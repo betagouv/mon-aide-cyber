@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  web:
+    container_name: mon-aide-cyber-ui
+    build:
+      context: .
+      dockerfile: Dockerfile-ui
+    ports:
+      - 3000:3000
+      - 3001:3001
+      - 5001:5001
+    volumes:
+      - ./mon-aide-cyber-ui:/usr/src/app/mon-aide-cyber-ui
