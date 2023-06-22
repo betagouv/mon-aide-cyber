@@ -8,7 +8,15 @@ services:
       dockerfile: Dockerfile-ui
     ports:
       - 3000:3000
-      - 3001:3001
-      - 5001:5001
     volumes:
       - ./mon-aide-cyber-ui:/usr/src/app/mon-aide-cyber-ui
+
+  api:
+    container_name: mon-aide-cyber-api
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+    ports:
+      - 8081:8081
+    volumes:
+      - ./mon-aide-cyber-api:/usr/src/app/mon-aide-cyber-api
