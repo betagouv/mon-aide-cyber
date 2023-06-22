@@ -2,14 +2,16 @@
   "name": "mon-aide-cyber-ui",
   "private": true,
   "version": "0.0.0",
+  "description": "Interface graphique de Mon aide cyber",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "vitest --config vitest.config.ts --ui --reporter verbose",
-    "test:coverage": "vitest --config vitest.config.ts run --coverage"
+    "test": "vitest run --config vitest.config.ts --reporter verbose",
+    "test:coverage": "vitest --config vitest.config.ts run --coverage",
+    "test:watch": "vitest --config vitest.config.ts --ui --reporter verbose"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -21,10 +23,9 @@
     "@typescript-eslint/eslint-plugin": "^5.60.0",
     "@typescript-eslint/parser": "^5.60.0",
     "@vitejs/plugin-react-swc": "^3.0.0",
-    "eslint": "^8.38.0",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.3.4",
+    "@vitest/ui": "^0.32.2",
+    "eslint": "^8.43.0",
+    "happy-dom": "^9.20.3",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
     "vitest": "^0.32.2"

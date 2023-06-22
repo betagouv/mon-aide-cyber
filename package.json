@@ -1,0 +1,22 @@
+{
+  "name": "mon-aide-cyber",
+  "version": "1.0.0",
+  "description": "MonAideCyber",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:betagouv/mon-aide-cyber.git"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/betagouv/mon-aide-cyber/issues"
+  },
+  "homepage": "https://github.com/betagouv/mon-aide-cyber#readme",
+  "workspaces": [
+    "mon-aide-cyber-api",
+    "mon-aide-cyber-ui"
+  ],
+  "scripts": {
+    "test": "npm run test --workspaces",
+    "test:watch": "npm run test:watch --workspaces"
+  }
+}
