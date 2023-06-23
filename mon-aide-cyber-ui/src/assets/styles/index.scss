@@ -1,0 +1,58 @@
+@import "palette";
+@import "en-tete";
+@import "pied-de-page";
+
+body {
+  font-family: Marianne;
+  line-height: 1.5;
+  font-weight: 400;
+  height: 100%;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+.devise {
+  height: 1.38em;
+
+  background-image: $logo-devise;
+}
+
+.marianne,
+.devise {
+  width: 45%;
+
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.marianne {
+  height: 0.75em;
+
+  background-image: $logo-marianne;
+}
+
+.republique-francaise {
+  padding: 0.36em 0;
+
+  line-height: 1.075em;
+  color: #000;
+  font-size: 0.7em;
+  font-weight: bold;
+}
+
+.logo-anssi {
+  width: 4.05em;
+  height: 4.05em;
+  margin: 0 0.4em;
+  padding: 0.3em 0.85em;
+  background-image: $logo-anssi;
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  cursor: pointer;
+}

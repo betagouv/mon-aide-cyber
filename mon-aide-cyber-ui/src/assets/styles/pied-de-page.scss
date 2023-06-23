@@ -1,0 +1,116 @@
+footer {
+  display: flex;
+  column-gap: 1.4em;
+  align-items: center;
+  justify-content: center;
+  padding: 1em 0;
+}
+
+footer .marges-fixes {
+  width: 100vw;
+  flex-direction: column;
+}
+
+footer .bandeau-mac {
+  display: flex;
+
+  padding: 1.5em 0;
+}
+
+footer .bloc-france {
+  flex: 1;
+  align-self: center;
+}
+
+footer .infos-mac {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.8em;
+
+  color: $texte-fonce;
+  line-height: 1.7em;
+}
+
+footer .infos-mac a {
+  color: $texte-fonce;
+  text-decoration: underline;
+  text-decoration-thickness: 0.03em;
+  text-underline-offset: 0.3em;
+}
+
+footer .infos-mac a.nouvel-onglet::after {
+  background-color: $texte-fonce;
+}
+
+footer .infos-mac a:hover {
+  color: $texte-fonce;
+  text-decoration-thickness: 0.12em;
+}
+
+footer .infos-mac a:active {
+  background-color: $etat-gris-actif;
+}
+
+footer .infos-mac .liens {
+  display: flex;
+  justify-content: space-between;
+  transform: translateX(-0.7em);
+}
+
+footer .infos-mac .liens a {
+  padding: 0.15em 0.7em;
+
+  text-decoration: none;
+  font-weight: bold;
+}
+
+footer .infos-mac .liens a:hover {
+  background-color: $etat-gris-survol;
+}
+
+footer .infos-mac .liens a:active {
+  background-color: $etat-gris-actif;
+}
+
+footer .separateur {
+  border-top: 1px solid $etat-contour-champs;
+}
+
+footer nav {
+  display: flex;
+  padding: 1em 0;
+}
+
+footer nav ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+
+  list-style-type: none;
+}
+
+footer nav li {
+  padding-right: 0.5em;
+  border-left: 1px solid var(--systeme-design-etat-contour-champs);
+}
+
+footer nav li:first-of-type {
+  border-left: none;
+}
+
+footer nav a {
+  margin-left: 0.5em;
+  padding: 0.3em 0.8em;
+
+  text-decoration: none;
+  color: var(--texte-fonce);
+}
+
+footer nav a:hover {
+  background-color: var(--systeme-design-etat-gris-survol);
+}
+
+footer nav a:active {
+  background-color: var(--systeme-design-etat-gris-actif);
+}
