@@ -27,6 +27,7 @@ repos:
           - eslint-plugin-react@7.32.2
           - eslint-plugin-react-hooks@4.6.0
           - eslint-plugin-react-refresh@0.3.4
+
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: "v3.0.0-alpha.9-for-vscode"
     hooks:
