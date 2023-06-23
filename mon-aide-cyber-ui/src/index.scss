@@ -1,5 +1,7 @@
+@import "assets/styles/palette";
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Marianne;
   line-height: 1.5;
   font-weight: 400;
 
@@ -25,7 +27,6 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
@@ -66,4 +67,67 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+header {
+  display: flex;
+  column-gap: 1.4em;
+  align-items: center;
+  padding: 1em 0;
+}
+
+header.marges-fixes {
+  width: 100vw;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.devise {
+  height: 1.38em;
+
+  background-image: $logo-devise;
+}
+
+.marianne,
+.devise {
+  width: 45%;
+
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.marianne {
+  height: 0.75em;
+
+  background-image: $logo-marianne;
+}
+
+.republique-francaise {
+  padding: 0.36em 0;
+
+  line-height: 1.075em;
+  color: #000;
+  font-size: 0.7em;
+  font-weight: bold;
+}
+
+.logo-anssi {
+  width: 4.05em;
+  height: 4.05em;
+  margin: 0 0.4em;
+  padding: 0.3em 0.85em;
+  background-image: $logo-anssi;
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  cursor: pointer;
+}
+
+:is(header nav, .logo-anssi):hover {
+  background-color: $etat-gris-survol;
+}
+
+:is(header nav a, .logo-anssi):active {
+  background-color: $etat-gris-actif;
 }
