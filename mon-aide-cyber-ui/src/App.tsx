@@ -4,7 +4,7 @@ function App() {
   return (
     <>
       <div>
-        <h2>Mon Aide Cyber</h2>
+        <h2>MonAideCyber</h2>
       </div>
     </>
   );

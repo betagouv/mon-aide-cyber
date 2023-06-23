@@ -1,0 +1,20 @@
+header {
+  display: flex;
+  column-gap: 1.4em;
+  align-items: center;
+  padding: 1em 0;
+}
+
+header.marges-fixes {
+  width: 100vw;
+  justify-content: center;
+  flex-direction: row;
+}
+
+:is(header nav, .logo-anssi):hover {
+  background-color: $etat-gris-survol;
+}
+
+:is(header nav a, .logo-anssi):active {
+  background-color: $etat-gris-actif;
+}
