@@ -1,8 +1,8 @@
-import MAC from "./src/serveur.js";
+import serveur from "./src/serveur";
 
-const serveur = MAC.creeServeur();
+const serveurMAC = serveur.creeServeur();
 
 const port = process.env.PORT || 8081;
-serveur.ecoute(port, () => {
+serveurMAC.ecoute(port as number, () => {
   console.log(`MonAideCyber est démarré et écoute le port ${port} !…`);
 });

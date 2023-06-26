@@ -1,6 +1,6 @@
 {
   "name": "mon-aide-cyber",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "MonAideCyber",
   "repository": {
     "type": "git",
@@ -17,6 +17,8 @@
   ],
   "scripts": {
     "test": "npm run test --workspaces",
-    "test:watch": "npm run test:watch --workspaces"
+    "test:watch": "npm run test:watch --workspaces",
+    "build": "npm run build --workspaces",
+    "start": "npm run start -w mon-aide-cyber-api"
   }
 }

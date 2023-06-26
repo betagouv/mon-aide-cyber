@@ -5,7 +5,7 @@
   "description": "Interface graphique de Mon aide cyber",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite build --watch",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
