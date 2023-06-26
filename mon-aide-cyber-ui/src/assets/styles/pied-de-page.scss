@@ -1,25 +1,22 @@
 footer {
   display: flex;
-  column-gap: 1.4em;
-  align-items: center;
-  justify-content: center;
-  padding: 1em 0;
-}
-
-footer .marges-fixes {
-  width: 100vw;
   flex-direction: column;
+  padding: 1em 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 footer .bandeau-mac {
   display: flex;
-
+  justify-content: space-between;
   padding: 1.5em 0;
 }
 
 footer .bloc-france {
   flex: 1;
   align-self: center;
+  padding-left: $marge-exterieure;
 }
 
 footer .infos-mac {
@@ -27,7 +24,7 @@ footer .infos-mac {
   display: flex;
   flex-direction: column;
   row-gap: 1.8em;
-
+  padding-right: $marge-exterieure;
   color: $texte-fonce;
   line-height: 1.7em;
 }
@@ -78,15 +75,15 @@ footer .separateur {
 }
 
 footer nav {
-  display: flex;
   padding: 1em 0;
+  justify-content: space-between;
 }
 
 footer nav ul {
   display: flex;
   margin: 0;
-  padding: 0;
-
+  padding: 0 $marge-exterieure;
+  justify-content: space-between;
   list-style-type: none;
 }
 
