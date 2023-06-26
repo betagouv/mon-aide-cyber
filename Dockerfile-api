@@ -13,4 +13,4 @@ RUN npm install
 
 COPY mon-aide-cyber-api/ /usr/src/app/mon-aide-cyber-api/
 
-CMD ["npm", "run", "start", "-w", "mon-aide-cyber-api"]
+CMD ["npm", "run", "dev", "-w", "mon-aide-cyber-api"]

@@ -20,3 +20,4 @@ services:
       - 8081:8081
     volumes:
       - ./mon-aide-cyber-api:/usr/src/app/mon-aide-cyber-api
+      - ./mon-aide-cyber-ui/dist/:/usr/src/app/mon-aide-cyber-ui/dist
