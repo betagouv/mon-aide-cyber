@@ -2,8 +2,14 @@ import * as path from "path";
 import express, { Request, Response } from "express";
 import * as http from "http";
 import rateLimit from "express-rate-limit";
+import routesAPI from "./api/routesAPI";
+import { AdaptateurDonnees } from "./adaptateurs/AdaptateurDonnees";
 
-const creeServeur = () => {
+export type ConfigurationServeur = {
+  adaptateurDonnees: AdaptateurDonnees;
+};
+
+const creeServeur = (config: ConfigurationServeur) => {
   let serveur: http.Server;
 
   const app = express();
@@ -15,8 +21,7 @@ const creeServeur = () => {
       "Vous avez atteint le nombre maximal de requête. Veuillez réessayer ultérieurement.",
     standardHeaders: true,
     legacyHeaders: false,
-    skip: (request: Request, _response: Response) =>
-      request.path.startsWith("/api"),
+    skip: (requete: Request, _) => requete.path.startsWith("/api"),
   });
   app.use(limiteurTrafficUI);
   app.use(
@@ -29,14 +34,13 @@ const creeServeur = () => {
     serveur.close();
   };
 
-  app.get("/api/hello", (_req: Request, res: Response) => {
-    res.send("OK");
-  });
-  app.get("*", function (_req: Request, res: Response) {
-    res.sendFile(
+  app.use("/api", routesAPI(config));
+
+  app.get("*", (_: Request, reponse: Response) =>
+    reponse.sendFile(
       path.join(__dirname, "./../../mon-aide-cyber-ui/dist/index.html"),
-    );
-  });
+    ),
+  );
 
   return { ecoute, arreteEcoute };
 };

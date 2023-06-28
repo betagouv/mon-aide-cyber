@@ -20,5 +20,8 @@
     "test:watch": "npm run test:watch --workspaces",
     "build": "npm run build --workspaces",
     "start": "npm run start -w mon-aide-cyber-api"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.0.2"
   }
 }
