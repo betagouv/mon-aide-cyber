@@ -1,3 +1,5 @@
+@use "couleurs";
+
 footer {
   display: flex;
   flex-direction: column;
@@ -25,23 +27,23 @@ footer .infos-mac {
   flex-direction: column;
   row-gap: 1.8em;
   padding-right: $marge-exterieure;
-  color: $texte-fonce;
+  color: map-get($map: couleurs.$principales, $key: "noir-typo");
   line-height: 1.7em;
 }
 
 footer .infos-mac a {
-  color: $texte-fonce;
+  color: map-get($map: couleurs.$principales, $key: "noir-typo");
   text-decoration: underline;
   text-decoration-thickness: 0.03em;
   text-underline-offset: 0.3em;
 }
 
 footer .infos-mac a.nouvel-onglet::after {
-  background-color: $texte-fonce;
+  background-color: map-get($map: couleurs.$principales, $key: "noir-typo");
 }
 
 footer .infos-mac a:hover {
-  color: $texte-fonce;
+  color: map-get($map: couleurs.$principales, $key: "noir-typo");
   text-decoration-thickness: 0.12em;
 }
 
