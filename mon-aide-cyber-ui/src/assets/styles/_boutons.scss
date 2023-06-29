@@ -1,0 +1,88 @@
+@use "couleurs";
+
+button {
+  color: map-get($map: couleurs.$niveau-de-gris, $key: "blanc");
+  font-weight: 500;
+  font-size: 1em;
+  padding: 0.5em 1em;
+  background: map-get($map: couleurs.$principales, $key: "bleu-clair");
+  border-radius: 0.25em;
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.625em;
+
+  img {
+    aspect-ratio: 1;
+    width: 1.25em;
+    height: 1.25em;
+    filter: brightness(0) invert(1);
+  }
+
+  &:hover {
+    background: map-get($map: couleurs.$principales, $key: "bleu-survol");
+  }
+
+  &:focus {
+    border: 2px solid map-get($map: couleurs.$niveau-de-gris, $key: "blanc");
+    box-shadow: 0px 0px 0px 2px
+      map-get($map: couleurs.$principales, $key: "bleu-clair");
+  }
+
+  &:active {
+    background: map-get($map: couleurs.$principales, $key: "bleu-fonce");
+  }
+
+  &.secondaire,
+  &.tertiaire {
+    color: map-get($map: couleurs.$principales, $key: "bleu-clair");
+    background: map-get($map: couleurs.$niveau-de-gris, $key: "blanc");
+    border: 1px solid map-get($map: couleurs.$principales, $key: "bleu-clair");
+
+    img {
+      // On utilise un générateur de filtre pour obtenir la couleur souhaitée depuis une image complétement noire : https://codepen.io/sosuke/pen/Pjoqqp
+      // Le premier filtre 'brightness(0)' transforme toutes les couleurs en noir
+      filter: brightness(0) invert(37%) sepia(54%) saturate(6332%)
+        hue-rotate(188deg) brightness(93%) contrast(101%);
+    }
+
+    &:hover {
+      color: map-get($map: couleurs.$principales, $key: "bleu-survol");
+      background: map-get($map: couleurs.$niveau-de-gris, $key: "gris-fond");
+
+      img {
+        filter: brightness(0) invert(28%) sepia(95%) saturate(824%)
+          hue-rotate(174deg) brightness(87%) contrast(98%);
+      }
+    }
+
+    &:focus {
+      box-shadow:
+        0px 0px 0px 2px map-get($map: couleurs.$niveau-de-gris, $key: "blanc"),
+        0px 0px 0px 4px map-get($map: couleurs.$principales, $key: "bleu-clair");
+    }
+
+    &:active {
+      color: map-get($map: couleurs.$principales, $key: "bleu-fonce");
+      border-color: map-get(
+        $map: couleurs.$principales,
+        $key: "bleu-fonce-MSS"
+      );
+
+      img {
+        filter: brightness(0) invert(15%) sepia(44%) saturate(3670%)
+          hue-rotate(187deg) brightness(94%) contrast(94%);
+      }
+    }
+  }
+
+  &.tertiaire {
+    border: 1px solid transparent;
+
+    &:active {
+      border-color: transparent;
+    }
+  }
+}
