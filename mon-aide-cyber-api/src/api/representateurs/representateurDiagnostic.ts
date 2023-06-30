@@ -9,6 +9,7 @@ type RepresentationReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
+  type?: { type: TypeDeSaisie; format: Format } | undefined;
 };
 type RepresentationQuestionChoixUnique = {
   identifiant: string;
@@ -22,21 +23,52 @@ type RepresentationReferentiel = {
   contexte: RepresentationContexte;
 };
 
+type TypeDeSaisie = "saisieLibre";
+type Format = "nombre" | "texte";
+
+export type Transcripteur = {
+  contexte: {
+    questions: [
+      {
+        identifiant: string;
+        reponses: {
+          identifiant: string;
+          type?: { type: TypeDeSaisie; format: Format };
+        }[];
+      },
+    ];
+  };
+};
+
 export function representeLeDiagnosticPourLeClient(
   diagnostic: Diagnostic,
+  transcripteur: Transcripteur,
 ): RepresentationDiagnostic {
   return {
     identifiant: diagnostic.identifiant,
     referentiel: {
       contexte: {
-        questions: diagnostic.referentiel.contexte.questions.map(
-          (question) => ({
+        questions: diagnostic.referentiel.contexte.questions.map((question) => {
+          return {
             ...question,
-            reponsesPossibles: question.reponsesPossibles.map((reponse) => ({
-              ...reponse,
-            })),
-          }),
-        ),
+            reponsesPossibles: question.reponsesPossibles.map((reponse) => {
+              const transcription = transcripteur.contexte.questions.find(
+                (transcription) =>
+                  question.identifiant === transcription.identifiant,
+              );
+              if (transcription !== undefined) {
+                const reponseAtranscrire = transcription.reponses.find(
+                  (reponseATranscrire) =>
+                    reponseATranscrire.identifiant === reponse.identifiant,
+                );
+                if (reponseAtranscrire !== undefined) {
+                  return { ...reponse, type: reponseAtranscrire.type };
+                }
+              }
+              return { ...reponse };
+            }),
+          };
+        }),
       },
     },
   };

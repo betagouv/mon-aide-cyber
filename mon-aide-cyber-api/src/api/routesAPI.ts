@@ -1,8 +1,8 @@
 import express, { Request, Response, Router } from "express";
 import { ConfigurationServeur } from "../serveur";
 import * as crypto from "crypto";
-import { representeLeDiagnosticPourLeClient } from "./representateurs/representateurDiagnostic";
 import { ServiceDiagnostic } from "../diagnostic/ServiceDiagnostic";
+import { representeLeDiagnosticPourLeClient } from "./representateurs/representateurDiagnostic";
 
 const routesAPI = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
@@ -12,7 +12,12 @@ const routesAPI = (configuration: ConfigurationServeur) => {
     new ServiceDiagnostic(configuration.adaptateurDonnees)
       .diagnostic(id as crypto.UUID)
       .then((diagnostic) =>
-        res.json(representeLeDiagnosticPourLeClient(diagnostic)),
+        res.json(
+          representeLeDiagnosticPourLeClient(
+            diagnostic,
+            configuration.adaptateurTranscripteurDonnees.transcripteur(),
+          ),
+        ),
       );
   });
 

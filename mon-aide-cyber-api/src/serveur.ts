@@ -4,9 +4,11 @@ import * as http from "http";
 import rateLimit from "express-rate-limit";
 import routesAPI from "./api/routesAPI";
 import { AdaptateurDonnees } from "./adaptateurs/AdaptateurDonnees";
+import { AdaptateurTranscripteur } from "./adaptateurs/AdaptateurTranscripteur";
 
 export type ConfigurationServeur = {
   adaptateurDonnees: AdaptateurDonnees;
+  adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
 };
 
 const creeServeur = (config: ConfigurationServeur) => {
