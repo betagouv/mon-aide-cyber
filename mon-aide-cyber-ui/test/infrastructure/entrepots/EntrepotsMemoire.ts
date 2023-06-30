@@ -1,9 +1,9 @@
 import { Aggregat } from "../../../src/domaine/Aggregat";
 import {
-  Entrepot,
+  Diagnostic,
   EntrepotDiagnostic,
-} from "../../../src/fournisseurs/FournisseurEntrepot";
-import { Diagnostic } from "../../../src/domaine/diagnostic/Diagnostic.ts";
+} from "../../../src/domaine/diagnostic/Diagnostic.ts";
+import { Entrepot } from "../../../src/domaine/Entrepots";
 
 class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   private entites: T[] = [];

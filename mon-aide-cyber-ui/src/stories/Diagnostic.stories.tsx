@@ -1,4 +1,3 @@
-import { EntrepotDiagnosticMemoire } from "../../test/infrastructure/entrepots/EntrepotMemoire.ts";
 import { UUID } from "../types/Types.ts";
 import { faker } from "@faker-js/faker/locale/fr";
 import { ComposantDiagnostic } from "../composants/ComposantDiagnostic.tsx";
@@ -8,6 +7,7 @@ import { unDiagnostic } from "../../test/constructeurs/constructeurDiagnostic.ts
 import { unReferentiel } from "../../test/constructeurs/construceurReferentiel.ts";
 import { waitFor, within } from "@storybook/testing-library";
 import { expect } from "@storybook/jest";
+import { EntrepotDiagnosticMemoire } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
 
 const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
 const identifiantDiagnostic: UUID = faker.string.uuid() as UUID;
