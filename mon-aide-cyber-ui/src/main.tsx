@@ -3,10 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./assets/styles/index.scss";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {
-  APIEntrepotDiagnostic,
-  FournisseurEntrepots,
-} from "./fournisseurs/FournisseurEntrepot.ts";
+import { FournisseurEntrepots } from "./fournisseurs/FournisseurEntrepot.ts";
+import { APIEntrepotDiagnostic } from "./infrastructure/entrepots/EntrepotsAPI.ts";
 import { ComposantDiagnosticIntercepteur } from "./composants/intercepteurs/ComposantDiagnosticIntercepteur.tsx";
 
 const routeur = createBrowserRouter([

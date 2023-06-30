@@ -1,21 +1,7 @@
 import { createContext } from "react";
-import { Diagnostic } from "../domaine/diagnostic/Diagnostic.ts";
-
-export interface Entrepot<T> {
-  lis(identifiant: string): Promise<T>;
-}
-
-export type EntrepotDiagnostic = Entrepot<Diagnostic>;
-
-export interface Entrepots {
-  diagnostic(): EntrepotDiagnostic;
-}
-
-export class APIEntrepotDiagnostic implements EntrepotDiagnostic {
-  lis(_: string): Promise<Diagnostic> {
-    return Promise.reject("Pas encore implémenté!");
-  }
-}
+import { Entrepots } from "../domaine/Entrepots.ts";
+import { EntrepotDiagnostic } from "../domaine/diagnostic/Diagnostic.ts";
+import { APIEntrepotDiagnostic } from "../infrastructure/entrepots/EntrepotsAPI.ts";
 
 export const FournisseurEntrepots = createContext<Entrepots>({
   diagnostic: (): EntrepotDiagnostic => new APIEntrepotDiagnostic(),
