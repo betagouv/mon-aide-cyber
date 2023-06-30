@@ -3,11 +3,9 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./assets/styles/index.scss";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {
-  APIEntrepotDiagnostique,
-  FournisseurEntrepots,
-} from "./fournisseurs/FournisseurEntrepot.ts";
+import { FournisseurEntrepots } from "./fournisseurs/FournisseurEntrepot.ts";
 import { ComposantDiagnostiqueIntercepteur } from "./composants/intercepteurs/ComposantDiagnostiqueIntercepteur.tsx";
+import { APIEntrepotDiagnostique } from "./infrastructure/entrepots/EntrepotsAPI.ts";
 
 const routeur = createBrowserRouter([
   {
