@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Question,
   Referentiel,
   ReponsePossible,
 } from "../domaine/diagnostic/Referentiel.ts";
+import { FournisseurEntrepots } from "../fournisseurs/FournisseurEntrepot.ts";
+import { UUID } from "../types/Types.ts";
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -54,6 +56,7 @@ const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
       {question.reponsesPossibles.map((reponse) => {
         return (
           <ComposantReponsePossible
+            key={reponse.identifiant}
             reponsePossible={reponse}
             question={question}
           />
@@ -63,47 +66,25 @@ const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
   );
 };
 
-export const ComposantDiagnostic = () => {
+type ProprietesComposantDiagnostic = {
+  idDiagnostic: UUID;
+};
+
+export const ComposantDiagnostic = ({
+  idDiagnostic,
+}: ProprietesComposantDiagnostic) => {
   const [referentiel, setReferentiel] = useState<Referentiel | undefined>(
     undefined,
   );
 
+  const entrepots = useContext(FournisseurEntrepots);
+
   useEffect(() => {
-    setReferentiel({
-      contexte: {
-        questions: [
-          {
-            identifiant: "natureOrganisation",
-            libelle: "Quelle est la nature de votre organisation ?",
-            reponsesPossibles: [
-              {
-                identifiant: "organisationPublique",
-                libelle:
-                  "Organisation publique (ex. collectivité, organisation centrale)",
-                ordre: 0,
-              },
-              {
-                identifiant: "entreprisePrivee",
-                libelle: "Entreprise privée (ex. TPE, PME, ETI)",
-                ordre: 1,
-              },
-              {
-                identifiant: "association",
-                libelle: "Association (ex. association loi 1901)",
-                ordre: 2,
-              },
-              {
-                identifiant: "autre",
-                libelle: "Autre : préciser",
-                ordre: 3,
-                type: "aSaisir",
-              },
-            ],
-          },
-        ],
-      },
-    });
-  }, []);
+    entrepots
+      .diagnostic()
+      .lis(idDiagnostic)
+      .then((diagnostic) => setReferentiel(diagnostic.referentiel));
+  }, [entrepots, idDiagnostic]);
 
   return (
     <>
@@ -112,7 +93,7 @@ export const ComposantDiagnostic = () => {
         <section>
           <div>
             {referentiel?.contexte.questions.map((question) => (
-              <fieldset id={question.identifiant}>
+              <fieldset key={question.identifiant} id={question.identifiant}>
                 <ComposantQuestion question={question} />
               </fieldset>
             ))}
