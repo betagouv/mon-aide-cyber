@@ -10,9 +10,9 @@ type QuestionChoixUnique = {
   libelle: string;
 };
 
-class Contexte {
-  questions: QuestionChoixUnique[] = [];
-}
+type Contexte = {
+  questions: QuestionChoixUnique[];
+};
 
 type Referentiel = {
   contexte: Contexte;

@@ -24,20 +24,23 @@ describe("le serveur MAC sur les routes /api/diagnostiques/", () => {
       const premiereQuestion = referentiel.contexte.questions[0];
       const premiereReponsePossible = premiereQuestion.reponsesPossibles[0];
       expect(await reponse.json()).toMatchObject({
-        contexte: {
-          questions: [
-            {
-              identifiant: premiereQuestion.identifiant,
-              libelle: premiereQuestion.libelle,
-              reponsesPossibles: [
-                {
-                  identifiant: premiereReponsePossible.identifiant,
-                  libelle: premiereReponsePossible.libelle,
-                  ordre: 0,
-                },
-              ],
-            },
-          ],
+        identifiant: id,
+        referentiel: {
+          contexte: {
+            questions: [
+              {
+                identifiant: premiereQuestion.identifiant,
+                libelle: premiereQuestion.libelle,
+                reponsesPossibles: [
+                  {
+                    identifiant: premiereReponsePossible.identifiant,
+                    libelle: premiereReponsePossible.libelle,
+                    ordre: 0,
+                  },
+                ],
+              },
+            ],
+          },
         },
       });
     });

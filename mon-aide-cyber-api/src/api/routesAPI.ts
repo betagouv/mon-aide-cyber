@@ -1,50 +1,18 @@
 import express, { Request, Response, Router } from "express";
-import { ServiceReferentiel } from "../diagnostique/ServiceReferentiel";
-import { Referentiel } from "../diagnostique/referentiel";
+import { ServiceDiagnostique } from "../diagnostique/serviceDiagnostique";
 import { ConfigurationServeur } from "../serveur";
-
-type ReponsePossibleOT = {
-  identifiant: string;
-  libelle: string;
-  ordre: number;
-};
-
-type QuestionChoixUniqueOT = {
-  reponsesPossibles: ReponsePossibleOT[];
-  identifiant: string;
-  libelle: string;
-};
-
-type ContexteOT = {
-  questions: QuestionChoixUniqueOT[];
-};
-
-type ReferentielOT = {
-  contexte: ContexteOT;
-};
-function representeLeReferentielPourLeClient(
-  referentiel: Referentiel,
-): ReferentielOT {
-  return {
-    contexte: {
-      questions: referentiel.contexte.questions.map((question) => ({
-        ...question,
-        reponsesPossibles: question.reponsesPossibles.map((reponse) => ({
-          ...reponse,
-        })),
-      })),
-    },
-  };
-}
+import * as crypto from "crypto";
+import { representeLeDiagnostiquePourLeClient } from "./representateurs/representateurDiagnostique";
 
 const routesAPI = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
   routes.get("/diagnostiques/:id", (_req: Request, res: Response) => {
-    new ServiceReferentiel(configuration.adaptateurDonnees)
-      .referentiel()
-      .then((referentiel) =>
-        res.json(representeLeReferentielPourLeClient(referentiel)),
+    const { id } = _req.params;
+    new ServiceDiagnostique(configuration.adaptateurDonnees)
+      .diagnostique(id as crypto.UUID)
+      .then((diagnostique) =>
+        res.json(representeLeDiagnostiquePourLeClient(diagnostique)),
       );
   });
 
