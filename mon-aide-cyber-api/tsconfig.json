@@ -19,5 +19,6 @@
     "exactOptionalPropertyTypes": true,
     "noImplicitReturns": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": ["coverage"]
 }
