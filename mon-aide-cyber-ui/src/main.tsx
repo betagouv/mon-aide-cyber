@@ -3,7 +3,11 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./assets/styles/index.scss";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ComposantDiagnostique } from "./composants/ComposantDiagnostique.tsx";
+import {
+  APIEntrepotDiagnostique,
+  FournisseurEntrepots,
+} from "./fournisseurs/FournisseurEntrepot.ts";
+import { ComposantDiagnostiqueIntercepteur } from "./composants/intercepteurs/ComposantDiagnostiqueIntercepteur.tsx";
 
 const routeur = createBrowserRouter([
   {
@@ -12,12 +16,16 @@ const routeur = createBrowserRouter([
   },
   {
     path: "diagnostique/:idDiagnostique",
-    element: <ComposantDiagnostique />,
+    element: <ComposantDiagnostiqueIntercepteur />,
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={routeur} />
+    <FournisseurEntrepots.Provider
+      value={{ diagnostique: () => new APIEntrepotDiagnostique() }}
+    >
+      <RouterProvider router={routeur} />
+    </FournisseurEntrepots.Provider>
   </React.StrictMode>,
 );
