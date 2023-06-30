@@ -1,0 +1,22 @@
+name: "Tests MAC UI"
+on: push
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+      - name: Installe les dépendances
+        run: npm ci
+      - name: Installe Playwright
+        run: npx playwright install --with-deps
+      - name: Construis Storybook
+        run: npm run build:storybook --quiet -w mon-aide-cyber-ui
+      - name: Démarre Storybook et execute les tests
+        run: |
+          npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+            "npx http-server ./mon-aide-cyber-ui/storybook-static --port 6006 --silent" \
+            "npx wait-on tcp:6006 && npm run test:storybook -w mon-aide-cyber-ui"
