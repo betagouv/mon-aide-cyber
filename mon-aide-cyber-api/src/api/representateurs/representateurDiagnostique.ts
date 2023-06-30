@@ -6,6 +6,7 @@ type DiagnostiqueOT = {
   referentiel: ReferentielOT;
 };
 type ReponsePossibleOT = {
+  type?: { type: TypeDeSaisie; format: Format } | undefined;
   identifiant: string;
   libelle: string;
   ordre: number;
@@ -22,20 +23,53 @@ type ReferentielOT = {
   contexte: ContexteOT;
 };
 
+type TypeDeSaisie = "saisieLibre";
+type Format = "nombre" | "texte";
+
+export type Transcripteur = {
+  contexte: {
+    questions: [
+      {
+        identifiant: string;
+        reponses: {
+          identifiant: string;
+          type?: { type: TypeDeSaisie; format: Format };
+        }[];
+      },
+    ];
+  };
+};
+
 export function representeLeDiagnostiquePourLeClient(
   diagnostique: Diagnostique,
+  transcripteur: Transcripteur,
 ): DiagnostiqueOT {
   return {
     identifiant: diagnostique.identifiant,
     referentiel: {
       contexte: {
         questions: diagnostique.referentiel.contexte.questions.map(
-          (question) => ({
-            ...question,
-            reponsesPossibles: question.reponsesPossibles.map((reponse) => ({
-              ...reponse,
-            })),
-          }),
+          (question) => {
+            return {
+              ...question,
+              reponsesPossibles: question.reponsesPossibles.map((reponse) => {
+                const transcription = transcripteur.contexte.questions.find(
+                  (transcription) =>
+                    question.identifiant === transcription.identifiant,
+                );
+                if (transcription !== undefined) {
+                  const reponseAtranscrire = transcription.reponses.find(
+                    (reponseATranscrire) =>
+                      reponseATranscrire.identifiant === reponse.identifiant,
+                  );
+                  if (reponseAtranscrire !== undefined) {
+                    return { ...reponse, type: reponseAtranscrire.type };
+                  }
+                }
+                return { ...reponse };
+              }),
+            };
+          },
         ),
       },
     },

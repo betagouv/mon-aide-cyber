@@ -12,7 +12,12 @@ const routesAPI = (configuration: ConfigurationServeur) => {
     new ServiceDiagnostique(configuration.adaptateurDonnees)
       .diagnostique(id as crypto.UUID)
       .then((diagnostique) =>
-        res.json(representeLeDiagnostiquePourLeClient(diagnostique)),
+        res.json(
+          representeLeDiagnostiquePourLeClient(
+            diagnostique,
+            configuration.adaptateurTranscripteurDonnees.transcripteur(),
+          ),
+        ),
       );
   });
 

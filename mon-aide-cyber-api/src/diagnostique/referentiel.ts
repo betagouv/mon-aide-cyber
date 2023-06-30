@@ -4,10 +4,13 @@ type ReponsePossible = {
   ordre: number;
 };
 
-type QuestionChoixUnique = {
-  reponsesPossibles: ReponsePossible[];
+type Question = {
   identifiant: string;
   libelle: string;
+};
+
+type QuestionChoixUnique = Question & {
+  reponsesPossibles: ReponsePossible[];
 };
 
 type Contexte = {
@@ -18,4 +21,10 @@ type Referentiel = {
   contexte: Contexte;
 };
 
-export { Contexte, QuestionChoixUnique, Referentiel, ReponsePossible };
+export {
+  Contexte,
+  Question,
+  QuestionChoixUnique,
+  Referentiel,
+  ReponsePossible,
+};
