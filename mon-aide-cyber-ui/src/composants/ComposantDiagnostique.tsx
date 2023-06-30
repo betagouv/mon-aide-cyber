@@ -38,7 +38,9 @@ const ComposantReponsePossible = ({
         name={question.identifiant}
         value={reponsePossible.identifiant}
       ></input>
-      <label>{reponsePossible.libelle}</label>
+      <label htmlFor={reponsePossible.identifiant}>
+        {reponsePossible.libelle}
+      </label>
       {champsASaisir}
       <br />
     </>
