@@ -5,14 +5,14 @@ type ReponsePossible = {
 };
 
 type QuestionChoixUnique = {
-  reponsesPossibles: ReponsePossible[];
   identifiant: string;
   libelle: string;
+  reponsesPossibles: ReponsePossible[];
 };
 
-class Contexte {
-  questions: QuestionChoixUnique[] = [];
-}
+type Contexte = {
+  questions: QuestionChoixUnique[];
+};
 
 type Referentiel = {
   contexte: Contexte;
