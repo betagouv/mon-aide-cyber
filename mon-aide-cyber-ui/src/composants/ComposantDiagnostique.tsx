@@ -67,11 +67,11 @@ const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
 };
 
 type ProprietesComposantDiagnostique = {
-  identifiant: UUID;
+  idDiagnostique: UUID;
 };
 
 export const ComposantDiagnostique = ({
-  identifiant,
+  idDiagnostique,
 }: ProprietesComposantDiagnostique) => {
   const [referentiel, setReferentiel] = useState<Referentiel | undefined>(
     undefined,
@@ -82,9 +82,9 @@ export const ComposantDiagnostique = ({
   useEffect(() => {
     entrepots
       .diagnostique()
-      .lis(identifiant)
+      .lis(idDiagnostique)
       .then((diagnostique) => setReferentiel(diagnostique.referentiel));
-  }, [entrepots, identifiant]);
+  }, [entrepots, idDiagnostique]);
 
   return (
     <>
