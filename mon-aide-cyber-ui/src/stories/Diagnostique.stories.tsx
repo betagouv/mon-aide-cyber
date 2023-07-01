@@ -68,7 +68,7 @@ type Story = StoryObj<typeof meta>;
 
 export const AfficheQuestionDiagnostique: Story = {
   name: "Affiche une question du diagnostique",
-  args: { identifiant: identifiantUneQuestion },
+  args: { idDiagnostique: identifiantUneQuestion },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
@@ -89,7 +89,7 @@ export const AfficheQuestionDiagnostique: Story = {
 
 export const AfficheQuestionDiagnostiqueAvecChampsSaisie: Story = {
   name: "Affiche une question avec plusieurs réponses dont un champs de saisie pour la réponse",
-  args: { identifiant: identifiantChampsDeSaise },
+  args: { idDiagnostique: identifiantChampsDeSaise },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
@@ -100,7 +100,7 @@ export const AfficheQuestionDiagnostiqueAvecChampsSaisie: Story = {
 };
 export const AfficheDiagnostiqueAvecPlusieursQuestions: Story = {
   name: "Affiche plusieurs questions",
-  args: { identifiant: identifiantPlusieursQuestions },
+  args: { idDiagnostique: identifiantPlusieursQuestions },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
