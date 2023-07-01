@@ -4,8 +4,9 @@ import App from "./App.tsx";
 import "./assets/styles/index.scss";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { FournisseurEntrepots } from "./fournisseurs/FournisseurEntrepot.ts";
-import { ComposantDiagnostiqueIntercepteur } from "./composants/intercepteurs/ComposantDiagnostiqueIntercepteur.tsx";
+import { ComposantIntercepteur } from "./composants/intercepteurs/ComposantIntercepteur.tsx";
 import { APIEntrepotDiagnostique } from "./infrastructure/entrepots/EntrepotsAPI.ts";
+import { ComposantDiagnostique } from "./composants/ComposantDiagnostique.tsx";
 
 const routeur = createBrowserRouter([
   {
@@ -14,7 +15,7 @@ const routeur = createBrowserRouter([
   },
   {
     path: "diagnostique/:idDiagnostique",
-    element: <ComposantDiagnostiqueIntercepteur />,
+    element: <ComposantIntercepteur composant={ComposantDiagnostique} />,
   },
 ]);
 
