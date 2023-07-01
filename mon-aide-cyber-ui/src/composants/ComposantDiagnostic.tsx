@@ -21,7 +21,7 @@ const ComposantReponsePossible = ({
   question,
 }: ProprietesComposantReponsePossible) => {
   const champsASaisir =
-    reponsePossible.type === "aSaisir" ? (
+    reponsePossible.type?.type === "saisieLibre" ? (
       <input
         id={"asaisir-" + reponsePossible.identifiant}
         name={reponsePossible.identifiant}
