@@ -1,6 +1,6 @@
 import { describe, expect } from "vitest";
 import { unDiagnostique } from "../../consructeurs/constructeurDiagnostique";
-import { unReferentiel } from "../../consructeurs/construceurReferentiel";
+import { unReferentiel } from "../../consructeurs/constructeurReferentiel";
 import {
   diagnostiqueCharge,
   reducteurDiagnostique,
