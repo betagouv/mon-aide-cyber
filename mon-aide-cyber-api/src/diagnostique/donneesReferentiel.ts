@@ -171,6 +171,20 @@ const referentiel: Referentiel = {
           },
         ],
       },
+      {
+        identifiant: "activitesRechercheEtDeveloppement",
+        libelle:
+          'Votre organisation a-t-elle des activités de "Recherche et Développement" ?',
+        reponsesPossibles: [
+          {
+            identifiant: "REtD-neSaisPas",
+            libelle: "Je ne sais pas",
+            ordre: 1,
+          },
+          { identifiant: "REtD-non", libelle: "Non", ordre: 2 },
+          { identifiant: "REtD-oui", libelle: "Oui", ordre: 3 },
+        ],
+      },
     ],
   },
 };
