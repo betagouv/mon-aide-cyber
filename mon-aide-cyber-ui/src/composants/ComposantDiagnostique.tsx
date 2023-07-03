@@ -119,8 +119,6 @@ export const ComposantDiagnostique = ({
 
   const entrepots = useContext(FournisseurEntrepots);
 
-  const entrepots = useContext(FournisseurEntrepots);
-
   useEffect(() => {
     entrepots
       .diagnostique()

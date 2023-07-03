@@ -27,7 +27,7 @@ class ConstructeurReferentiel {
   private questions: Question[] = [];
 
   avecUneQuestion(
-    question: string,
+    question: { libelle: string; type?: TypeDeSaisie },
     reponsePossibles: ReponsePossible[] = [],
   ): ConstructeurReferentiel {
     if (reponsePossibles.length === 0) {
@@ -35,13 +35,14 @@ class ConstructeurReferentiel {
     }
     this.questions.push({
       identifiant: faker.string.alpha(10),
-      libelle: question,
+      libelle: question.libelle,
       reponsesPossibles: reponsePossibles.map((reponse, index) => ({
         ordre: index,
         libelle: reponse.libelle,
         identifiant: faker.string.alpha(10),
         type: reponse.type,
       })),
+      type: question.type,
     });
     return this;
   }
