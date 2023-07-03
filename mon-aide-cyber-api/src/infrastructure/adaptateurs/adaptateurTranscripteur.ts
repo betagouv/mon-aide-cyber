@@ -16,6 +16,10 @@ export const adaptateurTranscripteur = () =>
                 },
               ],
             },
+            {
+              identifiant: "secteurActivite",
+              type: "liste",
+            },
           ],
         },
       };

@@ -59,4 +59,29 @@ describe("Le représentateur de diagnostic", () => {
     });
     expect(reponsesPossibles[2].type).toBeUndefined();
   });
+
+  it("définit la manière dont est présentée la question sous forme de liste", () => {
+    const diagnostic = unDiagnostic()
+      .avecUnReferentiel(
+        unReferentielAuContexteVide()
+          .ajouteUneQuestionAuContexte(
+            uneQuestion().aChoixUnique("Question liste?").construis(),
+          )
+          .construis(),
+      )
+      .construis();
+    const diagnosticRepresente = representeLeDiagnosticPourLeClient(
+      diagnostic,
+      {
+        contexte: {
+          questions: [
+            { identifiant: "question-liste", type: "liste", reponses: [] },
+          ],
+        },
+      },
+    );
+
+    const question = diagnosticRepresente.referentiel.contexte.questions[0];
+    expect(question.type).toBe("liste");
+  });
 });

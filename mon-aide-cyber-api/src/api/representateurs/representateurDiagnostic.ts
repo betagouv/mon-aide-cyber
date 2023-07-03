@@ -15,6 +15,7 @@ type RepresentationQuestionChoixUnique = {
   identifiant: string;
   libelle: string;
   reponsesPossibles: RepresentationReponsePossible[];
+  type?: TypeDeSaisie | undefined;
 };
 type RepresentationContexte = {
   questions: RepresentationQuestionChoixUnique[];
@@ -23,50 +24,66 @@ type RepresentationReferentiel = {
   contexte: RepresentationContexte;
 };
 
-type TypeDeSaisie = "saisieLibre";
+type TypeDeSaisie = "liste" | "saisieLibre";
 type Format = "nombre" | "texte";
 
+type ReponseATranscrire = {
+  identifiant: string;
+  type?: { format: Format; type: TypeDeSaisie };
+};
+type QuestionATranscrire = {
+  identifiant: string;
+  reponses?: ReponseATranscrire[];
+  type?: TypeDeSaisie;
+};
 export type Transcripteur = {
   contexte: {
-    questions: [
-      {
-        identifiant: string;
-        reponses: {
-          identifiant: string;
-          type?: { type: TypeDeSaisie; format: Format };
-        }[];
-      },
-    ];
+    questions: QuestionATranscrire[];
   };
 };
 
+const trouveQuestionATranscrire = (
+  identifiantQuestion: string,
+  transcripteur: Transcripteur
+): QuestionATranscrire | undefined => {
+  return transcripteur.contexte.questions.find(
+    (question) => identifiantQuestion === question.identifiant
+  );
+};
+
+function trouveReponseATranscrire(
+  identifiantReponse: string,
+  questionATranscrire: ReponseATranscrire[] | undefined
+): ReponseATranscrire | undefined {
+  return questionATranscrire?.find(
+    (reponseATranscrire) =>
+      reponseATranscrire?.identifiant === identifiantReponse
+  );
+}
+
 export function representeLeDiagnosticPourLeClient(
   diagnostic: Diagnostic,
-  transcripteur: Transcripteur,
+  transcripteur: Transcripteur
 ): RepresentationDiagnostic {
   return {
     identifiant: diagnostic.identifiant,
     referentiel: {
       contexte: {
         questions: diagnostic.referentiel.contexte.questions.map((question) => {
+          const questionATranscrire = trouveQuestionATranscrire(
+            question.identifiant,
+            transcripteur
+          );
           return {
             ...question,
             reponsesPossibles: question.reponsesPossibles.map((reponse) => {
-              const transcription = transcripteur.contexte.questions.find(
-                (transcription) =>
-                  question.identifiant === transcription.identifiant,
+              const reponseAtranscrire = trouveReponseATranscrire(
+                reponse.identifiant,
+                questionATranscrire?.reponses
               );
-              if (transcription !== undefined) {
-                const reponseAtranscrire = transcription.reponses.find(
-                  (reponseATranscrire) =>
-                    reponseATranscrire.identifiant === reponse.identifiant,
-                );
-                if (reponseAtranscrire !== undefined) {
-                  return { ...reponse, type: reponseAtranscrire.type };
-                }
-              }
-              return { ...reponse };
+              return { ...reponse, type: reponseAtranscrire?.type };
             }),
+            type: questionATranscrire?.type,
           };
         }),
       },
