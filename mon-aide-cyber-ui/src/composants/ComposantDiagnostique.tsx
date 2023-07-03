@@ -1,11 +1,14 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import {
   Question,
-  Referentiel,
   ReponsePossible,
 } from "../domaine/diagnostique/Referentiel.ts";
 import { FournisseurEntrepots } from "../fournisseurs/FournisseurEntrepot.ts";
 import { UUID } from "../types/Types.ts";
+import {
+  diagnostiqueCharge,
+  reducteurDiagnostique,
+} from "../domaine/diagnostique/reducteurs.ts";
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -13,11 +16,12 @@ type ProprietesComposantQuestion = {
 
 type ProprietesComposantReponsePossible = {
   reponsePossible: ReponsePossible;
-  question: Question;
+  identifiantQuestion: string;
 };
 
 const ComposantReponsePossible = ({
   reponsePossible,
+  identifiantQuestion,
 }: ProprietesComposantReponsePossible) => {
   const champsASaisir =
     reponsePossible.type?.type === "saisieLibre" ? (
@@ -36,7 +40,7 @@ const ComposantReponsePossible = ({
       <input
         id={reponsePossible.identifiant}
         type="radio"
-        name={reponsePossible.identifiant}
+        name={identifiantQuestion}
         value={reponsePossible.identifiant}
       ></input>
       <label htmlFor={reponsePossible.identifiant}>
@@ -74,7 +78,7 @@ const ComposantQuestionSimple = ({ question }: ProprietesComposantQuestion) => {
           <ComposantReponsePossible
             key={reponse.identifiant}
             reponsePossible={reponse}
-            question={question}
+            identifiantQuestion={question.identifiant}
           />
         );
       })}
@@ -101,9 +105,9 @@ type ProprietesComposantDiagnostique = {
 export const ComposantDiagnostique = ({
   idDiagnostique,
 }: ProprietesComposantDiagnostique) => {
-  const [referentiel, setReferentiel] = useState<Referentiel | undefined>(
-    undefined,
-  );
+  const [etatReferentiel, envoie] = useReducer(reducteurDiagnostique, {
+    diagnostique: undefined,
+  });
 
   const entrepots = useContext(FournisseurEntrepots);
 
@@ -111,8 +115,10 @@ export const ComposantDiagnostique = ({
     entrepots
       .diagnostique()
       .lis(idDiagnostique)
-      .then((diagnostique) => setReferentiel(diagnostique.referentiel));
-  }, [entrepots, idDiagnostique]);
+      .then((diagnostique) => {
+        envoie(diagnostiqueCharge(diagnostique));
+      });
+  }, [entrepots, idDiagnostique, envoie]);
 
   return (
     <>
@@ -120,13 +126,15 @@ export const ComposantDiagnostique = ({
         <h2>Contexte</h2>
         <section>
           <div>
-            {referentiel?.contexte.questions.map((question) => (
-              <fieldset key={question.identifiant} id={question.identifiant}>
-                <label>{question.libelle}</label>
-                <br />
-                <ComposantQuestion question={question} />
-              </fieldset>
-            ))}
+            {etatReferentiel.diagnostique?.referentiel?.contexte.questions.map(
+              (question) => (
+                <fieldset key={question.identifiant} id={question.identifiant}>
+                  <label>{question.libelle}</label>
+                  <br />
+                  <ComposantQuestion question={question} />
+                </fieldset>
+              ),
+            )}
           </div>
         </section>
       </form>

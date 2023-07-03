@@ -8,6 +8,7 @@ import { faker } from "@faker-js/faker/locale/fr";
 
 type ReponsePossible = {
   libelle: string;
+  ordre?: number;
   type?: { type: TypeDeSaisie; format: Format } | undefined;
 };
 
@@ -37,7 +38,7 @@ class ConstructeurReferentiel {
       identifiant: faker.string.alpha(10),
       libelle: question.libelle,
       reponsesPossibles: reponsePossibles.map((reponse, index) => ({
-        ordre: index,
+        ordre: reponse.ordre !== undefined ? reponse.ordre : index,
         libelle: reponse.libelle,
         identifiant: faker.string.alpha(10),
         type: reponse.type,
