@@ -60,4 +60,29 @@ describe("Le représentateur de diagnostique", () => {
     });
     expect(reponsesPossibles[2].type).toBeUndefined();
   });
+
+  it("définit la manière dont est présentée la question sous forme de liste", () => {
+    const diagnostique = unDiagnostique()
+      .avecUnReferentiel(
+        unReferentielAuContexteVide()
+          .ajouteUneQuestionAuContexte(
+            uneQuestion().aChoixUnique("Question liste?").construis(),
+          )
+          .construis(),
+      )
+      .construis();
+    const diagnostiqueRepresente = representeLeDiagnostiquePourLeClient(
+      diagnostique,
+      {
+        contexte: {
+          questions: [
+            { identifiant: "question-liste", type: "liste", reponses: [] },
+          ],
+        },
+      },
+    );
+
+    const question = diagnostiqueRepresente.referentiel.contexte.questions[0];
+    expect(question.type).toBe("liste");
+  });
 });
