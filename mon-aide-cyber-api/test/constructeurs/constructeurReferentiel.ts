@@ -39,7 +39,7 @@ class ConstructeurQuestion implements Constructeur<QuestionChoixUnique> {
 
   aChoixUnique(
     libelleQuestion: string,
-    reponsesPossibles: { identifiant: string; libelle: string }[],
+    reponsesPossibles: { identifiant: string; libelle: string }[] = [],
   ): ConstructeurQuestion {
     this.question.reponsesPossibles = [];
     this.question.libelle = libelleQuestion;
