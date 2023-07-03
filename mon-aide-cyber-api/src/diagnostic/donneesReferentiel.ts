@@ -185,6 +185,20 @@ const referentiel: Referentiel = {
           { identifiant: "REtD-oui", libelle: "Oui", ordre: 3 },
         ],
       },
+      {
+        identifiant: "opereSIIndustriels",
+        libelle:
+          "Votre organisation opère-t-elle des systèmes d'information industriels ?",
+        reponsesPossibles: [
+          {
+            identifiant: "SII-neSaisPas",
+            libelle: "Je ne sais pas",
+            ordre: 1,
+          },
+          { identifiant: "SII-non", libelle: "Non", ordre: 2 },
+          { identifiant: "SII-oui", libelle: "Oui", ordre: 3 },
+        ],
+      },
     ],
   },
 };
