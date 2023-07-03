@@ -103,16 +103,72 @@ const referentiel: Referentiel = {
         identifiant: "nombrePersonnesDansOrganisation",
         libelle: "Combien de personnes compte votre organisation ?",
         reponsesPossibles: [
-          { identifiant: "entre0Et20", libelle: "Entre 0 et 20", ordre: 0 },
-          { identifiant: "entre20Et50", libelle: "Entre 20 et 50", ordre: 1 },
-          { identifiant: "entre50Et100", libelle: "Entre 50 et 100", ordre: 2 },
           {
-            identifiant: "entre100Et200",
+            identifiant: "nbPersOrg-entre0Et20",
+            libelle: "Entre 0 et 20",
+            ordre: 0,
+          },
+          {
+            identifiant: "nbPersOrg-entre20Et50",
+            libelle: "Entre 20 et 50",
+            ordre: 1,
+          },
+          {
+            identifiant: "nbPersOrg-entre50Et100",
+            libelle: "Entre 50 et 100",
+            ordre: 2,
+          },
+          {
+            identifiant: "nbPersOrg-entre100Et200",
             libelle: "Entre 100 et 200",
             ordre: 3,
           },
-          { identifiant: "plusDe200", libelle: "Plus de 200", ordre: 4 },
-          { identifiant: "plusDe500", libelle: "Plus de 500", ordre: 5 },
+          {
+            identifiant: "nbPersOrg-plusDe200",
+            libelle: "Plus de 200",
+            ordre: 4,
+          },
+          {
+            identifiant: "nbPersOrg-plusDe500",
+            libelle: "Plus de 500",
+            ordre: 5,
+          },
+        ],
+      },
+      {
+        identifiant: "nombrePostesTravailDansOrganisation",
+        libelle: "Combien de postes de travail compte votre organisation ?",
+        reponsesPossibles: [
+          {
+            identifiant: "nbPosOrg-entre0Et20",
+            libelle: "Entre 0 et 20",
+            ordre: 0,
+          },
+          {
+            identifiant: "nbPosOrg-entre20Et50",
+            libelle: "Entre 20 et 50",
+            ordre: 1,
+          },
+          {
+            identifiant: "nbPosOrg-entre50Et100",
+            libelle: "Entre 50 et 100",
+            ordre: 2,
+          },
+          {
+            identifiant: "nbPosOrg-entre100Et200",
+            libelle: "Entre 100 et 200",
+            ordre: 3,
+          },
+          {
+            identifiant: "nbPosOrg-plusDe200",
+            libelle: "Plus de 200",
+            ordre: 4,
+          },
+          {
+            identifiant: "nbPosOrg-plusDe500",
+            libelle: "Plus de 500",
+            ordre: 5,
+          },
         ],
       },
     ],
