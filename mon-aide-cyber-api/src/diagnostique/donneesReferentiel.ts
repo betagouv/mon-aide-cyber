@@ -1,4 +1,6 @@
-const referentiel = {
+import { Referentiel } from "./referentiel";
+
+const referentiel: Referentiel = {
   contexte: {
     questions: [
       {
@@ -95,6 +97,22 @@ const referentiel = {
             identifiant: "Activités extra-territoriales",
             ordre: 18,
           },
+        ],
+      },
+      {
+        identifiant: "nombrePersonnesDansOrganisation",
+        libelle: "Combien de personnes compte votre organisation ?",
+        reponsesPossibles: [
+          { ordre: 0, libelle: "Entre 0 et 20", identifiant: "entre0Et20" },
+          { ordre: 1, libelle: "Entre 20 et 50", identifiant: "entre20Et50" },
+          { ordre: 2, libelle: "Entre 50 et 100", identifiant: "entre50Et100" },
+          {
+            ordre: 3,
+            libelle: "Entre 100 et 200",
+            identifiant: "entre100Et200",
+          },
+          { ordre: 4, libelle: "Plus de 200", identifiant: "plusDe200" },
+          { ordre: 5, libelle: "Plus de 500", identifiant: "plusDe500" },
         ],
       },
     ],
