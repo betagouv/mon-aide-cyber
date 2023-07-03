@@ -4,7 +4,7 @@ export type Contexte = {
 export type Referentiel = {
   contexte: Contexte;
 };
-export type TypeDeSaisie = "saisieLibre";
+export type TypeDeSaisie = "saisieLibre" | "liste";
 export type Format = "texte" | "nombre";
 export type ReponsePossible = {
   ordre: number;
@@ -16,4 +16,5 @@ export type Question = {
   identifiant: string;
   libelle: string;
   reponsesPossibles: ReponsePossible[];
+  type?: TypeDeSaisie;
 };
