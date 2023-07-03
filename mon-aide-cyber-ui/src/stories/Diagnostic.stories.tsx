@@ -14,7 +14,7 @@ const diagnosticAvecUneQuestion = unDiagnostic()
   .avecIdentifiant(identifiantUneQuestion)
   .avecUnReferentiel(
     unReferentiel()
-      .avecUneQuestion("Quelle entreprise êtes-vous ?", [
+      .avecUneQuestion({ libelle: "Quelle entreprise êtes-vous ?" }, [
         { libelle: "Entreprise privée (ex. TPE, PME, ETI)" },
       ])
       .construis(),
@@ -25,7 +25,7 @@ const diagnosticAvecUnChampsDeSaisie = unDiagnostic()
   .avecIdentifiant(identifiantChampsDeSaise)
   .avecUnReferentiel(
     unReferentiel()
-      .avecUneQuestion("Quelle entreprise êtes-vous ?", [
+      .avecUneQuestion({ libelle: "Quelle entreprise êtes-vous ?" }, [
         { libelle: "Entreprise privée (ex. TPE, PME, ETI)" },
         { libelle: "Autre", type: { type: "saisieLibre", format: "texte" } },
       ])
@@ -37,14 +37,31 @@ const diagnosticAvecPlusieursQuestions = unDiagnostic()
   .avecIdentifiant(identifiantPlusieursQuestions)
   .avecUnReferentiel(
     unReferentiel()
-      .avecUneQuestion("Une question?")
-      .avecUneQuestion("Une autre question?")
+      .avecUneQuestion({ libelle: "Une question?" })
+      .avecUneQuestion({ libelle: "Une autre question?" })
+      .construis(),
+  )
+  .construis();
+const identifiantQuestionListeDeroulante =
+  "1cdaac38-2ee8-413d-ac00-00f8b5fbad10";
+const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
+  .avecIdentifiant(identifiantQuestionListeDeroulante)
+  .avecUnReferentiel(
+    unReferentiel()
+      .avecUneQuestion({ libelle: "Une liste déroulante?", type: "liste" }, [
+        { libelle: "Réponse A" },
+        { libelle: "Réponse B" },
+        { libelle: "Réponse C" },
+      ])
       .construis(),
   )
   .construis();
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestion);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUnChampsDeSaisie);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecPlusieursQuestions);
+await entrepotDiagnosticMemoire.persiste(
+  diagnosticAvecQuestionSousFormeDeListeDeroulante,
+);
 
 const meta = {
   title: "Diagnostic",
@@ -119,6 +136,27 @@ export const AfficheDiagnosticAvecPlusieursQuestions: Story = {
             .libelle,
         ),
       ),
+    ).toBeInTheDocument();
+  },
+};
+
+export const AfficheDiagnosticQuestionListeDeroulante: Story = {
+  name: "Affiche les réponses possibles à une question sous forme de liste déroulante",
+  args: { idDiagnostic: identifiantQuestionListeDeroulante },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    expect(
+      await waitFor(() => canvas.getByRole("listbox")),
+    ).toBeInTheDocument();
+    expect(
+      await waitFor(() => canvas.getByRole("option", { name: /réponse a/i })),
+    ).toBeInTheDocument();
+    expect(
+      await waitFor(() => canvas.getByRole("option", { name: /réponse B/i })),
+    ).toBeInTheDocument();
+    expect(
+      await waitFor(() => canvas.getByRole("option", { name: /réponse c/i })),
     ).toBeInTheDocument();
   },
 };

@@ -18,7 +18,6 @@ type ProprietesComposantReponsePossible = {
 
 const ComposantReponsePossible = ({
   reponsePossible,
-  question,
 }: ProprietesComposantReponsePossible) => {
   const champsASaisir =
     reponsePossible.type?.type === "saisieLibre" ? (
@@ -37,7 +36,7 @@ const ComposantReponsePossible = ({
       <input
         id={reponsePossible.identifiant}
         type="radio"
-        name={question.identifiant}
+        name={reponsePossible.identifiant}
         value={reponsePossible.identifiant}
       ></input>
       <label htmlFor={reponsePossible.identifiant}>
@@ -48,11 +47,28 @@ const ComposantReponsePossible = ({
     </>
   );
 };
-const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
+
+const ComposantQuestionListe = ({ question }: ProprietesComposantQuestion) => {
+  return (
+    <select
+      role="listbox"
+      id={question.identifiant}
+      name={question.identifiant}
+    >
+      {question.reponsesPossibles.map((reponse) => {
+        return (
+          <option key={reponse.identifiant} value={reponse.identifiant}>
+            {reponse.libelle}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
+
+const ComposantQuestionSimple = ({ question }: ProprietesComposantQuestion) => {
   return (
     <>
-      <label>{question.libelle}</label>
-      <br />
       {question.reponsesPossibles.map((reponse) => {
         return (
           <ComposantReponsePossible
@@ -62,6 +78,18 @@ const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
           />
         );
       })}
+    </>
+  );
+};
+
+const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
+  return (
+    <>
+      {question.type === "liste" ? (
+        <ComposantQuestionListe question={question} />
+      ) : (
+        <ComposantQuestionSimple question={question} />
+      )}
     </>
   );
 };
@@ -94,6 +122,8 @@ export const ComposantDiagnostic = ({
           <div>
             {referentiel?.contexte.questions.map((question) => (
               <fieldset key={question.identifiant} id={question.identifiant}>
+                <label>{question.libelle}</label>
+                <br />
                 <ComposantQuestion question={question} />
               </fieldset>
             ))}
