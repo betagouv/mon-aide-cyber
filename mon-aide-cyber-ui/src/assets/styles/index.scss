@@ -4,6 +4,7 @@
 @import "en-tete";
 @import "pied-de-page";
 @import "formulaires";
+@import "questionnaire";
 
 body {
   font-family: Marianne;
@@ -20,7 +21,6 @@ body {
 
 .devise {
   height: 1.38em;
-
   background-image: $logo-devise;
 }
 
