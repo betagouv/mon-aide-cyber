@@ -5,6 +5,7 @@ import {
   diagnosticCharge,
   reducteurDiagnostic,
 } from "../../../src/domaine/diagnostic/reducteurs";
+import { uneReponsePossible } from "../../consructeurs/constructeurReponsePossible";
 
 describe("Les réducteurs de diagnostic", () => {
   describe("Lorsque le diagnostic est chargé", () => {
@@ -12,16 +13,37 @@ describe("Les réducteurs de diagnostic", () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
-            .avecUneQuestion({ libelle: "Première question ?" }, [
-              { libelle: "Réponse D", ordre: 3 },
-              { libelle: "Réponse B", ordre: 1 },
-              { libelle: "Réponse A", ordre: 0 },
-              { libelle: "Réponse C", ordre: 2 },
+            .avecUneQuestionEtDesReponses({ libelle: "Première question ?" }, [
+              uneReponsePossible()
+                .avecLibelle("Réponse D")
+                .enPosition(3)
+                .construis(),
+              uneReponsePossible()
+                .avecLibelle("Réponse B")
+                .enPosition(1)
+                .construis(),
+              uneReponsePossible()
+                .avecLibelle("Réponse A")
+                .enPosition(0)
+                .construis(),
+              uneReponsePossible()
+                .avecLibelle("Réponse C")
+                .enPosition(2)
+                .construis(),
             ])
-            .avecUneQuestion({ libelle: "Deuxième question ?" }, [
-              { libelle: "Réponse B", ordre: 1 },
-              { libelle: "Réponse C", ordre: 2 },
-              { libelle: "Réponse A", ordre: 0 },
+            .avecUneQuestionEtDesReponses({ libelle: "Deuxième question ?" }, [
+              uneReponsePossible()
+                .avecLibelle("Réponse B")
+                .enPosition(1)
+                .construis(),
+              uneReponsePossible()
+                .avecLibelle("Réponse C")
+                .enPosition(2)
+                .construis(),
+              uneReponsePossible()
+                .avecLibelle("Réponse A")
+                .enPosition(0)
+                .construis(),
             ])
             .construis(),
         )
