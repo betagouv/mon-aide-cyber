@@ -5,7 +5,7 @@ import { expect } from "@storybook/jest";
 import { FournisseurEntrepots } from "../fournisseurs/FournisseurEntrepot.ts";
 import { EntrepotDiagnostiqueMemoire } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
 import { unDiagnostique } from "../../test/consructeurs/constructeurDiagnostique.ts";
-import { unReferentiel } from "../../test/consructeurs/construceurReferentiel.ts";
+import { unReferentiel } from "../../test/consructeurs/constructeurReferentiel.ts";
 import {
   uneQuestion,
   uneQuestionAChoixMultiple,
