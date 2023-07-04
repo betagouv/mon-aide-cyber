@@ -1,5 +1,5 @@
 import { describe, expect } from "vitest";
-import { unReferentiel } from "../../constructeurs/construceurReferentiel";
+import { unReferentiel } from "../../constructeurs/constructeurReferentiel";
 import { unDiagnostic } from "../../constructeurs/constructeurDiagnostic";
 import {
   diagnosticCharge,
@@ -45,22 +45,22 @@ describe("Les réducteurs de diagnostic", () => {
                 .enPosition(0)
                 .construis(),
             ])
-            .construis()
+            .construis(),
         )
         .construis();
 
       const etatDiagnostic = reducteurDiagnostic(
         { diagnostic: undefined },
-        diagnosticCharge(diagnostic)
+        diagnosticCharge(diagnostic),
       );
 
       const questions =
         etatDiagnostic.diagnostic.referentiel.contexte.questions;
       expect(
-        questions[0].reponsesPossibles.map((reponse) => reponse.ordre)
+        questions[0].reponsesPossibles.map((reponse) => reponse.ordre),
       ).toStrictEqual([0, 1, 2, 3]);
       expect(
-        questions[1].reponsesPossibles.map((reponse) => reponse.ordre)
+        questions[1].reponsesPossibles.map((reponse) => reponse.ordre),
       ).toStrictEqual([0, 1, 2]);
     });
   });

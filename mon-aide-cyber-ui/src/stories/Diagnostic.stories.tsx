@@ -2,7 +2,7 @@ import { ComposantDiagnostic } from "../composants/ComposantDiagnostic.tsx";
 import { Meta, StoryObj } from "@storybook/react";
 import { FournisseurEntrepots } from "../fournisseurs/FournisseurEntrepot.ts";
 import { unDiagnostic } from "../../test/constructeurs/constructeurDiagnostic.ts";
-import { unReferentiel } from "../../test/constructeurs/construceurReferentiel.ts";
+import { unReferentiel } from "../../test/constructeurs/constructeurReferentiel.ts";
 import { waitFor, within } from "@storybook/testing-library";
 import { expect } from "@storybook/jest";
 import { EntrepotDiagnosticMemoire } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
@@ -25,9 +25,9 @@ const diagnosticAvecUneQuestion = unDiagnostic()
           uneReponsePossible()
             .avecLibelle("Entreprise privée (ex. TPE, PME, ETI)")
             .construis(),
-        ]
+        ],
       )
-      .construis()
+      .construis(),
   )
   .construis();
 const identifiantChampsDeSaise = "19aea878-6593-4b2e-b092-678777270d31";
@@ -45,9 +45,9 @@ const diagnosticAvecUnChampsDeSaisie = unDiagnostic()
             .avecLibelle("Autre")
             .auFormatTexteDeSaisieLibre()
             .construis(),
-        ]
+        ],
       )
-      .construis()
+      .construis(),
   )
   .construis();
 const identifiantPlusieursQuestions = "684a9219-83b2-40f5-9752-17675aa00b22";
@@ -57,7 +57,7 @@ const diagnosticAvecPlusieursQuestions = unDiagnostic()
     unReferentiel()
       .avecUneQuestionEtDesReponses({ libelle: "Une question?" })
       .avecUneQuestionEtDesReponses({ libelle: "Une autre question?" })
-      .construis()
+      .construis(),
   )
   .construis();
 const identifiantQuestionListeDeroulante =
@@ -72,9 +72,9 @@ const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
           uneReponsePossible().avecLibelle("Réponse A").construis(),
           uneReponsePossible().avecLibelle("Réponse B").construis(),
           uneReponsePossible().avecLibelle("Réponse C").construis(),
-        ]
+        ],
       )
-      .construis()
+      .construis(),
   )
   .construis();
 
@@ -98,23 +98,23 @@ const diagnosticAvecReponseEntrainantQuestion = unDiagnostic()
                       .auFormatTexteDeSaisieLibre()
                       .construis(),
                   ])
-                  .construis()
+                  .construis(),
               )
               .construis(),
           ])
-          .construis()
+          .construis(),
       )
-      .construis()
+      .construis(),
   )
   .construis();
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestion);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUnChampsDeSaisie);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecPlusieursQuestions);
 await entrepotDiagnosticMemoire.persiste(
-  diagnosticAvecQuestionSousFormeDeListeDeroulante
+  diagnosticAvecQuestionSousFormeDeListeDeroulante,
 );
 await entrepotDiagnosticMemoire.persiste(
-  diagnosticAvecReponseEntrainantQuestion
+  diagnosticAvecReponseEntrainantQuestion,
 );
 
 const meta = {
@@ -146,14 +146,14 @@ export const QuestionDiagnostic: Story = {
     expect(
       await waitFor(() =>
         canvas.getByText(
-          diagnosticAvecUneQuestion.referentiel.contexte.questions[0].libelle
-        )
-      )
+          diagnosticAvecUneQuestion.referentiel.contexte.questions[0].libelle,
+        ),
+      ),
     ).toBeInTheDocument();
     expect(
       await waitFor(() =>
-        canvas.getByLabelText("Entreprise privée (ex. TPE, PME, ETI)")
-      )
+        canvas.getByLabelText("Entreprise privée (ex. TPE, PME, ETI)"),
+      ),
     ).toBeInTheDocument();
   },
 };
@@ -165,7 +165,7 @@ export const AfficheQuestionDiagnosticAvecChampsSaisie: Story = {
     const canvas = within(canvasElement);
 
     expect(
-      await waitFor(() => canvas.getByRole("textbox"))
+      await waitFor(() => canvas.getByRole("textbox")),
     ).toBeInTheDocument();
   },
 };
@@ -179,17 +179,17 @@ export const AfficheDiagnosticAvecPlusieursQuestions: Story = {
       await waitFor(() =>
         canvas.getByText(
           diagnosticAvecPlusieursQuestions.referentiel.contexte.questions[0]
-            .libelle
-        )
-      )
+            .libelle,
+        ),
+      ),
     ).toBeInTheDocument();
     expect(
       await waitFor(() =>
         canvas.getByText(
           diagnosticAvecPlusieursQuestions.referentiel.contexte.questions[1]
-            .libelle
-        )
-      )
+            .libelle,
+        ),
+      ),
     ).toBeInTheDocument();
   },
 };
@@ -201,16 +201,16 @@ export const AfficheDiagnosticQuestionListeDeroulante: Story = {
     const canvas = within(canvasElement);
 
     expect(
-      await waitFor(() => canvas.getByRole("listbox"))
+      await waitFor(() => canvas.getByRole("listbox")),
     ).toBeInTheDocument();
     expect(
-      await waitFor(() => canvas.getByRole("option", { name: /réponse a/i }))
+      await waitFor(() => canvas.getByRole("option", { name: /réponse a/i })),
     ).toBeInTheDocument();
     expect(
-      await waitFor(() => canvas.getByRole("option", { name: /réponse B/i }))
+      await waitFor(() => canvas.getByRole("option", { name: /réponse B/i })),
     ).toBeInTheDocument();
     expect(
-      await waitFor(() => canvas.getByRole("option", { name: /réponse c/i }))
+      await waitFor(() => canvas.getByRole("option", { name: /réponse c/i })),
     ).toBeInTheDocument();
   },
 };
@@ -226,12 +226,12 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
         .reponsesPossibles[2];
     expect(
       await waitFor(() =>
-        canvas.findByText(reponseEntrainantQuestion.question?.libelle || "")
-      )
+        canvas.findByText(reponseEntrainantQuestion.question?.libelle || ""),
+      ),
     ).toBeInTheDocument();
     expect(await waitFor(() => canvas.getAllByRole("checkbox").length)).toBe(5);
     expect(
-      await waitFor(() => canvas.getByRole("textbox"))
+      await waitFor(() => canvas.getByRole("textbox")),
     ).toBeInTheDocument();
   },
 };
