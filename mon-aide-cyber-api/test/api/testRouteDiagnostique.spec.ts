@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import testeurIntegration from "./testeurIntegration";
 import * as crypto from "crypto";
 import { unReferentiel } from "../constructeurs/constructeurReferentiel";
+import { unDiagnostique } from "../constructeurs/constructeurDiagnostique";
 
 describe("le serveur MAC sur les routes /api/diagnostiques/", () => {
   const testeurMAC = testeurIntegration();
@@ -13,15 +14,17 @@ describe("le serveur MAC sur les routes /api/diagnostiques/", () => {
   describe("quand une requête GET est reçue sur /api/diagnostiques/{id}", () => {
     it("retourne le référentiel du diagnostique", async () => {
       const id = crypto.randomUUID();
-      const referentiel = unReferentiel().construis();
-      testeurMAC.adaptateurDonnees.ajoute(referentiel);
+      const diagnostique = unDiagnostique()
+        .avecUnReferentiel(unReferentiel().construis())
+        .construis();
+      testeurMAC.adaptateurDonnees.ajoute(diagnostique);
 
       const reponse = await fetch(
         `http://localhost:1234/api/diagnostiques/${id}`,
       );
 
       expect(reponse.status).toBe(200);
-      const premiereQuestion = referentiel.contexte.questions[0];
+      const premiereQuestion = diagnostique.referentiel.contexte.questions[0];
       const premiereReponsePossible = premiereQuestion.reponsesPossibles[0];
       expect(await reponse.json()).toMatchObject({
         identifiant: id,
