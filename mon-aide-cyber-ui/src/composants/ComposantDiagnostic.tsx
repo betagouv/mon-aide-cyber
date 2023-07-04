@@ -45,7 +45,7 @@ const ComposantReponsePossible = (
       <label htmlFor={proprietes.reponsePossible.identifiant}>
         {proprietes.reponsePossible.libelle}
       </label>
-      {champsASaisir}
+      <div>{champsASaisir}</div>
       {proprietes.children}
       <br />
     </>
@@ -82,7 +82,7 @@ const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
             typeDeSaisie="radio"
           >
             {reponse.question?.type === "choixMultiple" ? (
-              <>
+              <div className="question-secondaire">
                 <br />
                 <label>{reponse.question?.libelle}</label>
                 <br />
@@ -96,7 +96,7 @@ const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
                     />
                   );
                 })}
-              </>
+              </div>
             ) : (
               ""
             )}
@@ -130,7 +130,7 @@ export const ComposantDiagnostic = ({
     <>
       <form>
         <h2>Contexte</h2>
-        <section>
+        <section className="question">
           <div>
             {etatReferentiel.diagnostic?.referentiel?.contexte.questions.map(
               (question) => (
