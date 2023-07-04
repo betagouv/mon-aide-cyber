@@ -25,6 +25,7 @@ const referentiel: Referentiel = {
           },
           { identifiant: "autre", libelle: "Autre : préciser", ordre: 3 },
         ],
+        type: "choixUnique",
       },
       {
         identifiant: "secteurActivite",
@@ -98,6 +99,7 @@ const referentiel: Referentiel = {
             ordre: 18,
           },
         ],
+        type: "choixUnique",
       },
       {
         identifiant: "nombrePersonnesDansOrganisation",
@@ -134,6 +136,7 @@ const referentiel: Referentiel = {
             ordre: 5,
           },
         ],
+        type: "choixUnique",
       },
       {
         identifiant: "nombrePostesTravailDansOrganisation",
@@ -170,6 +173,7 @@ const referentiel: Referentiel = {
             ordre: 5,
           },
         ],
+        type: "choixUnique",
       },
       {
         identifiant: "activitesRechercheEtDeveloppement",
@@ -184,6 +188,7 @@ const referentiel: Referentiel = {
           { identifiant: "REtD-non", libelle: "Non", ordre: 2 },
           { identifiant: "REtD-oui", libelle: "Oui", ordre: 3 },
         ],
+        type: "choixUnique",
       },
       {
         identifiant: "opereSIIndustriels",
@@ -198,6 +203,62 @@ const referentiel: Referentiel = {
           { identifiant: "SII-non", libelle: "Non", ordre: 2 },
           { identifiant: "SII-oui", libelle: "Oui", ordre: 3 },
         ],
+        type: "choixUnique",
+      },
+      {
+        identifiant: "usageCloud",
+        libelle: "Existe t-il un usage du Cloud dans votre organisation ?",
+        reponsesPossibles: [
+          {
+            identifiant: "usageCloud-neSaisPas",
+            libelle: "Je ne sais pas",
+            ordre: 1,
+          },
+          { identifiant: "usageCloud-non", libelle: "Non", ordre: 2 },
+          {
+            identifiant: "usageCloud-oui",
+            libelle: "Oui",
+            ordre: 3,
+            questionATiroir: {
+              identifiant: "usageCloudQuestionTiroir",
+              libelle: 'Si "Oui": quels sont vos usages du Cloud ?',
+              reponsesPossibles: [
+                {
+                  identifiant: "usageCloud-Oui-neSaisPas",
+                  libelle: "Je ne sais pas",
+                  ordre: 1,
+                },
+                {
+                  identifiant: "usageCloud-Oui-Messagerie",
+                  libelle: "Messagerie",
+                  ordre: 2,
+                },
+                {
+                  identifiant: "usageCloud-Oui-SuiteBureautiqueComplete",
+                  libelle: "Suite bureautique complète",
+                  ordre: 3,
+                },
+                {
+                  identifiant: "usageCloud-Oui-HebergementDonneesetSauvegardes",
+                  libelle: "Hébergement des données et sauvegardes",
+                  ordre: 4,
+                },
+                {
+                  identifiant: "usageCloud-Oui-VirtualisationCompleteSI",
+                  libelle: "Virtualisation complète du SI",
+                  ordre: 5,
+                },
+                {
+                  identifiant: "usageCloud-Oui-Autre",
+                  libelle: "Autre : Préciser",
+                  ordre: 6,
+                },
+              ],
+              type: "choixMultiple",
+            },
+          },
+        ],
+        type: "choixUnique",
       },
     ],
   },
