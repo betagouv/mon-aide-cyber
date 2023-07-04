@@ -1,5 +1,5 @@
 import { Referentiel } from "../../src/domaine/diagnostique/Referentiel.ts";
-import { unReferentiel } from "./construceurReferentiel.ts";
+import { unReferentiel } from "./constructeurReferentiel.ts";
 import { Diagnostique } from "../../src/domaine/diagnostique/Diagnostique.ts";
 import { faker } from "@faker-js/faker/locale/fr";
 import { UUID } from "../../src/types/Types.ts";
