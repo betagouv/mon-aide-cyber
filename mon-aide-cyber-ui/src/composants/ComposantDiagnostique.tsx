@@ -82,7 +82,7 @@ const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
             typeDeSaisie="radio"
           >
             {reponse.question?.type === "choixMultiple" ? (
-              <div className="question-secondaire">
+              <div className="question-tiroir">
                 <br />
                 <label>{reponse.question?.libelle}</label>
                 <br />
