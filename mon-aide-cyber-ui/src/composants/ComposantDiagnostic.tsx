@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer } from "react";
+import { PropsWithChildren, useContext, useEffect, useReducer } from "react";
 import {
   Question,
   ReponsePossible,
@@ -17,17 +17,16 @@ type ProprietesComposantQuestion = {
 type ProprietesComposantReponsePossible = {
   reponsePossible: ReponsePossible;
   identifiantQuestion: string;
+  typeDeSaisie: "radio" | "checkbox";
 };
-
-const ComposantReponsePossible = ({
-  reponsePossible,
-  identifiantQuestion,
-}: ProprietesComposantReponsePossible) => {
+const ComposantReponsePossible = (
+  proprietes: PropsWithChildren<ProprietesComposantReponsePossible>,
+) => {
   const champsASaisir =
-    reponsePossible.type?.type === "saisieLibre" ? (
+    proprietes.reponsePossible.type?.type === "saisieLibre" ? (
       <input
-        id={"asaisir-" + reponsePossible.identifiant}
-        name={reponsePossible.identifiant}
+        id={`asaisir-${proprietes.reponsePossible.identifiant}`}
+        name={proprietes.reponsePossible.identifiant}
         type="text"
         required={true}
       />
@@ -38,15 +37,16 @@ const ComposantReponsePossible = ({
   return (
     <>
       <input
-        id={reponsePossible.identifiant}
-        type="radio"
-        name={identifiantQuestion}
-        value={reponsePossible.identifiant}
+        id={proprietes.reponsePossible.identifiant}
+        type={proprietes.typeDeSaisie}
+        name={proprietes.identifiantQuestion}
+        value={proprietes.reponsePossible.identifiant}
       ></input>
-      <label htmlFor={reponsePossible.identifiant}>
-        {reponsePossible.libelle}
+      <label htmlFor={proprietes.reponsePossible.identifiant}>
+        {proprietes.reponsePossible.libelle}
       </label>
       {champsASaisir}
+      {proprietes.children}
       <br />
     </>
   );
@@ -70,7 +70,7 @@ const ComposantQuestionListe = ({ question }: ProprietesComposantQuestion) => {
   );
 };
 
-const ComposantQuestionSimple = ({ question }: ProprietesComposantQuestion) => {
+const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
   return (
     <>
       {question.reponsesPossibles.map((reponse) => {
@@ -79,25 +79,33 @@ const ComposantQuestionSimple = ({ question }: ProprietesComposantQuestion) => {
             key={reponse.identifiant}
             reponsePossible={reponse}
             identifiantQuestion={question.identifiant}
-          />
+            typeDeSaisie="radio"
+          >
+            {reponse.question?.type === "choixMultiple" ? (
+              <>
+                <br />
+                <label>{reponse.question?.libelle}</label>
+                <br />
+                {reponse.question.reponsesPossibles.map((reponse) => {
+                  return (
+                    <ComposantReponsePossible
+                      key={reponse.identifiant}
+                      reponsePossible={reponse}
+                      identifiantQuestion={question.identifiant}
+                      typeDeSaisie="checkbox"
+                    />
+                  );
+                })}
+              </>
+            ) : (
+              ""
+            )}
+          </ComposantReponsePossible>
         );
       })}
     </>
   );
 };
-
-const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
-  return (
-    <>
-      {question.type === "liste" ? (
-        <ComposantQuestionListe question={question} />
-      ) : (
-        <ComposantQuestionSimple question={question} />
-      )}
-    </>
-  );
-};
-
 type ProprietesComposantDiagnostic = {
   idDiagnostic: UUID;
 };
@@ -129,7 +137,11 @@ export const ComposantDiagnostic = ({
                 <fieldset key={question.identifiant} id={question.identifiant}>
                   <label>{question.libelle}</label>
                   <br />
-                  <ComposantQuestion question={question} />
+                  {question.type === "liste" ? (
+                    <ComposantQuestionListe question={question} />
+                  ) : (
+                    <ComposantQuestion question={question} />
+                  )}
                 </fieldset>
               ),
             )}

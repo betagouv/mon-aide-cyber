@@ -6,6 +6,11 @@ import { unReferentiel } from "../../test/consructeurs/construceurReferentiel.ts
 import { waitFor, within } from "@storybook/testing-library";
 import { expect } from "@storybook/jest";
 import { EntrepotDiagnosticMemoire } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
+import {
+  uneQuestion,
+  uneQuestionAChoixMultiple,
+} from "../../test/consructeurs/constructeurQuestions.ts";
+import { uneReponsePossible } from "../../test/consructeurs/constructeurReponsePossible.ts";
 
 const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
 
@@ -14,9 +19,14 @@ const diagnosticAvecUneQuestion = unDiagnostic()
   .avecIdentifiant(identifiantUneQuestion)
   .avecUnReferentiel(
     unReferentiel()
-      .avecUneQuestion({ libelle: "Quelle entreprise êtes-vous ?" }, [
-        { libelle: "Entreprise privée (ex. TPE, PME, ETI)" },
-      ])
+      .avecUneQuestionEtDesReponses(
+        { libelle: "Quelle entreprise êtes-vous ?" },
+        [
+          uneReponsePossible()
+            .avecLibelle("Entreprise privée (ex. TPE, PME, ETI)")
+            .construis(),
+        ],
+      )
       .construis(),
   )
   .construis();
@@ -25,10 +35,18 @@ const diagnosticAvecUnChampsDeSaisie = unDiagnostic()
   .avecIdentifiant(identifiantChampsDeSaise)
   .avecUnReferentiel(
     unReferentiel()
-      .avecUneQuestion({ libelle: "Quelle entreprise êtes-vous ?" }, [
-        { libelle: "Entreprise privée (ex. TPE, PME, ETI)" },
-        { libelle: "Autre", type: { type: "saisieLibre", format: "texte" } },
-      ])
+      .avecUneQuestionEtDesReponses(
+        { libelle: "Quelle entreprise êtes-vous ?" },
+        [
+          uneReponsePossible()
+            .avecLibelle("Entreprise privée (ex. TPE, PME, ETI)")
+            .construis(),
+          uneReponsePossible()
+            .avecLibelle("Autre")
+            .auFormatTexteDeSaisieLibre()
+            .construis(),
+        ],
+      )
       .construis(),
   )
   .construis();
@@ -37,8 +55,8 @@ const diagnosticAvecPlusieursQuestions = unDiagnostic()
   .avecIdentifiant(identifiantPlusieursQuestions)
   .avecUnReferentiel(
     unReferentiel()
-      .avecUneQuestion({ libelle: "Une question?" })
-      .avecUneQuestion({ libelle: "Une autre question?" })
+      .avecUneQuestionEtDesReponses({ libelle: "Une question?" })
+      .avecUneQuestionEtDesReponses({ libelle: "Une autre question?" })
       .construis(),
   )
   .construis();
@@ -48,11 +66,44 @@ const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
   .avecIdentifiant(identifiantQuestionListeDeroulante)
   .avecUnReferentiel(
     unReferentiel()
-      .avecUneQuestion({ libelle: "Une liste déroulante?", type: "liste" }, [
-        { libelle: "Réponse A" },
-        { libelle: "Réponse B" },
-        { libelle: "Réponse C" },
-      ])
+      .avecUneQuestionEtDesReponses(
+        { libelle: "Une liste déroulante?", type: "liste" },
+        [
+          uneReponsePossible().avecLibelle("Réponse A").construis(),
+          uneReponsePossible().avecLibelle("Réponse B").construis(),
+          uneReponsePossible().avecLibelle("Réponse C").construis(),
+        ],
+      )
+      .construis(),
+  )
+  .construis();
+
+const identifiantReponseEntrainantQuestion =
+  "4a0242d6-26c0-459b-85bd-bf2ce9962c9b";
+const diagnosticAvecReponseEntrainantQuestion = unDiagnostic()
+  .avecIdentifiant(identifiantReponseEntrainantQuestion)
+  .avecUnReferentiel(
+    unReferentiel()
+      .avecUneQuestion(
+        uneQuestion()
+          .avecDesReponses([
+            uneReponsePossible().construis(),
+            uneReponsePossible().construis(),
+            uneReponsePossible()
+              .avecUneQuestion(
+                uneQuestionAChoixMultiple()
+                  .avecNReponses(4)
+                  .avecDesReponses([
+                    uneReponsePossible()
+                      .auFormatTexteDeSaisieLibre()
+                      .construis(),
+                  ])
+                  .construis(),
+              )
+              .construis(),
+          ])
+          .construis(),
+      )
       .construis(),
   )
   .construis();
@@ -61,6 +112,9 @@ await entrepotDiagnosticMemoire.persiste(diagnosticAvecUnChampsDeSaisie);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecPlusieursQuestions);
 await entrepotDiagnosticMemoire.persiste(
   diagnosticAvecQuestionSousFormeDeListeDeroulante,
+);
+await entrepotDiagnosticMemoire.persiste(
+  diagnosticAvecReponseEntrainantQuestion,
 );
 
 const meta = {
@@ -157,6 +211,27 @@ export const AfficheDiagnosticQuestionListeDeroulante: Story = {
     ).toBeInTheDocument();
     expect(
       await waitFor(() => canvas.getByRole("option", { name: /réponse c/i })),
+    ).toBeInTheDocument();
+  },
+};
+
+export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
+  name: "Affiche les réponses possibles à une question ainsi qu'une question reliée à une réponse",
+  args: { idDiagnostic: identifiantReponseEntrainantQuestion },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const reponseEntrainantQuestion =
+      diagnosticAvecReponseEntrainantQuestion.referentiel.contexte.questions[0]
+        .reponsesPossibles[2];
+    expect(
+      await waitFor(() =>
+        canvas.findByText(reponseEntrainantQuestion.question?.libelle || ""),
+      ),
+    ).toBeInTheDocument();
+    expect(await waitFor(() => canvas.getAllByRole("checkbox").length)).toBe(5);
+    expect(
+      await waitFor(() => canvas.getByRole("textbox")),
     ).toBeInTheDocument();
   },
 };
