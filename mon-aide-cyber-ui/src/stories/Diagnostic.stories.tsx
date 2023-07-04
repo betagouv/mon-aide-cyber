@@ -2,7 +2,6 @@ import { ComposantDiagnostic } from "../composants/ComposantDiagnostic.tsx";
 import { Meta, StoryObj } from "@storybook/react";
 import { FournisseurEntrepots } from "../fournisseurs/FournisseurEntrepot.ts";
 import { unDiagnostic } from "../../test/consructeurs/constructeurDiagnostic.ts";
-import { unReferentiel } from "../../test/consructeurs/construceurReferentiel.ts";
 import { waitFor, within } from "@storybook/testing-library";
 import { expect } from "@storybook/jest";
 import { EntrepotDiagnosticMemoire } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
@@ -11,6 +10,7 @@ import {
   uneQuestionAChoixMultiple,
 } from "../../test/consructeurs/constructeurQuestions.ts";
 import { uneReponsePossible } from "../../test/consructeurs/constructeurReponsePossible.ts";
+import { unReferentiel } from "../../test/consructeurs/constructeurReferentiel.ts";
 
 const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
 

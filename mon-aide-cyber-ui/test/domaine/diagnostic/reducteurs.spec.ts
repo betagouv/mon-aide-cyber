@@ -1,11 +1,11 @@
 import { describe, expect } from "vitest";
-import { unReferentiel } from "../../consructeurs/construceurReferentiel";
 import { unDiagnostic } from "../../consructeurs/constructeurDiagnostic";
 import {
   diagnosticCharge,
   reducteurDiagnostic,
 } from "../../../src/domaine/diagnostic/reducteurs";
 import { uneReponsePossible } from "../../consructeurs/constructeurReponsePossible";
+import { unReferentiel } from "../../consructeurs/constructeurReferentiel";
 
 describe("Les réducteurs de diagnostic", () => {
   describe("Lorsque le diagnostic est chargé", () => {
