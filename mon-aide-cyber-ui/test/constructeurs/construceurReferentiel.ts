@@ -1,34 +1,21 @@
 import { faker } from "@faker-js/faker/locale/fr";
 import {
-  Format,
   Question,
   Referentiel,
+  ReponsePossible,
   TypeDeSaisie,
 } from "../../src/domaine/diagnostic/Referentiel.ts";
+import { Constructeur } from "./Constructeur.ts";
+import { uneReponsePossible } from "./constructeurReponsePossible.ts";
 
-type ReponsePossible = {
-  libelle: string;
-  ordre?: number;
-  type?: { type: TypeDeSaisie; format: Format } | undefined;
-};
-
-class ConstructeurReponsePossibles {
-  private libelle = faker.word.words();
-
-  construis(): ReponsePossible {
-    return {
-      libelle: this.libelle,
-    };
-  }
-}
-
-const uneReponsePossible = () => new ConstructeurReponsePossibles();
-
-class ConstructeurReferentiel {
+class ConstructeurReferentiel implements Constructeur<Referentiel> {
   private questions: Question[] = [];
 
-  avecUneQuestion(
-    question: { libelle: string; type?: TypeDeSaisie },
+  avecUneQuestionEtDesReponses(
+    question: {
+      libelle: string;
+      type?: Exclude<TypeDeSaisie, "aCocher" | "saisieLibre">;
+    },
     reponsePossibles: ReponsePossible[] = [],
   ): ConstructeurReferentiel {
     if (reponsePossibles.length === 0) {
@@ -45,6 +32,11 @@ class ConstructeurReferentiel {
       })),
       type: question.type,
     });
+    return this;
+  }
+
+  avecUneQuestion(question: Question): ConstructeurReferentiel {
+    this.questions.push(question);
     return this;
   }
 
