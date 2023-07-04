@@ -1,4 +1,4 @@
-import { unReferentiel } from "./construceurReferentiel.ts";
+import { unReferentiel } from "./constructeurReferentiel.ts";
 import { faker } from "@faker-js/faker/locale/fr";
 import { UUID } from "../../src/types/Types.ts";
 import { Referentiel } from "../../src/domaine/diagnostic/Referentiel.ts";
