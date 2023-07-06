@@ -219,7 +219,7 @@ const referentiel: Referentiel = {
             identifiant: "usageCloud-oui",
             libelle: "Oui",
             ordre: 3,
-            questionATiroir: {
+            question: {
               identifiant: "usageCloudQuestionTiroir",
               libelle: 'Si "Oui": quels sont vos usages du Cloud ?',
               reponsesPossibles: [

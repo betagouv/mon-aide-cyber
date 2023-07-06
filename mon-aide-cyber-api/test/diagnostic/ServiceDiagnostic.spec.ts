@@ -65,7 +65,7 @@ describe("Le service de diagnostic", () => {
         identifiant: reponseAttendue.identifiant,
         libelle: reponseAttendue.libelle,
         ordre: reponseAttendue.ordre,
-        questionATiroir: {
+        question: {
           identifiant: "quelles-reponses-",
           libelle: "Quelles réponses ?",
           reponsesPossibles: [

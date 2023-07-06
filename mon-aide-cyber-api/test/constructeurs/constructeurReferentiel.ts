@@ -81,9 +81,9 @@ class ConstructeurQuestion
   }
 
   avecReponsesPossibles(
-    reponsePossibles: ReponsePossible[],
+    reponsesPossibles: ReponsePossible[],
   ): ConstructeurQuestion {
-    this.question.reponsesPossibles = reponsePossibles;
+    this.question.reponsesPossibles = reponsesPossibles;
     return this;
   }
 
@@ -105,12 +105,18 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     return this;
   }
 
+  avecLibelle(libelle: string): ConstructeurReponsePossible {
+    this.libelle = libelle;
+    this.identifiant = aseptise(libelle);
+    return this;
+  }
+
   construis(): ReponsePossible {
     return {
       identifiant: this.identifiant,
       libelle: this.libelle,
       ordre: this.ordre,
-      questionATiroir: this.question,
+      question: this.question,
     };
   }
 }
