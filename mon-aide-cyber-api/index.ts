@@ -1,9 +1,9 @@
 import serveur from "./src/serveur";
-import { AdaptateurDonneesMAC } from "./src/infrastructure/adaptateurs/AdaptateurDonneesMAC";
+import { AdaptateurReferentielMAC } from "./src/infrastructure/adaptateurs/AdaptateurReferentielMAC";
 import { adaptateurTranscripteur } from "./src/infrastructure/adaptateurs/adaptateurTranscripteur";
 
 const serveurMAC = serveur.creeServeur({
-  adaptateurDonnees: new AdaptateurDonneesMAC(),
+  adaptateurReferentiel: new AdaptateurReferentielMAC(),
   adaptateurTranscripteurDonnees: adaptateurTranscripteur(),
 });
 

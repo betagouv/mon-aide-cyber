@@ -4,7 +4,7 @@ import {
   QuestionChoixUnique,
   Referentiel,
   ReponsePossible,
-} from "../../src/diagnostique/referentiel";
+} from "../../src/diagnostique/Referentiel";
 import { fakerFR as faker } from "@faker-js/faker";
 import { Constructeur } from "./constructeur";
 import { aseptise } from "../utilitaires/aseptise";

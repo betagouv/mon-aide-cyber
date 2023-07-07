@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { Diagnostique } from "../../diagnostique/diagnostique";
+import { Diagnostique } from "../../diagnostique/Diagnostique";
 
 type DiagnostiqueOT = {
   identifiant: crypto.UUID;

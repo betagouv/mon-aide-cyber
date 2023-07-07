@@ -1,5 +1,5 @@
-import { Referentiel } from "../../src/diagnostique/referentiel";
-import { Diagnostique } from "../../src/diagnostique/diagnostique";
+import { Referentiel } from "../../src/diagnostique/Referentiel";
+import { Diagnostique } from "../../src/diagnostique/Diagnostique";
 import { Constructeur } from "./constructeur";
 import { unReferentiel } from "./constructeurReferentiel";
 import { fakerFR as faker } from "@faker-js/faker";
