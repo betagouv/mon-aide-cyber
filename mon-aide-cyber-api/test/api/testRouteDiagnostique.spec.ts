@@ -17,7 +17,7 @@ describe("le serveur MAC sur les routes /api/diagnostiques/", () => {
       const diagnostique = unDiagnostique()
         .avecUnReferentiel(unReferentiel().construis())
         .construis();
-      testeurMAC.adaptateurDonnees.ajoute(diagnostique);
+      testeurMAC.adaptateurDonnees.ajoute(diagnostique.referentiel);
 
       const reponse = await fetch(
         `http://localhost:1234/api/diagnostiques/${id}`,
