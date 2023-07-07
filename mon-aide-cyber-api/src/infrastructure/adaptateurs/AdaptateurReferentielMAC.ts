@@ -1,6 +1,7 @@
 import { AdaptateurReferentiel } from "../../adaptateurs/AdaptateurReferentiel";
 import { referentiel } from "../../diagnostique/donneesReferentiel";
+import { Referentiel } from "../../diagnostique/Referentiel";
 
 export class AdaptateurReferentielMAC implements AdaptateurReferentiel {
-  lis = (): Promise<object> => Promise.resolve({ referentiel });
+  lis = (): Promise<Referentiel> => Promise.resolve(referentiel);
 }
