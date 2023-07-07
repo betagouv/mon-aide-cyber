@@ -9,6 +9,7 @@ import {
   diagnostiqueCharge,
   reducteurDiagnostique,
 } from "../domaine/diagnostique/reducteurs.ts";
+import { useErrorBoundary } from "react-error-boundary";
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -118,6 +119,7 @@ export const ComposantDiagnostique = ({
   });
 
   const entrepots = useContext(FournisseurEntrepots);
+  const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
     entrepots
@@ -125,8 +127,9 @@ export const ComposantDiagnostique = ({
       .lis(idDiagnostique)
       .then((diagnostique) => {
         envoie(diagnostiqueCharge(diagnostique));
-      });
-  }, [entrepots, idDiagnostique, envoie]);
+      })
+      .catch((erreur) => showBoundary(erreur));
+  }, [entrepots, idDiagnostique, envoie, showBoundary]);
 
   return (
     <>
