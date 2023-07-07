@@ -45,6 +45,18 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         },
       });
     });
+
+    it("renvoie une erreur 404 diagnostic non trouvé si le diagnostic n'existe pas", async () => {
+      const reponse = await fetch(
+        `http://localhost:1234/api/diagnostic/id-inexistant`,
+      );
+
+      expect(reponse.status).toBe(404);
+      const newVar = await reponse.json();
+      expect(newVar).toStrictEqual({
+        message: "Le diagnostic demandé n'existe pas.",
+      });
+    });
   });
 
   describe("quand une requête POST est reçue sur /api/diagnostic", () => {
