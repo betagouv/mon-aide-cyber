@@ -17,7 +17,7 @@ describe("le serveur MAC sur les routes /api/diagnostique/", () => {
       const diagnostique = unDiagnostique()
         .avecUnReferentiel(unReferentiel().construis())
         .construis();
-      testeurMAC.adaptateurDonnees.ajoute(diagnostique.referentiel);
+      testeurMAC.adaptateurReferentiel.ajoute(diagnostique.referentiel);
 
       const reponse = await fetch(
         `http://localhost:1234/api/diagnostique/${id}`,
@@ -46,6 +46,22 @@ describe("le serveur MAC sur les routes /api/diagnostique/", () => {
           },
         },
       });
+    });
+  });
+
+  describe("quand une requête POST est reçue sur /api/diagnostique", () => {
+    it("crée un nouveau diagnostique", async () => {
+      const referentiel = unReferentiel().construis();
+      testeurMAC.adaptateurReferentiel.ajoute(referentiel);
+
+      const reponse = await fetch("http://localhost:1234/api/diagnostique", {
+        method: "POST",
+      });
+
+      expect(reponse.status).toBe(201);
+      expect(reponse.headers.get("Link")).toMatch(
+        /api\/diagnostique\/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+      );
     });
   });
 });
