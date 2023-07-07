@@ -1,6 +1,5 @@
 import { ConfigurationServeur } from "../serveur";
 import express, { Request, Response } from "express";
-import { EntrepotsMemoire } from "../infrastructure/entrepots/memoire/Entrepots";
 import crypto from "crypto";
 import { ServiceDiagnostic } from "../diagnostic/ServiceDiagnostic";
 import { representeLeDiagnosticPourLeClient } from "./representateurs/representateurDiagnostic";
@@ -12,7 +11,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     const { id } = requete.params;
     new ServiceDiagnostic(
       configuration.adaptateurReferentiel,
-      new EntrepotsMemoire(),
+      configuration.entrepots,
     )
       .diagnostic(id as crypto.UUID)
       .then((diagnostic) =>
@@ -28,7 +27,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.post("/", (_requete: Request, reponse: Response) => {
     new ServiceDiagnostic(
       configuration.adaptateurReferentiel,
-      new EntrepotsMemoire(),
+      configuration.entrepots,
     )
       .cree()
       .then((diagnostic) => {

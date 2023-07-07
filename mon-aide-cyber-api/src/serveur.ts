@@ -5,10 +5,12 @@ import rateLimit from "express-rate-limit";
 import routesAPI from "./api/routesAPI";
 import { AdaptateurReferentiel } from "./adaptateurs/AdaptateurReferentiel";
 import { AdaptateurTranscripteur } from "./adaptateurs/AdaptateurTranscripteur";
+import { Entrepots } from "./domaine/Entrepots";
 
 export type ConfigurationServeur = {
   adaptateurReferentiel: AdaptateurReferentiel;
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
+  entrepots: Entrepots;
 };
 
 const creeServeur = (config: ConfigurationServeur) => {
