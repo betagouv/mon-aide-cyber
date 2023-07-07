@@ -2,7 +2,6 @@ import { ComposantDiagnostic } from "../composants/ComposantDiagnostic.tsx";
 import { Meta, StoryObj } from "@storybook/react";
 import { FournisseurEntrepots } from "../fournisseurs/FournisseurEntrepot.ts";
 import { unDiagnostic } from "../../test/constructeurs/constructeurDiagnostic.ts";
-import { unReferentiel } from "../../test/constructeurs/constructeurReferentiel.ts";
 import { waitFor, within } from "@storybook/testing-library";
 import { expect } from "@storybook/jest";
 import { EntrepotDiagnosticMemoire } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
@@ -11,6 +10,9 @@ import {
   uneQuestionAChoixMultiple,
 } from "../../test/constructeurs/constructeurQuestions.ts";
 import { uneReponsePossible } from "../../test/constructeurs/constructeurReponsePossible.ts";
+import { ComposantAffichageErreur } from "../composants/erreurs/ComposantAffichageErreur.tsx";
+import { ErrorBoundary } from "react-error-boundary";
+import { unReferentiel } from "../../test/constructeurs/constructeurReferentiel.ts";
 
 const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
 
@@ -128,7 +130,9 @@ const meta = {
       <FournisseurEntrepots.Provider
         value={{ diagnostic: () => entrepotDiagnosticMemoire }}
       >
-        {story()}
+        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+          {story()}
+        </ErrorBoundary>
       </FournisseurEntrepots.Provider>
     ),
   ],
