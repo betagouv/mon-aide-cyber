@@ -10,6 +10,8 @@ import {
   uneQuestionAChoixMultiple,
 } from "../../test/consructeurs/constructeurQuestions.ts";
 import { uneReponsePossible } from "../../test/consructeurs/constructeurReponsePossible.ts";
+import { ComposantAffichageErreur } from "../composants/erreurs/ComposantAffichageErreur.tsx";
+import { ErrorBoundary } from "react-error-boundary";
 import { unReferentiel } from "../../test/consructeurs/constructeurReferentiel.ts";
 
 const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
@@ -128,7 +130,9 @@ const meta = {
       <FournisseurEntrepots.Provider
         value={{ diagnostic: () => entrepotDiagnosticMemoire }}
       >
-        {story()}
+        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+          {story()}
+        </ErrorBoundary>
       </FournisseurEntrepots.Provider>
     ),
   ],
