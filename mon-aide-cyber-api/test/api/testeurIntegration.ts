@@ -1,5 +1,5 @@
 import serveur from "../../src/serveur";
-import { AdaptateurDonneesDeTest } from "../adaptateurs/AdaptateurDonneesDeTest";
+import { AdaptateurReferentielDeTest } from "../adaptateurs/AdaptateurReferentielDeTest";
 import { AdaptateurTranscripteurDeTest } from "../adaptateurs/adaptateurTranscripteur";
 
 const testeurIntegration = () => {
@@ -7,11 +7,11 @@ const testeurIntegration = () => {
     arreteEcoute: () => void;
     ecoute: (port: number, succes: () => void) => void;
   };
-  const adaptateurDonnees = new AdaptateurDonneesDeTest();
+  const adaptateurDonnees = new AdaptateurReferentielDeTest();
   const adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest();
   const initialise = () => {
     serveurDeTest = serveur.creeServeur({
-      adaptateurDonnees,
+      adaptateurReferentiel: adaptateurDonnees,
       adaptateurTranscripteurDonnees,
     });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
