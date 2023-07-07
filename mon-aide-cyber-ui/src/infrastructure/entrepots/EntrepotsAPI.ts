@@ -5,7 +5,7 @@ import {
 
 export class APIEntrepotDiagnostique implements EntrepotDiagnostique {
   lis(identifiant: string): Promise<Diagnostique> {
-    return fetch(`/api/diagnostiques/${identifiant}`).then((reponse) =>
+    return fetch(`/api/diagnostique/${identifiant}`).then((reponse) =>
       reponse.json(),
     );
   }
