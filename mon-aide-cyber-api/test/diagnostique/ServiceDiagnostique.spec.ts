@@ -48,9 +48,10 @@ describe("Le service de diagnostique", () => {
         )
         .construis();
       adaptateurReferentiel.ajoute(diagnostique.referentiel);
+      entrepots.diagnostique().persiste(diagnostique);
       const serviceDiagnostique = new ServiceDiagnostique(
         adaptateurReferentiel,
-        new EntrepotsMemoire(),
+        entrepots,
       );
 
       const diagnostiqueRetourne = await serviceDiagnostique.diagnostique(

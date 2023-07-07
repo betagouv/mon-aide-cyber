@@ -11,10 +11,7 @@ export class ServiceDiagnostique {
   ) {}
 
   diagnostique = async (id: crypto.UUID): Promise<Diagnostique> =>
-    this.adaptateurReferentiel.lis().then((referentiel) => ({
-      identifiant: id,
-      referentiel,
-    }));
+    this.entrepots.diagnostique().lis(id);
 
   cree(): Promise<Diagnostique> {
     return this.adaptateurReferentiel.lis().then((referentiel) => {
