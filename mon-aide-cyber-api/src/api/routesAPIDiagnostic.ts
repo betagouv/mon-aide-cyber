@@ -25,5 +25,21 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       );
   });
 
+  routes.post("/", (_requete: Request, reponse: Response) => {
+    new ServiceDiagnostic(
+      configuration.adaptateurReferentiel,
+      new EntrepotsMemoire(),
+    )
+      .cree()
+      .then((diagnostic) => {
+        reponse.status(201);
+        reponse.appendHeader(
+          "Link",
+          `${_requete.originalUrl}/${diagnostic.identifiant}`,
+        );
+        reponse.send();
+      });
+  });
+
   return routes;
 };
