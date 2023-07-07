@@ -1,6 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import testeurIntegration from "./testeurIntegration";
-import * as crypto from "crypto";
 import { unReferentiel } from "../constructeurs/constructeurReferentiel";
 import { unDiagnostic } from "../constructeurs/constructeurDiagnostic";
 
@@ -13,19 +12,20 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
 
   describe("quand une requête GET est reçue sur /api/diagnostic/{id}", () => {
     it("retourne le référentiel du diagnostic", async () => {
-      const id = crypto.randomUUID();
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(unReferentiel().construis())
         .construis();
-      testeurMAC.adaptateurReferentiel.ajoute(diagnostic.referentiel);
+      testeurMAC.entrepots.diagnostic().persiste(diagnostic);
 
-      const reponse = await fetch(`http://localhost:1234/api/diagnostic/${id}`);
+      const reponse = await fetch(
+        `http://localhost:1234/api/diagnostic/${diagnostic.identifiant}`,
+      );
 
       expect(reponse.status).toBe(200);
       const premiereQuestion = diagnostic.referentiel.contexte.questions[0];
       const premiereReponsePossible = premiereQuestion.reponsesPossibles[0];
       expect(await reponse.json()).toMatchObject({
-        identifiant: id,
+        identifiant: diagnostic.identifiant,
         referentiel: {
           contexte: {
             questions: [
@@ -60,6 +60,26 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
       expect(reponse.headers.get("Link")).toMatch(
         /api\/diagnostic\/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/,
       );
+    });
+
+    it("on peut récupérer le diagnostic précédemment lancé", async () => {
+      const referentiel = unReferentiel().construis();
+      testeurMAC.adaptateurReferentiel.ajoute(referentiel);
+      const reponseCreation = await fetch(
+        "http://localhost:1234/api/diagnostic",
+        {
+          method: "POST",
+        },
+      );
+      const lien = reponseCreation.headers.get("Link");
+
+      const reponse = await fetch(`http://localhost:1234${lien}`);
+
+      const diagnosticRetourne = await reponse.json();
+      expect(diagnosticRetourne.identifiant).toBe(
+        lien?.substring(lien.lastIndexOf("/") + 1),
+      );
+      expect(diagnosticRetourne.referentiel.contexte.questions).toHaveLength(1);
     });
   });
 });
