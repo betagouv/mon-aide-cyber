@@ -6,6 +6,7 @@ import routesAPI from "./api/routesAPI";
 import { AdaptateurReferentiel } from "./adaptateurs/AdaptateurReferentiel";
 import { AdaptateurTranscripteur } from "./adaptateurs/AdaptateurTranscripteur";
 import { Entrepots } from "./domaine/Entrepots";
+import { gestionnaireErreurAggregatNonTrouve } from "./api/gestionnaires/erreurs";
 
 export type ConfigurationServeur = {
   adaptateurReferentiel: AdaptateurReferentiel;
@@ -45,6 +46,8 @@ const creeServeur = (config: ConfigurationServeur) => {
       path.join(__dirname, "./../../mon-aide-cyber-ui/dist/index.html"),
     ),
   );
+
+  app.use(gestionnaireErreurAggregatNonTrouve);
 
   return { ecoute, arreteEcoute };
 };
