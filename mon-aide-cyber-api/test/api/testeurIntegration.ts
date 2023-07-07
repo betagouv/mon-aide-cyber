@@ -7,11 +7,11 @@ const testeurIntegration = () => {
     arreteEcoute: () => void;
     ecoute: (port: number, succes: () => void) => void;
   };
-  const adaptateurDonnees = new AdaptateurReferentielDeTest();
+  const adaptateurReferentiel = new AdaptateurReferentielDeTest();
   const adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest();
   const initialise = () => {
     serveurDeTest = serveur.creeServeur({
-      adaptateurReferentiel: adaptateurDonnees,
+      adaptateurReferentiel,
       adaptateurTranscripteurDonnees,
     });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -23,7 +23,7 @@ const testeurIntegration = () => {
   };
 
   return {
-    adaptateurDonnees,
+    adaptateurReferentiel,
     arrete,
     initialise,
   };
