@@ -15,7 +15,7 @@ class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
     if (entiteTrouvee !== undefined) {
       return Promise.resolve(entiteTrouvee);
     }
-    return Promise.reject(`Entitee ${identifiant} non trouvée.`);
+    return Promise.reject({ message: `Entitée ${identifiant} non trouvée.` });
   }
 
   async persiste(entite: T) {
