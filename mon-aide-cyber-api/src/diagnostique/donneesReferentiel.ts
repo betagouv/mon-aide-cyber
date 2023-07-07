@@ -1,4 +1,4 @@
-import { Referentiel } from "./referentiel";
+import { Referentiel } from "./Referentiel";
 
 const referentiel: Referentiel = {
   contexte: {
