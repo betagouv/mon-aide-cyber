@@ -1,6 +1,6 @@
-import { AdaptateurDonnees } from "../../src/adaptateurs/AdaptateurDonnees";
+import { AdaptateurReferentiel } from "../../src/adaptateurs/AdaptateurReferentiel";
 
-export class AdaptateurDonneesDeTest implements AdaptateurDonnees {
+export class AdaptateurReferentielDeTest implements AdaptateurReferentiel {
   private contenu = {};
 
   lis(): Promise<object> {
