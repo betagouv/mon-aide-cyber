@@ -1,13 +1,16 @@
 import { AdaptateurReferentiel } from "../../src/adaptateurs/AdaptateurReferentiel";
+import { Referentiel } from "../../src/diagnostic/Referentiel";
 
 export class AdaptateurReferentielDeTest implements AdaptateurReferentiel {
-  private contenu = {};
+  private referentiel: Referentiel | undefined = undefined;
 
-  lis(): Promise<object> {
-    return Promise.resolve(this.contenu);
+  lis(): Promise<Referentiel> {
+    return this.referentiel !== undefined
+      ? Promise.resolve(this.referentiel)
+      : Promise.reject("Referentiel non connu");
   }
 
-  ajoute(contenu: object) {
-    this.contenu = { ...this.contenu, ...contenu };
+  ajoute(referentiel: Referentiel) {
+    this.referentiel = referentiel;
   }
 }
