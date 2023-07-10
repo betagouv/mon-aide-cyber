@@ -1,4 +1,3 @@
-import { ComposantDiagnostic } from "../composants/ComposantDiagnostic.tsx";
 import { Meta, StoryObj } from "@storybook/react";
 import { FournisseurEntrepots } from "../fournisseurs/FournisseurEntrepot.ts";
 import { unDiagnostic } from "../../test/constructeurs/constructeurDiagnostic.ts";
@@ -13,6 +12,7 @@ import { uneReponsePossible } from "../../test/constructeurs/constructeurReponse
 import { ComposantAffichageErreur } from "../composants/erreurs/ComposantAffichageErreur.tsx";
 import { ErrorBoundary } from "react-error-boundary";
 import { unReferentiel } from "../../test/constructeurs/constructeurReferentiel.ts";
+import { ComposantDiagnostic } from "../composants/diagnostic/ComposantDiagnostic.tsx";
 
 const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
 

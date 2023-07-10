@@ -2,7 +2,7 @@ import {
   Diagnostic,
   EntrepotDiagnostic,
 } from "../../domaine/diagnostic/Diagnostic.ts";
-import { Entrepot } from "../../domaine/Entrepots.ts";
+import { Entrepot, FormatLien, Lien } from "../../domaine/Entrepots.ts";
 import { Aggregat } from "../../domaine/Aggregat.ts";
 
 abstract class APIEntrepot<T extends Aggregat> implements Entrepot<T> {
@@ -16,6 +16,10 @@ abstract class APIEntrepot<T extends Aggregat> implements Entrepot<T> {
       return reponse.json();
     });
   }
+
+  persiste() {
+    return fetch(`/api/${this.chemin}`, { method: "POST" });
+  }
 }
 
 export class APIEntrepotDiagnostic
@@ -24,5 +28,11 @@ export class APIEntrepotDiagnostic
 {
   constructor() {
     super("diagnostic");
+  }
+
+  lancer(): Promise<Lien> {
+    return super
+      .persiste()
+      .then((reponse) => new Lien(reponse.headers.get("Link") as FormatLien));
   }
 }
