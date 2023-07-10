@@ -2,13 +2,13 @@ import { PropsWithChildren, useContext, useEffect, useReducer } from "react";
 import {
   Question,
   ReponsePossible,
-} from "../domaine/diagnostique/Referentiel.ts";
-import { FournisseurEntrepots } from "../fournisseurs/FournisseurEntrepot.ts";
-import { UUID } from "../types/Types.ts";
+} from "../../domaine/diagnostique/Referentiel.ts";
+import { FournisseurEntrepots } from "../../fournisseurs/FournisseurEntrepot.ts";
+import { UUID } from "../../types/Types.ts";
 import {
   diagnostiqueCharge,
   reducteurDiagnostique,
-} from "../domaine/diagnostique/reducteurs.ts";
+} from "../../domaine/diagnostique/reducteurs.ts";
 import { useErrorBoundary } from "react-error-boundary";
 
 type ProprietesComposantQuestion = {

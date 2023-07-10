@@ -6,12 +6,18 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { FournisseurEntrepots } from "./fournisseurs/FournisseurEntrepot.ts";
 import { ComposantIntercepteur } from "./composants/intercepteurs/ComposantIntercepteur.tsx";
 import { APIEntrepotDiagnostique } from "./infrastructure/entrepots/EntrepotsAPI.ts";
-import { ComposantDiagnostique } from "./composants/ComposantDiagnostique.tsx";
+import { ComposantDiagnostique } from "./composants/diagnostic/ComposantDiagnostique.tsx";
+import { ComposantAffichageErreur } from "./composants/erreurs/ComposantAffichageErreur.tsx";
+import { ErrorBoundary } from "react-error-boundary";
 
 const routeur = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+        <App />
+      </ErrorBoundary>
+    ),
   },
   {
     path: "diagnostique/:idDiagnostique",
