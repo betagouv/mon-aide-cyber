@@ -2,14 +2,27 @@ import {
   Diagnostique,
   EntrepotDiagnostique,
 } from "../../domaine/diagnostique/Diagnostique.ts";
+import { Entrepot } from "../../domaine/Entrepots.ts";
+import { Aggregat } from "../../domaine/Aggregat.ts";
 
-export class APIEntrepotDiagnostique implements EntrepotDiagnostique {
-  lis(identifiant: string): Promise<Diagnostique> {
-    return fetch(`/api/diagnostique/${identifiant}`).then((reponse) => {
+abstract class APIEntrepot<T extends Aggregat> implements Entrepot<T> {
+  protected constructor(private readonly chemin: string) {}
+
+  lis(identifiant: string): Promise<T> {
+    return fetch(`/api/${this.chemin}/${identifiant}`).then((reponse) => {
       if (!reponse.ok) {
         return reponse.json().then((reponse) => Promise.reject(reponse));
       }
       return reponse.json();
     });
+  }
+}
+
+export class APIEntrepotDiagnostique
+  extends APIEntrepot<Diagnostique>
+  implements EntrepotDiagnostique
+{
+  constructor() {
+    super("diagnostique");
   }
 }
