@@ -4,14 +4,20 @@ import App from "./App.tsx";
 import "./assets/styles/index.scss";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { FournisseurEntrepots } from "./fournisseurs/FournisseurEntrepot.ts";
-import { ComposantDiagnostic } from "./composants/ComposantDiagnostic.tsx";
 import { ComposantIntercepteur } from "./composants/intercepteurs/ComposantIntercepteur.tsx";
 import { APIEntrepotDiagnostic } from "./infrastructure/entrepots/EntrepotsAPI.ts";
+import { ComposantAffichageErreur } from "./composants/erreurs/ComposantAffichageErreur.tsx";
+import { ErrorBoundary } from "react-error-boundary";
+import { ComposantDiagnostic } from "./composants/diagnostic/ComposantDiagnostic.tsx";
 
 const routeur = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+        <App />
+      </ErrorBoundary>
+    ),
   },
   {
     path: "diagnostic/:idDiagnostic",
