@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { waitFor, within } from "@storybook/testing-library";
-import { ComposantDiagnostique } from "../composants/ComposantDiagnostique.tsx";
+import { ComposantDiagnostique } from "../composants/diagnostic/ComposantDiagnostique.tsx";
 import { expect } from "@storybook/jest";
 import { FournisseurEntrepots } from "../fournisseurs/FournisseurEntrepot.ts";
 import { EntrepotDiagnostiqueMemoire } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
