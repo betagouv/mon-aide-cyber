@@ -3,7 +3,8 @@ import {
   Diagnostic,
   EntrepotDiagnostic,
 } from "../../../src/domaine/diagnostic/Diagnostic.ts";
-import { Entrepot } from "../../../src/domaine/Entrepots";
+import { Entrepot, Lien } from "../../../src/domaine/Entrepots";
+import { unDiagnostic } from "../../consructeurs/constructeurDiagnostic.ts";
 
 class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   private entites: T[] = [];
@@ -25,4 +26,12 @@ class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
 
 export class EntrepotDiagnosticMemoire
   extends EntrepotMemoire<Diagnostic>
-  implements EntrepotDiagnostic {}
+  implements EntrepotDiagnostic
+{
+  lancer(): Promise<Lien> {
+    const diagnostic = unDiagnostic().construis();
+    return this.persiste(diagnostic).then(
+      () => new Lien(`/api/diagnostic/${diagnostic.identifiant}`),
+    );
+  }
+}
