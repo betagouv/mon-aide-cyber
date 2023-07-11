@@ -49,6 +49,7 @@
     "prop-types": "^15.8.1",
     "sass": "^1.63.6",
     "storybook": "^7.0.24",
+    "storybook-addon-react-router-v6": "^1.0.2",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
     "vitest": "^0.32.2"
