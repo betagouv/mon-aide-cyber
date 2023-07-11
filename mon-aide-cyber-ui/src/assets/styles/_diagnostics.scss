@@ -1,0 +1,47 @@
+.conteneur-diagnostics {
+  display: flex;
+  flex-direction: column;
+}
+
+.droite {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.diagnostics {
+  display: grid;
+  grid-template-columns: repeat(6, 16em);
+  grid-gap: 10px;
+}
+
+.diagnostics .identifiant {
+  grid-column: 1/6;
+}
+
+.diagnostics .en-tete {
+  grid-row: 1;
+}
+
+.diagnostics .un {
+  grid-column: 1/6;
+}
+
+.diagnostics .deux {
+  grid-column: 2/6;
+}
+
+.diagnostics .trois {
+  grid-column: 3/6;
+}
+
+.diagnostics .quatre {
+  grid-column: 4/6;
+}
+
+.diagnostics .cinq {
+  grid-column: 5/6;
+}
+
+.diagnostics .six {
+  grid-column: 6;
+}
