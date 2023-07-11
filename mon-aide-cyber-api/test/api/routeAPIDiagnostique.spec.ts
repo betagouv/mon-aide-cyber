@@ -1,14 +1,18 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import testeurIntegration from "./testeurIntegration";
 import { unReferentiel } from "../constructeurs/constructeurReferentiel";
 import { unDiagnostique } from "../constructeurs/constructeurDiagnostique";
+import { executeRequete } from "./executeurRequete";
 
 describe("le serveur MAC sur les routes /api/diagnostique/", () => {
   const testeurMAC = testeurIntegration();
+  let numeroPort: number;
 
-  beforeAll(() => testeurMAC.initialise());
+  beforeEach(() => {
+    numeroPort = testeurMAC.initialise();
+  });
 
-  afterAll(() => testeurMAC.arrete());
+  afterEach(() => testeurMAC.arrete());
 
   describe("quand une requête GET est reçue sur /api/diagnostique/{id}", () => {
     it("retourne le référentiel du diagnostique", async () => {
@@ -17,8 +21,10 @@ describe("le serveur MAC sur les routes /api/diagnostique/", () => {
         .construis();
       testeurMAC.entrepots.diagnostique().persiste(diagnostique);
 
-      const reponse = await fetch(
-        `http://localhost:1234/api/diagnostique/${diagnostique.identifiant}`,
+      const reponse = await executeRequete(
+        "GET",
+        `/api/diagnostique/${diagnostique.identifiant}`,
+        numeroPort,
       );
 
       expect(reponse.status).toBe(200);
@@ -47,8 +53,10 @@ describe("le serveur MAC sur les routes /api/diagnostique/", () => {
     });
 
     it("renvoie une erreur 404 diagnostique non trouvé si le diagnostique n'existe pas", async () => {
-      const reponse = await fetch(
-        `http://localhost:1234/api/diagnostique/id-inexistant`,
+      const reponse = await executeRequete(
+        "GET",
+        `/api/diagnostique/id-inexistant`,
+        numeroPort,
       );
 
       expect(reponse.status).toBe(404);
@@ -64,9 +72,11 @@ describe("le serveur MAC sur les routes /api/diagnostique/", () => {
       const referentiel = unReferentiel().construis();
       testeurMAC.adaptateurReferentiel.ajoute(referentiel);
 
-      const reponse = await fetch("http://localhost:1234/api/diagnostique", {
-        method: "POST",
-      });
+      const reponse = await executeRequete(
+        "POST",
+        "/api/diagnostique",
+        numeroPort,
+      );
 
       expect(reponse.status).toBe(201);
       expect(reponse.headers.get("Link")).toMatch(
@@ -77,15 +87,14 @@ describe("le serveur MAC sur les routes /api/diagnostique/", () => {
     it("on peut récupérer le diagnostique précédemment créé", async () => {
       const referentiel = unReferentiel().construis();
       testeurMAC.adaptateurReferentiel.ajoute(referentiel);
-      const reponseCreation = await fetch(
-        "http://localhost:1234/api/diagnostique",
-        {
-          method: "POST",
-        },
+      const reponseCreation = await executeRequete(
+        "POST",
+        "/api/diagnostique",
+        numeroPort,
       );
       const lien = reponseCreation.headers.get("Link");
 
-      const reponse = await fetch(`http://localhost:1234${lien}`);
+      const reponse = await executeRequete("GET", `${lien}`, numeroPort);
 
       const diagnostiqueRetourne = await reponse.json();
       expect(diagnostiqueRetourne.identifiant).toBe(

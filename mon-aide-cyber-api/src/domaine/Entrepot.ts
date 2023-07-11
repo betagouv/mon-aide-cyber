@@ -5,5 +5,7 @@ export interface Entrepot<T extends Aggregat> {
 
   persiste(entite: T): Promise<void>;
 
+  tous(): Promise<T[]>;
+
   typeAggregat(): string;
 }

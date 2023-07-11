@@ -2,6 +2,7 @@ import serveur from "../../src/serveur";
 import { AdaptateurReferentielDeTest } from "../adaptateurs/AdaptateurReferentielDeTest";
 import { AdaptateurTranscripteurDeTest } from "../adaptateurs/adaptateurTranscripteur";
 import { EntrepotsMemoire } from "../../src/infrastructure/entrepots/memoire/Entrepots";
+import { faker } from "@faker-js/faker/locale/fr";
 
 const testeurIntegration = () => {
   let serveurDeTest: {
@@ -17,8 +18,10 @@ const testeurIntegration = () => {
       adaptateurTranscripteurDonnees,
       entrepots,
     });
+    const portAleatoire = faker.number.int({ min: 1000, max: 3000 });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    serveurDeTest.ecoute(1234, () => {});
+    serveurDeTest.ecoute(portAleatoire, () => {});
+    return portAleatoire;
   };
 
   const arrete = () => {
