@@ -5,10 +5,15 @@ import "./assets/styles/index.scss";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { FournisseurEntrepots } from "./fournisseurs/FournisseurEntrepot.ts";
 import { ComposantIntercepteur } from "./composants/intercepteurs/ComposantIntercepteur.tsx";
-import { APIEntrepotDiagnostique } from "./infrastructure/entrepots/EntrepotsAPI.ts";
+import {
+  APIEntrepotDiagnostics,
+  APIEntrepotDiagnostique,
+} from "./infrastructure/entrepots/EntrepotsAPI.ts";
 import { ComposantDiagnostique } from "./composants/diagnostic/ComposantDiagnostique.tsx";
 import { ComposantAffichageErreur } from "./composants/erreurs/ComposantAffichageErreur.tsx";
 import { ErrorBoundary } from "react-error-boundary";
+import { ComposantDiagnostics } from "./composants/ComposantDiagnostics.tsx";
+import { EntrepotDiagnostics } from "./domaine/diagnostique/Diagnostics.ts";
 
 const routeur = createBrowserRouter([
   {
@@ -16,6 +21,14 @@ const routeur = createBrowserRouter([
     element: (
       <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
         <App />
+      </ErrorBoundary>
+    ),
+  },
+  {
+    path: "diagnostics",
+    element: (
+      <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+        <ComposantDiagnostics />
       </ErrorBoundary>
     ),
   },
@@ -28,7 +41,10 @@ const routeur = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <FournisseurEntrepots.Provider
-      value={{ diagnostique: () => new APIEntrepotDiagnostique() }}
+      value={{
+        diagnostique: () => new APIEntrepotDiagnostique(),
+        diagnostics: (): EntrepotDiagnostics => new APIEntrepotDiagnostics(),
+      }}
     >
       <RouterProvider router={routeur} />
     </FournisseurEntrepots.Provider>
