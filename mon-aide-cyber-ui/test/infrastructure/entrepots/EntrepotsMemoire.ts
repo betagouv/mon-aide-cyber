@@ -3,11 +3,16 @@ import {
   Diagnostique,
   EntrepotDiagnostique,
 } from "../../../src/domaine/diagnostique/Diagnostique";
-import { Entrepot, Lien } from "../../../src/domaine/Entrepots";
+import { Entrepot } from "../../../src/domaine/Entrepots";
 import { unDiagnostique } from "../../consructeurs/constructeurDiagnostique.ts";
+import {
+  Diagnostics,
+  EntrepotDiagnostics,
+} from "../../../src/domaine/diagnostique/Diagnostics.ts";
+import { LienRoutage } from "../../../src/domaine/LienRoutage.ts";
 
 class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
-  private entites: T[] = [];
+  protected entites: T[] = [];
 
   async lis(identifiant: string): Promise<T> {
     const entiteTrouvee = this.entites.find(
@@ -28,10 +33,24 @@ export class EntrepotDiagnostiqueMemoire
   extends EntrepotMemoire<Diagnostique>
   implements EntrepotDiagnostique
 {
-  lancer(): Promise<Lien> {
+  lancer(): Promise<LienRoutage> {
     const diagnostic = unDiagnostique().construis();
     return this.persiste(diagnostic).then(
-      () => new Lien(`/api/diagnostique/${diagnostic.identifiant}`),
+      () => new LienRoutage(`/api/diagnostique/${diagnostic.identifiant}`),
+    );
+  }
+}
+
+export class EntrepotDiagnosticsMemoire
+  extends EntrepotMemoire<Diagnostics>
+  implements EntrepotDiagnostics
+{
+  tous(): Promise<Diagnostics> {
+    console.log(this.entites);
+    return Promise.resolve(
+      this.entites.flatMap((diagnostic) =>
+        diagnostic.map((diag) => diag),
+      ) as Diagnostics,
     );
   }
 }
