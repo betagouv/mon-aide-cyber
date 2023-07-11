@@ -29,6 +29,10 @@ class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
     this.entites.push(entite);
   }
 
+  tous(): Promise<T[]> {
+    return Promise.resolve(this.entites);
+  }
+
   typeAggregat(): string {
     throw new Error("Non implémenté");
   }
