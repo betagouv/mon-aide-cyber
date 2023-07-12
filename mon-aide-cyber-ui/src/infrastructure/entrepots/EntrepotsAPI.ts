@@ -40,8 +40,18 @@ export class APIEntrepotDiagnostique
   lancer(): Promise<LienRoutage> {
     return super
       .persiste()
-      .then(
-        (reponse) => new LienRoutage(reponse.headers.get("Link") as FormatLien),
+      .then((reponse) => {
+        const lien = reponse.headers.get("Link");
+        return lien !== null
+          ? new LienRoutage(lien as FormatLien)
+          : Promise.reject(
+              "Impossible de récupérer le lien vers le diagnostic",
+            );
+      })
+      .catch((erreur) =>
+        Promise.reject({
+          message: `Lors de la création ou de la récupération du diagnostic pour les raisons suivantes : '${erreur}'`,
+        }),
       );
   }
 }
