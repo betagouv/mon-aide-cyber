@@ -2,7 +2,7 @@ type ReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
-  questionATiroir?: QuestionChoixUnique | QuestionChoixMultiple | undefined;
+  question?: QuestionChoixUnique | QuestionChoixMultiple | undefined;
 };
 
 type TypeQuestion = "choixMultiple" | "choixUnique";
