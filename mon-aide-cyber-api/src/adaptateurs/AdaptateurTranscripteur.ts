@@ -1,4 +1,4 @@
-import { Transcripteur } from "../api/representateurs/representateurDiagnostic";
+import { Transcripteur } from "../api/representateurs/types";
 
 export interface AdaptateurTranscripteur {
   transcripteur(): Transcripteur;

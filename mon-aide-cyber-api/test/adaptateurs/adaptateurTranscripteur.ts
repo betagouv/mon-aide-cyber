@@ -1,5 +1,6 @@
 import { AdaptateurTranscripteur } from "../../src/adaptateurs/AdaptateurTranscripteur";
-import { Transcripteur } from "../../src/api/representateurs/representateurDiagnostic";
+
+import { Transcripteur } from "../../src/api/representateurs/types";
 
 export class AdaptateurTranscripteurDeTest implements AdaptateurTranscripteur {
   transcripteur(): Transcripteur {

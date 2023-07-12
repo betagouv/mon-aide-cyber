@@ -1,5 +1,6 @@
 import { AdaptateurTranscripteur } from "../../adaptateurs/AdaptateurTranscripteur";
-import { Transcripteur } from "../../api/representateurs/representateurDiagnostic";
+
+import { Transcripteur } from "../../api/representateurs/types";
 
 export const adaptateurTranscripteur = () =>
   new (class implements AdaptateurTranscripteur {
@@ -19,6 +20,24 @@ export const adaptateurTranscripteur = () =>
             {
               identifiant: "secteurActivite",
               type: "liste",
+            },
+            {
+              identifiant: "usageCloud",
+              reponses: [
+                {
+                  identifiant: "usageCloud-oui",
+                  question: {
+                    identifiant: "usageCloudQuestionTiroir",
+                    type: "choixMultiple",
+                    reponses: [
+                      {
+                        identifiant: "usageCloud-Oui-Autre",
+                        type: { type: "saisieLibre", format: "texte" },
+                      },
+                    ],
+                  },
+                },
+              ],
             },
           ],
         },
