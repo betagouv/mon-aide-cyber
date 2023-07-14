@@ -1,8 +1,13 @@
+type ReponseComplementaire = Omit<
+  ReponsePossible,
+  "question" | "reponsesComplementaires"
+>;
 type ReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
   question?: QuestionChoixUnique | QuestionChoixMultiple | undefined;
+  reponsesComplementaires?: ReponseComplementaire[] | undefined;
 };
 
 type TypeQuestion = "choixMultiple" | "choixUnique";
@@ -37,5 +42,6 @@ export {
   QuestionChoixUnique,
   QuestionChoixMultiple,
   Referentiel,
+  ReponseComplementaire,
   ReponsePossible,
 };
