@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker/locale/fr";
 import {
   Format,
   Question,
+  ReponseComplementaire,
   ReponsePossible,
   TypeDeSaisie,
 } from "../../src/domaine/diagnostic/Referentiel.ts";
@@ -13,6 +14,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private ordre = faker.number.int();
   private question?: Question = undefined;
   private type?: { type: TypeDeSaisie; format?: Format } = undefined;
+  private reponsesComplementaires?: ReponseComplementaire[] = undefined;
 
   avecUneQuestion(question: Question): ConstructeurReponsePossible {
     this.question = question;
@@ -34,6 +36,13 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     return this;
   }
 
+  avecReponsesComplementaires(
+    reponsesComplementaires: ReponseComplementaire[],
+  ): ConstructeurReponsePossible {
+    this.reponsesComplementaires = reponsesComplementaires;
+    return this;
+  }
+
   construis(): ReponsePossible {
     return {
       identifiant: this.identifiant,
@@ -41,6 +50,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
       ordre: this.ordre,
       question: this.question,
       type: this.type,
+      reponsesComplementaires: this.reponsesComplementaires,
     };
   }
 }
