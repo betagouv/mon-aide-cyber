@@ -2,6 +2,7 @@ import { PropsWithChildren, useContext, useEffect, useReducer } from "react";
 import { useErrorBoundary } from "react-error-boundary";
 import {
   Question,
+  ReponseComplementaire,
   ReponsePossible,
 } from "../../domaine/diagnostic/Referentiel.ts";
 import { UUID } from "../../types/Types.ts";
@@ -15,22 +16,64 @@ type ProprietesComposantQuestion = {
   question: Question;
 };
 
+type ProprietesChampsDeSaisie = {
+  identifiant: string;
+};
+
+const ChampsDeSaisie = ({ identifiant }: ProprietesChampsDeSaisie) => {
+  return (
+    <div>
+      <input
+        id={`asaisir-${identifiant}`}
+        name={identifiant}
+        type="text"
+        required={true}
+      />
+    </div>
+  );
+};
+
+type PropprietesComposantReponseComplementaire = {
+  reponseComplementaire: ReponseComplementaire;
+};
+
+const ComposantReponseComplementaire = ({
+  reponseComplementaire,
+}: PropprietesComposantReponseComplementaire) => {
+  const champsASaisir =
+    reponseComplementaire.type?.type === "saisieLibre" ? (
+      <ChampsDeSaisie identifiant={reponseComplementaire.identifiant} />
+    ) : (
+      ""
+    );
+  return (
+    <>
+      <input
+        id={reponseComplementaire.identifiant}
+        type="checkbox"
+        name={reponseComplementaire.identifiant}
+        value={reponseComplementaire.identifiant}
+      ></input>
+      <label htmlFor={reponseComplementaire.identifiant}>
+        {reponseComplementaire.libelle}
+      </label>
+      {champsASaisir}
+      <br />
+    </>
+  );
+};
 type ProprietesComposantReponsePossible = {
   reponsePossible: ReponsePossible;
   identifiantQuestion: string;
   typeDeSaisie: "radio" | "checkbox";
 };
+
 const ComposantReponsePossible = (
   proprietes: PropsWithChildren<ProprietesComposantReponsePossible>,
 ) => {
   const champsASaisir =
     proprietes.reponsePossible.type?.type === "saisieLibre" ? (
-      <input
-        id={`asaisir-${proprietes.reponsePossible.identifiant}`}
-        name={proprietes.reponsePossible.identifiant}
-        type="text"
-        required={true}
-      />
+      <ChampsDeSaisie identifiant={proprietes.reponsePossible.identifiant} />
     ) : (
       ""
     );
@@ -47,6 +90,21 @@ const ComposantReponsePossible = (
         {proprietes.reponsePossible.libelle}
       </label>
       <div>{champsASaisir}</div>
+      {proprietes.reponsePossible.reponsesComplementaires !== undefined ? (
+        <div className="reponses-complementaires">
+          {proprietes.reponsePossible.reponsesComplementaires.map((reponse) => {
+            return (
+              <ComposantReponseComplementaire
+                key={reponse.identifiant}
+                reponseComplementaire={reponse}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        ""
+      )}
+
       {proprietes.children}
       <br />
     </>
