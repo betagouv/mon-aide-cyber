@@ -260,6 +260,69 @@ const referentiel: Referentiel = {
         ],
         type: "choixUnique",
       },
+      {
+        identifiant: "cyberAttaqueSubie",
+        libelle: "Avez-vous déjà subi une cyberrataque ?",
+        reponsesPossibles: [
+          {
+            identifiant: "cyberAttaqueSubie-neSaisPas",
+            libelle: "Je ne sais pas",
+            ordre: 1,
+          },
+          { identifiant: "cyberAttaqueSubie-non", libelle: "Non", ordre: 2 },
+          {
+            identifiant: "cyberAttaqueSubie-oui",
+            libelle: "Oui",
+            ordre: 3,
+            question: {
+              identifiant: "cyberAttaqueSubieTiroir",
+              libelle:
+                'Si "Oui": avez-vous déposé plainte ou réalisé un signalement auprès d\'un service judiciaire ?',
+              reponsesPossibles: [
+                {
+                  identifiant: "cyberAttaqueSubie-Oui-neSaisPas",
+                  libelle: "Je ne sais pas",
+                  ordre: 0,
+                },
+                {
+                  identifiant: "cyberAttaqueSubie-Oui-non",
+                  libelle: "Non",
+                  ordre: 1,
+                },
+                {
+                  identifiant: "cyberAttaqueSubie-Oui-oui",
+                  libelle: "Oui",
+                  ordre: 2,
+                },
+              ],
+              type: "choixMultiple",
+            },
+            reponsesComplementaires: [
+              {
+                identifiant: "cyberAttaqueSubie-Oui-oui-compromission",
+                libelle: "Compromission d'un poste et/ou d'une boîte mail",
+                ordre: 0,
+              },
+              {
+                identifiant: "cyberAttaqueSubie-Oui-oui-rancongiciel",
+                libelle: "Rançongiciel ou  autre maliciel sur plusieurs postes",
+                ordre: 1,
+              },
+              {
+                identifiant: "cyberAttaqueSubie-Oui-oui-fauxOrdre",
+                libelle: "Faux ordre de virement",
+                ordre: 2,
+              },
+              {
+                identifiant: "cyberAttaqueSubie-Oui-oui-autre",
+                libelle: "Autre : Préciser",
+                ordre: 3,
+              },
+            ],
+          },
+        ],
+        type: "choixUnique",
+      },
     ],
   },
 };

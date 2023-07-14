@@ -61,7 +61,7 @@ describe("Le service de diagnostic", () => {
       expect(
         diagnosticRetourne.referentiel.contexte.questions[1]
           .reponsesPossibles[1],
-      ).toStrictEqual({
+      ).toMatchObject({
         identifiant: reponseAttendue.identifiant,
         libelle: reponseAttendue.libelle,
         ordre: reponseAttendue.ordre,

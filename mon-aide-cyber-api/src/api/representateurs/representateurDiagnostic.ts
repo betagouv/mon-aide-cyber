@@ -2,6 +2,7 @@ import { Diagnostic } from "../../diagnostic/Diagnostic";
 import {
   QuestionChoixMultiple,
   QuestionChoixUnique,
+  ReponseComplementaire,
 } from "../../diagnostic/Referentiel";
 import {
   Chemin,
@@ -9,6 +10,7 @@ import {
   ReponseATranscrire,
   RepresentationDiagnostic,
   RepresentationQuestionChoixMultiple,
+  RepresentationReponseComplementaire,
   RepresentationReponsePossible,
   Transcripteur,
 } from "./types";
@@ -30,7 +32,7 @@ const trouveParmiLesQuestions = (
     if (question.identifiant === identifiantQuestion) {
       return question;
     }
-    const questionsATranscrire: QuestionATranscrire[] | undefined =
+    const questionsATranscrire = (
       question.reponses
         ?.reduce((accumulateur: ReponseATranscrire[], reponseCourante) => {
           if (reponseCourante.question !== undefined) {
@@ -38,9 +40,10 @@ const trouveParmiLesQuestions = (
           }
           return accumulateur;
         }, [])
-        .map((reponse) => reponse.question) as QuestionATranscrire[];
-    if (questionsATranscrire !== undefined && questionsATranscrire.length > 0) {
-      return trouveParmiLesQuestions(questionsATranscrire, identifiantQuestion);
+        .map((reponse) => reponse.question) as QuestionATranscrire[]
+    )?.find((q) => q.identifiant === identifiantQuestion);
+    if (questionsATranscrire !== undefined) {
+      return questionsATranscrire;
     }
   }
   return undefined;
@@ -77,13 +80,51 @@ const questionTiroirATranscrire = (
   return undefined;
 };
 
+const toutesLesReponses = (
+  reponses: ReponseATranscrire[] | undefined,
+): ReponseATranscrire[] => {
+  return (
+    reponses?.reduce((accumulateur: ReponseATranscrire[], reponseCourante) => {
+      if (reponseCourante.reponses !== undefined) {
+        accumulateur.push(...reponseCourante.reponses);
+      }
+      return accumulateur;
+    }, []) || []
+  );
+};
+const trouveReponsesComplementaires = (
+  reponsesComplementaires: ReponseComplementaire[],
+  transcripteur: Transcripteur,
+): RepresentationReponseComplementaire[] => {
+  const reponsesATranscrire = transcripteur.contexte.questions.flatMap((q) =>
+    toutesLesReponses(q.reponses),
+  );
+  return reponsesComplementaires.map((rc) => {
+    const reponseATranscrire = reponsesATranscrire.find(
+      (rat) => rat.identifiant === rc.identifiant,
+    );
+    if (reponseATranscrire !== undefined) {
+      return {
+        identifiant: rc.identifiant,
+        libelle: rc.libelle,
+        ordre: rc.ordre,
+        type: reponseATranscrire.type,
+      };
+    }
+    return {
+      identifiant: rc.identifiant,
+      libelle: rc.libelle,
+      ordre: rc.ordre,
+    };
+  });
+};
 const trouveReponsesPossibles = (
   question: QuestionChoixUnique | QuestionChoixMultiple,
   transcripteur: Transcripteur,
   questionATranscrire: QuestionATranscrire | undefined,
 ): RepresentationReponsePossible[] => {
   return question.reponsesPossibles.map((reponse) => {
-    const questionATiroirOT = questionTiroirATranscrire(
+    const representationQuestionATiroir = questionTiroirATranscrire(
       reponse.question,
       transcripteur,
       reponse.question?.identifiant,
@@ -92,12 +133,17 @@ const trouveReponsesPossibles = (
       reponse.identifiant,
       questionATranscrire?.reponses,
     );
+    const reponsesComplementaires = trouveReponsesComplementaires(
+      reponse.reponsesComplementaires || [],
+      transcripteur,
+    );
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { question, ...corpsDeReponse } = reponse;
     return {
       ...corpsDeReponse,
       type: reponseAtranscrire?.type,
-      question: questionATiroirOT,
+      question: representationQuestionATiroir,
+      reponsesComplementaires,
     };
   });
 };

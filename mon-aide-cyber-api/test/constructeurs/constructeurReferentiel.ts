@@ -3,6 +3,7 @@ import {
   QuestionChoixMultiple,
   QuestionChoixUnique,
   Referentiel,
+  ReponseComplementaire,
   ReponsePossible,
 } from "../../src/diagnostic/Referentiel";
 import { fakerFR as faker } from "@faker-js/faker";
@@ -97,6 +98,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private libelle: string = faker.word.words();
   private ordre: number = faker.number.int();
   private question?: QuestionChoixUnique | QuestionChoixMultiple = undefined;
+  private reponsesComplementaires?: ReponseComplementaire[] = undefined;
 
   avecQuestionATiroir(
     question: QuestionChoixUnique | QuestionChoixMultiple,
@@ -111,13 +113,28 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     return this;
   }
 
+  avecDesReponsesComplementaires(
+    reponsesComplementaires: ReponseComplementaire[],
+  ): ConstructeurReponsePossible {
+    this.reponsesComplementaires = reponsesComplementaires;
+    return this;
+  }
+
   construis(): ReponsePossible {
     return {
       identifiant: this.identifiant,
       libelle: this.libelle,
       ordre: this.ordre,
       question: this.question,
+      reponsesComplementaires: this.reponsesComplementaires,
     };
+  }
+}
+
+class ConstructeurReponseComplementaire extends ConstructeurReponsePossible {
+  construis(): ReponseComplementaire {
+    const { question, ...reponseComplementaire } = super.construis();
+    return reponseComplementaire;
   }
 }
 
@@ -135,3 +152,6 @@ export const uneQuestion = (): ConstructeurQuestion =>
 
 export const uneReponsePossible = (): ConstructeurReponsePossible =>
   new ConstructeurReponsePossible();
+
+export const uneReponseComplementaire = (): ConstructeurReponseComplementaire =>
+  new ConstructeurReponseComplementaire();
