@@ -1,30 +1,36 @@
 import { describe, expect } from "vitest";
 import {
   uneQuestion,
+  uneReponseComplementaire,
   uneReponsePossible,
   unReferentielAuContexteVide,
 } from "../../constructeurs/constructeurReferentiel";
 import { unDiagnostic } from "../../constructeurs/constructeurDiagnostic";
 import { representeLeDiagnosticPourLeClient } from "../../../src/api/representateurs/representateurDiagnostic";
 import {
+  fabriqueTranscripteur,
   transcripteurAvecSaisiesLibres,
+  TranscripteurDeQuestion,
+  TranscripteurDeReponse,
+  TranscripteurDeReponseComplementaire,
+  transcripteurMultipleTiroir,
   transcripteurQuestionTiroir,
 } from "./transcripteursDeTest";
+import { Transcripteur } from "../../../src/api/representateurs/types";
 
 describe("Le représentateur de diagnostic", () => {
   it("définit le type de saisie que doit faire l'utilisateur", () => {
+    const question = uneQuestion()
+      .aChoixUnique("Quelle est la question?", [
+        { identifiant: "reponse1", libelle: "réponse 1" },
+        { identifiant: "reponse2", libelle: "réponse 2" },
+        { identifiant: "reponse3", libelle: "réponse 3" },
+      ])
+      .construis();
     const diagnostic = unDiagnostic()
       .avecUnReferentiel(
         unReferentielAuContexteVide()
-          .ajouteUneQuestionAuContexte(
-            uneQuestion()
-              .aChoixUnique("Quelle est la question?", [
-                { identifiant: "reponse1", libelle: "réponse 1" },
-                { identifiant: "reponse2", libelle: "réponse 2" },
-                { identifiant: "reponse3", libelle: "réponse 3" },
-              ])
-              .construis(),
-          )
+          .ajouteUneQuestionAuContexte(question)
           .construis(),
       )
       .construis();
@@ -105,7 +111,7 @@ describe("Le représentateur de diagnostic", () => {
 
         expect(
           diagnosticRepresente.referentiel.contexte.questions,
-        ).toStrictEqual([
+        ).toMatchObject([
           {
             identifiant: "question-avec-reponse-tiroir",
             libelle: "Question avec réponse tiroir?",
@@ -122,13 +128,10 @@ describe("Le représentateur de diagnostic", () => {
                       identifiant: "reponse-1",
                       libelle: "Réponse 1",
                       ordre: reponse.ordre,
-                      type: undefined,
-                      question: undefined,
                     },
                   ],
                   type: "choixMultiple",
                 },
-                type: undefined,
               },
             ],
             type: "choixUnique",
@@ -176,17 +179,16 @@ describe("Le représentateur de diagnostic", () => {
         expect(questionTiroir?.question?.identifiant).toBe("question-tiroir");
         expect(questionTiroir?.question?.libelle).toBe("Question tiroir?");
         expect(questionTiroir?.question?.type).toBe("choixMultiple");
-        expect(questionTiroir?.question?.reponsesPossibles[2]).toStrictEqual({
+        expect(questionTiroir?.question?.reponsesPossibles[2]).toMatchObject({
           identifiant: "reponse-3",
           libelle: "Réponse 3",
           ordre: reponse3.ordre,
           type: { type: "saisieLibre", format: "texte" },
-          question: undefined,
         });
       });
 
       it("avec plusieurs questions", () => {
-        const reponse3 = uneReponsePossible()
+        const reponse = uneReponsePossible()
           .avecLibelle("Réponse 3")
           .construis();
         const diagnostic = unDiagnostic()
@@ -201,7 +203,7 @@ describe("Le représentateur de diagnostic", () => {
                       .avecQuestionATiroir(
                         uneQuestion()
                           .aChoixMultiple("Question tiroir?")
-                          .avecReponsesPossibles([reponse3])
+                          .avecReponsesPossibles([reponse])
                           .construis(),
                       )
                       .construis(),
@@ -219,13 +221,192 @@ describe("Le représentateur de diagnostic", () => {
         const questionTiroir =
           diagnosticRepresente.referentiel.contexte.questions[1]
             .reponsesPossibles[0]?.question;
-        expect(questionTiroir?.reponsesPossibles[0]).toStrictEqual({
+        expect(questionTiroir?.reponsesPossibles[0]).toMatchObject({
           identifiant: "reponse-3",
           libelle: "Réponse 3",
-          ordre: reponse3.ordre,
+          ordre: reponse.ordre,
           type: { type: "saisieLibre", format: "texte" },
-          question: undefined,
         });
+      });
+      it("avec plusieurs questions à tiroir", () => {
+        const reponse1 = uneReponsePossible()
+          .avecLibelle("Réponse 11")
+          .construis();
+        const reponse2 = uneReponsePossible()
+          .avecLibelle("Réponse 21")
+          .construis();
+        const premiereQuestion = uneQuestion()
+          .aChoixUnique("Première question?")
+          .avecReponsesPossibles([
+            uneReponsePossible()
+              .avecLibelle("Réponse 1")
+              .avecQuestionATiroir(
+                uneQuestion()
+                  .aChoixMultiple("Question 11")
+                  .avecReponsesPossibles([reponse1])
+                  .construis(),
+              )
+              .construis(),
+          ])
+          .construis();
+        const secondeQuestion = uneQuestion()
+          .aChoixUnique("Deuxième question?")
+          .avecReponsesPossibles([
+            uneReponsePossible()
+              .avecLibelle("Réponse 2")
+              .avecQuestionATiroir(
+                uneQuestion()
+                  .aChoixMultiple("Question 21")
+                  .avecReponsesPossibles([reponse2])
+                  .construis(),
+              )
+              .construis(),
+          ])
+          .construis();
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentielAuContexteVide()
+              .ajouteUneQuestionAuContexte(premiereQuestion)
+              .ajouteUneQuestionAuContexte(secondeQuestion)
+              .construis(),
+          )
+          .construis();
+
+        const representationDiagnostic = representeLeDiagnosticPourLeClient(
+          diagnostic,
+          transcripteurMultipleTiroir,
+        );
+
+        const premiereQuestionTiroir =
+          representationDiagnostic.referentiel.contexte.questions[0]
+            .reponsesPossibles[0]?.question;
+        expect(premiereQuestionTiroir?.reponsesPossibles[0]).toMatchObject({
+          identifiant: "reponse-11",
+          libelle: "Réponse 11",
+          ordre: reponse1.ordre,
+        });
+        const deuxiemeQuestionTiroir =
+          representationDiagnostic.referentiel.contexte.questions[1]
+            .reponsesPossibles[0]?.question;
+        expect(deuxiemeQuestionTiroir?.reponsesPossibles[0]).toMatchObject({
+          identifiant: "reponse-21",
+          libelle: "Réponse 21",
+          ordre: reponse2.ordre,
+        });
+      });
+    });
+
+    it("retourne les questions lorsqu'elles ne sont pas définies dans le transcripteur", () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentielAuContexteVide()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique("Quelle est la réponse ?")
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle("Une réponse").construis(),
+                ])
+                .construis(),
+            )
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique("Tiroir?")
+                .avecReponsesPossibles([
+                  uneReponsePossible()
+                    .avecQuestionATiroir(
+                      uneQuestion()
+                        .aChoixMultiple("Question tiroir ?")
+                        .construis(),
+                    )
+                    .construis(),
+                ])
+                .construis(),
+            )
+            .construis(),
+        )
+        .construis();
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        {
+          contexte: {
+            questions: [
+              {
+                identifiant: "quelle-est-la-reponse-",
+                type: "choixUnique",
+              },
+            ],
+          },
+        } as Transcripteur,
+      );
+
+      const questionRepresentee =
+        representationDiagnostic.referentiel.contexte.questions[0];
+      expect(questionRepresentee.libelle).toBe("Quelle est la réponse ?");
+    });
+
+    it("retourne les réponses complémentaires si il y en a", () => {
+      const reponseComplementaire = uneReponseComplementaire().construis();
+      const secondeReponseComplementaire =
+        uneReponseComplementaire().construis();
+      const reponsePossible = uneReponsePossible()
+        .avecDesReponsesComplementaires([
+          reponseComplementaire,
+          secondeReponseComplementaire,
+        ])
+        .construis();
+      const question = uneQuestion()
+        .avecReponsesPossibles([reponsePossible])
+        .construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentielAuContexteVide()
+            .ajouteUneQuestionAuContexte(question)
+            .construis(),
+        )
+        .construis();
+
+      const transcripteurs = new TranscripteurDeQuestion(
+        question,
+      ).ajouteUnTranscripteurDeReponse(
+        new TranscripteurDeReponse(reponsePossible)
+          .ajouteUnTranscripteurDeReponseComplementaire(
+            new TranscripteurDeReponseComplementaire(
+              secondeReponseComplementaire,
+            ),
+          )
+          .ajouteUnTranscripteurDeReponseComplementaire(
+            new TranscripteurDeReponseComplementaire(reponseComplementaire),
+          ),
+      );
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        fabriqueTranscripteur([transcripteurs]),
+      );
+
+      const questionRepresentee =
+        representationDiagnostic.referentiel.contexte.questions[0];
+      expect(
+        questionRepresentee.reponsesPossibles[0]?.reponsesComplementaires?.[0]
+          .libelle,
+      ).toBe(reponseComplementaire.libelle);
+      expect(
+        questionRepresentee.reponsesPossibles[0]?.reponsesComplementaires?.[0]
+          .type,
+      ).toMatchObject({
+        type: "saisieLibre",
+        format: "texte",
+      });
+      expect(
+        questionRepresentee.reponsesPossibles[0]?.reponsesComplementaires?.[1]
+          .libelle,
+      ).toBe(secondeReponseComplementaire.libelle);
+      expect(
+        questionRepresentee.reponsesPossibles[0]?.reponsesComplementaires?.[1]
+          .type,
+      ).toMatchObject({
+        type: "saisieLibre",
+        format: "texte",
       });
     });
   });

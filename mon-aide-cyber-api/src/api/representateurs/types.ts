@@ -4,6 +4,10 @@ export type RepresentationDiagnostic = {
   identifiant: crypto.UUID;
   referentiel: RepresentationReferentiel;
 };
+export type RepresentationReponseComplementaire = Omit<
+  RepresentationReponsePossible,
+  "question" | "reponsesComplementaires"
+>;
 export type RepresentationReponsePossible = {
   identifiant: string;
   libelle: string;
@@ -12,6 +16,7 @@ export type RepresentationReponsePossible = {
     | RepresentationQuestionChoixUnique
     | RepresentationQuestionChoixMultiple
     | undefined;
+  reponsesComplementaires?: RepresentationReponseComplementaire[] | undefined;
   type?: { type: TypeDeSaisie; format: Format } | undefined;
 };
 type RepresentationQuestion = {
@@ -44,6 +49,7 @@ export type Format = "nombre" | "texte";
 export type ReponseATranscrire = {
   identifiant: string;
   question?: QuestionATranscrire;
+  reponses?: ReponseATranscrire[];
   type?: { format: Format; type: TypeDeSaisie };
 };
 export type QuestionATranscrire = {

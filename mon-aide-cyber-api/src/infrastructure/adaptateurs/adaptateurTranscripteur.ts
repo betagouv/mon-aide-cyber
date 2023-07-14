@@ -22,6 +22,18 @@ export const adaptateurTranscripteur = () =>
               type: "liste",
             },
             {
+              identifiant: "cyberAttaqueSubie",
+              reponses: [
+                {
+                  identifiant: "cyberAttaqueSubie-oui",
+                  question: {
+                    identifiant: "cyberAttaqueSubieTiroir",
+                    type: "choixMultiple",
+                  },
+                },
+              ],
+            },
+            {
               identifiant: "usageCloud",
               reponses: [
                 {
@@ -36,6 +48,20 @@ export const adaptateurTranscripteur = () =>
                       },
                     ],
                   },
+                },
+              ],
+            },
+            {
+              identifiant: "cyberAttaqueSubie",
+              reponses: [
+                {
+                  identifiant: "cyberAttaqueSubie-oui",
+                  reponses: [
+                    {
+                      identifiant: "cyberAttaqueSubie-Oui-oui-autre",
+                      type: { type: "saisieLibre", format: "texte" },
+                    },
+                  ],
                 },
               ],
             },
