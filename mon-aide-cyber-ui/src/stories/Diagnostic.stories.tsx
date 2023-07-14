@@ -17,6 +17,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { unReferentiel } from "../../test/consructeurs/constructeurReferentiel.ts";
 import { ComposantDiagnostic } from "../composants/diagnostic/ComposantDiagnostic.tsx";
 import { EntrepotDiagnostics } from "../domaine/diagnostic/Diagnostics.ts";
+import { uneReponseComplementaire } from "../../test/consructeurs/constructeurReponseComplementaire.ts";
 
 const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
 
@@ -113,6 +114,33 @@ const diagnosticAvecReponseEntrainantQuestion = unDiagnostic()
       .construis(),
   )
   .construis();
+
+const identifiantReponseComplementaire = "47713b22-9595-4205-9e5f-0c2fe1daa639";
+const diagnosticAvecReponseComplementaire = unDiagnostic()
+  .avecIdentifiant(identifiantReponseComplementaire)
+  .avecUnReferentiel(
+    unReferentiel()
+      .avecUneQuestion(
+        uneQuestion()
+          .avecDesReponses([
+            uneReponsePossible()
+              .avecReponsesComplementaires([
+                uneReponseComplementaire()
+                  .avecLibelle("Réponse Complémentaire 1")
+                  .construis(),
+                uneReponseComplementaire()
+                  .avecLibelle("Réponse Complémentaire 2")
+                  .auFormatTexteEnSaisieLibre()
+                  .construis(),
+              ])
+              .construis(),
+          ])
+          .construis(),
+      )
+      .construis(),
+  )
+  .construis();
+
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestion);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUnChampsDeSaisie);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecPlusieursQuestions);
@@ -122,6 +150,7 @@ await entrepotDiagnosticMemoire.persiste(
 await entrepotDiagnosticMemoire.persiste(
   diagnosticAvecReponseEntrainantQuestion,
 );
+await entrepotDiagnosticMemoire.persiste(diagnosticAvecReponseComplementaire);
 
 const meta = {
   title: "Diagnostic",
@@ -242,6 +271,28 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
       ),
     ).toBeInTheDocument();
     expect(await waitFor(() => canvas.getAllByRole("checkbox").length)).toBe(5);
+    expect(
+      await waitFor(() => canvas.getByRole("textbox")),
+    ).toBeInTheDocument();
+  },
+};
+
+export const AfficheDiagnosticAvecReponsesComplementaires: Story = {
+  name: "Affiche les réponses complémentaires à une réponse possible",
+  args: { idDiagnostic: identifiantReponseComplementaire },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    expect(
+      await waitFor(() =>
+        canvas.getByRole("checkbox", { name: /réponse complémentaire 1/i }),
+      ),
+    ).toBeInTheDocument();
+    expect(
+      await waitFor(() =>
+        canvas.getByRole("checkbox", { name: /réponse complémentaire 2/i }),
+      ),
+    ).toBeInTheDocument();
     expect(
       await waitFor(() => canvas.getByRole("textbox")),
     ).toBeInTheDocument();
