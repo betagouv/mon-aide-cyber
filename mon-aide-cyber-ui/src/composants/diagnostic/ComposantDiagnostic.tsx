@@ -3,14 +3,16 @@ import { useErrorBoundary } from "react-error-boundary";
 import {
   Question,
   ReponseComplementaire,
+  ReponseDonnee,
   ReponsePossible,
 } from "../../domaine/diagnostic/Referentiel.ts";
 import { UUID } from "../../types/Types.ts";
 import {
   diagnosticCharge,
   reducteurDiagnostic,
-} from "../../domaine/diagnostic/reducteurs.ts";
+} from "../../domaine/diagnostic/reducteurDiagnostic.ts";
 import { FournisseurEntrepots } from "../../fournisseurs/FournisseurEntrepot.ts";
+import { reducteurReponse } from "../../domaine/diagnostic/reducteurReponse.ts";
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -63,14 +65,19 @@ const ComposantReponseComplementaire = ({
   );
 };
 type ProprietesComposantReponsePossible = {
-  reponsePossible: ReponsePossible;
   identifiantQuestion: string;
+  reponseDonnee?: ReponseDonnee;
+  reponsePossible: ReponsePossible;
   typeDeSaisie: "radio" | "checkbox";
 };
 
 const ComposantReponsePossible = (
   proprietes: PropsWithChildren<ProprietesComposantReponsePossible>,
 ) => {
+  const [etatReponse, _] = useReducer(reducteurReponse, {
+    reponseDonnee: proprietes.reponseDonnee,
+  });
+
   const champsASaisir =
     proprietes.reponsePossible.type?.type === "saisieLibre" ? (
       <ChampsDeSaisie identifiant={proprietes.reponsePossible.identifiant} />
@@ -85,6 +92,10 @@ const ComposantReponsePossible = (
         type={proprietes.typeDeSaisie}
         name={proprietes.identifiantQuestion}
         value={proprietes.reponsePossible.identifiant}
+        checked={
+          etatReponse.reponseDonnee?.valeur ===
+          proprietes.reponsePossible.identifiant
+        }
       ></input>
       <label htmlFor={proprietes.reponsePossible.identifiant}>
         {proprietes.reponsePossible.libelle}
@@ -112,6 +123,10 @@ const ComposantReponsePossible = (
 };
 
 const ComposantQuestionListe = ({ question }: ProprietesComposantQuestion) => {
+  const [etatReponse, _] = useReducer(reducteurReponse, {
+    reponseDonnee: question.reponseDonnee,
+  });
+
   return (
     <select
       role="listbox"
@@ -120,7 +135,11 @@ const ComposantQuestionListe = ({ question }: ProprietesComposantQuestion) => {
     >
       {question.reponsesPossibles.map((reponse) => {
         return (
-          <option key={reponse.identifiant} value={reponse.identifiant}>
+          <option
+            key={reponse.identifiant}
+            value={reponse.identifiant}
+            selected={etatReponse.reponseDonnee?.valeur === reponse.identifiant}
+          >
             {reponse.libelle}
           </option>
         );
@@ -145,6 +164,7 @@ const ComposantQuestionTiroir = ({ question }: ProprietesComposantQuestion) => {
             reponsePossible={reponse}
             identifiantQuestion={question.identifiant}
             typeDeSaisie={typeDeSaisie}
+            reponseDonnee={undefined}
           />
         );
       })}
@@ -162,6 +182,7 @@ const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
             reponsePossible={reponse}
             identifiantQuestion={question.identifiant}
             typeDeSaisie="radio"
+            reponseDonnee={question.reponseDonnee}
           >
             {reponse.question !== undefined ? (
               <ComposantQuestionTiroir question={reponse.question} />
