@@ -19,14 +19,14 @@ export type RepresentationReponsePossible = {
   reponsesComplementaires?: RepresentationReponseComplementaire[] | undefined;
   type?: { type: TypeDeSaisie; format: Format } | undefined;
 };
-type RepresentationQuestion = {
+export type RepresentationQuestion = {
   identifiant: string;
   libelle: string;
   reponsesPossibles: RepresentationReponsePossible[];
   type?: TypeDeSaisie | undefined;
 };
 export type RepresentationQuestionChoixMultiple = RepresentationQuestion & {
-  type?: Exclude<TypeDeSaisie, "choixSimple"> | undefined;
+  type?: Exclude<TypeDeSaisie, "choixUnique"> | undefined;
 };
 type RepresentationQuestionChoixUnique = RepresentationQuestion & {
   type?: Exclude<TypeDeSaisie, "choixMultiple"> | undefined;

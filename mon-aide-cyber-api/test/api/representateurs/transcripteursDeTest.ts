@@ -123,7 +123,6 @@ const transcripteurQuestionTiroir = {
                   type: { type: "saisieLibre", format: "texte" },
                 },
               ],
-              type: "choixMultiple",
             },
           },
         ],
@@ -142,7 +141,6 @@ const transcripteurMultipleTiroir = {
             identifiant: "reponse-1",
             question: {
               identifiant: "question-11",
-              type: "choixMultiple",
             },
           },
         ],
@@ -154,7 +152,6 @@ const transcripteurMultipleTiroir = {
             identifiant: "reponse-2",
             question: {
               identifiant: "question-21",
-              type: "choixMultiple",
             },
           },
         ],

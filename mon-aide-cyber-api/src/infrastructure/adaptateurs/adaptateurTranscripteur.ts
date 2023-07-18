@@ -22,18 +22,6 @@ export const adaptateurTranscripteur = () =>
               type: "liste",
             },
             {
-              identifiant: "cyberAttaqueSubie",
-              reponses: [
-                {
-                  identifiant: "cyberAttaqueSubie-oui",
-                  question: {
-                    identifiant: "cyberAttaqueSubieTiroir",
-                    type: "choixMultiple",
-                  },
-                },
-              ],
-            },
-            {
               identifiant: "usageCloud",
               reponses: [
                 {
