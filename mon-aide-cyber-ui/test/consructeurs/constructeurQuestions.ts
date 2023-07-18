@@ -18,10 +18,15 @@ class ConstructeurQuestion implements Constructeur<Question> {
     return this;
   }
 
-  avecNReponses(nombreReponses: number): ConstructeurQuestionAChoixMultiple {
+  avecNReponses(nombreReponses: number): ConstructeurQuestion {
     for (let i = 0; i < nombreReponses; i++) {
       this.reponsesPossibles.push(uneReponsePossible().construis());
     }
+    return this;
+  }
+
+  avecLibelle(libelle: string): ConstructeurQuestion {
+    this.libelle = libelle;
     return this;
   }
 
@@ -42,7 +47,17 @@ class ConstructeurQuestionAChoixMultiple extends ConstructeurQuestion {
   }
 }
 
+class ConstructeurQuestionAChoixUnique extends ConstructeurQuestion {
+  constructor() {
+    super();
+    this.type = "choixUnique";
+  }
+}
+
 export const uneQuestionAChoixMultiple = () =>
   new ConstructeurQuestionAChoixMultiple();
+
+export const uneQuestionAChoixUnique = () =>
+  new ConstructeurQuestionAChoixUnique();
 
 export const uneQuestion = () => new ConstructeurQuestion();
