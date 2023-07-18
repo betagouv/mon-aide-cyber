@@ -1,6 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import testeurIntegration from "./testeurIntegration";
-import { unReferentiel } from "../constructeurs/constructeurReferentiel";
+import {
+  uneQuestion,
+  uneReponsePossible,
+  unReferentiel,
+  unReferentielAuContexteVide,
+} from "../constructeurs/constructeurReferentiel";
 import { unDiagnostic } from "../constructeurs/constructeurDiagnostic";
 import { executeRequete } from "./executeurRequete";
 
@@ -52,7 +57,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
       });
     });
 
-    it("renvoie une erreur 404 diagnostic non trouvé si le diagnostic n'existe pas", async () => {
+    it("renvoie une erreur HTTP 404 diagnostic non trouvé si le diagnostic n'existe pas", async () => {
       const reponse = await executeRequete(
         "GET",
         `/api/diagnostic/id-inexistant`,
@@ -101,6 +106,63 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         lien?.substring(lien.lastIndexOf("/") + 1),
       );
       expect(diagnosticRetourne.referentiel.contexte.questions).toHaveLength(1);
+    });
+  });
+
+  describe("quand une requête PATCH est reçue sur /api/diagnostic/{id}", () => {
+    it("on peut donner une réponse à une question", async () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentielAuContexteVide()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique("Une question ?")
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle("Réponse 1").construis(),
+                  uneReponsePossible().avecLibelle("Réponse 2").construis(),
+                ])
+                .construis(),
+            )
+            .construis(),
+        )
+        .construis();
+      testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      const reponse = await executeRequete(
+        "PATCH",
+        `/api/diagnostic/${diagnostic.identifiant}`,
+        numeroPort,
+        {
+          chemin: "contexte",
+          identifiant: "une-question-",
+          reponse: "reponse-2",
+        },
+      );
+
+      expect(reponse.status).toBe(204);
+      expect(
+        diagnostic.referentiel.contexte.questions[0].reponseDonnee,
+      ).toMatchObject({
+        valeur: "reponse-2",
+      });
+    });
+
+    it("retourne une erreur HTTP 404 si le diagnostic visé n’existe pas", async () => {
+      const reponse = await executeRequete(
+        "PATCH",
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
+        numeroPort,
+        {
+          chemin: "contexte",
+          identifiant: "une-question-",
+          reponse: "reponse-2",
+        },
+      );
+
+      expect(reponse.status).toBe(404);
+      expect(await reponse.json()).toMatchObject({
+        message: "Le diagnostic demandé n'existe pas.",
+      });
     });
   });
 });
