@@ -16,7 +16,6 @@ import {
   transcripteurMultipleTiroir,
   transcripteurQuestionTiroir,
 } from "./transcripteursDeTest";
-import { Transcripteur } from "../../../src/api/representateurs/types";
 
 describe("Le représentateur de diagnostic", () => {
   it("définit le type de saisie que doit faire l'utilisateur", () => {
@@ -40,8 +39,10 @@ describe("Le représentateur de diagnostic", () => {
       transcripteurAvecSaisiesLibres,
     );
 
-    const reponsesPossibles =
-      diagnosticRepresente.referentiel.contexte.questions[0].reponsesPossibles;
+    const questionRetournee =
+      diagnosticRepresente.referentiel.contexte.questions[0];
+    const reponsesPossibles = questionRetournee.reponsesPossibles;
+    expect(questionRetournee.type).toBe("choixUnique");
     expect(reponsesPossibles[0].type).toStrictEqual({
       type: "saisieLibre",
       format: "texte",
@@ -294,55 +295,47 @@ describe("Le représentateur de diagnostic", () => {
           ordre: reponse2.ordre,
         });
       });
-    });
 
-    it("retourne les questions lorsqu'elles ne sont pas définies dans le transcripteur", () => {
-      const diagnostic = unDiagnostic()
-        .avecUnReferentiel(
-          unReferentielAuContexteVide()
-            .ajouteUneQuestionAuContexte(
-              uneQuestion()
-                .aChoixUnique("Quelle est la réponse ?")
-                .avecReponsesPossibles([
-                  uneReponsePossible().avecLibelle("Une réponse").construis(),
-                ])
-                .construis(),
-            )
-            .ajouteUneQuestionAuContexte(
-              uneQuestion()
-                .aChoixUnique("Tiroir?")
-                .avecReponsesPossibles([
-                  uneReponsePossible()
-                    .avecQuestionATiroir(
-                      uneQuestion()
-                        .aChoixMultiple("Question tiroir ?")
-                        .construis(),
-                    )
-                    .construis(),
-                ])
-                .construis(),
-            )
-            .construis(),
-        )
-        .construis();
+      it("avec les questions telles que décrites dans le référentiel sans transcripteur spécifique", () => {
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentielAuContexteVide()
+              .ajouteUneQuestionAuContexte(
+                uneQuestion()
+                  .aChoixUnique("Une question à choix unique ?")
+                  .avecReponsesPossibles([
+                    uneReponsePossible()
+                      .avecQuestionATiroir(
+                        uneQuestion()
+                          .aChoixUnique("Une question tiroir à choix unique?")
+                          .construis(),
+                      )
+                      .construis(),
+                  ])
+                  .construis(),
+              )
+              .construis(),
+          )
+          .construis();
 
-      const representationDiagnostic = representeLeDiagnosticPourLeClient(
-        diagnostic,
-        {
-          contexte: {
-            questions: [
-              {
-                identifiant: "quelle-est-la-reponse-",
-                type: "choixUnique",
-              },
-            ],
-          },
-        } as Transcripteur,
-      );
+        const representationDiagnostic = representeLeDiagnosticPourLeClient(
+          diagnostic,
+          fabriqueTranscripteur([]),
+        );
 
-      const questionRepresentee =
-        representationDiagnostic.referentiel.contexte.questions[0];
-      expect(questionRepresentee.libelle).toBe("Quelle est la réponse ?");
+        const question =
+          representationDiagnostic.referentiel.contexte.questions[0];
+        expect(question).toMatchObject({
+          identifiant: "une-question-a-choix-unique-",
+          libelle: "Une question à choix unique ?",
+          type: "choixUnique",
+        });
+        expect(question.reponsesPossibles[0].question).toMatchObject({
+          identifiant: "une-question-tiroir-a-choix-unique",
+          libelle: "Une question tiroir à choix unique?",
+          type: "choixUnique",
+        });
+      });
     });
 
     it("retourne les réponses complémentaires si il y en a", () => {

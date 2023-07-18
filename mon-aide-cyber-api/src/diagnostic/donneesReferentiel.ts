@@ -295,7 +295,7 @@ const referentiel: Referentiel = {
                   ordre: 2,
                 },
               ],
-              type: "choixMultiple",
+              type: "choixUnique",
             },
             reponsesComplementaires: [
               {

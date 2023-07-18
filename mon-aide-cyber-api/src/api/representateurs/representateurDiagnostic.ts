@@ -9,7 +9,7 @@ import {
   QuestionATranscrire,
   ReponseATranscrire,
   RepresentationDiagnostic,
-  RepresentationQuestionChoixMultiple,
+  RepresentationQuestion,
   RepresentationReponseComplementaire,
   RepresentationReponsePossible,
   Transcripteur,
@@ -52,7 +52,7 @@ const questionTiroirATranscrire = (
   question: QuestionChoixUnique | QuestionChoixMultiple | undefined,
   transcripteur: Transcripteur,
   identifiantQuestion: string | undefined,
-): RepresentationQuestionChoixMultiple | undefined => {
+): RepresentationQuestion | undefined => {
   if (question !== undefined) {
     const questionTiroirATranscrire: QuestionATranscrire | undefined =
       trouveQuestionATranscrire(
@@ -71,11 +71,14 @@ const questionTiroirATranscrire = (
         );
       return {
         ...question,
-        type: questionTiroirATranscrire.type,
+        type: question.type,
         identifiant: questionTiroirATranscrire.identifiant,
         reponsesPossibles,
-      } as RepresentationQuestionChoixMultiple;
+      } as RepresentationQuestion;
     }
+    return {
+      ...question,
+    } as RepresentationQuestion;
   }
   return undefined;
 };
