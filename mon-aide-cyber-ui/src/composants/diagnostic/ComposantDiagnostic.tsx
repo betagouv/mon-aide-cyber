@@ -129,6 +129,29 @@ const ComposantQuestionListe = ({ question }: ProprietesComposantQuestion) => {
   );
 };
 
+const ComposantQuestionTiroir = ({ question }: ProprietesComposantQuestion) => {
+  return (
+    <div className="question-tiroir">
+      <br />
+      <label>{question?.libelle}</label>
+      <br />
+      {question?.reponsesPossibles.map((reponse) => {
+        const typeDeSaisie =
+          question.type === "choixMultiple" ? "checkbox" : "radio";
+
+        return (
+          <ComposantReponsePossible
+            key={reponse.identifiant}
+            reponsePossible={reponse}
+            identifiantQuestion={question.identifiant}
+            typeDeSaisie={typeDeSaisie}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
 const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
   return (
     <>
@@ -140,22 +163,8 @@ const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
             identifiantQuestion={question.identifiant}
             typeDeSaisie="radio"
           >
-            {reponse.question?.type === "choixMultiple" ? (
-              <div className="question-tiroir">
-                <br />
-                <label>{reponse.question?.libelle}</label>
-                <br />
-                {reponse.question.reponsesPossibles.map((reponse) => {
-                  return (
-                    <ComposantReponsePossible
-                      key={reponse.identifiant}
-                      reponsePossible={reponse}
-                      identifiantQuestion={question.identifiant}
-                      typeDeSaisie="checkbox"
-                    />
-                  );
-                })}
-              </div>
+            {reponse.question !== undefined ? (
+              <ComposantQuestionTiroir question={reponse.question} />
             ) : (
               ""
             )}
@@ -165,6 +174,7 @@ const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
     </>
   );
 };
+
 type ProprietesComposantDiagnostic = {
   idDiagnostic: UUID;
 };

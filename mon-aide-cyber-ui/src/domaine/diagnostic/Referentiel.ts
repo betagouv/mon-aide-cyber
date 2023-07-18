@@ -4,7 +4,11 @@ export type Contexte = {
 export type Referentiel = {
   contexte: Contexte;
 };
-export type TypeDeSaisie = "choixMultiple" | "saisieLibre" | "liste";
+export type TypeDeSaisie =
+  | "choixMultiple"
+  | "choixUnique"
+  | "saisieLibre"
+  | "liste";
 export type Format = "texte" | "nombre" | undefined;
 export type ReponseComplementaire = Omit<
   ReponsePossible,
