@@ -12,20 +12,24 @@ type ReponsePossible = {
 
 type TypeQuestion = "choixMultiple" | "choixUnique";
 
+type ReponseDonnee = {
+  valeur: string;
+};
+
 type Question = {
   identifiant: string;
   libelle: string;
   type: TypeQuestion;
+  reponseDonnee?: ReponseDonnee;
+  reponsesPossibles: ReponsePossible[];
 };
 
 type QuestionChoixUnique = Question & {
   type: Exclude<TypeQuestion, "choixMultiple">;
-  reponsesPossibles: ReponsePossible[];
 };
 
 type QuestionChoixMultiple = Question & {
   type: Exclude<TypeQuestion, "choixUnique">;
-  reponsesPossibles: ReponsePossible[];
 };
 
 type Contexte = {
