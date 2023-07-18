@@ -4,9 +4,26 @@ import crypto from "crypto";
 import { ServiceDiagnostic } from "../diagnostic/ServiceDiagnostic";
 import { representeLeDiagnosticPourLeClient } from "./representateurs/representateurDiagnostic";
 import { NextFunction } from "express-serve-static-core";
+import bodyParser from "body-parser";
 
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
+
+  routes.post("/", (_requete: Request, reponse: Response) => {
+    new ServiceDiagnostic(
+      configuration.adaptateurReferentiel,
+      configuration.entrepots,
+    )
+      .cree()
+      .then((diagnostic) => {
+        reponse.status(201);
+        reponse.appendHeader(
+          "Link",
+          `${_requete.originalUrl}/${diagnostic.identifiant}`,
+        );
+        reponse.send();
+      });
+  });
 
   routes.get(
     "/:id",
@@ -29,21 +46,24 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     },
   );
 
-  routes.post("/", (_requete: Request, reponse: Response) => {
-    new ServiceDiagnostic(
-      configuration.adaptateurReferentiel,
-      configuration.entrepots,
-    )
-      .cree()
-      .then((diagnostic) => {
-        reponse.status(201);
-        reponse.appendHeader(
-          "Link",
-          `${_requete.originalUrl}/${diagnostic.identifiant}`,
-        );
-        reponse.send();
-      });
-  });
+  routes.patch(
+    "/:id",
+    bodyParser.json(),
+    (requete: Request, reponse, suite) => {
+      const { id } = requete.params;
+      const corpsReponse = requete.body;
+      new ServiceDiagnostic(
+        configuration.adaptateurReferentiel,
+        configuration.entrepots,
+      )
+        .ajouteLaReponse(id as crypto.UUID, corpsReponse)
+        .then(() => {
+          reponse.status(204);
+          reponse.send();
+        })
+        .catch((erreur) => suite(erreur));
+    },
+  );
 
   return routes;
 };
