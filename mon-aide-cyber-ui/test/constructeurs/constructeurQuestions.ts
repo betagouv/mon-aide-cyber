@@ -3,6 +3,7 @@ import { uneReponsePossible } from "./constructeurReponsePossible.ts";
 import { faker } from "@faker-js/faker/locale/fr";
 import {
   Question,
+  ReponseDonnee,
   ReponsePossible,
   TypeDeSaisie,
 } from "../../src/domaine/diagnostic/Referentiel.ts";
@@ -12,9 +13,16 @@ class ConstructeurQuestion implements Constructeur<Question> {
   protected libelle = faker.word.words().concat(" ?");
   protected reponsesPossibles: ReponsePossible[] = [];
   protected type?: Exclude<TypeDeSaisie, "saisieLibre"> = undefined;
+  private reponseDonnee?: ReponseDonnee = undefined;
 
   avecDesReponses(reponsePossibles: ReponsePossible[]): ConstructeurQuestion {
     this.reponsesPossibles.push(...reponsePossibles);
+    return this;
+  }
+
+  avecLaReponseDonnee(reponsePossible: ReponsePossible): ConstructeurQuestion {
+    this.reponsesPossibles.push(reponsePossible);
+    this.reponseDonnee = { valeur: reponsePossible.identifiant };
     return this;
   }
 
@@ -30,10 +38,16 @@ class ConstructeurQuestion implements Constructeur<Question> {
     return this;
   }
 
+  sousFormeDeListe(): ConstructeurQuestion {
+    this.type = "liste";
+    return this;
+  }
+
   construis(): Question {
     return {
       identifiant: this.identifiant,
       libelle: this.libelle,
+      reponseDonnee: this.reponseDonnee,
       reponsesPossibles: this.reponsesPossibles,
       type: this.type,
     };

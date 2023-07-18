@@ -4,7 +4,7 @@ import { unDiagnostic } from "../../constructeurs/constructeurDiagnostic";
 import {
   diagnosticCharge,
   reducteurDiagnostic,
-} from "../../../src/domaine/diagnostic/reducteurs";
+} from "../../../src/domaine/diagnostic/reducteurDiagnostic";
 import { uneReponsePossible } from "../../constructeurs/constructeurReponsePossible";
 
 describe("Les réducteurs de diagnostic", () => {
