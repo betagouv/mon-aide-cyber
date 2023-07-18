@@ -14,6 +14,9 @@ export type ReponseComplementaire = Omit<
   ReponsePossible,
   "question" | "reponsesComplementaires"
 >;
+export type ReponseDonnee = {
+  valeur: string;
+};
 export type ReponsePossible = {
   identifiant: string;
   libelle: string;
@@ -25,6 +28,7 @@ export type ReponsePossible = {
 export type Question = {
   identifiant: string;
   libelle: string;
+  reponseDonnee?: ReponseDonnee;
   reponsesPossibles: ReponsePossible[];
   type?: Exclude<TypeDeSaisie, "saisieLibre">;
 };

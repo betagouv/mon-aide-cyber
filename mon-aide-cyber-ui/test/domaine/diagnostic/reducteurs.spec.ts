@@ -3,7 +3,7 @@ import { unDiagnostic } from "../../consructeurs/constructeurDiagnostic";
 import {
   diagnosticCharge,
   reducteurDiagnostic,
-} from "../../../src/domaine/diagnostic/reducteurs";
+} from "../../../src/domaine/diagnostic/reducteurDiagnostic";
 import { uneReponsePossible } from "../../consructeurs/constructeurReponsePossible";
 import { unReferentiel } from "../../consructeurs/constructeurReferentiel";
 
