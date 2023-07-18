@@ -10,6 +10,7 @@ import {
 import {
   uneQuestion,
   uneQuestionAChoixMultiple,
+  uneQuestionAChoixUnique,
 } from "../../test/constructeurs/constructeurQuestions.ts";
 import { uneReponsePossible } from "../../test/constructeurs/constructeurReponsePossible.ts";
 import { ComposantAffichageErreur } from "../composants/erreurs/ComposantAffichageErreur.tsx";
@@ -141,6 +142,34 @@ const diagnosticAvecReponseComplementaire = unDiagnostic()
   )
   .construis();
 
+const identifiantDiagnosticAvecQuestionTiroirAChoixUnique =
+  "ba4cbe4d-dbcb-418c-8b8e-98aea21de323";
+const unDiagnosticAvecQuestionTiroirAChoixUnique = unDiagnostic()
+  .avecIdentifiant(identifiantDiagnosticAvecQuestionTiroirAChoixUnique)
+  .avecUnReferentiel(
+    unReferentiel()
+      .avecUneQuestion(
+        uneQuestion()
+          .avecDesReponses([
+            uneReponsePossible()
+              .avecUneQuestion(
+                uneQuestionAChoixUnique()
+                  .avecLibelle("un libelle de question à choix unique")
+                  .avecDesReponses([
+                    uneReponsePossible()
+                      .avecLibelle("un libelle de réponse possible")
+                      .construis(),
+                  ])
+                  .construis(),
+              )
+              .construis(),
+          ])
+          .construis(),
+      )
+      .construis(),
+  )
+  .construis();
+
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestion);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUnChampsDeSaisie);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecPlusieursQuestions);
@@ -151,6 +180,9 @@ await entrepotDiagnosticMemoire.persiste(
   diagnosticAvecReponseEntrainantQuestion,
 );
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecReponseComplementaire);
+await entrepotDiagnosticMemoire.persiste(
+  unDiagnosticAvecQuestionTiroirAChoixUnique,
+);
 
 const meta = {
   title: "Diagnostic",
@@ -295,6 +327,25 @@ export const AfficheDiagnosticAvecReponsesComplementaires: Story = {
     ).toBeInTheDocument();
     expect(
       await waitFor(() => canvas.getByRole("textbox")),
+    ).toBeInTheDocument();
+  },
+};
+
+export const AfficheDiagnosticAvecQuestionTiroirAChoixUnique: Story = {
+  name: "Affiche la question avec réponses à choix unique sous forme de boutton radio",
+  args: { idDiagnostic: identifiantDiagnosticAvecQuestionTiroirAChoixUnique },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    expect(
+      await waitFor(() =>
+        canvas.getByText("un libelle de question à choix unique"),
+      ),
+    ).toBeInTheDocument();
+    expect(
+      await waitFor(() =>
+        canvas.getByRole("radio", { name: /un libelle de réponse possible/i }),
+      ),
     ).toBeInTheDocument();
   },
 };
