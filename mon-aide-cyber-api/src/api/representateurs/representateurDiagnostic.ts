@@ -188,6 +188,16 @@ export function representeLeDiagnosticPourLeClient(
             type: questionATranscrire?.type || question.type,
           };
         }),
+        actions: [
+          {
+            action: "repondre",
+            chemin: "contexte",
+            ressource: {
+              url: `/api/diagnostic/${diagnostic.identifiant}`,
+              methode: "PATCH",
+            },
+          },
+        ],
       },
     },
   };
