@@ -7,6 +7,7 @@ import {
   ReponsePossible,
   TypeDeSaisie,
 } from "../../src/domaine/diagnostic/Referentiel.ts";
+import { aseptise } from "../utilitaires/aseptise.ts";
 
 class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private identifiant = faker.string.alpha(10);
@@ -22,6 +23,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   }
 
   avecLibelle(libelle: string): ConstructeurReponsePossible {
+    this.identifiant = aseptise(libelle);
     this.libelle = libelle;
     return this;
   }

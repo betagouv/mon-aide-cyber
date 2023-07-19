@@ -1,7 +1,9 @@
 import { Aggregat } from "../../../src/domaine/Aggregat";
 import {
+  ActionDiagnostic,
   Diagnostic,
   EntrepotDiagnostic,
+  Reponse,
 } from "../../../src/domaine/diagnostic/Diagnostic.ts";
 import { Entrepot } from "../../../src/domaine/Entrepots";
 import { unDiagnostic } from "../../consructeurs/constructeurDiagnostic.ts";
@@ -33,10 +35,32 @@ export class EntrepotDiagnosticMemoire
   extends EntrepotMemoire<Diagnostic>
   implements EntrepotDiagnostic
 {
+  private actionRepondre: ActionDiagnostic | undefined = undefined;
+  private reponseDonnee: Reponse | undefined = undefined;
   lancer(): Promise<LienRoutage> {
     const diagnostic = unDiagnostic().construis();
     return this.persiste(diagnostic).then(
       () => new LienRoutage(`/api/diagnostic/${diagnostic.identifiant}`),
+    );
+  }
+
+  repond(action: ActionDiagnostic, reponseDonnee: Reponse): Promise<void> {
+    this.actionRepondre = action;
+    this.reponseDonnee = reponseDonnee;
+    return Promise.resolve();
+  }
+
+  verifieEnvoiReponse(
+    actionRepondre: ActionDiagnostic,
+    reponseDonnee: Reponse,
+  ) {
+    console.log(this.actionRepondre, actionRepondre);
+    console.log(this.reponseDonnee, reponseDonnee);
+    return (
+      Object.entries(this.actionRepondre!).toString() ===
+        Object.entries(actionRepondre).toString() &&
+      Object.entries(this.reponseDonnee!).toString() ===
+        Object.entries(reponseDonnee).toString()
     );
   }
 }

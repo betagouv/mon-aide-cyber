@@ -1,5 +1,8 @@
+import { ActionDiagnostic } from "./Diagnostic.ts";
+
 export type Contexte = {
   questions: Question[];
+  actions: ActionDiagnostic[];
 };
 export type Referentiel = {
   contexte: Contexte;
