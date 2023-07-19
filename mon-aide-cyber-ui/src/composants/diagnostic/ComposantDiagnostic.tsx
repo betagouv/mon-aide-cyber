@@ -1,4 +1,11 @@
-import { PropsWithChildren, useContext, useEffect, useReducer } from "react";
+import {
+  ChangeEvent,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 import { useErrorBoundary } from "react-error-boundary";
 import {
   Question,
@@ -12,10 +19,15 @@ import {
   reducteurDiagnostic,
 } from "../../domaine/diagnostic/reducteurDiagnostic.ts";
 import { FournisseurEntrepots } from "../../fournisseurs/FournisseurEntrepot.ts";
-import { reducteurReponse } from "../../domaine/diagnostic/reducteurReponse.ts";
+import {
+  reducteurReponse,
+  reponseChangee,
+} from "../../domaine/diagnostic/reducteurReponse.ts";
+import { ActionDiagnostic } from "../../domaine/diagnostic/Diagnostic.ts";
 
 type ProprietesComposantQuestion = {
   question: Question;
+  actions?: ActionDiagnostic[];
 };
 
 type ProprietesChampsDeSaisie = {
@@ -69,15 +81,13 @@ type ProprietesComposantReponsePossible = {
   reponseDonnee?: ReponseDonnee;
   reponsePossible: ReponsePossible;
   typeDeSaisie: "radio" | "checkbox";
+  onChange: (identifiantReponse: string) => void;
+  selectionnee: boolean;
 };
 
 const ComposantReponsePossible = (
   proprietes: PropsWithChildren<ProprietesComposantReponsePossible>,
 ) => {
-  const [etatReponse, _] = useReducer(reducteurReponse, {
-    reponseDonnee: proprietes.reponseDonnee,
-  });
-
   const champsASaisir =
     proprietes.reponsePossible.type?.type === "saisieLibre" ? (
       <ChampsDeSaisie identifiant={proprietes.reponsePossible.identifiant} />
@@ -92,10 +102,10 @@ const ComposantReponsePossible = (
         type={proprietes.typeDeSaisie}
         name={proprietes.identifiantQuestion}
         value={proprietes.reponsePossible.identifiant}
-        checked={
-          etatReponse.reponseDonnee?.valeur ===
-          proprietes.reponsePossible.identifiant
-        }
+        checked={proprietes.selectionnee}
+        onChange={(event) => {
+          proprietes.onChange(event.target.value);
+        }}
       ></input>
       <label htmlFor={proprietes.reponsePossible.identifiant}>
         {proprietes.reponsePossible.libelle}
@@ -122,24 +132,45 @@ const ComposantReponsePossible = (
   );
 };
 
-const ComposantQuestionListe = ({ question }: ProprietesComposantQuestion) => {
-  const [etatReponse, _] = useReducer(reducteurReponse, {
+const ComposantQuestionListe = ({
+  question,
+  actions,
+}: ProprietesComposantQuestion) => {
+  const [etatReponse, envoie] = useReducer(reducteurReponse, {
     reponseDonnee: question.reponseDonnee,
   });
+  const entrepots = useContext(FournisseurEntrepots);
+
+  const repond = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      envoie(reponseChangee(event.target.value));
+    },
+    [envoie],
+  );
+
+  useEffect(() => {
+    if (etatReponse.reponseDonnee !== undefined) {
+      const action = actions?.find((a) => a.action === "repondre");
+      if (action !== undefined) {
+        entrepots.diagnostic().repond(action, {
+          reponseDonnee: etatReponse.reponseDonnee.valeur,
+          identifiantQuestion: question.identifiant,
+        });
+      }
+    }
+  }, [actions, entrepots, etatReponse, question]);
 
   return (
     <select
       role="listbox"
       id={question.identifiant}
       name={question.identifiant}
+      onChange={repond}
+      value={etatReponse.reponseDonnee?.valeur}
     >
       {question.reponsesPossibles.map((reponse) => {
         return (
-          <option
-            key={reponse.identifiant}
-            value={reponse.identifiant}
-            selected={etatReponse.reponseDonnee?.valeur === reponse.identifiant}
-          >
+          <option key={reponse.identifiant} value={reponse.identifiant}>
             {reponse.libelle}
           </option>
         );
@@ -165,6 +196,10 @@ const ComposantQuestionTiroir = ({ question }: ProprietesComposantQuestion) => {
             identifiantQuestion={question.identifiant}
             typeDeSaisie={typeDeSaisie}
             reponseDonnee={undefined}
+            selectionnee={false}
+            onChange={() => {
+              // TODO Prendre en compte les réponses des question à tiroir
+            }}
           />
         );
       })}
@@ -172,7 +207,33 @@ const ComposantQuestionTiroir = ({ question }: ProprietesComposantQuestion) => {
   );
 };
 
-const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
+const ComposantQuestion = ({
+  question,
+  actions,
+}: ProprietesComposantQuestion) => {
+  const [etatReponse, envoie] = useReducer(reducteurReponse, {
+    reponseDonnee: question.reponseDonnee,
+  });
+  const entrepots = useContext(FournisseurEntrepots);
+
+  const repond = useCallback(
+    (identifiantReponse: string) => {
+      envoie(reponseChangee(identifiantReponse));
+    },
+    [envoie],
+  );
+
+  useEffect(() => {
+    if (etatReponse.reponseDonnee !== undefined) {
+      const action = actions?.find((a) => a.action === "repondre");
+      if (action !== undefined) {
+        entrepots.diagnostic().repond(action, {
+          reponseDonnee: etatReponse.reponseDonnee.valeur,
+          identifiantQuestion: question.identifiant,
+        });
+      }
+    }
+  }, [actions, entrepots, etatReponse, question]);
   return (
     <>
       {question.reponsesPossibles.map((reponse) => {
@@ -183,9 +244,16 @@ const ComposantQuestion = ({ question }: ProprietesComposantQuestion) => {
             identifiantQuestion={question.identifiant}
             typeDeSaisie="radio"
             reponseDonnee={question.reponseDonnee}
+            onChange={(identifiantReponse) => repond(identifiantReponse)}
+            selectionnee={
+              etatReponse.reponseDonnee?.valeur === reponse.identifiant
+            }
           >
             {reponse.question !== undefined ? (
-              <ComposantQuestionTiroir question={reponse.question} />
+              <ComposantQuestionTiroir
+                question={reponse.question}
+                actions={actions}
+              />
             ) : (
               ""
             )}
@@ -218,25 +286,30 @@ export const ComposantDiagnostic = ({
       .catch((erreur) => showBoundary(erreur));
   }, [entrepots, idDiagnostic, envoie, showBoundary]);
 
+  const contexte = etatReferentiel.diagnostic?.referentiel?.contexte;
   return (
     <>
       <form>
         <h2>Contexte</h2>
         <section className="question">
           <div>
-            {etatReferentiel.diagnostic?.referentiel?.contexte.questions.map(
-              (question) => (
-                <fieldset key={question.identifiant} id={question.identifiant}>
-                  <label>{question.libelle}</label>
-                  <br />
-                  {question.type === "liste" ? (
-                    <ComposantQuestionListe question={question} />
-                  ) : (
-                    <ComposantQuestion question={question} />
-                  )}
-                </fieldset>
-              ),
-            )}
+            {contexte?.questions.map((question) => (
+              <fieldset key={question.identifiant} id={question.identifiant}>
+                <label>{question.libelle}</label>
+                <br />
+                {question.type === "liste" ? (
+                  <ComposantQuestionListe
+                    question={question}
+                    actions={contexte.actions}
+                  />
+                ) : (
+                  <ComposantQuestion
+                    question={question}
+                    actions={contexte.actions}
+                  />
+                )}
+              </fieldset>
+            ))}
           </div>
         </section>
       </form>

@@ -7,9 +7,11 @@ import {
 } from "../../src/domaine/diagnostic/Referentiel.ts";
 import { Constructeur } from "./Constructeur.ts";
 import { uneReponsePossible } from "./constructeurReponsePossible.ts";
+import { ActionDiagnostic } from "../../src/domaine/diagnostic/Diagnostic.ts";
 
 class ConstructeurReferentiel implements Constructeur<Referentiel> {
   private questions: Question[] = [];
+  private actions: ActionDiagnostic[] = [];
 
   avecUneQuestionEtDesReponses(
     question: {
@@ -39,10 +41,15 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
     this.questions.push(question);
     return this;
   }
+  ajouteAction(action: ActionDiagnostic): ConstructeurReferentiel {
+    this.actions.push(action);
+    return this;
+  }
 
   construis(): Referentiel {
     return {
       contexte: {
+        actions: this.actions,
         questions: this.questions,
       },
     };

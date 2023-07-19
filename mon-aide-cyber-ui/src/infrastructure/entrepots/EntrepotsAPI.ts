@@ -1,6 +1,8 @@
 import {
+  ActionDiagnostic,
   Diagnostic,
   EntrepotDiagnostic,
+  Reponse,
 } from "../../domaine/diagnostic/Diagnostic.ts";
 import { Aggregat } from "../../domaine/Aggregat.ts";
 import { FormatLien, LienRoutage } from "../../domaine/LienRoutage.ts";
@@ -53,6 +55,18 @@ export class APIEntrepotDiagnostic
           message: `Lors de la création ou de la récupération du diagnostic pour les raisons suivantes : '${erreur}'`,
         }),
       );
+  }
+
+  repond(action: ActionDiagnostic, reponseDonnee: Reponse): Promise<void> {
+    return fetch(action.ressource.url, {
+      method: action.ressource.methode,
+      body: JSON.stringify({
+        chemin: action.chemin,
+        identifiant: reponseDonnee.identifiantQuestion,
+        reponse: reponseDonnee.reponseDonnee,
+      }),
+      headers: { "Content-Type": "application/json" },
+    }).then();
   }
 }
 
