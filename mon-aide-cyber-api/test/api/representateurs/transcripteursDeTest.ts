@@ -170,8 +170,13 @@ const fabriqueTranscripteur = (
   return transcripteursDeTest.construis();
 };
 
+const fabriqueTranscripteurVide = (): Transcripteur => {
+  return new TranscripteursDeTest().construis();
+};
+
 export {
   fabriqueTranscripteur,
+  fabriqueTranscripteurVide,
   transcripteurAvecSaisiesLibres,
   transcripteurMultipleTiroir,
   transcripteurQuestionTiroir,
