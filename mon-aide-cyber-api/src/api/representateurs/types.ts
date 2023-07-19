@@ -1,5 +1,10 @@
 import crypto from "crypto";
 
+type ActionDiagnostic = {
+  action: "repondre";
+  chemin: "contexte";
+  ressource: { url: string; methode: "PATCH" };
+};
 export type RepresentationDiagnostic = {
   identifiant: crypto.UUID;
   referentiel: RepresentationReferentiel;
@@ -32,6 +37,7 @@ type RepresentationQuestionChoixUnique = RepresentationQuestion & {
   type?: Exclude<TypeDeSaisie, "choixMultiple"> | undefined;
 };
 type RepresentationContexte = {
+  actions: ActionDiagnostic[];
   questions: (
     | RepresentationQuestionChoixUnique
     | RepresentationQuestionChoixMultiple
