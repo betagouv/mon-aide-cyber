@@ -1,17 +1,19 @@
 import {
-  Contexte,
+  QuestionsThematique,
+  QuestionATiroir,
   QuestionChoixMultiple,
   QuestionChoixUnique,
   Referentiel,
   ReponseComplementaire,
   ReponsePossible,
+  TypeQuestion,
 } from "../../src/diagnostic/Referentiel";
 import { fakerFR as faker } from "@faker-js/faker";
 import { Constructeur } from "./constructeur";
 import { aseptise } from "../utilitaires/aseptise";
 
 class ConstructeurReferentiel implements Constructeur<Referentiel> {
-  contexte: Contexte = { questions: [uneQuestion().construis()] };
+  contexte: QuestionsThematique = { questions: [uneQuestion().construis()] };
 
   ajouteUneQuestionAuContexte(
     question: QuestionChoixUnique | QuestionChoixMultiple,
@@ -93,16 +95,58 @@ class ConstructeurQuestion
   }
 }
 
+class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
+  private identifiant: string = faker.string.alpha(10);
+  private libelle: string = faker.word.words();
+  private reponsesPossibles: Omit<
+    ReponsePossible,
+    "reponsesComplementaires" | "question"
+  >[] = [];
+  private type: TypeQuestion = "choixUnique";
+
+  aChoixMultiple = (libelle: string): ConstructeurQuestionATiroir => {
+    this.libelle = libelle;
+    this.identifiant = aseptise(libelle);
+    this.type = "choixMultiple";
+    return this;
+  };
+
+  avecReponsesPossibles = (
+    reponsePossibles: ReponsePossible[],
+  ): ConstructeurQuestionATiroir => {
+    this.reponsesPossibles = reponsePossibles.map((reponse, index) => ({
+      identifiant: reponse.identifiant,
+      libelle: reponse.libelle,
+      ordre: index,
+    }));
+    return this;
+  };
+
+  aChoixUnique = (libelle: string): ConstructeurQuestionATiroir => {
+    this.libelle = libelle;
+    this.identifiant = aseptise(libelle);
+    this.type = "choixUnique";
+    return this;
+  };
+
+  construis(): QuestionATiroir {
+    return {
+      identifiant: this.identifiant,
+      libelle: this.libelle,
+      reponsesPossibles: this.reponsesPossibles,
+      type: this.type,
+    };
+  }
+}
+
 class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private identifiant: string = faker.string.alpha(10);
   private libelle: string = faker.word.words();
   private ordre: number = faker.number.int();
-  private question?: QuestionChoixUnique | QuestionChoixMultiple = undefined;
+  private question?: QuestionATiroir = undefined;
   private reponsesComplementaires?: ReponseComplementaire[] = undefined;
 
-  avecQuestionATiroir(
-    question: QuestionChoixUnique | QuestionChoixMultiple,
-  ): ConstructeurReponsePossible {
+  avecQuestionATiroir(question: QuestionATiroir): ConstructeurReponsePossible {
     this.question = question;
     return this;
   }
@@ -149,6 +193,9 @@ export const unReferentielAuContexteVide = (): ConstructeurReferentiel => {
 
 export const uneQuestion = (): ConstructeurQuestion =>
   new ConstructeurQuestion();
+
+export const uneQuestionATiroir = (): ConstructeurQuestionATiroir =>
+  new ConstructeurQuestionATiroir();
 
 export const uneReponsePossible = (): ConstructeurReponsePossible =>
   new ConstructeurReponsePossible();
