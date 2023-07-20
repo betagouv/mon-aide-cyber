@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import {
   uneQuestion,
+  uneQuestionATiroir,
   uneReponsePossible,
   unReferentiel,
   unReferentielAuContexteVide,
@@ -24,11 +25,12 @@ describe("Le service de diagnostic", () => {
     it("retourne un diagnostic contenant une réponse avec une question à tiroir", async () => {
       const reponseAttendue = uneReponsePossible()
         .avecQuestionATiroir(
-          uneQuestion()
-            .aChoixMultiple("Quelles réponses ?", [
-              { identifiant: "reponse-a", libelle: "Réponse A" },
-              { identifiant: "reponse-b", libelle: "Réponse B" },
-              { identifiant: "reponse-c", libelle: "Réponse C" },
+          uneQuestionATiroir()
+            .aChoixMultiple("Quelles réponses ?")
+            .avecReponsesPossibles([
+              uneReponsePossible().avecLibelle("Réponse A").construis(),
+              uneReponsePossible().avecLibelle("Réponse B").construis(),
+              uneReponsePossible().avecLibelle("Réponse C").construis(),
             ])
             .construis(),
         )
