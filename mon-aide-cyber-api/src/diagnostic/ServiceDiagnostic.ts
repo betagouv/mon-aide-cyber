@@ -1,12 +1,23 @@
-import { Diagnostic, initialiseDiagnostic } from "./Diagnostic";
+import {
+  ajouteLaReponseAuDiagnostic,
+  Diagnostic,
+  initialiseDiagnostic,
+} from "./Diagnostic";
 import * as crypto from "crypto";
 import { AdaptateurReferentiel } from "../adaptateurs/AdaptateurReferentiel";
 import { Entrepots } from "../domaine/Entrepots";
 
+export type CorpsReponseQuestionATiroir = {
+  reponse: string;
+  question: {
+    identifiant: string;
+    reponses: string[];
+  };
+};
 export type CorpsReponse = {
   chemin: "contexte";
   identifiant: string;
-  reponse: string;
+  reponse: string | CorpsReponseQuestionATiroir;
 };
 
 export class ServiceDiagnostic {
@@ -28,18 +39,13 @@ export class ServiceDiagnostic {
 
   ajouteLaReponse = async (
     id: crypto.UUID,
-    corspsReponse: CorpsReponse,
+    corpsReponse: CorpsReponse,
   ): Promise<void> => {
     return this.entrepots
       .diagnostic()
       .lis(id)
       .then((diagnostic) => {
-        const questionTrouvee = diagnostic.referentiel[
-          corspsReponse.chemin
-        ].questions.find((q) => q.identifiant === corspsReponse.identifiant);
-        if (questionTrouvee !== undefined) {
-          questionTrouvee.reponseDonnee = { valeur: corspsReponse.reponse };
-        }
+        ajouteLaReponseAuDiagnostic(diagnostic, corpsReponse);
       });
   };
 }

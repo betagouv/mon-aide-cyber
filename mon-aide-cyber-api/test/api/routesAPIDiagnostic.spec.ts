@@ -35,14 +35,25 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
       expect(reponse.status).toBe(200);
       const premiereQuestion = diagnostic.referentiel.contexte.questions[0];
       const premiereReponsePossible = premiereQuestion.reponsesPossibles[0];
-      expect(await reponse.json()).toMatchObject({
+      expect(await reponse.json()).toStrictEqual({
         identifiant: diagnostic.identifiant,
         referentiel: {
           contexte: {
+            actions: [
+              {
+                action: "repondre",
+                chemin: "contexte",
+                ressource: {
+                  methode: "PATCH",
+                  url: `/api/diagnostic/${diagnostic.identifiant}`,
+                },
+              },
+            ],
             questions: [
               {
                 identifiant: premiereQuestion.identifiant,
                 libelle: premiereQuestion.libelle,
+                reponseDonnee: { valeur: null, reponsesMultiples: [] },
                 reponsesPossibles: [
                   {
                     identifiant: premiereReponsePossible.identifiant,
@@ -50,6 +61,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
                     ordre: 0,
                   },
                 ],
+                type: "choixUnique",
               },
             ],
           },
@@ -142,8 +154,9 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
       expect(reponse.status).toBe(204);
       expect(
         diagnostic.referentiel.contexte.questions[0].reponseDonnee,
-      ).toMatchObject({
-        valeur: "reponse-2",
+      ).toStrictEqual({
+        reponsesMultiples: new Set(),
+        reponseUnique: "reponse-2",
       });
     });
 
