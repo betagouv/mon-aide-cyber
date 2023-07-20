@@ -24,7 +24,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
 
   construis(): Referentiel {
     return {
-      contexte: this.contexte,
+      ["contexte"]: this.contexte,
     };
   }
 }
