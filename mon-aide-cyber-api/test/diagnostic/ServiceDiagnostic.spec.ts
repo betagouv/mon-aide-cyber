@@ -41,15 +41,14 @@ describe("Le service de diagnostic", () => {
           reponseAttendue,
         ])
         .construis();
-      const diagnostic = unDiagnostic()
-        .avecUnReferentiel(
-          unReferentielAuContexteVide()
-            .ajouteUneQuestionAuContexte(uneQuestion().construis())
-            .ajouteUneQuestionAuContexte(question)
-            .construis(),
-        )
+      const referentiel = unReferentielAuContexteVide()
+        .ajouteUneQuestionAuContexte(uneQuestion().construis())
+        .ajouteUneQuestionAuContexte(question)
         .construis();
-      adaptateurReferentiel.ajoute(diagnostic.referentiel);
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(referentiel)
+        .construis();
+      adaptateurReferentiel.ajoute(referentiel);
       entrepots.diagnostic().persiste(diagnostic);
       const serviceDiagnostic = new ServiceDiagnostic(
         adaptateurReferentiel,
@@ -60,9 +59,12 @@ describe("Le service de diagnostic", () => {
         diagnostic.identifiant,
       );
 
+      const referentielDiagnostic = diagnosticRetourne.referentiel["contexte"];
       expect(
-        diagnosticRetourne.referentiel.contexte.questions[1]
-          .reponsesPossibles[1],
+        referentielDiagnostic.questions.map((q) => q.reponseDonnee),
+      ).toMatchObject([{ valeur: null }, { valeur: null }]);
+      expect(
+        referentielDiagnostic.questions[1].reponsesPossibles[1],
       ).toMatchObject({
         identifiant: reponseAttendue.identifiant,
         libelle: reponseAttendue.libelle,
@@ -85,17 +87,28 @@ describe("Le service de diagnostic", () => {
     it("copie le référentiel disponible et le persiste", async () => {
       const referentiel = unReferentiel().construis();
       adaptateurReferentiel.ajoute(referentiel);
+      const questionAttendue = referentiel.contexte.questions[0];
 
       const diagnostic = await new ServiceDiagnostic(
         adaptateurReferentiel,
         entrepots,
-      ).cree();
+      ).lance();
 
       const diagnosticRetourne = await entrepots
         .diagnostic()
         .lis(diagnostic.identifiant);
       expect(diagnosticRetourne.identifiant).not.toBeUndefined();
-      expect(diagnosticRetourne.referentiel).toStrictEqual(referentiel);
+      expect(
+        diagnosticRetourne.referentiel["contexte"].questions,
+      ).toStrictEqual([
+        {
+          identifiant: questionAttendue.identifiant,
+          libelle: questionAttendue.libelle,
+          type: questionAttendue.type,
+          reponsesPossibles: questionAttendue.reponsesPossibles,
+          reponseDonnee: { valeur: null },
+        },
+      ]);
     });
   });
 });
