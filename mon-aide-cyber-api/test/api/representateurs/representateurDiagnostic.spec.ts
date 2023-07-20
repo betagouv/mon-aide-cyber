@@ -1,6 +1,7 @@
 import { describe, expect } from "vitest";
 import {
   uneQuestion,
+  uneQuestionATiroir,
   uneReponseComplementaire,
   uneReponsePossible,
   unReferentielAuContexteVide,
@@ -114,7 +115,7 @@ describe("Le représentateur de diagnostic", () => {
           const reponsePossible = uneReponsePossible()
             .avecLibelle("Réponse 0")
             .avecQuestionATiroir(
-              uneQuestion()
+              uneQuestionATiroir()
                 .aChoixMultiple("Question tiroir?")
                 .avecReponsesPossibles([reponse])
                 .construis(),
@@ -154,7 +155,7 @@ describe("Le représentateur de diagnostic", () => {
                       {
                         identifiant: "reponse-1",
                         libelle: "Réponse 1",
-                        ordre: reponse.ordre,
+                        ordre: 0,
                       },
                     ],
                     type: "choixMultiple",
@@ -179,7 +180,7 @@ describe("Le représentateur de diagnostic", () => {
                     uneReponsePossible()
                       .avecLibelle("Réponse 0")
                       .avecQuestionATiroir(
-                        uneQuestion()
+                        uneQuestionATiroir()
                           .aChoixMultiple("Question tiroir?")
                           .avecReponsesPossibles([
                             uneReponsePossible().construis(),
@@ -209,7 +210,7 @@ describe("Le représentateur de diagnostic", () => {
           expect(questionTiroir?.question?.reponsesPossibles[2]).toMatchObject({
             identifiant: "reponse-3",
             libelle: "Réponse 3",
-            ordre: reponse3.ordre,
+            ordre: 2,
             type: { type: "saisieLibre", format: "texte" },
           });
         });
@@ -228,7 +229,7 @@ describe("Le représentateur de diagnostic", () => {
                     .avecReponsesPossibles([
                       uneReponsePossible()
                         .avecQuestionATiroir(
-                          uneQuestion()
+                          uneQuestionATiroir()
                             .aChoixMultiple("Question tiroir?")
                             .avecReponsesPossibles([reponse])
                             .construis(),
@@ -251,7 +252,7 @@ describe("Le représentateur de diagnostic", () => {
           expect(questionTiroir?.reponsesPossibles[0]).toMatchObject({
             identifiant: "reponse-3",
             libelle: "Réponse 3",
-            ordre: reponse.ordre,
+            ordre: 0,
             type: { type: "saisieLibre", format: "texte" },
           });
         });
@@ -268,7 +269,7 @@ describe("Le représentateur de diagnostic", () => {
               uneReponsePossible()
                 .avecLibelle("Réponse 1")
                 .avecQuestionATiroir(
-                  uneQuestion()
+                  uneQuestionATiroir()
                     .aChoixMultiple("Question 11")
                     .avecReponsesPossibles([reponse1])
                     .construis(),
@@ -282,7 +283,7 @@ describe("Le représentateur de diagnostic", () => {
               uneReponsePossible()
                 .avecLibelle("Réponse 2")
                 .avecQuestionATiroir(
-                  uneQuestion()
+                  uneQuestionATiroir()
                     .aChoixMultiple("Question 21")
                     .avecReponsesPossibles([reponse2])
                     .construis(),
@@ -310,7 +311,7 @@ describe("Le représentateur de diagnostic", () => {
           expect(premiereQuestionTiroir?.reponsesPossibles[0]).toMatchObject({
             identifiant: "reponse-11",
             libelle: "Réponse 11",
-            ordre: reponse1.ordre,
+            ordre: 0,
           });
           const deuxiemeQuestionTiroir =
             representationDiagnostic.referentiel.contexte.questions[1]
@@ -318,7 +319,7 @@ describe("Le représentateur de diagnostic", () => {
           expect(deuxiemeQuestionTiroir?.reponsesPossibles[0]).toMatchObject({
             identifiant: "reponse-21",
             libelle: "Réponse 21",
-            ordre: reponse2.ordre,
+            ordre: 0,
           });
         });
 
@@ -332,7 +333,7 @@ describe("Le représentateur de diagnostic", () => {
                     .avecReponsesPossibles([
                       uneReponsePossible()
                         .avecQuestionATiroir(
-                          uneQuestion()
+                          uneQuestionATiroir()
                             .aChoixUnique("Une question tiroir à choix unique?")
                             .construis(),
                         )

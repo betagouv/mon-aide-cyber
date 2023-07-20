@@ -2,11 +2,19 @@ type ReponseComplementaire = Omit<
   ReponsePossible,
   "question" | "reponsesComplementaires"
 >;
+
+type QuestionATiroir = Omit<Question, "reponsesPossibles" | "reponseDonnee"> & {
+  reponsesPossibles: Omit<
+    ReponsePossible,
+    "question" | "reponsesComplementaires"
+  >[];
+};
+
 type ReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
-  question?: QuestionChoixUnique | QuestionChoixMultiple | undefined;
+  question?: QuestionATiroir | undefined;
   reponsesComplementaires?: ReponseComplementaire[] | undefined;
 };
 
@@ -20,7 +28,7 @@ type Question = {
   identifiant: string;
   libelle: string;
   type: TypeQuestion;
-  reponseDonnee?: ReponseDonnee;
+  reponseDonnee?: ReponseDonnee | undefined;
   reponsesPossibles: ReponsePossible[];
 };
 
@@ -32,20 +40,23 @@ type QuestionChoixMultiple = Question & {
   type: Exclude<TypeQuestion, "choixUnique">;
 };
 
-type Contexte = {
+type QuestionsThematique = {
   questions: (QuestionChoixUnique | QuestionChoixMultiple)[];
 };
 
 type Referentiel = {
-  contexte: Contexte;
+  contexte: QuestionsThematique;
 };
 
 export {
-  Contexte,
+  QuestionsThematique,
   Question,
+  QuestionATiroir,
   QuestionChoixUnique,
   QuestionChoixMultiple,
   Referentiel,
   ReponseComplementaire,
+  ReponseDonnee,
   ReponsePossible,
+  TypeQuestion,
 };
