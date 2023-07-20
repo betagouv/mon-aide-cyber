@@ -25,6 +25,7 @@ const diagnosticAvecUneQuestionAChoixUnique = unDiagnostic()
   .avecIdentifiant(identifiantQuestionAChoixUnique)
   .avecUnReferentiel(
     unReferentiel()
+      .sansAction()
       .ajouteAction(actionRepondre)
       .avecUneQuestion(
         uneQuestionAChoixUnique()
@@ -49,6 +50,7 @@ const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
   .avecIdentifiant(identifiantQuestionListeDeroulante)
   .avecUnReferentiel(
     unReferentiel()
+      .sansAction()
       .ajouteAction(actionRepondre)
       .avecUneQuestion(
         uneQuestionAChoixUnique()

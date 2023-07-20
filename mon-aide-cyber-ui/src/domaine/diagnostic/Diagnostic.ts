@@ -13,7 +13,7 @@ export type Diagnostic = Aggregat & {
   referentiel: Referentiel;
 };
 export type Reponse = {
-  reponseDonnee: string;
+  reponseDonnee: string | null;
   identifiantQuestion: string;
 };
 export interface EntrepotDiagnostic extends Entrepot<Diagnostic> {

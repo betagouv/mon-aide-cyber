@@ -20,6 +20,7 @@ import {
 } from "../../domaine/diagnostic/reducteurDiagnostic.ts";
 import { FournisseurEntrepots } from "../../fournisseurs/FournisseurEntrepot.ts";
 import {
+  EtatReponseStatut,
   reducteurReponse,
   reponseChangee,
 } from "../../domaine/diagnostic/reducteurReponse.ts";
@@ -138,6 +139,7 @@ const ComposantQuestionListe = ({
 }: ProprietesComposantQuestion) => {
   const [etatReponse, envoie] = useReducer(reducteurReponse, {
     reponseDonnee: question.reponseDonnee,
+    statut: EtatReponseStatut.EN_COURS_DE_CHARGEMENT,
   });
   const entrepots = useContext(FournisseurEntrepots);
 
@@ -149,11 +151,11 @@ const ComposantQuestionListe = ({
   );
 
   useEffect(() => {
-    if (etatReponse.reponseDonnee !== undefined) {
+    if (etatReponse.statut === EtatReponseStatut.MODIFIE) {
       const action = actions?.find((a) => a.action === "repondre");
       if (action !== undefined) {
         entrepots.diagnostic().repond(action, {
-          reponseDonnee: etatReponse.reponseDonnee.valeur,
+          reponseDonnee: etatReponse.reponseDonnee!.valeur,
           identifiantQuestion: question.identifiant,
         });
       }
@@ -166,7 +168,11 @@ const ComposantQuestionListe = ({
       id={question.identifiant}
       name={question.identifiant}
       onChange={repond}
-      value={etatReponse.reponseDonnee?.valeur}
+      value={
+        etatReponse.reponseDonnee?.valeur !== null
+          ? etatReponse.reponseDonnee?.valeur
+          : undefined
+      }
     >
       {question.reponsesPossibles.map((reponse) => {
         return (
@@ -213,6 +219,7 @@ const ComposantQuestion = ({
 }: ProprietesComposantQuestion) => {
   const [etatReponse, envoie] = useReducer(reducteurReponse, {
     reponseDonnee: question.reponseDonnee,
+    statut: EtatReponseStatut.EN_COURS_DE_CHARGEMENT,
   });
   const entrepots = useContext(FournisseurEntrepots);
 
@@ -224,11 +231,11 @@ const ComposantQuestion = ({
   );
 
   useEffect(() => {
-    if (etatReponse.reponseDonnee !== undefined) {
+    if (etatReponse.statut === EtatReponseStatut.MODIFIE) {
       const action = actions?.find((a) => a.action === "repondre");
       if (action !== undefined) {
         entrepots.diagnostic().repond(action, {
-          reponseDonnee: etatReponse.reponseDonnee.valeur,
+          reponseDonnee: etatReponse.reponseDonnee!.valeur,
           identifiantQuestion: question.identifiant,
         });
       }
