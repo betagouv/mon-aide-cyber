@@ -47,4 +47,9 @@ const initialiseDiagnostic = (r: Referentiel): Diagnostic => {
   };
 };
 
-export { Diagnostic, EntrepotDiagnostic, initialiseDiagnostic };
+export {
+  Diagnostic,
+  EntrepotDiagnostic,
+  QuestionDiagnostic,
+  initialiseDiagnostic,
+};
