@@ -1,4 +1,4 @@
-import { Diagnostic } from "./Diagnostic";
+import { Diagnostic, initialiseDiagnostic } from "./Diagnostic";
 import * as crypto from "crypto";
 import { AdaptateurReferentiel } from "../adaptateurs/AdaptateurReferentiel";
 import { Entrepots } from "../domaine/Entrepots";
@@ -18,12 +18,9 @@ export class ServiceDiagnostic {
   diagnostic = async (id: crypto.UUID): Promise<Diagnostic> =>
     this.entrepots.diagnostic().lis(id);
 
-  cree = async (): Promise<Diagnostic> => {
-    return this.adaptateurReferentiel.lis().then((referentiel) => {
-      const diagnostic: Diagnostic = {
-        identifiant: crypto.randomUUID(),
-        referentiel,
-      };
+  lance = async (): Promise<Diagnostic> => {
+    return this.adaptateurReferentiel.lis().then((r) => {
+      const diagnostic = initialiseDiagnostic(r);
       this.entrepots.diagnostic().persiste(diagnostic);
       return Promise.resolve(diagnostic);
     });

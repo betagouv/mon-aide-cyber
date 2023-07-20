@@ -14,7 +14,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       configuration.adaptateurReferentiel,
       configuration.entrepots,
     )
-      .cree()
+      .lance()
       .then((diagnostic) => {
         reponse.status(201);
         reponse.appendHeader(
