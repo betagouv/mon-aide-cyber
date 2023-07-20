@@ -18,7 +18,7 @@ export type ReponseComplementaire = Omit<
   "question" | "reponsesComplementaires"
 >;
 export type ReponseDonnee = {
-  valeur: string;
+  valeur: string | null;
 };
 export type ReponsePossible = {
   identifiant: string;

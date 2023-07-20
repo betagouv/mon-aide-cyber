@@ -5,8 +5,14 @@ enum TypeActionReponse {
   REPONSE_CHANGEE = "REPONSE_CHANGEE",
 }
 
+export enum EtatReponseStatut {
+  EN_COURS_DE_CHARGEMENT = "EN_COURS_DE_CHARGEMENT",
+  MODIFIE = "MODIFIE",
+}
+
 type EtatReponse = {
   reponseDonnee?: ReponseDonnee | undefined;
+  statut: EtatReponseStatut;
 };
 
 type ActionReponse =
@@ -24,7 +30,11 @@ export const reducteurReponse = (
 ): EtatReponse => {
   switch (action.type) {
     case TypeActionReponse.REPONSE_CHANGEE:
-      return { ...etat, reponseDonnee: { valeur: action.reponse } };
+      return {
+        ...etat,
+        reponseDonnee: { valeur: action.reponse },
+        statut: EtatReponseStatut.MODIFIE,
+      };
     case TypeActionReponse.REPONSE_DONNEE:
       return { ...etat, reponseDonnee: action.reponseDonnee };
   }
