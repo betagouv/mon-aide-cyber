@@ -11,6 +11,7 @@ import { ServiceDiagnostic } from "../../src/diagnostic/ServiceDiagnostic";
 import { AdaptateurReferentielDeTest } from "../adaptateurs/AdaptateurReferentielDeTest";
 import { Entrepots } from "../../src/domaine/Entrepots";
 import { EntrepotsMemoire } from "../../src/infrastructure/entrepots/memoire/Entrepots";
+import { QuestionDiagnostic } from "../../src/diagnostic/Diagnostic";
 
 describe("Le service de diagnostic", () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -62,7 +63,10 @@ describe("Le service de diagnostic", () => {
       const referentielDiagnostic = diagnosticRetourne.referentiel["contexte"];
       expect(
         referentielDiagnostic.questions.map((q) => q.reponseDonnee),
-      ).toMatchObject([{ valeur: null }, { valeur: null }]);
+      ).toMatchObject([
+        { reponseUnique: null, reponsesMultiples: new Set() },
+        { reponseUnique: null, reponsesMultiples: new Set() },
+      ]);
       expect(
         referentielDiagnostic.questions[1].reponsesPossibles[1],
       ).toMatchObject({
@@ -106,9 +110,66 @@ describe("Le service de diagnostic", () => {
           libelle: questionAttendue.libelle,
           type: questionAttendue.type,
           reponsesPossibles: questionAttendue.reponsesPossibles,
-          reponseDonnee: { valeur: null },
+          reponseDonnee: { reponseUnique: null, reponsesMultiples: new Set() },
         },
       ]);
+    });
+  });
+
+  describe("Lorsque l’on veut ajouter une réponse au diagnostic", () => {
+    it("met à jour les réponses d’une question à tiroir", async () => {
+      const premiereReponse = uneReponsePossible().construis();
+      const secondeReponse = uneReponsePossible().construis();
+      const reponseAvecQuestionATiroir = uneReponsePossible()
+        .avecQuestionATiroir(
+          uneQuestion()
+            .aChoixMultiple("QCM ?")
+            .avecReponsesPossibles([
+              premiereReponse,
+              uneReponsePossible().construis(),
+              secondeReponse,
+            ])
+            .construis(),
+        )
+        .construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentielAuContexteVide()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique("Question à tiroir ?")
+                .avecReponsesPossibles([reponseAvecQuestionATiroir])
+                .construis(),
+            )
+            .construis(),
+        )
+        .construis();
+      entrepots.diagnostic().persiste(diagnostic);
+
+      await new ServiceDiagnostic(
+        adaptateurReferentiel,
+        entrepots,
+      ).ajouteLaReponse(diagnostic.identifiant, {
+        chemin: "contexte",
+        identifiant: "question-a-tiroir-",
+        reponse: {
+          reponse: reponseAvecQuestionATiroir.identifiant,
+          question: {
+            identifiant: "qcm-",
+            reponses: [premiereReponse.identifiant, secondeReponse.identifiant],
+          },
+        },
+      });
+
+      const question = diagnostic.referentiel.contexte
+        .questions[0] as QuestionDiagnostic;
+      expect(question.reponseDonnee).toMatchObject({
+        reponseUnique: reponseAvecQuestionATiroir.identifiant,
+        reponsesMultiples: new Set([
+          premiereReponse.identifiant,
+          secondeReponse.identifiant,
+        ]),
+      });
     });
   });
 });

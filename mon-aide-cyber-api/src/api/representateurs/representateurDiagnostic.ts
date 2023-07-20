@@ -196,8 +196,14 @@ export function representeLeDiagnosticPourLeClient(
             transcripteur,
             questionATranscrire,
           );
+          const autresReponses = {
+            valeur: question.reponseDonnee.reponseUnique,
+            reponsesMultiples: [...question.reponseDonnee.reponsesMultiples],
+          };
+          const { reponseDonnee, ...reste } = { ...question };
           return {
-            ...question,
+            ...reste,
+            reponseDonnee: autresReponses,
             reponsesPossibles,
             type: questionATranscrire?.type || question.type,
           };

@@ -24,9 +24,14 @@ export type RepresentationReponsePossible = {
   reponsesComplementaires?: RepresentationReponseComplementaire[] | undefined;
   type?: { type: TypeDeSaisie; format: Format } | undefined;
 };
+type RepresentationReponseDonnee = {
+  valeur: string | null;
+  reponsesMultiples: string[];
+};
 export type RepresentationQuestion = {
   identifiant: string;
   libelle: string;
+  reponseDonnee: RepresentationReponseDonnee;
   reponsesPossibles: RepresentationReponsePossible[];
   type?: TypeDeSaisie | undefined;
 };
