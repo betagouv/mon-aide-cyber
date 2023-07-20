@@ -1,8 +1,8 @@
-import { Diagnostic } from "../../diagnostic/Diagnostic";
+import { Diagnostic, QuestionDiagnostic } from "../../diagnostic/Diagnostic";
 import {
-  QuestionChoixMultiple,
-  QuestionChoixUnique,
+  QuestionATiroir,
   ReponseComplementaire,
+  ReponsePossible,
 } from "../../diagnostic/Referentiel";
 import {
   Chemin,
@@ -49,7 +49,7 @@ const trouveParmiLesQuestions = (
   return undefined;
 };
 const questionTiroirATranscrire = (
-  question: QuestionChoixUnique | QuestionChoixMultiple | undefined,
+  question: QuestionATiroir | undefined,
   transcripteur: Transcripteur,
   identifiantQuestion: string | undefined,
 ): RepresentationQuestion | undefined => {
@@ -121,32 +121,46 @@ const trouveReponsesComplementaires = (
     };
   });
 };
+
+const estQuestionATiroir = (
+  reponse:
+    | ReponsePossible
+    | Omit<ReponsePossible, "question" | "reponsesComplementaires">,
+): reponse is ReponsePossible => {
+  return "question" in reponse && "reponsesComplementaires" in reponse;
+};
 const trouveReponsesPossibles = (
-  question: QuestionChoixUnique | QuestionChoixMultiple,
+  question: QuestionDiagnostic | QuestionATiroir,
   transcripteur: Transcripteur,
   questionATranscrire: QuestionATranscrire | undefined,
 ): RepresentationReponsePossible[] => {
   return question.reponsesPossibles.map((reponse) => {
-    const representationQuestionATiroir = questionTiroirATranscrire(
-      reponse.question,
-      transcripteur,
-      reponse.question?.identifiant,
-    );
     const reponseAtranscrire = trouveReponseATranscrire(
       reponse.identifiant,
       questionATranscrire?.reponses,
     );
-    const reponsesComplementaires = trouveReponsesComplementaires(
-      reponse.reponsesComplementaires || [],
-      transcripteur,
-    );
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { question, ...corpsDeReponse } = reponse;
+    if (estQuestionATiroir(reponse)) {
+      const representationQuestionATiroir = questionTiroirATranscrire(
+        reponse.question,
+        transcripteur,
+        reponse.question?.identifiant,
+      );
+      const reponsesComplementaires = trouveReponsesComplementaires(
+        reponse.reponsesComplementaires || [],
+        transcripteur,
+      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { question, ...corpsDeReponse } = reponse;
+      return {
+        ...corpsDeReponse,
+        type: reponseAtranscrire?.type,
+        question: representationQuestionATiroir,
+        reponsesComplementaires,
+      };
+    }
     return {
-      ...corpsDeReponse,
+      ...reponse,
       type: reponseAtranscrire?.type,
-      question: representationQuestionATiroir,
-      reponsesComplementaires,
     };
   });
 };
