@@ -325,6 +325,227 @@ const referentiel: Referentiel = {
       },
     ],
   },
+  gouvernance: {
+    questions: [
+      {
+        identifiant: "gouvernance-infos-et-processus-a-proteger",
+        libelle:
+          "Disposez-vous d'une liste à jour des informations et processus à protéger en priorité dans votre organisation ?",
+        type: "choixUnique",
+        reponsesPossibles: [
+          {
+            identifiant: "gouvernance-ipp-nsp",
+            libelle: "Je ne sais pas.",
+            ordre: 0,
+          },
+          { identifiant: "gouvernance-ipp-non", libelle: "Non.", ordre: 1 },
+          {
+            identifiant: "gouvernance-ipp-oui-idee-generale",
+            libelle:
+              "Nous avons une idée générale de nos données et processus à protéger en priorité.",
+            ordre: 2,
+          },
+          {
+            identifiant: "gouvernance-ipp-oui-precise",
+            libelle:
+              "Il existe une liste précise et maintenue à jour de toutes les données et processus à protéger en priorité à l’échelle de l’organisation.",
+            ordre: 3,
+          },
+        ],
+      },
+      {
+        identifiant: "gouvernance-schema-si-a-jour",
+        libelle:
+          "Existe-t-il un schéma à jour du système d’information de l’organisation ?",
+        type: "choixUnique",
+        reponsesPossibles: [
+          {
+            identifiant: "gouvernance-schema-nsp",
+            libelle: "Je ne sais pas.",
+            ordre: 0,
+          },
+          {
+            identifiant: "gouvernance-schema-non-pas-a-jour",
+            libelle:
+              "Non / Nous avons un schéma historique qui n'est pas à jour",
+            ordre: 1,
+          },
+          {
+            identifiant: "gouvernance-schema-oui-macro",
+            libelle:
+              'Il existe un schéma "macro" non détaillé ou partiellement détaillé.',
+            ordre: 2,
+          },
+          {
+            identifiant: "gouvernance-schema-oui-detaille",
+            libelle:
+              "Il existe un schéma détaillé, incluant la liste exhaustive des interconnexions vers l'extérieur.",
+            ordre: 3,
+          },
+        ],
+      },
+      {
+        identifiant: "gouvernance-schema-si-industriel-a-jour",
+        libelle:
+          "Si l'entité dispose d'un SI industriel : Existe-t-il un schéma et un inventaire à jour du système d'information industriel de l'organisation ?",
+        type: "choixUnique",
+        reponsesPossibles: [
+          {
+            identifiant: "gouvernance-schema-si-nsp",
+            libelle: "Je ne sais pas / Non applicable",
+            ordre: 0,
+          },
+          {
+            identifiant: "gouvernance-schema-si-non",
+            libelle: "Non.",
+            ordre: 1,
+          },
+          {
+            identifiant: "gouvernance-schema-si-oui-partiel",
+            libelle:
+              'Il existe un schéma "macro" non détaillé ou partiellement détaillé.',
+            ordre: 2,
+          },
+          {
+            identifiant: "gouvernance-schema-si-oui-detaille",
+            libelle:
+              "'Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industrielles, installations matériels connectés et des interconnexions vers l'extérieur.",
+            ordre: 3,
+          },
+        ],
+      },
+      {
+        identifiant: "gouvernance-connaissance-rgpd",
+        libelle:
+          "Connaissez-vous les exigences réglementaires liées au RGPD concernant vos traitements des données personnelles, incluant vos données RH ou celles de vos clients/usagers ?",
+        type: "choixUnique",
+        reponsesPossibles: [
+          {
+            identifiant: "gouvernance-connaissance-rgpd-nsp",
+            libelle: "Je ne sais pas.",
+            ordre: 1,
+          },
+          {
+            identifiant: "gouvernance-connaissance-rgpd-non",
+            libelle: "Non.",
+            ordre: 2,
+          },
+          {
+            identifiant: "gouvernance-connaissance-rgpd-oui",
+            libelle: "Oui",
+            ordre: 3,
+            question: {
+              identifiant: "gouvernance-connaissance-rgpd-oui-tiroir",
+              libelle:
+                'Si "Oui" : combien de mesures de conformité respectez-vous parmi celles-ci ?',
+              type: "choixMultiple",
+              reponsesPossibles: [
+                {
+                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-na",
+                  libelle: "Non applicable",
+                  ordre: 0,
+                },
+                {
+                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-nsp",
+                  libelle: "Je ne sais pas.",
+                  ordre: 1,
+                },
+                {
+                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-1",
+                  libelle: "1",
+                  ordre: 2,
+                },
+                {
+                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-2",
+                  libelle: "2",
+                  ordre: 3,
+                },
+                {
+                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-3",
+                  libelle: "3",
+                  ordre: 4,
+                },
+                {
+                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-4",
+                  libelle: "4",
+                  ordre: 5,
+                },
+                {
+                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-5",
+                  libelle: "5",
+                  ordre: 6,
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        identifiant: "gouvernance-moyen-budgetaire-cyber-securite",
+        libelle:
+          "Des moyens budgétaires sont-ils alloués à la cybersécurité au sein de votre organisation ?",
+        type: "choixUnique",
+        reponsesPossibles: [
+          {
+            identifiant: "gouvernance-moyen-budgetaire-cyber-securite-nsp",
+            libelle: "Je ne sais pas.",
+            ordre: 0,
+          },
+          {
+            identifiant: "gouvernance-moyen-budgetaire-cyber-securite-non",
+            libelle: "Non.",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "gouvernance-moyen-budgetaire-cyber-securite-oui-ponctuels",
+            libelle:
+              "Des achats ponctuels ont été réalisés mais il n’existe pas de ligne budgétaire dédiée.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "gouvernance-moyen-budgetaire-cyber-securite-oui-dedie",
+            libelle:
+              "Il existe une ligne budgétaire dédiée à la cybersécurité dont le montant est >= 10% du buget IT ; ou déterminé via une analyse approfondie",
+            ordre: 3,
+          },
+        ],
+      },
+      {
+        identifiant: "gouvernance-exigence-cyber-securite-presta",
+        libelle:
+          "Des exigences de cybersécurité sont-elles fixées aux prestataires ayant des accès informatiques ?",
+        type: "choixUnique",
+        reponsesPossibles: [
+          {
+            identifiant: "gouvernance-exigence-cyber-securite-presta-nsp",
+            libelle: "Je ne sais pas / Non applicable",
+            ordre: 0,
+          },
+          {
+            identifiant: "gouvernance-exigence-cyber-securite-presta-non",
+            libelle:
+              "Non, aucune exigence ne figure dans nos contrats de prestation",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "gouvernance-exigence-cyber-securite-presta-oui-formalisee",
+            libelle:
+              "Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.",
+            ordre: 2,
+          },
+          {
+            identifiant: "gouvernance-exigence-cyber-securite-presta-oui-fixee",
+            libelle:
+              "Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.",
+            ordre: 3,
+          },
+        ],
+      },
+    ],
+  },
 };
 
 export { referentiel };
