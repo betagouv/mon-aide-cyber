@@ -228,6 +228,9 @@ export const QuestionDiagnostic: Story = {
         canvas.getByLabelText("Entreprise privée (ex. TPE, PME, ETI)"),
       ),
     ).toBeInTheDocument();
+    expect(await entrepotDiagnosticMemoire.verifieReponseNonEnvoyee()).toBe(
+      true,
+    );
   },
 };
 
@@ -285,6 +288,9 @@ export const AfficheDiagnosticQuestionListeDeroulante: Story = {
     expect(
       await waitFor(() => canvas.getByRole("option", { name: /réponse c/i })),
     ).toBeInTheDocument();
+    expect(await entrepotDiagnosticMemoire.verifieReponseNonEnvoyee()).toBe(
+      true,
+    );
   },
 };
 

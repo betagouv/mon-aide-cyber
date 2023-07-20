@@ -37,6 +37,7 @@ export class EntrepotDiagnosticMemoire
 {
   private actionRepondre: ActionDiagnostic | undefined = undefined;
   private reponseDonnee: Reponse | undefined = undefined;
+  private reponseEnvoyee = false;
   lancer(): Promise<LienRoutage> {
     const diagnostic = unDiagnostic().construis();
     return this.persiste(diagnostic).then(
@@ -47,6 +48,7 @@ export class EntrepotDiagnosticMemoire
   repond(action: ActionDiagnostic, reponseDonnee: Reponse): Promise<void> {
     this.actionRepondre = action;
     this.reponseDonnee = reponseDonnee;
+    this.reponseEnvoyee = true;
     return Promise.resolve();
   }
 
@@ -54,14 +56,16 @@ export class EntrepotDiagnosticMemoire
     actionRepondre: ActionDiagnostic,
     reponseDonnee: Reponse,
   ) {
-    console.log(this.actionRepondre, actionRepondre);
-    console.log(this.reponseDonnee, reponseDonnee);
     return (
       Object.entries(this.actionRepondre!).toString() ===
         Object.entries(actionRepondre).toString() &&
       Object.entries(this.reponseDonnee!).toString() ===
         Object.entries(reponseDonnee).toString()
     );
+  }
+
+  async verifieReponseNonEnvoyee() {
+    return Promise.resolve(!this.reponseEnvoyee);
   }
 }
 
