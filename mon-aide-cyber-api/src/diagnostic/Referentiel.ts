@@ -40,7 +40,7 @@ type QuestionsThematique = {
 };
 
 type Referentiel = {
-  contexte: QuestionsThematique;
+  [clef: string]: QuestionsThematique;
 };
 
 export {
