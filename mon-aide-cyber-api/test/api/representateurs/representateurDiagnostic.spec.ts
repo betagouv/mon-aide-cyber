@@ -31,7 +31,7 @@ describe("Le représentateur de diagnostic", () => {
 
       expect(
         representationDiagnostic.referentiel.contexte.actions,
-      ).toMatchObject([
+      ).toStrictEqual([
         {
           action: "repondre",
           chemin: "contexte",
@@ -45,6 +45,29 @@ describe("Le représentateur de diagnostic", () => {
   });
 
   describe("Afin de représenter l’affichage de la saisie pour le client", () => {
+    it("présente le format de réponse pour une question", () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentielAuContexteVide()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion().aChoixUnique("Des réponses?").construis(),
+            )
+            .construis(),
+        )
+        .construis();
+
+      const diagnosticRepresente = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        transcripteurAvecSaisiesLibres,
+      );
+
+      expect(
+        diagnosticRepresente.referentiel["contexte"].questions[0].reponseDonnee,
+      ).toStrictEqual({
+        valeur: null,
+        reponsesMultiples: [],
+      });
+    });
     it("définit le type de saisie que doit faire l'utilisateur", () => {
       const question = uneQuestion()
         .aChoixUnique("Quelle est la question?", [

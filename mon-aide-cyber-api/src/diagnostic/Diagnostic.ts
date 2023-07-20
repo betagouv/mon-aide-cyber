@@ -1,11 +1,13 @@
 import crypto from "crypto";
 import { Question, Referentiel } from "./Referentiel";
 import { Entrepot } from "../domaine/Entrepot";
+import { CorpsReponse, CorpsReponseQuestionATiroir } from "./ServiceDiagnostic";
 
 type Thematique = string;
 
 type ReponseDonnee = {
-  valeur: string | null;
+  reponsesMultiples: Set<string>;
+  reponseUnique: string | null;
 };
 type QuestionDiagnostic = Question & {
   reponseDonnee: ReponseDonnee;
@@ -35,7 +37,10 @@ const initialiseDiagnostic = (r: Referentiel): Diagnostic => {
           (q) =>
             ({
               ...q,
-              reponseDonnee: { valeur: null },
+              reponseDonnee: {
+                reponseUnique: null,
+                reponsesMultiples: new Set(),
+              },
             }) as QuestionDiagnostic,
         ),
       },
@@ -47,9 +52,53 @@ const initialiseDiagnostic = (r: Referentiel): Diagnostic => {
   };
 };
 
+const ajouteLaReponseAuDiagnostic = (
+  diagnostic: Diagnostic,
+  corpsReponse: CorpsReponse,
+) => {
+  const questions = diagnostic.referentiel[corpsReponse.chemin].questions;
+  const reponseCorpsReponse = corpsReponse.reponse;
+  if (estChaineDeCharactere(reponseCorpsReponse)) {
+    const questionTrouvee = questions.find(
+      (q) => q.identifiant === corpsReponse.identifiant,
+    );
+    if (questionTrouvee !== undefined) {
+      questionTrouvee.reponseDonnee = {
+        reponseUnique: reponseCorpsReponse,
+        reponsesMultiples: new Set(),
+      };
+    }
+  }
+
+  if (estReponseQuestionATiroir(reponseCorpsReponse)) {
+    const questionTrouvee = questions.find(
+      (q) => q.identifiant === corpsReponse.identifiant,
+    );
+    if (questionTrouvee !== undefined) {
+      questionTrouvee.reponseDonnee = {
+        reponseUnique: reponseCorpsReponse.reponse,
+        reponsesMultiples: new Set(reponseCorpsReponse.question.reponses),
+      };
+    }
+  }
+};
+const estReponseQuestionATiroir = (
+  reponse: string | CorpsReponseQuestionATiroir,
+): reponse is CorpsReponseQuestionATiroir => {
+  return (
+    (reponse as CorpsReponseQuestionATiroir).reponse !== undefined &&
+    (reponse as CorpsReponseQuestionATiroir).reponse !== null
+  );
+};
+const estChaineDeCharactere = (
+  reponse: string | CorpsReponseQuestionATiroir,
+): reponse is string => {
+  return typeof reponse === "string";
+};
 export {
   Diagnostic,
   EntrepotDiagnostic,
   QuestionDiagnostic,
+  ajouteLaReponseAuDiagnostic,
   initialiseDiagnostic,
 };
