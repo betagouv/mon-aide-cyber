@@ -13,12 +13,12 @@ type QuestionDiagnostic = Question & {
   reponseDonnee: ReponseDonnee;
 };
 
-type QuestionsThematiqueDiagnostic = {
+type QuestionsThematique = {
   questions: QuestionDiagnostic[];
 };
 
 type ReferentielDiagnostic = {
-  [clef: Thematique]: QuestionsThematiqueDiagnostic;
+  [clef: Thematique]: QuestionsThematique;
 };
 
 type Diagnostic = {
@@ -28,7 +28,7 @@ type Diagnostic = {
 type EntrepotDiagnostic = Entrepot<Diagnostic>;
 const initialiseDiagnostic = (r: Referentiel): Diagnostic => {
   const referentiel: {
-    [clef: Thematique]: QuestionsThematiqueDiagnostic;
+    [clef: Thematique]: QuestionsThematique;
   } = Object.entries(r).reduce((accumulateur, [clef, questions]) => {
     return {
       ...accumulateur,
