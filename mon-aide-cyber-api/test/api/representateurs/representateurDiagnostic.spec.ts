@@ -4,7 +4,8 @@ import {
   uneQuestionATiroir,
   uneReponseComplementaire,
   uneReponsePossible,
-  unReferentielAuContexteVide,
+  unReferentiel,
+  unReferentielSansThematiques,
 } from "../../constructeurs/constructeurReferentiel";
 import { unDiagnostic } from "../../constructeurs/constructeurDiagnostic";
 import { representeLeDiagnosticPourLeClient } from "../../../src/api/representateurs/representateurDiagnostic";
@@ -18,6 +19,9 @@ import {
   transcripteurMultipleTiroir,
   transcripteurQuestionTiroir,
 } from "./transcripteursDeTest";
+import { Question, ReponsePossible } from "../../../src/diagnostic/Referentiel";
+import { RepresentationDiagnostic } from "../../../src/api/representateurs/types";
+import { Diagnostic } from "../../../src/diagnostic/Diagnostic";
 
 describe("Le représentateur de diagnostic", () => {
   describe("Afin de fournir les actions possibles pour un client", () => {
@@ -48,7 +52,7 @@ describe("Le représentateur de diagnostic", () => {
     it("présente le format de réponse pour une question", () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
-          unReferentielAuContexteVide()
+          unReferentiel()
             .ajouteUneQuestionAuContexte(
               uneQuestion().aChoixUnique("Des réponses?").construis(),
             )
@@ -78,9 +82,7 @@ describe("Le représentateur de diagnostic", () => {
         .construis();
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
-          unReferentielAuContexteVide()
-            .ajouteUneQuestionAuContexte(question)
-            .construis(),
+          unReferentiel().ajouteUneQuestionAuContexte(question).construis(),
         )
         .construis();
 
@@ -107,7 +109,7 @@ describe("Le représentateur de diagnostic", () => {
     it("définit la manière dont est présentée la question sous forme de liste", () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
-          unReferentielAuContexteVide()
+          unReferentiel()
             .ajouteUneQuestionAuContexte(
               uneQuestion().aChoixUnique("Question liste?").construis(),
             )
@@ -146,7 +148,7 @@ describe("Le représentateur de diagnostic", () => {
             .construis();
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
-              unReferentielAuContexteVide()
+              unReferentiel()
                 .ajouteUneQuestionAuContexte(
                   uneQuestion()
                     .aChoixUnique("Question avec réponse tiroir?")
@@ -198,7 +200,7 @@ describe("Le représentateur de diagnostic", () => {
             .construis();
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
-              unReferentielAuContexteVide()
+              unReferentiel()
                 .ajouteUneQuestionAuContexte(
                   uneQuestion()
                     .aChoixUnique("Question avec réponse tiroir?")
@@ -248,7 +250,7 @@ describe("Le représentateur de diagnostic", () => {
             .construis();
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
-              unReferentielAuContexteVide()
+              unReferentiel()
                 .ajouteUneQuestionAuContexte(uneQuestion().construis())
                 .ajouteUneQuestionAuContexte(
                   uneQuestion()
@@ -321,7 +323,7 @@ describe("Le représentateur de diagnostic", () => {
             .construis();
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
-              unReferentielAuContexteVide()
+              unReferentiel()
                 .ajouteUneQuestionAuContexte(premiereQuestion)
                 .ajouteUneQuestionAuContexte(secondeQuestion)
                 .construis(),
@@ -354,7 +356,7 @@ describe("Le représentateur de diagnostic", () => {
         it("avec les questions telles que décrites dans le référentiel sans transcripteur spécifique", () => {
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
-              unReferentielAuContexteVide()
+              unReferentiel()
                 .ajouteUneQuestionAuContexte(
                   uneQuestion()
                     .aChoixUnique("Une question à choix unique ?")
@@ -408,9 +410,7 @@ describe("Le représentateur de diagnostic", () => {
           .construis();
         const diagnostic = unDiagnostic()
           .avecUnReferentiel(
-            unReferentielAuContexteVide()
-              .ajouteUneQuestionAuContexte(question)
-              .construis(),
+            unReferentiel().ajouteUneQuestionAuContexte(question).construis(),
           )
           .construis();
 
@@ -457,6 +457,82 @@ describe("Le représentateur de diagnostic", () => {
           format: "texte",
         });
       });
+    });
+  });
+
+  describe("Afin de représenter toutes les thématiques du diagnostic", () => {
+    const expectThematique = (
+      representationDiagnostic: RepresentationDiagnostic,
+      nomThematique: string,
+      question: Question,
+      reponsePossible: ReponsePossible,
+      diagnostic: Diagnostic,
+    ) => {
+      expect(representationDiagnostic.referentiel[nomThematique]).toStrictEqual(
+        {
+          questions: [
+            {
+              identifiant: question.identifiant,
+              libelle: question.libelle,
+              reponseDonnee: { valeur: null, reponsesMultiples: [] },
+              reponsesPossibles: [
+                {
+                  identifiant: reponsePossible.identifiant,
+                  libelle: reponsePossible.libelle,
+                  ordre: reponsePossible.ordre,
+                  type: undefined,
+                },
+              ],
+              type: "choixUnique",
+            },
+          ],
+          actions: [
+            {
+              action: "repondre",
+              chemin: nomThematique,
+              ressource: {
+                url: `/api/diagnostic/${diagnostic.identifiant}`,
+                methode: "PATCH",
+              },
+            },
+          ],
+        },
+      );
+    };
+
+    it("présente les différentes thématiques", () => {
+      const questionTheme1 = uneQuestion().construis();
+      const questionTheme2 = uneQuestion().construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentielSansThematiques()
+            .ajouteUneThematique("theme 1", questionTheme1)
+            .ajouteUneThematique("theme 2", questionTheme2)
+            .construis(),
+        )
+        .construis();
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        fabriqueTranscripteurVide(),
+      );
+
+      const reponsePossibleQuestionTheme1 = questionTheme1.reponsesPossibles[0];
+      const reponsePossibleQuestionTheme2 = questionTheme2.reponsesPossibles[0];
+      expectThematique(
+        representationDiagnostic,
+        "theme 1",
+        questionTheme1,
+        reponsePossibleQuestionTheme1,
+        diagnostic,
+      );
+      expectThematique(
+        representationDiagnostic,
+        "theme 2",
+        questionTheme2,
+        reponsePossibleQuestionTheme2,
+        diagnostic,
+      );
     });
   });
 });
