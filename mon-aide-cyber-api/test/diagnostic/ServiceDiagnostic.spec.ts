@@ -4,7 +4,6 @@ import {
   uneQuestionATiroir,
   uneReponsePossible,
   unReferentiel,
-  unReferentielAuContexteVide,
 } from "../constructeurs/constructeurReferentiel";
 import { unDiagnostic } from "../constructeurs/constructeurDiagnostic";
 import { ServiceDiagnostic } from "../../src/diagnostic/ServiceDiagnostic";
@@ -42,7 +41,7 @@ describe("Le service de diagnostic", () => {
           reponseAttendue,
         ])
         .construis();
-      const referentiel = unReferentielAuContexteVide()
+      const referentiel = unReferentiel()
         .ajouteUneQuestionAuContexte(uneQuestion().construis())
         .ajouteUneQuestionAuContexte(question)
         .construis();
@@ -89,7 +88,9 @@ describe("Le service de diagnostic", () => {
 
   describe("Lorsque l'on veut lancer un diagnostic", () => {
     it("copie le référentiel disponible et le persiste", async () => {
-      const referentiel = unReferentiel().construis();
+      const referentiel = unReferentiel()
+        .ajouteUneQuestionAuContexte(uneQuestion().construis())
+        .construis();
       adaptateurReferentiel.ajoute(referentiel);
       const questionAttendue = referentiel.contexte.questions[0];
 
@@ -134,7 +135,7 @@ describe("Le service de diagnostic", () => {
         .construis();
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
-          unReferentielAuContexteVide()
+          unReferentiel()
             .ajouteUneQuestionAuContexte(
               uneQuestion()
                 .aChoixUnique("Question à tiroir ?")

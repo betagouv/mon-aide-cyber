@@ -13,19 +13,35 @@ import { Constructeur } from "./constructeur";
 import { aseptise } from "../utilitaires/aseptise";
 
 class ConstructeurReferentiel implements Constructeur<Referentiel> {
-  contexte: QuestionsThematique = { questions: [uneQuestion().construis()] };
+  thematique: { [clef: string]: QuestionsThematique } = {
+    ["contexte"]: { questions: [] },
+  };
 
   ajouteUneQuestionAuContexte(
     question: QuestionChoixUnique | QuestionChoixMultiple,
   ): ConstructeurReferentiel {
-    this.contexte.questions.push(question);
+    this.thematique["contexte"].questions.push(question);
+    return this;
+  }
+
+  ajouteUneThematique(
+    theme: string,
+    question: QuestionChoixUnique | QuestionChoixMultiple,
+  ): ConstructeurReferentiel {
+    this.thematique[theme] = { questions: [question] };
     return this;
   }
 
   construis(): Referentiel {
-    return {
-      ["contexte"]: this.contexte,
-    };
+    return Object.entries(this.thematique).reduce(
+      (accumulateur, [clef, thematique]) => {
+        return {
+          ...accumulateur,
+          [clef]: thematique,
+        };
+      },
+      {},
+    );
   }
 }
 
@@ -185,9 +201,9 @@ class ConstructeurReponseComplementaire extends ConstructeurReponsePossible {
 export const unReferentiel = (): ConstructeurReferentiel =>
   new ConstructeurReferentiel();
 
-export const unReferentielAuContexteVide = (): ConstructeurReferentiel => {
+export const unReferentielSansThematiques = (): ConstructeurReferentiel => {
   const constructeurReferentiel = new ConstructeurReferentiel();
-  constructeurReferentiel.contexte.questions = [];
+  constructeurReferentiel.thematique = {};
   return constructeurReferentiel;
 };
 
