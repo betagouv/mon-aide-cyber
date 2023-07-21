@@ -175,6 +175,16 @@ const trouveReponseATranscrire = (
   );
 };
 
+const extraisLesChampsDeLaQuestion = (question: QuestionDiagnostic) => {
+  const autresReponses = {
+    valeur: question.reponseDonnee.reponseUnique,
+    reponsesMultiples: [...question.reponseDonnee.reponsesMultiples],
+  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { reponseDonnee, ...reste } = { ...question };
+  return { autresReponses, reste };
+};
+
 export function representeLeDiagnosticPourLeClient(
   diagnostic: Diagnostic,
   transcripteur: Transcripteur,
@@ -182,43 +192,48 @@ export function representeLeDiagnosticPourLeClient(
   return {
     identifiant: diagnostic.identifiant,
     referentiel: {
-      contexte: {
-        questions: diagnostic.referentiel.contexte.questions.map((question) => {
-          const questionATranscrire = trouveQuestionATranscrire(
-            {
-              chemin: "contexte",
-              identifiantQuestion: question.identifiant,
-            },
-            transcripteur,
-          );
-          const reponsesPossibles = trouveReponsesPossibles(
-            question,
-            transcripteur,
-            questionATranscrire,
-          );
-          const autresReponses = {
-            valeur: question.reponseDonnee.reponseUnique,
-            reponsesMultiples: [...question.reponseDonnee.reponsesMultiples],
-          };
-          const { reponseDonnee, ...reste } = { ...question };
+      ...Object.entries(diagnostic.referentiel).reduce(
+        (accumulateur, [clef, questionsThematique]) => {
           return {
-            ...reste,
-            reponseDonnee: autresReponses,
-            reponsesPossibles,
-            type: questionATranscrire?.type || question.type,
-          };
-        }),
-        actions: [
-          {
-            action: "repondre",
-            chemin: "contexte",
-            ressource: {
-              url: `/api/diagnostic/${diagnostic.identifiant}`,
-              methode: "PATCH",
+            ...accumulateur,
+            [clef]: {
+              questions: questionsThematique.questions.map((question) => {
+                const questionATranscrire = trouveQuestionATranscrire(
+                  {
+                    chemin: "contexte",
+                    identifiantQuestion: question.identifiant,
+                  },
+                  transcripteur,
+                );
+                const reponsesPossibles = trouveReponsesPossibles(
+                  question,
+                  transcripteur,
+                  questionATranscrire,
+                );
+                const { autresReponses, reste } =
+                  extraisLesChampsDeLaQuestion(question);
+                return {
+                  ...reste,
+                  reponseDonnee: autresReponses,
+                  reponsesPossibles,
+                  type: questionATranscrire?.type || question.type,
+                };
+              }),
+              actions: [
+                {
+                  action: "repondre",
+                  chemin: clef,
+                  ressource: {
+                    url: `/api/diagnostic/${diagnostic.identifiant}`,
+                    methode: "PATCH",
+                  },
+                },
+              ],
             },
-          },
-        ],
-      },
+          };
+        },
+        {},
+      ),
     },
   };
 }

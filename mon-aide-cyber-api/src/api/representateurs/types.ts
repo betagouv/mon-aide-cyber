@@ -49,7 +49,7 @@ type RepresentationContexte = {
   )[];
 };
 type RepresentationReferentiel = {
-  contexte: RepresentationContexte;
+  [clef: string]: RepresentationContexte;
 };
 export type TypeDeSaisie =
   | "choixMultiple"
