@@ -4,7 +4,6 @@ import {
   uneQuestion,
   uneReponsePossible,
   unReferentiel,
-  unReferentielAuContexteVide,
 } from "../constructeurs/constructeurReferentiel";
 import { unDiagnostic } from "../constructeurs/constructeurDiagnostic";
 import { executeRequete } from "./executeurRequete";
@@ -22,7 +21,11 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
   describe("quand une requête GET est reçue sur /api/diagnostic/{id}", () => {
     it("retourne le référentiel du diagnostic", async () => {
       const diagnostic = unDiagnostic()
-        .avecUnReferentiel(unReferentiel().construis())
+        .avecUnReferentiel(
+          unReferentiel()
+            .ajouteUneQuestionAuContexte(uneQuestion().construis())
+            .construis(),
+        )
         .construis();
       testeurMAC.entrepots.diagnostic().persiste(diagnostic);
 
@@ -102,7 +105,9 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
     });
 
     it("on peut récupérer le diagnostic précédemment lancé", async () => {
-      const referentiel = unReferentiel().construis();
+      const referentiel = unReferentiel()
+        .ajouteUneQuestionAuContexte(uneQuestion().construis())
+        .construis();
       testeurMAC.adaptateurReferentiel.ajoute(referentiel);
       const reponseCreation = await executeRequete(
         "POST",
@@ -125,7 +130,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
     it("on peut donner une réponse à une question", async () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
-          unReferentielAuContexteVide()
+          unReferentiel()
             .ajouteUneQuestionAuContexte(
               uneQuestion()
                 .aChoixUnique("Une question ?")
