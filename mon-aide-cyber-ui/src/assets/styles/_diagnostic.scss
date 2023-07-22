@@ -1,0 +1,37 @@
+.diagnostic {
+  display: flex;
+  flex-direction: row;
+}
+
+.diagnostic .contenu {
+  padding-left: 48px;
+  margin-left: 10px;
+}
+.diagnostic form {
+  padding-left: 10vw;
+  width: 80vw;
+}
+
+.diagnostic .visible {
+  visibility: visible;
+}
+
+.diagnostic .invisible {
+  display: none;
+}
+
+.navigation-verticale {
+  width: 48px;
+}
+
+.navigation-verticale ul {
+  list-style: none;
+}
+
+.navigation-verticale ul li button {
+  text-decoration: none;
+  display: block;
+  width: 48px;
+  margin: 5px;
+  padding: 10px;
+}
