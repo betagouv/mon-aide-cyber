@@ -3,6 +3,7 @@ import { unDiagnostic } from "../../consructeurs/constructeurDiagnostic";
 import {
   diagnosticCharge,
   reducteurDiagnostic,
+  thematiqueAffichee,
 } from "../../../src/domaine/diagnostic/reducteurDiagnostic";
 import { uneReponsePossible } from "../../consructeurs/constructeurReponsePossible";
 import { unReferentiel } from "../../consructeurs/constructeurReferentiel";
@@ -50,7 +51,7 @@ describe("Les réducteurs de diagnostic", () => {
         .construis();
 
       const etatDiagnostic = reducteurDiagnostic(
-        { diagnostic: undefined },
+        { diagnostic: undefined, thematiqueAffichee: undefined },
         diagnosticCharge(diagnostic),
       );
 
@@ -62,6 +63,19 @@ describe("Les réducteurs de diagnostic", () => {
       expect(
         questions[1].reponsesPossibles.map((reponse) => reponse.ordre),
       ).toStrictEqual([0, 1, 2]);
+    });
+  });
+
+  describe("Lorsque l'on veut changer la thématique affichée", () => {
+    it("change la thématique affichée", () => {
+      const etatDiagnostic = reducteurDiagnostic(
+        {
+          diagnostic: undefined,
+          thematiqueAffichee: undefined,
+        },
+        thematiqueAffichee("nouvelle-thematique"),
+      );
+      expect(etatDiagnostic.thematiqueAffichee).toBe("nouvelle-thematique");
     });
   });
 });

@@ -12,11 +12,13 @@ import {
   ReponseComplementaire,
   ReponseDonnee,
   ReponsePossible,
+  Thematique,
 } from "../../domaine/diagnostic/Referentiel.ts";
 import { UUID } from "../../types/Types.ts";
 import {
   diagnosticCharge,
   reducteurDiagnostic,
+  thematiqueAffichee,
 } from "../../domaine/diagnostic/reducteurDiagnostic.ts";
 import { FournisseurEntrepots } from "../../fournisseurs/FournisseurEntrepot.ts";
 import {
@@ -25,6 +27,7 @@ import {
   reponseChangee,
 } from "../../domaine/diagnostic/reducteurReponse.ts";
 import { ActionDiagnostic } from "../../domaine/diagnostic/Diagnostic.ts";
+import "../../assets/styles/_diagnostic.scss";
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -280,6 +283,7 @@ export const ComposantDiagnostic = ({
 }: ProprietesComposantDiagnostic) => {
   const [etatReferentiel, envoie] = useReducer(reducteurDiagnostic, {
     diagnostic: undefined,
+    thematiqueAffichee: undefined,
   });
 
   const entrepots = useContext(FournisseurEntrepots);
@@ -293,33 +297,78 @@ export const ComposantDiagnostic = ({
       .catch((erreur) => showBoundary(erreur));
   }, [entrepots, idDiagnostic, envoie, showBoundary]);
 
-  const contexte = etatReferentiel.diagnostic?.referentiel?.contexte;
+  let thematiques: [string, Thematique][] = [];
+  if (etatReferentiel.diagnostic?.referentiel !== undefined) {
+    thematiques = Object.entries(etatReferentiel.diagnostic!.referentiel!);
+  }
+
+  const affiche = useCallback(
+    (clef: string) => {
+      envoie(thematiqueAffichee(clef));
+    },
+    [envoie],
+  );
+
+  const navigation = (
+    <div className="navigation-verticale">
+      <nav>
+        <ul>
+          {thematiques.map(([clef, _]) => (
+            <li key={`li-${clef}`}>
+              <input
+                type="button"
+                className=""
+                onClick={() => affiche(clef)}
+                value={clef.charAt(0).toUpperCase()}
+              />
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  );
+
   return (
-    <>
-      <form>
-        <h2>Contexte</h2>
-        <section className="question">
-          <div>
-            {contexte?.questions.map((question) => (
-              <fieldset key={question.identifiant} id={question.identifiant}>
-                <label>{question.libelle}</label>
-                <br />
-                {question.type === "liste" ? (
-                  <ComposantQuestionListe
-                    question={question}
-                    actions={contexte.actions}
-                  />
-                ) : (
-                  <ComposantQuestion
-                    question={question}
-                    actions={contexte.actions}
-                  />
-                )}
-              </fieldset>
-            ))}
-          </div>
-        </section>
-      </form>
-    </>
+    <div className="diagnostic">
+      {navigation}
+      <div className="contenu">
+        {thematiques.map(([clef, thematique]) => {
+          console.log(clef, etatReferentiel);
+          const elements = thematique.questions.map((question) => (
+            <fieldset key={question.identifiant} id={question.identifiant}>
+              <label>{question.libelle}</label>
+              <br />
+              {question.type === "liste" ? (
+                <ComposantQuestionListe
+                  question={question}
+                  actions={thematique.actions}
+                />
+              ) : (
+                <ComposantQuestion
+                  question={question}
+                  actions={thematique.actions}
+                />
+              )}
+            </fieldset>
+          ));
+          return (
+            <form
+              key={clef}
+              id={clef}
+              className={
+                etatReferentiel.thematiqueAffichee === clef
+                  ? `visible`
+                  : `invisible`
+              }
+            >
+              <h2>{clef}</h2>
+              <section className="question">
+                <div>{elements}</div>
+              </section>
+            </form>
+          );
+        })}
+      </div>
+    </div>
   );
 };

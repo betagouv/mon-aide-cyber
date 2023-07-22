@@ -7,7 +7,10 @@ import {
   EntrepotDiagnosticMemoire,
   EntrepotDiagnosticsMemoire,
 } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
-import { uneQuestionAChoixUnique } from "../../test/consructeurs/constructeurQuestions.ts";
+import {
+  uneQuestion,
+  uneQuestionAChoixUnique,
+} from "../../test/consructeurs/constructeurQuestions.ts";
 import { uneReponsePossible } from "../../test/consructeurs/constructeurReponsePossible.ts";
 import { ComposantAffichageErreur } from "../composants/erreurs/ComposantAffichageErreur.tsx";
 import { ErrorBoundary } from "react-error-boundary";
@@ -67,10 +70,26 @@ const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
   )
   .construis();
 
+const identifiantDiagnosticAvecPlusieursThematiques =
+  "aa1a75a3-8896-4ab2-81e3-24a773ec994e";
+const diagnosticAPlusieursThematiques = unDiagnostic()
+  .avecIdentifiant(identifiantDiagnosticAvecPlusieursThematiques)
+  .avecUnReferentiel(
+    unReferentiel()
+      .ajouteUneThematique("Thème 1", [
+        uneQuestion().construis(),
+        uneQuestion().construis(),
+      ])
+      .avecUneQuestion(uneQuestion().construis())
+      .construis(),
+  )
+  .construis();
+
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestionAChoixUnique);
 await entrepotDiagnosticMemoire.persiste(
   diagnosticAvecQuestionSousFormeDeListeDeroulante,
 );
+await entrepotDiagnosticMemoire.persiste(diagnosticAPlusieursThematiques);
 
 const meta = {
   title: "Diagnostic",
@@ -128,12 +147,10 @@ export const SelectionneReponseDiagnostic: Story = {
       expect(
         canvas.getByRole("radio", { name: /entreprise privée/i }),
       ).toBeChecked();
-      expect(
-        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-          reponseDonnee: "entreprise-privee",
-          identifiantQuestion: "quelle-entreprise-etesvous-",
-        }),
-      ).toBeTruthy();
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+        reponseDonnee: "entreprise-privee",
+        identifiantQuestion: "quelle-entreprise-etesvous-",
+      });
     });
   },
 };
@@ -171,12 +188,64 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
           canvas.getByRole("option", { name: /réponse c/i, selected: true }),
         ),
       ).toBeInTheDocument();
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+        reponseDonnee: "reponse-c",
+        identifiantQuestion: "une-liste-deroulante",
+      });
+    });
+  },
+};
+
+export const AfficheLesThematiques: Story = {
+  name: "Affiche les thématiques et peut interagir avec",
+  args: { idDiagnostic: identifiantDiagnosticAvecPlusieursThematiques },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step("Lorsque le diagnostic est récupéré depuis l’API", async () => {
       expect(
-        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-          reponseDonnee: "reponse-c",
-          identifiantQuestion: "une-liste-deroulante",
-        }),
-      ).toBeTruthy();
+        await waitFor(() =>
+          canvas.getByText(
+            diagnosticAPlusieursThematiques.referentiel["contexte"].questions[0]
+              .libelle,
+          ),
+        ),
+      ).toBeInTheDocument();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("button", {
+            name: /c/i,
+          }),
+        ),
+      ).toBeInTheDocument();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("button", {
+            name: /t/i,
+          }),
+        ),
+      ).toBeInTheDocument();
+    });
+
+    await step("Lorsque l’utilisateur change de thématique", async () => {
+      await userEvent.click(canvas.getByRole("button", { name: /t/i }));
+
+      expect(
+        await waitFor(() =>
+          canvas.getByText(
+            diagnosticAPlusieursThematiques.referentiel["Thème 1"].questions[0]
+              .libelle,
+          ),
+        ),
+      ).toBeInTheDocument();
+      expect(
+        await waitFor(() =>
+          canvas.getByText(
+            diagnosticAPlusieursThematiques.referentiel["Thème 1"].questions[1]
+              .libelle,
+          ),
+        ),
+      ).toBeInTheDocument();
     });
   },
 };

@@ -1,11 +1,11 @@
 import { ActionDiagnostic } from "./Diagnostic.ts";
 
-export type Contexte = {
-  questions: Question[];
+export type Thematique = {
   actions: ActionDiagnostic[];
+  questions: Question[];
 };
 export type Referentiel = {
-  contexte: Contexte;
+  [clef: string]: Thematique;
 };
 export type TypeDeSaisie =
   | "choixMultiple"
