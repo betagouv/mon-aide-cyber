@@ -12,6 +12,7 @@ import {
   Diagnostics,
   EntrepotDiagnostics,
 } from "../../../src/domaine/diagnostic/Diagnostics.ts";
+import { expect } from "@storybook/jest";
 
 class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: T[] = [];
@@ -56,12 +57,8 @@ export class EntrepotDiagnosticMemoire
     actionRepondre: ActionDiagnostic,
     reponseDonnee: Reponse,
   ) {
-    return (
-      Object.entries(this.actionRepondre!).toString() ===
-        Object.entries(actionRepondre).toString() &&
-      Object.entries(this.reponseDonnee!).toString() ===
-        Object.entries(reponseDonnee).toString()
-    );
+    expect(actionRepondre).toStrictEqual(this.actionRepondre);
+    expect(reponseDonnee).toStrictEqual(this.reponseDonnee);
   }
 
   async verifieReponseNonEnvoyee() {
