@@ -11,8 +11,14 @@ import { ActionDiagnostic } from "../../src/domaine/diagnostic/Diagnostic.ts";
 import { uneAction } from "./constructeurActionDiagnostic.ts";
 
 class ConstructeurReferentiel implements Constructeur<Referentiel> {
-  private questions: Question[] = [];
-  private actions: ActionDiagnostic[] = [uneAction().contexte().construis()];
+  private thematique: {
+    [clef: string]: { questions: Question[]; actions: ActionDiagnostic[] };
+  } = {
+    ["contexte"]: {
+      questions: [],
+      actions: [uneAction().contexte().construis()],
+    },
+  };
 
   avecUneQuestionEtDesReponses(
     question: {
@@ -24,7 +30,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
     if (reponsePossibles.length === 0) {
       reponsePossibles.push(uneReponsePossible().construis());
     }
-    this.questions.push({
+    this.thematique["contexte"].questions.push({
       identifiant: faker.string.alpha(10),
       libelle: question.libelle,
       reponsesPossibles: reponsePossibles.map((reponse, index) => ({
@@ -39,27 +45,38 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
   }
 
   avecUneQuestion(question: Question): ConstructeurReferentiel {
-    this.questions.push(question);
+    this.thematique["contexte"].questions.push(question);
     return this;
   }
 
   ajouteAction(action: ActionDiagnostic): ConstructeurReferentiel {
-    this.actions.push(action);
+    this.thematique["contexte"].actions.push(action);
     return this;
   }
 
   sansAction(): ConstructeurReferentiel {
-    this.actions = [];
+    this.thematique["contexte"].actions = [];
+    return this;
+  }
+
+  ajouteUneThematique(
+    theme: string,
+    questions: Question[],
+  ): ConstructeurReferentiel {
+    this.thematique[theme] = { questions, actions: [] };
     return this;
   }
 
   construis(): Referentiel {
-    return {
-      contexte: {
-        actions: this.actions,
-        questions: this.questions,
+    return Object.entries(this.thematique).reduce(
+      (accumulateur, [clef, thematique]) => {
+        return {
+          ...accumulateur,
+          [clef]: thematique,
+        };
       },
-    };
+      {},
+    );
   }
 }
 
