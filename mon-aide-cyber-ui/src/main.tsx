@@ -5,15 +5,13 @@ import "./assets/styles/index.scss";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { FournisseurEntrepots } from "./fournisseurs/FournisseurEntrepot.ts";
 import { ComposantIntercepteur } from "./composants/intercepteurs/ComposantIntercepteur.tsx";
-import {
-  APIEntrepotDiagnostic,
-  APIEntrepotDiagnostics,
-} from "./infrastructure/entrepots/EntrepotsAPI.ts";
+import { APIEntrepotDiagnostics } from "./infrastructure/entrepots/EntrepotsAPI.ts";
 import { ComposantAffichageErreur } from "./composants/erreurs/ComposantAffichageErreur.tsx";
 import { ErrorBoundary } from "react-error-boundary";
 import { EntrepotDiagnostics } from "./domaine/diagnostic/Diagnostics.ts";
 import { ComposantDiagnostic } from "./composants/diagnostic/ComposantDiagnostic.tsx";
 import { ComposantDiagnostics } from "./composants/ComposantDiagnostics.tsx";
+import { APIEntrepotDiagnostic } from "./infrastructure/entrepots/APIEntrepotDiagnostic.ts";
 
 const routeur = createBrowserRouter([
   {

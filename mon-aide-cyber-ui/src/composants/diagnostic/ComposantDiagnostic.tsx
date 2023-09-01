@@ -25,12 +25,14 @@ import {
   EtatReponseStatut,
   reducteurReponse,
   reponseChangee,
+  initialiseReducteur,
 } from "../../domaine/diagnostic/reducteurReponse.ts";
 import { ActionDiagnostic } from "../../domaine/diagnostic/Diagnostic.ts";
 import "../../assets/styles/_diagnostic.scss";
 
 type ProprietesComposantQuestion = {
   question: Question;
+  reponseDonnee?: ReponseDonnee;
   actions?: ActionDiagnostic[];
 };
 
@@ -82,7 +84,6 @@ const ComposantReponseComplementaire = ({
 };
 type ProprietesComposantReponsePossible = {
   identifiantQuestion: string;
-  reponseDonnee?: ReponseDonnee;
   reponsePossible: ReponsePossible;
   typeDeSaisie: "radio" | "checkbox";
   onChange: (identifiantReponse: string) => void;
@@ -110,7 +111,7 @@ const ComposantReponsePossible = (
         onChange={(event) => {
           proprietes.onChange(event.target.value);
         }}
-      ></input>
+      />
       <label htmlFor={proprietes.reponsePossible.identifiant}>
         {proprietes.reponsePossible.libelle}
       </label>
@@ -140,10 +141,10 @@ const ComposantQuestionListe = ({
   question,
   actions,
 }: ProprietesComposantQuestion) => {
-  const [etatReponse, envoie] = useReducer(reducteurReponse, {
-    reponseDonnee: question.reponseDonnee,
-    statut: EtatReponseStatut.EN_COURS_DE_CHARGEMENT,
-  });
+  const [etatReponse, envoie] = useReducer(
+    reducteurReponse,
+    initialiseReducteur(question),
+  );
   const entrepots = useContext(FournisseurEntrepots);
 
   const repond = useCallback(
@@ -157,10 +158,7 @@ const ComposantQuestionListe = ({
     if (etatReponse.statut === EtatReponseStatut.MODIFIE) {
       const action = actions?.find((a) => a.action === "repondre");
       if (action !== undefined) {
-        entrepots.diagnostic().repond(action, {
-          reponseDonnee: etatReponse.reponseDonnee!.valeur,
-          identifiantQuestion: question.identifiant,
-        });
+        entrepots.diagnostic().repond(action, etatReponse.reponse()!);
       }
     }
   }, [actions, entrepots, etatReponse, question]);
@@ -171,11 +169,7 @@ const ComposantQuestionListe = ({
       id={question.identifiant}
       name={question.identifiant}
       onChange={repond}
-      value={
-        etatReponse.reponseDonnee?.valeur !== null
-          ? etatReponse.reponseDonnee?.valeur
-          : undefined
-      }
+      value={etatReponse.valeur()}
     >
       {question.reponsesPossibles.map((reponse) => {
         return (
@@ -188,42 +182,14 @@ const ComposantQuestionListe = ({
   );
 };
 
-const ComposantQuestionTiroir = ({ question }: ProprietesComposantQuestion) => {
-  return (
-    <div className="question-tiroir">
-      <br />
-      <label>{question?.libelle}</label>
-      <br />
-      {question?.reponsesPossibles.map((reponse) => {
-        const typeDeSaisie =
-          question.type === "choixMultiple" ? "checkbox" : "radio";
-
-        return (
-          <ComposantReponsePossible
-            key={reponse.identifiant}
-            reponsePossible={reponse}
-            identifiantQuestion={question.identifiant}
-            typeDeSaisie={typeDeSaisie}
-            reponseDonnee={undefined}
-            selectionnee={false}
-            onChange={() => {
-              // TODO Prendre en compte les réponses des question à tiroir
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-};
-
 const ComposantQuestion = ({
   question,
   actions,
 }: ProprietesComposantQuestion) => {
-  const [etatReponse, envoie] = useReducer(reducteurReponse, {
-    reponseDonnee: question.reponseDonnee,
-    statut: EtatReponseStatut.EN_COURS_DE_CHARGEMENT,
-  });
+  const [etatReponse, envoie] = useReducer(
+    reducteurReponse,
+    initialiseReducteur(question),
+  );
   const entrepots = useContext(FournisseurEntrepots);
 
   const repond = useCallback(
@@ -233,14 +199,24 @@ const ComposantQuestion = ({
     [envoie],
   );
 
+  const repondChoixMultiple = useCallback(
+    (
+      identifiantReponse: string,
+      elementReponseMultiple: {
+        identifiantReponse: string;
+        elementReponse: string;
+      },
+    ) => {
+      envoie(reponseChangee(identifiantReponse, elementReponseMultiple));
+    },
+    [envoie],
+  );
+
   useEffect(() => {
     if (etatReponse.statut === EtatReponseStatut.MODIFIE) {
       const action = actions?.find((a) => a.action === "repondre");
       if (action !== undefined) {
-        entrepots.diagnostic().repond(action, {
-          reponseDonnee: etatReponse.reponseDonnee!.valeur,
-          identifiantQuestion: question.identifiant,
-        });
+        entrepots.diagnostic().repond(action, etatReponse.reponse()!);
       }
     }
   }, [actions, entrepots, etatReponse, question]);
@@ -253,17 +229,39 @@ const ComposantQuestion = ({
             reponsePossible={reponse}
             identifiantQuestion={question.identifiant}
             typeDeSaisie="radio"
-            reponseDonnee={question.reponseDonnee}
             onChange={(identifiantReponse) => repond(identifiantReponse)}
-            selectionnee={
-              etatReponse.reponseDonnee?.valeur === reponse.identifiant
-            }
+            selectionnee={etatReponse.valeur() === reponse.identifiant}
           >
             {reponse.question !== undefined ? (
-              <ComposantQuestionTiroir
-                question={reponse.question}
-                actions={actions}
-              />
+              <div className="question-tiroir">
+                <br />
+                <label>{reponse.question?.libelle}</label>
+                <br />
+                {reponse.question?.reponsesPossibles.map((rep) => {
+                  const typeDeSaisie =
+                    reponse.question?.type === "choixMultiple"
+                      ? "checkbox"
+                      : "radio";
+
+                  return (
+                    <ComposantReponsePossible
+                      key={rep.identifiant}
+                      reponsePossible={rep}
+                      identifiantQuestion={rep.question?.identifiant || ""}
+                      typeDeSaisie={typeDeSaisie}
+                      selectionnee={etatReponse.reponseDonnee.reponsesMultiples.has(
+                        rep.identifiant,
+                      )}
+                      onChange={(identifiantReponse) =>
+                        repondChoixMultiple(reponse.identifiant, {
+                          identifiantReponse: reponse.question!.identifiant,
+                          elementReponse: identifiantReponse,
+                        })
+                      }
+                    />
+                  );
+                })}
+              </div>
             ) : (
               ""
             )}

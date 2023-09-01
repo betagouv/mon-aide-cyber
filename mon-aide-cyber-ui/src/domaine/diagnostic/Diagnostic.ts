@@ -12,8 +12,15 @@ export type ActionDiagnostic = {
 export type Diagnostic = Aggregat & {
   referentiel: Referentiel;
 };
+export type ReponseQuestionATiroir = {
+  reponse: string;
+  question: {
+    identifiant: string;
+    reponses: string[];
+  };
+};
 export type Reponse = {
-  reponseDonnee: string | null;
+  reponseDonnee: string | ReponseQuestionATiroir | null;
   identifiantQuestion: string;
 };
 export interface EntrepotDiagnostic extends Entrepot<Diagnostic> {
