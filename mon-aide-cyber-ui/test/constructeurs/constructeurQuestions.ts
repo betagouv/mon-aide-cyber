@@ -14,16 +14,24 @@ class ConstructeurQuestion implements Constructeur<Question> {
   protected libelle = faker.word.words().concat(" ?");
   protected reponsesPossibles: ReponsePossible[] = [];
   protected type?: Exclude<TypeDeSaisie, "saisieLibre"> = undefined;
-  private reponseDonnee?: ReponseDonnee = undefined;
+  private reponseDonnee: ReponseDonnee = {
+    valeur: null,
+    reponsesMultiples: new Set(),
+  };
 
   avecDesReponses(reponsePossibles: ReponsePossible[]): ConstructeurQuestion {
     this.reponsesPossibles.push(...reponsePossibles);
     return this;
   }
 
-  avecLaReponseDonnee(reponsePossible: ReponsePossible): ConstructeurQuestion {
-    this.reponsesPossibles.push(reponsePossible);
-    this.reponseDonnee = { valeur: reponsePossible.identifiant };
+  avecLaReponseDonnee(
+    reponsePossible: ReponsePossible,
+    reponsesMultiples: Set<string> = new Set(),
+  ): ConstructeurQuestion {
+    this.reponseDonnee = {
+      valeur: reponsePossible.identifiant,
+      reponsesMultiples,
+    };
     return this;
   }
 

@@ -19,6 +19,7 @@ export type ReponseComplementaire = Omit<
 >;
 export type ReponseDonnee = {
   valeur: string | null;
+  reponsesMultiples: Set<string>;
 };
 export type ReponsePossible = {
   identifiant: string;
@@ -31,7 +32,7 @@ export type ReponsePossible = {
 export type Question = {
   identifiant: string;
   libelle: string;
-  reponseDonnee?: ReponseDonnee;
+  reponseDonnee: ReponseDonnee;
   reponsesPossibles: ReponsePossible[];
   type?: Exclude<TypeDeSaisie, "saisieLibre">;
 };

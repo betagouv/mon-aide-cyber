@@ -33,6 +33,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
     this.thematique["contexte"].questions.push({
       identifiant: faker.string.alpha(10),
       libelle: question.libelle,
+      reponseDonnee: { valeur: null, reponsesMultiples: new Set() },
       reponsesPossibles: reponsePossibles.map((reponse, index) => ({
         ordre: reponse.ordre !== undefined ? reponse.ordre : index,
         libelle: reponse.libelle,

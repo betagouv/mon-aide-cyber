@@ -9,6 +9,7 @@ import {
 } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
 import {
   uneQuestion,
+  uneQuestionAChoixMultiple,
   uneQuestionAChoixUnique,
 } from "../../test/constructeurs/constructeurQuestions.ts";
 import { uneReponsePossible } from "../../test/constructeurs/constructeurReponsePossible.ts";
@@ -35,6 +36,7 @@ const diagnosticAvecUneQuestionAChoixUnique = unDiagnostic()
           .avecLibelle("Quelle entreprise êtes-vous ?")
           .avecDesReponses([
             uneReponsePossible().avecLibelle("Entreprise privée").construis(),
+            reponseDonneeChoixUnique,
             uneReponsePossible().construis(),
           ])
           .avecLaReponseDonnee(reponseDonneeChoixUnique)
@@ -61,6 +63,7 @@ const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
           .sousFormeDeListe()
           .avecDesReponses([
             uneReponsePossible().avecLibelle("Réponse A").construis(),
+            reponseSelectionnee,
             uneReponsePossible().avecLibelle("Réponse C").construis(),
           ])
           .avecLaReponseDonnee(reponseSelectionnee)
@@ -85,11 +88,51 @@ const diagnosticAPlusieursThematiques = unDiagnostic()
   )
   .construis();
 
+const identifiantQuestionATiroir = "4a0242d6-26c0-459b-85bd-bf2ce9962c9b";
+const reponseAvecQuestionAChoixMultiple = uneReponsePossible()
+  .avecLibelle("Plusieurs choix?")
+  .avecUneQuestion(
+    uneQuestionAChoixMultiple()
+      .avecLibelle("La question?")
+      .avecDesReponses([
+        uneReponsePossible().avecLibelle("choix 1").construis(),
+        uneReponsePossible().avecLibelle("choix 2").construis(),
+        uneReponsePossible().avecLibelle("choix 3").construis(),
+        uneReponsePossible().avecLibelle("choix 4").construis(),
+      ])
+      .construis(),
+  )
+  .construis();
+const diagnosticAvecQuestionATiroir = unDiagnostic()
+  .avecIdentifiant(identifiantQuestionATiroir)
+  .avecUnReferentiel(
+    unReferentiel()
+      .sansAction()
+      .ajouteAction(actionRepondre)
+      .avecUneQuestion(
+        uneQuestion()
+          .avecLibelle("QCM?")
+          .avecDesReponses([
+            uneReponsePossible().construis(),
+            uneReponsePossible().avecLibelle("un seul choix").construis(),
+            reponseAvecQuestionAChoixMultiple,
+          ])
+          .avecLaReponseDonnee(
+            reponseAvecQuestionAChoixMultiple,
+            new Set(["choix-2", "choix-4"]),
+          )
+          .construis(),
+      )
+      .construis(),
+  )
+  .construis();
+
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestionAChoixUnique);
 await entrepotDiagnosticMemoire.persiste(
   diagnosticAvecQuestionSousFormeDeListeDeroulante,
 );
 await entrepotDiagnosticMemoire.persiste(diagnosticAPlusieursThematiques);
+await entrepotDiagnosticMemoire.persiste(diagnosticAvecQuestionATiroir);
 
 const meta = {
   title: "Diagnostic",
@@ -247,5 +290,105 @@ export const AfficheLesThematiques: Story = {
         ),
       ).toBeInTheDocument();
     });
+  },
+};
+
+export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
+  name: "Sélectionne les réponses pour les questions à tiroir",
+  args: { idDiagnostic: identifiantQuestionATiroir },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step("Lorsque le diagnostic est récupéré depuis l’API", async () => {
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /choix 2/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /choix 4/i,
+          }),
+        ),
+      ).toBeChecked();
+    });
+
+    await step("Lorsque l’utilisateur modifie la réponse", async () => {
+      await userEvent.click(canvas.getByRole("checkbox", { name: /choix 3/i }));
+      await userEvent.click(canvas.getByRole("checkbox", { name: /choix 4/i }));
+
+      expect(
+        canvas.getByRole("radio", { name: /plusieurs choix/i }),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /choix 2/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /choix 3/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /choix 4/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+        reponseDonnee: {
+          reponse: "plusieurs-choix",
+          question: {
+            identifiant: "la-question",
+            reponses: ["choix-2", "choix-3"],
+          },
+        },
+        identifiantQuestion: "qcm",
+      });
+    });
+
+    await step(
+      "Lorsque l'utilisateur sélectionne une réponse à choix unique",
+      async () => {
+        await userEvent.click(
+          canvas.getByRole("radio", { name: /un seul choix/i }),
+        );
+
+        expect(
+          await waitFor(() =>
+            canvas.getByRole("radio", {
+              name: /un seul choix/i,
+            }),
+          ),
+        ).toBeChecked();
+        expect(
+          await waitFor(() =>
+            canvas.getByRole("checkbox", {
+              name: /choix 2/i,
+            }),
+          ),
+        ).not.toBeChecked();
+        expect(
+          await waitFor(() =>
+            canvas.getByRole("checkbox", {
+              name: /choix 3/i,
+            }),
+          ),
+        ).not.toBeChecked();
+        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+          reponseDonnee: "un-seul-choix",
+          identifiantQuestion: "qcm",
+        });
+      },
+    );
   },
 };
