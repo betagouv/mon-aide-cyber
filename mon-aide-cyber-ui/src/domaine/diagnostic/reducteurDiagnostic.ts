@@ -1,4 +1,5 @@
 import { Diagnostic } from "./Diagnostic.ts";
+import { ReponsePossible } from "./Referentiel.ts";
 
 enum TypeActionDiagnostic {
   DIAGNOSTIC_CHARGE = "DIAGNOSTIC_CHARGE",
@@ -26,16 +27,25 @@ export const reducteurDiagnostic = (
     case TypeActionDiagnostic.THEMATIQUE_AFFICHEE:
       return { ...etat, thematiqueAffichee: action.clef };
     case TypeActionDiagnostic.DIAGNOSTIC_CHARGE:
-      action.diagnostic.referentiel.contexte.questions.forEach((question) => {
-        const reponsesTriees = question.reponsesPossibles.sort(
-          (premiereQuestion, secondeQuestion) =>
-            premiereQuestion.ordre - secondeQuestion.ordre,
-        );
-        return {
-          ...question,
-          reponsesPossibles: reponsesTriees,
-        };
-      });
+      Object.entries(action.diagnostic.referentiel).forEach(
+        ([_, thematique]) => {
+          const trieLesReponses = (
+            reponsesPossibles: ReponsePossible[] | undefined,
+          ): void => {
+            reponsesPossibles?.sort(
+              (premiereReponse, secondeReponse) =>
+                premiereReponse.ordre - secondeReponse.ordre,
+            );
+          };
+          thematique.questions.forEach((question) => {
+            trieLesReponses(question.reponsesPossibles);
+            question.reponsesPossibles.forEach((reponse) =>
+              trieLesReponses(reponse.question?.reponsesPossibles),
+            );
+            return question;
+          });
+        },
+      );
       return {
         ...etat,
         diagnostic: action.diagnostic,
