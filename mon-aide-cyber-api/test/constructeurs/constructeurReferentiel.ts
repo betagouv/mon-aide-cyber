@@ -116,7 +116,7 @@ class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
   private libelle: string = faker.word.words();
   private reponsesPossibles: Omit<
     ReponsePossible,
-    "reponsesComplementaires" | "question"
+    "reponsesComplementaires" | "questions"
   >[] = [];
   private type: TypeQuestion = "choixUnique";
 
@@ -159,11 +159,11 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private identifiant: string = faker.string.alpha(10);
   private libelle: string = faker.word.words();
   private ordre: number = faker.number.int();
-  private question?: QuestionATiroir = undefined;
-  private reponsesComplementaires?: ReponseComplementaire[] = undefined;
+  private questions?: QuestionATiroir[] = undefined;
+  private reponsesComplementaires?: ReponseComplementaire[];
 
   avecQuestionATiroir(question: QuestionATiroir): ConstructeurReponsePossible {
-    this.question = question;
+    this.questions = [question];
     return this;
   }
 
@@ -181,19 +181,27 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   }
 
   construis(): ReponsePossible {
+    if (this.reponsesComplementaires !== undefined) {
+      return {
+        identifiant: this.identifiant,
+        libelle: this.libelle,
+        ordre: this.ordre,
+        questions: this.questions,
+        reponsesComplementaires: this.reponsesComplementaires,
+      };
+    }
     return {
       identifiant: this.identifiant,
       libelle: this.libelle,
       ordre: this.ordre,
-      question: this.question,
-      reponsesComplementaires: this.reponsesComplementaires,
+      questions: this.questions,
     };
   }
 }
 
 class ConstructeurReponseComplementaire extends ConstructeurReponsePossible {
   construis(): ReponseComplementaire {
-    const { question, ...reponseComplementaire } = super.construis();
+    const { questions, ...reponseComplementaire } = super.construis();
     return reponseComplementaire;
   }
 }

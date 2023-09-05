@@ -36,7 +36,11 @@ export class TranscripteurDeReponse {
   construis(): ReponseATranscrire {
     return {
       identifiant: this.reponse.identifiant,
-      question: this.reponse.question!,
+      question:
+        this.reponse.questions !== undefined &&
+        this.reponse.questions.length > 0
+          ? this.reponse.questions![0]
+          : undefined,
       reponses: this.transcripteurDeReponseComplementaires.map((rc) =>
         rc.construis(),
       ),

@@ -1,12 +1,12 @@
 type ReponseComplementaire = Omit<
   ReponsePossible,
-  "question" | "reponsesComplementaires"
+  "questions" | "reponsesComplementaires"
 >;
 
 type QuestionATiroir = Omit<Question, "reponsesPossibles"> & {
   reponsesPossibles: Omit<
     ReponsePossible,
-    "question" | "reponsesComplementaires"
+    "questions" | "reponsesComplementaires"
   >[];
 };
 
@@ -14,8 +14,8 @@ type ReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
-  question?: QuestionATiroir | undefined;
-  reponsesComplementaires?: ReponseComplementaire[] | undefined;
+  questions?: QuestionATiroir[] | undefined;
+  reponsesComplementaires?: ReponseComplementaire[];
 };
 
 type TypeQuestion = "choixMultiple" | "choixUnique";
