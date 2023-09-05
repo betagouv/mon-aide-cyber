@@ -24,7 +24,7 @@ describe("Le service de diagnostic", () => {
   describe("Lorsque l'on veut accéder à un diagnostic", () => {
     it("retourne un diagnostic contenant une réponse avec une question à tiroir", async () => {
       const reponseAttendue = uneReponsePossible()
-        .avecQuestionATiroir(
+        .ajouteUneQuestionATiroir(
           uneQuestionATiroir()
             .aChoixMultiple("Quelles réponses ?")
             .avecReponsesPossibles([
@@ -86,6 +86,62 @@ describe("Le service de diagnostic", () => {
         ],
       });
     });
+
+    it("retourne un diagnostic contenant une réponse avec plusieurs questions à tiroir", async () => {
+      const reponseAttendue = uneReponsePossible()
+        .ajouteUneQuestionATiroir(uneQuestionATiroir().construis())
+        .ajouteUneQuestionATiroir(
+          uneQuestionATiroir()
+            .aChoixMultiple("Autres réponses ?")
+            .avecReponsesPossibles([
+              uneReponsePossible().avecLibelle("AA").construis(),
+              uneReponsePossible().avecLibelle("BB").construis(),
+              uneReponsePossible().avecLibelle("CC").construis(),
+            ])
+            .construis(),
+        )
+        .construis();
+      const question = uneQuestion()
+        .avecReponsesPossibles([
+          uneReponsePossible().construis(),
+          reponseAttendue,
+        ])
+        .construis();
+      const referentiel = unReferentiel()
+        .ajouteUneQuestionAuContexte(uneQuestion().construis())
+        .ajouteUneQuestionAuContexte(question)
+        .construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(referentiel)
+        .construis();
+      adaptateurReferentiel.ajoute(referentiel);
+      entrepots.diagnostic().persiste(diagnostic);
+      const serviceDiagnostic = new ServiceDiagnostic(
+        adaptateurReferentiel,
+        entrepots,
+      );
+
+      const diagnosticRetourne = await serviceDiagnostic.diagnostic(
+        diagnostic.identifiant,
+      );
+
+      const referentielDiagnostic = diagnosticRetourne.referentiel["contexte"];
+      expect(referentielDiagnostic.questions[1].reponsesPossibles).toHaveLength(
+        2,
+      );
+      expect(
+        referentielDiagnostic.questions[1].reponsesPossibles[1].questions?.[1],
+      ).toMatchObject({
+        identifiant: "autres-reponses-",
+        libelle: "Autres réponses ?",
+        reponsesPossibles: [
+          { identifiant: "aa", libelle: "AA", ordre: 0 },
+          { identifiant: "bb", libelle: "BB", ordre: 1 },
+          { identifiant: "cc", libelle: "CC", ordre: 2 },
+        ],
+        type: "choixMultiple",
+      });
+    });
   });
 
   describe("Lorsque l'on veut lancer un diagnostic", () => {
@@ -124,7 +180,7 @@ describe("Le service de diagnostic", () => {
       const premiereReponse = uneReponsePossible().construis();
       const secondeReponse = uneReponsePossible().construis();
       const reponseAvecQuestionATiroir = uneReponsePossible()
-        .avecQuestionATiroir(
+        .ajouteUneQuestionATiroir(
           uneQuestion()
             .aChoixMultiple("QCM ?")
             .avecReponsesPossibles([

@@ -14,7 +14,7 @@ type ReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
-  questions?: QuestionATiroir[] | undefined;
+  questions?: QuestionATiroir[];
   reponsesComplementaires?: ReponseComplementaire[];
 };
 
