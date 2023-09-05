@@ -125,9 +125,14 @@ const trouveReponsesComplementaires = (
 const estQuestionATiroir = (
   reponse:
     | ReponsePossible
-    | Omit<ReponsePossible, "question" | "reponsesComplementaires">,
+    | Omit<ReponsePossible, "questions" | "reponsesComplementaires">,
 ): reponse is ReponsePossible => {
-  return "question" in reponse && "reponsesComplementaires" in reponse;
+  return (
+    ("questions" in reponse &&
+      reponse.questions !== undefined &&
+      reponse.questions?.length > 0) ||
+    "reponsesComplementaires" in reponse
+  );
 };
 const trouveReponsesPossibles = (
   question: QuestionDiagnostic | QuestionATiroir,
@@ -141,16 +146,16 @@ const trouveReponsesPossibles = (
     );
     if (estQuestionATiroir(reponse)) {
       const representationQuestionATiroir = questionTiroirATranscrire(
-        reponse.question,
+        reponse.questions?.[0],
         transcripteur,
-        reponse.question?.identifiant,
+        reponse.questions?.[0].identifiant,
       );
       const reponsesComplementaires = trouveReponsesComplementaires(
         reponse.reponsesComplementaires || [],
         transcripteur,
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { question, ...corpsDeReponse } = reponse;
+      const { questions, ...corpsDeReponse } = reponse;
       return {
         ...corpsDeReponse,
         type: reponseAtranscrire?.type,

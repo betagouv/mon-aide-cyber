@@ -219,43 +219,46 @@ const referentiel: Referentiel = {
             identifiant: "usageCloud-oui",
             libelle: "Oui",
             ordre: 3,
-            question: {
-              identifiant: "usageCloudQuestionTiroir",
-              libelle: 'Si "Oui": quels sont vos usages du Cloud ?',
-              reponsesPossibles: [
-                {
-                  identifiant: "usageCloud-Oui-neSaisPas",
-                  libelle: "Je ne sais pas",
-                  ordre: 1,
-                },
-                {
-                  identifiant: "usageCloud-Oui-Messagerie",
-                  libelle: "Messagerie",
-                  ordre: 2,
-                },
-                {
-                  identifiant: "usageCloud-Oui-SuiteBureautiqueComplete",
-                  libelle: "Suite bureautique complète",
-                  ordre: 3,
-                },
-                {
-                  identifiant: "usageCloud-Oui-HebergementDonneesetSauvegardes",
-                  libelle: "Hébergement des données et sauvegardes",
-                  ordre: 4,
-                },
-                {
-                  identifiant: "usageCloud-Oui-VirtualisationCompleteSI",
-                  libelle: "Virtualisation complète du SI",
-                  ordre: 5,
-                },
-                {
-                  identifiant: "usageCloud-Oui-Autre",
-                  libelle: "Autre : Préciser",
-                  ordre: 6,
-                },
-              ],
-              type: "choixMultiple",
-            },
+            questions: [
+              {
+                identifiant: "usageCloudQuestionTiroir",
+                libelle: 'Si "Oui": quels sont vos usages du Cloud ?',
+                reponsesPossibles: [
+                  {
+                    identifiant: "usageCloud-Oui-neSaisPas",
+                    libelle: "Je ne sais pas",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant: "usageCloud-Oui-Messagerie",
+                    libelle: "Messagerie",
+                    ordre: 2,
+                  },
+                  {
+                    identifiant: "usageCloud-Oui-SuiteBureautiqueComplete",
+                    libelle: "Suite bureautique complète",
+                    ordre: 3,
+                  },
+                  {
+                    identifiant:
+                      "usageCloud-Oui-HebergementDonneesetSauvegardes",
+                    libelle: "Hébergement des données et sauvegardes",
+                    ordre: 4,
+                  },
+                  {
+                    identifiant: "usageCloud-Oui-VirtualisationCompleteSI",
+                    libelle: "Virtualisation complète du SI",
+                    ordre: 5,
+                  },
+                  {
+                    identifiant: "usageCloud-Oui-Autre",
+                    libelle: "Autre : Préciser",
+                    ordre: 6,
+                  },
+                ],
+                type: "choixMultiple",
+              },
+            ],
           },
         ],
         type: "choixUnique",
@@ -274,29 +277,31 @@ const referentiel: Referentiel = {
             identifiant: "cyberAttaqueSubie-oui",
             libelle: "Oui",
             ordre: 3,
-            question: {
-              identifiant: "cyberAttaqueSubieTiroir",
-              libelle:
-                'Si "Oui": avez-vous déposé plainte ou réalisé un signalement auprès d\'un service judiciaire ?',
-              reponsesPossibles: [
-                {
-                  identifiant: "cyberAttaqueSubie-Oui-neSaisPas",
-                  libelle: "Je ne sais pas",
-                  ordre: 0,
-                },
-                {
-                  identifiant: "cyberAttaqueSubie-Oui-non",
-                  libelle: "Non",
-                  ordre: 1,
-                },
-                {
-                  identifiant: "cyberAttaqueSubie-Oui-oui",
-                  libelle: "Oui",
-                  ordre: 2,
-                },
-              ],
-              type: "choixUnique",
-            },
+            questions: [
+              {
+                identifiant: "cyberAttaqueSubieTiroir",
+                libelle:
+                  'Si "Oui": avez-vous déposé plainte ou réalisé un signalement auprès d\'un service judiciaire ?',
+                reponsesPossibles: [
+                  {
+                    identifiant: "cyberAttaqueSubie-Oui-neSaisPas",
+                    libelle: "Je ne sais pas",
+                    ordre: 0,
+                  },
+                  {
+                    identifiant: "cyberAttaqueSubie-Oui-non",
+                    libelle: "Non",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant: "cyberAttaqueSubie-Oui-oui",
+                    libelle: "Oui",
+                    ordre: 2,
+                  },
+                ],
+                type: "choixUnique",
+              },
+            ],
             reponsesComplementaires: [
               {
                 identifiant: "cyberAttaqueSubie-Oui-oui-compromission",
@@ -434,48 +439,50 @@ const referentiel: Referentiel = {
             identifiant: "gouvernance-connaissance-rgpd-oui",
             libelle: "Oui",
             ordre: 3,
-            question: {
-              identifiant: "gouvernance-connaissance-rgpd-oui-tiroir",
-              libelle:
-                'Si "Oui" : combien de mesures de conformité respectez-vous parmi celles-ci ?',
-              type: "choixMultiple",
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement",
-                  libelle: "Etablissement d'un registre de vos traitements",
-                  ordre: 0,
-                },
-                {
-                  identifiant:
-                    "gouvernance-connaissance-rgpd-oui-tiroir-traitement-nature-besoin-suppression",
-                  libelle:
-                    "Pour chaque traitement, détermination de la nature, besoin et finalité des traitements de données personnelles effectuées puis suppression de données non nécessaires",
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    "gouvernance-connaissance-rgpd-oui-tiroir-analyse-impact",
-                  libelle:
-                    "Analyse d'impact relative à la protection des données sur les traitements susceptibles d'engendrer un risque élevé",
-                  ordre: 2,
-                },
-                {
-                  identifiant:
-                    "gouvernance-connaissance-rgpd-oui-tiroir-info-donnees-finalite",
-                  libelle:
-                    "Information auprès des personnes concernées des données personnelles traitées et leurs finalités",
-                  ordre: 3,
-                },
-                {
-                  identifiant:
-                    "gouvernance-connaissance-rgpd-oui-tiroir-moyen-exercer-valoir-droits",
-                  libelle:
-                    "Mise en place de moyens permettant aux personnes concernées d'exercer et faire valoir leurs droits (droits d’accès, rectification, opposition, suppression; etc.)",
-                  ordre: 4,
-                },
-              ],
-            },
+            questions: [
+              {
+                identifiant: "gouvernance-connaissance-rgpd-oui-tiroir",
+                libelle:
+                  'Si "Oui" : combien de mesures de conformité respectez-vous parmi celles-ci ?',
+                type: "choixMultiple",
+                reponsesPossibles: [
+                  {
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement",
+                    libelle: "Etablissement d'un registre de vos traitements",
+                    ordre: 0,
+                  },
+                  {
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-traitement-nature-besoin-suppression",
+                    libelle:
+                      "Pour chaque traitement, détermination de la nature, besoin et finalité des traitements de données personnelles effectuées puis suppression de données non nécessaires",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-analyse-impact",
+                    libelle:
+                      "Analyse d'impact relative à la protection des données sur les traitements susceptibles d'engendrer un risque élevé",
+                    ordre: 2,
+                  },
+                  {
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-info-donnees-finalite",
+                    libelle:
+                      "Information auprès des personnes concernées des données personnelles traitées et leurs finalités",
+                    ordre: 3,
+                  },
+                  {
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-moyen-exercer-valoir-droits",
+                    libelle:
+                      "Mise en place de moyens permettant aux personnes concernées d'exercer et faire valoir leurs droits (droits d’accès, rectification, opposition, suppression; etc.)",
+                    ordre: 4,
+                  },
+                ],
+              },
+            ],
           },
         ],
       },

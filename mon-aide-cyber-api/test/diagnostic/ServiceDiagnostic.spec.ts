@@ -72,16 +72,18 @@ describe("Le service de diagnostic", () => {
         identifiant: reponseAttendue.identifiant,
         libelle: reponseAttendue.libelle,
         ordre: reponseAttendue.ordre,
-        question: {
-          identifiant: "quelles-reponses-",
-          libelle: "Quelles réponses ?",
-          reponsesPossibles: [
-            { identifiant: "reponse-a", libelle: "Réponse A", ordre: 0 },
-            { identifiant: "reponse-b", libelle: "Réponse B", ordre: 1 },
-            { identifiant: "reponse-c", libelle: "Réponse C", ordre: 2 },
-          ],
-          type: "choixMultiple",
-        },
+        questions: [
+          {
+            identifiant: "quelles-reponses-",
+            libelle: "Quelles réponses ?",
+            reponsesPossibles: [
+              { identifiant: "reponse-a", libelle: "Réponse A", ordre: 0 },
+              { identifiant: "reponse-b", libelle: "Réponse B", ordre: 1 },
+              { identifiant: "reponse-c", libelle: "Réponse C", ordre: 2 },
+            ],
+            type: "choixMultiple",
+          },
+        ],
       });
     });
   });
