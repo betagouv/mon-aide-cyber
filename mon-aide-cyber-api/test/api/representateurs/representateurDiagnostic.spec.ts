@@ -139,7 +139,7 @@ describe("Le représentateur de diagnostic", () => {
             .construis();
           const reponsePossible = uneReponsePossible()
             .avecLibelle("Réponse 0")
-            .avecQuestionATiroir(
+            .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
                 .aChoixMultiple("Question tiroir?")
                 .avecReponsesPossibles([reponse])
@@ -187,6 +187,20 @@ describe("Le représentateur de diagnostic", () => {
                     ],
                     type: "choixMultiple",
                   },
+                  questions: [
+                    {
+                      identifiant: "question-tiroir",
+                      libelle: "Question tiroir?",
+                      reponsesPossibles: [
+                        {
+                          identifiant: "reponse-1",
+                          libelle: "Réponse 1",
+                          ordre: 0,
+                        },
+                      ],
+                      type: "choixMultiple",
+                    },
+                  ],
                 },
               ],
               type: "choixUnique",
@@ -207,7 +221,7 @@ describe("Le représentateur de diagnostic", () => {
                     .avecReponsesPossibles([
                       uneReponsePossible()
                         .avecLibelle("Réponse 0")
-                        .avecQuestionATiroir(
+                        .ajouteUneQuestionATiroir(
                           uneQuestionATiroir()
                             .aChoixMultiple("Question tiroir?")
                             .avecReponsesPossibles([
@@ -257,7 +271,7 @@ describe("Le représentateur de diagnostic", () => {
                     .aChoixUnique("Question avec réponse tiroir?")
                     .avecReponsesPossibles([
                       uneReponsePossible()
-                        .avecQuestionATiroir(
+                        .ajouteUneQuestionATiroir(
                           uneQuestionATiroir()
                             .aChoixMultiple("Question tiroir?")
                             .avecReponsesPossibles([reponse])
@@ -298,7 +312,7 @@ describe("Le représentateur de diagnostic", () => {
             .avecReponsesPossibles([
               uneReponsePossible()
                 .avecLibelle("Réponse 1")
-                .avecQuestionATiroir(
+                .ajouteUneQuestionATiroir(
                   uneQuestionATiroir()
                     .aChoixMultiple("Question 11")
                     .avecReponsesPossibles([reponse1])
@@ -312,7 +326,7 @@ describe("Le représentateur de diagnostic", () => {
             .avecReponsesPossibles([
               uneReponsePossible()
                 .avecLibelle("Réponse 2")
-                .avecQuestionATiroir(
+                .ajouteUneQuestionATiroir(
                   uneQuestionATiroir()
                     .aChoixMultiple("Question 21")
                     .avecReponsesPossibles([reponse2])
@@ -362,7 +376,7 @@ describe("Le représentateur de diagnostic", () => {
                     .aChoixUnique("Une question à choix unique ?")
                     .avecReponsesPossibles([
                       uneReponsePossible()
-                        .avecQuestionATiroir(
+                        .ajouteUneQuestionATiroir(
                           uneQuestionATiroir()
                             .aChoixUnique("Une question tiroir à choix unique?")
                             .construis(),

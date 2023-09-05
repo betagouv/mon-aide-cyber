@@ -16,7 +16,7 @@ import {
 } from "./types";
 
 const trouveQuestionATranscrire = (
-  chemin: { chemin: Chemin; identifiantQuestion: string | undefined },
+  chemin: { chemin: Chemin; identifiantQuestion: string },
   transcripteur: Transcripteur,
 ): QuestionATranscrire | undefined => {
   return trouveParmiLesQuestions(
@@ -26,7 +26,7 @@ const trouveQuestionATranscrire = (
 };
 const trouveParmiLesQuestions = (
   questions: QuestionATranscrire[],
-  identifiantQuestion: string | undefined,
+  identifiantQuestion: string,
 ): QuestionATranscrire | undefined => {
   for (const question of questions) {
     if (question.identifiant === identifiantQuestion) {
@@ -49,38 +49,38 @@ const trouveParmiLesQuestions = (
   return undefined;
 };
 const questionTiroirATranscrire = (
-  question: QuestionATiroir | undefined,
+  questions: QuestionATiroir[] | undefined,
   transcripteur: Transcripteur,
-  identifiantQuestion: string | undefined,
-): RepresentationQuestion | undefined => {
-  if (question !== undefined) {
-    const questionTiroirATranscrire: QuestionATranscrire | undefined =
-      trouveQuestionATranscrire(
-        {
-          chemin: `contexte`,
-          identifiantQuestion,
-        },
-        transcripteur,
-      );
-    if (questionTiroirATranscrire !== undefined) {
-      const reponsesPossibles: RepresentationReponsePossible[] =
-        trouveReponsesPossibles(
-          question,
+): RepresentationQuestion[] => {
+  return (
+    questions?.map((question) => {
+      const questionTiroirATranscrire: QuestionATranscrire | undefined =
+        trouveQuestionATranscrire(
+          {
+            chemin: `contexte`,
+            identifiantQuestion: question.identifiant,
+          },
           transcripteur,
-          questionTiroirATranscrire,
         );
+      if (questionTiroirATranscrire !== undefined) {
+        const reponsesPossibles: RepresentationReponsePossible[] =
+          trouveReponsesPossibles(
+            question,
+            transcripteur,
+            questionTiroirATranscrire,
+          );
+        return {
+          ...question,
+          type: question.type,
+          identifiant: questionTiroirATranscrire.identifiant,
+          reponsesPossibles,
+        } as RepresentationQuestion;
+      }
       return {
         ...question,
-        type: question.type,
-        identifiant: questionTiroirATranscrire.identifiant,
-        reponsesPossibles,
       } as RepresentationQuestion;
-    }
-    return {
-      ...question,
-    } as RepresentationQuestion;
-  }
-  return undefined;
+    }) || []
+  );
 };
 
 const toutesLesReponses = (
@@ -146,9 +146,8 @@ const trouveReponsesPossibles = (
     );
     if (estQuestionATiroir(reponse)) {
       const representationQuestionATiroir = questionTiroirATranscrire(
-        reponse.questions?.[0],
+        reponse.questions,
         transcripteur,
-        reponse.questions?.[0].identifiant,
       );
       const reponsesComplementaires = trouveReponsesComplementaires(
         reponse.reponsesComplementaires || [],
@@ -159,7 +158,8 @@ const trouveReponsesPossibles = (
       return {
         ...corpsDeReponse,
         type: reponseAtranscrire?.type,
-        question: representationQuestionATiroir,
+        question: representationQuestionATiroir[0],
+        questions: representationQuestionATiroir,
         reponsesComplementaires,
       };
     }
