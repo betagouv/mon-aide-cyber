@@ -159,11 +159,16 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private identifiant: string = faker.string.alpha(10);
   private libelle: string = faker.word.words();
   private ordre: number = faker.number.int();
-  private questions?: QuestionATiroir[] = undefined;
+  private questions?: QuestionATiroir[];
   private reponsesComplementaires?: ReponseComplementaire[];
 
-  avecQuestionATiroir(question: QuestionATiroir): ConstructeurReponsePossible {
-    this.questions = [question];
+  ajouteUneQuestionATiroir(
+    question: QuestionATiroir,
+  ): ConstructeurReponsePossible {
+    if (!this.questions) {
+      this.questions = [];
+    }
+    this.questions.push(question);
     return this;
   }
 
@@ -181,21 +186,24 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   }
 
   construis(): ReponsePossible {
-    if (this.reponsesComplementaires !== undefined) {
-      return {
-        identifiant: this.identifiant,
-        libelle: this.libelle,
-        ordre: this.ordre,
-        questions: this.questions,
-        reponsesComplementaires: this.reponsesComplementaires,
-      };
-    }
-    return {
+    let reponsePossible: ReponsePossible = {
       identifiant: this.identifiant,
       libelle: this.libelle,
       ordre: this.ordre,
-      questions: this.questions,
     };
+    if (this.reponsesComplementaires !== undefined) {
+      reponsePossible = {
+        ...reponsePossible,
+        reponsesComplementaires: this.reponsesComplementaires,
+      };
+    }
+    if (this.questions !== undefined) {
+      reponsePossible = {
+        ...reponsePossible,
+        questions: this.questions,
+      };
+    }
+    return reponsePossible;
   }
 }
 
