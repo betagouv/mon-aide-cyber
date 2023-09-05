@@ -441,39 +441,38 @@ const referentiel: Referentiel = {
               type: "choixMultiple",
               reponsesPossibles: [
                 {
-                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-na",
-                  libelle: "Non applicable",
+                  identifiant:
+                    "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement",
+                  libelle: "Etablissement d'un registre de vos traitements",
                   ordre: 0,
                 },
                 {
-                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-nsp",
-                  libelle: "Je ne sais pas.",
+                  identifiant:
+                    "gouvernance-connaissance-rgpd-oui-tiroir-traitement-nature-besoin-suppression",
+                  libelle:
+                    "Pour chaque traitement, détermination de la nature, besoin et finalité des traitements de données personnelles effectuées puis suppression de données non nécessaires",
                   ordre: 1,
                 },
                 {
-                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-1",
-                  libelle: "1",
+                  identifiant:
+                    "gouvernance-connaissance-rgpd-oui-tiroir-analyse-impact",
+                  libelle:
+                    "Analyse d'impact relative à la protection des données sur les traitements susceptibles d'engendrer un risque élevé",
                   ordre: 2,
                 },
                 {
-                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-2",
-                  libelle: "2",
+                  identifiant:
+                    "gouvernance-connaissance-rgpd-oui-tiroir-info-donnees-finalite",
+                  libelle:
+                    "Information auprès des personnes concernées des données personnelles traitées et leurs finalités",
                   ordre: 3,
                 },
                 {
-                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-3",
-                  libelle: "3",
+                  identifiant:
+                    "gouvernance-connaissance-rgpd-oui-tiroir-moyen-exercer-valoir-droits",
+                  libelle:
+                    "Mise en place de moyens permettant aux personnes concernées d'exercer et faire valoir leurs droits (droits d’accès, rectification, opposition, suppression; etc.)",
                   ordre: 4,
-                },
-                {
-                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-4",
-                  libelle: "4",
-                  ordre: 5,
-                },
-                {
-                  identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-5",
-                  libelle: "5",
-                  ordre: 6,
                 },
               ],
             },
