@@ -232,14 +232,14 @@ const ComposantQuestion = ({
             onChange={(identifiantReponse) => repond(identifiantReponse)}
             selectionnee={etatReponse.valeur() === reponse.identifiant}
           >
-            {reponse.question !== undefined ? (
-              <div className="question-tiroir">
+            {reponse.questions?.map((questionTiroir) => (
+              <div className="question-tiroir" key={questionTiroir.identifiant}>
                 <br />
-                <label>{reponse.question?.libelle}</label>
+                <label>{questionTiroir.libelle}</label>
                 <br />
-                {reponse.question?.reponsesPossibles.map((rep) => {
+                {questionTiroir.reponsesPossibles.map((rep) => {
                   const typeDeSaisie =
-                    reponse.question?.type === "choixMultiple"
+                    questionTiroir?.type === "choixMultiple"
                       ? "checkbox"
                       : "radio";
 
@@ -254,7 +254,7 @@ const ComposantQuestion = ({
                       )}
                       onChange={(identifiantReponse) =>
                         repondChoixMultiple(reponse.identifiant, {
-                          identifiantReponse: reponse.question!.identifiant,
+                          identifiantReponse: questionTiroir.identifiant,
                           elementReponse: identifiantReponse,
                         })
                       }
@@ -262,9 +262,7 @@ const ComposantQuestion = ({
                   );
                 })}
               </div>
-            ) : (
-              ""
-            )}
+            ))}
           </ComposantReponsePossible>
         );
       })}

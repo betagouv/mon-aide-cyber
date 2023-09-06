@@ -9,8 +9,8 @@ import {
 } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
 import {
   uneQuestion,
-  uneQuestionAChoixMultiple,
   uneQuestionAChoixUnique,
+  uneQuestionTiroirAChoixMultiple,
 } from "../../test/constructeurs/constructeurQuestions.ts";
 import { uneReponsePossible } from "../../test/constructeurs/constructeurReponsePossible.ts";
 import { ComposantAffichageErreur } from "../composants/erreurs/ComposantAffichageErreur.tsx";
@@ -99,7 +99,10 @@ const diagnosticAvecReponseEntrainantQuestion = unDiagnostic()
             uneReponsePossible().construis(),
             uneReponsePossible()
               .avecUneQuestion(
-                uneQuestionAChoixMultiple()
+                uneQuestionTiroirAChoixMultiple().avecNReponses(2).construis(),
+              )
+              .avecUneQuestion(
+                uneQuestionTiroirAChoixMultiple()
                   .avecNReponses(4)
                   .avecDesReponses([
                     uneReponsePossible()
@@ -308,7 +311,7 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
         canvas.findByText(reponseEntrainantQuestion.question?.libelle || ""),
       ),
     ).toBeInTheDocument();
-    expect(await waitFor(() => canvas.getAllByRole("checkbox").length)).toBe(5);
+    expect(await waitFor(() => canvas.getAllByRole("checkbox").length)).toBe(7);
     expect(
       await waitFor(() => canvas.getByRole("textbox")),
     ).toBeInTheDocument();

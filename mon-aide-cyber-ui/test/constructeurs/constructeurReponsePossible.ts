@@ -2,7 +2,7 @@ import { Constructeur } from "./Constructeur.ts";
 import { faker } from "@faker-js/faker/locale/fr";
 import {
   Format,
-  Question,
+  QuestionATiroir,
   ReponseComplementaire,
   ReponsePossible,
   TypeDeSaisie,
@@ -13,12 +13,17 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private identifiant = faker.string.alpha(10);
   private libelle = faker.word.words();
   private ordre = faker.number.int();
-  private question?: Question = undefined;
-  private type?: { type: TypeDeSaisie; format?: Format } = undefined;
-  private reponsesComplementaires?: ReponseComplementaire[] = undefined;
+  private question?: QuestionATiroir;
+  private questions?: QuestionATiroir[];
+  private type?: { type: TypeDeSaisie; format?: Format };
+  private reponsesComplementaires?: ReponseComplementaire[];
 
-  avecUneQuestion(question: Question): ConstructeurReponsePossible {
+  avecUneQuestion(question: QuestionATiroir): ConstructeurReponsePossible {
     this.question = question;
+    if (!this.questions) {
+      this.questions = [];
+    }
+    this.questions.push(question);
     return this;
   }
 
@@ -46,14 +51,27 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   }
 
   construis(): ReponsePossible {
-    return {
+    let reponsePossible: ReponsePossible = {
       identifiant: this.identifiant,
       libelle: this.libelle,
       ordre: this.ordre,
-      question: this.question,
-      type: this.type,
-      reponsesComplementaires: this.reponsesComplementaires,
     };
+    if (this.question) {
+      reponsePossible = { ...reponsePossible, question: this.question };
+    }
+    if (this.type) {
+      reponsePossible = { ...reponsePossible, type: this.type };
+    }
+    if (this.reponsesComplementaires) {
+      reponsePossible = {
+        ...reponsePossible,
+        reponsesComplementaires: this.reponsesComplementaires,
+      };
+    }
+    if (this.questions) {
+      reponsePossible = { ...reponsePossible, questions: this.questions };
+    }
+    return reponsePossible;
   }
 }
 
