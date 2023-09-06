@@ -9,8 +9,8 @@ import {
 } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
 import {
   uneQuestion,
-  uneQuestionAChoixMultiple,
   uneQuestionAChoixUnique,
+  uneQuestionTiroirAChoixMultiple,
 } from "../../test/constructeurs/constructeurQuestions.ts";
 import { uneReponsePossible } from "../../test/constructeurs/constructeurReponsePossible.ts";
 import { ComposantAffichageErreur } from "../composants/erreurs/ComposantAffichageErreur.tsx";
@@ -92,7 +92,7 @@ const identifiantQuestionATiroir = "4a0242d6-26c0-459b-85bd-bf2ce9962c9b";
 const reponseAvecQuestionAChoixMultiple = uneReponsePossible()
   .avecLibelle("Plusieurs choix?")
   .avecUneQuestion(
-    uneQuestionAChoixMultiple()
+    uneQuestionTiroirAChoixMultiple()
       .avecLibelle("La question?")
       .avecDesReponses([
         uneReponsePossible().avecLibelle("choix 1").construis(),

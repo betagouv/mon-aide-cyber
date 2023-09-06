@@ -9,6 +9,7 @@ import { uneReponsePossible } from "../../constructeurs/constructeurReponsePossi
 import {
   uneQuestionAChoixMultiple,
   uneQuestionAChoixUnique,
+  uneQuestionTiroirAChoixMultiple,
 } from "../../constructeurs/constructeurQuestions";
 
 describe("Le réducteur de réponse", () => {
@@ -49,6 +50,7 @@ describe("Le réducteur de réponse", () => {
 
       const etatReponse = reducteurReponse(
         {
+          identifiantQuestion: "une-question",
           reponse: () => null,
           reponseDonnee: { valeur: null, reponsesMultiples: new Set() },
           statut: EtatReponseStatut.CHARGEE,
@@ -68,12 +70,13 @@ describe("Le réducteur de réponse", () => {
     it("prend en compte les réponses à choix multiple", () => {
       const nouvelleReponse = uneReponsePossible()
         .avecUneQuestion(
-          uneQuestionAChoixMultiple().avecLibelle("QCM").construis(),
+          uneQuestionTiroirAChoixMultiple().avecLibelle("QCM").construis(),
         )
         .construis();
 
       const etatReponse = reducteurReponse(
         {
+          identifiantQuestion: "une-question",
           reponse: () => null,
           reponseDonnee: {
             valeur: nouvelleReponse.identifiant,
@@ -98,18 +101,18 @@ describe("Le réducteur de réponse", () => {
     it("retire un élément de la réponse lorsqu'il est déja présent (l'utilisateur désélectionne cet élément)", () => {
       const nouvelleReponse = uneReponsePossible()
         .avecUneQuestion(
-          uneQuestionAChoixMultiple().avecLibelle("QCM").construis(),
+          uneQuestionTiroirAChoixMultiple().avecLibelle("QCM").construis(),
         )
         .construis();
 
       const etatReponse = reducteurReponse(
         {
+          identifiantQuestion: "une-question",
           reponse: () => null,
           reponseDonnee: {
             valeur: nouvelleReponse.identifiant,
             reponsesMultiples: new Set(["choix 2", "choix 3", "choix 4"]),
           },
-
           valeur: () => nouvelleReponse.libelle,
           statut: EtatReponseStatut.CHARGEE,
         },

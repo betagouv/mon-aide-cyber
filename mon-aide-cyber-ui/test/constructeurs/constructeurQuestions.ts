@@ -3,6 +3,7 @@ import { uneReponsePossible } from "./constructeurReponsePossible.ts";
 import { faker } from "@faker-js/faker/locale/fr";
 import {
   Question,
+  QuestionATiroir,
   ReponseDonnee,
   ReponsePossible,
   TypeDeSaisie,
@@ -64,7 +65,49 @@ class ConstructeurQuestion implements Constructeur<Question> {
   }
 }
 
+class ConstructeurQuestionTiroir implements Constructeur<QuestionATiroir> {
+  protected identifiant = faker.string.alpha(10);
+  protected libelle = faker.word.words().concat(" ?");
+  protected reponsesPossibles: ReponsePossible[] = [];
+  protected type?: Exclude<TypeDeSaisie, "saisieLibre"> = undefined;
+
+  avecLibelle(libelle: string): ConstructeurQuestionTiroir {
+    this.identifiant = aseptise(libelle);
+    this.libelle = libelle;
+    return this;
+  }
+
+  avecNReponses(nombreReponses: number): ConstructeurQuestionTiroir {
+    for (let i = 0; i < nombreReponses; i++) {
+      this.reponsesPossibles.push(uneReponsePossible().construis());
+    }
+    return this;
+  }
+  avecDesReponses(
+    reponsePossibles: ReponsePossible[],
+  ): ConstructeurQuestionTiroir {
+    this.reponsesPossibles.push(...reponsePossibles);
+    return this;
+  }
+
+  construis(): QuestionATiroir {
+    return {
+      identifiant: this.identifiant,
+      libelle: this.libelle,
+      reponsesPossibles: this.reponsesPossibles,
+      type: this.type,
+    };
+  }
+}
+
 class ConstructeurQuestionAChoixMultiple extends ConstructeurQuestion {
+  constructor() {
+    super();
+    this.type = "choixMultiple";
+  }
+}
+
+class ConstructeurQuestionTiroirAChoixMultiple extends ConstructeurQuestionTiroir {
   constructor() {
     super();
     this.type = "choixMultiple";
@@ -80,6 +123,9 @@ class ConstructeurQuestionAChoixUnique extends ConstructeurQuestion {
 
 export const uneQuestionAChoixMultiple = () =>
   new ConstructeurQuestionAChoixMultiple();
+
+export const uneQuestionTiroirAChoixMultiple = () =>
+  new ConstructeurQuestionTiroirAChoixMultiple();
 
 export const uneQuestionAChoixUnique = () =>
   new ConstructeurQuestionAChoixUnique();
