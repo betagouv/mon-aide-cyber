@@ -25,7 +25,7 @@ type RepresentationReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
-  question?: RepresentationQuestion;
+  questions?: RepresentationQuestion[];
   type?: { type: RepresentationTypeDeSaisie; format?: Format } | undefined;
   reponsesComplementaires?: RepresentationReponseComplementaire[] | undefined;
 };

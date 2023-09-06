@@ -308,7 +308,9 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
         .reponsesPossibles[2];
     expect(
       await waitFor(() =>
-        canvas.findByText(reponseEntrainantQuestion.question?.libelle || ""),
+        canvas.findByText(
+          reponseEntrainantQuestion.questions?.[0].libelle || "",
+        ),
       ),
     ).toBeInTheDocument();
     expect(await waitFor(() => canvas.getAllByRole("checkbox").length)).toBe(7);

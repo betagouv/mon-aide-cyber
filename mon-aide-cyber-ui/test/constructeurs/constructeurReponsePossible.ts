@@ -13,13 +13,11 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private identifiant = faker.string.alpha(10);
   private libelle = faker.word.words();
   private ordre = faker.number.int();
-  private question?: QuestionATiroir;
   private questions?: QuestionATiroir[];
   private type?: { type: TypeDeSaisie; format?: Format };
   private reponsesComplementaires?: ReponseComplementaire[];
 
   avecUneQuestion(question: QuestionATiroir): ConstructeurReponsePossible {
-    this.question = question;
     if (!this.questions) {
       this.questions = [];
     }
@@ -56,9 +54,6 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
       libelle: this.libelle,
       ordre: this.ordre,
     };
-    if (this.question) {
-      reponsePossible = { ...reponsePossible, question: this.question };
-    }
     if (this.type) {
       reponsePossible = { ...reponsePossible, type: this.type };
     }

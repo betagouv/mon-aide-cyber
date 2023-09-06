@@ -10,6 +10,7 @@ import { uneReponsePossible } from "../../constructeurs/constructeurReponsePossi
 import {
   uneQuestion,
   uneQuestionAChoixMultiple,
+  uneQuestionTiroirAChoixUnique,
 } from "../../constructeurs/constructeurQuestions";
 
 describe("Les réducteurs de diagnostic", () => {
@@ -135,7 +136,7 @@ describe("Les réducteurs de diagnostic", () => {
                 .avecDesReponses([
                   uneReponsePossible()
                     .avecUneQuestion(
-                      uneQuestion()
+                      uneQuestionTiroirAChoixUnique()
                         .avecDesReponses([
                           uneReponsePossible()
                             .avecLibelle("Réponse B")
@@ -143,6 +144,20 @@ describe("Les réducteurs de diagnostic", () => {
                             .construis(),
                           uneReponsePossible()
                             .avecLibelle("Réponse A")
+                            .enPosition(0)
+                            .construis(),
+                        ])
+                        .construis(),
+                    )
+                    .avecUneQuestion(
+                      uneQuestionTiroirAChoixUnique()
+                        .avecDesReponses([
+                          uneReponsePossible()
+                            .avecLibelle("Réponse Z")
+                            .enPosition(1)
+                            .construis(),
+                          uneReponsePossible()
+                            .avecLibelle("Réponse Y")
                             .enPosition(0)
                             .construis(),
                         ])
@@ -164,7 +179,12 @@ describe("Les réducteurs de diagnostic", () => {
       const thematiqueContexte =
         etatDiagnostic.diagnostic.referentiel["contexte"];
       expect(
-        thematiqueContexte.questions[0].reponsesPossibles[0].question.reponsesPossibles.map(
+        thematiqueContexte.questions[0].reponsesPossibles[0].questions[0].reponsesPossibles.map(
+          (reponse) => reponse.ordre,
+        ),
+      ).toStrictEqual([0, 1]);
+      expect(
+        thematiqueContexte.questions[0].reponsesPossibles[0].questions[1].reponsesPossibles.map(
           (reponse) => reponse.ordre,
         ),
       ).toStrictEqual([0, 1]);

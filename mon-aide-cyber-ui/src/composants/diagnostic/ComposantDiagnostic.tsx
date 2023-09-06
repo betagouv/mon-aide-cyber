@@ -247,7 +247,7 @@ const ComposantQuestion = ({
                     <ComposantReponsePossible
                       key={rep.identifiant}
                       reponsePossible={rep}
-                      identifiantQuestion={rep.question?.identifiant || ""}
+                      identifiantQuestion={questionTiroir.identifiant}
                       typeDeSaisie={typeDeSaisie}
                       selectionnee={etatReponse.reponseDonnee.reponsesMultiples.has(
                         rep.identifiant,
