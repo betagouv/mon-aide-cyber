@@ -21,13 +21,15 @@ export type ReponseDonnee = {
   valeur: string | null;
   reponsesMultiples: Set<string>;
 };
+export type QuestionATiroir = Omit<Question, "reponseDonnee">;
 export type ReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
-  question?: Question;
-  type?: { type: TypeDeSaisie; format?: Format } | undefined;
-  reponsesComplementaires?: ReponseComplementaire[] | undefined;
+  question?: QuestionATiroir;
+  questions?: QuestionATiroir[];
+  type?: { type: TypeDeSaisie; format?: Format };
+  reponsesComplementaires?: ReponseComplementaire[];
 };
 export type Question = {
   identifiant: string;
