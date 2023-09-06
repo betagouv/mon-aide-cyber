@@ -39,8 +39,11 @@ export const reducteurDiagnostic = (
           };
           thematique.questions.forEach((question) => {
             trieLesReponses(question.reponsesPossibles);
-            question.reponsesPossibles.forEach((reponse) =>
-              trieLesReponses(reponse.question?.reponsesPossibles),
+            question.reponsesPossibles.forEach(
+              (reponse) =>
+                reponse.questions?.forEach((question) =>
+                  trieLesReponses(question.reponsesPossibles),
+                ),
             );
             return question;
           });

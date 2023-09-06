@@ -69,7 +69,7 @@ class ConstructeurQuestionTiroir implements Constructeur<QuestionATiroir> {
   protected identifiant = faker.string.alpha(10);
   protected libelle = faker.word.words().concat(" ?");
   protected reponsesPossibles: ReponsePossible[] = [];
-  protected type?: Exclude<TypeDeSaisie, "saisieLibre"> = undefined;
+  protected type?: Exclude<TypeDeSaisie, "saisieLibre">;
 
   avecLibelle(libelle: string): ConstructeurQuestionTiroir {
     this.identifiant = aseptise(libelle);
@@ -91,12 +91,15 @@ class ConstructeurQuestionTiroir implements Constructeur<QuestionATiroir> {
   }
 
   construis(): QuestionATiroir {
-    return {
+    let question: QuestionATiroir = {
       identifiant: this.identifiant,
       libelle: this.libelle,
       reponsesPossibles: this.reponsesPossibles,
-      type: this.type,
     };
+    if (this.type) {
+      question = { ...question, type: this.type };
+    }
+    return question;
   }
 }
 
@@ -104,6 +107,13 @@ class ConstructeurQuestionAChoixMultiple extends ConstructeurQuestion {
   constructor() {
     super();
     this.type = "choixMultiple";
+  }
+}
+
+class ConstructeurQuestionTiroirAChoixUnique extends ConstructeurQuestionTiroir {
+  constructor() {
+    super();
+    this.type = "choixUnique";
   }
 }
 
@@ -124,10 +134,12 @@ class ConstructeurQuestionAChoixUnique extends ConstructeurQuestion {
 export const uneQuestionAChoixMultiple = () =>
   new ConstructeurQuestionAChoixMultiple();
 
-export const uneQuestionTiroirAChoixMultiple = () =>
-  new ConstructeurQuestionTiroirAChoixMultiple();
-
 export const uneQuestionAChoixUnique = () =>
   new ConstructeurQuestionAChoixUnique();
+
+export const uneQuestionTiroirAChoixUnique = () =>
+  new ConstructeurQuestionTiroirAChoixUnique();
+export const uneQuestionTiroirAChoixMultiple = () =>
+  new ConstructeurQuestionTiroirAChoixMultiple();
 
 export const uneQuestion = () => new ConstructeurQuestion();

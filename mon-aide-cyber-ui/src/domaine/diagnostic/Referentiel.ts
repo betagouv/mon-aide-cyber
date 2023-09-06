@@ -15,7 +15,7 @@ export type TypeDeSaisie =
 export type Format = "texte" | "nombre" | undefined;
 export type ReponseComplementaire = Omit<
   ReponsePossible,
-  "question" | "reponsesComplementaires"
+  "questions" | "reponsesComplementaires"
 >;
 export type ReponseDonnee = {
   valeur: string | null;
@@ -26,7 +26,6 @@ export type ReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
-  question?: QuestionATiroir;
   questions?: QuestionATiroir[];
   type?: { type: TypeDeSaisie; format?: Format };
   reponsesComplementaires?: ReponseComplementaire[];
