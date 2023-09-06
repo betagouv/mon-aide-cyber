@@ -44,12 +44,16 @@ export const adaptateurTranscripteur = () =>
               reponses: [
                 {
                   identifiant: "cyberAttaqueSubie-oui",
-                  reponses: [
-                    {
-                      identifiant: "cyberAttaqueSubie-Oui-oui-autre",
-                      type: { type: "saisieLibre", format: "texte" },
-                    },
-                  ],
+                  question: {
+                    identifiant: "cyber-attaque-subie-tiroir-type",
+                    type: "choixMultiple",
+                    reponses: [
+                      {
+                        identifiant: "cyber-attaque-subie-oui-type-autre",
+                        type: { type: "saisieLibre", format: "texte" },
+                      },
+                    ],
+                  },
                 },
               ],
             },
