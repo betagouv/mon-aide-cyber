@@ -279,49 +279,55 @@ const referentiel: Referentiel = {
             ordre: 3,
             questions: [
               {
-                identifiant: "cyberAttaqueSubieTiroir",
+                identifiant: "cyber-attaque-subie-tiroir-type",
+                libelle: "Si oui, de quel type ?",
+                reponsesPossibles: [
+                  {
+                    identifiant: "cyber-attaque-subie-oui-type-compromission",
+                    libelle: "Compromission d'un poste et/ou d'une boîte mail",
+                    ordre: 0,
+                  },
+                  {
+                    identifiant: "cyber-attaque-subie-oui-type-rancongiciel",
+                    libelle:
+                      "Rançongiciel ou  autre maliciel sur plusieurs postes",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant: "cyber-attaque-subie-oui-type-fauxOrdre",
+                    libelle: "Faux ordre de virement",
+                    ordre: 2,
+                  },
+                  {
+                    identifiant: "cyber-attaque-subie-oui-type-autre",
+                    libelle: "Autre : Préciser",
+                    ordre: 3,
+                  },
+                ],
+                type: "choixMultiple",
+              },
+              {
+                identifiant: "cyber-attaque-subie-tiroir-plainte",
                 libelle:
                   'Si "Oui": avez-vous déposé plainte ou réalisé un signalement auprès d\'un service judiciaire ?',
                 reponsesPossibles: [
                   {
-                    identifiant: "cyberAttaqueSubie-Oui-neSaisPas",
+                    identifiant: "cyber-attaque-subie-oui-plainte-neSaisPas",
                     libelle: "Je ne sais pas",
                     ordre: 0,
                   },
                   {
-                    identifiant: "cyberAttaqueSubie-Oui-non",
+                    identifiant: "cyber-attaque-subie-oui-plainte-non",
                     libelle: "Non",
                     ordre: 1,
                   },
                   {
-                    identifiant: "cyberAttaqueSubie-Oui-oui",
+                    identifiant: "cyber-attaque-subie-oui-plainte-oui",
                     libelle: "Oui",
                     ordre: 2,
                   },
                 ],
                 type: "choixUnique",
-              },
-            ],
-            reponsesComplementaires: [
-              {
-                identifiant: "cyberAttaqueSubie-Oui-oui-compromission",
-                libelle: "Compromission d'un poste et/ou d'une boîte mail",
-                ordre: 0,
-              },
-              {
-                identifiant: "cyberAttaqueSubie-Oui-oui-rancongiciel",
-                libelle: "Rançongiciel ou  autre maliciel sur plusieurs postes",
-                ordre: 1,
-              },
-              {
-                identifiant: "cyberAttaqueSubie-Oui-oui-fauxOrdre",
-                libelle: "Faux ordre de virement",
-                ordre: 2,
-              },
-              {
-                identifiant: "cyberAttaqueSubie-Oui-oui-autre",
-                libelle: "Autre : Préciser",
-                ordre: 3,
               },
             ],
           },
