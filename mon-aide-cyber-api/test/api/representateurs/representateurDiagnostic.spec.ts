@@ -175,18 +175,6 @@ describe("Le représentateur de diagnostic", () => {
                   identifiant: "reponse-0",
                   libelle: "Réponse 0",
                   ordre: reponsePossible.ordre,
-                  question: {
-                    identifiant: "question-tiroir",
-                    libelle: "Question tiroir?",
-                    reponsesPossibles: [
-                      {
-                        identifiant: "reponse-1",
-                        libelle: "Réponse 1",
-                        ordre: 0,
-                      },
-                    ],
-                    type: "choixMultiple",
-                  },
                   questions: [
                     {
                       identifiant: "question-tiroir",
@@ -247,10 +235,16 @@ describe("Le représentateur de diagnostic", () => {
           const questionTiroir =
             diagnosticRepresente.referentiel.contexte.questions[0]
               .reponsesPossibles[0];
-          expect(questionTiroir?.question?.identifiant).toBe("question-tiroir");
-          expect(questionTiroir?.question?.libelle).toBe("Question tiroir?");
-          expect(questionTiroir?.question?.type).toBe("choixMultiple");
-          expect(questionTiroir?.question?.reponsesPossibles[2]).toMatchObject({
+          expect(questionTiroir?.questions?.[0].identifiant).toBe(
+            "question-tiroir",
+          );
+          expect(questionTiroir?.questions?.[0].libelle).toBe(
+            "Question tiroir?",
+          );
+          expect(questionTiroir?.questions?.[0].type).toBe("choixMultiple");
+          expect(
+            questionTiroir?.questions?.[0].reponsesPossibles[2],
+          ).toMatchObject({
             identifiant: "reponse-3",
             libelle: "Réponse 3",
             ordre: 2,
@@ -292,7 +286,7 @@ describe("Le représentateur de diagnostic", () => {
 
           const questionTiroir =
             diagnosticRepresente.referentiel.contexte.questions[1]
-              .reponsesPossibles[0]?.question;
+              .reponsesPossibles[0]?.questions?.[0];
           expect(questionTiroir?.reponsesPossibles[0]).toMatchObject({
             identifiant: "reponse-3",
             libelle: "Réponse 3",
@@ -351,7 +345,7 @@ describe("Le représentateur de diagnostic", () => {
 
           const premiereQuestionTiroir =
             representationDiagnostic.referentiel.contexte.questions[0]
-              .reponsesPossibles[0]?.question;
+              .reponsesPossibles[0]?.questions?.[0];
           expect(premiereQuestionTiroir?.reponsesPossibles[0]).toMatchObject({
             identifiant: "reponse-11",
             libelle: "Réponse 11",
@@ -359,7 +353,7 @@ describe("Le représentateur de diagnostic", () => {
           });
           const deuxiemeQuestionTiroir =
             representationDiagnostic.referentiel.contexte.questions[1]
-              .reponsesPossibles[0]?.question;
+              .reponsesPossibles[0]?.questions?.[0];
           expect(deuxiemeQuestionTiroir?.reponsesPossibles[0]).toMatchObject({
             identifiant: "reponse-21",
             libelle: "Réponse 21",
@@ -401,7 +395,7 @@ describe("Le représentateur de diagnostic", () => {
             libelle: "Une question à choix unique ?",
             type: "choixUnique",
           });
-          expect(question.reponsesPossibles[0].question).toMatchObject({
+          expect(question.reponsesPossibles[0].questions?.[0]).toMatchObject({
             identifiant: "une-question-tiroir-a-choix-unique",
             libelle: "Une question tiroir à choix unique?",
             type: "choixUnique",
