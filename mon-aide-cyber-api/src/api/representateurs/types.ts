@@ -17,10 +17,10 @@ export type RepresentationReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
-  question?:
+  questions?: (
     | RepresentationQuestionChoixUnique
     | RepresentationQuestionChoixMultiple
-    | undefined;
+  )[];
   reponsesComplementaires?: RepresentationReponseComplementaire[] | undefined;
   type?: { type: TypeDeSaisie; format: Format } | undefined;
 };

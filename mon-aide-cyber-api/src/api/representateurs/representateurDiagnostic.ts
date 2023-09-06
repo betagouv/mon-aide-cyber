@@ -155,13 +155,13 @@ const trouveReponsesPossibles = (
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { questions, ...corpsDeReponse } = reponse;
-      return {
+      const representationReponsePossible: RepresentationReponsePossible = {
         ...corpsDeReponse,
         type: reponseAtranscrire?.type,
-        question: representationQuestionATiroir[0],
         questions: representationQuestionATiroir,
         reponsesComplementaires,
       };
+      return representationReponsePossible;
     }
     return {
       ...reponse,
