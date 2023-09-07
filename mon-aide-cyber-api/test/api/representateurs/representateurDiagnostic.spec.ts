@@ -21,7 +21,14 @@ import {
 } from "./transcripteursDeTest";
 import { Question, ReponsePossible } from "../../../src/diagnostic/Referentiel";
 import { RepresentationDiagnostic } from "../../../src/api/representateurs/types";
-import { Diagnostic } from "../../../src/diagnostic/Diagnostic";
+import {
+  ajouteLaReponseAuDiagnostic,
+  Diagnostic,
+} from "../../../src/diagnostic/Diagnostic";
+import {
+  unCorpsDeReponseQuestionATiroir,
+  unCorspsDeReponse,
+} from "../../constructeurs/constructeurReponse";
 
 describe("Le représentateur de diagnostic", () => {
   describe("Afin de fournir les actions possibles pour un client", () => {
@@ -70,6 +77,7 @@ describe("Le représentateur de diagnostic", () => {
       ).toStrictEqual({
         valeur: null,
         reponsesMultiples: [],
+        reponses: [],
       });
     });
     it("définit le type de saisie que doit faire l'utilisateur", () => {
@@ -354,7 +362,7 @@ describe("Le représentateur de diagnostic", () => {
           const deuxiemeQuestionTiroir =
             representationDiagnostic.referentiel.contexte.questions[1]
               .reponsesPossibles[0]?.questions?.[0];
-          expect(deuxiemeQuestionTiroir?.reponsesPossibles[0]).toMatchObject({
+          expect(deuxiemeQuestionTiroir?.reponsesPossibles[0]).toStrictEqual({
             identifiant: "reponse-21",
             libelle: "Réponse 21",
             ordre: 0,
@@ -482,13 +490,16 @@ describe("Le représentateur de diagnostic", () => {
             {
               identifiant: question.identifiant,
               libelle: question.libelle,
-              reponseDonnee: { valeur: null, reponsesMultiples: [] },
+              reponseDonnee: {
+                valeur: null,
+                reponsesMultiples: [],
+                reponses: [],
+              },
               reponsesPossibles: [
                 {
                   identifiant: reponsePossible.identifiant,
                   libelle: reponsePossible.libelle,
                   ordre: reponsePossible.ordre,
-                  type: undefined,
                 },
               ],
               type: "choixUnique",
@@ -541,6 +552,82 @@ describe("Le représentateur de diagnostic", () => {
         reponsePossibleQuestionTheme2,
         diagnostic,
       );
+    });
+  });
+
+  describe("Afin de prendre en compte les réponses données par l’utilisateur", () => {
+    it("présente les réponses multiples", () => {
+      const premiereReponse = uneReponsePossible()
+        .avecLibelle("rep 11")
+        .construis();
+      const deuxiemeReponse = uneReponsePossible()
+        .avecLibelle("rep 12")
+        .construis();
+      const troisiemeReponse = uneReponsePossible()
+        .avecLibelle("rep 21")
+        .construis();
+      const reponsePossible = uneReponsePossible()
+        .avecLibelle("Réponse")
+        .ajouteUneQuestionATiroir(
+          uneQuestionATiroir()
+            .aChoixMultiple("q1")
+            .avecReponsesPossibles([premiereReponse, deuxiemeReponse])
+            .construis(),
+        )
+        .ajouteUneQuestionATiroir(
+          uneQuestionATiroir()
+            .aChoixUnique("q2")
+            .avecReponsesPossibles([troisiemeReponse])
+            .construis(),
+        )
+        .construis();
+      const question = uneQuestion()
+        .aChoixUnique("question")
+        .avecReponsesPossibles([reponsePossible])
+        .construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel().ajouteUneQuestionAuContexte(question).construis(),
+        )
+        .construis();
+      ajouteLaReponseAuDiagnostic(
+        diagnostic,
+        unCorspsDeReponse()
+          .pourLaThematique("contexte")
+          .concernantLaQuestion(question)
+          .avecLaReponse(
+            unCorpsDeReponseQuestionATiroir()
+              .avecLaReponse({
+                reponse: "réponse",
+                valeurs: [
+                  {
+                    question: "q1",
+                    reponses: [premiereReponse, deuxiemeReponse],
+                  },
+                  { question: "q2", reponses: [troisiemeReponse] },
+                ],
+              })
+              .construis(),
+          )
+          .construis(),
+      );
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        fabriqueTranscripteurVide(),
+      );
+
+      const reponseDonnee =
+        representationDiagnostic.referentiel["contexte"].questions[0]
+          .reponseDonnee;
+      expect(reponseDonnee).toStrictEqual({
+        valeur: "réponse",
+        reponsesMultiples: ["rep-11", "rep-12", "rep-21"],
+        reponses: [
+          { identifiant: "q1", reponses: ["rep-11", "rep-12"] },
+          { identifiant: "q2", reponses: ["rep-21"] },
+        ],
+      });
     });
   });
 });
