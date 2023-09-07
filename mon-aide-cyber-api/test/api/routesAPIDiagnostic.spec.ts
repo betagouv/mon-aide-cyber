@@ -56,7 +56,11 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
               {
                 identifiant: premiereQuestion.identifiant,
                 libelle: premiereQuestion.libelle,
-                reponseDonnee: { valeur: null, reponsesMultiples: [] },
+                reponseDonnee: {
+                  valeur: null,
+                  reponsesMultiples: [],
+                  reponses: [],
+                },
                 reponsesPossibles: [
                   {
                     identifiant: premiereReponsePossible.identifiant,
@@ -160,7 +164,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
       expect(
         diagnostic.referentiel.contexte.questions[0].reponseDonnee,
       ).toStrictEqual({
-        reponsesMultiples: new Set(),
+        reponsesMultiples: [],
         reponseUnique: "reponse-2",
       });
     });

@@ -5,8 +5,9 @@ import { CorpsReponse, CorpsReponseQuestionATiroir } from "./ServiceDiagnostic";
 
 type Thematique = string;
 
+type ReponsesMultiples = { identifiant: string; reponses: Set<string> };
 type ReponseDonnee = {
-  reponsesMultiples: Set<string>;
+  reponsesMultiples: ReponsesMultiples[];
   reponseUnique: string | null;
 };
 type QuestionDiagnostic = Question & {
@@ -39,7 +40,7 @@ const initialiseDiagnostic = (r: Referentiel): Diagnostic => {
               ...q,
               reponseDonnee: {
                 reponseUnique: null,
-                reponsesMultiples: new Set(),
+                reponsesMultiples: [],
               },
             }) as QuestionDiagnostic,
         ),
@@ -65,7 +66,7 @@ const ajouteLaReponseAuDiagnostic = (
     if (questionTrouvee !== undefined) {
       questionTrouvee.reponseDonnee = {
         reponseUnique: reponseCorpsReponse,
-        reponsesMultiples: new Set(),
+        reponsesMultiples: [],
       };
     }
   }
@@ -75,9 +76,32 @@ const ajouteLaReponseAuDiagnostic = (
       (q) => q.identifiant === corpsReponse.identifiant,
     );
     if (questionTrouvee !== undefined) {
+      let reponsesMultiples: ReponsesMultiples[] = [];
+      if (reponseCorpsReponse.question) {
+        reponsesMultiples = [
+          {
+            identifiant: reponseCorpsReponse.question.identifiant,
+            reponses: new Set(reponseCorpsReponse.question.reponses),
+          },
+        ];
+      }
+      const map = reponseCorpsReponse.questions?.map((q) => ({
+        identifiant: q.identifiant,
+        reponses: new Set(q.reponses),
+      }));
+      if (map !== undefined) {
+        reponsesMultiples.push(
+          ...map.filter(
+            (m) =>
+              !reponsesMultiples
+                .map((rep) => rep.identifiant)
+                .includes(m.identifiant),
+          ),
+        );
+      }
       questionTrouvee.reponseDonnee = {
         reponseUnique: reponseCorpsReponse.reponse,
-        reponsesMultiples: new Set(reponseCorpsReponse.question.reponses),
+        reponsesMultiples,
       };
     }
   }
@@ -99,6 +123,8 @@ export {
   Diagnostic,
   EntrepotDiagnostic,
   QuestionDiagnostic,
+  ReponseDonnee,
+  ReponsesMultiples,
   ajouteLaReponseAuDiagnostic,
   initialiseDiagnostic,
 };

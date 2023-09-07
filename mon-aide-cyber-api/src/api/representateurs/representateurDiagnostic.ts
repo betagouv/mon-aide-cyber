@@ -106,18 +106,11 @@ const trouveReponsesComplementaires = (
     const reponseATranscrire = reponsesATranscrire.find(
       (rat) => rat.identifiant === rc.identifiant,
     );
-    if (reponseATranscrire !== undefined) {
-      return {
-        identifiant: rc.identifiant,
-        libelle: rc.libelle,
-        ordre: rc.ordre,
-        type: reponseATranscrire.type,
-      };
-    }
     return {
       identifiant: rc.identifiant,
       libelle: rc.libelle,
       ordre: rc.ordre,
+      ...(reponseATranscrire?.type && { type: reponseATranscrire?.type }),
     };
   });
 };
@@ -140,7 +133,10 @@ const trouveReponsesPossibles = (
   questionATranscrire: QuestionATranscrire | undefined,
 ): RepresentationReponsePossible[] => {
   return question.reponsesPossibles.map((reponse) => {
-    const reponseAtranscrire = trouveReponseATranscrire(
+    let representationReponsePossible: RepresentationReponsePossible = {
+      ...reponse,
+    } as RepresentationReponsePossible;
+    const reponseATranscrire = trouveReponseATranscrire(
       reponse.identifiant,
       questionATranscrire?.reponses,
     );
@@ -155,17 +151,15 @@ const trouveReponsesPossibles = (
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { questions, ...corpsDeReponse } = reponse;
-      const representationReponsePossible: RepresentationReponsePossible = {
+      representationReponsePossible = {
         ...corpsDeReponse,
-        type: reponseAtranscrire?.type,
         questions: representationQuestionATiroir,
         reponsesComplementaires,
       };
-      return representationReponsePossible;
     }
     return {
-      ...reponse,
-      type: reponseAtranscrire?.type,
+      ...representationReponsePossible,
+      ...(reponseATranscrire?.type && { type: reponseATranscrire?.type }),
     };
   });
 };
@@ -183,7 +177,13 @@ const trouveReponseATranscrire = (
 const extraisLesChampsDeLaQuestion = (question: QuestionDiagnostic) => {
   const autresReponses = {
     valeur: question.reponseDonnee.reponseUnique,
-    reponsesMultiples: [...question.reponseDonnee.reponsesMultiples],
+    reponsesMultiples: question.reponseDonnee.reponsesMultiples.flatMap(
+      (rep) => [...rep.reponses],
+    ),
+    reponses: question.reponseDonnee.reponsesMultiples.map((rep) => ({
+      identifiant: rep.identifiant,
+      reponses: [...rep.reponses],
+    })),
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { reponseDonnee, ...reste } = { ...question };

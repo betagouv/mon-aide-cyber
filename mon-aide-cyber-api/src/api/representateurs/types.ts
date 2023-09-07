@@ -22,11 +22,12 @@ export type RepresentationReponsePossible = {
     | RepresentationQuestionChoixMultiple
   )[];
   reponsesComplementaires?: RepresentationReponseComplementaire[] | undefined;
-  type?: { type: TypeDeSaisie; format: Format } | undefined;
+  type?: { type: TypeDeSaisie; format: Format };
 };
 type RepresentationReponseDonnee = {
   valeur: string | null;
   reponsesMultiples: string[];
+  reponses: { identifiant: string; reponses: string[] }[];
 };
 export type RepresentationQuestion = {
   identifiant: string;
