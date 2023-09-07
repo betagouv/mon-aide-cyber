@@ -169,7 +169,7 @@ describe("Le service de diagnostic", () => {
           libelle: questionAttendue.libelle,
           type: questionAttendue.type,
           reponsesPossibles: questionAttendue.reponsesPossibles,
-          reponseDonnee: { reponseUnique: null, reponsesMultiples: new Set() },
+          reponseDonnee: { reponseUnique: null, reponsesMultiples: [] },
         },
       ]);
     });
@@ -217,6 +217,15 @@ describe("Le service de diagnostic", () => {
             identifiant: "qcm-",
             reponses: [premiereReponse.identifiant, secondeReponse.identifiant],
           },
+          questions: [
+            {
+              identifiant: "qcm-",
+              reponses: [
+                premiereReponse.identifiant,
+                secondeReponse.identifiant,
+              ],
+            },
+          ],
         },
       });
 
@@ -224,10 +233,90 @@ describe("Le service de diagnostic", () => {
         .questions[0] as QuestionDiagnostic;
       expect(question.reponseDonnee).toMatchObject({
         reponseUnique: reponseAvecQuestionATiroir.identifiant,
-        reponsesMultiples: new Set([
-          premiereReponse.identifiant,
-          secondeReponse.identifiant,
-        ]),
+        reponsesMultiples: [
+          {
+            identifiant: "qcm-",
+            reponses: new Set([
+              premiereReponse.identifiant,
+              secondeReponse.identifiant,
+            ]),
+          },
+        ],
+      });
+    });
+
+    it("met à jour les réponses de plusieurs questions à tiroir", async () => {
+      const premiereReponse = uneReponsePossible().construis();
+      const secondeReponse = uneReponsePossible().construis();
+      const reponseAvecQuestionsATiroir = uneReponsePossible()
+        .ajouteUneQuestionATiroir(
+          uneQuestionATiroir()
+            .aChoixMultiple("tiroir 1 ?")
+            .avecReponsesPossibles([
+              premiereReponse,
+              uneReponsePossible().construis(),
+            ])
+            .construis(),
+        )
+        .ajouteUneQuestionATiroir(
+          uneQuestionATiroir()
+            .aChoixUnique("tiroir 2 ?")
+            .avecReponsesPossibles([
+              secondeReponse,
+              uneReponsePossible().construis(),
+            ])
+            .construis(),
+        )
+        .construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique("Question à tiroir ?")
+                .avecReponsesPossibles([reponseAvecQuestionsATiroir])
+                .construis(),
+            )
+            .construis(),
+        )
+        .construis();
+      entrepots.diagnostic().persiste(diagnostic);
+
+      await new ServiceDiagnostic(
+        adaptateurReferentiel,
+        entrepots,
+      ).ajouteLaReponse(diagnostic.identifiant, {
+        chemin: "contexte",
+        identifiant: "question-a-tiroir-",
+        reponse: {
+          reponse: reponseAvecQuestionsATiroir.identifiant,
+          questions: [
+            {
+              identifiant: "tiroir-1-",
+              reponses: [premiereReponse.identifiant],
+            },
+            {
+              identifiant: "tiroir-2-",
+              reponses: [secondeReponse.identifiant],
+            },
+          ],
+        },
+      });
+
+      const question = diagnostic.referentiel.contexte
+        .questions[0] as QuestionDiagnostic;
+      expect(question.reponseDonnee).toMatchObject({
+        reponseUnique: reponseAvecQuestionsATiroir.identifiant,
+        reponsesMultiples: [
+          {
+            identifiant: "tiroir-1-",
+            reponses: new Set([premiereReponse.identifiant]),
+          },
+          {
+            identifiant: "tiroir-2-",
+            reponses: new Set([secondeReponse.identifiant]),
+          },
+        ],
       });
     });
   });
