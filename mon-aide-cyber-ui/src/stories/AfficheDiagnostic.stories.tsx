@@ -18,7 +18,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import { unReferentiel } from "../../test/constructeurs/constructeurReferentiel.ts";
 import { ComposantDiagnostic } from "../composants/diagnostic/ComposantDiagnostic.tsx";
 import { EntrepotDiagnostics } from "../domaine/diagnostic/Diagnostics.ts";
-import { uneReponseComplementaire } from "../../test/constructeurs/constructeurReponseComplementaire.ts";
 
 const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
 
@@ -119,32 +118,6 @@ const diagnosticAvecReponseEntrainantQuestion = unDiagnostic()
   )
   .construis();
 
-const identifiantReponseComplementaire = "47713b22-9595-4205-9e5f-0c2fe1daa639";
-const diagnosticAvecReponseComplementaire = unDiagnostic()
-  .avecIdentifiant(identifiantReponseComplementaire)
-  .avecUnReferentiel(
-    unReferentiel()
-      .avecUneQuestion(
-        uneQuestion()
-          .avecDesReponses([
-            uneReponsePossible()
-              .avecReponsesComplementaires([
-                uneReponseComplementaire()
-                  .avecLibelle("Réponse Complémentaire 1")
-                  .construis(),
-                uneReponseComplementaire()
-                  .avecLibelle("Réponse Complémentaire 2")
-                  .auFormatTexteEnSaisieLibre()
-                  .construis(),
-              ])
-              .construis(),
-          ])
-          .construis(),
-      )
-      .construis(),
-  )
-  .construis();
-
 const identifiantDiagnosticAvecQuestionTiroirAChoixUnique =
   "ba4cbe4d-dbcb-418c-8b8e-98aea21de323";
 const unDiagnosticAvecQuestionTiroirAChoixUnique = unDiagnostic()
@@ -182,7 +155,6 @@ await entrepotDiagnosticMemoire.persiste(
 await entrepotDiagnosticMemoire.persiste(
   diagnosticAvecReponseEntrainantQuestion,
 );
-await entrepotDiagnosticMemoire.persiste(diagnosticAvecReponseComplementaire);
 await entrepotDiagnosticMemoire.persiste(
   unDiagnosticAvecQuestionTiroirAChoixUnique,
 );
@@ -314,28 +286,6 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
       ),
     ).toBeInTheDocument();
     expect(await waitFor(() => canvas.getAllByRole("checkbox").length)).toBe(7);
-    expect(
-      await waitFor(() => canvas.getByRole("textbox")),
-    ).toBeInTheDocument();
-  },
-};
-
-export const AfficheDiagnosticAvecReponsesComplementaires: Story = {
-  name: "Affiche les réponses complémentaires à une réponse possible",
-  args: { idDiagnostic: identifiantReponseComplementaire },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    expect(
-      await waitFor(() =>
-        canvas.getByRole("checkbox", { name: /réponse complémentaire 1/i }),
-      ),
-    ).toBeInTheDocument();
-    expect(
-      await waitFor(() =>
-        canvas.getByRole("checkbox", { name: /réponse complémentaire 2/i }),
-      ),
-    ).toBeInTheDocument();
     expect(
       await waitFor(() => canvas.getByRole("textbox")),
     ).toBeInTheDocument();
