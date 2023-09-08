@@ -2,7 +2,6 @@ import { describe, expect } from "vitest";
 import {
   uneQuestion,
   uneQuestionATiroir,
-  uneReponseComplementaire,
   uneReponsePossible,
   unReferentiel,
   unReferentielSansThematiques,
@@ -10,12 +9,8 @@ import {
 import { unDiagnostic } from "../../constructeurs/constructeurDiagnostic";
 import { representeLeDiagnosticPourLeClient } from "../../../src/api/representateurs/representateurDiagnostic";
 import {
-  fabriqueTranscripteur,
   fabriqueTranscripteurVide,
   transcripteurAvecSaisiesLibres,
-  TranscripteurDeQuestion,
-  TranscripteurDeReponse,
-  TranscripteurDeReponseComplementaire,
   transcripteurMultipleTiroir,
   transcripteurQuestionTiroir,
 } from "./transcripteursDeTest";
@@ -407,69 +402,6 @@ describe("Le représentateur de diagnostic", () => {
             libelle: "Une question tiroir à choix unique?",
             type: "choixUnique",
           });
-        });
-      });
-
-      it("retourne les réponses complémentaires si il y en a", () => {
-        const reponseComplementaire = uneReponseComplementaire().construis();
-        const secondeReponseComplementaire =
-          uneReponseComplementaire().construis();
-        const reponsePossible = uneReponsePossible()
-          .avecDesReponsesComplementaires([
-            reponseComplementaire,
-            secondeReponseComplementaire,
-          ])
-          .construis();
-        const question = uneQuestion()
-          .avecReponsesPossibles([reponsePossible])
-          .construis();
-        const diagnostic = unDiagnostic()
-          .avecUnReferentiel(
-            unReferentiel().ajouteUneQuestionAuContexte(question).construis(),
-          )
-          .construis();
-
-        const transcripteurs = new TranscripteurDeQuestion(
-          question,
-        ).ajouteUnTranscripteurDeReponse(
-          new TranscripteurDeReponse(reponsePossible)
-            .ajouteUnTranscripteurDeReponseComplementaire(
-              new TranscripteurDeReponseComplementaire(
-                secondeReponseComplementaire,
-              ),
-            )
-            .ajouteUnTranscripteurDeReponseComplementaire(
-              new TranscripteurDeReponseComplementaire(reponseComplementaire),
-            ),
-        );
-        const representationDiagnostic = representeLeDiagnosticPourLeClient(
-          diagnostic,
-          fabriqueTranscripteur([transcripteurs]),
-        );
-
-        const questionRepresentee =
-          representationDiagnostic.referentiel.contexte.questions[0];
-        expect(
-          questionRepresentee.reponsesPossibles[0]?.reponsesComplementaires?.[0]
-            .libelle,
-        ).toBe(reponseComplementaire.libelle);
-        expect(
-          questionRepresentee.reponsesPossibles[0]?.reponsesComplementaires?.[0]
-            .type,
-        ).toMatchObject({
-          type: "saisieLibre",
-          format: "texte",
-        });
-        expect(
-          questionRepresentee.reponsesPossibles[0]?.reponsesComplementaires?.[1]
-            .libelle,
-        ).toBe(secondeReponseComplementaire.libelle);
-        expect(
-          questionRepresentee.reponsesPossibles[0]?.reponsesComplementaires?.[1]
-            .type,
-        ).toMatchObject({
-          type: "saisieLibre",
-          format: "texte",
         });
       });
     });

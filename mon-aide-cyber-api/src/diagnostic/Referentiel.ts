@@ -1,13 +1,5 @@
-type ReponseComplementaire = Omit<
-  ReponsePossible,
-  "questions" | "reponsesComplementaires"
->;
-
 type QuestionATiroir = Omit<Question, "reponsesPossibles"> & {
-  reponsesPossibles: Omit<
-    ReponsePossible,
-    "questions" | "reponsesComplementaires"
-  >[];
+  reponsesPossibles: Omit<ReponsePossible, "questions">[];
 };
 
 type ReponsePossible = {
@@ -15,7 +7,6 @@ type ReponsePossible = {
   libelle: string;
   ordre: number;
   questions?: QuestionATiroir[];
-  reponsesComplementaires?: ReponseComplementaire[];
 };
 
 type TypeQuestion = "choixMultiple" | "choixUnique";
@@ -50,7 +41,6 @@ export {
   QuestionChoixUnique,
   QuestionChoixMultiple,
   Referentiel,
-  ReponseComplementaire,
   ReponsePossible,
   TypeQuestion,
 };

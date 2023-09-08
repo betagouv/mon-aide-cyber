@@ -3,35 +3,9 @@ import {
   ReponseATranscrire,
   Transcripteur,
 } from "../../../src/api/representateurs/types";
-import {
-  Question,
-  ReponseComplementaire,
-  ReponsePossible,
-} from "../../../src/diagnostic/Referentiel";
-
-export class TranscripteurDeReponseComplementaire {
-  constructor(private readonly reponse: ReponseComplementaire) {}
-
-  construis(): ReponseATranscrire {
-    return {
-      identifiant: this.reponse.identifiant,
-      type: { format: "texte", type: "saisieLibre" },
-    };
-  }
-}
-
+import { Question, ReponsePossible } from "../../../src/diagnostic/Referentiel";
 export class TranscripteurDeReponse {
-  private transcripteurDeReponseComplementaires: TranscripteurDeReponseComplementaire[] =
-    [];
-
   constructor(private readonly reponse: ReponsePossible) {}
-
-  ajouteUnTranscripteurDeReponseComplementaire(
-    transcripteurDeReponse: TranscripteurDeReponseComplementaire,
-  ): TranscripteurDeReponse {
-    this.transcripteurDeReponseComplementaires.push(transcripteurDeReponse);
-    return this;
-  }
 
   construis(): ReponseATranscrire {
     return {
@@ -41,9 +15,7 @@ export class TranscripteurDeReponse {
         this.reponse.questions.length > 0
           ? this.reponse.questions![0]
           : undefined,
-      reponses: this.transcripteurDeReponseComplementaires.map((rc) =>
-        rc.construis(),
-      ),
+      reponses: [],
       type: {
         format: "texte",
         type: "saisieLibre",

@@ -1,16 +1,11 @@
 import { Diagnostic, QuestionDiagnostic } from "../../diagnostic/Diagnostic";
-import {
-  QuestionATiroir,
-  ReponseComplementaire,
-  ReponsePossible,
-} from "../../diagnostic/Referentiel";
+import { QuestionATiroir, ReponsePossible } from "../../diagnostic/Referentiel";
 import {
   Chemin,
   QuestionATranscrire,
   ReponseATranscrire,
   RepresentationDiagnostic,
   RepresentationQuestion,
-  RepresentationReponseComplementaire,
   RepresentationReponsePossible,
   Transcripteur,
 } from "./types";
@@ -83,48 +78,13 @@ const questionTiroirATranscrire = (
   );
 };
 
-const toutesLesReponses = (
-  reponses: ReponseATranscrire[] | undefined,
-): ReponseATranscrire[] => {
-  return (
-    reponses?.reduce((accumulateur: ReponseATranscrire[], reponseCourante) => {
-      if (reponseCourante.reponses !== undefined) {
-        accumulateur.push(...reponseCourante.reponses);
-      }
-      return accumulateur;
-    }, []) || []
-  );
-};
-const trouveReponsesComplementaires = (
-  reponsesComplementaires: ReponseComplementaire[],
-  transcripteur: Transcripteur,
-): RepresentationReponseComplementaire[] => {
-  const reponsesATranscrire = transcripteur.contexte.questions.flatMap((q) =>
-    toutesLesReponses(q.reponses),
-  );
-  return reponsesComplementaires.map((rc) => {
-    const reponseATranscrire = reponsesATranscrire.find(
-      (rat) => rat.identifiant === rc.identifiant,
-    );
-    return {
-      identifiant: rc.identifiant,
-      libelle: rc.libelle,
-      ordre: rc.ordre,
-      ...(reponseATranscrire?.type && { type: reponseATranscrire?.type }),
-    };
-  });
-};
-
 const estQuestionATiroir = (
-  reponse:
-    | ReponsePossible
-    | Omit<ReponsePossible, "questions" | "reponsesComplementaires">,
+  reponse: ReponsePossible | Omit<ReponsePossible, "questions">,
 ): reponse is ReponsePossible => {
   return (
-    ("questions" in reponse &&
-      reponse.questions !== undefined &&
-      reponse.questions?.length > 0) ||
-    "reponsesComplementaires" in reponse
+    "questions" in reponse &&
+    reponse.questions !== undefined &&
+    reponse.questions?.length > 0
   );
 };
 const trouveReponsesPossibles = (
@@ -145,16 +105,11 @@ const trouveReponsesPossibles = (
         reponse.questions,
         transcripteur,
       );
-      const reponsesComplementaires = trouveReponsesComplementaires(
-        reponse.reponsesComplementaires || [],
-        transcripteur,
-      );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { questions, ...corpsDeReponse } = reponse;
       representationReponsePossible = {
         ...corpsDeReponse,
         questions: representationQuestionATiroir,
-        reponsesComplementaires,
       };
     }
     return {
