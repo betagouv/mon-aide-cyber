@@ -19,7 +19,7 @@ export type ReponseComplementaire = Omit<
 >;
 export type ReponseDonnee = {
   valeur: string | null;
-  reponsesMultiples: Set<string>;
+  reponses: { identifiant: string; reponses: Set<string> }[];
 };
 export type QuestionATiroir = Omit<Question, "reponseDonnee">;
 export type ReponsePossible = {

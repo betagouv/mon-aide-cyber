@@ -9,7 +9,7 @@ export enum EtatReponseStatut {
   MODIFIE = "MODIFIE",
 }
 
-type EtatReponse = {
+export type EtatReponse = {
   identifiantQuestion: string;
   reponseDonnee: ReponseDonnee;
   reponse: () => Reponse | null;
@@ -40,36 +40,49 @@ export const reducteurReponse = (
       });
       const reponseDonnee: ReponseDonnee = {
         valeur: action.reponse.valeur,
-        reponsesMultiples: new Set(),
+        reponses: [],
       };
 
       const valeur: () => string = () => action.reponse.valeur;
       const reponseDonneeCourante = etat.reponseDonnee as ReponseDonnee;
-      const reponses: Set<string> = new Set(
-        reponseDonneeCourante.reponsesMultiples,
-      );
+      const reponses: { identifiant: string; reponses: Set<string> }[] =
+        reponseDonneeCourante.reponses.map((rep) => ({
+          identifiant: rep.identifiant,
+          reponses: new Set(rep.reponses),
+        }));
       const elementReponseMultiple = action.reponse.elementReponseMultiple;
-      if (elementReponseMultiple !== undefined) {
-        reponses.add(elementReponseMultiple.elementReponse);
-        if (
-          reponseDonneeCourante.reponsesMultiples.has(
-            elementReponseMultiple.elementReponse,
-          )
-        ) {
-          reponses.delete(elementReponseMultiple.elementReponse);
+      if (elementReponseMultiple) {
+        const aDejaUneReponse = reponses.find(
+          (rep) =>
+            rep.identifiant === elementReponseMultiple.identifiantReponse,
+        );
+        if (aDejaUneReponse) {
+          aDejaUneReponse.reponses.add(elementReponseMultiple.elementReponse);
+          const doitRetirerUneReponsePrecedemmentSelectionnee =
+            reponseDonneeCourante.reponses.find((rep) =>
+              rep.reponses.has(elementReponseMultiple.elementReponse),
+            );
+          if (doitRetirerUneReponsePrecedemmentSelectionnee) {
+            aDejaUneReponse.reponses.delete(
+              elementReponseMultiple.elementReponse,
+            );
+          }
+        } else {
+          reponses.push({
+            identifiant: elementReponseMultiple.identifiantReponse,
+            reponses: new Set([elementReponseMultiple.elementReponse]),
+          });
         }
-        reponseDonnee.reponsesMultiples = reponses;
+        reponseDonnee.reponses = reponses;
 
         reponse = () => ({
           identifiantQuestion: etat.identifiantQuestion,
           reponseDonnee: {
             reponse: (reponseDonnee as ReponseDonnee).valeur!,
-            question: {
-              identifiant: elementReponseMultiple.identifiantReponse,
-              reponses: Array.from(
-                (reponseDonnee as ReponseDonnee).reponsesMultiples,
-              ),
-            },
+            questions: reponseDonnee.reponses.map((rep) => ({
+              identifiant: rep.identifiant,
+              reponses: Array.from(rep.reponses),
+            })),
           },
         });
       }

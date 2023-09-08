@@ -17,7 +17,7 @@ class ConstructeurQuestion implements Constructeur<Question> {
   protected type?: Exclude<TypeDeSaisie, "saisieLibre"> = undefined;
   private reponseDonnee: ReponseDonnee = {
     valeur: null,
-    reponsesMultiples: new Set(),
+    reponses: [],
   };
 
   avecDesReponses(reponsePossibles: ReponsePossible[]): ConstructeurQuestion {
@@ -27,11 +27,11 @@ class ConstructeurQuestion implements Constructeur<Question> {
 
   avecLaReponseDonnee(
     reponsePossible: ReponsePossible,
-    reponsesMultiples: Set<string> = new Set(),
+    reponses: { identifiant: string; reponses: Set<string> }[] = [],
   ): ConstructeurQuestion {
     this.reponseDonnee = {
       valeur: reponsePossible.identifiant,
-      reponsesMultiples,
+      reponses,
     };
     return this;
   }
