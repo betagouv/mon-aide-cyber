@@ -29,14 +29,6 @@ class ConstructeurDeCorpsDeReponse implements Constructeur<CorpsReponse> {
     return this;
   }
 
-  construis(): CorpsReponse {
-    return {
-      reponse: this.reponse,
-      identifiant: this.identifiant,
-      chemin: this.chemin,
-    };
-  }
-
   avecLaReponse(
     reponse: string | CorpsReponseQuestionATiroir,
   ): ConstructeurDeCorpsDeReponse {
@@ -64,21 +56,24 @@ class ConstructeurDeCorpsDeReponse implements Constructeur<CorpsReponse> {
     });
     return this;
   }
+
+  construis(): CorpsReponse {
+    return {
+      reponse: this.reponse,
+      identifiant: this.identifiant,
+      chemin: this.chemin,
+    };
+  }
 }
 
 class ConstructeurDeCorpsDeReponseQuestionATiroir
   implements Constructeur<CorpsReponseQuestionATiroir>
 {
-  private question: { identifiant: string; reponses: string[] } = {
-    identifiant: "",
-    reponses: [],
-  };
   private questions: { identifiant: string; reponses: string[] }[] = [];
   private reponse = "";
 
   construis(): CorpsReponseQuestionATiroir {
     return {
-      question: this.question,
       questions: this.questions,
       reponse: this.reponse,
     };
@@ -89,10 +84,6 @@ class ConstructeurDeCorpsDeReponseQuestionATiroir
     valeurs: { question: string; reponses: ReponsePossible[] }[];
   }): ConstructeurDeCorpsDeReponseQuestionATiroir {
     this.reponse = reponse.reponse;
-    this.question = {
-      identifiant: reponse.valeurs[0].question,
-      reponses: reponse.valeurs[0].reponses.map((rep) => rep.identifiant),
-    };
     this.questions = reponse.valeurs.map((valeur) => ({
       identifiant: valeur.question,
       reponses: valeur.reponses.map((rep) => rep.identifiant),

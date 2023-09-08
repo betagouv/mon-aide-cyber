@@ -76,7 +76,6 @@ describe("Le représentateur de diagnostic", () => {
         diagnosticRepresente.referentiel["contexte"].questions[0].reponseDonnee,
       ).toStrictEqual({
         valeur: null,
-        reponsesMultiples: [],
         reponses: [],
       });
     });
@@ -492,7 +491,6 @@ describe("Le représentateur de diagnostic", () => {
               libelle: question.libelle,
               reponseDonnee: {
                 valeur: null,
-                reponsesMultiples: [],
                 reponses: [],
               },
               reponsesPossibles: [
@@ -622,7 +620,6 @@ describe("Le représentateur de diagnostic", () => {
           .reponseDonnee;
       expect(reponseDonnee).toStrictEqual({
         valeur: "réponse",
-        reponsesMultiples: ["rep-11", "rep-12", "rep-21"],
         reponses: [
           { identifiant: "q1", reponses: ["rep-11", "rep-12"] },
           { identifiant: "q2", reponses: ["rep-21"] },
