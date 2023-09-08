@@ -177,9 +177,6 @@ const trouveReponseATranscrire = (
 const extraisLesChampsDeLaQuestion = (question: QuestionDiagnostic) => {
   const autresReponses = {
     valeur: question.reponseDonnee.reponseUnique,
-    reponsesMultiples: question.reponseDonnee.reponsesMultiples.flatMap(
-      (rep) => [...rep.reponses],
-    ),
     reponses: question.reponseDonnee.reponsesMultiples.map((rep) => ({
       identifiant: rep.identifiant,
       reponses: [...rep.reponses],

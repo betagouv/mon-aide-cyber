@@ -9,11 +9,7 @@ import { Entrepots } from "../domaine/Entrepots";
 
 export type CorpsReponseQuestionATiroir = {
   reponse: string;
-  question?: {
-    identifiant: string;
-    reponses: string[];
-  };
-  questions?: { identifiant: string; reponses: string[] }[];
+  questions: { identifiant: string; reponses: string[] }[];
 };
 export type CorpsReponse = {
   chemin: string;

@@ -76,32 +76,12 @@ const ajouteLaReponseAuDiagnostic = (
       (q) => q.identifiant === corpsReponse.identifiant,
     );
     if (questionTrouvee !== undefined) {
-      let reponsesMultiples: ReponsesMultiples[] = [];
-      if (reponseCorpsReponse.question) {
-        reponsesMultiples = [
-          {
-            identifiant: reponseCorpsReponse.question.identifiant,
-            reponses: new Set(reponseCorpsReponse.question.reponses),
-          },
-        ];
-      }
-      const map = reponseCorpsReponse.questions?.map((q) => ({
-        identifiant: q.identifiant,
-        reponses: new Set(q.reponses),
-      }));
-      if (map !== undefined) {
-        reponsesMultiples.push(
-          ...map.filter(
-            (m) =>
-              !reponsesMultiples
-                .map((rep) => rep.identifiant)
-                .includes(m.identifiant),
-          ),
-        );
-      }
       questionTrouvee.reponseDonnee = {
         reponseUnique: reponseCorpsReponse.reponse,
-        reponsesMultiples,
+        reponsesMultiples: reponseCorpsReponse.questions.map((q) => ({
+          identifiant: q.identifiant,
+          reponses: new Set(q.reponses),
+        })),
       };
     }
   }

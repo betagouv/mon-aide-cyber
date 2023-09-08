@@ -26,7 +26,6 @@ export type RepresentationReponsePossible = {
 };
 type RepresentationReponseDonnee = {
   valeur: string | null;
-  reponsesMultiples: string[];
   reponses: { identifiant: string; reponses: string[] }[];
 };
 export type RepresentationQuestion = {

@@ -58,7 +58,6 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
                 libelle: premiereQuestion.libelle,
                 reponseDonnee: {
                   valeur: null,
-                  reponsesMultiples: [],
                   reponses: [],
                 },
                 reponsesPossibles: [
