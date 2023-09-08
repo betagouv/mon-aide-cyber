@@ -14,12 +14,12 @@ type RepresentationActionDiagnostic = {
 };
 type RepresentationReponseDonnee = {
   valeur: string | null;
-  reponsesMultiples: string[];
+  reponses: { identifiant: string; reponses: string[] }[];
 };
 type Format = "texte" | "nombre" | undefined;
 export type RepresentationReponseComplementaire = Omit<
   RepresentationReponsePossible,
-  "question" | "reponsesComplementaires"
+  "questions" | "reponsesComplementaires"
 >;
 type RepresentationReponsePossible = {
   identifiant: string;
@@ -97,9 +97,10 @@ export class APIEntrepotDiagnostic
             ...question,
             reponseDonnee: {
               valeur: question.reponseDonnee.valeur,
-              reponsesMultiples: new Set(
-                question.reponseDonnee.reponsesMultiples,
-              ),
+              reponses: question.reponseDonnee.reponses.map((rep) => ({
+                identifiant: rep.identifiant,
+                reponses: new Set(rep.reponses),
+              })),
             },
           };
         });

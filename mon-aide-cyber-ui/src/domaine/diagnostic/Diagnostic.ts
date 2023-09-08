@@ -14,10 +14,10 @@ export type Diagnostic = Aggregat & {
 };
 export type ReponseQuestionATiroir = {
   reponse: string;
-  question: {
+  questions: {
     identifiant: string;
     reponses: string[];
-  };
+  }[];
 };
 export type Reponse = {
   reponseDonnee: string | ReponseQuestionATiroir | null;

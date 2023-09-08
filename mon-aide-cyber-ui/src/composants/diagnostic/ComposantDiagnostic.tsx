@@ -249,8 +249,8 @@ const ComposantQuestion = ({
                       reponsePossible={rep}
                       identifiantQuestion={questionTiroir.identifiant}
                       typeDeSaisie={typeDeSaisie}
-                      selectionnee={etatReponse.reponseDonnee.reponsesMultiples.has(
-                        rep.identifiant,
+                      selectionnee={etatReponse.reponseDonnee.reponses.some(
+                        (reponse) => reponse.reponses.has(rep.identifiant),
                       )}
                       onChange={(identifiantReponse) =>
                         repondChoixMultiple(reponse.identifiant, {

@@ -117,10 +117,67 @@ const diagnosticAvecQuestionATiroir = unDiagnostic()
             uneReponsePossible().avecLibelle("un seul choix").construis(),
             reponseAvecQuestionAChoixMultiple,
           ])
-          .avecLaReponseDonnee(
-            reponseAvecQuestionAChoixMultiple,
-            new Set(["choix-2", "choix-4"]),
-          )
+          .avecLaReponseDonnee(reponseAvecQuestionAChoixMultiple, [
+            {
+              identifiant: "la-question",
+              reponses: new Set(["choix-2", "choix-4"]),
+            },
+          ])
+          .construis(),
+      )
+      .construis(),
+  )
+  .construis();
+
+const identifiantQuestionAPlusieursTiroirs =
+  "7e37b7fa-1ed6-434d-ba5b-d473928c08c2";
+const diagnosticAvecQuestionsAPlusieursTiroirs = unDiagnostic()
+  .avecIdentifiant(identifiantQuestionAPlusieursTiroirs)
+  .avecUnReferentiel(
+    unReferentiel()
+      .sansAction()
+      .ajouteAction(actionRepondre)
+      .avecUneQuestion(
+        uneQuestion()
+          .avecLibelle("QCM?")
+          .avecDesReponses([
+            uneReponsePossible().construis(),
+            uneReponsePossible().avecLibelle("un seul choix").construis(),
+            uneReponsePossible()
+              .avecLibelle("Plusieurs tiroirs")
+              .avecUneQuestion(
+                uneQuestionTiroirAChoixMultiple()
+                  .avecLibelle("La question?")
+                  .avecDesReponses([
+                    uneReponsePossible().avecLibelle("choix 1").construis(),
+                    uneReponsePossible().avecLibelle("choix 2").construis(),
+                    uneReponsePossible().avecLibelle("choix 3").construis(),
+                    uneReponsePossible().avecLibelle("choix 4").construis(),
+                  ])
+                  .construis(),
+              )
+              .avecUneQuestion(
+                uneQuestionTiroirAChoixMultiple()
+                  .avecLibelle("second tiroir")
+                  .avecDesReponses([
+                    uneReponsePossible().avecLibelle("tiroir 21").construis(),
+                    uneReponsePossible().avecLibelle("tiroir 22").construis(),
+                  ])
+                  .construis(),
+              )
+
+              .construis(),
+          ])
+          .avecLaReponseDonnee(reponseAvecQuestionAChoixMultiple, [
+            {
+              identifiant: "la-question",
+              reponses: new Set(["choix-2", "choix-4"]),
+            },
+            {
+              identifiant: "second-tiroir",
+              reponses: new Set(["tiroir-21"]),
+            },
+          ])
           .construis(),
       )
       .construis(),
@@ -133,6 +190,9 @@ await entrepotDiagnosticMemoire.persiste(
 );
 await entrepotDiagnosticMemoire.persiste(diagnosticAPlusieursThematiques);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecQuestionATiroir);
+await entrepotDiagnosticMemoire.persiste(
+  diagnosticAvecQuestionsAPlusieursTiroirs,
+);
 
 const meta = {
   title: "Diagnostic",
@@ -347,10 +407,12 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
       entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
         reponseDonnee: {
           reponse: "plusieurs-choix",
-          question: {
-            identifiant: "la-question",
-            reponses: ["choix-2", "choix-3"],
-          },
+          questions: [
+            {
+              identifiant: "la-question",
+              reponses: ["choix-2", "choix-3"],
+            },
+          ],
         },
         identifiantQuestion: "qcm",
       });
@@ -390,5 +452,99 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
         });
       },
     );
+  },
+};
+
+export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
+  name: "Sélectionne les réponses pour les questions à plusieurs tiroirs",
+  args: { idDiagnostic: identifiantQuestionAPlusieursTiroirs },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step("Lorsque le diagnostic est récupéré depuis l’API", async () => {
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /choix 2/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /choix 4/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /tiroir 21/i,
+          }),
+        ),
+      ).toBeChecked();
+    });
+
+    await step("Lorsque l’utilisateur modifie la réponse", async () => {
+      await userEvent.click(canvas.getByRole("checkbox", { name: /choix 3/i }));
+      await userEvent.click(
+        canvas.getByRole("checkbox", { name: /tiroir 22/i }),
+      );
+
+      expect(
+        canvas.getByRole("radio", { name: /plusieurs tiroirs/i }),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /choix 2/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /choix 3/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /choix 4/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /tiroir 21/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /tiroir 22/i,
+          }),
+        ),
+      ).toBeChecked();
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+        reponseDonnee: {
+          reponse: "plusieurs-tiroirs",
+          questions: [
+            {
+              identifiant: "la-question",
+              reponses: ["choix-2", "choix-4", "choix-3"],
+            },
+            {
+              identifiant: "second-tiroir",
+              reponses: ["tiroir-21", "tiroir-22"],
+            },
+          ],
+        },
+        identifiantQuestion: "qcm",
+      });
+    });
   },
 };
