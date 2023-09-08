@@ -9,10 +9,6 @@ export type RepresentationDiagnostic = {
   identifiant: crypto.UUID;
   referentiel: RepresentationReferentiel;
 };
-export type RepresentationReponseComplementaire = Omit<
-  RepresentationReponsePossible,
-  "question" | "reponsesComplementaires"
->;
 export type RepresentationReponsePossible = {
   identifiant: string;
   libelle: string;
@@ -21,7 +17,6 @@ export type RepresentationReponsePossible = {
     | RepresentationQuestionChoixUnique
     | RepresentationQuestionChoixMultiple
   )[];
-  reponsesComplementaires?: RepresentationReponseComplementaire[] | undefined;
   type?: { type: TypeDeSaisie; format: Format };
 };
 type RepresentationReponseDonnee = {

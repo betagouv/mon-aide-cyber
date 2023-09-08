@@ -4,7 +4,6 @@ import {
   QuestionChoixMultiple,
   QuestionChoixUnique,
   Referentiel,
-  ReponseComplementaire,
   ReponsePossible,
   TypeQuestion,
 } from "../../src/diagnostic/Referentiel";
@@ -114,10 +113,7 @@ class ConstructeurQuestion
 class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
   private identifiant: string = faker.string.alpha(10);
   private libelle: string = faker.word.words();
-  private reponsesPossibles: Omit<
-    ReponsePossible,
-    "reponsesComplementaires" | "questions"
-  >[] = [];
+  private reponsesPossibles: Omit<ReponsePossible, "questions">[] = [];
   private type: TypeQuestion = "choixUnique";
 
   aChoixMultiple = (libelle: string): ConstructeurQuestionATiroir => {
@@ -160,7 +156,6 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private libelle: string = faker.word.words();
   private ordre: number = faker.number.int();
   private questions?: QuestionATiroir[];
-  private reponsesComplementaires?: ReponseComplementaire[];
 
   ajouteUneQuestionATiroir(
     question: QuestionATiroir,
@@ -177,26 +172,12 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     this.identifiant = aseptise(libelle);
     return this;
   }
-
-  avecDesReponsesComplementaires(
-    reponsesComplementaires: ReponseComplementaire[],
-  ): ConstructeurReponsePossible {
-    this.reponsesComplementaires = reponsesComplementaires;
-    return this;
-  }
-
   construis(): ReponsePossible {
     let reponsePossible: ReponsePossible = {
       identifiant: this.identifiant,
       libelle: this.libelle,
       ordre: this.ordre,
     };
-    if (this.reponsesComplementaires !== undefined) {
-      reponsePossible = {
-        ...reponsePossible,
-        reponsesComplementaires: this.reponsesComplementaires,
-      };
-    }
     if (this.questions !== undefined) {
       reponsePossible = {
         ...reponsePossible,
@@ -206,14 +187,6 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     return reponsePossible;
   }
 }
-
-class ConstructeurReponseComplementaire extends ConstructeurReponsePossible {
-  construis(): ReponseComplementaire {
-    const { questions, ...reponseComplementaire } = super.construis();
-    return reponseComplementaire;
-  }
-}
-
 export const unReferentiel = (): ConstructeurReferentiel =>
   new ConstructeurReferentiel();
 
@@ -231,6 +204,3 @@ export const uneQuestionATiroir = (): ConstructeurQuestionATiroir =>
 
 export const uneReponsePossible = (): ConstructeurReponsePossible =>
   new ConstructeurReponsePossible();
-
-export const uneReponseComplementaire = (): ConstructeurReponseComplementaire =>
-  new ConstructeurReponseComplementaire();
