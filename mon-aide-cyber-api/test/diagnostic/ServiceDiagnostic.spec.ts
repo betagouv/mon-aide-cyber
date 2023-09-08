@@ -213,10 +213,6 @@ describe("Le service de diagnostic", () => {
         identifiant: "question-a-tiroir-",
         reponse: {
           reponse: reponseAvecQuestionATiroir.identifiant,
-          question: {
-            identifiant: "qcm-",
-            reponses: [premiereReponse.identifiant, secondeReponse.identifiant],
-          },
           questions: [
             {
               identifiant: "qcm-",
