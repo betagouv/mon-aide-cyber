@@ -9,7 +9,6 @@ import {
 import { useErrorBoundary } from "react-error-boundary";
 import {
   Question,
-  ReponseComplementaire,
   ReponseDonnee,
   ReponsePossible,
   Thematique,
@@ -52,36 +51,6 @@ const ChampsDeSaisie = ({ identifiant }: ProprietesChampsDeSaisie) => {
     </div>
   );
 };
-
-type PropprietesComposantReponseComplementaire = {
-  reponseComplementaire: ReponseComplementaire;
-};
-
-const ComposantReponseComplementaire = ({
-  reponseComplementaire,
-}: PropprietesComposantReponseComplementaire) => {
-  const champsASaisir =
-    reponseComplementaire.type?.type === "saisieLibre" ? (
-      <ChampsDeSaisie identifiant={reponseComplementaire.identifiant} />
-    ) : (
-      ""
-    );
-  return (
-    <>
-      <input
-        id={reponseComplementaire.identifiant}
-        type="checkbox"
-        name={reponseComplementaire.identifiant}
-        value={reponseComplementaire.identifiant}
-      ></input>
-      <label htmlFor={reponseComplementaire.identifiant}>
-        {reponseComplementaire.libelle}
-      </label>
-      {champsASaisir}
-      <br />
-    </>
-  );
-};
 type ProprietesComposantReponsePossible = {
   identifiantQuestion: string;
   reponsePossible: ReponsePossible;
@@ -116,20 +85,6 @@ const ComposantReponsePossible = (
         {proprietes.reponsePossible.libelle}
       </label>
       <div>{champsASaisir}</div>
-      {proprietes.reponsePossible.reponsesComplementaires !== undefined ? (
-        <div className="reponses-complementaires">
-          {proprietes.reponsePossible.reponsesComplementaires.map((reponse) => {
-            return (
-              <ComposantReponseComplementaire
-                key={reponse.identifiant}
-                reponseComplementaire={reponse}
-              />
-            );
-          })}
-        </div>
-      ) : (
-        ""
-      )}
 
       {proprietes.children}
       <br />

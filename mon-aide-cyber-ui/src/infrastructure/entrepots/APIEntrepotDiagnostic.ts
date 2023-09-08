@@ -19,7 +19,7 @@ type RepresentationReponseDonnee = {
 type Format = "texte" | "nombre" | undefined;
 export type RepresentationReponseComplementaire = Omit<
   RepresentationReponsePossible,
-  "questions" | "reponsesComplementaires"
+  "questions"
 >;
 type RepresentationReponsePossible = {
   identifiant: string;
@@ -27,7 +27,6 @@ type RepresentationReponsePossible = {
   ordre: number;
   questions?: RepresentationQuestion[];
   type?: { type: RepresentationTypeDeSaisie; format?: Format } | undefined;
-  reponsesComplementaires?: RepresentationReponseComplementaire[] | undefined;
 };
 type RepresentationQuestion = {
   identifiant: string;

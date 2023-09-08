@@ -1,67 +1,4 @@
-import {
-  QuestionATranscrire,
-  ReponseATranscrire,
-  Transcripteur,
-} from "../../../src/api/representateurs/types";
-import { Question, ReponsePossible } from "../../../src/diagnostic/Referentiel";
-export class TranscripteurDeReponse {
-  constructor(private readonly reponse: ReponsePossible) {}
-
-  construis(): ReponseATranscrire {
-    return {
-      identifiant: this.reponse.identifiant,
-      question:
-        this.reponse.questions !== undefined &&
-        this.reponse.questions.length > 0
-          ? this.reponse.questions![0]
-          : undefined,
-      reponses: [],
-      type: {
-        format: "texte",
-        type: "saisieLibre",
-      },
-    };
-  }
-}
-
-export class TranscripteurDeQuestion {
-  private transcripteursDeReponses: TranscripteurDeReponse[] = [];
-
-  constructor(private readonly question: Question) {}
-
-  ajouteUnTranscripteurDeReponse(
-    transcripteurDeReponse: TranscripteurDeReponse,
-  ): TranscripteurDeQuestion {
-    this.transcripteursDeReponses.push(transcripteurDeReponse);
-    return this;
-  }
-
-  construis(): QuestionATranscrire {
-    return {
-      identifiant: this.question.identifiant,
-      reponses: this.transcripteursDeReponses.map((r) => r.construis()),
-      type: this.question.type,
-    };
-  }
-}
-
-export class TranscripteursDeTest {
-  private transcripteursDeQuestions: TranscripteurDeQuestion[] = [];
-
-  ajouteUnTranscripteurDeQuestion(
-    transcripteurDeQuestion: TranscripteurDeQuestion,
-  ) {
-    this.transcripteursDeQuestions.push(transcripteurDeQuestion);
-  }
-
-  construis(): Transcripteur {
-    return {
-      contexte: {
-        questions: this.transcripteursDeQuestions.map((t) => t.construis()),
-      },
-    };
-  }
-}
+import { Transcripteur } from "../../../src/api/representateurs/types";
 
 const transcripteurAvecSaisiesLibres = {
   contexte: {
@@ -135,23 +72,15 @@ const transcripteurMultipleTiroir = {
     ],
   },
 } as Transcripteur;
-
-const fabriqueTranscripteur = (
-  transcripteurs: TranscripteurDeQuestion[],
-): Transcripteur => {
-  const transcripteursDeTest = new TranscripteursDeTest();
-  for (const transcripteur of transcripteurs) {
-    transcripteursDeTest.ajouteUnTranscripteurDeQuestion(transcripteur);
-  }
-  return transcripteursDeTest.construis();
-};
-
 const fabriqueTranscripteurVide = (): Transcripteur => {
-  return new TranscripteursDeTest().construis();
+  return {
+    contexte: {
+      questions: [],
+    },
+  };
 };
 
 export {
-  fabriqueTranscripteur,
   fabriqueTranscripteurVide,
   transcripteurAvecSaisiesLibres,
   transcripteurMultipleTiroir,
