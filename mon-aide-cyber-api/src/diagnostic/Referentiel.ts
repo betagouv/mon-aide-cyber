@@ -31,7 +31,7 @@ type QuestionsThematique = {
 };
 
 type Referentiel = {
-  [clef: string]: QuestionsThematique;
+  [thematique: string]: QuestionsThematique;
 };
 
 export {

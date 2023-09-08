@@ -64,7 +64,7 @@ export type QuestionATranscrire = {
   type?: TypeDeSaisie;
 };
 export type Transcripteur = {
-  contexte: {
+  [thematique: string]: {
     questions: QuestionATranscrire[];
   };
 };
