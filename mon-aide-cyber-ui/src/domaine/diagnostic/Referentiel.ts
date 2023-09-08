@@ -13,10 +13,6 @@ export type TypeDeSaisie =
   | "saisieLibre"
   | "liste";
 export type Format = "texte" | "nombre" | undefined;
-export type ReponseComplementaire = Omit<
-  ReponsePossible,
-  "questions" | "reponsesComplementaires"
->;
 export type ReponseDonnee = {
   valeur: string | null;
   reponses: { identifiant: string; reponses: Set<string> }[];
@@ -28,7 +24,6 @@ export type ReponsePossible = {
   ordre: number;
   questions?: QuestionATiroir[];
   type?: { type: TypeDeSaisie; format?: Format };
-  reponsesComplementaires?: ReponseComplementaire[];
 };
 export type Question = {
   identifiant: string;

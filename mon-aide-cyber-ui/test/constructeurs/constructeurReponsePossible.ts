@@ -3,7 +3,6 @@ import { faker } from "@faker-js/faker/locale/fr";
 import {
   Format,
   QuestionATiroir,
-  ReponseComplementaire,
   ReponsePossible,
   TypeDeSaisie,
 } from "../../src/domaine/diagnostic/Referentiel.ts";
@@ -15,7 +14,6 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private ordre = faker.number.int();
   private questions?: QuestionATiroir[];
   private type?: { type: TypeDeSaisie; format?: Format };
-  private reponsesComplementaires?: ReponseComplementaire[];
 
   avecUneQuestion(question: QuestionATiroir): ConstructeurReponsePossible {
     if (!this.questions) {
@@ -40,33 +38,14 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     this.ordre = ordre;
     return this;
   }
-
-  avecReponsesComplementaires(
-    reponsesComplementaires: ReponseComplementaire[],
-  ): ConstructeurReponsePossible {
-    this.reponsesComplementaires = reponsesComplementaires;
-    return this;
-  }
-
   construis(): ReponsePossible {
-    let reponsePossible: ReponsePossible = {
+    return {
       identifiant: this.identifiant,
       libelle: this.libelle,
       ordre: this.ordre,
+      ...(this.type && { type: this.type }),
+      ...(this.questions && { questions: this.questions }),
     };
-    if (this.type) {
-      reponsePossible = { ...reponsePossible, type: this.type };
-    }
-    if (this.reponsesComplementaires) {
-      reponsePossible = {
-        ...reponsePossible,
-        reponsesComplementaires: this.reponsesComplementaires,
-      };
-    }
-    if (this.questions) {
-      reponsePossible = { ...reponsePossible, questions: this.questions };
-    }
-    return reponsePossible;
   }
 }
 
