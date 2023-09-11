@@ -9,29 +9,30 @@ export const adaptateurTranscripteur = () =>
         contexte: {
           questions: [
             {
-              identifiant: "natureOrganisation",
+              identifiant: "nature-organisation",
               reponses: [
                 {
-                  identifiant: "autre",
+                  identifiant: "nature-organisation-autre",
                   type: { type: "saisieLibre", format: "texte" },
                 },
               ],
             },
             {
-              identifiant: "secteurActivite",
+              identifiant: "secteur-activite",
               type: "liste",
             },
             {
-              identifiant: "usageCloud",
+              identifiant: "usage-cloud",
               reponses: [
                 {
-                  identifiant: "usageCloud-oui",
+                  identifiant: "usage-cloud-oui",
                   question: {
-                    identifiant: "usageCloudQuestionTiroir",
+                    identifiant: "usage-cloud-oui-question-tiroir-usages",
                     type: "choixMultiple",
                     reponses: [
                       {
-                        identifiant: "usageCloud-Oui-Autre",
+                        identifiant:
+                          "usage-cloud-oui-question-tiroir-usages-autre",
                         type: { type: "saisieLibre", format: "texte" },
                       },
                     ],
@@ -40,16 +41,17 @@ export const adaptateurTranscripteur = () =>
               ],
             },
             {
-              identifiant: "cyberAttaqueSubie",
+              identifiant: "cyber-attaque-subie",
               reponses: [
                 {
-                  identifiant: "cyberAttaqueSubie-oui",
+                  identifiant: "cyber-attaque-subie-oui",
                   question: {
-                    identifiant: "cyber-attaque-subie-tiroir-type",
+                    identifiant: "cyber-attaque-subie-oui-tiroir-type",
                     type: "choixMultiple",
                     reponses: [
                       {
-                        identifiant: "cyber-attaque-subie-oui-type-autre",
+                        identifiant:
+                          "cyber-attaque-subie-oui-tiroir-type-autre",
                         type: { type: "saisieLibre", format: "texte" },
                       },
                     ],
