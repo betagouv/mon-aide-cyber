@@ -11,6 +11,7 @@ import {
   uneQuestion,
   uneQuestionAChoixUnique,
   uneQuestionTiroirAChoixMultiple,
+  uneQuestionTiroirAChoixUnique,
 } from "../../test/constructeurs/constructeurQuestions.ts";
 import { uneReponsePossible } from "../../test/constructeurs/constructeurReponsePossible.ts";
 import { ComposantAffichageErreur } from "../composants/erreurs/ComposantAffichageErreur.tsx";
@@ -184,6 +185,46 @@ const diagnosticAvecQuestionsAPlusieursTiroirs = unDiagnostic()
   )
   .construis();
 
+const identifiantQuestionATiroirAvecReponseUnique =
+  "4196086c-d370-4406-a757-347d964a4e74";
+const diagnosticAvecQuestionsATiroirsAvecReponseUnique = unDiagnostic()
+  .avecIdentifiant(identifiantQuestionATiroirAvecReponseUnique)
+  .avecUnReferentiel(
+    unReferentiel()
+      .sansAction()
+      .ajouteAction(actionRepondre)
+      .avecUneQuestion(
+        uneQuestion()
+          .avecLibelle("QCM?")
+          .avecDesReponses([
+            uneReponsePossible().construis(),
+            uneReponsePossible().avecLibelle("un seul choix").construis(),
+            uneReponsePossible()
+              .avecLibelle("Tiroir à choix unique ?")
+              .avecUneQuestion(
+                uneQuestionTiroirAChoixUnique()
+                  .avecLibelle("Le choix unique ?")
+                  .avecDesReponses([
+                    uneReponsePossible().avecLibelle("choix 1").construis(),
+                    uneReponsePossible().avecLibelle("choix 2").construis(),
+                    uneReponsePossible().avecLibelle("choix 3").construis(),
+                  ])
+                  .construis(),
+              )
+              .construis(),
+          ])
+          .avecLaReponseDonnee(reponseAvecQuestionAChoixMultiple, [
+            {
+              identifiant: "le-choix-unique-",
+              reponses: new Set(["choix-2"]),
+            },
+          ])
+          .construis(),
+      )
+      .construis(),
+  )
+  .construis();
+
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestionAChoixUnique);
 await entrepotDiagnosticMemoire.persiste(
   diagnosticAvecQuestionSousFormeDeListeDeroulante,
@@ -192,6 +233,9 @@ await entrepotDiagnosticMemoire.persiste(diagnosticAPlusieursThematiques);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecQuestionATiroir);
 await entrepotDiagnosticMemoire.persiste(
   diagnosticAvecQuestionsAPlusieursTiroirs,
+);
+await entrepotDiagnosticMemoire.persiste(
+  diagnosticAvecQuestionsATiroirsAvecReponseUnique,
 );
 
 const meta = {
@@ -548,3 +592,80 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
     });
   },
 };
+
+export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story =
+  {
+    name: "Sélectionne la réponse pour la question à tiroir avec une réponse unique",
+    args: { idDiagnostic: identifiantQuestionATiroirAvecReponseUnique },
+    play: async ({ canvasElement, step }) => {
+      const canvas = within(canvasElement);
+
+      await step(
+        "Lorsque le diagnostic est récupéré depuis l’API",
+        async () => {
+          expect(
+            await waitFor(() =>
+              canvas.getByRole("radio", {
+                name: /choix 1/i,
+              }),
+            ),
+          ).not.toBeChecked();
+          expect(
+            await waitFor(() =>
+              canvas.getByRole("radio", {
+                name: /choix 2/i,
+              }),
+            ),
+          ).toBeChecked();
+          expect(
+            await waitFor(() =>
+              canvas.getByRole("radio", {
+                name: /choix 3/i,
+              }),
+            ),
+          ).not.toBeChecked();
+        },
+      );
+
+      await step("Lorsque l’utilisateur modifie la réponse", async () => {
+        await userEvent.click(canvas.getByRole("radio", { name: /choix 3/i }));
+
+        expect(
+          canvas.getByRole("radio", { name: /tiroir à choix unique ?/i }),
+        ).toBeChecked();
+        expect(
+          await waitFor(() =>
+            canvas.getByRole("radio", {
+              name: /choix 1/i,
+            }),
+          ),
+        ).not.toBeChecked();
+        expect(
+          await waitFor(() =>
+            canvas.getByRole("radio", {
+              name: /choix 2/i,
+            }),
+          ),
+        ).not.toBeChecked();
+        expect(
+          await waitFor(() =>
+            canvas.getByRole("radio", {
+              name: /choix 3/i,
+            }),
+          ),
+        ).toBeChecked();
+        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+          reponseDonnee: {
+            reponse: "tiroir-a-choix-unique-",
+            questions: [
+              {
+                identifiant: "le-choix-unique-",
+                reponses: ["choix-3"],
+              },
+            ],
+          },
+          identifiantQuestion: "qcm",
+        });
+      });
+    },
+  };
