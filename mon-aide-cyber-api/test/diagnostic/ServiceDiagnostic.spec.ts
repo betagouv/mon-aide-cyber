@@ -11,13 +11,20 @@ import { AdaptateurReferentielDeTest } from "../adaptateurs/AdaptateurReferentie
 import { Entrepots } from "../../src/domaine/Entrepots";
 import { EntrepotsMemoire } from "../../src/infrastructure/entrepots/memoire/Entrepots";
 import { QuestionDiagnostic } from "../../src/diagnostic/Diagnostic";
+import {
+  uneNote,
+  unTableauDeNotes,
+} from "../constructeurs/constructeurTableauDeNotes";
+import { AdaptateurTableauDeNotesDeTest } from "../adaptateurs/AdaptateurTableauDeNotesDeTest";
 
 describe("Le service de diagnostic", () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
+  let adaptateurTableauDeNotes: AdaptateurTableauDeNotesDeTest;
   let entrepots: Entrepots;
 
   beforeEach(() => {
     adaptateurReferentiel = new AdaptateurReferentielDeTest();
+    adaptateurTableauDeNotes = new AdaptateurTableauDeNotesDeTest();
     entrepots = new EntrepotsMemoire();
   });
 
@@ -52,6 +59,7 @@ describe("Le service de diagnostic", () => {
       entrepots.diagnostic().persiste(diagnostic);
       const serviceDiagnostic = new ServiceDiagnostic(
         adaptateurReferentiel,
+        adaptateurTableauDeNotes,
         entrepots,
       );
 
@@ -118,6 +126,7 @@ describe("Le service de diagnostic", () => {
       entrepots.diagnostic().persiste(diagnostic);
       const serviceDiagnostic = new ServiceDiagnostic(
         adaptateurReferentiel,
+        adaptateurTableauDeNotes,
         entrepots,
       );
 
@@ -154,6 +163,7 @@ describe("Le service de diagnostic", () => {
 
       const diagnostic = await new ServiceDiagnostic(
         adaptateurReferentiel,
+        adaptateurTableauDeNotes,
         entrepots,
       ).lance();
 
@@ -172,6 +182,45 @@ describe("Le service de diagnostic", () => {
           reponseDonnee: { reponseUnique: null, reponsesMultiples: [] },
         },
       ]);
+    });
+
+    it("ajoute le tableau des notes", async () => {
+      const question = uneQuestion()
+        .aChoixUnique("q")
+        .avecReponsesPossibles([
+          uneReponsePossible().avecLibelle("r1").construis(),
+          uneReponsePossible().avecLibelle("r2").construis(),
+          uneReponsePossible().avecLibelle("r3").construis(),
+        ])
+        .construis();
+      const referentiel = unReferentiel()
+        .ajouteUneThematique("T1", question)
+        .construis();
+      adaptateurReferentiel.ajoute(referentiel);
+      adaptateurTableauDeNotes.ajoute(
+        unTableauDeNotes()
+          .avecDesNotes([
+            uneNote().identifieePar("r1").ayantPourValeur(0.5).construis(),
+            uneNote().identifieePar("r0").ayantPourValeur(null).construis(),
+            uneNote().identifieePar("r2").ayantPourValeur(1).construis(),
+          ])
+          .construis(),
+      );
+
+      const diagnostic = await new ServiceDiagnostic(
+        adaptateurReferentiel,
+        adaptateurTableauDeNotes,
+        entrepots,
+      ).lance();
+
+      const diagnosticRetourne = await entrepots
+        .diagnostic()
+        .lis(diagnostic.identifiant);
+      expect(diagnosticRetourne.tableauDesNotes).toStrictEqual({
+        r1: 0.5,
+        r2: 1,
+        r0: null,
+      });
     });
   });
 
@@ -207,6 +256,7 @@ describe("Le service de diagnostic", () => {
 
       await new ServiceDiagnostic(
         adaptateurReferentiel,
+        adaptateurTableauDeNotes,
         entrepots,
       ).ajouteLaReponse(diagnostic.identifiant, {
         chemin: "contexte",
@@ -280,6 +330,7 @@ describe("Le service de diagnostic", () => {
 
       await new ServiceDiagnostic(
         adaptateurReferentiel,
+        adaptateurTableauDeNotes,
         entrepots,
       ).ajouteLaReponse(diagnostic.identifiant, {
         chemin: "contexte",
