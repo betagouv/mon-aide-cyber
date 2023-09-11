@@ -154,15 +154,15 @@ const ComposantQuestion = ({
     [envoie],
   );
 
-  const repondChoixMultiple = useCallback(
+  const repondQuestionTiroir = useCallback(
     (
       identifiantReponse: string,
-      elementReponseMultiple: {
+      elementReponse: {
         identifiantReponse: string;
-        elementReponse: string;
+        reponse: string;
       },
     ) => {
-      envoie(reponseChangee(identifiantReponse, elementReponseMultiple));
+      envoie(reponseChangee(identifiantReponse, elementReponse));
     },
     [envoie],
   );
@@ -208,9 +208,9 @@ const ComposantQuestion = ({
                         (reponse) => reponse.reponses.has(rep.identifiant),
                       )}
                       onChange={(identifiantReponse) =>
-                        repondChoixMultiple(reponse.identifiant, {
+                        repondQuestionTiroir(reponse.identifiant, {
                           identifiantReponse: questionTiroir.identifiant,
-                          elementReponse: identifiantReponse,
+                          reponse: identifiantReponse,
                         })
                       }
                     />

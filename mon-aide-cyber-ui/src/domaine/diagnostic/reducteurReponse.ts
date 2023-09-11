@@ -10,7 +10,7 @@ export enum EtatReponseStatut {
 }
 
 export type EtatReponse = {
-  identifiantQuestion: string;
+  question: Question;
   reponseDonnee: ReponseDonnee;
   reponse: () => Reponse | null;
   statut: EtatReponseStatut;
@@ -18,9 +18,9 @@ export type EtatReponse = {
 };
 type ElementReponse = {
   valeur: string;
-  elementReponseMultiple?: {
+  elementReponse?: {
     identifiantReponse: string;
-    elementReponse: string;
+    reponse: string;
   };
 };
 
@@ -32,10 +32,24 @@ export const reducteurReponse = (
   etat: EtatReponse,
   action: ActionReponse,
 ): EtatReponse => {
+  const laQuestionTiroirEstAChoixUnique = (
+    identifiantReponse: string,
+  ): boolean => {
+    return etat.question.reponsesPossibles.some(
+      (rep) =>
+        rep.questions?.some((q) => {
+          return (
+            q.reponsesPossibles
+              .map((r) => r.identifiant)
+              .includes(identifiantReponse) && q.type === "choixUnique"
+          );
+        }),
+    );
+  };
   switch (action.type) {
     case TypeActionReponse.REPONSE_CHANGEE: {
       let reponse: () => Reponse = () => ({
-        identifiantQuestion: etat.identifiantQuestion,
+        identifiantQuestion: etat.question.identifiant,
         reponseDonnee: action.reponse.valeur,
       });
       const reponseDonnee: ReponseDonnee = {
@@ -50,33 +64,35 @@ export const reducteurReponse = (
           identifiant: rep.identifiant,
           reponses: new Set(rep.reponses),
         }));
-      const elementReponseMultiple = action.reponse.elementReponseMultiple;
-      if (elementReponseMultiple) {
+      const elementReponse = action.reponse.elementReponse;
+      if (elementReponse) {
         const aDejaUneReponse = reponses.find(
-          (rep) =>
-            rep.identifiant === elementReponseMultiple.identifiantReponse,
+          (rep) => rep.identifiant === elementReponse.identifiantReponse,
         );
         if (aDejaUneReponse) {
-          aDejaUneReponse.reponses.add(elementReponseMultiple.elementReponse);
-          const doitRetirerUneReponsePrecedemmentSelectionnee =
-            reponseDonneeCourante.reponses.find((rep) =>
-              rep.reponses.has(elementReponseMultiple.elementReponse),
-            );
-          if (doitRetirerUneReponsePrecedemmentSelectionnee) {
-            aDejaUneReponse.reponses.delete(
-              elementReponseMultiple.elementReponse,
-            );
+          if (laQuestionTiroirEstAChoixUnique(elementReponse.reponse)) {
+            aDejaUneReponse.reponses.clear();
+            aDejaUneReponse.reponses.add(elementReponse.reponse);
+          } else {
+            aDejaUneReponse.reponses.add(elementReponse.reponse);
+            const doitRetirerUneReponsePrecedemmentSelectionnee =
+              reponseDonneeCourante.reponses.find((rep) =>
+                rep.reponses.has(elementReponse.reponse),
+              );
+            if (doitRetirerUneReponsePrecedemmentSelectionnee) {
+              aDejaUneReponse.reponses.delete(elementReponse.reponse);
+            }
           }
         } else {
           reponses.push({
-            identifiant: elementReponseMultiple.identifiantReponse,
-            reponses: new Set([elementReponseMultiple.elementReponse]),
+            identifiant: elementReponse.identifiantReponse,
+            reponses: new Set([elementReponse.reponse]),
           });
         }
         reponseDonnee.reponses = reponses;
 
         reponse = () => ({
-          identifiantQuestion: etat.identifiantQuestion,
+          identifiantQuestion: etat.question.identifiant,
           reponseDonnee: {
             reponse: (reponseDonnee as ReponseDonnee).valeur!,
             questions: reponseDonnee.reponses.map((rep) => ({
@@ -100,14 +116,14 @@ export const reducteurReponse = (
 
 export const reponseChangee = (
   reponse: string,
-  elementReponseMultilple:
-    | { identifiantReponse: string; elementReponse: string }
+  elementReponse:
+    | { identifiantReponse: string; reponse: string }
     | undefined = undefined,
 ): ActionReponse => {
   return {
     reponse: {
       valeur: reponse,
-      elementReponseMultiple: elementReponseMultilple,
+      ...(elementReponse !== undefined && { elementReponse }),
     },
     type: TypeActionReponse.REPONSE_CHANGEE,
   };
@@ -117,7 +133,7 @@ export const initialiseReducteur = (question: Question): EtatReponse => {
   const valeur: () => string | undefined = () =>
     question.reponseDonnee?.valeur || undefined;
   return {
-    identifiantQuestion: question.identifiant,
+    question: question,
     reponseDonnee: question.reponseDonnee,
     reponse: () => null,
     statut: EtatReponseStatut.CHARGEE,
