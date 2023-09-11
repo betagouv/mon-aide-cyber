@@ -4,8 +4,10 @@ import {
   initialiseDiagnostic,
 } from "./Diagnostic";
 import * as crypto from "crypto";
-import { AdaptateurReferentiel } from "../adaptateurs/AdaptateurReferentiel";
 import { Entrepots } from "../domaine/Entrepots";
+import { Adaptateur } from "../adaptateurs/Adaptateur";
+import { TableauDeNotes } from "./TableauDeNotes";
+import { Referentiel } from "./Referentiel";
 
 export type CorpsReponseQuestionATiroir = {
   reponse: string;
@@ -19,7 +21,8 @@ export type CorpsReponse = {
 
 export class ServiceDiagnostic {
   constructor(
-    private readonly adaptateurReferentiel: AdaptateurReferentiel,
+    private readonly adaptateurReferentiel: Adaptateur<Referentiel>,
+    private readonly adaptateurTableauDeNotes: Adaptateur<TableauDeNotes>,
     private readonly entrepots: Entrepots,
   ) {}
 
@@ -27,10 +30,13 @@ export class ServiceDiagnostic {
     this.entrepots.diagnostic().lis(id);
 
   lance = async (): Promise<Diagnostic> => {
-    return this.adaptateurReferentiel.lis().then((r) => {
-      const diagnostic = initialiseDiagnostic(r);
+    return Promise.all([
+      this.adaptateurReferentiel.lis(),
+      this.adaptateurTableauDeNotes.lis(),
+    ]).then(([r, t]) => {
+      const diagnostic = initialiseDiagnostic(r, t);
       this.entrepots.diagnostic().persiste(diagnostic);
-      return Promise.resolve(diagnostic);
+      return diagnostic;
     });
   };
 

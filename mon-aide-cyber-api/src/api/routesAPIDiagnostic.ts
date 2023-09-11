@@ -12,6 +12,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.post("/", (_requete: Request, reponse: Response) => {
     new ServiceDiagnostic(
       configuration.adaptateurReferentiel,
+      configuration.adaptateurTableauDeNotes,
       configuration.entrepots,
     )
       .lance()
@@ -31,6 +32,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       const { id } = requete.params;
       new ServiceDiagnostic(
         configuration.adaptateurReferentiel,
+        configuration.adaptateurTableauDeNotes,
         configuration.entrepots,
       )
         .diagnostic(id as crypto.UUID)
@@ -54,6 +56,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       const corpsReponse = requete.body;
       new ServiceDiagnostic(
         configuration.adaptateurReferentiel,
+        configuration.adaptateurTableauDeNotes,
         configuration.entrepots,
       )
         .ajouteLaReponse(id as crypto.UUID, corpsReponse)

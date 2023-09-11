@@ -3,6 +3,7 @@ import { AdaptateurReferentielDeTest } from "../adaptateurs/AdaptateurReferentie
 import { AdaptateurTranscripteurDeTest } from "../adaptateurs/adaptateurTranscripteur";
 import { EntrepotsMemoire } from "../../src/infrastructure/entrepots/memoire/Entrepots";
 import { faker } from "@faker-js/faker/locale/fr";
+import { AdaptateurTableauDeNotesDeTest } from "../adaptateurs/AdaptateurTableauDeNotesDeTest";
 
 const testeurIntegration = () => {
   let serveurDeTest: {
@@ -10,11 +11,13 @@ const testeurIntegration = () => {
     ecoute: (port: number, succes: () => void) => void;
   };
   const adaptateurReferentiel = new AdaptateurReferentielDeTest();
+  const adaptateurTableauDeNotes = new AdaptateurTableauDeNotesDeTest();
   const adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest();
   const entrepots = new EntrepotsMemoire();
   const initialise = () => {
     serveurDeTest = serveur.creeServeur({
       adaptateurReferentiel,
+      adaptateurTableauDeNotes,
       adaptateurTranscripteurDonnees,
       entrepots,
     });
