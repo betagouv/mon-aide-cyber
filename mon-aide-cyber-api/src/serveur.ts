@@ -3,13 +3,16 @@ import express, { Request, Response } from "express";
 import * as http from "http";
 import rateLimit from "express-rate-limit";
 import routesAPI from "./api/routesAPI";
-import { AdaptateurReferentiel } from "./adaptateurs/AdaptateurReferentiel";
 import { AdaptateurTranscripteur } from "./adaptateurs/AdaptateurTranscripteur";
 import { Entrepots } from "./domaine/Entrepots";
 import { gestionnaireErreurAggregatNonTrouve } from "./api/gestionnaires/erreurs";
+import { Adaptateur } from "./adaptateurs/Adaptateur";
+import { TableauDeNotes } from "./diagnostic/TableauDeNotes";
+import { Referentiel } from "./diagnostic/Referentiel";
 
 export type ConfigurationServeur = {
-  adaptateurReferentiel: AdaptateurReferentiel;
+  adaptateurReferentiel: Adaptateur<Referentiel>;
+  adaptateurTableauDeNotes: Adaptateur<TableauDeNotes>;
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
   entrepots: Entrepots;
 };

@@ -1,7 +1,7 @@
-import { AdaptateurReferentiel } from "../../src/adaptateurs/AdaptateurReferentiel";
 import { Referentiel } from "../../src/diagnostic/Referentiel";
+import { Adaptateur } from "../../src/adaptateurs/Adaptateur";
 
-export class AdaptateurReferentielDeTest implements AdaptateurReferentiel {
+export class AdaptateurReferentielDeTest implements Adaptateur<Referentiel> {
   private referentiel: Referentiel | undefined = undefined;
 
   lis(): Promise<Referentiel> {

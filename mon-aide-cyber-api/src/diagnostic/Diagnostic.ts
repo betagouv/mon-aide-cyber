@@ -2,6 +2,7 @@ import crypto from "crypto";
 import { Question, Referentiel } from "./Referentiel";
 import { Entrepot } from "../domaine/Entrepot";
 import { CorpsReponse, CorpsReponseQuestionATiroir } from "./ServiceDiagnostic";
+import { TableauDeNotes } from "./TableauDeNotes";
 
 type Thematique = string;
 
@@ -23,11 +24,15 @@ type ReferentielDiagnostic = {
 };
 
 type Diagnostic = {
+  tableauDesNotes: TableauDeNotes;
   identifiant: crypto.UUID;
   referentiel: ReferentielDiagnostic;
 };
 type EntrepotDiagnostic = Entrepot<Diagnostic>;
-const initialiseDiagnostic = (r: Referentiel): Diagnostic => {
+const initialiseDiagnostic = (
+  r: Referentiel,
+  tableauDesNotes: TableauDeNotes,
+): Diagnostic => {
   const referentiel: {
     [clef: Thematique]: QuestionsThematique;
   } = Object.entries(r).reduce((accumulateur, [clef, questions]) => {
@@ -50,6 +55,7 @@ const initialiseDiagnostic = (r: Referentiel): Diagnostic => {
   return {
     identifiant: crypto.randomUUID(),
     referentiel,
+    tableauDesNotes,
   };
 };
 
