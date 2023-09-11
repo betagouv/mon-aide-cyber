@@ -4,50 +4,35 @@ import {
   EtatReponseStatut,
 } from "../../../src/domaine/diagnostic/reducteurReponse";
 import {
+  Question,
   ReponseDonnee,
-  ReponsePossible,
 } from "../../../src/domaine/diagnostic/Referentiel";
 
 class ConstructeurEtaReponse {
   private reponse: () => Reponse | null = () => null;
   private statut: EtatReponseStatut = EtatReponseStatut.CHARGEE;
-  private reponseDonnee: ReponseDonnee = {
-    valeur: null,
-    reponses: [],
-  };
   private valeur: () => string | undefined = () => undefined;
 
-  constructor(private readonly identifiantQuestion: string) {}
+  constructor(private readonly question: Question) {}
 
   reponseChargee(): ConstructeurEtaReponse {
     this.statut = EtatReponseStatut.CHARGEE;
     return this;
   }
-
-  avecUneReponseDonnee(reponse: {
-    reponse: ReponsePossible;
-    reponses: { identifiant: string; reponses: string[] }[];
-  }): ConstructeurEtaReponse {
-    this.reponseDonnee = {
-      valeur: reponse.reponse.identifiant,
-      reponses: reponse.reponses.map((rep) => ({
-        identifiant: rep.identifiant,
-        reponses: new Set(rep.reponses),
-      })),
-    };
-    return this;
-  }
-
   construis(): EtatReponse {
+    const reponseDonnee: ReponseDonnee = {
+      valeur: this.question.reponseDonnee.valeur,
+      reponses: this.question.reponseDonnee.reponses,
+    };
     return {
-      identifiantQuestion: this.identifiantQuestion,
+      question: this.question,
       reponse: this.reponse,
-      reponseDonnee: this.reponseDonnee,
+      reponseDonnee,
       statut: this.statut,
       valeur: this.valeur,
     };
   }
 }
 
-export const unEtatDeReponse = (identifiantQuestion: string) =>
-  new ConstructeurEtaReponse(identifiantQuestion);
+export const unEtatDeReponse = (question: Question) =>
+  new ConstructeurEtaReponse(question);

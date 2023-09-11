@@ -47,9 +47,13 @@ describe("Le réducteur de réponse", () => {
 
     it("change la réponse donnée et modifie le statut", () => {
       const nouvelleReponse = uneReponsePossible().construis();
+      const question = uneQuestionAChoixUnique()
+        .avecLibelle("Une question?")
+        .avecDesReponses([nouvelleReponse])
+        .construis();
 
       const etatReponse = reducteurReponse(
-        unEtatDeReponse("une-question").reponseChargee().construis(),
+        unEtatDeReponse(question).reponseChargee().construis(),
         reponseChangee(nouvelleReponse.identifiant),
       );
 
@@ -67,18 +71,18 @@ describe("Le réducteur de réponse", () => {
           uneQuestionTiroirAChoixMultiple().avecLibelle("QCM").construis(),
         )
         .construis();
+      const question = uneQuestionAChoixUnique()
+        .avecLibelle("Une question?")
+        .avecLaReponseDonnee(nouvelleReponse, [
+          { identifiant: "qcm", reponses: new Set(["choix 2"]) },
+        ])
+        .construis();
 
       const etatReponse = reducteurReponse(
-        unEtatDeReponse("une-question")
-          .reponseChargee()
-          .avecUneReponseDonnee({
-            reponse: nouvelleReponse,
-            reponses: [{ identifiant: "qcm", reponses: ["choix 2"] }],
-          })
-          .construis(),
+        unEtatDeReponse(question).reponseChargee().construis(),
         reponseChangee(nouvelleReponse.identifiant, {
           identifiantReponse: "qcm",
-          elementReponse: "choix 3",
+          reponse: "choix 3",
         }),
       );
 
@@ -109,23 +113,21 @@ describe("Le réducteur de réponse", () => {
           uneQuestionTiroirAChoixMultiple().avecLibelle("QCM").construis(),
         )
         .construis();
+      const question = uneQuestionAChoixUnique()
+        .avecLibelle("Une question?")
+        .avecLaReponseDonnee(nouvelleReponse, [
+          {
+            identifiant: "qcm",
+            reponses: new Set(["choix 2", "choix 3", "choix 4"]),
+          },
+        ])
+        .construis();
 
       const etatReponse = reducteurReponse(
-        unEtatDeReponse("une-question")
-          .reponseChargee()
-          .avecUneReponseDonnee({
-            reponse: nouvelleReponse,
-            reponses: [
-              {
-                identifiant: "qcm",
-                reponses: ["choix 2", "choix 3", "choix 4"],
-              },
-            ],
-          })
-          .construis(),
+        unEtatDeReponse(question).reponseChargee().construis(),
         reponseChangee(nouvelleReponse.identifiant, {
           identifiantReponse: "qcm",
-          elementReponse: "choix 4",
+          reponse: "choix 4",
         }),
       );
 
@@ -159,27 +161,25 @@ describe("Le réducteur de réponse", () => {
           uneQuestionTiroirAChoixMultiple().avecLibelle("tiroir 2").construis(),
         )
         .construis();
+      const question = uneQuestionAChoixUnique()
+        .avecLibelle("Une Question")
+        .avecLaReponseDonnee(nouvelleReponse, [
+          {
+            identifiant: "tiroir-1",
+            reponses: new Set(["choix 12", "choix 13"]),
+          },
+          {
+            identifiant: "tiroir-2",
+            reponses: new Set(["choix 21"]),
+          },
+        ])
+        .construis();
 
       const etatReponse = reducteurReponse(
-        unEtatDeReponse("une-question")
-          .reponseChargee()
-          .avecUneReponseDonnee({
-            reponse: nouvelleReponse,
-            reponses: [
-              {
-                identifiant: "tiroir-1",
-                reponses: ["choix 12", "choix 13"],
-              },
-              {
-                identifiant: "tiroir-2",
-                reponses: ["choix 21"],
-              },
-            ],
-          })
-          .construis(),
+        unEtatDeReponse(question).reponseChargee().construis(),
         reponseChangee(nouvelleReponse.identifiant, {
           identifiantReponse: "tiroir-2",
-          elementReponse: "choix 23",
+          reponse: "choix 23",
         }),
       );
 
@@ -207,6 +207,53 @@ describe("Le réducteur de réponse", () => {
         },
       });
       expect(etatReponse.statut).toBe(EtatReponseStatut.MODIFIE);
+    });
+
+    it("prend en compte les réponses à choix unique pour les questions à tiroir", () => {
+      const nouvelleReponse = uneReponsePossible()
+        .avecUneQuestion(
+          uneQuestionAChoixUnique()
+            .avecLibelle("choix unique")
+            .avecDesReponses([
+              uneReponsePossible().avecLibelle("1").construis(),
+              uneReponsePossible().avecLibelle("2").construis(),
+              uneReponsePossible().avecLibelle("3").construis(),
+            ])
+            .construis(),
+        )
+        .construis();
+      const question = uneQuestionAChoixUnique()
+        .avecLibelle("une question?")
+        .avecDesReponses([nouvelleReponse])
+        .avecLaReponseDonnee(nouvelleReponse, [
+          { identifiant: "choix-unique", reponses: new Set(["2"]) },
+        ])
+        .construis();
+
+      const etatReponse = reducteurReponse(
+        unEtatDeReponse(question).reponseChargee().construis(),
+        reponseChangee(nouvelleReponse.identifiant, {
+          identifiantReponse: "choix-unique",
+          reponse: "1",
+        }),
+      );
+
+      expect(etatReponse.reponseDonnee).toStrictEqual({
+        valeur: nouvelleReponse.identifiant,
+        reponses: [
+          {
+            identifiant: "choix-unique",
+            reponses: new Set(["1"]),
+          },
+        ],
+      });
+      expect(etatReponse.reponse()).toStrictEqual({
+        identifiantQuestion: "une-question",
+        reponseDonnee: {
+          reponse: nouvelleReponse.identifiant,
+          questions: [{ identifiant: "choix-unique", reponses: ["1"] }],
+        },
+      });
     });
   });
 });
