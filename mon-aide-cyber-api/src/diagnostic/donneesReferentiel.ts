@@ -4,97 +4,132 @@ const referentiel: Referentiel = {
   contexte: {
     questions: [
       {
-        identifiant: "natureOrganisation",
+        identifiant: "nature-organisation",
         libelle: "Quelle est la nature de votre organisation ?",
         reponsesPossibles: [
           {
-            identifiant: "organisationPublique",
+            identifiant: "nature-organisation-organisation-publique",
             libelle:
               "Organisation publique (ex. collectivité, organisation centrale)",
             ordre: 0,
           },
           {
-            identifiant: "entreprisePrivee",
+            identifiant: "nature-organisation-entreprise-privee",
             libelle: "Entreprise privée (ex. TPE, PME, ETI)",
             ordre: 1,
           },
           {
-            identifiant: "association",
+            identifiant: "nature-organisation-association",
             libelle: "Association (ex. association loi 1901)",
             ordre: 2,
           },
-          { identifiant: "autre", libelle: "Autre : préciser", ordre: 3 },
+          {
+            identifiant: "nature-organisation-autre",
+            libelle: "Autre : préciser",
+            ordre: 3,
+          },
         ],
         type: "choixUnique",
       },
       {
-        identifiant: "secteurActivite",
+        identifiant: "secteur-activite",
         libelle: "Quel est son secteur d'activité ?",
         reponsesPossibles: [
           {
-            identifiant: "administration",
+            identifiant: "secteur-activite-administration",
             libelle: "Administration",
             ordre: 0,
           },
-          { identifiant: "agriculture", libelle: "Agriculture", ordre: 1 },
-          { identifiant: "industrie", libelle: "Industrie", ordre: 2 },
-          { identifiant: "construction", libelle: "Construction", ordre: 3 },
-          { identifiant: "tertiaire", libelle: "Tertiaire", ordre: 4 },
-          { identifiant: "commerce", libelle: "Commerce", ordre: 5 },
-          { identifiant: "transports", libelle: "Transports", ordre: 6 },
           {
-            identifiant: "hebergementEtRestauration",
+            identifiant: "secteur-activite-agriculture",
+            libelle: "Agriculture",
+            ordre: 1,
+          },
+          {
+            identifiant: "secteur-activite-industrie",
+            libelle: "Industrie",
+            ordre: 2,
+          },
+          {
+            identifiant: "secteur-activite-construction",
+            libelle: "Construction",
+            ordre: 3,
+          },
+          {
+            identifiant: "secteur-activite-tertiaire",
+            libelle: "Tertiaire",
+            ordre: 4,
+          },
+          {
+            identifiant: "secteur-activite-commerce",
+            libelle: "Commerce",
+            ordre: 5,
+          },
+          {
+            identifiant: "secteur-activite-transports",
+            libelle: "Transports",
+            ordre: 6,
+          },
+          {
+            identifiant: "secteur-activite-hebergement-et-restauration",
             libelle: "Hébergement et restauration",
             ordre: 7,
           },
           {
-            identifiant: "informationEtcommunication",
+            identifiant: "secteur-activite-information-et-communication",
             libelle: "Information et communication",
             ordre: 8,
           },
           {
-            identifiant: "activitesFinancieresEtAssurance",
+            identifiant: "secteur-activite-activites-financieres-et-assurance",
             libelle: "Activités financières et d'assurance",
             ordre: 9,
           },
           {
-            identifiant: "activitesImmobilieres",
+            identifiant: "secteur-activite-activites-immobilieres",
             libelle: "Activités immobilières",
             ordre: 10,
           },
           {
-            identifiant: "activitesSpecialiseesScientifiquesEtTechniques",
+            identifiant:
+              "secteur-activite-activites-specialisees-scientifiques-et-techniques",
             libelle: "Activités spécialisées, scientifiques et techniques",
             ordre: 11,
           },
           {
-            identifiant: "activitesDeServicesAdministratifsEtDeSoutien",
+            identifiant:
+              "secteur-activite-activites-de-services-administratifs-et-de-soutien",
             libelle: "Activités de services administratifs et de soutien",
             ordre: 12,
           },
-          { identifiant: "enseignement", libelle: "Enseignement", ordre: 13 },
           {
-            identifiant: "santeHumaineEtActionSociale",
+            identifiant: "secteur-activite-enseignement",
+            libelle: "Enseignement",
+            ordre: 13,
+          },
+          {
+            identifiant: "secteur-activite-sante-humaine-et-action-sociale",
             libelle: "Santé humaine et action sociale",
             ordre: 14,
           },
           {
-            identifiant: "artsSpectaclesEtActivitesRecreatives",
+            identifiant:
+              "secteur-activite-arts-spectacles-et-activites-recreatives",
             libelle: "Arts, spectacles et activités récréatives",
             ordre: 15,
           },
           {
-            identifiant: "autresActivitesDeServices",
+            identifiant: "secteur-activite-autres-activites-de-services",
             libelle: "Autres activités de services",
             ordre: 16,
           },
           {
-            identifiant: "servicesAuxMenages",
+            identifiant: "secteur-activite-services-aux-menages",
             libelle: "Services aux ménages",
             ordre: 17,
           },
           {
-            identifiant: "activitesExtraTerritoriales",
+            identifiant: "secteur-activite-activites-extra-territoriales",
             libelle: "Activités extra-territoriales",
             ordre: 18,
           },
@@ -102,36 +137,36 @@ const referentiel: Referentiel = {
         type: "choixUnique",
       },
       {
-        identifiant: "nombrePersonnesDansOrganisation",
+        identifiant: "nombre-personnes-dans-organisation",
         libelle: "Combien de personnes compte votre organisation ?",
         reponsesPossibles: [
           {
-            identifiant: "nbPersOrg-entre0Et20",
+            identifiant: "nombre-personnes-dans-organisation-entre-0-et-20",
             libelle: "Entre 0 et 20",
             ordre: 0,
           },
           {
-            identifiant: "nbPersOrg-entre20Et50",
+            identifiant: "nombre-personnes-dans-organisation-entre-20-et-50",
             libelle: "Entre 20 et 50",
             ordre: 1,
           },
           {
-            identifiant: "nbPersOrg-entre50Et100",
+            identifiant: "nombre-personnes-dans-organisation-entre-50-et-100",
             libelle: "Entre 50 et 100",
             ordre: 2,
           },
           {
-            identifiant: "nbPersOrg-entre100Et200",
+            identifiant: "nombre-personnes-dans-organisation-entre-100-et-200",
             libelle: "Entre 100 et 200",
             ordre: 3,
           },
           {
-            identifiant: "nbPersOrg-plusDe200",
+            identifiant: "nombre-personnes-dans-organisation-plus-de-200",
             libelle: "Plus de 200",
             ordre: 4,
           },
           {
-            identifiant: "nbPersOrg-plusDe500",
+            identifiant: "nombre-personnes-dans-organisation-plus-de-500",
             libelle: "Plus de 500",
             ordre: 5,
           },
@@ -139,36 +174,40 @@ const referentiel: Referentiel = {
         type: "choixUnique",
       },
       {
-        identifiant: "nombrePostesTravailDansOrganisation",
+        identifiant: "nombre-postes-travail-dans-organisation",
         libelle: "Combien de postes de travail compte votre organisation ?",
         reponsesPossibles: [
           {
-            identifiant: "nbPosOrg-entre0Et20",
+            identifiant:
+              "nombre-postes-travail-dans-organisation-entre-0-et-20",
             libelle: "Entre 0 et 20",
             ordre: 0,
           },
           {
-            identifiant: "nbPosOrg-entre20Et50",
+            identifiant:
+              "nombre-postes-travail-dans-organisation-entre-20-et-50",
             libelle: "Entre 20 et 50",
             ordre: 1,
           },
           {
-            identifiant: "nbPosOrg-entre50Et100",
+            identifiant:
+              "nombre-postes-travail-dans-organisation-entre-50-et-100",
             libelle: "Entre 50 et 100",
             ordre: 2,
           },
           {
-            identifiant: "nbPosOrg-entre100Et200",
+            identifiant:
+              "nombre-postes-travail-dans-organisation-entre-100-et-200",
             libelle: "Entre 100 et 200",
             ordre: 3,
           },
           {
-            identifiant: "nbPosOrg-plusDe200",
+            identifiant: "nombre-postes-travail-dans-organisation-plus-de-200",
             libelle: "Plus de 200",
             ordre: 4,
           },
           {
-            identifiant: "nbPosOrg-plusDe500",
+            identifiant: "nombre-postes-travail-dans-organisation-plus-de-500",
             libelle: "Plus de 500",
             ordre: 5,
           },
@@ -176,82 +215,101 @@ const referentiel: Referentiel = {
         type: "choixUnique",
       },
       {
-        identifiant: "activitesRechercheEtDeveloppement",
+        identifiant: "activites-recherche-et-developpement",
         libelle:
           'Votre organisation a-t-elle des activités de "Recherche et Développement" ?',
         reponsesPossibles: [
           {
-            identifiant: "REtD-neSaisPas",
+            identifiant: "activites-recherche-et-developpement-nsp",
             libelle: "Je ne sais pas",
             ordre: 1,
           },
-          { identifiant: "REtD-non", libelle: "Non", ordre: 2 },
-          { identifiant: "REtD-oui", libelle: "Oui", ordre: 3 },
+          {
+            identifiant: "activites-recherche-et-developpement-non",
+            libelle: "Non",
+            ordre: 2,
+          },
+          {
+            identifiant: "activites-recherche-et-developpement-oui",
+            libelle: "Oui",
+            ordre: 3,
+          },
         ],
         type: "choixUnique",
       },
       {
-        identifiant: "opereSIIndustriels",
+        identifiant: "opere-systemes-information-industriels",
         libelle:
           "Votre organisation opère-t-elle des systèmes d'information industriels ?",
         reponsesPossibles: [
           {
-            identifiant: "SII-neSaisPas",
+            identifiant: "opere-systemes-information-industriels-nsp",
             libelle: "Je ne sais pas",
             ordre: 1,
           },
-          { identifiant: "SII-non", libelle: "Non", ordre: 2 },
-          { identifiant: "SII-oui", libelle: "Oui", ordre: 3 },
+          {
+            identifiant: "opere-systemes-information-industriels-non",
+            libelle: "Non",
+            ordre: 2,
+          },
+          {
+            identifiant: "opere-systemes-information-industriels-oui",
+            libelle: "Oui",
+            ordre: 3,
+          },
         ],
         type: "choixUnique",
       },
       {
-        identifiant: "usageCloud",
+        identifiant: "usage-cloud",
         libelle: "Existe t-il un usage du Cloud dans votre organisation ?",
         reponsesPossibles: [
           {
-            identifiant: "usageCloud-neSaisPas",
+            identifiant: "usage-cloud-nsp",
             libelle: "Je ne sais pas",
             ordre: 1,
           },
-          { identifiant: "usageCloud-non", libelle: "Non", ordre: 2 },
+          { identifiant: "usage-cloud-non", libelle: "Non", ordre: 2 },
           {
-            identifiant: "usageCloud-oui",
+            identifiant: "usage-cloud-oui",
             libelle: "Oui",
             ordre: 3,
             questions: [
               {
-                identifiant: "usageCloudQuestionTiroir",
+                identifiant: "usage-cloud-oui-question-tiroir-usages",
                 libelle: 'Si "Oui": quels sont vos usages du Cloud ?',
                 reponsesPossibles: [
                   {
-                    identifiant: "usageCloud-Oui-neSaisPas",
+                    identifiant: "usage-cloud-oui-question-tiroir-usages-nsp",
                     libelle: "Je ne sais pas",
                     ordre: 1,
                   },
                   {
-                    identifiant: "usageCloud-Oui-Messagerie",
+                    identifiant:
+                      "usage-cloud-oui-question-tiroir-usages-messagerie",
                     libelle: "Messagerie",
                     ordre: 2,
                   },
                   {
-                    identifiant: "usageCloud-Oui-SuiteBureautiqueComplete",
+                    identifiant:
+                      "usage-cloud-oui-question-tiroir-usages-suite-bureautique-complete",
                     libelle: "Suite bureautique complète",
                     ordre: 3,
                   },
                   {
                     identifiant:
-                      "usageCloud-Oui-HebergementDonneesetSauvegardes",
+                      "usage-cloud-oui-question-tiroir-usages-hebergement-donnees-et-sauvegardes",
                     libelle: "Hébergement des données et sauvegardes",
                     ordre: 4,
                   },
                   {
-                    identifiant: "usageCloud-Oui-VirtualisationCompleteSI",
+                    identifiant:
+                      "usage-cloud-oui-question-tiroir-usages-virtualisation-complete-si",
                     libelle: "Virtualisation complète du SI",
                     ordre: 5,
                   },
                   {
-                    identifiant: "usageCloud-Oui-Autre",
+                    identifiant: "usage-cloud-oui-question-tiroir-usages-autre",
                     libelle: "Autre : Préciser",
                     ordre: 6,
                   },
@@ -264,42 +322,45 @@ const referentiel: Referentiel = {
         type: "choixUnique",
       },
       {
-        identifiant: "cyberAttaqueSubie",
+        identifiant: "cyber-attaque-subie",
         libelle: "Avez-vous déjà subi une cyberrataque ?",
         reponsesPossibles: [
           {
-            identifiant: "cyberAttaqueSubie-neSaisPas",
+            identifiant: "cyber-attaque-subie-nsp",
             libelle: "Je ne sais pas",
             ordre: 1,
           },
-          { identifiant: "cyberAttaqueSubie-non", libelle: "Non", ordre: 2 },
+          { identifiant: "cyber-attaque-subie-non", libelle: "Non", ordre: 2 },
           {
-            identifiant: "cyberAttaqueSubie-oui",
+            identifiant: "cyber-attaque-subie-oui",
             libelle: "Oui",
             ordre: 3,
             questions: [
               {
-                identifiant: "cyber-attaque-subie-tiroir-type",
+                identifiant: "cyber-attaque-subie-oui-tiroir-type",
                 libelle: "Si oui, de quel type ?",
                 reponsesPossibles: [
                   {
-                    identifiant: "cyber-attaque-subie-oui-type-compromission",
+                    identifiant:
+                      "cyber-attaque-subie-oui-tiroir-type-compromission",
                     libelle: "Compromission d'un poste et/ou d'une boîte mail",
                     ordre: 0,
                   },
                   {
-                    identifiant: "cyber-attaque-subie-oui-type-rancongiciel",
+                    identifiant:
+                      "cyber-attaque-subie-oui-tiroir-type-rancongiciel",
                     libelle:
                       "Rançongiciel ou  autre maliciel sur plusieurs postes",
                     ordre: 1,
                   },
                   {
-                    identifiant: "cyber-attaque-subie-oui-type-fauxOrdre",
+                    identifiant:
+                      "cyber-attaque-subie-oui-tiroir-type-faux-ordre",
                     libelle: "Faux ordre de virement",
                     ordre: 2,
                   },
                   {
-                    identifiant: "cyber-attaque-subie-oui-type-autre",
+                    identifiant: "cyber-attaque-subie-oui-tiroir-type-autre",
                     libelle: "Autre : Préciser",
                     ordre: 3,
                   },
@@ -312,17 +373,17 @@ const referentiel: Referentiel = {
                   'Si "Oui": avez-vous déposé plainte ou réalisé un signalement auprès d\'un service judiciaire ?',
                 reponsesPossibles: [
                   {
-                    identifiant: "cyber-attaque-subie-oui-plainte-neSaisPas",
+                    identifiant: "cyber-attaque-subie-tiroir-plainte-nsp",
                     libelle: "Je ne sais pas",
                     ordre: 0,
                   },
                   {
-                    identifiant: "cyber-attaque-subie-oui-plainte-non",
+                    identifiant: "cyber-attaque-subie-tiroir-plainte-non",
                     libelle: "Non",
                     ordre: 1,
                   },
                   {
-                    identifiant: "cyber-attaque-subie-oui-plainte-oui",
+                    identifiant: "cyber-attaque-subie-tiroir-plainte-oui",
                     libelle: "Oui",
                     ordre: 2,
                   },
@@ -345,19 +406,25 @@ const referentiel: Referentiel = {
         type: "choixUnique",
         reponsesPossibles: [
           {
-            identifiant: "gouvernance-ipp-nsp",
+            identifiant: "gouvernance-infos-et-processus-a-proteger-nsp",
             libelle: "Je ne sais pas.",
             ordre: 0,
           },
-          { identifiant: "gouvernance-ipp-non", libelle: "Non.", ordre: 1 },
           {
-            identifiant: "gouvernance-ipp-oui-idee-generale",
+            identifiant: "gouvernance-infos-et-processus-a-proteger-non",
+            libelle: "Non.",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "gouvernance-infos-et-processus-a-proteger-oui-idee-generale",
             libelle:
               "Nous avons une idée générale de nos données et processus à protéger en priorité.",
             ordre: 2,
           },
           {
-            identifiant: "gouvernance-ipp-oui-precise",
+            identifiant:
+              "gouvernance-infos-et-processus-a-proteger-oui-precise",
             libelle:
               "Il existe une liste précise et maintenue à jour de toutes les données et processus à protéger en priorité à l’échelle de l’organisation.",
             ordre: 3,
@@ -454,37 +521,49 @@ const referentiel: Referentiel = {
                 reponsesPossibles: [
                   {
                     identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-non-applicable",
+                    libelle: "Non applicable",
+                    ordre: 0,
+                  },
+
+                  {
+                    identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-nsp",
+                    libelle: "Je ne sais pas",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement",
                     libelle: "Etablissement d'un registre de vos traitements",
-                    ordre: 0,
+                    ordre: 2,
                   },
                   {
                     identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-traitement-nature-besoin-suppression",
                     libelle:
                       "Pour chaque traitement, détermination de la nature, besoin et finalité des traitements de données personnelles effectuées puis suppression de données non nécessaires",
-                    ordre: 1,
+                    ordre: 3,
                   },
                   {
                     identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-analyse-impact",
                     libelle:
                       "Analyse d'impact relative à la protection des données sur les traitements susceptibles d'engendrer un risque élevé",
-                    ordre: 2,
+                    ordre: 4,
                   },
                   {
                     identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-info-donnees-finalite",
                     libelle:
                       "Information auprès des personnes concernées des données personnelles traitées et leurs finalités",
-                    ordre: 3,
+                    ordre: 5,
                   },
                   {
                     identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-moyen-exercer-valoir-droits",
                     libelle:
                       "Mise en place de moyens permettant aux personnes concernées d'exercer et faire valoir leurs droits (droits d’accès, rectification, opposition, suppression; etc.)",
-                    ordre: 4,
+                    ordre: 6,
                   },
                 ],
               },
