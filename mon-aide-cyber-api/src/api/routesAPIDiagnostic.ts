@@ -28,6 +28,31 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   });
 
   routes.get(
+    "/:id/termine",
+    (requete: Request, reponse: Response, suite: NextFunction) => {
+      const { id } = requete.params;
+      const serviceDiagnostic = new ServiceDiagnostic(
+        configuration.adaptateurReferentiel,
+        configuration.adaptateurTableauDeNotes,
+        configuration.adaptateurTableauDeRecommandations,
+        configuration.entrepots,
+      );
+      serviceDiagnostic
+        .termine(id as crypto.UUID)
+        .then(() =>
+          serviceDiagnostic.diagnostic(id as crypto.UUID).then((diagnostic) => {
+            configuration.adaptateurPDF
+              .genereRecommandations(diagnostic)
+              .then((pdf) => {
+                reponse.contentType("application/pdf").send(pdf);
+              });
+          }),
+        )
+        .catch((erreur) => suite(erreur));
+    },
+  );
+
+  routes.get(
     "/:id",
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
@@ -53,7 +78,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.patch(
     "/:id",
     bodyParser.json(),
-    (requete: Request, reponse, suite) => {
+    (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       const corpsReponse = requete.body;
       new ServiceDiagnostic(

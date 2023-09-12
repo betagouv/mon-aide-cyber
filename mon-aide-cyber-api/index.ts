@@ -4,8 +4,10 @@ import { adaptateurTranscripteur } from "./src/infrastructure/adaptateurs/adapta
 import { EntrepotsMemoire } from "./src/infrastructure/entrepots/memoire/Entrepots";
 import { AdaptateurTableauDeNotesMAC } from "./src/infrastructure/adaptateurs/AdaptateurTableauDeNotesMAC";
 import { AdaptateurTableauDeRecommandationsMAC } from "./src/infrastructure/adaptateurs/AdaptateurTableauDeRecommandationsMAC";
+import { AdaptateurPDFMAC } from "./src/infrastructure/adaptateurs/AdaptateurPDFMAC";
 
 const serveurMAC = serveur.creeServeur({
+  adaptateurPDF: new AdaptateurPDFMAC(),
   adaptateurReferentiel: new AdaptateurReferentielMAC(),
   adaptateurTableauDeNotes: new AdaptateurTableauDeNotesMAC(),
   adaptateurTranscripteurDonnees: adaptateurTranscripteur(),

@@ -5,6 +5,8 @@ import { EntrepotsMemoire } from "../../src/infrastructure/entrepots/memoire/Ent
 import { faker } from "@faker-js/faker/locale/fr";
 import { AdaptateurTableauDeNotesDeTest } from "../adaptateurs/AdaptateurTableauDeNotesDeTest";
 import { AdaptateurTableauDeRecommandationsDeTest } from "../adaptateurs/AdaptateurTableauDeRecommandationsDeTest";
+import { AdaptateurPDF } from "../../src/adaptateurs/AdaptateurPDF";
+import { Diagnostic } from "../../src/diagnostic/Diagnostic";
 
 const testeurIntegration = () => {
   let serveurDeTest: {
@@ -17,8 +19,13 @@ const testeurIntegration = () => {
     new AdaptateurTableauDeRecommandationsDeTest();
   const adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest();
   const entrepots = new EntrepotsMemoire();
+  const adaptateurPDF: AdaptateurPDF = {
+    genereRecommandations: (__: Diagnostic) =>
+      Promise.resolve(Buffer.from("PDF généré")),
+  };
   const initialise = () => {
     serveurDeTest = serveur.creeServeur({
+      adaptateurPDF,
       adaptateurReferentiel,
       adaptateurTableauDeNotes,
       adaptateurTranscripteurDonnees,
@@ -40,6 +47,7 @@ const testeurIntegration = () => {
     arrete,
     entrepots,
     initialise,
+    adaptateurPDF,
   };
 };
 
