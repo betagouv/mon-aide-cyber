@@ -89,7 +89,7 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
     .flatMap(([__, questions]) => questions.questions)
     .forEach((question) => {
       if (diagnostic.tableauDesNotes[question.identifiant]) {
-        const recommandation: Recommandation = Object.entries(
+        const recommandations: Recommandation[] = Object.entries(
           diagnostic.tableauDesNotes[question.identifiant],
         )
           .filter(
@@ -107,8 +107,8 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
               recommandation,
               noteObtenue: note,
             } as Recommandation;
-          })?.[0];
-        diagnostic.recommandations?.push(recommandation);
+          });
+        diagnostic.recommandations?.push(...recommandations);
       }
     });
   diagnostic.recommandations = diagnostic.recommandations

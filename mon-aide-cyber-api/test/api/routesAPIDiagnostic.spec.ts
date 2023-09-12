@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import crypto from "crypto";
 import testeurIntegration from "./testeurIntegration";
 import {
   uneQuestion,
@@ -178,6 +179,41 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
           identifiant: "une-question-",
           reponse: "reponse-2",
         },
+      );
+
+      expect(reponse.status).toBe(404);
+      expect(await reponse.json()).toMatchObject({
+        message: "Le diagnostic demandé n'existe pas.",
+      });
+    });
+  });
+
+  describe("quand une requête GET est reçue sur /api/diagnostic/{id}/termine", () => {
+    it("génère les recommandations", async () => {
+      let adaptateurPDFAppele = false;
+      testeurMAC.adaptateurPDF.genereRecommandations = () => {
+        adaptateurPDFAppele = true;
+        return Promise.resolve(Buffer.from("PDF Recommandations généré"));
+      };
+      const diagnostic = unDiagnostic().construis();
+      testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      const reponse = await executeRequete(
+        "GET",
+        `/api/diagnostic/${diagnostic.identifiant}/termine`,
+        numeroPort,
+      );
+
+      expect(reponse.status).toBe(200);
+      expect(reponse.headers.get("Content-type")).toBe("application/pdf");
+      expect(adaptateurPDFAppele).toBe(true);
+    });
+
+    it("retourne une erreur HTTP 404 si le diagnostic visé n’existe pas", async () => {
+      const reponse = await executeRequete(
+        "GET",
+        `/api/diagnostic/${crypto.randomUUID()}/termine`,
+        numeroPort,
       );
 
       expect(reponse.status).toBe(404);

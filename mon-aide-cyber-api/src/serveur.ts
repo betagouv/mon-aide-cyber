@@ -10,8 +10,10 @@ import { TableauDeNotes } from "./diagnostic/TableauDeNotes";
 import { Referentiel } from "./diagnostic/Referentiel";
 import { TableauDeRecommandations } from "./diagnostic/TableauDeRecommandations";
 import { Adaptateur } from "./adaptateurs/Adaptateur";
+import { AdaptateurPDF } from "./adaptateurs/AdaptateurPDF";
 
 export type ConfigurationServeur = {
+  adaptateurPDF: AdaptateurPDF;
   adaptateurReferentiel: Adaptateur<Referentiel>;
   adaptateurTableauDeNotes: Adaptateur<TableauDeNotes>;
   adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>;
@@ -30,10 +32,10 @@ const creeServeur = (config: ConfigurationServeur) => {
     message:
       "Vous avez atteint le nombre maximal de requête. Veuillez réessayer ultérieurement.",
     standardHeaders: true,
-    keyGenerator: (requete: Request, _reponse: Response) =>
+    keyGenerator: (requete: Request, __: Response) =>
       requete.headers["x-real-ip"] as string,
     legacyHeaders: false,
-    skip: (requete: Request, _) => requete.path.startsWith("/api"),
+    skip: (requete: Request, __) => requete.path.startsWith("/api"),
   });
   app.use(limiteurTrafficUI);
   app.use(
