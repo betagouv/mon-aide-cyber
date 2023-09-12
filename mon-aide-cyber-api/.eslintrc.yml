@@ -11,4 +11,8 @@ parserOptions:
   sourceType: module
 plugins:
   - "@typescript-eslint"
-rules: {}
+rules:
+  {
+    no-unused-vars:
+      ["warn", { "varsIgnorePattern": "^__", "argsIgnorePattern": "^__" }],
+  }
