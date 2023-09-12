@@ -6,13 +6,15 @@ import routesAPI from "./api/routesAPI";
 import { AdaptateurTranscripteur } from "./adaptateurs/AdaptateurTranscripteur";
 import { Entrepots } from "./domaine/Entrepots";
 import { gestionnaireErreurAggregatNonTrouve } from "./api/gestionnaires/erreurs";
-import { Adaptateur } from "./adaptateurs/Adaptateur";
 import { TableauDeNotes } from "./diagnostic/TableauDeNotes";
 import { Referentiel } from "./diagnostic/Referentiel";
+import { TableauDeRecommandations } from "./diagnostic/TableauDeRecommandations";
+import { Adaptateur } from "./adaptateurs/Adaptateur";
 
 export type ConfigurationServeur = {
   adaptateurReferentiel: Adaptateur<Referentiel>;
   adaptateurTableauDeNotes: Adaptateur<TableauDeNotes>;
+  adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>;
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
   entrepots: Entrepots;
 };

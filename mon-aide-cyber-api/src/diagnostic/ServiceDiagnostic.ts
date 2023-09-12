@@ -1,6 +1,7 @@
 import {
   ajouteLaReponseAuDiagnostic,
   Diagnostic,
+  genereLesRecommandations,
   initialiseDiagnostic,
 } from "./Diagnostic";
 import * as crypto from "crypto";
@@ -8,6 +9,7 @@ import { Entrepots } from "../domaine/Entrepots";
 import { Adaptateur } from "../adaptateurs/Adaptateur";
 import { TableauDeNotes } from "./TableauDeNotes";
 import { Referentiel } from "./Referentiel";
+import { TableauDeRecommandations } from "./TableauDeRecommandations";
 
 export type CorpsReponseQuestionATiroir = {
   reponse: string;
@@ -23,6 +25,7 @@ export class ServiceDiagnostic {
   constructor(
     private readonly adaptateurReferentiel: Adaptateur<Referentiel>,
     private readonly adaptateurTableauDeNotes: Adaptateur<TableauDeNotes>,
+    private readonly adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>,
     private readonly entrepots: Entrepots,
   ) {}
 
@@ -33,8 +36,9 @@ export class ServiceDiagnostic {
     return Promise.all([
       this.adaptateurReferentiel.lis(),
       this.adaptateurTableauDeNotes.lis(),
-    ]).then(([r, t]) => {
-      const diagnostic = initialiseDiagnostic(r, t);
+      this.adaptateurTableauDeRecommandations.lis(),
+    ]).then(([ref, notes, rec]) => {
+      const diagnostic = initialiseDiagnostic(ref, notes, rec);
       this.entrepots.diagnostic().persiste(diagnostic);
       return diagnostic;
     });
@@ -51,4 +55,13 @@ export class ServiceDiagnostic {
         ajouteLaReponseAuDiagnostic(diagnostic, corpsReponse);
       });
   };
+
+  async termine(id: crypto.UUID) {
+    return this.entrepots
+      .diagnostic()
+      .lis(id)
+      .then((diagnostic) => {
+        genereLesRecommandations(diagnostic);
+      });
+  }
 }

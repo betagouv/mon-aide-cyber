@@ -455,8 +455,8 @@ describe("Le représentateur de diagnostic", () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentielSansThematiques()
-            .ajouteUneThematique("theme 1", questionTheme1)
-            .ajouteUneThematique("theme 2", questionTheme2)
+            .ajouteUneThematique("theme 1", [questionTheme1])
+            .ajouteUneThematique("theme 2", [questionTheme2])
             .construis(),
         )
         .construis();
