@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { Question, Referentiel } from "./Referentiel";
 import { Entrepot } from "../domaine/Entrepot";
 import { CorpsReponse, CorpsReponseQuestionATiroir } from "./ServiceDiagnostic";
-import { TableauDeNotes } from "./TableauDeNotes";
+import { Note, TableauDeNotes } from "./TableauDeNotes";
 import { TableauDeRecommandations } from "./TableauDeRecommandations";
 
 type Thematique = string;
@@ -26,6 +26,7 @@ type ReferentielDiagnostic = {
 
 type Recommandation = {
   recommandation: string;
+  noteObtenue: Note;
 };
 
 type Diagnostic = {
@@ -107,11 +108,32 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
   Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
     .forEach((question) => {
-      diagnostic.recommandations?.push({
-        recommandation:
-          diagnostic.tableauDesRecommandations[question.identifiant].niveau1,
-      });
+      if (diagnostic.tableauDesNotes[question.identifiant]) {
+        const recommandation: Recommandation = Object.entries(
+          diagnostic.tableauDesNotes[question.identifiant],
+        )
+          .filter(
+            ([identifiantReponse]) =>
+              question.reponseDonnee.reponseUnique === identifiantReponse,
+          )
+          .map(([__, note]) => {
+            const recommandationTrouvee =
+              diagnostic.tableauDesRecommandations[question.identifiant];
+            const recommandation =
+              (note && note > 0
+                ? recommandationTrouvee.niveau2
+                : recommandationTrouvee.niveau1) || "";
+            return {
+              recommandation,
+              noteObtenue: note,
+            } as Recommandation;
+          })?.[0];
+        diagnostic.recommandations?.push(recommandation);
+      }
     });
+  diagnostic.recommandations = diagnostic.recommandations
+    .filter((r) => r.noteObtenue !== null)
+    .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || -0);
 };
 
 const estReponseQuestionATiroir = (
