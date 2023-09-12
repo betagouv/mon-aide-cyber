@@ -25,9 +25,14 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
 
   ajouteUneThematique(
     theme: string,
-    question: QuestionChoixUnique | QuestionChoixMultiple,
+    question: (QuestionChoixUnique | QuestionChoixMultiple)[],
   ): ConstructeurReferentiel {
-    this.thematique[theme] = { questions: [question] };
+    this.thematique[theme] = { questions: [...question] };
+    return this;
+  }
+
+  sansThematique(): ConstructeurReferentiel {
+    this.thematique = {};
     return this;
   }
 
@@ -110,6 +115,38 @@ class ConstructeurQuestion
   }
 }
 
+class ConstructeurListeDeQuestions
+  implements Constructeur<(QuestionChoixUnique | QuestionChoixMultiple)[]>
+{
+  private libellesReponsesPossibles: string[][] = [];
+  private labels: string[] = [];
+
+  avecLesReponsesPossiblesSuivantes(
+    libellesReponsesPossibles: string[][],
+  ): ConstructeurListeDeQuestions {
+    this.libellesReponsesPossibles = libellesReponsesPossibles;
+    return this;
+  }
+
+  dontLesLabelsSont(labels: string[]): ConstructeurListeDeQuestions {
+    this.labels = labels;
+    return this;
+  }
+
+  construis(): (QuestionChoixUnique | QuestionChoixMultiple)[] {
+    return this.labels.map((label, index) =>
+      uneQuestion()
+        .aChoixUnique(
+          label,
+          this.libellesReponsesPossibles[index].map((rep) =>
+            uneReponsePossible().avecLibelle(rep).construis(),
+          ),
+        )
+        .construis(),
+    );
+  }
+}
+
 class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
   private identifiant: string = faker.string.alpha(10);
   private libelle: string = faker.word.words();
@@ -150,7 +187,6 @@ class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
     };
   }
 }
-
 class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private identifiant: string = faker.string.alpha(10);
   private libelle: string = faker.word.words();
@@ -187,6 +223,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     return reponsePossible;
   }
 }
+
 export const unReferentiel = (): ConstructeurReferentiel =>
   new ConstructeurReferentiel();
 
@@ -198,6 +235,9 @@ export const unReferentielSansThematiques = (): ConstructeurReferentiel => {
 
 export const uneQuestion = (): ConstructeurQuestion =>
   new ConstructeurQuestion();
+
+export const uneListeDeQuestions = (): ConstructeurListeDeQuestions =>
+  new ConstructeurListeDeQuestions();
 
 export const uneQuestionATiroir = (): ConstructeurQuestionATiroir =>
   new ConstructeurQuestionATiroir();
