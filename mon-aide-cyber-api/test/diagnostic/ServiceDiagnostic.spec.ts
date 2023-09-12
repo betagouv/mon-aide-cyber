@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import {
+  uneListeDeQuestions,
   uneQuestion,
   uneQuestionATiroir,
   uneReponsePossible,
@@ -11,20 +12,22 @@ import { AdaptateurReferentielDeTest } from "../adaptateurs/AdaptateurReferentie
 import { Entrepots } from "../../src/domaine/Entrepots";
 import { EntrepotsMemoire } from "../../src/infrastructure/entrepots/memoire/Entrepots";
 import { QuestionDiagnostic } from "../../src/diagnostic/Diagnostic";
-import {
-  uneNote,
-  unTableauDeNotes,
-} from "../constructeurs/constructeurTableauDeNotes";
+import { unTableauDeNotes } from "../constructeurs/constructeurTableauDeNotes";
 import { AdaptateurTableauDeNotesDeTest } from "../adaptateurs/AdaptateurTableauDeNotesDeTest";
+import { unTableauDeRecommandations } from "../constructeurs/constructeurTableauDeRecommandations";
+import { AdaptateurTableauDeRecommandationsDeTest } from "../adaptateurs/AdaptateurTableauDeRecommandationsDeTest";
 
 describe("Le service de diagnostic", () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
   let adaptateurTableauDeNotes: AdaptateurTableauDeNotesDeTest;
+  let adaptateurTableauDeRecommandations: AdaptateurTableauDeRecommandationsDeTest;
   let entrepots: Entrepots;
 
   beforeEach(() => {
     adaptateurReferentiel = new AdaptateurReferentielDeTest();
     adaptateurTableauDeNotes = new AdaptateurTableauDeNotesDeTest();
+    adaptateurTableauDeRecommandations =
+      new AdaptateurTableauDeRecommandationsDeTest();
     entrepots = new EntrepotsMemoire();
   });
 
@@ -60,6 +63,7 @@ describe("Le service de diagnostic", () => {
       const serviceDiagnostic = new ServiceDiagnostic(
         adaptateurReferentiel,
         adaptateurTableauDeNotes,
+        adaptateurTableauDeRecommandations,
         entrepots,
       );
 
@@ -127,6 +131,7 @@ describe("Le service de diagnostic", () => {
       const serviceDiagnostic = new ServiceDiagnostic(
         adaptateurReferentiel,
         adaptateurTableauDeNotes,
+        adaptateurTableauDeRecommandations,
         entrepots,
       );
 
@@ -164,6 +169,7 @@ describe("Le service de diagnostic", () => {
       const diagnostic = await new ServiceDiagnostic(
         adaptateurReferentiel,
         adaptateurTableauDeNotes,
+        adaptateurTableauDeRecommandations,
         entrepots,
       ).lance();
 
@@ -194,22 +200,19 @@ describe("Le service de diagnostic", () => {
         ])
         .construis();
       const referentiel = unReferentiel()
-        .ajouteUneThematique("T1", question)
+        .ajouteUneThematique("T1", [question])
         .construis();
       adaptateurReferentiel.ajoute(referentiel);
       adaptateurTableauDeNotes.ajoute(
         unTableauDeNotes()
-          .avecDesNotes([
-            uneNote().identifieePar("r1").ayantPourValeur(0.5).construis(),
-            uneNote().identifieePar("r0").ayantPourValeur(null).construis(),
-            uneNote().identifieePar("r2").ayantPourValeur(1).construis(),
-          ])
+          .avecDesNotes([{ q: { r1: 0.5, r0: null, r2: 1 } }])
           .construis(),
       );
 
       const diagnostic = await new ServiceDiagnostic(
         adaptateurReferentiel,
         adaptateurTableauDeNotes,
+        adaptateurTableauDeRecommandations,
         entrepots,
       ).lance();
 
@@ -217,9 +220,11 @@ describe("Le service de diagnostic", () => {
         .diagnostic()
         .lis(diagnostic.identifiant);
       expect(diagnosticRetourne.tableauDesNotes).toStrictEqual({
-        r1: 0.5,
-        r2: 1,
-        r0: null,
+        q: {
+          r1: 0.5,
+          r2: 1,
+          r0: null,
+        },
       });
     });
   });
@@ -257,6 +262,7 @@ describe("Le service de diagnostic", () => {
       await new ServiceDiagnostic(
         adaptateurReferentiel,
         adaptateurTableauDeNotes,
+        adaptateurTableauDeRecommandations,
         entrepots,
       ).ajouteLaReponse(diagnostic.identifiant, {
         chemin: "contexte",
@@ -331,6 +337,7 @@ describe("Le service de diagnostic", () => {
       await new ServiceDiagnostic(
         adaptateurReferentiel,
         adaptateurTableauDeNotes,
+        adaptateurTableauDeRecommandations,
         entrepots,
       ).ajouteLaReponse(diagnostic.identifiant, {
         chemin: "contexte",
@@ -365,6 +372,86 @@ describe("Le service de diagnostic", () => {
           },
         ],
       });
+    });
+  });
+
+  describe("Lorsque l'on veut terminer le diagnostic", () => {
+    let serviceDiagnostic: ServiceDiagnostic;
+    const tableauDeNotes = unTableauDeNotes()
+      .avecDesNotes([
+        { q1: { "reponse-11": 0, "reponse-12": 1 } },
+        { q2: { "reponse-21": 0, "reponse-22": 1 } },
+        { q3: { "reponse-31": 0, "reponse-32": 1 } },
+        { q4: { "reponse-41": 0, "reponse-42": 1 } },
+        { q5: { "reponse-51": 0, "reponse-52": 1 } },
+        { q6: { "reponse-61": 0, "reponse-62": 1 } },
+        { q7: { "reponse-71": 0, "reponse-72": 1 } },
+      ])
+      .construis();
+    const tableauDeRecommandations = unTableauDeRecommandations()
+      .avecLesRecommandations([
+        { q1: { niveau1: "reco 1", niveau2: "reco 12" } },
+        { q2: { niveau1: "reco 2", niveau2: "reco 22" } },
+        { q3: { niveau1: "reco 3", niveau2: "reco 32" } },
+        { q4: { niveau1: "reco 4", niveau2: "reco 42" } },
+        { q5: { niveau1: "reco 5", niveau2: "reco 52" } },
+        { q6: { niveau1: "reco 6", niveau2: "reco 62" } },
+        { q7: { niveau1: "reco 7", niveau2: "reco 72" } },
+      ])
+      .construis();
+    beforeEach(() => {
+      serviceDiagnostic = new ServiceDiagnostic(
+        adaptateurReferentiel,
+        adaptateurTableauDeNotes,
+        adaptateurTableauDeRecommandations,
+        entrepots,
+      );
+    });
+    it("génère les recommandations", async () => {
+      const questions = uneListeDeQuestions()
+        .dontLesLabelsSont(["q1", "q2", "q3", "q4", "q5", "q6", "q7"])
+        .avecLesReponsesPossiblesSuivantes([
+          ["reponse 11", "reponse 12"],
+          ["reponse 21", "reponse 22"],
+          ["reponse 31", "reponse 32"],
+          ["reponse 41", "reponse 42"],
+          ["reponse 51", "reponse 52"],
+          ["reponse 61", "reponse 62"],
+          ["reponse 71", "reponse 72"],
+        ])
+        .construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .sansThematique()
+            .ajouteUneThematique("thematique", questions)
+            .construis(),
+        )
+        .avecLesReponsesDonnees("thematique", [
+          { q1: "reponse-11" },
+          { q2: "reponse-21" },
+          { q3: "reponse-31" },
+          { q4: "reponse-41" },
+          { q5: "reponse-51" },
+          { q6: "reponse-61" },
+          { q7: "reponse-71" },
+        ])
+        .avecUnTableauDeNotes(tableauDeNotes)
+        .avecUnTableauDeRecommandations(tableauDeRecommandations)
+        .construis();
+      entrepots.diagnostic().persiste(diagnostic);
+
+      await serviceDiagnostic.termine(diagnostic.identifiant);
+
+      expect(diagnostic.recommandations).toStrictEqual([
+        { recommandation: "reco 1" },
+        { recommandation: "reco 2" },
+        { recommandation: "reco 3" },
+        { recommandation: "reco 4" },
+        { recommandation: "reco 5" },
+        { recommandation: "reco 6" },
+        { recommandation: "reco 7" },
+      ]);
     });
   });
 });

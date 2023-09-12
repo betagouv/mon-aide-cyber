@@ -3,6 +3,7 @@ import { Question, Referentiel } from "./Referentiel";
 import { Entrepot } from "../domaine/Entrepot";
 import { CorpsReponse, CorpsReponseQuestionATiroir } from "./ServiceDiagnostic";
 import { TableauDeNotes } from "./TableauDeNotes";
+import { TableauDeRecommandations } from "./TableauDeRecommandations";
 
 type Thematique = string;
 
@@ -23,15 +24,22 @@ type ReferentielDiagnostic = {
   [clef: Thematique]: QuestionsThematique;
 };
 
+type Recommandation = {
+  recommandation: string;
+};
+
 type Diagnostic = {
-  tableauDesNotes: TableauDeNotes;
   identifiant: crypto.UUID;
+  recommandations?: Recommandation[];
   referentiel: ReferentielDiagnostic;
+  tableauDesNotes: TableauDeNotes;
+  tableauDesRecommandations: TableauDeRecommandations;
 };
 type EntrepotDiagnostic = Entrepot<Diagnostic>;
 const initialiseDiagnostic = (
   r: Referentiel,
   tableauDesNotes: TableauDeNotes,
+  tableauDesRecommandations: TableauDeRecommandations,
 ): Diagnostic => {
   const referentiel: {
     [clef: Thematique]: QuestionsThematique;
@@ -56,6 +64,7 @@ const initialiseDiagnostic = (
     identifiant: crypto.randomUUID(),
     referentiel,
     tableauDesNotes,
+    tableauDesRecommandations,
   };
 };
 
@@ -92,6 +101,19 @@ const ajouteLaReponseAuDiagnostic = (
     }
   }
 };
+
+const genereLesRecommandations = (diagnostic: Diagnostic) => {
+  diagnostic.recommandations = [];
+  Object.entries(diagnostic.referentiel)
+    .flatMap(([__, questions]) => questions.questions)
+    .forEach((question) => {
+      diagnostic.recommandations?.push({
+        recommandation:
+          diagnostic.tableauDesRecommandations[question.identifiant].niveau1,
+      });
+    });
+};
+
 const estReponseQuestionATiroir = (
   reponse: string | CorpsReponseQuestionATiroir,
 ): reponse is CorpsReponseQuestionATiroir => {
@@ -112,5 +134,6 @@ export {
   ReponseDonnee,
   ReponsesMultiples,
   ajouteLaReponseAuDiagnostic,
+  genereLesRecommandations,
   initialiseDiagnostic,
 };

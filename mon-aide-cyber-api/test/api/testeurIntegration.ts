@@ -4,6 +4,7 @@ import { AdaptateurTranscripteurDeTest } from "../adaptateurs/adaptateurTranscri
 import { EntrepotsMemoire } from "../../src/infrastructure/entrepots/memoire/Entrepots";
 import { faker } from "@faker-js/faker/locale/fr";
 import { AdaptateurTableauDeNotesDeTest } from "../adaptateurs/AdaptateurTableauDeNotesDeTest";
+import { AdaptateurTableauDeRecommandationsDeTest } from "../adaptateurs/AdaptateurTableauDeRecommandationsDeTest";
 
 const testeurIntegration = () => {
   let serveurDeTest: {
@@ -12,6 +13,8 @@ const testeurIntegration = () => {
   };
   const adaptateurReferentiel = new AdaptateurReferentielDeTest();
   const adaptateurTableauDeNotes = new AdaptateurTableauDeNotesDeTest();
+  const adaptateurTableauDeRecommandations =
+    new AdaptateurTableauDeRecommandationsDeTest();
   const adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest();
   const entrepots = new EntrepotsMemoire();
   const initialise = () => {
@@ -19,6 +22,7 @@ const testeurIntegration = () => {
       adaptateurReferentiel,
       adaptateurTableauDeNotes,
       adaptateurTranscripteurDonnees,
+      adaptateurTableauDeRecommandations,
       entrepots,
     });
     const portAleatoire = faker.number.int({ min: 1000, max: 3000 });
