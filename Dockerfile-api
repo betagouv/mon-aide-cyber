@@ -1,6 +1,10 @@
 FROM node:18
 
-RUN apt-get update
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+RUN apt-get update && \
+    apt-get install -y chromium
 
 RUN npm install -g npm
 
