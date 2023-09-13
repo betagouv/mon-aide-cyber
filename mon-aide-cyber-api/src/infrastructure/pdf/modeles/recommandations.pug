@@ -1,0 +1,9 @@
+extends base
+
+block page
+    each recommandation in recommandations
+        p
+        span=recommandation.noteObtenue
+        span="--"
+        span
+            | !{recommandation.recommandation}

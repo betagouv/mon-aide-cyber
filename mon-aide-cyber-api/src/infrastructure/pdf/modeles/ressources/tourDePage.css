@@ -1,0 +1,95 @@
+html {
+  font-family: Marianne;
+  font-size: 12px;
+}
+
+.entete {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 2mm;
+  margin: 3mm 1cm 0;
+}
+
+.entete .illustration {
+  width: 40px;
+  height: 40px;
+  content: var(--dossier-entete);
+}
+
+.entete .logo-anssi {
+  width: 36px;
+  content: var(--logo-anssi);
+}
+
+.entete h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 0;
+}
+
+.entete .sous-titre {
+  font-size: 9px;
+  color: #5e5e5e;
+  font-weight: 500;
+}
+
+.entete img.indispensable {
+  width: 10px;
+  height: 10px;
+  margin-left: 1px;
+  transform: translateY(1px);
+}
+
+.piedpage {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0 1cm 3mm;
+  font-size: 8px;
+}
+
+.piedpage .mss {
+  color: #08416a;
+  font-weight: bold;
+}
+
+.piedpage .pagination {
+  display: flex;
+}
+
+:is(.piedpage .pagenumber, .piedpage .totalpages) {
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+.entete-dossier-decision {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 2mm;
+  margin: 1mm 1cm 0;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 12px;
+}
+
+.entete-dossier-decision .republique-francaise {
+  width: 40px;
+}
+
+.entete-dossier-decision .logos {
+  display: flex;
+  column-gap: 16px;
+}
+
+.entete-dossier-decision .logo-mss {
+  width: 100px;
+}
+
+.entete-dossier-decision .logo-anssi {
+  width: 36px;
+  content: var(--logo-anssi);
+}
