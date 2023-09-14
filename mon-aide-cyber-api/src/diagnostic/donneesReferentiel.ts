@@ -1091,24 +1091,24 @@ const referentiel: Referentiel = {
         type: "choixUnique",
         reponsesPossibles: [
           {
-            identifiant: "gouvernance-schema-nsp",
+            identifiant: "gouvernance-schema-si-a-jour-nsp",
             libelle: "Je ne sais pas.",
             ordre: 0,
           },
           {
-            identifiant: "gouvernance-schema-non-pas-a-jour",
+            identifiant: "gouvernance-schema-si-a-jour-non",
             libelle:
               "Non / Nous avons un schéma historique qui n'est pas à jour",
             ordre: 1,
           },
           {
-            identifiant: "gouvernance-schema-oui-macro",
+            identifiant: "gouvernance-schema-si-a-jour-oui-macro",
             libelle:
               'Il existe un schéma "macro" non détaillé ou partiellement détaillé.',
             ordre: 2,
           },
           {
-            identifiant: "gouvernance-schema-oui-detaille",
+            identifiant: "gouvernance-schema-si-a-jour-oui-detaille",
             libelle:
               "Il existe un schéma détaillé, incluant la liste exhaustive des interconnexions vers l'extérieur.",
             ordre: 3,
@@ -1122,23 +1122,23 @@ const referentiel: Referentiel = {
         type: "choixUnique",
         reponsesPossibles: [
           {
-            identifiant: "gouvernance-schema-si-nsp",
+            identifiant: "gouvernance-schema-si-industriel-a-jour-nsp",
             libelle: "Je ne sais pas / Non applicable",
             ordre: 0,
           },
           {
-            identifiant: "gouvernance-schema-si-non",
+            identifiant: "gouvernance-schema-si-industriel-a-jour-non",
             libelle: "Non.",
             ordre: 1,
           },
           {
-            identifiant: "gouvernance-schema-si-oui-partiel",
+            identifiant: "gouvernance-schema-si-industriel-a-jour-oui-partiel",
             libelle:
               'Il existe un schéma "macro" non détaillé ou partiellement détaillé.',
             ordre: 2,
           },
           {
-            identifiant: "gouvernance-schema-si-oui-detaille",
+            identifiant: "gouvernance-schema-si-industriel-a-jour-oui-detaille",
             libelle:
               "'Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industrielles, installations matériels connectés et des interconnexions vers l'extérieur.",
             ordre: 3,
