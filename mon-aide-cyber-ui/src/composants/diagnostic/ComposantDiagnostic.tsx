@@ -35,6 +35,9 @@ import {
   ActionReponseDiagnostic,
 } from "../../domaine/diagnostic/Diagnostic.ts";
 import "../../assets/styles/_diagnostic.scss";
+import Button from "@codegouvfr/react-dsfr/Button";
+import { RiIconClassName } from "@codegouvfr/react-dsfr/src/fr/generatedFromCss/classNames.ts";
+import Select from "@codegouvfr/react-dsfr/Select";
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -77,7 +80,7 @@ const ComposantReponsePossible = (
     );
 
   return (
-    <>
+    <div className={`fr-${proprietes.typeDeSaisie}-group`}>
       <input
         id={proprietes.reponsePossible.identifiant}
         type={proprietes.typeDeSaisie}
@@ -88,14 +91,15 @@ const ComposantReponsePossible = (
           proprietes.onChange(event.target.value);
         }}
       />
-      <label htmlFor={proprietes.reponsePossible.identifiant}>
+      <label
+        className="fr-label"
+        htmlFor={proprietes.reponsePossible.identifiant}
+      >
         {proprietes.reponsePossible.libelle}
       </label>
       <div>{champsASaisir}</div>
-
       {proprietes.children}
-      <br />
-    </>
+    </div>
   );
 };
 
@@ -126,13 +130,17 @@ const ComposantQuestionListe = ({
   }, [actions, entrepots, etatReponse, question]);
 
   return (
-    <select
-      role="listbox"
+    <Select
+      label={question.libelle}
       id={question.identifiant}
-      name={question.identifiant}
-      onChange={repond}
-      value={etatReponse.valeur()}
+      nativeSelectProps={{
+        onChange: (event) => repond(event),
+        value: etatReponse.valeur(),
+      }}
     >
+      <option value="" disabled hidden>
+        Selectionnez une option
+      </option>
       {question.reponsesPossibles.map((reponse) => {
         return (
           <option key={reponse.identifiant} value={reponse.identifiant}>
@@ -140,7 +148,7 @@ const ComposantQuestionListe = ({
           </option>
         );
       })}
-    </select>
+    </Select>
   );
 };
 
@@ -204,70 +212,80 @@ const ComposantQuestion = ({
   }, [actions, entrepots, etatReponse, question]);
   return (
     <>
-      {question.reponsesPossibles.map((reponse) => {
-        const typeDeSaisie =
-          question.type === "choixUnique" ? "radio" : "checkbox";
-        return (
-          <ComposantReponsePossible
-            key={reponse.identifiant}
-            reponsePossible={reponse}
-            identifiantQuestion={question.identifiant}
-            typeDeSaisie={typeDeSaisie}
-            onChange={(identifiantReponse) =>
-              typeDeSaisie === "radio"
-                ? repondQuestionUnique(identifiantReponse)
-                : repondQuestionMultiple({
-                    identifiantReponse: question.identifiant,
-                    reponse: identifiantReponse,
-                  })
-            }
-            selectionnee={
-              typeDeSaisie === "radio"
-                ? etatReponse.valeur() === reponse.identifiant
-                : etatReponse.reponseDonnee.reponses.some((rep) =>
-                    rep.reponses.has(reponse.identifiant),
-                  )
-            }
-          >
-            {reponse.questions?.map((questionTiroir) => (
-              <div className="question-tiroir" key={questionTiroir.identifiant}>
-                <br />
-                <label>{questionTiroir.libelle}</label>
-                <br />
-                {questionTiroir.reponsesPossibles.map((rep) => {
-                  const typeDeSaisie =
-                    questionTiroir?.type === "choixMultiple"
-                      ? "checkbox"
-                      : "radio";
+      <legend className="fr-fieldset__legend">{question.libelle}</legend>
+      <div className="fr-fieldset__content">
+        {question.reponsesPossibles.map((reponse) => {
+          const typeDeSaisie =
+            question.type === "choixUnique" ? "radio" : "checkbox";
+          return (
+            <ComposantReponsePossible
+              key={reponse.identifiant}
+              reponsePossible={reponse}
+              identifiantQuestion={question.identifiant}
+              typeDeSaisie={typeDeSaisie}
+              onChange={(identifiantReponse) =>
+                typeDeSaisie === "radio"
+                  ? repondQuestionUnique(identifiantReponse)
+                  : repondQuestionMultiple({
+                      identifiantReponse: question.identifiant,
+                      reponse: identifiantReponse,
+                    })
+              }
+              selectionnee={
+                typeDeSaisie === "radio"
+                  ? etatReponse.valeur() === reponse.identifiant
+                  : etatReponse.reponseDonnee.reponses.some((rep) =>
+                      rep.reponses.has(reponse.identifiant),
+                    )
+              }
+            >
+              {reponse.questions?.map((questionTiroir) => (
+                <div
+                  className="question-tiroir"
+                  key={questionTiroir.identifiant}
+                >
+                  <legend className="fr-fieldset__legend">
+                    {questionTiroir.libelle}
+                  </legend>
+                  {questionTiroir.reponsesPossibles.map((rep) => {
+                    const typeDeSaisie =
+                      questionTiroir?.type === "choixMultiple"
+                        ? "checkbox"
+                        : "radio";
 
-                  return (
-                    <ComposantReponsePossible
-                      key={rep.identifiant}
-                      reponsePossible={rep}
-                      identifiantQuestion={questionTiroir.identifiant}
-                      typeDeSaisie={typeDeSaisie}
-                      selectionnee={etatReponse.reponseDonnee.reponses.some(
-                        (reponse) => reponse.reponses.has(rep.identifiant),
-                      )}
-                      onChange={(identifiantReponse) => {
-                        typeDeSaisie === "checkbox"
-                          ? repondQuestionTiroirMultiple(reponse.identifiant, {
-                              identifiantReponse: questionTiroir.identifiant,
-                              reponse: identifiantReponse,
-                            })
-                          : repondQuestionTiroirUnique(reponse.identifiant, {
-                              identifiantReponse: questionTiroir.identifiant,
-                              reponse: identifiantReponse,
-                            });
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            ))}
-          </ComposantReponsePossible>
-        );
-      })}
+                    return (
+                      <ComposantReponsePossible
+                        key={rep.identifiant}
+                        reponsePossible={rep}
+                        identifiantQuestion={questionTiroir.identifiant}
+                        typeDeSaisie={typeDeSaisie}
+                        selectionnee={etatReponse.reponseDonnee.reponses.some(
+                          (reponse) => reponse.reponses.has(rep.identifiant),
+                        )}
+                        onChange={(identifiantReponse) => {
+                          typeDeSaisie === "checkbox"
+                            ? repondQuestionTiroirMultiple(
+                                reponse.identifiant,
+                                {
+                                  identifiantReponse:
+                                    questionTiroir.identifiant,
+                                  reponse: identifiantReponse,
+                                },
+                              )
+                            : repondQuestionTiroirUnique(reponse.identifiant, {
+                                identifiantReponse: questionTiroir.identifiant,
+                                reponse: identifiantReponse,
+                              });
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              ))}
+            </ComposantReponsePossible>
+          );
+        })}
+      </div>
     </>
   );
 };
@@ -309,6 +327,16 @@ export const ComposantDiagnostic = ({
     [envoie],
   );
 
+  const icones: RiIconClassName[] = [
+    "ri-building-line",
+    "ri-user-2-line",
+    "ri-key-2-line",
+    "ri-computer-line",
+    "ri-server-line",
+    "ri-team-line",
+    "ri-loop-right-line",
+  ];
+
   const termineDiagnostic = useCallback(async () => {
     const action = actions.find((a) => a.action === "terminer");
     if (action) {
@@ -320,13 +348,17 @@ export const ComposantDiagnostic = ({
     <div className="navigation-verticale">
       <nav>
         <ul>
-          {thematiques.map(([clef, _]) => (
+          {thematiques.map(([clef, _], index) => (
             <li key={`li-${clef}`}>
-              <input
-                type="button"
-                className=""
+              <Button
+                iconId={icones[index]}
+                priority={
+                  etatReferentiel.thematiqueAffichee === clef
+                    ? "primary"
+                    : "secondary"
+                }
                 onClick={() => affiche(clef)}
-                value={clef.charAt(0).toUpperCase()}
+                title=""
               />
             </li>
           ))}
@@ -348,9 +380,11 @@ export const ComposantDiagnostic = ({
               (action) => Object.entries(action).find(([c]) => c === clef),
             ) as ActionReponseDiagnostic[];
             const elements = thematique.questions.map((question) => (
-              <fieldset key={question.identifiant} id={question.identifiant}>
-                <label>{question.libelle}</label>
-                <br />
+              <fieldset
+                key={question.identifiant}
+                id={question.identifiant}
+                className="fr-fieldset"
+              >
                 {question.type === "liste" ? (
                   <ComposantQuestionListe
                     question={question}

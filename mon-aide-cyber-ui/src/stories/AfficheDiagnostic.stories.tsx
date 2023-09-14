@@ -261,7 +261,7 @@ export const AfficheDiagnosticQuestionListeDeroulante: Story = {
     const canvas = within(canvasElement);
 
     expect(
-      await waitFor(() => canvas.getByRole("listbox")),
+      await waitFor(() => canvas.getByRole("combobox")),
     ).toBeInTheDocument();
     expect(
       await waitFor(() => canvas.getByRole("option", { name: /réponse a/i })),

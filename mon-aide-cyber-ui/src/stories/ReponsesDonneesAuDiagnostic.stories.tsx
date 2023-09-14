@@ -455,7 +455,7 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
     });
 
     await step("Lorsque l’utilisateur modifie la réponse", async () => {
-      await userEvent.selectOptions(canvas.getByRole("listbox"), "Réponse C");
+      await userEvent.selectOptions(canvas.getByRole("combobox"), "Réponse C");
 
       expect(
         await waitFor(() =>
@@ -485,24 +485,11 @@ export const AfficheLesThematiques: Story = {
           ),
         ),
       ).toBeInTheDocument();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole("button", {
-            name: "C",
-          }),
-        ),
-      ).toBeInTheDocument();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole("button", {
-            name: "T",
-          }),
-        ),
-      ).toBeInTheDocument();
+      expect(await waitFor(() => canvas.getAllByRole("button").length)).toBe(3);
     });
 
     await step("Lorsque l’utilisateur change de thématique", async () => {
-      await userEvent.click(canvas.getByRole("button", { name: "T" }));
+      await userEvent.click(canvas.getAllByRole("button")[1]);
 
       expect(
         await waitFor(() =>

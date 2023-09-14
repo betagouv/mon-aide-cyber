@@ -6,3 +6,5 @@ dist
 dist-ssr
 *.local
 .vite
+
+/public/dsfr/
