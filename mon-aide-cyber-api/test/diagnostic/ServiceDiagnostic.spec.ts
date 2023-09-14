@@ -390,13 +390,13 @@ describe("Le service de diagnostic", () => {
       .construis();
     const tableauDeRecommandations = unTableauDeRecommandations()
       .avecLesRecommandations([
-        { q1: { niveau1: "reco 1", niveau2: "reco 12" } },
-        { q2: { niveau1: "reco 2", niveau2: "reco 22" } },
-        { q3: { niveau1: "reco 3", niveau2: "reco 32" } },
-        { q4: { niveau1: "reco 4", niveau2: "reco 42" } },
-        { q5: { niveau1: "reco 5", niveau2: "reco 52" } },
-        { q6: { niveau1: "reco 6", niveau2: "reco 62" } },
-        { q7: { niveau1: "reco 7", niveau2: "reco 72" } },
+        { q1: { niveau1: "reco 1", niveau2: "reco 12", priorisation: 1 } },
+        { q2: { niveau1: "reco 2", niveau2: "reco 22", priorisation: 2 } },
+        { q3: { niveau1: "reco 3", niveau2: "reco 32", priorisation: 3 } },
+        { q4: { niveau1: "reco 4", niveau2: "reco 42", priorisation: 4 } },
+        { q5: { niveau1: "reco 5", niveau2: "reco 52", priorisation: 5 } },
+        { q6: { niveau1: "reco 6", niveau2: "reco 62", priorisation: 6 } },
+        { q7: { niveau1: "reco 7", niveau2: "reco 72", priorisation: 7 } },
       ])
       .construis();
     beforeEach(() => {
@@ -444,13 +444,13 @@ describe("Le service de diagnostic", () => {
       await serviceDiagnostic.termine(diagnostic.identifiant);
 
       expect(diagnostic.recommandations).toStrictEqual([
-        { recommandation: "reco 1", noteObtenue: 0 },
-        { recommandation: "reco 2", noteObtenue: 0 },
-        { recommandation: "reco 3", noteObtenue: 0 },
-        { recommandation: "reco 4", noteObtenue: 0 },
-        { recommandation: "reco 5", noteObtenue: 0 },
-        { recommandation: "reco 6", noteObtenue: 0 },
-        { recommandation: "reco 7", noteObtenue: 0 },
+        { recommandation: "reco 1", noteObtenue: 0, priorisation: 1 },
+        { recommandation: "reco 2", noteObtenue: 0, priorisation: 2 },
+        { recommandation: "reco 3", noteObtenue: 0, priorisation: 3 },
+        { recommandation: "reco 4", noteObtenue: 0, priorisation: 4 },
+        { recommandation: "reco 5", noteObtenue: 0, priorisation: 5 },
+        { recommandation: "reco 6", noteObtenue: 0, priorisation: 6 },
+        { recommandation: "reco 7", noteObtenue: 0, priorisation: 7 },
       ]);
     });
   });

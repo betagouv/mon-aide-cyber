@@ -55,18 +55,18 @@ const genereHtml = async (
 };
 
 const generePdfs = (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
-  return lanceNavigateur().then((navigateur) => {
-    return Promise.all(
-      pagesHtml.map((pageHtml) => {
-        return navigateur
+  return lanceNavigateur().then((navigateur) =>
+    Promise.all(
+      pagesHtml.map((pageHtml) =>
+        navigateur
           .newPage()
           .then((page) => page.setContent(pageHtml.corps).then(() => page))
           .then((page) =>
             page.pdf(formatPdfA4(pageHtml.entete, pageHtml.piedPage)),
-          );
-      }),
-    );
-  });
+          ),
+      ),
+    ),
+  );
 };
 
 const formatPdfA4 = (enteteHtml: string, piedPageHtml: string): PDFOptions => ({

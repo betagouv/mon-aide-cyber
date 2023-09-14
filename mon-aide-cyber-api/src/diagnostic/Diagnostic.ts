@@ -28,6 +28,7 @@ type ReferentielDiagnostic = {
 type Recommandation = {
   recommandation: string;
   noteObtenue: Note;
+  priorisation: number;
 };
 
 type Diagnostic = {
@@ -106,6 +107,7 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
             return {
               recommandation,
               noteObtenue: note,
+              priorisation: recommandationTrouvee.priorisation,
             } as Recommandation;
           });
         diagnostic.recommandations?.push(...recommandations);
@@ -113,7 +115,8 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
     });
   diagnostic.recommandations = diagnostic.recommandations
     .filter((r) => r.noteObtenue !== null)
-    .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || -0);
+    .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
+    .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || 0);
 };
 
 export {
