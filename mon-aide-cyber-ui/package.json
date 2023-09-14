@@ -9,6 +9,9 @@
     "build": "vite build",
     "build:storybook": "storybook build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "postinstall": "copy-dsfr-to-public",
+    "predev": "only-include-used-icons",
+    "prebuild": "only-include-used-icons",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "test": "tsc && vitest run --config vitest.config.ts --reporter verbose",
@@ -17,6 +20,7 @@
     "test:storybook": "test-storybook"
   },
   "dependencies": {
+    "@codegouvfr/react-dsfr": "^0.75.8",
     "@vitejs/plugin-react-swc": "^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

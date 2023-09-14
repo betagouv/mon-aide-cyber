@@ -13,6 +13,9 @@ import { ComposantDiagnostic } from "./composants/diagnostic/ComposantDiagnostic
 import { ComposantDiagnostics } from "./composants/ComposantDiagnostics.tsx";
 import { APIEntrepotDiagnostic } from "./infrastructure/entrepots/APIEntrepotDiagnostic.ts";
 
+import { startReactDsfr } from "@codegouvfr/react-dsfr/spa";
+startReactDsfr({ defaultColorScheme: "system" });
+
 const routeur = createBrowserRouter([
   {
     path: "/",

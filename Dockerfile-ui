@@ -5,6 +5,7 @@ RUN apt-get update
 RUN npm install -g npm
 
 WORKDIR /usr/src/app
+RUN mkdir -p "/usr/src/app/mon-aide-cyber-ui/public"
 
 COPY package*.json /usr/src/app/
 COPY mon-aide-cyber-ui/package.json /usr/src/app/mon-aide-cyber-ui/package.json
