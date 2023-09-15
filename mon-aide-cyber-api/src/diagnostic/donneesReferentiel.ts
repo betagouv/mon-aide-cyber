@@ -1082,6 +1082,268 @@ const referentiel: Referentiel = {
       },
     ],
   },
+  securiteposte: {
+    questions: [
+      {
+        identifiant: "securite-poste-utilisateurs-administrateurs-poste",
+        libelle: "Les utilisateurs sont-ils administrateurs de leur poste ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "securite-poste-utilisateurs-administrateurs-poste-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+
+          {
+            identifiant:
+              "securite-poste-utilisateurs-administrateurs-poste-oui",
+            libelle: "Oui",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "securite-poste-utilisateurs-administrateurs-poste-non",
+            libelle: "Non, et les rares exceptions sont justifiées.",
+            ordre: 2,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant: "securite-poste-maj-fonctionnelles-et-securite-deployees",
+        libelle:
+          "Les mises à jour fonctionnelles et de sécurité des logiciels utilisés sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "securite-poste-maj-fonctionnelles-et-securite-deployees-nsp",
+            libelle: "Je ne sais pas / Non applicable",
+            ordre: 0,
+          },
+
+          {
+            identifiant:
+              "securite-poste-maj-fonctionnelles-et-securite-deployees-oui",
+            libelle: "Oui",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-excetpions",
+            libelle:
+              "Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles",
+            libelle:
+              "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires.",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant:
+          "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees",
+        libelle:
+          "Si l'entité dispose d'un SI industriel : Les mises à jour fonctionnelles et de sécurité sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-nsp",
+            libelle: "Je ne sais pas / Non applicable",
+            ordre: 0,
+          },
+
+          {
+            identifiant:
+              "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-oui",
+            libelle: "Oui",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-excetpions",
+            libelle:
+              "Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles",
+            libelle:
+              "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires.",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant: "securite-poste-antivirus-deploye",
+        libelle:
+          "Un antivirus à jour est-il déployé sur chaque poste de travail ?",
+        reponsesPossibles: [
+          {
+            identifiant: "securite-poste-antivirus-deploye-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+
+          {
+            identifiant: "securite-poste-antivirus-deploye-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "securite-poste-antivirus-deploye-oui-alertes-pas-toujours-traitees",
+            libelle: "Oui, mais ses alertes ne sont pas toujours traitées",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "securite-poste-antivirus-deploye-oui-alertes-toujours-traitees",
+            libelle: "Oui et ses alertes sont systématiquement traitées.",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant: "securite-poste-pare-feu-local-active",
+        libelle: "Un pare-feu local est-il activé sur les postes de travail ?",
+        reponsesPossibles: [
+          {
+            identifiant: "securite-poste-pare-feu-local-active-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+
+          {
+            identifiant: "securite-poste-pare-feu-local-active-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+
+          {
+            identifiant: "securite-poste-pare-feu-local-active-oui",
+            libelle: "Oui",
+            ordre: 2,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant: "securite-poste-outils-complementaires-securisation",
+        libelle:
+          "Des outils complémentaires de sécurisation des postes de travail et de la navigation internet sont-elles en place ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "securite-poste-outils-complementaires-securisation-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+
+          {
+            identifiant:
+              "securite-poste-outils-complementaires-securisation-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+
+          {
+            identifiant:
+              "securite-poste-outils-complementaires-securisation-oui",
+            libelle: "Oui",
+            questions: [
+              {
+                identifiant:
+                  "securite-poste-outils-complementaires-securisation-oui-outils",
+                libelle: 'Si "Oui" : combien d\'outils parmi ceux-ci ?',
+                reponsesPossibles: [
+                  {
+                    identifiant:
+                      "securite-poste-outils-complementaires-securisation-oui-outils-proxy",
+                    libelle: "Filtrage web (proxy)",
+                    ordre: 0,
+                  },
+                  {
+                    identifiant:
+                      "securite-poste-outils-complementaires-securisation-oui-outils-mecanisme-securite-transactions-bancaires",
+                    libelle: "Mécanisme de sécurité des transactions bancaires",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant:
+                      "securite-poste-outils-complementaires-securisation-oui-outils-blocage-clef-usb",
+                    libelle:
+                      "Contrôle voir blocage des clefs USB externes (ou via station blanche)",
+                    ordre: 2,
+                  },
+                  {
+                    identifiant:
+                      "securite-poste-outils-complementaires-securisation-oui-outils-protection-complement-edr",
+                    libelle:
+                      "Outil de protection des postes utilisateurs complémentaires à un antivirus de type EDR (Endpoint Detection and Response)",
+                    ordre: 3,
+                  },
+                  {
+                    identifiant:
+                      "securite-poste-outils-complementaires-securisation-oui-outils-chiffrement-disques",
+                    libelle:
+                      "Pour les entités ayant un risque d'espionnage industriel : Chiffrement des disques des postes et des terminaux nomades",
+                    ordre: 4,
+                  },
+                  {
+                    identifiant:
+                      "securite-poste-outils-complementaires-securisation-oui-outils-autre-outil-acceptable",
+                    libelle: "Autre outil jugé acceptable par l'aidant",
+                    ordre: 5,
+                  },
+                ],
+                type: "choixMultiple",
+              },
+            ],
+            ordre: 2,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant:
+          "securite-poste-configuration-securisee-standardisee-et-homogene",
+        libelle:
+          "Tous les postes de travail bénéficient-ils d'une configuration sécurisée standardisée et homogène sur l'ensemble du parcs ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "securite-poste-configuration-securisee-standardisee-et-homogene-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+
+          {
+            identifiant:
+              "securite-poste-configuration-securisee-standardisee-et-homogene-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+
+          {
+            identifiant:
+              "securite-poste-configuration-securisee-standardisee-et-homogene-oui",
+            libelle: "Oui",
+            ordre: 2,
+          },
+        ],
+        type: "choixUnique",
+      },
+    ],
+  },
 };
 
 export { referentiel };
