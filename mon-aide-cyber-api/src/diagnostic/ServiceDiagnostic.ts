@@ -18,7 +18,7 @@ export type CorpsReponseQuestionATiroir = {
 export type CorpsReponse = {
   chemin: string;
   identifiant: string;
-  reponse: string | CorpsReponseQuestionATiroir;
+  reponse: string | string[] | CorpsReponseQuestionATiroir;
 };
 
 export class ServiceDiagnostic {
