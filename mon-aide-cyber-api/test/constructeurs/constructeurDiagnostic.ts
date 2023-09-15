@@ -3,6 +3,8 @@ import { unReferentiel } from "./constructeurReferentiel";
 import {
   Diagnostic,
   initialiseDiagnostic,
+  ReponseDonnee,
+  ReponsesMultiples,
 } from "../../src/diagnostic/Diagnostic";
 import { Referentiel } from "../../src/diagnostic/Referentiel";
 import { unTableauDeNotes } from "./constructeurTableauDeNotes";
@@ -16,8 +18,9 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   private tableauDeRecommandations: TableauDeRecommandations =
     unTableauDeRecommandations().construis();
   private reponsesDonnees: {
-    [thematique: string]: { [guestion: string]: string }[];
-  } = {};
+    identifiant: { thematique: string; question: string };
+    reponseDonnee: ReponseDonnee;
+  }[] = [];
 
   avecUnReferentiel(referentiel: Referentiel): ConstructeurDiagnostic {
     this.referentiel = referentiel;
@@ -26,9 +29,24 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
 
   avecLesReponsesDonnees(
     thematique: string,
-    reponses: { [q1: string]: string }[],
+    reponses: { [question: string]: string | string[] }[],
   ): ConstructeurDiagnostic {
-    this.reponsesDonnees = { [thematique]: reponses };
+    reponses.forEach((rep) => {
+      Object.entries(rep).forEach(([question, valeur]) => {
+        const constructeurReponseDonnee = uneReponseDonnee();
+        if (typeof valeur === "string") {
+          constructeurReponseDonnee.ayantPourReponse(valeur);
+        } else {
+          constructeurReponseDonnee.avecDesReponsesMultilpes([
+            { identifiant: question, reponses: valeur },
+          ]);
+        }
+        this.ajouteUneReponseDonnee(
+          { thematique, question: question },
+          constructeurReponseDonnee.construis(),
+        );
+      });
+    });
     return this;
   }
 
@@ -44,25 +62,59 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     return this;
   }
 
+  ajouteUneReponseDonnee = (
+    identifiant: { thematique: string; question: string },
+    reponseDonnee: ReponseDonnee,
+  ): ConstructeurDiagnostic => {
+    this.reponsesDonnees.push({ identifiant, reponseDonnee });
+    return this;
+  };
+
   construis(): Diagnostic {
     const diagnostic = initialiseDiagnostic(
       this.referentiel,
       this.tableauDeNotes,
       this.tableauDeRecommandations,
     );
-    Object.entries(this.reponsesDonnees).forEach(([thematique, reponse]) => {
-      diagnostic.referentiel[thematique].questions.forEach((q) => {
-        reponse.forEach((rep) => {
-          Object.entries(rep).forEach(([identifiantQuestion, rep]) => {
-            if (q.identifiant === identifiantQuestion) {
-              q.reponseDonnee = { reponseUnique: rep, reponsesMultiples: [] };
-            }
-          });
-        });
-      });
+    this.reponsesDonnees.forEach((rep) => {
+      const reponseDonnee = diagnostic.referentiel[
+        rep.identifiant.thematique
+      ].questions.find((q) => q.identifiant === rep.identifiant.question);
+      if (reponseDonnee) {
+        reponseDonnee.reponseDonnee = rep.reponseDonnee;
+      }
     });
     return diagnostic;
   }
 }
 
+class ConstructeurReponseDonnee implements Constructeur<ReponseDonnee> {
+  private reponseUnique: string | null = null;
+  private reponsesMultiples: ReponsesMultiples[] = [];
+  ayantPourReponse(reponse: string): ConstructeurReponseDonnee {
+    this.reponseUnique = reponse;
+    return this;
+  }
+
+  avecDesReponsesMultilpes(
+    reponsesMultiples: { identifiant: string; reponses: string[] }[],
+  ): ConstructeurReponseDonnee {
+    this.reponsesMultiples = reponsesMultiples.map((rep) => ({
+      identifiant: rep.identifiant,
+      reponses: new Set(rep.reponses),
+    }));
+    return this;
+  }
+
+  construis(): ReponseDonnee {
+    return {
+      reponseUnique: this.reponseUnique,
+      reponsesMultiples: this.reponsesMultiples,
+    };
+  }
+}
+
 export const unDiagnostic = () => new ConstructeurDiagnostic();
+
+export const uneReponseDonnee = (): ConstructeurReponseDonnee =>
+  new ConstructeurReponseDonnee();

@@ -6,7 +6,10 @@ import {
   unReferentiel,
   unReferentielSansThematiques,
 } from "../../constructeurs/constructeurReferentiel";
-import { unDiagnostic } from "../../constructeurs/constructeurDiagnostic";
+import {
+  unDiagnostic,
+  uneReponseDonnee,
+} from "../../constructeurs/constructeurDiagnostic";
 import { representeLeDiagnosticPourLeClient } from "../../../src/api/representateurs/representateurDiagnostic";
 import {
   fabriqueTranscripteurVide,
@@ -16,14 +19,7 @@ import {
 } from "./transcripteursDeTest";
 import { Question, ReponsePossible } from "../../../src/diagnostic/Referentiel";
 import { RepresentationDiagnostic } from "../../../src/api/representateurs/types";
-import {
-  ajouteLaReponseAuDiagnostic,
-  Diagnostic,
-} from "../../../src/diagnostic/Diagnostic";
-import {
-  unCorpsDeReponseQuestionATiroir,
-  unCorspsDeReponse,
-} from "../../constructeurs/constructeurReponse";
+import { Diagnostic } from "../../../src/diagnostic/Diagnostic";
 
 describe("Le représentateur de diagnostic", () => {
   describe("Afin de fournir les actions possibles pour un client", () => {
@@ -486,7 +482,51 @@ describe("Le représentateur de diagnostic", () => {
   });
 
   describe("Afin de prendre en compte les réponses données par l’utilisateur", () => {
-    it("présente les réponses multiples", () => {
+    it("présente les réponses multiples pour les QCM", () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .sansThematique()
+            .ajouteUneThematique("multiple", [
+              uneQuestion()
+                .aChoixMultiple("Ma question ?")
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle("rep1").construis(),
+                  uneReponsePossible().avecLibelle("rep2").construis(),
+                  uneReponsePossible().avecLibelle("rep3").construis(),
+                ])
+                .construis(),
+            ])
+            .construis(),
+        )
+        .ajouteUneReponseDonnee(
+          {
+            thematique: "multiple",
+            question: "ma-question-",
+          },
+          uneReponseDonnee()
+            .avecDesReponsesMultilpes([
+              { identifiant: "ma-question-", reponses: ["rep1", "rep3"] },
+            ])
+            .construis(),
+        )
+        .construis();
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        fabriqueTranscripteurVide(),
+      );
+
+      const reponse =
+        representationDiagnostic.referentiel["multiple"].questions[0]
+          .reponseDonnee;
+      expect(reponse).toStrictEqual({
+        valeur: null,
+        reponses: [{ identifiant: "ma-question-", reponses: ["rep1", "rep3"] }],
+      });
+    });
+
+    it("présente les réponses multiples pour les questions à tiroir", () => {
       const premiereReponse = uneReponsePossible()
         .avecLibelle("rep 11")
         .construis();
@@ -519,28 +559,23 @@ describe("Le représentateur de diagnostic", () => {
         .avecUnReferentiel(
           unReferentiel().ajouteUneQuestionAuContexte(question).construis(),
         )
-        .construis();
-      ajouteLaReponseAuDiagnostic(
-        diagnostic,
-        unCorspsDeReponse()
-          .pourLaThematique("contexte")
-          .concernantLaQuestion(question)
-          .avecLaReponse(
-            unCorpsDeReponseQuestionATiroir()
-              .avecLaReponse({
-                reponse: "réponse",
-                valeurs: [
-                  {
-                    question: "q1",
-                    reponses: [premiereReponse, deuxiemeReponse],
-                  },
-                  { question: "q2", reponses: [troisiemeReponse] },
+        .ajouteUneReponseDonnee(
+          { thematique: "contexte", question: "question" },
+          uneReponseDonnee()
+            .ayantPourReponse("réponse")
+            .avecDesReponsesMultilpes([
+              {
+                identifiant: "q1",
+                reponses: [
+                  premiereReponse.identifiant,
+                  deuxiemeReponse.identifiant,
                 ],
-              })
-              .construis(),
-          )
-          .construis(),
-      );
+              },
+              { identifiant: "q2", reponses: [troisiemeReponse.identifiant] },
+            ])
+            .construis(),
+        )
+        .construis();
 
       const representationDiagnostic = representeLeDiagnosticPourLeClient(
         diagnostic,
