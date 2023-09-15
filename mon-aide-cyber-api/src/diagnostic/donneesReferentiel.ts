@@ -1221,13 +1221,11 @@ const referentiel: Referentiel = {
             libelle: "Je ne sais pas",
             ordre: 0,
           },
-
           {
             identifiant: "securite-poste-pare-feu-local-active-non",
             libelle: "Non",
             ordre: 1,
           },
-
           {
             identifiant: "securite-poste-pare-feu-local-active-oui",
             libelle: "Oui",
@@ -1338,6 +1336,45 @@ const referentiel: Referentiel = {
               "securite-poste-configuration-securisee-standardisee-et-homogene-oui",
             libelle: "Oui",
             ordre: 2,
+          },
+        ],
+        type: "choixUnique",
+      },
+    ],
+  },
+  securiteinfrastructure: {
+    questions: [
+      {
+        identifiant:
+          "securite-infrastructure-mises-a-jour-fonctionnelles-securite-deployees",
+        libelle:
+          "Les mises à jour fonctionnelles et de sécurité des serveurs, des équipements, des systèmes et logiciels d'administration sont-elles déployées ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-deployees-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-deployees-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-deployees-a-intervalle-regulier",
+            libelle:
+              "Des mises à jour logicielles sont déployées à intervalle régulier.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-deployees-des-que-possible",
+            libelle:
+              "Toutes les mises à jour logicielles sont déployées dès que celles-ci sont disponibles et fonctionnelles.",
+            ordre: 3,
           },
         ],
         type: "choixUnique",
