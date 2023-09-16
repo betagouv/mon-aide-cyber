@@ -8,8 +8,8 @@ import {
 } from "../../../src/domaine/diagnostic/reducteurDiagnostic";
 import { uneReponsePossible } from "../../constructeurs/constructeurReponsePossible";
 import {
-  uneQuestion,
   uneQuestionAChoixMultiple,
+  uneQuestionAChoixUnique,
   uneQuestionTiroirAChoixUnique,
 } from "../../constructeurs/constructeurQuestions";
 
@@ -75,7 +75,7 @@ describe("Les réducteurs de diagnostic", () => {
         .avecUnReferentiel(
           unReferentiel()
             .avecUneQuestion(
-              uneQuestion()
+              uneQuestionAChoixUnique()
                 .avecDesReponses([
                   uneReponsePossible()
                     .avecLibelle("Réponse B")
@@ -89,7 +89,7 @@ describe("Les réducteurs de diagnostic", () => {
                 .construis(),
             )
             .ajouteUneThematique("Autre thématique", [
-              uneQuestion()
+              uneQuestionAChoixUnique()
                 .avecDesReponses([
                   uneReponsePossible()
                     .avecLibelle("Réponse B")

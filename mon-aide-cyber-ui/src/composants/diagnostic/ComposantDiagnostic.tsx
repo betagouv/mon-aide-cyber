@@ -23,8 +23,11 @@ import { FournisseurEntrepots } from "../../fournisseurs/FournisseurEntrepot.ts"
 import {
   EtatReponseStatut,
   reducteurReponse,
-  reponseChangee,
+  reponseUniqueDonnee,
   initialiseReducteur,
+  reponseMultipleDonnee,
+  reponseTiroirUniqueDonnee,
+  reponseTiroirMultipleDonnee,
 } from "../../domaine/diagnostic/reducteurReponse.ts";
 import { ActionDiagnostic } from "../../domaine/diagnostic/Diagnostic.ts";
 import "../../assets/styles/_diagnostic.scss";
@@ -104,7 +107,7 @@ const ComposantQuestionListe = ({
 
   const repond = useCallback(
     (event: ChangeEvent<HTMLSelectElement>) => {
-      envoie(reponseChangee(event.target.value));
+      envoie(reponseUniqueDonnee(event.target.value));
     },
     [envoie],
   );
@@ -147,14 +150,21 @@ const ComposantQuestion = ({
   );
   const entrepots = useContext(FournisseurEntrepots);
 
-  const repond = useCallback(
+  const repondQuestionUnique = useCallback(
     (identifiantReponse: string) => {
-      envoie(reponseChangee(identifiantReponse));
+      envoie(reponseUniqueDonnee(identifiantReponse));
     },
     [envoie],
   );
 
-  const repondQuestionTiroir = useCallback(
+  const repondQuestionMultiple = useCallback(
+    (elementReponse: { identifiantReponse: string; reponse: string }) => {
+      envoie(reponseMultipleDonnee(elementReponse));
+    },
+    [envoie],
+  );
+
+  const repondQuestionTiroirUnique = useCallback(
     (
       identifiantReponse: string,
       elementReponse: {
@@ -162,7 +172,20 @@ const ComposantQuestion = ({
         reponse: string;
       },
     ) => {
-      envoie(reponseChangee(identifiantReponse, elementReponse));
+      envoie(reponseTiroirUniqueDonnee(identifiantReponse, elementReponse));
+    },
+    [envoie],
+  );
+
+  const repondQuestionTiroirMultiple = useCallback(
+    (
+      identifiantReponse: string,
+      elementReponse: {
+        identifiantReponse: string;
+        reponse: string;
+      },
+    ) => {
+      envoie(reponseTiroirMultipleDonnee(identifiantReponse, elementReponse));
     },
     [envoie],
   );
@@ -178,14 +201,29 @@ const ComposantQuestion = ({
   return (
     <>
       {question.reponsesPossibles.map((reponse) => {
+        const typeDeSaisie =
+          question.type === "choixUnique" ? "radio" : "checkbox";
         return (
           <ComposantReponsePossible
             key={reponse.identifiant}
             reponsePossible={reponse}
             identifiantQuestion={question.identifiant}
-            typeDeSaisie="radio"
-            onChange={(identifiantReponse) => repond(identifiantReponse)}
-            selectionnee={etatReponse.valeur() === reponse.identifiant}
+            typeDeSaisie={typeDeSaisie}
+            onChange={(identifiantReponse) =>
+              typeDeSaisie === "radio"
+                ? repondQuestionUnique(identifiantReponse)
+                : repondQuestionMultiple({
+                    identifiantReponse: question.identifiant,
+                    reponse: identifiantReponse,
+                  })
+            }
+            selectionnee={
+              typeDeSaisie === "radio"
+                ? etatReponse.valeur() === reponse.identifiant
+                : etatReponse.reponseDonnee.reponses.some((rep) =>
+                    rep.reponses.has(reponse.identifiant),
+                  )
+            }
           >
             {reponse.questions?.map((questionTiroir) => (
               <div className="question-tiroir" key={questionTiroir.identifiant}>
@@ -207,12 +245,17 @@ const ComposantQuestion = ({
                       selectionnee={etatReponse.reponseDonnee.reponses.some(
                         (reponse) => reponse.reponses.has(rep.identifiant),
                       )}
-                      onChange={(identifiantReponse) =>
-                        repondQuestionTiroir(reponse.identifiant, {
-                          identifiantReponse: questionTiroir.identifiant,
-                          reponse: identifiantReponse,
-                        })
-                      }
+                      onChange={(identifiantReponse) => {
+                        typeDeSaisie === "checkbox"
+                          ? repondQuestionTiroirMultiple(reponse.identifiant, {
+                              identifiantReponse: questionTiroir.identifiant,
+                              reponse: identifiantReponse,
+                            })
+                          : repondQuestionTiroirUnique(reponse.identifiant, {
+                              identifiantReponse: questionTiroir.identifiant,
+                              reponse: identifiantReponse,
+                            });
+                      }}
                     />
                   );
                 })}
