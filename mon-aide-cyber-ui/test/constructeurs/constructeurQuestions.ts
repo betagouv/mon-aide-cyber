@@ -5,6 +5,7 @@ import {
   Question,
   QuestionATiroir,
   ReponseDonnee,
+  ReponseMultiple,
   ReponsePossible,
   TypeDeSaisie,
 } from "../../src/domaine/diagnostic/Referentiel.ts";
@@ -14,7 +15,7 @@ class ConstructeurQuestion implements Constructeur<Question> {
   protected identifiant = faker.string.alpha(10);
   protected libelle = faker.word.words().concat(" ?");
   protected reponsesPossibles: ReponsePossible[] = [];
-  protected type?: Exclude<TypeDeSaisie, "saisieLibre"> = undefined;
+  protected type: Exclude<TypeDeSaisie, "saisieLibre"> = "choixUnique";
   private reponseDonnee: ReponseDonnee = {
     valeur: null,
     reponses: [],
@@ -27,11 +28,26 @@ class ConstructeurQuestion implements Constructeur<Question> {
 
   avecLaReponseDonnee(
     reponsePossible: ReponsePossible,
-    reponses: { identifiant: string; reponses: Set<string> }[] = [],
+    reponses: ReponseMultiple[] = [],
   ): ConstructeurQuestion {
     this.reponseDonnee = {
       valeur: reponsePossible.identifiant,
       reponses,
+    };
+    return this;
+  }
+
+  avecUneReponseMultipleDonnee(
+    reponsePossibles: ReponsePossible[],
+  ): ConstructeurQuestion {
+    this.reponseDonnee = {
+      valeur: null,
+      reponses: [
+        {
+          identifiant: this.identifiant,
+          reponses: new Set(reponsePossibles.map((rep) => rep.identifiant)),
+        },
+      ],
     };
     return this;
   }
@@ -69,7 +85,7 @@ class ConstructeurQuestionTiroir implements Constructeur<QuestionATiroir> {
   protected identifiant = faker.string.alpha(10);
   protected libelle = faker.word.words().concat(" ?");
   protected reponsesPossibles: ReponsePossible[] = [];
-  protected type?: Exclude<TypeDeSaisie, "saisieLibre">;
+  protected type: Exclude<TypeDeSaisie, "saisieLibre"> = "choixMultiple";
 
   avecLibelle(libelle: string): ConstructeurQuestionTiroir {
     this.identifiant = aseptise(libelle);
@@ -91,15 +107,12 @@ class ConstructeurQuestionTiroir implements Constructeur<QuestionATiroir> {
   }
 
   construis(): QuestionATiroir {
-    let question: QuestionATiroir = {
+    return {
       identifiant: this.identifiant,
       libelle: this.libelle,
       reponsesPossibles: this.reponsesPossibles,
+      type: this.type,
     };
-    if (this.type) {
-      question = { ...question, type: this.type };
-    }
-    return question;
   }
 }
 
@@ -141,5 +154,3 @@ export const uneQuestionTiroirAChoixUnique = () =>
   new ConstructeurQuestionTiroirAChoixUnique();
 export const uneQuestionTiroirAChoixMultiple = () =>
   new ConstructeurQuestionTiroirAChoixMultiple();
-
-export const uneQuestion = () => new ConstructeurQuestion();

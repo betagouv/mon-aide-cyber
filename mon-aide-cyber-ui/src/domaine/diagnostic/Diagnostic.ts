@@ -20,8 +20,8 @@ export type ReponseQuestionATiroir = {
   }[];
 };
 export type Reponse = {
-  reponseDonnee: string | ReponseQuestionATiroir | null;
   identifiantQuestion: string;
+  reponseDonnee: string | string[] | ReponseQuestionATiroir | null;
 };
 export interface EntrepotDiagnostic extends Entrepot<Diagnostic> {
   lancer(): Promise<LienRoutage>;

@@ -8,7 +8,7 @@ import {
   EntrepotDiagnosticsMemoire,
 } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
 import {
-  uneQuestion,
+  uneQuestionAChoixMultiple,
   uneQuestionAChoixUnique,
   uneQuestionTiroirAChoixMultiple,
   uneQuestionTiroirAChoixUnique,
@@ -81,10 +81,10 @@ const diagnosticAPlusieursThematiques = unDiagnostic()
   .avecUnReferentiel(
     unReferentiel()
       .ajouteUneThematique("Thème 1", [
-        uneQuestion().construis(),
-        uneQuestion().construis(),
+        uneQuestionAChoixUnique().construis(),
+        uneQuestionAChoixUnique().construis(),
       ])
-      .avecUneQuestion(uneQuestion().construis())
+      .avecUneQuestion(uneQuestionAChoixUnique().construis())
       .construis(),
   )
   .construis();
@@ -111,7 +111,7 @@ const diagnosticAvecQuestionATiroir = unDiagnostic()
       .sansAction()
       .ajouteAction(actionRepondre)
       .avecUneQuestion(
-        uneQuestion()
+        uneQuestionAChoixUnique()
           .avecLibelle("QCM?")
           .avecDesReponses([
             uneReponsePossible().construis(),
@@ -139,7 +139,7 @@ const diagnosticAvecQuestionsAPlusieursTiroirs = unDiagnostic()
       .sansAction()
       .ajouteAction(actionRepondre)
       .avecUneQuestion(
-        uneQuestion()
+        uneQuestionAChoixUnique()
           .avecLibelle("QCM?")
           .avecDesReponses([
             uneReponsePossible().construis(),
@@ -186,7 +186,7 @@ const diagnosticAvecQuestionsAPlusieursTiroirs = unDiagnostic()
   .construis();
 
 const identifiantQuestionATiroirAvecReponseUnique =
-  "4196086c-d370-4406-a757-347d964a4e74";
+  "d01c0e69-7abd-46cf-a109-a38f8b1b26e0";
 const diagnosticAvecQuestionsATiroirsAvecReponseUnique = unDiagnostic()
   .avecIdentifiant(identifiantQuestionATiroirAvecReponseUnique)
   .avecUnReferentiel(
@@ -194,7 +194,7 @@ const diagnosticAvecQuestionsATiroirsAvecReponseUnique = unDiagnostic()
       .sansAction()
       .ajouteAction(actionRepondre)
       .avecUneQuestion(
-        uneQuestion()
+        uneQuestionAChoixUnique()
           .avecLibelle("QCM?")
           .avecDesReponses([
             uneReponsePossible().construis(),
@@ -225,6 +225,32 @@ const diagnosticAvecQuestionsATiroirsAvecReponseUnique = unDiagnostic()
   )
   .construis();
 
+const identifiantQuestionAChoixMultiple =
+  "4196086c-d370-4406-a757-347d964a4e74";
+const diagnosticAveUneQuestionAChoixMultiple = unDiagnostic()
+  .avecIdentifiant(identifiantQuestionAChoixMultiple)
+  .avecUnReferentiel(
+    unReferentiel()
+      .sansAction()
+      .ajouteAction(actionRepondre)
+      .avecUneQuestion(
+        uneQuestionAChoixMultiple()
+          .avecLibelle("Question à choix multiple ?")
+          .avecDesReponses([
+            uneReponsePossible().avecLibelle("Réponse 1").construis(),
+            uneReponsePossible().avecLibelle("Réponse 2").construis(),
+            uneReponsePossible().avecLibelle("Réponse 3").construis(),
+            uneReponsePossible().avecLibelle("Réponse 4").construis(),
+          ])
+          .avecUneReponseMultipleDonnee([
+            uneReponsePossible().avecLibelle("Réponse 1").construis(),
+          ])
+          .construis(),
+      )
+      .construis(),
+  )
+  .construis();
+
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestionAChoixUnique);
 await entrepotDiagnosticMemoire.persiste(
   diagnosticAvecQuestionSousFormeDeListeDeroulante,
@@ -236,6 +262,9 @@ await entrepotDiagnosticMemoire.persiste(
 );
 await entrepotDiagnosticMemoire.persiste(
   diagnosticAvecQuestionsATiroirsAvecReponseUnique,
+);
+await entrepotDiagnosticMemoire.persiste(
+  diagnosticAveUneQuestionAChoixMultiple,
 );
 
 const meta = {
@@ -669,3 +698,81 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
       });
     },
   };
+
+export const SelectionneLaReponsePourUneQuestionAChoixMultiple: Story = {
+  name: "Sélectionne la réponse pour une question à choix multiple",
+  args: { idDiagnostic: identifiantQuestionAChoixMultiple },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step("Lorsque le diagnostic est récupéré depuis l’API", async () => {
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /réponse 1/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /réponse 2/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /réponse 3/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /réponse 4/i,
+          }),
+        ),
+      ).not.toBeChecked();
+    });
+
+    await step("Lorsque l’utilisateur modifie la réponse", async () => {
+      await userEvent.click(
+        canvas.getByRole("checkbox", { name: /réponse 3/i }),
+      );
+
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /réponse 1/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /réponse 2/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /réponse 3/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole("checkbox", {
+            name: /réponse 4/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+        reponseDonnee: ["reponse-1", "reponse-3"],
+        identifiantQuestion: "question-a-choix-multiple-",
+      });
+    });
+  },
+};
