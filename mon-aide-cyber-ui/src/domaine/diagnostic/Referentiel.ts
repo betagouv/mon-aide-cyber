@@ -13,9 +13,10 @@ export type TypeDeSaisie =
   | "saisieLibre"
   | "liste";
 export type Format = "texte" | "nombre" | undefined;
+export type ReponseMultiple = { identifiant: string; reponses: Set<string> };
 export type ReponseDonnee = {
   valeur: string | null;
-  reponses: { identifiant: string; reponses: Set<string> }[];
+  reponses: ReponseMultiple[];
 };
 export type QuestionATiroir = Omit<Question, "reponseDonnee">;
 export type ReponsePossible = {
@@ -30,5 +31,5 @@ export type Question = {
   libelle: string;
   reponseDonnee: ReponseDonnee;
   reponsesPossibles: ReponsePossible[];
-  type?: Exclude<TypeDeSaisie, "saisieLibre">;
+  type: Exclude<TypeDeSaisie, "saisieLibre">;
 };

@@ -8,7 +8,6 @@ import {
   EntrepotDiagnosticsMemoire,
 } from "../../test/infrastructure/entrepots/EntrepotsMemoire.ts";
 import {
-  uneQuestion,
   uneQuestionAChoixUnique,
   uneQuestionTiroirAChoixMultiple,
 } from "../../test/constructeurs/constructeurQuestions.ts";
@@ -26,13 +25,15 @@ const diagnosticAvecUneQuestion = unDiagnostic()
   .avecIdentifiant(identifiantUneQuestion)
   .avecUnReferentiel(
     unReferentiel()
-      .avecUneQuestionEtDesReponses(
-        { libelle: "Quelle entreprise êtes-vous ?" },
-        [
-          uneReponsePossible()
-            .avecLibelle("Entreprise privée (ex. TPE, PME, ETI)")
-            .construis(),
-        ],
+      .avecUneQuestion(
+        uneQuestionAChoixUnique()
+          .avecLibelle("Quelle entreprise êtes-vous ?")
+          .avecDesReponses([
+            uneReponsePossible()
+              .avecLibelle("Entreprise privée (ex. TPE, PME, ETI)")
+              .construis(),
+          ])
+          .construis(),
       )
       .construis(),
   )
@@ -42,17 +43,19 @@ const diagnosticAvecUnChampsDeSaisie = unDiagnostic()
   .avecIdentifiant(identifiantChampsDeSaise)
   .avecUnReferentiel(
     unReferentiel()
-      .avecUneQuestionEtDesReponses(
-        { libelle: "Quelle entreprise êtes-vous ?" },
-        [
-          uneReponsePossible()
-            .avecLibelle("Entreprise privée (ex. TPE, PME, ETI)")
-            .construis(),
-          uneReponsePossible()
-            .avecLibelle("Autre")
-            .auFormatTexteDeSaisieLibre()
-            .construis(),
-        ],
+      .avecUneQuestion(
+        uneQuestionAChoixUnique()
+          .avecLibelle("Quelle entreprise êtes-vous ?")
+          .avecDesReponses([
+            uneReponsePossible()
+              .avecLibelle("Entreprise privée (ex. TPE, PME, ETI)")
+              .construis(),
+            uneReponsePossible()
+              .avecLibelle("Autre")
+              .auFormatTexteDeSaisieLibre()
+              .construis(),
+          ])
+          .construis(),
       )
       .construis(),
   )
@@ -62,8 +65,14 @@ const diagnosticAvecPlusieursQuestions = unDiagnostic()
   .avecIdentifiant(identifiantPlusieursQuestions)
   .avecUnReferentiel(
     unReferentiel()
-      .avecUneQuestionEtDesReponses({ libelle: "Une question?" })
-      .avecUneQuestionEtDesReponses({ libelle: "Une autre question?" })
+      .avecUneQuestion(
+        uneQuestionAChoixUnique().avecLibelle("Une question?").construis(),
+      )
+      .avecUneQuestion(
+        uneQuestionAChoixUnique()
+          .avecLibelle("Une autre question?")
+          .construis(),
+      )
       .construis(),
   )
   .construis();
@@ -92,7 +101,7 @@ const diagnosticAvecReponseEntrainantQuestion = unDiagnostic()
   .avecUnReferentiel(
     unReferentiel()
       .avecUneQuestion(
-        uneQuestion()
+        uneQuestionAChoixUnique()
           .avecDesReponses([
             uneReponsePossible().construis(),
             uneReponsePossible().construis(),
@@ -125,7 +134,7 @@ const unDiagnosticAvecQuestionTiroirAChoixUnique = unDiagnostic()
   .avecUnReferentiel(
     unReferentiel()
       .avecUneQuestion(
-        uneQuestion()
+        uneQuestionAChoixUnique()
           .avecDesReponses([
             uneReponsePossible()
               .avecUneQuestion(
