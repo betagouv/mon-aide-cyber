@@ -23,7 +23,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
   avecUneQuestionEtDesReponses(
     question: {
       libelle: string;
-      type?: Exclude<TypeDeSaisie, "aCocher" | "saisieLibre">;
+      type: Exclude<TypeDeSaisie, "aCocher" | "saisieLibre">;
     },
     reponsePossibles: ReponsePossible[] = [],
   ): ConstructeurReferentiel {

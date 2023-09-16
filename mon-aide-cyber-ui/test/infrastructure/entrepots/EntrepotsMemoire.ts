@@ -57,8 +57,8 @@ export class EntrepotDiagnosticMemoire
     actionRepondre: ActionDiagnostic,
     reponseDonnee: Reponse,
   ) {
-    expect(actionRepondre).toStrictEqual(this.actionRepondre);
-    expect(reponseDonnee).toStrictEqual(this.reponseDonnee);
+    expect(this.actionRepondre).toStrictEqual(actionRepondre);
+    expect(this.reponseDonnee).toStrictEqual(reponseDonnee);
   }
 
   async verifieReponseNonEnvoyee() {
