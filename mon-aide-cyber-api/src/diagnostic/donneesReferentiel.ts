@@ -10,7 +10,7 @@ const referentiel: Referentiel = {
           {
             identifiant: "nature-organisation-organisation-publique",
             libelle:
-              "Organisation publique (ex. collectivité, organisation centrale)",
+              "Organisation publique (ex. collectivité, administration centrale)",
             ordre: 0,
           },
           {
