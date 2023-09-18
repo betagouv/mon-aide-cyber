@@ -1381,6 +1381,74 @@ const referentiel: Referentiel = {
       },
     ],
   },
+  sensibilisation: {
+    questions: [
+      {
+        identifiant:
+          "sensibilisation-collaborateurs-soumis-obligations-usages-securises",
+        libelle:
+          "Les collaborateurs sont-ils soumis à des obligations en matière d'usages sécurisés des moyens informatiques ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "sensibilisation-collaborateurs-soumis-obligations-usages-securises-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+          {
+            identifiant:
+              "sensibilisation-collaborateurs-soumis-obligations-usages-securises-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui",
+            libelle: "Oui",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-signee",
+            libelle:
+              "Oui, une charte est signée par chaque collaborateur et elle est annexée au règlement intérieur.",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant: "sensibilisation-declaration-incidents-encouragee",
+        libelle:
+          "La déclaration d'incidents de sécurité par les salariés est-elle encouragée et facilitée ?",
+        reponsesPossibles: [
+          {
+            identifiant: "sensibilisation-declaration-incidents-encouragee-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+          {
+            identifiant: "sensibilisation-declaration-incidents-encouragee-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "sensibilisation-declaration-incidents-encouragee-non-habitude-utilisateurs-contactent-informaticien",
+            libelle:
+              "Non, mais dans la majorité des cas, les utilisateurs ont pris l'habitude de contacter un informaticien en cas de doute ou d'incident.",
+            ordre: 2,
+          },
+          {
+            identifiant: "sensibilisation-declaration-incidents-encouragee-oui",
+            libelle: "Oui",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+    ],
+  },
 };
 
 export { referentiel };
