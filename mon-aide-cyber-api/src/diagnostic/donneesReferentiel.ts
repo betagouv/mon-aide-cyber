@@ -10,7 +10,7 @@ const referentiel: Referentiel = {
           {
             identifiant: "nature-organisation-organisation-publique",
             libelle:
-              "Organisation publique (ex. collectivité, organisation centrale)",
+              "Organisation publique (ex. collectivité, administration centrale)",
             ordre: 0,
           },
           {
@@ -534,7 +534,7 @@ const referentiel: Referentiel = {
                   {
                     identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement",
-                    libelle: "Etablissement d'un registre de vos traitements",
+                    libelle: "Établissement d'un registre de vos traitements",
                     ordre: 2,
                   },
                   {
@@ -642,7 +642,7 @@ const referentiel: Referentiel = {
       {
         identifiant: "acces-outil-gestion-des-comptes",
         libelle:
-          "Un outil de gestion des comptes et des politiques de sécurité centralisés (ex : Active Directory, Samba-AD, Azure AD) est-il déployé au sein du système d'information ?",
+          "Un outil de gestion des comptes et des politiques de sécurité centralisé (ex : Active Directory, Samba-AD, Azure AD) est-il déployé au sein du système d'information ?",
         reponsesPossibles: [
           {
             identifiant: "acces-outil-gestion-des-comptes-nsp",
@@ -680,7 +680,7 @@ const referentiel: Referentiel = {
           {
             identifiant: "acces-liste-compte-utilisateurs-revue-reguliere",
             libelle:
-              "Les comptes des utilisateurs et leurs accès sont régulièrement revues (ex : liste du personnel vs liste des comptes).",
+              "Les comptes des utilisateurs et leurs accès sont régulièrement revus (ex : liste du personnel vs liste des comptes).",
             ordre: 2,
           },
           {
@@ -695,7 +695,7 @@ const referentiel: Referentiel = {
       {
         identifiant: "acces-droits-acces-utilisateurs-limites",
         libelle:
-          "Les droits d'accès des utilisateurs aux données, aux systèmes et applications métiers sont-ils limités à leurs besoins métiers ?",
+          "Les droits d'accès des utilisateurs aux données, aux systèmes et aux applications métiers sont-ils limités à leurs besoins métiers ?",
         reponsesPossibles: [
           {
             identifiant: "acces-droits-acces-utilisateurs-limites-nsp",
@@ -718,7 +718,7 @@ const referentiel: Referentiel = {
             identifiant:
               "acces-droits-acces-utilisateurs-limites-restrictions-limitees",
             libelle:
-              "L’accès des utilisateurs aux données et aux systèmes et aux applications sont limités aux seuls accès nécessaires à leur activité.",
+              "L’accès des utilisateurs aux données, aux systèmes et aux applications sont limités aux seuls accès nécessaires à leur activité.",
             ordre: 3,
           },
         ],
@@ -745,7 +745,7 @@ const referentiel: Referentiel = {
             identifiant:
               "acces-administrateurs-informatiques-suivie-et-limitee-revue-reguliere",
             libelle:
-              "Les comptes des administrateurs sont régulièrement revues (ex : liste du personnel vs liste des comptes).",
+              "Les comptes des administrateurs sont régulièrement revus (ex : liste du personnel vs liste des comptes).",
             ordre: 2,
           },
           {
@@ -773,7 +773,7 @@ const referentiel: Referentiel = {
             identifiant:
               "acces-utilisation-comptes-administrateurs-droits-limitee-non",
             libelle:
-              "Non, des utilisateurs disposent de privilèges d’administrations sans restrictions particulières.",
+              "Non, des utilisateurs disposent de privilèges d’administration sans restrictions particulières.",
             ordre: 1,
           },
           {
@@ -865,7 +865,7 @@ const referentiel: Referentiel = {
                     identifiant:
                       "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-question-tiroir-combien-messures-acces-distants-securises",
                     libelle:
-                      "Connexions via accès distants sécurisés (VPN, bastion, etc.)",
+                      "Connexion via accès distants sécurisés (VPN, bastion, etc.)",
                     ordre: 1,
                   },
                   {
@@ -929,7 +929,7 @@ const referentiel: Referentiel = {
             identifiant:
               "acces-teletravail-acces-distants-mesures-particulieres-mfa",
             libelle:
-              "De l'authentification à double facteurs a été mis en place pour les accès distants.",
+              "De l'authentification à double facteurs a été mise en place pour les accès distants.",
             ordre: 2,
           },
           {
@@ -1237,7 +1237,7 @@ const referentiel: Referentiel = {
       {
         identifiant: "securite-poste-outils-complementaires-securisation",
         libelle:
-          "Des outils complémentaires de sécurisation des postes de travail et de la navigation internet sont-elles en place ?",
+          "Des outils complémentaires de sécurisation des postes de travail et de la navigation internet sont-ils en place ?",
         reponsesPossibles: [
           {
             identifiant:
@@ -1279,7 +1279,7 @@ const referentiel: Referentiel = {
                     identifiant:
                       "securite-poste-outils-complementaires-securisation-oui-outils-blocage-clef-usb",
                     libelle:
-                      "Contrôle voir blocage des clefs USB externes (ou via station blanche)",
+                      "Contrôle voire blocage des clefs USB externes (ou via station blanche)",
                     ordre: 2,
                   },
                   {
@@ -1315,7 +1315,7 @@ const referentiel: Referentiel = {
         identifiant:
           "securite-poste-configuration-securisee-standardisee-et-homogene",
         libelle:
-          "Tous les postes de travail bénéficient-ils d'une configuration sécurisée standardisée et homogène sur l'ensemble du parcs ?",
+          "Tous les postes de travail bénéficient-ils d'une configuration sécurisée standardisée et homogène sur l'ensemble du parc ?",
         reponsesPossibles: [
           {
             identifiant:
