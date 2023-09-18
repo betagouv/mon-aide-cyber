@@ -1449,6 +1449,73 @@ const referentiel: Referentiel = {
       },
     ],
   },
+  reaction: {
+    questions: [
+      {
+        identifiant: "reaction-moyens-identification-vulnerabilites-en-place",
+        libelle:
+          "Des moyens d'identification des vulnérabilités potentielles sont-ils en place, notamment pour les systèmes et applications ne se mettant pas à jour automatiquement ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "reaction-moyens-identification-vulnerabilites-en-place-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+          {
+            identifiant:
+              "reaction-moyens-identification-vulnerabilites-en-place-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "reaction-moyens-identification-vulnerabilites-en-place-veille-ponctuelle",
+            libelle: "Réalisation d'une veille ponctuelle sur internet.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "reaction-moyens-identification-vulnerabilites-en-place-veille-reguliere",
+            libelle: "Réalisation d'une veille régulière et exhaustive.",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant: "reaction-dispositif-gestion-crise-adapte-defini",
+        libelle:
+          "Un dispositif de gestion de crise adapté au risque de cyberattaques a-t-il été défini ?",
+        reponsesPossibles: [
+          {
+            identifiant: "reaction-dispositif-gestion-crise-adapte-defini-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+          {
+            identifiant: "reaction-dispositif-gestion-crise-adapte-defini-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "reaction-dispositif-gestion-crise-adapte-defini-oui-fiche-reflexe",
+            libelle: "Nous avons défini une fiche réflexe dédiée.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "reaction-dispositif-gestion-crise-adapte-defini-oui-organisation-gestion-crise-definie",
+            libelle:
+              "Oui, une organisation de gestion de crise d'origine cyber a été définie",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+    ],
+  },
 };
 
 export { referentiel };
