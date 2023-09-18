@@ -178,7 +178,19 @@ export const reducteurReponse = (
       };
     }
     case TypeActionReponse.REPONSE_TIROIR_UNIQUE_DONNEE: {
-      const reponses: ReponseMultiple[] = toutesLesReponses();
+      let reponses: ReponseMultiple[] = toutesLesReponses();
+      if (
+        !reponses
+          .map((rep) => rep.identifiant)
+          .some((rep) =>
+            etat.question.reponsesPossibles
+              .filter((rep) => rep.identifiant === action.reponse.valeur)
+              .flatMap((rep) => rep.questions?.map((q) => q.identifiant))
+              .includes(rep),
+          )
+      ) {
+        reponses = [];
+      }
       const elementReponse = action.reponse.elementReponse;
       const aDejaUneReponse = reponses.find(
         (rep) => rep.identifiant === elementReponse.identifiantReponse,
