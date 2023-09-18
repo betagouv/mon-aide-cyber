@@ -13,6 +13,7 @@ import {
   uneQuestionAChoixMultiple,
   uneQuestionAChoixUnique,
   uneQuestionTiroirAChoixMultiple,
+  uneQuestionTiroirAChoixUnique,
 } from "../../constructeurs/constructeurQuestions";
 import { unEtatDeReponse } from "./constructeurEtaReponse";
 
@@ -309,6 +310,90 @@ describe("Le réducteur de réponse", () => {
           questions: [
             { identifiant: "tiroir-1", reponses: ["choix-12", "choix-13"] },
             { identifiant: "tiroir-2", reponses: ["choix-21", "choix-23"] },
+          ],
+        },
+      });
+      expect(etatReponse.statut).toBe(EtatReponseStatut.MODIFIE);
+    });
+
+    it("prend en compte les réponses à choix unique avec plusieurs questions à tiroir", () => {
+      const nouvelleReponse = uneReponsePossible()
+        .avecUneQuestion(
+          uneQuestionTiroirAChoixUnique()
+            .avecLibelle("tiroir 1")
+            .avecDesReponses([
+              uneReponsePossible().avecLibelle("choix 12").construis(),
+              uneReponsePossible().avecLibelle("choix 13").construis(),
+            ])
+            .construis(),
+        )
+        .construis();
+      const uneAutreReponse = uneReponsePossible()
+        .avecUneQuestion(
+          uneQuestionTiroirAChoixUnique()
+            .avecLibelle("tiroir 2")
+            .avecDesReponses([
+              uneReponsePossible().avecLibelle("choix 22").construis(),
+              uneReponsePossible().avecLibelle("choix 23").construis(),
+            ])
+            .construis(),
+        )
+        .avecUneQuestion(
+          uneQuestionTiroirAChoixUnique()
+            .avecLibelle("tiroir 3")
+            .avecDesReponses([
+              uneReponsePossible().avecLibelle("choix 32").construis(),
+              uneReponsePossible().avecLibelle("choix 33").construis(),
+            ])
+            .construis(),
+        )
+        .construis();
+      const question = uneQuestionAChoixUnique()
+        .avecLibelle("Une Question")
+        .avecDesReponses([nouvelleReponse, uneAutreReponse])
+        .avecLaReponseDonnee(nouvelleReponse, [
+          {
+            identifiant: "tiroir-1",
+            reponses: new Set(["choix-12"]),
+          },
+        ])
+        .construis();
+
+      const premierEtatReponse = reducteurReponse(
+        unEtatDeReponse(question).reponseChargee().construis(),
+        reponseTiroirUniqueDonnee(uneAutreReponse.identifiant, {
+          identifiantReponse: "tiroir-2",
+          reponse: "choix-23",
+        }),
+      );
+      const etatReponse = reducteurReponse(
+        premierEtatReponse,
+        reponseTiroirUniqueDonnee(uneAutreReponse.identifiant, {
+          identifiantReponse: "tiroir-3",
+          reponse: "choix-32",
+        }),
+      );
+
+      expect(etatReponse.reponseDonnee).toStrictEqual({
+        valeur: uneAutreReponse.identifiant,
+        reponses: [
+          {
+            identifiant: "tiroir-2",
+            reponses: new Set(["choix-23"]),
+          },
+          {
+            identifiant: "tiroir-3",
+            reponses: new Set(["choix-32"]),
+          },
+        ],
+      });
+      expect(etatReponse.reponse()).toStrictEqual({
+        identifiantQuestion: "une-question",
+        reponseDonnee: {
+          reponse: uneAutreReponse.identifiant,
+          questions: [
+            { identifiant: "tiroir-2", reponses: ["choix-23"] },
+            { identifiant: "tiroir-3", reponses: ["choix-32"] },
           ],
         },
       });
