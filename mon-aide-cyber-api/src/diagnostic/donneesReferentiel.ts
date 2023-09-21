@@ -1706,32 +1706,6 @@ const referentiel: Referentiel = {
   securiteposte: {
     questions: [
       {
-        identifiant: "securite-poste-utilisateurs-administrateurs-poste",
-        libelle: "Les utilisateurs sont-ils administrateurs de leur poste ?",
-        reponsesPossibles: [
-          {
-            identifiant:
-              "securite-poste-utilisateurs-administrateurs-poste-nsp",
-            libelle: "Je ne sais pas",
-            ordre: 0,
-          },
-
-          {
-            identifiant:
-              "securite-poste-utilisateurs-administrateurs-poste-oui",
-            libelle: "Oui",
-            ordre: 1,
-          },
-          {
-            identifiant:
-              "securite-poste-utilisateurs-administrateurs-poste-non",
-            libelle: "Non, et les rares exceptions sont justifiées.",
-            ordre: 2,
-          },
-        ],
-        type: "choixUnique",
-      },
-      {
         identifiant: "securite-poste-maj-fonctionnelles-et-securite-deployees",
         libelle:
           "Les mises à jour fonctionnelles et de sécurité des logiciels utilisés sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?",
@@ -1834,6 +1808,36 @@ const referentiel: Referentiel = {
         type: "choixUnique",
       },
       {
+        identifiant: "securite-poste-si-industriel-antivirus-deploye",
+        libelle:
+          "Si l'entité dispose d'un SI industriel : Un antivirus à jour est-il déployé sur chaque poste de travail du SI industriel ?",
+        reponsesPossibles: [
+          {
+            identifiant: "securite-poste-si-industriel-antivirus-deploye-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+          {
+            identifiant: "securite-poste-si-industriel-antivirus-deploye-nsp",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "securite-poste-si-industriel-antivirus-deploye-oui-alertes-pas-toujours-traitees",
+            libelle: "Oui, mais ses alertes ne sont pas toujours traitées",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "securite-poste-si-industriel-antivirus-deploye-oui-alertes-toujours-traitees",
+            libelle: "Oui et ses alertes sont systématiquement traitées.",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
         identifiant: "securite-poste-pare-feu-local-active",
         libelle: "Un pare-feu local est-il activé sur les postes de travail ?",
         reponsesPossibles: [
@@ -1873,88 +1877,39 @@ const referentiel: Referentiel = {
             libelle: "Non",
             ordre: 1,
           },
-
           {
             identifiant:
-              "securite-poste-outils-complementaires-securisation-oui",
-            libelle: "Oui",
-            questions: [
-              {
-                identifiant:
-                  "securite-poste-outils-complementaires-securisation-oui-outils",
-                libelle: 'Si "Oui" : combien d\'outils parmi ceux-ci ?',
-                reponsesPossibles: [
-                  {
-                    identifiant:
-                      "securite-poste-outils-complementaires-securisation-oui-outils-proxy",
-                    libelle: "Filtrage web (proxy)",
-                    ordre: 0,
-                  },
-                  {
-                    identifiant:
-                      "securite-poste-outils-complementaires-securisation-oui-outils-mecanisme-securite-transactions-bancaires",
-                    libelle: "Mécanisme de sécurité des transactions bancaires",
-                    ordre: 1,
-                  },
-                  {
-                    identifiant:
-                      "securite-poste-outils-complementaires-securisation-oui-outils-blocage-clef-usb",
-                    libelle:
-                      "Contrôle voire blocage des clefs USB externes (ou via station blanche)",
-                    ordre: 2,
-                  },
-                  {
-                    identifiant:
-                      "securite-poste-outils-complementaires-securisation-oui-outils-protection-complement-edr",
-                    libelle:
-                      "Outil de protection des postes utilisateurs complémentaires à un antivirus de type EDR (Endpoint Detection and Response)",
-                    ordre: 3,
-                  },
-                  {
-                    identifiant:
-                      "securite-poste-outils-complementaires-securisation-oui-outils-chiffrement-disques",
-                    libelle:
-                      "Pour les entités ayant un risque d'espionnage industriel : Chiffrement des disques des postes et des terminaux nomades",
-                    ordre: 4,
-                  },
-                  {
-                    identifiant:
-                      "securite-poste-outils-complementaires-securisation-oui-outils-autre-outil-acceptable",
-                    libelle: "Autre outil jugé acceptable par l'aidant",
-                    ordre: 5,
-                  },
-                ],
-                type: "choixMultiple",
-              },
-            ],
+              "securite-poste-outils-complementaires-securisation-oui-filtrage-acces-internet",
+            libelle: "Oui, un filtrage des accès internet est réalisé.",
             ordre: 2,
+          },
+          {
+            identifiant:
+              "securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr",
+            libelle:
+              "Oui, un outil complémentaire à un antivirus de type EDR a été mis en place.",
+            ordre: 3,
           },
         ],
         type: "choixUnique",
       },
       {
-        identifiant:
-          "securite-poste-configuration-securisee-standardisee-et-homogene",
+        identifiant: "securite-poste-r-et-d-disques-chiffres",
         libelle:
-          "Tous les postes de travail bénéficient-ils d'une configuration sécurisée standardisée et homogène sur l'ensemble du parc ?",
+          " Si entité avec risque d'espionnage industriel (R&D), les disques durs des matériels nomades nomades sont-ils chiffrés ?",
         reponsesPossibles: [
           {
-            identifiant:
-              "securite-poste-configuration-securisee-standardisee-et-homogene-nsp",
-            libelle: "Je ne sais pas",
+            identifiant: "securite-poste-r-et-d-disques-chiffres-nsp",
+            libelle: "Je ne sais pas / Non applicable",
             ordre: 0,
           },
-
           {
-            identifiant:
-              "securite-poste-configuration-securisee-standardisee-et-homogene-non",
+            identifiant: "securite-poste-r-et-d-disques-chiffres-non",
             libelle: "Non",
             ordre: 1,
           },
-
           {
-            identifiant:
-              "securite-poste-configuration-securisee-standardisee-et-homogene-oui",
+            identifiant: "securite-poste-r-et-d-disques-chiffres-oui",
             libelle: "Oui",
             ordre: 2,
           },
