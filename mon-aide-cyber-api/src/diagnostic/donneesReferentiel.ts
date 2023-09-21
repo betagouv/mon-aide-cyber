@@ -2226,6 +2226,67 @@ const referentiel: Referentiel = {
     questions: [
       {
         identifiant:
+          "sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques",
+        libelle:
+          "Des actions de sensibilisation à la menace et aux bonnes pratiques cyber sont-elles réalisées plusieurs fois par an ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+          {
+            identifiant:
+              "sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-ponctuellement",
+            libelle:
+              "Oui, nous menons ponctuellement des actions de sensibilisation.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-regulierement",
+            libelle:
+              "Oui, nous menons régulièrement des actions de sensibilisation ciblant des populations spécifiques.",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant: "sensibilisation-risque-espionnage-industriel-r-et-d",
+        libelle:
+          "Si entité avec risque d'espionnage industriel (R&D), menez-vous des actions de sensibilisation ciblant spécifiquement les collaborateurs effectuant des missions à l'étranger ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "sensibilisation-risque-espionnage-industriel-r-et-d-nsp",
+            libelle: "Je ne sais pas / Non applicable.",
+            ordre: 0,
+          },
+          {
+            identifiant:
+              "sensibilisation-risque-espionnage-industriel-r-et-d-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "sensibilisation-risque-espionnage-industriel-r-et-d-oui",
+            libelle: "Oui",
+            ordre: 2,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant:
           "sensibilisation-collaborateurs-soumis-obligations-usages-securises",
         libelle:
           "Les collaborateurs sont-ils soumis à des obligations en matière d'usages sécurisés des moyens informatiques ?",
