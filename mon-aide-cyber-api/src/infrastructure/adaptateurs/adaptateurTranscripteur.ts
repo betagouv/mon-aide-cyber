@@ -8,57 +8,62 @@ export const adaptateurTranscripteur = () =>
       return {
         contexte: {
           questions: [
+            // {
+            //   identifiant: "contexte-nature-organisation",
+            //   reponses: [
+            //     {
+            //       identifiant: "nature-organisation-autre",
+            //       type: { type: "saisieLibre", format: "texte" },
+            //     },
+            //   ],
+            // },
             {
-              identifiant: "nature-organisation",
-              reponses: [
-                {
-                  identifiant: "nature-organisation-autre",
-                  type: { type: "saisieLibre", format: "texte" },
-                },
-              ],
-            },
-            {
-              identifiant: "secteur-activite",
+              identifiant: "contexte-secteur-activite",
               type: "liste",
             },
+            { identifiant: "contexte-region-siege-social", type: "liste" },
             {
-              identifiant: "usage-cloud",
-              reponses: [
-                {
-                  identifiant: "usage-cloud-oui",
-                  question: {
-                    identifiant: "usage-cloud-oui-question-tiroir-usages",
-                    type: "choixMultiple",
-                    reponses: [
-                      {
-                        identifiant:
-                          "usage-cloud-oui-question-tiroir-usages-autre",
-                        type: { type: "saisieLibre", format: "texte" },
-                      },
-                    ],
-                  },
-                },
-              ],
+              identifiant: "contexte-departement-tom-siege-social",
+              type: "liste",
             },
-            {
-              identifiant: "cyber-attaque-subie",
-              reponses: [
-                {
-                  identifiant: "cyber-attaque-subie-oui",
-                  question: {
-                    identifiant: "cyber-attaque-subie-oui-tiroir-type",
-                    type: "choixMultiple",
-                    reponses: [
-                      {
-                        identifiant:
-                          "cyber-attaque-subie-oui-tiroir-type-autre",
-                        type: { type: "saisieLibre", format: "texte" },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
+            // {
+            //   identifiant: "contexte-usage-cloud",
+            //   reponses: [
+            //     {
+            //       identifiant: "usage-cloud-oui",
+            //       question: {
+            //         identifiant: "contexte-usage-cloud-oui-question-tiroir-usages",
+            //         type: "choixMultiple",
+            //         reponses: [
+            //           {
+            //             identifiant:
+            //               "contexte-usage-cloud-oui-question-tiroir-usages-autre",
+            //             type: { type: "saisieLibre", format: "texte" },
+            //           },
+            //         ],
+            //       },
+            //     },
+            //   ],
+            // },
+            // {
+            //   identifiant: "contexte-cyber-attaque-subie",
+            //   reponses: [
+            //     {
+            //       identifiant: "contexte-cyber-attaque-subie-oui",
+            //       question: {
+            //         identifiant: "contexte-cyber-attaque-subie-oui-tiroir-type",
+            //         type: "choixMultiple",
+            //         reponses: [
+            //           {
+            //             identifiant:
+            //               "contexte-cyber-attaque-subie-oui-tiroir-type-autre",
+            //             type: { type: "saisieLibre", format: "texte" },
+            //           },
+            //         ],
+            //       },
+            //     },
+            //   ],
+            // },
           ],
         },
       };
