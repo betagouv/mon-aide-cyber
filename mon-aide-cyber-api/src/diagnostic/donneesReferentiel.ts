@@ -1921,35 +1921,300 @@ const referentiel: Referentiel = {
   securiteinfrastructure: {
     questions: [
       {
+        identifiant: "securite-infrastructure-pare-feu-deploye",
+        libelle: "Un pare-feu physique est-il déployé au niveau du réseau ?",
+        reponsesPossibles: [
+          {
+            identifiant: "securite-infrastructure-pare-feu-deploye-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+          {
+            identifiant: "securite-infrastructure-pare-feu-deploye-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant: "securite-infrastructure-pare-feu-deploye-oui",
+            libelle: "Oui",
+            questions: [
+              {
+                identifiant:
+                  "securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees",
+                libelle:
+                  'Si "Oui" : protégez-vous les interconnexions de votre système d\'information à Internet et aux réseaux tiers en bloquant tous les flux et les ports non strictement nécessaires ?',
+                reponsesPossibles: [
+                  {
+                    identifiant:
+                      "securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-nsp",
+                    libelle: "Je ne sais pas",
+                    ordre: 0,
+                  },
+                  {
+                    identifiant:
+                      "securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-non",
+                    libelle: "Non",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant:
+                      "securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-oui",
+                    libelle: "Oui",
+                    ordre: 2,
+                  },
+                ],
+                type: "choixUnique",
+              },
+              {
+                identifiant:
+                  "securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes",
+                libelle:
+                  'Si "Oui" : stockez-vous les logs et les journaux traçant les flux bloqués ainsi que lex flus entrants et sortants de votre parefeu ? ',
+                reponsesPossibles: [
+                  {
+                    identifiant:
+                      "securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-nsp",
+                    libelle: "Je ne sais pas",
+                    ordre: 0,
+                  },
+                  {
+                    identifiant:
+                      "securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-non",
+                    libelle: "Non",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant:
+                      "securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-oui-logs-stockes",
+                    libelle:
+                      "Oui, nous stockons quelques logs et journaux du pare-feu.",
+                    ordre: 2,
+                  },
+                  {
+                    identifiant:
+                      "securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-oui-logs-stockes-conserves-6-mois",
+                    libelle:
+                      "Oui, nous stockons les logs et les journaux du pare-feu avec une durée de conservation d'au moins 6 mois.",
+                    ordre: 2,
+                  },
+                ],
+                type: "choixUnique",
+              },
+            ],
+            ordre: 2,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
         identifiant:
-          "securite-infrastructure-mises-a-jour-fonctionnelles-securite-deployees",
+          "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees",
         libelle:
-          "Les mises à jour fonctionnelles et de sécurité des serveurs, des équipements, des systèmes et logiciels d'administration sont-elles déployées ?",
+          "Les mises à jour fonctionnelles et de sécurité des équipements de sécurité sont-elles déployées ?",
         reponsesPossibles: [
           {
             identifiant:
-              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-deployees-nsp",
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-nsp",
             libelle: "Je ne sais pas",
             ordre: 0,
           },
           {
             identifiant:
-              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-deployees-non",
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-non",
             libelle: "Non",
             ordre: 1,
           },
           {
             identifiant:
-              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-deployees-a-intervalle-regulier",
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-a-intervalle-regulier",
             libelle:
               "Des mises à jour logicielles sont déployées à intervalle régulier.",
             ordre: 2,
           },
           {
             identifiant:
-              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-deployees-des-que-possible",
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-des-que-possible",
             libelle:
               "Toutes les mises à jour logicielles sont déployées dès que celles-ci sont disponibles et fonctionnelles.",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant:
+          "securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees",
+        libelle:
+          "Les mises à jour fonctionnelles et de sécurité des systèmes d'exploitation des serveurs, services et logiciels d'admnistration sont-elles déployées ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-a-intervalle-regulier",
+            libelle:
+              "Des mises à jour logicielles sont déployées à intervalle régulier.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-des-que-possible",
+            libelle:
+              "Toutes les mises à jour logicielles sont déployées dès que celles-ci sont disponibles et fonctionnelles.",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant:
+          "securite-infrastructure-outils-securisation-systeme-messagerie",
+        libelle:
+          "Des mesures et outils spécifiques sont-ils mis en œuvre pour sécuriser le système de messagerie ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "securite-infrastructure-outils-securisation-systeme-messagerie-nsp",
+            libelle: "Je ne sais pas / Non concerné.",
+            ordre: 0,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-outils-securisation-systeme-messagerie-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-outils-securisation-systeme-messagerie-oui",
+            libelle: "Oui",
+            questions: [
+              {
+                identifiant:
+                  "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam",
+                libelle:
+                  "Si \"Oui\" : avez-vous mis en œuvre d’une solution d'anti-spam et d'anti-hameçonnage permettant de détecter et de bloquer les mails malveillants ?",
+                reponsesPossibles: [
+                  {
+                    identifiant:
+                      "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-nsp",
+                    libelle: "Je ne sais pas / Non concerné.",
+                    ordre: 0,
+                  },
+                  {
+                    identifiant:
+                      "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-non",
+                    libelle: "Non",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant:
+                      "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-oui",
+                    libelle: "Oui",
+                    ordre: 1,
+                  },
+                ],
+                type: "choixUnique",
+              },
+              {
+                identifiant:
+                  "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive",
+                libelle:
+                  'Si "Oui" : avez-vous désactivé le portail type webmail exposé sur internet ?',
+                reponsesPossibles: [
+                  {
+                    identifiant:
+                      "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-nsp",
+                    libelle: "Je ne sais pas / Non concerné.",
+                    ordre: 0,
+                  },
+                  {
+                    identifiant:
+                      "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-non",
+                    libelle: "Non",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant:
+                      "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-oui",
+                    libelle: "Oui",
+                    ordre: 1,
+                  },
+                ],
+                type: "choixUnique",
+              },
+            ],
+            ordre: 2,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant: "securite-infrastructure-acces-wifi-securises",
+        libelle: "Les points d’accès wifi sont-ils sécurisés?",
+        reponsesPossibles: [
+          {
+            identifiant: "securite-infrastructure-acces-wifi-securises-nsp",
+            libelle: "Je ne sais pas / Non Applicable",
+            ordre: 0,
+          },
+          {
+            identifiant: "securite-infrastructure-acces-wifi-securises-non",
+            libelle: "Non",
+            ordre: 0,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste",
+            libelle: "Oui, le chiffrement de la connexion wifi est robuste.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste-acces-visiteur-restreint",
+            libelle:
+              "Oui, le chiffrement de la connexion wifi est robuste et les visiteurs n'ont pas accès au réseau interne.",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant: "securite-infrastructure-espace-stockage-serveurs",
+        libelle:
+          "L'accès à la salle ou à l'espace dédié au stockage des serveurs d'administration, baies informatiques et des équipements réseau est-il protégé par une porte sécurisée ?",
+        reponsesPossibles: [
+          {
+            identifiant: "securite-infrastructure-espace-stockage-serveurs-nsp",
+            libelle: "Je ne sais pas / Non Applicable",
+            ordre: 0,
+          },
+          {
+            identifiant: "securite-infrastructure-espace-stockage-serveurs-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef",
+            libelle: "Oui, l'accès est sécurisé par une porte fermée à clef.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef-videosurveillance",
+            libelle:
+              "Oui, l'accès est sécurisé par une porte fermée à clef et par un dispositif de vidéosurveillance.",
             ordre: 3,
           },
         ],
