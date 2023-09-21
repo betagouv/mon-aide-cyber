@@ -1148,7 +1148,7 @@ const referentiel: Referentiel = {
       {
         identifiant: "gouvernance-connaissance-rgpd",
         libelle:
-          "Connaissez-vous les exigences réglementaires liées au RGPD concernant vos traitements des données personnelles, incluant vos données RH ou celles de vos clients/usagers ?",
+          "Avez-vous mener une démarche de conformité liées au RGPD concernant vos traitements des données personnelles, incluant vos données RH ou celles de vos clients/usagers ?",
         type: "choixUnique",
         reponsesPossibles: [
           {
@@ -1167,92 +1167,90 @@ const referentiel: Referentiel = {
             ordre: 3,
             questions: [
               {
-                identifiant: "gouvernance-connaissance-rgpd-oui-tiroir",
+                identifiant:
+                  "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement",
                 libelle:
-                  'Si "Oui" : combien de mesures de conformité respectez-vous parmi celles-ci ?',
-                type: "choixMultiple",
+                  'Si "Oui" : avez-vous établi de manière exhaustive le registre de vos traitements ?',
+                type: "choixUnique",
                 reponsesPossibles: [
                   {
                     identifiant:
-                      "gouvernance-connaissance-rgpd-oui-tiroir-non-applicable",
-                    libelle: "Non applicable",
+                      "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-nsp",
+                    libelle: "Je ne sais pas / Non applicable",
                     ordre: 0,
                   },
 
                   {
-                    identifiant: "gouvernance-connaissance-rgpd-oui-tiroir-nsp",
-                    libelle: "Je ne sais pas",
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-non",
+                    libelle: "Non",
                     ordre: 1,
                   },
                   {
                     identifiant:
-                      "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement",
-                    libelle: "Établissement d'un registre de vos traitements",
+                      "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-oui",
+                    libelle: "Oui",
                     ordre: 2,
                   },
+                ],
+              },
+              {
+                identifiant:
+                  "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines",
+                libelle:
+                  'Si "Oui" : pour chaque traitement, avez-vous déterminé la nature, besoin et finalité des traitements de données personnelles effectuées et supprimer les données non nécessaires ?',
+                type: "choixUnique",
+                reponsesPossibles: [
                   {
                     identifiant:
-                      "gouvernance-connaissance-rgpd-oui-tiroir-traitement-nature-besoin-suppression",
-                    libelle:
-                      "Pour chaque traitement, détermination de la nature, besoin et finalité des traitements de données personnelles effectuées puis suppression de données non nécessaires",
-                    ordre: 3,
+                      "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-nsp",
+                    libelle: "Je ne sais pas / Non applicable",
+                    ordre: 0,
+                  },
+
+                  {
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-non",
+                    libelle: "Non",
+                    ordre: 1,
                   },
                   {
                     identifiant:
-                      "gouvernance-connaissance-rgpd-oui-tiroir-analyse-impact",
-                    libelle:
-                      "Analyse d'impact relative à la protection des données sur les traitements susceptibles d'engendrer un risque élevé",
-                    ordre: 4,
+                      "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-oui",
+                    libelle: "Oui",
+                    ordre: 2,
+                  },
+                ],
+              },
+              {
+                identifiant:
+                  "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place",
+                libelle:
+                  'Si "Oui" : avez-vous mis en place des moyens pour informer les personnes concernées par le traitement de leurs données personnelles et pour leur permettre d\'exercer et faire valoir leurs droits (droits d’accès, rectification, opposition, suppression; etc.) ?',
+                type: "choixUnique",
+                reponsesPossibles: [
+                  {
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-nsp",
+                    libelle: "Je ne sais pas / Non applicable",
+                    ordre: 0,
+                  },
+
+                  {
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-non",
+                    libelle: "Non",
+                    ordre: 1,
                   },
                   {
                     identifiant:
-                      "gouvernance-connaissance-rgpd-oui-tiroir-info-donnees-finalite",
-                    libelle:
-                      "Information auprès des personnes concernées des données personnelles traitées et leurs finalités",
-                    ordre: 5,
-                  },
-                  {
-                    identifiant:
-                      "gouvernance-connaissance-rgpd-oui-tiroir-moyen-exercer-valoir-droits",
-                    libelle:
-                      "Mise en place de moyens permettant aux personnes concernées d'exercer et faire valoir leurs droits (droits d’accès, rectification, opposition, suppression; etc.)",
-                    ordre: 6,
+                      "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-oui",
+                    libelle: "Oui",
+                    ordre: 2,
                   },
                 ],
               },
             ],
-          },
-        ],
-      },
-      {
-        identifiant: "gouvernance-moyen-budgetaire-cyber-securite",
-        libelle:
-          "Des moyens budgétaires sont-ils alloués à la cybersécurité au sein de votre organisation ?",
-        type: "choixUnique",
-        reponsesPossibles: [
-          {
-            identifiant: "gouvernance-moyen-budgetaire-cyber-securite-nsp",
-            libelle: "Je ne sais pas.",
-            ordre: 0,
-          },
-          {
-            identifiant: "gouvernance-moyen-budgetaire-cyber-securite-non",
-            libelle: "Non.",
-            ordre: 1,
-          },
-          {
-            identifiant:
-              "gouvernance-moyen-budgetaire-cyber-securite-oui-ponctuels",
-            libelle:
-              "Des achats ponctuels ont été réalisés mais il n’existe pas de ligne budgétaire dédiée.",
-            ordre: 2,
-          },
-          {
-            identifiant:
-              "gouvernance-moyen-budgetaire-cyber-securite-oui-dedie",
-            libelle:
-              "Il existe une ligne budgétaire dédiée à la cybersécurité dont le montant est >= 10% du buget IT ; ou déterminé via une analyse approfondie",
-            ordre: 3,
           },
         ],
       },
@@ -1282,6 +1280,41 @@ const referentiel: Referentiel = {
           },
           {
             identifiant: "gouvernance-exigence-cyber-securite-presta-oui-fixee",
+            libelle:
+              "Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.",
+            ordre: 3,
+          },
+        ],
+      },
+      {
+        identifiant: "gouvernance-exigence-cyber-securite-presta-si-industriel",
+        libelle:
+          "Si l'entité dispose d'un SI industriel : Des exigences de cybersécurité sont-elles fixées aux prestataires vous accompagnant dans la gestion du système industriel. Font-elles également  l'objet d'une attention particulière ?",
+        type: "choixUnique",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "gouvernance-exigence-cyber-securite-presta-si-industriel-nsp",
+            libelle: "Je ne sais pas / Non applicable",
+            ordre: 0,
+          },
+          {
+            identifiant:
+              "gouvernance-exigence-cyber-securite-presta-si-industriel-non",
+            libelle:
+              "Non, aucune exigence ne figure dans nos contrats de prestation",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "gouvernance-exigence-cyber-securite-presta-si-industriel-oui-formalisee",
+            libelle:
+              "Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "gouvernance-exigence-cyber-securite-presta-si-industriel-oui-fixee",
             libelle:
               "Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.",
             ordre: 3,
