@@ -1480,6 +1480,36 @@ const referentiel: Referentiel = {
         type: "choixUnique",
       },
       {
+        identifiant: "acces-utilisateurs-administrateurs-poste",
+        libelle: "Les utilisateurs sont-ils administrateurs de leur poste ?",
+        reponsesPossibles: [
+          {
+            identifiant: "acces-utilisateurs-administrateurs-poste-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+          {
+            identifiant: "acces-utilisateurs-administrateurs-poste-oui",
+            libelle: "Oui",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "acces-utilisateurs-administrateurs-poste-suppression-privilege-en-cours",
+            libelle:
+              "La suppression de ce privilège est en cours de traitement, plusieurs utilisateurs sont toujours administrateurs de leur poste.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "acces-utilisateurs-administrateurs-poste-non-exceptions-justifiees",
+            libelle: "Non, et les rares exceptions sont justifiées.",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
         identifiant: "acces-mesures-securite-robustesse-mdp",
         libelle:
           "Avez-vous mis en place des mesures de sécurité particulières afin de renforcer la robustesse des mots de passe permettant aux utilisateurs d'accéder à leur session ?",
@@ -1515,7 +1545,7 @@ const referentiel: Referentiel = {
         identifiant:
           "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles",
         libelle:
-          "L'accès des utilisateurs aux ressources et données sensibles fait-il l’objet de mesures de sécurité additionnelles ?",
+          "L'accès des utilisateurs aux ressources et données les plus sensibles fait-il l’objet de mesures de sécurité additionnelles ?",
         reponsesPossibles: [
           {
             identifiant:
@@ -1531,65 +1561,17 @@ const referentiel: Referentiel = {
           },
           {
             identifiant:
-              "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui",
-            libelle: "Oui",
+              "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-mesures-authentification-renforcees",
+            libelle:
+              "Oui, des mesures renforçant l'authentification ont été mises en œuvre.",
             ordre: 2,
-            questions: [
-              {
-                identifiant:
-                  "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-question-tiroir-combien-messures",
-                libelle: 'Si "Oui" : combien de mesures parmi celles-ci ?',
-                reponsesPossibles: [
-                  {
-                    identifiant:
-                      "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-question-tiroir-combien-messures-longueur-mdp",
-                    libelle:
-                      "Contraintes renforcées de robustesse et de longueur de mots de passe",
-                    ordre: 0,
-                  },
-                  {
-                    identifiant:
-                      "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-question-tiroir-combien-messures-acces-distants-securises",
-                    libelle:
-                      "Connexion via accès distants sécurisés (VPN, bastion, etc.)",
-                    ordre: 1,
-                  },
-                  {
-                    identifiant:
-                      "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-question-tiroir-combien-messures-mfa",
-                    libelle: "Authentification multi facteur",
-                    ordre: 2,
-                  },
-                  {
-                    identifiant:
-                      "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-question-tiroir-combien-messures-chiffrement",
-                    libelle: "Chiffrement des données",
-                    ordre: 3,
-                  },
-                  {
-                    identifiant:
-                      "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-question-tiroir-combien-messures-data-loss-prevention",
-                    libelle:
-                      "Utilisation d'une solution de Data Loss Prevention permettant de limiter les fuites de données",
-                    ordre: 4,
-                  },
-                  {
-                    identifiant:
-                      "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-question-tiroir-combien-messures-rebut-disques",
-                    libelle:
-                      "Procédure de suppression et mise à rebut des disques",
-                    ordre: 5,
-                  },
-                  {
-                    identifiant:
-                      "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-question-tiroir-combien-messures-autre-messure",
-                    libelle: "Autre mesure jugée acceptable par l'aidant",
-                    ordre: 6,
-                  },
-                ],
-                type: "choixMultiple",
-              },
-            ],
+          },
+          {
+            identifiant:
+              "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-mesures-authentification-renforcees-et-donnees-chiffrees",
+            libelle:
+              "Oui, des mesures renforçant l'authentification ont été mises en œuvre et les données sont chiffrées.",
+            ordre: 3,
           },
         ],
         type: "choixUnique",
@@ -1597,7 +1579,7 @@ const referentiel: Referentiel = {
       {
         identifiant: "acces-teletravail-acces-distants-mesures-particulieres",
         libelle:
-          "Le télétravail et les accès distants font-ils l'objet de mesures de sécurité particulières ?",
+          "Le télétravail et les accès distants (cloud inclus) font-ils l'objet de mesures de sécurité particulières ?",
         reponsesPossibles: [
           {
             identifiant:
@@ -1649,7 +1631,7 @@ const referentiel: Referentiel = {
             identifiant:
               "acces-si-industriel-teletravail-acces-distants-mesures-particulieres-mfa",
             libelle:
-              "De l'authentification à double facteurs a été mis en place pour les accès distants.",
+              "De l'authentification à double facteurs a été mise en place pour les accès distants.",
             ordre: 2,
           },
           {
@@ -1694,7 +1676,7 @@ const referentiel: Referentiel = {
         reponsesPossibles: [
           {
             identifiant: "acces-administrateurs-si-mesures-specifiques-nsp",
-            libelle: "Je ne sais pas",
+            libelle: "Je ne sais pas / Non applicable",
             ordre: 0,
           },
           {
@@ -1703,65 +1685,18 @@ const referentiel: Referentiel = {
             ordre: 1,
           },
           {
-            identifiant: "acces-administrateurs-si-mesures-specifiques-oui",
-            libelle: "Oui",
-            questions: [
-              {
-                identifiant:
-                  "acces-administrateurs-si-mesures-specifiques-oui-question-tiroir-combien-mesures",
-                libelle: 'Si "Oui" : combien de mesures parmi celles-ci ?',
-                reponsesPossibles: [
-                  {
-                    identifiant:
-                      "acces-administrateurs-si-mesures-specifiques-oui-question-tiroir-combien-mesures-contrainte-robustesse-mdp",
-                    libelle:
-                      "Contraintes renforcées de robustesse et de longueur de mots de passe",
-                    ordre: 0,
-                  },
-                  {
-                    identifiant:
-                      "acces-administrateurs-si-mesures-specifiques-oui-question-tiroir-combien-mesures-coffre-fort",
-                    libelle: "Utilisation de coffre forts de mot de passe",
-                    ordre: 1,
-                  },
-                  {
-                    identifiant:
-                      "acces-administrateurs-si-mesures-specifiques-oui-question-tiroir-combien-mesures-modification-mdp-systematique",
-                    libelle:
-                      "Modification systématique des mots de passe par défaut",
-                    ordre: 2,
-                  },
-                  {
-                    identifiant:
-                      "acces-administrateurs-si-mesures-specifiques-oui-question-tiroir-combien-mesures-mfa",
-                    libelle: "Authentification multi facteur",
-                    ordre: 3,
-                  },
-                  {
-                    identifiant:
-                      "acces-administrateurs-si-mesures-specifiques-oui-question-tiroir-combien-mesures-poste-dedie",
-                    libelle:
-                      "Postes d’administration dédiés aux fonctions d'administration.",
-                    ordre: 4,
-                  },
-                  {
-                    identifiant:
-                      "acces-administrateurs-si-mesures-specifiques-oui-question-tiroir-combien-mesures-solution-gestion-acces-privileges",
-                    libelle:
-                      "Utilisation d'une solution de gestion des accès à privilèges (PAM, bastion, portail d'authentification).",
-                    ordre: 5,
-                  },
-                  {
-                    identifiant:
-                      "acces-administrateurs-si-mesures-specifiques-oui-question-tiroir-combien-mesures-autre-mesure-acceptable",
-                    libelle: "Autre mesure jugée acceptable par l'aidant.",
-                    ordre: 6,
-                  },
-                ],
-                type: "choixMultiple",
-              },
-            ],
+            identifiant:
+              "acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees",
+            libelle:
+              "Oui, des mesures renforçant l'authentification ont été mises en œuvre.",
             ordre: 2,
+          },
+          {
+            identifiant:
+              "acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees-postes-dedies-administration",
+            libelle:
+              "Oui, des mesures renforçant l'authentification ont été mises en œuvre et des postes dédiés à l'administration sont utilisés.",
+            ordre: 3,
           },
         ],
         type: "choixUnique",
