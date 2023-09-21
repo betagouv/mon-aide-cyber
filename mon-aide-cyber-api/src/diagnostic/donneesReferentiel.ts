@@ -2354,31 +2354,31 @@ const referentiel: Referentiel = {
   reaction: {
     questions: [
       {
-        identifiant: "reaction-moyens-identification-vulnerabilites-en-place",
+        identifiant: "reaction-surveillance-veille-vulnerabilites-potentielles",
         libelle:
-          "Des moyens d'identification des vulnérabilités potentielles sont-ils en place, notamment pour les systèmes et applications ne se mettant pas à jour automatiquement ?",
+          "Une surveillance ou une veille des vulnérabilités potentielles pouvant vous affecter est-elle réalisée ?",
         reponsesPossibles: [
           {
             identifiant:
-              "reaction-moyens-identification-vulnerabilites-en-place-nsp",
+              "reaction-surveillance-veille-vulnerabilites-potentielles-nsp",
             libelle: "Je ne sais pas",
             ordre: 0,
           },
           {
             identifiant:
-              "reaction-moyens-identification-vulnerabilites-en-place-non",
+              "reaction-surveillance-veille-vulnerabilites-potentielles-non",
             libelle: "Non",
             ordre: 1,
           },
           {
             identifiant:
-              "reaction-moyens-identification-vulnerabilites-en-place-veille-ponctuelle",
+              "reaction-surveillance-veille-vulnerabilites-potentielles-veille-ponctuelle",
             libelle: "Réalisation d'une veille ponctuelle sur internet.",
             ordre: 2,
           },
           {
             identifiant:
-              "reaction-moyens-identification-vulnerabilites-en-place-veille-reguliere",
+              "reaction-surveillance-veille-vulnerabilites-potentielles-veille-reguliere",
             libelle: "Réalisation d'une veille régulière et exhaustive.",
             ordre: 3,
           },
@@ -2593,6 +2593,97 @@ const referentiel: Referentiel = {
               "reaction-dispositif-gestion-crise-adapte-defini-oui-organisation-gestion-crise-definie",
             libelle:
               "Oui, une organisation de gestion de crise d'origine cyber a été définie",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
+        identifiant: "reaction-assurance-cyber-souscrite",
+        libelle: "Votre organisation a-t-elle souscrit à une assurance cyber ?",
+        reponsesPossibles: [
+          {
+            identifiant: "reaction-assurance-cyber-souscrite-nsp",
+            libelle: "Je ne sais pas.",
+            ordre: 0,
+          },
+          {
+            identifiant: "reaction-assurance-cyber-souscrite-non-pas-pense",
+            libelle: "Non, je n'y ai pas pensé.",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "reaction-assurance-cyber-souscrite-non-pas-necessaire",
+            libelle: "Non, car j'ai évalué que ce n'était pas nécessaire.",
+            ordre: 2,
+          },
+          {
+            identifiant: "reaction-assurance-cyber-souscrite-oui",
+            libelle: "Oui.",
+            questions: [
+              {
+                identifiant:
+                  "reaction-assurance-cyber-souscrite-oui-tiroir-aspects",
+                libelle: 'Si "Oui" : Sur quels aspects ?',
+                reponsesPossibles: [
+                  {
+                    identifiant:
+                      "reaction-assurance-cyber-souscrite-oui-tiroir-aspects-financement-remediation",
+                    libelle:
+                      "Aide financière pour financer les opérations de remédiation en cas de cyberattaque",
+                    ordre: 0,
+                  },
+                  {
+                    identifiant:
+                      "reaction-assurance-cyber-souscrite-oui-tiroir-aspects-financement-pallier-impact-financier",
+                    libelle:
+                      "Aide financière pour pallier l'impact financier lié à la cyberattaque (ex : pertes d'exploitation)",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant:
+                      "reaction-assurance-cyber-souscrite-oui-tiroir-aspects-accompagnement-gestion-crise",
+                    libelle: "Accompagnement dans la gestion de crise",
+                    ordre: 2,
+                  },
+                ],
+                type: "choixMultiple",
+              },
+              {
+                identifiant:
+                  "reaction-assurance-cyber-souscrite-oui-tiroir-conditions-applicabilite",
+                libelle:
+                  'Si "Oui" : Etes-vous bien conforme aux conditions d\'applicabilité ?',
+                reponsesPossibles: [
+                  {
+                    identifiant:
+                      "reaction-assurance-cyber-souscrite-oui-tiroir-conditions-applicabilite-na",
+                    libelle: "Non Applicable",
+                    ordre: 0,
+                  },
+                  {
+                    identifiant:
+                      "reaction-assurance-cyber-souscrite-oui-tiroir-conditions-applicabilite-nsp",
+                    libelle: "Je ne sais pas",
+                    ordre: 1,
+                  },
+                  {
+                    identifiant:
+                      "reaction-assurance-cyber-souscrite-oui-tiroir-conditions-applicabilite-non",
+                    libelle: "Non",
+                    ordre: 2,
+                  },
+                  {
+                    identifiant:
+                      "reaction-assurance-cyber-souscrite-oui-tiroir-conditions-applicabilite-oui",
+                    libelle: "Oui",
+                    ordre: 3,
+                  },
+                ],
+                type: "choixUnique",
+              },
+            ],
             ordre: 3,
           },
         ],
