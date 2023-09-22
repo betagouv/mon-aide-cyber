@@ -488,21 +488,21 @@ export const AfficheLesThematiques: Story = {
       expect(
         await waitFor(() =>
           canvas.getByRole("button", {
-            name: /c/i,
+            name: "C",
           }),
         ),
       ).toBeInTheDocument();
       expect(
         await waitFor(() =>
           canvas.getByRole("button", {
-            name: /t/i,
+            name: "T",
           }),
         ),
       ).toBeInTheDocument();
     });
 
     await step("Lorsque l’utilisateur change de thématique", async () => {
-      await userEvent.click(canvas.getByRole("button", { name: /t/i }));
+      await userEvent.click(canvas.getByRole("button", { name: "T" }));
 
       expect(
         await waitFor(() =>

@@ -74,15 +74,15 @@ export const reducteurReponse = (
       Object.entries(a).find(([, a]) => a.action === actionDemandee),
     );
   };
-  function ajouteLaReponse(
+  const ajouteLaReponse = (
     reponses: ReponseMultiple[],
     elementReponse: ElementReponse,
-  ) {
+  ): void => {
     reponses.push({
       identifiant: elementReponse.identifiantReponse,
       reponses: new Set([elementReponse.reponse]),
     });
-  }
+  };
 
   const toutesLesReponses = () => {
     const reponses: ReponseMultiple[] = etat.reponseDonnee.reponses.map(
@@ -94,7 +94,9 @@ export const reducteurReponse = (
     return reponses;
   };
 
-  function gereLesReponsesMultiples(elementReponse: ElementReponse) {
+  const gereLesReponsesMultiples = (
+    elementReponse: ElementReponse,
+  ): ReponseMultiple[] => {
     const reponses = toutesLesReponses();
     const doitRetirerUneReponsePrecedemmentSelectionnee = reponses.find(
       (rep) =>
@@ -119,7 +121,7 @@ export const reducteurReponse = (
       ajouteLaReponse(reponses, elementReponse);
     }
     return reponses;
-  }
+  };
 
   const genereLaReponsePourUneQuestionTiroir = (
     reponses: ReponseMultiple[],
@@ -137,10 +139,10 @@ export const reducteurReponse = (
     });
   };
 
-  function etatPourUneQuestionTiroir(
+  const etatPourUneQuestionTiroir = (
     reponses: ReponseMultiple[],
     valeur: string,
-  ) {
+  ): EtatReponse => {
     return {
       ...etat,
       action: (actionDemandee: string) => actionAMener(actionDemandee),
@@ -152,7 +154,7 @@ export const reducteurReponse = (
       statut: EtatReponseStatut.MODIFIE,
       valeur: () => valeur,
     };
-  }
+  };
 
   switch (action.type) {
     case TypeActionReponse.REPONSE_UNIQUE_DONNEE: {
