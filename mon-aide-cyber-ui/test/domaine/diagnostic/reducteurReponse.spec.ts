@@ -16,6 +16,7 @@ import {
   uneQuestionTiroirAChoixUnique,
 } from "../../constructeurs/constructeurQuestions";
 import { unEtatDeReponse } from "./constructeurEtaReponse";
+import { actions } from "../../../src/domaine/Actions";
 
 describe("Le réducteur de réponse", () => {
   describe("dans le cas de question simple", () => {
@@ -25,7 +26,7 @@ describe("Le réducteur de réponse", () => {
         .avecDesReponses([reponse])
         .construis();
 
-      const etatReponse = initialiseReducteur(question);
+      const etatReponse = initialiseReducteur(question, actions);
 
       expect(etatReponse.reponseDonnee).toStrictEqual({
         reponses: [],
@@ -41,7 +42,7 @@ describe("Le réducteur de réponse", () => {
         .avecLaReponseDonnee(reponse)
         .construis();
 
-      const etatReponse = initialiseReducteur(question);
+      const etatReponse = initialiseReducteur(question, actions);
 
       expect(etatReponse.reponseDonnee).toStrictEqual({
         reponses: [],

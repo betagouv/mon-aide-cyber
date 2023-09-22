@@ -22,20 +22,23 @@ import {
 import { FournisseurEntrepots } from "../../fournisseurs/FournisseurEntrepot.ts";
 import {
   EtatReponseStatut,
-  reducteurReponse,
-  reponseUniqueDonnee,
   initialiseReducteur,
+  reducteurReponse,
   reponseMultipleDonnee,
-  reponseTiroirUniqueDonnee,
   reponseTiroirMultipleDonnee,
+  reponseTiroirUniqueDonnee,
+  reponseUniqueDonnee,
 } from "../../domaine/diagnostic/reducteurReponse.ts";
-import { ActionDiagnostic } from "../../domaine/diagnostic/Diagnostic.ts";
+import {
+  Action,
+  ActionReponseDiagnostic,
+} from "../../domaine/diagnostic/Diagnostic.ts";
 import "../../assets/styles/_diagnostic.scss";
 
 type ProprietesComposantQuestion = {
   question: Question;
   reponseDonnee?: ReponseDonnee;
-  actions?: ActionDiagnostic[];
+  actions: ActionReponseDiagnostic[];
 };
 
 type ProprietesChampsDeSaisie = {
@@ -101,7 +104,7 @@ const ComposantQuestionListe = ({
 }: ProprietesComposantQuestion) => {
   const [etatReponse, envoie] = useReducer(
     reducteurReponse,
-    initialiseReducteur(question),
+    initialiseReducteur(question, actions),
   );
   const entrepots = useContext(FournisseurEntrepots);
 
@@ -114,7 +117,7 @@ const ComposantQuestionListe = ({
 
   useEffect(() => {
     if (etatReponse.statut === EtatReponseStatut.MODIFIE) {
-      const action = actions?.find((a) => a.action === "repondre");
+      const action = etatReponse.action("repondre");
       if (action !== undefined) {
         entrepots.diagnostic().repond(action, etatReponse.reponse()!);
       }
@@ -146,7 +149,7 @@ const ComposantQuestion = ({
 }: ProprietesComposantQuestion) => {
   const [etatReponse, envoie] = useReducer(
     reducteurReponse,
-    initialiseReducteur(question),
+    initialiseReducteur(question, actions),
   );
   const entrepots = useContext(FournisseurEntrepots);
 
@@ -192,7 +195,7 @@ const ComposantQuestion = ({
 
   useEffect(() => {
     if (etatReponse.statut === EtatReponseStatut.MODIFIE) {
-      const action = actions?.find((a) => a.action === "repondre");
+      const action = etatReponse.action("repondre");
       if (action !== undefined) {
         entrepots.diagnostic().repond(action, etatReponse.reponse()!);
       }
@@ -292,8 +295,10 @@ export const ComposantDiagnostic = ({
   }, [entrepots, idDiagnostic, envoie, showBoundary]);
 
   let thematiques: [string, Thematique][] = [];
+  let actions: Action[] = [];
   if (etatReferentiel.diagnostic?.referentiel !== undefined) {
     thematiques = Object.entries(etatReferentiel.diagnostic!.referentiel!);
+    actions = etatReferentiel.diagnostic!.actions;
   }
 
   const affiche = useCallback(
@@ -327,6 +332,9 @@ export const ComposantDiagnostic = ({
       {navigation}
       <div className="contenu">
         {thematiques.map(([clef, thematique]) => {
+          const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
+            (action) => Object.entries(action).find(([c]) => c === clef),
+          ) as ActionReponseDiagnostic[];
           const elements = thematique.questions.map((question) => (
             <fieldset key={question.identifiant} id={question.identifiant}>
               <label>{question.libelle}</label>
@@ -334,12 +342,12 @@ export const ComposantDiagnostic = ({
               {question.type === "liste" ? (
                 <ComposantQuestionListe
                   question={question}
-                  actions={thematique.actions}
+                  actions={actionsPossibles}
                 />
               ) : (
                 <ComposantQuestion
                   question={question}
-                  actions={thematique.actions}
+                  actions={actionsPossibles}
                 />
               )}
             </fieldset>

@@ -7,16 +7,15 @@ import {
 } from "../../src/domaine/diagnostic/Referentiel.ts";
 import { Constructeur } from "./Constructeur.ts";
 import { uneReponsePossible } from "./constructeurReponsePossible.ts";
-import { ActionDiagnostic } from "../../src/domaine/diagnostic/Diagnostic.ts";
-import { uneAction } from "./constructeurActionDiagnostic.ts";
 
 class ConstructeurReferentiel implements Constructeur<Referentiel> {
   private thematique: {
-    [clef: string]: { questions: Question[]; actions: ActionDiagnostic[] };
+    [clef: string]: {
+      questions: Question[];
+    };
   } = {
     ["contexte"]: {
       questions: [],
-      actions: [uneAction().contexte().construis()],
     },
   };
 
@@ -49,22 +48,11 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
     this.thematique["contexte"].questions.push(question);
     return this;
   }
-
-  ajouteAction(action: ActionDiagnostic): ConstructeurReferentiel {
-    this.thematique["contexte"].actions.push(action);
-    return this;
-  }
-
-  sansAction(): ConstructeurReferentiel {
-    this.thematique["contexte"].actions = [];
-    return this;
-  }
-
   ajouteUneThematique(
     theme: string,
     questions: Question[],
   ): ConstructeurReferentiel {
-    this.thematique[theme] = { questions, actions: [] };
+    this.thematique[theme] = { questions };
     return this;
   }
 

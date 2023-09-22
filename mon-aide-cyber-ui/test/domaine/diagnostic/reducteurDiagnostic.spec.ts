@@ -19,38 +19,44 @@ describe("Les réducteurs de diagnostic", () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
-            .avecUneQuestionEtDesReponses({ libelle: "Première question ?" }, [
-              uneReponsePossible()
-                .avecLibelle("Réponse D")
-                .enPosition(3)
-                .construis(),
-              uneReponsePossible()
-                .avecLibelle("Réponse B")
-                .enPosition(1)
-                .construis(),
-              uneReponsePossible()
-                .avecLibelle("Réponse A")
-                .enPosition(0)
-                .construis(),
-              uneReponsePossible()
-                .avecLibelle("Réponse C")
-                .enPosition(2)
-                .construis(),
-            ])
-            .avecUneQuestionEtDesReponses({ libelle: "Deuxième question ?" }, [
-              uneReponsePossible()
-                .avecLibelle("Réponse B")
-                .enPosition(1)
-                .construis(),
-              uneReponsePossible()
-                .avecLibelle("Réponse C")
-                .enPosition(2)
-                .construis(),
-              uneReponsePossible()
-                .avecLibelle("Réponse A")
-                .enPosition(0)
-                .construis(),
-            ])
+            .avecUneQuestionEtDesReponses(
+              { libelle: "Première question ?", type: "choixUnique" },
+              [
+                uneReponsePossible()
+                  .avecLibelle("Réponse D")
+                  .enPosition(3)
+                  .construis(),
+                uneReponsePossible()
+                  .avecLibelle("Réponse B")
+                  .enPosition(1)
+                  .construis(),
+                uneReponsePossible()
+                  .avecLibelle("Réponse A")
+                  .enPosition(0)
+                  .construis(),
+                uneReponsePossible()
+                  .avecLibelle("Réponse C")
+                  .enPosition(2)
+                  .construis(),
+              ],
+            )
+            .avecUneQuestionEtDesReponses(
+              { libelle: "Deuxième question ?", type: "choixUnique" },
+              [
+                uneReponsePossible()
+                  .avecLibelle("Réponse B")
+                  .enPosition(1)
+                  .construis(),
+                uneReponsePossible()
+                  .avecLibelle("Réponse C")
+                  .enPosition(2)
+                  .construis(),
+                uneReponsePossible()
+                  .avecLibelle("Réponse A")
+                  .enPosition(0)
+                  .construis(),
+              ],
+            )
             .construis(),
         )
         .construis();
