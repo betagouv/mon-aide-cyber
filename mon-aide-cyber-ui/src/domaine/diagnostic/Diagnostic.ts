@@ -36,4 +36,6 @@ export interface EntrepotDiagnostic extends Entrepot<Diagnostic> {
     action: ActionReponseDiagnostic,
     reponseDonnee: Reponse,
   ) => Promise<void>;
+
+  termine(action: ActionBase): Promise<void>;
 }

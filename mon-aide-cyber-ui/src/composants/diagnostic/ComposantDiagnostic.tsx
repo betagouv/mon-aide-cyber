@@ -31,6 +31,7 @@ import {
 } from "../../domaine/diagnostic/reducteurReponse.ts";
 import {
   Action,
+  ActionBase,
   ActionReponseDiagnostic,
 } from "../../domaine/diagnostic/Diagnostic.ts";
 import "../../assets/styles/_diagnostic.scss";
@@ -308,6 +309,13 @@ export const ComposantDiagnostic = ({
     [envoie],
   );
 
+  const termineDiagnostic = useCallback(async () => {
+    const action = actions.find((a) => a.action === "terminer");
+    if (action) {
+      return entrepots.diagnostic().termine(action as ActionBase);
+    }
+  }, [entrepots, actions]);
+
   const navigation = (
     <div className="navigation-verticale">
       <nav>
@@ -328,47 +336,52 @@ export const ComposantDiagnostic = ({
   );
 
   return (
-    <div className="diagnostic">
-      {navigation}
-      <div className="contenu">
-        {thematiques.map(([clef, thematique]) => {
-          const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
-            (action) => Object.entries(action).find(([c]) => c === clef),
-          ) as ActionReponseDiagnostic[];
-          const elements = thematique.questions.map((question) => (
-            <fieldset key={question.identifiant} id={question.identifiant}>
-              <label>{question.libelle}</label>
-              <br />
-              {question.type === "liste" ? (
-                <ComposantQuestionListe
-                  question={question}
-                  actions={actionsPossibles}
-                />
-              ) : (
-                <ComposantQuestion
-                  question={question}
-                  actions={actionsPossibles}
-                />
-              )}
-            </fieldset>
-          ));
-          return (
-            <form
-              key={clef}
-              id={clef}
-              className={
-                etatReferentiel.thematiqueAffichee === clef
-                  ? `visible`
-                  : `invisible`
-              }
-            >
-              <h2>{clef}</h2>
-              <section className="question">
-                <div>{elements}</div>
-              </section>
-            </form>
-          );
-        })}
+    <div>
+      <div className="droite">
+        <button onClick={termineDiagnostic}>Terminer Diagnostic</button>
+      </div>
+      <div className="diagnostic">
+        {navigation}
+        <div className="contenu">
+          {thematiques.map(([clef, thematique]) => {
+            const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
+              (action) => Object.entries(action).find(([c]) => c === clef),
+            ) as ActionReponseDiagnostic[];
+            const elements = thematique.questions.map((question) => (
+              <fieldset key={question.identifiant} id={question.identifiant}>
+                <label>{question.libelle}</label>
+                <br />
+                {question.type === "liste" ? (
+                  <ComposantQuestionListe
+                    question={question}
+                    actions={actionsPossibles}
+                  />
+                ) : (
+                  <ComposantQuestion
+                    question={question}
+                    actions={actionsPossibles}
+                  />
+                )}
+              </fieldset>
+            ));
+            return (
+              <form
+                key={clef}
+                id={clef}
+                className={
+                  etatReferentiel.thematiqueAffichee === clef
+                    ? `visible`
+                    : `invisible`
+                }
+              >
+                <h2>{clef}</h2>
+                <section className="question">
+                  <div>{elements}</div>
+                </section>
+              </form>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

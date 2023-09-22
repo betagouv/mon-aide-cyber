@@ -1,5 +1,6 @@
 import { Aggregat } from "../../../src/domaine/Aggregat";
 import {
+  ActionBase,
   ActionReponseDiagnostic,
   Diagnostic,
   EntrepotDiagnostic,
@@ -66,6 +67,10 @@ export class EntrepotDiagnosticMemoire
 
   async verifieReponseNonEnvoyee() {
     return Promise.resolve(!this.reponseEnvoyee);
+  }
+
+  termine(__: ActionBase): Promise<void> {
+    return Promise.reject();
   }
 }
 
