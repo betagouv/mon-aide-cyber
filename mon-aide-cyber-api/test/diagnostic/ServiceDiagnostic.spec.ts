@@ -443,13 +443,17 @@ describe("Le service de diagnostic", () => {
 
       await serviceDiagnostic.termine(diagnostic.identifiant);
 
-      expect(diagnostic.recommandations).toStrictEqual([
+      expect(
+        diagnostic.recommandations?.recommandationsPrioritaires,
+      ).toStrictEqual([
         { recommandation: "reco 1", noteObtenue: 0, priorisation: 1 },
         { recommandation: "reco 2", noteObtenue: 0, priorisation: 2 },
         { recommandation: "reco 3", noteObtenue: 0, priorisation: 3 },
         { recommandation: "reco 4", noteObtenue: 0, priorisation: 4 },
         { recommandation: "reco 5", noteObtenue: 0, priorisation: 5 },
         { recommandation: "reco 6", noteObtenue: 0, priorisation: 6 },
+      ]);
+      expect(diagnostic.recommandations?.autresRecommandations).toStrictEqual([
         { recommandation: "reco 7", noteObtenue: 0, priorisation: 7 },
       ]);
     });

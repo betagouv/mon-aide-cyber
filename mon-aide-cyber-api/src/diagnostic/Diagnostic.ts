@@ -31,9 +31,14 @@ type Recommandation = {
   priorisation: number;
 };
 
+type Recommandations = {
+  recommandationsPrioritaires: Recommandation[];
+  autresRecommandations: Recommandation[];
+};
+
 type Diagnostic = {
   identifiant: crypto.UUID;
-  recommandations?: Recommandation[];
+  recommandations?: Recommandations;
   referentiel: ReferentielDiagnostic;
   tableauDesNotes: TableauDeNotes;
   tableauDesRecommandations: TableauDeRecommandations;
@@ -85,14 +90,15 @@ const ajouteLaReponseAuDiagnostic = (
 };
 
 const genereLesRecommandations = (diagnostic: Diagnostic) => {
-  diagnostic.recommandations = [];
-  Object.entries(diagnostic.referentiel)
+  diagnostic.recommandations = {
+    recommandationsPrioritaires: [],
+    autresRecommandations: [],
+  };
+  const lesRecommandations = Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
-    .forEach((question) => {
+    .map((question) => {
       if (diagnostic.tableauDesNotes[question.identifiant]) {
-        const recommandations: Recommandation[] = Object.entries(
-          diagnostic.tableauDesNotes[question.identifiant],
-        )
+        return Object.entries(diagnostic.tableauDesNotes[question.identifiant])
           .filter(
             ([identifiantReponse]) =>
               question.reponseDonnee.reponseUnique === identifiantReponse,
@@ -109,14 +115,18 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
               noteObtenue: note,
               priorisation: recommandationTrouvee.priorisation,
             } as Recommandation;
-          });
-        diagnostic.recommandations?.push(...recommandations);
+          })
+          .filter((reco) => reco.noteObtenue !== null);
       }
-    });
-  diagnostic.recommandations = diagnostic.recommandations
-    .filter((r) => r.noteObtenue !== null)
+      return [];
+    })
+    .flatMap((reco) => reco)
     .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
     .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || 0);
+  diagnostic.recommandations.recommandationsPrioritaires =
+    lesRecommandations.slice(0, 6);
+  diagnostic.recommandations.autresRecommandations =
+    lesRecommandations.slice(6);
 };
 
 export {
