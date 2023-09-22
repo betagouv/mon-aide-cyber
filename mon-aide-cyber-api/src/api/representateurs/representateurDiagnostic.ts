@@ -1,6 +1,7 @@
 import { Diagnostic, QuestionDiagnostic } from "../../diagnostic/Diagnostic";
 import { QuestionATiroir, ReponsePossible } from "../../diagnostic/Referentiel";
 import {
+  Action,
   Chemin,
   QuestionATranscrire,
   ReponseATranscrire,
@@ -146,11 +147,29 @@ export function representeLeDiagnosticPourLeClient(
   diagnostic: Diagnostic,
   transcripteur: Transcripteur,
 ): RepresentationDiagnostic {
+  const actions: Action[] = [
+    {
+      action: "terminer",
+      ressource: {
+        url: `/api/diagnostic/${diagnostic.identifiant}/termine`,
+        methode: "GET",
+      },
+    },
+  ];
   return {
     identifiant: diagnostic.identifiant,
     referentiel: {
       ...Object.entries(diagnostic.referentiel).reduce(
         (accumulateur, [clef, questionsThematique]) => {
+          actions.push({
+            [clef]: {
+              action: "repondre",
+              ressource: {
+                url: `/api/diagnostic/${diagnostic.identifiant}`,
+                methode: "PATCH",
+              },
+            },
+          });
           return {
             ...accumulateur,
             [clef]: {
@@ -192,5 +211,6 @@ export function representeLeDiagnosticPourLeClient(
         {},
       ),
     },
+    actions,
   };
 }
