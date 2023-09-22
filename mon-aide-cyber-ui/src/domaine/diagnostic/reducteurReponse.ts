@@ -1,5 +1,5 @@
 import { Question, ReponseDonnee, ReponseMultiple } from "./Referentiel.ts";
-import { Reponse } from "./Diagnostic.ts";
+import { ActionReponseDiagnostic, Reponse } from "./Diagnostic.ts";
 
 enum TypeActionReponse {
   REPONSE_UNIQUE_DONNEE = "REPONSE_UNIQUE_DONNEE",
@@ -14,6 +14,8 @@ export enum EtatReponseStatut {
 }
 
 export type EtatReponse = {
+  actions: ActionReponseDiagnostic[];
+  action: (actionDemandee: string) => ActionReponseDiagnostic | undefined;
   question: Question;
   reponseDonnee: ReponseDonnee;
   reponse: () => Reponse | null;
@@ -65,6 +67,13 @@ export const reducteurReponse = (
   etat: EtatReponse,
   action: ActionReponse,
 ): EtatReponse => {
+  const actionAMener = (
+    actionDemandee: string,
+  ): ActionReponseDiagnostic | undefined => {
+    return etat.actions.find((a) =>
+      Object.entries(a).find(([, a]) => a.action === actionDemandee),
+    );
+  };
   function ajouteLaReponse(
     reponses: ReponseMultiple[],
     elementReponse: ElementReponse,
@@ -134,6 +143,7 @@ export const reducteurReponse = (
   ) {
     return {
       ...etat,
+      action: (actionDemandee: string) => actionAMener(actionDemandee),
       reponseDonnee: {
         valeur,
         reponses,
@@ -148,6 +158,7 @@ export const reducteurReponse = (
     case TypeActionReponse.REPONSE_UNIQUE_DONNEE: {
       return {
         ...etat,
+        action: (actionDemandee) => actionAMener(actionDemandee),
         reponseDonnee: {
           valeur: action.reponse.valeur,
           reponses: [],
@@ -165,6 +176,7 @@ export const reducteurReponse = (
 
       return {
         ...etat,
+        action: (actionDemandee) => actionAMener(actionDemandee),
         reponseDonnee: {
           valeur: null,
           reponses,
@@ -259,10 +271,15 @@ export const reponseTiroirMultipleDonnee = (
   };
 };
 
-export const initialiseReducteur = (question: Question): EtatReponse => {
+export const initialiseReducteur = (
+  question: Question,
+  actions: ActionReponseDiagnostic[],
+): EtatReponse => {
   const valeur: () => string | undefined = () =>
     question.reponseDonnee.valeur || undefined;
   return {
+    actions,
+    action: (__) => undefined,
     question: question,
     reponseDonnee: question.reponseDonnee,
     reponse: () => null,

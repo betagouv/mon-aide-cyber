@@ -1,7 +1,7 @@
-import { ActionDiagnostic } from "./Diagnostic.ts";
+import { ActionReponseDiagnostic } from "./Diagnostic.ts";
 
 export type Thematique = {
-  actions: ActionDiagnostic[];
+  actions: ActionReponseDiagnostic[];
   questions: Question[];
 };
 export type Referentiel = {

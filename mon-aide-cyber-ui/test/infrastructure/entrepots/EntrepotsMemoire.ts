@@ -1,6 +1,6 @@
 import { Aggregat } from "../../../src/domaine/Aggregat";
 import {
-  ActionDiagnostic,
+  ActionReponseDiagnostic,
   Diagnostic,
   EntrepotDiagnostic,
   Reponse,
@@ -36,7 +36,7 @@ export class EntrepotDiagnosticMemoire
   extends EntrepotMemoire<Diagnostic>
   implements EntrepotDiagnostic
 {
-  private actionRepondre: ActionDiagnostic | undefined = undefined;
+  private actionRepondre: ActionReponseDiagnostic | undefined = undefined;
   private reponseDonnee: Reponse | undefined = undefined;
   private reponseEnvoyee = false;
   lancer(): Promise<LienRoutage> {
@@ -46,7 +46,10 @@ export class EntrepotDiagnosticMemoire
     );
   }
 
-  repond(action: ActionDiagnostic, reponseDonnee: Reponse): Promise<void> {
+  repond(
+    action: ActionReponseDiagnostic,
+    reponseDonnee: Reponse,
+  ): Promise<void> {
     this.actionRepondre = action;
     this.reponseDonnee = reponseDonnee;
     this.reponseEnvoyee = true;
@@ -54,7 +57,7 @@ export class EntrepotDiagnosticMemoire
   }
 
   verifieEnvoiReponse(
-    actionRepondre: ActionDiagnostic,
+    actionRepondre: ActionReponseDiagnostic,
     reponseDonnee: Reponse,
   ) {
     expect(this.actionRepondre).toStrictEqual(actionRepondre);

@@ -27,11 +27,10 @@ const actionRepondre = uneAction().contexte().construis();
 const identifiantQuestionAChoixUnique = "6dadad14-8fa0-4be7-a8da-473d538eb6c1";
 const reponseDonneeChoixUnique = uneReponsePossible().construis();
 const diagnosticAvecUneQuestionAChoixUnique = unDiagnostic()
+  .ajouteAction(actionRepondre)
   .avecIdentifiant(identifiantQuestionAChoixUnique)
   .avecUnReferentiel(
     unReferentiel()
-      .sansAction()
-      .ajouteAction(actionRepondre)
       .avecUneQuestion(
         uneQuestionAChoixUnique()
           .avecLibelle("Quelle entreprise êtes-vous ?")
@@ -53,11 +52,10 @@ const reponseSelectionnee = uneReponsePossible()
   .avecLibelle("Réponse B")
   .construis();
 const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
+  .ajouteAction(actionRepondre)
   .avecIdentifiant(identifiantQuestionListeDeroulante)
   .avecUnReferentiel(
     unReferentiel()
-      .sansAction()
-      .ajouteAction(actionRepondre)
       .avecUneQuestion(
         uneQuestionAChoixUnique()
           .avecLibelle("Une liste déroulante?")
@@ -105,10 +103,9 @@ const reponseAvecQuestionAChoixMultiple = uneReponsePossible()
   );
 const diagnosticAvecQuestionATiroir = unDiagnostic()
   .avecIdentifiant(identifiantQuestionATiroir)
+  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
-      .sansAction()
-      .ajouteAction(actionRepondre)
       .avecUneQuestion(
         uneQuestionAChoixUnique()
           .avecLibelle("QCM?")
@@ -140,11 +137,10 @@ const questionAChoixUnique = uneQuestionAChoixUnique()
   ]);
 const diagnosticAvecQuestionATiroirAvecChoixUniqueEtChoixMultiple =
   unDiagnostic()
+    .ajouteAction(actionRepondre)
     .avecIdentifiant(identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple)
     .avecUnReferentiel(
       unReferentiel()
-        .sansAction()
-        .ajouteAction(actionRepondre)
         .avecUneQuestion(
           uneQuestionAChoixUnique()
             .avecLibelle("Tiroir multiple et unique")
@@ -215,10 +211,9 @@ const secondeReponseAChoixUniqueATiroir = uneReponsePossible()
 const diagnosticAvecUneQuestionAvecPlusieursQuestionsATiroirAChoixUnique =
   unDiagnostic()
     .avecIdentifiant(identifiantQuestionATiroirAvecPlusieursChoixUnique)
+    .ajouteAction(actionRepondre)
     .avecUnReferentiel(
       unReferentiel()
-        .sansAction()
-        .ajouteAction(actionRepondre)
         .avecUneQuestion(
           uneQuestionAChoixUnique()
             .avecLibelle("Une question à choix unique à tiroir")
@@ -246,10 +241,9 @@ const identifiantQuestionAPlusieursTiroirs =
   "7e37b7fa-1ed6-434d-ba5b-d473928c08c2";
 const diagnosticAvecQuestionsAPlusieursTiroirs = unDiagnostic()
   .avecIdentifiant(identifiantQuestionAPlusieursTiroirs)
+  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
-      .sansAction()
-      .ajouteAction(actionRepondre)
       .avecUneQuestion(
         uneQuestionAChoixUnique()
           .avecLibelle("QCM?")
@@ -289,10 +283,9 @@ const identifiantQuestionATiroirAvecReponseUnique =
   "d01c0e69-7abd-46cf-a109-a38f8b1b26e0";
 const diagnosticAvecQuestionsATiroirsAvecReponseUnique = unDiagnostic()
   .avecIdentifiant(identifiantQuestionATiroirAvecReponseUnique)
+  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
-      .sansAction()
-      .ajouteAction(actionRepondre)
       .avecUneQuestion(
         uneQuestionAChoixUnique()
           .avecLibelle("QCM?")
@@ -329,10 +322,9 @@ const identifiantQuestionAChoixMultiple =
   "4196086c-d370-4406-a757-347d964a4e74";
 const diagnosticAveUneQuestionAChoixMultiple = unDiagnostic()
   .avecIdentifiant(identifiantQuestionAChoixMultiple)
+  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
-      .sansAction()
-      .ajouteAction(actionRepondre)
       .avecUneQuestion(
         uneQuestionAChoixMultiple()
           .avecLibelle("Question à choix multiple ?")

@@ -4,13 +4,19 @@ import { Aggregat } from "../Aggregat.ts";
 import { Entrepot } from "../Entrepots.ts";
 import { LienRoutage } from "../LienRoutage.ts";
 
-export type ActionDiagnostic = {
-  action: "repondre";
-  chemin: string;
-  ressource: { url: string; methode: "PATCH" };
+export type ActionReponseDiagnostic = {
+  [thematique: string]: ActionBase;
 };
+
+export type ActionBase = {
+  action: string;
+  ressource: { url: string; methode: string };
+};
+export type Action = ActionBase | ActionReponseDiagnostic;
+
 export type Diagnostic = Aggregat & {
   referentiel: Referentiel;
+  actions: Action[];
 };
 export type ReponseQuestionATiroir = {
   reponse: string;
@@ -26,5 +32,8 @@ export type Reponse = {
 export interface EntrepotDiagnostic extends Entrepot<Diagnostic> {
   lancer(): Promise<LienRoutage>;
 
-  repond: (action: ActionDiagnostic, reponseDonnee: Reponse) => Promise<void>;
+  repond: (
+    action: ActionReponseDiagnostic,
+    reponseDonnee: Reponse,
+  ) => Promise<void>;
 }

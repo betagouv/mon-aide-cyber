@@ -1,26 +1,18 @@
 import {
-  ActionDiagnostic,
+  Action,
+  ActionReponseDiagnostic,
   Diagnostic,
   EntrepotDiagnostic,
   Reponse,
 } from "../../domaine/diagnostic/Diagnostic.ts";
 import { FormatLien, LienRoutage } from "../../domaine/LienRoutage.ts";
 import { APIEntrepot } from "./EntrepotsAPI.ts";
-
-type RepresentationActionDiagnostic = {
-  action: "repondre";
-  chemin: string;
-  ressource: { url: string; methode: "PATCH" };
-};
+import { UUID } from "../../types/Types.ts";
 type RepresentationReponseDonnee = {
   valeur: string | null;
   reponses: { identifiant: string; reponses: string[] }[];
 };
 type Format = "texte" | "nombre" | undefined;
-export type RepresentationReponseComplementaire = Omit<
-  RepresentationReponsePossible,
-  "questions"
->;
 type RepresentationReponsePossible = {
   identifiant: string;
   libelle: string;
@@ -41,13 +33,16 @@ export type RepresentationTypeDeSaisie =
   | "saisieLibre"
   | "liste";
 type RepresentationThematique = {
-  actions: RepresentationActionDiagnostic[];
   questions: RepresentationQuestion[];
 };
 type RepresentationReferentiel = {
   [clef: string]: RepresentationThematique;
 };
-
+type RepresentationDiagnostic = {
+  identifiant: UUID;
+  referentiel: RepresentationReferentiel;
+  actions: Action[];
+};
 export class APIEntrepotDiagnostic
   extends APIEntrepot<Diagnostic>
   implements EntrepotDiagnostic
@@ -74,11 +69,18 @@ export class APIEntrepotDiagnostic
       );
   }
 
-  repond(action: ActionDiagnostic, reponseDonnee: Reponse): Promise<void> {
-    return fetch(action.ressource.url, {
-      method: action.ressource.methode,
+  repond(
+    action: ActionReponseDiagnostic,
+    reponseDonnee: Reponse,
+  ): Promise<void> {
+    const actionAMener = Object.entries(action).map(([thematique, action]) => ({
+      chemin: thematique,
+      ressource: action.ressource,
+    }))[0];
+    return fetch(actionAMener.ressource.url, {
+      method: actionAMener.ressource.methode,
       body: JSON.stringify({
-        chemin: action.chemin,
+        chemin: actionAMener.chemin,
         identifiant: reponseDonnee.identifiantQuestion,
         reponse: reponseDonnee.reponseDonnee,
       }),
@@ -86,28 +88,31 @@ export class APIEntrepotDiagnostic
     }).then();
   }
 
-  protected transcris(json: Promise<any>): Promise<Diagnostic> {
+  protected transcris(
+    json: Promise<RepresentationDiagnostic>,
+  ): Promise<Diagnostic> {
     return json.then((corps) => {
-      const referentiel = Object.entries(
-        corps.referentiel as RepresentationReferentiel,
-      ).reduce((accumulateur, [clef, thematique]) => {
-        const questions = thematique.questions.map((question) => {
+      const referentiel = Object.entries(corps.referentiel).reduce(
+        (accumulateur, [clef, thematique]) => {
+          const questions = thematique.questions.map((question) => {
+            return {
+              ...question,
+              reponseDonnee: {
+                valeur: question.reponseDonnee.valeur,
+                reponses: question.reponseDonnee.reponses.map((rep) => ({
+                  identifiant: rep.identifiant,
+                  reponses: new Set(rep.reponses),
+                })),
+              },
+            };
+          });
           return {
-            ...question,
-            reponseDonnee: {
-              valeur: question.reponseDonnee.valeur,
-              reponses: question.reponseDonnee.reponses.map((rep) => ({
-                identifiant: rep.identifiant,
-                reponses: new Set(rep.reponses),
-              })),
-            },
+            ...accumulateur,
+            [clef]: { ...thematique, questions },
           };
-        });
-        return {
-          ...accumulateur,
-          [clef]: { ...thematique, questions },
-        };
-      }, {});
+        },
+        {},
+      );
       return {
         ...corps,
         referentiel,
