@@ -1,13 +1,28 @@
 import crypto from "crypto";
 
-type ActionDiagnostic = {
+type ActionBase = {
+  action: string;
+  ressource: { url: string; methode: "PATCH" | "GET" };
+};
+
+export type Action =
+  | ActionDiagnostic
+  | ActionRepondreDiagnostic
+  | ActionTerminerDiagnostic;
+type ActionRepondreDiagnostic = {
+  [thematique: string]: ActionBase & { action: "repondre" };
+};
+type ActionTerminerDiagnostic = ActionBase & {
+  action: "terminer";
+};
+type ActionDiagnostic = ActionBase & {
   action: "repondre";
-  chemin: "contexte";
-  ressource: { url: string; methode: "PATCH" };
+  chemin: string;
 };
 export type RepresentationDiagnostic = {
   identifiant: crypto.UUID;
   referentiel: RepresentationReferentiel;
+  actions: Action[];
 };
 export type RepresentationReponsePossible = {
   identifiant: string;

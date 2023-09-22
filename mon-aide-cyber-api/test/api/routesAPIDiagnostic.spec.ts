@@ -8,6 +8,7 @@ import {
 } from "../constructeurs/constructeurReferentiel";
 import { unDiagnostic } from "../constructeurs/constructeurDiagnostic";
 import { executeRequete } from "./executeurRequete";
+import { RepresentationDiagnostic } from "../../src/api/representateurs/types";
 
 describe("le serveur MAC sur les routes /api/diagnostic/", () => {
   const testeurMAC = testeurIntegration();
@@ -39,39 +40,38 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
       expect(reponse.status).toBe(200);
       const premiereQuestion = diagnostic.referentiel.contexte.questions[0];
       const premiereReponsePossible = premiereQuestion.reponsesPossibles[0];
-      expect(await reponse.json()).toStrictEqual({
-        identifiant: diagnostic.identifiant,
-        referentiel: {
-          contexte: {
-            actions: [
-              {
-                action: "repondre",
-                chemin: "contexte",
-                ressource: {
-                  methode: "PATCH",
-                  url: `/api/diagnostic/${diagnostic.identifiant}`,
-                },
+      const diagnosticRecu: RepresentationDiagnostic = await reponse.json();
+      expect(diagnosticRecu.identifiant).toBe(diagnostic.identifiant);
+      expect(diagnosticRecu.referentiel).toStrictEqual({
+        contexte: {
+          actions: [
+            {
+              action: "repondre",
+              chemin: "contexte",
+              ressource: {
+                methode: "PATCH",
+                url: `/api/diagnostic/${diagnostic.identifiant}`,
               },
-            ],
-            questions: [
-              {
-                identifiant: premiereQuestion.identifiant,
-                libelle: premiereQuestion.libelle,
-                reponseDonnee: {
-                  valeur: null,
-                  reponses: [],
-                },
-                reponsesPossibles: [
-                  {
-                    identifiant: premiereReponsePossible.identifiant,
-                    libelle: premiereReponsePossible.libelle,
-                    ordre: 0,
-                  },
-                ],
-                type: "choixUnique",
+            },
+          ],
+          questions: [
+            {
+              identifiant: premiereQuestion.identifiant,
+              libelle: premiereQuestion.libelle,
+              reponseDonnee: {
+                valeur: null,
+                reponses: [],
               },
-            ],
-          },
+              reponsesPossibles: [
+                {
+                  identifiant: premiereReponsePossible.identifiant,
+                  libelle: premiereReponsePossible.libelle,
+                  ordre: 0,
+                },
+              ],
+              type: "choixUnique",
+            },
+          ],
         },
       });
     });
