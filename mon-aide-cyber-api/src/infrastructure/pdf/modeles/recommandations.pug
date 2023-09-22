@@ -1,7 +1,7 @@
 extends base
 
 block page
-    each recommandation in recommandations
+    each recommandation in recommandations.recommandationsPrioritaires
         p
         span=recommandation.noteObtenue
         span="--"

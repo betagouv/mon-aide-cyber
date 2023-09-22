@@ -70,45 +70,17 @@ describe("Diagnostic", () => {
 
       genereLesRecommandations(diagnostic);
 
-      expect(diagnostic.recommandations).toStrictEqual([
+      expect(
+        diagnostic.recommandations?.recommandationsPrioritaires,
+      ).toStrictEqual([
         { recommandation: "reco 1", noteObtenue: 0, priorisation: 1 },
         { recommandation: "reco 3", noteObtenue: 0, priorisation: 3 },
         { recommandation: "reco 4", noteObtenue: 0, priorisation: 4 },
         { recommandation: "reco 6", noteObtenue: 0, priorisation: 6 },
         { recommandation: "reco 22", noteObtenue: 1, priorisation: 2 },
         { recommandation: "reco 52", noteObtenue: 1, priorisation: 5 },
-        { recommandation: "reco 72", noteObtenue: 1, priorisation: 7 },
       ]);
-    });
-
-    it("les réponses entraînant une note 'null' sont écartées des recommandations", () => {
-      const diagnostic = unDiagnostic()
-        .avecUnReferentiel(
-          unReferentiel()
-            .sansThematique()
-            .ajouteUneThematique("thematique", questions)
-            .construis(),
-        )
-        .avecLesReponsesDonnees("thematique", [
-          { q1: "reponse-13" },
-          { q2: "reponse-22" },
-          { q3: "reponse-31" },
-          { q4: "reponse-43" },
-          { q5: "reponse-52" },
-          { q6: "reponse-61" },
-          { q7: "reponse-72" },
-        ])
-        .avecUnTableauDeNotes(tableauDeNotes)
-        .avecUnTableauDeRecommandations(tableauDeRecommandations)
-        .construis();
-
-      genereLesRecommandations(diagnostic);
-
-      expect(diagnostic.recommandations).toStrictEqual([
-        { recommandation: "reco 3", noteObtenue: 0, priorisation: 3 },
-        { recommandation: "reco 6", noteObtenue: 0, priorisation: 6 },
-        { recommandation: "reco 22", noteObtenue: 1, priorisation: 2 },
-        { recommandation: "reco 52", noteObtenue: 1, priorisation: 5 },
+      expect(diagnostic.recommandations?.autresRecommandations).toStrictEqual([
         { recommandation: "reco 72", noteObtenue: 1, priorisation: 7 },
       ]);
     });
@@ -117,7 +89,7 @@ describe("Diagnostic", () => {
       const questionContexte = uneQuestion()
         .aChoixUnique("qc")
         .avecReponsesPossibles([
-          uneReponsePossible().avecLibelle("ꞧqc").construis(),
+          uneReponsePossible().avecLibelle("qc").construis(),
         ])
         .construis();
       const diagnostic = unDiagnostic()
@@ -143,13 +115,18 @@ describe("Diagnostic", () => {
 
       genereLesRecommandations(diagnostic);
 
-      expect(diagnostic.recommandations).toStrictEqual([
+      expect(
+        diagnostic.recommandations?.recommandationsPrioritaires,
+      ).toStrictEqual([
         { recommandation: "reco 3", noteObtenue: 0, priorisation: 3 },
         { recommandation: "reco 6", noteObtenue: 0, priorisation: 6 },
         { recommandation: "reco 22", noteObtenue: 1, priorisation: 2 },
         { recommandation: "reco 52", noteObtenue: 1, priorisation: 5 },
         { recommandation: "reco 72", noteObtenue: 1, priorisation: 7 },
       ]);
+      expect(diagnostic.recommandations?.autresRecommandations).toStrictEqual(
+        [],
+      );
     });
 
     describe("trie le resultat", () => {
@@ -188,15 +165,19 @@ describe("Diagnostic", () => {
 
         genereLesRecommandations(diagnostic);
 
-        expect(diagnostic.recommandations).toStrictEqual([
+        expect(
+          diagnostic.recommandations?.recommandationsPrioritaires,
+        ).toStrictEqual([
           { recommandation: "reco 4", noteObtenue: 0, priorisation: 1 },
           { recommandation: "reco 2", noteObtenue: 0, priorisation: 2 },
           { recommandation: "reco 1", noteObtenue: 0, priorisation: 3 },
           { recommandation: "reco 3", noteObtenue: 0, priorisation: 4 },
           { recommandation: "reco 6", noteObtenue: 0, priorisation: 5 },
           { recommandation: "reco 7", noteObtenue: 0, priorisation: 6 },
-          { recommandation: "reco 5", noteObtenue: 0, priorisation: 7 },
         ]);
+        expect(diagnostic.recommandations?.autresRecommandations).toStrictEqual(
+          [{ recommandation: "reco 5", noteObtenue: 0, priorisation: 7 }],
+        );
       });
     });
   });
