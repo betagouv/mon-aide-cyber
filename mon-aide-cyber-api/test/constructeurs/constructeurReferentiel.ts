@@ -136,8 +136,8 @@ class ConstructeurListeDeQuestions
   construis(): (QuestionChoixUnique | QuestionChoixMultiple)[] {
     return this.labels.map((label, index) =>
       uneQuestion()
-        .aChoixUnique(
-          label,
+        .aChoixUnique(label)
+        .avecReponsesPossibles(
           this.libellesReponsesPossibles[index].map((rep) =>
             uneReponsePossible().avecLibelle(rep).construis(),
           ),

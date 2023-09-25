@@ -22,6 +22,23 @@ const tableauDeNotes: TableauDeNotes = {
   "gouvernance-connaissance-rgpd": {
     "gouvernance-connaissance-rgpd-nsp": null,
     "gouvernance-connaissance-rgpd-non": 0,
+    "gouvernance-connaissance-rgpd-oui": {
+      operation: "moyenne",
+      reponses: {
+        "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-nsp":
+          null,
+        "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-non": 0,
+        "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-oui": 3,
+        "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-nsp":
+          null,
+        "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-non": 0,
+        "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-oui": 3,
+        "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-nsp":
+          null,
+        "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-non": 0,
+        "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-oui": 3,
+      },
+    },
   },
   "gouvernance-exigence-cyber-securite-presta": {
     "gouvernance-exigence-cyber-securite-presta-nsp": null,
