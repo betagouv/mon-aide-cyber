@@ -105,17 +105,41 @@ class MoteurDeRecommandationReponsesMultiples extends MoteurDeRecommandation {
     const notes = Object.entries(regleDeCalcul.reponses)
       .filter(([rep]) => reponsesDonnees.includes(rep))
       .map(([, note]) => note);
-    const note =
-      notes.reduce((note1: number, note2) => somme(note1, note2), 0) /
-      notes.length;
-    return note as Note;
+    return notes
+      .reduce(
+        (note1: CalculateurDeNote, note2) => note1.ajoute(note2),
+        new CalculateurDeNote(0),
+      )
+      .divise(notes.length).note;
   }
 }
 
-const somme = (note1: number, note2: Note): number => {
-  return note1 + (note2 as number);
-};
+class CalculateurDeNote {
+  constructor(private _note: Note) {}
 
+  get note(): Note {
+    return this._note;
+  }
+
+  public ajoute(note: Note) {
+    this._note =
+      estUnNombre(this._note) && estUnNombre(note)
+        ? (((this._note as number) + (note as number)) as Note)
+        : null;
+    return this;
+  }
+
+  public divise(nombre: number) {
+    this._note = estUnNombre(this._note)
+      ? (((this._note as number) / nombre) as Note)
+      : null;
+    return this;
+  }
+}
+
+function estUnNombre(note: Note): boolean {
+  return typeof note === "number";
+}
 const estRegleDeCalcul = (
   note: Note | RegleDeCalcul,
 ): note is RegleDeCalcul => {
