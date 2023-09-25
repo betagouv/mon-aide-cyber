@@ -195,10 +195,13 @@ describe("Diagnostic", () => {
               "reponse-3": {
                 operation: "moyenne",
                 reponses: {
+                  "reponse-310": null,
                   "reponse-311": 1,
                   "reponse-312": 3,
+                  "reponse-320": null,
                   "reponse-321": 1.5,
                   "reponse-322": 2,
+                  "reponse-330": null,
                   "reponse-331": 0,
                   "reponse-332": 3,
                 },
@@ -289,6 +292,48 @@ describe("Diagnostic", () => {
         ).toStrictEqual([
           { recommandation: "reco 12", noteObtenue: 2, priorisation: 1 },
         ]);
+      });
+
+      it("prend en compte les réponses aux questions ne donnant pas lieu à une recommandation", () => {
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentiel()
+              .sansThematique()
+              .ajouteUneThematique("multiple", [question])
+              .construis(),
+          )
+          .ajouteUneReponseDonnee(
+            { thematique: "multiple", question: "q1" },
+            uneReponseDonnee()
+              .ayantPourReponse("reponse-3")
+              .avecDesReponsesMultilpes([
+                {
+                  identifiant: "question-31",
+                  reponses: ["reponse-310"],
+                },
+                {
+                  identifiant: "question-32",
+                  reponses: ["reponse-320"],
+                },
+                {
+                  identifiant: "question-33",
+                  reponses: ["reponse-330"],
+                },
+              ])
+              .construis(),
+          )
+          .avecUnTableauDeNotes(tableauDeNotes)
+          .avecUnTableauDeRecommandations(tableauDeRecommandations)
+          .construis();
+
+        genereLesRecommandations(diagnostic);
+
+        expect(
+          diagnostic.recommandations?.recommandationsPrioritaires,
+        ).toStrictEqual([]);
+        expect(diagnostic.recommandations?.autresRecommandations).toStrictEqual(
+          [],
+        );
       });
     });
   });
