@@ -5,6 +5,7 @@ import { CorpsReponse } from "./ServiceDiagnostic";
 import { Note, TableauDeNotes } from "./TableauDeNotes";
 import { TableauDeRecommandations } from "./TableauDeRecommandations";
 import { StrategieDeReponse } from "./StrategieDeReponse";
+import { MoteurDeRecommandations } from "./MoteurDeRecommandations";
 
 type Thematique = string;
 
@@ -25,17 +26,15 @@ type ReferentielDiagnostic = {
   [clef: Thematique]: QuestionsThematique;
 };
 
-type Recommandation = {
+export type Recommandation = {
   recommandation: string;
   noteObtenue: Note;
   priorisation: number;
 };
-
-type Recommandations = {
+export type Recommandations = {
   recommandationsPrioritaires: Recommandation[];
   autresRecommandations: Recommandation[];
 };
-
 type Diagnostic = {
   identifiant: crypto.UUID;
   recommandations?: Recommandations;
@@ -94,31 +93,20 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
     recommandationsPrioritaires: [],
     autresRecommandations: [],
   };
+
+  const estReponseUnique = (question: QuestionDiagnostic): boolean => {
+    return question.reponseDonnee.reponsesMultiples.length === 0;
+  };
+
   const lesRecommandations = Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
     .map((question) => {
-      if (diagnostic.tableauDesNotes[question.identifiant]) {
-        return Object.entries(diagnostic.tableauDesNotes[question.identifiant])
-          .filter(
-            ([identifiantReponse]) =>
-              question.reponseDonnee.reponseUnique === identifiantReponse,
-          )
-          .map(([__, note]) => {
-            const recommandationTrouvee =
-              diagnostic.tableauDesRecommandations[question.identifiant];
-            const recommandation =
-              (note && note > 0
-                ? recommandationTrouvee.niveau2
-                : recommandationTrouvee.niveau1) || "";
-            return {
-              recommandation,
-              noteObtenue: note,
-              priorisation: recommandationTrouvee.priorisation,
-            } as Recommandation;
-          })
-          .filter((reco) => reco.noteObtenue !== null);
-      }
-      return [];
+      return (
+        MoteurDeRecommandations.get(estReponseUnique(question))?.genere(
+          diagnostic,
+          question,
+        ) || []
+      );
     })
     .flatMap((reco) => reco)
     .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)

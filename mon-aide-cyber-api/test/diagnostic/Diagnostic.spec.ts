@@ -1,10 +1,14 @@
 import { describe, expect } from "vitest";
 import { unTableauDeNotes } from "../constructeurs/constructeurTableauDeNotes";
 import { unTableauDeRecommandations } from "../constructeurs/constructeurTableauDeRecommandations";
-import { unDiagnostic } from "../constructeurs/constructeurDiagnostic";
+import {
+  unDiagnostic,
+  uneReponseDonnee,
+} from "../constructeurs/constructeurDiagnostic";
 import {
   uneListeDeQuestions,
   uneQuestion,
+  uneQuestionATiroir,
   uneReponsePossible,
   unReferentiel,
 } from "../constructeurs/constructeurReferentiel";
@@ -178,6 +182,113 @@ describe("Diagnostic", () => {
         expect(diagnostic.recommandations?.autresRecommandations).toStrictEqual(
           [{ recommandation: "reco 5", noteObtenue: 0, priorisation: 7 }],
         );
+      });
+    });
+
+    describe("pour des questions dont le résultat dépend d'une règle de calcul", () => {
+      const tableauDeNotes = unTableauDeNotes()
+        .avecDesNotes([
+          {
+            q1: {
+              "reponse-1": 0,
+              "reponse-2": 1,
+              "reponse-3": {
+                operation: "moyenne",
+                reponses: {
+                  "reponse-311": 1,
+                  "reponse-312": 3,
+                  "reponse-321": 1.5,
+                  "reponse-322": 2,
+                  "reponse-331": 0,
+                  "reponse-332": 3,
+                },
+              },
+            },
+          },
+        ])
+        .construis();
+      const tableauDeRecommandations = unTableauDeRecommandations()
+        .avecLesRecommandations([
+          { q1: { niveau1: "reco 1", niveau2: "reco 12", priorisation: 1 } },
+        ])
+        .construis();
+      const question = uneQuestion()
+        .aChoixUnique("q1")
+        .avecReponsesPossibles([
+          uneReponsePossible().avecLibelle("Réponse 1").construis(),
+          uneReponsePossible().avecLibelle("Réponse 2").construis(),
+          uneReponsePossible()
+            .avecLibelle("Réponse 3")
+            .ajouteUneQuestionATiroir(
+              uneQuestionATiroir()
+                .aChoixUnique("Question 31")
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle("Réponse 311").construis(),
+                  uneReponsePossible().avecLibelle("Réponse 312").construis(),
+                ])
+                .construis(),
+            )
+            .ajouteUneQuestionATiroir(
+              uneQuestionATiroir()
+                .aChoixUnique("Question 32")
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle("Réponse 321").construis(),
+                  uneReponsePossible().avecLibelle("Réponse 322").construis(),
+                ])
+                .construis(),
+            )
+            .ajouteUneQuestionATiroir(
+              uneQuestionATiroir()
+                .aChoixUnique("Réponse 33")
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle("Réponse 331").construis(),
+                  uneReponsePossible().avecLibelle("Réponse 332").construis(),
+                ])
+                .construis(),
+            )
+            .construis(),
+        ])
+        .construis();
+
+      it("prend en compte la règle de la moyenne", () => {
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentiel()
+              .sansThematique()
+              .ajouteUneThematique("multiple", [question])
+              .construis(),
+          )
+          .ajouteUneReponseDonnee(
+            { thematique: "multiple", question: "q1" },
+            uneReponseDonnee()
+              .ayantPourReponse("reponse-3")
+              .avecDesReponsesMultilpes([
+                {
+                  identifiant: "question-31",
+                  reponses: ["reponse-311"],
+                },
+                {
+                  identifiant: "question-32",
+                  reponses: ["reponse-322"],
+                },
+                {
+                  identifiant: "question-33",
+                  reponses: ["reponse-332"],
+                },
+              ])
+              .construis(),
+          )
+          .avecUnTableauDeNotes(tableauDeNotes)
+          .avecUnTableauDeRecommandations(tableauDeRecommandations)
+          .construis();
+
+        genereLesRecommandations(diagnostic);
+
+        expect(
+          diagnostic.recommandations?.recommandationsPrioritaires,
+        ).toStrictEqual([
+          { recommandation: "reco 12", noteObtenue: 2, priorisation: 1 },
+        ]);
       });
     });
   });

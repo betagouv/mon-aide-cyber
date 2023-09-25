@@ -1,12 +1,12 @@
 import { ConstructeurDeTableau } from "./constructeur";
 import {
-  Recommandation,
+  ObjetDeRecommandation,
   TableauDeRecommandations,
 } from "../../src/diagnostic/TableauDeRecommandations";
 
 class ConstructeurDeTableauDeRecommandations extends ConstructeurDeTableau<TableauDeRecommandations> {
   avecLesRecommandations(
-    recommandations: { [identifiant: string]: Recommandation }[],
+    recommandations: { [identifiant: string]: ObjetDeRecommandation }[],
   ): ConstructeurDeTableauDeRecommandations {
     this.tableau.push(...recommandations);
     return this;

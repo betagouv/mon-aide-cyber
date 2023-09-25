@@ -1,12 +1,8 @@
 import { ConstructeurDeTableau } from "./constructeur";
-import { Note, TableauDeNotes } from "../../src/diagnostic/TableauDeNotes";
+import { TableauDeNotes } from "../../src/diagnostic/TableauDeNotes";
 
 class ConstructeurDeTableauDeNotes extends ConstructeurDeTableau<TableauDeNotes> {
-  avecDesNotes(
-    notes: {
-      [identifiantQuestion: string]: { [identifiantReponse: string]: Note };
-    }[],
-  ): ConstructeurDeTableauDeNotes {
+  avecDesNotes(notes: TableauDeNotes[]): ConstructeurDeTableauDeNotes {
     this.tableau.push(...notes);
     return this;
   }
