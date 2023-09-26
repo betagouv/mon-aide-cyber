@@ -51,79 +51,127 @@ describe("Diagnostic", () => {
     .construis();
 
   describe("lorsque l'on génère les recommandations", () => {
-    it("prend en compte la note de la réponse pour choisir entre le niveau 1 ou le niveau 2 des recommandations", () => {
-      const diagnostic = unDiagnostic()
-        .avecUnReferentiel(
-          unReferentiel()
-            .sansThematique()
-            .ajouteUneThematique("thematique", questions)
-            .construis(),
-        )
-        .avecLesReponsesDonnees("thematique", [
-          { q1: "reponse-11" },
-          { q2: "reponse-22" },
-          { q3: "reponse-31" },
-          { q4: "reponse-41" },
-          { q5: "reponse-52" },
-          { q6: "reponse-61" },
-          { q7: "reponse-72" },
-        ])
-        .avecUnTableauDeNotes(tableauDeNotes)
-        .avecUnTableauDeRecommandations(tableauDeRecommandations)
-        .construis();
+    describe("en ce qui concerne les différents niveaux de recommandations", () => {
+      it("prend en compte la note de la réponse pour choisir entre le niveau 1 ou le niveau 2 des recommandations", () => {
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentiel()
+              .sansThematique()
+              .ajouteUneThematique("thematique", questions)
+              .construis(),
+          )
+          .avecLesReponsesDonnees("thematique", [
+            { q1: "reponse-11" },
+            { q2: "reponse-22" },
+            { q3: "reponse-31" },
+            { q4: "reponse-41" },
+            { q5: "reponse-52" },
+            { q6: "reponse-61" },
+            { q7: "reponse-72" },
+          ])
+          .avecUnTableauDeNotes(tableauDeNotes)
+          .avecUnTableauDeRecommandations(tableauDeRecommandations)
+          .construis();
 
-      genereLesRecommandations(diagnostic);
+        genereLesRecommandations(diagnostic);
 
-      const partieCommuneAttendue = {
-        noteObtenue: 0,
-        pourquoi: "parce-que",
-        comment: "comme ça",
-      };
-      expect(
-        diagnostic.recommandations?.recommandationsPrioritaires,
-      ).toStrictEqual([
-        {
-          priorisation: 1,
-          titre: "reco 1",
-          ...partieCommuneAttendue,
-        },
-        {
-          priorisation: 3,
-          titre: "reco 3",
-          ...partieCommuneAttendue,
-        },
-        {
-          priorisation: 4,
-          titre: "reco 4",
-          ...partieCommuneAttendue,
-        },
-        {
-          priorisation: 6,
-          titre: "reco 6",
-          ...partieCommuneAttendue,
-        },
-        {
-          priorisation: 2,
-          titre: "reco 22",
+        const partieCommuneAttendue = {
+          noteObtenue: 0,
+          pourquoi: "parce-que",
+          comment: "comme ça",
+        };
+        expect(
+          diagnostic.recommandations?.recommandationsPrioritaires,
+        ).toStrictEqual([
+          {
+            priorisation: 1,
+            titre: "reco 1",
+            ...partieCommuneAttendue,
+          },
+          {
+            priorisation: 3,
+            titre: "reco 3",
+            ...partieCommuneAttendue,
+          },
+          {
+            priorisation: 4,
+            titre: "reco 4",
+            ...partieCommuneAttendue,
+          },
+          {
+            priorisation: 6,
+            titre: "reco 6",
+            ...partieCommuneAttendue,
+          },
+          {
+            priorisation: 2,
+            titre: "reco 22",
 
-          ...partieCommuneAttendue,
-          noteObtenue: 1,
-        },
-        {
-          priorisation: 5,
-          titre: "reco 52",
-          ...partieCommuneAttendue,
-          noteObtenue: 1,
-        },
-      ]);
-      expect(diagnostic.recommandations?.autresRecommandations).toStrictEqual([
-        {
-          priorisation: 7,
-          titre: "reco 72",
-          ...partieCommuneAttendue,
-          noteObtenue: 1,
-        },
-      ]);
+            ...partieCommuneAttendue,
+            noteObtenue: 1,
+          },
+          {
+            priorisation: 5,
+            titre: "reco 52",
+            ...partieCommuneAttendue,
+            noteObtenue: 1,
+          },
+        ]);
+        expect(diagnostic.recommandations?.autresRecommandations).toStrictEqual(
+          [
+            {
+              priorisation: 7,
+              titre: "reco 72",
+              ...partieCommuneAttendue,
+              noteObtenue: 1,
+            },
+          ],
+        );
+      });
+
+      it("le niveau 2 est optionnel", () => {
+        const tableauDeNotes = unTableauDeNotes().avecDesNotes([
+          { q8: { "reponse-81": 0, "reponse-82": 1, "reponse-83": null } },
+        ]);
+        const tableauDeRecommandations =
+          unTableauDeRecommandations().avecLesRecommandations([
+            { q8: { niveau1: "reco 8", priorisation: 7 } },
+          ]);
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentiel()
+              .sansThematique()
+              .ajouteUneThematique("thematique", [
+                uneQuestion()
+                  .aChoixUnique("q8")
+                  .avecReponsesPossibles([
+                    uneReponsePossible().avecLibelle("Réponse 81").construis(),
+                    uneReponsePossible().avecLibelle("Réponse 82").construis(),
+                    uneReponsePossible().avecLibelle("Réponse 83").construis(),
+                  ])
+                  .construis(),
+              ])
+              .construis(),
+          )
+          .avecLesReponsesDonnees("thematique", [{ q8: "reponse-82" }])
+          .avecUnTableauDeNotes(tableauDeNotes.construis())
+          .avecUnTableauDeRecommandations(tableauDeRecommandations.construis())
+          .construis();
+
+        genereLesRecommandations(diagnostic);
+
+        expect(
+          diagnostic.recommandations?.recommandationsPrioritaires,
+        ).toStrictEqual([
+          {
+            comment: "comme ça",
+            noteObtenue: 1,
+            pourquoi: "parce-que",
+            priorisation: 7,
+            titre: "reco 8",
+          },
+        ]);
+      });
     });
 
     it("prend en compte les questions ne donnant pas lieu à une recommandation", () => {

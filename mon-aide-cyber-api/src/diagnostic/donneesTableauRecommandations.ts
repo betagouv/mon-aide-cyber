@@ -66,13 +66,6 @@ const tableauRecommandations: TableauDeRecommandations = {
       comment:
         "recommandations/gouvernance/gouvernance-connaissance-rgpd-niveau1-comment.pug",
     },
-    niveau2: {
-      titre: "RGPD niveau 2.",
-      pourquoi:
-        "recommandations/gouvernance/gouvernance-connaissance-rgpd-niveau2-pourquoi.pug",
-      comment:
-        "recommandations/gouvernance/gouvernance-connaissance-rgpd-niveau2-comment.pug",
-    },
     priorisation: 24,
   },
   "gouvernance-exigence-cyber-securite-presta": {

@@ -56,7 +56,8 @@ abstract class MoteurDeRecommandation {
         const noteCalculee: Note = this.calculeLaNote(note);
         const recommandation =
           (noteCalculee && noteCalculee > 0
-            ? this.recommandationTrouvee.niveau2
+            ? this.recommandationTrouvee.niveau2 ||
+              this.recommandationTrouvee.niveau1
             : this.recommandationTrouvee.niveau1) || undefined;
         return {
           titre: recommandation?.titre || "",
