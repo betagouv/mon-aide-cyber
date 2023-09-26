@@ -1,5 +1,4 @@
 import { Constructeur } from "./constructeur";
-import { ReponsesMultiples } from "../../src/diagnostic/Diagnostic";
 import {
   QuestionChoixMultiple,
   QuestionChoixUnique,
@@ -12,7 +11,6 @@ import {
 } from "../../src/diagnostic/ServiceDiagnostic";
 
 class ConstructeurDeCorpsDeReponse implements Constructeur<CorpsReponse> {
-  private reponsesMultiples: ReponsesMultiples[] = [];
   private chemin = "contexte";
   private identifiant = fakerFR.string.alpha(10);
   private reponse: string | CorpsReponseQuestionATiroir = "";
@@ -35,28 +33,6 @@ class ConstructeurDeCorpsDeReponse implements Constructeur<CorpsReponse> {
     this.reponse = reponse;
     return this;
   }
-
-  avecReponses(
-    reponses: { identifiant: string; reponses: ReponsePossible[] }[],
-  ): ConstructeurDeCorpsDeReponse {
-    reponses.forEach((reponse) => {
-      const reponsesMultiples = this.reponsesMultiples.find((rep) => {
-        rep.identifiant === reponse.identifiant;
-      });
-      if (reponsesMultiples !== undefined) {
-        reponse.reponses.forEach((rep) =>
-          reponsesMultiples.reponses.add(rep.identifiant),
-        );
-      } else {
-        this.reponsesMultiples.push({
-          identifiant: reponse.identifiant,
-          reponses: new Set(reponse.reponses.map((rep) => rep.identifiant)),
-        });
-      }
-    });
-    return this;
-  }
-
   construis(): CorpsReponse {
     return {
       reponse: this.reponse,
