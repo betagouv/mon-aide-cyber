@@ -1,9 +1,14 @@
 extends base
 
 block page
-    each recommandation in recommandations.recommandationsPrioritaires
-        p
-        span=recommandation.noteObtenue
-        span="--"
-        span
-            | !{recommandation.recommandation}
+    each recommandation, index in recommandations.recommandationsPrioritaires
+        div
+            h2=index + 1 + '. ' + recommandation.titre
+            div
+                h3 Pourquoi?
+                div
+                    | !{include(recommandation.pourquoi)}
+            div
+                h3 Comment mettre en œuvre cette mesure ?
+                div
+                    | !{include(recommandation.comment)}

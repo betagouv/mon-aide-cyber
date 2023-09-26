@@ -43,13 +43,23 @@ const genereHtml = async (
   pugCorps: string,
   paramsCorps: any,
 ): Promise<ContenuHtml> => {
+  const fonctionInclusionDynamique = (
+    cheminTemplatePug: string,
+    options = {},
+  ) => {
+    return pug.renderFile(
+      `src/infrastructure/pdf/modeles/${cheminTemplatePug}`,
+      options,
+    );
+  };
   const piedPage = pug.compileFile(
     "src/infrastructure/pdf/modeles/recommandations.piedpage.pug",
   )();
   return Promise.all([
-    pug.compileFile(`src/infrastructure/pdf/modeles/${pugCorps}.pug`)(
-      paramsCorps,
-    ),
+    pug.compileFile(`src/infrastructure/pdf/modeles/${pugCorps}.pug`)({
+      ...paramsCorps,
+      include: fonctionInclusionDynamique,
+    }),
     pug.compileFile(`src/infrastructure/pdf/modeles/${pugCorps}.entete.pug`)(),
   ]).then(([corps, entete]) => ({ corps, entete, piedPage }));
 };

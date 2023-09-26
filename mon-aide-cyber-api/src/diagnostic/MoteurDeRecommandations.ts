@@ -57,9 +57,11 @@ abstract class MoteurDeRecommandation {
         const recommandation =
           (noteCalculee && noteCalculee > 0
             ? this.recommandationTrouvee.niveau2
-            : this.recommandationTrouvee.niveau1) || "";
+            : this.recommandationTrouvee.niveau1) || undefined;
         return {
-          recommandation: recommandation,
+          titre: recommandation?.titre || "",
+          pourquoi: recommandation?.pourquoi || "",
+          comment: recommandation?.comment || "",
           noteObtenue: noteCalculee,
           priorisation: this.recommandationTrouvee.priorisation,
         };

@@ -27,7 +27,9 @@ type ReferentielDiagnostic = {
 };
 
 export type Recommandation = {
-  recommandation: string;
+  titre: string;
+  pourquoi: string;
+  comment: string;
   noteObtenue: Note;
   priorisation: number;
 };
