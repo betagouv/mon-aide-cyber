@@ -6,19 +6,6 @@
 @import "questionnaire";
 @import "diagnostics";
 
-body {
-  font-family: Marianne;
-  line-height: 1.5;
-  font-weight: 400;
-  height: 100%;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
 .devise {
   height: 1.38em;
   background-image: $logo-devise;
