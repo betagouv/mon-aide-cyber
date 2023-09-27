@@ -1719,13 +1719,13 @@ const referentiel: Referentiel = {
 
           {
             identifiant:
-              "securite-poste-maj-fonctionnelles-et-securite-deployees-oui",
-            libelle: "Oui",
+              "securite-poste-maj-fonctionnelles-et-securite-deployees-non",
+            libelle: "Non",
             ordre: 1,
           },
           {
             identifiant:
-              "securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-excetpions",
+              "securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-exceptions",
             libelle:
               "Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.",
             ordre: 2,
@@ -1755,13 +1755,13 @@ const referentiel: Referentiel = {
 
           {
             identifiant:
-              "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-oui",
-            libelle: "Oui",
+              "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-non",
+            libelle: "Non",
             ordre: 1,
           },
           {
             identifiant:
-              "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-excetpions",
+              "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-exceptions",
             libelle:
               "Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.",
             ordre: 2,
@@ -1818,7 +1818,7 @@ const referentiel: Referentiel = {
             ordre: 0,
           },
           {
-            identifiant: "securite-poste-si-industriel-antivirus-deploye-nsp",
+            identifiant: "securite-poste-si-industriel-antivirus-deploye-non",
             libelle: "Non",
             ordre: 1,
           },
@@ -1896,7 +1896,7 @@ const referentiel: Referentiel = {
       {
         identifiant: "securite-poste-r-et-d-disques-chiffres",
         libelle:
-          " Si entité avec risque d'espionnage industriel (R&D), les disques durs des matériels nomades nomades sont-ils chiffrés ?",
+          "Si entité avec risque d'espionnage industriel (R&D), les disques durs des matériels nomades nomades sont-ils chiffrés ?",
         reponsesPossibles: [
           {
             identifiant: "securite-poste-r-et-d-disques-chiffres-nsp",
