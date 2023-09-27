@@ -370,7 +370,7 @@ export const ComposantDiagnostic = ({
   return (
     <div>
       <div className="droite">
-        <button onClick={termineDiagnostic}>Terminer Diagnostic</button>
+        <Button onClick={termineDiagnostic}>Terminer Diagnostic</Button>
       </div>
       <div className="diagnostic">
         {navigation}
