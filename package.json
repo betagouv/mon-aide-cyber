@@ -21,6 +21,9 @@
     "build": "npm run build --workspaces",
     "start": "npm run start -w mon-aide-cyber-api"
   },
+  "dependencies": {
+    "typescript": "^5.1.3"
+  },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2"
   }
