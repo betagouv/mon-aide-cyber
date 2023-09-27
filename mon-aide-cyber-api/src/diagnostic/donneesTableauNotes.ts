@@ -124,6 +124,47 @@ const tableauDeNotes: TableauDeNotes = {
     "acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees": 1.5,
     "acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees-postes-dedies-administration": 3,
   },
+  "securite-poste-maj-fonctionnelles-et-securite-deployees": {
+    "securite-poste-maj-fonctionnelles-et-securite-deployees-nsp": null,
+    "securite-poste-maj-fonctionnelles-et-securite-deployees-non": 0,
+    "securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-exceptions": 2,
+    "securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles": 3,
+  },
+  "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees": {
+    "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-nsp":
+      null,
+    "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-non": 0,
+    "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-exceptions": 2,
+    "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles": 3,
+  },
+  "securite-poste-antivirus-deploye": {
+    "securite-poste-antivirus-deploye-nsp": null,
+    "securite-poste-antivirus-deploye-non": 0,
+    "securite-poste-antivirus-deploye-oui-alertes-pas-toujours-traitees": 2,
+    "securite-poste-antivirus-deploye-oui-alertes-toujours-traitees": 3,
+  },
+  "securite-poste-si-industriel-antivirus-deploye": {
+    "securite-poste-si-industriel-antivirus-deploye-nsp": null,
+    "securite-poste-si-industriel-antivirus-deploye-non": 0,
+    "securite-poste-si-industriel-antivirus-deploye-oui-alertes-pas-toujours-traitees": 2,
+    "securite-poste-si-industriel-antivirus-deploye-oui-alertes-toujours-traitees": 3,
+  },
+  "securite-poste-pare-feu-local-active": {
+    "securite-poste-pare-feu-local-active-nsp": null,
+    "securite-poste-pare-feu-local-active-non": 0,
+    "securite-poste-pare-feu-local-active-oui": 3,
+  },
+  "securite-poste-outils-complementaires-securisation": {
+    "securite-poste-outils-complementaires-securisation-nsp": null,
+    "securite-poste-outils-complementaires-securisation-non": 0,
+    "securite-poste-outils-complementaires-securisation-oui-filtrage-acces-internet": 1,
+    "securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr": 3,
+  },
+  "securite-poste-r-et-d-disques-chiffres": {
+    "securite-poste-r-et-d-disques-chiffres-nsp": 0,
+    "securite-poste-r-et-d-disques-chiffres-non": 0,
+    "securite-poste-r-et-d-disques-chiffres-oui": 3,
+  },
 };
 
 export { tableauDeNotes };
