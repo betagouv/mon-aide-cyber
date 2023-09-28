@@ -1,5 +1,5 @@
 import { Entrepots } from '../domaine/Entrepots';
-import { EntrepotsMemoire } from '../../test/infrastructure/entrepots/memoire/Entrepots';
+import { EntrepotsMemoire } from '../infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { EntrepotsPostgres } from '../infrastructure/entrepots/postgres/EntrepotsPostgres';
 
 export const fabriqueEntrepots = (): Entrepots => {

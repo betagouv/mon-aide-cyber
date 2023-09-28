@@ -6,7 +6,7 @@ import {
   diagnosticTermnine,
   reponseAjoutee,
 } from '../../src/journalisation/evenements';
-import { EntrepotEvenementJournalMemoire } from '../infrastructure/entrepots/memoire/EntrepotsMemoire';
+import { EntrepotEvenementJournalMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import crypto from 'crypto';
 
 describe('Évènements', () => {
