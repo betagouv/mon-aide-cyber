@@ -14,6 +14,8 @@ import { ComposantDiagnostics } from "./composants/ComposantDiagnostics.tsx";
 import { APIEntrepotDiagnostic } from "./infrastructure/entrepots/APIEntrepotDiagnostic.ts";
 
 import { startReactDsfr } from "@codegouvfr/react-dsfr/spa";
+import { Header } from "@codegouvfr/react-dsfr/Header";
+import { Footer } from "@codegouvfr/react-dsfr/Footer";
 startReactDsfr({ defaultColorScheme: "system" });
 
 const routeur = createBrowserRouter([
@@ -47,11 +49,46 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         diagnostics: (): EntrepotDiagnostics => new APIEntrepotDiagnostics(),
       }}
     >
-      <div className="fr-container">
-        <div className="fr-grid-row">
-          <RouterProvider router={routeur} />
+      <Header
+        brandTop={
+          <>
+            République
+            <br />
+            Française
+          </>
+        }
+        homeLinkProps={{
+          href: "/",
+          title: "Accueil - MonAideCyber",
+        }}
+        id="fr-header-simple-header-with-service-title-and-tagline"
+        serviceTagline="baseline - précisions sur l'organisation"
+        serviceTitle="MonAideCyber"
+        operatorLogo={{
+          alt: "ANSSI",
+          imgUrl: "/images/logo_anssi.png",
+          orientation: "vertical",
+        }}
+      />
+      <main role="main">
+        <div className="fr-container">
+          <div className="fr-grid-row">
+            <RouterProvider router={routeur} />
+          </div>
         </div>
-      </div>
+      </main>
+      <Footer
+        accessibility="non compliant"
+        contentDescription="
+    Ce message est à remplacer par les informations de votre site.
+
+    Comme exemple de contenu, vous pouvez indiquer les informations
+    suivantes : Le site officiel d’information administrative pour les entreprises.
+    Retrouvez toutes les informations et démarches administratives nécessaires à la création,
+    à la gestion et au développement de votre entreprise.
+    "
+        bottomItems={[]}
+      />
     </FournisseurEntrepots.Provider>
   </React.StrictMode>,
 );
