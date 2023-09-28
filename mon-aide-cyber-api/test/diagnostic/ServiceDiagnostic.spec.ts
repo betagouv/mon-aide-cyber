@@ -16,7 +16,7 @@ import { Entrepots } from '../../src/domaine/Entrepots';
 import { QuestionDiagnostic } from '../../src/diagnostic/Diagnostic';
 import { unTableauDeRecommandations } from '../constructeurs/constructeurTableauDeRecommandations';
 import { AdaptateurTableauDeRecommandationsDeTest } from '../adaptateurs/AdaptateurTableauDeRecommandationsDeTest';
-import { EntrepotsMemoire } from '../infrastructure/entrepots/memoire/Entrepots';
+import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 

@@ -1,16 +1,13 @@
-import { Aggregat, AggregatNonTrouve } from "../../../../src/domaine/Aggregat";
-import { Entrepot } from "../../../../src/domaine/Entrepot";
-import {
-  Diagnostic,
-  EntrepotDiagnostic,
-} from "../../../../src/diagnostic/Diagnostic";
-import { cloneDeep } from "lodash";
-import crypto from "crypto";
+import { Aggregat, AggregatNonTrouve } from '../../../domaine/Aggregat';
+import { Entrepot } from '../../../domaine/Entrepot';
+import { Diagnostic, EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
+import { cloneDeep } from 'lodash';
+import crypto from 'crypto';
 
 import {
   EntrepotEvenementJournal,
   Publication,
-} from "../../../../src/journalisation/Publication";
+} from '../../../journalisation/Publication';
 
 class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   private entites: Map<crypto.UUID, T> = new Map();
@@ -33,7 +30,7 @@ class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   }
 
   typeAggregat(): string {
-    throw new Error("Non implémenté");
+    throw new Error('Non implémenté');
   }
 }
 
@@ -42,7 +39,7 @@ export class EntrepotDiagnosticMemoire
   implements EntrepotDiagnostic
 {
   typeAggregat(): string {
-    return "diagnostic";
+    return 'diagnostic';
   }
 }
 

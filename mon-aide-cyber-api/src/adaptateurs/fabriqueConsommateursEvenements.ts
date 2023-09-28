@@ -6,7 +6,7 @@ import {
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
 import { ConsommateurEvenement, TypeEvenement } from '../domaine/BusEvenement';
-import { EntrepotEvenementJournalMemoire } from '../../test/infrastructure/entrepots/memoire/EntrepotsMemoire';
+import { EntrepotEvenementJournalMemoire } from '../infrastructure/entrepots/memoire/EntrepotMemoire';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES

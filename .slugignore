@@ -1,0 +1,8 @@
+README.md
+LICENSE
+./Dockerfile-*
+./docker-compose.yml
+**/*test*/
+./docker-entrypoint-initdb.d/
+./mon-aide-cyber-ui/.storybook/
+.github/
