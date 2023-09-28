@@ -323,6 +323,7 @@ export const ComposantDiagnostic = ({
   const affiche = useCallback(
     (clef: string) => {
       envoie(thematiqueAffichee(clef));
+      window.scrollTo({ top: 0 });
     },
     [envoie],
   );
@@ -345,26 +346,44 @@ export const ComposantDiagnostic = ({
   }, [entrepots, actions]);
 
   const navigation = (
-    <div className="navigation-verticale">
-      <nav>
-        <ul>
-          {thematiques.map(([clef, _], index) => (
-            <li key={`li-${clef}`}>
-              <Button
-                iconId={icones[index]}
-                priority={
-                  etatReferentiel.thematiqueAffichee === clef
-                    ? "primary"
-                    : "secondary"
+    <nav className="fr-sidemenu fr-sidemenu--sticky-full-height">
+      <div className="fr-sidemenu__inner">
+        <button
+          className="fr-sidemenu__btn"
+          hidden
+          aria-controls="fr-sidemenu-wrapper"
+          aria-expanded="false"
+        >
+          Thématiques
+        </button>
+        <div className="fr-collapse" id="fr-sidemenu-wrapper">
+          <ul className="fr-sidemenu__list">
+            {thematiques.map(([clef, _], index) => (
+              <li
+                key={`li-${clef}`}
+                className={
+                  "fr-sidemenu__item" +
+                  (etatReferentiel.thematiqueAffichee === clef
+                    ? " fr-sidemenu__item--active"
+                    : "")
                 }
-                onClick={() => affiche(clef)}
-                title=""
-              />
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </div>
+              >
+                <Button
+                  iconId={icones[index]}
+                  priority={
+                    etatReferentiel.thematiqueAffichee === clef
+                      ? "primary"
+                      : "secondary"
+                  }
+                  onClick={() => affiche(clef)}
+                  title=""
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </nav>
   );
 
   return (
@@ -373,7 +392,7 @@ export const ComposantDiagnostic = ({
         <Button onClick={termineDiagnostic}>Terminer Diagnostic</Button>
       </div>
       <div className="diagnostic">
-        {navigation}
+        <div>{navigation}</div>
         <div className="contenu">
           {thematiques.map(([clef, thematique]) => {
             const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
