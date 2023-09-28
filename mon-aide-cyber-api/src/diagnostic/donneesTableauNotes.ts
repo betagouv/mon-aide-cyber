@@ -161,7 +161,7 @@ const tableauDeNotes: TableauDeNotes = {
     "securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr": 3,
   },
   "securite-poste-r-et-d-disques-chiffres": {
-    "securite-poste-r-et-d-disques-chiffres-nsp": 0,
+    "securite-poste-r-et-d-disques-chiffres-nsp": null,
     "securite-poste-r-et-d-disques-chiffres-non": 0,
     "securite-poste-r-et-d-disques-chiffres-oui": 3,
   },
