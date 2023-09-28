@@ -1,21 +1,11 @@
-.diagnostic {
-  display: flex;
-  flex-direction: row;
-}
-
-.diagnostic .contenu {
-  padding-left: 48px;
+.contenu {
   margin-left: 10px;
 }
-.diagnostic form {
-  padding-left: 10vw;
-  width: 80vw;
-}
 
-.diagnostic .visible {
+.visible {
   visibility: visible;
 }
 
-.diagnostic .invisible {
+.invisible {
   display: none;
 }

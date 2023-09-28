@@ -387,55 +387,53 @@ export const ComposantDiagnostic = ({
   );
 
   return (
-    <div>
-      <div className="droite">
-        <Button onClick={termineDiagnostic}>Terminer Diagnostic</Button>
-      </div>
-      <div className="diagnostic">
-        <div>{navigation}</div>
-        <div className="contenu">
-          {thematiques.map(([clef, thematique]) => {
-            const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
-              (action) => Object.entries(action).find(([c]) => c === clef),
-            ) as ActionReponseDiagnostic[];
-            const elements = thematique.questions.map((question) => (
-              <fieldset
-                key={question.identifiant}
-                id={question.identifiant}
-                className="fr-fieldset"
-              >
-                {question.type === "liste" ? (
-                  <ComposantQuestionListe
-                    question={question}
-                    actions={actionsPossibles}
-                  />
-                ) : (
-                  <ComposantQuestion
-                    question={question}
-                    actions={actionsPossibles}
-                  />
-                )}
-              </fieldset>
-            ));
-            return (
-              <form
-                key={clef}
-                id={clef}
-                className={
-                  etatReferentiel.thematiqueAffichee === clef
-                    ? `visible`
-                    : `invisible`
-                }
-              >
-                <h2>{clef}</h2>
-                <section className="question">
-                  <div>{elements}</div>
-                </section>
-              </form>
-            );
-          })}
+    <>
+      <div className="fr-col-12 fr-col-md-1">{navigation}</div>
+      <div className="contenu fr-col-12 fr-col-md-10 fr-py-12v">
+        <div className="droite">
+          <Button onClick={termineDiagnostic}>Terminer Diagnostic</Button>
         </div>
+        {thematiques.map(([clef, thematique]) => {
+          const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
+            (action) => Object.entries(action).find(([c]) => c === clef),
+          ) as ActionReponseDiagnostic[];
+          const elements = thematique.questions.map((question) => (
+            <fieldset
+              key={question.identifiant}
+              id={question.identifiant}
+              className="fr-fieldset fr-mb-5w"
+            >
+              {question.type === "liste" ? (
+                <ComposantQuestionListe
+                  question={question}
+                  actions={actionsPossibles}
+                />
+              ) : (
+                <ComposantQuestion
+                  question={question}
+                  actions={actionsPossibles}
+                />
+              )}
+            </fieldset>
+          ));
+          return (
+            <form
+              key={clef}
+              id={clef}
+              className={
+                etatReferentiel.thematiqueAffichee === clef
+                  ? `visible`
+                  : `invisible`
+              }
+            >
+              <h2>{clef}</h2>
+              <section className="question">
+                <div>{elements}</div>
+              </section>
+            </form>
+          );
+        })}
       </div>
-    </div>
+    </>
   );
 };
