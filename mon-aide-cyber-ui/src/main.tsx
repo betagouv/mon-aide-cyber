@@ -47,7 +47,11 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         diagnostics: (): EntrepotDiagnostics => new APIEntrepotDiagnostics(),
       }}
     >
-      <RouterProvider router={routeur} />
+      <div className="fr-container">
+        <div className="fr-grid-row">
+          <RouterProvider router={routeur} />
+        </div>
+      </div>
     </FournisseurEntrepots.Provider>
   </React.StrictMode>,
 );
