@@ -2007,6 +2007,40 @@ const referentiel: Referentiel = {
         type: "choixUnique",
       },
       {
+        identifiant: "securite-infrastructure-si-industriel-pare-feu-deploye",
+        libelle:
+          "Si l'entité dispose d'un SI industriel : des mesures de cloisonnement spécifiques au système d'information industriel ont-elles été mise en œuvre ?",
+        reponsesPossibles: [
+          {
+            identifiant:
+              "securite-infrastructure-si-industriel-pare-feu-deploye-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 0,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-si-industriel-pare-feu-deploye-non",
+            libelle: "Non",
+            ordre: 1,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-si-industriel-pare-feu-deploye-oui-flux-necessaires-bloques",
+            libelle:
+              "Oui, tous les flux et ports non nécessaires sont bloqués.",
+            ordre: 2,
+          },
+          {
+            identifiant:
+              "securite-infrastructure-si-industriel-pare-feu-deploye-oui-segmentation-stricte",
+            libelle:
+              "Oui, une segmentation réseau stricte a été mis en œuvre pour isoler l'environnement industriel de l'environnement bureautique (hors besoin métier justifié).",
+            ordre: 3,
+          },
+        ],
+        type: "choixUnique",
+      },
+      {
         identifiant:
           "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees",
         libelle:

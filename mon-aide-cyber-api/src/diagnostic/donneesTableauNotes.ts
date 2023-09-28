@@ -165,6 +165,69 @@ const tableauDeNotes: TableauDeNotes = {
     "securite-poste-r-et-d-disques-chiffres-non": 0,
     "securite-poste-r-et-d-disques-chiffres-oui": 3,
   },
+  "securite-infrastructure-pare-feu-deploye": {
+    "securite-infrastructure-pare-feu-deploye-nsp": null,
+    "securite-infrastructure-pare-feu-deploye-non": 0,
+    "securite-infrastructure-pare-feu-deploye-oui": {
+      operation: "moyenne",
+      reponses: {
+        "securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-nsp":
+          null,
+        "securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-non": 0,
+        "securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-oui": 3,
+        "securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-nsp":
+          null,
+        "securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-non": 0,
+        "securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-oui-logs-stockes": 1,
+        "securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-oui-logs-stockes-conserves-6-mois": 3,
+      },
+    },
+  },
+  "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees":
+    {
+      "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-nsp":
+        null,
+      "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-non": 0,
+      "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-a-intervalle-regulier": 2,
+      "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-des-que-possible": 3,
+    },
+  "securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees":
+    {
+      "securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-nsp":
+        null,
+      "securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-non": 0,
+      "securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-a-intervalle-regulier": 2,
+      "securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-des-que-possible": 3,
+    },
+  "securite-infrastructure-outils-securisation-systeme-messagerie": {
+    "securite-infrastructure-outils-securisation-systeme-messagerie-nsp": null,
+    "securite-infrastructure-outils-securisation-systeme-messagerie-non": 0,
+    "securite-infrastructure-outils-securisation-systeme-messagerie-oui": {
+      operation: "moyenne",
+      reponses: {
+        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-nsp":
+          null,
+        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-non": 0,
+        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-oui": 3,
+        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-nsp":
+          null,
+        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-non": 0,
+        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-oui": 3,
+      },
+    },
+  },
+  "securite-infrastructure-acces-wifi-securises": {
+    "securite-infrastructure-acces-wifi-securises-nsp": null,
+    "securite-infrastructure-acces-wifi-securises-non": 0,
+    "securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste": 2,
+    "securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste-acces-visiteur-restreint": 3,
+  },
+  "securite-infrastructure-espace-stockage-serveurs": {
+    "securite-infrastructure-espace-stockage-serveurs-nsp": null,
+    "securite-infrastructure-espace-stockage-serveurs-non": 0,
+    "securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef": 1.5,
+    "securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef-videosurveillance": 3,
+  },
 };
 
 export { tableauDeNotes };
