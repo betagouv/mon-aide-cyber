@@ -268,6 +268,72 @@ const tableauDeNotes: TableauDeNotes = {
     "sensibilisation-declaration-incidents-encouragee-non-habitude-utilisateurs-contactent-informaticien": 1,
     "sensibilisation-declaration-incidents-encouragee-oui": 3,
   },
+  "reaction-surveillance-veille-vulnerabilites-potentielles": {
+    "reaction-surveillance-veille-vulnerabilites-potentielles-nsp": null,
+    "reaction-surveillance-veille-vulnerabilites-potentielles-non": 0,
+    "reaction-surveillance-veille-vulnerabilites-potentielles-veille-ponctuelle": 1.5,
+    "reaction-surveillance-veille-vulnerabilites-potentielles-veille-reguliere": 3,
+  },
+  "reaction-sauvegardes-donnees-realisees": {
+    "reaction-sauvegardes-donnees-realisees-nsp": null,
+    "reaction-sauvegardes-donnees-realisees-non": 0,
+    "reaction-sauvegardes-donnees-realisees-oui-ponctuellement": {
+      operation: "moyenne",
+      reponses: {
+        "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-na":
+          null,
+        "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-nsp": 0.5,
+        "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-non": 0,
+        "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-oui": 2.5,
+        "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-oui-jeu-chiffre": 3,
+        "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-na":
+          null,
+        "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-nsp": 0.5,
+        "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-non": 0,
+        "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-oui": 3,
+      },
+    },
+    "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere": {
+      operation: "moyenne",
+      reponses: {
+        "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-na":
+          null,
+        "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-nsp": 0.5,
+        "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-non": 0,
+        "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-oui": 2.5,
+        "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-oui-jeu-chiffre": 3,
+        "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-na":
+          null,
+        "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-nsp": 0.5,
+        "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-non": 0,
+        "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-oui": 3,
+      },
+    },
+  },
+  "reaction-dispositif-gestion-crise-adapte-defini": {
+    "reaction-dispositif-gestion-crise-adapte-defini-nsp": null,
+    "reaction-dispositif-gestion-crise-adapte-defini-non": 0,
+    "reaction-dispositif-gestion-crise-adapte-defini-oui-fiche-reflexe": 1.5,
+    "reaction-dispositif-gestion-crise-adapte-defini-oui-organisation-gestion-crise-definie": 3,
+  },
+  "reaction-assurance-cyber-souscrite": {
+    "reaction-assurance-cyber-souscrite-nsp": null,
+    "reaction-assurance-cyber-souscrite-non-pas-pense": 0,
+    "reaction-assurance-cyber-souscrite-non-pas-necessaire": null,
+    "reaction-assurance-cyber-souscrite-oui": {
+      reponses: {
+        "reaction-assurance-cyber-souscrite-oui-tiroir-aspects-financement-remediation": 1,
+        "reaction-assurance-cyber-souscrite-oui-tiroir-aspects-financement-pallier-impact-financier": 1,
+        "reaction-assurance-cyber-souscrite-oui-tiroir-aspects-accompagnement-gestion-crise": 1,
+        "reaction-assurance-cyber-souscrite-oui-tiroir-conditions-applicabilite-na":
+          null,
+        "reaction-assurance-cyber-souscrite-oui-tiroir-conditions-applicabilite-nsp": 0.5,
+        "reaction-assurance-cyber-souscrite-oui-tiroir-conditions-applicabilite-non": 0,
+        "reaction-assurance-cyber-souscrite-oui-tiroir-conditions-applicabilite-oui": 3,
+      },
+      operation: "moyenne",
+    },
+  },
 };
 
 export { tableauDeNotes };
