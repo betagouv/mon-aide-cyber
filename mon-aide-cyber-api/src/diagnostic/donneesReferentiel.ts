@@ -2339,8 +2339,8 @@ const referentiel: Referentiel = {
           },
           {
             identifiant:
-              "sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui",
-            libelle: "Oui",
+              "sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-communiquee",
+            libelle: "Oui, une charte est communiquée aux collaborateurs.",
             ordre: 2,
           },
           {

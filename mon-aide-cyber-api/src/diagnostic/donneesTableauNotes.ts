@@ -228,6 +228,31 @@ const tableauDeNotes: TableauDeNotes = {
     "securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef": 1.5,
     "securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef-videosurveillance": 3,
   },
+  "sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques": {
+    "sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-nsp":
+      null,
+    "sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-non": 0,
+    "sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-ponctuellement": 1.5,
+    "sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-regulierement": 3,
+  },
+  "sensibilisation-risque-espionnage-industriel-r-et-d": {
+    "sensibilisation-risque-espionnage-industriel-r-et-d-nsp": null,
+    "sensibilisation-risque-espionnage-industriel-r-et-d-non": 0,
+    "sensibilisation-risque-espionnage-industriel-r-et-d-oui": 3,
+  },
+  "sensibilisation-collaborateurs-soumis-obligations-usages-securises": {
+    "sensibilisation-collaborateurs-soumis-obligations-usages-securises-nsp":
+      null,
+    "sensibilisation-collaborateurs-soumis-obligations-usages-securises-non": 0,
+    "sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-communiquee": 2,
+    "sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-signee": 3,
+  },
+  "sensibilisation-declaration-incidents-encouragee": {
+    "sensibilisation-declaration-incidents-encouragee-nsp": null,
+    "sensibilisation-declaration-incidents-encouragee-non": 0,
+    "sensibilisation-declaration-incidents-encouragee-non-habitude-utilisateurs-contactent-informaticien": 1,
+    "sensibilisation-declaration-incidents-encouragee-oui": 3,
+  },
 };
 
 export { tableauDeNotes };
