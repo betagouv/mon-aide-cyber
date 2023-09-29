@@ -21,9 +21,7 @@ export type ConfigurationServeur = {
   entrepots: Entrepots;
 };
 
-const creeServeur = (config: ConfigurationServeur) => {
-  let serveur: http.Server;
-
+const creeApp = (config: ConfigurationServeur) => {
   const app = express();
 
   const limiteurTrafficUI = rateLimit({
@@ -41,13 +39,6 @@ const creeServeur = (config: ConfigurationServeur) => {
   app.use(
     express.static(path.join(__dirname, "./../../mon-aide-cyber-ui/dist")),
   );
-  const ecoute = (port: number, succes: () => void) => {
-    serveur = app.listen(port, succes);
-  };
-  const arreteEcoute = () => {
-    serveur.close();
-  };
-
   app.use("/api", routesAPI(config));
 
   app.get("*", (_: Request, reponse: Response) =>
@@ -57,8 +48,22 @@ const creeServeur = (config: ConfigurationServeur) => {
   );
 
   app.use(gestionnaireErreurAggregatNonTrouve);
+  return app;
+};
 
-  return { ecoute, arreteEcoute };
+const creeServeur = (config: ConfigurationServeur) => {
+  let serveur: http.Server;
+
+  const app = creeApp(config);
+
+  const ecoute = (port: number, succes: () => void) => {
+    serveur = app.listen(port, succes);
+  };
+  const arreteEcoute = () => {
+    serveur.close();
+  };
+
+  return { app, ecoute, arreteEcoute };
 };
 
 export default { creeServeur };

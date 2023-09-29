@@ -1,8 +1,12 @@
+import { Express } from "express";
+import { inject, Response } from "light-my-request";
+
 export const executeRequete = (
+  app: Express,
   verbe: "GET" | "POST" | "PATCH",
   chemin: string,
   port: number,
-  corps: object | null = null,
+  corps: object | undefined = undefined,
 ): Promise<Response> => {
   const requeteInit: RequestInit = {
     method: verbe,
@@ -11,5 +15,9 @@ export const executeRequete = (
   if (corps !== null) {
     requeteInit["body"] = JSON.stringify(corps);
   }
-  return fetch(`http://localhost:${port}${chemin}`, requeteInit);
+  return inject(app, {
+    method: verbe,
+    url: { pathname: chemin, port },
+    ...(corps && { body: corps }),
+  }).then((rep) => rep);
 };

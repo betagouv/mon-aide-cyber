@@ -7,9 +7,11 @@ import { AdaptateurTableauDeNotesDeTest } from "../adaptateurs/AdaptateurTableau
 import { AdaptateurTableauDeRecommandationsDeTest } from "../adaptateurs/AdaptateurTableauDeRecommandationsDeTest";
 import { AdaptateurPDF } from "../../src/adaptateurs/AdaptateurPDF";
 import { Diagnostic } from "../../src/diagnostic/Diagnostic";
+import { Express } from "express";
 
 const testeurIntegration = () => {
   let serveurDeTest: {
+    app: Express;
     arreteEcoute: () => void;
     ecoute: (port: number, succes: () => void) => void;
   };
@@ -35,7 +37,7 @@ const testeurIntegration = () => {
     const portAleatoire = faker.number.int({ min: 1000, max: 3000 });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     serveurDeTest.ecoute(portAleatoire, () => {});
-    return portAleatoire;
+    return { portAleatoire, app: serveurDeTest.app };
   };
 
   const arrete = () => {

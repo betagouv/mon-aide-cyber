@@ -2,13 +2,14 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import testeurIntegration from "./testeurIntegration";
 import { executeRequete } from "./executeurRequete";
 import { unDiagnostic } from "../constructeurs/constructeurDiagnostic";
+import { Express } from "express";
 
 describe("le serveur MAC sur les routes /api/diagnostics/", () => {
   const testeurMAC = testeurIntegration();
-  let numeroPort: number;
+  let donneesServeur: { portAleatoire: number; app: Express };
 
   beforeEach(() => {
-    numeroPort = testeurMAC.initialise();
+    donneesServeur = testeurMAC.initialise();
   });
 
   afterEach(() => testeurMAC.arrete());
@@ -23,12 +24,13 @@ describe("le serveur MAC sur les routes /api/diagnostics/", () => {
       testeurMAC.entrepots.diagnostic().persiste(troisiemeDiagnostic);
 
       const reponse = await executeRequete(
+        donneesServeur.app,
         "GET",
         "/api/diagnostics",
-        numeroPort,
+        donneesServeur.portAleatoire,
       );
 
-      expect(reponse.status).toBe(200);
+      expect(reponse.statusCode).toBe(200);
       expect(await reponse.json()).toStrictEqual([
         {
           identifiant: premierDiagnostic.identifiant,
