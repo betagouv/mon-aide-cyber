@@ -9,13 +9,14 @@ import {
 import { unDiagnostic } from "../constructeurs/constructeurDiagnostic";
 import { executeRequete } from "./executeurRequete";
 import { RepresentationDiagnostic } from "../../src/api/representateurs/types";
+import { Express } from "express";
 
 describe("le serveur MAC sur les routes /api/diagnostic/", () => {
   const testeurMAC = testeurIntegration();
-  let numeroPort: number;
+  let donneesServeur: { portAleatoire: number; app: Express };
 
   beforeEach(() => {
-    numeroPort = testeurMAC.initialise();
+    donneesServeur = testeurMAC.initialise();
   });
 
   afterEach(() => testeurMAC.arrete());
@@ -32,12 +33,13 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
       testeurMAC.entrepots.diagnostic().persiste(diagnostic);
 
       const reponse = await executeRequete(
+        donneesServeur.app,
         "GET",
         `/api/diagnostic/${diagnostic.identifiant}`,
-        numeroPort,
+        donneesServeur.portAleatoire,
       );
 
-      expect(reponse.status).toBe(200);
+      expect(reponse.statusCode).toBe(200);
       const premiereQuestion = diagnostic.referentiel.contexte.questions[0];
       const premiereReponsePossible = premiereQuestion.reponsesPossibles[0];
       const diagnosticRecu: RepresentationDiagnostic = await reponse.json();
@@ -78,12 +80,13 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
 
     it("renvoie une erreur HTTP 404 diagnostic non trouvé si le diagnostic n'existe pas", async () => {
       const reponse = await executeRequete(
+        donneesServeur.app,
         "GET",
         `/api/diagnostic/id-inexistant`,
-        numeroPort,
+        donneesServeur.portAleatoire,
       );
 
-      expect(reponse.status).toBe(404);
+      expect(reponse.statusCode).toBe(404);
       const newVar = await reponse.json();
       expect(newVar).toStrictEqual({
         message: "Le diagnostic demandé n'existe pas.",
@@ -97,13 +100,14 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
       testeurMAC.adaptateurReferentiel.ajoute(referentiel);
 
       const reponse = await executeRequete(
+        donneesServeur.app,
         "POST",
         "/api/diagnostic",
-        numeroPort,
+        donneesServeur.portAleatoire,
       );
 
-      expect(reponse.status).toBe(201);
-      expect(reponse.headers.get("Link")).toMatch(
+      expect(reponse.statusCode).toBe(201);
+      expect(reponse.headers["link"]).toMatch(
         /api\/diagnostic\/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/,
       );
     });
@@ -114,13 +118,19 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         .construis();
       testeurMAC.adaptateurReferentiel.ajoute(referentiel);
       const reponseCreation = await executeRequete(
+        donneesServeur.app,
         "POST",
         "/api/diagnostic",
-        numeroPort,
+        donneesServeur.portAleatoire,
       );
-      const lien = reponseCreation.headers.get("Link");
+      const lien = reponseCreation.headers["link"] as string;
 
-      const reponse = await executeRequete("GET", `${lien}`, numeroPort);
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        "GET",
+        `${lien}`,
+        donneesServeur.portAleatoire,
+      );
 
       const diagnosticRetourne = await reponse.json();
       expect(diagnosticRetourne.identifiant).toBe(
@@ -150,9 +160,10 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
       testeurMAC.entrepots.diagnostic().persiste(diagnostic);
 
       const reponse = await executeRequete(
+        donneesServeur.app,
         "PATCH",
         `/api/diagnostic/${diagnostic.identifiant}`,
-        numeroPort,
+        donneesServeur.portAleatoire,
         {
           chemin: "contexte",
           identifiant: "une-question-",
@@ -160,7 +171,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         },
       );
 
-      expect(reponse.status).toBe(204);
+      expect(reponse.statusCode).toBe(204);
       expect(
         diagnostic.referentiel.contexte.questions[0].reponseDonnee,
       ).toStrictEqual({
@@ -171,9 +182,10 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
 
     it("retourne une erreur HTTP 404 si le diagnostic visé n’existe pas", async () => {
       const reponse = await executeRequete(
+        donneesServeur.app,
         "PATCH",
         `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        numeroPort,
+        donneesServeur.portAleatoire,
         {
           chemin: "contexte",
           identifiant: "une-question-",
@@ -181,7 +193,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         },
       );
 
-      expect(reponse.status).toBe(404);
+      expect(reponse.statusCode).toBe(404);
       expect(await reponse.json()).toMatchObject({
         message: "Le diagnostic demandé n'existe pas.",
       });
@@ -199,24 +211,26 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
       testeurMAC.entrepots.diagnostic().persiste(diagnostic);
 
       const reponse = await executeRequete(
+        donneesServeur.app,
         "GET",
         `/api/diagnostic/${diagnostic.identifiant}/termine`,
-        numeroPort,
+        donneesServeur.portAleatoire,
       );
 
-      expect(reponse.status).toBe(200);
-      expect(reponse.headers.get("Content-type")).toBe("application/pdf");
+      expect(reponse.statusCode).toBe(200);
+      expect(reponse.headers["content-type"]).toBe("application/pdf");
       expect(adaptateurPDFAppele).toBe(true);
     });
 
     it("retourne une erreur HTTP 404 si le diagnostic visé n’existe pas", async () => {
       const reponse = await executeRequete(
+        donneesServeur.app,
         "GET",
         `/api/diagnostic/${crypto.randomUUID()}/termine`,
-        numeroPort,
+        donneesServeur.portAleatoire,
       );
 
-      expect(reponse.status).toBe(404);
+      expect(reponse.statusCode).toBe(404);
       expect(await reponse.json()).toMatchObject({
         message: "Le diagnostic demandé n'existe pas.",
       });
