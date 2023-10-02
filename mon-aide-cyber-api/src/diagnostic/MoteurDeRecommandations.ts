@@ -96,8 +96,23 @@ class MoteurDeRecommandationReponsesMultiples extends MoteurDeRecommandation {
   enTantQue(note: RegleDeCalcul): RegleDeCalcul {
     return note;
   }
-  filtre(__: string, note: Note | RegleDeCalcul): boolean {
-    return estRegleDeCalcul(note);
+
+  filtre(identifiantReponse: string, note: Note | RegleDeCalcul): boolean {
+    const identifiantsReponsesTiroir = this.question.reponsesPossibles
+      .filter((reponse) => reponse.identifiant === identifiantReponse)
+      .map((reponse) => reponse.questions)
+      .flatMap(
+        (question) =>
+          question?.flatMap((question) =>
+            question.reponsesPossibles.map((reponse) => reponse.identifiant),
+          ),
+      );
+    return (
+      this.question.reponseDonnee.reponsesMultiples
+        .flatMap((reponses) => Array.from(reponses.reponses))
+        .some((reponse) => identifiantsReponsesTiroir.includes(reponse)) &&
+      estRegleDeCalcul(note)
+    );
   }
 
   calculeLaNote(regleDeCalcul: RegleDeCalcul): Note {
@@ -140,9 +155,9 @@ class CalculateurDeNote {
   }
 }
 
-function estUnNombre(note: Note): boolean {
+const estUnNombre = (note: Note): boolean => {
   return typeof note === "number";
-}
+};
 const estRegleDeCalcul = (
   note: Note | RegleDeCalcul,
 ): note is RegleDeCalcul => {
