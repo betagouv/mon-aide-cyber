@@ -1,9 +1,9 @@
 import serveur from "./src/serveur";
 import { AdaptateurReferentielMAC } from "./src/infrastructure/adaptateurs/AdaptateurReferentielMAC";
 import { adaptateurTranscripteur } from "./src/infrastructure/adaptateurs/adaptateurTranscripteur";
-import { EntrepotsMemoire } from "./src/infrastructure/entrepots/memoire/Entrepots";
 import { AdaptateurTableauDeRecommandationsMAC } from "./src/infrastructure/adaptateurs/AdaptateurTableauDeRecommandationsMAC";
 import { AdaptateurPDFMAC } from "./src/infrastructure/adaptateurs/AdaptateurPDFMAC";
+import { fabriqueEntrepots } from "./src/adaptateurs/fabriqueEntrepots";
 
 const serveurMAC = serveur.creeServeur({
   adaptateurPDF: new AdaptateurPDFMAC(),
@@ -11,7 +11,7 @@ const serveurMAC = serveur.creeServeur({
   adaptateurTranscripteurDonnees: adaptateurTranscripteur(),
   adaptateurTableauDeRecommandations:
     new AdaptateurTableauDeRecommandationsMAC(),
-  entrepots: new EntrepotsMemoire(),
+  entrepots: fabriqueEntrepots(),
 });
 
 const port = process.env.PORT || 8081;

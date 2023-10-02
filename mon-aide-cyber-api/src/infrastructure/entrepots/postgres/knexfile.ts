@@ -1,6 +1,6 @@
 export default {
   client: "pg",
-  connection: process.env.URL_SERVEUR_BASE_DONNEES,
+  connection: process.env.URL_SERVEUR_BASE_DONNEES!,
   pool: { min: 2, max: 10 },
   migrations: { tableName: "knex_migrations" },
 };
