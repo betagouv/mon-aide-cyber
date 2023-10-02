@@ -11,13 +11,27 @@ services:
     volumes:
       - ./mon-aide-cyber-ui:/usr/src/app/mon-aide-cyber-ui
 
+  db:
+    container_name: mon-aide-cyber-bd
+    image: postgres
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5433:5432
+    volumes:
+      - /var/lib/postgresql/data
+
   api:
     container_name: mon-aide-cyber-api
     build:
       context: .
       dockerfile: Dockerfile-api
+    environment:
+      - URL_SERVEUR_BASE_DONNEES=postgres://postgres@mon-aide-cyber-bd/mac
     ports:
       - 8081:8081
     volumes:
       - ./mon-aide-cyber-api:/usr/src/app/mon-aide-cyber-api
       - ./mon-aide-cyber-ui/dist/:/usr/src/app/mon-aide-cyber-ui/dist
+    depends_on:
+      - db

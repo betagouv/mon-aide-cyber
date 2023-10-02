@@ -5,34 +5,31 @@ on:
   push:
     branches: [main]
 
+env:
+  URL_SERVEUR_BASE_DONNEES: postgres://postgres@localhost:5433
+
 jobs:
-  pre-commit:
+  tests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5433:5432
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Installe node
+        uses: actions/checkout@v2
+      - name: Installe Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run build --workspaces
-      - name: Exécute pre-commit
-        uses: pre-commit/action@v3.0.0
-
-  tests:
-    runs-on: ubuntu-latest
-    needs:
-      - pre-commit
-    strategy:
-      matrix:
-        node-version: [18.x]
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm ci
       - run: npm test
