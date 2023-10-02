@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "description": "API de MonAideCyber",
   "scripts": {
-    "build": "",
+    "build": "knex migrate:latest --knexfile src/infrastructure/entrepots/postgres/knexfile.ts --migrations-directory migrations",
     "start": "ts-node --transpile-only --require dotenv/config index.ts",
-    "dev": "nodemon --require dotenv/config index.ts",
+    "dev": "knex migrate:latest --debug --knexfile src/infrastructure/entrepots/postgres/knexfile.ts --migrations-directory migrations && nodemon --require dotenv/config index.ts",
     "test": "tsc --noEmit && vitest run --config vitest.config.ts --reporter verbose",
     "test:coverage": "vitest --config vitest.config.ts run --coverage",
     "test:coverage:ui": "vitest --config vitest.config.ts --ui --coverage --reporter verbose",
@@ -16,7 +16,9 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.0",
+    "knex": "^2.5.1",
     "pdf-lib": "^1.17.1",
+    "pg": "^8.11.3",
     "pug": "^3.0.2",
     "puppeteer": "^21.3.1",
     "ts-node": "^10.9.1"
