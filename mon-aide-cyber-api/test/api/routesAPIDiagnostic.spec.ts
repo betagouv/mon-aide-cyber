@@ -13,7 +13,7 @@ import { Express } from "express";
 
 describe("le serveur MAC sur les routes /api/diagnostic/", () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portAleatoire: number; app: Express };
+  let donneesServeur: { portEcoute: number; app: Express };
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
@@ -36,7 +36,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         donneesServeur.app,
         "GET",
         `/api/diagnostic/${diagnostic.identifiant}`,
-        donneesServeur.portAleatoire,
+        donneesServeur.portEcoute,
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -83,7 +83,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         donneesServeur.app,
         "GET",
         `/api/diagnostic/id-inexistant`,
-        donneesServeur.portAleatoire,
+        donneesServeur.portEcoute,
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -103,7 +103,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         donneesServeur.app,
         "POST",
         "/api/diagnostic",
-        donneesServeur.portAleatoire,
+        donneesServeur.portEcoute,
       );
 
       expect(reponse.statusCode).toBe(201);
@@ -121,7 +121,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         donneesServeur.app,
         "POST",
         "/api/diagnostic",
-        donneesServeur.portAleatoire,
+        donneesServeur.portEcoute,
       );
       const lien = reponseCreation.headers["link"] as string;
 
@@ -129,7 +129,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         donneesServeur.app,
         "GET",
         `${lien}`,
-        donneesServeur.portAleatoire,
+        donneesServeur.portEcoute,
       );
 
       const diagnosticRetourne = await reponse.json();
@@ -163,7 +163,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         donneesServeur.app,
         "PATCH",
         `/api/diagnostic/${diagnostic.identifiant}`,
-        donneesServeur.portAleatoire,
+        donneesServeur.portEcoute,
         {
           chemin: "contexte",
           identifiant: "une-question-",
@@ -185,7 +185,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         donneesServeur.app,
         "PATCH",
         `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portAleatoire,
+        donneesServeur.portEcoute,
         {
           chemin: "contexte",
           identifiant: "une-question-",
@@ -214,7 +214,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         donneesServeur.app,
         "GET",
         `/api/diagnostic/${diagnostic.identifiant}/termine`,
-        donneesServeur.portAleatoire,
+        donneesServeur.portEcoute,
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -227,7 +227,7 @@ describe("le serveur MAC sur les routes /api/diagnostic/", () => {
         donneesServeur.app,
         "GET",
         `/api/diagnostic/${crypto.randomUUID()}/termine`,
-        donneesServeur.portAleatoire,
+        donneesServeur.portEcoute,
       );
 
       expect(reponse.statusCode).toBe(404);

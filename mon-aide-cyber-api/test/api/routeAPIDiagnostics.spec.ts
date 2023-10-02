@@ -6,7 +6,7 @@ import { Express } from "express";
 
 describe("le serveur MAC sur les routes /api/diagnostics/", () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portAleatoire: number; app: Express };
+  let donneesServeur: { portEcoute: number; app: Express };
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
@@ -27,7 +27,7 @@ describe("le serveur MAC sur les routes /api/diagnostics/", () => {
         donneesServeur.app,
         "GET",
         "/api/diagnostics",
-        donneesServeur.portAleatoire,
+        donneesServeur.portEcoute,
       );
 
       expect(reponse.statusCode).toBe(200);
