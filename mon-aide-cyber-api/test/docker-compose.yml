@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  db:
+    container_name: mon-aide-cyber-bd-test
+    image: postgres
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5434:5432
+    volumes:
+      - /var/lib/postgresql/data
