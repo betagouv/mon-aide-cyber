@@ -59,4 +59,23 @@ describe("le serveur MAC sur les routes /api/diagnostics/", () => {
       });
     });
   });
+
+  describe("Quand une requête GET est reçue sur /api/diagnostics/telecharge", () => {
+    it("télécharge le diagnostic complet au format json", async () => {
+      const premierDiagnostic = unDiagnostic().construis();
+      testeurMAC.entrepots.diagnostic().persiste(premierDiagnostic);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        "GET",
+        "/api/diagnostics/telecharge",
+        donneesServeur.portEcoute,
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(reponse.headers["content-disposition"]).toBe(
+        'attachment; filename="diagnostics.json"',
+      );
+    });
+  });
 });

@@ -1,5 +1,6 @@
 import { ConfigurationServeur } from "../serveur";
 import express from "express";
+import * as fs from "fs";
 // import crypto from "crypto";
 // import { Diagnostic } from "../diagnostic/Diagnostic";
 
@@ -35,6 +36,19 @@ export const routesAPIDiagnostics = (configuration: ConfigurationServeur) => {
         //   ),
         // ),
       );
+  });
+
+  routes.get("/telecharge", (_requete, reponse) => {
+    configuration.entrepots
+      .diagnostic()
+      .tous()
+      .then((diagnostics) => {
+        fs.writeFileSync(
+          "/tmp/diagnostics.json",
+          Buffer.from(JSON.stringify(diagnostics)),
+        );
+        reponse.download("/tmp/diagnostics.json", "diagnostics.json");
+      });
   });
   return routes;
 };
