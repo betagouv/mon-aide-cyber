@@ -51,14 +51,6 @@ class ConstructeurQuestion implements Constructeur<Question> {
     };
     return this;
   }
-
-  avecNReponses(nombreReponses: number): ConstructeurQuestion {
-    for (let i = 0; i < nombreReponses; i++) {
-      this.reponsesPossibles.push(uneReponsePossible().construis());
-    }
-    return this;
-  }
-
   avecLibelle(libelle: string): ConstructeurQuestion {
     this.identifiant = aseptise(libelle);
     this.libelle = libelle;
