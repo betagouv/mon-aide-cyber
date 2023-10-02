@@ -15,46 +15,48 @@ describe("le serveur MAC sur les routes /api/diagnostics/", () => {
   afterEach(() => testeurMAC.arrete());
 
   describe("quand une requête GET est reçue sur /api/diagnostics", () => {
-    it("retourne la liste de diagnostics ", async () => {
-      const premierDiagnostic = unDiagnostic().construis();
-      const deuxiemeDiagnostic = unDiagnostic().construis();
-      const troisiemeDiagnostic = unDiagnostic().construis();
-      testeurMAC.entrepots.diagnostic().persiste(premierDiagnostic);
-      testeurMAC.entrepots.diagnostic().persiste(deuxiemeDiagnostic);
-      testeurMAC.entrepots.diagnostic().persiste(troisiemeDiagnostic);
+    describe.skip("Test non exécuté car la liste des diagnostics n'est plus exposée à l'utilisateur ", () => {
+      it("retourne la liste de diagnostics ", async () => {
+        const premierDiagnostic = unDiagnostic().construis();
+        const deuxiemeDiagnostic = unDiagnostic().construis();
+        const troisiemeDiagnostic = unDiagnostic().construis();
+        testeurMAC.entrepots.diagnostic().persiste(premierDiagnostic);
+        testeurMAC.entrepots.diagnostic().persiste(deuxiemeDiagnostic);
+        testeurMAC.entrepots.diagnostic().persiste(troisiemeDiagnostic);
 
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        "GET",
-        "/api/diagnostics",
-        donneesServeur.portEcoute,
-      );
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          "GET",
+          "/api/diagnostics",
+          donneesServeur.portEcoute,
+        );
 
-      expect(reponse.statusCode).toBe(200);
-      expect(await reponse.json()).toStrictEqual([
-        {
-          identifiant: premierDiagnostic.identifiant,
-          actions: [
-            { details: `/api/diagnostic/${premierDiagnostic.identifiant}` },
-          ],
-        },
-        {
-          identifiant: deuxiemeDiagnostic.identifiant,
-          actions: [
-            {
-              details: `/api/diagnostic/${deuxiemeDiagnostic.identifiant}`,
-            },
-          ],
-        },
-        {
-          identifiant: troisiemeDiagnostic.identifiant,
-          actions: [
-            {
-              details: `/api/diagnostic/${troisiemeDiagnostic.identifiant}`,
-            },
-          ],
-        },
-      ]);
+        expect(reponse.statusCode).toBe(200);
+        expect(await reponse.json()).toStrictEqual([
+          {
+            identifiant: premierDiagnostic.identifiant,
+            actions: [
+              { details: `/api/diagnostic/${premierDiagnostic.identifiant}` },
+            ],
+          },
+          {
+            identifiant: deuxiemeDiagnostic.identifiant,
+            actions: [
+              {
+                details: `/api/diagnostic/${deuxiemeDiagnostic.identifiant}`,
+              },
+            ],
+          },
+          {
+            identifiant: troisiemeDiagnostic.identifiant,
+            actions: [
+              {
+                details: `/api/diagnostic/${troisiemeDiagnostic.identifiant}`,
+              },
+            ],
+          },
+        ]);
+      });
     });
   });
 });
