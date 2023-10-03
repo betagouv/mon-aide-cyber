@@ -12,7 +12,7 @@ const tableauRecommandations: TableauDeRecommandations = {
     },
     niveau2: {
       titre:
-        "Établir la liste des activités et des informations à protéger en priorité.",
+        "Établir la liste exhaustive et à jour des activités et des informations à protéger en priorité.",
       pourquoi:
         "recommandations/gouvernance/gouvernance-infos-et-processus-a-proteger-niveau2-pourquoi.pug",
       comment:
@@ -502,16 +502,14 @@ const tableauRecommandations: TableauDeRecommandations = {
     },
   "securite-infrastructure-outils-securisation-systeme-messagerie": {
     niveau1: {
-      titre:
-        "Mettre en place des mesures de sécurisation du système de messagerie.",
+      titre: "Mettre en oeuvre une solution d'anti-spam et d'anti-hameçonnage.",
       pourquoi:
         "recommandations/infras/securite-infrastructure-outils-securisation-systeme-messagerie-niveau1-pourquoi.pug",
       comment:
         "recommandations/infras/securite-infrastructure-outils-securisation-systeme-messagerie-niveau1-comment.pug",
     },
     niveau2: {
-      titre:
-        "En complément des pratiques déjà en œuvre, mettre en place des règles de sécurisation du système de messagerie additionnelles.",
+      titre: 'Désactiver le portail de type "webmail"',
       pourquoi:
         "recommandations/infras/securite-infrastructure-outils-securisation-systeme-messagerie-niveau2-pourquoi.pug",
       comment:

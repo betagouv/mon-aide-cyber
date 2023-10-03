@@ -211,65 +211,17 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         },
         {
           identifiant:
-            "securite-infrastructure-outils-securisation-systeme-messagerie-oui",
-          libelle: "Oui",
-          questions: [
-            {
-              identifiant:
-                "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam",
-              libelle:
-                "Si \"Oui\" : avez-vous mis en œuvre d’une solution d'anti-spam et d'anti-hameçonnage permettant de détecter et de bloquer les mails malveillants ?",
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-nsp",
-                  libelle: "Je ne sais pas / Non concerné.",
-                  ordre: 0,
-                },
-                {
-                  identifiant:
-                    "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-non",
-                  libelle: "Non",
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-oui",
-                  libelle: "Oui",
-                  ordre: 1,
-                },
-              ],
-              type: "choixUnique",
-            },
-            {
-              identifiant:
-                "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive",
-              libelle:
-                'Si "Oui" : avez-vous désactivé le portail type webmail exposé sur internet ?',
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-nsp",
-                  libelle: "Je ne sais pas / Non concerné.",
-                  ordre: 0,
-                },
-                {
-                  identifiant:
-                    "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-non",
-                  libelle: "Non",
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-oui",
-                  libelle: "Oui",
-                  ordre: 1,
-                },
-              ],
-              type: "choixUnique",
-            },
-          ],
+            "securite-infrastructure-outils-securisation-systeme-messagerie-antispam",
+          libelle:
+            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre.",
           ordre: 2,
+        },
+        {
+          identifiant:
+            "securite-infrastructure-outils-securisation-systeme-messagerie-webmail",
+          libelle:
+            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre et aucun portail webmail n'est activé.",
+          ordre: 3,
         },
       ],
       type: "choixUnique",

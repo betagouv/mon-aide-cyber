@@ -211,19 +211,8 @@ const tableauDeNotes: TableauDeNotes = {
   "securite-infrastructure-outils-securisation-systeme-messagerie": {
     "securite-infrastructure-outils-securisation-systeme-messagerie-nsp": null,
     "securite-infrastructure-outils-securisation-systeme-messagerie-non": 0,
-    "securite-infrastructure-outils-securisation-systeme-messagerie-oui": {
-      operation: "moyenne",
-      reponses: {
-        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-nsp":
-          null,
-        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-non": 0,
-        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-solution-anti-spam-oui": 3,
-        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-nsp":
-          null,
-        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-non": 0,
-        "securite-infrastructure-outils-securisation-systeme-messagerie-oui-tiroir-webmail-desactive-oui": 3,
-      },
-    },
+    "securite-infrastructure-outils-securisation-systeme-messagerie-antispam": 2,
+    "securite-infrastructure-outils-securisation-systeme-messagerie-webmail": 3,
   },
   "securite-infrastructure-acces-wifi-securises": {
     "securite-infrastructure-acces-wifi-securises-nsp": null,
