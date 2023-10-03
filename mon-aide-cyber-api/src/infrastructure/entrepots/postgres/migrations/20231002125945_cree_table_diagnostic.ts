@@ -4,7 +4,7 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable("diagnostics", (fabriqueDeTable) => {
     fabriqueDeTable.uuid("id");
     fabriqueDeTable.primary(["id"]);
-    fabriqueDeTable.json("donnees");
+    fabriqueDeTable.jsonb("donnees");
   });
 }
 
