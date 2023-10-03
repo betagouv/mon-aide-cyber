@@ -66,8 +66,7 @@ abstract class MoteurDeRecommandation {
           noteObtenue: noteCalculee,
           priorisation: this.recommandationTrouvee.priorisation,
         };
-      })
-      .filter((reco) => reco.noteObtenue !== null);
+      });
   }
 
   abstract filtre(
@@ -161,5 +160,10 @@ const estUnNombre = (note: Note): boolean => {
 const estRegleDeCalcul = (
   note: Note | RegleDeCalcul,
 ): note is RegleDeCalcul => {
-  return note !== null && typeof note !== "number" && "operation" in note;
+  return (
+    note !== undefined &&
+    note !== null &&
+    typeof note !== "number" &&
+    "operation" in note
+  );
 };

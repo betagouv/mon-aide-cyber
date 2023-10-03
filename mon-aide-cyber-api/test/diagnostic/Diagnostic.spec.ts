@@ -17,13 +17,62 @@ import { genereLesRecommandations } from "../../src/diagnostic/Diagnostic";
 describe("Diagnostic", () => {
   const tableauDeNotes = unTableauDeNotes()
     .avecDesNotes([
-      { q1: { "reponse-11": 0, "reponse-12": 1, "reponse-13": null } },
-      { q2: { "reponse-21": 0, "reponse-22": 1, "reponse-23": null } },
-      { q3: { "reponse-31": 0, "reponse-32": 1, "reponse-33": null } },
-      { q4: { "reponse-41": 0, "reponse-42": 1, "reponse-43": null } },
-      { q5: { "reponse-51": 0, "reponse-52": 1, "reponse-53": null } },
-      { q6: { "reponse-61": 0, "reponse-62": 1, "reponse-63": null } },
-      { q7: { "reponse-71": 0, "reponse-72": 1, "reponse-73": null } },
+      {
+        q1: {
+          "reponse-11": 0,
+          "reponse-12": 1,
+          "reponse-13": null,
+          "reponse-14": undefined,
+        },
+      },
+      {
+        q2: {
+          "reponse-21": 0,
+          "reponse-22": 1,
+          "reponse-23": null,
+          "reponse-24": undefined,
+        },
+      },
+      {
+        q3: {
+          "reponse-31": 0,
+          "reponse-32": 1,
+          "reponse-33": null,
+          "reponse-34": undefined,
+        },
+      },
+      {
+        q4: {
+          "reponse-41": 0,
+          "reponse-42": 1,
+          "reponse-43": null,
+          "reponse-44": undefined,
+        },
+      },
+      {
+        q5: {
+          "reponse-51": 0,
+          "reponse-52": 1,
+          "reponse-53": null,
+          "reponse-54": undefined,
+        },
+      },
+      {
+        q6: {
+          "reponse-61": 0,
+          "reponse-62": 1,
+          "reponse-63": null,
+          "reponse-64": undefined,
+        },
+      },
+      {
+        q7: {
+          "reponse-71": 0,
+          "reponse-72": 1,
+          "reponse-73": null,
+          "reponse-74": undefined,
+        },
+      },
     ])
     .construis();
   const tableauDeRecommandations = unTableauDeRecommandations()
@@ -193,7 +242,7 @@ describe("Diagnostic", () => {
           { q1: "reponse-13" },
           { q2: "reponse-22" },
           { q3: "reponse-31" },
-          { q4: "reponse-43" },
+          { q4: "reponse-44" },
           { q5: "reponse-52" },
           { q6: "reponse-61" },
           { q7: "reponse-72" },

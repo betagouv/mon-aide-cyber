@@ -112,7 +112,10 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
     })
     .flatMap((reco) => reco)
     .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
-    .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || 0);
+    .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || 0)
+    .filter(
+      (reco) => reco.noteObtenue !== null && reco.noteObtenue !== undefined,
+    );
   diagnostic.recommandations.recommandationsPrioritaires =
     lesRecommandations.slice(0, 6);
   diagnostic.recommandations.autresRecommandations =
