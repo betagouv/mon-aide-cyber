@@ -17,13 +17,62 @@ import { genereLesRecommandations } from "../../src/diagnostic/Diagnostic";
 describe("Diagnostic", () => {
   const tableauDeNotes = unTableauDeNotes()
     .avecDesNotes([
-      { q1: { "reponse-11": 0, "reponse-12": 1, "reponse-13": null } },
-      { q2: { "reponse-21": 0, "reponse-22": 1, "reponse-23": null } },
-      { q3: { "reponse-31": 0, "reponse-32": 1, "reponse-33": null } },
-      { q4: { "reponse-41": 0, "reponse-42": 1, "reponse-43": null } },
-      { q5: { "reponse-51": 0, "reponse-52": 1, "reponse-53": null } },
-      { q6: { "reponse-61": 0, "reponse-62": 1, "reponse-63": null } },
-      { q7: { "reponse-71": 0, "reponse-72": 1, "reponse-73": null } },
+      {
+        q1: {
+          "reponse-11": 0,
+          "reponse-12": 1,
+          "reponse-13": null,
+          "reponse-14": undefined,
+        },
+      },
+      {
+        q2: {
+          "reponse-21": 0,
+          "reponse-22": 1,
+          "reponse-23": null,
+          "reponse-24": undefined,
+        },
+      },
+      {
+        q3: {
+          "reponse-31": 0,
+          "reponse-32": 1,
+          "reponse-33": null,
+          "reponse-34": undefined,
+        },
+      },
+      {
+        q4: {
+          "reponse-41": 0,
+          "reponse-42": 1,
+          "reponse-43": null,
+          "reponse-44": undefined,
+        },
+      },
+      {
+        q5: {
+          "reponse-51": 0,
+          "reponse-52": 1,
+          "reponse-53": null,
+          "reponse-54": undefined,
+        },
+      },
+      {
+        q6: {
+          "reponse-61": 0,
+          "reponse-62": 1,
+          "reponse-63": null,
+          "reponse-64": undefined,
+        },
+      },
+      {
+        q7: {
+          "reponse-71": 0,
+          "reponse-72": 1,
+          "reponse-73": null,
+          "reponse-74": undefined,
+        },
+      },
     ])
     .construis();
   const tableauDeRecommandations = unTableauDeRecommandations()
@@ -193,7 +242,7 @@ describe("Diagnostic", () => {
           { q1: "reponse-13" },
           { q2: "reponse-22" },
           { q3: "reponse-31" },
-          { q4: "reponse-43" },
+          { q4: "reponse-44" },
           { q5: "reponse-52" },
           { q6: "reponse-61" },
           { q7: "reponse-72" },
@@ -255,27 +304,55 @@ describe("Diagnostic", () => {
           { q5: { niveau1: "reco 5", niveau2: "reco 52", priorisation: 7 } },
           { q6: { niveau1: "reco 6", niveau2: "reco 62", priorisation: 5 } },
           { q7: { niveau1: "reco 7", niveau2: "reco 72", priorisation: 6 } },
+          { q8: { niveau1: "reco 8", niveau2: "reco 82", priorisation: 8 } },
+          { q9: { niveau1: "reco 9", niveau2: "reco 92", priorisation: 9 } },
         ])
         .construis();
 
       it("en prenant en compte le niveau de priorisation de la recommandation", () => {
+        const questionsSupplementaires = uneListeDeQuestions()
+          .dontLesLabelsSont(["q8", "q9"])
+          .avecLesReponsesPossiblesSuivantes([
+            ["reponse 81", "reponse 82"],
+            ["reponse 91", "reponse 92"],
+          ])
+          .construis();
+        const autreTableauDeNotes = unTableauDeNotes()
+          .avecDesNotes([
+            {
+              q8: {
+                "reponse-81": 0,
+                "reponse-82": 1,
+              },
+              q9: {
+                "reponse-91": 0,
+                "reponse-92": 1,
+              },
+            },
+          ])
+          .construis();
         const diagnostic = unDiagnostic()
           .avecUnReferentiel(
             unReferentiel()
-              .ajouteUneThematique("thematique", questions)
+              .ajouteUneThematique("thematique", [
+                ...questions,
+                ...questionsSupplementaires,
+              ])
               .construis(),
           )
           .avecLesReponsesDonnees("contexte", [{ qc: "rqc" }])
           .avecLesReponsesDonnees("thematique", [
-            { q2: "reponse-21" },
+            { q2: "reponse-23" },
             { q1: "reponse-11" },
             { q4: "reponse-41" },
-            { q3: "reponse-31" },
+            { q3: "reponse-34" },
             { q6: "reponse-61" },
-            { q5: "reponse-51" },
+            { q5: "reponse-52" },
             { q7: "reponse-71" },
+            { q8: "reponse-81" },
+            { q9: "reponse-92" },
           ])
-          .avecUnTableauDeNotes(tableauDeNotes)
+          .avecUnTableauDeNotes({ ...tableauDeNotes, ...autreTableauDeNotes })
           .avecUnTableauDeRecommandations(tableauDeRecommandations)
           .construis();
 
@@ -295,18 +372,8 @@ describe("Diagnostic", () => {
             ...partieCommuneAttendue,
           },
           {
-            priorisation: 2,
-            titre: "reco 2",
-            ...partieCommuneAttendue,
-          },
-          {
             priorisation: 3,
             titre: "reco 1",
-            ...partieCommuneAttendue,
-          },
-          {
-            priorisation: 4,
-            titre: "reco 3",
             ...partieCommuneAttendue,
           },
           {
@@ -319,13 +386,25 @@ describe("Diagnostic", () => {
             titre: "reco 7",
             ...partieCommuneAttendue,
           },
+          {
+            ...partieCommuneAttendue,
+            priorisation: 8,
+            titre: "reco 8",
+          },
+          {
+            ...partieCommuneAttendue,
+            noteObtenue: 1,
+            priorisation: 7,
+            titre: "reco 52",
+          },
         ]);
         expect(diagnostic.recommandations?.autresRecommandations).toStrictEqual(
           [
             {
-              priorisation: 7,
-              titre: "reco 5",
               ...partieCommuneAttendue,
+              noteObtenue: 1,
+              priorisation: 9,
+              titre: "reco 92",
             },
           ],
         );
