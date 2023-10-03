@@ -14,6 +14,7 @@ const tableauDeNotes: TableauDeNotes = {
     "gouvernance-schema-si-a-jour-oui-detaille": 3,
   },
   "gouvernance-schema-si-industriel-a-jour": {
+    "gouvernance-schema-si-industriel-a-jour-na": undefined,
     "gouvernance-schema-si-industriel-a-jour-nsp": null,
     "gouvernance-schema-si-industriel-a-jour-non": 0,
     "gouvernance-schema-si-industriel-a-jour-oui-partiel": 2,
@@ -25,14 +26,20 @@ const tableauDeNotes: TableauDeNotes = {
     "gouvernance-connaissance-rgpd-oui": {
       operation: "moyenne",
       reponses: {
+        "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-na":
+          undefined,
         "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-nsp":
           null,
         "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-non": 0,
         "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-oui": 3,
+        "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-na":
+          undefined,
         "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-nsp":
           null,
         "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-non": 0,
         "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-oui": 3,
+        "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-na":
+          undefined,
         "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-nsp":
           null,
         "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-non": 0,
@@ -41,12 +48,14 @@ const tableauDeNotes: TableauDeNotes = {
     },
   },
   "gouvernance-exigence-cyber-securite-presta": {
+    "gouvernance-exigence-cyber-securite-presta-na": undefined,
     "gouvernance-exigence-cyber-securite-presta-nsp": null,
     "gouvernance-exigence-cyber-securite-presta-non": 0,
     "gouvernance-exigence-cyber-securite-presta-oui-formalisee": 2,
     "gouvernance-exigence-cyber-securite-presta-oui-fixee": 3,
   },
   "gouvernance-exigence-cyber-securite-presta-si-industriel": {
+    "gouvernance-exigence-cyber-securite-presta-si-industriel-na": undefined,
     "gouvernance-exigence-cyber-securite-presta-si-industriel-nsp": null,
     "gouvernance-exigence-cyber-securite-presta-si-industriel-non": 0,
     "gouvernance-exigence-cyber-securite-presta-si-industriel-oui-formalisee": 2,
