@@ -1135,26 +1135,31 @@ const referentiel: Referentiel = {
         type: "choixUnique",
         reponsesPossibles: [
           {
-            identifiant: "gouvernance-schema-si-industriel-a-jour-nsp",
-            libelle: "Je ne sais pas / Non applicable",
+            identifiant: "gouvernance-schema-si-industriel-a-jour-na",
+            libelle: "Non applicable",
             ordre: 0,
+          },
+          {
+            identifiant: "gouvernance-schema-si-industriel-a-jour-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 1,
           },
           {
             identifiant: "gouvernance-schema-si-industriel-a-jour-non",
             libelle: "Non.",
-            ordre: 1,
+            ordre: 2,
           },
           {
             identifiant: "gouvernance-schema-si-industriel-a-jour-oui-partiel",
             libelle:
               'Il existe un schéma "macro" non détaillé ou partiellement détaillé.',
-            ordre: 2,
+            ordre: 3,
           },
           {
             identifiant: "gouvernance-schema-si-industriel-a-jour-oui-detaille",
             libelle:
               "'Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industrielles, installations matériels connectés et des interconnexions vers l'extérieur.",
-            ordre: 3,
+            ordre: 4,
           },
         ],
       },
@@ -1188,22 +1193,28 @@ const referentiel: Referentiel = {
                 reponsesPossibles: [
                   {
                     identifiant:
-                      "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-nsp",
-                    libelle: "Je ne sais pas / Non applicable",
+                      "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-na",
+                    libelle: "Non applicable",
                     ordre: 0,
+                  },
+                  {
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-nsp",
+                    libelle: "Je ne sais pas",
+                    ordre: 1,
                   },
 
                   {
                     identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-non",
                     libelle: "Non",
-                    ordre: 1,
+                    ordre: 2,
                   },
                   {
                     identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-registre-traitement-oui",
                     libelle: "Oui",
-                    ordre: 2,
+                    ordre: 3,
                   },
                 ],
               },
@@ -1216,22 +1227,28 @@ const referentiel: Referentiel = {
                 reponsesPossibles: [
                   {
                     identifiant:
-                      "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-nsp",
-                    libelle: "Je ne sais pas / Non applicable",
+                      "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-na",
+                    libelle: "Non applicable",
                     ordre: 0,
+                  },
+                  {
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-nsp",
+                    libelle: "Je ne sais pas",
+                    ordre: 1,
                   },
 
                   {
                     identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-non",
                     libelle: "Non",
-                    ordre: 1,
+                    ordre: 2,
                   },
                   {
                     identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-nature-besoin-finalite-determines-oui",
                     libelle: "Oui",
-                    ordre: 2,
+                    ordre: 3,
                   },
                 ],
               },
@@ -1244,22 +1261,27 @@ const referentiel: Referentiel = {
                 reponsesPossibles: [
                   {
                     identifiant:
-                      "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-nsp",
-                    libelle: "Je ne sais pas / Non applicable",
+                      "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-na",
+                    libelle: "Non applicable",
                     ordre: 0,
                   },
-
+                  {
+                    identifiant:
+                      "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-nsp",
+                    libelle: "Je ne sais pas",
+                    ordre: 1,
+                  },
                   {
                     identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-non",
                     libelle: "Non",
-                    ordre: 1,
+                    ordre: 2,
                   },
                   {
                     identifiant:
                       "gouvernance-connaissance-rgpd-oui-tiroir-moyens-informer-personnes-mis-en-place-oui",
                     libelle: "Oui",
-                    ordre: 2,
+                    ordre: 3,
                   },
                 ],
               },
@@ -1274,28 +1296,33 @@ const referentiel: Referentiel = {
         type: "choixUnique",
         reponsesPossibles: [
           {
-            identifiant: "gouvernance-exigence-cyber-securite-presta-nsp",
-            libelle: "Je ne sais pas / Non applicable",
+            identifiant: "gouvernance-exigence-cyber-securite-presta-na",
+            libelle: "Non applicable",
             ordre: 0,
+          },
+          {
+            identifiant: "gouvernance-exigence-cyber-securite-presta-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 1,
           },
           {
             identifiant: "gouvernance-exigence-cyber-securite-presta-non",
             libelle:
               "Non, aucune exigence ne figure dans nos contrats de prestation",
-            ordre: 1,
+            ordre: 2,
           },
           {
             identifiant:
               "gouvernance-exigence-cyber-securite-presta-oui-formalisee",
             libelle:
               "Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.",
-            ordre: 2,
+            ordre: 3,
           },
           {
             identifiant: "gouvernance-exigence-cyber-securite-presta-oui-fixee",
             libelle:
               "Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.",
-            ordre: 3,
+            ordre: 4,
           },
         ],
       },
@@ -1307,30 +1334,36 @@ const referentiel: Referentiel = {
         reponsesPossibles: [
           {
             identifiant:
-              "gouvernance-exigence-cyber-securite-presta-si-industriel-nsp",
-            libelle: "Je ne sais pas / Non applicable",
+              "gouvernance-exigence-cyber-securite-presta-si-industriel-na",
+            libelle: "Non applicable",
             ordre: 0,
+          },
+          {
+            identifiant:
+              "gouvernance-exigence-cyber-securite-presta-si-industriel-nsp",
+            libelle: "Je ne sais pas",
+            ordre: 1,
           },
           {
             identifiant:
               "gouvernance-exigence-cyber-securite-presta-si-industriel-non",
             libelle:
               "Non, aucune exigence ne figure dans nos contrats de prestation",
-            ordre: 1,
+            ordre: 2,
           },
           {
             identifiant:
               "gouvernance-exigence-cyber-securite-presta-si-industriel-oui-formalisee",
             libelle:
               "Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.",
-            ordre: 2,
+            ordre: 3,
           },
           {
             identifiant:
               "gouvernance-exigence-cyber-securite-presta-si-industriel-oui-fixee",
             libelle:
               "Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.",
-            ordre: 3,
+            ordre: 4,
           },
         ],
       },
