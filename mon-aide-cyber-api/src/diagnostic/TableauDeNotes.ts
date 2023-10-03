@@ -6,7 +6,7 @@ type Bareme = {
     [identifiantReponse: string]: Note;
   };
 };
-export type Note = 0 | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | null;
+export type Note = 0 | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | null | undefined;
 export type RegleDeCalcul = Operation & Bareme;
 export type TableauDeNotes = {
   [identifiantQuestion: string]: {
