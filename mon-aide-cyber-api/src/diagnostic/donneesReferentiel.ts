@@ -950,13 +950,13 @@ const referentiel: Referentiel = {
                     identifiant:
                       "contexte-usage-cloud-oui-question-tiroir-usages-virtualisation-complete-si",
                     libelle: "Virtualisation complète du SI",
-                    ordre: 5,
+                    ordre: 6,
                   },
                   {
                     identifiant:
-                      "contexte-usage-cloud-oui-question-tiroir-usages-autre",
-                    libelle: "Autre : Préciser",
-                    ordre: 6,
+                      "contexte-usage-cloud-oui-question-tiroir-usages-applications",
+                    libelle: "Application(s) métier(s)",
+                    ordre: 5,
                   },
                 ],
                 type: "choixMultiple",
@@ -1010,9 +1010,22 @@ const referentiel: Referentiel = {
                   },
                   {
                     identifiant:
-                      "contexte-cyber-attaque-subie-oui-tiroir-type-autre",
-                    libelle: "Autre : Préciser",
+                      "contexte-cyber-attaque-subie-oui-tiroir-type-accès",
+                    libelle: "Compromission d'un ou plusieurs accès distants",
                     ordre: 3,
+                  },
+                  {
+                    identifiant:
+                      "contexte-cyber-attaque-subie-oui-tiroir-type-web",
+                    libelle: "Compromission d'un ou plusieurs services web",
+                    ordre: 4,
+                  },
+                  {
+                    identifiant:
+                      "contexte-cyber-attaque-subie-oui-tiroir-type-réseaux",
+                    libelle:
+                      "Compromission d'un ou plusieurs équipements réseaux",
+                    ordre: 5,
                   },
                 ],
                 type: "choixMultiple",
