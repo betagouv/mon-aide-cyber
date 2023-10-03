@@ -121,6 +121,7 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
     lesRecommandations.slice(0, 6);
   diagnostic.recommandations.autresRecommandations =
     lesRecommandations.slice(6);
+  console.log("RECOMMANDATIONS", diagnostic.recommandations);
 };
 
 export {
