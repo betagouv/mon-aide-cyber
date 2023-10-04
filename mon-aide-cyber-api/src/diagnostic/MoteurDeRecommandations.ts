@@ -46,14 +46,16 @@ abstract class MoteurDeRecommandation {
       return [];
     }
     return Object.entries(
-      this.diagnostic.tableauDesNotes[this.question.identifiant],
+      this.diagnostic.tableauDesNotes[this.question.identifiant].notation,
     )
       .filter(([identifiantReponse, note]) =>
         this.filtre(identifiantReponse, note),
       )
-      .map(([, note]) => this.enTantQue(note))
+      .map(([__, note]) => this.enTantQue(note))
       .map((note) => {
-        const noteCalculee: Note = this.calculeLaNote(note);
+        return this.calculeLaNote(note);
+      })
+      .map((noteCalculee) => {
         const recommandation =
           (noteCalculee && noteCalculee > 0
             ? this.recommandationTrouvee.niveau2 ||

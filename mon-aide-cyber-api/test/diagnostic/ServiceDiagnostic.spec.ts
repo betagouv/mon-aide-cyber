@@ -16,6 +16,7 @@ import { unTableauDeNotes } from "../constructeurs/constructeurTableauDeNotes";
 import { AdaptateurTableauDeNotesDeTest } from "../adaptateurs/AdaptateurTableauDeNotesDeTest";
 import { unTableauDeRecommandations } from "../constructeurs/constructeurTableauDeRecommandations";
 import { AdaptateurTableauDeRecommandationsDeTest } from "../adaptateurs/AdaptateurTableauDeRecommandationsDeTest";
+import { TableauDeNotes } from "../../src/diagnostic/TableauDeNotes";
 
 describe("Le service de diagnostic", () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -219,11 +220,13 @@ describe("Le service de diagnostic", () => {
       const diagnosticRetourne = await entrepots
         .diagnostic()
         .lis(diagnostic.identifiant);
-      expect(diagnosticRetourne.tableauDesNotes).toStrictEqual({
+      expect(diagnosticRetourne.tableauDesNotes).toStrictEqual<TableauDeNotes>({
         q: {
-          r1: 0.5,
-          r2: 1,
-          r0: null,
+          notation: {
+            r1: 0.5,
+            r2: 1,
+            r0: null,
+          },
         },
       });
     });
