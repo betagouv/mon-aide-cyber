@@ -62,17 +62,20 @@ const tableauDeNotes: TableauDeNotes = {
     "gouvernance-exigence-cyber-securite-presta-si-industriel-oui-fixee": 3,
   },
   "acces-outil-gestion-des-comptes": {
+    "acces-outil-gestion-des-comptes-na": undefined,
     "acces-outil-gestion-des-comptes-nsp": null,
     "acces-outil-gestion-des-comptes-oui": 3,
     "acces-outil-gestion-des-comptes-non": 0,
   },
   "acces-liste-compte-utilisateurs": {
+    "acces-liste-compte-utilisateurs-na": undefined,
     "acces-liste-compte-utilisateurs-nsp": null,
     "acces-liste-compte-utilisateurs-non": 0,
     "acces-liste-compte-utilisateurs-revue-reguliere": 2,
     "acces-liste-compte-utilisateurs-revue-en-continu": 3,
   },
   "acces-droits-acces-utilisateurs-limites": {
+    "acces-droits-acces-utilisateurs-limites-na": undefined,
     "acces-droits-acces-utilisateurs-limites-nsp": null,
     "acces-droits-acces-utilisateurs-limites-non": 0,
     "acces-droits-acces-utilisateurs-limites-restrictions-ponctuelles": 1,
@@ -103,6 +106,8 @@ const tableauDeNotes: TableauDeNotes = {
     "acces-mesures-securite-robustesse-mdp-contraintes-par-defaut": 3,
   },
   "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles": {
+    "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-na":
+      undefined,
     "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-nsp":
       null,
     "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-non": 0,
@@ -110,6 +115,7 @@ const tableauDeNotes: TableauDeNotes = {
     "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-mesures-authentification-renforcees-et-donnees-chiffrees": 3,
   },
   "acces-teletravail-acces-distants-mesures-particulieres": {
+    "acces-teletravail-acces-distants-mesures-particulieres-na": undefined,
     "acces-teletravail-acces-distants-mesures-particulieres-nsp": null,
     "acces-teletravail-acces-distants-mesures-particulieres-non": 0,
     "acces-teletravail-acces-distants-mesures-particulieres-mfa": 2,
@@ -123,11 +129,13 @@ const tableauDeNotes: TableauDeNotes = {
     "acces-si-industriel-teletravail-acces-distants-mesures-particulieres-vpn": 3,
   },
   "acces-entite-dispose-plusieurs-sites-geographiques": {
+    "acces-entite-dispose-plusieurs-sites-geographiques-na": undefined,
     "acces-entite-dispose-plusieurs-sites-geographiques-nsp": null,
     "acces-entite-dispose-plusieurs-sites-geographiques-non": 0,
     "acces-entite-dispose-plusieurs-sites-geographiques-oui": 3,
   },
   "acces-administrateurs-si-mesures-specifiques": {
+    "acces-administrateurs-si-mesures-specifiques-na": undefined,
     "acces-administrateurs-si-mesures-specifiques-nsp": null,
     "acces-administrateurs-si-mesures-specifiques-non": 0,
     "acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees": 1.5,
