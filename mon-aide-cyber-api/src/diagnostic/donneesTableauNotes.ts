@@ -217,18 +217,22 @@ const tableauDeNotes: TableauDeNotes = {
       "securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-des-que-possible": 3,
     },
   "securite-infrastructure-outils-securisation-systeme-messagerie": {
+    "securite-infrastructure-outils-securisation-systeme-messagerie-na":
+      undefined,
     "securite-infrastructure-outils-securisation-systeme-messagerie-nsp": null,
     "securite-infrastructure-outils-securisation-systeme-messagerie-non": 0,
     "securite-infrastructure-outils-securisation-systeme-messagerie-antispam": 2,
     "securite-infrastructure-outils-securisation-systeme-messagerie-webmail": 3,
   },
   "securite-infrastructure-acces-wifi-securises": {
+    "securite-infrastructure-acces-wifi-securises-na": undefined,
     "securite-infrastructure-acces-wifi-securises-nsp": null,
     "securite-infrastructure-acces-wifi-securises-non": 0,
     "securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste": 2,
     "securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste-acces-visiteur-restreint": 3,
   },
   "securite-infrastructure-espace-stockage-serveurs": {
+    "securite-infrastructure-espace-stockage-serveurs-na": undefined,
     "securite-infrastructure-espace-stockage-serveurs-nsp": null,
     "securite-infrastructure-espace-stockage-serveurs-non": 0,
     "securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef": 1.5,
