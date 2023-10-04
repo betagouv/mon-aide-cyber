@@ -199,29 +199,35 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
-            "securite-infrastructure-outils-securisation-systeme-messagerie-nsp",
-          libelle: "Je ne sais pas / Non concerné.",
+            "securite-infrastructure-outils-securisation-systeme-messagerie-na",
+          libelle: "Non applicable.",
           ordre: 0,
+        },
+        {
+          identifiant:
+            "securite-infrastructure-outils-securisation-systeme-messagerie-nsp",
+          libelle: "Je ne sais pas.",
+          ordre: 1,
         },
         {
           identifiant:
             "securite-infrastructure-outils-securisation-systeme-messagerie-non",
           libelle: "Non",
-          ordre: 1,
+          ordre: 2,
         },
         {
           identifiant:
             "securite-infrastructure-outils-securisation-systeme-messagerie-antispam",
           libelle:
             "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre.",
-          ordre: 2,
+          ordre: 3,
         },
         {
           identifiant:
             "securite-infrastructure-outils-securisation-systeme-messagerie-webmail",
           libelle:
             "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre et aucun portail webmail n'est activé.",
-          ordre: 3,
+          ordre: 4,
         },
       ],
       type: "choixUnique",
@@ -231,27 +237,32 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
       libelle: "Les points d’accès wifi sont-ils sécurisés?",
       reponsesPossibles: [
         {
-          identifiant: "securite-infrastructure-acces-wifi-securises-nsp",
-          libelle: "Je ne sais pas / Non Applicable",
+          identifiant: "securite-infrastructure-acces-wifi-securises-na",
+          libelle: "Non Applicable",
           ordre: 0,
+        },
+        {
+          identifiant: "securite-infrastructure-acces-wifi-securises-nsp",
+          libelle: "Je ne sais pas",
+          ordre: 1,
         },
         {
           identifiant: "securite-infrastructure-acces-wifi-securises-non",
           libelle: "Non",
-          ordre: 0,
+          ordre: 2,
         },
         {
           identifiant:
             "securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste",
           libelle: "Oui, le chiffrement de la connexion wifi est robuste.",
-          ordre: 2,
+          ordre: 3,
         },
         {
           identifiant:
             "securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste-acces-visiteur-restreint",
           libelle:
             "Oui, le chiffrement de la connexion wifi est robuste et les visiteurs n'ont pas accès au réseau interne.",
-          ordre: 3,
+          ordre: 4,
         },
       ],
       type: "choixUnique",
@@ -262,27 +273,32 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         "L'accès à la salle ou à l'espace dédié au stockage des serveurs d'administration, baies informatiques et des équipements réseau est-il protégé par une porte sécurisée ?",
       reponsesPossibles: [
         {
-          identifiant: "securite-infrastructure-espace-stockage-serveurs-nsp",
-          libelle: "Je ne sais pas / Non Applicable",
+          identifiant: "securite-infrastructure-espace-stockage-serveurs-na",
+          libelle: "Non Applicable",
           ordre: 0,
+        },
+        {
+          identifiant: "securite-infrastructure-espace-stockage-serveurs-nsp",
+          libelle: "Je ne sais pas",
+          ordre: 1,
         },
         {
           identifiant: "securite-infrastructure-espace-stockage-serveurs-non",
           libelle: "Non",
-          ordre: 1,
+          ordre: 2,
         },
         {
           identifiant:
             "securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef",
           libelle: "Oui, l'accès est sécurisé par une porte fermée à clef.",
-          ordre: 2,
+          ordre: 3,
         },
         {
           identifiant:
             "securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef-videosurveillance",
           libelle:
             "Oui, l'accès est sécurisé par une porte fermée à clef et par un dispositif de vidéosurveillance.",
-          ordre: 3,
+          ordre: 4,
         },
       ],
       type: "choixUnique",
