@@ -250,6 +250,7 @@ const tableauDeNotes: TableauDeNotes = {
     "sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-regulierement": 3,
   },
   "sensibilisation-risque-espionnage-industriel-r-et-d": {
+    "sensibilisation-risque-espionnage-industriel-r-et-d-na": undefined,
     "sensibilisation-risque-espionnage-industriel-r-et-d-nsp": null,
     "sensibilisation-risque-espionnage-industriel-r-et-d-non": 0,
     "sensibilisation-risque-espionnage-industriel-r-et-d-oui": 3,

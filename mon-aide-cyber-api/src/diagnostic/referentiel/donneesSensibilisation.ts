@@ -43,22 +43,27 @@ export const donneesSensibilisation: QuestionsThematique = {
         "Si entité avec risque d'espionnage industriel (R&D), menez-vous des actions de sensibilisation ciblant spécifiquement les collaborateurs effectuant des missions à l'étranger ?",
       reponsesPossibles: [
         {
+          identifiant: "sensibilisation-risque-espionnage-industriel-r-et-d-na",
+          libelle: "Non applicable.",
+          ordre: 0,
+        },
+        {
           identifiant:
             "sensibilisation-risque-espionnage-industriel-r-et-d-nsp",
-          libelle: "Je ne sais pas / Non applicable.",
-          ordre: 0,
+          libelle: "Je ne sais pas.",
+          ordre: 1,
         },
         {
           identifiant:
             "sensibilisation-risque-espionnage-industriel-r-et-d-non",
           libelle: "Non",
-          ordre: 1,
+          ordre: 2,
         },
         {
           identifiant:
             "sensibilisation-risque-espionnage-industriel-r-et-d-oui",
           libelle: "Oui",
-          ordre: 2,
+          ordre: 3,
         },
       ],
       type: "choixUnique",
