@@ -9,30 +9,35 @@ export const donneesSecuritePoste: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
-            "securite-poste-maj-fonctionnelles-et-securite-deployees-nsp",
-          libelle: "Je ne sais pas / Non applicable",
+            "securite-poste-maj-fonctionnelles-et-securite-deployees-na",
+          libelle: "Non applicable",
           ordre: 0,
         },
-
+        {
+          identifiant:
+            "securite-poste-maj-fonctionnelles-et-securite-deployees-nsp",
+          libelle: "Je ne sais pas",
+          ordre: 1,
+        },
         {
           identifiant:
             "securite-poste-maj-fonctionnelles-et-securite-deployees-non",
           libelle: "Non",
-          ordre: 1,
+          ordre: 2,
         },
         {
           identifiant:
             "securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-exceptions",
           libelle:
             "Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.",
-          ordre: 2,
+          ordre: 3,
         },
         {
           identifiant:
             "securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles",
           libelle:
             "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires.",
-          ordre: 3,
+          ordre: 4,
         },
       ],
       type: "choixUnique",
@@ -45,30 +50,35 @@ export const donneesSecuritePoste: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
-            "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-nsp",
-          libelle: "Je ne sais pas / Non applicable",
+            "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-na",
+          libelle: "Non applicable",
           ordre: 0,
         },
-
+        {
+          identifiant:
+            "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-nsp",
+          libelle: "Je ne sais pas",
+          ordre: 1,
+        },
         {
           identifiant:
             "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-non",
           libelle: "Non",
-          ordre: 1,
+          ordre: 2,
         },
         {
           identifiant:
             "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-exceptions",
           libelle:
             "Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.",
-          ordre: 2,
+          ordre: 3,
         },
         {
           identifiant:
             "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles",
           libelle:
             "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires.",
-          ordre: 3,
+          ordre: 4,
         },
       ],
       type: "choixUnique",
@@ -194,19 +204,24 @@ export const donneesSecuritePoste: QuestionsThematique = {
         "Si entité avec risque d'espionnage industriel (R&D), les disques durs des matériels nomades nomades sont-ils chiffrés ?",
       reponsesPossibles: [
         {
-          identifiant: "securite-poste-r-et-d-disques-chiffres-nsp",
-          libelle: "Je ne sais pas / Non applicable",
+          identifiant: "securite-poste-r-et-d-disques-chiffres-na",
+          libelle: "Non applicable",
           ordre: 0,
+        },
+        {
+          identifiant: "securite-poste-r-et-d-disques-chiffres-nsp",
+          libelle: "Je ne sais pas",
+          ordre: 1,
         },
         {
           identifiant: "securite-poste-r-et-d-disques-chiffres-non",
           libelle: "Non",
-          ordre: 1,
+          ordre: 2,
         },
         {
           identifiant: "securite-poste-r-et-d-disques-chiffres-oui",
           libelle: "Oui",
-          ordre: 2,
+          ordre: 3,
         },
       ],
       type: "choixUnique",
