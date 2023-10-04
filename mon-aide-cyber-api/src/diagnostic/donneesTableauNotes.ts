@@ -142,12 +142,15 @@ const tableauDeNotes: TableauDeNotes = {
     "acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees-postes-dedies-administration": 3,
   },
   "securite-poste-maj-fonctionnelles-et-securite-deployees": {
+    "securite-poste-maj-fonctionnelles-et-securite-deployees-na": undefined,
     "securite-poste-maj-fonctionnelles-et-securite-deployees-nsp": null,
     "securite-poste-maj-fonctionnelles-et-securite-deployees-non": 0,
     "securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-exceptions": 2,
     "securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles": 3,
   },
   "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees": {
+    "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-na":
+      undefined,
     "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-nsp":
       null,
     "securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-non": 0,
@@ -178,6 +181,7 @@ const tableauDeNotes: TableauDeNotes = {
     "securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr": 3,
   },
   "securite-poste-r-et-d-disques-chiffres": {
+    "securite-poste-r-et-d-disques-chiffres-na": undefined,
     "securite-poste-r-et-d-disques-chiffres-nsp": null,
     "securite-poste-r-et-d-disques-chiffres-non": 0,
     "securite-poste-r-et-d-disques-chiffres-oui": 3,
