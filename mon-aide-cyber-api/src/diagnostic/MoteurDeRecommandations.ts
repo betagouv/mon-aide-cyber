@@ -1,5 +1,9 @@
 import { Note, RegleDeCalcul } from "./TableauDeNotes";
-import { Diagnostic, QuestionDiagnostic, Recommandation } from "./Diagnostic";
+import {
+  Diagnostic,
+  QuestionDiagnostic,
+  RecommandationPriorisee,
+} from "./Diagnostic";
 import { ObjetDeRecommandation } from "./TableauDeRecommandations";
 
 export const MoteurDeRecommandations = new Map<
@@ -8,7 +12,7 @@ export const MoteurDeRecommandations = new Map<
     genere: (
       diagnostic: Diagnostic,
       question: QuestionDiagnostic,
-    ) => Recommandation[];
+    ) => RecommandationPriorisee[];
   }
 >([
   [
@@ -30,7 +34,7 @@ export const MoteurDeRecommandations = new Map<
   ],
 ]);
 
-abstract class MoteurDeRecommandation {
+abstract class MoteurDeRecommandationPriorisee {
   protected recommandationTrouvee: ObjetDeRecommandation;
 
   constructor(
@@ -41,7 +45,7 @@ abstract class MoteurDeRecommandation {
       this.diagnostic.tableauDesRecommandations[this.question.identifiant];
   }
 
-  genere(): Recommandation[] {
+  genere(): RecommandationPriorisee[] {
     if (!this.diagnostic.tableauDesNotes[this.question.identifiant]) {
       return [];
     }
@@ -80,7 +84,7 @@ abstract class MoteurDeRecommandation {
   abstract calculeLaNote(note: Note | RegleDeCalcul): Note;
 }
 
-class MoteurDeRecommandationReponseUnique extends MoteurDeRecommandation {
+class MoteurDeRecommandationReponseUnique extends MoteurDeRecommandationPriorisee {
   filtre(identifiantReponse: string, __: Note | RegleDeCalcul): boolean {
     return this.question.reponseDonnee.reponseUnique === identifiantReponse;
   }
@@ -93,7 +97,7 @@ class MoteurDeRecommandationReponseUnique extends MoteurDeRecommandation {
   }
 }
 
-class MoteurDeRecommandationReponsesMultiples extends MoteurDeRecommandation {
+class MoteurDeRecommandationReponsesMultiples extends MoteurDeRecommandationPriorisee {
   enTantQue(note: RegleDeCalcul): RegleDeCalcul {
     return note;
   }

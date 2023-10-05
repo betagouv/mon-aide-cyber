@@ -6,10 +6,12 @@ import {
   Referentiel,
   ReponsePossible,
   TypeQuestion,
+  NiveauRecommandation,
 } from "../../src/diagnostic/Referentiel";
 import { fakerFR as faker } from "@faker-js/faker";
 import { Constructeur } from "./constructeur";
 import { aseptise } from "../utilitaires/aseptise";
+import { Note } from "../../src/diagnostic/TableauDeNotes";
 
 class ConstructeurReferentiel implements Constructeur<Referentiel> {
   thematique: { [clef: string]: QuestionsThematique } = {
@@ -167,6 +169,9 @@ class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
       identifiant: reponse.identifiant,
       libelle: reponse.libelle,
       ordre: index,
+      ...(reponse.recommandations && {
+        recommandations: reponse.recommandations,
+      }),
     }));
     return this;
   };
@@ -192,6 +197,11 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private libelle: string = faker.word.words();
   private ordre: number = faker.number.int();
   private questions?: QuestionATiroir[];
+  private recommandations?: {
+    niveau: NiveauRecommandation;
+    noteObtenue: Note;
+    identifiant: string;
+  }[];
 
   ajouteUneQuestionATiroir(
     question: QuestionATiroir,
@@ -208,11 +218,29 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     this.identifiant = aseptise(libelle);
     return this;
   }
+
+  associeeARecommandation(
+    identifiantRecommandation: string,
+    niveauRecommandation: NiveauRecommandation,
+    note: Note,
+  ): ConstructeurReponsePossible {
+    if (!this.recommandations) {
+      this.recommandations = [];
+    }
+    this.recommandations.push({
+      identifiant: identifiantRecommandation,
+      niveau: niveauRecommandation,
+      noteObtenue: note,
+    });
+    return this;
+  }
+
   construis(): ReponsePossible {
     let reponsePossible: ReponsePossible = {
       identifiant: this.identifiant,
       libelle: this.libelle,
       ordre: this.ordre,
+      ...(this.recommandations && { recommandations: this.recommandations }),
     };
     if (this.questions !== undefined) {
       reponsePossible = {

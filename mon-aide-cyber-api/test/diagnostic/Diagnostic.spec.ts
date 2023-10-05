@@ -491,7 +491,7 @@ describe("Diagnostic", () => {
             { thematique: "multiple", question: "q1" },
             uneReponseDonnee()
               .ayantPourReponse("reponse-3")
-              .avecDesReponsesMultilpes([
+              .avecDesReponsesMultiples([
                 {
                   identifiant: "question-31",
                   reponses: ["reponse-311"],
@@ -538,7 +538,7 @@ describe("Diagnostic", () => {
             { thematique: "multiple", question: "q1" },
             uneReponseDonnee()
               .ayantPourReponse("reponse-3")
-              .avecDesReponsesMultilpes([
+              .avecDesReponsesMultiples([
                 {
                   identifiant: "question-31",
                   reponses: ["reponse-310"],

@@ -1,12 +1,21 @@
+import { Note } from "./TableauDeNotes";
+
 type QuestionATiroir = Omit<Question, "reponsesPossibles"> & {
   reponsesPossibles: Omit<ReponsePossible, "questions">[];
 };
+
+export type NiveauRecommandation = 1 | 2;
 
 type ReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
   questions?: QuestionATiroir[];
+  recommandations?: {
+    identifiant: string;
+    niveau: NiveauRecommandation;
+    noteObtenue: Note;
+  }[];
 };
 
 type TypeQuestion = "choixMultiple" | "choixUnique";

@@ -378,7 +378,9 @@ describe("Le représentateur de diagnostic", () => {
           const deuxiemeQuestionTiroir =
             representationDiagnostic.referentiel.contexte.questions[1]
               .reponsesPossibles[0]?.questions?.[0];
-          expect(deuxiemeQuestionTiroir?.reponsesPossibles[0]).toStrictEqual({
+          expect(
+            deuxiemeQuestionTiroir?.reponsesPossibles[0],
+          ).toStrictEqual<ReponsePossible>({
             identifiant: "reponse-21",
             libelle: "Réponse 21",
             ordre: 0,
@@ -531,7 +533,7 @@ describe("Le représentateur de diagnostic", () => {
             question: "ma-question-",
           },
           uneReponseDonnee()
-            .avecDesReponsesMultilpes([
+            .avecDesReponsesMultiples([
               { identifiant: "ma-question-", reponses: ["rep1", "rep3"] },
             ])
             .construis(),
@@ -589,7 +591,7 @@ describe("Le représentateur de diagnostic", () => {
           { thematique: "contexte", question: "question" },
           uneReponseDonnee()
             .ayantPourReponse("réponse")
-            .avecDesReponsesMultilpes([
+            .avecDesReponsesMultiples([
               {
                 identifiant: "q1",
                 reponses: [
