@@ -43,7 +43,7 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
         if (typeof valeur === "string") {
           constructeurReponseDonnee.ayantPourReponse(valeur);
         } else {
-          constructeurReponseDonnee.avecDesReponsesMultilpes([
+          constructeurReponseDonnee.avecDesReponsesMultiples([
             { identifiant: question, reponses: valeur },
           ]);
         }
@@ -102,7 +102,7 @@ class ConstructeurReponseDonnee implements Constructeur<ReponseDonnee> {
     return this;
   }
 
-  avecDesReponsesMultilpes(
+  avecDesReponsesMultiples(
     reponsesMultiples: { identifiant: string; reponses: string[] }[],
   ): ConstructeurReponseDonnee {
     this.reponsesMultiples = reponsesMultiples.map((rep) => ({
@@ -132,6 +132,32 @@ class ConstructeurQuestionDiagnostic
   };
   private type: TypeQuestion = "choixMultiple";
 
+  avecLesReponsesPossibles(
+    reponsePossibles: ReponsePossible[],
+  ): ConstructeurQuestionDiagnostic {
+    this.reponsesPossibles = reponsePossibles;
+    return this;
+  }
+
+  ayantLaReponseUnique(
+    identifiantReponse: string,
+  ): ConstructeurQuestionDiagnostic {
+    this.reponseDonnee.reponseUnique = identifiantReponse;
+    return this;
+  }
+
+  avecLibelle(libelle: string): ConstructeurQuestionDiagnostic {
+    this.libelle = libelle;
+    return this;
+  }
+
+  ayantLaReponseDonnee(
+    reponseDonnee: ReponseDonnee,
+  ): ConstructeurQuestionDiagnostic {
+    this.reponseDonnee = reponseDonnee;
+    return this;
+  }
+
   construis(): QuestionDiagnostic {
     return {
       identifiant: this.identifiant,
@@ -140,13 +166,6 @@ class ConstructeurQuestionDiagnostic
       reponsesPossibles: this.reponsesPossibles,
       type: this.type,
     };
-  }
-
-  avecLesReponsesPossibles(
-    reponsePossibles: ReponsePossible[],
-  ): ConstructeurQuestionDiagnostic {
-    this.reponsesPossibles = reponsePossibles;
-    return this;
   }
 }
 

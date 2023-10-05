@@ -112,7 +112,7 @@ describe("Moteur de recommandations", () => {
         { thematique: "multi-tiroir", question: "la-question" },
         uneReponseDonnee()
           .ayantPourReponse("rep-1")
-          .avecDesReponsesMultilpes([
+          .avecDesReponsesMultiples([
             {
               identifiant: "la-sous-question-1",
               reponses: ["rep-111"],

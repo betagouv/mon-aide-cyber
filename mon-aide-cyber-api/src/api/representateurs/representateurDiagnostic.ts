@@ -94,8 +94,10 @@ const trouveReponsesPossibles = (
   questionATranscrire: QuestionATranscrire | undefined,
 ): RepresentationReponsePossible[] => {
   return question.reponsesPossibles.map((reponse) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { recommandations, ...corpsDeReponse } = reponse;
     let representationReponsePossible: RepresentationReponsePossible = {
-      ...reponse,
+      ...corpsDeReponse,
     } as RepresentationReponsePossible;
     const reponseATranscrire = trouveReponseATranscrire(
       reponse.identifiant,
@@ -107,7 +109,7 @@ const trouveReponsesPossibles = (
         transcripteur,
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { questions, ...corpsDeReponse } = reponse;
+      const { questions, recommandations, ...corpsDeReponse } = reponse;
       representationReponsePossible = {
         ...corpsDeReponse,
         questions: representationQuestionATiroir,

@@ -3,7 +3,10 @@ import { Question, Referentiel } from "./Referentiel";
 import { Entrepot } from "../domaine/Entrepot";
 import { CorpsReponse } from "./ServiceDiagnostic";
 import { Note, TableauDeNotes } from "./TableauDeNotes";
-import { TableauDeRecommandations } from "./TableauDeRecommandations";
+import {
+  NiveauDeRecommandation,
+  TableauDeRecommandations,
+} from "./TableauDeRecommandations";
 import { StrategieDeReponse } from "./StrategieDeReponse";
 import { MoteurDeRecommandations } from "./MoteurDeRecommandations";
 
@@ -27,6 +30,12 @@ type ReferentielDiagnostic = {
 };
 
 export type Recommandation = {
+  niveau: NiveauDeRecommandation;
+  noteObtenue: Note;
+  priorisation: number;
+};
+
+export type RecommandationPriorisee = {
   titre: string;
   pourquoi: string;
   comment: string;
@@ -34,8 +43,8 @@ export type Recommandation = {
   priorisation: number;
 };
 export type Recommandations = {
-  recommandationsPrioritaires: Recommandation[];
-  autresRecommandations: Recommandation[];
+  recommandationsPrioritaires: RecommandationPriorisee[];
+  autresRecommandations: RecommandationPriorisee[];
 };
 type Diagnostic = {
   identifiant: crypto.UUID;
