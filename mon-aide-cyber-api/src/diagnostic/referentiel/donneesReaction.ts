@@ -17,18 +17,39 @@ export const donneesReaction: QuestionsThematique = {
           identifiant:
             "reaction-surveillance-veille-vulnerabilites-potentielles-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant:
+                  "reaction-surveillance-veille-vulnerabilites-potentielles",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 1,
         },
         {
           identifiant:
             "reaction-surveillance-veille-vulnerabilites-potentielles-veille-ponctuelle",
           libelle: "Réalisation d'une veille ponctuelle sur internet.",
+          resultat: {
+            note: 1.5,
+            recommandations: [
+              {
+                identifiant:
+                  "reaction-surveillance-veille-vulnerabilites-potentielles",
+                niveau: 2,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
           identifiant:
             "reaction-surveillance-veille-vulnerabilites-potentielles-veille-reguliere",
           libelle: "Réalisation d'une veille régulière et exhaustive.",
+          resultat: { note: 3 },
           ordre: 3,
         },
       ],
@@ -47,6 +68,25 @@ export const donneesReaction: QuestionsThematique = {
         {
           identifiant: "reaction-sauvegardes-donnees-realisees-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant: "reaction-sauvegardes-donnees-realisees",
+                niveau: 1,
+              },
+              {
+                identifiant:
+                  "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole",
+                niveau: 1,
+              },
+              {
+                identifiant:
+                  "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 1,
         },
         {
@@ -77,12 +117,32 @@ export const donneesReaction: QuestionsThematique = {
                   identifiant:
                     "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-non",
                   libelle: "Non",
+                  resultat: {
+                    note: 0,
+                    recommandations: [
+                      {
+                        identifiant:
+                          "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole",
+                        niveau: 1,
+                      },
+                    ],
+                  },
                   ordre: 2,
                 },
                 {
                   identifiant:
                     "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-oui",
                   libelle: "Oui",
+                  resultat: {
+                    note: 2.5,
+                    recommandations: [
+                      {
+                        identifiant:
+                          "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole",
+                        niveau: 1,
+                      },
+                    ],
+                  },
                   ordre: 3,
                 },
                 {
@@ -90,6 +150,7 @@ export const donneesReaction: QuestionsThematique = {
                     "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-oui-jeu-chiffre",
                   libelle:
                     "Oui, et le jeu de sauvegarde externalisé est chiffré",
+                  resultat: { note: 3 },
                   ordre: 4,
                 },
               ],
@@ -117,18 +178,38 @@ export const donneesReaction: QuestionsThematique = {
                   identifiant:
                     "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-non",
                   libelle: "Non",
+                  resultat: {
+                    note: 0,
+                    recommandations: [
+                      {
+                        identifiant:
+                          "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement",
+                        niveau: 1,
+                      },
+                    ],
+                  },
                   ordre: 2,
                 },
                 {
                   identifiant:
                     "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-oui",
                   libelle: "Oui",
+                  resultat: { note: 3 },
                   ordre: 3,
                 },
               ],
               type: "choixUnique",
             },
           ],
+          resultat: {
+            recommandations: [
+              {
+                identifiant: "reaction-sauvegardes-donnees-realisees",
+                niveau: 1,
+              },
+            ],
+            note: 1,
+          },
           ordre: 2,
         },
         {
@@ -159,12 +240,32 @@ export const donneesReaction: QuestionsThematique = {
                   identifiant:
                     "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-non",
                   libelle: "Non",
+                  resultat: {
+                    note: 0,
+                    recommandations: [
+                      {
+                        identifiant:
+                          "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole",
+                        niveau: 1,
+                      },
+                    ],
+                  },
                   ordre: 2,
                 },
                 {
                   identifiant:
                     "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-oui",
                   libelle: "Oui",
+                  resultat: {
+                    note: 2.5,
+                    recommandations: [
+                      {
+                        identifiant:
+                          "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole",
+                        niveau: 1,
+                      },
+                    ],
+                  },
                   ordre: 3,
                 },
                 {
@@ -172,6 +273,7 @@ export const donneesReaction: QuestionsThematique = {
                     "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-oui-jeu-chiffre",
                   libelle:
                     "Oui, et le jeu de sauvegarde externalisé est chiffré",
+                  resultat: { note: 3 },
                   ordre: 4,
                 },
               ],
@@ -199,18 +301,30 @@ export const donneesReaction: QuestionsThematique = {
                   identifiant:
                     "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-non",
                   libelle: "Non",
+                  resultat: {
+                    note: 0,
+                    recommandations: [
+                      {
+                        identifiant:
+                          "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement",
+                        niveau: 1,
+                      },
+                    ],
+                  },
                   ordre: 2,
                 },
                 {
                   identifiant:
                     "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-oui",
                   libelle: "Oui",
+                  resultat: { note: 3 },
                   ordre: 3,
                 },
               ],
               type: "choixUnique",
             },
           ],
+          resultat: { note: 3 },
           ordre: 3,
         },
       ],
@@ -230,11 +344,29 @@ export const donneesReaction: QuestionsThematique = {
           identifiant: "reaction-dispositif-gestion-crise-adapte-defini-non",
           libelle: "Non",
           ordre: 1,
+          resultat: {
+            recommandations: [
+              {
+                identifiant: "reaction-dispositif-gestion-crise-adapte-defini",
+                niveau: 1,
+              },
+            ],
+            note: 0,
+          },
         },
         {
           identifiant:
             "reaction-dispositif-gestion-crise-adapte-defini-oui-fiche-reflexe",
           libelle: "Nous avons défini une fiche réflexe dédiée.",
+          resultat: {
+            recommandations: [
+              {
+                identifiant: "reaction-dispositif-gestion-crise-adapte-defini",
+                niveau: 2,
+              },
+            ],
+            note: 1.5,
+          },
           ordre: 2,
         },
         {
@@ -242,6 +374,7 @@ export const donneesReaction: QuestionsThematique = {
             "reaction-dispositif-gestion-crise-adapte-defini-oui-organisation-gestion-crise-definie",
           libelle:
             "Oui, une organisation de gestion de crise d'origine cyber a été définie",
+          resultat: { note: 3 },
           ordre: 3,
         },
       ],

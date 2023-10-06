@@ -651,7 +651,7 @@ const tableauRecommandations: TableauDeRecommandations = {
         comment:
           "recommandations/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-niveau1-comment.pug",
       },
-      priorisation: 9,
+      priorisation: 10,
     },
   "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement":
     {
@@ -675,7 +675,7 @@ const tableauRecommandations: TableauDeRecommandations = {
         comment:
           "recommandations/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-niveau1-comment.pug",
       },
-      priorisation: 9,
+      priorisation: 10,
     },
   "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement":
     {
