@@ -95,7 +95,7 @@ const trouveReponsesPossibles = (
 ): RepresentationReponsePossible[] => {
   return question.reponsesPossibles.map((reponse) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { recommandations, ...corpsDeReponse } = reponse;
+    const { resultat, ...corpsDeReponse } = reponse;
     let representationReponsePossible: RepresentationReponsePossible = {
       ...corpsDeReponse,
     } as RepresentationReponsePossible;
@@ -109,7 +109,7 @@ const trouveReponsesPossibles = (
         transcripteur,
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { questions, recommandations, ...corpsDeReponse } = reponse;
+      const { questions, resultat, ...corpsDeReponse } = reponse;
       representationReponsePossible = {
         ...corpsDeReponse,
         questions: representationQuestionATiroir,

@@ -1,12 +1,13 @@
 import {
-  QuestionsThematique,
+  NiveauRecommandation,
   QuestionATiroir,
   QuestionChoixMultiple,
   QuestionChoixUnique,
+  QuestionsThematique,
+  Recommandation,
   Referentiel,
   ReponsePossible,
   TypeQuestion,
-  NiveauRecommandation,
 } from "../../src/diagnostic/Referentiel";
 import { fakerFR as faker } from "@faker-js/faker";
 import { Constructeur } from "./constructeur";
@@ -169,9 +170,7 @@ class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
       identifiant: reponse.identifiant,
       libelle: reponse.libelle,
       ordre: index,
-      ...(reponse.recommandations && {
-        recommandations: reponse.recommandations,
-      }),
+      ...(reponse.resultat && { resultat: reponse.resultat }),
     }));
     return this;
   };
@@ -197,11 +196,8 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private libelle: string = faker.word.words();
   private ordre: number = faker.number.int();
   private questions?: QuestionATiroir[];
-  private recommandations?: {
-    niveau: NiveauRecommandation;
-    noteObtenue: Note;
-    identifiant: string;
-  }[];
+  private recommandations?: Recommandation[];
+  private note?: Note;
 
   ajouteUneQuestionATiroir(
     question: QuestionATiroir,
@@ -227,28 +223,24 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     if (!this.recommandations) {
       this.recommandations = [];
     }
+    this.note = note;
     this.recommandations.push({
       identifiant: identifiantRecommandation,
       niveau: niveauRecommandation,
-      noteObtenue: note,
     });
     return this;
   }
 
   construis(): ReponsePossible {
-    let reponsePossible: ReponsePossible = {
+    return {
       identifiant: this.identifiant,
       libelle: this.libelle,
       ordre: this.ordre,
-      ...(this.recommandations && { recommandations: this.recommandations }),
+      ...(this.recommandations && {
+        resultat: { recommandations: this.recommandations, note: this.note },
+      }),
+      ...(this.questions && { questions: this.questions }),
     };
-    if (this.questions !== undefined) {
-      reponsePossible = {
-        ...reponsePossible,
-        questions: this.questions,
-      };
-    }
-    return reponsePossible;
   }
 }
 

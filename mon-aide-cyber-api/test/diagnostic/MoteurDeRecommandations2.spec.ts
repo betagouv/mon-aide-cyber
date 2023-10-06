@@ -8,8 +8,8 @@ import {
   uneReponsePossible,
 } from "../constructeurs/constructeurReferentiel";
 import { unTableauDeRecommandations } from "../constructeurs/constructeurTableauDeRecommandations";
-import { MoteurDeRecommandations2 } from "../../src/diagnostic/MoteurDeRecommandations2";
-import { Recommandation } from "../../src/diagnostic/Diagnostic";
+import { MoteurDeRecommandation2 } from "../../src/diagnostic/MoteurDeRecommandations2";
+import { RecommandationDiagnostic } from "../../src/diagnostic/Diagnostic";
 
 describe("Moteur de recommandations", () => {
   const tableauDeRecommandations = unTableauDeRecommandations()
@@ -41,19 +41,19 @@ describe("Moteur de recommandations", () => {
         .ayantLaReponseUnique("non")
         .construis();
 
-      const recommandations = MoteurDeRecommandations2.get(true)?.genere(
+      const recommandations = MoteurDeRecommandation2.genere(
         questionRepondue,
         tableauDeRecommandations,
       );
 
-      expect(recommandations).toStrictEqual<Recommandation[]>([
+      expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
         {
+          repondA: questionRepondue.identifiant,
           niveau: {
             titre: "reco 1",
             comment: "comme ça",
             pourquoi: "parce-que",
           },
-          noteObtenue: 0,
           priorisation: 1,
         },
       ]);
@@ -70,19 +70,19 @@ describe("Moteur de recommandations", () => {
         .ayantLaReponseUnique("oui-mais")
         .construis();
 
-      const recommandations = MoteurDeRecommandations2.get(true)?.genere(
+      const recommandations = MoteurDeRecommandation2.genere(
         questionRepondue,
         tableauDeRecommandations,
       );
 
-      expect(recommandations).toStrictEqual<Recommandation[]>([
+      expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
         {
+          repondA: questionRepondue.identifiant,
           niveau: {
             titre: "reco 2",
             comment: "comme ça",
             pourquoi: "parce-que",
           },
-          noteObtenue: 1,
           priorisation: 1,
         },
       ]);
@@ -100,28 +100,28 @@ describe("Moteur de recommandations", () => {
         .ayantLaReponseUnique("oui-mais")
         .construis();
 
-      const recommandations = MoteurDeRecommandations2.get(true)?.genere(
+      const recommandations = MoteurDeRecommandation2.genere(
         questionRepondue,
         tableauDeRecommandations,
       );
 
-      expect(recommandations).toStrictEqual<Recommandation[]>([
+      expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
         {
+          repondA: questionRepondue.identifiant,
           niveau: {
             titre: "reco 2",
             comment: "comme ça",
             pourquoi: "parce-que",
           },
-          noteObtenue: 2,
           priorisation: 1,
         },
         {
+          repondA: questionRepondue.identifiant,
           niveau: {
             titre: "reco RGPD 2 1",
             comment: "comme ça",
             pourquoi: "parce-que",
           },
-          noteObtenue: 0,
           priorisation: 2,
         },
       ]);
@@ -131,10 +131,24 @@ describe("Moteur de recommandations", () => {
       const tableauDeRecommandations = unTableauDeRecommandations()
         .avecLesRecommandations([
           {
+            "ordinateur-obsolete": {
+              niveau1: "Obsolète",
+              niveau2: "Obsolète niveau 2",
+              priorisation: 4,
+            },
+          },
+          {
             "obsolete-annee-1980": {
               niveau1: "Les années 80 c’est bien mais",
               niveau2: "Passez aux années 90",
               priorisation: 3,
+            },
+          },
+          {
+            "obsolete-annee-1990": {
+              niveau1: "",
+              niveau2: "Passez aux années 2000",
+              priorisation: 5,
             },
           },
         ])
@@ -152,6 +166,10 @@ describe("Moteur de recommandations", () => {
                     uneReponsePossible()
                       .avecLibelle("1980")
                       .associeeARecommandation("obsolete-annee-1980", 1, 0)
+                      .construis(),
+                    uneReponsePossible()
+                      .avecLibelle("1990")
+                      .associeeARecommandation("obsolete-annee-1990", 2, 2)
                       .construis(),
                   ])
                   .construis(),
@@ -171,20 +189,92 @@ describe("Moteur de recommandations", () => {
           )
           .construis();
 
-        const recommandations = MoteurDeRecommandations2.get(false)?.genere(
+        const recommandations = MoteurDeRecommandation2.genere(
           questionRepondue,
           tableauDeRecommandations,
         );
 
-        expect(recommandations).toStrictEqual<Recommandation[]>([
+        expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
           {
+            repondA: "quelle-annee",
             niveau: {
               titre: "Les années 80 c’est bien mais",
               comment: "comme ça",
               pourquoi: "parce-que",
             },
-            noteObtenue: 0,
             priorisation: 3,
+          },
+        ]);
+      });
+
+      it("multiples", () => {
+        const questionRepondue = uneQuestionDiagnostic()
+          .avecLibelle("Avez-vous un ordinateur?")
+          .avecLesReponsesPossibles([
+            uneReponsePossible()
+              .avecLibelle("Ordinateur obsolète")
+              .ajouteUneQuestionATiroir(
+                uneQuestionATiroir()
+                  .aChoixUnique("Quelle année?")
+                  .avecReponsesPossibles([
+                    uneReponsePossible()
+                      .avecLibelle("1980")
+                      .associeeARecommandation("obsolete-annee-1980", 1, 0)
+                      .construis(),
+                    uneReponsePossible()
+                      .avecLibelle("1990")
+                      .associeeARecommandation("obsolete-annee-1990", 2, 2)
+                      .construis(),
+                  ])
+                  .construis(),
+              )
+              .ajouteUneQuestionATiroir(
+                uneQuestionATiroir()
+                  .avecReponsesPossibles([
+                    uneReponsePossible().construis(),
+                    uneReponsePossible().construis(),
+                  ])
+                  .construis(),
+              )
+              .associeeARecommandation("ordinateur-obsolete", 2, 1)
+              .construis(),
+          ])
+          .ayantLaReponseDonnee(
+            uneReponseDonnee()
+              .ayantPourReponse("ordinateur-obsolete")
+              .avecDesReponsesMultiples([
+                {
+                  identifiant: "quelle-annee",
+                  reponses: ["1980"],
+                },
+              ])
+              .construis(),
+          )
+          .construis();
+
+        const recommandations = MoteurDeRecommandation2.genere(
+          questionRepondue,
+          tableauDeRecommandations,
+        );
+
+        expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
+          {
+            repondA: "quelle-annee",
+            niveau: {
+              titre: "Les années 80 c’est bien mais",
+              comment: "comme ça",
+              pourquoi: "parce-que",
+            },
+            priorisation: 3,
+          },
+          {
+            repondA: questionRepondue.identifiant,
+            niveau: {
+              titre: "Obsolète niveau 2",
+              comment: "comme ça",
+              pourquoi: "parce-que",
+            },
+            priorisation: 4,
           },
         ]);
       });

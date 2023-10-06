@@ -1,94 +1,65 @@
-import { QuestionDiagnostic, Recommandation } from "./Diagnostic";
+import { QuestionDiagnostic, RecommandationDiagnostic } from "./Diagnostic";
 import { TableauDeRecommandations } from "./TableauDeRecommandations";
-import { NiveauRecommandation } from "./Referentiel";
-import { Note } from "./TableauDeNotes";
 
-export const MoteurDeRecommandations2 = new Map<
-  boolean,
-  {
-    genere: (
-      question: QuestionDiagnostic,
-      tableauDeRecommandations: TableauDeRecommandations,
-    ) => Recommandation[];
-  }
->([
-  [
-    true,
-    {
-      genere: (question, tableauDeRecommandations) =>
-        new MoteurDeRecommandation2ReponseUnique(
-          question,
-          tableauDeRecommandations,
-        ).genere(),
-    },
-  ],
-  [
-    false,
-    {
-      genere: (question, tableauDeRecommandations) =>
-        new MoteurDeRecommandation2ReponsesMultiples(
-          question,
-          tableauDeRecommandations,
-        ).genere(),
-    },
-  ],
-]);
-
-abstract class MoteurDeRecommandation2 {
-  constructor(
-    protected readonly question: QuestionDiagnostic,
-    protected readonly tableauDeRecommandations: TableauDeRecommandations,
-  ) {}
-
-  genere(): Recommandation[] {
-    return this.filtre()
-      .map((rec) => ({
-        recommandationTrouvee: this.tableauDeRecommandations[rec.identifiant],
-        niveau: rec.niveau,
-        noteObtenue: rec.noteObtenue,
+export class MoteurDeRecommandation2 {
+  static genere(
+    question: QuestionDiagnostic,
+    tableauDeRecommandations: TableauDeRecommandations,
+  ): RecommandationDiagnostic[] {
+    return [
+      ...this.recommandationsMultiples(question),
+      ...this.recommandationsUnique(question),
+    ]
+      .map((recommandation) => ({
+        recommandationTrouvee:
+          tableauDeRecommandations[recommandation.identifiant],
+        niveau: recommandation.niveau,
+        repondA: recommandation.repondA,
       }))
-      .flatMap((rec) => {
-        return [
-          {
-            niveau:
-              rec.niveau === 1
-                ? rec.recommandationTrouvee.niveau1
-                : rec.recommandationTrouvee.niveau2!,
-            noteObtenue: rec.noteObtenue,
-            priorisation: rec.recommandationTrouvee.priorisation as number,
-          },
-        ];
-      });
+      .flatMap((recommandation) => [
+        {
+          niveau:
+            recommandation.niveau === 1
+              ? recommandation.recommandationTrouvee.niveau1
+              : recommandation.recommandationTrouvee.niveau2!,
+          priorisation: recommandation.recommandationTrouvee
+            .priorisation as number,
+          repondA: recommandation.repondA,
+        },
+      ]);
   }
 
-  abstract filtre(): {
-    identifiant: string;
-    niveau: NiveauRecommandation;
-    noteObtenue: Note;
-  }[];
-}
+  private static recommandationsMultiples(question: QuestionDiagnostic) {
+    return question.reponsesPossibles
+      .flatMap((reponsePossible) => reponsePossible.questions || [])
+      .flatMap((questionATiroir) => ({
+        reponses: questionATiroir.reponsesPossibles.filter((reponsePossible) =>
+          question.reponseDonnee.reponsesMultiples
+            .flatMap((reponsesDonnees) => Array.from(reponsesDonnees.reponses))
+            .includes(reponsePossible.identifiant),
+        ),
+        identifiantQuestion: questionATiroir.identifiant,
+      }))
+      .flatMap((rep) =>
+        rep.reponses.flatMap(
+          (reponse) =>
+            reponse.resultat?.recommandations?.map((rec) => ({
+              ...rec,
+              repondA: rep.identifiantQuestion,
+            })) || [],
+        ),
+      );
+  }
 
-class MoteurDeRecommandation2ReponsesMultiples extends MoteurDeRecommandation2 {
-  filtre() {
-    return this.question.reponsesPossibles
+  private static recommandationsUnique(question: QuestionDiagnostic) {
+    return question.reponsesPossibles
+      .filter((rep) => rep.identifiant === question.reponseDonnee.reponseUnique)
       .flatMap(
-        (rep) => rep.questions?.flatMap((q) => q.reponsesPossibles) || [],
-      )
-      .filter((rep) =>
-        this.question.reponseDonnee.reponsesMultiples
-          .flatMap((rep) => Array.from(rep.reponses))
-          .includes(rep.identifiant),
-      )
-      .flatMap((rep) => rep.recommandations || []);
-  }
-}
-
-class MoteurDeRecommandation2ReponseUnique extends MoteurDeRecommandation2 {
-  filtre() {
-    return this.question.reponsesPossibles
-      .filter(
-        (rep) => rep.identifiant === this.question.reponseDonnee.reponseUnique,
-      )
-      .flatMap((rep) => rep.recommandations || []);
+        (rep) =>
+          rep.resultat?.recommandations?.map((rec) => ({
+            ...rec,
+            repondA: question.identifiant,
+          })) || [],
+      );
   }
 }
