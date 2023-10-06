@@ -11,11 +11,10 @@ type ReponsePossible = {
   libelle: string;
   ordre: number;
   questions?: QuestionATiroir[];
-  recommandations?: {
-    identifiant: string;
-    niveau: NiveauRecommandation;
-    noteObtenue: Note;
-  }[];
+  resultat?: {
+    recommandations?: Recommandation[];
+    note: Note;
+  };
 };
 
 type TypeQuestion = "choixMultiple" | "choixUnique";
@@ -52,4 +51,8 @@ export {
   Referentiel,
   ReponsePossible,
   TypeQuestion,
+};
+export type Recommandation = {
+  identifiant: string;
+  niveau: NiveauRecommandation;
 };

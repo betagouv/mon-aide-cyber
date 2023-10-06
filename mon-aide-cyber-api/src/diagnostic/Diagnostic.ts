@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { Question, Referentiel } from "./Referentiel";
+import { Question, Recommandation, Referentiel } from "./Referentiel";
 import { Entrepot } from "../domaine/Entrepot";
 import { CorpsReponse } from "./ServiceDiagnostic";
 import { Note, TableauDeNotes } from "./TableauDeNotes";
@@ -29,11 +29,10 @@ type ReferentielDiagnostic = {
   [clef: Thematique]: QuestionsThematique;
 };
 
-export type Recommandation = {
-  niveau: NiveauDeRecommandation;
-  noteObtenue: Note;
-  priorisation: number;
-};
+export type RecommandationDiagnostic = Omit<
+  Recommandation,
+  "identifiant" | "niveau" | "noteObtenue"
+> & { niveau: NiveauDeRecommandation; priorisation: number; repondA: string };
 
 export type RecommandationPriorisee = {
   titre: string;
