@@ -196,8 +196,10 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private libelle: string = faker.word.words();
   private ordre: number = faker.number.int();
   private questions?: QuestionATiroir[];
-  private recommandations?: Recommandation[];
-  private note?: Note;
+  private resultat?: {
+    recommandations?: Recommandation[];
+    note: Note;
+  };
 
   ajouteUneQuestionATiroir(
     question: QuestionATiroir,
@@ -220,14 +222,24 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     niveauRecommandation: NiveauRecommandation,
     note: Note,
   ): ConstructeurReponsePossible {
-    if (!this.recommandations) {
-      this.recommandations = [];
-    }
-    this.note = note;
-    this.recommandations.push({
+    const recommandations = [];
+    recommandations.push({
       identifiant: identifiantRecommandation,
       niveau: niveauRecommandation,
     });
+    this.resultat = {
+      ...this.resultat,
+      recommandations: [
+        ...(this.resultat?.recommandations || []),
+        ...recommandations,
+      ],
+      note,
+    };
+    return this;
+  }
+
+  ayantPourNote(note: Note): ConstructeurReponsePossible {
+    this.resultat = { ...this.resultat, note };
     return this;
   }
 
@@ -236,8 +248,8 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
       identifiant: this.identifiant,
       libelle: this.libelle,
       ordre: this.ordre,
-      ...(this.recommandations && {
-        resultat: { recommandations: this.recommandations, note: this.note },
+      ...(this.resultat && {
+        resultat: this.resultat,
       }),
       ...(this.questions && { questions: this.questions }),
     };

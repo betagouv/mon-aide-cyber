@@ -21,7 +21,7 @@ type QuestionDiagnostic = Question & {
   reponseDonnee: ReponseDonnee;
 };
 
-type QuestionsThematique = {
+export type QuestionsThematique = {
   questions: QuestionDiagnostic[];
 };
 
