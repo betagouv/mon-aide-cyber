@@ -436,7 +436,7 @@ const tableauRecommandations: TableauDeRecommandations = {
   },
   "securite-poste-r-et-d-disques-chiffres": {
     niveau1: {
-      titre: "RECO DISQUES CHIFFRES",
+      titre: "Chiffrer les disques durs des matériels nomades.",
       pourquoi:
         "recommandations/postes/securite-poste-r-et-d-disques-chiffres-niveau1-pourquoi.pug",
       comment:
