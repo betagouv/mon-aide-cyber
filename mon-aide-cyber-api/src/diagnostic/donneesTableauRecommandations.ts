@@ -453,20 +453,34 @@ const tableauRecommandations: TableauDeRecommandations = {
       comment:
         "recommandations/infras/securite-infrastructure-pare-feu-deploye-niveau1-comment.pug",
     },
-    niveau2: {
+    priorisation: 20,
+  },
+  "securite-infrastructure-pare-feu-deploye-interconnexions-protegees": {
+    niveau1: {
       titre:
-        "En complément des pratiques déjà en œuvre, mettre en place des règles de cloisonnement réseau additionnelles.",
+        "Déployer un pare-feu physique pour protéger l’interconnexion du SI à Internet.",
       pourquoi:
-        "recommandations/infras/securite-infrastructure-pare-feu-deploye-niveau2-pourquoi.pug",
+        "recommandations/infras/securite-infrastructure-pare-feu-deploye-interconnexions-protegees-niveau1-pourquoi.pug",
       comment:
-        "recommandations/infras/securite-infrastructure-pare-feu-deploye-niveau2-comment.pug",
+        "recommandations/infras/securite-infrastructure-pare-feu-deploye-interconnexions-protegees-niveau1-comment.pug",
     },
-    priorisation: 19,
+    priorisation: 20,
+  },
+  "securite-infrastructure-pare-feu-deploye-logs-stockes": {
+    niveau1: {
+      titre:
+        "Activer et conserver l'historique de l’ensemble des flux bloqués et des flux entrants et sortants identifiés par le pare-feu.",
+      pourquoi:
+        "recommandations/infras/securite-infrastructure-pare-feu-deploye-logs-stockes-niveau1-pourquoi.pug",
+      comment:
+        "recommandations/infras/securite-infrastructure-pare-feu-deploye-logs-stockes-niveau1-comment.pug",
+    },
+    priorisation: 20,
   },
   "securite-infrastructure-si-industriel-pare-feu-deploye": {
     niveau1: {
       titre:
-        "Déployer un pare-feu physique pour protéger l’interconnexion du SI industriel à Internet.",
+        "Fermer tous les flux et les ports non strictement nécessaires au SI industriel.",
       pourquoi:
         "recommandations/infras/securite-infrastructure-si-industriel-pare-feu-deploye-niveau1-pourquoi.pug",
       comment:
@@ -474,13 +488,13 @@ const tableauRecommandations: TableauDeRecommandations = {
     },
     niveau2: {
       titre:
-        "En complément des pratiques déjà en œuvre, mettre en place sur le SI industriel des règles de cloisonnement réseau additionnelles.",
+        "Dans la mesure du possible et si non nécessaire, séparer le réseau industriel du réseau bureautique interne.",
       pourquoi:
         "recommandations/infras/securite-infrastructure-si-industriel-pare-feu-deploye-niveau2-pourquoi.pug",
       comment:
         "recommandations/infras/securite-infrastructure-si-industriel-pare-feu-deploye-niveau2-comment.pug",
     },
-    priorisation: 19,
+    priorisation: 20,
   },
   "securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees":
     {
