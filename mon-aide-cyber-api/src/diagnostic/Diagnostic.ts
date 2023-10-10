@@ -9,7 +9,7 @@ import {
 } from "./TableauDeRecommandations";
 import { StrategieDeReponse } from "./StrategieDeReponse";
 import { MoteurDeNote, NotesDiagnostic } from "./MoteurDeNote";
-import { MoteurDeRecommandation2 } from "./MoteurDeRecommandations2";
+import { MoteurDeRecommandations } from "./MoteurDeRecommandations";
 
 type Thematique = string;
 
@@ -108,7 +108,7 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
   const recommandations = Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
     .flatMap((question) =>
-      MoteurDeRecommandation2.genere(
+      MoteurDeRecommandations.genere(
         question,
         diagnostic.tableauDesRecommandations,
       ),

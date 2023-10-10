@@ -1,7 +1,7 @@
 import { QuestionDiagnostic, RecommandationDiagnostic } from "./Diagnostic";
 import { TableauDeRecommandations } from "./TableauDeRecommandations";
 
-export class MoteurDeRecommandation2 {
+export class MoteurDeRecommandations {
   static genere(
     question: QuestionDiagnostic,
     tableauDeRecommandations: TableauDeRecommandations,
