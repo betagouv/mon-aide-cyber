@@ -20,11 +20,26 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: "acces-outil-gestion-des-comptes-oui",
           libelle: "Oui",
+          resultat: {
+            note: 3,
+            recommandations: [
+              { identifiant: "acces-outil-gestion-des-comptes", niveau: 2 },
+            ],
+          },
           ordre: 3,
         },
         {
           identifiant: "acces-outil-gestion-des-comptes-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant: "acces-outil-gestion-des-comptes",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 2,
         },
       ],
@@ -48,18 +63,37 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: "acces-liste-compte-utilisateurs-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant: "acces-liste-compte-utilisateurs",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
           identifiant: "acces-liste-compte-utilisateurs-revue-reguliere",
           libelle:
             "Les comptes des utilisateurs et leurs accès sont régulièrement revus (ex : liste du personnel vs liste des comptes).",
+          resultat: {
+            note: 2,
+            recommandations: [
+              {
+                identifiant: "acces-liste-compte-utilisateurs",
+                niveau: 2,
+              },
+            ],
+          },
           ordre: 3,
         },
         {
           identifiant: "acces-liste-compte-utilisateurs-revue-en-continu",
           libelle:
             "La liste des comptes des utilisateurs est mise à jour en continu dans le cadre d'un processus de suppression systématique des comptes inactifs. Une revue annuelle est également réalisée.",
+          resultat: { note: 3 },
           ordre: 4,
         },
       ],
@@ -83,6 +117,15 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: "acces-droits-acces-utilisateurs-limites-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant: "acces-droits-acces-utilisateurs-limites",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
@@ -90,6 +133,15 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-droits-acces-utilisateurs-limites-restrictions-ponctuelles",
           libelle:
             "Des restrictions d’accès à certaines données sont ponctuellement mises en place.",
+          resultat: {
+            note: 1,
+            recommandations: [
+              {
+                identifiant: "acces-droits-acces-utilisateurs-limites",
+                niveau: 2,
+              },
+            ],
+          },
           ordre: 3,
         },
         {
@@ -97,6 +149,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-droits-acces-utilisateurs-limites-restrictions-limitees",
           libelle:
             "L’accès des utilisateurs aux données, aux systèmes et aux applications sont limités aux seuls accès nécessaires à leur activité.",
+          resultat: { note: 3 },
           ordre: 4,
         },
       ],
@@ -117,6 +170,16 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-administrateurs-informatiques-suivie-et-limitee-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant:
+                  "acces-administrateurs-informatiques-suivie-et-limitee",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 1,
         },
         {
@@ -124,6 +187,16 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-administrateurs-informatiques-suivie-et-limitee-revue-reguliere",
           libelle:
             "Les comptes des administrateurs sont régulièrement revus (ex : liste du personnel vs liste des comptes).",
+          resultat: {
+            note: 2,
+            recommandations: [
+              {
+                identifiant:
+                  "acces-administrateurs-informatiques-suivie-et-limitee",
+                niveau: 2,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
@@ -131,6 +204,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-administrateurs-informatiques-suivie-et-limitee-revue-continue",
           libelle:
             "La liste des comptes des administrateurs est mise à jour en continu dans le cadre d'un processus de suppression systématique des comptes inactifs. Une revue annuelle est également réalisée.",
+          resultat: { note: 3 },
           ordre: 3,
         },
       ],
@@ -152,6 +226,16 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-utilisation-comptes-administrateurs-droits-limitee-non",
           libelle:
             "Non, des utilisateurs disposent de privilèges d’administration sans restrictions particulières.",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant:
+                  "acces-utilisation-comptes-administrateurs-droits-limitee",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 1,
         },
         {
@@ -159,6 +243,16 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-utilisation-comptes-administrateurs-droits-quelques-restrictions",
           libelle:
             "La mise à disposition des comptes d'administration et des droits d'accès d'administration fait l'objet de quelques restrictions.",
+          resultat: {
+            note: 2,
+            recommandations: [
+              {
+                identifiant:
+                  "acces-utilisation-comptes-administrateurs-droits-limitee",
+                niveau: 2,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
@@ -166,6 +260,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-utilisation-comptes-administrateurs-droits-justifies",
           libelle:
             "Tous les comptes administration et tous les accès d'administration sont justifiés, dédiés et utilisés aux seules tâches d'administration.",
+          resultat: { note: 3 },
           ordre: 3,
         },
       ],
@@ -183,6 +278,15 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: "acces-utilisateurs-administrateurs-poste-oui",
           libelle: "Oui",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant: "acces-utilisateurs-administrateurs-poste",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 1,
         },
         {
@@ -190,12 +294,22 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-utilisateurs-administrateurs-poste-suppression-privilege-en-cours",
           libelle:
             "La suppression de ce privilège est en cours de traitement, plusieurs utilisateurs sont toujours administrateurs de leur poste.",
+          resultat: {
+            note: 1,
+            recommandations: [
+              {
+                identifiant: "acces-utilisateurs-administrateurs-poste",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
           identifiant:
             "acces-utilisateurs-administrateurs-poste-non-exceptions-justifiees",
           libelle: "Non, et les rares exceptions sont justifiées.",
+          resultat: { note: 3 },
           ordre: 3,
         },
       ],
@@ -214,6 +328,15 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: "acces-mesures-securite-robustesse-mdp-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant: "acces-mesures-securite-robustesse-mdp",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 1,
         },
         {
@@ -221,6 +344,15 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-mesures-securite-robustesse-mdp-utilisateurs-sensibilises",
           libelle:
             "Les utilisateurs sont sensibilisés à la gestion sécurisée de leurs mots de passe.",
+          resultat: {
+            note: 1,
+            recommandations: [
+              {
+                identifiant: "acces-mesures-securite-robustesse-mdp",
+                niveau: 2,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
@@ -228,6 +360,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-mesures-securite-robustesse-mdp-contraintes-par-defaut",
           libelle:
             "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte.",
+          resultat: { note: 3 },
           ordre: 3,
         },
       ],
@@ -255,6 +388,16 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant:
+                  "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
@@ -262,6 +405,16 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-mesures-authentification-renforcees",
           libelle:
             "Oui, des mesures renforçant l'authentification ont été mises en œuvre.",
+          resultat: {
+            note: 2,
+            recommandations: [
+              {
+                identifiant:
+                  "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles",
+                niveau: 2,
+              },
+            ],
+          },
           ordre: 3,
         },
         {
@@ -269,6 +422,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-mesures-authentification-renforcees-et-donnees-chiffrees",
           libelle:
             "Oui, des mesures renforçant l'authentification ont été mises en œuvre et les données sont chiffrées.",
+          resultat: { note: 3 },
           ordre: 4,
         },
       ],
@@ -295,6 +449,16 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-teletravail-acces-distants-mesures-particulieres-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant:
+                  "acces-teletravail-acces-distants-mesures-particulieres",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
@@ -302,12 +466,23 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-teletravail-acces-distants-mesures-particulieres-mfa",
           libelle:
             "De l'authentification à double facteurs a été mise en place pour les accès distants.",
+          resultat: {
+            note: 2,
+            recommandations: [
+              {
+                identifiant:
+                  "acces-teletravail-acces-distants-mesures-particulieres",
+                niveau: 2,
+              },
+            ],
+          },
           ordre: 3,
         },
         {
           identifiant:
             "acces-teletravail-acces-distants-mesures-particulieres-vpn",
           libelle: "Les connexions à distance sont réalisées via un VPN.",
+          resultat: { note: 3 },
           ordre: 4,
         },
       ],
@@ -335,6 +510,16 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-si-industriel-teletravail-acces-distants-mesures-particulieres-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant:
+                  "acces-si-industriel-teletravail-acces-distants-mesures-particulieres",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
@@ -342,12 +527,23 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-si-industriel-teletravail-acces-distants-mesures-particulieres-mfa",
           libelle:
             "De l'authentification à double facteurs a été mise en place pour les accès distants.",
+          resultat: {
+            note: 2,
+            recommandations: [
+              {
+                identifiant:
+                  "acces-si-industriel-teletravail-acces-distants-mesures-particulieres",
+                niveau: 2,
+              },
+            ],
+          },
           ordre: 3,
         },
         {
           identifiant:
             "acces-si-industriel-teletravail-acces-distants-mesures-particulieres-vpn",
           libelle: "Les connexions à distance sont réalisées via un VPN.",
+          resultat: { note: 3 },
           ordre: 4,
         },
       ],
@@ -371,11 +567,22 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: "acces-entite-dispose-plusieurs-sites-geographiques-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant:
+                  "acces-entite-dispose-plusieurs-sites-geographiques",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
           identifiant: "acces-entite-dispose-plusieurs-sites-geographiques-oui",
           libelle: 'Oui les interconnexions "site à site" sont chiffrées.',
+          resultat: { note: 3 },
           ordre: 3,
         },
       ],
@@ -399,6 +606,15 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: "acces-administrateurs-si-mesures-specifiques-non",
           libelle: "Non",
+          resultat: {
+            note: 0,
+            recommandations: [
+              {
+                identifiant: "acces-administrateurs-si-mesures-specifiques",
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 2,
         },
         {
@@ -406,6 +622,15 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees",
           libelle:
             "Oui, des mesures renforçant l'authentification ont été mises en œuvre.",
+          resultat: {
+            note: 1.5,
+            recommandations: [
+              {
+                identifiant: "acces-administrateurs-si-mesures-specifiques",
+                niveau: 2,
+              },
+            ],
+          },
           ordre: 3,
         },
         {
@@ -413,6 +638,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees-postes-dedies-administration",
           libelle:
             "Oui, des mesures renforçant l'authentification ont été mises en œuvre et des postes dédiés à l'administration sont utilisés.",
+          resultat: { note: 3 },
           ordre: 4,
         },
       ],
