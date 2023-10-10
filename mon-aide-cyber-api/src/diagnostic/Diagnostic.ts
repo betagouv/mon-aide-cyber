@@ -146,18 +146,21 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
       .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || 0);
   };
   lesRecommandations = prioriseLesRecommandations(recommandations, notes);
+  console.log("1. RECOS", lesRecommandations);
 
   lesRecommandations = [
     ...lesRecommandations,
     ...Object.entries(diagnostic.referentiel)
       .filter(
         ([thematique]) =>
-          thematique !==
-          ("reaction" &&
-            "gouvernance" &&
-            "SecuriteAcces" &&
-            "securiteinfrastructure" &&
-            "securiteposte"),
+          ![
+            "reaction",
+            "gouvernance",
+            "SecuriteAcces",
+            "securiteinfrastructure",
+            "securiteposte",
+            "sensibilisation",
+          ].includes(thematique),
       )
       .flatMap(([, questions]) => questions.questions)
       .map((question) => {
@@ -175,6 +178,8 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
       .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
       .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || 0),
   ];
+
+  console.log("2. RECOS", lesRecommandations);
 
   diagnostic.recommandations.recommandationsPrioritaires =
     lesRecommandations.slice(0, 6);
