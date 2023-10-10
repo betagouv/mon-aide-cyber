@@ -155,7 +155,7 @@ describe("Moteur de note", () => {
       });
     });
 
-    it("génère la note pour une question à plusieurs tiroirs", () => {
+    it("génère les notes pour une question à plusieurs tiroirs", () => {
       const question1 = uneQuestion()
         .aChoixUnique("Quelle est la réponse?")
         .avecReponsesPossibles([
@@ -222,6 +222,87 @@ describe("Moteur de note", () => {
 
       expect(notes).toStrictEqual<NotesDiagnostic>({
         thematique: [
+          {
+            identifiant: "voulezvous-inverser-les-chiffres",
+            note: 0,
+          },
+          {
+            identifiant: "une-question-a-tiroir",
+            note: 1,
+          },
+        ],
+      });
+    });
+
+    it("génère les notes pour une question et les réponses aux questions tiroirs", () => {
+      const question1 = uneQuestion()
+        .aChoixUnique("Quelle est la réponse?")
+        .avecReponsesPossibles([
+          uneReponsePossible().avecLibelle("42").construis(),
+          uneReponsePossible()
+            .avecLibelle("24")
+            .ajouteUneQuestionATiroir(
+              uneQuestionATiroir()
+                .aChoixUnique("Voulez-vous inverser les chiffres?")
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle("Oui").construis(),
+                  uneReponsePossible()
+                    .avecLibelle("Non")
+                    .ayantPourNote(0)
+                    .construis(),
+                ])
+                .construis(),
+            )
+            .ajouteUneQuestionATiroir(
+              uneQuestionATiroir()
+                .aChoixUnique("Une question à tiroir?")
+                .avecReponsesPossibles([
+                  uneReponsePossible()
+                    .avecLibelle("Affirmatif")
+                    .ayantPourNote(1)
+                    .construis(),
+                  uneReponsePossible().avecLibelle("Négatif").construis(),
+                ])
+                .construis(),
+            )
+            .ayantPourNote(0)
+            .construis(),
+        ])
+        .construis();
+
+      const diagnostic = constructeurDiagnostic
+        .avecUnReferentiel(
+          unReferentiel()
+            .sansThematique()
+            .ajouteUneThematique("thematique", [question1])
+            .construis(),
+        )
+        .ajouteUneReponseDonnee(
+          {
+            thematique: "thematique",
+            question: "quelle-est-la-reponse",
+          },
+          uneReponseDonnee()
+            .ayantPourReponse("24")
+            .avecDesReponsesMultiples([
+              {
+                identifiant: "voulezvous-inverser-les-chiffres",
+                reponses: ["non"],
+              },
+              {
+                identifiant: "une-question-a-tiroir",
+                reponses: ["affirmatif"],
+              },
+            ])
+            .construis(),
+        )
+        .construis();
+
+      const notes = MoteurDeNote.genereLesNotes(diagnostic);
+
+      expect(notes).toStrictEqual<NotesDiagnostic>({
+        thematique: [
+          { identifiant: "quelle-est-la-reponse", note: 0 },
           {
             identifiant: "voulezvous-inverser-les-chiffres",
             note: 0,
