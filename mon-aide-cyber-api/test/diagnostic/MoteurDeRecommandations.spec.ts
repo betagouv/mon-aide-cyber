@@ -8,7 +8,7 @@ import {
   uneReponsePossible,
 } from "../constructeurs/constructeurReferentiel";
 import { unTableauDeRecommandations } from "../constructeurs/constructeurTableauDeRecommandations";
-import { MoteurDeRecommandation2 } from "../../src/diagnostic/MoteurDeRecommandations2";
+import { MoteurDeRecommandations } from "../../src/diagnostic/MoteurDeRecommandations";
 import { RecommandationDiagnostic } from "../../src/diagnostic/Diagnostic";
 
 describe("Moteur de recommandations", () => {
@@ -41,7 +41,7 @@ describe("Moteur de recommandations", () => {
         .ayantLaReponseUnique("non")
         .construis();
 
-      const recommandations = MoteurDeRecommandation2.genere(
+      const recommandations = MoteurDeRecommandations.genere(
         questionRepondue,
         tableauDeRecommandations,
       );
@@ -70,7 +70,7 @@ describe("Moteur de recommandations", () => {
         .ayantLaReponseUnique("oui-mais")
         .construis();
 
-      const recommandations = MoteurDeRecommandation2.genere(
+      const recommandations = MoteurDeRecommandations.genere(
         questionRepondue,
         tableauDeRecommandations,
       );
@@ -100,7 +100,7 @@ describe("Moteur de recommandations", () => {
         .ayantLaReponseUnique("oui-mais")
         .construis();
 
-      const recommandations = MoteurDeRecommandation2.genere(
+      const recommandations = MoteurDeRecommandations.genere(
         questionRepondue,
         tableauDeRecommandations,
       );
@@ -189,7 +189,7 @@ describe("Moteur de recommandations", () => {
           )
           .construis();
 
-        const recommandations = MoteurDeRecommandation2.genere(
+        const recommandations = MoteurDeRecommandations.genere(
           questionRepondue,
           tableauDeRecommandations,
         );
@@ -252,7 +252,7 @@ describe("Moteur de recommandations", () => {
           )
           .construis();
 
-        const recommandations = MoteurDeRecommandation2.genere(
+        const recommandations = MoteurDeRecommandations.genere(
           questionRepondue,
           tableauDeRecommandations,
         );
