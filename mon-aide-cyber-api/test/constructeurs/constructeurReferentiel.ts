@@ -121,11 +121,25 @@ class ConstructeurQuestion
 class ConstructeurListeDeQuestions
   implements Constructeur<(QuestionChoixUnique | QuestionChoixMultiple)[]>
 {
-  private libellesReponsesPossibles: string[][] = [];
+  private libellesReponsesPossibles: {
+    libelle: string;
+    association?: {
+      identifiantRecommandation: string;
+      niveauRecommandation: NiveauRecommandation;
+      note: Note;
+    };
+  }[] = [];
   private labels: string[] = [];
 
-  avecLesReponsesPossiblesSuivantes(
-    libellesReponsesPossibles: string[][],
+  avecLesReponsesPossiblesSuivantesAssociees(
+    libellesReponsesPossibles: {
+      libelle: string;
+      association?: {
+        identifiantRecommandation: string;
+        niveauRecommandation: NiveauRecommandation;
+        note: Note;
+      };
+    }[],
   ): ConstructeurListeDeQuestions {
     this.libellesReponsesPossibles = libellesReponsesPossibles;
     return this;
@@ -137,13 +151,24 @@ class ConstructeurListeDeQuestions
   }
 
   construis(): (QuestionChoixUnique | QuestionChoixMultiple)[] {
-    return this.labels.map((label, index) =>
+    return this.labels.map((label) =>
       uneQuestion()
         .aChoixUnique(label)
         .avecReponsesPossibles(
-          this.libellesReponsesPossibles[index].map((rep) =>
-            uneReponsePossible().avecLibelle(rep).construis(),
-          ),
+          this.libellesReponsesPossibles.map((rep) => {
+            let constructeurReponsePossible = uneReponsePossible().avecLibelle(
+              rep.libelle,
+            );
+            if (rep.association) {
+              constructeurReponsePossible =
+                constructeurReponsePossible.associeeARecommandation(
+                  rep.association?.identifiantRecommandation,
+                  rep.association?.niveauRecommandation,
+                  rep.association?.note,
+                );
+            }
+            return constructeurReponsePossible.construis();
+          }),
         )
         .construis(),
     );
@@ -191,6 +216,7 @@ class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
     };
   }
 }
+
 class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private identifiant: string = faker.string.alpha(10);
   private libelle: string = faker.word.words();
