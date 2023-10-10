@@ -156,7 +156,8 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
           ("reaction" &&
             "gouvernance" &&
             "SecuriteAcces" &&
-            "securiteinfrastructure"),
+            "securiteinfrastructure" &&
+            "securiteposte"),
       )
       .flatMap(([, questions]) => questions.questions)
       .map((question) => {
