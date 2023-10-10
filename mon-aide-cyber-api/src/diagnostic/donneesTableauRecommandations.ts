@@ -68,6 +68,28 @@ const tableauRecommandations: TableauDeRecommandations = {
     },
     priorisation: 24,
   },
+  "gouvernance-connaissance-rgpd-registre-traitement": {
+    niveau1: {
+      titre:
+        "Établir votre registre des activités de traitement  de données personnelles.",
+      pourquoi:
+        "recommandations/gouvernance/gouvernance-connaissance-rgpd-registre-traitement-niveau1-pourquoi.pug",
+      comment:
+        "recommandations/gouvernance/gouvernance-connaissance-rgpd-registre-traitement-niveau1-comment.pug",
+    },
+    priorisation: 24,
+  },
+  "gouvernance-connaissance-rgpd-moyens-informer-personnes-mis-en-place": {
+    niveau1: {
+      titre:
+        "Mettre en place des moyens permettant aux personnes concernées d’exercer et faire valoir leurs droits.",
+      pourquoi:
+        "recommandations/gouvernance/gouvernance-connaissance-rgpd-moyens-informer-personnes-mis-en-place-niveau1-pourquoi.pug",
+      comment:
+        "recommandations/gouvernance/gouvernance-connaissance-rgpd-moyens-informer-personnes-mis-en-place-niveau1-comment.pug",
+    },
+    priorisation: 24,
+  },
   "gouvernance-exigence-cyber-securite-presta": {
     niveau1: {
       titre: "Fixer des exigences de cybersécurité aux prestataires.",
