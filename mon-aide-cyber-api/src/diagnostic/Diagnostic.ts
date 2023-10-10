@@ -152,12 +152,14 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
     ...Object.entries(diagnostic.referentiel)
       .filter(
         ([thematique]) =>
-          thematique !==
-          ("reaction" &&
-            "gouvernance" &&
-            "SecuriteAcces" &&
-            "securiteinfrastructure" &&
-            "securiteposte"),
+          ![
+            "reaction",
+            "gouvernance",
+            "SecuriteAcces",
+            "securiteinfrastructure",
+            "securiteposte",
+            "sensibilisation",
+          ].includes(thematique),
       )
       .flatMap(([, questions]) => questions.questions)
       .map((question) => {
