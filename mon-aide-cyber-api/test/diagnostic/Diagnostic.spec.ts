@@ -1,5 +1,4 @@
 import { describe, expect } from "vitest";
-import { unTableauDeNotes } from "../constructeurs/constructeurTableauDeNotes";
 import { unTableauDeRecommandations } from "../constructeurs/constructeurTableauDeRecommandations";
 import {
   unDiagnostic,
@@ -15,66 +14,6 @@ import {
 import { genereLesRecommandations } from "../../src/diagnostic/Diagnostic";
 
 describe("Diagnostic", () => {
-  const tableauDeNotes = unTableauDeNotes()
-    .avecDesNotes([
-      {
-        q1: {
-          "reponse-11": 0,
-          "reponse-12": 1,
-          "reponse-13": null,
-          "reponse-14": undefined,
-        },
-      },
-      {
-        q2: {
-          "reponse-21": 0,
-          "reponse-22": 1,
-          "reponse-23": null,
-          "reponse-24": undefined,
-        },
-      },
-      {
-        q3: {
-          "reponse-31": 0,
-          "reponse-32": 1,
-          "reponse-33": null,
-          "reponse-34": undefined,
-        },
-      },
-      {
-        q4: {
-          "reponse-41": 0,
-          "reponse-42": 1,
-          "reponse-43": null,
-          "reponse-44": undefined,
-        },
-      },
-      {
-        q5: {
-          "reponse-51": 0,
-          "reponse-52": 1,
-          "reponse-53": null,
-          "reponse-54": undefined,
-        },
-      },
-      {
-        q6: {
-          "reponse-61": 0,
-          "reponse-62": 1,
-          "reponse-63": null,
-          "reponse-64": undefined,
-        },
-      },
-      {
-        q7: {
-          "reponse-71": 0,
-          "reponse-72": 1,
-          "reponse-73": null,
-          "reponse-74": undefined,
-        },
-      },
-    ])
-    .construis();
   const tableauDeRecommandations = unTableauDeRecommandations()
     .avecLesRecommandations([
       { q1: { niveau1: "reco 1", niveau2: "reco 12", priorisation: 1 } },
@@ -88,14 +27,133 @@ describe("Diagnostic", () => {
     .construis();
   const questions = uneListeDeQuestions()
     .dontLesLabelsSont(["q1", "q2", "q3", "q4", "q5", "q6", "q7"])
-    .avecLesReponsesPossiblesSuivantes([
-      ["reponse 11", "reponse 12", "reponse 13", "reponse 14"],
-      ["reponse 21", "reponse 22", "reponse 23", "reponse 24"],
-      ["reponse 31", "reponse 32", "reponse 33", "reponse 34"],
-      ["reponse 41", "reponse 42", "reponse 43", "reponse 44"],
-      ["reponse 51", "reponse 52", "reponse 53", "reponse 54"],
-      ["reponse 61", "reponse 62", "reponse 63", "reponse 64"],
-      ["reponse 71", "reponse 72", "reponse 73", "reponse 74"],
+    .avecLesReponsesPossiblesSuivantesAssociees([
+      {
+        libelle: "reponse 11",
+        association: {
+          identifiantRecommandation: "q1",
+          niveauRecommandation: 1,
+          note: 0,
+        },
+      },
+      {
+        libelle: "reponse 12",
+        association: {
+          identifiantRecommandation: "q1",
+          niveauRecommandation: 2,
+          note: 1,
+        },
+      },
+      { libelle: "reponse 13" },
+      { libelle: "reponse 14" },
+      {
+        libelle: "reponse 21",
+        association: {
+          identifiantRecommandation: "q2",
+          niveauRecommandation: 1,
+          note: 0,
+        },
+      },
+      {
+        libelle: "reponse 22",
+        association: {
+          identifiantRecommandation: "q2",
+          niveauRecommandation: 2,
+          note: 1,
+        },
+      },
+      { libelle: "reponse 23" },
+      { libelle: "reponse 24" },
+      {
+        libelle: "reponse 31",
+        association: {
+          identifiantRecommandation: "q3",
+          niveauRecommandation: 1,
+          note: 0,
+        },
+      },
+      {
+        libelle: "reponse 32",
+        association: {
+          identifiantRecommandation: "q3",
+          niveauRecommandation: 2,
+          note: 1,
+        },
+      },
+      { libelle: "reponse 33" },
+      { libelle: "reponse 34" },
+      {
+        libelle: "reponse 41",
+        association: {
+          identifiantRecommandation: "q4",
+          niveauRecommandation: 1,
+          note: 0,
+        },
+      },
+      {
+        libelle: "reponse 42",
+        association: {
+          identifiantRecommandation: "q4",
+          niveauRecommandation: 2,
+          note: 1,
+        },
+      },
+      { libelle: "reponse 43" },
+      { libelle: "reponse 44" },
+      {
+        libelle: "reponse 51",
+        association: {
+          identifiantRecommandation: "q5",
+          niveauRecommandation: 1,
+          note: 0,
+        },
+      },
+      {
+        libelle: "reponse 52",
+        association: {
+          identifiantRecommandation: "q5",
+          niveauRecommandation: 2,
+          note: 1,
+        },
+      },
+      { libelle: "reponse 53" },
+      { libelle: "reponse 54" },
+      {
+        libelle: "reponse 61",
+        association: {
+          identifiantRecommandation: "q6",
+          niveauRecommandation: 1,
+          note: 0,
+        },
+      },
+      {
+        libelle: "reponse 62",
+        association: {
+          identifiantRecommandation: "q6",
+          niveauRecommandation: 2,
+          note: 1,
+        },
+      },
+      { libelle: "reponse 63" },
+      { libelle: "reponse 64" },
+      {
+        libelle: "reponse 71",
+        association: {
+          identifiantRecommandation: "q7",
+          niveauRecommandation: 1,
+          note: 0,
+        },
+      },
+      {
+        libelle: "reponse 72",
+        association: {
+          identifiantRecommandation: "q7",
+          niveauRecommandation: 2,
+          note: 1,
+        },
+      },
+      { libelle: "reponse 73" },
+      { libelle: "reponse 74" },
     ])
     .construis();
 
@@ -118,7 +176,6 @@ describe("Diagnostic", () => {
             { q6: "reponse-61" },
             { q7: "reponse-72" },
           ])
-          .avecUnTableauDeNotes(tableauDeNotes)
           .avecUnTableauDeRecommandations(tableauDeRecommandations)
           .construis();
 
@@ -179,9 +236,6 @@ describe("Diagnostic", () => {
       });
 
       it("le niveau 2 est optionnel", () => {
-        const tableauDeNotes = unTableauDeNotes().avecDesNotes([
-          { q8: { "reponse-81": 0, "reponse-82": 1, "reponse-83": null } },
-        ]);
         const tableauDeRecommandations =
           unTableauDeRecommandations().avecLesRecommandations([
             { q8: { niveau1: "reco 8", priorisation: 7 } },
@@ -194,8 +248,14 @@ describe("Diagnostic", () => {
                 uneQuestion()
                   .aChoixUnique("q8")
                   .avecReponsesPossibles([
-                    uneReponsePossible().avecLibelle("Réponse 81").construis(),
-                    uneReponsePossible().avecLibelle("Réponse 82").construis(),
+                    uneReponsePossible()
+                      .avecLibelle("Réponse 81")
+                      .associeeARecommandation("q8", 1, 0)
+                      .construis(),
+                    uneReponsePossible()
+                      .avecLibelle("Réponse 82")
+                      .associeeARecommandation("q8", 1, 1)
+                      .construis(),
                     uneReponsePossible().avecLibelle("Réponse 83").construis(),
                   ])
                   .construis(),
@@ -203,7 +263,6 @@ describe("Diagnostic", () => {
               .construis(),
           )
           .avecLesReponsesDonnees("thematique", [{ q8: "reponse-82" }])
-          .avecUnTableauDeNotes(tableauDeNotes.construis())
           .avecUnTableauDeRecommandations(tableauDeRecommandations.construis())
           .construis();
 
@@ -247,7 +306,6 @@ describe("Diagnostic", () => {
           { q6: "reponse-61" },
           { q7: "reponse-72" },
         ])
-        .avecUnTableauDeNotes(tableauDeNotes)
         .avecUnTableauDeRecommandations(tableauDeRecommandations)
         .construis();
 
@@ -312,21 +370,37 @@ describe("Diagnostic", () => {
       it("en prenant en compte le niveau de priorisation de la recommandation", () => {
         const questionsSupplementaires = uneListeDeQuestions()
           .dontLesLabelsSont(["q8", "q9"])
-          .avecLesReponsesPossiblesSuivantes([
-            ["reponse 81", "reponse 82"],
-            ["reponse 91", "reponse 92"],
-          ])
-          .construis();
-        const autreTableauDeNotes = unTableauDeNotes()
-          .avecDesNotes([
+          .avecLesReponsesPossiblesSuivantesAssociees([
             {
-              q8: {
-                "reponse-81": 0,
-                "reponse-82": 1,
+              libelle: "reponse 81",
+              association: {
+                identifiantRecommandation: "q8",
+                niveauRecommandation: 1,
+                note: 0,
               },
-              q9: {
-                "reponse-91": 0,
-                "reponse-92": 1,
+            },
+            {
+              libelle: "reponse 82",
+              association: {
+                identifiantRecommandation: "q8",
+                niveauRecommandation: 2,
+                note: 1,
+              },
+            },
+            {
+              libelle: "reponse 91",
+              association: {
+                identifiantRecommandation: "q9",
+                niveauRecommandation: 1,
+                note: 0,
+              },
+            },
+            {
+              libelle: "reponse 92",
+              association: {
+                identifiantRecommandation: "q9",
+                niveauRecommandation: 2,
+                note: 1,
               },
             },
           ])
@@ -352,7 +426,6 @@ describe("Diagnostic", () => {
             { q8: "reponse-81" },
             { q9: "reponse-92" },
           ])
-          .avecUnTableauDeNotes({ ...tableauDeNotes, ...autreTableauDeNotes })
           .avecUnTableauDeRecommandations(tableauDeRecommandations)
           .construis();
 
@@ -412,30 +485,6 @@ describe("Diagnostic", () => {
     });
 
     describe("pour des questions dont le résultat dépend d'une règle de calcul", () => {
-      const tableauDeNotes = unTableauDeNotes()
-        .avecDesNotes([
-          {
-            q1: {
-              "reponse-1": 0,
-              "reponse-2": 1,
-              "reponse-3": {
-                operation: "moyenne",
-                reponses: {
-                  "reponse-310": null,
-                  "reponse-311": 1,
-                  "reponse-312": 3,
-                  "reponse-320": null,
-                  "reponse-321": 1.5,
-                  "reponse-322": 2,
-                  "reponse-330": null,
-                  "reponse-331": 0,
-                  "reponse-332": 3,
-                },
-              },
-            },
-          },
-        ])
-        .construis();
       const tableauDeRecommandations = unTableauDeRecommandations()
         .avecLesRecommandations([
           { q1: { niveau1: "reco 1", niveau2: "reco 12", priorisation: 1 } },
@@ -479,7 +528,7 @@ describe("Diagnostic", () => {
         ])
         .construis();
 
-      it("prend en compte la règle de la moyenne", () => {
+      it.skip("[PROBABLEMENT À SUPPRIMER CAR plus de sens avec le nouveau modèle] prend en compte la règle de la moyenne", () => {
         const diagnostic = unDiagnostic()
           .avecUnReferentiel(
             unReferentiel()
@@ -507,7 +556,6 @@ describe("Diagnostic", () => {
               ])
               .construis(),
           )
-          .avecUnTableauDeNotes(tableauDeNotes)
           .avecUnTableauDeRecommandations(tableauDeRecommandations)
           .construis();
 
@@ -554,7 +602,6 @@ describe("Diagnostic", () => {
               ])
               .construis(),
           )
-          .avecUnTableauDeNotes(tableauDeNotes)
           .avecUnTableauDeRecommandations(tableauDeRecommandations)
           .construis();
 

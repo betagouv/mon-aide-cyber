@@ -380,17 +380,6 @@ describe("Le service de diagnostic", () => {
 
   describe("Lorsque l'on veut terminer le diagnostic", () => {
     let serviceDiagnostic: ServiceDiagnostic;
-    const tableauDeNotes = unTableauDeNotes()
-      .avecDesNotes([
-        { q1: { "reponse-11": 0, "reponse-12": 1 } },
-        { q2: { "reponse-21": 0, "reponse-22": 1 } },
-        { q3: { "reponse-31": 0, "reponse-32": 1 } },
-        { q4: { "reponse-41": 0, "reponse-42": 1 } },
-        { q5: { "reponse-51": 0, "reponse-52": 1 } },
-        { q6: { "reponse-61": 0, "reponse-62": 1 } },
-        { q7: { "reponse-71": 0, "reponse-72": 1 } },
-      ])
-      .construis();
     const tableauDeRecommandations = unTableauDeRecommandations()
       .avecLesRecommandations([
         { q1: { niveau1: "reco 1", niveau2: "reco 12", priorisation: 1 } },
@@ -413,14 +402,119 @@ describe("Le service de diagnostic", () => {
     it("génère les recommandations", async () => {
       const questions = uneListeDeQuestions()
         .dontLesLabelsSont(["q1", "q2", "q3", "q4", "q5", "q6", "q7"])
-        .avecLesReponsesPossiblesSuivantes([
-          ["reponse 11", "reponse 12"],
-          ["reponse 21", "reponse 22"],
-          ["reponse 31", "reponse 32"],
-          ["reponse 41", "reponse 42"],
-          ["reponse 51", "reponse 52"],
-          ["reponse 61", "reponse 62"],
-          ["reponse 71", "reponse 72"],
+        .avecLesReponsesPossiblesSuivantesAssociees([
+          {
+            libelle: "reponse 11",
+            association: {
+              identifiantRecommandation: "q1",
+              niveauRecommandation: 1,
+              note: 0,
+            },
+          },
+          {
+            libelle: "reponse 12",
+            association: {
+              identifiantRecommandation: "q1",
+              niveauRecommandation: 2,
+              note: 1,
+            },
+          },
+          {
+            libelle: "reponse 21",
+            association: {
+              identifiantRecommandation: "q2",
+              niveauRecommandation: 1,
+              note: 0,
+            },
+          },
+          {
+            libelle: "reponse 22",
+            association: {
+              identifiantRecommandation: "q2",
+              niveauRecommandation: 2,
+              note: 1,
+            },
+          },
+          {
+            libelle: "reponse 31",
+            association: {
+              identifiantRecommandation: "q3",
+              niveauRecommandation: 1,
+              note: 0,
+            },
+          },
+          {
+            libelle: "reponse 32",
+            association: {
+              identifiantRecommandation: "q3",
+              niveauRecommandation: 2,
+              note: 1,
+            },
+          },
+          {
+            libelle: "reponse 41",
+            association: {
+              identifiantRecommandation: "q4",
+              niveauRecommandation: 1,
+              note: 0,
+            },
+          },
+          {
+            libelle: "reponse 42",
+            association: {
+              identifiantRecommandation: "q4",
+              niveauRecommandation: 2,
+              note: 1,
+            },
+          },
+          {
+            libelle: "reponse 51",
+            association: {
+              identifiantRecommandation: "q5",
+              niveauRecommandation: 1,
+              note: 0,
+            },
+          },
+          {
+            libelle: "reponse 52",
+            association: {
+              identifiantRecommandation: "q5",
+              niveauRecommandation: 2,
+              note: 1,
+            },
+          },
+          {
+            libelle: "reponse 61",
+            association: {
+              identifiantRecommandation: "q6",
+              niveauRecommandation: 1,
+              note: 0,
+            },
+          },
+          {
+            libelle: "reponse 62",
+            association: {
+              identifiantRecommandation: "q6",
+              niveauRecommandation: 2,
+              note: 1,
+            },
+          },
+          {
+            libelle: "reponse 71",
+            association: {
+              identifiantRecommandation: "q7",
+              niveauRecommandation: 1,
+              note: 0,
+            },
+          },
+          {
+            libelle: "reponse 72",
+            association: {
+              identifiantRecommandation: "q7",
+              niveauRecommandation: 2,
+              note: 1,
+            },
+          },
         ])
         .construis();
       const diagnostic = unDiagnostic()
@@ -439,10 +533,9 @@ describe("Le service de diagnostic", () => {
           { q6: "reponse-61" },
           { q7: "reponse-71" },
         ])
-        .avecUnTableauDeNotes(tableauDeNotes)
         .avecUnTableauDeRecommandations(tableauDeRecommandations)
         .construis();
-      entrepots.diagnostic().persiste(diagnostic);
+      await entrepots.diagnostic().persiste(diagnostic);
 
       await serviceDiagnostic.termine(diagnostic.identifiant);
 

@@ -8,6 +8,8 @@ import {
   TableauDeRecommandations,
 } from "./TableauDeRecommandations";
 import { StrategieDeReponse } from "./StrategieDeReponse";
+import { MoteurDeNote, NotesDiagnostic } from "./MoteurDeNote";
+import { MoteurDeRecommandation2 } from "./MoteurDeRecommandations2";
 import { MoteurDeRecommandations } from "./MoteurDeRecommandations";
 
 type Thematique = string;
@@ -108,22 +110,63 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
     return question.reponseDonnee.reponsesMultiples.length === 0;
   };
 
-  const lesRecommandations = Object.entries(diagnostic.referentiel)
+  let lesRecommandations: RecommandationPriorisee[];
+
+  const notes = MoteurDeNote.genereLesNotes(diagnostic);
+  const recommandations = Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
-    .map((question) => {
-      return (
-        MoteurDeRecommandations.get(estReponseUnique(question))?.genere(
-          diagnostic,
-          question,
-        ) || []
-      );
-    })
-    .flatMap((reco) => reco)
-    .filter(
-      (reco) => reco.noteObtenue !== null && reco.noteObtenue !== undefined,
-    )
-    .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
-    .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || 0);
+    .flatMap((question) =>
+      MoteurDeRecommandation2.genere(
+        question,
+        diagnostic.tableauDesRecommandations,
+      ),
+    );
+
+  const prioriseLesRecommandations = (
+    recommandations: RecommandationDiagnostic[],
+    notes: NotesDiagnostic,
+  ): RecommandationPriorisee[] => {
+    return recommandations
+      .map((recommandation) => {
+        const note = Object.values(notes)
+          .flatMap((note) => note)
+          .find((note) => note.identifiant === recommandation.repondA)?.note;
+        return {
+          titre: recommandation.niveau.titre,
+          pourquoi: recommandation.niveau.pourquoi,
+          comment: recommandation.niveau.comment,
+          priorisation: recommandation.priorisation,
+          noteObtenue: note,
+        };
+      })
+      .filter(
+        (reco) => reco.noteObtenue !== null && reco.noteObtenue !== undefined,
+      )
+      .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
+      .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || 0);
+  };
+  lesRecommandations = prioriseLesRecommandations(recommandations, notes);
+
+  lesRecommandations = [
+    ...lesRecommandations,
+    ...Object.entries(diagnostic.referentiel)
+      .filter(([thematique]) => thematique !== "reaction")
+      .flatMap(([, questions]) => questions.questions)
+      .map((question) => {
+        return (
+          MoteurDeRecommandations.get(estReponseUnique(question))?.genere(
+            diagnostic,
+            question,
+          ) || []
+        );
+      })
+      .flatMap((reco) => reco)
+      .filter(
+        (reco) => reco.noteObtenue !== null && reco.noteObtenue !== undefined,
+      )
+      .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
+      .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || 0),
+  ];
 
   diagnostic.recommandations.recommandationsPrioritaires =
     lesRecommandations.slice(0, 6);
