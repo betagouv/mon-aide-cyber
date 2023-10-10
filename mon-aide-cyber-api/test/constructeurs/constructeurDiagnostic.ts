@@ -12,15 +12,12 @@ import {
   ReponsePossible,
   TypeQuestion,
 } from "../../src/diagnostic/Referentiel";
-import { unTableauDeNotes } from "./constructeurTableauDeNotes";
-import { TableauDeNotes } from "../../src/diagnostic/TableauDeNotes";
 import { TableauDeRecommandations } from "../../src/diagnostic/TableauDeRecommandations";
 import { unTableauDeRecommandations } from "./constructeurTableauDeRecommandations";
 import { fakerFR } from "@faker-js/faker";
 
 class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   private referentiel: Referentiel = unReferentiel().construis();
-  private tableauDeNotes = unTableauDeNotes().construis();
   private tableauDeRecommandations: TableauDeRecommandations =
     unTableauDeRecommandations().construis();
   private reponsesDonnees: {
@@ -55,12 +52,6 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     });
     return this;
   }
-
-  avecUnTableauDeNotes(tableauDeNotes: TableauDeNotes): ConstructeurDiagnostic {
-    this.tableauDeNotes = tableauDeNotes;
-    return this;
-  }
-
   avecUnTableauDeRecommandations(
     tableauDeRecommandations: TableauDeRecommandations,
   ): ConstructeurDiagnostic {
@@ -79,7 +70,6 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   construis(): Diagnostic {
     const diagnostic = initialiseDiagnostic(
       this.referentiel,
-      this.tableauDeNotes,
       this.tableauDeRecommandations,
     );
     this.reponsesDonnees.forEach((rep) => {

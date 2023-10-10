@@ -8,6 +8,7 @@
     "dev": "nodemon --require dotenv/config index.ts",
     "test": "tsc --noEmit && vitest run --config vitest.config.ts --reporter verbose",
     "test:coverage": "vitest --config vitest.config.ts run --coverage",
+    "test:coverage:ui": "vitest --config vitest.config.ts --ui --coverage --reporter verbose",
     "test:watch": "vitest --config vitest.config.ts --ui --reporter verbose"
   },
   "dependencies": {

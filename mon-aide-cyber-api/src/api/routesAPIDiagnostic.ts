@@ -12,7 +12,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.post("/", (_requete: Request, reponse: Response) => {
     new ServiceDiagnostic(
       configuration.adaptateurReferentiel,
-      configuration.adaptateurTableauDeNotes,
       configuration.adaptateurTableauDeRecommandations,
       configuration.entrepots,
     )
@@ -33,7 +32,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       const { id } = requete.params;
       const serviceDiagnostic = new ServiceDiagnostic(
         configuration.adaptateurReferentiel,
-        configuration.adaptateurTableauDeNotes,
         configuration.adaptateurTableauDeRecommandations,
         configuration.entrepots,
       );
@@ -54,7 +52,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       const { id } = requete.params;
       new ServiceDiagnostic(
         configuration.adaptateurReferentiel,
-        configuration.adaptateurTableauDeNotes,
         configuration.adaptateurTableauDeRecommandations,
         configuration.entrepots,
       )
@@ -79,7 +76,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       const corpsReponse = requete.body;
       new ServiceDiagnostic(
         configuration.adaptateurReferentiel,
-        configuration.adaptateurTableauDeNotes,
         configuration.adaptateurTableauDeRecommandations,
         configuration.entrepots,
       )

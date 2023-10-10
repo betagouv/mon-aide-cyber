@@ -2,7 +2,6 @@ import serveur from "../../src/serveur";
 import { AdaptateurReferentielDeTest } from "../adaptateurs/AdaptateurReferentielDeTest";
 import { AdaptateurTranscripteurDeTest } from "../adaptateurs/adaptateurTranscripteur";
 import { EntrepotsMemoire } from "../../src/infrastructure/entrepots/memoire/Entrepots";
-import { AdaptateurTableauDeNotesDeTest } from "../adaptateurs/AdaptateurTableauDeNotesDeTest";
 import { AdaptateurTableauDeRecommandationsDeTest } from "../adaptateurs/AdaptateurTableauDeRecommandationsDeTest";
 import { AdaptateurPDF } from "../../src/adaptateurs/AdaptateurPDF";
 import { Diagnostic } from "../../src/diagnostic/Diagnostic";
@@ -17,7 +16,6 @@ const testeurIntegration = () => {
     ecoute: (port: number, succes: () => void) => void;
   };
   const adaptateurReferentiel = new AdaptateurReferentielDeTest();
-  const adaptateurTableauDeNotes = new AdaptateurTableauDeNotesDeTest();
   const adaptateurTableauDeRecommandations =
     new AdaptateurTableauDeRecommandationsDeTest();
   const adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest();
@@ -30,7 +28,6 @@ const testeurIntegration = () => {
     serveurDeTest = serveur.creeServeur({
       adaptateurPDF,
       adaptateurReferentiel,
-      adaptateurTableauDeNotes,
       adaptateurTranscripteurDonnees,
       adaptateurTableauDeRecommandations,
       entrepots,

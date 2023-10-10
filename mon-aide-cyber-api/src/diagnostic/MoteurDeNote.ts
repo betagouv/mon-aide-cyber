@@ -1,5 +1,5 @@
 import { Diagnostic, QuestionDiagnostic } from "./Diagnostic";
-import { Note } from "./TableauDeNotes";
+import { Note } from "./Note";
 
 export type NotesDiagnostic = {
   [thematique: string]: { identifiant: string; note: Note }[];

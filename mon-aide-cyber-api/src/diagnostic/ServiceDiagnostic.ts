@@ -7,7 +7,6 @@ import {
 import * as crypto from "crypto";
 import { Entrepots } from "../domaine/Entrepots";
 import { Adaptateur } from "../adaptateurs/Adaptateur";
-import { TableauDeNotes } from "./TableauDeNotes";
 import { Referentiel } from "./Referentiel";
 import { TableauDeRecommandations } from "./TableauDeRecommandations";
 
@@ -24,7 +23,6 @@ export type CorpsReponse = {
 export class ServiceDiagnostic {
   constructor(
     private readonly adaptateurReferentiel: Adaptateur<Referentiel>,
-    private readonly adaptateurTableauDeNotes: Adaptateur<TableauDeNotes>,
     private readonly adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>,
     private readonly entrepots: Entrepots,
   ) {}
@@ -35,10 +33,9 @@ export class ServiceDiagnostic {
   lance = async (): Promise<Diagnostic> => {
     return Promise.all([
       this.adaptateurReferentiel.lis(),
-      this.adaptateurTableauDeNotes.lis(),
       this.adaptateurTableauDeRecommandations.lis(),
-    ]).then(([ref, notes, rec]) => {
-      const diagnostic = initialiseDiagnostic(ref, notes, rec);
+    ]).then(([ref, rec]) => {
+      const diagnostic = initialiseDiagnostic(ref, rec);
       this.entrepots.diagnostic().persiste(diagnostic);
       return diagnostic;
     });
