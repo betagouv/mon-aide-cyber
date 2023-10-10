@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { Question, Recommandation, Referentiel } from "./Referentiel";
 import { Entrepot } from "../domaine/Entrepot";
 import { CorpsReponse } from "./ServiceDiagnostic";
-import { Note, TableauDeNotes } from "./TableauDeNotes";
+import { Note } from "./Note";
 import {
   NiveauDeRecommandation,
   TableauDeRecommandations,
@@ -50,13 +50,11 @@ type Diagnostic = {
   identifiant: crypto.UUID;
   recommandations?: Recommandations;
   referentiel: ReferentielDiagnostic;
-  tableauDesNotes: TableauDeNotes;
   tableauDesRecommandations: TableauDeRecommandations;
 };
 type EntrepotDiagnostic = Entrepot<Diagnostic>;
 const initialiseDiagnostic = (
   r: Referentiel,
-  tableauDesNotes: TableauDeNotes,
   tableauDesRecommandations: TableauDeRecommandations,
 ): Diagnostic => {
   const referentiel: {
@@ -81,7 +79,6 @@ const initialiseDiagnostic = (
   return {
     identifiant: crypto.randomUUID(),
     referentiel,
-    tableauDesNotes,
     tableauDesRecommandations,
   };
 };

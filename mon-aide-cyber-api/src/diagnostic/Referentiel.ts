@@ -1,4 +1,4 @@
-import { Note } from "./TableauDeNotes";
+import { Note } from "./Note";
 
 type QuestionATiroir = Omit<Question, "reponsesPossibles"> & {
   reponsesPossibles: Omit<ReponsePossible, "questions">[];

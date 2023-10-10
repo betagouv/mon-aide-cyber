@@ -12,7 +12,7 @@ import {
 import { fakerFR as faker } from "@faker-js/faker";
 import { Constructeur } from "./constructeur";
 import { aseptise } from "../utilitaires/aseptise";
-import { Note } from "../../src/diagnostic/TableauDeNotes";
+import { Note } from "../../src/diagnostic/Note";
 
 class ConstructeurReferentiel implements Constructeur<Referentiel> {
   thematique: { [clef: string]: QuestionsThematique } = {

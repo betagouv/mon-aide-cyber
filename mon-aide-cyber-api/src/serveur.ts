@@ -6,7 +6,6 @@ import routesAPI from "./api/routesAPI";
 import { AdaptateurTranscripteur } from "./adaptateurs/AdaptateurTranscripteur";
 import { Entrepots } from "./domaine/Entrepots";
 import { gestionnaireErreurAggregatNonTrouve } from "./api/gestionnaires/erreurs";
-import { TableauDeNotes } from "./diagnostic/TableauDeNotes";
 import { Referentiel } from "./diagnostic/Referentiel";
 import { TableauDeRecommandations } from "./diagnostic/TableauDeRecommandations";
 import { Adaptateur } from "./adaptateurs/Adaptateur";
@@ -15,7 +14,6 @@ import { AdaptateurPDF } from "./adaptateurs/AdaptateurPDF";
 export type ConfigurationServeur = {
   adaptateurPDF: AdaptateurPDF;
   adaptateurReferentiel: Adaptateur<Referentiel>;
-  adaptateurTableauDeNotes: Adaptateur<TableauDeNotes>;
   adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>;
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
   entrepots: Entrepots;
