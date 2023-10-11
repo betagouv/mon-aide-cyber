@@ -1,31 +1,49 @@
-import { describe, expect, it, afterEach } from "vitest";
-import { EntrepotDiagnosticPostgres } from "../../../../src/infrastructure/entrepots/postgres/EntrepotsPostgres";
-import { unDiagnostic } from "../../../constructeurs/constructeurDiagnostic";
-import Knex from "knex";
-import knexfile from "../../../../src/infrastructure/entrepots/postgres/knexfile";
+import { afterEach, describe, expect, it } from 'vitest';
+import { EntrepotDiagnosticPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotsPostgres';
+import { unDiagnostic } from '../../../constructeurs/constructeurDiagnostic';
+import { nettoieLaBaseDeDonnees } from '../../../utilitaires/nettoyeurBDD';
+import {
+  uneQuestion,
+  uneReponsePossible,
+  unReferentiel,
+} from '../../../constructeurs/constructeurReferentiel';
 
-class EntrepotsDiagnosticPostgresPourLesTests {
-  private knex: any;
-  constructor() {
-    this.knex = Knex(knexfile);
-  }
-  async nettoie() {
-    await this.knex("diagnostics").truncate();
-  }
-}
-
-class EntrepotsPostgresPourLesTests {
-  async nettoieLaBase() {
-    await new EntrepotsDiagnosticPostgresPourLesTests().nettoie();
-  }
-}
-
-describe("Entrepot Diagnostic Postgres", () => {
+describe('Entrepot Diagnostic Postgres', () => {
   afterEach(async () => {
-    await new EntrepotsPostgresPourLesTests().nettoieLaBase();
+    await nettoieLaBaseDeDonnees();
   });
-  it("persiste un diagnostic", async () => {
+  it('persiste un diagnostic', async () => {
     const diagnostic = unDiagnostic().construis();
+
+    await new EntrepotDiagnosticPostgres().persiste(diagnostic);
+
+    const entrepotDiagnosticPostgresLecture =
+      await new EntrepotDiagnosticPostgres();
+    expect(
+      await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant),
+    ).toStrictEqual(diagnostic);
+  });
+
+  it('persiste un diagnostic avec les réponses données', async () => {
+    const diagnostic = unDiagnostic()
+      .avecUnReferentiel(
+        unReferentiel()
+          .sansThematique()
+          .ajouteUneThematique('question-set', [
+            uneQuestion()
+              .aChoixMultiple('Sauvegardes-tu les set?', [
+                uneReponsePossible().avecLibelle('Oui').construis(),
+                uneReponsePossible().avecLibelle('Un peu').construis(),
+                uneReponsePossible().avecLibelle('Beaucoup').construis(),
+              ])
+              .construis(),
+          ])
+          .construis(),
+      )
+      .avecLesReponsesDonnees('question-set', [
+        { 'sauvegardestu-les-set': ['un-peu', 'beaucoup'] },
+      ])
+      .construis();
 
     await new EntrepotDiagnosticPostgres().persiste(diagnostic);
 

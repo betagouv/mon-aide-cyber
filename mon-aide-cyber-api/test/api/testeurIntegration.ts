@@ -1,12 +1,12 @@
-import serveur from "../../src/serveur";
-import { AdaptateurReferentielDeTest } from "../adaptateurs/AdaptateurReferentielDeTest";
-import { AdaptateurTranscripteurDeTest } from "../adaptateurs/adaptateurTranscripteur";
-import { EntrepotsMemoire } from "../../src/infrastructure/entrepots/memoire/Entrepots";
-import { AdaptateurTableauDeRecommandationsDeTest } from "../adaptateurs/AdaptateurTableauDeRecommandationsDeTest";
-import { AdaptateurPDF } from "../../src/adaptateurs/AdaptateurPDF";
-import { Diagnostic } from "../../src/diagnostic/Diagnostic";
-import { Express } from "express";
-import { fakerFR } from "@faker-js/faker";
+import serveur from '../../src/serveur';
+import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
+import { AdaptateurTranscripteurDeTest } from '../adaptateurs/adaptateurTranscripteur';
+import { AdaptateurTableauDeRecommandationsDeTest } from '../adaptateurs/AdaptateurTableauDeRecommandationsDeTest';
+import { AdaptateurPDF } from '../../src/adaptateurs/AdaptateurPDF';
+import { Diagnostic } from '../../src/diagnostic/Diagnostic';
+import { Express } from 'express';
+import { fakerFR } from '@faker-js/faker';
+import { EntrepotsMemoire } from '../infrastructure/entrepots/memoire/Entrepots';
 
 const PORT_ECOUTE = fakerFR.number.int({ min: 10000, max: 20000 });
 const testeurIntegration = () => {
@@ -22,7 +22,7 @@ const testeurIntegration = () => {
   const entrepots = new EntrepotsMemoire();
   const adaptateurPDF: AdaptateurPDF = {
     genereRecommandations: (__: Diagnostic) =>
-      Promise.resolve(Buffer.from("PDF généré")),
+      Promise.resolve(Buffer.from('PDF généré')),
   };
   const initialise = () => {
     serveurDeTest = serveur.creeServeur({

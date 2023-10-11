@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import { AggregatNonTrouve } from "../../infrastructure/entrepots/memoire/EntrepotsMemoire";
-import { NextFunction } from "express-serve-static-core";
+import { Request, Response } from 'express';
+import { NextFunction } from 'express-serve-static-core';
+import { AggregatNonTrouve } from '../../domaine/Aggregat';
 
 export const gestionnaireErreurAggregatNonTrouve = (
   erreur: Error,

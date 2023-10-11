@@ -1,6 +1,6 @@
-import { Entrepots } from "../domaine/Entrepots";
-import { EntrepotsMemoire } from "../infrastructure/entrepots/memoire/Entrepots";
-import { EntrepotsPostgres } from "../infrastructure/entrepots/postgres/EntrepotsPostgres";
+import { Entrepots } from '../domaine/Entrepots';
+import { EntrepotsMemoire } from '../../test/infrastructure/entrepots/memoire/Entrepots';
+import { EntrepotsPostgres } from '../infrastructure/entrepots/postgres/EntrepotsPostgres';
 
 export const fabriqueEntrepots = (): Entrepots => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {

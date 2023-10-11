@@ -3,12 +3,12 @@ import {
   Diagnostic,
   genereLesRecommandations,
   initialiseDiagnostic,
-} from "./Diagnostic";
-import * as crypto from "crypto";
-import { Entrepots } from "../domaine/Entrepots";
-import { Adaptateur } from "../adaptateurs/Adaptateur";
-import { Referentiel } from "./Referentiel";
-import { TableauDeRecommandations } from "./TableauDeRecommandations";
+} from './Diagnostic';
+import * as crypto from 'crypto';
+import { Entrepots } from '../domaine/Entrepots';
+import { Adaptateur } from '../adaptateurs/Adaptateur';
+import { Referentiel } from './Referentiel';
+import { TableauDeRecommandations } from './TableauDeRecommandations';
 
 export type CorpsReponseQuestionATiroir = {
   reponse: string;
@@ -28,15 +28,15 @@ export class ServiceDiagnostic {
   ) {}
 
   diagnostic = async (id: crypto.UUID): Promise<Diagnostic> =>
-    this.entrepots.diagnostic().lis(id);
+    await this.entrepots.diagnostic().lis(id);
 
   lance = async (): Promise<Diagnostic> => {
     return Promise.all([
       this.adaptateurReferentiel.lis(),
       this.adaptateurTableauDeRecommandations.lis(),
-    ]).then(([ref, rec]) => {
+    ]).then(async ([ref, rec]) => {
       const diagnostic = initialiseDiagnostic(ref, rec);
-      this.entrepots.diagnostic().persiste(diagnostic);
+      await this.entrepots.diagnostic().persiste(diagnostic);
       return diagnostic;
     });
   };
@@ -50,7 +50,12 @@ export class ServiceDiagnostic {
       .lis(id)
       .then((diagnostic) => {
         ajouteLaReponseAuDiagnostic(diagnostic, corpsReponse);
-      });
+        return diagnostic;
+      })
+      .then(
+        async (diagnostic) =>
+          await this.entrepots.diagnostic().persiste(diagnostic),
+      );
   };
 
   async termine(id: crypto.UUID) {
@@ -59,6 +64,11 @@ export class ServiceDiagnostic {
       .lis(id)
       .then((diagnostic) => {
         genereLesRecommandations(diagnostic);
-      });
+        return diagnostic;
+      })
+      .then(
+        async (diagnostic) =>
+          await this.entrepots.diagnostic().persiste(diagnostic),
+      );
   }
 }
