@@ -25,13 +25,15 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
+    "@types/lodash": "^4.14.199",
     "@types/pug": "^2.0.6",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "@vitest/coverage-v8": "^0.32.2",
     "eslint": "^8.43.0",
     "light-my-request": "^5.11.0",
+    "lodash.clonedeep": "^4.5.0",
     "nodemon": "^2.0.22",
-    "vitest": "^0.32.2"
+    "vitest": "^0.34.6"
   }
 }

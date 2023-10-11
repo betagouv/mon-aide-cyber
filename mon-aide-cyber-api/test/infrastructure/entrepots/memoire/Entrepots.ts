@@ -1,7 +1,7 @@
-import { Entrepots } from "../../../domaine/Entrepots";
+import { Entrepots } from '../../../../src/domaine/Entrepots';
 
-import { EntrepotDiagnosticMemoire } from "./EntrepotsMemoire";
-import { EntrepotDiagnostic } from "../../../diagnostic/Diagnostic";
+import { EntrepotDiagnosticMemoire } from './EntrepotsMemoire';
+import { EntrepotDiagnostic } from '../../../../src/diagnostic/Diagnostic';
 
 export class EntrepotsMemoire implements Entrepots {
   private entrepotDiagnostic: EntrepotDiagnostic =
