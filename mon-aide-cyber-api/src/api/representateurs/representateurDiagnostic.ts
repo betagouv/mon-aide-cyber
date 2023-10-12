@@ -1,22 +1,25 @@
-import { Diagnostic, QuestionDiagnostic } from "../../diagnostic/Diagnostic";
-import { QuestionATiroir, ReponsePossible } from "../../diagnostic/Referentiel";
+import { Diagnostic, QuestionDiagnostic } from '../../diagnostic/Diagnostic';
+import { QuestionATiroir, ReponsePossible } from '../../diagnostic/Referentiel';
 import {
   Action,
   Chemin,
   QuestionATranscrire,
   ReponseATranscrire,
+  RepresentationContexte,
   RepresentationDiagnostic,
   RepresentationQuestion,
   RepresentationReponsePossible,
   Transcripteur,
-} from "./types";
+} from './types';
 
 const trouveQuestionATranscrire = (
   chemin: { chemin: Chemin; identifiantQuestion: string },
   transcripteur: Transcripteur,
 ): QuestionATranscrire | undefined => {
   return trouveParmiLesQuestions(
-    transcripteur[chemin.chemin]["questions"] as QuestionATranscrire[],
+    transcripteur.thematiques[chemin.chemin][
+      'questions'
+    ] as QuestionATranscrire[],
     chemin.identifiantQuestion,
   );
 };
@@ -80,10 +83,10 @@ const questionTiroirATranscrire = (
 };
 
 const estQuestionATiroir = (
-  reponse: ReponsePossible | Omit<ReponsePossible, "questions">,
+  reponse: ReponsePossible | Omit<ReponsePossible, 'questions'>,
 ): reponse is ReponsePossible => {
   return (
-    "questions" in reponse &&
+    'questions' in reponse &&
     reponse.questions !== undefined &&
     reponse.questions?.length > 0
   );
@@ -151,68 +154,88 @@ export function representeLeDiagnosticPourLeClient(
 ): RepresentationDiagnostic {
   const actions: Action[] = [
     {
-      action: "terminer",
+      action: 'terminer',
       ressource: {
         url: `/api/diagnostic/${diagnostic.identifiant}/termine`,
-        methode: "GET",
+        methode: 'GET',
       },
     },
   ];
-  return {
-    identifiant: diagnostic.identifiant,
-    referentiel: {
-      ...Object.entries(diagnostic.referentiel).reduce(
-        (accumulateur, [clef, questionsThematique]) => {
-          actions.push({
-            [clef]: {
-              action: "repondre",
+  const referentiel = Object.entries(diagnostic.referentiel).reduce(
+    (accumulateur, [clef, questionsThematique]) => {
+      actions.push({
+        [clef]: {
+          action: 'repondre',
+          ressource: {
+            url: `/api/diagnostic/${diagnostic.identifiant}`,
+            methode: 'PATCH',
+          },
+        },
+      });
+      return {
+        ...accumulateur,
+        [clef]: {
+          questions: questionsThematique.questions.map((question) => {
+            const questionATranscrire = trouveQuestionATranscrire(
+              {
+                chemin: 'contexte',
+                identifiantQuestion: question.identifiant,
+              },
+              transcripteur,
+            );
+            const reponsesPossibles = trouveReponsesPossibles(
+              question,
+              transcripteur,
+              questionATranscrire,
+            );
+            const { autresReponses, reste } =
+              extraisLesChampsDeLaQuestion(question);
+            return {
+              ...reste,
+              reponseDonnee: autresReponses,
+              reponsesPossibles,
+              type: questionATranscrire?.type || question.type,
+            };
+          }),
+          actions: [
+            {
+              action: 'repondre',
+              chemin: clef,
               ressource: {
                 url: `/api/diagnostic/${diagnostic.identifiant}`,
-                methode: "PATCH",
+                methode: 'PATCH',
               },
             },
-          });
-          return {
-            ...accumulateur,
-            [clef]: {
-              questions: questionsThematique.questions.map((question) => {
-                const questionATranscrire = trouveQuestionATranscrire(
-                  {
-                    chemin: "contexte",
-                    identifiantQuestion: question.identifiant,
-                  },
-                  transcripteur,
-                );
-                const reponsesPossibles = trouveReponsesPossibles(
-                  question,
-                  transcripteur,
-                  questionATranscrire,
-                );
-                const { autresReponses, reste } =
-                  extraisLesChampsDeLaQuestion(question);
-                return {
-                  ...reste,
-                  reponseDonnee: autresReponses,
-                  reponsesPossibles,
-                  type: questionATranscrire?.type || question.type,
-                };
-              }),
-              actions: [
-                {
-                  action: "repondre",
-                  chemin: clef,
-                  ressource: {
-                    url: `/api/diagnostic/${diagnostic.identifiant}`,
-                    methode: "PATCH",
-                  },
-                },
-              ],
-            },
-          };
+          ],
         },
-        {},
-      ),
+      };
     },
+    {},
+  );
+
+  return {
     actions,
+    identifiant: diagnostic.identifiant,
+    referentiel: {
+      ...Object.keys(referentiel)
+        .sort((thematiqueA, thematiqueB) =>
+          transcripteur.ordreThematiques &&
+          transcripteur.ordreThematiques?.indexOf(thematiqueA) >
+            transcripteur.ordreThematiques?.indexOf(thematiqueB)
+            ? 1
+            : -1,
+        )
+        .reduce(
+          (accumulateur, thematique) => ({
+            ...accumulateur,
+            [thematique]: {
+              ...(Object.entries(referentiel).find(
+                ([clef]) => clef === thematique,
+              )?.[1] as RepresentationContexte),
+            },
+          }),
+          {},
+        ),
+    },
   };
 }

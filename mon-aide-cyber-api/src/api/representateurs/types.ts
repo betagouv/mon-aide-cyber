@@ -1,8 +1,8 @@
-import crypto from "crypto";
+import crypto from 'crypto';
 
 type ActionBase = {
   action: string;
-  ressource: { url: string; methode: "PATCH" | "GET" };
+  ressource: { url: string; methode: 'PATCH' | 'GET' };
 };
 
 export type Action =
@@ -10,13 +10,13 @@ export type Action =
   | ActionRepondreDiagnostic
   | ActionTerminerDiagnostic;
 type ActionRepondreDiagnostic = {
-  [thematique: string]: ActionBase & { action: "repondre" };
+  [thematique: string]: ActionBase & { action: 'repondre' };
 };
 type ActionTerminerDiagnostic = ActionBase & {
-  action: "terminer";
+  action: 'terminer';
 };
 type ActionDiagnostic = ActionBase & {
-  action: "repondre";
+  action: 'repondre';
   chemin: string;
 };
 export type RepresentationDiagnostic = {
@@ -46,12 +46,12 @@ export type RepresentationQuestion = {
   type?: TypeDeSaisie | undefined;
 };
 export type RepresentationQuestionChoixMultiple = RepresentationQuestion & {
-  type?: Exclude<TypeDeSaisie, "choixUnique"> | undefined;
+  type?: Exclude<TypeDeSaisie, 'choixUnique'> | undefined;
 };
 type RepresentationQuestionChoixUnique = RepresentationQuestion & {
-  type?: Exclude<TypeDeSaisie, "choixMultiple"> | undefined;
+  type?: Exclude<TypeDeSaisie, 'choixMultiple'> | undefined;
 };
-type RepresentationContexte = {
+export type RepresentationContexte = {
   actions: ActionDiagnostic[];
   questions: (
     | RepresentationQuestionChoixUnique
@@ -62,11 +62,11 @@ type RepresentationReferentiel = {
   [clef: string]: RepresentationContexte;
 };
 export type TypeDeSaisie =
-  | "choixMultiple"
-  | "choixUnique"
-  | "liste"
-  | "saisieLibre";
-export type Format = "nombre" | "texte";
+  | 'choixMultiple'
+  | 'choixUnique'
+  | 'liste'
+  | 'saisieLibre';
+export type Format = 'nombre' | 'texte';
 export type ReponseATranscrire = {
   identifiant: string;
   question?: QuestionATranscrire | undefined;
@@ -78,9 +78,14 @@ export type QuestionATranscrire = {
   reponses?: ReponseATranscrire[];
   type?: TypeDeSaisie;
 };
-export type Transcripteur = {
+type Thematiques = {
   [thematique: string]: {
     questions: QuestionATranscrire[];
   };
 };
-export type Chemin = "contexte";
+
+export type Transcripteur = {
+  ordreThematiques?: string[];
+  thematiques: Thematiques;
+};
+export type Chemin = 'contexte';
