@@ -1,29 +1,30 @@
-import { describe, expect } from "vitest";
+import { describe, expect } from 'vitest';
 import {
   uneQuestion,
   uneQuestionATiroir,
   uneReponsePossible,
   unReferentiel,
   unReferentielSansThematiques,
-} from "../../constructeurs/constructeurReferentiel";
+} from '../../constructeurs/constructeurReferentiel';
 import {
   unDiagnostic,
   uneReponseDonnee,
-} from "../../constructeurs/constructeurDiagnostic";
-import { representeLeDiagnosticPourLeClient } from "../../../src/api/representateurs/representateurDiagnostic";
+} from '../../constructeurs/constructeurDiagnostic';
+import { representeLeDiagnosticPourLeClient } from '../../../src/api/representateurs/representateurDiagnostic';
 import {
+  fabriqueTranscripteurThematiquesOrdonnees,
   fabriqueTranscripteurVide,
   transcripteurAvecSaisiesLibres,
   transcripteurMultipleTiroir,
   transcripteurQuestionTiroir,
-} from "./transcripteursDeTest";
-import { Question, ReponsePossible } from "../../../src/diagnostic/Referentiel";
-import { RepresentationDiagnostic } from "../../../src/api/representateurs/types";
-import { Diagnostic } from "../../../src/diagnostic/Diagnostic";
+} from './transcripteursDeTest';
+import { Question, ReponsePossible } from '../../../src/diagnostic/Referentiel';
+import { RepresentationDiagnostic } from '../../../src/api/representateurs/types';
+import { Diagnostic } from '../../../src/diagnostic/Diagnostic';
 
-describe("Le représentateur de diagnostic", () => {
-  describe("Afin de fournir les actions possibles pour un client", () => {
-    it("fournit l’action ’repondre’ dans la réponse", () => {
+describe('Le représentateur de diagnostic', () => {
+  describe('Afin de fournir les actions possibles pour un client', () => {
+    it('fournit l’action ’repondre’ dans la réponse', () => {
       const diagnostic = unDiagnostic().construis();
 
       const representationDiagnostic = representeLeDiagnosticPourLeClient(
@@ -35,20 +36,20 @@ describe("Le représentateur de diagnostic", () => {
         representationDiagnostic.referentiel.contexte.actions,
       ).toStrictEqual([
         {
-          action: "repondre",
-          chemin: "contexte",
+          action: 'repondre',
+          chemin: 'contexte',
           ressource: {
             url: `/api/diagnostic/${diagnostic.identifiant}`,
-            methode: "PATCH",
+            methode: 'PATCH',
           },
         },
       ]);
       expect(representationDiagnostic.actions[1]).toStrictEqual({
         contexte: {
-          action: "repondre",
+          action: 'repondre',
           ressource: {
             url: `/api/diagnostic/${diagnostic.identifiant}`,
-            methode: "PATCH",
+            methode: 'PATCH',
           },
         },
       });
@@ -63,22 +64,22 @@ describe("Le représentateur de diagnostic", () => {
       );
 
       expect(representationDiagnostic.actions[0]).toStrictEqual({
-        action: "terminer",
+        action: 'terminer',
         ressource: {
           url: `/api/diagnostic/${diagnostic.identifiant}/termine`,
-          methode: "GET",
+          methode: 'GET',
         },
       });
     });
   });
 
-  describe("Afin de représenter l’affichage de la saisie pour le client", () => {
-    it("présente le format de réponse pour une question", () => {
+  describe('Afin de représenter l’affichage de la saisie pour le client', () => {
+    it('présente le format de réponse pour une question', () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
             .ajouteUneQuestionAuContexte(
-              uneQuestion().aChoixUnique("Des réponses?").construis(),
+              uneQuestion().aChoixUnique('Des réponses?').construis(),
             )
             .construis(),
         )
@@ -90,7 +91,7 @@ describe("Le représentateur de diagnostic", () => {
       );
 
       expect(
-        diagnosticRepresente.referentiel["contexte"].questions[0].reponseDonnee,
+        diagnosticRepresente.referentiel['contexte'].questions[0].reponseDonnee,
       ).toStrictEqual({
         valeur: null,
         reponses: [],
@@ -98,10 +99,10 @@ describe("Le représentateur de diagnostic", () => {
     });
     it("définit le type de saisie que doit faire l'utilisateur", () => {
       const question = uneQuestion()
-        .aChoixUnique("Quelle est la question?", [
-          { identifiant: "reponse1", libelle: "réponse 1" },
-          { identifiant: "reponse2", libelle: "réponse 2" },
-          { identifiant: "reponse3", libelle: "réponse 3" },
+        .aChoixUnique('Quelle est la question?', [
+          { identifiant: 'reponse1', libelle: 'réponse 1' },
+          { identifiant: 'reponse2', libelle: 'réponse 2' },
+          { identifiant: 'reponse3', libelle: 'réponse 3' },
         ])
         .construis();
       const diagnostic = unDiagnostic()
@@ -118,24 +119,24 @@ describe("Le représentateur de diagnostic", () => {
       const questionRetournee =
         diagnosticRepresente.referentiel.contexte.questions[0];
       const reponsesPossibles = questionRetournee.reponsesPossibles;
-      expect(questionRetournee.type).toBe("choixUnique");
+      expect(questionRetournee.type).toBe('choixUnique');
       expect(reponsesPossibles[0].type).toStrictEqual({
-        type: "saisieLibre",
-        format: "texte",
+        type: 'saisieLibre',
+        format: 'texte',
       });
       expect(reponsesPossibles[1].type).toStrictEqual({
-        type: "saisieLibre",
-        format: "nombre",
+        type: 'saisieLibre',
+        format: 'nombre',
       });
       expect(reponsesPossibles[2].type).toBeUndefined();
     });
 
-    it("définit la manière dont est présentée la question sous forme de liste", () => {
+    it('définit la manière dont est présentée la question sous forme de liste', () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
             .ajouteUneQuestionAuContexte(
-              uneQuestion().aChoixUnique("Question liste?").construis(),
+              uneQuestion().aChoixUnique('Question liste?').construis(),
             )
             .construis(),
         )
@@ -143,29 +144,31 @@ describe("Le représentateur de diagnostic", () => {
       const diagnosticRepresente = representeLeDiagnosticPourLeClient(
         diagnostic,
         {
-          contexte: {
-            questions: [
-              { identifiant: "question-liste", type: "liste", reponses: [] },
-            ],
+          thematiques: {
+            contexte: {
+              questions: [
+                { identifiant: 'question-liste', type: 'liste', reponses: [] },
+              ],
+            },
           },
         },
       );
 
       const question = diagnosticRepresente.referentiel.contexte.questions[0];
-      expect(question.type).toBe("liste");
+      expect(question.type).toBe('liste');
     });
 
     describe("Lorsqu'il contient des réponses avec des questions tiroirs", () => {
-      describe("définit la manière dont est présentée la question et ses réponses", () => {
-        it("avec une seule question et une seule réponse", () => {
+      describe('définit la manière dont est présentée la question et ses réponses', () => {
+        it('avec une seule question et une seule réponse', () => {
           const reponse = uneReponsePossible()
-            .avecLibelle("Réponse 1")
+            .avecLibelle('Réponse 1')
             .construis();
           const reponsePossible = uneReponsePossible()
-            .avecLibelle("Réponse 0")
+            .avecLibelle('Réponse 0')
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
-                .aChoixMultiple("Question tiroir?")
+                .aChoixMultiple('Question tiroir?')
                 .avecReponsesPossibles([reponse])
                 .construis(),
             )
@@ -175,7 +178,7 @@ describe("Le représentateur de diagnostic", () => {
               unReferentiel()
                 .ajouteUneQuestionAuContexte(
                   uneQuestion()
-                    .aChoixUnique("Question avec réponse tiroir?")
+                    .aChoixUnique('Question avec réponse tiroir?')
                     .avecReponsesPossibles([reponsePossible])
                     .construis(),
                 )
@@ -192,50 +195,50 @@ describe("Le représentateur de diagnostic", () => {
             diagnosticRepresente.referentiel.contexte.questions,
           ).toMatchObject([
             {
-              identifiant: "question-avec-reponse-tiroir",
-              libelle: "Question avec réponse tiroir?",
+              identifiant: 'question-avec-reponse-tiroir',
+              libelle: 'Question avec réponse tiroir?',
               reponsesPossibles: [
                 {
-                  identifiant: "reponse-0",
-                  libelle: "Réponse 0",
+                  identifiant: 'reponse-0',
+                  libelle: 'Réponse 0',
                   ordre: reponsePossible.ordre,
                   questions: [
                     {
-                      identifiant: "question-tiroir",
-                      libelle: "Question tiroir?",
+                      identifiant: 'question-tiroir',
+                      libelle: 'Question tiroir?',
                       reponsesPossibles: [
                         {
-                          identifiant: "reponse-1",
-                          libelle: "Réponse 1",
+                          identifiant: 'reponse-1',
+                          libelle: 'Réponse 1',
                           ordre: 0,
                         },
                       ],
-                      type: "choixMultiple",
+                      type: 'choixMultiple',
                     },
                   ],
                 },
               ],
-              type: "choixUnique",
+              type: 'choixUnique',
             },
           ]);
         });
 
-        it("avec une seule question et plusieurs réponses", () => {
+        it('avec une seule question et plusieurs réponses', () => {
           const reponse3 = uneReponsePossible()
-            .avecLibelle("Réponse 3")
+            .avecLibelle('Réponse 3')
             .construis();
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
               unReferentiel()
                 .ajouteUneQuestionAuContexte(
                   uneQuestion()
-                    .aChoixUnique("Question avec réponse tiroir?")
+                    .aChoixUnique('Question avec réponse tiroir?')
                     .avecReponsesPossibles([
                       uneReponsePossible()
-                        .avecLibelle("Réponse 0")
+                        .avecLibelle('Réponse 0')
                         .ajouteUneQuestionATiroir(
                           uneQuestionATiroir()
-                            .aChoixMultiple("Question tiroir?")
+                            .aChoixMultiple('Question tiroir?')
                             .avecReponsesPossibles([
                               uneReponsePossible().construis(),
                               uneReponsePossible().construis(),
@@ -260,25 +263,25 @@ describe("Le représentateur de diagnostic", () => {
             diagnosticRepresente.referentiel.contexte.questions[0]
               .reponsesPossibles[0];
           expect(questionTiroir?.questions?.[0].identifiant).toBe(
-            "question-tiroir",
+            'question-tiroir',
           );
           expect(questionTiroir?.questions?.[0].libelle).toBe(
-            "Question tiroir?",
+            'Question tiroir?',
           );
-          expect(questionTiroir?.questions?.[0].type).toBe("choixMultiple");
+          expect(questionTiroir?.questions?.[0].type).toBe('choixMultiple');
           expect(
             questionTiroir?.questions?.[0].reponsesPossibles[2],
           ).toMatchObject({
-            identifiant: "reponse-3",
-            libelle: "Réponse 3",
+            identifiant: 'reponse-3',
+            libelle: 'Réponse 3',
             ordre: 2,
-            type: { type: "saisieLibre", format: "texte" },
+            type: { type: 'saisieLibre', format: 'texte' },
           });
         });
 
-        it("avec plusieurs questions", () => {
+        it('avec plusieurs questions', () => {
           const reponse = uneReponsePossible()
-            .avecLibelle("Réponse 3")
+            .avecLibelle('Réponse 3')
             .construis();
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
@@ -286,12 +289,12 @@ describe("Le représentateur de diagnostic", () => {
                 .ajouteUneQuestionAuContexte(uneQuestion().construis())
                 .ajouteUneQuestionAuContexte(
                   uneQuestion()
-                    .aChoixUnique("Question avec réponse tiroir?")
+                    .aChoixUnique('Question avec réponse tiroir?')
                     .avecReponsesPossibles([
                       uneReponsePossible()
                         .ajouteUneQuestionATiroir(
                           uneQuestionATiroir()
-                            .aChoixMultiple("Question tiroir?")
+                            .aChoixMultiple('Question tiroir?')
                             .avecReponsesPossibles([reponse])
                             .construis(),
                         )
@@ -312,27 +315,27 @@ describe("Le représentateur de diagnostic", () => {
             diagnosticRepresente.referentiel.contexte.questions[1]
               .reponsesPossibles[0]?.questions?.[0];
           expect(questionTiroir?.reponsesPossibles[0]).toMatchObject({
-            identifiant: "reponse-3",
-            libelle: "Réponse 3",
+            identifiant: 'reponse-3',
+            libelle: 'Réponse 3',
             ordre: 0,
-            type: { type: "saisieLibre", format: "texte" },
+            type: { type: 'saisieLibre', format: 'texte' },
           });
         });
-        it("avec plusieurs questions à tiroir", () => {
+        it('avec plusieurs questions à tiroir', () => {
           const reponse1 = uneReponsePossible()
-            .avecLibelle("Réponse 11")
+            .avecLibelle('Réponse 11')
             .construis();
           const reponse2 = uneReponsePossible()
-            .avecLibelle("Réponse 21")
+            .avecLibelle('Réponse 21')
             .construis();
           const premiereQuestion = uneQuestion()
-            .aChoixUnique("Première question?")
+            .aChoixUnique('Première question?')
             .avecReponsesPossibles([
               uneReponsePossible()
-                .avecLibelle("Réponse 1")
+                .avecLibelle('Réponse 1')
                 .ajouteUneQuestionATiroir(
                   uneQuestionATiroir()
-                    .aChoixMultiple("Question 11")
+                    .aChoixMultiple('Question 11')
                     .avecReponsesPossibles([reponse1])
                     .construis(),
                 )
@@ -340,13 +343,13 @@ describe("Le représentateur de diagnostic", () => {
             ])
             .construis();
           const secondeQuestion = uneQuestion()
-            .aChoixUnique("Deuxième question?")
+            .aChoixUnique('Deuxième question?')
             .avecReponsesPossibles([
               uneReponsePossible()
-                .avecLibelle("Réponse 2")
+                .avecLibelle('Réponse 2')
                 .ajouteUneQuestionATiroir(
                   uneQuestionATiroir()
-                    .aChoixMultiple("Question 21")
+                    .aChoixMultiple('Question 21')
                     .avecReponsesPossibles([reponse2])
                     .construis(),
                 )
@@ -371,8 +374,8 @@ describe("Le représentateur de diagnostic", () => {
             representationDiagnostic.referentiel.contexte.questions[0]
               .reponsesPossibles[0]?.questions?.[0];
           expect(premiereQuestionTiroir?.reponsesPossibles[0]).toMatchObject({
-            identifiant: "reponse-11",
-            libelle: "Réponse 11",
+            identifiant: 'reponse-11',
+            libelle: 'Réponse 11',
             ordre: 0,
           });
           const deuxiemeQuestionTiroir =
@@ -381,24 +384,24 @@ describe("Le représentateur de diagnostic", () => {
           expect(
             deuxiemeQuestionTiroir?.reponsesPossibles[0],
           ).toStrictEqual<ReponsePossible>({
-            identifiant: "reponse-21",
-            libelle: "Réponse 21",
+            identifiant: 'reponse-21',
+            libelle: 'Réponse 21',
             ordre: 0,
           });
         });
 
-        it("avec les questions telles que décrites dans le référentiel sans transcripteur spécifique", () => {
+        it('avec les questions telles que décrites dans le référentiel sans transcripteur spécifique', () => {
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
               unReferentiel()
                 .ajouteUneQuestionAuContexte(
                   uneQuestion()
-                    .aChoixUnique("Une question à choix unique ?")
+                    .aChoixUnique('Une question à choix unique ?')
                     .avecReponsesPossibles([
                       uneReponsePossible()
                         .ajouteUneQuestionATiroir(
                           uneQuestionATiroir()
-                            .aChoixUnique("Une question tiroir à choix unique?")
+                            .aChoixUnique('Une question tiroir à choix unique?')
                             .construis(),
                         )
                         .construis(),
@@ -417,21 +420,21 @@ describe("Le représentateur de diagnostic", () => {
           const question =
             representationDiagnostic.referentiel.contexte.questions[0];
           expect(question).toMatchObject({
-            identifiant: "une-question-a-choix-unique-",
-            libelle: "Une question à choix unique ?",
-            type: "choixUnique",
+            identifiant: 'une-question-a-choix-unique-',
+            libelle: 'Une question à choix unique ?',
+            type: 'choixUnique',
           });
           expect(question.reponsesPossibles[0].questions?.[0]).toMatchObject({
-            identifiant: "une-question-tiroir-a-choix-unique",
-            libelle: "Une question tiroir à choix unique?",
-            type: "choixUnique",
+            identifiant: 'une-question-tiroir-a-choix-unique',
+            libelle: 'Une question tiroir à choix unique?',
+            type: 'choixUnique',
           });
         });
       });
     });
   });
 
-  describe("Afin de représenter toutes les thématiques du diagnostic", () => {
+  describe('Afin de représenter toutes les thématiques du diagnostic', () => {
     const expectThematique = (
       representationDiagnostic: RepresentationDiagnostic,
       nomThematique: string,
@@ -456,16 +459,16 @@ describe("Le représentateur de diagnostic", () => {
                   ordre: reponsePossible.ordre,
                 },
               ],
-              type: "choixUnique",
+              type: 'choixUnique',
             },
           ],
           actions: [
             {
-              action: "repondre",
+              action: 'repondre',
               chemin: nomThematique,
               ressource: {
                 url: `/api/diagnostic/${diagnostic.identifiant}`,
-                methode: "PATCH",
+                methode: 'PATCH',
               },
             },
           ],
@@ -473,14 +476,14 @@ describe("Le représentateur de diagnostic", () => {
       );
     };
 
-    it("présente les différentes thématiques", () => {
+    it('présente les différentes thématiques', () => {
       const questionTheme1 = uneQuestion().construis();
       const questionTheme2 = uneQuestion().construis();
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentielSansThematiques()
-            .ajouteUneThematique("theme 1", [questionTheme1])
-            .ajouteUneThematique("theme 2", [questionTheme2])
+            .ajouteUneThematique('theme 1', [questionTheme1])
+            .ajouteUneThematique('theme 2', [questionTheme2])
             .construis(),
         )
         .construis();
@@ -494,34 +497,57 @@ describe("Le représentateur de diagnostic", () => {
       const reponsePossibleQuestionTheme2 = questionTheme2.reponsesPossibles[0];
       expectThematique(
         representationDiagnostic,
-        "theme 1",
+        'theme 1',
         questionTheme1,
         reponsePossibleQuestionTheme1,
         diagnostic,
       );
       expectThematique(
         representationDiagnostic,
-        "theme 2",
+        'theme 2',
         questionTheme2,
         reponsePossibleQuestionTheme2,
         diagnostic,
       );
     });
+
+    it('ordonne les différentes thématiques', () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentielSansThematiques()
+            .ajouteUneThematique('b-3', [])
+            .ajouteUneThematique('c-1', [])
+            .ajouteUneThematique('a-2', [])
+            .construis(),
+        )
+        .construis();
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        fabriqueTranscripteurThematiquesOrdonnees(['c-1', 'a-2', 'b-3']),
+      );
+
+      expect(Object.keys(representationDiagnostic.referentiel)).toStrictEqual([
+        'c-1',
+        'a-2',
+        'b-3',
+      ]);
+    });
   });
 
-  describe("Afin de prendre en compte les réponses données par l’utilisateur", () => {
-    it("présente les réponses multiples pour les QCM", () => {
+  describe('Afin de prendre en compte les réponses données par l’utilisateur', () => {
+    it('présente les réponses multiples pour les QCM', () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
             .sansThematique()
-            .ajouteUneThematique("multiple", [
+            .ajouteUneThematique('multiple', [
               uneQuestion()
-                .aChoixMultiple("Ma question ?")
+                .aChoixMultiple('Ma question ?')
                 .avecReponsesPossibles([
-                  uneReponsePossible().avecLibelle("rep1").construis(),
-                  uneReponsePossible().avecLibelle("rep2").construis(),
-                  uneReponsePossible().avecLibelle("rep3").construis(),
+                  uneReponsePossible().avecLibelle('rep1').construis(),
+                  uneReponsePossible().avecLibelle('rep2').construis(),
+                  uneReponsePossible().avecLibelle('rep3').construis(),
                 ])
                 .construis(),
             ])
@@ -529,12 +555,12 @@ describe("Le représentateur de diagnostic", () => {
         )
         .ajouteUneReponseDonnee(
           {
-            thematique: "multiple",
-            question: "ma-question-",
+            thematique: 'multiple',
+            question: 'ma-question-',
           },
           uneReponseDonnee()
             .avecDesReponsesMultiples([
-              { identifiant: "ma-question-", reponses: ["rep1", "rep3"] },
+              { identifiant: 'ma-question-', reponses: ['rep1', 'rep3'] },
             ])
             .construis(),
         )
@@ -546,41 +572,41 @@ describe("Le représentateur de diagnostic", () => {
       );
 
       const reponse =
-        representationDiagnostic.referentiel["multiple"].questions[0]
+        representationDiagnostic.referentiel['multiple'].questions[0]
           .reponseDonnee;
       expect(reponse).toStrictEqual({
         valeur: null,
-        reponses: [{ identifiant: "ma-question-", reponses: ["rep1", "rep3"] }],
+        reponses: [{ identifiant: 'ma-question-', reponses: ['rep1', 'rep3'] }],
       });
     });
 
-    it("présente les réponses multiples pour les questions à tiroir", () => {
+    it('présente les réponses multiples pour les questions à tiroir', () => {
       const premiereReponse = uneReponsePossible()
-        .avecLibelle("rep 11")
+        .avecLibelle('rep 11')
         .construis();
       const deuxiemeReponse = uneReponsePossible()
-        .avecLibelle("rep 12")
+        .avecLibelle('rep 12')
         .construis();
       const troisiemeReponse = uneReponsePossible()
-        .avecLibelle("rep 21")
+        .avecLibelle('rep 21')
         .construis();
       const reponsePossible = uneReponsePossible()
-        .avecLibelle("Réponse")
+        .avecLibelle('Réponse')
         .ajouteUneQuestionATiroir(
           uneQuestionATiroir()
-            .aChoixMultiple("q1")
+            .aChoixMultiple('q1')
             .avecReponsesPossibles([premiereReponse, deuxiemeReponse])
             .construis(),
         )
         .ajouteUneQuestionATiroir(
           uneQuestionATiroir()
-            .aChoixUnique("q2")
+            .aChoixUnique('q2')
             .avecReponsesPossibles([troisiemeReponse])
             .construis(),
         )
         .construis();
       const question = uneQuestion()
-        .aChoixUnique("question")
+        .aChoixUnique('question')
         .avecReponsesPossibles([reponsePossible])
         .construis();
       const diagnostic = unDiagnostic()
@@ -588,18 +614,18 @@ describe("Le représentateur de diagnostic", () => {
           unReferentiel().ajouteUneQuestionAuContexte(question).construis(),
         )
         .ajouteUneReponseDonnee(
-          { thematique: "contexte", question: "question" },
+          { thematique: 'contexte', question: 'question' },
           uneReponseDonnee()
-            .ayantPourReponse("réponse")
+            .ayantPourReponse('réponse')
             .avecDesReponsesMultiples([
               {
-                identifiant: "q1",
+                identifiant: 'q1',
                 reponses: [
                   premiereReponse.identifiant,
                   deuxiemeReponse.identifiant,
                 ],
               },
-              { identifiant: "q2", reponses: [troisiemeReponse.identifiant] },
+              { identifiant: 'q2', reponses: [troisiemeReponse.identifiant] },
             ])
             .construis(),
         )
@@ -611,13 +637,13 @@ describe("Le représentateur de diagnostic", () => {
       );
 
       const reponseDonnee =
-        representationDiagnostic.referentiel["contexte"].questions[0]
+        representationDiagnostic.referentiel['contexte'].questions[0]
           .reponseDonnee;
       expect(reponseDonnee).toStrictEqual({
-        valeur: "réponse",
+        valeur: 'réponse',
         reponses: [
-          { identifiant: "q1", reponses: ["rep-11", "rep-12"] },
-          { identifiant: "q2", reponses: ["rep-21"] },
+          { identifiant: 'q1', reponses: ['rep-11', 'rep-12'] },
+          { identifiant: 'q2', reponses: ['rep-21'] },
         ],
       });
     });
