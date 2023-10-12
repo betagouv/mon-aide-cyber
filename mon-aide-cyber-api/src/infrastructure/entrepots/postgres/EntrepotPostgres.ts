@@ -1,8 +1,8 @@
-import crypto from 'crypto';
-import { Aggregat, AggregatNonTrouve } from '../../../domaine/Aggregat';
-import { Entrepot } from '../../../domaine/Entrepot';
-import { knex, Knex } from 'knex';
-import knexfile from './knexfile';
+import crypto from "crypto";
+import { Aggregat, AggregatNonTrouve } from '../../../domaine/Aggregat'
+import { Entrepot } from "../../../domaine/Entrepot";
+import { knex, Knex } from "knex";
+import knexfile from "./knexfile";
 
 export abstract class EntrepotPostgres<T extends Aggregat>
   implements Entrepot<T>
@@ -16,7 +16,7 @@ export abstract class EntrepotPostgres<T extends Aggregat>
   lis(identifiant: string): Promise<T> {
     return this.knex
       .from(this.nomTable())
-      .where('id', identifiant)
+      .where("id", identifiant)
       .first()
       .then((ligne: { id: crypto.UUID; donnees: object }) =>
         this.deDTOAEntite(ligne.donnees as DTO),
@@ -30,7 +30,7 @@ export abstract class EntrepotPostgres<T extends Aggregat>
     const entiteDTO = this.deEntiteADTO(entite);
     const entiteExistante = await this.knex
       .from(this.nomTable())
-      .where('id', entiteDTO.identifiant)
+      .where("id", entiteDTO.identifiant)
       .first();
     if (!entiteExistante) {
       await this.knex(this.nomTable()).insert({
@@ -39,7 +39,7 @@ export abstract class EntrepotPostgres<T extends Aggregat>
       });
     } else {
       await this.knex(this.nomTable())
-        .where('id', entiteDTO.identifiant)
+        .where("id", entiteDTO.identifiant)
         .update({ donnees: entiteDTO });
     }
   }
@@ -50,7 +50,7 @@ export abstract class EntrepotPostgres<T extends Aggregat>
   }
 
   typeAggregat(): string {
-    throw new Error('Non implémenté');
+    throw new Error("Non implémenté");
   }
 
   protected abstract nomTable(): string;
