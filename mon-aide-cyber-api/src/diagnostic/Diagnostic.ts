@@ -1,17 +1,17 @@
-import crypto from "crypto";
-import { Question, Recommandation, Referentiel } from "./Referentiel";
-import { Entrepot } from "../domaine/Entrepot";
-import { CorpsReponse } from "./ServiceDiagnostic";
-import { Note } from "./Note";
+import crypto from 'crypto';
+import { Question, Recommandation, Referentiel } from './Referentiel';
+import { Entrepot } from '../domaine/Entrepot';
+import { CorpsReponse } from './ServiceDiagnostic';
+import { Note } from './Note';
 import {
   NiveauDeRecommandation,
   TableauDeRecommandations,
-} from "./TableauDeRecommandations";
-import { StrategieDeReponse } from "./StrategieDeReponse";
-import { MoteurDeNote, NotesDiagnostic } from "./MoteurDeNote";
-import { MoteurDeRecommandations } from "./MoteurDeRecommandations";
+} from './TableauDeRecommandations';
+import { StrategieDeReponse } from './StrategieDeReponse';
+import { MoteurDeNote, NotesDiagnostic } from './MoteurDeNote';
+import { MoteurDeRecommandations } from './MoteurDeRecommandations';
 
-type Thematique = string;
+export type Thematique = string;
 
 type ReponsesMultiples = { identifiant: string; reponses: Set<string> };
 type ReponseDonnee = {
@@ -26,13 +26,13 @@ export type QuestionsThematique = {
   questions: QuestionDiagnostic[];
 };
 
-type ReferentielDiagnostic = {
+export type ReferentielDiagnostic = {
   [clef: Thematique]: QuestionsThematique;
 };
 
 export type RecommandationDiagnostic = Omit<
   Recommandation,
-  "identifiant" | "niveau" | "noteObtenue"
+  'identifiant' | 'niveau' | 'noteObtenue'
 > & { niveau: NiveauDeRecommandation; priorisation: number; repondA: string };
 
 export type RecommandationPriorisee = {
