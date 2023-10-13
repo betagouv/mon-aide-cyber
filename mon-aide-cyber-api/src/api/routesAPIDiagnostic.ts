@@ -1,25 +1,26 @@
-import { ConfigurationServeur } from "../serveur";
-import express, { Request, Response } from "express";
-import crypto from "crypto";
-import { ServiceDiagnostic } from "../diagnostic/ServiceDiagnostic";
-import { representeLeDiagnosticPourLeClient } from "./representateurs/representateurDiagnostic";
-import { NextFunction } from "express-serve-static-core";
-import bodyParser from "body-parser";
+import { ConfigurationServeur } from '../serveur';
+import express, { Request, Response } from 'express';
+import crypto from 'crypto';
+import { ServiceDiagnostic } from '../diagnostic/ServiceDiagnostic';
+import { representeLeDiagnosticPourLeClient } from './representateurs/representateurDiagnostic';
+import { NextFunction } from 'express-serve-static-core';
+import bodyParser from 'body-parser';
 
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
-  routes.post("/", (_requete: Request, reponse: Response) => {
+  routes.post('/', (_requete: Request, reponse: Response) => {
     new ServiceDiagnostic(
       configuration.adaptateurReferentiel,
       configuration.adaptateurTableauDeRecommandations,
       configuration.entrepots,
+      configuration.busEvenement,
     )
       .lance()
       .then((diagnostic) => {
         reponse.status(201);
         reponse.appendHeader(
-          "Link",
+          'Link',
           `${_requete.originalUrl}/${diagnostic.identifiant}`,
         );
         reponse.send();
@@ -27,13 +28,14 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   });
 
   routes.get(
-    "/:id/termine",
+    '/:id/termine',
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       const serviceDiagnostic = new ServiceDiagnostic(
         configuration.adaptateurReferentiel,
         configuration.adaptateurTableauDeRecommandations,
         configuration.entrepots,
+        configuration.busEvenement,
       );
       serviceDiagnostic
         .termine(id as crypto.UUID)
@@ -41,13 +43,13 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         .then((diagnostic) =>
           configuration.adaptateurPDF.genereRecommandations(diagnostic),
         )
-        .then((pdf) => reponse.contentType("application/pdf").send(pdf))
+        .then((pdf) => reponse.contentType('application/pdf').send(pdf))
         .catch((erreur) => suite(erreur));
     },
   );
 
   routes.get(
-    "/:id",
+    '/:id',
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       new ServiceDiagnostic(
@@ -69,7 +71,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   );
 
   routes.patch(
-    "/:id",
+    '/:id',
     bodyParser.json(),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
@@ -78,6 +80,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         configuration.adaptateurReferentiel,
         configuration.adaptateurTableauDeRecommandations,
         configuration.entrepots,
+        configuration.busEvenement,
       )
         .ajouteLaReponse(id as crypto.UUID, corpsReponse)
         .then(() => {
