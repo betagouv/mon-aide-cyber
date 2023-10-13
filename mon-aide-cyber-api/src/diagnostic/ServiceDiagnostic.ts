@@ -9,6 +9,8 @@ import { Entrepots } from '../domaine/Entrepots';
 import { Adaptateur } from '../adaptateurs/Adaptateur';
 import { Referentiel } from './Referentiel';
 import { TableauDeRecommandations } from './TableauDeRecommandations';
+import { BusEvenement, Evenement } from '../domaine/BusEvenement';
+import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
 export type CorpsReponseQuestionATiroir = {
   reponse: string;
@@ -25,6 +27,7 @@ export class ServiceDiagnostic {
     private readonly adaptateurReferentiel: Adaptateur<Referentiel>,
     private readonly adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>,
     private readonly entrepots: Entrepots,
+    private readonly busEvenement: BusEvenement | null = null,
   ) {}
 
   diagnostic = async (id: crypto.UUID): Promise<Diagnostic> =>
@@ -37,6 +40,12 @@ export class ServiceDiagnostic {
     ]).then(async ([ref, rec]) => {
       const diagnostic = initialiseDiagnostic(ref, rec);
       await this.entrepots.diagnostic().persiste(diagnostic);
+      await this.busEvenement?.publie({
+        identifiant: diagnostic.identifiant,
+        type: 'DIAGNOSTIC_LANCE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {},
+      });
       return diagnostic;
     });
   };
@@ -52,9 +61,22 @@ export class ServiceDiagnostic {
         ajouteLaReponseAuDiagnostic(diagnostic, corpsReponse);
         return diagnostic;
       })
+      .then(async (diagnostic) => {
+        await this.entrepots.diagnostic().persiste(diagnostic);
+        return diagnostic;
+      })
       .then(
-        async (diagnostic) =>
-          await this.entrepots.diagnostic().persiste(diagnostic),
+        (diagnostic) =>
+          this.busEvenement?.publie<ReponseAjoutee>({
+            identifiant: diagnostic.identifiant,
+            type: 'REPONSE_AJOUTEE',
+            date: FournisseurHorloge.maintenant(),
+            corps: {
+              thematique: corpsReponse.chemin,
+              identifiantQuestion: corpsReponse.identifiant,
+              reponse: corpsReponse.reponse,
+            },
+          }),
       );
   };
 
@@ -66,9 +88,26 @@ export class ServiceDiagnostic {
         genereLesRecommandations(diagnostic);
         return diagnostic;
       })
+      .then(async (diagnostic) => {
+        await this.entrepots.diagnostic().persiste(diagnostic);
+        return diagnostic;
+      })
       .then(
-        async (diagnostic) =>
-          await this.entrepots.diagnostic().persiste(diagnostic),
+        (diagnostic) =>
+          this.busEvenement?.publie({
+            identifiant: diagnostic.identifiant,
+            type: 'DIAGNOSTIC_TERMINE',
+            date: FournisseurHorloge.maintenant(),
+            corps: {},
+          }),
       );
   }
 }
+
+type ReponseAjoutee = Omit<Evenement, 'corps'> & {
+  corps: {
+    thematique: string;
+    identifiantQuestion: string;
+    reponse: string | string[] | CorpsReponseQuestionATiroir;
+  };
+};
