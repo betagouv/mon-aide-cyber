@@ -5,21 +5,22 @@ import {
   useContext,
   useEffect,
   useReducer,
-} from "react";
-import { useErrorBoundary } from "react-error-boundary";
+  useState,
+} from 'react';
+import { useErrorBoundary } from 'react-error-boundary';
 import {
   Question,
   ReponseDonnee,
   ReponsePossible,
   Thematique,
-} from "../../domaine/diagnostic/Referentiel.ts";
-import { UUID } from "../../types/Types.ts";
+} from '../../domaine/diagnostic/Referentiel.ts';
+import { UUID } from '../../types/Types.ts';
 import {
   diagnosticCharge,
   reducteurDiagnostic,
   thematiqueAffichee,
-} from "../../domaine/diagnostic/reducteurDiagnostic.ts";
-import { FournisseurEntrepots } from "../../fournisseurs/FournisseurEntrepot.ts";
+} from '../../domaine/diagnostic/reducteurDiagnostic.ts';
+import { FournisseurEntrepots } from '../../fournisseurs/FournisseurEntrepot.ts';
 import {
   EtatReponseStatut,
   initialiseReducteur,
@@ -28,16 +29,16 @@ import {
   reponseTiroirMultipleDonnee,
   reponseTiroirUniqueDonnee,
   reponseUniqueDonnee,
-} from "../../domaine/diagnostic/reducteurReponse.ts";
+} from '../../domaine/diagnostic/reducteurReponse.ts';
 import {
   Action,
   ActionBase,
   ActionReponseDiagnostic,
-} from "../../domaine/diagnostic/Diagnostic.ts";
-import "../../assets/styles/_diagnostic.scss";
-import Button from "@codegouvfr/react-dsfr/Button";
-import { RiIconClassName } from "@codegouvfr/react-dsfr/src/fr/generatedFromCss/classNames.ts";
-import Select from "@codegouvfr/react-dsfr/Select";
+} from '../../domaine/diagnostic/Diagnostic.ts';
+import '../../assets/styles/_diagnostic.scss';
+import Button from '@codegouvfr/react-dsfr/Button';
+import { RiIconClassName } from '@codegouvfr/react-dsfr/src/fr/generatedFromCss/classNames.ts';
+import Select from '@codegouvfr/react-dsfr/Select';
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -64,7 +65,7 @@ const ChampsDeSaisie = ({ identifiant }: ProprietesChampsDeSaisie) => {
 type ProprietesComposantReponsePossible = {
   identifiantQuestion: string;
   reponsePossible: ReponsePossible;
-  typeDeSaisie: "radio" | "checkbox";
+  typeDeSaisie: 'radio' | 'checkbox';
   onChange: (identifiantReponse: string) => void;
   selectionnee: boolean;
 };
@@ -73,10 +74,10 @@ const ComposantReponsePossible = (
   proprietes: PropsWithChildren<ProprietesComposantReponsePossible>,
 ) => {
   const champsASaisir =
-    proprietes.reponsePossible.type?.type === "saisieLibre" ? (
+    proprietes.reponsePossible.type?.type === 'saisieLibre' ? (
       <ChampsDeSaisie identifiant={proprietes.reponsePossible.identifiant} />
     ) : (
-      ""
+      ''
     );
 
   return (
@@ -122,7 +123,7 @@ const ComposantQuestionListe = ({
 
   useEffect(() => {
     if (etatReponse.statut === EtatReponseStatut.MODIFIE) {
-      const action = etatReponse.action("repondre");
+      const action = etatReponse.action('repondre');
       if (action !== undefined) {
         entrepots.diagnostic().repond(action, etatReponse.reponse()!);
       }
@@ -204,7 +205,7 @@ const ComposantQuestion = ({
 
   useEffect(() => {
     if (etatReponse.statut === EtatReponseStatut.MODIFIE) {
-      const action = etatReponse.action("repondre");
+      const action = etatReponse.action('repondre');
       if (action !== undefined) {
         entrepots.diagnostic().repond(action, etatReponse.reponse()!);
       }
@@ -216,7 +217,7 @@ const ComposantQuestion = ({
       <div className="fr-fieldset__content">
         {question.reponsesPossibles.map((reponse) => {
           const typeDeSaisie =
-            question.type === "choixUnique" ? "radio" : "checkbox";
+            question.type === 'choixUnique' ? 'radio' : 'checkbox';
           return (
             <ComposantReponsePossible
               key={reponse.identifiant}
@@ -224,7 +225,7 @@ const ComposantQuestion = ({
               identifiantQuestion={question.identifiant}
               typeDeSaisie={typeDeSaisie}
               onChange={(identifiantReponse) =>
-                typeDeSaisie === "radio"
+                typeDeSaisie === 'radio'
                   ? repondQuestionUnique(identifiantReponse)
                   : repondQuestionMultiple({
                       identifiantReponse: question.identifiant,
@@ -232,7 +233,7 @@ const ComposantQuestion = ({
                     })
               }
               selectionnee={
-                typeDeSaisie === "radio"
+                typeDeSaisie === 'radio'
                   ? etatReponse.valeur() === reponse.identifiant
                   : etatReponse.reponseDonnee.reponses.some((rep) =>
                       rep.reponses.has(reponse.identifiant),
@@ -249,9 +250,9 @@ const ComposantQuestion = ({
                   </legend>
                   {questionTiroir.reponsesPossibles.map((rep) => {
                     const typeDeSaisie =
-                      questionTiroir?.type === "choixMultiple"
-                        ? "checkbox"
-                        : "radio";
+                      questionTiroir?.type === 'choixMultiple'
+                        ? 'checkbox'
+                        : 'radio';
 
                     return (
                       <ComposantReponsePossible
@@ -263,7 +264,7 @@ const ComposantQuestion = ({
                           (reponse) => reponse.reponses.has(rep.identifiant),
                         )}
                         onChange={(identifiantReponse) => {
-                          typeDeSaisie === "checkbox"
+                          typeDeSaisie === 'checkbox'
                             ? repondQuestionTiroirMultiple(
                                 reponse.identifiant,
                                 {
@@ -301,6 +302,7 @@ export const ComposantDiagnostic = ({
     diagnostic: undefined,
     thematiqueAffichee: undefined,
   });
+  const [lienCopie, setLienCopie] = useState(<></>);
 
   const entrepots = useContext(FournisseurEntrepots);
   const { showBoundary } = useErrorBoundary();
@@ -329,21 +331,42 @@ export const ComposantDiagnostic = ({
   );
 
   const icones: RiIconClassName[] = [
-    "ri-building-line",
-    "ri-user-2-line",
-    "ri-key-2-line",
-    "ri-computer-line",
-    "ri-server-line",
-    "ri-team-line",
-    "ri-loop-right-line",
+    'ri-building-line',
+    'ri-user-2-line',
+    'ri-key-2-line',
+    'ri-computer-line',
+    'ri-server-line',
+    'ri-team-line',
+    'ri-loop-right-line',
   ];
 
   const termineDiagnostic = useCallback(async () => {
-    const action = actions.find((a) => a.action === "terminer");
+    const action = actions.find((a) => a.action === 'terminer');
     if (action) {
       return entrepots.diagnostic().termine(action as ActionBase);
     }
   }, [entrepots, actions]);
+
+  const fermeAlerte = useCallback(() => {
+    setLienCopie(<></>);
+  }, []);
+
+  const copierLienDiagnostic = useCallback(() => {
+    navigator.clipboard.writeText(window.location.href);
+    setLienCopie(() => (
+      <div className="fr-alert fr-alert--success fr-mb-1w">
+        <h3 className="fr-alert__title">Lien copié avec succès</h3>
+        <p>Le lien du diagnostic a été copié dans votre presse-papier</p>
+        <button
+          className="fr-btn--close fr-btn"
+          title="Masquer le message"
+          onClick={fermeAlerte}
+        >
+          Masquer le message
+        </button>
+      </div>
+    ));
+  }, []);
 
   const navigation = (
     <nav className="fr-sidemenu fr-sidemenu--sticky-full-height">
@@ -362,18 +385,18 @@ export const ComposantDiagnostic = ({
               <li
                 key={`li-${clef}`}
                 className={
-                  "fr-sidemenu__item" +
+                  'fr-sidemenu__item' +
                   (etatReferentiel.thematiqueAffichee === clef
-                    ? " fr-sidemenu__item--active"
-                    : "")
+                    ? ' fr-sidemenu__item--active'
+                    : '')
                 }
               >
                 <Button
                   iconId={icones[index]}
                   priority={
                     etatReferentiel.thematiqueAffichee === clef
-                      ? "primary"
-                      : "secondary"
+                      ? 'primary'
+                      : 'secondary'
                   }
                   onClick={() => affiche(clef)}
                   title=""
@@ -390,8 +413,22 @@ export const ComposantDiagnostic = ({
     <>
       <div className="fr-col-12 fr-col-md-1">{navigation}</div>
       <div className="contenu fr-col-12 fr-col-md-10 fr-py-12v">
+        {lienCopie}
         <div className="droite">
-          <Button onClick={termineDiagnostic}>Terminer Diagnostic</Button>
+          <div>
+            <Button onClick={termineDiagnostic}>Terminer Diagnostic</Button>
+          </div>
+          <div className="fr-share fr-ml-1w">
+            <ul className="fr-share__group">
+              <li>
+                <button
+                  className="fr-share__link fr-share__link--copy"
+                  title="Copier le lien du diagnostic"
+                  onClick={copierLienDiagnostic}
+                />
+              </li>
+            </ul>
+          </div>
         </div>
         {thematiques.map(([clef, thematique]) => {
           const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
@@ -403,7 +440,7 @@ export const ComposantDiagnostic = ({
               id={question.identifiant}
               className="fr-fieldset fr-mb-5w"
             >
-              {question.type === "liste" ? (
+              {question.type === 'liste' ? (
                 <ComposantQuestionListe
                   question={question}
                   actions={actionsPossibles}
