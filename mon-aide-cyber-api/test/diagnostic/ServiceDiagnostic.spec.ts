@@ -14,6 +14,8 @@ import { QuestionDiagnostic } from '../../src/diagnostic/Diagnostic';
 import { unTableauDeRecommandations } from '../constructeurs/constructeurTableauDeRecommandations';
 import { AdaptateurTableauDeRecommandationsDeTest } from '../adaptateurs/AdaptateurTableauDeRecommandationsDeTest';
 import { EntrepotsMemoire } from '../infrastructure/entrepots/memoire/Entrepots';
+import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 
 describe('Le service de diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -60,6 +62,7 @@ describe('Le service de diagnostic', () => {
         adaptateurReferentiel,
         adaptateurTableauDeRecommandations,
         entrepots,
+        new BusEvenementDeTest(),
       );
 
       const diagnosticRetourne = await serviceDiagnostic.diagnostic(
@@ -127,6 +130,7 @@ describe('Le service de diagnostic', () => {
         adaptateurReferentiel,
         adaptateurTableauDeRecommandations,
         entrepots,
+        new BusEvenementDeTest(),
       );
 
       const diagnosticRetourne = await serviceDiagnostic.diagnostic(
@@ -164,6 +168,7 @@ describe('Le service de diagnostic', () => {
         adaptateurReferentiel,
         adaptateurTableauDeRecommandations,
         entrepots,
+        new BusEvenementDeTest(),
       ).lance();
 
       const diagnosticRetourne = await entrepots
@@ -181,6 +186,26 @@ describe('Le service de diagnostic', () => {
           reponseDonnee: { reponseUnique: null, reponsesMultiples: [] },
         },
       ]);
+    });
+
+    it("publie sur un bus d'événement DiagnosticLance", async () => {
+      const maintenant = new Date();
+      FournisseurHorlogeDeTest.initialise(maintenant);
+      const busEvenement = new BusEvenementDeTest();
+      adaptateurReferentiel.ajoute(unReferentiel().construis());
+      const diagnostic = await new ServiceDiagnostic(
+        adaptateurReferentiel,
+        adaptateurTableauDeRecommandations,
+        entrepots,
+        busEvenement,
+      ).lance();
+
+      expect(busEvenement.evenementRecu).toStrictEqual({
+        identifiant: diagnostic.identifiant,
+        type: 'DIAGNOSTIC_LANCE',
+        date: maintenant,
+        corps: {},
+      });
     });
   });
 
@@ -218,6 +243,7 @@ describe('Le service de diagnostic', () => {
         adaptateurReferentiel,
         adaptateurTableauDeRecommandations,
         entrepots,
+        new BusEvenementDeTest(),
       ).ajouteLaReponse(diagnostic.identifiant, {
         chemin: 'contexte',
         identifiant: 'question-a-tiroir-',
@@ -251,6 +277,48 @@ describe('Le service de diagnostic', () => {
             ]),
           },
         ],
+      });
+    });
+
+    it("publie sur un bus d'événement ReponseAjoutee", async () => {
+      const maintenant = new Date();
+      FournisseurHorlogeDeTest.initialise(maintenant);
+      const busEvenement = new BusEvenementDeTest();
+      const secondeReponse = uneReponsePossible().construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique('Avez-vous quelque chose à envoyer ?')
+                .avecReponsesPossibles([secondeReponse])
+                .construis(),
+            )
+            .construis(),
+        )
+        .construis();
+      await entrepots.diagnostic().persiste(diagnostic);
+
+      await new ServiceDiagnostic(
+        adaptateurReferentiel,
+        adaptateurTableauDeRecommandations,
+        entrepots,
+        busEvenement,
+      ).ajouteLaReponse(diagnostic.identifiant, {
+        chemin: 'contexte',
+        identifiant: 'avezvous-quelque-chose-a-envoyer-',
+        reponse: secondeReponse.identifiant,
+      });
+
+      expect(busEvenement.evenementRecu).toStrictEqual({
+        identifiant: diagnostic.identifiant,
+        type: 'REPONSE_AJOUTEE',
+        date: maintenant,
+        corps: {
+          thematique: 'contexte',
+          identifiantQuestion: 'avezvous-quelque-chose-a-envoyer-',
+          reponse: secondeReponse.identifiant,
+        },
       });
     });
 
@@ -295,6 +363,7 @@ describe('Le service de diagnostic', () => {
         adaptateurReferentiel,
         adaptateurTableauDeRecommandations,
         entrepots,
+        new BusEvenementDeTest(),
       ).ajouteLaReponse(diagnostic.identifiant, {
         chemin: 'contexte',
         identifiant: 'question-a-tiroir-',
@@ -352,6 +421,7 @@ describe('Le service de diagnostic', () => {
         adaptateurReferentiel,
         adaptateurTableauDeRecommandations,
         entrepots,
+        new BusEvenementDeTest(),
       );
     });
     it('génère les recommandations', async () => {
@@ -554,6 +624,39 @@ describe('Le service de diagnostic', () => {
           priorisation: 7,
         },
       ]);
+    });
+
+    it("publie sur un bus d'événement DiagnosticTermine", async () => {
+      const maintenant = new Date();
+      FournisseurHorlogeDeTest.initialise(maintenant);
+      const busEvenement = new BusEvenementDeTest();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique('Avez-vous quelque chose à envoyer ?')
+                .avecReponsesPossibles([uneReponsePossible().construis()])
+                .construis(),
+            )
+            .construis(),
+        )
+        .construis();
+      await entrepots.diagnostic().persiste(diagnostic);
+
+      await new ServiceDiagnostic(
+        adaptateurReferentiel,
+        adaptateurTableauDeRecommandations,
+        entrepots,
+        busEvenement,
+      ).termine(diagnostic.identifiant);
+
+      expect(busEvenement.evenementRecu).toStrictEqual({
+        identifiant: diagnostic.identifiant,
+        type: 'DIAGNOSTIC_TERMINE',
+        date: maintenant,
+        corps: {},
+      });
     });
   });
 });
