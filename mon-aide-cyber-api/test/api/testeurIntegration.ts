@@ -7,6 +7,7 @@ import { Diagnostic } from '../../src/diagnostic/Diagnostic';
 import { Express } from 'express';
 import { fakerFR } from '@faker-js/faker';
 import { EntrepotsMemoire } from '../infrastructure/entrepots/memoire/Entrepots';
+import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 
 const PORT_ECOUTE = fakerFR.number.int({ min: 10000, max: 20000 });
 const testeurIntegration = () => {
@@ -20,6 +21,7 @@ const testeurIntegration = () => {
     new AdaptateurTableauDeRecommandationsDeTest();
   const adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest();
   const entrepots = new EntrepotsMemoire();
+  const busEvenement = new BusEvenementDeTest();
   const adaptateurPDF: AdaptateurPDF = {
     genereRecommandations: (__: Diagnostic) =>
       Promise.resolve(Buffer.from('PDF généré')),
@@ -31,6 +33,7 @@ const testeurIntegration = () => {
       adaptateurTranscripteurDonnees,
       adaptateurTableauDeRecommandations,
       entrepots,
+      busEvenement,
     });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     serveurDeTest.ecoute(PORT_ECOUTE, () => {});
