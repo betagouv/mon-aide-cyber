@@ -19,7 +19,8 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - /var/lib/postgresql/data
+      - ./bdd-mac/:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
 
   api:
     container_name: mon-aide-cyber-api
