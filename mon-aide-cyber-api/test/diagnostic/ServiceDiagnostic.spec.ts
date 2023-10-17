@@ -655,7 +655,7 @@ describe('Le service de diagnostic', () => {
         identifiant: diagnostic.identifiant,
         type: 'DIAGNOSTIC_TERMINE',
         date: maintenant,
-        corps: {},
+        corps: { identifiantDiagnostic: diagnostic.identifiant },
       });
     });
   });
