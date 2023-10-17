@@ -24,7 +24,7 @@ export class EntrepotJournalisationPostgres
   }
 
   protected nomTable(): string {
-    return "evenements";
+    return "journal_mac.evenements";
   }
 
   protected deDTOAEntite(__dto: PublicationDTO): Publication {

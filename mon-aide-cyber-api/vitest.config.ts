@@ -5,10 +5,10 @@ export default defineProject({
     env: {
       URL_SERVEUR_BASE_DONNEES:
         process.env.URL_SERVEUR_BASE_DONNEES ||
-        "postgres://postgres@localhost:5434",
+        "postgres://postgres@localhost:5434/mac",
       URL_JOURNALISATION_BASE_DE_DONNEES:
         process.env.URL_JOURNALISATION_BASE_DONNEES ||
-        "postgres://postgres@localhost:5434",
+        "postgres://postgres@localhost:5434/mac-journal",
     },
     environment: "node",
     globals: true,

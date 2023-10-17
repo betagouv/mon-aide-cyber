@@ -5,6 +5,8 @@ import {
 } from "../domaine/BusEvenement";
 import crypto from "crypto";
 import { EntrepotEvenementJournal } from "./Publication";
+import { EntrepotJournalisationPostgres } from "../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres";
+import configurationJournalisation from "../infrastructure/entrepots/postgres/configurationJournalisation";
 
 export function diagnosticTermnine(entrepot?: EntrepotEvenementJournal) {
   return new (class implements ConsommateurEvenement {
@@ -43,7 +45,12 @@ export const consommateursEvenements: Map<
   TypeEvenement,
   ConsommateurEvenement
 > = new Map([
-  ["DIAGNOSTIC_TERMINE", diagnosticTermnine()],
+  [
+    "DIAGNOSTIC_TERMINE",
+    diagnosticTermnine(
+      new EntrepotJournalisationPostgres(configurationJournalisation),
+    ),
+  ],
   ["DIAGNOSTIC_LANCE", diagnosticLance()],
   ["REPONSE_AJOUTEE", reponseAjoutee()],
 ]);
