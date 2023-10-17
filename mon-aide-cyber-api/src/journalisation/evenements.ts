@@ -4,7 +4,7 @@ import {
   TypeEvenement,
 } from "../domaine/BusEvenement";
 import crypto from "crypto";
-import { EntrepotEvenementJournal } from "./EvenementJournal";
+import { EntrepotEvenementJournal } from "./Publication";
 
 export function diagnosticTermnine(entrepot?: EntrepotEvenementJournal) {
   return new (class implements ConsommateurEvenement {

@@ -1,18 +1,18 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import { unDiagnostic } from '../../../constructeurs/constructeurDiagnostic';
-import { nettoieLaBaseDeDonnees } from '../../../utilitaires/nettoyeurBDD';
+import { afterEach, describe, expect, it } from "vitest";
+import { unDiagnostic } from "../../../constructeurs/constructeurDiagnostic";
+import { nettoieLaBaseDeDonnees } from "../../../utilitaires/nettoyeurBDD";
 import {
   uneQuestion,
   uneReponsePossible,
   unReferentiel,
-} from '../../../constructeurs/constructeurReferentiel';
-import { EntrepotDiagnosticPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotDiagnosticPostgres';
+} from "../../../constructeurs/constructeurReferentiel";
+import { EntrepotDiagnosticPostgres } from "../../../../src/infrastructure/entrepots/postgres/EntrepotDiagnosticPostgres";
 
-describe('Entrepot Diagnostic Postgres', () => {
+describe("Entrepot Diagnostic Postgres", () => {
   afterEach(async () => {
     await nettoieLaBaseDeDonnees();
   });
-  it('persiste un diagnostic', async () => {
+  it("persiste un diagnostic", async () => {
     const diagnostic = unDiagnostic().construis();
 
     await new EntrepotDiagnosticPostgres().persiste(diagnostic);
@@ -24,24 +24,24 @@ describe('Entrepot Diagnostic Postgres', () => {
     ).toStrictEqual(diagnostic);
   });
 
-  it('persiste un diagnostic avec les réponses données', async () => {
+  it("persiste un diagnostic avec les réponses données", async () => {
     const diagnostic = unDiagnostic()
       .avecUnReferentiel(
         unReferentiel()
           .sansThematique()
-          .ajouteUneThematique('question-set', [
+          .ajouteUneThematique("question-set", [
             uneQuestion()
-              .aChoixMultiple('Sauvegardes-tu les set?', [
-                uneReponsePossible().avecLibelle('Oui').construis(),
-                uneReponsePossible().avecLibelle('Un peu').construis(),
-                uneReponsePossible().avecLibelle('Beaucoup').construis(),
+              .aChoixMultiple("Sauvegardes-tu les set?", [
+                uneReponsePossible().avecLibelle("Oui").construis(),
+                uneReponsePossible().avecLibelle("Un peu").construis(),
+                uneReponsePossible().avecLibelle("Beaucoup").construis(),
               ])
               .construis(),
           ])
           .construis(),
       )
-      .avecLesReponsesDonnees('question-set', [
-        { 'sauvegardestu-les-set': ['un-peu', 'beaucoup'] },
+      .avecLesReponsesDonnees("question-set", [
+        { "sauvegardestu-les-set": ["un-peu", "beaucoup"] },
       ])
       .construis();
 
