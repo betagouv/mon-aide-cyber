@@ -10,6 +10,8 @@ services:
       - 3000:3000
     volumes:
       - ./mon-aide-cyber-ui:/usr/src/app/mon-aide-cyber-ui
+    networks:
+      - reseau-mon-aide-cyber
 
   db:
     container_name: mon-aide-cyber-bd
@@ -21,6 +23,8 @@ services:
     volumes:
       - ./bdd-mac/:/var/lib/postgresql/data
       - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
+    networks:
+      - reseau-mon-aide-cyber
 
   api:
     container_name: mon-aide-cyber-api
@@ -36,3 +40,9 @@ services:
       - ./mon-aide-cyber-ui/dist/:/usr/src/app/mon-aide-cyber-ui/dist
     depends_on:
       - db
+    networks:
+      - reseau-mon-aide-cyber
+
+networks:
+  reseau-mon-aide-cyber:
+    external: true

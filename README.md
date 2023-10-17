@@ -15,6 +15,11 @@ Commencer par récupérer les sources du projet et aller dans le répertoire cr�
 ```sh
 $ git clone git@github.com:betagouv/mon-aide-cyber.git && cd mon-aide-cyber
 ```
+Rajouter le réseau commun à l'application et au journal (s'il n'existe pas déjà) :
+
+```sh
+$ docker network create reseau-mon-aide-cyber
+```
 
 ## Lancement du serveur
 
