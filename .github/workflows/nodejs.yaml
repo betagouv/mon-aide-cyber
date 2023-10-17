@@ -7,6 +7,7 @@ on:
 
 env:
   URL_SERVEUR_BASE_DONNEES: postgres://postgres@localhost:5433
+  URL_JOURNALISATION_BASE_DONNEES: postgres://postgres@localhost:5433
 
 jobs:
   tests:
@@ -32,4 +33,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run build --workspaces
+      - run: npm run ci:initialise -w mon-aide-cyber-api
       - run: npm test
