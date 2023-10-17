@@ -9,8 +9,8 @@ import crypto from "crypto";
 
 import {
   EntrepotEvenementJournal,
-  EvenementJournal,
-} from "../../../../src/journalisation/EvenementJournal";
+  Publication,
+} from "../../../../src/journalisation/Publication";
 
 class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   private entites: Map<crypto.UUID, T> = new Map();
@@ -47,5 +47,5 @@ export class EntrepotDiagnosticMemoire
 }
 
 export class EntrepotEvenementJournalMemoire
-  extends EntrepotMemoire<EvenementJournal>
+  extends EntrepotMemoire<Publication>
   implements EntrepotEvenementJournal {}

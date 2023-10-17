@@ -6,6 +6,7 @@
     "build": "knex migrate:latest --knexfile src/infrastructure/entrepots/postgres/knexfile.ts --migrations-directory migrations",
     "start": "ts-node --transpile-only --require dotenv/config index.ts",
     "dev": "knex migrate:latest --debug --knexfile src/infrastructure/entrepots/postgres/knexfile.ts --migrations-directory migrations && nodemon --require dotenv/config index.ts",
+    "ci:initialise": "ts-node --transpile-only --require dotenv/config test/infrastructure/entrepots/postgres/integration_continue.ts",
     "test": "tsc --noEmit && vitest run --config vitest.config.ts --reporter verbose",
     "test:coverage": "vitest --config vitest.config.ts run --coverage",
     "test:coverage:ui": "vitest --config vitest.config.ts --ui --coverage --reporter verbose",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/lodash": "^4.14.199",
+    "@types/pg": "^8.10.5",
     "@types/pug": "^2.0.6",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",

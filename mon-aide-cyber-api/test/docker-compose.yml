@@ -10,3 +10,4 @@ services:
       - 5434:5432
     volumes:
       - /var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
