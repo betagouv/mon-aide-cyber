@@ -27,7 +27,7 @@ export class ServiceDiagnostic {
     private readonly adaptateurReferentiel: Adaptateur<Referentiel>,
     private readonly adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>,
     private readonly entrepots: Entrepots,
-    private readonly busEvenement: BusEvenement | null = null,
+    private readonly busEvenement?: BusEvenement,
   ) {}
 
   diagnostic = async (id: crypto.UUID): Promise<Diagnostic> =>
@@ -94,15 +94,21 @@ export class ServiceDiagnostic {
       })
       .then(
         (diagnostic) =>
-          this.busEvenement?.publie({
+          this.busEvenement?.publie<DiagnosticTermine>({
             identifiant: diagnostic.identifiant,
             type: 'DIAGNOSTIC_TERMINE',
             date: FournisseurHorloge.maintenant(),
-            corps: {},
+            corps: { identifiantDiagnostic: diagnostic.identifiant },
           }),
       );
   }
 }
+
+type DiagnosticTermine = Omit<Evenement, 'corps'> & {
+  corps: {
+    identifiantDiagnostic: crypto.UUID;
+  };
+};
 
 type ReponseAjoutee = Omit<Evenement, 'corps'> & {
   corps: {
