@@ -1,18 +1,26 @@
-import { Request, Response } from 'express';
-import { NextFunction } from 'express-serve-static-core';
-import { AggregatNonTrouve } from '../../domaine/Aggregat';
+import { Request, Response } from "express";
+import { NextFunction } from "express-serve-static-core";
+import { AggregatNonTrouve } from "../../domaine/Aggregat";
+import { AdapteurGestionnaireErreurs } from "../../adaptateurs/AdapteurGestionnaireErreurs";
 
 export const gestionnaireErreurAggregatNonTrouve = (
-  erreur: Error,
-  _requete: Request,
-  reponse: Response,
-  suite: NextFunction,
+  gestionnaireErreurs: AdapteurGestionnaireErreurs,
 ) => {
-  if (erreur instanceof AggregatNonTrouve) {
-    if (reponse.headersSent) {
-      return suite(erreur);
+  return (
+    erreur: Error,
+    _requete: Request,
+    reponse: Response,
+    suite: NextFunction,
+  ) => {
+    if (erreur instanceof AggregatNonTrouve) {
+      gestionnaireErreurs.consigne(erreur);
+
+      if (reponse.headersSent) {
+        return suite(erreur);
+      }
+
+      reponse.status(404);
+      reponse.json({ message: erreur.message });
     }
-    reponse.status(404);
-    reponse.json({ message: erreur.message });
-  }
+  };
 };

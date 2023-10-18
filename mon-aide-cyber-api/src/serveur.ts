@@ -1,16 +1,17 @@
-import * as path from 'path';
-import express, { Request, Response } from 'express';
-import * as http from 'http';
-import rateLimit from 'express-rate-limit';
-import routesAPI from './api/routesAPI';
-import { AdaptateurTranscripteur } from './adaptateurs/AdaptateurTranscripteur';
-import { Entrepots } from './domaine/Entrepots';
-import { gestionnaireErreurAggregatNonTrouve } from './api/gestionnaires/erreurs';
-import { Referentiel } from './diagnostic/Referentiel';
-import { TableauDeRecommandations } from './diagnostic/TableauDeRecommandations';
-import { Adaptateur } from './adaptateurs/Adaptateur';
-import { AdaptateurPDF } from './adaptateurs/AdaptateurPDF';
-import { BusEvenement } from './domaine/BusEvenement';
+import * as path from "path";
+import express, { Request, Response } from "express";
+import * as http from "http";
+import rateLimit from "express-rate-limit";
+import routesAPI from "./api/routesAPI";
+import { AdaptateurTranscripteur } from "./adaptateurs/AdaptateurTranscripteur";
+import { Entrepots } from "./domaine/Entrepots";
+import { gestionnaireErreurAggregatNonTrouve } from "./api/gestionnaires/erreurs";
+import { Referentiel } from "./diagnostic/Referentiel";
+import { TableauDeRecommandations } from "./diagnostic/TableauDeRecommandations";
+import { Adaptateur } from "./adaptateurs/Adaptateur";
+import { AdaptateurPDF } from "./adaptateurs/AdaptateurPDF";
+import { BusEvenement } from "./domaine/BusEvenement";
+import { AdapteurGestionnaireErreurs } from "./adaptateurs/AdapteurGestionnaireErreurs";
 
 export type ConfigurationServeur = {
   adaptateurPDF: AdaptateurPDF;
@@ -19,6 +20,7 @@ export type ConfigurationServeur = {
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
   entrepots: Entrepots;
   busEvenement: BusEvenement;
+  gestionnaireErreurs: AdapteurGestionnaireErreurs;
 };
 
 const creeApp = (config: ConfigurationServeur) => {
@@ -28,26 +30,27 @@ const creeApp = (config: ConfigurationServeur) => {
     windowMs: 5 * 60 * 1000,
     max: 100,
     message:
-      'Vous avez atteint le nombre maximal de requête. Veuillez réessayer ultérieurement.',
+      "Vous avez atteint le nombre maximal de requête. Veuillez réessayer ultérieurement.",
     standardHeaders: true,
     keyGenerator: (requete: Request, __: Response) =>
-      requete.headers['x-real-ip'] as string,
+      requete.headers["x-real-ip"] as string,
     legacyHeaders: false,
-    skip: (requete: Request, __) => requete.path.startsWith('/api'),
+    skip: (requete: Request, __) => requete.path.startsWith("/api"),
   });
   app.use(limiteurTrafficUI);
   app.use(
-    express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist')),
+    express.static(path.join(__dirname, "./../../mon-aide-cyber-ui/dist")),
   );
-  app.use('/api', routesAPI(config));
+  app.use("/api", routesAPI(config));
 
-  app.get('*', (_: Request, reponse: Response) =>
+  app.get("*", (_: Request, reponse: Response) =>
     reponse.sendFile(
-      path.join(__dirname, './../../mon-aide-cyber-ui/dist/index.html'),
+      path.join(__dirname, "./../../mon-aide-cyber-ui/dist/index.html"),
     ),
   );
 
-  app.use(gestionnaireErreurAggregatNonTrouve);
+  app.use(gestionnaireErreurAggregatNonTrouve(config.gestionnaireErreurs));
+
   return app;
 };
 
