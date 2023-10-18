@@ -318,6 +318,7 @@ describe('Le service de diagnostic', () => {
         type: 'REPONSE_AJOUTEE',
         date: maintenant,
         corps: {
+          identifiantDiagnostic: diagnostic.identifiant,
           thematique: 'contexte',
           identifiantQuestion: 'avezvous-quelque-chose-a-envoyer-',
           reponse: secondeReponse.identifiant,

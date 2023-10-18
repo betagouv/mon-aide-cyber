@@ -5,12 +5,7 @@ import { EntrepotEvenementJournal } from './Publication';
 export const diagnosticTermnine = (entrepot: EntrepotEvenementJournal) => {
   return new (class implements ConsommateurEvenement {
     consomme<E extends Evenement>(evenement: E): Promise<void> {
-      entrepot.persiste({
-        identifiant: crypto.randomUUID(),
-        date: evenement.date,
-        type: evenement.type,
-        donnees: evenement.corps,
-      });
+      entrepot.persiste(genereEvenement(evenement));
 
       return Promise.resolve(undefined);
     }
@@ -20,21 +15,25 @@ export const diagnosticTermnine = (entrepot: EntrepotEvenementJournal) => {
 export const diagnosticLance = (entrepot: EntrepotEvenementJournal) => {
   return new (class implements ConsommateurEvenement {
     consomme<E extends Evenement>(evenement: E): Promise<void> {
-      entrepot.persiste({
-        date: evenement.date,
-        donnees: evenement.corps,
-        identifiant: crypto.randomUUID(),
-        type: 'DIAGNOSTIC_LANCE',
-      });
+      entrepot.persiste(genereEvenement(evenement));
       return Promise.resolve(undefined);
     }
   })();
 };
 
-export const reponseAjoutee = () =>
+export const reponseAjoutee = (entrepot: EntrepotEvenementJournal) =>
   new (class implements ConsommateurEvenement {
     consomme<E extends Evenement>(evenement: E): Promise<void> {
-      console.log(`${evenement.type} :`, evenement);
+      entrepot.persiste(genereEvenement(evenement));
       return Promise.resolve(undefined);
     }
   })();
+
+const genereEvenement = <E extends Evenement>(evenement: E) => {
+  return {
+    date: evenement.date,
+    donnees: evenement.corps,
+    identifiant: crypto.randomUUID(),
+    type: evenement.type,
+  };
+};

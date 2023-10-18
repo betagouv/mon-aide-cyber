@@ -4,6 +4,7 @@ import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurH
 import {
   diagnosticLance,
   diagnosticTermnine,
+  reponseAjoutee,
 } from '../../src/journalisation/evenements';
 import { EntrepotEvenementJournalMemoire } from '../infrastructure/entrepots/memoire/EntrepotsMemoire';
 import crypto from 'crypto';
@@ -49,6 +50,27 @@ describe('Évènements', () => {
         {
           date: FournisseurHorloge.maintenant(),
           type: 'DIAGNOSTIC_LANCE',
+          donnees: {},
+        },
+      ]);
+    });
+  });
+
+  describe('Diagnostic réponse ajoutée', () => {
+    it("lorsque l'évènement est consommé, il est persisté", async () => {
+      const entrepot = new EntrepotEvenementJournalMemoire();
+
+      reponseAjoutee(entrepot).consomme({
+        identifiant: crypto.randomUUID(),
+        type: 'REPONSE_AJOUTEE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {},
+      });
+
+      expect(await entrepot.tous()).toMatchObject([
+        {
+          date: FournisseurHorloge.maintenant(),
+          type: 'REPONSE_AJOUTEE',
           donnees: {},
         },
       ]);

@@ -72,6 +72,7 @@ export class ServiceDiagnostic {
             type: 'REPONSE_AJOUTEE',
             date: FournisseurHorloge.maintenant(),
             corps: {
+              identifiantDiagnostic: diagnostic.identifiant,
               thematique: corpsReponse.chemin,
               identifiantQuestion: corpsReponse.identifiant,
               reponse: corpsReponse.reponse,
@@ -118,6 +119,7 @@ type DiagnosticTermine = Omit<Evenement, 'corps'> & {
 
 type ReponseAjoutee = Omit<Evenement, 'corps'> & {
   corps: {
+    identifiantDiagnostic: crypto.UUID;
     thematique: string;
     identifiantQuestion: string;
     reponse: string | string[] | CorpsReponseQuestionATiroir;
