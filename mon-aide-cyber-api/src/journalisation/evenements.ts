@@ -17,10 +17,15 @@ export const diagnosticTermnine = (entrepot: EntrepotEvenementJournal) => {
   })();
 };
 
-export const diagnosticLance = () => {
+export const diagnosticLance = (entrepot: EntrepotEvenementJournal) => {
   return new (class implements ConsommateurEvenement {
     consomme<E extends Evenement>(evenement: E): Promise<void> {
-      console.log(`${evenement.type} :`, evenement);
+      entrepot.persiste({
+        date: evenement.date,
+        donnees: evenement.corps,
+        identifiant: crypto.randomUUID(),
+        type: 'DIAGNOSTIC_LANCE',
+      });
       return Promise.resolve(undefined);
     }
   })();

@@ -19,7 +19,7 @@ export const fabriqueConsommateursEvenements = () => {
 
   return new Map<TypeEvenement, ConsommateurEvenement>([
     ['DIAGNOSTIC_TERMINE', diagnosticTermnine(entrepotJournalisation)],
-    ['DIAGNOSTIC_LANCE', diagnosticLance()],
+    ['DIAGNOSTIC_LANCE', diagnosticLance(entrepotJournalisation)],
     ['REPONSE_AJOUTEE', reponseAjoutee()],
   ]);
 };

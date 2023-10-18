@@ -40,11 +40,11 @@ export class ServiceDiagnostic {
     ]).then(async ([ref, rec]) => {
       const diagnostic = initialiseDiagnostic(ref, rec);
       await this.entrepots.diagnostic().persiste(diagnostic);
-      await this.busEvenement?.publie({
+      await this.busEvenement?.publie<DiagnosticLance>({
         identifiant: diagnostic.identifiant,
         type: 'DIAGNOSTIC_LANCE',
         date: FournisseurHorloge.maintenant(),
-        corps: {},
+        corps: { identifiantDiagnostic: diagnostic.identifiant },
       });
       return diagnostic;
     });
@@ -103,6 +103,12 @@ export class ServiceDiagnostic {
       );
   }
 }
+
+export type DiagnosticLance = Omit<Evenement, 'corps'> & {
+  corps: {
+    identifiantDiagnostic: crypto.UUID;
+  };
+};
 
 type DiagnosticTermine = Omit<Evenement, 'corps'> & {
   corps: {
