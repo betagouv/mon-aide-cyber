@@ -7,7 +7,10 @@ import {
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
-import { ServiceDiagnostic } from '../../src/diagnostic/ServiceDiagnostic';
+import {
+  DiagnosticLance,
+  ServiceDiagnostic,
+} from '../../src/diagnostic/ServiceDiagnostic';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { QuestionDiagnostic } from '../../src/diagnostic/Diagnostic';
@@ -200,11 +203,11 @@ describe('Le service de diagnostic', () => {
         busEvenement,
       ).lance();
 
-      expect(busEvenement.evenementRecu).toStrictEqual({
+      expect(busEvenement.evenementRecu).toStrictEqual<DiagnosticLance>({
         identifiant: diagnostic.identifiant,
         type: 'DIAGNOSTIC_LANCE',
         date: maintenant,
-        corps: {},
+        corps: { identifiantDiagnostic: diagnostic.identifiant },
       });
     });
   });
