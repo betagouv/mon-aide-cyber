@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   web:
@@ -33,6 +33,7 @@ services:
       dockerfile: Dockerfile-api
     environment:
       - URL_SERVEUR_BASE_DONNEES=postgres://postgres@mon-aide-cyber-bd/mac
+      - URL_JOURNALISATION_BASE_DONNEES=postgres://postgres@mac-journal-db/mac-journal
     ports:
       - 8081:8081
     volumes:
