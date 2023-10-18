@@ -1,11 +1,11 @@
-import serveur from "./src/serveur";
-import { AdaptateurReferentielMAC } from "./src/infrastructure/adaptateurs/AdaptateurReferentielMAC";
-import { adaptateurTranscripteur } from "./src/infrastructure/adaptateurs/adaptateurTranscripteur";
-import { AdaptateurTableauDeRecommandationsMAC } from "./src/infrastructure/adaptateurs/AdaptateurTableauDeRecommandationsMAC";
-import { AdaptateurPDFMAC } from "./src/infrastructure/adaptateurs/AdaptateurPDFMAC";
-import { fabriqueEntrepots } from "./src/adaptateurs/fabriqueEntrepots";
-import { BusEvenementMAC } from "./src/infrastructure/bus/BusEvenementMAC";
-import { consommateursEvenements } from "./src/journalisation/evenements";
+import serveur from './src/serveur';
+import { AdaptateurReferentielMAC } from './src/infrastructure/adaptateurs/AdaptateurReferentielMAC';
+import { adaptateurTranscripteur } from './src/infrastructure/adaptateurs/adaptateurTranscripteur';
+import { AdaptateurTableauDeRecommandationsMAC } from './src/infrastructure/adaptateurs/AdaptateurTableauDeRecommandationsMAC';
+import { AdaptateurPDFMAC } from './src/infrastructure/adaptateurs/AdaptateurPDFMAC';
+import { fabriqueEntrepots } from './src/adaptateurs/fabriqueEntrepots';
+import { BusEvenementMAC } from './src/infrastructure/bus/BusEvenementMAC';
+import { fabriqueConsommateursEvenements } from './src/adaptateurs/fabriqueConsommateursEvenements';
 
 const serveurMAC = serveur.creeServeur({
   adaptateurPDF: new AdaptateurPDFMAC(),
@@ -14,7 +14,7 @@ const serveurMAC = serveur.creeServeur({
   adaptateurTableauDeRecommandations:
     new AdaptateurTableauDeRecommandationsMAC(),
   entrepots: fabriqueEntrepots(),
-  busEvenement: new BusEvenementMAC(consommateursEvenements),
+  busEvenement: new BusEvenementMAC(fabriqueConsommateursEvenements()),
 });
 
 const port = process.env.PORT || 8081;
