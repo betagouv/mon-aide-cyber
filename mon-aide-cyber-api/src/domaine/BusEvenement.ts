@@ -1,10 +1,11 @@
 import crypto from 'crypto';
 
+export type Corps = object;
 export type Evenement = {
   identifiant: crypto.UUID;
   type: TypeEvenement;
   date: Date;
-  corps: object;
+  corps: Corps;
 };
 
 export interface BusEvenement {
