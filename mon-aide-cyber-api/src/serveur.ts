@@ -11,7 +11,7 @@ import { TableauDeRecommandations } from "./diagnostic/TableauDeRecommandations"
 import { Adaptateur } from "./adaptateurs/Adaptateur";
 import { AdaptateurPDF } from "./adaptateurs/AdaptateurPDF";
 import { BusEvenement } from "./domaine/BusEvenement";
-import { ConsignateurErreurs } from "./adaptateurs/ConsignateurErreurs";
+import { AdaptateurGestionnaireErreurs } from "./adaptateurs/AdaptateurGestionnaireErreurs";
 
 export type ConfigurationServeur = {
   adaptateurPDF: AdaptateurPDF;
@@ -20,7 +20,7 @@ export type ConfigurationServeur = {
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
   entrepots: Entrepots;
   busEvenement: BusEvenement;
-  gestionnaireErreurs: ConsignateurErreurs;
+  gestionnaireErreurs: AdaptateurGestionnaireErreurs;
 };
 
 const creeApp = (config: ConfigurationServeur) => {
@@ -50,7 +50,9 @@ const creeApp = (config: ConfigurationServeur) => {
   );
 
   app.use(gestionnaireErreurAggregatNonTrouve());
-  app.use(gestionnaireErreurGeneralisee(config.gestionnaireErreurs));
+  app.use(
+    gestionnaireErreurGeneralisee(config.gestionnaireErreurs.consignateur()),
+  );
 
   return app;
 };

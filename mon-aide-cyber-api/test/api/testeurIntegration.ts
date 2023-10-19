@@ -8,8 +8,7 @@ import { Express } from "express";
 import { fakerFR } from "@faker-js/faker";
 import { EntrepotsMemoire } from "../infrastructure/entrepots/memoire/Entrepots";
 import { BusEvenementDeTest } from "../infrastructure/bus/BusEvenementDeTest";
-
-import { ConsignateurErreursMemoire } from "../../src/infrastructure/adaptateurs/ConsignateurErreursMemoire";
+import { AdaptateurGestionnaireErreursMemoire } from "../../src/infrastructure/adaptateurs/AdatpateurGestionnaireErreurs";
 
 const PORT_ECOUTE = fakerFR.number.int({ min: 10000, max: 20000 });
 
@@ -29,7 +28,7 @@ const testeurIntegration = () => {
     genereRecommandations: (__: Diagnostic) =>
       Promise.resolve(Buffer.from("PDF généré")),
   };
-  const gestionnaireErreurs = new ConsignateurErreursMemoire();
+  const gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire();
 
   const initialise = () => {
     serveurDeTest = serveur.creeServeur({
