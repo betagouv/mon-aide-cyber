@@ -8,7 +8,7 @@ import { Express } from "express";
 import { fakerFR } from "@faker-js/faker";
 import { EntrepotsMemoire } from "../infrastructure/entrepots/memoire/Entrepots";
 import { BusEvenementDeTest } from "../infrastructure/bus/BusEvenementDeTest";
-import { AdaptateurGestionnaireErreursMemoire } from "../../src/infrastructure/adaptateurs/AdatpateurGestionnaireErreurs";
+import { AdaptateurGestionnaireErreursMemoire } from "../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire";
 
 const PORT_ECOUTE = fakerFR.number.int({ min: 10000, max: 20000 });
 
