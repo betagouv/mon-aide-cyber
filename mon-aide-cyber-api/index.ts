@@ -6,7 +6,7 @@ import { AdaptateurPDFMAC } from "./src/infrastructure/adaptateurs/AdaptateurPDF
 import { fabriqueEntrepots } from "./src/adaptateurs/fabriqueEntrepots";
 import { BusEvenementMAC } from "./src/infrastructure/bus/BusEvenementMAC";
 import { fabriqueConsommateursEvenements } from "./src/adaptateurs/fabriqueConsommateursEvenements";
-import { AdaptateurGestionnaireErreursMemoire } from "./src/infrastructure/adaptateurs/AdatpateurGestionnaireErreurs";
+import { AdaptateurGestionnaireErreursMemoire } from "./src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire";
 
 const serveurMAC = serveur.creeServeur({
   adaptateurPDF: new AdaptateurPDFMAC(),
