@@ -5,7 +5,7 @@ import rateLimit from "express-rate-limit";
 import routesAPI from "./api/routesAPI";
 import { AdaptateurTranscripteur } from "./adaptateurs/AdaptateurTranscripteur";
 import { Entrepots } from "./domaine/Entrepots";
-import { gestionnaireErreurAggregatNonTrouve } from "./api/gestionnaires/erreurs";
+import { gestionnaireErreurAggregatNonTrouve, gestionnaireErreurGeneralisee } from "./api/gestionnaires/erreurs";
 import { Referentiel } from "./diagnostic/Referentiel";
 import { TableauDeRecommandations } from "./diagnostic/TableauDeRecommandations";
 import { Adaptateur } from "./adaptateurs/Adaptateur";
@@ -49,7 +49,8 @@ const creeApp = (config: ConfigurationServeur) => {
     ),
   );
 
-  app.use(gestionnaireErreurAggregatNonTrouve(config.gestionnaireErreurs));
+  app.use(gestionnaireErreurAggregatNonTrouve());
+  app.use(gestionnaireErreurGeneralisee(config.gestionnaireErreurs));
 
   return app;
 };
