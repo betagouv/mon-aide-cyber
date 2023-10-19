@@ -3,7 +3,7 @@ import testeurIntegration from "./api/testeurIntegration";
 import { executeRequete } from "./api/executeurRequete";
 import { Express } from "express";
 
-describe("Médiateur de gestion d'erreurr", () => {
+describe("Consignateur de gestion d'erreurr", () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { portEcoute: number; app: Express };
 
