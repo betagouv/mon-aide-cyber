@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { NextFunction } from "express-serve-static-core";
 import { AggregatNonTrouve } from "../../domaine/Aggregat";
-import { AdapteurGestionnaireErreurs } from "../../adaptateurs/AdapteurGestionnaireErreurs";
+import { ConsignateurErreurs } from "../../adaptateurs/ConsignateurErreurs";
 
 export const gestionnaireErreurAggregatNonTrouve = () => {
   return (
@@ -20,7 +20,7 @@ export const gestionnaireErreurAggregatNonTrouve = () => {
 };
 
 export const gestionnaireErreurGeneralisee = (
-  gestionnaireErreurs: AdapteurGestionnaireErreurs,
+  gestionnaireErreurs: ConsignateurErreurs,
 ) => {
   return (
     erreur: Error,

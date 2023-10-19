@@ -11,7 +11,7 @@ import { TableauDeRecommandations } from "./diagnostic/TableauDeRecommandations"
 import { Adaptateur } from "./adaptateurs/Adaptateur";
 import { AdaptateurPDF } from "./adaptateurs/AdaptateurPDF";
 import { BusEvenement } from "./domaine/BusEvenement";
-import { AdapteurGestionnaireErreurs } from "./adaptateurs/AdapteurGestionnaireErreurs";
+import { ConsignateurErreurs } from "./adaptateurs/ConsignateurErreurs";
 
 export type ConfigurationServeur = {
   adaptateurPDF: AdaptateurPDF;
@@ -20,7 +20,7 @@ export type ConfigurationServeur = {
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
   entrepots: Entrepots;
   busEvenement: BusEvenement;
-  gestionnaireErreurs: AdapteurGestionnaireErreurs;
+  gestionnaireErreurs: ConsignateurErreurs;
 };
 
 const creeApp = (config: ConfigurationServeur) => {
