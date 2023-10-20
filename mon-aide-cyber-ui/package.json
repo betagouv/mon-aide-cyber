@@ -14,7 +14,7 @@
     "prebuild": "only-include-used-icons",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "test": "tsc && vitest run --config vitest.config.ts --reporter verbose",
+    "test": "tsc -p test/tsconfig.test.json && vitest run --config vitest.config.ts --reporter verbose",
     "test:coverage": "vitest --config vitest.config.ts run --coverage",
     "test:watch": "vitest --config vitest.config.ts --ui --reporter verbose",
     "test:storybook": "test-storybook"

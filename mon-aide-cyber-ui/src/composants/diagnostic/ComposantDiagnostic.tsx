@@ -4,6 +4,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
   useState,
 } from 'react';
@@ -25,6 +26,7 @@ import {
   EtatReponseStatut,
   initialiseReducteur,
   reducteurReponse,
+  reponseEnvoyee,
   reponseMultipleDonnee,
   reponseTiroirMultipleDonnee,
   reponseTiroirUniqueDonnee,
@@ -121,14 +123,21 @@ const ComposantQuestionListe = ({
     [envoie],
   );
 
+  const reponseQuestionEnvoyee = useCallback(() => {
+    envoie(reponseEnvoyee());
+  }, [envoie]);
+
   useEffect(() => {
-    if (etatReponse.statut === EtatReponseStatut.MODIFIE) {
+    if (etatReponse.statut === EtatReponseStatut.MODIFIEE) {
       const action = etatReponse.action('repondre');
       if (action !== undefined) {
-        entrepots.diagnostic().repond(action, etatReponse.reponse()!);
+        entrepots
+          .diagnostic()
+          .repond(action, etatReponse.reponse()!)
+          .then(() => reponseQuestionEnvoyee());
       }
     }
-  }, [actions, entrepots, etatReponse, question]);
+  }, [actions, entrepots, etatReponse, question, reponseQuestionEnvoyee]);
 
   return (
     <Select
@@ -203,14 +212,23 @@ const ComposantQuestion = ({
     [envoie],
   );
 
+  const reponseQuestionEnvoyee = useCallback(() => {
+    envoie(reponseEnvoyee());
+  }, [envoie]);
+
   useEffect(() => {
-    if (etatReponse.statut === EtatReponseStatut.MODIFIE) {
+    if (etatReponse.statut === EtatReponseStatut.MODIFIEE) {
       const action = etatReponse.action('repondre');
       if (action !== undefined) {
-        entrepots.diagnostic().repond(action, etatReponse.reponse()!);
+        entrepots
+          .diagnostic()
+          .repond(action, etatReponse.reponse()!)
+          .then(() => {
+            reponseQuestionEnvoyee();
+          });
       }
     }
-  }, [actions, entrepots, etatReponse, question]);
+  }, [actions, entrepots, etatReponse, question, reponseQuestionEnvoyee]);
   return (
     <>
       <legend className="fr-fieldset__legend">{question.libelle}</legend>
@@ -316,7 +334,7 @@ export const ComposantDiagnostic = ({
   }, [entrepots, idDiagnostic, envoie, showBoundary]);
 
   let thematiques: [string, Thematique][] = [];
-  let actions: Action[] = [];
+  let actions: Action[] = useMemo(() => [], []);
   if (etatReferentiel.diagnostic?.referentiel !== undefined) {
     thematiques = Object.entries(etatReferentiel.diagnostic!.referentiel!);
     actions = etatReferentiel.diagnostic!.actions;
@@ -366,7 +384,7 @@ export const ComposantDiagnostic = ({
         </button>
       </div>
     ));
-  }, []);
+  }, [fermeAlerte]);
 
   const navigation = (
     <nav className="fr-sidemenu fr-sidemenu--sticky-full-height">
@@ -381,7 +399,7 @@ export const ComposantDiagnostic = ({
         </button>
         <div className="fr-collapse" id="fr-sidemenu-wrapper">
           <ul className="fr-sidemenu__list">
-            {thematiques.map(([clef, _], index) => (
+            {thematiques.map(([clef], index) => (
               <li
                 key={`li-${clef}`}
                 className={

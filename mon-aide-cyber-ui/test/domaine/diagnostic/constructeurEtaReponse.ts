@@ -1,12 +1,15 @@
-import { Reponse } from "../../../src/domaine/diagnostic/Diagnostic";
+import {
+  ActionReponseDiagnostic,
+  Reponse,
+} from '../../../src/domaine/diagnostic/Diagnostic';
 import {
   EtatReponse,
   EtatReponseStatut,
-} from "../../../src/domaine/diagnostic/reducteurReponse";
+} from '../../../src/domaine/diagnostic/reducteurReponse';
 import {
   Question,
   ReponseDonnee,
-} from "../../../src/domaine/diagnostic/Referentiel";
+} from '../../../src/domaine/diagnostic/Referentiel';
 
 class ConstructeurEtaReponse {
   private reponse: () => Reponse | null = () => null;
@@ -25,6 +28,10 @@ class ConstructeurEtaReponse {
       reponses: this.question.reponseDonnee.reponses,
     };
     return {
+      action(_: string): ActionReponseDiagnostic | undefined {
+        return undefined;
+      },
+      actions: [],
       question: this.question,
       reponse: this.reponse,
       reponseDonnee,
