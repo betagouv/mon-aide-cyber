@@ -321,6 +321,7 @@ export const ComposantDiagnostic = ({
     thematiqueAffichee: undefined,
   });
   const [lienCopie, setLienCopie] = useState(<></>);
+  const [boutonDesactive, setBoutonDesactive] = useState(false);
 
   const entrepots = useContext(FournisseurEntrepots);
   const { showBoundary } = useErrorBoundary();
@@ -358,12 +359,45 @@ export const ComposantDiagnostic = ({
     'ri-loop-right-line',
   ];
 
+  const spinner = (
+    <div className="blanc">
+      <div className="loader">
+        <svg className="circular" viewBox="25 25 50 50">
+          <circle
+            className="path-outline"
+            cx="50"
+            cy="50"
+            r="20"
+            fill="none"
+            strokeWidth="1"
+            strokeMiterlimit="10"
+          />
+          <circle
+            className="path"
+            cx="50"
+            cy="50"
+            r="20"
+            fill="none"
+            strokeWidth="1"
+            strokeMiterlimit="10"
+          />
+        </svg>
+      </div>
+    </div>
+  );
+
   const termineDiagnostic = useCallback(async () => {
+    setBoutonDesactive(true);
     const action = actions.find((a) => a.action === 'terminer');
     if (action) {
-      return entrepots.diagnostic().termine(action as ActionBase);
+      return entrepots
+        .diagnostic()
+        .termine(action as ActionBase)
+        .then(() => {
+          setBoutonDesactive(false);
+        });
     }
-  }, [entrepots, actions]);
+  }, [actions, entrepots]);
 
   const fermeAlerte = useCallback(() => {
     setLienCopie(<></>);
@@ -431,10 +465,16 @@ export const ComposantDiagnostic = ({
     <>
       <div className="fr-col-12 fr-col-md-1">{navigation}</div>
       <div className="contenu fr-col-12 fr-col-md-10 fr-py-12v">
+        {boutonDesactive && spinner}
         {lienCopie}
         <div className="droite">
           <div>
-            <Button onClick={termineDiagnostic}>Terminer Diagnostic</Button>
+            <Button
+              disabled={boutonDesactive}
+              onClick={() => termineDiagnostic()}
+            >
+              Terminer Diagnostic
+            </Button>
           </div>
           <div className="fr-share fr-ml-1w">
             <ul className="fr-share__group">
