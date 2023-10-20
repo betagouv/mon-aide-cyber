@@ -1,16 +1,18 @@
-import { Question, ReponseDonnee, ReponseMultiple } from "./Referentiel.ts";
-import { ActionReponseDiagnostic, Reponse } from "./Diagnostic.ts";
+import { Question, ReponseDonnee, ReponseMultiple } from './Referentiel.ts';
+import { ActionReponseDiagnostic, Reponse } from './Diagnostic.ts';
 
 enum TypeActionReponse {
-  REPONSE_UNIQUE_DONNEE = "REPONSE_UNIQUE_DONNEE",
-  REPONSE_MULTIPLE_DONNEE = "REPONSE_MULTIPLE_DONNEE",
-  REPONSE_TIROIR_UNIQUE_DONNEE = "REPONSE_TIROIR_UNIQUE_DONNEE",
-  REPONSE_TIROIR_MULTIPLE_DONNEE = "REPONSE_TIROIR_MULTIPLE_DONNEE",
+  REPONSE_UNIQUE_DONNEE = 'REPONSE_UNIQUE_DONNEE',
+  REPONSE_MULTIPLE_DONNEE = 'REPONSE_MULTIPLE_DONNEE',
+  REPONSE_TIROIR_UNIQUE_DONNEE = 'REPONSE_TIROIR_UNIQUE_DONNEE',
+  REPONSE_TIROIR_MULTIPLE_DONNEE = 'REPONSE_TIROIR_MULTIPLE_DONNEE',
+  REPONSE_ENVOYEE = 'REPONSE_ENVOYEE',
 }
 
 export enum EtatReponseStatut {
-  CHARGEE = "CHARGEE",
-  MODIFIE = "MODIFIE",
+  CHARGEE = 'CHARGEE',
+  MODIFIEE = 'MODIFIEE',
+  ENVOYEE = 'ENVOYEE',
 }
 
 export type EtatReponse = {
@@ -62,6 +64,9 @@ type ActionReponse =
   | {
       reponse: ElementReponseTiroirMultiple;
       type: TypeActionReponse.REPONSE_TIROIR_MULTIPLE_DONNEE;
+    }
+  | {
+      type: TypeActionReponse.REPONSE_ENVOYEE;
     };
 export const reducteurReponse = (
   etat: EtatReponse,
@@ -151,12 +156,17 @@ export const reducteurReponse = (
         reponses,
       },
       reponse: genereLaReponsePourUneQuestionTiroir(reponses, valeur),
-      statut: EtatReponseStatut.MODIFIE,
+      statut: EtatReponseStatut.MODIFIEE,
       valeur: () => valeur,
     };
   };
 
   switch (action.type) {
+    case TypeActionReponse.REPONSE_ENVOYEE:
+      return {
+        ...etat,
+        statut: EtatReponseStatut.ENVOYEE,
+      };
     case TypeActionReponse.REPONSE_UNIQUE_DONNEE: {
       return {
         ...etat,
@@ -169,7 +179,7 @@ export const reducteurReponse = (
           identifiantQuestion: etat.question.identifiant,
           reponseDonnee: action.reponse.valeur,
         }),
-        statut: EtatReponseStatut.MODIFIE,
+        statut: EtatReponseStatut.MODIFIEE,
         valeur: () => action.reponse.valeur,
       };
     }
@@ -187,7 +197,7 @@ export const reducteurReponse = (
           identifiantQuestion: etat.question.identifiant,
           reponseDonnee: reponses.flatMap((rep) => Array.from(rep.reponses)),
         }),
-        statut: EtatReponseStatut.MODIFIE,
+        statut: EtatReponseStatut.MODIFIEE,
         valeur: () => undefined,
       };
     }
@@ -270,6 +280,12 @@ export const reponseTiroirMultipleDonnee = (
       elementReponse,
     },
     type: TypeActionReponse.REPONSE_TIROIR_MULTIPLE_DONNEE,
+  };
+};
+
+export const reponseEnvoyee = (): ActionReponse => {
+  return {
+    type: TypeActionReponse.REPONSE_ENVOYEE,
   };
 };
 

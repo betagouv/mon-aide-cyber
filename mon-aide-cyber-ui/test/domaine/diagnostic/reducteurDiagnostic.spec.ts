@@ -1,58 +1,58 @@
-import { describe, expect, it } from "vitest";
-import { unReferentiel } from "../../constructeurs/constructeurReferentiel";
-import { unDiagnostic } from "../../constructeurs/constructeurDiagnostic";
+import { describe, expect, it } from 'vitest';
+import { unReferentiel } from '../../constructeurs/constructeurReferentiel';
+import { unDiagnostic } from '../../constructeurs/constructeurDiagnostic';
 import {
   diagnosticCharge,
   reducteurDiagnostic,
   thematiqueAffichee,
-} from "../../../src/domaine/diagnostic/reducteurDiagnostic";
-import { uneReponsePossible } from "../../constructeurs/constructeurReponsePossible";
+} from '../../../src/domaine/diagnostic/reducteurDiagnostic';
+import { uneReponsePossible } from '../../constructeurs/constructeurReponsePossible';
 import {
   uneQuestionAChoixMultiple,
   uneQuestionAChoixUnique,
   uneQuestionTiroirAChoixUnique,
-} from "../../constructeurs/constructeurQuestions";
+} from '../../constructeurs/constructeurQuestions';
 
-describe("Les réducteurs de diagnostic", () => {
-  describe("Lorsque le diagnostic est chargé", () => {
+describe('Les réducteurs de diagnostic', () => {
+  describe('Lorsque le diagnostic est chargé', () => {
     it("trie les réponses aux questions par l'ordre définit pour la thématique 'Contexte'", () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
             .avecUneQuestionEtDesReponses(
-              { libelle: "Première question ?", type: "choixUnique" },
+              { libelle: 'Première question ?', type: 'choixUnique' },
               [
                 uneReponsePossible()
-                  .avecLibelle("Réponse D")
+                  .avecLibelle('Réponse D')
                   .enPosition(3)
                   .construis(),
                 uneReponsePossible()
-                  .avecLibelle("Réponse B")
+                  .avecLibelle('Réponse B')
                   .enPosition(1)
                   .construis(),
                 uneReponsePossible()
-                  .avecLibelle("Réponse A")
+                  .avecLibelle('Réponse A')
                   .enPosition(0)
                   .construis(),
                 uneReponsePossible()
-                  .avecLibelle("Réponse C")
+                  .avecLibelle('Réponse C')
                   .enPosition(2)
                   .construis(),
               ],
             )
             .avecUneQuestionEtDesReponses(
-              { libelle: "Deuxième question ?", type: "choixUnique" },
+              { libelle: 'Deuxième question ?', type: 'choixUnique' },
               [
                 uneReponsePossible()
-                  .avecLibelle("Réponse B")
+                  .avecLibelle('Réponse B')
                   .enPosition(1)
                   .construis(),
                 uneReponsePossible()
-                  .avecLibelle("Réponse C")
+                  .avecLibelle('Réponse C')
                   .enPosition(2)
                   .construis(),
                 uneReponsePossible()
-                  .avecLibelle("Réponse A")
+                  .avecLibelle('Réponse A')
                   .enPosition(0)
                   .construis(),
               ],
@@ -67,7 +67,7 @@ describe("Les réducteurs de diagnostic", () => {
       );
 
       const questions =
-        etatDiagnostic.diagnostic.referentiel["contexte"].questions;
+        etatDiagnostic.diagnostic?.referentiel['contexte'].questions || [];
       expect(
         questions[0].reponsesPossibles.map((reponse) => reponse.ordre),
       ).toStrictEqual([0, 1, 2, 3]);
@@ -76,7 +76,7 @@ describe("Les réducteurs de diagnostic", () => {
       ).toStrictEqual([0, 1, 2]);
     });
 
-    it("trie les réponses aux questions pour toutes les thématiques", () => {
+    it('trie les réponses aux questions pour toutes les thématiques', () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
@@ -84,25 +84,25 @@ describe("Les réducteurs de diagnostic", () => {
               uneQuestionAChoixUnique()
                 .avecDesReponses([
                   uneReponsePossible()
-                    .avecLibelle("Réponse B")
+                    .avecLibelle('Réponse B')
                     .enPosition(1)
                     .construis(),
                   uneReponsePossible()
-                    .avecLibelle("Réponse A")
+                    .avecLibelle('Réponse A')
                     .enPosition(0)
                     .construis(),
                 ])
                 .construis(),
             )
-            .ajouteUneThematique("Autre thématique", [
+            .ajouteUneThematique('Autre thématique', [
               uneQuestionAChoixUnique()
                 .avecDesReponses([
                   uneReponsePossible()
-                    .avecLibelle("Réponse B")
+                    .avecLibelle('Réponse B')
                     .enPosition(1)
                     .construis(),
                   uneReponsePossible()
-                    .avecLibelle("Réponse A")
+                    .avecLibelle('Réponse A')
                     .enPosition(0)
                     .construis(),
                 ])
@@ -118,22 +118,22 @@ describe("Les réducteurs de diagnostic", () => {
       );
 
       const thematiqueContexte =
-        etatDiagnostic.diagnostic.referentiel["contexte"];
+        etatDiagnostic.diagnostic?.referentiel['contexte'];
       const thematiqueAutreThematique =
-        etatDiagnostic.diagnostic.referentiel["Autre thématique"];
+        etatDiagnostic.diagnostic?.referentiel['Autre thématique'];
       expect(
-        thematiqueContexte.questions[0].reponsesPossibles.map(
+        thematiqueContexte?.questions[0].reponsesPossibles.map(
           (reponse) => reponse.ordre,
         ),
       ).toStrictEqual([0, 1]);
       expect(
-        thematiqueAutreThematique.questions[0].reponsesPossibles.map(
+        thematiqueAutreThematique?.questions[0].reponsesPossibles.map(
           (reponse) => reponse.ordre,
         ),
       ).toStrictEqual([0, 1]);
     });
 
-    it("trie les réponses des questions à tiroir", () => {
+    it('trie les réponses des questions à tiroir', () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
@@ -145,11 +145,11 @@ describe("Les réducteurs de diagnostic", () => {
                       uneQuestionTiroirAChoixUnique()
                         .avecDesReponses([
                           uneReponsePossible()
-                            .avecLibelle("Réponse B")
+                            .avecLibelle('Réponse B')
                             .enPosition(1)
                             .construis(),
                           uneReponsePossible()
-                            .avecLibelle("Réponse A")
+                            .avecLibelle('Réponse A')
                             .enPosition(0)
                             .construis(),
                         ])
@@ -159,11 +159,11 @@ describe("Les réducteurs de diagnostic", () => {
                       uneQuestionTiroirAChoixUnique()
                         .avecDesReponses([
                           uneReponsePossible()
-                            .avecLibelle("Réponse Z")
+                            .avecLibelle('Réponse Z')
                             .enPosition(1)
                             .construis(),
                           uneReponsePossible()
-                            .avecLibelle("Réponse Y")
+                            .avecLibelle('Réponse Y')
                             .enPosition(0)
                             .construis(),
                         ])
@@ -183,14 +183,16 @@ describe("Les réducteurs de diagnostic", () => {
       );
 
       const thematiqueContexte =
-        etatDiagnostic.diagnostic.referentiel["contexte"];
+        etatDiagnostic.diagnostic?.referentiel['contexte'];
+      const reponsesPossible =
+        thematiqueContexte?.questions[0]?.reponsesPossibles[0];
       expect(
-        thematiqueContexte.questions[0].reponsesPossibles[0].questions[0].reponsesPossibles.map(
+        reponsesPossible?.questions?.[0]?.reponsesPossibles.map(
           (reponse) => reponse.ordre,
         ),
       ).toStrictEqual([0, 1]);
       expect(
-        thematiqueContexte.questions[0].reponsesPossibles[0].questions[1].reponsesPossibles.map(
+        reponsesPossible?.questions?.[1]?.reponsesPossibles.map(
           (reponse) => reponse.ordre,
         ),
       ).toStrictEqual([0, 1]);
@@ -198,15 +200,15 @@ describe("Les réducteurs de diagnostic", () => {
   });
 
   describe("Lorsque l'on veut changer la thématique affichée", () => {
-    it("change la thématique affichée", () => {
+    it('change la thématique affichée', () => {
       const etatDiagnostic = reducteurDiagnostic(
         {
           diagnostic: undefined,
           thematiqueAffichee: undefined,
         },
-        thematiqueAffichee("nouvelle-thematique"),
+        thematiqueAffichee('nouvelle-thematique'),
       );
-      expect(etatDiagnostic.thematiqueAffichee).toBe("nouvelle-thematique");
+      expect(etatDiagnostic.thematiqueAffichee).toBe('nouvelle-thematique');
     });
   });
 });
