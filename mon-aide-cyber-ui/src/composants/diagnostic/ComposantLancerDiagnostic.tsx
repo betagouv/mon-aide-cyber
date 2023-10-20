@@ -1,8 +1,8 @@
-import { useCallback, useContext } from "react";
-import { FournisseurEntrepots } from "../../fournisseurs/FournisseurEntrepot.ts";
-import { useErrorBoundary } from "react-error-boundary";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@codegouvfr/react-dsfr/Button";
+import { useCallback, useContext } from 'react';
+import { FournisseurEntrepots } from '../../fournisseurs/FournisseurEntrepot.ts';
+import { useErrorBoundary } from 'react-error-boundary';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 
 export const ComposantLancerDiagnostic = () => {
   const entrepots = useContext(FournisseurEntrepots);

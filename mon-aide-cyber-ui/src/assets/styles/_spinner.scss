@@ -1,0 +1,106 @@
+$primary-color: #0097e6;
+$width: 100px;
+
+.blanc {
+  .loader .path-outline {
+    stroke: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.loader {
+  position: relative;
+  margin: 0 auto;
+  width: $width;
+  &:before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
+}
+
+.circular {
+  animation: rotate 1.33s linear infinite;
+  height: 100%;
+  transform-origin: center center;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.path {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s ease-in-out infinite;
+  stroke-linecap: round;
+  stroke: $primary-color;
+}
+.path-outline {
+  stroke: rgba(0, 0, 0, 0.1);
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -21px;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+  }
+}
+
+@keyframes growandshrink {
+  0% {
+    left: 0;
+    right: 100%;
+    animation-timing-function: ease-in;
+  }
+  33% {
+    left: 10%;
+    right: 25%;
+  }
+  66% {
+    left: 75%;
+    right: 10%;
+  }
+  100% {
+    left: 100%;
+    right: 0;
+    animation-timing-function: ease-out;
+  }
+}
+
+.loader.linear.indefinite {
+  width: 100%;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.1);
+  position: relative;
+  .inside {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: $primary-color;
+    animation: growandshrink 1s linear infinite;
+  }
+  .color & {
+    background: rgba(0, 0, 0, 0.2);
+    .inside {
+      background: white;
+    }
+  }
+}
