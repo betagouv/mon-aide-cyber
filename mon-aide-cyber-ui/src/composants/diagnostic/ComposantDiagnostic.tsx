@@ -148,8 +148,8 @@ const ComposantQuestionListe = ({
         value: etatReponse.valeur(),
       }}
     >
-      <option value="" disabled hidden>
-        Selectionnez une option
+      <option value="" disabled hidden selected>
+        Sélectionnez une option
       </option>
       {question.reponsesPossibles.map((reponse) => {
         return (
