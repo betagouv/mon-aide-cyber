@@ -164,7 +164,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-connaissance-rgpd',
       libelle:
-        'Avez-vous mené une démarche de conformité liées au RGPD concernant vos traitements des données personnelles ?',
+        'Avez-vous mené une démarche de conformité liée au RGPD concernant vos traitements des données personnelles ?',
       type: 'choixUnique',
       reponsesPossibles: [
         {
@@ -205,7 +205,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-connaissance-rgpd-oui',
           libelle:
-            "Oui, je tiens à jour mon registre des traitements et j'informe les personnes concernés sur leurs droits et l'utilisation de leurs données.",
+            "Oui, je tiens à jour mon registre des traitements et j'informe les personnes concernées sur leurs droits et l'utilisation de leurs données.",
           ordre: 3,
           resultat: {
             note: 3,
