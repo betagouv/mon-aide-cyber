@@ -1,0 +1,40 @@
+.piedpage-mac {
+  background-color: var(--couleurs-mac-violet-pale);
+  padding: 3rem;
+}
+
+.piedpage-mac div {
+  --ul-type: none;
+  --ol-type: none;
+  --ul-start: 0;
+  --ol-start: 0;
+  --xl-block: 0;
+  --li-bottom: 0;
+  --ol-content: none;
+  justify-content: center;
+  width: 100%;
+}
+
+.piedpage-mac div ul li {
+  margin-left: 3rem;
+}
+
+.piedpage-mac-logos {
+  display: flex;
+  flex-direction: column;
+}
+
+.piedpage-mac-logos > div > ul > li {
+  ::after {
+    content: none;
+  }
+
+  > a {
+    text-decoration: none;
+    background-image: none;
+
+    > img {
+      height: 5rem;
+    }
+  }
+}

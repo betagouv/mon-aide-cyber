@@ -1,8 +1,10 @@
+@import 'couleurs';
 @import 'icones';
 @import 'mise-en-page';
 @import 'questionnaire';
 @import 'diagnostics';
 @import 'spinner';
+@import 'footer';
 
 .devise {
   height: 1.38em;
@@ -43,4 +45,8 @@
   background-position: center;
   background-size: contain;
   cursor: pointer;
+}
+
+.mac-container {
+  padding: 12px 120px 12px 108px;
 }
