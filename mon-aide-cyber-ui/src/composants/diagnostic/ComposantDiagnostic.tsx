@@ -42,7 +42,11 @@ import Button from '@codegouvfr/react-dsfr/Button';
 import { RiIconClassName } from '@codegouvfr/react-dsfr/src/fr/generatedFromCss/classNames.ts';
 import Select from '@codegouvfr/react-dsfr/Select';
 import { BoutonThematique } from './BoutonThematique.tsx';
-import { reducteurThematiqueSuivante } from './reducteurThematiqueSuivante.ts';
+
+import {
+  reducteurBoutonThematiqueSuivante,
+  reducteurBoutonThematiquePrecedente,
+} from './reducteurBoutonThematique.ts';
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -532,8 +536,17 @@ export const ComposantDiagnostic = ({
         })}
         <div>
           <BoutonThematique
+            titre="Thématique précédente"
+            reducteur={reducteurBoutonThematiquePrecedente}
+            style="bouton-mac-secondaire"
+            thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
+            thematiques={thematiques.map(([clef]) => clef)}
+            onClick={(thematique: string) => affiche(thematique)}
+          />
+          <BoutonThematique
             titre="Thématique suivante"
-            reducteur={reducteurThematiqueSuivante}
+            reducteur={reducteurBoutonThematiqueSuivante}
+            style="bouton-mac-primaire"
             thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
             thematiques={thematiques.map(([clef]) => clef)}
             onClick={(thematique: string) => affiche(thematique)}

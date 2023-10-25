@@ -2,14 +2,15 @@ import { useCallback, useEffect, useReducer } from 'react';
 import Button from '@codegouvfr/react-dsfr/Button';
 import {
   ActionBouton,
-  etapeChargee,
-  etapeSuivanteCliquee,
+  thematiqueChargee,
+  boutonThematiqueCliquee,
   EtatBouton,
-} from './reducteurThematiqueSuivante.ts';
+} from './reducteurBoutonThematique.ts';
 
 type ProprietesBoutonThematique = {
   onClick: (thematique: string) => void;
   reducteur: (etat: EtatBouton, action: ActionBouton) => EtatBouton;
+  style: string;
   thematiqueCourante: string;
   thematiques: string[];
   titre: string;
@@ -18,6 +19,7 @@ type ProprietesBoutonThematique = {
 export const BoutonThematique = ({
   onClick,
   reducteur,
+  style,
   thematiqueCourante,
   thematiques,
   titre,
@@ -26,23 +28,23 @@ export const BoutonThematique = ({
     onClick,
     thematiques,
     thematiqueCourante,
-    derniereThematique: false,
+    borneThematique: false,
   });
 
   useEffect(() => {
-    envoie(etapeChargee(thematiqueCourante, thematiques));
+    envoie(thematiqueChargee(thematiqueCourante, thematiques));
   }, [envoie, thematiqueCourante, thematiques]);
 
-  const etapeSuivante = useCallback(() => {
-    envoie(etapeSuivanteCliquee());
+  const surClick = useCallback(() => {
+    envoie(boutonThematiqueCliquee());
   }, [envoie]);
 
   return (
     <Button
-      className={`bouton-mac bouton-mac-primaire ${
-        etatBouton.derniereThematique ? `invisible` : `visible`
+      className={`bouton-mac ${style} ${
+        etatBouton.borneThematique ? `invisible` : `visible`
       }`}
-      onClick={etapeSuivante}
+      onClick={surClick}
     >
       {titre}
     </Button>
