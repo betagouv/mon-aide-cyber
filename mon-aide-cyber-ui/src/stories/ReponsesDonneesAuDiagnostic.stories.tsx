@@ -485,7 +485,12 @@ export const AfficheLesThematiques: Story = {
           ),
         ),
       ).toBeInTheDocument();
-      expect(await waitFor(() => canvas.getAllByRole('button').length)).toBe(4);
+      expect(await waitFor(() => canvas.getAllByRole('button').length)).toBe(5);
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('button', { name: /thématique suivante/i }),
+        ),
+      ).toBeInTheDocument();
     });
 
     await step('Lorsque l’utilisateur change de thématique', async () => {
@@ -507,6 +512,11 @@ export const AfficheLesThematiques: Story = {
           ),
         ),
       ).toBeInTheDocument();
+      await waitFor(() =>
+        expect(
+          canvas.queryByRole('button', { name: /thématique suivante/i }),
+        ).not.toBeInTheDocument(),
+      );
     });
   },
 };

@@ -85,7 +85,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </div>
       </header>
       <main role="main">
-        <div className="fr-container">
+        <div className="mac-container">
           <div className="fr-grid-row">
             <RouterProvider router={routeur} />
           </div>
@@ -157,7 +157,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           </div>
         </div>
         <div className="fr-footer">
-          <div className="fr-container">
+          <div className="mac-container">
             <div className="fr-footer__body">
               <div className="fr-footer__brand fr-enlarge-link">
                 <a href="/" title="Retour à l’accueil du site - MonAideCyber">

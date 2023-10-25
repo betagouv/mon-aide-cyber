@@ -1,0 +1,16 @@
+.bouton-mac {
+  border-radius: 8px;
+  padding: 10px 24px;
+  cursor: pointer;
+}
+
+.bouton-mac-primaire {
+  background-color: var(--couleurs-mac-violet-primaire);
+  color: white;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+
+  --hover: var(--couleurs-mac-violet-secondaire);
+}
