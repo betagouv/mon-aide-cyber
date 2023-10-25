@@ -2,6 +2,7 @@
   border-radius: 8px;
   padding: 10px 24px;
   cursor: pointer;
+  margin-right: 1.5rem;
 }
 
 .bouton-mac-primaire {
@@ -13,4 +14,21 @@
   text-align: center;
 
   --hover: var(--couleurs-mac-violet-secondaire);
+}
+
+.bouton-mac-secondaire {
+  outline: 2px solid var(--couleurs-mac-violet-primaire);
+  outline-offset: -2px;
+  background-color: white;
+  color: var(--couleurs-mac-violet-primaire);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+
+  &:focus {
+    outline-style: solid !important;
+  }
+
+  --hover: var(--couleurs-mac-violet-mid);
 }

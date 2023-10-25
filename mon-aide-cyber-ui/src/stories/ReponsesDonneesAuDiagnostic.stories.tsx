@@ -486,6 +486,11 @@ export const AfficheLesThematiques: Story = {
         ),
       ).toBeInTheDocument();
       expect(await waitFor(() => canvas.getAllByRole('button').length)).toBe(5);
+      await waitFor(() =>
+        expect(
+          canvas.queryByRole('button', { name: /thématique précédente/i }),
+        ).not.toBeInTheDocument(),
+      );
       expect(
         await waitFor(() =>
           canvas.getByRole('button', { name: /thématique suivante/i }),
@@ -510,6 +515,12 @@ export const AfficheLesThematiques: Story = {
             diagnosticAPlusieursThematiques.referentiel['Thème 1'].questions[1]
               .libelle,
           ),
+        ),
+      ).toBeInTheDocument();
+
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('button', { name: /thématique précédente/i }),
         ),
       ).toBeInTheDocument();
       await waitFor(() =>
