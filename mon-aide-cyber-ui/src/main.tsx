@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import Accueil from './Accueil.tsx';
 import './assets/styles/index.scss';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { FournisseurEntrepots } from './fournisseurs/FournisseurEntrepot.ts';
@@ -22,7 +22,7 @@ const routeur = createBrowserRouter([
     path: '/',
     element: (
       <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-        <App />
+        <Accueil />
       </ErrorBoundary>
     ),
   },

@@ -1,0 +1,54 @@
+@import 'couleurs';
+
+.presentation-generale {
+  align-items: center;
+  background-color: var(--couleurs-mac-violet-primaire);
+  height: 30rem;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  padding: 1rem 0;
+}
+
+.presentation-generale .corps {
+  color: #ffffff;
+}
+
+.presentation-generale .corps h1 {
+  color: #ffffff;
+  font-size: 3.5rem;
+  font-weight: 800;
+}
+
+.presentation-generale .corps p {
+  font-size: 1.2rem;
+}
+
+.presentation-generale .corps .actions {
+  gap: 8px;
+}
+
+.presentation-generale button {
+  border-radius: 8px;
+  background-color: white;
+  color: var(--couleurs-mac-violet-primaire);
+  padding: 8px 16px 8px 16px;
+}
+
+.presentation-details .titre h2 {
+  color: var(--couleurs-mac-violet-primaire);
+}
+
+.presentation-details .detail {
+  padding: 0 1rem 0 1rem;
+  margin-bottom: 1rem;
+}
+
+.bordure-gauche-jaune {
+  border-left: solid 0.35rem;
+  border-color: var(--couleurs-mac-jaune-primaire);
+}
+
+.bordure-gauche-violette {
+  border-left: solid 0.35rem;
+  border-color: var(--couleurs-mac-violet-primaire);
+}
