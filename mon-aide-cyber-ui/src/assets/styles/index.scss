@@ -6,6 +6,8 @@
 @import 'spinner';
 @import 'footer';
 @import 'bouton';
+@import 'charte';
+@import 'carte';
 
 .devise {
   height: 1.38em;
@@ -50,4 +52,12 @@
 
 .mac-container {
   padding: 12px 120px 12px 108px;
+}
+
+.lien-mac {
+  color: var(--couleurs-mac-violet-primaire);
+}
+
+.lien-mac :hover {
+  color: var(--couleurs-mac-violet-secondaire);
 }
