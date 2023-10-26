@@ -136,9 +136,15 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
+            'securite-infrastructure-si-industriel-pare-feu-deploye-na',
+          libelle: 'Non applicable',
+          ordre: 0,
+        },
+        {
+          identifiant:
             'securite-infrastructure-si-industriel-pare-feu-deploye-nsp',
           libelle: 'Je ne sais pas',
-          ordre: 0,
+          ordre: 1,
         },
         {
           identifiant:
@@ -154,7 +160,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               },
             ],
           },
-          ordre: 1,
+          ordre: 2,
         },
         {
           identifiant:
@@ -170,7 +176,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               },
             ],
           },
-          ordre: 2,
+          ordre: 3,
         },
         {
           identifiant:
@@ -178,7 +184,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           libelle:
             "Oui, une segmentation réseau stricte a été mis en œuvre pour isoler l'environnement industriel de l'environnement bureautique (hors besoin métier justifié).",
           resultat: { note: 3 },
-          ordre: 3,
+          ordre: 4,
         },
       ],
       type: 'choixUnique',
