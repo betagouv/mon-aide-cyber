@@ -14,6 +14,7 @@ import { ComposantDiagnostics } from './composants/ComposantDiagnostics.tsx';
 import { APIEntrepotDiagnostic } from './infrastructure/entrepots/APIEntrepotDiagnostic.ts';
 
 import { startReactDsfr } from '@codegouvfr/react-dsfr/spa';
+import { CharteAidant } from './vues/CharteAidant.tsx';
 
 startReactDsfr({ defaultColorScheme: 'system' });
 
@@ -26,6 +27,7 @@ const routeur = createBrowserRouter([
       </ErrorBoundary>
     ),
   },
+  { path: '/charte-aidant', element: <CharteAidant /> },
   {
     path: 'diagnostics',
     element: (
