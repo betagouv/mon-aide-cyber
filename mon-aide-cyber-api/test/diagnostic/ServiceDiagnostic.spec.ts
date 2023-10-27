@@ -19,6 +19,9 @@ import { AdaptateurTableauDeRecommandationsDeTest } from '../adaptateurs/Adaptat
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
+import { AggregatNonTrouve } from '../../src/domaine/Aggregat';
+import crypto from 'crypto';
+import { ErreurMAC } from '../../src/domaine/erreurMAC';
 
 describe('Le service de diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -157,6 +160,19 @@ describe('Le service de diagnostic', () => {
         type: 'choixMultiple',
       });
     });
+
+    it('si le diagnostic est inconnu, cela génère un erreur', async () => {
+      await expect(() =>
+        new ServiceDiagnostic(
+          adaptateurReferentiel,
+          adaptateurTableauDeRecommandations,
+          entrepots,
+          new BusEvenementDeTest(),
+        ).diagnostic(crypto.randomUUID()),
+      ).rejects.toStrictEqual(
+        ErreurMAC.cree('Accès diagnostic', new AggregatNonTrouve('diagnostic')),
+      );
+    });
   });
 
   describe("Lorsque l'on veut lancer un diagnostic", () => {
@@ -209,6 +225,22 @@ describe('Le service de diagnostic', () => {
         date: maintenant,
         corps: { identifiantDiagnostic: diagnostic.identifiant },
       });
+    });
+
+    it('cela peut générer une erreur', async () => {
+      await expect(() =>
+        new ServiceDiagnostic(
+          adaptateurReferentiel,
+          adaptateurTableauDeRecommandations,
+          entrepots,
+          new BusEvenementDeTest(),
+        ).lance(),
+      ).rejects.toStrictEqual(
+        ErreurMAC.cree(
+          'Lance le diagnostic',
+          new Error('Referentiel non connu'),
+        ),
+      );
     });
   });
 
@@ -404,6 +436,26 @@ describe('Le service de diagnostic', () => {
           },
         ],
       });
+    });
+
+    it('si le diagnostic est inconnu, cela génère un erreur', async () => {
+      await expect(() =>
+        new ServiceDiagnostic(
+          adaptateurReferentiel,
+          adaptateurTableauDeRecommandations,
+          entrepots,
+          new BusEvenementDeTest(),
+        ).ajouteLaReponse(crypto.randomUUID(), {
+          chemin: '',
+          identifiant: '',
+          reponse: '',
+        }),
+      ).rejects.toStrictEqual(
+        ErreurMAC.cree(
+          'Ajout réponse au diagnostic',
+          new AggregatNonTrouve('diagnostic'),
+        ),
+      );
     });
   });
 
@@ -661,6 +713,22 @@ describe('Le service de diagnostic', () => {
         date: maintenant,
         corps: { identifiantDiagnostic: diagnostic.identifiant },
       });
+    });
+
+    it('si le diagnostic est inconnu, cela génère un erreur', async () => {
+      await expect(() =>
+        new ServiceDiagnostic(
+          adaptateurReferentiel,
+          adaptateurTableauDeRecommandations,
+          entrepots,
+          new BusEvenementDeTest(),
+        ).termine(crypto.randomUUID()),
+      ).rejects.toStrictEqual(
+        ErreurMAC.cree(
+          'Termine le diagnostic',
+          new AggregatNonTrouve('diagnostic'),
+        ),
+      );
     });
   });
 });

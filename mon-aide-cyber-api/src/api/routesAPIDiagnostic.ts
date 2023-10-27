@@ -9,23 +9,27 @@ import bodyParser from 'body-parser';
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
-  routes.post('/', (_requete: Request, reponse: Response) => {
-    new ServiceDiagnostic(
-      configuration.adaptateurReferentiel,
-      configuration.adaptateurTableauDeRecommandations,
-      configuration.entrepots,
-      configuration.busEvenement,
-    )
-      .lance()
-      .then((diagnostic) => {
-        reponse.status(201);
-        reponse.appendHeader(
-          'Link',
-          `${_requete.originalUrl}/${diagnostic.identifiant}`,
-        );
-        reponse.send();
-      });
-  });
+  routes.post(
+    '/',
+    (_requete: Request, reponse: Response, suite: NextFunction) => {
+      new ServiceDiagnostic(
+        configuration.adaptateurReferentiel,
+        configuration.adaptateurTableauDeRecommandations,
+        configuration.entrepots,
+        configuration.busEvenement,
+      )
+        .lance()
+        .then((diagnostic) => {
+          reponse.status(201);
+          reponse.appendHeader(
+            'Link',
+            `${_requete.originalUrl}/${diagnostic.identifiant}`,
+          );
+          reponse.send();
+        })
+        .catch((erreur) => suite(erreur));
+    },
+  );
 
   routes.get(
     '/:id/termine',

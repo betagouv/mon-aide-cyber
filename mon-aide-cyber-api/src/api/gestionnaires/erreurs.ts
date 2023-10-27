@@ -1,22 +1,14 @@
-import { Request, Response } from "express";
-import { NextFunction } from "express-serve-static-core";
-import { AggregatNonTrouve } from "../../domaine/Aggregat";
-import { ConsignateurErreurs } from "../../adaptateurs/ConsignateurErreurs";
+import { Request, Response } from 'express';
+import { NextFunction } from 'express-serve-static-core';
+import { AggregatNonTrouve } from '../../domaine/Aggregat';
+import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 
-export const gestionnaireErreurAggregatNonTrouve = () => {
-  return (
-    erreur: Error,
-    _requete: Request,
-    reponse: Response,
-    suite: NextFunction,
-  ) => {
-    if (erreur instanceof AggregatNonTrouve) {
-      reponse.status(404);
-      reponse.json({ message: erreur.message });
+import { ErreurMAC } from '../../domaine/erreurMAC';
 
-      suite(erreur);
-    }
-  };
+const HTTP_NON_TROUVE = 404;
+const HTTP_ERREUR_SERVEUR = 500;
+const CORPS_REPONSE_ERREUR_NON_GEREE = {
+  message: "MonAideCyber n'est pas en mesure de traiter votre demande.",
 };
 
 export const gestionnaireErreurGeneralisee = (
@@ -25,11 +17,34 @@ export const gestionnaireErreurGeneralisee = (
   return (
     erreur: Error,
     _requete: Request,
-    _reponse: Response,
-    _suite: NextFunction,
+    reponse: Response,
+    suite: NextFunction,
   ) => {
+    const construisReponse = (
+      codeHTTP: number,
+      corpsReponse: { message: string },
+    ) => {
+      reponse.status(codeHTTP);
+      reponse.json(corpsReponse);
+    };
+
+    const construisReponseErreurServeur = () => {
+      construisReponse(HTTP_ERREUR_SERVEUR, CORPS_REPONSE_ERREUR_NON_GEREE);
+    };
+
     if (erreur) {
-      gestionnaireErreurs.consigne(erreur);
+      if (erreur instanceof ErreurMAC) {
+        if (erreur.erreurOriginelle instanceof AggregatNonTrouve) {
+          construisReponse(HTTP_NON_TROUVE, { message: erreur.message });
+          gestionnaireErreurs.consigne(erreur);
+        } else {
+          construisReponseErreurServeur();
+          suite(erreur);
+        }
+      } else {
+        construisReponseErreurServeur();
+        suite(erreur);
+      }
     }
   };
 };
