@@ -189,6 +189,21 @@ describe('le serveur MAC sur les routes', () => {
           1,
         );
       });
+
+      it('retourne une erreur HTTP 500', async () => {
+        testeurMAC.adaptateurReferentiel.reInitialise();
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/diagnostic',
+          donneesServeur.portEcoute,
+        );
+
+        expect(reponse.statusCode).toBe(500);
+        expect(await reponse.json()).toMatchObject({
+          message: "MonAideCyber n'est pas en mesure de traiter votre demande.",
+        });
+      });
     });
 
     describe('quand une requête PATCH est reçue sur /{id}', () => {

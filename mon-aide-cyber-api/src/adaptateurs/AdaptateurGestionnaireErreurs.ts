@@ -1,18 +1,10 @@
-import { ConsignateurErreurs } from "./ConsignateurErreurs";
-import { Request, Response } from "express";
-import { NextFunction } from "express-serve-static-core";
-
-export type ControleurGestionnaireErreurs = (
-  erreur: Error,
-  requete: Request,
-  reponse: Response,
-  suite: NextFunction,
-) => void;
+import { ConsignateurErreurs } from './ConsignateurErreurs';
+import { ErrorRequestHandler, RequestHandler } from 'express';
 
 export interface AdaptateurGestionnaireErreurs {
   consignateur(): ConsignateurErreurs;
 
-  controleurRequete(): ControleurGestionnaireErreurs;
+  controleurRequete(): RequestHandler;
 
-  controleurErreurs(): ControleurGestionnaireErreurs;
+  controleurErreurs(): ErrorRequestHandler;
 }

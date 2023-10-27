@@ -1,12 +1,12 @@
-import serveur from "./src/serveur";
-import { AdaptateurReferentielMAC } from "./src/infrastructure/adaptateurs/AdaptateurReferentielMAC";
-import { adaptateurTranscripteur } from "./src/infrastructure/adaptateurs/adaptateurTranscripteur";
-import { AdaptateurTableauDeRecommandationsMAC } from "./src/infrastructure/adaptateurs/AdaptateurTableauDeRecommandationsMAC";
-import { AdaptateurPDFMAC } from "./src/infrastructure/adaptateurs/AdaptateurPDFMAC";
-import { fabriqueEntrepots } from "./src/adaptateurs/fabriqueEntrepots";
-import { BusEvenementMAC } from "./src/infrastructure/bus/BusEvenementMAC";
-import { fabriqueConsommateursEvenements } from "./src/adaptateurs/fabriqueConsommateursEvenements";
-import { AdaptateurGestionnaireErreursMemoire } from "./src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire";
+import serveur from './src/serveur';
+import { AdaptateurReferentielMAC } from './src/infrastructure/adaptateurs/AdaptateurReferentielMAC';
+import { adaptateurTranscripteur } from './src/infrastructure/adaptateurs/adaptateurTranscripteur';
+import { AdaptateurTableauDeRecommandationsMAC } from './src/infrastructure/adaptateurs/AdaptateurTableauDeRecommandationsMAC';
+import { AdaptateurPDFMAC } from './src/infrastructure/adaptateurs/AdaptateurPDFMAC';
+import { fabriqueEntrepots } from './src/adaptateurs/fabriqueEntrepots';
+import { BusEvenementMAC } from './src/infrastructure/bus/BusEvenementMAC';
+import { fabriqueConsommateursEvenements } from './src/adaptateurs/fabriqueConsommateursEvenements';
+import { fabriqueGestionnaireErreurs } from './src/infrastructure/adaptateurs/fabriqueGestionnaireErreurs';
 
 const serveurMAC = serveur.creeServeur({
   adaptateurPDF: new AdaptateurPDFMAC(),
@@ -16,7 +16,7 @@ const serveurMAC = serveur.creeServeur({
     new AdaptateurTableauDeRecommandationsMAC(),
   entrepots: fabriqueEntrepots(),
   busEvenement: new BusEvenementMAC(fabriqueConsommateursEvenements()),
-  gestionnaireErreurs: new AdaptateurGestionnaireErreursMemoire(),
+  gestionnaireErreurs: fabriqueGestionnaireErreurs(),
 });
 
 const port = process.env.PORT || 8081;

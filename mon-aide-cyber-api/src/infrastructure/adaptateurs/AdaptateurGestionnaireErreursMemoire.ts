@@ -1,11 +1,13 @@
+import { AdaptateurGestionnaireErreurs } from '../../adaptateurs/AdaptateurGestionnaireErreurs';
+import { ConsignateurErreursMemoire } from './ConsignateurErreursMemoire';
+import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 import {
-  AdaptateurGestionnaireErreurs,
-  ControleurGestionnaireErreurs,
-} from "../../adaptateurs/AdaptateurGestionnaireErreurs";
-import { ConsignateurErreursMemoire } from "./ConsignateurErreursMemoire";
-import { ConsignateurErreurs } from "../../adaptateurs/ConsignateurErreurs";
-import { Request, Response } from "express";
-import { NextFunction } from "express-serve-static-core";
+  ErrorRequestHandler,
+  Request,
+  RequestHandler,
+  Response,
+} from 'express';
+import { NextFunction } from 'express-serve-static-core';
 
 export class AdaptateurGestionnaireErreursMemoire
   implements AdaptateurGestionnaireErreurs
@@ -16,25 +18,18 @@ export class AdaptateurGestionnaireErreursMemoire
     return this._consignateur;
   }
 
-  controleurRequete(): ControleurGestionnaireErreurs {
-    return (
-      _erreur: Error,
-      requete: Request,
-      _reponse: Response,
-      suite: NextFunction,
-    ) => {
-      suite(requete);
-    };
+  controleurRequete(): RequestHandler {
+    return (_requete: Request, _reponse: Response, suite: NextFunction) =>
+      suite();
   }
 
-  controleurErreurs(): ControleurGestionnaireErreurs {
+  controleurErreurs(): ErrorRequestHandler {
     return (
-      erreur: Error,
+      _erreur: Error,
       _requete: Request,
       _reponse: Response,
-      suite: NextFunction,
-    ) => {
-      suite(erreur);
-    };
+      _suite: NextFunction,
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+    ) => {};
   }
 }

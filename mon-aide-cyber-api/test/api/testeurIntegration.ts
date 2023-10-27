@@ -10,8 +10,6 @@ import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/Ent
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 
-const PORT_ECOUTE = fakerFR.number.int({ min: 10000, max: 20000 });
-
 const testeurIntegration = () => {
   let serveurDeTest: {
     app: Express;
@@ -40,9 +38,10 @@ const testeurIntegration = () => {
       busEvenement,
       gestionnaireErreurs,
     });
+    const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    serveurDeTest.ecoute(PORT_ECOUTE, () => {});
-    return { portEcoute: PORT_ECOUTE, app: serveurDeTest.app };
+    serveurDeTest.ecoute(portEcoute, () => {});
+    return { portEcoute: portEcoute, app: serveurDeTest.app };
   };
 
   const arrete = () => {

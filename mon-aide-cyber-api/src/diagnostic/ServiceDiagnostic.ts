@@ -11,6 +11,7 @@ import { Referentiel } from './Referentiel';
 import { TableauDeRecommandations } from './TableauDeRecommandations';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
+import { ErreurMAC } from '../domaine/erreurMAC';
 
 export type CorpsReponseQuestionATiroir = {
   reponse: string;
@@ -31,23 +32,32 @@ export class ServiceDiagnostic {
   ) {}
 
   diagnostic = async (id: crypto.UUID): Promise<Diagnostic> =>
-    await this.entrepots.diagnostic().lis(id);
+    await this.entrepots
+      .diagnostic()
+      .lis(id)
+      .catch((erreur) =>
+        Promise.reject(ErreurMAC.cree('Accès diagnostic', erreur)),
+      );
 
   lance = async (): Promise<Diagnostic> => {
     return Promise.all([
       this.adaptateurReferentiel.lis(),
       this.adaptateurTableauDeRecommandations.lis(),
-    ]).then(async ([ref, rec]) => {
-      const diagnostic = initialiseDiagnostic(ref, rec);
-      await this.entrepots.diagnostic().persiste(diagnostic);
-      await this.busEvenement?.publie<DiagnosticLance>({
-        identifiant: diagnostic.identifiant,
-        type: 'DIAGNOSTIC_LANCE',
-        date: FournisseurHorloge.maintenant(),
-        corps: { identifiantDiagnostic: diagnostic.identifiant },
-      });
-      return diagnostic;
-    });
+    ])
+      .then(async ([ref, rec]) => {
+        const diagnostic = initialiseDiagnostic(ref, rec);
+        await this.entrepots.diagnostic().persiste(diagnostic);
+        await this.busEvenement?.publie<DiagnosticLance>({
+          identifiant: diagnostic.identifiant,
+          type: 'DIAGNOSTIC_LANCE',
+          date: FournisseurHorloge.maintenant(),
+          corps: { identifiantDiagnostic: diagnostic.identifiant },
+        });
+        return diagnostic;
+      })
+      .catch((erreur) =>
+        Promise.reject(ErreurMAC.cree('Lance le diagnostic', erreur)),
+      );
   };
 
   ajouteLaReponse = async (
@@ -78,6 +88,9 @@ export class ServiceDiagnostic {
               reponse: corpsReponse.reponse,
             },
           }),
+      )
+      .catch((erreur) =>
+        Promise.reject(ErreurMAC.cree('Ajout réponse au diagnostic', erreur)),
       );
   };
 
@@ -101,6 +114,9 @@ export class ServiceDiagnostic {
             date: FournisseurHorloge.maintenant(),
             corps: { identifiantDiagnostic: diagnostic.identifiant },
           }),
+      )
+      .catch((erreur) =>
+        Promise.reject(ErreurMAC.cree('Termine le diagnostic', erreur)),
       );
   }
 }
