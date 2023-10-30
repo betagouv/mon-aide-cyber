@@ -87,11 +87,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </div>
       </header>
       <main role="main">
-        <div className="mac-container">
-          <div className="fr-grid-row">
-            <RouterProvider router={routeur} />
-          </div>
-        </div>
+        <RouterProvider router={routeur} />
       </main>
       <footer role="contentinfo" id="footer">
         <div className="fr-footer__partners piedpage-mac">
