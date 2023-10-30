@@ -52,8 +52,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     >
       <header role="banner" className="fr-header">
         <div className="fr-header__body">
-          <div className="fr-container">
-            <div className="fr-header__body-row">
+          <div className="fr-container--fluid">
+            <div className="fr-col-offset-2 fr-header__body-row">
               <div className="fr-header__brand fr-enlarge-link">
                 <div className="fr-header__brand-top">
                   <div className="fr-header__logo">
@@ -159,8 +159,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           </div>
         </div>
         <div className="fr-footer">
-          <div className="mac-container">
-            <div className="fr-footer__body">
+          <div className="fr-container--fluid">
+            <div className="fr-col-offset-2 fr-footer__body">
               <div className="fr-footer__brand fr-enlarge-link">
                 <a href="/" title="Retour à l’accueil du site - MonAideCyber">
                   <p className="fr-logo">
@@ -170,7 +170,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                   </p>
                 </a>
               </div>
-              <div className="fr-footer__content">
+              <div className="fr-footer__content fr-col-offset-2--right">
                 <p className="fr-footer__content-desc">
                   MonAideCyber aide les collectivités territoriales et les PME
                   sensibilisées à la sécurité informatique à passer à l’action.
@@ -223,7 +223,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 </ul>
               </div>
             </div>
-            <div className="fr-footer__bottom">
+            <div className="fr-col-offset-2 fr-footer__bottom">
               <ul className="fr-footer__bottom-list">
                 <li className="fr-footer__bottom-item">
                   <a className="fr-footer__bottom-link" href="#">
