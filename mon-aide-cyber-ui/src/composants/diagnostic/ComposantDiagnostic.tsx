@@ -44,8 +44,8 @@ import Select from '@codegouvfr/react-dsfr/Select';
 import { BoutonThematique } from './BoutonThematique.tsx';
 
 import {
-  reducteurBoutonThematiqueSuivante,
   reducteurBoutonThematiquePrecedente,
+  reducteurBoutonThematiqueSuivante,
 } from './reducteurBoutonThematique.ts';
 
 type ProprietesComposantQuestion = {
@@ -469,88 +469,93 @@ export const ComposantDiagnostic = ({
 
   return (
     <>
-      <div className="fr-col-12 fr-col-md-1">{navigation}</div>
-      <div className="contenu fr-col-12 fr-col-md-10 fr-py-12v">
-        {boutonDesactive && spinner}
-        {lienCopie}
-        <div className="droite">
+      <div className="fr-grid-row fr-grid-row--gutters">
+        <div className="fr-col-12 fr-col-md-1">{navigation}</div>
+        <div className="fr-col-12 fr-col-md-8 fr-py-12v fr-col-offset-3--right">
+          {boutonDesactive && spinner}
+          {lienCopie}
+          <div className="fr-col-offset-6 fr-col-offset-md-8 fr-grid-row">
+            <div>
+              <Button
+                disabled={boutonDesactive}
+                onClick={() => termineDiagnostic()}
+              >
+                Terminer Diagnostic
+              </Button>
+            </div>
+            <div className="fr-share fr-ml-1w">
+              <ul className="fr-share__group">
+                <li>
+                  <button
+                    className="fr-share__link fr-share__link--copy"
+                    title="Copier le lien du diagnostic"
+                    onClick={copierLienDiagnostic}
+                  />
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="fr-col-12 fr-col-md-8">
+            {thematiques.map(([clef, thematique]) => {
+              const actionsPossibles: ActionReponseDiagnostic[] =
+                actions.filter((action) =>
+                  Object.entries(action).find(([c]) => c === clef),
+                ) as ActionReponseDiagnostic[];
+              const elements = thematique.questions.map((question) => (
+                <fieldset
+                  key={question.identifiant}
+                  id={question.identifiant}
+                  className="fr-fieldset fr-mb-5w"
+                >
+                  {question.type === 'liste' ? (
+                    <ComposantQuestionListe
+                      question={question}
+                      actions={actionsPossibles}
+                    />
+                  ) : (
+                    <ComposantQuestion
+                      question={question}
+                      actions={actionsPossibles}
+                    />
+                  )}
+                </fieldset>
+              ));
+              return (
+                <form
+                  key={clef}
+                  id={clef}
+                  className={
+                    etatReferentiel.thematiqueAffichee === clef
+                      ? `visible`
+                      : `invisible`
+                  }
+                >
+                  <h2>{clef}</h2>
+                  <section className="question">
+                    <div>{elements}</div>
+                  </section>
+                </form>
+              );
+            })}
+          </div>
           <div>
-            <Button
-              disabled={boutonDesactive}
-              onClick={() => termineDiagnostic()}
-            >
-              Terminer Diagnostic
-            </Button>
+            <BoutonThematique
+              titre="Thématique précédente"
+              reducteur={reducteurBoutonThematiquePrecedente}
+              style="bouton-mac-secondaire"
+              thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
+              thematiques={thematiques.map(([clef]) => clef)}
+              onClick={(thematique: string) => affiche(thematique)}
+            />
+            <BoutonThematique
+              titre="Thématique suivante"
+              reducteur={reducteurBoutonThematiqueSuivante}
+              style="bouton-mac-primaire"
+              thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
+              thematiques={thematiques.map(([clef]) => clef)}
+              onClick={(thematique: string) => affiche(thematique)}
+            />
           </div>
-          <div className="fr-share fr-ml-1w">
-            <ul className="fr-share__group">
-              <li>
-                <button
-                  className="fr-share__link fr-share__link--copy"
-                  title="Copier le lien du diagnostic"
-                  onClick={copierLienDiagnostic}
-                />
-              </li>
-            </ul>
-          </div>
-        </div>
-        {thematiques.map(([clef, thematique]) => {
-          const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
-            (action) => Object.entries(action).find(([c]) => c === clef),
-          ) as ActionReponseDiagnostic[];
-          const elements = thematique.questions.map((question) => (
-            <fieldset
-              key={question.identifiant}
-              id={question.identifiant}
-              className="fr-fieldset fr-mb-5w"
-            >
-              {question.type === 'liste' ? (
-                <ComposantQuestionListe
-                  question={question}
-                  actions={actionsPossibles}
-                />
-              ) : (
-                <ComposantQuestion
-                  question={question}
-                  actions={actionsPossibles}
-                />
-              )}
-            </fieldset>
-          ));
-          return (
-            <form
-              key={clef}
-              id={clef}
-              className={
-                etatReferentiel.thematiqueAffichee === clef
-                  ? `visible`
-                  : `invisible`
-              }
-            >
-              <h2>{clef}</h2>
-              <section className="question">
-                <div>{elements}</div>
-              </section>
-            </form>
-          );
-        })}
-        <div>
-          <BoutonThematique
-            titre="Thématique précédente"
-            reducteur={reducteurBoutonThematiquePrecedente}
-            style="bouton-mac-secondaire"
-            thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
-            thematiques={thematiques.map(([clef]) => clef)}
-            onClick={(thematique: string) => affiche(thematique)}
-          />
-          <BoutonThematique
-            titre="Thématique suivante"
-            reducteur={reducteurBoutonThematiqueSuivante}
-            style="bouton-mac-primaire"
-            thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
-            thematiques={thematiques.map(([clef]) => clef)}
-            onClick={(thematique: string) => affiche(thematique)}
-          />
         </div>
       </div>
     </>

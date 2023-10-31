@@ -12,9 +12,8 @@ import { EntrepotDiagnostics } from './domaine/diagnostic/Diagnostics.ts';
 import { ComposantDiagnostic } from './composants/diagnostic/ComposantDiagnostic.tsx';
 import { ComposantDiagnostics } from './composants/ComposantDiagnostics.tsx';
 import { APIEntrepotDiagnostic } from './infrastructure/entrepots/APIEntrepotDiagnostic.ts';
-
-import { startReactDsfr } from '@codegouvfr/react-dsfr/spa';
 import { CharteAidant } from './vues/CharteAidant.tsx';
+import { startReactDsfr } from '@codegouvfr/react-dsfr/spa';
 
 startReactDsfr({ defaultColorScheme: 'system' });
 
