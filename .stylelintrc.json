@@ -4,7 +4,7 @@
     "font-family-no-missing-generic-family-keyword": [
       true,
       {
-        "ignoreFontFamilies": ["Marianne"]
+        "ignoreFontFamilies": ["Marianne", "Marianne ExtraBold"]
       }
     ]
   }

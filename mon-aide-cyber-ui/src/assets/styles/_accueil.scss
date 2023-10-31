@@ -1,56 +1,115 @@
 @import 'couleurs';
 
-.presentation-generale {
-  align-items: center;
-  background-color: var(--couleurs-mac-violet-primaire);
-  padding: 6rem 0;
+$gouttiere: 1.5rem;
+
+@font-face {
+  font-family: 'Marianne ExtraBold';
+  src: url('/fontes/Marianne-ExtraBold.woff2') format('woff2');
 }
 
-.presentation-generale .corps {
-  color: #ffffff;
-  padding-right: 3rem;
+.fond-violet {
+  background-color: var(--couleurs-mac-violet-fonce);
 }
 
-.presentation-generale .corps h1 {
-  color: #ffffff;
-  font-size: 3.5rem;
-  font-weight: 800;
+#presentation {
+  #corps {
+    color: var(--couleurs-mac-blanc);
+
+    h1 {
+      color: var(--couleurs-mac-blanc);
+      font-family: 'Marianne ExtraBold';
+      font-size: 3.5rem;
+      font-weight: 800;
+    }
+
+    p {
+      font-size: 1.5rem;
+      line-height: 2.1rem;
+    }
+
+    .actions {
+      gap: 8px;
+    }
+  }
+
+  #illustration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 100%;
+    }
+  }
 }
 
-.presentation-generale .corps p {
-  font-size: 1.2rem;
+#ce-que-cest {
+  row-gap: 3rem;
+
+  .titre h2 {
+    color: var(--couleurs-mac-violet-fonce);
+    font-family: 'Marianne ExtraBold';
+    font-size: 2.6rem;
+    font-weight: 800;
+    line-height: 2.5rem;
+  }
+
+  .detail {
+    padding-left: 1.5rem;
+
+    h3 {
+      font-weight: 800;
+      font-size: 2rem;
+      line-height: 2.4rem;
+    }
+  }
+
+  .bordure-gauche-jaune {
+    border-left: solid 0.35rem;
+    border-color: var(--couleurs-mac-jaune-fonce);
+  }
+
+  .bordure-gauche-violette {
+    border-left: solid 0.35rem;
+    border-color: var(--couleurs-mac-violet-fonce);
+  }
 }
 
-.presentation-generale .corps .actions {
-  gap: 8px;
+#participer {
+  column-gap: $gouttiere;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+
+  .titre h2 {
+    color: var(--couleurs-mac-violet-fonce);
+    font-family: 'Marianne ExtraBold';
+    font-size: 2.6rem;
+    font-weight: 800;
+    line-height: 2.5rem;
+  }
+
+  h3 {
+    font-weight: 800;
+    font-family: 'Marianne ExtraBold';
+    font-size: 2rem;
+    line-height: 2.4rem;
+  }
+
+  img {
+    width: 100%;
+    height: 50%;
+  }
 }
 
-.presentation-generale button {
-  border-radius: 8px;
-  background-color: white;
-  color: var(--couleurs-mac-violet-primaire);
-  padding: 8px 16px 8px 16px;
+.tuile {
+  height: max-content;
+  border-radius: 18px;
+  box-shadow: 0 12px 12px 0 #0000001a;
+  flex: 0 0 calc(600% / 12 - $gouttiere);
 }
 
-.section .titre h2 {
-  color: var(--couleurs-mac-violet-primaire);
-}
-
-.presentation-details .detail {
-  padding: 0 1rem 0 1rem;
-  margin-bottom: 1rem;
-}
-
-.bordure-gauche-jaune {
-  border-left: solid 0.35rem;
-  border-color: var(--couleurs-mac-jaune-primaire);
-}
-
-.bordure-gauche-violette {
-  border-left: solid 0.35rem;
-  border-color: var(--couleurs-mac-violet-primaire);
-}
-
-.devenir-aidant img {
-  width: 100%;
+.bientot-disponible {
+  background-color: #efefef;
+  filter: grayscale(90%);
 }
