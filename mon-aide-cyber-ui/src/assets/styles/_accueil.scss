@@ -3,14 +3,14 @@
 .presentation-generale {
   align-items: center;
   background-color: var(--couleurs-mac-violet-primaire);
-  height: 30rem;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
-  padding: 1rem 0;
+  padding: 6rem 0;
 }
 
 .presentation-generale .corps {
   color: #ffffff;
+  padding-right: 3rem;
 }
 
 .presentation-generale .corps h1 {
