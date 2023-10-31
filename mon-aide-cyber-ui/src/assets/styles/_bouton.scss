@@ -1,34 +1,80 @@
 .bouton-mac {
   border-radius: 8px;
-  padding: 10px 24px;
+  padding: 8px 16px;
   cursor: pointer;
   margin-right: 1.5rem;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
 }
 
 .bouton-mac-primaire {
-  background-color: var(--couleurs-mac-violet-primaire);
+  background-color: var(--couleurs-mac-violet-fonce);
   color: white;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 28px;
-  text-align: center;
+  box-shadow:
+    0 0 0 2px transparent,
+    0 0 0 4px transparent;
 
-  --hover: var(--couleurs-mac-violet-secondaire);
+  --hover: none;
+
+  &:hover {
+    background-color: var(--couleurs-mac-violet-moyen) !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  &:focus {
+    box-shadow:
+      0 0 0 2px white,
+      0 0 0 4px var(--couleurs-mac-violet-moyen);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px white,
+      0 0 0 4px var(--couleurs-mac-violet-moyen);
+  }
 }
 
 .bouton-mac-secondaire {
-  outline: 2px solid var(--couleurs-mac-violet-primaire);
+  outline: 2px solid var(--couleurs-mac-violet-fonce);
   outline-offset: -2px;
   background-color: white;
-  color: var(--couleurs-mac-violet-primaire);
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 28px;
-  text-align: center;
+  color: var(--couleurs-mac-violet-fonce);
+  box-shadow:
+    0 0 0 2px transparent,
+    0 0 0 4px transparent;
 
-  &:focus {
-    outline-style: solid !important;
+  --hover: none;
+
+  &:hover {
+    outline: 2px solid var(--couleurs-mac-violet-fonce) !important;
+    outline-offset: -2px;
+    background-color: var(--couleurs-mac-violet-leger) !important;
+    color: var(--couleurs-mac-violet-fonce) !important;
+    box-shadow: none !important;
+    border: none !important;
   }
 
-  --hover: var(--couleurs-mac-violet-mid);
+  &:focus {
+    outline: 2px solid var(--couleurs-mac-violet-fonce) !important;
+    outline-offset: -2px;
+    box-shadow:
+      0 0 0 2px #ffffff,
+      0 0 0 4px #9c51d0;
+    background-color: white;
+    color: var(--couleurs-mac-violet-fonce) !important;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--couleurs-mac-violet-fonce) !important;
+    outline-offset: -2px;
+    box-shadow:
+      0 0 0 2px white,
+      0 0 0 4px var(--couleurs-mac-violet-moyen);
+    background-color: white;
+    color: var(--couleurs-mac-violet-fonce) !important;
+  }
 }
