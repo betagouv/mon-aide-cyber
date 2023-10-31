@@ -10,9 +10,12 @@ export const CharteAidant = () => {
     </a>
   );
   return (
-    <div id="fr-container--fluid">
-      <div id="fr-grid-row fr-grid-row--gutters">
-        <div className="fr-col-offset-2 fr-col-10 fr-col-lg-8" id="top">
+    <div className="fr-container--fluid">
+      <div className="fr-grid-row fr-grid-row--gutters">
+        <div
+          className="fr-col-offset-2 fr-col-offset-md-3 fr-col-8 fr-col-lg-6"
+          id="top"
+        >
           <h1>La Charte de l’Aidant</h1>
           <hr />
           {telechargementCharte}
