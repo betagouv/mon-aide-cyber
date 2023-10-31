@@ -477,6 +477,7 @@ export const ComposantDiagnostic = ({
           <div className="fr-col-offset-6 fr-col-offset-md-8 fr-grid-row">
             <div>
               <Button
+                className="bouton-mac bouton-mac-primaire"
                 disabled={boutonDesactive}
                 onClick={() => termineDiagnostic()}
               >
@@ -487,7 +488,7 @@ export const ComposantDiagnostic = ({
               <ul className="fr-share__group">
                 <li>
                   <button
-                    className="fr-share__link fr-share__link--copy"
+                    className="bouton-icone-mac bouton-mac-secondaire fr-share__link fr-share__link--copy"
                     title="Copier le lien du diagnostic"
                     onClick={copierLienDiagnostic}
                   />
@@ -542,7 +543,7 @@ export const ComposantDiagnostic = ({
             <BoutonThematique
               titre="Thématique précédente"
               reducteur={reducteurBoutonThematiquePrecedente}
-              style="bouton-mac-secondaire"
+              style="bouton-mac bouton-mac-secondaire"
               thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
               thematiques={thematiques.map(([clef]) => clef)}
               onClick={(thematique: string) => affiche(thematique)}
@@ -550,7 +551,7 @@ export const ComposantDiagnostic = ({
             <BoutonThematique
               titre="Thématique suivante"
               reducteur={reducteurBoutonThematiqueSuivante}
-              style="bouton-mac-primaire"
+              style="bouton-mac bouton-mac-primaire"
               thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
               thematiques={thematiques.map(([clef]) => clef)}
               onClick={(thematique: string) => affiche(thematique)}
