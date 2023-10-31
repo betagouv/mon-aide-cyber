@@ -5,7 +5,7 @@ import { ComposantLancerDiagnostic } from './composants/diagnostic/ComposantLanc
 function Accueil() {
   return (
     <>
-      <div className="fr-container--fuild">
+      <div className="fr-container--fluid">
         <div className="presentation-generale fr-grid-row">
           <div className="corps fr-col-offset-2 fr-col-5">
             <h1>MonAideCyber</h1>
@@ -18,7 +18,7 @@ function Accueil() {
               <ComposantLancerDiagnostic />
             </div>
           </div>
-          <div className="illustration fr-col-3 fr-col-offset-2--right">
+          <div className="fr-col-3 fr-col-offset-2--right">
             <img
               src={sceneUnAidantEtUnAideFaisantUnDiagnostic}
               alt="scène d'un aidant et d'un aidé faisant un diagnostic"
