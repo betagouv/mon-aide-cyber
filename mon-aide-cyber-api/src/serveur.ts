@@ -15,6 +15,7 @@ import { Adaptateur } from './adaptateurs/Adaptateur';
 import { AdaptateurPDF } from './adaptateurs/AdaptateurPDF';
 import { BusEvenement } from './domaine/BusEvenement';
 import { AdaptateurGestionnaireErreurs } from './adaptateurs/AdaptateurGestionnaireErreurs';
+import { NextFunction } from 'express-serve-static-core';
 
 export type ConfigurationServeur = {
   adaptateurPDF: AdaptateurPDF;
@@ -43,21 +44,25 @@ const creeApp = (config: ConfigurationServeur) => {
     skip: (requete: Request, __) => requete.path.startsWith('/api'),
   });
   app.use(limiteurTrafficUI);
-  app.use(
-    express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist')),
-  );
-  app.use('/api', routesAPI(config));
-
-  app.get('*', (_: Request, reponse: Response) => {
+  app.use((_: Request, reponse: Response, suite: NextFunction) => {
     reponse.setHeader('Content-Security-Policy', process.env.MAC_CSP || '*');
     reponse.setHeader(
       'Strict-Transport-Security',
       'max-age=63072000; includeSubDomains; preload',
     );
+    reponse.setHeader('X-Content-Type-Options', 'nosniff');
+    suite();
+  });
+  app.use(
+    express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist')),
+  );
+  app.use('/api', routesAPI(config));
+
+  app.get('*', (_: Request, reponse: Response) =>
     reponse.sendFile(
       path.join(__dirname, './../../mon-aide-cyber-ui/dist/index.html'),
-    );
-  });
+    ),
+  );
 
   app.use(config.gestionnaireErreurs.controleurErreurs());
   app.use(gestionnaireErreurAggregatNonTrouve());
