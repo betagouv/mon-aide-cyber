@@ -50,6 +50,10 @@ const creeApp = (config: ConfigurationServeur) => {
 
   app.get('*', (_: Request, reponse: Response) => {
     reponse.setHeader('Content-Security-Policy', process.env.MAC_CSP || '*');
+    reponse.setHeader(
+      'Strict-Transport-Security',
+      'max-age=63072000; includeSubDomains; preload',
+    );
     reponse.sendFile(
       path.join(__dirname, './../../mon-aide-cyber-ui/dist/index.html'),
     );
