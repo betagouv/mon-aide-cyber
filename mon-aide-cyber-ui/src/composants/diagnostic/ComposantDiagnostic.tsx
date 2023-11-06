@@ -556,6 +556,15 @@ export const ComposantDiagnostic = ({
               thematiques={thematiques.map(([clef]) => clef)}
               onClick={(thematique: string) => affiche(thematique)}
             />
+            <div className="fr-col-offset-6 fr-col-offset-md-8 fr-grid-row">
+              <Button
+                className="bouton-mac bouton-mac-primaire"
+                disabled={boutonDesactive}
+                onClick={() => termineDiagnostic()}
+              >
+                Terminer Diagnostic
+              </Button>
+            </div>
           </div>
         </div>
       </div>
