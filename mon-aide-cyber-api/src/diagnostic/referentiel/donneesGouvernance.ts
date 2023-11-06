@@ -5,7 +5,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-infos-et-processus-a-proteger',
       libelle:
-        "Disposez-vous d'une liste à jour des informations et processus à protéger en priorité dans votre organisation ?",
+        "Avez-vous déterminé les informations et les activités à protéger en priorité ?",
       type: 'choixUnique',
       reponsesPossibles: [
         {
@@ -57,7 +57,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-schema-si-a-jour',
       libelle:
-        'Existe-t-il un schéma à jour du système d’information de l’organisation ?',
+        'Existe-t-il un schéma du système d’information de l’organisation ?',
       type: 'choixUnique',
       reponsesPossibles: [
         {
@@ -108,7 +108,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-schema-si-industriel-a-jour',
       libelle:
-        "Si l'entité dispose de systèmes industriels : Existe-t-il un schéma et un inventaire à jour des systèmes industriels de l'organisation ?",
+        "Si l'entité dispose d'un SI industriel : Existe-t-il un schéma et un inventaire du système d'information industriel de l'organisation ?",
       type: 'choixUnique',
       reponsesPossibles: [
         {
@@ -153,7 +153,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-detaille',
           libelle:
-            "Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industriels connectés et des interconnexions avec l'extérieur.",
+            "'Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industrielles, installations matériels connectés et des interconnexions vers l'extérieur.",
           resultat: {
             note: 3,
           },
@@ -216,7 +216,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-exigence-cyber-securite-presta',
       libelle:
-        'Des exigences de cybersécurité sont-elles fixées aux prestataires ayant des accès informatiques ?',
+        "Des exigences de cybersécurité sont-elles intégrées aux contrats des prestataires disposant d'accès informatiques ?",
       type: 'choixUnique',
       reponsesPossibles: [
         {
@@ -272,7 +272,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-exigence-cyber-securite-presta-si-industriel',
       libelle:
-        "Si l'entité dispose d'un SI industriel : Des exigences de cybersécurité sont-elles fixées aux prestataires vous accompagnant dans la gestion du système industriel. Font-elles également  l'objet d'une attention particulière ?",
+        "Si l'entité dispose d'un SI industriel : Des exigences de cybersécurité sont-elles intégrées dans les contrats des prestataires disposant d'accès informatiques sur le système industriel ?",
       type: 'choixUnique',
       reponsesPossibles: [
         {
