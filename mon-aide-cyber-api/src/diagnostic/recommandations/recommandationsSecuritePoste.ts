@@ -103,6 +103,6 @@ export const recommandationsSecuritePoste = {
       comment:
         'recommandations/postes/securite-poste-r-et-d-disques-chiffres-niveau1-comment.pug',
     },
-    priorisation: 25,
+    priorisation: 29,
   },
 };
