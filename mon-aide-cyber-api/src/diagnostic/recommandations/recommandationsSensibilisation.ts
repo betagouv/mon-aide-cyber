@@ -19,7 +19,8 @@ export const recommandationsSensibilisation = {
   },
   'sensibilisation-risque-espionnage-industriel-r-et-d': {
     niveau1: {
-      titre: 'Mettre en œuvre des bonnes pratiques de sensibilisation.',
+      titre:
+        "Mener des actions de sensibilisation ciblée auprès des agents effectuant des missions à l'étranger.",
       pourquoi:
         'recommandations/sensibilisation/sensibilisation-risque-espionnage-industriel-r-et-d-niveau1-pourquoi.pug',
       comment:
