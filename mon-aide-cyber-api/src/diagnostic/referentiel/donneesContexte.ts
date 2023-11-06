@@ -41,7 +41,12 @@ export const donneesContexte: QuestionsThematique = {
         },
         {
           identifiant: "contexte-secteur-activite-agriculture",
-          libelle: "Agriculture",
+          libelle: "Agriculture, sylviculture",
+          ordre: 1,
+        },
+        {
+          identifiant: "contexte-secteur-activite-agroalimentaire",
+          libelle: "Agroalimentaire",
           ordre: 1,
         },
         {
@@ -51,7 +56,7 @@ export const donneesContexte: QuestionsThematique = {
         },
         {
           identifiant: "contexte-secteur-activite-industrie-defense",
-          libelle: "Industrie de défense - sous-traitant de l'armée",
+          libelle: "Industrie de défense",
           ordre: 3,
         },
         {
@@ -114,25 +119,31 @@ export const donneesContexte: QuestionsThematique = {
         },
         {
           identifiant:
+            "contexte-secteur-activite-recherche",
+          libelle: "Recherche, laboratoire",
+          ordre: 14,
+        },
+        {
+          identifiant:
             "contexte-secteur-activite-sante-humaine-et-action-sociale",
           libelle: "Santé humaine et action sociale",
-          ordre: 14,
+          ordre: 15,
         },
         {
           identifiant:
             "contexte-secteur-activite-arts-spectacles-et-activites-recreatives",
           libelle: "Arts, spectacles et activités récréatives",
-          ordre: 15,
+          ordre: 16,
         },
         {
           identifiant: "contexte-secteur-activite-autres-activites-de-services",
           libelle: "Autres activités de services",
-          ordre: 16,
+          ordre: 17,
         },
         {
           identifiant: "contexte-secteur-activite-services-aux-menages",
           libelle: "Services aux ménages",
-          ordre: 17,
+          ordre: 18,
         },
         {
           identifiant:
@@ -850,7 +861,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: "contexte-activites-recherche-et-developpement",
       libelle:
-        'Votre organisation a-t-elle des activités de "Recherche et Développement" ?',
+        'Votre organisation a-t-elle des activités de R&D, de conception de services innovants, de dépôts de brevets ?',
       reponsesPossibles: [
         {
           identifiant: "contexte-activites-recherche-et-developpement-nsp",
@@ -894,71 +905,8 @@ export const donneesContexte: QuestionsThematique = {
       type: "choixUnique",
     },
     {
-      identifiant: "contexte-usage-cloud",
-      libelle: "Existe t-il un usage du Cloud dans votre organisation ?",
-      reponsesPossibles: [
-        {
-          identifiant: "contexte-usage-cloud-nsp",
-          libelle: "Je ne sais pas",
-          ordre: 1,
-        },
-        { identifiant: "contexte-usage-cloud-non", libelle: "Non", ordre: 2 },
-        {
-          identifiant: "contexte-usage-cloud-oui",
-          libelle: "Oui",
-          ordre: 3,
-          questions: [
-            {
-              identifiant: "contexte-usage-cloud-oui-question-tiroir-usages",
-              libelle: 'Si "Oui": quels sont vos usages du Cloud ?',
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    "contexte-usage-cloud-oui-question-tiroir-usages-nsp",
-                  libelle: "Je ne sais pas",
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    "contexte-usage-cloud-oui-question-tiroir-usages-messagerie",
-                  libelle: "Messagerie",
-                  ordre: 2,
-                },
-                {
-                  identifiant:
-                    "contexte-usage-cloud-oui-question-tiroir-usages-suite-bureautique-complete",
-                  libelle: "Suite bureautique complète",
-                  ordre: 3,
-                },
-                {
-                  identifiant:
-                    "contexte-usage-cloud-oui-question-tiroir-usages-hebergement-donnees-et-sauvegardes",
-                  libelle: "Hébergement des données et sauvegardes",
-                  ordre: 4,
-                },
-                {
-                  identifiant:
-                    "contexte-usage-cloud-oui-question-tiroir-usages-virtualisation-complete-si",
-                  libelle: "Virtualisation complète du SI",
-                  ordre: 6,
-                },
-                {
-                  identifiant:
-                    "contexte-usage-cloud-oui-question-tiroir-usages-applications",
-                  libelle: "Application(s) métier(s)",
-                  ordre: 5,
-                },
-              ],
-              type: "choixMultiple",
-            },
-          ],
-        },
-      ],
-      type: "choixUnique",
-    },
-    {
       identifiant: "contexte-cyber-attaque-subie",
-      libelle: "Avez-vous déjà subi une cyberrataque ?",
+      libelle: "Avez-vous déjà subi une cyberattaque ?",
       reponsesPossibles: [
         {
           identifiant: "contexte-cyber-attaque-subie-nsp",
