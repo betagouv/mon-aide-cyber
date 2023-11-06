@@ -485,7 +485,7 @@ export const AfficheLesThematiques: Story = {
           ),
         ),
       ).toBeInTheDocument();
-      expect(await waitFor(() => canvas.getAllByRole('button').length)).toBe(5);
+      expect(await waitFor(() => canvas.getAllByRole('button').length)).toBe(6);
       await waitFor(() =>
         expect(
           canvas.queryByRole('button', { name: /thématique précédente/i }),
