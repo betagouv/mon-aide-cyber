@@ -14,12 +14,35 @@ $border-radius: 0.5rem;
   }
 }
 
-@mixin primaire() {
-  background-color: var(--couleurs-mac-violet-fonce);
-  color: white;
+@mixin primaire($couleur-texte, $couleur-fond, $couleur-fond-survol-et-actif) {
+  background-color: $couleur-fond;
+  color: $couleur-texte;
   box-shadow:
     0 0 0 2px transparent,
     0 0 0 4px transparent;
+
+  --hover: none;
+
+  &:active:enabled {
+    background-color: $couleur-fond-survol-et-actif !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  &:hover:enabled {
+    background-color: $couleur-fond-survol-et-actif !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  &:focus {
+    @include box-shadow();
+  }
+
+  &:focus-visible {
+    outline: none;
+    @include box-shadow();
+  }
 }
 
 @mixin box-shadow($box1: white, $box2: var(--couleurs-mac-violet-moyen)) {
@@ -51,30 +74,19 @@ $border-radius: 0.5rem;
 }
 
 .bouton-mac-primaire {
-  @include primaire();
+  @include primaire(
+    white,
+    var(--couleurs-mac-violet-fonce),
+    var(--couleurs-mac-violet-moyen)
+  );
+}
 
-  --hover: none;
-
-  &:active:enabled {
-    background-color: var(--couleurs-mac-violet-moyen) !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-
-  &:hover:enabled {
-    background-color: var(--couleurs-mac-violet-moyen) !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-
-  &:focus {
-    @include box-shadow();
-  }
-
-  &:focus-visible {
-    outline: none;
-    @include box-shadow();
-  }
+.bouton-mac-primaire-jaune {
+  @include primaire(
+    black,
+    var(--couleurs-mac-jaune-fonce),
+    var(--couleurs-mac-jaune-moyen)
+  );
 }
 
 .bouton-mac-secondaire {
