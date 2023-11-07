@@ -16,7 +16,7 @@ function Accueil() {
                 les faiblesses de leur infrastructure.
               </p>
               <div className="actions">
-                <ComposantLancerDiagnostic />
+                <ComposantLancerDiagnostic style="bouton-mac bouton-mac-primaire-jaune" />
               </div>
             </div>
             <div id="illustration" className="fr-col-5">
