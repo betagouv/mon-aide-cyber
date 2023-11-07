@@ -70,16 +70,18 @@ function Accueil() {
           </div>
         </div>
       </div>
-      <div className="fr-container fr-my-20v">
-        <div id="participer">
-          <div className="fr-col-12">
-            <h3>Participer ?</h3>
-          </div>
-          <div className="tuile">
+      <div id="participer" className="fr-container fr-my-20v">
+        <div className="fr-col-12">
+          <h2>Participer ?</h2>
+        </div>
+        <div className="tuile fr-p-7v">
+          <div className="illustration">
             <img
               src={illustrationSectionDevenirAidant}
               alt="illustration temporaire pour la section"
             />
+          </div>
+          <div className="corps">
             <h3>Devenir Aidant</h3>
             <ul>
               <li>Être bénévole et dans une posture bienveillante</li>
@@ -97,11 +99,15 @@ function Accueil() {
               </li>
             </ul>
           </div>
-          <div className="tuile bientot-disponible">
+        </div>
+        <div className="tuile fr-p-7v bientot-disponible">
+          <div className="illustration">
             <img
               src={illustrationSectionDevenirAidant}
               alt="illustration temporaire pour la section"
             />
+          </div>
+          <div className="corps">
             <h3>Devenir Aidé</h3>
             <p>Bientôt disponible.</p>
           </div>
