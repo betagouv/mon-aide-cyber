@@ -62,3 +62,31 @@
 .lien-mac :hover {
   color: var(--couleurs-mac-violet-secondaire);
 }
+
+@font-face {
+  font-family: 'Marianne ExtraBold';
+  src: url('/fontes/Marianne-ExtraBold.woff2') format('woff2');
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Marianne ExtraBold';
+  font-weight: 800;
+}
+
+h1 {
+  color: var(--couleurs-mac-blanc);
+  font-size: 3.5rem;
+}
+
+h2 {
+  color: var(--couleurs-mac-violet-fonce);
+  font-size: 2.6rem;
+  line-height: 2.5rem;
+}
+
+h3 {
+  font-size: 2rem;
+  line-height: 2.4rem;
+}
