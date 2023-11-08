@@ -3,13 +3,13 @@ import { FournisseurEntrepots } from '../../fournisseurs/FournisseurEntrepot.ts'
 import { useErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
 
-interface ComposantLancerDiagnosticProps {
+type ProprietesComposantLancerDiagnostic = {
   style: string;
-}
+};
 
 export const ComposantLancerDiagnostic = ({
   style,
-}: ComposantLancerDiagnosticProps) => {
+}: ProprietesComposantLancerDiagnostic) => {
   const entrepots = useContext(FournisseurEntrepots);
   const { showBoundary } = useErrorBoundary();
   const navigate = useNavigate();
