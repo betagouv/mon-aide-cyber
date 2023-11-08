@@ -5,7 +5,7 @@ import illustrationSectionDevenirAidant from '../public/images/devenir-aidant.sv
 function Accueil() {
   return (
     <>
-      <div className="fond-violet">
+      <div className="bandeau-violet">
         <div id="presentation" className="fr-container">
           <div className="fr-grid-row fr-grid-row--middle fr-py-20v">
             <div id="corps" className="fr-col-6 fr-col-offset-1--right">
@@ -30,7 +30,7 @@ function Accueil() {
       </div>
       <div className="fr-container fr-mt-20v">
         <div id="ce-que-cest" className="fr-grid-row">
-          <div className="fr-col-8 titre">
+          <div className="fr-col-8">
             <h2>Qu&apos;est-ce que MonAideCyber?</h2>
             <p>
               MonAideCyber est en construction... Mais est déjà capable de vous

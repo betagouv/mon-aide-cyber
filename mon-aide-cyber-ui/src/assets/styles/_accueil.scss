@@ -4,12 +4,7 @@ $gouttiere: 1.5rem;
 $hauteur-tuile: 29rem;
 $taille-padding-dsfr-7v: 3.5rem;
 
-@font-face {
-  font-family: 'Marianne ExtraBold';
-  src: url('/fontes/Marianne-ExtraBold.woff2') format('woff2');
-}
-
-.fond-violet {
+.bandeau-violet {
   background-color: var(--couleurs-mac-violet-fonce);
 }
 
@@ -17,20 +12,9 @@ $taille-padding-dsfr-7v: 3.5rem;
   #corps {
     color: var(--couleurs-mac-blanc);
 
-    h1 {
-      color: var(--couleurs-mac-blanc);
-      font-family: 'Marianne ExtraBold';
-      font-size: 3.5rem;
-      font-weight: 800;
-    }
-
     p {
       font-size: 1.5rem;
       line-height: 2.1rem;
-    }
-
-    .actions {
-      gap: 8px;
     }
   }
 
@@ -48,22 +32,8 @@ $taille-padding-dsfr-7v: 3.5rem;
 #ce-que-cest {
   row-gap: 3rem;
 
-  .titre h2 {
-    color: var(--couleurs-mac-violet-fonce);
-    font-family: 'Marianne ExtraBold';
-    font-size: 2.6rem;
-    font-weight: 800;
-    line-height: 2.5rem;
-  }
-
   .detail {
     padding-left: 1.5rem;
-
-    h3 {
-      font-weight: 800;
-      font-size: 2rem;
-      line-height: 2.4rem;
-    }
   }
 
   .bordure-gauche-jaune {
@@ -82,14 +52,6 @@ $taille-padding-dsfr-7v: 3.5rem;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-
-  h2 {
-    color: var(--couleurs-mac-violet-fonce);
-    font-family: 'Marianne ExtraBold';
-    font-size: 2.6rem;
-    font-weight: 800;
-    line-height: 2.5rem;
-  }
 }
 
 .tuile {
@@ -110,13 +72,6 @@ $taille-padding-dsfr-7v: 3.5rem;
     img {
       max-height: calc($hauteur-tuile / 2 - $taille-padding-dsfr-7v);
     }
-  }
-
-  .corps h3 {
-    font-weight: 800;
-    font-family: 'Marianne ExtraBold';
-    font-size: 2rem;
-    line-height: 2.4rem;
   }
 }
 
