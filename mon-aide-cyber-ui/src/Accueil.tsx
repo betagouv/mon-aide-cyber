@@ -1,6 +1,4 @@
-import sceneUnAidantEtUnAideFaisantUnDiagnostic from '../public/images/scene-un-aidant-et-un-aidant-faisant-un-diagnostic.svg';
-import { ComposantLancerDiagnostic } from './composants/diagnostic/ComposantLancerDiagnostic';
-import illustrationSectionDevenirAidant from '../public/images/devenir-aidant.svg';
+import { ComposantLancerDiagnostic } from './composants/diagnostic/ComposantLancerDiagnostic.tsx';
 
 function Accueil() {
   return (
@@ -21,7 +19,7 @@ function Accueil() {
             </div>
             <div id="illustration" className="fr-col-5">
               <img
-                src={sceneUnAidantEtUnAideFaisantUnDiagnostic}
+                src="/images/scene-un-aidant-et-un-aidant-faisant-un-diagnostic.svg"
                 alt="scène d'un aidant et d'un aidé faisant un diagnostic"
               />
             </div>
@@ -77,7 +75,7 @@ function Accueil() {
         <div className="tuile fr-p-7v">
           <div className="illustration">
             <img
-              src={illustrationSectionDevenirAidant}
+              src="/images/devenir-aidant.svg"
               alt="illustration temporaire pour la section"
             />
           </div>
@@ -103,7 +101,7 @@ function Accueil() {
         <div className="tuile fr-p-7v bientot-disponible">
           <div className="illustration">
             <img
-              src={illustrationSectionDevenirAidant}
+              src="/images/devenir-aidant.svg"
               alt="illustration temporaire pour la section"
             />
           </div>
