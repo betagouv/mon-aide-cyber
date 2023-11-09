@@ -16,6 +16,7 @@ class StrategieChaineDeCaractere implements Strategie {
     questionTrouvee.reponseDonnee = {
       reponseUnique: this.reponse,
       reponsesMultiples: [],
+      reponse: this.reponse,
     };
   }
 }
@@ -30,6 +31,13 @@ class StrategieQuestionATiroir implements Strategie {
         identifiant: q.identifiant,
         reponses: new Set(q.reponses),
       })),
+      reponse: {
+        identifiant: this.reponse.reponse,
+        reponses: this.reponse.questions.map((q) => ({
+          identifiant: q.identifiant,
+          reponses: new Set(q.reponses),
+        })),
+      },
     };
   }
 }
@@ -49,6 +57,15 @@ class StrategieReponsesMultiples implements Strategie {
           reponses: new Set(this.reponse as string[]),
         },
       ],
+      reponse: {
+        identifiant: null,
+        reponses: [
+          {
+            identifiant: this.identifiant,
+            reponses: new Set(this.reponse as string[]),
+          },
+        ],
+      },
     };
   }
 }
@@ -63,6 +80,10 @@ class StrategieReponseLibre implements Strategie {
         reponse: this.reponse.valeur,
       },
       reponsesMultiples: [],
+      reponse: {
+        identifiant: this.reponse.identifiant,
+        reponse: this.reponse.valeur,
+      },
     };
   }
 }

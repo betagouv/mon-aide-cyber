@@ -246,6 +246,7 @@ describe('le serveur MAC sur les routes', () => {
         ).toStrictEqual({
           reponsesMultiples: [],
           reponseUnique: 'reponse-2',
+          reponse: 'reponse-2',
         });
       });
 

@@ -1,20 +1,22 @@
-import { Constructeur } from "./constructeur";
-import { unReferentiel } from "./constructeurReferentiel";
+import { Constructeur } from './constructeur';
+import { unReferentiel } from './constructeurReferentiel';
 import {
   Diagnostic,
   initialiseDiagnostic,
   QuestionDiagnostic,
   ReponseDonnee,
+  ReponseLibre,
+  ReponseMultiple,
   ReponsesMultiples,
-} from "../../src/diagnostic/Diagnostic";
+} from '../../src/diagnostic/Diagnostic';
 import {
   Referentiel,
   ReponsePossible,
   TypeQuestion,
-} from "../../src/diagnostic/Referentiel";
-import { TableauDeRecommandations } from "../../src/diagnostic/TableauDeRecommandations";
-import { unTableauDeRecommandations } from "./constructeurTableauDeRecommandations";
-import { fakerFR } from "@faker-js/faker";
+} from '../../src/diagnostic/Referentiel';
+import { TableauDeRecommandations } from '../../src/diagnostic/TableauDeRecommandations';
+import { unTableauDeRecommandations } from './constructeurTableauDeRecommandations';
+import { fakerFR } from '@faker-js/faker';
 
 class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   private referentiel: Referentiel = unReferentiel().construis();
@@ -37,7 +39,7 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     reponses.forEach((rep) => {
       Object.entries(rep).forEach(([question, valeur]) => {
         const constructeurReponseDonnee = uneReponseDonnee();
-        if (typeof valeur === "string") {
+        if (typeof valeur === 'string') {
           constructeurReponseDonnee.ayantPourReponse(valeur);
         } else {
           constructeurReponseDonnee.avecDesReponsesMultiples([
@@ -52,6 +54,21 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     });
     return this;
   }
+  avecLaReponseDonnee(
+    thematique: string,
+    reponse: { [identifiantQuestion: string]: string[] },
+  ): ConstructeurDiagnostic {
+    Object.entries(reponse).forEach(([identifiantQuestion, valeur]) => {
+      this.ajouteUneReponseDonnee(
+        { thematique, question: identifiantQuestion },
+        uneReponseDonnee()
+          .avecUneReponse(identifiantQuestion, valeur)
+          .construis(),
+      );
+    });
+    return this;
+  }
+
   avecUnTableauDeRecommandations(
     tableauDeRecommandations: TableauDeRecommandations,
   ): ConstructeurDiagnostic {
@@ -87,6 +104,7 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
 class ConstructeurReponseDonnee implements Constructeur<ReponseDonnee> {
   private reponseUnique: string | null = null;
   private reponsesMultiples: ReponsesMultiples[] = [];
+  reponse?: string | ReponseLibre | ReponseMultiple | null;
   ayantPourReponse(reponse: string): ConstructeurReponseDonnee {
     this.reponseUnique = reponse;
     return this;
@@ -102,10 +120,33 @@ class ConstructeurReponseDonnee implements Constructeur<ReponseDonnee> {
     return this;
   }
 
+  avecUneReponse(
+    identifiantQuestion: string,
+    valeur: string[],
+  ): ConstructeurReponseDonnee {
+    this.reponse = {
+      identifiant: null,
+      reponses: [
+        { identifiant: identifiantQuestion, reponses: new Set(valeur) },
+      ],
+    };
+    return this;
+  }
+
   construis(): ReponseDonnee {
+    // let reponse;
+    // if (this.reponsesMultiples.length === 0) {
+    //   reponse = this.reponseUnique;
+    // } else {
+    //   reponse = {
+    //     identifiant: this.reponseUnique,
+    //     reponses: this.reponsesMultiples,
+    //   };
+    // }
     return {
       reponseUnique: this.reponseUnique,
       reponsesMultiples: this.reponsesMultiples,
+      ...(this.reponse && { reponse: this.reponse }),
     };
   }
 }
@@ -120,7 +161,7 @@ class ConstructeurQuestionDiagnostic
     reponseUnique: null,
     reponsesMultiples: [],
   };
-  private type: TypeQuestion = "choixMultiple";
+  private type: TypeQuestion = 'choixMultiple';
 
   avecLesReponsesPossibles(
     reponsePossibles: ReponsePossible[],
@@ -133,6 +174,7 @@ class ConstructeurQuestionDiagnostic
     identifiantReponse: string,
   ): ConstructeurQuestionDiagnostic {
     this.reponseDonnee.reponseUnique = identifiantReponse;
+    this.reponseDonnee.reponse = identifiantReponse;
     return this;
   }
 

@@ -14,11 +14,16 @@ import { MoteurDeRecommandations } from './MoteurDeRecommandations';
 export type Thematique = string;
 
 type ReponsesMultiples = { identifiant: string; reponses: Set<string> };
+type ReponseMultiple = {
+  identifiant: string | null;
+  reponses: ReponsesMultiples[];
+};
+type ReponseLibre = { identifiant: string; reponse: string };
 type ReponseDonnee = {
   reponsesMultiples: ReponsesMultiples[];
   reponseUnique: string | ReponseLibre | null;
+  reponse?: string | ReponseLibre | ReponseMultiple | null;
 };
-type ReponseLibre = { identifiant: string; reponse: string };
 type QuestionDiagnostic = Question & {
   reponseDonnee: ReponseDonnee;
 };
@@ -152,6 +157,7 @@ export {
   QuestionDiagnostic,
   ReponseDonnee,
   ReponseLibre,
+  ReponseMultiple,
   ReponsesMultiples,
   ajouteLaReponseAuDiagnostic,
   genereLesRecommandations,

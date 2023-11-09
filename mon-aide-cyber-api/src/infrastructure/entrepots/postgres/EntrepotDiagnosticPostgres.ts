@@ -4,6 +4,8 @@ import {
   QuestionDiagnostic,
   QuestionsThematique,
   ReponseDonnee,
+  ReponseLibre,
+  ReponseMultiple,
   ReponsesMultiples,
   Thematique,
 } from '../../../diagnostic/Diagnostic';
@@ -12,6 +14,26 @@ import { DTO, EntrepotPostgres } from './EntrepotPostgres';
 export type DiagnosticDTO = DTO & {
   donnees: object;
 };
+type TousTypesDeReponse =
+  | string
+  | ReponseLibre
+  | ReponseMultiple
+  | null
+  | (string & ReponseLibre)
+  | (string & RepresentationReponseMultiple)
+  | (ReponseLibre & string)
+  | (ReponseLibre & RepresentationReponseMultiple)
+  | (ReponseLibre & null)
+  | (ReponseMultiple & string)
+  | (ReponseMultiple & ReponseLibre)
+  | (ReponseMultiple & RepresentationReponseMultiple)
+  | (ReponseMultiple & null)
+  | (null & ReponseLibre)
+  | (null & RepresentationReponseMultiple)
+  | undefined;
+
+type TypeReponseMultiple = ReponseMultiple & RepresentationReponseMultiple;
+
 export class EntrepotDiagnosticPostgres
   extends EntrepotPostgres<Diagnostic, DiagnosticDTO>
   implements EntrepotDiagnostic
@@ -63,22 +85,68 @@ export class EntrepotDiagnosticPostgres
           questions: questions.questions.map(
             (
               question: QuestionDiagnostic | RepresentationQuestionDiagnostic,
-            ) => ({
-              ...question,
-              reponseDonnee: {
-                ...question.reponseDonnee,
-                reponsesMultiples: question.reponseDonnee.reponsesMultiples.map(
-                  (rep) => ({
-                    ...rep,
-                    reponses: transformeReponsesMultiples(rep.reponses),
-                  }),
-                ),
-              },
-            }),
+            ) => {
+              const reponseTranscrite = this.transcrisLaReponse(
+                question.reponseDonnee.reponse,
+                transformeReponsesMultiples,
+              );
+              if (reponseTranscrite) {
+                return {
+                  ...question,
+                  reponseDonnee: {
+                    ...question.reponseDonnee,
+                    reponsesMultiples:
+                      question.reponseDonnee.reponsesMultiples.map((rep) => ({
+                        ...rep,
+                        reponses: transformeReponsesMultiples(rep.reponses),
+                      })),
+                    reponse: reponseTranscrite,
+                  },
+                };
+              }
+              return {
+                ...question,
+                reponseDonnee: {
+                  ...question.reponseDonnee,
+                  reponsesMultiples:
+                    question.reponseDonnee.reponsesMultiples.map((rep) => ({
+                      ...rep,
+                      reponses: transformeReponsesMultiples(rep.reponses),
+                    })),
+                },
+              };
+            },
           ),
         },
       }),
       {},
+    );
+  }
+
+  private transcrisLaReponse(
+    reponse: TousTypesDeReponse,
+    transformeReponsesMultiples: <E, S>(reponses: E) => S,
+  ) {
+    if (this.estReponseMultiple(reponse)) {
+      return {
+        identifiant: reponse.identifiant,
+        reponses: reponse.reponses.map((rep) => ({
+          ...rep,
+          reponses: transformeReponsesMultiples(rep.reponses),
+        })),
+      };
+    }
+    return reponse;
+  }
+
+  private estReponseMultiple(
+    reponse: TousTypesDeReponse,
+  ): reponse is TypeReponseMultiple {
+    return (
+      reponse !== undefined &&
+      (reponse as TypeReponseMultiple).identifiant !== undefined &&
+      (reponse as TypeReponseMultiple).reponses !== undefined &&
+      (reponse as TypeReponseMultiple).reponses !== null
     );
   }
 }
@@ -86,8 +154,12 @@ export class EntrepotDiagnosticPostgres
 type RepresentationReponsesMultiples = Omit<ReponsesMultiples, 'reponses'> & {
   reponses: string[];
 };
+type RepresentationReponseMultiple = Omit<ReponseMultiple, 'reponses'> & {
+  reponses: RepresentationReponsesMultiples[];
+};
 type ReponseDonneeDTO = Omit<ReponseDonnee, 'reponsesMultiples'> & {
   reponsesMultiples: RepresentationReponsesMultiples[];
+  reponse: string | ReponseLibre | RepresentationReponseMultiple | null;
 };
 type RepresentationQuestionDiagnostic = Omit<
   QuestionDiagnostic,

@@ -1,35 +1,45 @@
-import { describe, expect } from "vitest";
-import { uneReponsePossible } from "../constructeurs/constructeurReferentiel";
-import { uneQuestionDiagnostic } from "../constructeurs/constructeurDiagnostic";
-import { StrategieDeReponse } from "../../src/diagnostic/StrategieDeReponse";
-import { CorpsReponse } from "../../src/diagnostic/ServiceDiagnostic";
+import { describe, expect } from 'vitest';
+import { uneReponsePossible } from '../constructeurs/constructeurReferentiel';
+import { uneQuestionDiagnostic } from '../constructeurs/constructeurDiagnostic';
+import { StrategieDeReponse } from '../../src/diagnostic/StrategieDeReponse';
+import { CorpsReponse } from '../../src/diagnostic/ServiceDiagnostic';
+import { ReponseDonnee } from '../../src/diagnostic/Diagnostic';
 
-describe("Stratégie de réponse", () => {
-  describe("En cas de réponses multiples", () => {
-    it("applique la réponse donnée à la question", () => {
+describe('Stratégie de réponse', () => {
+  describe('En cas de réponses multiples', () => {
+    it('applique la réponse donnée à la question', () => {
       const question = uneQuestionDiagnostic()
         .avecLesReponsesPossibles([
-          uneReponsePossible().avecLibelle("Réponse 1").construis(),
-          uneReponsePossible().avecLibelle("Réponse 2").construis(),
-          uneReponsePossible().avecLibelle("Réponse 3").construis(),
+          uneReponsePossible().avecLibelle('Réponse 1').construis(),
+          uneReponsePossible().avecLibelle('Réponse 2').construis(),
+          uneReponsePossible().avecLibelle('Réponse 3').construis(),
         ])
         .construis();
 
       const corpsDeReponse: CorpsReponse = {
-        chemin: "",
+        chemin: '',
         identifiant: question.identifiant,
-        reponse: ["reponse-2", "reponse-1"],
+        reponse: ['reponse-2', 'reponse-1'],
       };
       StrategieDeReponse.pour(corpsDeReponse).applique(question);
 
-      expect(question.reponseDonnee).toStrictEqual({
+      expect(question.reponseDonnee).toStrictEqual<ReponseDonnee>({
         reponseUnique: null,
         reponsesMultiples: [
           {
             identifiant: question.identifiant,
-            reponses: new Set(["reponse-2", "reponse-1"]),
+            reponses: new Set(['reponse-2', 'reponse-1']),
           },
         ],
+        reponse: {
+          identifiant: null,
+          reponses: [
+            {
+              identifiant: question.identifiant,
+              reponses: new Set(['reponse-2', 'reponse-1']),
+            },
+          ],
+        },
       });
     });
   });
