@@ -1,5 +1,9 @@
-import { CorpsReponse, CorpsReponseQuestionATiroir } from "./ServiceDiagnostic";
-import { QuestionDiagnostic } from "./Diagnostic";
+import {
+  CorpsReponse,
+  CorpsReponseLibre,
+  CorpsReponseQuestionATiroir,
+} from './ServiceDiagnostic';
+import { QuestionDiagnostic } from './Diagnostic';
 
 interface Strategie {
   applique(questionTrouvee: QuestionDiagnostic | undefined): void;
@@ -49,6 +53,20 @@ class StrategieReponsesMultiples implements Strategie {
   }
 }
 
+class StrategieReponseLibre implements Strategie {
+  constructor(private readonly reponse: CorpsReponseLibre) {}
+
+  applique(questionTrouvee: QuestionDiagnostic): void {
+    questionTrouvee.reponseDonnee = {
+      reponseUnique: {
+        identifiant: this.reponse.identifiant,
+        reponse: this.reponse.valeur,
+      },
+      reponsesMultiples: [],
+    };
+  }
+}
+
 export const StrategieDeReponse = {
   pour: (corpsReponse: CorpsReponse): Strategie => {
     if (estChaineDeCharactere(corpsReponse.reponse)) {
@@ -57,6 +75,9 @@ export const StrategieDeReponse = {
     if (estReponseQuestionATiroir(corpsReponse.reponse)) {
       return new StrategieQuestionATiroir(corpsReponse.reponse);
     }
+    if (estReponseLibre(corpsReponse.reponse)) {
+      return new StrategieReponseLibre(corpsReponse.reponse);
+    }
     return new StrategieReponsesMultiples(
       corpsReponse.identifiant,
       corpsReponse.reponse,
@@ -64,15 +85,27 @@ export const StrategieDeReponse = {
   },
 };
 const estReponseQuestionATiroir = (
-  reponse: string | CorpsReponseQuestionATiroir | string[],
+  reponse: string | CorpsReponseQuestionATiroir | CorpsReponseLibre | string[],
 ): reponse is CorpsReponseQuestionATiroir => {
   return (
     (reponse as CorpsReponseQuestionATiroir).reponse !== undefined &&
     (reponse as CorpsReponseQuestionATiroir).reponse !== null
   );
 };
+
+const estReponseLibre = (
+  reponse: string | CorpsReponseQuestionATiroir | CorpsReponseLibre | string[],
+): reponse is CorpsReponseLibre => {
+  return (
+    (reponse as CorpsReponseLibre).valeur !== undefined &&
+    (reponse as CorpsReponseLibre).valeur !== null &&
+    (reponse as CorpsReponseLibre).identifiant !== undefined &&
+    (reponse as CorpsReponseLibre).identifiant !== null
+  );
+};
+
 const estChaineDeCharactere = (
-  reponse: string | CorpsReponseQuestionATiroir | string[],
+  reponse: string | CorpsReponseQuestionATiroir | CorpsReponseLibre | string[],
 ): reponse is string => {
-  return typeof reponse === "string";
+  return typeof reponse === 'string';
 };

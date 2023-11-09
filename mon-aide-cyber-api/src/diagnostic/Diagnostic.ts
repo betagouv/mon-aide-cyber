@@ -16,8 +16,9 @@ export type Thematique = string;
 type ReponsesMultiples = { identifiant: string; reponses: Set<string> };
 type ReponseDonnee = {
   reponsesMultiples: ReponsesMultiples[];
-  reponseUnique: string | null;
+  reponseUnique: string | ReponseLibre | null;
 };
+type ReponseLibre = { identifiant: string; reponse: string };
 type QuestionDiagnostic = Question & {
   reponseDonnee: ReponseDonnee;
 };
@@ -150,6 +151,7 @@ export {
   EntrepotDiagnostic,
   QuestionDiagnostic,
   ReponseDonnee,
+  ReponseLibre,
   ReponsesMultiples,
   ajouteLaReponseAuDiagnostic,
   genereLesRecommandations,

@@ -17,10 +17,14 @@ export type CorpsReponseQuestionATiroir = {
   reponse: string;
   questions: { identifiant: string; reponses: string[] }[];
 };
+export type CorpsReponseLibre = {
+  identifiant: string;
+  valeur: string;
+};
 export type CorpsReponse = {
   chemin: string;
   identifiant: string;
-  reponse: string | string[] | CorpsReponseQuestionATiroir;
+  reponse: string | string[] | CorpsReponseQuestionATiroir | CorpsReponseLibre;
 };
 
 export class ServiceDiagnostic {
@@ -138,6 +142,10 @@ type ReponseAjoutee = Omit<Evenement, 'corps'> & {
     identifiantDiagnostic: crypto.UUID;
     thematique: string;
     identifiantQuestion: string;
-    reponse: string | string[] | CorpsReponseQuestionATiroir;
+    reponse:
+      | string
+      | string[]
+      | CorpsReponseQuestionATiroir
+      | CorpsReponseLibre;
   };
 };
