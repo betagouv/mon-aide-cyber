@@ -59,7 +59,7 @@ describe('Diagnostic', () => {
 
       expect(
         diagnostic.referentiel['saisie-libre'].questions[0].reponseDonnee
-          .reponseUnique,
+          .reponse,
       ).toStrictEqual<ReponseLibre>({
         identifiant: 'a-preciser',
         reponse: 'La réponse à la question',
@@ -209,7 +209,7 @@ describe('Diagnostic', () => {
               .ajouteUneThematique('thematique', questions)
               .construis(),
           )
-          .avecLesReponsesDonnees('thematique', [
+          .avecLesNouvellesReponsesDonnees('thematique', [
             { q1: 'reponse-11' },
             { q2: 'reponse-22' },
             { q3: 'reponse-31' },
@@ -304,7 +304,7 @@ describe('Diagnostic', () => {
               ])
               .construis(),
           )
-          .avecLesReponsesDonnees('thematique', [{ q8: 'reponse-82' }])
+          .avecLesNouvellesReponsesDonnees('thematique', [{ q8: 'reponse-82' }])
           .avecUnTableauDeRecommandations(tableauDeRecommandations.construis())
           .construis();
 
@@ -386,8 +386,8 @@ describe('Diagnostic', () => {
               ])
               .construis(),
           )
-          .avecLesReponsesDonnees('contexte', [{ qc: 'rqc' }])
-          .avecLesReponsesDonnees('thematique', [
+          .avecLesNouvellesReponsesDonnees('contexte', [{ qc: 'rqc' }])
+          .avecLesNouvellesReponsesDonnees('thematique', [
             { q2: 'reponse-23' },
             { q1: 'reponse-11' },
             { q4: 'reponse-41' },
@@ -471,8 +471,8 @@ describe('Diagnostic', () => {
               .ajouteUneQuestionAuContexte(questionContexte)
               .construis(),
           )
-          .avecLesReponsesDonnees('contexte', [{ qc: 'rqc' }])
-          .avecLesReponsesDonnees('thematique', [
+          .avecLesNouvellesReponsesDonnees('contexte', [{ qc: 'rqc' }])
+          .avecLesNouvellesReponsesDonnees('thematique', [
             { q1: 'reponse-13' },
             { q2: 'reponse-22' },
             { q3: 'reponse-31' },

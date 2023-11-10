@@ -53,6 +53,30 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     });
     return this;
   }
+
+  avecLesNouvellesReponsesDonnees(
+    thematique: string,
+    reponses: { [question: string]: string | string[] }[],
+  ): ConstructeurDiagnostic {
+    reponses.forEach((rep) => {
+      Object.entries(rep).forEach(([question, valeur]) => {
+        const constructeurReponseDonnee = uneNouvelleReponseDonnee();
+        if (typeof valeur === 'string') {
+          constructeurReponseDonnee.reponseSimple(valeur);
+        } else {
+          constructeurReponseDonnee.reponseMultipleSansIdentifiant([
+            { identifiant: question, reponses: valeur },
+          ]);
+        }
+        this.ajouteUneReponseDonnee(
+          { thematique, question: question },
+          constructeurReponseDonnee.construis(),
+        );
+      });
+    });
+    return this;
+  }
+
   avecLaReponseDonnee(
     thematique: string,
     reponse: { [identifiantQuestion: string]: string[] },

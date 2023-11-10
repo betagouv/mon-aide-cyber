@@ -1,5 +1,9 @@
-import { Diagnostic, QuestionDiagnostic } from "./Diagnostic";
-import { Note } from "./Note";
+import {
+  Diagnostic,
+  estReponseMultiple,
+  QuestionDiagnostic,
+} from './Diagnostic';
+import { Note } from './Note';
 
 export type NotesDiagnostic = {
   [thematique: string]: { identifiant: string; note: Note }[];
@@ -11,7 +15,7 @@ export class MoteurDeNote {
       (reducteur, [thematique, questions]) => ({
         ...reducteur,
         [thematique]: questions.questions
-          .filter((question) => question.reponseDonnee.reponseUnique != null)
+          .filter((question) => question.reponseDonnee.reponse != null)
           .flatMap((question) => [
             ...this.genereLesNotesPourReponseUnique(question),
             ...this.genereLesNotesPourReponsesMultiples(question),
@@ -23,9 +27,11 @@ export class MoteurDeNote {
 
   private static genereLesNotesPourReponseUnique(question: QuestionDiagnostic) {
     return question.reponsesPossibles
-      .filter(
-        (reponsePossible) =>
-          reponsePossible.identifiant === question.reponseDonnee.reponseUnique,
+      .filter((reponsePossible) =>
+        !estReponseMultiple(question.reponseDonnee.reponse)
+          ? reponsePossible.identifiant === question.reponseDonnee.reponse
+          : reponsePossible.identifiant ===
+            question.reponseDonnee.reponse.identifiant,
       )
       ?.filter(
         (reponsePossible) => reponsePossible.resultat?.note !== undefined,
@@ -39,25 +45,28 @@ export class MoteurDeNote {
   private static genereLesNotesPourReponsesMultiples(
     question: QuestionDiagnostic,
   ) {
-    return question.reponseDonnee.reponsesMultiples
-      .flatMap((reponsesMultiples) =>
-        question.reponsesPossibles
-          .flatMap(
-            (rep) =>
-              rep.questions?.filter(
-                (q) => q.identifiant === reponsesMultiples.identifiant,
-              ) || [],
-          )
-          .flatMap((questionATiroir) =>
-            questionATiroir.reponsesPossibles.filter((reponsePossible) =>
-              reponsesMultiples.reponses.has(reponsePossible.identifiant),
-            ),
-          )
-          .flatMap((reponsePossible) => ({
-            identifiant: reponsesMultiples.identifiant,
-            note: reponsePossible.resultat?.note,
-          })),
-      )
-      .flatMap((questionDiagnostic) => questionDiagnostic);
+    if (estReponseMultiple(question.reponseDonnee.reponse)) {
+      return question.reponseDonnee.reponse.reponses
+        .flatMap((reponsesMultiples) =>
+          question.reponsesPossibles
+            .flatMap(
+              (rep) =>
+                rep.questions?.filter(
+                  (q) => q.identifiant === reponsesMultiples.identifiant,
+                ) || [],
+            )
+            .flatMap((questionATiroir) =>
+              questionATiroir.reponsesPossibles.filter((reponsePossible) =>
+                reponsesMultiples.reponses.has(reponsePossible.identifiant),
+              ),
+            )
+            .flatMap((reponsePossible) => ({
+              identifiant: reponsesMultiples.identifiant,
+              note: reponsePossible.resultat?.note,
+            })),
+        )
+        .flatMap((questionDiagnostic) => questionDiagnostic);
+    }
+    return [];
   }
 }

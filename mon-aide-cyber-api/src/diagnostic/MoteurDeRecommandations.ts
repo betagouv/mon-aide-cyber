@@ -1,5 +1,9 @@
-import { QuestionDiagnostic, RecommandationDiagnostic } from "./Diagnostic";
-import { TableauDeRecommandations } from "./TableauDeRecommandations";
+import {
+  estReponseMultiple,
+  QuestionDiagnostic,
+  RecommandationDiagnostic,
+} from './Diagnostic';
+import { TableauDeRecommandations } from './TableauDeRecommandations';
 
 export class MoteurDeRecommandations {
   static genere(
@@ -34,9 +38,13 @@ export class MoteurDeRecommandations {
       .flatMap((reponsePossible) => reponsePossible.questions || [])
       .flatMap((questionATiroir) => ({
         reponses: questionATiroir.reponsesPossibles.filter((reponsePossible) =>
-          question.reponseDonnee.reponsesMultiples
-            .flatMap((reponsesDonnees) => Array.from(reponsesDonnees.reponses))
-            .includes(reponsePossible.identifiant),
+          estReponseMultiple(question.reponseDonnee.reponse)
+            ? question.reponseDonnee.reponse.reponses
+                .flatMap((reponsesDonnees) =>
+                  Array.from(reponsesDonnees.reponses),
+                )
+                .includes(reponsePossible.identifiant)
+            : [],
         ),
         identifiantQuestion: questionATiroir.identifiant,
       }))
@@ -53,7 +61,11 @@ export class MoteurDeRecommandations {
 
   private static recommandationsUnique(question: QuestionDiagnostic) {
     return question.reponsesPossibles
-      .filter((rep) => rep.identifiant === question.reponseDonnee.reponseUnique)
+      .filter((rep) =>
+        estReponseMultiple(question.reponseDonnee.reponse)
+          ? rep.identifiant === question.reponseDonnee.reponse.identifiant
+          : rep.identifiant === question.reponseDonnee.reponse,
+      )
       .flatMap(
         (rep) =>
           rep.resultat?.recommandations?.map((rec) => ({

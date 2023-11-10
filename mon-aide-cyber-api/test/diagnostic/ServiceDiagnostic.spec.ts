@@ -605,7 +605,7 @@ describe('Le service de diagnostic', () => {
             .ajouteUneThematique('thematique', questions)
             .construis(),
         )
-        .avecLesReponsesDonnees('thematique', [
+        .avecLesNouvellesReponsesDonnees('thematique', [
           { q1: 'reponse-11' },
           { q2: 'reponse-21' },
           { q3: 'reponse-31' },

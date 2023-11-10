@@ -25,7 +25,7 @@ describe('Entrepot Diagnostic Postgres', () => {
     ).toStrictEqual(diagnostic);
   });
 
-  it('persiste un diagnostic avec les réponses données', async () => {
+  it("persiste un diagnostic avec les réponses données correspondant à l'ancien modèle", async () => {
     const diagnostic = unDiagnostic()
       .avecUnReferentiel(
         unReferentiel()
