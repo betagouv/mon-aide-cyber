@@ -5,9 +5,8 @@ import {
   initialiseDiagnostic,
   QuestionDiagnostic,
   ReponseDonnee,
-  ReponseLibre,
-  ReponseMultiple,
   ReponsesMultiples,
+  TypesDeReponseDonnee,
 } from '../../src/diagnostic/Diagnostic';
 import {
   Referentiel,
@@ -102,7 +101,7 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
 }
 
 class ConstructeurNouvelleReponseDonnee implements Constructeur<ReponseDonnee> {
-  private reponse: string | ReponseLibre | ReponseMultiple | null = null;
+  private reponse: TypesDeReponseDonnee = null;
 
   reponseSimple(reponse: string): ConstructeurNouvelleReponseDonnee {
     this.reponse = reponse;
@@ -131,6 +130,19 @@ class ConstructeurNouvelleReponseDonnee implements Constructeur<ReponseDonnee> {
     return this;
   }
 
+  reponseMultipleSansIdentifiant(
+    reponses: { identifiant: string; reponses: string[] }[],
+  ) {
+    this.reponse = {
+      identifiant: null,
+      reponses: reponses.map((rep) => ({
+        ...rep,
+        reponses: new Set(rep.reponses),
+      })),
+    };
+    return this;
+  }
+
   construis(): ReponseDonnee {
     return {
       reponse: this.reponse,
@@ -143,7 +155,7 @@ class ConstructeurNouvelleReponseDonnee implements Constructeur<ReponseDonnee> {
 class ConstructeurReponseDonnee implements Constructeur<ReponseDonnee> {
   private reponseUnique: string | null = null;
   private reponsesMultiples: ReponsesMultiples[] = [];
-  reponse?: string | ReponseLibre | ReponseMultiple | null;
+  reponse?: TypesDeReponseDonnee;
   ayantPourReponse(reponse: string): ConstructeurReponseDonnee {
     this.reponseUnique = reponse;
     return this;

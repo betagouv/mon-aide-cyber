@@ -11,7 +11,7 @@ import { StrategieDeReponse } from './StrategieDeReponse';
 import { MoteurDeNote, NotesDiagnostic } from './MoteurDeNote';
 import { MoteurDeRecommandations } from './MoteurDeRecommandations';
 
-export type Thematique = string;
+type Thematique = string;
 
 type ReponsesMultiples = { identifiant: string; reponses: Set<string> };
 type ReponseMultiple = {
@@ -19,36 +19,44 @@ type ReponseMultiple = {
   reponses: ReponsesMultiples[];
 };
 type ReponseLibre = { identifiant: string; reponse: string };
+
+type TypesDeReponseDonnee =
+  | string
+  | ReponseLibre
+  | ReponseMultiple
+  | null
+  | undefined;
+
 type ReponseDonnee = {
   reponsesMultiples: ReponsesMultiples[];
   reponseUnique: string | ReponseLibre | null;
-  reponse?: string | ReponseLibre | ReponseMultiple | null;
+  reponse?: TypesDeReponseDonnee;
 };
 type QuestionDiagnostic = Question & {
   reponseDonnee: ReponseDonnee;
 };
 
-export type QuestionsThematique = {
+type QuestionsThematique = {
   questions: QuestionDiagnostic[];
 };
 
-export type ReferentielDiagnostic = {
+type ReferentielDiagnostic = {
   [clef: Thematique]: QuestionsThematique;
 };
 
-export type RecommandationDiagnostic = Omit<
+type RecommandationDiagnostic = Omit<
   Recommandation,
   'identifiant' | 'niveau' | 'noteObtenue'
 > & { niveau: NiveauDeRecommandation; priorisation: number; repondA: string };
 
-export type RecommandationPriorisee = {
+type RecommandationPriorisee = {
   titre: string;
   pourquoi: string;
   comment: string;
   noteObtenue: Note;
   priorisation: number;
 };
-export type Recommandations = {
+type Recommandations = {
   recommandationsPrioritaires: RecommandationPriorisee[];
   autresRecommandations: RecommandationPriorisee[];
 };
@@ -151,15 +159,56 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
     recommandationPriorisees.slice(6);
 };
 
+const estReponseMultiple = (
+  reponse: TypesDeReponseDonnee,
+): reponse is ReponseMultiple => {
+  return (
+    reponse !== null &&
+    reponse !== undefined &&
+    (reponse as ReponseMultiple).identifiant !== undefined &&
+    (reponse as ReponseMultiple).reponses !== undefined &&
+    (reponse as ReponseMultiple).reponses !== null
+  );
+};
+
+const estReponseSimple = (reponse: TypesDeReponseDonnee): reponse is string => {
+  return (
+    reponse !== null && reponse !== undefined && typeof reponse === 'string'
+  );
+};
+
+const estReponseLibre = (
+  reponse: TypesDeReponseDonnee,
+): reponse is ReponseLibre => {
+  return (
+    reponse !== null &&
+    reponse !== undefined &&
+    (reponse as ReponseLibre).reponse !== undefined &&
+    (reponse as ReponseLibre).reponse !== null &&
+    (reponse as ReponseLibre).identifiant !== undefined &&
+    (reponse as ReponseLibre).identifiant !== null
+  );
+};
+
 export {
   Diagnostic,
   EntrepotDiagnostic,
   QuestionDiagnostic,
+  QuestionsThematique,
+  RecommandationDiagnostic,
+  RecommandationPriorisee,
+  Recommandations,
   ReponseDonnee,
   ReponseLibre,
   ReponseMultiple,
   ReponsesMultiples,
+  ReferentielDiagnostic,
+  Thematique,
+  TypesDeReponseDonnee,
   ajouteLaReponseAuDiagnostic,
+  estReponseLibre,
+  estReponseMultiple,
+  estReponseSimple,
   genereLesRecommandations,
   initialiseDiagnostic,
 };

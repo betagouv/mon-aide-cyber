@@ -1,10 +1,10 @@
 import { Transcripteur } from '../Transcripteur';
 import {
   Diagnostic,
+  estReponseMultiple,
   QuestionDiagnostic,
-  ReponseLibre,
-  ReponseMultiple,
   Thematique,
+  TypesDeReponseDonnee,
 } from '../../../../diagnostic/Diagnostic';
 import {
   DiagnosticDTO,
@@ -67,10 +67,10 @@ export class TranscripteurDiagnosticVersRepresentation
   }
 
   private transcrisLaReponse(
-    reponse: TypesDeReponse,
+    reponse: TypesDeReponseDonnee,
     transformeReponsesMultiples: <E, S>(reponses: E) => S,
   ) {
-    if (this.estReponseMultiple(reponse)) {
+    if (estReponseMultiple(reponse)) {
       return {
         identifiant: reponse.identifiant,
         reponses: reponse.reponses.map((rep) => ({
@@ -81,23 +81,4 @@ export class TranscripteurDiagnosticVersRepresentation
     }
     return reponse;
   }
-
-  private estReponseMultiple(
-    reponse: TypesDeReponse,
-  ): reponse is ReponseMultiple {
-    return (
-      reponse !== null &&
-      reponse !== undefined &&
-      (reponse as ReponseMultiple).identifiant !== undefined &&
-      (reponse as ReponseMultiple).reponses !== undefined &&
-      (reponse as ReponseMultiple).reponses !== null
-    );
-  }
 }
-
-type TypesDeReponse =
-  | string
-  | ReponseLibre
-  | ReponseMultiple
-  | null
-  | undefined;

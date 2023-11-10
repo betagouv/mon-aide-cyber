@@ -1,4 +1,10 @@
-import { Diagnostic, QuestionDiagnostic } from '../../diagnostic/Diagnostic';
+import {
+  Diagnostic,
+  estReponseLibre,
+  estReponseMultiple,
+  estReponseSimple,
+  QuestionDiagnostic,
+} from '../../diagnostic/Diagnostic';
 import { QuestionATiroir, ReponsePossible } from '../../diagnostic/Referentiel';
 import {
   Action,
@@ -8,6 +14,7 @@ import {
   RepresentationContexte,
   RepresentationDiagnostic,
   RepresentationQuestion,
+  RepresentationReponseDonnee,
   RepresentationReponsePossible,
   Transcripteur,
 } from './types';
@@ -136,13 +143,23 @@ const trouveReponseATranscrire = (
 };
 
 const extraisLesChampsDeLaQuestion = (question: QuestionDiagnostic) => {
-  const autresReponses = {
-    valeur: question.reponseDonnee.reponseUnique,
-    reponses: question.reponseDonnee.reponsesMultiples.map((rep) => ({
-      identifiant: rep.identifiant,
-      reponses: [...rep.reponses],
-    })),
+  const autresReponses: RepresentationReponseDonnee = {
+    valeur: null,
+    reponses: [],
   };
+  if (estReponseMultiple(question.reponseDonnee.reponse)) {
+    autresReponses.valeur = question.reponseDonnee.reponse.identifiant;
+    autresReponses.reponses = question.reponseDonnee.reponse.reponses.map(
+      (rep) => ({ identifiant: rep.identifiant, reponses: [...rep.reponses] }),
+    );
+  }
+  if (estReponseSimple(question.reponseDonnee.reponse)) {
+    autresReponses.valeur = question.reponseDonnee.reponse;
+  }
+  if (estReponseLibre(question.reponseDonnee.reponse)) {
+    autresReponses.valeur = question.reponseDonnee.reponse.identifiant;
+    autresReponses.reponses = [question.reponseDonnee.reponse.reponse];
+  }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { reponseDonnee, ...reste } = { ...question };
   return { autresReponses, reste };

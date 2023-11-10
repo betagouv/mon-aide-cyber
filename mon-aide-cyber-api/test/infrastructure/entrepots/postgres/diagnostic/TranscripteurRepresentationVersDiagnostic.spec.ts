@@ -17,9 +17,8 @@ import {
 } from '../../../../constructeurs/constructeurDiagnostic';
 import {
   Diagnostic,
+  estReponseMultiple,
   QuestionDiagnostic,
-  ReponseLibre,
-  ReponseMultiple,
 } from '../../../../../src/diagnostic/Diagnostic';
 
 describe('Transcripteur représentation vers diagnostic', () => {
@@ -114,16 +113,6 @@ describe('Transcripteur représentation vers diagnostic', () => {
   });
 
   const versDTO = (diagnostic: Diagnostic) => {
-    const estReponseMultiple = (
-      reponse: string | ReponseLibre | ReponseMultiple | null | undefined,
-    ): reponse is ReponseMultiple => {
-      return (
-        reponse !== undefined &&
-        (reponse as ReponseMultiple).identifiant !== undefined &&
-        (reponse as ReponseMultiple).reponses !== undefined &&
-        (reponse as ReponseMultiple).reponses !== null
-      );
-    };
     function reponsesMultiples(
       question: QuestionDiagnostic,
     ): RepresentationReponsesMultiplesDTO[] {

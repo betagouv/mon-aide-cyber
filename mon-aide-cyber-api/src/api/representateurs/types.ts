@@ -24,19 +24,19 @@ export type RepresentationDiagnostic = {
   referentiel: RepresentationReferentiel;
   actions: Action[];
 };
+export type RepresentationQuestionTiroir =
+  | Omit<RepresentationQuestionChoixUnique, 'reponseDonnee'>
+  | Omit<RepresentationQuestionChoixMultiple, 'reponseDonnee'>;
 export type RepresentationReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
-  questions?: (
-    | RepresentationQuestionChoixUnique
-    | RepresentationQuestionChoixMultiple
-  )[];
+  questions?: RepresentationQuestionTiroir[];
   type?: { type: TypeDeSaisie; format: Format };
 };
-type RepresentationReponseDonnee = {
+export type RepresentationReponseDonnee = {
   valeur: string | null;
-  reponses: { identifiant: string; reponses: string[] }[];
+  reponses: ({ identifiant: string; reponses: string[] } | string)[];
 };
 export type RepresentationQuestion = {
   identifiant: string;
@@ -48,7 +48,7 @@ export type RepresentationQuestion = {
 export type RepresentationQuestionChoixMultiple = RepresentationQuestion & {
   type?: Exclude<TypeDeSaisie, 'choixUnique'> | undefined;
 };
-type RepresentationQuestionChoixUnique = RepresentationQuestion & {
+export type RepresentationQuestionChoixUnique = RepresentationQuestion & {
   type?: Exclude<TypeDeSaisie, 'choixMultiple'> | undefined;
 };
 export type RepresentationContexte = {

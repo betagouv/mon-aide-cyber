@@ -8,21 +8,21 @@ import {
   Referentiel,
   ReponsePossible,
   TypeQuestion,
-} from "../../src/diagnostic/Referentiel";
-import { fakerFR as faker } from "@faker-js/faker";
-import { Constructeur } from "./constructeur";
-import { aseptise } from "../utilitaires/aseptise";
-import { Note } from "../../src/diagnostic/Note";
+} from '../../src/diagnostic/Referentiel';
+import { fakerFR as faker } from '@faker-js/faker';
+import { Constructeur } from './constructeur';
+import { aseptise } from '../utilitaires/aseptise';
+import { Note } from '../../src/diagnostic/Note';
 
 class ConstructeurReferentiel implements Constructeur<Referentiel> {
   thematique: { [clef: string]: QuestionsThematique } = {
-    ["contexte"]: { questions: [] },
+    ['contexte']: { questions: [] },
   };
 
   ajouteUneQuestionAuContexte(
     question: QuestionChoixUnique | QuestionChoixMultiple,
   ): ConstructeurReferentiel {
-    this.thematique["contexte"].questions.push(question);
+    this.thematique['contexte'].questions.push(question);
     return this;
   }
 
@@ -56,9 +56,9 @@ class ConstructeurQuestion
   implements Constructeur<QuestionChoixUnique | QuestionChoixMultiple>
 {
   private question: QuestionChoixUnique | QuestionChoixMultiple = {
-    type: "choixUnique",
+    type: 'choixUnique',
     identifiant: faker.string.alpha(10),
-    libelle: "Quelle est la réponse?",
+    libelle: 'Quelle est la réponse?',
     reponsesPossibles: [
       {
         identifiant: faker.string.alpha(10),
@@ -95,7 +95,7 @@ class ConstructeurQuestion
     this.question.reponsesPossibles = [];
     this.question.libelle = libelleQuestion;
     this.question.identifiant = aseptise(libelleQuestion);
-    this.question.type = "choixMultiple";
+    this.question.type = 'choixMultiple';
     reponsesPossibles.forEach((reponse, index) =>
       this.question.reponsesPossibles.push({
         identifiant: reponse.identifiant,
@@ -178,32 +178,32 @@ class ConstructeurListeDeQuestions
 class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
   private identifiant: string = faker.string.alpha(10);
   private libelle: string = faker.word.words();
-  private reponsesPossibles: Omit<ReponsePossible, "questions">[] = [];
-  private type: TypeQuestion = "choixUnique";
+  private reponsesPossibles: Omit<ReponsePossible, 'questions'>[] = [];
+  private type: TypeQuestion = 'choixUnique';
 
   aChoixMultiple = (libelle: string): ConstructeurQuestionATiroir => {
     this.libelle = libelle;
     this.identifiant = aseptise(libelle);
-    this.type = "choixMultiple";
+    this.type = 'choixMultiple';
     return this;
   };
 
   avecReponsesPossibles = (
     reponsePossibles: ReponsePossible[],
   ): ConstructeurQuestionATiroir => {
-    this.reponsesPossibles = reponsePossibles.map((reponse, index) => ({
-      identifiant: reponse.identifiant,
-      libelle: reponse.libelle,
-      ordre: index,
-      ...(reponse.resultat && { resultat: reponse.resultat }),
-    }));
+    this.reponsesPossibles = reponsePossibles.map((reponse, index) => {
+      reponse.ordre = index;
+      return {
+        ...reponse,
+      };
+    });
     return this;
   };
 
   aChoixUnique = (libelle: string): ConstructeurQuestionATiroir => {
     this.libelle = libelle;
     this.identifiant = aseptise(libelle);
-    this.type = "choixUnique";
+    this.type = 'choixUnique';
     return this;
   };
 
