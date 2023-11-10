@@ -6,7 +6,8 @@ import {
   uneReponsePossible,
   unReferentiel,
 } from '../../../constructeurs/constructeurReferentiel';
-import { EntrepotDiagnosticPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotDiagnosticPostgres';
+import { EntrepotDiagnosticPostgres } from '../../../../src/infrastructure/entrepots/postgres/diagnostic/EntrepotDiagnosticPostgres';
+import { ReponseDonnee } from '../../../../src/diagnostic/Diagnostic';
 
 describe('Entrepot Diagnostic Postgres', () => {
   afterEach(async () => {
@@ -47,11 +48,31 @@ describe('Entrepot Diagnostic Postgres', () => {
 
     await new EntrepotDiagnosticPostgres().persiste(diagnostic);
 
-    const entrepotDiagnosticPostgresLecture =
-      await new EntrepotDiagnosticPostgres();
+    const diagnosticLu = await new EntrepotDiagnosticPostgres().lis(
+      diagnostic.identifiant,
+    );
+    expect(diagnosticLu.identifiant).toStrictEqual(diagnostic.identifiant);
+    expect(diagnosticLu.recommandations).toStrictEqual(
+      diagnostic.recommandations,
+    );
+    expect(diagnosticLu.tableauDesRecommandations).toStrictEqual(
+      diagnostic.tableauDesRecommandations,
+    );
     expect(
-      await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant),
-    ).toStrictEqual(diagnostic);
+      diagnosticLu.referentiel['question-set'].questions[0].reponseDonnee,
+    ).toStrictEqual<ReponseDonnee>({
+      reponse: {
+        identifiant: null,
+        reponses: [
+          {
+            identifiant: 'sauvegardestu-les-set',
+            reponses: new Set(['un-peu', 'beaucoup']),
+          },
+        ],
+      },
+      reponseUnique: null,
+      reponsesMultiples: [],
+    });
   });
 
   it('persiste un diagnostic avec les réponses données avec le nouveau modèle de réponse ', async () => {

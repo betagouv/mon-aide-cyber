@@ -101,6 +101,45 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   }
 }
 
+class ConstructeurNouvelleReponseDonnee implements Constructeur<ReponseDonnee> {
+  private reponse: string | ReponseLibre | ReponseMultiple | null = null;
+
+  reponseSimple(reponse: string): ConstructeurNouvelleReponseDonnee {
+    this.reponse = reponse;
+    return this;
+  }
+
+  reponseLibre(
+    identifiant: string,
+    reponse: string,
+  ): ConstructeurNouvelleReponseDonnee {
+    this.reponse = { identifiant, reponse };
+    return this;
+  }
+
+  reponseMultiple(
+    identifiant: string,
+    reponses: { identifiant: string; reponses: string[] }[],
+  ): ConstructeurNouvelleReponseDonnee {
+    this.reponse = {
+      identifiant,
+      reponses: reponses.map((rep) => ({
+        ...rep,
+        reponses: new Set(rep.reponses),
+      })),
+    };
+    return this;
+  }
+
+  construis(): ReponseDonnee {
+    return {
+      reponse: this.reponse,
+      reponseUnique: null,
+      reponsesMultiples: [],
+    };
+  }
+}
+
 class ConstructeurReponseDonnee implements Constructeur<ReponseDonnee> {
   private reponseUnique: string | null = null;
   private reponsesMultiples: ReponsesMultiples[] = [];
@@ -134,15 +173,6 @@ class ConstructeurReponseDonnee implements Constructeur<ReponseDonnee> {
   }
 
   construis(): ReponseDonnee {
-    // let reponse;
-    // if (this.reponsesMultiples.length === 0) {
-    //   reponse = this.reponseUnique;
-    // } else {
-    //   reponse = {
-    //     identifiant: this.reponseUnique,
-    //     reponses: this.reponsesMultiples,
-    //   };
-    // }
     return {
       reponseUnique: this.reponseUnique,
       reponsesMultiples: this.reponsesMultiples,
@@ -207,3 +237,6 @@ export const uneQuestionDiagnostic = () => new ConstructeurQuestionDiagnostic();
 
 export const uneReponseDonnee = (): ConstructeurReponseDonnee =>
   new ConstructeurReponseDonnee();
+
+export const uneNouvelleReponseDonnee = (): ConstructeurNouvelleReponseDonnee =>
+  new ConstructeurNouvelleReponseDonnee();

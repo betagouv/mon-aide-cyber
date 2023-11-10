@@ -1,7 +1,7 @@
 import { Entrepots } from '../../../domaine/Entrepots';
 import { EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
-import { EntrepotDiagnosticPostgres } from './EntrepotDiagnosticPostgres';
 import { EntrepotAidant } from '../../../authentification/Aidant';
+import { EntrepotDiagnosticPostgres } from './diagnostic/EntrepotDiagnosticPostgres';
 
 export class EntrepotsPostgres implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
