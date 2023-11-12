@@ -808,14 +808,14 @@ export const donneesContexte: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-0-et-20',
-          libelle: 'Entre 0 et 20',
+            'contexte-nombre-personnes-dans-organisation-entre-0-et-10',
+          libelle: 'Entre 0 et 10',
           ordre: 0,
         },
         {
           identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-20-et-50',
-          libelle: 'Entre 20 et 50',
+            'contexte-nombre-personnes-dans-organisation-entre-10-et-50',
+          libelle: 'Entre 10 et 50',
           ordre: 1,
         },
         {
@@ -851,14 +851,14 @@ export const donneesContexte: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-0-et-20',
-          libelle: 'Entre 0 et 20',
+            'contexte-nombre-postes-travail-dans-organisation-entre-0-et-10',
+          libelle: 'Entre 0 et 10',
           ordre: 0,
         },
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-20-et-50',
-          libelle: 'Entre 20 et 50',
+            'contexte-nombre-postes-travail-dans-organisation-entre-10-et-50',
+          libelle: 'Entre 10 et 50',
           ordre: 1,
         },
         {

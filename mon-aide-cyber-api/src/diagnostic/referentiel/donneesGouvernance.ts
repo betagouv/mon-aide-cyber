@@ -153,7 +153,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-detaille',
           libelle:
-            "'Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industrielles, installations matériels connectés et des interconnexions vers l'extérieur.",
+            "Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industrielles, installations matériels connectés et des interconnexions vers l'extérieur.",
           resultat: {
             note: 3,
           },
