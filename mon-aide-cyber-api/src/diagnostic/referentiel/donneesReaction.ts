@@ -134,7 +134,7 @@ export const donneesReaction: QuestionsThematique = {
                     "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-oui",
                   libelle: "Oui",
                   resultat: {
-                    note: 2.5,
+                    note: 3,
                     recommandations: [
                       {
                         identifiant:
@@ -144,14 +144,6 @@ export const donneesReaction: QuestionsThematique = {
                     ],
                   },
                   ordre: 3,
-                },
-                {
-                  identifiant:
-                    "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-oui-jeu-chiffre",
-                  libelle:
-                    "Oui, et le jeu de sauvegarde externalisé est chiffré",
-                  resultat: { note: 3 },
-                  ordre: 4,
                 },
               ],
               type: "choixUnique",
@@ -257,7 +249,7 @@ export const donneesReaction: QuestionsThematique = {
                     "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-oui",
                   libelle: "Oui",
                   resultat: {
-                    note: 2.5,
+                    note: 3,
                     recommandations: [
                       {
                         identifiant:
@@ -267,14 +259,6 @@ export const donneesReaction: QuestionsThematique = {
                     ],
                   },
                   ordre: 3,
-                },
-                {
-                  identifiant:
-                    "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-oui-jeu-chiffre",
-                  libelle:
-                    "Oui, et le jeu de sauvegarde externalisé est chiffré",
-                  resultat: { note: 3 },
-                  ordre: 4,
                 },
               ],
               type: "choixUnique",
