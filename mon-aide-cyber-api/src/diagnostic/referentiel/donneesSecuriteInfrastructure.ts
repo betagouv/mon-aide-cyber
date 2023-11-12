@@ -182,7 +182,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-si-industriel-pare-feu-deploye-oui-segmentation-stricte',
           libelle:
-            "Oui, une segmentation réseau stricte a été mis en œuvre pour isoler l'environnement industriel de l'environnement bureautique (hors besoin métier justifié).",
+            "Oui, une segmentation réseau stricte a été mise en œuvre pour isoler l'environnement industriel de l'environnement bureautique (hors besoin métier justifié).",
           resultat: { note: 3 },
           ordre: 4,
         },
@@ -249,7 +249,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
       identifiant:
         'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees',
       libelle:
-        "Les mises à jour fonctionnelles et de sécurité des systèmes d'exploitation des serveurs, services et logiciels d'admnistration sont-elles déployées ?",
+        "Les mises à jour fonctionnelles et de sécurité des systèmes d'exploitation des serveurs, services et logiciels d'administration sont-elles déployées ?",
       reponsesPossibles: [
         {
           identifiant:
@@ -365,7 +365,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
     },
     {
       identifiant: 'securite-infrastructure-acces-wifi-securises',
-      libelle: 'Les points d’accès wifi sont-ils sécurisés?',
+      libelle: 'Les points d’accès wifi sont-ils sécurisés ?',
       reponsesPossibles: [
         {
           identifiant: 'securite-infrastructure-acces-wifi-securises-na',
