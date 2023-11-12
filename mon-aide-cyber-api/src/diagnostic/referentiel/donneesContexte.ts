@@ -255,7 +255,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-departement-tom-siege-social',
       libelle:
-        "Dans quel département, ou Territoire d'Outre Mer, votre siège social est-il basé ?",
+        "Dans quel département, ou collectivité d'outre-mer, votre siège social est-il basé ?",
       reponsesPossibles: [
         {
           identifiant: 'contexte-departement-tom-siege-social-ain',
@@ -768,6 +768,36 @@ export const donneesContexte: QuestionsThematique = {
           identifiant: 'contexte-departement-tom-siege-social-mayotte',
           libelle: 'Mayotte',
           ordre: 976,
+        },
+        {
+          identifiant: 'contexte-departement-tom-siege-social-saintmartin',
+          libelle: 'Collectivité de Saint-Martin',
+          ordre: 977,
+        },
+        {
+          identifiant: 'contexte-departement-tom-siege-social-saintbarthélémy',
+          libelle: 'Collectivité de Saint-Barthélémy',
+          ordre: 978,
+        },
+        {
+          identifiant: 'contexte-departement-tom-siege-social-saintpierreetmiquelon',
+          libelle: 'Collectivité de Saint-Pierre et Miquelon',
+          ordre: 979,
+        },
+        {
+          identifiant: 'contexte-departement-tom-siege-social-wallisetfutuna',
+          libelle: 'Collectivité de Wallis & Futuna',
+          ordre: 980,
+        },
+        {
+          identifiant: 'contexte-departement-tom-siege-social-polynésiefrançaise',
+          libelle: 'Collectivité de Polynésie Française',
+          ordre: 981,
+        },
+        {
+          identifiant: 'contexte-departement-tom-siege-social-nouvellecalédonie',
+          libelle: 'Collectivité de Nouvelle-Calédonie',
+          ordre: 982,
         },
       ],
       type: 'choixUnique',
