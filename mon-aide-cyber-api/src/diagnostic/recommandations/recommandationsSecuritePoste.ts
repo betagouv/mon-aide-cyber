@@ -87,7 +87,7 @@ export const recommandationsSecuritePoste = {
   'securite-poste-outils-complementaires-securisation': {
     niveau1: {
       titre:
-        'Mettre en place des outils complémentaires de sécurisation des postes de travail.',
+        'Mettre en œuvre une solution de type EDR (Endpoint Detection & Response)',
       pourquoi:
         'recommandations/postes/securite-poste-outils-complementaires-securisation-niveau1-pourquoi.pug',
       comment:

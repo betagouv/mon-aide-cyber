@@ -264,7 +264,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     {
       identifiant: 'securite-poste-outils-complementaires-securisation',
       libelle:
-        'Des outils complémentaires de sécurisation des postes de travail et de la navigation internet sont-ils en place ?',
+        'Un outil complémentaire à un antivirus de type EDR a-t-il était mis en place ?',
       reponsesPossibles: [
         {
           identifiant: 'securite-poste-outils-complementaires-securisation-nsp',
@@ -288,27 +288,11 @@ export const donneesSecuritePoste: QuestionsThematique = {
         },
         {
           identifiant:
-            'securite-poste-outils-complementaires-securisation-oui-filtrage-acces-internet',
-          libelle: 'Oui, un filtrage des accès internet est réalisé.',
-          resultat: {
-            note: 1,
-            recommandations: [
-              {
-                identifiant:
-                  'securite-poste-outils-complementaires-securisation',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
             'securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr',
           libelle:
             'Oui, un outil complémentaire à un antivirus de type EDR a été mis en place.',
           resultat: { note: 3 },
-          ordre: 3,
+          ordre: 2,
         },
       ],
       type: 'choixUnique',
