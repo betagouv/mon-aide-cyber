@@ -40,13 +40,13 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 0,
         },
         {
-          identifiant: "contexte-secteur-activite-agriculture",
-          libelle: "Agriculture, sylviculture",
+          identifiant: 'contexte-secteur-activite-agriculture',
+          libelle: 'Agriculture, sylviculture',
           ordre: 1,
         },
         {
-          identifiant: "contexte-secteur-activite-agroalimentaire",
-          libelle: "Agroalimentaire",
+          identifiant: 'contexte-secteur-activite-agroalimentaire',
+          libelle: 'Agroalimentaire',
           ordre: 2,
         },
         {
@@ -55,8 +55,8 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 3,
         },
         {
-          identifiant: "contexte-secteur-activite-industrie-defense",
-          libelle: "Industrie de défense",
+          identifiant: 'contexte-secteur-activite-industrie-defense',
+          libelle: 'Industrie de défense',
           ordre: 4,
         },
         {
@@ -118,31 +118,30 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 15,
         },
         {
-          identifiant:
-            "contexte-secteur-activite-recherche",
-          libelle: "Recherche, laboratoire",
+          identifiant: 'contexte-secteur-activite-recherche',
+          libelle: 'Recherche, laboratoire',
           ordre: 16,
         },
         {
           identifiant:
-            "contexte-secteur-activite-sante-humaine-et-action-sociale",
-          libelle: "Santé humaine et action sociale",
+            'contexte-secteur-activite-sante-humaine-et-action-sociale',
+          libelle: 'Santé humaine et action sociale',
           ordre: 17,
         },
         {
           identifiant:
-            "contexte-secteur-activite-arts-spectacles-et-activites-recreatives",
-          libelle: "Arts, spectacles et activités récréatives",
+            'contexte-secteur-activite-arts-spectacles-et-activites-recreatives',
+          libelle: 'Arts, spectacles et activités récréatives',
           ordre: 18,
         },
         {
-          identifiant: "contexte-secteur-activite-autres-activites-de-services",
-          libelle: "Autres activités de services",
+          identifiant: 'contexte-secteur-activite-autres-activites-de-services',
+          libelle: 'Autres activités de services',
           ordre: 19,
         },
         {
-          identifiant: "contexte-secteur-activite-services-aux-menages",
-          libelle: "Services aux ménages",
+          identifiant: 'contexte-secteur-activite-services-aux-menages',
+          libelle: 'Services aux ménages',
           ordre: 20,
         },
         {
@@ -808,39 +807,27 @@ export const donneesContexte: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-0-et-10',
-          libelle: 'Entre 0 et 10',
+            'contexte-nombre-personnes-dans-organisation-entre-0-et-9',
+          libelle: 'Entre 0 et 9',
           ordre: 0,
         },
         {
           identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-10-et-50',
-          libelle: 'Entre 10 et 50',
+            'contexte-nombre-personnes-dans-organisation-entre-10-et-49',
+          libelle: 'Entre 10 et 49',
           ordre: 1,
         },
         {
           identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-50-et-100',
-          libelle: 'Entre 50 et 100',
+            'contexte-nombre-personnes-dans-organisation-entre-50-et-249',
+          libelle: 'Entre 50 et 249',
           ordre: 2,
         },
         {
           identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-100-et-200',
-          libelle: 'Entre 100 et 200',
-          ordre: 3,
-        },
-        {
-          identifiant:
-            'contexte-nombre-personnes-dans-organisation-plus-de-200',
-          libelle: 'Plus de 200',
+            'contexte-nombre-personnes-dans-organisation-plus-de-250',
+          libelle: 'Plus de 250',
           ordre: 4,
-        },
-        {
-          identifiant:
-            'contexte-nombre-personnes-dans-organisation-plus-de-500',
-          libelle: 'Plus de 500',
-          ordre: 5,
         },
       ],
       type: 'choixUnique',
@@ -851,26 +838,26 @@ export const donneesContexte: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-0-et-10',
-          libelle: 'Entre 0 et 10',
+            'contexte-nombre-postes-travail-dans-organisation-entre-0-et-19',
+          libelle: 'Entre 0 et 19',
           ordre: 0,
         },
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-10-et-50',
-          libelle: 'Entre 10 et 50',
+            'contexte-nombre-postes-travail-dans-organisation-entre-20-et-49',
+          libelle: 'Entre 20 et 49',
           ordre: 1,
         },
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-50-et-100',
-          libelle: 'Entre 50 et 100',
+            'contexte-nombre-postes-travail-dans-organisation-entre-50-et-99',
+          libelle: 'Entre 50 et 99',
           ordre: 2,
         },
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-100-et-200',
-          libelle: 'Entre 100 et 200',
+            'contexte-nombre-postes-travail-dans-organisation-entre-100-et-199',
+          libelle: 'Entre 100 et 199',
           ordre: 3,
         },
         {
@@ -878,12 +865,6 @@ export const donneesContexte: QuestionsThematique = {
             'contexte-nombre-postes-travail-dans-organisation-plus-de-200',
           libelle: 'Plus de 200',
           ordre: 4,
-        },
-        {
-          identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-plus-de-500',
-          libelle: 'Plus de 500',
-          ordre: 5,
         },
       ],
       type: 'choixUnique',
@@ -935,8 +916,8 @@ export const donneesContexte: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: "contexte-cyber-attaque-subie",
-      libelle: "Avez-vous déjà subi une cyberattaque ?",
+      identifiant: 'contexte-cyber-attaque-subie',
+      libelle: 'Avez-vous déjà subi une cyberattaque ?',
       reponsesPossibles: [
         {
           identifiant: 'contexte-cyber-attaque-subie-nsp',
@@ -972,35 +953,29 @@ export const donneesContexte: QuestionsThematique = {
                 },
                 {
                   identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-faux-ordre',
-                  libelle: 'Faux ordre de virement',
-                  ordre: 2,
-                },
-                {
-                  identifiant:
                     'contexte-cyber-attaque-subie-oui-tiroir-type-accès',
                   libelle: "Compromission d'un ou plusieurs accès distants",
-                  ordre: 3,
+                  ordre: 2,
                 },
                 {
                   identifiant:
                     'contexte-cyber-attaque-subie-oui-tiroir-type-web',
                   libelle: "Compromission d'un ou plusieurs services web",
-                  ordre: 4,
+                  ordre: 3,
                 },
                 {
                   identifiant:
                     'contexte-cyber-attaque-subie-oui-tiroir-type-réseaux',
                   libelle:
                     "Compromission d'un ou plusieurs équipements réseaux",
-                  ordre: 5,
+                  ordre: 4,
                 },
                 {
                   identifiant:
                     'contexte-cyber-attaque-subie-oui-tiroir-type-serveur',
                   libelle:
                     "Compromission d'un serveur ou service exposé sur internet",
-                  ordre: 6,
+                  ordre: 5,
                 },
               ],
               type: 'choixMultiple',
