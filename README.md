@@ -15,6 +15,7 @@ Commencer par récupérer les sources du projet et aller dans le répertoire cr�
 ```sh
 $ git clone git@github.com:betagouv/mon-aide-cyber.git && cd mon-aide-cyber
 ```
+
 Rajouter le réseau commun à l'application et au journal (s'il n'existe pas déjà) :
 
 ```sh
@@ -41,3 +42,9 @@ Les tests sont lancés manuellement et nécessitent une première installation d
 
 - `npm run test` lance les tests de l'`api` et du `front`
 - `npm run test:watch` lance les tests à chaque modification de fichier de l'`api` et du `front`
+
+## Activations de fonctionnalités
+
+### mon-aide-cyber-ui
+
+- `VITE_ACTIVATION_LANCEMENT_DIAGNOSTIC` à true pour pouvoir afficher le bouton de lancement
