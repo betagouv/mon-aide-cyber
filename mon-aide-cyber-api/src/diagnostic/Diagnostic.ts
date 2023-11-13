@@ -28,7 +28,6 @@ type TypesDeReponseDonnee =
   | undefined;
 
 type ReponseDonnee = {
-  reponsesMultiples: ReponsesMultiples[];
   reponseUnique: string | ReponseLibre | null;
   reponse?: TypesDeReponseDonnee;
 };
@@ -83,7 +82,6 @@ const initialiseDiagnostic = (
               ...q,
               reponseDonnee: {
                 reponseUnique: null,
-                reponsesMultiples: [],
               },
             }) as QuestionDiagnostic,
         ),

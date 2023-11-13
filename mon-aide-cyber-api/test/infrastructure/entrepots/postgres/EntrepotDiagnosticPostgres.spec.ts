@@ -1,5 +1,8 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { unDiagnostic } from '../../../constructeurs/constructeurDiagnostic';
+import {
+  unAncienDiagnostic,
+  unDiagnostic,
+} from '../../../constructeurs/constructeurDiagnostic';
 import { nettoieLaBaseDeDonnees } from '../../../utilitaires/nettoyeurBDD';
 import {
   uneQuestion,
@@ -8,6 +11,7 @@ import {
 } from '../../../constructeurs/constructeurReferentiel';
 import { EntrepotDiagnosticPostgres } from '../../../../src/infrastructure/entrepots/postgres/diagnostic/EntrepotDiagnosticPostgres';
 import { ReponseDonnee } from '../../../../src/diagnostic/Diagnostic';
+import { EntrepotAncienDiagnosticPostgres } from './diagnostic/AncienDiagnostic';
 
 describe('Entrepot Diagnostic Postgres', () => {
   afterEach(async () => {
@@ -26,7 +30,7 @@ describe('Entrepot Diagnostic Postgres', () => {
   });
 
   it("persiste un diagnostic avec les réponses données correspondant à l'ancien modèle", async () => {
-    const diagnostic = unDiagnostic()
+    const diagnostic = unAncienDiagnostic()
       .avecUnReferentiel(
         unReferentiel()
           .sansThematique()
@@ -46,7 +50,7 @@ describe('Entrepot Diagnostic Postgres', () => {
       ])
       .construis();
 
-    await new EntrepotDiagnosticPostgres().persiste(diagnostic);
+    await new EntrepotAncienDiagnosticPostgres().persiste(diagnostic);
 
     const diagnosticLu = await new EntrepotDiagnosticPostgres().lis(
       diagnostic.identifiant,
@@ -71,7 +75,6 @@ describe('Entrepot Diagnostic Postgres', () => {
         ],
       },
       reponseUnique: null,
-      reponsesMultiples: [],
     });
   });
 

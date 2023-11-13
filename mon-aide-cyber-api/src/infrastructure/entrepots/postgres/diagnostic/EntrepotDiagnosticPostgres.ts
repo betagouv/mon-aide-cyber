@@ -55,8 +55,8 @@ export type RepresentationReponseMultipleDTO = Omit<
 > & {
   reponses: RepresentationReponsesMultiplesDTO[];
 };
-type ReponseDonneeDTO = Omit<ReponseDonnee, 'reponsesMultiples'> & {
-  reponsesMultiples: RepresentationReponsesMultiplesDTO[];
+type ReponseDonneeDTO = ReponseDonnee & {
+  reponsesMultiples?: RepresentationReponsesMultiplesDTO[];
   reponse?:
     | string
     | ReponseLibre

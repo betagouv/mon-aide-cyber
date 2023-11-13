@@ -32,12 +32,6 @@ export class TranscripteurDiagnosticVersRepresentation
                 ...question,
                 reponseDonnee: {
                   ...question.reponseDonnee,
-                  reponsesMultiples:
-                    question.reponseDonnee.reponsesMultiples.map((rep) => ({
-                      ...rep,
-                      reponses: (<E = Set<string>, S = string[]>(reponses: E) =>
-                        Array.from(reponses as Set<string>) as S)(rep.reponses),
-                    })),
                   reponse: reponseTranscrite,
                 },
               };
@@ -46,13 +40,6 @@ export class TranscripteurDiagnosticVersRepresentation
               ...question,
               reponseDonnee: {
                 ...question.reponseDonnee,
-                reponsesMultiples: question.reponseDonnee.reponsesMultiples.map(
-                  (rep) => ({
-                    ...rep,
-                    reponses: (<E = Set<string>, S = string[]>(reponses: E) =>
-                      Array.from(reponses as Set<string>) as S)(rep.reponses),
-                  }),
-                ),
               },
             };
           }),

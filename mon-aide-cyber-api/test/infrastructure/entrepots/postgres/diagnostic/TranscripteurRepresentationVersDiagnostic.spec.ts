@@ -67,52 +67,63 @@ describe('Transcripteur représentation vers diagnostic', () => {
     expect(diagnosticTranscris).toStrictEqual(diagnostic);
   });
 
-  it('transcris une représentation avec une question à tiroir à choix multiple', () => {
-    const question = uneQuestion()
-      .aChoixUnique('q')
-      .avecReponsesPossibles([
-        uneReponsePossible()
-          .avecLibelle('Réponse')
-          .ajouteUneQuestionATiroir(
-            uneQuestionATiroir()
-              .aChoixMultiple('Parmi les réponses')
-              .avecReponsesPossibles([
-                uneReponsePossible().avecLibelle('1').construis(),
-                uneReponsePossible().avecLibelle('2').construis(),
-                uneReponsePossible().avecLibelle('3').construis(),
-              ])
-              .construis(),
-          )
-          .construis(),
-      ])
-      .construis();
-    const reponseDonnee = uneNouvelleReponseDonnee()
-      .reponseMultiple('reponse', [
-        { identifiant: 'parmi-les-reponses', reponses: ['2', '3'] },
-      ])
-      .construis();
-    const diagnostic = unDiagnostic()
-      .avecUnReferentiel(
-        unReferentiel()
-          .sansThematique()
-          .ajouteUneThematique('thematique1', [question])
-          .construis(),
-      )
-      .ajouteUneReponseDonnee(
-        { thematique: 'thematique1', question: 'q' },
-        reponseDonnee,
-      )
-      .construis();
+  it.each([false, true])(
+    'transcris une représentation avec une question à tiroir à choix multiple',
+    (ancienneReponsesMultiplesOptionnelles) => {
+      const question = uneQuestion()
+        .aChoixUnique('q')
+        .avecReponsesPossibles([
+          uneReponsePossible()
+            .avecLibelle('Réponse')
+            .ajouteUneQuestionATiroir(
+              uneQuestionATiroir()
+                .aChoixMultiple('Parmi les réponses')
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle('1').construis(),
+                  uneReponsePossible().avecLibelle('2').construis(),
+                  uneReponsePossible().avecLibelle('3').construis(),
+                ])
+                .construis(),
+            )
+            .construis(),
+        ])
+        .construis();
+      const reponseDonnee = uneNouvelleReponseDonnee()
+        .reponseMultiple('reponse', [
+          { identifiant: 'parmi-les-reponses', reponses: ['2', '3'] },
+        ])
+        .construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .sansThematique()
+            .ajouteUneThematique('thematique1', [question])
+            .construis(),
+        )
+        .ajouteUneReponseDonnee(
+          { thematique: 'thematique1', question: 'q' },
+          reponseDonnee,
+        )
+        .construis();
 
-    const diagnosticDTO: DiagnosticDTO = versDTO(diagnostic);
+      const diagnosticDTO: DiagnosticDTO = versDTO(
+        diagnostic,
+        ancienneReponsesMultiplesOptionnelles,
+      );
 
-    const diagnosticTranscris =
-      new TranscripteurRepresentationVersDiagnostic().transcris(diagnosticDTO);
+      const diagnosticTranscris =
+        new TranscripteurRepresentationVersDiagnostic().transcris(
+          diagnosticDTO,
+        );
 
-    expect(diagnosticTranscris).toStrictEqual(diagnostic);
-  });
+      expect(diagnosticTranscris).toStrictEqual(diagnostic);
+    },
+  );
 
-  const versDTO = (diagnostic: Diagnostic) => {
+  const versDTO = (
+    diagnostic: Diagnostic,
+    ancienneReponsesMultiplesOptionnelles = false,
+  ) => {
     function reponsesMultiples(
       question: QuestionDiagnostic,
     ): RepresentationReponsesMultiplesDTO[] {
@@ -137,7 +148,12 @@ describe('Transcripteur représentation vers diagnostic', () => {
                   questions: questions.questions.map((question) => ({
                     ...question,
                     reponseDonnee: {
-                      reponsesMultiples: reponsesMultiples(question),
+                      ...(!ancienneReponsesMultiplesOptionnelles && {
+                        reponsesMultiples: reponsesMultiples(question),
+                      }),
+                      ...(estReponseMultiple(
+                        question.reponseDonnee.reponse,
+                      ) && { reponse: question.reponseDonnee.reponse }),
                       reponseUnique: estReponseMultiple(
                         question.reponseDonnee.reponse,
                       )

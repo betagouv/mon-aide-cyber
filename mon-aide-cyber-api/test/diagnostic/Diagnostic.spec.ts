@@ -2,7 +2,7 @@ import { describe, expect } from 'vitest';
 import { unTableauDeRecommandations } from '../constructeurs/constructeurTableauDeRecommandations';
 import {
   unDiagnostic,
-  uneReponseDonnee,
+  uneNouvelleReponseDonnee,
 } from '../constructeurs/constructeurDiagnostic';
 import {
   uneListeDeQuestions,
@@ -581,9 +581,8 @@ describe('Diagnostic', () => {
             )
             .ajouteUneReponseDonnee(
               { thematique: 'multiple', question: 'q1' },
-              uneReponseDonnee()
-                .ayantPourReponse('reponse-3')
-                .avecDesReponsesMultiples([
+              uneNouvelleReponseDonnee()
+                .reponseMultiple('reponse-3', [
                   {
                     identifiant: 'question-31',
                     reponses: ['reponse-310'],

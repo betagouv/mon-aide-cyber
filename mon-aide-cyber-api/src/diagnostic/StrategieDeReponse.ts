@@ -15,7 +15,6 @@ class StrategieChaineDeCaractere implements Strategie {
   applique(questionTrouvee: QuestionDiagnostic): void {
     questionTrouvee.reponseDonnee = {
       reponseUnique: this.reponse,
-      reponsesMultiples: [],
       reponse: this.reponse,
     };
   }
@@ -27,10 +26,6 @@ class StrategieQuestionATiroir implements Strategie {
   applique(questionTrouvee: QuestionDiagnostic): void {
     questionTrouvee.reponseDonnee = {
       reponseUnique: this.reponse.reponse,
-      reponsesMultiples: this.reponse.questions.map((q) => ({
-        identifiant: q.identifiant,
-        reponses: new Set(q.reponses),
-      })),
       reponse: {
         identifiant: this.reponse.reponse,
         reponses: this.reponse.questions.map((q) => ({
@@ -51,12 +46,6 @@ class StrategieReponsesMultiples implements Strategie {
   applique(questionTrouvee: QuestionDiagnostic): void {
     questionTrouvee.reponseDonnee = {
       reponseUnique: null,
-      reponsesMultiples: [
-        {
-          identifiant: this.identifiant,
-          reponses: new Set(this.reponse as string[]),
-        },
-      ],
       reponse: {
         identifiant: null,
         reponses: [
@@ -79,7 +68,6 @@ class StrategieReponseLibre implements Strategie {
         identifiant: this.reponse.identifiant,
         reponse: this.reponse.valeur,
       },
-      reponsesMultiples: [],
       reponse: {
         identifiant: this.reponse.identifiant,
         reponse: this.reponse.valeur,

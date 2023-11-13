@@ -25,12 +25,6 @@ describe('Stratégie de réponse', () => {
 
       expect(question.reponseDonnee).toStrictEqual<ReponseDonnee>({
         reponseUnique: null,
-        reponsesMultiples: [
-          {
-            identifiant: question.identifiant,
-            reponses: new Set(['reponse-2', 'reponse-1']),
-          },
-        ],
         reponse: {
           identifiant: null,
           reponses: [

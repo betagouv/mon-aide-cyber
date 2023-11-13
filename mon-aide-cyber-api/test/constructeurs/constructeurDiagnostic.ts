@@ -5,7 +5,6 @@ import {
   initialiseDiagnostic,
   QuestionDiagnostic,
   ReponseDonnee,
-  ReponsesMultiples,
   TypesDeReponseDonnee,
 } from '../../src/diagnostic/Diagnostic';
 import {
@@ -16,6 +15,7 @@ import {
 import { TableauDeRecommandations } from '../../src/diagnostic/TableauDeRecommandations';
 import { unTableauDeRecommandations } from './constructeurTableauDeRecommandations';
 import { fakerFR } from '@faker-js/faker';
+import { ConstructeurAncienDiagnostic } from '../infrastructure/entrepots/postgres/diagnostic/AncienDiagnostic';
 
 class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   private referentiel: Referentiel = unReferentiel().construis();
@@ -30,30 +30,6 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     this.referentiel = referentiel;
     return this;
   }
-
-  avecLesReponsesDonnees(
-    thematique: string,
-    reponses: { [question: string]: string | string[] }[],
-  ): ConstructeurDiagnostic {
-    reponses.forEach((rep) => {
-      Object.entries(rep).forEach(([question, valeur]) => {
-        const constructeurReponseDonnee = uneReponseDonnee();
-        if (typeof valeur === 'string') {
-          constructeurReponseDonnee.ayantPourReponse(valeur);
-        } else {
-          constructeurReponseDonnee.avecDesReponsesMultiples([
-            { identifiant: question, reponses: valeur },
-          ]);
-        }
-        this.ajouteUneReponseDonnee(
-          { thematique, question: question },
-          constructeurReponseDonnee.construis(),
-        );
-      });
-    });
-    return this;
-  }
-
   avecLesNouvellesReponsesDonnees(
     thematique: string,
     reponses: { [question: string]: string | string[] }[],
@@ -171,30 +147,13 @@ class ConstructeurNouvelleReponseDonnee implements Constructeur<ReponseDonnee> {
     return {
       reponse: this.reponse,
       reponseUnique: null,
-      reponsesMultiples: [],
     };
   }
 }
 
 class ConstructeurReponseDonnee implements Constructeur<ReponseDonnee> {
   private reponseUnique: string | null = null;
-  private reponsesMultiples: ReponsesMultiples[] = [];
   reponse?: TypesDeReponseDonnee;
-  ayantPourReponse(reponse: string): ConstructeurReponseDonnee {
-    this.reponseUnique = reponse;
-    return this;
-  }
-
-  avecDesReponsesMultiples(
-    reponsesMultiples: { identifiant: string; reponses: string[] }[],
-  ): ConstructeurReponseDonnee {
-    this.reponsesMultiples = reponsesMultiples.map((rep) => ({
-      identifiant: rep.identifiant,
-      reponses: new Set(rep.reponses),
-    }));
-    return this;
-  }
-
   avecUneReponse(
     identifiantQuestion: string,
     valeur: string[],
@@ -211,7 +170,6 @@ class ConstructeurReponseDonnee implements Constructeur<ReponseDonnee> {
   construis(): ReponseDonnee {
     return {
       reponseUnique: this.reponseUnique,
-      reponsesMultiples: this.reponsesMultiples,
       ...(this.reponse && { reponse: this.reponse }),
     };
   }
@@ -225,7 +183,6 @@ class ConstructeurQuestionDiagnostic
   private identifiant = fakerFR.string.alpha(10);
   private reponseDonnee: ReponseDonnee = {
     reponseUnique: null,
-    reponsesMultiples: [],
   };
   private type: TypeQuestion = 'choixMultiple';
 
@@ -268,6 +225,8 @@ class ConstructeurQuestionDiagnostic
 }
 
 export const unDiagnostic = () => new ConstructeurDiagnostic();
+
+export const unAncienDiagnostic = () => new ConstructeurAncienDiagnostic();
 
 export const uneQuestionDiagnostic = () => new ConstructeurQuestionDiagnostic();
 

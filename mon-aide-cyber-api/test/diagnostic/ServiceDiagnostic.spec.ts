@@ -13,7 +13,10 @@ import {
 } from '../../src/diagnostic/ServiceDiagnostic';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { Entrepots } from '../../src/domaine/Entrepots';
-import { QuestionDiagnostic } from '../../src/diagnostic/Diagnostic';
+import {
+  QuestionDiagnostic,
+  ReponseDonnee,
+} from '../../src/diagnostic/Diagnostic';
 import { unTableauDeRecommandations } from '../constructeurs/constructeurTableauDeRecommandations';
 import { AdaptateurTableauDeRecommandationsDeTest } from '../adaptateurs/AdaptateurTableauDeRecommandationsDeTest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
@@ -22,6 +25,7 @@ import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { AggregatNonTrouve } from '../../src/domaine/Aggregat';
 import crypto from 'crypto';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
+import { ReponsePossible } from '../../src/diagnostic/Referentiel';
 
 describe('Le service de diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -78,13 +82,10 @@ describe('Le service de diagnostic', () => {
       const referentielDiagnostic = diagnosticRetourne.referentiel['contexte'];
       expect(
         referentielDiagnostic.questions.map((q) => q.reponseDonnee),
-      ).toMatchObject([
-        { reponseUnique: null, reponsesMultiples: new Set() },
-        { reponseUnique: null, reponsesMultiples: new Set() },
-      ]);
+      ).toStrictEqual([{ reponseUnique: null }, { reponseUnique: null }]);
       expect(
         referentielDiagnostic.questions[1].reponsesPossibles[1],
-      ).toMatchObject({
+      ).toStrictEqual<ReponsePossible>({
         identifiant: reponseAttendue.identifiant,
         libelle: reponseAttendue.libelle,
         ordre: reponseAttendue.ordre,
@@ -149,7 +150,7 @@ describe('Le service de diagnostic', () => {
       );
       expect(
         referentielDiagnostic.questions[1].reponsesPossibles[1].questions?.[1],
-      ).toMatchObject({
+      ).toStrictEqual({
         identifiant: 'autres-reponses-',
         libelle: 'Autres réponses ?',
         reponsesPossibles: [
@@ -202,7 +203,7 @@ describe('Le service de diagnostic', () => {
           libelle: questionAttendue.libelle,
           type: questionAttendue.type,
           reponsesPossibles: questionAttendue.reponsesPossibles,
-          reponseDonnee: { reponseUnique: null, reponsesMultiples: [] },
+          reponseDonnee: { reponseUnique: null },
         },
       ]);
     });
@@ -301,17 +302,20 @@ describe('Le service de diagnostic', () => {
         .lis(diagnostic.identifiant);
       const question = diagnosticRetourne.referentiel.contexte
         .questions[0] as QuestionDiagnostic;
-      expect(question.reponseDonnee).toMatchObject({
+      expect(question.reponseDonnee).toStrictEqual<ReponseDonnee>({
         reponseUnique: reponseAvecQuestionATiroir.identifiant,
-        reponsesMultiples: [
-          {
-            identifiant: 'qcm-',
-            reponses: new Set([
-              premiereReponse.identifiant,
-              secondeReponse.identifiant,
-            ]),
-          },
-        ],
+        reponse: {
+          identifiant: reponseAvecQuestionATiroir.identifiant,
+          reponses: [
+            {
+              identifiant: 'qcm-',
+              reponses: new Set([
+                premiereReponse.identifiant,
+                secondeReponse.identifiant,
+              ]),
+            },
+          ],
+        },
       });
     });
 
@@ -423,18 +427,21 @@ describe('Le service de diagnostic', () => {
         .lis(diagnostic.identifiant);
       const question = diagnosticRetourne.referentiel.contexte
         .questions[0] as QuestionDiagnostic;
-      expect(question.reponseDonnee).toMatchObject({
+      expect(question.reponseDonnee).toStrictEqual<ReponseDonnee>({
         reponseUnique: reponseAvecQuestionsATiroir.identifiant,
-        reponsesMultiples: [
-          {
-            identifiant: 'tiroir-1-',
-            reponses: new Set([premiereReponse.identifiant]),
-          },
-          {
-            identifiant: 'tiroir-2-',
-            reponses: new Set([secondeReponse.identifiant]),
-          },
-        ],
+        reponse: {
+          identifiant: reponseAvecQuestionsATiroir.identifiant,
+          reponses: [
+            {
+              identifiant: 'tiroir-1-',
+              reponses: new Set([premiereReponse.identifiant]),
+            },
+            {
+              identifiant: 'tiroir-2-',
+              reponses: new Set([secondeReponse.identifiant]),
+            },
+          ],
+        },
       });
     });
 

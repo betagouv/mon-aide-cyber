@@ -244,7 +244,6 @@ describe('le serveur MAC sur les routes', () => {
         expect(
           diagnosticRetourne.referentiel.contexte.questions[0].reponseDonnee,
         ).toStrictEqual({
-          reponsesMultiples: [],
           reponseUnique: 'reponse-2',
           reponse: 'reponse-2',
         });

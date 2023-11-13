@@ -18,8 +18,9 @@ export class TranscripteurRepresentationVersDiagnostic
         ...reducteur,
         [thematique as Thematique]: {
           questions: questions.questions.map((question) => {
+            const reponse = question.reponseDonnee;
             const reponseTranscrite = this.transcrisLaReponse(
-              question.reponseDonnee.reponse,
+              reponse.reponse,
               <E = string[], S = Set<string>>(reponses: E) =>
                 new Set(reponses as string[]) as S,
             );
@@ -27,34 +28,24 @@ export class TranscripteurRepresentationVersDiagnostic
               return {
                 ...question,
                 reponseDonnee: {
-                  ...question.reponseDonnee,
-                  // TODO : A supprimer une fois le modèle intermédiaire obsolète
-                  reponsesMultiples:
-                    question.reponseDonnee.reponsesMultiples.map((rep) => ({
-                      ...rep,
-                      reponses: (<E = string[], S = Set<string>>(reponses: E) =>
-                        new Set(reponses as string[]) as S)(rep.reponses),
-                    })),
+                  reponseUnique: null,
                   reponse: reponseTranscrite,
                 },
               };
             }
-            const reponses = question.reponseDonnee.reponsesMultiples.map(
-              (rep) => ({
+            const reponses =
+              reponse.reponsesMultiples?.map((rep) => ({
                 ...rep,
                 reponses: (<E = string[], S = Set<string>>(reponses: E) =>
                   new Set(reponses as string[]) as S)(rep.reponses),
-              }),
-            );
+              })) || [];
             return {
               ...question,
               reponseDonnee: {
-                ...question.reponseDonnee,
-                reponsesMultiples: [],
                 reponseUnique: null,
                 ...(reponses.length > 0 && {
                   reponse: {
-                    identifiant: question.reponseDonnee.reponseUnique,
+                    identifiant: reponse.reponseUnique,
                     reponses,
                   },
                 }),
