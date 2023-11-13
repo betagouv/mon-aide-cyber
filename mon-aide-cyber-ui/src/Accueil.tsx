@@ -1,6 +1,8 @@
 import { ComposantLancerDiagnostic } from './composants/diagnostic/ComposantLancerDiagnostic.tsx';
+import { activationLancementDiagnostic } from './infrastructure/activation_fonctionnalites.ts';
 
 function Accueil() {
+  const lancerDiagnosticActive = activationLancementDiagnostic();
   return (
     <>
       <div className="bandeau-violet">
@@ -14,7 +16,9 @@ function Accueil() {
                 les faiblesses de leur infrastructure.
               </p>
               <div className="actions">
-                <ComposantLancerDiagnostic style="bouton-mac bouton-mac-primaire-jaune" />
+                {lancerDiagnosticActive && lancerDiagnosticActive == 'true' && (
+                  <ComposantLancerDiagnostic style="bouton-mac bouton-mac-primaire-jaune" />
+                )}
               </div>
             </div>
             <div id="illustration" className="fr-col-5">
