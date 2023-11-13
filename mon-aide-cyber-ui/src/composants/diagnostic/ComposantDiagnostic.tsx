@@ -155,7 +155,7 @@ const ComposantQuestionListe = ({
       }}
     >
       <option value="" disabled hidden selected>
-        Sélectionnez une option
+        Sélectionnez une valeur
       </option>
       {question.reponsesPossibles.map((reponse) => {
         return (
