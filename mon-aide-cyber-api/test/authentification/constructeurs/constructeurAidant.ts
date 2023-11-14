@@ -27,6 +27,11 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  avecUnIdentifiant(identifiant: crypto.UUID): ConstructeurAidant {
+    this.identifiant = identifiant;
+    return this;
+  }
+
   construis(): Aidant {
     return {
       identifiant: this.identifiant,
