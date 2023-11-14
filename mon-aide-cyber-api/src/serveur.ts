@@ -13,6 +13,13 @@ import { AdaptateurPDF } from './adaptateurs/AdaptateurPDF';
 import { BusEvenement } from './domaine/BusEvenement';
 import { AdaptateurGestionnaireErreurs } from './adaptateurs/AdaptateurGestionnaireErreurs';
 import { NextFunction } from 'express-serve-static-core';
+import { GestionnaireDeJeton } from './authentification/GestionnaireDeJeton';
+import { csrf } from 'lusca';
+import CookieSession = require('cookie-session');
+
+const ENDPOINTS_SANS_CSRF = ['/api/token'];
+
+const COOKIE_DUREE_SESSION = 60 * 60 * 1000;
 
 export type ConfigurationServeur = {
   adaptateurPDF: AdaptateurPDF;
@@ -22,10 +29,23 @@ export type ConfigurationServeur = {
   entrepots: Entrepots;
   busEvenement: BusEvenement;
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
+  gestionnaireDeJeton: GestionnaireDeJeton;
+  avecProtectionCsrf: boolean;
 };
-
 const creeApp = (config: ConfigurationServeur) => {
   const app = express();
+
+  app.use(
+    CookieSession({
+      sameSite: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: COOKIE_DUREE_SESSION,
+      keys: [process.env.SECRET_COOKIE || ''],
+    }),
+  );
+
+  if (config.avecProtectionCsrf)
+    app.use(csrf({ blocklist: ENDPOINTS_SANS_CSRF }));
 
   app.use(config.gestionnaireErreurs.controleurRequete());
 

@@ -1,6 +1,6 @@
 import { ConfigurationServeur } from '../serveur';
 import express, { Request, Response } from 'express';
-import { Aidant, authentifie } from '../authentification/Aidant';
+import { AidantAuthentifie, authentifie } from '../authentification/Aidant';
 import { NextFunction } from 'express-serve-static-core';
 import bodyParser from 'body-parser';
 
@@ -14,10 +14,17 @@ export const routesAPIAuthentification = (
     bodyParser.json(),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { identifiant, motDePasse } = requete.body;
-      authentifie(configuration.entrepots.aidants(), identifiant, motDePasse)
-        .then((aidant: Aidant) => {
+
+      authentifie(
+        configuration.entrepots.aidants(),
+        configuration.gestionnaireDeJeton,
+        identifiant,
+        motDePasse,
+      )
+        .then((aidantAuthentifie: AidantAuthentifie) => {
+          requete.session!.token = aidantAuthentifie.jeton;
           reponse.status(201).json({
-            nomPrenom: aidant.nomPrenom,
+            nomPrenom: aidantAuthentifie.nomPrenom,
           });
         })
         .catch((erreur) => suite(erreur));

@@ -9,6 +9,7 @@ import { fakerFR } from '@faker-js/faker';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
+import { FauxGestionnaireDeJeton } from '../../src/infrastructure/authentification/FauxGestionnaireDeJeton';
 
 const testeurIntegration = () => {
   let serveurDeTest: {
@@ -22,6 +23,7 @@ const testeurIntegration = () => {
   const adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest();
   const entrepots = new EntrepotsMemoire();
   const busEvenement = new BusEvenementDeTest();
+  const gestionnaireDeJeton = new FauxGestionnaireDeJeton();
   const adaptateurPDF: AdaptateurPDF = {
     genereRecommandations: (__: Diagnostic) =>
       Promise.resolve(Buffer.from('PDF généré')),
@@ -37,6 +39,8 @@ const testeurIntegration = () => {
       entrepots,
       busEvenement,
       gestionnaireErreurs,
+      gestionnaireDeJeton,
+      avecProtectionCsrf: false,
     });
     const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
