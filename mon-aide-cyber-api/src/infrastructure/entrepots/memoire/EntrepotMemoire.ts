@@ -8,9 +8,10 @@ import {
   EntrepotEvenementJournal,
   Publication,
 } from '../../../journalisation/Publication';
+import { Aidant, EntrepotAidant } from '../../../authentification/Aidant';
 
-class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
-  private entites: Map<crypto.UUID, T> = new Map();
+export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
+  protected entites: Map<crypto.UUID, T> = new Map();
 
   async lis(identifiant: string): Promise<T> {
     const entiteTrouvee = this.entites.get(identifiant as crypto.UUID);
@@ -46,3 +47,23 @@ export class EntrepotDiagnosticMemoire
 export class EntrepotEvenementJournalMemoire
   extends EntrepotMemoire<Publication>
   implements EntrepotEvenementJournal {}
+
+export class EntrepotAidantMemoire
+  extends EntrepotMemoire<Aidant>
+  implements EntrepotAidant
+{
+  async rechercheParIdentifiantConnexionEtMotDePasse(
+    identifiantConnexion: string,
+    motDePasse: string,
+  ): Promise<Aidant> {
+    const aidantTrouve = Array.from(this.entites.values()).find(
+      (aidant) =>
+        aidant.identifiantConnexion === identifiantConnexion &&
+        aidant.motDePasse === motDePasse,
+    );
+    if (!aidantTrouve) {
+      throw new AggregatNonTrouve('aidant');
+    }
+    return Promise.resolve(aidantTrouve);
+  }
+}

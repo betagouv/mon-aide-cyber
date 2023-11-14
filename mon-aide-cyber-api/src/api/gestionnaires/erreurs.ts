@@ -5,8 +5,12 @@ import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 
 import { ErreurMAC } from '../../domaine/erreurMAC';
 
+import { ErreurAuthentification } from '../../authentification/Aidant';
+
+const HTTP_NON_AUTORISE = 401;
 const HTTP_NON_TROUVE = 404;
 const HTTP_ERREUR_SERVEUR = 500;
+('Authentification');
 const CORPS_REPONSE_ERREUR_NON_GEREE = {
   message: "MonAideCyber n'est pas en mesure de traiter votre demande.",
 };
@@ -37,6 +41,8 @@ export const gestionnaireErreurGeneralisee = (
         if (erreur.erreurOriginelle instanceof AggregatNonTrouve) {
           construisReponse(HTTP_NON_TROUVE, { message: erreur.message });
           gestionnaireErreurs.consigne(erreur);
+        } else if (erreur.erreurOriginelle instanceof ErreurAuthentification) {
+          construisReponse(HTTP_NON_AUTORISE, { message: erreur.message });
         } else {
           construisReponseErreurServeur();
           suite(erreur);

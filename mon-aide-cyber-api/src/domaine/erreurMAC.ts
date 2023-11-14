@@ -2,7 +2,8 @@ type Contexte =
   | 'Accès diagnostic'
   | 'Ajout réponse au diagnostic'
   | 'Termine le diagnostic'
-  | 'Lance le diagnostic';
+  | 'Lance le diagnostic'
+  | "Demande d'Authentification";
 
 export class ErreurMAC implements Error {
   private constructor(
