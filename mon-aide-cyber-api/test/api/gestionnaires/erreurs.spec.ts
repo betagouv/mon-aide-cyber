@@ -4,6 +4,7 @@ import { ConsignateurErreursMemoire } from '../../../src/infrastructure/adaptate
 import { Request, Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../../src/domaine/erreurMAC';
+import { ErreurAuthentification } from '../../../src/authentification/Aidant';
 
 describe("Gestionnaire d'erreur", () => {
   let codeRecu = 0;
@@ -65,5 +66,21 @@ describe("Gestionnaire d'erreur", () => {
     expect(erreurRecue).toStrictEqual(
       ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée')),
     );
+  });
+
+  it("consigne l'erreur en cas d'authentification erronée", () => {
+    const consignateurErreurs = new ConsignateurErreursMemoire();
+
+    gestionnaireErreurGeneralisee(consignateurErreurs)(
+      ErreurMAC.cree(
+        "Demande d'Authentification",
+        new ErreurAuthentification(new Error('Quelque chose est arrivé')),
+      ),
+      fausseRequete,
+      fausseReponse,
+      fausseSuite,
+    );
+
+    expect(consignateurErreurs.tous()).toHaveLength(1);
   });
 });
