@@ -1,8 +1,9 @@
 import { ConfigurationServeur } from '../serveur';
 import express, { Request, Response } from 'express';
-import { AidantAuthentifie, authentifie } from '../authentification/Aidant';
+import { AidantAuthentifie } from '../authentification/Aidant';
 import { NextFunction } from 'express-serve-static-core';
 import bodyParser from 'body-parser';
+import { authentifie } from '../authentification/authentification';
 
 export const routesAPIAuthentification = (
   configuration: ConfigurationServeur,

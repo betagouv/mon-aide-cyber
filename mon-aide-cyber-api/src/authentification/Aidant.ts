@@ -1,7 +1,5 @@
 import { Entrepot } from '../domaine/Entrepot';
 import { Aggregat } from '../domaine/Aggregat';
-import { ErreurMAC } from '../domaine/erreurMAC';
-import { GestionnaireDeJeton } from './GestionnaireDeJeton';
 
 export type Aidant = Aggregat & {
   identifiantConnexion: string;
@@ -22,25 +20,4 @@ export class ErreurAuthentification extends Error {
 
 export type AidantAuthentifie = Aidant & {
   jeton: string;
-};
-export const authentifie = (
-  entrepotAidant: EntrepotAidant,
-  gestionnaireDeJeton: GestionnaireDeJeton,
-  identifiant: string,
-  motDePasse: string,
-): Promise<AidantAuthentifie> => {
-  return entrepotAidant
-    .rechercheParIdentifiantConnexionEtMotDePasse(identifiant, motDePasse)
-    .then((aidant) => ({
-      ...aidant,
-      jeton: gestionnaireDeJeton.genereJeton(aidant.identifiant),
-    }))
-    .catch((erreur) =>
-      Promise.reject(
-        ErreurMAC.cree(
-          "Demande d'Authentification",
-          new ErreurAuthentification(erreur),
-        ),
-      ),
-    );
 };
