@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useModale } from '../../fournisseurs/FournisseurModale.ts';
+import { useModale } from '../../fournisseurs/ContexteModale.ts';
 import { Authentification } from './Authentification.tsx';
 import Button from '@codegouvfr/react-dsfr/Button';
 

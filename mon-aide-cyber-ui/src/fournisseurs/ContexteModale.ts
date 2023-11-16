@@ -6,7 +6,7 @@ export type ElementModale = {
   actions: ReactElement[];
 };
 
-export const FournisseurModale = createContext<ActionsModale>({
+export const ContexteModale = createContext<ActionsModale>({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   affiche: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -18,4 +18,4 @@ export type ActionsModale = {
   ferme: () => void;
 };
 
-export const useModale = (): ActionsModale => useContext(FournisseurModale);
+export const useModale = (): ActionsModale => useContext(ContexteModale);

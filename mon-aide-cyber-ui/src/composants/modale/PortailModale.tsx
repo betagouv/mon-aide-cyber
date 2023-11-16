@@ -1,7 +1,7 @@
 import {
   ElementModale,
-  FournisseurModale,
-} from '../../fournisseurs/FournisseurModale.ts';
+  ContexteModale,
+} from '../../fournisseurs/ContexteModale.ts';
 import { createPortal } from 'react-dom';
 import { PropsWithChildren, ReactElement, useCallback, useState } from 'react';
 import Button from '@codegouvfr/react-dsfr/Button';
@@ -54,7 +54,7 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
   }, []);
 
   return (
-    <FournisseurModale.Provider
+    <ContexteModale.Provider
       value={{
         ferme: () => fermeModale(),
         affiche: (element: ElementModale) => {
@@ -92,6 +92,6 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
             document.getElementById('modale') as Element,
           )
         : null}
-    </FournisseurModale.Provider>
+    </ContexteModale.Provider>
   );
 };
