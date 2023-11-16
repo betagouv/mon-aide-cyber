@@ -1,21 +1,35 @@
-import {
-  ElementModale,
-  ContexteModale,
-} from '../../fournisseurs/ContexteModale.ts';
+import { ContexteModale, ElementModale } from '../../fournisseurs/ContexteModale.ts';
 import { createPortal } from 'react-dom';
-import { PropsWithChildren, ReactElement, useCallback, useState } from 'react';
-import Button from '@codegouvfr/react-dsfr/Button';
+import { PropsWithChildren, ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 
 type ProprietesElementModale = ElementModale & {
   boutonFermer: ReactElement;
+  surClickEnDehors: () => void
 };
 export const Modale = (
   proprietes: PropsWithChildren<ProprietesElementModale>,
 ) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const clickEnDehors = (e: MouseEvent) => {
+    if (ref.current && !ref.current.contains(e.target as Node)) {
+      console.log("je ferme la modale");
+      proprietes.surClickEnDehors();
+    }
+  };
+
+  useEffect(() => {
+    addEventListener('click', clickEnDehors, true);
+
+    return () => {
+      removeEventListener('click', clickEnDehors);
+    }
+  });
+
   return (
     <div className="fr-container fr-container--fluid fr-container-md">
       <div className="fr-grid-row fr-grid-row--center">
-        <div className="fr-col-12 fr-col-md-8 fr-col-lg-6">
+        <div ref={ref} className="fr-col-12 fr-col-md-8 fr-col-lg-6">
           <div className="fr-modal__body modale-mac">
             <div className="fr-modal__header">{proprietes.boutonFermer}</div>
             <div className="fr-modal__content">
@@ -29,9 +43,9 @@ export const Modale = (
                 })}
               </ul>
             </div>
-          </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
@@ -76,19 +90,20 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
       ></dialog>
       {elementModale
         ? createPortal(
-            <Modale
-              titre={elementModale.titre}
-              corps={elementModale.corps}
-              actions={elementModale.actions}
-              boutonFermer={
-                <button
-                  className="fr-btn fr-btn--close"
-                  aria-controls="modale"
-                  title="Fermer"
-                  onClick={() => fermeModale()}
-                />
-              }
-            />,
+              <Modale
+                titre={elementModale.titre}
+                corps={elementModale.corps}
+                boutonFermer={
+                  <button
+                    className="fr-btn fr-btn--close"
+                    aria-controls="modale"
+                    title="Fermer"
+                    onClick={() => fermeModale()}
+                  />
+                }
+                actions={elementModale.actions}
+                surClickEnDehors={fermeModale}
+              />,
             document.getElementById('modale') as Element,
           )
         : null}
