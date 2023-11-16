@@ -270,26 +270,26 @@ export const donneesGouvernance: QuestionsThematique = {
       ],
     },
     {
-      identifiant: 'gouvernance-exigence-cyber-securite-presta-si-industriel',
+      identifiant: 'gouvernance-exigence-cyber-securite-presta-systemes-industriels',
       libelle:
-        "Si l'entité dispose d'un SI industriel : Des exigences de cybersécurité sont-elles fixées aux prestataires vous accompagnant dans la gestion du système industriel. Font-elles également  l'objet d'une attention particulière ?",
+        "Si l'entité dispose de systemes industriels : Des exigences de cybersécurité sont-elles fixées aux prestataires vous accompagnant dans la gestion des systèmes industriels. Font-elles également l'objet d'une attention particulière ?",
       type: 'choixUnique',
       reponsesPossibles: [
         {
           identifiant:
-            'gouvernance-exigence-cyber-securite-presta-si-industriel-na',
+            'gouvernance-exigence-cyber-securite-presta-systemes-industriels-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
           identifiant:
-            'gouvernance-exigence-cyber-securite-presta-si-industriel-nsp',
+            'gouvernance-exigence-cyber-securite-presta-systemes-industriels-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
           identifiant:
-            'gouvernance-exigence-cyber-securite-presta-si-industriel-non',
+            'gouvernance-exigence-cyber-securite-presta-systemes-industriels-non',
           libelle:
             'Non, aucune exigence ne figure dans nos contrats de prestation',
           resultat: {
@@ -297,7 +297,7 @@ export const donneesGouvernance: QuestionsThematique = {
             recommandations: [
               {
                 identifiant:
-                  'gouvernance-exigence-cyber-securite-presta-si-industriel',
+                  'gouvernance-exigence-cyber-securite-presta-systemes-industriels',
                 niveau: 1,
               },
             ],
@@ -306,7 +306,7 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant:
-            'gouvernance-exigence-cyber-securite-presta-si-industriel-oui-formalisee',
+            'gouvernance-exigence-cyber-securite-presta-systemes-industriels-oui-formalisee',
           libelle:
             'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.',
           resultat: {
@@ -314,7 +314,7 @@ export const donneesGouvernance: QuestionsThematique = {
             recommandations: [
               {
                 identifiant:
-                  'gouvernance-exigence-cyber-securite-presta-si-industriel',
+                  'gouvernance-exigence-cyber-securite-presta-systemes-industriels',
                 niveau: 2,
               },
             ],
@@ -323,7 +323,7 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant:
-            'gouvernance-exigence-cyber-securite-presta-si-industriel-oui-fixee',
+            'gouvernance-exigence-cyber-securite-presta-systemes-industriels-oui-fixee',
           libelle:
             'Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.',
           resultat: { note: 3 },
