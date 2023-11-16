@@ -779,7 +779,8 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 978,
         },
         {
-          identifiant: 'contexte-departement-tom-siege-social-saintpierreetmiquelon',
+          identifiant:
+            'contexte-departement-tom-siege-social-saintpierreetmiquelon',
           libelle: 'Collectivité de Saint-Pierre et Miquelon',
           ordre: 979,
         },
@@ -789,12 +790,14 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 980,
         },
         {
-          identifiant: 'contexte-departement-tom-siege-social-polynésiefrançaise',
+          identifiant:
+            'contexte-departement-tom-siege-social-polynésiefrançaise',
           libelle: 'Collectivité de Polynésie Française',
           ordre: 981,
         },
         {
-          identifiant: 'contexte-departement-tom-siege-social-nouvellecalédonie',
+          identifiant:
+            'contexte-departement-tom-siege-social-nouvellecalédonie',
           libelle: 'Collectivité de Nouvelle-Calédonie',
           ordre: 982,
         },
@@ -870,9 +873,9 @@ export const donneesContexte: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'contexte-activites-recherche-et-developpement',
+      identifiant: 'contexte-protection-contre-l-espionnage',
       libelle:
-        'Votre organisation a-t-elle des activités de R&D, de conception de services innovants, de dépôts de brevets ?',
+        "Souhaitez-vous protéger votre organisation contre l'espionnage ?",
       reponsesPossibles: [
         {
           identifiant: 'contexte-activites-recherche-et-developpement-nsp',
