@@ -912,22 +912,22 @@ export const donneesContexte: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'contexte-opere-systemes-information-industriels',
+      identifiant: 'contexte-opere-systemes-industriels',
       libelle:
-        "Votre organisation opère-t-elle des systèmes d'information industriels ?",
+        "Votre organisation opère-t-elle des systèmes industriels ?",
       reponsesPossibles: [
         {
-          identifiant: 'contexte-opere-systemes-information-industriels-nsp',
+          identifiant: 'contexte-opere-systemes-industriels-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
-          identifiant: 'contexte-opere-systemes-information-industriels-non',
+          identifiant: 'contexte-opere-systemes-industriels-non',
           libelle: 'Non',
           ordre: 2,
         },
         {
-          identifiant: 'contexte-opere-systemes-information-industriels-oui',
+          identifiant: 'contexte-opere-systemes-industriels-oui',
           libelle: 'Oui',
           ordre: 3,
         },
