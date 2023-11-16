@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite build --watch",
+    "dev2": "vite dev",
     "build": "vite build",
     "build:storybook": "storybook build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
