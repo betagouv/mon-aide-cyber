@@ -106,29 +106,29 @@ export const donneesGouvernance: QuestionsThematique = {
       ],
     },
     {
-      identifiant: 'gouvernance-schema-si-industriel-a-jour',
+      identifiant: 'gouvernance-schema-systemes-industriels-a-jour',
       libelle:
-        "Si l'entité dispose d'un SI industriel : Existe-t-il un schéma et un inventaire à jour du système d'information industriel de l'organisation ?",
+        "Si l'entité dispose de systèmes industriels : Existe-t-il un schéma et un inventaire à jour des systèmes industriels de l'organisation ?",
       type: 'choixUnique',
       reponsesPossibles: [
         {
-          identifiant: 'gouvernance-schema-si-industriel-a-jour-na',
+          identifiant: 'gouvernance-schema-systèmes-industriels-a-jour-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
-          identifiant: 'gouvernance-schema-si-industriel-a-jour-nsp',
+          identifiant: 'gouvernance-schema-systèmes-industriels-a-jour-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
-          identifiant: 'gouvernance-schema-si-industriel-a-jour-non',
+          identifiant: 'gouvernance-schema-systèmes-industriels-a-jour-non',
           libelle: 'Non.',
           resultat: {
             note: 0,
             recommandations: [
               {
-                identifiant: 'gouvernance-schema-si-industriel-a-jour',
+                identifiant: 'gouvernance-schema-systèmes-industriels-a-jour',
                 niveau: 1,
               },
             ],
@@ -136,14 +136,14 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-partiel',
+          identifiant: 'gouvernance-schema-systèmes-industriels-a-jour-oui-partiel',
           libelle:
             'Il existe un schéma "macro" non détaillé ou partiellement détaillé.',
           resultat: {
             note: 2,
             recommandations: [
               {
-                identifiant: 'gouvernance-schema-si-industriel-a-jour',
+                identifiant: 'gouvernance-schema-systèmes-industriels-a-jour',
                 niveau: 2,
               },
             ],
@@ -151,9 +151,9 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 3,
         },
         {
-          identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-detaille',
+          identifiant: 'gouvernance-schema-systèmes-industriels-a-jour-oui-detaille',
           libelle:
-            "Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industrielles, installations matériels connectés et des interconnexions vers l'extérieur.",
+            "Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industriels, et de leurs interconnexions avec l'extérieur.",
           resultat: {
             note: 3,
           },
