@@ -213,7 +213,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: "acces-utilisation-comptes-administrateurs-droits-limitee",
       libelle:
-        "L'utilisation des comptes administrateurs et des droits d'accès d'administration est-elle bien limitée aux tâches d'administration ?",
+        "L'utilisation des comptes administrateurs est-elle bien limitée aux tâches d'administration ?",
       reponsesPossibles: [
         {
           identifiant:
