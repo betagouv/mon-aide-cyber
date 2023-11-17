@@ -99,7 +99,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                   identifiant:
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-oui-logs-stockes',
                   libelle:
-                    'Oui, nous stockons quelques logs et journaux du pare-feu.',
+                    'Oui, nous stockons quelques journaux du pare-feu.',
                   resultat: {
                     note: 1,
                     recommandations: [
@@ -116,7 +116,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                   identifiant:
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-oui-logs-stockes-conserves-6-mois',
                   libelle:
-                    "Oui, nous stockons les logs et les journaux du pare-feu avec une durée de conservation d'au moins 6 mois.",
+                    "Oui, nous stockons les journaux du pare-feu avec une durée de conservation d'au moins 6 mois.",
                   resultat: { note: 3 },
                   ordre: 2,
                 },
