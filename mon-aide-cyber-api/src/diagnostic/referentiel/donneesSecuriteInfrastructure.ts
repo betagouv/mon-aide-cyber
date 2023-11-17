@@ -33,7 +33,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               identifiant:
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees',
               libelle:
-                'Si "Oui" : protégez-vous les interconnexions de votre système d\'information à Internet et aux réseaux tiers en bloquant tous les flux et les ports non strictement nécessaires ?',
+                'Si "Oui" : protégez-vous les interconnexions de votre système d\'information à Internet (et autres réseaux tiers) en bloquant tous les flux non strictement nécessaires ?',
               reponsesPossibles: [
                 {
                   identifiant:
