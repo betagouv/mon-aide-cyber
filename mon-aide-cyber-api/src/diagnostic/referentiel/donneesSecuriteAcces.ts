@@ -330,13 +330,13 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             libelle: "La session s'ouvre au démarrage du poste, sans demande de mot de passe.",
             resultat: {
               note: 0,
-            recommandations: [
-              {
-                identifiant: "acces-mesures-securite-robustesse-mdp",
-                niveau: 1,
-              },
-            ],
-            }
+              recommandations: [
+                {
+                  identifiant: "acces-mesures-securite-robustesse-mdp",
+                  niveau: 1,
+                },
+              ],
+            },
             ordre: 1,
         },
         {
@@ -351,7 +351,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
               },
             ],
           },
-          ordre: é,
+          ordre: 2,
         },
         {
           identifiant:
@@ -367,7 +367,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
               },
             ],
           },
-          ordre: ",
+          ordre: 3,
         },
         {
           identifiant:
