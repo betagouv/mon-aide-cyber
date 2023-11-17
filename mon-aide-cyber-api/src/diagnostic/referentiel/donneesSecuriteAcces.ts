@@ -318,7 +318,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: "acces-mesures-securite-robustesse-mdp",
       libelle:
-        "Avez-vous mis en place des mesures de sécurité particulières afin de renforcer la robustesse des mots de passe permettant aux utilisateurs d'accéder à leur session ?",
+        "Des exigences de complexité sont-elles imposées sur les mots de passe de session des utilisateurs ?",
       reponsesPossibles: [
         {
           identifiant: "acces-mesures-securite-robustesse-mdp-nsp",
