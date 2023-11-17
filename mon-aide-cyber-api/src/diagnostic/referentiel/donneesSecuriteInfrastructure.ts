@@ -165,7 +165,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         {
           identifiant:
             'securite-infrastructure-si-industriel-pare-feu-deploye-oui-flux-necessaires-bloques',
-          libelle: 'Oui, tous les flux et ports non nécessaires sont bloqués.',
+          libelle: 'Oui, certains flux sont bloqués mais aucune revue n'a été faite depuis longtemps.'
           resultat: {
             note: 1.5,
             recommandations: [
