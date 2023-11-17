@@ -58,7 +58,7 @@ export const donneesReaction: QuestionsThematique = {
     {
       identifiant: "reaction-sauvegardes-donnees-realisees",
       libelle:
-        "Des sauvegardes régulières des données et des systèmes d'information sont-elles réalisées ?",
+        "Des sauvegardes régulières des données sont-elles réalisées ?",
       reponsesPossibles: [
         {
           identifiant: "reaction-sauvegardes-donnees-realisees-nsp",
