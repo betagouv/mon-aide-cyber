@@ -242,7 +242,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-utilisation-comptes-administrateurs-droits-quelques-restrictions",
           libelle:
-            "La mise à disposition des comptes d'administration et des droits d'accès d'administration fait l'objet de quelques restrictions.",
+            "La mise à disposition des comptes d'administration fait l'objet de quelques restrictions.",
           resultat: {
             note: 2,
             recommandations: [
