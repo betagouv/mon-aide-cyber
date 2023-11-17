@@ -4,7 +4,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
   questions: [
     {
       identifiant: 'securite-infrastructure-pare-feu-deploye',
-      libelle: 'Votre interconnexion à l'Internet est-elle protégée par un pare-feu physique ?',
+      libelle: 'Votre interconnexion à l\'Internet est-elle protégée par un pare-feu physique ?',
       reponsesPossibles: [
         {
           identifiant: 'securite-infrastructure-pare-feu-deploye-nsp',
