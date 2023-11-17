@@ -566,7 +566,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: "acces-entite-dispose-plusieurs-sites-geographiques",
       libelle:
-        "Si l'entité dispose de plusieurs sites géographiques interconnectés, et si à risque d'espionnage industriel : les interconnexions \"site à site\" font-elles l'objet de mesures de sécurité particulières ?",
+        "Si l'entité dispose de plusieurs sites géographiques interconnectés, et si à risque d'espionnage : les interconnexions \"site-à-site\" sont-elles chiffrées ?",
       reponsesPossibles: [
         {
           identifiant: "acces-entite-dispose-plusieurs-sites-geographiques-na",
