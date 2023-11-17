@@ -9,20 +9,20 @@ export const donneesReaction: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
-            "reaction-surveillance-veille-vulnerabilites-nsp",
+            "reaction-veille-vulnerabilites-nsp",
           libelle: "Je ne sais pas",
           ordre: 0,
         },
         {
           identifiant:
-            "reaction-surveillance-veille-vulnerabilites-non",
+            "reaction-veille-vulnerabilites-non",
           libelle: "Non",
           resultat: {
             note: 0,
             recommandations: [
               {
                 identifiant:
-                  "reaction-surveillance-veille-vulnerabilites",
+                  "reaction-veille-vulnerabilites",
                 niveau: 1,
               },
             ],
@@ -31,14 +31,14 @@ export const donneesReaction: QuestionsThematique = {
         },
         {
           identifiant:
-            "reaction-surveillance-veille-vulnerabilites-veille-ponctuelle",
+            "reaction-veille-vulnerabilites-veille-ponctuelle",
           libelle: "Réalisation d'une veille ponctuelle sur internet.",
           resultat: {
             note: 1.5,
             recommandations: [
               {
                 identifiant:
-                  "reaction-surveillance-veille-vulnerabilites",
+                  "reaction-veille-vulnerabilites",
                 niveau: 2,
               },
             ],
@@ -47,7 +47,7 @@ export const donneesReaction: QuestionsThematique = {
         },
         {
           identifiant:
-            "reaction-surveillance-veille-vulnerabilites-veille-reguliere",
+            "reaction-veille-vulnerabilites-veille-reguliere",
           libelle: "Réalisation d'une veille régulière et exhaustive.",
           resultat: { note: 3 },
           ordre: 3,
