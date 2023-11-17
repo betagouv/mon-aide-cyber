@@ -31,8 +31,8 @@ export const donneesReaction: QuestionsThematique = {
         },
         {
           identifiant:
-            "reaction-veille-vulnerabilites-veille-ponctuelle",
-          libelle: "Réalisation d'une veille ponctuelle sur internet.",
+            "reaction-surveillance-veille-vulnerabilites-potentielles-veille-ponctuelle",
+          libelle: "Réalisation d'une veille ponctuelle sur Internet.",
           resultat: {
             note: 1.5,
             recommandations: [
@@ -99,7 +99,7 @@ export const donneesReaction: QuestionsThematique = {
               identifiant:
                 "reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole",
               libelle:
-                'Si "Oui" : Existe-t-il au moins une sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne et d’internet ?',
+                'Si "Oui" : Existe-t-il au moins une sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne et d’Internet ?',
               reponsesPossibles: [
                 {
                   identifiant:
@@ -214,7 +214,7 @@ export const donneesReaction: QuestionsThematique = {
               identifiant:
                 "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole",
               libelle:
-                'Si "Oui" : Existe-t-il au moins une sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne et d’internet ?',
+                'Si "Oui" : Existe-t-il au moins une sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne et d’Internet ?',
               reponsesPossibles: [
                 {
                   identifiant:
