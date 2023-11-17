@@ -225,7 +225,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-utilisation-comptes-administrateurs-droits-limitee-non",
           libelle:
-            "Non, des utilisateurs disposent de privilèges d’administration sans restrictions particulières.",
+            "Non, des utilisateurs disposent de privilèges d’administration sans restriction particulière.",
           resultat: {
             note: 0,
             recommandations: [
