@@ -94,15 +94,4 @@ export const recommandationsReaction = {
     },
     priorisation: 15,
   },
-  'reaction-assurance-cyber-souscrite': {
-    niveau1: {
-      titre:
-        "Evaluer l'opportunité à souscrire à une police d’assurance du risque cyber (ou de la compléter).",
-      pourquoi:
-        'recommandations/reaction/reaction-assurance-cyber-souscrite-niveau1-pourquoi.pug',
-      comment:
-        'recommandations/reaction/reaction-assurance-cyber-souscrite-niveau1-comment.pug',
-    },
-    priorisation: 34,
-  },
 };
