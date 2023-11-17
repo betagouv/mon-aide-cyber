@@ -3,26 +3,26 @@ import { QuestionsThematique } from "../Referentiel";
 export const donneesReaction: QuestionsThematique = {
   questions: [
     {
-      identifiant: "reaction-surveillance-veille-vulnerabilites-potentielles",
+      identifiant: "reaction-veille-vulnerabilites",
       libelle:
-        "Une surveillance ou une veille des vulnérabilités potentielles pouvant vous affecter est-elle réalisée ?",
+        "Une veille des vulnérabilités pouvant vous affecter est-elle réalisée ?",
       reponsesPossibles: [
         {
           identifiant:
-            "reaction-surveillance-veille-vulnerabilites-potentielles-nsp",
+            "reaction-surveillance-veille-vulnerabilites-nsp",
           libelle: "Je ne sais pas",
           ordre: 0,
         },
         {
           identifiant:
-            "reaction-surveillance-veille-vulnerabilites-potentielles-non",
+            "reaction-surveillance-veille-vulnerabilites-non",
           libelle: "Non",
           resultat: {
             note: 0,
             recommandations: [
               {
                 identifiant:
-                  "reaction-surveillance-veille-vulnerabilites-potentielles",
+                  "reaction-surveillance-veille-vulnerabilites",
                 niveau: 1,
               },
             ],
@@ -31,14 +31,14 @@ export const donneesReaction: QuestionsThematique = {
         },
         {
           identifiant:
-            "reaction-surveillance-veille-vulnerabilites-potentielles-veille-ponctuelle",
+            "reaction-surveillance-veille-vulnerabilites-veille-ponctuelle",
           libelle: "Réalisation d'une veille ponctuelle sur internet.",
           resultat: {
             note: 1.5,
             recommandations: [
               {
                 identifiant:
-                  "reaction-surveillance-veille-vulnerabilites-potentielles",
+                  "reaction-surveillance-veille-vulnerabilites",
                 niveau: 2,
               },
             ],
@@ -47,7 +47,7 @@ export const donneesReaction: QuestionsThematique = {
         },
         {
           identifiant:
-            "reaction-surveillance-veille-vulnerabilites-potentielles-veille-reguliere",
+            "reaction-surveillance-veille-vulnerabilites-veille-reguliere",
           libelle: "Réalisation d'une veille régulière et exhaustive.",
           resultat: { note: 3 },
           ordre: 3,
