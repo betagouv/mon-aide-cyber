@@ -102,7 +102,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: "acces-droits-acces-utilisateurs-limites",
       libelle:
-        "Les droits d'accès des utilisateurs aux données, aux systèmes et aux applications métiers sont-ils limités à leurs besoins métiers ?",
+        "Les droits des utilisateurs sont-ils limités à leurs besoins métiers ?",
       reponsesPossibles: [
         {
           identifiant: "acces-droits-acces-utilisateurs-limites-na",
