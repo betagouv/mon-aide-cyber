@@ -108,7 +108,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-schema-si-industriel-a-jour',
       libelle:
-        "Si l'entité dispose d'un SI industriel : Existe-t-il un schéma et un inventaire à jour du système d'information industriel de l'organisation ?",
+        "Si l'entité dispose de systèmes industriels : Existe-t-il un schéma et un inventaire à jour des systèmes industriels de l'organisation ?",
       type: 'choixUnique',
       reponsesPossibles: [
         {
@@ -153,7 +153,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-detaille',
           libelle:
-            "Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industrielles, installations matériels connectés et des interconnexions vers l'extérieur.",
+            "Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industriels connectés et des interconnexions avec l'extérieur.",
           resultat: {
             note: 3,
           },
