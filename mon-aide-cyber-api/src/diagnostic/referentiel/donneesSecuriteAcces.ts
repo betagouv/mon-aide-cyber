@@ -357,7 +357,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-mesures-securite-robustesse-mdp-utilisateurs-sensibilises",
           libelle:
-            "Les utilisateurs sont sensibilisés à la gestion sécurisée de leurs mots de passe.",
+            "Les utilisateurs sont sensibilisés au bienfait de choisir un mdp robuste.",
           resultat: {
             note: 1,
             recommandations: [
