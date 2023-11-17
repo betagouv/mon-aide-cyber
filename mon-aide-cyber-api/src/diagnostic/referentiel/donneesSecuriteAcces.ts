@@ -605,7 +605,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: "acces-administrateurs-si-mesures-specifiques",
       libelle:
-        "Les accès des administrateurs aux systèmes d'information font-ils l’objet de mesures de sécurité spécifiques ?",
+        "Les accès des administrateurs font-ils l’objet de mesures de sécurité spécifiques ?",
       reponsesPossibles: [
         {
           identifiant: "acces-administrateurs-si-mesures-specifiques-na",
