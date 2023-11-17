@@ -48,7 +48,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: "acces-liste-compte-utilisateurs",
       libelle:
-        "La liste des comptes des utilisateurs (prestataires inclus) ayant le droit d'accéder au système et application est-elle maintenue à jour ?",
+        "La liste des comptes utilisateurs (prestataires inclus) est-elle maintenue à jour ?",
       reponsesPossibles: [
         {
           identifiant: "acces-liste-compte-utilisateurs-na",
@@ -102,7 +102,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: "acces-droits-acces-utilisateurs-limites",
       libelle:
-        "Les droits d'accès des utilisateurs aux données, aux systèmes et aux applications métiers sont-ils limités à leurs besoins métiers ?",
+        "Les droits des utilisateurs sont-ils limités à leurs besoins métiers ?",
       reponsesPossibles: [
         {
           identifiant: "acces-droits-acces-utilisateurs-limites-na",
@@ -213,7 +213,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: "acces-utilisation-comptes-administrateurs-droits-limitee",
       libelle:
-        "L'utilisation des comptes administrateurs et des droits d'accès d'administration est-elle bien limitée aux tâches d'administration ?",
+        "L'utilisation des comptes administrateurs est-elle bien limitée aux tâches d'administration ?",
       reponsesPossibles: [
         {
           identifiant:
@@ -225,7 +225,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-utilisation-comptes-administrateurs-droits-limitee-non",
           libelle:
-            "Non, des utilisateurs disposent de privilèges d’administration sans restrictions particulières.",
+            "Non, des utilisateurs disposent de privilèges d’administration sans restriction particulière.",
           resultat: {
             note: 0,
             recommandations: [
@@ -242,7 +242,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-utilisation-comptes-administrateurs-droits-quelques-restrictions",
           libelle:
-            "La mise à disposition des comptes d'administration et des droits d'accès d'administration fait l'objet de quelques restrictions.",
+            "La mise à disposition des comptes d'administration fait l'objet de quelques restrictions.",
           resultat: {
             note: 2,
             recommandations: [
@@ -259,7 +259,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-utilisation-comptes-administrateurs-droits-justifies",
           libelle:
-            "Tous les comptes administration et tous les accès d'administration sont justifiés, dédiés et utilisés aux seules tâches d'administration.",
+            "Tous les comptes administration sont justifiés, et dédiés aux seules tâches d’administration.",
           resultat: { note: 3 },
           ordre: 3,
         },
@@ -318,12 +318,26 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: "acces-mesures-securite-robustesse-mdp",
       libelle:
-        "Avez-vous mis en place des mesures de sécurité particulières afin de renforcer la robustesse des mots de passe permettant aux utilisateurs d'accéder à leur session ?",
+        "Des exigences de complexité sont-elles imposées sur les mots de passe de session des utilisateurs ?",
       reponsesPossibles: [
         {
           identifiant: "acces-mesures-securite-robustesse-mdp-nsp",
           libelle: "Je ne sais pas",
           ordre: 0,
+        },
+        {
+            identifiant: "acces-mesures-securite-robustesse-mdp-pas-de-mdp",
+            libelle: "La session s'ouvre au démarrage du poste, sans demande de mot de passe.",
+            resultat: {
+              note: 0,
+              recommandations: [
+                {
+                  identifiant: "acces-mesures-securite-robustesse-mdp",
+                  niveau: 1,
+                },
+              ],
+            },
+            ordre: 1,
         },
         {
           identifiant: "acces-mesures-securite-robustesse-mdp-non",
@@ -337,7 +351,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
               },
             ],
           },
-          ordre: 1,
+          ordre: 2,
         },
         {
           identifiant:
@@ -353,7 +367,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
               },
             ],
           },
-          ordre: 2,
+          ordre: 3,
         },
         {
           identifiant:
@@ -361,7 +375,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle:
             "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte.",
           resultat: { note: 3 },
-          ordre: 3,
+          ordre: 4,
         },
       ],
       type: "choixUnique",
