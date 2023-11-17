@@ -373,7 +373,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-mesures-securite-robustesse-mdp-contraintes-par-defaut",
           libelle:
-            "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte.",
+            "Des exigences de complexité sont imposées aux mots de passe de session des utilisateurs",
           resultat: { note: 3 },
           ordre: 4,
         },
