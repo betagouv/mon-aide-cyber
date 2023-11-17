@@ -895,7 +895,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-opere-systemes-information-industriels',
       libelle:
-        "Votre organisation opère-t-elle des systèmes d'information industriels ?",
+        "Votre organisation opère-t-elle des systèmes industriels ?",
       reponsesPossibles: [
         {
           identifiant: 'contexte-opere-systemes-information-industriels-nsp',
