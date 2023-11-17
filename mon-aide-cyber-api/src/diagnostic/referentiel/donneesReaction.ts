@@ -5,7 +5,7 @@ export const donneesReaction: QuestionsThematique = {
     {
       identifiant: "reaction-surveillance-veille-vulnerabilites-potentielles",
       libelle:
-        "Une surveillance ou une veille des vulnérabilités potentielles pouvant vous affecter est-elle réalisée ?",
+        "Une veille des vulnérabilités pouvant vous affecter est-elle réalisée ?",
       reponsesPossibles: [
         {
           identifiant:
@@ -58,7 +58,7 @@ export const donneesReaction: QuestionsThematique = {
     {
       identifiant: "reaction-sauvegardes-donnees-realisees",
       libelle:
-        "Des sauvegardes régulières des données et des systèmes d'information sont-elles réalisées ?",
+        "Des sauvegardes régulières des données sont-elles réalisées ?",
       reponsesPossibles: [
         {
           identifiant: "reaction-sauvegardes-donnees-realisees-nsp",
@@ -93,7 +93,7 @@ export const donneesReaction: QuestionsThematique = {
           identifiant:
             "reaction-sauvegardes-donnees-realisees-oui-ponctuellement",
           libelle:
-            "Des sauvegardes des données et des systèmes d'information sont réalisées ponctuellement.",
+            "Des sauvegardes des données sont réalisées ponctuellement.",
           questions: [
             {
               identifiant:
@@ -208,7 +208,7 @@ export const donneesReaction: QuestionsThematique = {
           identifiant:
             "reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere",
           libelle:
-            "Des sauvegardes des données et des systèmes sont réalisées de manière automatique et régulière",
+            "Des sauvegardes des données sont réalisées de manière automatique et régulière",
           questions: [
             {
               identifiant:
