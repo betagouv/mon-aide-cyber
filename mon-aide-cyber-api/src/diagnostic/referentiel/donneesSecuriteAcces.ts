@@ -148,7 +148,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-droits-acces-utilisateurs-limites-restrictions-limitees",
           libelle:
-            "L’accès des utilisateurs aux données, aux systèmes et aux applications sont limités aux seuls accès nécessaires à leur activité.",
+            "Les accès des utilisateurs sont limités aux seuls accès nécessaires à leur activité.",
           resultat: { note: 3 },
           ordre: 4,
         },
