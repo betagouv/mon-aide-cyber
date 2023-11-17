@@ -259,7 +259,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             "acces-utilisation-comptes-administrateurs-droits-justifies",
           libelle:
-            "Tous les comptes administration et tous les accès d'administration sont justifiés, dédiés et utilisés aux seules tâches d'administration.",
+            "Tous les comptes administration sont justifiés, et dédiés aux seules tâches d’administration.",
           resultat: { note: 3 },
           ordre: 3,
         },
