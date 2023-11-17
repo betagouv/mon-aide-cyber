@@ -326,6 +326,20 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           ordre: 0,
         },
         {
+            identifiant: "acces-mesures-securite-robustesse-mdp-pas-de-mdp",
+            libelle: "La session s'ouvre au démarrage du poste, sans demande de mot de passe.",
+            resultat: {
+              note: 0,
+            recommandations: [
+              {
+                identifiant: "acces-mesures-securite-robustesse-mdp",
+                niveau: 1,
+              },
+            ],
+            }
+            ordre: 1,
+        },
+        {
           identifiant: "acces-mesures-securite-robustesse-mdp-non",
           libelle: "Non",
           resultat: {
@@ -337,7 +351,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
               },
             ],
           },
-          ordre: 1,
+          ordre: é,
         },
         {
           identifiant:
@@ -353,7 +367,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
               },
             ],
           },
-          ordre: 2,
+          ordre: ",
         },
         {
           identifiant:
@@ -361,7 +375,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle:
             "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte.",
           resultat: { note: 3 },
-          ordre: 3,
+          ordre: 4,
         },
       ],
       type: "choixUnique",
