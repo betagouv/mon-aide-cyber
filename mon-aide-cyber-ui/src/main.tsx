@@ -5,7 +5,10 @@ import './assets/styles/index.scss';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { FournisseurEntrepots } from './fournisseurs/FournisseurEntrepot.ts';
 import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
-import { APIEntrepotDiagnostics } from './infrastructure/entrepots/EntrepotsAPI.ts';
+import {
+  APIEntrepotAuthentification,
+  APIEntrepotDiagnostics,
+} from './infrastructure/entrepots/EntrepotsAPI.ts';
 import { ComposantAffichageErreur } from './composants/erreurs/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { EntrepotDiagnostics } from './domaine/diagnostic/Diagnostics.ts';
@@ -16,6 +19,7 @@ import { CharteAidant } from './vues/CharteAidant.tsx';
 import { startReactDsfr } from '@codegouvfr/react-dsfr/spa';
 import { PortailModale } from './composants/modale/PortailModale.tsx';
 import { SeConnecter } from './composants/authentification/SeConnecter.tsx';
+import { EntrepotAuthentification } from './domaine/authentification/Authentification.ts';
 
 startReactDsfr({ defaultColorScheme: 'system' });
 
@@ -49,6 +53,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       value={{
         diagnostic: () => new APIEntrepotDiagnostic(),
         diagnostics: (): EntrepotDiagnostics => new APIEntrepotDiagnostics(),
+        authentification: (): EntrepotAuthentification =>
+          new APIEntrepotAuthentification(),
       }}
     >
       <PortailModale>
