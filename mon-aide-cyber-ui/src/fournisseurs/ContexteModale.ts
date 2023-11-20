@@ -1,9 +1,8 @@
-import { createContext, ReactElement, useContext } from 'react';
+import { createContext, ReactElement } from 'react';
 
 export type ElementModale = {
   titre: string;
   corps: ReactElement;
-  actions: ReactElement[];
 };
 
 export const ContexteModale = createContext<ActionsModale>({
@@ -17,5 +16,3 @@ export type ActionsModale = {
   affiche: (element: ElementModale) => void;
   ferme: () => void;
 };
-
-export const useModale = (): ActionsModale => useContext(ContexteModale);
