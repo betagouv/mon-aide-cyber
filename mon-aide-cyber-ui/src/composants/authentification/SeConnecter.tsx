@@ -1,10 +1,19 @@
 import React, { FormEvent, useCallback, useState } from 'react';
-import { useEntrepots, useModale } from '../../fournisseurs/hooks.ts';
+import {
+  useAuthentification,
+  useEntrepots,
+  useModale,
+} from '../../fournisseurs/hooks.ts';
 import Button from '@codegouvfr/react-dsfr/Button';
-const Authentification = ({ surAnnulation }: { surAnnulation: () => void }) => {
+import { useNavigate } from 'react-router-dom';
+
+const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
   const entrepots = useEntrepots();
+  const authentification = useAuthentification();
+  const navigate = useNavigate();
 
   const [motDePasse, setMotDePasse] = useState('');
+
   const [identifiant, setIdentifiant] = useState('');
 
   const surSaisieMoteDePasse = useCallback(
@@ -22,11 +31,28 @@ const Authentification = ({ surAnnulation }: { surAnnulation: () => void }) => {
   );
 
   const connexion = useCallback(
-    (e: FormEvent) => {
+    async (e: FormEvent) => {
       e.preventDefault();
-      entrepots.authentification().connexion({ identifiant, motDePasse });
+      await entrepots
+        .authentification()
+        .connexion({
+          identifiant,
+          motDePasse,
+        })
+        .then((utilisateur) => {
+          authentification.authentifie(utilisateur);
+          surFermeture();
+          navigate('diagnostics');
+        });
     },
-    [entrepots, identifiant, motDePasse],
+    [
+      authentification,
+      entrepots,
+      identifiant,
+      motDePasse,
+      navigate,
+      surFermeture,
+    ],
   );
 
   return (
@@ -61,7 +87,7 @@ const Authentification = ({ surAnnulation }: { surAnnulation: () => void }) => {
             <Button
               key="annule-connexion-aidant"
               className="bouton-mac bouton-mac-secondaire"
-              onClick={surAnnulation}
+              onClick={surFermeture}
             >
               Annuler
             </Button>
@@ -86,7 +112,7 @@ export const SeConnecter = () => {
       event.preventDefault();
       affiche({
         titre: 'Connectez vous',
-        corps: <Authentification surAnnulation={ferme} />,
+        corps: <Authentification surFermeture={ferme} />,
       });
     },
     [affiche, ferme],
