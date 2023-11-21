@@ -4,7 +4,11 @@ import {
   Diagnostics,
   EntrepotDiagnostics,
 } from '../../domaine/diagnostic/Diagnostics.ts';
-import { EntrepotAuthentification } from '../../domaine/authentification/Authentification.ts';
+import {
+  EntrepotAuthentification,
+  Utilisateur,
+} from '../../domaine/authentification/Authentification.ts';
+import * as console from 'console';
 
 export abstract class APIEntrepot<T extends Aggregat> implements Entrepot<T> {
   protected constructor(private readonly chemin: string) {}
@@ -45,13 +49,30 @@ export class APIEntrepotDiagnostics
 }
 
 export class APIEntrepotAuthentification implements EntrepotAuthentification {
-  connexion(identifiants: { motDePasse: string; identifiant: string }): void {
-    fetch(`/api/token`, {
+  connexion(identifiants: {
+    motDePasse: string;
+    identifiant: string;
+  }): Promise<Utilisateur> {
+    return fetch(`/api/token`, {
       method: 'POST',
       body: JSON.stringify(identifiants),
       headers: { 'Content-Type': 'application/json' },
     })
-      .then((reponse) => console.log('CONNECTE', reponse))
-      .catch((erreur) => console.log('ERREUR', erreur));
+      .then(async (reponse) => {
+        const aidant = await reponse.json();
+        sessionStorage.setItem('aidant', JSON.stringify(aidant));
+
+        return Promise.resolve(aidant);
+      })
+      .catch((erreur) => {
+        console.log('ERREUR', erreur);
+        return Promise.reject();
+      });
+  }
+
+  utilisateurAuthentifie(): Promise<Utilisateur> {
+    return Promise.resolve(
+      sessionStorage.getItem('aidant') as unknown as Utilisateur,
+    );
   }
 }

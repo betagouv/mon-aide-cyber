@@ -6,13 +6,13 @@ import { EntrepotDiagnosticsMemoire } from '../../test/infrastructure/entrepots/
 import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ComposantDiagnostics } from '../composants/ComposantDiagnostics.tsx';
-import { withRouter } from 'storybook-addon-react-router-v6';
 import { lesDiagnostics } from '../../test/constructeurs/ConstructeurDiagnostics.ts';
 import { actions } from '../domaine/Actions.ts';
 import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts';
 import { EntrepotDiagnostic } from '../domaine/diagnostic/Diagnostic.ts';
 import { EntrepotDiagnostics } from '../domaine/diagnostic/Diagnostics.ts';
 import { EntrepotAuthentification } from '../domaine/authentification/Authentification.ts';
+import { BrowserRouter } from 'react-router-dom';
 
 const entrepotDiagnosticsMemoire = new EntrepotDiagnosticsMemoire();
 const premierDiagnostic = unDiagnostic().construis();
@@ -38,20 +38,21 @@ const meta = {
     },
   },
   decorators: [
-    withRouter,
     (story) => (
-      <FournisseurEntrepots.Provider
-        value={{
-          diagnostic: () => ({}) as unknown as EntrepotDiagnostic,
-          diagnostics: (): EntrepotDiagnostics => entrepotDiagnosticsMemoire,
-          authentification: (): EntrepotAuthentification =>
-            ({}) as unknown as EntrepotAuthentification,
-        }}
-      >
-        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-          {story()}
-        </ErrorBoundary>
-      </FournisseurEntrepots.Provider>
+      <BrowserRouter>
+        <FournisseurEntrepots.Provider
+          value={{
+            diagnostic: () => ({}) as unknown as EntrepotDiagnostic,
+            diagnostics: (): EntrepotDiagnostics => entrepotDiagnosticsMemoire,
+            authentification: (): EntrepotAuthentification =>
+              ({}) as unknown as EntrepotAuthentification,
+          }}
+        >
+          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+            {story()}
+          </ErrorBoundary>
+        </FournisseurEntrepots.Provider>
+      </BrowserRouter>
     ),
   ],
 } satisfies Meta<typeof ComposantDiagnostics>;
