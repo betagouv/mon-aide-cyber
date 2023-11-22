@@ -3,7 +3,8 @@ type Contexte =
   | 'Ajout réponse au diagnostic'
   | 'Termine le diagnostic'
   | 'Lance le diagnostic'
-  | "Demande d'Authentification";
+  | "Demande d'Authentification"
+  | 'Accès ressource protégée';
 
 export class ErreurMAC implements Error {
   private constructor(

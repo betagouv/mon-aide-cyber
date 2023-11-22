@@ -2,21 +2,7 @@ import { describe } from 'vitest';
 import { authentifie } from '../../src/authentification/authentification';
 import { EntrepotAidantMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { unAidant } from './constructeurs/constructeurAidant';
-import {
-  GestionnaireDeJeton,
-  Jeton,
-} from '../../src/authentification/GestionnaireDeJeton';
-import jwt from 'jsonwebtoken';
-
-class GestionnaireDeJetonJWT implements GestionnaireDeJeton {
-  decode(_: string): any {
-    return;
-  }
-
-  genereJeton(donnee: string): Jeton {
-    return jwt.sign(donnee, process.env.SECRET_JETON || '');
-  }
-}
+import { GestionnaireDeJetonJWT } from '../../src/infrastructure/authentification/gestionnaireDeJetonJWT';
 
 describe('Authentification', () => {
   it('génère un jeton JWT', async () => {
@@ -33,12 +19,18 @@ describe('Authentification', () => {
 
     const aidantAuthentifie = await authentifie(
       entrepotAidant,
-      new GestionnaireDeJetonJWT(),
+      new GestionnaireDeJetonJWT('ma-clef-secrete'),
       'Thomas',
       'motDePasse',
     );
     expect(aidantAuthentifie.jeton).toStrictEqual(
       'eyJhbGciOiJIUzI1NiJ9.OThmYjQ1ZjUtZGI3NC00MGQyLThhYjgtMGM3NzRlMzlkZjM2.hKtc0U2BhwunzgdXvpFuuEkkStMYAcVM8ge6ttYDmBc',
     );
+  });
+
+  it('jète une erreur quand decoder un jeton echoue', () => {
+    expect(() =>
+      new GestionnaireDeJetonJWT('clef-secrete').decode('un jeton indecodable'),
+    ).toThrowError();
   });
 });

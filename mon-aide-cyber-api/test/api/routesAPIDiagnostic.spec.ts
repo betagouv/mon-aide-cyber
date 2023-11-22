@@ -7,7 +7,7 @@ import {
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
-import { executeRequete } from './executeurRequete';
+import { executeRequete, executeRequeteAuthentifie } from './executeurRequete';
 import { RepresentationDiagnostic } from '../../src/api/representateurs/types';
 import { Express } from 'express';
 
@@ -33,7 +33,7 @@ describe('le serveur MAC sur les routes', () => {
         await testeurMAC.entrepots.diagnostic().persiste(deuxiemeDiagnostic);
         await testeurMAC.entrepots.diagnostic().persiste(troisiemeDiagnostic);
 
-        const reponse = await executeRequete(
+        const reponse = await executeRequeteAuthentifie(
           donneesServeur.app,
           'GET',
           '/api/diagnostics',
