@@ -1,0 +1,27 @@
+@startuml
+!define ICONURL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v2.4.0
+!include ICONURL/devicons/github.puml
+!include ICONURL/devicons/postgresql.puml
+
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+'Person_Ext(sfmcmu, "SFMC Marketing user", "An SFMC user who plans to manage marketing campaigns through Sinch SFMC activity.")
+Person(aidant, "Aidant", "Une personne formée à MonAideCyber faisant passer des diagnostics à des aidés de sa région")
+Person(administrateur, "Administrateur MAC", "Maintient le référentiel")
+'Person(sinchadm, "Sinch Administrator", "A Sinch administrator responsible to setup Sinch customer account to use SFMC.")
+System(mac, "MonAideCyber", "Permet à des aidants de faire des diagnostics pour leurs aidés")
+System_Ext(postgres, "PostgreSQL", "Base de données", $sprite="postgresql")
+System_Ext(metabase, "Metabase", "Analyse de données")
+System_Ext(sentry, "Sentry", "Analyse et gestion d'erreurs du service")
+System_Ext(github, "GitHub", "Entrepôt des sources MonAideCyber", $sprite="github")
+
+Rel(aidant, mac, "Uses")
+Rel(mac, postgres, "Uses")
+Rel(mac, metabase, "Uses")
+Rel(mac, sentry, "Uses")
+
+Rel(administrateur, github, "Uses")
+Rel(github, mac, "Déploie")
+@enduml

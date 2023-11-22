@@ -1,0 +1,39 @@
+@startuml
+!define ICONURL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v2.4.0
+!include ICONURL/devicons/react.puml
+!include ICONURL/devicons/nodejs.puml
+!include ICONURL/devicons/github.puml
+!include ICONURL/devicons/postgresql.puml
+
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(aidant, "Aidant", "Une personne formée à MonAideCyber faisant passer des diagnostics à des aidés de sa région")
+Person(administrateur, "Administrateur MAC", "Maintient le référentiel")
+
+System_Ext(postgres, "PostgreSQL", "Base de données", $sprite="postgresql")
+System_Ext(metabase, "Metabase", "Analyse de données")
+System_Ext(sentry, "Sentry", "Analyse et gestion d'erreurs du service")
+System_Ext(github, "GitHub", "Entrepôt des sources MonAideCyber", $sprite="github")
+
+System_Boundary(mac, "MAC") {
+    Container(ui, "UI", "Interface utilisateur React", "", $sprite="react")
+    Container(backend, "API", "Backend","Backend de MonAideCyber", $sprite="nodejs")
+
+    Rel_D(ui, backend, "Fait des appels API", "JSON/HTTPS")
+    Rel(backend, postgres, "Lis / écris en base de données")
+    Rel(backend, metabase, "Collecte les interactions métiers")
+    Rel(backend, sentry, "Collecte les erreurs issues du service pour analyse")
+}
+
+Rel(aidant, ui, "Arrive sur la page d'accueil de MAC", "Navigateur")
+Rel(aidant, ui, "S'authentifie", "Navigateur")
+Rel(aidant, ui, "Fait les diagnostics", "Navigateur")
+
+Rel(administrateur, github, "Opère des tâches d'administration (maintien du référentiel notamment)")
+
+Rel(github, mac, "Déploie")
+
+
+@enduml

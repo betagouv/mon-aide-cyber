@@ -1,0 +1,55 @@
+@startuml
+!define ICONURL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v2.4.0
+!include ICONURL/devicons/javascript.puml
+!include ICONURL/devicons/github.puml
+!include ICONURL/devicons/react.puml
+!include ICONURL/devicons/nodejs.puml
+!include ICONURL/devicons/postgresql.puml
+
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(aidant, "Aidant", "Une personne formée à MonAideCyber faisant passer des diagnostics à des aidés de sa région")
+Person(administrateur, "Administrateur MAC", "Maintient le référentiel")
+
+System_Ext(postgres, "PostgreSQL", "Base de données", $sprite="postgresql")
+System_Ext(metabase, "Metabase", "Analyse de données")
+System_Ext(sentry, "Sentry", "Analyse et gestion d'erreurs du service")
+System_Ext(github, "GitHub", "Entrepôt des sources MonAideCyber", $sprite="github")
+
+Component(ui, "UI", "Interface utilisateur React", "", $sprite="react")
+
+Container_Boundary(mac, "MAC") {
+    Component(authentification, "Authentification", "Backend","Permet à l'aidant de se connecter à MAC", $sprite="nodejs")
+    Rel_D(authentification, postgres, "Cherche l'aidant")
+    Rel_D(authentification, sentry, "Remonte les erreurs")
+    Rel_D(authentification, metabase, "Collecte l'information qu'un aidant s'est connecté")
+
+    Component(diagnostics, "Diagnostics", "Backend", "Liste des diagnostics de l'aidant", $sprite="nodejs")
+    Rel_D(diagnostics, postgres, "Recherche les diagnostics de l'aidant")
+
+    Component(diagnostic, "Diagnostic", "Backend", "", $sprite="nodejs")
+    Component(pdf_diagnostic, "PDF", "Backend", "", $sprite="nodejs")
+    Rel_D(diagnostic, pdf_diagnostic, "Génère le PDF du diagnostic")
+    Rel_D(diagnostic, postgres, "Persiste les réponses du diagnostic")
+    Rel_D(diagnostic, sentry, "Remonte les erreurs")
+    Rel_D(diagnostic, metabase, "Collecte les informations de création / réponses / terminaison du diagnostic")
+
+
+}
+
+Rel_D(ui, authentification, "Fait des appels API", "JSON/HTTPS")
+Rel_D(ui, diagnostic, "Fait des appels API", "JSON/HTTPS")
+Rel_D(ui, diagnostics, "Fait des appels API", "JSON/HTTPS")
+
+Rel(aidant, ui, "Arrive sur la page d'accueil de MAC", "Navigateur")
+Rel(aidant, ui, "Fait les diagnostics", "Navigateur")
+Rel(aidant, ui, "S'authentifie", "Navigateur")
+
+Rel(administrateur, github, "Opère des tâches d'administration (maintien du référentiel notamment)")
+
+Rel(github, mac, "Déploie")
+
+
+@enduml
