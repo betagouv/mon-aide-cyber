@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   db:
@@ -11,3 +11,14 @@ services:
     volumes:
       - /var/lib/postgresql/data
       - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
+
+  node:
+    image: node:18.12.1 # Version LTS
+    environment:
+      - URL_SERVEUR_BASE_DONNEES=postgres://postgres@mon-aide-cyber-bd-test
+    volumes:
+      - ../:/home/node/app
+    working_dir: /home/node/app
+    command: './test/scripts/migrations.sh'
+    depends_on:
+      - db
