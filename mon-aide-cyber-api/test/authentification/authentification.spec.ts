@@ -33,6 +33,6 @@ describe('Authentification', () => {
       new GestionnaireDeJetonJWT('clef-secrete').verifie(
         'un jeton indecodable',
       ),
-    ).toThrowError(new Error('jwt malformed'));
+    ).toThrowError('jeton JWT malformé.');
   });
 });

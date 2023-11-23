@@ -4,6 +4,7 @@ import {
 } from '../../authentification/GestionnaireDeJeton';
 import jwt from 'jsonwebtoken';
 import { ErreurMAC } from '../../domaine/erreurMAC';
+import { ErreurAccesRefuse } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
 
 export class GestionnaireDeJetonJWT implements GestionnaireDeJeton {
   constructor(private readonly clef: string) {}
@@ -12,7 +13,10 @@ export class GestionnaireDeJetonJWT implements GestionnaireDeJeton {
     try {
       jwt.verify(token, this.clef);
     } catch (erreur) {
-      throw ErreurMAC.cree('Accès ressource protégée', erreur as Error);
+      throw ErreurMAC.cree(
+        'Accès ressource protégée',
+        new ErreurAccesRefuse('jeton JWT malformé.'),
+      );
     }
   }
 
