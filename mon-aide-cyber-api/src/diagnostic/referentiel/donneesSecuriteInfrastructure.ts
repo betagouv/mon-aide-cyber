@@ -71,7 +71,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               identifiant:
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes',
               libelle:
-                'Si "Oui" : stockez-vous les journaux des flux manipulés par votre pare-feu (entrants/sortants/bloqués) ? ',
+                'Si "Oui" : stockez-vous les journaux des flux (entrants/sortants/bloqués) générés par votre pare-feu ?',
               reponsesPossibles: [
                 {
                   identifiant:
