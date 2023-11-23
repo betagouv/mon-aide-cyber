@@ -4,7 +4,7 @@ import {
 } from '../../authentification/GestionnaireDeJeton';
 
 export class FauxGestionnaireDeJeton implements GestionnaireDeJeton {
-  decode(_: string): void {
+  verifie(_: string): void {
     return;
   }
 

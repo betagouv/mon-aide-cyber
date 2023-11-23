@@ -8,7 +8,7 @@ import { ErreurMAC } from '../../domaine/erreurMAC';
 export class GestionnaireDeJetonJWT implements GestionnaireDeJeton {
   constructor(private readonly clef: string) {}
 
-  decode(token: string): void {
+  verifie(token: string): void {
     try {
       jwt.verify(token, this.clef);
     } catch (erreur) {
