@@ -22,26 +22,17 @@ const representeUnElementDeListeDeDiagnosticsPourLeClient = (
   };
 };
 
-const verifieSession =
-  (configuration: ConfigurationServeur) =>
-  (requete: Request, _reponse: Response, suite: NextFunction) => {
-    const matches = requete.headers.cookie!.match(/session=(\w+)=/);
-
-    const jetonDeSessionEnClair = JSON.parse(
-      Buffer.from(matches![1], 'base64').toString(),
-    );
-
-    configuration.gestionnaireDeJeton.decode(jetonDeSessionEnClair.token);
-
-    suite();
-  };
-
 export const routesAPIDiagnostics = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
   routes.get(
     '/',
-    verifieSession(configuration),
+    (requete, reponse, suite) =>
+      configuration.adaptateurDeVerificationDeSession.verifie(
+        requete,
+        reponse,
+        suite,
+      ),
     (_requete: Request, reponse: Response, suite: NextFunction) => {
       configuration.entrepots
         .diagnostic()

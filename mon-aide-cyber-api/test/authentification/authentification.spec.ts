@@ -28,9 +28,11 @@ describe('Authentification', () => {
     );
   });
 
-  it('jète une erreur quand decoder un jeton echoue', () => {
+  it('jette une erreur quand decoder un jeton echoue', () => {
     expect(() =>
-      new GestionnaireDeJetonJWT('clef-secrete').decode('un jeton indecodable'),
-    ).toThrowError();
+      new GestionnaireDeJetonJWT('clef-secrete').verifie(
+        'un jeton indecodable',
+      ),
+    ).toThrowError(new Error('jwt malformed'));
   });
 });

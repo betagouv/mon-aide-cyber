@@ -15,6 +15,7 @@ import { AdaptateurGestionnaireErreurs } from './adaptateurs/AdaptateurGestionna
 import { NextFunction } from 'express-serve-static-core';
 import { GestionnaireDeJeton } from './authentification/GestionnaireDeJeton';
 import { csrf } from 'lusca';
+import { AdaptateurDeVerificationDeSession } from './adaptateurs/AdaptateurDeVerificationDeSession';
 import CookieSession = require('cookie-session');
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
@@ -30,6 +31,7 @@ export type ConfigurationServeur = {
   busEvenement: BusEvenement;
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
   gestionnaireDeJeton: GestionnaireDeJeton;
+  adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
   avecProtectionCsrf: boolean;
 };
 const creeApp = (config: ConfigurationServeur) => {
