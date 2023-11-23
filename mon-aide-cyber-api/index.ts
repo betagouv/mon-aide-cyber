@@ -8,10 +8,10 @@ import { BusEvenementMAC } from './src/infrastructure/bus/BusEvenementMAC';
 import { fabriqueConsommateursEvenements } from './src/adaptateurs/fabriqueConsommateursEvenements';
 import { fabriqueGestionnaireErreurs } from './src/infrastructure/adaptateurs/fabriqueGestionnaireErreurs';
 import { GestionnaireDeJetonJWT } from './src/infrastructure/authentification/gestionnaireDeJetonJWT';
-import { AdaptateurDeVerificationDeSessionHttp } from './AdaptateurDeVerificationDeSessionHttp';
+import { AdaptateurDeVerificationDeSessionHttp } from './src/adaptateurs/AdaptateurDeVerificationDeSessionHttp';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
-  process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
+  process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut',
 );
 
 const serveurMAC = serveur.creeServeur({
@@ -25,7 +25,7 @@ const serveurMAC = serveur.creeServeur({
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),
   gestionnaireDeJeton: gestionnaireDeJeton,
   adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(
-    gestionnaireDeJeton
+    gestionnaireDeJeton,
   ),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
 });

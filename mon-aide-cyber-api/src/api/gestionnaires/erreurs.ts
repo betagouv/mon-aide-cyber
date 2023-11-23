@@ -6,8 +6,10 @@ import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 
 import { ErreurAuthentification } from '../../authentification/Aidant';
+import { ErreurAccesRefuse } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
 
 const HTTP_NON_AUTORISE = 401;
+const HTTP_ACCES_REFUSE = 403;
 const HTTP_NON_TROUVE = 404;
 const HTTP_ERREUR_SERVEUR = 500;
 
@@ -16,7 +18,7 @@ const CORPS_REPONSE_ERREUR_NON_GEREE = {
 };
 
 export const gestionnaireErreurGeneralisee = (
-  gestionnaireErreurs: ConsignateurErreurs,
+  consignateurErreur: ConsignateurErreurs,
 ) => {
   return (
     erreur: Error,
@@ -36,14 +38,21 @@ export const gestionnaireErreurGeneralisee = (
       construisReponse(HTTP_ERREUR_SERVEUR, CORPS_REPONSE_ERREUR_NON_GEREE);
     };
 
+    console.log(erreur);
+
     if (erreur) {
       if (erreur instanceof ErreurMAC) {
         if (erreur.erreurOriginelle instanceof AggregatNonTrouve) {
           construisReponse(HTTP_NON_TROUVE, { message: erreur.message });
-          gestionnaireErreurs.consigne(erreur);
+          consignateurErreur.consigne(erreur);
         } else if (erreur.erreurOriginelle instanceof ErreurAuthentification) {
-          gestionnaireErreurs.consigne(erreur);
+          consignateurErreur.consigne(erreur);
           construisReponse(HTTP_NON_AUTORISE, { message: erreur.message });
+        } else if (erreur.erreurOriginelle instanceof ErreurAccesRefuse) {
+          consignateurErreur.consigne(erreur);
+          construisReponse(HTTP_ACCES_REFUSE, {
+            message: "L'accès à la ressource est interdit.",
+          });
         } else {
           construisReponseErreurServeur();
           suite(erreur);
