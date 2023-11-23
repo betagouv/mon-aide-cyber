@@ -22,6 +22,7 @@ import { FournisseurAuthentification } from './fournisseurs/ContexteAuthentifica
 import { PortailModale } from './composants/modale/PortailModale.tsx';
 import { Footer } from './composants/Footer.tsx';
 import { Header } from './composants/Header.tsx';
+import { CharteAidant } from './vues/CharteAidant.tsx';
 
 startReactDsfr({ defaultColorScheme: 'system' });
 
@@ -49,6 +50,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     </ErrorBoundary>
                   }
                 />
+                <Route path="/charte-aidant" element={<CharteAidant />} />
                 <Route
                   element={
                     <Suspense>
