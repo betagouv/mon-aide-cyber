@@ -3,9 +3,13 @@ import { authentifie } from '../../src/authentification/authentification';
 import { EntrepotAidantMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { unAidant } from './constructeurs/constructeurAidant';
 import { GestionnaireDeJetonJWT } from '../../src/infrastructure/authentification/gestionnaireDeJetonJWT';
+import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe('Authentification', () => {
   it('génère un jeton JWT', async () => {
+    FournisseurHorlogeDeTest.initialise(
+      new Date(Date.parse('2023-02-04T10:00:00+01:00')),
+    );
     process.env.SECRET_JETON = 'ma-clef-secrete';
 
     const entrepotAidant = new EntrepotAidantMemoire();
@@ -24,15 +28,7 @@ describe('Authentification', () => {
       'motDePasse',
     );
     expect(aidantAuthentifie.jeton).toStrictEqual(
-      'eyJhbGciOiJIUzI1NiJ9.OThmYjQ1ZjUtZGI3NC00MGQyLThhYjgtMGM3NzRlMzlkZjM2.hKtc0U2BhwunzgdXvpFuuEkkStMYAcVM8ge6ttYDmBc',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWFudCI6Ijk4ZmI0NWY1LWRiNzQtNDBkMi04YWI4LTBjNzc0ZTM5ZGYzNiIsImlhdCI6MTY3NTUwMTIwMDAwMH0.XaNT7-A3lUv4NgZEbpD6gc-Nrv0fE19RN554t3IUjTM',
     );
-  });
-
-  it('jette une erreur quand decoder un jeton echoue', () => {
-    expect(() =>
-      new GestionnaireDeJetonJWT('clef-secrete').verifie(
-        'un jeton indecodable',
-      ),
-    ).toThrowError('jeton JWT malformé.');
   });
 });

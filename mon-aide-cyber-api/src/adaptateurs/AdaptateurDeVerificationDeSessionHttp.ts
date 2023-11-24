@@ -5,31 +5,37 @@ import {
   AdaptateurDeVerificationDeSession,
   ErreurAccesRefuse,
 } from './AdaptateurDeVerificationDeSession';
+import { Contexte, ErreurMAC } from '../domaine/erreurMAC';
 
 export class AdaptateurDeVerificationDeSessionHttp
   implements AdaptateurDeVerificationDeSession
 {
   constructor(private readonly gestionnaireDeJeton: GestionnaireDeJeton) {}
 
-  verifie(requete: Request, _reponse: Response, suite: NextFunction) {
-    const cookie = requete.headers.cookie;
-
-    if (!cookie) {
-      throw new ErreurAccesRefuse('Aucun cookie de session trouvé.');
+  verifie(
+    contexte: Contexte,
+    requete: Request,
+    _reponse: Response,
+    suite: NextFunction,
+  ): void {
+    const cookieSessionValide = requete.headers.cookie
+      ?.match(/session=(\w+)=/)
+      ?.pop();
+    if (!cookieSessionValide) {
+      throw ErreurMAC.cree(contexte, new ErreurAccesRefuse('Cookie invalide.'));
     }
 
-    const matches = cookie.match(/session=(\w+)=/);
-    const cookieDeSession = matches ? matches[1] : undefined;
-
-    if (!cookieDeSession) {
-      throw new ErreurAccesRefuse(`Cookie de session malformé: '${cookie}'.`);
+    try {
+      const sessionDecodee = JSON.parse(
+        Buffer.from(cookieSessionValide, 'base64').toString(),
+      );
+      this.gestionnaireDeJeton.verifie(sessionDecodee.token);
+    } catch (e) {
+      throw ErreurMAC.cree(
+        contexte,
+        new ErreurAccesRefuse('Session invalide.'),
+      );
     }
-
-    const sessionDecodee = JSON.parse(
-      Buffer.from(cookieDeSession, 'base64').toString(),
-    );
-
-    this.gestionnaireDeJeton.verifie(sessionDecodee.token);
 
     suite();
   }

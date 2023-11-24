@@ -1,12 +1,8 @@
 import { Request, Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
-import { AggregatNonTrouve } from '../../domaine/Aggregat';
 import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 
 import { ErreurMAC } from '../../domaine/erreurMAC';
-
-import { ErreurAuthentification } from '../../authentification/Aidant';
-import { ErreurAccesRefuse } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
 
 const HTTP_NON_AUTORISE = 401;
 const HTTP_ACCES_REFUSE = 403;
@@ -17,6 +13,48 @@ const CORPS_REPONSE_ERREUR_NON_GEREE = {
   message: "MonAideCyber n'est pas en mesure de traiter votre demande.",
 };
 
+const construisReponse = (
+  reponse: Response,
+  codeHTTP: number,
+  corpsReponse: { message: string },
+) => {
+  reponse.status(codeHTTP);
+  reponse.json(corpsReponse);
+};
+
+const erreursGerees: Map<
+  string,
+  (
+    erreur: ErreurMAC,
+    consignateur: ConsignateurErreurs,
+    reponse: Response,
+  ) => void
+> = new Map([
+  [
+    'AggregatNonTrouve',
+    (erreur, consignateur, reponse) => {
+      consignateur.consigne(erreur);
+      construisReponse(reponse, HTTP_NON_TROUVE, { message: erreur.message });
+    },
+  ],
+  [
+    'ErreurAuthentification',
+    (erreur, consignateur, reponse) => {
+      consignateur.consigne(erreur);
+      construisReponse(reponse, HTTP_NON_AUTORISE, { message: erreur.message });
+    },
+  ],
+  [
+    'ErreurAccesRefuse',
+    (erreur, consignateur, reponse) => {
+      consignateur.consigne(erreur);
+      construisReponse(reponse, HTTP_ACCES_REFUSE, {
+        message: "L'accès à la ressource est interdit.",
+      });
+    },
+  ],
+]);
+
 export const gestionnaireErreurGeneralisee = (
   consignateurErreur: ConsignateurErreurs,
 ) => {
@@ -26,33 +64,22 @@ export const gestionnaireErreurGeneralisee = (
     reponse: Response,
     suite: NextFunction,
   ) => {
-    const construisReponse = (
-      codeHTTP: number,
-      corpsReponse: { message: string },
-    ) => {
-      reponse.status(codeHTTP);
-      reponse.json(corpsReponse);
-    };
-
     const construisReponseErreurServeur = () => {
-      construisReponse(HTTP_ERREUR_SERVEUR, CORPS_REPONSE_ERREUR_NON_GEREE);
+      construisReponse(
+        reponse,
+        HTTP_ERREUR_SERVEUR,
+        CORPS_REPONSE_ERREUR_NON_GEREE,
+      );
     };
-
-    console.log(erreur);
 
     if (erreur) {
       if (erreur instanceof ErreurMAC) {
-        if (erreur.erreurOriginelle instanceof AggregatNonTrouve) {
-          construisReponse(HTTP_NON_TROUVE, { message: erreur.message });
-          consignateurErreur.consigne(erreur);
-        } else if (erreur.erreurOriginelle instanceof ErreurAuthentification) {
-          consignateurErreur.consigne(erreur);
-          construisReponse(HTTP_NON_AUTORISE, { message: erreur.message });
-        } else if (erreur.erreurOriginelle instanceof ErreurAccesRefuse) {
-          consignateurErreur.consigne(erreur);
-          construisReponse(HTTP_ACCES_REFUSE, {
-            message: "L'accès à la ressource est interdit.",
-          });
+        if (erreursGerees.has(erreur.erreurOriginelle.constructor.name)) {
+          erreursGerees.get(erreur.erreurOriginelle.constructor.name)?.(
+            erreur,
+            consignateurErreur,
+            reponse,
+          );
         } else {
           construisReponseErreurServeur();
           suite(erreur);

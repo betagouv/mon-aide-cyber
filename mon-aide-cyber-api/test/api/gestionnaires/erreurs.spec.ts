@@ -91,7 +91,7 @@ describe("Gestionnaire d'erreur", () => {
     const messageInterne = "une explication de l'erreur pour le développeur";
     gestionnaireErreurGeneralisee(consignateurErreurs)(
       ErreurMAC.cree(
-        'Accès ressource protégée',
+        'Ajout réponse au diagnostic',
         new ErreurAccesRefuse(messageInterne),
       ),
       fausseRequete,

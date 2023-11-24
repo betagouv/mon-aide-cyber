@@ -13,6 +13,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/',
     (requete, reponse, suite) =>
       configuration.adaptateurDeVerificationDeSession.verifie(
+        'Lance le diagnostic',
         requete,
         reponse,
         suite,
@@ -41,6 +42,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id/termine',
     (requete, reponse, suite) =>
       configuration.adaptateurDeVerificationDeSession.verifie(
+        'Termine le diagnostic',
         requete,
         reponse,
         suite,
@@ -68,6 +70,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id',
     (requete, reponse, suite) =>
       configuration.adaptateurDeVerificationDeSession.verifie(
+        'Accès diagnostic',
         requete,
         reponse,
         suite,
@@ -96,6 +99,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id',
     (requete, reponse, suite) =>
       configuration.adaptateurDeVerificationDeSession.verifie(
+        'Ajout réponse au diagnostic',
         requete,
         reponse,
         suite,
