@@ -8,7 +8,6 @@ import {
   EntrepotAuthentification,
   Utilisateur,
 } from '../../domaine/authentification/Authentification.ts';
-import * as console from 'console';
 
 export abstract class APIEntrepot<T extends Aggregat> implements Entrepot<T> {
   protected constructor(private readonly chemin: string) {}
@@ -59,14 +58,17 @@ export class APIEntrepotAuthentification implements EntrepotAuthentification {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(async (reponse) => {
-        const aidant = await reponse.json();
-        sessionStorage.setItem('aidant', JSON.stringify(aidant));
-
-        return Promise.resolve(aidant);
+        const reponseJSON = await reponse.json();
+        if (reponse.ok) {
+          const aidant = reponseJSON;
+          sessionStorage.setItem('aidant', JSON.stringify(aidant));
+          return Promise.resolve(aidant);
+        } else {
+          return Promise.reject(reponseJSON);
+        }
       })
       .catch((erreur) => {
-        console.log('ERREUR', erreur);
-        return Promise.reject();
+        return Promise.reject(erreur);
       });
   }
 
