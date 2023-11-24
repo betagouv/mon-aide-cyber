@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback, useState } from 'react';
+import React, { FormEvent, useCallback, useReducer } from 'react';
 import {
   useAuthentification,
   useEntrepots,
@@ -6,52 +6,64 @@ import {
 } from '../../fournisseurs/hooks.ts';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useNavigate } from 'react-router-dom';
+import {
+  authentificationInvalidee,
+  identifiantSaisi,
+  motDePasseSaisi,
+  reducteurAuthentification,
+  saisieInvalidee,
+} from './reducteurAuthentification.tsx';
 
 const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
   const entrepots = useEntrepots();
   const authentification = useAuthentification();
   const navigate = useNavigate();
 
-  const [motDePasse, setMotDePasse] = useState('');
+  const [etatAuthentification, envoie] = useReducer(reducteurAuthentification, {
+    identifiant: '',
+    motDePasse: '',
+    champsErreur: <></>,
+    saisieValide: () => false,
+  });
 
-  const [identifiant, setIdentifiant] = useState('');
+  const surSaisieMoteDePasse = useCallback((motDePasse: string) => {
+    envoie(motDePasseSaisi(motDePasse));
+  }, []);
 
-  const surSaisieMoteDePasse = useCallback(
-    (motDePasse: string) => {
-      setMotDePasse(motDePasse);
-    },
-    [setMotDePasse],
-  );
-
-  const surSaisieIdentifiant = useCallback(
-    (identifiant: string) => {
-      setIdentifiant(identifiant);
-    },
-    [setIdentifiant],
-  );
+  const surSaisieIdentifiant = useCallback((identifiant: string) => {
+    envoie(identifiantSaisi(identifiant));
+  }, []);
 
   const connexion = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
-      await entrepots
-        .authentification()
-        .connexion({
-          identifiant,
-          motDePasse,
-        })
-        .then((utilisateur) => {
-          authentification.authentifie(utilisateur);
-          surFermeture();
-          navigate('diagnostics');
-        });
+      const saisieValide = etatAuthentification.saisieValide();
+      if (!saisieValide) {
+        envoie(saisieInvalidee());
+      } else {
+        await entrepots
+          .authentification()
+          .connexion({
+            identifiant: etatAuthentification.identifiant,
+            motDePasse: etatAuthentification.motDePasse,
+          })
+          .then((utilisateur) => {
+            authentification.authentifie(utilisateur);
+            surFermeture();
+            navigate('diagnostics');
+          })
+          .catch((erreur) => {
+            envoie(authentificationInvalidee(erreur));
+          });
+      }
     },
     [
       authentification,
       entrepots,
-      identifiant,
-      motDePasse,
+      etatAuthentification,
       navigate,
       surFermeture,
+      envoie,
     ],
   );
 
@@ -61,26 +73,36 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
         <section>
           <div>
             <fieldset className="fr-mb-5w">
-              <label className="fr-label" htmlFor="identifiant-connexion">
-                Votre adresse email
-              </label>
-              <input
-                className="fr-input"
-                type="text"
-                id="identifiant-connexion"
-                name="identifiant-connexion"
-                onChange={(e) => surSaisieIdentifiant(e.target.value)}
-              />
-              <label className="fr-label" htmlFor="mot-de-passe">
-                Votre mot de passe
-              </label>
-              <input
-                className="fr-input"
-                type="password"
-                id="mot-de-passe"
-                name="mot-de-passe"
-                onChange={(e) => surSaisieMoteDePasse(e.target.value)}
-              />
+              <div
+                className={`fr-input-group ${etatAuthentification.erreur?.identifiant?.className}`}
+              >
+                <label className="fr-label" htmlFor="identifiant-connexion">
+                  Votre adresse email
+                </label>
+                <input
+                  className="fr-input"
+                  type="text"
+                  id={'identifiant-connexion'}
+                  name="identifiant-connexion"
+                  onChange={(e) => surSaisieIdentifiant(e.target.value)}
+                />
+                {etatAuthentification.erreur?.identifiant?.texteExplicatif}
+              </div>
+              <div
+                className={`fr-input-group ${etatAuthentification.erreur?.motDePasse?.className}`}
+              >
+                <label className="fr-label" htmlFor="mot-de-passe">
+                  Votre mot de passe
+                </label>
+                <input
+                  className="fr-input"
+                  type="password"
+                  id="mot-de-passe"
+                  name="mot-de-passe"
+                  onChange={(e) => surSaisieMoteDePasse(e.target.value)}
+                />
+                {etatAuthentification.erreur?.motDePasse?.texteExplicatif}
+              </div>
             </fieldset>
           </div>
           <div>
@@ -99,6 +121,7 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
               Se connecter
             </Button>
           </div>
+          <div className="fr-mt-2w">{etatAuthentification.champsErreur}</div>
         </section>
       </form>
     </>
