@@ -15,7 +15,7 @@ describe('Adaptateur de vérification de session', () => {
   it('valide le cookie', () => {
     const fauxGestionnaireDeJeton = new FauxGestionnaireDeJeton();
     const cookieDeSession =
-      'session=eyJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUo5Lll6RTFZekF5T0RNdE56ZGhNQzAwTlRReExXRXlZVE10TldJeE4yTm1OemMwWlRVdy5YVTExUkxJZlNfd2NJcWlhdTBmZzZ3RUtNZUVsNDhiNzhJdUVpeDd2Z2ZRIn0=';
+      'session=eyJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwWkdWdWRHbG1hV0Z1ZENJNkltTmlZVE16WVRSbUxUQXlNalF0TkdRNE1TMWlPRGs1TFRFMU1qRXdOV00yWWpoaFppSXNJbWxoZENJNk1UY3dNRGt3TWpZMU1UazJNSDAuV3hnRzNmSHRUUHl6R3d5T2RqcFFHcTlrbHE0eUJvNlVGOW53a1ltS3NobyJ9; session.sig=n5DahOjdSBgjYBonCTddV0mqZto';
     const requete: Request = {
       headers: { cookie: cookieDeSession },
     } as Request;
@@ -28,7 +28,7 @@ describe('Adaptateur de vérification de session', () => {
     );
 
     fauxGestionnaireDeJeton.verifieToken(
-      'eyJhbGciOiJIUzI1NiJ9.YzE1YzAyODMtNzdhMC00NTQxLWEyYTMtNWIxN2NmNzc0ZTUw.XU11RLIfS_wcIqiau0fg6wEKMeEl48b78IuEix7vgfQ',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWFudCI6ImNiYTMzYTRmLTAyMjQtNGQ4MS1iODk5LTE1MjEwNWM2YjhhZiIsImlhdCI6MTcwMDkwMjY1MTk2MH0.WxgG3fHtTPyzGwyOdjpQGq9klq4yBo6UF9nwkYmKsho',
     );
   });
 
@@ -60,7 +60,7 @@ describe('Adaptateur de vérification de session', () => {
 
   it('lève une erreur quand le cookie de session est malformé', () => {
     const cookieDeSession =
-      'session=eyJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFtctOaUo5Lll6RTFZekF5T0RNdE56ZGhNQzAwTlRReExXRXlZVE10TldJeE4yTm1OemMwWlRVdy5YVTExUkxJZlNfd2NJcWlhdTBmZzZ3RUtNZUVsNDhiNzhJdUVpeDd2Z2ZRIn0=';
+      'session=eyJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOtctaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwWkdWdWRHbG1hV0Z1ZENJNkltTmlZVE16WVRSbUxUQXlNalF0TkdRNE1TMWlPRGs1TFRFMU1qRXdOV00yWWpoaFppSXNJbWxoZENJNk1UY3dNRGt3TWpZMU1UazJNSDAuV3hnRzNmSHRUUHl6R3d5T2RqcFFHcTlrbHE0eUJvNlVGOW53a1ltS3NobyJ9; session.sig=n5DahOjdSBgjYBonCTddV0mqZto';
     const requete: Request = {
       headers: { cookie: cookieDeSession },
     } as Request;
@@ -75,7 +75,7 @@ describe('Adaptateur de vérification de session', () => {
   it('lève une erreur quand décoder un jeton échoue', () => {
     const fauxGestionnaireDeJeton = new FauxGestionnaireDeJeton(true);
     const cookieDeSession =
-      'session=eyJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUo5Lll6RTFZekF5T0RNdE56ZGhNQzAwTlRReExXRXlZVE10TldJeE4yTm1OemMwWlRVdy5YVTExUkxJZlNfd2NJcWlhdTBmZzZ3RUtNZUVsNDhiNzhJdUVpeDd2Z2ZRIn0=';
+      'session=eyJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwWkdWdWRHbG1hV0qqdZ1ZENJNkltTmlZVE16WVRSbUxUQXlNalF0TkdRNE1TMWlPRGs1TFRFMU1qRXdOV00yWWpoaFppSXNJbWxoZENJNk1UY3dNRGt3TWpZMU1UazJNSDAuV3hnRzNmSHRUUHl6R3d5T2RqcFFHcTlrbHE0eUJvNlVGOW53a1ltS3NobyJ9; session.sig=n5DahOjdSBgjYBonCTddV0mqZto';
     const requete: Request = {
       headers: { cookie: cookieDeSession },
     } as Request;
