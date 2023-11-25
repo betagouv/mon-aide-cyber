@@ -5,11 +5,17 @@ import { PortailModale } from '../composants/modale/PortailModale.tsx';
 import { FournisseurEntrepots } from '../fournisseurs/FournisseurEntrepot.ts';
 import { EntrepotDiagnostics } from '../domaine/diagnostic/Diagnostics.ts';
 import { EntrepotDiagnosticsMemoire } from '../../test/infrastructure/entrepots/EntrepotsMemoire.ts';
-import { EntrepotAuthentification, Utilisateur } from '../domaine/authentification/Authentification.ts';
+import {
+  EntrepotAuthentification,
+  Utilisateur,
+} from '../domaine/authentification/Authentification.ts';
+import { expect } from '@storybook/jest';
 import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { EntrepotDiagnostic } from '../domaine/diagnostic/Diagnostic.ts';
 import { BrowserRouter } from 'react-router-dom';
+import { FournisseurAuthentification } from '../fournisseurs/ContexteAuthentification.tsx';
+import { RequiertAuthentification } from '../fournisseurs/RequiertAuthentification.tsx';
 
 class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
   private aidants: {
@@ -17,7 +23,11 @@ class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
     motDePasse: string;
     nomPrenom: string;
   }[] = [];
-  connexion(identifiants: { motDePasse: string; identifiant: string }): Promise<Utilisateur> {
+
+  connexion(identifiants: {
+    motDePasse: string;
+    identifiant: string;
+  }): Promise<Utilisateur> {
     const aidantTrouve = this.aidants.find(
       (aidant) =>
         aidant.identifiant === identifiants.identifiant &&
@@ -35,15 +45,17 @@ class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
     identifiant: string;
     motDePasse: string;
     nomPrenom: string;
-  }): void {
+  }): Promise<void> {
     this.aidants.push(aidant);
+    return Promise.resolve();
   }
 
   utilisateurAuthentifie(): Promise<Utilisateur> {
     return Promise.resolve(this.aidants[0]);
   }
 }
-const entrepoAuthentification: EntrepotAuthentificationMemoire =
+
+const entrepotAuthentification: EntrepotAuthentificationMemoire =
   new EntrepotAuthentificationMemoire();
 
 const meta = {
@@ -67,41 +79,50 @@ export const ConnexionAMonAideCyber: Story = {
             diagnostics: (): EntrepotDiagnostics =>
               new EntrepotDiagnosticsMemoire(),
             authentification: (): EntrepotAuthentification =>
-              new EntrepotAuthentificationMemoire(),
+              entrepotAuthentification,
           }}
         >
-          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            <PortailModale>{story()}</PortailModale>
-          </ErrorBoundary>
+          <FournisseurAuthentification>
+            <RequiertAuthentification />
+            <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+              <PortailModale>{story()}</PortailModale>
+            </ErrorBoundary>
+          </FournisseurAuthentification>
         </FournisseurEntrepots.Provider>
       </BrowserRouter>
     ),
   ],
   name: 'Tente de se connecter à MonAideCyber',
   play: async ({ canvasElement, step }) => {
+    const aidant = {
+      identifiant: 'jean.dupont@mail.fr',
+      motDePasse: 'mot-de-passe',
+      nomPrenom: 'Jean Dupont',
+    };
+    await entrepotAuthentification.persiste(aidant);
     const canvas = within(canvasElement);
 
     await step("Lorsque l'aidant se connecte", async () => {
-      const aidant = {
-        identifiant: 'jean.dupont@mail.fr',
-        motDePasse: 'mot-de-passe',
-        nomPrenom: 'Jean Dupont',
-      };
-      entrepoAuthentification.persiste(aidant);
       await userEvent.click(
         canvas.getByRole('link', { name: /Se connecter/i }),
       );
-
       const champsAdresseEmail = await waitFor(() =>
         canvas.getByRole('textbox', {
           name: /votre adresse email/i,
         }),
       );
+      const champsMotDePasse = await waitFor(() =>
+        canvas.getByRole('textbox', {
+          name: /votre mot de passe/i,
+        }),
+      );
 
       userEvent.type(champsAdresseEmail, aidant.identifiant);
-      userEvent.type(
-        canvas.getByText(/votre mot de passe/i),
-        aidant.motDePasse,
+      userEvent.type(champsMotDePasse, aidant.motDePasse);
+      userEvent.click(canvas.getByRole('button', { name: /se connecter/i }));
+
+      await waitFor(() =>
+        expect(canvas.queryByText(/connectez vous/i)).not.toBeInTheDocument(),
       );
     });
   },

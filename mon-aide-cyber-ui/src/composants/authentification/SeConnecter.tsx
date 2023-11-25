@@ -97,6 +97,7 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
                 <input
                   className="fr-input"
                   type="password"
+                  role="textbox"
                   id="mot-de-passe"
                   name="mot-de-passe"
                   onChange={(e) => surSaisieMoteDePasse(e.target.value)}
