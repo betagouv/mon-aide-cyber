@@ -18,9 +18,9 @@ export class AdaptateurDeVerificationDeSessionHttp
     _reponse: Response,
     suite: NextFunction,
   ): void {
-    const cookieSessionValide = requete.headers.cookie
-      ?.match(/session=(\w+)=/)
-      ?.pop();
+    const cookieSessionValide = requete.headers.cookie?.match(
+      /session=(?<session>\w+);\ssession.sig=(\w+)/,
+    )?.groups?.session;
     if (!cookieSessionValide) {
       throw ErreurMAC.cree(contexte, new ErreurAccesRefuse('Cookie invalide.'));
     }
