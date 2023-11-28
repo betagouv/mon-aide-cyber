@@ -4,8 +4,8 @@ export const Header = () => (
   <header role="banner" className="fr-header">
     <div className="fr-header__body">
       <div className="fr-container--fluid">
-        <div className="fr-col-offset-2 fr-header__body-row">
-          <div className="fr-header__brand fr-enlarge-link">
+        <div className="fr-header__body-row">
+          <div className="fr-col-offset-2 fr-header__brand fr-enlarge-link">
             <div className="fr-header__brand-top">
               <div className="fr-header__logo">
                 <p className="fr-logo">
@@ -33,7 +33,7 @@ export const Header = () => (
               </a>
             </div>
           </div>
-          <div className="fr-header__tools">
+          <div className="fr-header__tools fr-col-offset-1--right">
             <div className="fr-header__tools-links">
               <ul className="fr-btns-group">
                 <li>
