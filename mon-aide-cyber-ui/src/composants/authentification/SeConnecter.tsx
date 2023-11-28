@@ -50,7 +50,7 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
           .then((utilisateur) => {
             authentification.authentifie(utilisateur);
             surFermeture();
-            navigate('diagnostics');
+            navigate('tableau-de-bord');
           })
           .catch((erreur) => {
             envoie(authentificationInvalidee(erreur));
@@ -109,7 +109,7 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
           <div>
             <Button
               key="annule-connexion-aidant"
-              className="bouton-mac bouton-mac-secondaire"
+              className="bouton-mac bouton-mac-secondaire fr-mr-2w"
               onClick={surFermeture}
             >
               Annuler

@@ -23,6 +23,7 @@ import { PortailModale } from './composants/modale/PortailModale.tsx';
 import { Footer } from './composants/Footer.tsx';
 import { Header } from './composants/Header.tsx';
 import { CharteAidant } from './vues/CharteAidant.tsx';
+import { TableauDeBord } from './composants/TableauDeBord.tsx';
 
 startReactDsfr({ defaultColorScheme: 'system' });
 
@@ -58,6 +59,12 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     </Suspense>
                   }
                 >
+                  <Route
+                    path="/tableau-de-bord"
+                    element={
+                      <ComposantIntercepteur composant={TableauDeBord} />
+                    }
+                  ></Route>
                   <Route
                     path="/diagnostics"
                     element={
