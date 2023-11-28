@@ -1,0 +1,10 @@
+.bandeau-violet {
+  @extend .bandeau-violet;
+  h2 {
+    color: var(--couleurs-mac-blanc);
+  }
+}
+
+.tableau-de-bord {
+  padding-top: 1.5rem;
+}

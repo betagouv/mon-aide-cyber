@@ -73,8 +73,10 @@ export class APIEntrepotAuthentification implements EntrepotAuthentification {
   }
 
   utilisateurAuthentifie(): Promise<Utilisateur> {
-    return Promise.resolve(
-      sessionStorage.getItem('aidant') as unknown as Utilisateur,
-    );
+    const aidant = sessionStorage.getItem('aidant');
+    if (aidant) {
+      return Promise.resolve(JSON.parse(aidant) as unknown as Utilisateur);
+    }
+    return Promise.reject({ message: "Vous n'êtes pas connecté." });
   }
 }

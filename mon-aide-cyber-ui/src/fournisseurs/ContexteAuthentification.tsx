@@ -24,7 +24,8 @@ export const FournisseurAuthentification = ({
     entrepots
       .authentification()
       .utilisateurAuthentifie()
-      .then((utilisateur) => setUtilisateur(utilisateur));
+      .then((utilisateur) => setUtilisateur(utilisateur))
+      .catch(() => setUtilisateur({} as unknown as Utilisateur));
   }, [entrepots]);
 
   const authentifie = (utilisateur: Utilisateur) => {
