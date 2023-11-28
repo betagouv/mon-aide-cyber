@@ -11,12 +11,8 @@ export interface AdaptateurDeVerificationDeSession {
   ): void;
 }
 
-export class ErreurAccesRefuse implements Error {
-  message: string;
-  name: string;
-
+export class ErreurAccesRefuse extends Error {
   constructor(message: string) {
-    this.name = '';
-    this.message = message;
+    super(message);
   }
 }
