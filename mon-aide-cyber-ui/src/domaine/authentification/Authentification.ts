@@ -9,4 +9,6 @@ export interface EntrepotAuthentification {
   }): Promise<Utilisateur>;
 
   utilisateurAuthentifie(): Promise<Utilisateur>;
+
+  utilisateurAuthentifieSync(): Utilisateur | null;
 }

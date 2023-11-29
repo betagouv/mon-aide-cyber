@@ -53,6 +53,10 @@ class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
   utilisateurAuthentifie(): Promise<Utilisateur> {
     return Promise.resolve(this.aidants[0]);
   }
+
+  utilisateurAuthentifieSync(): Utilisateur | null {
+    return this.aidants[0] || null;
+  }
 }
 
 const entrepotAuthentification: EntrepotAuthentificationMemoire =

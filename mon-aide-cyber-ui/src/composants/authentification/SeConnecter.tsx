@@ -1,9 +1,5 @@
 import React, { FormEvent, useCallback, useReducer } from 'react';
-import {
-  useAuthentification,
-  useEntrepots,
-  useModale,
-} from '../../fournisseurs/hooks.ts';
+import { useAuthentification, useModale } from '../../fournisseurs/hooks.ts';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -15,7 +11,6 @@ import {
 } from './reducteurAuthentification.tsx';
 
 const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
-  const entrepots = useEntrepots();
   const authentification = useAuthentification();
   const navigate = useNavigate();
 
@@ -41,30 +36,19 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
       if (!saisieValide) {
         envoie(saisieInvalidee());
       } else {
-        await entrepots
-          .authentification()
-          .connexion({
+        try {
+          await authentification.authentifie({
             identifiant: etatAuthentification.identifiant,
             motDePasse: etatAuthentification.motDePasse,
-          })
-          .then((utilisateur) => {
-            authentification.authentifie(utilisateur);
-            surFermeture();
-            navigate('tableau-de-bord');
-          })
-          .catch((erreur) => {
-            envoie(authentificationInvalidee(erreur));
           });
+          surFermeture();
+          navigate('tableau-de-bord');
+        } catch (erreur) {
+          envoie(authentificationInvalidee(erreur as Error));
+        }
       }
     },
-    [
-      authentification,
-      entrepots,
-      etatAuthentification,
-      navigate,
-      surFermeture,
-      envoie,
-    ],
+    [authentification, etatAuthentification, navigate, surFermeture, envoie],
   );
 
   return (

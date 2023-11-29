@@ -1,10 +1,13 @@
-import { createContext, PropsWithChildren, useEffect, useState } from 'react';
+import { createContext, PropsWithChildren, useState } from 'react';
 import { Utilisateur } from '../domaine/authentification/Authentification.ts';
 import { useEntrepots } from './hooks.ts';
 
 type ContexteAuthentificationType = {
   utilisateur: Utilisateur | null;
-  authentifie: (utilisateur: Utilisateur) => void;
+  authentifie: (identifiants: {
+    identifiant: string;
+    motDePasse: string;
+  }) => Promise<void>;
 };
 
 export const ContexteAuthentification =
@@ -16,21 +19,23 @@ export const FournisseurAuthentification = ({
   children,
 }: PropsWithChildren) => {
   const entrepots = useEntrepots();
-  const [utilisateur, setUtilisateur] = useState<Utilisateur>(
-    {} as unknown as Utilisateur,
+  const [utilisateur, setUtilisateur] = useState<Utilisateur | null>(
+    entrepots.authentification().utilisateurAuthentifieSync(),
   );
 
-  useEffect(() => {
+  const authentifie = (identifiants: {
+    identifiant: string;
+    motDePasse: string;
+  }) =>
     entrepots
       .authentification()
-      .utilisateurAuthentifie()
-      .then((utilisateur) => setUtilisateur(utilisateur))
-      .catch(() => setUtilisateur({} as unknown as Utilisateur));
-  }, [entrepots]);
-
-  const authentifie = (utilisateur: Utilisateur) => {
-    setUtilisateur(utilisateur);
-  };
+      .connexion({
+        identifiant: identifiants.identifiant,
+        motDePasse: identifiants.motDePasse,
+      })
+      .then((utilisateur) => {
+        setUtilisateur(utilisateur);
+      });
 
   const value = { utilisateur, authentifie };
 
