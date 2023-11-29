@@ -36,7 +36,7 @@ export type ConfigurationServeur = {
 };
 const creeApp = (config: ConfigurationServeur) => {
   const app = express();
-
+  app.set('trust proxy', 1);
   app.use(
     CookieSession({
       sameSite: true,
