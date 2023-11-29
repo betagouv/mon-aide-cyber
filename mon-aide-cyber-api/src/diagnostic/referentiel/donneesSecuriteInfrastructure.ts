@@ -132,7 +132,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
     {
       identifiant: 'securite-infrastructure-si-industriel-pare-feu-deploye',
       libelle:
-        "Si l'entité dispose d'un SI industriel : des mesures de cloisonnement spécifiques au système d'information industriel ont-elles été mise en œuvre ?",
+        "Si l'entité dispose de systèmes industriels : des mesures de cloisonnement spécifiques des systèmes industriels ont-elles été mise en œuvre ?",
       reponsesPossibles: [
         {
           identifiant:
