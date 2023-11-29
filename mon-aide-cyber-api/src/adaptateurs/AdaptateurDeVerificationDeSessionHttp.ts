@@ -6,6 +6,7 @@ import {
   ErreurAccesRefuse,
 } from './AdaptateurDeVerificationDeSession';
 import { Contexte, ErreurMAC } from '../domaine/erreurMAC';
+import Cookies from 'cookies';
 
 export class AdaptateurDeVerificationDeSessionHttp
   implements AdaptateurDeVerificationDeSession
@@ -15,19 +16,18 @@ export class AdaptateurDeVerificationDeSessionHttp
   verifie(
     contexte: Contexte,
     requete: Request,
-    _reponse: Response,
+    reponse: Response,
     suite: NextFunction,
   ): void {
-    const cookieSessionValide = requete.headers.cookie?.match(
-      /session=(?<session>\w+);\ssession.sig=(\w+)/,
-    )?.groups?.session;
-    if (!cookieSessionValide) {
+    const session = new Cookies(requete, reponse).get('session');
+
+    if (!session) {
       throw ErreurMAC.cree(contexte, new ErreurAccesRefuse('Cookie invalide.'));
     }
 
     try {
       const sessionDecodee = JSON.parse(
-        Buffer.from(cookieSessionValide, 'base64').toString(),
+        Buffer.from(session, 'base64').toString(),
       );
       this.gestionnaireDeJeton.verifie(sessionDecodee.token);
     } catch (e) {
