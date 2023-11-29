@@ -7,8 +7,9 @@ import { fabriqueEntrepots } from './src/adaptateurs/fabriqueEntrepots';
 import { BusEvenementMAC } from './src/infrastructure/bus/BusEvenementMAC';
 import { fabriqueConsommateursEvenements } from './src/adaptateurs/fabriqueConsommateursEvenements';
 import { fabriqueGestionnaireErreurs } from './src/infrastructure/adaptateurs/fabriqueGestionnaireErreurs';
-import { GestionnaireDeJetonJWT } from './src/infrastructure/authentification/gestionnaireDeJetonJWT';
+import { GestionnaireDeJetonJWT } from './src/infrastructure/authentification/GestionnaireDeJetonJWT';
 import { AdaptateurDeVerificationDeSessionHttp } from './src/adaptateurs/AdaptateurDeVerificationDeSessionHttp';
+import { ParseurCookieSessionMAC } from './src/authentification/ParseurCookieSessionMAC';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut',
@@ -25,6 +26,7 @@ const serveurMAC = serveur.creeServeur({
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),
   gestionnaireDeJeton: gestionnaireDeJeton,
   adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(
+    new ParseurCookieSessionMAC(),
     gestionnaireDeJeton,
   ),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',

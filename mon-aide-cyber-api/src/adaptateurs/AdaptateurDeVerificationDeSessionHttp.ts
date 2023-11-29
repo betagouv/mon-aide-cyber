@@ -6,11 +6,15 @@ import {
   ErreurAccesRefuse,
 } from './AdaptateurDeVerificationDeSession';
 import { Contexte, ErreurMAC } from '../domaine/erreurMAC';
+import { ParseurCookieSession } from './ParseurCookieSession';
 
 export class AdaptateurDeVerificationDeSessionHttp
   implements AdaptateurDeVerificationDeSession
 {
-  constructor(private readonly gestionnaireDeJeton: GestionnaireDeJeton) {}
+  constructor(
+    private readonly parseurCookieSession: ParseurCookieSession,
+    private readonly gestionnaireDeJeton: GestionnaireDeJeton,
+  ) {}
 
   verifie(
     contexte: Contexte,
@@ -18,22 +22,22 @@ export class AdaptateurDeVerificationDeSessionHttp
     _reponse: Response,
     suite: NextFunction,
   ): void {
-    const cookieSessionValide = requete.headers.cookie?.match(
-      /session=(?<session>\w+);\ssession.sig=(\w+)/,
-    )?.groups?.session;
-    if (!cookieSessionValide) {
-      throw ErreurMAC.cree(contexte, new ErreurAccesRefuse('Cookie invalide.'));
+    const cookie = requete.headers.cookie;
+
+    if (!cookie) {
+      throw ErreurMAC.cree(
+        contexte,
+        new ErreurAccesRefuse('Cookie de session invalide.'),
+      );
     }
 
     try {
-      const sessionDecodee = JSON.parse(
-        Buffer.from(cookieSessionValide, 'base64').toString(),
-      );
-      this.gestionnaireDeJeton.verifie(sessionDecodee.token);
+      const session = this.parseurCookieSession.parse(cookie);
+      this.gestionnaireDeJeton.verifie(session.token);
     } catch (e) {
       throw ErreurMAC.cree(
         contexte,
-        new ErreurAccesRefuse('Session invalide.'),
+        new ErreurAccesRefuse('Cookie de session invalide.'),
       );
     }
 

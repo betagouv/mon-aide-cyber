@@ -2,7 +2,7 @@ import { describe } from 'vitest';
 import { authentifie } from '../../src/authentification/authentification';
 import { EntrepotAidantMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { unAidant } from './constructeurs/constructeurAidant';
-import { GestionnaireDeJetonJWT } from '../../src/infrastructure/authentification/gestionnaireDeJetonJWT';
+import { GestionnaireDeJetonJWT } from '../../src/infrastructure/authentification/GestionnaireDeJetonJWT';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe('Authentification', () => {
