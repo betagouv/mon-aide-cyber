@@ -21,11 +21,19 @@ const representeUnElementDeListeDeDiagnosticsPourLeClient = (
     identifiant: diagnostic.identifiant,
   };
 };
+
 export const routesAPIDiagnostics = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
   routes.get(
     '/',
+    (requete, reponse, suite) =>
+      configuration.adaptateurDeVerificationDeSession.verifie(
+        'Accède aux diagnostics',
+        requete,
+        reponse,
+        suite,
+      ),
     (_requete: Request, reponse: Response, suite: NextFunction) => {
       configuration.entrepots
         .diagnostic()

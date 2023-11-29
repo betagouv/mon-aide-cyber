@@ -6,7 +6,7 @@ export const executeRequete = (
   verbe: 'GET' | 'POST' | 'PATCH',
   chemin: string,
   port: number,
-  corps: object | undefined = undefined,
+  corps: object | undefined = undefined
 ): Promise<Response> => {
   const requeteInit: RequestInit = {
     method: verbe,

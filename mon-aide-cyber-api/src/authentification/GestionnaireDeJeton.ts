@@ -1,7 +1,11 @@
 export type Jeton = string;
 
-export interface GestionnaireDeJeton {
-  decode(jeton: string): any;
+export type DonneesJetonMAC = {
+  identifiant: string;
+};
 
-  genereJeton(donnee: string): Jeton;
+export interface GestionnaireDeJeton {
+  verifie(jeton: string): void;
+
+  genereJeton(donnee: DonneesJetonMAC): Jeton;
 }

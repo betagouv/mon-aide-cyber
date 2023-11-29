@@ -10,6 +10,7 @@ import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/Ent
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 import { FauxGestionnaireDeJeton } from '../../src/infrastructure/authentification/FauxGestionnaireDeJeton';
+import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/AdaptateurDeVerificationDeSessionDeTest';
 
 const testeurIntegration = () => {
   let serveurDeTest: {
@@ -24,6 +25,8 @@ const testeurIntegration = () => {
   const entrepots = new EntrepotsMemoire();
   const busEvenement = new BusEvenementDeTest();
   const gestionnaireDeJeton = new FauxGestionnaireDeJeton();
+  const adaptateurDeVerificationDeSession =
+    new AdaptateurDeVerificationDeSessionDeTest();
   const adaptateurPDF: AdaptateurPDF = {
     genereRecommandations: (__: Diagnostic) =>
       Promise.resolve(Buffer.from('PDF généré')),
@@ -40,6 +43,7 @@ const testeurIntegration = () => {
       busEvenement,
       gestionnaireErreurs,
       gestionnaireDeJeton,
+      adaptateurDeVerificationDeSession,
       avecProtectionCsrf: false,
     });
     const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
@@ -59,6 +63,7 @@ const testeurIntegration = () => {
     initialise,
     adaptateurPDF,
     gestionnaireErreurs,
+    adaptateurDeVerificationDeSession,
   };
 };
 

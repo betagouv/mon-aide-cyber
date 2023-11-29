@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../../src/domaine/erreurMAC';
 import { ErreurAuthentification } from '../../../src/authentification/Aidant';
+import { ErreurAccesRefuse } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';
 
 describe("Gestionnaire d'erreur", () => {
   let codeRecu = 0;
@@ -82,5 +83,28 @@ describe("Gestionnaire d'erreur", () => {
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(1);
+  });
+
+  it("génère une erreur 403 lorsqu'une erreur MAC 'Accès ressource protégée' est reçue et consigne l'erreur avec le détail", () => {
+    const consignateurErreurs = new ConsignateurErreursMemoire();
+
+    const messageInterne = "une explication de l'erreur pour le développeur";
+    gestionnaireErreurGeneralisee(consignateurErreurs)(
+      ErreurMAC.cree(
+        'Ajout réponse au diagnostic',
+        new ErreurAccesRefuse(messageInterne),
+      ),
+      fausseRequete,
+      fausseReponse,
+      fausseSuite,
+    );
+
+    expect(
+      (consignateurErreurs.tous()[0] as ErreurMAC).erreurOriginelle.message,
+    ).toStrictEqual(messageInterne);
+    expect(codeRecu).toBe(403);
+    expect(corpsRecu).toStrictEqual({
+      message: "L'accès à la ressource est interdit.",
+    });
   });
 });

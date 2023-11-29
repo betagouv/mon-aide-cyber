@@ -4,7 +4,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
   questions: [
     {
       identifiant: 'securite-infrastructure-pare-feu-deploye',
-      libelle: 'Un pare-feu physique est-il déployé au niveau du réseau ?',
+      libelle: 'Votre connexion à Internet est-elle protégée par un pare-feu physique ?',
       reponsesPossibles: [
         {
           identifiant: 'securite-infrastructure-pare-feu-deploye-nsp',
@@ -33,7 +33,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               identifiant:
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees',
               libelle:
-                'Si "Oui" : protégez-vous les interconnexions de votre système d\'information à Internet et aux réseaux tiers en bloquant tous les flux et les ports non strictement nécessaires ?',
+                'Si "Oui" : Est-ce que seuls les flux strictement nécessaires entre votre système d\'information et Internet (ou autres réseaux externes) sont autorisés ?',
               reponsesPossibles: [
                 {
                   identifiant:
@@ -72,7 +72,6 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes',
               libelle:
                 'Si "Oui" : stockez-vous les journaux des flux entrants, sortants et bloqués générés par votre pare-feu ?',
-              reponsesPossibles: [
                 {
                   identifiant:
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-nsp',

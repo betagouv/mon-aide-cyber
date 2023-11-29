@@ -4,12 +4,8 @@ export interface Aggregat {
   identifiant: crypto.UUID;
 }
 
-export class AggregatNonTrouve implements Error {
-  message: string;
-  name: string;
-
+export class AggregatNonTrouve extends Error {
   constructor(typeAggregat: string) {
-    this.name = '';
-    this.message = `Le ${typeAggregat} demandé n'existe pas.`;
+    super(`Le ${typeAggregat} demandé n'existe pas.`);
   }
 }

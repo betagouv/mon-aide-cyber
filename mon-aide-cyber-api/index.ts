@@ -7,7 +7,12 @@ import { fabriqueEntrepots } from './src/adaptateurs/fabriqueEntrepots';
 import { BusEvenementMAC } from './src/infrastructure/bus/BusEvenementMAC';
 import { fabriqueConsommateursEvenements } from './src/adaptateurs/fabriqueConsommateursEvenements';
 import { fabriqueGestionnaireErreurs } from './src/infrastructure/adaptateurs/fabriqueGestionnaireErreurs';
-import { FauxGestionnaireDeJeton } from './src/infrastructure/authentification/FauxGestionnaireDeJeton';
+import { GestionnaireDeJetonJWT } from './src/infrastructure/authentification/gestionnaireDeJetonJWT';
+import { AdaptateurDeVerificationDeSessionHttp } from './src/adaptateurs/AdaptateurDeVerificationDeSessionHttp';
+
+const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
+  process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut',
+);
 
 const serveurMAC = serveur.creeServeur({
   adaptateurPDF: new AdaptateurPDFMAC(),
@@ -18,7 +23,10 @@ const serveurMAC = serveur.creeServeur({
   entrepots: fabriqueEntrepots(),
   busEvenement: new BusEvenementMAC(fabriqueConsommateursEvenements()),
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),
-  gestionnaireDeJeton: new FauxGestionnaireDeJeton(),
+  gestionnaireDeJeton: gestionnaireDeJeton,
+  adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(
+    gestionnaireDeJeton,
+  ),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
 });
 

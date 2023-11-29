@@ -1,19 +1,17 @@
-type Contexte =
+export type Contexte =
   | 'Accès diagnostic'
   | 'Ajout réponse au diagnostic'
   | 'Termine le diagnostic'
   | 'Lance le diagnostic'
+  | 'Accède aux diagnostics'
   | "Demande d'Authentification";
 
-export class ErreurMAC implements Error {
+export class ErreurMAC extends Error {
   private constructor(
     public readonly contexte: string,
     public readonly erreurOriginelle: Error,
-    public readonly message = '',
-    public readonly name = '',
   ) {
-    this.name = erreurOriginelle.name;
-    this.message = erreurOriginelle.message;
+    super(erreurOriginelle.message);
   }
 
   public static cree(contexte: Contexte, erreur: Error) {

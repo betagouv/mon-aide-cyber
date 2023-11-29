@@ -16,10 +16,11 @@ export const authentifie = (
     .rechercheParIdentifiantConnexionEtMotDePasse(identifiant, motDePasse)
     .then((aidant) => ({
       ...aidant,
-      jeton: gestionnaireDeJeton.genereJeton(aidant.identifiant),
+      jeton: gestionnaireDeJeton.genereJeton({
+        identifiant: aidant.identifiant,
+      }),
     }))
     .catch((erreur) => {
-      console.log(erreur);
       return Promise.reject(
         ErreurMAC.cree(
           "Demande d'Authentification",
