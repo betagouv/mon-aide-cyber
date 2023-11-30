@@ -22,6 +22,7 @@ import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { AggregatNonTrouve } from '../../src/domaine/Aggregat';
 import crypto from 'crypto';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
+import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 
 describe('Le service de diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -205,6 +206,29 @@ describe('Le service de diagnostic', () => {
           reponseDonnee: { reponseUnique: null, reponsesMultiples: [] },
         },
       ]);
+    });
+
+    it('les dates de création et modification sont initialisées', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const referentiel = unReferentiel().construis();
+      adaptateurReferentiel.ajoute(referentiel);
+
+      const diagnostic = await new ServiceDiagnostic(
+        adaptateurReferentiel,
+        adaptateurTableauDeRecommandations,
+        entrepots,
+        new BusEvenementDeTest(),
+      ).lance();
+
+      const diagnosticRetourne = await entrepots
+        .diagnostic()
+        .lis(diagnostic.identifiant);
+      expect(diagnosticRetourne.dateCreation).toStrictEqual(
+        FournisseurHorloge.maintenant(),
+      );
+      expect(diagnosticRetourne.dateDerniereModification).toStrictEqual(
+        FournisseurHorloge.maintenant(),
+      );
     });
 
     it("publie sur un bus d'événement DiagnosticLance", async () => {
