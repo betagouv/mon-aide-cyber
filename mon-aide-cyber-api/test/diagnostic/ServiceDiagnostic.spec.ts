@@ -481,6 +481,46 @@ describe('Le service de diagnostic', () => {
         ),
       );
     });
+
+    it('met à jour la date de dernière modification', async () => {
+      const dateCreation = new Date(2023, 10, 12, 11, 15, 22);
+      FournisseurHorlogeDeTest.initialise(dateCreation);
+      const secondeReponse = uneReponsePossible().construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique('Faites-vous une mise à jour ?')
+                .avecReponsesPossibles([secondeReponse])
+                .construis(),
+            )
+            .construis(),
+        )
+        .construis();
+      await entrepots.diagnostic().persiste(diagnostic);
+      const dateDerniereModification = new Date(2023, 10, 12, 12, 20, 10);
+      FournisseurHorlogeDeTest.initialise(dateDerniereModification);
+
+      await new ServiceDiagnostic(
+        adaptateurReferentiel,
+        adaptateurTableauDeRecommandations,
+        entrepots,
+        new BusEvenementDeTest(),
+      ).ajouteLaReponse(diagnostic.identifiant, {
+        chemin: 'contexte',
+        identifiant: 'avezvous-quelque-chose-a-envoyer-',
+        reponse: secondeReponse.identifiant,
+      });
+
+      const diagnosticRetourne = await entrepots
+        .diagnostic()
+        .lis(diagnostic.identifiant);
+      expect(diagnosticRetourne.dateCreation).toStrictEqual(dateCreation);
+      expect(diagnosticRetourne.dateDerniereModification).toStrictEqual(
+        dateDerniereModification,
+      );
+    });
   });
 
   describe("Lorsque l'on veut terminer le diagnostic", () => {

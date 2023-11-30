@@ -92,6 +92,7 @@ const ajouteLaReponseAuDiagnostic = (
   diagnostic: Diagnostic,
   corpsReponse: CorpsReponse,
 ) => {
+  diagnostic.dateDerniereModification = FournisseurHorloge.maintenant();
   const questions = diagnostic.referentiel[corpsReponse.chemin].questions;
   const questionTrouvee = questions.find(
     (q) => q.identifiant === corpsReponse.identifiant,
