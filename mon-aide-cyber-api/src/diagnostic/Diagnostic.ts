@@ -10,6 +10,7 @@ import {
 import { StrategieDeReponse } from './StrategieDeReponse';
 import { MoteurDeNote, NotesDiagnostic } from './MoteurDeNote';
 import { MoteurDeRecommandations } from './MoteurDeRecommandations';
+import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
 export type Thematique = string;
 
@@ -47,6 +48,8 @@ export type Recommandations = {
   autresRecommandations: RecommandationPriorisee[];
 };
 type Diagnostic = {
+  dateCreation: Date;
+  dateDerniereModification: Date;
   identifiant: crypto.UUID;
   recommandations?: Recommandations;
   referentiel: ReferentielDiagnostic;
@@ -77,6 +80,8 @@ const initialiseDiagnostic = (
     };
   }, {});
   return {
+    dateCreation: FournisseurHorloge.maintenant(),
+    dateDerniereModification: FournisseurHorloge.maintenant(),
     identifiant: crypto.randomUUID(),
     referentiel,
     tableauDesRecommandations,

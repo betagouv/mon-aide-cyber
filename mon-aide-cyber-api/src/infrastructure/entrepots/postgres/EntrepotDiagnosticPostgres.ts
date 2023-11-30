@@ -8,6 +8,7 @@ import {
   Thematique,
 } from '../../../diagnostic/Diagnostic';
 import { DTO, EntrepotPostgres } from './EntrepotPostgres';
+import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 
 export type DiagnosticDTO = DTO & {
   donnees: object;
@@ -45,7 +46,14 @@ export class EntrepotDiagnosticPostgres
       <E = string[], S = Set<string>>(reponses: E) =>
         new Set(reponses as string[]) as S,
     );
-    return { ...diagnosticDTO, referentiel: referentiel } as Diagnostic;
+    return {
+      ...diagnosticDTO,
+      dateCreation: FournisseurHorloge.enDate(diagnosticDTO.dateCreation),
+      dateDerniereModification: FournisseurHorloge.enDate(
+        diagnosticDTO.dateDerniereModification,
+      ),
+      referentiel: referentiel,
+    } as Diagnostic;
   }
 
   protected champsAMettreAJour(entiteDTO: DiagnosticDTO): { donnees: object } {
@@ -104,6 +112,11 @@ type RepresentationQuestionsThematique = Omit<
 type RepresentationReferentielDiagnostic = {
   [thematique: Thematique]: RepresentationQuestionsThematique;
 };
-type RepresentationDiagnostic = Omit<Diagnostic, 'referentiel'> & {
+export type RepresentationDiagnostic = Omit<
+  Diagnostic,
+  'referentiel' | 'dateCreation' | 'dateDerniereModification'
+> & {
+  dateCreation: string;
+  dateDerniereModification: string;
   referentiel: RepresentationReferentielDiagnostic;
 };
