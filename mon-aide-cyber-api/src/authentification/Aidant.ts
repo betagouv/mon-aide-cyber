@@ -5,6 +5,8 @@ export type Aidant = Aggregat & {
   identifiantConnexion: string;
   nomPrenom: string;
   motDePasse: string;
+  dateSignatureCGU: Date;
+  dateSignatureCharte: Date;
 };
 export interface EntrepotAidant extends Entrepot<Aidant> {
   rechercheParIdentifiantConnexionEtMotDePasse(

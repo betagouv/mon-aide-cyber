@@ -11,7 +11,9 @@ export class BusEvenementMAC implements BusEvenement {
   ) {}
 
   publie<E extends Evenement>(evenement: E): Promise<void> {
-    this.consomateurs.get(evenement.type)?.consomme(evenement);
-    return Promise.resolve(undefined);
+    return (
+      this.consomateurs.get(evenement.type)?.consomme(evenement) ||
+      Promise.resolve()
+    );
   }
 }

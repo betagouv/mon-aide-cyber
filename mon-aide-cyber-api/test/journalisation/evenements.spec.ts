@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import {
+  aidantCree,
   diagnosticLance,
   diagnosticTermnine,
   reponseAjoutee,
@@ -72,6 +73,28 @@ describe('Évènements', () => {
           date: FournisseurHorloge.maintenant(),
           type: 'REPONSE_AJOUTEE',
           donnees: {},
+        },
+      ]);
+    });
+  });
+
+  describe('Aidant créé', () => {
+    it("lorsque l'évènement est consommé, il est persisté", async () => {
+      const identifiant = crypto.randomUUID();
+      const entrepot = new EntrepotEvenementJournalMemoire();
+
+      aidantCree(entrepot).consomme({
+        date: FournisseurHorloge.maintenant(),
+        identifiant,
+        type: 'AIDANT_CREE',
+        corps: { identifiant },
+      });
+
+      expect(await entrepot.tous()).toMatchObject([
+        {
+          donnees: { identifiant },
+          date: FournisseurHorloge.maintenant(),
+          type: 'AIDANT_CREE',
         },
       ]);
     });
