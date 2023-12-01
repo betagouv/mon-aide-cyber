@@ -61,14 +61,13 @@ describe('Adaptateur de vérification de session', () => {
   it('lève une erreur quand le cookie de session est malformé', () => {
     const cookieDeSession =
       'session=eyJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOtctaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwWkdWdWRHbG1hV0Z1ZENJNkltTmlZVE16WVRSbUxUQXlNalF0TkdRNE1TMWlPRGs1TFRFMU1qRXdOV00yWWpoaFppSXNJbWxoZENJNk1UY3dNRGt3TWpZMU1UazJNSDAuV3hnRzNmSHRUUHl6R3d5T2RqcFFHcTlrbHE0eUJvNlVGOW53a1ltS3NobyJ9; session.sig=n5DahOjdSBgjYBonCTddV0mqZto';
-    const requete: Request = {
-      headers: { cookie: cookieDeSession },
-    } as Request;
 
     expect(() => {
       new AdaptateurDeVerificationDeSessionHttp(
         new FauxGestionnaireDeJeton(),
-      ).verifie('Accès diagnostic', requete, reponse, fausseSuite);
+      ).verifie('Accès diagnostic', requete, reponse, fausseSuite, {
+        session: cookieDeSession,
+      });
     }).toThrow(`Session invalide.`);
   });
 
@@ -76,14 +75,13 @@ describe('Adaptateur de vérification de session', () => {
     const fauxGestionnaireDeJeton = new FauxGestionnaireDeJeton(true);
     const cookieDeSession =
       'session=eyJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwWkdWdWRHbG1hV0qqdZ1ZENJNkltTmlZVE16WVRSbUxUQXlNalF0TkdRNE1TMWlPRGs1TFRFMU1qRXdOV00yWWpoaFppSXNJbWxoZENJNk1UY3dNRGt3TWpZMU1UazJNSDAuV3hnRzNmSHRUUHl6R3d5T2RqcFFHcTlrbHE0eUJvNlVGOW53a1ltS3NobyJ9; session.sig=n5DahOjdSBgjYBonCTddV0mqZto';
-    const requete: Request = {
-      headers: { cookie: cookieDeSession },
-    } as Request;
 
     expect(() => {
       new AdaptateurDeVerificationDeSessionHttp(
         fauxGestionnaireDeJeton,
-      ).verifie('Accès diagnostic', requete, reponse, fausseSuite);
+      ).verifie('Accès diagnostic', requete, reponse, fausseSuite, {
+        session: cookieDeSession,
+      });
     }).toThrow(`Session invalide.`);
   });
 });
