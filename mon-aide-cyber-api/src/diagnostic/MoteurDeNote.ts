@@ -1,5 +1,5 @@
-import { Diagnostic, QuestionDiagnostic } from "./Diagnostic";
-import { Note } from "./Note";
+import { Diagnostic, QuestionDiagnostic } from './Diagnostic';
+import { Note } from './Note';
 
 export type NotesDiagnostic = {
   [thematique: string]: { identifiant: string; note: Note }[];
@@ -21,7 +21,9 @@ export class MoteurDeNote {
     );
   };
 
-  private static genereLesNotesPourReponseUnique(question: QuestionDiagnostic) {
+  private static genereLesNotesPourReponseUnique(
+    question: QuestionDiagnostic,
+  ): { identifiant: string; note: Note }[] {
     return question.reponsesPossibles
       .filter(
         (reponsePossible) =>
@@ -38,7 +40,7 @@ export class MoteurDeNote {
 
   private static genereLesNotesPourReponsesMultiples(
     question: QuestionDiagnostic,
-  ) {
+  ): { identifiant: string; note: Note }[] {
     return question.reponseDonnee.reponsesMultiples
       .flatMap((reponsesMultiples) =>
         question.reponsesPossibles
@@ -58,6 +60,6 @@ export class MoteurDeNote {
             note: reponsePossible.resultat?.note,
           })),
       )
-      .flatMap((questionDiagnostic) => questionDiagnostic);
+      .flatMap((note) => note);
   }
 }

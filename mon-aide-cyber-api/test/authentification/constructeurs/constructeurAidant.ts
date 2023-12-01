@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import { fakerFR } from '@faker-js/faker';
 import { Aidant } from '../../../src/authentification/Aidant';
+import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 
 interface Constructeur<T> {
   construis(): T;
@@ -10,6 +11,8 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   private identifiantConnexion: string = fakerFR.internet.email();
   private nomPrenom: string = fakerFR.person.fullName();
   private motDePasse: string = fakerFR.string.alpha(10);
+  private dateSignatureCGU: Date = FournisseurHorloge.maintenant();
+  private dateSignatureCharte: Date = FournisseurHorloge.maintenant();
   avecUnNomPrenom(nomPrenom: string): ConstructeurAidant {
     this.nomPrenom = nomPrenom;
     return this;
@@ -38,6 +41,8 @@ class ConstructeurAidant implements Constructeur<Aidant> {
       identifiantConnexion: this.identifiantConnexion,
       motDePasse: this.motDePasse,
       nomPrenom: this.nomPrenom,
+      dateSignatureCGU: this.dateSignatureCGU,
+      dateSignatureCharte: this.dateSignatureCharte,
     };
   }
 }

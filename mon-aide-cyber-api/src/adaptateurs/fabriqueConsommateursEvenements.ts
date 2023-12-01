@@ -1,4 +1,5 @@
 import {
+  aidantCree,
   diagnosticLance,
   diagnosticTermnine,
   reponseAjoutee,
@@ -7,6 +8,7 @@ import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/post
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
 import { ConsommateurEvenement, TypeEvenement } from '../domaine/BusEvenement';
 import { EntrepotEvenementJournalMemoire } from '../infrastructure/entrepots/memoire/EntrepotMemoire';
+import { EntrepotEvenementJournal } from '../journalisation/Publication';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -14,12 +16,16 @@ const fabriqueEntrepotJournalisation = () => {
     : new EntrepotEvenementJournalMemoire();
 };
 
-export const fabriqueConsommateursEvenements = () => {
-  const entrepotJournalisation = fabriqueEntrepotJournalisation();
-
+export const fabriqueConsommateursEvenements = (
+  entrepotJournalisation: EntrepotEvenementJournal = fabriqueEntrepotJournalisation(),
+  configuration: { aidantCree: () => ConsommateurEvenement } = {
+    aidantCree: () => aidantCree(entrepotJournalisation),
+  },
+) => {
   return new Map<TypeEvenement, ConsommateurEvenement>([
     ['DIAGNOSTIC_TERMINE', diagnosticTermnine(entrepotJournalisation)],
     ['DIAGNOSTIC_LANCE', diagnosticLance(entrepotJournalisation)],
     ['REPONSE_AJOUTEE', reponseAjoutee(entrepotJournalisation)],
+    ['AIDANT_CREE', configuration.aidantCree()],
   ]);
 };
