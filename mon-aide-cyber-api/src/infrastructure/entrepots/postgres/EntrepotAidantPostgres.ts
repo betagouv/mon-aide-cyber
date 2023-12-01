@@ -5,7 +5,7 @@ import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 
-type DonneesUtilisateur = {
+export type DonneesUtilisateur = {
   dateSignatureCharte: string;
   dateSignatureCGU: string;
   identifiantConnexion: string;
