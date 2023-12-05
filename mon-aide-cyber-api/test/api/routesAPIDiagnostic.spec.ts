@@ -262,7 +262,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
   describe('quand une requête GET est reçue sur /{id}/termine', () => {
     it('génère les recommandations', async () => {
       let adaptateurPDFAppele = false;
-      testeurMAC.adaptateurPDF.genereRecommandations = () => {
+      testeurMAC.adaptateurDeRestitution.genereRestitution = () => {
         adaptateurPDFAppele = true;
         return Promise.resolve(Buffer.from('PDF Recommandations généré'));
       };

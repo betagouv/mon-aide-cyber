@@ -1,27 +1,11 @@
-import { AdaptateurPDF } from '../../adaptateurs/AdaptateurPDF';
-import { Diagnostic } from '../../diagnostic/Diagnostic';
+import { AdaptateurDeRestitution } from '../../adaptateurs/AdaptateurDeRestitution';
+import { RecommandationPriorisee } from '../../diagnostic/Diagnostic';
 import * as pug from 'pug';
 import puppeteer, { Browser, PDFOptions } from 'puppeteer';
 import { PDFDocument } from 'pdf-lib';
 
-export class AdaptateurPDFMAC implements AdaptateurPDF {
-  genereRecommandations(diagnostic: Diagnostic): Promise<Buffer> {
-    const htmlRecommandations = [
-      genereHtml('recommandations', {
-        recommandations:
-          diagnostic.recommandations?.recommandationsPrioritaires,
-      }),
-    ];
-    if (
-      diagnostic.recommandations?.autresRecommandations.length &&
-      diagnostic.recommandations?.autresRecommandations.length > 0
-    ) {
-      htmlRecommandations.push(
-        genereHtml('recommandations.annexe', {
-          recommandations: diagnostic.recommandations?.autresRecommandations,
-        }),
-      );
-    }
+export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution {
+  protected genere(htmlRecommandations: Promise<ContenuHtml>[]) {
     return Promise.all(htmlRecommandations)
       .then((htmls) => generePdfs(htmls))
       .then((pdfs) => fusionnePdfs(pdfs))
@@ -29,6 +13,22 @@ export class AdaptateurPDFMAC implements AdaptateurPDF {
         console.log('Erreur génération recos', erreur);
         throw new Error(erreur);
       });
+  }
+
+  protected genereAnnexes(
+    autresRecommandations: RecommandationPriorisee[] | undefined,
+  ): Promise<ContenuHtml> {
+    return genereHtml('recommandations.annexe', {
+      recommandations: autresRecommandations,
+    });
+  }
+
+  protected genereRecommandations(
+    recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
+  ): Promise<ContenuHtml> {
+    return genereHtml('recommandations', {
+      recommandations: recommandationsPrioritaires,
+    });
   }
 }
 
@@ -56,7 +56,7 @@ const fusionnePdfs = (pdfs: Buffer[]): Promise<Buffer> => {
     .then((pdf) => Buffer.from(pdf));
 };
 
-type ContenuHtml = { corps: string; entete: string; piedPage: string };
+export type ContenuHtml = { corps: string; entete: string; piedPage: string };
 const genereHtml = async (
   pugCorps: string,
   paramsCorps: any,

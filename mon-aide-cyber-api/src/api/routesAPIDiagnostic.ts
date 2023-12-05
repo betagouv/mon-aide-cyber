@@ -59,7 +59,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         .termine(id as crypto.UUID)
         .then(() => serviceDiagnostic.diagnostic(id as crypto.UUID))
         .then((diagnostic) =>
-          configuration.adaptateurPDF.genereRecommandations(diagnostic),
+          configuration.adaptateurDeRestitution.genereRestitution(diagnostic),
         )
         .then((pdf) => reponse.contentType('application/pdf').send(pdf))
         .catch((erreur) => suite(erreur));

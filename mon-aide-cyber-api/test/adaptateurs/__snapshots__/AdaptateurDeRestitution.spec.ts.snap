@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Adaptateur de Restitution > génère la restitution avec annexe 1`] = `
+[
+  {
+    "corps": "{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"noteObtenue\\":0}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"noteObtenue\\":0}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"noteObtenue\\":0}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"noteObtenue\\":0}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"noteObtenue\\":0}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"noteObtenue\\":0}",
+    "entete": "entete",
+    "piedPage": "piedPage",
+  },
+  {
+    "corps": "{\\"titre\\":\\"reco 1\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":3,\\"noteObtenue\\":0}",
+    "entete": "entete",
+    "piedPage": "piedPage",
+  },
+]
+`;
+
+exports[`Adaptateur de Restitution > génère une recommandation sans annexe 1`] = `
+[
+  {
+    "corps": "{\\"titre\\":\\"reco 1\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":3,\\"noteObtenue\\":0}",
+    "entete": "entete",
+    "piedPage": "piedPage",
+  },
+]
+`;
