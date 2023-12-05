@@ -688,7 +688,8 @@ describe('Le service de diagnostic', () => {
         .diagnostic()
         .lis(diagnostic.identifiant);
       expect(
-        diagnosticRetourne.recommandations?.recommandationsPrioritaires,
+        diagnosticRetourne.restitution?.recommandations
+          ?.recommandationsPrioritaires,
       ).toStrictEqual([
         {
           noteObtenue: 0,
@@ -734,7 +735,7 @@ describe('Le service de diagnostic', () => {
         },
       ]);
       expect(
-        diagnosticRetourne.recommandations?.autresRecommandations,
+        diagnosticRetourne.restitution?.recommandations?.autresRecommandations,
       ).toStrictEqual([
         {
           titre: 'reco 7',
