@@ -15,6 +15,19 @@ export const Footer = () => (
               </a>
             </li>
             <li>
+              <a
+                href="https://www.gendarmerie.interieur.gouv.fr/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {' '}
+                <img
+                  src="/images/logo_gendarmerie_nationale.svg"
+                  alt="Gendarmerie Nationale"
+                />
+              </a>
+            </li>
+            <li>
               <a href="https://www.cnil.fr" target="_blank" rel="noreferrer">
                 {' '}
                 <img src="/images/logo_cnil.webp" alt="CNIL" />
@@ -28,19 +41,6 @@ export const Footer = () => (
               >
                 {' '}
                 <img src="/images/logo_acyma.svg" alt="CyberMalveillance" />
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.gendarmerie.interieur.gouv.fr/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {' '}
-                <img
-                  src="/images/logo_gendarmerie_nationale.svg"
-                  alt="Gendarmerie Nationale"
-                />
               </a>
             </li>
             <li>
@@ -74,10 +74,10 @@ export const Footer = () => (
           </div>
           <div className="fr-footer__content fr-col-offset-2--right">
             <p className="fr-footer__content-desc">
-              MonAideCyber aide les collectivités territoriales et les PME
+              MonAideCyber aide les entités publiques et privées
               sensibilisées à la sécurité informatique à passer à l’action. Le
-              dispositif MonAideCyber est développé par l&apos;Agence nationale
-              de la sécurité des systèmes d&apos;information, en lien avec
+              dispositif MonAideCyber est développé par l&apos;Agence Nationale
+              de la Sécurité des Systèmes d&apos;Information, en lien avec
               BetaGouv et la Direction interministérielle du numérique.
             </p>
             <ul className="fr-footer__content-list">
