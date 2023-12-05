@@ -70,6 +70,7 @@ const ChampsDeSaisie = ({ identifiant }: ProprietesChampsDeSaisie) => {
     </div>
   );
 };
+
 type ProprietesComposantReponsePossible = {
   identifiantQuestion: string;
   reponsePossible: ReponsePossible;

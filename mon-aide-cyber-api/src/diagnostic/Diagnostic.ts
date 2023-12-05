@@ -47,11 +47,17 @@ export type Recommandations = {
   recommandationsPrioritaires: RecommandationPriorisee[];
   autresRecommandations: RecommandationPriorisee[];
 };
+
+export type Restitution = {
+  recommandations?: Recommandations;
+};
+
 type Diagnostic = {
   dateCreation: Date;
   dateDerniereModification: Date;
   identifiant: crypto.UUID;
   recommandations?: Recommandations;
+  restitution?: Restitution;
   referentiel: ReferentielDiagnostic;
   tableauDesRecommandations: TableauDeRecommandations;
 };
@@ -74,7 +80,7 @@ const initialiseDiagnostic = (
                 reponseUnique: null,
                 reponsesMultiples: [],
               },
-            }) as QuestionDiagnostic,
+            } as QuestionDiagnostic),
         ),
       },
     };
@@ -103,10 +109,6 @@ const ajouteLaReponseAuDiagnostic = (
 };
 
 const genereLesRecommandations = (diagnostic: Diagnostic) => {
-  diagnostic.recommandations = {
-    recommandationsPrioritaires: [],
-    autresRecommandations: [],
-  };
   const notes = MoteurDeNote.genereLesNotes(diagnostic);
   const recommandations = Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
@@ -145,10 +147,12 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
     notes,
   );
 
-  diagnostic.recommandations.recommandationsPrioritaires =
-    recommandationPriorisees.slice(0, 6);
-  diagnostic.recommandations.autresRecommandations =
-    recommandationPriorisees.slice(6);
+  diagnostic.restitution = {
+    recommandations: {
+      recommandationsPrioritaires: recommandationPriorisees.slice(0, 6),
+      autresRecommandations: recommandationPriorisees.slice(6),
+    },
+  };
 };
 
 export {
