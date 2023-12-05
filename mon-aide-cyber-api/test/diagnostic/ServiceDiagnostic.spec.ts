@@ -23,6 +23,7 @@ import { AggregatNonTrouve } from '../../src/domaine/Aggregat';
 import crypto from 'crypto';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
+import { uneAssociation } from '../constructeurs/constructeurAssociation';
 
 describe('Le service de diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -550,115 +551,115 @@ describe('Le service de diagnostic', () => {
         .avecLesReponsesPossiblesSuivantesAssociees([
           {
             libelle: 'reponse 11',
-            association: {
-              identifiantRecommandation: 'q1',
-              niveauRecommandation: 1,
-              note: 0,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q1')
+              .deNiveau1()
+              .ayantPourNote(0)
+              .construis(),
           },
           {
             libelle: 'reponse 12',
-            association: {
-              identifiantRecommandation: 'q1',
-              niveauRecommandation: 2,
-              note: 1,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q1')
+              .deNiveau2()
+              .ayantPourNote(1)
+              .construis(),
           },
           {
             libelle: 'reponse 21',
-            association: {
-              identifiantRecommandation: 'q2',
-              niveauRecommandation: 1,
-              note: 0,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q2')
+              .deNiveau1()
+              .ayantPourNote(0)
+              .construis(),
           },
           {
             libelle: 'reponse 22',
-            association: {
-              identifiantRecommandation: 'q2',
-              niveauRecommandation: 2,
-              note: 1,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q2')
+              .deNiveau2()
+              .ayantPourNote(1)
+              .construis(),
           },
           {
             libelle: 'reponse 31',
-            association: {
-              identifiantRecommandation: 'q3',
-              niveauRecommandation: 1,
-              note: 0,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q3')
+              .deNiveau1()
+              .ayantPourNote(0)
+              .construis(),
           },
           {
             libelle: 'reponse 32',
-            association: {
-              identifiantRecommandation: 'q3',
-              niveauRecommandation: 2,
-              note: 1,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q3')
+              .deNiveau2()
+              .ayantPourNote(1)
+              .construis(),
           },
           {
             libelle: 'reponse 41',
-            association: {
-              identifiantRecommandation: 'q4',
-              niveauRecommandation: 1,
-              note: 0,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q4')
+              .deNiveau1()
+              .ayantPourNote(0)
+              .construis(),
           },
           {
             libelle: 'reponse 42',
-            association: {
-              identifiantRecommandation: 'q4',
-              niveauRecommandation: 2,
-              note: 1,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q4')
+              .deNiveau2()
+              .ayantPourNote(1)
+              .construis(),
           },
           {
             libelle: 'reponse 51',
-            association: {
-              identifiantRecommandation: 'q5',
-              niveauRecommandation: 1,
-              note: 0,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q5')
+              .deNiveau1()
+              .ayantPourNote(0)
+              .construis(),
           },
           {
             libelle: 'reponse 52',
-            association: {
-              identifiantRecommandation: 'q5',
-              niveauRecommandation: 2,
-              note: 1,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q5')
+              .deNiveau2()
+              .ayantPourNote(1)
+              .construis(),
           },
           {
             libelle: 'reponse 61',
-            association: {
-              identifiantRecommandation: 'q6',
-              niveauRecommandation: 1,
-              note: 0,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q6')
+              .deNiveau1()
+              .ayantPourNote(0)
+              .construis(),
           },
           {
             libelle: 'reponse 62',
-            association: {
-              identifiantRecommandation: 'q6',
-              niveauRecommandation: 2,
-              note: 1,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q6')
+              .deNiveau2()
+              .ayantPourNote(1)
+              .construis(),
           },
           {
             libelle: 'reponse 71',
-            association: {
-              identifiantRecommandation: 'q7',
-              niveauRecommandation: 1,
-              note: 0,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q7')
+              .deNiveau1()
+              .ayantPourNote(0)
+              .construis(),
           },
           {
             libelle: 'reponse 72',
-            association: {
-              identifiantRecommandation: 'q7',
-              niveauRecommandation: 2,
-              note: 1,
-            },
+            association: uneAssociation()
+              .avecIdentifiant('q7')
+              .deNiveau2()
+              .ayantPourNote(1)
+              .construis(),
           },
         ])
         .construis();
@@ -692,42 +693,42 @@ describe('Le service de diagnostic', () => {
           ?.recommandationsPrioritaires,
       ).toStrictEqual([
         {
-          noteObtenue: 0,
+          noteObtenue: { theorique: 0 },
           priorisation: 1,
           titre: 'reco 1',
           pourquoi: 'parce-que',
           comment: 'comme ça',
         },
         {
-          noteObtenue: 0,
+          noteObtenue: { theorique: 0 },
           priorisation: 2,
           titre: 'reco 2',
           pourquoi: 'parce-que',
           comment: 'comme ça',
         },
         {
-          noteObtenue: 0,
+          noteObtenue: { theorique: 0 },
           priorisation: 3,
           titre: 'reco 3',
           pourquoi: 'parce-que',
           comment: 'comme ça',
         },
         {
-          noteObtenue: 0,
+          noteObtenue: { theorique: 0 },
           priorisation: 4,
           titre: 'reco 4',
           pourquoi: 'parce-que',
           comment: 'comme ça',
         },
         {
-          noteObtenue: 0,
+          noteObtenue: { theorique: 0 },
           priorisation: 5,
           titre: 'reco 5',
           pourquoi: 'parce-que',
           comment: 'comme ça',
         },
         {
-          noteObtenue: 0,
+          noteObtenue: { theorique: 0 },
           priorisation: 6,
           titre: 'reco 6',
           pourquoi: 'parce-que',
@@ -741,7 +742,7 @@ describe('Le service de diagnostic', () => {
           titre: 'reco 7',
           pourquoi: 'parce-que',
           comment: 'comme ça',
-          noteObtenue: 0,
+          noteObtenue: { theorique: 0 },
           priorisation: 7,
         },
       ]);

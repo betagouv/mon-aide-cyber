@@ -12,6 +12,7 @@ import {
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
 import { genereLesRecommandations } from '../../src/diagnostic/Diagnostic';
+import { uneAssociation } from '../constructeurs/constructeurAssociation';
 
 describe('Diagnostic', () => {
   const tableauDeRecommandations = unTableauDeRecommandations()
@@ -25,132 +26,133 @@ describe('Diagnostic', () => {
       { q7: { niveau1: 'reco 7', niveau2: 'reco 72', priorisation: 7 } },
     ])
     .construis();
+
   const questions = uneListeDeQuestions()
     .dontLesLabelsSont(['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'])
     .avecLesReponsesPossiblesSuivantesAssociees([
       {
         libelle: 'reponse 11',
-        association: {
-          identifiantRecommandation: 'q1',
-          niveauRecommandation: 1,
-          note: 0,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q1')
+          .deNiveau1()
+          .ayantPourNote(0)
+          .construis(),
       },
       {
         libelle: 'reponse 12',
-        association: {
-          identifiantRecommandation: 'q1',
-          niveauRecommandation: 2,
-          note: 1,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q1')
+          .deNiveau2()
+          .ayantPourNote(1)
+          .construis(),
       },
       { libelle: 'reponse 13' },
       { libelle: 'reponse 14' },
       {
         libelle: 'reponse 21',
-        association: {
-          identifiantRecommandation: 'q2',
-          niveauRecommandation: 1,
-          note: 0,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q2')
+          .deNiveau1()
+          .ayantPourNote(0)
+          .construis(),
       },
       {
         libelle: 'reponse 22',
-        association: {
-          identifiantRecommandation: 'q2',
-          niveauRecommandation: 2,
-          note: 1,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q2')
+          .deNiveau2()
+          .ayantPourNote(1)
+          .construis(),
       },
       { libelle: 'reponse 23' },
       { libelle: 'reponse 24' },
       {
         libelle: 'reponse 31',
-        association: {
-          identifiantRecommandation: 'q3',
-          niveauRecommandation: 1,
-          note: 0,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q3')
+          .deNiveau1()
+          .ayantPourNote(0)
+          .construis(),
       },
       {
         libelle: 'reponse 32',
-        association: {
-          identifiantRecommandation: 'q3',
-          niveauRecommandation: 2,
-          note: 1,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q3')
+          .deNiveau2()
+          .ayantPourNote(1)
+          .construis(),
       },
       { libelle: 'reponse 33' },
       { libelle: 'reponse 34' },
       {
         libelle: 'reponse 41',
-        association: {
-          identifiantRecommandation: 'q4',
-          niveauRecommandation: 1,
-          note: 0,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q4')
+          .deNiveau1()
+          .ayantPourNote(0)
+          .construis(),
       },
       {
         libelle: 'reponse 42',
-        association: {
-          identifiantRecommandation: 'q4',
-          niveauRecommandation: 2,
-          note: 1,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q4')
+          .deNiveau2()
+          .ayantPourNote(1)
+          .construis(),
       },
       { libelle: 'reponse 43' },
       { libelle: 'reponse 44' },
       {
         libelle: 'reponse 51',
-        association: {
-          identifiantRecommandation: 'q5',
-          niveauRecommandation: 1,
-          note: 0,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q5')
+          .deNiveau1()
+          .ayantPourNote(0)
+          .construis(),
       },
       {
         libelle: 'reponse 52',
-        association: {
-          identifiantRecommandation: 'q5',
-          niveauRecommandation: 2,
-          note: 1,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q5')
+          .deNiveau2()
+          .ayantPourNote(1)
+          .construis(),
       },
       { libelle: 'reponse 53' },
       { libelle: 'reponse 54' },
       {
         libelle: 'reponse 61',
-        association: {
-          identifiantRecommandation: 'q6',
-          niveauRecommandation: 1,
-          note: 0,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q6')
+          .deNiveau1()
+          .ayantPourNote(0)
+          .construis(),
       },
       {
         libelle: 'reponse 62',
-        association: {
-          identifiantRecommandation: 'q6',
-          niveauRecommandation: 2,
-          note: 1,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q6')
+          .deNiveau2()
+          .ayantPourNote(1)
+          .construis(),
       },
       { libelle: 'reponse 63' },
       { libelle: 'reponse 64' },
       {
         libelle: 'reponse 71',
-        association: {
-          identifiantRecommandation: 'q7',
-          niveauRecommandation: 1,
-          note: 0,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q7')
+          .deNiveau1()
+          .ayantPourNote(0)
+          .construis(),
       },
       {
         libelle: 'reponse 72',
-        association: {
-          identifiantRecommandation: 'q7',
-          niveauRecommandation: 2,
-          note: 1,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q7')
+          .deNiveau2()
+          .ayantPourNote(1)
+          .construis(),
       },
       { libelle: 'reponse 73' },
       { libelle: 'reponse 74' },
@@ -182,7 +184,7 @@ describe('Diagnostic', () => {
         genereLesRecommandations(diagnostic);
 
         const partieCommuneAttendue = {
-          noteObtenue: 0,
+          noteObtenue: { theorique: 0 },
           pourquoi: 'parce-que',
           comment: 'comme ça',
         };
@@ -214,13 +216,13 @@ describe('Diagnostic', () => {
             titre: 'reco 22',
 
             ...partieCommuneAttendue,
-            noteObtenue: 1,
+            noteObtenue: { theorique: 1 },
           },
           {
             priorisation: 5,
             titre: 'reco 52',
             ...partieCommuneAttendue,
-            noteObtenue: 1,
+            noteObtenue: { theorique: 1 },
           },
         ]);
         expect(
@@ -230,7 +232,7 @@ describe('Diagnostic', () => {
             priorisation: 7,
             titre: 'reco 72',
             ...partieCommuneAttendue,
-            noteObtenue: 1,
+            noteObtenue: { theorique: 1 },
           },
         ]);
       });
@@ -273,7 +275,7 @@ describe('Diagnostic', () => {
         ).toStrictEqual([
           {
             comment: 'comme ça',
-            noteObtenue: 1,
+            noteObtenue: { theorique: 1 },
             pourquoi: 'parce-que',
             priorisation: 7,
             titre: 'reco 8',
@@ -312,7 +314,7 @@ describe('Diagnostic', () => {
       genereLesRecommandations(diagnostic);
 
       const partieCommuneAttendue = {
-        noteObtenue: 1,
+        noteObtenue: { theorique: 1 },
         pourquoi: 'parce-que',
         comment: 'comme ça',
       };
@@ -321,13 +323,13 @@ describe('Diagnostic', () => {
       ).toStrictEqual([
         {
           ...partieCommuneAttendue,
-          noteObtenue: 0,
+          noteObtenue: { theorique: 0 },
           priorisation: 3,
           titre: 'reco 3',
         },
         {
           ...partieCommuneAttendue,
-          noteObtenue: 0,
+          noteObtenue: { theorique: 0 },
           priorisation: 6,
           titre: 'reco 6',
         },
@@ -373,35 +375,35 @@ describe('Diagnostic', () => {
           .avecLesReponsesPossiblesSuivantesAssociees([
             {
               libelle: 'reponse 81',
-              association: {
-                identifiantRecommandation: 'q8',
-                niveauRecommandation: 1,
-                note: 0,
-              },
+              association: uneAssociation()
+                .avecIdentifiant('q8')
+                .deNiveau1()
+                .ayantPourNote(0)
+                .construis(),
             },
             {
               libelle: 'reponse 82',
-              association: {
-                identifiantRecommandation: 'q8',
-                niveauRecommandation: 2,
-                note: 1,
-              },
+              association: uneAssociation()
+                .avecIdentifiant('q8')
+                .deNiveau2()
+                .ayantPourNote(1)
+                .construis(),
             },
             {
               libelle: 'reponse 91',
-              association: {
-                identifiantRecommandation: 'q9',
-                niveauRecommandation: 1,
-                note: 0,
-              },
+              association: uneAssociation()
+                .avecIdentifiant('q9')
+                .deNiveau1()
+                .ayantPourNote(0)
+                .construis(),
             },
             {
               libelle: 'reponse 92',
-              association: {
-                identifiantRecommandation: 'q9',
-                niveauRecommandation: 2,
-                note: 1,
-              },
+              association: uneAssociation()
+                .avecIdentifiant('q9')
+                .deNiveau2()
+                .ayantPourNote(1)
+                .construis(),
             },
           ])
           .construis();
@@ -432,7 +434,7 @@ describe('Diagnostic', () => {
         genereLesRecommandations(diagnostic);
 
         const partieCommuneAttendue = {
-          noteObtenue: 0,
+          noteObtenue: { theorique: 0 },
           pourquoi: 'parce-que',
           comment: 'comme ça',
         };
@@ -466,7 +468,7 @@ describe('Diagnostic', () => {
           },
           {
             ...partieCommuneAttendue,
-            noteObtenue: 1,
+            noteObtenue: { theorique: 1 },
             priorisation: 7,
             titre: 'reco 52',
           },
@@ -476,7 +478,7 @@ describe('Diagnostic', () => {
         ).toStrictEqual([
           {
             ...partieCommuneAttendue,
-            noteObtenue: 1,
+            noteObtenue: { theorique: 1 },
             priorisation: 9,
             titre: 'reco 92',
           },

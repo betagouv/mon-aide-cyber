@@ -8,21 +8,22 @@ import {
   Referentiel,
   ReponsePossible,
   TypeQuestion,
-} from "../../src/diagnostic/Referentiel";
-import { fakerFR as faker } from "@faker-js/faker";
-import { Constructeur } from "./constructeur";
-import { aseptise } from "../utilitaires/aseptise";
-import { Note } from "../../src/diagnostic/Note";
+} from '../../src/diagnostic/Referentiel';
+import { fakerFR as faker } from '@faker-js/faker';
+import { Constructeur } from './constructeur';
+import { aseptise } from '../utilitaires/aseptise';
+import { Note, ValeurPossible } from '../../src/diagnostic/Note';
+import { Association } from './types';
 
 class ConstructeurReferentiel implements Constructeur<Referentiel> {
   thematique: { [clef: string]: QuestionsThematique } = {
-    ["contexte"]: { questions: [] },
+    ['contexte']: { questions: [] },
   };
 
   ajouteUneQuestionAuContexte(
     question: QuestionChoixUnique | QuestionChoixMultiple,
   ): ConstructeurReferentiel {
-    this.thematique["contexte"].questions.push(question);
+    this.thematique['contexte'].questions.push(question);
     return this;
   }
 
@@ -56,9 +57,9 @@ class ConstructeurQuestion
   implements Constructeur<QuestionChoixUnique | QuestionChoixMultiple>
 {
   private question: QuestionChoixUnique | QuestionChoixMultiple = {
-    type: "choixUnique",
+    type: 'choixUnique',
     identifiant: faker.string.alpha(10),
-    libelle: "Quelle est la réponse?",
+    libelle: 'Quelle est la réponse?',
     reponsesPossibles: [
       {
         identifiant: faker.string.alpha(10),
@@ -95,7 +96,7 @@ class ConstructeurQuestion
     this.question.reponsesPossibles = [];
     this.question.libelle = libelleQuestion;
     this.question.identifiant = aseptise(libelleQuestion);
-    this.question.type = "choixMultiple";
+    this.question.type = 'choixMultiple';
     reponsesPossibles.forEach((reponse, index) =>
       this.question.reponsesPossibles.push({
         identifiant: reponse.identifiant,
@@ -123,22 +124,14 @@ class ConstructeurListeDeQuestions
 {
   private libellesReponsesPossibles: {
     libelle: string;
-    association?: {
-      identifiantRecommandation: string;
-      niveauRecommandation: NiveauRecommandation;
-      note: Note;
-    };
+    association?: Association;
   }[] = [];
   private labels: string[] = [];
 
   avecLesReponsesPossiblesSuivantesAssociees(
     libellesReponsesPossibles: {
       libelle: string;
-      association?: {
-        identifiantRecommandation: string;
-        niveauRecommandation: NiveauRecommandation;
-        note: Note;
-      };
+      association?: Association;
     }[],
   ): ConstructeurListeDeQuestions {
     this.libellesReponsesPossibles = libellesReponsesPossibles;
@@ -164,7 +157,7 @@ class ConstructeurListeDeQuestions
                 constructeurReponsePossible.associeeARecommandation(
                   rep.association?.identifiantRecommandation,
                   rep.association?.niveauRecommandation,
-                  rep.association?.note,
+                  rep.association?.note?.theorique,
                 );
             }
             return constructeurReponsePossible.construis();
@@ -178,13 +171,13 @@ class ConstructeurListeDeQuestions
 class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
   private identifiant: string = faker.string.alpha(10);
   private libelle: string = faker.word.words();
-  private reponsesPossibles: Omit<ReponsePossible, "questions">[] = [];
-  private type: TypeQuestion = "choixUnique";
+  private reponsesPossibles: Omit<ReponsePossible, 'questions'>[] = [];
+  private type: TypeQuestion = 'choixUnique';
 
   aChoixMultiple = (libelle: string): ConstructeurQuestionATiroir => {
     this.libelle = libelle;
     this.identifiant = aseptise(libelle);
-    this.type = "choixMultiple";
+    this.type = 'choixMultiple';
     return this;
   };
 
@@ -203,7 +196,7 @@ class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
   aChoixUnique = (libelle: string): ConstructeurQuestionATiroir => {
     this.libelle = libelle;
     this.identifiant = aseptise(libelle);
-    this.type = "choixUnique";
+    this.type = 'choixUnique';
     return this;
   };
 
@@ -246,7 +239,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   associeeARecommandation(
     identifiantRecommandation: string,
     niveauRecommandation: NiveauRecommandation,
-    note: Note,
+    note: ValeurPossible,
   ): ConstructeurReponsePossible {
     const recommandations = [];
     recommandations.push({
@@ -259,13 +252,13 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
         ...(this.resultat?.recommandations || []),
         ...recommandations,
       ],
-      note,
+      note: { theorique: note },
     };
     return this;
   }
 
-  ayantPourNote(note: Note): ConstructeurReponsePossible {
-    this.resultat = { ...this.resultat, note };
+  ayantPourNoteTheorique(note: ValeurPossible): ConstructeurReponsePossible {
+    this.resultat = { ...this.resultat, note: { theorique: note } };
     return this;
   }
 

@@ -133,13 +133,23 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
           comment: recommandation.niveau.comment,
           priorisation: recommandation.priorisation,
           noteObtenue: note,
-        };
+        } as RecommandationPriorisee;
       })
       .filter(
-        (reco) => reco.noteObtenue !== null && reco.noteObtenue !== undefined,
+        (reco) =>
+          reco.noteObtenue !== undefined &&
+          reco.noteObtenue.theorique !== null &&
+          reco.noteObtenue.theorique !== undefined,
       )
       .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
-      .sort((a, b) => (a.noteObtenue! < b.noteObtenue! ? -1 : 1) || 0);
+      .sort(
+        (a, b) =>
+          (a.noteObtenue &&
+          b.noteObtenue &&
+          a.noteObtenue.theorique! < b.noteObtenue.theorique!
+            ? -1
+            : 1) || 0,
+      );
   };
   const recommandationPriorisees = prioriseLesRecommandations(
     recommandations,

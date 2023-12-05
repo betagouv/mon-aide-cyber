@@ -11,6 +11,7 @@ import {
 } from '../constructeurs/constructeurReferentiel';
 import { unTableauDeRecommandations } from '../constructeurs/constructeurTableauDeRecommandations';
 import { ContenuHtml } from '../../src/infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
+import { uneAssociation } from '../constructeurs/constructeurAssociation';
 
 describe('Adaptateur de Restitution', () => {
   const adaptateurRestitution = new (class extends AdaptateurDeRestitution {
@@ -66,37 +67,37 @@ describe('Adaptateur de Restitution', () => {
     .avecLesReponsesPossiblesSuivantesAssociees([
       {
         libelle: 'reponse 11',
-        association: {
-          identifiantRecommandation: 'q1',
-          niveauRecommandation: 1,
-          note: 0,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q1')
+          .deNiveau1()
+          .ayantPourNote(0)
+          .construis(),
       },
       {
         libelle: 'reponse 12',
-        association: {
-          identifiantRecommandation: 'q1',
-          niveauRecommandation: 2,
-          note: 1,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q1')
+          .deNiveau2()
+          .ayantPourNote(1)
+          .construis(),
       },
       { libelle: 'reponse 13' },
       { libelle: 'reponse 14' },
       {
         libelle: 'reponse 21',
-        association: {
-          identifiantRecommandation: 'q2',
-          niveauRecommandation: 1,
-          note: 0,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q2')
+          .deNiveau1()
+          .ayantPourNote(0)
+          .construis(),
       },
       {
         libelle: 'reponse 22',
-        association: {
-          identifiantRecommandation: 'q2',
-          niveauRecommandation: 2,
-          note: 1,
-        },
+        association: uneAssociation()
+          .avecIdentifiant('q2')
+          .deNiveau2()
+          .ayantPourNote(1)
+          .construis(),
       },
       { libelle: 'reponse 23' },
       { libelle: 'reponse 24' },
@@ -145,43 +146,43 @@ describe('Adaptateur de Restitution', () => {
       .avecLesReponsesPossiblesSuivantesAssociees([
         {
           libelle: 'reponse 31',
-          association: {
-            identifiantRecommandation: 'q3',
-            niveauRecommandation: 1,
-            note: 0,
-          },
+          association: uneAssociation()
+            .avecIdentifiant('q3')
+            .deNiveau1()
+            .ayantPourNote(0)
+            .construis(),
         },
         {
           libelle: 'reponse 41',
-          association: {
-            identifiantRecommandation: 'q4',
-            niveauRecommandation: 1,
-            note: 0,
-          },
+          association: uneAssociation()
+            .avecIdentifiant('q4')
+            .deNiveau1()
+            .ayantPourNote(0)
+            .construis(),
         },
         {
           libelle: 'reponse 51',
-          association: {
-            identifiantRecommandation: 'q5',
-            niveauRecommandation: 1,
-            note: 0,
-          },
+          association: uneAssociation()
+            .avecIdentifiant('q5')
+            .deNiveau1()
+            .ayantPourNote(0)
+            .construis(),
         },
         {
           libelle: 'reponse 61',
-          association: {
-            identifiantRecommandation: 'q6',
-            niveauRecommandation: 1,
-            note: 0,
-          },
+          association: uneAssociation()
+            .avecIdentifiant('q6')
+            .deNiveau1()
+            .ayantPourNote(0)
+            .construis(),
         },
         {
           libelle: 'reponse 71',
-          association: {
-            identifiantRecommandation: 'q7',
-            niveauRecommandation: 1,
-            note: 0,
-          },
+          association: uneAssociation()
+            .avecIdentifiant('q7')
+            .deNiveau1()
+            .ayantPourNote(0)
+            .construis(),
         },
       ])
       .construis();

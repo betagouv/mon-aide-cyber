@@ -1,44 +1,47 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from 'vitest';
 import {
   unDiagnostic,
   uneReponseDonnee,
-} from "../constructeurs/constructeurDiagnostic";
+} from '../constructeurs/constructeurDiagnostic';
 import {
   MoteurDeNote,
   NotesDiagnostic,
-} from "../../src/diagnostic/MoteurDeNote";
+} from '../../src/diagnostic/MoteurDeNote';
 import {
   uneQuestion,
   uneQuestionATiroir,
   uneReponsePossible,
   unReferentiel,
-} from "../constructeurs/constructeurReferentiel";
+} from '../constructeurs/constructeurReferentiel';
 
-describe("Moteur de note", () => {
+describe('Moteur de note', () => {
   const constructeurDiagnostic = unDiagnostic();
 
-  describe("pour les questions à réponse unique", () => {
-    it("génère la note pour une réponse à une question", () => {
+  describe('pour les questions à réponse unique', () => {
+    it('génère la note pour une réponse à une question', () => {
       const question = uneQuestion()
-        .aChoixUnique("Quelle est la réponse?")
+        .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
-          uneReponsePossible().avecLibelle("42").construis(),
-          uneReponsePossible().avecLibelle("24").ayantPourNote(0).construis(),
+          uneReponsePossible().avecLibelle('42').construis(),
+          uneReponsePossible()
+            .avecLibelle('24')
+            .ayantPourNoteTheorique(0)
+            .construis(),
         ])
         .construis();
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
             .sansThematique()
-            .ajouteUneThematique("thematique", [question])
+            .ajouteUneThematique('thematique', [question])
             .construis(),
         )
         .ajouteUneReponseDonnee(
           {
-            thematique: "thematique",
-            question: "quelle-est-la-reponse",
+            thematique: 'thematique',
+            question: 'quelle-est-la-reponse',
           },
-          uneReponseDonnee().ayantPourReponse("24").construis(),
+          uneReponseDonnee().ayantPourReponse('24').construis(),
         )
         .construis();
 
@@ -47,19 +50,22 @@ describe("Moteur de note", () => {
       expect(notes).toStrictEqual<NotesDiagnostic>({
         thematique: [
           {
-            identifiant: "quelle-est-la-reponse",
-            note: 0,
+            identifiant: 'quelle-est-la-reponse',
+            note: { theorique: 0 },
           },
         ],
       });
     });
 
-    it("génère les notes uniquement pour les réponses données", () => {
+    it('génère les notes uniquement pour les réponses données', () => {
       const question1 = uneQuestion()
-        .aChoixUnique("Quelle est la réponse?")
+        .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
-          uneReponsePossible().avecLibelle("42").construis(),
-          uneReponsePossible().avecLibelle("24").ayantPourNote(0).construis(),
+          uneReponsePossible().avecLibelle('42').construis(),
+          uneReponsePossible()
+            .avecLibelle('24')
+            .ayantPourNoteTheorique(0)
+            .construis(),
         ])
         .construis();
       const question2 = uneQuestion()
@@ -70,15 +76,15 @@ describe("Moteur de note", () => {
         .avecUnReferentiel(
           unReferentiel()
             .sansThematique()
-            .ajouteUneThematique("thematique", [question1, question2])
+            .ajouteUneThematique('thematique', [question1, question2])
             .construis(),
         )
         .ajouteUneReponseDonnee(
           {
-            thematique: "thematique",
-            question: "quelle-est-la-reponse",
+            thematique: 'thematique',
+            question: 'quelle-est-la-reponse',
           },
-          uneReponseDonnee().ayantPourReponse("24").construis(),
+          uneReponseDonnee().ayantPourReponse('24').construis(),
         )
         .construis();
 
@@ -87,30 +93,30 @@ describe("Moteur de note", () => {
       expect(notes).toStrictEqual<NotesDiagnostic>({
         thematique: [
           {
-            identifiant: "quelle-est-la-reponse",
-            note: 0,
+            identifiant: 'quelle-est-la-reponse',
+            note: { theorique: 0 },
           },
         ],
       });
     });
   });
 
-  describe("pour les questions à tiroir", () => {
-    it("génère la note pour une question tiroir", () => {
+  describe('pour les questions à tiroir', () => {
+    it('génère la note pour une question tiroir', () => {
       const question1 = uneQuestion()
-        .aChoixUnique("Quelle est la réponse?")
+        .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
-          uneReponsePossible().avecLibelle("42").construis(),
+          uneReponsePossible().avecLibelle('42').construis(),
           uneReponsePossible()
-            .avecLibelle("24")
+            .avecLibelle('24')
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
-                .aChoixUnique("Voulez-vous inverser les chiffres?")
+                .aChoixUnique('Voulez-vous inverser les chiffres?')
                 .avecReponsesPossibles([
-                  uneReponsePossible().avecLibelle("Oui").construis(),
+                  uneReponsePossible().avecLibelle('Oui').construis(),
                   uneReponsePossible()
-                    .avecLibelle("Non")
-                    .ayantPourNote(0)
+                    .avecLibelle('Non')
+                    .ayantPourNoteTheorique(0)
                     .construis(),
                 ])
                 .construis(),
@@ -123,20 +129,20 @@ describe("Moteur de note", () => {
         .avecUnReferentiel(
           unReferentiel()
             .sansThematique()
-            .ajouteUneThematique("thematique", [question1])
+            .ajouteUneThematique('thematique', [question1])
             .construis(),
         )
         .ajouteUneReponseDonnee(
           {
-            thematique: "thematique",
-            question: "quelle-est-la-reponse",
+            thematique: 'thematique',
+            question: 'quelle-est-la-reponse',
           },
           uneReponseDonnee()
-            .ayantPourReponse("24")
+            .ayantPourReponse('24')
             .avecDesReponsesMultiples([
               {
-                identifiant: "voulezvous-inverser-les-chiffres",
-                reponses: ["non"],
+                identifiant: 'voulezvous-inverser-les-chiffres',
+                reponses: ['non'],
               },
             ])
             .construis(),
@@ -148,41 +154,41 @@ describe("Moteur de note", () => {
       expect(notes).toStrictEqual<NotesDiagnostic>({
         thematique: [
           {
-            identifiant: "voulezvous-inverser-les-chiffres",
-            note: 0,
+            identifiant: 'voulezvous-inverser-les-chiffres',
+            note: { theorique: 0 },
           },
         ],
       });
     });
 
-    it("génère les notes pour une question à plusieurs tiroirs", () => {
+    it('génère les notes pour une question à plusieurs tiroirs', () => {
       const question1 = uneQuestion()
-        .aChoixUnique("Quelle est la réponse?")
+        .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
-          uneReponsePossible().avecLibelle("42").construis(),
+          uneReponsePossible().avecLibelle('42').construis(),
           uneReponsePossible()
-            .avecLibelle("24")
+            .avecLibelle('24')
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
-                .aChoixUnique("Voulez-vous inverser les chiffres?")
+                .aChoixUnique('Voulez-vous inverser les chiffres?')
                 .avecReponsesPossibles([
-                  uneReponsePossible().avecLibelle("Oui").construis(),
+                  uneReponsePossible().avecLibelle('Oui').construis(),
                   uneReponsePossible()
-                    .avecLibelle("Non")
-                    .ayantPourNote(0)
+                    .avecLibelle('Non')
+                    .ayantPourNoteTheorique(0)
                     .construis(),
                 ])
                 .construis(),
             )
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
-                .aChoixUnique("Une question à tiroir?")
+                .aChoixUnique('Une question à tiroir?')
                 .avecReponsesPossibles([
                   uneReponsePossible()
-                    .avecLibelle("Affirmatif")
-                    .ayantPourNote(1)
+                    .avecLibelle('Affirmatif')
+                    .ayantPourNoteTheorique(1)
                     .construis(),
-                  uneReponsePossible().avecLibelle("Négatif").construis(),
+                  uneReponsePossible().avecLibelle('Négatif').construis(),
                 ])
                 .construis(),
             )
@@ -194,24 +200,24 @@ describe("Moteur de note", () => {
         .avecUnReferentiel(
           unReferentiel()
             .sansThematique()
-            .ajouteUneThematique("thematique", [question1])
+            .ajouteUneThematique('thematique', [question1])
             .construis(),
         )
         .ajouteUneReponseDonnee(
           {
-            thematique: "thematique",
-            question: "quelle-est-la-reponse",
+            thematique: 'thematique',
+            question: 'quelle-est-la-reponse',
           },
           uneReponseDonnee()
-            .ayantPourReponse("24")
+            .ayantPourReponse('24')
             .avecDesReponsesMultiples([
               {
-                identifiant: "voulezvous-inverser-les-chiffres",
-                reponses: ["non"],
+                identifiant: 'voulezvous-inverser-les-chiffres',
+                reponses: ['non'],
               },
               {
-                identifiant: "une-question-a-tiroir",
-                reponses: ["affirmatif"],
+                identifiant: 'une-question-a-tiroir',
+                reponses: ['affirmatif'],
               },
             ])
             .construis(),
@@ -223,49 +229,49 @@ describe("Moteur de note", () => {
       expect(notes).toStrictEqual<NotesDiagnostic>({
         thematique: [
           {
-            identifiant: "voulezvous-inverser-les-chiffres",
-            note: 0,
+            identifiant: 'voulezvous-inverser-les-chiffres',
+            note: { theorique: 0 },
           },
           {
-            identifiant: "une-question-a-tiroir",
-            note: 1,
+            identifiant: 'une-question-a-tiroir',
+            note: { theorique: 1 },
           },
         ],
       });
     });
 
-    it("génère les notes pour une question et les réponses aux questions tiroirs", () => {
+    it('génère les notes pour une question et les réponses aux questions tiroirs', () => {
       const question1 = uneQuestion()
-        .aChoixUnique("Quelle est la réponse?")
+        .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
-          uneReponsePossible().avecLibelle("42").construis(),
+          uneReponsePossible().avecLibelle('42').construis(),
           uneReponsePossible()
-            .avecLibelle("24")
+            .avecLibelle('24')
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
-                .aChoixUnique("Voulez-vous inverser les chiffres?")
+                .aChoixUnique('Voulez-vous inverser les chiffres?')
                 .avecReponsesPossibles([
-                  uneReponsePossible().avecLibelle("Oui").construis(),
+                  uneReponsePossible().avecLibelle('Oui').construis(),
                   uneReponsePossible()
-                    .avecLibelle("Non")
-                    .ayantPourNote(0)
+                    .avecLibelle('Non')
+                    .ayantPourNoteTheorique(0)
                     .construis(),
                 ])
                 .construis(),
             )
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
-                .aChoixUnique("Une question à tiroir?")
+                .aChoixUnique('Une question à tiroir?')
                 .avecReponsesPossibles([
                   uneReponsePossible()
-                    .avecLibelle("Affirmatif")
-                    .ayantPourNote(1)
+                    .avecLibelle('Affirmatif')
+                    .ayantPourNoteTheorique(1)
                     .construis(),
-                  uneReponsePossible().avecLibelle("Négatif").construis(),
+                  uneReponsePossible().avecLibelle('Négatif').construis(),
                 ])
                 .construis(),
             )
-            .ayantPourNote(0)
+            .ayantPourNoteTheorique(0)
             .construis(),
         ])
         .construis();
@@ -274,24 +280,24 @@ describe("Moteur de note", () => {
         .avecUnReferentiel(
           unReferentiel()
             .sansThematique()
-            .ajouteUneThematique("thematique", [question1])
+            .ajouteUneThematique('thematique', [question1])
             .construis(),
         )
         .ajouteUneReponseDonnee(
           {
-            thematique: "thematique",
-            question: "quelle-est-la-reponse",
+            thematique: 'thematique',
+            question: 'quelle-est-la-reponse',
           },
           uneReponseDonnee()
-            .ayantPourReponse("24")
+            .ayantPourReponse('24')
             .avecDesReponsesMultiples([
               {
-                identifiant: "voulezvous-inverser-les-chiffres",
-                reponses: ["non"],
+                identifiant: 'voulezvous-inverser-les-chiffres',
+                reponses: ['non'],
               },
               {
-                identifiant: "une-question-a-tiroir",
-                reponses: ["affirmatif"],
+                identifiant: 'une-question-a-tiroir',
+                reponses: ['affirmatif'],
               },
             ])
             .construis(),
@@ -302,14 +308,14 @@ describe("Moteur de note", () => {
 
       expect(notes).toStrictEqual<NotesDiagnostic>({
         thematique: [
-          { identifiant: "quelle-est-la-reponse", note: 0 },
+          { identifiant: 'quelle-est-la-reponse', note: { theorique: 0 } },
           {
-            identifiant: "voulezvous-inverser-les-chiffres",
-            note: 0,
+            identifiant: 'voulezvous-inverser-les-chiffres',
+            note: { theorique: 0 },
           },
           {
-            identifiant: "une-question-a-tiroir",
-            note: 1,
+            identifiant: 'une-question-a-tiroir',
+            note: { theorique: 1 },
           },
         ],
       });
