@@ -10,7 +10,6 @@ describe('Authentification', () => {
     FournisseurHorlogeDeTest.initialise(
       new Date(Date.parse('2023-02-04T10:00:00+01:00')),
     );
-    process.env.SECRET_JETON = 'ma-clef-secrete';
 
     const entrepotAidant = new EntrepotAidantMemoire();
     const thomas = unAidant()
