@@ -56,7 +56,6 @@ type Diagnostic = {
   dateCreation: Date;
   dateDerniereModification: Date;
   identifiant: crypto.UUID;
-  recommandations?: Recommandations;
   restitution?: Restitution;
   referentiel: ReferentielDiagnostic;
   tableauDesRecommandations: TableauDeRecommandations;
@@ -80,7 +79,7 @@ const initialiseDiagnostic = (
                 reponseUnique: null,
                 reponsesMultiples: [],
               },
-            } as QuestionDiagnostic),
+            }) as QuestionDiagnostic,
         ),
       },
     };
