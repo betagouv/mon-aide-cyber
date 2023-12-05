@@ -2,7 +2,7 @@ import serveur from './src/serveur';
 import { AdaptateurReferentielMAC } from './src/infrastructure/adaptateurs/AdaptateurReferentielMAC';
 import { adaptateurTranscripteur } from './src/infrastructure/adaptateurs/adaptateurTranscripteur';
 import { AdaptateurTableauDeRecommandationsMAC } from './src/infrastructure/adaptateurs/AdaptateurTableauDeRecommandationsMAC';
-import { AdaptateurPDFMAC } from './src/infrastructure/adaptateurs/AdaptateurPDFMAC';
+import { AdaptateurDeRestitutionPDF } from './src/infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import { fabriqueEntrepots } from './src/adaptateurs/fabriqueEntrepots';
 import { BusEvenementMAC } from './src/infrastructure/bus/BusEvenementMAC';
 import { fabriqueConsommateursEvenements } from './src/adaptateurs/fabriqueConsommateursEvenements';
@@ -15,7 +15,7 @@ const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
 );
 
 const serveurMAC = serveur.creeServeur({
-  adaptateurPDF: new AdaptateurPDFMAC(),
+  adaptateurDeRestitution: new AdaptateurDeRestitutionPDF(),
   adaptateurReferentiel: new AdaptateurReferentielMAC(),
   adaptateurTranscripteurDonnees: adaptateurTranscripteur(),
   adaptateurTableauDeRecommandations:

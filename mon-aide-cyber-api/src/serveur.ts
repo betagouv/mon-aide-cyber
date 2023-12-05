@@ -9,7 +9,7 @@ import { gestionnaireErreurGeneralisee } from './api/gestionnaires/erreurs';
 import { Referentiel } from './diagnostic/Referentiel';
 import { TableauDeRecommandations } from './diagnostic/TableauDeRecommandations';
 import { Adaptateur } from './adaptateurs/Adaptateur';
-import { AdaptateurPDF } from './adaptateurs/AdaptateurPDF';
+import { AdaptateurDeRestitution } from './adaptateurs/AdaptateurDeRestitution';
 import { BusEvenement } from './domaine/BusEvenement';
 import { AdaptateurGestionnaireErreurs } from './adaptateurs/AdaptateurGestionnaireErreurs';
 import { NextFunction } from 'express-serve-static-core';
@@ -23,7 +23,7 @@ const ENDPOINTS_SANS_CSRF = ['/api/token'];
 const COOKIE_DUREE_SESSION = 60 * 60 * 1000;
 
 export type ConfigurationServeur = {
-  adaptateurPDF: AdaptateurPDF;
+  adaptateurDeRestitution: AdaptateurDeRestitution;
   adaptateurReferentiel: Adaptateur<Referentiel>;
   adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>;
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
