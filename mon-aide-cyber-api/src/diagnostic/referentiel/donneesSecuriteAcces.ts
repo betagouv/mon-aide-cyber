@@ -506,7 +506,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant:
         "acces-si-industriel-teletravail-acces-distants-mesures-particulieres",
       libelle:
-        "Si l'entité dispose de systèmes industriels : les accès aux systèmes industriels font-ils l'objet de mesures de sécurité particulières ?",
+        "Si l'entité dispose de systèmes industriels : les accès distants aux systèmes industriels font-ils l'objet de mesures de sécurité particulières ?",
       reponsesPossibles: [
         {
           identifiant:
