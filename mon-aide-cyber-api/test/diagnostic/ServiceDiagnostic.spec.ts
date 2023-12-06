@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
-  uneListeDeQuestions,
+  uneListeDe7QuestionsToutesAssociees,
   uneQuestion,
   uneQuestionATiroir,
   uneReponsePossible,
@@ -13,8 +13,11 @@ import {
 } from '../../src/diagnostic/ServiceDiagnostic';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { Entrepots } from '../../src/domaine/Entrepots';
-import { QuestionDiagnostic } from '../../src/diagnostic/Diagnostic';
-import { unTableauDeRecommandations } from '../constructeurs/constructeurTableauDeRecommandations';
+import {
+  QuestionDiagnostic,
+  RecommandationPriorisee,
+} from '../../src/diagnostic/Diagnostic';
+import { unTableauDeRecommandationsPour7Questions } from '../constructeurs/constructeurTableauDeRecommandations';
 import { AdaptateurTableauDeRecommandationsDeTest } from '../adaptateurs/AdaptateurTableauDeRecommandationsDeTest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
@@ -23,7 +26,6 @@ import { AggregatNonTrouve } from '../../src/domaine/Aggregat';
 import crypto from 'crypto';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
-import { uneAssociation } from '../constructeurs/constructeurAssociation';
 
 describe('Le service de diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -526,17 +528,7 @@ describe('Le service de diagnostic', () => {
 
   describe("Lorsque l'on veut terminer le diagnostic", () => {
     let serviceDiagnostic: ServiceDiagnostic;
-    const tableauDeRecommandations = unTableauDeRecommandations()
-      .avecLesRecommandations([
-        { q1: { niveau1: 'reco 1', niveau2: 'reco 12', priorisation: 1 } },
-        { q2: { niveau1: 'reco 2', niveau2: 'reco 22', priorisation: 2 } },
-        { q3: { niveau1: 'reco 3', niveau2: 'reco 32', priorisation: 3 } },
-        { q4: { niveau1: 'reco 4', niveau2: 'reco 42', priorisation: 4 } },
-        { q5: { niveau1: 'reco 5', niveau2: 'reco 52', priorisation: 5 } },
-        { q6: { niveau1: 'reco 6', niveau2: 'reco 62', priorisation: 6 } },
-        { q7: { niveau1: 'reco 7', niveau2: 'reco 72', priorisation: 7 } },
-      ])
-      .construis();
+    const tableauDeRecommandations = unTableauDeRecommandationsPour7Questions();
     beforeEach(() => {
       serviceDiagnostic = new ServiceDiagnostic(
         adaptateurReferentiel,
@@ -546,123 +538,7 @@ describe('Le service de diagnostic', () => {
       );
     });
     it('génère les recommandations', async () => {
-      const questions = uneListeDeQuestions()
-        .dontLesLabelsSont(['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'])
-        .avecLesReponsesPossiblesSuivantesAssociees([
-          {
-            libelle: 'reponse 11',
-            association: uneAssociation()
-              .avecIdentifiant('q1')
-              .deNiveau1()
-              .ayantPourNote(0)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 12',
-            association: uneAssociation()
-              .avecIdentifiant('q1')
-              .deNiveau2()
-              .ayantPourNote(1)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 21',
-            association: uneAssociation()
-              .avecIdentifiant('q2')
-              .deNiveau1()
-              .ayantPourNote(0)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 22',
-            association: uneAssociation()
-              .avecIdentifiant('q2')
-              .deNiveau2()
-              .ayantPourNote(1)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 31',
-            association: uneAssociation()
-              .avecIdentifiant('q3')
-              .deNiveau1()
-              .ayantPourNote(0)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 32',
-            association: uneAssociation()
-              .avecIdentifiant('q3')
-              .deNiveau2()
-              .ayantPourNote(1)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 41',
-            association: uneAssociation()
-              .avecIdentifiant('q4')
-              .deNiveau1()
-              .ayantPourNote(0)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 42',
-            association: uneAssociation()
-              .avecIdentifiant('q4')
-              .deNiveau2()
-              .ayantPourNote(1)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 51',
-            association: uneAssociation()
-              .avecIdentifiant('q5')
-              .deNiveau1()
-              .ayantPourNote(0)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 52',
-            association: uneAssociation()
-              .avecIdentifiant('q5')
-              .deNiveau2()
-              .ayantPourNote(1)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 61',
-            association: uneAssociation()
-              .avecIdentifiant('q6')
-              .deNiveau1()
-              .ayantPourNote(0)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 62',
-            association: uneAssociation()
-              .avecIdentifiant('q6')
-              .deNiveau2()
-              .ayantPourNote(1)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 71',
-            association: uneAssociation()
-              .avecIdentifiant('q7')
-              .deNiveau1()
-              .ayantPourNote(0)
-              .construis(),
-          },
-          {
-            libelle: 'reponse 72',
-            association: uneAssociation()
-              .avecIdentifiant('q7')
-              .deNiveau2()
-              .ayantPourNote(1)
-              .construis(),
-          },
-        ])
-        .construis();
+      const questions = uneListeDe7QuestionsToutesAssociees();
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
@@ -691,44 +567,44 @@ describe('Le service de diagnostic', () => {
       expect(
         diagnosticRetourne.restitution?.recommandations
           ?.recommandationsPrioritaires,
-      ).toStrictEqual([
+      ).toStrictEqual<RecommandationPriorisee[]>([
         {
-          noteObtenue: { theorique: 0 },
+          valeurObtenue: { theorique: 0 },
           priorisation: 1,
           titre: 'reco 1',
           pourquoi: 'parce-que',
           comment: 'comme ça',
         },
         {
-          noteObtenue: { theorique: 0 },
+          valeurObtenue: { theorique: 0 },
           priorisation: 2,
           titre: 'reco 2',
           pourquoi: 'parce-que',
           comment: 'comme ça',
         },
         {
-          noteObtenue: { theorique: 0 },
+          valeurObtenue: { theorique: 0 },
           priorisation: 3,
           titre: 'reco 3',
           pourquoi: 'parce-que',
           comment: 'comme ça',
         },
         {
-          noteObtenue: { theorique: 0 },
+          valeurObtenue: { theorique: 0 },
           priorisation: 4,
           titre: 'reco 4',
           pourquoi: 'parce-que',
           comment: 'comme ça',
         },
         {
-          noteObtenue: { theorique: 0 },
+          valeurObtenue: { theorique: 0 },
           priorisation: 5,
           titre: 'reco 5',
           pourquoi: 'parce-que',
           comment: 'comme ça',
         },
         {
-          noteObtenue: { theorique: 0 },
+          valeurObtenue: { theorique: 0 },
           priorisation: 6,
           titre: 'reco 6',
           pourquoi: 'parce-que',
@@ -742,7 +618,7 @@ describe('Le service de diagnostic', () => {
           titre: 'reco 7',
           pourquoi: 'parce-que',
           comment: 'comme ça',
-          noteObtenue: { theorique: 0 },
+          valeurObtenue: { theorique: 0 },
           priorisation: 7,
         },
       ]);

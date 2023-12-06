@@ -1,167 +1,46 @@
 import { describe, expect } from 'vitest';
-import { unTableauDeRecommandations } from '../constructeurs/constructeurTableauDeRecommandations';
+import {
+  unTableauDeRecommandations,
+  unTableauDeRecommandationsPour7Questions,
+} from '../constructeurs/constructeurTableauDeRecommandations';
 import {
   unDiagnostic,
   uneReponseDonnee,
 } from '../constructeurs/constructeurDiagnostic';
 import {
+  uneListeDe7QuestionsToutesAssociees,
   uneListeDeQuestions,
   uneQuestion,
   uneQuestionATiroir,
   uneReponsePossible,
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
-import { genereLesRecommandations } from '../../src/diagnostic/Diagnostic';
+import {
+  genereLesRecommandations,
+  RecommandationPriorisee,
+} from '../../src/diagnostic/Diagnostic';
 import { uneAssociation } from '../constructeurs/constructeurAssociation';
 
 describe('Diagnostic', () => {
-  const tableauDeRecommandations = unTableauDeRecommandations()
-    .avecLesRecommandations([
-      { q1: { niveau1: 'reco 1', niveau2: 'reco 12', priorisation: 1 } },
-      { q2: { niveau1: 'reco 2', niveau2: 'reco 22', priorisation: 2 } },
-      { q3: { niveau1: 'reco 3', niveau2: 'reco 32', priorisation: 3 } },
-      { q4: { niveau1: 'reco 4', niveau2: 'reco 42', priorisation: 4 } },
-      { q5: { niveau1: 'reco 5', niveau2: 'reco 52', priorisation: 5 } },
-      { q6: { niveau1: 'reco 6', niveau2: 'reco 62', priorisation: 6 } },
-      { q7: { niveau1: 'reco 7', niveau2: 'reco 72', priorisation: 7 } },
-    ])
-    .construis();
+  type PartieCommuneAttendueRecommandationPriorisee = Omit<
+    RecommandationPriorisee,
+    'priorisation' | 'titre'
+  >;
 
-  const questions = uneListeDeQuestions()
-    .dontLesLabelsSont(['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'])
-    .avecLesReponsesPossiblesSuivantesAssociees([
-      {
-        libelle: 'reponse 11',
-        association: uneAssociation()
-          .avecIdentifiant('q1')
-          .deNiveau1()
-          .ayantPourNote(0)
-          .construis(),
-      },
-      {
-        libelle: 'reponse 12',
-        association: uneAssociation()
-          .avecIdentifiant('q1')
-          .deNiveau2()
-          .ayantPourNote(1)
-          .construis(),
-      },
-      { libelle: 'reponse 13' },
-      { libelle: 'reponse 14' },
-      {
-        libelle: 'reponse 21',
-        association: uneAssociation()
-          .avecIdentifiant('q2')
-          .deNiveau1()
-          .ayantPourNote(0)
-          .construis(),
-      },
-      {
-        libelle: 'reponse 22',
-        association: uneAssociation()
-          .avecIdentifiant('q2')
-          .deNiveau2()
-          .ayantPourNote(1)
-          .construis(),
-      },
-      { libelle: 'reponse 23' },
-      { libelle: 'reponse 24' },
-      {
-        libelle: 'reponse 31',
-        association: uneAssociation()
-          .avecIdentifiant('q3')
-          .deNiveau1()
-          .ayantPourNote(0)
-          .construis(),
-      },
-      {
-        libelle: 'reponse 32',
-        association: uneAssociation()
-          .avecIdentifiant('q3')
-          .deNiveau2()
-          .ayantPourNote(1)
-          .construis(),
-      },
-      { libelle: 'reponse 33' },
-      { libelle: 'reponse 34' },
-      {
-        libelle: 'reponse 41',
-        association: uneAssociation()
-          .avecIdentifiant('q4')
-          .deNiveau1()
-          .ayantPourNote(0)
-          .construis(),
-      },
-      {
-        libelle: 'reponse 42',
-        association: uneAssociation()
-          .avecIdentifiant('q4')
-          .deNiveau2()
-          .ayantPourNote(1)
-          .construis(),
-      },
-      { libelle: 'reponse 43' },
-      { libelle: 'reponse 44' },
-      {
-        libelle: 'reponse 51',
-        association: uneAssociation()
-          .avecIdentifiant('q5')
-          .deNiveau1()
-          .ayantPourNote(0)
-          .construis(),
-      },
-      {
-        libelle: 'reponse 52',
-        association: uneAssociation()
-          .avecIdentifiant('q5')
-          .deNiveau2()
-          .ayantPourNote(1)
-          .construis(),
-      },
-      { libelle: 'reponse 53' },
-      { libelle: 'reponse 54' },
-      {
-        libelle: 'reponse 61',
-        association: uneAssociation()
-          .avecIdentifiant('q6')
-          .deNiveau1()
-          .ayantPourNote(0)
-          .construis(),
-      },
-      {
-        libelle: 'reponse 62',
-        association: uneAssociation()
-          .avecIdentifiant('q6')
-          .deNiveau2()
-          .ayantPourNote(1)
-          .construis(),
-      },
-      { libelle: 'reponse 63' },
-      { libelle: 'reponse 64' },
-      {
-        libelle: 'reponse 71',
-        association: uneAssociation()
-          .avecIdentifiant('q7')
-          .deNiveau1()
-          .ayantPourNote(0)
-          .construis(),
-      },
-      {
-        libelle: 'reponse 72',
-        association: uneAssociation()
-          .avecIdentifiant('q7')
-          .deNiveau2()
-          .ayantPourNote(1)
-          .construis(),
-      },
-      { libelle: 'reponse 73' },
-      { libelle: 'reponse 74' },
-    ])
-    .construis();
+  const PARTIE_COMMUNE_ATTENDUE: PartieCommuneAttendueRecommandationPriorisee =
+    {
+      valeurObtenue: { theorique: 0 },
+      pourquoi: 'parce-que',
+      comment: 'comme ça',
+    };
+
+  const tableauDeRecommandations = unTableauDeRecommandationsPour7Questions();
+
+  const questions = uneListeDe7QuestionsToutesAssociees();
 
   describe("lorsque l'on génère les recommandations", () => {
     describe('en ce qui concerne les différents niveaux de recommandations', () => {
-      it('prend en compte la note de la réponse pour choisir entre le niveau 1 ou le niveau 2 des recommandations', () => {
+      it('prend en compte la valeur de la réponse pour choisir entre le niveau 1 ou le niveau 2 des recommandations', () => {
         const diagnostic = unDiagnostic()
           .avecUnReferentiel(
             unReferentiel()
@@ -183,56 +62,51 @@ describe('Diagnostic', () => {
 
         genereLesRecommandations(diagnostic);
 
-        const partieCommuneAttendue = {
-          noteObtenue: { theorique: 0 },
-          pourquoi: 'parce-que',
-          comment: 'comme ça',
-        };
         expect(
           diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
-        ).toStrictEqual([
+        ).toStrictEqual<RecommandationPriorisee[]>([
           {
             priorisation: 1,
             titre: 'reco 1',
-            ...partieCommuneAttendue,
+            ...PARTIE_COMMUNE_ATTENDUE,
           },
           {
             priorisation: 3,
             titre: 'reco 3',
-            ...partieCommuneAttendue,
+            ...PARTIE_COMMUNE_ATTENDUE,
           },
           {
             priorisation: 4,
             titre: 'reco 4',
-            ...partieCommuneAttendue,
+            ...PARTIE_COMMUNE_ATTENDUE,
           },
           {
             priorisation: 6,
             titre: 'reco 6',
-            ...partieCommuneAttendue,
+            ...PARTIE_COMMUNE_ATTENDUE,
           },
           {
             priorisation: 2,
             titre: 'reco 22',
 
-            ...partieCommuneAttendue,
-            noteObtenue: { theorique: 1 },
+            ...PARTIE_COMMUNE_ATTENDUE,
+            valeurObtenue: { theorique: 1 },
           },
           {
             priorisation: 5,
             titre: 'reco 52',
-            ...partieCommuneAttendue,
-            noteObtenue: { theorique: 1 },
+            ...PARTIE_COMMUNE_ATTENDUE,
+            valeurObtenue: { theorique: 1 },
           },
         ]);
         expect(
           diagnostic.restitution?.recommandations?.autresRecommandations,
-        ).toStrictEqual([
+        ).toStrictEqual<RecommandationPriorisee[]>([
           {
             priorisation: 7,
             titre: 'reco 72',
-            ...partieCommuneAttendue,
-            noteObtenue: { theorique: 1 },
+            ...PARTIE_COMMUNE_ATTENDUE,
+            valeurObtenue: { theorique: 1 },
           },
         ]);
       });
@@ -272,10 +146,10 @@ describe('Diagnostic', () => {
 
         expect(
           diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
-        ).toStrictEqual([
+        ).toStrictEqual<RecommandationPriorisee[]>([
           {
             comment: 'comme ça',
-            noteObtenue: { theorique: 1 },
+            valeurObtenue: { theorique: 1 },
             pourquoi: 'parce-que',
             priorisation: 7,
             titre: 'reco 8',
@@ -313,40 +187,36 @@ describe('Diagnostic', () => {
 
       genereLesRecommandations(diagnostic);
 
-      const partieCommuneAttendue = {
-        noteObtenue: { theorique: 1 },
-        pourquoi: 'parce-que',
-        comment: 'comme ça',
-      };
       expect(
         diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
-      ).toStrictEqual([
+      ).toStrictEqual<RecommandationPriorisee[]>([
         {
-          ...partieCommuneAttendue,
-          noteObtenue: { theorique: 0 },
+          ...PARTIE_COMMUNE_ATTENDUE,
           priorisation: 3,
           titre: 'reco 3',
         },
         {
-          ...partieCommuneAttendue,
-          noteObtenue: { theorique: 0 },
+          ...PARTIE_COMMUNE_ATTENDUE,
           priorisation: 6,
           titre: 'reco 6',
         },
         {
-          ...partieCommuneAttendue,
+          ...PARTIE_COMMUNE_ATTENDUE,
           priorisation: 2,
           titre: 'reco 22',
+          valeurObtenue: { theorique: 1 },
         },
         {
-          ...partieCommuneAttendue,
+          ...PARTIE_COMMUNE_ATTENDUE,
           priorisation: 5,
           titre: 'reco 52',
+          valeurObtenue: { theorique: 1 },
         },
         {
-          ...partieCommuneAttendue,
+          ...PARTIE_COMMUNE_ATTENDUE,
           priorisation: 7,
           titre: 'reco 72',
+          valeurObtenue: { theorique: 1 },
         },
       ]);
       expect(
@@ -378,7 +248,7 @@ describe('Diagnostic', () => {
               association: uneAssociation()
                 .avecIdentifiant('q8')
                 .deNiveau1()
-                .ayantPourNote(0)
+                .ayantPourValeurTheorique(0)
                 .construis(),
             },
             {
@@ -386,7 +256,7 @@ describe('Diagnostic', () => {
               association: uneAssociation()
                 .avecIdentifiant('q8')
                 .deNiveau2()
-                .ayantPourNote(1)
+                .ayantPourValeurTheorique(1)
                 .construis(),
             },
             {
@@ -394,7 +264,7 @@ describe('Diagnostic', () => {
               association: uneAssociation()
                 .avecIdentifiant('q9')
                 .deNiveau1()
-                .ayantPourNote(0)
+                .ayantPourValeurTheorique(0)
                 .construis(),
             },
             {
@@ -402,7 +272,7 @@ describe('Diagnostic', () => {
               association: uneAssociation()
                 .avecIdentifiant('q9')
                 .deNiveau2()
-                .ayantPourNote(1)
+                .ayantPourValeurTheorique(1)
                 .construis(),
             },
           ])
@@ -433,52 +303,47 @@ describe('Diagnostic', () => {
 
         genereLesRecommandations(diagnostic);
 
-        const partieCommuneAttendue = {
-          noteObtenue: { theorique: 0 },
-          pourquoi: 'parce-que',
-          comment: 'comme ça',
-        };
         expect(
           diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
-        ).toStrictEqual([
+        ).toStrictEqual<RecommandationPriorisee[]>([
           {
             priorisation: 1,
             titre: 'reco 4',
-            ...partieCommuneAttendue,
+            ...PARTIE_COMMUNE_ATTENDUE,
           },
           {
             priorisation: 3,
             titre: 'reco 1',
-            ...partieCommuneAttendue,
+            ...PARTIE_COMMUNE_ATTENDUE,
           },
           {
             priorisation: 5,
             titre: 'reco 6',
-            ...partieCommuneAttendue,
+            ...PARTIE_COMMUNE_ATTENDUE,
           },
           {
             priorisation: 6,
             titre: 'reco 7',
-            ...partieCommuneAttendue,
+            ...PARTIE_COMMUNE_ATTENDUE,
           },
           {
-            ...partieCommuneAttendue,
+            ...PARTIE_COMMUNE_ATTENDUE,
             priorisation: 8,
             titre: 'reco 8',
           },
           {
-            ...partieCommuneAttendue,
-            noteObtenue: { theorique: 1 },
+            ...PARTIE_COMMUNE_ATTENDUE,
+            valeurObtenue: { theorique: 1 },
             priorisation: 7,
             titre: 'reco 52',
           },
         ]);
         expect(
           diagnostic.restitution?.recommandations?.autresRecommandations,
-        ).toStrictEqual([
+        ).toStrictEqual<RecommandationPriorisee[]>([
           {
-            ...partieCommuneAttendue,
-            noteObtenue: { theorique: 1 },
+            ...PARTIE_COMMUNE_ATTENDUE,
+            valeurObtenue: { theorique: 1 },
             priorisation: 9,
             titre: 'reco 92',
           },

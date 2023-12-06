@@ -1,46 +1,48 @@
 import { Diagnostic, QuestionDiagnostic } from './Diagnostic';
-import { Note } from './Note';
+import { Valeur } from './Valeur';
 
-export type NotesDiagnostic = {
-  [thematique: string]: { identifiant: string; note: Note }[];
+export type ValeursDesReponsesAuDiagnostic = {
+  [thematique: string]: { identifiant: string; valeur: Valeur }[];
 };
 
-export class MoteurDeNote {
-  public static genereLesNotes = (diagnostic: Diagnostic): NotesDiagnostic => {
+export class MoteurDeValeur {
+  public static genereLesValeursDesReponses = (
+    diagnostic: Diagnostic,
+  ): ValeursDesReponsesAuDiagnostic => {
     return Object.entries(diagnostic.referentiel).reduce(
       (reducteur, [thematique, questions]) => ({
         ...reducteur,
         [thematique]: questions.questions
           .filter((question) => question.reponseDonnee.reponseUnique != null)
           .flatMap((question) => [
-            ...this.genereLesNotesPourReponseUnique(question),
-            ...this.genereLesNotesPourReponsesMultiples(question),
+            ...this.genereLesValeursDesReponsesUniques(question),
+            ...this.genereLesValeursDesReponsesMultiples(question),
           ]),
       }),
       {},
     );
   };
 
-  private static genereLesNotesPourReponseUnique(
+  private static genereLesValeursDesReponsesUniques(
     question: QuestionDiagnostic,
-  ): { identifiant: string; note: Note }[] {
+  ): { identifiant: string; valeur: Valeur }[] {
     return question.reponsesPossibles
       .filter(
         (reponsePossible) =>
           reponsePossible.identifiant === question.reponseDonnee.reponseUnique,
       )
       ?.filter(
-        (reponsePossible) => reponsePossible.resultat?.note !== undefined,
+        (reponsePossible) => reponsePossible.resultat?.valeur !== undefined,
       )
       .flatMap((reponsePossible) => ({
         identifiant: question.identifiant,
-        note: reponsePossible.resultat?.note,
+        valeur: reponsePossible.resultat?.valeur,
       }));
   }
 
-  private static genereLesNotesPourReponsesMultiples(
+  private static genereLesValeursDesReponsesMultiples(
     question: QuestionDiagnostic,
-  ): { identifiant: string; note: Note }[] {
+  ): { identifiant: string; valeur: Valeur }[] {
     return question.reponseDonnee.reponsesMultiples
       .flatMap((reponsesMultiples) =>
         question.reponsesPossibles
@@ -57,9 +59,9 @@ export class MoteurDeNote {
           )
           .flatMap((reponsePossible) => ({
             identifiant: reponsesMultiples.identifiant,
-            note: reponsePossible.resultat?.note,
+            valeur: reponsePossible.resultat?.valeur,
           })),
       )
-      .flatMap((note) => note);
+      .flatMap((valeur) => valeur);
   }
 }

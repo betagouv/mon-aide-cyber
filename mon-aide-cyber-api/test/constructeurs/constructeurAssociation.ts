@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { NiveauRecommandation } from '../../src/diagnostic/Referentiel';
-import { Note, ValeurPossible } from '../../src/diagnostic/Note';
+import { Valeur, ValeurPossible } from '../../src/diagnostic/Valeur';
 
 import { Association } from './types';
 import { Constructeur } from './constructeur';
@@ -9,7 +9,7 @@ class ConstructeurAssociation implements Constructeur<Association> {
   constructor(
     private identifiantRecommandation: string = faker.string.alpha(10),
     private niveauRecommandation: NiveauRecommandation = 1,
-    private _note: Note = { theorique: 0 },
+    private _valeur: Valeur = { theorique: 0 },
   ) {}
 
   avecIdentifiant(identifiant: string): ConstructeurAssociation {
@@ -29,8 +29,8 @@ class ConstructeurAssociation implements Constructeur<Association> {
     return this;
   }
 
-  ayantPourNote(theorique: ValeurPossible): ConstructeurAssociation {
-    this._note!.theorique = theorique;
+  ayantPourValeurTheorique(theorique: ValeurPossible): ConstructeurAssociation {
+    this._valeur!.theorique = theorique;
     return this;
   }
 
@@ -38,7 +38,7 @@ class ConstructeurAssociation implements Constructeur<Association> {
     return {
       identifiantRecommandation: this.identifiantRecommandation,
       niveauRecommandation: this.niveauRecommandation,
-      note: this._note,
+      valeur: this._valeur,
     };
   }
 }
