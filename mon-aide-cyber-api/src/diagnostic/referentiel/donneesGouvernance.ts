@@ -67,7 +67,7 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant: 'gouvernance-schema-si-a-jour-non',
-          libelle: "Non / Nous avons un schéma historique qui n'est pas à jour",
+          libelle: "Non / Nous avons un plan historique qui n'est pas à jour",
           resultat: {
             note: 0,
             recommandations: [
@@ -82,7 +82,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-schema-si-a-jour-oui-macro',
           libelle:
-            'Il existe un schéma "macro" non détaillé ou partiellement détaillé.',
+            'Il existe un plan "macro" non détaillé ou partiellement détaillé.',
           resultat: {
             note: 2,
             recommandations: [
