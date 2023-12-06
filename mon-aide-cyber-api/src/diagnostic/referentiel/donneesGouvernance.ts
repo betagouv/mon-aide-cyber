@@ -84,7 +84,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
           resultat: {
-            note: 2,
+            note: 1,
             recommandations: [
               {
                 identifiant: 'gouvernance-schema-si-a-jour',
