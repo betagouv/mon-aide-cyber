@@ -57,7 +57,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-schema-si-a-jour',
       libelle:
-        'Existe-t-il un schéma du système d’information de l’organisation ?',
+        'Existe-t-il un plan du système d’information de l’organisation ?',
       type: 'choixUnique',
       reponsesPossibles: [
         {
