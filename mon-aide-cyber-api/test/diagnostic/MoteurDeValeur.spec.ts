@@ -4,9 +4,9 @@ import {
   uneReponseDonnee,
 } from '../constructeurs/constructeurDiagnostic';
 import {
-  MoteurDeNote,
-  NotesDiagnostic,
-} from '../../src/diagnostic/MoteurDeNote';
+  MoteurDeValeur,
+  ValeursDesReponsesAuDiagnostic,
+} from '../../src/diagnostic/MoteurDeValeur';
 import {
   uneQuestion,
   uneQuestionATiroir,
@@ -14,18 +14,18 @@ import {
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
 
-describe('Moteur de note', () => {
+describe('Moteur de valeur', () => {
   const constructeurDiagnostic = unDiagnostic();
 
   describe('pour les questions à réponse unique', () => {
-    it('génère la note pour une réponse à une question', () => {
+    it('génère la valeur pour une réponse à une question', () => {
       const question = uneQuestion()
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
           uneReponsePossible().avecLibelle('42').construis(),
           uneReponsePossible()
             .avecLibelle('24')
-            .ayantPourNoteTheorique(0)
+            .ayantPourValeurTheorique(0)
             .construis(),
         ])
         .construis();
@@ -45,26 +45,27 @@ describe('Moteur de note', () => {
         )
         .construis();
 
-      const notes = MoteurDeNote.genereLesNotes(diagnostic);
+      const valeursDesReponses =
+        MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
 
-      expect(notes).toStrictEqual<NotesDiagnostic>({
+      expect(valeursDesReponses).toStrictEqual<ValeursDesReponsesAuDiagnostic>({
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
-            note: { theorique: 0 },
+            valeur: { theorique: 0 },
           },
         ],
       });
     });
 
-    it('génère les notes uniquement pour les réponses données', () => {
+    it('génère les valeurs uniquement pour les réponses données', () => {
       const question1 = uneQuestion()
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
           uneReponsePossible().avecLibelle('42').construis(),
           uneReponsePossible()
             .avecLibelle('24')
-            .ayantPourNoteTheorique(0)
+            .ayantPourValeurTheorique(0)
             .construis(),
         ])
         .construis();
@@ -88,13 +89,14 @@ describe('Moteur de note', () => {
         )
         .construis();
 
-      const notes = MoteurDeNote.genereLesNotes(diagnostic);
+      const valeursDesReponses =
+        MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
 
-      expect(notes).toStrictEqual<NotesDiagnostic>({
+      expect(valeursDesReponses).toStrictEqual<ValeursDesReponsesAuDiagnostic>({
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
-            note: { theorique: 0 },
+            valeur: { theorique: 0 },
           },
         ],
       });
@@ -102,7 +104,7 @@ describe('Moteur de note', () => {
   });
 
   describe('pour les questions à tiroir', () => {
-    it('génère la note pour une question tiroir', () => {
+    it('génère la valeur pour une question tiroir', () => {
       const question1 = uneQuestion()
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
@@ -116,7 +118,7 @@ describe('Moteur de note', () => {
                   uneReponsePossible().avecLibelle('Oui').construis(),
                   uneReponsePossible()
                     .avecLibelle('Non')
-                    .ayantPourNoteTheorique(0)
+                    .ayantPourValeurTheorique(0)
                     .construis(),
                 ])
                 .construis(),
@@ -149,19 +151,20 @@ describe('Moteur de note', () => {
         )
         .construis();
 
-      const notes = MoteurDeNote.genereLesNotes(diagnostic);
+      const valeursDesReponses =
+        MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
 
-      expect(notes).toStrictEqual<NotesDiagnostic>({
+      expect(valeursDesReponses).toStrictEqual<ValeursDesReponsesAuDiagnostic>({
         thematique: [
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            note: { theorique: 0 },
+            valeur: { theorique: 0 },
           },
         ],
       });
     });
 
-    it('génère les notes pour une question à plusieurs tiroirs', () => {
+    it('génère les valeurs pour une question à plusieurs tiroirs', () => {
       const question1 = uneQuestion()
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
@@ -175,7 +178,7 @@ describe('Moteur de note', () => {
                   uneReponsePossible().avecLibelle('Oui').construis(),
                   uneReponsePossible()
                     .avecLibelle('Non')
-                    .ayantPourNoteTheorique(0)
+                    .ayantPourValeurTheorique(0)
                     .construis(),
                 ])
                 .construis(),
@@ -186,7 +189,7 @@ describe('Moteur de note', () => {
                 .avecReponsesPossibles([
                   uneReponsePossible()
                     .avecLibelle('Affirmatif')
-                    .ayantPourNoteTheorique(1)
+                    .ayantPourValeurTheorique(1)
                     .construis(),
                   uneReponsePossible().avecLibelle('Négatif').construis(),
                 ])
@@ -224,23 +227,24 @@ describe('Moteur de note', () => {
         )
         .construis();
 
-      const notes = MoteurDeNote.genereLesNotes(diagnostic);
+      const valeursDesReponses =
+        MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
 
-      expect(notes).toStrictEqual<NotesDiagnostic>({
+      expect(valeursDesReponses).toStrictEqual<ValeursDesReponsesAuDiagnostic>({
         thematique: [
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            note: { theorique: 0 },
+            valeur: { theorique: 0 },
           },
           {
             identifiant: 'une-question-a-tiroir',
-            note: { theorique: 1 },
+            valeur: { theorique: 1 },
           },
         ],
       });
     });
 
-    it('génère les notes pour une question et les réponses aux questions tiroirs', () => {
+    it('génère les valeurs pour une question et les réponses aux questions tiroirs', () => {
       const question1 = uneQuestion()
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
@@ -254,7 +258,7 @@ describe('Moteur de note', () => {
                   uneReponsePossible().avecLibelle('Oui').construis(),
                   uneReponsePossible()
                     .avecLibelle('Non')
-                    .ayantPourNoteTheorique(0)
+                    .ayantPourValeurTheorique(0)
                     .construis(),
                 ])
                 .construis(),
@@ -265,13 +269,13 @@ describe('Moteur de note', () => {
                 .avecReponsesPossibles([
                   uneReponsePossible()
                     .avecLibelle('Affirmatif')
-                    .ayantPourNoteTheorique(1)
+                    .ayantPourValeurTheorique(1)
                     .construis(),
                   uneReponsePossible().avecLibelle('Négatif').construis(),
                 ])
                 .construis(),
             )
-            .ayantPourNoteTheorique(0)
+            .ayantPourValeurTheorique(0)
             .construis(),
         ])
         .construis();
@@ -304,18 +308,19 @@ describe('Moteur de note', () => {
         )
         .construis();
 
-      const notes = MoteurDeNote.genereLesNotes(diagnostic);
+      const valeursDesReponses =
+        MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
 
-      expect(notes).toStrictEqual<NotesDiagnostic>({
+      expect(valeursDesReponses).toStrictEqual<ValeursDesReponsesAuDiagnostic>({
         thematique: [
-          { identifiant: 'quelle-est-la-reponse', note: { theorique: 0 } },
+          { identifiant: 'quelle-est-la-reponse', valeur: { theorique: 0 } },
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            note: { theorique: 0 },
+            valeur: { theorique: 0 },
           },
           {
             identifiant: 'une-question-a-tiroir',
-            note: { theorique: 1 },
+            valeur: { theorique: 1 },
           },
         ],
       });

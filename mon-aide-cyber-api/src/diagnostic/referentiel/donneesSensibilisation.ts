@@ -19,7 +19,7 @@ export const donneesSensibilisation: QuestionsThematique = {
             'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-non',
           libelle: 'Non',
           resultat: {
-            note: { theorique: 0 },
+            valeur: { theorique: 0 },
             recommandations: [
               {
                 identifiant:
@@ -36,7 +36,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           libelle:
             'Oui, nous menons ponctuellement des actions de sensibilisation.',
           resultat: {
-            note: { theorique: 1.5 },
+            valeur: { theorique: 1.5 },
             recommandations: [
               {
                 identifiant:
@@ -52,7 +52,7 @@ export const donneesSensibilisation: QuestionsThematique = {
             'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-regulierement',
           libelle:
             'Oui, nous menons régulièrement des actions de sensibilisation ciblant des populations spécifiques.',
-          resultat: { note: { theorique: 3 } },
+          resultat: { valeur: { theorique: 3 } },
           ordre: 3,
         },
       ],
@@ -79,7 +79,7 @@ export const donneesSensibilisation: QuestionsThematique = {
             'sensibilisation-risque-espionnage-industriel-r-et-d-non',
           libelle: 'Non',
           resultat: {
-            note: { theorique: 0 },
+            valeur: { theorique: 0 },
             recommandations: [
               {
                 identifiant:
@@ -94,7 +94,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           identifiant:
             'sensibilisation-risque-espionnage-industriel-r-et-d-oui',
           libelle: 'Oui',
-          resultat: { note: { theorique: 3 } },
+          resultat: { valeur: { theorique: 3 } },
           ordre: 3,
         },
       ],
@@ -117,7 +117,7 @@ export const donneesSensibilisation: QuestionsThematique = {
             'sensibilisation-collaborateurs-soumis-obligations-usages-securises-non',
           libelle: 'Non',
           resultat: {
-            note: { theorique: 0 },
+            valeur: { theorique: 0 },
             recommandations: [
               {
                 identifiant:
@@ -133,7 +133,7 @@ export const donneesSensibilisation: QuestionsThematique = {
             'sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-communiquee',
           libelle: 'Oui, une charte est communiquée aux collaborateurs.',
           resultat: {
-            note: { theorique: 2 },
+            valeur: { theorique: 2 },
             recommandations: [
               {
                 identifiant:
@@ -149,7 +149,7 @@ export const donneesSensibilisation: QuestionsThematique = {
             'sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-signee',
           libelle:
             'Oui, une charte est signée par chaque collaborateur et elle est annexée au règlement intérieur.',
-          resultat: { note: { theorique: 3 } },
+          resultat: { valeur: { theorique: 3 } },
           ordre: 3,
         },
       ],
@@ -169,7 +169,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           identifiant: 'sensibilisation-declaration-incidents-encouragee-non',
           libelle: 'Non',
           resultat: {
-            note: { theorique: 0 },
+            valeur: { theorique: 0 },
             recommandations: [
               {
                 identifiant: 'sensibilisation-declaration-incidents-encouragee',
@@ -185,7 +185,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           libelle:
             "Non, mais dans la majorité des cas, les utilisateurs ont pris l'habitude de contacter un informaticien en cas de doute ou d'incident.",
           resultat: {
-            note: { theorique: 1 },
+            valeur: { theorique: 1 },
             recommandations: [
               {
                 identifiant: 'sensibilisation-declaration-incidents-encouragee',
@@ -198,7 +198,7 @@ export const donneesSensibilisation: QuestionsThematique = {
         {
           identifiant: 'sensibilisation-declaration-incidents-encouragee-oui',
           libelle: 'Oui',
-          resultat: { note: { theorique: 3 } },
+          resultat: { valeur: { theorique: 3 } },
           ordre: 3,
         },
       ],

@@ -12,8 +12,9 @@ import {
 import { fakerFR as faker } from '@faker-js/faker';
 import { Constructeur } from './constructeur';
 import { aseptise } from '../utilitaires/aseptise';
-import { Note, ValeurPossible } from '../../src/diagnostic/Note';
+import { Valeur, ValeurPossible } from '../../src/diagnostic/Valeur';
 import { Association } from './types';
+import { uneAssociation } from './constructeurAssociation';
 
 class ConstructeurReferentiel implements Constructeur<Referentiel> {
   thematique: { [clef: string]: QuestionsThematique } = {
@@ -157,7 +158,7 @@ class ConstructeurListeDeQuestions
                 constructeurReponsePossible.associeeARecommandation(
                   rep.association?.identifiantRecommandation,
                   rep.association?.niveauRecommandation,
-                  rep.association?.note?.theorique,
+                  rep.association?.valeur?.theorique,
                 );
             }
             return constructeurReponsePossible.construis();
@@ -217,7 +218,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private questions?: QuestionATiroir[];
   private resultat?: {
     recommandations?: Recommandation[];
-    note: Note;
+    valeur: Valeur;
   };
 
   ajouteUneQuestionATiroir(
@@ -239,7 +240,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   associeeARecommandation(
     identifiantRecommandation: string,
     niveauRecommandation: NiveauRecommandation,
-    note: ValeurPossible,
+    valeurPossible: ValeurPossible,
   ): ConstructeurReponsePossible {
     const recommandations = [];
     recommandations.push({
@@ -252,13 +253,18 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
         ...(this.resultat?.recommandations || []),
         ...recommandations,
       ],
-      note: { theorique: note },
+      valeur: { theorique: valeurPossible },
     };
     return this;
   }
 
-  ayantPourNoteTheorique(note: ValeurPossible): ConstructeurReponsePossible {
-    this.resultat = { ...this.resultat, note: { theorique: note } };
+  ayantPourValeurTheorique(
+    valeurTheoriquePossible: ValeurPossible,
+  ): ConstructeurReponsePossible {
+    this.resultat = {
+      ...this.resultat,
+      valeur: { theorique: valeurTheoriquePossible },
+    };
     return this;
   }
 
@@ -295,3 +301,135 @@ export const uneQuestionATiroir = (): ConstructeurQuestionATiroir =>
 
 export const uneReponsePossible = (): ConstructeurReponsePossible =>
   new ConstructeurReponsePossible();
+export const uneListeDe7QuestionsToutesAssociees = () =>
+  uneListeDeQuestions()
+    .dontLesLabelsSont(['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'])
+    .avecLesReponsesPossiblesSuivantesAssociees([
+      {
+        libelle: 'reponse 11',
+        association: uneAssociation()
+          .avecIdentifiant('q1')
+          .deNiveau1()
+          .ayantPourValeurTheorique(0)
+          .construis(),
+      },
+      {
+        libelle: 'reponse 12',
+        association: uneAssociation()
+          .avecIdentifiant('q1')
+          .deNiveau2()
+          .ayantPourValeurTheorique(1)
+          .construis(),
+      },
+      { libelle: 'reponse 13' },
+      { libelle: 'reponse 14' },
+      {
+        libelle: 'reponse 21',
+        association: uneAssociation()
+          .avecIdentifiant('q2')
+          .deNiveau1()
+          .ayantPourValeurTheorique(0)
+          .construis(),
+      },
+      {
+        libelle: 'reponse 22',
+        association: uneAssociation()
+          .avecIdentifiant('q2')
+          .deNiveau2()
+          .ayantPourValeurTheorique(1)
+          .construis(),
+      },
+      { libelle: 'reponse 23' },
+      { libelle: 'reponse 24' },
+      {
+        libelle: 'reponse 31',
+        association: uneAssociation()
+          .avecIdentifiant('q3')
+          .deNiveau1()
+          .ayantPourValeurTheorique(0)
+          .construis(),
+      },
+      {
+        libelle: 'reponse 32',
+        association: uneAssociation()
+          .avecIdentifiant('q3')
+          .deNiveau2()
+          .ayantPourValeurTheorique(1)
+          .construis(),
+      },
+      { libelle: 'reponse 33' },
+      { libelle: 'reponse 34' },
+      {
+        libelle: 'reponse 41',
+        association: uneAssociation()
+          .avecIdentifiant('q4')
+          .deNiveau1()
+          .ayantPourValeurTheorique(0)
+          .construis(),
+      },
+      {
+        libelle: 'reponse 42',
+        association: uneAssociation()
+          .avecIdentifiant('q4')
+          .deNiveau2()
+          .ayantPourValeurTheorique(1)
+          .construis(),
+      },
+      { libelle: 'reponse 43' },
+      { libelle: 'reponse 44' },
+      {
+        libelle: 'reponse 51',
+        association: uneAssociation()
+          .avecIdentifiant('q5')
+          .deNiveau1()
+          .ayantPourValeurTheorique(0)
+          .construis(),
+      },
+      {
+        libelle: 'reponse 52',
+        association: uneAssociation()
+          .avecIdentifiant('q5')
+          .deNiveau2()
+          .ayantPourValeurTheorique(1)
+          .construis(),
+      },
+      { libelle: 'reponse 53' },
+      { libelle: 'reponse 54' },
+      {
+        libelle: 'reponse 61',
+        association: uneAssociation()
+          .avecIdentifiant('q6')
+          .deNiveau1()
+          .ayantPourValeurTheorique(0)
+          .construis(),
+      },
+      {
+        libelle: 'reponse 62',
+        association: uneAssociation()
+          .avecIdentifiant('q6')
+          .deNiveau2()
+          .ayantPourValeurTheorique(1)
+          .construis(),
+      },
+      { libelle: 'reponse 63' },
+      { libelle: 'reponse 64' },
+      {
+        libelle: 'reponse 71',
+        association: uneAssociation()
+          .avecIdentifiant('q7')
+          .deNiveau1()
+          .ayantPourValeurTheorique(0)
+          .construis(),
+      },
+      {
+        libelle: 'reponse 72',
+        association: uneAssociation()
+          .avecIdentifiant('q7')
+          .deNiveau2()
+          .ayantPourValeurTheorique(1)
+          .construis(),
+      },
+      { libelle: 'reponse 73' },
+      { libelle: 'reponse 74' },
+    ])
+    .construis();

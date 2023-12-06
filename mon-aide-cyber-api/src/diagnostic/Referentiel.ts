@@ -1,7 +1,7 @@
-import { Note } from "./Note";
+import { Valeur } from './Valeur';
 
-type QuestionATiroir = Omit<Question, "reponsesPossibles"> & {
-  reponsesPossibles: Omit<ReponsePossible, "questions">[];
+type QuestionATiroir = Omit<Question, 'reponsesPossibles'> & {
+  reponsesPossibles: Omit<ReponsePossible, 'questions'>[];
 };
 
 export type NiveauRecommandation = 1 | 2;
@@ -13,11 +13,11 @@ type ReponsePossible = {
   questions?: QuestionATiroir[];
   resultat?: {
     recommandations?: Recommandation[];
-    note: Note;
+    valeur: Valeur;
   };
 };
 
-type TypeQuestion = "choixMultiple" | "choixUnique";
+type TypeQuestion = 'choixMultiple' | 'choixUnique';
 
 type Question = {
   identifiant: string;
@@ -27,11 +27,11 @@ type Question = {
 };
 
 type QuestionChoixUnique = Question & {
-  type: Exclude<TypeQuestion, "choixMultiple">;
+  type: Exclude<TypeQuestion, 'choixMultiple'>;
 };
 
 type QuestionChoixMultiple = Question & {
-  type: Exclude<TypeQuestion, "choixUnique">;
+  type: Exclude<TypeQuestion, 'choixUnique'>;
 };
 
 type QuestionsThematique = {

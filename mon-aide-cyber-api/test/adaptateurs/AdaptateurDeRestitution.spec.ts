@@ -70,7 +70,7 @@ describe('Adaptateur de Restitution', () => {
         association: uneAssociation()
           .avecIdentifiant('q1')
           .deNiveau1()
-          .ayantPourNote(0)
+          .ayantPourValeurTheorique(0)
           .construis(),
       },
       {
@@ -78,7 +78,7 @@ describe('Adaptateur de Restitution', () => {
         association: uneAssociation()
           .avecIdentifiant('q1')
           .deNiveau2()
-          .ayantPourNote(1)
+          .ayantPourValeurTheorique(1)
           .construis(),
       },
       { libelle: 'reponse 13' },
@@ -88,7 +88,7 @@ describe('Adaptateur de Restitution', () => {
         association: uneAssociation()
           .avecIdentifiant('q2')
           .deNiveau1()
-          .ayantPourNote(0)
+          .ayantPourValeurTheorique(0)
           .construis(),
       },
       {
@@ -96,7 +96,7 @@ describe('Adaptateur de Restitution', () => {
         association: uneAssociation()
           .avecIdentifiant('q2')
           .deNiveau2()
-          .ayantPourNote(1)
+          .ayantPourValeurTheorique(1)
           .construis(),
       },
       { libelle: 'reponse 23' },
@@ -149,7 +149,7 @@ describe('Adaptateur de Restitution', () => {
           association: uneAssociation()
             .avecIdentifiant('q3')
             .deNiveau1()
-            .ayantPourNote(0)
+            .ayantPourValeurTheorique(0)
             .construis(),
         },
         {
@@ -157,7 +157,7 @@ describe('Adaptateur de Restitution', () => {
           association: uneAssociation()
             .avecIdentifiant('q4')
             .deNiveau1()
-            .ayantPourNote(0)
+            .ayantPourValeurTheorique(0)
             .construis(),
         },
         {
@@ -165,7 +165,7 @@ describe('Adaptateur de Restitution', () => {
           association: uneAssociation()
             .avecIdentifiant('q5')
             .deNiveau1()
-            .ayantPourNote(0)
+            .ayantPourValeurTheorique(0)
             .construis(),
         },
         {
@@ -173,7 +173,7 @@ describe('Adaptateur de Restitution', () => {
           association: uneAssociation()
             .avecIdentifiant('q6')
             .deNiveau1()
-            .ayantPourNote(0)
+            .ayantPourValeurTheorique(0)
             .construis(),
         },
         {
@@ -181,7 +181,7 @@ describe('Adaptateur de Restitution', () => {
           association: uneAssociation()
             .avecIdentifiant('q7')
             .deNiveau1()
-            .ayantPourNote(0)
+            .ayantPourValeurTheorique(0)
             .construis(),
         },
       ])

@@ -2,13 +2,16 @@ import crypto from 'crypto';
 import { Question, Recommandation, Referentiel } from './Referentiel';
 import { Entrepot } from '../domaine/Entrepot';
 import { CorpsReponse } from './ServiceDiagnostic';
-import { Note } from './Note';
+import { Valeur } from './Valeur';
 import {
   NiveauDeRecommandation,
   TableauDeRecommandations,
 } from './TableauDeRecommandations';
 import { StrategieDeReponse } from './StrategieDeReponse';
-import { MoteurDeNote, NotesDiagnostic } from './MoteurDeNote';
+import {
+  MoteurDeValeur,
+  ValeursDesReponsesAuDiagnostic,
+} from './MoteurDeValeur';
 import { MoteurDeRecommandations } from './MoteurDeRecommandations';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
@@ -33,14 +36,14 @@ export type ReferentielDiagnostic = {
 
 export type RecommandationDiagnostic = Omit<
   Recommandation,
-  'identifiant' | 'niveau' | 'noteObtenue'
+  'identifiant' | 'niveau'
 > & { niveau: NiveauDeRecommandation; priorisation: number; repondA: string };
 
 export type RecommandationPriorisee = {
   titre: string;
   pourquoi: string;
   comment: string;
-  noteObtenue: Note;
+  valeurObtenue: Valeur;
   priorisation: number;
 };
 export type Recommandations = {
@@ -108,7 +111,8 @@ const ajouteLaReponseAuDiagnostic = (
 };
 
 const genereLesRecommandations = (diagnostic: Diagnostic) => {
-  const notes = MoteurDeNote.genereLesNotes(diagnostic);
+  const valeursDesReponses =
+    MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
   const recommandations = Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
     .flatMap((question) =>
@@ -120,40 +124,43 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
 
   const prioriseLesRecommandations = (
     recommandations: RecommandationDiagnostic[],
-    notes: NotesDiagnostic,
+    valeursDesReponses: ValeursDesReponsesAuDiagnostic,
   ): RecommandationPriorisee[] => {
     return recommandations
       .map((recommandation) => {
-        const note = Object.values(notes)
-          .flatMap((note) => note)
-          .find((note) => note.identifiant === recommandation.repondA)?.note;
+        const valeurObtenue = Object.values(valeursDesReponses)
+          .flatMap((valeurReponse) => valeurReponse)
+          .find(
+            (valeurReponse) =>
+              valeurReponse.identifiant === recommandation.repondA,
+          )?.valeur;
         return {
           titre: recommandation.niveau.titre,
           pourquoi: recommandation.niveau.pourquoi,
           comment: recommandation.niveau.comment,
           priorisation: recommandation.priorisation,
-          noteObtenue: note,
+          valeurObtenue,
         } as RecommandationPriorisee;
       })
       .filter(
         (reco) =>
-          reco.noteObtenue !== undefined &&
-          reco.noteObtenue.theorique !== null &&
-          reco.noteObtenue.theorique !== undefined,
+          reco.valeurObtenue !== undefined &&
+          reco.valeurObtenue.theorique !== null &&
+          reco.valeurObtenue.theorique !== undefined,
       )
       .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
       .sort(
         (a, b) =>
-          (a.noteObtenue &&
-          b.noteObtenue &&
-          a.noteObtenue.theorique! < b.noteObtenue.theorique!
+          (a.valeurObtenue &&
+          b.valeurObtenue &&
+          a.valeurObtenue.theorique! < b.valeurObtenue.theorique!
             ? -1
             : 1) || 0,
       );
   };
   const recommandationPriorisees = prioriseLesRecommandations(
     recommandations,
-    notes,
+    valeursDesReponses,
   );
 
   diagnostic.restitution = {
