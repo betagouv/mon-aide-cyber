@@ -138,9 +138,9 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-partiel',
           libelle:
-            'Il existe un schéma "macro" non détaillé ou partiellement détaillé.',
+            'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
           resultat: {
-            note: 2,
+            note: 1,
             recommandations: [
               {
                 identifiant: 'gouvernance-schema-si-industriel-a-jour',
@@ -153,7 +153,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-detaille',
           libelle:
-            "'Il existe un schéma détaillé, incluant la liste exhaustive des systèmes industrielles, installations matériels connectés et des interconnexions vers l'extérieur.",
+            "'Il existe un schéma détaillé à jour, incluant la liste exhaustive des systèmes industrielles, installations matériels connectés et des interconnexions vers l'extérieur.",
           resultat: {
             note: 3,
           },
