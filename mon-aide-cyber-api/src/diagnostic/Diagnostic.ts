@@ -14,6 +14,7 @@ import {
 } from './MoteurDeValeur';
 import { MoteurDeRecommandations } from './MoteurDeRecommandations';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
+import { MoteurDesIndicateurs } from './MoteurDesIndicateurs';
 
 export type Thematique = string;
 
@@ -51,10 +52,14 @@ export type Recommandations = {
   autresRecommandations: RecommandationPriorisee[];
 };
 
-export type Restitution = {
-  recommandations?: Recommandations;
+type Indicateurs = {
+  [thematique: string]: { moyennePonderee: number };
 };
 
+export type Restitution = {
+  indicateurs?: Indicateurs;
+  recommandations?: Recommandations;
+};
 type Diagnostic = {
   dateCreation: Date;
   dateDerniereModification: Date;
@@ -64,6 +69,7 @@ type Diagnostic = {
   tableauDesRecommandations: TableauDeRecommandations;
 };
 type EntrepotDiagnostic = Entrepot<Diagnostic>;
+
 const initialiseDiagnostic = (
   r: Referentiel,
   tableauDesRecommandations: TableauDeRecommandations,
@@ -113,6 +119,8 @@ const ajouteLaReponseAuDiagnostic = (
 const genereLesRecommandations = (diagnostic: Diagnostic) => {
   const valeursDesReponses =
     MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
+  const indicateurs =
+    MoteurDesIndicateurs.genereLesIndicateurs(valeursDesReponses);
   const recommandations = Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
     .flatMap((question) =>
@@ -164,16 +172,17 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
   );
 
   diagnostic.restitution = {
+    indicateurs,
     recommandations: {
       recommandationsPrioritaires: recommandationPriorisees.slice(0, 6),
       autresRecommandations: recommandationPriorisees.slice(6),
     },
   };
 };
-
 export {
   Diagnostic,
   EntrepotDiagnostic,
+  Indicateurs,
   QuestionDiagnostic,
   ReponseDonnee,
   ReponsesMultiples,

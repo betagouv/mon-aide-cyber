@@ -1,4 +1,8 @@
-import { Diagnostic, QuestionDiagnostic } from './Diagnostic';
+import {
+  Diagnostic,
+  QuestionDiagnostic,
+  QuestionsThematique,
+} from './Diagnostic';
 import { Valeur } from './Valeur';
 
 export type ValeursDesReponsesAuDiagnostic = {
@@ -9,18 +13,39 @@ export class MoteurDeValeur {
   public static genereLesValeursDesReponses = (
     diagnostic: Diagnostic,
   ): ValeursDesReponsesAuDiagnostic => {
-    return Object.entries(diagnostic.referentiel).reduce(
-      (reducteur, [thematique, questions]) => ({
-        ...reducteur,
-        [thematique]: questions.questions
-          .filter((question) => question.reponseDonnee.reponseUnique != null)
-          .flatMap((question) => [
-            ...this.genereLesValeursDesReponsesUniques(question),
-            ...this.genereLesValeursDesReponsesMultiples(question),
-          ]),
-      }),
-      {},
-    );
+    function laThematiqueContientDesResultats(questions: QuestionsThematique) {
+      return (
+        questions.questions.filter(
+          (q) =>
+            q.reponsesPossibles.filter((r) => {
+              const questionsTiroirContenantDesResultats = r.questions?.filter(
+                (q) =>
+                  q.reponsesPossibles.filter((r) => !!r.resultat).length > 0,
+              );
+              return (
+                !!r.resultat ||
+                (questionsTiroirContenantDesResultats &&
+                  questionsTiroirContenantDesResultats.length > 0)
+              );
+            }).length > 0,
+        ).length > 0
+      );
+    }
+
+    return Object.entries(diagnostic.referentiel)
+      .filter(([, questions]) => laThematiqueContientDesResultats(questions))
+      .reduce(
+        (reducteur, [thematique, questions]) => ({
+          ...reducteur,
+          [thematique]: questions.questions
+            .filter((question) => question.reponseDonnee.reponseUnique != null)
+            .flatMap((question) => [
+              ...this.genereLesValeursDesReponsesUniques(question),
+              ...this.genereLesValeursDesReponsesMultiples(question),
+            ]),
+        }),
+        {},
+      );
   };
 
   private static genereLesValeursDesReponsesUniques(
