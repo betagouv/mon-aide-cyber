@@ -21,4 +21,19 @@ describe('Moteur des indicateurs', () => {
       thematique: { moyennePonderee: 2.5 },
     });
   });
+
+  it('génère les indicateurs en prenant en compte le poids des réponses', () => {
+    const valeurs = desValeursDesReponsesAuDiagnostic()
+      .pourLaThematique('thematique')
+      .ajoute(uneValeur().de(2).avecUnPoidsDe(3).construis())
+      .ajoute(uneValeur().de(1).avecUnPoidsDe(2).construis())
+      .ajoute(uneValeur().de(1.5).avecUnPoidsDe(3).construis())
+      .construis();
+
+    const indicateurs = MoteurDesIndicateurs.genereLesIndicateurs(valeurs);
+
+    expect(indicateurs).toStrictEqual<Indicateurs>({
+      thematique: { moyennePonderee: 1.5625 },
+    });
+  });
 });

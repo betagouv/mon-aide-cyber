@@ -34,8 +34,12 @@ type RepresentationReferentiel = {
   [clef: Thematique]: RepresentationQuestionsThematique;
 };
 
-type RepresentationRecommandationPriorisee = RecommandationPriorisee & {
+type RepresentationRecommandationPriorisee = Omit<
+  RecommandationPriorisee,
+  'valeurObtenue'
+> & {
   noteObtenue?: ValeurPossible;
+  valeurObtenue: { theorique: ValeurPossible };
 };
 
 type RepresentationRecommandations = {

@@ -1,6 +1,10 @@
 import { Constructeur } from './constructeur';
 import { ValeursDesReponsesAuDiagnostic } from '../../src/diagnostic/MoteurDeValeur';
-import { Valeur, ValeurPossible } from '../../src/diagnostic/Valeur';
+import {
+  PoidsPossible,
+  Valeur,
+  ValeurPossible,
+} from '../../src/diagnostic/Valeur';
 import { fakerFR } from '@faker-js/faker';
 
 class ConstructeurDesValeursDesReponsesAuDiagnostic
@@ -38,8 +42,23 @@ class ConstructeurDesValeursDesReponsesAuDiagnostic
 
 class ConstructeurDeValeur implements Constructeur<Valeur> {
   private valeur: Valeur = undefined;
+
   de(valeur: ValeurPossible): ConstructeurDeValeur {
-    this.valeur = { theorique: valeur };
+    this.valeur = {
+      ...((this.valeur &&
+        this.valeur.poids && { poids: this.valeur.poids }) || { poids: 1 }),
+      theorique: valeur,
+    };
+    return this;
+  }
+
+  avecUnPoidsDe(poids: PoidsPossible): ConstructeurDeValeur {
+    this.valeur = {
+      ...((this.valeur && { theorique: this.valeur.theorique }) || {
+        theorique: 0,
+      }),
+      poids,
+    };
     return this;
   }
 
