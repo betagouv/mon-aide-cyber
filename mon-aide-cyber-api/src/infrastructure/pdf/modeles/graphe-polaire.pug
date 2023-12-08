@@ -1,0 +1,30 @@
+- const valueMax = 5
+- const size = 100;
+
+svg(viewbox=`0 -3 ${size} ${size}`)
+  - const [cx, cy] = [size/4, size/4]
+  - const radius = size/4
+  - const polarToCartesian = (r, a) => ({ x: cx + (r * Math.cos(a)), y: cy + (r * Math.sin(a))})
+  - const pathForSlice = (r, a0, a1) => {const start=polarToCartesian(r, a1);const end=polarToCartesian(r, a0);const largeArcFlag = a1 - a0 <= 180 ? 0 : 1;return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y} L ${cx} ${cy} L ${start.x} ${start.y} Z`;}
+  - const angleStep = Math.PI * 2 / values.length;
+  each v, i in values
+    - const startAngle = angleStep * i - Math.PI / 2;
+    - const r = (v  / valueMax) * radius
+    path(d=pathForSlice(r, startAngle, startAngle + angleStep) fill=colors[i])
+  each i in new Array(5).fill(0).map((_, i) => i + 1)
+    - const r = i / 5 * radius;
+    - const ordinateCoordinate = (-(i-5) / 5 * radius) - 1.5
+    - const abscissaCoordinate = cx - 2
+    circle(cx=cx cy=cy r=r stroke='#eeeeee' fill='none' stroke-width=0.3)
+    text(x=abscissaCoordinate y=ordinateCoordinate style="font-size: 2px;") !{i}
+
+  each leg, i in legend
+    - const pillOrdinate = (i / 6 * cy) + 10
+    - const legendOrdinate = pillOrdinate + 1.5
+    rect(x=60 y=pillOrdinate width="4" height="1" fill=leg.colour ry="0.5" rx="0.5")
+    text(x=67 y=legendOrdinate style="font-size: 2px;") !{leg.text}
+
+  - const forstIndicatorOrdinate = 7 / 6 * cy + 10
+  - const secondIndicatorOrdinate = forstIndicatorOrdinate + 3
+  text(x=60 y=forstIndicatorOrdinate style="font-size: 2px;") 0 - 1 = Très faible  2 - 3 = Faible
+  text(x=60 y=secondIndicatorOrdinate style="font-size: 2px;") 3 - 4 = Bon  5 = Excellent

@@ -85,6 +85,7 @@ type Thematiques = {
 };
 
 export type Transcripteur = {
+  traductionThematiques?: Map<string, string>;
   ordreThematiques?: string[];
   thematiques: Thematiques;
 };

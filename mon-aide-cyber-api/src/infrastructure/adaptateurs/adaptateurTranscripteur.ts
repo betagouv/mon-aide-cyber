@@ -6,6 +6,15 @@ export const adaptateurTranscripteur = () =>
   new (class implements AdaptateurTranscripteur {
     transcripteur(): Transcripteur {
       return {
+        traductionThematiques: new Map([
+          ['contexte', 'Contexte'],
+          ['gouvernance', 'Gouvernance'],
+          ['SecuriteAcces', 'Sécurité des accès'],
+          ['securiteposte', 'Sécurité des postes'],
+          ['securiteinfrastructure', 'Sécurité des infrastructures'],
+          ['sensibilisation', 'Sensibilisation des utilisateurs'],
+          ['reaction', 'Réaction à une cyber attaque'],
+        ]),
         ordreThematiques: [
           'contexte',
           'gouvernance',
