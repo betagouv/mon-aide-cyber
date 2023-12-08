@@ -14,10 +14,14 @@ const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut',
 );
 
+const adaptateurTranscripteurDonnees = adaptateurTranscripteur();
 const serveurMAC = serveur.creeServeur({
-  adaptateurDeRestitution: new AdaptateurDeRestitutionPDF(),
+  adaptateurDeRestitution: new AdaptateurDeRestitutionPDF(
+    adaptateurTranscripteurDonnees.transcripteur().traductionThematiques ||
+      new Map(),
+  ),
   adaptateurReferentiel: new AdaptateurReferentielMAC(),
-  adaptateurTranscripteurDonnees: adaptateurTranscripteur(),
+  adaptateurTranscripteurDonnees: adaptateurTranscripteurDonnees,
   adaptateurTableauDeRecommandations:
     new AdaptateurTableauDeRecommandationsMAC(),
   entrepots: fabriqueEntrepots(),

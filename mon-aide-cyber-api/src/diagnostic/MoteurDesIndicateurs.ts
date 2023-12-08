@@ -3,7 +3,7 @@ import { Indicateurs } from './Diagnostic';
 import { Indice, Poids, Valeur } from './Indice';
 
 const estUnNombre = (valeur: Poids | Valeur): valeur is number =>
-  !!valeur && typeof valeur === 'number';
+  (!!valeur || valeur === 0) && typeof valeur === 'number';
 
 export class MoteurDesIndicateurs {
   static genereLesIndicateurs(

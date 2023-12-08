@@ -39,9 +39,17 @@ class ConstructeurIndice implements Constructeur<Indice> {
 
   de(valeur: Valeur): ConstructeurIndice {
     this.indice = {
-      ...((this.indice &&
-        this.indice.poids && { poids: this.indice.poids }) || { poids: 1 }),
+      ...(this.indice && this.indice.poids && { poids: this.indice.poids }),
       valeur: valeur,
+    };
+    return this;
+  }
+
+  sansPoids(): ConstructeurIndice {
+    this.indice = {
+      ...((this.indice && { valeur: this.indice.valeur }) || {
+        valeur: 0,
+      }),
     };
     return this;
   }

@@ -1,4 +1,8 @@
-import { Diagnostic, RecommandationPriorisee } from '../diagnostic/Diagnostic';
+import {
+  Diagnostic,
+  Indicateurs,
+  RecommandationPriorisee,
+} from '../diagnostic/Diagnostic';
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 
 const estRecommandationPriorisee = (
@@ -11,7 +15,10 @@ const estRecommandationPriorisee = (
 
 export abstract class AdaptateurDeRestitution {
   genereRestitution(diagnostic: Diagnostic): Promise<Buffer> {
-    const recommandations = this.genereRecommandations(
+    const pageDeGarde = this.genereIndicateurs(
+      diagnostic.restitution?.indicateurs,
+    );
+    const recommandations = this.genereRecommandationsPrioritaires(
       diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
     );
 
@@ -20,22 +27,27 @@ export abstract class AdaptateurDeRestitution {
 
     if (estRecommandationPriorisee(autresRecommandations)) {
       return this.genere([
+        pageDeGarde,
         recommandations,
-        this.genereAnnexes(autresRecommandations),
+        this.genereRecommandationsAnnexes(autresRecommandations),
       ]);
     }
-    return this.genere([recommandations]);
+    return this.genere([pageDeGarde, recommandations]);
   }
 
-  protected abstract genereAnnexes(
+  protected abstract genereRecommandationsAnnexes(
     autresRecommandations: RecommandationPriorisee[],
   ): Promise<ContenuHtml>;
 
-  protected abstract genereRecommandations(
+  protected abstract genereRecommandationsPrioritaires(
     recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
   ): Promise<ContenuHtml>;
 
   protected abstract genere(
     htmlRecommandations: Promise<ContenuHtml>[],
   ): Promise<Buffer>;
+
+  protected abstract genereIndicateurs(
+    indicateurs: Indicateurs | undefined,
+  ): Promise<ContenuHtml>;
 }

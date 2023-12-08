@@ -1,10 +1,17 @@
 import { AdaptateurDeRestitution } from '../../adaptateurs/AdaptateurDeRestitution';
-import { RecommandationPriorisee } from '../../diagnostic/Diagnostic';
+import {
+  Indicateurs,
+  RecommandationPriorisee,
+} from '../../diagnostic/Diagnostic';
 import * as pug from 'pug';
 import puppeteer, { Browser, PDFOptions } from 'puppeteer';
 import { PDFDocument } from 'pdf-lib';
 
 export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution {
+  constructor(private readonly traductionThematiques: Map<string, string>) {
+    super();
+  }
+
   protected genere(htmlRecommandations: Promise<ContenuHtml>[]) {
     return Promise.all(htmlRecommandations)
       .then((htmls) => generePdfs(htmls))
@@ -15,7 +22,16 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution {
       });
   }
 
-  protected genereAnnexes(
+  protected genereIndicateurs(
+    indicateurs: Indicateurs | undefined,
+  ): Promise<ContenuHtml> {
+    return genereHtml('restitution-page-de-garde', {
+      indicateurs,
+      traductions: this.traductionThematiques,
+    });
+  }
+
+  protected genereRecommandationsAnnexes(
     autresRecommandations: RecommandationPriorisee[] | undefined,
   ): Promise<ContenuHtml> {
     return genereHtml('recommandations.annexe', {
@@ -23,7 +39,7 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution {
     });
   }
 
-  protected genereRecommandations(
+  protected genereRecommandationsPrioritaires(
     recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
   ): Promise<ContenuHtml> {
     return genereHtml('recommandations', {

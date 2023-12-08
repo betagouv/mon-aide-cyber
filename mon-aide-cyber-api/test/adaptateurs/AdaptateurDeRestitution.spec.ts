@@ -2,6 +2,7 @@ import { describe, it } from 'vitest';
 import { AdaptateurDeRestitution } from '../../src/adaptateurs/AdaptateurDeRestitution';
 import {
   genereLesRecommandations,
+  Indicateurs,
   RecommandationPriorisee,
 } from '../../src/diagnostic/Diagnostic';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
@@ -28,8 +29,23 @@ describe('Adaptateur de Restitution', () => {
         return Buffer.from(JSON.stringify(resultat), 'utf-8');
       });
     }
+    protected genereIndicateurs(
+      indicateurs: Indicateurs | undefined,
+    ): Promise<ContenuHtml> {
+      const resultat: ContenuHtml = {
+        corps: '',
+        entete: 'entete indicateur',
+        piedPage: 'piedPage indicateur',
+      };
 
-    protected genereAnnexes(
+      Object.entries(indicateurs || {})?.forEach(([thematique, indicateur]) => {
+        resultat.corps += JSON.stringify({ thematique, indicateur });
+      });
+
+      return Promise.resolve(resultat);
+    }
+
+    protected genereRecommandationsAnnexes(
       autresRecommandations: RecommandationPriorisee[] | undefined,
     ): Promise<ContenuHtml> {
       const resultat: ContenuHtml = {
@@ -45,7 +61,7 @@ describe('Adaptateur de Restitution', () => {
       return Promise.resolve(resultat);
     }
 
-    protected genereRecommandations(
+    protected genereRecommandationsPrioritaires(
       recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
     ): Promise<ContenuHtml> {
       const resultat: ContenuHtml = {
@@ -116,7 +132,7 @@ describe('Adaptateur de Restitution', () => {
     ])
     .construis();
 
-  it('génère une recommandation sans annexe', async () => {
+  it('génère la restitution sans annexe', async () => {
     const diagnostic = unDiagnostic()
       .avecUnReferentiel(
         unReferentiel()
