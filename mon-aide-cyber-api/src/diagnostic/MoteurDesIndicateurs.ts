@@ -26,31 +26,25 @@ export class MoteurDesIndicateurs {
   private static caluleLaSommeDesPoids(
     valeurs: { identifiant: string; valeur: Valeur }[],
   ) {
-    return valeurs.reduce((valeurPrecedente, valeurCourante) => {
-      const poids = valeurCourante.valeur?.poids;
+    return valeurs.reduce((sommeDesPoids, poidsCourant) => {
+      const poids = poidsCourant.valeur.poids;
       if (estUnNombre(poids)) {
-        return valeurPrecedente + poids;
+        return sommeDesPoids + poids;
       }
-      if (estUnNombre(valeurCourante.valeur?.theorique)) {
-        return valeurPrecedente + 1;
-      }
-      return valeurPrecedente;
+      return sommeDesPoids;
     }, 0);
   }
 
   private static calculeLaSommeDesProduitsDesValeurs(
     valeurs: { identifiant: string; valeur: Valeur }[],
   ) {
-    return valeurs.reduce((valeurPrecedente, valeurCourante) => {
-      const valeurTheorique = valeurCourante.valeur?.theorique;
-      const poids = valeurCourante.valeur?.poids;
+    return valeurs.reduce((sommeDesProduits, valeurCourante) => {
+      const valeurTheorique = valeurCourante.valeur.theorique;
+      const poids = valeurCourante.valeur.poids;
       if (estUnNombre(valeurTheorique) && estUnNombre(poids)) {
-        return valeurPrecedente + valeurTheorique * poids;
+        return sommeDesProduits + valeurTheorique * poids;
       }
-      if (estUnNombre(valeurTheorique)) {
-        return valeurPrecedente + valeurTheorique;
-      }
-      return valeurPrecedente;
+      return sommeDesProduits;
     }, 0);
   }
 }

@@ -4,6 +4,7 @@ import {
   QuestionsThematique,
 } from './Diagnostic';
 import { Valeur } from './Valeur';
+import { Resultat } from './Referentiel';
 
 export type ValeursDesReponsesAuDiagnostic = {
   [thematique: string]: { identifiant: string; valeur: Valeur }[];
@@ -56,12 +57,14 @@ export class MoteurDeValeur {
         (reponsePossible) =>
           reponsePossible.identifiant === question.reponseDonnee.reponseUnique,
       )
-      ?.filter(
-        (reponsePossible) => reponsePossible.resultat?.valeur !== undefined,
+      .map((reponsePossible) => reponsePossible.resultat)
+      .filter(
+        (reponsePossible): reponsePossible is Resultat =>
+          reponsePossible !== undefined,
       )
       .flatMap((reponsePossible) => ({
         identifiant: question.identifiant,
-        valeur: reponsePossible.resultat?.valeur,
+        valeur: reponsePossible.valeur,
       }));
   }
 
@@ -78,13 +81,16 @@ export class MoteurDeValeur {
               ) || [],
           )
           .flatMap((questionATiroir) =>
-            questionATiroir.reponsesPossibles.filter((reponsePossible) =>
-              reponsesMultiples.reponses.has(reponsePossible.identifiant),
-            ),
+            questionATiroir.reponsesPossibles
+              .filter((reponsePossible) =>
+                reponsesMultiples.reponses.has(reponsePossible.identifiant),
+              )
+              .map((reponsePossible) => reponsePossible.resultat)
+              .filter((resultat): resultat is Resultat => !!resultat),
           )
           .flatMap((reponsePossible) => ({
             identifiant: reponsesMultiples.identifiant,
-            valeur: reponsePossible.resultat?.valeur,
+            valeur: reponsePossible.valeur,
           })),
       )
       .flatMap((valeur) => valeur);
