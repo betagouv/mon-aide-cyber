@@ -6,15 +6,16 @@ type QuestionATiroir = Omit<Question, 'reponsesPossibles'> & {
 
 export type NiveauRecommandation = 1 | 2;
 
+type Resultat = {
+  recommandations?: Recommandation[];
+  valeur: Valeur;
+};
 type ReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
   questions?: QuestionATiroir[];
-  resultat?: {
-    recommandations?: Recommandation[];
-    valeur: Valeur;
-  };
+  resultat?: Resultat;
 };
 
 type TypeQuestion = 'choixMultiple' | 'choixUnique';
@@ -50,6 +51,7 @@ export {
   QuestionChoixMultiple,
   Referentiel,
   ReponsePossible,
+  Resultat,
   TypeQuestion,
 };
 export type Recommandation = {

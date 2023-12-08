@@ -25,9 +25,7 @@ class ConstructeurDesValeursDesReponsesAuDiagnostic
     return this;
   }
 
-  ajoute(
-    valeur: Valeur | undefined,
-  ): ConstructeurDesValeursDesReponsesAuDiagnostic {
+  ajoute(valeur: Valeur): ConstructeurDesValeursDesReponsesAuDiagnostic {
     this.thematiques[this.thematiqueChoisie].push({
       identifiant: fakerFR.string.alpha(10),
       valeur,
@@ -41,7 +39,7 @@ class ConstructeurDesValeursDesReponsesAuDiagnostic
 }
 
 class ConstructeurDeValeur implements Constructeur<Valeur> {
-  private valeur: Valeur = undefined;
+  private valeur: Valeur = { theorique: 0, poids: 0 };
 
   de(valeur: ValeurPossible): ConstructeurDeValeur {
     this.valeur = {

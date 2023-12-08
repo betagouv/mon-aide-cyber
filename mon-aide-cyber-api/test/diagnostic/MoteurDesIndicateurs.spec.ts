@@ -11,7 +11,6 @@ describe('Moteur des indicateurs', () => {
     const valeurs = desValeursDesReponsesAuDiagnostic()
       .pourLaThematique('thematique')
       .ajoute(uneValeur().de(2).construis())
-      .ajoute(undefined)
       .ajoute(uneValeur().de(3).construis())
       .construis();
 
