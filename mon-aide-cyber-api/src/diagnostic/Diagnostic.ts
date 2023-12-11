@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { Question, Recommandation, Referentiel } from './Referentiel';
 import { Entrepot } from '../domaine/Entrepot';
 import { CorpsReponse } from './ServiceDiagnostic';
-import { Valeur } from './Valeur';
+import { Indice } from './Indice';
 import {
   NiveauDeRecommandation,
   TableauDeRecommandations,
@@ -44,7 +44,7 @@ export type RecommandationPriorisee = {
   titre: string;
   pourquoi: string;
   comment: string;
-  valeurObtenue: Valeur;
+  valeurObtenue: Indice;
   priorisation: number;
 };
 export type Recommandations = {
@@ -141,7 +141,7 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
           .find(
             (valeurReponse) =>
               valeurReponse.identifiant === recommandation.repondA,
-          )?.valeur;
+          )?.indice;
         return {
           titre: recommandation.niveau.titre,
           pourquoi: recommandation.niveau.pourquoi,

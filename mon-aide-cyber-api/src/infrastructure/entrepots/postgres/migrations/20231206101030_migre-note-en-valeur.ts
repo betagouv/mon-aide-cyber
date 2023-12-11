@@ -10,13 +10,17 @@ import {
   Recommandation,
   ReponsePossible,
 } from '../../../../diagnostic/Referentiel';
-import { Valeur, ValeurPossible } from '../../../../diagnostic/Valeur';
+import { Valeur } from '../../../../diagnostic/Indice';
 
 type RepresentationReponsePossible = Omit<ReponsePossible, 'resultat'> & {
   resultat?: {
     recommandations?: Recommandation[];
-    valeur?: Valeur;
-    note?: ValeurPossible;
+    valeur?:
+      | {
+      theorique: Valeur;
+    }
+      | undefined;
+    note?: Valeur;
   };
 };
 
@@ -38,8 +42,8 @@ type RepresentationRecommandationPriorisee = Omit<
   RecommandationPriorisee,
   'valeurObtenue'
 > & {
-  noteObtenue?: ValeurPossible;
-  valeurObtenue: { theorique: ValeurPossible };
+  noteObtenue?: Valeur;
+  valeurObtenue: { theorique: Valeur };
 };
 
 type RepresentationRecommandations = {

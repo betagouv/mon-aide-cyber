@@ -1,8 +1,8 @@
 import { NiveauRecommandation } from '../../src/diagnostic/Referentiel';
-import { Valeur } from '../../src/diagnostic/Valeur';
+import { Indice } from '../../src/diagnostic/Indice';
 
 export type Association = {
   identifiantRecommandation: string;
   niveauRecommandation: NiveauRecommandation;
-  valeur: Valeur;
+  indice: Indice;
 };

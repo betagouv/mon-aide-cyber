@@ -256,7 +256,7 @@ describe('Diagnostic', () => {
                 association: uneAssociation()
                   .avecIdentifiant('q8')
                   .deNiveau1()
-                  .ayantPourValeurTheorique(0)
+                  .ayantPourValeurDIndice(0)
                   .construis(),
               },
               {
@@ -264,7 +264,7 @@ describe('Diagnostic', () => {
                 association: uneAssociation()
                   .avecIdentifiant('q8')
                   .deNiveau2()
-                  .ayantPourValeurTheorique(1)
+                  .ayantPourValeurDIndice(1)
                   .construis(),
               },
               {
@@ -272,7 +272,7 @@ describe('Diagnostic', () => {
                 association: uneAssociation()
                   .avecIdentifiant('q9')
                   .deNiveau1()
-                  .ayantPourValeurTheorique(0)
+                  .ayantPourValeurDIndice(0)
                   .construis(),
               },
               {
@@ -280,7 +280,7 @@ describe('Diagnostic', () => {
                 association: uneAssociation()
                   .avecIdentifiant('q9')
                   .deNiveau2()
-                  .ayantPourValeurTheorique(1)
+                  .ayantPourValeurDIndice(1)
                   .construis(),
               },
             ])
@@ -457,7 +457,7 @@ describe('Diagnostic', () => {
             association: uneAssociation()
               .avecIdentifiant('q1')
               .deNiveau1()
-              .ayantPourValeurTheorique(2)
+              .ayantPourValeurDIndice(2)
               .construis(),
           },
           {
@@ -465,7 +465,7 @@ describe('Diagnostic', () => {
             association: uneAssociation()
               .avecIdentifiant('q2')
               .deNiveau2()
-              .ayantPourValeurTheorique(2)
+              .ayantPourValeurDIndice(2)
               .construis(),
           },
         ])
@@ -478,7 +478,7 @@ describe('Diagnostic', () => {
             association: uneAssociation()
               .avecIdentifiant('q1')
               .deNiveau1()
-              .ayantPourValeurTheorique(3)
+              .ayantPourValeurDIndice(3)
               .construis(),
           },
           {
@@ -486,7 +486,7 @@ describe('Diagnostic', () => {
             association: uneAssociation()
               .avecIdentifiant('q2')
               .deNiveau2()
-              .ayantPourValeurTheorique(3)
+              .ayantPourValeurDIndice(3)
               .construis(),
           },
         ])

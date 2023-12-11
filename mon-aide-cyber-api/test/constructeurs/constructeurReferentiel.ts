@@ -12,7 +12,7 @@ import {
 import { fakerFR as faker } from '@faker-js/faker';
 import { Constructeur } from './constructeur';
 import { aseptise } from '../utilitaires/aseptise';
-import { Valeur, ValeurPossible } from '../../src/diagnostic/Valeur';
+import { Indice, Valeur } from '../../src/diagnostic/Indice';
 import { Association } from './types';
 import { uneAssociation } from './constructeurAssociation';
 
@@ -158,7 +158,7 @@ class ConstructeurListeDeQuestions
                 constructeurReponsePossible.associeeARecommandation(
                   rep.association?.identifiantRecommandation,
                   rep.association?.niveauRecommandation,
-                  rep.association?.valeur?.theorique,
+                  rep.association?.indice?.theorique,
                 );
             }
             return constructeurReponsePossible.construis();
@@ -218,7 +218,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private questions?: QuestionATiroir[];
   private resultat?: {
     recommandations?: Recommandation[];
-    valeur: Valeur;
+    indice: Indice;
   };
 
   ajouteUneQuestionATiroir(
@@ -240,7 +240,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   associeeARecommandation(
     identifiantRecommandation: string,
     niveauRecommandation: NiveauRecommandation,
-    valeurPossible: ValeurPossible,
+    valeurIndice: Valeur,
   ): ConstructeurReponsePossible {
     const recommandations = [];
     recommandations.push({
@@ -253,17 +253,15 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
         ...(this.resultat?.recommandations || []),
         ...recommandations,
       ],
-      valeur: { theorique: valeurPossible },
+      indice: { theorique: valeurIndice },
     };
     return this;
   }
 
-  ayantPourValeurTheorique(
-    valeurTheoriquePossible: ValeurPossible,
-  ): ConstructeurReponsePossible {
+  ayantPourValeurDIndice(valeurIndice: Valeur): ConstructeurReponsePossible {
     this.resultat = {
       ...this.resultat,
-      valeur: { theorique: valeurTheoriquePossible },
+      indice: { theorique: valeurIndice },
     };
     return this;
   }
@@ -310,7 +308,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q1')
           .deNiveau1()
-          .ayantPourValeurTheorique(0)
+          .ayantPourValeurDIndice(0)
           .construis(),
       },
       {
@@ -318,7 +316,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q1')
           .deNiveau2()
-          .ayantPourValeurTheorique(1)
+          .ayantPourValeurDIndice(1)
           .construis(),
       },
       { libelle: 'reponse 13' },
@@ -328,7 +326,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q2')
           .deNiveau1()
-          .ayantPourValeurTheorique(0)
+          .ayantPourValeurDIndice(0)
           .construis(),
       },
       {
@@ -336,7 +334,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q2')
           .deNiveau2()
-          .ayantPourValeurTheorique(1)
+          .ayantPourValeurDIndice(1)
           .construis(),
       },
       { libelle: 'reponse 23' },
@@ -346,7 +344,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q3')
           .deNiveau1()
-          .ayantPourValeurTheorique(0)
+          .ayantPourValeurDIndice(0)
           .construis(),
       },
       {
@@ -354,7 +352,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q3')
           .deNiveau2()
-          .ayantPourValeurTheorique(1)
+          .ayantPourValeurDIndice(1)
           .construis(),
       },
       { libelle: 'reponse 33' },
@@ -364,7 +362,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q4')
           .deNiveau1()
-          .ayantPourValeurTheorique(0)
+          .ayantPourValeurDIndice(0)
           .construis(),
       },
       {
@@ -372,7 +370,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q4')
           .deNiveau2()
-          .ayantPourValeurTheorique(1)
+          .ayantPourValeurDIndice(1)
           .construis(),
       },
       { libelle: 'reponse 43' },
@@ -382,7 +380,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q5')
           .deNiveau1()
-          .ayantPourValeurTheorique(0)
+          .ayantPourValeurDIndice(0)
           .construis(),
       },
       {
@@ -390,7 +388,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q5')
           .deNiveau2()
-          .ayantPourValeurTheorique(1)
+          .ayantPourValeurDIndice(1)
           .construis(),
       },
       { libelle: 'reponse 53' },
@@ -400,7 +398,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q6')
           .deNiveau1()
-          .ayantPourValeurTheorique(0)
+          .ayantPourValeurDIndice(0)
           .construis(),
       },
       {
@@ -408,7 +406,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q6')
           .deNiveau2()
-          .ayantPourValeurTheorique(1)
+          .ayantPourValeurDIndice(1)
           .construis(),
       },
       { libelle: 'reponse 63' },
@@ -418,7 +416,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q7')
           .deNiveau1()
-          .ayantPourValeurTheorique(0)
+          .ayantPourValeurDIndice(0)
           .construis(),
       },
       {
@@ -426,7 +424,7 @@ export const uneListeDe7QuestionsToutesAssociees = () =>
         association: uneAssociation()
           .avecIdentifiant('q7')
           .deNiveau2()
-          .ayantPourValeurTheorique(1)
+          .ayantPourValeurDIndice(1)
           .construis(),
       },
       { libelle: 'reponse 73' },

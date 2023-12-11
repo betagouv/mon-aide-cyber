@@ -3,11 +3,11 @@ import {
   QuestionDiagnostic,
   QuestionsThematique,
 } from './Diagnostic';
-import { Valeur } from './Valeur';
+import { Indice } from './Indice';
 import { Resultat } from './Referentiel';
 
 export type ValeursDesReponsesAuDiagnostic = {
-  [thematique: string]: { identifiant: string; valeur: Valeur }[];
+  [thematique: string]: { identifiant: string; indice: Indice }[];
 };
 
 export class MoteurDeValeur {
@@ -51,7 +51,7 @@ export class MoteurDeValeur {
 
   private static genereLesValeursDesReponsesUniques(
     question: QuestionDiagnostic,
-  ): { identifiant: string; valeur: Valeur }[] {
+  ): { identifiant: string; indice: Indice }[] {
     return question.reponsesPossibles
       .filter(
         (reponsePossible) =>
@@ -64,13 +64,13 @@ export class MoteurDeValeur {
       )
       .flatMap((reponsePossible) => ({
         identifiant: question.identifiant,
-        valeur: reponsePossible.valeur,
+        indice: reponsePossible.indice,
       }));
   }
 
   private static genereLesValeursDesReponsesMultiples(
     question: QuestionDiagnostic,
-  ): { identifiant: string; valeur: Valeur }[] {
+  ): { identifiant: string; indice: Indice }[] {
     return question.reponseDonnee.reponsesMultiples
       .flatMap((reponsesMultiples) =>
         question.reponsesPossibles
@@ -90,7 +90,7 @@ export class MoteurDeValeur {
           )
           .flatMap((reponsePossible) => ({
             identifiant: reponsesMultiples.identifiant,
-            valeur: reponsePossible.valeur,
+            indice: reponsePossible.indice,
           })),
       )
       .flatMap((valeur) => valeur);
