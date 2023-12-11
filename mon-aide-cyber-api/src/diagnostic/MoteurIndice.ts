@@ -6,14 +6,14 @@ import {
 import { Indice } from './Indice';
 import { Resultat } from './Referentiel';
 
-export type ValeursDesReponsesAuDiagnostic = {
+export type ValeursDesIndicesAuDiagnostic = {
   [thematique: string]: { identifiant: string; indice: Indice }[];
 };
 
-export class MoteurDeValeur {
-  public static genereLesValeursDesReponses = (
+export class MoteurIndice {
+  public static genereLesIndicesDesReponses = (
     diagnostic: Diagnostic,
-  ): ValeursDesReponsesAuDiagnostic => {
+  ): ValeursDesIndicesAuDiagnostic => {
     function laThematiqueContientDesResultats(questions: QuestionsThematique) {
       return (
         questions.questions.filter(
@@ -41,15 +41,15 @@ export class MoteurDeValeur {
           [thematique]: questions.questions
             .filter((question) => question.reponseDonnee.reponseUnique != null)
             .flatMap((question) => [
-              ...this.genereLesValeursDesReponsesUniques(question),
-              ...this.genereLesValeursDesReponsesMultiples(question),
+              ...this.genereLesIndicesDesReponsesUniques(question),
+              ...this.genereLesIndicesDesReponsesMultiples(question),
             ]),
         }),
         {},
       );
   };
 
-  private static genereLesValeursDesReponsesUniques(
+  private static genereLesIndicesDesReponsesUniques(
     question: QuestionDiagnostic,
   ): { identifiant: string; indice: Indice }[] {
     return question.reponsesPossibles
@@ -68,7 +68,7 @@ export class MoteurDeValeur {
       }));
   }
 
-  private static genereLesValeursDesReponsesMultiples(
+  private static genereLesIndicesDesReponsesMultiples(
     question: QuestionDiagnostic,
   ): { identifiant: string; indice: Indice }[] {
     return question.reponseDonnee.reponsesMultiples
@@ -93,6 +93,6 @@ export class MoteurDeValeur {
             indice: reponsePossible.indice,
           })),
       )
-      .flatMap((valeur) => valeur);
+      .flatMap((valeurIndice) => valeurIndice);
   }
 }

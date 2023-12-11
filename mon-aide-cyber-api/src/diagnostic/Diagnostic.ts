@@ -8,10 +8,7 @@ import {
   TableauDeRecommandations,
 } from './TableauDeRecommandations';
 import { StrategieDeReponse } from './StrategieDeReponse';
-import {
-  MoteurDeValeur,
-  ValeursDesReponsesAuDiagnostic,
-} from './MoteurDeValeur';
+import { MoteurIndice, ValeursDesIndicesAuDiagnostic } from './MoteurIndice';
 import { MoteurDeRecommandations } from './MoteurDeRecommandations';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { MoteurDesIndicateurs } from './MoteurDesIndicateurs';
@@ -117,10 +114,10 @@ const ajouteLaReponseAuDiagnostic = (
 };
 
 const genereLesRecommandations = (diagnostic: Diagnostic) => {
-  const valeursDesReponses =
-    MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
+  const valeursDesIndices =
+    MoteurIndice.genereLesIndicesDesReponses(diagnostic);
   const indicateurs =
-    MoteurDesIndicateurs.genereLesIndicateurs(valeursDesReponses);
+    MoteurDesIndicateurs.genereLesIndicateurs(valeursDesIndices);
   const recommandations = Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
     .flatMap((question) =>
@@ -132,11 +129,11 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
 
   const prioriseLesRecommandations = (
     recommandations: RecommandationDiagnostic[],
-    valeursDesReponses: ValeursDesReponsesAuDiagnostic,
+    valeursDesIndices: ValeursDesIndicesAuDiagnostic,
   ): RecommandationPriorisee[] => {
     return recommandations
       .map((recommandation) => {
-        const valeurObtenue = Object.values(valeursDesReponses)
+        const valeurObtenue = Object.values(valeursDesIndices)
           .flatMap((valeurReponse) => valeurReponse)
           .find(
             (valeurReponse) =>
@@ -168,7 +165,7 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
   };
   const recommandationPriorisees = prioriseLesRecommandations(
     recommandations,
-    valeursDesReponses,
+    valeursDesIndices,
   );
 
   diagnostic.restitution = {
