@@ -1,4 +1,4 @@
-import { Valeur } from './Valeur';
+import { Indice } from './Indice';
 
 type QuestionATiroir = Omit<Question, 'reponsesPossibles'> & {
   reponsesPossibles: Omit<ReponsePossible, 'questions'>[];
@@ -8,7 +8,7 @@ export type NiveauRecommandation = 1 | 2;
 
 type Resultat = {
   recommandations?: Recommandation[];
-  valeur: Valeur;
+  indice: Indice;
 };
 type ReponsePossible = {
   identifiant: string;

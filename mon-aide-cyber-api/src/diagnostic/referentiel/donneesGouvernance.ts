@@ -17,7 +17,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant: 'gouvernance-infos-et-processus-a-proteger-non',
           libelle: 'Non.',
           resultat: {
-            valeur: { theorique: 0, poids: 2 },
+            indice: { theorique: 0, poids: 2 },
             recommandations: [
               {
                 identifiant: 'gouvernance-infos-et-processus-a-proteger',
@@ -33,7 +33,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             'Nous avons une idée générale de nos données et processus à protéger en priorité.',
           resultat: {
-            valeur: { theorique: 1.5, poids: 2 },
+            indice: { theorique: 1.5, poids: 2 },
             recommandations: [
               {
                 identifiant: 'gouvernance-infos-et-processus-a-proteger',
@@ -48,7 +48,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             'Il existe une liste précise et maintenue à jour de toutes les données et processus à protéger en priorité à l’échelle de l’organisation.',
           resultat: {
-            valeur: { theorique: 3, poids: 2 },
+            indice: { theorique: 3, poids: 2 },
           },
           ordre: 3,
         },
@@ -69,7 +69,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant: 'gouvernance-schema-si-a-jour-non',
           libelle: "Non / Nous avons un plan historique qui n'est pas à jour",
           resultat: {
-            valeur: { theorique: 0, poids: 1 },
+            indice: { theorique: 0, poids: 1 },
             recommandations: [
               {
                 identifiant: 'gouvernance-schema-si-a-jour',
@@ -84,7 +84,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
           resultat: {
-            valeur: { theorique: 1, poids: 1 },
+            indice: { theorique: 1, poids: 1 },
             recommandations: [
               {
                 identifiant: 'gouvernance-schema-si-a-jour',
@@ -99,7 +99,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             "Il existe un schéma détaillé à jour, incluant la liste exhaustive des interconnexions vers l'extérieur.",
           resultat: {
-            valeur: { theorique: 3, poids: 1 },
+            indice: { theorique: 3, poids: 1 },
           },
           ordre: 3,
         },
@@ -125,7 +125,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant: 'gouvernance-schema-si-industriel-a-jour-non',
           libelle: 'Non.',
           resultat: {
-            valeur: { theorique: 0, poids: 1 },
+            indice: { theorique: 0, poids: 1 },
             recommandations: [
               {
                 identifiant: 'gouvernance-schema-si-industriel-a-jour',
@@ -140,7 +140,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
           resultat: {
-            valeur: { theorique: 1, poids: 1 },
+            indice: { theorique: 1, poids: 1 },
             recommandations: [
               {
                 identifiant: 'gouvernance-schema-si-industriel-a-jour',
@@ -155,7 +155,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             "Il existe un schéma détaillé à jour, incluant la liste exhaustive des systèmes industrielles, installations matériels connectés et des interconnexions vers l'extérieur.",
           resultat: {
-            valeur: { theorique: 3, poids: 1 },
+            indice: { theorique: 3, poids: 1 },
           },
           ordre: 4,
         },
@@ -176,7 +176,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant: 'gouvernance-connaissance-rgpd-1-non',
           libelle: 'Non.',
           resultat: {
-            valeur: { theorique: 0, poids: 1 },
+            indice: { theorique: 0, poids: 1 },
             recommandations: [
               {
                 identifiant: 'gouvernance-connaissance-rgpd-1',
@@ -192,7 +192,7 @@ export const donneesGouvernance: QuestionsThematique = {
             "Oui, j'ai listé l'ensemble des données personnelles traitées au sein de mon entité",
           ordre: 3,
           resultat: {
-            valeur: { theorique: 2, poids: 1 },
+            indice: { theorique: 2, poids: 1 },
             recommandations: [
               { identifiant: 'gouvernance-connaissance-rgpd-1', niveau: 2 },
             ],
@@ -203,7 +203,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle: 'Oui, je tiens à jour un registre des traitements',
           ordre: 4,
           resultat: {
-            valeur: { theorique: 3, poids: 1 },
+            indice: { theorique: 3, poids: 1 },
           },
         },
       ],
@@ -223,7 +223,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant: 'gouvernance-connaissance-rgpd-2-non',
           libelle: 'Non.',
           resultat: {
-            valeur: { theorique: 0, poids: 1 },
+            indice: { theorique: 0, poids: 1 },
             recommandations: [
               {
                 identifiant: 'gouvernance-connaissance-rgpd-2',
@@ -239,7 +239,7 @@ export const donneesGouvernance: QuestionsThematique = {
             "Oui, j'informe les personnes concernées sur l’utilisation de leurs données personnelles.",
           ordre: 3,
           resultat: {
-            valeur: { theorique: 2, poids: 1 },
+            indice: { theorique: 2, poids: 1 },
             recommandations: [
               { identifiant: 'gouvernance-connaissance-rgpd-2', niveau: 2 },
             ],
@@ -251,7 +251,7 @@ export const donneesGouvernance: QuestionsThematique = {
             'Oui, j’informe les personnes concernées et j’ai mis en place les moyens nécessaires leur permettant d’exercer leurs droits',
           ordre: 4,
           resultat: {
-            valeur: { theorique: 3, poids: 1 },
+            indice: { theorique: 3, poids: 1 },
           },
         },
       ],
@@ -277,7 +277,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             'Non, aucune exigence ne figure dans nos contrats de prestation',
           resultat: {
-            valeur: { theorique: 0, poids: 2 },
+            indice: { theorique: 0, poids: 2 },
             recommandations: [
               {
                 identifiant: 'gouvernance-exigence-cyber-securite-presta',
@@ -293,7 +293,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.',
           resultat: {
-            valeur: { theorique: 2, poids: 2 },
+            indice: { theorique: 2, poids: 2 },
             recommandations: [
               {
                 identifiant: 'gouvernance-exigence-cyber-securite-presta',
@@ -307,7 +307,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant: 'gouvernance-exigence-cyber-securite-presta-oui-fixee',
           libelle:
             'Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.',
-          resultat: { valeur: { theorique: 3, poids: 2 } },
+          resultat: { indice: { theorique: 3, poids: 2 } },
           ordre: 4,
         },
       ],
@@ -336,7 +336,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             'Non, aucune exigence ne figure dans nos contrats de prestation',
           resultat: {
-            valeur: { theorique: 0, poids: 2 },
+            indice: { theorique: 0, poids: 2 },
             recommandations: [
               {
                 identifiant:
@@ -353,7 +353,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.',
           resultat: {
-            valeur: { theorique: 2, poids: 2 },
+            indice: { theorique: 2, poids: 2 },
             recommandations: [
               {
                 identifiant:
@@ -369,7 +369,7 @@ export const donneesGouvernance: QuestionsThematique = {
             'gouvernance-exigence-cyber-securite-presta-si-industriel-oui-fixee',
           libelle:
             'Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.',
-          resultat: { valeur: { theorique: 3, poids: 2 } },
+          resultat: { indice: { theorique: 3, poids: 2 } },
           ordre: 4,
         },
       ],

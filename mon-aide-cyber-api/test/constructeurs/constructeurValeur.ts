@@ -1,17 +1,13 @@
 import { Constructeur } from './constructeur';
 import { ValeursDesReponsesAuDiagnostic } from '../../src/diagnostic/MoteurDeValeur';
-import {
-  PoidsPossible,
-  Valeur,
-  ValeurPossible,
-} from '../../src/diagnostic/Valeur';
+import { Poids, Indice, Valeur } from '../../src/diagnostic/Indice';
 import { fakerFR } from '@faker-js/faker';
 
 class ConstructeurDesValeursDesReponsesAuDiagnostic
   implements Constructeur<ValeursDesReponsesAuDiagnostic>
 {
   private thematiques: {
-    [thematique: string]: { identifiant: string; valeur: Valeur }[];
+    [thematique: string]: { identifiant: string; indice: Indice }[];
   } = {};
   private thematiqueChoisie = '';
 
@@ -25,10 +21,10 @@ class ConstructeurDesValeursDesReponsesAuDiagnostic
     return this;
   }
 
-  ajoute(valeur: Valeur): ConstructeurDesValeursDesReponsesAuDiagnostic {
+  ajoute(indice: Indice): ConstructeurDesValeursDesReponsesAuDiagnostic {
     this.thematiques[this.thematiqueChoisie].push({
       identifiant: fakerFR.string.alpha(10),
-      valeur,
+      indice,
     });
     return this;
   }
@@ -38,21 +34,21 @@ class ConstructeurDesValeursDesReponsesAuDiagnostic
   }
 }
 
-class ConstructeurDeValeur implements Constructeur<Valeur> {
-  private valeur: Valeur = { theorique: 0, poids: 0 };
+class ConstructeurDeValeur implements Constructeur<Indice> {
+  private indice: Indice = { theorique: 0, poids: 0 };
 
-  de(valeur: ValeurPossible): ConstructeurDeValeur {
-    this.valeur = {
-      ...((this.valeur &&
-        this.valeur.poids && { poids: this.valeur.poids }) || { poids: 1 }),
+  de(valeur: Valeur): ConstructeurDeValeur {
+    this.indice = {
+      ...((this.indice &&
+        this.indice.poids && { poids: this.indice.poids }) || { poids: 1 }),
       theorique: valeur,
     };
     return this;
   }
 
-  avecUnPoidsDe(poids: PoidsPossible): ConstructeurDeValeur {
-    this.valeur = {
-      ...((this.valeur && { theorique: this.valeur.theorique }) || {
+  avecUnPoidsDe(poids: Poids): ConstructeurDeValeur {
+    this.indice = {
+      ...((this.indice && { theorique: this.indice.theorique }) || {
         theorique: 0,
       }),
       poids,
@@ -60,8 +56,8 @@ class ConstructeurDeValeur implements Constructeur<Valeur> {
     return this;
   }
 
-  construis(): Valeur {
-    return this.valeur;
+  construis(): Indice {
+    return this.indice;
   }
 }
 

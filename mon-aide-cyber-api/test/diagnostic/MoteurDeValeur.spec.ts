@@ -25,7 +25,7 @@ describe('Moteur de valeur', () => {
           uneReponsePossible().avecLibelle('42').construis(),
           uneReponsePossible()
             .avecLibelle('24')
-            .ayantPourValeurTheorique(0)
+            .ayantPourValeurDIndice(0)
             .construis(),
         ])
         .construis();
@@ -52,7 +52,7 @@ describe('Moteur de valeur', () => {
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
-            valeur: { theorique: 0 },
+            indice: { theorique: 0 },
           },
         ],
       });
@@ -65,7 +65,7 @@ describe('Moteur de valeur', () => {
           uneReponsePossible().avecLibelle('42').construis(),
           uneReponsePossible()
             .avecLibelle('24')
-            .ayantPourValeurTheorique(0)
+            .ayantPourValeurDIndice(0)
             .construis(),
         ])
         .construis();
@@ -96,7 +96,7 @@ describe('Moteur de valeur', () => {
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
-            valeur: { theorique: 0 },
+            indice: { theorique: 0 },
           },
         ],
       });
@@ -118,7 +118,7 @@ describe('Moteur de valeur', () => {
                   uneReponsePossible().avecLibelle('Oui').construis(),
                   uneReponsePossible()
                     .avecLibelle('Non')
-                    .ayantPourValeurTheorique(0)
+                    .ayantPourValeurDIndice(0)
                     .construis(),
                 ])
                 .construis(),
@@ -158,7 +158,7 @@ describe('Moteur de valeur', () => {
         thematique: [
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            valeur: { theorique: 0 },
+            indice: { theorique: 0},
           },
         ],
       });
@@ -178,7 +178,7 @@ describe('Moteur de valeur', () => {
                   uneReponsePossible().avecLibelle('Oui').construis(),
                   uneReponsePossible()
                     .avecLibelle('Non')
-                    .ayantPourValeurTheorique(0)
+                    .ayantPourValeurDIndice(0)
                     .construis(),
                 ])
                 .construis(),
@@ -189,7 +189,7 @@ describe('Moteur de valeur', () => {
                 .avecReponsesPossibles([
                   uneReponsePossible()
                     .avecLibelle('Affirmatif')
-                    .ayantPourValeurTheorique(1)
+                    .ayantPourValeurDIndice(1)
                     .construis(),
                   uneReponsePossible().avecLibelle('Négatif').construis(),
                 ])
@@ -234,11 +234,11 @@ describe('Moteur de valeur', () => {
         thematique: [
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            valeur: { theorique: 0 },
+            indice: { theorique: 0 },
           },
           {
             identifiant: 'une-question-a-tiroir',
-            valeur: { theorique: 1 },
+            indice: { theorique: 1 },
           },
         ],
       });
@@ -258,7 +258,7 @@ describe('Moteur de valeur', () => {
                   uneReponsePossible().avecLibelle('Oui').construis(),
                   uneReponsePossible()
                     .avecLibelle('Non')
-                    .ayantPourValeurTheorique(0)
+                    .ayantPourValeurDIndice(0)
                     .construis(),
                 ])
                 .construis(),
@@ -269,13 +269,13 @@ describe('Moteur de valeur', () => {
                 .avecReponsesPossibles([
                   uneReponsePossible()
                     .avecLibelle('Affirmatif')
-                    .ayantPourValeurTheorique(1)
+                    .ayantPourValeurDIndice(1)
                     .construis(),
                   uneReponsePossible().avecLibelle('Négatif').construis(),
                 ])
                 .construis(),
             )
-            .ayantPourValeurTheorique(0)
+            .ayantPourValeurDIndice(0)
             .construis(),
         ])
         .construis();
@@ -313,14 +313,17 @@ describe('Moteur de valeur', () => {
 
       expect(valeursDesReponses).toStrictEqual<ValeursDesReponsesAuDiagnostic>({
         thematique: [
-          { identifiant: 'quelle-est-la-reponse', valeur: { theorique: 0 } },
+          {
+            identifiant: 'quelle-est-la-reponse',
+            indice: { theorique: 0 },
+          },
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            valeur: { theorique: 0 },
+            indice: { theorique: 0 },
           },
           {
             identifiant: 'une-question-a-tiroir',
-            valeur: { theorique: 1 },
+            indice: { theorique: 1 },
           },
         ],
       });
