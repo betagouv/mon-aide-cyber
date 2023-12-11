@@ -1,4 +1,4 @@
-import { ValeursDesReponsesAuDiagnostic } from './MoteurDeValeur';
+import { ValeursDesIndicesAuDiagnostic } from './MoteurIndice';
 import { Indicateurs } from './Diagnostic';
 import { Indice, Poids, Valeur } from './Indice';
 
@@ -7,7 +7,7 @@ const estUnNombre = (valeur: Poids | Valeur): valeur is number =>
 
 export class MoteurDesIndicateurs {
   static genereLesIndicateurs(
-    valeurs: ValeursDesReponsesAuDiagnostic,
+    valeurs: ValeursDesIndicesAuDiagnostic,
   ): Indicateurs {
     return Object.entries(valeurs).reduce(
       (indicateurs, [thematique, valeurs]) => {

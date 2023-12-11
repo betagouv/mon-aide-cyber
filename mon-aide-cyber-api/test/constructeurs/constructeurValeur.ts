@@ -1,10 +1,10 @@
 import { Constructeur } from './constructeur';
-import { ValeursDesReponsesAuDiagnostic } from '../../src/diagnostic/MoteurDeValeur';
+import { ValeursDesIndicesAuDiagnostic } from '../../src/diagnostic/MoteurIndice';
 import { Poids, Indice, Valeur } from '../../src/diagnostic/Indice';
 import { fakerFR } from '@faker-js/faker';
 
 class ConstructeurDesValeursDesReponsesAuDiagnostic
-  implements Constructeur<ValeursDesReponsesAuDiagnostic>
+  implements Constructeur<ValeursDesIndicesAuDiagnostic>
 {
   private thematiques: {
     [thematique: string]: { identifiant: string; indice: Indice }[];
@@ -29,7 +29,7 @@ class ConstructeurDesValeursDesReponsesAuDiagnostic
     return this;
   }
 
-  construis(): ValeursDesReponsesAuDiagnostic {
+  construis(): ValeursDesIndicesAuDiagnostic {
     return this.thematiques;
   }
 }

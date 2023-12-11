@@ -4,9 +4,9 @@ import {
   uneReponseDonnee,
 } from '../constructeurs/constructeurDiagnostic';
 import {
-  MoteurDeValeur,
-  ValeursDesReponsesAuDiagnostic,
-} from '../../src/diagnostic/MoteurDeValeur';
+  MoteurIndice,
+  ValeursDesIndicesAuDiagnostic,
+} from '../../src/diagnostic/MoteurIndice';
 import {
   uneQuestion,
   uneQuestionATiroir,
@@ -14,11 +14,11 @@ import {
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
 
-describe('Moteur de valeur', () => {
+describe('Moteur Indice', () => {
   const constructeurDiagnostic = unDiagnostic();
 
   describe('pour les questions à réponse unique', () => {
-    it('génère la valeur pour une réponse à une question', () => {
+    it("génère l'indice pour une réponse à une question", () => {
       const question = uneQuestion()
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
@@ -45,10 +45,10 @@ describe('Moteur de valeur', () => {
         )
         .construis();
 
-      const valeursDesReponses =
-        MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
+      const valeursDesIndices =
+        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
 
-      expect(valeursDesReponses).toStrictEqual<ValeursDesReponsesAuDiagnostic>({
+      expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
@@ -58,7 +58,7 @@ describe('Moteur de valeur', () => {
       });
     });
 
-    it('génère les valeurs uniquement pour les réponses données', () => {
+    it('génère les indices uniquement pour les réponses données', () => {
       const question1 = uneQuestion()
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
@@ -89,10 +89,10 @@ describe('Moteur de valeur', () => {
         )
         .construis();
 
-      const valeursDesReponses =
-        MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
+      const valeursDesIndices =
+        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
 
-      expect(valeursDesReponses).toStrictEqual<ValeursDesReponsesAuDiagnostic>({
+      expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
@@ -104,7 +104,7 @@ describe('Moteur de valeur', () => {
   });
 
   describe('pour les questions à tiroir', () => {
-    it('génère la valeur pour une question tiroir', () => {
+    it("génère l'indice pour une question tiroir", () => {
       const question1 = uneQuestion()
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
@@ -151,10 +151,10 @@ describe('Moteur de valeur', () => {
         )
         .construis();
 
-      const valeursDesReponses =
-        MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
+      const valeursDesIndices =
+        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
 
-      expect(valeursDesReponses).toStrictEqual<ValeursDesReponsesAuDiagnostic>({
+      expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
         thematique: [
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
@@ -164,7 +164,7 @@ describe('Moteur de valeur', () => {
       });
     });
 
-    it('génère les valeurs pour une question à plusieurs tiroirs', () => {
+    it('génère les indices pour une question à plusieurs tiroirs', () => {
       const question1 = uneQuestion()
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
@@ -227,10 +227,10 @@ describe('Moteur de valeur', () => {
         )
         .construis();
 
-      const valeursDesReponses =
-        MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
+      const valeursDesIndices =
+        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
 
-      expect(valeursDesReponses).toStrictEqual<ValeursDesReponsesAuDiagnostic>({
+      expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
         thematique: [
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
@@ -244,7 +244,7 @@ describe('Moteur de valeur', () => {
       });
     });
 
-    it('génère les valeurs pour une question et les réponses aux questions tiroirs', () => {
+    it('génère les indices pour une question et les réponses aux questions tiroirs', () => {
       const question1 = uneQuestion()
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
@@ -308,10 +308,10 @@ describe('Moteur de valeur', () => {
         )
         .construis();
 
-      const valeursDesReponses =
-        MoteurDeValeur.genereLesValeursDesReponses(diagnostic);
+      const valeursDesIndices =
+        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
 
-      expect(valeursDesReponses).toStrictEqual<ValeursDesReponsesAuDiagnostic>({
+      expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
