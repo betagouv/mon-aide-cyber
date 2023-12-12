@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { Question, Recommandation, Referentiel } from './Referentiel';
 import { Entrepot } from '../domaine/Entrepot';
 import { CorpsReponse } from './ServiceDiagnostic';
-import { Indice } from './Indice';
+import { laValeurEstDefinie, Valeur } from './Indice';
 import {
   NiveauDeRecommandation,
   TableauDeRecommandations,
@@ -41,7 +41,7 @@ export type RecommandationPriorisee = {
   titre: string;
   pourquoi: string;
   comment: string;
-  valeurObtenue: Indice;
+  valeurObtenue: Valeur;
   priorisation: number;
 };
 export type Recommandations = {
@@ -131,7 +131,7 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
     recommandations: RecommandationDiagnostic[],
     valeursDesIndices: ValeursDesIndicesAuDiagnostic,
   ): RecommandationPriorisee[] => {
-    return recommandations
+    const recommandationPriorisees1 = recommandations
       .map((recommandation) => {
         const valeurObtenue = Object.values(valeursDesIndices)
           .flatMap((valeurReponse) => valeurReponse)
@@ -144,24 +144,23 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
           pourquoi: recommandation.niveau.pourquoi,
           comment: recommandation.niveau.comment,
           priorisation: recommandation.priorisation,
-          valeurObtenue,
+          valeurObtenue: valeurObtenue?.valeur,
         } as RecommandationPriorisee;
       })
       .filter(
         (reco) =>
-          reco.valeurObtenue !== undefined &&
-          reco.valeurObtenue.valeur !== null &&
-          reco.valeurObtenue.valeur !== undefined,
+          reco.valeurObtenue !== undefined && reco.valeurObtenue !== null,
       )
       .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
       .sort(
         (a, b) =>
-          (a.valeurObtenue &&
-          b.valeurObtenue &&
-          a.valeurObtenue.valeur! < b.valeurObtenue.valeur!
+          (laValeurEstDefinie(a.valeurObtenue) &&
+          laValeurEstDefinie(b.valeurObtenue) &&
+          a.valeurObtenue < b.valeurObtenue
             ? -1
             : 1) || 0,
       );
+    return recommandationPriorisees1;
   };
   const recommandationPriorisees = prioriseLesRecommandations(
     recommandations,
