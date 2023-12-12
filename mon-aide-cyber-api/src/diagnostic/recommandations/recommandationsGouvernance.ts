@@ -56,10 +56,10 @@ export const recommandationsGouvernance = {
     },
     priorisation: 14,
   },
-  'gouvernance-connaissance-rgpd': {
+  'gouvernance-connaissance-rgpd-1': {
     niveau1: {
       titre:
-        'Établir votre registre des activités de traitement de données personnelles et le tenir à jour.',
+        'Établir la liste des données personnelles traitées au sein de votre entité.',
       pourquoi:
         'recommandations/gouvernance/gouvernance-connaissance-rgpd-niveau1-pourquoi.pug',
       comment:
@@ -67,7 +67,26 @@ export const recommandationsGouvernance = {
     },
     niveau2: {
       titre:
-        "Fournir des informations aux personnes concernées sur l'utilisation de leurs données à caractère personnel et sur les modalités d'exercice de leurs droits.",
+        'Établir votre registre des activités de traitement de données personnelles et le tenir à jour.',
+      pourquoi:
+        'recommandations/gouvernance/gouvernance-connaissance-rgpd-niveau1-pourquoi.pug',
+      comment:
+        'recommandations/gouvernance/gouvernance-connaissance-rgpd-niveau1-comment.pug',
+    },
+    priorisation: 24,
+  },
+  'gouvernance-connaissance-rgpd-2': {
+    niveau1: {
+      titre:
+        "Fournir des informations aux personnes concernées sur l'utilisation de leurs données personnelles",
+      pourquoi:
+        'recommandations/gouvernance/gouvernance-connaissance-rgpd-niveau2-pourquoi.pug',
+      comment:
+        'recommandations/gouvernance/gouvernance-connaissance-rgpd-niveau2-comment.pug',
+    },
+    niveau2: {
+      titre:
+        "Mettre en place les modalités permettant aux personnes d'exercer de leurs droits",
       pourquoi:
         'recommandations/gouvernance/gouvernance-connaissance-rgpd-niveau2-pourquoi.pug',
       comment:
