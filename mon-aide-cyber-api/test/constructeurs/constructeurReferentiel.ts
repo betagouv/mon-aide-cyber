@@ -158,7 +158,7 @@ class ConstructeurListeDeQuestions
                 constructeurReponsePossible.associeeARecommandation(
                   rep.association?.identifiantRecommandation,
                   rep.association?.niveauRecommandation,
-                  rep.association?.indice?.theorique,
+                  rep.association?.indice?.valeur,
                 );
             }
             return constructeurReponsePossible.construis();
@@ -253,7 +253,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
         ...(this.resultat?.recommandations || []),
         ...recommandations,
       ],
-      indice: { theorique: valeurIndice },
+      indice: { valeur: valeurIndice },
     };
     return this;
   }
@@ -261,7 +261,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   ayantPourValeurDIndice(valeurIndice: Valeur): ConstructeurReponsePossible {
     this.resultat = {
       ...this.resultat,
-      indice: { theorique: valeurIndice },
+      indice: { valeur: valeurIndice },
     };
     return this;
   }

@@ -9,7 +9,7 @@ class ConstructeurAssociation implements Constructeur<Association> {
   constructor(
     private identifiantRecommandation: string = faker.string.alpha(10),
     private niveauRecommandation: NiveauRecommandation = 1,
-    private _indice: Indice = { theorique: 0, poids: 1 },
+    private _indice: Indice = { valeur: 0, poids: 1 },
   ) {}
 
   avecIdentifiant(identifiant: string): ConstructeurAssociation {
@@ -30,7 +30,7 @@ class ConstructeurAssociation implements Constructeur<Association> {
   }
 
   ayantPourValeurDIndice(theorique: Valeur): ConstructeurAssociation {
-    this._indice!.theorique = theorique;
+    this._indice!.valeur = theorique;
     return this;
   }
 
