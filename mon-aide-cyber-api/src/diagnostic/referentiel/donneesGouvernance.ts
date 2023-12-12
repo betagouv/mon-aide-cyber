@@ -6,6 +6,7 @@ export const donneesGouvernance: QuestionsThematique = {
       identifiant: 'gouvernance-infos-et-processus-a-proteger',
       libelle:
         'Avez-vous déterminé les informations et les activités à protéger en priorité ?',
+      poids: 2,
       type: 'choixUnique',
       reponsesPossibles: [
         {
@@ -58,6 +59,7 @@ export const donneesGouvernance: QuestionsThematique = {
       identifiant: 'gouvernance-schema-si-a-jour',
       libelle:
         'Existe-t-il un plan du système d’information de l’organisation ?',
+      poids: 1,
       type: 'choixUnique',
       reponsesPossibles: [
         {
@@ -109,6 +111,7 @@ export const donneesGouvernance: QuestionsThematique = {
       identifiant: 'gouvernance-schema-si-industriel-a-jour',
       libelle:
         "Si l'entité dispose de systèmes industriels : Existe-t-il un plan et un inventaire des systèmes d'informations industriels de l'organisation ?",
+      poids: 1,
       type: 'choixUnique',
       reponsesPossibles: [
         {
@@ -260,6 +263,7 @@ export const donneesGouvernance: QuestionsThematique = {
       identifiant: 'gouvernance-exigence-cyber-securite-presta',
       libelle:
         "Des exigences de cybersécurité sont-elles intégrées aux contrats des prestataires disposant d'accès informatiques ?",
+      poids: 2,
       type: 'choixUnique',
       reponsesPossibles: [
         {
@@ -316,6 +320,7 @@ export const donneesGouvernance: QuestionsThematique = {
       identifiant: 'gouvernance-exigence-cyber-securite-presta-si-industriel',
       libelle:
         "Si l'entité dispose de systèmes industriels : des exigences de cybersécurité sont-elles intégrées dans les contrats des prestataires disposant d'accès informatiques sur les systèmes industriels ?",
+      poids: 2,
       type: 'choixUnique',
       reponsesPossibles: [
         {
