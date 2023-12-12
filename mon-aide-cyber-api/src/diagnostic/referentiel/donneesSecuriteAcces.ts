@@ -5,28 +5,12 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-outil-gestion-des-comptes',
       libelle:
-        "Un outil de gestion des comptes et des politiques de sécurité centralisé (ex : Active Directory, Samba-AD, Azure AD) est-il déployé au sein du système d'information ?",
+        "Un outil de gestion des comptes et des politiques de sécurité centralisé (ex : Active Directory, Samba-AD, Azure AD, scripts d'administration automatisés, etc.) est-il mis en oeuvre ?",
       reponsesPossibles: [
-        {
-          identifiant: 'acces-outil-gestion-des-comptes-na',
-          libelle: 'Non applicable',
-          ordre: 0,
-        },
         {
           identifiant: 'acces-outil-gestion-des-comptes-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
-        },
-        {
-          identifiant: 'acces-outil-gestion-des-comptes-oui',
-          libelle: 'Oui',
-          resultat: {
-            valeur: { theorique: 3, poids: 0.5 },
-            recommandations: [
-              { identifiant: 'acces-outil-gestion-des-comptes', niveau: 2 },
-            ],
-          },
-          ordre: 3,
         },
         {
           identifiant: 'acces-outil-gestion-des-comptes-non',
@@ -41,6 +25,17 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             ],
           },
           ordre: 2,
+        },
+        {
+          identifiant: 'acces-outil-gestion-des-comptes-oui',
+          libelle: 'Oui',
+          resultat: {
+            valeur: { theorique: 3, poids: 0.5 },
+            recommandations: [
+              { identifiant: 'acces-outil-gestion-des-comptes', niveau: 2 },
+            ],
+          },
+          ordre: 3,
         },
       ],
       type: 'choixUnique',
@@ -151,6 +146,55 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             'L’accès des utilisateurs aux données, aux systèmes et aux applications sont limités aux seuls accès nécessaires à leur activité.',
           resultat: { valeur: { theorique: 3, poids: 1 } },
           ordre: 4,
+        },
+      ],
+      type: 'choixUnique',
+    },
+    {
+      identifiant: 'acces-utilisateurs-administrateurs-poste',
+      libelle: 'Les utilisateurs sont-ils administrateurs de leur poste ?',
+      reponsesPossibles: [
+        {
+          identifiant: 'acces-utilisateurs-administrateurs-poste-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 0,
+        },
+        {
+          identifiant: 'acces-utilisateurs-administrateurs-poste-oui',
+          libelle: 'Oui',
+          resultat: {
+            valeur: { theorique: 0, poids: 3 },
+            recommandations: [
+              {
+                identifiant: 'acces-utilisateurs-administrateurs-poste',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant:
+            'acces-utilisateurs-administrateurs-poste-suppression-privilege-en-cours',
+          libelle:
+            'La suppression de ce privilège est en cours de traitement, plusieurs utilisateurs sont toujours administrateurs de leur poste.',
+          resultat: {
+            valeur: { theorique: 1, poids: 3 },
+            recommandations: [
+              {
+                identifiant: 'acces-utilisateurs-administrateurs-poste',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant:
+            'acces-utilisateurs-administrateurs-poste-non-exceptions-justifiees',
+          libelle: 'Non, et les rares exceptions sont justifiées.',
+          resultat: { valeur: { theorique: 3, poids: 3 } },
+          ordre: 3,
         },
       ],
       type: 'choixUnique',
@@ -267,55 +311,6 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'acces-utilisateurs-administrateurs-poste',
-      libelle: 'Les utilisateurs sont-ils administrateurs de leur poste ?',
-      reponsesPossibles: [
-        {
-          identifiant: 'acces-utilisateurs-administrateurs-poste-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant: 'acces-utilisateurs-administrateurs-poste-oui',
-          libelle: 'Oui',
-          resultat: {
-            valeur: { theorique: 0, poids: 3 },
-            recommandations: [
-              {
-                identifiant: 'acces-utilisateurs-administrateurs-poste',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'acces-utilisateurs-administrateurs-poste-suppression-privilege-en-cours',
-          libelle:
-            'La suppression de ce privilège est en cours de traitement, plusieurs utilisateurs sont toujours administrateurs de leur poste.',
-          resultat: {
-            valeur: { theorique: 1, poids: 3 },
-            recommandations: [
-              {
-                identifiant: 'acces-utilisateurs-administrateurs-poste',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
-            'acces-utilisateurs-administrateurs-poste-non-exceptions-justifiees',
-          libelle: 'Non, et les rares exceptions sont justifiées.',
-          resultat: { valeur: { theorique: 3, poids: 3 } },
-          ordre: 3,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
       identifiant: 'acces-mesures-securite-robustesse-mdp',
       libelle:
         'Des exigences de complexité sont-elles imposées sur les mots de passe de session des utilisateurs ?',
@@ -324,21 +319,6 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant: 'acces-mesures-securite-robustesse-mdp-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
-        },
-        {
-          identifiant: 'acces-mesures-securite-robustesse-mdp-pas-de-mdp',
-          libelle:
-            "La session s'ouvre au démarrage du poste, sans demande de mot de passe.",
-          resultat: {
-            valeur: { theorique: 0, poids: 1 },
-            recommandations: [
-              {
-                identifiant: 'acces-mesures-securite-robustesse-mdp',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 1,
         },
         {
           identifiant: 'acces-mesures-securite-robustesse-mdp-non',
@@ -507,7 +487,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant:
         'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
       libelle:
-        "Si l'entité dispose de systèmes industriels : les accès distants aux systèmes industriels font-ils l'objet de mesures de sécurité particulières ?",
+        "Si l’entité dispose de systèmes industriels : les accès distants aux systèmes industriels font-ils l’objet de mesures de sécurité particulières ?",
       reponsesPossibles: [
         {
           identifiant:
@@ -565,54 +545,10 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'acces-entite-dispose-plusieurs-sites-geographiques',
-      libelle:
-        "Si l'entité dispose de plusieurs sites géographiques interconnectés, et si à risque d'espionnage industriel : les interconnexions \"site à site\" font-elles l'objet de mesures de sécurité particulières ?",
-      reponsesPossibles: [
-        {
-          identifiant: 'acces-entite-dispose-plusieurs-sites-geographiques-na',
-          libelle: 'Non applicable',
-          ordre: 0,
-        },
-        {
-          identifiant: 'acces-entite-dispose-plusieurs-sites-geographiques-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 1,
-        },
-        {
-          identifiant: 'acces-entite-dispose-plusieurs-sites-geographiques-non',
-          libelle: 'Non',
-          resultat: {
-            valeur: { theorique: 0, poids: 1 },
-            recommandations: [
-              {
-                identifiant:
-                  'acces-entite-dispose-plusieurs-sites-geographiques',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant: 'acces-entite-dispose-plusieurs-sites-geographiques-oui',
-          libelle: 'Oui les interconnexions "site à site" sont chiffrées.',
-          resultat: { valeur: { theorique: 3, poids: 1 } },
-          ordre: 3,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
       identifiant: 'acces-administrateurs-si-mesures-specifiques',
       libelle:
         'Les accès des administrateurs font-ils l’objet de mesures de sécurité spécifiques ?',
       reponsesPossibles: [
-        {
-          identifiant: 'acces-administrateurs-si-mesures-specifiques-na',
-          libelle: 'Non applicable',
-          ordre: 0,
-        },
         {
           identifiant: 'acces-administrateurs-si-mesures-specifiques-nsp',
           libelle: 'Je ne sais pas',
