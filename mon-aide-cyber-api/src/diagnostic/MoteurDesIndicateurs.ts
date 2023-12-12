@@ -31,7 +31,7 @@ export class MoteurDesIndicateurs {
         return sommeDesPoids + poids;
       }
 
-      if (estUnNombre(poidsCourant.indice.theorique)) {
+      if (estUnNombre(poidsCourant.indice.valeur)) {
         return sommeDesPoids + 1;
       }
       return sommeDesPoids;
@@ -42,7 +42,7 @@ export class MoteurDesIndicateurs {
     valeurs: { identifiant: string; indice: Indice }[],
   ) {
     return valeurs.reduce((sommeDesProduits, valeurCourante) => {
-      const valeurTheorique = valeurCourante.indice.theorique;
+      const valeurTheorique = valeurCourante.indice.valeur;
       const poids = valeurCourante.indice.poids;
       if (estUnNombre(valeurTheorique) && estUnNombre(poids)) {
         return sommeDesProduits + valeurTheorique * poids;

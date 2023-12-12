@@ -2,7 +2,7 @@ import { describe, expect } from 'vitest';
 import {
   desValeursDesReponsesAuDiagnostic,
   uneValeur,
-} from '../constructeurs/constructeurValeur';
+} from '../constructeurs/constructeurIndice';
 import { MoteurDesIndicateurs } from '../../src/diagnostic/MoteurDesIndicateurs';
 import { Indicateurs } from '../../src/diagnostic/Diagnostic';
 

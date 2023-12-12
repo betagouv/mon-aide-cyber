@@ -34,22 +34,22 @@ class ConstructeurDesValeursDesReponsesAuDiagnostic
   }
 }
 
-class ConstructeurDeValeur implements Constructeur<Indice> {
-  private indice: Indice = { theorique: 0, poids: 0 };
+class ConstructeurIndice implements Constructeur<Indice> {
+  private indice: Indice = { valeur: 0, poids: 0 };
 
-  de(valeur: Valeur): ConstructeurDeValeur {
+  de(valeur: Valeur): ConstructeurIndice {
     this.indice = {
       ...((this.indice &&
         this.indice.poids && { poids: this.indice.poids }) || { poids: 1 }),
-      theorique: valeur,
+      valeur: valeur,
     };
     return this;
   }
 
-  avecUnPoidsDe(poids: Poids): ConstructeurDeValeur {
+  avecUnPoidsDe(poids: Poids): ConstructeurIndice {
     this.indice = {
-      ...((this.indice && { theorique: this.indice.theorique }) || {
-        theorique: 0,
+      ...((this.indice && { valeur: this.indice.valeur }) || {
+        valeur: 0,
       }),
       poids,
     };
@@ -64,4 +64,4 @@ class ConstructeurDeValeur implements Constructeur<Indice> {
 export const desValeursDesReponsesAuDiagnostic = () =>
   new ConstructeurDesValeursDesReponsesAuDiagnostic();
 
-export const uneValeur = () => new ConstructeurDeValeur();
+export const uneValeur = () => new ConstructeurIndice();

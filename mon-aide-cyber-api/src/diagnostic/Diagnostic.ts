@@ -150,15 +150,15 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
       .filter(
         (reco) =>
           reco.valeurObtenue !== undefined &&
-          reco.valeurObtenue.theorique !== null &&
-          reco.valeurObtenue.theorique !== undefined,
+          reco.valeurObtenue.valeur !== null &&
+          reco.valeurObtenue.valeur !== undefined,
       )
       .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
       .sort(
         (a, b) =>
           (a.valeurObtenue &&
           b.valeurObtenue &&
-          a.valeurObtenue.theorique! < b.valeurObtenue.theorique!
+          a.valeurObtenue.valeur! < b.valeurObtenue.valeur!
             ? -1
             : 1) || 0,
       );

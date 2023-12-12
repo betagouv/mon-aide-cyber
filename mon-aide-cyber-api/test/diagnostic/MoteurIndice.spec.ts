@@ -52,7 +52,7 @@ describe('Moteur Indice', () => {
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
-            indice: { theorique: 0 },
+            indice: { valeur: 0 },
           },
         ],
       });
@@ -96,7 +96,7 @@ describe('Moteur Indice', () => {
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
-            indice: { theorique: 0 },
+            indice: { valeur: 0 },
           },
         ],
       });
@@ -158,7 +158,7 @@ describe('Moteur Indice', () => {
         thematique: [
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            indice: { theorique: 0},
+            indice: { valeur: 0 },
           },
         ],
       });
@@ -234,11 +234,11 @@ describe('Moteur Indice', () => {
         thematique: [
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            indice: { theorique: 0 },
+            indice: { valeur: 0 },
           },
           {
             identifiant: 'une-question-a-tiroir',
-            indice: { theorique: 1 },
+            indice: { valeur: 1 },
           },
         ],
       });
@@ -315,15 +315,15 @@ describe('Moteur Indice', () => {
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
-            indice: { theorique: 0 },
+            indice: { valeur: 0 },
           },
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            indice: { theorique: 0 },
+            indice: { valeur: 0 },
           },
           {
             identifiant: 'une-question-a-tiroir',
-            indice: { theorique: 1 },
+            indice: { valeur: 1 },
           },
         ],
       });
