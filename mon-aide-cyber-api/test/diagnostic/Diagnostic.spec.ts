@@ -30,7 +30,7 @@ describe('Diagnostic', () => {
 
   const PARTIE_COMMUNE_ATTENDUE: PartieCommuneAttendueRecommandationPriorisee =
     {
-      valeurObtenue: { valeur: 0 },
+      valeurObtenue: 0,
       pourquoi: 'parce-que',
       comment: 'comme ça',
     };
@@ -93,13 +93,13 @@ describe('Diagnostic', () => {
               titre: 'reco 22',
 
               ...PARTIE_COMMUNE_ATTENDUE,
-              valeurObtenue: { valeur: 1 },
+              valeurObtenue: 1,
             },
             {
               priorisation: 5,
               titre: 'reco 52',
               ...PARTIE_COMMUNE_ATTENDUE,
-              valeurObtenue: { valeur: 1 },
+              valeurObtenue: 1,
             },
           ]);
           expect(
@@ -109,7 +109,7 @@ describe('Diagnostic', () => {
               priorisation: 7,
               titre: 'reco 72',
               ...PARTIE_COMMUNE_ATTENDUE,
-              valeurObtenue: { valeur: 1 },
+              valeurObtenue: 1,
             },
           ]);
         });
@@ -157,7 +157,7 @@ describe('Diagnostic', () => {
           ).toStrictEqual<RecommandationPriorisee[]>([
             {
               comment: 'comme ça',
-              valeurObtenue: { valeur: 1 },
+              valeurObtenue: 1,
               pourquoi: 'parce-que',
               priorisation: 7,
               titre: 'reco 8',
@@ -212,19 +212,19 @@ describe('Diagnostic', () => {
             ...PARTIE_COMMUNE_ATTENDUE,
             priorisation: 2,
             titre: 'reco 22',
-            valeurObtenue: { valeur: 1 },
+            valeurObtenue: 1,
           },
           {
             ...PARTIE_COMMUNE_ATTENDUE,
             priorisation: 5,
             titre: 'reco 52',
-            valeurObtenue: { valeur: 1 },
+            valeurObtenue: 1,
           },
           {
             ...PARTIE_COMMUNE_ATTENDUE,
             priorisation: 7,
             titre: 'reco 72',
-            valeurObtenue: { valeur: 1 },
+            valeurObtenue: 1,
           },
         ]);
         expect(
@@ -342,7 +342,7 @@ describe('Diagnostic', () => {
             },
             {
               ...PARTIE_COMMUNE_ATTENDUE,
-              valeurObtenue: { valeur: 1 },
+              valeurObtenue: 1,
               priorisation: 7,
               titre: 'reco 52',
             },
@@ -352,7 +352,7 @@ describe('Diagnostic', () => {
           ).toStrictEqual<RecommandationPriorisee[]>([
             {
               ...PARTIE_COMMUNE_ATTENDUE,
-              valeurObtenue: { valeur: 1 },
+              valeurObtenue: 1,
               priorisation: 9,
               titre: 'reco 92',
             },

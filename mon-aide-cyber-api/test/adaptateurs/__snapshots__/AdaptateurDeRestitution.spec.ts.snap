@@ -3,12 +3,12 @@
 exports[`Adaptateur de Restitution > génère la restitution avec annexe 1`] = `
 [
   {
-    "corps": "{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":{\\"valeur\\":0}}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":{\\"valeur\\":0}}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":{\\"valeur\\":0}}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":{\\"valeur\\":0}}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":{\\"valeur\\":0}}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":{\\"valeur\\":0}}",
+    "corps": "{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":0}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":0}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":0}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":0}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":0}{\\"titre\\":\\"reco 2\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":2,\\"valeurObtenue\\":0}",
     "entete": "entete",
     "piedPage": "piedPage",
   },
   {
-    "corps": "{\\"titre\\":\\"reco 1\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":3,\\"valeurObtenue\\":{\\"valeur\\":0}}",
+    "corps": "{\\"titre\\":\\"reco 1\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":3,\\"valeurObtenue\\":0}",
     "entete": "entete",
     "piedPage": "piedPage",
   },
@@ -18,7 +18,7 @@ exports[`Adaptateur de Restitution > génère la restitution avec annexe 1`] = `
 exports[`Adaptateur de Restitution > génère une recommandation sans annexe 1`] = `
 [
   {
-    "corps": "{\\"titre\\":\\"reco 1\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":3,\\"valeurObtenue\\":{\\"valeur\\":0}}",
+    "corps": "{\\"titre\\":\\"reco 1\\",\\"pourquoi\\":\\"parce-que\\",\\"comment\\":\\"comme ça\\",\\"priorisation\\":3,\\"valeurObtenue\\":0}",
     "entete": "entete",
     "piedPage": "piedPage",
   },
