@@ -6,6 +6,7 @@ export const donneesReaction: QuestionsThematique = {
       identifiant: 'reaction-surveillance-veille-vulnerabilites-potentielles',
       libelle:
         'Une veille des vulnérabilités pouvant vous affecter est-elle réalisée ?',
+      poids: 2,
       reponsesPossibles: [
         {
           identifiant:
@@ -58,6 +59,7 @@ export const donneesReaction: QuestionsThematique = {
     {
       identifiant: 'reaction-sauvegardes-donnees-realisees',
       libelle: 'Des sauvegardes régulières des données sont-elles réalisées ?',
+      poids: 3,
       reponsesPossibles: [
         {
           identifiant: 'reaction-sauvegardes-donnees-realisees-nsp',
@@ -98,6 +100,7 @@ export const donneesReaction: QuestionsThematique = {
                 'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
               libelle:
                 'Si "Oui" : Existe-t-il au moins une sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne et d’Internet ?',
+              poids: 3,
               reponsesPossibles: [
                 {
                   identifiant:
@@ -151,6 +154,7 @@ export const donneesReaction: QuestionsThematique = {
                 'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement',
               libelle:
                 'Si "Oui" : La restauration de toutes les sauvegardes est-elle testée régulièrement ?',
+              poids: 3,
               reponsesPossibles: [
                 {
                   identifiant:
@@ -213,6 +217,7 @@ export const donneesReaction: QuestionsThematique = {
                 'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole',
               libelle:
                 'Si "Oui" : Existe-t-il au moins une sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne et d’Internet ?',
+              poids: 3,
               reponsesPossibles: [
                 {
                   identifiant:
@@ -266,6 +271,7 @@ export const donneesReaction: QuestionsThematique = {
                 'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement',
               libelle:
                 'Si "Oui" : La restauration de toutes les sauvegardes est-elle testée régulièrement ?',
+              poids: 3,
               reponsesPossibles: [
                 {
                   identifiant:
@@ -316,6 +322,7 @@ export const donneesReaction: QuestionsThematique = {
       identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
       libelle:
         'Un dispositif de gestion de crise adapté au risque de cyberattaques a-t-il été défini ?',
+      poids: 3,
       reponsesPossibles: [
         {
           identifiant: 'reaction-dispositif-gestion-crise-adapte-defini-nsp',
