@@ -158,95 +158,75 @@ export const donneesContexte: QuestionsThematique = {
       libelle: 'Dans quelle région votre siège social est-il basé ?',
       reponsesPossibles: [
         {
-          identifiant: 'contexte-region-siege-social-ile-de-France',
-          libelle: 'Île-de-France',
-          ordre: 11,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-centre-val-de-loire',
-          libelle: 'Centre-Val de Loire',
-          ordre: 24,
+          identifiant: 'contexte-region-siege-social-auvergne-rhone-alpes',
+          libelle: 'Auvergne-Rhône-Alpes',
+          ordre: 1,
         },
         {
           identifiant: 'contexte-region-siege-social-bourgogne-franche-comte',
           libelle: 'Bourgogne-Franche-Comté',
-          ordre: 27,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-normandie',
-          libelle: 'Normandie',
-          ordre: 28,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-hauts-de-france',
-          libelle: 'Hauts-de-France',
-          ordre: 32,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-grand-est',
-          libelle: 'Grand Est',
-          ordre: 44,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-pays-de-la-loire',
-          libelle: 'Pays de la Loire',
-          ordre: 52,
+          ordre: 2,
         },
         {
           identifiant: 'contexte-region-siege-social-bretagne',
           libelle: 'Bretagne',
-          ordre: 53,
+          ordre: 3,
+        },
+        {
+          identifiant: 'contexte-region-siege-social-centre-val-de-loire',
+          libelle: 'Centre-Val de Loire',
+          ordre: 4,
+        },
+        {
+          identifiant: 'contexte-region-siege-social-corse',
+          libelle: 'Corse',
+          ordre: 5,
+        },
+        {
+          identifiant: 'contexte-region-siege-social-drom-com',
+          libelle: 'DROM-COM',
+          ordre: 6,
+        },
+        {
+          identifiant: 'contexte-region-siege-social-grand-est',
+          libelle: 'Grand Est',
+          ordre: 7,
+        },
+        {
+          identifiant: 'contexte-region-siege-social-hauts-de-france',
+          libelle: 'Hauts-de-France',
+          ordre: 8,
+        },
+        {
+          identifiant: 'contexte-region-siege-social-ile-de-France',
+          libelle: 'Île-de-France',
+          ordre: 9,
+        },
+        {
+          identifiant: 'contexte-region-siege-social-normandie',
+          libelle: 'Normandie',
+          ordre: 10,
         },
         {
           identifiant: 'contexte-region-siege-social-nouvelle-aquitaine',
           libelle: 'Nouvelle-Aquitaine',
-          ordre: 75,
+          ordre: 11,
         },
         {
           identifiant: 'contexte-region-siege-social-occitanie',
           libelle: 'Occitanie',
-          ordre: 76,
+          ordre: 12,
         },
         {
-          identifiant: 'contexte-region-siege-social-auvergne-rhone-alpes',
-          libelle: 'Auvergne-Rhône-Alpes',
-          ordre: 84,
+          identifiant: 'contexte-region-siege-social-pays-de-la-loire',
+          libelle: 'Pays de la Loire',
+          ordre: 13,
         },
         {
           identifiant:
             'contexte-region-siege-social-provence-alpes-cote-d-azur',
           libelle: "Provence-Alpes-Côte d'Azur",
-          ordre: 93,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-corse',
-          libelle: 'Corse',
-          ordre: 94,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-guadeloupe',
-          libelle: 'Guadeloupe',
-          ordre: 1,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-martinique',
-          libelle: 'Martinique',
-          ordre: 2,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-guyane',
-          libelle: 'Guyane',
-          ordre: 3,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-la-reunion',
-          libelle: 'La Réunion',
-          ordre: 4,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-mayotte',
-          libelle: 'Mayotte',
-          ordre: 6,
+          ordre: 14,
         },
       ],
       type: 'choixUnique',
@@ -254,7 +234,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-departement-tom-siege-social',
       libelle:
-        "Dans quel département, ou collectivité d'outre-mer, votre siège social est-il basé ?",
+        'Dans quel département, ou DROM-COM, votre siège social est-il basé ?',
       reponsesPossibles: [
         {
           identifiant: 'contexte-departement-tom-siege-social-ain',
@@ -779,7 +759,8 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 978,
         },
         {
-          identifiant: 'contexte-departement-tom-siege-social-saintpierreetmiquelon',
+          identifiant:
+            'contexte-departement-tom-siege-social-saintpierreetmiquelon',
           libelle: 'Collectivité de Saint-Pierre et Miquelon',
           ordre: 979,
         },
@@ -789,12 +770,14 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 980,
         },
         {
-          identifiant: 'contexte-departement-tom-siege-social-polynésiefrançaise',
+          identifiant:
+            'contexte-departement-tom-siege-social-polynésiefrançaise',
           libelle: 'Collectivité de Polynésie Française',
           ordre: 981,
         },
         {
-          identifiant: 'contexte-departement-tom-siege-social-nouvellecalédonie',
+          identifiant:
+            'contexte-departement-tom-siege-social-nouvellecalédonie',
           libelle: 'Collectivité de Nouvelle-Calédonie',
           ordre: 982,
         },
@@ -807,8 +790,8 @@ export const donneesContexte: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-0-et-9',
-          libelle: 'Entre 0 et 9',
+            'contexte-nombre-personnes-dans-organisation-entre-1-et-9',
+          libelle: 'Entre 1 et 9',
           ordre: 0,
         },
         {
@@ -838,33 +821,27 @@ export const donneesContexte: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-0-et-19',
-          libelle: 'Entre 0 et 19',
+            'contexte-nombre-postes-travail-dans-organisation-entre-1-et-9',
+          libelle: 'Entre 1 et 9',
           ordre: 0,
         },
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-20-et-49',
-          libelle: 'Entre 20 et 49',
+            'contexte-nombre-postes-travail-dans-organisation-entre-10-et-49',
+          libelle: 'Entre 10 et 49',
           ordre: 1,
         },
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-50-et-99',
-          libelle: 'Entre 50 et 99',
+            'contexte-nombre-postes-travail-dans-organisation-entre-50-et-249',
+          libelle: 'Entre 50 et 249',
           ordre: 2,
         },
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-100-et-199',
-          libelle: 'Entre 100 et 199',
+            'contexte-nombre-postes-travail-dans-organisation-plus-de-250',
+          libelle: 'Plus de 250',
           ordre: 3,
-        },
-        {
-          identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-plus-de-200',
-          libelle: 'Plus de 200',
-          ordre: 4,
         },
       ],
       type: 'choixUnique',
@@ -894,8 +871,7 @@ export const donneesContexte: QuestionsThematique = {
     },
     {
       identifiant: 'contexte-opere-systemes-information-industriels',
-      libelle:
-        "Votre organisation opère-t-elle des systèmes industriels ?",
+      libelle: 'Votre organisation opère-t-elle des systèmes industriels ?',
       reponsesPossibles: [
         {
           identifiant: 'contexte-opere-systemes-information-industriels-nsp',
@@ -941,41 +917,48 @@ export const donneesContexte: QuestionsThematique = {
                 {
                   identifiant:
                     'contexte-cyber-attaque-subie-oui-tiroir-type-compromission',
-                  libelle: "Compromission d'un poste et/ou d'une boîte mail",
+                  libelle:
+                    "Compromission d'un poste, d'une boîte mail ou d'un compte Cloud",
                   ordre: 0,
+                },
+                {
+                  identifiant:
+                    'contexte-cyber-attaque-subie-oui-tiroir-type-usurpation',
+                  libelle: "Usurpation d'identité",
+                  ordre: 1,
                 },
                 {
                   identifiant:
                     'contexte-cyber-attaque-subie-oui-tiroir-type-rancongiciel',
                   libelle:
-                    'Rançongiciel ou  autre maliciel sur plusieurs postes',
-                  ordre: 1,
+                    'Rançongiciel ou autre maliciel sur plusieurs postes',
+                  ordre: 2,
                 },
                 {
                   identifiant:
                     'contexte-cyber-attaque-subie-oui-tiroir-type-accès',
                   libelle: "Compromission d'un ou plusieurs accès distants",
-                  ordre: 2,
+                  ordre: 3,
                 },
                 {
                   identifiant:
                     'contexte-cyber-attaque-subie-oui-tiroir-type-web',
                   libelle: "Compromission d'un ou plusieurs services web",
-                  ordre: 3,
+                  ordre: 4,
                 },
                 {
                   identifiant:
                     'contexte-cyber-attaque-subie-oui-tiroir-type-réseaux',
                   libelle:
                     "Compromission d'un ou plusieurs équipements réseaux",
-                  ordre: 4,
+                  ordre: 5,
                 },
                 {
                   identifiant:
                     'contexte-cyber-attaque-subie-oui-tiroir-type-serveur',
                   libelle:
                     "Compromission d'un serveur ou service exposé sur internet",
-                  ordre: 5,
+                  ordre: 6,
                 },
               ],
               type: 'choixMultiple',
