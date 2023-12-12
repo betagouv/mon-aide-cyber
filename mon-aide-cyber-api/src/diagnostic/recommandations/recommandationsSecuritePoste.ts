@@ -2,7 +2,7 @@ export const recommandationsSecuritePoste = {
   'securite-poste-maj-fonctionnelles-et-securite-deployees': {
     niveau1: {
       titre:
-        'Déployer systématiquement toutes les mises à jour dès que celles-ci sont disponibles (ou après qualification interne) et hors exceptions spécifiquement identifiées.',
+        'Déployer systématiquement toutes les mises à jour sur les postes de travail dès que celles-ci sont disponibles (ou après qualification interne) et hors exceptions spécifiquement identifiées.',
       pourquoi:
         'recommandations/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau1-pourquoi.pug',
       comment:
@@ -21,7 +21,7 @@ export const recommandationsSecuritePoste = {
   'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees': {
     niveau1: {
       titre:
-        'Déployer systématiquement toutes les mises à jour dès que celles-ci sont disponibles (ou après qualification interne) et hors exceptions spécifiquement identifiées.',
+        'Déployer systématiquement toutes les mises à jour sur les postes de travail dédiés aux systèmes industriels dès que celles-ci sont disponibles (ou après qualification interne) et hors exceptions spécifiquement identifiées.',
       pourquoi:
         'recommandations/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau1-pourquoi.pug',
       comment:
