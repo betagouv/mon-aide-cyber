@@ -55,19 +55,11 @@ export const recommandationsSecuriteInfrastructure = {
     {
       niveau1: {
         titre:
-          "Déployer systématiquement toutes les mises à jour dès que celles-ci sont disponibles  (ou après qualification interne) et hors exceptions spécifiquement identifiées.",
+          "Déployer systématiquement toutes les mises à jour sur les équipements de sécurité dès que celles-ci sont disponibles (ou après qualification interne) et hors exceptions spécifiquement identifiées.",
         pourquoi:
           "recommandations/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-niveau1-pourquoi.pug",
         comment:
           "recommandations/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-niveau1-comment.pug",
-      },
-      niveau2: {
-        titre:
-          "Déployer systématiquement toutes les mises à jour dès que celles-ci sont disponibles  (ou après qualification interne) et hors exceptions spécifiquement identifiées.",
-        pourquoi:
-          "recommandations/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-niveau2-pourquoi.pug",
-        comment:
-          "recommandations/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-niveau2-comment.pug",
       },
       priorisation: 2,
     },
@@ -75,7 +67,7 @@ export const recommandationsSecuriteInfrastructure = {
     {
       niveau1: {
         titre:
-          "Déployer systématiquement toutes les mises à jour dès que celles-ci sont disponibles  (ou après qualification interne) et hors exceptions spécifiquement identifiées.",
+          "Déployer systématiquement toutes les mises à jour sur les serveurs, services et logiciels d'administration dès que celles-ci sont disponibles (ou après qualification interne) et hors exceptions spécifiquement identifiées.",
         pourquoi:
           "recommandations/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-niveau1-pourquoi.pug",
         comment:

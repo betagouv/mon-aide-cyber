@@ -219,23 +219,6 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         },
         {
           identifiant:
-            'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-a-intervalle-regulier',
-          libelle:
-            'Des mises à jour logicielles sont déployées à intervalle régulier.',
-          resultat: {
-            valeur: { theorique: 2, poids: 3 },
-            recommandations: [
-              {
-                identifiant:
-                  'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees',
-                niveau: 2,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-des-que-possible',
           libelle:
             'Toutes les mises à jour logicielles sont déployées dès que celles-ci sont disponibles et fonctionnelles.',
