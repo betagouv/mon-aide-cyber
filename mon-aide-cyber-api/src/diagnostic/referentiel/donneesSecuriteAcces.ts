@@ -6,6 +6,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant: 'acces-outil-gestion-des-comptes',
       libelle:
         "Un outil de gestion des comptes et des politiques de sécurité centralisé (ex : Active Directory, Samba-AD, Azure AD, scripts d'administration automatisés, etc.) est-il mis en oeuvre ?",
+      poids: 0.5,
       reponsesPossibles: [
         {
           identifiant: 'acces-outil-gestion-des-comptes-nsp',
@@ -44,6 +45,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant: 'acces-liste-compte-utilisateurs',
       libelle:
         'La liste des comptes utilisateurs (prestataires inclus) est-elle maintenue à jour ?',
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant: 'acces-liste-compte-utilisateurs-na',
@@ -98,6 +100,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant: 'acces-droits-acces-utilisateurs-limites',
       libelle:
         'Les droits des utilisateurs sont-ils limités à leurs besoins métiers ?',
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant: 'acces-droits-acces-utilisateurs-limites-na',
@@ -203,6 +206,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant: 'acces-administrateurs-informatiques-suivie-et-limitee',
       libelle:
         'La liste des comptes des administrateurs informatiques (prestataires inclus) est-elle suivie et limitée au strict nécessaire ?',
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant:
@@ -258,6 +262,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant: 'acces-utilisation-comptes-administrateurs-droits-limitee',
       libelle:
         "L'utilisation des comptes administrateurs est-elle bien limitée aux tâches d'administration ?",
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant:
@@ -314,6 +319,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant: 'acces-mesures-securite-robustesse-mdp',
       libelle:
         'Des exigences de complexité sont-elles imposées sur les mots de passe de session des utilisateurs ?',
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant: 'acces-mesures-securite-robustesse-mdp-nsp',
@@ -366,6 +372,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
       libelle:
         "L'accès des utilisateurs aux ressources et données les plus sensibles fait-il l’objet de mesures de sécurité additionnelles ?",
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant:
@@ -427,6 +434,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant: 'acces-teletravail-acces-distants-mesures-particulieres',
       libelle:
         "Le télétravail et les accès distants (cloud inclus) font-ils l'objet de mesures de sécurité particulières ?",
+      poids: 2,
       reponsesPossibles: [
         {
           identifiant:
@@ -488,6 +496,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
       libelle:
         'Si l’entité dispose de systèmes industriels : les accès distants aux systèmes industriels font-ils l’objet de mesures de sécurité particulières ?',
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant:
@@ -548,6 +557,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant: 'acces-administrateurs-si-mesures-specifiques',
       libelle:
         'Les accès des administrateurs font-ils l’objet de mesures de sécurité spécifiques ?',
+      poids: 2,
       reponsesPossibles: [
         {
           identifiant: 'acces-administrateurs-si-mesures-specifiques-nsp',
