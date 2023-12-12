@@ -162,29 +162,24 @@ export const donneesGouvernance: QuestionsThematique = {
       ],
     },
     {
-      identifiant: 'gouvernance-connaissance-rgpd',
+      identifiant: 'gouvernance-connaissance-rgpd-1',
       libelle:
-        'Avez-vous mené une démarche de conformité liée au RGPD concernant vos traitements des données personnelles ?',
+        'Avez-vous listé les données personnelles traitées au sein de votre entité ?',
       type: 'choixUnique',
       reponsesPossibles: [
         {
-          identifiant: 'gouvernance-connaissance-rgpd-na',
-          libelle: 'Non applicable.',
-          ordre: 0,
-        },
-        {
-          identifiant: 'gouvernance-connaissance-rgpd-nsp',
+          identifiant: 'gouvernance-connaissance-rgpd-1-nsp',
           libelle: 'Je ne sais pas.',
           ordre: 1,
         },
         {
-          identifiant: 'gouvernance-connaissance-rgpd-non',
+          identifiant: 'gouvernance-connaissance-rgpd-1-non',
           libelle: 'Non.',
           resultat: {
             valeur: { theorique: 0, poids: 1 },
             recommandations: [
               {
-                identifiant: 'gouvernance-connaissance-rgpd',
+                identifiant: 'gouvernance-connaissance-rgpd-1',
                 niveau: 1,
               },
             ],
@@ -192,21 +187,69 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant: 'gouvernance-connaissance-rgpd-oui-registre-traitement',
-          libelle: 'Oui, je tiens à jour mon registre des traitements.',
+          identifiant: 'gouvernance-connaissance-rgpd-1-oui-liste-données',
+          libelle:
+            "Oui, j'ai listé l'ensemble des données personnelles traitées au sein de mon entité",
           ordre: 3,
           resultat: {
             valeur: { theorique: 2, poids: 1 },
             recommandations: [
-              { identifiant: 'gouvernance-connaissance-rgpd', niveau: 2 },
+              { identifiant: 'gouvernance-connaissance-rgpd-1', niveau: 2 },
             ],
           },
         },
         {
-          identifiant: 'gouvernance-connaissance-rgpd-oui',
+          identifiant: 'gouvernance-connaissance-rgpd-1-oui-registre',
+          libelle: 'Oui, je tiens à jour un registre des traitements',
+          ordre: 4,
+          resultat: {
+            valeur: { theorique: 3, poids: 1 },
+          },
+        },
+      ],
+    },
+    {
+      identifiant: 'gouvernance-connaissance-rgpd-2',
+      libelle:
+        "Informez-vous les personnes concernées sur l'utilisation de leurs données personnelles et leurs droits d’accès ? ",
+      type: 'choixUnique',
+      reponsesPossibles: [
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-2-nsp',
+          libelle: 'Je ne sais pas.',
+          ordre: 1,
+        },
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-2-non',
+          libelle: 'Non.',
+          resultat: {
+            valeur: { theorique: 0, poids: 1 },
+            recommandations: [
+              {
+                identifiant: 'gouvernance-connaissance-rgpd-2',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-2-oui-liste-données',
           libelle:
-            "Oui, je tiens à jour mon registre des traitements et j'informe les personnes concernées sur leurs droits et l'utilisation de leurs données.",
+            "Oui, j'informe les personnes concernées sur l’utilisation de leurs données personnelles.",
           ordre: 3,
+          resultat: {
+            valeur: { theorique: 2, poids: 1 },
+            recommandations: [
+              { identifiant: 'gouvernance-connaissance-rgpd-2', niveau: 2 },
+            ],
+          },
+        },
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-2-oui-registre',
+          libelle:
+            'Oui, j’informe les personnes concernées et j’ai mis en place les moyens nécessaires leur permettant d’exercer leurs droits',
+          ordre: 4,
           resultat: {
             valeur: { theorique: 3, poids: 1 },
           },
