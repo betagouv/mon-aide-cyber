@@ -264,7 +264,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     {
       identifiant: 'securite-poste-outils-complementaires-securisation',
       libelle:
-        'Un outil complémentaire à un antivirus de type EDR a-t-il était mis en place ?',
+        'Un outil complémentaire à un antivirus de type EDR a-t-il été mis en place ?',
       reponsesPossibles: [
         {
           identifiant: 'securite-poste-outils-complementaires-securisation-nsp',

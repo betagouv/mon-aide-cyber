@@ -181,17 +181,6 @@ export const recommandationsSecuriteAcces = {
     },
     priorisation: 12,
   },
-  'acces-entite-dispose-plusieurs-sites-geographiques': {
-    niveau1: {
-      titre:
-        'Mettre en place des mesures de chiffrement pour sécuriser les interconnexions "site à site".',
-      pourquoi:
-        'recommandations/acces/acces-entite-dispose-plusieurs-sites-geographiques-niveau1-pourquoi.pug',
-      comment:
-        'recommandations/acces/acces-entite-dispose-plusieurs-sites-geographiques-niveau1-comment.pug',
-    },
-    priorisation: 31,
-  },
   'acces-administrateurs-si-mesures-specifiques': {
     niveau1: {
       titre:
