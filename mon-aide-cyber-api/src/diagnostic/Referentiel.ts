@@ -1,4 +1,4 @@
-import { Indice } from './Indice';
+import { Indice, Poids } from './Indice';
 
 type QuestionATiroir = Omit<Question, 'reponsesPossibles'> & {
   reponsesPossibles: Omit<ReponsePossible, 'questions'>[];
@@ -25,6 +25,7 @@ type Question = {
   libelle: string;
   type: TypeQuestion;
   reponsesPossibles: ReponsePossible[];
+  poids?: Poids;
 };
 
 type QuestionChoixUnique = Question & {
