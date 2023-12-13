@@ -169,6 +169,7 @@ export const donneesGouvernance: QuestionsThematique = {
       libelle:
         'Avez-vous listé les données personnelles traitées au sein de votre entité ?',
       type: 'choixUnique',
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant: 'gouvernance-connaissance-rgpd-1-nsp',
@@ -216,6 +217,7 @@ export const donneesGouvernance: QuestionsThematique = {
       libelle:
         "Informez-vous les personnes concernées sur l'utilisation de leurs données personnelles et leurs droits d’accès ? ",
       type: 'choixUnique',
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant: 'gouvernance-connaissance-rgpd-2-nsp',
