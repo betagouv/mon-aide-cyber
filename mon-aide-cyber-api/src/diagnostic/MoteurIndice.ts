@@ -3,11 +3,18 @@ import {
   QuestionDiagnostic,
   QuestionsThematique,
 } from './Diagnostic';
-import { Indice } from './Indice';
+import { Poids, Valeur } from './Indice';
 import { Resultat } from './Referentiel';
 
+type Indice = { identifiant: string; indice: Valeur; poids: Poids };
+
+type IndiceIntermediaire = {
+  resultat: Resultat;
+  poids: Poids;
+};
+
 export type ValeursDesIndicesAuDiagnostic = {
-  [thematique: string]: { identifiant: string; indice: Indice }[];
+  [thematique: string]: Indice[];
 };
 
 export class MoteurIndice {
@@ -51,7 +58,7 @@ export class MoteurIndice {
 
   private static genereLesIndicesDesReponsesUniques(
     question: QuestionDiagnostic,
-  ): { identifiant: string; indice: Indice }[] {
+  ): Indice[] {
     return question.reponsesPossibles
       .filter(
         (reponsePossible) =>
@@ -64,13 +71,14 @@ export class MoteurIndice {
       )
       .flatMap((reponsePossible) => ({
         identifiant: question.identifiant,
-        indice: reponsePossible.indice,
+        indice: reponsePossible.indice.valeur,
+        poids: question.poids!,
       }));
   }
 
   private static genereLesIndicesDesReponsesMultiples(
     question: QuestionDiagnostic,
-  ): { identifiant: string; indice: Indice }[] {
+  ): Indice[] {
     return question.reponseDonnee.reponsesMultiples
       .flatMap((reponsesMultiples) =>
         question.reponsesPossibles
@@ -85,12 +93,22 @@ export class MoteurIndice {
               .filter((reponsePossible) =>
                 reponsesMultiples.reponses.has(reponsePossible.identifiant),
               )
-              .map((reponsePossible) => reponsePossible.resultat)
-              .filter((resultat): resultat is Resultat => !!resultat),
+              .map(
+                (reponsePossible) =>
+                  ({
+                    resultat: reponsePossible.resultat,
+                    poids: questionATiroir.poids,
+                  } as IndiceIntermediaire),
+              )
+              .filter(
+                (indice: IndiceIntermediaire): indice is IndiceIntermediaire =>
+                  !!indice,
+              ),
           )
-          .flatMap((reponsePossible) => ({
+          .flatMap((indice) => ({
             identifiant: reponsesMultiples.identifiant,
-            indice: reponsePossible.indice,
+            indice: indice.resultat.indice.valeur,
+            poids: indice.poids,
           })),
       )
       .flatMap((valeurIndice) => valeurIndice);

@@ -1,13 +1,15 @@
 import { Constructeur } from './constructeur';
 import { ValeursDesIndicesAuDiagnostic } from '../../src/diagnostic/MoteurIndice';
-import { Poids, Indice, Valeur } from '../../src/diagnostic/Indice';
+import { Poids, Valeur } from '../../src/diagnostic/Indice';
 import { fakerFR } from '@faker-js/faker';
+
+type Indice = { identifiant: string; indice: Valeur; poids: Poids };
 
 class ConstructeurDesValeursDesReponsesAuDiagnostic
   implements Constructeur<ValeursDesIndicesAuDiagnostic>
 {
   private thematiques: {
-    [thematique: string]: { identifiant: string; indice: Indice }[];
+    [thematique: string]: Indice[];
   } = {};
   private thematiqueChoisie = '';
 
@@ -24,7 +26,8 @@ class ConstructeurDesValeursDesReponsesAuDiagnostic
   ajoute(indice: Indice): ConstructeurDesValeursDesReponsesAuDiagnostic {
     this.thematiques[this.thematiqueChoisie].push({
       identifiant: fakerFR.string.alpha(10),
-      indice,
+      indice: indice.indice,
+      poids: indice.poids,
     });
     return this;
   }
@@ -35,29 +38,32 @@ class ConstructeurDesValeursDesReponsesAuDiagnostic
 }
 
 class ConstructeurIndice implements Constructeur<Indice> {
-  private indice: Indice = { valeur: 0, poids: 0 };
+  private indice: Indice = {
+    identifiant: fakerFR.string.alpha(10),
+    indice: 0,
+    poids: 0,
+  };
 
   de(valeur: Valeur): ConstructeurIndice {
     this.indice = {
-      ...(this.indice && this.indice.poids && { poids: this.indice.poids }),
-      valeur: valeur,
-    };
-    return this;
-  }
-
-  sansPoids(): ConstructeurIndice {
-    this.indice = {
-      ...((this.indice && { valeur: this.indice.valeur }) || {
-        valeur: 0,
-      }),
+      ...((this.indice &&
+        this.indice.poids && {
+          poids: this.indice.poids,
+          identifiant: this.indice.identifiant,
+        }) || { poids: 1, identifiant: this.indice.identifiant }),
+      indice: valeur,
     };
     return this;
   }
 
   avecUnPoidsDe(poids: Poids): ConstructeurIndice {
     this.indice = {
-      ...((this.indice && { valeur: this.indice.valeur }) || {
-        valeur: 0,
+      ...((this.indice && {
+        indice: this.indice.indice,
+        identifiant: this.indice.identifiant,
+      }) || {
+        indice: 0,
+        identifiant: this.indice.identifiant,
       }),
       poids,
     };

@@ -52,7 +52,8 @@ describe('Moteur Indice', () => {
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
-            indice: { valeur: 0 },
+            indice: 0,
+            poids: 1,
           },
         ],
       });
@@ -96,7 +97,8 @@ describe('Moteur Indice', () => {
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
-            indice: { valeur: 0 },
+            indice: 0,
+            poids: 1,
           },
         ],
       });
@@ -113,6 +115,7 @@ describe('Moteur Indice', () => {
             .avecLibelle('24')
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
+                .avecPoids(2)
                 .aChoixUnique('Voulez-vous inverser les chiffres?')
                 .avecReponsesPossibles([
                   uneReponsePossible().avecLibelle('Oui').construis(),
@@ -158,7 +161,8 @@ describe('Moteur Indice', () => {
         thematique: [
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            indice: { valeur: 0 },
+            indice: 0,
+            poids: 2,
           },
         ],
       });
@@ -173,6 +177,7 @@ describe('Moteur Indice', () => {
             .avecLibelle('24')
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
+                .avecPoids(2)
                 .aChoixUnique('Voulez-vous inverser les chiffres?')
                 .avecReponsesPossibles([
                   uneReponsePossible().avecLibelle('Oui').construis(),
@@ -185,6 +190,7 @@ describe('Moteur Indice', () => {
             )
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
+                .avecPoids(3)
                 .aChoixUnique('Une question à tiroir?')
                 .avecReponsesPossibles([
                   uneReponsePossible()
@@ -234,11 +240,13 @@ describe('Moteur Indice', () => {
         thematique: [
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            indice: { valeur: 0 },
+            indice: 0,
+            poids: 2,
           },
           {
             identifiant: 'une-question-a-tiroir',
-            indice: { valeur: 1 },
+            indice: 1,
+            poids: 3,
           },
         ],
       });
@@ -253,6 +261,7 @@ describe('Moteur Indice', () => {
             .avecLibelle('24')
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
+                .avecPoids(2)
                 .aChoixUnique('Voulez-vous inverser les chiffres?')
                 .avecReponsesPossibles([
                   uneReponsePossible().avecLibelle('Oui').construis(),
@@ -265,6 +274,7 @@ describe('Moteur Indice', () => {
             )
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
+                .avecPoids(3)
                 .aChoixUnique('Une question à tiroir?')
                 .avecReponsesPossibles([
                   uneReponsePossible()
@@ -315,15 +325,18 @@ describe('Moteur Indice', () => {
         thematique: [
           {
             identifiant: 'quelle-est-la-reponse',
-            indice: { valeur: 0 },
+            indice: 0,
+            poids: 1,
           },
           {
             identifiant: 'voulezvous-inverser-les-chiffres',
-            indice: { valeur: 0 },
+            indice: 0,
+            poids: 2,
           },
           {
             identifiant: 'une-question-a-tiroir',
-            indice: { valeur: 1 },
+            indice: 1,
+            poids: 3,
           },
         ],
       });
