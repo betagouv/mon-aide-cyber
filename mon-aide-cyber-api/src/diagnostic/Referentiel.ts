@@ -10,6 +10,7 @@ type Resultat = {
   recommandations?: Recommandation[];
   indice: Indice;
 };
+
 type ReponsePossible = {
   identifiant: string;
   libelle: string;

@@ -144,7 +144,7 @@ const extraisLesChampsDeLaQuestion = (question: QuestionDiagnostic) => {
     })),
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { reponseDonnee, ...reste } = { ...question };
+  const { reponseDonnee, poids, ...reste } = { ...question };
   return { autresReponses, reste };
 };
 
