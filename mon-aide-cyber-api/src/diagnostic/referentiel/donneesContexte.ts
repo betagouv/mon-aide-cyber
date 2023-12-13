@@ -5,6 +5,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-nature-organisation',
       libelle: 'Quelle est la nature de votre organisation ?',
+      poids: 0,
       reponsesPossibles: [
         {
           identifiant: 'contexte-nature-organisation-organisation-publique',
@@ -33,6 +34,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-secteur-activite',
       libelle: "Quel est son secteur d'activité ?",
+      poids: 0,
       reponsesPossibles: [
         {
           identifiant: 'contexte-secteur-activite-administration',
@@ -156,6 +158,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-region-siege-social',
       libelle: 'Dans quelle région votre siège social est-il basé ?',
+      poids: 0,
       reponsesPossibles: [
         {
           identifiant: 'contexte-region-siege-social-auvergne-rhone-alpes',
@@ -235,6 +238,7 @@ export const donneesContexte: QuestionsThematique = {
       identifiant: 'contexte-departement-tom-siege-social',
       libelle:
         'Dans quel département, ou DROM-COM, votre siège social est-il basé ?',
+      poids: 0,
       reponsesPossibles: [
         {
           identifiant: 'contexte-departement-tom-siege-social-ain',
@@ -787,6 +791,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-nombre-personnes-dans-organisation',
       libelle: 'Combien de personnes compte votre organisation ?',
+      poids: 0,
       reponsesPossibles: [
         {
           identifiant:
@@ -818,6 +823,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-nombre-postes-travail-dans-organisation',
       libelle: 'Combien de postes de travail compte votre organisation ?',
+      poids: 0,
       reponsesPossibles: [
         {
           identifiant:
@@ -850,6 +856,7 @@ export const donneesContexte: QuestionsThematique = {
       identifiant: 'contexte-activites-recherche-et-developpement',
       libelle:
         'Votre organisation a-t-elle des activités de R&D, de conception de services innovants, de dépôts de brevets ?',
+      poids: 0,
       reponsesPossibles: [
         {
           identifiant: 'contexte-activites-recherche-et-developpement-nsp',
@@ -872,6 +879,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-opere-systemes-information-industriels',
       libelle: 'Votre organisation opère-t-elle des systèmes industriels ?',
+      poids: 0,
       reponsesPossibles: [
         {
           identifiant: 'contexte-opere-systemes-information-industriels-nsp',
@@ -894,6 +902,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-cyber-attaque-subie',
       libelle: 'Avez-vous déjà subi une cyberattaque ?',
+      poids: 0,
       reponsesPossibles: [
         {
           identifiant: 'contexte-cyber-attaque-subie-nsp',
@@ -913,6 +922,7 @@ export const donneesContexte: QuestionsThematique = {
             {
               identifiant: 'contexte-cyber-attaque-subie-oui-tiroir-type',
               libelle: 'Si oui, de quel type ?',
+              poids: 0,
               reponsesPossibles: [
                 {
                   identifiant:
@@ -967,6 +977,7 @@ export const donneesContexte: QuestionsThematique = {
               identifiant: 'contexte-cyber-attaque-subie-tiroir-plainte',
               libelle:
                 'Si "Oui": avez-vous déposé plainte ou réalisé un signalement auprès d\'un service judiciaire ?',
+              poids: 0,
               reponsesPossibles: [
                 {
                   identifiant:
