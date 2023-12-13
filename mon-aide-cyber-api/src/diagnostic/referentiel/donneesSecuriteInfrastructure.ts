@@ -6,6 +6,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
       identifiant: 'securite-infrastructure-pare-feu-deploye',
       libelle:
         'Votre connexion à Internet est-elle protégée par un pare-feu physique ?',
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant: 'securite-infrastructure-pare-feu-deploye-nsp',
@@ -16,7 +17,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant: 'securite-infrastructure-pare-feu-deploye-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 1 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant: 'securite-infrastructure-pare-feu-deploye',
@@ -35,6 +36,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees',
               libelle:
                 'Si "Oui" : Est-ce que seuls les flux strictement nécessaires entre votre système d\'information et Internet (ou autres réseaux externes) sont autorisés ?',
+              poids: 2,
               reponsesPossibles: [
                 {
                   identifiant:
@@ -47,7 +49,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-non',
                   libelle: 'Non',
                   resultat: {
-                    indice: { valeur: 0, poids: 2 },
+                    indice: { valeur: 0 },
                     recommandations: [
                       {
                         identifiant:
@@ -62,7 +64,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                   identifiant:
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-oui',
                   libelle: 'Oui',
-                  resultat: { indice: { valeur: 3, poids: 2 } },
+                  resultat: { indice: { valeur: 3 } },
                   ordre: 2,
                 },
               ],
@@ -73,6 +75,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes',
               libelle:
                 'Si "Oui" : stockez-vous les journaux des flux entrants, sortants et bloqués générés par votre pare-feu ?',
+              poids: 2,
               reponsesPossibles: [
                 {
                   identifiant:
@@ -85,7 +88,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-non',
                   libelle: 'Non',
                   resultat: {
-                    indice: { valeur: 0, poids: 2 },
+                    indice: { valeur: 0 },
                     recommandations: [
                       {
                         identifiant:
@@ -101,7 +104,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-oui-logs-stockes',
                   libelle: 'Oui, nous stockons quelques journaux du pare-feu.',
                   resultat: {
-                    indice: { valeur: 1, poids: 2 },
+                    indice: { valeur: 1 },
                     recommandations: [
                       {
                         identifiant:
@@ -117,7 +120,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-oui-logs-stockes-conserves-6-mois',
                   libelle:
                     "Oui, nous stockons les journaux du pare-feu avec une durée de conservation d'au moins 6 mois.",
-                  resultat: { indice: { valeur: 3, poids: 2 } },
+                  resultat: { indice: { valeur: 3 } },
                   ordre: 2,
                 },
               ],
@@ -133,6 +136,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
       identifiant: 'securite-infrastructure-si-industriel-pare-feu-deploye',
       libelle:
         "Si l'entité dispose de systèmes industriels : des mesures de cloisonnement spécifiques des systèmes industriels ont-elles été mise en œuvre ?",
+      poids: 2,
       reponsesPossibles: [
         {
           identifiant:
@@ -151,7 +155,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-si-industriel-pare-feu-deploye-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 2 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant:
@@ -167,7 +171,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-si-industriel-pare-feu-deploye-oui-flux-necessaires-bloques',
           libelle: 'Oui, tous les flux et ports non nécessaires sont bloqués.',
           resultat: {
-            indice: { valeur: 1.5, poids: 2 },
+            indice: { valeur: 1.5 },
             recommandations: [
               {
                 identifiant:
@@ -183,7 +187,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-si-industriel-pare-feu-deploye-oui-segmentation-stricte',
           libelle:
             "Oui, une segmentation réseau stricte a été mise en œuvre pour isoler l'environnement industriel de l'environnement bureautique (hors besoin métier justifié).",
-          resultat: { indice: { valeur: 3, poids: 2 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
       ],
@@ -194,6 +198,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees',
       libelle:
         'Les mises à jour fonctionnelles et de sécurité des équipements de sécurité sont-elles déployées ?',
+      poids: 3,
       reponsesPossibles: [
         {
           identifiant:
@@ -206,7 +211,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 3 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant:
@@ -222,7 +227,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-des-que-possible',
           libelle:
             'Toutes les mises à jour logicielles sont déployées dès que celles-ci sont disponibles et fonctionnelles.',
-          resultat: { indice: { valeur: 3, poids: 3 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
       ],
@@ -233,6 +238,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees',
       libelle:
         "Les mises à jour fonctionnelles et de sécurité des systèmes d'exploitation des serveurs, services et logiciels d'administration sont-elles déployées ?",
+      poids: 3,
       reponsesPossibles: [
         {
           identifiant:
@@ -245,7 +251,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 3 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant:
@@ -262,7 +268,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           libelle:
             'Des mises à jour logicielles sont déployées à intervalle régulier.',
           resultat: {
-            indice: { valeur: 2, poids: 3 },
+            indice: { valeur: 2 },
             recommandations: [
               {
                 identifiant:
@@ -278,7 +284,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-des-que-possible',
           libelle:
             'Toutes les mises à jour logicielles sont déployées dès que celles-ci sont disponibles et fonctionnelles.',
-          resultat: { indice: { valeur: 3, poids: 3 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
       ],
@@ -289,6 +295,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         'securite-infrastructure-outils-securisation-systeme-messagerie',
       libelle:
         'Des mesures et outils spécifiques sont-ils mis en œuvre pour sécuriser le système de messagerie ?',
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant:
@@ -307,7 +314,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-outils-securisation-systeme-messagerie-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 1 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant:
@@ -324,7 +331,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           libelle:
             "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre.",
           resultat: {
-            indice: { valeur: 2, poids: 1 },
+            indice: { valeur: 2 },
             recommandations: [
               {
                 identifiant:
@@ -340,7 +347,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-outils-securisation-systeme-messagerie-webmail',
           libelle:
             "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre et aucun portail webmail n'est activé.",
-          resultat: { indice: { valeur: 3, poids: 1 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
       ],
@@ -349,6 +356,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
     {
       identifiant: 'securite-infrastructure-acces-wifi-securises',
       libelle: 'Les points d’accès wifi sont-ils sécurisés ?',
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant: 'securite-infrastructure-acces-wifi-securises-na',
@@ -364,7 +372,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant: 'securite-infrastructure-acces-wifi-securises-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 1 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant: 'securite-infrastructure-acces-wifi-securises',
@@ -379,7 +387,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste',
           libelle: 'Oui, le chiffrement de la connexion wifi est robuste.',
           resultat: {
-            indice: { valeur: 2, poids: 1 },
+            indice: { valeur: 2 },
             recommandations: [
               {
                 identifiant: 'securite-infrastructure-acces-wifi-securises',
@@ -394,7 +402,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste-acces-visiteur-restreint',
           libelle:
             "Oui, le chiffrement de la connexion wifi est robuste et les visiteurs n'ont pas accès au réseau interne.",
-          resultat: { indice: { valeur: 3, poids: 1 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
       ],
@@ -404,6 +412,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
       identifiant: 'securite-infrastructure-espace-stockage-serveurs',
       libelle:
         "L'accès à la salle ou à l'espace dédié au stockage des serveurs d'administration, baies informatiques et des équipements réseau est-il protégé par une porte sécurisée ?",
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant: 'securite-infrastructure-espace-stockage-serveurs-na',
@@ -419,7 +428,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant: 'securite-infrastructure-espace-stockage-serveurs-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 1 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant: 'securite-infrastructure-espace-stockage-serveurs',
@@ -434,7 +443,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef',
           libelle: "Oui, l'accès est sécurisé par une porte fermée à clef.",
           resultat: {
-            indice: { valeur: 1.5, poids: 1 },
+            indice: { valeur: 1.5 },
             recommandations: [
               {
                 identifiant: 'securite-infrastructure-espace-stockage-serveurs',
@@ -449,7 +458,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
             'securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef-videosurveillance',
           libelle:
             "Oui, l'accès est sécurisé par une porte fermée à clef et par un dispositif de vidéosurveillance.",
-          resultat: { indice: { valeur: 3, poids: 1 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
       ],
