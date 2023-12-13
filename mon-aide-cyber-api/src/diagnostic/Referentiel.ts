@@ -26,7 +26,7 @@ type Question = {
   libelle: string;
   type: TypeQuestion;
   reponsesPossibles: ReponsePossible[];
-  poids?: Poids;
+  poids: Poids;
 };
 
 type QuestionChoixUnique = Question & {

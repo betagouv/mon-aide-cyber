@@ -205,7 +205,7 @@ describe('Le service de diagnostic', () => {
           identifiant: questionAttendue.identifiant,
           libelle: questionAttendue.libelle,
           type: questionAttendue.type,
-          poids: questionAttendue.poids!,
+          poids: questionAttendue.poids,
           reponsesPossibles: questionAttendue.reponsesPossibles,
           reponseDonnee: { reponseUnique: null, reponsesMultiples: [] },
         },

@@ -1,20 +1,21 @@
-import { Constructeur } from "./constructeur";
-import { unReferentiel } from "./constructeurReferentiel";
+import { Constructeur } from './constructeur';
+import { unReferentiel } from './constructeurReferentiel';
 import {
   Diagnostic,
   initialiseDiagnostic,
   QuestionDiagnostic,
   ReponseDonnee,
   ReponsesMultiples,
-} from "../../src/diagnostic/Diagnostic";
+} from '../../src/diagnostic/Diagnostic';
 import {
   Referentiel,
   ReponsePossible,
   TypeQuestion,
-} from "../../src/diagnostic/Referentiel";
-import { TableauDeRecommandations } from "../../src/diagnostic/TableauDeRecommandations";
-import { unTableauDeRecommandations } from "./constructeurTableauDeRecommandations";
-import { fakerFR } from "@faker-js/faker";
+} from '../../src/diagnostic/Referentiel';
+import { TableauDeRecommandations } from '../../src/diagnostic/TableauDeRecommandations';
+import { unTableauDeRecommandations } from './constructeurTableauDeRecommandations';
+import { fakerFR } from '@faker-js/faker';
+import { Poids } from '../../src/diagnostic/Indice';
 
 class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   private referentiel: Referentiel = unReferentiel().construis();
@@ -37,7 +38,7 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     reponses.forEach((rep) => {
       Object.entries(rep).forEach(([question, valeur]) => {
         const constructeurReponseDonnee = uneReponseDonnee();
-        if (typeof valeur === "string") {
+        if (typeof valeur === 'string') {
           constructeurReponseDonnee.ayantPourReponse(valeur);
         } else {
           constructeurReponseDonnee.avecDesReponsesMultiples([
@@ -120,7 +121,8 @@ class ConstructeurQuestionDiagnostic
     reponseUnique: null,
     reponsesMultiples: [],
   };
-  private type: TypeQuestion = "choixMultiple";
+  private type: TypeQuestion = 'choixMultiple';
+  private poids: Poids = 1;
 
   avecLesReponsesPossibles(
     reponsePossibles: ReponsePossible[],
@@ -155,6 +157,7 @@ class ConstructeurQuestionDiagnostic
       reponseDonnee: this.reponseDonnee,
       reponsesPossibles: this.reponsesPossibles,
       type: this.type,
+      poids: this.poids,
     };
   }
 }

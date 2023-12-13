@@ -69,14 +69,15 @@ const questionTiroirATranscrire = (
             questionTiroirATranscrire,
           );
         return {
-          ...question,
           type: question.type,
           identifiant: questionTiroirATranscrire.identifiant,
           reponsesPossibles,
+          libelle: question.libelle,
         } as RepresentationQuestion;
       }
+      const { poids, ...questionSansPoids } = { ...question };
       return {
-        ...question,
+        ...questionSansPoids,
       } as RepresentationQuestion;
     }) || []
   );
