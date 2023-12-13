@@ -6,6 +6,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
       identifiant: 'securite-poste-maj-fonctionnelles-et-securite-deployees',
       libelle:
         'Les mises à jour fonctionnelles et de sécurité des logiciels utilisés sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?',
+      poids: 3,
       reponsesPossibles: [
         {
           identifiant:
@@ -24,7 +25,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
             'securite-poste-maj-fonctionnelles-et-securite-deployees-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 3 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant:
@@ -41,7 +42,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           libelle:
             'Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.',
           resultat: {
-            indice: { valeur: 2, poids: 3 },
+            indice: { valeur: 2 },
             recommandations: [
               {
                 identifiant:
@@ -57,7 +58,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
             'securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles',
           libelle:
             "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires.",
-          resultat: { indice: { valeur: 3, poids: 3 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
       ],
@@ -68,6 +69,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
       libelle:
         "Si l'entité dispose d'un SI industriel : Les mises à jour fonctionnelles et de sécurité sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?",
+      poids: 2,
       reponsesPossibles: [
         {
           identifiant:
@@ -86,7 +88,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
             'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 2 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant:
@@ -103,7 +105,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           libelle:
             'Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.',
           resultat: {
-            indice: { valeur: 2, poids: 2 },
+            indice: { valeur: 2 },
             recommandations: [
               {
                 identifiant:
@@ -119,7 +121,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
             'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles',
           libelle:
             "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires.",
-          resultat: { indice: { valeur: 3, poids: 2 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
       ],
@@ -129,6 +131,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
       identifiant: 'securite-poste-antivirus-deploye',
       libelle:
         'Un antivirus à jour est-il déployé sur chaque poste de travail ?',
+      poids: 3,
       reponsesPossibles: [
         {
           identifiant: 'securite-poste-antivirus-deploye-nsp',
@@ -140,7 +143,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant: 'securite-poste-antivirus-deploye-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 3 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant: 'securite-poste-antivirus-deploye',
@@ -155,7 +158,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
             'securite-poste-antivirus-deploye-oui-alertes-pas-toujours-traitees',
           libelle: 'Oui, mais ses alertes ne sont pas toujours traitées',
           resultat: {
-            indice: { valeur: 2, poids: 3 },
+            indice: { valeur: 2 },
             recommandations: [
               {
                 identifiant: 'securite-poste-antivirus-deploye',
@@ -169,7 +172,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-antivirus-deploye-oui-alertes-toujours-traitees',
           libelle: 'Oui et ses alertes sont systématiquement traitées.',
-          resultat: { indice: { valeur: 3, poids: 3 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
       ],
@@ -179,6 +182,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
       identifiant: 'securite-poste-si-industriel-antivirus-deploye',
       libelle:
         "Si l'entité dispose d'un SI industriel : Un antivirus à jour est-il déployé sur chaque poste de travail du SI industriel ?",
+      poids: 2,
       reponsesPossibles: [
         {
           identifiant: 'securite-poste-si-industriel-antivirus-deploye-na',
@@ -194,7 +198,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant: 'securite-poste-si-industriel-antivirus-deploye-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 2 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant: 'securite-poste-si-industriel-antivirus-deploye',
@@ -209,7 +213,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
             'securite-poste-si-industriel-antivirus-deploye-oui-alertes-pas-toujours-traitees',
           libelle: 'Oui, mais ses alertes ne sont pas toujours traitées',
           resultat: {
-            indice: { valeur: 2, poids: 2 },
+            indice: { valeur: 2 },
             recommandations: [
               {
                 identifiant: 'securite-poste-si-industriel-antivirus-deploye',
@@ -223,7 +227,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-si-industriel-antivirus-deploye-oui-alertes-toujours-traitees',
           libelle: 'Oui et ses alertes sont systématiquement traitées.',
-          resultat: { indice: { valeur: 3, poids: 2 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
       ],
@@ -232,6 +236,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     {
       identifiant: 'securite-poste-pare-feu-local-active',
       libelle: 'Un pare-feu local est-il activé sur les postes de travail ?',
+      poids: 2,
       reponsesPossibles: [
         {
           identifiant: 'securite-poste-pare-feu-local-active-nsp',
@@ -242,7 +247,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant: 'securite-poste-pare-feu-local-active-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 2 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant: 'securite-poste-pare-feu-local-active',
@@ -255,7 +260,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant: 'securite-poste-pare-feu-local-active-oui',
           libelle: 'Oui',
-          resultat: { indice: { valeur: 3, poids: 2 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 2,
         },
       ],
@@ -265,6 +270,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
       identifiant: 'securite-poste-outils-complementaires-securisation',
       libelle:
         'Un outil complémentaire à un antivirus de type EDR a-t-il été mis en place ?',
+      poids: 2,
       reponsesPossibles: [
         {
           identifiant: 'securite-poste-outils-complementaires-securisation-nsp',
@@ -275,7 +281,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant: 'securite-poste-outils-complementaires-securisation-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 2 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant:
@@ -291,7 +297,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
             'securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr',
           libelle:
             'Oui, un outil complémentaire à un antivirus de type EDR a été mis en place.',
-          resultat: { indice: { valeur: 3, poids: 2 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 2,
         },
       ],
@@ -301,6 +307,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
       identifiant: 'securite-poste-r-et-d-disques-chiffres',
       libelle:
         "Si entité à risque d'espionnage, les disques durs des matériels nomades sont-ils chiffrés ?",
+      poids: 2,
       reponsesPossibles: [
         {
           identifiant: 'securite-poste-r-et-d-disques-chiffres-na',
@@ -316,7 +323,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant: 'securite-poste-r-et-d-disques-chiffres-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 2 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant: 'securite-poste-r-et-d-disques-chiffres',
@@ -329,7 +336,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant: 'securite-poste-r-et-d-disques-chiffres-oui',
           libelle: 'Oui',
-          resultat: { indice: { valeur: 3, poids: 2 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
       ],
