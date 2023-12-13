@@ -19,7 +19,7 @@ export const donneesReaction: QuestionsThematique = {
             'reaction-surveillance-veille-vulnerabilites-potentielles-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 2 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant:
@@ -35,7 +35,7 @@ export const donneesReaction: QuestionsThematique = {
             'reaction-surveillance-veille-vulnerabilites-potentielles-veille-ponctuelle',
           libelle: "Réalisation d'une veille ponctuelle sur Internet.",
           resultat: {
-            indice: { valeur: 1.5, poids: 2 },
+            indice: { valeur: 1.5 },
             recommandations: [
               {
                 identifiant:
@@ -50,7 +50,7 @@ export const donneesReaction: QuestionsThematique = {
           identifiant:
             'reaction-surveillance-veille-vulnerabilites-potentielles-veille-reguliere',
           libelle: "Réalisation d'une veille régulière et exhaustive.",
-          resultat: { indice: { valeur: 3, poids: 2 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
       ],
@@ -70,7 +70,7 @@ export const donneesReaction: QuestionsThematique = {
           identifiant: 'reaction-sauvegardes-donnees-realisees-non',
           libelle: 'Non',
           resultat: {
-            indice: { valeur: 0, poids: 3 },
+            indice: { valeur: 0 },
             recommandations: [
               {
                 identifiant: 'reaction-sauvegardes-donnees-realisees',
@@ -119,7 +119,7 @@ export const donneesReaction: QuestionsThematique = {
                     'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-non',
                   libelle: 'Non',
                   resultat: {
-                    indice: { valeur: 0, poids: 3 },
+                    indice: { valeur: 0 },
                     recommandations: [
                       {
                         identifiant:
@@ -135,7 +135,7 @@ export const donneesReaction: QuestionsThematique = {
                     'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-oui',
                   libelle: 'Oui',
                   resultat: {
-                    indice: { valeur: 3, poids: 3 },
+                    indice: { valeur: 3 },
                     recommandations: [
                       {
                         identifiant:
@@ -173,7 +173,7 @@ export const donneesReaction: QuestionsThematique = {
                     'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-non',
                   libelle: 'Non',
                   resultat: {
-                    indice: { valeur: 0, poids: 3 },
+                    indice: { valeur: 0 },
                     recommandations: [
                       {
                         identifiant:
@@ -188,7 +188,7 @@ export const donneesReaction: QuestionsThematique = {
                   identifiant:
                     'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-oui',
                   libelle: 'Oui',
-                  resultat: { indice: { valeur: 3, poids: 3 } },
+                  resultat: { indice: { valeur: 3 } },
                   ordre: 3,
                 },
               ],
@@ -196,13 +196,13 @@ export const donneesReaction: QuestionsThematique = {
             },
           ],
           resultat: {
+            indice: { valeur: 1 },
             recommandations: [
               {
                 identifiant: 'reaction-sauvegardes-donnees-realisees',
                 niveau: 1,
               },
             ],
-            indice: { valeur: 1, poids: 3 },
           },
           ordre: 2,
         },
@@ -236,7 +236,7 @@ export const donneesReaction: QuestionsThematique = {
                     'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-non',
                   libelle: 'Non',
                   resultat: {
-                    indice: { valeur: 0, poids: 3 },
+                    indice: { valeur: 0 },
                     recommandations: [
                       {
                         identifiant:
@@ -252,7 +252,7 @@ export const donneesReaction: QuestionsThematique = {
                     'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-oui',
                   libelle: 'Oui',
                   resultat: {
-                    indice: { valeur: 3, poids: 3 },
+                    indice: { valeur: 3 },
                     recommandations: [
                       {
                         identifiant:
@@ -290,7 +290,7 @@ export const donneesReaction: QuestionsThematique = {
                     'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-non',
                   libelle: 'Non',
                   resultat: {
-                    indice: { valeur: 0, poids: 3 },
+                    indice: { valeur: 0 },
                     recommandations: [
                       {
                         identifiant:
@@ -305,14 +305,14 @@ export const donneesReaction: QuestionsThematique = {
                   identifiant:
                     'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-oui',
                   libelle: 'Oui',
-                  resultat: { indice: { valeur: 3, poids: 3 } },
+                  resultat: { indice: { valeur: 3 } },
                   ordre: 3,
                 },
               ],
               type: 'choixUnique',
             },
           ],
-          resultat: { indice: { valeur: 3, poids: 3 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
       ],
@@ -340,7 +340,7 @@ export const donneesReaction: QuestionsThematique = {
                 niveau: 1,
               },
             ],
-            indice: { valeur: 0, poids: 3 },
+            indice: { valeur: 0 },
           },
         },
         {
@@ -354,7 +354,7 @@ export const donneesReaction: QuestionsThematique = {
                 niveau: 2,
               },
             ],
-            indice: { valeur: 1.5, poids: 3 },
+            indice: { valeur: 1.5 },
           },
           ordre: 2,
         },
@@ -363,7 +363,7 @@ export const donneesReaction: QuestionsThematique = {
             'reaction-dispositif-gestion-crise-adapte-defini-oui-organisation-gestion-crise-definie',
           libelle:
             "Oui, une organisation de gestion de crise d'origine cyber a été définie",
-          resultat: { indice: { valeur: 3, poids: 3 } },
+          resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
       ],
