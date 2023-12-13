@@ -200,11 +200,12 @@ describe('Le service de diagnostic', () => {
       expect(diagnosticRetourne.identifiant).not.toBeUndefined();
       expect(
         diagnosticRetourne.referentiel['contexte'].questions,
-      ).toStrictEqual([
+      ).toStrictEqual<QuestionDiagnostic[]>([
         {
           identifiant: questionAttendue.identifiant,
           libelle: questionAttendue.libelle,
           type: questionAttendue.type,
+          poids: questionAttendue.poids!,
           reponsesPossibles: questionAttendue.reponsesPossibles,
           reponseDonnee: { reponseUnique: null, reponsesMultiples: [] },
         },

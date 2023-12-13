@@ -68,6 +68,7 @@ class ConstructeurQuestion
         ordre: 0,
       },
     ],
+    poids: 1,
   };
 
   aChoixUnique(
