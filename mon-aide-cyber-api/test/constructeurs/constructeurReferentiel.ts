@@ -12,7 +12,7 @@ import {
 import { fakerFR as faker } from '@faker-js/faker';
 import { Constructeur } from './constructeur';
 import { aseptise } from '../utilitaires/aseptise';
-import { Indice, Valeur } from '../../src/diagnostic/Indice';
+import { Indice, Poids, Valeur } from '../../src/diagnostic/Indice';
 import { Association } from './types';
 import { uneAssociation } from './constructeurAssociation';
 
@@ -70,6 +70,12 @@ class ConstructeurQuestion
     ],
     poids: 1,
   };
+
+  avecPoids(poids: Poids): ConstructeurQuestion {
+    this.question.poids = poids;
+
+    return this;
+  }
 
   aChoixUnique(
     libelleQuestion: string,
@@ -175,6 +181,7 @@ class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
   private libelle: string = faker.word.words();
   private reponsesPossibles: Omit<ReponsePossible, 'questions'>[] = [];
   private type: TypeQuestion = 'choixUnique';
+  private poids: Poids = 1;
 
   aChoixMultiple = (libelle: string): ConstructeurQuestionATiroir => {
     this.libelle = libelle;
@@ -202,12 +209,19 @@ class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
     return this;
   };
 
+  avecPoids(poids: Poids): ConstructeurQuestionATiroir {
+    this.poids = poids;
+
+    return this;
+  }
+
   construis(): QuestionATiroir {
     return {
       identifiant: this.identifiant,
       libelle: this.libelle,
       reponsesPossibles: this.reponsesPossibles,
       type: this.type,
+      poids: this.poids,
     };
   }
 }

@@ -1,6 +1,8 @@
 import { ValeursDesIndicesAuDiagnostic } from './MoteurIndice';
 import { Indicateurs } from './Diagnostic';
-import { Indice, Poids, Valeur } from './Indice';
+import { Poids, Valeur } from './Indice';
+
+type Indice = { identifiant: string; indice: Valeur; poids: Poids };
 
 const estUnNombre = (valeur: Poids | Valeur): valeur is number =>
   (!!valeur || valeur === 0) && typeof valeur === 'number';
@@ -10,11 +12,11 @@ export class MoteurDesIndicateurs {
     valeurs: ValeursDesIndicesAuDiagnostic,
   ): Indicateurs {
     return Object.entries(valeurs).reduce(
-      (indicateurs, [thematique, valeurs]) => {
+      (indicateurs, [thematique, indices]) => {
         indicateurs[thematique] = {
           moyennePonderee:
-            this.calculeLaSommeDesProduitsDesValeurs(valeurs) /
-            this.calculeLaSommeDesPoids(valeurs),
+            this.calculeLaSommeDesProduitsDesIndices(indices) /
+            this.calculeLaSommeDesPoids(indices),
         };
         return indicateurs;
       },
@@ -22,35 +24,25 @@ export class MoteurDesIndicateurs {
     );
   }
 
-  private static calculeLaSommeDesPoids(
-    valeurs: { identifiant: string; indice: Indice }[],
-  ) {
-    return valeurs.reduce((sommeDesPoids, poidsCourant) => {
-      const poids = poidsCourant.indice.poids;
+  private static calculeLaSommeDesPoids(indices: Indice[]) {
+    return indices.reduce((sommeDesPoids, indiceCourant) => {
+      const poids = indiceCourant.poids;
       if (estUnNombre(poids)) {
         return sommeDesPoids + poids;
       }
 
-      if (estUnNombre(poidsCourant.indice.valeur)) {
-        return sommeDesPoids + 1;
-      }
       return sommeDesPoids;
     }, 0);
   }
 
-  private static calculeLaSommeDesProduitsDesValeurs(
-    valeurs: { identifiant: string; indice: Indice }[],
-  ) {
-    return valeurs.reduce((sommeDesProduits, valeurCourante) => {
-      const valeurTheorique = valeurCourante.indice.valeur;
-      const poids = valeurCourante.indice.poids;
-      if (estUnNombre(valeurTheorique) && estUnNombre(poids)) {
-        return sommeDesProduits + valeurTheorique * poids;
+  private static calculeLaSommeDesProduitsDesIndices(indices: Indice[]) {
+    return indices.reduce((sommeDesProduits, indiceCourant) => {
+      const indice = indiceCourant.indice;
+      const poids = indiceCourant.poids;
+      if (estUnNombre(indice) && estUnNombre(poids)) {
+        return sommeDesProduits + indice * poids;
       }
 
-      if (estUnNombre(valeurTheorique)) {
-        return sommeDesProduits + valeurTheorique;
-      }
       return sommeDesProduits;
     }, 0);
   }

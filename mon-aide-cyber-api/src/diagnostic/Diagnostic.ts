@@ -85,7 +85,7 @@ const initialiseDiagnostic = (
                 reponseUnique: null,
                 reponsesMultiples: [],
               },
-            }) as QuestionDiagnostic,
+            } as QuestionDiagnostic),
         ),
       },
     };
@@ -144,7 +144,7 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
           pourquoi: recommandation.niveau.pourquoi,
           comment: recommandation.niveau.comment,
           priorisation: recommandation.priorisation,
-          valeurObtenue: valeurObtenue?.valeur,
+          valeurObtenue: valeurObtenue,
         } as RecommandationPriorisee;
       })
       .filter(

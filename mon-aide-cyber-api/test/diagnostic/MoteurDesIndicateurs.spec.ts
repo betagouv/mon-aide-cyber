@@ -35,17 +35,4 @@ describe('Moteur des indicateurs', () => {
       thematique: { moyennePonderee: 1.5625 },
     });
   });
-
-  it("génère les indicateurs y compris lorsque l'indice est à 0", () => {
-    const valeurs = desValeursDesReponsesAuDiagnostic()
-      .pourLaThematique('thematique')
-      .ajoute(uneValeur().sansPoids().de(0).construis())
-      .construis();
-
-    const indicateurs = MoteurDesIndicateurs.genereLesIndicateurs(valeurs);
-
-    expect(indicateurs).toStrictEqual<Indicateurs>({
-      thematique: { moyennePonderee: 0 },
-    });
-  });
 });
