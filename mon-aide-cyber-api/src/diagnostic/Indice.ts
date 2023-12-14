@@ -9,5 +9,4 @@ export const laValeurEstDefinie = (
 
 export type Indice = {
   valeur: Valeur;
-  poids?: Poids;
 };
