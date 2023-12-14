@@ -88,7 +88,7 @@ const initialiseDiagnostic = (
                 reponseUnique: null,
                 reponsesMultiples: [],
               },
-            } as QuestionDiagnostic),
+            }) as QuestionDiagnostic,
         ),
       },
     };
@@ -134,7 +134,7 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
     recommandations: RecommandationDiagnostic[],
     valeursDesIndices: ValeursDesIndicesAuDiagnostic,
   ): RecommandationPriorisee[] => {
-    const recommandationPriorisees1 = recommandations
+    return recommandations
       .map((recommandation) => {
         const valeurObtenue = Object.values(valeursDesIndices)
           .flatMap((valeurReponse) => valeurReponse)
@@ -163,7 +163,6 @@ const genereLesRecommandations = (diagnostic: Diagnostic) => {
             ? -1
             : 1) || 0,
       );
-    return recommandationPriorisees1;
   };
   const recommandationPriorisees = prioriseLesRecommandations(
     recommandations,
