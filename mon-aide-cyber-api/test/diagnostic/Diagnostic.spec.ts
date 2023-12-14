@@ -16,7 +16,7 @@ import {
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
 import {
-  genereLesRecommandations,
+  genereLaRestitution,
   Indicateurs,
   RecommandationPriorisee,
 } from '../../src/diagnostic/Diagnostic';
@@ -62,7 +62,7 @@ describe('Diagnostic', () => {
             .avecUnTableauDeRecommandations(tableauDeRecommandations)
             .construis();
 
-          genereLesRecommandations(diagnostic);
+          genereLaRestitution(diagnostic);
 
           expect(
             diagnostic.restitution?.recommandations
@@ -149,7 +149,7 @@ describe('Diagnostic', () => {
             )
             .construis();
 
-          genereLesRecommandations(diagnostic);
+          genereLaRestitution(diagnostic);
 
           expect(
             diagnostic.restitution?.recommandations
@@ -193,7 +193,7 @@ describe('Diagnostic', () => {
           .avecUnTableauDeRecommandations(tableauDeRecommandations)
           .construis();
 
-        genereLesRecommandations(diagnostic);
+        genereLaRestitution(diagnostic);
 
         expect(
           diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
@@ -309,7 +309,7 @@ describe('Diagnostic', () => {
             .avecUnTableauDeRecommandations(tableauDeRecommandations)
             .construis();
 
-          genereLesRecommandations(diagnostic);
+          genereLaRestitution(diagnostic);
 
           expect(
             diagnostic.restitution?.recommandations
@@ -435,7 +435,7 @@ describe('Diagnostic', () => {
             .avecUnTableauDeRecommandations(tableauDeRecommandations)
             .construis();
 
-          genereLesRecommandations(diagnostic);
+          genereLaRestitution(diagnostic);
 
           expect(
             diagnostic.restitution?.recommandations
@@ -448,7 +448,7 @@ describe('Diagnostic', () => {
       });
     });
 
-    describe('calcul les indicateurs', () => {
+    describe('calcule les indicateurs', () => {
       const questionsThematique1 = uneListeDeQuestions()
         .dontLesLabelsSont(['q1', 'q2'])
         .avecLesReponsesPossiblesSuivantesAssociees([
@@ -512,7 +512,7 @@ describe('Diagnostic', () => {
           .avecUnTableauDeRecommandations(tableauDeRecommandations)
           .construis();
 
-        genereLesRecommandations(diagnostic);
+        genereLaRestitution(diagnostic);
 
         expect(diagnostic.restitution?.indicateurs).toStrictEqual<Indicateurs>({
           thematique1: { moyennePonderee: 2 },
@@ -541,7 +541,7 @@ describe('Diagnostic', () => {
           .avecUnTableauDeRecommandations(tableauDeRecommandations)
           .construis();
 
-        genereLesRecommandations(diagnostic);
+        genereLaRestitution(diagnostic);
         expect(diagnostic.restitution?.indicateurs).toStrictEqual<Indicateurs>({
           thematique1: { moyennePonderee: 2 },
         });
@@ -575,7 +575,7 @@ describe('Diagnostic', () => {
           .avecUnTableauDeRecommandations(tableauDeRecommandations)
           .construis();
 
-        genereLesRecommandations(diagnostic);
+        genereLaRestitution(diagnostic);
         expect(diagnostic.restitution?.indicateurs).toStrictEqual<Indicateurs>({
           thematique1: { moyennePonderee: 2 },
         });

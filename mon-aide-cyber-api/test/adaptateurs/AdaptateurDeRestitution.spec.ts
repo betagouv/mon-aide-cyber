@@ -1,7 +1,7 @@
 import { describe, it } from 'vitest';
 import { AdaptateurDeRestitution } from '../../src/adaptateurs/AdaptateurDeRestitution';
 import {
-  genereLesRecommandations,
+  genereLaRestitution,
   Indicateurs,
   RecommandationPriorisee,
 } from '../../src/diagnostic/Diagnostic';
@@ -147,7 +147,7 @@ describe('Adaptateur de Restitution', () => {
       .avecUnTableauDeRecommandations(tableauDeRecommandations)
       .construis();
 
-    genereLesRecommandations(diagnostic);
+    genereLaRestitution(diagnostic);
 
     expect(
       JSON.parse(
@@ -224,7 +224,7 @@ describe('Adaptateur de Restitution', () => {
       .avecUnTableauDeRecommandations(tableauDeRecommandations)
       .construis();
 
-    genereLesRecommandations(diagnostic);
+    genereLaRestitution(diagnostic);
 
     const buffer = await adaptateurRestitution.genereRestitution(diagnostic);
 
