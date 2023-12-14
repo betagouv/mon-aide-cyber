@@ -116,7 +116,7 @@ const ajouteLaReponseAuDiagnostic = (
   }
 };
 
-const genereLesRecommandations = (diagnostic: Diagnostic) => {
+const genereLaRestitution = (diagnostic: Diagnostic) => {
   const valeursDesIndices =
     MoteurIndice.genereLesIndicesDesReponses(diagnostic);
   const indicateurs =
@@ -185,6 +185,6 @@ export {
   ReponseDonnee,
   ReponsesMultiples,
   ajouteLaReponseAuDiagnostic,
-  genereLesRecommandations,
+  genereLaRestitution,
   initialiseDiagnostic,
 };

@@ -1,7 +1,7 @@
 import {
   ajouteLaReponseAuDiagnostic,
   Diagnostic,
-  genereLesRecommandations,
+  genereLaRestitution,
   initialiseDiagnostic,
 } from './Diagnostic';
 import * as crypto from 'crypto';
@@ -99,7 +99,7 @@ export class ServiceDiagnostic {
       .diagnostic()
       .lis(id)
       .then((diagnostic) => {
-        genereLesRecommandations(diagnostic);
+        genereLaRestitution(diagnostic);
         return diagnostic;
       })
       .then(async (diagnostic) => {
