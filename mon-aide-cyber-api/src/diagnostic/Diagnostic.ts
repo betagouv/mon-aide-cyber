@@ -16,10 +16,12 @@ import { MoteurDesIndicateurs } from './MoteurDesIndicateurs';
 export type Thematique = string;
 
 type ReponsesMultiples = { identifiant: string; reponses: Set<string> };
+
 type ReponseDonnee = {
   reponsesMultiples: ReponsesMultiples[];
   reponseUnique: string | null;
 };
+
 type QuestionDiagnostic = Question & {
   reponseDonnee: ReponseDonnee;
 };
@@ -65,6 +67,7 @@ type Diagnostic = {
   referentiel: ReferentielDiagnostic;
   tableauDesRecommandations: TableauDeRecommandations;
 };
+
 type EntrepotDiagnostic = Entrepot<Diagnostic>;
 
 const initialiseDiagnostic = (
