@@ -156,6 +156,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-utilisateurs-administrateurs-poste',
       libelle: 'Les utilisateurs sont-ils administrateurs de leur poste ?',
+      poids: 3,
       reponsesPossibles: [
         {
           identifiant: 'acces-utilisateurs-administrateurs-poste-nsp',
