@@ -39,7 +39,6 @@ import {
 } from '../../domaine/diagnostic/Diagnostic.ts';
 import '../../assets/styles/_diagnostic.scss';
 import Button from '@codegouvfr/react-dsfr/Button';
-import { RiIconClassName } from '@codegouvfr/react-dsfr/src/fr/generatedFromCss/classNames.ts';
 import Select from '@codegouvfr/react-dsfr/Select';
 import { BoutonThematique } from './BoutonThematique.tsx';
 
@@ -356,8 +355,8 @@ export const ComposantDiagnostic = ({
     [envoie],
   );
 
-  const icones: RiIconClassName[] = [
-    'ri-building-line',
+  const icones: string[] = [
+    'mac-thematique-contexte',
     'ri-user-2-line',
     'ri-key-2-line',
     'ri-computer-line',
@@ -430,33 +429,25 @@ export const ComposantDiagnostic = ({
   const navigation = (
     <nav className="fr-sidemenu fr-sidemenu--sticky-full-height">
       <div className="fr-sidemenu__inner">
-        <button
-          className="fr-sidemenu__btn"
-          hidden
-          aria-controls="fr-sidemenu-wrapper"
-          aria-expanded="false"
-        >
-          Thématiques
-        </button>
         <div className="fr-collapse" id="fr-sidemenu-wrapper">
-          <ul className="fr-sidemenu__list">
+          <ul className="fr-sidemenu__list thematiques">
             {thematiques.map(([clef], index) => (
               <li
                 key={`li-${clef}`}
                 className={
                   'fr-sidemenu__item' +
                   (etatReferentiel.thematiqueAffichee === clef
-                    ? ' fr-sidemenu__item--active'
+                    ? ' mac-thematique--active'
                     : '')
                 }
               >
-                <Button
-                  iconId={icones[index]}
-                  priority={
-                    etatReferentiel.thematiqueAffichee === clef
-                      ? 'primary'
-                      : 'secondary'
-                  }
+                <button
+                  className={`fr-btn ${icones[index]}`}
+                  // priority={
+                  //   etatReferentiel.thematiqueAffichee === clef
+                  //     ? 'primary'
+                  //     : 'secondary'
+                  // }
                   onClick={() => affiche(clef)}
                   title=""
                 />
@@ -471,7 +462,7 @@ export const ComposantDiagnostic = ({
   return (
     <>
       <div className="fr-grid-row fr-grid-row--gutters">
-        <div className="fr-col-12 fr-col-md-1">{navigation}</div>
+        <div className="thematiques">{navigation}</div>
         <div className="fr-col-12 fr-col-md-8 fr-py-12v fr-col-offset-3--right">
           {boutonDesactive && spinner}
           {lienCopie}
