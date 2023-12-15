@@ -4,6 +4,7 @@ $couleurs-mac: (
   violet-moyen: #9c51d0,
   violet-leger: #e1cbf1,
   violet-clair: #f1e2fd,
+  violet-tres-clair: #f5f1f9,
   jaune-fonce: #fdc82e,
   jaune-moyen: #fad16c,
   blanc: white,
@@ -20,4 +21,8 @@ $toutes-couleurs: (
       --#{$categorie}-#{$nom}: #{$valeur};
     }
   }
+}
+
+.fond-clair-mac {
+  background-color: var(--couleurs-mac-violet-tres-clair);
 }
