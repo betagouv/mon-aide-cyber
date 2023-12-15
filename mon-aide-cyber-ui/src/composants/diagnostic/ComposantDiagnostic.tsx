@@ -357,12 +357,12 @@ export const ComposantDiagnostic = ({
 
   const icones: string[] = [
     'mac-thematique-contexte',
-    'ri-user-2-line',
-    'ri-key-2-line',
-    'ri-computer-line',
-    'ri-server-line',
-    'ri-team-line',
-    'ri-loop-right-line',
+    'mac-thematique-gouvernance',
+    'mac-thematique-securite-acces',
+    'mac-thematique-securite-postes',
+    'mac-thematique-securite-infrastructures',
+    'mac-thematique-sensibilisation',
+    'mac-thematique-reaction',
   ];
 
   const spinner = (
@@ -427,42 +427,32 @@ export const ComposantDiagnostic = ({
   }, [fermeAlerte]);
 
   const navigation = (
-    <nav className="fr-sidemenu fr-sidemenu--sticky-full-height">
-      <div className="fr-sidemenu__inner">
-        <div className="fr-collapse" id="fr-sidemenu-wrapper">
-          <ul className="fr-sidemenu__list thematiques">
-            {thematiques.map(([clef], index) => (
-              <li
-                key={`li-${clef}`}
-                className={
-                  'fr-sidemenu__item' +
-                  (etatReferentiel.thematiqueAffichee === clef
-                    ? ' mac-thematique--active'
-                    : '')
-                }
-              >
-                <button
-                  className={`fr-btn ${icones[index]}`}
-                  // priority={
-                  //   etatReferentiel.thematiqueAffichee === clef
-                  //     ? 'primary'
-                  //     : 'secondary'
-                  // }
-                  onClick={() => affiche(clef)}
-                  title=""
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+    <nav className="navigation-thematiqes">
+      <ul className="thematiques">
+        {thematiques.map(([clef], index) => (
+          <li
+            key={`li-${clef}`}
+            className={
+              etatReferentiel.thematiqueAffichee === clef
+                ? 'mac-thematique--active'
+                : ''
+            }
+          >
+            <button
+              className={`fr-btn ${icones[index]}`}
+              onClick={() => affiche(clef)}
+              title=""
+            />
+          </li>
+        ))}
+      </ul>
     </nav>
   );
 
   return (
     <>
       <div className="fr-grid-row fr-grid-row--gutters">
-        <div className="thematiques">{navigation}</div>
+        <div className="conteneur-navigation">{navigation}</div>
         <div className="fr-col-12 fr-col-md-8 fr-py-12v fr-col-offset-3--right">
           {boutonDesactive && spinner}
           {lienCopie}

@@ -12,32 +12,82 @@
   display: none;
 }
 
-.thematiques ul {
-  width: 64px;
-  height: 72px;
+.conteneur-navigation {
+  background-color: var(--couleurs-mac-violet-fonce);
 }
 
-.thematiques ul li {
-  &:active:enabled {
-    border-right: var(--couleurs-mac-jaune-fonce) 4px solid;
-  }
+.navigation-thematiqes {
+  position: sticky;
+  top: 7.29rem;
+  left: 0;
+  height: 100%;
+  max-height: 100vh;
 }
+
+.navigation-thematiqes ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 64px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: var(--couleurs-mac-violet-fonce);
+}
+
+.navigation-thematiqes li {
+  width: 100%;
+  height: 72px;
+  padding-left: 0.5rem;
+}
+
+.navigation-thematiqes button {
+  margin-top: 1rem;
+  margin-left: 0.6rem;
+  width: 40px !important;
+}
+
 .mac-thematique--active {
+  background-color: var(--couleurs-mac-blanc) !important;
   border-right: var(--couleurs-mac-jaune-fonce) 4px solid;
 }
-.mac-thematique-contexte {
-  //mask-image: $icone-contexte;
-  //-webkit-mask-image: $icone-contexte;
-  //-webkit-mask-repeat: no-repeat;
-  //mask-repeat: no-repeat;
-  margin-left: 0.5rem;
-  background: $icone-contexte no-repeat;
 
-  &:active:enabled {
-    background-color: var(--couleurs-mac-noir) !important;
-  }
+.mac-thematique--active button {
+  background-color: var(--couleurs-mac-noir) !important;
 }
 
-nav .thematiques {
-  max-width: 64px;
+@mixin icone-thematique($icone) {
+  mask-image: $icone;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: $icone;
+  -webkit-mask-repeat: no-repeat;
+  background-color: var(--couleurs-mac-blanc) !important;
+}
+
+.mac-thematique-contexte {
+  @include icone-thematique($icone-contexte);
+}
+
+.mac-thematique-gouvernance {
+  @include icone-thematique($icone-gouvernance);
+}
+
+.mac-thematique-securite-acces {
+  @include icone-thematique($icone-securite-acces);
+}
+
+.mac-thematique-securite-postes {
+  @include icone-thematique($icone-securite-postes);
+}
+
+.mac-thematique-securite-infrastructures {
+  @include icone-thematique($icone-securite-infrastructures);
+}
+
+.mac-thematique-sensibilisation {
+  @include icone-thematique($icone-sensibilisation);
+}
+
+.mac-thematique-reaction {
+  @include icone-thematique($icone-reaction);
 }
