@@ -1,3 +1,5 @@
+@import 'icones';
+
 .contenu {
   margin-left: 10px;
 }
@@ -8,4 +10,34 @@
 
 .invisible {
   display: none;
+}
+
+.thematiques ul {
+  width: 64px;
+  height: 72px;
+}
+
+.thematiques ul li {
+  &:active:enabled {
+    border-right: var(--couleurs-mac-jaune-fonce) 4px solid;
+  }
+}
+.mac-thematique--active {
+  border-right: var(--couleurs-mac-jaune-fonce) 4px solid;
+}
+.mac-thematique-contexte {
+  //mask-image: $icone-contexte;
+  //-webkit-mask-image: $icone-contexte;
+  //-webkit-mask-repeat: no-repeat;
+  //mask-repeat: no-repeat;
+  margin-left: 0.5rem;
+  background: $icone-contexte no-repeat;
+
+  &:active:enabled {
+    background-color: var(--couleurs-mac-noir) !important;
+  }
+}
+
+nav .thematiques {
+  max-width: 64px;
 }
