@@ -10,12 +10,6 @@ export const donneesSecuritePoste: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
-            'securite-poste-maj-fonctionnelles-et-securite-deployees-na',
-          libelle: 'Non applicable',
-          ordre: 0,
-        },
-        {
-          identifiant:
             'securite-poste-maj-fonctionnelles-et-securite-deployees-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
@@ -71,12 +65,6 @@ export const donneesSecuritePoste: QuestionsThematique = {
         "Si l'entité dispose d'un SI industriel : Les mises à jour fonctionnelles et de sécurité sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?",
       poids: 2,
       reponsesPossibles: [
-        {
-          identifiant:
-            'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-na',
-          libelle: 'Non applicable',
-          ordre: 0,
-        },
         {
           identifiant:
             'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-nsp',
@@ -184,11 +172,6 @@ export const donneesSecuritePoste: QuestionsThematique = {
         "Si l'entité dispose d'un SI industriel : Un antivirus à jour est-il déployé sur chaque poste de travail du SI industriel ?",
       poids: 2,
       reponsesPossibles: [
-        {
-          identifiant: 'securite-poste-si-industriel-antivirus-deploye-na',
-          libelle: 'Non applicable',
-          ordre: 0,
-        },
         {
           identifiant: 'securite-poste-si-industriel-antivirus-deploye-nsp',
           libelle: 'Je ne sais pas',
