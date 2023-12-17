@@ -47,16 +47,4 @@ export const mesuresSensibilisation = {
     },
     priorisation: 23,
   },
-  'sensibilisation-declaration-incidents-encouragee': {
-    niveau1: {
-      titre:
-        'Encourager régulièrement (2 fois par an à minima) la déclaration d’incident auprès de vos agents en rappelant les évènements "signaux faibles" devant être signalés ainsi que le contact à alerter.' +
-        'Formaliser et diffuser une fiche réflexe dédiée aux utilisateurs.',
-      pourquoi:
-        '../../mesures/sensibilisation/sensibilisation-declaration-incidents-encouragee-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/sensibilisation/sensibilisation-declaration-incidents-encouragee-niveau1-comment.pug',
-    },
-    priorisation: 16,
-  },
 };
