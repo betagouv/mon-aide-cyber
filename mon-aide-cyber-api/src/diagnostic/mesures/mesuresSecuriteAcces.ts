@@ -108,19 +108,19 @@ export const mesuresSecuriteAcces = {
   'acces-mesures-securite-robustesse-mdp': {
     niveau1: {
       titre:
+      'Fixer des contraintes de longueur et de complexité des mots de passe exigeant à minima 12 caractères (idéalement 15) incluant minuscules, majuscules, chiffres et caractères spéciaux. Si nécessaire poursuivre les actions de communication et de promotion des coffres fort de mot de passe.',
+    pourquoi:
+      '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-pourquoi.pug',
+    comment:
+      '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-comment.pug',
+    },
+    niveau2: {
+      titre:
         'Mettre à disposition des utilisateurs une coffre fort de mots de passe et les former régulièrement à la création de mots de passe robustes.',
       pourquoi:
         '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau1-pourquoi.pug',
       comment:
         '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau1-comment.pug',
-    },
-    niveau2: {
-      titre:
-        'Fixer des contraintes de longueur et de complexité des mots de passe exigeant à minima 12 caractères (idéalement 15) incluant minuscules, majuscules, chiffres et caractères spéciaux. Si nécessaire poursuivre les actions de communication et de promotion des coffres fort de mot de passe.',
-      pourquoi:
-        '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-comment.pug',
     },
     priorisation: 20,
   },

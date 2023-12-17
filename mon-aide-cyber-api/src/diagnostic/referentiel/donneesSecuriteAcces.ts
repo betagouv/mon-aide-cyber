@@ -343,11 +343,11 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant:
-            'acces-mesures-securite-robustesse-mdp-utilisateurs-sensibilises',
+            'acces-mesures-securite-robustesse-mdp-contraintes-par-defaut',
           libelle:
-            'Les utilisateurs sont sensibilisés à la gestion sécurisée de leurs mots de passe.',
+            "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte.",
           resultat: {
-            indice: { valeur: 1 },
+            indice: { valeur: 2 },
             mesures: [
               {
                 identifiant: 'acces-mesures-securite-robustesse-mdp',
@@ -359,10 +359,12 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant:
-            'acces-mesures-securite-robustesse-mdp-contraintes-par-defaut',
+            'acces-mesures-securite-robustesse-mdp-utilisateurs-sensibilises',
           libelle:
-            "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte.",
-          resultat: { indice: { valeur: 3 } },
+            'Les utilisateurs sont formés à la création et à la gestion sécurisée de mots de passe robustes.',
+          resultat: {
+            indice: { valeur: 3 },
+          },
           ordre: 4,
         },
       ],
