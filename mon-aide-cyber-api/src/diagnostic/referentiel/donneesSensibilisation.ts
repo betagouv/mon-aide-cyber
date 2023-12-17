@@ -106,7 +106,7 @@ export const donneesSensibilisation: QuestionsThematique = {
       identifiant:
         'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
       libelle:
-        "Les collaborateurs sont-ils soumis à des obligations en matière d'usages sécurisés des moyens informatiques ?",
+        "Le respect d’une charte d’utilisation des moyens informatiques et des outils numériques est-il exigé au personnel ?",
       poids: 2,
       reponsesPossibles: [
         {
@@ -117,7 +117,7 @@ export const donneesSensibilisation: QuestionsThematique = {
         },
         {
           identifiant:
-            'sensibilisation-collaborateurs-soumis-obligations-usages-securises-non',
+            'sensibilisation-collaborateurs-soumis-sensibilisation-declaration-incidents-encourageeobligations-usages-securises-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
@@ -152,56 +152,6 @@ export const donneesSensibilisation: QuestionsThematique = {
             'sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-signee',
           libelle:
             'Oui, une charte est signée par chaque collaborateur et elle est annexée au règlement intérieur.',
-          resultat: { indice: { valeur: 3 } },
-          ordre: 3,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
-      identifiant: 'sensibilisation-declaration-incidents-encouragee',
-      libelle:
-        "La déclaration d'incidents de sécurité par les salariés est-elle encouragée et facilitée ?",
-      poids: 1.5,
-      reponsesPossibles: [
-        {
-          identifiant: 'sensibilisation-declaration-incidents-encouragee-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant: 'sensibilisation-declaration-incidents-encouragee-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant: 'sensibilisation-declaration-incidents-encouragee',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'sensibilisation-declaration-incidents-encouragee-non-habitude-utilisateurs-contactent-informaticien',
-          libelle:
-            "Non, mais dans la majorité des cas, les utilisateurs ont pris l'habitude de contacter un informaticien en cas de doute ou d'incident.",
-          resultat: {
-            indice: { valeur: 1 },
-            mesures: [
-              {
-                identifiant: 'sensibilisation-declaration-incidents-encouragee',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant: 'sensibilisation-declaration-incidents-encouragee-oui',
-          libelle: 'Oui',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
