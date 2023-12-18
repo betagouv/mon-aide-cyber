@@ -17,8 +17,11 @@ const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
 const adaptateurTranscripteurDonnees = adaptateurTranscripteur();
 const serveurMAC = serveur.creeServeur({
   adaptateurDeRestitution: new AdaptateurDeRestitutionPDF(
-    adaptateurTranscripteurDonnees.transcripteur().traductionThematiques ||
-      new Map(),
+    new Map(
+      Object.entries(
+        adaptateurTranscripteurDonnees.transcripteur().thematiques,
+      ).map(([clef, thematique]) => [clef, thematique.libelle]),
+    ) || new Map(),
   ),
   adaptateurReferentiel: new AdaptateurReferentielMAC(),
   adaptateurTranscripteurDonnees: adaptateurTranscripteurDonnees,

@@ -6,15 +6,6 @@ export const adaptateurTranscripteur = () =>
   new (class implements AdaptateurTranscripteur {
     transcripteur(): Transcripteur {
       return {
-        traductionThematiques: new Map([
-          ['contexte', 'Contexte'],
-          ['gouvernance', 'Gouvernance'],
-          ['SecuriteAcces', 'Sécurité des accès'],
-          ['securiteposte', 'Sécurité des postes'],
-          ['securiteinfrastructure', 'Sécurité des infrastructures'],
-          ['sensibilisation', 'Sensibilisation des utilisateurs'],
-          ['reaction', 'Réaction à une cyber attaque'],
-        ]),
         ordreThematiques: [
           'contexte',
           'gouvernance',
@@ -26,6 +17,7 @@ export const adaptateurTranscripteur = () =>
         ],
         thematiques: {
           contexte: {
+            libelle: 'Contexte',
             questions: [
               // {
               //   identifiant: "contexte-nature-organisation",
@@ -85,6 +77,18 @@ export const adaptateurTranscripteur = () =>
               // },
             ],
           },
+          gouvernance: { libelle: 'Gouvernance', questions: [] },
+          SecuriteAcces: { libelle: 'Sécurité des accès', questions: [] },
+          securiteposte: { libelle: 'Sécurité des postes', questions: [] },
+          securiteinfrastructure: {
+            libelle: 'Sécurité des infrastructures',
+            questions: [],
+          },
+          sensibilisation: {
+            libelle: 'Sensibilisation des utilisateurs',
+            questions: [],
+          },
+          reaction: { libelle: 'Réaction à une cyber attaque', questions: [] },
         },
       };
     }

@@ -6,7 +6,10 @@ export class AdaptateurTranscripteurDeTest implements AdaptateurTranscripteur {
   transcripteur(): Transcripteur {
     return {
       thematiques: {
-        contexte: { questions: [{ identifiant: '', reponses: [] }] },
+        contexte: {
+          libelle: 'Contexte',
+          questions: [{ identifiant: '', reponses: [] }],
+        },
       },
     };
   }
