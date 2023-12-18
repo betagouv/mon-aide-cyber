@@ -119,3 +119,16 @@
 .mac-thematique-reaction {
   @include icone-thematique($icone-reaction);
 }
+
+.question > fieldset {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.introduction-thematique {
+  padding-top: 3rem;
+}
+
+.introduction-thematique h2 {
+  color: var(--couleurs-mac-violet-noir);
+}
