@@ -18,7 +18,7 @@ export const adaptateurTranscripteur = () =>
         thematiques: {
           contexte: {
             localisationIllustration:
-              '/images/diagnostic/illustration_contexte.svg',
+              '/images/diagnostic/contexte/illustration.svg',
             libelle: 'Contexte',
             questions: [
               {
@@ -35,37 +35,37 @@ export const adaptateurTranscripteur = () =>
           gouvernance: {
             libelle: 'Gouvernance',
             localisationIllustration:
-              '/images/diagnostic/illustration_gouvernance.svg',
+              '/images/diagnostic/gouvernance/illustration.svg',
             questions: [],
           },
           SecuriteAcces: {
             libelle: "Sécurité des accès au système d'information",
             localisationIllustration:
-              '/images/diagnostic/illustration_securite_acces.svg',
+              '/images/diagnostic/securite-acces/illustration.svg',
             questions: [],
           },
           securiteposte: {
             libelle: 'Sécurité des postes',
             localisationIllustration:
-              '/images/diagnostic/illustration_securite_postes.svg',
+              '/images/diagnostic/securite-postes/illustration.svg',
             questions: [],
           },
           securiteinfrastructure: {
             libelle: 'Sécurité des infrastructures',
             localisationIllustration:
-              '/images/diagnostic/illustration_securite_infrastructures.svg',
+              '/images/diagnostic/securite-infrastructures/illustration.svg',
             questions: [],
           },
           sensibilisation: {
             libelle: 'Sensibilisation des utilisateurs',
             localisationIllustration:
-              '/images/diagnostic/illustration_sensibilisation.svg',
+              '/images/diagnostic/sensibilisation/illustration.svg',
             questions: [],
           },
           reaction: {
             libelle: 'Réaction à une cyber attaque',
             localisationIllustration:
-              '/images/diagnostic/illustration_reaction.svg',
+              '/images/diagnostic/reaction/illustration.svg',
             questions: [],
           },
         },
