@@ -54,6 +54,7 @@ type RepresentationQuestionChoixUnique = RepresentationQuestion & {
 export type RepresentationThematique = {
   actions: ActionDiagnostic[];
   libelle: string;
+  localisationIllustration: string;
   questions: (
     | RepresentationQuestionChoixUnique
     | RepresentationQuestionChoixMultiple
@@ -81,6 +82,7 @@ export type QuestionATranscrire = {
 };
 type Thematiques = {
   [thematique: string]: {
+    localisationIllustration: string;
     questions: QuestionATranscrire[];
     libelle: string;
   };

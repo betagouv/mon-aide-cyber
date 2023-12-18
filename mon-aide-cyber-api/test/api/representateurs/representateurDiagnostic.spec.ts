@@ -150,6 +150,7 @@ describe('Le représentateur de diagnostic', () => {
           thematiques: {
             contexte: {
               libelle: 'Contexte',
+              localisationIllustration: '/chemin/illustration/contexte',
               questions: [
                 { identifiant: 'question-liste', type: 'liste', reponses: [] },
               ],
@@ -478,6 +479,7 @@ describe('Le représentateur de diagnostic', () => {
           },
         ],
         libelle: nomThematique,
+        localisationIllustration: `/chemin/illustration/${nomThematique}`,
       });
     };
 

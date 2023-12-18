@@ -176,6 +176,8 @@ export function representeLeDiagnosticPourLeClient(
       return {
         ...accumulateur,
         [clef]: {
+          localisationIllustration:
+            transcripteur.thematiques[clef].localisationIllustration,
           questions: questionsThematique.questions.map((question) => {
             const questionATranscrire = trouveQuestionATranscrire(
               {

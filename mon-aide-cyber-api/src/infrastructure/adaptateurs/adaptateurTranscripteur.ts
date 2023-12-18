@@ -17,6 +17,8 @@ export const adaptateurTranscripteur = () =>
         ],
         thematiques: {
           contexte: {
+            localisationIllustration:
+              '/images/diagnostic/illustration_contexte.svg',
             libelle: 'Contexte',
             questions: [
               // {
@@ -77,18 +79,25 @@ export const adaptateurTranscripteur = () =>
               // },
             ],
           },
-          gouvernance: { libelle: 'Gouvernance', questions: [] },
-          SecuriteAcces: { libelle: 'Sécurité des accès', questions: [] },
-          securiteposte: { libelle: 'Sécurité des postes', questions: [] },
+          gouvernance: { libelle: 'Gouvernance',  localisationIllustration:
+              '/images/diagnostic/illustration_gouvernance.svg', questions: [] },
+          SecuriteAcces: { libelle: 'Sécurité des accès', localisationIllustration:
+              '/images/diagnostic/illustration_securite_acces.svg', questions: [] },
+          securiteposte: { libelle: 'Sécurité des postes', localisationIllustration:
+              '/images/diagnostic/illustration_securite_postes.svg', questions: [] },
           securiteinfrastructure: {
             libelle: 'Sécurité des infrastructures',
+            localisationIllustration:
+              '/images/diagnostic/illustration_securite_infrastructures.svg',
             questions: [],
           },
           sensibilisation: {
             libelle: 'Sensibilisation des utilisateurs',
+            localisationIllustration:
+              '/images/diagnostic/illustration_sensibilisation.svg',
             questions: [],
           },
-          reaction: { libelle: 'Réaction à une cyber attaque', questions: [] },
+          reaction: { libelle: 'Réaction à une cyber attaque',  localisationIllustration: '/images/diagnostic/illustration_reaction.svg', questions: [] },
         },
       };
     }
