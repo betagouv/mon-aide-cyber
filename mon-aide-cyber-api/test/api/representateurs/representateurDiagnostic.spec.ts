@@ -12,14 +12,17 @@ import {
 } from '../../constructeurs/constructeurDiagnostic';
 import { representeLeDiagnosticPourLeClient } from '../../../src/api/representateurs/representateurDiagnostic';
 import {
-  fabriqueTranscripteurThematiquesOrdonnees,
   fabriqueTranscripteurVide,
   transcripteurAvecSaisiesLibres,
   transcripteurMultipleTiroir,
   transcripteurQuestionTiroir,
+  unTranscripteur,
 } from './transcripteursDeTest';
 import { Question, ReponsePossible } from '../../../src/diagnostic/Referentiel';
-import { RepresentationDiagnostic } from '../../../src/api/representateurs/types';
+import {
+  RepresentationDiagnostic,
+  RepresentationThematique,
+} from '../../../src/api/representateurs/types';
 import { Diagnostic } from '../../../src/diagnostic/Diagnostic';
 
 describe('Le représentateur de diagnostic', () => {
@@ -443,38 +446,39 @@ describe('Le représentateur de diagnostic', () => {
       reponsePossible: ReponsePossible,
       diagnostic: Diagnostic,
     ) => {
-      expect(representationDiagnostic.referentiel[nomThematique]).toStrictEqual(
-        {
-          questions: [
-            {
-              identifiant: question.identifiant,
-              libelle: question.libelle,
-              reponseDonnee: {
-                valeur: null,
-                reponses: [],
-              },
-              reponsesPossibles: [
-                {
-                  identifiant: reponsePossible.identifiant,
-                  libelle: reponsePossible.libelle,
-                  ordre: reponsePossible.ordre,
-                },
-              ],
-              type: 'choixUnique',
+      expect(
+        representationDiagnostic.referentiel[nomThematique],
+      ).toStrictEqual<RepresentationThematique>({
+        questions: [
+          {
+            identifiant: question.identifiant,
+            libelle: question.libelle,
+            reponseDonnee: {
+              valeur: null,
+              reponses: [],
             },
-          ],
-          actions: [
-            {
-              action: 'repondre',
-              chemin: nomThematique,
-              ressource: {
-                url: `/api/diagnostic/${diagnostic.identifiant}`,
-                methode: 'PATCH',
+            reponsesPossibles: [
+              {
+                identifiant: reponsePossible.identifiant,
+                libelle: reponsePossible.libelle,
+                ordre: reponsePossible.ordre,
               },
+            ],
+            type: 'choixUnique',
+          },
+        ],
+        actions: [
+          {
+            action: 'repondre',
+            chemin: nomThematique,
+            ressource: {
+              url: `/api/diagnostic/${diagnostic.identifiant}`,
+              methode: 'PATCH',
             },
-          ],
-        },
-      );
+          },
+        ],
+        libelle: nomThematique,
+      });
     };
 
     it('présente les différentes thématiques', () => {
@@ -491,7 +495,9 @@ describe('Le représentateur de diagnostic', () => {
 
       const representationDiagnostic = representeLeDiagnosticPourLeClient(
         diagnostic,
-        fabriqueTranscripteurVide(),
+        unTranscripteur()
+          .avecLesThematiques(['theme 1', 'theme 2'])
+          .construis(),
       );
 
       const reponsePossibleQuestionTheme1 = questionTheme1.reponsesPossibles[0];
@@ -525,7 +531,10 @@ describe('Le représentateur de diagnostic', () => {
 
       const representationDiagnostic = representeLeDiagnosticPourLeClient(
         diagnostic,
-        fabriqueTranscripteurThematiquesOrdonnees(['c-1', 'a-2', 'b-3']),
+        unTranscripteur()
+          .avecLesThematiques(['a-2', 'b-3', 'c-1'])
+          .ordonneLesThematiques(['c-1', 'a-2', 'b-3'])
+          .construis(),
       );
 
       expect(Object.keys(representationDiagnostic.referentiel)).toStrictEqual([
@@ -569,7 +578,7 @@ describe('Le représentateur de diagnostic', () => {
 
       const representationDiagnostic = representeLeDiagnosticPourLeClient(
         diagnostic,
-        fabriqueTranscripteurVide(),
+        unTranscripteur().avecLesThematiques(['multiple']).construis(),
       );
 
       const reponse =

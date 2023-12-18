@@ -1,4 +1,5 @@
 import { Transcripteur } from '../../../src/api/representateurs/types';
+import { Constructeur } from '../../constructeurs/constructeur';
 
 const transcripteurAvecSaisiesLibres = {
   thematiques: {
@@ -81,11 +82,37 @@ const transcripteurMultipleTiroir = {
     },
   },
 } as Transcripteur;
+
+class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
+  private thematiques: { [clef: string]: { libelle: string; questions: [] } } =
+    {};
+  private thematiquesOrdonnees: string[] = [];
+  avecLesThematiques(thematiques: string[]): ConstructeurTranscripteur {
+    thematiques.forEach((thematique) => {
+      this.thematiques[thematique] = { libelle: thematique, questions: [] };
+    });
+    return this;
+  }
+
+  ordonneLesThematiques(
+    thematiquesOrdonnees: string[],
+  ): ConstructeurTranscripteur {
+    this.thematiquesOrdonnees = thematiquesOrdonnees;
+    return this;
+  }
+
+  construis(): Transcripteur {
+    return {
+      ordreThematiques: this.thematiquesOrdonnees,
+      thematiques: { ...this.thematiques },
+    };
+  }
+}
 const fabriqueTranscripteurVide = (): Transcripteur => {
   return {
     thematiques: {
       contexte: {
-        libelle: 'Context',
+        libelle: 'Contexte',
         questions: [],
       },
     },
@@ -98,10 +125,15 @@ const fabriqueTranscripteurThematiquesOrdonnees = (
   return { ordreThematiques: ordreThematiques, thematiques: {} };
 };
 
+const unTranscripteur = (): ConstructeurTranscripteur => {
+  return new ConstructeurTranscripteur();
+};
+
 export {
   fabriqueTranscripteurThematiquesOrdonnees,
   fabriqueTranscripteurVide,
   transcripteurAvecSaisiesLibres,
   transcripteurMultipleTiroir,
   transcripteurQuestionTiroir,
+  unTranscripteur,
 };
