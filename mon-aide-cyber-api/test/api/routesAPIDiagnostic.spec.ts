@@ -8,7 +8,10 @@ import {
 } from '../constructeurs/constructeurReferentiel';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
 import { executeRequete } from './executeurRequete';
-import { RepresentationDiagnostic } from '../../src/api/representateurs/types';
+import {
+  RepresentationDiagnostic,
+  RepresentationReferentiel,
+} from '../../src/api/representateurs/types';
 import { Express } from 'express';
 
 describe('le serveur MAC sur les routes /api/diagnostic', () => {
@@ -46,7 +49,9 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       const premiereReponsePossible = premiereQuestion.reponsesPossibles[0];
       const diagnosticRecu: RepresentationDiagnostic = await reponse.json();
       expect(diagnosticRecu.identifiant).toBe(diagnostic.identifiant);
-      expect(diagnosticRecu.referentiel).toStrictEqual({
+      expect(
+        diagnosticRecu.referentiel,
+      ).toStrictEqual<RepresentationReferentiel>({
         contexte: {
           actions: [
             {
@@ -58,6 +63,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
               },
             },
           ],
+          libelle: 'Contexte',
           questions: [
             {
               identifiant: premiereQuestion.identifiant,

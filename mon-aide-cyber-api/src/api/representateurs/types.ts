@@ -51,15 +51,16 @@ export type RepresentationQuestionChoixMultiple = RepresentationQuestion & {
 type RepresentationQuestionChoixUnique = RepresentationQuestion & {
   type?: Exclude<TypeDeSaisie, 'choixMultiple'> | undefined;
 };
-export type RepresentationContexte = {
+export type RepresentationThematique = {
   actions: ActionDiagnostic[];
+  libelle: string;
   questions: (
     | RepresentationQuestionChoixUnique
     | RepresentationQuestionChoixMultiple
   )[];
 };
-type RepresentationReferentiel = {
-  [clef: string]: RepresentationContexte;
+export type RepresentationReferentiel = {
+  [clef: string]: RepresentationThematique;
 };
 export type TypeDeSaisie =
   | 'choixMultiple'
@@ -89,4 +90,4 @@ export type Transcripteur = {
   ordreThematiques?: string[];
   thematiques: Thematiques;
 };
-export type Chemin = 'contexte';
+export type Chemin = string;

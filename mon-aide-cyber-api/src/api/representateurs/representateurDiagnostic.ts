@@ -5,7 +5,7 @@ import {
   Chemin,
   QuestionATranscrire,
   ReponseATranscrire,
-  RepresentationContexte,
+  RepresentationThematique,
   RepresentationDiagnostic,
   RepresentationQuestion,
   RepresentationReponsePossible,
@@ -179,7 +179,7 @@ export function representeLeDiagnosticPourLeClient(
           questions: questionsThematique.questions.map((question) => {
             const questionATranscrire = trouveQuestionATranscrire(
               {
-                chemin: 'contexte',
+                chemin: clef,
                 identifiantQuestion: question.identifiant,
               },
               transcripteur,
@@ -208,6 +208,7 @@ export function representeLeDiagnosticPourLeClient(
               },
             },
           ],
+          libelle: transcripteur.thematiques[clef].libelle,
         },
       };
     },
@@ -232,7 +233,7 @@ export function representeLeDiagnosticPourLeClient(
             [thematique]: {
               ...(Object.entries(referentiel).find(
                 ([clef]) => clef === thematique,
-              )?.[1] as RepresentationContexte),
+              )?.[1] as RepresentationThematique),
             },
           }),
           {},
