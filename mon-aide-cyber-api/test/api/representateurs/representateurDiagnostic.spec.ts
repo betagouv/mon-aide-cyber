@@ -146,6 +146,7 @@ describe('Le représentateur de diagnostic', () => {
         {
           thematiques: {
             contexte: {
+              libelle: 'Contexte',
               questions: [
                 { identifiant: 'question-liste', type: 'liste', reponses: [] },
               ],

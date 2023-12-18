@@ -81,11 +81,11 @@ export type QuestionATranscrire = {
 type Thematiques = {
   [thematique: string]: {
     questions: QuestionATranscrire[];
+    libelle: string;
   };
 };
 
 export type Transcripteur = {
-  traductionThematiques?: Map<string, string>;
   ordreThematiques?: string[];
   thematiques: Thematiques;
 };

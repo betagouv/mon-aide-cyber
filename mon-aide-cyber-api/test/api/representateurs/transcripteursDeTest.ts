@@ -3,6 +3,7 @@ import { Transcripteur } from '../../../src/api/representateurs/types';
 const transcripteurAvecSaisiesLibres = {
   thematiques: {
     contexte: {
+      libelle: 'Contexte',
       questions: [
         {
           identifiant: 'quelle-est-la-question',
@@ -25,6 +26,7 @@ const transcripteurAvecSaisiesLibres = {
 const transcripteurQuestionTiroir = {
   thematiques: {
     contexte: {
+      libelle: 'Contexte',
       questions: [
         {
           identifiant: 'question-avec-reponse-tiroir',
@@ -51,6 +53,7 @@ const transcripteurQuestionTiroir = {
 const transcripteurMultipleTiroir = {
   thematiques: {
     contexte: {
+      libelle: 'Contexte',
       questions: [
         {
           identifiant: 'premiere-question',
@@ -82,6 +85,7 @@ const fabriqueTranscripteurVide = (): Transcripteur => {
   return {
     thematiques: {
       contexte: {
+        libelle: 'Context',
         questions: [],
       },
     },
