@@ -497,10 +497,10 @@ export const ComposantDiagnostic = ({
               {boutonDesactive && spinner}
               {lienCopie}
               <div className="bandeau-thematique">
-                <div className="fr-container fr-pt-md-4w">
+                <div className="mac-container fr-pt-md-4w">
                   <div className="fr-grid-row">
-                    <div className="fr-col-7">
-                      <h2>{clef}</h2>
+                    <div className="fr-col-7 introduction-thematique">
+                      <h2>{thematique.libelle}</h2>
                     </div>
                     <div className="fr-col-5">
                       <img
@@ -534,12 +534,12 @@ export const ComposantDiagnostic = ({
                   </div>
                 </div>
               </div>
-              <div className="fr-col-12">
-                <form id={clef}>
-                  <section className="question fr-col-offset-1 fr-col-md-7 fr-col-7">
-                    <div>{elements}</div>
-                  </section>
-                </form>
+              <div className="mac-container fr-grid-row fr-grid-row--gutters">
+                <div className="fr-col-md-8 fr-col-8">
+                  <form id={clef}>
+                    <section className="question">{elements}</section>
+                  </form>
+                </div>
               </div>
               <div className="fr-col-offset-1">
                 <BoutonThematique
