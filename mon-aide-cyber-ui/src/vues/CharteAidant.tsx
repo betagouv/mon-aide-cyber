@@ -6,7 +6,7 @@ export const CharteAidant = () => {
       href="/fichiers/Charte_MonAideCyber.pdf"
     >
       Télécharger la charte de l&apos;aidant
-      <span className="fr-link__detail">PDF – 66.6 ko</span>
+      <span className="fr-link__detail">PDF – 85.7 ko</span>
     </a>
   );
   return (
