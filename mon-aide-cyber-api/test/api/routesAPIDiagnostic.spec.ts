@@ -53,6 +53,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         diagnosticRecu.referentiel,
       ).toStrictEqual<RepresentationReferentiel>({
         contexte: {
+          localisationIllustration: '/chemin/illustration/contexte',
           actions: [
             {
               action: 'repondre',

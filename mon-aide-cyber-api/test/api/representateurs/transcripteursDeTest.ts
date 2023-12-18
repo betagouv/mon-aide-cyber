@@ -5,6 +5,7 @@ const transcripteurAvecSaisiesLibres = {
   thematiques: {
     contexte: {
       libelle: 'Contexte',
+      localisationIllustration: '/chemin/illustration/contexte',
       questions: [
         {
           identifiant: 'quelle-est-la-question',
@@ -28,6 +29,7 @@ const transcripteurQuestionTiroir = {
   thematiques: {
     contexte: {
       libelle: 'Contexte',
+      localisationIllustration: '/chemin/illustration/contexte',
       questions: [
         {
           identifiant: 'question-avec-reponse-tiroir',
@@ -55,6 +57,7 @@ const transcripteurMultipleTiroir = {
   thematiques: {
     contexte: {
       libelle: 'Contexte',
+      localisationIllustration: '/chemin/illustration/contexte',
       questions: [
         {
           identifiant: 'premiere-question',
@@ -84,12 +87,21 @@ const transcripteurMultipleTiroir = {
 } as Transcripteur;
 
 class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
-  private thematiques: { [clef: string]: { libelle: string; questions: [] } } =
-    {};
+  private thematiques: {
+    [clef: string]: {
+      libelle: string;
+      localisationIllustration: string;
+      questions: [];
+    };
+  } = {};
   private thematiquesOrdonnees: string[] = [];
   avecLesThematiques(thematiques: string[]): ConstructeurTranscripteur {
     thematiques.forEach((thematique) => {
-      this.thematiques[thematique] = { libelle: thematique, questions: [] };
+      this.thematiques[thematique] = {
+        libelle: thematique,
+        localisationIllustration: `/chemin/illustration/${thematique}`,
+        questions: [],
+      };
     });
     return this;
   }
@@ -113,6 +125,7 @@ const fabriqueTranscripteurVide = (): Transcripteur => {
     thematiques: {
       contexte: {
         libelle: 'Contexte',
+        localisationIllustration: '/chemin/illustration/contexte',
         questions: [],
       },
     },

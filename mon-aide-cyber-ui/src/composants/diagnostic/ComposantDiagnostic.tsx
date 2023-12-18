@@ -497,9 +497,20 @@ export const ComposantDiagnostic = ({
               {boutonDesactive && spinner}
               {lienCopie}
               <div className="bandeau-thematique">
-                <div className="fr-pt-md-4w">
-                  <h2>{clef}</h2>
+                <div className="fr-container fr-pt-md-4w">
+                  <div className="fr-grid-row">
+                    <div className="fr-col-7">
+                      <h2>{clef}</h2>
+                    </div>
+                    <div className="fr-col-5">
+                      <img
+                        src={thematique.localisationIllustration}
+                        alt="illustration de la thématique"
+                      />
+                    </div>
+                  </div>
                 </div>
+
                 <div className="fr-col-offset-6 fr-col-offset-md-8 fr-grid-row">
                   <div>
                     <Button

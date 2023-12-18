@@ -8,6 +8,7 @@ export class AdaptateurTranscripteurDeTest implements AdaptateurTranscripteur {
       thematiques: {
         contexte: {
           libelle: 'Contexte',
+          localisationIllustration: '/chemin/illustration/contexte',
           questions: [{ identifiant: '', reponses: [] }],
         },
       },
