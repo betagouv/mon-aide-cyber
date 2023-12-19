@@ -72,7 +72,6 @@ export type Format = 'nombre' | 'texte';
 export type ReponseATranscrire = {
   identifiant: string;
   question?: QuestionATranscrire | undefined;
-  reponses?: ReponseATranscrire[];
   type?: { format: Format; type: TypeDeSaisie };
 };
 export type QuestionATranscrire = {
