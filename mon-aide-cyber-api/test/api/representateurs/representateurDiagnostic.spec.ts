@@ -150,6 +150,7 @@ describe('Le représentateur de diagnostic', () => {
           thematiques: {
             contexte: {
               libelle: 'Contexte',
+              localisationIconeNavigation: '/chemin/icone/contexte',
               localisationIllustration: '/chemin/illustration/contexte',
               questions: [
                 { identifiant: 'question-liste', type: 'liste', reponses: [] },
@@ -450,6 +451,19 @@ describe('Le représentateur de diagnostic', () => {
       expect(
         representationDiagnostic.referentiel[nomThematique],
       ).toStrictEqual<RepresentationThematique>({
+        actions: [
+          {
+            action: 'repondre',
+            chemin: nomThematique,
+            ressource: {
+              url: `/api/diagnostic/${diagnostic.identifiant}`,
+              methode: 'PATCH',
+            },
+          },
+        ],
+        libelle: nomThematique,
+        localisationIllustration: `/chemin/illustration/${nomThematique}`,
+        localisationIconeNavigation: `/chemin/icone/${nomThematique}`,
         questions: [
           {
             identifiant: question.identifiant,
@@ -468,18 +482,6 @@ describe('Le représentateur de diagnostic', () => {
             type: 'choixUnique',
           },
         ],
-        actions: [
-          {
-            action: 'repondre',
-            chemin: nomThematique,
-            ressource: {
-              url: `/api/diagnostic/${diagnostic.identifiant}`,
-              methode: 'PATCH',
-            },
-          },
-        ],
-        libelle: nomThematique,
-        localisationIllustration: `/chemin/illustration/${nomThematique}`,
       });
     };
 
