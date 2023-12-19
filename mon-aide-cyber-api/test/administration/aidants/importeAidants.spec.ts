@@ -203,4 +203,45 @@ describe('Importe des aidants', () => {
       ],
     });
   });
+
+  it('importe un aidant avec un email contenant des majuscules', async () => {
+    const entrepotAidant = new EntrepotAidantMemoire();
+    const dateSignatureCGU = new Date(Date.parse('2023-12-05T12:00:00+01:00'));
+    FournisseurHorlogeDeTest.initialise(dateSignatureCGU);
+
+    const resultat = await importeAidants(
+      entrepotAidant,
+      busEvenement,
+      ';Région;nom;charte;mail;\n' +
+        ';BFC;Jean Dupont;OK;jean.dUPonT@mail.com;',
+      () => 'un-mot-de-passe',
+    );
+
+    const aidant =
+      await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse(
+        'jean.dupont@mail.com',
+        'un-mot-de-passe',
+      );
+    expect(resultat).toStrictEqual<ResultatImportationAidants>({
+      aidantsImportes: [
+        {
+          charteSignee: true,
+          cguSignee: true,
+          email: aidant.identifiantConnexion,
+          motDePasse: 'un-mot-de-passe',
+          nomPrenom: aidant.nomPrenom,
+        },
+      ],
+      aidantsNonImportes: [],
+      aidantsExistants: [],
+    });
+    expect(aidant).toStrictEqual<Aidant>({
+      dateSignatureCharte: dateSignatureCGU,
+      dateSignatureCGU: dateSignatureCGU,
+      nomPrenom: 'Jean Dupont',
+      motDePasse: 'un-mot-de-passe',
+      identifiantConnexion: 'jean.dupont@mail.com',
+      identifiant: aidant.identifiant,
+    });
+  });
 });
