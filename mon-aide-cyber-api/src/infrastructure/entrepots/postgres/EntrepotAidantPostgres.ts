@@ -92,7 +92,24 @@ export class EntrepotAidantPostgres
       });
   }
 
-  rechercheParIdentifiantDeConnexion(__: string): Promise<Aidant> {
-    return Promise.reject('non implémenté');
+  rechercheParIdentifiantDeConnexion(
+    identifiantConnexion: string,
+  ): Promise<Aidant> {
+    return this.knex
+      .from(`${this.nomTable()}`)
+      .where({ type: 'AIDANT' })
+      .then((aidants: AidantDTO[]) =>
+        aidants.find(
+          (a) =>
+            this.chiffrement.dechiffre(a.donnees.identifiantConnexion) ===
+            identifiantConnexion,
+        ),
+      )
+      .then((ligne) => {
+        if (!ligne) {
+          return Promise.reject(new AggregatNonTrouve(this.typeAggregat()));
+        }
+        return this.deDTOAEntite(ligne);
+      });
   }
 }
