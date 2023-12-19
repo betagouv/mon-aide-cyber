@@ -29,8 +29,7 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      ';Région;nom;charte;mail;\n' +
-        ';BFC;Jean Dupont;OK;jean.dupont@mail.com;',
+      'Région;nom;charte;mail;\n' + 'BFC;Jean Dupont;OK;jean.dupont@mail.com;',
       () => 'un-mot-de-passe',
     );
 
@@ -70,9 +69,9 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      ';Région;nom;charte;mail;\n' +
-        ';BFC;Jean Dupont;OK;jean.dupont@mail.com;\n' +
-        ';BFC;Charles Martin;OK;charles.martin@mail.com;',
+      'Région;nom;charte;mail;\n' +
+        'BFC;Jean Dupont;OK;jean.dupont@mail.com;\n' +
+        'BFC;Charles Martin;OK;charles.martin@mail.com;',
       () => 'un-mot-de-passe',
     );
 
@@ -124,9 +123,9 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      ';Région;nom;charte;mail;\n' +
-        ';BFC;Jean Dupont;OK;jean.dupont@mail.com;\n' +
-        ';BFC;Charles Martin;A demander;charles.martin@mail.com;',
+      'Région;nom;charte;mail;\n' +
+        'BFC;Jean Dupont;OK;jean.dupont@mail.com;\n' +
+        'BFC;Charles Martin;A demander;charles.martin@mail.com;',
       () => 'un-mot-de-passe',
     );
 
@@ -170,9 +169,9 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      ';Région;nom;charte;mail;\n' +
-        ';BFC;Jean Dupont;OK;jean.dupont@mail.com;\n' +
-        ';BFC;Charles Martin;OK;charles.martin@mail.com;',
+      'Région;nom;charte;mail;\n' +
+        'BFC;Jean Dupont;OK;jean.dupont@mail.com;\n' +
+        'BFC;Charles Martin;OK;charles.martin@mail.com;',
       () => 'un-mot-de-passe',
     );
 
@@ -212,8 +211,7 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      ';Région;nom;charte;mail;\n' +
-        ';BFC;Jean Dupont;OK;jean.dUPonT@mail.com;',
+      'Région;nom;charte;mail;\n' + 'BFC;Jean Dupont;OK;jean.dUPonT@mail.com;',
       () => 'un-mot-de-passe',
     );
 

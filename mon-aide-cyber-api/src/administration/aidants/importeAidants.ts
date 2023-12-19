@@ -30,9 +30,9 @@ export const importeAidants = async (
     doitImporterAidant: boolean;
   } => {
     return {
-      doitImporterAidant: aidant[3] === 'OK',
-      nomPrenom: aidant[2],
-      identifiantConnexion: aidant[4],
+      doitImporterAidant: aidant[2] === 'OK',
+      nomPrenom: aidant[1],
+      identifiantConnexion: aidant[3],
     };
   };
 
