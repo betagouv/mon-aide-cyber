@@ -99,6 +99,7 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
               boutonFermer={
                 <button
                   className="fr-btn fr-btn--close"
+                  type="button"
                   aria-controls="modale"
                   title="Fermer"
                   onClick={() => fermeModale()}

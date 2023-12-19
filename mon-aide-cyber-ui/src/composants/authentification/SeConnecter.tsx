@@ -1,6 +1,5 @@
 import React, { FormEvent, useCallback, useReducer } from 'react';
 import { useAuthentification, useModale } from '../../fournisseurs/hooks.ts';
-import Button from '@codegouvfr/react-dsfr/Button';
 import { useNavigate } from 'react-router-dom';
 import {
   authentificationInvalidee,
@@ -91,20 +90,21 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
             </fieldset>
           </div>
           <div>
-            <Button
+            <button
+              type="button"
               key="annule-connexion-aidant"
-              className="bouton-mac bouton-mac-secondaire fr-mr-2w"
+              className="fr-btn bouton-mac bouton-mac-secondaire fr-mr-2w"
               onClick={surFermeture}
             >
               Annuler
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
               key="connexion-aidant"
-              className="bouton-mac bouton-mac-primaire"
+              className="fr-btn bouton-mac bouton-mac-primaire"
             >
               Se connecter
-            </Button>
+            </button>
           </div>
           <div className="fr-mt-2w">{etatAuthentification.champsErreur}</div>
         </section>
