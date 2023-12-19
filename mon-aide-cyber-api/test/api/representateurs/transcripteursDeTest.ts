@@ -5,6 +5,7 @@ const transcripteurAvecSaisiesLibres = {
   thematiques: {
     contexte: {
       libelle: 'Contexte',
+      localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
       questions: [
         {
@@ -29,6 +30,7 @@ const transcripteurQuestionTiroir = {
   thematiques: {
     contexte: {
       libelle: 'Contexte',
+      localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
       questions: [
         {
@@ -57,6 +59,7 @@ const transcripteurMultipleTiroir = {
   thematiques: {
     contexte: {
       libelle: 'Contexte',
+      localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
       questions: [
         {
@@ -90,6 +93,7 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
   private thematiques: {
     [clef: string]: {
       libelle: string;
+      localisationIconeNavigation: string;
       localisationIllustration: string;
       questions: [];
     };
@@ -99,6 +103,7 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
     thematiques.forEach((thematique) => {
       this.thematiques[thematique] = {
         libelle: thematique,
+        localisationIconeNavigation: `/chemin/icone/${thematique}`,
         localisationIllustration: `/chemin/illustration/${thematique}`,
         questions: [],
       };
@@ -125,6 +130,7 @@ const fabriqueTranscripteurVide = (): Transcripteur => {
     thematiques: {
       contexte: {
         libelle: 'Contexte',
+        localisationIconeNavigation: '/chemin/icone/contexte',
         localisationIllustration: '/chemin/illustration/contexte',
         questions: [],
       },

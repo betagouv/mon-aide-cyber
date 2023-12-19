@@ -5,10 +5,10 @@ import {
   Chemin,
   QuestionATranscrire,
   ReponseATranscrire,
-  RepresentationThematique,
   RepresentationDiagnostic,
   RepresentationQuestion,
   RepresentationReponsePossible,
+  RepresentationThematique,
   Transcripteur,
 } from './types';
 
@@ -176,6 +176,19 @@ export function representeLeDiagnosticPourLeClient(
       return {
         ...accumulateur,
         [clef]: {
+          actions: [
+            {
+              action: 'repondre',
+              chemin: clef,
+              ressource: {
+                url: `/api/diagnostic/${diagnostic.identifiant}`,
+                methode: 'PATCH',
+              },
+            },
+          ],
+          libelle: transcripteur.thematiques[clef].libelle,
+          localisationIconeNavigation:
+            transcripteur.thematiques[clef].localisationIconeNavigation,
           localisationIllustration:
             transcripteur.thematiques[clef].localisationIllustration,
           questions: questionsThematique.questions.map((question) => {
@@ -200,17 +213,6 @@ export function representeLeDiagnosticPourLeClient(
               type: questionATranscrire?.type || question.type,
             };
           }),
-          actions: [
-            {
-              action: 'repondre',
-              chemin: clef,
-              ressource: {
-                url: `/api/diagnostic/${diagnostic.identifiant}`,
-                methode: 'PATCH',
-              },
-            },
-          ],
-          libelle: transcripteur.thematiques[clef].libelle,
         },
       };
     },
