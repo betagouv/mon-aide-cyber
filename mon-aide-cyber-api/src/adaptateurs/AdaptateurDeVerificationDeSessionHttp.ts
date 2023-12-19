@@ -1,5 +1,5 @@
 import { GestionnaireDeJeton } from '../authentification/GestionnaireDeJeton';
-import { Request, Response } from 'express';
+import { Request, RequestHandler, Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 import {
   AdaptateurDeVerificationDeSession,
@@ -15,23 +15,34 @@ export class AdaptateurDeVerificationDeSessionHttp
 
   verifie(
     contexte: Contexte,
-    requete: Request,
-    reponse: Response,
-    suite: NextFunction,
-    cookies: MACCookies = fabriqueDeCookies(contexte, requete, reponse),
-  ): void {
-    try {
-      const sessionDecodee = JSON.parse(
-        Buffer.from(cookies.session, 'base64').toString(),
-      );
-      this.gestionnaireDeJeton.verifie(sessionDecodee.token);
-    } catch (e) {
-      throw ErreurMAC.cree(
-        contexte,
-        new ErreurAccesRefuse('Session invalide.'),
-      );
-    }
+    fabriqueLesCookies: (
+      contexte: Contexte,
+      requete: Request,
+      reponse: Response,
+    ) => MACCookies = (contexte, requete, reponse) =>
+      fabriqueDeCookies(contexte, requete, reponse),
+  ): RequestHandler {
+    return (requete: Request, reponse: Response, suite: NextFunction) => {
+      try {
+        const cookies: MACCookies = fabriqueLesCookies(
+          contexte,
+          requete,
+          reponse,
+        );
+        const sessionDecodee = JSON.parse(
+          Buffer.from(cookies.session, 'base64').toString(),
+        );
+        this.gestionnaireDeJeton.verifie(sessionDecodee.token);
+      } catch (e) {
+        throw ErreurMAC.cree(
+          contexte,
+          e instanceof ErreurMAC
+            ? e
+            : new ErreurAccesRefuse('Session invalide.'),
+        );
+      }
 
-    suite();
+      suite();
+    };
   }
 }

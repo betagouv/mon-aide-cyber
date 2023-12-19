@@ -27,13 +27,9 @@ export const routesAPIDiagnostics = (configuration: ConfigurationServeur) => {
 
   routes.get(
     '/',
-    (requete, reponse, suite) =>
-      configuration.adaptateurDeVerificationDeSession.verifie(
-        'Accède aux diagnostics',
-        requete,
-        reponse,
-        suite,
-      ),
+    configuration.adaptateurDeVerificationDeSession.verifie(
+      'Accède aux diagnostics',
+    ),
     (_requete: Request, reponse: Response, suite: NextFunction) => {
       configuration.entrepots
         .diagnostic()

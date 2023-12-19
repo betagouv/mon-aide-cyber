@@ -1,14 +1,8 @@
-import { Request, Response } from 'express';
-import { NextFunction } from 'express-serve-static-core';
+import { RequestHandler } from 'express';
 import { Contexte } from '../domaine/erreurMAC';
 
 export interface AdaptateurDeVerificationDeSession {
-  verifie(
-    contexte: Contexte,
-    requete: Request,
-    _reponse: Response,
-    suite: NextFunction,
-  ): void;
+  verifie(contexte: Contexte): RequestHandler;
 }
 
 export class ErreurAccesRefuse extends Error {

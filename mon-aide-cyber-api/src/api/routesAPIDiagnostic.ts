@@ -9,15 +9,11 @@ import bodyParser from 'body-parser';
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
+  const { adaptateurDeVerificationDeSession: session } = configuration;
+
   routes.post(
     '/',
-    (requete, reponse, suite) =>
-      configuration.adaptateurDeVerificationDeSession.verifie(
-        'Lance le diagnostic',
-        requete,
-        reponse,
-        suite,
-      ),
+    session.verifie('Lance le diagnostic'),
     (_requete: Request, reponse: Response, suite: NextFunction) => {
       new ServiceDiagnostic(
         configuration.adaptateurReferentiel,
@@ -40,13 +36,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
 
   routes.get(
     '/:id/termine',
-    (requete, reponse, suite) =>
-      configuration.adaptateurDeVerificationDeSession.verifie(
-        'Termine le diagnostic',
-        requete,
-        reponse,
-        suite,
-      ),
+    session.verifie('Termine le diagnostic'),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       const serviceDiagnostic = new ServiceDiagnostic(
@@ -70,13 +60,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
 
   routes.get(
     '/:id',
-    (requete, reponse, suite) =>
-      configuration.adaptateurDeVerificationDeSession.verifie(
-        'Accès diagnostic',
-        requete,
-        reponse,
-        suite,
-      ),
+    session.verifie('Accès diagnostic'),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       new ServiceDiagnostic(
@@ -99,13 +83,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
 
   routes.patch(
     '/:id',
-    (requete, reponse, suite) =>
-      configuration.adaptateurDeVerificationDeSession.verifie(
-        'Ajout réponse au diagnostic',
-        requete,
-        reponse,
-        suite,
-      ),
+    session.verifie('Ajout réponse au diagnostic'),
     bodyParser.json(),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
@@ -127,13 +105,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
 
   routes.get(
     '/:id/restitution',
-    (requete, reponse, suite) =>
-      configuration.adaptateurDeVerificationDeSession.verifie(
-        'Ajout réponse au diagnostic',
-        requete,
-        reponse,
-        suite,
-      ),
+    session.verifie('Ajout réponse au diagnostic'),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       const serviceDiagnostic = new ServiceDiagnostic(
