@@ -3,6 +3,7 @@ import { ActionReponseDiagnostic } from './Diagnostic.ts';
 export type Thematique = {
   actions: ActionReponseDiagnostic[];
   libelle: string;
+  localisationIconeNavigation: string;
   localisationIllustration: string;
   questions: Question[];
 };

@@ -84,42 +84,6 @@
   background-color: var(--couleurs-mac-noir) !important;
 }
 
-@mixin icone-thematique($icone) {
-  mask-image: $icone;
-  mask-repeat: no-repeat;
-  -webkit-mask-image: $icone;
-  -webkit-mask-repeat: no-repeat;
-  background-color: var(--couleurs-mac-blanc) !important;
-}
-
-.mac-thematique-contexte {
-  @include icone-thematique($icone-contexte);
-}
-
-.mac-thematique-gouvernance {
-  @include icone-thematique($icone-gouvernance);
-}
-
-.mac-thematique-securite-acces {
-  @include icone-thematique($icone-securite-acces);
-}
-
-.mac-thematique-securite-postes {
-  @include icone-thematique($icone-securite-postes);
-}
-
-.mac-thematique-securite-infrastructures {
-  @include icone-thematique($icone-securite-infrastructures);
-}
-
-.mac-thematique-sensibilisation {
-  @include icone-thematique($icone-sensibilisation);
-}
-
-.mac-thematique-reaction {
-  @include icone-thematique($icone-reaction);
-}
-
 .question > fieldset {
   margin-right: 0 !important;
   margin-left: 0 !important;
