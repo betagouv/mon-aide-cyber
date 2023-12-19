@@ -13,6 +13,10 @@ export interface EntrepotAidant extends Entrepot<Aidant> {
     identifiantConnexion: string,
     motDePasse: string,
   ): Promise<Aidant>;
+
+  rechercheParIdentifiantDeConnexion(
+    identifiantConnexion: string,
+  ): Promise<Aidant>;
 }
 export class ErreurAuthentification extends Error {
   constructor(public readonly erreur: Error) {

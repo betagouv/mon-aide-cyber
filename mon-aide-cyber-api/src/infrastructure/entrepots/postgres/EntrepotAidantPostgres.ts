@@ -91,4 +91,8 @@ export class EntrepotAidantPostgres
         return this.deDTOAEntite(ligne);
       });
   }
+
+  rechercheParIdentifiantDeConnexion(__: string): Promise<Aidant> {
+    return Promise.reject('non implémenté');
+  }
 }
