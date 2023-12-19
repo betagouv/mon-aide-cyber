@@ -66,4 +66,16 @@ export class EntrepotAidantMemoire
     }
     return Promise.resolve(aidantTrouve);
   }
+
+  rechercheParIdentifiantDeConnexion(
+    identifiantConnexion: string,
+  ): Promise<Aidant> {
+    const aidantTrouve = Array.from(this.entites.values()).find(
+      (aidant) => aidant.identifiantConnexion === identifiantConnexion,
+    );
+    if (!aidantTrouve) {
+      return Promise.reject(new AggregatNonTrouve('aidant'));
+    }
+    return Promise.resolve(aidantTrouve);
+  }
 }
