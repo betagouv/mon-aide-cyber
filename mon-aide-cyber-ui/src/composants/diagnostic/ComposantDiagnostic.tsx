@@ -40,11 +40,13 @@ import {
 import '../../assets/styles/_diagnostic.scss';
 import Button from '@codegouvfr/react-dsfr/Button';
 import { BoutonThematique } from './BoutonThematique.tsx';
+import '../../assets/styles/_couleurs.scss';
 
 import {
   reducteurBoutonThematiquePrecedente,
   reducteurBoutonThematiqueSuivante,
 } from './reducteurBoutonThematique.ts';
+import styled from 'styled-components';
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -322,6 +324,16 @@ const ComposantQuestion = ({
   );
 };
 
+const BoutonNavigeVersThematique = styled.button<{
+  $localisationIcone: string;
+}>`
+  mask-image: url(${(props) => props.$localisationIcone});
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url(${(props) => props.$localisationIcone});
+  -webkit-mask-repeat: no-repeat;
+  background-color: var(--couleurs-mac-blanc) !important;
+`;
+
 type ProprietesComposantDiagnostic = {
   idDiagnostic: UUID;
 };
@@ -361,16 +373,6 @@ export const ComposantDiagnostic = ({
     },
     [envoie],
   );
-
-  const icones: string[] = [
-    'mac-thematique-contexte',
-    'mac-thematique-gouvernance',
-    'mac-thematique-securite-acces',
-    'mac-thematique-securite-postes',
-    'mac-thematique-securite-infrastructures',
-    'mac-thematique-sensibilisation',
-    'mac-thematique-reaction',
-  ];
 
   const spinner = (
     <div className="blanc">
@@ -436,7 +438,7 @@ export const ComposantDiagnostic = ({
   const navigation = (
     <nav className="navigation-thematiqes">
       <ul className="thematiques">
-        {thematiques.map(([clef], index) => (
+        {thematiques.map(([clef, thematique]) => (
           <li
             key={`li-${clef}`}
             className={
@@ -445,8 +447,9 @@ export const ComposantDiagnostic = ({
                 : ''
             }
           >
-            <button
-              className={`fr-btn ${icones[index]}`}
+            <BoutonNavigeVersThematique
+              $localisationIcone={thematique.localisationIconeNavigation}
+              className={`fr-btn`}
               onClick={() => affiche(clef)}
               title=""
             />
