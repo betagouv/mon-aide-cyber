@@ -28,11 +28,15 @@ export const importeAidants = async (
     nomPrenom: string;
     identifiantConnexion: string;
     doitImporterAidant: boolean;
+    numeroTelephone: string;
+    region: string;
   } => {
     return {
       doitImporterAidant: aidant[2] === 'OK',
       nomPrenom: aidant[1],
       identifiantConnexion: aidant[3],
+      numeroTelephone: aidant[4],
+      region: aidant[0],
     };
   };
 
@@ -55,6 +59,8 @@ export const importeAidants = async (
             cguSignee: true,
             email: aidantExistant.identifiantConnexion,
             nomPrenom: aidantExistant.nomPrenom,
+            telephone: aidantTranscris.numeroTelephone,
+            region: aidantTranscris.region,
           };
         }
         if (aidantTranscris.doitImporterAidant) {
@@ -72,6 +78,8 @@ export const importeAidants = async (
             email: aidantImporte!.identifiantConnexion,
             motDePasse,
             nomPrenom: aidantImporte!.nomPrenom,
+            telephone: aidantTranscris.numeroTelephone,
+            region: aidantTranscris.region,
           };
         }
         return {
@@ -79,6 +87,8 @@ export const importeAidants = async (
           cguSignee: false,
           email: aidantTranscris.identifiantConnexion,
           nomPrenom: aidantTranscris.nomPrenom,
+          telephone: aidantTranscris.numeroTelephone,
+          region: aidantTranscris.region,
         };
       }),
   );
@@ -108,6 +118,8 @@ type ImportAidant = {
   email: string;
   motDePasse?: string;
   nomPrenom: string;
+  telephone: string;
+  region: string;
 };
 
 const genereMotDePasse = () => {
