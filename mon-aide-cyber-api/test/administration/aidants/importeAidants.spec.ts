@@ -29,7 +29,8 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      'Région;nom;charte;mail;\n' + 'BFC;Jean Dupont;OK;jean.dupont@mail.com;',
+      'Région;nom;charte;mail;\n' +
+        'BFC;Jean Dupont;OK;jean.dupont@mail.com;123',
       () => 'un-mot-de-passe',
     );
 
@@ -46,6 +47,8 @@ describe('Importe des aidants', () => {
           email: aidant.identifiantConnexion,
           motDePasse: 'un-mot-de-passe',
           nomPrenom: aidant.nomPrenom,
+          telephone: '123',
+          region: 'BFC',
         },
       ],
       aidantsNonImportes: [],
@@ -70,8 +73,8 @@ describe('Importe des aidants', () => {
       entrepotAidant,
       busEvenement,
       'Région;nom;charte;mail;\n' +
-        'BFC;Jean Dupont;OK;jean.dupont@mail.com;\n' +
-        'BFC;Charles Martin;OK;charles.martin@mail.com;',
+        'BFC;Jean Dupont;OK;jean.dupont@mail.com;123\n' +
+        'BFC;Charles Martin;OK;charles.martin@mail.com;456',
       () => 'un-mot-de-passe',
     );
 
@@ -93,6 +96,8 @@ describe('Importe des aidants', () => {
           email: jeanDupont.identifiantConnexion,
           motDePasse: 'un-mot-de-passe',
           nomPrenom: jeanDupont.nomPrenom,
+          telephone: '123',
+          region: 'BFC',
         },
         {
           charteSignee: true,
@@ -100,6 +105,8 @@ describe('Importe des aidants', () => {
           email: charlesMartin.identifiantConnexion,
           motDePasse: 'un-mot-de-passe',
           nomPrenom: charlesMartin.nomPrenom,
+          telephone: '456',
+          region: 'BFC',
         },
       ],
       aidantsNonImportes: [],
@@ -124,8 +131,8 @@ describe('Importe des aidants', () => {
       entrepotAidant,
       busEvenement,
       'Région;nom;charte;mail;\n' +
-        'BFC;Jean Dupont;OK;jean.dupont@mail.com;\n' +
-        'BFC;Charles Martin;A demander;charles.martin@mail.com;',
+        'BFC;Jean Dupont;OK;jean.dupont@mail.com;123\n' +
+        'BFC;Charles Martin;A demander;charles.martin@mail.com;456',
       () => 'un-mot-de-passe',
     );
 
@@ -143,6 +150,8 @@ describe('Importe des aidants', () => {
           email: jeanDupont.identifiantConnexion,
           motDePasse: 'un-mot-de-passe',
           nomPrenom: jeanDupont.nomPrenom,
+          telephone: '123',
+          region: 'BFC',
         },
       ],
       aidantsExistants: [],
@@ -152,6 +161,8 @@ describe('Importe des aidants', () => {
           charteSignee: false,
           nomPrenom: 'Charles Martin',
           email: 'charles.martin@mail.com',
+          telephone: '456',
+          region: 'BFC',
         },
       ],
     });
@@ -170,8 +181,8 @@ describe('Importe des aidants', () => {
       entrepotAidant,
       busEvenement,
       'Région;nom;charte;mail;\n' +
-        'BFC;Jean Dupont;OK;jean.dupont@mail.com;\n' +
-        'BFC;Charles Martin;OK;charles.martin@mail.com;',
+        'BFC;Jean Dupont;OK;jean.dupont@mail.com;123\n' +
+        'BFC;Charles Martin;OK;charles.martin@mail.com;456',
       () => 'un-mot-de-passe',
     );
 
@@ -189,6 +200,8 @@ describe('Importe des aidants', () => {
           email: charlesMartin.identifiantConnexion,
           motDePasse: 'un-mot-de-passe',
           nomPrenom: charlesMartin.nomPrenom,
+          telephone: '456',
+          region: 'BFC',
         },
       ],
       aidantsNonImportes: [],
@@ -198,6 +211,8 @@ describe('Importe des aidants', () => {
           email: jeanDupont.identifiantConnexion,
           charteSignee: true,
           cguSignee: true,
+          telephone: '123',
+          region: 'BFC',
         },
       ],
     });
@@ -211,7 +226,8 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      'Région;nom;charte;mail;\n' + 'BFC;Jean Dupont;OK;jean.dUPonT@mail.com;',
+      'Région;nom;charte;mail;\n' +
+        'BFC;Jean Dupont;OK;jean.dUPonT@mail.com;123',
       () => 'un-mot-de-passe',
     );
 
@@ -228,6 +244,8 @@ describe('Importe des aidants', () => {
           email: aidant.identifiantConnexion,
           motDePasse: 'un-mot-de-passe',
           nomPrenom: aidant.nomPrenom,
+          telephone: '123',
+          region: 'BFC',
         },
       ],
       aidantsNonImportes: [],
