@@ -70,6 +70,34 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           message: 'Identifiants incorrects.',
         });
       });
+
+      it("l'identifiant de connexion est expurgé", async () => {
+        await testeurMAC.entrepots
+          .aidants()
+          .persiste(
+            unAidant()
+              .avecUnNomPrenom('Martin Dupont')
+              .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
+              .avecUnMotDePasse('mon_Mot-D3p4sse')
+              .construis(),
+          );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/token',
+          donneesServeur.portEcoute,
+          {
+            identifiant: 'MARTIN.DUPONT@EMAIL.COM',
+            motDePasse: 'mon_Mot-D3p4sse',
+          },
+        );
+
+        expect(reponse.statusCode).toBe(201);
+        expect(await reponse.json()).toStrictEqual({
+          nomPrenom: 'Martin Dupont',
+        });
+      });
     });
   });
 });

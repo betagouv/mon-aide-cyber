@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import { AidantAuthentifie } from '../authentification/Aidant';
 import { NextFunction } from 'express-serve-static-core';
 import bodyParser from 'body-parser';
+import { body } from 'express-validator';
 import { authentifie } from '../authentification/authentification';
 
 export const routesAPIAuthentification = (
@@ -13,9 +14,9 @@ export const routesAPIAuthentification = (
   routes.post(
     '/',
     bodyParser.json(),
+    body('identifiant').toLowerCase(),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { identifiant, motDePasse } = requete.body;
-
       authentifie(
         configuration.entrepots.aidants(),
         configuration.gestionnaireDeJeton,
