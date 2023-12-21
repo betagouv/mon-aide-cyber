@@ -10,6 +10,16 @@ export type ResultatImportationAidants = {
   aidantsExistants: ImportAidant[];
 };
 
+function recupereListeAidants(aidants: string) {
+  const tableauAidants = aidants.split('\n');
+
+  if (tableauAidants[tableauAidants.length - 1].trim() === '') {
+    return tableauAidants.slice(1, -1);
+  }
+
+  return tableauAidants.slice(1);
+}
+
 export const importeAidants = async (
   entrepotAidant: EntrepotAidant,
   busEvenement: BusEvenement,
@@ -41,56 +51,55 @@ export const importeAidants = async (
   };
 
   const importAidants: Promise<ImportAidant[]> = Promise.all(
-    aidants
-      .split('\n')
-      .slice(1)
-      .map(async (aidantCourant) => {
-        const aidant = aidantCourant.split(';');
-        const aidantTranscris = transcris(aidant);
-        const aidantExistant = await entrepotAidant
-          .rechercheParIdentifiantDeConnexion(
-            aidantTranscris.identifiantConnexion,
-          )
-          .then((aidantDejaCree) => aidantDejaCree)
-          .catch(() => undefined);
-        if (aidantExistant) {
-          return {
-            charteSignee: true,
-            cguSignee: true,
-            email: aidantExistant.identifiantConnexion,
-            nomPrenom: aidantExistant.nomPrenom,
-            telephone: aidantTranscris.numeroTelephone,
-            region: aidantTranscris.region,
-          };
-        }
-        if (aidantTranscris.doitImporterAidant) {
-          const motDePasse = generateurMotDePasse();
-          const aidantImporte = await creeAidant(entrepotAidant, busEvenement, {
-            identifiantConnexion: aidantTranscris.identifiantConnexion,
-            motDePasse,
-            nomPrenom: aidantTranscris.nomPrenom,
-            dateSignatureCGU: FournisseurHorloge.maintenant(),
-            dateSignatureCharte: FournisseurHorloge.maintenant(),
-          });
-          return {
-            charteSignee: true,
-            cguSignee: true,
-            email: aidantImporte!.identifiantConnexion,
-            motDePasse,
-            nomPrenom: aidantImporte!.nomPrenom,
-            telephone: aidantTranscris.numeroTelephone,
-            region: aidantTranscris.region,
-          };
-        }
+    recupereListeAidants(aidants).map(async (aidantCourant) => {
+      const aidant = aidantCourant.split(';');
+      const aidantTranscris = transcris(aidant);
+      const aidantExistant = await entrepotAidant
+        .rechercheParIdentifiantDeConnexion(
+          aidantTranscris.identifiantConnexion,
+        )
+        .then((aidantDejaCree) => aidantDejaCree)
+        .catch(() => undefined);
+      if (aidantExistant) {
         return {
-          charteSignee: false,
-          cguSignee: false,
-          email: aidantTranscris.identifiantConnexion,
-          nomPrenom: aidantTranscris.nomPrenom,
+          charteSignee: true,
+          cguSignee: true,
+          email: aidantExistant.identifiantConnexion,
+          nomPrenom: aidantExistant.nomPrenom,
           telephone: aidantTranscris.numeroTelephone,
           region: aidantTranscris.region,
         };
-      }),
+      }
+
+      if (aidantTranscris.doitImporterAidant) {
+        const motDePasse = generateurMotDePasse();
+        const aidantImporte = await creeAidant(entrepotAidant, busEvenement, {
+          identifiantConnexion: aidantTranscris.identifiantConnexion,
+          motDePasse,
+          nomPrenom: aidantTranscris.nomPrenom,
+          dateSignatureCGU: FournisseurHorloge.maintenant(),
+          dateSignatureCharte: FournisseurHorloge.maintenant(),
+        });
+        return {
+          charteSignee: true,
+          cguSignee: true,
+          email: aidantImporte!.identifiantConnexion,
+          motDePasse,
+          nomPrenom: aidantImporte!.nomPrenom,
+          telephone: aidantTranscris.numeroTelephone,
+          region: aidantTranscris.region,
+
+      };
+        }
+      return {
+        charteSignee: false,
+        cguSignee: false,
+        email: aidantTranscris.identifiantConnexion,
+        nomPrenom: aidantTranscris.nomPrenom,
+        telephone: aidantTranscris.numeroTelephone,
+        region: aidantTranscris.region,
+      };
+    }),
   );
   return importAidants.then((aidants) => {
     aidants.forEach((aidant) => {

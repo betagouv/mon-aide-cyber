@@ -9,6 +9,7 @@ import {
 } from '../../../src/administration/aidants/importeAidants';
 import { nettoieLaBaseDeDonnees } from '../../utilitaires/nettoyeurBDD';
 import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
+import * as fs from 'fs';
 
 describe('Importe des aidants', () => {
   let busEvenement: BusEvenementDeTest;
@@ -259,5 +260,23 @@ describe('Importe des aidants', () => {
       identifiantConnexion: 'jean.dupont@mail.com',
       identifiant: aidant.identifiant,
     });
+  });
+
+  it("importe les aidants à partir d'un fichier", async () => {
+    const entrepot = new EntrepotAidantMemoire();
+    const aidantsAImporter = fs.readFileSync(
+      './test/administration/aidants/beta_testeur.csv',
+      {
+        encoding: 'utf-8',
+      },
+    );
+
+    const aidantsImportes = await importeAidants(
+      entrepot,
+      new BusEvenementDeTest(),
+      aidantsAImporter,
+    );
+
+    expect(aidantsImportes.aidantsNonImportes).toHaveLength(0);
   });
 });
