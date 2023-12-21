@@ -5,6 +5,7 @@ import { NextFunction } from 'express-serve-static-core';
 import { Request, Response } from 'express';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
 import { ErreurAccesRefuse } from '../../src/adaptateurs/AdaptateurDeVerificationDeSession';
+import { MACCookies } from '../../src/adaptateurs/fabriqueDeCookies';
 
 describe('Adaptateur de vérification de session', () => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -20,8 +21,9 @@ describe('Adaptateur de vérification de session', () => {
       headers: { cookie: cookieDeSession },
     } as Request;
 
-    new AdaptateurDeVerificationDeSessionHttp(fauxGestionnaireDeJeton).verifie(
-      'Accède aux diagnostics',
+    new AdaptateurDeVerificationDeSessionHttp(
+      fauxGestionnaireDeJeton,
+    ).verifieParMiddleware('Accède aux diagnostics')(
       requete,
       reponse,
       fausseSuite,
@@ -36,7 +38,7 @@ describe('Adaptateur de vérification de session', () => {
     expect(() => {
       new AdaptateurDeVerificationDeSessionHttp(
         new FauxGestionnaireDeJeton(),
-      ).verifie('Accès diagnostic', requete, reponse, fausseSuite);
+      ).verifieParMiddleware('Accès diagnostic')(requete, reponse, fausseSuite);
     }).toThrow(
       ErreurMAC.cree(
         'Accès diagnostic',
@@ -54,7 +56,7 @@ describe('Adaptateur de vérification de session', () => {
     expect(() => {
       new AdaptateurDeVerificationDeSessionHttp(
         new FauxGestionnaireDeJeton(),
-      ).verifie('Accès diagnostic', requete, reponse, fausseSuite);
+      ).verifieParMiddleware('Accès diagnostic')(requete, reponse, fausseSuite);
     }).toThrow(`Cookie invalide.`);
   });
 
@@ -65,9 +67,13 @@ describe('Adaptateur de vérification de session', () => {
     expect(() => {
       new AdaptateurDeVerificationDeSessionHttp(
         new FauxGestionnaireDeJeton(),
-      ).verifie('Accès diagnostic', requete, reponse, fausseSuite, {
-        session: cookieDeSession,
-      });
+      ).verifieParMiddleware(
+        'Accès diagnostic',
+        () =>
+          ({
+            session: cookieDeSession,
+          }) as MACCookies,
+      )(requete, reponse, fausseSuite);
     }).toThrow(`Session invalide.`);
   });
 
@@ -79,9 +85,13 @@ describe('Adaptateur de vérification de session', () => {
     expect(() => {
       new AdaptateurDeVerificationDeSessionHttp(
         fauxGestionnaireDeJeton,
-      ).verifie('Accès diagnostic', requete, reponse, fausseSuite, {
-        session: cookieDeSession,
-      });
+      ).verifieParMiddleware(
+        'Accès diagnostic',
+        () =>
+          ({
+            session: cookieDeSession,
+          }) as MACCookies,
+      )(requete, reponse, fausseSuite);
     }).toThrow(`Session invalide.`);
   });
 });
