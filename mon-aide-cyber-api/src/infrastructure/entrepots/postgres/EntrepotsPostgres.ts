@@ -3,12 +3,12 @@ import { EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
 import { EntrepotDiagnosticPostgres } from './EntrepotDiagnosticPostgres';
 import { EntrepotAidant } from '../../../authentification/Aidant';
 import { EntrepotAidantPostgres } from './EntrepotAidantPostgres';
-import { ServiceDeChiffrementChacha20 } from '../../securite/ServiceDeChiffrementChacha20';
+import { adaptateurServiceChiffrement } from '../../adaptateurs/adaptateurServiceChiffrement';
 
 export class EntrepotsPostgres implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
   private readonly entrepotAidant: EntrepotAidant = new EntrepotAidantPostgres(
-    new ServiceDeChiffrementChacha20(),
+    adaptateurServiceChiffrement(),
   );
 
   diagnostic(): EntrepotDiagnostic {

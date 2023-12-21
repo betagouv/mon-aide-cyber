@@ -1,10 +1,10 @@
 import { program } from 'commander';
 import { EntrepotAidantPostgres } from '../../infrastructure/entrepots/postgres/EntrepotAidantPostgres';
-import { ServiceDeChiffrementChacha20 } from '../../infrastructure/securite/ServiceDeChiffrementChacha20';
 import { creeAidant, DonneesAidant } from './creeAidant';
 import { BusEvenementMAC } from '../../infrastructure/bus/BusEvenementMAC';
 import { fabriqueConsommateursEvenements } from '../../adaptateurs/fabriqueConsommateursEvenements';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { adaptateurServiceChiffrement } from '../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 
 const command = program
   .description('Crée un aidant')
@@ -34,9 +34,7 @@ command.action(async (...args: any[]) => {
     dateSignatureCharte: args[4],
   };
 
-  const entrepot = new EntrepotAidantPostgres(
-    new ServiceDeChiffrementChacha20(),
-  );
+  const entrepot = new EntrepotAidantPostgres(adaptateurServiceChiffrement());
 
   const aidant = await creeAidant(
     entrepot,

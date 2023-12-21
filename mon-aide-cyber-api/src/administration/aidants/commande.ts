@@ -1,11 +1,11 @@
 import { program } from 'commander';
 import { EntrepotAidantPostgres } from '../../infrastructure/entrepots/postgres/EntrepotAidantPostgres';
-import { ServiceDeChiffrementChacha20 } from '../../infrastructure/securite/ServiceDeChiffrementChacha20';
 import { BusEvenementMAC } from '../../infrastructure/bus/BusEvenementMAC';
 import { fabriqueConsommateursEvenements } from '../../adaptateurs/fabriqueConsommateursEvenements';
 import { importeAidants } from './importeAidants';
 import * as fs from 'fs';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { adaptateurServiceChiffrement } from '../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 
 const command = program
   .description('Importe des aidants')
@@ -15,9 +15,7 @@ const command = program
   );
 
 command.action(async (...args: any[]) => {
-  const entrepot = new EntrepotAidantPostgres(
-    new ServiceDeChiffrementChacha20(),
-  );
+  const entrepot = new EntrepotAidantPostgres(adaptateurServiceChiffrement());
 
   const aidantsImportes = await importeAidants(
     entrepot,
