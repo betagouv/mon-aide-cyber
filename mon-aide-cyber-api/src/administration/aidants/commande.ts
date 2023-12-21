@@ -20,7 +20,7 @@ command.action(async (...args: any[]) => {
   const aidantsImportes = await importeAidants(
     entrepot,
     new BusEvenementMAC(fabriqueConsommateursEvenements()),
-    fs.readFileSync(args[0], { encoding: 'utf-8' }),
+    fs.readFileSync(args[0], { encoding: 'latin1' }),
   );
   if (aidantsImportes) {
     const resultat: string[] = [];
