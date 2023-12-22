@@ -44,7 +44,7 @@ export const importeAidants = async (
     return {
       doitImporterAidant: aidant[2] === 'OK',
       nomPrenom: aidant[1],
-      identifiantConnexion: aidant[3],
+      identifiantConnexion: aidant[3].toLowerCase(),
       numeroTelephone: aidant[4],
       region: aidant[0],
     };
@@ -88,9 +88,8 @@ export const importeAidants = async (
           nomPrenom: aidantImporte!.nomPrenom,
           telephone: aidantTranscris.numeroTelephone,
           region: aidantTranscris.region,
-
-      };
-        }
+        };
+      }
       return {
         charteSignee: false,
         cguSignee: false,

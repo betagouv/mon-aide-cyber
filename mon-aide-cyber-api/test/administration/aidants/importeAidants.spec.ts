@@ -219,6 +219,56 @@ describe('Importe des aidants', () => {
     });
   });
 
+  it('importe uniquement les aidants non déjà présents contenant des majuscules dans leur email de connexion', async () => {
+    const entrepotAidant = new EntrepotAidantMemoire();
+    const jeanDupont = unAidant()
+      .avecUnIdentifiantDeConnexion('jean.dupont@mail.com')
+      .construis();
+    entrepotAidant.persiste(jeanDupont);
+    const dateSignatureCGU = new Date(Date.parse('2023-12-05T12:00:00+01:00'));
+    FournisseurHorlogeDeTest.initialise(dateSignatureCGU);
+
+    const resultat = await importeAidants(
+      entrepotAidant,
+      busEvenement,
+      'Région;nom;charte;mail;\n' +
+        'BFC;Jean Dupont;OK;jean.DUPONT@mail.com;123\n' +
+        'BFC;Charles Martin;OK;charles.martin@mail.com;456',
+      () => 'un-mot-de-passe',
+    );
+
+    expect(await entrepotAidant.tous()).toHaveLength(2);
+    const charlesMartin =
+      await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse(
+        'charles.martin@mail.com',
+        'un-mot-de-passe',
+      );
+    expect(resultat).toStrictEqual<ResultatImportationAidants>({
+      aidantsImportes: [
+        {
+          charteSignee: true,
+          cguSignee: true,
+          email: charlesMartin.identifiantConnexion,
+          motDePasse: 'un-mot-de-passe',
+          nomPrenom: charlesMartin.nomPrenom,
+          telephone: '456',
+          region: 'BFC',
+        },
+      ],
+      aidantsNonImportes: [],
+      aidantsExistants: [
+        {
+          nomPrenom: jeanDupont.nomPrenom,
+          email: jeanDupont.identifiantConnexion,
+          charteSignee: true,
+          cguSignee: true,
+          telephone: '123',
+          region: 'BFC',
+        },
+      ],
+    });
+  });
+
   it('importe un aidant avec un email contenant des majuscules', async () => {
     const entrepotAidant = new EntrepotAidantMemoire();
     const dateSignatureCGU = new Date(Date.parse('2023-12-05T12:00:00+01:00'));

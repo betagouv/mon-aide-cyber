@@ -27,7 +27,7 @@ const command = program
 
 command.action(async (...args: any[]) => {
   const identifiants: DonneesAidant = {
-    identifiantConnexion: args[0],
+    identifiantConnexion: args[0].toLowerCase(),
     motDePasse: args[1],
     nomPrenom: args[2],
     dateSignatureCGU: args[3],
