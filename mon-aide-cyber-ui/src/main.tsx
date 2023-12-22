@@ -20,8 +20,6 @@ import { EntrepotAuthentification } from './domaine/authentification/Authentific
 import { RequiertAuthentification } from './fournisseurs/RequiertAuthentification.tsx';
 import { FournisseurAuthentification } from './fournisseurs/ContexteAuthentification.tsx';
 import { PortailModale } from './composants/modale/PortailModale.tsx';
-import { Footer } from './composants/Footer.tsx';
-import { Header } from './composants/Header.tsx';
 import { CharteAidant } from './vues/CharteAidant.tsx';
 import { TableauDeBord } from './composants/TableauDeBord.tsx';
 
@@ -40,47 +38,41 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       >
         <FournisseurAuthentification>
           <PortailModale>
-            <Header />
-            <main role="main">
-              <Routes>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+                    <Accueil />
+                  </ErrorBoundary>
+                }
+              />
+              <Route path="/charte-aidant" element={<CharteAidant />} />
+              <Route
+                element={
+                  <Suspense>
+                    <RequiertAuthentification />
+                  </Suspense>
+                }
+              >
                 <Route
-                  path="/"
-                  element={
-                    <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-                      <Accueil />
-                    </ErrorBoundary>
-                  }
-                />
-                <Route path="/charte-aidant" element={<CharteAidant />} />
+                  path="/tableau-de-bord"
+                  element={<ComposantIntercepteur composant={TableauDeBord} />}
+                ></Route>
                 <Route
+                  path="/diagnostics"
                   element={
-                    <Suspense>
-                      <RequiertAuthentification />
-                    </Suspense>
+                    <ComposantIntercepteur composant={ComposantDiagnostics} />
                   }
-                >
-                  <Route
-                    path="/tableau-de-bord"
-                    element={
-                      <ComposantIntercepteur composant={TableauDeBord} />
-                    }
-                  ></Route>
-                  <Route
-                    path="/diagnostics"
-                    element={
-                      <ComposantIntercepteur composant={ComposantDiagnostics} />
-                    }
-                  ></Route>
-                  <Route
-                    path="/diagnostic/:idDiagnostic"
-                    element={
-                      <ComposantIntercepteur composant={ComposantDiagnostic} />
-                    }
-                  ></Route>
-                </Route>
-              </Routes>
-            </main>
-            <Footer />
+                ></Route>
+                <Route
+                  path="/diagnostic/:idDiagnostic"
+                  element={
+                    <ComposantIntercepteur composant={ComposantDiagnostic} />
+                  }
+                ></Route>
+              </Route>
+            </Routes>
           </PortailModale>
         </FournisseurAuthentification>
       </FournisseurEntrepots.Provider>
