@@ -42,7 +42,7 @@ export const importeAidants = async (
   } => {
     return {
       nomPrenom: aidant[1],
-      identifiantConnexion: aidant[3].toLowerCase(),
+      identifiantConnexion: aidant[3].toLowerCase().trim(),
       numeroTelephone: aidant[4],
       region: aidant[0],
     };
