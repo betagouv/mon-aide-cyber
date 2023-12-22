@@ -37,12 +37,10 @@ export const importeAidants = async (
   ): {
     nomPrenom: string;
     identifiantConnexion: string;
-    doitImporterAidant: boolean;
     numeroTelephone: string;
     region: string;
   } => {
     return {
-      doitImporterAidant: aidant[2] === 'OK',
       nomPrenom: aidant[1],
       identifiantConnexion: aidant[3].toLowerCase(),
       numeroTelephone: aidant[4],
@@ -71,30 +69,20 @@ export const importeAidants = async (
         };
       }
 
-      if (aidantTranscris.doitImporterAidant) {
-        const motDePasse = generateurMotDePasse();
-        const aidantImporte = await creeAidant(entrepotAidant, busEvenement, {
-          identifiantConnexion: aidantTranscris.identifiantConnexion,
-          motDePasse,
-          nomPrenom: aidantTranscris.nomPrenom,
-          dateSignatureCGU: FournisseurHorloge.maintenant(),
-          dateSignatureCharte: FournisseurHorloge.maintenant(),
-        });
-        return {
-          charteSignee: true,
-          cguSignee: true,
-          email: aidantImporte!.identifiantConnexion,
-          motDePasse,
-          nomPrenom: aidantImporte!.nomPrenom,
-          telephone: aidantTranscris.numeroTelephone,
-          region: aidantTranscris.region,
-        };
-      }
-      return {
-        charteSignee: false,
-        cguSignee: false,
-        email: aidantTranscris.identifiantConnexion,
+      const motDePasse = generateurMotDePasse();
+      const aidantImporte = await creeAidant(entrepotAidant, busEvenement, {
+        identifiantConnexion: aidantTranscris.identifiantConnexion,
+        motDePasse,
         nomPrenom: aidantTranscris.nomPrenom,
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        dateSignatureCharte: FournisseurHorloge.maintenant(),
+      });
+      return {
+        charteSignee: true,
+        cguSignee: true,
+        email: aidantImporte!.identifiantConnexion,
+        motDePasse,
+        nomPrenom: aidantImporte!.nomPrenom,
         telephone: aidantTranscris.numeroTelephone,
         region: aidantTranscris.region,
       };
