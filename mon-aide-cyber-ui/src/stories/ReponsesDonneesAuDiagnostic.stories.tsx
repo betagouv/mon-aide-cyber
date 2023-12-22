@@ -488,7 +488,7 @@ export const AfficheLesThematiques: Story = {
           ),
         ),
       ).toBeInTheDocument();
-      expect(await waitFor(() => canvas.getAllByRole('button').length)).toBe(6);
+      expect(await waitFor(() => canvas.getAllByRole('button').length)).toBe(5);
       await waitFor(() =>
         expect(
           canvas.queryByRole('button', { name: /thématique précédente/i }),
@@ -502,7 +502,7 @@ export const AfficheLesThematiques: Story = {
     });
 
     await step('Lorsque l’utilisateur change de thématique', async () => {
-      await userEvent.click(canvas.getAllByRole('button')[1]);
+      await userEvent.click(canvas.getAllByRole('button')[3]);
 
       expect(
         await waitFor(() =>
