@@ -500,8 +500,8 @@ export const ComposantDiagnostic = ({
               {boutonDesactive && spinner}
               {lienCopie}
               <div className="bandeau-thematique">
-                <div className="mac-container fr-pt-md-4w">
-                  <div className="fr-grid-row">
+                <div className="fr-container fr-pt-md-4w">
+                  <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
                     <div className="fr-col-7 introduction-thematique">
                       <h2>{thematique.libelle}</h2>
                     </div>
@@ -537,38 +537,47 @@ export const ComposantDiagnostic = ({
                   </div>
                 </div>
               </div>
-              <div className="mac-container fr-grid-row fr-grid-row--gutters">
-                <div className="fr-col-md-8 fr-col-8">
-                  <form id={clef}>
-                    <section className="question">{elements}</section>
-                  </form>
+              <div className="fr-container">
+                <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
+                  <div className="fr-col-md-8 fr-col-8">
+                    <form id={clef}>
+                      <section className="question">{elements}</section>
+                    </form>
+                  </div>
+                  <div className="fr-col-md-4 fr-col-4"></div>
                 </div>
               </div>
-              <div className="fr-col-offset-1">
-                <BoutonThematique
-                  titre="Thématique précédente"
-                  reducteur={reducteurBoutonThematiquePrecedente}
-                  style="bouton-mac bouton-mac-secondaire"
-                  thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
-                  thematiques={thematiques.map(([clef]) => clef)}
-                  onClick={(thematique: string) => affiche(thematique)}
-                />
-                <BoutonThematique
-                  titre="Thématique suivante"
-                  reducteur={reducteurBoutonThematiqueSuivante}
-                  style="bouton-mac bouton-mac-primaire"
-                  thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
-                  thematiques={thematiques.map(([clef]) => clef)}
-                  onClick={(thematique: string) => affiche(thematique)}
-                />
-                <div className="fr-col-offset-5 fr-col-offset-md-7 fr-grid-row">
-                  <Button
-                    className="bouton-mac bouton-mac-primaire"
-                    disabled={boutonDesactive}
-                    onClick={() => termineDiagnostic()}
-                  >
-                    Terminer Diagnostic
-                  </Button>
+              <div className="fr-container">
+                <div className="fr-grid-row">
+                  <BoutonThematique
+                    titre="Thématique précédente"
+                    reducteur={reducteurBoutonThematiquePrecedente}
+                    style="bouton-mac bouton-mac-secondaire"
+                    thematiqueCourante={
+                      etatReferentiel.thematiqueAffichee || ''
+                    }
+                    thematiques={thematiques.map(([clef]) => clef)}
+                    onClick={(thematique: string) => affiche(thematique)}
+                  />
+                  <BoutonThematique
+                    titre="Thématique suivante"
+                    reducteur={reducteurBoutonThematiqueSuivante}
+                    style="bouton-mac bouton-mac-primaire"
+                    thematiqueCourante={
+                      etatReferentiel.thematiqueAffichee || ''
+                    }
+                    thematiques={thematiques.map(([clef]) => clef)}
+                    onClick={(thematique: string) => affiche(thematique)}
+                  />
+                  <div className="fr-col-offset-4">
+                    <Button
+                      className="bouton-mac bouton-mac-primaire"
+                      disabled={boutonDesactive}
+                      onClick={() => termineDiagnostic()}
+                    >
+                      Terminer Diagnostic
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
