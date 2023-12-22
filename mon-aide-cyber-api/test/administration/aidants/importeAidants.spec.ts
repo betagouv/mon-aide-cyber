@@ -123,7 +123,7 @@ describe('Importe des aidants', () => {
     });
   });
 
-  it('importe uniquement les aidants ayant signé la charte', async () => {
+  it.skip('ON IMPOSTE TOUS LES AIDANTS - importe uniquement les aidants ayant signé la charte', async () => {
     const entrepotAidant = new EntrepotAidantMemoire();
     const dateSignatureCGU = new Date(Date.parse('2023-12-05T12:00:00+01:00'));
     FournisseurHorlogeDeTest.initialise(dateSignatureCGU);
