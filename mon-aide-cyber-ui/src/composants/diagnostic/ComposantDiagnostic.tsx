@@ -38,7 +38,6 @@ import {
   ActionReponseDiagnostic,
 } from '../../domaine/diagnostic/Diagnostic.ts';
 import '../../assets/styles/_diagnostic.scss';
-import Button from '@codegouvfr/react-dsfr/Button';
 import { BoutonThematique } from './BoutonThematique.tsx';
 import '../../assets/styles/_couleurs.scss';
 
@@ -47,8 +46,8 @@ import {
   reducteurBoutonThematiqueSuivante,
 } from './reducteurBoutonThematique.ts';
 import styled from 'styled-components';
-import { Header } from '../Header.tsx';
 import { FooterDiagnostic } from './FooterDiagnostic.tsx';
+import { HeaderDiagnostic } from './HeaderDiagnostic.tsx';
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -463,7 +462,13 @@ export const ComposantDiagnostic = ({
 
   return (
     <>
-      <Header />
+      <HeaderDiagnostic
+        terminer={{
+          active: boutonDesactive,
+          termineDiagnostic: () => termineDiagnostic(),
+        }}
+        copier={{ copier: () => copierLienDiagnostic() }}
+      />
       <main role="main">
         <div className="fr-grid-row fr-grid-row--gutters fond-clair-mac">
           <div className="conteneur-navigation">{navigation}</div>
@@ -517,29 +522,6 @@ export const ComposantDiagnostic = ({
                       </div>
                     </div>
                   </div>
-
-                  <div className="fr-col-offset-6 fr-col-offset-md-8 fr-grid-row">
-                    <div>
-                      <Button
-                        className="bouton-mac bouton-mac-primaire"
-                        disabled={boutonDesactive}
-                        onClick={() => termineDiagnostic()}
-                      >
-                        Terminer Diagnostic
-                      </Button>
-                    </div>
-                    <div className="fr-share fr-ml-1w">
-                      <ul className="fr-share__group">
-                        <li>
-                          <button
-                            className="bouton-icone-mac bouton-mac-secondaire fr-share__link fr-share__link--copy"
-                            title="Copier le lien du diagnostic"
-                            onClick={copierLienDiagnostic}
-                          />
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
                 </div>
                 <div className="fr-container">
                   <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
@@ -573,15 +555,6 @@ export const ComposantDiagnostic = ({
                       thematiques={thematiques.map(([clef]) => clef)}
                       onClick={(thematique: string) => affiche(thematique)}
                     />
-                    <div className="fr-col-offset-4">
-                      <Button
-                        className="bouton-mac bouton-mac-primaire"
-                        disabled={boutonDesactive}
-                        onClick={() => termineDiagnostic()}
-                      >
-                        Terminer Diagnostic
-                      </Button>
-                    </div>
                   </div>
                 </div>
               </div>
