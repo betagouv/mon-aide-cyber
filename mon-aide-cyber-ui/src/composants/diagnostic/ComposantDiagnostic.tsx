@@ -47,6 +47,8 @@ import {
   reducteurBoutonThematiqueSuivante,
 } from './reducteurBoutonThematique.ts';
 import styled from 'styled-components';
+import { Header } from '../Header.tsx';
+import { Footer } from '../Footer.tsx';
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -461,129 +463,133 @@ export const ComposantDiagnostic = ({
 
   return (
     <>
-      <div className="fr-grid-row fr-grid-row--gutters fond-clair-mac">
-        <div className="conteneur-navigation">{navigation}</div>
-        {thematiques.map(([clef, thematique]) => {
-          const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
-            (action) => Object.entries(action).find(([c]) => c === clef),
-          ) as ActionReponseDiagnostic[];
-          const elements = thematique.questions.map((question) => (
-            <fieldset
-              key={question.identifiant}
-              id={question.identifiant}
-              className="fr-fieldset fr-mb-5w section-diagnostic"
-            >
-              {question.type === 'liste' ? (
-                <ComposantQuestionListe
-                  question={question}
-                  actions={actionsPossibles}
-                />
-              ) : (
-                <ComposantQuestion
-                  question={question}
-                  actions={actionsPossibles}
-                />
-              )}
-            </fieldset>
-          ));
-          return (
-            <div
-              key={clef}
-              className={`
+      <Header />
+      <main role="main">
+        <div className="fr-grid-row fr-grid-row--gutters fond-clair-mac">
+          <div className="conteneur-navigation">{navigation}</div>
+          {thematiques.map(([clef, thematique]) => {
+            const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
+              (action) => Object.entries(action).find(([c]) => c === clef),
+            ) as ActionReponseDiagnostic[];
+            const elements = thematique.questions.map((question) => (
+              <fieldset
+                key={question.identifiant}
+                id={question.identifiant}
+                className="fr-fieldset fr-mb-5w section-diagnostic"
+              >
+                {question.type === 'liste' ? (
+                  <ComposantQuestionListe
+                    question={question}
+                    actions={actionsPossibles}
+                  />
+                ) : (
+                  <ComposantQuestion
+                    question={question}
+                    actions={actionsPossibles}
+                  />
+                )}
+              </fieldset>
+            ));
+            return (
+              <div
+                key={clef}
+                className={`
                 ${
                   etatReferentiel.thematiqueAffichee === clef
                     ? `visible`
                     : `invisible`
                 }
                conteneur-thematique`}
-            >
-              {boutonDesactive && spinner}
-              {lienCopie}
-              <div className="bandeau-thematique">
-                <div className="fr-container fr-pt-md-4w">
-                  <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-                    <div className="fr-col-7 introduction-thematique">
-                      <h2>{thematique.libelle}</h2>
-                    </div>
-                    <div className="fr-col-5">
-                      <img
-                        src={thematique.localisationIllustration}
-                        alt="illustration de la thématique"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="fr-col-offset-6 fr-col-offset-md-8 fr-grid-row">
-                  <div>
-                    <Button
-                      className="bouton-mac bouton-mac-primaire"
-                      disabled={boutonDesactive}
-                      onClick={() => termineDiagnostic()}
-                    >
-                      Terminer Diagnostic
-                    </Button>
-                  </div>
-                  <div className="fr-share fr-ml-1w">
-                    <ul className="fr-share__group">
-                      <li>
-                        <button
-                          className="bouton-icone-mac bouton-mac-secondaire fr-share__link fr-share__link--copy"
-                          title="Copier le lien du diagnostic"
-                          onClick={copierLienDiagnostic}
+              >
+                {boutonDesactive && spinner}
+                {lienCopie}
+                <div className="bandeau-thematique">
+                  <div className="fr-container fr-pt-md-4w">
+                    <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
+                      <div className="fr-col-7 introduction-thematique">
+                        <h2>{thematique.libelle}</h2>
+                      </div>
+                      <div className="fr-col-5">
+                        <img
+                          src={thematique.localisationIllustration}
+                          alt="illustration de la thématique"
                         />
-                      </li>
-                    </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="fr-col-offset-6 fr-col-offset-md-8 fr-grid-row">
+                    <div>
+                      <Button
+                        className="bouton-mac bouton-mac-primaire"
+                        disabled={boutonDesactive}
+                        onClick={() => termineDiagnostic()}
+                      >
+                        Terminer Diagnostic
+                      </Button>
+                    </div>
+                    <div className="fr-share fr-ml-1w">
+                      <ul className="fr-share__group">
+                        <li>
+                          <button
+                            className="bouton-icone-mac bouton-mac-secondaire fr-share__link fr-share__link--copy"
+                            title="Copier le lien du diagnostic"
+                            onClick={copierLienDiagnostic}
+                          />
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div className="fr-container">
+                  <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
+                    <div className="fr-col-md-8 fr-col-8">
+                      <form id={clef}>
+                        <section className="question">{elements}</section>
+                      </form>
+                    </div>
+                    <div className="fr-col-md-4 fr-col-4"></div>
+                  </div>
+                </div>
+                <div className="fr-container">
+                  <div className="fr-grid-row">
+                    <BoutonThematique
+                      titre="Thématique précédente"
+                      reducteur={reducteurBoutonThematiquePrecedente}
+                      style="bouton-mac bouton-mac-secondaire"
+                      thematiqueCourante={
+                        etatReferentiel.thematiqueAffichee || ''
+                      }
+                      thematiques={thematiques.map(([clef]) => clef)}
+                      onClick={(thematique: string) => affiche(thematique)}
+                    />
+                    <BoutonThematique
+                      titre="Thématique suivante"
+                      reducteur={reducteurBoutonThematiqueSuivante}
+                      style="bouton-mac bouton-mac-primaire"
+                      thematiqueCourante={
+                        etatReferentiel.thematiqueAffichee || ''
+                      }
+                      thematiques={thematiques.map(([clef]) => clef)}
+                      onClick={(thematique: string) => affiche(thematique)}
+                    />
+                    <div className="fr-col-offset-4">
+                      <Button
+                        className="bouton-mac bouton-mac-primaire"
+                        disabled={boutonDesactive}
+                        onClick={() => termineDiagnostic()}
+                      >
+                        Terminer Diagnostic
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="fr-container">
-                <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-                  <div className="fr-col-md-8 fr-col-8">
-                    <form id={clef}>
-                      <section className="question">{elements}</section>
-                    </form>
-                  </div>
-                  <div className="fr-col-md-4 fr-col-4"></div>
-                </div>
-              </div>
-              <div className="fr-container">
-                <div className="fr-grid-row">
-                  <BoutonThematique
-                    titre="Thématique précédente"
-                    reducteur={reducteurBoutonThematiquePrecedente}
-                    style="bouton-mac bouton-mac-secondaire"
-                    thematiqueCourante={
-                      etatReferentiel.thematiqueAffichee || ''
-                    }
-                    thematiques={thematiques.map(([clef]) => clef)}
-                    onClick={(thematique: string) => affiche(thematique)}
-                  />
-                  <BoutonThematique
-                    titre="Thématique suivante"
-                    reducteur={reducteurBoutonThematiqueSuivante}
-                    style="bouton-mac bouton-mac-primaire"
-                    thematiqueCourante={
-                      etatReferentiel.thematiqueAffichee || ''
-                    }
-                    thematiques={thematiques.map(([clef]) => clef)}
-                    onClick={(thematique: string) => affiche(thematique)}
-                  />
-                  <div className="fr-col-offset-4">
-                    <Button
-                      className="bouton-mac bouton-mac-primaire"
-                      disabled={boutonDesactive}
-                      onClick={() => termineDiagnostic()}
-                    >
-                      Terminer Diagnostic
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      </main>
+      <Footer />
     </>
   );
 };
