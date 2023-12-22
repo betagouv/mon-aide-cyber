@@ -48,7 +48,7 @@ import {
 } from './reducteurBoutonThematique.ts';
 import styled from 'styled-components';
 import { Header } from '../Header.tsx';
-import { Footer } from '../Footer.tsx';
+import { FooterDiagnostic } from './FooterDiagnostic.tsx';
 
 type ProprietesComposantQuestion = {
   question: Question;
@@ -589,7 +589,7 @@ export const ComposantDiagnostic = ({
           })}
         </div>
       </main>
-      <Footer />
+      <FooterDiagnostic />
     </>
   );
 };
