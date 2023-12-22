@@ -44,6 +44,20 @@
   background-color: var(--couleurs-mac-violet-fonce);
 }
 
+.piedpage-diagnostic {
+  display: flex;
+}
+
+.piedpage-diagnostic > div {
+  padding-bottom: 6rem;
+}
+
+.bordure-piedpage-diagnostic {
+  background-color: var(--couleurs-mac-violet-fonce);
+  width: 52px;
+  max-width: 64px;
+}
+
 .navigation-thematiqes {
   position: sticky;
   top: 7.29rem;
