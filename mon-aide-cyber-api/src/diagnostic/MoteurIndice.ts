@@ -93,12 +93,13 @@ export class MoteurIndice {
               .filter((reponsePossible) =>
                 reponsesMultiples.reponses.has(reponsePossible.identifiant),
               )
+              .filter((reponsePossible) => !!reponsePossible.resultat)
               .map(
                 (reponsePossible) =>
                   ({
                     resultat: reponsePossible.resultat,
                     poids: questionATiroir.poids,
-                  } as IndiceIntermediaire),
+                  }) as IndiceIntermediaire,
               )
               .filter(
                 (indice: IndiceIntermediaire): indice is IndiceIntermediaire =>

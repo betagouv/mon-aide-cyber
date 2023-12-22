@@ -341,5 +341,69 @@ describe('Moteur Indice', () => {
         ],
       });
     });
+
+    it("génère l'indice pour une question tiroir quand la réponse n'a pas de valeur", () => {
+      const question1 = uneQuestion()
+        .aChoixUnique('Quelle est la réponse?')
+        .avecPoids(1)
+        .avecReponsesPossibles([
+          uneReponsePossible().avecLibelle('42').construis(),
+          uneReponsePossible()
+            .avecLibelle('24')
+            .ayantPourValeurDIndice(2)
+            .ajouteUneQuestionATiroir(
+              uneQuestionATiroir()
+                .avecPoids(2)
+                .aChoixUnique('Voulez-vous inverser les chiffres?')
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle('Ne sais pas').construis(),
+                  uneReponsePossible()
+                    .avecLibelle('Non')
+                    .ayantPourValeurDIndice(0)
+                    .construis(),
+                ])
+                .construis(),
+            )
+            .construis(),
+        ])
+        .construis();
+
+      const diagnostic = constructeurDiagnostic
+        .avecUnReferentiel(
+          unReferentiel()
+            .sansThematique()
+            .ajouteUneThematique('thematique', [question1])
+            .construis(),
+        )
+        .ajouteUneReponseDonnee(
+          {
+            thematique: 'thematique',
+            question: 'quelle-est-la-reponse',
+          },
+          uneReponseDonnee()
+            .ayantPourReponse('24')
+            .avecDesReponsesMultiples([
+              {
+                identifiant: 'voulezvous-inverser-les-chiffres',
+                reponses: ['ne-sais-pas'],
+              },
+            ])
+            .construis(),
+        )
+        .construis();
+
+      const valeursDesIndices =
+        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
+
+      expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
+        thematique: [
+          {
+            identifiant: 'quelle-est-la-reponse',
+            indice: 2,
+            poids: 1,
+          },
+        ],
+      });
+    });
   });
 });
