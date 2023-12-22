@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useReducer } from 'react';
-import Button from '@codegouvfr/react-dsfr/Button';
 import {
   ActionBouton,
   thematiqueChargee,
@@ -40,13 +39,14 @@ export const BoutonThematique = ({
   }, [envoie]);
 
   return (
-    <Button
-      className={`bouton-mac ${style} ${
+    <div
+      className={`fr-pr-2w ${
         etatBouton.borneThematique ? `invisible` : `visible`
       }`}
-      onClick={surClick}
     >
-      {titre}
-    </Button>
+      <button className={`fr-btn bouton-mac ${style}`} onClick={surClick}>
+        {titre}
+      </button>
+    </div>
   );
 };

@@ -20,7 +20,7 @@ export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => (
           <div className="fr-header__tools">
             <div className="fr-header__tools-links">
               <ul className="fr-btns-group">
-                <li>
+                <li className="fr-pr-2w">
                   <button
                     className="bouton-mac bouton-mac-primaire"
                     title="Terminer Diagnostic"
