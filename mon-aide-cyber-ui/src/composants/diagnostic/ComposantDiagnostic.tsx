@@ -469,7 +469,7 @@ export const ComposantDiagnostic = ({
         }}
         copier={{ copier: () => copierLienDiagnostic() }}
       />
-      <main role="main">
+      <main role="main" className="diagnostic-main">
         <div className="fr-grid-row fr-grid-row--gutters fond-clair-mac">
           <div className="conteneur-navigation">{navigation}</div>
           {thematiques.map(([clef, thematique]) => {

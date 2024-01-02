@@ -3,7 +3,7 @@ type ProprietesHeaderDiagnostic = {
   copier: { copier: () => void };
 };
 export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => (
-  <header role="banner" className="fr-header">
+  <header role="banner" className="fr-header diagnostic-header">
     <div className="fr-header__body">
       <div className="fr-container">
         <div className="fr-header__body-row">
