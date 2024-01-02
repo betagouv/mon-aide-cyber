@@ -91,7 +91,9 @@ const ComposantReponsePossible = (
     );
 
   return (
-    <div className={`fr-${proprietes.typeDeSaisie}-group`}>
+    <div
+      className={`fr-${proprietes.typeDeSaisie}-group mac-${proprietes.typeDeSaisie}-group`}
+    >
       <input
         id={proprietes.reponsePossible.identifiant}
         type={proprietes.typeDeSaisie}

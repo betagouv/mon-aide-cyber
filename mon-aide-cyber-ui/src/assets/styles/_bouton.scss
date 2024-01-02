@@ -122,3 +122,23 @@ $border-radius: 0.5rem;
     @include box-shadow();
   }
 }
+
+.mac-radio-group input[type='radio'] + label {
+  background-image: radial-gradient(
+    transparent 8px 45%,
+    var(--couleurs-mac-violet-fonce) 10px 55%,
+    transparent 11px
+  ) !important;
+}
+
+.mac-radio-group input[type='radio']:checked + label {
+  background-image: radial-gradient(
+      transparent 8px 45%,
+      var(--couleurs-mac-violet-fonce) 10px 55%,
+      transparent 11px
+    ),
+    radial-gradient(
+      var(--couleurs-mac-violet-fonce) 5px 30%,
+      transparent 6px 70%
+    ) !important;
+}
