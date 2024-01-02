@@ -186,6 +186,7 @@ export function representeLeDiagnosticPourLeClient(
               },
             },
           ],
+          description: transcripteur.thematiques[clef].description,
           libelle: transcripteur.thematiques[clef].libelle,
           localisationIconeNavigation:
             transcripteur.thematiques[clef].localisationIconeNavigation,
