@@ -1,9 +1,11 @@
 import { Transcripteur } from '../../../src/api/representateurs/types';
 import { Constructeur } from '../../constructeurs/constructeur';
+import { fakerFR } from '@faker-js/faker';
 
 const transcripteurAvecSaisiesLibres = {
   thematiques: {
     contexte: {
+      description: fakerFR.lorem.sentence(),
       libelle: 'Contexte',
       localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
@@ -29,6 +31,7 @@ const transcripteurAvecSaisiesLibres = {
 const transcripteurQuestionTiroir = {
   thematiques: {
     contexte: {
+      description: fakerFR.lorem.sentence(),
       libelle: 'Contexte',
       localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
@@ -58,6 +61,7 @@ const transcripteurQuestionTiroir = {
 const transcripteurMultipleTiroir = {
   thematiques: {
     contexte: {
+      description: fakerFR.lorem.sentence(),
       libelle: 'Contexte',
       localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
@@ -95,6 +99,7 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
       libelle: string;
       localisationIconeNavigation: string;
       localisationIllustration: string;
+      description: string;
       questions: [];
     };
   } = {};
@@ -105,6 +110,7 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
         libelle: thematique,
         localisationIconeNavigation: `/chemin/icone/${thematique}`,
         localisationIllustration: `/chemin/illustration/${thematique}`,
+        description: fakerFR.lorem.sentence(),
         questions: [],
       };
     });
@@ -115,6 +121,19 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
     thematiquesOrdonnees: string[],
   ): ConstructeurTranscripteur {
     this.thematiquesOrdonnees = thematiquesOrdonnees;
+    return this;
+  }
+
+  avecLesDescriptions(
+    descriptions: { thematique: string; description: string }[],
+  ): ConstructeurTranscripteur {
+    descriptions.forEach((description) => {
+      Object.entries(this.thematiques).forEach(([clef, thematique]) => {
+        if (description.thematique === clef) {
+          thematique.description = description.description;
+        }
+      });
+    });
     return this;
   }
 
@@ -129,6 +148,7 @@ const fabriqueTranscripteurVide = (): Transcripteur => {
   return {
     thematiques: {
       contexte: {
+        description: fakerFR.lorem.sentence(),
         libelle: 'Contexte',
         localisationIconeNavigation: '/chemin/icone/contexte',
         localisationIllustration: '/chemin/illustration/contexte',

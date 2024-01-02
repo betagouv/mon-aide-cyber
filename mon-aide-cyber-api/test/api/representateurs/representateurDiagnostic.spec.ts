@@ -149,6 +149,7 @@ describe('Le représentateur de diagnostic', () => {
         {
           thematiques: {
             contexte: {
+              description: 'Description du contexte',
               libelle: 'Contexte',
               localisationIconeNavigation: '/chemin/icone/contexte',
               localisationIllustration: '/chemin/illustration/contexte',
@@ -447,6 +448,7 @@ describe('Le représentateur de diagnostic', () => {
       question: Question,
       reponsePossible: ReponsePossible,
       diagnostic: Diagnostic,
+      description: string,
     ) => {
       expect(
         representationDiagnostic.referentiel[nomThematique],
@@ -461,6 +463,7 @@ describe('Le représentateur de diagnostic', () => {
             },
           },
         ],
+        description,
         libelle: nomThematique,
         localisationIllustration: `/chemin/illustration/${nomThematique}`,
         localisationIconeNavigation: `/chemin/icone/${nomThematique}`,
@@ -497,11 +500,12 @@ describe('Le représentateur de diagnostic', () => {
         )
         .construis();
 
+      const transcripteur = unTranscripteur()
+        .avecLesThematiques(['theme 1', 'theme 2'])
+        .construis();
       const representationDiagnostic = representeLeDiagnosticPourLeClient(
         diagnostic,
-        unTranscripteur()
-          .avecLesThematiques(['theme 1', 'theme 2'])
-          .construis(),
+        transcripteur,
       );
 
       const reponsePossibleQuestionTheme1 = questionTheme1.reponsesPossibles[0];
@@ -512,6 +516,7 @@ describe('Le représentateur de diagnostic', () => {
         questionTheme1,
         reponsePossibleQuestionTheme1,
         diagnostic,
+        transcripteur.thematiques['theme 1'].description,
       );
       expectThematique(
         representationDiagnostic,
@@ -519,6 +524,7 @@ describe('Le représentateur de diagnostic', () => {
         questionTheme2,
         reponsePossibleQuestionTheme2,
         diagnostic,
+        transcripteur.thematiques['theme 2'].description,
       );
     });
 
@@ -546,6 +552,40 @@ describe('Le représentateur de diagnostic', () => {
         'a-2',
         'b-3',
       ]);
+    });
+
+    it('offre une description des thématiques', () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentielSansThematiques()
+            .ajouteUneThematique('thematique-1', [])
+            .ajouteUneThematique('thematique-2', [])
+            .construis(),
+        )
+        .construis();
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        unTranscripteur()
+          .avecLesThematiques(['thematique-1', 'thematique-2'])
+          .avecLesDescriptions([
+            {
+              thematique: 'thematique-1',
+              description: 'Description thématique 1',
+            },
+            {
+              thematique: 'thematique-2',
+              description: 'Description thématique 2',
+            },
+          ])
+          .construis(),
+      );
+
+      expect(
+        Object.entries(representationDiagnostic.referentiel).map(
+          ([, thematique]) => thematique.description,
+        ),
+      ).toStrictEqual(['Description thématique 2', 'Description thématique 1']);
     });
   });
 

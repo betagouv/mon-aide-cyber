@@ -7,6 +7,7 @@ export class AdaptateurTranscripteurDeTest implements AdaptateurTranscripteur {
     return {
       thematiques: {
         contexte: {
+          description: 'Description du contexte',
           libelle: 'Contexte',
           localisationIconeNavigation: '/chemin/icone/contexte',
           localisationIllustration: '/chemin/illustration/contexte',
