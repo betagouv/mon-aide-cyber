@@ -2,6 +2,7 @@ import { ActionReponseDiagnostic } from './Diagnostic.ts';
 
 export type Thematique = {
   actions: ActionReponseDiagnostic[];
+  description: string;
   libelle: string;
   localisationIconeNavigation: string;
   localisationIllustration: string;

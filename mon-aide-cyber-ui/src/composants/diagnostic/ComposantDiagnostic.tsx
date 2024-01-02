@@ -513,8 +513,9 @@ export const ComposantDiagnostic = ({
                 <div className="bandeau-thematique">
                   <div className="fr-container fr-pt-md-4w">
                     <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-                      <div className="fr-col-7 introduction-thematique">
+                      <div className="fr-col-7 fr-mt-8w introduction-thematique">
                         <h2>{thematique.libelle}</h2>
+                        <p>{thematique.description}</p>
                       </div>
                       <div className="fr-col-5">
                         <img
