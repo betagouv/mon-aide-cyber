@@ -22,6 +22,15 @@
   background-color: var(--couleurs-mac-violet-tres-clair);
 }
 
+.diagnostic-header {
+  position: fixed;
+  top: 0;
+}
+
+.diagnostic-main {
+  margin-top: 7.5rem;
+}
+
 .section-diagnostic {
   background-color: var(--couleurs-mac-blanc);
   border-radius: 16px;
