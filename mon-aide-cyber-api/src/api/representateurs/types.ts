@@ -51,6 +51,13 @@ export type RepresentationQuestionChoixMultiple = RepresentationQuestion & {
 type RepresentationQuestionChoixUnique = RepresentationQuestion & {
   type?: Exclude<TypeDeSaisie, 'choixMultiple'> | undefined;
 };
+export type RepresentationGroupes = {
+  numero: number;
+  questions: (
+    | RepresentationQuestionChoixUnique
+    | RepresentationQuestionChoixMultiple
+  )[];
+}[];
 export type RepresentationThematique = {
   actions: ActionDiagnostic[];
   description: string;
@@ -61,6 +68,7 @@ export type RepresentationThematique = {
     | RepresentationQuestionChoixUnique
     | RepresentationQuestionChoixMultiple
   )[];
+  groupes: RepresentationGroupes;
 };
 export type RepresentationReferentiel = {
   [clef: string]: RepresentationThematique;
@@ -88,6 +96,7 @@ type Thematiques = {
     localisationIconeNavigation: string;
     localisationIllustration: string;
     questions: QuestionATranscrire[];
+    groupes: { numero: number; questions: QuestionATranscrire[] }[];
   };
 };
 

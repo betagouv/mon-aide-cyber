@@ -7,12 +7,14 @@ import {
   ReponseATranscrire,
   RepresentationDiagnostic,
   RepresentationQuestion,
+  RepresentationReferentiel,
   RepresentationReponsePossible,
   RepresentationThematique,
   Transcripteur,
 } from './types';
+import { RepresentationGroupee } from './representationGroupee';
 
-const trouveQuestionATranscrire = (
+export const trouveQuestionATranscrire = (
   chemin: { chemin: Chemin; identifiantQuestion: string },
   transcripteur: Transcripteur,
 ): QuestionATranscrire | undefined => {
@@ -92,7 +94,7 @@ const estQuestionATiroir = (
     reponse.questions?.length > 0
   );
 };
-const trouveReponsesPossibles = (
+export const trouveReponsesPossibles = (
   question: QuestionDiagnostic | QuestionATiroir,
   transcripteur: Transcripteur,
   questionATranscrire: QuestionATranscrire | undefined,
@@ -136,7 +138,7 @@ const trouveReponseATranscrire = (
   );
 };
 
-const extraisLesChampsDeLaQuestion = (question: QuestionDiagnostic) => {
+export const extraisLesChampsDeLaQuestion = (question: QuestionDiagnostic) => {
   const autresReponses = {
     valeur: question.reponseDonnee.reponseUnique,
     reponses: question.reponseDonnee.reponsesMultiples.map((rep) => ({
@@ -162,8 +164,12 @@ export function representeLeDiagnosticPourLeClient(
       },
     },
   ];
-  const referentiel = Object.entries(diagnostic.referentiel).reduce(
-    (accumulateur, [clef, questionsThematique]) => {
+  const representationGroupee = new RepresentationGroupee(transcripteur);
+
+  const referentiel: RepresentationReferentiel = Object.entries(
+    diagnostic.referentiel,
+  ).reduce(
+    (accumulateur: RepresentationReferentiel, [clef, questionsThematique]) => {
       actions.push({
         [clef]: {
           action: 'repondre',
@@ -214,6 +220,10 @@ export function representeLeDiagnosticPourLeClient(
               type: questionATranscrire?.type || question.type,
             };
           }),
+          groupes: representationGroupee.represente(
+            clef,
+            questionsThematique,
+          ),
         },
       };
     },

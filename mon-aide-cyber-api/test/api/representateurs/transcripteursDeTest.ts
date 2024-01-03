@@ -1,4 +1,7 @@
-import { Transcripteur } from '../../../src/api/representateurs/types';
+import {
+  QuestionATranscrire,
+  Transcripteur,
+} from '../../../src/api/representateurs/types';
 import { Constructeur } from '../../constructeurs/constructeur';
 import { fakerFR } from '@faker-js/faker';
 
@@ -20,6 +23,26 @@ const transcripteurAvecSaisiesLibres = {
             {
               identifiant: 'reponse2',
               type: { type: 'saisieLibre', format: 'nombre' },
+            },
+          ],
+        },
+      ],
+      groupes: [
+        {
+          numero: 1,
+          questions: [
+            {
+              identifiant: 'quelle-est-la-question',
+              reponses: [
+                {
+                  identifiant: 'reponse1',
+                  type: { type: 'saisieLibre', format: 'texte' },
+                },
+                {
+                  identifiant: 'reponse2',
+                  type: { type: 'saisieLibre', format: 'nombre' },
+                },
+              ],
             },
           ],
         },
@@ -50,6 +73,30 @@ const transcripteurQuestionTiroir = {
                   },
                 ],
               },
+            },
+          ],
+        },
+      ],
+      groupes: [
+        {
+          numero: 1,
+          questions: [
+            {
+              identifiant: 'question-avec-reponse-tiroir',
+              reponses: [
+                {
+                  identifiant: 'reponse-0',
+                  question: {
+                    identifiant: 'question-tiroir',
+                    reponses: [
+                      {
+                        identifiant: 'reponse-3',
+                        type: { type: 'saisieLibre', format: 'texte' },
+                      },
+                    ],
+                  },
+                },
+              ],
             },
           ],
         },
@@ -89,6 +136,35 @@ const transcripteurMultipleTiroir = {
           ],
         },
       ],
+      groupes: [
+        {
+          numero: 1,
+          questions: [
+            {
+              identifiant: 'premiere-question',
+              reponses: [
+                {
+                  identifiant: 'reponse-1',
+                  question: {
+                    identifiant: 'question-11',
+                  },
+                },
+              ],
+            },
+            {
+              identifiant: 'deuxieme-question',
+              reponses: [
+                {
+                  identifiant: 'reponse-2',
+                  question: {
+                    identifiant: 'question-21',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
     },
   },
 } as Transcripteur;
@@ -100,10 +176,12 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
       localisationIconeNavigation: string;
       localisationIllustration: string;
       description: string;
-      questions: [];
+      questions: QuestionATranscrire[];
+      groupes: { numero: number; questions: QuestionATranscrire[] }[];
     };
   } = {};
   private thematiquesOrdonnees: string[] = [];
+
   avecLesThematiques(thematiques: string[]): ConstructeurTranscripteur {
     thematiques.forEach((thematique) => {
       this.thematiques[thematique] = {
@@ -112,6 +190,7 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
         localisationIllustration: `/chemin/illustration/${thematique}`,
         description: fakerFR.lorem.sentence(),
         questions: [],
+        groupes: [],
       };
     });
     return this;
@@ -137,6 +216,23 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
     return this;
   }
 
+  avecLesQuestionsGroupees(
+    groupes: {
+      groupes: { questions: QuestionATranscrire[] }[];
+      thematique: string;
+    }[],
+  ): ConstructeurTranscripteur {
+    groupes.forEach((groupe) => {
+      groupe.groupes.forEach((g) => {
+        this.thematiques[groupe.thematique].groupes.push({
+          numero: this.thematiques[groupe.thematique].groupes.length + 1,
+          questions: g.questions,
+        });
+      });
+    });
+    return this;
+  }
+
   construis(): Transcripteur {
     return {
       ordreThematiques: this.thematiquesOrdonnees,
@@ -144,6 +240,7 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
     };
   }
 }
+
 const fabriqueTranscripteurVide = (): Transcripteur => {
   return {
     thematiques: {
@@ -153,6 +250,7 @@ const fabriqueTranscripteurVide = (): Transcripteur => {
         localisationIconeNavigation: '/chemin/icone/contexte',
         localisationIllustration: '/chemin/illustration/contexte',
         questions: [],
+        groupes: [],
       },
     },
   };

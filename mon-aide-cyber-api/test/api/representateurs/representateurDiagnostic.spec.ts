@@ -156,6 +156,7 @@ describe('Le représentateur de diagnostic', () => {
               questions: [
                 { identifiant: 'question-liste', type: 'liste', reponses: [] },
               ],
+              groupes: [],
             },
           },
         },
@@ -485,6 +486,29 @@ describe('Le représentateur de diagnostic', () => {
             type: 'choixUnique',
           },
         ],
+        groupes: [
+          {
+            numero: 1,
+            questions: [
+              {
+                identifiant: question.identifiant,
+                libelle: question.libelle,
+                reponseDonnee: {
+                  valeur: null,
+                  reponses: [],
+                },
+                reponsesPossibles: [
+                  {
+                    identifiant: reponsePossible.identifiant,
+                    libelle: reponsePossible.libelle,
+                    ordre: reponsePossible.ordre,
+                  },
+                ],
+                type: 'choixUnique',
+              },
+            ],
+          },
+        ],
       });
     };
 
@@ -700,6 +724,131 @@ describe('Le représentateur de diagnostic', () => {
           { identifiant: 'q2', reponses: ['rep-21'] },
         ],
       });
+    });
+  });
+
+  describe('Afin de représenter les questions de manière groupées', () => {
+    it('groupe les questions pour une thématique', () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .sansThematique()
+            .ajouteUneThematique('thematique-groupee', [
+              uneQuestion()
+                .aChoixUnique('Quelle est la nature de votre entité?')
+                .construis(),
+              uneQuestion()
+                .aChoixUnique("Quel est son secteur d'activité?")
+                .construis(),
+              uneQuestion()
+                .aChoixUnique('Combien de personnes compte votre entité?')
+                .construis(),
+            ])
+            .construis(),
+        )
+        .construis();
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        unTranscripteur()
+          .avecLesThematiques(['thematique-groupee'])
+          .avecLesQuestionsGroupees([
+            {
+              thematique: 'thematique-groupee',
+              groupes: [
+                {
+                  questions: [
+                    { identifiant: 'quelle-est-la-nature-de-votre-entite' },
+                    { identifiant: 'quel-est-son-secteur-dactivite' },
+                  ],
+                },
+                {
+                  questions: [
+                    { identifiant: 'combien-de-personnes-compte-votre-entite' },
+                  ],
+                },
+              ],
+            },
+          ])
+          .construis(),
+      );
+
+      expect(
+        representationDiagnostic.referentiel['thematique-groupee'].groupes,
+      ).toStrictEqual([
+        {
+          numero: 1,
+          questions: [
+            {
+              type: 'choixUnique',
+              identifiant: 'quelle-est-la-nature-de-votre-entite',
+              libelle: 'Quelle est la nature de votre entité?',
+              reponseDonnee: { valeur: null, reponses: [] },
+              reponsesPossibles: [],
+            },
+            {
+              type: 'choixUnique',
+              identifiant: 'quel-est-son-secteur-dactivite',
+              libelle: "Quel est son secteur d'activité?",
+              reponseDonnee: { valeur: null, reponses: [] },
+              reponsesPossibles: [],
+            },
+          ],
+        },
+        {
+          numero: 2,
+          questions: [
+            {
+              type: 'choixUnique',
+              identifiant: 'combien-de-personnes-compte-votre-entite',
+              libelle: 'Combien de personnes compte votre entité?',
+              reponseDonnee: { valeur: null, reponses: [] },
+              reponsesPossibles: [],
+            },
+          ],
+        },
+      ]);
+    });
+
+    it("fait figurer la question même si elle n'est pas dans le transcripteur", () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .sansThematique()
+            .ajouteUneThematique('thematique-sans-definition-question', [
+              uneQuestion()
+                .aChoixUnique('Quelle est la nature de votre entité?')
+                .construis(),
+            ])
+            .construis(),
+        )
+        .construis();
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        unTranscripteur()
+          .avecLesThematiques(['thematique-sans-definition-question'])
+          .construis(),
+      );
+
+      expect(
+        representationDiagnostic.referentiel[
+          'thematique-sans-definition-question'
+        ].groupes,
+      ).toStrictEqual([
+        {
+          numero: 1,
+          questions: [
+            {
+              identifiant: 'quelle-est-la-nature-de-votre-entite',
+              libelle: 'Quelle est la nature de votre entité?',
+              reponseDonnee: { valeur: null, reponses: [] },
+              reponsesPossibles: [],
+              type: 'choixUnique',
+            },
+          ],
+        },
+      ]);
     });
   });
 });
