@@ -12,6 +12,7 @@ export class AdaptateurTranscripteurDeTest implements AdaptateurTranscripteur {
           localisationIconeNavigation: '/chemin/icone/contexte',
           localisationIllustration: '/chemin/illustration/contexte',
           questions: [{ identifiant: '', reponses: [] }],
+          groupes: [],
         },
       },
     };

@@ -85,6 +85,29 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
               type: 'choixUnique',
             },
           ],
+          groupes: [
+            {
+              numero: 1,
+              questions: [
+                {
+                  identifiant: premiereQuestion.identifiant,
+                  libelle: premiereQuestion.libelle,
+                  reponseDonnee: {
+                    valeur: null,
+                    reponses: [],
+                  },
+                  reponsesPossibles: [
+                    {
+                      identifiant: premiereReponsePossible.identifiant,
+                      libelle: premiereReponsePossible.libelle,
+                      ordre: 0,
+                    },
+                  ],
+                  type: 'choixUnique',
+                },
+              ],
+            },
+          ],
         },
       });
     });

@@ -35,6 +35,60 @@ export const adaptateurTranscripteur = () =>
                 type: 'liste',
               },
             ],
+            groupes: [
+              {
+                numero: 1,
+                questions: [
+                  { identifiant: 'contexte-nature-organisation' },
+                  {
+                    identifiant: 'contexte-secteur-activite',
+                    type: 'liste',
+                  },
+                  {
+                    identifiant: 'contexte-region-siege-social',
+                    type: 'liste',
+                  },
+                  {
+                    identifiant: 'contexte-departement-tom-siege-social',
+                    type: 'liste',
+                  },
+                ],
+              },
+              {
+                numero: 2,
+                questions: [
+                  {
+                    identifiant: 'contexte-nombre-personnes-dans-organisation',
+                  },
+                  {
+                    identifiant:
+                      'contexte-nombre-postes-travail-dans-organisation',
+                  },
+                ],
+              },
+              {
+                numero: 3,
+                questions: [
+                  {
+                    identifiant:
+                      'contexte-activites-recherche-et-developpement',
+                  },
+                ],
+              },
+              {
+                numero: 4,
+                questions: [
+                  {
+                    identifiant:
+                      'contexte-opere-systemes-information-industriels',
+                  },
+                ],
+              },
+              {
+                numero: 5,
+                questions: [{ identifiant: 'contexte-cyber-attaque-subie' }],
+              },
+            ],
           },
           gouvernance: {
             description:
@@ -45,6 +99,39 @@ export const adaptateurTranscripteur = () =>
             localisationIllustration:
               '/images/diagnostic/gouvernance/illustration.svg',
             questions: [],
+            groupes: [
+              {
+                numero: 6,
+                questions: [
+                  { identifiant: 'gouvernance-infos-et-processus-a-proteger' },
+                ],
+              },
+              {
+                numero: 7,
+                questions: [
+                  { identifiant: 'gouvernance-schema-si-a-jour' },
+                  { identifiant: 'gouvernance-schema-si-industriel-a-jour' },
+                ],
+              },
+              {
+                numero: 8,
+                questions: [{ identifiant: 'gouvernance-connaissance-rgpd-1' }],
+              },
+              {
+                numero: 9,
+                questions: [{ identifiant: 'gouvernance-connaissance-rgpd-2' }],
+              },
+              {
+                numero: 10,
+                questions: [
+                  { identifiant: 'gouvernance-exigence-cyber-securite-presta' },
+                  {
+                    identifiant:
+                      'gouvernance-exigence-cyber-securite-presta-si-industriel',
+                  },
+                ],
+              },
+            ],
           },
           SecuriteAcces: {
             description:
@@ -55,6 +142,82 @@ export const adaptateurTranscripteur = () =>
             localisationIllustration:
               '/images/diagnostic/securite-acces/illustration.svg',
             questions: [],
+            groupes: [
+              {
+                numero: 11,
+                questions: [{ identifiant: 'acces-outil-gestion-des-comptes' }],
+              },
+              {
+                numero: 12,
+                questions: [{ identifiant: 'acces-liste-compte-utilisateurs' }],
+              },
+              {
+                numero: 13,
+                questions: [
+                  { identifiant: 'acces-droits-acces-utilisateurs-limites' },
+                ],
+              },
+              {
+                numero: 14,
+                questions: [
+                  { identifiant: 'acces-utilisateurs-administrateurs-poste' },
+                ],
+              },
+              {
+                numero: 15,
+                questions: [
+                  {
+                    identifiant:
+                      'acces-administrateurs-informatiques-suivie-et-limitee',
+                  },
+                ],
+              },
+              {
+                numero: 16,
+                questions: [
+                  {
+                    identifiant:
+                      'acces-utilisation-comptes-administrateurs-droits-limitee',
+                  },
+                ],
+              },
+              {
+                numero: 17,
+                questions: [
+                  { identifiant: 'acces-mesures-securite-robustesse-mdp' },
+                ],
+              },
+              {
+                numero: 18,
+                questions: [
+                  {
+                    identifiant:
+                      'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
+                  },
+                ],
+              },
+              {
+                numero: 19,
+                questions: [
+                  {
+                    identifiant:
+                      'acces-teletravail-acces-distants-mesures-particulieres',
+                  },
+                  {
+                    identifiant:
+                      'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
+                  },
+                ],
+              },
+              {
+                numero: 20,
+                questions: [
+                  {
+                    identifiant: 'acces-administrateurs-si-mesures-specifiques',
+                  },
+                ],
+              },
+            ],
           },
           securiteposte: {
             description:
@@ -65,6 +228,47 @@ export const adaptateurTranscripteur = () =>
             localisationIllustration:
               '/images/diagnostic/securite-postes/illustration.svg',
             questions: [],
+            groupes: [
+              {
+                numero: 21,
+                questions: [
+                  {
+                    identifiant:
+                      'securite-poste-maj-fonctionnelles-et-securite-deployees',
+                  },
+                  {
+                    identifiant:
+                      'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
+                  },
+                ],
+              },
+              {
+                numero: 22,
+                questions: [
+                  { identifiant: 'securite-poste-antivirus-deploye' },
+                  {
+                    identifiant:
+                      'securite-poste-si-industriel-antivirus-deploye',
+                  },
+                ],
+              },
+              {
+                numero: 23,
+                questions: [
+                  { identifiant: 'securite-poste-pare-feu-local-active' },
+                ],
+              },
+              {
+                numero: 24,
+                questions: [
+                  {
+                    identifiant:
+                      'securite-poste-outils-complementaires-securisation',
+                  },
+                  { identifiant: 'securite-poste-r-et-d-disques-chiffres' },
+                ],
+              },
+            ],
           },
           securiteinfrastructure: {
             description:
@@ -75,6 +279,62 @@ export const adaptateurTranscripteur = () =>
             localisationIllustration:
               '/images/diagnostic/securite-infrastructures/illustration.svg',
             questions: [],
+            groupes: [
+              {
+                numero: 25,
+                questions: [
+                  { identifiant: 'securite-infrastructure-pare-feu-deploye' },
+                  {
+                    identifiant:
+                      'securite-infrastructure-si-industriel-pare-feu-deploye',
+                  },
+                ],
+              },
+              {
+                numero: 26,
+                questions: [
+                  {
+                    identifiant:
+                      'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees',
+                  },
+                ],
+              },
+              {
+                numero: 27,
+                questions: [
+                  {
+                    identifiant:
+                      'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees',
+                  },
+                ],
+              },
+              {
+                numero: 28,
+                questions: [
+                  {
+                    identifiant:
+                      'securite-infrastructure-outils-securisation-systeme-messagerie',
+                  },
+                ],
+              },
+              {
+                numero: 29,
+                questions: [
+                  {
+                    identifiant: 'securite-infrastructure-acces-wifi-securises',
+                  },
+                ],
+              },
+              {
+                numero: 30,
+                questions: [
+                  {
+                    identifiant:
+                      'securite-infrastructure-espace-stockage-serveurs',
+                  },
+                ],
+              },
+            ],
           },
           sensibilisation: {
             description:
@@ -85,6 +345,39 @@ export const adaptateurTranscripteur = () =>
             localisationIllustration:
               '/images/diagnostic/sensibilisation/illustration.svg',
             questions: [],
+            groupes: [
+              {
+                numero: 31,
+                questions: [
+                  {
+                    identifiant:
+                      'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
+                  },
+                  {
+                    identifiant:
+                      'sensibilisation-risque-espionnage-industriel-r-et-d',
+                  },
+                ],
+              },
+              {
+                numero: 32,
+                questions: [
+                  {
+                    identifiant:
+                      'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
+                  },
+                ],
+              },
+              {
+                numero: 33,
+                questions: [
+                  {
+                    identifiant:
+                      'sensibilisation-declaration-incidents-encouragee',
+                  },
+                ],
+              },
+            ],
           },
           reaction: {
             description:
@@ -95,6 +388,32 @@ export const adaptateurTranscripteur = () =>
             localisationIllustration:
               '/images/diagnostic/reaction/illustration.svg',
             questions: [],
+            groupes: [
+              {
+                numero: 34,
+                questions: [
+                  {
+                    identifiant:
+                      'reaction-surveillance-veille-vulnerabilites-potentielles',
+                  },
+                ],
+              },
+              {
+                numero: 35,
+                questions: [
+                  { identifiant: 'reaction-sauvegardes-donnees-realisees' },
+                ],
+              },
+              {
+                numero: 36,
+                questions: [
+                  {
+                    identifiant:
+                      'reaction-dispositif-gestion-crise-adapte-defini',
+                  },
+                ],
+              },
+            ],
           },
         },
       };
