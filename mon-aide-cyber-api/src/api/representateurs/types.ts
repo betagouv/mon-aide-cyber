@@ -96,7 +96,7 @@ type Thematiques = {
     localisationIconeNavigation: string;
     localisationIllustration: string;
     questions: QuestionATranscrire[];
-    groupes: { numero: number; questions: QuestionATranscrire[] }[];
+    groupes: { questions: QuestionATranscrire[] }[];
   };
 };
 

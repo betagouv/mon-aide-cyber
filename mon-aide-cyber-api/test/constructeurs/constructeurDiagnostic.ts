@@ -16,6 +16,7 @@ import { TableauDeRecommandations } from '../../src/diagnostic/TableauDeRecomman
 import { unTableauDeRecommandations } from './constructeurTableauDeRecommandations';
 import { fakerFR } from '@faker-js/faker';
 import { Poids } from '../../src/diagnostic/Indice';
+import { aseptise } from '../utilitaires/aseptise';
 
 class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   private referentiel: Referentiel = unReferentiel().construis();
@@ -139,6 +140,7 @@ class ConstructeurQuestionDiagnostic
   }
 
   avecLibelle(libelle: string): ConstructeurQuestionDiagnostic {
+    this.identifiant = aseptise(libelle);
     this.libelle = libelle;
     return this;
   }
@@ -147,6 +149,11 @@ class ConstructeurQuestionDiagnostic
     reponseDonnee: ReponseDonnee,
   ): ConstructeurQuestionDiagnostic {
     this.reponseDonnee = reponseDonnee;
+    return this;
+  }
+
+  aChoixUnique(): ConstructeurQuestionDiagnostic {
+    this.type = 'choixUnique';
     return this;
   }
 

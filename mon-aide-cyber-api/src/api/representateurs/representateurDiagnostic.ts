@@ -12,7 +12,7 @@ import {
   RepresentationThematique,
   Transcripteur,
 } from './types';
-import { RepresentationGroupee } from './representationGroupee';
+import { RepresentationGroupee } from './RepresentationGroupee';
 
 export const trouveQuestionATranscrire = (
   chemin: { chemin: Chemin; identifiantQuestion: string },

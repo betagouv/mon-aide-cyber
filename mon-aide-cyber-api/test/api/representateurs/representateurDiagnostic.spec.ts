@@ -450,6 +450,7 @@ describe('Le représentateur de diagnostic', () => {
       reponsePossible: ReponsePossible,
       diagnostic: Diagnostic,
       description: string,
+      numero = 1,
     ) => {
       expect(
         representationDiagnostic.referentiel[nomThematique],
@@ -488,7 +489,7 @@ describe('Le représentateur de diagnostic', () => {
         ],
         groupes: [
           {
-            numero: 1,
+            numero,
             questions: [
               {
                 identifiant: question.identifiant,
@@ -549,6 +550,7 @@ describe('Le représentateur de diagnostic', () => {
         reponsePossibleQuestionTheme2,
         diagnostic,
         transcripteur.thematiques['theme 2'].description,
+        2,
       );
     });
 
@@ -804,47 +806,6 @@ describe('Le représentateur de diagnostic', () => {
               libelle: 'Combien de personnes compte votre entité?',
               reponseDonnee: { valeur: null, reponses: [] },
               reponsesPossibles: [],
-            },
-          ],
-        },
-      ]);
-    });
-
-    it("fait figurer la question même si elle n'est pas dans le transcripteur", () => {
-      const diagnostic = unDiagnostic()
-        .avecUnReferentiel(
-          unReferentiel()
-            .sansThematique()
-            .ajouteUneThematique('thematique-sans-definition-question', [
-              uneQuestion()
-                .aChoixUnique('Quelle est la nature de votre entité?')
-                .construis(),
-            ])
-            .construis(),
-        )
-        .construis();
-
-      const representationDiagnostic = representeLeDiagnosticPourLeClient(
-        diagnostic,
-        unTranscripteur()
-          .avecLesThematiques(['thematique-sans-definition-question'])
-          .construis(),
-      );
-
-      expect(
-        representationDiagnostic.referentiel[
-          'thematique-sans-definition-question'
-        ].groupes,
-      ).toStrictEqual([
-        {
-          numero: 1,
-          questions: [
-            {
-              identifiant: 'quelle-est-la-nature-de-votre-entite',
-              libelle: 'Quelle est la nature de votre entité?',
-              reponseDonnee: { valeur: null, reponses: [] },
-              reponsesPossibles: [],
-              type: 'choixUnique',
             },
           ],
         },

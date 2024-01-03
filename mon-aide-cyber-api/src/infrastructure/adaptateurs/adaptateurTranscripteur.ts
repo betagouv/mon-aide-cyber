@@ -37,7 +37,6 @@ export const adaptateurTranscripteur = () =>
             ],
             groupes: [
               {
-                numero: 1,
                 questions: [
                   { identifiant: 'contexte-nature-organisation' },
                   {
@@ -55,7 +54,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 2,
                 questions: [
                   {
                     identifiant: 'contexte-nombre-personnes-dans-organisation',
@@ -67,7 +65,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 3,
                 questions: [
                   {
                     identifiant:
@@ -76,7 +73,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 4,
                 questions: [
                   {
                     identifiant:
@@ -85,7 +81,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 5,
                 questions: [{ identifiant: 'contexte-cyber-attaque-subie' }],
               },
             ],
@@ -101,28 +96,23 @@ export const adaptateurTranscripteur = () =>
             questions: [],
             groupes: [
               {
-                numero: 6,
                 questions: [
                   { identifiant: 'gouvernance-infos-et-processus-a-proteger' },
                 ],
               },
               {
-                numero: 7,
                 questions: [
                   { identifiant: 'gouvernance-schema-si-a-jour' },
                   { identifiant: 'gouvernance-schema-si-industriel-a-jour' },
                 ],
               },
               {
-                numero: 8,
                 questions: [{ identifiant: 'gouvernance-connaissance-rgpd-1' }],
               },
               {
-                numero: 9,
                 questions: [{ identifiant: 'gouvernance-connaissance-rgpd-2' }],
               },
               {
-                numero: 10,
                 questions: [
                   { identifiant: 'gouvernance-exigence-cyber-securite-presta' },
                   {
@@ -144,27 +134,22 @@ export const adaptateurTranscripteur = () =>
             questions: [],
             groupes: [
               {
-                numero: 11,
                 questions: [{ identifiant: 'acces-outil-gestion-des-comptes' }],
               },
               {
-                numero: 12,
                 questions: [{ identifiant: 'acces-liste-compte-utilisateurs' }],
               },
               {
-                numero: 13,
                 questions: [
                   { identifiant: 'acces-droits-acces-utilisateurs-limites' },
                 ],
               },
               {
-                numero: 14,
                 questions: [
                   { identifiant: 'acces-utilisateurs-administrateurs-poste' },
                 ],
               },
               {
-                numero: 15,
                 questions: [
                   {
                     identifiant:
@@ -173,7 +158,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 16,
                 questions: [
                   {
                     identifiant:
@@ -182,13 +166,11 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 17,
                 questions: [
                   { identifiant: 'acces-mesures-securite-robustesse-mdp' },
                 ],
               },
               {
-                numero: 18,
                 questions: [
                   {
                     identifiant:
@@ -197,7 +179,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 19,
                 questions: [
                   {
                     identifiant:
@@ -210,7 +191,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 20,
                 questions: [
                   {
                     identifiant: 'acces-administrateurs-si-mesures-specifiques',
@@ -230,7 +210,6 @@ export const adaptateurTranscripteur = () =>
             questions: [],
             groupes: [
               {
-                numero: 21,
                 questions: [
                   {
                     identifiant:
@@ -243,7 +222,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 22,
                 questions: [
                   { identifiant: 'securite-poste-antivirus-deploye' },
                   {
@@ -253,13 +231,11 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 23,
                 questions: [
                   { identifiant: 'securite-poste-pare-feu-local-active' },
                 ],
               },
               {
-                numero: 24,
                 questions: [
                   {
                     identifiant:
@@ -281,7 +257,6 @@ export const adaptateurTranscripteur = () =>
             questions: [],
             groupes: [
               {
-                numero: 25,
                 questions: [
                   { identifiant: 'securite-infrastructure-pare-feu-deploye' },
                   {
@@ -291,7 +266,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 26,
                 questions: [
                   {
                     identifiant:
@@ -300,7 +274,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 27,
                 questions: [
                   {
                     identifiant:
@@ -309,7 +282,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 28,
                 questions: [
                   {
                     identifiant:
@@ -318,7 +290,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 29,
                 questions: [
                   {
                     identifiant: 'securite-infrastructure-acces-wifi-securises',
@@ -326,7 +297,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 30,
                 questions: [
                   {
                     identifiant:
@@ -347,7 +317,6 @@ export const adaptateurTranscripteur = () =>
             questions: [],
             groupes: [
               {
-                numero: 31,
                 questions: [
                   {
                     identifiant:
@@ -360,7 +329,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 32,
                 questions: [
                   {
                     identifiant:
@@ -369,7 +337,6 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 33,
                 questions: [
                   {
                     identifiant:
@@ -390,7 +357,6 @@ export const adaptateurTranscripteur = () =>
             questions: [],
             groupes: [
               {
-                numero: 34,
                 questions: [
                   {
                     identifiant:
@@ -399,13 +365,11 @@ export const adaptateurTranscripteur = () =>
                 ],
               },
               {
-                numero: 35,
                 questions: [
                   { identifiant: 'reaction-sauvegardes-donnees-realisees' },
                 ],
               },
               {
-                numero: 36,
                 questions: [
                   {
                     identifiant:

@@ -29,7 +29,6 @@ const transcripteurAvecSaisiesLibres = {
       ],
       groupes: [
         {
-          numero: 1,
           questions: [
             {
               identifiant: 'quelle-est-la-question',
@@ -79,7 +78,6 @@ const transcripteurQuestionTiroir = {
       ],
       groupes: [
         {
-          numero: 1,
           questions: [
             {
               identifiant: 'question-avec-reponse-tiroir',
@@ -138,7 +136,6 @@ const transcripteurMultipleTiroir = {
       ],
       groupes: [
         {
-          numero: 1,
           questions: [
             {
               identifiant: 'premiere-question',
@@ -177,7 +174,7 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
       localisationIllustration: string;
       description: string;
       questions: QuestionATranscrire[];
-      groupes: { numero: number; questions: QuestionATranscrire[] }[];
+      groupes: { questions: QuestionATranscrire[] }[];
     };
   } = {};
   private thematiquesOrdonnees: string[] = [];
@@ -225,7 +222,6 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
     groupes.forEach((groupe) => {
       groupe.groupes.forEach((g) => {
         this.thematiques[groupe.thematique].groupes.push({
-          numero: this.thematiques[groupe.thematique].groupes.length + 1,
           questions: g.questions,
         });
       });
@@ -256,18 +252,11 @@ const fabriqueTranscripteurVide = (): Transcripteur => {
   };
 };
 
-const fabriqueTranscripteurThematiquesOrdonnees = (
-  ordreThematiques: string[],
-): Transcripteur => {
-  return { ordreThematiques: ordreThematiques, thematiques: {} };
-};
-
 const unTranscripteur = (): ConstructeurTranscripteur => {
   return new ConstructeurTranscripteur();
 };
 
 export {
-  fabriqueTranscripteurThematiquesOrdonnees,
   fabriqueTranscripteurVide,
   transcripteurAvecSaisiesLibres,
   transcripteurMultipleTiroir,
