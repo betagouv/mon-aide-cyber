@@ -7,7 +7,10 @@ import {
 } from './representateurDiagnostic';
 
 export class RepresentationGroupee {
-  constructor(private readonly transcripteur: Transcripteur) {}
+  constructor(
+    private readonly transcripteur: Transcripteur,
+    private numeroQuestion: number = 1,
+  ) {}
 
   represente(
     clef: string,
@@ -46,7 +49,7 @@ export class RepresentationGroupee {
               type: questionATranscrire?.type || question!.type,
             };
           });
-          return { numero: groupe.numero, questions };
+          return { numero: this.numeroQuestion++, questions };
         });
 
     representations.push(
@@ -87,7 +90,7 @@ export class RepresentationGroupee {
       );
       const { autresReponses, reste } = extraisLesChampsDeLaQuestion(question);
       return {
-        numero: 1,
+        numero: this.numeroQuestion++,
         questions: [
           {
             ...reste,
