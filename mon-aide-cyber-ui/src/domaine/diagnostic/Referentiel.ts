@@ -1,12 +1,16 @@
 import { ActionReponseDiagnostic } from './Diagnostic.ts';
 
+export type Groupes = {
+  numero: number;
+  questions: Question[];
+}[];
 export type Thematique = {
   actions: ActionReponseDiagnostic[];
   description: string;
   libelle: string;
   localisationIconeNavigation: string;
   localisationIllustration: string;
-  questions: Question[];
+  groupes: Groupes;
 };
 export type Referentiel = {
   [clef: string]: Thematique;

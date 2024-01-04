@@ -404,8 +404,7 @@ export const SelectionneReponseDiagnostic: Story = {
       expect(
         await waitFor(() =>
           canvas.getByText(
-            diagnosticAvecUneQuestionAChoixUnique.referentiel.contexte
-              .questions[0].libelle,
+            `1. ${diagnosticAvecUneQuestionAChoixUnique.referentiel.contexte.groupes[0].questions[0].libelle}`,
           ),
         ),
       ).toBeInTheDocument();
@@ -442,8 +441,7 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
       expect(
         await waitFor(() =>
           canvas.getByText(
-            diagnosticAvecQuestionSousFormeDeListeDeroulante.referentiel
-              .contexte.questions[0].libelle,
+            `1. ${diagnosticAvecQuestionSousFormeDeListeDeroulante.referentiel.contexte.groupes[0].questions[0].libelle}`,
           ),
         ),
       ).toBeInTheDocument();
@@ -483,8 +481,7 @@ export const AfficheLesThematiques: Story = {
       expect(
         await waitFor(() =>
           canvas.getByText(
-            diagnosticAPlusieursThematiques.referentiel['contexte'].questions[0]
-              .libelle,
+            `1. ${diagnosticAPlusieursThematiques.referentiel['contexte'].groupes[0].questions[0].libelle}`,
           ),
         ),
       ).toBeInTheDocument();
@@ -507,16 +504,14 @@ export const AfficheLesThematiques: Story = {
       expect(
         await waitFor(() =>
           canvas.getByText(
-            diagnosticAPlusieursThematiques.referentiel['Thème 1'].questions[0]
-              .libelle,
+            `1. ${diagnosticAPlusieursThematiques.referentiel['Thème 1'].groupes[0].questions[0].libelle}`,
           ),
         ),
       ).toBeInTheDocument();
       expect(
         await waitFor(() =>
           canvas.getByText(
-            diagnosticAPlusieursThematiques.referentiel['Thème 1'].questions[1]
-              .libelle,
+            `2. ${diagnosticAPlusieursThematiques.referentiel['Thème 1'].groupes[1].questions[0].libelle}`,
           ),
         ),
       ).toBeInTheDocument();

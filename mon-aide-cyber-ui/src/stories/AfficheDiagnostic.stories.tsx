@@ -206,7 +206,7 @@ export const QuestionDiagnostic: Story = {
     expect(
       await waitFor(() =>
         canvas.getByText(
-          diagnosticAvecUneQuestion.referentiel.contexte.questions[0].libelle,
+          `1. ${diagnosticAvecUneQuestion.referentiel.contexte.groupes[0].questions[0].libelle}`,
         ),
       ),
     ).toBeInTheDocument();
@@ -241,16 +241,14 @@ export const AfficheDiagnosticAvecPlusieursQuestions: Story = {
     expect(
       await waitFor(() =>
         canvas.getByText(
-          diagnosticAvecPlusieursQuestions.referentiel.contexte.questions[0]
-            .libelle,
+          `1. ${diagnosticAvecPlusieursQuestions.referentiel.contexte.groupes[0].questions[0].libelle}`,
         ),
       ),
     ).toBeInTheDocument();
     expect(
       await waitFor(() =>
         canvas.getByText(
-          diagnosticAvecPlusieursQuestions.referentiel.contexte.questions[1]
-            .libelle,
+          `2. ${diagnosticAvecPlusieursQuestions.referentiel.contexte.groupes[1].questions[0].libelle}`,
         ),
       ),
     ).toBeInTheDocument();
@@ -288,8 +286,8 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
     const canvas = within(canvasElement);
 
     const reponseEntrainantQuestion =
-      diagnosticAvecReponseEntrainantQuestion.referentiel.contexte.questions[0]
-        .reponsesPossibles[2];
+      diagnosticAvecReponseEntrainantQuestion.referentiel.contexte.groupes[0]
+        .questions[0].reponsesPossibles[2];
     expect(
       await waitFor(() =>
         canvas.findByText(

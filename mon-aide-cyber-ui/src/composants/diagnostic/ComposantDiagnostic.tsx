@@ -50,9 +50,10 @@ import { FooterDiagnostic } from './FooterDiagnostic.tsx';
 import { HeaderDiagnostic } from './HeaderDiagnostic.tsx';
 
 type ProprietesComposantQuestion = {
+  actions: ActionReponseDiagnostic[];
+  numeroQuestion: number | undefined;
   question: Question;
   reponseDonnee?: ReponseDonnee;
-  actions: ActionReponseDiagnostic[];
 };
 
 type ProprietesChampsDeSaisie = {
@@ -119,6 +120,7 @@ const ComposantReponsePossible = (
 const ComposantQuestionListe = ({
   question,
   actions,
+  numeroQuestion,
 }: ProprietesComposantQuestion) => {
   const [etatReponse, envoie] = useReducer(
     reducteurReponse,
@@ -150,9 +152,12 @@ const ComposantQuestionListe = ({
   }, [actions, entrepots, etatReponse, question, reponseQuestionEnvoyee]);
 
   return (
-    <div className="fr-select-group">
+    <div className={`fr-select-group ${!numeroQuestion ? 'fr-pt-2w' : ''}`}>
       <label className="fr-label" htmlFor={`select-${question.identifiant}`}>
-        <h5>{question.libelle}</h5>
+        <h5>
+          {numeroQuestion ? `${numeroQuestion}. ` : ''}
+          {question.libelle}
+        </h5>
       </label>
       <select
         onChange={repond}
@@ -181,6 +186,7 @@ const ComposantQuestionListe = ({
 const ComposantQuestion = ({
   question,
   actions,
+  numeroQuestion,
 }: ProprietesComposantQuestion) => {
   const [etatReponse, envoie] = useReducer(
     reducteurReponse,
@@ -246,9 +252,12 @@ const ComposantQuestion = ({
     }
   }, [actions, entrepots, etatReponse, question, reponseQuestionEnvoyee]);
   return (
-    <>
+    <div className={!numeroQuestion ? `fr-pt-2w` : ''}>
       <label className="fr-label">
-        <h5>{question.libelle}</h5>
+        <h5>
+          {numeroQuestion ? `${numeroQuestion}. ` : ''}
+          {question.libelle}
+        </h5>
       </label>
       <div className="fr-fieldset__content">
         {question.reponsesPossibles.map((reponse) => {
@@ -323,7 +332,7 @@ const ComposantQuestion = ({
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 
@@ -478,25 +487,37 @@ export const ComposantDiagnostic = ({
             const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
               (action) => Object.entries(action).find(([c]) => c === clef),
             ) as ActionReponseDiagnostic[];
-            const elements = thematique.questions.map((question) => (
-              <fieldset
-                key={question.identifiant}
-                id={question.identifiant}
-                className="fr-fieldset fr-mb-5w section-diagnostic"
-              >
-                {question.type === 'liste' ? (
-                  <ComposantQuestionListe
-                    question={question}
-                    actions={actionsPossibles}
-                  />
-                ) : (
-                  <ComposantQuestion
-                    question={question}
-                    actions={actionsPossibles}
-                  />
-                )}
-              </fieldset>
-            ));
+            const elements = thematique.groupes.flatMap((groupe) => {
+              return (
+                <fieldset
+                  key={`groupe-${groupe.numero}`}
+                  id={`groupe-${groupe.numero}`}
+                  className="fr-fieldset fr-mb-5w section-diagnostic"
+                >
+                  {groupe.questions.map((question, index) => {
+                    const numeroQuestion =
+                      index === 0 ? groupe.numero : undefined;
+                    return (
+                      <>
+                        {question.type === 'liste' ? (
+                          <ComposantQuestionListe
+                            question={question}
+                            actions={actionsPossibles}
+                            numeroQuestion={numeroQuestion}
+                          />
+                        ) : (
+                          <ComposantQuestion
+                            question={question}
+                            actions={actionsPossibles}
+                            numeroQuestion={numeroQuestion}
+                          />
+                        )}
+                      </>
+                    );
+                  })}
+                </fieldset>
+              );
+            });
             return (
               <div
                 key={clef}

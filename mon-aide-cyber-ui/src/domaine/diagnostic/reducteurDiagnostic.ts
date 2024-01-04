@@ -1,9 +1,9 @@
-import { Diagnostic } from "./Diagnostic.ts";
-import { ReponsePossible } from "./Referentiel.ts";
+import { Diagnostic } from './Diagnostic.ts';
+import { ReponsePossible } from './Referentiel.ts';
 
 enum TypeActionDiagnostic {
-  DIAGNOSTIC_CHARGE = "DIAGNOSTIC_CHARGE",
-  THEMATIQUE_AFFICHEE = "THEMATIQUE_AFFICHEE",
+  DIAGNOSTIC_CHARGE = 'DIAGNOSTIC_CHARGE',
+  THEMATIQUE_AFFICHEE = 'THEMATIQUE_AFFICHEE',
 }
 
 type EtatDiagnostic = {
@@ -37,22 +37,23 @@ export const reducteurDiagnostic = (
                 premiereReponse.ordre - secondeReponse.ordre,
             );
           };
-          thematique.questions.forEach((question) => {
-            trieLesReponses(question.reponsesPossibles);
-            question.reponsesPossibles.forEach(
-              (reponse) =>
-                reponse.questions?.forEach((question) =>
-                  trieLesReponses(question.reponsesPossibles),
-                ),
-            );
-            return question;
+          thematique.groupes.forEach((groupe) => {
+            groupe.questions.forEach((question) => {
+              trieLesReponses(question.reponsesPossibles);
+              question.reponsesPossibles.forEach(
+                (reponse) =>
+                  reponse.questions?.forEach((question) =>
+                    trieLesReponses(question.reponsesPossibles),
+                  ),
+              );
+            });
           });
         },
       );
       return {
         ...etat,
         diagnostic: action.diagnostic,
-        thematiqueAffichee: "contexte",
+        thematiqueAffichee: 'contexte',
       };
   }
 };
