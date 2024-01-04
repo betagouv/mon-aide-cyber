@@ -64,10 +64,6 @@ export type RepresentationThematique = {
   libelle: string;
   localisationIllustration: string;
   localisationIconeNavigation: string;
-  questions: (
-    | RepresentationQuestionChoixUnique
-    | RepresentationQuestionChoixMultiple
-  )[];
   groupes: RepresentationGroupes;
 };
 export type RepresentationReferentiel = {
@@ -95,7 +91,6 @@ type Thematiques = {
     libelle: string;
     localisationIconeNavigation: string;
     localisationIllustration: string;
-    questions: QuestionATranscrire[];
     groupes: { questions: QuestionATranscrire[] }[];
   };
 };

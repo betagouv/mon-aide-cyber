@@ -24,17 +24,6 @@ export const adaptateurTranscripteur = () =>
               '/images/diagnostic/contexte/icone-navigation.svg',
             localisationIllustration:
               '/images/diagnostic/contexte/illustration.svg',
-            questions: [
-              {
-                identifiant: 'contexte-secteur-activite',
-                type: 'liste',
-              },
-              { identifiant: 'contexte-region-siege-social', type: 'liste' },
-              {
-                identifiant: 'contexte-departement-tom-siege-social',
-                type: 'liste',
-              },
-            ],
             groupes: [
               {
                 questions: [
@@ -93,7 +82,6 @@ export const adaptateurTranscripteur = () =>
               '/images/diagnostic/gouvernance/icone-navigation.svg',
             localisationIllustration:
               '/images/diagnostic/gouvernance/illustration.svg',
-            questions: [],
             groupes: [
               {
                 questions: [
@@ -131,7 +119,6 @@ export const adaptateurTranscripteur = () =>
               '/images/diagnostic/securite-acces/icone-navigation.svg',
             localisationIllustration:
               '/images/diagnostic/securite-acces/illustration.svg',
-            questions: [],
             groupes: [
               {
                 questions: [{ identifiant: 'acces-outil-gestion-des-comptes' }],
@@ -207,7 +194,6 @@ export const adaptateurTranscripteur = () =>
               '/images/diagnostic/securite-postes/icone-navigation.svg',
             localisationIllustration:
               '/images/diagnostic/securite-postes/illustration.svg',
-            questions: [],
             groupes: [
               {
                 questions: [
@@ -254,7 +240,6 @@ export const adaptateurTranscripteur = () =>
               '/images/diagnostic/securite-infrastructures/icone-navigation.svg',
             localisationIllustration:
               '/images/diagnostic/securite-infrastructures/illustration.svg',
-            questions: [],
             groupes: [
               {
                 questions: [
@@ -314,7 +299,6 @@ export const adaptateurTranscripteur = () =>
               '/images/diagnostic/sensibilisation/icone-navigation.svg',
             localisationIllustration:
               '/images/diagnostic/sensibilisation/illustration.svg',
-            questions: [],
             groupes: [
               {
                 questions: [
@@ -354,7 +338,6 @@ export const adaptateurTranscripteur = () =>
               '/images/diagnostic/reaction/icone-navigation.svg',
             localisationIllustration:
               '/images/diagnostic/reaction/illustration.svg',
-            questions: [],
             groupes: [
               {
                 questions: [

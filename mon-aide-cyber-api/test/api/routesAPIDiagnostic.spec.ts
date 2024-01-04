@@ -67,24 +67,6 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
           libelle: 'Contexte',
           localisationIconeNavigation: '/chemin/icone/contexte',
           localisationIllustration: '/chemin/illustration/contexte',
-          questions: [
-            {
-              identifiant: premiereQuestion.identifiant,
-              libelle: premiereQuestion.libelle,
-              reponseDonnee: {
-                valeur: null,
-                reponses: [],
-              },
-              reponsesPossibles: [
-                {
-                  identifiant: premiereReponsePossible.identifiant,
-                  libelle: premiereReponsePossible.libelle,
-                  ordre: 0,
-                },
-              ],
-              type: 'choixUnique',
-            },
-          ],
           groupes: [
             {
               numero: 1,
@@ -183,7 +165,9 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       expect(diagnosticRetourne.identifiant).toBe(
         lien?.substring(lien.lastIndexOf('/') + 1),
       );
-      expect(diagnosticRetourne.referentiel.contexte.questions).toHaveLength(1);
+      expect(diagnosticRetourne.referentiel.contexte.groupes).toHaveLength(
+        1,
+      );
     });
 
     it("retourne une erreur HTTP 500 lorsque le référentiel n'est pas trouvé", async () => {

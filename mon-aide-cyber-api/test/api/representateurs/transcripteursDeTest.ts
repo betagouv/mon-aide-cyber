@@ -12,21 +12,6 @@ const transcripteurAvecSaisiesLibres = {
       libelle: 'Contexte',
       localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
-      questions: [
-        {
-          identifiant: 'quelle-est-la-question',
-          reponses: [
-            {
-              identifiant: 'reponse1',
-              type: { type: 'saisieLibre', format: 'texte' },
-            },
-            {
-              identifiant: 'reponse2',
-              type: { type: 'saisieLibre', format: 'nombre' },
-            },
-          ],
-        },
-      ],
       groupes: [
         {
           questions: [
@@ -57,25 +42,6 @@ const transcripteurQuestionTiroir = {
       libelle: 'Contexte',
       localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
-      questions: [
-        {
-          identifiant: 'question-avec-reponse-tiroir',
-          reponses: [
-            {
-              identifiant: 'reponse-0',
-              question: {
-                identifiant: 'question-tiroir',
-                reponses: [
-                  {
-                    identifiant: 'reponse-3',
-                    type: { type: 'saisieLibre', format: 'texte' },
-                  },
-                ],
-              },
-            },
-          ],
-        },
-      ],
       groupes: [
         {
           questions: [
@@ -110,30 +76,6 @@ const transcripteurMultipleTiroir = {
       libelle: 'Contexte',
       localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
-      questions: [
-        {
-          identifiant: 'premiere-question',
-          reponses: [
-            {
-              identifiant: 'reponse-1',
-              question: {
-                identifiant: 'question-11',
-              },
-            },
-          ],
-        },
-        {
-          identifiant: 'deuxieme-question',
-          reponses: [
-            {
-              identifiant: 'reponse-2',
-              question: {
-                identifiant: 'question-21',
-              },
-            },
-          ],
-        },
-      ],
       groupes: [
         {
           questions: [
@@ -173,7 +115,6 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
       localisationIconeNavigation: string;
       localisationIllustration: string;
       description: string;
-      questions: QuestionATranscrire[];
       groupes: { questions: QuestionATranscrire[] }[];
     };
   } = {};
@@ -186,7 +127,6 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
         localisationIconeNavigation: `/chemin/icone/${thematique}`,
         localisationIllustration: `/chemin/illustration/${thematique}`,
         description: fakerFR.lorem.sentence(),
-        questions: [],
         groupes: [],
       };
     });
@@ -245,7 +185,6 @@ const fabriqueTranscripteurVide = (): Transcripteur => {
         libelle: 'Contexte',
         localisationIconeNavigation: '/chemin/icone/contexte',
         localisationIllustration: '/chemin/illustration/contexte',
-        questions: [],
         groupes: [],
       },
     },
