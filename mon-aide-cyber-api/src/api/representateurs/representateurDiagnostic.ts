@@ -9,7 +9,6 @@ import {
   RepresentationQuestion,
   RepresentationReferentiel,
   RepresentationReponsePossible,
-  RepresentationThematique,
   Transcripteur,
 } from './types';
 import { RepresentationGroupee } from './RepresentationGroupee';
@@ -168,91 +167,82 @@ export function representeLeDiagnosticPourLeClient(
 
   const referentiel: RepresentationReferentiel = Object.entries(
     diagnostic.referentiel,
-  ).reduce(
-    (accumulateur: RepresentationReferentiel, [clef, questionsThematique]) => {
-      actions.push({
-        [clef]: {
-          action: 'repondre',
-          ressource: {
-            url: `/api/diagnostic/${diagnostic.identifiant}`,
-            methode: 'PATCH',
-          },
-        },
-      });
-      return {
-        ...accumulateur,
-        [clef]: {
-          actions: [
-            {
-              action: 'repondre',
-              chemin: clef,
-              ressource: {
-                url: `/api/diagnostic/${diagnostic.identifiant}`,
-                methode: 'PATCH',
-              },
+  )
+    .sort(([thematiqueA], [thematiqueB]) =>
+      transcripteur.ordreThematiques &&
+      transcripteur.ordreThematiques?.indexOf(thematiqueA) >
+        transcripteur.ordreThematiques?.indexOf(thematiqueB)
+        ? 1
+        : -1,
+    )
+    .reduce(
+      (
+        accumulateur: RepresentationReferentiel,
+        [clef, questionsThematique],
+      ) => {
+        actions.push({
+          [clef]: {
+            action: 'repondre',
+            ressource: {
+              url: `/api/diagnostic/${diagnostic.identifiant}`,
+              methode: 'PATCH',
             },
-          ],
-          description: transcripteur.thematiques[clef].description,
-          libelle: transcripteur.thematiques[clef].libelle,
-          localisationIconeNavigation:
-            transcripteur.thematiques[clef].localisationIconeNavigation,
-          localisationIllustration:
-            transcripteur.thematiques[clef].localisationIllustration,
-          questions: questionsThematique.questions.map((question) => {
-            const questionATranscrire = trouveQuestionATranscrire(
+          },
+        });
+        return {
+          ...accumulateur,
+          [clef]: {
+            actions: [
               {
+                action: 'repondre',
                 chemin: clef,
-                identifiantQuestion: question.identifiant,
+                ressource: {
+                  url: `/api/diagnostic/${diagnostic.identifiant}`,
+                  methode: 'PATCH',
+                },
               },
-              transcripteur,
-            );
-            const reponsesPossibles = trouveReponsesPossibles(
-              question,
-              transcripteur,
-              questionATranscrire,
-            );
-            const { autresReponses, reste } =
-              extraisLesChampsDeLaQuestion(question);
-            return {
-              ...reste,
-              reponseDonnee: autresReponses,
-              reponsesPossibles,
-              type: questionATranscrire?.type || question.type,
-            };
-          }),
-          groupes: representationGroupee.represente(
-            clef,
-            questionsThematique,
-          ),
-        },
-      };
-    },
-    {},
-  );
+            ],
+            description: transcripteur.thematiques[clef].description,
+            libelle: transcripteur.thematiques[clef].libelle,
+            localisationIconeNavigation:
+              transcripteur.thematiques[clef].localisationIconeNavigation,
+            localisationIllustration:
+              transcripteur.thematiques[clef].localisationIllustration,
+            questions: questionsThematique.questions.map((question) => {
+              const questionATranscrire = trouveQuestionATranscrire(
+                {
+                  chemin: clef,
+                  identifiantQuestion: question.identifiant,
+                },
+                transcripteur,
+              );
+              const reponsesPossibles = trouveReponsesPossibles(
+                question,
+                transcripteur,
+                questionATranscrire,
+              );
+              const { autresReponses, reste } =
+                extraisLesChampsDeLaQuestion(question);
+              return {
+                ...reste,
+                reponseDonnee: autresReponses,
+                reponsesPossibles,
+                type: questionATranscrire?.type || question.type,
+              };
+            }),
+            groupes: representationGroupee.represente(
+              clef,
+              questionsThematique,
+            ),
+          },
+        };
+      },
+      {},
+    );
 
   return {
     actions,
     identifiant: diagnostic.identifiant,
-    referentiel: {
-      ...Object.keys(referentiel)
-        .sort((thematiqueA, thematiqueB) =>
-          transcripteur.ordreThematiques &&
-          transcripteur.ordreThematiques?.indexOf(thematiqueA) >
-            transcripteur.ordreThematiques?.indexOf(thematiqueB)
-            ? 1
-            : -1,
-        )
-        .reduce(
-          (accumulateur, thematique) => ({
-            ...accumulateur,
-            [thematique]: {
-              ...(Object.entries(referentiel).find(
-                ([clef]) => clef === thematique,
-              )?.[1] as RepresentationThematique),
-            },
-          }),
-          {},
-        ),
-    },
+    referentiel,
   };
 }

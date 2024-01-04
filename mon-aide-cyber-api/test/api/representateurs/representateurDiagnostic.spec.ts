@@ -21,6 +21,7 @@ import {
 import { Question, ReponsePossible } from '../../../src/diagnostic/Referentiel';
 import {
   RepresentationDiagnostic,
+  RepresentationGroupes,
   RepresentationThematique,
 } from '../../../src/api/representateurs/types';
 import { Diagnostic } from '../../../src/diagnostic/Diagnostic';
@@ -527,6 +528,7 @@ describe('Le représentateur de diagnostic', () => {
 
       const transcripteur = unTranscripteur()
         .avecLesThematiques(['theme 1', 'theme 2'])
+        .ordonneLesThematiques(['theme 1', 'theme 2'])
         .construis();
       const representationDiagnostic = representeLeDiagnosticPourLeClient(
         diagnostic,
@@ -806,6 +808,67 @@ describe('Le représentateur de diagnostic', () => {
               libelle: 'Combien de personnes compte votre entité?',
               reponseDonnee: { valeur: null, reponses: [] },
               reponsesPossibles: [],
+            },
+          ],
+        },
+      ]);
+    });
+
+    it("conserve l'ordre des thématiques", () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .sansThematique()
+            .ajouteUneThematique('seconde-thematique', [
+              uneQuestion()
+                .aChoixUnique('Existe-t-il un schéma à jour?')
+                .construis(),
+            ])
+            .ajouteUneThematique('premiere-thematique', [
+              uneQuestion()
+                .aChoixUnique('Quelle est la nature de votre entité?')
+                .construis(),
+            ])
+            .construis(),
+        )
+        .construis();
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        unTranscripteur()
+          .avecLesThematiques(['premiere-thematique', 'seconde-thematique'])
+          .ordonneLesThematiques(['premiere-thematique', 'seconde-thematique'])
+          .construis(),
+      );
+
+      expect(
+        representationDiagnostic.referentiel['premiere-thematique'].groupes,
+      ).toStrictEqual<RepresentationGroupes>([
+        {
+          numero: 1,
+          questions: [
+            {
+              identifiant: 'quelle-est-la-nature-de-votre-entite',
+              libelle: 'Quelle est la nature de votre entité?',
+              reponseDonnee: { valeur: null, reponses: [] },
+              reponsesPossibles: [],
+              type: 'choixUnique',
+            },
+          ],
+        },
+      ]);
+      expect(
+        representationDiagnostic.referentiel['seconde-thematique'].groupes,
+      ).toStrictEqual<RepresentationGroupes>([
+        {
+          numero: 2,
+          questions: [
+            {
+              identifiant: 'existetil-un-schema-a-jour',
+              libelle: 'Existe-t-il un schéma à jour?',
+              reponseDonnee: { valeur: null, reponses: [] },
+              reponsesPossibles: [],
+              type: 'choixUnique',
             },
           ],
         },
