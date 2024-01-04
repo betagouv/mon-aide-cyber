@@ -18,9 +18,9 @@ export const trouveQuestionATranscrire = (
   transcripteur: Transcripteur,
 ): QuestionATranscrire | undefined => {
   return trouveParmiLesQuestions(
-    transcripteur.thematiques[chemin.chemin][
-      'questions'
-    ] as QuestionATranscrire[],
+    transcripteur.thematiques[chemin.chemin].groupes.flatMap(
+      (q) => q.questions as QuestionATranscrire[],
+    ),
     chemin.identifiantQuestion,
   );
 };
@@ -208,28 +208,6 @@ export function representeLeDiagnosticPourLeClient(
               transcripteur.thematiques[clef].localisationIconeNavigation,
             localisationIllustration:
               transcripteur.thematiques[clef].localisationIllustration,
-            questions: questionsThematique.questions.map((question) => {
-              const questionATranscrire = trouveQuestionATranscrire(
-                {
-                  chemin: clef,
-                  identifiantQuestion: question.identifiant,
-                },
-                transcripteur,
-              );
-              const reponsesPossibles = trouveReponsesPossibles(
-                question,
-                transcripteur,
-                questionATranscrire,
-              );
-              const { autresReponses, reste } =
-                extraisLesChampsDeLaQuestion(question);
-              return {
-                ...reste,
-                reponseDonnee: autresReponses,
-                reponsesPossibles,
-                type: questionATranscrire?.type || question.type,
-              };
-            }),
             groupes: representationGroupee.represente(
               clef,
               questionsThematique,

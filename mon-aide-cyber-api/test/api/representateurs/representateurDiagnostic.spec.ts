@@ -95,7 +95,8 @@ describe('Le représentateur de diagnostic', () => {
       );
 
       expect(
-        diagnosticRepresente.referentiel['contexte'].questions[0].reponseDonnee,
+        diagnosticRepresente.referentiel['contexte'].groupes[0].questions[0]
+          .reponseDonnee,
       ).toStrictEqual({
         valeur: null,
         reponses: [],
@@ -121,7 +122,7 @@ describe('Le représentateur de diagnostic', () => {
       );
 
       const questionRetournee =
-        diagnosticRepresente.referentiel.contexte.questions[0];
+        diagnosticRepresente.referentiel.contexte.groupes[0].questions[0];
       const reponsesPossibles = questionRetournee.reponsesPossibles;
       expect(questionRetournee.type).toBe('choixUnique');
       expect(reponsesPossibles[0].type).toStrictEqual({
@@ -154,16 +155,24 @@ describe('Le représentateur de diagnostic', () => {
               libelle: 'Contexte',
               localisationIconeNavigation: '/chemin/icone/contexte',
               localisationIllustration: '/chemin/illustration/contexte',
-              questions: [
-                { identifiant: 'question-liste', type: 'liste', reponses: [] },
+              groupes: [
+                {
+                  questions: [
+                    {
+                      identifiant: 'question-liste',
+                      type: 'liste',
+                      reponses: [],
+                    },
+                  ],
+                },
               ],
-              groupes: [],
             },
           },
         },
       );
 
-      const question = diagnosticRepresente.referentiel.contexte.questions[0];
+      const question =
+        diagnosticRepresente.referentiel.contexte.groupes[0].questions[0];
       expect(question.type).toBe('liste');
     });
 
@@ -201,7 +210,9 @@ describe('Le représentateur de diagnostic', () => {
           );
 
           expect(
-            diagnosticRepresente.referentiel.contexte.questions,
+            diagnosticRepresente.referentiel.contexte.groupes.flatMap(
+              (q) => q.questions,
+            ),
           ).toMatchObject([
             {
               identifiant: 'question-avec-reponse-tiroir',
@@ -269,7 +280,7 @@ describe('Le représentateur de diagnostic', () => {
           );
 
           const questionTiroir =
-            diagnosticRepresente.referentiel.contexte.questions[0]
+            diagnosticRepresente.referentiel.contexte.groupes[0].questions[0]
               .reponsesPossibles[0];
           expect(questionTiroir?.questions?.[0].identifiant).toBe(
             'question-tiroir',
@@ -321,7 +332,7 @@ describe('Le représentateur de diagnostic', () => {
           );
 
           const questionTiroir =
-            diagnosticRepresente.referentiel.contexte.questions[1]
+            diagnosticRepresente.referentiel.contexte.groupes[0].questions[0]
               .reponsesPossibles[0]?.questions?.[0];
           expect(questionTiroir?.reponsesPossibles[0]).toMatchObject({
             identifiant: 'reponse-3',
@@ -380,16 +391,16 @@ describe('Le représentateur de diagnostic', () => {
           );
 
           const premiereQuestionTiroir =
-            representationDiagnostic.referentiel.contexte.questions[0]
-              .reponsesPossibles[0]?.questions?.[0];
+            representationDiagnostic.referentiel.contexte.groupes[0]
+              .questions[0].reponsesPossibles[0]?.questions?.[0];
           expect(premiereQuestionTiroir?.reponsesPossibles[0]).toMatchObject({
             identifiant: 'reponse-11',
             libelle: 'Réponse 11',
             ordre: 0,
           });
           const deuxiemeQuestionTiroir =
-            representationDiagnostic.referentiel.contexte.questions[1]
-              .reponsesPossibles[0]?.questions?.[0];
+            representationDiagnostic.referentiel.contexte.groupes[0]
+              .questions[1].reponsesPossibles[0]?.questions?.[0];
           expect(
             deuxiemeQuestionTiroir?.reponsesPossibles[0],
           ).toStrictEqual<ReponsePossible>({
@@ -427,7 +438,8 @@ describe('Le représentateur de diagnostic', () => {
           );
 
           const question =
-            representationDiagnostic.referentiel.contexte.questions[0];
+            representationDiagnostic.referentiel.contexte.groupes[0]
+              .questions[0];
           expect(question).toMatchObject({
             identifiant: 'une-question-a-choix-unique-',
             libelle: 'Une question à choix unique ?',
@@ -470,24 +482,6 @@ describe('Le représentateur de diagnostic', () => {
         libelle: nomThematique,
         localisationIllustration: `/chemin/illustration/${nomThematique}`,
         localisationIconeNavigation: `/chemin/icone/${nomThematique}`,
-        questions: [
-          {
-            identifiant: question.identifiant,
-            libelle: question.libelle,
-            reponseDonnee: {
-              valeur: null,
-              reponses: [],
-            },
-            reponsesPossibles: [
-              {
-                identifiant: reponsePossible.identifiant,
-                libelle: reponsePossible.libelle,
-                ordre: reponsePossible.ordre,
-              },
-            ],
-            type: 'choixUnique',
-          },
-        ],
         groupes: [
           {
             numero,
@@ -654,7 +648,7 @@ describe('Le représentateur de diagnostic', () => {
       );
 
       const reponse =
-        representationDiagnostic.referentiel['multiple'].questions[0]
+        representationDiagnostic.referentiel['multiple'].groupes[0].questions[0]
           .reponseDonnee;
       expect(reponse).toStrictEqual({
         valeur: null,
@@ -719,7 +713,7 @@ describe('Le représentateur de diagnostic', () => {
       );
 
       const reponseDonnee =
-        representationDiagnostic.referentiel['contexte'].questions[0]
+        representationDiagnostic.referentiel['contexte'].groupes[0].questions[0]
           .reponseDonnee;
       expect(reponseDonnee).toStrictEqual({
         valeur: 'réponse',
