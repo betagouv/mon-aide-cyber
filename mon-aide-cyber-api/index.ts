@@ -1,6 +1,6 @@
 import serveur from './src/serveur';
 import { AdaptateurReferentielMAC } from './src/infrastructure/adaptateurs/AdaptateurReferentielMAC';
-import { adaptateurTranscripteur } from './src/infrastructure/adaptateurs/adaptateurTranscripteur';
+import { adaptateurTranscripteur } from './src/infrastructure/adaptateurs/transcripteur/adaptateurTranscripteur';
 import { AdaptateurTableauDeRecommandationsMAC } from './src/infrastructure/adaptateurs/AdaptateurTableauDeRecommandationsMAC';
 import { AdaptateurDeRestitutionPDF } from './src/infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import { fabriqueEntrepots } from './src/adaptateurs/fabriqueEntrepots';

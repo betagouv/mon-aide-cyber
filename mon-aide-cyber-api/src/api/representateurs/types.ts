@@ -85,14 +85,15 @@ export type QuestionATranscrire = {
   reponses?: ReponseATranscrire[];
   type?: TypeDeSaisie;
 };
+export type Thematique = {
+  description: string;
+  libelle: string;
+  localisationIconeNavigation: string;
+  localisationIllustration: string;
+  groupes: { questions: QuestionATranscrire[] }[];
+};
 type Thematiques = {
-  [thematique: string]: {
-    description: string;
-    libelle: string;
-    localisationIconeNavigation: string;
-    localisationIllustration: string;
-    groupes: { questions: QuestionATranscrire[] }[];
-  };
+  [thematique: string]: Thematique;
 };
 
 export type Transcripteur = {
