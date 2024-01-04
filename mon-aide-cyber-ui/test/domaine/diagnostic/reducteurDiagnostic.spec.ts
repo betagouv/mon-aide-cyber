@@ -67,7 +67,9 @@ describe('Les réducteurs de diagnostic', () => {
       );
 
       const questions =
-        etatDiagnostic.diagnostic?.referentiel['contexte'].questions || [];
+        etatDiagnostic.diagnostic?.referentiel['contexte'].groupes.flatMap(
+          (q) => q.questions,
+        ) || [];
       expect(
         questions[0].reponsesPossibles.map((reponse) => reponse.ordre),
       ).toStrictEqual([0, 1, 2, 3]);
@@ -122,13 +124,13 @@ describe('Les réducteurs de diagnostic', () => {
       const thematiqueAutreThematique =
         etatDiagnostic.diagnostic?.referentiel['Autre thématique'];
       expect(
-        thematiqueContexte?.questions[0].reponsesPossibles.map(
-          (reponse) => reponse.ordre,
+        thematiqueContexte?.groupes[0].questions.flatMap((q) =>
+          q.reponsesPossibles.map((reponse) => reponse.ordre),
         ),
       ).toStrictEqual([0, 1]);
       expect(
-        thematiqueAutreThematique?.questions[0].reponsesPossibles.map(
-          (reponse) => reponse.ordre,
+        thematiqueAutreThematique?.groupes[0].questions.flatMap((q) =>
+          q.reponsesPossibles.map((reponse) => reponse.ordre),
         ),
       ).toStrictEqual([0, 1]);
     });
@@ -185,7 +187,7 @@ describe('Les réducteurs de diagnostic', () => {
       const thematiqueContexte =
         etatDiagnostic.diagnostic?.referentiel['contexte'];
       const reponsesPossible =
-        thematiqueContexte?.questions[0]?.reponsesPossibles[0];
+        thematiqueContexte?.groupes[0]?.questions[0].reponsesPossibles[0];
       expect(
         reponsesPossible?.questions?.[0]?.reponsesPossibles.map(
           (reponse) => reponse.ordre,
