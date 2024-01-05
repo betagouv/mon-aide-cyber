@@ -25,11 +25,12 @@ export class AdaptateurGestionnaireErreursMemoire
 
   controleurErreurs(): ErrorRequestHandler {
     return (
-      _erreur: Error,
+      erreur: Error,
       _requete: Request,
       _reponse: Response,
       _suite: NextFunction,
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-    ) => {};
+    ) => {
+      console.error('Une erreur est survenue: %s', erreur);
+    };
   }
 }
