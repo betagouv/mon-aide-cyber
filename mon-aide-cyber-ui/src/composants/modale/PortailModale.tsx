@@ -108,14 +108,22 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
         }
       };
 
+      const surEchappe = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          fermeModale();
+        }
+      };
+
       modaleCourante.addEventListener('keydown', surTabulation);
+      modaleCourante.addEventListener('keydown', surEchappe);
 
       return () => {
         clearTimeout(timeoutSurPremierChamps);
         modaleCourante.removeEventListener('keydown', surTabulation);
+        modaleCourante.removeEventListener('keydown', surEchappe);
       };
     }
-  }, [modaleOuverte]);
+  }, [fermeModale, modaleOuverte]);
 
   return (
     <ContexteModale.Provider
