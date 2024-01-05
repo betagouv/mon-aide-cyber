@@ -62,6 +62,7 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
   );
   const [ariaModale, setAriaModale] = useState<boolean>(false);
   const [modaleOuverte, setModaleOuverte] = useState<boolean>(false);
+  const ref = useRef<HTMLDialogElement | null>(null);
 
   const fermeModale = useCallback(() => {
     setClasseModale('');
@@ -69,6 +70,17 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
     setModaleOuverte(false);
     setElementModale(null);
   }, []);
+
+  useEffect(() => {
+    if (modaleOuverte) {
+      const focusable: HTMLElement | null | undefined =
+        ref.current?.firstElementChild?.querySelector(
+          '[href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
+      const timeout = setTimeout(() => focusable?.focus(), 10);
+      return () => clearTimeout(timeout);
+    }
+  }, [modaleOuverte]);
 
   return (
     <ContexteModale.Provider
@@ -90,6 +102,7 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
         aria-modal={ariaModale}
         open={modaleOuverte}
         role="dialog"
+        ref={ref}
       ></dialog>
       {elementModale
         ? createPortal(

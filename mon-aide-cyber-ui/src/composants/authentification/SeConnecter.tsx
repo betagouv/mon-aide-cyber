@@ -50,6 +50,7 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
     [authentification, etatAuthentification, navigate, surFermeture, envoie],
   );
 
+  const erreur = etatAuthentification.erreur;
   return (
     <>
       <form onSubmit={connexion}>
@@ -57,7 +58,9 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
           <div>
             <fieldset className="fr-mb-5w">
               <div
-                className={`fr-input-group ${etatAuthentification.erreur?.identifiant?.className}`}
+                className={`fr-input-group ${
+                  erreur ? erreur?.identifiant?.className : ''
+                }`}
               >
                 <label className="fr-label" htmlFor="identifiant-connexion">
                   Votre adresse email
@@ -67,12 +70,15 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
                   type="text"
                   id={'identifiant-connexion'}
                   name="identifiant-connexion"
+                  autoComplete={'email'}
                   onChange={(e) => surSaisieIdentifiant(e.target.value)}
                 />
-                {etatAuthentification.erreur?.identifiant?.texteExplicatif}
+                {erreur?.identifiant?.texteExplicatif}
               </div>
               <div
-                className={`fr-input-group ${etatAuthentification.erreur?.motDePasse?.className}`}
+                className={`fr-input-group ${
+                  erreur ? erreur?.motDePasse?.className : ''
+                }`}
               >
                 <label className="fr-label" htmlFor="mot-de-passe">
                   Votre mot de passe
@@ -83,9 +89,10 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
                   role="textbox"
                   id="mot-de-passe"
                   name="mot-de-passe"
+                  autoComplete={'current-password'}
                   onChange={(e) => surSaisieMoteDePasse(e.target.value)}
                 />
-                {etatAuthentification.erreur?.motDePasse?.texteExplicatif}
+                {erreur?.motDePasse?.texteExplicatif}
               </div>
             </fieldset>
           </div>
