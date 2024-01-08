@@ -1,18 +1,25 @@
-import { AdaptateurDeVerificationDeSession } from '../../src/adaptateurs/AdaptateurDeVerificationDeSession';
-import { NextFunction } from 'express-serve-static-core';
-import { Request, Response } from 'express';
-import { Contexte } from '../../src/domaine/erreurMAC';
+import { AdaptateurDeVerificationDeSession } from "../../src/adaptateurs/AdaptateurDeVerificationDeSession";
+import { NextFunction } from "express-serve-static-core";
+import { Request, RequestHandler, Response } from "express";
+import { Contexte } from "../../src/domaine/erreurMAC";
 
 export class AdaptateurDeVerificationDeSessionDeTest
   implements AdaptateurDeVerificationDeSession
 {
   constructor(private estPassee = false) {}
 
+  verifieParMiddleware(__contexte: Contexte): RequestHandler {
+    return (_requete: Request, _reponse: Response, suite: NextFunction) => {
+      this.estPassee = true;
+      suite();
+    };
+  }
+
   verifie(
     _contexte: Contexte,
     _requete: Request,
     _reponse: Response,
-    suite: NextFunction,
+    suite: NextFunction
   ): void {
     this.estPassee = true;
     suite();
