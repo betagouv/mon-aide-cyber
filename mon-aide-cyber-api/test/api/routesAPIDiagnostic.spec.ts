@@ -13,6 +13,9 @@ import {
   RepresentationReferentiel,
 } from '../../src/api/representateurs/types';
 import { Express } from 'express';
+import { RestitutionHTML } from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
+import { unAdaptateurDeRestitutionHTML } from '../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
+import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
 
 describe('le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -165,9 +168,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       expect(diagnosticRetourne.identifiant).toBe(
         lien?.substring(lien.lastIndexOf('/') + 1),
       );
-      expect(diagnosticRetourne.referentiel.contexte.groupes).toHaveLength(
-        1,
-      );
+      expect(diagnosticRetourne.referentiel.contexte.groupes).toHaveLength(1);
     });
 
     it("retourne une erreur HTTP 500 lorsque le référentiel n'est pas trouvé", async () => {
@@ -278,10 +279,12 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
   describe('quand une requête GET est reçue sur /{id}/termine', () => {
     it('génère les recommandations', async () => {
       let adaptateurPDFAppele = false;
-      testeurMAC.adaptateurDeRestitution.genereRestitution = () => {
+      const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
+      adaptateurRestitutionPDF.genereRestitution = () => {
         adaptateurPDFAppele = true;
         return Promise.resolve(Buffer.from('PDF Recommandations généré'));
       };
+      testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
       const diagnostic = unDiagnostic().construis();
       await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
 
@@ -322,6 +325,63 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       expect(
         testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
       ).toBe(true);
+    });
+  });
+
+  describe('quand une requête GET est reçue sur /{id}/restitution', () => {
+    it('retourne la restitution', async () => {
+      const adaptateurDeRestitutionHTML = unAdaptateurDeRestitutionHTML()
+        .avecIndicateurs('indicateurs')
+        .avecMesuresPrioritaires('mesures prioritaires')
+        .avecAutresMesures('autres mesures')
+        .construis();
+
+      testeurMAC.adaptateursRestitution.html = () =>
+        adaptateurDeRestitutionHTML;
+
+      const diagnostic = unDiagnostic().construis();
+      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/${diagnostic.identifiant}/restitution`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(await reponse.json()).toStrictEqual<RestitutionHTML>({
+        autresMesures: '',
+        indicateurs: 'indicateurs',
+        mesuresPrioritaires: 'mesures prioritaires',
+      });
+    });
+
+    it('la route est protégée', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/${crypto.randomUUID()}/restitution`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+      ).toBe(true);
+    });
+
+    it('retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/${crypto.randomUUID()}/restitution`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toMatchObject({
+        message: "Le diagnostic demandé n'existe pas.",
+      });
     });
   });
 });
