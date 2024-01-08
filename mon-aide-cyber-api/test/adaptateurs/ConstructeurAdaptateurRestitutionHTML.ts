@@ -17,7 +17,11 @@ class ConstructeurAdaptateurRestitutionHTML {
     const corpsAutresMesures = this.corpsAutresMesures;
 
     return new (class extends AdaptateurDeRestitutionHTML {
-      protected genereRecommandationsPrioritaires(
+      constructor() {
+        super(new Map());
+      }
+
+      protected genereMesuresPrioritaires(
         _: RecommandationPriorisee[] | undefined,
       ): Promise<ContenuHtml> {
         return Promise.resolve({
@@ -37,7 +41,7 @@ class ConstructeurAdaptateurRestitutionHTML {
         });
       }
 
-      protected genereRecommandationsAnnexes(
+      protected genereAutresMesures(
         _: RecommandationPriorisee[],
       ): Promise<ContenuHtml> {
         return Promise.resolve({

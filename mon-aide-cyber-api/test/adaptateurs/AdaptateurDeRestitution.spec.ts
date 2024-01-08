@@ -48,7 +48,7 @@ describe('Adaptateur de Restitution', () => {
         return Promise.resolve(resultat);
       }
 
-      protected genereRecommandationsAnnexes(
+      protected genereAutresMesures(
         autresRecommandations: RecommandationPriorisee[] | undefined,
       ): Promise<ContenuHtml> {
         const resultat: ContenuHtml = {
@@ -64,7 +64,7 @@ describe('Adaptateur de Restitution', () => {
         return Promise.resolve(resultat);
       }
 
-      protected genereRecommandationsPrioritaires(
+      protected genereMesuresPrioritaires(
         recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
       ): Promise<ContenuHtml> {
         const resultat: ContenuHtml = {

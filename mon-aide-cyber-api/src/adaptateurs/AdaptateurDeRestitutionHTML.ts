@@ -1,6 +1,7 @@
 import { AdaptateurDeRestitution } from './AdaptateurDeRestitution';
 import { Indicateurs, RecommandationPriorisee } from '../diagnostic/Diagnostic';
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
+import * as pug from 'pug';
 
 export type RestitutionHTML = {
   autresMesures: string;
@@ -9,16 +10,8 @@ export type RestitutionHTML = {
 };
 
 export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<RestitutionHTML> {
-  protected genereRecommandationsAnnexes(
-    _: RecommandationPriorisee[],
-  ): Promise<ContenuHtml> {
-    throw new Error('Method not implemented.');
-  }
-
-  protected genereRecommandationsPrioritaires(
-    _: RecommandationPriorisee[] | undefined,
-  ): Promise<ContenuHtml> {
-    return Promise.resolve({} as ContenuHtml);
+  constructor(private readonly traductionThematiques: Map<string, string>) {
+    super();
   }
 
   protected async genere(
@@ -33,8 +26,51 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
   }
 
   protected genereIndicateurs(
-    _: Indicateurs | undefined,
+    indicateurs: Indicateurs | undefined,
   ): Promise<ContenuHtml> {
-    return Promise.resolve({} as ContenuHtml);
+    return this.genereHtml('indicateurs', {
+      indicateurs,
+      traductions: this.traductionThematiques,
+    });
+  }
+
+  protected genereMesuresPrioritaires(
+    mesuresPrioritaires: RecommandationPriorisee[] | undefined,
+  ): Promise<ContenuHtml> {
+    return this.genereHtml('mesures', {
+      recommandations: mesuresPrioritaires,
+    });
+  }
+
+  protected genereAutresMesures(
+    autresMesures: RecommandationPriorisee[],
+  ): Promise<ContenuHtml> {
+    return this.genereHtml('autres-mesures', {
+      recommandations: autresMesures,
+    });
+  }
+
+  async genereHtml(pugCorps: string, paramsCorps: any): Promise<ContenuHtml> {
+    const fonctionInclusionDynamique = (
+      cheminTemplatePug: string,
+      options = {},
+    ) => {
+      return pug.renderFile(
+        `src/infrastructure/html/modeles/${cheminTemplatePug}`,
+        options,
+      );
+    };
+
+    return Promise.all([
+      pug.compileFile(`src/infrastructure/html/modeles/${pugCorps}.pug`)({
+        ...paramsCorps,
+        include: fonctionInclusionDynamique,
+      }),
+    ])
+      .then(([corps]) => ({ entete: '', corps, piedPage: '' }))
+      .catch((erreur) => {
+        console.log('Erreur génération HTML', erreur);
+        throw new Error(erreur);
+      });
   }
 }

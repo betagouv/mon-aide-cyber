@@ -19,7 +19,7 @@ export abstract class AdaptateurDeRestitution<T> {
     const indicateurs = this.genereIndicateurs(
       diagnostic.restitution?.indicateurs,
     );
-    const recommandations = this.genereRecommandationsPrioritaires(
+    const recommandations = this.genereMesuresPrioritaires(
       diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
     );
 
@@ -30,17 +30,17 @@ export abstract class AdaptateurDeRestitution<T> {
       return this.genere([
         indicateurs,
         recommandations,
-        this.genereRecommandationsAnnexes(autresRecommandations),
+        this.genereAutresMesures(autresRecommandations),
       ]);
     }
     return this.genere([indicateurs, recommandations]);
   }
 
-  protected abstract genereRecommandationsAnnexes(
+  protected abstract genereAutresMesures(
     autresRecommandations: RecommandationPriorisee[],
   ): Promise<ContenuHtml>;
 
-  protected abstract genereRecommandationsPrioritaires(
+  protected abstract genereMesuresPrioritaires(
     recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
   ): Promise<ContenuHtml>;
 

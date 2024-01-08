@@ -25,26 +25,55 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
   protected genereIndicateurs(
     indicateurs: Indicateurs | undefined,
   ): Promise<ContenuHtml> {
-    return genereHtml('restitution-page-de-garde', {
+    return this.genereHtml('restitution-page-de-garde', {
       indicateurs,
       traductions: this.traductionThematiques,
     });
   }
 
-  protected genereRecommandationsAnnexes(
+  protected genereAutresMesures(
     autresRecommandations: RecommandationPriorisee[] | undefined,
   ): Promise<ContenuHtml> {
-    return genereHtml('recommandations.annexe', {
+    return this.genereHtml('recommandations.annexe', {
       recommandations: autresRecommandations,
     });
   }
 
-  protected genereRecommandationsPrioritaires(
+  protected genereMesuresPrioritaires(
     recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
   ): Promise<ContenuHtml> {
-    return genereHtml('recommandations', {
+    return this.genereHtml('recommandations', {
       recommandations: recommandationsPrioritaires,
     });
+  }
+
+  async genereHtml(pugCorps: string, paramsCorps: any): Promise<ContenuHtml> {
+    const fonctionInclusionDynamique = (
+      cheminTemplatePug: string,
+      options = {},
+    ) => {
+      return pug.renderFile(
+        `src/infrastructure/pdf/modeles/${cheminTemplatePug}`,
+        options,
+      );
+    };
+    const piedPage = pug.compileFile(
+      `src/infrastructure/pdf/modeles/${pugCorps}.piedpage.pug`,
+    )();
+    return Promise.all([
+      pug.compileFile(`src/infrastructure/pdf/modeles/${pugCorps}.pug`)({
+        ...paramsCorps,
+        include: fonctionInclusionDynamique,
+      }),
+      pug.compileFile(
+        `src/infrastructure/pdf/modeles/${pugCorps}.entete.pug`,
+      )(),
+    ])
+      .then(([corps, entete]) => ({ corps, entete, piedPage }))
+      .catch((erreur) => {
+        console.log('Erreur génération HTML', erreur);
+        throw new Error(erreur);
+      });
   }
 }
 
@@ -73,35 +102,6 @@ const fusionnePdfs = (pdfs: Buffer[]): Promise<Buffer> => {
 };
 
 export type ContenuHtml = { corps: string; entete: string; piedPage: string };
-const genereHtml = async (
-  pugCorps: string,
-  paramsCorps: any,
-): Promise<ContenuHtml> => {
-  const fonctionInclusionDynamique = (
-    cheminTemplatePug: string,
-    options = {},
-  ) => {
-    return pug.renderFile(
-      `src/infrastructure/pdf/modeles/${cheminTemplatePug}`,
-      options,
-    );
-  };
-  const piedPage = pug.compileFile(
-    `src/infrastructure/pdf/modeles/${pugCorps}.piedpage.pug`,
-  )();
-  return Promise.all([
-    pug.compileFile(`src/infrastructure/pdf/modeles/${pugCorps}.pug`)({
-      ...paramsCorps,
-      include: fonctionInclusionDynamique,
-    }),
-    pug.compileFile(`src/infrastructure/pdf/modeles/${pugCorps}.entete.pug`)(),
-  ])
-    .then(([corps, entete]) => ({ corps, entete, piedPage }))
-    .catch((erreur) => {
-      console.log('Erreur génération HTML', erreur);
-      throw new Error(erreur);
-    });
-};
 
 const generePdfs = (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
   return lanceNavigateur()
