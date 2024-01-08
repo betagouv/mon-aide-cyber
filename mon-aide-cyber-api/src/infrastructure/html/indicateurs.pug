@@ -1,0 +1,12 @@
+extends base
+
+block page
+    h2 Indicateurs de maturité
+
+    div
+        - const couleursThematiques = new Map([['gouvernance', '#fd9c2e'], ['SecuriteAcces', '#9c51d0'], ['securiteposte', '#fdc8d5'], ['securiteinfrastructure', '#fdc82e'], ['sensibilisation', '#5d2a9d'], ['reaction', '#fd8eb9']])
+        - const configurationIndicateurs = Object.entries(indicateurs).map(([thematique, indicateur]) => ({couleur: couleursThematiques.get(thematique), valeur: indicateur.moyennePonderee * 5 / 3}))
+        - const values = configurationIndicateurs.map(configuration => configuration.valeur)
+        - const colors = configurationIndicateurs.map(configuration => configuration.couleur)
+        - const legend = Object.entries(Object.fromEntries(couleursThematiques)).map(([thematique, couleur]) => ({text: traductions.get(thematique),colour: couleur}));
+        include graphe-polaire
