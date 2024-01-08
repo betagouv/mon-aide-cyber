@@ -15,68 +15,71 @@ import { ContenuHtml } from '../../src/infrastructure/adaptateurs/AdaptateurDeRe
 import { uneAssociation } from '../constructeurs/constructeurAssociation';
 
 describe('Adaptateur de Restitution', () => {
-  const adaptateurRestitution = new (class extends AdaptateurDeRestitution {
-    protected genere(
-      htmlRecommandations: Promise<ContenuHtml>[],
-    ): Promise<Buffer> {
-      return Promise.all(htmlRecommandations).then((htmls) => {
-        const resultat: ContenuHtml[] = [];
+  const adaptateurRestitution =
+    new (class extends AdaptateurDeRestitution<Buffer> {
+      protected genere(
+        htmlRecommandations: Promise<ContenuHtml>[],
+      ): Promise<Buffer> {
+        return Promise.all(htmlRecommandations).then((htmls) => {
+          const resultat: ContenuHtml[] = [];
 
-        htmls.forEach((html) => {
-          resultat.push(html);
+          htmls.forEach((html) => {
+            resultat.push(html);
+          });
+
+          return Buffer.from(JSON.stringify(resultat), 'utf-8');
+        });
+      }
+      protected genereIndicateurs(
+        indicateurs: Indicateurs | undefined,
+      ): Promise<ContenuHtml> {
+        const resultat: ContenuHtml = {
+          corps: '',
+          entete: 'entete indicateur',
+          piedPage: 'piedPage indicateur',
+        };
+
+        Object.entries(indicateurs || {})?.forEach(
+          ([thematique, indicateur]) => {
+            resultat.corps += JSON.stringify({ thematique, indicateur });
+          },
+        );
+
+        return Promise.resolve(resultat);
+      }
+
+      protected genereRecommandationsAnnexes(
+        autresRecommandations: RecommandationPriorisee[] | undefined,
+      ): Promise<ContenuHtml> {
+        const resultat: ContenuHtml = {
+          corps: '',
+          entete: 'entete',
+          piedPage: 'piedPage',
+        };
+
+        autresRecommandations?.forEach((reco) => {
+          resultat.corps += JSON.stringify(reco);
         });
 
-        return Buffer.from(JSON.stringify(resultat), 'utf-8');
-      });
-    }
-    protected genereIndicateurs(
-      indicateurs: Indicateurs | undefined,
-    ): Promise<ContenuHtml> {
-      const resultat: ContenuHtml = {
-        corps: '',
-        entete: 'entete indicateur',
-        piedPage: 'piedPage indicateur',
-      };
+        return Promise.resolve(resultat);
+      }
 
-      Object.entries(indicateurs || {})?.forEach(([thematique, indicateur]) => {
-        resultat.corps += JSON.stringify({ thematique, indicateur });
-      });
+      protected genereRecommandationsPrioritaires(
+        recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
+      ): Promise<ContenuHtml> {
+        const resultat: ContenuHtml = {
+          corps: '',
+          entete: 'entete',
+          piedPage: 'piedPage',
+        };
 
-      return Promise.resolve(resultat);
-    }
+        recommandationsPrioritaires?.forEach((reco) => {
+          resultat.corps += JSON.stringify(reco);
+        });
 
-    protected genereRecommandationsAnnexes(
-      autresRecommandations: RecommandationPriorisee[] | undefined,
-    ): Promise<ContenuHtml> {
-      const resultat: ContenuHtml = {
-        corps: '',
-        entete: 'entete',
-        piedPage: 'piedPage',
-      };
-
-      autresRecommandations?.forEach((reco) => {
-        resultat.corps += JSON.stringify(reco);
-      });
-
-      return Promise.resolve(resultat);
-    }
-
-    protected genereRecommandationsPrioritaires(
-      recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
-    ): Promise<ContenuHtml> {
-      const resultat: ContenuHtml = {
-        corps: '',
-        entete: 'entete',
-        piedPage: 'piedPage',
-      };
-
-      recommandationsPrioritaires?.forEach((reco) => {
-        resultat.corps += JSON.stringify(reco);
-      });
-
-      return Promise.resolve(resultat);
-    }
-  })();
+        return Promise.resolve(resultat);
+      }
+    })();
 
   const questions = uneListeDeQuestions()
     .dontLesLabelsSont(['q1', 'q2'])

@@ -13,9 +13,9 @@ const estRecommandationPriorisee = (
   );
 };
 
-export abstract class AdaptateurDeRestitution {
-  genereRestitution(diagnostic: Diagnostic): Promise<Buffer> {
-    const pageDeGarde = this.genereIndicateurs(
+export abstract class AdaptateurDeRestitution<T> {
+  genereRestitution(diagnostic: Diagnostic): Promise<T> {
+    const indicateurs = this.genereIndicateurs(
       diagnostic.restitution?.indicateurs,
     );
     const recommandations = this.genereRecommandationsPrioritaires(
@@ -27,12 +27,12 @@ export abstract class AdaptateurDeRestitution {
 
     if (estRecommandationPriorisee(autresRecommandations)) {
       return this.genere([
-        pageDeGarde,
+        indicateurs,
         recommandations,
         this.genereRecommandationsAnnexes(autresRecommandations),
       ]);
     }
-    return this.genere([pageDeGarde, recommandations]);
+    return this.genere([indicateurs, recommandations]);
   }
 
   protected abstract genereRecommandationsAnnexes(
@@ -45,7 +45,7 @@ export abstract class AdaptateurDeRestitution {
 
   protected abstract genere(
     htmlRecommandations: Promise<ContenuHtml>[],
-  ): Promise<Buffer>;
+  ): Promise<T>;
 
   protected abstract genereIndicateurs(
     indicateurs: Indicateurs | undefined,

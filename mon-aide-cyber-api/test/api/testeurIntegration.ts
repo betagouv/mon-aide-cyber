@@ -31,7 +31,7 @@ const testeurIntegration = () => {
   const gestionnaireDeJeton = new FauxGestionnaireDeJeton();
   const adaptateurDeVerificationDeSession =
     new AdaptateurDeVerificationDeSessionDeTest();
-  const adaptateurDeRestitution: AdaptateurDeRestitution = {
+  const adaptateurDeRestitution: AdaptateurDeRestitution<Buffer> = {
     genere: (__: Promise<ContenuHtml>[]) =>
       Promise.resolve(Buffer.from('genere')),
     genereAnnexes: (__: RecommandationPriorisee[]) =>
@@ -40,7 +40,7 @@ const testeurIntegration = () => {
       Promise.resolve({} as unknown as ContenuHtml),
     genereRestitution: (__: Diagnostic) =>
       Promise.resolve(Buffer.from('PDF généré')),
-  } as unknown as AdaptateurDeRestitution;
+  } as unknown as AdaptateurDeRestitution<Buffer>;
   const gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire();
 
   const initialise = () => {

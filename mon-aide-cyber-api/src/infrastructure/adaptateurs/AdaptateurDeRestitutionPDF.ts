@@ -7,7 +7,7 @@ import * as pug from 'pug';
 import puppeteer, { Browser, PDFOptions } from 'puppeteer';
 import { PDFDocument } from 'pdf-lib';
 
-export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution {
+export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> {
   constructor(private readonly traductionThematiques: Map<string, string>) {
     super();
   }
