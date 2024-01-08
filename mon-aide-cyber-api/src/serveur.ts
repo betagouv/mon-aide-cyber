@@ -9,13 +9,13 @@ import { gestionnaireErreurGeneralisee } from './api/gestionnaires/erreurs';
 import { Referentiel } from './diagnostic/Referentiel';
 import { TableauDeRecommandations } from './diagnostic/TableauDeRecommandations';
 import { Adaptateur } from './adaptateurs/Adaptateur';
-import { AdaptateurDeRestitution } from './adaptateurs/AdaptateurDeRestitution';
 import { BusEvenement } from './domaine/BusEvenement';
 import { AdaptateurGestionnaireErreurs } from './adaptateurs/AdaptateurGestionnaireErreurs';
 import { NextFunction } from 'express-serve-static-core';
 import { GestionnaireDeJeton } from './authentification/GestionnaireDeJeton';
 import { csrf } from 'lusca';
 import { AdaptateurDeVerificationDeSession } from './adaptateurs/AdaptateurDeVerificationDeSession';
+import { AdaptateursRestitution } from './adaptateurs/AdaptateursRestitution';
 import CookieSession = require('cookie-session');
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
@@ -23,7 +23,6 @@ const ENDPOINTS_SANS_CSRF = ['/api/token'];
 const COOKIE_DUREE_SESSION = 60 * 60 * 1000;
 
 export type ConfigurationServeur = {
-  adaptateurDeRestitution: AdaptateurDeRestitution<Buffer>;
   adaptateurReferentiel: Adaptateur<Referentiel>;
   adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>;
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
@@ -32,6 +31,7 @@ export type ConfigurationServeur = {
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
   gestionnaireDeJeton: GestionnaireDeJeton;
   adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
+  adaptateursRestitution: AdaptateursRestitution;
   avecProtectionCsrf: boolean;
 };
 const creeApp = (config: ConfigurationServeur) => {

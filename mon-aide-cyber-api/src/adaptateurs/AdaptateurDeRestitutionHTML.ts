@@ -56,13 +56,15 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
       options = {},
     ) => {
       return pug.renderFile(
-        `src/infrastructure/html/modeles/${cheminTemplatePug}`,
+        `src/infrastructure/restitution/html/modeles/${cheminTemplatePug}`,
         options,
       );
     };
 
     return Promise.all([
-      pug.compileFile(`src/infrastructure/html/modeles/${pugCorps}.pug`)({
+      pug.compileFile(
+        `src/infrastructure/restitution/html/modeles/${pugCorps}.pug`,
+      )({
         ...paramsCorps,
         include: fonctionInclusionDynamique,
       }),

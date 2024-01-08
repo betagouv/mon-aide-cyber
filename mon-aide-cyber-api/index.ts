@@ -9,20 +9,25 @@ import { fabriqueConsommateursEvenements } from './src/adaptateurs/fabriqueConso
 import { fabriqueGestionnaireErreurs } from './src/infrastructure/adaptateurs/fabriqueGestionnaireErreurs';
 import { GestionnaireDeJetonJWT } from './src/infrastructure/authentification/gestionnaireDeJetonJWT';
 import { AdaptateurDeVerificationDeSessionHttp } from './src/adaptateurs/AdaptateurDeVerificationDeSessionHttp';
+import { AdaptateurDeRestitutionHTML } from './src/adaptateurs/AdaptateurDeRestitutionHTML';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut',
 );
 
 const adaptateurTranscripteurDonnees = adaptateurTranscripteur();
+const traductionThematiques =
+  new Map(
+    Object.entries(
+      adaptateurTranscripteurDonnees.transcripteur().thematiques,
+    ).map(([clef, thematique]) => [clef, thematique.libelle]),
+  ) || new Map();
+
 const serveurMAC = serveur.creeServeur({
-  adaptateurDeRestitution: new AdaptateurDeRestitutionPDF(
-    new Map(
-      Object.entries(
-        adaptateurTranscripteurDonnees.transcripteur().thematiques,
-      ).map(([clef, thematique]) => [clef, thematique.libelle]),
-    ) || new Map(),
-  ),
+  adaptateursRestitution: {
+    pdf: () => new AdaptateurDeRestitutionPDF(traductionThematiques),
+    html: () => new AdaptateurDeRestitutionHTML(traductionThematiques),
+  },
   adaptateurReferentiel: new AdaptateurReferentielMAC(),
   adaptateurTranscripteurDonnees: adaptateurTranscripteurDonnees,
   adaptateurTableauDeRecommandations:

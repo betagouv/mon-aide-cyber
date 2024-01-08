@@ -53,20 +53,22 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
       options = {},
     ) => {
       return pug.renderFile(
-        `src/infrastructure/pdf/modeles/${cheminTemplatePug}`,
+        `src/infrastructure/restitution/pdf/modeles/${cheminTemplatePug}`,
         options,
       );
     };
     const piedPage = pug.compileFile(
-      `src/infrastructure/pdf/modeles/${pugCorps}.piedpage.pug`,
+      `src/infrastructure/restitution/pdf/modeles/${pugCorps}.piedpage.pug`,
     )();
     return Promise.all([
-      pug.compileFile(`src/infrastructure/pdf/modeles/${pugCorps}.pug`)({
+      pug.compileFile(
+        `src/infrastructure/restitution/pdf/modeles/${pugCorps}.pug`,
+      )({
         ...paramsCorps,
         include: fonctionInclusionDynamique,
       }),
       pug.compileFile(
-        `src/infrastructure/pdf/modeles/${pugCorps}.entete.pug`,
+        `src/infrastructure/restitution/pdf/modeles/${pugCorps}.entete.pug`,
       )(),
     ])
       .then(([corps, entete]) => ({ corps, entete, piedPage }))
