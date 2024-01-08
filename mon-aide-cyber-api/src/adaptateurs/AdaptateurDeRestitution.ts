@@ -6,10 +6,11 @@ import {
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 
 const estRecommandationPriorisee = (
-  recommandationPriorisee: RecommandationPriorisee[] | undefined,
-): recommandationPriorisee is RecommandationPriorisee[] => {
+  recommandationPriorisees: RecommandationPriorisee[] | undefined,
+): recommandationPriorisees is RecommandationPriorisee[] => {
   return (
-    recommandationPriorisee !== undefined && recommandationPriorisee.length > 0
+    recommandationPriorisees !== undefined &&
+    recommandationPriorisees.length > 0
   );
 };
 
