@@ -36,6 +36,17 @@ Optionnellement, forcer le build si nécessaire.
  docker-compose up --build --force-recreate --no-deps
 ```
 
+## Création d'un aidant
+Seul un **aidant** connecté à la plateforme peut lancer des diagnostics.
+
+Pour créer un **aidant**, exécuter :
+
+```shell
+ npm run -w mon-aide-cyber-api administration:cree-aidant "aidant" "aidant" "prenom nom" `date --iso-8601=seconds` `date --iso-8601=seconds`
+```
+
+Pour se connecter, utiliser l'identifiant "aidant" et le mot de passe "aidant".
+
 ## Lancement de la suite de tests automatisés
 
 Les tests sont lancés manuellement et nécessitent une première installation des espaces de travail du projet (`npm install`).
