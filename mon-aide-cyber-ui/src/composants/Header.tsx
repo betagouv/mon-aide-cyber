@@ -3,9 +3,9 @@ import { SeConnecter } from './authentification/SeConnecter.tsx';
 export const Header = () => (
   <header role="banner" className="fr-header">
     <div className="fr-header__body">
-      <div className="fr-container--fluid">
+      <div className="fr-container">
         <div className="fr-header__body-row">
-          <div className="fr-col-offset-2 fr-header__brand fr-enlarge-link">
+          <div className="fr-header__brand fr-enlarge-link">
             <div className="fr-header__brand-top">
               <div className="fr-header__logo">
                 <p className="fr-logo">

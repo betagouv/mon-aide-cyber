@@ -1,6 +1,6 @@
 export const Footer = () => (
   <footer role="contentinfo" id="footer">
-    <div className="fr-footer__partners piedpage-mac">
+    <div className="piedpage-mac">
       <div className="piedpage-mac-logos">
         <div className="fr-footer__partners-sub">
           <ul>
@@ -74,11 +74,11 @@ export const Footer = () => (
           </div>
           <div className="fr-footer__content fr-col-offset-2--right">
             <p className="fr-footer__content-desc">
-              MonAideCyber aide les entités publiques et privées
-              sensibilisées à la sécurité informatique à passer à l’action. Le
-              dispositif MonAideCyber est développé par l&apos;Agence Nationale
-              de la Sécurité des Systèmes d&apos;Information, en lien avec
-              BetaGouv et la Direction interministérielle du numérique.
+              MonAideCyber aide les entités publiques et privées sensibilisées à
+              la sécurité informatique à passer à l’action. Le dispositif
+              MonAideCyber est développé par l&apos;Agence Nationale de la
+              Sécurité des Systèmes d&apos;Information, en lien avec BetaGouv et
+              la Direction interministérielle du numérique.
             </p>
             <ul className="fr-footer__content-list">
               <li className="fr-footer__content-item">

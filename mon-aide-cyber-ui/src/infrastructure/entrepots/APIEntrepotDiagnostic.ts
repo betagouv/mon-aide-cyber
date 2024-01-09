@@ -9,6 +9,7 @@ import {
 import { FormatLien, LienRoutage } from '../../domaine/LienRoutage.ts';
 import { APIEntrepot } from './EntrepotsAPI.ts';
 import { UUID } from '../../types/Types.ts';
+import { Restitution } from '../../domaine/diagnostic/Restitution.ts';
 type RepresentationReponseDonnee = {
   valeur: string | null;
   reponses: { identifiant: string; reponses: string[] }[];
@@ -132,6 +133,18 @@ export class APIEntrepotDiagnostic
         ...corps,
         referentiel,
       };
+    });
+  }
+
+  restitution(idDiagnostic: string): Promise<Restitution> {
+    return fetch(`/api/diagnostic/${idDiagnostic}/restitution`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    }).then((reponse) => {
+      if (!reponse.ok) {
+        return reponse.json().then((reponse) => Promise.reject(reponse));
+      }
+      return reponse.json();
     });
   }
 }

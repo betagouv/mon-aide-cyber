@@ -1,19 +1,20 @@
-import { Aggregat } from "../../../src/domaine/Aggregat";
+import { Aggregat } from '../../../src/domaine/Aggregat';
 import {
   ActionBase,
   ActionReponseDiagnostic,
   Diagnostic,
   EntrepotDiagnostic,
   Reponse,
-} from "../../../src/domaine/diagnostic/Diagnostic.ts";
-import { Entrepot } from "../../../src/domaine/Entrepots";
-import { unDiagnostic } from "../../constructeurs/constructeurDiagnostic.ts";
-import { LienRoutage } from "../../../src/domaine/LienRoutage.ts";
+} from '../../../src/domaine/diagnostic/Diagnostic.ts';
+import { Entrepot } from '../../../src/domaine/Entrepots';
+import { unDiagnostic } from '../../constructeurs/constructeurDiagnostic.ts';
+import { LienRoutage } from '../../../src/domaine/LienRoutage.ts';
 import {
   Diagnostics,
   EntrepotDiagnostics,
-} from "../../../src/domaine/diagnostic/Diagnostics.ts";
-import { expect } from "@storybook/jest";
+} from '../../../src/domaine/diagnostic/Diagnostics.ts';
+import { expect } from '@storybook/jest';
+import { Restitution } from '../../../src/domaine/diagnostic/Restitution.ts';
 
 class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: T[] = [];
@@ -70,6 +71,10 @@ export class EntrepotDiagnosticMemoire
   }
 
   termine(__: ActionBase): Promise<void> {
+    return Promise.reject();
+  }
+
+  restitution(__: string): Promise<Restitution> {
     return Promise.reject();
   }
 }
