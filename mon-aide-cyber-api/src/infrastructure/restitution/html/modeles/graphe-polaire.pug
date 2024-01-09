@@ -1,7 +1,8 @@
 - const valueMax = 5
 - const size = 100;
+- const height = 60
 
-svg(viewbox=`0 -3 ${size} ${size}`)
+svg(viewbox=`0 -3 ${size} ${height}`)
   - const [cx, cy] = [size/4, size/4]
   - const radius = size/4
   - const polarToCartesian = (r, a) => ({ x: cx + (r * Math.cos(a)), y: cy + (r * Math.sin(a))})
