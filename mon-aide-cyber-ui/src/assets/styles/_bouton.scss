@@ -1,17 +1,9 @@
 $border-radius: 0.5rem;
 
-@mixin secondaire($background-color: white, $important: null) {
+@mixin outline-bouton() {
   $valeur-outline: 2px solid var(--couleurs-mac-violet-fonce);
-  $valeur-color: var(--couleurs-mac-violet-fonce);
   outline: $valeur-outline;
   outline-offset: -2px;
-  background-color: $background-color;
-  color: $valeur-color;
-
-  @if $important != null {
-    outline: $valeur-outline $important;
-    color: $valeur-color $important;
-  }
 }
 
 @mixin primaire($couleur-texte, $couleur-fond, $couleur-fond-survol-et-actif) {
@@ -43,6 +35,57 @@ $border-radius: 0.5rem;
     outline: none;
     @include box-shadow();
   }
+}
+
+@mixin secondaire(
+  $couleur-texte: var(--couleurs-mac-violet-fonce),
+  $couleur-outline: var(--couleurs-mac-violet-fonce),
+  $background-color: white,
+  $couleur-fond-survol: var(--couleurs-mac-violet-leger),
+  $important: null
+) {
+  $valeur-outline: 2px solid $couleur-outline;
+  outline: $valeur-outline;
+  outline-offset: -2px;
+  background-color: $background-color;
+  color: $couleur-texte;
+
+  @if $important != null {
+    outline: $valeur-outline $important;
+    color: $couleur-texte $important;
+  }
+
+  &:active:enabled {
+    background-color: $couleur-fond-survol !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  &:hover:enabled {
+    background-color: $couleur-fond-survol !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  &:focus {
+    outline: $valeur-outline $important;
+    color: $couleur-texte $important;
+    @include box-shadow();
+  }
+
+  &:focus-visible {
+    outline: $valeur-outline $important;
+    color: $couleur-texte $important;
+    @include box-shadow();
+  }
+
+  &:disabled {
+    outline: 2px solid var(--couleurs-mac-violet-moyen) $important;
+    background-color: var(--couleurs-mac-violet-fonce);
+    color: var(--couleurs-mac-violet-moyen) $important;
+  }
+
+  --hover: none;
 }
 
 @mixin box-shadow($box1: white, $box2: var(--couleurs-mac-violet-moyen)) {
@@ -80,6 +123,14 @@ $border-radius: 0.5rem;
   );
 }
 
+.bouton-mac-primaire-inverse {
+  @include primaire(
+    var(--couleurs-mac-violet-fonce),
+    var(--couleurs-mac-blanc),
+    var(--couleurs-mac-violet-leger)
+  );
+}
+
 .bouton-mac-primaire-jaune {
   @include primaire(
     black,
@@ -91,36 +142,16 @@ $border-radius: 0.5rem;
 .bouton-mac-secondaire {
   @include secondaire();
   @include box-shadow(transparent, transparent);
+}
 
-  --hover: none;
-
-  &:active:enabled {
-    @include secondaire(
-      var(--couleurs-mac-violet-leger) !important,
-      $important: !important
-    );
-    box-shadow: none !important;
-    border: none !important;
-  }
-
-  &:hover:enabled {
-    @include secondaire(
-      var(--couleurs-mac-violet-leger) !important,
-      $important: !important
-    );
-    box-shadow: none !important;
-    border: none !important;
-  }
-
-  &:focus {
-    @include secondaire($important: !important);
-    @include box-shadow();
-  }
-
-  &:focus-visible {
-    @include secondaire($important: !important);
-    @include box-shadow();
-  }
+.bouton-mac-secondaire-inverse {
+  @include secondaire(
+    var(--couleurs-mac-blanc),
+    var(--couleurs-mac-blanc),
+    var(--couleurs-mac-violet-fonce),
+    $couleur-fond-survol: var(--couleurs-mac-violet-moyen)
+  );
+  @include box-shadow(transparent, transparent);
 }
 
 .mac-radio-group input[type='radio'] + label {
