@@ -1,5 +1,12 @@
+@import 'icones';
+
 .section {
   background-color: var(--couleurs-mac-blanc);
   border-radius: 16px;
   padding: 56px 102px 56px 102px;
+}
+
+.mac-icone-retour {
+  background: $icone-gauche no-repeat left center;
+  padding-left: 1rem;
 }

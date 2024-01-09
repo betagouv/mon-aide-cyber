@@ -1,8 +1,8 @@
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useEntrepots } from '../../fournisseurs/hooks.ts';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useErrorBoundary } from 'react-error-boundary';
 import { Restitution } from '../../domaine/diagnostic/Restitution.ts';
 import '../../assets/styles/_restitution.scss';
@@ -13,6 +13,7 @@ export const ComposantRestitution = () => {
   const { idDiagnostic } = useParams();
   const { showBoundary } = useErrorBoundary();
   const [restitution, setRestitution] = useState<Restitution>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     entrepots
@@ -21,15 +22,50 @@ export const ComposantRestitution = () => {
       .then((restitution) => setRestitution(restitution))
       .catch((erreur) => showBoundary(erreur));
   }, [entrepots, idDiagnostic, showBoundary]);
+
+  const modifierLeDiagnostic = useCallback(
+    () => navigate(`/diagnostic/${idDiagnostic}`),
+    [idDiagnostic, navigate],
+  );
+
   return (
     <>
       <Header />
       <main role="main">
-        <div className="bandeau-violet">
-          <div className="fr-grid-row">
-            <a href="">Retour à la liste des bénificiaires</a>{' '}
+        <div className="bandeau-violet fr-pt-md-4w fr-pb-md-8w">
+          <div className="fr-container">
+            <div className="fr-grid-row">
+              <div>
+                <i className="mac-icone-retour" />
+                <a href="/tableau-de-bord">
+                  Retour à la liste des bénéficiaires
+                </a>
+              </div>
+            </div>
+            <div className="fr-grid-row fr-pt-md-2w">
+              <div className="identifiant-diagnostic">
+                ID {idDiagnostic?.substring(0, 8)}
+              </div>
+            </div>
+            <div className="fr-grid-row fr-grid-row--right">
+              <div className="fr-pl-2w">
+                <button
+                  className={`fr-btn fr-btn--icon-left fr-icon-download-line bouton-mac bouton-mac-secondaire-inverse`}
+                  disabled={true}
+                >
+                  Télécharger
+                </button>
+              </div>
+              <div className="fr-pl-2w">
+                <button
+                  className={`fr-btn fr-btn--icon-left fr-icon-pencil-line bouton-mac bouton-mac-primaire-inverse`}
+                  onClick={modifierLeDiagnostic}
+                >
+                  Modifier le diagnostic
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="fr-grid-row"></div>
         </div>
         <div className="fond-clair-mac">
           <div className="fr-container restitution">
