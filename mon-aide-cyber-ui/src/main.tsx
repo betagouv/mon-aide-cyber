@@ -15,15 +15,12 @@ import { EntrepotDiagnostics } from './domaine/diagnostic/Diagnostics.ts';
 import { ComposantDiagnostic } from './composants/diagnostic/ComposantDiagnostic.tsx';
 import { ComposantDiagnostics } from './composants/ComposantDiagnostics.tsx';
 import { APIEntrepotDiagnostic } from './infrastructure/entrepots/APIEntrepotDiagnostic.ts';
-import { startReactDsfr } from '@codegouvfr/react-dsfr/spa';
 import { EntrepotAuthentification } from './domaine/authentification/Authentification.ts';
 import { RequiertAuthentification } from './fournisseurs/RequiertAuthentification.tsx';
 import { FournisseurAuthentification } from './fournisseurs/ContexteAuthentification.tsx';
 import { PortailModale } from './composants/modale/PortailModale.tsx';
 import { CharteAidant } from './vues/CharteAidant.tsx';
 import { TableauDeBord } from './composants/TableauDeBord.tsx';
-
-startReactDsfr({ defaultColorScheme: 'system' });
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
