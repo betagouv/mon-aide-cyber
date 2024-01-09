@@ -38,6 +38,7 @@ import {
   ActionReponseDiagnostic,
 } from '../../domaine/diagnostic/Diagnostic.ts';
 import '../../assets/styles/_diagnostic.scss';
+import '../../assets/styles/_commun.scss';
 import { BoutonThematique } from './BoutonThematique.tsx';
 import '../../assets/styles/_couleurs.scss';
 
@@ -492,7 +493,7 @@ export const ComposantDiagnostic = ({
                 <fieldset
                   key={`groupe-${groupe.numero}`}
                   id={`groupe-${groupe.numero}`}
-                  className="fr-fieldset fr-mb-5w section-diagnostic"
+                  className="fr-fieldset fr-mb-5w section"
                 >
                   {groupe.questions.map((question, index) => {
                     const numeroQuestion =

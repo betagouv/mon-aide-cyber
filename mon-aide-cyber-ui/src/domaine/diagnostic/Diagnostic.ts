@@ -1,8 +1,9 @@
-import { Referentiel } from "./Referentiel.ts";
-import { Aggregat } from "../Aggregat.ts";
+import { Referentiel } from './Referentiel.ts';
+import { Aggregat } from '../Aggregat.ts';
 
-import { Entrepot } from "../Entrepots.ts";
-import { LienRoutage } from "../LienRoutage.ts";
+import { Entrepot } from '../Entrepots.ts';
+import { LienRoutage } from '../LienRoutage.ts';
+import { Restitution } from './Restitution.ts';
 
 export type ActionReponseDiagnostic = {
   [thematique: string]: ActionBase;
@@ -38,4 +39,6 @@ export interface EntrepotDiagnostic extends Entrepot<Diagnostic> {
   ) => Promise<void>;
 
   termine(action: ActionBase): Promise<void>;
+
+  restitution(idDiagnostic: string): Promise<Restitution>;
 }

@@ -21,6 +21,7 @@ import { FournisseurAuthentification } from './fournisseurs/ContexteAuthentifica
 import { PortailModale } from './composants/modale/PortailModale.tsx';
 import { CharteAidant } from './vues/CharteAidant.tsx';
 import { TableauDeBord } from './composants/TableauDeBord.tsx';
+import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -66,6 +67,12 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                   path="/diagnostic/:idDiagnostic"
                   element={
                     <ComposantIntercepteur composant={ComposantDiagnostic} />
+                  }
+                ></Route>
+                <Route
+                  path="/diagnostic/:idDiagnostic/restitution"
+                  element={
+                    <ComposantIntercepteur composant={ComposantRestitution} />
                   }
                 ></Route>
               </Route>
