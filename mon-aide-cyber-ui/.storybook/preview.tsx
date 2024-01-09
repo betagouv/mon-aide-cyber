@@ -1,7 +1,6 @@
-import type { Preview } from "@storybook/react";
-import "../src/assets/styles/index.scss";
-import "../public/dsfr/utility/icons/icons.min.css";
-import "../public/dsfr/dsfr/dsfr.min.css";
+import type { Preview } from '@storybook/react';
+import '../src/assets/styles/index.scss';
+import '@gouvfr/dsfr/dist/dsfr.min.css';
 
 const preview: Preview = {
   decorators: [
@@ -16,7 +15,7 @@ const preview: Preview = {
     ),
   ],
   parameters: {
-    actions: { argTypesRegex: "^on[A-Z].*" },
+    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
         color: /(background|color)$/i,
