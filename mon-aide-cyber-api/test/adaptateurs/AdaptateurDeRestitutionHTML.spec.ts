@@ -1,14 +1,21 @@
 import { describe, it } from 'vitest';
 import {
   uneListeDeQuestions,
+  uneQuestion,
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
 import { uneAssociation } from '../constructeurs/constructeurAssociation';
 import { unTableauDeRecommandations } from '../constructeurs/constructeurTableauDeRecommandations';
-import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
+import {
+  unDiagnostic,
+  uneReponseDonnee,
+} from '../constructeurs/constructeurDiagnostic';
 import { genereLaRestitution } from '../../src/diagnostic/Diagnostic';
 import { unAdaptateurDeRestitutionHTML } from './ConstructeurAdaptateurRestitutionHTML';
-import { RestitutionHTML } from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
+import {
+  AdaptateurDeRestitutionHTML,
+  RestitutionHTML,
+} from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
 
 describe('Adapatateur de Restitution HTML', () => {
   const questions = uneListeDeQuestions()
@@ -209,6 +216,166 @@ describe('Adapatateur de Restitution HTML', () => {
         indicateurs: '',
         informations: '',
         mesuresPrioritaires: '',
+      });
+    });
+  });
+
+  describe('extrait les informations', () => {
+    it("extrait l'identifiant du diagnostic", () => {
+      const diagnostic = unDiagnostic().construis();
+
+      const informations = new AdaptateurDeRestitutionHTML(
+        new Map(),
+      ).extraitInformations(diagnostic);
+
+      expect(informations.identifiant).toStrictEqual(diagnostic.identifiant);
+    });
+
+    it('extrait la date de création du diagnostic', () => {
+      const diagnostic = unDiagnostic().construis();
+
+      const informations = new AdaptateurDeRestitutionHTML(
+        new Map(),
+      ).extraitInformations(diagnostic);
+
+      expect(informations.dateCreation).toStrictEqual(diagnostic.dateCreation);
+    });
+
+    it('extrait la date de dernière modification du diagnostic', () => {
+      const diagnostic = unDiagnostic().construis();
+
+      const informations = new AdaptateurDeRestitutionHTML(
+        new Map(),
+      ).extraitInformations(diagnostic);
+
+      expect(informations.dateDerniereModification).toStrictEqual(
+        diagnostic.dateDerniereModification,
+      );
+    });
+
+    describe("zone géographique de l'entité", () => {
+      it('si renseigné lors du diagnostic, extrait la zone géographique', () => {
+        const zoneGeographique = 'Île-de-France';
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentiel()
+              .ajouteUneThematique('contexte', [
+                uneQuestion()
+                  .avecIdentifiant('contexte-region-siege-social')
+                  .aChoixUnique('siège social ?', [
+                    {
+                      identifiant: 'contexte-region-siege-social-ile-de-France',
+                      libelle: zoneGeographique,
+                    },
+                  ])
+                  .construis(),
+              ])
+              .construis(),
+          )
+          .ajouteUneReponseDonnee(
+            {
+              thematique: 'contexte',
+              question: 'contexte-region-siege-social',
+            },
+            uneReponseDonnee().ayantPourReponse(zoneGeographique).construis(),
+          )
+          .construis();
+
+        const informations = new AdaptateurDeRestitutionHTML(
+          new Map(),
+        ).extraitInformations(diagnostic);
+
+        expect(informations.zoneGeographique).toStrictEqual(zoneGeographique);
+      });
+
+      it("si non renseigné lors du diagnostic, indique 'non renseigné'", () => {
+        const zoneGeographique = 'Île-de-France';
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentiel()
+              .ajouteUneThematique('contexte', [
+                uneQuestion()
+                  .avecIdentifiant('contexte-region-siege-social')
+                  .aChoixUnique('siège social ?', [
+                    {
+                      identifiant: 'contexte-region-siege-social-ile-de-France',
+                      libelle: zoneGeographique,
+                    },
+                  ])
+                  .construis(),
+              ])
+              .construis(),
+          )
+          .construis();
+
+        const informations = new AdaptateurDeRestitutionHTML(
+          new Map(),
+        ).extraitInformations(diagnostic);
+
+        expect(informations.zoneGeographique).toStrictEqual('non renseigné');
+      });
+    });
+
+    describe("secteur d'activité de l'entité", () => {
+      it("si renseigné lors du diagnostic, extrait le secteur d'activité", () => {
+        const secteurActivite = 'Enseignement';
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentiel()
+              .ajouteUneThematique('contexte', [
+                uneQuestion()
+                  .avecIdentifiant('contexte-secteur-activite')
+                  .aChoixUnique("secteur d'activité ?", [
+                    {
+                      identifiant: 'contexte-secteur-activite-enseignement',
+                      libelle: secteurActivite,
+                    },
+                  ])
+                  .construis(),
+              ])
+              .construis(),
+          )
+          .ajouteUneReponseDonnee(
+            {
+              thematique: 'contexte',
+              question: 'contexte-secteur-activite',
+            },
+            uneReponseDonnee().ayantPourReponse(secteurActivite).construis(),
+          )
+          .construis();
+
+        const informations = new AdaptateurDeRestitutionHTML(
+          new Map(),
+        ).extraitInformations(diagnostic);
+
+        expect(informations.secteurActivite).toStrictEqual(secteurActivite);
+      });
+
+      it("si non renseigné lors du diagnostic, indique 'non renseigné'", () => {
+        const secteurActivite = 'Enseignement';
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentiel()
+              .ajouteUneThematique('contexte', [
+                uneQuestion()
+                  .avecIdentifiant('contexte-secteur-activite')
+                  .aChoixUnique("secteur d'activité ?", [
+                    {
+                      identifiant: 'contexte-secteur-activite-enseignement',
+                      libelle: secteurActivite,
+                    },
+                  ])
+                  .construis(),
+              ])
+              .construis(),
+          )
+          .construis();
+
+        const informations = new AdaptateurDeRestitutionHTML(
+          new Map(),
+        ).extraitInformations(diagnostic);
+
+        expect(informations.secteurActivite).toStrictEqual('non renseigné');
       });
     });
   });

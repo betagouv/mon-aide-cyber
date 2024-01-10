@@ -59,7 +59,7 @@ class ConstructeurQuestion
 {
   private question: QuestionChoixUnique | QuestionChoixMultiple = {
     type: 'choixUnique',
-    identifiant: faker.string.alpha(10),
+    identifiant: '',
     libelle: 'Quelle est la réponse?',
     reponsesPossibles: [
       {
@@ -83,7 +83,7 @@ class ConstructeurQuestion
   ): ConstructeurQuestion {
     this.question.reponsesPossibles = [];
     this.question.libelle = libelleQuestion;
-    this.question.identifiant = aseptise(libelleQuestion);
+    this.question.identifiant ||= aseptise(libelleQuestion);
     reponsesPossibles.forEach((reponse, index) =>
       this.question.reponsesPossibles.push({
         identifiant: reponse.identifiant,
@@ -102,7 +102,7 @@ class ConstructeurQuestion
     }[] = [],
   ): ConstructeurQuestion {
     this.question.reponsesPossibles = [];
-    this.question.libelle = libelleQuestion;
+    this.question.libelle ||= libelleQuestion;
     this.question.identifiant = aseptise(libelleQuestion);
     this.question.type = 'choixMultiple';
     reponsesPossibles.forEach((reponse, index) =>
@@ -119,6 +119,12 @@ class ConstructeurQuestion
     reponsesPossibles: ReponsePossible[],
   ): ConstructeurQuestion {
     this.question.reponsesPossibles = reponsesPossibles;
+    return this;
+  }
+
+  avecIdentifiant(identifiant: string) {
+    this.question.identifiant = identifiant;
+
     return this;
   }
 
