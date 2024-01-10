@@ -91,6 +91,32 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
     });
   }
 
+  extraitInformations(diagnostic: Diagnostic) {
+    const questionContexteRegionSiegeSocial = diagnostic.referentiel[
+      'contexte'
+    ].questions.find(
+      (question) => question.identifiant === 'contexte-region-siege-social',
+    );
+
+    const questionContexteSecteurActivite = diagnostic.referentiel[
+      'contexte'
+    ].questions.find(
+      (question) => question.identifiant === 'contexte-secteur-activite',
+    );
+
+    return {
+      identifiant: diagnostic.identifiant,
+      dateCreation: diagnostic.dateCreation,
+      dateDerniereModification: diagnostic.dateDerniereModification,
+      secteurActivite:
+        questionContexteSecteurActivite?.reponseDonnee?.reponseUnique ||
+        'non renseigné',
+      zoneGeographique:
+        questionContexteRegionSiegeSocial?.reponseDonnee?.reponseUnique ||
+        'non renseigné',
+    };
+  }
+
   async genereHtml(pugCorps: string, paramsCorps: any): Promise<ContenuHtml> {
     const fonctionInclusionDynamique = (
       cheminTemplatePug: string,
