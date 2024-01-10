@@ -1,4 +1,5 @@
 import {
+  Diagnostic,
   Indicateurs,
   RecommandationPriorisee,
 } from '../../src/diagnostic/Diagnostic';
@@ -10,15 +11,27 @@ class ConstructeurAdaptateurRestitutionHTML {
   private corpsMesuresPrioritaires = '';
   private corpsIndicateurs = '';
   private corpsAutresMesures = '';
+  private diagnostic: Diagnostic | undefined;
 
   construis(): AdaptateurDeRestitutionHTML {
     const corpsMesuresPriorisees = this.corpsMesuresPrioritaires;
     const corpsIndicateurs = this.corpsIndicateurs;
     const corpsAutresMesures = this.corpsAutresMesures;
+    const diagnostic = this.diagnostic;
 
     return new (class extends AdaptateurDeRestitutionHTML {
       constructor() {
         super(new Map());
+      }
+
+      protected genereInformations(
+        _: Diagnostic | undefined,
+      ): Promise<ContenuHtml> {
+        return Promise.resolve({
+          entete: '',
+          corps: diagnostic ? diagnostic.identifiant : '',
+          piedPage: '',
+        });
       }
 
       protected genereMesuresPrioritaires(
@@ -51,6 +64,14 @@ class ConstructeurAdaptateurRestitutionHTML {
         });
       }
     })();
+  }
+
+  avecInformations(
+    diagnostic: Diagnostic,
+  ): ConstructeurAdaptateurRestitutionHTML {
+    this.diagnostic = diagnostic;
+
+    return this;
   }
 
   avecMesuresPrioritaires(

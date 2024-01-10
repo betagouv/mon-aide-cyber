@@ -353,6 +353,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       expect(await reponse.json()).toStrictEqual<RestitutionHTML>({
         autresMesures: '',
         indicateurs: 'indicateurs',
+        informations: '',
         mesuresPrioritaires: 'mesures prioritaires',
       });
     });
