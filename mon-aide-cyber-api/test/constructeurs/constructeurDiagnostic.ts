@@ -54,6 +54,7 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     });
     return this;
   }
+
   avecUnTableauDeRecommandations(
     tableauDeRecommandations: TableauDeRecommandations,
   ): ConstructeurDiagnostic {
