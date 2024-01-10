@@ -5,7 +5,7 @@ import {
 } from '../diagnostic/Diagnostic';
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 
-const estRecommandationPriorisee = (
+export const estRecommandationPriorisee = (
   recommandationPriorisees: RecommandationPriorisee[] | undefined,
 ): recommandationPriorisees is RecommandationPriorisee[] => {
   return (

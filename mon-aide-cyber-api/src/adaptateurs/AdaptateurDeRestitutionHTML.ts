@@ -1,11 +1,19 @@
-import { AdaptateurDeRestitution } from './AdaptateurDeRestitution';
-import { Indicateurs, RecommandationPriorisee } from '../diagnostic/Diagnostic';
+import {
+  AdaptateurDeRestitution,
+  estRecommandationPriorisee,
+} from './AdaptateurDeRestitution';
+import {
+  Diagnostic,
+  Indicateurs,
+  RecommandationPriorisee,
+} from '../diagnostic/Diagnostic';
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import * as pug from 'pug';
 
 export type RestitutionHTML = {
   autresMesures: string;
   indicateurs: string;
+  informations: string;
   mesuresPrioritaires: string;
 };
 
@@ -14,14 +22,47 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
     super();
   }
 
+  genereRestitution(diagnostic: Diagnostic): Promise<RestitutionHTML> {
+    const indicateurs = this.genereIndicateurs(
+      diagnostic.restitution?.indicateurs,
+    );
+    const recommandations = this.genereMesuresPrioritaires(
+      diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
+    );
+
+    const autresRecommandations =
+      diagnostic.restitution?.recommandations?.autresRecommandations;
+
+    if (estRecommandationPriorisee(autresRecommandations)) {
+      return this.genere([
+        this.genereInformations(diagnostic),
+        indicateurs,
+        recommandations,
+        this.genereAutresMesures(autresRecommandations),
+      ]);
+    }
+    return this.genere([
+      this.genereInformations(diagnostic),
+      indicateurs,
+      recommandations,
+    ]);
+  }
+
+  protected async genereInformations(
+    _: Diagnostic | undefined,
+  ): Promise<ContenuHtml> {
+    throw new Error('non implémenté');
+  }
+
   protected async genere(
     htmlRecommandations: Promise<ContenuHtml>[],
   ): Promise<RestitutionHTML> {
-    const autresMesures = await htmlRecommandations[2];
+    const autresMesures = await htmlRecommandations[3];
     return Promise.resolve({
+      informations: (await htmlRecommandations[0]).corps,
+      indicateurs: (await htmlRecommandations[1]).corps,
+      mesuresPrioritaires: (await htmlRecommandations[2]).corps,
       autresMesures: autresMesures ? autresMesures.corps : '',
-      indicateurs: (await htmlRecommandations[0]).corps,
-      mesuresPrioritaires: (await htmlRecommandations[1]).corps,
     });
   }
 

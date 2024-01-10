@@ -30,6 +30,7 @@ describe('Adaptateur de Restitution', () => {
           return Buffer.from(JSON.stringify(resultat), 'utf-8');
         });
       }
+
       protected genereIndicateurs(
         indicateurs: Indicateurs | undefined,
       ): Promise<ContenuHtml> {
