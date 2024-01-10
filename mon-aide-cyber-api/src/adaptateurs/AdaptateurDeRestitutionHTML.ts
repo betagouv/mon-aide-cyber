@@ -9,6 +9,7 @@ import {
 } from '../diagnostic/Diagnostic';
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import * as pug from 'pug';
+import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
 export type RestitutionHTML = {
   autresMesures: string;
@@ -49,9 +50,11 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
   }
 
   protected async genereInformations(
-    _: Diagnostic | undefined,
+    diagnostic: Diagnostic,
   ): Promise<ContenuHtml> {
-    throw new Error('non implémenté');
+    return this.genereHtml('informations', {
+      ...this.representeInformations(diagnostic),
+    });
   }
 
   protected async genere(
@@ -91,29 +94,56 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
     });
   }
 
-  extraitInformations(diagnostic: Diagnostic) {
-    const questionContexteRegionSiegeSocial = diagnostic.referentiel[
-      'contexte'
+  private trouveLibelleReponseUniqueDonnee(
+    diagnostic: Diagnostic,
+    thematique: string,
+    identifiantQuestion: string,
+  ) {
+    const questionDiagnostic = diagnostic.referentiel[
+      thematique
     ].questions.find(
-      (question) => question.identifiant === 'contexte-region-siege-social',
+      (question) => question.identifiant === identifiantQuestion,
     );
 
-    const questionContexteSecteurActivite = diagnostic.referentiel[
-      'contexte'
-    ].questions.find(
-      (question) => question.identifiant === 'contexte-secteur-activite',
+    return questionDiagnostic?.reponsesPossibles.find(
+      (reponse) =>
+        reponse.identifiant === questionDiagnostic.reponseDonnee.reponseUnique,
+    )?.libelle;
+  }
+
+  private representeZoneGeographique(diagnostic: Diagnostic) {
+    const region = this.trouveLibelleReponseUniqueDonnee(
+      diagnostic,
+      'contexte',
+      'contexte-region-siege-social',
     );
+    const departement = this.trouveLibelleReponseUniqueDonnee(
+      diagnostic,
+      'contexte',
+      'contexte-departement-tom-siege-social',
+    );
+    return ''
+      .concat(!departement && !region ? 'non renseigné' : '')
+      .concat(departement || '')
+      .concat(departement && region ? ', '.concat(region || '') : region || '');
+  }
+
+  representeInformations(diagnostic: Diagnostic) {
+    const secteurActivite =
+      this.trouveLibelleReponseUniqueDonnee(
+        diagnostic,
+        'contexte',
+        'contexte-secteur-activite',
+      ) || 'non renseigné';
 
     return {
+      dateCreation: FournisseurHorloge.formateDate(diagnostic.dateCreation),
+      dateDerniereModification: FournisseurHorloge.formateDate(
+        diagnostic.dateDerniereModification,
+      ),
       identifiant: diagnostic.identifiant,
-      dateCreation: diagnostic.dateCreation,
-      dateDerniereModification: diagnostic.dateDerniereModification,
-      secteurActivite:
-        questionContexteSecteurActivite?.reponseDonnee?.reponseUnique ||
-        'non renseigné',
-      zoneGeographique:
-        questionContexteRegionSiegeSocial?.reponseDonnee?.reponseUnique ||
-        'non renseigné',
+      secteurActivite,
+      zoneGeographique: this.representeZoneGeographique(diagnostic),
     };
   }
 

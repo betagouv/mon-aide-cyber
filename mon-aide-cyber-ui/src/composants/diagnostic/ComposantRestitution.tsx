@@ -179,7 +179,12 @@ export const ComposantRestitution = ({
               </div>
               <div className="fr-col-md-9 fr-col-9 section">
                 <h3>Récapitulatif</h3>
-                <div id="informations">INFORMATIONS</div>
+                <div
+                  id="informations"
+                  dangerouslySetInnerHTML={{
+                    __html: etatRestitution.restitution?.informations || '',
+                  }}
+                ></div>
                 <div
                   id="indicateurs"
                   dangerouslySetInnerHTML={{

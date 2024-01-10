@@ -16,6 +16,7 @@ import {
   AdaptateurDeRestitutionHTML,
   RestitutionHTML,
 } from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
+import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 
 describe('Adapatateur de Restitution HTML', () => {
   const questions = uneListeDeQuestions()
@@ -220,52 +221,72 @@ describe('Adapatateur de Restitution HTML', () => {
     });
   });
 
-  describe('extrait les informations', () => {
-    it("extrait l'identifiant du diagnostic", () => {
+  describe('représente les informations du diagnostic', () => {
+    it("représente l'identifiant", () => {
       const diagnostic = unDiagnostic().construis();
 
       const informations = new AdaptateurDeRestitutionHTML(
         new Map(),
-      ).extraitInformations(diagnostic);
+      ).representeInformations(diagnostic);
 
       expect(informations.identifiant).toStrictEqual(diagnostic.identifiant);
     });
 
-    it('extrait la date de création du diagnostic', () => {
+    it('représente la date de création', () => {
       const diagnostic = unDiagnostic().construis();
+      diagnostic.dateCreation = FournisseurHorloge.enDate(
+        '2023-01-01T17:01:00',
+      );
 
       const informations = new AdaptateurDeRestitutionHTML(
         new Map(),
-      ).extraitInformations(diagnostic);
+      ).representeInformations(diagnostic);
 
-      expect(informations.dateCreation).toStrictEqual(diagnostic.dateCreation);
+      expect(informations.dateCreation.date).toStrictEqual('01.01.2023');
+      expect(informations.dateCreation.heure).toStrictEqual('17:01');
     });
 
-    it('extrait la date de dernière modification du diagnostic', () => {
+    it('représente la date de dernière modification', () => {
       const diagnostic = unDiagnostic().construis();
+      diagnostic.dateDerniereModification = FournisseurHorloge.enDate(
+        '2023-01-01T17:01:00',
+      );
 
       const informations = new AdaptateurDeRestitutionHTML(
         new Map(),
-      ).extraitInformations(diagnostic);
+      ).representeInformations(diagnostic);
 
-      expect(informations.dateDerniereModification).toStrictEqual(
-        diagnostic.dateDerniereModification,
+      expect(informations.dateDerniereModification.date).toStrictEqual(
+        '01.01.2023',
+      );
+      expect(informations.dateDerniereModification.heure).toStrictEqual(
+        '17:01',
       );
     });
 
     describe("zone géographique de l'entité", () => {
-      it('si renseigné lors du diagnostic, extrait la zone géographique', () => {
-        const zoneGeographique = 'Île-de-France';
+      it("représente la zone géographique au format '<département>, <région>'", () => {
         const diagnostic = unDiagnostic()
           .avecUnReferentiel(
             unReferentiel()
               .ajouteUneThematique('contexte', [
                 uneQuestion()
                   .avecIdentifiant('contexte-region-siege-social')
-                  .aChoixUnique('siège social ?', [
+                  .aChoixUnique('région siège social ?', [
                     {
-                      identifiant: 'contexte-region-siege-social-ile-de-France',
-                      libelle: zoneGeographique,
+                      identifiant:
+                        'contexte-region-siege-social-nouvelle-aquitaine',
+                      libelle: 'Nouvelle-Aquitaine',
+                    },
+                  ])
+                  .construis(),
+                uneQuestion()
+                  .avecIdentifiant('contexte-departement-tom-siege-social')
+                  .aChoixUnique('département siège social ?', [
+                    {
+                      identifiant:
+                        'contexte-departement-tom-siege-social-gironde',
+                      libelle: 'Gironde',
                     },
                   ])
                   .construis(),
@@ -277,29 +298,147 @@ describe('Adapatateur de Restitution HTML', () => {
               thematique: 'contexte',
               question: 'contexte-region-siege-social',
             },
-            uneReponseDonnee().ayantPourReponse(zoneGeographique).construis(),
+            uneReponseDonnee()
+              .ayantPourReponse(
+                'contexte-region-siege-social-nouvelle-aquitaine',
+              )
+              .construis(),
+          )
+          .ajouteUneReponseDonnee(
+            {
+              thematique: 'contexte',
+              question: 'contexte-departement-tom-siege-social',
+            },
+            uneReponseDonnee()
+              .ayantPourReponse('contexte-departement-tom-siege-social-gironde')
+              .construis(),
           )
           .construis();
 
         const informations = new AdaptateurDeRestitutionHTML(
           new Map(),
-        ).extraitInformations(diagnostic);
-
-        expect(informations.zoneGeographique).toStrictEqual(zoneGeographique);
+        ).representeInformations(diagnostic);
+        expect(informations.zoneGeographique).toStrictEqual(
+          'Gironde, Nouvelle-Aquitaine',
+        );
       });
 
-      it("si non renseigné lors du diagnostic, indique 'non renseigné'", () => {
-        const zoneGeographique = 'Île-de-France';
+      it("si seulement le département est renseigné, représente la zone géographique au format '<département>'", () => {
         const diagnostic = unDiagnostic()
           .avecUnReferentiel(
             unReferentiel()
               .ajouteUneThematique('contexte', [
                 uneQuestion()
                   .avecIdentifiant('contexte-region-siege-social')
-                  .aChoixUnique('siège social ?', [
+                  .aChoixUnique('région siège social ?', [
                     {
-                      identifiant: 'contexte-region-siege-social-ile-de-France',
-                      libelle: zoneGeographique,
+                      identifiant:
+                        'contexte-region-siege-social-nouvelle-aquitaine',
+                      libelle: 'Nouvelle-Aquitaine',
+                    },
+                  ])
+                  .construis(),
+                uneQuestion()
+                  .avecIdentifiant('contexte-departement-tom-siege-social')
+                  .aChoixUnique('département siège social ?', [
+                    {
+                      identifiant:
+                        'contexte-departement-tom-siege-social-gironde',
+                      libelle: 'Gironde',
+                    },
+                  ])
+                  .construis(),
+              ])
+              .construis(),
+          )
+          .ajouteUneReponseDonnee(
+            {
+              thematique: 'contexte',
+              question: 'contexte-departement-tom-siege-social',
+            },
+            uneReponseDonnee()
+              .ayantPourReponse('contexte-departement-tom-siege-social-gironde')
+              .construis(),
+          )
+          .construis();
+
+        const informations = new AdaptateurDeRestitutionHTML(
+          new Map(),
+        ).representeInformations(diagnostic);
+        expect(informations.zoneGeographique).toStrictEqual('Gironde');
+      });
+
+      it("si seulement la région est renseigné, représente la zone géographique au format '<région>'", () => {
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentiel()
+              .ajouteUneThematique('contexte', [
+                uneQuestion()
+                  .avecIdentifiant('contexte-region-siege-social')
+                  .aChoixUnique('région siège social ?', [
+                    {
+                      identifiant:
+                        'contexte-region-siege-social-nouvelle-aquitaine',
+                      libelle: 'Nouvelle-Aquitaine',
+                    },
+                  ])
+                  .construis(),
+                uneQuestion()
+                  .avecIdentifiant('contexte-departement-tom-siege-social')
+                  .aChoixUnique('département siège social ?', [
+                    {
+                      identifiant:
+                        'contexte-departement-tom-siege-social-gironde',
+                      libelle: 'Gironde',
+                    },
+                  ])
+                  .construis(),
+              ])
+              .construis(),
+          )
+          .ajouteUneReponseDonnee(
+            {
+              thematique: 'contexte',
+              question: 'contexte-region-siege-social',
+            },
+            uneReponseDonnee()
+              .ayantPourReponse(
+                'contexte-region-siege-social-nouvelle-aquitaine',
+              )
+              .construis(),
+          )
+          .construis();
+
+        const informations = new AdaptateurDeRestitutionHTML(
+          new Map(),
+        ).representeInformations(diagnostic);
+        expect(informations.zoneGeographique).toStrictEqual(
+          'Nouvelle-Aquitaine',
+        );
+      });
+
+      it("si ni le département ni la région ne sont renseignés, affiche 'non renseigné'", () => {
+        const diagnostic = unDiagnostic()
+          .avecUnReferentiel(
+            unReferentiel()
+              .ajouteUneThematique('contexte', [
+                uneQuestion()
+                  .avecIdentifiant('contexte-region-siege-social')
+                  .aChoixUnique('région siège social ?', [
+                    {
+                      identifiant:
+                        'contexte-region-siege-social-nouvelle-aquitaine',
+                      libelle: 'Nouvelle-Aquitaine',
+                    },
+                  ])
+                  .construis(),
+                uneQuestion()
+                  .avecIdentifiant('contexte-departement-tom-siege-social')
+                  .aChoixUnique('département siège social ?', [
+                    {
+                      identifiant:
+                        'contexte-departement-tom-siege-social-gironde',
+                      libelle: 'Gironde',
                     },
                   ])
                   .construis(),
@@ -310,14 +449,13 @@ describe('Adapatateur de Restitution HTML', () => {
 
         const informations = new AdaptateurDeRestitutionHTML(
           new Map(),
-        ).extraitInformations(diagnostic);
-
+        ).representeInformations(diagnostic);
         expect(informations.zoneGeographique).toStrictEqual('non renseigné');
       });
     });
 
     describe("secteur d'activité de l'entité", () => {
-      it("si renseigné lors du diagnostic, extrait le secteur d'activité", () => {
+      it("si renseigné, représente le secteur d'activité", () => {
         const secteurActivite = 'Enseignement';
         const diagnostic = unDiagnostic()
           .avecUnReferentiel(
@@ -340,18 +478,20 @@ describe('Adapatateur de Restitution HTML', () => {
               thematique: 'contexte',
               question: 'contexte-secteur-activite',
             },
-            uneReponseDonnee().ayantPourReponse(secteurActivite).construis(),
+            uneReponseDonnee()
+              .ayantPourReponse('contexte-secteur-activite-enseignement')
+              .construis(),
           )
           .construis();
 
         const informations = new AdaptateurDeRestitutionHTML(
           new Map(),
-        ).extraitInformations(diagnostic);
+        ).representeInformations(diagnostic);
 
         expect(informations.secteurActivite).toStrictEqual(secteurActivite);
       });
 
-      it("si non renseigné lors du diagnostic, indique 'non renseigné'", () => {
+      it("si non renseigné, indique 'non renseigné'", () => {
         const secteurActivite = 'Enseignement';
         const diagnostic = unDiagnostic()
           .avecUnReferentiel(
@@ -373,7 +513,7 @@ describe('Adapatateur de Restitution HTML', () => {
 
         const informations = new AdaptateurDeRestitutionHTML(
           new Map(),
-        ).extraitInformations(diagnostic);
+        ).representeInformations(diagnostic);
 
         expect(informations.secteurActivite).toStrictEqual('non renseigné');
       });
