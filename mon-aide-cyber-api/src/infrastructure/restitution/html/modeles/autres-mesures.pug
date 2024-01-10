@@ -1,21 +1,20 @@
-block page
-    div(class='fr-pt-md-5w')
-        h4 Les autres mesures
-        div(class='fr-accordions-group')&attributes({'data-fr-js-accordions-group': 'true'})
-            each recommandation, index in recommandations
-                section(class="fr-accordion")&attributes({'data-fr-js-accordion': 'true'})
-                    h5(class="fr-accordion__title")
-                        button(class="fr-accordion__btn" aria-expanded="false" aria-controls='mesures-prioritaires-' + index + 7)&attributes({
-                            'data-fr-js-collapse-button': 'true',
-                            'data-fr-js-accordion-button-actionee': 'true'
-                        })
-                            | !{index + 7} . !{recommandation.titre}
-                    div(class='fr-collapse' id='mesures-prioritaires-'+index+7)&attributes({'data-fr-js-collapse': 'true', 'data-fr-js-accordion-actionee': 'true'})
-                        div
-                            b Pourquoi ?
-                            div(class='fr-pt-md-2w fr-pb-md-3w')
-                                | !{include(recommandation.pourquoi)}
-                        div
-                            b Comment mettre en œuvre cette mesure ?
-                            div(class='fr-pt-md-2w fr-pb-md-3w')
-                                | !{include(recommandation.comment)}
+div(class='fr-pt-md-5w')
+    h4 Les autres mesures
+    div(class='fr-accordions-group')&attributes({'data-fr-js-accordions-group': 'true'})
+        each recommandation, index in recommandations
+            section(class="fr-accordion")&attributes({'data-fr-js-accordion': 'true'})
+                h5(class="fr-accordion__title")
+                    button(class="fr-accordion__btn" aria-expanded="false" aria-controls='mesures-prioritaires-' + index + 7)&attributes({
+                        'data-fr-js-collapse-button': 'true',
+                        'data-fr-js-accordion-button-actionee': 'true'
+                    })
+                        | !{index + 7} . !{recommandation.titre}
+                div(class='fr-collapse' id='mesures-prioritaires-'+index+7)&attributes({'data-fr-js-collapse': 'true', 'data-fr-js-accordion-actionee': 'true'})
+                    div
+                        b Pourquoi ?
+                        div(class='fr-pt-md-2w fr-pb-md-3w')
+                            | !{include(recommandation.pourquoi)}
+                    div
+                        b Comment mettre en œuvre cette mesure ?
+                        div(class='fr-pt-md-2w fr-pb-md-3w')
+                            | !{include(recommandation.comment)}

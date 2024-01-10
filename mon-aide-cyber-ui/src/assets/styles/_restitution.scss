@@ -62,6 +62,25 @@ html {
     mask-repeat: no-repeat;
   }
 
+  .fr-sidemenu__inner {
+    box-shadow: unset;
+  }
+
+  .fr-sidemenu__btn[aria-current]:not([aria-current='false']):before,
+  .fr-sidemenu__link[aria-current]:not([aria-current='false']):before {
+    background-color: var(--couleurs-mac-violet-fonce) !important;
+  }
+
+  .fr-sidemenu__link[aria-current]:not([aria-current='false']) {
+    color: var(--couleurs-mac-violet-fonce);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    a[href]:hover {
+      background-color: unset !important;
+    }
+  }
+
   div[id^=mesures-prioritaires] {
     b {
       font-size: 18px;
