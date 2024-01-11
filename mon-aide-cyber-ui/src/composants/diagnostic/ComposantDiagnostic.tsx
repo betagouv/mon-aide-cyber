@@ -414,7 +414,7 @@ export const ComposantDiagnostic = ({
     </div>
   );
 
-  const termineDiagnostic = useCallback(async () => {
+  const quitterLeDiagnostic = useCallback(async () => {
     setBoutonDesactive(true);
     const action = actions.find((a) => a.action === 'terminer');
     if (action) {
@@ -475,9 +475,9 @@ export const ComposantDiagnostic = ({
   return (
     <>
       <HeaderDiagnostic
-        terminer={{
+        quitter={{
           active: boutonDesactive,
-          termineDiagnostic: () => termineDiagnostic(),
+          quitterLeDiagnostic: () => quitterLeDiagnostic(),
         }}
         copier={{ copier: () => copierLienDiagnostic() }}
       />

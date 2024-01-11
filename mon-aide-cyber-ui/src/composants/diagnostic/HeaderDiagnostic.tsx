@@ -1,5 +1,5 @@
 type ProprietesHeaderDiagnostic = {
-  terminer: { active: boolean; termineDiagnostic: () => void };
+  quitter: { active: boolean; quitterLeDiagnostic: () => void };
   copier: { copier: () => void };
 };
 export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => (
@@ -23,11 +23,11 @@ export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => (
                 <li className="fr-pr-2w">
                   <button
                     className="bouton-mac bouton-mac-primaire"
-                    title="Terminer Diagnostic"
-                    disabled={propietes.terminer.active}
-                    onClick={propietes.terminer.termineDiagnostic}
+                    title="Quitter le diagnostic"
+                    disabled={propietes.quitter.active}
+                    onClick={propietes.quitter.quitterLeDiagnostic}
                   >
-                    Terminer Diagnostic
+                    Quitter le diagnostic
                   </button>
                 </li>
                 <li>
