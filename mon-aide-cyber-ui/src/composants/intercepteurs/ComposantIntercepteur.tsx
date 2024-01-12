@@ -1,10 +1,10 @@
-import { useParams } from "react-router-dom";
-import React from "react";
-import { UUID } from "../../types/Types.ts";
-import { ErrorBoundary } from "react-error-boundary";
-import { ComposantAffichageErreur } from "../erreurs/ComposantAffichageErreur.tsx";
+import { useParams } from 'react-router-dom';
+import React from 'react';
+import { UUID } from '../../types/Types.ts';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ComposantAffichageErreur } from '../erreurs/ComposantAffichageErreur.tsx';
 
-("use client");
+('use client');
 type CommePropriete<C extends React.ElementType> = {
   composant?: C;
 };
@@ -24,10 +24,10 @@ type ProprietesComposant = {
   idDiagnostic?: UUID;
 };
 
-export const ComposantIntercepteur = <C extends React.ElementType = "div">({
+export const ComposantIntercepteur = <C extends React.ElementType = 'div'>({
   composant,
 }: ProprietesComposantIntercepteur<C, ProprietesComposant>) => {
-  const Composant = composant || "div";
+  const Composant = composant || 'div';
   const params = useParams();
 
   return (
