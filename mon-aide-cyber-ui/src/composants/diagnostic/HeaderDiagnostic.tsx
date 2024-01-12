@@ -1,5 +1,5 @@
 type ProprietesHeaderDiagnostic = {
-  quitter: { active: boolean; quitterLeDiagnostic: () => void };
+  quitter: { quitterLeDiagnostic: () => void };
   copier: { copier: () => void };
 };
 export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => (
@@ -24,7 +24,6 @@ export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => (
                   <button
                     className="bouton-mac bouton-mac-primaire"
                     title="Quitter le diagnostic"
-                    disabled={propietes.quitter.active}
                     onClick={propietes.quitter.quitterLeDiagnostic}
                   >
                     Quitter le diagnostic
