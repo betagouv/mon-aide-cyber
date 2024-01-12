@@ -6,7 +6,6 @@ import {
   useEffect,
   useMemo,
   useReducer,
-  useState,
 } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import {
@@ -359,7 +358,6 @@ export const ComposantDiagnostic = ({
     diagnostic: undefined,
     thematiqueAffichee: undefined,
   });
-  const [lienCopie, setLienCopie] = useState(<></>);
   const entrepots = useContext(FournisseurEntrepots);
   const { showBoundary } = useErrorBoundary();
   const { affiche, ferme } = useModale();
@@ -398,27 +396,6 @@ export const ComposantDiagnostic = ({
     [affiche, ferme, idDiagnostic],
   );
 
-  const fermeAlerte = useCallback(() => {
-    setLienCopie(<></>);
-  }, []);
-
-  const copierLienDiagnostic = useCallback(() => {
-    navigator.clipboard.writeText(window.location.href);
-    setLienCopie(() => (
-      <div className="fr-alert fr-alert--success fr-mb-1w">
-        <h3 className="fr-alert__title">Lien copié avec succès</h3>
-        <p>Le lien du diagnostic a été copié dans votre presse-papier</p>
-        <button
-          className="fr-btn--close fr-btn"
-          title="Masquer le message"
-          onClick={fermeAlerte}
-        >
-          Masquer le message
-        </button>
-      </div>
-    ));
-  }, [fermeAlerte]);
-
   const navigation = (
     <nav className="navigation-thematiqes">
       <ul className="thematiques">
@@ -449,7 +426,6 @@ export const ComposantDiagnostic = ({
         quitter={{
           quitterLeDiagnostic: () => afficheModaleQuitterLeDiagnostic(),
         }}
-        copier={{ copier: () => copierLienDiagnostic() }}
       />
       <main role="main" className="diagnostic-main">
         <div className="fr-grid-row fr-grid-row--gutters fond-clair-mac">
@@ -500,7 +476,6 @@ export const ComposantDiagnostic = ({
                 }
                conteneur-thematique`}
               >
-                {lienCopie}
                 <div className="bandeau-thematique">
                   <div className="fr-container fr-pt-md-4w">
                     <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
