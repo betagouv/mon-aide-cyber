@@ -360,11 +360,8 @@ export const ComposantDiagnostic = ({
     thematiqueAffichee: undefined,
   });
   const [lienCopie, setLienCopie] = useState(<></>);
-  const [boutonDesactive] = useState(false);
-
   const entrepots = useContext(FournisseurEntrepots);
   const { showBoundary } = useErrorBoundary();
-
   const { affiche, ferme } = useModale();
 
   useEffect(() => {
@@ -399,33 +396,6 @@ export const ComposantDiagnostic = ({
         ),
       }),
     [affiche, ferme, idDiagnostic],
-  );
-
-  const spinner = (
-    <div className="blanc">
-      <div className="loader">
-        <svg className="circular" viewBox="25 25 50 50">
-          <circle
-            className="path-outline"
-            cx="50"
-            cy="50"
-            r="20"
-            fill="none"
-            strokeWidth="1"
-            strokeMiterlimit="10"
-          />
-          <circle
-            className="path"
-            cx="50"
-            cy="50"
-            r="20"
-            fill="none"
-            strokeWidth="1"
-            strokeMiterlimit="10"
-          />
-        </svg>
-      </div>
-    </div>
   );
 
   const fermeAlerte = useCallback(() => {
@@ -477,7 +447,6 @@ export const ComposantDiagnostic = ({
     <>
       <HeaderDiagnostic
         quitter={{
-          active: boutonDesactive,
           quitterLeDiagnostic: () => afficheModaleQuitterLeDiagnostic(),
         }}
         copier={{ copier: () => copierLienDiagnostic() }}
@@ -531,7 +500,6 @@ export const ComposantDiagnostic = ({
                 }
                conteneur-thematique`}
               >
-                {boutonDesactive && spinner}
                 {lienCopie}
                 <div className="bandeau-thematique">
                   <div className="fr-container fr-pt-md-4w">
