@@ -139,7 +139,7 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
     >
       {children}
       <dialog
-        aria-labelledby="modale-title"
+        aria-labelledby="titre-modale"
         id="modale"
         className={`fr-modal ${classModale}`}
         aria-modal={ariaModale}

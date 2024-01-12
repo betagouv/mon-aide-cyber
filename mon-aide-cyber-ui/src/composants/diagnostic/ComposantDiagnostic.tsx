@@ -34,7 +34,6 @@ import {
 } from '../../domaine/diagnostic/reducteurReponse.ts';
 import {
   Action,
-  ActionBase,
   ActionReponseDiagnostic,
 } from '../../domaine/diagnostic/Diagnostic.ts';
 import '../../assets/styles/_diagnostic.scss';
@@ -49,6 +48,8 @@ import {
 import styled from 'styled-components';
 import { FooterDiagnostic } from './FooterDiagnostic.tsx';
 import { HeaderDiagnostic } from './HeaderDiagnostic.tsx';
+import { useModale } from '../../fournisseurs/hooks.ts';
+import { QuitterLeDiagnostic } from './QuitterLeDiagnostic.tsx';
 
 type ProprietesComposantQuestion = {
   actions: ActionReponseDiagnostic[];
@@ -337,7 +338,7 @@ const ComposantQuestion = ({
   );
 };
 
-const BoutonNavigeVersThematique = styled.button<{
+const BoutonNavigueVersThematique = styled.button<{
   $localisationIcone: string;
 }>`
   mask-image: url(${(props) => props.$localisationIcone});
@@ -359,10 +360,12 @@ export const ComposantDiagnostic = ({
     thematiqueAffichee: undefined,
   });
   const [lienCopie, setLienCopie] = useState(<></>);
-  const [boutonDesactive, setBoutonDesactive] = useState(false);
+  const [boutonDesactive] = useState(false);
 
   const entrepots = useContext(FournisseurEntrepots);
   const { showBoundary } = useErrorBoundary();
+
+  const { affiche, ferme } = useModale();
 
   useEffect(() => {
     entrepots
@@ -379,12 +382,23 @@ export const ComposantDiagnostic = ({
     actions = etatReferentiel.diagnostic!.actions;
   }
 
-  const affiche = useCallback(
+  const afficheThematique = useCallback(
     (clef: string) => {
       envoie(thematiqueAffichee(clef));
       window.scrollTo({ top: 0 });
     },
     [envoie],
+  );
+
+  const afficheModaleQuitterLeDiagnostic = useCallback(
+    () =>
+      affiche({
+        titre: 'Quitter le diagnostic',
+        corps: (
+          <QuitterLeDiagnostic surAnnuler={ferme} idDiagnostic={idDiagnostic} />
+        ),
+      }),
+    [affiche, ferme, idDiagnostic],
   );
 
   const spinner = (
@@ -413,19 +427,6 @@ export const ComposantDiagnostic = ({
       </div>
     </div>
   );
-
-  const quitterLeDiagnostic = useCallback(async () => {
-    setBoutonDesactive(true);
-    const action = actions.find((a) => a.action === 'terminer');
-    if (action) {
-      return entrepots
-        .diagnostic()
-        .termine(action as ActionBase)
-        .then(() => {
-          setBoutonDesactive(false);
-        });
-    }
-  }, [actions, entrepots]);
 
   const fermeAlerte = useCallback(() => {
     setLienCopie(<></>);
@@ -460,10 +461,10 @@ export const ComposantDiagnostic = ({
                 : ''
             }
           >
-            <BoutonNavigeVersThematique
+            <BoutonNavigueVersThematique
               $localisationIcone={thematique.localisationIconeNavigation}
               className={`fr-btn`}
-              onClick={() => affiche(clef)}
+              onClick={() => afficheThematique(clef)}
               title=""
             />
           </li>
@@ -477,7 +478,7 @@ export const ComposantDiagnostic = ({
       <HeaderDiagnostic
         quitter={{
           active: boutonDesactive,
-          quitterLeDiagnostic: () => quitterLeDiagnostic(),
+          quitterLeDiagnostic: () => afficheModaleQuitterLeDiagnostic(),
         }}
         copier={{ copier: () => copierLienDiagnostic() }}
       />
@@ -568,7 +569,9 @@ export const ComposantDiagnostic = ({
                         etatReferentiel.thematiqueAffichee || ''
                       }
                       thematiques={thematiques.map(([clef]) => clef)}
-                      onClick={(thematique: string) => affiche(thematique)}
+                      onClick={(thematique: string) =>
+                        afficheThematique(thematique)
+                      }
                     />
                     <BoutonThematique
                       titre="Thématique suivante"
@@ -578,7 +581,9 @@ export const ComposantDiagnostic = ({
                         etatReferentiel.thematiqueAffichee || ''
                       }
                       thematiques={thematiques.map(([clef]) => clef)}
-                      onClick={(thematique: string) => affiche(thematique)}
+                      onClick={(thematique: string) =>
+                        afficheThematique(thematique)
+                      }
                     />
                   </div>
                 </div>
