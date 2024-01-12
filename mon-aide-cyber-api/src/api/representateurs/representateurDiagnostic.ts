@@ -12,6 +12,7 @@ import {
   Transcripteur,
 } from './types';
 import { RepresentationGroupee } from './RepresentationGroupee';
+import { ConstructeurAction } from './ConstructeurAction';
 
 export const trouveQuestionATranscrire = (
   chemin: { chemin: Chemin; identifiantQuestion: string },
@@ -155,13 +156,8 @@ export function representeLeDiagnosticPourLeClient(
   transcripteur: Transcripteur,
 ): RepresentationDiagnostic {
   const actions: Action[] = [
-    {
-      action: 'terminer',
-      ressource: {
-        url: `/api/diagnostic/${diagnostic.identifiant}/termine`,
-        methode: 'GET',
-      },
-    },
+    ConstructeurAction.terminer(diagnostic.identifiant),
+    ConstructeurAction.restituer(diagnostic.identifiant),
   ];
   const representationGroupee = new RepresentationGroupee(transcripteur);
 
@@ -180,27 +176,15 @@ export function representeLeDiagnosticPourLeClient(
         accumulateur: RepresentationReferentiel,
         [clef, questionsThematique],
       ) => {
-        actions.push({
-          [clef]: {
-            action: 'repondre',
-            ressource: {
-              url: `/api/diagnostic/${diagnostic.identifiant}`,
-              methode: 'PATCH',
-            },
-          },
-        });
+        actions.push(ConstructeurAction.repondre(clef, diagnostic.identifiant));
         return {
           ...accumulateur,
           [clef]: {
             actions: [
-              {
-                action: 'repondre',
-                chemin: clef,
-                ressource: {
-                  url: `/api/diagnostic/${diagnostic.identifiant}`,
-                  methode: 'PATCH',
-                },
-              },
+              ConstructeurAction.repondreThematique(
+                clef,
+                diagnostic.identifiant,
+              ),
             ],
             description: transcripteur.thematiques[clef].description,
             libelle: transcripteur.thematiques[clef].libelle,

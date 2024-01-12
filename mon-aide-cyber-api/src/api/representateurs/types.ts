@@ -8,14 +8,18 @@ type ActionBase = {
 export type Action =
   | ActionDiagnostic
   | ActionRepondreDiagnostic
+  | ActionRestituerDiagnostic
   | ActionTerminerDiagnostic;
-type ActionRepondreDiagnostic = {
+export type ActionRepondreDiagnostic = {
   [thematique: string]: ActionBase & { action: 'repondre' };
 };
 type ActionTerminerDiagnostic = ActionBase & {
   action: 'terminer';
 };
-type ActionDiagnostic = ActionBase & {
+type ActionRestituerDiagnostic = ActionBase & {
+  action: 'restituer';
+};
+export type ActionDiagnostic = ActionBase & {
   action: 'repondre';
   chemin: string;
 };
