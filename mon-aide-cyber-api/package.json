@@ -47,6 +47,6 @@
     "light-my-request": "^5.11.0",
     "lodash.clonedeep": "^4.5.0",
     "nodemon": "^2.0.22",
-    "vitest": "^0.34.6"
+    "vitest": "^1.2.0"
   }
 }
