@@ -30,23 +30,19 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
     const recommandations = this.genereMesuresPrioritaires(
       diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
     );
-
     const autresRecommandations =
       diagnostic.restitution?.recommandations?.autresRecommandations;
+    const informations = this.genereInformations(diagnostic);
 
     if (estRecommandationPriorisee(autresRecommandations)) {
       return this.genere([
-        this.genereInformations(diagnostic),
+        informations,
         indicateurs,
         recommandations,
         this.genereAutresMesures(autresRecommandations),
       ]);
     }
-    return this.genere([
-      this.genereInformations(diagnostic),
-      indicateurs,
-      recommandations,
-    ]);
+    return this.genere([informations, indicateurs, recommandations]);
   }
 
   protected async genereInformations(
