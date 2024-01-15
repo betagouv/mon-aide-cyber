@@ -93,3 +93,27 @@ html {
   line-height: 48px;
   font-weight: 800;
 }
+
+#information-contenu {
+  background-color: var(--couleurs-mac-violet-tres-clair);
+  border-radius: 17px;
+  padding: 32px;
+  line-height: 28px;
+  font-size: 16px;
+
+  #information-id {
+    font-size: 22px;
+    font-family: "Marianne ExtraBold";
+    font-weight: 800;
+  }
+
+  p {
+    margin-bottom: 0;
+    font-weight: 400;
+
+    strong {
+      font-family: "Marianne ExtraBold";
+      font-weight: 400;
+    }
+  }
+}

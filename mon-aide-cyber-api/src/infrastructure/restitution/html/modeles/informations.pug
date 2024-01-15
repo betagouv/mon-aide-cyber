@@ -1,12 +1,22 @@
 block page
     h4 Informations
-    div
-        b ID !{identifiant}
+div(id='information-contenu' class='fr-mt-2w fr-mb-5w')
+    div(id='information-id' class='fr-mb-2w')
+        | ID !{identifiant}
+    div(class='autres-informations')
         p Projet créé le
-            |  <strong>!{dateCreation.date}</strong> à <strong>!{dateCreation.heure}</strong>
+            |
+            strong  !{dateCreation.date}
+            |  à
+            strong  !{dateCreation.heure}
         p Dernière Modification le
-            |  <strong>!{dateDerniereModification.date}</strong> à <strong>!{dateDerniereModification.heure}</strong>
+            |
+            strong  !{dateDerniereModification.date}
+            |  à
+            strong  !{dateDerniereModification.heure}
         p Zone géographique :
-            b  !{zoneGeographique}
+            |
+            strong  !{zoneGeographique}
         p Secteur d'activité :
-            b  !{secteurActivite}
+            |
+            strong  !{secteurActivite}
