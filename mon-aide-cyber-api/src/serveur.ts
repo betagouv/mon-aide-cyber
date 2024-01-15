@@ -51,9 +51,16 @@ const creeApp = (config: ConfigurationServeur) => {
 
   app.use(config.gestionnaireErreurs.controleurRequete());
 
+  const dureePeriodeConnexionMs =
+    Number(process.env.MAC_LIMITEUR_TRAFFIC_DUREE_PERIODE_CONNEXIONS_MS) ||
+    5 * 60 * 1000;
+  const nombreMaximumDeConnexions =
+    Number(
+      process.env.MAC_LIMITEUR_TRAFFIC_NOMBRE_CONNEXIONS_MAXIMUM_PAR_PERIODE,
+    ) || 100;
   const limiteurTrafficUI = rateLimit({
-    windowMs: 5 * 60 * 1000,
-    max: 100,
+    windowMs: dureePeriodeConnexionMs,
+    max: nombreMaximumDeConnexions,
     message:
       'Vous avez atteint le nombre maximal de requête. Veuillez réessayer ultérieurement.',
     standardHeaders: true,
