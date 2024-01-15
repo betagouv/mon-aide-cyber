@@ -17,6 +17,7 @@ import { csrf } from 'lusca';
 import { AdaptateurDeVerificationDeSession } from './adaptateurs/AdaptateurDeVerificationDeSession';
 import { AdaptateursRestitution } from './adaptateurs/AdaptateursRestitution';
 import CookieSession = require('cookie-session');
+import { BusCommande } from './domaine/commande';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -27,6 +28,7 @@ export type ConfigurationServeur = {
   adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>;
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
   entrepots: Entrepots;
+  busCommande: BusCommande;
   busEvenement: BusEvenement;
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
   gestionnaireDeJeton: GestionnaireDeJeton;

@@ -12,6 +12,7 @@ import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/Adaptate
 import { unAdaptateurDeRestitutionHTML } from '../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
 import { AdaptateursRestitution } from '../../src/adaptateurs/AdaptateursRestitution';
 import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
+import { BusCommandeMAC } from '../../src/infrastructure/bus/BusCommandeMAC';
 
 const testeurIntegration = () => {
   let serveurDeTest: {
@@ -46,6 +47,7 @@ const testeurIntegration = () => {
       adaptateurTranscripteurDonnees,
       adaptateurTableauDeRecommandations,
       entrepots,
+      busCommande: new BusCommandeMAC(entrepots, busEvenement),
       busEvenement,
       gestionnaireErreurs,
       gestionnaireDeJeton,

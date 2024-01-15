@@ -10,6 +10,7 @@ import { fabriqueGestionnaireErreurs } from './src/infrastructure/adaptateurs/fa
 import { GestionnaireDeJetonJWT } from './src/infrastructure/authentification/gestionnaireDeJetonJWT';
 import { AdaptateurDeVerificationDeSessionHttp } from './src/adaptateurs/AdaptateurDeVerificationDeSessionHttp';
 import { AdaptateurDeRestitutionHTML } from './src/adaptateurs/AdaptateurDeRestitutionHTML';
+import { BusCommandeMAC } from './src/infrastructure/bus/BusCommandeMAC';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut',
@@ -23,6 +24,8 @@ const traductionThematiques =
     ).map(([clef, thematique]) => [clef, thematique.libelle]),
   ) || new Map();
 
+const entrepots = fabriqueEntrepots();
+const busEvenementMAC = new BusEvenementMAC(fabriqueConsommateursEvenements());
 const serveurMAC = serveur.creeServeur({
   adaptateursRestitution: {
     pdf: () => new AdaptateurDeRestitutionPDF(traductionThematiques),
@@ -32,8 +35,9 @@ const serveurMAC = serveur.creeServeur({
   adaptateurTranscripteurDonnees: adaptateurTranscripteurDonnees,
   adaptateurTableauDeRecommandations:
     new AdaptateurTableauDeRecommandationsMAC(),
-  entrepots: fabriqueEntrepots(),
-  busEvenement: new BusEvenementMAC(fabriqueConsommateursEvenements()),
+  entrepots,
+  busCommande: new BusCommandeMAC(entrepots, busEvenementMAC),
+  busEvenement: busEvenementMAC,
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),
   gestionnaireDeJeton: gestionnaireDeJeton,
   adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(

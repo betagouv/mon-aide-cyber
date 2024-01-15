@@ -1,5 +1,4 @@
 import {
-  ajouteLaReponseAuDiagnostic,
   Diagnostic,
   genereLaRestitution,
   initialiseDiagnostic,
@@ -12,16 +11,6 @@ import { TableauDeRecommandations } from './TableauDeRecommandations';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
-
-export type CorpsReponseQuestionATiroir = {
-  reponse: string;
-  questions: { identifiant: string; reponses: string[] }[];
-};
-export type CorpsReponse = {
-  chemin: string;
-  identifiant: string;
-  reponse: string | string[] | CorpsReponseQuestionATiroir;
-};
 
 export class ServiceDiagnostic {
   constructor(
@@ -57,40 +46,6 @@ export class ServiceDiagnostic {
       })
       .catch((erreur) =>
         Promise.reject(ErreurMAC.cree('Lance le diagnostic', erreur)),
-      );
-  };
-
-  ajouteLaReponse = async (
-    id: crypto.UUID,
-    corpsReponse: CorpsReponse,
-  ): Promise<void> => {
-    return this.entrepots
-      .diagnostic()
-      .lis(id)
-      .then((diagnostic) => {
-        ajouteLaReponseAuDiagnostic(diagnostic, corpsReponse);
-        return diagnostic;
-      })
-      .then(async (diagnostic) => {
-        await this.entrepots.diagnostic().persiste(diagnostic);
-        return diagnostic;
-      })
-      .then(
-        (diagnostic) =>
-          this.busEvenement?.publie<ReponseAjoutee>({
-            identifiant: diagnostic.identifiant,
-            type: 'REPONSE_AJOUTEE',
-            date: FournisseurHorloge.maintenant(),
-            corps: {
-              identifiantDiagnostic: diagnostic.identifiant,
-              thematique: corpsReponse.chemin,
-              identifiantQuestion: corpsReponse.identifiant,
-              reponse: corpsReponse.reponse,
-            },
-          }),
-      )
-      .catch((erreur) =>
-        Promise.reject(ErreurMAC.cree('Ajout réponse au diagnostic', erreur)),
       );
   };
 
@@ -130,14 +85,5 @@ export type DiagnosticLance = Omit<Evenement, 'corps'> & {
 type DiagnosticTermine = Omit<Evenement, 'corps'> & {
   corps: {
     identifiantDiagnostic: crypto.UUID;
-  };
-};
-
-type ReponseAjoutee = Omit<Evenement, 'corps'> & {
-  corps: {
-    identifiantDiagnostic: crypto.UUID;
-    thematique: string;
-    identifiantQuestion: string;
-    reponse: string | string[] | CorpsReponseQuestionATiroir;
   };
 };
