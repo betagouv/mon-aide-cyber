@@ -7,16 +7,33 @@ class EntrepotsPostgresPourLesTests {
   constructor() {
     this.knex = knex(knexfile);
   }
-
-  async nettoie() {
+  async nettoieDiagnostics() {
     await this.knex('diagnostics').truncate();
+  }
+
+  async nettoieJournal() {
     await this.knex('journal_mac.evenements').truncate();
+  }
+
+  async nettoieAidants() {
     await this.knex('utilisateurs').truncate();
   }
 }
 
-export const nettoieLaBaseDeDonnees = async () => {
+export const nettoieLaBaseDeDonneesAidants = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
-    await new EntrepotsPostgresPourLesTests().nettoie();
+    await new EntrepotsPostgresPourLesTests().nettoieAidants();
+  }
+};
+
+export const nettoieLaBaseDeDonneesJournal = async () => {
+  if (process.env.URL_SERVEUR_BASE_DONNEES) {
+    await new EntrepotsPostgresPourLesTests().nettoieJournal();
+  }
+};
+
+export const nettoieLaBaseDeDonneesDiagnostics = async () => {
+  if (process.env.URL_SERVEUR_BASE_DONNEES) {
+    await new EntrepotsPostgresPourLesTests().nettoieDiagnostics();
   }
 };

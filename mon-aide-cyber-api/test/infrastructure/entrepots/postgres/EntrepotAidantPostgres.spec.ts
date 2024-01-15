@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import { nettoieLaBaseDeDonnees } from '../../../utilitaires/nettoyeurBDD';
+import { describe, expect, it } from 'vitest';
+import { nettoieLaBaseDeDonneesAidants } from '../../../utilitaires/nettoyeurBDD';
 import { EntrepotAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAidantPostgres';
 import { unAidant } from '../../../authentification/constructeurs/constructeurAidant';
 
@@ -26,7 +26,7 @@ class FauxServiceDeChiffrement implements ServiceDeChiffrement {
 
 describe('Entrepot Aidant', () => {
   afterEach(async () => {
-    await nettoieLaBaseDeDonnees();
+    await nettoieLaBaseDeDonneesAidants();
   });
 
   it('persiste un aidant', async () => {
