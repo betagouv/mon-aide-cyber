@@ -7,7 +7,6 @@ import {
   importeAidants,
   ResultatImportationAidants,
 } from '../../../src/administration/aidants/importeAidants';
-import { nettoieLaBaseDeDonnees } from '../../utilitaires/nettoyeurBDD';
 import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
 import * as fs from 'fs';
 
@@ -16,10 +15,6 @@ describe('Importe des aidants', () => {
 
   beforeEach(() => {
     busEvenement = new BusEvenementDeTest();
-  });
-
-  afterEach(async () => {
-    await nettoieLaBaseDeDonnees();
   });
 
   it('importe un aidant', async () => {
@@ -166,7 +161,7 @@ describe('Importe des aidants', () => {
     });
   });
 
-  it.skip('ON IMPOSTE TOUS LES AIDANTS - importe uniquement les aidants ayant signé la charte', async () => {
+  it.skip('ON IMPORTE TOUS LES AIDANTS - importe uniquement les aidants ayant signé la charte', async () => {
     const entrepotAidant = new EntrepotAidantMemoire();
     const dateSignatureCGU = new Date(Date.parse('2023-12-05T12:00:00+01:00'));
     FournisseurHorlogeDeTest.initialise(dateSignatureCGU);

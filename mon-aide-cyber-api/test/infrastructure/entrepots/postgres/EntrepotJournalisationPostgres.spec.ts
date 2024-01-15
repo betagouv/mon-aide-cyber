@@ -1,11 +1,11 @@
-import { afterEach, describe, expect, it } from "vitest";
-import { nettoieLaBaseDeDonnees } from "../../../utilitaires/nettoyeurBDD";
-import { Publication } from "../../../../src/journalisation/Publication";
-import { faker } from "@faker-js/faker";
-import crypto from "crypto";
-import configurationJournalisation from "../../../../src/infrastructure/entrepots/postgres/configurationJournalisation";
-import { EntrepotJournalisationPostgres } from "../../../../src/infrastructure/entrepots/postgres/EntrepotJournalisationPostgres";
-import { DTO } from "../../../../src/infrastructure/entrepots/postgres/EntrepotPostgres";
+import { afterEach, describe, expect, it } from 'vitest';
+import { nettoieLaBaseDeDonneesJournal } from '../../../utilitaires/nettoyeurBDD';
+import { Publication } from '../../../../src/journalisation/Publication';
+import { faker } from '@faker-js/faker';
+import crypto from 'crypto';
+import configurationJournalisation from '../../../../src/infrastructure/entrepots/postgres/configurationJournalisation';
+import { EntrepotJournalisationPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
+import { DTO } from '../../../../src/infrastructure/entrepots/postgres/EntrepotPostgres';
 
 class ConstructeurPublication {
   private date = new Date();
@@ -44,12 +44,12 @@ class EntrepotJournalisationPostgresTests extends EntrepotJournalisationPostgres
   }
 }
 
-describe("Entrepot Journalisation Postgres", () => {
+describe('Entrepot Journalisation Postgres', () => {
   afterEach(async () => {
-    await nettoieLaBaseDeDonnees();
+    await nettoieLaBaseDeDonneesJournal();
   });
 
-  it("persiste une publication", async () => {
+  it('persiste une publication', async () => {
     const publication = unePublication().construis();
 
     await new EntrepotJournalisationPostgres(
