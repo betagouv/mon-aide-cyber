@@ -1,5 +1,8 @@
-import { CorpsReponse, CorpsReponseQuestionATiroir } from "./ServiceDiagnostic";
-import { QuestionDiagnostic } from "./Diagnostic";
+import { QuestionDiagnostic } from './Diagnostic';
+import {
+  CorpsReponse,
+  CorpsReponseQuestionATiroir,
+} from './CapteurSagaAjoutReponse';
 
 interface Strategie {
   applique(questionTrouvee: QuestionDiagnostic | undefined): void;
@@ -74,5 +77,5 @@ const estReponseQuestionATiroir = (
 const estChaineDeCharactere = (
   reponse: string | CorpsReponseQuestionATiroir | string[],
 ): reponse is string => {
-  return typeof reponse === "string";
+  return typeof reponse === 'string';
 };

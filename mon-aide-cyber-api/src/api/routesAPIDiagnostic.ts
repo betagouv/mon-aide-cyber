@@ -5,11 +5,13 @@ import { ServiceDiagnostic } from '../diagnostic/ServiceDiagnostic';
 import { representeLeDiagnosticPourLeClient } from './representateurs/representateurDiagnostic';
 import { NextFunction } from 'express-serve-static-core';
 import bodyParser from 'body-parser';
+import { SagaAjoutReponse } from '../diagnostic/CapteurSagaAjoutReponse';
 
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
-  const { adaptateurDeVerificationDeSession: session } = configuration;
+  const { adaptateurDeVerificationDeSession: session, busCommande } =
+    configuration;
 
   routes.post(
     '/',
@@ -88,13 +90,13 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       const corpsReponse = requete.body;
-      new ServiceDiagnostic(
-        configuration.adaptateurReferentiel,
-        configuration.adaptateurTableauDeRecommandations,
-        configuration.entrepots,
-        configuration.busEvenement,
-      )
-        .ajouteLaReponse(id as crypto.UUID, corpsReponse)
+      const commande: SagaAjoutReponse = {
+        type: 'SagaAjoutReponse',
+        idDiagnostic: id,
+        ...corpsReponse,
+      };
+      busCommande
+        .publie(commande)
         .then(() => {
           reponse.status(204);
           reponse.send();

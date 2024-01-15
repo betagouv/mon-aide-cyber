@@ -1,7 +1,6 @@
 import crypto from 'crypto';
 import { Question, Recommandation, Referentiel } from './Referentiel';
 import { Entrepot } from '../domaine/Entrepot';
-import { CorpsReponse } from './ServiceDiagnostic';
 import { laValeurEstDefinie, Valeur } from './Indice';
 import {
   NiveauDeRecommandation,
@@ -12,6 +11,7 @@ import { MoteurIndice, ValeursDesIndicesAuDiagnostic } from './MoteurIndice';
 import { MoteurDeRecommandations } from './MoteurDeRecommandations';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { MoteurDesIndicateurs } from './MoteurDesIndicateurs';
+import { CorpsReponse } from './CapteurSagaAjoutReponse';
 
 export type Thematique = string;
 

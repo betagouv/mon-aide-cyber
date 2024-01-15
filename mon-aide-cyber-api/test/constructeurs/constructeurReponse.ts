@@ -1,19 +1,19 @@
-import { Constructeur } from "./constructeur";
+import { Constructeur } from './constructeur';
 import {
   QuestionChoixMultiple,
   QuestionChoixUnique,
   ReponsePossible,
-} from "../../src/diagnostic/Referentiel";
-import { fakerFR } from "@faker-js/faker";
+} from '../../src/diagnostic/Referentiel';
+import { fakerFR } from '@faker-js/faker';
 import {
   CorpsReponse,
   CorpsReponseQuestionATiroir,
-} from "../../src/diagnostic/ServiceDiagnostic";
+} from '../../src/diagnostic/CapteurSagaAjoutReponse';
 
 class ConstructeurDeCorpsDeReponse implements Constructeur<CorpsReponse> {
-  private chemin = "contexte";
+  private chemin = 'contexte';
   private identifiant = fakerFR.string.alpha(10);
-  private reponse: string | CorpsReponseQuestionATiroir = "";
+  private reponse: string | CorpsReponseQuestionATiroir = '';
 
   pourLaThematique(thematique: string): ConstructeurDeCorpsDeReponse {
     this.chemin = thematique;
@@ -46,7 +46,7 @@ class ConstructeurDeCorpsDeReponseQuestionATiroir
   implements Constructeur<CorpsReponseQuestionATiroir>
 {
   private questions: { identifiant: string; reponses: string[] }[] = [];
-  private reponse = "";
+  private reponse = '';
 
   construis(): CorpsReponseQuestionATiroir {
     return {
