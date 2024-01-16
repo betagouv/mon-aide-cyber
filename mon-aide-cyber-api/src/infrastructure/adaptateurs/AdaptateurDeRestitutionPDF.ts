@@ -1,5 +1,6 @@
 import { AdaptateurDeRestitution } from '../../adaptateurs/AdaptateurDeRestitution';
 import {
+  Diagnostic,
   Indicateurs,
   RecommandationPriorisee,
 } from '../../diagnostic/Diagnostic';
@@ -20,6 +21,10 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
         console.log('Erreur génération recos', erreur);
         throw new Error(erreur);
       });
+  }
+
+  protected genereInformations(_: Diagnostic): Promise<ContenuHtml> {
+    return Promise.resolve({ entete: '', corps: '', piedPage: '' });
   }
 
   protected genereIndicateurs(

@@ -1,7 +1,4 @@
-import {
-  AdaptateurDeRestitution,
-  estRecommandationPriorisee,
-} from './AdaptateurDeRestitution';
+import { AdaptateurDeRestitution } from './AdaptateurDeRestitution';
 import {
   Diagnostic,
   Indicateurs,
@@ -21,28 +18,6 @@ export type RestitutionHTML = {
 export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<RestitutionHTML> {
   constructor(private readonly traductionThematiques: Map<string, string>) {
     super();
-  }
-
-  genereRestitution(diagnostic: Diagnostic): Promise<RestitutionHTML> {
-    const indicateurs = this.genereIndicateurs(
-      diagnostic.restitution?.indicateurs,
-    );
-    const recommandations = this.genereMesuresPrioritaires(
-      diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
-    );
-    const autresRecommandations =
-      diagnostic.restitution?.recommandations?.autresRecommandations;
-    const informations = this.genereInformations(diagnostic);
-
-    if (estRecommandationPriorisee(autresRecommandations)) {
-      return this.genere([
-        informations,
-        indicateurs,
-        recommandations,
-        this.genereAutresMesures(autresRecommandations),
-      ]);
-    }
-    return this.genere([informations, indicateurs, recommandations]);
   }
 
   protected async genereInformations(

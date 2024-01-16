@@ -5,7 +5,7 @@ import {
 } from '../diagnostic/Diagnostic';
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 
-export const estRecommandationPriorisee = (
+const estRecommandationPriorisee = (
   recommandationPriorisees: RecommandationPriorisee[] | undefined,
 ): recommandationPriorisees is RecommandationPriorisee[] => {
   return (
@@ -16,24 +16,25 @@ export const estRecommandationPriorisee = (
 
 export abstract class AdaptateurDeRestitution<T> {
   genereRestitution(diagnostic: Diagnostic): Promise<T> {
+    const informations = this.genereInformations(diagnostic);
     const indicateurs = this.genereIndicateurs(
       diagnostic.restitution?.indicateurs,
     );
     const recommandations = this.genereMesuresPrioritaires(
       diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
     );
-
     const autresRecommandations =
       diagnostic.restitution?.recommandations?.autresRecommandations;
 
     if (estRecommandationPriorisee(autresRecommandations)) {
       return this.genere([
+        informations,
         indicateurs,
         recommandations,
         this.genereAutresMesures(autresRecommandations),
       ]);
     }
-    return this.genere([indicateurs, recommandations]);
+    return this.genere([informations, indicateurs, recommandations]);
   }
 
   protected abstract genereAutresMesures(
@@ -50,5 +51,9 @@ export abstract class AdaptateurDeRestitution<T> {
 
   protected abstract genereIndicateurs(
     indicateurs: Indicateurs | undefined,
+  ): Promise<ContenuHtml>;
+
+  protected abstract genereInformations(
+    diagnostic: Diagnostic,
   ): Promise<ContenuHtml>;
 }
