@@ -11,6 +11,7 @@ import { TableauDeRecommandations } from './TableauDeRecommandations';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
+import { DiagnosticTermine } from './CapteurCommandeLanceRestitution';
 
 export class ServiceDiagnostic {
   constructor(
@@ -77,12 +78,6 @@ export class ServiceDiagnostic {
 }
 
 export type DiagnosticLance = Omit<Evenement, 'corps'> & {
-  corps: {
-    identifiantDiagnostic: crypto.UUID;
-  };
-};
-
-type DiagnosticTermine = Omit<Evenement, 'corps'> & {
   corps: {
     identifiantDiagnostic: crypto.UUID;
   };

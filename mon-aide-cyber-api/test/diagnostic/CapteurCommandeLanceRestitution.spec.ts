@@ -1,0 +1,179 @@
+import { describe, beforeEach, expect, it } from 'vitest';
+import { unTableauDeRecommandationsPour7Questions } from '../constructeurs/constructeurTableauDeRecommandations';
+import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
+import {
+  uneListeDe7QuestionsToutesAssociees,
+  uneQuestion,
+  uneReponsePossible,
+  unReferentiel,
+} from '../constructeurs/constructeurReferentiel';
+import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
+import { RecommandationPriorisee } from '../../src/diagnostic/Diagnostic';
+import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
+import crypto from 'crypto';
+import { ErreurMAC } from '../../src/domaine/erreurMAC';
+import { AggregatNonTrouve } from '../../src/domaine/Aggregat';
+import {
+  CapteurCommandeLanceRestitution,
+  CommandeLanceRestitution,
+} from '../../src/diagnostic/CapteurCommandeLanceRestitution';
+import { Entrepots } from '../../src/domaine/Entrepots';
+import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
+import { Constructeur } from '../constructeurs/constructeur';
+
+describe('Capteur de lancement de la restitution', () => {
+  let capteurCommandeLanceRestitution: CapteurCommandeLanceRestitution;
+  let entrepots: Entrepots;
+  const tableauDeRecommandations = unTableauDeRecommandationsPour7Questions();
+  beforeEach(() => {
+    entrepots = new EntrepotsMemoire();
+    capteurCommandeLanceRestitution = new CapteurCommandeLanceRestitution(
+      entrepots,
+      new BusEvenementDeTest(),
+    );
+  });
+
+  it('génère les recommandations', async () => {
+    const questions = uneListeDe7QuestionsToutesAssociees();
+    const diagnostic = unDiagnostic()
+      .avecUnReferentiel(
+        unReferentiel()
+          .sansThematique()
+          .ajouteUneThematique('thematique', questions)
+          .construis(),
+      )
+      .avecLesReponsesDonnees('thematique', [
+        { q1: 'reponse-11' },
+        { q2: 'reponse-21' },
+        { q3: 'reponse-31' },
+        { q4: 'reponse-41' },
+        { q5: 'reponse-51' },
+        { q6: 'reponse-61' },
+        { q7: 'reponse-71' },
+      ])
+      .avecUnTableauDeRecommandations(tableauDeRecommandations)
+      .construis();
+    await entrepots.diagnostic().persiste(diagnostic);
+
+    await capteurCommandeLanceRestitution.execute(
+      new ConstructeurCommande(diagnostic.identifiant).construis(),
+    );
+
+    const diagnosticRetourne = await entrepots
+      .diagnostic()
+      .lis(diagnostic.identifiant);
+    expect(
+      diagnosticRetourne.restitution?.recommandations
+        ?.recommandationsPrioritaires,
+    ).toStrictEqual<RecommandationPriorisee[]>([
+      {
+        valeurObtenue: 0,
+        priorisation: 1,
+        titre: 'reco 1',
+        pourquoi: 'parce-que',
+        comment: 'comme ça',
+      },
+      {
+        valeurObtenue: 0,
+        priorisation: 2,
+        titre: 'reco 2',
+        pourquoi: 'parce-que',
+        comment: 'comme ça',
+      },
+      {
+        valeurObtenue: 0,
+        priorisation: 3,
+        titre: 'reco 3',
+        pourquoi: 'parce-que',
+        comment: 'comme ça',
+      },
+      {
+        valeurObtenue: 0,
+        priorisation: 4,
+        titre: 'reco 4',
+        pourquoi: 'parce-que',
+        comment: 'comme ça',
+      },
+      {
+        valeurObtenue: 0,
+        priorisation: 5,
+        titre: 'reco 5',
+        pourquoi: 'parce-que',
+        comment: 'comme ça',
+      },
+      {
+        valeurObtenue: 0,
+        priorisation: 6,
+        titre: 'reco 6',
+        pourquoi: 'parce-que',
+        comment: 'comme ça',
+      },
+    ]);
+    expect(
+      diagnosticRetourne.restitution?.recommandations?.autresRecommandations,
+    ).toStrictEqual([
+      {
+        titre: 'reco 7',
+        pourquoi: 'parce-que',
+        comment: 'comme ça',
+        valeurObtenue: 0,
+        priorisation: 7,
+      },
+    ]);
+  });
+
+  it("publie sur un bus d'événement DiagnosticTermine", async () => {
+    const maintenant = new Date();
+    FournisseurHorlogeDeTest.initialise(maintenant);
+    const busEvenement = new BusEvenementDeTest();
+    const diagnostic = unDiagnostic()
+      .avecUnReferentiel(
+        unReferentiel()
+          .ajouteUneQuestionAuContexte(
+            uneQuestion()
+              .aChoixUnique('Avez-vous quelque chose à envoyer ?')
+              .avecReponsesPossibles([uneReponsePossible().construis()])
+              .construis(),
+          )
+          .construis(),
+      )
+      .construis();
+    await entrepots.diagnostic().persiste(diagnostic);
+
+    await new CapteurCommandeLanceRestitution(entrepots, busEvenement).execute(
+      new ConstructeurCommande(diagnostic.identifiant).construis(),
+    );
+
+    expect(busEvenement.evenementRecu).toStrictEqual({
+      identifiant: diagnostic.identifiant,
+      type: 'DIAGNOSTIC_TERMINE',
+      date: maintenant,
+      corps: { identifiantDiagnostic: diagnostic.identifiant },
+    });
+  });
+
+  it('si le diagnostic est inconnu, cela génère un erreur', async () => {
+    await expect(() =>
+      new CapteurCommandeLanceRestitution(
+        entrepots,
+        new BusEvenementDeTest(),
+      ).execute(new ConstructeurCommande(crypto.randomUUID()).construis()),
+    ).rejects.toStrictEqual(
+      ErreurMAC.cree(
+        'Termine le diagnostic',
+        new AggregatNonTrouve('diagnostic'),
+      ),
+    );
+  });
+});
+
+class ConstructeurCommande implements Constructeur<CommandeLanceRestitution> {
+  constructor(private readonly idDiagnostic: crypto.UUID) {}
+
+  construis(): CommandeLanceRestitution {
+    return {
+      idDiagnostic: this.idDiagnostic,
+      type: 'CommandeLanceRestitution',
+    };
+  }
+}
