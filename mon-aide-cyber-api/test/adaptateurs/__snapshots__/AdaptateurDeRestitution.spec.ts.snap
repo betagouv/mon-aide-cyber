@@ -3,6 +3,11 @@
 exports[`Adaptateur de Restitution > génère la restitution avec annexe 1`] = `
 [
   {
+    "corps": "q1",
+    "entete": "",
+    "piedPage": "",
+  },
+  {
     "corps": "{"thematique":"thematique","indicateur":{"moyennePonderee":0}}",
     "entete": "entete indicateur",
     "piedPage": "piedPage indicateur",
@@ -22,6 +27,11 @@ exports[`Adaptateur de Restitution > génère la restitution avec annexe 1`] = `
 
 exports[`Adaptateur de Restitution > génère la restitution sans annexe 1`] = `
 [
+  {
+    "corps": "q1",
+    "entete": "",
+    "piedPage": "",
+  },
   {
     "corps": "{"thematique":"thematique","indicateur":{"moyennePonderee":0}}",
     "entete": "entete indicateur",

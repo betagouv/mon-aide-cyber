@@ -1,6 +1,7 @@
 import { describe, it } from 'vitest';
 import { AdaptateurDeRestitution } from '../../src/adaptateurs/AdaptateurDeRestitution';
 import {
+  Diagnostic,
   genereLaRestitution,
   Indicateurs,
   RecommandationPriorisee,
@@ -28,6 +29,16 @@ describe('Adaptateur de Restitution', () => {
           });
 
           return Buffer.from(JSON.stringify(resultat), 'utf-8');
+        });
+      }
+
+      protected genereInformations(
+        diagnostic: Diagnostic,
+      ): Promise<ContenuHtml> {
+        return Promise.resolve({
+          corps: diagnostic.referentiel['thematique'].questions[0].libelle,
+          entete: '',
+          piedPage: '',
         });
       }
 
