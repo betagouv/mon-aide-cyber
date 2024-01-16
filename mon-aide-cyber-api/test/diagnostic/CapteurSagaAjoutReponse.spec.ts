@@ -21,6 +21,7 @@ import {
 } from '../../src/diagnostic/CapteurSagaAjoutReponse';
 import { Constructeur } from '../constructeurs/constructeur';
 import { fakerFR } from '@faker-js/faker';
+import { BusCommande, Commande } from '../../src/domaine/commande';
 
 describe("Capteur d'ajout de réponse au diagnostic", () => {
   let entrepots: Entrepots;
@@ -60,6 +61,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
 
       await new CapteurSagaAjoutReponse(
         entrepots,
+        new BusDeCommandePourLesTests(),
         new BusEvenementDeTest(),
       ).execute(
         new ConstructeurSaga(diagnostic.identifiant)
@@ -118,7 +120,11 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
-      await new CapteurSagaAjoutReponse(entrepots, busEvenement).execute(
+      await new CapteurSagaAjoutReponse(
+        entrepots,
+        new BusDeCommandePourLesTests(),
+        busEvenement,
+      ).execute(
         new ConstructeurSaga(diagnostic.identifiant)
           .avecUnIdentifiant('avezvous-quelque-chose-a-envoyer-')
           .avecUnchemin('contexte')
@@ -178,6 +184,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
 
       await new CapteurSagaAjoutReponse(
         entrepots,
+        new BusDeCommandePourLesTests(),
         new BusEvenementDeTest(),
       ).execute(
         new ConstructeurSaga(diagnostic.identifiant)
@@ -223,6 +230,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
       await expect(() =>
         new CapteurSagaAjoutReponse(
           entrepots,
+          new BusDeCommandePourLesTests(),
           new BusEvenementDeTest(),
         ).execute(
           new ConstructeurSaga(crypto.randomUUID())
@@ -261,6 +269,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
 
       await new CapteurSagaAjoutReponse(
         entrepots,
+        new BusDeCommandePourLesTests(),
         new BusEvenementDeTest(),
       ).execute(
         new ConstructeurSaga(diagnostic.identifiant)
@@ -277,6 +286,32 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
       expect(diagnosticRetourne.dateDerniereModification).toStrictEqual(
         dateDerniereModification,
       );
+    });
+
+    it('publie sur le bus de commande la commande de génération de restitution', async () => {
+      const question = uneQuestion().construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel().ajouteUneQuestionAuContexte(question).construis(),
+        )
+        .construis();
+      await entrepots.diagnostic().persiste(diagnostic);
+      const busDeCommande: BusDeCommandePourLesTests =
+        new BusDeCommandePourLesTests();
+
+      await new CapteurSagaAjoutReponse(
+        entrepots,
+        busDeCommande,
+        new BusEvenementDeTest(),
+      ).execute(
+        new ConstructeurSaga(diagnostic.identifiant)
+          .avecUnIdentifiant(question.identifiant)
+          .avecUnchemin('contexte')
+          .avecUneReponse(question.reponsesPossibles[0].identifiant)
+          .construis(),
+      );
+
+      expect(busDeCommande.aRecu('CommandeLanceRestitution')).toBe(true);
     });
   });
 });
@@ -314,5 +349,18 @@ class ConstructeurSaga implements Constructeur<SagaAjoutReponse> {
       reponse: this.reponse,
       type: 'SagaAjoutReponse',
     };
+  }
+}
+
+class BusDeCommandePourLesTests implements BusCommande {
+  private commandesRecues: string[] = [];
+
+  publie<C extends Commande>(commande: C): Promise<void> {
+    this.commandesRecues.push(commande.type);
+    return Promise.resolve(undefined);
+  }
+
+  aRecu(typeCommande: string): boolean {
+    return this.commandesRecues.includes(typeCommande);
   }
 }

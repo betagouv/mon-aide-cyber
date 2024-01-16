@@ -4,11 +4,13 @@ import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { ajouteLaReponseAuDiagnostic } from './Diagnostic';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import { CapteurSaga, Saga } from '../domaine/commande';
+import { BusCommande, CapteurSaga, Saga } from '../domaine/commande';
+import { CommandeLanceRestitution } from './CapteurCommandeLanceRestitution';
 
 class CapteurSagaAjoutReponse implements CapteurSaga<SagaAjoutReponse, void> {
   constructor(
     private readonly entrepots: Entrepots,
+    private readonly busCommande: BusCommande,
     private readonly busEvenement?: BusEvenement,
   ) {}
   execute(commande: SagaAjoutReponse): Promise<void> {
@@ -25,6 +27,14 @@ class CapteurSagaAjoutReponse implements CapteurSaga<SagaAjoutReponse, void> {
       })
       .then(async (diagnostic) => {
         await this.entrepots.diagnostic().persiste(diagnostic);
+        return diagnostic;
+      })
+      .then(async (diagnostic) => {
+        const commande: CommandeLanceRestitution = {
+          type: 'CommandeLanceRestitution',
+          idDiagnostic: diagnostic.identifiant,
+        };
+        await this.busCommande.publie(commande);
         return diagnostic;
       })
       .then(
