@@ -1,0 +1,15 @@
+extends base
+
+block page
+    h2 Les 6 mesures prioritaires
+    each mesure, index in mesures
+        div
+            h3=index + 1 + '. ' + mesure.titre
+            div
+                h4 Pourquoi?
+                div
+                    | !{include(mesure.pourquoi)}
+            div
+                h4 Comment mettre en œuvre cette mesure ?
+                div
+                    | !{include(mesure.comment)}

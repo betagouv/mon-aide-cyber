@@ -11,7 +11,7 @@ import {
   desInformationsDeRestitution,
   uneRestitution,
 } from '../constructeurs/constructeurRestitution';
-import { uneRecommandationPriorisee } from '../constructeurs/constructeurRecommandation';
+import { uneMesurePriorisee } from '../constructeurs/constructeurRecommandation';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
 
@@ -43,7 +43,7 @@ describe('Adapatateur de Restitution HTML', () => {
     it('intègre des mesures prioritaires', async () => {
       const restitution = uneRestitution()
         .avecIdentifiant(crypto.randomUUID())
-        .avecRecommandations([uneRecommandationPriorisee().construis()])
+        .avecMesures([uneMesurePriorisee().construis()])
         .construis();
       entrepots.restitution().persiste(restitution);
 
@@ -88,10 +88,10 @@ describe('Adapatateur de Restitution HTML', () => {
       const adaptateurDeRestitutionHTML = unAdaptateurDeRestitutionHTML()
         .avecAutresMesures('une mesure non prioritaire')
         .construis();
-      const recommandationPriorisee = uneRecommandationPriorisee().construis();
+      const mesurePriorisee = uneMesurePriorisee().construis();
       const restitution = uneRestitution()
         .avecIdentifiant(crypto.randomUUID())
-        .avecRecommandations(Array(7).fill(recommandationPriorisee))
+        .avecMesures(Array(7).fill(mesurePriorisee))
         .construis();
       entrepots.restitution().persiste(restitution);
 
@@ -120,7 +120,7 @@ describe('Adapatateur de Restitution HTML', () => {
           .avecZoneGeographique('')
           .construis(),
       )
-      .avecRecommandations([])
+      .avecMesures([])
       .construis();
     await entrepots.restitution().persiste(restitution);
 

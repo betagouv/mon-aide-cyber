@@ -12,7 +12,7 @@ import {
   desInformationsDeRestitution,
   uneRestitution,
 } from '../constructeurs/constructeurRestitution';
-import { uneRecommandationPriorisee } from '../constructeurs/constructeurRecommandation';
+import { uneMesurePriorisee } from '../constructeurs/constructeurRecommandation';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
 
@@ -25,10 +25,8 @@ describe('Adaptateur de Restitution', () => {
   const entrepots: Entrepots = new EntrepotsMemoire();
   const adaptateurRestitution =
     new (class extends AdaptateurDeRestitution<Buffer> {
-      protected genere(
-        htmlRecommandations: Promise<ContenuHtml>[],
-      ): Promise<Buffer> {
-        return Promise.all(htmlRecommandations).then((htmls) => {
+      protected genere(htmlMesures: Promise<ContenuHtml>[]): Promise<Buffer> {
+        return Promise.all(htmlMesures).then((htmls) => {
           const resultat: ContenuHtml[] = [];
 
           htmls.forEach((html) => {
@@ -68,7 +66,7 @@ describe('Adaptateur de Restitution', () => {
       }
 
       protected genereAutresMesures(
-        autresRecommandations: RecommandationPriorisee[] | undefined,
+        autresMesures: RecommandationPriorisee[] | undefined,
       ): Promise<ContenuHtml> {
         const resultat: ContenuHtml = {
           corps: '',
@@ -76,15 +74,15 @@ describe('Adaptateur de Restitution', () => {
           piedPage: 'piedPage',
         };
 
-        autresRecommandations?.forEach((reco) => {
-          resultat.corps += JSON.stringify(reco);
+        autresMesures?.forEach((mesure) => {
+          resultat.corps += JSON.stringify(mesure);
         });
 
         return Promise.resolve(resultat);
       }
 
       protected genereMesuresPrioritaires(
-        recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
+        mesuresPrioritaires: RecommandationPriorisee[] | undefined,
       ): Promise<ContenuHtml> {
         const resultat: ContenuHtml = {
           corps: '',
@@ -92,8 +90,8 @@ describe('Adaptateur de Restitution', () => {
           piedPage: 'piedPage',
         };
 
-        recommandationsPrioritaires?.forEach((reco) => {
-          resultat.corps += JSON.stringify(reco);
+        mesuresPrioritaires?.forEach((mesure) => {
+          resultat.corps += JSON.stringify(mesure);
         });
 
         return Promise.resolve(resultat);
@@ -110,9 +108,9 @@ describe('Adaptateur de Restitution', () => {
           .construis(),
       )
       .avecIndicateurs('thematique', 0)
-      .avecRecommandations([
-        uneRecommandationPriorisee()
-          .avecTitre('reco 1')
+      .avecMesures([
+        uneMesurePriorisee()
+          .avecTitre('mesure 1')
           .avecPourquoi('parce-que')
           .avecComment('comme ça')
           .avecPriorisation(3)
@@ -130,8 +128,8 @@ describe('Adaptateur de Restitution', () => {
   });
 
   it('génère la restitution avec annexe', async () => {
-    const recommandationPriorisee = uneRecommandationPriorisee()
-      .avecTitre('reco 2')
+    const mesurePrioritaire = uneMesurePriorisee()
+      .avecTitre('mesure 2')
       .avecPourquoi('parce-que')
       .avecComment('comme ça')
       .avecPriorisation(2)
@@ -146,12 +144,12 @@ describe('Adaptateur de Restitution', () => {
           .construis(),
       )
       .avecIndicateurs('thematique', 0)
-      .avecRecommandations(
+      .avecMesures(
         Array(7)
-          .fill(recommandationPriorisee, 0, 6)
+          .fill(mesurePrioritaire, 0, 6)
           .fill(
-            uneRecommandationPriorisee()
-              .avecTitre('reco 1')
+            uneMesurePriorisee()
+              .avecTitre('mesure 1')
               .avecPourquoi('parce-que')
               .avecComment('comme ça')
               .avecPriorisation(3)

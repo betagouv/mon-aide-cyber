@@ -1,16 +1,16 @@
 h4 Les 6 mesures prioritaires
 div(class='fr-accordions-group')&attributes({'data-fr-js-accordions-group': 'true'})
-    each recommandation, index in recommandations
+    each mesure, index in mesures
         section(class="fr-accordion")&attributes({'data-fr-js-accordion': 'true'})
             h5(class="fr-accordion__title")
                 button(class="fr-accordion__btn" aria-expanded="false" aria-controls='mesures-prioritaires-'+index)&attributes({'data-fr-js-collapse-button': 'true', 'data-fr-js-accordion-button-actionee': 'true'})
-                    | !{index + 1} . !{recommandation.titre}
+                    | !{index + 1} . !{mesure.titre}
             div(class='fr-collapse' id='mesures-prioritaires-'+index)&attributes({'data-fr-js-collapse': 'true', 'data-fr-js-accordion-actionee': 'true'})
                 div
                     b Pourquoi ?
                     div(class='fr-pt-md-2w fr-pb-md-3w')
-                        | !{include(recommandation.pourquoi)}
+                        | !{include(mesure.pourquoi)}
                 div
                     b Comment mettre en œuvre cette mesure ?
                     div(class='fr-pt-md-2w fr-pb-md-3w')
-                        | !{include(recommandation.comment)}
+                        | !{include(mesure.comment)}

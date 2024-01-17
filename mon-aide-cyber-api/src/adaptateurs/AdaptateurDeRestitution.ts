@@ -6,13 +6,10 @@ import {
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import { Restitution } from '../restitution/Restitution';
 
-const estRecommandationPriorisee = (
-  recommandationPriorisees: RecommandationPriorisee[] | undefined,
-): recommandationPriorisees is RecommandationPriorisee[] => {
-  return (
-    recommandationPriorisees !== undefined &&
-    recommandationPriorisees.length > 0
-  );
+const estMesurePrioritaire = (
+  mesurePrioritaire: RecommandationPriorisee[] | undefined,
+): mesurePrioritaire is RecommandationPriorisee[] => {
+  return mesurePrioritaire !== undefined && mesurePrioritaire.length > 0;
 };
 
 export abstract class AdaptateurDeRestitution<T> {
@@ -35,34 +32,32 @@ export abstract class AdaptateurDeRestitution<T> {
         {},
       );
     const indicateurs = this.genereIndicateurs(indicateursRestitution);
-    const recommandations = this.genereMesuresPrioritaires(
+    const mesuresPrioritaires = this.genereMesuresPrioritaires(
       restitution.recommandations.recommandationsPrioritaires,
     );
-    const autresRecommandations =
+    const autresMesures =
       restitution.recommandations.autresRecommandations;
 
-    if (estRecommandationPriorisee(autresRecommandations)) {
+    if (estMesurePrioritaire(autresMesures)) {
       return this.genere([
         informations,
         indicateurs,
-        recommandations,
-        this.genereAutresMesures(autresRecommandations),
+        mesuresPrioritaires,
+        this.genereAutresMesures(autresMesures),
       ]);
     }
-    return this.genere([informations, indicateurs, recommandations]);
+    return this.genere([informations, indicateurs, mesuresPrioritaires]);
   }
 
   protected abstract genereAutresMesures(
-    autresRecommandations: RecommandationPriorisee[],
+    autresMesures: RecommandationPriorisee[],
   ): Promise<ContenuHtml>;
 
   protected abstract genereMesuresPrioritaires(
-    recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
+    mesuresPrioritaires: RecommandationPriorisee[] | undefined,
   ): Promise<ContenuHtml>;
 
-  protected abstract genere(
-    htmlRecommandations: Promise<ContenuHtml>[],
-  ): Promise<T>;
+  protected abstract genere(mesures: Promise<ContenuHtml>[]): Promise<T>;
 
   protected abstract genereIndicateurs(
     indicateurs: Indicateurs | undefined,
