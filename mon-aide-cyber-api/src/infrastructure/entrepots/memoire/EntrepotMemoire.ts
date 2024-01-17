@@ -9,6 +9,10 @@ import {
   Publication,
 } from '../../../journalisation/Publication';
 import { Aidant, EntrepotAidant } from '../../../authentification/Aidant';
+import {
+  EntrepotRestitution,
+  Restitution,
+} from '../../../restitution/Restitution';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -47,6 +51,15 @@ export class EntrepotDiagnosticMemoire
 export class EntrepotEvenementJournalMemoire
   extends EntrepotMemoire<Publication>
   implements EntrepotEvenementJournal {}
+
+export class EntrepotRestitutionMemoire
+  extends EntrepotMemoire<Restitution>
+  implements EntrepotRestitution
+{
+  typeAggregat(): string {
+    return 'restitution';
+  }
+}
 
 export class EntrepotAidantMemoire
   extends EntrepotMemoire<Aidant>

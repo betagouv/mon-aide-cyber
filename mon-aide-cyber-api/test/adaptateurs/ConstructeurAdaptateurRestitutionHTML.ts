@@ -6,18 +6,17 @@ import {
 import { ContenuHtml } from '../../src/infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 
 import { AdaptateurDeRestitutionHTML } from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
+import { Restitution } from '../../src/restitution/Restitution';
 
 class ConstructeurAdaptateurRestitutionHTML {
   private corpsMesuresPrioritaires = '';
   private corpsIndicateurs = '';
   private corpsAutresMesures = '';
-  private diagnostic: Diagnostic | undefined;
 
   construis(): AdaptateurDeRestitutionHTML {
     const corpsMesuresPriorisees = this.corpsMesuresPrioritaires;
     const corpsIndicateurs = this.corpsIndicateurs;
     const corpsAutresMesures = this.corpsAutresMesures;
-    const diagnostic = this.diagnostic;
 
     return new (class extends AdaptateurDeRestitutionHTML {
       constructor() {
@@ -25,11 +24,14 @@ class ConstructeurAdaptateurRestitutionHTML {
       }
 
       protected genereInformations(
-        _: Diagnostic | undefined,
+        _: Diagnostic,
+        restitution: Restitution,
       ): Promise<ContenuHtml> {
         return Promise.resolve({
           entete: '',
-          corps: diagnostic ? diagnostic.identifiant : '',
+          corps: restitution.informations
+            ? JSON.stringify(restitution.informations)
+            : '',
           piedPage: '',
         });
       }
@@ -66,11 +68,7 @@ class ConstructeurAdaptateurRestitutionHTML {
     })();
   }
 
-  avecInformations(
-    diagnostic: Diagnostic,
-  ): ConstructeurAdaptateurRestitutionHTML {
-    this.diagnostic = diagnostic;
-
+  avecInformations(_: Diagnostic): ConstructeurAdaptateurRestitutionHTML {
     return this;
   }
 

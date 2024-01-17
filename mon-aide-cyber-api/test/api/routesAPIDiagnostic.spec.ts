@@ -16,6 +16,7 @@ import { Express } from 'express';
 import { RestitutionHTML } from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
 import { unAdaptateurDeRestitutionHTML } from '../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
 import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
+import { uneRestitution } from '../constructeurs/constructeurRestitution';
 
 describe('le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -340,7 +341,11 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         adaptateurDeRestitutionHTML;
 
       const diagnostic = unDiagnostic().construis();
+      const restitution = uneRestitution()
+        .avecIdentifiant(diagnostic.identifiant)
+        .construis();
       await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+      await testeurMAC.entrepots.restitution().persiste(restitution);
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -353,7 +358,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       expect(await reponse.json()).toStrictEqual<RestitutionHTML>({
         autresMesures: '',
         indicateurs: 'indicateurs',
-        informations: '',
+        informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: 'mesures prioritaires',
       });
     });
