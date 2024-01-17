@@ -8,10 +8,10 @@ import {
   uneReponsePossible,
 } from '../constructeurs/constructeurReferentiel';
 import { desMesures } from '../constructeurs/constructeurMesures';
-import { MoteurDeRecommandations } from '../../src/diagnostic/MoteurDeRecommandations';
-import { RecommandationDiagnostic } from '../../src/diagnostic/Diagnostic';
+import { MoteurMesures } from '../../src/diagnostic/MoteurMesures';
+import { MesureDiagnostic } from '../../src/diagnostic/Diagnostic';
 
-describe('Moteur de recommandations', () => {
+describe('Moteur de mesures', () => {
   const mesures = desMesures()
     .avecLesMesures([
       {
@@ -29,7 +29,7 @@ describe('Moteur de recommandations', () => {
     ])
     .construis();
 
-  describe('recommande les recommandations aux réponses fournies', () => {
+  describe('recommande les mesures aux réponses fournies', () => {
     it('de niveau 1', () => {
       const questionRepondue = uneQuestionDiagnostic()
         .avecLesReponsesPossibles([
@@ -41,12 +41,9 @@ describe('Moteur de recommandations', () => {
         .ayantLaReponseUnique('non')
         .construis();
 
-      const recommandations = MoteurDeRecommandations.genere(
-        questionRepondue,
-        mesures,
-      );
+      const mesuresGenerees = MoteurMesures.genere(questionRepondue, mesures);
 
-      expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
+      expect(mesuresGenerees).toStrictEqual<MesureDiagnostic[]>([
         {
           repondA: questionRepondue.identifiant,
           niveau: {
@@ -70,12 +67,9 @@ describe('Moteur de recommandations', () => {
         .ayantLaReponseUnique('oui-mais')
         .construis();
 
-      const recommandations = MoteurDeRecommandations.genere(
-        questionRepondue,
-        mesures,
-      );
+      const mesuresGenerees = MoteurMesures.genere(questionRepondue, mesures);
 
-      expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
+      expect(mesuresGenerees).toStrictEqual<MesureDiagnostic[]>([
         {
           repondA: questionRepondue.identifiant,
           niveau: {
@@ -88,7 +82,7 @@ describe('Moteur de recommandations', () => {
       ]);
     });
 
-    it('avec plusieurs recommandations', () => {
+    it('avec plusieurs mesures', () => {
       const questionRepondue = uneQuestionDiagnostic()
         .avecLesReponsesPossibles([
           uneReponsePossible()
@@ -100,12 +94,9 @@ describe('Moteur de recommandations', () => {
         .ayantLaReponseUnique('oui-mais')
         .construis();
 
-      const recommandations = MoteurDeRecommandations.genere(
-        questionRepondue,
-        mesures,
-      );
+      const mesuresGenerees = MoteurMesures.genere(questionRepondue, mesures);
 
-      expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
+      expect(mesuresGenerees).toStrictEqual<MesureDiagnostic[]>([
         {
           repondA: questionRepondue.identifiant,
           niveau: {
@@ -189,12 +180,9 @@ describe('Moteur de recommandations', () => {
           )
           .construis();
 
-        const recommandations = MoteurDeRecommandations.genere(
-          questionRepondue,
-          mesures,
-        );
+        const mesuresGenerees = MoteurMesures.genere(questionRepondue, mesures);
 
-        expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
+        expect(mesuresGenerees).toStrictEqual<MesureDiagnostic[]>([
           {
             repondA: 'quelle-annee',
             niveau: {
@@ -252,12 +240,9 @@ describe('Moteur de recommandations', () => {
           )
           .construis();
 
-        const recommandations = MoteurDeRecommandations.genere(
-          questionRepondue,
-          mesures,
-        );
+        const mesuresGenerees = MoteurMesures.genere(questionRepondue, mesures);
 
-        expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
+        expect(mesuresGenerees).toStrictEqual<MesureDiagnostic[]>([
           {
             repondA: 'quelle-annee',
             niveau: {
