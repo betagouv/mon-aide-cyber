@@ -1,7 +1,7 @@
 import serveur from '../../src/serveur';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { AdaptateurTranscripteurDeTest } from '../adaptateurs/adaptateurTranscripteur';
-import { AdaptateurTableauDeRecommandationsDeTest } from '../adaptateurs/AdaptateurTableauDeRecommandationsDeTest';
+import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
 import { Express } from 'express';
 import { fakerFR } from '@faker-js/faker';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
@@ -23,8 +23,7 @@ const testeurIntegration = () => {
     ecoute: (port: number, succes: () => void) => void;
   };
   const adaptateurReferentiel = new AdaptateurReferentielDeTest();
-  const adaptateurTableauDeRecommandations =
-    new AdaptateurTableauDeRecommandationsDeTest();
+  const adaptateurMesures = new AdaptateurMesuresTest();
   const adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest();
   const entrepots = new EntrepotsMemoire();
   const busEvenement = new BusEvenementDeTest();
@@ -49,7 +48,7 @@ const testeurIntegration = () => {
     serveurDeTest = serveur.creeServeur({
       adaptateurReferentiel,
       adaptateurTranscripteurDonnees,
-      adaptateurTableauDeRecommandations,
+      adaptateurMesures,
       entrepots,
       busCommande: new BusCommandeMAC(entrepots, busEvenement),
       busEvenement,

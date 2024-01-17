@@ -1,10 +1,10 @@
-import { QuestionDiagnostic, RecommandationDiagnostic } from "./Diagnostic";
-import { TableauDeRecommandations } from "./TableauDeRecommandations";
+import { QuestionDiagnostic, RecommandationDiagnostic } from './Diagnostic';
+import { Mesures } from './Mesures';
 
 export class MoteurDeRecommandations {
   static genere(
     question: QuestionDiagnostic,
-    tableauDeRecommandations: TableauDeRecommandations,
+    tableauDeRecommandations: Mesures,
   ): RecommandationDiagnostic[] {
     return [
       ...this.recommandationsMultiples(question),

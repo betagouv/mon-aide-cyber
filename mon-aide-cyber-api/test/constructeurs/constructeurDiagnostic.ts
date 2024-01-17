@@ -18,19 +18,15 @@ import {
   ReponsePossible,
   TypeQuestion,
 } from '../../src/diagnostic/Referentiel';
-import { TableauDeRecommandations } from '../../src/diagnostic/TableauDeRecommandations';
-import {
-  unTableauDeRecommandations,
-  unTableauDeRecommandationsPour7Questions,
-} from './constructeurTableauDeRecommandations';
+import { Mesures } from '../../src/diagnostic/Mesures';
+import { desMesures, desMesuresPour7Questions } from './constructeurMesures';
 import { fakerFR } from '@faker-js/faker';
 import { Poids } from '../../src/diagnostic/Indice';
 import { aseptise } from '../utilitaires/aseptise';
 
 class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   private referentiel: Referentiel = unReferentiel().construis();
-  private tableauDeRecommandations: TableauDeRecommandations =
-    unTableauDeRecommandations().construis();
+  private mesures: Mesures = desMesures().construis();
   private reponsesDonnees: {
     identifiant: { thematique: string; question: string };
     reponseDonnee: ReponseDonnee;
@@ -64,10 +60,8 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     return this;
   }
 
-  avecUnTableauDeRecommandations(
-    tableauDeRecommandations: TableauDeRecommandations,
-  ): ConstructeurDiagnostic {
-    this.tableauDeRecommandations = tableauDeRecommandations;
+  avecDesMesures(mesures: Mesures): ConstructeurDiagnostic {
+    this.mesures = mesures;
     return this;
   }
 
@@ -88,10 +82,7 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   }
 
   construis(): Diagnostic {
-    const diagnostic = initialiseDiagnostic(
-      this.referentiel,
-      this.tableauDeRecommandations,
-    );
+    const diagnostic = initialiseDiagnostic(this.referentiel, this.mesures);
     this.reponsesDonnees.forEach((rep) => {
       const reponseDonnee = diagnostic.referentiel[
         rep.identifiant.thematique
@@ -193,7 +184,7 @@ export const unDiagnosticCompletEnGirondeAvecDesReponsesDonnees = () =>
   unDiagnosticEnGironde()
     .ajouteAuReferentiel('thematique', uneListeDe7QuestionsToutesAssociees())
     .avecLesReponsesDonnees('thematique', septReponsesDonnees())
-    .avecUnTableauDeRecommandations(unTableauDeRecommandationsPour7Questions());
+    .avecDesMesures(desMesuresPour7Questions());
 export const unDiagnosticEnGironde = () =>
   unDiagnostic()
     .avecUnReferentiel(
@@ -277,7 +268,7 @@ export const unDiagnosticAvecUneThematiqueEtSeptReponsesDonnees = (
         .construis(),
     )
     .avecLesReponsesDonnees(thematique, septReponsesDonnees())
-    .avecUnTableauDeRecommandations(unTableauDeRecommandationsPour7Questions());
+    .avecDesMesures(desMesuresPour7Questions());
 
 const septReponsesDonnees = () => [
   { q1: 'reponse-11' },
@@ -289,5 +280,6 @@ const septReponsesDonnees = () => [
   { q7: 'reponse-71' },
 ];
 export const uneQuestionDiagnostic = () => new ConstructeurQuestionDiagnostic();
+
 export const uneReponseDonnee = (): ConstructeurReponseDonnee =>
   new ConstructeurReponseDonnee();

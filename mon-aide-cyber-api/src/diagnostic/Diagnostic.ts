@@ -2,10 +2,7 @@ import crypto from 'crypto';
 import { Question, Recommandation, Referentiel } from './Referentiel';
 import { Entrepot } from '../domaine/Entrepot';
 import { laValeurEstDefinie, Valeur } from './Indice';
-import {
-  NiveauDeRecommandation,
-  TableauDeRecommandations,
-} from './TableauDeRecommandations';
+import { Mesures, NiveauMesure } from './Mesures';
 import { StrategieDeReponse } from './StrategieDeReponse';
 import { MoteurIndice, ValeursDesIndicesAuDiagnostic } from './MoteurIndice';
 import { MoteurDeRecommandations } from './MoteurDeRecommandations';
@@ -37,7 +34,7 @@ export type ReferentielDiagnostic = {
 export type RecommandationDiagnostic = Omit<
   Recommandation,
   'identifiant' | 'niveau'
-> & { niveau: NiveauDeRecommandation; priorisation: number; repondA: string };
+> & { niveau: NiveauMesure; priorisation: number; repondA: string };
 
 export type RecommandationPriorisee = {
   titre: string;
@@ -65,15 +62,12 @@ type Diagnostic = {
   identifiant: crypto.UUID;
   restitution?: Restitution;
   referentiel: ReferentielDiagnostic;
-  tableauDesRecommandations: TableauDeRecommandations;
+  tableauDesRecommandations: Mesures;
 };
 
 type EntrepotDiagnostic = Entrepot<Diagnostic>;
 
-const initialiseDiagnostic = (
-  r: Referentiel,
-  tableauDesRecommandations: TableauDeRecommandations,
-): Diagnostic => {
+const initialiseDiagnostic = (r: Referentiel, mesures: Mesures): Diagnostic => {
   const referentiel: {
     [clef: Thematique]: QuestionsThematique;
   } = Object.entries(r).reduce((accumulateur, [clef, questions]) => {
@@ -88,7 +82,7 @@ const initialiseDiagnostic = (
                 reponseUnique: null,
                 reponsesMultiples: [],
               },
-            }) as QuestionDiagnostic,
+            } as QuestionDiagnostic),
         ),
       },
     };
@@ -98,7 +92,7 @@ const initialiseDiagnostic = (
     dateDerniereModification: FournisseurHorloge.maintenant(),
     identifiant: crypto.randomUUID(),
     referentiel,
-    tableauDesRecommandations,
+    tableauDesRecommandations: mesures,
   };
 };
 

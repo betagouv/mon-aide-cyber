@@ -12,8 +12,10 @@ import {
 } from '../../src/diagnostic/ServiceDiagnostic';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { Entrepots } from '../../src/domaine/Entrepots';
-import { QuestionDiagnostic } from '../../src/diagnostic/Diagnostic';
-import { AdaptateurTableauDeRecommandationsDeTest } from '../adaptateurs/AdaptateurTableauDeRecommandationsDeTest';
+import {
+  QuestionDiagnostic,
+} from '../../src/diagnostic/Diagnostic';
+import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
@@ -24,13 +26,12 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 
 describe('Le service de diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
-  let adaptateurTableauDeRecommandations: AdaptateurTableauDeRecommandationsDeTest;
+  let adaptateurTableauDeRecommandations: AdaptateurMesuresTest;
   let entrepots: Entrepots;
 
   beforeEach(() => {
     adaptateurReferentiel = new AdaptateurReferentielDeTest();
-    adaptateurTableauDeRecommandations =
-      new AdaptateurTableauDeRecommandationsDeTest();
+    adaptateurTableauDeRecommandations = new AdaptateurMesuresTest();
     entrepots = new EntrepotsMemoire();
   });
 

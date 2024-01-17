@@ -7,13 +7,13 @@ import {
   uneQuestionATiroir,
   uneReponsePossible,
 } from '../constructeurs/constructeurReferentiel';
-import { unTableauDeRecommandations } from '../constructeurs/constructeurTableauDeRecommandations';
+import { desMesures } from '../constructeurs/constructeurMesures';
 import { MoteurDeRecommandations } from '../../src/diagnostic/MoteurDeRecommandations';
 import { RecommandationDiagnostic } from '../../src/diagnostic/Diagnostic';
 
 describe('Moteur de recommandations', () => {
-  const tableauDeRecommandations = unTableauDeRecommandations()
-    .avecLesRecommandations([
+  const mesures = desMesures()
+    .avecLesMesures([
       {
         RGPD: {
           niveau1: 'reco 1',
@@ -43,7 +43,7 @@ describe('Moteur de recommandations', () => {
 
       const recommandations = MoteurDeRecommandations.genere(
         questionRepondue,
-        tableauDeRecommandations,
+        mesures,
       );
 
       expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
@@ -72,7 +72,7 @@ describe('Moteur de recommandations', () => {
 
       const recommandations = MoteurDeRecommandations.genere(
         questionRepondue,
-        tableauDeRecommandations,
+        mesures,
       );
 
       expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
@@ -102,7 +102,7 @@ describe('Moteur de recommandations', () => {
 
       const recommandations = MoteurDeRecommandations.genere(
         questionRepondue,
-        tableauDeRecommandations,
+        mesures,
       );
 
       expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
@@ -128,8 +128,8 @@ describe('Moteur de recommandations', () => {
     });
 
     describe('pour les questions à tiroir', () => {
-      const tableauDeRecommandations = unTableauDeRecommandations()
-        .avecLesRecommandations([
+      const mesures = desMesures()
+        .avecLesMesures([
           {
             'ordinateur-obsolete': {
               niveau1: 'Obsolète',
@@ -191,7 +191,7 @@ describe('Moteur de recommandations', () => {
 
         const recommandations = MoteurDeRecommandations.genere(
           questionRepondue,
-          tableauDeRecommandations,
+          mesures,
         );
 
         expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([
@@ -254,7 +254,7 @@ describe('Moteur de recommandations', () => {
 
         const recommandations = MoteurDeRecommandations.genere(
           questionRepondue,
-          tableauDeRecommandations,
+          mesures,
         );
 
         expect(recommandations).toStrictEqual<RecommandationDiagnostic[]>([

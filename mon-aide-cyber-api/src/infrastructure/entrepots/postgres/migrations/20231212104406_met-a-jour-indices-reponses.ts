@@ -1,7 +1,6 @@
 import { Knex } from 'knex';
 import {
   QuestionATiroir,
-  Recommandation,
   ReponsePossible,
 } from '../../../../diagnostic/Referentiel';
 import { Poids, Valeur } from '../../../../diagnostic/Indice';
@@ -11,7 +10,29 @@ import {
   Thematique,
 } from '../../../../diagnostic/Diagnostic';
 import crypto from 'crypto';
-import { TableauDeRecommandations } from '../../../../diagnostic/TableauDeRecommandations';
+
+type NiveauRecommandation = 1 | 2;
+
+type Recommandation = {
+  identifiant: string;
+  niveau: NiveauRecommandation;
+};
+
+type NiveauDeRecommandation = {
+  titre: string;
+  pourquoi: string;
+  comment: string;
+};
+
+type ObjetDeRecommandation = {
+  niveau1: NiveauDeRecommandation;
+  niveau2?: NiveauDeRecommandation;
+  priorisation: number;
+};
+
+type TableauDeRecommandations = {
+  [identifiantQuestion: string]: ObjetDeRecommandation;
+};
 
 type RepresentationReponsePossible = Omit<
   ReponsePossible,

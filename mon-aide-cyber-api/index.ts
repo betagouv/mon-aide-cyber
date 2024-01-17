@@ -1,7 +1,7 @@
 import serveur from './src/serveur';
 import { AdaptateurReferentielMAC } from './src/infrastructure/adaptateurs/AdaptateurReferentielMAC';
 import { adaptateurTranscripteur } from './src/infrastructure/adaptateurs/transcripteur/adaptateurTranscripteur';
-import { AdaptateurTableauDeRecommandationsMAC } from './src/infrastructure/adaptateurs/AdaptateurTableauDeRecommandationsMAC';
+import { AdaptateurMesures } from './src/infrastructure/adaptateurs/AdaptateurMesures';
 import { AdaptateurDeRestitutionPDF } from './src/infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import { fabriqueEntrepots } from './src/adaptateurs/fabriqueEntrepots';
 import { BusEvenementMAC } from './src/infrastructure/bus/BusEvenementMAC';
@@ -34,8 +34,7 @@ const serveurMAC = serveur.creeServeur({
   },
   adaptateurReferentiel: new AdaptateurReferentielMAC(),
   adaptateurTranscripteurDonnees: adaptateurTranscripteurDonnees,
-  adaptateurTableauDeRecommandations:
-    new AdaptateurTableauDeRecommandationsMAC(),
+  adaptateurMesures: new AdaptateurMesures(),
   entrepots,
   busCommande: new BusCommandeMAC(entrepots, busEvenementMAC),
   busEvenement: busEvenementMAC,

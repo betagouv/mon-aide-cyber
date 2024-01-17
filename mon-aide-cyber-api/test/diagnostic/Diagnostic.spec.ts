@@ -1,8 +1,8 @@
 import { describe, expect } from 'vitest';
 import {
-  unTableauDeRecommandations,
-  unTableauDeRecommandationsPour7Questions,
-} from '../constructeurs/constructeurTableauDeRecommandations';
+  desMesures,
+  desMesuresPour7Questions,
+} from '../constructeurs/constructeurMesures';
 import {
   unDiagnostic,
   uneReponseDonnee,
@@ -35,7 +35,7 @@ describe('Diagnostic', () => {
       comment: 'comme ça',
     };
 
-  const tableauDeRecommandations = unTableauDeRecommandationsPour7Questions();
+  const mesures = desMesuresPour7Questions();
 
   const questions = uneListeDe7QuestionsToutesAssociees();
 
@@ -59,7 +59,7 @@ describe('Diagnostic', () => {
               { q6: 'reponse-61' },
               { q7: 'reponse-72' },
             ])
-            .avecUnTableauDeRecommandations(tableauDeRecommandations)
+            .avecDesMesures(mesures)
             .construis();
 
           genereLaRestitution(diagnostic);
@@ -115,10 +115,9 @@ describe('Diagnostic', () => {
         });
 
         it('le niveau 2 est optionnel', () => {
-          const tableauDeRecommandations =
-            unTableauDeRecommandations().avecLesRecommandations([
-              { q8: { niveau1: 'reco 8', priorisation: 7 } },
-            ]);
+          const mesures = desMesures().avecLesMesures([
+            { q8: { niveau1: 'reco 8', priorisation: 7 } },
+          ]);
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
               unReferentiel()
@@ -144,9 +143,7 @@ describe('Diagnostic', () => {
                 .construis(),
             )
             .avecLesReponsesDonnees('thematique', [{ q8: 'reponse-82' }])
-            .avecUnTableauDeRecommandations(
-              tableauDeRecommandations.construis(),
-            )
+            .avecDesMesures(mesures.construis())
             .construis();
 
           genereLaRestitution(diagnostic);
@@ -190,7 +187,7 @@ describe('Diagnostic', () => {
             { q6: 'reponse-61' },
             { q7: 'reponse-72' },
           ])
-          .avecUnTableauDeRecommandations(tableauDeRecommandations)
+          .avecDesMesures(mesures)
           .construis();
 
         genereLaRestitution(diagnostic);
@@ -233,8 +230,8 @@ describe('Diagnostic', () => {
       });
 
       describe('trie le resultat', () => {
-        const tableauDeRecommandations = unTableauDeRecommandations()
-          .avecLesRecommandations([
+        const mesures = desMesures()
+          .avecLesMesures([
             { q1: { niveau1: 'reco 1', niveau2: 'reco 12', priorisation: 3 } },
             { q2: { niveau1: 'reco 2', niveau2: 'reco 22', priorisation: 2 } },
             { q3: { niveau1: 'reco 3', niveau2: 'reco 32', priorisation: 4 } },
@@ -306,7 +303,7 @@ describe('Diagnostic', () => {
               { q8: 'reponse-81' },
               { q9: 'reponse-92' },
             ])
-            .avecUnTableauDeRecommandations(tableauDeRecommandations)
+            .avecDesMesures(mesures)
             .construis();
 
           genereLaRestitution(diagnostic);
@@ -361,8 +358,8 @@ describe('Diagnostic', () => {
       });
 
       describe("pour des questions dont le résultat dépend d'une règle de calcul", () => {
-        const tableauDeRecommandations = unTableauDeRecommandations()
-          .avecLesRecommandations([
+        const mesures = desMesures()
+          .avecLesMesures([
             { q1: { niveau1: 'reco 1', niveau2: 'reco 12', priorisation: 1 } },
           ])
           .construis();
@@ -432,7 +429,7 @@ describe('Diagnostic', () => {
                 ])
                 .construis(),
             )
-            .avecUnTableauDeRecommandations(tableauDeRecommandations)
+            .avecDesMesures(mesures)
             .construis();
 
           genereLaRestitution(diagnostic);
@@ -509,7 +506,7 @@ describe('Diagnostic', () => {
             { q2: 'reponse-1' },
             { q1: 'reponse-2' },
           ])
-          .avecUnTableauDeRecommandations(tableauDeRecommandations)
+          .avecDesMesures(mesures)
           .construis();
 
         genereLaRestitution(diagnostic);
@@ -538,7 +535,7 @@ describe('Diagnostic', () => {
             { q2: 'reponse-1' },
             { q1: 'reponse-2' },
           ])
-          .avecUnTableauDeRecommandations(tableauDeRecommandations)
+          .avecDesMesures(mesures)
           .construis();
 
         genereLaRestitution(diagnostic);
@@ -572,7 +569,7 @@ describe('Diagnostic', () => {
             { q2: 'reponse-1' },
             { q1: 'reponse-2' },
           ])
-          .avecUnTableauDeRecommandations(tableauDeRecommandations)
+          .avecDesMesures(mesures)
           .construis();
 
         genereLaRestitution(diagnostic);

@@ -1,6 +1,5 @@
 import { Knex } from 'knex';
 import crypto from 'crypto';
-import { TableauDeRecommandations } from '../../../../diagnostic/TableauDeRecommandations';
 import {
   QuestionATiroir,
   Recommandation,
@@ -11,6 +10,22 @@ import {
   QuestionDiagnostic,
   Thematique,
 } from '../../../../diagnostic/Diagnostic';
+
+type NiveauDeRecommandation = {
+  titre: string;
+  pourquoi: string;
+  comment: string;
+};
+
+type ObjetDeRecommandation = {
+  niveau1: NiveauDeRecommandation;
+  niveau2?: NiveauDeRecommandation;
+  priorisation: number;
+};
+
+type TableauDeRecommandations = {
+  [identifiantQuestion: string]: ObjetDeRecommandation;
+};
 
 type RepresentationReponsePossible = Omit<
   ReponsePossible,

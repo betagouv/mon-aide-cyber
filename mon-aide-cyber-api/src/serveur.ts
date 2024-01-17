@@ -7,7 +7,7 @@ import { AdaptateurTranscripteur } from './adaptateurs/AdaptateurTranscripteur';
 import { Entrepots } from './domaine/Entrepots';
 import { gestionnaireErreurGeneralisee } from './api/gestionnaires/erreurs';
 import { Referentiel } from './diagnostic/Referentiel';
-import { TableauDeRecommandations } from './diagnostic/TableauDeRecommandations';
+import { Mesures } from './diagnostic/Mesures';
 import { Adaptateur } from './adaptateurs/Adaptateur';
 import { BusEvenement } from './domaine/BusEvenement';
 import { AdaptateurGestionnaireErreurs } from './adaptateurs/AdaptateurGestionnaireErreurs';
@@ -29,7 +29,7 @@ export type ConfigurationServeur = {
   adaptateurEnvoiMessage: AdaptateurEnvoiMail;
   adaptateurReferentiel: Adaptateur<Referentiel>;
   adaptateursRestitution: AdaptateursRestitution;
-  adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>;
+  adaptateurMesures: Adaptateur<Mesures>;
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
   adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
   avecProtectionCsrf: boolean;

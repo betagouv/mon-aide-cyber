@@ -5,7 +5,22 @@ import {
   ReferentielDiagnostic,
   Restitution,
 } from '../../../../diagnostic/Diagnostic';
-import { TableauDeRecommandations } from '../../../../diagnostic/TableauDeRecommandations';
+
+type NiveauDeRecommandation = {
+  titre: string;
+  pourquoi: string;
+  comment: string;
+};
+
+type ObjetDeRecommandation = {
+  niveau1: NiveauDeRecommandation;
+  niveau2?: NiveauDeRecommandation;
+  priorisation: number;
+};
+
+type TableauDeRecommandations = {
+  [identifiantQuestion: string]: ObjetDeRecommandation;
+};
 
 export async function up(knex: Knex): Promise<void> {
   knex('diagnostics').then(
