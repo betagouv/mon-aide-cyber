@@ -5,7 +5,7 @@ import { laValeurEstDefinie, Valeur } from './Indice';
 import { Mesures, NiveauMesure } from './Mesures';
 import { StrategieDeReponse } from './StrategieDeReponse';
 import { MoteurIndice, ValeursDesIndicesAuDiagnostic } from './MoteurIndice';
-import { MoteurDeRecommandations } from './MoteurDeRecommandations';
+import { MoteurMesures } from './MoteurMesures';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { MoteurDesIndicateurs } from './MoteurDesIndicateurs';
 import { CorpsReponse } from './CapteurSagaAjoutReponse';
@@ -31,7 +31,7 @@ export type ReferentielDiagnostic = {
   [clef: Thematique]: QuestionsThematique;
 };
 
-export type RecommandationDiagnostic = Omit<
+export type MesureDiagnostic = Omit<
   Recommandation,
   'identifiant' | 'niveau'
 > & { niveau: NiveauMesure; priorisation: number; repondA: string };
@@ -118,14 +118,11 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
   const recommandations = Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
     .flatMap((question) =>
-      MoteurDeRecommandations.genere(
-        question,
-        diagnostic.tableauDesRecommandations,
-      ),
+      MoteurMesures.genere(question, diagnostic.tableauDesRecommandations),
     );
 
   const prioriseLesRecommandations = (
-    recommandations: RecommandationDiagnostic[],
+    recommandations: MesureDiagnostic[],
     valeursDesIndices: ValeursDesIndicesAuDiagnostic,
   ): RecommandationPriorisee[] => {
     return recommandations

@@ -1,35 +1,33 @@
-import { QuestionDiagnostic, RecommandationDiagnostic } from './Diagnostic';
+import { MesureDiagnostic, QuestionDiagnostic } from './Diagnostic';
 import { Mesures } from './Mesures';
 
-export class MoteurDeRecommandations {
+export class MoteurMesures {
   static genere(
     question: QuestionDiagnostic,
-    tableauDeRecommandations: Mesures,
-  ): RecommandationDiagnostic[] {
+    mesures: Mesures,
+  ): MesureDiagnostic[] {
     return [
-      ...this.recommandationsMultiples(question),
-      ...this.recommandationsUnique(question),
+      ...this.mesuresMultiples(question),
+      ...this.mesuresUniques(question),
     ]
-      .map((recommandation) => ({
-        recommandationTrouvee:
-          tableauDeRecommandations[recommandation.identifiant],
-        niveau: recommandation.niveau,
-        repondA: recommandation.repondA,
+      .map((mesure) => ({
+        mesureTrouvee: mesures[mesure.identifiant],
+        niveau: mesure.niveau,
+        repondA: mesure.repondA,
       }))
-      .flatMap((recommandation) => [
+      .flatMap((mesure) => [
         {
           niveau:
-            recommandation.niveau === 1
-              ? recommandation.recommandationTrouvee.niveau1
-              : recommandation.recommandationTrouvee.niveau2!,
-          priorisation: recommandation.recommandationTrouvee
-            .priorisation as number,
-          repondA: recommandation.repondA,
+            mesure.niveau === 1
+              ? mesure.mesureTrouvee.niveau1
+              : mesure.mesureTrouvee.niveau2!,
+          priorisation: mesure.mesureTrouvee.priorisation as number,
+          repondA: mesure.repondA,
         },
       ]);
   }
 
-  private static recommandationsMultiples(question: QuestionDiagnostic) {
+  private static mesuresMultiples(question: QuestionDiagnostic) {
     return question.reponsesPossibles
       .flatMap((reponsePossible) => reponsePossible.questions || [])
       .flatMap((questionATiroir) => ({
@@ -51,7 +49,7 @@ export class MoteurDeRecommandations {
       );
   }
 
-  private static recommandationsUnique(question: QuestionDiagnostic) {
+  private static mesuresUniques(question: QuestionDiagnostic) {
     return question.reponsesPossibles
       .filter((rep) => rep.identifiant === question.reponseDonnee.reponseUnique)
       .flatMap(
