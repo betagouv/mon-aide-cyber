@@ -1,5 +1,9 @@
 import { Constructeur } from './constructeur';
-import { unReferentiel } from './constructeurReferentiel';
+import {
+  uneListeDe7QuestionsToutesAssociees,
+  uneQuestion,
+  unReferentiel,
+} from './constructeurReferentiel';
 import {
   Diagnostic,
   initialiseDiagnostic,
@@ -8,12 +12,17 @@ import {
   ReponsesMultiples,
 } from '../../src/diagnostic/Diagnostic';
 import {
+  QuestionChoixMultiple,
+  QuestionChoixUnique,
   Referentiel,
   ReponsePossible,
   TypeQuestion,
 } from '../../src/diagnostic/Referentiel';
 import { TableauDeRecommandations } from '../../src/diagnostic/TableauDeRecommandations';
-import { unTableauDeRecommandations } from './constructeurTableauDeRecommandations';
+import {
+  unTableauDeRecommandations,
+  unTableauDeRecommandationsPour7Questions,
+} from './constructeurTableauDeRecommandations';
 import { fakerFR } from '@faker-js/faker';
 import { Poids } from '../../src/diagnostic/Indice';
 import { aseptise } from '../utilitaires/aseptise';
@@ -69,6 +78,14 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     this.reponsesDonnees.push({ identifiant, reponseDonnee });
     return this;
   };
+
+  ajouteAuReferentiel(
+    thematique: string,
+    questions: (QuestionChoixUnique | QuestionChoixMultiple)[],
+  ): ConstructeurDiagnostic {
+    this.referentiel[thematique] = { questions };
+    return this;
+  }
 
   construis(): Diagnostic {
     const diagnostic = initialiseDiagnostic(
@@ -172,7 +189,105 @@ class ConstructeurQuestionDiagnostic
 
 export const unDiagnostic = () => new ConstructeurDiagnostic();
 
-export const uneQuestionDiagnostic = () => new ConstructeurQuestionDiagnostic();
+export const unDiagnosticCompletEnGirondeAvecDesReponsesDonnees = () =>
+  unDiagnosticEnGironde()
+    .ajouteAuReferentiel('thematique', uneListeDe7QuestionsToutesAssociees())
+    .avecLesReponsesDonnees('thematique', septReponsesDonnees())
+    .avecUnTableauDeRecommandations(unTableauDeRecommandationsPour7Questions());
+export const unDiagnosticEnGironde = () =>
+  unDiagnostic()
+    .avecUnReferentiel(
+      unReferentiel()
+        .ajouteUneThematique('contexte', [
+          uneQuestion()
+            .avecIdentifiant('contexte-region-siege-social')
+            .aChoixUnique('région siège social ?', [
+              {
+                identifiant: 'contexte-region-siege-social-nouvelle-aquitaine',
+                libelle: 'Nouvelle-Aquitaine',
+              },
+            ])
+            .construis(),
+          uneQuestion()
+            .avecIdentifiant('contexte-departement-tom-siege-social')
+            .aChoixUnique('département siège social ?', [
+              {
+                identifiant: 'contexte-departement-tom-siege-social-gironde',
+                libelle: 'Gironde',
+              },
+            ])
+            .construis(),
+        ])
+        .construis(),
+    )
+    .ajouteUneReponseDonnee(
+      {
+        thematique: 'contexte',
+        question: 'contexte-region-siege-social',
+      },
+      uneReponseDonnee()
+        .ayantPourReponse('contexte-region-siege-social-nouvelle-aquitaine')
+        .construis(),
+    )
+    .ajouteUneReponseDonnee(
+      {
+        thematique: 'contexte',
+        question: 'contexte-departement-tom-siege-social',
+      },
+      uneReponseDonnee()
+        .ayantPourReponse('contexte-departement-tom-siege-social-gironde')
+        .construis(),
+    );
 
+export const unDiagnosticAvecSecteurActivite = (secteurActivite: string) =>
+  unDiagnostic()
+    .avecUnReferentiel(
+      unReferentiel()
+        .ajouteUneThematique('contexte', [
+          uneQuestion()
+            .avecIdentifiant('contexte-secteur-activite')
+            .aChoixUnique("secteur d'activité ?", [
+              {
+                identifiant: 'contexte-secteur-activite-enseignement',
+                libelle: secteurActivite,
+              },
+            ])
+            .construis(),
+        ])
+        .construis(),
+    )
+    .ajouteUneReponseDonnee(
+      {
+        thematique: 'contexte',
+        question: 'contexte-secteur-activite',
+      },
+      uneReponseDonnee()
+        .ayantPourReponse('contexte-secteur-activite-enseignement')
+        .construis(),
+    );
+
+export const unDiagnosticAvecUneThematiqueEtSeptReponsesDonnees = (
+  thematique = 'thematique',
+): ConstructeurDiagnostic =>
+  unDiagnostic()
+    .avecUnReferentiel(
+      unReferentiel()
+        .sansThematique()
+        .ajouteUneThematique(thematique, uneListeDe7QuestionsToutesAssociees())
+        .construis(),
+    )
+    .avecLesReponsesDonnees(thematique, septReponsesDonnees())
+    .avecUnTableauDeRecommandations(unTableauDeRecommandationsPour7Questions());
+
+const septReponsesDonnees = () => [
+  { q1: 'reponse-11' },
+  { q2: 'reponse-21' },
+  { q3: 'reponse-31' },
+  { q4: 'reponse-41' },
+  { q5: 'reponse-51' },
+  { q6: 'reponse-61' },
+  { q7: 'reponse-71' },
+];
+export const uneQuestionDiagnostic = () => new ConstructeurQuestionDiagnostic();
 export const uneReponseDonnee = (): ConstructeurReponseDonnee =>
   new ConstructeurReponseDonnee();

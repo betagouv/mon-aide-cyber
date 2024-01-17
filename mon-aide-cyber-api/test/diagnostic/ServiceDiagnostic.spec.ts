@@ -1,12 +1,14 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
-  uneListeDe7QuestionsToutesAssociees,
   uneQuestion,
   uneQuestionATiroir,
   uneReponsePossible,
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
-import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
+import {
+  unDiagnostic,
+  unDiagnosticAvecUneThematiqueEtSeptReponsesDonnees,
+} from '../constructeurs/constructeurDiagnostic';
 import {
   DiagnosticLance,
   ServiceDiagnostic,
@@ -17,7 +19,6 @@ import {
   QuestionDiagnostic,
   RecommandationPriorisee,
 } from '../../src/diagnostic/Diagnostic';
-import { unTableauDeRecommandationsPour7Questions } from '../constructeurs/constructeurTableauDeRecommandations';
 import { AdaptateurTableauDeRecommandationsDeTest } from '../adaptateurs/AdaptateurTableauDeRecommandationsDeTest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
@@ -274,7 +275,6 @@ describe('Le service de diagnostic', () => {
 
   describe("Lorsque l'on veut terminer le diagnostic", () => {
     let serviceDiagnostic: ServiceDiagnostic;
-    const tableauDeRecommandations = unTableauDeRecommandationsPour7Questions();
     beforeEach(() => {
       serviceDiagnostic = new ServiceDiagnostic(
         adaptateurReferentiel,
@@ -284,25 +284,8 @@ describe('Le service de diagnostic', () => {
       );
     });
     it('génère les recommandations', async () => {
-      const questions = uneListeDe7QuestionsToutesAssociees();
-      const diagnostic = unDiagnostic()
-        .avecUnReferentiel(
-          unReferentiel()
-            .sansThematique()
-            .ajouteUneThematique('thematique', questions)
-            .construis(),
-        )
-        .avecLesReponsesDonnees('thematique', [
-          { q1: 'reponse-11' },
-          { q2: 'reponse-21' },
-          { q3: 'reponse-31' },
-          { q4: 'reponse-41' },
-          { q5: 'reponse-51' },
-          { q6: 'reponse-61' },
-          { q7: 'reponse-71' },
-        ])
-        .avecUnTableauDeRecommandations(tableauDeRecommandations)
-        .construis();
+      const diagnostic =
+        unDiagnosticAvecUneThematiqueEtSeptReponsesDonnees().construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
       await serviceDiagnostic.termine(diagnostic.identifiant);

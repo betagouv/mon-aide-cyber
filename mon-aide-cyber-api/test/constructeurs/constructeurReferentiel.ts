@@ -320,7 +320,10 @@ export const uneQuestionATiroir = (): ConstructeurQuestionATiroir =>
 
 export const uneReponsePossible = (): ConstructeurReponsePossible =>
   new ConstructeurReponsePossible();
-export const uneListeDe7QuestionsToutesAssociees = () =>
+export const uneListeDe7QuestionsToutesAssociees = (): (
+  | QuestionChoixUnique
+  | QuestionChoixMultiple
+)[] =>
   uneListeDeQuestions()
     .dontLesLabelsSont(['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'])
     .avecLesReponsesPossiblesSuivantesAssociees([
