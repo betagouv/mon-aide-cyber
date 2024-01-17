@@ -13,8 +13,8 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
     super();
   }
 
-  protected genere(htmlRecommandations: Promise<ContenuHtml>[]) {
-    return Promise.all(htmlRecommandations)
+  protected genere(mesures: Promise<ContenuHtml>[]) {
+    return Promise.all(mesures)
       .then((htmls) => generePdfs(htmls))
       .then((pdfs) => fusionnePdfs(pdfs))
       .catch((erreur) => {
@@ -37,18 +37,18 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
   }
 
   protected genereAutresMesures(
-    autresRecommandations: RecommandationPriorisee[] | undefined,
+    autresMesures: RecommandationPriorisee[] | undefined,
   ): Promise<ContenuHtml> {
-    return this.genereHtml('recommandations.annexe', {
-      recommandations: autresRecommandations,
+    return this.genereHtml('mesures.annexe', {
+      mesures: autresMesures,
     });
   }
 
   protected genereMesuresPrioritaires(
-    recommandationsPrioritaires: RecommandationPriorisee[] | undefined,
+    mesuresPrioritaires: RecommandationPriorisee[] | undefined,
   ): Promise<ContenuHtml> {
-    return this.genereHtml('recommandations', {
-      recommandations: recommandationsPrioritaires,
+    return this.genereHtml('mesures', {
+      mesures: mesuresPrioritaires,
     });
   }
 

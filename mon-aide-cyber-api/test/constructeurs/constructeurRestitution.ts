@@ -12,7 +12,7 @@ import { add } from 'date-fns';
 class ConstructeurRestitution implements Constructeur<Restitution> {
   private identifiant: crypto.UUID = fakerFR.string.uuid() as crypto.UUID;
   private dateCreation: Date = fakerFR.date.anytime();
-  private recommandations: RecommandationPriorisee[] = [];
+  private mesures: RecommandationPriorisee[] = [];
   private indicateurs = {};
   private informationsRestitution: InformationsRestitution = {
     dateCreation: this.dateCreation,
@@ -30,8 +30,8 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
       informations: this.informationsRestitution,
       indicateurs: this.indicateurs,
       recommandations: {
-        autresRecommandations: this.recommandations.slice(6),
-        recommandationsPrioritaires: this.recommandations.slice(0, 6),
+        autresRecommandations: this.mesures.slice(6),
+        recommandationsPrioritaires: this.mesures.slice(0, 6),
       },
     };
   }
@@ -47,10 +47,10 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
     return this;
   }
 
-  avecRecommandations(
+  avecMesures(
     recommandations: RecommandationPriorisee[],
   ): ConstructeurRestitution {
-    this.recommandations = [...this.recommandations, ...recommandations];
+    this.mesures = [...this.mesures, ...recommandations];
     return this;
   }
 

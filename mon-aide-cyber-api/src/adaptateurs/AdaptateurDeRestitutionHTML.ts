@@ -26,13 +26,13 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
   }
 
   protected async genere(
-    htmlRecommandations: Promise<ContenuHtml>[],
+    mesures: Promise<ContenuHtml>[],
   ): Promise<RestitutionHTML> {
-    const autresMesures = await htmlRecommandations[3];
+    const autresMesures = await mesures[3];
     return Promise.resolve({
-      informations: (await htmlRecommandations[0]).corps,
-      indicateurs: (await htmlRecommandations[1]).corps,
-      mesuresPrioritaires: (await htmlRecommandations[2]).corps,
+      informations: (await mesures[0]).corps,
+      indicateurs: (await mesures[1]).corps,
+      mesuresPrioritaires: (await mesures[2]).corps,
       autresMesures: autresMesures ? autresMesures.corps : '',
     });
   }
@@ -50,7 +50,7 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
     mesuresPrioritaires: RecommandationPriorisee[] | undefined,
   ): Promise<ContenuHtml> {
     return this.genereHtml('mesures', {
-      recommandations: mesuresPrioritaires,
+      mesures: mesuresPrioritaires,
     });
   }
 
@@ -58,7 +58,7 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
     autresMesures: RecommandationPriorisee[],
   ): Promise<ContenuHtml> {
     return this.genereHtml('autres-mesures', {
-      recommandations: autresMesures,
+      mesures: autresMesures,
     });
   }
   private representeInformations(restitution: Restitution) {

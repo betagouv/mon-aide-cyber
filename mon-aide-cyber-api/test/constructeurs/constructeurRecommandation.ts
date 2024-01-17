@@ -50,5 +50,5 @@ class ConstructeurRecommandationPriorisee
   }
 }
 
-export const uneRecommandationPriorisee = () =>
+export const uneMesurePriorisee = () =>
   new ConstructeurRecommandationPriorisee();
