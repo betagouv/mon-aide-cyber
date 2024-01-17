@@ -23,7 +23,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     (_requete: Request, reponse: Response, suite: NextFunction) => {
       new ServiceDiagnostic(
         configuration.adaptateurReferentiel,
-        configuration.adaptateurTableauDeRecommandations,
+        configuration.adaptateurMesures,
         configuration.entrepots,
         configuration.busEvenement,
       )
@@ -47,7 +47,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       const { id } = requete.params;
       new ServiceDiagnostic(
         configuration.adaptateurReferentiel,
-        configuration.adaptateurTableauDeRecommandations,
+        configuration.adaptateurMesures,
         configuration.entrepots,
       )
         .diagnostic(id as crypto.UUID)

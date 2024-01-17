@@ -5,20 +5,33 @@ import {
   RecommandationPriorisee,
   Thematique,
 } from '../../../../diagnostic/Diagnostic';
-import { TableauDeRecommandations } from '../../../../diagnostic/TableauDeRecommandations';
 import {
   Recommandation,
   ReponsePossible,
 } from '../../../../diagnostic/Referentiel';
 import { Valeur } from '../../../../diagnostic/Indice';
 
+type NiveauDeRecommandation = {
+  titre: string;
+  pourquoi: string;
+  comment: string;
+};
+type ObjetDeRecommandation = {
+  niveau1: NiveauDeRecommandation;
+  niveau2?: NiveauDeRecommandation;
+  priorisation: number;
+};
+type TableauDeRecommandations = {
+  [identifiantQuestion: string]: ObjetDeRecommandation;
+};
+
 type RepresentationReponsePossible = Omit<ReponsePossible, 'resultat'> & {
   resultat?: {
     recommandations?: Recommandation[];
     valeur?:
       | {
-      theorique: Valeur;
-    }
+          theorique: Valeur;
+        }
       | undefined;
     note?: Valeur;
   };

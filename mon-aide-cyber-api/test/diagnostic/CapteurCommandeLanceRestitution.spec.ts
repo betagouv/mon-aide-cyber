@@ -1,5 +1,4 @@
-import { describe, beforeEach, expect, it } from 'vitest';
-import { unTableauDeRecommandationsPour7Questions } from '../constructeurs/constructeurTableauDeRecommandations';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import {
   uneListeDe7QuestionsToutesAssociees,
@@ -20,11 +19,12 @@ import {
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { Constructeur } from '../constructeurs/constructeur';
+import { desMesuresPour7Questions } from '../constructeurs/constructeurMesures';
 
 describe('Capteur de lancement de la restitution', () => {
   let capteurCommandeLanceRestitution: CapteurCommandeLanceRestitution;
   let entrepots: Entrepots;
-  const tableauDeRecommandations = unTableauDeRecommandationsPour7Questions();
+  const mesures = desMesuresPour7Questions();
   beforeEach(() => {
     entrepots = new EntrepotsMemoire();
     capteurCommandeLanceRestitution = new CapteurCommandeLanceRestitution(
@@ -51,7 +51,7 @@ describe('Capteur de lancement de la restitution', () => {
         { q6: 'reponse-61' },
         { q7: 'reponse-71' },
       ])
-      .avecUnTableauDeRecommandations(tableauDeRecommandations)
+      .avecDesMesures(mesures)
       .construis();
     await entrepots.diagnostic().persiste(diagnostic);
 

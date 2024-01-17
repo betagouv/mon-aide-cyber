@@ -1,4 +1,4 @@
-import { TableauDeRecommandations } from './TableauDeRecommandations';
+import { Mesures } from './Mesures';
 import { recommandationsGouvernance } from './recommandations/recommandationsGouvernance';
 import { recommandationsSecuriteAcces } from './recommandations/recommandationsSecuriteAcces';
 import { recommandationsSecuritePoste } from './recommandations/recommandationsSecuritePoste';
@@ -6,7 +6,7 @@ import { recommandationsSecuriteInfrastructure } from './recommandations/recomma
 import { recommandationsSensibilisation } from './recommandations/recommandationsSensibilisation';
 import { recommandationsReaction } from './recommandations/recommandationsReaction';
 
-const tableauRecommandations: TableauDeRecommandations = {
+const tableauRecommandations: Mesures = {
   ...recommandationsGouvernance,
   ...recommandationsSecuriteAcces,
   ...recommandationsSecuritePoste,

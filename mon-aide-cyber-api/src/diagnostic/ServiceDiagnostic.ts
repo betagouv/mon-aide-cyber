@@ -3,7 +3,7 @@ import * as crypto from 'crypto';
 import { Entrepots } from '../domaine/Entrepots';
 import { Adaptateur } from '../adaptateurs/Adaptateur';
 import { Referentiel } from './Referentiel';
-import { TableauDeRecommandations } from './TableauDeRecommandations';
+import { Mesures } from './Mesures';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
@@ -11,7 +11,7 @@ import { ErreurMAC } from '../domaine/erreurMAC';
 export class ServiceDiagnostic {
   constructor(
     private readonly adaptateurReferentiel: Adaptateur<Referentiel>,
-    private readonly adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>,
+    private readonly adaptateurMesures: Adaptateur<Mesures>,
     private readonly entrepots: Entrepots,
     private readonly busEvenement?: BusEvenement,
   ) {}
@@ -27,7 +27,7 @@ export class ServiceDiagnostic {
   lance = async (): Promise<Diagnostic> => {
     return Promise.all([
       this.adaptateurReferentiel.lis(),
-      this.adaptateurTableauDeRecommandations.lis(),
+      this.adaptateurMesures.lis(),
     ])
       .then(async ([ref, rec]) => {
         const diagnostic = initialiseDiagnostic(ref, rec);

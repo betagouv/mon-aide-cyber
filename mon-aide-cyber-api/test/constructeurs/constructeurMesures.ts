@@ -1,33 +1,33 @@
 import { ConstructeurDeTableau } from './constructeur';
-import { TableauDeRecommandations } from '../../src/diagnostic/TableauDeRecommandations';
+import { Mesures } from '../../src/diagnostic/Mesures';
 
-class ConstructeurDeTableauDeRecommandations extends ConstructeurDeTableau<TableauDeRecommandations> {
-  avecLesRecommandations(
-    recommandations: {
+class ConstructeurMesures extends ConstructeurDeTableau<Mesures> {
+  avecLesMesures(
+    mesures: {
       [identifiant: string]: {
         niveau1: string;
         niveau2?: string;
         priorisation: number;
       };
     }[],
-  ): ConstructeurDeTableauDeRecommandations {
-    recommandations.forEach((rec) => {
+  ): ConstructeurMesures {
+    mesures.forEach((mesure) => {
       this.tableau.push(
-        ...Object.entries(rec).map(([question, recommandation]) => ({
+        ...Object.entries(mesure).map(([question, mesure]) => ({
           [question]: {
             niveau1: {
-              titre: recommandation.niveau1,
+              titre: mesure.niveau1,
               pourquoi: 'parce-que',
               comment: 'comme ça',
             },
-            ...(recommandation.niveau2 && {
+            ...(mesure.niveau2 && {
               niveau2: {
-                titre: recommandation.niveau2,
+                titre: mesure.niveau2,
                 pourquoi: 'parce-que',
                 comment: 'comme ça',
               },
             }),
-            priorisation: recommandation.priorisation,
+            priorisation: mesure.priorisation,
           },
         })),
       );
@@ -36,11 +36,10 @@ class ConstructeurDeTableauDeRecommandations extends ConstructeurDeTableau<Table
   }
 }
 
-export const unTableauDeRecommandations = () =>
-  new ConstructeurDeTableauDeRecommandations();
-export const unTableauDeRecommandationsPour7Questions = () => {
-  return unTableauDeRecommandations()
-    .avecLesRecommandations([
+export const desMesures = () => new ConstructeurMesures();
+export const desMesuresPour7Questions = () => {
+  return desMesures()
+    .avecLesMesures([
       { q1: { niveau1: 'reco 1', niveau2: 'reco 12', priorisation: 1 } },
       { q2: { niveau1: 'reco 2', niveau2: 'reco 22', priorisation: 2 } },
       { q3: { niveau1: 'reco 3', niveau2: 'reco 32', priorisation: 3 } },
