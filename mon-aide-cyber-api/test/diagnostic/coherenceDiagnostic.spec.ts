@@ -1,6 +1,6 @@
 import { describe, expect } from 'vitest';
 import { referentiel } from '../../src/diagnostic/donneesReferentiel';
-import { tableauRecommandations } from '../../src/diagnostic/donneesTableauRecommandations';
+import { tableauMesures } from '../../src/diagnostic/donneesMesures';
 import {
   QuestionChoixMultiple,
   QuestionChoixUnique,
@@ -54,7 +54,7 @@ describe('Cohérence du référentiel et des recommandations', () => {
             'portant la recommandation "%s" est référencée dans les recommandations',
             (reco) => {
               const toutesLesRecommandations = Object.entries(
-                tableauRecommandations,
+                tableauMesures,
               ).map(([reco]) => reco);
 
               expect(
@@ -67,7 +67,7 @@ describe('Cohérence du référentiel et des recommandations', () => {
     },
   );
 
-  describe.each(Object.entries(tableauRecommandations).map(([reco]) => reco))(
+  describe.each(Object.entries(tableauMesures).map(([reco]) => reco))(
     'La recommandation %s',
     (reco) => {
       it('est référencée dans le référentiel', () => {
