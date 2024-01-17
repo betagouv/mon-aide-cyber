@@ -1,4 +1,4 @@
-export const recommandationsSensibilisation = {
+export const mesuresSensibilisation = {
   'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques': {
     niveau1: {
       titre: 'Mettre en œuvre des bonnes pratiques de sensibilisation.',

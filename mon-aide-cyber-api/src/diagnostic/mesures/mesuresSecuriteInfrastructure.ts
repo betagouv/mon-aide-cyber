@@ -1,4 +1,4 @@
-export const recommandationsSecuriteInfrastructure = {
+export const mesuresSecuriteInfrastructure = {
   'securite-infrastructure-pare-feu-deploye': {
     niveau1: {
       titre:

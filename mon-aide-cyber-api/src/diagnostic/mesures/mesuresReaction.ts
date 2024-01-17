@@ -1,4 +1,4 @@
-export const recommandationsReaction = {
+export const mesuresReaction = {
   'reaction-surveillance-veille-vulnerabilites-potentielles': {
     niveau1: {
       titre: 'Réaliser une veille périodique sur internet.',

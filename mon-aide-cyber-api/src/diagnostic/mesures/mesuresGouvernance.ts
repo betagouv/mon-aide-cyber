@@ -1,4 +1,4 @@
-export const recommandationsGouvernance = {
+export const mesuresGouvernance = {
   'gouvernance-infos-et-processus-a-proteger': {
     niveau1: {
       titre:

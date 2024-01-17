@@ -1,4 +1,4 @@
-export const recommandationsSecuritePoste = {
+export const mesuresSecuritePoste = {
   'securite-poste-maj-fonctionnelles-et-securite-deployees': {
     niveau1: {
       titre:

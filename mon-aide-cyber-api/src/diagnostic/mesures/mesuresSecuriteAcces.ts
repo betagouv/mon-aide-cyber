@@ -1,4 +1,4 @@
-export const recommandationsSecuriteAcces = {
+export const mesuresSecuriteAcces = {
   'acces-outil-gestion-des-comptes': {
     niveau1: {
       titre:
