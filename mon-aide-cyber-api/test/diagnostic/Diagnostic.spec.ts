@@ -23,26 +23,25 @@ import {
 import { uneAssociation } from '../constructeurs/constructeurAssociation';
 
 describe('Diagnostic', () => {
-  type PartieCommuneAttendueRecommandationPriorisee = Omit<
+  type PartieCommuneAttendueMesurePriorisee = Omit<
     RecommandationPriorisee,
     'priorisation' | 'titre'
   >;
 
-  const PARTIE_COMMUNE_ATTENDUE: PartieCommuneAttendueRecommandationPriorisee =
-    {
-      valeurObtenue: 0,
-      pourquoi: 'parce-que',
-      comment: 'comme ça',
-    };
+  const PARTIE_COMMUNE_ATTENDUE: PartieCommuneAttendueMesurePriorisee = {
+    valeurObtenue: 0,
+    pourquoi: 'parce-que',
+    comment: 'comme ça',
+  };
 
   const mesures = desMesuresPour7Questions();
 
   const questions = uneListeDe7QuestionsToutesAssociees();
 
   describe('restitution', () => {
-    describe("lorsque l'on génère les recommandations", () => {
-      describe('en ce qui concerne les différents niveaux de recommandations', () => {
-        it('prend en compte la valeur de la réponse pour choisir entre le niveau 1 ou le niveau 2 des recommandations', () => {
+    describe("lorsque l'on génère les mesures", () => {
+      describe('en ce qui concerne les différents niveaux de mesures', () => {
+        it('prend en compte la valeur de la réponse pour choisir entre le niveau 1 ou le niveau 2 des mesures', () => {
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
               unReferentiel()
@@ -70,34 +69,34 @@ describe('Diagnostic', () => {
           ).toStrictEqual<RecommandationPriorisee[]>([
             {
               priorisation: 1,
-              titre: 'reco 1',
+              titre: 'mesure 1',
               ...PARTIE_COMMUNE_ATTENDUE,
             },
             {
               priorisation: 3,
-              titre: 'reco 3',
+              titre: 'mesure 3',
               ...PARTIE_COMMUNE_ATTENDUE,
             },
             {
               priorisation: 4,
-              titre: 'reco 4',
+              titre: 'mesure 4',
               ...PARTIE_COMMUNE_ATTENDUE,
             },
             {
               priorisation: 6,
-              titre: 'reco 6',
+              titre: 'mesure 6',
               ...PARTIE_COMMUNE_ATTENDUE,
             },
             {
               priorisation: 2,
-              titre: 'reco 22',
+              titre: 'mesure 22',
 
               ...PARTIE_COMMUNE_ATTENDUE,
               valeurObtenue: 1,
             },
             {
               priorisation: 5,
-              titre: 'reco 52',
+              titre: 'mesure 52',
               ...PARTIE_COMMUNE_ATTENDUE,
               valeurObtenue: 1,
             },
@@ -107,7 +106,7 @@ describe('Diagnostic', () => {
           ).toStrictEqual<RecommandationPriorisee[]>([
             {
               priorisation: 7,
-              titre: 'reco 72',
+              titre: 'mesure 72',
               ...PARTIE_COMMUNE_ATTENDUE,
               valeurObtenue: 1,
             },
@@ -116,7 +115,7 @@ describe('Diagnostic', () => {
 
         it('le niveau 2 est optionnel', () => {
           const mesures = desMesures().avecLesMesures([
-            { q8: { niveau1: 'reco 8', priorisation: 7 } },
+            { q8: { niveau1: 'mesure 8', priorisation: 7 } },
           ]);
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
@@ -128,11 +127,11 @@ describe('Diagnostic', () => {
                     .avecReponsesPossibles([
                       uneReponsePossible()
                         .avecLibelle('Réponse 81')
-                        .associeeARecommandation('q8', 1, 0)
+                        .associeeAMesure('q8', 1, 0)
                         .construis(),
                       uneReponsePossible()
                         .avecLibelle('Réponse 82')
-                        .associeeARecommandation('q8', 1, 1)
+                        .associeeAMesure('q8', 1, 1)
                         .construis(),
                       uneReponsePossible()
                         .avecLibelle('Réponse 83')
@@ -157,13 +156,13 @@ describe('Diagnostic', () => {
               valeurObtenue: 1,
               pourquoi: 'parce-que',
               priorisation: 7,
-              titre: 'reco 8',
+              titre: 'mesure 8',
             },
           ]);
         });
       });
 
-      it('prend en compte les questions ne donnant pas lieu à une recommandation', () => {
+      it('prend en compte les questions ne donnant pas lieu à une mesure', () => {
         const questionContexte = uneQuestion()
           .aChoixUnique('qc')
           .avecReponsesPossibles([
@@ -198,29 +197,29 @@ describe('Diagnostic', () => {
           {
             ...PARTIE_COMMUNE_ATTENDUE,
             priorisation: 3,
-            titre: 'reco 3',
+            titre: 'mesure 3',
           },
           {
             ...PARTIE_COMMUNE_ATTENDUE,
             priorisation: 6,
-            titre: 'reco 6',
+            titre: 'mesure 6',
           },
           {
             ...PARTIE_COMMUNE_ATTENDUE,
             priorisation: 2,
-            titre: 'reco 22',
+            titre: 'mesure 22',
             valeurObtenue: 1,
           },
           {
             ...PARTIE_COMMUNE_ATTENDUE,
             priorisation: 5,
-            titre: 'reco 52',
+            titre: 'mesure 52',
             valeurObtenue: 1,
           },
           {
             ...PARTIE_COMMUNE_ATTENDUE,
             priorisation: 7,
-            titre: 'reco 72',
+            titre: 'mesure 72',
             valeurObtenue: 1,
           },
         ]);
@@ -232,19 +231,73 @@ describe('Diagnostic', () => {
       describe('trie le resultat', () => {
         const mesures = desMesures()
           .avecLesMesures([
-            { q1: { niveau1: 'reco 1', niveau2: 'reco 12', priorisation: 3 } },
-            { q2: { niveau1: 'reco 2', niveau2: 'reco 22', priorisation: 2 } },
-            { q3: { niveau1: 'reco 3', niveau2: 'reco 32', priorisation: 4 } },
-            { q4: { niveau1: 'reco 4', niveau2: 'reco 42', priorisation: 1 } },
-            { q5: { niveau1: 'reco 5', niveau2: 'reco 52', priorisation: 7 } },
-            { q6: { niveau1: 'reco 6', niveau2: 'reco 62', priorisation: 5 } },
-            { q7: { niveau1: 'reco 7', niveau2: 'reco 72', priorisation: 6 } },
-            { q8: { niveau1: 'reco 8', niveau2: 'reco 82', priorisation: 8 } },
-            { q9: { niveau1: 'reco 9', niveau2: 'reco 92', priorisation: 9 } },
+            {
+              q1: {
+                niveau1: 'mesure 1',
+                niveau2: 'mesure 12',
+                priorisation: 3,
+              },
+            },
+            {
+              q2: {
+                niveau1: 'mesure 2',
+                niveau2: 'mesure 22',
+                priorisation: 2,
+              },
+            },
+            {
+              q3: {
+                niveau1: 'mesure 3',
+                niveau2: 'mesure 32',
+                priorisation: 4,
+              },
+            },
+            {
+              q4: {
+                niveau1: 'mesure 4',
+                niveau2: 'mesure 42',
+                priorisation: 1,
+              },
+            },
+            {
+              q5: {
+                niveau1: 'mesure 5',
+                niveau2: 'mesure 52',
+                priorisation: 7,
+              },
+            },
+            {
+              q6: {
+                niveau1: 'mesure 6',
+                niveau2: 'mesure 62',
+                priorisation: 5,
+              },
+            },
+            {
+              q7: {
+                niveau1: 'mesure 7',
+                niveau2: 'mesure 72',
+                priorisation: 6,
+              },
+            },
+            {
+              q8: {
+                niveau1: 'mesure 8',
+                niveau2: 'mesure 82',
+                priorisation: 8,
+              },
+            },
+            {
+              q9: {
+                niveau1: 'mesure 9',
+                niveau2: 'mesure 92',
+                priorisation: 9,
+              },
+            },
           ])
           .construis();
 
-        it('en prenant en compte le niveau de priorisation de la recommandation', () => {
+        it('en prenant en compte le niveau de priorisation de la mesure', () => {
           const questionsSupplementaires = uneListeDeQuestions()
             .dontLesLabelsSont(['q8', 'q9'])
             .avecLesReponsesPossiblesSuivantesAssociees([
@@ -314,34 +367,34 @@ describe('Diagnostic', () => {
           ).toStrictEqual<RecommandationPriorisee[]>([
             {
               priorisation: 1,
-              titre: 'reco 4',
+              titre: 'mesure 4',
               ...PARTIE_COMMUNE_ATTENDUE,
             },
             {
               priorisation: 3,
-              titre: 'reco 1',
+              titre: 'mesure 1',
               ...PARTIE_COMMUNE_ATTENDUE,
             },
             {
               priorisation: 5,
-              titre: 'reco 6',
+              titre: 'mesure 6',
               ...PARTIE_COMMUNE_ATTENDUE,
             },
             {
               priorisation: 6,
-              titre: 'reco 7',
+              titre: 'mesure 7',
               ...PARTIE_COMMUNE_ATTENDUE,
             },
             {
               ...PARTIE_COMMUNE_ATTENDUE,
               priorisation: 8,
-              titre: 'reco 8',
+              titre: 'mesure 8',
             },
             {
               ...PARTIE_COMMUNE_ATTENDUE,
               valeurObtenue: 1,
               priorisation: 7,
-              titre: 'reco 52',
+              titre: 'mesure 52',
             },
           ]);
           expect(
@@ -351,7 +404,7 @@ describe('Diagnostic', () => {
               ...PARTIE_COMMUNE_ATTENDUE,
               valeurObtenue: 1,
               priorisation: 9,
-              titre: 'reco 92',
+              titre: 'mesure 92',
             },
           ]);
         });
@@ -360,7 +413,13 @@ describe('Diagnostic', () => {
       describe("pour des questions dont le résultat dépend d'une règle de calcul", () => {
         const mesures = desMesures()
           .avecLesMesures([
-            { q1: { niveau1: 'reco 1', niveau2: 'reco 12', priorisation: 1 } },
+            {
+              q1: {
+                niveau1: 'mesure 1',
+                niveau2: 'mesure 12',
+                priorisation: 1,
+              },
+            },
           ])
           .construis();
         const question = uneQuestion()
@@ -401,7 +460,7 @@ describe('Diagnostic', () => {
           ])
           .construis();
 
-        it('prend en compte les réponses aux questions ne donnant pas lieu à une recommandation', () => {
+        it('prend en compte les réponses aux questions ne donnant pas lieu à une mesure', () => {
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
               unReferentiel()
@@ -517,7 +576,7 @@ describe('Diagnostic', () => {
         });
       });
 
-      it('ne prend pas en compte les thématiques sans recommandations', () => {
+      it('ne prend pas en compte les thématiques sans mesure', () => {
         const questionContexte = uneQuestion()
           .aChoixUnique('qc')
           .avecReponsesPossibles([
@@ -544,7 +603,7 @@ describe('Diagnostic', () => {
         });
       });
 
-      it('ne prend pas en compte les thématiques sans recommandations contenant des questions à tiroir', () => {
+      it('ne prend pas en compte les thématiques sans mesure contenant des questions à tiroir', () => {
         const questionContexte = uneQuestion()
           .aChoixUnique('qc')
           .avecReponsesPossibles([

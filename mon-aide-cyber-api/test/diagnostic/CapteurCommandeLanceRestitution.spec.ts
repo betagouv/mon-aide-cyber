@@ -33,7 +33,7 @@ describe('Capteur de lancement de la restitution', () => {
     );
   });
 
-  it('génère les recommandations', async () => {
+  it('génère les mesures', async () => {
     const questions = uneListeDe7QuestionsToutesAssociees();
     const diagnostic = unDiagnostic()
       .avecUnReferentiel(
@@ -69,42 +69,42 @@ describe('Capteur de lancement de la restitution', () => {
       {
         valeurObtenue: 0,
         priorisation: 1,
-        titre: 'reco 1',
+        titre: 'mesure 1',
         pourquoi: 'parce-que',
         comment: 'comme ça',
       },
       {
         valeurObtenue: 0,
         priorisation: 2,
-        titre: 'reco 2',
+        titre: 'mesure 2',
         pourquoi: 'parce-que',
         comment: 'comme ça',
       },
       {
         valeurObtenue: 0,
         priorisation: 3,
-        titre: 'reco 3',
+        titre: 'mesure 3',
         pourquoi: 'parce-que',
         comment: 'comme ça',
       },
       {
         valeurObtenue: 0,
         priorisation: 4,
-        titre: 'reco 4',
+        titre: 'mesure 4',
         pourquoi: 'parce-que',
         comment: 'comme ça',
       },
       {
         valeurObtenue: 0,
         priorisation: 5,
-        titre: 'reco 5',
+        titre: 'mesure 5',
         pourquoi: 'parce-que',
         comment: 'comme ça',
       },
       {
         valeurObtenue: 0,
         priorisation: 6,
-        titre: 'reco 6',
+        titre: 'mesure 6',
         pourquoi: 'parce-que',
         comment: 'comme ça',
       },
@@ -113,7 +113,7 @@ describe('Capteur de lancement de la restitution', () => {
       diagnosticRetourne.restitution?.recommandations?.autresRecommandations,
     ).toStrictEqual([
       {
-        titre: 'reco 7',
+        titre: 'mesure 7',
         pourquoi: 'parce-que',
         comment: 'comme ça',
         valeurObtenue: 0,

@@ -16,13 +16,13 @@ describe('Moteur de mesures', () => {
     .avecLesMesures([
       {
         RGPD: {
-          niveau1: 'reco 1',
-          niveau2: 'reco 2',
+          niveau1: 'mesure 1',
+          niveau2: 'mesure 2',
           priorisation: 1,
         },
         RGPD2: {
-          niveau1: 'reco RGPD 2 1',
-          niveau2: 'reco RGPD 2 2',
+          niveau1: 'mesure RGPD 2 1',
+          niveau2: 'mesure RGPD 2 2',
           priorisation: 2,
         },
       },
@@ -35,7 +35,7 @@ describe('Moteur de mesures', () => {
         .avecLesReponsesPossibles([
           uneReponsePossible()
             .avecLibelle('Non')
-            .associeeARecommandation('RGPD', 1, 0)
+            .associeeAMesure('RGPD', 1, 0)
             .construis(),
         ])
         .ayantLaReponseUnique('non')
@@ -47,7 +47,7 @@ describe('Moteur de mesures', () => {
         {
           repondA: questionRepondue.identifiant,
           niveau: {
-            titre: 'reco 1',
+            titre: 'mesure 1',
             comment: 'comme ça',
             pourquoi: 'parce-que',
           },
@@ -61,7 +61,7 @@ describe('Moteur de mesures', () => {
         .avecLesReponsesPossibles([
           uneReponsePossible()
             .avecLibelle('Oui mais')
-            .associeeARecommandation('RGPD', 2, 1)
+            .associeeAMesure('RGPD', 2, 1)
             .construis(),
         ])
         .ayantLaReponseUnique('oui-mais')
@@ -73,7 +73,7 @@ describe('Moteur de mesures', () => {
         {
           repondA: questionRepondue.identifiant,
           niveau: {
-            titre: 'reco 2',
+            titre: 'mesure 2',
             comment: 'comme ça',
             pourquoi: 'parce-que',
           },
@@ -87,8 +87,8 @@ describe('Moteur de mesures', () => {
         .avecLesReponsesPossibles([
           uneReponsePossible()
             .avecLibelle('Oui mais')
-            .associeeARecommandation('RGPD', 2, 2)
-            .associeeARecommandation('RGPD2', 1, 0)
+            .associeeAMesure('RGPD', 2, 2)
+            .associeeAMesure('RGPD2', 1, 0)
             .construis(),
         ])
         .ayantLaReponseUnique('oui-mais')
@@ -100,7 +100,7 @@ describe('Moteur de mesures', () => {
         {
           repondA: questionRepondue.identifiant,
           niveau: {
-            titre: 'reco 2',
+            titre: 'mesure 2',
             comment: 'comme ça',
             pourquoi: 'parce-que',
           },
@@ -109,7 +109,7 @@ describe('Moteur de mesures', () => {
         {
           repondA: questionRepondue.identifiant,
           niveau: {
-            titre: 'reco RGPD 2 1',
+            titre: 'mesure RGPD 2 1',
             comment: 'comme ça',
             pourquoi: 'parce-que',
           },
@@ -156,11 +156,11 @@ describe('Moteur de mesures', () => {
                   .avecReponsesPossibles([
                     uneReponsePossible()
                       .avecLibelle('1980')
-                      .associeeARecommandation('obsolete-annee-1980', 1, 0)
+                      .associeeAMesure('obsolete-annee-1980', 1, 0)
                       .construis(),
                     uneReponsePossible()
                       .avecLibelle('1990')
-                      .associeeARecommandation('obsolete-annee-1990', 2, 2)
+                      .associeeAMesure('obsolete-annee-1990', 2, 2)
                       .construis(),
                   ])
                   .construis(),
@@ -207,11 +207,11 @@ describe('Moteur de mesures', () => {
                   .avecReponsesPossibles([
                     uneReponsePossible()
                       .avecLibelle('1980')
-                      .associeeARecommandation('obsolete-annee-1980', 1, 0)
+                      .associeeAMesure('obsolete-annee-1980', 1, 0)
                       .construis(),
                     uneReponsePossible()
                       .avecLibelle('1990')
-                      .associeeARecommandation('obsolete-annee-1990', 2, 2)
+                      .associeeAMesure('obsolete-annee-1990', 2, 2)
                       .construis(),
                   ])
                   .construis(),
@@ -224,7 +224,7 @@ describe('Moteur de mesures', () => {
                   ])
                   .construis(),
               )
-              .associeeARecommandation('ordinateur-obsolete', 2, 1)
+              .associeeAMesure('ordinateur-obsolete', 2, 1)
               .construis(),
           ])
           .ayantLaReponseDonnee(

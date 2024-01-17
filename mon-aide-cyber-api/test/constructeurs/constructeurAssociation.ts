@@ -7,25 +7,25 @@ import { Constructeur } from './constructeur';
 
 class ConstructeurAssociation implements Constructeur<Association> {
   constructor(
-    private identifiantRecommandation: string = faker.string.alpha(10),
-    private niveauRecommandation: NiveauRecommandation = 1,
+    private identifiantMesure: string = faker.string.alpha(10),
+    private niveauMesure: NiveauRecommandation = 1,
     private _indice: Indice = { valeur: 0 },
   ) {}
 
   avecIdentifiant(identifiant: string): ConstructeurAssociation {
-    this.identifiantRecommandation = identifiant;
+    this.identifiantMesure = identifiant;
 
     return this;
   }
 
   deNiveau1(): ConstructeurAssociation {
-    this.niveauRecommandation = 1;
+    this.niveauMesure = 1;
 
     return this;
   }
 
   deNiveau2() {
-    this.niveauRecommandation = 2;
+    this.niveauMesure = 2;
     return this;
   }
 
@@ -36,8 +36,8 @@ class ConstructeurAssociation implements Constructeur<Association> {
 
   construis(): Association {
     return {
-      identifiantRecommandation: this.identifiantRecommandation,
-      niveauRecommandation: this.niveauRecommandation,
+      identifiantMesure: this.identifiantMesure,
+      niveauMesure: this.niveauMesure,
       indice: this._indice,
     };
   }
