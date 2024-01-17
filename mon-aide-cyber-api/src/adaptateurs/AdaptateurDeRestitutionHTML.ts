@@ -7,6 +7,7 @@ import {
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import * as pug from 'pug';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
+import { Restitution } from '../restitution/Restitution';
 
 export type RestitutionHTML = {
   autresMesures: string;
@@ -22,6 +23,7 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
 
   protected async genereInformations(
     diagnostic: Diagnostic,
+    _: Restitution,
   ): Promise<ContenuHtml> {
     return this.genereHtml('informations', {
       ...this.representeInformations(diagnostic),

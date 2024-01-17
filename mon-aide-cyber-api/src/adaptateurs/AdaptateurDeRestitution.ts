@@ -4,6 +4,8 @@ import {
   RecommandationPriorisee,
 } from '../diagnostic/Diagnostic';
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
+import { Entrepots } from '../domaine/Entrepots';
+import { Restitution } from '../restitution/Restitution';
 
 const estRecommandationPriorisee = (
   recommandationPriorisees: RecommandationPriorisee[] | undefined,
@@ -15,16 +17,20 @@ const estRecommandationPriorisee = (
 };
 
 export abstract class AdaptateurDeRestitution<T> {
-  genereRestitution(diagnostic: Diagnostic): Promise<T> {
-    const informations = this.genereInformations(diagnostic);
-    const indicateurs = this.genereIndicateurs(
-      diagnostic.restitution?.indicateurs,
-    );
+  async genereRestitution(
+    diagnostic: Diagnostic,
+    entrepots: Entrepots,
+  ): Promise<T> {
+    const restitution: Restitution = await entrepots
+      .restitution()
+      .lis(diagnostic.identifiant);
+    const informations = this.genereInformations(diagnostic, restitution);
+    const indicateurs = this.genereIndicateurs(restitution.indicateurs);
     const recommandations = this.genereMesuresPrioritaires(
-      diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
+      restitution.recommandations.recommandationsPrioritaires,
     );
     const autresRecommandations =
-      diagnostic.restitution?.recommandations?.autresRecommandations;
+      restitution.recommandations.autresRecommandations;
 
     if (estRecommandationPriorisee(autresRecommandations)) {
       return this.genere([
@@ -55,5 +61,6 @@ export abstract class AdaptateurDeRestitution<T> {
 
   protected abstract genereInformations(
     diagnostic: Diagnostic,
+    restitution: Restitution,
   ): Promise<ContenuHtml>;
 }

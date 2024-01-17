@@ -53,7 +53,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         .then((diagnostic) =>
           configuration.adaptateursRestitution
             .pdf()
-            .genereRestitution(diagnostic),
+            .genereRestitution(diagnostic, configuration.entrepots),
         )
         .then((pdf) => reponse.contentType('application/pdf').send(pdf))
         .catch((erreur) => suite(erreur));
@@ -122,7 +122,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         .then((diagnostic) =>
           configuration.adaptateursRestitution
             .html()
-            .genereRestitution(diagnostic),
+            .genereRestitution(diagnostic, configuration.entrepots),
         )
         .then((restitution) => reponse.json(restitution))
         .catch((erreur) => suite(erreur));

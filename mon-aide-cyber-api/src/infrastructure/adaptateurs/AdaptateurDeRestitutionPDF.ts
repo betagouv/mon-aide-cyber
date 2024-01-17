@@ -3,6 +3,7 @@ import {
   Diagnostic,
   Indicateurs,
   RecommandationPriorisee,
+  Restitution,
 } from '../../diagnostic/Diagnostic';
 import * as pug from 'pug';
 import puppeteer, { Browser, PDFOptions } from 'puppeteer';
@@ -23,7 +24,10 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
       });
   }
 
-  protected genereInformations(_: Diagnostic): Promise<ContenuHtml> {
+  protected genereInformations(
+    _: Diagnostic,
+    __: Restitution,
+  ): Promise<ContenuHtml> {
     return Promise.resolve({ entete: '', corps: '', piedPage: '' });
   }
 

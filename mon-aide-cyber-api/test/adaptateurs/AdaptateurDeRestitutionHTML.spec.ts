@@ -17,8 +17,16 @@ import {
   RestitutionHTML,
 } from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
+import { Entrepots } from '../../src/domaine/Entrepots';
+import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
+import {
+  desInformationsDeRestitution,
+  uneRestitution,
+} from '../constructeurs/constructeurRestitution';
+import { uneRecommandationPriorisee } from '../constructeurs/constructeurRecommandation';
 
 describe('Adapatateur de Restitution HTML', () => {
+  const entrepots: Entrepots = new EntrepotsMemoire();
   const questions = uneListeDeQuestions()
     .dontLesLabelsSont(['q1', 'q2'])
     .avecLesReponsesPossiblesSuivantesAssociees([
@@ -76,61 +84,80 @@ describe('Adapatateur de Restitution HTML', () => {
   describe('genère la restitution', () => {
     it('intègre les informations', async () => {
       const diagnostic = unDiagnostic().construis();
-
+      const restitution = uneRestitution()
+        .avecIdentifiant(diagnostic.identifiant)
+        .avecInformations(desInformationsDeRestitution().construis())
+        .construis();
+      entrepots.restitution().persiste(restitution);
       const adaptateurDeRestitutionHTML = unAdaptateurDeRestitutionHTML()
         .avecMesuresPrioritaires('une mesure prioritaire')
         .avecInformations(diagnostic)
         .construis();
 
-      genereLaRestitution(diagnostic);
-      const restitution = await adaptateurDeRestitutionHTML.genereRestitution(
-        diagnostic,
-      );
+      const restitutionHTML =
+        await adaptateurDeRestitutionHTML.genereRestitution(
+          diagnostic,
+          entrepots,
+        );
 
-      expect(restitution).toStrictEqual<RestitutionHTML>({
+      expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: '',
         indicateurs: '',
-        informations: `${diagnostic.identifiant}`,
+        informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: 'une mesure prioritaire',
       });
     });
 
     it('intègre des mesures prioritaires', async () => {
       const diagnostic = unDiagnostic().construis();
+      const restitution = uneRestitution()
+        .avecIdentifiant(diagnostic.identifiant)
+        .avecRecommandations([uneRecommandationPriorisee().construis()])
+        .construis();
+      entrepots.restitution().persiste(restitution);
 
       const adaptateurDeRestitutionHTML = unAdaptateurDeRestitutionHTML()
         .avecMesuresPrioritaires('une mesure prioritaire')
         .construis();
 
       genereLaRestitution(diagnostic);
-      const restitution = await adaptateurDeRestitutionHTML.genereRestitution(
-        diagnostic,
-      );
+      const restitutionHTML =
+        await adaptateurDeRestitutionHTML.genereRestitution(
+          diagnostic,
+          entrepots,
+        );
 
-      expect(restitution).toStrictEqual<RestitutionHTML>({
+      expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: '',
         indicateurs: '',
-        informations: '',
+        informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: 'une mesure prioritaire',
       });
     });
 
     it('intègre un indicateur', async () => {
       const diagnostic = unDiagnostic().construis();
+      const restitution = uneRestitution()
+        .avecIdentifiant(diagnostic.identifiant)
+        .avecIndicateurs('thematique', 2)
+        .construis();
+      entrepots.restitution().persiste(restitution);
 
       const adaptateurDeRestitutionHTML = unAdaptateurDeRestitutionHTML()
         .avecIndicateurs("un graphe d'indicateurs")
         .construis();
 
       genereLaRestitution(diagnostic);
-      const restitution = await adaptateurDeRestitutionHTML.genereRestitution(
-        diagnostic,
-      );
+      const restitutionHTML =
+        await adaptateurDeRestitutionHTML.genereRestitution(
+          diagnostic,
+          entrepots,
+        );
 
-      expect(restitution).toStrictEqual<RestitutionHTML>({
+      expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: '',
         indicateurs: "un graphe d'indicateurs",
-        informations: '',
+        informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: '',
       });
     });
@@ -202,20 +229,27 @@ describe('Adapatateur de Restitution HTML', () => {
         ])
         .avecUnTableauDeRecommandations(tableauDeRecommandations)
         .construis();
-
       const adaptateurDeRestitutionHTML = unAdaptateurDeRestitutionHTML()
         .avecAutresMesures('une mesure non prioritaire')
         .construis();
+      const recommandationPriorisee = uneRecommandationPriorisee().construis();
+      const restitution = uneRestitution()
+        .avecIdentifiant(diagnostic.identifiant)
+        .avecRecommandations(Array(7).fill(recommandationPriorisee))
+        .construis();
+      entrepots.restitution().persiste(restitution);
 
       genereLaRestitution(diagnostic);
-      const restitution = await adaptateurDeRestitutionHTML.genereRestitution(
-        diagnostic,
-      );
+      const restitutionHTML =
+        await adaptateurDeRestitutionHTML.genereRestitution(
+          diagnostic,
+          entrepots,
+        );
 
-      expect(restitution).toStrictEqual<RestitutionHTML>({
+      expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: 'une mesure non prioritaire',
         indicateurs: '',
-        informations: '',
+        informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: '',
       });
     });
