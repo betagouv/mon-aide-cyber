@@ -7,22 +7,22 @@ import {
   ReponsePossible,
 } from '../../src/diagnostic/Referentiel';
 
-describe('Cohérence du référentiel et des recommandations', () => {
-  const identifiantsDeRecommandations = (r: ReponsePossible): string[] => {
+describe('Cohérence du référentiel et des mesures', () => {
+  const identifiantsDeMesures = (r: ReponsePossible): string[] => {
     return (
       r.resultat?.recommandations
         ?.map((rec) => rec.identifiant)
         .filter((rec): rec is string => !!rec) || []
     );
   };
-  const tousLesIdentifiantsDeRecommandations = (
+  const tousLesIdentifiantsDeMesures = (
     q: QuestionChoixUnique | QuestionChoixMultiple,
   ): string[] => {
     return q.reponsesPossibles.flatMap((r) => {
       return [
-        ...identifiantsDeRecommandations(r),
+        ...identifiantsDeMesures(r),
         ...(r.questions?.flatMap((q) =>
-          q.reponsesPossibles.flatMap((r) => identifiantsDeRecommandations(r)),
+          q.reponsesPossibles.flatMap((r) => identifiantsDeMesures(r)),
         ) || []),
       ];
     });
@@ -38,7 +38,7 @@ describe('Cohérence du référentiel et des recommandations', () => {
           thematique: thematique,
           questions: questions.questions.flatMap((q) => ({
             question: q.identifiant,
-            recos: new Set(tousLesIdentifiantsDeRecommandations(q)),
+            recos: new Set(tousLesIdentifiantsDeMesures(q)),
           })),
         };
       });
@@ -51,7 +51,7 @@ describe('Cohérence du référentiel et des recommandations', () => {
         'la question "$question"',
         (question) => {
           it.each(Array.from(question.recos))(
-            'portant la recommandation "%s" est référencée dans les recommandations',
+            'portant la mesure "%s" est référencée dans les mesures',
             (reco) => {
               const toutesLesRecommandations = Object.entries(
                 tableauMesures,
@@ -68,7 +68,7 @@ describe('Cohérence du référentiel et des recommandations', () => {
   );
 
   describe.each(Object.entries(tableauMesures).map(([reco]) => reco))(
-    'La recommandation %s',
+    'La mesure %s',
     (reco) => {
       it('est référencée dans le référentiel', () => {
         expect(

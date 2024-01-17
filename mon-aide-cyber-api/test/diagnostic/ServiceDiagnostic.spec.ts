@@ -26,12 +26,12 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 
 describe('Le service de diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
-  let adaptateurTableauDeRecommandations: AdaptateurMesuresTest;
+  let adaptateurMesures: AdaptateurMesuresTest;
   let entrepots: Entrepots;
 
   beforeEach(() => {
     adaptateurReferentiel = new AdaptateurReferentielDeTest();
-    adaptateurTableauDeRecommandations = new AdaptateurMesuresTest();
+    adaptateurMesures = new AdaptateurMesuresTest();
     entrepots = new EntrepotsMemoire();
   });
 
@@ -66,7 +66,7 @@ describe('Le service de diagnostic', () => {
       await entrepots.diagnostic().persiste(diagnostic);
       const serviceDiagnostic = new ServiceDiagnostic(
         adaptateurReferentiel,
-        adaptateurTableauDeRecommandations,
+        adaptateurMesures,
         entrepots,
         new BusEvenementDeTest(),
       );
@@ -134,7 +134,7 @@ describe('Le service de diagnostic', () => {
       await entrepots.diagnostic().persiste(diagnostic);
       const serviceDiagnostic = new ServiceDiagnostic(
         adaptateurReferentiel,
-        adaptateurTableauDeRecommandations,
+        adaptateurMesures,
         entrepots,
         new BusEvenementDeTest(),
       );
@@ -165,7 +165,7 @@ describe('Le service de diagnostic', () => {
       await expect(() =>
         new ServiceDiagnostic(
           adaptateurReferentiel,
-          adaptateurTableauDeRecommandations,
+          adaptateurMesures,
           entrepots,
           new BusEvenementDeTest(),
         ).diagnostic(crypto.randomUUID()),
@@ -185,7 +185,7 @@ describe('Le service de diagnostic', () => {
 
       const diagnostic = await new ServiceDiagnostic(
         adaptateurReferentiel,
-        adaptateurTableauDeRecommandations,
+        adaptateurMesures,
         entrepots,
         new BusEvenementDeTest(),
       ).lance();
@@ -215,7 +215,7 @@ describe('Le service de diagnostic', () => {
 
       const diagnostic = await new ServiceDiagnostic(
         adaptateurReferentiel,
-        adaptateurTableauDeRecommandations,
+        adaptateurMesures,
         entrepots,
         new BusEvenementDeTest(),
       ).lance();
@@ -238,7 +238,7 @@ describe('Le service de diagnostic', () => {
       adaptateurReferentiel.ajoute(unReferentiel().construis());
       const diagnostic = await new ServiceDiagnostic(
         adaptateurReferentiel,
-        adaptateurTableauDeRecommandations,
+        adaptateurMesures,
         entrepots,
         busEvenement,
       ).lance();
@@ -255,7 +255,7 @@ describe('Le service de diagnostic', () => {
       await expect(() =>
         new ServiceDiagnostic(
           adaptateurReferentiel,
-          adaptateurTableauDeRecommandations,
+          adaptateurMesures,
           entrepots,
           new BusEvenementDeTest(),
         ).lance(),

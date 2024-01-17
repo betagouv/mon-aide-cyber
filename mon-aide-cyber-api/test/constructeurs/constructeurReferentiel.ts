@@ -168,9 +168,9 @@ class ConstructeurListeDeQuestions
             );
             if (rep.association) {
               constructeurReponsePossible =
-                constructeurReponsePossible.associeeARecommandation(
-                  rep.association?.identifiantRecommandation,
-                  rep.association?.niveauRecommandation,
+                constructeurReponsePossible.associeeAMesure(
+                  rep.association?.identifiantMesure,
+                  rep.association?.niveauMesure,
                   rep.association?.indice?.valeur,
                 );
             }
@@ -258,22 +258,19 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     return this;
   }
 
-  associeeARecommandation(
-    identifiantRecommandation: string,
-    niveauRecommandation: NiveauRecommandation,
+  associeeAMesure(
+    identifiantMesure: string,
+    niveauMesure: NiveauRecommandation,
     valeurIndice: Valeur,
   ): ConstructeurReponsePossible {
-    const recommandations = [];
-    recommandations.push({
-      identifiant: identifiantRecommandation,
-      niveau: niveauRecommandation,
+    const mesures = [];
+    mesures.push({
+      identifiant: identifiantMesure,
+      niveau: niveauMesure,
     });
     this.resultat = {
       ...this.resultat,
-      recommandations: [
-        ...(this.resultat?.recommandations || []),
-        ...recommandations,
-      ],
+      recommandations: [...(this.resultat?.recommandations || []), ...mesures],
       indice: { valeur: valeurIndice },
     };
     return this;
