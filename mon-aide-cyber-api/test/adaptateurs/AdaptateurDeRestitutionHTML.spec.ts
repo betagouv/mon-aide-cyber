@@ -8,6 +8,8 @@ import { uneAssociation } from '../constructeurs/constructeurAssociation';
 import { unTableauDeRecommandations } from '../constructeurs/constructeurTableauDeRecommandations';
 import {
   unDiagnostic,
+  unDiagnosticAvecSecteurActivite,
+  unDiagnosticEnGironde,
   uneReponseDonnee,
 } from '../constructeurs/constructeurDiagnostic';
 import { genereLaRestitution } from '../../src/diagnostic/Diagnostic';
@@ -300,54 +302,7 @@ describe('Adapatateur de Restitution HTML', () => {
 
     describe("zone géographique de l'entité", () => {
       it("représente la zone géographique au format '<département>, <région>'", () => {
-        const diagnostic = unDiagnostic()
-          .avecUnReferentiel(
-            unReferentiel()
-              .ajouteUneThematique('contexte', [
-                uneQuestion()
-                  .avecIdentifiant('contexte-region-siege-social')
-                  .aChoixUnique('région siège social ?', [
-                    {
-                      identifiant:
-                        'contexte-region-siege-social-nouvelle-aquitaine',
-                      libelle: 'Nouvelle-Aquitaine',
-                    },
-                  ])
-                  .construis(),
-                uneQuestion()
-                  .avecIdentifiant('contexte-departement-tom-siege-social')
-                  .aChoixUnique('département siège social ?', [
-                    {
-                      identifiant:
-                        'contexte-departement-tom-siege-social-gironde',
-                      libelle: 'Gironde',
-                    },
-                  ])
-                  .construis(),
-              ])
-              .construis(),
-          )
-          .ajouteUneReponseDonnee(
-            {
-              thematique: 'contexte',
-              question: 'contexte-region-siege-social',
-            },
-            uneReponseDonnee()
-              .ayantPourReponse(
-                'contexte-region-siege-social-nouvelle-aquitaine',
-              )
-              .construis(),
-          )
-          .ajouteUneReponseDonnee(
-            {
-              thematique: 'contexte',
-              question: 'contexte-departement-tom-siege-social',
-            },
-            uneReponseDonnee()
-              .ayantPourReponse('contexte-departement-tom-siege-social-gironde')
-              .construis(),
-          )
-          .construis();
+        const diagnostic = unDiagnosticEnGironde().construis();
 
         const informations = new AdaptateurDeRestitutionHTML(
           new Map(),
@@ -491,32 +446,8 @@ describe('Adapatateur de Restitution HTML', () => {
     describe("secteur d'activité de l'entité", () => {
       it("si renseigné, représente le secteur d'activité", () => {
         const secteurActivite = 'Enseignement';
-        const diagnostic = unDiagnostic()
-          .avecUnReferentiel(
-            unReferentiel()
-              .ajouteUneThematique('contexte', [
-                uneQuestion()
-                  .avecIdentifiant('contexte-secteur-activite')
-                  .aChoixUnique("secteur d'activité ?", [
-                    {
-                      identifiant: 'contexte-secteur-activite-enseignement',
-                      libelle: secteurActivite,
-                    },
-                  ])
-                  .construis(),
-              ])
-              .construis(),
-          )
-          .ajouteUneReponseDonnee(
-            {
-              thematique: 'contexte',
-              question: 'contexte-secteur-activite',
-            },
-            uneReponseDonnee()
-              .ayantPourReponse('contexte-secteur-activite-enseignement')
-              .construis(),
-          )
-          .construis();
+        const diagnostic =
+          unDiagnosticAvecSecteurActivite(secteurActivite).construis();
 
         const informations = new AdaptateurDeRestitutionHTML(
           new Map(),

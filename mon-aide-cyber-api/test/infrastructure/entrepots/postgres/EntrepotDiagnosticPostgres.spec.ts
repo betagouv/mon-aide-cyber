@@ -17,8 +17,7 @@ describe('Entrepot Diagnostic Postgres', () => {
 
     await new EntrepotDiagnosticPostgres().persiste(diagnostic);
 
-    const entrepotDiagnosticPostgresLecture =
-      await new EntrepotDiagnosticPostgres();
+    const entrepotDiagnosticPostgresLecture = new EntrepotDiagnosticPostgres();
     expect(
       await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant),
     ).toStrictEqual(diagnostic);
