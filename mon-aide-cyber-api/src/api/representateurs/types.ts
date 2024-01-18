@@ -5,7 +5,23 @@ type ActionBase = {
   ressource: { url: string; methode: 'PATCH' | 'GET' };
 };
 
-export type Action = ActionDiagnostic | ActionRepondreDiagnostic;
+export type Action =
+  | ActionDiagnostic
+  | ActionRepondreDiagnostic
+  | ActionRestituer;
+export type RessourceActionRestituer = {
+  ressource: {
+    url: string;
+    methode: 'PATCH' | 'GET';
+    contentType: 'application/pdf' | 'application/json';
+  };
+};
+export type TypeActionRestituer = {
+  [type: string]: RessourceActionRestituer;
+};
+type ActionRestituer = Omit<ActionBase, 'ressource'> & {
+  types: TypeActionRestituer;
+};
 type ActionRepondreDiagnostic = {
   [thematique: string]: ActionBase & { action: 'repondre' };
 };

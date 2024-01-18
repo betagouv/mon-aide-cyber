@@ -13,10 +13,10 @@ import {
   RepresentationReferentiel,
 } from '../../src/api/representateurs/types';
 import { Express } from 'express';
-import { RestitutionHTML } from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
 import { unAdaptateurDeRestitutionHTML } from '../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
 import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
 import { uneRestitution } from '../constructeurs/constructeurRestitution';
+import { ReprensentationRestitution } from '../../src/api/routesAPIDiagnostic';
 
 describe('le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -336,31 +336,74 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         .avecMesuresPrioritaires('mesures prioritaires')
         .avecAutresMesures('autres mesures')
         .construis();
-
       testeurMAC.adaptateursRestitution.html = () =>
         adaptateurDeRestitutionHTML;
-
-      const diagnostic = unDiagnostic().construis();
+      const identifiant = crypto.randomUUID();
       const restitution = uneRestitution()
-        .avecIdentifiant(diagnostic.identifiant)
+        .avecIdentifiant(identifiant)
         .construis();
-      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
       await testeurMAC.entrepots.restitution().persiste(restitution);
 
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/${diagnostic.identifiant}/restitution`,
+        `/api/diagnostic/${identifiant}/restitution`,
         donneesServeur.portEcoute,
       );
 
       expect(reponse.statusCode).toBe(200);
-      expect(await reponse.json()).toStrictEqual<RestitutionHTML>({
+      expect(await reponse.json()).toStrictEqual<ReprensentationRestitution>({
+        actions: [
+          {
+            action: 'restituer',
+            types: {
+              pdf: {
+                ressource: {
+                  url: `/api/diagnostic/${identifiant}/restitution`,
+                  methode: 'GET',
+                  contentType: 'application/pdf',
+                },
+              },
+              json: {
+                ressource: {
+                  url: `/api/diagnostic/${identifiant}/restitution`,
+                  methode: 'GET',
+                  contentType: 'application/json',
+                },
+              },
+            },
+          },
+        ],
         autresMesures: '',
         indicateurs: 'indicateurs',
         informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: 'mesures prioritaires',
       });
+    });
+
+    it('retourne la restitution au format PDF', async () => {
+      let adaptateurPDFAppele = false;
+      const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
+      adaptateurRestitutionPDF.genereRestitution = () => {
+        adaptateurPDFAppele = true;
+        return Promise.resolve(Buffer.from('PDF Recommandations généré'));
+      };
+      testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
+      const restitution = uneRestitution().construis();
+      testeurMAC.entrepots.restitution().persiste(restitution);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/${restitution.identifiant}/restitution`,
+        donneesServeur.portEcoute,
+        undefined,
+        { accept: 'application/pdf' },
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(reponse.headers['content-type']).toBe('application/pdf');
+      expect(adaptateurPDFAppele).toBe(true);
     });
 
     it('la route est protégée', async () => {
