@@ -111,9 +111,16 @@ const fusionnePdfs = (pdfs: Buffer[]): Promise<Buffer> => {
 export type ContenuHtml = { corps: string; entete: string; piedPage: string };
 
 const generePdfs = (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
+  const pagesHtmlRemplies = pagesHtml.filter(
+    (pageHtml) =>
+      pageHtml.entete !== '' &&
+      pageHtml.corps !== '' &&
+      pageHtml.piedPage !== '',
+  );
+
   return lanceNavigateur()
     .then((navigateur) => {
-      const pages = pagesHtml.map((pageHtml) =>
+      const pages = pagesHtmlRemplies.map((pageHtml) =>
         navigateur
           .newPage()
           .then((page) => page.setContent(pageHtml.corps).then(() => page))
