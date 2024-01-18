@@ -7,6 +7,9 @@ import { NextFunction } from 'express-serve-static-core';
 import bodyParser from 'body-parser';
 import { SagaAjoutReponse } from '../diagnostic/CapteurSagaAjoutReponse';
 import { ErreurMAC } from '../domaine/erreurMAC';
+import { Action, TypeActionRestituer } from './representateurs/types';
+import { Restitution } from '../restitution/Restitution';
+import { RestitutionHTML } from '../adaptateurs/AdaptateurDeRestitutionHTML';
 
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -107,15 +110,53 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     session.verifie('Demande la restitution'),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
+
+      const genereRestitution = (
+        restitution: Restitution,
+      ): Promise<Buffer | RestitutionHTML> => {
+        if (requete.headers.accept === 'application/pdf') {
+          return configuration.adaptateursRestitution
+            .pdf()
+            .genereRestitution(restitution);
+        }
+        return configuration.adaptateursRestitution
+          .html()
+          .genereRestitution(restitution);
+      };
+
+      const creerReponse = (restitution: Buffer | RestitutionHTML) => {
+        if (requete.headers.accept === 'application/pdf') {
+          reponse.contentType('application/pdf').send(restitution);
+        } else {
+          const type = (type: 'pdf' | 'json'): TypeActionRestituer => ({
+            [type]: {
+              ressource: {
+                contentType:
+                  type === 'pdf' ? 'application/pdf' : 'application/json',
+                methode: 'GET',
+                url: `/api/diagnostic/${id}/restitution`,
+              },
+            },
+          });
+
+          const resultat: ReprensentationRestitution = {
+            actions: [
+              {
+                action: 'restituer',
+                types: { ...type('pdf'), ...type('json') },
+              },
+            ],
+            ...(restitution as RestitutionHTML),
+          };
+          reponse.json(resultat);
+        }
+      };
+
       configuration.entrepots
         .restitution()
         .lis(id)
-        .then((restitution) =>
-          configuration.adaptateursRestitution
-            .html()
-            .genereRestitution(restitution),
-        )
-        .then((restitution) => reponse.json(restitution))
+        .then((restitution) => genereRestitution(restitution))
+        .then((pdf) => creerReponse(pdf))
         .catch((erreur) =>
           suite(ErreurMAC.cree('Demande la restitution', erreur)),
         );
@@ -123,4 +164,12 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   );
 
   return routes;
+};
+
+export type ReprensentationRestitution = {
+  actions: Action[];
+  autresMesures: string;
+  indicateurs: string;
+  informations: string;
+  mesuresPrioritaires: string;
 };
