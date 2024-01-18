@@ -25,7 +25,7 @@ describe('Bus Événement', () => {
     FournisseurHorlogeDeTest.initialise(maintenant);
     const consommateur = new ConsommateurEvenementDeTest();
 
-    new BusEvenementMAC(
+    await new BusEvenementMAC(
       new Map<TypeEvenement, ConsommateurEvenement>([
         ['DIAGNOSTIC_LANCE', consommateur],
       ]),
@@ -52,14 +52,14 @@ describe('Bus Événement', () => {
     const premierConsommateur = new ConsommateurEvenementDeTest();
     const secondConsommateur = new ConsommateurEvenementDeTest();
 
-    new BusEvenementMAC(
+    await new BusEvenementMAC(
       new Map<TypeEvenement, ConsommateurEvenement>([
         ['DIAGNOSTIC_LANCE', premierConsommateur],
-        ['DIAGNOSTIC_TERMINE', secondConsommateur],
+        ['RESTITUTION_LANCEE', secondConsommateur],
       ]),
     ).publie({
       identifiant,
-      type: 'DIAGNOSTIC_TERMINE',
+      type: 'RESTITUTION_LANCEE',
       date: maintenant,
       corps: {},
     });
@@ -68,7 +68,7 @@ describe('Bus Événement', () => {
     expect(secondConsommateur.nombreConsommation).toBe(1);
     expect(secondConsommateur.consommation).toStrictEqual<Evenement>({
       identifiant,
-      type: 'DIAGNOSTIC_TERMINE',
+      type: 'RESTITUTION_LANCEE',
       date: maintenant,
       corps: {},
     });

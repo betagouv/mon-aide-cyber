@@ -122,7 +122,7 @@ describe('Capteur de lancement de la restitution', () => {
     ]);
   });
 
-  it("publie sur un bus d'événement DiagnosticTermine", async () => {
+  it("publie sur un bus d'événement Restitution Lancée", async () => {
     const maintenant = new Date();
     FournisseurHorlogeDeTest.initialise(maintenant);
     const busEvenement = new BusEvenementDeTest();
@@ -146,7 +146,7 @@ describe('Capteur de lancement de la restitution', () => {
 
     expect(busEvenement.evenementRecu).toStrictEqual({
       identifiant: diagnostic.identifiant,
-      type: 'DIAGNOSTIC_TERMINE',
+      type: 'RESTITUTION_LANCEE',
       date: maintenant,
       corps: { identifiantDiagnostic: diagnostic.identifiant },
     });
@@ -160,7 +160,7 @@ describe('Capteur de lancement de la restitution', () => {
       ).execute(new ConstructeurCommande(crypto.randomUUID()).construis()),
     ).rejects.toStrictEqual(
       ErreurMAC.cree(
-        'Termine le diagnostic',
+        'Demande la restitution',
         new AggregatNonTrouve('diagnostic'),
       ),
     );

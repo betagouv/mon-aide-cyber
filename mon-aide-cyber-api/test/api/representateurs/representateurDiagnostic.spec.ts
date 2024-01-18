@@ -48,30 +48,13 @@ describe('Le représentateur de diagnostic', () => {
           },
         },
       ]);
-      expect(representationDiagnostic.actions[1]).toStrictEqual({
+      expect(representationDiagnostic.actions[0]).toStrictEqual({
         contexte: {
           action: 'repondre',
           ressource: {
             url: `/api/diagnostic/${diagnostic.identifiant}`,
             methode: 'PATCH',
           },
-        },
-      });
-    });
-
-    it("fournit l'action 'terminer' dans la réponse", () => {
-      const diagnostic = unDiagnostic().construis();
-
-      const representationDiagnostic = representeLeDiagnosticPourLeClient(
-        diagnostic,
-        fabriqueTranscripteurVide(),
-      );
-
-      expect(representationDiagnostic.actions[0]).toStrictEqual({
-        action: 'terminer',
-        ressource: {
-          url: `/api/diagnostic/${diagnostic.identifiant}/termine`,
-          methode: 'GET',
         },
       });
     });

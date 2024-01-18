@@ -5,20 +5,14 @@ import {
   uneReponsePossible,
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
-import {
-  unDiagnostic,
-  unDiagnosticAvecUneThematiqueEtSeptReponsesDonnees,
-} from '../constructeurs/constructeurDiagnostic';
+import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
 import {
   DiagnosticLance,
   ServiceDiagnostic,
 } from '../../src/diagnostic/ServiceDiagnostic';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { Entrepots } from '../../src/domaine/Entrepots';
-import {
-  QuestionDiagnostic,
-  RecommandationPriorisee,
-} from '../../src/diagnostic/Diagnostic';
+import { QuestionDiagnostic } from '../../src/diagnostic/Diagnostic';
 import { AdaptateurTableauDeRecommandationsDeTest } from '../adaptateurs/AdaptateurTableauDeRecommandationsDeTest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
@@ -268,136 +262,6 @@ describe('Le service de diagnostic', () => {
         ErreurMAC.cree(
           'Lance le diagnostic',
           new Error('Referentiel non connu'),
-        ),
-      );
-    });
-  });
-
-  describe("Lorsque l'on veut terminer le diagnostic", () => {
-    let serviceDiagnostic: ServiceDiagnostic;
-    beforeEach(() => {
-      serviceDiagnostic = new ServiceDiagnostic(
-        adaptateurReferentiel,
-        adaptateurTableauDeRecommandations,
-        entrepots,
-        new BusEvenementDeTest(),
-      );
-    });
-    it('génère les recommandations', async () => {
-      const diagnostic =
-        unDiagnosticAvecUneThematiqueEtSeptReponsesDonnees().construis();
-      await entrepots.diagnostic().persiste(diagnostic);
-
-      await serviceDiagnostic.termine(diagnostic.identifiant);
-
-      const diagnosticRetourne = await entrepots
-        .diagnostic()
-        .lis(diagnostic.identifiant);
-      expect(
-        diagnosticRetourne.restitution?.recommandations
-          ?.recommandationsPrioritaires,
-      ).toStrictEqual<RecommandationPriorisee[]>([
-        {
-          valeurObtenue: 0,
-          priorisation: 1,
-          titre: 'reco 1',
-          pourquoi: 'parce-que',
-          comment: 'comme ça',
-        },
-        {
-          valeurObtenue: 0,
-          priorisation: 2,
-          titre: 'reco 2',
-          pourquoi: 'parce-que',
-          comment: 'comme ça',
-        },
-        {
-          valeurObtenue: 0,
-          priorisation: 3,
-          titre: 'reco 3',
-          pourquoi: 'parce-que',
-          comment: 'comme ça',
-        },
-        {
-          valeurObtenue: 0,
-          priorisation: 4,
-          titre: 'reco 4',
-          pourquoi: 'parce-que',
-          comment: 'comme ça',
-        },
-        {
-          valeurObtenue: 0,
-          priorisation: 5,
-          titre: 'reco 5',
-          pourquoi: 'parce-que',
-          comment: 'comme ça',
-        },
-        {
-          valeurObtenue: 0,
-          priorisation: 6,
-          titre: 'reco 6',
-          pourquoi: 'parce-que',
-          comment: 'comme ça',
-        },
-      ]);
-      expect(
-        diagnosticRetourne.restitution?.recommandations?.autresRecommandations,
-      ).toStrictEqual([
-        {
-          titre: 'reco 7',
-          pourquoi: 'parce-que',
-          comment: 'comme ça',
-          valeurObtenue: 0,
-          priorisation: 7,
-        },
-      ]);
-    });
-
-    it("publie sur un bus d'événement DiagnosticTermine", async () => {
-      const maintenant = new Date();
-      FournisseurHorlogeDeTest.initialise(maintenant);
-      const busEvenement = new BusEvenementDeTest();
-      const diagnostic = unDiagnostic()
-        .avecUnReferentiel(
-          unReferentiel()
-            .ajouteUneQuestionAuContexte(
-              uneQuestion()
-                .aChoixUnique('Avez-vous quelque chose à envoyer ?')
-                .avecReponsesPossibles([uneReponsePossible().construis()])
-                .construis(),
-            )
-            .construis(),
-        )
-        .construis();
-      await entrepots.diagnostic().persiste(diagnostic);
-
-      await new ServiceDiagnostic(
-        adaptateurReferentiel,
-        adaptateurTableauDeRecommandations,
-        entrepots,
-        busEvenement,
-      ).termine(diagnostic.identifiant);
-
-      expect(busEvenement.evenementRecu).toStrictEqual({
-        identifiant: diagnostic.identifiant,
-        type: 'DIAGNOSTIC_TERMINE',
-        date: maintenant,
-        corps: { identifiantDiagnostic: diagnostic.identifiant },
-      });
-    });
-
-    it('si le diagnostic est inconnu, cela génère un erreur', async () => {
-      await expect(() =>
-        new ServiceDiagnostic(
-          adaptateurReferentiel,
-          adaptateurTableauDeRecommandations,
-          entrepots,
-          new BusEvenementDeTest(),
-        ).termine(crypto.randomUUID()),
-      ).rejects.toStrictEqual(
-        ErreurMAC.cree(
-          'Termine le diagnostic',
-          new AggregatNonTrouve('diagnostic'),
         ),
       );
     });

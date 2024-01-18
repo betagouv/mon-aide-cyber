@@ -39,7 +39,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
 
   routes.get(
     '/:id/termine',
-    session.verifie('Termine le diagnostic'),
+    session.verifie('Demande la restitution'),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       configuration.entrepots
@@ -52,7 +52,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         )
         .then((pdf) => reponse.contentType('application/pdf').send(pdf))
         .catch((erreur) =>
-          suite(ErreurMAC.cree('Termine le diagnostic', erreur)),
+          suite(ErreurMAC.cree('Demande la restitution', erreur)),
         );
     },
   );
@@ -104,7 +104,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
 
   routes.get(
     '/:id/restitution',
-    session.verifie('Ajout réponse au diagnostic'),
+    session.verifie('Demande la restitution'),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       configuration.entrepots

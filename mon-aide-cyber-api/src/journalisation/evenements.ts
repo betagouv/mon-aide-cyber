@@ -9,7 +9,7 @@ const consommateurEvenement = () => (entrepot: EntrepotEvenementJournal) =>
     }
   })();
 
-export const diagnosticTermnine = consommateurEvenement();
+export const restitutionLancee = consommateurEvenement();
 
 export const diagnosticLance = consommateurEvenement();
 

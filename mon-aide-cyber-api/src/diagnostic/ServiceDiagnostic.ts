@@ -1,8 +1,4 @@
-import {
-  Diagnostic,
-  genereLaRestitution,
-  initialiseDiagnostic,
-} from './Diagnostic';
+import { Diagnostic, initialiseDiagnostic } from './Diagnostic';
 import * as crypto from 'crypto';
 import { Entrepots } from '../domaine/Entrepots';
 import { Adaptateur } from '../adaptateurs/Adaptateur';
@@ -11,7 +7,6 @@ import { TableauDeRecommandations } from './TableauDeRecommandations';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import { DiagnosticTermine } from './CapteurCommandeLanceRestitution';
 
 export class ServiceDiagnostic {
   constructor(
@@ -49,32 +44,6 @@ export class ServiceDiagnostic {
         Promise.reject(ErreurMAC.cree('Lance le diagnostic', erreur)),
       );
   };
-
-  async termine(id: crypto.UUID) {
-    return this.entrepots
-      .diagnostic()
-      .lis(id)
-      .then((diagnostic) => {
-        genereLaRestitution(diagnostic);
-        return diagnostic;
-      })
-      .then(async (diagnostic) => {
-        await this.entrepots.diagnostic().persiste(diagnostic);
-        return diagnostic;
-      })
-      .then(
-        (diagnostic) =>
-          this.busEvenement?.publie<DiagnosticTermine>({
-            identifiant: diagnostic.identifiant,
-            type: 'DIAGNOSTIC_TERMINE',
-            date: FournisseurHorloge.maintenant(),
-            corps: { identifiantDiagnostic: diagnostic.identifiant },
-          }),
-      )
-      .catch((erreur) =>
-        Promise.reject(ErreurMAC.cree('Termine le diagnostic', erreur)),
-      );
-  }
 }
 
 export type DiagnosticLance = Omit<Evenement, 'corps'> & {
