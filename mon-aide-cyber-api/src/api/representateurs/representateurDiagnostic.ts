@@ -154,15 +154,7 @@ export function representeLeDiagnosticPourLeClient(
   diagnostic: Diagnostic,
   transcripteur: Transcripteur,
 ): RepresentationDiagnostic {
-  const actions: Action[] = [
-    {
-      action: 'terminer',
-      ressource: {
-        url: `/api/diagnostic/${diagnostic.identifiant}/termine`,
-        methode: 'GET',
-      },
-    },
-  ];
+  const actions: Action[] = [];
   const representationGroupee = new RepresentationGroupee(transcripteur);
 
   const referentiel: RepresentationReferentiel = Object.entries(

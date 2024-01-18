@@ -1,7 +1,7 @@
 import {
   aidantCree,
   diagnosticLance,
-  diagnosticTermnine,
+  restitutionLancee,
   reponseAjoutee,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
@@ -23,7 +23,7 @@ export const fabriqueConsommateursEvenements = (
   },
 ) => {
   return new Map<TypeEvenement, ConsommateurEvenement>([
-    ['DIAGNOSTIC_TERMINE', diagnosticTermnine(entrepotJournalisation)],
+    ['RESTITUTION_LANCEE', restitutionLancee(entrepotJournalisation)],
     ['DIAGNOSTIC_LANCE', diagnosticLance(entrepotJournalisation)],
     ['REPONSE_AJOUTEE', reponseAjoutee(entrepotJournalisation)],
     ['AIDANT_CREE', configuration.aidantCree()],

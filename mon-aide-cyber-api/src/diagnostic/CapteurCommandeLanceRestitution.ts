@@ -33,20 +33,20 @@ export class CapteurCommandeLanceRestitution
       })
       .then(
         (diagnostic) =>
-          this.busEvenement?.publie<DiagnosticTermine>({
+          this.busEvenement?.publie<RestitutionLancee>({
             identifiant: diagnostic.identifiant,
-            type: 'DIAGNOSTIC_TERMINE',
+            type: 'RESTITUTION_LANCEE',
             date: FournisseurHorloge.maintenant(),
             corps: { identifiantDiagnostic: diagnostic.identifiant },
           }),
       )
       .catch((erreur) =>
-        Promise.reject(ErreurMAC.cree('Termine le diagnostic', erreur)),
+        Promise.reject(ErreurMAC.cree('Demande la restitution', erreur)),
       );
   }
 }
 
-export type DiagnosticTermine = Omit<Evenement, 'corps'> & {
+type RestitutionLancee = Omit<Evenement, 'corps'> & {
   corps: {
     identifiantDiagnostic: crypto.UUID;
   };

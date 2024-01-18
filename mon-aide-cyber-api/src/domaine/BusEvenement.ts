@@ -19,5 +19,5 @@ export interface ConsommateurEvenement {
 export type TypeEvenement =
   | 'DIAGNOSTIC_LANCE'
   | 'REPONSE_AJOUTEE'
-  | 'DIAGNOSTIC_TERMINE'
+  | 'RESTITUTION_LANCEE'
   | 'AIDANT_CREE';
