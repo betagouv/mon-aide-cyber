@@ -2,6 +2,7 @@ export type Contexte =
   | 'Accès diagnostic'
   | 'Ajout réponse au diagnostic'
   | 'Termine le diagnostic'
+  | 'Demande la restitution'
   | 'Lance le diagnostic'
   | 'Accède aux diagnostics'
   | "Demande d'Authentification";

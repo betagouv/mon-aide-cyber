@@ -1,9 +1,5 @@
 import { AdaptateurDeRestitution } from './AdaptateurDeRestitution';
-import {
-  Diagnostic,
-  Indicateurs,
-  RecommandationPriorisee,
-} from '../diagnostic/Diagnostic';
+import { Indicateurs, RecommandationPriorisee } from '../diagnostic/Diagnostic';
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import * as pug from 'pug';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
@@ -22,11 +18,10 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
   }
 
   protected async genereInformations(
-    diagnostic: Diagnostic,
-    _: Restitution,
+    restitution: Restitution,
   ): Promise<ContenuHtml> {
     return this.genereHtml('informations', {
-      ...this.representeInformations(diagnostic),
+      ...this.representeInformations(restitution),
     });
   }
 
@@ -66,57 +61,17 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
       recommandations: autresMesures,
     });
   }
-
-  private trouveLibelleReponseUniqueDonnee(
-    diagnostic: Diagnostic,
-    thematique: string,
-    identifiantQuestion: string,
-  ) {
-    const questionDiagnostic = diagnostic.referentiel[
-      thematique
-    ].questions.find(
-      (question) => question.identifiant === identifiantQuestion,
-    );
-
-    return questionDiagnostic?.reponsesPossibles.find(
-      (reponse) =>
-        reponse.identifiant === questionDiagnostic.reponseDonnee.reponseUnique,
-    )?.libelle;
-  }
-
-  private representeZoneGeographique(diagnostic: Diagnostic) {
-    const region = this.trouveLibelleReponseUniqueDonnee(
-      diagnostic,
-      'contexte',
-      'contexte-region-siege-social',
-    );
-    const departement = this.trouveLibelleReponseUniqueDonnee(
-      diagnostic,
-      'contexte',
-      'contexte-departement-tom-siege-social',
-    );
-    return ''
-      .concat(!departement && !region ? 'non renseigné' : '')
-      .concat(departement || '')
-      .concat(departement && region ? ', '.concat(region || '') : region || '');
-  }
-
-  representeInformations(diagnostic: Diagnostic) {
-    const secteurActivite =
-      this.trouveLibelleReponseUniqueDonnee(
-        diagnostic,
-        'contexte',
-        'contexte-secteur-activite',
-      ) || 'non renseigné';
-
+  private representeInformations(restitution: Restitution) {
     return {
-      dateCreation: FournisseurHorloge.formateDate(diagnostic.dateCreation),
-      dateDerniereModification: FournisseurHorloge.formateDate(
-        diagnostic.dateDerniereModification,
+      dateCreation: FournisseurHorloge.formateDate(
+        restitution.informations.dateCreation,
       ),
-      identifiant: diagnostic.identifiant,
-      secteurActivite,
-      zoneGeographique: this.representeZoneGeographique(diagnostic),
+      dateDerniereModification: FournisseurHorloge.formateDate(
+        restitution.informations.dateDerniereModification,
+      ),
+      identifiant: restitution.identifiant,
+      secteurActivite: restitution.informations.secteurActivite,
+      zoneGeographique: restitution.informations.zoneGeographique,
     };
   }
 

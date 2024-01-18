@@ -6,6 +6,7 @@ import { representeLeDiagnosticPourLeClient } from './representateurs/representa
 import { NextFunction } from 'express-serve-static-core';
 import bodyParser from 'body-parser';
 import { SagaAjoutReponse } from '../diagnostic/CapteurSagaAjoutReponse';
+import { ErreurMAC } from '../domaine/erreurMAC';
 
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -41,22 +42,18 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     session.verifie('Termine le diagnostic'),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
-      const serviceDiagnostic = new ServiceDiagnostic(
-        configuration.adaptateurReferentiel,
-        configuration.adaptateurTableauDeRecommandations,
-        configuration.entrepots,
-        configuration.busEvenement,
-      );
-      serviceDiagnostic
-        .termine(id as crypto.UUID)
-        .then(() => serviceDiagnostic.diagnostic(id as crypto.UUID))
-        .then((diagnostic) =>
+      configuration.entrepots
+        .restitution()
+        .lis(id)
+        .then((restitution) =>
           configuration.adaptateursRestitution
             .pdf()
-            .genereRestitution(diagnostic, configuration.entrepots),
+            .genereRestitution(restitution),
         )
         .then((pdf) => reponse.contentType('application/pdf').send(pdf))
-        .catch((erreur) => suite(erreur));
+        .catch((erreur) =>
+          suite(ErreurMAC.cree('Termine le diagnostic', erreur)),
+        );
     },
   );
 
@@ -110,22 +107,18 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     session.verifie('Ajout réponse au diagnostic'),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
-      const serviceDiagnostic = new ServiceDiagnostic(
-        configuration.adaptateurReferentiel,
-        configuration.adaptateurTableauDeRecommandations,
-        configuration.entrepots,
-        configuration.busEvenement,
-      );
-      serviceDiagnostic
-        .termine(id as crypto.UUID)
-        .then(() => serviceDiagnostic.diagnostic(id as crypto.UUID))
-        .then((diagnostic) =>
+      configuration.entrepots
+        .restitution()
+        .lis(id)
+        .then((restitution) =>
           configuration.adaptateursRestitution
             .html()
-            .genereRestitution(diagnostic, configuration.entrepots),
+            .genereRestitution(restitution),
         )
         .then((restitution) => reponse.json(restitution))
-        .catch((erreur) => suite(erreur));
+        .catch((erreur) =>
+          suite(ErreurMAC.cree('Demande la restitution', erreur)),
+        );
     },
   );
 
