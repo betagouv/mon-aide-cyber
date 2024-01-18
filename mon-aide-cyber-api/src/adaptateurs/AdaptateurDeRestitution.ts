@@ -1,10 +1,5 @@
-import {
-  Diagnostic,
-  Indicateurs,
-  RecommandationPriorisee,
-} from '../diagnostic/Diagnostic';
+import { Indicateurs, RecommandationPriorisee } from '../diagnostic/Diagnostic';
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
-import { Entrepots } from '../domaine/Entrepots';
 import { Restitution } from '../restitution/Restitution';
 
 const estRecommandationPriorisee = (
@@ -17,14 +12,8 @@ const estRecommandationPriorisee = (
 };
 
 export abstract class AdaptateurDeRestitution<T> {
-  async genereRestitution(
-    diagnostic: Diagnostic,
-    entrepots: Entrepots,
-  ): Promise<T> {
-    const restitution: Restitution = await entrepots
-      .restitution()
-      .lis(diagnostic.identifiant);
-    const informations = this.genereInformations(diagnostic, restitution);
+  genereRestitution(restitution: Restitution): Promise<T> {
+    const informations = this.genereInformations(restitution);
     const indicateurs = this.genereIndicateurs(restitution.indicateurs);
     const recommandations = this.genereMesuresPrioritaires(
       restitution.recommandations.recommandationsPrioritaires,
@@ -60,7 +49,6 @@ export abstract class AdaptateurDeRestitution<T> {
   ): Promise<ContenuHtml>;
 
   protected abstract genereInformations(
-    diagnostic: Diagnostic,
     restitution: Restitution,
   ): Promise<ContenuHtml>;
 }

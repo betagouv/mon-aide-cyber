@@ -1,5 +1,4 @@
 import {
-  Diagnostic,
   Indicateurs,
   RecommandationPriorisee,
 } from '../../src/diagnostic/Diagnostic';
@@ -24,7 +23,6 @@ class ConstructeurAdaptateurRestitutionHTML {
       }
 
       protected genereInformations(
-        _: Diagnostic,
         restitution: Restitution,
       ): Promise<ContenuHtml> {
         return Promise.resolve({
@@ -66,10 +64,6 @@ class ConstructeurAdaptateurRestitutionHTML {
         });
       }
     })();
-  }
-
-  avecInformations(_: Diagnostic): ConstructeurAdaptateurRestitutionHTML {
-    return this;
   }
 
   avecMesuresPrioritaires(

@@ -5,7 +5,7 @@ import { EntrepotAidant } from '../../../authentification/Aidant';
 import { EntrepotAidantPostgres } from './EntrepotAidantPostgres';
 import { adaptateurServiceChiffrement } from '../../adaptateurs/adaptateurServiceChiffrement';
 import { EntrepotRestitution } from '../../../restitution/Restitution';
-import { EntrepotRestitutionMemoire } from '../memoire/EntrepotMemoire';
+import { EntrepotRestitutionPostgres } from './EntrepotRestitutionPostgres';
 
 export class EntrepotsPostgres implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -13,7 +13,7 @@ export class EntrepotsPostgres implements Entrepots {
     adaptateurServiceChiffrement(),
   );
   private entrepotRestitution: EntrepotRestitution =
-    new EntrepotRestitutionMemoire();
+    new EntrepotRestitutionPostgres();
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;

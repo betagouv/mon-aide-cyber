@@ -286,13 +286,13 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         return Promise.resolve(Buffer.from('PDF Recommandations généré'));
       };
       testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
-      const diagnostic = unDiagnostic().construis();
-      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+      const restitution = uneRestitution().construis();
+      testeurMAC.entrepots.restitution().persiste(restitution);
 
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/${diagnostic.identifiant}/termine`,
+        `/api/diagnostic/${restitution.identifiant}/termine`,
         donneesServeur.portEcoute,
       );
 
@@ -311,7 +311,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
 
       expect(reponse.statusCode).toBe(404);
       expect(await reponse.json()).toMatchObject({
-        message: "Le diagnostic demandé n'existe pas.",
+        message: "Le restitution demandé n'existe pas.",
       });
     });
 
@@ -386,7 +386,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
 
       expect(reponse.statusCode).toBe(404);
       expect(await reponse.json()).toMatchObject({
-        message: "Le diagnostic demandé n'existe pas.",
+        message: "Le restitution demandé n'existe pas.",
       });
     });
   });

@@ -1,6 +1,5 @@
 import { AdaptateurDeRestitution } from '../../adaptateurs/AdaptateurDeRestitution';
 import {
-  Diagnostic,
   Indicateurs,
   RecommandationPriorisee,
   Restitution,
@@ -24,10 +23,7 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
       });
   }
 
-  protected genereInformations(
-    _: Diagnostic,
-    __: Restitution,
-  ): Promise<ContenuHtml> {
+  protected genereInformations(_: Restitution): Promise<ContenuHtml> {
     return Promise.resolve({ entete: '', corps: '', piedPage: '' });
   }
 
