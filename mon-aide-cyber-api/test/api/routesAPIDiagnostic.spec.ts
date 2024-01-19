@@ -277,58 +277,6 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
     });
   });
 
-  describe('quand une requête GET est reçue sur /{id}/termine', () => {
-    it('génère les recommandations', async () => {
-      let adaptateurPDFAppele = false;
-      const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
-      adaptateurRestitutionPDF.genereRestitution = () => {
-        adaptateurPDFAppele = true;
-        return Promise.resolve(Buffer.from('PDF Recommandations généré'));
-      };
-      testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
-      const restitution = uneRestitution().construis();
-      testeurMAC.entrepots.restitution().persiste(restitution);
-
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/diagnostic/${restitution.identifiant}/termine`,
-        donneesServeur.portEcoute,
-      );
-
-      expect(reponse.statusCode).toBe(200);
-      expect(reponse.headers['content-type']).toBe('application/pdf');
-      expect(adaptateurPDFAppele).toBe(true);
-    });
-
-    it('retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/diagnostic/${crypto.randomUUID()}/termine`,
-        donneesServeur.portEcoute,
-      );
-
-      expect(reponse.statusCode).toBe(404);
-      expect(await reponse.json()).toMatchObject({
-        message: "Le restitution demandé n'existe pas.",
-      });
-    });
-
-    it('la route est protégée', async () => {
-      await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/diagnostic/${crypto.randomUUID()}/termine`,
-        donneesServeur.portEcoute,
-      );
-
-      expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
-      ).toBe(true);
-    });
-  });
-
   describe('quand une requête GET est reçue sur /{id}/restitution', () => {
     it('retourne la restitution', async () => {
       const adaptateurDeRestitutionHTML = unAdaptateurDeRestitutionHTML()

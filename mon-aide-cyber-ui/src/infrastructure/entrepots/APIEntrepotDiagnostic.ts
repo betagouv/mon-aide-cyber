@@ -1,6 +1,5 @@
 import {
   Action,
-  ActionBase,
   ActionReponseDiagnostic,
   Diagnostic,
   EntrepotDiagnostic,
@@ -95,15 +94,6 @@ export class APIEntrepotDiagnostic
       }),
       headers: { 'Content-Type': 'application/json' },
     }).then();
-  }
-
-  termine(action: ActionBase): Promise<void> {
-    return fetch(action.ressource.url, {
-      method: action.ressource.methode,
-    })
-      .then((reponse) => reponse.blob())
-      .then((blob) => window.open(URL.createObjectURL(blob)))
-      .then();
   }
 
   protected transcris(
