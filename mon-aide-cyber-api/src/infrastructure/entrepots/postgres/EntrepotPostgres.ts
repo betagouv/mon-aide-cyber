@@ -44,7 +44,7 @@ export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
 
   async tous(): Promise<T[]> {
     const lignes = await this.knex.from(this.nomTable());
-    return lignes.map((ligne) => ligne.donnees as T);
+    return lignes.map((ligne) => this.deDTOAEntite(ligne));
   }
 
   typeAggregat(): string {
