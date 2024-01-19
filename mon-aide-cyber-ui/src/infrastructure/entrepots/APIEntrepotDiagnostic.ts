@@ -10,6 +10,8 @@ import { FormatLien, LienRoutage } from '../../domaine/LienRoutage.ts';
 import { APIEntrepot } from './EntrepotsAPI.ts';
 import { UUID } from '../../types/Types.ts';
 import { Restitution } from '../../domaine/diagnostic/Restitution.ts';
+import { RessourceActionRestituer } from 'mon-aide-cyber-api/src/api/representateurs/types.ts';
+
 type RepresentationReponseDonnee = {
   valeur: string | null;
   reponses: { identifiant: string; reponses: string[] }[];
@@ -49,6 +51,7 @@ type RepresentationDiagnostic = {
   referentiel: RepresentationReferentiel;
   actions: Action[];
 };
+
 export class APIEntrepotDiagnostic
   extends APIEntrepot<Diagnostic>
   implements EntrepotDiagnostic
@@ -136,7 +139,28 @@ export class APIEntrepotDiagnostic
     });
   }
 
-  restitution(idDiagnostic: string): Promise<Restitution> {
+  restitution(
+    idDiagnostic: string,
+    action?: RessourceActionRestituer,
+  ): Promise<Restitution> {
+    if (action) {
+      return fetch(action.ressource.url, {
+        method: action.ressource.methode,
+        headers: { Accept: action.ressource.contentType },
+      }).then((reponse) => {
+        if (!reponse.ok) {
+          return reponse.json().then((reponse) => Promise.reject(reponse));
+        }
+        if (reponse.headers.get('Content-Type') === 'application/pdf') {
+          return reponse
+            .blob()
+            .then((blob) => window.open(URL.createObjectURL(blob)))
+            .then();
+        }
+        return reponse.json();
+      });
+    }
+
     return fetch(`/api/diagnostic/${idDiagnostic}/restitution`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },

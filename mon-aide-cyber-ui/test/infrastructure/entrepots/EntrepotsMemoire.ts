@@ -15,6 +15,7 @@ import {
 } from '../../../src/domaine/diagnostic/Diagnostics.ts';
 import { expect } from '@storybook/jest';
 import { Restitution } from '../../../src/domaine/diagnostic/Restitution.ts';
+import { RessourceActionRestituer } from 'mon-aide-cyber-api/src/api/representateurs/types.ts';
 
 class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: T[] = [];
@@ -74,7 +75,7 @@ export class EntrepotDiagnosticMemoire
     return Promise.reject();
   }
 
-  restitution(__: string): Promise<Restitution> {
+  restitution(__: string, ___: RessourceActionRestituer): Promise<Restitution> {
     return Promise.reject();
   }
 }

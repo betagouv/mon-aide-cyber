@@ -4,6 +4,7 @@ import { Aggregat } from '../Aggregat.ts';
 import { Entrepot } from '../Entrepots.ts';
 import { LienRoutage } from '../LienRoutage.ts';
 import { Restitution } from './Restitution.ts';
+import { RessourceActionRestituer } from 'mon-aide-cyber-api/src/api/representateurs/types.ts';
 
 export type ActionReponseDiagnostic = {
   [thematique: string]: ActionBase;
@@ -40,5 +41,8 @@ export interface EntrepotDiagnostic extends Entrepot<Diagnostic> {
 
   termine(action: ActionBase): Promise<void>;
 
-  restitution(idDiagnostic: string): Promise<Restitution>;
+  restitution(
+    idDiagnostic: string,
+    action?: RessourceActionRestituer,
+  ): Promise<Restitution>;
 }

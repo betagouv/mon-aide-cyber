@@ -12,6 +12,7 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
 
   construis(): Restitution {
     return {
+      actions: [],
       autresMesures: this.autresMesures,
       indicateurs: this.indicateurs,
       informations: this.informations,

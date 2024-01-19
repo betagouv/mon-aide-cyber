@@ -1,6 +1,6 @@
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
-import { useCallback, useEffect, useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useEntrepots } from '../../fournisseurs/hooks.ts';
 import { useNavigate } from 'react-router-dom';
 import { useErrorBoundary } from 'react-error-boundary';
@@ -24,6 +24,7 @@ export const ComposantRestitution = ({
   const { showBoundary } = useErrorBoundary();
   const navigate = useNavigate();
   const [etatRestitution, envoie] = useReducer(reducteurRestitution, {});
+  const [boutonDesactive, setBoutonDesactive] = useState<boolean>(false);
 
   useEffect(() => {
     entrepots
@@ -45,6 +46,20 @@ export const ComposantRestitution = ({
     [envoie],
   );
 
+  const telechargerRestitution = useCallback(() => {
+    setBoutonDesactive(true);
+    const action = etatRestitution.restitution?.actions.find(
+      (a) => a.action === 'restituer',
+    )?.types['pdf'];
+    if (action) {
+      return entrepots
+        .diagnostic()
+        .restitution(idDiagnostic, action)
+        .then(() => {
+          setBoutonDesactive(false);
+        });
+    }
+  }, [entrepots, etatRestitution, idDiagnostic]);
   return (
     <>
       <Header />
@@ -68,7 +83,8 @@ export const ComposantRestitution = ({
               <div className="fr-pl-2w">
                 <button
                   className={`fr-btn--icon-left fr-icon-download-line bouton-mac bouton-mac-secondaire-inverse`}
-                  disabled={true}
+                  onClick={telechargerRestitution}
+                  disabled={boutonDesactive}
                 >
                   Télécharger
                 </button>

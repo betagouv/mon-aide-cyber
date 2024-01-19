@@ -18,6 +18,7 @@ class ConstructeurRestitution {
 
   construis(): Restitution {
     return {
+      actions: [],
       autresMesures: this.autresMesures,
       indicateurs: this.indicateurs,
       informations: this.informations,
