@@ -41,26 +41,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   );
 
   routes.get(
-    '/:id/termine',
-    session.verifie('Demande la restitution'),
-    (requete: Request, reponse: Response, suite: NextFunction) => {
-      const { id } = requete.params;
-      configuration.entrepots
-        .restitution()
-        .lis(id)
-        .then((restitution) =>
-          configuration.adaptateursRestitution
-            .pdf()
-            .genereRestitution(restitution),
-        )
-        .then((pdf) => reponse.contentType('application/pdf').send(pdf))
-        .catch((erreur) =>
-          suite(ErreurMAC.cree('Demande la restitution', erreur)),
-        );
-    },
-  );
-
-  routes.get(
     '/:id',
     session.verifie('Accès diagnostic'),
     (requete: Request, reponse: Response, suite: NextFunction) => {
