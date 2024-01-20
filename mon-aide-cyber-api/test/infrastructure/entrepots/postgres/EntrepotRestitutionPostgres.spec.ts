@@ -1,4 +1,5 @@
 import {
+  unDiagnostic,
   unDiagnosticAvecSecteurActivite,
   unDiagnosticCompletEnGirondeAvecDesReponsesDonnees,
   unDiagnosticEnGironde,
@@ -27,6 +28,38 @@ describe('Entrepôt de restitution', () => {
 
   afterEach(async () => {
     await nettoieLaBaseDeDonneesDiagnostics();
+  });
+
+  it('retourne une restitution sans indicateurs', async () => {
+    const diagnostic = unDiagnostic().construis();
+    await new EntrepotDiagnosticPostgres().persiste(diagnostic);
+
+    const entrepotRestitution = new EntrepotRestitutionPostgres();
+    expect(
+      await entrepotRestitution.lis(diagnostic.identifiant),
+    ).toStrictEqual<Restitution>({
+      identifiant: diagnostic.identifiant,
+      informations: {
+        dateCreation: FournisseurHorloge.maintenant(),
+        dateDerniereModification: FournisseurHorloge.maintenant(),
+        zoneGeographique: 'non renseigné',
+        secteurActivite: 'non renseigné',
+      },
+      indicateurs: {},
+      recommandations: {
+        recommandationsPrioritaires: [],
+        autresRecommandations: [],
+      },
+    });
+  });
+
+  it("remonte une erreur si la restitution n'existe pas", async () => {
+    const entrepotRestitution = new EntrepotRestitutionPostgres();
+    const identifiant = crypto.randomUUID();
+
+    await expect(entrepotRestitution.lis(identifiant)).rejects.toThrowError(
+      "Le restitution demandé n'existe pas",
+    );
   });
 
   describe('retourne les informations de restitution', () => {

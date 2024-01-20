@@ -29,11 +29,11 @@ class EntrepotRestitutionPostgres extends EntrepotPostgres<
                    donnees ->> 'dateCreation'                                                                                           AS dateCreation,
                    donnees ->> 'dateDerniereModification'                                                                               AS dateDerniereModification,
                    donnees -> 'restitution'                                                                                             AS restitution,
-                   jsonb_path_query(donnees,
+                   jsonb_path_query_first(donnees,
                                     '$.referentiel.contexte.questions[*] \\? (@.identifiant=="contexte-region-siege-social")')          as region,
-                   jsonb_path_query(donnees,
+                   jsonb_path_query_first(donnees,
                                     '$.referentiel.contexte.questions[*] \\? (@.identifiant=="contexte-departement-tom-siege-social")') as departement,
-                   jsonb_path_query(donnees,
+                   jsonb_path_query_first(donnees,
                                     '$.referentiel.contexte.questions[*] \\? (@.identifiant=="contexte-secteur-activite")')             as secteurActivite
             FROM diagnostics
             WHERE id = ?`,
@@ -46,12 +46,17 @@ class EntrepotRestitutionPostgres extends EntrepotPostgres<
       });
   }
 
+  typeAggregat(): string {
+    return 'restitution';
+  }
+
   protected champsAMettreAJour(_: RestitutionDTO): Partial<RestitutionDTO> {
     throw new Error('non implémenté');
   }
 
   protected deDTOAEntite(dto: RestitutionDTO): Restitution {
     const { zoneGeographique, secteurActivite } = this.transcripteur(dto);
+    const restitutionDTO = dto.restitution;
     return {
       identifiant: dto.id,
       informations: {
@@ -62,12 +67,16 @@ class EntrepotRestitutionPostgres extends EntrepotPostgres<
         zoneGeographique,
         secteurActivite,
       },
-      indicateurs: dto.restitution.indicateurs,
+      indicateurs: restitutionDTO !== null ? restitutionDTO.indicateurs : {},
       recommandations: {
         recommandationsPrioritaires:
-          dto.restitution.recommandations.recommandationsPrioritaires,
+          restitutionDTO !== null
+            ? restitutionDTO.recommandations.recommandationsPrioritaires
+            : [],
         autresRecommandations:
-          dto.restitution.recommandations.autresRecommandations,
+          restitutionDTO !== null
+            ? restitutionDTO.recommandations.autresRecommandations
+            : [],
       },
     };
   }
