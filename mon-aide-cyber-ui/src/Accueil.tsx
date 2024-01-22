@@ -6,21 +6,93 @@ function Accueil() {
     <>
       <Header />
       <main role="main">
-        <div className="bandeau-violet">
+        <div className="bandeau-violet accueil">
           <div id="presentation" className="fr-container">
             <div className="fr-grid-row fr-grid-row--middle fr-py-20v">
-              <div id="corps" className="fr-col-6 fr-col-offset-1--right">
+              <div id="corps" className="fr-col-6">
                 <h1 className="fr-mb-5w">MonAideCyber</h1>
                 <p>
                   Passez à l’action pour votre cyber sécurité grâce à notre
                   communauté d’Aidants sur tout le territoire !
                 </p>
               </div>
-              <div id="illustration" className="fr-col-5">
+              <div id="illustration" className="fr-col-6">
                 <img
-                  src="/images/scene-un-aidant-et-un-aidant-faisant-un-diagnostic.svg"
+                  src="/images/illustration-accueil.svg"
                   alt="scène d'un aidant et d'un aidé faisant un diagnostic"
                 />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="fr-container tuiles">
+          <div className="fr-grid-row fr-grid-row--gutters">
+            <div className="fr-col-4">
+              <div className="tuile tuile-centree tuile-petite">
+                <div className="illustration">
+                  <img
+                    src="/images/icones/diagnostic-cyber.svg"
+                    alt="Un diagnostic cyber"
+                  />
+                </div>
+                <div className="corps">
+                  <div>
+                    <h4>
+                      <span>
+                        1 Diagnostic <br />
+                        cyber
+                      </span>
+                    </h4>
+                  </div>
+                  <div>
+                    <p>
+                      MonAideCyber propose un diagnostic de sécurité cyber
+                      gratuit
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="fr-col-4">
+              <div className="tuile tuile-centree tuile-petite">
+                <div className="illustration">
+                  <img
+                    src="/images/icones/communaute-aidants.svg"
+                    alt="Un diagnostic cyber"
+                  />
+                </div>
+                <div className="corps">
+                  <div>
+                    <h4>1 Communauté d&apos;Aidants</h4>
+                  </div>
+                  <div>
+                    <p>
+                      MonAideCyber s’appuie sur une communauté d’Aidants de
+                      confiance
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="fr-col-4">
+              <div className="tuile tuile-centree tuile-petite">
+                <div className="illustration">
+                  <img
+                    src="/images/icones/accompagnement-personnalise.svg"
+                    alt="Un diagnostic cyber"
+                  />
+                </div>
+                <div className="corps">
+                  <div>
+                    <h4>1 Accompagnement personnalisé</h4>
+                  </div>
+                  <div>
+                    <p>
+                      MonAideCyber aiguille les entités vers des dispositifs et
+                      des tiers de confiance
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -69,44 +141,52 @@ function Accueil() {
         </div>
         <div id="participer" className="fr-container fr-my-20v">
           <div className="fr-col-12">
-            <h2>Participer ?</h2>
-          </div>
-          <div className="tuile fr-p-7v">
-            <div className="illustration">
-              <img
-                src="/images/devenir-aidant.svg"
-                alt="illustration temporaire pour la section"
-              />
+            <div className="fr-col-12">
+              <h2>Participer ?</h2>
             </div>
-            <div className="corps">
-              <h3>Devenir Aidant</h3>
-              <ul>
-                <li>Être bénévole et dans une posture bienveillante</li>
-                <li>Assister à une formation</li>
-                <li>Prendre en main l&apos;outil diagnostic</li>
-                <li>
-                  Signer la{' '}
-                  <a href="/charte-aidant">
-                    charte aidant{' '}
-                    <span
-                      className="fr-icon-pen-nib-line"
-                      aria-hidden="true"
-                    ></span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="tuile fr-p-7v bientot-disponible">
-            <div className="illustration">
-              <img
-                src="/images/devenir-aidant.svg"
-                alt="illustration temporaire pour la section"
-              />
-            </div>
-            <div className="corps">
-              <h3>Devenir Aidé</h3>
-              <p>Bientôt disponible.</p>
+            <div className="fr-grid-row fr-grid-row--gutters">
+              <div className="fr-col-6">
+                <div className="tuile tuile-grande fr-p-7v">
+                  <div className="illustration">
+                    <img
+                      src="/images/devenir-aidant.svg"
+                      alt="illustration temporaire pour la section"
+                    />
+                  </div>
+                  <div className="corps">
+                    <h4>Devenir Aidant</h4>
+                    <ul>
+                      <li>Être bénévole et dans une posture bienveillante</li>
+                      <li>Assister à une formation</li>
+                      <li>Prendre en main l&apos;outil diagnostic</li>
+                      <li>
+                        Signer la{' '}
+                        <a href="/charte-aidant">
+                          charte aidant{' '}
+                          <span
+                            className="fr-icon-pen-nib-line"
+                            aria-hidden="true"
+                          ></span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div className="fr-col-6">
+                <div className="tuile tuile-grande fr-p-7v bientot-disponible">
+                  <div className="illustration">
+                    <img
+                      src="/images/devenir-aidant.svg"
+                      alt="illustration temporaire pour la section"
+                    />
+                  </div>
+                  <div className="corps">
+                    <h4>Devenir Aidé</h4>
+                    <p>Bientôt disponible.</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
