@@ -25,122 +25,268 @@ function Accueil() {
             </div>
           </div>
         </div>
-        <div className="fr-container tuiles">
-          <div className="fr-grid-row fr-grid-row--gutters">
-            <div className="fr-col-4">
-              <div className="tuile tuile-centree tuile-petite">
-                <div className="illustration">
-                  <img
-                    src="/images/icones/diagnostic-cyber.svg"
-                    alt="Un diagnostic cyber"
-                  />
-                </div>
-                <div className="corps">
-                  <div>
-                    <h4>
-                      <span>
-                        1 Diagnostic <br />
-                        cyber
-                      </span>
-                    </h4>
+        <div className="conteneur-accueil">
+          <div className="fr-container tuiles">
+            <div className="fr-grid-row fr-grid-row--gutters">
+              <div className="fr-col-4">
+                <div className="tuile tuile-centree tuile-petite">
+                  <div className="illustration">
+                    <img
+                      src="/images/icones/diagnostic-cyber.svg"
+                      alt="Un diagnostic cyber"
+                    />
                   </div>
-                  <div>
-                    <p>
-                      MonAideCyber propose un diagnostic de sécurité cyber
-                      gratuit
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="fr-col-4">
-              <div className="tuile tuile-centree tuile-petite">
-                <div className="illustration">
-                  <img
-                    src="/images/icones/communaute-aidants.svg"
-                    alt="Un diagnostic cyber"
-                  />
-                </div>
-                <div className="corps">
-                  <div>
-                    <h4>1 Communauté d&apos;Aidants</h4>
-                  </div>
-                  <div>
-                    <p>
-                      MonAideCyber s’appuie sur une communauté d’Aidants de
-                      confiance
-                    </p>
+                  <div className="corps">
+                    <div>
+                      <h4>
+                        <span>
+                          1 Diagnostic <br />
+                          cyber
+                        </span>
+                      </h4>
+                    </div>
+                    <div>
+                      <p>
+                        MonAideCyber propose un diagnostic de sécurité cyber
+                        gratuit
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="fr-col-4">
-              <div className="tuile tuile-centree tuile-petite">
-                <div className="illustration">
-                  <img
-                    src="/images/icones/accompagnement-personnalise.svg"
-                    alt="Un diagnostic cyber"
-                  />
-                </div>
-                <div className="corps">
-                  <div>
-                    <h4>1 Accompagnement personnalisé</h4>
+              <div className="fr-col-4">
+                <div className="tuile tuile-centree tuile-petite">
+                  <div className="illustration">
+                    <img
+                      src="/images/icones/communaute-aidants.svg"
+                      alt="Un diagnostic cyber"
+                    />
                   </div>
-                  <div>
-                    <p>
-                      MonAideCyber aiguille les entités vers des dispositifs et
-                      des tiers de confiance
-                    </p>
+                  <div className="corps">
+                    <div>
+                      <h4>1 Communauté d&apos;Aidants</h4>
+                    </div>
+                    <div>
+                      <p>
+                        MonAideCyber s’appuie sur une communauté d’Aidants de
+                        confiance
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="fr-col-4">
+                <div className="tuile tuile-centree tuile-petite">
+                  <div className="illustration">
+                    <img
+                      src="/images/icones/accompagnement-personnalise.svg"
+                      alt="Un diagnostic cyber"
+                    />
+                  </div>
+                  <div className="corps">
+                    <div>
+                      <h4>1 Accompagnement personnalisé</h4>
+                    </div>
+                    <div>
+                      <p>
+                        MonAideCyber aiguille les entités vers des dispositifs
+                        et des tiers de confiance
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="fr-container fr-mt-20v">
-          <div id="ce-que-cest" className="fr-grid-row">
-            <div className="fr-col-8">
-              <h2>Qu&apos;est-ce que MonAideCyber?</h2>
-              <p>
-                MonAideCyber est en construction... Mais est déjà capable de
-                vous apporter :
-              </p>
-            </div>
-            <div className="fr-col-6 detail bordure-gauche-violette">
-              <h3>Un diagnostic complet</h3>
-              <p>
-                le diagnostic composé de ses thématiques permet de générer un
-                bilan à la destination de l&apos;aidé.
-              </p>
-            </div>
-            <div className="fr-col-6 detail bordure-gauche-jaune">
-              <h3>La reprise d&apos;un diagnostic en cours</h3>
-              <p>
-                Vous pouvez commencer, arrêter et retourner au{' '}
-                <strong>diagnostic sauvegardé en permanence</strong>. Pour cela,
-                utilisez le bouton de copie de lien pour le mettre de côté et y
-                revenir ensuite.
-              </p>
-            </div>
-            <div className="fr-col-6 detail bordure-gauche-jaune">
-              <h3>Des bilans disponibles immédiatement</h3>
-              <p>
-                Pas besoin de finir le diagnostic. Préparé dès le début, le{' '}
-                <strong>bilan est recalculé à chaque nouvelle réponse</strong>.
-              </p>
-            </div>
-            <div className="fr-col-6 detail bordure-gauche-violette">
-              <h3>Des recommandations priorisées</h3>
-              <p>
-                Les <strong>6 recommandations prioritaires</strong> sont mises
-                en avant, tandis que les autres sont rassemblées en{' '}
-                <strong>annexe</strong> du bilan.
-              </p>
+          <div className="fr-container">
+            <div id="ce-que-cest" className="fr-grid-row fr-grid-row--gutters">
+              <div className="fr-col-8">
+                <h2>Qu&apos;est-ce que MonAideCyber ?</h2>
+              </div>
+              <div className="fr-col-6">
+                <div className="detail bordure-gauche-violette">
+                  <h3>Une initiative de l’État</h3>
+                  Un <b>programme d’accompagnement</b> et de formation gratuit à
+                  destination d’une <b>communauté d’Aidants</b> leur permettant
+                  de guider leur <b>écosystème</b> pour mettre en œuvre une{' '}
+                  <b>démarche de cybersécurité.</b>
+                </div>
+              </div>
+              <div className="fr-col-6">
+                <div className="detail bordure-gauche-jaune">
+                  <h3>Une démarche concrète</h3>
+                  <b>Clé-en-main</b> et <b>pédagogique</b>, MonAideCyber rend la
+                  cybersécurité accessible à toutes et tous, et facilite la mise
+                  en œuvre de <b>premières mesures</b> qui réduisent les risques
+                  liés à la <b>cybercriminalité de masse.</b>
+                </div>
+              </div>
+              <div className="fr-col-6">
+                <div className="detail bordure-gauche-jaune">
+                  <h3>Une startup d’état</h3>
+                  <b>MonAideCyber</b> est une start-up d’État incubée au sein du
+                  laboratoire d’innovation de l’
+                  <b>
+                    Agence Nationale de la Sécurité des Systèmes d’Information
+                    (ANSSI).
+                  </b>
+                </div>
+              </div>
+              <div className="fr-col-6">
+                <div className="detail bordure-gauche-violette">
+                  <h3>Pour toutes les entités novices</h3>
+                  <b>MonAideCyber</b> s’adresse aux{' '}
+                  <b>entités publiques, associatives et privées,</b> déjà
+                  sensibilisées et de <b>faible maturité cyber</b>, qui{' '}
+                  <b>souhaitent s’engager</b> dans une démarche{' '}
+                  <b>progressive.</b> Les particuliers ne sont pas concernés.
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div id="participer" className="fr-container fr-my-20v">
-          <div className="fr-col-12">
+          <div className="bandeau-violet">
+            <div className="fr-container">
+              <img src="/images/icones/guillemets.svg" alt="Les mots de" />
+              <div className="slider">
+                <div className="slides">
+                  <div id="slide-dg" className="fr-container">
+                    <div className="fr-grid-row les-mots-de">
+                      <div className="titre">Le mot du Directeur Général</div>
+                      <div className="contenu">
+                        MonAideCyber est un service d’accompagnement, simple et
+                        adapté aux entités souhaitant améliorer leur niveau de
+                        cybersécurité. Reposant sur un réseau d’experts aidants,
+                        MonAideCyber propose une méthode des « petits pas » pour
+                        identifier les actions prioritaires, permettant ainsi de
+                        tirer vers le haut l’ensemble des acteurs, quels que
+                        soit leurs moyens et leur niveau de maturité.
+                      </div>
+                      <div className="personne">
+                        <div className="illustration"></div>
+                        <img
+                          src="/images/illustration-dg-anssi.png"
+                          alt="Directeur Général ANSSI"
+                        />
+                        <div className="nom">Vincent Strubel</div>
+                        <div>Directeur Général de l&apos;ANSSI</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="fr-col-6"></div>
+                  <div id="slide-general" className="fr-container">
+                    <div className="fr-grid-row les-mots-de">
+                      <div className="titre">Le mot du Général</div>
+                      <div className="contenu">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Nulla eget condimentum orci, faucibus viverra ipsum.
+                        Aliquam sed lorem turpis. Nunc facilisis leo nec metus
+                        rutrum, eget scelerisque dolor mollis. Curabitur at
+                        tortor non neque hendrerit egestas et vel massa. Integer
+                        ac lectus vitae lacus mollis varius at at quam. Proin
+                        sagittis libero ex. Nunc iaculis non dui vel.
+                      </div>
+                      <div className="personne">
+                        <div className="illustration">
+                          <img
+                            src="/images/illustration-general-gendarmerie.png"
+                            alt="Commandant de la Gendarmerie dans le cyberespace"
+                          />
+                        </div>
+                        <div className="nom">Général Husson</div>
+                        <div>
+                          Commandant de la Gendarmerie dans le cyberespace
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="lien-slider fr-grid-row fr-grid-row--center">
+                  <div>
+                    <a
+                      href="#slide-dg"
+                      onClick={surCliqueMotDG}
+                      className={motDGClique ? 'slider-active' : ''}
+                    >
+                      &nbsp;
+                    </a>
+                  </div>
+                  <div>
+                    <a
+                      href="#slide-general"
+                      onClick={surCliqueMotGeneral}
+                      className={motGeneralClique ? 'slider-active' : ''}
+                    >
+                      &nbsp;
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="fr-container comment-fonctionne-mon-aide-cyber">
+            <div className="fr-col-12">
+              <h2>Comment fonctionne MonAideCyber ?</h2>
+            </div>
+            <div className="etapes">
+              <ComposantEtapeGauche
+                illustration={{
+                  chemin: '/images/illustration-echange.svg',
+                  texteAlternatif:
+                    'Un Aidé faisant un diagnostic avec un Aidant',
+                }}
+                numeroEtape={1}
+              >
+                <h4>Réalisation d’un diagnostic</h4>
+                Réalisation{' '}
+                <b>
+                  d’un diagnostic cyber de premier niveau établi par des Aidants
+                </b>{' '}
+                auprès de leurs bénéficiaires. La plateforme contient également
+                un ensemble de <b>ressources et de dispositifs</b> d’aides
+                complémentaires mis à disposition.
+              </ComposantEtapeGauche>
+              <ComposantEtapeDroite
+                illustration={{
+                  chemin: '/images/illustration-marelle.svg',
+                  texteAlternatif: 'Un Aidé avançant sur un diagnostic',
+                }}
+                numeroEtape={2}
+              >
+                <h4>Un référentiel avec des mesures accessibles</h4>
+                Le service de diagnostic accompagné s’appuie sur un{' '}
+                <b>référentiel évolutif de questions</b> et de mesures de
+                sécurité non exhaustif inspiré en particulier du guide{' '}
+                <b>« La cybersécurité pour les TPE/PME en 13 questions »</b> de
+                l’ANSSI.
+              </ComposantEtapeDroite>
+              <ComposantEtapeGauche
+                illustration={{
+                  chemin: '/images/illustration-mesures.svg',
+                  texteAlternatif:
+                    'Un Aidé découvrant les mesures à mettre en place',
+                }}
+                numeroEtape={3}
+              >
+                <h4>Des mesures priorisées et applicables</h4>À l’issue du{' '}
+                <b>diagnostic d’1h30</b>, l’entité diagnostiquée se voit
+                proposer <b>6 mesures de sécurité</b> à mener en priorité et à
+                mettre en œuvre sur les 6 prochains mois.
+              </ComposantEtapeGauche>
+              <ComposantEtapeDroite
+                illustration={{
+                  chemin: '/images/illustration-suivi.svg',
+                  texteAlternatif: 'Un Aidé accompagné par son Aidant',
+                }}
+                numeroEtape={4}
+              >
+                <h4>Un suivi à 6 mois</h4>
+                <b>Un suivi</b> et des conseils complémentaires dans la mise en
+                œuvre de mesures de sécurité avec <b>« l’aidant cyber »</b>{' '}
+                ayant réalisé le diagnostic peuvent aussi être envisagés.
+              </ComposantEtapeDroite>
+            </div>
+          </div>
+          <div id="participer" className="fr-container">
             <div className="fr-col-12">
               <h2>Participer ?</h2>
             </div>
