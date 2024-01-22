@@ -214,6 +214,34 @@ export const ComposantRestitution = ({
                       etatRestitution.restitution?.mesuresPrioritaires || '',
                   }}
                 ></div>
+                <hr className="intersection" />
+                <div className="contact-et-liens-utiles">
+                  <h4>Contacts et liens utiles</h4>
+                  <div className="contact-ou-lien-utile">
+                    <div className="logo">
+                      <img
+                        src="/images/logo_acyma.svg"
+                        alt="logo de Cybermalveillance"
+                        className="fr-responsive-img"
+                      />
+                    </div>
+                    <div className="titre">Cybermalveillance</div>
+                    <div className="corps">
+                      Pour vous aider dans vos démarches de sécurisation avec
+                      des prestataires de confiance, Cybermalveillance vous
+                      accompagne avec des professionnels référencés.
+                    </div>
+                    <div className="lien">
+                      <a
+                        href="https://www.cybermalveillance.gouv.fr/accompagnement"
+                        target="_blank"
+                        rel="noopener external noreferrer"
+                      >
+                        cybermalveillance.gouv.fr/accompagnement
+                      </a>
+                    </div>
+                  </div>
+                </div>
                 <div
                   id="autres-mesures"
                   dangerouslySetInnerHTML={{
