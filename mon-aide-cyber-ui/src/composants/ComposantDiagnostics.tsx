@@ -4,7 +4,6 @@ import { useErrorBoundary } from 'react-error-boundary';
 import { ComposantLancerDiagnostic } from './diagnostic/ComposantLancerDiagnostic.tsx';
 import { actions, routage } from '../domaine/Actions.ts';
 import { Diagnostics } from '../domaine/diagnostic/Diagnostics.ts';
-import { activationLancementDiagnostic } from '../infrastructure/activation_fonctionnalites.ts';
 import { Footer } from './Footer.tsx';
 import { Header } from './Header.tsx';
 
@@ -21,7 +20,6 @@ export const ComposantDiagnostics = () => {
       .then((diagnostics) => setDiagnostics(diagnostics))
       .catch((erreur) => showBoundary(erreur));
   }, [entrepots, setDiagnostics, showBoundary]);
-  const lancerDiagnosticActive = activationLancementDiagnostic();
   return (
     <>
       <Header />
@@ -30,10 +28,7 @@ export const ComposantDiagnostics = () => {
           <div className="fr-grid-row">
             <div className="conteneur-diagnostics">
               <div className="droite">
-                {lancerDiagnosticActive &&
-                  lancerDiagnosticActive === 'true' && (
-                    <ComposantLancerDiagnostic style="bouton-mac bouton-mac-primaire" />
-                  )}
+                <ComposantLancerDiagnostic style="bouton-mac bouton-mac-primaire" />
               </div>
               <div className="diagnostics">
                 <div className="en-tete un">ID</div>
