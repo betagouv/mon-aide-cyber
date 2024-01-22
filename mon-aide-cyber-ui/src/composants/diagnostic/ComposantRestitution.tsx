@@ -241,6 +241,31 @@ export const ComposantRestitution = ({
                       </a>
                     </div>
                   </div>
+                  <div className="contact-ou-lien-utile">
+                    <div className="logos">
+                      <img
+                        src="/images/logo_anssi.png"
+                        alt="logo de l'ANSSI"
+                        className="fr-responsive-img"
+                      />
+                    </div>
+                    <div className="titre">l'ANSSI</div>
+                    <div className="corps">
+                      L’Agence nationale de la sécurité des systèmes
+                      d’informations. Son action pour la protection de la Nation
+                      face aux cyberattaques se traduit en quatre grandes
+                      missions : défendre, connaître, partager, accompagner.
+                    </div>
+                    <div className="lien">
+                      <a
+                        href="https://cyber.gouv.fr/"
+                        target="_blank"
+                        rel="noopener external noreferrer"
+                      >
+                        cyber.gouv.fr/
+                      </a>
+                    </div>
+                  </div>
                 </div>
                 <div
                   id="autres-mesures"
