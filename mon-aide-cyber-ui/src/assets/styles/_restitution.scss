@@ -146,7 +146,7 @@ html {
       margin: 0;
 
       a {
-        color: var(--couleurs-mac-violet-moyen);
+        color: var(--couleurs-mac-violet-fonce);
       }
     }
 
@@ -155,10 +155,10 @@ html {
       align-items: start;
       justify-content: left;
       gap: 1.5rem;
-      height: 7.5rem;
 
       img {
-        height: 100%
+        max-width: 19rem;
+        max-height: 7.5rem;
       }
     }
 
@@ -170,7 +170,7 @@ html {
     }
 
     .lien {
-      color: var(--couleurs-mac-violet-moyen);
+      color: var(--couleurs-mac-violet-fonce);
     }
   }
 }

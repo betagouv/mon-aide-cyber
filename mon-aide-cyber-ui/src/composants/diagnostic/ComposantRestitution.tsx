@@ -316,10 +316,7 @@ export const ComposantRestitution = ({
                         la démarche MonAideCyber.
                       </p>
                       <p>
-                        l’aidant ayant réalisé le diagnostic sauf s’il s’agit
-                        d’une demande de l’entité aidée, de sa propre initiative
-                        et en dehors du cadre de la démarche MonAideCyber. Il
-                        vous est possible à tout moment de prendre contact
+                        Il vous est possible à tout moment de prendre contact
                         auprès d’un agent de l’ANSSI pour remonter toute
                         problématique et/ou écart de conduite de l’aidant
                         constaté via le mail suivant :{' '}
@@ -344,6 +341,26 @@ export const ComposantRestitution = ({
                         rel="noopener external noreferrer"
                       >
                         monaidecyber.ssi.gouv.fr/charte-aidant
+                      </a>
+                    </div>
+                  </div>
+                  <div className="contact-ou-lien-utile">
+                    <div className="logos">
+                      <img
+                        src="/images/logo_mac.svg"
+                        alt="logo de Mon Aide Cyber"
+                        className="fr-responsive-img"
+                      />
+                    </div>
+                    <div className="titre">L'équipe MonAideCyber</div>
+                    <div className="corps">
+                      Si vous avez des remarques, des questions ou des remontées
+                      suite à votre diagnostic à partager, toute l’équipe de
+                      MonAideCyber se tient à votre écoute !
+                    </div>
+                    <div className="lien">
+                      <a href="mailto:monaidecyber@ssi.gouv.fr">
+                        monaidecyber@ssi.gouv.fr
                       </a>
                     </div>
                   </div>
