@@ -299,6 +299,54 @@ export const ComposantRestitution = ({
                       </a>
                     </div>
                   </div>
+                  <div className="contact-ou-lien-utile">
+                    <div className="titre">La charte de L'aidant</div>
+                    <div className="corps">
+                      <p>
+                        Vous avez effectué un diagnostic Mon Aide Cyber auprès
+                        d’un Aidant. Ce dernier doit respecter des règles,
+                        établies dans une charte.
+                      </p>
+                      <p>
+                        Le diagnostic MonAideCyber est une démarche gratuite et
+                        bénévole. Aucune proposition commerciale ne peut être
+                        établie à l’initiative de l’aidant ayant réalisé le
+                        diagnostic sauf s’il s’agit d’une demande de l’entité
+                        aidée, de sa propre initiative et en dehors du cadre de
+                        la démarche MonAideCyber.
+                      </p>
+                      <p>
+                        l’aidant ayant réalisé le diagnostic sauf s’il s’agit
+                        d’une demande de l’entité aidée, de sa propre initiative
+                        et en dehors du cadre de la démarche MonAideCyber. Il
+                        vous est possible à tout moment de prendre contact
+                        auprès d’un agent de l’ANSSI pour remonter toute
+                        problématique et/ou écart de conduite de l’aidant
+                        constaté via le mail suivant :{' '}
+                        <a href="mailto:monaidecyber@ssi.gouv.fr">
+                          monaidecyber@ssi.gouv.fr
+                        </a>
+                        .
+                      </p>
+                      <p>
+                        L’Aidant observe un devoir de confidentialité des
+                        échanges avec vous, et fait preuve de discrétion
+                        professionnelle de tous les faits et informations dont
+                        il a pris connaissance.
+                      </p>{' '}
+                      <br />
+                      Pour accéder à la charte de l’Aidant :
+                    </div>
+                    <div className="lien">
+                      <a
+                        href="https://monaidecyber.ssi.gouv.fr/charte-aidant"
+                        target="_blank"
+                        rel="noopener external noreferrer"
+                      >
+                        monaidecyber.ssi.gouv.fr/charte-aidant
+                      </a>
+                    </div>
+                  </div>
                 </div>
                 <div
                   id="autres-mesures"
