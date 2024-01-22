@@ -1,10 +1,7 @@
-import { ComposantLancerDiagnostic } from './composants/diagnostic/ComposantLancerDiagnostic.tsx';
-import { activationLancementDiagnostic } from './infrastructure/activation_fonctionnalites.ts';
 import { Header } from './composants/Header.tsx';
 import { Footer } from './composants/Footer.tsx';
 
 function Accueil() {
-  const lancerDiagnosticActive = activationLancementDiagnostic();
   return (
     <>
       <Header />
@@ -15,16 +12,9 @@ function Accueil() {
               <div id="corps" className="fr-col-6 fr-col-offset-1--right">
                 <h1 className="fr-mb-5w">MonAideCyber</h1>
                 <p>
-                  Accompagnez les entreprises et collectivités à gagner en
-                  maturité sur leurs pratiques cyber en les aidant à identifier
-                  les faiblesses de leur infrastructure.
+                  Passez à l’action pour votre cyber sécurité grâce à notre
+                  communauté d’Aidants sur tout le territoire !
                 </p>
-                <div className="actions">
-                  {lancerDiagnosticActive &&
-                    lancerDiagnosticActive == 'true' && (
-                      <ComposantLancerDiagnostic style="bouton-mac bouton-mac-primaire-jaune" />
-                    )}
-                </div>
               </div>
               <div id="illustration" className="fr-col-5">
                 <img
