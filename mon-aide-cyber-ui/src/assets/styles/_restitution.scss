@@ -142,9 +142,16 @@ html {
     gap: 1rem;
     align-self: stretch;
 
-    .logo {
-      width: 8.5625rem;
-      height: 6.125rem;
+    .logos {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 1.5rem;
+      height: 7.5rem;
+
+      img {
+        height: 100%
+      }
     }
 
     .titre {
