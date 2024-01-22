@@ -266,6 +266,39 @@ export const ComposantRestitution = ({
                       </a>
                     </div>
                   </div>
+                  <div className="contact-ou-lien-utile">
+                    <div className="logos">
+                      <img
+                        src="/images/logo_republique_française.png"
+                        alt="logo et devise la République française"
+                        className="fr-responsive-img"
+                      />
+                      <img
+                        src="/images/logo_gendarmerie_nationale.svg"
+                        alt="logo de la gendarmerie nationale"
+                        className="fr-responsive-img"
+                      />
+                      <img
+                        src="/images/logo_police_nationale.svg"
+                        alt="logo de la police nationale"
+                        className="fr-responsive-img"
+                      />
+                    </div>
+                    <div className="titre">Ma sécurité, service de l'État</div>
+                    <div className="corps">
+                      La gendarmerie et la police nationales vous accompagnent
+                      dans vos démarches de sécurité cyber.
+                    </div>
+                    <div className="lien">
+                      <a
+                        href="https://www.masecurite.interieur.gouv.fr/fr"
+                        target="_blank"
+                        rel="noopener external noreferrer"
+                      >
+                        masecurite.interieur.gouv.fr/fr
+                      </a>
+                    </div>
+                  </div>
                 </div>
                 <div
                   id="autres-mesures"
