@@ -1,11 +1,14 @@
 @import 'couleurs';
 
 $gouttiere: 1.5rem;
-$hauteur-tuile: 29rem;
 $taille-padding-dsfr-7v: 3.5rem;
 
 .bandeau-violet {
   background-color: var(--couleurs-mac-violet-fonce);
+}
+
+.accueil {
+  height: 42.5rem;
 }
 
 #presentation {
@@ -54,25 +57,55 @@ $taille-padding-dsfr-7v: 3.5rem;
   justify-content: space-between;
 }
 
-.tuile {
-  height: $hauteur-tuile;
-  border-radius: 18px;
-  box-shadow: 0 12px 12px 0 #0000001a;
-  flex: 0 0 calc(600% / 12 - $gouttiere);
+.tuiles {
+  margin-top: -5rem;
+}
 
+@mixin tuile($hauteur-tuile) {
+  height: $hauteur-tuile;
+  img {
+    max-height: calc($hauteur-tuile / 2 - $taille-padding-dsfr-7v);
+  }
+}
+
+.tuile {
   display: flex;
+  border-radius: 1rem;
+  background: var(--couleurs-mac-blanc);
+  box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.1);
+  padding-bottom: 2.5rem;
   flex-direction: column;
-  gap: calc(100% / 12);
+  gap: 0.5rem;
+
+  h4 {
+    font-size: 2rem;
+    line-height: 2.625rem;
+  }
+
+  .corps {
+    padding: 0 2rem;
+    align-items: center;
+    gap: 1rem;
+  }
 
   .illustration {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    img {
-      max-height: calc($hauteur-tuile / 2 - $taille-padding-dsfr-7v);
-    }
   }
+}
+
+.tuile-centree {
+  text-align: center;
+  align-items: center;
+}
+
+.tuile-grande {
+  @include tuile(29rem);
+}
+
+.tuile-petite {
+  @include tuile(24.5rem);
 }
 
 .bientot-disponible {
