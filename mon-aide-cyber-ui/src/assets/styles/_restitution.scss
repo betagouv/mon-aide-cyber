@@ -117,3 +117,45 @@ html {
     }
   }
 }
+
+.intersection {
+  margin: 2.5rem 0;
+  border-top: 5rem var(--couleurs-mac-violet-tres-clair);
+  color: var(--couleurs-mac-violet-tres-clair);
+  height: 40px;
+}
+
+.contact-et-liens-utiles {
+  h4 {
+    margin-bottom: 0;
+  }
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.5rem;
+  align-self: stretch;
+
+  .contact-ou-lien-utile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    align-self: stretch;
+
+    .logo {
+      width: 8.5625rem;
+      height: 6.125rem;
+    }
+
+    .titre {
+      font-family: "Marianne ExtraBold";
+      font-weight: 800;
+      line-height: 2rem;
+      font-size: 1.375rem;
+    }
+
+    .lien {
+      color: var(--couleurs-mac-violet-moyen);
+    }
+  }
+}
