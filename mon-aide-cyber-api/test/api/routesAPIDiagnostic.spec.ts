@@ -334,7 +334,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
       adaptateurRestitutionPDF.genereRestitution = () => {
         adaptateurPDFAppele = true;
-        return Promise.resolve(Buffer.from('PDF Recommandations généré'));
+        return Promise.resolve(Buffer.from('PDF Mesures généré'));
       };
       testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
       const restitution = uneRestitution().construis();

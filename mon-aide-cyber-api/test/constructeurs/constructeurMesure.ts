@@ -1,18 +1,16 @@
 import { Constructeur } from './constructeur';
-import { RecommandationPriorisee } from '../../src/diagnostic/Diagnostic';
+import { MesurePriorisee } from '../../src/diagnostic/Diagnostic';
 import { fakerFR } from '@faker-js/faker';
 import { Valeur } from '../../src/diagnostic/Indice';
 
-class ConstructeurRecommandationPriorisee
-  implements Constructeur<RecommandationPriorisee>
-{
+class ConstructeurMesurePriorisee implements Constructeur<MesurePriorisee> {
   private titre: string = fakerFR.lorem.words(3);
   private pourquoi: string = fakerFR.word.words(2);
   private comment: string = fakerFR.word.words(2);
   private priorisation: number = fakerFR.number.int();
   private valeurObtenue: Valeur = 0;
 
-  construis(): RecommandationPriorisee {
+  construis(): MesurePriorisee {
     return {
       titre: this.titre,
       pourquoi: this.pourquoi,
@@ -22,33 +20,30 @@ class ConstructeurRecommandationPriorisee
     };
   }
 
-  avecTitre(titre: string): ConstructeurRecommandationPriorisee {
+  avecTitre(titre: string): ConstructeurMesurePriorisee {
     this.titre = titre;
     return this;
   }
 
-  avecPourquoi(pourquoi: string): ConstructeurRecommandationPriorisee {
+  avecPourquoi(pourquoi: string): ConstructeurMesurePriorisee {
     this.pourquoi = pourquoi;
     return this;
   }
 
-  avecComment(comment: string): ConstructeurRecommandationPriorisee {
+  avecComment(comment: string): ConstructeurMesurePriorisee {
     this.comment = comment;
     return this;
   }
 
-  avecPriorisation(priorisation: number): ConstructeurRecommandationPriorisee {
+  avecPriorisation(priorisation: number): ConstructeurMesurePriorisee {
     this.priorisation = priorisation;
     return this;
   }
 
-  avecValeurObtenue(
-    valeurObtenue: Valeur,
-  ): ConstructeurRecommandationPriorisee {
+  avecValeurObtenue(valeurObtenue: Valeur): ConstructeurMesurePriorisee {
     this.valeurObtenue = valeurObtenue;
     return this;
   }
 }
 
-export const uneMesurePriorisee = () =>
-  new ConstructeurRecommandationPriorisee();
+export const uneMesurePriorisee = () => new ConstructeurMesurePriorisee();

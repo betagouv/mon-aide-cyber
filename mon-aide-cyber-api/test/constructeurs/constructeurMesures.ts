@@ -1,7 +1,7 @@
 import { ConstructeurDeTableau } from './constructeur';
-import { Mesures } from '../../src/diagnostic/Mesures';
+import { ReferentielDeMesures } from '../../src/diagnostic/ReferentielDeMesures';
 
-class ConstructeurMesures extends ConstructeurDeTableau<Mesures> {
+class ConstructeurMesures extends ConstructeurDeTableau<ReferentielDeMesures> {
   avecLesMesures(
     mesures: {
       [identifiant: string]: {

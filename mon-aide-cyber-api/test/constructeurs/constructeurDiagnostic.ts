@@ -18,7 +18,7 @@ import {
   ReponsePossible,
   TypeQuestion,
 } from '../../src/diagnostic/Referentiel';
-import { Mesures } from '../../src/diagnostic/Mesures';
+import { ReferentielDeMesures } from '../../src/diagnostic/ReferentielDeMesures';
 import { desMesures, desMesuresPour7Questions } from './constructeurMesures';
 import { fakerFR } from '@faker-js/faker';
 import { Poids } from '../../src/diagnostic/Indice';
@@ -26,7 +26,7 @@ import { aseptise } from '../utilitaires/aseptise';
 
 class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   private referentiel: Referentiel = unReferentiel().construis();
-  private mesures: Mesures = desMesures().construis();
+  private mesures: ReferentielDeMesures = desMesures().construis();
   private reponsesDonnees: {
     identifiant: { thematique: string; question: string };
     reponseDonnee: ReponseDonnee;
@@ -60,7 +60,7 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     return this;
   }
 
-  avecDesMesures(mesures: Mesures): ConstructeurDiagnostic {
+  avecDesMesures(mesures: ReferentielDeMesures): ConstructeurDiagnostic {
     this.mesures = mesures;
     return this;
   }

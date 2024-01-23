@@ -53,12 +53,12 @@ describe('Cohérence du référentiel et des mesures', () => {
           it.each(Array.from(question.recos))(
             'portant la mesure "%s" est référencée dans les mesures',
             (reco) => {
-              const toutesLesRecommandations = Object.entries(
-                tableauMesures,
-              ).map(([reco]) => reco);
+              const toutesLesMesures = Object.entries(tableauMesures).map(
+                ([reco]) => reco,
+              );
 
               expect(
-                toutesLesRecommandations.find((r) => r === reco),
+                toutesLesMesures.find((r) => r === reco),
               ).not.toBeUndefined();
             },
           );

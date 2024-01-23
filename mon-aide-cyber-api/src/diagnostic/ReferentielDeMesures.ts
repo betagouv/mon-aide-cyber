@@ -3,11 +3,11 @@ export type NiveauMesure = {
   pourquoi: string;
   comment: string;
 };
-export type ObjetMesure = {
+export type ReferentielDeMesure = {
   niveau1: NiveauMesure;
   niveau2?: NiveauMesure;
   priorisation: number;
 };
-export type Mesures = {
-  [identifiantQuestion: string]: ObjetMesure;
+export type ReferentielDeMesures = {
+  [identifiantQuestion: string]: ReferentielDeMesure;
 };

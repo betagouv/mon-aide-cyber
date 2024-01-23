@@ -6,7 +6,6 @@ import {
 import { Poids, Valeur } from '../../../../diagnostic/Indice';
 import {
   QuestionDiagnostic,
-  RecommandationPriorisee,
   Thematique,
 } from '../../../../diagnostic/Diagnostic';
 import crypto from 'crypto';
@@ -70,7 +69,7 @@ type RepresentationReferentiel = {
 };
 
 type RepresentationRecommandationPriorisee = Omit<
-  RecommandationPriorisee,
+  Recommandation,
   'valeurObtenue'
 > & {
   noteObtenue?: Valeur;

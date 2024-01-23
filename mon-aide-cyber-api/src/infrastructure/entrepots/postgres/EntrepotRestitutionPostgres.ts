@@ -3,11 +3,11 @@ import { Restitution } from '../../../restitution/Restitution';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
 import {
   QuestionDiagnostic,
-  RecommandationPriorisee,
   ReponseDonnee,
   ReponsesMultiples,
 } from '../../../diagnostic/Diagnostic';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
+import { Valeur } from '../../../diagnostic/Indice';
 
 class EntrepotRestitutionPostgres extends EntrepotPostgres<
   Restitution,
@@ -68,15 +68,13 @@ class EntrepotRestitutionPostgres extends EntrepotPostgres<
         secteurActivite,
       },
       indicateurs: restitutionDTO !== null ? restitutionDTO.indicateurs : {},
-      recommandations: {
-        recommandationsPrioritaires:
+      mesures: {
+        mesuresPrioritaires:
           restitutionDTO !== null
-            ? restitutionDTO.recommandations.recommandationsPrioritaires
+            ? restitutionDTO.mesures.mesuresPrioritaires
             : [],
-        autresRecommandations:
-          restitutionDTO !== null
-            ? restitutionDTO.recommandations.autresRecommandations
-            : [],
+        autresMesures:
+          restitutionDTO !== null ? restitutionDTO.mesures.autresMesures : [],
       },
     };
   }
@@ -108,9 +106,17 @@ type RepresentationIndicateurs = {
   [thematique: string]: { moyennePonderee: number };
 };
 
+export type RepresentationMesure = {
+  titre: string;
+  pourquoi: string;
+  comment: string;
+  valeurObtenue: Valeur;
+  priorisation: number;
+};
+
 export type RepresentationMesures = {
-  recommandationsPrioritaires: RecommandationPriorisee[];
-  autresRecommandations: RecommandationPriorisee[];
+  mesuresPrioritaires: RepresentationMesure[];
+  autresMesures: RepresentationMesure[];
 };
 
 type RestitutionDTO = DTO & {
@@ -121,7 +127,7 @@ type RestitutionDTO = DTO & {
   secteuractivite: RepresentationQuestionDiagnostic;
   restitution: {
     indicateurs: RepresentationIndicateurs;
-    recommandations: RepresentationMesures;
+    mesures: RepresentationMesures;
   };
 };
 

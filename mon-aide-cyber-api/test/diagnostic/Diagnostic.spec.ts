@@ -18,13 +18,13 @@ import {
 import {
   genereLaRestitution,
   Indicateurs,
-  RecommandationPriorisee,
+  MesurePriorisee,
 } from '../../src/diagnostic/Diagnostic';
 import { uneAssociation } from '../constructeurs/constructeurAssociation';
 
 describe('Diagnostic', () => {
   type PartieCommuneAttendueMesurePriorisee = Omit<
-    RecommandationPriorisee,
+    MesurePriorisee,
     'priorisation' | 'titre'
   >;
 
@@ -64,9 +64,8 @@ describe('Diagnostic', () => {
           genereLaRestitution(diagnostic);
 
           expect(
-            diagnostic.restitution?.recommandations
-              ?.recommandationsPrioritaires,
-          ).toStrictEqual<RecommandationPriorisee[]>([
+            diagnostic.restitution?.mesures?.mesuresPrioritaires,
+          ).toStrictEqual<MesurePriorisee[]>([
             {
               priorisation: 1,
               titre: 'mesure 1',
@@ -101,9 +100,9 @@ describe('Diagnostic', () => {
               valeurObtenue: 1,
             },
           ]);
-          expect(
-            diagnostic.restitution?.recommandations?.autresRecommandations,
-          ).toStrictEqual<RecommandationPriorisee[]>([
+          expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual<
+            MesurePriorisee[]
+          >([
             {
               priorisation: 7,
               titre: 'mesure 72',
@@ -148,9 +147,8 @@ describe('Diagnostic', () => {
           genereLaRestitution(diagnostic);
 
           expect(
-            diagnostic.restitution?.recommandations
-              ?.recommandationsPrioritaires,
-          ).toStrictEqual<RecommandationPriorisee[]>([
+            diagnostic.restitution?.mesures?.mesuresPrioritaires,
+          ).toStrictEqual<MesurePriorisee[]>([
             {
               comment: 'comme ça',
               valeurObtenue: 1,
@@ -192,8 +190,8 @@ describe('Diagnostic', () => {
         genereLaRestitution(diagnostic);
 
         expect(
-          diagnostic.restitution?.recommandations?.recommandationsPrioritaires,
-        ).toStrictEqual<RecommandationPriorisee[]>([
+          diagnostic.restitution?.mesures?.mesuresPrioritaires,
+        ).toStrictEqual<MesurePriorisee[]>([
           {
             ...PARTIE_COMMUNE_ATTENDUE,
             priorisation: 3,
@@ -223,9 +221,9 @@ describe('Diagnostic', () => {
             valeurObtenue: 1,
           },
         ]);
-        expect(
-          diagnostic.restitution?.recommandations?.autresRecommandations,
-        ).toStrictEqual([]);
+        expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual(
+          [],
+        );
       });
 
       describe('trie le resultat', () => {
@@ -362,9 +360,8 @@ describe('Diagnostic', () => {
           genereLaRestitution(diagnostic);
 
           expect(
-            diagnostic.restitution?.recommandations
-              ?.recommandationsPrioritaires,
-          ).toStrictEqual<RecommandationPriorisee[]>([
+            diagnostic.restitution?.mesures?.mesuresPrioritaires,
+          ).toStrictEqual<MesurePriorisee[]>([
             {
               priorisation: 1,
               titre: 'mesure 4',
@@ -397,9 +394,9 @@ describe('Diagnostic', () => {
               titre: 'mesure 52',
             },
           ]);
-          expect(
-            diagnostic.restitution?.recommandations?.autresRecommandations,
-          ).toStrictEqual<RecommandationPriorisee[]>([
+          expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual<
+            MesurePriorisee[]
+          >([
             {
               ...PARTIE_COMMUNE_ATTENDUE,
               valeurObtenue: 1,
@@ -494,12 +491,11 @@ describe('Diagnostic', () => {
           genereLaRestitution(diagnostic);
 
           expect(
-            diagnostic.restitution?.recommandations
-              ?.recommandationsPrioritaires,
+            diagnostic.restitution?.mesures?.mesuresPrioritaires,
           ).toStrictEqual([]);
-          expect(
-            diagnostic.restitution?.recommandations?.autresRecommandations,
-          ).toStrictEqual([]);
+          expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual(
+            [],
+          );
         });
       });
     });

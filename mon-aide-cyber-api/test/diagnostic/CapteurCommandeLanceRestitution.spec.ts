@@ -7,7 +7,7 @@ import {
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
-import { RecommandationPriorisee } from '../../src/diagnostic/Diagnostic';
+import { MesurePriorisee } from '../../src/diagnostic/Diagnostic';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
@@ -63,9 +63,8 @@ describe('Capteur de lancement de la restitution', () => {
       .diagnostic()
       .lis(diagnostic.identifiant);
     expect(
-      diagnosticRetourne.restitution?.recommandations
-        ?.recommandationsPrioritaires,
-    ).toStrictEqual<RecommandationPriorisee[]>([
+      diagnosticRetourne.restitution?.mesures?.mesuresPrioritaires,
+    ).toStrictEqual<MesurePriorisee[]>([
       {
         valeurObtenue: 0,
         priorisation: 1,
@@ -110,7 +109,7 @@ describe('Capteur de lancement de la restitution', () => {
       },
     ]);
     expect(
-      diagnosticRetourne.restitution?.recommandations?.autresRecommandations,
+      diagnosticRetourne.restitution?.mesures?.autresMesures,
     ).toStrictEqual([
       {
         titre: 'mesure 7',

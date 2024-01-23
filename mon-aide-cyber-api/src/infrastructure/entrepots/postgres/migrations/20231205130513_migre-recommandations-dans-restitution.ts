@@ -1,10 +1,6 @@
 import { Knex } from 'knex';
 import crypto from 'crypto';
-import {
-  Recommandations,
-  ReferentielDiagnostic,
-  Restitution,
-} from '../../../../diagnostic/Diagnostic';
+import { ReferentielDiagnostic } from '../../../../diagnostic/Diagnostic';
 
 type NiveauDeRecommandation = {
   titre: string;
@@ -20,6 +16,30 @@ type ObjetDeRecommandation = {
 
 type TableauDeRecommandations = {
   [identifiantQuestion: string]: ObjetDeRecommandation;
+};
+
+type Valeur = 0 | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | null | undefined;
+
+type RecommandationPriorisee = {
+  titre: string;
+  pourquoi: string;
+  comment: string;
+  valeurObtenue: Valeur;
+  priorisation: number;
+};
+
+type Indicateurs = {
+  [thematique: string]: { moyennePonderee: number };
+};
+
+type Restitution = {
+  indicateurs?: Indicateurs;
+  recommandations?: Recommandations;
+};
+
+type Recommandations = {
+  recommandationsPrioritaires: RecommandationPriorisee[];
+  autresRecommandations: RecommandationPriorisee[];
 };
 
 export async function up(knex: Knex): Promise<void> {
