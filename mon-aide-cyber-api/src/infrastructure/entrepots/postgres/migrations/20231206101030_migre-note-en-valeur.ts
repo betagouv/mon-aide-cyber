@@ -2,7 +2,6 @@ import { Knex } from 'knex';
 import crypto from 'crypto';
 import {
   QuestionDiagnostic,
-  RecommandationPriorisee,
   Thematique,
 } from '../../../../diagnostic/Diagnostic';
 import {
@@ -52,7 +51,7 @@ type RepresentationReferentiel = {
 };
 
 type RepresentationRecommandationPriorisee = Omit<
-  RecommandationPriorisee,
+  Recommandation,
   'valeurObtenue'
 > & {
   noteObtenue?: Valeur;

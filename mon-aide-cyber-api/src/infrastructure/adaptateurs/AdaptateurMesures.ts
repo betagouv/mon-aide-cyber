@@ -1,9 +1,9 @@
 import { Adaptateur } from '../../adaptateurs/Adaptateur';
-import { Mesures } from '../../diagnostic/Mesures';
+import { ReferentielDeMesures } from '../../diagnostic/ReferentielDeMesures';
 import { tableauMesures } from '../../diagnostic/donneesMesures';
 
-export class AdaptateurMesures implements Adaptateur<Mesures> {
-  lis(): Promise<Mesures> {
+export class AdaptateurMesures implements Adaptateur<ReferentielDeMesures> {
+  lis(): Promise<ReferentielDeMesures> {
     return Promise.resolve(tableauMesures);
   }
 }

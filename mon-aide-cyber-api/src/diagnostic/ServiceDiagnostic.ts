@@ -3,7 +3,7 @@ import * as crypto from 'crypto';
 import { Entrepots } from '../domaine/Entrepots';
 import { Adaptateur } from '../adaptateurs/Adaptateur';
 import { Referentiel } from './Referentiel';
-import { Mesures } from './Mesures';
+import { ReferentielDeMesures } from './ReferentielDeMesures';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
@@ -11,7 +11,7 @@ import { ErreurMAC } from '../domaine/erreurMAC';
 export class ServiceDiagnostic {
   constructor(
     private readonly adaptateurReferentiel: Adaptateur<Referentiel>,
-    private readonly adaptateurMesures: Adaptateur<Mesures>,
+    private readonly adaptateurMesures: Adaptateur<ReferentielDeMesures>,
     private readonly entrepots: Entrepots,
     private readonly busEvenement?: BusEvenement,
   ) {}

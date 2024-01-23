@@ -46,9 +46,9 @@ describe('Entrepôt de restitution', () => {
         secteurActivite: 'non renseigné',
       },
       indicateurs: {},
-      recommandations: {
-        recommandationsPrioritaires: [],
-        autresRecommandations: [],
+      mesures: {
+        mesuresPrioritaires: [],
+        autresMesures: [],
       },
     });
   });
@@ -80,9 +80,9 @@ describe('Entrepôt de restitution', () => {
           secteurActivite: 'non renseigné',
         },
         indicateurs: {},
-        recommandations: {
-          recommandationsPrioritaires: [],
-          autresRecommandations: [],
+        mesures: {
+          mesuresPrioritaires: [],
+          autresMesures: [],
         },
       });
     });
@@ -105,9 +105,9 @@ describe('Entrepôt de restitution', () => {
           secteurActivite: 'Construction',
         },
         indicateurs: {},
-        recommandations: {
-          recommandationsPrioritaires: [],
-          autresRecommandations: [],
+        mesures: {
+          mesuresPrioritaires: [],
+          autresMesures: [],
         },
       });
     });
@@ -132,8 +132,8 @@ describe('Entrepôt de restitution', () => {
           secteurActivite: 'non renseigné',
         },
         indicateurs: { thematique: { moyennePonderee: 0 } },
-        recommandations: {
-          recommandationsPrioritaires: [
+        mesures: {
+          mesuresPrioritaires: [
             {
               valeurObtenue: 0,
               priorisation: 1,
@@ -177,7 +177,7 @@ describe('Entrepôt de restitution', () => {
               comment: 'comme ça',
             },
           ],
-          autresRecommandations: [
+          autresMesures: [
             {
               titre: 'mesure 7',
               pourquoi: 'parce-que',
@@ -227,9 +227,9 @@ describe('Mappeur de restitution', () => {
       ),
       restitution: {
         indicateurs: {},
-        recommandations: {
-          recommandationsPrioritaires: [],
-          autresRecommandations: [],
+        mesures: {
+          mesuresPrioritaires: [],
+          autresMesures: [],
         },
       },
       secteuractivite: enDTO(

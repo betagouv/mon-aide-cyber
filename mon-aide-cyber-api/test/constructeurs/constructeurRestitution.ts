@@ -5,14 +5,14 @@ import {
 } from '../../src/restitution/Restitution';
 import crypto from 'crypto';
 import { fakerFR } from '@faker-js/faker';
-import { RecommandationPriorisee } from '../../src/diagnostic/Diagnostic';
+import { MesurePriorisee } from '../../src/diagnostic/Diagnostic';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { add } from 'date-fns';
 
 class ConstructeurRestitution implements Constructeur<Restitution> {
   private identifiant: crypto.UUID = fakerFR.string.uuid() as crypto.UUID;
   private dateCreation: Date = fakerFR.date.anytime();
-  private mesures: RecommandationPriorisee[] = [];
+  private mesures: MesurePriorisee[] = [];
   private indicateurs = {};
   private informationsRestitution: InformationsRestitution = {
     dateCreation: this.dateCreation,
@@ -29,9 +29,9 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
       identifiant: this.identifiant,
       informations: this.informationsRestitution,
       indicateurs: this.indicateurs,
-      recommandations: {
-        autresRecommandations: this.mesures.slice(6),
-        recommandationsPrioritaires: this.mesures.slice(0, 6),
+      mesures: {
+        autresMesures: this.mesures.slice(6),
+        mesuresPrioritaires: this.mesures.slice(0, 6),
       },
     };
   }
@@ -47,10 +47,8 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
     return this;
   }
 
-  avecMesures(
-    recommandations: RecommandationPriorisee[],
-  ): ConstructeurRestitution {
-    this.mesures = [...this.mesures, ...recommandations];
+  avecMesures(mesures: MesurePriorisee[]): ConstructeurRestitution {
+    this.mesures = [...this.mesures, ...mesures];
     return this;
   }
 

@@ -1,10 +1,10 @@
 import { MesureDiagnostic, QuestionDiagnostic } from './Diagnostic';
-import { Mesures } from './Mesures';
+import { ReferentielDeMesures } from './ReferentielDeMesures';
 
 export class MoteurMesures {
   static genere(
     question: QuestionDiagnostic,
-    mesures: Mesures,
+    mesures: ReferentielDeMesures,
   ): MesureDiagnostic[] {
     return [
       ...this.mesuresMultiples(question),

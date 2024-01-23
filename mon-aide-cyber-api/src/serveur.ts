@@ -7,7 +7,6 @@ import { AdaptateurTranscripteur } from './adaptateurs/AdaptateurTranscripteur';
 import { Entrepots } from './domaine/Entrepots';
 import { gestionnaireErreurGeneralisee } from './api/gestionnaires/erreurs';
 import { Referentiel } from './diagnostic/Referentiel';
-import { Mesures } from './diagnostic/Mesures';
 import { Adaptateur } from './adaptateurs/Adaptateur';
 import { BusEvenement } from './domaine/BusEvenement';
 import { AdaptateurGestionnaireErreurs } from './adaptateurs/AdaptateurGestionnaireErreurs';
@@ -18,8 +17,9 @@ import { AdaptateurDeVerificationDeSession } from './adaptateurs/AdaptateurDeVer
 import { AdaptateursRestitution } from './adaptateurs/AdaptateursRestitution';
 import { BusCommande } from './domaine/commande';
 import { routeContact } from './api/routeContact';
-import CookieSession = require('cookie-session');
 import { AdaptateurEnvoiMail } from './adaptateurs/AdaptateurEnvoiMail';
+import { ReferentielDeMesures } from './diagnostic/ReferentielDeMesures';
+import CookieSession = require('cookie-session');
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -29,7 +29,7 @@ export type ConfigurationServeur = {
   adaptateurEnvoiMessage: AdaptateurEnvoiMail;
   adaptateurReferentiel: Adaptateur<Referentiel>;
   adaptateursRestitution: AdaptateursRestitution;
-  adaptateurMesures: Adaptateur<Mesures>;
+  adaptateurMesures: Adaptateur<ReferentielDeMesures>;
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
   adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
   avecProtectionCsrf: boolean;

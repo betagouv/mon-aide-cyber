@@ -1,14 +1,14 @@
 import {
   Indicateurs,
   ORDRE_THEMATIQUES,
-  RecommandationPriorisee,
+  MesurePriorisee,
 } from '../diagnostic/Diagnostic';
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import { Restitution } from '../restitution/Restitution';
 
 const estMesurePrioritaire = (
-  mesurePrioritaire: RecommandationPriorisee[] | undefined,
-): mesurePrioritaire is RecommandationPriorisee[] => {
+  mesurePrioritaire: MesurePriorisee[] | undefined,
+): mesurePrioritaire is MesurePriorisee[] => {
   return mesurePrioritaire !== undefined && mesurePrioritaire.length > 0;
 };
 
@@ -33,10 +33,9 @@ export abstract class AdaptateurDeRestitution<T> {
       );
     const indicateurs = this.genereIndicateurs(indicateursRestitution);
     const mesuresPrioritaires = this.genereMesuresPrioritaires(
-      restitution.recommandations.recommandationsPrioritaires,
+      restitution.mesures.mesuresPrioritaires,
     );
-    const autresMesures =
-      restitution.recommandations.autresRecommandations;
+    const autresMesures = restitution.mesures.autresMesures;
 
     if (estMesurePrioritaire(autresMesures)) {
       return this.genere([
@@ -50,11 +49,11 @@ export abstract class AdaptateurDeRestitution<T> {
   }
 
   protected abstract genereAutresMesures(
-    autresMesures: RecommandationPriorisee[],
+    autresMesures: MesurePriorisee[],
   ): Promise<ContenuHtml>;
 
   protected abstract genereMesuresPrioritaires(
-    mesuresPrioritaires: RecommandationPriorisee[] | undefined,
+    mesuresPrioritaires: MesurePriorisee[] | undefined,
   ): Promise<ContenuHtml>;
 
   protected abstract genere(mesures: Promise<ContenuHtml>[]): Promise<T>;

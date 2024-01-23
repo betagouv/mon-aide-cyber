@@ -1,6 +1,6 @@
 import { Entrepot } from '../domaine/Entrepot';
 import crypto from 'crypto';
-import { Indicateurs, Recommandations } from '../diagnostic/Diagnostic';
+import { Indicateurs, Mesures } from '../diagnostic/Diagnostic';
 
 type InformationsRestitution = {
   dateCreation: Date;
@@ -12,7 +12,7 @@ type Restitution = {
   identifiant: crypto.UUID;
   indicateurs: Indicateurs;
   informations: InformationsRestitution;
-  recommandations: Recommandations;
+  mesures: Mesures;
 };
 type EntrepotRestitution = Entrepot<Restitution>;
 

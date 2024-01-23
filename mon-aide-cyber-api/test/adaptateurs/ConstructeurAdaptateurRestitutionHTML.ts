@@ -1,7 +1,4 @@
-import {
-  Indicateurs,
-  RecommandationPriorisee,
-} from '../../src/diagnostic/Diagnostic';
+import { Indicateurs, MesurePriorisee } from '../../src/diagnostic/Diagnostic';
 import { ContenuHtml } from '../../src/infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 
 import { AdaptateurDeRestitutionHTML } from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
@@ -35,7 +32,7 @@ class ConstructeurAdaptateurRestitutionHTML {
       }
 
       protected genereMesuresPrioritaires(
-        _: RecommandationPriorisee[] | undefined,
+        _: MesurePriorisee[] | undefined,
       ): Promise<ContenuHtml> {
         return Promise.resolve({
           entete: '',
@@ -55,7 +52,7 @@ class ConstructeurAdaptateurRestitutionHTML {
       }
 
       protected genereAutresMesures(
-        _: RecommandationPriorisee[],
+        _: MesurePriorisee[],
       ): Promise<ContenuHtml> {
         return Promise.resolve({
           entete: '',

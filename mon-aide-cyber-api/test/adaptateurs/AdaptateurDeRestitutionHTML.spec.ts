@@ -11,7 +11,7 @@ import {
   desInformationsDeRestitution,
   uneRestitution,
 } from '../constructeurs/constructeurRestitution';
-import { uneMesurePriorisee } from '../constructeurs/constructeurRecommandation';
+import { uneMesurePriorisee } from '../constructeurs/constructeurMesure';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
 

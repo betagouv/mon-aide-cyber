@@ -1,9 +1,6 @@
 import { describe, it } from 'vitest';
 import { AdaptateurDeRestitution } from '../../src/adaptateurs/AdaptateurDeRestitution';
-import {
-  Indicateurs,
-  RecommandationPriorisee,
-} from '../../src/diagnostic/Diagnostic';
+import { Indicateurs, MesurePriorisee } from '../../src/diagnostic/Diagnostic';
 import { ContenuHtml } from '../../src/infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
@@ -12,7 +9,7 @@ import {
   desInformationsDeRestitution,
   uneRestitution,
 } from '../constructeurs/constructeurRestitution';
-import { uneMesurePriorisee } from '../constructeurs/constructeurRecommandation';
+import { uneMesurePriorisee } from '../constructeurs/constructeurMesure';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
 
@@ -66,7 +63,7 @@ describe('Adaptateur de Restitution', () => {
       }
 
       protected genereAutresMesures(
-        autresMesures: RecommandationPriorisee[] | undefined,
+        autresMesures: MesurePriorisee[] | undefined,
       ): Promise<ContenuHtml> {
         const resultat: ContenuHtml = {
           corps: '',
@@ -82,7 +79,7 @@ describe('Adaptateur de Restitution', () => {
       }
 
       protected genereMesuresPrioritaires(
-        mesuresPrioritaires: RecommandationPriorisee[] | undefined,
+        mesuresPrioritaires: MesurePriorisee[] | undefined,
       ): Promise<ContenuHtml> {
         const resultat: ContenuHtml = {
           corps: '',

@@ -1,7 +1,7 @@
 import { AdaptateurDeRestitution } from '../../adaptateurs/AdaptateurDeRestitution';
 import {
   Indicateurs,
-  RecommandationPriorisee,
+  MesurePriorisee,
   Restitution,
 } from '../../diagnostic/Diagnostic';
 import * as pug from 'pug';
@@ -37,7 +37,7 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
   }
 
   protected genereAutresMesures(
-    autresMesures: RecommandationPriorisee[] | undefined,
+    autresMesures: MesurePriorisee[] | undefined,
   ): Promise<ContenuHtml> {
     return this.genereHtml('mesures.annexe', {
       mesures: autresMesures,
@@ -45,7 +45,7 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
   }
 
   protected genereMesuresPrioritaires(
-    mesuresPrioritaires: RecommandationPriorisee[] | undefined,
+    mesuresPrioritaires: MesurePriorisee[] | undefined,
   ): Promise<ContenuHtml> {
     return this.genereHtml('mesures', {
       mesures: mesuresPrioritaires,

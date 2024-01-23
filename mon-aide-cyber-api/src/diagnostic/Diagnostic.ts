@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { Question, Recommandation, Referentiel } from './Referentiel';
 import { Entrepot } from '../domaine/Entrepot';
 import { laValeurEstDefinie, Valeur } from './Indice';
-import { Mesures, NiveauMesure } from './Mesures';
+import { NiveauMesure, ReferentielDeMesures } from './ReferentielDeMesures';
 import { StrategieDeReponse } from './StrategieDeReponse';
 import { MoteurIndice, ValeursDesIndicesAuDiagnostic } from './MoteurIndice';
 import { MoteurMesures } from './MoteurMesures';
@@ -36,16 +36,17 @@ export type MesureDiagnostic = Omit<
   'identifiant' | 'niveau'
 > & { niveau: NiveauMesure; priorisation: number; repondA: string };
 
-export type RecommandationPriorisee = {
+export type MesurePriorisee = {
   titre: string;
   pourquoi: string;
   comment: string;
   valeurObtenue: Valeur;
   priorisation: number;
 };
-export type Recommandations = {
-  recommandationsPrioritaires: RecommandationPriorisee[];
-  autresRecommandations: RecommandationPriorisee[];
+
+export type Mesures = {
+  mesuresPrioritaires: MesurePriorisee[];
+  autresMesures: MesurePriorisee[];
 };
 
 type Indicateurs = {
@@ -54,20 +55,24 @@ type Indicateurs = {
 
 export type Restitution = {
   indicateurs?: Indicateurs;
-  recommandations?: Recommandations;
+  mesures?: Mesures;
 };
+
 type Diagnostic = {
   dateCreation: Date;
   dateDerniereModification: Date;
   identifiant: crypto.UUID;
   restitution?: Restitution;
   referentiel: ReferentielDiagnostic;
-  tableauDesRecommandations: Mesures;
+  mesures: ReferentielDeMesures;
 };
 
 type EntrepotDiagnostic = Entrepot<Diagnostic>;
 
-const initialiseDiagnostic = (r: Referentiel, mesures: Mesures): Diagnostic => {
+const initialiseDiagnostic = (
+  r: Referentiel,
+  mesures: ReferentielDeMesures,
+): Diagnostic => {
   const referentiel: {
     [clef: Thematique]: QuestionsThematique;
   } = Object.entries(r).reduce((accumulateur, [clef, questions]) => {
@@ -92,7 +97,7 @@ const initialiseDiagnostic = (r: Referentiel, mesures: Mesures): Diagnostic => {
     dateDerniereModification: FournisseurHorloge.maintenant(),
     identifiant: crypto.randomUUID(),
     referentiel,
-    tableauDesRecommandations: mesures,
+    mesures: mesures,
   };
 };
 
@@ -115,31 +120,28 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
     MoteurIndice.genereLesIndicesDesReponses(diagnostic);
   const indicateurs =
     MoteurDesIndicateurs.genereLesIndicateurs(valeursDesIndices);
-  const recommandations = Object.entries(diagnostic.referentiel)
+  const mesures = Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
-    .flatMap((question) =>
-      MoteurMesures.genere(question, diagnostic.tableauDesRecommandations),
-    );
+    .flatMap((question) => MoteurMesures.genere(question, diagnostic.mesures));
 
-  const prioriseLesRecommandations = (
-    recommandations: MesureDiagnostic[],
+  const prioriseLesMesures = (
+    mesures: MesureDiagnostic[],
     valeursDesIndices: ValeursDesIndicesAuDiagnostic,
-  ): RecommandationPriorisee[] => {
-    return recommandations
-      .map((recommandation) => {
+  ): MesurePriorisee[] => {
+    return mesures
+      .map((mesure) => {
         const valeurObtenue = Object.values(valeursDesIndices)
           .flatMap((valeurReponse) => valeurReponse)
           .find(
-            (valeurReponse) =>
-              valeurReponse.identifiant === recommandation.repondA,
+            (valeurReponse) => valeurReponse.identifiant === mesure.repondA,
           )?.indice;
         return {
-          titre: recommandation.niveau.titre,
-          pourquoi: recommandation.niveau.pourquoi,
-          comment: recommandation.niveau.comment,
-          priorisation: recommandation.priorisation,
+          titre: mesure.niveau.titre,
+          pourquoi: mesure.niveau.pourquoi,
+          comment: mesure.niveau.comment,
+          priorisation: mesure.priorisation,
           valeurObtenue: valeurObtenue,
-        } as RecommandationPriorisee;
+        } as MesurePriorisee;
       })
       .filter(
         (reco) =>
@@ -155,16 +157,13 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
             : 1) || 0,
       );
   };
-  const recommandationPriorisees = prioriseLesRecommandations(
-    recommandations,
-    valeursDesIndices,
-  );
+  const mesuresPriorisees = prioriseLesMesures(mesures, valeursDesIndices);
 
   diagnostic.restitution = {
     indicateurs,
-    recommandations: {
-      recommandationsPrioritaires: recommandationPriorisees.slice(0, 6),
-      autresRecommandations: recommandationPriorisees.slice(6),
+    mesures: {
+      mesuresPrioritaires: mesuresPriorisees.slice(0, 6),
+      autresMesures: mesuresPriorisees.slice(6),
     },
   };
 };
