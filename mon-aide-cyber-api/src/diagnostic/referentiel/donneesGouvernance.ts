@@ -32,7 +32,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant:
             'gouvernance-infos-et-processus-a-proteger-oui-idee-generale',
           libelle:
-            'Nous avons une idée générale de nos données et processus à protéger en priorité.',
+            'Nous avons une idée générale de nos données et activités à protéger en priorité.',
           resultat: {
             indice: { valeur: 1.5 },
             recommandations: [
@@ -47,7 +47,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-infos-et-processus-a-proteger-oui-precise',
           libelle:
-            'Il existe une liste précise et maintenue à jour de toutes les données et processus à protéger en priorité à l’échelle de l’organisation.',
+            'Il existe une liste précise et maintenue à jour de toutes les données et activités à protéger en priorité à l’échelle de l’organisation.',
           resultat: {
             indice: { valeur: 3 },
           },
