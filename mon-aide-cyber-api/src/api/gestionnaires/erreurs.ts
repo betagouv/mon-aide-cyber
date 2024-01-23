@@ -26,27 +26,29 @@ const erreursGerees: Map<
   string,
   (
     erreur: ErreurMAC,
+    requete: Request,
     consignateur: ConsignateurErreurs,
     reponse: Response,
   ) => void
 > = new Map([
   [
     'AggregatNonTrouve',
-    (erreur, consignateur, reponse) => {
+    (erreur, _, consignateur, reponse) => {
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_NON_TROUVE, { message: erreur.message });
     },
   ],
   [
     'ErreurAuthentification',
-    (erreur, consignateur, reponse) => {
+    (erreur, requete, consignateur, reponse) => {
+      requete.body['motDePasse'] = '<MOT_DE_PASSE_OBFUSQUE/>';
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_NON_AUTORISE, { message: erreur.message });
     },
   ],
   [
     'ErreurAccesRefuse',
-    (erreur, consignateur, reponse) => {
+    (erreur, _, consignateur, reponse) => {
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_ACCES_REFUSE, {
         message: "L'accès à la ressource est interdit.",
@@ -60,7 +62,7 @@ export const gestionnaireErreurGeneralisee = (
 ) => {
   return (
     erreur: Error,
-    _requete: Request,
+    requete: Request,
     reponse: Response,
     suite: NextFunction,
   ) => {
@@ -77,6 +79,7 @@ export const gestionnaireErreurGeneralisee = (
         if (erreursGerees.has(erreur.erreurOriginelle.constructor.name)) {
           erreursGerees.get(erreur.erreurOriginelle.constructor.name)?.(
             erreur,
+            requete,
             consignateurErreur,
             reponse,
           );
