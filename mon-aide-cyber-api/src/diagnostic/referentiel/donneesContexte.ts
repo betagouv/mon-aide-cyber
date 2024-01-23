@@ -958,17 +958,23 @@ export const donneesContexte: QuestionsThematique = {
                 },
                 {
                   identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-réseaux',
+                    'contexte-cyber-attaque-subie-oui-tiroir-type-serveur',
                   libelle:
-                    "Compromission d'un ou plusieurs équipements réseaux",
+                    "Compromission d'un serveur ou service exposé sur internet",
                   ordre: 5,
                 },
                 {
                   identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-serveur',
+                    'contexte-cyber-attaque-subie-oui-tiroir-type-reseaux',
                   libelle:
-                    "Compromission d'un serveur ou service exposé sur internet",
+                    "Compromission d'un ou plusieurs équipements réseaux",
                   ordre: 6,
+                },
+                {
+                  identifiant:
+                    'contexte-cyber-attaque-subie-oui-tiroir-type-malveillance',
+                  libelle: 'Malveillance interne',
+                  ordre: 7,
                 },
               ],
               type: 'choixMultiple',
