@@ -92,7 +92,7 @@ export const recommandationsSecuriteInfrastructure = {
         '../../recommandations/infras/securite-infrastructure-outils-securisation-systeme-messagerie-niveau1-comment.pug',
     },
     niveau2: {
-      titre: 'Désactiver le portail de type "webmail"',
+      titre: 'Sécuriser les accès distants à la messagerie via une solution de type VPN',
       pourquoi:
         '../../recommandations/infras/securite-infrastructure-outils-securisation-systeme-messagerie-niveau2-pourquoi.pug',
       comment:
