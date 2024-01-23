@@ -37,6 +37,13 @@ export const transcripteurSecuriteAcces: Thematique = {
       ],
     },
     {
+      questions: [
+        {
+          identifiant: 'acces-administrateurs-si-mesures-specifiques',
+        },
+      ],
+    },
+    {
       questions: [{ identifiant: 'acces-mesures-securite-robustesse-mdp' }],
     },
     {
@@ -55,13 +62,6 @@ export const transcripteurSecuriteAcces: Thematique = {
         {
           identifiant:
             'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
-        },
-      ],
-    },
-    {
-      questions: [
-        {
-          identifiant: 'acces-administrateurs-si-mesures-specifiques',
         },
       ],
     },
