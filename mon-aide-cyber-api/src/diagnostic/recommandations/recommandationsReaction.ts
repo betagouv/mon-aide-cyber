@@ -1,7 +1,7 @@
 export const recommandationsReaction = {
   'reaction-surveillance-veille-vulnerabilites-potentielles': {
     niveau1: {
-      titre: 'Réaliser une veille trimestrielle sur internet.',
+      titre: 'Réaliser une veille périodique sur internet.',
       pourquoi:
         '../../recommandations/reaction/reaction-surveillance-veille-vulnerabilites-potentielles-niveau1-pourquoi.pug',
       comment:
@@ -19,7 +19,7 @@ export const recommandationsReaction = {
   'reaction-sauvegardes-donnees-realisees': {
     niveau1: {
       titre:
-        'Réaliser des sauvegardes régulières autant que de besoin et dont le rythme est jugé acceptable par le CODIR.',
+        'Réaliser des sauvegardes selon une période déterminée par les besoins métiers.',
       pourquoi:
         '../../recommandations/reaction/reaction-sauvegardes-donnees-realisees-niveau1-pourquoi.pug',
       comment:
@@ -31,7 +31,7 @@ export const recommandationsReaction = {
     {
       niveau1: {
         titre:
-          "Procéder régulièrement à des tests de restauration des données critiques qui sont stockées dans un environnement sécurisé et isolée d'internet, à minima une fois par semestre.",
+          "Procéder régulièrement à des tests de restauration, couvrant en priorité les données critiques.",
         pourquoi:
           '../../recommandations/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-niveau1-pourquoi.pug',
         comment:
@@ -43,7 +43,7 @@ export const recommandationsReaction = {
     {
       niveau1: {
         titre:
-          "En complément des sauvegardes régulièrement réalisées et stockées sur le réseau, disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet (ex : sauvegarde amovible, hors AD, cloud privé, solution de sauvegarde externalisée dédiée). Déterminer le rythme de sauvegarde avec le CODIR.",
+          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet.",
         pourquoi:
           '../../recommandations/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:
@@ -55,7 +55,7 @@ export const recommandationsReaction = {
     {
       niveau1: {
         titre:
-          "En complément des sauvegardes régulièrement réalisées et stockées sur le réseau, disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet (ex : sauvegarde amovible, hors AD, cloud privé, solution de sauvegarde externalisée dédiée). Déterminer le rythme de sauvegarde avec le CODIR.",
+          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet.",
         pourquoi:
           '../../recommandations/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-niveau1-pourquoi.pug',
         comment:
@@ -67,7 +67,7 @@ export const recommandationsReaction = {
     {
       niveau1: {
         titre:
-          "En complément des sauvegardes régulièrement réalisées et stockées sur le réseau, disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet (ex : sauvegarde amovible, hors AD, cloud privé, solution de sauvegarde externalisée dédiée). Déterminer le rythme de sauvegarde avec le CODIR.",
+          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet.",
         pourquoi:
           '../../recommandations/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:
