@@ -6,6 +6,8 @@ import bodyParser from 'body-parser';
 import { body } from 'express-validator';
 import { authentifie } from '../authentification/authentification';
 
+export type CorpsAuthentification = { identifiant: string; motDePasse: string };
+
 export const routesAPIAuthentification = (
   configuration: ConfigurationServeur,
 ) => {
@@ -15,8 +17,12 @@ export const routesAPIAuthentification = (
     '/',
     bodyParser.json(),
     body('identifiant').toLowerCase(),
-    (requete: Request, reponse: Response, suite: NextFunction) => {
-      const { identifiant, motDePasse } = requete.body;
+    (
+      requete: Request<CorpsAuthentification>,
+      reponse: Response,
+      suite: NextFunction,
+    ) => {
+      const { identifiant, motDePasse }: CorpsAuthentification = requete.body;
       authentifie(
         configuration.entrepots.aidants(),
         configuration.gestionnaireDeJeton,

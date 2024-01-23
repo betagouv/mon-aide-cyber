@@ -6,6 +6,7 @@ import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../../src/domaine/erreurMAC';
 import { ErreurAuthentification } from '../../../src/authentification/Aidant';
 import { ErreurAccesRefuse } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';
+import { CorpsAuthentification } from '../../../src/api/routesAPIAuthentification';
 
 describe("Gestionnaire d'erreur", () => {
   let codeRecu = 0;
@@ -71,6 +72,11 @@ describe("Gestionnaire d'erreur", () => {
 
   it("consigne l'erreur en cas d'authentification erronée", () => {
     const consignateurErreurs = new ConsignateurErreursMemoire();
+    const corpsAuthentification: CorpsAuthentification = {
+      identifiant: 'jean',
+      motDePasse: 'abc123',
+    };
+    fausseRequete.body = corpsAuthentification;
 
     gestionnaireErreurGeneralisee(consignateurErreurs)(
       ErreurMAC.cree(
@@ -83,6 +89,10 @@ describe("Gestionnaire d'erreur", () => {
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(1);
+    expect(fausseRequete.body).toStrictEqual<CorpsAuthentification>({
+      identifiant: 'jean',
+      motDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
+    });
   });
 
   it("génère une erreur 403 lorsqu'une erreur MAC 'Accès ressource protégée' est reçue et consigne l'erreur avec le détail", () => {
