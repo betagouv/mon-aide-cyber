@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
-import Accueil from './Accueil.tsx';
+import { Accueil } from './Accueil.tsx';
 import './assets/styles/index.scss';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { FournisseurEntrepots } from './fournisseurs/FournisseurEntrepot.ts';

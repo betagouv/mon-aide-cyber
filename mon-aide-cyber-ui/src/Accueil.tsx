@@ -1,8 +1,79 @@
 import { Header } from './composants/Header.tsx';
 import { Footer } from './composants/Footer.tsx';
-import { useCallback, useState } from 'react';
+import { PropsWithChildren, ReactNode, useCallback, useState } from 'react';
 
-function Accueil() {
+type ProprietesComposantEtape = {
+  illustration: { chemin: string; texteAlternatif: string };
+  numeroEtape: number;
+};
+
+type ProprietesComposantEtape2 = {
+  elementDroite: ReactNode;
+  elementGauche: ReactNode;
+  numeroEtape: number;
+};
+
+const ComposantEtape = (
+  proprietes: PropsWithChildren<ProprietesComposantEtape2>,
+) => {
+  return (
+    <div className="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+      {proprietes.elementGauche}
+      <div className="fr-col-2 fr-grid-row fr-grid-row--center">
+        <div className={`etape etape-${proprietes.numeroEtape}`}>
+          <i>{proprietes.numeroEtape}</i>
+        </div>
+      </div>
+      {proprietes.elementDroite}
+    </div>
+  );
+};
+const ComposantEtapeDroite = (
+  proprietes: PropsWithChildren<ProprietesComposantEtape>,
+) => {
+  return (
+    <ComposantEtape
+      elementDroite={
+        <div className="fr-col-5">
+          <img
+            src={proprietes.illustration.chemin}
+            alt={proprietes.illustration.texteAlternatif}
+            className="illustration"
+          />
+        </div>
+      }
+      elementGauche={
+        <div className="fr-col-4 fr-col-offset-1">{proprietes.children}</div>
+      }
+      numeroEtape={proprietes.numeroEtape}
+    />
+  );
+};
+const ComposantEtapeGauche = (
+  proprietes: PropsWithChildren<ProprietesComposantEtape>,
+) => {
+  return (
+    <ComposantEtape
+      elementDroite={
+        <div className="fr-col-4 fr-col-offset-1--right">
+          {proprietes.children}
+        </div>
+      }
+      elementGauche={
+        <div className="fr-col-5">
+          <img
+            src={proprietes.illustration.chemin}
+            alt={proprietes.illustration.texteAlternatif}
+            className="illustration"
+          />
+        </div>
+      }
+      numeroEtape={proprietes.numeroEtape}
+    />
+  );
+};
+
+export const Accueil = () => {
   const [motDGClique, setMotDGClique] = useState<boolean>(true);
   const [motGeneralClique, setMotGeneralClique] = useState<boolean>(false);
 
@@ -294,8 +365,8 @@ function Accueil() {
               >
                 <h4>Un suivi à 6 mois</h4>
                 <b>Un suivi</b> et des conseils complémentaires dans la mise en
-                œuvre de mesures de sécurité avec <b>« l’aidant cyber »</b>{' '}
-                ayant réalisé le diagnostic peuvent aussi être envisagés.
+                œuvre de mesures de sécurité avec l’<b>Aidant cyber</b> ayant
+                réalisé le diagnostic peuvent aussi être envisagés.
               </ComposantEtapeDroite>
             </div>
           </div>
@@ -353,6 +424,4 @@ function Accueil() {
       <Footer />
     </>
   );
-}
-
-export default Accueil;
+};
