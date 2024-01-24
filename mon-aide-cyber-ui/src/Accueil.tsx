@@ -96,8 +96,9 @@ export const Accueil = () => {
               <div id="corps" className="fr-col-6">
                 <h1 className="fr-mb-5w">MonAideCyber</h1>
                 <p>
-                  Passez à l’action pour votre cyber sécurité grâce à notre
-                  communauté d’Aidants sur tout le territoire !
+                  Passez à l’action et menons ensemble votre première démarche
+                  de cybersécurité grâce à notre communauté d’Aidants présente
+                  sur tout le territoire !
                 </p>
               </div>
               <div id="illustration" className="fr-col-6">
