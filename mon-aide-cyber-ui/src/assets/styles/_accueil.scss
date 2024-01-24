@@ -218,6 +218,54 @@ $taille-padding-dsfr-7v: 3.5rem;
   align-items: center;
 }
 
+.comment-fonctionne-mon-aide-cyber {
+  b {
+    color: var(--couleurs-mac-violet-fonce);
+  }
+}
+
+.etapes {
+  .illustration {
+    height: 22.75rem;
+  }
+
+  h4 {
+    font-size: 2rem;
+  }
+}
+
+.etape i {
+  display: inline-flex;
+  width: 7.5rem;
+  height: 7.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--couleurs-mac-violet-fonce);
+  color: var(--couleurs-mac-blanc);
+  text-align: center;
+  font-size: 3rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.5rem;
+}
+
+.etape-1 i {
+  opacity: 0.5;
+}
+
+.etape-2 i {
+  opacity: 0.6;
+}
+
+.etape-3 i {
+  opacity: 0.8;
+}
+
+.etape-4 i {
+  opacity: 1;
+}
+
 .bientot-disponible {
   background-color: #efefef;
   filter: grayscale(90%);
