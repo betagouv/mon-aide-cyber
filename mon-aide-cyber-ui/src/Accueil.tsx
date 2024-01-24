@@ -1,7 +1,20 @@
 import { Header } from './composants/Header.tsx';
 import { Footer } from './composants/Footer.tsx';
+import { useCallback, useState } from 'react';
 
 function Accueil() {
+  const [motDGClique, setMotDGClique] = useState<boolean>(true);
+  const [motGeneralClique, setMotGeneralClique] = useState<boolean>(false);
+
+  const surCliqueMotDG = useCallback(() => {
+    setMotGeneralClique(false);
+    setMotDGClique(true);
+  }, []);
+
+  const surCliqueMotGeneral = useCallback(() => {
+    setMotDGClique(false);
+    setMotGeneralClique(true);
+  }, []);
   return (
     <>
       <Header />
