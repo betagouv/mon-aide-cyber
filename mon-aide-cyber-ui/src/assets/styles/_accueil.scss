@@ -11,6 +11,12 @@ $taille-padding-dsfr-7v: 3.5rem;
   height: 42.5rem;
 }
 
+.conteneur-accueil {
+  display: flex;
+  flex-direction: column;
+  gap: 6.5rem;
+}
+
 #presentation {
   #corps {
     color: var(--couleurs-mac-blanc);
@@ -106,6 +112,110 @@ $taille-padding-dsfr-7v: 3.5rem;
 
 .tuile-petite {
   @include tuile(24.5rem);
+}
+
+.guillemets {
+}
+
+.les-mots-de {
+  display: flex;
+  padding: 8.5rem 0 5rem 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+
+  .titre {
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 2.25rem;
+    color: var(--couleurs-mac-violet-tres-clair);
+  }
+
+  .contenu {
+    font-family: Spectral;
+    font-size: 2.375rem;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 3rem;
+    text-align: center;
+  }
+
+  .personne {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    .illustration {
+    }
+
+    .nom {
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1.5rem;
+    }
+  }
+}
+
+.slider {
+  margin-top: -10.9rem;
+  overflow: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.lien-slider a {
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+  background: white;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 0.5rem 2rem 0.5rem;
+  position: relative;
+}
+.lien-slider a:active {
+  background: var(--couleurs-mac-violet-leger);
+}
+.lien-slider a:hover {
+  background: var(--couleurs-mac-violet-leger);
+}
+.lien-slider a:focus {
+  background: var(--couleurs-mac-blanc);
+}
+
+.slider-active {
+  background: var(--couleurs-mac-violet-leger) !important;
+}
+
+.slides {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.slides::-webkit-scrollbar {
+  display: none;
+}
+
+.slides > div {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  transform-origin: center center;
+  transform: scale(1);
+  transition: transform 0.5s;
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .bientot-disponible {
