@@ -1,4 +1,9 @@
 import { ReactElement } from 'react';
+import {
+  ChampsErreur,
+  construisErreur,
+  PresentationErreur,
+} from '../erreurs/Erreurs.tsx';
 
 enum TypeActionAuthentification {
   SAISIE_INVALIDEE = 'SAISIE_INVALIDEE',
@@ -7,22 +12,14 @@ enum TypeActionAuthentification {
   AUTHENTIFICATION_INVALIDEE = 'AUTHENTIFICATION_INVALIDEE',
 }
 
-type ClasseErreurInputGroup = 'fr-input-group--error';
-
 type EtatAuthentification = {
   identifiant: string;
   motDePasse: string;
   champsErreur: ReactElement;
   saisieValide: () => boolean;
   erreur?: {
-    identifiant?: {
-      texteExplicatif: ReactElement;
-      className: ClasseErreurInputGroup;
-    };
-    motDePasse?: {
-      texteExplicatif: ReactElement;
-      className: ClasseErreurInputGroup;
-    };
+    identifiant?: PresentationErreur;
+    motDePasse?: PresentationErreur;
   };
 };
 
@@ -42,23 +39,6 @@ type ActionAuthentification =
       erreur: Error;
       type: TypeActionAuthentification.AUTHENTIFICATION_INVALIDEE;
     };
-
-const construisErreur = (
-  clef: 'identifiant' | 'motDePasse',
-  texteExplicatif: { identifiantTexteExplicatif: string; texte: string },
-) => {
-  return {
-    [clef]: {
-      texteExplicatif: (
-        <TexteExplicatif
-          id={texteExplicatif.identifiantTexteExplicatif}
-          texte={texteExplicatif.texte}
-        />
-      ),
-      className: 'fr-input-group--error' as ClasseErreurInputGroup,
-    },
-  };
-};
 
 const construisErreurIdentifiant = () => {
   return construisErreur('identifiant', {
@@ -175,24 +155,4 @@ export const initialiseReducteur = (): EtatAuthentification => {
     motDePasse: '',
     saisieValide: (): boolean => false,
   };
-};
-
-type ProprietesTexteExplicatif = {
-  id: string;
-  texte: string;
-};
-export const TexteExplicatif = (proprietes: ProprietesTexteExplicatif) => {
-  return (
-    <p id={proprietes.id} className="fr-error-text">
-      {proprietes.texte}
-    </p>
-  );
-};
-
-export const ChampsErreur = ({ erreur }: { erreur: Error }) => {
-  return (
-    <div className="fr-alert fr-alert--error fr-alert--sm">
-      <p>{erreur.message}</p>
-    </div>
-  );
 };

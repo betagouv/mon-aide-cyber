@@ -8,10 +8,15 @@ import {
 import { EntrepotDiagnostics } from '../domaine/diagnostic/Diagnostics.ts';
 import { APIEntrepotDiagnostic } from '../infrastructure/entrepots/APIEntrepotDiagnostic.ts';
 import { EntrepotAuthentification } from '../domaine/authentification/Authentification.ts';
+import {
+  APIEntrepotContact,
+  EntrepotContact,
+} from '../infrastructure/entrepots/APIEntrepotContact.ts';
 
 export const FournisseurEntrepots = createContext<Entrepots>({
   diagnostic: (): EntrepotDiagnostic => new APIEntrepotDiagnostic(),
   diagnostics: (): EntrepotDiagnostics => new APIEntrepotDiagnostics(),
   authentification: (): EntrepotAuthentification =>
     new APIEntrepotAuthentification(),
+  contact: (): EntrepotContact => new APIEntrepotContact(),
 });

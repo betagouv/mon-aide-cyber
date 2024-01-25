@@ -1,6 +1,23 @@
 import { Header } from './composants/Header.tsx';
 import { Footer } from './composants/Footer.tsx';
-import { PropsWithChildren, ReactNode, useCallback, useState } from 'react';
+import React, {
+  FormEvent,
+  PropsWithChildren,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useReducer,
+} from 'react';
+import {
+  emailSaisi,
+  envoiMessageInvalide,
+  messageComplete,
+  messageEnvoye,
+  messageSaisi,
+  nomSaisi,
+  reducteurEnvoiMessageContact,
+} from './reducteurs/reducteurEnvoiMessageContact.tsx';
+import { useEntrepots } from './fournisseurs/hooks.ts';
 
 type ProprietesComposantEtape = {
   illustration: { chemin: string; texteAlternatif: string };
@@ -74,18 +91,27 @@ const ComposantEtapeGauche = (
 };
 
 export const Accueil = () => {
-  const [motDGClique, setMotDGClique] = useState<boolean>(true);
-  const [motGeneralClique, setMotGeneralClique] = useState<boolean>(false);
+  // const [motDGClique, setMotDGClique] = useState<boolean>(true);
+  // const [motGeneralClique, setMotGeneralClique] = useState<boolean>(false);
+  const [etatMessage, envoie] = useReducer(reducteurEnvoiMessageContact, {
+    nom: '',
+    email: '',
+    message: '',
+    erreur: {},
+    saisieValide: () => false,
+  });
+  const entrepots = useEntrepots();
+  const erreur = etatMessage.erreur;
 
-  const surCliqueMotDG = useCallback(() => {
-    setMotGeneralClique(false);
-    setMotDGClique(true);
-  }, []);
-
-  const surCliqueMotGeneral = useCallback(() => {
-    setMotDGClique(false);
-    setMotGeneralClique(true);
-  }, []);
+  // const surCliqueMotDG = useCallback(() => {
+  //   setMotGeneralClique(false);
+  //   setMotDGClique(true);
+  // }, []);
+  //
+  // const surCliqueMotGeneral = useCallback(() => {
+  //   setMotDGClique(false);
+  //   setMotGeneralClique(true);
+  // }, []);
   const mailMonAideCyber = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       window.location.href = 'mailto:monaidecyber@ssi.gouv.fr';
@@ -93,6 +119,35 @@ export const Accueil = () => {
     },
     [],
   );
+  const envoieMessage = useCallback(async (e: FormEvent) => {
+    e.preventDefault();
+    envoie(messageComplete());
+  }, []);
+
+  useEffect(() => {
+    if (etatMessage.saisieValide() && !etatMessage.messageEnvoye) {
+      entrepots
+        .contact()
+        .envoie({
+          nom: etatMessage.nom,
+          email: etatMessage.email,
+          message: etatMessage.message,
+        })
+        .then(() => messageEnvoye())
+        .catch((erreur) => envoiMessageInvalide(erreur as Error));
+      envoie(messageEnvoye());
+    }
+  }, [entrepots, etatMessage]);
+
+  const surSaisieNom = useCallback((nom: string) => {
+    envoie(nomSaisi(nom));
+  }, []);
+  const surSaisieEmail = useCallback((email: string) => {
+    envoie(emailSaisi(email));
+  }, []);
+  const surSaisieMessage = useCallback((message: string) => {
+    envoie(messageSaisi(message));
+  }, []);
   return (
     <>
       <Header />
@@ -100,7 +155,7 @@ export const Accueil = () => {
         <div className="bandeau-violet accueil">
           <div id="presentation" className="fr-container">
             <div className="fr-grid-row fr-grid-row--middle fr-py-20v">
-              <div id="corps" className="fr-col-6">
+              <div id="corps" className="fr-col-6 fr-col-offset-1--right">
                 <h1 className="fr-mb-5w">MonAideCyber</h1>
                 <p>
                   Passez à l’action et menons ensemble votre première démarche
@@ -108,7 +163,7 @@ export const Accueil = () => {
                   sur tout le territoire !
                 </p>
               </div>
-              <div id="illustration" className="fr-col-6">
+              <div id="illustration" className="fr-col-5">
                 <img
                   src="/images/illustration-accueil.svg"
                   alt="scène d'un aidant et d'un aidé faisant un diagnostic"
@@ -193,11 +248,11 @@ export const Accueil = () => {
           <div className="fr-container">
             <div id="ce-que-cest" className="fr-grid-row fr-grid-row--gutters">
               <div className="fr-col-8">
-                <h2>Qu&apos;est-ce que MonAideCyber ?</h2>
+                <h2>Qu&apos;est-ce que MonAideCyber?</h2>
               </div>
               <div className="fr-col-6">
                 <div className="detail bordure-gauche-violette">
-                  <h3>Une initiative de l’État</h3>
+                  <h3>Une initiative de l’ANSSI</h3>
                   <p>
                     Un <b>programme d’accompagnement</b> et de formation gratuit
                     à destination d’une <b>communauté d’Aidants</b> leur
@@ -272,54 +327,54 @@ export const Accueil = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="fr-col-6"></div>
-                  <div id="slide-general" className="fr-container">
-                    <div className="fr-grid-row les-mots-de">
-                      <div className="titre">Le mot du Général</div>
-                      <div className="contenu">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nulla eget condimentum orci, faucibus viverra ipsum.
-                        Aliquam sed lorem turpis. Nunc facilisis leo nec metus
-                        rutrum, eget scelerisque dolor mollis. Curabitur at
-                        tortor non neque hendrerit egestas et vel massa. Integer
-                        ac lectus vitae lacus mollis varius at at quam. Proin
-                        sagittis libero ex. Nunc iaculis non dui vel.
-                      </div>
-                      <div className="personne">
-                        <div className="illustration">
-                          <img
-                            src="/images/illustration-general-gendarmerie.png"
-                            alt="Commandant de la Gendarmerie dans le cyberespace"
-                          />
-                        </div>
-                        <div className="nom">Général Husson</div>
-                        <div>
-                          Commandant de la Gendarmerie dans le cyberespace
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  {/*<div className="fr-col-6"></div>*/}
+                  {/*<div id="slide-general" className="fr-container">*/}
+                  {/*  <div className="fr-grid-row les-mots-de">*/}
+                  {/*    <div className="titre">Le mot du Général</div>*/}
+                  {/*    <div className="contenu">*/}
+                  {/*      Lorem ipsum dolor sit amet, consectetur adipiscing elit.*/}
+                  {/*      Nulla eget condimentum orci, faucibus viverra ipsum.*/}
+                  {/*      Aliquam sed lorem turpis. Nunc facilisis leo nec metus*/}
+                  {/*      rutrum, eget scelerisque dolor mollis. Curabitur at*/}
+                  {/*      tortor non neque hendrerit egestas et vel massa. Integer*/}
+                  {/*      ac lectus vitae lacus mollis varius at at quam. Proin*/}
+                  {/*      sagittis libero ex. Nunc iaculis non dui vel.*/}
+                  {/*    </div>*/}
+                  {/*    <div className="personne">*/}
+                  {/*      <div className="illustration">*/}
+                  {/*        <img*/}
+                  {/*          src="/images/illustration-general-gendarmerie.png"*/}
+                  {/*          alt="Commandant de la Gendarmerie dans le cyberespace"*/}
+                  {/*        />*/}
+                  {/*      </div>*/}
+                  {/*      <div className="nom">Général Husson</div>*/}
+                  {/*      <div>*/}
+                  {/*        Commandant de la Gendarmerie dans le cyberespace*/}
+                  {/*      </div>*/}
+                  {/*    </div>*/}
+                  {/*  </div>*/}
+                  {/*</div>*/}
                 </div>
-                <div className="lien-slider fr-grid-row fr-grid-row--center">
-                  <div>
-                    <a
-                      href="#slide-dg"
-                      onClick={surCliqueMotDG}
-                      className={motDGClique ? 'slider-active' : ''}
-                    >
-                      &nbsp;
-                    </a>
-                  </div>
-                  <div>
-                    <a
-                      href="#slide-general"
-                      onClick={surCliqueMotGeneral}
-                      className={motGeneralClique ? 'slider-active' : ''}
-                    >
-                      &nbsp;
-                    </a>
-                  </div>
-                </div>
+                {/*<div className="lien-slider fr-grid-row fr-grid-row--center">*/}
+                {/*  <div>*/}
+                {/*    <a*/}
+                {/*      href="#slide-dg"*/}
+                {/*      onClick={surCliqueMotDG}*/}
+                {/*      className={motDGClique ? 'slider-active' : ''}*/}
+                {/*    >*/}
+                {/*      &nbsp;*/}
+                {/*    </a>*/}
+                {/*  </div>*/}
+                {/*  <div>*/}
+                {/*    <a*/}
+                {/*      href="#slide-general"*/}
+                {/*      onClick={surCliqueMotGeneral}*/}
+                {/*      className={motGeneralClique ? 'slider-active' : ''}*/}
+                {/*    >*/}
+                {/*      &nbsp;*/}
+                {/*    </a>*/}
+                {/*  </div>*/}
+                {/*</div>*/}
               </div>
             </div>
           </div>
@@ -395,8 +450,8 @@ export const Accueil = () => {
               </ComposantEtapeDroite>
             </div>
           </div>
-          <div className="fr-container">
-            <div className="participer">
+          <div className="fr-container participer">
+            <div className="conteneur-participer">
               <div className="fr-col-12">
                 <h2>Vous souhaitez participer ?</h2>
               </div>
@@ -454,6 +509,124 @@ export const Accueil = () => {
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bandeau-violet contactez-nous">
+            <div className="fr-container">
+              <div className="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+                <div className="fr-col-5 fr-col-offset-1--right">
+                  <h2>Contactez-nous !</h2>
+                  <p>
+                    Vous avez des <b>questions</b> sur MonAideCyber ?
+                    <br />
+                    Toute l’équipe est à votre écoute.
+                  </p>
+                </div>
+                <div className="fr-col-6">
+                  <form onSubmit={envoieMessage}>
+                    <section>
+                      <div className="fr-col-12">
+                        <fieldset>
+                          <div className="fr-grid-row fr-grid-row--gutters">
+                            <div className="fr-col-6">
+                              <div
+                                className={`fr-input-group ${
+                                  erreur ? erreur?.nom?.className : ''
+                                }`}
+                              >
+                                <label className="fr-label" htmlFor="votre-nom">
+                                  Votre Nom
+                                </label>
+                                <input
+                                  className="fr-input"
+                                  type="text"
+                                  id={'votre-nom'}
+                                  name="votre-nom"
+                                  autoComplete={'name'}
+                                  onChange={(e) => surSaisieNom(e.target.value)}
+                                  value={etatMessage.nom}
+                                />
+                                {erreur?.nom?.texteExplicatif}
+                              </div>
+                            </div>
+                            <div className="fr-col-6">
+                              <div
+                                className={`fr-input-group ${
+                                  erreur ? erreur?.email?.className : ''
+                                }`}
+                              >
+                                <label
+                                  className="fr-label"
+                                  htmlFor="votre-email"
+                                >
+                                  Votre adresse email
+                                </label>
+                                <input
+                                  className="fr-input"
+                                  type="text"
+                                  role="textbox"
+                                  id="votre-email"
+                                  name="votre-email"
+                                  autoComplete={'email'}
+                                  onChange={(e) =>
+                                    surSaisieEmail(e.target.value)
+                                  }
+                                  value={etatMessage.email}
+                                />
+                                {erreur?.email?.texteExplicatif}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="fr-mt-3w">
+                            <div
+                              className={`fr-input-group ${
+                                erreur ? erreur?.message?.className : ''
+                              }`}
+                            >
+                              <label
+                                className="fr-label"
+                                htmlFor="votre-message"
+                              >
+                                Votre message
+                              </label>
+                              <textarea
+                                className="fr-input"
+                                id="votre-message"
+                                name="votre-message"
+                                rows={4}
+                                onChange={(e) =>
+                                  surSaisieMessage(e.target.value)
+                                }
+                                value={etatMessage.message}
+                              ></textarea>
+                              {erreur?.message?.texteExplicatif}
+                            </div>
+                          </div>
+                          <div className="fr-mt-3w">
+                            <button
+                              type="submit"
+                              key="connexion-aidant"
+                              className="fr-btn bouton-mac bouton-mac-primaire-inverse"
+                            >
+                              Envoyer le message
+                            </button>
+                            {etatMessage.messageEnvoye ? (
+                              <p id="message-envoye" className="fr-valid-text">
+                                Message envoyé
+                              </p>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
+                          <div className="fr-mt-2w">
+                            {etatMessage.champsErreur}
+                          </div>
+                        </fieldset>
+                      </div>
+                    </section>
+                  </form>
                 </div>
               </div>
             </div>

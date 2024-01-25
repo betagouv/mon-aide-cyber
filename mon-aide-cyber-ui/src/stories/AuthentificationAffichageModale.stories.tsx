@@ -14,6 +14,7 @@ import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAfficha
 import { ErrorBoundary } from 'react-error-boundary';
 import { EntrepotDiagnostic } from '../domaine/diagnostic/Diagnostic.ts';
 import { BrowserRouter } from 'react-router-dom';
+import { EntrepotContact } from '../infrastructure/entrepots/APIEntrepotContact.ts';
 
 class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
   private aidants: {
@@ -79,6 +80,7 @@ export const ModaleDeConnexion: Story = {
               new EntrepotDiagnosticsMemoire(),
             authentification: (): EntrepotAuthentification =>
               entrepoAuthentification,
+            contact: (): EntrepotContact => ({}) as unknown as EntrepotContact,
           }}
         >
           <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>

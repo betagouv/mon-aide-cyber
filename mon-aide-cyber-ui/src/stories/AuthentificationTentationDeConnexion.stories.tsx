@@ -16,6 +16,7 @@ import { EntrepotDiagnostic } from '../domaine/diagnostic/Diagnostic.ts';
 import { BrowserRouter } from 'react-router-dom';
 import { FournisseurAuthentification } from '../fournisseurs/ContexteAuthentification.tsx';
 import { RequiertAuthentification } from '../fournisseurs/RequiertAuthentification.tsx';
+import { EntrepotContact } from '../infrastructure/entrepots/APIEntrepotContact.ts';
 
 class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
   private aidants: {
@@ -84,6 +85,7 @@ export const ConnexionAMonAideCyber: Story = {
               new EntrepotDiagnosticsMemoire(),
             authentification: (): EntrepotAuthentification =>
               entrepotAuthentification,
+            contact: (): EntrepotContact => ({}) as unknown as EntrepotContact,
           }}
         >
           <FournisseurAuthentification>

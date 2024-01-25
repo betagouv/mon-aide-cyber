@@ -1,25 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import {
   authentificationInvalidee,
-  ChampsErreur,
   identifiantSaisi,
   initialiseReducteur,
   motDePasseSaisi,
   reducteurAuthentification,
   saisieInvalidee,
-  TexteExplicatif,
 } from '../../../src/composants/authentification/reducteurAuthentification';
+import {
+  ChampsErreur,
+  TexteExplicatif,
+} from '../../../src/composants/erreurs/Erreurs.tsx';
 
 describe('Réducteur authentification', () => {
-  it.skip('est initialisé', () => {
-    expect(initialiseReducteur()).toStrictEqual({
-      champsErreur: <></>,
-      identifiant: '',
-      motDePasse: '',
-      saisieValide: (): boolean => false,
-    });
-  });
-
   describe("Lorsque l'authentification est invalidée", () => {
     it("affiche le champs d'erreur", () => {
       const etatAuthentification = reducteurAuthentification(

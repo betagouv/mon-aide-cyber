@@ -21,6 +21,7 @@ import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnosti
 import { EntrepotDiagnostics } from '../domaine/diagnostic/Diagnostics.ts';
 import { uneAction } from '../../test/constructeurs/constructeurActionDiagnostic.ts';
 import { EntrepotAuthentification } from '../domaine/authentification/Authentification.ts';
+import { EntrepotContact } from '../infrastructure/entrepots/APIEntrepotContact.ts';
 
 const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
 const actionRepondre = uneAction().contexte().construis();
@@ -381,6 +382,7 @@ const meta = {
             new EntrepotDiagnosticsMemoire(),
           authentification: (): EntrepotAuthentification =>
             ({}) as unknown as EntrepotAuthentification,
+          contact: (): EntrepotContact => ({}) as unknown as EntrepotContact,
         }}
       >
         <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
