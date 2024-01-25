@@ -22,6 +22,10 @@ import { PortailModale } from './composants/modale/PortailModale.tsx';
 import { CharteAidant } from './vues/CharteAidant.tsx';
 import { TableauDeBord } from './composants/TableauDeBord.tsx';
 import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution.tsx';
+import {
+  APIEntrepotContact,
+  EntrepotContact,
+} from './infrastructure/entrepots/APIEntrepotContact.ts';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -32,6 +36,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           diagnostics: (): EntrepotDiagnostics => new APIEntrepotDiagnostics(),
           authentification: (): EntrepotAuthentification =>
             new APIEntrepotAuthentification(),
+          contact: (): EntrepotContact => new APIEntrepotContact(),
         }}
       >
         <FournisseurAuthentification>
