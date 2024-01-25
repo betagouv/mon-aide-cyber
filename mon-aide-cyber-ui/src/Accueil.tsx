@@ -86,6 +86,13 @@ export const Accueil = () => {
     setMotDGClique(false);
     setMotGeneralClique(true);
   }, []);
+  const mailMonAideCyber = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      window.location.href = 'mailto:monaidecyber@ssi.gouv.fr';
+      e.preventDefault();
+    },
+    [],
+  );
   return (
     <>
       <Header />
@@ -191,40 +198,48 @@ export const Accueil = () => {
               <div className="fr-col-6">
                 <div className="detail bordure-gauche-violette">
                   <h3>Une initiative de l’État</h3>
-                  Un <b>programme d’accompagnement</b> et de formation gratuit à
-                  destination d’une <b>communauté d’Aidants</b> leur permettant
-                  de guider leur <b>écosystème</b> pour mettre en œuvre une{' '}
-                  <b>démarche de cybersécurité.</b>
+                  <p>
+                    Un <b>programme d’accompagnement</b> et de formation gratuit
+                    à destination d’une <b>communauté d’Aidants</b> leur
+                    permettant de guider leur <b>écosystème</b> pour mettre en
+                    œuvre une <b>démarche de cybersécurité.</b>
+                  </p>
                 </div>
               </div>
               <div className="fr-col-6">
                 <div className="detail bordure-gauche-jaune">
                   <h3>Une démarche concrète</h3>
-                  <b>Clé-en-main</b> et <b>pédagogique</b>, MonAideCyber rend la
-                  cybersécurité accessible à toutes et tous, et facilite la mise
-                  en œuvre de <b>premières mesures</b> qui réduisent les risques
-                  liés à la <b>cybercriminalité de masse.</b>
+                  <p>
+                    <b>Clé-en-main</b> et <b>pédagogique</b>, MonAideCyber rend
+                    la cybersécurité accessible à toutes et tous, et facilite la
+                    mise en œuvre de <b>premières mesures</b> qui réduisent les
+                    risques liés à la <b>cybercriminalité de masse.</b>
+                  </p>
                 </div>
               </div>
               <div className="fr-col-6">
                 <div className="detail bordure-gauche-jaune">
                   <h3>Une startup d’état</h3>
-                  <b>MonAideCyber</b> est une start-up d’État incubée au sein du
-                  laboratoire d’innovation de l’
-                  <b>
-                    Agence Nationale de la Sécurité des Systèmes d’Information
-                    (ANSSI).
-                  </b>
+                  <p>
+                    <b>MonAideCyber</b> est une start-up d’État incubée au sein
+                    du laboratoire d’innovation de l’
+                    <b>
+                      Agence Nationale de la Sécurité des Systèmes d’Information
+                      (ANSSI).
+                    </b>
+                  </p>
                 </div>
               </div>
               <div className="fr-col-6">
                 <div className="detail bordure-gauche-violette">
                   <h3>Pour toutes les entités novices</h3>
-                  <b>MonAideCyber</b> s’adresse aux{' '}
-                  <b>entités publiques, associatives et privées,</b> déjà
-                  sensibilisées et de <b>faible maturité cyber</b>, qui{' '}
-                  <b>souhaitent s’engager</b> dans une démarche{' '}
-                  <b>progressive.</b> Les particuliers ne sont pas concernés.
+                  <p>
+                    <b>MonAideCyber</b> s’adresse aux{' '}
+                    <b>entités publiques, associatives et privées,</b> déjà
+                    sensibilisées et de <b>faible maturité cyber</b>, qui{' '}
+                    <b>souhaitent s’engager</b> dans une démarche{' '}
+                    <b>progressive.</b> Les particuliers ne sont pas concernés.
+                  </p>
                 </div>
               </div>
             </div>
@@ -322,13 +337,16 @@ export const Accueil = () => {
                 numeroEtape={1}
               >
                 <h4>Réalisation d’un diagnostic</h4>
-                Réalisation{' '}
-                <b>
-                  d’un diagnostic cyber de premier niveau établi par des Aidants
-                </b>{' '}
-                auprès de leurs bénéficiaires. La plateforme contient également
-                un ensemble de <b>ressources et de dispositifs</b> d’aides
-                complémentaires mis à disposition.
+                <p>
+                  Réalisation{' '}
+                  <b>
+                    d’un diagnostic cyber de premier niveau établi par des
+                    Aidants
+                  </b>{' '}
+                  auprès de leurs bénéficiaires. La plateforme contient
+                  également un ensemble de <b>ressources et de dispositifs</b>{' '}
+                  d’aides complémentaires mis à disposition.
+                </p>
               </ComposantEtapeGauche>
               <ComposantEtapeDroite
                 illustration={{
@@ -338,11 +356,13 @@ export const Accueil = () => {
                 numeroEtape={2}
               >
                 <h4>Un référentiel avec des mesures accessibles</h4>
-                Le service de diagnostic accompagné s’appuie sur un{' '}
-                <b>référentiel évolutif de questions</b> et de mesures de
-                sécurité non exhaustif inspiré en particulier du guide{' '}
-                <b>« La cybersécurité pour les TPE/PME en 13 questions »</b> de
-                l’ANSSI.
+                <p>
+                  Le service de diagnostic accompagné s’appuie sur un{' '}
+                  <b>référentiel évolutif de questions</b> et de mesures de
+                  sécurité non exhaustif inspiré en particulier du guide{' '}
+                  <b>« La cybersécurité pour les TPE/PME en 13 questions »</b>{' '}
+                  de l’ANSSI.
+                </p>
               </ComposantEtapeDroite>
               <ComposantEtapeGauche
                 illustration={{
@@ -352,10 +372,12 @@ export const Accueil = () => {
                 }}
                 numeroEtape={3}
               >
-                <h4>Des mesures priorisées et applicables</h4>À l’issue du{' '}
-                <b>diagnostic d’1h30</b>, l’entité diagnostiquée se voit
-                proposer <b>6 mesures de sécurité</b> à mener en priorité et à
-                mettre en œuvre sur les 6 prochains mois.
+                <h4>Des mesures priorisées et applicables</h4>
+                <p>
+                  À l’issue du <b>diagnostic d’1h30</b>, l’entité diagnostiquée
+                  se voit proposer <b>6 mesures de sécurité</b> à mener en
+                  priorité et à mettre en œuvre sur les 6 prochains mois.
+                </p>
               </ComposantEtapeGauche>
               <ComposantEtapeDroite
                 illustration={{
@@ -365,56 +387,72 @@ export const Accueil = () => {
                 numeroEtape={4}
               >
                 <h4>Un suivi à 6 mois</h4>
-                <b>Un suivi</b> et des conseils complémentaires dans la mise en
-                œuvre de mesures de sécurité avec l’<b>Aidant cyber</b> ayant
-                réalisé le diagnostic peuvent aussi être envisagés.
+                <p>
+                  <b>Un suivi</b> et des conseils complémentaires dans la mise
+                  en œuvre de mesures de sécurité avec l’<b>Aidant cyber</b>{' '}
+                  ayant réalisé le diagnostic peuvent aussi être envisagés.
+                </p>
               </ComposantEtapeDroite>
             </div>
           </div>
-          <div id="participer" className="fr-container">
-            <div className="fr-col-12">
-              <h2>Participer ?</h2>
-            </div>
-            <div className="fr-grid-row fr-grid-row--gutters">
-              <div className="fr-col-6">
-                <div className="tuile tuile-grande fr-p-7v">
-                  <div className="illustration">
-                    <img
-                      src="/images/devenir-aidant.svg"
-                      alt="illustration temporaire pour la section"
-                    />
-                  </div>
-                  <div className="corps">
-                    <h4>Devenir Aidant</h4>
-                    <ul>
-                      <li>Être bénévole et dans une posture bienveillante</li>
-                      <li>Assister à une formation</li>
-                      <li>Prendre en main l&apos;outil diagnostic</li>
-                      <li>
-                        Signer la{' '}
-                        <a href="/charte-aidant">
-                          charte aidant{' '}
-                          <span
-                            className="fr-icon-pen-nib-line"
-                            aria-hidden="true"
-                          ></span>
-                        </a>
-                      </li>
-                    </ul>
+          <div className="fr-container">
+            <div className="participer">
+              <div className="fr-col-12">
+                <h2>Vous souhaitez participer ?</h2>
+              </div>
+              <div className="fr-grid-row fr-grid-row--gutters">
+                <div className="fr-col-6">
+                  <div className="tuile tuile-grande">
+                    <div className="illustration">
+                      <img
+                        src="/images/illustration-devenir-aidant.svg"
+                        alt="Deux personnes souhaitant devenir Aidant MonAideCyber"
+                      />
+                    </div>
+                    <div className="corps">
+                      <h4>Devenir Aidant</h4>
+                      <p>
+                        Vous êtes un <b>agent du service public</b>, un{' '}
+                        <b>professionnel</b>, un
+                        <b>bénévole</b> ou un <b>passionné</b> de Cyber et vous
+                        souhaitez <b className="violet-fonce">devenir Aidant</b>{' '}
+                        ?
+                      </p>
+                      <button
+                        type="button"
+                        className="fr-btn bouton-mac bouton-mac-primaire"
+                        onClick={mailMonAideCyber}
+                      >
+                        Je veux être Aidant
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="fr-col-6">
-                <div className="tuile tuile-grande fr-p-7v bientot-disponible">
-                  <div className="illustration">
-                    <img
-                      src="/images/devenir-aidant.svg"
-                      alt="illustration temporaire pour la section"
-                    />
-                  </div>
-                  <div className="corps">
-                    <h4>Devenir Aidé</h4>
-                    <p>Bientôt disponible.</p>
+                <div className="fr-col-6">
+                  <div className="tuile tuile-grande">
+                    <div className="illustration">
+                      <img
+                        src="/images/diagnostic/gouvernance/illustration.svg"
+                        alt="Des personnes portées par une main leur montrant le chemin."
+                      />
+                    </div>
+                    <div className="corps">
+                      <h4>Être Aidé</h4>
+                      <p>
+                        Vous êtes décideur ou employé d’une{' '}
+                        <b>collectivité territoriale</b>, d’une{' '}
+                        <b>association</b>, ou d’une <b>entreprise</b> (TPE,
+                        PME, ETI...) et vous souhaitez{' '}
+                        <b className="violet-fonce">être Aidé</b> ?
+                      </p>
+                      <button
+                        type="button"
+                        className="fr-btn bouton-mac bouton-mac-primaire"
+                        onClick={mailMonAideCyber}
+                      >
+                        Je veux être Aidé
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
