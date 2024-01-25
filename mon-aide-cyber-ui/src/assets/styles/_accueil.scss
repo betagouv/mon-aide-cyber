@@ -15,6 +15,10 @@ $taille-padding-dsfr-7v: 3.5rem;
   display: flex;
   flex-direction: column;
   gap: 6.5rem;
+
+  p {
+    font-weight: 400;
+  }
 }
 
 #presentation {
@@ -56,11 +60,8 @@ $taille-padding-dsfr-7v: 3.5rem;
   }
 }
 
-#participer {
-  column-gap: $gouttiere;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
+.participer {
+  gap: 3rem;
 }
 
 .tuiles {
@@ -79,7 +80,6 @@ $taille-padding-dsfr-7v: 3.5rem;
   border-radius: 1rem;
   background: var(--couleurs-mac-blanc);
   box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.1);
-  padding-bottom: 2.5rem;
   flex-direction: column;
   gap: 0.5rem;
 
@@ -89,7 +89,6 @@ $taille-padding-dsfr-7v: 3.5rem;
   }
 
   .corps {
-    padding: 0 2rem;
     align-items: center;
     gap: 1rem;
   }
@@ -107,11 +106,19 @@ $taille-padding-dsfr-7v: 3.5rem;
 }
 
 .tuile-grande {
-  @include tuile(29rem);
+  @include tuile(31.4rem);
+  padding: 2.5rem 3.5rem;
+  gap: 1.5rem;
+
+  .illustration {
+    justify-content: flex-start;
+    width: 29.75rem;
+  }
 }
 
 .tuile-petite {
   @include tuile(24.5rem);
+  padding: 2.5rem 2rem;
 }
 
 .guillemets {
@@ -246,7 +253,6 @@ $taille-padding-dsfr-7v: 3.5rem;
   text-align: center;
   font-size: 3rem;
   font-style: normal;
-  font-weight: 700;
   line-height: 1.5rem;
 }
 
