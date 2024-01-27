@@ -1,6 +1,6 @@
 .piedpage-mac {
-  background-color: var(--couleurs-mac-violet-pale);
-  padding: 3rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 }
 
 .piedpage-mac div {
@@ -20,8 +20,21 @@
 }
 
 .piedpage-mac-logos {
-  display: flex;
-  flex-direction: column;
+  img {
+    height: 5rem;
+  }
+
+  a[href] {
+    background-image: unset;
+    background-position: unset;
+    background-repeat: unset;
+    background-size: unset;
+    transition: unset;
+  }
+
+  [target='_blank']:after {
+    background-color: unset;
+  }
 }
 
 .piedpage-mac-logos > div > ul > li {
