@@ -1,62 +1,54 @@
 export const Footer = () => (
   <footer role="contentinfo" id="footer">
-    <div className="piedpage-mac">
-      <div className="piedpage-mac-logos">
-        <div className="fr-footer__partners-sub">
-          <ul>
-            <li>
-              <a
-                href="https://www.ssi.gouv.fr/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {' '}
-                <img src="/images/logo_anssi.png" alt="ANSSI" />
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.gendarmerie.interieur.gouv.fr/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {' '}
-                <img
-                  src="/images/logo_gendarmerie_nationale.svg"
-                  alt="Gendarmerie Nationale"
-                />
-              </a>
-            </li>
-            <li>
-              <a href="https://www.cnil.fr" target="_blank" rel="noreferrer">
-                {' '}
-                <img src="/images/logo_cnil.webp" alt="CNIL" />
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.cybermalveillance.gouv.fr/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {' '}
-                <img src="/images/logo_acyma.svg" alt="CyberMalveillance" />
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.police-nationale.interieur.gouv.fr/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {' '}
-                <img
-                  src="/images/logo_police_nationale.svg"
-                  alt="Police Nationale"
-                />
-              </a>
-            </li>
-          </ul>
+    <div className="piedpage-mac fr-container">
+      <div className="piedpage-mac-logos fr-grid-row fr-grid-row--gutters">
+        <div className="fr-col-2">
+          <a href="https://www.ssi.gouv.fr/" target="_blank" rel="noreferrer">
+            {' '}
+            <img src="/images/logo_anssi.png" alt="ANSSI" />
+          </a>
+        </div>
+        <div className="fr-col-2">
+          <a
+            href="https://www.gendarmerie.interieur.gouv.fr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {' '}
+            <img
+              src="/images/logo_gendarmerie_nationale.svg"
+              alt="Gendarmerie Nationale"
+            />
+          </a>
+        </div>
+        <div className="fr-col-3">
+          <a href="https://www.cnil.fr" target="_blank" rel="noreferrer">
+            {' '}
+            <img src="/images/logo_cnil.webp" alt="CNIL" />
+          </a>
+        </div>
+        <div className="fr-col-3">
+          <a
+            href="https://www.cybermalveillance.gouv.fr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {' '}
+            <img src="/images/logo_acyma.svg" alt="CyberMalveillance" />
+          </a>
+        </div>
+        <div className="fr-col-2">
+          <a
+            href="https://www.police-nationale.interieur.gouv.fr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {' '}
+            <img
+              src="/images/logo_police_nationale.svg"
+              alt="Police Nationale"
+            />
+          </a>
         </div>
       </div>
     </div>
