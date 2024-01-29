@@ -253,13 +253,6 @@ export const donneesReaction: QuestionsThematique = {
                   libelle: 'Oui',
                   resultat: {
                     indice: { valeur: 3 },
-                    recommandations: [
-                      {
-                        identifiant:
-                          'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole',
-                        niveau: 1,
-                      },
-                    ],
                   },
                   ordre: 3,
                 },
