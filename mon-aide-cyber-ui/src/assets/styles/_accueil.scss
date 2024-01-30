@@ -3,50 +3,6 @@
 $gouttiere: 1.5rem;
 $taille-padding-dsfr-7v: 3.5rem;
 
-.bandeau-violet {
-  background-color: var(--couleurs-mac-violet-fonce);
-  color: var(--couleurs-mac-blanc);
-
-  h2 {
-    color: var(--couleurs-mac-blanc);
-  }
-
-  input,
-  textarea {
-    background-color: var(--couleurs-mac-violet-mode-fonce) !important;
-    border-bottom: 2px solid var(--couleurs-mac-blanc, rgba(255, 255, 255, 0.6));
-    box-shadow: inset 0 -2px 0 0 var(--couleurs-mac-violet-mode-fonce) !important;
-    color: var(--couleurs-mac-blanc);
-    &:focus {
-      border: 2px solid var(red);
-    }
-    &:focus-visible {
-      outline-style: solid;
-      outline-color: var(--couleurs-mac-violet-leger);
-    }
-  }
-
-  .fr-input-group--error:before {
-    background-image: linear-gradient(
-      0deg,
-      var(--couleurs-mac-erreur-mode-fonce),
-      var(--couleurs-mac-erreur-mode-fonce)
-    );
-  }
-  .fr-error-text {
-    color: var(--couleurs-mac-erreur-mode-fonce);
-  }
-  .fr-error-text:before {
-    background-color: var(--couleurs-mac-erreur-mode-fonce);
-  }
-  .fr-valid-text {
-    color: var(--couleurs-mac-succes-mode-fonce);
-  }
-  .fr-valid-text:before {
-    background-color: var(--couleurs-mac-succes-mode-fonce);
-  }
-}
-
 .accueil {
   height: 42.5rem;
 }
