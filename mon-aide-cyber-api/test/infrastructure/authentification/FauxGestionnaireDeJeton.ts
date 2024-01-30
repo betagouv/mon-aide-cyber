@@ -2,7 +2,7 @@ import {
   DonneesJetonMAC,
   GestionnaireDeJeton,
   Jeton,
-} from '../../authentification/GestionnaireDeJeton';
+} from '../../../src/authentification/GestionnaireDeJeton';
 import { expect } from 'vitest';
 
 export class FauxGestionnaireDeJeton implements GestionnaireDeJeton {

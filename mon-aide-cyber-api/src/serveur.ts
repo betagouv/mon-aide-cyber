@@ -16,25 +16,28 @@ import { GestionnaireDeJeton } from './authentification/GestionnaireDeJeton';
 import { csrf } from 'lusca';
 import { AdaptateurDeVerificationDeSession } from './adaptateurs/AdaptateurDeVerificationDeSession';
 import { AdaptateursRestitution } from './adaptateurs/AdaptateursRestitution';
-import CookieSession = require('cookie-session');
 import { BusCommande } from './domaine/commande';
+import { routeContact } from './api/routeContact';
+import CookieSession = require('cookie-session');
+import { AdaptateurEnvoiMail } from './adaptateurs/AdaptateurEnvoiMail';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
 const COOKIE_DUREE_SESSION = 180 * 60 * 1000;
 
 export type ConfigurationServeur = {
+  adaptateurEnvoiMessage: AdaptateurEnvoiMail;
   adaptateurReferentiel: Adaptateur<Referentiel>;
+  adaptateursRestitution: AdaptateursRestitution;
   adaptateurTableauDeRecommandations: Adaptateur<TableauDeRecommandations>;
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
-  entrepots: Entrepots;
+  adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
+  avecProtectionCsrf: boolean;
   busCommande: BusCommande;
   busEvenement: BusEvenement;
-  gestionnaireErreurs: AdaptateurGestionnaireErreurs;
+  entrepots: Entrepots;
   gestionnaireDeJeton: GestionnaireDeJeton;
-  adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
-  adaptateursRestitution: AdaptateursRestitution;
-  avecProtectionCsrf: boolean;
+  gestionnaireErreurs: AdaptateurGestionnaireErreurs;
 };
 const creeApp = (config: ConfigurationServeur) => {
   const app = express();
@@ -85,6 +88,8 @@ const creeApp = (config: ConfigurationServeur) => {
     express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist')),
   );
   app.use('/api', routesAPI(config));
+
+  app.use('/contact', routeContact(config));
 
   app.get('*', (_: Request, reponse: Response) =>
     reponse.sendFile(

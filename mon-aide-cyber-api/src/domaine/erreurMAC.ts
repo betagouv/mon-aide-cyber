@@ -4,7 +4,8 @@ export type Contexte =
   | 'Demande la restitution'
   | 'Lance le diagnostic'
   | 'Accède aux diagnostics'
-  | "Demande d'Authentification";
+  | "Demande d'Authentification"
+  | 'Envoi un message de contact';
 
 export class ErreurMAC extends Error {
   private constructor(

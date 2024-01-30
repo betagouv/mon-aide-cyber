@@ -11,6 +11,7 @@ import { GestionnaireDeJetonJWT } from './src/infrastructure/authentification/ge
 import { AdaptateurDeVerificationDeSessionHttp } from './src/adaptateurs/AdaptateurDeVerificationDeSessionHttp';
 import { AdaptateurDeRestitutionHTML } from './src/adaptateurs/AdaptateurDeRestitutionHTML';
 import { BusCommandeMAC } from './src/infrastructure/bus/BusCommandeMAC';
+import { fabriqueAdaptateurEnvoiMail } from './src/infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut',
@@ -44,6 +45,7 @@ const serveurMAC = serveur.creeServeur({
     gestionnaireDeJeton,
   ),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
+  adaptateurEnvoiMessage: fabriqueAdaptateurEnvoiMail(),
 });
 
 const port = process.env.PORT || 8081;
