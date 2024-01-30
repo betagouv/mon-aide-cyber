@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest';
 import { AdaptateurDeVerificationDeSessionHttp } from '../../src/adaptateurs/AdaptateurDeVerificationDeSessionHttp';
-import { FauxGestionnaireDeJeton } from '../../src/infrastructure/authentification/FauxGestionnaireDeJeton';
+import { FauxGestionnaireDeJeton } from '../infrastructure/authentification/FauxGestionnaireDeJeton';
 import { NextFunction } from 'express-serve-static-core';
 import { Request, Response } from 'express';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';

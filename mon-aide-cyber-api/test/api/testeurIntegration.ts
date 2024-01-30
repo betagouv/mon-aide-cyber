@@ -7,12 +7,14 @@ import { fakerFR } from '@faker-js/faker';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
-import { FauxGestionnaireDeJeton } from '../../src/infrastructure/authentification/FauxGestionnaireDeJeton';
+import { FauxGestionnaireDeJeton } from '../infrastructure/authentification/FauxGestionnaireDeJeton';
 import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/AdaptateurDeVerificationDeSessionDeTest';
 import { unAdaptateurDeRestitutionHTML } from '../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
 import { AdaptateursRestitution } from '../../src/adaptateurs/AdaptateursRestitution';
 import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
 import { BusCommandeMAC } from '../../src/infrastructure/bus/BusCommandeMAC';
+import { AdaptateurEnvoiMail } from '../../src/adaptateurs/AdaptateurEnvoiMail';
+import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 
 const testeurIntegration = () => {
   let serveurDeTest: {
@@ -30,6 +32,8 @@ const testeurIntegration = () => {
   const adaptateurDeVerificationDeSession =
     new AdaptateurDeVerificationDeSessionDeTest();
   const gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire();
+  const adaptateurEnvoieMessage: AdaptateurEnvoiMail =
+    new AdaptateurEnvoiMailMemoire();
 
   const adaptateursRestitution: AdaptateursRestitution = {
     html() {
@@ -54,6 +58,7 @@ const testeurIntegration = () => {
       adaptateurDeVerificationDeSession,
       adaptateursRestitution,
       avecProtectionCsrf: false,
+      adaptateurEnvoiMessage: adaptateurEnvoieMessage,
     });
     const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -73,6 +78,7 @@ const testeurIntegration = () => {
     gestionnaireErreurs,
     adaptateurDeVerificationDeSession,
     adaptateursRestitution,
+    adaptateurEnvoieMessage,
   };
 };
 
