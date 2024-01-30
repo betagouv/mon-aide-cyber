@@ -64,7 +64,7 @@ export const ComposantRestitution = ({
     <>
       <Header />
       <main role="main">
-        <div className="bandeau-violet fr-pt-md-4w fr-pb-md-8w">
+        <div className="mode-fonce fr-pt-md-4w fr-pb-md-8w">
           <div className="fr-container">
             <div className="fr-grid-row">
               <div>

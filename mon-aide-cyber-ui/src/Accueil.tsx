@@ -152,7 +152,7 @@ export const Accueil = () => {
     <>
       <Header />
       <main role="main">
-        <div className="bandeau-violet accueil">
+        <div className="mode-fonce accueil">
           <div id="presentation" className="fr-container">
             <div className="fr-grid-row fr-grid-row--middle fr-py-20v">
               <div id="corps" className="fr-col-6 fr-col-offset-1--right">
@@ -299,7 +299,7 @@ export const Accueil = () => {
               </div>
             </div>
           </div>
-          <div className="bandeau-violet">
+          <div className="mode-fonce">
             <div className="fr-container">
               <img src="/images/icones/guillemets.svg" alt="Les mots de" />
               <div className="slider">
@@ -513,7 +513,7 @@ export const Accueil = () => {
               </div>
             </div>
           </div>
-          <div className="bandeau-violet contactez-nous">
+          <div className="mode-fonce contactez-nous">
             <div className="fr-container">
               <div className="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
                 <div className="fr-col-5 fr-col-offset-1--right">
