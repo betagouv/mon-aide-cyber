@@ -8,7 +8,14 @@ export interface EntrepotContact {
 }
 export class APIEntrepotContact implements EntrepotContact {
   envoie(message: Message): Promise<void> {
-    console.log(message);
-    return Promise.resolve();
+    return fetch('/contact', {
+      method: 'POST',
+      body: JSON.stringify({ ...message }),
+      headers: { 'Content-Type': 'application/json' },
+    }).then((reponse) => {
+      if (!reponse.ok) {
+        return reponse.json().then((erreur) => Promise.reject(erreur));
+      }
+    });
   }
 }
