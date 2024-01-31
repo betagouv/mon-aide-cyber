@@ -125,10 +125,19 @@ html {
   height: 40px;
 }
 
-.contact-et-liens-utiles {
+#contacts-et-liens-utiles-conteneur {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  align-self: stretch;
+
   h4 {
     margin-bottom: 0;
   }
+}
+
+#contacts-et-liens-utiles {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
