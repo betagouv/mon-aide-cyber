@@ -53,8 +53,8 @@ export const Footer = () => (
       </div>
     </div>
     <div className="fr-footer">
-      <div className="fr-container--fluid">
-        <div className="fr-col-offset-2 fr-footer__body">
+      <div className="fr-container">
+        <div className="fr-footer__body">
           <div className="fr-footer__brand fr-enlarge-link">
             <a href="/" title="Retour à l’accueil du site - MonAideCyber">
               <p className="fr-logo">
@@ -64,7 +64,7 @@ export const Footer = () => (
               </p>
             </a>
           </div>
-          <div className="fr-footer__content fr-col-offset-2--right">
+          <div className="fr-footer__content">
             <p className="fr-footer__content-desc">
               MonAideCyber aide les entités publiques et privées sensibilisées à
               la sécurité informatique à passer à l’action. Le dispositif
@@ -116,7 +116,7 @@ export const Footer = () => (
             </ul>
           </div>
         </div>
-        <div className="fr-col-offset-2 fr-footer__bottom">
+        <div className="fr-footer__bottom">
           <ul className="fr-footer__bottom-list">
             <li className="fr-footer__bottom-item">
               <a className="fr-footer__bottom-link" href="#">
