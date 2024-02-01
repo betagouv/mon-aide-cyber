@@ -41,7 +41,7 @@ export class MoteurMesures {
       .flatMap((rep) =>
         rep.reponses.flatMap(
           (reponse) =>
-            reponse.resultat?.recommandations?.map((rec) => ({
+            reponse.resultat?.mesures?.map((rec) => ({
               ...rec,
               repondA: rep.identifiantQuestion,
             })) || [],
@@ -54,7 +54,7 @@ export class MoteurMesures {
       .filter((rep) => rep.identifiant === question.reponseDonnee.reponseUnique)
       .flatMap(
         (rep) =>
-          rep.resultat?.recommandations?.map((rec) => ({
+          rep.resultat?.mesures?.map((rec) => ({
             ...rec,
             repondA: question.identifiant,
           })) || [],

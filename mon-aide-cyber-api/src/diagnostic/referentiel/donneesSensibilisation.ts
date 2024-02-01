@@ -21,7 +21,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
@@ -38,7 +38,7 @@ export const donneesSensibilisation: QuestionsThematique = {
             'Oui, nous menons ponctuellement des actions de sensibilisation.',
           resultat: {
             indice: { valeur: 1.5 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
@@ -82,7 +82,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'sensibilisation-risque-espionnage-industriel-r-et-d',
@@ -121,7 +121,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
@@ -137,7 +137,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           libelle: 'Oui, une charte est communiquée aux collaborateurs.',
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
@@ -174,7 +174,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'sensibilisation-declaration-incidents-encouragee',
                 niveau: 1,
@@ -190,7 +190,7 @@ export const donneesSensibilisation: QuestionsThematique = {
             "Non, mais dans la majorité des cas, les utilisateurs ont pris l'habitude de contacter un informaticien en cas de doute ou d'incident.",
           resultat: {
             indice: { valeur: 1 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'sensibilisation-declaration-incidents-encouragee',
                 niveau: 1,

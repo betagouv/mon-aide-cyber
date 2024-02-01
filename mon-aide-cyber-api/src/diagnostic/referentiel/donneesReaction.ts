@@ -20,7 +20,7 @@ export const donneesReaction: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'reaction-surveillance-veille-vulnerabilites-potentielles',
@@ -36,7 +36,7 @@ export const donneesReaction: QuestionsThematique = {
           libelle: "Réalisation d'une veille ponctuelle sur Internet.",
           resultat: {
             indice: { valeur: 1.5 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'reaction-surveillance-veille-vulnerabilites-potentielles',
@@ -71,7 +71,7 @@ export const donneesReaction: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'reaction-sauvegardes-donnees-realisees',
                 niveau: 1,
@@ -120,7 +120,7 @@ export const donneesReaction: QuestionsThematique = {
                   libelle: 'Non',
                   resultat: {
                     indice: { valeur: 0 },
-                    recommandations: [
+                    mesures: [
                       {
                         identifiant:
                           'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
@@ -136,7 +136,7 @@ export const donneesReaction: QuestionsThematique = {
                   libelle: 'Oui',
                   resultat: {
                     indice: { valeur: 3 },
-                    recommandations: [
+                    mesures: [
                       {
                         identifiant:
                           'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
@@ -174,7 +174,7 @@ export const donneesReaction: QuestionsThematique = {
                   libelle: 'Non',
                   resultat: {
                     indice: { valeur: 0 },
-                    recommandations: [
+                    mesures: [
                       {
                         identifiant:
                           'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement',
@@ -197,7 +197,7 @@ export const donneesReaction: QuestionsThematique = {
           ],
           resultat: {
             indice: { valeur: 1 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'reaction-sauvegardes-donnees-realisees',
                 niveau: 1,
@@ -237,7 +237,7 @@ export const donneesReaction: QuestionsThematique = {
                   libelle: 'Non',
                   resultat: {
                     indice: { valeur: 0 },
-                    recommandations: [
+                    mesures: [
                       {
                         identifiant:
                           'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole',
@@ -284,7 +284,7 @@ export const donneesReaction: QuestionsThematique = {
                   libelle: 'Non',
                   resultat: {
                     indice: { valeur: 0 },
-                    recommandations: [
+                    mesures: [
                       {
                         identifiant:
                           'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement',
@@ -327,7 +327,7 @@ export const donneesReaction: QuestionsThematique = {
           libelle: 'Non',
           ordre: 1,
           resultat: {
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
                 niveau: 1,
@@ -341,7 +341,7 @@ export const donneesReaction: QuestionsThematique = {
             'reaction-dispositif-gestion-crise-adapte-defini-oui-fiche-reflexe',
           libelle: 'Nous avons défini une fiche réflexe dédiée.',
           resultat: {
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
                 niveau: 2,

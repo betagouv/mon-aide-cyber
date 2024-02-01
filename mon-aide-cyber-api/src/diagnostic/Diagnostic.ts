@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { Question, Recommandation, Referentiel } from './Referentiel';
+import { Mesure, Question, Referentiel } from './Referentiel';
 import { Entrepot } from '../domaine/Entrepot';
 import { laValeurEstDefinie, Valeur } from './Indice';
 import { NiveauMesure, ReferentielDeMesures } from './ReferentielDeMesures';
@@ -31,10 +31,11 @@ export type ReferentielDiagnostic = {
   [clef: Thematique]: QuestionsThematique;
 };
 
-export type MesureDiagnostic = Omit<
-  Recommandation,
-  'identifiant' | 'niveau'
-> & { niveau: NiveauMesure; priorisation: number; repondA: string };
+export type MesureDiagnostic = Omit<Mesure, 'identifiant' | 'niveau'> & {
+  niveau: NiveauMesure;
+  priorisation: number;
+  repondA: string;
+};
 
 export type MesurePriorisee = {
   titre: string;
@@ -144,8 +145,8 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
         } as MesurePriorisee;
       })
       .filter(
-        (reco) =>
-          reco.valeurObtenue !== undefined && reco.valeurObtenue !== null,
+        (mesure) =>
+          mesure.valeurObtenue !== undefined && mesure.valeurObtenue !== null,
       )
       .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
       .sort(

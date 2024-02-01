@@ -4,11 +4,14 @@ import {
   QuestionDiagnostic,
   Thematique,
 } from '../../../../diagnostic/Diagnostic';
-import {
-  Recommandation,
-  ReponsePossible,
-} from '../../../../diagnostic/Referentiel';
 import { Valeur } from '../../../../diagnostic/Indice';
+
+type NiveauRecommandation = 1 | 2;
+
+type Recommandation = {
+  identifiant: string;
+  niveau: NiveauRecommandation;
+};
 
 type NiveauDeRecommandation = {
   titre: string;
@@ -22,6 +25,39 @@ type ObjetDeRecommandation = {
 };
 type TableauDeRecommandations = {
   [identifiantQuestion: string]: ObjetDeRecommandation;
+};
+
+type TypeQuestion = 'choixMultiple' | 'choixUnique';
+
+export type Indice = {
+  valeur: Valeur;
+};
+
+export type Poids = Omit<Valeur, 'null' | 'undefined'>;
+
+type Question = {
+  identifiant: string;
+  libelle: string;
+  type: TypeQuestion;
+  reponsesPossibles: ReponsePossible[];
+  poids: Poids;
+};
+
+type QuestionATiroir = Omit<Question, 'reponsesPossibles'> & {
+  reponsesPossibles: Omit<ReponsePossible, 'questions'>[];
+};
+
+type Resultat = {
+  recommandations?: Recommandation[];
+  indice: Indice;
+};
+
+type ReponsePossible = {
+  identifiant: string;
+  libelle: string;
+  ordre: number;
+  questions?: QuestionATiroir[];
+  resultat?: Resultat;
 };
 
 type RepresentationReponsePossible = Omit<ReponsePossible, 'resultat'> & {
@@ -50,8 +86,16 @@ type RepresentationReferentiel = {
   [clef: Thematique]: RepresentationQuestionsThematique;
 };
 
+export type RecommandationPriorisee = {
+  titre: string;
+  pourquoi: string;
+  comment: string;
+  valeurObtenue: Valeur;
+  priorisation: number;
+};
+
 type RepresentationRecommandationPriorisee = Omit<
-  Recommandation,
+  RecommandationPriorisee,
   'valeurObtenue'
 > & {
   noteObtenue?: Valeur;

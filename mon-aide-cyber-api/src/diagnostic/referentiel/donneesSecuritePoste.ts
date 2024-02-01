@@ -26,7 +26,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'securite-poste-maj-fonctionnelles-et-securite-deployees',
@@ -43,7 +43,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
             'Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.',
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'securite-poste-maj-fonctionnelles-et-securite-deployees',
@@ -89,7 +89,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
@@ -106,7 +106,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
             'Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.',
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
@@ -144,7 +144,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'securite-poste-antivirus-deploye',
                 niveau: 1,
@@ -159,7 +159,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           libelle: 'Oui, mais ses alertes ne sont pas toujours traitées',
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'securite-poste-antivirus-deploye',
                 niveau: 2,
@@ -199,7 +199,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'securite-poste-si-industriel-antivirus-deploye',
                 niveau: 1,
@@ -214,7 +214,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           libelle: 'Oui, mais ses alertes ne sont pas toujours traitées',
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'securite-poste-si-industriel-antivirus-deploye',
                 niveau: 2,
@@ -248,7 +248,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'securite-poste-pare-feu-local-active',
                 niveau: 1,
@@ -282,7 +282,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'securite-poste-outils-complementaires-securisation',
@@ -324,7 +324,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'securite-poste-r-et-d-disques-chiffres',
                 niveau: 1,
