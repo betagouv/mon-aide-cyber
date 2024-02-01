@@ -29,8 +29,8 @@ export class ServiceDiagnostic {
       this.adaptateurReferentiel.lis(),
       this.adaptateurMesures.lis(),
     ])
-      .then(async ([ref, rec]) => {
-        const diagnostic = initialiseDiagnostic(ref, rec);
+      .then(async ([ref, mesures]) => {
+        const diagnostic = initialiseDiagnostic(ref, mesures);
         await this.entrepots.diagnostic().persiste(diagnostic);
         await this.busEvenement?.publie<DiagnosticLance>({
           identifiant: diagnostic.identifiant,
