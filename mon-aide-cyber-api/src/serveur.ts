@@ -21,7 +21,7 @@ import { BusCommande } from './domaine/commande';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
-const COOKIE_DUREE_SESSION = 60 * 60 * 1000;
+const COOKIE_DUREE_SESSION = 180 * 60 * 1000;
 
 export type ConfigurationServeur = {
   adaptateurReferentiel: Adaptateur<Referentiel>;
