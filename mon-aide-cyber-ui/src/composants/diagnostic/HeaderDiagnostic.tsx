@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 type ProprietesHeaderDiagnostic = {
-  quitter: { quitterLeDiagnostic: () => void };
+  quitter: { accederALaRestitution: () => void };
 };
 export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => {
   const [lienCopie, setLienCopie] = useState(<></>);
@@ -55,10 +55,10 @@ export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => {
                   <li className="fr-pr-2w">
                     <button
                       className="bouton-mac bouton-mac-primaire"
-                      title="Quitter le diagnostic"
-                      onClick={propietes.quitter.quitterLeDiagnostic}
+                      title="Accéder à la restitution"
+                      onClick={propietes.quitter.accederALaRestitution}
                     >
-                      Quitter le diagnostic
+                      Accéder à la restitution
                     </button>
                   </li>
                   <li>

@@ -2,7 +2,7 @@ import { UUID } from '../../types/Types.ts';
 import { useNavigate } from 'react-router';
 import { useCallback } from 'react';
 
-export const QuitterLeDiagnostic = ({
+export const AccederALaRestitution = ({
   idDiagnostic,
   surAnnuler,
 }: {
@@ -19,14 +19,14 @@ export const QuitterLeDiagnostic = ({
     <>
       <section>
         <div>
-          Vous vous apprêtez à quitter le diagnostic. Votre progression est
-          enregistrée, vous pourrez reprendre et modifier le diagnostic à votre
-          convenance.
+          Vous vous apprêtez à quitter le diagnostic et accéder à la
+          restitution. Votre progression est enregistrée, vous pourrez reprendre
+          et modifier le diagnostic à votre convenance.
         </div>
         <div className="fr-pt-4w">
           <button
             type="button"
-            key="annule-quitter-le-diagnostic"
+            key="annule-acceder-a-la-restitution"
             className="fr-btn bouton-mac bouton-mac-secondaire fr-mr-2w"
             onClick={surAnnuler}
           >

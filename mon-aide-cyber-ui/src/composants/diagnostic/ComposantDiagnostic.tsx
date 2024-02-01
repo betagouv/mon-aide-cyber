@@ -48,7 +48,7 @@ import styled from 'styled-components';
 import { FooterDiagnostic } from './FooterDiagnostic.tsx';
 import { HeaderDiagnostic } from './HeaderDiagnostic.tsx';
 import { useModale } from '../../fournisseurs/hooks.ts';
-import { QuitterLeDiagnostic } from './QuitterLeDiagnostic.tsx';
+import { AccederALaRestitution } from './AccederALaRestitution.tsx';
 
 type ProprietesComposantQuestion = {
   actions: ActionReponseDiagnostic[];
@@ -385,12 +385,15 @@ export const ComposantDiagnostic = ({
     [envoie],
   );
 
-  const afficheModaleQuitterLeDiagnostic = useCallback(
+  const afficheModaleAccederALaRestitution = useCallback(
     () =>
       affiche({
-        titre: 'Quitter le diagnostic',
+        titre: 'Accéder à la restitution',
         corps: (
-          <QuitterLeDiagnostic surAnnuler={ferme} idDiagnostic={idDiagnostic} />
+          <AccederALaRestitution
+            surAnnuler={ferme}
+            idDiagnostic={idDiagnostic}
+          />
         ),
       }),
     [affiche, ferme, idDiagnostic],
@@ -424,7 +427,7 @@ export const ComposantDiagnostic = ({
     <>
       <HeaderDiagnostic
         quitter={{
-          quitterLeDiagnostic: () => afficheModaleQuitterLeDiagnostic(),
+          accederALaRestitution: () => afficheModaleAccederALaRestitution(),
         }}
       />
       <main role="main" className="diagnostic-main">
