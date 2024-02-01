@@ -4,10 +4,10 @@ type QuestionATiroir = Omit<Question, 'reponsesPossibles'> & {
   reponsesPossibles: Omit<ReponsePossible, 'questions'>[];
 };
 
-export type NiveauRecommandation = 1 | 2;
+export type NiveauMesure = 1 | 2;
 
 type Resultat = {
-  recommandations?: Recommandation[];
+  mesures?: Mesure[];
   indice: Indice;
 };
 
@@ -56,7 +56,7 @@ export {
   Resultat,
   TypeQuestion,
 };
-export type Recommandation = {
+export type Mesure = {
   identifiant: string;
-  niveau: NiveauRecommandation;
+  niveau: NiveauMesure;
 };

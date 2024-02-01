@@ -18,7 +18,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'acces-outil-gestion-des-comptes',
                 niveau: 1,
@@ -32,7 +32,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle: 'Oui',
           resultat: {
             indice: { valeur: 3 },
-            recommandations: [
+            mesures: [
               { identifiant: 'acces-outil-gestion-des-comptes', niveau: 2 },
             ],
           },
@@ -62,7 +62,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'acces-liste-compte-utilisateurs',
                 niveau: 1,
@@ -77,7 +77,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             'Les comptes des utilisateurs et leurs accès sont régulièrement revus (ex : liste du personnel vs liste des comptes).',
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'acces-liste-compte-utilisateurs',
                 niveau: 2,
@@ -117,7 +117,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'acces-droits-acces-utilisateurs-limites',
                 niveau: 1,
@@ -133,7 +133,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             'Des restrictions d’accès à certaines données sont ponctuellement mises en place.',
           resultat: {
             indice: { valeur: 1 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'acces-droits-acces-utilisateurs-limites',
                 niveau: 2,
@@ -168,7 +168,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle: 'Oui',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'acces-utilisateurs-administrateurs-poste',
                 niveau: 1,
@@ -184,7 +184,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             'La suppression de ce privilège est en cours de traitement, plusieurs utilisateurs sont toujours administrateurs de leur poste.',
           resultat: {
             indice: { valeur: 1 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'acces-utilisateurs-administrateurs-poste',
                 niveau: 1,
@@ -221,7 +221,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'acces-administrateurs-informatiques-suivie-et-limitee',
@@ -238,7 +238,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             'Les comptes des administrateurs sont régulièrement revus (ex : liste du personnel vs liste des comptes).',
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'acces-administrateurs-informatiques-suivie-et-limitee',
@@ -278,7 +278,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             'Non, des utilisateurs disposent de privilèges d’administration sans restriction particulière.',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'acces-utilisation-comptes-administrateurs-droits-limitee',
@@ -295,7 +295,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "La mise à disposition des comptes d'administration fait l'objet de quelques restrictions.",
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'acces-utilisation-comptes-administrateurs-droits-limitee',
@@ -332,7 +332,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'acces-mesures-securite-robustesse-mdp',
                 niveau: 1,
@@ -348,7 +348,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             'Les utilisateurs sont sensibilisés à la gestion sécurisée de leurs mots de passe.',
           resultat: {
             indice: { valeur: 1 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'acces-mesures-securite-robustesse-mdp',
                 niveau: 2,
@@ -393,7 +393,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
@@ -410,7 +410,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "Oui, des mesures renforçant l'authentification ont été mises en œuvre.",
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
@@ -455,7 +455,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'acces-teletravail-acces-distants-mesures-particulieres',
@@ -472,7 +472,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "De l'authentification à double facteurs a été mise en place pour les accès distants.",
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'acces-teletravail-acces-distants-mesures-particulieres',
@@ -517,7 +517,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
@@ -534,7 +534,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "De l'authentification à double facteurs a été mise en place pour les accès distants.",
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
@@ -570,7 +570,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'acces-administrateurs-si-mesures-specifiques',
                 niveau: 1,
@@ -586,7 +586,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             "Oui, des mesures renforçant l'authentification ont été mises en œuvre.",
           resultat: {
             indice: { valeur: 1.5 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'acces-administrateurs-si-mesures-specifiques',
                 niveau: 2,

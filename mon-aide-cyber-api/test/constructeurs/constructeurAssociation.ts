@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { NiveauRecommandation } from '../../src/diagnostic/Referentiel';
+import { NiveauMesure } from '../../src/diagnostic/Referentiel';
 import { Indice, Valeur } from '../../src/diagnostic/Indice';
 
 import { Association } from './types';
@@ -8,7 +8,7 @@ import { Constructeur } from './constructeur';
 class ConstructeurAssociation implements Constructeur<Association> {
   constructor(
     private identifiantMesure: string = faker.string.alpha(10),
-    private niveauMesure: NiveauRecommandation = 1,
+    private niveauMesure: NiveauMesure = 1,
     private _indice: Indice = { valeur: 0 },
   ) {}
 

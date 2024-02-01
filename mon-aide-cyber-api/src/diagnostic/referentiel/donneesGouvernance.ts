@@ -19,7 +19,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle: 'Non.',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'gouvernance-infos-et-processus-a-proteger',
                 niveau: 1,
@@ -35,7 +35,7 @@ export const donneesGouvernance: QuestionsThematique = {
             'Nous avons une idée générale de nos données et activités à protéger en priorité.',
           resultat: {
             indice: { valeur: 1.5 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'gouvernance-infos-et-processus-a-proteger',
                 niveau: 2,
@@ -72,7 +72,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle: "Non / Nous avons un plan historique qui n'est pas à jour",
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'gouvernance-schema-si-a-jour',
                 niveau: 1,
@@ -87,7 +87,7 @@ export const donneesGouvernance: QuestionsThematique = {
             'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
           resultat: {
             indice: { valeur: 1 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'gouvernance-schema-si-a-jour',
                 niveau: 2,
@@ -129,7 +129,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle: 'Non.',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'gouvernance-schema-si-industriel-a-jour',
                 niveau: 1,
@@ -144,7 +144,7 @@ export const donneesGouvernance: QuestionsThematique = {
             'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
           resultat: {
             indice: { valeur: 1 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'gouvernance-schema-si-industriel-a-jour',
                 niveau: 2,
@@ -181,7 +181,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle: 'Non.',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'gouvernance-connaissance-rgpd-1',
                 niveau: 1,
@@ -197,7 +197,7 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 3,
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               { identifiant: 'gouvernance-connaissance-rgpd-1', niveau: 2 },
             ],
           },
@@ -229,7 +229,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle: 'Non.',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'gouvernance-connaissance-rgpd-2',
                 niveau: 1,
@@ -245,7 +245,7 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 3,
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               { identifiant: 'gouvernance-connaissance-rgpd-2', niveau: 2 },
             ],
           },
@@ -284,7 +284,7 @@ export const donneesGouvernance: QuestionsThematique = {
             'Non, aucune exigence ne figure dans nos contrats de prestation',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'gouvernance-exigence-cyber-securite-presta',
                 niveau: 1,
@@ -300,7 +300,7 @@ export const donneesGouvernance: QuestionsThematique = {
             'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.',
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant: 'gouvernance-exigence-cyber-securite-presta',
                 niveau: 2,
@@ -344,7 +344,7 @@ export const donneesGouvernance: QuestionsThematique = {
             'Non, aucune exigence ne figure dans nos contrats de prestation',
           resultat: {
             indice: { valeur: 0 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'gouvernance-exigence-cyber-securite-presta-si-industriel',
@@ -361,7 +361,7 @@ export const donneesGouvernance: QuestionsThematique = {
             'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.',
           resultat: {
             indice: { valeur: 2 },
-            recommandations: [
+            mesures: [
               {
                 identifiant:
                   'gouvernance-exigence-cyber-securite-presta-si-industriel',

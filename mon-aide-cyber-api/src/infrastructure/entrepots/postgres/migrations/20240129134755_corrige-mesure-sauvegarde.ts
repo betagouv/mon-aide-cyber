@@ -2,7 +2,6 @@ import { Knex } from 'knex';
 import crypto from 'crypto';
 import {
   QuestionATiroir,
-  Recommandation,
   ReponsePossible,
 } from '../../../../diagnostic/Referentiel';
 import { Poids, Valeur } from '../../../../diagnostic/Indice';
@@ -10,6 +9,13 @@ import {
   QuestionDiagnostic,
   Thematique,
 } from '../../../../diagnostic/Diagnostic';
+
+type NiveauRecommandation = 1 | 2;
+
+type Recommandation = {
+  identifiant: string;
+  niveau: NiveauRecommandation;
+};
 
 type NiveauDeRecommandation = {
   titre: string;

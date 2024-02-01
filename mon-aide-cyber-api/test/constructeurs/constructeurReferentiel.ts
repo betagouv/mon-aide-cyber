@@ -1,10 +1,10 @@
 import {
-  NiveauRecommandation,
+  Mesure,
+  NiveauMesure,
   QuestionATiroir,
   QuestionChoixMultiple,
   QuestionChoixUnique,
   QuestionsThematique,
-  Recommandation,
   Referentiel,
   ReponsePossible,
   TypeQuestion,
@@ -238,7 +238,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private ordre: number = faker.number.int();
   private questions?: QuestionATiroir[];
   private resultat?: {
-    recommandations?: Recommandation[];
+    mesures?: Mesure[];
     indice: Indice;
   };
 
@@ -260,7 +260,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
 
   associeeAMesure(
     identifiantMesure: string,
-    niveauMesure: NiveauRecommandation,
+    niveauMesure: NiveauMesure,
     valeurIndice: Valeur,
   ): ConstructeurReponsePossible {
     const mesures = [];
@@ -270,7 +270,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     });
     this.resultat = {
       ...this.resultat,
-      recommandations: [...(this.resultat?.recommandations || []), ...mesures],
+      mesures: [...(this.resultat?.mesures || []), ...mesures],
       indice: { valeur: valeurIndice },
     };
     return this;

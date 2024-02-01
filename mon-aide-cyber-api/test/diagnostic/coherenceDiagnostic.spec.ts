@@ -10,7 +10,7 @@ import {
 describe('Cohérence du référentiel et des mesures', () => {
   const identifiantsDeMesures = (r: ReponsePossible): string[] => {
     return (
-      r.resultat?.recommandations
+      r.resultat?.mesures
         ?.map((rec) => rec.identifiant)
         .filter((rec): rec is string => !!rec) || []
     );
