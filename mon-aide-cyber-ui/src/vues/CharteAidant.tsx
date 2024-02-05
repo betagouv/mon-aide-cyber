@@ -97,8 +97,7 @@ export const CharteAidant = () => {
                   en s’appuyant sur le dispositif d’accompagnement de
                   cybermalveillance.gouv.fr, ou tout autre prestataire de
                   services qualifié par l’ANSSI, pour être accompagné dans la
-                  mise en œuvre de mes recommandations via le service
-                  MonAideCyber,
+                  mise en œuvre de mes mesures via le service MonAideCyber,
                 </li>
                 <li>
                   Aucune proposition commerciale ne sera établie à l’initiative
@@ -155,9 +154,9 @@ export const CharteAidant = () => {
               <h3>Condition pour une démarche commerciale indirecte</h3>
               <p>
                 Je ne propose pas mes services commerciaux de conseil, de
-                réalisation et de mise en œuvre des recommandations <b>sauf</b>{' '}
-                si cela est demandé par l’entité aidée de sa propre initiative
-                et en dehors du cadre de la démarche MonAideCyber.
+                réalisation et de mise en œuvre des mesures <b>sauf</b> si cela
+                est demandé par l’entité aidée de sa propre initiative et en
+                dehors du cadre de la démarche MonAideCyber.
               </p>
               <h3>Aucun conflit d’intérêts</h3>
               <p>
