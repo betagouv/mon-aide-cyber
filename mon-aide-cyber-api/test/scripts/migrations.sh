@@ -1,4 +1,4 @@
 #!/bin/bash -e
 
-npm install
+npm -f install
 npx knex --knexfile ./src/infrastructure/entrepots/postgres/knexfile.ts migrate:latest
