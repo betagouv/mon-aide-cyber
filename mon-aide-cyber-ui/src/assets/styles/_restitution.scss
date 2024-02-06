@@ -81,7 +81,7 @@ html {
     }
   }
 
-  div[id^=mesures-prioritaires] {
+  div[id^='mesures-prioritaires'] {
     b {
       font-size: 18px;
     }
@@ -103,7 +103,7 @@ html {
 
   #information-id {
     font-size: 22px;
-    font-family: "Marianne ExtraBold";
+    font-family: 'Marianne ExtraBold';
     font-weight: 800;
   }
 
@@ -112,7 +112,7 @@ html {
     font-weight: 400;
 
     strong {
-      font-family: "Marianne ExtraBold";
+      font-family: 'Marianne ExtraBold';
       font-weight: 400;
     }
   }
@@ -172,7 +172,7 @@ html {
     }
 
     .titre {
-      font-family: "Marianne ExtraBold";
+      font-family: 'Marianne ExtraBold';
       font-weight: 800;
       line-height: 2rem;
       font-size: 1.375rem;
@@ -181,5 +181,39 @@ html {
     .lien {
       color: var(--couleurs-mac-violet-fonce);
     }
+  }
+}
+
+.badge-gouvernance {
+  background-color: var(--couleurs-mac-gouvernance);
+}
+.badge-securiteacces {
+  background-color: var(--couleurs-mac-securiteacces);
+}
+.badge-securiteposte {
+  background-color: var(--couleurs-mac-securiteposte);
+}
+.badge-securiteinfrastructure {
+  background-color: var(--couleurs-mac-securiteinfrastructure);
+}
+.badge-sensibilisation {
+  background-color: var(--couleurs-mac-sensibilisation);
+}
+.badge-reaction {
+  background-color: var(--couleurs-mac-reaction);
+}
+
+.badge {
+  width: 2.5rem;
+  height: 0.8rem;
+  display: inline-flex;
+  line-height: 1.5rem;
+  border-radius: 5rem;
+  margin-top: 0.4rem;
+}
+
+.legende .sous-legende {
+  span {
+    padding-right: 1rem;
   }
 }

@@ -1,4 +1,8 @@
-import { Indicateurs, RecommandationPriorisee } from '../diagnostic/Diagnostic';
+import {
+  Indicateurs,
+  ORDRE_THEMATIQUES,
+  RecommandationPriorisee,
+} from '../diagnostic/Diagnostic';
 import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import { Restitution } from '../restitution/Restitution';
 
@@ -14,7 +18,23 @@ const estRecommandationPriorisee = (
 export abstract class AdaptateurDeRestitution<T> {
   genereRestitution(restitution: Restitution): Promise<T> {
     const informations = this.genereInformations(restitution);
-    const indicateurs = this.genereIndicateurs(restitution.indicateurs);
+    const indicateursRestitution: Indicateurs = Object.entries(
+      restitution.indicateurs,
+    )
+      .sort(([thematiqueA], [thematiqueB]) =>
+        ORDRE_THEMATIQUES.indexOf(thematiqueA) >
+        ORDRE_THEMATIQUES.indexOf(thematiqueB)
+          ? 1
+          : -1,
+      )
+      .reduce(
+        (accumulateur, [thematique, indicateur]) => ({
+          ...accumulateur,
+          [thematique]: indicateur,
+        }),
+        {},
+      );
+    const indicateurs = this.genereIndicateurs(indicateursRestitution);
     const recommandations = this.genereMesuresPrioritaires(
       restitution.recommandations.recommandationsPrioritaires,
     );

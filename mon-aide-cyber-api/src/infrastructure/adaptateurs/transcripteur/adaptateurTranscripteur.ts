@@ -8,20 +8,13 @@ import { transcripteurSecuritePoste } from './transcripteurSecuritePoste';
 import { transcripteurSecuriteInfrastructure } from './transcripteurSecuriteInfrastructure';
 import { transcripteurSensibilisation } from './transcripteurSensibilisation';
 import { transcripteurReaction } from './transcripteurReaction';
+import { ORDRE_THEMATIQUES } from '../../../diagnostic/Diagnostic';
 
 export const adaptateurTranscripteur = () =>
   new (class implements AdaptateurTranscripteur {
     transcripteur(): Transcripteur {
       return {
-        ordreThematiques: [
-          'contexte',
-          'gouvernance',
-          'SecuriteAcces',
-          'securiteposte',
-          'securiteinfrastructure',
-          'sensibilisation',
-          'reaction',
-        ],
+        ordreThematiques: ORDRE_THEMATIQUES,
         thematiques: {
           contexte: transcripteurContexte,
           gouvernance: transcripteurGouvernance,
