@@ -169,4 +169,29 @@ describe('Adaptateur de Restitution', () => {
       ),
     ).toMatchSnapshot();
   });
+
+  it("génère une restitution en conservant l'ordre des thématiques", async () => {
+    const restitution = uneRestitution()
+      .avecIdentifiant(crypto.randomUUID())
+      .avecInformations(
+        desInformationsDeRestitution()
+          .avecSecteurActivite('Administration')
+          .avecZoneGeographique('Bretagne, Finistère')
+          .construis(),
+      )
+      .avecIndicateurs('reaction', 2)
+      .avecIndicateurs('gouvernance', 2.5)
+      .avecIndicateurs('securiteposte', 3)
+      .avecIndicateurs('SecuriteAcces', 2.2)
+      .avecIndicateurs('securiteinfrastructure', 4)
+      .avecIndicateurs('sensibilisation', 2.5)
+      .construis();
+    entrepots.restitution().persiste(restitution);
+
+    expect(
+      JSON.parse(
+        (await adaptateurRestitution.genereRestitution(restitution)).toString(),
+      ),
+    ).toMatchSnapshot();
+  });
 });

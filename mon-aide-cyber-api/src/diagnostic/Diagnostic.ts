@@ -177,6 +177,15 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
     },
   };
 };
+const ORDRE_THEMATIQUES = [
+  'contexte',
+  'gouvernance',
+  'SecuriteAcces',
+  'securiteposte',
+  'securiteinfrastructure',
+  'sensibilisation',
+  'reaction',
+];
 export {
   Diagnostic,
   EntrepotDiagnostic,
@@ -187,4 +196,5 @@ export {
   ajouteLaReponseAuDiagnostic,
   genereLaRestitution,
   initialiseDiagnostic,
+  ORDRE_THEMATIQUES,
 };
