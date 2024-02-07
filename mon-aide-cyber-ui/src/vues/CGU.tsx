@@ -35,9 +35,7 @@ export const CGU = () => {
                 mesures de sécurité prioritaires à mener sur 6 mois. Les
                 informations légales de la plateforme MonAideCyber sont
                 accessibles à l’adresse{' '}
-                <a href="https://www.monaidecyber.ssi.gouv.fr/cgu">
-                  https://www.monaidecyber.ssi.gouv.fr/cgu
-                </a>{' '}
+                <a href="/cgu">https://www.monaidecyber.ssi.gouv.fr/cgu</a>{' '}
                 depuis la page d’accueil du Site.
               </p>
               <div id="definitions">
