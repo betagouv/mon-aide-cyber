@@ -26,6 +26,8 @@ import {
   APIEntrepotContact,
   EntrepotContact,
 } from './infrastructure/entrepots/APIEntrepotContact.ts';
+import { CGU } from './vues/CGU.tsx';
+import { MentionsLegales } from './vues/MentionsLegales.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -50,7 +52,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                   </ErrorBoundary>
                 }
               />
+              <Route path="/cgu" element={<CGU />} />
               <Route path="/charte-aidant" element={<CharteAidant />} />
+              <Route path="/mentions-legales" element={<MentionsLegales />} />
               <Route
                 element={
                   <Suspense>

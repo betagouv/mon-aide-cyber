@@ -123,6 +123,21 @@ export const Footer = () => (
                 Accessibilité : non conforme
               </a>
             </li>
+            <li className="fr-footer__bottom-item">
+              <a className="fr-footer__bottom-link" href="/mentions-legales">
+                Mentions légales
+              </a>
+            </li>
+            <li className="fr-footer__bottom-item">
+              <a className="fr-footer__bottom-link" href="/charte-aidant">
+                La charte de l&apos;aidant
+              </a>
+            </li>
+            <li className="fr-footer__bottom-item">
+              <a className="fr-footer__bottom-link" href="/cgu">
+                Les CGU
+              </a>
+            </li>
           </ul>
         </div>
       </div>
