@@ -10,17 +10,17 @@ export const donneesContexte: QuestionsThematique = {
         {
           identifiant: 'contexte-nature-organisation-organisation-publique',
           libelle:
-            'Organisation publique (ex. collectivité, administration, etc.)',
+            'Organisation publique (ex : collectivité, administration, syndicats mixte, GIP etc.)',
           ordre: 0,
         },
         {
           identifiant: 'contexte-nature-organisation-entreprise-privee',
-          libelle: 'Entreprise privée (ex. TPE, PME, ETI)',
+          libelle: 'Entreprise privée (ex : TPE, PME, ETI)',
           ordre: 1,
         },
         {
           identifiant: 'contexte-nature-organisation-association',
-          libelle: 'Association (ex. association loi 1901, GIP)',
+          libelle: 'Association (ex : association loi 1901)',
           ordre: 2,
         },
         {
@@ -120,37 +120,42 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 15,
         },
         {
+          identifiant: 'contexte-secteur-activite-santé',
+          libelle: 'Santé et action sociale',
+          ordre: 16,
+        },
+        {
           identifiant: 'contexte-secteur-activite-recherche',
           libelle: 'Recherche, laboratoire',
-          ordre: 16,
+          ordre: 17,
         },
         {
           identifiant:
             'contexte-secteur-activite-sante-humaine-et-action-sociale',
           libelle: 'Santé humaine et action sociale',
-          ordre: 17,
+          ordre: 18,
         },
         {
           identifiant:
             'contexte-secteur-activite-arts-spectacles-et-activites-recreatives',
           libelle: 'Arts, spectacles et activités récréatives',
-          ordre: 18,
+          ordre: 19,
         },
         {
           identifiant: 'contexte-secteur-activite-autres-activites-de-services',
           libelle: 'Autres activités de services',
-          ordre: 19,
+          ordre: 20,
         },
         {
           identifiant: 'contexte-secteur-activite-services-aux-menages',
           libelle: 'Services aux ménages',
-          ordre: 20,
+          ordre: 21,
         },
         {
           identifiant:
             'contexte-secteur-activite-activites-extra-territoriales',
           libelle: 'Activités extra-territoriales',
-          ordre: 21,
+          ordre: 22,
         },
       ],
       type: 'choixUnique',
