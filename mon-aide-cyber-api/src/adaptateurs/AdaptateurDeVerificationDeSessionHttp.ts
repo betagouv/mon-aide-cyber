@@ -7,6 +7,7 @@ import {
 } from './AdaptateurDeVerificationDeSession';
 import { Contexte, ErreurMAC } from '../domaine/erreurMAC';
 import { fabriqueDeCookies, MACCookies } from './fabriqueDeCookies';
+import { RequeteUtilisateur } from '../api/routesAPI';
 
 export class AdaptateurDeVerificationDeSessionHttp
   implements AdaptateurDeVerificationDeSession
@@ -22,7 +23,11 @@ export class AdaptateurDeVerificationDeSessionHttp
     ) => MACCookies = (contexte, requete, reponse) =>
       fabriqueDeCookies(contexte, requete, reponse),
   ): RequestHandler {
-    return (requete: Request, reponse: Response, suite: NextFunction) => {
+    return (
+      requete: RequeteUtilisateur,
+      reponse: Response,
+      suite: NextFunction,
+    ) => {
       try {
         const cookies: MACCookies = fabriqueLesCookies(
           contexte,
@@ -32,7 +37,10 @@ export class AdaptateurDeVerificationDeSessionHttp
         const sessionDecodee = JSON.parse(
           Buffer.from(cookies.session, 'base64').toString(),
         );
-        this.gestionnaireDeJeton.verifie(sessionDecodee.token);
+        const jwtPayload = this.gestionnaireDeJeton.verifie(
+          sessionDecodee.token,
+        );
+        requete.identifiantUtilisateurCourant = jwtPayload.identifiant;
       } catch (e) {
         throw ErreurMAC.cree(
           contexte,
