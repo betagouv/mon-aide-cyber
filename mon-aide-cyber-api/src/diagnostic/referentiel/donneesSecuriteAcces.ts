@@ -339,33 +339,15 @@ export const donneesSecuriteAcces: QuestionsThematique = {
               },
             ],
           },
-          ordre: 2,
+          ordre: 1,
         },
         {
           identifiant:
             'acces-mesures-securite-robustesse-mdp-contraintes-par-defaut',
           libelle:
             "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte.",
-          resultat: {
-            indice: { valeur: 2 },
-            mesures: [
-              {
-                identifiant: 'acces-mesures-securite-robustesse-mdp',
-                niveau: 2,
-              },
-            ],
-          },
-          ordre: 3,
-        },
-        {
-          identifiant:
-            'acces-mesures-securite-robustesse-mdp-utilisateurs-sensibilises',
-          libelle:
-            'Les utilisateurs sont formés à la création et à la gestion sécurisée de mots de passe robustes.',
-          resultat: {
-            indice: { valeur: 3 },
-          },
-          ordre: 4,
+          resultat: { indice: { valeur: 3 } },
+          ordre: 2,
         },
       ],
       type: 'choixUnique',
@@ -487,7 +469,8 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant:
             'acces-teletravail-acces-distants-mesures-particulieres-vpn',
-          libelle: 'Les connexions à distance sont réalisées via un VPN, lui même authentifié à double facteur.',
+          libelle:
+            'Les connexions à distance sont réalisées via un VPN, lui même authentifié à double facteur.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -549,7 +532,8 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant:
             'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-vpn',
-          libelle: 'Les connexions à distance sont réalisées via un VPN, lui même authentifié à double facteur.',
+          libelle:
+            'Les connexions à distance sont réalisées via un VPN, lui même authentifié à double facteur.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
