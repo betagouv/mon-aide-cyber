@@ -1,5 +1,5 @@
 export const mesuresGouvernance = {
-  'gouvernance-infos-et-processus-a-proteger': {
+  'gouvernance-infos-et-activités-a-proteger': {
     niveau1: {
       titre:
         'Établir la liste des activités et des informations à protéger en priorité.',

@@ -3,25 +3,25 @@ import { QuestionsThematique } from '../Referentiel';
 export const donneesGouvernance: QuestionsThematique = {
   questions: [
     {
-      identifiant: 'gouvernance-infos-et-processus-a-proteger',
+      identifiant: 'gouvernance-infos-et-activités-a-proteger',
       libelle:
-        'Avez-vous déterminé les informations et les activités à protéger en priorité ?',
+        'Avez-vous déterminé les informations et les activités métiers à protéger en priorité ?',
       poids: 2,
       type: 'choixUnique',
       reponsesPossibles: [
         {
-          identifiant: 'gouvernance-infos-et-processus-a-proteger-nsp',
+          identifiant: 'gouvernance-infos-et-activités-a-proteger-nsp',
           libelle: 'Je ne sais pas.',
           ordre: 0,
         },
         {
-          identifiant: 'gouvernance-infos-et-processus-a-proteger-non',
+          identifiant: 'gouvernance-infos-et-activités-a-proteger-non',
           libelle: 'Non.',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'gouvernance-infos-et-processus-a-proteger',
+                identifiant: 'gouvernance-infos-et-activités-a-proteger',
                 niveau: 1,
               },
             ],
@@ -30,14 +30,14 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant:
-            'gouvernance-infos-et-processus-a-proteger-oui-idee-generale',
+            'gouvernance-infos-et-activités-a-proteger-oui-idee-generale',
           libelle:
-            'Nous avons une idée générale de nos données et activités à protéger en priorité.',
+            'Nous avons une idée générale de nos données et activités métiers à protéger en priorité.',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
               {
-                identifiant: 'gouvernance-infos-et-processus-a-proteger',
+                identifiant: 'gouvernance-infos-et-activités-a-proteger',
                 niveau: 2,
               },
             ],
@@ -47,7 +47,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-infos-et-processus-a-proteger-oui-precise',
           libelle:
-            'Il existe une liste précise et maintenue à jour de toutes les données et activités à protéger en priorité à l’échelle de l’organisation.',
+            'Il existe une liste précise et maintenue à jour de toutes les données et activités métiers à protéger en priorité à l’échelle de l’organisation.',
           resultat: {
             indice: { valeur: 3 },
           },
