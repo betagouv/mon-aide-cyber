@@ -5,8 +5,8 @@ export type Aidant = Aggregat & {
   identifiantConnexion: string;
   nomPrenom: string;
   motDePasse: string;
-  dateSignatureCGU: Date;
-  dateSignatureCharte: Date;
+  dateSignatureCGU?: Date;
+  dateSignatureCharte?: Date;
 };
 export interface EntrepotAidant extends Entrepot<Aidant> {
   rechercheParIdentifiantConnexionEtMotDePasse(
@@ -21,6 +21,12 @@ export interface EntrepotAidant extends Entrepot<Aidant> {
 export class ErreurAuthentification extends Error {
   constructor(public readonly erreur: Error) {
     super('Identifiants incorrects.');
+  }
+}
+
+export class ErreurFinalisationCompte extends Error {
+  constructor(public readonly message: string) {
+    super(message);
   }
 }
 

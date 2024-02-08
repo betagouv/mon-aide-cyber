@@ -6,8 +6,8 @@ import { AggregatNonTrouve } from '../../../domaine/Aggregat';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 
 export type DonneesUtilisateur = {
-  dateSignatureCharte: string;
-  dateSignatureCGU: string;
+  dateSignatureCharte?: string;
+  dateSignatureCGU?: string;
   identifiantConnexion: string;
   nomPrenom: string;
   motDePasse: string;
@@ -38,10 +38,16 @@ export class EntrepotAidantPostgres
       ),
       motDePasse: this.chiffrement.dechiffre(dto.donnees.motDePasse),
       nomPrenom: this.chiffrement.dechiffre(dto.donnees.nomPrenom),
-      dateSignatureCGU: FournisseurHorloge.enDate(dto.donnees.dateSignatureCGU),
-      dateSignatureCharte: FournisseurHorloge.enDate(
-        dto.donnees.dateSignatureCharte,
-      ),
+      ...(dto.donnees.dateSignatureCGU && {
+        dateSignatureCGU: FournisseurHorloge.enDate(
+          dto.donnees.dateSignatureCGU,
+        ),
+      }),
+      ...(dto.donnees.dateSignatureCharte && {
+        dateSignatureCharte: FournisseurHorloge.enDate(
+          dto.donnees.dateSignatureCharte,
+        ),
+      }),
     };
   }
 
@@ -55,8 +61,12 @@ export class EntrepotAidantPostgres
         ),
         motDePasse: this.chiffrement.chiffre(entite.motDePasse),
         nomPrenom: this.chiffrement.chiffre(entite.nomPrenom),
-        dateSignatureCGU: entite.dateSignatureCGU.toISOString(),
-        dateSignatureCharte: entite.dateSignatureCharte.toISOString(),
+        ...(entite.dateSignatureCGU && {
+          dateSignatureCGU: entite.dateSignatureCGU.toISOString(),
+        }),
+        ...(entite.dateSignatureCharte && {
+          dateSignatureCharte: entite.dateSignatureCharte.toISOString(),
+        }),
       },
     };
   }

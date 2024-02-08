@@ -11,8 +11,9 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   private identifiantConnexion: string = fakerFR.internet.email();
   private nomPrenom: string = fakerFR.person.fullName();
   private motDePasse: string = fakerFR.string.alpha(10);
-  private dateSignatureCGU: Date = FournisseurHorloge.maintenant();
-  private dateSignatureCharte: Date = FournisseurHorloge.maintenant();
+  private dateSignatureCGU: Date | undefined = FournisseurHorloge.maintenant();
+  private dateSignatureCharte: Date | undefined =
+    FournisseurHorloge.maintenant();
   avecUnNomPrenom(nomPrenom: string): ConstructeurAidant {
     this.nomPrenom = nomPrenom;
     return this;
@@ -35,14 +36,22 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  avecCompteEnAttenteDeFinalisation(): ConstructeurAidant {
+    this.dateSignatureCGU = undefined;
+    this.dateSignatureCharte = undefined;
+    return this;
+  }
+
   construis(): Aidant {
     return {
       identifiant: this.identifiant,
       identifiantConnexion: this.identifiantConnexion,
       motDePasse: this.motDePasse,
       nomPrenom: this.nomPrenom,
-      dateSignatureCGU: this.dateSignatureCGU,
-      dateSignatureCharte: this.dateSignatureCharte,
+      ...(this.dateSignatureCGU && { dateSignatureCGU: this.dateSignatureCGU }),
+      ...(this.dateSignatureCharte && {
+        dateSignatureCharte: this.dateSignatureCharte,
+      }),
     };
   }
 }

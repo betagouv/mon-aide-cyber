@@ -4,6 +4,7 @@ import { ConfigurationServeur } from '../serveur';
 import { routesAPIDiagnostics } from './routesAPIDiagnostics';
 import { routesAPIAuthentification } from './routesAPIAuthentification';
 import crypto from 'crypto';
+import { routesAPIUtilisateur } from './routesAPIUtilisateur';
 
 export interface RequeteUtilisateur extends Request {
   identifiantUtilisateurCourant?: crypto.UUID;
@@ -15,6 +16,7 @@ const routesAPI = (configuration: ConfigurationServeur) => {
   routes.use('/diagnostic', routesAPIDiagnostic(configuration));
   routes.use('/diagnostics', routesAPIDiagnostics(configuration));
   routes.use('/token', routesAPIAuthentification(configuration));
+  routes.use('/utilisateur', routesAPIUtilisateur(configuration));
 
   return routes;
 };
