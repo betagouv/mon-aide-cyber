@@ -253,7 +253,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-connaissance-rgpd-2-oui-registre',
           libelle:
-            'Oui, j’informe les personnes concernées et j’ai mis en place les moyens nécessaires leur permettant d’exercer leurs droits (ex : accès, modification, suppression)',
+            'Oui, j’informe les personnes concernées et j’ai mis en place les moyens nécessaires leur permettant d’exercer leurs droits (ex : accès, rectification, opposition, suppression)',
           ordre: 4,
           resultat: {
             indice: { valeur: 3 },
