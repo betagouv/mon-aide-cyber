@@ -7,6 +7,7 @@ import { ErreurMAC } from '../../domaine/erreurMAC';
 const HTTP_NON_AUTORISE = 401;
 const HTTP_ACCES_REFUSE = 403;
 const HTTP_NON_TROUVE = 404;
+const HTTP_NON_TRAITABLE = 422;
 const HTTP_ERREUR_SERVEUR = 500;
 
 const CORPS_REPONSE_ERREUR_NON_GEREE = {
@@ -52,6 +53,15 @@ const erreursGerees: Map<
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_ACCES_REFUSE, {
         message: "L'accès à la ressource est interdit.",
+      });
+    },
+  ],
+  [
+    'ErreurFinalisationCompte',
+    (erreur, _, consignateur, reponse) => {
+      consignateur.consigne(erreur);
+      construisReponse(reponse, HTTP_NON_TRAITABLE, {
+        message: erreur.message,
       });
     },
   ],

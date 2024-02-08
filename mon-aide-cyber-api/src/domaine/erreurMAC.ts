@@ -5,6 +5,7 @@ export type Contexte =
   | 'Lance le diagnostic'
   | 'Accède aux diagnostics'
   | "Demande d'Authentification"
+  | 'Finalise la création du compte'
   | 'Envoi un message de contact';
 
 export class ErreurMAC extends Error {
