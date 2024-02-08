@@ -391,7 +391,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-mesures-authentification-renforcees',
           libelle:
-            "Oui, des mesures renforçant l'authentification ont été mises en œuvre.",
+            "Oui, des mesures renforçant l'accès à ces données ont été mises en œuvre.",
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -408,7 +408,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-mesures-authentification-renforcees-et-donnees-chiffrees',
           libelle:
-            "Oui, des mesures renforçant l'authentification ont été mises en œuvre et les données sont chiffrées.",
+            "Oui, des mesures renforçant l'accès à ces données ont été mises en œuvre et les données sont chiffrées.",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -453,7 +453,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-teletravail-acces-distants-mesures-particulieres-mfa',
           libelle:
-            "De l'authentification à double facteurs a été mise en place pour les accès distants.",
+            "De l'authentification à double facteur a été mise en place pour les accès distants.",
           resultat: {
             indice: { valeur: 2 },
             mesures: [
