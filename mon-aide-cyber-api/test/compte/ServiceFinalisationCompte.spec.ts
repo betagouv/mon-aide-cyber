@@ -49,4 +49,26 @@ describe('Service de finalisation de création de compte', () => {
       ),
     );
   });
+
+  it('renvoie une erreur si le compte a déjà été finalisé', async () => {
+    const entrepots = new EntrepotsMemoire();
+    const aidant = unAidant().construis();
+    entrepots.aidants().persiste(aidant);
+    const service = new ServiceFinalisationCreationCompte(entrepots);
+
+    await expect(() =>
+      service.finalise({
+        cguCochees: false,
+        charteCochee: false,
+        identifiant: aidant.identifiant,
+      }),
+    ).rejects.toThrowError(
+      ErreurMAC.cree(
+        'Finalise la création du compte',
+        new ErreurFinalisationCompte(
+          'Vous avez déjà finaliser la création de votre compte.',
+        ),
+      ),
+    );
+  });
 });
