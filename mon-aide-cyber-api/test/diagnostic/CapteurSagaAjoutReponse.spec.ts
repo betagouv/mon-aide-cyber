@@ -355,9 +355,9 @@ class ConstructeurSaga implements Constructeur<SagaAjoutReponse> {
 class BusDeCommandePourLesTests implements BusCommande {
   private commandesRecues: string[] = [];
 
-  publie<C extends Commande>(commande: C): Promise<void> {
+  publie<C extends Commande, R>(commande: C): Promise<R> {
     this.commandesRecues.push(commande.type);
-    return Promise.resolve(undefined);
+    return Promise.resolve(undefined as R);
   }
 
   aRecu(typeCommande: string): boolean {
