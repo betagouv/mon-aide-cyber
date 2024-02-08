@@ -1,8 +1,9 @@
 import { ConfigurationServeur } from '../serveur';
-import express, { Request, Response } from 'express';
+import express, { Response } from 'express';
 import crypto from 'crypto';
 import { Diagnostic } from '../diagnostic/Diagnostic';
 import { NextFunction } from 'express-serve-static-core';
+import { RequeteUtilisateur } from './routesAPI';
 
 type CheminAction = string;
 type Action = {
@@ -30,7 +31,7 @@ export const routesAPIDiagnostics = (configuration: ConfigurationServeur) => {
     configuration.adaptateurDeVerificationDeSession.verifie(
       'Accède aux diagnostics',
     ),
-    (_requete: Request, reponse: Response, suite: NextFunction) => {
+    (_requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       configuration.entrepots
         .diagnostic()
         .tous()
