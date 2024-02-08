@@ -1,5 +1,5 @@
 import { ConfigurationServeur } from '../serveur';
-import express, { Request, Response } from 'express';
+import express, { Response } from 'express';
 import crypto from 'crypto';
 import { ServiceDiagnostic } from '../diagnostic/ServiceDiagnostic';
 import { representeLeDiagnosticPourLeClient } from './representateurs/representateurDiagnostic';
@@ -10,6 +10,7 @@ import { ErreurMAC } from '../domaine/erreurMAC';
 import { Action, TypeActionRestituer } from './representateurs/types';
 import { Restitution } from '../restitution/Restitution';
 import { RestitutionHTML } from '../adaptateurs/AdaptateurDeRestitutionHTML';
+import { RequeteUtilisateur } from './routesAPI';
 
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -20,7 +21,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.post(
     '/',
     session.verifie('Lance le diagnostic'),
-    (_requete: Request, reponse: Response, suite: NextFunction) => {
+    (_requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       new ServiceDiagnostic(
         configuration.adaptateurReferentiel,
         configuration.adaptateurMesures,
@@ -43,7 +44,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.get(
     '/:id',
     session.verifie('Accès diagnostic'),
-    (requete: Request, reponse: Response, suite: NextFunction) => {
+    (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       new ServiceDiagnostic(
         configuration.adaptateurReferentiel,
@@ -67,7 +68,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id',
     session.verifie('Ajout réponse au diagnostic'),
     bodyParser.json(),
-    (requete: Request, reponse: Response, suite: NextFunction) => {
+    (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       const corpsReponse = requete.body;
       const commande: SagaAjoutReponse = {
@@ -88,7 +89,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.get(
     '/:id/restitution',
     session.verifie('Demande la restitution'),
-    (requete: Request, reponse: Response, suite: NextFunction) => {
+    (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
 
       const genereRestitution = (
