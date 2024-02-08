@@ -2,7 +2,7 @@ export const mesuresSecuriteAcces = {
   'acces-outil-gestion-des-comptes': {
     niveau1: {
       titre:
-        "Mettre en œuvre un outil de gestion des politiques de sécurité centralisées (ex : Active Directory, Samba-AD) et en évaluer/améliorer son niveau de sécurité annuellement, idéalement au travers d'un accompagnement extérieur.",
+        "Mettre en œuvre un outil de gestion des politiques de sécurité centralisées (ex : Active Directory, Samba-AD) et en évaluer/améliorer son niveau de sécurité annuellement",
       pourquoi:
         '../../mesures/acces/acces-outil-gestion-des-comptes-niveau1-pourquoi.pug',
       comment:
@@ -10,7 +10,7 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        "Contrôler régulièrement le niveau de sécurité de son outil de gestion de politiques de sécurité centralisé, en s'appuyant idéalement sur un prestataire labellisé/qualifié.",
+        "Contrôler régulièrement le niveau de sécurité de son outil de gestion de politiques de sécurité centralisé",
       pourquoi:
         '../../mesures/acces/acces-outil-gestion-des-comptes-niveau2-pourquoi.pug',
       comment:
@@ -21,7 +21,7 @@ export const mesuresSecuriteAcces = {
   'acces-liste-compte-utilisateurs': {
     niveau1: {
       titre:
-        'Réaliser annuellement une revue des accès utilisateurs en les comparant avec les informations détenues par le service RH. Les mots de passes des comptes partagés concernés sont renouvelés à chaque départ.',
+        'Réaliser annuellement une revue des accès utilisateurs en les comparant avec les informations détenues par le service RH',
       pourquoi:
         '../../mesures/acces/acces-liste-compte-utilisateurs-niveau1-pourquoi.pug',
       comment:
