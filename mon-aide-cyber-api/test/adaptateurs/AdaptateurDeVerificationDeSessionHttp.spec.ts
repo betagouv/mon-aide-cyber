@@ -6,6 +6,7 @@ import { Request, Response } from 'express';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
 import { ErreurAccesRefuse } from '../../src/adaptateurs/AdaptateurDeVerificationDeSession';
 import { MACCookies } from '../../src/adaptateurs/fabriqueDeCookies';
+import { RequeteUtilisateur } from '../../src/api/routesAPI';
 
 describe('Adaptateur de vérification de session', () => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -89,5 +90,22 @@ describe('Adaptateur de vérification de session', () => {
           }) as MACCookies,
       )(requete, reponse, fausseSuite);
     }).toThrow(`Session invalide.`);
+  });
+
+  it("ajoute l'identifiant de l'utilisateur lorsque le jeton est vérifié", () => {
+    const fauxGestionnaireDeJeton = new FauxGestionnaireDeJeton();
+    const cookieDeSession =
+      'session=eyJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwWkdWdWRHbG1hV0Z1ZENJNkltTmlZVE16WVRSbUxUQXlNalF0TkdRNE1TMWlPRGs1TFRFMU1qRXdOV00yWWpoaFppSXNJbWxoZENJNk1UY3dNRGt3TWpZMU1UazJNSDAuV3hnRzNmSHRUUHl6R3d5T2RqcFFHcTlrbHE0eUJvNlVGOW53a1ltS3NobyJ9; session.sig=n5DahOjdSBgjYBonCTddV0mqZto';
+    const requete: RequeteUtilisateur = {
+      headers: { cookie: cookieDeSession },
+    } as RequeteUtilisateur;
+
+    new AdaptateurDeVerificationDeSessionHttp(fauxGestionnaireDeJeton).verifie(
+      'Accède aux diagnostics',
+    )(requete, reponse, fausseSuite);
+
+    expect(requete.identifiantUtilisateurCourant).toStrictEqual(
+      'cba33a4f-0224-4d81-b899-152105c6b8af',
+    );
   });
 });
