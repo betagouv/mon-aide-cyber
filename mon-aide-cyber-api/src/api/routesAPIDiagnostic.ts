@@ -23,11 +23,12 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.post(
     '/',
     session.verifie('Lance le diagnostic'),
-    (_requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
+    (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const commande: CommandeLanceDiagnostic = {
         type: 'CommandeLanceDiagnostic',
         adaptateurReferentiel: configuration.adaptateurReferentiel,
         adaptateurReferentielDeMesures: configuration.adaptateurMesures,
+        identifiantAidant: requete.identifiantUtilisateurCourant!,
       };
       busCommande
         .publie<CommandeLanceDiagnostic, Diagnostic>(commande)
@@ -35,7 +36,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
           reponse.status(201);
           reponse.appendHeader(
             'Link',
-            `${_requete.originalUrl}/${diagnostic.identifiant}`,
+            `${requete.originalUrl}/${diagnostic.identifiant}`,
           );
           reponse.send();
         })
