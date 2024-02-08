@@ -855,23 +855,18 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-activites-recherche-et-developpement',
       libelle:
-        'Votre organisation a-t-elle des activités de R&D, de conception de services innovants, de dépôts de brevets ?',
+        'Estimez-vous que votre entreprise puisse faire l’objet d’espionnage ?',
       poids: 0,
       reponsesPossibles: [
         {
-          identifiant: 'contexte-activites-recherche-et-developpement-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 1,
-        },
-        {
           identifiant: 'contexte-activites-recherche-et-developpement-non',
           libelle: 'Non',
-          ordre: 2,
+          ordre: 1,
         },
         {
           identifiant: 'contexte-activites-recherche-et-developpement-oui',
           libelle: 'Oui',
-          ordre: 3,
+          ordre: 2,
         },
       ],
       type: 'choixUnique',
