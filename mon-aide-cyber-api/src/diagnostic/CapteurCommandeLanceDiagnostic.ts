@@ -8,6 +8,7 @@ import { Adaptateur } from '../adaptateurs/Adaptateur';
 import { Referentiel } from './Referentiel';
 import crypto from 'crypto';
 import { ReferentielDeMesures } from './ReferentielDeMesures';
+
 export class CapteurCommandeLanceDiagnostic
   implements CapteurCommande<CommandeLanceDiagnostic, Diagnostic>
 {
@@ -28,7 +29,10 @@ export class CapteurCommandeLanceDiagnostic
           identifiant: diagnostic.identifiant,
           type: 'DIAGNOSTIC_LANCE',
           date: FournisseurHorloge.maintenant(),
-          corps: { identifiantDiagnostic: diagnostic.identifiant },
+          corps: {
+            identifiantDiagnostic: diagnostic.identifiant,
+            identifiantAidant: commande.identifiantAidant,
+          },
         });
         return diagnostic;
       })
@@ -42,10 +46,12 @@ export type CommandeLanceDiagnostic = Omit<Commande, 'type'> & {
   type: 'CommandeLanceDiagnostic';
   adaptateurReferentiel: Adaptateur<Referentiel>;
   adaptateurReferentielDeMesures: Adaptateur<ReferentielDeMesures>;
+  identifiantAidant: crypto.UUID;
 };
 
 export type DiagnosticLance = Omit<Evenement, 'corps'> & {
   corps: {
     identifiantDiagnostic: crypto.UUID;
+    identifiantAidant: crypto.UUID;
   };
 };
