@@ -1,9 +1,34 @@
 div
-    p
+    div
+        | Des exigences sur la création des mots de passe peuvent être implémentées via l’outil de gestion centralisée de
+        | politiques de sécurité (exemple : Active Directory, Samba-AD).
+    div
+        | Par défaut, utiliser au moins la règle de force de mot de passe suivante :
+        ul
+            li Nombre de caractères : 12 caractères minimum, idéalement 15
+            li Caractères spéciaux : au moins une minuscule, au moins une majuscule, au moins un chiffre, au moins un
+            | caractère spécial de la liste suivante : #?!@$%^&*-'+_()[].
+    div
+        | Au-delà de 20 caractères, il peut être envisageable d’enlever les contraintes sur les caractères spéciaux.
+        | Lors de la création d’un mot de passe, éviter les mots du dictionnaire, les suites de lettres, les suites de
+        | chiffre, les dates, les informations personnelles (nom, prénom, date de naissance).
+    div
+        | Un renouvellement trop fréquent n’est pas recommandé. Il vaut mieux privilégier un changement des mots de passe
+        | en cas de suspicion ou bien de manière annuelle.
+    div
+        | Les deux outils suivants peuvent être recommandés aux utilisateurs ou administrateurs :
+        ul
+            li L’outil de la CNIL permettant de créer un mot de passe robuste :
+                |
+                a(href="https://www.cnil.fr/fr/verifier-sa-politique-de-mots-de-passe")
+                |
+                | Vérifier sa politique de mots de passe | CNIL
+    
+    div 
         | Il est recommandé d’installer sur les postes de travail et inciter auprès des collaborateurs l’utilisation un coffre-fort
         | de mots de passe permettant facilement de générer des mots de passe robustes et différents pour chaque accès nécessitant
         | une authentification distincte.
-    p
+    div 
         | Une communication ou une réunion spécifique peut être organisée pour présenter cet outil, ses fonctionnalités
         | et proposer des moyens mnémotechniques pour créer un ou plusieurs mots de passe robustes
         | (cf.
