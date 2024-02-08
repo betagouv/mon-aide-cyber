@@ -6,32 +6,20 @@ import {
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
-import {
-  DiagnosticLance,
-  ServiceDiagnostic,
-} from '../../src/diagnostic/ServiceDiagnostic';
+import { ServiceDiagnostic } from '../../src/diagnostic/ServiceDiagnostic';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { Entrepots } from '../../src/domaine/Entrepots';
-import {
-  QuestionDiagnostic,
-} from '../../src/diagnostic/Diagnostic';
-import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { AggregatNonTrouve } from '../../src/domaine/Aggregat';
 import crypto from 'crypto';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
-import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 
 describe('Le service de diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
-  let adaptateurMesures: AdaptateurMesuresTest;
   let entrepots: Entrepots;
 
   beforeEach(() => {
     adaptateurReferentiel = new AdaptateurReferentielDeTest();
-    adaptateurMesures = new AdaptateurMesuresTest();
     entrepots = new EntrepotsMemoire();
   });
 
@@ -64,12 +52,7 @@ describe('Le service de diagnostic', () => {
         .construis();
       adaptateurReferentiel.ajoute(referentiel);
       await entrepots.diagnostic().persiste(diagnostic);
-      const serviceDiagnostic = new ServiceDiagnostic(
-        adaptateurReferentiel,
-        adaptateurMesures,
-        entrepots,
-        new BusEvenementDeTest(),
-      );
+      const serviceDiagnostic = new ServiceDiagnostic(entrepots);
 
       const diagnosticRetourne = await serviceDiagnostic.diagnostic(
         diagnostic.identifiant,
@@ -132,12 +115,7 @@ describe('Le service de diagnostic', () => {
         .construis();
       adaptateurReferentiel.ajoute(referentiel);
       await entrepots.diagnostic().persiste(diagnostic);
-      const serviceDiagnostic = new ServiceDiagnostic(
-        adaptateurReferentiel,
-        adaptateurMesures,
-        entrepots,
-        new BusEvenementDeTest(),
-      );
+      const serviceDiagnostic = new ServiceDiagnostic(entrepots);
 
       const diagnosticRetourne = await serviceDiagnostic.diagnostic(
         diagnostic.identifiant,
@@ -163,107 +141,9 @@ describe('Le service de diagnostic', () => {
 
     it('si le diagnostic est inconnu, cela génère un erreur', async () => {
       await expect(() =>
-        new ServiceDiagnostic(
-          adaptateurReferentiel,
-          adaptateurMesures,
-          entrepots,
-          new BusEvenementDeTest(),
-        ).diagnostic(crypto.randomUUID()),
+        new ServiceDiagnostic(entrepots).diagnostic(crypto.randomUUID()),
       ).rejects.toStrictEqual(
         ErreurMAC.cree('Accès diagnostic', new AggregatNonTrouve('diagnostic')),
-      );
-    });
-  });
-
-  describe("Lorsque l'on veut lancer un diagnostic", () => {
-    it('copie le référentiel disponible et le persiste', async () => {
-      const referentiel = unReferentiel()
-        .ajouteUneQuestionAuContexte(uneQuestion().construis())
-        .construis();
-      adaptateurReferentiel.ajoute(referentiel);
-      const questionAttendue = referentiel.contexte.questions[0];
-
-      const diagnostic = await new ServiceDiagnostic(
-        adaptateurReferentiel,
-        adaptateurMesures,
-        entrepots,
-        new BusEvenementDeTest(),
-      ).lance();
-
-      const diagnosticRetourne = await entrepots
-        .diagnostic()
-        .lis(diagnostic.identifiant);
-      expect(diagnosticRetourne.identifiant).not.toBeUndefined();
-      expect(
-        diagnosticRetourne.referentiel['contexte'].questions,
-      ).toStrictEqual<QuestionDiagnostic[]>([
-        {
-          identifiant: questionAttendue.identifiant,
-          libelle: questionAttendue.libelle,
-          type: questionAttendue.type,
-          poids: questionAttendue.poids,
-          reponsesPossibles: questionAttendue.reponsesPossibles,
-          reponseDonnee: { reponseUnique: null, reponsesMultiples: [] },
-        },
-      ]);
-    });
-
-    it('les dates de création et modification sont initialisées', async () => {
-      FournisseurHorlogeDeTest.initialise(new Date());
-      const referentiel = unReferentiel().construis();
-      adaptateurReferentiel.ajoute(referentiel);
-
-      const diagnostic = await new ServiceDiagnostic(
-        adaptateurReferentiel,
-        adaptateurMesures,
-        entrepots,
-        new BusEvenementDeTest(),
-      ).lance();
-
-      const diagnosticRetourne = await entrepots
-        .diagnostic()
-        .lis(diagnostic.identifiant);
-      expect(diagnosticRetourne.dateCreation).toStrictEqual(
-        FournisseurHorloge.maintenant(),
-      );
-      expect(diagnosticRetourne.dateDerniereModification).toStrictEqual(
-        FournisseurHorloge.maintenant(),
-      );
-    });
-
-    it("publie sur un bus d'événement DiagnosticLance", async () => {
-      const maintenant = new Date();
-      FournisseurHorlogeDeTest.initialise(maintenant);
-      const busEvenement = new BusEvenementDeTest();
-      adaptateurReferentiel.ajoute(unReferentiel().construis());
-      const diagnostic = await new ServiceDiagnostic(
-        adaptateurReferentiel,
-        adaptateurMesures,
-        entrepots,
-        busEvenement,
-      ).lance();
-
-      expect(busEvenement.evenementRecu).toStrictEqual<DiagnosticLance>({
-        identifiant: diagnostic.identifiant,
-        type: 'DIAGNOSTIC_LANCE',
-        date: maintenant,
-        corps: { identifiantDiagnostic: diagnostic.identifiant },
-      });
-    });
-
-    it('cela peut générer une erreur', async () => {
-      await expect(() =>
-        new ServiceDiagnostic(
-          adaptateurReferentiel,
-          adaptateurMesures,
-          entrepots,
-          new BusEvenementDeTest(),
-        ).lance(),
-      ).rejects.toStrictEqual(
-        ErreurMAC.cree(
-          'Lance le diagnostic',
-          new Error('Referentiel non connu'),
-        ),
       );
     });
   });

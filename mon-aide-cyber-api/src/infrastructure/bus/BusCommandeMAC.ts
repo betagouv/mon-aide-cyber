@@ -3,6 +3,7 @@ import { Entrepots } from '../../domaine/Entrepots';
 import { BusEvenement } from '../../domaine/BusEvenement';
 import { CapteurSagaAjoutReponse } from '../../diagnostic/CapteurSagaAjoutReponse';
 import { CapteurCommandeLanceRestitution } from '../../diagnostic/CapteurCommandeLanceRestitution';
+import { CapteurCommandeLanceDiagnostic } from '../../diagnostic/CapteurCommandeLanceDiagnostic';
 
 type ParametresCapteur = {
   entrepots: Entrepots;
@@ -35,6 +36,16 @@ const capteurs: Map<string, Capteur> = new Map([
         ),
     },
   ],
+  [
+    'CommandeLanceDiagnostic',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeLanceDiagnostic(
+          parametres.entrepots,
+          parametres.busEvenements!,
+        ),
+    },
+  ],
 ]);
 
 export class BusCommandeMAC implements BusCommande {
@@ -43,7 +54,7 @@ export class BusCommandeMAC implements BusCommande {
     private readonly busEvenement: BusEvenement,
   ) {}
 
-  publie<C extends Commande>(commande: C): Promise<void> {
+  publie<C extends Commande, R>(commande: C): Promise<R> {
     const capteur = capteurs.get(commande.type);
     // La vérification ci-dessous est remontée par codeql https://github.com/github/codeql/blob/d540fc0794dcb2a6c10648b8925403788612e976/javascript/ql/src/Security/CWE-754/UnvalidatedDynamicMethodCall.ql
     if (capteur && typeof capteur.capteur === 'function') {

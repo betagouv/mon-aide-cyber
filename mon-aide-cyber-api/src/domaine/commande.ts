@@ -12,5 +12,5 @@ export interface CapteurCommande<C extends Commande, R> {
 }
 
 export interface BusCommande {
-  publie<C extends Commande>(commande: C): Promise<void>;
+  publie<C extends Commande, R>(commande: C): Promise<R>;
 }

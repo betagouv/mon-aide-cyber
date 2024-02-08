@@ -11,6 +11,8 @@ import { Action, TypeActionRestituer } from './representateurs/types';
 import { Restitution } from '../restitution/Restitution';
 import { RestitutionHTML } from '../adaptateurs/AdaptateurDeRestitutionHTML';
 import { RequeteUtilisateur } from './routesAPI';
+import { CommandeLanceDiagnostic } from '../diagnostic/CapteurCommandeLanceDiagnostic';
+import { Diagnostic } from '../diagnostic/Diagnostic';
 
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -22,13 +24,13 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/',
     session.verifie('Lance le diagnostic'),
     (_requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
-      new ServiceDiagnostic(
-        configuration.adaptateurReferentiel,
-        configuration.adaptateurMesures,
-        configuration.entrepots,
-        configuration.busEvenement,
-      )
-        .lance()
+      const commande: CommandeLanceDiagnostic = {
+        type: 'CommandeLanceDiagnostic',
+        adaptateurReferentiel: configuration.adaptateurReferentiel,
+        adaptateurReferentielDeMesures: configuration.adaptateurMesures,
+      };
+      busCommande
+        .publie<CommandeLanceDiagnostic, Diagnostic>(commande)
         .then((diagnostic) => {
           reponse.status(201);
           reponse.appendHeader(
@@ -46,11 +48,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     session.verifie('Accès diagnostic'),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
-      new ServiceDiagnostic(
-        configuration.adaptateurReferentiel,
-        configuration.adaptateurMesures,
-        configuration.entrepots,
-      )
+      new ServiceDiagnostic(configuration.entrepots)
         .diagnostic(id as crypto.UUID)
         .then((diagnostic) =>
           reponse.json(
