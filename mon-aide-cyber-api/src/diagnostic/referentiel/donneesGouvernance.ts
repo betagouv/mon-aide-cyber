@@ -215,7 +215,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-connaissance-rgpd-2',
       libelle:
-        "Informez-vous les personnes concernées sur l'utilisation de leurs données personnelles et leurs droits d’accès ? ",
+        "Informez-vous les personnes concernées sur l'utilisation de leurs données personnelles et leurs droits ? ",
       type: 'choixUnique',
       poids: 1,
       reponsesPossibles: [
@@ -253,7 +253,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-connaissance-rgpd-2-oui-registre',
           libelle:
-            'Oui, j’informe les personnes concernées et j’ai mis en place les moyens nécessaires leur permettant d’exercer leurs droits',
+            'Oui, j’informe les personnes concernées et j’ai mis en place les moyens nécessaires leur permettant d’exercer leurs droits (ex : accès, modification, suppression)',
           ordre: 4,
           resultat: {
             indice: { valeur: 3 },
