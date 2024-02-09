@@ -9,7 +9,6 @@ import {
   ReponseAuthentification,
   Utilisateur,
 } from '../../domaine/authentification/Authentification.ts';
-import { ParametresAPI } from '../../domaine/diagnostic/ParametresAPI.ts';
 
 export abstract class APIEntrepot<T extends Aggregat> implements Entrepot<T> {
   protected constructor(private readonly chemin: string) {}
@@ -26,13 +25,6 @@ export abstract class APIEntrepot<T extends Aggregat> implements Entrepot<T> {
   }
 
   protected abstract transcris(json: Promise<any>): Promise<T>;
-
-  persiste(parametresAPI: ParametresAPI | undefined) {
-    if (parametresAPI) {
-      return fetch(parametresAPI.url, { method: parametresAPI.methode });
-    }
-    return fetch(`/api/${this.chemin}`, { method: 'POST' });
-  }
 }
 
 export class APIEntrepotDiagnostics

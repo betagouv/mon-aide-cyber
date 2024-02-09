@@ -8,6 +8,7 @@ import {
   reducteurAuthentification,
   saisieInvalidee,
 } from './reducteurAuthentification.tsx';
+import { extraisLesActions } from '../../domaine/Actions.ts';
 
 const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
   const authentification = useAuthentification();
@@ -43,15 +44,7 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
           surFermeture();
           navigate(reponse.liens.suite.url, {
             state: {
-              ...Object.entries(reponse.liens)
-                .filter(([lien]) => lien !== 'suite')
-                .reduce(
-                  (accumulateur, [action, lien]) => ({
-                    ...accumulateur,
-                    [action]: lien,
-                  }),
-                  {},
-                ),
+              ...extraisLesActions(reponse.liens),
             },
           });
         } catch (erreur) {

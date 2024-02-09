@@ -5,29 +5,8 @@ import {
   restitutionChargee,
   rubriqueCliquee,
 } from '../../../src/domaine/diagnostic/reducteurRestitution';
-import { Restitution } from '../../../src/domaine/diagnostic/Restitution';
-import { fakerFR } from '@faker-js/faker';
+import { uneRestitution } from '../../constructeurs/constructeurRestitution.ts';
 
-class ConstructeurRestitution {
-  constructor(
-    private autresMesures: string = fakerFR.lorem.text(),
-    private indicateurs: string = fakerFR.lorem.text(),
-    private informations: string = fakerFR.lorem.text(),
-    private mesuresPrioritaires: string = fakerFR.lorem.text(),
-  ) {}
-
-  construis(): Restitution {
-    return {
-      actions: [],
-      autresMesures: this.autresMesures,
-      indicateurs: this.indicateurs,
-      informations: this.informations,
-      mesuresPrioritaires: this.mesuresPrioritaires,
-    };
-  }
-}
-
-const uneRestitution = () => new ConstructeurRestitution();
 describe('Réducteur Restitution', () => {
   it('charge la restitution', () => {
     const restitution = uneRestitution().construis();
