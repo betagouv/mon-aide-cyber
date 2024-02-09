@@ -40,8 +40,7 @@ export const routesAPIAuthentification = (
           reponse.status(201).json({
             nomPrenom: aidantAuthentifie.nomPrenom,
             ...constructeurActionsHATEOAS()
-              .postAuthentification()
-              .lancerDiagnostic()
+              .postAuthentification(aidantAuthentifie)
               .construis(),
           });
         })
