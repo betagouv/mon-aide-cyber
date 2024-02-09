@@ -13,7 +13,6 @@ import { RequeteUtilisateur } from './routesAPI';
 import { CommandeLanceDiagnostic } from '../diagnostic/CapteurCommandeLanceDiagnostic';
 import { Diagnostic } from '../diagnostic/Diagnostic';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
-import { Action, TypeActionRestituer } from './representateurs/types';
 
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -109,17 +108,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         if (requete.headers.accept === 'application/pdf') {
           reponse.contentType('application/pdf').send(restitution);
         } else {
-          const type = (type: 'pdf' | 'json'): TypeActionRestituer => ({
-            [type]: {
-              ressource: {
-                contentType:
-                  type === 'pdf' ? 'application/pdf' : 'application/json',
-                methode: 'GET',
-                url: `/api/diagnostic/${id}/restitution`,
-              },
-            },
-          });
-
           const reponseHATEOAS = constructeurActionsHATEOAS()
             .tableauDeBord()
             .lancerDiagnostic()
@@ -128,12 +116,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
             .construis();
           const resultat: ReprensentationRestitution = {
             ...reponseHATEOAS,
-            actions: [
-              {
-                action: 'restituer',
-                types: { ...type('pdf'), ...type('json') },
-              },
-            ],
             ...(restitution as RestitutionHTML),
           };
           reponse.json(resultat);
@@ -155,7 +137,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
 };
 
 export type ReprensentationRestitution = ReponseHATEOAS & {
-  actions: Action[];
   autresMesures: string;
   indicateurs: string;
   informations: string;

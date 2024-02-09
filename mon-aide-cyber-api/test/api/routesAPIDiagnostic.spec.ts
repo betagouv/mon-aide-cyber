@@ -323,27 +323,6 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
             url: '/tableau-de-bord',
           },
         },
-        actions: [
-          {
-            action: 'restituer',
-            types: {
-              pdf: {
-                ressource: {
-                  url: `/api/diagnostic/${identifiant}/restitution`,
-                  methode: 'GET',
-                  contentType: 'application/pdf',
-                },
-              },
-              json: {
-                ressource: {
-                  url: `/api/diagnostic/${identifiant}/restitution`,
-                  methode: 'GET',
-                  contentType: 'application/json',
-                },
-              },
-            },
-          },
-        ],
         autresMesures: '',
         indicateurs: 'indicateurs',
         informations: JSON.stringify(restitution.informations),
