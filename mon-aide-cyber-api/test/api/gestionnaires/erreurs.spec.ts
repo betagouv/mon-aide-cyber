@@ -6,7 +6,7 @@ import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../../src/domaine/erreurMAC';
 import { ErreurAuthentification } from '../../../src/authentification/Aidant';
 import { ErreurAccesRefuse } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';
-import { CorpsAuthentification } from '../../../src/api/routesAPIAuthentification';
+import { CorpsRequeteAuthentification } from '../../../src/api/routesAPIAuthentification';
 
 describe("Gestionnaire d'erreur", () => {
   let codeRecu = 0;
@@ -72,7 +72,7 @@ describe("Gestionnaire d'erreur", () => {
 
   it("consigne l'erreur en cas d'authentification erronée", () => {
     const consignateurErreurs = new ConsignateurErreursMemoire();
-    const corpsAuthentification: CorpsAuthentification = {
+    const corpsAuthentification: CorpsRequeteAuthentification = {
       identifiant: 'jean',
       motDePasse: 'abc123',
     };
@@ -89,7 +89,7 @@ describe("Gestionnaire d'erreur", () => {
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(1);
-    expect(fausseRequete.body).toStrictEqual<CorpsAuthentification>({
+    expect(fausseRequete.body).toStrictEqual<CorpsRequeteAuthentification>({
       identifiant: 'jean',
       motDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
     });

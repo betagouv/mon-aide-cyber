@@ -8,7 +8,11 @@ type ActionBase = {
 export type Action =
   | ActionDiagnostic
   | ActionRepondreDiagnostic
-  | ActionRestituer;
+  | ActionRestituer
+  | ActionLancerDiagnostic;
+export type ActionLancerDiagnostic = ActionBase & {
+  action: 'lancer-diagnostic';
+};
 export type RessourceActionRestituer = {
   ressource: {
     url: string;

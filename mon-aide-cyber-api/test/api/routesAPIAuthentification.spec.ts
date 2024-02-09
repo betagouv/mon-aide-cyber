@@ -3,6 +3,7 @@ import { executeRequete } from './executeurRequete';
 import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { unAidant } from '../authentification/constructeurs/constructeurAidant';
+import { ReponseAuthentification } from '../../src/api/routesAPIAuthentification';
 
 describe("Le serveur MAC, sur les routes d'authentification", () => {
   const testeurMAC = testeurIntegration();
@@ -41,6 +42,13 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         expect(reponse.statusCode).toBe(201);
         expect(await reponse.json()).toStrictEqual({
           nomPrenom: 'Martin Dupont',
+          liens: {
+            suite: { url: '/tableau-de-bord' },
+            'lancer-diagnostic': {
+              url: '/api/diagnostic',
+              methode: 'POST',
+            },
+          },
         });
         const cookieRecu = (
           reponse.headers['set-cookie']! as string[]
@@ -94,8 +102,12 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         );
 
         expect(reponse.statusCode).toBe(201);
-        expect(await reponse.json()).toStrictEqual({
+        expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
           nomPrenom: 'Martin Dupont',
+          liens: {
+            suite: { url: '/tableau-de-bord' },
+            'lancer-diagnostic': { url: '/api/diagnostic', methode: 'POST' },
+          },
         });
       });
     });
