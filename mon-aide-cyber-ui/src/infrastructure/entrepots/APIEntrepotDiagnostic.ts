@@ -9,7 +9,6 @@ import { FormatLien, LienRoutage } from '../../domaine/LienRoutage.ts';
 import { APIEntrepot } from './EntrepotsAPI.ts';
 import { UUID } from '../../types/Types.ts';
 import { Restitution } from '../../domaine/diagnostic/Restitution.ts';
-import { RessourceActionRestituer } from 'mon-aide-cyber-api/src/api/representateurs/types.ts';
 import { ParametresAPI } from '../../domaine/diagnostic/ParametresAPI.ts';
 
 type RepresentationReponseDonnee = {
@@ -61,8 +60,7 @@ export class APIEntrepotDiagnostic
   }
 
   lancer(parametresAPI: ParametresAPI): Promise<LienRoutage> {
-    return super
-      .persiste(parametresAPI)
+    return fetch(parametresAPI.url, { method: parametresAPI.methode })
       .then((reponse) => {
         const lien = reponse.headers.get('Link');
         return lien !== null
@@ -132,12 +130,12 @@ export class APIEntrepotDiagnostic
 
   restitution(
     idDiagnostic: string,
-    action?: RessourceActionRestituer,
+    parametresAPI?: ParametresAPI,
   ): Promise<Restitution> {
-    if (action) {
-      return fetch(action.ressource.url, {
-        method: action.ressource.methode,
-        headers: { Accept: action.ressource.contentType },
+    if (parametresAPI) {
+      return fetch(parametresAPI.url, {
+        method: parametresAPI.methode,
+        headers: { Accept: parametresAPI.contentType! },
       }).then((reponse) => {
         if (!reponse.ok) {
           return reponse.json().then((reponse) => Promise.reject(reponse));

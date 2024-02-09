@@ -1,19 +1,6 @@
-type RessourceActionRestituer = {
-  ressource: {
-    url: string;
-    methode: 'PATCH' | 'GET';
-    contentType: 'application/pdf' | 'application/json';
-  };
-};
-type ActionRestituer = {
-  action: 'restituer';
-  types: {
-    [type: string]: RessourceActionRestituer;
-  };
-};
+import { ReponseHATEOAS } from '../Actions.ts';
 
-export type Restitution = {
-  actions: ActionRestituer[];
+export type Restitution = ReponseHATEOAS & {
   autresMesures: string;
   indicateurs: string;
   informations: string;

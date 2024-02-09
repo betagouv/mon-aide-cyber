@@ -2,7 +2,7 @@ import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useEntrepots } from '../../fournisseurs/hooks.ts';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useErrorBoundary } from 'react-error-boundary';
 import '../../assets/styles/_restitution.scss';
 import '../../assets/styles/_commun.scss';
@@ -12,6 +12,11 @@ import {
   rubriqueCliquee,
 } from '../../domaine/diagnostic/reducteurRestitution.ts';
 import { UUID } from '../../types/Types.ts';
+import {
+  extraisLesActions,
+  Lien,
+  trouveParmiLesLiens,
+} from '../../domaine/Actions.ts';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
@@ -25,6 +30,10 @@ export const ComposantRestitution = ({
   const navigate = useNavigate();
   const [etatRestitution, envoie] = useReducer(reducteurRestitution, {});
   const [boutonDesactive, setBoutonDesactive] = useState<boolean>(false);
+  const [retourListeBeneficiaires, setRetourListeBeneficiaires] = useState<{
+    suite: Lien;
+    actions: { [clef: string]: Lien };
+  }>({ suite: { url: '', methode: '' }, actions: {} });
 
   useEffect(() => {
     entrepots
@@ -36,10 +45,23 @@ export const ComposantRestitution = ({
       .catch((erreur) => showBoundary(erreur));
   }, [entrepots, envoie, idDiagnostic, showBoundary]);
 
-  const modifierLeDiagnostic = useCallback(
-    () => navigate(`/diagnostic/${idDiagnostic}`),
-    [idDiagnostic, navigate],
-  );
+  useEffect(() => {
+    if (etatRestitution.restitution) {
+      setRetourListeBeneficiaires({
+        suite: etatRestitution.restitution.liens.suite,
+        actions: extraisLesActions(etatRestitution.restitution.liens),
+      });
+    }
+  }, [etatRestitution.restitution]);
+
+  const modifierLeDiagnostic = useCallback(() => {
+    return navigate(
+      trouveParmiLesLiens(
+        etatRestitution.restitution!.liens,
+        'modifier-diagnostic',
+      ).url,
+    );
+  }, [etatRestitution, navigate]);
 
   const rubriqueCliqueee = useCallback(
     (rubrique: string) => envoie(rubriqueCliquee(rubrique)),
@@ -47,19 +69,20 @@ export const ComposantRestitution = ({
   );
 
   const telechargerRestitution = useCallback(() => {
+    const restitutionPdf = trouveParmiLesLiens(
+      etatRestitution.restitution!.liens,
+      'restitution-pdf',
+    );
     setBoutonDesactive(true);
-    const action = etatRestitution.restitution?.actions.find(
-      (a) => a.action === 'restituer',
-    )?.types['pdf'];
-    if (action) {
+    if (restitutionPdf) {
       return entrepots
         .diagnostic()
-        .restitution(idDiagnostic, action)
+        .restitution(idDiagnostic, restitutionPdf)
         .then(() => {
           setBoutonDesactive(false);
         });
     }
-  }, [entrepots, etatRestitution, idDiagnostic]);
+  }, [entrepots, etatRestitution.restitution, idDiagnostic]);
   return (
     <>
       <Header />
@@ -69,9 +92,12 @@ export const ComposantRestitution = ({
             <div className="fr-grid-row">
               <div>
                 <i className="mac-icone-retour" />
-                <a href="/tableau-de-bord">
+                <Link
+                  to={retourListeBeneficiaires.suite.url}
+                  state={retourListeBeneficiaires.actions}
+                >
                   Retour à la liste des bénéficiaires
-                </a>
+                </Link>
               </div>
             </div>
             <div className="fr-grid-row fr-pt-md-2w">
@@ -273,7 +299,7 @@ export const ComposantRestitution = ({
                           className="fr-responsive-img"
                         />
                       </div>
-                      <div className="titre">l'ANSSI</div>
+                      <div className="titre">L&apos;ANSSI</div>
                       <div className="corps">
                         L’Agence nationale de la sécurité des systèmes
                         d’informations. Son action pour la protection de la
@@ -310,7 +336,7 @@ export const ComposantRestitution = ({
                         />
                       </div>
                       <div className="titre">
-                        Ma sécurité, service de l'État
+                        Ma sécurité, service de l&apos;État
                       </div>
                       <div className="corps">
                         La gendarmerie et la police nationales vous accompagnent
@@ -327,7 +353,7 @@ export const ComposantRestitution = ({
                       </div>
                     </div>
                     <div className="contact-ou-lien-utile">
-                      <div className="titre">La charte de L'aidant</div>
+                      <div className="titre">La charte de L&apos;aidant</div>
                       <div className="corps">
                         <p>
                           Vous avez effectué un diagnostic Mon Aide Cyber auprès
@@ -379,7 +405,7 @@ export const ComposantRestitution = ({
                           className="fr-responsive-img"
                         />
                       </div>
-                      <div className="titre">L'équipe MonAideCyber</div>
+                      <div className="titre">L&apos;équipe MonAideCyber</div>
                       <div className="corps">
                         Si vous avez des remarques, des questions ou des
                         remontées suite à votre diagnostic à partager, toute

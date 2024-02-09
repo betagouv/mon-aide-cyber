@@ -1,21 +1,15 @@
-import { createContext, PropsWithChildren, useState } from 'react';
+import { createContext, PropsWithChildren } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Liens } from '../domaine/Actions.ts';
 
-export const ContexteActionsUtilisateurs = createContext<LiensHATEOAS>(
-  {} as Liens,
-);
+export const ContexteActionsUtilisateurs = createContext<Liens>({} as Liens);
 
 export const FournisseurContexteActionsUtilisateur = ({
   children,
 }: PropsWithChildren) => {
-  const location = useLocation();
-  const [actionsUtilisateurs] = useState<Liens>({
-    ...location.state,
-  });
-
+  const { state } = useLocation();
   return (
-    <ContexteActionsUtilisateurs.Provider value={actionsUtilisateurs}>
+    <ContexteActionsUtilisateurs.Provider value={{ ...state }}>
       {children}
     </ContexteActionsUtilisateurs.Provider>
   );

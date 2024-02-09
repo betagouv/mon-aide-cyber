@@ -3,7 +3,7 @@ import { FournisseurEntrepots } from '../../fournisseurs/FournisseurEntrepot.ts'
 import { useErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
 import { useActionsUtilisateur } from '../../fournisseurs/hooks.ts';
-import { ParametresAPI } from '../../domaine/diagnostic/ParametresAPI.ts';
+import { trouveParmiLesLiens } from '../../domaine/Actions.ts';
 
 type ProprietesComposantLancerDiagnostic = {
   style: string;
@@ -18,12 +18,9 @@ export const ComposantLancerDiagnostic = ({
   const actions = useActionsUtilisateur();
 
   const lancerDiagnostic = useCallback(async () => {
-    const lancerDiagnostic: ParametresAPI = Object.entries(actions)
-      .filter(([action]) => action === 'lancer-diagnostic')
-      .map(([, action]) => action as ParametresAPI)[0];
     return await entrepots
       .diagnostic()
-      .lancer(lancerDiagnostic)
+      .lancer(trouveParmiLesLiens(actions, 'lancer-diagnostic'))
       .then((lien) => navigate(lien.route()))
       .catch((erreur) => showBoundary(erreur));
   }, [actions, entrepots, navigate, showBoundary]);

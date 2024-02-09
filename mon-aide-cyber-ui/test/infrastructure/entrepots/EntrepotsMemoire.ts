@@ -14,7 +14,6 @@ import {
 } from '../../../src/domaine/diagnostic/Diagnostics.ts';
 import { expect } from '@storybook/jest';
 import { Restitution } from '../../../src/domaine/diagnostic/Restitution.ts';
-import { RessourceActionRestituer } from 'mon-aide-cyber-api/src/api/representateurs/types.ts';
 import { ParametresAPI } from '../../../src/domaine/diagnostic/ParametresAPI.ts';
 
 class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
@@ -72,7 +71,10 @@ export class EntrepotDiagnosticMemoire
     return Promise.resolve(!this.reponseEnvoyee);
   }
 
-  restitution(__: string, ___: RessourceActionRestituer): Promise<Restitution> {
+  restitution(
+    _idDiagnostic: string,
+    _parametresAPI?: ParametresAPI,
+  ): Promise<Restitution> {
     return Promise.reject();
   }
 }
