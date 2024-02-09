@@ -1,3 +1,5 @@
+import { AidantAuthentifie } from '../../authentification/Aidant';
+
 type Methode = 'GET' | 'POST' | 'PATCH';
 type SuiteHATEOAS = { suite?: Options };
 type LiensHATEOAS = SuiteHATEOAS | Record<string, Options>;
@@ -19,8 +21,22 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  postAuthentification(): ConstructeurActionsHATEOAS {
-    this.tableauDeBord();
+  postAuthentification(
+    aidantAuthentifie: AidantAuthentifie,
+  ): ConstructeurActionsHATEOAS {
+    if (
+      !aidantAuthentifie.dateSignatureCharte ||
+      !aidantAuthentifie.dateSignatureCGU
+    ) {
+      this.suite = { url: '/finalise-creation-compte' };
+      this.actions.set('finaliser-creation-compte', {
+        url: '/api/utilisateur/finalise',
+        methode: 'POST',
+      });
+    } else {
+      this.tableauDeBord();
+      this.lancerDiagnostic();
+    }
     return this;
   }
 

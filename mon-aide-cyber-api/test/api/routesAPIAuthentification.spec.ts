@@ -4,6 +4,7 @@ import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { unAidant } from '../authentification/constructeurs/constructeurAidant';
 import { ReponseAuthentification } from '../../src/api/routesAPIAuthentification';
+import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 
 describe("Le serveur MAC, sur les routes d'authentification", () => {
   const testeurMAC = testeurIntegration();
@@ -108,6 +109,75 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             suite: { url: '/tableau-de-bord' },
             'lancer-diagnostic': { url: '/api/diagnostic', methode: 'POST' },
           },
+        });
+      });
+
+      describe("dans le cas où un aidant n'a pas encore finalisé la création de son compte", () => {
+        it('renvoie un lien pour finaliser la création du compte', async () => {
+          await testeurMAC.entrepots
+            .aidants()
+            .persiste(
+              unAidant()
+                .avecCompteEnAttenteDeFinalisation()
+                .avecUnNomPrenom('Jean Dupont')
+                .avecUnIdentifiantDeConnexion('jean.dupont@email.com')
+                .avecUnMotDePasse('mon_Mot-D3p4sse')
+                .construis(),
+            );
+
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/token',
+            donneesServeur.portEcoute,
+            {
+              identifiant: 'jean.dupont@email.com',
+              motDePasse: 'mon_Mot-D3p4sse',
+            },
+          );
+
+          expect(reponse.statusCode).toBe(201);
+          expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
+            nomPrenom: 'Jean Dupont',
+            liens: {
+              suite: { url: '/finalise-creation-compte' },
+              'finaliser-creation-compte': {
+                url: '/api/utilisateur/finalise',
+                methode: 'POST',
+              },
+            },
+          });
+        });
+
+        it('renvoie un lien pour finaliser la création du compte si les CGU ne sont pas signées', async () => {
+          const aidant = unAidant()
+            .avecCompteEnAttenteDeFinalisation()
+            .construis();
+          aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
+          await testeurMAC.entrepots.aidants().persiste(aidant);
+
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/token',
+            donneesServeur.portEcoute,
+            {
+              identifiant: aidant.identifiantConnexion,
+              motDePasse: aidant.motDePasse,
+            },
+          );
+
+          expect(reponse.statusCode).toBe(201);
+          expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
+            nomPrenom: aidant.nomPrenom,
+            liens: {
+              suite: { url: '/finalise-creation-compte' },
+              'finaliser-creation-compte': {
+                url: '/api/utilisateur/finalise',
+                methode: 'POST',
+              },
+            },
+          });
         });
       });
     });

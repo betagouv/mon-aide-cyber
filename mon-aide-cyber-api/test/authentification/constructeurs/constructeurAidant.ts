@@ -8,7 +8,7 @@ interface Constructeur<T> {
 }
 class ConstructeurAidant implements Constructeur<Aidant> {
   private identifiant: crypto.UUID = fakerFR.string.uuid() as crypto.UUID;
-  private identifiantConnexion: string = fakerFR.internet.email();
+  private identifiantConnexion: string = fakerFR.internet.email().toLowerCase();
   private nomPrenom: string = fakerFR.person.fullName();
   private motDePasse: string = fakerFR.string.alpha(10);
   private dateSignatureCGU: Date | undefined = FournisseurHorloge.maintenant();
