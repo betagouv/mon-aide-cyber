@@ -10,6 +10,7 @@ import { APIEntrepot } from './EntrepotsAPI.ts';
 import { UUID } from '../../types/Types.ts';
 import { Restitution } from '../../domaine/diagnostic/Restitution.ts';
 import { RessourceActionRestituer } from 'mon-aide-cyber-api/src/api/representateurs/types.ts';
+import { ParametresAPI } from '../../domaine/diagnostic/ParametresAPI.ts';
 
 type RepresentationReponseDonnee = {
   valeur: string | null;
@@ -59,9 +60,9 @@ export class APIEntrepotDiagnostic
     super('diagnostic');
   }
 
-  lancer(): Promise<LienRoutage> {
+  lancer(parametresAPI: ParametresAPI): Promise<LienRoutage> {
     return super
-      .persiste()
+      .persiste(parametresAPI)
       .then((reponse) => {
         const lien = reponse.headers.get('Link');
         return lien !== null
