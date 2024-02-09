@@ -6,6 +6,7 @@ import {
 } from '../../domaine/diagnostic/Diagnostics.ts';
 import {
   EntrepotAuthentification,
+  ReponseAuthentification,
   Utilisateur,
 } from '../../domaine/authentification/Authentification.ts';
 
@@ -51,7 +52,7 @@ export class APIEntrepotAuthentification implements EntrepotAuthentification {
   connexion(identifiants: {
     motDePasse: string;
     identifiant: string;
-  }): Promise<Utilisateur> {
+  }): Promise<ReponseAuthentification> {
     return fetch(`/api/token`, {
       method: 'POST',
       body: JSON.stringify(identifiants),

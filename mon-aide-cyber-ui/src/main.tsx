@@ -28,6 +28,7 @@ import {
 } from './infrastructure/entrepots/APIEntrepotContact.ts';
 import { CGU } from './vues/CGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
+import { FournisseurContexteActionsUtilisateur } from './fournisseurs/ContexteActionsUtilisateurs.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -42,51 +43,55 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         }}
       >
         <FournisseurAuthentification>
-          <PortailModale>
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-                    <Accueil />
-                  </ErrorBoundary>
-                }
-              />
-              <Route path="/cgu" element={<CGU />} />
-              <Route path="/charte-aidant" element={<CharteAidant />} />
-              <Route path="/mentions-legales" element={<MentionsLegales />} />
-              <Route
-                element={
-                  <Suspense>
-                    <RequiertAuthentification />
-                  </Suspense>
-                }
-              >
+          <FournisseurContexteActionsUtilisateur>
+            <PortailModale>
+              <Routes>
                 <Route
-                  path="/tableau-de-bord"
-                  element={<ComposantIntercepteur composant={TableauDeBord} />}
-                ></Route>
-                <Route
-                  path="/diagnostics"
+                  path="/"
                   element={
-                    <ComposantIntercepteur composant={ComposantDiagnostics} />
+                    <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+                      <Accueil />
+                    </ErrorBoundary>
                   }
-                ></Route>
+                />
+                <Route path="/cgu" element={<CGU />} />
+                <Route path="/charte-aidant" element={<CharteAidant />} />
+                <Route path="/mentions-legales" element={<MentionsLegales />} />
                 <Route
-                  path="/diagnostic/:idDiagnostic"
                   element={
-                    <ComposantIntercepteur composant={ComposantDiagnostic} />
+                    <Suspense>
+                      <RequiertAuthentification />
+                    </Suspense>
                   }
-                ></Route>
-                <Route
-                  path="/diagnostic/:idDiagnostic/restitution"
-                  element={
-                    <ComposantIntercepteur composant={ComposantRestitution} />
-                  }
-                ></Route>
-              </Route>
-            </Routes>
-          </PortailModale>
+                >
+                  <Route
+                    path="/tableau-de-bord"
+                    element={
+                      <ComposantIntercepteur composant={TableauDeBord} />
+                    }
+                  ></Route>
+                  <Route
+                    path="/diagnostics"
+                    element={
+                      <ComposantIntercepteur composant={ComposantDiagnostics} />
+                    }
+                  ></Route>
+                  <Route
+                    path="/diagnostic/:idDiagnostic"
+                    element={
+                      <ComposantIntercepteur composant={ComposantDiagnostic} />
+                    }
+                  ></Route>
+                  <Route
+                    path="/diagnostic/:idDiagnostic/restitution"
+                    element={
+                      <ComposantIntercepteur composant={ComposantRestitution} />
+                    }
+                  ></Route>
+                </Route>
+              </Routes>
+            </PortailModale>
+          </FournisseurContexteActionsUtilisateur>
         </FournisseurAuthentification>
       </FournisseurEntrepots.Provider>
     </BrowserRouter>

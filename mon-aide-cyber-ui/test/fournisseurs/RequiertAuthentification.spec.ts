@@ -3,7 +3,7 @@ import {
   initialiseReducteurUtilisateurAuthentifie,
   reducteurUtilisateurAuthentifie,
 } from '../../src/fournisseurs/RequiertAuthentification';
-import { Utilisateur } from '../../src/domaine/authentification/Authentification';
+import { ReponseAuthentification } from '../../src/domaine/authentification/Authentification';
 describe('Fournisseur requiert authentification', () => {
   it("n'est pas authentifié si l'utilisateur est null", () => {
     const etatUtilisateurAuthentifie = reducteurUtilisateurAuthentifie(
@@ -15,7 +15,9 @@ describe('Fournisseur requiert authentification', () => {
 
   it("n'est pas authentifié si l'utilisateur est n'a pas de nom prénom", () => {
     const etatUtilisateurAuthentifie = reducteurUtilisateurAuthentifie(
-      initialiseReducteurUtilisateurAuthentifie({} as unknown as Utilisateur),
+      initialiseReducteurUtilisateurAuthentifie(
+        {} as unknown as ReponseAuthentification,
+      ),
     );
 
     expect(etatUtilisateurAuthentifie.estAuthentifie()).toBe(false);

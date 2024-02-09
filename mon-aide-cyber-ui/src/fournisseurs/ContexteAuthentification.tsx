@@ -1,13 +1,14 @@
 import { createContext, PropsWithChildren, useState } from 'react';
 import { Utilisateur } from '../domaine/authentification/Authentification.ts';
 import { useEntrepots } from './hooks.ts';
+import { ReponseHATEOAS } from '../domaine/Actions.ts';
 
 type ContexteAuthentificationType = {
-  utilisateur: Utilisateur | null;
+  utilisateur: { nomPrenom: string } | null;
   authentifie: (identifiants: {
     identifiant: string;
     motDePasse: string;
-  }) => Promise<void>;
+  }) => Promise<ReponseHATEOAS>;
 };
 
 export const ContexteAuthentification =
@@ -33,11 +34,15 @@ export const FournisseurAuthentification = ({
         identifiant: identifiants.identifiant,
         motDePasse: identifiants.motDePasse,
       })
-      .then((utilisateur) => {
-        setUtilisateur(utilisateur);
+      .then((reponse) => {
+        setUtilisateur({ nomPrenom: reponse.nomPrenom });
+        return { liens: reponse.liens } as ReponseHATEOAS;
       });
 
-  const value = { utilisateur, authentifie };
+  const value = {
+    utilisateur: { nomPrenom: utilisateur?.nomPrenom || '' },
+    authentifie,
+  };
 
   return (
     <ContexteAuthentification.Provider value={value}>
