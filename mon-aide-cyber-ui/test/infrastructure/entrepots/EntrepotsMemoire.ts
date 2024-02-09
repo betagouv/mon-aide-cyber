@@ -15,6 +15,7 @@ import {
 import { expect } from '@storybook/jest';
 import { Restitution } from '../../../src/domaine/diagnostic/Restitution.ts';
 import { RessourceActionRestituer } from 'mon-aide-cyber-api/src/api/representateurs/types.ts';
+import { ParametresAPI } from '../../../src/domaine/diagnostic/ParametresAPI.ts';
 
 class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: T[] = [];
@@ -41,7 +42,8 @@ export class EntrepotDiagnosticMemoire
   private actionRepondre: ActionReponseDiagnostic | undefined = undefined;
   private reponseDonnee: Reponse | undefined = undefined;
   private reponseEnvoyee = false;
-  lancer(): Promise<LienRoutage> {
+
+  lancer(_: ParametresAPI): Promise<LienRoutage> {
     const diagnostic = unDiagnostic().construis();
     return this.persiste(diagnostic).then(
       () => new LienRoutage(`/api/diagnostic/${diagnostic.identifiant}`),

@@ -5,6 +5,7 @@ import { Entrepot } from '../Entrepots.ts';
 import { LienRoutage } from '../LienRoutage.ts';
 import { Restitution } from './Restitution.ts';
 import { RessourceActionRestituer } from 'mon-aide-cyber-api/src/api/representateurs/types.ts';
+import { ParametresAPI } from './ParametresAPI.ts';
 
 export type ActionReponseDiagnostic = {
   [thematique: string]: ActionBase;
@@ -31,8 +32,9 @@ export type Reponse = {
   identifiantQuestion: string;
   reponseDonnee: string | string[] | ReponseQuestionATiroir | null;
 };
+
 export interface EntrepotDiagnostic extends Entrepot<Diagnostic> {
-  lancer(): Promise<LienRoutage>;
+  lancer(lancerDiagnostic: ParametresAPI): Promise<LienRoutage>;
 
   repond: (
     action: ActionReponseDiagnostic,
