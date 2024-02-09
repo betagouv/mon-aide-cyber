@@ -1,8 +1,15 @@
-import { FormatLien, LienRoutage } from "./LienRoutage.ts";
+import { FormatLien, LienRoutage } from './LienRoutage.ts';
 
 export enum ActionsDiagnostics {
-  AFFICHER = "details",
+  AFFICHER = 'details',
 }
+
+export type Lien = { url: string; methode?: string; contentType?: string };
+type Suite = { suite: Lien };
+export type Liens = Suite & Record<string, Lien>;
+export type ReponseHATEOAS = {
+  liens: Liens;
+};
 
 export const actions = {
   diagnostics: () => ActionsDiagnostics,

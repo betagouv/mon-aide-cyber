@@ -36,12 +36,24 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
         envoie(saisieInvalidee());
       } else {
         try {
-          await authentification.authentifie({
+          const reponse = await authentification.authentifie({
             identifiant: etatAuthentification.identifiant,
             motDePasse: etatAuthentification.motDePasse,
           });
           surFermeture();
-          navigate('tableau-de-bord');
+          navigate(reponse.liens.suite.url, {
+            state: {
+              ...Object.entries(reponse.liens)
+                .filter(([lien]) => lien !== 'suite')
+                .reduce(
+                  (accumulateur, [action, lien]) => ({
+                    ...accumulateur,
+                    [action]: lien,
+                  }),
+                  {},
+                ),
+            },
+          });
         } catch (erreur) {
           envoie(authentificationInvalidee(erreur as Error));
         }

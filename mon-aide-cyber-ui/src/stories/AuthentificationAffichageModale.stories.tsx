@@ -8,6 +8,7 @@ import { EntrepotDiagnostics } from '../domaine/diagnostic/Diagnostics.ts';
 import { EntrepotDiagnosticsMemoire } from '../../test/infrastructure/entrepots/EntrepotsMemoire.ts';
 import {
   EntrepotAuthentification,
+  ReponseAuthentification,
   Utilisateur,
 } from '../domaine/authentification/Authentification.ts';
 import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAffichageErreur.tsx';
@@ -25,7 +26,7 @@ class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
   connexion(identifiants: {
     motDePasse: string;
     identifiant: string;
-  }): Promise<Utilisateur> {
+  }): Promise<ReponseAuthentification> {
     const aidantTrouve = this.aidants.find(
       (aidant) =>
         aidant.identifiant === identifiants.identifiant &&
@@ -36,7 +37,10 @@ class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
       return Promise.reject();
     }
 
-    return Promise.resolve(aidantTrouve);
+    return Promise.resolve({
+      nomPrenom: aidantTrouve.nomPrenom,
+      liens: { suite: { url: '', methode: '' } },
+    });
   }
 
   persiste(aidant: {
