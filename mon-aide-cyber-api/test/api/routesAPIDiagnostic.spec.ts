@@ -301,6 +301,28 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
 
       expect(reponse.statusCode).toBe(200);
       expect(await reponse.json()).toStrictEqual<ReprensentationRestitution>({
+        liens: {
+          'lancer-diagnostic': {
+            methode: 'POST',
+            url: '/api/diagnostic',
+          },
+          'modifier-diagnostic': {
+            url: `/diagnostic/${identifiant}`,
+          },
+          'restitution-json': {
+            contentType: 'application/json',
+            methode: 'GET',
+            url: `/api/diagnostic/${identifiant}/restitution`,
+          },
+          'restitution-pdf': {
+            contentType: 'application/pdf',
+            methode: 'GET',
+            url: `/api/diagnostic/${identifiant}/restitution`,
+          },
+          suite: {
+            url: '/tableau-de-bord',
+          },
+        },
         actions: [
           {
             action: 'restituer',

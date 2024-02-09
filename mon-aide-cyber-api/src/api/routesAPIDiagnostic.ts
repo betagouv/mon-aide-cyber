@@ -7,12 +7,13 @@ import { NextFunction } from 'express-serve-static-core';
 import bodyParser from 'body-parser';
 import { SagaAjoutReponse } from '../diagnostic/CapteurSagaAjoutReponse';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import { Action, TypeActionRestituer } from './representateurs/types';
 import { Restitution } from '../restitution/Restitution';
 import { RestitutionHTML } from '../adaptateurs/AdaptateurDeRestitutionHTML';
 import { RequeteUtilisateur } from './routesAPI';
 import { CommandeLanceDiagnostic } from '../diagnostic/CapteurCommandeLanceDiagnostic';
 import { Diagnostic } from '../diagnostic/Diagnostic';
+import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
+import { Action, TypeActionRestituer } from './representateurs/types';
 
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -119,7 +120,14 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
             },
           });
 
+          const reponseHATEOAS = constructeurActionsHATEOAS()
+            .tableauDeBord()
+            .lancerDiagnostic()
+            .restituerDiagnostic(id)
+            .modifierDiagnostic(id)
+            .construis();
           const resultat: ReprensentationRestitution = {
+            ...reponseHATEOAS,
             actions: [
               {
                 action: 'restituer',
@@ -146,7 +154,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   return routes;
 };
 
-export type ReprensentationRestitution = {
+export type ReprensentationRestitution = ReponseHATEOAS & {
   actions: Action[];
   autresMesures: string;
   indicateurs: string;
