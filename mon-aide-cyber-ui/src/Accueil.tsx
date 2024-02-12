@@ -470,7 +470,7 @@ export const Accueil = () => {
                 <h2>Vous souhaitez participer ?</h2>
               </div>
               <div className="fr-grid-row fr-grid-row--gutters">
-                <div className="fr-col-6">
+                <div className="fr-col-md-6 fr-col-sm-12">
                   <div className="tuile tuile-grande">
                     <div className="illustration">
                       <img
@@ -497,7 +497,7 @@ export const Accueil = () => {
                     </div>
                   </div>
                 </div>
-                <div className="fr-col-6">
+                <div className="fr-col-md-6 fr-col-sm-12">
                   <div className="tuile tuile-grande">
                     <div className="illustration">
                       <img
