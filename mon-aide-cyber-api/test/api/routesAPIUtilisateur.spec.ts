@@ -36,7 +36,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         'POST',
         `/api/utilisateur/finalise`,
         donneesServeur.portEcoute,
-        { cguCochees: true, charteCochee: true },
+        { cguSignees: true, charteSignee: true },
       );
 
       expect(reponse.statusCode).toBe(204);
@@ -71,7 +71,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         'POST',
         `/api/utilisateur/finalise`,
         donneesServeur.portEcoute,
-        { cguCochees: false, charteCochee: true },
+        { cguSignees: false, charteSignee: true },
       );
 
       expect(reponse.statusCode).toBe(422);
