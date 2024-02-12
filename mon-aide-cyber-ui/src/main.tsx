@@ -29,6 +29,9 @@ import {
 import { CGU } from './vues/CGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
 import { FournisseurContexteActionsUtilisateur } from './fournisseurs/ContexteActionsUtilisateurs.tsx';
+import { ComposantFinalisationCreationCompte } from './composants/parcoursCGU/ComposantFinalisationCreationCompte.tsx';
+import { EntrepotUtilisateur } from './domaine/utilisateur/Utilisateur.ts';
+import { APIEntrepotUtilisateur } from './infrastructure/entrepots/APIEntrepotUtilisateur.ts';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -40,6 +43,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           authentification: (): EntrepotAuthentification =>
             new APIEntrepotAuthentification(),
           contact: (): EntrepotContact => new APIEntrepotContact(),
+          utilisateur: (): EntrepotUtilisateur => new APIEntrepotUtilisateur(),
         }}
       >
         <FournisseurAuthentification>
@@ -68,6 +72,14 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     path="/tableau-de-bord"
                     element={
                       <ComposantIntercepteur composant={TableauDeBord} />
+                    }
+                  ></Route>
+                  <Route
+                    path="/finalise-creation-compte"
+                    element={
+                      <ComposantIntercepteur
+                        composant={ComposantFinalisationCreationCompte}
+                      />
                     }
                   ></Route>
                   <Route

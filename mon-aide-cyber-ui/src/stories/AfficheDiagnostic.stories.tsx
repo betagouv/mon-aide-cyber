@@ -16,9 +16,7 @@ import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAfficha
 import { ErrorBoundary } from 'react-error-boundary';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
 import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';
-import { EntrepotDiagnostics } from '../domaine/diagnostic/Diagnostics.ts';
-import { EntrepotAuthentification } from '../domaine/authentification/Authentification.ts';
-import { EntrepotContact } from '../infrastructure/entrepots/APIEntrepotContact.ts';
+import { initialiseEntrepots } from './InitialiseEntrepots.tsx';
 
 const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
 
@@ -179,14 +177,10 @@ const meta = {
   decorators: [
     (story) => (
       <FournisseurEntrepots.Provider
-        value={{
-          diagnostic: () => entrepotDiagnosticMemoire,
-          diagnostics: (): EntrepotDiagnostics =>
-            new EntrepotDiagnosticsMemoire(),
-          authentification: (): EntrepotAuthentification =>
-            ({}) as unknown as EntrepotAuthentification,
-          contact: (): EntrepotContact => ({}) as unknown as EntrepotContact,
-        }}
+        value={initialiseEntrepots({
+          entrepotDiagnostic: entrepotDiagnosticMemoire,
+          entrepotDiagnostics: new EntrepotDiagnosticsMemoire(),
+        })}
       >
         <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
           {story()}

@@ -3,7 +3,6 @@ import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { SeConnecter } from '../composants/authentification/SeConnecter.tsx';
 import { PortailModale } from '../composants/modale/PortailModale.tsx';
 import { FournisseurEntrepots } from '../fournisseurs/FournisseurEntrepot.ts';
-import { EntrepotDiagnostics } from '../domaine/diagnostic/Diagnostics.ts';
 import { EntrepotDiagnosticsMemoire } from '../../test/infrastructure/entrepots/EntrepotsMemoire.ts';
 import {
   EntrepotAuthentification,
@@ -13,11 +12,10 @@ import {
 import { expect } from '@storybook/jest';
 import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
-import { EntrepotDiagnostic } from '../domaine/diagnostic/Diagnostic.ts';
 import { BrowserRouter } from 'react-router-dom';
 import { FournisseurAuthentification } from '../fournisseurs/ContexteAuthentification.tsx';
 import { RequiertAuthentification } from '../fournisseurs/RequiertAuthentification.tsx';
-import { EntrepotContact } from '../infrastructure/entrepots/APIEntrepotContact.ts';
+import { initialiseEntrepots } from './InitialiseEntrepots.tsx';
 
 class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
   private aidants: {
@@ -83,14 +81,10 @@ export const ConnexionAMonAideCyber: Story = {
     (story) => (
       <BrowserRouter>
         <FournisseurEntrepots.Provider
-          value={{
-            diagnostic: () => ({}) as unknown as EntrepotDiagnostic,
-            diagnostics: (): EntrepotDiagnostics =>
-              new EntrepotDiagnosticsMemoire(),
-            authentification: (): EntrepotAuthentification =>
-              entrepotAuthentification,
-            contact: (): EntrepotContact => ({}) as unknown as EntrepotContact,
-          }}
+          value={initialiseEntrepots({
+            entrepotDiagnostics: new EntrepotDiagnosticsMemoire(),
+            entrepotAuthentification,
+          })}
         >
           <FournisseurAuthentification>
             <RequiertAuthentification />

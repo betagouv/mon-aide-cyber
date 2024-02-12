@@ -9,11 +9,8 @@ import { ComposantDiagnostics } from '../composants/ComposantDiagnostics.tsx';
 import { lesDiagnostics } from '../../test/constructeurs/ConstructeurDiagnostics.ts';
 import { actions } from '../domaine/Actions.ts';
 import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts';
-import { EntrepotDiagnostic } from '../domaine/diagnostic/Diagnostic.ts';
-import { EntrepotDiagnostics } from '../domaine/diagnostic/Diagnostics.ts';
-import { EntrepotAuthentification } from '../domaine/authentification/Authentification.ts';
 import { BrowserRouter } from 'react-router-dom';
-import { EntrepotContact } from '../infrastructure/entrepots/APIEntrepotContact.ts';
+import { initialiseEntrepots } from './InitialiseEntrepots.tsx';
 
 const entrepotDiagnosticsMemoire = new EntrepotDiagnosticsMemoire();
 const premierDiagnostic = unDiagnostic().construis();
@@ -42,13 +39,9 @@ const meta = {
     (story) => (
       <BrowserRouter>
         <FournisseurEntrepots.Provider
-          value={{
-            diagnostic: () => ({}) as unknown as EntrepotDiagnostic,
-            diagnostics: (): EntrepotDiagnostics => entrepotDiagnosticsMemoire,
-            authentification: (): EntrepotAuthentification =>
-              ({}) as unknown as EntrepotAuthentification,
-            contact: (): EntrepotContact => ({}) as unknown as EntrepotContact,
-          }}
+          value={initialiseEntrepots({
+            entrepotDiagnostics: entrepotDiagnosticsMemoire,
+          })}
         >
           <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
             {story()}
