@@ -3,6 +3,7 @@ import express, { Response } from 'express';
 import { RequeteUtilisateur } from './routesAPI';
 import { NextFunction } from 'express-serve-static-core';
 import { ServiceFinalisationCreationCompte } from '../compte/ServiceFinalisationCompte';
+import { constructeurActionsHATEOAS } from './hateoas/hateoas';
 
 export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -28,7 +29,12 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
           ...finalisationCompte,
           identifiant: requete.identifiantUtilisateurCourant!,
         });
-        reponse.status(204);
+        reponse.status(200).json({
+          ...constructeurActionsHATEOAS()
+            .tableauDeBord()
+            .lancerDiagnostic()
+            .construis(),
+        });
         reponse.send();
       } catch (erreur) {
         suite(erreur);
