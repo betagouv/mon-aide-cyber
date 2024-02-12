@@ -12,6 +12,8 @@ import {
   APIEntrepotContact,
   EntrepotContact,
 } from '../infrastructure/entrepots/APIEntrepotContact.ts';
+import { EntrepotUtilisateur } from '../domaine/utilisateur/Utilisateur.ts';
+import { APIEntrepotUtilisateur } from '../infrastructure/entrepots/APIEntrepotUtilisateur.ts';
 
 export const FournisseurEntrepots = createContext<Entrepots>({
   diagnostic: (): EntrepotDiagnostic => new APIEntrepotDiagnostic(),
@@ -19,4 +21,5 @@ export const FournisseurEntrepots = createContext<Entrepots>({
   authentification: (): EntrepotAuthentification =>
     new APIEntrepotAuthentification(),
   contact: (): EntrepotContact => new APIEntrepotContact(),
+  utilisateur: (): EntrepotUtilisateur => new APIEntrepotUtilisateur(),
 });

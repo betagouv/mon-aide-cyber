@@ -4,7 +4,6 @@ import { expect } from '@storybook/jest';
 import { SeConnecter } from '../composants/authentification/SeConnecter.tsx';
 import { PortailModale } from '../composants/modale/PortailModale.tsx';
 import { FournisseurEntrepots } from '../fournisseurs/FournisseurEntrepot.ts';
-import { EntrepotDiagnostics } from '../domaine/diagnostic/Diagnostics.ts';
 import { EntrepotDiagnosticsMemoire } from '../../test/infrastructure/entrepots/EntrepotsMemoire.ts';
 import {
   EntrepotAuthentification,
@@ -13,9 +12,8 @@ import {
 } from '../domaine/authentification/Authentification.ts';
 import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
-import { EntrepotDiagnostic } from '../domaine/diagnostic/Diagnostic.ts';
 import { BrowserRouter } from 'react-router-dom';
-import { EntrepotContact } from '../infrastructure/entrepots/APIEntrepotContact.ts';
+import { initialiseEntrepots } from './InitialiseEntrepots.tsx';
 
 class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
   private aidants: {
@@ -59,7 +57,7 @@ class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
     return this.aidants[0] || null;
   }
 }
-const entrepoAuthentification: EntrepotAuthentificationMemoire =
+const entrepotAuthentification: EntrepotAuthentificationMemoire =
   new EntrepotAuthentificationMemoire();
 
 const meta = {
@@ -78,14 +76,10 @@ export const ModaleDeConnexion: Story = {
     (story) => (
       <BrowserRouter>
         <FournisseurEntrepots.Provider
-          value={{
-            diagnostic: () => ({}) as unknown as EntrepotDiagnostic,
-            diagnostics: (): EntrepotDiagnostics =>
-              new EntrepotDiagnosticsMemoire(),
-            authentification: (): EntrepotAuthentification =>
-              entrepoAuthentification,
-            contact: (): EntrepotContact => ({}) as unknown as EntrepotContact,
-          }}
+          value={initialiseEntrepots({
+            entrepotDiagnostics: new EntrepotDiagnosticsMemoire(),
+            entrepotAuthentification,
+          })}
         >
           <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
             <PortailModale>{story()}</PortailModale>

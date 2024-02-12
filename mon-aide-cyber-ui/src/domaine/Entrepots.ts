@@ -3,6 +3,7 @@ import { Aggregat } from './Aggregat.ts';
 import { EntrepotDiagnostics } from './diagnostic/Diagnostics.ts';
 import { EntrepotAuthentification } from './authentification/Authentification.ts';
 import { EntrepotContact } from '../infrastructure/entrepots/APIEntrepotContact.ts';
+import { EntrepotUtilisateur } from './utilisateur/Utilisateur.ts';
 
 export interface Entrepot<T extends Aggregat> {
   lis(identifiant: string): Promise<T>;
@@ -16,4 +17,6 @@ export interface Entrepots {
   authentification(): EntrepotAuthentification;
 
   contact(): EntrepotContact;
+
+  utilisateur(): EntrepotUtilisateur;
 }

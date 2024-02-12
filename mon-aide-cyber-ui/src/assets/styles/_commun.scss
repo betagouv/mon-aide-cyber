@@ -2,8 +2,12 @@
 
 .section {
   background-color: var(--couleurs-mac-blanc);
-  border-radius: 16px;
-  padding: 56px 102px 56px 102px;
+  border-radius: 1rem;
+  padding: 3.5rem 6.375rem !important;
+}
+
+a {
+  color: var(--couleurs-mac-violet-fonce);
 }
 
 .mac-icone-retour {
