@@ -530,7 +530,7 @@ export const Accueil = () => {
           <div className="mode-fonce contactez-nous">
             <div className="fr-container">
               <div className="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
-                <div className="fr-col-5 fr-col-offset-1--right">
+                <div className="fr-col-md-5 fr-col-sm-12 fr-col-offset-1--right">
                   <h2>Contactez-nous !</h2>
                   <p>
                     Vous avez des <b>questions</b> sur MonAideCyber ?
@@ -538,13 +538,13 @@ export const Accueil = () => {
                     Toute l’équipe est à votre écoute.
                   </p>
                 </div>
-                <div className="fr-col-6">
+                <div className="fr-col-md-6 fr-col-sm-12">
                   <form onSubmit={envoieMessage}>
                     <section>
                       <div className="fr-col-12">
                         <fieldset>
                           <div className="fr-grid-row fr-grid-row--gutters">
-                            <div className="fr-col-6">
+                            <div className="fr-col-md-6 fr-col-sm-12">
                               <div
                                 className={`fr-input-group ${
                                   erreur ? erreur?.nom?.className : ''
@@ -565,7 +565,7 @@ export const Accueil = () => {
                                 {erreur?.nom?.texteExplicatif}
                               </div>
                             </div>
-                            <div className="fr-col-6">
+                            <div className="fr-col-md-6 fr-col-sm-12">
                               <div
                                 className={`fr-input-group ${
                                   erreur ? erreur?.email?.className : ''
