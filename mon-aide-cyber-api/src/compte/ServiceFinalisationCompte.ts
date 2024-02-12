@@ -5,8 +5,8 @@ import { Aidant, ErreurFinalisationCompte } from '../authentification/Aidant';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
 type FinalisationCompte = {
-  cguCochees: boolean;
-  charteCochee: boolean;
+  cguSignees: boolean;
+  charteSignee: boolean;
   identifiant: crypto.UUID;
 };
 
@@ -23,8 +23,8 @@ export class ServiceFinalisationCreationCompte {
     const verifieLesCGUEtLaCharte = (
       finalisationCompte: FinalisationCompte,
     ) => {
-      const cguNonValidees = !finalisationCompte.cguCochees;
-      const charteNonSignee = !finalisationCompte.charteCochee;
+      const cguNonValidees = !finalisationCompte.cguSignees;
+      const charteNonSignee = !finalisationCompte.charteSignee;
 
       if (cguNonValidees && charteNonSignee) {
         leveErreur(
@@ -38,16 +38,16 @@ export class ServiceFinalisationCreationCompte {
         leveErreur("Vous devez signer la charte de l'aidant.");
       }
     };
-    const verifieCGUEtCharteDejaSignee = (aidant: Aidant) => {
-      aidant.dateSignatureCGU &&
-        aidant.dateSignatureCharte &&
-        leveErreur('Vous avez déjà finaliser la création de votre compte.');
+    const cguEtCharteDejaSignees = (aidant: Aidant) => {
+      return aidant.dateSignatureCGU && aidant.dateSignatureCharte;
     };
 
     const aidant = await this.entrepots
       .aidants()
       .lis(finalisationCompte.identifiant);
-    verifieCGUEtCharteDejaSignee(aidant);
+    if (cguEtCharteDejaSignees(aidant)) {
+      return;
+    }
     verifieLesCGUEtLaCharte(finalisationCompte);
     aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
     aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
