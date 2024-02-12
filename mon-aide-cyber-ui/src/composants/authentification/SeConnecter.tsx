@@ -138,7 +138,11 @@ export const SeConnecter = () => {
   );
 
   return (
-    <a href="/" onClick={(event) => afficheModaleConnexion(event)}>
+    <a
+      href="/"
+      className="violet-fonce"
+      onClick={(event) => afficheModaleConnexion(event)}
+    >
       Se connecter
     </a>
   );
