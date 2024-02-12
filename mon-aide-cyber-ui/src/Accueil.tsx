@@ -189,7 +189,7 @@ export const Accueil = () => {
         <div className="conteneur-accueil">
           <div className="fr-container tuiles">
             <div className="fr-grid-row fr-grid-row--gutters">
-              <div className="fr-col-4">
+              <div className="fr-col-md-4 fr-col-sm-12">
                 <div className="tuile tuile-centree tuile-petite">
                   <div className="illustration">
                     <img
@@ -215,7 +215,7 @@ export const Accueil = () => {
                   </div>
                 </div>
               </div>
-              <div className="fr-col-4">
+              <div className="fr-col-md-4 fr-col-sm-12">
                 <div className="tuile tuile-centree tuile-petite">
                   <div className="illustration">
                     <img
@@ -236,7 +236,7 @@ export const Accueil = () => {
                   </div>
                 </div>
               </div>
-              <div className="fr-col-4">
+              <div className="fr-col-md-4 fr-col-sm-12">
                 <div className="tuile tuile-centree tuile-petite">
                   <div className="illustration">
                     <img
