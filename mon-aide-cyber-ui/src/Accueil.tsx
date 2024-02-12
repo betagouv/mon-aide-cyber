@@ -264,7 +264,7 @@ export const Accueil = () => {
               <div className="fr-col-8">
                 <h2>Qu&apos;est-ce que MonAideCyber?</h2>
               </div>
-              <div className="fr-col-6">
+              <div className="fr-col-md-6 fr-col-sm-12">
                 <div className="detail bordure-gauche-violette">
                   <h3>Une initiative de l’ANSSI</h3>
                   <p>
@@ -275,7 +275,7 @@ export const Accueil = () => {
                   </p>
                 </div>
               </div>
-              <div className="fr-col-6">
+              <div className="fr-col-md-6 fr-col-sm-12">
                 <div className="detail bordure-gauche-jaune">
                   <h3>Une démarche concrète</h3>
                   <p>
@@ -286,7 +286,7 @@ export const Accueil = () => {
                   </p>
                 </div>
               </div>
-              <div className="fr-col-6">
+              <div className="fr-col-md-6 fr-col-sm-12">
                 <div className="detail bordure-gauche-jaune">
                   <h3>Une startup d’état</h3>
                   <p>
@@ -299,7 +299,7 @@ export const Accueil = () => {
                   </p>
                 </div>
               </div>
-              <div className="fr-col-6">
+              <div className="fr-col-md-6 fr-col-sm-12">
                 <div className="detail bordure-gauche-violette">
                   <h3>Pour toutes les entités novices</h3>
                   <p>
