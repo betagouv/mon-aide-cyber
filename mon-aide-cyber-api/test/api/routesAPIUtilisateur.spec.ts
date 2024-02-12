@@ -5,6 +5,7 @@ import { Express } from 'express';
 import { executeRequete } from './executeurRequete';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { ReponseHATEOAS } from '../../src/api/hateoas/hateoas';
 
 describe('le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -39,7 +40,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         { cguSignees: true, charteSignee: true },
       );
 
-      expect(reponse.statusCode).toBe(204);
+      expect(reponse.statusCode).toBe(200);
       const aidantRetrouve = await testeurMAC.entrepots
         .aidants()
         .lis(aidantFinalisantSonCompte.identifiant);
@@ -52,6 +53,15 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
       expect(
         testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
       ).toBe(true);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
+        liens: {
+          suite: { url: '/tableau-de-bord' },
+          'lancer-diagnostic': {
+            url: '/api/diagnostic',
+            methode: 'POST',
+          },
+        },
+      });
     });
 
     it('renvoie une erreur HTTP 422 si les CGU ne sont pas acceptées', async () => {
