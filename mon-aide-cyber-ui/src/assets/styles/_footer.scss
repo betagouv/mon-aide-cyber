@@ -11,17 +11,20 @@
   --xl-block: 0;
   --li-bottom: 0;
   --ol-content: none;
-  justify-content: center;
-  width: 100%;
-}
-
-.piedpage-mac div ul li {
-  margin-left: 3rem;
 }
 
 .piedpage-mac-logos {
-  img {
-    height: 5rem;
+  @media (max-width: 576px) {
+    img {
+      width: 182px;
+      height: auto;
+    }
+  }
+
+  @media (min-width: 768px) {
+    img {
+      height: 5rem;
+    }
   }
 
   a[href] {
