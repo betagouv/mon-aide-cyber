@@ -166,7 +166,10 @@ export const Accueil = () => {
         <div className="mode-fonce accueil">
           <div id="presentation" className="fr-container">
             <div className="fr-grid-row fr-grid-row--middle fr-py-20v">
-              <div id="corps" className="fr-col-6 fr-col-offset-1--right">
+              <div
+                id="corps"
+                className="fr-col-md-6 fr-col-sm-12 fr-col-offset-md-1--right"
+              >
                 <h1 className="fr-mb-5w">MonAideCyber</h1>
                 <p>
                   Passez à l’action et menons ensemble votre première démarche
@@ -174,7 +177,7 @@ export const Accueil = () => {
                   sur tout le territoire !
                 </p>
               </div>
-              <div id="illustration" className="fr-col-5">
+              <div id="illustration" className="fr-col-md-5 fr-col-sm-12">
                 <img
                   src="/images/illustration-accueil.svg"
                   alt="scène d'un aidant et d'un aidé faisant un diagnostic"
