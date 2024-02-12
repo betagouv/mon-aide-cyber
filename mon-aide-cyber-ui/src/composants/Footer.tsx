@@ -1,14 +1,14 @@
 export const Footer = () => (
   <footer role="contentinfo" id="footer">
     <div className="piedpage-mac fr-container">
-      <div className="piedpage-mac-logos fr-grid-row fr-grid-row--gutters">
-        <div className="fr-col-2">
+      <div className="piedpage-mac-logos fr-grid-row fr-grid-row--center">
+        <div className="fr-col-md-2 fr-col-sm-12">
           <a href="https://www.ssi.gouv.fr/" target="_blank" rel="noreferrer">
             {' '}
             <img src="/images/logo_anssi.png" alt="ANSSI" />
           </a>
         </div>
-        <div className="fr-col-2">
+        <div className="fr-col-md-2 fr-col-sm-12">
           <a
             href="https://www.gendarmerie.interieur.gouv.fr/"
             target="_blank"
@@ -21,13 +21,13 @@ export const Footer = () => (
             />
           </a>
         </div>
-        <div className="fr-col-3">
+        <div className="fr-col-md-3 fr-col-sm-12">
           <a href="https://www.cnil.fr" target="_blank" rel="noreferrer">
             {' '}
             <img src="/images/logo_cnil.webp" alt="CNIL" />
           </a>
         </div>
-        <div className="fr-col-3">
+        <div className="fr-col-md-3 fr-col-sm-12">
           <a
             href="https://www.cybermalveillance.gouv.fr/"
             target="_blank"
@@ -37,7 +37,7 @@ export const Footer = () => (
             <img src="/images/logo_acyma.svg" alt="CyberMalveillance" />
           </a>
         </div>
-        <div className="fr-col-2">
+        <div className="fr-col-md-2 fr-col-sm-12">
           <a
             href="https://www.police-nationale.interieur.gouv.fr/"
             target="_blank"
