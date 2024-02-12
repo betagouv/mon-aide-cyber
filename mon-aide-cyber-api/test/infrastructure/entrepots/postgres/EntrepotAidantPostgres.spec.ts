@@ -5,6 +5,8 @@ import { unAidant } from '../../../authentification/constructeurs/constructeurAi
 
 import { ServiceDeChiffrement } from '../../../../src/securite/ServiceDeChiffrement';
 import { Aidant } from '../../../../src/authentification/Aidant';
+import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
+import { FournisseurHorlogeDeTest } from '../../horloge/FournisseurHorlogeDeTest';
 
 class FauxServiceDeChiffrement implements ServiceDeChiffrement {
   constructor(private readonly tableDeChiffrement: Map<string, string>) {}
@@ -45,6 +47,26 @@ describe('Entrepot Aidant', () => {
       serviceDeChiffrement,
     ).lis(aidant.identifiant);
     expect(aidantRecu).toStrictEqual<Aidant>(aidant);
+  });
+
+  describe('mets à jour un aidant', () => {
+    it('mets à jour les dates de signature des CGU et de la charte', async () => {
+      const dateSignature = new Date(Date.parse('2024-02-04T13:25:17+01:00'));
+      FournisseurHorlogeDeTest.initialise(dateSignature);
+      const aidant = unAidant().avecCompteEnAttenteDeFinalisation().construis();
+      const serviceDeChiffrement = new FauxServiceDeChiffrement(new Map([]));
+      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+
+      aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
+      aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
+      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+
+      const aidantRecu = await new EntrepotAidantPostgres(
+        serviceDeChiffrement,
+      ).lis(aidant.identifiant);
+      expect(aidantRecu.dateSignatureCharte).toStrictEqual(dateSignature);
+      expect(aidantRecu.dateSignatureCGU).toStrictEqual(dateSignature);
+    });
   });
 
   describe('recherche par identifiant et mot de passe', () => {
