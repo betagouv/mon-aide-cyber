@@ -25,15 +25,20 @@ class ConstructeurActionsHATEOAS {
     aidantAuthentifie: AidantAuthentifie,
   ): ConstructeurActionsHATEOAS {
     if (!aidantAuthentifie.dateSignatureCGU) {
-      this.suite = { url: '/finalise-creation-compte' };
-      this.actions.set('finaliser-creation-compte', {
-        url: '/api/utilisateur/finalise',
-        methode: 'POST',
-      });
+      this.finaliseCreationCompte();
     } else {
       this.tableauDeBord();
       this.lancerDiagnostic();
     }
+    return this;
+  }
+
+  finaliseCreationCompte(): ConstructeurActionsHATEOAS {
+    this.suite = { url: '/finalise-creation-compte' };
+    this.actions.set('finaliser-creation-compte', {
+      url: '/api/utilisateur/finalise',
+      methode: 'POST',
+    });
     return this;
   }
 

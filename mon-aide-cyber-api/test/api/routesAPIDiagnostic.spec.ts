@@ -23,6 +23,8 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
   let donneesServeur: { portEcoute: number; app: Express };
 
   beforeEach(() => {
+    testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
+    testeurMAC.adaptateurDeVerificationDeCGU.reinitialise();
     donneesServeur = testeurMAC.initialise();
   });
 
@@ -125,6 +127,19 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
       ).toBe(true);
     });
+
+    it('vérifie que les CGU et la charte ont été signées', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
+        true,
+      );
+    });
   });
 
   describe('quand une requête POST est reçue', () => {
@@ -198,6 +213,19 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       expect(
         testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
       ).toBe(true);
+    });
+
+    it('vérifie que les CGU et la charte ont été signées', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/diagnostic/`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
+        true,
+      );
     });
   });
 
@@ -274,6 +302,19 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       expect(
         testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
       ).toBe(true);
+    });
+
+    it('vérifie que les CGU et la charte ont été signées', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
+        true,
+      );
     });
   });
 
@@ -366,6 +407,19 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       expect(
         testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
       ).toBe(true);
+    });
+
+    it('vérifie que les CGU et la charte ont été signées', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/${crypto.randomUUID()}/restitution`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
+        true,
+      );
     });
 
     it('retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {

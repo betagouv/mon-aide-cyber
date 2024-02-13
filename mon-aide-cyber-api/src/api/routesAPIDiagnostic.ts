@@ -17,12 +17,16 @@ import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
-  const { adaptateurDeVerificationDeSession: session, busCommande } =
-    configuration;
+  const {
+    adaptateurDeVerificationDeSession: session,
+    adaptateurDeVerificationDeCGU: cgu,
+    busCommande,
+  } = configuration;
 
   routes.post(
     '/',
     session.verifie('Lance le diagnostic'),
+    cgu.verifie(),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const commande: CommandeLanceDiagnostic = {
         type: 'CommandeLanceDiagnostic',
@@ -47,6 +51,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.get(
     '/:id',
     session.verifie('Accès diagnostic'),
+    cgu.verifie(),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       new ServiceDiagnostic(configuration.entrepots)
@@ -66,6 +71,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.patch(
     '/:id',
     session.verifie('Ajout réponse au diagnostic'),
+    cgu.verifie(),
     bodyParser.json(),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
@@ -88,6 +94,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.get(
     '/:id/restitution',
     session.verifie('Demande la restitution'),
+    cgu.verifie(),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
 

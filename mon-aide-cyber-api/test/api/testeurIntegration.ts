@@ -16,6 +16,8 @@ import { BusCommandeMAC } from '../../src/infrastructure/bus/BusCommandeMAC';
 import { AdaptateurEnvoiMail } from '../../src/adaptateurs/AdaptateurEnvoiMail';
 import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 
+import { AdapatateurDeVerificationDeCGUDeTest } from '../adaptateurs/AdaptateurDeVerificationDeCGUDeTest';
+
 const testeurIntegration = () => {
   let serveurDeTest: {
     app: Express;
@@ -28,6 +30,8 @@ const testeurIntegration = () => {
   const entrepots = new EntrepotsMemoire();
   const busEvenement = new BusEvenementDeTest();
   const gestionnaireDeJeton = new FauxGestionnaireDeJeton();
+  const adaptateurDeVerificationDeCGU =
+    new AdapatateurDeVerificationDeCGUDeTest();
   const adaptateurDeVerificationDeSession =
     new AdaptateurDeVerificationDeSessionDeTest();
   const gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire();
@@ -54,6 +58,7 @@ const testeurIntegration = () => {
       busEvenement,
       gestionnaireErreurs,
       gestionnaireDeJeton,
+      adaptateurDeVerificationDeCGU,
       adaptateurDeVerificationDeSession,
       adaptateursRestitution,
       avecProtectionCsrf: false,
@@ -75,6 +80,7 @@ const testeurIntegration = () => {
     entrepots,
     initialise,
     gestionnaireErreurs,
+    adaptateurDeVerificationDeCGU,
     adaptateurDeVerificationDeSession,
     adaptateursRestitution,
     adaptateurEnvoieMessage,
