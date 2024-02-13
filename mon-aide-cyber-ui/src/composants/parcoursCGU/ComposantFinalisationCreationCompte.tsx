@@ -1,6 +1,6 @@
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
-import { FormEvent, useCallback, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useReducer } from 'react';
 import {
   useActionsUtilisateur,
   useEntrepots,
@@ -10,34 +10,60 @@ import {
   trouveParmiLesLiens,
 } from '../../domaine/Actions.ts';
 import { useNavigate } from 'react-router-dom';
+import {
+  cguCliquees,
+  finalisationCreationCompteInvalidee,
+  finalisationCreationCompteTransmise,
+  finalisationCreationCompteValidee,
+  reducteurFinalisationCreationCompte,
+} from './reducteurFinalisationCreationCompte.tsx';
 
 export const ComposantFinalisationCreationCompte = () => {
   const actions = useActionsUtilisateur();
   const entrepots = useEntrepots();
-  const [cguSignees, setCguSignees] = useState<boolean>(false);
+  const [etatFinalisationCreationCompte, envoie] = useReducer(
+    reducteurFinalisationCreationCompte,
+    {
+      cguSignees: false,
+      saisieValide: () => false,
+      erreur: {},
+    },
+  );
   const navigate = useNavigate();
 
-  const finaliseCreationCompte = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault();
+  const finaliseCreationCompte = useCallback(async (e: FormEvent) => {
+    e.preventDefault();
+    envoie(finalisationCreationCompteValidee());
+  }, []);
+
+  useEffect(() => {
+    if (
+      etatFinalisationCreationCompte.saisieValide() &&
+      etatFinalisationCreationCompte.finalisationCreationCompteATransmettre
+    ) {
       const parametresAPI = trouveParmiLesLiens(
         actions,
         'finaliser-creation-compte',
       );
       entrepots
         .utilisateur()
-        .finaliseCreationCompte(parametresAPI, { cguSignees })
-        .then((reponse) =>
-          navigate(reponse.liens.suite.url, {
+        .finaliseCreationCompte(parametresAPI, {
+          cguSignees: etatFinalisationCreationCompte.cguSignees,
+        })
+        .then((reponse) => {
+          envoie(finalisationCreationCompteTransmise());
+          return navigate(reponse.liens.suite.url, {
             state: extraisLesActions(reponse.liens),
-          }),
-        );
-    },
-    [actions, cguSignees, entrepots, navigate],
-  );
+          });
+        })
+        .catch((erreur) => envoie(finalisationCreationCompteInvalidee(erreur)));
+    }
+  }, [actions, entrepots, etatFinalisationCreationCompte, navigate]);
+
   const surCGUSignees = useCallback(() => {
-    setCguSignees(!cguSignees);
-  }, [cguSignees]);
+    envoie(cguCliquees());
+  }, []);
+
   return (
     <>
       <Header />
@@ -68,6 +94,7 @@ export const ComposantFinalisationCreationCompte = () => {
                           id="cgu-aidant"
                           name="cgu-aidant"
                           onClick={surCGUSignees}
+                          checked={etatFinalisationCreationCompte.cguSignees}
                         />
                         <label className="fr-label" htmlFor="cgu-aidant">
                           J&apos;accepte les &nbsp;
@@ -78,6 +105,10 @@ export const ComposantFinalisationCreationCompte = () => {
                           </b>
                           &nbsp; de MonAideCyber
                         </label>
+                        {
+                          etatFinalisationCreationCompte.erreur?.cguSignees
+                            ?.texteExplicatif
+                        }
                       </div>
                       <div className="fr-grid-row fr-grid-row--right">
                         <button
@@ -88,6 +119,9 @@ export const ComposantFinalisationCreationCompte = () => {
                           Valider
                         </button>
                       </div>
+                    </div>
+                    <div className="fr-mt-2w">
+                      {etatFinalisationCreationCompte.champsErreur}
                     </div>
                   </fieldset>
                 </form>
