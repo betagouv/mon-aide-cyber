@@ -7,8 +7,6 @@ export type DonneesAidant = {
   identifiantConnexion: string;
   motDePasse: string;
   nomPrenom: string;
-  dateSignatureCGU: Date;
-  dateSignatureCharte: Date;
 };
 export const creeAidant = async (
   entrepot: EntrepotAidant,
@@ -27,8 +25,6 @@ export const creeAidant = async (
         identifiantConnexion: donneesAidant.identifiantConnexion,
         motDePasse: donneesAidant.motDePasse,
         nomPrenom: donneesAidant.nomPrenom,
-        dateSignatureCGU: donneesAidant.dateSignatureCGU,
-        dateSignatureCharte: donneesAidant.dateSignatureCharte,
       };
       await entrepot.persiste(aidant);
       await busEvenement.publie<AidantCree>({

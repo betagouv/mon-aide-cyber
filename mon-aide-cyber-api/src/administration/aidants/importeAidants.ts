@@ -1,12 +1,21 @@
 import crypto from 'crypto';
 import { creeAidant } from '../aidant/creeAidant';
-import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { EntrepotAidant } from '../../authentification/Aidant';
 import { BusEvenement } from '../../domaine/BusEvenement';
 
+type StatusImportation = 'importé' | 'existant';
+
+export type ImportAidant = {
+  email: string;
+  motDePasse?: string;
+  nomPrenom: string;
+  region: string;
+  status: StatusImportation;
+  telephone: string;
+};
+
 export type ResultatImportationAidants = {
   aidantsImportes: ImportAidant[];
-  aidantsNonImportes: ImportAidant[];
   aidantsExistants: ImportAidant[];
 };
 
@@ -28,22 +37,21 @@ export const importeAidants = async (
 ): Promise<ResultatImportationAidants> => {
   const resultat: ResultatImportationAidants = {
     aidantsImportes: [],
-    aidantsNonImportes: [],
     aidantsExistants: [],
   };
 
   const transcris = (
     aidant: string[],
   ): {
-    nomPrenom: string;
     identifiantConnexion: string;
+    nomPrenom: string;
     numeroTelephone: string;
     region: string;
   } => {
     return {
+      identifiantConnexion: aidant[2].toLowerCase().trim(),
       nomPrenom: aidant[1],
-      identifiantConnexion: aidant[3].toLowerCase().trim(),
-      numeroTelephone: aidant[4],
+      numeroTelephone: aidant[3],
       region: aidant[0],
     };
   };
@@ -60,12 +68,11 @@ export const importeAidants = async (
         .catch(() => undefined);
       if (aidantExistant) {
         return {
-          charteSignee: true,
-          cguSignee: true,
           email: aidantExistant.identifiantConnexion,
           nomPrenom: aidantExistant.nomPrenom,
-          telephone: aidantTranscris.numeroTelephone,
           region: aidantTranscris.region,
+          status: 'existant',
+          telephone: aidantTranscris.numeroTelephone,
         };
       }
 
@@ -74,48 +81,28 @@ export const importeAidants = async (
         identifiantConnexion: aidantTranscris.identifiantConnexion,
         motDePasse,
         nomPrenom: aidantTranscris.nomPrenom,
-        dateSignatureCGU: FournisseurHorloge.maintenant(),
-        dateSignatureCharte: FournisseurHorloge.maintenant(),
       });
       return {
-        charteSignee: true,
-        cguSignee: true,
         email: aidantImporte!.identifiantConnexion,
         motDePasse,
         nomPrenom: aidantImporte!.nomPrenom,
-        telephone: aidantTranscris.numeroTelephone,
         region: aidantTranscris.region,
+        status: 'importé',
+        telephone: aidantTranscris.numeroTelephone,
       };
     }),
   );
   return importAidants.then((aidants) => {
     aidants.forEach((aidant) => {
-      const aidantExistant =
-        !aidant.motDePasse && aidant.cguSignee && aidant.charteSignee;
-      if (aidantExistant) {
+      if (aidant.status === 'importé') {
+        resultat.aidantsImportes.push(aidant);
+      } else {
         resultat.aidantsExistants.push(aidant);
       }
-      const aidantImporte = aidant.motDePasse;
-      if (aidantImporte) {
-        resultat.aidantsImportes.push(aidant);
-      }
-      const aidantNonImporte = !aidant.charteSignee && !aidant.cguSignee;
-      if (aidantNonImporte) {
-        resultat.aidantsNonImportes.push(aidant);
-      }
     });
+
     return resultat;
   });
-};
-
-type ImportAidant = {
-  charteSignee: boolean;
-  cguSignee: boolean;
-  email: string;
-  motDePasse?: string;
-  nomPrenom: string;
-  telephone: string;
-  region: string;
 };
 
 const genereMotDePasse = () => {
