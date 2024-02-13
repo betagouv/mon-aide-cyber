@@ -33,4 +33,8 @@ export class AdaptateurDeVerificationDeSessionDeTest
   utilisateurConnecte(utilisateur: Aidant) {
     this._utilisateurConnecte = utilisateur;
   }
+
+  reinitialise() {
+    this.estPassee = false;
+  }
 }

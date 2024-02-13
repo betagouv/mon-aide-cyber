@@ -12,6 +12,7 @@ import { AdaptateurDeVerificationDeSessionHttp } from './src/adaptateurs/Adaptat
 import { AdaptateurDeRestitutionHTML } from './src/adaptateurs/AdaptateurDeRestitutionHTML';
 import { BusCommandeMAC } from './src/infrastructure/bus/BusCommandeMAC';
 import { fabriqueAdaptateurEnvoiMail } from './src/infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
+import { AdaptateurDeVerificationDeCGUMAC } from './src/adaptateurs/AdaptateurDeVerificationDeCGUMAC';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut',
@@ -40,6 +41,9 @@ const serveurMAC = serveur.creeServeur({
   busEvenement: busEvenementMAC,
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),
   gestionnaireDeJeton: gestionnaireDeJeton,
+  adaptateurDeVerificationDeCGU: new AdaptateurDeVerificationDeCGUMAC(
+    entrepots,
+  ),
   adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(
     gestionnaireDeJeton,
   ),
