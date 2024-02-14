@@ -154,7 +154,7 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        'Gérer tous les accès distants via un VPN  "full-tunneling*" dédié et des mécanismes de double authentification à minima.',
+        'Gérer tous les accès distants via un VPN "full-tunneling*" dédié et des mécanismes de double authentification à minima.',
       pourquoi:
         '../../mesures/acces/acces-teletravail-acces-distants-mesures-particulieres-niveau2-pourquoi.pug',
       comment:
