@@ -151,7 +151,6 @@ const formatPdfA4 = (enteteHtml: string, piedPageHtml: string): PDFOptions => ({
 
 const lanceNavigateur = (): Promise<Browser> =>
   puppeteer.launch({
-    headless: 'new',
     // Documentation des arguments : https://peter.sh/experiments/chromium-command-line-switches/
     // Inspiration pour la liste utilisée ici : https://www.bannerbear.com/blog/ways-to-speed-up-puppeteer-screenshots/
     // Le but est d'avoir un Puppeteer le plus léger et rapide à lancer possible.
