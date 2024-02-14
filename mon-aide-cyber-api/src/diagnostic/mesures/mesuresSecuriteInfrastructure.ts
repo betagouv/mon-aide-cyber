@@ -55,7 +55,7 @@ export const mesuresSecuriteInfrastructure = {
     {
       niveau1: {
         titre:
-          'Déployer systématiquement toutes les mises à jour sur les équipements de sécurité dès que celles-ci sont disponibles (ou après qualification interne) et hors exceptions spécifiquement identifiées.',
+          'Déployer systématiquement toutes les mises à jour sur les équipements de sécurité dès que celles-ci sont disponibles et hors exceptions spécifiquement identifiées.',
         pourquoi:
           '../../mesures/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-niveau1-pourquoi.pug',
         comment:
@@ -67,7 +67,7 @@ export const mesuresSecuriteInfrastructure = {
     {
       niveau1: {
         titre:
-          "Déployer systématiquement toutes les mises à jour sur les serveurs, services et logiciels d'administration dès que celles-ci sont disponibles (ou après qualification interne) et hors exceptions spécifiquement identifiées.",
+          "Déployer systématiquement toutes les mises à jour sur les serveurs, services et logiciels d'administration dès que celles-ci sont disponibles et hors exceptions spécifiquement identifiées",
         pourquoi:
           '../../mesures/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-niveau1-pourquoi.pug',
         comment:
@@ -75,7 +75,7 @@ export const mesuresSecuriteInfrastructure = {
       },
       niveau2: {
         titre:
-          'Mettre en œuvre des mesures de sécurité supplémentaires (cloisonnement, règles EDR durcies, déconnexion AD) sur les systèmes ne pouvant pas bénéficier des mises à jour (ex : systèmes industriels, applications particulières).',
+          'Mettre en œuvre des mesures de sécurité supplémentaires sur les systèmes ne pouvant pas bénéficier des mises à jour',
         pourquoi:
           '../../mesures/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-niveau2-pourquoi.pug',
         comment:
@@ -85,7 +85,7 @@ export const mesuresSecuriteInfrastructure = {
     },
   'securite-infrastructure-outils-securisation-systeme-messagerie': {
     niveau1: {
-      titre: "Mettre en oeuvre une solution d'anti-spam et d'anti-hameçonnage.",
+      titre: "Mettre en œuvre une solution d'anti-spam et d'anti-hameçonnage",
       pourquoi:
         '../../mesures/infras/securite-infrastructure-outils-securisation-systeme-messagerie-niveau1-pourquoi.pug',
       comment:
@@ -93,7 +93,7 @@ export const mesuresSecuriteInfrastructure = {
     },
     niveau2: {
       titre:
-        'Sécuriser les accès distants à la messagerie via une solution de type VPN',
+        'Mettre en œuvre des mécanismes complémentaires de protection contre les mails illégitimes',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-outils-securisation-systeme-messagerie-niveau2-pourquoi.pug',
       comment:
