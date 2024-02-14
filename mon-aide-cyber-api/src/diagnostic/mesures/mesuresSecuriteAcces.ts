@@ -59,7 +59,7 @@ export const mesuresSecuriteAcces = {
   'acces-administrateurs-informatiques-suivie-et-limitee': {
     niveau1: {
       titre:
-        'Réaliser tous les 6 mois une revue des accès administrateurs en les comparant avec les informations détenues par le service RH. Les mots de passes des comptes partagés concernés sont renouvelés à chaque départ.',
+        'Réaliser tous les 6 mois une revue des accès administrateurs en les comparant avec les informations détenues par le service RH. Les mots de passes des comptes partagés concernés sont renouvelés à chaque départ',
       pourquoi:
         '../../mesures/acces/acces-administrateurs-informatiques-suivie-et-limitee-niveau1-pourquoi.pug',
       comment:
@@ -78,7 +78,7 @@ export const mesuresSecuriteAcces = {
   'acces-utilisation-comptes-administrateurs-droits-limitee': {
     niveau1: {
       titre:
-        "Utiliser des comptes d'administration dédiées à cet usage, les administrateurs disposant en parallèle d’un compte utilisateur. Utiliser également des comptes d'administration distincts dédiés à l'administration de l'AD ou Samba-AD et à la solution de sauvegarde (et non géré via l'AD ou Samba-AD).",
+        "Utiliser des comptes d'administrations dédiés à cet usage",
       pourquoi:
         '../../mesures/acces/acces-utilisation-comptes-administrateurs-droits-limitee-niveau1-pourquoi.pug',
       comment:
@@ -86,7 +86,7 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        "Utiliser des comptes d'administration distincts selon les périmètres d’administration.",
+        "Utiliser des comptes d'administration distincts selon les périmètres d’administration",
       pourquoi:
         '../../mesures/acces/acces-utilisation-comptes-administrateurs-droits-limitee-niveau2-pourquoi.pug',
       comment:

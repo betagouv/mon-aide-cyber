@@ -9,6 +9,10 @@ div
         | de paramétrage des systèmes et des applications, etc.
     p
         | Il est également recommandé d’utiliser 2 autres comptes administrateurs distincts (et une authentification spécifique) :
-        | 1 compte pour gérer l’administration de l’outil de gestion centralisée de politiques de sécurité (exemple : Active Directory, Samba-AD)
-        | et 1 compte pour gérer la solution de sauvegarde (NB : ce compte ne doit pas être non géré via l’outil de gestion
+        | 1 seul compte pour gérer l’administration de l’outil de gestion centralisée de politiques de sécurité (exemple : Active Directory, Samba-AD)
+        | et 1 seul compte pour gérer la solution de sauvegarde (NB : ce compte ne doit pas être non géré via l’outil de gestion
         | centralisée de politiques de sécurité).
+    p
+        | Par ailleurs le compte d'administrateur du domaine ne doit être utilisé que de manière exceptionnelle 
+        | (ex: migration, gestion des relations d'approbation, etc.). Le mot de passe de ce compte doit être stocké dans un 
+        | coffre-fort.
