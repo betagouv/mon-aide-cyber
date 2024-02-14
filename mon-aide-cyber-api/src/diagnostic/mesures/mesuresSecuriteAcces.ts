@@ -192,7 +192,7 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        "En complément des pratiques déjà en œuvre, mettre en place des mesures complémentaires de sécurisation des accès d'administration.",
+        "Compléter les mesures de sécurisation des accès d’administration",
       pourquoi:
         '../../mesures/acces/acces-administrateurs-si-mesures-specifiques-niveau2-pourquoi.pug',
       comment:
