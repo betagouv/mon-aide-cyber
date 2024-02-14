@@ -22,44 +22,60 @@ html {
     }
     color: var(--couleurs-mac-violet-fonce) !important;
   }
-  .fr-accordion:before {
-    bottom: 0;
-    box-shadow:
-      inset 0 1px 0 0 var(--couleurs-mac-violet-clair),
-      0 1px 0 0 var(--couleurs-mac-violet-clair);
+
+  details {
+    position: relative;
   }
 
-  .fr-accordion__btn {
-    align-items: baseline;
-  }
-
-  .fr-accordion__btn:after {
-    margin-left: 16px;
-    -webkit-mask-image: $icone-plus;
-    mask-image: $icone-plus;
-    -webkit-mask-size: 16px 16px;
-    mask-size: 16px 16px;
-    mask-repeat: no-repeat;
-  }
-
-  .fr-accordion__btn[aria-expanded='false']:hover {
-    background-color: var(--couleurs-mac-violet-tres-clair);
-  }
-
-  .fr-accordion__btn[aria-expanded='true'] {
+  details[open] > summary {
     --hover: none;
     --active: none;
     background-color: unset;
     color: var(--couleurs-mac-noir) !important;
   }
 
-  .fr-accordion__btn[aria-expanded='true']::after {
+  summary + div {
+    margin: 0 -0.25rem;
+    padding: 1rem 1rem 1.5rem 1rem;
+  }
+
+  summary {
+    user-select: none;
+    display: inline-flex;
+    color: var(--couleurs-mac-violet-fonce) !important;
+    font-family: "Marianne ExtraBold";
+    font-size: 22px;
+    line-height: 32px;
+    align-items: baseline;
+    padding: 0.75rem 1rem;
+    border-top: solid var(--couleurs-mac-violet-leger) 1px;
+    border-bottom: solid var(--couleurs-mac-violet-leger) 1px;
+    margin: -1px 0 0 -1px;
+  }
+
+  details[open] > summary {
+    border-bottom: none;
+  }
+
+  summary:after {
+    content: '';
+    width: 16px;
+    height: 16px;
     margin-left: 16px;
-    -webkit-mask-image: $icone-moins;
-    mask-image: $icone-moins;
-    -webkit-mask-size: 16px 16px;
+    mask-image: $icone-plus;
     mask-size: 16px 16px;
     mask-repeat: no-repeat;
+    background: var(--couleurs-mac-violet-fonce);
+    flex-shrink: 0;
+  }
+
+  details[open] > summary::after {
+    mask-image: $icone-moins;
+    background: var(--couleurs-mac-noir);
+  }
+
+  summary:hover {
+    background-color: var(--couleurs-mac-violet-tres-clair);
   }
 
   .fr-sidemenu__inner {
