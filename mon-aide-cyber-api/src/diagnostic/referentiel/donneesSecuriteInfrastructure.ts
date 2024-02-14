@@ -346,7 +346,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-outils-securisation-systeme-messagerie-webmail',
           libelle:
-            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre et les accès distants à la messagerie sont gérés via VPN.",
+            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre et les mécanismes complémentaires de protection de mails illégitimes sont activés.",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
