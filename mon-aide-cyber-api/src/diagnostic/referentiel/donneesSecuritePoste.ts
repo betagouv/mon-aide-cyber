@@ -66,7 +66,8 @@ export const donneesSecuritePoste: QuestionsThematique = {
       poids: 2,
       reponsesPossibles: [
         {
-          identifiant: 'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-na',
+          identifiant:
+            'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
@@ -289,9 +290,26 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr',
           libelle:
-            'Oui, un outil complémentaire à un antivirus de type EDR a été mis en place.',
-          resultat: { indice: { valeur: 3 } },
+            'Oui, un outil complémentaire à un antivirus de type EDR a été mis en place mais ses alertes ne sont pas toujours traitées.',
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              {
+                identifiant:
+                  'securite-poste-outils-complementaires-securisation',
+                niveau: 2,
+              },
+            ],
+          },
           ordre: 2,
+        },
+        {
+          identifiant:
+            'securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr',
+          libelle:
+            'Oui, un outil complémentaire à un antivirus de type EDR a été mis en place et ses alertes sont systématiquement traitées.',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 3,
         },
       ],
       type: 'choixUnique',
