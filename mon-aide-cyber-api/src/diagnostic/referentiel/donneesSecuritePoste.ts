@@ -62,9 +62,14 @@ export const donneesSecuritePoste: QuestionsThematique = {
       identifiant:
         'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
       libelle:
-        "Si l'entité dispose d'un SI industriel : Les mises à jour fonctionnelles et de sécurité sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?",
+        "Si l'entité dispose de systèmes industriels : les mises à jour fonctionnelles et de sécurité sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?",
       poids: 2,
       reponsesPossibles: [
+        {
+          identifiant: 'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-na',
+          libelle: 'Non applicable',
+          ordre: 0,
+        },
         {
           identifiant:
             'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-nsp',
