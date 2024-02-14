@@ -2,7 +2,7 @@ export const mesuresSecuritePoste = {
   'securite-poste-maj-fonctionnelles-et-securite-deployees': {
     niveau1: {
       titre:
-        'Déployer systématiquement toutes les mises à jour sur les postes de travail dès que celles-ci sont disponibles (ou après qualification interne) et hors exceptions spécifiquement identifiées.',
+        'Déployer systématiquement toutes les mises à jour sur les postes de travail dès que celles-ci sont disponibles et hors exceptions spécifiquement identifiées',
       pourquoi:
         '../../mesures/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau1-pourquoi.pug',
       comment:
@@ -10,7 +10,7 @@ export const mesuresSecuritePoste = {
     },
     niveau2: {
       titre:
-        'Mettre en œuvre des mesures de sécurité supplémentaires (cloisonnement, règles EDR durcies, déconnexion AD) sur les systèmes ne pouvant pas bénéficier des mises à jour (ex : systèmes industriels, applications particulières)',
+        'Mettre en œuvre des mesures de sécurité supplémentaires sur les systèmes ne pouvant pas bénéficier des mises à jour',
       pourquoi:
         '../../mesures/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau2-pourquoi.pug',
       comment:
@@ -21,7 +21,7 @@ export const mesuresSecuritePoste = {
   'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees': {
     niveau1: {
       titre:
-        'Déployer systématiquement toutes les mises à jour sur les postes de travail dédiés aux systèmes industriels dès que celles-ci sont disponibles (ou après qualification interne) et hors exceptions spécifiquement identifiées.',
+        'Déployer systématiquement toutes les mises à jour sur les postes de travail dédiés aux systèmes industriels dès que celles-ci sont disponibles et hors exceptions spécifiquement identifiées',
       pourquoi:
         '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau1-pourquoi.pug',
       comment:
@@ -29,7 +29,7 @@ export const mesuresSecuritePoste = {
     },
     niveau2: {
       titre:
-        'Mettre en œuvre des mesures de sécurité supplémentaires (cloisonnement, règles EDR durcies, déconnexion AD) sur les systèmes ne pouvant pas bénéficier des mises à jour (ex : systèmes industriels, applications particulières)',
+        'Mettre en œuvre des mesures de sécurité supplémentaires sur les systèmes ne pouvant pas bénéficier des mises à jour',
       pourquoi:
         '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau2-pourquoi.pug',
       comment:
