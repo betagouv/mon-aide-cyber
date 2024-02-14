@@ -93,6 +93,13 @@ export const mesuresSecuritePoste = {
       comment:
         '../../mesures/postes/securite-poste-outils-complementaires-securisation-niveau1-comment.pug',
     },
+    niveau2: {
+      titre: "Traiter systématiquement les alertes générées par l'EDR",
+      pourquoi:
+        '../../mesures/postes/securite-poste-outils-complementaires-securisation-niveau2-pourquoi.pug',
+      comment:
+        '../../mesures/postes/securite-poste-outils-complementaires-securisation-niveau2-comment.pug',
+    },
     priorisation: 25,
   },
   'securite-poste-r-et-d-disques-chiffres': {
