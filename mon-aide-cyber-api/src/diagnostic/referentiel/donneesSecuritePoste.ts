@@ -178,6 +178,11 @@ export const donneesSecuritePoste: QuestionsThematique = {
       poids: 2,
       reponsesPossibles: [
         {
+          identifiant: 'securite-poste-si-industriel-antivirus-deploye-na',
+          libelle: 'Non applicable',
+          ordre: 0,
+        },
+        {
           identifiant: 'securite-poste-si-industriel-antivirus-deploye-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
