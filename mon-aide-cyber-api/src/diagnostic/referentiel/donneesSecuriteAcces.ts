@@ -487,7 +487,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant:
             'acces-teletravail-acces-distants-mesures-particulieres-vpn',
-          libelle: 'Les connexions à distance sont réalisées via un VPN.',
+          libelle: 'Les connexions à distance sont réalisées via un VPN, lui même authentifié à double facteur.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -549,7 +549,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant:
             'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-vpn',
-          libelle: 'Les connexions à distance sont réalisées via un VPN.',
+          libelle: 'Les connexions à distance sont réalisées via un VPN, lui même authentifié à double facteur.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
