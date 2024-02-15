@@ -1,7 +1,6 @@
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
 import { useCallback, useEffect, useReducer, useState } from 'react';
-import { useEntrepots } from '../../fournisseurs/hooks.ts';
 import { Link, useNavigate } from 'react-router-dom';
 import { useErrorBoundary } from 'react-error-boundary';
 import '../../assets/styles/_restitution.scss';
@@ -17,6 +16,11 @@ import {
   Lien,
   trouveParmiLesLiens,
 } from '../../domaine/Actions.ts';
+import { Restitution } from '../../domaine/diagnostic/Restitution.ts';
+
+import { useMACAPI } from '../../fournisseurs/hooks.ts';
+
+import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
@@ -25,7 +29,6 @@ type ProprietesComposantRestitution = {
 export const ComposantRestitution = ({
   idDiagnostic,
 }: ProprietesComposantRestitution) => {
-  const entrepots = useEntrepots();
   const { showBoundary } = useErrorBoundary();
   const navigate = useNavigate();
   const [etatRestitution, envoie] = useReducer(reducteurRestitution, {});
@@ -34,16 +37,22 @@ export const ComposantRestitution = ({
     suite: Lien;
     actions: { [clef: string]: Lien };
   }>({ suite: { url: '', methode: '' }, actions: {} });
+  const macapi = useMACAPI();
 
   useEffect(() => {
-    entrepots
-      .diagnostic()
-      .restitution(idDiagnostic)
-      .then((restitution) => {
-        envoie(restitutionChargee(restitution));
-      })
-      .catch((erreur) => showBoundary(erreur));
-  }, [entrepots, envoie, idDiagnostic, showBoundary]);
+    if (!etatRestitution.restitution) {
+      macapi
+        .appelle<Restitution>(
+          constructeurParametresAPI()
+            .url(`/api/diagnostic/${idDiagnostic}/restitution`)
+            .methode('GET')
+            .construis(),
+          async (json) => Promise.resolve((await json) as Restitution),
+        )
+        .then((restitution) => envoie(restitutionChargee(restitution)))
+        .catch((erreur) => showBoundary(erreur));
+    }
+  }, [envoie, etatRestitution, idDiagnostic, macapi, showBoundary]);
 
   useEffect(() => {
     if (etatRestitution.restitution) {
@@ -75,14 +84,21 @@ export const ComposantRestitution = ({
     );
     setBoutonDesactive(true);
     if (restitutionPdf) {
-      return entrepots
-        .diagnostic()
-        .restitution(idDiagnostic, restitutionPdf)
+      const parametresAPI = constructeurParametresAPI()
+        .url(restitutionPdf.url)
+        .methode(restitutionPdf.methode!)
+        .accept(restitutionPdf.contentType!)
+        .construis();
+      macapi
+        .appelle<Window>(
+          parametresAPI,
+          async (blob) => window.open(URL.createObjectURL(await blob))!,
+        )
         .then(() => {
           setBoutonDesactive(false);
         });
     }
-  }, [entrepots, etatRestitution.restitution, idDiagnostic]);
+  }, [etatRestitution.restitution, macapi]);
   return (
     <>
       <Header />

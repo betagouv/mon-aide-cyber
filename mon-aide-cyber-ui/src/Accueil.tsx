@@ -17,7 +17,12 @@ import {
   nomSaisi,
   reducteurEnvoiMessageContact,
 } from './reducteurs/reducteurEnvoiMessageContact.tsx';
-import { useEntrepots } from './fournisseurs/hooks.ts';
+
+import { Message } from './domaine/contact/Message.ts';
+
+import { useMACAPI } from './fournisseurs/hooks.ts';
+
+import { constructeurParametresAPI } from './fournisseurs/api/ConstructeurParametresAPI.ts';
 
 type ProprietesComposantEtape = {
   illustration: { chemin: string; texteAlternatif: string };
@@ -100,8 +105,8 @@ export const Accueil = () => {
     erreur: {},
     saisieValide: () => false,
   });
-  const entrepots = useEntrepots();
   const erreur = etatMessage.erreur;
+  const macapi = useMACAPI();
 
   // const surCliqueMotDG = useCallback(() => {
   //   setMotGeneralClique(false);
@@ -126,18 +131,24 @@ export const Accueil = () => {
 
   useEffect(() => {
     if (etatMessage.saisieValide() && !etatMessage.messageEnvoye) {
-      entrepots
-        .contact()
-        .envoie({
-          nom: etatMessage.nom,
-          email: etatMessage.email,
-          message: etatMessage.message,
-        })
+      macapi
+        .appelle<void, Message>(
+          constructeurParametresAPI<Message>()
+            .url('/contact')
+            .methode('POST')
+            .corps({
+              nom: etatMessage.nom,
+              email: etatMessage.email,
+              message: etatMessage.message,
+            })
+            .construis(),
+          () => Promise.resolve(),
+        )
         .then(() => messageEnvoye())
         .catch((erreur) => envoiMessageInvalide(erreur as Error));
       envoie(messageEnvoye());
     }
-  }, [entrepots, etatMessage]);
+  }, [etatMessage, macapi]);
 
   const surSaisieNom = useCallback((nom: string) => {
     envoie(nomSaisi(nom));

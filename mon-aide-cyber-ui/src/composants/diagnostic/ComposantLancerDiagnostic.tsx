@@ -1,9 +1,11 @@
-import { useCallback, useContext } from 'react';
-import { FournisseurEntrepots } from '../../fournisseurs/FournisseurEntrepot.ts';
+import { useCallback } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
-import { useActionsUtilisateur } from '../../fournisseurs/hooks.ts';
+import { useActionsUtilisateur, useMACAPI } from '../../fournisseurs/hooks.ts';
 import { trouveParmiLesLiens } from '../../domaine/Actions.ts';
+import { FormatLien, LienRoutage } from '../../domaine/LienRoutage.ts';
+
+import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 
 type ProprietesComposantLancerDiagnostic = {
   style: string;
@@ -12,18 +14,24 @@ type ProprietesComposantLancerDiagnostic = {
 export const ComposantLancerDiagnostic = ({
   style,
 }: ProprietesComposantLancerDiagnostic) => {
-  const entrepots = useContext(FournisseurEntrepots);
   const { showBoundary } = useErrorBoundary();
   const navigate = useNavigate();
   const actions = useActionsUtilisateur();
+  const macapi = useMACAPI();
 
   const lancerDiagnostic = useCallback(async () => {
-    return await entrepots
-      .diagnostic()
-      .lancer(trouveParmiLesLiens(actions, 'lancer-diagnostic'))
+    const lien = trouveParmiLesLiens(actions, 'lancer-diagnostic');
+    return macapi
+      .appelle<LienRoutage>(
+        constructeurParametresAPI()
+          .url(lien.url)
+          .methode(lien.methode!)
+          .construis(),
+        async (json) => new LienRoutage((await json) as FormatLien),
+      )
       .then((lien) => navigate(lien.route()))
       .catch((erreur) => showBoundary(erreur));
-  }, [actions, entrepots, navigate, showBoundary]);
+  }, [actions, macapi, navigate, showBoundary]);
 
   return (
     <button className={style} onClick={lancerDiagnostic}>

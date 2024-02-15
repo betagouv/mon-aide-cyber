@@ -3,7 +3,6 @@ import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { SeConnecter } from '../composants/authentification/SeConnecter.tsx';
 import { PortailModale } from '../composants/modale/PortailModale.tsx';
 import { FournisseurEntrepots } from '../fournisseurs/FournisseurEntrepot.ts';
-import { EntrepotDiagnosticsMemoire } from '../../test/infrastructure/entrepots/EntrepotsMemoire.ts';
 import {
   EntrepotAuthentification,
   ReponseAuthentification,
@@ -16,6 +15,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { FournisseurAuthentification } from '../fournisseurs/ContexteAuthentification.tsx';
 import { RequiertAuthentification } from '../fournisseurs/RequiertAuthentification.tsx';
 import { initialiseEntrepots } from './InitialiseEntrepots.tsx';
+import { Diagnostic } from '../domaine/diagnostic/Diagnostic.ts';
+import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
+import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 
 class EntrepotAuthentificationMemoire implements EntrepotAuthentification {
   private aidants: {
@@ -82,16 +84,30 @@ export const ConnexionAMonAideCyber: Story = {
       <BrowserRouter>
         <FournisseurEntrepots.Provider
           value={initialiseEntrepots({
-            entrepotDiagnostics: new EntrepotDiagnosticsMemoire(),
             entrepotAuthentification,
           })}
         >
-          <FournisseurAuthentification>
-            <RequiertAuthentification />
-            <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-              <PortailModale>{story()}</PortailModale>
-            </ErrorBoundary>
-          </FournisseurAuthentification>
+          <ContexteMacAPI.Provider
+            value={{
+              appelle: async <T = Diagnostic, V = void>(
+                _parametresAPI: ParametresAPI<V>,
+                _: (contenu: Promise<any>) => Promise<T>,
+              ) => {
+                const reponseAuthentification: ReponseAuthentification = {
+                  nomPrenom: 'Jean Dupont',
+                  liens: { suite: { url: '', methode: '' } },
+                };
+                return reponseAuthentification as T;
+              },
+            }}
+          >
+            <FournisseurAuthentification>
+              <RequiertAuthentification />
+              <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+                <PortailModale>{story()}</PortailModale>
+              </ErrorBoundary>
+            </FournisseurAuthentification>
+          </ContexteMacAPI.Provider>
         </FournisseurEntrepots.Provider>
       </BrowserRouter>
     ),

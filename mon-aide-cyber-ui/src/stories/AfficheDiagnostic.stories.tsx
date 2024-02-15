@@ -4,10 +4,6 @@ import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts
 import { waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 import {
-  EntrepotDiagnosticMemoire,
-  EntrepotDiagnosticsMemoire,
-} from '../../test/infrastructure/entrepots/EntrepotsMemoire.ts';
-import {
   uneQuestionAChoixUnique,
   uneQuestionTiroirAChoixMultiple,
 } from '../../test/constructeurs/constructeurQuestions.ts';
@@ -17,8 +13,11 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
 import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';
 import { initialiseEntrepots } from './InitialiseEntrepots.tsx';
-
-const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
+import { Diagnostic } from '../domaine/diagnostic/Diagnostic.ts';
+import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
+import { UUID } from '../types/Types.ts';
+import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
+import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 
 const identifiantUneQuestion = '6dadad14-8fa0-4be7-a8da-473d538eb6c1';
 const diagnosticAvecUneQuestion = unDiagnostic()
@@ -155,18 +154,13 @@ const unDiagnosticAvecQuestionTiroirAChoixUnique = unDiagnostic()
   )
   .construis();
 
-await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestion);
-await entrepotDiagnosticMemoire.persiste(diagnosticAvecUnChampsDeSaisie);
-await entrepotDiagnosticMemoire.persiste(diagnosticAvecPlusieursQuestions);
-await entrepotDiagnosticMemoire.persiste(
-  diagnosticAvecQuestionSousFormeDeListeDeroulante,
-);
-await entrepotDiagnosticMemoire.persiste(
-  diagnosticAvecReponseEntrainantQuestion,
-);
-await entrepotDiagnosticMemoire.persiste(
-  unDiagnosticAvecQuestionTiroirAChoixUnique,
-);
+const entrepotMemoire = new ServeurMACMemoire();
+entrepotMemoire.persiste(diagnosticAvecUneQuestion);
+entrepotMemoire.persiste(diagnosticAvecUnChampsDeSaisie);
+entrepotMemoire.persiste(diagnosticAvecPlusieursQuestions);
+entrepotMemoire.persiste(diagnosticAvecQuestionSousFormeDeListeDeroulante);
+entrepotMemoire.persiste(diagnosticAvecReponseEntrainantQuestion);
+entrepotMemoire.persiste(unDiagnosticAvecQuestionTiroirAChoixUnique);
 
 const meta = {
   title: 'Diagnostic',
@@ -176,15 +170,22 @@ const meta = {
   },
   decorators: [
     (story) => (
-      <FournisseurEntrepots.Provider
-        value={initialiseEntrepots({
-          entrepotDiagnostic: entrepotDiagnosticMemoire,
-          entrepotDiagnostics: new EntrepotDiagnosticsMemoire(),
-        })}
-      >
-        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-          {story()}
-        </ErrorBoundary>
+      <FournisseurEntrepots.Provider value={initialiseEntrepots({})}>
+        <ContexteMacAPI.Provider
+          value={{
+            appelle: async <T = Diagnostic, V = void>(
+              parametresAPI: ParametresAPI<V>,
+              _: (contenu: Promise<any>) => Promise<T>,
+            ) => {
+              const idDiagnostic = parametresAPI.url.split('/').at(-1);
+              return entrepotMemoire.find(idDiagnostic as UUID) as T;
+            },
+          }}
+        >
+          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+            {story()}
+          </ErrorBoundary>
+        </ContexteMacAPI.Provider>
       </FournisseurEntrepots.Provider>
     ),
   ],
@@ -211,9 +212,7 @@ export const QuestionDiagnostic: Story = {
         canvas.getByLabelText('Entreprise privée (ex. TPE, PME, ETI)'),
       ),
     ).toBeInTheDocument();
-    expect(await entrepotDiagnosticMemoire.verifieReponseNonEnvoyee()).toBe(
-      true,
-    );
+    expect(await entrepotMemoire.verifieReponseNonEnvoyee()).toBe(true);
   },
 };
 
@@ -269,9 +268,7 @@ export const AfficheDiagnosticQuestionListeDeroulante: Story = {
     expect(
       await waitFor(() => canvas.getByRole('option', { name: /réponse c/i })),
     ).toBeInTheDocument();
-    expect(await entrepotDiagnosticMemoire.verifieReponseNonEnvoyee()).toBe(
-      true,
-    );
+    expect(await entrepotMemoire.verifieReponseNonEnvoyee()).toBe(true);
   },
 };
 

@@ -1,12 +1,10 @@
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
 import { FormEvent, useCallback, useEffect, useReducer } from 'react';
-import {
-  useActionsUtilisateur,
-  useEntrepots,
-} from '../../fournisseurs/hooks.ts';
+import { useActionsUtilisateur, useMACAPI } from '../../fournisseurs/hooks.ts';
 import {
   extraisLesActions,
+  ReponseHATEOAS,
   trouveParmiLesLiens,
 } from '../../domaine/Actions.ts';
 import { useNavigate } from 'react-router-dom';
@@ -17,10 +15,12 @@ import {
   finalisationCreationCompteValidee,
   reducteurFinalisationCreationCompte,
 } from './reducteurFinalisationCreationCompte.tsx';
+import { FinalisationCompte } from '../../domaine/utilisateur/Utilisateur.ts';
+
+import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 
 export const ComposantFinalisationCreationCompte = () => {
   const actions = useActionsUtilisateur();
-  const entrepots = useEntrepots();
   const [etatFinalisationCreationCompte, envoie] = useReducer(
     reducteurFinalisationCreationCompte,
     {
@@ -30,6 +30,7 @@ export const ComposantFinalisationCreationCompte = () => {
     },
   );
   const navigate = useNavigate();
+  const macapi = useMACAPI();
 
   const finaliseCreationCompte = useCallback(async (e: FormEvent) => {
     e.preventDefault();
@@ -41,15 +42,19 @@ export const ComposantFinalisationCreationCompte = () => {
       etatFinalisationCreationCompte.saisieValide() &&
       etatFinalisationCreationCompte.finalisationCreationCompteATransmettre
     ) {
-      const parametresAPI = trouveParmiLesLiens(
-        actions,
-        'finaliser-creation-compte',
-      );
-      entrepots
-        .utilisateur()
-        .finaliseCreationCompte(parametresAPI, {
+      const lien = trouveParmiLesLiens(actions, 'finaliser-creation-compte');
+      const parametresAPI = constructeurParametresAPI<FinalisationCompte>()
+        .url(lien.url)
+        .methode(lien.methode!)
+        .corps({
           cguSignees: etatFinalisationCreationCompte.cguSignees,
         })
+        .construis();
+      macapi
+        .appelle<ReponseHATEOAS, FinalisationCompte>(
+          parametresAPI,
+          async (json) => (await json) as unknown as ReponseHATEOAS,
+        )
         .then((reponse) => {
           envoie(finalisationCreationCompteTransmise());
           return navigate(reponse.liens.suite.url, {
@@ -58,7 +63,7 @@ export const ComposantFinalisationCreationCompte = () => {
         })
         .catch((erreur) => envoie(finalisationCreationCompteInvalidee(erreur)));
     }
-  }, [actions, entrepots, etatFinalisationCreationCompte, navigate]);
+  }, [actions, etatFinalisationCreationCompte, macapi, navigate]);
 
   const surCGUSignees = useCallback(() => {
     envoie(cguCliquees());
