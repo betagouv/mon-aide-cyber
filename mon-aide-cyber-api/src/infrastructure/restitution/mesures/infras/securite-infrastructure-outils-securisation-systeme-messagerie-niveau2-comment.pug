@@ -3,7 +3,7 @@ div
     | certains protocoles ont pour rôle de vérifier l’authenticité et l’intégrité des courriels. 
     
     | Ils nécessitent une configuration, non seulement par l’entité expéditrice sur les enregistrements 
-    | DNS de ses noms de domaine, mais aussi par l’entité destinataire sur ses serveurs SMTP de réception. 
+    | DNS de ses noms de domaine, mais aussi par l’entité destinataire sur ses serveurs SMTP de réception. 
     
     Ces protocoles sont :
     li 
@@ -21,3 +21,8 @@ div
     | de l’activation du chiffrement TLS des échanges entre serveurs de messagerie (de l’entité ou publics) 
     | ainsi qu’entre les postes utilisateurs et les serveurs hébergeant les boîtes de messagerie électronique, 
     | en particulier pour les phases d’authentification.
+
+    
+    | Il est éganement souhaitable de ne pas exposer directement les serveurs de messagerie électronique 
+    | d’entreprise sur Internet. Dans ce cas, un serveur relais dédié à l’envoi et à la réception des messages 
+    | doit être mis en place en coupure d’Internet.
