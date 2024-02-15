@@ -4,10 +4,6 @@ import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 import {
-  EntrepotDiagnosticMemoire,
-  EntrepotDiagnosticsMemoire,
-} from '../../test/infrastructure/entrepots/EntrepotsMemoire.ts';
-import {
   uneQuestionAChoixMultiple,
   uneQuestionAChoixUnique,
   uneQuestionTiroirAChoixMultiple,
@@ -20,8 +16,15 @@ import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.
 import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';
 import { uneAction } from '../../test/constructeurs/constructeurActionDiagnostic.ts';
 import { initialiseEntrepots } from './InitialiseEntrepots.tsx';
+import {
+  Diagnostic,
+  ReponseQuestionATiroir,
+} from '../domaine/diagnostic/Diagnostic.ts';
+import { UUID } from '../types/Types.ts';
+import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
+import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
+import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 
-const entrepotDiagnosticMemoire = new EntrepotDiagnosticMemoire();
 const actionRepondre = uneAction().contexte().construis();
 
 const identifiantQuestionAChoixUnique = '6dadad14-8fa0-4be7-a8da-473d538eb6c1';
@@ -343,6 +346,7 @@ const diagnosticAveUneQuestionAChoixMultiple = unDiagnostic()
   )
   .construis();
 
+const entrepotDiagnosticMemoire = new ServeurMACMemoire();
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestionAChoixUnique);
 await entrepotDiagnosticMemoire.persiste(
   diagnosticAvecQuestionSousFormeDeListeDeroulante,
@@ -373,15 +377,31 @@ const meta = {
   },
   decorators: [
     (story) => (
-      <FournisseurEntrepots.Provider
-        value={initialiseEntrepots({
-          entrepotDiagnostic: entrepotDiagnosticMemoire,
-          entrepotDiagnostics: new EntrepotDiagnosticsMemoire(),
-        })}
-      >
-        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-          {story()}
-        </ErrorBoundary>
+      <FournisseurEntrepots.Provider value={initialiseEntrepots({})}>
+        <ContexteMacAPI.Provider
+          value={{
+            appelle: async <T = Diagnostic, V = void>(
+              parametresAPI: ParametresAPI<V>,
+              _: (contenu: Promise<any>) => Promise<T>,
+            ) => {
+              if (parametresAPI.methode === 'PATCH') {
+                entrepotDiagnosticMemoire.envoieReponse(
+                  parametresAPI as ParametresAPI<{
+                    chemin: string;
+                    identifiant: string;
+                    reponse: string | string[] | ReponseQuestionATiroir | null;
+                  }>,
+                );
+              }
+              const idDiagnostic = parametresAPI.url.split('/').at(-1);
+              return entrepotDiagnosticMemoire.find(idDiagnostic as UUID) as T;
+            },
+          }}
+        >
+          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+            {story()}
+          </ErrorBoundary>
+        </ContexteMacAPI.Provider>
       </FournisseurEntrepots.Provider>
     ),
   ],

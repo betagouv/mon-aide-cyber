@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
-import { FournisseurEntrepots } from '../fournisseurs/FournisseurEntrepot.ts';
+import { useEffect, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { ComposantLancerDiagnostic } from './diagnostic/ComposantLancerDiagnostic.tsx';
 import { actions, routage } from '../domaine/Actions.ts';
@@ -7,19 +6,30 @@ import { Diagnostics } from '../domaine/diagnostic/Diagnostics.ts';
 import { Footer } from './Footer.tsx';
 import { Header } from './Header.tsx';
 
+import { useMACAPI } from '../fournisseurs/hooks.ts';
+
+import { constructeurParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
+
 export const ComposantDiagnostics = () => {
-  const [diagnostics, setDiagnostics] = useState<Diagnostics>(
-    [] as unknown as Diagnostics,
+  const [diagnostics, setDiagnostics] = useState<Diagnostics | undefined>(
+    undefined,
   );
-  const entrepots = useContext(FournisseurEntrepots);
   const { showBoundary } = useErrorBoundary();
+  const macapi = useMACAPI();
   useEffect(() => {
-    entrepots
-      .diagnostics()
-      .tous()
-      .then((diagnostics) => setDiagnostics(diagnostics))
-      .catch((erreur) => showBoundary(erreur));
-  }, [entrepots, setDiagnostics, showBoundary]);
+    if (!diagnostics) {
+      macapi
+        .appelle<Diagnostics>(
+          constructeurParametresAPI()
+            .url('/api/diagnostics/')
+            .methode('GET')
+            .construis(),
+          async (reponse) => (await reponse) as Diagnostics,
+        )
+        .then((diagnostics) => setDiagnostics(diagnostics))
+        .catch((erreur) => showBoundary(erreur));
+    }
+  }, [diagnostics, macapi, setDiagnostics, showBoundary]);
   return (
     <>
       <Header />
@@ -37,7 +47,7 @@ export const ComposantDiagnostics = () => {
                 <div className="en-tete quatre">Lorem</div>
                 <div className="en-tete cinq">Ipsum</div>
                 <div className="en-tete six">Dolor</div>
-                {diagnostics.map((diagnostic) => {
+                {diagnostics?.map((diagnostic) => {
                   return (
                     <div className="identifiant" key={diagnostic.identifiant}>
                       <a

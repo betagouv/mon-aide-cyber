@@ -2,7 +2,6 @@ import {
   ChangeEvent,
   PropsWithChildren,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useReducer,
@@ -20,7 +19,6 @@ import {
   reducteurDiagnostic,
   thematiqueAffichee,
 } from '../../domaine/diagnostic/reducteurDiagnostic.ts';
-import { FournisseurEntrepots } from '../../fournisseurs/FournisseurEntrepot.ts';
 import {
   EtatReponseStatut,
   initialiseReducteur,
@@ -34,6 +32,9 @@ import {
 import {
   Action,
   ActionReponseDiagnostic,
+  Diagnostic,
+  Reponse,
+  ReponseQuestionATiroir,
 } from '../../domaine/diagnostic/Diagnostic.ts';
 import '../../assets/styles/_diagnostic.scss';
 import '../../assets/styles/_commun.scss';
@@ -47,8 +48,11 @@ import {
 import styled from 'styled-components';
 import { FooterDiagnostic } from './FooterDiagnostic.tsx';
 import { HeaderDiagnostic } from './HeaderDiagnostic.tsx';
-import { useModale } from '../../fournisseurs/hooks.ts';
+import { useMACAPI, useModale } from '../../fournisseurs/hooks.ts';
 import { AccederALaRestitution } from './AccederALaRestitution.tsx';
+import { enDiagnostic } from '../../fournisseurs/api/APIDiagnostic.ts';
+
+import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 
 type ProprietesComposantQuestion = {
   actions: ActionReponseDiagnostic[];
@@ -118,6 +122,32 @@ const ComposantReponsePossible = (
   );
 };
 
+type ReponseAEnvoyer = {
+  chemin: string;
+  identifiant: string;
+  reponse: string | string[] | ReponseQuestionATiroir | null;
+};
+
+const genereParametresAPI = (
+  action: ActionReponseDiagnostic,
+  reponseDonnee: Reponse,
+) => {
+  const actionAMener = Object.entries(action).map(([thematique, action]) => ({
+    chemin: thematique,
+    ressource: action.ressource,
+  }))[0];
+  const corps: ReponseAEnvoyer = {
+    chemin: actionAMener.chemin,
+    identifiant: reponseDonnee.identifiantQuestion,
+    reponse: reponseDonnee.reponseDonnee,
+  };
+  return constructeurParametresAPI<ReponseAEnvoyer>()
+    .url(actionAMener.ressource.url)
+    .methode(actionAMener.ressource.methode)
+    .corps(corps)
+    .construis();
+};
+
 const ComposantQuestionListe = ({
   question,
   actions,
@@ -127,7 +157,7 @@ const ComposantQuestionListe = ({
     reducteurReponse,
     initialiseReducteur(question, actions),
   );
-  const entrepots = useContext(FournisseurEntrepots);
+  const macapi = useMACAPI();
 
   const repond = useCallback(
     (event: ChangeEvent<HTMLSelectElement>) => {
@@ -144,13 +174,14 @@ const ComposantQuestionListe = ({
     if (etatReponse.statut === EtatReponseStatut.MODIFIEE) {
       const action = etatReponse.action('repondre');
       if (action !== undefined) {
-        entrepots
-          .diagnostic()
-          .repond(action, etatReponse.reponse()!)
-          .then(() => reponseQuestionEnvoyee());
+        const reponseDonnee = etatReponse.reponse()!;
+        const parametresAPI = genereParametresAPI(action, reponseDonnee);
+        macapi.appelle<void, ReponseAEnvoyer>(parametresAPI, () =>
+          Promise.resolve(),
+        );
       }
     }
-  }, [actions, entrepots, etatReponse, question, reponseQuestionEnvoyee]);
+  }, [actions, etatReponse, macapi, question, reponseQuestionEnvoyee]);
 
   return (
     <div className={`fr-select-group ${!numeroQuestion ? 'fr-pt-2w' : ''}`}>
@@ -193,7 +224,7 @@ const ComposantQuestion = ({
     reducteurReponse,
     initialiseReducteur(question, actions),
   );
-  const entrepots = useContext(FournisseurEntrepots);
+  const macapi = useMACAPI();
 
   const repondQuestionUnique = useCallback(
     (identifiantReponse: string) => {
@@ -243,15 +274,20 @@ const ComposantQuestion = ({
     if (etatReponse.statut === EtatReponseStatut.MODIFIEE) {
       const action = etatReponse.action('repondre');
       if (action !== undefined) {
-        entrepots
-          .diagnostic()
-          .repond(action, etatReponse.reponse()!)
+        const parametresAPI = genereParametresAPI(
+          action,
+          etatReponse.reponse()!,
+        );
+        macapi
+          .appelle<void, ReponseAEnvoyer>(parametresAPI, () =>
+            Promise.resolve(),
+          )
           .then(() => {
             reponseQuestionEnvoyee();
           });
       }
     }
-  }, [actions, entrepots, etatReponse, question, reponseQuestionEnvoyee]);
+  }, [actions, etatReponse, macapi, question, reponseQuestionEnvoyee]);
   return (
     <div className={!numeroQuestion ? `fr-pt-2w` : ''}>
       <label className="fr-label">
@@ -358,17 +394,24 @@ export const ComposantDiagnostic = ({
     diagnostic: undefined,
     thematiqueAffichee: undefined,
   });
-  const entrepots = useContext(FournisseurEntrepots);
   const { showBoundary } = useErrorBoundary();
   const { affiche, ferme } = useModale();
+  const macapi = useMACAPI();
 
   useEffect(() => {
-    entrepots
-      .diagnostic()
-      .lis(idDiagnostic)
-      .then((diagnostic) => envoie(diagnosticCharge(diagnostic)))
-      .catch((erreur) => showBoundary(erreur));
-  }, [entrepots, idDiagnostic, envoie, showBoundary]);
+    if (!etatReferentiel.diagnostic) {
+      macapi
+        .appelle<Diagnostic>(
+          {
+            url: `/api/diagnostic/${idDiagnostic}`,
+            methode: 'GET',
+          },
+          enDiagnostic,
+        )
+        .then((diagnostic) => envoie(diagnosticCharge(diagnostic)))
+        .catch((erreur) => showBoundary(erreur));
+    }
+  }, [idDiagnostic, envoie, showBoundary, macapi, etatReferentiel]);
 
   let thematiques: [string, Thematique][] = [];
   let actions: Action[] = useMemo(() => [], []);

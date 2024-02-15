@@ -1,11 +1,6 @@
 import { Referentiel } from './Referentiel.ts';
 import { Aggregat } from '../Aggregat.ts';
 
-import { Entrepot } from '../Entrepots.ts';
-import { LienRoutage } from '../LienRoutage.ts';
-import { Restitution } from './Restitution.ts';
-import { ParametresAPI } from './ParametresAPI.ts';
-
 export type ActionReponseDiagnostic = {
   [thematique: string]: ActionBase;
 };
@@ -31,17 +26,3 @@ export type Reponse = {
   identifiantQuestion: string;
   reponseDonnee: string | string[] | ReponseQuestionATiroir | null;
 };
-
-export interface EntrepotDiagnostic extends Entrepot<Diagnostic> {
-  lancer(lancerDiagnostic: ParametresAPI): Promise<LienRoutage>;
-
-  repond: (
-    action: ActionReponseDiagnostic,
-    reponseDonnee: Reponse,
-  ) => Promise<void>;
-
-  restitution(
-    idDiagnostic: string,
-    parametresAPI?: ParametresAPI,
-  ): Promise<Restitution>;
-}

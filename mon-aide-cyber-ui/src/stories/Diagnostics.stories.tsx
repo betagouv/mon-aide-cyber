@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
-import { FournisseurEntrepots } from '../fournisseurs/FournisseurEntrepot.ts';
-import { EntrepotDiagnosticsMemoire } from '../../test/infrastructure/entrepots/EntrepotsMemoire.ts';
 import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ComposantDiagnostics } from '../composants/ComposantDiagnostics.tsx';
@@ -10,9 +8,10 @@ import { lesDiagnostics } from '../../test/constructeurs/ConstructeurDiagnostics
 import { actions } from '../domaine/Actions.ts';
 import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts';
 import { BrowserRouter } from 'react-router-dom';
-import { initialiseEntrepots } from './InitialiseEntrepots.tsx';
+import { Diagnostic } from '../domaine/diagnostic/Diagnostic.ts';
+import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
+import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 
-const entrepotDiagnosticsMemoire = new EntrepotDiagnosticsMemoire();
 const premierDiagnostic = unDiagnostic().construis();
 const deuxiemeDiagnostic = unDiagnostic().construis();
 const troisiemeDiagnostic = unDiagnostic().construis();
@@ -24,7 +23,6 @@ const diagnostics = lesDiagnostics([
 ])
   .avecLesActions([actions.diagnostics().AFFICHER])
   .construis();
-await entrepotDiagnosticsMemoire.persiste(diagnostics);
 
 const meta = {
   title: 'Liste diagnostics',
@@ -38,15 +36,20 @@ const meta = {
   decorators: [
     (story) => (
       <BrowserRouter>
-        <FournisseurEntrepots.Provider
-          value={initialiseEntrepots({
-            entrepotDiagnostics: entrepotDiagnosticsMemoire,
-          })}
+        <ContexteMacAPI.Provider
+          value={{
+            appelle: async <T = Diagnostic, V = void>(
+              _parametresAPI: ParametresAPI<V>,
+              _: (contenu: Promise<any>) => Promise<T>,
+            ) => {
+              return diagnostics as T;
+            },
+          }}
         >
           <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
             {story()}
           </ErrorBoundary>
-        </FournisseurEntrepots.Provider>
+        </ContexteMacAPI.Provider>
       </BrowserRouter>
     ),
   ],
@@ -55,7 +58,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const AfficheLIsteDiagnostics: Story = {
+export const AfficheListeDiagnostics: Story = {
   name: 'Affiche une liste de diagnostics',
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

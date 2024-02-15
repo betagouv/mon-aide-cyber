@@ -1,7 +1,13 @@
 import { createContext, PropsWithChildren, useState } from 'react';
-import { Utilisateur } from '../domaine/authentification/Authentification.ts';
-import { useEntrepots } from './hooks.ts';
+import {
+  ReponseAuthentification,
+  Utilisateur,
+} from '../domaine/authentification/Authentification.ts';
+import { useEntrepots, useMACAPI } from './hooks.ts';
 import { ReponseHATEOAS } from '../domaine/Actions.ts';
+import { Identifiants } from '../infrastructure/entrepots/EntrepotsAPI.ts';
+
+import { constructeurParametresAPI } from './api/ConstructeurParametresAPI.ts';
 
 type ContexteAuthentificationType = {
   utilisateur: { nomPrenom: string } | null;
@@ -23,17 +29,31 @@ export const FournisseurAuthentification = ({
   const [utilisateur, setUtilisateur] = useState<Utilisateur | null>(
     entrepots.authentification().utilisateurAuthentifieSync(),
   );
+  const macapi = useMACAPI();
 
   const authentifie = (identifiants: {
     identifiant: string;
     motDePasse: string;
   }) =>
-    entrepots
-      .authentification()
-      .connexion({
-        identifiant: identifiants.identifiant,
-        motDePasse: identifiants.motDePasse,
-      })
+    macapi
+      .appelle<ReponseAuthentification, Identifiants>(
+        constructeurParametresAPI<Identifiants>()
+          .url(`/api/token`)
+          .methode('POST')
+          .corps({
+            identifiant: identifiants.identifiant,
+            motDePasse: identifiants.motDePasse,
+          })
+          .construis(),
+        async (reponse) => {
+          const aidant = (await reponse) as ReponseAuthentification;
+          sessionStorage.setItem(
+            'aidant',
+            JSON.stringify({ nomPrenom: aidant.nomPrenom }),
+          );
+          return aidant;
+        },
+      )
       .then((reponse) => {
         setUtilisateur({ nomPrenom: reponse.nomPrenom });
         return { liens: reponse.liens } as ReponseHATEOAS;

@@ -1,5 +1,4 @@
 import { FormatLien, LienRoutage } from './LienRoutage.ts';
-import { ParametresAPI } from './diagnostic/ParametresAPI.ts';
 
 export enum ActionsDiagnostics {
   AFFICHER = 'details',
@@ -30,7 +29,7 @@ export const routage = {
 export const trouveParmiLesLiens = (liens: Liens, lienATrouver: string) =>
   Object.entries(liens)
     .filter(([action]) => action === lienATrouver)
-    .map(([, restitution]) => restitution as ParametresAPI)[0];
+    .map(([, restitution]) => restitution)[0];
 export const extraisLesActions = (liens: Liens) =>
   Object.entries(liens)
     .filter(([action]) => action !== 'suite')
