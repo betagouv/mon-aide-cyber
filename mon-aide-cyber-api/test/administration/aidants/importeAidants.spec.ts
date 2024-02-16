@@ -3,18 +3,34 @@ import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest'
 import { EntrepotAidantMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { Aidant } from '../../../src/authentification/Aidant';
 import {
+  AidantTranscris,
   importeAidants,
   ResultatImportationAidants,
 } from '../../../src/administration/aidants/importeAidants';
 import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
 import * as fs from 'fs';
+import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 
+const enTeteCsv =
+  'Région;nom;charte;mail;telephone;TO DO;qui;Compte Créé ?;commentaires;message avec mot de passe\n';
 describe('Importe des aidants', () => {
   let busEvenement: BusEvenementDeTest;
+  FournisseurHorlogeDeTest.initialise(
+    new Date(Date.parse('2024-01-12T13:24:31+01:00')),
+  );
 
   beforeEach(() => {
     busEvenement = new BusEvenementDeTest();
   });
+
+  function genereFichierCsv(aidantsCsv: AidantTranscris[]) {
+    const ligne = aidantsCsv.map(
+      (aidantCsv) =>
+        `${aidantCsv.region};${aidantCsv.nomPrenom};${aidantCsv.charte};${aidantCsv.identifiantConnexion};${aidantCsv.numeroTelephone};${aidantCsv.todo};${aidantCsv.qui};${aidantCsv.compteCree};${aidantCsv.commentaires};${aidantCsv.messageAvecMDP}`,
+    );
+    return enTeteCsv + `${ligne.join('\n')}`;
+  }
 
   it('importe un aidant', async () => {
     const entrepotAidant = new EntrepotAidantMemoire();
@@ -22,7 +38,20 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      'Région;nom;mail;\n' + 'BFC;Jean Dupont;jean.dupont@mail.com;123',
+      genereFichierCsv([
+        {
+          numeroTelephone: '123',
+          identifiantConnexion: 'jean.dupont@mail.com',
+          nomPrenom: 'Jean Dupont',
+          region: 'BFC',
+          charte: 'OK',
+          qui: '',
+          todo: 'compte à créer',
+          commentaires: '',
+          messageAvecMDP: '',
+          compteCree: 'non',
+        },
+      ]),
       () => 'un-mot-de-passe',
     );
 
@@ -31,15 +60,21 @@ describe('Importe des aidants', () => {
         'jean.dupont@mail.com',
         'un-mot-de-passe',
       );
+
     expect(resultat).toStrictEqual<ResultatImportationAidants>({
       aidantsImportes: [
         {
           email: aidant.identifiantConnexion,
-          motDePasse: 'un-mot-de-passe',
           nomPrenom: aidant.nomPrenom,
           telephone: '123',
           status: 'importé',
           region: 'BFC',
+          charte: 'OK',
+          qui: '',
+          todo: 'message à envoyer',
+          commentaires: `importé le ${FournisseurHorloge.maintenant().toISOString()}`,
+          compteCree: 'oui',
+          messageAvecMDP: `"Bonjour,\nVotre mot de passe MonAideCyber : un-mot-de-passe\nPour toute information monaidecyber@ssi.gouv.fr\nBonne journée\nL'équipe MonAideCyber"`,
         },
       ],
       aidantsExistants: [],
@@ -58,7 +93,20 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      'Région;nom;mail;\n' + 'BFC;Jean Dupont;  jean.dupont@mail.com ;123',
+      genereFichierCsv([
+        {
+          numeroTelephone: '123',
+          identifiantConnexion: '  jean.dupont@mail.com ',
+          nomPrenom: 'Jean Dupont',
+          region: 'BFC',
+          charte: 'NOK',
+          qui: '',
+          todo: 'compte à créer',
+          commentaires: '',
+          messageAvecMDP: '',
+          compteCree: 'non',
+        },
+      ]),
       () => 'un-mot-de-passe',
     );
 
@@ -71,11 +119,16 @@ describe('Importe des aidants', () => {
       aidantsImportes: [
         {
           email: aidant.identifiantConnexion,
-          motDePasse: 'un-mot-de-passe',
           nomPrenom: aidant.nomPrenom,
           telephone: '123',
           status: 'importé',
           region: 'BFC',
+          charte: 'NOK',
+          qui: '',
+          todo: 'message à envoyer',
+          commentaires: `importé le ${FournisseurHorloge.maintenant().toISOString()}`,
+          compteCree: 'oui',
+          messageAvecMDP: `"Bonjour,\nVotre mot de passe MonAideCyber : un-mot-de-passe\nPour toute information monaidecyber@ssi.gouv.fr\nBonne journée\nL'équipe MonAideCyber"`,
         },
       ],
       aidantsExistants: [],
@@ -94,9 +147,32 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      'Région;nom;mail;\n' +
-        'BFC;Jean Dupont;jean.dupont@mail.com;123\n' +
-        'BFC;Charles Martin;charles.martin@mail.com;456',
+      genereFichierCsv([
+        {
+          numeroTelephone: '123',
+          identifiantConnexion: 'jean.dupont@mail.com',
+          nomPrenom: 'Jean Dupont',
+          region: 'BFC',
+          charte: 'NOK',
+          qui: '',
+          todo: 'compte à créer',
+          commentaires: '',
+          messageAvecMDP: '',
+          compteCree: 'non',
+        },
+        {
+          numeroTelephone: '456',
+          identifiantConnexion: 'charles.martin@mail.com',
+          nomPrenom: 'Charles Martin',
+          region: 'NAQ',
+          charte: 'OK',
+          qui: 'DEV',
+          todo: 'compte à créer',
+          commentaires: '',
+          messageAvecMDP: '',
+          compteCree: 'non',
+        },
+      ]),
       () => 'un-mot-de-passe',
     );
 
@@ -114,19 +190,29 @@ describe('Importe des aidants', () => {
       aidantsImportes: [
         {
           email: jeanDupont.identifiantConnexion,
-          motDePasse: 'un-mot-de-passe',
           nomPrenom: jeanDupont.nomPrenom,
           telephone: '123',
           status: 'importé',
           region: 'BFC',
+          charte: 'NOK',
+          qui: '',
+          todo: 'message à envoyer',
+          commentaires: `importé le ${FournisseurHorloge.maintenant().toISOString()}`,
+          compteCree: 'oui',
+          messageAvecMDP: `"Bonjour,\nVotre mot de passe MonAideCyber : un-mot-de-passe\nPour toute information monaidecyber@ssi.gouv.fr\nBonne journée\nL'équipe MonAideCyber"`,
         },
         {
           email: charlesMartin.identifiantConnexion,
-          motDePasse: 'un-mot-de-passe',
           nomPrenom: charlesMartin.nomPrenom,
           telephone: '456',
           status: 'importé',
-          region: 'BFC',
+          region: 'NAQ',
+          charte: 'OK',
+          qui: '',
+          todo: 'message à envoyer',
+          commentaires: `importé le ${FournisseurHorloge.maintenant().toISOString()}`,
+          compteCree: 'oui',
+          messageAvecMDP: `"Bonjour,\nVotre mot de passe MonAideCyber : un-mot-de-passe\nPour toute information monaidecyber@ssi.gouv.fr\nBonne journée\nL'équipe MonAideCyber"`,
         },
       ],
       aidantsExistants: [],
@@ -149,9 +235,32 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      'Région;nom;mail;\n' +
-        'BFC;Jean Dupont;jean.dupont@mail.com;123\n' +
-        'BFC;Charles Martin;charles.martin@mail.com;456',
+      genereFichierCsv([
+        {
+          numeroTelephone: '123',
+          identifiantConnexion: 'jean.dupont@mail.com',
+          nomPrenom: 'Jean Dupont',
+          region: 'BFC',
+          charte: 'NOK',
+          qui: 'FC',
+          todo: 'en attente de réponse',
+          commentaires: 'importé le 2024-01-05',
+          messageAvecMDP: 'Message',
+          compteCree: 'oui',
+        },
+        {
+          numeroTelephone: '456',
+          identifiantConnexion: 'charles.martin@mail.com',
+          nomPrenom: 'Charles Martin',
+          region: 'NAQ',
+          charte: 'OK',
+          qui: 'DEV',
+          todo: 'compte à créer',
+          commentaires: '',
+          messageAvecMDP: '',
+          compteCree: 'non',
+        },
+      ]),
       () => 'un-mot-de-passe',
     );
 
@@ -165,11 +274,16 @@ describe('Importe des aidants', () => {
       aidantsImportes: [
         {
           email: charlesMartin.identifiantConnexion,
-          motDePasse: 'un-mot-de-passe',
           nomPrenom: charlesMartin.nomPrenom,
           telephone: '456',
           status: 'importé',
-          region: 'BFC',
+          region: 'NAQ',
+          charte: 'OK',
+          qui: '',
+          todo: 'message à envoyer',
+          commentaires: `importé le ${FournisseurHorloge.maintenant().toISOString()}`,
+          compteCree: 'oui',
+          messageAvecMDP: `"Bonjour,\nVotre mot de passe MonAideCyber : un-mot-de-passe\nPour toute information monaidecyber@ssi.gouv.fr\nBonne journée\nL'équipe MonAideCyber"`,
         },
       ],
       aidantsExistants: [
@@ -179,6 +293,12 @@ describe('Importe des aidants', () => {
           telephone: '123',
           status: 'existant',
           region: 'BFC',
+          charte: 'NOK',
+          qui: 'FC',
+          todo: 'en attente de réponse',
+          commentaires: `importé le 2024-01-05`,
+          compteCree: 'oui',
+          messageAvecMDP: 'Message',
         },
       ],
     });
@@ -194,9 +314,32 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      'Région;nom;mail;\n' +
-        'BFC;Jean Dupont;jean.DUPONT@mail.com;123\n' +
-        'BFC;Charles Martin;charles.martin@mail.com;456',
+      genereFichierCsv([
+        {
+          numeroTelephone: '123',
+          identifiantConnexion: 'jean.DUPONT@mail.com',
+          nomPrenom: 'Jean Dupont',
+          region: 'BFC',
+          charte: 'NOK',
+          qui: 'FC',
+          todo: 'en attente de réponse',
+          commentaires: 'importé le 2024-01-05',
+          messageAvecMDP: 'Message',
+          compteCree: 'oui',
+        },
+        {
+          numeroTelephone: '456',
+          identifiantConnexion: 'charles.martin@mail.com',
+          nomPrenom: 'Charles Martin',
+          region: 'NAQ',
+          charte: 'OK',
+          qui: 'DEV',
+          todo: 'compte à créer',
+          commentaires: '',
+          messageAvecMDP: '',
+          compteCree: 'non',
+        },
+      ]),
       () => 'un-mot-de-passe',
     );
 
@@ -210,11 +353,16 @@ describe('Importe des aidants', () => {
       aidantsImportes: [
         {
           email: charlesMartin.identifiantConnexion,
-          motDePasse: 'un-mot-de-passe',
           nomPrenom: charlesMartin.nomPrenom,
           telephone: '456',
           status: 'importé',
-          region: 'BFC',
+          region: 'NAQ',
+          charte: 'OK',
+          qui: '',
+          todo: 'message à envoyer',
+          commentaires: `importé le ${FournisseurHorloge.maintenant().toISOString()}`,
+          compteCree: 'oui',
+          messageAvecMDP: `"Bonjour,\nVotre mot de passe MonAideCyber : un-mot-de-passe\nPour toute information monaidecyber@ssi.gouv.fr\nBonne journée\nL'équipe MonAideCyber"`,
         },
       ],
       aidantsExistants: [
@@ -224,6 +372,12 @@ describe('Importe des aidants', () => {
           telephone: '123',
           status: 'existant',
           region: 'BFC',
+          charte: 'NOK',
+          qui: 'FC',
+          todo: 'en attente de réponse',
+          commentaires: `importé le 2024-01-05`,
+          compteCree: 'oui',
+          messageAvecMDP: 'Message',
         },
       ],
     });
@@ -235,7 +389,20 @@ describe('Importe des aidants', () => {
     const resultat = await importeAidants(
       entrepotAidant,
       busEvenement,
-      'Région;nom;mail;\n' + 'BFC;Jean Dupont;jean.dUPonT@mail.com;123',
+      genereFichierCsv([
+        {
+          numeroTelephone: '123',
+          identifiantConnexion: 'jean.dUPonT@mail.com',
+          nomPrenom: 'Jean Dupont',
+          region: 'BFC',
+          charte: 'NOK',
+          qui: '',
+          todo: 'compte à créer',
+          commentaires: '',
+          messageAvecMDP: '',
+          compteCree: 'non',
+        },
+      ]),
       () => 'un-mot-de-passe',
     );
 
@@ -248,11 +415,16 @@ describe('Importe des aidants', () => {
       aidantsImportes: [
         {
           email: aidant.identifiantConnexion,
-          motDePasse: 'un-mot-de-passe',
           nomPrenom: aidant.nomPrenom,
           telephone: '123',
           status: 'importé',
           region: 'BFC',
+          charte: 'NOK',
+          qui: '',
+          todo: 'message à envoyer',
+          commentaires: `importé le ${FournisseurHorloge.maintenant().toISOString()}`,
+          compteCree: 'oui',
+          messageAvecMDP: `"Bonjour,\nVotre mot de passe MonAideCyber : un-mot-de-passe\nPour toute information monaidecyber@ssi.gouv.fr\nBonne journée\nL'équipe MonAideCyber"`,
         },
       ],
       aidantsExistants: [],
@@ -263,6 +435,19 @@ describe('Importe des aidants', () => {
       identifiantConnexion: 'jean.dupont@mail.com',
       identifiant: aidant.identifiant,
     });
+  });
+
+  it("n'importe pas si la ligne est vide", async () => {
+    const entrepotAidant = new EntrepotAidantMemoire();
+
+    const resultat = await importeAidants(
+      entrepotAidant,
+      busEvenement,
+      enTeteCsv + ';;;;;;;;;;;',
+      () => 'un-mot-de-passe',
+    );
+
+    expect(resultat.aidantsImportes).toHaveLength(0);
   });
 
   it("importe les aidants à partir d'un fichier", async () => {
