@@ -53,7 +53,6 @@ export const importeAidants = async (
   aidants: string,
   generateurMotDePasse: () => string = genereMotDePasse,
 ): Promise<ResultatImportationAidants> => {
-  console.log('AIDANTS', aidants);
   const resultat: ResultatImportationAidants = {
     aidantsImportes: [],
     aidantsExistants: [],
