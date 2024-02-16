@@ -7,29 +7,7 @@ import { unAidant } from '../authentification/constructeurs/constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe('Service de finalisation de création de compte', () => {
-  it("renvoie une erreur si la charte de l'aidant n'est pas signée", async () => {
-    const entrepots = new EntrepotsMemoire();
-    const aidant = unAidant().avecCompteEnAttenteDeFinalisation().construis();
-    entrepots.aidants().persiste(aidant);
-    const service = new ServiceFinalisationCreationCompte(entrepots);
-
-    await expect(() =>
-      service.finalise({
-        cguSignees: true,
-        charteSignee: false,
-        identifiant: aidant.identifiant,
-      }),
-    ).rejects.toThrowError(
-      ErreurMAC.cree(
-        'Finalise la création du compte',
-        new ErreurFinalisationCompte(
-          "Vous devez signer la charte de l'aidant.",
-        ),
-      ),
-    );
-  });
-
-  it("renvoie une erreur si ni la charte de l'aidant ni les CGU ne sont validées", async () => {
+  it('renvoie une erreur si les CGU ne sont pas signées', async () => {
     const entrepots = new EntrepotsMemoire();
     const aidant = unAidant().avecCompteEnAttenteDeFinalisation().construis();
     entrepots.aidants().persiste(aidant);
@@ -38,15 +16,12 @@ describe('Service de finalisation de création de compte', () => {
     await expect(() =>
       service.finalise({
         cguSignees: false,
-        charteSignee: false,
         identifiant: aidant.identifiant,
       }),
     ).rejects.toThrowError(
       ErreurMAC.cree(
         'Finalise la création du compte',
-        new ErreurFinalisationCompte(
-          "Vous devez valider les CGU et signer la charte de l'aidant.",
-        ),
+        new ErreurFinalisationCompte('Vous devez signer les CGU.'),
       ),
     );
   });
@@ -64,7 +39,6 @@ describe('Service de finalisation de création de compte', () => {
     );
     await service.finalise({
       cguSignees: true,
-      charteSignee: true,
       identifiant: aidant.identifiant,
     });
 

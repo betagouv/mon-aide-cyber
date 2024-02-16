@@ -1,12 +1,11 @@
 import { Entrepots } from '../domaine/Entrepots';
 import crypto from 'crypto';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import { Aidant, ErreurFinalisationCompte } from '../authentification/Aidant';
+import { ErreurFinalisationCompte } from '../authentification/Aidant';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
 type FinalisationCompte = {
   cguSignees: boolean;
-  charteSignee: boolean;
   identifiant: crypto.UUID;
 };
 
@@ -20,37 +19,19 @@ export class ServiceFinalisationCreationCompte {
         new ErreurFinalisationCompte(message),
       );
     };
-    const verifieLesCGUEtLaCharte = (
-      finalisationCompte: FinalisationCompte,
-    ) => {
-      const cguNonValidees = !finalisationCompte.cguSignees;
-      const charteNonSignee = !finalisationCompte.charteSignee;
-
-      if (cguNonValidees && charteNonSignee) {
-        leveErreur(
-          "Vous devez valider les CGU et signer la charte de l'aidant.",
-        );
-      }
-      if (cguNonValidees) {
-        leveErreur('Vous devez valider les CGU.');
-      }
-      if (charteNonSignee) {
-        leveErreur("Vous devez signer la charte de l'aidant.");
+    const verifieLesCGU = (finalisationCompte: FinalisationCompte) => {
+      if (!finalisationCompte.cguSignees) {
+        leveErreur('Vous devez signer les CGU.');
       }
     };
-    const cguEtCharteDejaSignees = (aidant: Aidant) => {
-      return aidant.dateSignatureCGU && aidant.dateSignatureCharte;
-    };
-
     const aidant = await this.entrepots
       .aidants()
       .lis(finalisationCompte.identifiant);
-    if (cguEtCharteDejaSignees(aidant)) {
+    if (aidant.dateSignatureCGU) {
       return;
     }
-    verifieLesCGUEtLaCharte(finalisationCompte);
+    verifieLesCGU(finalisationCompte);
     aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
-    aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
     await this.entrepots.aidants().persiste(aidant);
   }
 }

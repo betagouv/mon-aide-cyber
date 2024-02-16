@@ -37,7 +37,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         'POST',
         `/api/utilisateur/finalise`,
         donneesServeur.portEcoute,
-        { cguSignees: true, charteSignee: true },
+        { cguSignees: true },
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -45,9 +45,6 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         .aidants()
         .lis(aidantFinalisantSonCompte.identifiant);
       expect(aidantRetrouve.dateSignatureCGU).toStrictEqual(
-        FournisseurHorloge.maintenant(),
-      );
-      expect(aidantRetrouve.dateSignatureCharte).toStrictEqual(
         FournisseurHorloge.maintenant(),
       );
       expect(
@@ -81,12 +78,12 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         'POST',
         `/api/utilisateur/finalise`,
         donneesServeur.portEcoute,
-        { cguSignees: false, charteSignee: true },
+        { cguSignees: false },
       );
 
       expect(reponse.statusCode).toBe(422);
       expect(await reponse.json()).toStrictEqual({
-        message: 'Vous devez valider les CGU.',
+        message: 'Vous devez signer les CGU.',
       });
     });
   });
