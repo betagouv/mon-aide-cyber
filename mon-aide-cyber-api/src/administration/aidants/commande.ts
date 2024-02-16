@@ -19,8 +19,11 @@ function ligneCSV(
   estCompteCree: string,
   commentaire: string,
   messageAvecMotDePasse: string,
+  charte: string,
+  todo: string,
+  qui: string,
 ) {
-  return `${aidant.region};${aidant.nomPrenom};${aidant.email};${aidant.telephone};${estCompteCree};${commentaire};${messageAvecMotDePasse}\n`;
+  return `${aidant.region};${aidant.nomPrenom};${charte};${aidant.email};${aidant.telephone};${todo};${qui};${estCompteCree};${commentaire};${messageAvecMotDePasse}\n`;
 }
 
 command.action(async (...args: any[]) => {
@@ -38,25 +41,23 @@ command.action(async (...args: any[]) => {
     const rapport: string[] = [];
     const dateMaintenantISO = FournisseurHorloge.maintenant().toISOString();
     rapport.push(
-      `Région;nom;mail;Téléphone;Compte Créé ?;commentaires;message avec mot de passe\n`,
+      `Région;nom;charte;mail;Téléphone;TO DO;Qui;Compte Créé ?;commentaires;message avec mot de passe\n`,
     );
-    aidantsImportes.aidantsImportes.forEach((aidant) => {
-      const commentaire = `importé le ${dateMaintenantISO}`;
-      const estCompteCree = `oui`;
-      const messageAvecMotDePasse = `"Bonjour,\nVotre mot de passe MonAideCyber : ${aidant.motDePasse}\nPour toute information monaidecyber@ssi.gouv.fr\nBonne journée\nL'équipe MonAideCyber"`;
-
+    const imports: ImportAidant[] = [
+      ...aidantsImportes.aidantsImportes,
+      ...aidantsImportes.aidantsExistants,
+    ];
+    imports.forEach((aidant) => {
       rapport.push(
-        ligneCSV(aidant, estCompteCree, commentaire, messageAvecMotDePasse),
-      );
-    });
-
-    aidantsImportes.aidantsExistants.forEach((aidant) => {
-      const commentaire = `avait déjà été enregistré`;
-      const estCompteCree = `oui`;
-      const messageAvecMotDePasse = '';
-
-      rapport.push(
-        ligneCSV(aidant, estCompteCree, commentaire, messageAvecMotDePasse),
+        ligneCSV(
+          aidant,
+          aidant.compteCree,
+          aidant.commentaires,
+          aidant.messageAvecMDP,
+          aidant.charte,
+          aidant.todo,
+          aidant.qui,
+        ),
       );
     });
 
