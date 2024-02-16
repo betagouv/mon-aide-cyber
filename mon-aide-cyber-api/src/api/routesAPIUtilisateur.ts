@@ -23,7 +23,6 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       try {
         const finalisationCompte: {
           cguSignees: boolean;
-          charteSignee: boolean;
         } = requete.body;
         await new ServiceFinalisationCreationCompte(entrepots).finalise({
           ...finalisationCompte,

@@ -24,10 +24,7 @@ class ConstructeurActionsHATEOAS {
   postAuthentification(
     aidantAuthentifie: AidantAuthentifie,
   ): ConstructeurActionsHATEOAS {
-    if (
-      !aidantAuthentifie.dateSignatureCharte ||
-      !aidantAuthentifie.dateSignatureCGU
-    ) {
+    if (!aidantAuthentifie.dateSignatureCGU) {
       this.suite = { url: '/finalise-creation-compte' };
       this.actions.set('finaliser-creation-compte', {
         url: '/api/utilisateur/finalise',
