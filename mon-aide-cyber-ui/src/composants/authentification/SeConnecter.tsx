@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   authentificationInvalidee,
   identifiantSaisi,
+  initialiseReducteur,
   motDePasseSaisi,
   reducteurAuthentification,
   saisieInvalidee,
@@ -14,12 +15,10 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
   const authentification = useAuthentification();
   const navigate = useNavigate();
 
-  const [etatAuthentification, envoie] = useReducer(reducteurAuthentification, {
-    identifiant: '',
-    motDePasse: '',
-    champsErreur: <></>,
-    saisieValide: () => false,
-  });
+  const [etatAuthentification, envoie] = useReducer(
+    reducteurAuthentification,
+    initialiseReducteur(),
+  );
 
   const surSaisieMoteDePasse = useCallback((motDePasse: string) => {
     envoie(motDePasseSaisi(motDePasse));
