@@ -321,3 +321,9 @@ $taille-padding-dsfr-7v: 3.5rem;
   background-color: #efefef;
   filter: grayscale(90%);
 }
+
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem !important;
+  }
+}
