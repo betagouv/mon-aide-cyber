@@ -23,7 +23,7 @@ export const Header = () => (
                 />
               </div>
             </div>
-            <div className="fr-header__service">
+            <div className="fr-header__service fr-col-md-5">
               <a href="/" title="Accueil - MonAideCyber">
                 <img
                   className="fr-responsive-img"
