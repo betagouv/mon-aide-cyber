@@ -1,0 +1,40 @@
+@media screen and (min-width: 1440px) {
+  .etape {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 54px;
+    position: relative;
+  }
+
+  .etape.pair {
+    flex-direction: row-reverse;
+  }
+
+  .numero-etape {
+    min-width: 120px;
+    min-height: 120px;
+    z-index: 1;
+  }
+
+  .etape .chemin {
+    position: absolute;
+    left: 44%;
+    top: 245px;
+
+  }
+
+  .etape .chemin.pair {
+    position: absolute;
+    left: 54%;
+    top: 258px;
+    transform: rotate(180deg);
+  }
+}
+
+@media screen and (max-width: 1439px) {
+  .visible-uniquement-desktop {
+    display: none;
+  }
+}

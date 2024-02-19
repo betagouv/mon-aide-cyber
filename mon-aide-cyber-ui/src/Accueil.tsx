@@ -1,13 +1,6 @@
 import { Header } from './composants/Header.tsx';
 import { Footer } from './composants/Footer.tsx';
-import React, {
-  FormEvent,
-  PropsWithChildren,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useReducer,
-} from 'react';
+import React, { FormEvent, useCallback, useEffect, useReducer } from 'react';
 import {
   emailSaisi,
   envoiMessageInvalide,
@@ -23,77 +16,6 @@ import { Message } from './domaine/contact/Message.ts';
 import { useMACAPI } from './fournisseurs/hooks.ts';
 
 import { constructeurParametresAPI } from './fournisseurs/api/ConstructeurParametresAPI.ts';
-
-type ProprietesComposantEtape = {
-  illustration: { chemin: string; texteAlternatif: string };
-  numeroEtape: number;
-};
-
-type ProprietesComposantEtape2 = {
-  elementDroite: ReactNode;
-  elementGauche: ReactNode;
-  numeroEtape: number;
-};
-
-const ComposantEtape = (
-  proprietes: PropsWithChildren<ProprietesComposantEtape2>,
-) => {
-  return (
-    <div className="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
-      {proprietes.elementGauche}
-      <div className="fr-col-2 fr-grid-row fr-grid-row--center">
-        <div className={`etape etape-${proprietes.numeroEtape}`}>
-          <i>{proprietes.numeroEtape}</i>
-        </div>
-      </div>
-      {proprietes.elementDroite}
-    </div>
-  );
-};
-const ComposantEtapeDroite = (
-  proprietes: PropsWithChildren<ProprietesComposantEtape>,
-) => {
-  return (
-    <ComposantEtape
-      elementDroite={
-        <div className="fr-col-5">
-          <img
-            src={proprietes.illustration.chemin}
-            alt={proprietes.illustration.texteAlternatif}
-            className="illustration"
-          />
-        </div>
-      }
-      elementGauche={
-        <div className="fr-col-4 fr-col-offset-1">{proprietes.children}</div>
-      }
-      numeroEtape={proprietes.numeroEtape}
-    />
-  );
-};
-const ComposantEtapeGauche = (
-  proprietes: PropsWithChildren<ProprietesComposantEtape>,
-) => {
-  return (
-    <ComposantEtape
-      elementDroite={
-        <div className="fr-col-4 fr-col-offset-1--right">
-          {proprietes.children}
-        </div>
-      }
-      elementGauche={
-        <div className="fr-col-5">
-          <img
-            src={proprietes.illustration.chemin}
-            alt={proprietes.illustration.texteAlternatif}
-            className="illustration"
-          />
-        </div>
-      }
-      numeroEtape={proprietes.numeroEtape}
-    />
-  );
-};
 
 export const Accueil = () => {
   // const [motDGClique, setMotDGClique] = useState<boolean>(true);
@@ -392,76 +314,114 @@ export const Accueil = () => {
               </div>
             </div>
           </div>
-          <div className="fr-container comment-fonctionne-mon-aide-cyber">
+          <div></div>
+          <div className="fr-container">
             <div className="fr-col-12">
               <h2>Comment fonctionne MonAideCyber ?</h2>
-            </div>
-            <div className="etapes">
-              <ComposantEtapeGauche
-                illustration={{
-                  chemin: '/images/illustration-echange.svg',
-                  texteAlternatif:
-                    'Un Aidé faisant un diagnostic avec un Aidant',
-                }}
-                numeroEtape={1}
-              >
-                <h4>Réalisation d’un diagnostic</h4>
-                <p>
-                  Réalisation{' '}
-                  <b>
-                    d’un diagnostic cyber de premier niveau établi par des
-                    Aidants
-                  </b>{' '}
-                  auprès de leurs bénéficiaires. La plateforme contient
-                  également un ensemble de <b>ressources et de dispositifs</b>{' '}
-                  d’aides complémentaires mis à disposition.
-                </p>
-              </ComposantEtapeGauche>
-              <ComposantEtapeDroite
-                illustration={{
-                  chemin: '/images/illustration-marelle.svg',
-                  texteAlternatif: 'Un Aidé avançant sur un diagnostic',
-                }}
-                numeroEtape={2}
-              >
-                <h4>Un référentiel avec des mesures accessibles</h4>
-                <p>
-                  Le service de diagnostic accompagné s’appuie sur un{' '}
-                  <b>référentiel évolutif de questions</b> et de mesures de
-                  sécurité non exhaustif inspiré en particulier du guide{' '}
-                  <b>« La cybersécurité pour les TPE/PME en 13 questions »</b>{' '}
-                  de l’ANSSI.
-                </p>
-              </ComposantEtapeDroite>
-              <ComposantEtapeGauche
-                illustration={{
-                  chemin: '/images/illustration-mesures.svg',
-                  texteAlternatif:
-                    'Un Aidé découvrant les mesures à mettre en place',
-                }}
-                numeroEtape={3}
-              >
-                <h4>Des mesures priorisées et applicables</h4>
-                <p>
-                  À l’issue du <b>diagnostic d’1h30</b>, l’entité diagnostiquée
-                  se voit proposer <b>6 mesures de sécurité</b> à mener en
-                  priorité et à mettre en œuvre sur les 6 prochains mois.
-                </p>
-              </ComposantEtapeGauche>
-              <ComposantEtapeDroite
-                illustration={{
-                  chemin: '/images/illustration-suivi.svg',
-                  texteAlternatif: 'Un Aidé accompagné par son Aidant',
-                }}
-                numeroEtape={4}
-              >
-                <h4>Un suivi à 6 mois</h4>
-                <p>
-                  <b>Un suivi</b> et des conseils complémentaires dans la mise
-                  en œuvre de mesures de sécurité avec l’<b>Aidant cyber</b>{' '}
-                  ayant réalisé le diagnostic peuvent aussi être envisagés.
-                </p>
-              </ComposantEtapeDroite>
+              <div className="etapes">
+                <div className="etape">
+                  <img
+                    className="taille-maximale tres-petite-marge-basse"
+                    src="/images/illustration-echange.svg"
+                    alt="Un Aidé faisant un diagnostic avec un Aidant"
+                  />
+                  <div className="numero-etape visible-uniquement-desktop tres-petite-marge-basse numero-1">
+                    <span>1</span>
+                  </div>
+                  <div>
+                    <h4 className="alignement-gauche">
+                      Réalisation d'un diagnostic
+                    </h4>
+                    <p className="alignement-gauche">
+                      Réalisation{' '}
+                      <b>
+                        d’un diagnostic cyber de premier niveau établi par des
+                        Aidants
+                      </b>{' '}
+                      auprès de leurs bénéficiaires. La plateforme contient
+                      également un ensemble de{' '}
+                      <b>ressources et de dispositifs</b> d’aides
+                      complémentaires mis à disposition.
+                    </p>
+                  </div>
+                  <img
+                    className="visible-uniquement-desktop chemin"
+                    src="/images/chemin-etape.svg"
+                  ></img>
+                </div>
+                <div className="etape pair">
+                  <img
+                    className="taille-maximale tres-petite-marge-basse"
+                    src="/images/illustration-marelle.svg"
+                    alt="Un Aidé sur un diagnostic"
+                  />
+                  <div className="numero-etape visible-uniquement-desktop tres-petite-marge-basse numero-2">
+                    <span>2</span>
+                  </div>
+                  <div>
+                    <h4 className="alignement-gauche">
+                      Un référentiel avec des mesures accessibles
+                    </h4>
+                    <p className="alignement-gauche">
+                      Le service de diagnostic accompagné s’appuie sur un{' '}
+                      <b>référentiel évolutif de questions</b> et de mesures de
+                      sécurité non exhaustif inspiré en particulier du guide{' '}
+                      <b>
+                        « La cybersécurité pour les TPE/PME en 13 questions »
+                      </b>{' '}
+                      de l’ANSSI.
+                    </p>
+                  </div>
+                  <img
+                    className="visible-uniquement-desktop chemin pair"
+                    src="/images/chemin-etape.svg"
+                  ></img>
+                </div>
+                <div className="etape">
+                  <img
+                    className="taille-maximale tres-petite-marge-basse"
+                    src="/images/illustration-mesures.svg"
+                    alt="Un Aidé découvrant les mesures à mettre en place"
+                  />
+                  <div className="numero-etape visible-uniquement-desktop tres-petite-marge-basse numero-3">
+                    <span>3</span>
+                  </div>
+                  <div>
+                    <h4 className="alignement-gauche">
+                      Des mesures priorisées et applicables
+                    </h4>
+                    <p className="alignement-gauche">
+                      À l’issue du <b>diagnostic d’1h30</b>, l’entité
+                      diagnostiquée se voit proposer{' '}
+                      <b>6 mesures de sécurité</b> à mener en priorité et à
+                      mettre en œuvre sur les 6 prochains mois.
+                    </p>
+                  </div>
+                  <img
+                    className="visible-uniquement-desktop chemin"
+                    src="/images/chemin-etape.svg"
+                  ></img>
+                </div>
+                <div className="etape pair">
+                  <img
+                    className="taille-maximale tres-petite-marge-basse"
+                    src="/images/illustration-suivi.svg"
+                    alt="Un Aidé accompagné par son Aidant"
+                  />
+                  <div className="numero-etape visible-uniquement-desktop tres-petite-marge-basse numero-4">
+                    <span>4</span>
+                  </div>
+                  <div>
+                    <h4 className="alignement-gauche">Un suivi à 6 mois</h4>
+                    <p className="alignement-gauche">
+                      <b>Un suivi</b> et des conseils complémentaires dans la
+                      mise en œuvre de mesures de sécurité avec l’
+                      <b>Aidant cyber</b> ayant réalisé le diagnostic peuvent
+                      aussi être envisagés.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div className="fr-container participer">
