@@ -9,10 +9,12 @@ import {
 } from '../../domaine/Actions.ts';
 import { useNavigate } from 'react-router-dom';
 import {
+  motDePasseTemporaireSaisi,
   cguCliquees,
   finalisationCreationCompteInvalidee,
   finalisationCreationCompteTransmise,
   finalisationCreationCompteValidee,
+  initialiseReducteur,
   nouveauMotDePasseConfirme,
   nouveauMotDePasseSaisi,
   reducteurFinalisationCreationCompte,
@@ -25,12 +27,7 @@ export const ComposantFinalisationCreationCompte = () => {
   const actions = useActionsUtilisateur();
   const [etatFinalisationCreationCompte, envoie] = useReducer(
     reducteurFinalisationCreationCompte,
-    {
-      cguSignees: false,
-      nouveauMotDePasse: '',
-      saisieValide: () => false,
-      erreur: {},
-    },
+    initialiseReducteur(),
   );
   const navigate = useNavigate();
   const macapi = useMACAPI();
@@ -81,6 +78,9 @@ export const ComposantFinalisationCreationCompte = () => {
   }, []);
   const surSaisieConfirmationMotDePasse = useCallback((motDePasse: string) => {
     envoie(nouveauMotDePasseConfirme(motDePasse));
+  }, []);
+  const surSaisieMotDePasseTemporaire = useCallback((motDePasse: string) => {
+    envoie(motDePasseTemporaireSaisi(motDePasse));
   }, []);
   return (
     <>
@@ -142,6 +142,33 @@ export const ComposantFinalisationCreationCompte = () => {
                       <div className="champs-obligatoire">
                         <span className="asterisque">*</span>
                         <span> Champ obligatoire</span>
+                      </div>
+                      <div
+                        className={`fr-input-group ${
+                          etatFinalisationCreationCompte.erreur
+                            ? etatFinalisationCreationCompte.erreur?.motDePasse
+                                ?.className
+                            : ''
+                        }`}
+                      >
+                        <label className="fr-label" htmlFor="mot-de-passe">
+                          <span className="asterisque">*</span>
+                          <span> Saisissez votre mot de passe temporaire</span>
+                        </label>
+                        <input
+                          className="fr-input"
+                          type="password"
+                          role="textbox"
+                          id="ancien-mot-de-passe"
+                          name="ancien-mot-de-passe"
+                          autoComplete={'current-password'}
+                          value={
+                            etatFinalisationCreationCompte.motDePasseTemporaire
+                          }
+                          onChange={(e) =>
+                            surSaisieMotDePasseTemporaire(e.target.value)
+                          }
+                        />
                       </div>
                       <div
                         className={`fr-input-group ${
