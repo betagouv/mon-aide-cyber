@@ -1,7 +1,7 @@
 export const Footer = () => (
   <footer role="contentinfo" id="footer">
     <div className="piedpage-mac fr-container">
-      <div className="piedpage-mac-logos fr-grid-row fr-grid-row--center">
+      <div className="piedpage-mac-logos fr-grid-row fr-grid-row--middle">
         <div className="fr-col-md-2 fr-col-sm-12">
           <a href="https://www.ssi.gouv.fr/" target="_blank" rel="noreferrer">
             {' '}
@@ -21,13 +21,13 @@ export const Footer = () => (
             />
           </a>
         </div>
-        <div className="fr-col-md-3 fr-col-sm-12">
+        <div className="fr-col-md-2 fr-col-sm-12">
           <a href="https://www.cnil.fr" target="_blank" rel="noreferrer">
             {' '}
-            <img src="/images/logo_cnil.webp" alt="CNIL" />
+            <img src="/images/logo_cnil.svg" alt="CNIL" />
           </a>
         </div>
-        <div className="fr-col-md-3 fr-col-sm-12">
+        <div className="fr-col-md-2 fr-col-sm-12">
           <a
             href="https://www.cybermalveillance.gouv.fr/"
             target="_blank"
