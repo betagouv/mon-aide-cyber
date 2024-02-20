@@ -31,7 +31,7 @@ export const Header = () => (
             <div className="fr-header__service fr-col-md-5">
               <a href="/" title="Accueil - MonAideCyber">
                 <img
-                  className="fr-responsive-img"
+                  className="fr-responsive-img taille-reduite-en-mobile"
                   src="/images/logo_mac.svg"
                   alt="ANSSI"
                 />
