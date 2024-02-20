@@ -22,6 +22,11 @@ export const Header = () => (
                   alt="ANSSI"
                 />
               </div>
+              <div className="fr-header__navbar icone-se-connecter-mobile">
+                <button className="fr-btn fr-btn--lg fr-icon-account-circle-line">
+                  <SeConnecter />
+                </button>
+              </div>
             </div>
             <div className="fr-header__service fr-col-md-5">
               <a href="/" title="Accueil - MonAideCyber">
@@ -33,7 +38,7 @@ export const Header = () => (
               </a>
             </div>
           </div>
-          <div className="fr-header__tools fr-col-offset-1--right">
+          <div className="fr-header__tools">
             <div className="fr-header__tools-links">
               <ul className="fr-btns-group">
                 <li>
