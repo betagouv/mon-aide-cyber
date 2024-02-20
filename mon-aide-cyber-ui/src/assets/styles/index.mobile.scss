@@ -14,6 +14,11 @@
     line-height: 4.125rem;
   }
 
+  h2 {
+    line-height: 3rem !important;
+    font-size: 2.6rem;
+  }
+
   .tuile-grande {
     @include tuile(31.4rem);
     padding: 2.5rem 3.5rem;
