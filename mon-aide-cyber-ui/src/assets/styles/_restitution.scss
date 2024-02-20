@@ -51,6 +51,8 @@ html {
     border-top: solid var(--couleurs-mac-violet-leger) 1px;
     border-bottom: solid var(--couleurs-mac-violet-leger) 1px;
     margin: -1px 0 0 -1px;
+    width: 100%;
+    justify-content: space-between;
   }
 
   details[open] > summary {
