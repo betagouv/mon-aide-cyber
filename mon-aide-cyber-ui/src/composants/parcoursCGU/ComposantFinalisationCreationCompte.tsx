@@ -38,20 +38,19 @@ export const ComposantFinalisationCreationCompte = () => {
   }, []);
 
   useEffect(() => {
-    const lien = trouveParmiLesLiens(actions, 'finaliser-creation-compte');
-    if (!lien) {
-      navigate('/');
-    }
     if (
       etatFinalisationCreationCompte.saisieValide() &&
       etatFinalisationCreationCompte.finalisationCreationCompteATransmettre
     ) {
+      const lien = trouveParmiLesLiens(actions, 'finaliser-creation-compte');
       const parametresAPI = constructeurParametresAPI<FinalisationCompte>()
         .url(lien.url)
         .methode(lien.methode!)
         .corps({
           cguSignees: etatFinalisationCreationCompte.cguSignees,
           motDePasse: etatFinalisationCreationCompte.nouveauMotDePasse,
+          motDePasseTemporaire:
+            etatFinalisationCreationCompte.motDePasseTemporaire,
         })
         .construis();
       macapi
