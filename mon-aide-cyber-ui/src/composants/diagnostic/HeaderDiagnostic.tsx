@@ -43,7 +43,7 @@ export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => {
               <div className="fr-header__brand-top"></div>
               <div className="fr-header__service">
                 <img
-                  className="fr-responsive-img"
+                  className="fr-responsive-img logo-mac-diagnostic"
                   src="/images/logo_mac.svg"
                   alt="ANSSI"
                 />
