@@ -105,23 +105,9 @@ $taille-padding-dsfr-7v: 3.5rem;
   align-items: center;
 }
 
-.tuile-grande {
-  @include tuile(31.4rem);
-  padding: 2.5rem 3.5rem;
-  gap: 1.5rem;
-
-  .illustration {
-    justify-content: flex-start;
-    width: 29.75rem;
-  }
-}
-
 .tuile-petite {
   @include tuile(24.5rem);
   padding: 2.5rem 2rem;
-}
-
-.guillemets {
 }
 
 .les-mots-de {
@@ -153,9 +139,6 @@ $taille-padding-dsfr-7v: 3.5rem;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-
-    .illustration {
-    }
 
     .nom {
       font-size: 1.75rem;

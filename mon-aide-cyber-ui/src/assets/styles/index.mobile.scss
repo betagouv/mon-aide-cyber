@@ -5,4 +5,18 @@
     font-size: 2.5rem;
     line-height: 4.125rem;
   }
+
+  .tuile-grande {
+    @include tuile(31.4rem);
+    padding: 2.5rem 3.5rem;
+    gap: 1.5rem;
+
+    .illustration {
+      justify-content: flex-start;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
 }
