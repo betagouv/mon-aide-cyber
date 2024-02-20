@@ -51,6 +51,7 @@ export const ComposantFinalisationCreationCompte = () => {
         .methode(lien.methode!)
         .corps({
           cguSignees: etatFinalisationCreationCompte.cguSignees,
+          motDePasse: etatFinalisationCreationCompte.nouveauMotDePasse,
         })
         .construis();
       macapi

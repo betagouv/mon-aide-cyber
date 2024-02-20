@@ -1,1 +1,1 @@
-export type FinalisationCompte = { cguSignees: boolean };
+export type FinalisationCompte = { cguSignees: boolean; motDePasse: string };
