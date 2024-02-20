@@ -6,6 +6,7 @@ import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge
 
 type FinalisationCompte = {
   cguSignees: boolean;
+  motDePasse: string;
   identifiant: crypto.UUID;
 };
 
@@ -32,6 +33,7 @@ export class ServiceFinalisationCreationCompte {
     }
     verifieLesCGU(finalisationCompte);
     aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
+    aidant.motDePasse = finalisationCompte.motDePasse;
     await this.entrepots.aidants().persiste(aidant);
   }
 }

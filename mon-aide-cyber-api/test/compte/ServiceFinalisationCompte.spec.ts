@@ -16,6 +16,7 @@ describe('Service de finalisation de création de compte', () => {
     await expect(() =>
       service.finalise({
         cguSignees: false,
+        motDePasse: 'mdp',
         identifiant: aidant.identifiant,
       }),
     ).rejects.toThrowError(
@@ -39,6 +40,7 @@ describe('Service de finalisation de création de compte', () => {
     );
     await service.finalise({
       cguSignees: true,
+      motDePasse: 'mdp',
       identifiant: aidant.identifiant,
     });
 

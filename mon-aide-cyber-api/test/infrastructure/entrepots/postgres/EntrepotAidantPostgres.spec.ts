@@ -50,7 +50,7 @@ describe('Entrepot Aidant', () => {
   });
 
   describe('mets à jour un aidant', () => {
-    it('mets à jour les dates de signature des CGU et de la charte', async () => {
+    it('met à jour les dates de signature des CGU', async () => {
       const dateSignature = new Date(Date.parse('2024-02-04T13:25:17+01:00'));
       FournisseurHorlogeDeTest.initialise(dateSignature);
       const aidant = unAidant().avecCompteEnAttenteDeFinalisation().construis();
@@ -58,13 +58,11 @@ describe('Entrepot Aidant', () => {
       await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
 
       aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
-      aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
       await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
 
       const aidantRecu = await new EntrepotAidantPostgres(
         serviceDeChiffrement,
       ).lis(aidant.identifiant);
-      expect(aidantRecu.dateSignatureCharte).toStrictEqual(dateSignature);
       expect(aidantRecu.dateSignatureCGU).toStrictEqual(dateSignature);
     });
   });
