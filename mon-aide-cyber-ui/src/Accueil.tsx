@@ -101,7 +101,7 @@ export const Accueil = () => {
               </div>
               <div id="illustration" className="fr-col-md-5 fr-col-sm-12">
                 <img
-                  src="/images/illustration-accueil.svg"
+                  src="/images/illustration-dialogue-mac.svg"
                   alt="scène d'un aidant et d'un aidé faisant un diagnostic"
                 />
               </div>
