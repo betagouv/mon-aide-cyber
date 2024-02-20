@@ -13,6 +13,10 @@ import {
 import { ErreurMAC } from '../domaine/erreurMAC';
 import { ErreurFinalisationCompte } from '../authentification/Aidant';
 
+export type CorpsRequeteFinalisationCompte = {
+  cguSignees: boolean;
+  motDePasse: string;
+};
 export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
@@ -39,10 +43,8 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         const resultatValidation: Result<FieldValidationError> =
           validationResult(requete) as Result<FieldValidationError>;
         if (resultatValidation.isEmpty()) {
-          const finalisationCompte: {
-            cguSignees: boolean;
-            motDePasse: string;
-          } = requete.body;
+          const finalisationCompte: CorpsRequeteFinalisationCompte =
+            requete.body;
           await new ServiceFinalisationCreationCompte(entrepots).finalise({
             ...finalisationCompte,
             identifiant: requete.identifiantUtilisateurCourant!,

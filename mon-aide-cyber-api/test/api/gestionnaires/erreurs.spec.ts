@@ -4,9 +4,13 @@ import { ConsignateurErreursMemoire } from '../../../src/infrastructure/adaptate
 import { Request, Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../../src/domaine/erreurMAC';
-import { ErreurAuthentification } from '../../../src/authentification/Aidant';
+import {
+  ErreurAuthentification,
+  ErreurFinalisationCompte,
+} from '../../../src/authentification/Aidant';
 import { ErreurAccesRefuse } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';
 import { CorpsRequeteAuthentification } from '../../../src/api/routesAPIAuthentification';
+import { CorpsRequeteFinalisationCompte } from '../../../src/api/routesAPIUtilisateur';
 
 describe("Gestionnaire d'erreur", () => {
   let codeRecu = 0;
@@ -115,6 +119,31 @@ describe("Gestionnaire d'erreur", () => {
     expect(codeRecu).toBe(403);
     expect(corpsRecu).toStrictEqual({
       message: "L'accès à la ressource est interdit.",
+    });
+  });
+
+  it("consigne l'erreur en cas de finalisation de compte erronée", () => {
+    const consignateurErreurs = new ConsignateurErreursMemoire();
+    const corpsAuthentification: CorpsRequeteFinalisationCompte = {
+      cguSignees: true,
+      motDePasse: 'abc123',
+    };
+    fausseRequete.body = corpsAuthentification;
+
+    gestionnaireErreurGeneralisee(consignateurErreurs)(
+      ErreurMAC.cree(
+        'Finalise la création du compte',
+        new ErreurFinalisationCompte('Quelque chose est arrivé'),
+      ),
+      fausseRequete,
+      fausseReponse,
+      fausseSuite,
+    );
+
+    expect(consignateurErreurs.tous()).toHaveLength(1);
+    expect(fausseRequete.body).toStrictEqual<CorpsRequeteFinalisationCompte>({
+      cguSignees: true,
+      motDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
     });
   });
 });
