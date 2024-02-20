@@ -1,6 +1,10 @@
 @import 'etapes.desktop';
 
 @media screen and (min-width: 1440px) {
+  .accueil {
+    height: 42.5rem;
+  }
+
   h1 {
     font-size: 3.5rem;
     line-height: 4.125rem;
@@ -14,6 +18,31 @@
     .illustration {
       justify-content: flex-start;
       width: 29.75rem;
+    }
+  }
+
+  .les-mots-de {
+    display: flex;
+    padding: 8.5rem 0 5rem 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+
+    .titre {
+      font-size: 2rem;
+      font-style: normal;
+      font-weight: 300;
+      line-height: 2.25rem;
+      color: var(--couleurs-mac-violet-tres-clair);
+    }
+
+    .contenu {
+      font-family: Spectral;
+      font-size: 2.375rem;
+      font-style: italic;
+      font-weight: 500;
+      line-height: 3rem;
+      text-align: center;
     }
   }
 }

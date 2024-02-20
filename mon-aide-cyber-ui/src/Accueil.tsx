@@ -237,7 +237,11 @@ export const Accueil = () => {
           </div>
           <div className="mode-fonce">
             <div className="fr-container">
-              <img src="/images/icones/guillemets.svg" alt="Les mots de" />
+              <img
+                id="guillemets"
+                src="/images/icones/guillemets.svg"
+                alt="Les mots de"
+              />
               <div className="slider">
                 <div className="slides">
                   <div id="slide-dg" className="fr-container">

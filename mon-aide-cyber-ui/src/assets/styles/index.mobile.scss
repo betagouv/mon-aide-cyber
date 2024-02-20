@@ -1,6 +1,14 @@
 @import 'etapes.mobile';
 
 @media screen and (max-width: 768px) {
+  .accueil {
+    height: 52rem;
+  }
+
+  .les-mots-de .titre {
+    margin-top: 56px;
+  }
+
   h1 {
     font-size: 2.5rem;
     line-height: 4.125rem;
@@ -17,6 +25,49 @@
 
     img {
       width: 100%;
+    }
+  }
+
+  .icone-se-connecter-mobile {
+    align-self: center;
+
+    button {
+      color: var(--couleurs-mac-violet-fonce) !important;
+    }
+  }
+
+  .taille-reduite-en-mobile {
+    display: block;
+    width: 80%;
+    margin: auto;
+  }
+
+  #guillemets {
+    width: 40%;
+  }
+
+  .les-mots-de {
+    display: flex;
+    padding: 8.5rem 0 5rem 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+
+    .titre {
+      font-size: 1rem;
+      font-style: normal;
+      font-weight: 300;
+      line-height: 2.25rem;
+      color: var(--couleurs-mac-violet-tres-clair);
+    }
+
+    .contenu {
+      font-family: Spectral;
+      font-size: 1.5rem;
+      font-style: italic;
+      font-weight: 500;
+      line-height: 1.5rem;
+      text-align: center;
     }
   }
 }
