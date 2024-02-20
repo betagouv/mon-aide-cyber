@@ -4,7 +4,10 @@ import { ConsignateurErreursMemoire } from '../../../src/infrastructure/adaptate
 import { Request, Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../../src/domaine/erreurMAC';
-import { ErreurAuthentification } from '../../../src/authentification/Aidant';
+import {
+  ErreurAuthentification,
+  ErreurFinalisationCompte,
+} from '../../../src/authentification/Aidant';
 import { ErreurAccesRefuse } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';
 import { CorpsRequeteAuthentification } from '../../../src/api/routesAPIAuthentification';
 
@@ -39,7 +42,7 @@ describe("Gestionnaire d'erreur", () => {
       new Error('Quelque chose est arrivé'),
       fausseRequete,
       fausseReponse,
-      fausseSuite,
+      fausseSuite
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(0);
@@ -57,7 +60,7 @@ describe("Gestionnaire d'erreur", () => {
       ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée')),
       fausseRequete,
       fausseReponse,
-      fausseSuite,
+      fausseSuite
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(0);
@@ -66,7 +69,7 @@ describe("Gestionnaire d'erreur", () => {
       message: "MonAideCyber n'est pas en mesure de traiter votre demande.",
     });
     expect(erreurRecue).toStrictEqual(
-      ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée')),
+      ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée'))
     );
   });
 
@@ -81,11 +84,11 @@ describe("Gestionnaire d'erreur", () => {
     gestionnaireErreurGeneralisee(consignateurErreurs)(
       ErreurMAC.cree(
         "Demande d'Authentification",
-        new ErreurAuthentification(new Error('Quelque chose est arrivé')),
+        new ErreurAuthentification(new Error('Quelque chose est arrivé'))
       ),
       fausseRequete,
       fausseReponse,
-      fausseSuite,
+      fausseSuite
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(1);
@@ -102,19 +105,46 @@ describe("Gestionnaire d'erreur", () => {
     gestionnaireErreurGeneralisee(consignateurErreurs)(
       ErreurMAC.cree(
         'Ajout réponse au diagnostic',
-        new ErreurAccesRefuse(messageInterne),
+        new ErreurAccesRefuse(messageInterne)
       ),
       fausseRequete,
       fausseReponse,
-      fausseSuite,
+      fausseSuite
     );
 
     expect(
-      (consignateurErreurs.tous()[0] as ErreurMAC).erreurOriginelle.message,
+      (consignateurErreurs.tous()[0] as ErreurMAC).erreurOriginelle.message
     ).toStrictEqual(messageInterne);
     expect(codeRecu).toBe(403);
     expect(corpsRecu).toStrictEqual({
       message: "L'accès à la ressource est interdit.",
+    });
+  });
+
+  it("consigne l'erreur en cas de finalisation de compte erronée", () => {
+    const consignateurErreurs = new ConsignateurErreursMemoire();
+    const corpsAuthentification = {
+      cguSignees: true,
+      motDePasse: 'abc123',
+      motDePasseTemporaire: 'tmp',
+    };
+    fausseRequete.body = corpsAuthentification;
+
+    gestionnaireErreurGeneralisee(consignateurErreurs)(
+      ErreurMAC.cree(
+        'Finalise la création du compte',
+        new ErreurFinalisationCompte('Quelque chose est arrivé')
+      ),
+      fausseRequete,
+      fausseReponse,
+      fausseSuite
+    );
+
+    expect(consignateurErreurs.tous()).toHaveLength(1);
+    expect(fausseRequete.body).toStrictEqual({
+      cguSignees: true,
+      motDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
+      motDePasseTemporaire: '<MOT_DE_PASSE_OBFUSQUE/>',
     });
   });
 });

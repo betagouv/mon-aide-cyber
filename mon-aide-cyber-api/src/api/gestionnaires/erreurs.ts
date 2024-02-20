@@ -58,7 +58,9 @@ const erreursGerees: Map<
   ],
   [
     'ErreurFinalisationCompte',
-    (erreur, _, consignateur, reponse) => {
+    (erreur, requete, consignateur, reponse) => {
+      requete.body['motDePasse'] = '<MOT_DE_PASSE_OBFUSQUE/>';
+      requete.body['motDePasseTemporaire'] = '<MOT_DE_PASSE_OBFUSQUE/>';
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_NON_TRAITABLE, {
         message: erreur.message,
