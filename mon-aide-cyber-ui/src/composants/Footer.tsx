@@ -16,6 +16,7 @@ export const Footer = () => (
           >
             {' '}
             <img
+              id="logo-gendarmerie-nationale"
               src="/images/logo_gendarmerie_nationale.svg"
               alt="Gendarmerie Nationale"
             />
@@ -34,7 +35,11 @@ export const Footer = () => (
             rel="noreferrer"
           >
             {' '}
-            <img src="/images/logo_acyma.svg" alt="CyberMalveillance" />
+            <img
+              id="logo-acyma"
+              src="/images/logo_acyma.svg"
+              alt="CyberMalveillance"
+            />
           </a>
         </div>
         <div className="fr-col-md-2 fr-col-sm-12">
