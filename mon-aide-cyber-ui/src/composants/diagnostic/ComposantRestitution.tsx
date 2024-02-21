@@ -291,11 +291,12 @@ export const ComposantRestitution = ({
                           className="fr-responsive-img"
                         />
                       </div>
-                      <div className="titre">Cybermalveillance</div>
+                      <div className="titre">Cybermalveillance.gouv.fr</div>
                       <div className="corps">
                         Pour vous aider dans vos démarches de sécurisation avec
-                        des prestataires de confiance, Cybermalveillance vous
-                        accompagne avec des professionnels référencés.
+                        des prestataires de confiance, Cybermalveillance.gouv.fr
+                        vous met en relation avec des professionnels labellisés
+                        ExpertCyber.
                       </div>
                       <div className="lien">
                         <a
