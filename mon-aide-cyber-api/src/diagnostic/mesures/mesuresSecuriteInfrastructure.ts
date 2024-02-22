@@ -2,7 +2,7 @@ export const mesuresSecuriteInfrastructure = {
   'securite-infrastructure-pare-feu-deploye': {
     niveau1: {
       titre:
-        'Déployer un pare-feu physique pour protéger l’interconnexion du SI à Internet.',
+        'Déployer un pare-feu physique pour protéger l’interconnexion du SI à Internet',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-pare-feu-deploye-niveau1-pourquoi.pug',
       comment:
@@ -13,7 +13,7 @@ export const mesuresSecuriteInfrastructure = {
   'securite-infrastructure-pare-feu-deploye-interconnexions-protegees': {
     niveau1: {
       titre:
-        'Déployer un pare-feu physique pour protéger l’interconnexion du SI à Internet.',
+        'Déployer un pare-feu physique pour protéger l’interconnexion du SI à Internet',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-pare-feu-deploye-interconnexions-protegees-niveau1-pourquoi.pug',
       comment:
@@ -24,7 +24,7 @@ export const mesuresSecuriteInfrastructure = {
   'securite-infrastructure-pare-feu-deploye-logs-stockes': {
     niveau1: {
       titre:
-        "Activer et conserver l'historique de l’ensemble des flux bloqués et des flux entrants et sortants identifiés par le pare-feu.",
+        "Activer et conserver l'historique de l’ensemble des flux bloqués et des flux entrants et sortants identifiés par le pare-feu",
       pourquoi:
         '../../mesures/infras/securite-infrastructure-pare-feu-deploye-logs-stockes-niveau1-pourquoi.pug',
       comment:
@@ -35,7 +35,7 @@ export const mesuresSecuriteInfrastructure = {
   'securite-infrastructure-si-industriel-pare-feu-deploye': {
     niveau1: {
       titre:
-        'Fermer tous les flux et les ports non strictement nécessaires au SI industriel.',
+        'Fermer tous les flux et les ports non strictement nécessaires au SI industriel',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-si-industriel-pare-feu-deploye-niveau1-pourquoi.pug',
       comment:
@@ -43,7 +43,7 @@ export const mesuresSecuriteInfrastructure = {
     },
     niveau2: {
       titre:
-        'Dans la mesure du possible et si non nécessaire, séparer le réseau industriel du réseau bureautique interne.',
+        'Dans la mesure du possible et si non nécessaire, séparer le réseau industriel du réseau bureautique interne',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-si-industriel-pare-feu-deploye-niveau2-pourquoi.pug',
       comment:
@@ -55,7 +55,7 @@ export const mesuresSecuriteInfrastructure = {
     {
       niveau1: {
         titre:
-          'Déployer systématiquement toutes les mises à jour sur les équipements de sécurité dès que celles-ci sont disponibles et hors exceptions spécifiquement identifiées.',
+          'Déployer systématiquement toutes les mises à jour sur les équipements de sécurité dès que celles-ci sont disponibles',
         pourquoi:
           '../../mesures/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-niveau1-pourquoi.pug',
         comment:
@@ -67,7 +67,7 @@ export const mesuresSecuriteInfrastructure = {
     {
       niveau1: {
         titre:
-          "Déployer systématiquement toutes les mises à jour sur les serveurs, services et logiciels d'administration dès que celles-ci sont disponibles et hors exceptions spécifiquement identifiées",
+          "Déployer systématiquement toutes les mises à jour sur les serveurs, services et logiciels d'administration dès que celles-ci sont disponibles",
         pourquoi:
           '../../mesures/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-niveau1-pourquoi.pug',
         comment:
