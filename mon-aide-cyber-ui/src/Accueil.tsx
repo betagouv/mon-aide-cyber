@@ -180,7 +180,7 @@ export const Accueil = () => {
           </div>
           <div className="fr-container">
             <div id="ce-que-cest" className="fr-grid-row fr-grid-row--gutters">
-              <div className="fr-col-8">
+              <div className="fr-col-8 fr-col-sm-12">
                 <h2>Qu&apos;est-ce que MonAideCyber?</h2>
               </div>
               <div className="fr-col-md-6 fr-col-sm-12">
