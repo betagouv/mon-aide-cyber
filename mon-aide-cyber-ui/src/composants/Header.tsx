@@ -1,15 +1,13 @@
 import { SeConnecter } from './authentification/SeConnecter.tsx';
-import { useEntrepots } from '../fournisseurs/hooks.ts';
+import { useUtilisateurAuthentifie } from '../fournisseurs/hooks.ts';
 import { useEffect, useState } from 'react';
 
 export const Header = () => {
-  const entrepots = useEntrepots();
   const [utilisateur, setUtilisateur] = useState<string | null>(null);
+  const utilisateurAuthentifie = useUtilisateurAuthentifie();
 
   useEffect(() => {
-    entrepots
-      .authentification()
-      .utilisateurAuthentifie()
+    utilisateurAuthentifie
       .then((utilisateurAuthentifie) => {
         if (utilisateur === null) {
           let nomUtilisateur = utilisateurAuthentifie.nomPrenom;
@@ -22,8 +20,8 @@ export const Header = () => {
           setUtilisateur(nomUtilisateur);
         }
       })
-      .catch(() => Promise.resolve());
-  }, [entrepots, utilisateur]);
+      .catch(() => setUtilisateur(null));
+  }, [utilisateur, utilisateurAuthentifie]);
 
   return (
     <header role="banner" className="fr-header">

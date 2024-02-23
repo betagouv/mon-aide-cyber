@@ -3,9 +3,8 @@ import {
   ReponseAuthentification,
   Utilisateur,
 } from '../domaine/authentification/Authentification.ts';
-import { useEntrepots, useMACAPI } from './hooks.ts';
+import { useMACAPI } from './hooks.ts';
 import { ReponseHATEOAS } from '../domaine/Actions.ts';
-import { Identifiants } from '../infrastructure/entrepots/EntrepotsAPI.ts';
 
 import { constructeurParametresAPI } from './api/ConstructeurParametresAPI.ts';
 
@@ -22,12 +21,23 @@ export const ContexteAuthentification =
     {} as unknown as ContexteAuthentificationType,
   );
 
+const initialiseEtatUtilisateur = () => {
+  const aidant = sessionStorage.getItem('aidant');
+  if (aidant) {
+    return JSON.parse(aidant) as unknown as Utilisateur;
+  }
+  return null;
+};
+
+export type Identifiants = {
+  motDePasse: string;
+  identifiant: string;
+};
 export const FournisseurAuthentification = ({
   children,
 }: PropsWithChildren) => {
-  const entrepots = useEntrepots();
   const [utilisateur, setUtilisateur] = useState<Utilisateur | null>(
-    entrepots.authentification().utilisateurAuthentifieSync(),
+    initialiseEtatUtilisateur(),
   );
   const macapi = useMACAPI();
 

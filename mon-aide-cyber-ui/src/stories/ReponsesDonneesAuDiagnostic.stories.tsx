@@ -1,5 +1,4 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { FournisseurEntrepots } from '../fournisseurs/FournisseurEntrepot.ts';
 import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
@@ -15,7 +14,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
 import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';
 import { uneAction } from '../../test/constructeurs/constructeurActionDiagnostic.ts';
-import { initialiseEntrepots } from './InitialiseEntrepots.tsx';
 import {
   Diagnostic,
   ReponseQuestionATiroir,
@@ -377,32 +375,30 @@ const meta = {
   },
   decorators: [
     (story) => (
-      <FournisseurEntrepots.Provider value={initialiseEntrepots({})}>
-        <ContexteMacAPI.Provider
-          value={{
-            appelle: async <T = Diagnostic, V = void>(
-              parametresAPI: ParametresAPI<V>,
-              _: (contenu: Promise<any>) => Promise<T>,
-            ) => {
-              if (parametresAPI.methode === 'PATCH') {
-                entrepotDiagnosticMemoire.envoieReponse(
-                  parametresAPI as ParametresAPI<{
-                    chemin: string;
-                    identifiant: string;
-                    reponse: string | string[] | ReponseQuestionATiroir | null;
-                  }>,
-                );
-              }
-              const idDiagnostic = parametresAPI.url.split('/').at(-1);
-              return entrepotDiagnosticMemoire.find(idDiagnostic as UUID) as T;
-            },
-          }}
-        >
-          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            {story()}
-          </ErrorBoundary>
-        </ContexteMacAPI.Provider>
-      </FournisseurEntrepots.Provider>
+      <ContexteMacAPI.Provider
+        value={{
+          appelle: async <T = Diagnostic, V = void>(
+            parametresAPI: ParametresAPI<V>,
+            _: (contenu: Promise<any>) => Promise<T>,
+          ) => {
+            if (parametresAPI.methode === 'PATCH') {
+              entrepotDiagnosticMemoire.envoieReponse(
+                parametresAPI as ParametresAPI<{
+                  chemin: string;
+                  identifiant: string;
+                  reponse: string | string[] | ReponseQuestionATiroir | null;
+                }>,
+              );
+            }
+            const idDiagnostic = parametresAPI.url.split('/').at(-1);
+            return entrepotDiagnosticMemoire.find(idDiagnostic as UUID) as T;
+          },
+        }}
+      >
+        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+          {story()}
+        </ErrorBoundary>
+      </ContexteMacAPI.Provider>
     ),
   ],
 } satisfies Meta<typeof ComposantDiagnostic>;

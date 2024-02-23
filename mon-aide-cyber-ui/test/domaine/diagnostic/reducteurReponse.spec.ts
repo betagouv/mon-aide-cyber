@@ -71,7 +71,6 @@ describe('Le réducteur de réponse', () => {
         nouvelleReponse.identifiant,
       );
       expect(etatReponse.statut).toBe(EtatReponseStatut.MODIFIEE);
-      // expect(etatReponse.entrepot.)
     });
   });
 
