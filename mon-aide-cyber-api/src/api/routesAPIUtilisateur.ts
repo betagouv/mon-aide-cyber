@@ -27,7 +27,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
   const { body, validationResult } = new ExpressValidator({
     motDePasseTemporaireDifferentDuNouveauMotDePasse: (
       value: string,
-      { req }: Meta
+      { req }: Meta,
     ) => value !== req.body.motDePasse,
     motDePasseUtilisateur: async (value: string, { req }: Meta) => {
       const aidant = await entrepots
@@ -53,20 +53,20 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         minSymbols: 1,
       })
       .withMessage(
-        'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.'
+        'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
       ),
     body('motDePasseTemporaire')
       .notEmpty()
       .withMessage('Le mot de passe temporaire est obligatoire.')
       .motDePasseTemporaireDifferentDuNouveauMotDePasse()
       .withMessage(
-        'Votre nouveau mot de passe doit être différent du mot de passe temporaire.'
+        'Votre nouveau mot de passe doit être différent du mot de passe temporaire.',
       )
       .motDePasseUtilisateur(),
     async (
       requete: RequeteUtilisateur,
       reponse: Response,
-      suite: NextFunction
+      suite: NextFunction,
     ) => {
       try {
         const resultatValidation: Result<FieldValidationError> =
@@ -93,13 +93,38 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         return suite(
           ErreurMAC.cree(
             'Finalise la création du compte',
-            new ErreurFinalisationCompte(erreursValidation.join('\n'))
-          )
+            new ErreurFinalisationCompte(erreursValidation.join('\n')),
+          ),
         );
       } catch (erreur) {
         suite(erreur);
       }
-    }
+    },
+  );
+
+  routes.get(
+    '/',
+    session.verifie("Accède aux informations de l'utilisateur"),
+    async (
+      requete: RequeteUtilisateur,
+      reponse: Response,
+      suite: NextFunction,
+    ) => {
+      return entrepots
+        .aidants()
+        .lis(requete.identifiantUtilisateurCourant!)
+        .then((aidant) => {
+          reponse.status(200).json({
+            ...constructeurActionsHATEOAS().lancerDiagnostic().construis(),
+            nomPrenom: aidant.nomPrenom,
+          });
+        })
+        .catch((erreur) =>
+          suite(
+            ErreurMAC.cree("Accède aux informations de l'utilisateur", erreur),
+          ),
+        );
+    },
   );
 
   return routes;
