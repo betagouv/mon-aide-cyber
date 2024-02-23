@@ -42,7 +42,7 @@ describe("Gestionnaire d'erreur", () => {
       new Error('Quelque chose est arrivé'),
       fausseRequete,
       fausseReponse,
-      fausseSuite
+      fausseSuite,
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(0);
@@ -60,7 +60,7 @@ describe("Gestionnaire d'erreur", () => {
       ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée')),
       fausseRequete,
       fausseReponse,
-      fausseSuite
+      fausseSuite,
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(0);
@@ -69,7 +69,7 @@ describe("Gestionnaire d'erreur", () => {
       message: "MonAideCyber n'est pas en mesure de traiter votre demande.",
     });
     expect(erreurRecue).toStrictEqual(
-      ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée'))
+      ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée')),
     );
   });
 
@@ -84,11 +84,11 @@ describe("Gestionnaire d'erreur", () => {
     gestionnaireErreurGeneralisee(consignateurErreurs)(
       ErreurMAC.cree(
         "Demande d'Authentification",
-        new ErreurAuthentification(new Error('Quelque chose est arrivé'))
+        new ErreurAuthentification(new Error('Quelque chose est arrivé')),
       ),
       fausseRequete,
       fausseReponse,
-      fausseSuite
+      fausseSuite,
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(1);
@@ -105,15 +105,15 @@ describe("Gestionnaire d'erreur", () => {
     gestionnaireErreurGeneralisee(consignateurErreurs)(
       ErreurMAC.cree(
         'Ajout réponse au diagnostic',
-        new ErreurAccesRefuse(messageInterne)
+        new ErreurAccesRefuse(messageInterne),
       ),
       fausseRequete,
       fausseReponse,
-      fausseSuite
+      fausseSuite,
     );
 
     expect(
-      (consignateurErreurs.tous()[0] as ErreurMAC).erreurOriginelle.message
+      (consignateurErreurs.tous()[0] as ErreurMAC).erreurOriginelle.message,
     ).toStrictEqual(messageInterne);
     expect(codeRecu).toBe(403);
     expect(corpsRecu).toStrictEqual({
@@ -133,11 +133,11 @@ describe("Gestionnaire d'erreur", () => {
     gestionnaireErreurGeneralisee(consignateurErreurs)(
       ErreurMAC.cree(
         'Finalise la création du compte',
-        new ErreurFinalisationCompte('Quelque chose est arrivé')
+        new ErreurFinalisationCompte('Quelque chose est arrivé'),
       ),
       fausseRequete,
       fausseReponse,
-      fausseSuite
+      fausseSuite,
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(1);
@@ -145,6 +145,45 @@ describe("Gestionnaire d'erreur", () => {
       cguSignees: true,
       motDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
       motDePasseTemporaire: '<MOT_DE_PASSE_OBFUSQUE/>',
+    });
+  });
+
+  it("obfusque quelconque attribut ayant un nom la chaine de caractère contenant 'mot de passe'", () => {
+    const consignateurErreurs = new ConsignateurErreursMemoire();
+    const corpsAuthentification = {
+      cguSignees: true,
+      motDePasse: 'abc123',
+      motPasse: 'abc123',
+      motDePasseTemporaire: 'tmp',
+      'mot-de-passe': 'test',
+      'mot-de-passe-': 'test',
+      motsDePasse: 'test',
+      'motsDePasse-': 'test',
+      'mots-De-Passe': 'test',
+      'mots-de-passe': 'test',
+      'mots-De-Passe-': 'test',
+    };
+    fausseRequete.body = corpsAuthentification;
+
+    gestionnaireErreurGeneralisee(consignateurErreurs)(
+      new Error('Erreur'),
+      fausseRequete,
+      fausseReponse,
+      fausseSuite,
+    );
+
+    expect(fausseRequete.body).toStrictEqual({
+      cguSignees: true,
+      motDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
+      motDePasseTemporaire: '<MOT_DE_PASSE_OBFUSQUE/>',
+      'mot-de-passe': '<MOT_DE_PASSE_OBFUSQUE/>',
+      'mot-de-passe-': '<MOT_DE_PASSE_OBFUSQUE/>',
+      motsDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
+      motPasse: '<MOT_DE_PASSE_OBFUSQUE/>',
+      'motsDePasse-': '<MOT_DE_PASSE_OBFUSQUE/>',
+      'mots-De-Passe': '<MOT_DE_PASSE_OBFUSQUE/>',
+      'mots-de-passe': '<MOT_DE_PASSE_OBFUSQUE/>',
+      'mots-De-Passe-': '<MOT_DE_PASSE_OBFUSQUE/>',
     });
   });
 });
