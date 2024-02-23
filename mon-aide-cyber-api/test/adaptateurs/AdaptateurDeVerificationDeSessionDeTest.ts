@@ -8,7 +8,7 @@ import { RequeteUtilisateur } from '../../src/api/routesAPI';
 export class AdaptateurDeVerificationDeSessionDeTest
   implements AdaptateurDeVerificationDeSession
 {
-  private _utilisateurConnecte?: Aidant;
+  private _utilisateurConnecte?: Aidant | undefined;
   constructor(private estPassee = false) {}
 
   verifie(__contexte: Contexte): RequestHandler {
@@ -35,6 +35,7 @@ export class AdaptateurDeVerificationDeSessionDeTest
   }
 
   reinitialise() {
+    this._utilisateurConnecte = undefined;
     this.estPassee = false;
   }
 }

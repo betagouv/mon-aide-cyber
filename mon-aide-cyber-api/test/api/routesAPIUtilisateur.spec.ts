@@ -366,4 +366,51 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
       });
     });
   });
+
+  describe('quand une requête GET est reçue sur /', () => {
+    it("retourne l'utilisateur connecté", async () => {
+      const aidant = unAidant().construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/utilisateur/`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+      ).toBe(true);
+      expect(await reponse.json()).toStrictEqual({
+        nomPrenom: aidant.nomPrenom,
+        liens: {
+          'lancer-diagnostic': {
+            url: '/api/diagnostic',
+            methode: 'POST',
+          },
+        },
+      });
+    });
+
+    it("retourne une erreur HTTP 404 si l'utilisateur n'est pas connu", async () => {
+      testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/utilisateur/`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+      ).toBe(true);
+      expect(await reponse.json()).toStrictEqual({
+        message: "Le aidant demandé n'existe pas.",
+      });
+    });
+  });
 });

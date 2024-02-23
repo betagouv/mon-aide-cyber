@@ -11,7 +11,7 @@ type Options = { url: string; methode?: Methode; contentType?: string };
 
 class ConstructeurActionsHATEOAS {
   private readonly actions: Map<string, Options> = new Map();
-  private suite: Options = {} as { url: string };
+  private suite?: Options;
 
   lancerDiagnostic(): ConstructeurActionsHATEOAS {
     this.actions.set('lancer-diagnostic', {
@@ -71,7 +71,7 @@ class ConstructeurActionsHATEOAS {
   construis = (): ReponseHATEOAS => {
     return {
       liens: {
-        suite: this.suite,
+        ...(this.suite && { suite: this.suite }),
         ...(this.actions.size > 0 &&
           Array.from(this.actions).reduce(
             (accumulateur, [action, lien]) => ({

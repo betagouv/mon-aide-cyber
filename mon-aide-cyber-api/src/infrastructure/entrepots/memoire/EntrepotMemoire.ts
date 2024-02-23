@@ -91,4 +91,8 @@ export class EntrepotAidantMemoire
     }
     return Promise.resolve(aidantTrouve);
   }
+
+  typeAggregat(): string {
+    return 'aidant';
+  }
 }
