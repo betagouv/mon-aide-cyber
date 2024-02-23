@@ -1,5 +1,4 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { FournisseurEntrepots } from '../fournisseurs/FournisseurEntrepot.ts';
 import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts';
 import { waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
@@ -12,7 +11,6 @@ import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAfficha
 import { ErrorBoundary } from 'react-error-boundary';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
 import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';
-import { initialiseEntrepots } from './InitialiseEntrepots.tsx';
 import { Diagnostic } from '../domaine/diagnostic/Diagnostic.ts';
 import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { UUID } from '../types/Types.ts';
@@ -170,23 +168,21 @@ const meta = {
   },
   decorators: [
     (story) => (
-      <FournisseurEntrepots.Provider value={initialiseEntrepots({})}>
-        <ContexteMacAPI.Provider
-          value={{
-            appelle: async <T = Diagnostic, V = void>(
-              parametresAPI: ParametresAPI<V>,
-              _: (contenu: Promise<any>) => Promise<T>,
-            ) => {
-              const idDiagnostic = parametresAPI.url.split('/').at(-1);
-              return entrepotMemoire.find(idDiagnostic as UUID) as T;
-            },
-          }}
-        >
-          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            {story()}
-          </ErrorBoundary>
-        </ContexteMacAPI.Provider>
-      </FournisseurEntrepots.Provider>
+      <ContexteMacAPI.Provider
+        value={{
+          appelle: async <T = Diagnostic, V = void>(
+            parametresAPI: ParametresAPI<V>,
+            _: (contenu: Promise<any>) => Promise<T>,
+          ) => {
+            const idDiagnostic = parametresAPI.url.split('/').at(-1);
+            return entrepotMemoire.find(idDiagnostic as UUID) as T;
+          },
+        }}
+      >
+        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+          {story()}
+        </ErrorBoundary>
+      </ContexteMacAPI.Provider>
     ),
   ],
 } satisfies Meta<typeof ComposantDiagnostic>;

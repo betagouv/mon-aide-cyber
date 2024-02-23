@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
-import { useEntrepots } from '../fournisseurs/hooks.ts';
+import { useUtilisateurAuthentifie } from '../fournisseurs/hooks.ts';
 import { ComposantLancerDiagnostic } from './diagnostic/ComposantLancerDiagnostic.tsx';
 import { Footer } from './Footer.tsx';
 import { Header } from './Header.tsx';
@@ -8,15 +8,13 @@ import { Header } from './Header.tsx';
 export const TableauDeBord = () => {
   const { showBoundary } = useErrorBoundary();
   const [nomPrenom, setNomPrenom] = useState<string>('');
-  const entrepots = useEntrepots();
+  const utilisateurAuthentifie = useUtilisateurAuthentifie();
 
   useEffect(() => {
-    entrepots
-      .authentification()
-      .utilisateurAuthentifie()
+    utilisateurAuthentifie
       .then((aidant) => setNomPrenom(aidant.nomPrenom))
       .catch((erreur) => showBoundary(erreur));
-  }, [entrepots, setNomPrenom, showBoundary]);
+  }, [setNomPrenom, showBoundary, utilisateurAuthentifie]);
 
   return (
     <>
