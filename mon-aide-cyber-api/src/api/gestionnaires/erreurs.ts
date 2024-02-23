@@ -87,6 +87,17 @@ export const gestionnaireErreurGeneralisee = (
     };
 
     if (erreur) {
+      if (requete.body) {
+        Object.keys(requete.body)
+          .filter((attribut) =>
+            attribut.match(
+              /mot[s]?[-]?de[-]?passe[- ]?|mot[s]?[-]?passe[- ]?/i,
+            ),
+          )
+          .forEach(
+            (attribut) => (requete.body[attribut] = '<MOT_DE_PASSE_OBFUSQUE/>'),
+          );
+      }
       if (erreur instanceof ErreurMAC) {
         if (erreursGerees.has(erreur.erreurOriginelle.constructor.name)) {
           erreursGerees.get(erreur.erreurOriginelle.constructor.name)?.(
