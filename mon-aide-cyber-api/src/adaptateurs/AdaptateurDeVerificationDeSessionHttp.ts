@@ -45,7 +45,7 @@ export class AdaptateurDeVerificationDeSessionHttp
         throw ErreurMAC.cree(
           contexte,
           e instanceof ErreurMAC
-            ? e
+            ? e.erreurOriginelle
             : new ErreurAccesRefuse('Session invalide.'),
         );
       }
