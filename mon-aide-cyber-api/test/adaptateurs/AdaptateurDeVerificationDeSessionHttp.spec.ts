@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest';
+import { describe, expect, it, assert } from 'vitest';
 import { AdaptateurDeVerificationDeSessionHttp } from '../../src/adaptateurs/AdaptateurDeVerificationDeSessionHttp';
 import { FauxGestionnaireDeJeton } from '../infrastructure/authentification/FauxGestionnaireDeJeton';
 import { NextFunction } from 'express-serve-static-core';
@@ -36,12 +36,25 @@ describe('Adaptateur de vérification de session', () => {
       new AdaptateurDeVerificationDeSessionHttp(
         new FauxGestionnaireDeJeton(),
       ).verifie('Accès diagnostic')(requete, reponse, fausseSuite);
-    }).toThrow(
+    }).toThrowError(
       ErreurMAC.cree(
         'Accès diagnostic',
         new ErreurAccesRefuse('Cookie invalide.'),
       ),
     );
+  });
+
+  it("vérifie que l'erreur levée est de type Accès Refusé", () => {
+    try {
+      new AdaptateurDeVerificationDeSessionHttp(
+        new FauxGestionnaireDeJeton(),
+      ).verifie('Accès diagnostic')(requete, reponse, fausseSuite);
+      assert.fail('Ce test est sensé échouer');
+    } catch (e) {
+      expect((e as ErreurMAC).erreurOriginelle).toBeInstanceOf(
+        ErreurAccesRefuse,
+      );
+    }
   });
 
   it("lève une erreur quand le cookie de session envoyé n'est pas un cookie", () => {
