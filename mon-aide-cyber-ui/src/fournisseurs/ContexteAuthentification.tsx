@@ -1,4 +1,10 @@
-import { createContext, PropsWithChildren, useState } from 'react';
+import {
+  createContext,
+  PropsWithChildren,
+  ReactElement,
+  useEffect,
+  useReducer,
+} from 'react';
 import {
   ReponseAuthentification,
   Utilisateur,
@@ -7,9 +13,11 @@ import { useMACAPI } from './hooks.ts';
 import { ReponseHATEOAS } from '../domaine/Actions.ts';
 
 import { constructeurParametresAPI } from './api/ConstructeurParametresAPI.ts';
+import { Navigate, Outlet } from 'react-router-dom';
 
 type ContexteAuthentificationType = {
-  utilisateur: { nomPrenom: string } | null;
+  utilisateur?: Utilisateur;
+  element: ReactElement | null;
   authentifie: (identifiants: {
     identifiant: string;
     motDePasse: string;
@@ -18,28 +26,87 @@ type ContexteAuthentificationType = {
 
 export const ContexteAuthentification =
   createContext<ContexteAuthentificationType>(
-    {} as unknown as ContexteAuthentificationType,
+    {} as unknown as ContexteAuthentificationType
   );
-
-const initialiseEtatUtilisateur = () => {
-  const aidant = sessionStorage.getItem('aidant');
-  if (aidant) {
-    return JSON.parse(aidant) as unknown as Utilisateur;
-  }
-  return null;
-};
 
 export type Identifiants = {
   motDePasse: string;
   identifiant: string;
 };
+
+type EtatUtilisateurAuthentifie = {
+  element: ReactElement | null;
+  enAttenteDeChargement: boolean;
+  utilisateur?: Utilisateur;
+};
+
+enum TypeActionUtilisateurAuthentifie {
+  UTILISATEUR_CHARGE = 'UTILISATEUR_CHARGE',
+  UTILISATEUR_NON_AUTHENTIFIE = 'UTILISATEUR_NON_AUTHENTIFIE',
+}
+type ActionUtilisateurAuthentifie =
+  | {
+      utilisateur: Utilisateur;
+      type: TypeActionUtilisateurAuthentifie.UTILISATEUR_CHARGE;
+    }
+  | {
+      type: TypeActionUtilisateurAuthentifie.UTILISATEUR_NON_AUTHENTIFIE;
+    };
+export const reducteurUtilisateurAuthentifie = (
+  etat: EtatUtilisateurAuthentifie,
+  action: ActionUtilisateurAuthentifie
+): EtatUtilisateurAuthentifie => {
+  switch (action.type) {
+    case TypeActionUtilisateurAuthentifie.UTILISATEUR_NON_AUTHENTIFIE: {
+      const nouvelEtat = { ...etat };
+      delete nouvelEtat['utilisateur'];
+      return {
+        ...nouvelEtat,
+        element: <Navigate to="/" />,
+        enAttenteDeChargement: false,
+      };
+    }
+    case TypeActionUtilisateurAuthentifie.UTILISATEUR_CHARGE:
+      return {
+        ...etat,
+        utilisateur: action.utilisateur,
+        element: <Outlet />,
+        enAttenteDeChargement: false,
+      };
+  }
+};
+
+export const initialiseReducteurUtilisateurAuthentifie =
+  (): EtatUtilisateurAuthentifie => {
+    return {
+      enAttenteDeChargement: true,
+      element: null,
+    };
+  };
+
+export const utilisateurCharge = (
+  utilisateur: Utilisateur
+): ActionUtilisateurAuthentifie => {
+  return {
+    type: TypeActionUtilisateurAuthentifie.UTILISATEUR_CHARGE,
+    utilisateur,
+  };
+};
+export const utilisateurNonAuthentifie = (): ActionUtilisateurAuthentifie => {
+  return {
+    type: TypeActionUtilisateurAuthentifie.UTILISATEUR_NON_AUTHENTIFIE,
+  };
+};
+
 export const FournisseurAuthentification = ({
   children,
 }: PropsWithChildren) => {
-  const [utilisateur, setUtilisateur] = useState<Utilisateur | null>(
-    initialiseEtatUtilisateur(),
-  );
   const macapi = useMACAPI();
+
+  const [etatUtilisateurAuthentifie, envoie] = useReducer(
+    reducteurUtilisateurAuthentifie,
+    initialiseReducteurUtilisateurAuthentifie()
+  );
 
   const authentifie = (identifiants: {
     identifiant: string;
@@ -59,19 +126,35 @@ export const FournisseurAuthentification = ({
           const aidant = (await reponse) as ReponseAuthentification;
           sessionStorage.setItem(
             'aidant',
-            JSON.stringify({ nomPrenom: aidant.nomPrenom }),
+            JSON.stringify({ nomPrenom: aidant.nomPrenom })
           );
           return aidant;
-        },
+        }
       )
       .then((reponse) => {
-        setUtilisateur({ nomPrenom: reponse.nomPrenom });
+        envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
         return { liens: reponse.liens } as ReponseHATEOAS;
       });
 
-  const value = {
-    utilisateur: { nomPrenom: utilisateur?.nomPrenom || '' },
+  useEffect(() => {
+    if (etatUtilisateurAuthentifie.enAttenteDeChargement) {
+      macapi
+        .appelle<Utilisateur>(
+          constructeurParametresAPI()
+            .url('/api/utilisateur')
+            .methode('GET')
+            .construis(),
+          (json) => json
+        )
+        .then((utilisateur) => envoie(utilisateurCharge(utilisateur)))
+        .catch(() => envoie(utilisateurNonAuthentifie()));
+    }
+  }, [etatUtilisateurAuthentifie.enAttenteDeChargement, macapi]);
+
+  const value: ContexteAuthentificationType = {
     authentifie,
+    element: etatUtilisateurAuthentifie.element,
+    utilisateur: etatUtilisateurAuthentifie.utilisateur,
   };
 
   return (
