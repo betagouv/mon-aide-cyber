@@ -1,27 +1,23 @@
 import { SeConnecter } from './authentification/SeConnecter.tsx';
-import { useUtilisateurAuthentifie } from '../fournisseurs/hooks.ts';
+import { useAuthentification } from '../fournisseurs/hooks.ts';
 import { useEffect, useState } from 'react';
 
 export const Header = () => {
   const [utilisateur, setUtilisateur] = useState<string | null>(null);
-  const utilisateurAuthentifie = useUtilisateurAuthentifie();
+  const authentification = useAuthentification();
 
   useEffect(() => {
-    utilisateurAuthentifie
-      .then((utilisateurAuthentifie) => {
-        if (utilisateur === null) {
-          let nomUtilisateur = utilisateurAuthentifie.nomPrenom;
-          if (utilisateurAuthentifie.nomPrenom.includes(' ')) {
-            const nomPrenom = utilisateurAuthentifie.nomPrenom.split(' ');
-            nomUtilisateur = `${nomPrenom[0]} ${nomPrenom[1]
-              .at(0)
-              ?.toUpperCase()}.`;
-          }
-          setUtilisateur(nomUtilisateur);
-        }
-      })
-      .catch(() => setUtilisateur(null));
-  }, [utilisateur, utilisateurAuthentifie]);
+    if (utilisateur === null) {
+      let nomUtilisateur = authentification.utilisateur?.nomPrenom || null;
+      if (authentification.utilisateur?.nomPrenom.includes(' ')) {
+        const nomPrenom = authentification.utilisateur.nomPrenom.split(' ');
+        nomUtilisateur = `${nomPrenom[0]} ${nomPrenom[1]
+          .at(0)
+          ?.toUpperCase()}.`;
+      }
+      setUtilisateur(nomUtilisateur);
+    }
+  }, [authentification, utilisateur]);
 
   return (
     <header role="banner" className="fr-header">

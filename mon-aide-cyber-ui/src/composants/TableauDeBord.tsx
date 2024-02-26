@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useErrorBoundary } from 'react-error-boundary';
-import { useUtilisateurAuthentifie } from '../fournisseurs/hooks.ts';
+import { useAuthentification } from '../fournisseurs/hooks.ts';
 import { ComposantLancerDiagnostic } from './diagnostic/ComposantLancerDiagnostic.tsx';
 import { Footer } from './Footer.tsx';
 import { Header } from './Header.tsx';
 
 export const TableauDeBord = () => {
-  const { showBoundary } = useErrorBoundary();
   const [nomPrenom, setNomPrenom] = useState<string>('');
-  const utilisateurAuthentifie = useUtilisateurAuthentifie();
+  const authentification = useAuthentification();
 
   useEffect(() => {
-    utilisateurAuthentifie
-      .then((aidant) => setNomPrenom(aidant.nomPrenom))
-      .catch((erreur) => showBoundary(erreur));
-  }, [setNomPrenom, showBoundary, utilisateurAuthentifie]);
+    setNomPrenom(authentification.utilisateur?.nomPrenom || '');
+  }, [authentification, setNomPrenom]);
 
   return (
     <>
