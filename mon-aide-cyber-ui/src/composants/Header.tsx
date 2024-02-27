@@ -1,21 +1,18 @@
 import { SeConnecter } from './authentification/SeConnecter.tsx';
 import { useAuthentification } from '../fournisseurs/hooks.ts';
 import { useEffect, useState } from 'react';
+import { ComposantMenuUtilisateur } from './utilisateur/ComposantMenuUtilisateur.tsx';
+import { Utilisateur } from '../domaine/authentification/Authentification.ts';
 
 export const Header = () => {
-  const [utilisateur, setUtilisateur] = useState<string | null>(null);
+  const [utilisateur, setUtilisateur] = useState<Utilisateur | undefined>(
+    undefined,
+  );
   const authentification = useAuthentification();
 
   useEffect(() => {
-    if (utilisateur === null) {
-      let nomUtilisateur = authentification.utilisateur?.nomPrenom || null;
-      if (authentification.utilisateur?.nomPrenom.includes(' ')) {
-        const nomPrenom = authentification.utilisateur.nomPrenom.split(' ');
-        nomUtilisateur = `${nomPrenom[0]} ${nomPrenom[1]
-          .at(0)
-          ?.toUpperCase()}.`;
-      }
-      setUtilisateur(nomUtilisateur);
+    if (!utilisateur) {
+      setUtilisateur(authentification.utilisateur);
     }
   }, [authentification, utilisateur]);
 
@@ -59,11 +56,11 @@ export const Header = () => {
             </div>
             <div className="fr-header__tools">
               <div className="fr-header__tools-links">
-                <ul className="fr-btns-group">
-                  <li>
-                    {utilisateur !== null ? utilisateur : <SeConnecter />}
-                  </li>
-                </ul>
+                {utilisateur ? (
+                  <ComposantMenuUtilisateur utilisateur={utilisateur} />
+                ) : (
+                  <SeConnecter />
+                )}
               </div>
             </div>
           </div>
