@@ -25,7 +25,7 @@ class ConstructeurActionsHATEOAS {
     aidantAuthentifie: AidantAuthentifie,
   ): ConstructeurActionsHATEOAS {
     if (!aidantAuthentifie.dateSignatureCGU) {
-      this.finaliseCreationCompte();
+      this.creerEspaceAidant();
     } else {
       this.tableauDeBord();
       this.lancerDiagnostic();
@@ -33,10 +33,10 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  finaliseCreationCompte(): ConstructeurActionsHATEOAS {
+  creerEspaceAidant(): ConstructeurActionsHATEOAS {
     this.suite = { url: '/finalise-creation-compte' };
     this.actions.set('finaliser-creation-compte', {
-      url: '/api/utilisateur/finalise',
+      url: '/api/espace-aidant/cree',
       methode: 'POST',
     });
     return this;

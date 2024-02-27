@@ -53,7 +53,7 @@ describe('Entrepot Aidant', () => {
     it('mets à jour les dates de signature des CGU et de la charte', async () => {
       const dateSignature = new Date(Date.parse('2024-02-04T13:25:17+01:00'));
       FournisseurHorlogeDeTest.initialise(dateSignature);
-      const aidant = unAidant().avecCompteEnAttenteDeFinalisation().construis();
+      const aidant = unAidant().sansEspace().construis();
       const serviceDeChiffrement = new FauxServiceDeChiffrement(new Map([]));
       await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
 

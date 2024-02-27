@@ -6,7 +6,7 @@ import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../../src/domaine/erreurMAC';
 import {
   ErreurAuthentification,
-  ErreurFinalisationCompte,
+  ErreurCreationEspaceAidant,
 } from '../../../src/authentification/Aidant';
 import { ErreurAccesRefuse } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';
 import { CorpsRequeteAuthentification } from '../../../src/api/routesAPIAuthentification';
@@ -121,7 +121,7 @@ describe("Gestionnaire d'erreur", () => {
     });
   });
 
-  it("consigne l'erreur en cas de finalisation de compte erronée", () => {
+  it("consigne l'erreur en cas d'échec de création d'espace Aidant", () => {
     const consignateurErreurs = new ConsignateurErreursMemoire();
     const corpsAuthentification = {
       cguSignees: true,
@@ -132,8 +132,8 @@ describe("Gestionnaire d'erreur", () => {
 
     gestionnaireErreurGeneralisee(consignateurErreurs)(
       ErreurMAC.cree(
-        'Finalise la création du compte',
-        new ErreurFinalisationCompte('Quelque chose est arrivé'),
+        "Crée l'espace Aidant",
+        new ErreurCreationEspaceAidant('Quelque chose est arrivé'),
       ),
       fausseRequete,
       fausseReponse,

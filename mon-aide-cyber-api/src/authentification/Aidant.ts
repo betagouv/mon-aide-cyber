@@ -24,7 +24,7 @@ export class ErreurAuthentification extends Error {
   }
 }
 
-export class ErreurFinalisationCompte extends Error {
+export class ErreurCreationEspaceAidant extends Error {
   constructor(public readonly message: string) {
     super(message);
   }

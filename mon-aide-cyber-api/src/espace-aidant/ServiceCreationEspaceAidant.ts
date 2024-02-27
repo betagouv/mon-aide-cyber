@@ -1,39 +1,39 @@
 import { Entrepots } from '../domaine/Entrepots';
 import crypto from 'crypto';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import { ErreurFinalisationCompte } from '../authentification/Aidant';
+import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
-type FinalisationCompte = {
+type CreationEspaceAidant = {
   cguSignees: boolean;
   motDePasse: string;
   identifiant: crypto.UUID;
 };
 
-export class ServiceFinalisationCreationCompte {
+export class ServiceCreationEspaceAidant {
   constructor(private readonly entrepots: Entrepots) {}
 
-  async finalise(finalisationCompte: FinalisationCompte): Promise<void> {
+  async cree(creationEspaceAidant: CreationEspaceAidant): Promise<void> {
     const leveErreur = (message: string) => {
       throw ErreurMAC.cree(
-        'Finalise la création du compte',
-        new ErreurFinalisationCompte(message),
+        "Crée l'espace Aidant",
+        new ErreurCreationEspaceAidant(message),
       );
     };
-    const verifieLesCGU = (finalisationCompte: FinalisationCompte) => {
-      if (!finalisationCompte.cguSignees) {
+    const verifieLesCGU = (creationEspaceAidant: CreationEspaceAidant) => {
+      if (!creationEspaceAidant.cguSignees) {
         leveErreur('Vous devez signer les CGU.');
       }
     };
     const aidant = await this.entrepots
       .aidants()
-      .lis(finalisationCompte.identifiant);
+      .lis(creationEspaceAidant.identifiant);
     if (aidant.dateSignatureCGU) {
       return;
     }
-    verifieLesCGU(finalisationCompte);
+    verifieLesCGU(creationEspaceAidant);
     aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
-    aidant.motDePasse = finalisationCompte.motDePasse;
+    aidant.motDePasse = creationEspaceAidant.motDePasse;
     await this.entrepots.aidants().persiste(aidant);
   }
 }

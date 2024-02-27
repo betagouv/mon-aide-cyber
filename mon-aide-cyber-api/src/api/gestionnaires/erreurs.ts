@@ -57,7 +57,7 @@ const erreursGerees: Map<
     },
   ],
   [
-    'ErreurFinalisationCompte',
+    'ErreurCreationEspaceAidant',
     (erreur, requete, consignateur, reponse) => {
       requete.body['motDePasse'] = '<MOT_DE_PASSE_OBFUSQUE/>';
       requete.body['motDePasseTemporaire'] = '<MOT_DE_PASSE_OBFUSQUE/>';
