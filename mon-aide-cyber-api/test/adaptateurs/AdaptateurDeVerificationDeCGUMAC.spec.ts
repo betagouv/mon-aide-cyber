@@ -20,7 +20,7 @@ describe('Adaptateur de Vérification de CGU', () => {
   });
 
   it('vérifie que les CGU ont bien été signées', async () => {
-    const aidant = unAidant().avecCompteEnAttenteDeFinalisation().construis();
+    const aidant = unAidant().sansEspace().construis();
     aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
     await entrepots.aidants().persiste(aidant);
     let codeRecu = 0;
@@ -48,7 +48,7 @@ describe('Adaptateur de Vérification de CGU', () => {
       liens: {
         suite: { url: '/finalise-creation-compte' },
         'finaliser-creation-compte': {
-          url: '/api/utilisateur/finalise',
+          url: '/api/espace-aidant/cree',
           methode: 'POST',
         },
       },

@@ -22,9 +22,7 @@ export class AdaptateurDeVerificationDeCGUMAC
       if (!aidant.dateSignatureCGU) {
         reponse
           .status(302)
-          .json(
-            constructeurActionsHATEOAS().finaliseCreationCompte().construis(),
-          );
+          .json(constructeurActionsHATEOAS().creerEspaceAidant().construis());
       } else {
         suite();
       }

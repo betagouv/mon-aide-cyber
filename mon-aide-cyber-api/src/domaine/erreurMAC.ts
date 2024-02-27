@@ -5,7 +5,7 @@ export type Contexte =
   | 'Lance le diagnostic'
   | 'Accède aux diagnostics'
   | "Demande d'Authentification"
-  | 'Finalise la création du compte'
+  | "Crée l'espace Aidant"
   | 'Envoi un message de contact'
   | "Accède aux informations de l'utilisateur";
 

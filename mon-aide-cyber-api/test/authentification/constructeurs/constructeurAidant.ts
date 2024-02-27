@@ -36,7 +36,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
-  avecCompteEnAttenteDeFinalisation(): ConstructeurAidant {
+  sansEspace(): ConstructeurAidant {
     this.dateSignatureCGU = undefined;
     this.dateSignatureCharte = undefined;
     return this;

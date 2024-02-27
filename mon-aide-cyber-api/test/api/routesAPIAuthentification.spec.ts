@@ -112,13 +112,13 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         });
       });
 
-      describe("dans le cas où un aidant n'a pas encore finalisé la création de son compte", () => {
-        it('renvoie un lien pour finaliser la création du compte', async () => {
+      describe("dans le cas où un aidant n'a pas encore d'espace", () => {
+        it("renvoie un lien pour créer l'espace Aidant", async () => {
           await testeurMAC.entrepots
             .aidants()
             .persiste(
               unAidant()
-                .avecCompteEnAttenteDeFinalisation()
+                .sansEspace()
                 .avecUnNomPrenom('Jean Dupont')
                 .avecUnIdentifiantDeConnexion('jean.dupont@email.com')
                 .avecUnMotDePasse('mon_Mot-D3p4sse')
@@ -142,17 +142,15 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             liens: {
               suite: { url: '/finalise-creation-compte' },
               'finaliser-creation-compte': {
-                url: '/api/utilisateur/finalise',
+                url: '/api/espace-aidant/cree',
                 methode: 'POST',
               },
             },
           });
         });
 
-        it('renvoie un lien pour finaliser la création du compte si les CGU ne sont pas signées', async () => {
-          const aidant = unAidant()
-            .avecCompteEnAttenteDeFinalisation()
-            .construis();
+        it("renvoie un lien pour créer l'espace Aidant si les CGU ne sont pas signées", async () => {
+          const aidant = unAidant().sansEspace().construis();
           aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
           await testeurMAC.entrepots.aidants().persiste(aidant);
 
@@ -173,7 +171,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             liens: {
               suite: { url: '/finalise-creation-compte' },
               'finaliser-creation-compte': {
-                url: '/api/utilisateur/finalise',
+                url: '/api/espace-aidant/cree',
                 methode: 'POST',
               },
             },
