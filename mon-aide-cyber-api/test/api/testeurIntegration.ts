@@ -17,6 +17,7 @@ import { AdaptateurEnvoiMail } from '../../src/adaptateurs/AdaptateurEnvoiMail';
 import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 
 import { AdapatateurDeVerificationDeCGUDeTest } from '../adaptateurs/AdaptateurDeVerificationDeCGUDeTest';
+import { AdaptateurDeGestionDeCookiesDeTest } from '../adaptateurs/AdaptateurDeGestionDeCookiesDeTest';
 
 const testeurIntegration = () => {
   let serveurDeTest: {
@@ -37,6 +38,8 @@ const testeurIntegration = () => {
   const gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire();
   const adaptateurEnvoieMessage: AdaptateurEnvoiMail =
     new AdaptateurEnvoiMailMemoire();
+  const adaptateurDeGestionDeCookies: AdaptateurDeGestionDeCookiesDeTest =
+    new AdaptateurDeGestionDeCookiesDeTest();
 
   const adaptateursRestitution: AdaptateursRestitution = {
     html() {
@@ -58,6 +61,7 @@ const testeurIntegration = () => {
       busEvenement,
       gestionnaireErreurs,
       gestionnaireDeJeton,
+      adaptateurDeGestionDeCookies,
       adaptateurDeVerificationDeCGU,
       adaptateurDeVerificationDeSession,
       adaptateursRestitution,
@@ -80,6 +84,7 @@ const testeurIntegration = () => {
     entrepots,
     initialise,
     gestionnaireErreurs,
+    adaptateurDeGestionDeCookies,
     adaptateurDeVerificationDeCGU,
     adaptateurDeVerificationDeSession,
     adaptateursRestitution,

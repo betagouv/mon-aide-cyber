@@ -181,5 +181,36 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         });
       });
     });
+
+    describe('Quand une requête DELETE est reçue', () => {
+      it('supprime le cookie de session', async () => {
+        await testeurMAC.entrepots
+          .aidants()
+          .persiste(
+            unAidant()
+              .avecUnNomPrenom('Martin Dupont')
+              .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
+              .avecUnMotDePasse('mon_Mot-D3p4sse')
+              .construis(),
+          );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'DELETE',
+          '/api/token',
+          donneesServeur.portEcoute,
+          undefined,
+          { 'set-cookie': [] },
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        expect(await reponse.json()).toStrictEqual({
+          liens: {
+            suite: { url: '/' },
+          },
+        });
+        expect(testeurMAC.adaptateurDeGestionDeCookies.aSupprime).toBe(true);
+      });
+    });
   });
 });

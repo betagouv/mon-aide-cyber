@@ -68,6 +68,11 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
+  postDeconnexion(): ConstructeurActionsHATEOAS {
+    this.suite = { url: '/' };
+    return this;
+  }
+
   construis = (): ReponseHATEOAS => {
     return {
       liens: {

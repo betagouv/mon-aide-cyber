@@ -4,7 +4,7 @@ import { IncomingHttpHeaders } from 'http';
 
 export const executeRequete = (
   app: Express,
-  verbe: 'GET' | 'POST' | 'PATCH',
+  verbe: 'DELETE' | 'GET' | 'POST' | 'PATCH',
   chemin: string,
   port: number,
   corps: object | undefined = undefined,
