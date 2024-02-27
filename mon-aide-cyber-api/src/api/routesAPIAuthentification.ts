@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import { body } from 'express-validator';
 import { authentifie } from '../authentification/authentification';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
+import { RequeteUtilisateur } from './routesAPI';
 
 export type CorpsRequeteAuthentification = {
   identifiant: string;
@@ -45,6 +46,17 @@ export const routesAPIAuthentification = (
           });
         })
         .catch((erreur) => suite(erreur));
+    },
+  );
+
+  routes.delete(
+    '/',
+    (requete: RequeteUtilisateur, reponse: Response, _suite: NextFunction) => {
+      configuration.adaptateurDeGestionDeCookies.supprime(requete, reponse);
+      reponse.status(200);
+      return reponse.json({
+        ...constructeurActionsHATEOAS().postDeconnexion().construis(),
+      });
     },
   );
 

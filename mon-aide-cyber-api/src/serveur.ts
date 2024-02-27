@@ -22,6 +22,7 @@ import { ReferentielDeMesures } from './diagnostic/ReferentielDeMesures';
 import CookieSession = require('cookie-session');
 
 import { AdaptateurDeVerificationDeCGU } from './adaptateurs/AdaptateurDeVerificationDeCGU';
+import { AdaptateurDeGestionDeCookies } from './adaptateurs/AdaptateurDeGestionDeCookies';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -33,6 +34,7 @@ export type ConfigurationServeur = {
   adaptateursRestitution: AdaptateursRestitution;
   adaptateurMesures: Adaptateur<ReferentielDeMesures>;
   adaptateurTranscripteurDonnees: AdaptateurTranscripteur;
+  adaptateurDeGestionDeCookies: AdaptateurDeGestionDeCookies;
   adaptateurDeVerificationDeCGU: AdaptateurDeVerificationDeCGU;
   adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
   avecProtectionCsrf: boolean;
