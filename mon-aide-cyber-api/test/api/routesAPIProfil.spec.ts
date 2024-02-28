@@ -1,0 +1,47 @@
+import { afterEach, beforeEach, describe, expect } from 'vitest';
+import { unAidant } from '../authentification/constructeurs/constructeurAidant';
+import testeurIntegration from './testeurIntegration';
+import { Express } from 'express';
+import { executeRequete } from './executeurRequete';
+import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
+import { Profil } from '../../src/profil/Profil';
+
+describe('le serveur MAC sur les routes /api/profil', () => {
+  const testeurMAC = testeurIntegration();
+  let donneesServeur: { portEcoute: number; app: Express };
+
+  beforeEach(() => {
+    donneesServeur = testeurMAC.initialise();
+  });
+
+  afterEach(() => {
+    testeurMAC.arrete();
+  });
+
+  describe('quand une requête GET est reçue sur /', () => {
+    it("retourne les informations le l'utilisateur", async () => {
+      const aidant = unAidant().construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/profil/`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+      ).toBe(true);
+      expect(await reponse.json()).toStrictEqual<Profil>({
+        nomPrenom: aidant.nomPrenom,
+        dateSignatureCGU: FournisseurHorloge.formateDate(
+          aidant.dateSignatureCGU!,
+        ).date,
+        identifiantConnexion: aidant.identifiantConnexion,
+      });
+    });
+  });
+});
