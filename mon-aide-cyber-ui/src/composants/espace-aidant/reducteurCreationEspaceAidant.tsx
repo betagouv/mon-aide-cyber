@@ -5,64 +5,64 @@ import {
 } from '../erreurs/Erreurs.tsx';
 import { ReactElement } from 'react';
 
-type ErreurFinalisationCompte = {
+type ErreurCreationEspaceAidant = {
   cguSignees?: PresentationErreur;
   charteSignee?: PresentationErreur;
   motDePasse?: PresentationErreur;
 };
 
-export type EtatFinalisationCreationCompte = {
+export type EtatCreationEspaceAidant = {
   cguSignees: boolean;
   nouveauMotDePasse: string;
   motDePasseTemporaire: string;
   motDePasseConfirme: string;
   champsErreur?: ReactElement;
-  erreur?: ErreurFinalisationCompte;
-  finalisationCreationCompteATransmettre?: boolean;
+  erreur?: ErreurCreationEspaceAidant;
+  creationEspaceAidantATransmettre?: boolean;
   saisieValide: () => boolean;
 };
 
-enum TypeActionFinalisationCreationCompte {
-  FINALISATION_CREATION_COMPTE_VALIDEE = 'FINALISATION_CREATION_COMPTE_VALIDEE',
+enum TypeActionCreationEspaceAidant {
+  CREATION_ESPACE_AIDANT_VALIDEE = 'CREATION_ESPACE_AIDANT_VALIDEE',
   CGU_CLIQUEES = 'CGU_CLIQUEES',
-  FINALISATION_CREATION_COMPTE_TRANSMISE = 'FINALISATION_CREATION_COMPTE_TRANSMISE',
-  FINALISATION_CREATION_COMPTE_INVALIDEE = 'FINALISATION_CREATION_COMPTE_INVALIDEE',
+  CREATION_ESPACE_AIDANT_TRANSMISE = 'CREATION_ESPACE_AIDANT_TRANSMISE',
+  CREATION_ESPACE_AIDANT_INVALIDEE = 'CREATION_ESPACE_AIDANT_INVALIDEE',
   NOUVEAU_MOT_DE_PASSE_SAISI = 'NOUVEAU_MOT_DE_PASSE_SAISI',
   NOUVEAU_MOT_DE_PASSE_CONFIRME = 'NOUVEAU_MOT_DE_PASSE_CONFIRME',
   MOT_DE_PASSE_TEMPORAIRE_SAISI = 'MOT_DE_PASSE_TEMPORAIRE_SAISI',
 }
 
-type ActionFinalisationCreationCompte =
+type ActionCreationEspaceAidant =
   | {
-      type: TypeActionFinalisationCreationCompte.FINALISATION_CREATION_COMPTE_VALIDEE;
+      type: TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_VALIDEE;
     }
   | {
-      type: TypeActionFinalisationCreationCompte.CGU_CLIQUEES;
+      type: TypeActionCreationEspaceAidant.CGU_CLIQUEES;
     }
   | {
-      type: TypeActionFinalisationCreationCompte.FINALISATION_CREATION_COMPTE_TRANSMISE;
+      type: TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_TRANSMISE;
     }
   | {
       erreur: Error;
-      type: TypeActionFinalisationCreationCompte.FINALISATION_CREATION_COMPTE_INVALIDEE;
+      type: TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_INVALIDEE;
     }
   | {
       nouveauMotDePasse: string;
-      type: TypeActionFinalisationCreationCompte.NOUVEAU_MOT_DE_PASSE_SAISI;
+      type: TypeActionCreationEspaceAidant.NOUVEAU_MOT_DE_PASSE_SAISI;
     }
   | {
       motDePasseConfirme: string;
-      type: TypeActionFinalisationCreationCompte.NOUVEAU_MOT_DE_PASSE_CONFIRME;
+      type: TypeActionCreationEspaceAidant.NOUVEAU_MOT_DE_PASSE_CONFIRME;
     }
   | {
       motDePasseTemporaire: string;
-      type: TypeActionFinalisationCreationCompte.MOT_DE_PASSE_TEMPORAIRE_SAISI;
+      type: TypeActionCreationEspaceAidant.MOT_DE_PASSE_TEMPORAIRE_SAISI;
     };
 
-export const reducteurFinalisationCreationCompte = (
-  etat: EtatFinalisationCreationCompte,
-  action: ActionFinalisationCreationCompte
-): EtatFinalisationCreationCompte => {
+export const reducteurCreationEspaceAidant = (
+  etat: EtatCreationEspaceAidant,
+  action: ActionCreationEspaceAidant,
+): EtatCreationEspaceAidant => {
   const construisErreurCGU = () =>
     construisErreur('cguSignees', {
       texte: 'Veuillez accepter les CGU.',
@@ -72,7 +72,7 @@ export const reducteurFinalisationCreationCompte = (
   const verifieLesMotsDePasseSaisis = (
     nouveauMotDePasse: string,
     motDePasseConfirme: string,
-    motDePasseTemporaire: string
+    motDePasseTemporaire: string,
   ) => {
     const motsDePasseIdentiques = nouveauMotDePasse === motDePasseConfirme;
     const motDePasseTemporaireDifferentDuNouveauMotDePasse =
@@ -92,12 +92,12 @@ export const reducteurFinalisationCreationCompte = (
     };
   };
 
-  function construisErreurMotDePasse(verificationMotsDePasseSaisis: {
+  const construisErreurMotDePasse = (verificationMotsDePasseSaisis: {
     motsDePasseNonVides: boolean;
     motDePasseTemporaireDifferentDuNouveauMotDePasse: boolean;
     valide: boolean;
     motsDePasseIdentiques: boolean;
-  }) {
+  }) => {
     let erreurMotDePasse =
       !verificationMotsDePasseSaisis.motsDePasseIdentiques && {
         ...construisErreur('motDePasse', {
@@ -127,10 +127,10 @@ export const reducteurFinalisationCreationCompte = (
       };
     }
     return erreurMotDePasse;
-  }
+  };
 
   switch (action.type) {
-    case TypeActionFinalisationCreationCompte.MOT_DE_PASSE_TEMPORAIRE_SAISI: {
+    case TypeActionCreationEspaceAidant.MOT_DE_PASSE_TEMPORAIRE_SAISI: {
       const nouveauMotDePasse = etat.nouveauMotDePasse;
       const motDePasseConfirme = etat.motDePasseConfirme;
       return {
@@ -141,11 +141,11 @@ export const reducteurFinalisationCreationCompte = (
           verifieLesMotsDePasseSaisis(
             nouveauMotDePasse,
             motDePasseConfirme,
-            action.motDePasseTemporaire
+            action.motDePasseTemporaire,
           ).valide,
       };
     }
-    case TypeActionFinalisationCreationCompte.NOUVEAU_MOT_DE_PASSE_SAISI: {
+    case TypeActionCreationEspaceAidant.NOUVEAU_MOT_DE_PASSE_SAISI: {
       return {
         ...etat,
         nouveauMotDePasse: action.nouveauMotDePasse,
@@ -153,11 +153,11 @@ export const reducteurFinalisationCreationCompte = (
           verifieLesMotsDePasseSaisis(
             action.nouveauMotDePasse,
             etat.motDePasseConfirme,
-            etat.motDePasseTemporaire
+            etat.motDePasseTemporaire,
           ).valide && etat.cguSignees,
       };
     }
-    case TypeActionFinalisationCreationCompte.NOUVEAU_MOT_DE_PASSE_CONFIRME: {
+    case TypeActionCreationEspaceAidant.NOUVEAU_MOT_DE_PASSE_CONFIRME: {
       const erreur = { ...etat.erreur };
       delete erreur['motDePasse'];
       return {
@@ -169,13 +169,13 @@ export const reducteurFinalisationCreationCompte = (
           verifieLesMotsDePasseSaisis(
             etat.nouveauMotDePasse,
             action.motDePasseConfirme,
-            etat.motDePasseTemporaire
+            etat.motDePasseTemporaire,
           ).valide,
       };
     }
-    case TypeActionFinalisationCreationCompte.FINALISATION_CREATION_COMPTE_INVALIDEE: {
+    case TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_INVALIDEE: {
       const etatCourant = { ...etat };
-      delete etatCourant['finalisationCreationCompteATransmettre'];
+      delete etatCourant['creationEspaceAidantATransmettre'];
       return {
         ...etatCourant,
         cguSignees: false,
@@ -186,14 +186,14 @@ export const reducteurFinalisationCreationCompte = (
         saisieValide: () => false,
       };
     }
-    case TypeActionFinalisationCreationCompte.FINALISATION_CREATION_COMPTE_TRANSMISE: {
+    case TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_TRANSMISE: {
       const etatCourant = { ...etat };
-      delete etatCourant['finalisationCreationCompteATransmettre'];
+      delete etatCourant['creationEspaceAidantATransmettre'];
       return {
         ...etatCourant,
       };
     }
-    case TypeActionFinalisationCreationCompte.CGU_CLIQUEES: {
+    case TypeActionCreationEspaceAidant.CGU_CLIQUEES: {
       const cguSignees = !etat.cguSignees;
       const erreur = { ...etat.erreur };
       delete erreur['cguSignees'];
@@ -209,15 +209,15 @@ export const reducteurFinalisationCreationCompte = (
           verifieLesMotsDePasseSaisis(
             etat.nouveauMotDePasse,
             etat.motDePasseConfirme,
-            etat.motDePasseTemporaire
+            etat.motDePasseTemporaire,
           ).valide,
       };
     }
-    case TypeActionFinalisationCreationCompte.FINALISATION_CREATION_COMPTE_VALIDEE: {
+    case TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_VALIDEE: {
       const verificationMotsDePasseSaisis = verifieLesMotsDePasseSaisis(
         etat.nouveauMotDePasse,
         etat.motDePasseConfirme,
-        etat.motDePasseTemporaire
+        etat.motDePasseTemporaire,
       );
       return {
         ...etat,
@@ -231,7 +231,7 @@ export const reducteurFinalisationCreationCompte = (
           etat.cguSignees && verificationMotsDePasseSaisis.valide,
         ...(etat.cguSignees &&
           verificationMotsDePasseSaisis.valide && {
-            finalisationCreationCompteATransmettre:
+            creationEspaceAidantATransmettre:
               etat.cguSignees && verificationMotsDePasseSaisis.valide,
           }),
       };
@@ -239,48 +239,47 @@ export const reducteurFinalisationCreationCompte = (
   }
 };
 
-export const finalisationCreationCompteValidee =
-  (): ActionFinalisationCreationCompte => ({
-    type: TypeActionFinalisationCreationCompte.FINALISATION_CREATION_COMPTE_VALIDEE,
-  });
-
-export const cguCliquees = (): ActionFinalisationCreationCompte => ({
-  type: TypeActionFinalisationCreationCompte.CGU_CLIQUEES,
+export const creationEspaceAidantValidee = (): ActionCreationEspaceAidant => ({
+  type: TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_VALIDEE,
 });
 
-export const finalisationCreationCompteTransmise =
-  (): ActionFinalisationCreationCompte => ({
-    type: TypeActionFinalisationCreationCompte.FINALISATION_CREATION_COMPTE_TRANSMISE,
+export const cguCliquees = (): ActionCreationEspaceAidant => ({
+  type: TypeActionCreationEspaceAidant.CGU_CLIQUEES,
+});
+
+export const creationEspaceAidantTransmise =
+  (): ActionCreationEspaceAidant => ({
+    type: TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_TRANSMISE,
   });
 
-export const finalisationCreationCompteInvalidee = (
-  erreur: Error
-): ActionFinalisationCreationCompte => ({
+export const creationEspaceAidantInvalidee = (
+  erreur: Error,
+): ActionCreationEspaceAidant => ({
   erreur,
-  type: TypeActionFinalisationCreationCompte.FINALISATION_CREATION_COMPTE_INVALIDEE,
+  type: TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_INVALIDEE,
 });
 
 export const nouveauMotDePasseSaisi = (
-  nouveauMotDePasse: string
-): ActionFinalisationCreationCompte => ({
+  nouveauMotDePasse: string,
+): ActionCreationEspaceAidant => ({
   nouveauMotDePasse,
-  type: TypeActionFinalisationCreationCompte.NOUVEAU_MOT_DE_PASSE_SAISI,
+  type: TypeActionCreationEspaceAidant.NOUVEAU_MOT_DE_PASSE_SAISI,
 });
 
 export const nouveauMotDePasseConfirme = (
-  motDePasseConfirme: string
-): ActionFinalisationCreationCompte => ({
+  motDePasseConfirme: string,
+): ActionCreationEspaceAidant => ({
   motDePasseConfirme,
-  type: TypeActionFinalisationCreationCompte.NOUVEAU_MOT_DE_PASSE_CONFIRME,
+  type: TypeActionCreationEspaceAidant.NOUVEAU_MOT_DE_PASSE_CONFIRME,
 });
 
 export const motDePasseTemporaireSaisi = (
-  motDePasseTemporaire: string
-): ActionFinalisationCreationCompte => ({
+  motDePasseTemporaire: string,
+): ActionCreationEspaceAidant => ({
   motDePasseTemporaire: motDePasseTemporaire,
-  type: TypeActionFinalisationCreationCompte.MOT_DE_PASSE_TEMPORAIRE_SAISI,
+  type: TypeActionCreationEspaceAidant.MOT_DE_PASSE_TEMPORAIRE_SAISI,
 });
-export const initialiseReducteur = (): EtatFinalisationCreationCompte => ({
+export const initialiseReducteur = (): EtatCreationEspaceAidant => ({
   cguSignees: false,
   nouveauMotDePasse: '',
   motDePasseConfirme: '',
