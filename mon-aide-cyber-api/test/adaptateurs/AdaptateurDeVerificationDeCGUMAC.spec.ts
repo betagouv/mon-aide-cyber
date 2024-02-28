@@ -51,6 +51,10 @@ describe('Adaptateur de Vérification de CGU', () => {
           url: '/api/espace-aidant/cree',
           methode: 'POST',
         },
+        'creer-espace-aidant': {
+          url: '/api/espace-aidant/cree',
+          methode: 'POST',
+        },
       },
     });
     expect(suiteAppelee).toBe(false);
