@@ -41,6 +41,12 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           aidant.dateSignatureCGU!,
         ).date,
         identifiantConnexion: aidant.identifiantConnexion,
+        liens: {
+          'lancer-diagnostic': {
+            url: '/api/diagnostic',
+            methode: 'POST',
+          },
+        },
       });
     });
 

@@ -4,6 +4,7 @@ import { RequeteUtilisateur } from './routesAPI';
 import { NextFunction } from 'express-serve-static-core';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
+import { constructeurActionsHATEOAS } from './hateoas/hateoas';
 
 export const routesAPIProfil = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -33,6 +34,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
               ? FournisseurHorloge.formateDate(dateSignatureCGU).date
               : '',
             identifiantConnexion: aidant.identifiantConnexion,
+            ...constructeurActionsHATEOAS().lancerDiagnostic().construis(),
           });
         })
         .catch((erreur) => suite(ErreurMAC.cree('Accède au profil', erreur)));
