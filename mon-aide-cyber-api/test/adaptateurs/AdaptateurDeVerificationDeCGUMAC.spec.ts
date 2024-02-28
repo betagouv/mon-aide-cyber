@@ -47,10 +47,6 @@ describe('Adaptateur de Vérification de CGU', () => {
     expect(jsonRecu).toStrictEqual<ReponseHATEOAS>({
       liens: {
         suite: { url: '/finalise-creation-compte' },
-        'finaliser-creation-compte': {
-          url: '/api/espace-aidant/cree',
-          methode: 'POST',
-        },
         'creer-espace-aidant': {
           url: '/api/espace-aidant/cree',
           methode: 'POST',

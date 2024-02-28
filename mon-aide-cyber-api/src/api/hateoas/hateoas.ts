@@ -35,10 +35,6 @@ class ConstructeurActionsHATEOAS {
 
   creerEspaceAidant(): ConstructeurActionsHATEOAS {
     this.suite = { url: '/finalise-creation-compte' };
-    this.actions.set('finaliser-creation-compte', {
-      url: '/api/espace-aidant/cree',
-      methode: 'POST',
-    });
     this.actions.set('creer-espace-aidant', {
       url: '/api/espace-aidant/cree',
       methode: 'POST',
