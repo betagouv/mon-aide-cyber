@@ -25,11 +25,18 @@ class ConstructeurActionsHATEOAS {
     aidantAuthentifie: AidantAuthentifie,
   ): ConstructeurActionsHATEOAS {
     if (!aidantAuthentifie.dateSignatureCGU) {
-      this.creerEspaceAidant();
-    } else {
-      this.tableauDeBord();
-      this.lancerDiagnostic();
+      return this.creerEspaceAidant();
     }
+
+    return this.tableauDeBord().lancerDiagnostic().afficherProfil();
+  }
+
+  afficherProfil(): ConstructeurActionsHATEOAS {
+    this.actions.set('afficher-profil', {
+      url: '/api/profil',
+      methode: 'GET',
+    });
+
     return this;
   }
 

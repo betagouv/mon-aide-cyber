@@ -82,6 +82,7 @@ export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
             ...constructeurActionsHATEOAS()
               .tableauDeBord()
               .lancerDiagnostic()
+              .afficherProfil()
               .construis(),
           });
           return reponse.send();

@@ -360,6 +360,10 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
             methode: 'GET',
             url: `/api/diagnostic/${identifiant}/restitution`,
           },
+          'afficher-profil': {
+            url: '/api/profil',
+            methode: 'GET',
+          },
           suite: {
             url: '/tableau-de-bord',
           },
