@@ -7,6 +7,7 @@ export type Contexte =
   | "Demande d'Authentification"
   | "Crée l'espace Aidant"
   | 'Envoi un message de contact'
+  | 'Accède au profil'
   | "Accède aux informations de l'utilisateur";
 
 export class ErreurMAC extends Error {
