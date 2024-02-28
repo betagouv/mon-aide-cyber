@@ -6,12 +6,16 @@ import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge
 
 export const routesAPIProfil = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
-  const { entrepots, adaptateurDeVerificationDeSession: session } =
-    configuration;
+  const {
+    entrepots,
+    adaptateurDeVerificationDeSession: session,
+    adaptateurDeVerificationDeCGU: cgu,
+  } = configuration;
 
   routes.get(
     '/',
     session.verifie('Accède au profil'),
+    cgu.verifie(),
     async (
       requete: RequeteUtilisateur,
       reponse: Response,
