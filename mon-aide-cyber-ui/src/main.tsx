@@ -19,6 +19,7 @@ import { MentionsLegales } from './vues/MentionsLegales.tsx';
 import { ComposantCreationEspaceAidant } from './composants/espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { FournisseurMacAPI } from './fournisseurs/api/ContexteMacAPI.tsx';
 import { FournisseurNavigationMAC } from './fournisseurs/ContexteNavigationMAC.tsx';
+import { ComposantProfil } from './composants/ComposantProfil.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -76,6 +77,12 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     path="/diagnostic/:idDiagnostic/restitution"
                     element={
                       <ComposantIntercepteur composant={ComposantRestitution} />
+                    }
+                  ></Route>
+                  <Route
+                    path="/profil"
+                    element={
+                      <ComposantIntercepteur composant={ComposantProfil} />
                     }
                   ></Route>
                 </Route>
