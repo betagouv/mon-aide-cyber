@@ -145,6 +145,10 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
                 url: '/api/espace-aidant/cree',
                 methode: 'POST',
               },
+              'creer-espace-aidant': {
+                url: '/api/espace-aidant/cree',
+                methode: 'POST',
+              },
             },
           });
         });
@@ -171,6 +175,10 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             liens: {
               suite: { url: '/finalise-creation-compte' },
               'finaliser-creation-compte': {
+                url: '/api/espace-aidant/cree',
+                methode: 'POST',
+              },
+              'creer-espace-aidant': {
                 url: '/api/espace-aidant/cree',
                 methode: 'POST',
               },

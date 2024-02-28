@@ -39,6 +39,10 @@ class ConstructeurActionsHATEOAS {
       url: '/api/espace-aidant/cree',
       methode: 'POST',
     });
+    this.actions.set('creer-espace-aidant', {
+      url: '/api/espace-aidant/cree',
+      methode: 'POST',
+    });
     return this;
   }
 
