@@ -14,3 +14,25 @@ a {
   background: $icone-gauche no-repeat left center;
   padding-left: 1rem;
 }
+
+.mac-icone-information {
+  background: $icone-information no-repeat left center;
+}
+
+.mac-callout {
+  display: flex;
+  padding: 1rem;
+  align-items: flex-start;
+  gap: 0.5rem;
+  align-self: stretch;
+  border-radius: 0.5rem;
+
+  i {
+    width: 3rem;
+    height: 2rem;
+  }
+}
+
+.mac-callout-information {
+  background: var(--couleurs-mac-jaune-clair);
+}
