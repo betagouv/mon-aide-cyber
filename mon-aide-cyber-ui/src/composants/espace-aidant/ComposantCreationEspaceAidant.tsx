@@ -11,30 +11,30 @@ import { useNavigate } from 'react-router-dom';
 import {
   motDePasseTemporaireSaisi,
   cguCliquees,
-  finalisationCreationCompteInvalidee,
-  finalisationCreationCompteTransmise,
-  finalisationCreationCompteValidee,
+  creationEspaceAidantInvalidee,
+  creationEspaceAidantTransmise,
+  creationEspaceAidantValidee,
   initialiseReducteur,
   nouveauMotDePasseConfirme,
   nouveauMotDePasseSaisi,
-  reducteurFinalisationCreationCompte,
-} from './reducteurFinalisationCreationCompte.tsx';
-import { FinalisationCompte } from '../../domaine/utilisateur/Utilisateur.ts';
+  reducteurCreationEspaceAidant,
+} from './reducteurCreationEspaceAidant.tsx';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { CreationEspaceAidant } from '../../domaine/espace-aidant/EspaceAidant.ts';
 
-export const ComposantFinalisationCreationCompte = () => {
+export const ComposantCreationEspaceAidant = () => {
   const actions = useActionsUtilisateur();
-  const [etatFinalisationCreationCompte, envoie] = useReducer(
-    reducteurFinalisationCreationCompte,
+  const [etatCreationEspaceAidant, envoie] = useReducer(
+    reducteurCreationEspaceAidant,
     initialiseReducteur(),
   );
   const navigate = useNavigate();
   const macapi = useMACAPI();
 
-  const finaliseCreationCompte = useCallback(async (e: FormEvent) => {
+  const creeEspaceAidant = useCallback(async (e: FormEvent) => {
     e.preventDefault();
-    envoie(finalisationCreationCompteValidee());
+    envoie(creationEspaceAidantValidee());
   }, []);
 
   useEffect(() => {
@@ -43,34 +43,33 @@ export const ComposantFinalisationCreationCompte = () => {
       navigate('/');
     }
     if (
-      etatFinalisationCreationCompte.saisieValide() &&
-      etatFinalisationCreationCompte.finalisationCreationCompteATransmettre
+      etatCreationEspaceAidant.saisieValide() &&
+      etatCreationEspaceAidant.creationEspaceAidantATransmettre
     ) {
       const lien = trouveParmiLesLiens(actions, 'finaliser-creation-compte');
-      const parametresAPI = constructeurParametresAPI<FinalisationCompte>()
+      const parametresAPI = constructeurParametresAPI<CreationEspaceAidant>()
         .url(lien.url)
         .methode(lien.methode!)
         .corps({
-          cguSignees: etatFinalisationCreationCompte.cguSignees,
-          motDePasse: etatFinalisationCreationCompte.nouveauMotDePasse,
-          motDePasseTemporaire:
-            etatFinalisationCreationCompte.motDePasseTemporaire,
+          cguSignees: etatCreationEspaceAidant.cguSignees,
+          motDePasse: etatCreationEspaceAidant.nouveauMotDePasse,
+          motDePasseTemporaire: etatCreationEspaceAidant.motDePasseTemporaire,
         })
         .construis();
       macapi
-        .appelle<ReponseHATEOAS, FinalisationCompte>(
+        .appelle<ReponseHATEOAS, CreationEspaceAidant>(
           parametresAPI,
           async (json) => (await json) as unknown as ReponseHATEOAS,
         )
         .then((reponse) => {
-          envoie(finalisationCreationCompteTransmise());
+          envoie(creationEspaceAidantTransmise());
           return navigate(reponse.liens.suite.url, {
             state: extraisLesActions(reponse.liens),
           });
         })
-        .catch((erreur) => envoie(finalisationCreationCompteInvalidee(erreur)));
+        .catch((erreur) => envoie(creationEspaceAidantInvalidee(erreur)));
     }
-  }, [actions, etatFinalisationCreationCompte, macapi, navigate]);
+  }, [actions, etatCreationEspaceAidant, macapi, navigate]);
 
   const surCGUSignees = useCallback(() => {
     envoie(cguCliquees());
@@ -99,11 +98,11 @@ export const ComposantFinalisationCreationCompte = () => {
             </div>
           </div>
         </div>
-        <div className="fond-clair-mac finalisation-compte">
+        <div className="fond-clair-mac creation-espace-aidant">
           <div className="fr-container">
             <div className="fr-grid-row fr-grid-row--gutters fr-grid-row--center">
               <div className="fr-col-8">
-                <form onSubmit={finaliseCreationCompte}>
+                <form onSubmit={creeEspaceAidant}>
                   <fieldset className="fr-fieldset section">
                     <div>
                       <div>
@@ -148,8 +147,8 @@ export const ComposantFinalisationCreationCompte = () => {
                       </div>
                       <div
                         className={`fr-input-group ${
-                          etatFinalisationCreationCompte.erreur
-                            ? etatFinalisationCreationCompte.erreur?.motDePasse
+                          etatCreationEspaceAidant.erreur
+                            ? etatCreationEspaceAidant.erreur?.motDePasse
                                 ?.className
                             : ''
                         }`}
@@ -165,9 +164,7 @@ export const ComposantFinalisationCreationCompte = () => {
                           id="ancien-mot-de-passe"
                           name="ancien-mot-de-passe"
                           autoComplete={'current-password'}
-                          value={
-                            etatFinalisationCreationCompte.motDePasseTemporaire
-                          }
+                          value={etatCreationEspaceAidant.motDePasseTemporaire}
                           onChange={(e) =>
                             surSaisieMotDePasseTemporaire(e.target.value)
                           }
@@ -175,8 +172,8 @@ export const ComposantFinalisationCreationCompte = () => {
                       </div>
                       <div
                         className={`fr-input-group ${
-                          etatFinalisationCreationCompte.erreur
-                            ? etatFinalisationCreationCompte.erreur?.motDePasse
+                          etatCreationEspaceAidant.erreur
+                            ? etatCreationEspaceAidant.erreur?.motDePasse
                                 ?.className
                             : ''
                         }`}
@@ -192,9 +189,7 @@ export const ComposantFinalisationCreationCompte = () => {
                           id="nouveau-mot-de-passe"
                           name="nouveau-mot-de-passe"
                           autoComplete={'new-password'}
-                          value={
-                            etatFinalisationCreationCompte.nouveauMotDePasse
-                          }
+                          value={etatCreationEspaceAidant.nouveauMotDePasse}
                           onChange={(e) =>
                             surSaisieNouveauMotDePasse(e.target.value)
                           }
@@ -202,8 +197,8 @@ export const ComposantFinalisationCreationCompte = () => {
                       </div>
                       <div
                         className={`fr-input-group ${
-                          etatFinalisationCreationCompte.erreur
-                            ? etatFinalisationCreationCompte.erreur?.motDePasse
+                          etatCreationEspaceAidant.erreur
+                            ? etatCreationEspaceAidant.erreur?.motDePasse
                                 ?.className
                             : ''
                         }`}
@@ -219,15 +214,13 @@ export const ComposantFinalisationCreationCompte = () => {
                           id="confirmation-mot-de-passe"
                           name="confirmation-mot-de-passe"
                           autoComplete={'new-password'}
-                          value={
-                            etatFinalisationCreationCompte.motDePasseConfirme
-                          }
+                          value={etatCreationEspaceAidant.motDePasseConfirme}
                           onChange={(e) =>
                             surSaisieConfirmationMotDePasse(e.target.value)
                           }
                         />
                         {
-                          etatFinalisationCreationCompte.erreur?.motDePasse
+                          etatCreationEspaceAidant.erreur?.motDePasse
                             ?.texteExplicatif
                         }
                       </div>
@@ -237,7 +230,7 @@ export const ComposantFinalisationCreationCompte = () => {
                           id="cgu-aidant"
                           name="cgu-aidant"
                           onClick={surCGUSignees}
-                          checked={etatFinalisationCreationCompte.cguSignees}
+                          checked={etatCreationEspaceAidant.cguSignees}
                         />
                         <label className="fr-label" htmlFor="cgu-aidant">
                           J&apos;accepte les &nbsp;
@@ -249,14 +242,14 @@ export const ComposantFinalisationCreationCompte = () => {
                           &nbsp; de MonAideCyber
                         </label>
                         {
-                          etatFinalisationCreationCompte.erreur?.cguSignees
+                          etatCreationEspaceAidant.erreur?.cguSignees
                             ?.texteExplicatif
                         }
                       </div>
                       <div className="fr-grid-row fr-grid-row--right">
                         <button
                           type="submit"
-                          key="finalise-creation-compte"
+                          key="creation-espace-aidant"
                           className="fr-btn bouton-mac bouton-mac-primaire"
                         >
                           Valider
@@ -264,7 +257,7 @@ export const ComposantFinalisationCreationCompte = () => {
                       </div>
                     </div>
                     <div className="fr-mt-2w">
-                      {etatFinalisationCreationCompte.champsErreur}
+                      {etatCreationEspaceAidant.champsErreur}
                     </div>
                   </fieldset>
                 </form>

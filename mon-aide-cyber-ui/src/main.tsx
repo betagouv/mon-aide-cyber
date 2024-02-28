@@ -17,7 +17,7 @@ import { ComposantRestitution } from './composants/diagnostic/ComposantRestituti
 import { CGU } from './vues/CGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
 import { FournisseurContexteActionsUtilisateur } from './fournisseurs/ContexteActionsUtilisateurs.tsx';
-import { ComposantFinalisationCreationCompte } from './composants/parcoursCGU/ComposantFinalisationCreationCompte.tsx';
+import { ComposantCreationEspaceAidant } from './composants/espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { FournisseurMacAPI } from './fournisseurs/api/ContexteMacAPI.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -56,7 +56,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     path="/finalise-creation-compte"
                     element={
                       <ComposantIntercepteur
-                        composant={ComposantFinalisationCreationCompte}
+                        composant={ComposantCreationEspaceAidant}
                       />
                     }
                   ></Route>
