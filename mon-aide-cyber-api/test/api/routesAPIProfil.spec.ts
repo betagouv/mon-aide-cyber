@@ -59,5 +59,21 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         true,
       );
     });
+
+    it("ne peut pas accéder au profil si l'aidant n'existe pas", async () => {
+      testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/profil/`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toStrictEqual({
+        message: "Le aidant demandé n'existe pas.",
+      });
+    });
   });
 });
