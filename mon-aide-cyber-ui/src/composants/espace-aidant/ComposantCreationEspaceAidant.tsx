@@ -38,7 +38,7 @@ export const ComposantCreationEspaceAidant = () => {
   }, []);
 
   useEffect(() => {
-    const lien = trouveParmiLesLiens(actions, 'finaliser-creation-compte');
+    const lien = trouveParmiLesLiens(actions, 'creer-espace-aidant');
     if (!lien) {
       navigate('/');
     }
@@ -46,7 +46,7 @@ export const ComposantCreationEspaceAidant = () => {
       etatCreationEspaceAidant.saisieValide() &&
       etatCreationEspaceAidant.creationEspaceAidantATransmettre
     ) {
-      const lien = trouveParmiLesLiens(actions, 'finaliser-creation-compte');
+      const lien = trouveParmiLesLiens(actions, 'creer-espace-aidant');
       const parametresAPI = constructeurParametresAPI<CreationEspaceAidant>()
         .url(lien.url)
         .methode(lien.methode!)
