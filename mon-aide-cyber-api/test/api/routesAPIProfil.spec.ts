@@ -4,7 +4,7 @@ import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from './executeurRequete';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
-import { Profil } from '../../src/profil/Profil';
+import { Profil } from '../../src/api/representateurs/profil/Profil';
 
 describe('le serveur MAC sur les routes /api/profil', () => {
   const testeurMAC = testeurIntegration();
