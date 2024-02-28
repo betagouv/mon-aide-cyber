@@ -143,7 +143,7 @@ export const ComposantRestitution = ({
         <div className="fond-clair-mac">
           <div className="fr-container restitution">
             <div className="fr-grid-row">
-              <div className="fr-col-md-3 fr-col-3">
+              <div className="fr-col-md-3 fr-col-3 menu-restitution">
                 <nav
                   className="fr-sidemenu fr-sidemenu--sticky"
                   aria-labelledby="fr-sidemenu-title"

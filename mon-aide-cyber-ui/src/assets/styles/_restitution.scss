@@ -4,7 +4,9 @@ html {
   scroll-padding-top: 200px;
 }
 .restitution {
-  padding: 56px 0 46px 0;
+  .menu-restitution {
+    margin: 5.5rem 0;
+  }
 
   h3 {
     color: var(--couleurs-mac-violet-fonce);
