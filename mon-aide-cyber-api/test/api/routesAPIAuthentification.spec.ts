@@ -141,10 +141,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             nomPrenom: 'Jean Dupont',
             liens: {
               suite: { url: '/finalise-creation-compte' },
-              'finaliser-creation-compte': {
-                url: '/api/espace-aidant/cree',
-                methode: 'POST',
-              },
               'creer-espace-aidant': {
                 url: '/api/espace-aidant/cree',
                 methode: 'POST',
@@ -174,10 +170,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             nomPrenom: aidant.nomPrenom,
             liens: {
               suite: { url: '/finalise-creation-compte' },
-              'finaliser-creation-compte': {
-                url: '/api/espace-aidant/cree',
-                methode: 'POST',
-              },
               'creer-espace-aidant': {
                 url: '/api/espace-aidant/cree',
                 methode: 'POST',
