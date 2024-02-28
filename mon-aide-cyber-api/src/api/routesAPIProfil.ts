@@ -3,6 +3,7 @@ import express, { Response } from 'express';
 import { RequeteUtilisateur } from './routesAPI';
 import { NextFunction } from 'express-serve-static-core';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
+import { ErreurMAC } from '../domaine/erreurMAC';
 
 export const routesAPIProfil = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -19,7 +20,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     async (
       requete: RequeteUtilisateur,
       reponse: Response,
-      _suite: NextFunction,
+      suite: NextFunction,
     ) => {
       return entrepots
         .aidants()
@@ -33,7 +34,8 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
               : '',
             identifiantConnexion: aidant.identifiantConnexion,
           });
-        });
+        })
+        .catch((erreur) => suite(ErreurMAC.cree('Accède au profil', erreur)));
     },
   );
 
