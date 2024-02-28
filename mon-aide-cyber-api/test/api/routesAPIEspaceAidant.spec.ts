@@ -59,6 +59,10 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
             url: '/api/diagnostic',
             methode: 'POST',
           },
+          'afficher-profil': {
+            url: '/api/profil',
+            methode: 'GET',
+          },
         },
       });
     });

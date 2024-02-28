@@ -120,6 +120,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
             .lancerDiagnostic()
             .restituerDiagnostic(id)
             .modifierDiagnostic(id)
+            .afficherProfil()
             .construis();
           const resultat: ReprensentationRestitution = {
             ...reponseHATEOAS,
