@@ -40,6 +40,40 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
             url: '/api/diagnostic',
             methode: 'POST',
           },
+          'afficher-profil': {
+            url: '/api/profil',
+            methode: 'GET',
+          },
+        },
+      });
+    });
+
+    it("retourne l'utilisateur connecté avec le lien de création d'espace Aidant", async () => {
+      const aidant = unAidant().sansEspace().construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/utilisateur/`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+      ).toBe(true);
+      expect(await reponse.json()).toStrictEqual({
+        nomPrenom: aidant.nomPrenom,
+        liens: {
+          'creer-espace-aidant': {
+            url: '/api/espace-aidant/cree',
+            methode: 'POST',
+          },
+          suite: {
+            url: '/finalise-creation-compte',
+          },
         },
       });
     });

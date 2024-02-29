@@ -22,8 +22,16 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         .aidants()
         .lis(requete.identifiantUtilisateurCourant!)
         .then((aidant) => {
+          const actionsHATEOAS = constructeurActionsHATEOAS();
           reponse.status(200).json({
-            ...constructeurActionsHATEOAS().lancerDiagnostic().construis(),
+            ...(aidant.dateSignatureCGU
+              ? {
+                  ...actionsHATEOAS
+                    .lancerDiagnostic()
+                    .afficherProfil()
+                    .construis(),
+                }
+              : { ...actionsHATEOAS.creerEspaceAidant().construis() }),
             nomPrenom: aidant.nomPrenom,
           });
         })
