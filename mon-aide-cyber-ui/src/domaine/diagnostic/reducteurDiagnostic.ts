@@ -40,11 +40,10 @@ export const reducteurDiagnostic = (
           thematique.groupes.forEach((groupe) => {
             groupe.questions.forEach((question) => {
               trieLesReponses(question.reponsesPossibles);
-              question.reponsesPossibles.forEach(
-                (reponse) =>
-                  reponse.questions?.forEach((question) =>
-                    trieLesReponses(question.reponsesPossibles),
-                  ),
+              question.reponsesPossibles.forEach((reponse) =>
+                reponse.questions?.forEach((question) =>
+                  trieLesReponses(question.reponsesPossibles),
+                ),
               );
             });
           });
@@ -57,6 +56,7 @@ export const reducteurDiagnostic = (
       };
   }
 };
+
 export const diagnosticCharge = (diagnostic: Diagnostic): ActionDiagnostic => {
   return {
     type: TypeActionDiagnostic.DIAGNOSTIC_CHARGE,
