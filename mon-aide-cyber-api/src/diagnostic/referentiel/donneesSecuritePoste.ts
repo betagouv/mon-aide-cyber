@@ -263,7 +263,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     {
       identifiant: 'securite-poste-outils-complementaires-securisation',
       libelle:
-        'Un outil complémentaire à un antivirus de type EDR a-t-il été mis en place ?',
+        "En complément de l'antivirus, un outil de type EDR a-t-il été mis en place ?",
       poids: 2,
       reponsesPossibles: [
         {
@@ -290,7 +290,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr',
           libelle:
-            'Oui, un outil complémentaire à un antivirus de type EDR a été mis en place mais ses alertes ne sont pas toujours traitées.',
+            'Oui, un outil de type EDR a été mis en place mais ses alertes ne sont pas toujours traitées.',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -307,7 +307,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr',
           libelle:
-            'Oui, un outil complémentaire à un antivirus de type EDR a été mis en place et ses alertes sont systématiquement traitées.',
+            'Oui, un outil de type EDR a été mis en place et ses alertes sont systématiquement traitées.',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
