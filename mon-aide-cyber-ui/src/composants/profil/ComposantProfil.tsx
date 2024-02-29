@@ -1,6 +1,6 @@
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
-import { useEffect, useReducer } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 import { profilCharge, reducteurProfil } from './reducteurProfil.ts';
 import { Profil } from 'mon-aide-cyber-api/src/api/representateurs/profil/Profil.ts';
 import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
@@ -30,11 +30,18 @@ export const ComposantProfil = () => {
             .url(lien.url)
             .methode(lien.methode!)
             .construis(),
-          async (reponse) => await reponse,
+          (reponse) => reponse,
         )
         .then((profil) => envoie(profilCharge(profil)));
     }
   }, [navigationMAC.etat, etatProfil.enCoursDeChargement, macapi]);
+
+  const afficherTableauDeBord = useCallback(() => {
+    navigationMAC.navigue(
+      new MoteurDeLiens(navigationMAC.etat),
+      'lancer-diagnostic',
+    );
+  }, [navigationMAC]);
 
   return (
     <>
@@ -51,9 +58,28 @@ export const ComposantProfil = () => {
           <div className="fr-container">
             <div className="fr-grid-row fr-grid-row--center">
               <div className="fr-col-md-8 fr-col-sm-12 section">
-                <p>Compte Crée le {etatProfil.dateCreationCompte}</p>
-                <p>Prénom {etatProfil.prenom}</p>
-                <p>nom {etatProfil.nom}</p>
+                <div className="fr-mb-2w">
+                  Compte Crée le {etatProfil.dateCreationCompte}
+                </div>
+                <div>
+                  <button
+                    className="bouton-mac bouton-mac-secondaire"
+                    onClick={afficherTableauDeBord}
+                  >
+                    Accéder au tableau de bord
+                  </button>
+                </div>
+                <div className="fr-mt-2w">
+                  <p>
+                    <b>Prénom</b> {etatProfil.prenom}
+                  </p>
+                  <p>
+                    <b>Nom</b> {etatProfil.nom}
+                  </p>
+                  <p>
+                    <b>Email</b> {etatProfil.email}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
