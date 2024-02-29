@@ -103,7 +103,7 @@ export const mesuresSecuriteInfrastructure = {
   },
   'securite-infrastructure-acces-wifi-securises': {
     niveau1: {
-      titre: 'Mettre en place des mesures de sécurisation wifi.',
+      titre: 'Mettre en place des mesures de sécurisation wifi',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau1-pourquoi.pug',
       comment:
@@ -111,11 +111,11 @@ export const mesuresSecuriteInfrastructure = {
     },
     niveau2: {
       titre:
-        "Restreindre l'accès à l'interface d’administration dédiée seulement via le réseau cablé (et non en Wifi).",
+        "Mettre en place des mesures de sécurisation wifi",
       pourquoi:
-        '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau2-pourquoi.pug',
+        '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau2-comment.pug',
+        '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau1-comment.pug',
     },
     priorisation: 29,
   },
