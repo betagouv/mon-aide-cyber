@@ -5,7 +5,7 @@ export const donneesReaction: QuestionsThematique = {
     {
       identifiant: 'reaction-surveillance-veille-vulnerabilites-potentielles',
       libelle:
-        'Une veille des vulnérabilités pouvant vous affecter est-elle réalisée ?',
+        'Un suivi des alertes de cybersécurité et des vulnérabilités publiées pouvant vous affecter est-il réalisé ?',
       poids: 2,
       reponsesPossibles: [
         {
@@ -33,7 +33,7 @@ export const donneesReaction: QuestionsThematique = {
         {
           identifiant:
             'reaction-surveillance-veille-vulnerabilites-potentielles-veille-ponctuelle',
-          libelle: "Réalisation d'une veille ponctuelle sur Internet.",
+          libelle: "Un suivi ponctuel est réalisé",
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -49,7 +49,7 @@ export const donneesReaction: QuestionsThematique = {
         {
           identifiant:
             'reaction-surveillance-veille-vulnerabilites-potentielles-veille-reguliere',
-          libelle: "Réalisation d'une veille régulière et exhaustive.",
+          libelle: "Une veille proactive et exhaustive est réalisée",
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
