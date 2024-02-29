@@ -860,7 +860,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-activites-recherche-et-developpement',
       libelle:
-        'Estimez-vous que votre entreprise puisse faire l’objet d’espionnage ?',
+        'Estimez-vous que votre entité puisse faire l’objet d’espionnage ?',
       poids: 0,
       reponsesPossibles: [
         {
