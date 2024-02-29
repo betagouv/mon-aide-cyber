@@ -1,14 +1,14 @@
 export const mesuresReaction = {
   'reaction-surveillance-veille-vulnerabilites-potentielles': {
     niveau1: {
-      titre: 'Réaliser une veille périodique sur internet.',
+      titre: 'Réaliser une veille périodique sur internet',
       pourquoi:
         '../../mesures/reaction/reaction-surveillance-veille-vulnerabilites-potentielles-niveau1-pourquoi.pug',
       comment:
         '../../mesures/reaction/reaction-surveillance-veille-vulnerabilites-potentielles-niveau1-comment.pug',
     },
     niveau2: {
-      titre: 'Réaliser une veille proactive régulière.',
+      titre: 'Réaliser une veille proactive régulière',
       pourquoi:
         '../../mesures/reaction/reaction-surveillance-veille-vulnerabilites-potentielles-niveau2-pourquoi.pug',
       comment:
@@ -19,7 +19,7 @@ export const mesuresReaction = {
   'reaction-sauvegardes-donnees-realisees': {
     niveau1: {
       titre:
-        'Réaliser des sauvegardes selon une période déterminée par les besoins métiers.',
+        'Réaliser des sauvegardes selon une période déterminée par les besoins métiers',
       pourquoi:
         '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-niveau1-pourquoi.pug',
       comment:
@@ -31,7 +31,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          'Procéder régulièrement à des tests de restauration, couvrant en priorité les données critiques.',
+          'Procéder régulièrement à des tests de restauration, couvrant en priorité les données critiques',
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-niveau1-pourquoi.pug',
         comment:
@@ -43,7 +43,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet.",
+          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet",
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:
@@ -55,7 +55,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet.",
+          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet",
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-niveau1-pourquoi.pug',
         comment:
@@ -67,7 +67,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet.",
+          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet",
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:
@@ -78,7 +78,7 @@ export const mesuresReaction = {
   'reaction-dispositif-gestion-crise-adapte-defini': {
     niveau1: {
       titre:
-        'Lister les personnes à contacter en cas d’incident de sécurité informatique.',
+        'Lister les personnes à contacter en cas d’incident de sécurité informatique',
       pourquoi:
         '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau1-pourquoi.pug',
       comment:
@@ -86,7 +86,7 @@ export const mesuresReaction = {
     },
     niveau2: {
       titre:
-        'Définir des premières mesures organisationnelles de gestion de crise cyber.',
+        'Définir des premières mesures organisationnelles de gestion de crise cyber',
       pourquoi:
         '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau2-pourquoi.pug',
       comment:
