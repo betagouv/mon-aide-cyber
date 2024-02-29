@@ -29,7 +29,7 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        'Définir avec le service RH des processus de « circuit arrivée » et « circuit départ » assurant les créations et les désactivations des comptes utilisateurs.',
+        'Définir avec le service RH des processus de « circuit arrivée » et « circuit départ » assurant les créations et les désactivations des comptes utilisateurs',
       pourquoi:
         '../../mesures/acces/acces-liste-compte-utilisateurs-niveau2-pourquoi.pug',
       comment:
@@ -40,7 +40,7 @@ export const mesuresSecuriteAcces = {
   'acces-droits-acces-utilisateurs-limites': {
     niveau1: {
       titre:
-        "Restreindre l'accès aux données à protéger en priorité aux seules personnes autorisées à y accéder (ex : un tableau répertoriant les utilisateurs légitimes par systèmes/applications à protéger en priorité)",
+        "Restreindre l'accès aux données à protéger en priorité aux seules personnes autorisées à y accéder",
       pourquoi:
         '../../mesures/acces/acces-droits-acces-utilisateurs-limites-niveau1-pourquoi.pug',
       comment:
@@ -59,7 +59,7 @@ export const mesuresSecuriteAcces = {
   'acces-administrateurs-informatiques-suivie-et-limitee': {
     niveau1: {
       titre:
-        'Réaliser tous les 6 mois une revue des accès administrateurs en les comparant avec les informations détenues par le service RH. Les mots de passes des comptes partagés concernés sont renouvelés à chaque départ',
+        'Réaliser tous les 6 mois une revue des accès administrateurs en les comparant avec les informations détenues par le service RH',
       pourquoi:
         '../../mesures/acces/acces-administrateurs-informatiques-suivie-et-limitee-niveau1-pourquoi.pug',
       comment:
@@ -67,7 +67,7 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        'Définir avec les administrateurs (prestataire inclus), et si nécessaire avec le service RH et Achat, des processus de « circuit arrivée » et « circuit départ » assurant les créations et les désactivations des comptes administrateurs',
+        'Définir avec les administrateurs des processus de « circuit arrivée » et « circuit départ » assurant les créations et les désactivations des comptes administrateurs',
       pourquoi:
         '../../mesures/acces/acces-administrateurs-informatiques-suivie-et-limitee-niveau2-pourquoi.pug',
       comment:
@@ -108,7 +108,7 @@ export const mesuresSecuriteAcces = {
   'acces-mesures-securite-robustesse-mdp': {
     niveau1: {
       titre:
-      'Fixer des contraintes de longueur et de complexité des mots de passe exigeant à minima 12 caractères (idéalement 15) incluant minuscules, majuscules, chiffres et caractères spéciaux. Si nécessaire poursuivre les actions de communication et de promotion des coffres fort de mot de passe.',
+      'Fixer des contraintes de longueur et de complexité des mots de passe exigeant à minima 12 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux',
     pourquoi:
       '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-pourquoi.pug',
     comment:
@@ -127,7 +127,7 @@ export const mesuresSecuriteAcces = {
   'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles': {
     niveau1: {
       titre:
-        'Mettre en place des mesures complémentaires de sécurisation des données sensibles.',
+        'Mettre en place des mesures complémentaires de sécurisation des données sensibles',
       pourquoi:
         '../../mesures/acces/acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-niveau1-pourquoi.pug',
       comment:
@@ -135,7 +135,7 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        'En complément des pratiques déjà en œuvre, mettre en place des mesures complémentaires de sécurisation des données sensibles (dont R&D).',
+        'En complément des pratiques déjà en œuvre, mettre en place des mesures complémentaires de sécurisation des données sensibles (dont R&D)',
       pourquoi:
         '../../mesures/acces/acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-niveau2-pourquoi.pug',
       comment:
@@ -146,7 +146,7 @@ export const mesuresSecuriteAcces = {
   'acces-teletravail-acces-distants-mesures-particulieres': {
     niveau1: {
       titre:
-        'Mettre en place pour tous les accès distants des mécanismes de double authentification à minima, avec restriction via adresses IP (ex : localisation, pays, plages horaires)',
+        'Mettre en place pour tous les accès distants des mécanismes de double authentification à minima',
       pourquoi:
         '../../mesures/acces/acces-teletravail-acces-distants-mesures-particulieres-niveau1-pourquoi.pug',
       comment:
@@ -154,7 +154,7 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        'Gérer tous les accès distants via un VPN "full-tunneling*" dédié et des mécanismes de double authentification à minima.',
+        'Gérer tous les accès distants via un VPN, lui même authentifié à double facteur',
       pourquoi:
         '../../mesures/acces/acces-teletravail-acces-distants-mesures-particulieres-niveau2-pourquoi.pug',
       comment:
@@ -165,7 +165,7 @@ export const mesuresSecuriteAcces = {
   'acces-si-industriel-teletravail-acces-distants-mesures-particulieres': {
     niveau1: {
       titre:
-        'Mettre en place pour tous les accès distants du SI indus (ou GTB-GTC) des mécanismes de double authentification à minima, avec restriction via adresses IP (ex : localisation, pays, plages horaires)',
+        'Mettre en place pour tous les accès distants des systèmes industriels des mécanismes de double authentification',
       pourquoi:
         '../../mesures/acces/acces-si-industriel-teletravail-acces-distants-mesures-particulieres-niveau1-pourquoi.pug',
       comment:
@@ -173,7 +173,7 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        'Gérer tous les accès distants via un VPN "full-tunneling*" dédié et des mécanismes de double authentification à minima.',
+        'Gérer tous les accès distants des systèmes industriels via un VPN, lui même authentifié à double facteur',
       pourquoi:
         '../../mesures/acces/acces-si-industriel-teletravail-acces-distants-mesures-particulieres-niveau2-pourquoi.pug',
       comment:
