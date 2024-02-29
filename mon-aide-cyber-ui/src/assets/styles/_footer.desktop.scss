@@ -1,21 +1,23 @@
 @media screen and (min-width: 1440px) {
+  #logo-anssi {
+    width: 5.1875rem;
+    height: 5.1875rem;
+    position: relative;
+    top: -0.5rem;
+    left: 1rem;
+  }
+
   #logo-gendarmerie-nationale {
-    height: 9rem;
+    height: 6.5625rem;
     overflow: visible;
     top: -1.2rem;
     position: relative;
   }
 
   #logo-acyma {
-    height: 8rem;
+    height: 5.875rem;
     position: relative;
     top: -0.5rem;
   }
 
-  #logo-anssi {
-    height: 8rem;
-    position: relative;
-    top: -0.5rem;
-    left: 1rem;
-  }
 }

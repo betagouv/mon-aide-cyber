@@ -5,7 +5,7 @@ export const Footer = () => (
         <div className="fr-col-md-2 fr-col-sm-12">
           <a href="https://www.ssi.gouv.fr/" target="_blank" rel="noreferrer">
             {' '}
-            <img src="/images/logo_anssi.png" alt="ANSSI" />
+            <img id="logo-anssi" src="/images/logo_anssi.png" alt="ANSSI" />
           </a>
         </div>
         <div className="fr-col-md-2 fr-col-sm-12">
