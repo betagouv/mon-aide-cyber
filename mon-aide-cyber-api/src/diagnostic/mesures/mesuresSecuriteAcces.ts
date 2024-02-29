@@ -16,7 +16,7 @@ export const mesuresSecuriteAcces = {
       comment:
         '../../mesures/acces/acces-outil-gestion-des-comptes-niveau2-comment.pug',
     },
-    priorisation: 35,
+    priorisation: 14,
   },
   'acces-liste-compte-utilisateurs': {
     niveau1: {
@@ -35,7 +35,7 @@ export const mesuresSecuriteAcces = {
       comment:
         '../../mesures/acces/acces-liste-compte-utilisateurs-niveau2-comment.pug',
     },
-    priorisation: 26,
+    priorisation: 25,
   },
   'acces-droits-acces-utilisateurs-limites': {
     niveau1: {
@@ -54,7 +54,7 @@ export const mesuresSecuriteAcces = {
       comment:
         '../../mesures/acces/acces-droits-acces-utilisateurs-limites-niveau2-comment.pug',
     },
-    priorisation: 18,
+    priorisation: 31,
   },
   'acces-administrateurs-informatiques-suivie-et-limitee': {
     niveau1: {
@@ -73,7 +73,7 @@ export const mesuresSecuriteAcces = {
       comment:
         '../../mesures/acces/acces-administrateurs-informatiques-suivie-et-limitee-niveau2-comment.pug',
     },
-    priorisation: 27,
+    priorisation: 29,
   },
   'acces-utilisation-comptes-administrateurs-droits-limitee': {
     niveau1: {
@@ -92,7 +92,7 @@ export const mesuresSecuriteAcces = {
       comment:
         '../../mesures/acces/acces-utilisation-comptes-administrateurs-droits-limitee-niveau2-comment.pug',
     },
-    priorisation: 10,
+    priorisation: 11,
   },
   'acces-utilisateurs-administrateurs-poste': {
     niveau1: {
@@ -103,7 +103,7 @@ export const mesuresSecuriteAcces = {
       comment:
         '../../mesures/acces/acces-utilisateurs-administrateurs-poste-niveau1-comment.pug',
     },
-    priorisation: 10,
+    priorisation: 7,
   },
   'acces-mesures-securite-robustesse-mdp': {
     niveau1: {
@@ -122,12 +122,12 @@ export const mesuresSecuriteAcces = {
       comment:
         '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau1-comment.pug',
     },
-    priorisation: 20,
+    priorisation: 19,
   },
   'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles': {
     niveau1: {
       titre:
-        'Mettre en place des mesures complémentaires de sécurisation des données sensibles',
+        'Protéger de manière spéficique les données jugées sensibles',
       pourquoi:
         '../../mesures/acces/acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-niveau1-pourquoi.pug',
       comment:
@@ -135,13 +135,13 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        'En complément des pratiques déjà en œuvre, mettre en place des mesures complémentaires de sécurisation des données sensibles (dont R&D)',
+        'Mettre en place des mesures additionnelles de sécurisation des données jugées sensibles',
       pourquoi:
         '../../mesures/acces/acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-niveau2-pourquoi.pug',
       comment:
         '../../mesures/acces/acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-niveau2-comment.pug',
     },
-    priorisation: 28,
+    priorisation: 34,
   },
   'acces-teletravail-acces-distants-mesures-particulieres': {
     niveau1: {
@@ -198,6 +198,6 @@ export const mesuresSecuriteAcces = {
       comment:
         '../../mesures/acces/acces-administrateurs-si-mesures-specifiques-niveau2-comment.pug',
     },
-    priorisation: 11,
+    priorisation: 13,
   },
 };

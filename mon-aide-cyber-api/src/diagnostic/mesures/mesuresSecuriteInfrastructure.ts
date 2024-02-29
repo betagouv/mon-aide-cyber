@@ -8,7 +8,7 @@ export const mesuresSecuriteInfrastructure = {
       comment:
         '../../mesures/infras/securite-infrastructure-pare-feu-deploye-niveau1-comment.pug',
     },
-    priorisation: 20,
+    priorisation: 21,
   },
   'securite-infrastructure-pare-feu-deploye-interconnexions-protegees': {
     niveau1: {
@@ -19,7 +19,7 @@ export const mesuresSecuriteInfrastructure = {
       comment:
         '../../mesures/infras/securite-infrastructure-pare-feu-deploye-interconnexions-protegees-niveau1-comment.pug',
     },
-    priorisation: 20,
+    priorisation: 21,
   },
   'securite-infrastructure-pare-feu-deploye-logs-stockes': {
     niveau1: {
@@ -30,7 +30,7 @@ export const mesuresSecuriteInfrastructure = {
       comment:
         '../../mesures/infras/securite-infrastructure-pare-feu-deploye-logs-stockes-niveau1-comment.pug',
     },
-    priorisation: 20,
+    priorisation: 33,
   },
   'securite-infrastructure-si-industriel-pare-feu-deploye': {
     niveau1: {
@@ -49,7 +49,7 @@ export const mesuresSecuriteInfrastructure = {
       comment:
         '../../mesures/infras/securite-infrastructure-si-industriel-pare-feu-deploye-niveau2-comment.pug',
     },
-    priorisation: 20,
+    priorisation: 23,
   },
   'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees':
     {
@@ -81,7 +81,7 @@ export const mesuresSecuriteInfrastructure = {
         comment:
           '../../mesures/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-niveau2-comment.pug',
       },
-      priorisation: 2,
+      priorisation: 8,
     },
   'securite-infrastructure-outils-securisation-systeme-messagerie': {
     niveau1: {
@@ -99,7 +99,7 @@ export const mesuresSecuriteInfrastructure = {
       comment:
         '../../mesures/infras/securite-infrastructure-outils-securisation-systeme-messagerie-niveau2-comment.pug',
     },
-    priorisation: 22,
+    priorisation: 28,
   },
   'securite-infrastructure-acces-wifi-securises': {
     niveau1: {
@@ -117,7 +117,7 @@ export const mesuresSecuriteInfrastructure = {
       comment:
         '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau1-comment.pug',
     },
-    priorisation: 29,
+    priorisation: 36,
   },
   'securite-infrastructure-espace-stockage-serveurs': {
     niveau1: {
@@ -136,6 +136,6 @@ export const mesuresSecuriteInfrastructure = {
       comment:
         '../../mesures/infras/securite-infrastructure-espace-stockage-serveurs-niveau2-comment.pug',
     },
-    priorisation: 30,
+    priorisation: 35,
   },
 };

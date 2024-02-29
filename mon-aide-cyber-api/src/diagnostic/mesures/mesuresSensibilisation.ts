@@ -15,18 +15,18 @@ export const mesuresSensibilisation = {
       comment:
         '../../mesures/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-niveau2-comment.pug',
     },
-    priorisation: 13,
+    priorisation: 17,
   },
   'sensibilisation-risque-espionnage-industriel-r-et-d': {
     niveau1: {
       titre:
-        "Mener des actions de sensibilisation ciblée auprès des agents effectuant des missions à l'étranger.",
+        "Mener des actions de sensibilisation ciblée auprès du personnel effectuant des déplacements",
       pourquoi:
         '../../mesures/sensibilisation/sensibilisation-risque-espionnage-industriel-r-et-d-niveau1-pourquoi.pug',
       comment:
         '../../mesures/sensibilisation/sensibilisation-risque-espionnage-industriel-r-et-d-niveau1-comment.pug',
     },
-    priorisation: 13,
+    priorisation: 18,
   },
   'sensibilisation-collaborateurs-soumis-obligations-usages-securises': {
     niveau1: {
@@ -45,6 +45,6 @@ export const mesuresSensibilisation = {
       comment:
         '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau2-comment.pug',
     },
-    priorisation: 23,
+    priorisation: 30,
   },
 };
