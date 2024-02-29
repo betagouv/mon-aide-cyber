@@ -35,7 +35,7 @@ export const mesuresSecuriteInfrastructure = {
   'securite-infrastructure-si-industriel-pare-feu-deploye': {
     niveau1: {
       titre:
-        'Fermer tous les flux et les ports non strictement nécessaires au SI industriel',
+        'Fermer tous les flux et les ports non strictement nécessaires aux systèmes industriels',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-si-industriel-pare-feu-deploye-niveau1-pourquoi.pug',
       comment:
@@ -122,7 +122,7 @@ export const mesuresSecuriteInfrastructure = {
   'securite-infrastructure-espace-stockage-serveurs': {
     niveau1: {
       titre:
-        "Mettre en place des mesures de sécurisation de l'espace dédié au stockage des serveurs d'administration et des équipements réseau.",
+        "Protéger les informations et les systèmes contre des atteintes physiques",
       pourquoi:
         '../../mesures/infras/securite-infrastructure-espace-stockage-serveurs-niveau1-pourquoi.pug',
       comment:
@@ -130,7 +130,7 @@ export const mesuresSecuriteInfrastructure = {
     },
     niveau2: {
       titre:
-        "En complément des pratiques déjà en œuvre, mettre en place des mesures complémentaires de sécurisation de l'espace dédié au stockage des serveurs d'administration et des équipements réseau.",
+        "Mettre en place un système de vidéoprotection",
       pourquoi:
         '../../mesures/infras/securite-infrastructure-espace-stockage-serveurs-niveau2-pourquoi.pug',
       comment:

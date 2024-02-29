@@ -441,7 +441,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         {
           identifiant:
             'securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef',
-          libelle: "Oui, l'accès est sécurisé par une porte fermée à clef.",
+          libelle: "Oui, l’accès n’est autorisé qu’aux personnes légitimes",
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -457,7 +457,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef-videosurveillance',
           libelle:
-            "Oui, l'accès est sécurisé par une porte fermée à clef et par un dispositif de vidéosurveillance.",
+            "Oui, l’accès n’est autorisé qu’aux personnes légitimes et supervisé par un dispositif de vidéoprotection",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
