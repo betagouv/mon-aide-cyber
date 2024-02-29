@@ -43,7 +43,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet",
+          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique",
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:
@@ -55,7 +55,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet",
+          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique",
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-niveau1-pourquoi.pug',
         comment:
@@ -67,7 +67,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          "Disposer d'une sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique et d’internet",
+          "Procéder régulièrement à des tests de restauration des données critiques",
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:
