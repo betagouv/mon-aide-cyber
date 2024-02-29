@@ -99,7 +99,7 @@ export const donneesReaction: QuestionsThematique = {
               identifiant:
                 'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
               libelle:
-                'Si "Oui" : Existe-t-il au moins une sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne ou "hors-ligne" ?',
+                'Si "Oui" : Existe-t-il au moins un jeu de sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne ou "hors-ligne" ?',
               poids: 3,
               reponsesPossibles: [
                 {
@@ -216,7 +216,7 @@ export const donneesReaction: QuestionsThematique = {
               identifiant:
                 'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole',
               libelle:
-                'Si "Oui" : Existe-t-il au moins une sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne ou "hors-ligne"',
+                'Si "Oui" : Existe-t-il au moins un jeu de sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne ou "hors-ligne"',
               poids: 3,
               reponsesPossibles: [
                 {
