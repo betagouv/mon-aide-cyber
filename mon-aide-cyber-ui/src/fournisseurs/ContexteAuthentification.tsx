@@ -7,13 +7,14 @@ import {
 } from 'react';
 import {
   ReponseAuthentification,
+  ReponseUtilisateur,
   Utilisateur,
 } from '../domaine/authentification/Authentification.ts';
 import { useMACAPI } from './hooks.ts';
-import { ReponseHATEOAS } from '../domaine/Actions.ts';
+import { ReponseHATEOAS, trouveParmiLesLiens } from '../domaine/Actions.ts';
 
 import { constructeurParametresAPI } from './api/ConstructeurParametresAPI.ts';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 type ContexteAuthentificationType = {
   utilisateur?: Utilisateur;
@@ -26,12 +27,12 @@ type ContexteAuthentificationType = {
 
 export const ContexteAuthentification =
   createContext<ContexteAuthentificationType>(
-    {} as unknown as ContexteAuthentificationType
+    {} as unknown as ContexteAuthentificationType,
   );
 
 export type Identifiants = {
-  motDePasse: string;
   identifiant: string;
+  motDePasse: string;
 };
 
 type EtatUtilisateurAuthentifie = {
@@ -54,7 +55,7 @@ type ActionUtilisateurAuthentifie =
     };
 export const reducteurUtilisateurAuthentifie = (
   etat: EtatUtilisateurAuthentifie,
-  action: ActionUtilisateurAuthentifie
+  action: ActionUtilisateurAuthentifie,
 ): EtatUtilisateurAuthentifie => {
   switch (action.type) {
     case TypeActionUtilisateurAuthentifie.UTILISATEUR_NON_AUTHENTIFIE: {
@@ -85,7 +86,7 @@ export const initialiseReducteurUtilisateurAuthentifie =
   };
 
 export const utilisateurCharge = (
-  utilisateur: Utilisateur
+  utilisateur: Utilisateur,
 ): ActionUtilisateurAuthentifie => {
   return {
     type: TypeActionUtilisateurAuthentifie.UTILISATEUR_CHARGE,
@@ -102,10 +103,11 @@ export const FournisseurAuthentification = ({
   children,
 }: PropsWithChildren) => {
   const macapi = useMACAPI();
+  const navigate = useNavigate();
 
   const [etatUtilisateurAuthentifie, envoie] = useReducer(
     reducteurUtilisateurAuthentifie,
-    initialiseReducteurUtilisateurAuthentifie()
+    initialiseReducteurUtilisateurAuthentifie(),
   );
 
   const authentifie = (identifiants: {
@@ -122,14 +124,7 @@ export const FournisseurAuthentification = ({
             motDePasse: identifiants.motDePasse,
           })
           .construis(),
-        async (reponse) => {
-          const aidant = (await reponse) as ReponseAuthentification;
-          sessionStorage.setItem(
-            'aidant',
-            JSON.stringify({ nomPrenom: aidant.nomPrenom })
-          );
-          return aidant;
-        }
+        async (reponse) => (await reponse) as ReponseAuthentification,
       )
       .then((reponse) => {
         envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
@@ -139,17 +134,27 @@ export const FournisseurAuthentification = ({
   useEffect(() => {
     if (etatUtilisateurAuthentifie.enAttenteDeChargement) {
       macapi
-        .appelle<Utilisateur>(
+        .appelle<ReponseUtilisateur>(
           constructeurParametresAPI()
             .url('/api/utilisateur')
             .methode('GET')
             .construis(),
-          (json) => json
+          (json) => json,
         )
-        .then((utilisateur) => envoie(utilisateurCharge(utilisateur)))
+        .then((utilisateur) => {
+          envoie(utilisateurCharge(utilisateur));
+          const actionCreationEspaceAidant = trouveParmiLesLiens(
+            utilisateur.liens,
+            'creer-espace-aidant',
+          );
+
+          if (actionCreationEspaceAidant) {
+            navigate('finalise-creation-compte', { state: utilisateur.liens });
+          }
+        })
         .catch(() => envoie(utilisateurNonAuthentifie()));
     }
-  }, [etatUtilisateurAuthentifie.enAttenteDeChargement, macapi]);
+  }, [etatUtilisateurAuthentifie.enAttenteDeChargement, macapi, navigate]);
 
   const value: ContexteAuthentificationType = {
     authentifie,
