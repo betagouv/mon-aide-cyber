@@ -13,7 +13,7 @@ export const mesuresSecuriteInfrastructure = {
   'securite-infrastructure-pare-feu-deploye-interconnexions-protegees': {
     niveau1: {
       titre:
-        'Déployer un pare-feu physique pour protéger l’interconnexion du SI à Internet',
+        'Fermer tous les flux et les ports non strictement nécessaires',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-pare-feu-deploye-interconnexions-protegees-niveau1-pourquoi.pug',
       comment:
