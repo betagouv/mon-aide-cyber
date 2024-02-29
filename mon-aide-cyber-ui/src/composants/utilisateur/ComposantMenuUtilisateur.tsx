@@ -47,7 +47,15 @@ export const ComposantMenuUtilisateur = ({
         <details>
           <summary>{nomUtilisateur}</summary>
           <div id="conteneur">
-            <input type="button" onClick={afficherProfil} value="Mon Profil" />
+            {new MoteurDeLiens(navigationMAC.etat).trouve('afficher-profil') ? (
+              <input
+                type="button"
+                onClick={afficherProfil}
+                value="Mon Profil"
+              />
+            ) : (
+              <></>
+            )}
             <input type="button" onClick={deconnecter} value="Me Déconnecter" />
           </div>
         </details>
