@@ -175,7 +175,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     {
       identifiant: 'securite-poste-si-industriel-antivirus-deploye',
       libelle:
-        "Si l'entité dispose d'un SI industriel : Un antivirus à jour est-il déployé sur chaque poste de travail du SI industriel ?",
+        "Si l'entité dispose de systèmes industriels : Un antivirus à jour est-il déployé sur chaque poste de travail du SI industriel ?",
       poids: 2,
       reponsesPossibles: [
         {
@@ -317,7 +317,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     {
       identifiant: 'securite-poste-r-et-d-disques-chiffres',
       libelle:
-        "Si entité à risque d'espionnage, les disques durs des matériels nomades sont-ils chiffrés ?",
+        "Si entité à risque d'espionnage ciblé, les disques durs des matériels nomades sont-ils chiffrés ?",
       poids: 2,
       reponsesPossibles: [
         {
