@@ -307,7 +307,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr',
           libelle:
-            'Oui, un outil de type EDR a été mis en place et ses alertes sont systématiquement traitées.',
+            'Oui, un outil de type EDR a été mis en place et ses alertes sont systématiquement traitées',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
