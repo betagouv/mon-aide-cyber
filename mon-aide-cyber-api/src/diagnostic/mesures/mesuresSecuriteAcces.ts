@@ -78,7 +78,7 @@ export const mesuresSecuriteAcces = {
   'acces-utilisation-comptes-administrateurs-droits-limitee': {
     niveau1: {
       titre:
-        "Utiliser des comptes d'administrations dédiés à cet usage",
+        "Utiliser des comptes d'administration dédiés à cet usage",
       pourquoi:
         '../../mesures/acces/acces-utilisation-comptes-administrateurs-droits-limitee-niveau1-pourquoi.pug',
       comment:
