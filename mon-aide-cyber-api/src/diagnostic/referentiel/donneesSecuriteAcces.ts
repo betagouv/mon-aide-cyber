@@ -204,6 +204,42 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
+      identifiant: 'acces-mesures-securite-robustesse-mdp',
+      libelle:
+        'Des exigences de complexité sont-elles imposées sur les mots de passe de session des utilisateurs ?',
+      poids: 1,
+      reponsesPossibles: [
+        {
+          identifiant: 'acces-mesures-securite-robustesse-mdp-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 0,
+        },
+        {
+          identifiant: 'acces-mesures-securite-robustesse-mdp-non',
+          libelle: 'Non',
+          resultat: {
+            indice: { valeur: 0 },
+            mesures: [
+              {
+                identifiant: 'acces-mesures-securite-robustesse-mdp',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant:
+            'acces-mesures-securite-robustesse-mdp-contraintes-par-defaut',
+          libelle:
+            "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte.",
+          resultat: { indice: { valeur: 3 } },
+          ordre: 2,
+        },
+      ],
+      type: 'choixUnique',
+    },
+    {
       identifiant: 'acces-administrateurs-informatiques-suivie-et-limitee',
       libelle:
         'La liste des comptes des administrateurs informatiques (prestataires inclus) est-elle suivie et limitée au strict nécessaire ?',
@@ -312,42 +348,6 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             'Tous les comptes administration sont justifiés, et dédiés aux seules tâches d’administration.',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
-      identifiant: 'acces-mesures-securite-robustesse-mdp',
-      libelle:
-        'Des exigences de complexité sont-elles imposées sur les mots de passe de session des utilisateurs ?',
-      poids: 1,
-      reponsesPossibles: [
-        {
-          identifiant: 'acces-mesures-securite-robustesse-mdp-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant: 'acces-mesures-securite-robustesse-mdp-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant: 'acces-mesures-securite-robustesse-mdp',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'acces-mesures-securite-robustesse-mdp-contraintes-par-defaut',
-          libelle:
-            "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte.",
-          resultat: { indice: { valeur: 3 } },
-          ordre: 2,
         },
       ],
       type: 'choixUnique',
