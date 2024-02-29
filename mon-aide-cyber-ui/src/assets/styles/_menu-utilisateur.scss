@@ -7,23 +7,23 @@
     position: relative;
   }
 
-  details ul {
-    border-radius: 0.25rem 0.25rem 0 0;
-    border-bottom: 2px solid var(--couleurs-mac-violet-leger);
-    background: var(--couleurs-mac-violet-tres-clair);
-    display: flex;
-    padding: 0.5rem 1rem;
-    align-items: center;
-    gap: 0.375rem;
+  details #conteneur {
     position: absolute;
+    border-radius: 0.25rem;
+    overflow: hidden;
     right: 0;
-    min-width: 18rem;
     z-index: 10;
   }
 
-  input {
+  details input {
+    border-bottom: 2px solid var(--couleurs-mac-violet-leger);
+    background: var(--couleurs-mac-violet-tres-clair);
+    padding: 0.5rem 1rem;
+    min-width: 18rem;
     font-size: 1rem;
     box-shadow: unset !important;
+    text-align: left;
+    display: inline-block;
   }
 
   summary {
