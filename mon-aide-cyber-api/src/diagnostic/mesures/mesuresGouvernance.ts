@@ -35,7 +35,7 @@ export const mesuresGouvernance = {
       comment:
         '../../mesures/gouvernance/gouvernance-schema-si-a-jour-niveau2-comment.pug',
     },
-    priorisation: 14,
+    priorisation: 20,
   },
   'gouvernance-schema-si-industriel-a-jour': {
     niveau1: {
@@ -54,7 +54,7 @@ export const mesuresGouvernance = {
       comment:
         '../../mesures/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau2-comment.pug',
     },
-    priorisation: 14,
+    priorisation: 20,
   },
   'gouvernance-connaissance-rgpd-1': {
     niveau1: {
@@ -73,7 +73,7 @@ export const mesuresGouvernance = {
       comment:
         '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau1-comment.pug',
     },
-    priorisation: 24,
+    priorisation: 15,
   },
   'gouvernance-connaissance-rgpd-2': {
     niveau1: {
@@ -92,7 +92,7 @@ export const mesuresGouvernance = {
       comment:
         '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau2-comment.pug',
     },
-    priorisation: 24,
+    priorisation: 16,
   },
   'gouvernance-exigence-cyber-securite-presta': {
     niveau1: {
@@ -110,7 +110,7 @@ export const mesuresGouvernance = {
       comment:
         '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-niveau2-comment.pug',
     },
-    priorisation: 17,
+    priorisation: 24,
   },
   'gouvernance-exigence-cyber-securite-presta-si-industriel': {
     niveau1: {
@@ -128,6 +128,6 @@ export const mesuresGouvernance = {
       comment:
         '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-si-industriel-niveau2-comment.pug',
     },
-    priorisation: 17,
+    priorisation: 24,
   },
 };

@@ -16,7 +16,7 @@ export const mesuresSecuritePoste = {
       comment:
         '../../mesures/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau2-comment.pug',
     },
-    priorisation: 7,
+    priorisation: 5,
   },
   'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees': {
     niveau1: {
@@ -35,7 +35,7 @@ export const mesuresSecuritePoste = {
       comment:
         '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau2-comment.pug',
     },
-    priorisation: 7,
+    priorisation: 5,
   },
   'securite-poste-antivirus-deploye': {
     niveau1: {
@@ -53,7 +53,7 @@ export const mesuresSecuritePoste = {
       comment:
         '../../mesures/postes/securite-poste-antivirus-deploye-niveau2-comment.pug',
     },
-    priorisation: 3,
+    priorisation: 4,
   },
   'securite-poste-si-industriel-antivirus-deploye': {
     niveau1: {
@@ -71,7 +71,7 @@ export const mesuresSecuritePoste = {
       comment:
         '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau2-comment.pug',
     },
-    priorisation: 3,
+    priorisation: 4,
   },
   'securite-poste-pare-feu-local-active': {
     niveau1: {
@@ -82,7 +82,7 @@ export const mesuresSecuritePoste = {
       comment:
         '../../mesures/postes/securite-poste-pare-feu-local-active-niveau1-comment.pug',
     },
-    priorisation: 4,
+    priorisation: 27,
   },
   'securite-poste-outils-complementaires-securisation': {
     niveau1: {
@@ -110,6 +110,6 @@ export const mesuresSecuritePoste = {
       comment:
         '../../mesures/postes/securite-poste-r-et-d-disques-chiffres-niveau1-comment.pug',
     },
-    priorisation: 29,
+    priorisation: 26,
   },
 };
