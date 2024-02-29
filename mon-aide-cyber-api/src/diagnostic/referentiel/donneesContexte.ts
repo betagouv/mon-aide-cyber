@@ -972,9 +972,15 @@ export const donneesContexte: QuestionsThematique = {
                 },
                 {
                   identifiant:
+                    'contexte-cyber-attaque-subie-oui-tiroir-type-compromission-indirecte',
+                  libelle: 'Compromission indirecte via un prestataire ou un partenaire',
+                  ordre: 7,
+                },
+                {
+                  identifiant:
                     'contexte-cyber-attaque-subie-oui-tiroir-type-malveillance',
                   libelle: 'Malveillance interne',
-                  ordre: 7,
+                  ordre: 8,
                 },
               ],
               type: 'choixMultiple',
