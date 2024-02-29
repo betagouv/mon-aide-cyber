@@ -1,8 +1,8 @@
 export const mesuresGouvernance = {
-  'gouvernance-infos-et-activités-a-proteger': {
+  'gouvernance-infos-et-activites-a-proteger': {
     niveau1: {
       titre:
-        'Établir la liste des activités métiers et des informations à protéger en priorité.',
+        'Établir la liste des activités métiers et des informations à protéger en priorité',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-infos-et-processus-a-proteger-niveau1-pourquoi.pug',
       comment:
@@ -10,7 +10,7 @@ export const mesuresGouvernance = {
     },
     niveau2: {
       titre:
-        'Établir la liste exhaustive et à jour des activités métiers et des informations à protéger en priorité.',
+        'Établir la liste exhaustive et à jour des activités métiers et des informations à protéger en priorité',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-infos-et-processus-a-proteger-niveau2-pourquoi.pug',
       comment:
@@ -21,7 +21,7 @@ export const mesuresGouvernance = {
   'gouvernance-schema-si-a-jour': {
     niveau1: {
       titre:
-        'Disposer d’un schéma global du réseau informatique et de la liste des interconnexions vers l’extérieur à jour.',
+        'Disposer d’un schéma global du réseau informatique et de la liste des interconnexions vers l’extérieur à jour',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-schema-si-a-jour-niveau1-pourquoi.pug',
       comment:
@@ -29,7 +29,7 @@ export const mesuresGouvernance = {
     },
     niveau2: {
       titre:
-        'Disposer de la liste des équipements et applicatifs concourant au fonctionnement du système d’information.',
+        'Disposer de la liste des équipements et applicatifs concourant au fonctionnement du système d’information',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-schema-si-a-jour-niveau2-pourquoi.pug',
       comment:
@@ -40,7 +40,7 @@ export const mesuresGouvernance = {
   'gouvernance-schema-si-industriel-a-jour': {
     niveau1: {
       titre:
-        'Disposer d’un schéma global du réseau industriel et de la liste des interconnexions vers l’extérieur à jour.',
+        'Disposer d’un schéma global du réseau industriel et de la liste des interconnexions vers l’extérieur à jour',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau1-pourquoi.pug',
       comment:
@@ -48,7 +48,7 @@ export const mesuresGouvernance = {
     },
     niveau2: {
       titre:
-        'Disposer de la liste des équipements et applicatifs concourant au fonctionnement du système d’information industriel.',
+        'Disposer de la liste des équipements et applicatifs concourant au fonctionnement du système d’information industriel',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau2-pourquoi.pug',
       comment:
@@ -59,7 +59,7 @@ export const mesuresGouvernance = {
   'gouvernance-connaissance-rgpd-1': {
     niveau1: {
       titre:
-        'Établir la liste des données personnelles traitées au sein de votre entité.',
+        'Établir la liste des données personnelles traitées au sein de votre entité',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau1-pourquoi.pug',
       comment:
@@ -67,7 +67,7 @@ export const mesuresGouvernance = {
     },
     niveau2: {
       titre:
-        'Établir votre registre des activités de traitement de données personnelles et le tenir à jour.',
+        'Établir votre registre des activités de traitement de données personnelles et le tenir à jour',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau1-pourquoi.pug',
       comment:
@@ -96,7 +96,7 @@ export const mesuresGouvernance = {
   },
   'gouvernance-exigence-cyber-securite-presta': {
     niveau1: {
-      titre: 'Fixer des exigences de cybersécurité aux prestataires.',
+      titre: 'Fixer des exigences de cybersécurité aux prestataires',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-niveau1-pourquoi.pug',
       comment:
@@ -104,7 +104,7 @@ export const mesuresGouvernance = {
     },
     niveau2: {
       titre:
-        'Fixer des exigences de sécurité aux prestataires, en vérifier leur application et imposer des pénalités en cas de non-respect.',
+        'Fixer des exigences de sécurité aux prestataires, en vérifier leur application et imposer des pénalités en cas de non-respect',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-niveau2-pourquoi.pug',
       comment:
@@ -114,7 +114,7 @@ export const mesuresGouvernance = {
   },
   'gouvernance-exigence-cyber-securite-presta-si-industriel': {
     niveau1: {
-      titre: 'Fixer des exigences de cybersécurité aux prestataires.',
+      titre: 'Fixer des exigences de cybersécurité aux prestataires',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-si-industriel-niveau1-pourquoi.pug',
       comment:
@@ -122,7 +122,7 @@ export const mesuresGouvernance = {
     },
     niveau2: {
       titre:
-        'Fixer des exigences de sécurité aux prestataires, en vérifier leur application et imposer des pénalités en cas de non-respect.',
+        'Fixer des exigences de sécurité aux prestataires, en vérifier leur application et imposer des pénalités en cas de non-respect',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-si-industriel-niveau2-pourquoi.pug',
       comment:

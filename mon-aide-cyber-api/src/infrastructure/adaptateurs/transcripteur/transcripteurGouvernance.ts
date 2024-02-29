@@ -12,6 +12,9 @@ export const transcripteurGouvernance: Thematique = {
       questions: [{ identifiant: 'gouvernance-infos-et-processus-a-proteger' }],
     },
     {
+      questions: [{ identifiant: 'gouvernance-infos-et-activites-a-proteger' }],
+    },
+    {
       questions: [
         { identifiant: 'gouvernance-schema-si-a-jour' },
         { identifiant: 'gouvernance-schema-si-industriel-a-jour' },
