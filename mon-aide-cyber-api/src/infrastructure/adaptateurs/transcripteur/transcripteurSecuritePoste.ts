@@ -37,8 +37,10 @@ export const transcripteurSecuritePoste: Thematique = {
         {
           identifiant: 'securite-poste-outils-complementaires-securisation',
         },
-        { identifiant: 'securite-poste-r-et-d-disques-chiffres' },
       ],
+    },
+    {
+      questions: [{ identifiant: 'securite-poste-r-et-d-disques-chiffres' }],
     },
   ],
 };
