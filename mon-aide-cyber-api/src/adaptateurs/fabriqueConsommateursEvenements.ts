@@ -1,8 +1,8 @@
 import {
   aidantCree,
   diagnosticLance,
-  restitutionLancee,
   reponseAjoutee,
+  restitutionLancee,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';

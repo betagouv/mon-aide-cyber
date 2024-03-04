@@ -6,12 +6,13 @@ services:
     container_name: migrate
     environment:
       - OPENFGA_DATASTORE_ENGINE=postgres
-      - OPENFGA_DATASTORE_URI=postgres://postgres:password@mon-aide-cyber-bd:5432/permissions?sslmode=disable
+      - OPENFGA_DATASTORE_URI=postgres://postgres:password@mon-aide-cyber-bd:5432/mac?sslmode=disable&search_path=permissions
     command: migrate
     networks:
       - reseau-mon-aide-cyber
 
   mon-aide-cyber-permissions:
+    container_name: mon-aide-cyber-permissions
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -19,7 +20,7 @@ services:
     command: run
     environment:
       - OPENFGA_DATASTORE_ENGINE=postgres
-      - OPENFGA_DATASTORE_URI=postgres://postgres:password@mon-aide-cyber-bd:5432/permissions?sslmode=disable
+      - OPENFGA_DATASTORE_URI=postgres://postgres:password@mon-aide-cyber-bd:5432/mac?sslmode=disable&search_path=permissions
       - OPENFGA_DATASTORE_MAX_OPEN_CONNS=100 #see postgres container
       - OPENFGA_PLAYGROUND_ENABLED=true
     networks:

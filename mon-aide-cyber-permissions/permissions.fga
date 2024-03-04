@@ -1,0 +1,8 @@
+model
+  schema 1.1
+
+type aidant
+
+type diagnostic
+  relations
+    define createur: [aidant]
