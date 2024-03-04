@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  migrate:
+    image: openfga/openfga:v1.5.0
+    container_name: migrate
+    environment:
+      - OPENFGA_DATASTORE_ENGINE=postgres
+      - OPENFGA_DATASTORE_URI=postgres://postgres:password@mon-aide-cyber-bd:5432/permissions?sslmode=disable
+    command: migrate
+    networks:
+      - reseau-mon-aide-cyber
+
+  mon-aide-cyber-permissions:
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    image: openfga/openfga:v1.5.0
+    command: run
+    environment:
+      - OPENFGA_DATASTORE_ENGINE=postgres
+      - OPENFGA_DATASTORE_URI=postgres://postgres:password@mon-aide-cyber-bd:5432/permissions?sslmode=disable
+      - OPENFGA_DATASTORE_MAX_OPEN_CONNS=100 #see postgres container
+      - OPENFGA_PLAYGROUND_ENABLED=true
+    networks:
+      - reseau-mon-aide-cyber
+    ports:
+      - "9000:8080" #http
+      - "9001:8081" #grpc
+      - "9002:3000" #playground
+      - "2112:2112" #prometheus metrics
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/grpc_health_probe", "-addr=openfga:8081"]
+      interval: 5s
+      timeout: 30s
+
+networks:
+  reseau-mon-aide-cyber:
+    external: true
