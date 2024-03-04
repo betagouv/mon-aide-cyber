@@ -1,14 +1,14 @@
-import { extraisLesActions, ReponseHATEOAS } from '../../domaine/Actions.ts';
 import { ParametresAPI } from './ConstructeurParametresAPI.ts';
+import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import { Action, ReponseHATEOAS } from '../../domaine/Lien.ts';
 
 export const appelleAPI = async <REPONSE, CORPS = void>(
   parametresAPI: ParametresAPI<CORPS>,
   appel: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>,
-  navigate: (
-    vers: string,
-    state: {
-      state: any;
-    },
+  navigationMAC: (
+    moteurDeLiens: MoteurDeLiens,
+    action: string,
+    exclusion?: Action[],
   ) => void,
   transcris: (contenu: Promise<any>) => Promise<REPONSE>,
 ): Promise<REPONSE> => {
@@ -29,9 +29,10 @@ export const appelleAPI = async <REPONSE, CORPS = void>(
   }
   if (reponse.status === 302) {
     const reponseHATEOAS = (await reponse.json()) as ReponseHATEOAS;
-    navigate(reponseHATEOAS.liens.suite.url, {
-      state: extraisLesActions(reponseHATEOAS.liens),
-    });
+    navigationMAC(
+      new MoteurDeLiens(reponseHATEOAS.liens),
+      'creer-espace-aidant',
+    );
   }
   if (!reponse.ok) {
     return await Promise.reject(await reponse.json());

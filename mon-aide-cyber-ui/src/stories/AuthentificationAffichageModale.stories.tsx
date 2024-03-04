@@ -34,7 +34,7 @@ export const ModaleDeConnexion: Story = {
             ) => {
               const reponseAuthentification: ReponseAuthentification = {
                 nomPrenom: 'Jean Dupont',
-                liens: { suite: { url: '', methode: '' } },
+                liens: {},
               };
               return reponseAuthentification as T;
             },

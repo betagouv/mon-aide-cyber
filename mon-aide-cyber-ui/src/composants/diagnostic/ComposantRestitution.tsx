@@ -1,7 +1,6 @@
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
 import { useCallback, useEffect, useReducer, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { useErrorBoundary } from 'react-error-boundary';
 import '../../assets/styles/_restitution.scss';
 import '../../assets/styles/_commun.scss';
@@ -11,16 +10,16 @@ import {
   rubriqueCliquee,
 } from '../../domaine/diagnostic/reducteurRestitution.ts';
 import { UUID } from '../../types/Types.ts';
-import {
-  extraisLesActions,
-  Lien,
-  trouveParmiLesLiens,
-} from '../../domaine/Actions.ts';
 import { Restitution } from '../../domaine/diagnostic/Restitution.ts';
 
-import { useMACAPI } from '../../fournisseurs/hooks.ts';
+import {
+  useContexteNavigationMAC,
+  useMACAPI,
+  useNavigationMAC,
+} from '../../fournisseurs/hooks.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
@@ -30,14 +29,11 @@ export const ComposantRestitution = ({
   idDiagnostic,
 }: ProprietesComposantRestitution) => {
   const { showBoundary } = useErrorBoundary();
-  const navigate = useNavigate();
+  const navigationMAC = useNavigationMAC();
   const [etatRestitution, envoie] = useReducer(reducteurRestitution, {});
   const [boutonDesactive, setBoutonDesactive] = useState<boolean>(false);
-  const [retourListeBeneficiaires, setRetourListeBeneficiaires] = useState<{
-    suite: Lien;
-    actions: { [clef: string]: Lien };
-  }>({ suite: { url: '', methode: '' }, actions: {} });
   const macapi = useMACAPI();
+  const contexteNavigationMAC = useContexteNavigationMAC();
 
   useEffect(() => {
     if (!etatRestitution.restitution) {
@@ -49,28 +45,29 @@ export const ComposantRestitution = ({
             .construis(),
           async (json) => Promise.resolve((await json) as Restitution),
         )
-        .then((restitution) => envoie(restitutionChargee(restitution)))
+        .then((restitution) => {
+          contexteNavigationMAC.setEtat(
+            new MoteurDeLiens(restitution.liens).extrais(),
+          );
+          envoie(restitutionChargee(restitution));
+        })
         .catch((erreur) => showBoundary(erreur));
     }
-  }, [envoie, etatRestitution, idDiagnostic, macapi, showBoundary]);
-
-  useEffect(() => {
-    if (etatRestitution.restitution) {
-      setRetourListeBeneficiaires({
-        suite: etatRestitution.restitution.liens.suite,
-        actions: extraisLesActions(etatRestitution.restitution.liens),
-      });
-    }
-  }, [etatRestitution.restitution]);
+  }, [
+    contexteNavigationMAC,
+    envoie,
+    etatRestitution,
+    idDiagnostic,
+    macapi,
+    showBoundary,
+  ]);
 
   const modifierLeDiagnostic = useCallback(() => {
-    return navigate(
-      trouveParmiLesLiens(
-        etatRestitution.restitution!.liens,
-        'modifier-diagnostic',
-      ).url,
+    return navigationMAC.navigue(
+      new MoteurDeLiens(etatRestitution.restitution!.liens),
+      'modifier-diagnostic',
     );
-  }, [etatRestitution, navigate]);
+  }, [etatRestitution, navigationMAC]);
 
   const rubriqueCliqueee = useCallback(
     (rubrique: string) => envoie(rubriqueCliquee(rubrique)),
@@ -78,10 +75,9 @@ export const ComposantRestitution = ({
   );
 
   const telechargerRestitution = useCallback(() => {
-    const restitutionPdf = trouveParmiLesLiens(
+    const restitutionPdf = new MoteurDeLiens(
       etatRestitution.restitution!.liens,
-      'restitution-pdf',
-    );
+    ).trouve('restitution-pdf');
     setBoutonDesactive(true);
     if (restitutionPdf) {
       const parametresAPI = constructeurParametresAPI()
@@ -99,6 +95,18 @@ export const ComposantRestitution = ({
         });
     }
   }, [etatRestitution.restitution, macapi]);
+
+  const navigueVersTableauDeBord = useCallback(() => {
+    const liens = etatRestitution.restitution!.liens;
+    const moteurDeLiens = new MoteurDeLiens(liens);
+    navigationMAC.navigue(moteurDeLiens, 'lancer-diagnostic', [
+      'modifier-diagnostic',
+      'restitution-pdf',
+      'restitution-json',
+      'afficher-diagnostic',
+    ]);
+  }, [etatRestitution.restitution, navigationMAC]);
+
   return (
     <>
       <Header />
@@ -108,12 +116,9 @@ export const ComposantRestitution = ({
             <div className="fr-grid-row">
               <div>
                 <i className="mac-icone-retour" />
-                <Link
-                  to={retourListeBeneficiaires.suite.url}
-                  state={retourListeBeneficiaires.actions}
-                >
+                <a href="#" onClick={navigueVersTableauDeBord}>
                   Retour à la liste des bénéficiaires
-                </Link>
+                </a>
               </div>
             </div>
             <div className="fr-grid-row fr-pt-md-2w">

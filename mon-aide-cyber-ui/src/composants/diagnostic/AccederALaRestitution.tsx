@@ -1,6 +1,7 @@
 import { UUID } from '../../types/Types.ts';
 import { useNavigate } from 'react-router';
 import { useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export const AccederALaRestitution = ({
   idDiagnostic,
@@ -10,11 +11,14 @@ export const AccederALaRestitution = ({
   surAnnuler: () => void;
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const surQuitterLeDiagnostic = useCallback(() => {
     surAnnuler();
-    navigate(`/diagnostic/${idDiagnostic}/restitution/`);
-  }, [idDiagnostic, navigate, surAnnuler]);
+    navigate(`/diagnostic/${idDiagnostic}/restitution/`, {
+      state: location.state,
+    });
+  }, [idDiagnostic, location.state, navigate, surAnnuler]);
   return (
     <>
       <section>

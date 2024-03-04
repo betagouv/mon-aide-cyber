@@ -10,11 +10,16 @@ import {
   ReponseUtilisateur,
   Utilisateur,
 } from '../domaine/authentification/Authentification.ts';
-import { useMACAPI } from './hooks.ts';
-import { ReponseHATEOAS, trouveParmiLesLiens } from '../domaine/Actions.ts';
+import {
+  useContexteNavigationMAC,
+  useMACAPI,
+  useNavigationMAC,
+} from './hooks.ts';
 
 import { constructeurParametresAPI } from './api/ConstructeurParametresAPI.ts';
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
+import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
+import { ReponseHATEOAS } from '../domaine/Lien.ts';
 
 type ContexteAuthentificationType = {
   utilisateur?: Utilisateur;
@@ -103,7 +108,8 @@ export const FournisseurAuthentification = ({
   children,
 }: PropsWithChildren) => {
   const macapi = useMACAPI();
-  const navigate = useNavigate();
+  const navigationMAC = useNavigationMAC();
+  const contexteNavigationMAC = useContexteNavigationMAC();
 
   const [etatUtilisateurAuthentifie, envoie] = useReducer(
     reducteurUtilisateurAuthentifie,
@@ -143,18 +149,25 @@ export const FournisseurAuthentification = ({
         )
         .then((utilisateur) => {
           envoie(utilisateurCharge(utilisateur));
-          const actionCreationEspaceAidant = trouveParmiLesLiens(
-            utilisateur.liens,
+          const moteurDeLiens = new MoteurDeLiens(utilisateur.liens);
+          const actionCreationEspaceAidant = moteurDeLiens.trouve(
             'creer-espace-aidant',
           );
 
           if (actionCreationEspaceAidant) {
-            navigate('finalise-creation-compte', { state: utilisateur.liens });
+            navigationMAC.navigue(moteurDeLiens, 'creer-espace-aidant');
+          } else {
+            contexteNavigationMAC.setEtat(moteurDeLiens.extrais());
           }
         })
         .catch(() => envoie(utilisateurNonAuthentifie()));
     }
-  }, [etatUtilisateurAuthentifie.enAttenteDeChargement, macapi, navigate]);
+  }, [
+    contexteNavigationMAC,
+    etatUtilisateurAuthentifie.enAttenteDeChargement,
+    macapi,
+    navigationMAC,
+  ]);
 
   const value: ContexteAuthentificationType = {
     authentifie,

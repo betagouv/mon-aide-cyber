@@ -1,4 +1,4 @@
-import { ReponseHATEOAS } from '../Actions.ts';
+import { ReponseHATEOAS } from '../Lien.ts';
 
 export type Utilisateur = { nomPrenom: string };
 

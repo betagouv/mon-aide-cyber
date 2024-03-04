@@ -1,20 +1,18 @@
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
 import { FormEvent, useCallback, useEffect, useReducer } from 'react';
-import { useActionsUtilisateur, useMACAPI } from '../../fournisseurs/hooks.ts';
 import {
-  extraisLesActions,
-  ReponseHATEOAS,
-  trouveParmiLesLiens,
-} from '../../domaine/Actions.ts';
-import { useNavigate } from 'react-router-dom';
+  useContexteNavigationMAC,
+  useMACAPI,
+  useNavigationMAC,
+} from '../../fournisseurs/hooks.ts';
 import {
-  motDePasseTemporaireSaisi,
   cguCliquees,
   creationEspaceAidantInvalidee,
   creationEspaceAidantTransmise,
   creationEspaceAidantValidee,
   initialiseReducteur,
+  motDePasseTemporaireSaisi,
   nouveauMotDePasseConfirme,
   nouveauMotDePasseSaisi,
   reducteurCreationEspaceAidant,
@@ -22,14 +20,16 @@ import {
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { CreationEspaceAidant } from '../../domaine/espace-aidant/EspaceAidant.ts';
+import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import { ReponseHATEOAS } from '../../domaine/Lien.ts';
 
 export const ComposantCreationEspaceAidant = () => {
-  const actions = useActionsUtilisateur();
   const [etatCreationEspaceAidant, envoie] = useReducer(
     reducteurCreationEspaceAidant,
     initialiseReducteur(),
   );
-  const navigate = useNavigate();
+  const navigationMAC = useNavigationMAC();
+  const contexteNavigationMAC = useContexteNavigationMAC();
   const macapi = useMACAPI();
 
   const creeEspaceAidant = useCallback(async (e: FormEvent) => {
@@ -38,15 +38,15 @@ export const ComposantCreationEspaceAidant = () => {
   }, []);
 
   useEffect(() => {
-    const lien = trouveParmiLesLiens(actions, 'creer-espace-aidant');
+    const moteurDeLiens = new MoteurDeLiens(contexteNavigationMAC.etat);
+    const lien = moteurDeLiens.trouve('creer-espace-aidant');
     if (!lien) {
-      navigate('/');
+      navigationMAC.navigue(moteurDeLiens, 'lancer-diagnostic');
     }
     if (
       etatCreationEspaceAidant.saisieValide() &&
       etatCreationEspaceAidant.creationEspaceAidantATransmettre
     ) {
-      const lien = trouveParmiLesLiens(actions, 'creer-espace-aidant');
       const parametresAPI = constructeurParametresAPI<CreationEspaceAidant>()
         .url(lien.url)
         .methode(lien.methode!)
@@ -63,13 +63,15 @@ export const ComposantCreationEspaceAidant = () => {
         )
         .then((reponse) => {
           envoie(creationEspaceAidantTransmise());
-          return navigate(reponse.liens.suite.url, {
-            state: extraisLesActions(reponse.liens),
-          });
+          navigationMAC.navigue(
+            new MoteurDeLiens(reponse.liens),
+            'lancer-diagnostic',
+            ['creer-espace-aidant'],
+          );
         })
         .catch((erreur) => envoie(creationEspaceAidantInvalidee(erreur)));
     }
-  }, [actions, etatCreationEspaceAidant, macapi, navigate]);
+  }, [contexteNavigationMAC, etatCreationEspaceAidant, macapi, navigationMAC]);
 
   const surCGUSignees = useCallback(() => {
     envoie(cguCliquees());
