@@ -4,13 +4,6 @@ export enum ActionsDiagnostics {
   AFFICHER = 'details',
 }
 
-export type Lien = { url: string; methode?: string; contentType?: string };
-type Suite = { suite: Lien };
-export type Liens = Suite & Record<string, Lien>;
-export type ReponseHATEOAS = {
-  liens: Liens;
-};
-
 export const actions = {
   diagnostics: () => ActionsDiagnostics,
 };
@@ -26,17 +19,3 @@ export const routage = {
     };
   },
 };
-export const trouveParmiLesLiens = (liens: Liens, lienATrouver: string) =>
-  Object.entries(liens)
-    .filter(([action]) => action === lienATrouver)
-    .map(([, restitution]) => restitution)[0];
-export const extraisLesActions = (liens: Liens) =>
-  Object.entries(liens)
-    .filter(([action]) => action !== 'suite')
-    .reduce(
-      (accumulateur, [action, lien]) => ({
-        ...accumulateur,
-        [action]: lien,
-      }),
-      {},
-    );

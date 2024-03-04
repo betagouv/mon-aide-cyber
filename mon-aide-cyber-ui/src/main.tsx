@@ -16,16 +16,16 @@ import { TableauDeBord } from './composants/TableauDeBord.tsx';
 import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution.tsx';
 import { CGU } from './vues/CGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
-import { FournisseurContexteActionsUtilisateur } from './fournisseurs/ContexteActionsUtilisateurs.tsx';
 import { ComposantCreationEspaceAidant } from './composants/espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { FournisseurMacAPI } from './fournisseurs/api/ContexteMacAPI.tsx';
+import { FournisseurNavigationMAC } from './fournisseurs/ContexteNavigationMAC.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <FournisseurMacAPI>
-        <FournisseurAuthentification>
-          <FournisseurContexteActionsUtilisateur>
+        <FournisseurNavigationMAC>
+          <FournisseurAuthentification>
             <PortailModale>
               <Routes>
                 <Route
@@ -81,8 +81,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 </Route>
               </Routes>
             </PortailModale>
-          </FournisseurContexteActionsUtilisateur>
-        </FournisseurAuthentification>
+          </FournisseurAuthentification>
+        </FournisseurNavigationMAC>
       </FournisseurMacAPI>
     </BrowserRouter>
   </React.StrictMode>,

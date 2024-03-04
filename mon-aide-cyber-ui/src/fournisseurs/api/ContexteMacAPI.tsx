@@ -1,7 +1,7 @@
 import { createContext, PropsWithChildren } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ParametresAPI } from './ConstructeurParametresAPI.ts';
 import { appelleAPI } from './appelleAPI.ts';
+import { useNavigationMAC } from '../hooks.ts';
 
 type ContexteMacAPIType = {
   appelle: <REPONSE, CORPS = void>(
@@ -15,14 +15,14 @@ export const ContexteMacAPI = createContext<ContexteMacAPIType>(
 );
 
 export const FournisseurMacAPI = ({ children }: PropsWithChildren) => {
-  const navigate = useNavigate();
+  const navigate = useNavigationMAC();
 
   const appelle = async <REPONSE, CORPS = void>(
     parametresAPI: ParametresAPI<CORPS>,
     transcris: (contenu: Promise<any>) => Promise<REPONSE>,
   ) => {
     try {
-      return appelleAPI(parametresAPI, fetch, navigate, transcris);
+      return appelleAPI(parametresAPI, fetch, navigate.navigue, transcris);
     } catch (erreur) {
       return await Promise.reject(erreur);
     }

@@ -1,6 +1,9 @@
 import React, { FormEvent, useCallback, useReducer } from 'react';
-import { useAuthentification, useModale } from '../../fournisseurs/hooks.ts';
-import { useNavigate } from 'react-router-dom';
+import {
+  useAuthentification,
+  useModale,
+  useNavigationMAC,
+} from '../../fournisseurs/hooks.ts';
 import {
   authentificationInvalidee,
   identifiantSaisi,
@@ -9,11 +12,11 @@ import {
   reducteurAuthentification,
   saisieInvalidee,
 } from './reducteurAuthentification.tsx';
-import { extraisLesActions } from '../../domaine/Actions.ts';
+import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 
 const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
   const authentification = useAuthentification();
-  const navigate = useNavigate();
+  const navigationMac = useNavigationMAC();
 
   const [etatAuthentification, envoie] = useReducer(
     reducteurAuthentification,
@@ -41,17 +44,18 @@ const Authentification = ({ surFermeture }: { surFermeture: () => void }) => {
             motDePasse: etatAuthentification.motDePasse,
           });
           surFermeture();
-          navigate(reponse.liens.suite.url, {
-            state: {
-              ...extraisLesActions(reponse.liens),
-            },
-          });
+          const moteurDeLiens = new MoteurDeLiens(reponse.liens);
+          const lienEspaceAidant = moteurDeLiens.trouve('creer-espace-aidant');
+          if (lienEspaceAidant) {
+            navigationMac.navigue(moteurDeLiens, 'creer-espace-aidant');
+          }
+          navigationMac.navigue(moteurDeLiens, 'lancer-diagnostic');
         } catch (erreur) {
           envoie(authentificationInvalidee(erreur as Error));
         }
       }
     },
-    [authentification, etatAuthentification, navigate, surFermeture, envoie],
+    [etatAuthentification, authentification, surFermeture, navigationMac],
   );
 
   const erreur = etatAuthentification.erreur;

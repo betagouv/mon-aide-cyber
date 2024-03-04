@@ -1,10 +1,10 @@
 import { Utilisateur } from '../../domaine/authentification/Authentification.ts';
 import { useCallback } from 'react';
-import { useMACAPI } from '../../fournisseurs/hooks.ts';
+import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { ReponseHATEOAS } from '../../domaine/Actions.ts';
-import { useNavigate } from 'react-router-dom';
 import { useErrorBoundary } from 'react-error-boundary';
+import { ReponseHATEOAS } from '../../domaine/Lien.ts';
+import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 
 type ProprietesMenuUtilisateur = {
   utilisateur: Utilisateur;
@@ -13,7 +13,7 @@ export const ComposantMenuUtilisateur = ({
   utilisateur,
 }: ProprietesMenuUtilisateur) => {
   const macapi = useMACAPI();
-  const navigate = useNavigate();
+  const navigationMAC = useNavigationMAC();
   const { showBoundary } = useErrorBoundary();
 
   let nomUtilisateur = utilisateur.nomPrenom;
@@ -31,9 +31,14 @@ export const ComposantMenuUtilisateur = ({
           .construis(),
         async (reponse) => await reponse,
       )
-      .then((reponse) => navigate(reponse.liens.suite.url))
+      .then((reponse) =>
+        navigationMAC.navigue(
+          new MoteurDeLiens(reponse.liens),
+          'afficher-accueil',
+        ),
+      )
       .catch((erreur) => showBoundary(erreur));
-  }, [macapi, navigate, showBoundary]);
+  }, [macapi, navigationMAC, showBoundary]);
 
   return (
     <div className="menu-utilisateur">
