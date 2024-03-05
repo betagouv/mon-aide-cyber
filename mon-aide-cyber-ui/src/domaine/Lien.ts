@@ -15,4 +15,5 @@ export type Action =
   | 'lancer-diagnostic'
   | 'modifier-diagnostic'
   | 'restitution-pdf'
-  | 'restitution-json';
+  | 'restitution-json'
+  | 'se-connecter';

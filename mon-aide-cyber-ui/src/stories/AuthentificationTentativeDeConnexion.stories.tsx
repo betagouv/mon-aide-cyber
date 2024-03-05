@@ -12,6 +12,7 @@ import { RequiertAuthentification } from '../fournisseurs/RequiertAuthentificati
 import { Diagnostic } from '../domaine/diagnostic/Diagnostic.ts';
 import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 
 const meta = {
   title: 'Authentification',
@@ -42,12 +43,21 @@ export const ConnexionAMonAideCyber: Story = {
             },
           }}
         >
-          <FournisseurAuthentification>
-            <RequiertAuthentification />
-            <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-              <PortailModale>{story()}</PortailModale>
-            </ErrorBoundary>
-          </FournisseurAuthentification>
+          <ContexteNavigationMAC.Provider
+            value={{
+              etat: { 'se-connecter': { url: '' } },
+              setEtat: () => {
+                return;
+              },
+            }}
+          >
+            <FournisseurAuthentification>
+              <RequiertAuthentification />
+              <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+                <PortailModale>{story()}</PortailModale>
+              </ErrorBoundary>
+            </FournisseurAuthentification>
+          </ContexteNavigationMAC.Provider>
         </ContexteMacAPI.Provider>
       </BrowserRouter>
     ),
