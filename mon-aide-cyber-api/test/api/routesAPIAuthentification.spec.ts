@@ -210,11 +210,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         );
 
         expect(reponse.statusCode).toBe(200);
-        expect(await reponse.json()).toStrictEqual({
-          liens: {
-            suite: { url: '/' },
-          },
-        });
         expect(testeurMAC.adaptateurDeGestionDeCookies.aSupprime).toBe(true);
       });
     });

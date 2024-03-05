@@ -54,9 +54,7 @@ export const routesAPIAuthentification = (
     (requete: RequeteUtilisateur, reponse: Response, _suite: NextFunction) => {
       configuration.adaptateurDeGestionDeCookies.supprime(requete, reponse);
       reponse.status(200);
-      return reponse.json({
-        ...constructeurActionsHATEOAS().postDeconnexion().construis(),
-      });
+      return reponse.send();
     },
   );
 
