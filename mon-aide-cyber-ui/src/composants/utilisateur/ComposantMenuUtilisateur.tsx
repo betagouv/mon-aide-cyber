@@ -36,7 +36,7 @@ export const ComposantMenuUtilisateur = ({
   }, [macapi, navigate, showBoundary]);
 
   return (
-    <div className="menu-utilisateur fr-pr-14w">
+    <div className="menu-utilisateur">
       <div className="menu-utilisateur-contenu">
         <details>
           <summary>{nomUtilisateur}</summary>
