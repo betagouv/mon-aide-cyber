@@ -17,9 +17,14 @@ import {
 } from './hooks.ts';
 
 import { constructeurParametresAPI } from './api/ConstructeurParametresAPI.ts';
-import { Navigate, Outlet } from 'react-router-dom';
 import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
 import { ReponseHATEOAS } from '../domaine/Lien.ts';
+import {
+  initialiseReducteurUtilisateurAuthentifie,
+  reducteurUtilisateurAuthentifie,
+  utilisateurCharge,
+  utilisateurNonAuthentifie,
+} from './reducteurUtilisateurAuthentifie.tsx';
 
 type ContexteAuthentificationType = {
   utilisateur?: Utilisateur;
@@ -40,70 +45,6 @@ export type Identifiants = {
   motDePasse: string;
 };
 
-type EtatUtilisateurAuthentifie = {
-  element: ReactElement | null;
-  enAttenteDeChargement: boolean;
-  utilisateur?: Utilisateur;
-};
-
-enum TypeActionUtilisateurAuthentifie {
-  UTILISATEUR_CHARGE = 'UTILISATEUR_CHARGE',
-  UTILISATEUR_NON_AUTHENTIFIE = 'UTILISATEUR_NON_AUTHENTIFIE',
-}
-type ActionUtilisateurAuthentifie =
-  | {
-      utilisateur: Utilisateur;
-      type: TypeActionUtilisateurAuthentifie.UTILISATEUR_CHARGE;
-    }
-  | {
-      type: TypeActionUtilisateurAuthentifie.UTILISATEUR_NON_AUTHENTIFIE;
-    };
-export const reducteurUtilisateurAuthentifie = (
-  etat: EtatUtilisateurAuthentifie,
-  action: ActionUtilisateurAuthentifie,
-): EtatUtilisateurAuthentifie => {
-  switch (action.type) {
-    case TypeActionUtilisateurAuthentifie.UTILISATEUR_NON_AUTHENTIFIE: {
-      const nouvelEtat = { ...etat };
-      delete nouvelEtat['utilisateur'];
-      return {
-        ...nouvelEtat,
-        element: <Navigate to="/" />,
-        enAttenteDeChargement: false,
-      };
-    }
-    case TypeActionUtilisateurAuthentifie.UTILISATEUR_CHARGE:
-      return {
-        ...etat,
-        utilisateur: action.utilisateur,
-        element: <Outlet />,
-        enAttenteDeChargement: false,
-      };
-  }
-};
-
-export const initialiseReducteurUtilisateurAuthentifie =
-  (): EtatUtilisateurAuthentifie => {
-    return {
-      enAttenteDeChargement: true,
-      element: null,
-    };
-  };
-
-export const utilisateurCharge = (
-  utilisateur: Utilisateur,
-): ActionUtilisateurAuthentifie => {
-  return {
-    type: TypeActionUtilisateurAuthentifie.UTILISATEUR_CHARGE,
-    utilisateur,
-  };
-};
-export const utilisateurNonAuthentifie = (): ActionUtilisateurAuthentifie => {
-  return {
-    type: TypeActionUtilisateurAuthentifie.UTILISATEUR_NON_AUTHENTIFIE,
-  };
-};
-
 export const FournisseurAuthentification = ({
   children,
 }: PropsWithChildren) => {
@@ -119,12 +60,15 @@ export const FournisseurAuthentification = ({
   const authentifie = (identifiants: {
     identifiant: string;
     motDePasse: string;
-  }) =>
-    macapi
+  }) => {
+    const lienSeConnecter = new MoteurDeLiens(
+      contexteNavigationMAC.etat,
+    ).trouve('se-connecter');
+    return macapi
       .appelle<ReponseAuthentification, Identifiants>(
         constructeurParametresAPI<Identifiants>()
-          .url(`/api/token`)
-          .methode('POST')
+          .url(lienSeConnecter.url)
+          .methode(lienSeConnecter.methode!)
           .corps({
             identifiant: identifiants.identifiant,
             motDePasse: identifiants.motDePasse,
@@ -136,6 +80,7 @@ export const FournisseurAuthentification = ({
         envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
         return { liens: reponse.liens } as ReponseHATEOAS;
       });
+  };
 
   useEffect(() => {
     if (etatUtilisateurAuthentifie.enAttenteDeChargement) {
@@ -160,7 +105,12 @@ export const FournisseurAuthentification = ({
             contexteNavigationMAC.setEtat(moteurDeLiens.extrais());
           }
         })
-        .catch(() => envoie(utilisateurNonAuthentifie()));
+        .catch((erreur) => {
+          contexteNavigationMAC.setEtat(
+            new MoteurDeLiens((erreur as ReponseHATEOAS).liens).extrais(),
+          );
+          envoie(utilisateurNonAuthentifie());
+        });
     }
   }, [
     contexteNavigationMAC,
