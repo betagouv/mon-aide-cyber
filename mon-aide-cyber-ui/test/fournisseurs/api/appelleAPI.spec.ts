@@ -16,6 +16,7 @@ class ConstructeurDeReponse {
   private _ok = false;
   private _status = 404;
   private _json?: any;
+  private _headers: { [contentType: string]: string } = {};
 
   ok(): ConstructeurDeReponse {
     this._ok = true;
@@ -25,6 +26,7 @@ class ConstructeurDeReponse {
 
   json(contenu: any): ConstructeurDeReponse {
     this._json = contenu;
+    this._headers = { 'Content-Type': 'application/json; charset=utf-8' };
     return this;
   }
 
@@ -33,7 +35,14 @@ class ConstructeurDeReponse {
       ok: this._ok,
       status: this._status,
       json: () => Promise.resolve(this._json),
-      headers: { get: () => null },
+      headers: {
+        get: (clef: string) => {
+          const headers = Object.entries(this._headers)
+            .filter(([header]) => clef === header)
+            .flatMap(([, contenu]) => contenu);
+          return headers.length > 0 ? headers[0] : null;
+        },
+      },
     } as unknown as Response;
   }
 }
@@ -54,10 +63,7 @@ describe('Appelle API', () => {
           );
         },
         (_vers, _state) => Promise.resolve(),
-        (contenu) => {
-          console.log('contenu', contenu);
-          return contenu;
-        },
+        (contenu) => contenu,
       );
 
       expect(reponse).toStrictEqual<InformationsEnvoyees>({

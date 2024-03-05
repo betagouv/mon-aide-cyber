@@ -43,5 +43,8 @@ export const appelleAPI = async <REPONSE, CORPS = void>(
   if (reponse.status === 204) {
     return Promise.resolve() as Promise<REPONSE>;
   }
-  return transcris(reponse.json());
+  if (reponse.headers.get('Content-Type')?.includes('application/json')) {
+    return transcris(reponse.json());
+  }
+  return Promise.resolve() as Promise<REPONSE>;
 };

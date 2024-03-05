@@ -15,14 +15,14 @@ export const ContexteMacAPI = createContext<ContexteMacAPIType>(
 );
 
 export const FournisseurMacAPI = ({ children }: PropsWithChildren) => {
-  const navigate = useNavigationMAC();
+  const navigationMAC = useNavigationMAC();
 
   const appelle = async <REPONSE, CORPS = void>(
     parametresAPI: ParametresAPI<CORPS>,
     transcris: (contenu: Promise<any>) => Promise<REPONSE>,
   ) => {
     try {
-      return appelleAPI(parametresAPI, fetch, navigate.navigue, transcris);
+      return appelleAPI(parametresAPI, fetch, navigationMAC.navigue, transcris);
     } catch (erreur) {
       return await Promise.reject(erreur);
     }

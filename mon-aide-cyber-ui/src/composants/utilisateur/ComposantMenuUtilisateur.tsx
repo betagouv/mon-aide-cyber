@@ -1,10 +1,8 @@
 import { Utilisateur } from '../../domaine/authentification/Authentification.ts';
 import { useCallback } from 'react';
-import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
+import { useNavigationMAC, useMACAPI } from '../../fournisseurs/hooks.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useErrorBoundary } from 'react-error-boundary';
-import { ReponseHATEOAS } from '../../domaine/Lien.ts';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 
 type ProprietesMenuUtilisateur = {
   utilisateur: Utilisateur;
@@ -24,19 +22,14 @@ export const ComposantMenuUtilisateur = ({
 
   const deconnecter = useCallback(() => {
     macapi
-      .appelle<ReponseHATEOAS>(
+      .appelle<void>(
         constructeurParametresAPI()
-          .url('/api/token/')
+          .url('/api/token')
           .methode('DELETE')
           .construis(),
-        async (reponse) => await reponse,
+        (reponse) => reponse,
       )
-      .then((reponse) =>
-        navigationMAC.navigue(
-          new MoteurDeLiens(reponse.liens),
-          'afficher-accueil',
-        ),
-      )
+      .then(() => navigationMAC.retourAccueil())
       .catch((erreur) => showBoundary(erreur));
   }, [macapi, navigationMAC, showBoundary]);
 
@@ -47,9 +40,11 @@ export const ComposantMenuUtilisateur = ({
           <summary>{nomUtilisateur}</summary>
           <ul>
             <li>
-              <form onSubmit={deconnecter}>
-                <input type="submit" value="Me Déconnecter" />
-              </form>
+              <input
+                type="submit"
+                onClick={deconnecter}
+                value="Me Déconnecter"
+              />
             </li>
           </ul>
         </details>

@@ -10,11 +10,7 @@ import {
   ReponseUtilisateur,
   Utilisateur,
 } from '../domaine/authentification/Authentification.ts';
-import {
-  useContexteNavigationMAC,
-  useMACAPI,
-  useNavigationMAC,
-} from './hooks.ts';
+import { useNavigationMAC, useMACAPI } from './hooks.ts';
 
 import { constructeurParametresAPI } from './api/ConstructeurParametresAPI.ts';
 import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
@@ -50,7 +46,6 @@ export const FournisseurAuthentification = ({
 }: PropsWithChildren) => {
   const macapi = useMACAPI();
   const navigationMAC = useNavigationMAC();
-  const contexteNavigationMAC = useContexteNavigationMAC();
 
   const [etatUtilisateurAuthentifie, envoie] = useReducer(
     reducteurUtilisateurAuthentifie,
@@ -61,9 +56,9 @@ export const FournisseurAuthentification = ({
     identifiant: string;
     motDePasse: string;
   }) => {
-    const lienSeConnecter = new MoteurDeLiens(
-      contexteNavigationMAC.etat,
-    ).trouve('se-connecter');
+    const lienSeConnecter = new MoteurDeLiens(navigationMAC.etat).trouve(
+      'se-connecter',
+    );
     return macapi
       .appelle<ReponseAuthentification, Identifiants>(
         constructeurParametresAPI<Identifiants>()
@@ -102,22 +97,17 @@ export const FournisseurAuthentification = ({
           if (actionCreationEspaceAidant) {
             navigationMAC.navigue(moteurDeLiens, 'creer-espace-aidant');
           } else {
-            contexteNavigationMAC.setEtat(moteurDeLiens.extrais());
+            navigationMAC.setEtat(moteurDeLiens.extrais());
           }
         })
         .catch((erreur) => {
-          contexteNavigationMAC.setEtat(
+          navigationMAC.setEtat(
             new MoteurDeLiens((erreur as ReponseHATEOAS).liens).extrais(),
           );
           envoie(utilisateurNonAuthentifie());
         });
     }
-  }, [
-    contexteNavigationMAC,
-    etatUtilisateurAuthentifie.enAttenteDeChargement,
-    macapi,
-    navigationMAC,
-  ]);
+  }, [navigationMAC, etatUtilisateurAuthentifie.enAttenteDeChargement, macapi]);
 
   const value: ContexteAuthentificationType = {
     authentifie,
