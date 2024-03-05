@@ -3,6 +3,7 @@ import { NextFunction } from 'express-serve-static-core';
 import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 
 import { ErreurMAC } from '../../domaine/erreurMAC';
+import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 
 const HTTP_NON_AUTORISE = 401;
 const HTTP_ACCES_REFUSE = 403;
@@ -53,6 +54,7 @@ const erreursGerees: Map<
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_ACCES_REFUSE, {
         message: "L'accès à la ressource est interdit.",
+        ...constructeurActionsHATEOAS().seConnecter().construis(),
       });
     },
   ],

@@ -74,6 +74,11 @@ class ConstructeurActionsHATEOAS {
     });
     return this;
   }
+  seConnecter(): ConstructeurActionsHATEOAS {
+    this.actions.set('se-connecter', { url: '/api/token', methode: 'POST' });
+    return this;
+  }
+
   construis = (): ReponseHATEOAS => {
     return {
       liens: {
