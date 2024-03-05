@@ -1,11 +1,7 @@
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
 import { FormEvent, useCallback, useEffect, useReducer } from 'react';
-import {
-  useContexteNavigationMAC,
-  useMACAPI,
-  useNavigationMAC,
-} from '../../fournisseurs/hooks.ts';
+import { useNavigationMAC, useMACAPI } from '../../fournisseurs/hooks.ts';
 import {
   cguCliquees,
   creationEspaceAidantInvalidee,
@@ -29,7 +25,6 @@ export const ComposantCreationEspaceAidant = () => {
     initialiseReducteur(),
   );
   const navigationMAC = useNavigationMAC();
-  const contexteNavigationMAC = useContexteNavigationMAC();
   const macapi = useMACAPI();
 
   const creeEspaceAidant = useCallback(async (e: FormEvent) => {
@@ -38,7 +33,7 @@ export const ComposantCreationEspaceAidant = () => {
   }, []);
 
   useEffect(() => {
-    const moteurDeLiens = new MoteurDeLiens(contexteNavigationMAC.etat);
+    const moteurDeLiens = new MoteurDeLiens(navigationMAC.etat);
     const lien = moteurDeLiens.trouve('creer-espace-aidant');
     if (!lien) {
       navigationMAC.navigue(moteurDeLiens, 'lancer-diagnostic');
@@ -71,7 +66,7 @@ export const ComposantCreationEspaceAidant = () => {
         })
         .catch((erreur) => envoie(creationEspaceAidantInvalidee(erreur)));
     }
-  }, [contexteNavigationMAC, etatCreationEspaceAidant, macapi, navigationMAC]);
+  }, [navigationMAC, etatCreationEspaceAidant, macapi]);
 
   const surCGUSignees = useCallback(() => {
     envoie(cguCliquees());

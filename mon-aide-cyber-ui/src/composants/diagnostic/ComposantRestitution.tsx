@@ -12,11 +12,7 @@ import {
 import { UUID } from '../../types/Types.ts';
 import { Restitution } from '../../domaine/diagnostic/Restitution.ts';
 
-import {
-  useContexteNavigationMAC,
-  useMACAPI,
-  useNavigationMAC,
-} from '../../fournisseurs/hooks.ts';
+import { useNavigationMAC, useMACAPI } from '../../fournisseurs/hooks.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
@@ -33,7 +29,6 @@ export const ComposantRestitution = ({
   const [etatRestitution, envoie] = useReducer(reducteurRestitution, {});
   const [boutonDesactive, setBoutonDesactive] = useState<boolean>(false);
   const macapi = useMACAPI();
-  const contexteNavigationMAC = useContexteNavigationMAC();
 
   useEffect(() => {
     if (!etatRestitution.restitution) {
@@ -46,15 +41,13 @@ export const ComposantRestitution = ({
           async (json) => Promise.resolve((await json) as Restitution),
         )
         .then((restitution) => {
-          contexteNavigationMAC.setEtat(
-            new MoteurDeLiens(restitution.liens).extrais(),
-          );
+          navigationMAC.setEtat(new MoteurDeLiens(restitution.liens).extrais());
           envoie(restitutionChargee(restitution));
         })
         .catch((erreur) => showBoundary(erreur));
     }
   }, [
-    contexteNavigationMAC,
+    navigationMAC,
     envoie,
     etatRestitution,
     idDiagnostic,

@@ -1,10 +1,6 @@
 import { useCallback } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
-import {
-  useContexteNavigationMAC,
-  useMACAPI,
-  useNavigationMAC,
-} from '../../fournisseurs/hooks.ts';
+import { useNavigationMAC, useMACAPI } from '../../fournisseurs/hooks.ts';
 import { FormatLien, LienRoutage } from '../../domaine/LienRoutage.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
@@ -19,11 +15,10 @@ export const ComposantLancerDiagnostic = ({
 }: ProprietesComposantLancerDiagnostic) => {
   const { showBoundary } = useErrorBoundary();
   const navigationMAC = useNavigationMAC();
-  const contexteNavigationMAC = useContexteNavigationMAC();
   const macapi = useMACAPI();
 
   const lancerDiagnostic = useCallback(async () => {
-    const lien = new MoteurDeLiens(contexteNavigationMAC.etat).trouve(
+    const lien = new MoteurDeLiens(navigationMAC.etat).trouve(
       'lancer-diagnostic',
     );
     macapi
@@ -47,7 +42,7 @@ export const ComposantLancerDiagnostic = ({
         );
       })
       .catch((erreur) => showBoundary(erreur));
-  }, [contexteNavigationMAC, macapi, navigationMAC, showBoundary]);
+  }, [navigationMAC, macapi, showBoundary]);
 
   return (
     <button className={style} onClick={lancerDiagnostic}>
