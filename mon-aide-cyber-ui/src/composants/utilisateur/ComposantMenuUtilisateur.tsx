@@ -31,7 +31,7 @@ export const ComposantMenuUtilisateur = ({
       )
       .then(() => navigationMAC.retourAccueil())
       .catch((erreur) => showBoundary(erreur));
-  }, [macapi, navigationMAC, showBoundary]);
+  }, [macapi, showBoundary]);
 
   return (
     <div className="menu-utilisateur">
