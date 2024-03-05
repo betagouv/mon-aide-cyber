@@ -2,6 +2,7 @@ README.md
 LICENSE
 ./Dockerfile-*
 ./docker-compose.yml
+./mon-aide-cyber-permissions/docker-compose.yml
 **/*test*/
 ./docker-entrypoint-initdb.d/
 ./mon-aide-cyber-ui/.storybook/
