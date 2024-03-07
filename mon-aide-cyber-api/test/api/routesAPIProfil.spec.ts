@@ -12,6 +12,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
+    testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
   });
 
   afterEach(() => {
@@ -67,8 +68,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
     });
 
     it("ne peut pas accéder au profil si l'aidant n'existe pas", async () => {
-      testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
-
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
@@ -80,6 +79,33 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       expect(await reponse.json()).toStrictEqual({
         message: "Le aidant demandé n'existe pas.",
       });
+    });
+  });
+
+  describe('quand une requête POST est reçue sur /modifier-mot-de-passe', () => {
+    it('modifie le mot de passe', async () => {
+      const aidant = unAidant().construis();
+      testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const nouveauMotDePasse = 'EgLw5R0ItVRxkl%#>cPd';
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/profil/modifier-mot-de-passe',
+        donneesServeur.portEcoute,
+        {
+          ancienMotDePasse: aidant.motDePasse,
+          motDePasse: nouveauMotDePasse,
+          confirmationMotDePasse: nouveauMotDePasse,
+        },
+      );
+
+      expect(reponse.statusCode).toBe(204);
+      const aidantRecupere = await testeurMAC.entrepots
+        .aidants()
+        .lis(aidant.identifiant);
+      expect(aidantRecupere.motDePasse).toBe(nouveauMotDePasse);
     });
   });
 });

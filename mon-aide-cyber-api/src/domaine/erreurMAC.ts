@@ -1,14 +1,15 @@
 export type Contexte =
+  | 'Accède au profil'
+  | 'Accède aux diagnostics'
+  | "Accède aux informations de l'utilisateur"
   | 'Accès diagnostic'
   | 'Ajout réponse au diagnostic'
-  | 'Demande la restitution'
-  | 'Lance le diagnostic'
-  | 'Accède aux diagnostics'
-  | "Demande d'Authentification"
   | "Crée l'espace Aidant"
+  | "Demande d'Authentification"
+  | 'Demande la restitution'
   | 'Envoi un message de contact'
-  | 'Accède au profil'
-  | "Accède aux informations de l'utilisateur";
+  | 'Lance le diagnostic'
+  | 'Modifie le mot de passe';
 
 export class ErreurMAC extends Error {
   private constructor(
