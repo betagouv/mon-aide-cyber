@@ -79,6 +79,14 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
+  changerMotDePasse(): ConstructeurActionsHATEOAS {
+    this.actions.set('changer-mot-de-passe', {
+      url: '/api/profil/changement-mot-de-passe',
+      methode: 'POST',
+    });
+    return this;
+  }
+
   construis = (): ReponseHATEOAS => {
     return {
       liens: {
