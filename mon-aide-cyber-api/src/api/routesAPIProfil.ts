@@ -5,6 +5,13 @@ import { NextFunction } from 'express-serve-static-core';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
 import { constructeurActionsHATEOAS } from './hateoas/hateoas';
+import { validateurDeNouveauMotDePasse } from './validateurs/validateurs';
+import {
+  FieldValidationError,
+  Result,
+  validationResult,
+} from 'express-validator';
+import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
 
 type CorpsRequeteChangementMotDerPasse = {
   ancienMotDePasse: string;
@@ -51,11 +58,21 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     '/modifier-mot-de-passe',
     express.json(),
     session.verifie('Modifie le mot de passe'),
+    validateurDeNouveauMotDePasse(
+      entrepots,
+      'ancienMotDePasse',
+      'motDePasse',
+      'confirmationMotDePasse',
+    ),
     async (
       requete: RequeteUtilisateur,
       reponse: Response,
-      _suite: NextFunction,
+      suite: NextFunction,
     ) => {
+        const resultatValidation: Result<FieldValidationError> = validationResult(
+        requete,
+      ) as Result<FieldValidationError>;
+      if (resultatValidation.isEmpty()) {
         const aidant = await entrepots
           .aidants()
           .lis(requete.identifiantUtilisateurCourant!);
@@ -68,7 +85,18 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
           .then(() => {
             reponse.status(204);
             return reponse.send();
-      });
+          });
+      }
+      const erreursValidation = resultatValidation
+        .array()
+        .map((resultat) => resultat.msg)
+        .filter((erreur): erreur is string => !!erreur);
+      return suite(
+        ErreurMAC.cree(
+          'Modifie le mot de passe',
+          new ErreurCreationEspaceAidant(erreursValidation.join('\n')),
+        ),
+      );
     },
   );
 

@@ -5,6 +5,7 @@ type MessagesErreursValidateurMotDePasse = {
   ancienMotDePasseObligatoire: string;
   differentDeAncienMotDePasse: string;
   correspondAuMotDePasseUtilisateur: string;
+  laConfirmationDuMotDePasseCorrespond?: string;
 };
 
 const validateurDeMotDePasse = (
@@ -16,6 +17,8 @@ const validateurDeMotDePasse = (
       value: string,
       { req }: Meta,
     ) => value !== req.body.motDePasse,
+    confirmationMotDePasseCorrespond: (value: string, { req }: Meta) =>
+      value === req.body.motDePasse,
     motDePasseUtilisateur: async (value: string, { req }: Meta) => {
       const aidant = await entrepots
         .aidants()
@@ -32,9 +35,10 @@ const validateursDeMotDePasse = (
   nouveauMotDePasse: string,
   ancienMotDePasse: string,
   messageValidateurs: MessagesErreursValidateurMotDePasse,
+  confirmationNouveauMotDePasse?: string,
 ) => {
   const { body } = validateurDeMotDePasse(entrepots, messageValidateurs);
-  return [
+  const validateurs = [
     body(nouveauMotDePasse)
       .isStrongPassword({
         minLength: 16,
@@ -53,6 +57,14 @@ const validateursDeMotDePasse = (
       .withMessage(messageValidateurs.differentDeAncienMotDePasse)
       .motDePasseUtilisateur(),
   ];
+  if (confirmationNouveauMotDePasse) {
+    validateurs.push(
+      body(confirmationNouveauMotDePasse)
+        .confirmationMotDePasseCorrespond()
+        .withMessage(messageValidateurs.laConfirmationDuMotDePasseCorrespond!),
+    );
+  }
+  return validateurs;
 };
 
 export const validateursDeMotDePasseTemporaire = (
@@ -72,5 +84,28 @@ export const validateursDeMotDePasseTemporaire = (
       correspondAuMotDePasseUtilisateur:
         'Votre mot de passe temporaire est erroné.',
     },
+  );
+};
+
+export const validateurDeNouveauMotDePasse = (
+  entrepots: Entrepots,
+  ancienMotDepasse: string,
+  nouveauMotDePasse: string,
+  confirmationNouveauMotDePasse: string,
+) => {
+  return validateursDeMotDePasse(
+    entrepots,
+    nouveauMotDePasse,
+    ancienMotDepasse,
+    {
+        ancienMotDePasseObligatoire: "L'ancien mot de passe est obligatoire.",
+      differentDeAncienMotDePasse:
+        'Votre nouveau mot de passe doit être différent de votre ancien mot de passe.',
+      correspondAuMotDePasseUtilisateur:
+        'Votre ancien mot de passe est erroné.',
+      laConfirmationDuMotDePasseCorrespond:
+        'La confirmation de votre mot de passe ne correspond pas.',
+    },
+    confirmationNouveauMotDePasse,
   );
 };
