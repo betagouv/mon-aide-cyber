@@ -58,6 +58,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     '/modifier-mot-de-passe',
     express.json(),
     session.verifie('Modifie le mot de passe'),
+    cgu.verifie(),
     validateurDeNouveauMotDePasse(
       entrepots,
       'ancienMotDePasse',
@@ -69,7 +70,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
       reponse: Response,
       suite: NextFunction,
     ) => {
-        const resultatValidation: Result<FieldValidationError> = validationResult(
+      const resultatValidation: Result<FieldValidationError> = validationResult(
         requete,
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {

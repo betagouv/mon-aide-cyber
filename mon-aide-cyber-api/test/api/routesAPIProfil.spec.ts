@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { unAidant } from '../authentification/constructeurs/constructeurAidant';
 import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
@@ -107,6 +107,29 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         .aidants()
         .lis(aidant.identifiant);
       expect(aidantRecupere.motDePasse).toBe(nouveauMotDePasse);
+    });
+
+    it('vérifie que les CGU ont été signées', async () => {
+      const aidant = unAidant().construis();
+      testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const nouveauMotDePasse = 'EgLw5R0ItVRxkl%#>cPd';
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/api/profil/changement-mot-de-passe',
+        donneesServeur.portEcoute,
+        {
+          ancienMotDePasse: aidant.motDePasse,
+          motDePasse: nouveauMotDePasse,
+          confirmationMotDePasse: nouveauMotDePasse,
+        },
+      );
+
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
+        true,
+      );
     });
 
     describe('En ce qui concerne la vérification du mot de passe', async () => {
