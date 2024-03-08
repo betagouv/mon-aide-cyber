@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { expect } from '@storybook/jest';
-import { MemoryRouter } from 'react-router-dom';
 import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
@@ -17,19 +16,22 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+let valeursSaisies = {};
 
 export const CreationEspaceAidant: Story = {
   decorators: [
     (story) => (
-      <MemoryRouter>
-        <ContexteMacAPI.Provider
-          value={{
-            appelle: async <T = any, V = void>(
-              _parametresAPI: ParametresAPI<V>,
-              _: (contenu: Promise<any>) => Promise<T>,
-            ) => Promise.resolve() as Promise<T>,
-          }}
-        ></ContexteMacAPI.Provider>
+      <ContexteMacAPI.Provider
+        value={{
+          appelle: async <T = any, V = void>(
+            parametresAPI: ParametresAPI<V>,
+            _: (contenu: Promise<any>) => Promise<T>,
+          ) => {
+            valeursSaisies = parametresAPI.corps!;
+            return Promise.resolve({ liens: { url: '' } }) as Promise<T>;
+          },
+        }}
+      >
         <ContexteNavigationMAC.Provider
           value={{
             etat: {
@@ -49,7 +51,7 @@ export const CreationEspaceAidant: Story = {
         >
           {story()}
         </ContexteNavigationMAC.Provider>
-      </MemoryRouter>
+      </ContexteMacAPI.Provider>
     ),
   ],
   name: "Crée l'espace de l'aidant",
@@ -201,6 +203,44 @@ export const CreationEspaceAidant: Story = {
         expect(
           canvas.queryByText(/veuillez accepter les cgu./i),
         ).not.toBeInTheDocument(),
+      );
+    });
+
+    await step("L'utilisateur crée son espace aidant", async () => {
+      const champMotDePasseTemporaire = canvas.getByRole('textbox', {
+        name: /saisissez votre mot de passe temporaire/i,
+      });
+      const champNouveauMotDePasse = canvas.getByRole('textbox', {
+        name: /choisissez un nouveau mot de passe/i,
+      });
+      const champConfirmationMotDePasse = canvas.getByRole('textbox', {
+        name: /confirmez votre nouveau mot de passe/i,
+      });
+      const champCGU = canvas.getByRole('checkbox', {
+        name: /j'accepte les conditions générales d'utilisation/i,
+      });
+      userEvent.clear(champMotDePasseTemporaire);
+      userEvent.clear(champNouveauMotDePasse);
+      userEvent.clear(champConfirmationMotDePasse);
+      userEvent.clear(champCGU);
+      userEvent.type(champMotDePasseTemporaire, 'a');
+      userEvent.type(champNouveauMotDePasse, 'b');
+      userEvent.type(champConfirmationMotDePasse, 'b');
+      userEvent.click(champCGU);
+
+      userEvent.click(canvas.getByRole('button', { name: /valider/i }));
+
+      await waitFor(() =>
+        expect(
+          canvas.queryByText(/veuillez accepter les cgu./i),
+        ).not.toBeInTheDocument(),
+      );
+      await waitFor(() =>
+        expect(valeursSaisies).toStrictEqual({
+          cguSignees: true,
+          motDePasse: 'b',
+          motDePasseTemporaire: 'a',
+        }),
       );
     });
   },
