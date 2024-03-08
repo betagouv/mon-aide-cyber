@@ -47,7 +47,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
               ? FournisseurHorloge.formateDate(dateSignatureCGU).date
               : '',
             identifiantConnexion: aidant.identifiantConnexion,
-            ...constructeurActionsHATEOAS().lancerDiagnostic().construis(),
+            ...constructeurActionsHATEOAS().affichageProfil().construis(),
           });
         })
         .catch((erreur) => suite(ErreurMAC.cree('Accède au profil', erreur)));

@@ -48,6 +48,11 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             url: '/api/diagnostic',
             methode: 'POST',
           },
+          'se-deconnecter': { url: '/api/token', methode: 'DELETE' },
+          'modifier-mot-de-passe': {
+            url: '/api/profil/modifier-mot-de-passe',
+            methode: 'POST',
+          },
         },
       });
     });
