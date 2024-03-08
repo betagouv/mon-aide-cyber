@@ -1,0 +1,22 @@
+.mot-de-passe ul {
+  margin-left: 1rem;
+}
+
+.asterisque {
+  color: var(--couleurs-erreur-mode-clair, #ce0500);
+}
+
+.champs-obligatoire {
+  color: var(--couleurs-mac-gris, #666);
+  text-align: right;
+  font-size: 0.75rem;
+  font-style: normal;
+  line-height: 1.25rem;
+
+  .asterisque {
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.25rem;
+  }
+}
