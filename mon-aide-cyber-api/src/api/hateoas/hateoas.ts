@@ -1,6 +1,6 @@
 import { AidantAuthentifie } from '../../authentification/Aidant';
 
-type Methode = 'GET' | 'POST' | 'PATCH';
+type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
 type SuiteHATEOAS = { suite?: Options };
 type LiensHATEOAS = SuiteHATEOAS | Record<string, Options>;
 export type ReponseHATEOAS = {
@@ -79,12 +79,24 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  changerMotDePasse(): ConstructeurActionsHATEOAS {
-    this.actions.set('changer-mot-de-passe', {
-      url: '/api/profil/changement-mot-de-passe',
+  modifierMotDePasse(): ConstructeurActionsHATEOAS {
+    this.actions.set('modifier-mot-de-passe', {
+      url: '/api/profil/modifier-mot-de-passe',
       methode: 'POST',
     });
     return this;
+  }
+
+  private seDeconnecter(): ConstructeurActionsHATEOAS {
+    this.actions.set('se-deconnecter', {
+      url: '/api/token',
+      methode: 'DELETE',
+    });
+    return this;
+  }
+
+  affichageProfil(): ConstructeurActionsHATEOAS {
+    return this.lancerDiagnostic().modifierMotDePasse().seDeconnecter();
   }
 
   construis = (): ReponseHATEOAS => {
