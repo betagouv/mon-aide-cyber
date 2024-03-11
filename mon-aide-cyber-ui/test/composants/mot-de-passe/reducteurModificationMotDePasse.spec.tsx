@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { TexteExplicatif } from '../../../src/composants/erreurs/Erreurs.tsx';
 import {
   modificationMotDePasseValidee,
   EtatModificationMotDePasse,
@@ -8,7 +7,9 @@ import {
   nouveauMotDePasseConfirme,
   nouveauMotDePasseSaisi,
   reducteurModificationMotDePasse,
+  reinitialiseLeReducteur,
 } from '../../../src/composants/mot-de-passe/reducteurModificationMotDePasse.tsx';
+import { TexteExplicatif } from '../../../src/composants/alertes/Erreurs.tsx';
 
 describe('Réducteur de modification de mot de passe', () => {
   const messagesErreurs = {
@@ -368,6 +369,39 @@ describe('Réducteur de modification de mot de passe', () => {
         });
         expect(etatModificationMotDePasse.saisieValide()).toBe(true);
       });
+    });
+  });
+
+  describe('Lors de la réinitialisation du formulaire', () => {
+    it('Cela vide les mots de passe', () => {
+      const etatModificationMotDePasse = reducteurModificationMotDePasse(
+        {
+          ancienMotDePasse: 'ancien-mot-de-passe',
+          nouveauMotDePasse: 'un-mot-de-passe',
+          motDePasseConfirme: 'un-mot-de-passe',
+          erreur: {
+            motDePasse: {
+              className: 'fr-input-group--error',
+              texteExplicatif: <></>,
+            },
+          },
+          champsErreur: <></>,
+          messagesErreurs,
+          saisieValide: () => false,
+        },
+        reinitialiseLeReducteur(),
+      );
+
+      expect(
+        etatModificationMotDePasse,
+      ).toStrictEqual<EtatModificationMotDePasse>({
+        ancienMotDePasse: '',
+        nouveauMotDePasse: '',
+        motDePasseConfirme: '',
+        saisieValide: expect.any(Function),
+        messagesErreurs,
+      });
+      expect(etatModificationMotDePasse.saisieValide()).toBe(false);
     });
   });
 });

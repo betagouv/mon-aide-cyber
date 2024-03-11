@@ -10,7 +10,7 @@ import {
 import {
   ChampsErreur,
   TexteExplicatif,
-} from '../../../src/composants/erreurs/Erreurs.tsx';
+} from '../../../src/composants/alertes/Erreurs.tsx';
 
 describe('Réducteur authentification', () => {
   describe("Lorsque l'authentification est invalidée", () => {

@@ -1,7 +1,7 @@
 import {
   construisErreur,
   PresentationErreur,
-} from '../composants/erreurs/Erreurs.tsx';
+} from '../composants/alertes/Erreurs.tsx';
 
 enum TypeActionEnvoieMessage {
   NOM_SAISI = 'NOM_SAISI',

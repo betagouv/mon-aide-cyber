@@ -7,6 +7,7 @@ import {
   reducteurModificationMotDePasse,
   MessagesErreurs,
   modificationMotDePasseValidee,
+  reinitialiseLeReducteur,
 } from './reducteurModificationMotDePasse.tsx';
 
 export type ModificationMotDePasse = {
@@ -17,12 +18,14 @@ export type ModificationMotDePasse = {
 };
 type ProprieteseComposantMotDePasse = {
   messagesErreurs: MessagesErreurs;
+  reinitialise?: () => void;
   surValidation?: (modificationMotDePasse: ModificationMotDePasse) => void;
   titreSaisieAncienMotDePasse: string;
 };
 
 export const ComposantMotDePasse = ({
   messagesErreurs,
+  reinitialise,
   surValidation,
   titreSaisieAncienMotDePasse,
 }: ProprieteseComposantMotDePasse) => {
@@ -43,6 +46,12 @@ export const ComposantMotDePasse = ({
       });
     }
   }, [etatModificationMotDePasse, surValidation]);
+
+  useEffect(() => {
+    if (reinitialise) {
+      envoie(reinitialiseLeReducteur());
+    }
+  }, [reinitialise]);
 
   const surSaisieNouveauMotDePasse = useCallback((motDePasse: string) => {
     envoie(nouveauMotDePasseSaisi(motDePasse));

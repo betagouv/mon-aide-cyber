@@ -4,7 +4,7 @@ import { expect } from '@storybook/jest';
 import { SeConnecter } from '../composants/authentification/SeConnecter.tsx';
 import { PortailModale } from '../composants/modale/PortailModale.tsx';
 import { ReponseAuthentification } from '../domaine/authentification/Authentification.ts';
-import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAffichageErreur.tsx';
+import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter } from 'react-router-dom';
 import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';

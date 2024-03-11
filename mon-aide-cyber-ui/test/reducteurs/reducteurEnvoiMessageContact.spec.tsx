@@ -12,7 +12,7 @@ import {
 import {
   ChampsErreur,
   TexteExplicatif,
-} from '../../src/composants/erreurs/Erreurs.tsx';
+} from '../../src/composants/alertes/Erreurs.tsx';
 
 describe("Réducteur d'envoie de message de contact", () => {
   const etatInitial: EtatEnvoiMessageContact = {

@@ -4,7 +4,7 @@ import { Accueil } from './Accueil.tsx';
 import './assets/styles/index.scss';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
-import { ComposantAffichageErreur } from './composants/erreurs/ComposantAffichageErreur.tsx';
+import { ComposantAffichageErreur } from './composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ComposantDiagnostic } from './composants/diagnostic/ComposantDiagnostic.tsx';
 import { ComposantDiagnostics } from './composants/ComposantDiagnostics.tsx';

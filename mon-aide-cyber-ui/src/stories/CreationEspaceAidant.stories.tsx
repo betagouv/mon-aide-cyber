@@ -25,7 +25,7 @@ export const CreationEspaceAidant: Story = {
         value={{
           appelle: async <T = any, V = void>(
             parametresAPI: ParametresAPI<V>,
-            _: (contenu: Promise<any>) => Promise<T>,
+            _: (contenu: Promise<any>) => Promise<T>
           ) => {
             valeursSaisies = parametresAPI.corps!;
             return Promise.resolve({ liens: { url: '' } }) as Promise<T>;
@@ -43,6 +43,8 @@ export const CreationEspaceAidant: Story = {
             setEtat: () => {
               return;
             },
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            ajouteEtat: () => {},
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             navigue: (_moteurDeLiens, _action, _exclusion) => {},
             // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -64,24 +66,24 @@ export const CreationEspaceAidant: Story = {
         expect(
           canvas.getByRole('textbox', {
             name: /saisissez votre mot de passe temporaire/i,
-          }),
+          })
         ).toBeInTheDocument();
         expect(
           canvas.getByRole('textbox', {
             name: /choisissez un nouveau mot de passe/i,
-          }),
+          })
         ).toBeInTheDocument();
         expect(
           canvas.getByRole('textbox', {
             name: /confirmez votre nouveau mot de passe/i,
-          }),
+          })
         ).toBeInTheDocument();
         expect(
           canvas.getByRole('checkbox', {
             name: /j'accepte les conditions générales d'utilisation/i,
-          }),
+          })
         ).toBeInTheDocument();
-      },
+      }
     );
 
     await step(
@@ -91,15 +93,15 @@ export const CreationEspaceAidant: Story = {
 
         await waitFor(() =>
           expect(
-            canvas.getByText(/vous devez saisir vos mots de passe./i),
-          ).toBeInTheDocument(),
+            canvas.getByText(/vous devez saisir vos mots de passe./i)
+          ).toBeInTheDocument()
         );
         await waitFor(() =>
           expect(
-            canvas.getByText(/veuillez accepter les cgu./i),
-          ).toBeInTheDocument(),
+            canvas.getByText(/veuillez accepter les cgu./i)
+          ).toBeInTheDocument()
         );
-      },
+      }
     );
 
     await step("L'utilisateur se trompe dans la confirmation", async () => {
@@ -121,14 +123,14 @@ export const CreationEspaceAidant: Story = {
       await waitFor(() =>
         expect(
           canvas.getByText(
-            /la confirmation de votre mot de passe ne correspond pas au mot de passe saisi./i,
-          ),
-        ).toBeInTheDocument(),
+            /la confirmation de votre mot de passe ne correspond pas au mot de passe saisi./i
+          )
+        ).toBeInTheDocument()
       );
       await waitFor(() =>
         expect(
-          canvas.getByText(/veuillez accepter les cgu./i),
-        ).toBeInTheDocument(),
+          canvas.getByText(/veuillez accepter les cgu./i)
+        ).toBeInTheDocument()
       );
     });
 
@@ -156,16 +158,16 @@ export const CreationEspaceAidant: Story = {
         await waitFor(() =>
           expect(
             canvas.getByText(
-              /votre nouveau mot de passe doit être différent du mot de passe temporaire./i,
-            ),
-          ).toBeInTheDocument(),
+              /votre nouveau mot de passe doit être différent du mot de passe temporaire./i
+            )
+          ).toBeInTheDocument()
         );
         await waitFor(() =>
           expect(
-            canvas.getByText(/veuillez accepter les cgu./i),
-          ).toBeInTheDocument(),
+            canvas.getByText(/veuillez accepter les cgu./i)
+          ).toBeInTheDocument()
         );
-      },
+      }
     );
 
     await step("L'utilisateur signe les CGU", async () => {
@@ -188,21 +190,21 @@ export const CreationEspaceAidant: Story = {
       userEvent.click(
         canvas.getByRole('checkbox', {
           name: /j'accepte les conditions générales d'utilisation/i,
-        }),
+        })
       );
       userEvent.click(canvas.getByRole('button', { name: /valider/i }));
 
       await waitFor(() =>
         expect(
           canvas.getByText(
-            /votre nouveau mot de passe doit être différent du mot de passe temporaire./i,
-          ),
-        ).toBeInTheDocument(),
+            /votre nouveau mot de passe doit être différent du mot de passe temporaire./i
+          )
+        ).toBeInTheDocument()
       );
       await waitFor(() =>
         expect(
-          canvas.queryByText(/veuillez accepter les cgu./i),
-        ).not.toBeInTheDocument(),
+          canvas.queryByText(/veuillez accepter les cgu./i)
+        ).not.toBeInTheDocument()
       );
     });
 
@@ -232,15 +234,15 @@ export const CreationEspaceAidant: Story = {
 
       await waitFor(() =>
         expect(
-          canvas.queryByText(/veuillez accepter les cgu./i),
-        ).not.toBeInTheDocument(),
+          canvas.queryByText(/veuillez accepter les cgu./i)
+        ).not.toBeInTheDocument()
       );
       await waitFor(() =>
         expect(valeursSaisies).toStrictEqual({
           cguSignees: true,
           motDePasse: 'b',
           motDePasseTemporaire: 'a',
-        }),
+        })
       );
     });
   },
