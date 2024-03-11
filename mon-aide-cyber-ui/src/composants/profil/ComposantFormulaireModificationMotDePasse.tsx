@@ -86,7 +86,7 @@ export const ComposantFormulaireModificationMotDePasse = () => {
                 'La confirmation de votre mot de passe ne correspond pas au mot de passe saisi.',
               motsDePasseVides: 'Vous devez saisir vos mots de passe.',
               ancienMotDePasseIdentiqueAuNouveauMotDePasse:
-                'Votre nouveau mot de passe doit être différent du mot de passe temporaire.',
+                'Votre nouveau mot de passe doit être différent de votre ancien mot de passe.',
             }}
             {...(modificationMotDePasseTransmise && {
               surValidation: (modificationMotDePasse) => {
