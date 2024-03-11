@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import React from 'react';
 import { UUID } from '../../types/Types.ts';
 import { ErrorBoundary } from 'react-error-boundary';
-import { ComposantAffichageErreur } from '../erreurs/ComposantAffichageErreur.tsx';
+import { ComposantAffichageErreur } from '../alertes/ComposantAffichageErreur.tsx';
 
 ('use client');
 type CommePropriete<C extends React.ElementType> = {

@@ -12,6 +12,7 @@ import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { useErrorBoundary } from 'react-error-boundary';
+import { ComposantFormulaireModificationMotDePasse } from './ComposantFormulaireModificationMotDePasse.tsx';
 
 export const ComposantProfil = () => {
   const { showBoundary } = useErrorBoundary();
@@ -36,9 +37,12 @@ export const ComposantProfil = () => {
                 .url(lien.url)
                 .methode(lien.methode!)
                 .construis(),
-              (reponse) => reponse,
+              (reponse) => reponse
             )
-            .then((profil) => envoie(profilCharge(profil)))
+            .then((profil) => {
+                navigationMAC.ajouteEtat(profil.liens);
+              envoie(profilCharge(profil));
+            })
             .catch((erreur: ReponseHATEOAS) => {
               envoie(profilChargeEnErreur());
               showBoundary(erreur);
@@ -97,6 +101,8 @@ export const ComposantProfil = () => {
                     <b>Email</b> {etatProfil.email}
                   </p>
                 </div>
+                <hr />
+                <ComposantFormulaireModificationMotDePasse />
               </div>
             </div>
           </div>

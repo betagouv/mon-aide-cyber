@@ -9,7 +9,7 @@ import {
   uneQuestionTiroirAChoixUnique,
 } from '../../test/constructeurs/constructeurQuestions.ts';
 import { uneReponsePossible } from '../../test/constructeurs/constructeurReponsePossible.ts';
-import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAffichageErreur.tsx';
+import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
 import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';

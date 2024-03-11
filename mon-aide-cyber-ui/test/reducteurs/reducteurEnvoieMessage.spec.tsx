@@ -8,7 +8,7 @@ import {
   reducteurEnvoieMessage,
   saisieInvalidee,
 } from '../../src/reducteurs/reducteurEnvoieMessage.ts';
-import { TexteExplicatif } from '../../src/composants/erreurs/Erreurs.tsx';
+import { TexteExplicatif } from '../../src/composants/alertes/Erreurs.tsx';
 
 describe("Réducteur d'envoie de messages", () => {
   const etatInitial: EtatEnvoieMessage = {

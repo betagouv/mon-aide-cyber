@@ -2,7 +2,7 @@ import {
   ChampsErreur,
   construisErreur,
   PresentationErreur,
-} from '../composants/erreurs/Erreurs.tsx';
+} from '../composants/alertes/Erreurs.tsx';
 import { ReactElement } from 'react';
 
 enum TypeActionEnvoiMessageContact {

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
-import { ComposantAffichageErreur } from '../composants/erreurs/ComposantAffichageErreur.tsx';
+import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ComposantDiagnostics } from '../composants/ComposantDiagnostics.tsx';
 import { lesDiagnostics } from '../../test/constructeurs/ConstructeurDiagnostics.ts';

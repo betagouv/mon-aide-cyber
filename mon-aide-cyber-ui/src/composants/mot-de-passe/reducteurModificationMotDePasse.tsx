@@ -1,4 +1,4 @@
-import { construisErreur, PresentationErreur } from '../erreurs/Erreurs.tsx';
+import { construisErreur, PresentationErreur } from '../alertes/Erreurs.tsx';
 import { ReactElement } from 'react';
 
 type ErreurModificationMotDePasse = {
@@ -21,6 +21,7 @@ enum TypeActionModificationMotDePasse {
   NOUVEAU_MOT_DE_PASSE_SAISI = 'NOUVEAU_MOT_DE_PASSE_SAISI',
   NOUVEAU_MOT_DE_PASSE_CONFIRME = 'NOUVEAU_MOT_DE_PASSE_CONFIRME',
   ANCIEN_MOT_DE_PASSE_SAISI = 'ANCIEN_MOT_DE_PASSE_SAISI',
+  REINITIALISE = 'REINITIALISE',
 }
 
 type ActionModificationMotDePasse =
@@ -41,6 +42,9 @@ type ActionModificationMotDePasse =
   | {
       ancienMotDePasse: string;
       type: TypeActionModificationMotDePasse.ANCIEN_MOT_DE_PASSE_SAISI;
+    }
+  | {
+      type: TypeActionModificationMotDePasse.REINITIALISE;
     };
 
 export const reducteurModificationMotDePasse = (
@@ -107,6 +111,18 @@ export const reducteurModificationMotDePasse = (
   };
 
   switch (action.type) {
+    case TypeActionModificationMotDePasse.REINITIALISE: {
+      const etatCourant = { ...etat };
+      delete etatCourant['erreur'];
+      delete etatCourant['champsErreur'];
+      return {
+        ...etatCourant,
+        ancienMotDePasse: '',
+        nouveauMotDePasse: '',
+        motDePasseConfirme: '',
+        saisieValide: () => false,
+      };
+    }
     case TypeActionModificationMotDePasse.ANCIEN_MOT_DE_PASSE_SAISI: {
       const nouveauMotDePasse = etat.nouveauMotDePasse;
       const motDePasseConfirme = etat.motDePasseConfirme;
@@ -199,6 +215,10 @@ export const ancienMotDePasseSaisi = (
 ): ActionModificationMotDePasse => ({
   ancienMotDePasse: ancienMotDePasse,
   type: TypeActionModificationMotDePasse.ANCIEN_MOT_DE_PASSE_SAISI,
+});
+
+export const reinitialiseLeReducteur = (): ActionModificationMotDePasse => ({
+  type: TypeActionModificationMotDePasse.REINITIALISE,
 });
 
 export type MessagesErreurs = {

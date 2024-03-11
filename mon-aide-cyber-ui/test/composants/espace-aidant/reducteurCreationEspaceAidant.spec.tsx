@@ -11,7 +11,7 @@ import {
 import {
   ChampsErreur,
   TexteExplicatif,
-} from '../../../src/composants/erreurs/Erreurs.tsx';
+} from '../../../src/composants/alertes/Erreurs.tsx';
 
 describe("Réducteur de création de l'espace Aidant", () => {
   const etatInitialCreationEspaceAidant: EtatCreationEspaceAidant =

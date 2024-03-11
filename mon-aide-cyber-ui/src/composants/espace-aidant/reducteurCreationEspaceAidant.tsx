@@ -2,7 +2,7 @@ import {
   ChampsErreur,
   construisErreur,
   PresentationErreur,
-} from '../erreurs/Erreurs.tsx';
+} from '../alertes/Erreurs.tsx';
 import { ReactElement } from 'react';
 import { ModificationMotDePasse } from '../mot-de-passe/ComposantMotDePasse.tsx';
 

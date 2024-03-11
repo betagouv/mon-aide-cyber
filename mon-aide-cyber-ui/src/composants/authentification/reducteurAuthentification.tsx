@@ -3,7 +3,7 @@ import {
   ChampsErreur,
   construisErreur,
   PresentationErreur,
-} from '../erreurs/Erreurs.tsx';
+} from '../alertes/Erreurs.tsx';
 
 enum TypeActionAuthentification {
   SAISIE_INVALIDEE = 'SAISIE_INVALIDEE',
