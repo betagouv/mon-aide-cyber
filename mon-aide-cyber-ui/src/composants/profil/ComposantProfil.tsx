@@ -37,10 +37,10 @@ export const ComposantProfil = () => {
                 .url(lien.url)
                 .methode(lien.methode!)
                 .construis(),
-              (reponse) => reponse
+              (reponse) => reponse,
             )
             .then((profil) => {
-                navigationMAC.ajouteEtat(profil.liens);
+              navigationMAC.ajouteEtat(profil.liens);
               envoie(profilCharge(profil));
             })
             .catch((erreur: ReponseHATEOAS) => {
@@ -102,7 +102,11 @@ export const ComposantProfil = () => {
                   </p>
                 </div>
                 <hr />
-                <ComposantFormulaireModificationMotDePasse />
+                <ComposantFormulaireModificationMotDePasse
+                  lienModificationMotDePasse={
+                    navigationMAC.etat['modifier-mot-de-passe']
+                  }
+                />
               </div>
             </div>
           </div>
