@@ -6,7 +6,7 @@ export const donneesSensibilisation: QuestionsThematique = {
       identifiant:
         'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
       libelle:
-        'Des actions de sensibilisation à la menace et aux bonnes pratiques cyber sont-elles réalisées plusieurs fois par an ?',
+        'Des actions de sensibilisation à la menace et aux bonnes pratiques cyber sont-elles réalisées ?',
       poids: 3,
       reponsesPossibles: [
         {
