@@ -15,6 +15,8 @@ export type Action =
   | 'creer-espace-aidant'
   | 'lancer-diagnostic'
   | 'modifier-diagnostic'
+  | 'modifier-mot-de-passe'
   | 'restitution-json'
   | 'restitution-pdf'
-  | 'se-connecter';
+  | 'se-connecter'
+  | 'se-deconnecter';
