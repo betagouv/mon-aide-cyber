@@ -9,6 +9,11 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       poids: 0.5,
       reponsesPossibles: [
         {
+          identifiant: 'acces-outil-gestion-des-comptes-na',
+          libelle: 'Non applicable',
+          ordre: 0,
+        },
+        {
           identifiant: 'acces-outil-gestion-des-comptes-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
