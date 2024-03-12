@@ -62,7 +62,6 @@ describe('Appelle API', () => {
             new ConstructeurDeReponse().ok().json(infos).construis(),
           );
         },
-        (_vers, _state) => Promise.resolve(),
         (contenu) => contenu,
       );
 
