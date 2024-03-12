@@ -366,11 +366,8 @@ export const Accueil = () => {
                     <p className="alignement-gauche">
                       Le service de diagnostic accompagné s’appuie sur un{' '}
                       <b>référentiel évolutif de questions</b> et de mesures de
-                      sécurité non exhaustif inspiré en particulier du guide{' '}
-                      <b>
-                        « La cybersécurité pour les TPE/PME en 13 questions »
-                      </b>{' '}
-                      de l’ANSSI.
+                      sécurité non exhaustives qui se focalise sur les risques
+                      de <b>rançongiciels et de cybercriminalité de masse</b>.
                     </p>
                   </div>
                   <img
