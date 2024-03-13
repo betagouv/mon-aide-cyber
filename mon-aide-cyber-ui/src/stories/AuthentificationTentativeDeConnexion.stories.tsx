@@ -17,6 +17,7 @@ import { Suspense } from 'react';
 import { ComposantIntercepteur } from '../composants/intercepteurs/ComposantIntercepteur.tsx';
 import { TableauDeBord } from '../composants/TableauDeBord.tsx';
 import { Header } from '../composants/Header.tsx';
+import { Liens } from '../domaine/Lien.ts';
 
 const meta = {
   title: 'Authentification',
@@ -78,6 +79,8 @@ export const ConnexionAMonAideCyber: Story = {
               setEtat: () => {
                 return;
               },
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              ajouteEtat: (_liens: Liens) => {},
               // eslint-disable-next-line @typescript-eslint/no-empty-function
               navigue: (_moteurDeLiens, _action, _exclusion) => {},
               // eslint-disable-next-line @typescript-eslint/no-empty-function

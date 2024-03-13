@@ -2,6 +2,7 @@ import {
   createContext,
   PropsWithChildren,
   ReactElement,
+  useCallback,
   useEffect,
   useReducer,
 } from 'react';
@@ -25,6 +26,7 @@ import {
 type ContexteAuthentificationType = {
   utilisateur?: Utilisateur;
   element: ReactElement | null;
+  appelleUtilisateur: () => Promise<ReponseUtilisateur>;
   authentifie: (identifiants: {
     identifiant: string;
     motDePasse: string;
@@ -77,16 +79,19 @@ export const FournisseurAuthentification = ({
       });
   };
 
+  const appelleUtilisateur = useCallback(() => {
+    return macapi.appelle<ReponseUtilisateur>(
+      constructeurParametresAPI()
+        .url('/api/utilisateur')
+        .methode('GET')
+        .construis(),
+      (json) => json,
+    );
+  }, [macapi]);
+
   useEffect(() => {
     if (etatUtilisateurAuthentifie.enAttenteDeChargement) {
-      macapi
-        .appelle<ReponseUtilisateur>(
-          constructeurParametresAPI()
-            .url('/api/utilisateur')
-            .methode('GET')
-            .construis(),
-          (json) => json,
-        )
+      appelleUtilisateur()
         .then((utilisateur) => {
           envoie(utilisateurCharge(utilisateur));
           const moteurDeLiens = new MoteurDeLiens(utilisateur.liens);
@@ -107,10 +112,16 @@ export const FournisseurAuthentification = ({
           envoie(utilisateurNonAuthentifie());
         });
     }
-  }, [navigationMAC, etatUtilisateurAuthentifie.enAttenteDeChargement, macapi]);
+  }, [
+    navigationMAC,
+    etatUtilisateurAuthentifie.enAttenteDeChargement,
+    macapi,
+    appelleUtilisateur,
+  ]);
 
   const value: ContexteAuthentificationType = {
     authentifie,
+    appelleUtilisateur,
     element: etatUtilisateurAuthentifie.element,
     utilisateur: etatUtilisateurAuthentifie.utilisateur,
   };
