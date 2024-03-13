@@ -20,6 +20,7 @@ import { ComposantCreationEspaceAidant } from './composants/espace-aidant/Compos
 import { FournisseurMacAPI } from './fournisseurs/api/ContexteMacAPI.tsx';
 import { FournisseurNavigationMAC } from './fournisseurs/ContexteNavigationMAC.tsx';
 import { ComposantProfil } from './composants/profil/ComposantProfil.tsx';
+import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -40,6 +41,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 <Route path="/cgu" element={<CGU />} />
                 <Route path="/charte-aidant" element={<CharteAidant />} />
                 <Route path="/mentions-legales" element={<MentionsLegales />} />
+
                 <Route
                   element={
                     <Suspense>
@@ -54,13 +56,21 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     }
                   ></Route>
                   <Route
-                    path="/finalise-creation-compte"
                     element={
-                      <ComposantIntercepteur
-                        composant={ComposantCreationEspaceAidant}
-                      />
+                      <Suspense>
+                        <RequiertAidantSansEspace />
+                      </Suspense>
                     }
-                  ></Route>
+                  >
+                    <Route
+                      path="/finalise-creation-compte"
+                      element={
+                        <ComposantIntercepteur
+                          composant={ComposantCreationEspaceAidant}
+                        />
+                      }
+                    ></Route>
+                  </Route>
                   <Route
                     path="/diagnostics"
                     element={
