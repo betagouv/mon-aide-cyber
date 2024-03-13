@@ -4,6 +4,7 @@ import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
 import { useNavigate } from 'react-router-dom';
 
 type ContexteNavigationMACType = {
+  ajouteEtat(liens: Liens): void;
   etat: Liens;
   setEtat: (liens: Liens) => void;
   navigue: (
@@ -30,10 +31,11 @@ export const FournisseurNavigationMAC = ({ children }: PropsWithChildren) => {
     navigate(route || '/');
   };
   const retourAccueil = () => window.location.replace('/');
-
+  const ajouteEtat = (liens: Liens) => setEtat({ ...etat, ...liens });
   return (
     <ContexteNavigationMAC.Provider
       value={{
+        ajouteEtat,
         etat,
         setEtat,
         navigue,
