@@ -50,12 +50,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                   }
                 >
                   <Route
-                    path="/tableau-de-bord"
-                    element={
-                      <ComposantIntercepteur composant={TableauDeBord} />
-                    }
-                  ></Route>
-                  <Route
                     element={
                       <Suspense>
                         <RequiertAidantSansEspace />
@@ -63,7 +57,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     }
                   >
                     <Route
-                      path="/finalise-creation-compte"
+                      path="/finalise-creation-espace-aidant"
                       element={
                         <ComposantIntercepteur
                           composant={ComposantCreationEspaceAidant}
@@ -71,6 +65,12 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                       }
                     ></Route>
                   </Route>
+                  <Route
+                    path="/tableau-de-bord"
+                    element={
+                      <ComposantIntercepteur composant={TableauDeBord} />
+                    }
+                  ></Route>
                   <Route
                     path="/diagnostics"
                     element={

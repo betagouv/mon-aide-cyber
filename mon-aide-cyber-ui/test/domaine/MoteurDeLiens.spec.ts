@@ -12,7 +12,7 @@ describe('Le moteur de liens', () => {
     },
     {
       lien: { 'creer-espace-aidant': { url: '/une/url', methode: 'GET' } },
-      attendu: '/finalise-creation-compte',
+      attendu: '/finalise-creation-espace-aidant',
     },
     {
       lien: { 'lancer-diagnostic': { url: '/une/url', methode: 'GET' } },
