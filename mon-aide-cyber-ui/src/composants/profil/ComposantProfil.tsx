@@ -1,14 +1,20 @@
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
 import { useCallback, useEffect, useReducer } from 'react';
-import { profilCharge, reducteurProfil } from './reducteurProfil.ts';
+import {
+  profilCharge,
+  profilChargeEnErreur,
+  reducteurProfil,
+} from './reducteurProfil.ts';
 import { Profil } from 'mon-aide-cyber-api/src/api/representateurs/profil/Profil.ts';
 import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { Lien } from '../../domaine/Lien.ts';
+import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
+import { useErrorBoundary } from 'react-error-boundary';
 
 export const ComposantProfil = () => {
+  const { showBoundary } = useErrorBoundary();
   const macapi = useMACAPI();
   const navigationMAC = useNavigationMAC();
   const [etatProfil, envoie] = useReducer(reducteurProfil, {
@@ -32,11 +38,20 @@ export const ComposantProfil = () => {
                 .construis(),
               (reponse) => reponse,
             )
-            .then((profil) => envoie(profilCharge(profil)));
+            .then((profil) => envoie(profilCharge(profil)))
+            .catch((erreur: ReponseHATEOAS) => {
+              envoie(profilChargeEnErreur());
+              showBoundary(erreur);
+            });
         }
       },
     );
-  }, [navigationMAC.etat, etatProfil.enCoursDeChargement, macapi]);
+  }, [
+    navigationMAC.etat,
+    etatProfil.enCoursDeChargement,
+    macapi,
+    showBoundary,
+  ]);
 
   const afficherTableauDeBord = useCallback(() => {
     navigationMAC.navigue(
