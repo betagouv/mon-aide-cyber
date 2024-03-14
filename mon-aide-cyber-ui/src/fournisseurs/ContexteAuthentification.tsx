@@ -21,16 +21,20 @@ import {
   utilisateurCharge,
   utilisateurNonAuthentifie,
 } from './reducteurUtilisateurAuthentifie.tsx';
-import { ReponseHATEOAS } from '../domaine/Lien.ts';
+import { Lien, ReponseHATEOAS } from '../domaine/Lien.ts';
 
 type ContexteAuthentificationType = {
   utilisateur?: Utilisateur;
   element: ReactElement | null;
   appelleUtilisateur: () => Promise<ReponseUtilisateur>;
-  authentifie: (identifiants: {
-    identifiant: string;
-    motDePasse: string;
-  }) => Promise<void>;
+  authentifie: (
+    identifiants: {
+      identifiant: string;
+      motDePasse: string;
+    },
+    surSucces: () => void,
+    surErreur: (erreur: Error) => void,
+  ) => void;
 };
 
 export const ContexteAuthentification =
@@ -54,34 +58,42 @@ export const FournisseurAuthentification = ({
     initialiseReducteurUtilisateurAuthentifie(),
   );
 
-  const authentifie = (identifiants: {
-    identifiant: string;
-    motDePasse: string;
-  }) => {
-    const lienSeConnecter = new MoteurDeLiens(navigationMAC.etat).trouve(
+  const authentifie = (
+    identifiants: {
+      identifiant: string;
+      motDePasse: string;
+    },
+    surSucces: () => void,
+    surErreur: (erreur: Error) => void,
+  ) => {
+    new MoteurDeLiens(navigationMAC.etat).trouve(
       'se-connecter',
-    );
-    return macapi
-      .appelle<ReponseAuthentification, Identifiants>(
-        constructeurParametresAPI<Identifiants>()
-          .url(lienSeConnecter.url)
-          .methode(lienSeConnecter.methode!)
-          .corps({
-            identifiant: identifiants.identifiant,
-            motDePasse: identifiants.motDePasse,
-          })
-          .construis(),
-        async (reponse) => (await reponse) as ReponseAuthentification,
-      )
-      .then((reponse) => {
-        envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
-        const moteurDeLiens = new MoteurDeLiens({
-          ...reponse.liens,
-          'afficher-tableau-de-bord': { url: '' },
-        });
+      (lien: Lien) => {
+        macapi
+          .appelle<ReponseAuthentification, Identifiants>(
+            constructeurParametresAPI<Identifiants>()
+              .url(lien.url)
+              .methode(lien.methode!)
+              .corps({
+                identifiant: identifiants.identifiant,
+                motDePasse: identifiants.motDePasse,
+              })
+              .construis(),
+            async (reponse) => (await reponse) as ReponseAuthentification,
+          )
+          .then((reponse) => {
+            envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
+            const moteurDeLiens = new MoteurDeLiens({
+              ...reponse.liens,
+              'afficher-tableau-de-bord': { url: '' },
+            });
 
-        navigationMAC.navigue(moteurDeLiens, 'afficher-tableau-de-bord');
-      });
+            navigationMAC.navigue(moteurDeLiens, 'afficher-tableau-de-bord');
+            surSucces();
+          })
+          .catch(surErreur);
+      },
+    );
   };
 
   const appelleUtilisateur = useCallback(() => {
