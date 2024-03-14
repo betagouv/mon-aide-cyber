@@ -24,10 +24,20 @@ export class MoteurDeLiens {
       });
   }
 
-  trouve(lienATrouver: string): Lien {
-    return Object.entries(this.liens)
+  trouve(
+    lienATrouver: string,
+    enSucces?: (lien: Lien) => void,
+    enErreur?: () => void,
+  ): Lien {
+    const lien = Object.entries(this.liens)
       .filter(([action]) => action === lienATrouver)
       .map(([, restitution]) => restitution)[0];
+    if (lien && enSucces) {
+      enSucces(lien);
+    } else if (enErreur) {
+      enErreur();
+    }
+    return lien;
   }
 
   extrais(exclusion?: (Action | string)[]): Liens {
