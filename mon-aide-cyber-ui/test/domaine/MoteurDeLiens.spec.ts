@@ -11,6 +11,12 @@ describe('Le moteur de liens', () => {
       attendu: '/profil',
     },
     {
+      lien: {
+        'afficher-tableau-de-bord': { url: '/une/url', methode: 'GET' },
+      },
+      attendu: '/tableau-de-bord',
+    },
+    {
       lien: { 'creer-espace-aidant': { url: '/une/url', methode: 'GET' } },
       attendu: '/finalise-creation-espace-aidant',
     },
@@ -28,11 +34,14 @@ describe('Le moteur de liens', () => {
     it(`lorsque l'on recherche le lien correspondant à ${Object.keys(
       liens.lien,
     )} et donne comme route ${liens.attendu}`, () => {
-      const lien = new MoteurDeLiens(liens.lien as unknown as Liens).trouve(
+      let routeAttendue = '';
+      new MoteurDeLiens(liens.lien as unknown as Liens).trouve(
         Object.keys(liens.lien)[0],
+        (lien: Lien) => {
+          routeAttendue = lien.route!;
+        },
       );
-
-      expect(lien?.route).toStrictEqual(liens.attendu);
+      expect(routeAttendue).toStrictEqual(liens.attendu);
     });
 
     it(`lorsque l'on extrait les liens correspondants à ${Object.keys(
@@ -48,26 +57,12 @@ describe('Le moteur de liens', () => {
 
   describe('trouve un lien', () => {
     it('parmi une liste de liens', () => {
-      const lien = new MoteurDeLiens({
-        'mon-lien': { url: '/une/url', methode: 'GET' },
-        'un-autre-lien': { url: '/une/autre/url', methode: 'POST' },
-      }).trouve('mon-lien');
-
-      expect(lien).toStrictEqual<Lien>({
-        url: '/une/url',
-        methode: 'GET',
-      });
-    });
-
-    it('Exécute la fonction ’En succès’ lorsque le lien est trouvé', () => {
-      let enSuccesRecu: Lien | undefined = undefined;
-      const enSucces = (lien: Lien) => (enSuccesRecu = lien);
+      let lienAttendu = {};
       new MoteurDeLiens({
         'mon-lien': { url: '/une/url', methode: 'GET' },
         'un-autre-lien': { url: '/une/autre/url', methode: 'POST' },
-      }).trouve('mon-lien', enSucces);
-
-      expect(enSuccesRecu).toStrictEqual({
+      }).trouve('mon-lien', (lien: Lien) => (lienAttendu = lien));
+      expect(lienAttendu).toStrictEqual<Lien>({
         url: '/une/url',
         methode: 'GET',
       });
