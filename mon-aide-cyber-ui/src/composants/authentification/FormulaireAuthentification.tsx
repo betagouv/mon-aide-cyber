@@ -1,7 +1,4 @@
-import {
-  useAuthentification,
-  useNavigationMAC,
-} from '../../fournisseurs/hooks.ts';
+import { useAuthentification } from '../../fournisseurs/hooks.ts';
 import { FormEvent, useCallback, useReducer } from 'react';
 import {
   authentificationInvalidee,
@@ -11,7 +8,6 @@ import {
   reducteurAuthentification,
   saisieInvalidee,
 } from './reducteurAuthentification.tsx';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 
 export const FormulaireAuthentification = ({
   surAnnuler,
@@ -21,7 +17,6 @@ export const FormulaireAuthentification = ({
   surSeConnecter: () => void;
 }) => {
   const authentification = useAuthentification();
-  const navigationMac = useNavigationMAC();
 
   const [etatAuthentification, envoie] = useReducer(
     reducteurAuthentification,
@@ -44,23 +39,17 @@ export const FormulaireAuthentification = ({
         envoie(saisieInvalidee());
       } else {
         try {
-          const reponse = await authentification.authentifie({
+          await authentification.authentifie({
             identifiant: etatAuthentification.identifiant,
             motDePasse: etatAuthentification.motDePasse,
           });
           surSeConnecter();
-          const moteurDeLiens = new MoteurDeLiens(reponse.liens);
-          const lienEspaceAidant = moteurDeLiens.trouve('creer-espace-aidant');
-          if (lienEspaceAidant) {
-            navigationMac.navigue(moteurDeLiens, 'creer-espace-aidant');
-          }
-          navigationMac.navigue(moteurDeLiens, 'lancer-diagnostic');
         } catch (erreur) {
           envoie(authentificationInvalidee(erreur as Error));
         }
       }
     },
-    [etatAuthentification, authentification, surSeConnecter, navigationMac],
+    [etatAuthentification, authentification, surSeConnecter],
   );
 
   const erreur = etatAuthentification.erreur;
