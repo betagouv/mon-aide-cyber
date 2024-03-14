@@ -6,6 +6,7 @@ import { Profil } from 'mon-aide-cyber-api/src/api/representateurs/profil/Profil
 import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { Lien } from '../../domaine/Lien.ts';
 
 export const ComposantProfil = () => {
   const macapi = useMACAPI();
@@ -19,21 +20,22 @@ export const ComposantProfil = () => {
   });
 
   useEffect(() => {
-    const lien = new MoteurDeLiens(navigationMAC.etat).trouve(
+    new MoteurDeLiens(navigationMAC.etat).trouve(
       'afficher-profil',
+      (lien: Lien) => {
+        if (etatProfil.enCoursDeChargement) {
+          macapi
+            .appelle<Profil>(
+              constructeurParametresAPI()
+                .url(lien.url)
+                .methode(lien.methode!)
+                .construis(),
+              (reponse) => reponse,
+            )
+            .then((profil) => envoie(profilCharge(profil)));
+        }
+      },
     );
-
-    if (etatProfil.enCoursDeChargement && lien) {
-      macapi
-        .appelle<Profil>(
-          constructeurParametresAPI()
-            .url(lien.url)
-            .methode(lien.methode!)
-            .construis(),
-          (reponse) => reponse,
-        )
-        .then((profil) => envoie(profilCharge(profil)));
-    }
   }, [navigationMAC.etat, etatProfil.enCoursDeChargement, macapi]);
 
   const afficherTableauDeBord = useCallback(() => {
