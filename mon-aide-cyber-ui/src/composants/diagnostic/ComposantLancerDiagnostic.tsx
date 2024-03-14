@@ -5,6 +5,7 @@ import { FormatLien, LienRoutage } from '../../domaine/LienRoutage.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import { Lien } from '../../domaine/Lien.ts';
 
 type ProprietesComposantLancerDiagnostic = {
   style: string;
@@ -17,32 +18,39 @@ export const ComposantLancerDiagnostic = ({
   const navigationMAC = useNavigationMAC();
   const macapi = useMACAPI();
 
+  const lanceDiagnostic = useCallback(
+    (lien: Lien) => {
+      macapi
+        .appelle<LienRoutage>(
+          constructeurParametresAPI()
+            .url(lien.url)
+            .methode(lien.methode!)
+            .construis(),
+          async (json) => new LienRoutage((await json) as FormatLien),
+        )
+        .then((lien) => {
+          return navigationMAC.navigue(
+            new MoteurDeLiens({
+              'afficher-diagnostic': {
+                url: '',
+                route: lien.route(),
+                methode: 'GET',
+              },
+            }),
+            'afficher-diagnostic',
+          );
+        })
+        .catch((erreur) => showBoundary(erreur));
+    },
+    [macapi, navigationMAC, showBoundary],
+  );
+
   const lancerDiagnostic = useCallback(async () => {
-    const lien = new MoteurDeLiens(navigationMAC.etat).trouve(
+    new MoteurDeLiens(navigationMAC.etat).trouve(
       'lancer-diagnostic',
+      (lien: Lien) => lanceDiagnostic(lien),
     );
-    macapi
-      .appelle<LienRoutage>(
-        constructeurParametresAPI()
-          .url(lien.url)
-          .methode(lien.methode!)
-          .construis(),
-        async (json) => new LienRoutage((await json) as FormatLien),
-      )
-      .then((lien) => {
-        return navigationMAC.navigue(
-          new MoteurDeLiens({
-            'afficher-diagnostic': {
-              url: '',
-              route: lien.route(),
-              methode: 'GET',
-            },
-          }),
-          'afficher-diagnostic',
-        );
-      })
-      .catch((erreur) => showBoundary(erreur));
-  }, [navigationMAC, macapi, showBoundary]);
+  }, [navigationMAC.etat, lanceDiagnostic]);
 
   return (
     <button className={style} onClick={lancerDiagnostic}>
