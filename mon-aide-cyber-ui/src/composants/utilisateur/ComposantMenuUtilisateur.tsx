@@ -1,6 +1,6 @@
 import { Utilisateur } from '../../domaine/authentification/Authentification.ts';
-import { useCallback } from 'react';
-import { useNavigationMAC, useMACAPI } from '../../fournisseurs/hooks.ts';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
+import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
@@ -14,6 +14,8 @@ export const ComposantMenuUtilisateur = ({
   const macapi = useMACAPI();
   const navigationMAC = useNavigationMAC();
   const { showBoundary } = useErrorBoundary();
+  const [boutonAfficherMonProfil, setBoutonAfficherMonProfil] =
+    useState<ReactElement>(<></>);
 
   let nomUtilisateur = utilisateur.nomPrenom;
   if (utilisateur.nomPrenom.includes(' ')) {
@@ -32,7 +34,7 @@ export const ComposantMenuUtilisateur = ({
       )
       .then(() => navigationMAC.retourAccueil())
       .catch((erreur) => showBoundary(erreur));
-  }, [macapi, showBoundary]);
+  }, [macapi, navigationMAC, showBoundary]);
 
   const afficherProfil = useCallback(() => {
     navigationMAC.navigue(
@@ -41,21 +43,24 @@ export const ComposantMenuUtilisateur = ({
     );
   }, [navigationMAC]);
 
+  useEffect(() => {
+    new MoteurDeLiens(navigationMAC.etat).trouve(
+      'afficher-profil',
+      () =>
+        setBoutonAfficherMonProfil(
+          <input type="button" onClick={afficherProfil} value="Mon Profil" />,
+        ),
+      () => setBoutonAfficherMonProfil(<></>),
+    );
+  }, [afficherProfil, navigationMAC.etat]);
+
   return (
     <div className="menu-utilisateur">
       <div className="menu-utilisateur-contenu">
         <details>
           <summary>{nomUtilisateur}</summary>
           <div id="conteneur">
-            {new MoteurDeLiens(navigationMAC.etat).trouve('afficher-profil') ? (
-              <input
-                type="button"
-                onClick={afficherProfil}
-                value="Mon Profil"
-              />
-            ) : (
-              <></>
-            )}
+            {boutonAfficherMonProfil}
             <input type="button" onClick={deconnecter} value="Me Déconnecter" />
           </div>
         </details>
