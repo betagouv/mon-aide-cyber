@@ -21,6 +21,7 @@ import { FournisseurMacAPI } from './fournisseurs/api/ContexteMacAPI.tsx';
 import { FournisseurNavigationMAC } from './fournisseurs/ContexteNavigationMAC.tsx';
 import { ComposantProfil } from './composants/profil/ComposantProfil.tsx';
 import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
+import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -66,35 +67,49 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     ></Route>
                   </Route>
                   <Route
-                    path="/tableau-de-bord"
                     element={
-                      <ComposantIntercepteur composant={TableauDeBord} />
+                      <Suspense>
+                        <RequiertEspaceAidant />
+                      </Suspense>
                     }
-                  ></Route>
-                  <Route
-                    path="/diagnostics"
-                    element={
-                      <ComposantIntercepteur composant={ComposantDiagnostics} />
-                    }
-                  ></Route>
-                  <Route
-                    path="/diagnostic/:idDiagnostic"
-                    element={
-                      <ComposantIntercepteur composant={ComposantDiagnostic} />
-                    }
-                  ></Route>
-                  <Route
-                    path="/diagnostic/:idDiagnostic/restitution"
-                    element={
-                      <ComposantIntercepteur composant={ComposantRestitution} />
-                    }
-                  ></Route>
-                  <Route
-                    path="/profil"
-                    element={
-                      <ComposantIntercepteur composant={ComposantProfil} />
-                    }
-                  ></Route>
+                  >
+                    <Route
+                      path="/tableau-de-bord"
+                      element={
+                        <ComposantIntercepteur composant={TableauDeBord} />
+                      }
+                    ></Route>
+                    <Route
+                      path="/diagnostics"
+                      element={
+                        <ComposantIntercepteur
+                          composant={ComposantDiagnostics}
+                        />
+                      }
+                    ></Route>
+                    <Route
+                      path="/diagnostic/:idDiagnostic"
+                      element={
+                        <ComposantIntercepteur
+                          composant={ComposantDiagnostic}
+                        />
+                      }
+                    ></Route>
+                    <Route
+                      path="/diagnostic/:idDiagnostic/restitution"
+                      element={
+                        <ComposantIntercepteur
+                          composant={ComposantRestitution}
+                        />
+                      }
+                    ></Route>
+                    <Route
+                      path="/profil"
+                      element={
+                        <ComposantIntercepteur composant={ComposantProfil} />
+                      }
+                    ></Route>
+                  </Route>
                 </Route>
               </Routes>
             </PortailModale>
