@@ -12,10 +12,11 @@ import {
 import { UUID } from '../../types/Types.ts';
 import { Restitution } from '../../domaine/diagnostic/Restitution.ts';
 
-import { useNavigationMAC, useMACAPI } from '../../fournisseurs/hooks.ts';
+import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import { Lien } from '../../domaine/Lien.ts';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
@@ -68,25 +69,25 @@ export const ComposantRestitution = ({
   );
 
   const telechargerRestitution = useCallback(() => {
-    const restitutionPdf = new MoteurDeLiens(
-      etatRestitution.restitution!.liens,
-    ).trouve('restitution-pdf');
+    new MoteurDeLiens(etatRestitution.restitution!.liens).trouve(
+      'restitution-pdf',
+      (lien: Lien) => {
+        const parametresAPI = constructeurParametresAPI()
+          .url(lien.url)
+          .methode(lien.methode!)
+          .accept(lien.contentType!)
+          .construis();
+        macapi
+          .appelle<Window>(
+            parametresAPI,
+            async (blob) => window.open(URL.createObjectURL(await blob))!,
+          )
+          .then(() => {
+            setBoutonDesactive(false);
+          });
+      },
+    );
     setBoutonDesactive(true);
-    if (restitutionPdf) {
-      const parametresAPI = constructeurParametresAPI()
-        .url(restitutionPdf.url)
-        .methode(restitutionPdf.methode!)
-        .accept(restitutionPdf.contentType!)
-        .construis();
-      macapi
-        .appelle<Window>(
-          parametresAPI,
-          async (blob) => window.open(URL.createObjectURL(await blob))!,
-        )
-        .then(() => {
-          setBoutonDesactive(false);
-        });
-    }
   }, [etatRestitution.restitution, macapi]);
 
   const navigueVersTableauDeBord = useCallback(() => {
