@@ -11,17 +11,17 @@ import {
   ReponseUtilisateur,
   Utilisateur,
 } from '../domaine/authentification/Authentification.ts';
-import { useNavigationMAC, useMACAPI } from './hooks.ts';
+import { useMACAPI, useNavigationMAC } from './hooks.ts';
 
 import { constructeurParametresAPI } from './api/ConstructeurParametresAPI.ts';
 import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
-import { ReponseHATEOAS } from '../domaine/Lien.ts';
 import {
   initialiseReducteurUtilisateurAuthentifie,
   reducteurUtilisateurAuthentifie,
   utilisateurCharge,
   utilisateurNonAuthentifie,
 } from './reducteurUtilisateurAuthentifie.tsx';
+import { ReponseHATEOAS } from '../domaine/Lien.ts';
 
 type ContexteAuthentificationType = {
   utilisateur?: Utilisateur;
@@ -30,7 +30,7 @@ type ContexteAuthentificationType = {
   authentifie: (identifiants: {
     identifiant: string;
     motDePasse: string;
-  }) => Promise<ReponseHATEOAS>;
+  }) => Promise<void>;
 };
 
 export const ContexteAuthentification =
@@ -75,7 +75,13 @@ export const FournisseurAuthentification = ({
       )
       .then((reponse) => {
         envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
-        return { liens: reponse.liens } as ReponseHATEOAS;
+        const moteurDeLiens = new MoteurDeLiens(reponse.liens);
+        const lienEspaceAidant = moteurDeLiens.trouve('creer-espace-aidant');
+        if (lienEspaceAidant) {
+          navigationMAC.navigue(moteurDeLiens, 'creer-espace-aidant');
+        } else {
+          navigationMAC.navigue(moteurDeLiens, 'lancer-diagnostic');
+        }
       });
   };
 
@@ -95,15 +101,8 @@ export const FournisseurAuthentification = ({
         .then((utilisateur) => {
           envoie(utilisateurCharge(utilisateur));
           const moteurDeLiens = new MoteurDeLiens(utilisateur.liens);
-          const actionCreationEspaceAidant = moteurDeLiens.trouve(
-            'creer-espace-aidant',
-          );
 
-          if (actionCreationEspaceAidant) {
-            navigationMAC.navigue(moteurDeLiens, 'creer-espace-aidant');
-          } else {
-            navigationMAC.setEtat(moteurDeLiens.extrais());
-          }
+          navigationMAC.ajouteEtat(moteurDeLiens.extrais());
         })
         .catch((erreur) => {
           navigationMAC.setEtat(
