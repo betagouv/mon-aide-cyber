@@ -38,15 +38,14 @@ export const FormulaireAuthentification = ({
       if (!saisieValide) {
         envoie(saisieInvalidee());
       } else {
-        try {
-          await authentification.authentifie({
+        authentification.authentifie(
+          {
             identifiant: etatAuthentification.identifiant,
             motDePasse: etatAuthentification.motDePasse,
-          });
-          surSeConnecter();
-        } catch (erreur) {
-          envoie(authentificationInvalidee(erreur as Error));
-        }
+          },
+          surSeConnecter,
+          (erreur) => envoie(authentificationInvalidee(erreur)),
+        );
       }
     },
     [etatAuthentification, authentification, surSeConnecter],
