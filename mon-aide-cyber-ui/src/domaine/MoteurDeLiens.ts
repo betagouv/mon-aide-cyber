@@ -3,6 +3,7 @@ import { Action, Lien, Liens } from './Lien.ts';
 const ACTIONS: Map<Action | string, string> = new Map<Action | string, string>([
   ['afficher-accueil', '/'],
   ['afficher-profil', '/profil'],
+  ['afficher-tableau-de-bord', '/tableau-de-bord'],
   ['creer-espace-aidant', '/finalise-creation-espace-aidant'],
   ['lancer-diagnostic', '/tableau-de-bord'],
   ['modifier-diagnostic', '/diagnostic/{DYNAMIQUE}'],

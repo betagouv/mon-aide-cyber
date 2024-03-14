@@ -75,13 +75,12 @@ export const FournisseurAuthentification = ({
       )
       .then((reponse) => {
         envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
-        const moteurDeLiens = new MoteurDeLiens(reponse.liens);
-        const lienEspaceAidant = moteurDeLiens.trouve('creer-espace-aidant');
-        if (lienEspaceAidant) {
-          navigationMAC.navigue(moteurDeLiens, 'creer-espace-aidant');
-        } else {
-          navigationMAC.navigue(moteurDeLiens, 'lancer-diagnostic');
-        }
+        const moteurDeLiens = new MoteurDeLiens({
+          ...reponse.liens,
+          'afficher-tableau-de-bord': { url: '' },
+        });
+
+        navigationMAC.navigue(moteurDeLiens, 'afficher-tableau-de-bord');
       });
   };
 

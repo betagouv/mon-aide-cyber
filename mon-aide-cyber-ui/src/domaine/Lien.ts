@@ -11,9 +11,10 @@ export type ReponseHATEOAS = {
 export type Action =
   | 'afficher-diagnostic'
   | 'afficher-profil'
+  | 'afficher-tableau-de-bord'
   | 'creer-espace-aidant'
   | 'lancer-diagnostic'
   | 'modifier-diagnostic'
-  | 'restitution-pdf'
   | 'restitution-json'
+  | 'restitution-pdf'
   | 'se-connecter';
