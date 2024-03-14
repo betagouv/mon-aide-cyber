@@ -32,7 +32,7 @@ describe('Le moteur de liens', () => {
         Object.keys(liens.lien)[0],
       );
 
-      expect(lien.route).toStrictEqual(liens.attendu);
+      expect(lien?.route).toStrictEqual(liens.attendu);
     });
 
     it(`lorsque l'on extrait les liens correspondants à ${Object.keys(
@@ -57,6 +57,34 @@ describe('Le moteur de liens', () => {
         url: '/une/url',
         methode: 'GET',
       });
+    });
+
+    it('Exécute la fonction ’En succès’ lorsque le lien est trouvé', () => {
+      let enSuccesRecu: Lien | undefined = undefined;
+      const enSucces = (lien: Lien) => (enSuccesRecu = lien);
+      new MoteurDeLiens({
+        'mon-lien': { url: '/une/url', methode: 'GET' },
+        'un-autre-lien': { url: '/une/autre/url', methode: 'POST' },
+      }).trouve('mon-lien', enSucces);
+
+      expect(enSuccesRecu).toStrictEqual({
+        url: '/une/url',
+        methode: 'GET',
+      });
+    });
+
+    it('Exécute la fonction ’En erreur’ lorsque le lien n’est pas trouvé', () => {
+      let enErreurAppele = false;
+      let enSuccesRecu: Lien | undefined = undefined;
+      const enErreur = () => (enErreurAppele = true);
+      const enSucces = (lien: Lien) => (enSuccesRecu = lien);
+      new MoteurDeLiens({
+        'mon-lien': { url: '/une/url', methode: 'GET' },
+        'un-autre-lien': { url: '/une/autre/url', methode: 'POST' },
+      }).trouve('lien-introuvable', enSucces, enErreur);
+
+      expect(enSuccesRecu).toBeUndefined();
+      expect(enErreurAppele).toBeTruthy();
     });
   });
 
