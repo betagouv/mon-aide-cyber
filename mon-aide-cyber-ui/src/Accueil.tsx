@@ -331,7 +331,7 @@ export const Accueil = () => {
                   </div>
                   <div>
                     <h4 className="alignement-gauche">
-                      Réalisation d'un diagnostic
+                      Réalisation d&apos;un diagnostic
                     </h4>
                     <p className="alignement-gauche">
                       Réalisation{' '}
@@ -440,10 +440,9 @@ export const Accueil = () => {
                       <h4>Devenir Aidant</h4>
                       <p>
                         Vous êtes un <b>agent du service public</b>, un{' '}
-                        <b>professionnel</b>, un
-                        <b>bénévole</b> ou un <b>passionné</b> de Cyber et vous
-                        souhaitez <b className="violet-fonce">devenir Aidant</b>{' '}
-                        ?
+                        <b>professionnel</b>, un <b>bénévole</b> ou un{' '}
+                        <b>passionné</b> de Cyber et vous souhaitez{' '}
+                        <b className="violet-fonce">devenir Aidant</b> ?
                       </p>
                       <button
                         type="button"
