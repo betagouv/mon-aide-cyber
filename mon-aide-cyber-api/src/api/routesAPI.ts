@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import { routesAPIUtilisateur } from './routesAPIUtilisateur';
 import { routesAPIEspaceAidant } from './routesAPIEspaceAidant';
 import { routesAPIProfil } from './routesAPIProfil';
+import { routesAPIAide } from './aide/routesAPIAide';
 
 export interface RequeteUtilisateur extends Request {
   identifiantUtilisateurCourant?: crypto.UUID;
@@ -21,6 +22,7 @@ const routesAPI = (configuration: ConfigurationServeur) => {
   routes.use('/utilisateur', routesAPIUtilisateur(configuration));
   routes.use('/espace-aidant', routesAPIEspaceAidant(configuration));
   routes.use('/profil', routesAPIProfil(configuration));
+  routes.use('/aide', routesAPIAide(configuration));
 
   return routes;
 };

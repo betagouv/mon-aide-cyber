@@ -6,6 +6,7 @@ import { EntrepotAidantPostgres } from './EntrepotAidantPostgres';
 import { adaptateurServiceChiffrement } from '../../adaptateurs/adaptateurServiceChiffrement';
 import { EntrepotRestitution } from '../../../restitution/Restitution';
 import { EntrepotRestitutionPostgres } from './EntrepotRestitutionPostgres';
+import { EntrepotAide } from '../../../aide/Aide';
 
 export class EntrepotsPostgres implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -25,5 +26,9 @@ export class EntrepotsPostgres implements Entrepots {
 
   restitution(): EntrepotRestitution {
     return this.entrepotRestitution;
+  }
+
+  aides(): EntrepotAide {
+    throw new Error('Pas encore implémenté');
   }
 }

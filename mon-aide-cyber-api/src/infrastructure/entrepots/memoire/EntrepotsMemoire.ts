@@ -2,12 +2,14 @@ import { Entrepots } from '../../../domaine/Entrepots';
 
 import {
   EntrepotAidantMemoire,
+  EntrepotAideMemoire,
   EntrepotDiagnosticMemoire,
   EntrepotRestitutionMemoire,
 } from './EntrepotMemoire';
 import { EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
 import { EntrepotAidant } from '../../../authentification/Aidant';
 import { EntrepotRestitution } from '../../../restitution/Restitution';
+import { EntrepotAide } from '../../../aide/Aide';
 
 export class EntrepotsMemoire implements Entrepots {
   private entrepotDiagnostic: EntrepotDiagnostic =
@@ -15,6 +17,7 @@ export class EntrepotsMemoire implements Entrepots {
   private entrepotAidants: EntrepotAidant = new EntrepotAidantMemoire();
   private entrepotRestitution: EntrepotRestitution =
     new EntrepotRestitutionMemoire();
+  private entrepotAides: EntrepotAide = new EntrepotAideMemoire();
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
@@ -26,5 +29,9 @@ export class EntrepotsMemoire implements Entrepots {
 
   restitution(): EntrepotRestitution {
     return this.entrepotRestitution;
+  }
+
+  aides() {
+    return this.entrepotAides;
   }
 }
