@@ -4,6 +4,7 @@ import { BusEvenement } from '../../domaine/BusEvenement';
 import { CapteurSagaAjoutReponse } from '../../diagnostic/CapteurSagaAjoutReponse';
 import { CapteurCommandeLanceRestitution } from '../../diagnostic/CapteurCommandeLanceRestitution';
 import { CapteurCommandeLanceDiagnostic } from '../../diagnostic/CapteurCommandeLanceDiagnostic';
+import { CapteurSagaDemandeValidationCGUAide } from '../../parcours-cgu-aide/CapteurSagaDemandeValidationCGUAide';
 
 type ParametresCapteur = {
   entrepots: Entrepots;
@@ -20,6 +21,17 @@ const capteurs: Map<string, Capteur> = new Map([
     {
       capteur: (parametres) =>
         new CapteurSagaAjoutReponse(
+          parametres.entrepots,
+          parametres.busCommande!,
+          parametres.busEvenements!,
+        ),
+    },
+  ],
+  [
+    'SagaDemandeValidationCGUAide',
+    {
+      capteur: (parametres) =>
+        new CapteurSagaDemandeValidationCGUAide(
           parametres.entrepots,
           parametres.busCommande!,
           parametres.busEvenements!,

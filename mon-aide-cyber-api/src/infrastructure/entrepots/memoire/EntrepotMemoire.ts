@@ -13,6 +13,7 @@ import {
   EntrepotRestitution,
   Restitution,
 } from '../../../restitution/Restitution';
+import { Aide, EntrepotAide } from '../../../aide/Aide';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -96,3 +97,7 @@ export class EntrepotAidantMemoire
     return 'aidant';
   }
 }
+
+export class EntrepotAideMemoire
+  extends EntrepotMemoire<Aide>
+  implements EntrepotAide {}
