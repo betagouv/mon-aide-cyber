@@ -1,5 +1,5 @@
-import { Aggregat } from "../domaine/Aggregat";
-import { Entrepot } from "../domaine/Entrepot";
+import { Aggregat } from '../domaine/Aggregat';
+import { Entrepot } from '../domaine/Entrepot';
 
 export type Publication = Aggregat & {
   date: Date;

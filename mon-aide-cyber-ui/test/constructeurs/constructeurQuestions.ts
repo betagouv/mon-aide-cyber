@@ -1,6 +1,6 @@
-import { Constructeur } from "./Constructeur";
-import { uneReponsePossible } from "./constructeurReponsePossible.ts";
-import { faker } from "@faker-js/faker/locale/fr";
+import { Constructeur } from './Constructeur';
+import { uneReponsePossible } from './constructeurReponsePossible.ts';
+import { faker } from '@faker-js/faker/locale/fr';
 import {
   Question,
   QuestionATiroir,
@@ -8,14 +8,14 @@ import {
   ReponseMultiple,
   ReponsePossible,
   TypeDeSaisie,
-} from "../../src/domaine/diagnostic/Referentiel.ts";
-import { aseptise } from "../utilitaires/aseptise.ts";
+} from '../../src/domaine/diagnostic/Referentiel.ts';
+import { aseptise } from '../utilitaires/aseptise.ts';
 
 class ConstructeurQuestion implements Constructeur<Question> {
   protected identifiant = faker.string.alpha(10);
-  protected libelle = faker.word.words().concat(" ?");
+  protected libelle = faker.word.words().concat(' ?');
   protected reponsesPossibles: ReponsePossible[] = [];
-  protected type: Exclude<TypeDeSaisie, "saisieLibre"> = "choixUnique";
+  protected type: Exclude<TypeDeSaisie, 'saisieLibre'> = 'choixUnique';
   private reponseDonnee: ReponseDonnee = {
     valeur: null,
     reponses: [],
@@ -58,7 +58,7 @@ class ConstructeurQuestion implements Constructeur<Question> {
   }
 
   sousFormeDeListe(): ConstructeurQuestion {
-    this.type = "liste";
+    this.type = 'liste';
     return this;
   }
 
@@ -75,9 +75,9 @@ class ConstructeurQuestion implements Constructeur<Question> {
 
 class ConstructeurQuestionTiroir implements Constructeur<QuestionATiroir> {
   protected identifiant = faker.string.alpha(10);
-  protected libelle = faker.word.words().concat(" ?");
+  protected libelle = faker.word.words().concat(' ?');
   protected reponsesPossibles: ReponsePossible[] = [];
-  protected type: Exclude<TypeDeSaisie, "saisieLibre"> = "choixMultiple";
+  protected type: Exclude<TypeDeSaisie, 'saisieLibre'> = 'choixMultiple';
 
   avecLibelle(libelle: string): ConstructeurQuestionTiroir {
     this.identifiant = aseptise(libelle);
@@ -111,28 +111,28 @@ class ConstructeurQuestionTiroir implements Constructeur<QuestionATiroir> {
 class ConstructeurQuestionAChoixMultiple extends ConstructeurQuestion {
   constructor() {
     super();
-    this.type = "choixMultiple";
+    this.type = 'choixMultiple';
   }
 }
 
 class ConstructeurQuestionTiroirAChoixUnique extends ConstructeurQuestionTiroir {
   constructor() {
     super();
-    this.type = "choixUnique";
+    this.type = 'choixUnique';
   }
 }
 
 class ConstructeurQuestionTiroirAChoixMultiple extends ConstructeurQuestionTiroir {
   constructor() {
     super();
-    this.type = "choixMultiple";
+    this.type = 'choixMultiple';
   }
 }
 
 class ConstructeurQuestionAChoixUnique extends ConstructeurQuestion {
   constructor() {
     super();
-    this.type = "choixUnique";
+    this.type = 'choixUnique';
   }
 }
 

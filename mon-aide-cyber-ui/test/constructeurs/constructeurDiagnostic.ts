@@ -1,8 +1,8 @@
-import { unReferentiel } from "./constructeurReferentiel.ts";
-import { faker } from "@faker-js/faker/locale/fr";
-import { UUID } from "../../src/types/Types.ts";
-import { Referentiel } from "../../src/domaine/diagnostic/Referentiel.ts";
-import { Action, Diagnostic } from "../../src/domaine/diagnostic/Diagnostic.ts";
+import { unReferentiel } from './constructeurReferentiel.ts';
+import { faker } from '@faker-js/faker/locale/fr';
+import { UUID } from '../../src/types/Types.ts';
+import { Referentiel } from '../../src/domaine/diagnostic/Referentiel.ts';
+import { Action, Diagnostic } from '../../src/domaine/diagnostic/Diagnostic.ts';
 
 class ConstructeurDiagnostic {
   private referentiel: Referentiel = unReferentiel().construis();

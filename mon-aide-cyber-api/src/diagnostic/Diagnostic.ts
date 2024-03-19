@@ -88,7 +88,7 @@ const initialiseDiagnostic = (
                 reponseUnique: null,
                 reponsesMultiples: [],
               },
-            } as QuestionDiagnostic),
+            }) as QuestionDiagnostic,
         ),
       },
     };
@@ -133,9 +133,8 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
       .map((mesure) => {
         const valeurObtenue = Object.values(valeursDesIndices)
           .flatMap((valeurReponse) => valeurReponse)
-          .find(
-            (valeurReponse) => valeurReponse.identifiant === mesure.repondA,
-          )?.indice;
+          .find((valeurReponse) => valeurReponse.identifiant === mesure.repondA)
+          ?.indice;
         return {
           titre: mesure.niveau.titre,
           pourquoi: mesure.niveau.pourquoi,

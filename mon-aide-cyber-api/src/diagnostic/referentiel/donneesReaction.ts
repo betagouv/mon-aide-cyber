@@ -33,7 +33,7 @@ export const donneesReaction: QuestionsThematique = {
         {
           identifiant:
             'reaction-surveillance-veille-vulnerabilites-potentielles-veille-ponctuelle',
-          libelle: "Un suivi ponctuel est réalisé",
+          libelle: 'Un suivi ponctuel est réalisé',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -49,7 +49,7 @@ export const donneesReaction: QuestionsThematique = {
         {
           identifiant:
             'reaction-surveillance-veille-vulnerabilites-potentielles-veille-reguliere',
-          libelle: "Une veille proactive et exhaustive est réalisée",
+          libelle: 'Une veille proactive et exhaustive est réalisée',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },

@@ -98,7 +98,7 @@ export const validateurDeNouveauMotDePasse = (
     nouveauMotDePasse,
     ancienMotDepasse,
     {
-        ancienMotDePasseObligatoire: "L'ancien mot de passe est obligatoire.",
+      ancienMotDePasseObligatoire: "L'ancien mot de passe est obligatoire.",
       differentDeAncienMotDePasse:
         'Votre nouveau mot de passe doit être différent de votre ancien mot de passe.',
       correspondAuMotDePasseUtilisateur:

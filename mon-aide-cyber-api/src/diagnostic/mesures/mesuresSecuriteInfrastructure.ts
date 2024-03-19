@@ -12,8 +12,7 @@ export const mesuresSecuriteInfrastructure = {
   },
   'securite-infrastructure-pare-feu-deploye-interconnexions-protegees': {
     niveau1: {
-      titre:
-        'Fermer tous les flux et les ports non strictement nécessaires',
+      titre: 'Fermer tous les flux et les ports non strictement nécessaires',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-pare-feu-deploye-interconnexions-protegees-niveau1-pourquoi.pug',
       comment:
@@ -110,8 +109,7 @@ export const mesuresSecuriteInfrastructure = {
         '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau1-comment.pug',
     },
     niveau2: {
-      titre:
-        "Mettre en place des mesures de sécurisation wifi",
+      titre: 'Mettre en place des mesures de sécurisation wifi',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau1-pourquoi.pug',
       comment:
@@ -122,15 +120,14 @@ export const mesuresSecuriteInfrastructure = {
   'securite-infrastructure-espace-stockage-serveurs': {
     niveau1: {
       titre:
-        "Protéger les informations et les systèmes contre des atteintes physiques",
+        'Protéger les informations et les systèmes contre des atteintes physiques',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-espace-stockage-serveurs-niveau1-pourquoi.pug',
       comment:
         '../../mesures/infras/securite-infrastructure-espace-stockage-serveurs-niveau1-comment.pug',
     },
     niveau2: {
-      titre:
-        "Mettre en place un système de vidéoprotection",
+      titre: 'Mettre en place un système de vidéoprotection',
       pourquoi:
         '../../mesures/infras/securite-infrastructure-espace-stockage-serveurs-niveau2-pourquoi.pug',
       comment:

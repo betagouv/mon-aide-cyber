@@ -20,7 +20,7 @@ export const mesuresSensibilisation = {
   'sensibilisation-risque-espionnage-industriel-r-et-d': {
     niveau1: {
       titre:
-        "Mener des actions de sensibilisation ciblée auprès du personnel effectuant des déplacements",
+        'Mener des actions de sensibilisation ciblée auprès du personnel effectuant des déplacements',
       pourquoi:
         '../../mesures/sensibilisation/sensibilisation-risque-espionnage-industriel-r-et-d-niveau1-pourquoi.pug',
       comment:

@@ -40,10 +40,11 @@ export const reducteurDiagnostic = (
           thematique.groupes.forEach((groupe) => {
             groupe.questions.forEach((question) => {
               trieLesReponses(question.reponsesPossibles);
-              question.reponsesPossibles.forEach((reponse) =>
-                reponse.questions?.forEach((question) =>
-                  trieLesReponses(question.reponsesPossibles),
-                ),
+              question.reponsesPossibles.forEach(
+                (reponse) =>
+                  reponse.questions?.forEach((question) =>
+                    trieLesReponses(question.reponsesPossibles),
+                  ),
               );
             });
           });

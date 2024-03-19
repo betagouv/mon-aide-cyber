@@ -1,4 +1,4 @@
-import { ConsignateurErreurs } from "../../adaptateurs/ConsignateurErreurs";
+import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 
 export class ConsignateurErreursMemoire implements ConsignateurErreurs {
   private erreurs: Error[] = [];
