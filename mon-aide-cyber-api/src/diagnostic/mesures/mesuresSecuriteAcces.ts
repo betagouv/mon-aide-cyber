@@ -2,7 +2,7 @@ export const mesuresSecuriteAcces = {
   'acces-outil-gestion-des-comptes': {
     niveau1: {
       titre:
-        "Mettre en œuvre un outil de gestion des politiques de sécurité centralisées (ex : Active Directory, Samba-AD) et en évaluer/améliorer son niveau de sécurité annuellement",
+        'Mettre en œuvre un outil de gestion des politiques de sécurité centralisées (ex : Active Directory, Samba-AD) et en évaluer/améliorer son niveau de sécurité annuellement',
       pourquoi:
         '../../mesures/acces/acces-outil-gestion-des-comptes-niveau1-pourquoi.pug',
       comment:
@@ -10,7 +10,7 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        "Contrôler régulièrement le niveau de sécurité de son outil de gestion de politiques de sécurité centralisé",
+        'Contrôler régulièrement le niveau de sécurité de son outil de gestion de politiques de sécurité centralisé',
       pourquoi:
         '../../mesures/acces/acces-outil-gestion-des-comptes-niveau2-pourquoi.pug',
       comment:
@@ -77,8 +77,7 @@ export const mesuresSecuriteAcces = {
   },
   'acces-utilisation-comptes-administrateurs-droits-limitee': {
     niveau1: {
-      titre:
-        "Utiliser des comptes d'administration dédiés à cet usage",
+      titre: "Utiliser des comptes d'administration dédiés à cet usage",
       pourquoi:
         '../../mesures/acces/acces-utilisation-comptes-administrateurs-droits-limitee-niveau1-pourquoi.pug',
       comment:
@@ -108,11 +107,11 @@ export const mesuresSecuriteAcces = {
   'acces-mesures-securite-robustesse-mdp': {
     niveau1: {
       titre:
-      'Fixer des contraintes de longueur et de complexité des mots de passe exigeant à minima 12 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux',
-    pourquoi:
-      '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-pourquoi.pug',
-    comment:
-      '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-comment.pug',
+        'Fixer des contraintes de longueur et de complexité des mots de passe exigeant à minima 12 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux',
+      pourquoi:
+        '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-pourquoi.pug',
+      comment:
+        '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-comment.pug',
     },
     niveau2: {
       titre:
@@ -126,8 +125,7 @@ export const mesuresSecuriteAcces = {
   },
   'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles': {
     niveau1: {
-      titre:
-        'Protéger de manière spéficique les données jugées sensibles',
+      titre: 'Protéger de manière spéficique les données jugées sensibles',
       pourquoi:
         '../../mesures/acces/acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-niveau1-pourquoi.pug',
       comment:
@@ -183,16 +181,14 @@ export const mesuresSecuriteAcces = {
   },
   'acces-administrateurs-si-mesures-specifiques': {
     niveau1: {
-      titre:
-        "Protéger de manière spéficique les accès des admininistrateurs",
+      titre: 'Protéger de manière spéficique les accès des admininistrateurs',
       pourquoi:
         '../../mesures/acces/acces-administrateurs-si-mesures-specifiques-niveau1-pourquoi.pug',
       comment:
         '../../mesures/acces/acces-administrateurs-si-mesures-specifiques-niveau1-comment.pug',
     },
     niveau2: {
-      titre:
-        "Compléter les mesures de sécurisation des accès d’administration",
+      titre: 'Compléter les mesures de sécurisation des accès d’administration',
       pourquoi:
         '../../mesures/acces/acces-administrateurs-si-mesures-specifiques-niveau2-pourquoi.pug',
       comment:

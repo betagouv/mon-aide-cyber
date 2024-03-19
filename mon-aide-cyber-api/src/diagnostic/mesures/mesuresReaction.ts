@@ -1,7 +1,8 @@
 export const mesuresReaction = {
   'reaction-surveillance-veille-vulnerabilites-potentielles': {
     niveau1: {
-      titre: "Suivre régulièrement les alertes de sécurité publiées par le centre gouvernemental de veille, d'alerte et de réponses aux cyberattaques",
+      titre:
+        "Suivre régulièrement les alertes de sécurité publiées par le centre gouvernemental de veille, d'alerte et de réponses aux cyberattaques",
       pourquoi:
         '../../mesures/reaction/reaction-surveillance-veille-vulnerabilites-potentielles-niveau1-pourquoi.pug',
       comment:
@@ -18,8 +19,7 @@ export const mesuresReaction = {
   },
   'reaction-sauvegardes-donnees-realisees': {
     niveau1: {
-      titre:
-        'Réaliser des sauvegardes régulièrement',
+      titre: 'Réaliser des sauvegardes régulièrement',
       pourquoi:
         '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-niveau1-pourquoi.pug',
       comment:
@@ -43,7 +43,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          "Procéder régulièrement à des tests de restauration des sauvegardes",
+          'Procéder régulièrement à des tests de restauration des sauvegardes',
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:
@@ -67,7 +67,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          "Procéder régulièrement à des tests de restauration des sauvegardes",
+          'Procéder régulièrement à des tests de restauration des sauvegardes',
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:

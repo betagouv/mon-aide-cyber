@@ -1,4 +1,4 @@
-import { Aggregat } from "./Aggregat";
+import { Aggregat } from './Aggregat';
 
 export interface Entrepot<T extends Aggregat> {
   lis(identifiant: string): Promise<T>;

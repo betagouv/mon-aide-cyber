@@ -1,7 +1,7 @@
-import { Constructeur } from "./Constructeur";
-import { ActionsDiagnostics } from "../../src/domaine/Actions";
-import { Diagnostics } from "../../src/domaine/diagnostic/Diagnostics";
-import { Diagnostic } from "../../src/domaine/diagnostic/Diagnostic";
+import { Constructeur } from './Constructeur';
+import { ActionsDiagnostics } from '../../src/domaine/Actions';
+import { Diagnostics } from '../../src/domaine/diagnostic/Diagnostics';
+import { Diagnostic } from '../../src/domaine/diagnostic/Diagnostic';
 
 class ConstructeurDiagnostics implements Constructeur<Diagnostics> {
   private actions: ActionsDiagnostics[] = [];

@@ -4,8 +4,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
   questions: [
     {
       identifiant: 'securite-infrastructure-pare-feu-deploye',
-      libelle:
-        'Votre connexion à Internet est-elle protégée par un pare-feu ?',
+      libelle: 'Votre connexion à Internet est-elle protégée par un pare-feu ?',
       poids: 1,
       reponsesPossibles: [
         {
@@ -441,7 +440,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         {
           identifiant:
             'securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef',
-          libelle: "Oui, l’accès n’est autorisé qu’aux personnes légitimes",
+          libelle: 'Oui, l’accès n’est autorisé qu’aux personnes légitimes',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -457,7 +456,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-espace-stockage-serveurs-oui-porte-ferme-a-clef-videosurveillance',
           libelle:
-            "Oui, l’accès n’est autorisé qu’aux personnes légitimes et supervisé par un dispositif de vidéoprotection",
+            'Oui, l’accès n’est autorisé qu’aux personnes légitimes et supervisé par un dispositif de vidéoprotection',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },

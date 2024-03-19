@@ -1,8 +1,8 @@
-import { DTO, EntrepotPostgres } from "./EntrepotPostgres";
+import { DTO, EntrepotPostgres } from './EntrepotPostgres';
 import {
   EntrepotEvenementJournal,
   Publication,
-} from "../../../journalisation/Publication";
+} from '../../../journalisation/Publication';
 
 type PublicationDTO = DTO & {
   type: string;
@@ -24,14 +24,14 @@ export class EntrepotJournalisationPostgres
   }
 
   protected nomTable(): string {
-    return "journal_mac.evenements";
+    return 'journal_mac.evenements';
   }
 
   protected deDTOAEntite(__dto: PublicationDTO): Publication {
-    throw new Error("non implémenté");
+    throw new Error('non implémenté');
   }
 
   protected champsAMettreAJour(__dto: PublicationDTO): Partial<PublicationDTO> {
-    throw new Error("non implémenté");
+    throw new Error('non implémenté');
   }
 }

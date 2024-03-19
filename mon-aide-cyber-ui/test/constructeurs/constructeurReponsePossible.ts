@@ -1,12 +1,12 @@
-import { Constructeur } from "./Constructeur.ts";
-import { faker } from "@faker-js/faker/locale/fr";
+import { Constructeur } from './Constructeur.ts';
+import { faker } from '@faker-js/faker/locale/fr';
 import {
   Format,
   QuestionATiroir,
   ReponsePossible,
   TypeDeSaisie,
-} from "../../src/domaine/diagnostic/Referentiel.ts";
-import { aseptise } from "../utilitaires/aseptise.ts";
+} from '../../src/domaine/diagnostic/Referentiel.ts';
+import { aseptise } from '../utilitaires/aseptise.ts';
 
 class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   private identifiant = faker.string.alpha(10);
@@ -30,7 +30,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   }
 
   auFormatTexteDeSaisieLibre(): ConstructeurReponsePossible {
-    this.type = { type: "saisieLibre", format: "texte" };
+    this.type = { type: 'saisieLibre', format: 'texte' };
     return this;
   }
 
