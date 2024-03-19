@@ -139,7 +139,9 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
     describe('En ce qui concerne la vérification du mot de passe', async () => {
       const aidant: Aidant = unAidant().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
+      beforeEach(
+        async () => await testeurMAC.entrepots.aidants().persiste(aidant),
+      );
 
       it.each([
         [
