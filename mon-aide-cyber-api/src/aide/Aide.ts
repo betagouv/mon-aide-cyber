@@ -3,5 +3,10 @@ import { Aggregat } from '../domaine/Aggregat';
 
 export type Aide = Aggregat & {
   dateSignatureCGU: Date;
+  email: string;
+  raisonSociale?: string;
+  departement: string;
 };
-export type EntrepotAide = Entrepot<Aide>;
+export interface EntrepotAide extends Entrepot<Aide> {
+  rechercheParEmail(email: string): Promise<Aide | undefined>;
+}

@@ -7,7 +7,7 @@ export type SagaDemandeValidationCGUAide = Saga & {
   cguValidees: boolean;
   email: string;
   departement: string;
-  raisonSociale: string;
+  raisonSociale?: string;
 };
 
 export class CapteurSagaDemandeValidationCGUAide
@@ -16,13 +16,22 @@ export class CapteurSagaDemandeValidationCGUAide
   constructor(
     private readonly entrepots: Entrepots,
     _busCommande: BusCommande,
-    _busEvenement: BusEvenement,
+    _busEvenement: BusEvenement
   ) {}
 
-  execute(_saga: SagaDemandeValidationCGUAide): Promise<void> {
+  async execute(saga: SagaDemandeValidationCGUAide): Promise<void> {
+    const aide = await this.entrepots.aides().rechercheParEmail(saga.email);
+
+    if (aide) {
+      return Promise.resolve();
+    }
+
     return this.entrepots.aides().persiste({
-      identifiant: crypto.randomUUID(),
       dateSignatureCGU: FournisseurHorloge.maintenant(),
+      departement: saga.departement,
+      email: saga.email,
+      identifiant: crypto.randomUUID(),
+      ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
     });
   }
 }

@@ -1,10 +1,10 @@
 import { ConfigurationServeur } from '../../serveur';
-import express, { Request, Router, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { SagaDemandeValidationCGUAide } from '../../parcours-cgu-aide/CapteurSagaDemandeValidationCGUAide';
 import {
+  body,
   FieldValidationError,
   Result,
-  body,
   validationResult,
 } from 'express-validator';
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
@@ -13,7 +13,7 @@ type CorpsRequeteValidationCGUAide = {
   cguValidees: boolean;
   email: string;
   departement: string;
-  raisonSociale: string;
+  raisonSociale?: string;
 };
 export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
@@ -49,7 +49,9 @@ export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
           cguValidees: corpsRequete.cguValidees,
           email: corpsRequete.email,
           departement: corpsRequete.departement,
-          raisonSociale: corpsRequete.raisonSociale,
+          ...(corpsRequete.raisonSociale && {
+            raisonSociale: corpsRequete.raisonSociale,
+          }),
         };
         return configuration.busCommande.publie(saga).then(() => {
           reponse.status(202);
