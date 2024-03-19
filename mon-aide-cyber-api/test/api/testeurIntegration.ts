@@ -19,77 +19,65 @@ import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs
 import { AdapatateurDeVerificationDeCGUDeTest } from '../adaptateurs/AdaptateurDeVerificationDeCGUDeTest';
 import { AdaptateurDeGestionDeCookiesDeTest } from '../adaptateurs/AdaptateurDeGestionDeCookiesDeTest';
 
-const testeurIntegration = () => {
-  let serveurDeTest: {
-    app: Express;
-    arreteEcoute: () => void;
-    ecoute: (port: number, succes: () => void) => void;
-  };
-  const adaptateurReferentiel = new AdaptateurReferentielDeTest();
-  const adaptateurMesures = new AdaptateurMesuresTest();
-  const adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest();
-  const entrepots = new EntrepotsMemoire();
-  const busEvenement = new BusEvenementDeTest();
-  const gestionnaireDeJeton = new FauxGestionnaireDeJeton();
-  const adaptateurDeVerificationDeCGU =
-    new AdapatateurDeVerificationDeCGUDeTest();
-  const adaptateurDeVerificationDeSession =
-    new AdaptateurDeVerificationDeSessionDeTest();
-  const gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire();
-  const adaptateurEnvoieMessage: AdaptateurEnvoiMail =
-    new AdaptateurEnvoiMailMemoire();
-  const adaptateurDeGestionDeCookies: AdaptateurDeGestionDeCookiesDeTest =
-    new AdaptateurDeGestionDeCookiesDeTest();
+class TesteurIntegrationMAC {
+  private serveurDeTest:
+    | {
+        app: Express;
+        arreteEcoute: () => void;
+        ecoute: (port: number, succes: () => void) => void;
+      }
+    | undefined = undefined;
+  constructor(
+    public adaptateurReferentiel = new AdaptateurReferentielDeTest(),
+    public adaptateurMesures = new AdaptateurMesuresTest(),
+    public adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest(),
+    public entrepots = new EntrepotsMemoire(),
+    public busEvenement = new BusEvenementDeTest(),
+    public gestionnaireDeJeton = new FauxGestionnaireDeJeton(),
+    public adaptateurDeVerificationDeCGU = new AdapatateurDeVerificationDeCGUDeTest(),
+    public adaptateurDeVerificationDeSession = new AdaptateurDeVerificationDeSessionDeTest(),
+    public gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire(),
+    public adaptateurEnvoieMessage: AdaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire(),
+    public adaptateurDeGestionDeCookies: AdaptateurDeGestionDeCookiesDeTest = new AdaptateurDeGestionDeCookiesDeTest(),
+    public adaptateursRestitution: AdaptateursRestitution = {
+      html() {
+        return unAdaptateurDeRestitutionHTML().construis();
+      },
 
-  const adaptateursRestitution: AdaptateursRestitution = {
-    html() {
-      return unAdaptateurDeRestitutionHTML().construis();
+      pdf() {
+        return unAdaptateurRestitutionPDF();
+      },
     },
+  ) {}
 
-    pdf() {
-      return unAdaptateurRestitutionPDF();
-    },
-  };
-
-  const initialise = () => {
-    serveurDeTest = serveur.creeServeur({
-      adaptateurReferentiel,
-      adaptateurTranscripteurDonnees,
-      adaptateurMesures,
-      entrepots,
-      busCommande: new BusCommandeMAC(entrepots, busEvenement),
-      busEvenement,
-      gestionnaireErreurs,
-      gestionnaireDeJeton,
-      adaptateurDeGestionDeCookies,
-      adaptateurDeVerificationDeCGU,
-      adaptateurDeVerificationDeSession,
-      adaptateursRestitution,
+  initialise() {
+    this.serveurDeTest = serveur.creeServeur({
+      adaptateurReferentiel: this.adaptateurReferentiel,
+      adaptateurTranscripteurDonnees: this.adaptateurTranscripteurDonnees,
+      adaptateurMesures: this.adaptateurMesures,
+      entrepots: this.entrepots,
+      busCommande: new BusCommandeMAC(this.entrepots, this.busEvenement),
+      busEvenement: this.busEvenement,
+      gestionnaireErreurs: this.gestionnaireErreurs,
+      gestionnaireDeJeton: this.gestionnaireDeJeton,
+      adaptateurDeGestionDeCookies: this.adaptateurDeGestionDeCookies,
+      adaptateurDeVerificationDeCGU: this.adaptateurDeVerificationDeCGU,
+      adaptateurDeVerificationDeSession: this.adaptateurDeVerificationDeSession,
+      adaptateursRestitution: this.adaptateursRestitution,
       avecProtectionCsrf: false,
-      adaptateurEnvoiMessage: adaptateurEnvoieMessage,
+      adaptateurEnvoiMessage: this.adaptateurEnvoieMessage,
     });
     const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    serveurDeTest.ecoute(portEcoute, () => {});
-    return { portEcoute: portEcoute, app: serveurDeTest.app };
-  };
+    this.serveurDeTest.ecoute(portEcoute, () => {});
+    return { portEcoute: portEcoute, app: this.serveurDeTest.app };
+  }
 
-  const arrete = () => {
-    serveurDeTest.arreteEcoute();
-  };
+  arrete() {
+    this.serveurDeTest?.arreteEcoute();
+  }
+}
 
-  return {
-    adaptateurReferentiel,
-    arrete,
-    entrepots,
-    initialise,
-    gestionnaireErreurs,
-    adaptateurDeGestionDeCookies,
-    adaptateurDeVerificationDeCGU,
-    adaptateurDeVerificationDeSession,
-    adaptateursRestitution,
-    adaptateurEnvoieMessage,
-  };
-};
+const testeurIntegration = () => new TesteurIntegrationMAC();
 
 export default testeurIntegration;
