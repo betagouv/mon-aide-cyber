@@ -68,12 +68,12 @@ export class EntrepotAidantMemoire
 {
   async rechercheParIdentifiantConnexionEtMotDePasse(
     identifiantConnexion: string,
-    motDePasse: string,
+    motDePasse: string
   ): Promise<Aidant> {
     const aidantTrouve = Array.from(this.entites.values()).find(
       (aidant) =>
         aidant.identifiantConnexion === identifiantConnexion &&
-        aidant.motDePasse === motDePasse,
+        aidant.motDePasse === motDePasse
     );
     if (!aidantTrouve) {
       throw new AggregatNonTrouve('aidant');
@@ -82,10 +82,10 @@ export class EntrepotAidantMemoire
   }
 
   rechercheParIdentifiantDeConnexion(
-    identifiantConnexion: string,
+    identifiantConnexion: string
   ): Promise<Aidant> {
     const aidantTrouve = Array.from(this.entites.values()).find(
-      (aidant) => aidant.identifiantConnexion === identifiantConnexion,
+      (aidant) => aidant.identifiantConnexion === identifiantConnexion
     );
     if (!aidantTrouve) {
       return Promise.reject(new AggregatNonTrouve('aidant'));
@@ -100,4 +100,15 @@ export class EntrepotAidantMemoire
 
 export class EntrepotAideMemoire
   extends EntrepotMemoire<Aide>
-  implements EntrepotAide {}
+  implements EntrepotAide
+{
+  rechercheParEmail(email: string): Promise<Aide | undefined> {
+    const aides = Array.from(this.entites.values()).filter(
+      (aide) => aide.email === email
+    );
+
+    return aides.length > 0
+      ? Promise.resolve(aides[0])
+      : Promise.resolve(undefined);
+  }
+}
