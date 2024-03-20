@@ -1,6 +1,6 @@
 import { BusCommande, Commande } from '../../../src/domaine/commande';
 
-export class BusCommandeTests implements BusCommande {
+export class BusCommandeTest implements BusCommande {
   private commandesRecues: string[] = [];
 
   publie<C extends Commande, R>(commande: C): Promise<R> {

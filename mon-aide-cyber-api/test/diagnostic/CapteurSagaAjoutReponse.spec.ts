@@ -21,7 +21,7 @@ import {
 } from '../../src/diagnostic/CapteurSagaAjoutReponse';
 import { Constructeur } from '../constructeurs/constructeur';
 import { fakerFR } from '@faker-js/faker';
-import { BusCommandeTests } from '../infrastructure/bus/BusCommandeTests';
+import { BusCommandeTest } from '../infrastructure/bus/BusCommandeTest';
 
 describe("Capteur d'ajout de réponse au diagnostic", () => {
   let entrepots: Entrepots;
@@ -61,7 +61,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
 
       await new CapteurSagaAjoutReponse(
         entrepots,
-        new BusCommandeTests(),
+        new BusCommandeTest(),
         new BusEvenementDeTest()
       ).execute(
         new ConstructeurSagaAjoutReponse(diagnostic.identifiant)
@@ -122,7 +122,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
 
       await new CapteurSagaAjoutReponse(
         entrepots,
-        new BusCommandeTests(),
+        new BusCommandeTest(),
         busEvenement
       ).execute(
         new ConstructeurSagaAjoutReponse(diagnostic.identifiant)
@@ -184,7 +184,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
 
       await new CapteurSagaAjoutReponse(
         entrepots,
-        new BusCommandeTests(),
+        new BusCommandeTest(),
         new BusEvenementDeTest()
       ).execute(
         new ConstructeurSagaAjoutReponse(diagnostic.identifiant)
@@ -230,7 +230,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
       await expect(() =>
         new CapteurSagaAjoutReponse(
           entrepots,
-          new BusCommandeTests(),
+          new BusCommandeTest(),
           new BusEvenementDeTest()
         ).execute(
           new ConstructeurSagaAjoutReponse(crypto.randomUUID())
@@ -269,7 +269,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
 
       await new CapteurSagaAjoutReponse(
         entrepots,
-        new BusCommandeTests(),
+        new BusCommandeTest(),
         new BusEvenementDeTest()
       ).execute(
         new ConstructeurSagaAjoutReponse(diagnostic.identifiant)
@@ -296,7 +296,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
         )
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
-      const busDeCommande: BusCommandeTests = new BusCommandeTests();
+      const busDeCommande: BusCommandeTest = new BusCommandeTest();
 
       await new CapteurSagaAjoutReponse(
         entrepots,

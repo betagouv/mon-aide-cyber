@@ -6,6 +6,7 @@ import { CapteurCommandeLanceRestitution } from '../../diagnostic/CapteurCommand
 import { CapteurCommandeLanceDiagnostic } from '../../diagnostic/CapteurCommandeLanceDiagnostic';
 import { CapteurSagaDemandeValidationCGUAide } from '../../parcours-cgu-aide/CapteurSagaDemandeValidationCGUAide';
 import { CapteurCommandeRechercheAideParEmail } from '../../aide/CapteurCommandeRechercheAideParEmail';
+import { CapteurCommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 
 type ParametresCapteur = {
   entrepots: Entrepots;
@@ -45,6 +46,13 @@ const capteurs: Map<string, Capteur> = new Map([
     {
       capteur: (parametres) =>
         new CapteurCommandeRechercheAideParEmail(parametres.entrepots),
+    },
+  ],
+  [
+    'CommandeCreerAide',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeCreerAide(parametres.entrepots),
     },
   ],
   [
