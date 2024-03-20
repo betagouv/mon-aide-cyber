@@ -22,6 +22,9 @@ export const transcripteurSecuriteAcces: Thematique = {
       questions: [{ identifiant: 'acces-utilisateurs-administrateurs-poste' }],
     },
     {
+      questions: [{ identifiant: 'acces-mesures-securite-robustesse-mdp' }],
+    },
+    {
       questions: [
         {
           identifiant: 'acces-administrateurs-informatiques-suivie-et-limitee',
@@ -42,9 +45,6 @@ export const transcripteurSecuriteAcces: Thematique = {
           identifiant: 'acces-administrateurs-si-mesures-specifiques',
         },
       ],
-    },
-    {
-      questions: [{ identifiant: 'acces-mesures-securite-robustesse-mdp' }],
     },
     {
       questions: [
