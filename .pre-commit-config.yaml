@@ -13,8 +13,7 @@ repos:
     rev: 0.0.2
     hooks:
       - id: stylelint
-        additional_dependencies:
-          ['stylelint@15.10.3', 'stylelint-config-standard@34.0.0']
+        additional_dependencies: ['stylelint@15.10.3', 'stylelint-config-standard@34.0.0']
         exclude: 'mon-aide-cyber-ui'
 
   - repo: https://github.com/pre-commit/mirrors-eslint
