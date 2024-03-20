@@ -2,6 +2,7 @@ import { BusCommande, CapteurSaga, Saga } from '../domaine/commande';
 import { Entrepots } from '../domaine/Entrepots';
 import { BusEvenement } from '../domaine/BusEvenement';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
+import { CommandeRechercheAideParEmail } from '../aide/CapteurCommandeRechercheAideParEmail';
 
 export type SagaDemandeValidationCGUAide = Saga & {
   cguValidees: boolean;
@@ -15,12 +16,15 @@ export class CapteurSagaDemandeValidationCGUAide
 {
   constructor(
     private readonly entrepots: Entrepots,
-    _busCommande: BusCommande,
+    private readonly busCommande: BusCommande,
     _busEvenement: BusEvenement
   ) {}
 
   async execute(saga: SagaDemandeValidationCGUAide): Promise<void> {
-    const aide = await this.entrepots.aides().rechercheParEmail(saga.email);
+    const aide = await this.busCommande.publie({
+      type: 'CommandeRechercheAideParEmail',
+      email: saga.email,
+    } as CommandeRechercheAideParEmail);
 
     if (aide) {
       return Promise.resolve();

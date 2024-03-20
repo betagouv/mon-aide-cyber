@@ -16,12 +16,12 @@ import { Entrepots } from '../../src/domaine/Entrepots';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import {
   CapteurSagaAjoutReponse,
-  SagaAjoutReponse,
   CorpsReponseQuestionATiroir,
+  SagaAjoutReponse,
 } from '../../src/diagnostic/CapteurSagaAjoutReponse';
 import { Constructeur } from '../constructeurs/constructeur';
 import { fakerFR } from '@faker-js/faker';
-import { BusCommande, Commande } from '../../src/domaine/commande';
+import { BusCommandeTests } from '../infrastructure/bus/BusCommandeTests';
 
 describe("Capteur d'ajout de réponse au diagnostic", () => {
   let entrepots: Entrepots;
@@ -42,7 +42,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
               uneReponsePossible().construis(),
               secondeReponse,
             ])
-            .construis(),
+            .construis()
         )
         .construis();
       const diagnostic = unDiagnostic()
@@ -52,19 +52,19 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
               uneQuestion()
                 .aChoixUnique('Question à tiroir ?')
                 .avecReponsesPossibles([reponseAvecQuestionATiroir])
-                .construis(),
+                .construis()
             )
-            .construis(),
+            .construis()
         )
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
       await new CapteurSagaAjoutReponse(
         entrepots,
-        new BusDeCommandePourLesTests(),
-        new BusEvenementDeTest(),
+        new BusCommandeTests(),
+        new BusEvenementDeTest()
       ).execute(
-        new ConstructeurSaga(diagnostic.identifiant)
+        new ConstructeurSagaAjoutReponse(diagnostic.identifiant)
           .avecUnchemin('contexte')
           .avecUnIdentifiant('question-a-tiroir-')
           .avecUneReponse({
@@ -79,7 +79,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
               },
             ],
           })
-          .construis(),
+          .construis()
       );
 
       const diagnosticRetourne = await entrepots
@@ -113,23 +113,23 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
               uneQuestion()
                 .aChoixUnique('Avez-vous quelque chose à envoyer ?')
                 .avecReponsesPossibles([secondeReponse])
-                .construis(),
+                .construis()
             )
-            .construis(),
+            .construis()
         )
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
       await new CapteurSagaAjoutReponse(
         entrepots,
-        new BusDeCommandePourLesTests(),
-        busEvenement,
+        new BusCommandeTests(),
+        busEvenement
       ).execute(
-        new ConstructeurSaga(diagnostic.identifiant)
+        new ConstructeurSagaAjoutReponse(diagnostic.identifiant)
           .avecUnIdentifiant('avezvous-quelque-chose-a-envoyer-')
           .avecUnchemin('contexte')
           .avecUneReponse(secondeReponse.identifiant)
-          .construis(),
+          .construis()
       );
 
       expect(busEvenement.evenementRecu).toStrictEqual({
@@ -156,7 +156,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
               premiereReponse,
               uneReponsePossible().construis(),
             ])
-            .construis(),
+            .construis()
         )
         .ajouteUneQuestionATiroir(
           uneQuestionATiroir()
@@ -165,7 +165,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
               secondeReponse,
               uneReponsePossible().construis(),
             ])
-            .construis(),
+            .construis()
         )
         .construis();
       const diagnostic = unDiagnostic()
@@ -175,19 +175,19 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
               uneQuestion()
                 .aChoixUnique('Question à tiroir ?')
                 .avecReponsesPossibles([reponseAvecQuestionsATiroir])
-                .construis(),
+                .construis()
             )
-            .construis(),
+            .construis()
         )
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
       await new CapteurSagaAjoutReponse(
         entrepots,
-        new BusDeCommandePourLesTests(),
-        new BusEvenementDeTest(),
+        new BusCommandeTests(),
+        new BusEvenementDeTest()
       ).execute(
-        new ConstructeurSaga(diagnostic.identifiant)
+        new ConstructeurSagaAjoutReponse(diagnostic.identifiant)
           .avecUnchemin('contexte')
           .avecUnIdentifiant('question-a-tiroir-')
           .avecUneReponse({
@@ -203,7 +203,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
               },
             ],
           })
-          .construis(),
+          .construis()
       );
 
       const diagnosticRetourne = await entrepots
@@ -230,20 +230,20 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
       await expect(() =>
         new CapteurSagaAjoutReponse(
           entrepots,
-          new BusDeCommandePourLesTests(),
-          new BusEvenementDeTest(),
+          new BusCommandeTests(),
+          new BusEvenementDeTest()
         ).execute(
-          new ConstructeurSaga(crypto.randomUUID())
+          new ConstructeurSagaAjoutReponse(crypto.randomUUID())
             .avecUnchemin('')
             .avecUnIdentifiant('')
             .avecUneReponse('')
-            .construis(),
-        ),
+            .construis()
+        )
       ).rejects.toStrictEqual(
         ErreurMAC.cree(
           'Ajout réponse au diagnostic',
-          new AggregatNonTrouve('diagnostic'),
-        ),
+          new AggregatNonTrouve('diagnostic')
+        )
       );
     });
 
@@ -258,9 +258,9 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
               uneQuestion()
                 .aChoixUnique('Faites-vous une mise à jour ?')
                 .avecReponsesPossibles([secondeReponse])
-                .construis(),
+                .construis()
             )
-            .construis(),
+            .construis()
         )
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
@@ -269,14 +269,14 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
 
       await new CapteurSagaAjoutReponse(
         entrepots,
-        new BusDeCommandePourLesTests(),
-        new BusEvenementDeTest(),
+        new BusCommandeTests(),
+        new BusEvenementDeTest()
       ).execute(
-        new ConstructeurSaga(diagnostic.identifiant)
+        new ConstructeurSagaAjoutReponse(diagnostic.identifiant)
           .avecUnchemin('contexte')
           .avecUnIdentifiant('avezvous-quelque-chose-a-envoyer-')
           .avecUneReponse(secondeReponse.identifiant)
-          .construis(),
+          .construis()
       );
 
       const diagnosticRetourne = await entrepots
@@ -284,7 +284,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
         .lis(diagnostic.identifiant);
       expect(diagnosticRetourne.dateCreation).toStrictEqual(dateCreation);
       expect(diagnosticRetourne.dateDerniereModification).toStrictEqual(
-        dateDerniereModification,
+        dateDerniereModification
       );
     });
 
@@ -292,23 +292,22 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
       const question = uneQuestion().construis();
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
-          unReferentiel().ajouteUneQuestionAuContexte(question).construis(),
+          unReferentiel().ajouteUneQuestionAuContexte(question).construis()
         )
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
-      const busDeCommande: BusDeCommandePourLesTests =
-        new BusDeCommandePourLesTests();
+      const busDeCommande: BusCommandeTests = new BusCommandeTests();
 
       await new CapteurSagaAjoutReponse(
         entrepots,
         busDeCommande,
-        new BusEvenementDeTest(),
+        new BusEvenementDeTest()
       ).execute(
-        new ConstructeurSaga(diagnostic.identifiant)
+        new ConstructeurSagaAjoutReponse(diagnostic.identifiant)
           .avecUnIdentifiant(question.identifiant)
           .avecUnchemin('contexte')
           .avecUneReponse(question.reponsesPossibles[0].identifiant)
-          .construis(),
+          .construis()
       );
 
       expect(busDeCommande.aRecu('CommandeLanceRestitution')).toBe(true);
@@ -316,7 +315,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
   });
 });
 
-class ConstructeurSaga implements Constructeur<SagaAjoutReponse> {
+class ConstructeurSagaAjoutReponse implements Constructeur<SagaAjoutReponse> {
   private chemin: string = fakerFR.string.alpha(10);
   private identifiant: string = fakerFR.string.alpha(10);
   private reponse: string | string[] | CorpsReponseQuestionATiroir =
@@ -324,19 +323,19 @@ class ConstructeurSaga implements Constructeur<SagaAjoutReponse> {
 
   constructor(private readonly idDiagnostic: crypto.UUID) {}
 
-  avecUnchemin(chemin: string): ConstructeurSaga {
+  avecUnchemin(chemin: string): ConstructeurSagaAjoutReponse {
     this.chemin = chemin;
     return this;
   }
 
-  avecUnIdentifiant(identifiant: string): ConstructeurSaga {
+  avecUnIdentifiant(identifiant: string): ConstructeurSagaAjoutReponse {
     this.identifiant = identifiant;
     return this;
   }
 
   avecUneReponse(
-    reponse: string | string[] | CorpsReponseQuestionATiroir,
-  ): ConstructeurSaga {
+    reponse: string | string[] | CorpsReponseQuestionATiroir
+  ): ConstructeurSagaAjoutReponse {
     this.reponse = reponse;
     return this;
   }
@@ -349,18 +348,5 @@ class ConstructeurSaga implements Constructeur<SagaAjoutReponse> {
       reponse: this.reponse,
       type: 'SagaAjoutReponse',
     };
-  }
-}
-
-class BusDeCommandePourLesTests implements BusCommande {
-  private commandesRecues: string[] = [];
-
-  publie<C extends Commande, R>(commande: C): Promise<R> {
-    this.commandesRecues.push(commande.type);
-    return Promise.resolve(undefined as R);
-  }
-
-  aRecu(typeCommande: string): boolean {
-    return this.commandesRecues.includes(typeCommande);
   }
 }

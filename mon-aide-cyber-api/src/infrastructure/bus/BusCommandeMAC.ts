@@ -5,6 +5,7 @@ import { CapteurSagaAjoutReponse } from '../../diagnostic/CapteurSagaAjoutRepons
 import { CapteurCommandeLanceRestitution } from '../../diagnostic/CapteurCommandeLanceRestitution';
 import { CapteurCommandeLanceDiagnostic } from '../../diagnostic/CapteurCommandeLanceDiagnostic';
 import { CapteurSagaDemandeValidationCGUAide } from '../../parcours-cgu-aide/CapteurSagaDemandeValidationCGUAide';
+import { CapteurCommandeRechercheAideParEmail } from '../../aide/CapteurCommandeRechercheAideParEmail';
 
 type ParametresCapteur = {
   entrepots: Entrepots;
@@ -15,6 +16,7 @@ type ParametresCapteur = {
 type Capteur = {
   capteur: (parametres: ParametresCapteur) => CapteurCommande<Commande, any>;
 };
+
 const capteurs: Map<string, Capteur> = new Map([
   [
     'SagaAjoutReponse',
@@ -23,7 +25,7 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurSagaAjoutReponse(
           parametres.entrepots,
           parametres.busCommande!,
-          parametres.busEvenements!,
+          parametres.busEvenements!
         ),
     },
   ],
@@ -34,8 +36,15 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurSagaDemandeValidationCGUAide(
           parametres.entrepots,
           parametres.busCommande!,
-          parametres.busEvenements!,
+          parametres.busEvenements!
         ),
+    },
+  ],
+  [
+    'CommandeRechercheAideParEmail',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeRechercheAideParEmail(parametres.entrepots),
     },
   ],
   [
@@ -44,7 +53,7 @@ const capteurs: Map<string, Capteur> = new Map([
       capteur: (parametres) =>
         new CapteurCommandeLanceRestitution(
           parametres.entrepots,
-          parametres.busEvenements!,
+          parametres.busEvenements!
         ),
     },
   ],
@@ -54,7 +63,7 @@ const capteurs: Map<string, Capteur> = new Map([
       capteur: (parametres) =>
         new CapteurCommandeLanceDiagnostic(
           parametres.entrepots,
-          parametres.busEvenements!,
+          parametres.busEvenements!
         ),
     },
   ],
@@ -63,7 +72,7 @@ const capteurs: Map<string, Capteur> = new Map([
 export class BusCommandeMAC implements BusCommande {
   constructor(
     private readonly entrepots: Entrepots,
-    private readonly busEvenement: BusEvenement,
+    private readonly busEvenement: BusEvenement
   ) {}
 
   publie<C extends Commande, R>(commande: C): Promise<R> {
