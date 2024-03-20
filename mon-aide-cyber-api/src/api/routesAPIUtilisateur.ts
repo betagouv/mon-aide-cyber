@@ -7,17 +7,12 @@ import { ErreurMAC } from '../domaine/erreurMAC';
 export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
-  const { entrepots, adaptateurDeVerificationDeSession: session } =
-    configuration;
+  const { entrepots, adaptateurDeVerificationDeSession: session } = configuration;
 
   routes.get(
     '/',
     session.verifie("Accède aux informations de l'utilisateur"),
-    async (
-      requete: RequeteUtilisateur,
-      reponse: Response,
-      suite: NextFunction,
-    ) => {
+    async (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       return entrepots
         .aidants()
         .lis(requete.identifiantUtilisateurCourant!)
@@ -26,20 +21,13 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
           reponse.status(200).json({
             ...(aidant.dateSignatureCGU
               ? {
-                  ...actionsHATEOAS
-                    .lancerDiagnostic()
-                    .afficherProfil()
-                    .construis(),
+                  ...actionsHATEOAS.lancerDiagnostic().afficherProfil().construis(),
                 }
               : { ...actionsHATEOAS.creerEspaceAidant().construis() }),
             nomPrenom: aidant.nomPrenom,
           });
         })
-        .catch((erreur) =>
-          suite(
-            ErreurMAC.cree("Accède aux informations de l'utilisateur", erreur),
-          ),
-        );
+        .catch((erreur) => suite(ErreurMAC.cree("Accède aux informations de l'utilisateur", erreur)));
     },
   );
 

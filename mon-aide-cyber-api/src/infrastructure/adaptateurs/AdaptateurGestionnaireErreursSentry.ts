@@ -5,9 +5,7 @@ import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 import { ConsignateurErreursSentry } from './ConsignateurErreursSentry';
 import { ErrorRequestHandler, RequestHandler } from 'express';
 
-export class AdaptateurGestionnaireErreursSentry
-  implements AdaptateurGestionnaireErreurs
-{
+export class AdaptateurGestionnaireErreursSentry implements AdaptateurGestionnaireErreurs {
   private readonly _consignateur;
   constructor() {
     Sentry.init({

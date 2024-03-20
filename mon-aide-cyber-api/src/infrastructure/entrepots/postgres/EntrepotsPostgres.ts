@@ -10,11 +10,8 @@ import { EntrepotAide } from '../../../aide/Aide';
 
 export class EntrepotsPostgres implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
-  private readonly entrepotAidant: EntrepotAidant = new EntrepotAidantPostgres(
-    adaptateurServiceChiffrement(),
-  );
-  private entrepotRestitution: EntrepotRestitution =
-    new EntrepotRestitutionPostgres();
+  private readonly entrepotAidant: EntrepotAidant = new EntrepotAidantPostgres(adaptateurServiceChiffrement());
+  private entrepotRestitution: EntrepotRestitution = new EntrepotRestitutionPostgres();
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;

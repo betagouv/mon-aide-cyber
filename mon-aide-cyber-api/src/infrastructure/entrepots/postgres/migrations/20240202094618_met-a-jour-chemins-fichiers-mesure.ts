@@ -38,17 +38,11 @@ export async function up(knex: Knex): Promise<void> {
         .map((ligne) => ligne.donnees.restitution)
         .filter((restitution): restitution is Restitution => !!restitution)
         .forEach((restitution) => {
-          restitution.recommandations.recommandationsPrioritaires.forEach(
-            (mesures) => metsAJour(mesures),
-          );
-          restitution.recommandations.autresRecommandations.forEach((mesures) =>
-            metsAJour(mesures),
-          );
+          restitution.recommandations.recommandationsPrioritaires.forEach((mesures) => metsAJour(mesures));
+          restitution.recommandations.autresRecommandations.forEach((mesures) => metsAJour(mesures));
         });
       const misesAJour = lignes.map((ligne) =>
-        knex('diagnostics')
-          .where('id', ligne.id)
-          .update({ donnees: ligne.donnees }),
+        knex('diagnostics').where('id', ligne.id).update({ donnees: ligne.donnees }),
       );
       return Promise.all(misesAJour);
     },

@@ -18,10 +18,7 @@ type AidantDTO = DTO & {
   donnees: DonneesUtilisateur;
 };
 
-export class EntrepotAidantPostgres
-  extends EntrepotPostgres<Aidant, AidantDTO>
-  implements EntrepotAidant
-{
+export class EntrepotAidantPostgres extends EntrepotPostgres<Aidant, AidantDTO> implements EntrepotAidant {
   constructor(private readonly chiffrement: ServiceDeChiffrement) {
     super();
   }
@@ -33,20 +30,14 @@ export class EntrepotAidantPostgres
   protected deDTOAEntite(dto: AidantDTO): Aidant {
     return {
       identifiant: dto.id,
-      identifiantConnexion: this.chiffrement.dechiffre(
-        dto.donnees.identifiantConnexion,
-      ),
+      identifiantConnexion: this.chiffrement.dechiffre(dto.donnees.identifiantConnexion),
       motDePasse: this.chiffrement.dechiffre(dto.donnees.motDePasse),
       nomPrenom: this.chiffrement.dechiffre(dto.donnees.nomPrenom),
       ...(dto.donnees.dateSignatureCGU && {
-        dateSignatureCGU: FournisseurHorloge.enDate(
-          dto.donnees.dateSignatureCGU,
-        ),
+        dateSignatureCGU: FournisseurHorloge.enDate(dto.donnees.dateSignatureCGU),
       }),
       ...(dto.donnees.dateSignatureCharte && {
-        dateSignatureCharte: FournisseurHorloge.enDate(
-          dto.donnees.dateSignatureCharte,
-        ),
+        dateSignatureCharte: FournisseurHorloge.enDate(dto.donnees.dateSignatureCharte),
       }),
     };
   }
@@ -56,9 +47,7 @@ export class EntrepotAidantPostgres
       id: entite.identifiant,
       type: 'AIDANT',
       donnees: {
-        identifiantConnexion: this.chiffrement.chiffre(
-          entite.identifiantConnexion,
-        ),
+        identifiantConnexion: this.chiffrement.chiffre(entite.identifiantConnexion),
         motDePasse: this.chiffrement.chiffre(entite.motDePasse),
         nomPrenom: this.chiffrement.chiffre(entite.nomPrenom),
         ...(entite.dateSignatureCGU && {
@@ -79,18 +68,14 @@ export class EntrepotAidantPostgres
     return 'aidant';
   }
 
-  rechercheParIdentifiantConnexionEtMotDePasse(
-    identifiantConnexion: string,
-    motDePasse: string,
-  ): Promise<Aidant> {
+  rechercheParIdentifiantConnexionEtMotDePasse(identifiantConnexion: string, motDePasse: string): Promise<Aidant> {
     return this.knex
       .from(`${this.nomTable()}`)
       .where({ type: 'AIDANT' })
       .then((aidants: AidantDTO[]) =>
         aidants.find(
           (a) =>
-            this.chiffrement.dechiffre(a.donnees.identifiantConnexion) ===
-              identifiantConnexion &&
+            this.chiffrement.dechiffre(a.donnees.identifiantConnexion) === identifiantConnexion &&
             this.chiffrement.dechiffre(a.donnees.motDePasse) === motDePasse,
         ),
       )
@@ -102,18 +87,12 @@ export class EntrepotAidantPostgres
       });
   }
 
-  rechercheParIdentifiantDeConnexion(
-    identifiantConnexion: string,
-  ): Promise<Aidant> {
+  rechercheParIdentifiantDeConnexion(identifiantConnexion: string): Promise<Aidant> {
     return this.knex
       .from(`${this.nomTable()}`)
       .where({ type: 'AIDANT' })
       .then((aidants: AidantDTO[]) =>
-        aidants.find(
-          (a) =>
-            this.chiffrement.dechiffre(a.donnees.identifiantConnexion) ===
-            identifiantConnexion,
-        ),
+        aidants.find((a) => this.chiffrement.dechiffre(a.donnees.identifiantConnexion) === identifiantConnexion),
       )
       .then((ligne) => {
         if (!ligne) {

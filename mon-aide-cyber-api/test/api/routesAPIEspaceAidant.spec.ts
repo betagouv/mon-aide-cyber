@@ -21,14 +21,10 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
 
   describe('quand une requête POST est reçue sur /cree', () => {
     it('marque les CGU à signées', async () => {
-      FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-02-04T13:04:25+01:00')),
-      );
+      FournisseurHorlogeDeTest.initialise(new Date(Date.parse('2024-02-04T13:04:25+01:00')));
       const aidantCreantSonEspace = unAidant().sansEspace().construis();
       await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        aidantCreantSonEspace,
-      );
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidantCreantSonEspace);
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -43,15 +39,9 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       );
 
       expect(reponse.statusCode).toBe(200);
-      const aidantRetrouve = await testeurMAC.entrepots
-        .aidants()
-        .lis(aidantCreantSonEspace.identifiant);
-      expect(aidantRetrouve.dateSignatureCGU).toStrictEqual(
-        FournisseurHorloge.maintenant(),
-      );
-      expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
-      ).toBe(true);
+      const aidantRetrouve = await testeurMAC.entrepots.aidants().lis(aidantCreantSonEspace.identifiant);
+      expect(aidantRetrouve.dateSignatureCGU).toStrictEqual(FournisseurHorloge.maintenant());
+      expect(testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
       expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
         liens: {
           suite: { url: '/tableau-de-bord' },
@@ -71,9 +61,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       it('vérifie la longueur du mot de passe', async () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
-        );
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidantCreantSonEspace);
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -89,17 +77,14 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
 
         expect(reponse.statusCode).toBe(422);
         expect(await reponse.json()).toStrictEqual({
-          message:
-            'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
+          message: 'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
         });
       });
 
       it('vérifie que le mot de passe contient au moins une minuscule', async () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
-        );
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidantCreantSonEspace);
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -115,17 +100,14 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
 
         expect(reponse.statusCode).toBe(422);
         expect(await reponse.json()).toStrictEqual({
-          message:
-            'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
+          message: 'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
         });
       });
 
       it('vérifie que le mot de passe contient au moins une majuscule', async () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
-        );
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidantCreantSonEspace);
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -141,17 +123,14 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
 
         expect(reponse.statusCode).toBe(422);
         expect(await reponse.json()).toStrictEqual({
-          message:
-            'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
+          message: 'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
         });
       });
 
       it('vérifie que le mot de passe contient au moins un chiffre', async () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
-        );
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidantCreantSonEspace);
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -167,17 +146,14 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
 
         expect(reponse.statusCode).toBe(422);
         expect(await reponse.json()).toStrictEqual({
-          message:
-            'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
+          message: 'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
         });
       });
 
       it('vérifie que le mot de passe contient au moins un caractère spécial', async () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
-        );
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidantCreantSonEspace);
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -193,17 +169,14 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
 
         expect(reponse.statusCode).toBe(422);
         expect(await reponse.json()).toStrictEqual({
-          message:
-            'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
+          message: 'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
         });
       });
 
       it('vérifie que le mot de passe temporaire est bien fourni', async () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
-        );
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidantCreantSonEspace);
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -219,17 +192,14 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
 
         expect(reponse.statusCode).toBe(422);
         expect(await reponse.json()).toStrictEqual({
-          message:
-            'Le mot de passe temporaire est obligatoire.\nVotre mot de passe temporaire est erroné.',
+          message: 'Le mot de passe temporaire est obligatoire.\nVotre mot de passe temporaire est erroné.',
         });
       });
 
       it('vérifie que le mot de passe temporaire est bien fourni et que le nouveau mot de passe est valide', async () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
-        );
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidantCreantSonEspace);
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -253,9 +223,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       it('vérifie que le mot de passe temporaire est différent du nouveau mot de passe', async () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
-        );
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidantCreantSonEspace);
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -279,9 +247,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       it("vérifie que le mot de passe temporaire est bien celui de l'utilisateur", async () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
-        );
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidantCreantSonEspace);
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -303,14 +269,10 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
     });
 
     it('renvoie une erreur HTTP 422 si les CGU ne sont pas acceptées', async () => {
-      FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-02-04T13:04:25+01:00')),
-      );
+      FournisseurHorlogeDeTest.initialise(new Date(Date.parse('2024-02-04T13:04:25+01:00')));
       const aidantCreantSonEspace = unAidant().sansEspace().construis();
       await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        aidantCreantSonEspace,
-      );
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidantCreantSonEspace);
 
       const reponse = await executeRequete(
         donneesServeur.app,

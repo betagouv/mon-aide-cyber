@@ -1,14 +1,7 @@
 import { Constructeur } from './constructeur';
-import {
-  QuestionChoixMultiple,
-  QuestionChoixUnique,
-  ReponsePossible,
-} from '../../src/diagnostic/Referentiel';
+import { QuestionChoixMultiple, QuestionChoixUnique, ReponsePossible } from '../../src/diagnostic/Referentiel';
 import { fakerFR } from '@faker-js/faker';
-import {
-  CorpsReponse,
-  CorpsReponseQuestionATiroir,
-} from '../../src/diagnostic/CapteurSagaAjoutReponse';
+import { CorpsReponse, CorpsReponseQuestionATiroir } from '../../src/diagnostic/CapteurSagaAjoutReponse';
 
 class ConstructeurDeCorpsDeReponse implements Constructeur<CorpsReponse> {
   private chemin = 'contexte';
@@ -20,16 +13,12 @@ class ConstructeurDeCorpsDeReponse implements Constructeur<CorpsReponse> {
     return this;
   }
 
-  concernantLaQuestion(
-    question: QuestionChoixUnique | QuestionChoixMultiple,
-  ): ConstructeurDeCorpsDeReponse {
+  concernantLaQuestion(question: QuestionChoixUnique | QuestionChoixMultiple): ConstructeurDeCorpsDeReponse {
     this.identifiant = question.identifiant;
     return this;
   }
 
-  avecLaReponse(
-    reponse: string | CorpsReponseQuestionATiroir,
-  ): ConstructeurDeCorpsDeReponse {
+  avecLaReponse(reponse: string | CorpsReponseQuestionATiroir): ConstructeurDeCorpsDeReponse {
     this.reponse = reponse;
     return this;
   }
@@ -42,9 +31,7 @@ class ConstructeurDeCorpsDeReponse implements Constructeur<CorpsReponse> {
   }
 }
 
-class ConstructeurDeCorpsDeReponseQuestionATiroir
-  implements Constructeur<CorpsReponseQuestionATiroir>
-{
+class ConstructeurDeCorpsDeReponseQuestionATiroir implements Constructeur<CorpsReponseQuestionATiroir> {
   private questions: { identifiant: string; reponses: string[] }[] = [];
   private reponse = '';
 
@@ -70,5 +57,4 @@ class ConstructeurDeCorpsDeReponseQuestionATiroir
 
 export const unCorspsDeReponse = () => new ConstructeurDeCorpsDeReponse();
 
-export const unCorpsDeReponseQuestionATiroir = () =>
-  new ConstructeurDeCorpsDeReponseQuestionATiroir();
+export const unCorpsDeReponseQuestionATiroir = () => new ConstructeurDeCorpsDeReponseQuestionATiroir();

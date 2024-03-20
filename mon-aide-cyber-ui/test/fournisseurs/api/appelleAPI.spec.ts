@@ -58,9 +58,7 @@ describe('Appelle API', () => {
             methode: init!.method!,
             headers: init!.headers! as Headers,
           };
-          return Promise.resolve(
-            new ConstructeurDeReponse().ok().json(infos).construis(),
-          );
+          return Promise.resolve(new ConstructeurDeReponse().ok().json(infos).construis());
         },
         (contenu) => contenu,
       );

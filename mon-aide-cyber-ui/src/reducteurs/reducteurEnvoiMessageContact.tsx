@@ -1,8 +1,4 @@
-import {
-  ChampsErreur,
-  construisErreur,
-  PresentationErreur,
-} from '../composants/erreurs/Erreurs.tsx';
+import { ChampsErreur, construisErreur, PresentationErreur } from '../composants/erreurs/Erreurs.tsx';
 import { ReactElement } from 'react';
 
 enum TypeActionEnvoiMessageContact {
@@ -52,15 +48,9 @@ type ActionEnvoiMessageContact =
       type: TypeActionEnvoiMessageContact.MESSAGE_SAISI;
     };
 
-const textesExplicatif: Map<
-  'nom' | 'email' | 'message',
-  { texte: string; identifiant: string }
-> = new Map([
+const textesExplicatif: Map<'nom' | 'email' | 'message', { texte: string; identifiant: string }> = new Map([
   ['nom', { texte: 'Veuillez saisir votre nom.', identifiant: 'nom' }],
-  [
-    'email',
-    { texte: 'Veuillez saisir un email valide.', identifiant: 'email' },
-  ],
+  ['email', { texte: 'Veuillez saisir un email valide.', identifiant: 'email' }],
   ['message', { texte: 'Veuillez saisir un message.', identifiant: 'message' }],
 ]);
 export const reducteurEnvoiMessageContact = (
@@ -88,19 +78,11 @@ export const reducteurEnvoiMessageContact = (
     case TypeActionEnvoiMessageContact.MESSAGE_COMPLETE: {
       const nomEstValide = etat.nom.trim().length > 0;
       const erreurNom = construisErreurEnvoieMessage('nom', () => nomEstValide);
-      const estUnEmail = etat.email
-        .trim()
-        .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+      const estUnEmail = etat.email.trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
       const emailEstValide = (estUnEmail && estUnEmail?.length > 0) || false;
-      const erreurEmail = construisErreurEnvoieMessage(
-        'email',
-        () => emailEstValide,
-      );
+      const erreurEmail = construisErreurEnvoieMessage('email', () => emailEstValide);
       const messageEstValide = etat.message.trim().length > 0;
-      const erreurMessage = construisErreurEnvoieMessage(
-        'message',
-        () => messageEstValide,
-      );
+      const erreurMessage = construisErreurEnvoieMessage('message', () => messageEstValide);
       return {
         ...etat,
         erreur: { ...erreurNom, ...erreurEmail, ...erreurMessage },
@@ -141,9 +123,7 @@ export const reducteurEnvoiMessageContact = (
       };
     }
     case TypeActionEnvoiMessageContact.EMAIL_SAISI: {
-      const estUnEmail = action.email
-        .trim()
-        .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+      const estUnEmail = action.email.trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
       const estValide = (estUnEmail && estUnEmail?.length > 0) || false;
       const erreur = { ...etat.erreur };
       estValide && delete erreur['email'];
@@ -192,9 +172,7 @@ export const messageEnvoye = (): ActionEnvoiMessageContact => {
   };
 };
 
-export const envoiMessageInvalide = (
-  erreur: Error,
-): ActionEnvoiMessageContact => {
+export const envoiMessageInvalide = (erreur: Error): ActionEnvoiMessageContact => {
   return {
     erreur,
     type: TypeActionEnvoiMessageContact.ENVOI_MESSAGE_INVALIDE,

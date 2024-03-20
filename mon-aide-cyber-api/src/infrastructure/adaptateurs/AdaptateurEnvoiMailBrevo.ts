@@ -1,7 +1,4 @@
-import {
-  AdaptateurEnvoiMail,
-  Message,
-} from '../../adaptateurs/AdaptateurEnvoiMail';
+import { AdaptateurEnvoiMail, Message } from '../../adaptateurs/AdaptateurEnvoiMail';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   envoie(message: Message, destination: string): Promise<void> {
@@ -12,9 +9,7 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
         subject: 'Contact MAC',
         to: [{ email: destination, name: 'MonAideCyber' }],
         textContent:
-          `Bonjour, \n` +
-          `${message.nom} (${message.email}) a envoyé le message suivant:\n` +
-          `${message.message}`,
+          `Bonjour, \n` + `${message.nom} (${message.email}) a envoyé le message suivant:\n` + `${message.message}`,
       }),
       headers: {
         'Content-Type': 'application/json',

@@ -22,9 +22,10 @@ const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
 const adaptateurTranscripteurDonnees = adaptateurTranscripteur();
 const traductionThematiques =
   new Map(
-    Object.entries(
-      adaptateurTranscripteurDonnees.transcripteur().thematiques,
-    ).map(([clef, thematique]) => [clef, thematique.libelle]),
+    Object.entries(adaptateurTranscripteurDonnees.transcripteur().thematiques).map(([clef, thematique]) => [
+      clef,
+      thematique.libelle,
+    ]),
   ) || new Map();
 
 const entrepots = fabriqueEntrepots();
@@ -43,12 +44,8 @@ const serveurMAC = serveur.creeServeur({
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),
   gestionnaireDeJeton: gestionnaireDeJeton,
   adaptateurDeGestionDeCookies: new AdaptateurDeGestionDeCookiesMAC(),
-  adaptateurDeVerificationDeCGU: new AdaptateurDeVerificationDeCGUMAC(
-    entrepots,
-  ),
-  adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(
-    gestionnaireDeJeton,
-  ),
+  adaptateurDeVerificationDeCGU: new AdaptateurDeVerificationDeCGUMAC(entrepots),
+  adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(gestionnaireDeJeton),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
   adaptateurEnvoiMessage: fabriqueAdaptateurEnvoiMail(),
 });

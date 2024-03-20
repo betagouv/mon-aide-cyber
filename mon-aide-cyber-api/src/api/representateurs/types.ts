@@ -5,11 +5,7 @@ type ActionBase = {
   ressource: { url: string; methode: 'PATCH' | 'GET' };
 };
 
-export type Action =
-  | ActionDiagnostic
-  | ActionRepondreDiagnostic
-  | ActionRestituer
-  | ActionLancerDiagnostic;
+export type Action = ActionDiagnostic | ActionRepondreDiagnostic | ActionRestituer | ActionLancerDiagnostic;
 export type ActionLancerDiagnostic = ActionBase & {
   action: 'lancer-diagnostic';
 };
@@ -42,10 +38,7 @@ export type RepresentationReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
-  questions?: (
-    | RepresentationQuestionChoixUnique
-    | RepresentationQuestionChoixMultiple
-  )[];
+  questions?: (RepresentationQuestionChoixUnique | RepresentationQuestionChoixMultiple)[];
   type?: { type: TypeDeSaisie; format: Format };
 };
 type RepresentationReponseDonnee = {
@@ -67,10 +60,7 @@ type RepresentationQuestionChoixUnique = RepresentationQuestion & {
 };
 export type RepresentationGroupes = {
   numero: number;
-  questions: (
-    | RepresentationQuestionChoixUnique
-    | RepresentationQuestionChoixMultiple
-  )[];
+  questions: (RepresentationQuestionChoixUnique | RepresentationQuestionChoixMultiple)[];
 }[];
 export type RepresentationThematique = {
   actions: ActionDiagnostic[];
@@ -83,11 +73,7 @@ export type RepresentationThematique = {
 export type RepresentationReferentiel = {
   [clef: string]: RepresentationThematique;
 };
-export type TypeDeSaisie =
-  | 'choixMultiple'
-  | 'choixUnique'
-  | 'liste'
-  | 'saisieLibre';
+export type TypeDeSaisie = 'choixMultiple' | 'choixUnique' | 'liste' | 'saisieLibre';
 export type Format = 'nombre' | 'texte';
 export type ReponseATranscrire = {
   identifiant: string;

@@ -116,27 +116,15 @@ $border-radius: 0.5rem;
 }
 
 .bouton-mac-primaire {
-  @include primaire(
-    white,
-    var(--couleurs-mac-violet-fonce),
-    var(--couleurs-mac-violet-moyen)
-  );
+  @include primaire(white, var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-moyen));
 }
 
 .bouton-mac-primaire-inverse {
-  @include primaire(
-    var(--couleurs-mac-violet-fonce),
-    var(--couleurs-mac-blanc),
-    var(--couleurs-mac-violet-leger)
-  );
+  @include primaire(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-blanc), var(--couleurs-mac-violet-leger));
 }
 
 .bouton-mac-primaire-jaune {
-  @include primaire(
-    black,
-    var(--couleurs-mac-jaune-fonce),
-    var(--couleurs-mac-jaune-moyen)
-  );
+  @include primaire(black, var(--couleurs-mac-jaune-fonce), var(--couleurs-mac-jaune-moyen));
 }
 
 .bouton-mac-secondaire {
@@ -163,15 +151,8 @@ $border-radius: 0.5rem;
 }
 
 .mac-radio-group input[type='radio']:checked + label {
-  background-image: radial-gradient(
-      transparent 8px 45%,
-      var(--couleurs-mac-violet-fonce) 10px 55%,
-      transparent 11px
-    ),
-    radial-gradient(
-      var(--couleurs-mac-violet-fonce) 5px 30%,
-      transparent 6px 70%
-    ) !important;
+  background-image: radial-gradient(transparent 8px 45%, var(--couleurs-mac-violet-fonce) 10px 55%, transparent 11px),
+    radial-gradient(var(--couleurs-mac-violet-fonce) 5px 30%, transparent 6px 70%) !important;
 }
 
 .mac-radio-group input[type='checkbox'] + label::before {
@@ -203,10 +184,7 @@ $border-radius: 0.5rem;
       var(--couleurs-mac-violet-fonce) 5px,
       transparent 6px
     ),
-    linear-gradient(
-      var(--couleurs-mac-violet-fonce),
-      var(--couleurs-mac-violet-fonce)
-    ),
+    linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)),
     radial-gradient(
       at calc(100% - 5px) 4px,
       transparent 4px,
@@ -214,10 +192,7 @@ $border-radius: 0.5rem;
       var(--couleurs-mac-violet-fonce) 5px,
       transparent 6px
     ),
-    linear-gradient(
-      var(--couleurs-mac-violet-fonce),
-      var(--couleurs-mac-violet-fonce)
-    ),
+    linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)),
     radial-gradient(
       at calc(100% - 5px) calc(100% - 4px),
       transparent 4px,
@@ -225,10 +200,7 @@ $border-radius: 0.5rem;
       var(--couleurs-mac-violet-fonce) 5px,
       transparent 6px
     ),
-    linear-gradient(
-      var(--couleurs-mac-violet-fonce),
-      var(--couleurs-mac-violet-fonce)
-    ),
+    linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)),
     radial-gradient(
       at 5px calc(100% - 4px),
       transparent 4px,
@@ -236,11 +208,7 @@ $border-radius: 0.5rem;
       var(--couleurs-mac-violet-fonce) 5px,
       transparent 6px
     ),
-    linear-gradient(
-      var(--couleurs-mac-violet-fonce),
-      var(--couleurs-mac-violet-fonce)
-    ),
-    var(--data-uri-svg) !important;
+    linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)), var(--data-uri-svg) !important;
 }
 
 .mac-radio-group input[type='checkbox']:checked + label::before {

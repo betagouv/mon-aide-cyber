@@ -29,9 +29,7 @@ describe("Consignateur de gestion d'erreurr", () => {
         },
       );
 
-      expect(testeurMAC.gestionnaireErreurs.consignateur().tous()).toHaveLength(
-        1,
-      );
+      expect(testeurMAC.gestionnaireErreurs.consignateur().tous()).toHaveLength(1);
     });
   });
 });

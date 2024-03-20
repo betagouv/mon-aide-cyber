@@ -4,10 +4,8 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
   description:
     "La sécurité des infrastructures et des données est vitale pour protéger systèmes, réseaux et informations contre les menaces numériques. Le pare-feu, le cryptage et la détection d'intrusions pour prévenir, détecter et limiter les attaques sont entre autres utilisés.",
   libelle: 'Sécurité des infrastructures',
-  localisationIconeNavigation:
-    '/images/diagnostic/securite-infrastructures/icone-navigation.svg',
-  localisationIllustration:
-    '/images/diagnostic/securite-infrastructures/illustration.svg',
+  localisationIconeNavigation: '/images/diagnostic/securite-infrastructures/icone-navigation.svg',
+  localisationIllustration: '/images/diagnostic/securite-infrastructures/illustration.svg',
   groupes: [
     {
       questions: [
@@ -20,8 +18,7 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
     {
       questions: [
         {
-          identifiant:
-            'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees',
+          identifiant: 'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees',
         },
       ],
     },
@@ -36,8 +33,7 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
     {
       questions: [
         {
-          identifiant:
-            'securite-infrastructure-outils-securisation-systeme-messagerie',
+          identifiant: 'securite-infrastructure-outils-securisation-systeme-messagerie',
         },
       ],
     },

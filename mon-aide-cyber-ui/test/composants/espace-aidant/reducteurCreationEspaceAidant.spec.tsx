@@ -11,14 +11,10 @@ import {
   nouveauMotDePasseSaisi,
   reducteurCreationEspaceAidant,
 } from '../../../src/composants/espace-aidant/reducteurCreationEspaceAidant.tsx';
-import {
-  ChampsErreur,
-  TexteExplicatif,
-} from '../../../src/composants/erreurs/Erreurs.tsx';
+import { ChampsErreur, TexteExplicatif } from '../../../src/composants/erreurs/Erreurs.tsx';
 
 describe("Réducteur de création de l'espace Aidant", () => {
-  const etatInitialCreationEspaceAidant: EtatCreationEspaceAidant =
-    initialiseReducteur();
+  const etatInitialCreationEspaceAidant: EtatCreationEspaceAidant = initialiseReducteur();
   describe("Lors de la création de l'espace", () => {
     it('valide les CGU', () => {
       const etatCreationEspaceAidant = reducteurCreationEspaceAidant(
@@ -63,12 +59,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
         erreur: {
           cguSignees: {
             className: 'fr-input-group--error',
-            texteExplicatif: (
-              <TexteExplicatif
-                id="cguSignees"
-                texte="Veuillez accepter les CGU."
-              />
-            ),
+            texteExplicatif: <TexteExplicatif id="cguSignees" texte="Veuillez accepter les CGU." />,
           },
         },
         saisieValide: expect.any(Function),
@@ -165,12 +156,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
         erreur: {
           motDePasse: {
             className: 'fr-input-group--error',
-            texteExplicatif: (
-              <TexteExplicatif
-                id="nouveauMotDePasse"
-                texte="Vous devez saisir vos mots de passe."
-              />
-            ),
+            texteExplicatif: <TexteExplicatif id="nouveauMotDePasse" texte="Vous devez saisir vos mots de passe." />,
           },
         },
         saisieValide: expect.any(Function),
@@ -247,12 +233,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
         erreur: {
           cguSignees: {
             className: 'fr-input-group--error',
-            texteExplicatif: (
-              <TexteExplicatif
-                id="cguSignees"
-                texte="Veuillez accepter les CGU."
-              />
-            ),
+            texteExplicatif: <TexteExplicatif id="cguSignees" texte="Veuillez accepter les CGU." />,
           },
         },
         saisieValide: expect.any(Function),
@@ -360,9 +341,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
         motDePasseConfirme: '',
         erreur: {},
         saisieValide: expect.any(Function),
-        champsErreur: (
-          <ChampsErreur erreur={new Error('Une erreur est survenue')} />
-        ),
+        champsErreur: <ChampsErreur erreur={new Error('Une erreur est survenue')} />,
       });
       expect(etatCreationEspaceAidant.saisieValide()).toBe(false);
     });
@@ -380,9 +359,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           nouveauMotDePasseSaisi('un-mot-de-passe'),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: true,
           motDePasseTemporaire: '',
           nouveauMotDePasse: 'un-mot-de-passe',
@@ -405,9 +382,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           nouveauMotDePasseSaisi('un-mot-de-passe'),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: false,
           motDePasseTemporaire: 'mot-de-passe-temporaire',
           nouveauMotDePasse: 'un-mot-de-passe',
@@ -430,9 +405,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           nouveauMotDePasseSaisi('   '),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: true,
           motDePasseTemporaire: 'mot-de-passe-temporaire',
           nouveauMotDePasse: '   ',
@@ -455,9 +428,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           nouveauMotDePasseSaisi('mdp'),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: true,
           motDePasseTemporaire: ' ',
           nouveauMotDePasse: 'mdp',
@@ -482,9 +453,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           motDePasseTemporaireSaisi('mot-de-passe-temporaire'),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: false,
           motDePasseTemporaire: 'mot-de-passe-temporaire',
           nouveauMotDePasse: 'un-mot-de-passe',
@@ -507,9 +476,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           motDePasseTemporaireSaisi('mot-de-passe-temporaire'),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: true,
           motDePasseTemporaire: 'mot-de-passe-temporaire',
           nouveauMotDePasse: 'un-mot-de-passe',
@@ -532,9 +499,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           motDePasseTemporaireSaisi('mot-de-passe'),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: true,
           motDePasseTemporaire: 'mot-de-passe',
           nouveauMotDePasse: 'mot-de-passe',
@@ -557,9 +522,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           motDePasseTemporaireSaisi('mot-de-passe-temporaire'),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: true,
           motDePasseTemporaire: 'mot-de-passe-temporaire',
           nouveauMotDePasse: '   ',
@@ -599,9 +562,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           nouveauMotDePasseConfirme('un-mot-de-passe'),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: false,
           motDePasseTemporaire: 'mot-de-passe-temporaire',
           nouveauMotDePasse: 'un-mot-de-passe',
@@ -631,9 +592,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           nouveauMotDePasseConfirme('un-mot-de-passe'),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: true,
           motDePasseTemporaire: 'mot-de-passe-temporaire',
           nouveauMotDePasse: 'un-mot-de-passe',
@@ -656,9 +615,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           nouveauMotDePasseConfirme('mdp'),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: true,
           motDePasseTemporaire: ' ',
           nouveauMotDePasse: 'mdp',
@@ -681,9 +638,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           nouveauMotDePasseConfirme('un-mot-de-passe'),
         );
 
-        expect(
-          etatCreationEspaceAidant,
-        ).toStrictEqual<EtatCreationEspaceAidant>({
+        expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
           cguSignees: true,
           motDePasseTemporaire: 'mot-de-passe-temporaire',
           nouveauMotDePasse: 'un-mot-de-passe',

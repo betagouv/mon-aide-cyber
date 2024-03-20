@@ -7,11 +7,7 @@ type ContexteNavigationMACType = {
   ajouteEtat(liens: Liens): void;
   etat: Liens;
   setEtat: (liens: Liens) => void;
-  navigue: (
-    moteurDeLiens: MoteurDeLiens,
-    action: string,
-    exclusion?: Action[],
-  ) => void;
+  navigue: (moteurDeLiens: MoteurDeLiens, action: string, exclusion?: Action[]) => void;
   retourAccueil: () => void;
 };
 export const ContexteNavigationMAC = createContext<ContexteNavigationMACType>({
@@ -21,11 +17,7 @@ export const FournisseurNavigationMAC = ({ children }: PropsWithChildren) => {
   const [etat, setEtat] = useState<Liens>({});
   const navigate = useNavigate();
 
-  const navigue = (
-    moteurDeLiens: MoteurDeLiens,
-    action: string,
-    exclusion?: Action[],
-  ) => {
+  const navigue = (moteurDeLiens: MoteurDeLiens, action: string, exclusion?: Action[]) => {
     moteurDeLiens.trouve(
       action,
       (lien: Lien) => {

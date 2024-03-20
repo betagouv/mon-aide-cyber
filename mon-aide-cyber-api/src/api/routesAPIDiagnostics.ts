@@ -28,18 +28,14 @@ export const routesAPIDiagnostics = (configuration: ConfigurationServeur) => {
 
   routes.get(
     '/',
-    configuration.adaptateurDeVerificationDeSession.verifie(
-      'Accède aux diagnostics',
-    ),
+    configuration.adaptateurDeVerificationDeSession.verifie('Accède aux diagnostics'),
     (_requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       configuration.entrepots
         .diagnostic()
         .tous()
         .then((diagnostics) =>
           reponse.json(
-            diagnostics.map((diagnostic) =>
-              representeUnElementDeListeDeDiagnosticsPourLeClient(diagnostic),
-            ),
+            diagnostics.map((diagnostic) => representeUnElementDeListeDeDiagnosticsPourLeClient(diagnostic)),
           ),
         )
         .catch((erreur) => suite(erreur));

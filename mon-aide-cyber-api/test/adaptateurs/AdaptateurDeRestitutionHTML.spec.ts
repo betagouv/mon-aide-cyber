@@ -1,16 +1,10 @@
 import { describe, it } from 'vitest';
 
 import { unAdaptateurDeRestitutionHTML } from './ConstructeurAdaptateurRestitutionHTML';
-import {
-  AdaptateurDeRestitutionHTML,
-  RestitutionHTML,
-} from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
+import { AdaptateurDeRestitutionHTML, RestitutionHTML } from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import {
-  desInformationsDeRestitution,
-  uneRestitution,
-} from '../constructeurs/constructeurRestitution';
+import { desInformationsDeRestitution, uneRestitution } from '../constructeurs/constructeurRestitution';
 import { uneMesurePriorisee } from '../constructeurs/constructeurMesure';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
@@ -29,8 +23,7 @@ describe('Adapatateur de Restitution HTML', () => {
         .avecMesuresPrioritaires('une mesure prioritaire')
         .construis();
 
-      const restitutionHTML =
-        await adaptateurDeRestitutionHTML.genereRestitution(restitution);
+      const restitutionHTML = await adaptateurDeRestitutionHTML.genereRestitution(restitution);
 
       expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: '',
@@ -51,8 +44,7 @@ describe('Adapatateur de Restitution HTML', () => {
         .avecMesuresPrioritaires('une mesure prioritaire')
         .construis();
 
-      const restitutionHTML =
-        await adaptateurDeRestitutionHTML.genereRestitution(restitution);
+      const restitutionHTML = await adaptateurDeRestitutionHTML.genereRestitution(restitution);
 
       expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: '',
@@ -73,8 +65,7 @@ describe('Adapatateur de Restitution HTML', () => {
         .avecIndicateurs("un graphe d'indicateurs")
         .construis();
 
-      const restitutionHTML =
-        await adaptateurDeRestitutionHTML.genereRestitution(restitution);
+      const restitutionHTML = await adaptateurDeRestitutionHTML.genereRestitution(restitution);
 
       expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: '',
@@ -95,8 +86,7 @@ describe('Adapatateur de Restitution HTML', () => {
         .construis();
       entrepots.restitution().persiste(restitution);
 
-      const restitutionHTML =
-        await adaptateurDeRestitutionHTML.genereRestitution(restitution);
+      const restitutionHTML = await adaptateurDeRestitutionHTML.genereRestitution(restitution);
 
       expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: 'une mesure non prioritaire',
@@ -108,25 +98,16 @@ describe('Adapatateur de Restitution HTML', () => {
   });
 
   it('représente les informations du diagnostic', async () => {
-    FournisseurHorlogeDeTest.initialise(
-      new Date(Date.parse('2024-06-01T14:30:00')),
-    );
+    FournisseurHorlogeDeTest.initialise(new Date(Date.parse('2024-06-01T14:30:00')));
     const restitution = uneRestitution()
       .avecIdentifiant('63a5fba6-efe0-4da1-ab6f-45d4cb330938')
       .avecIndicateurs('thematique', 0)
-      .avecInformations(
-        desInformationsDeRestitution()
-          .avecSecteurActivite('')
-          .avecZoneGeographique('')
-          .construis(),
-      )
+      .avecInformations(desInformationsDeRestitution().avecSecteurActivite('').avecZoneGeographique('').construis())
       .avecMesures([])
       .construis();
     await entrepots.restitution().persiste(restitution);
 
-    const informations = await new AdaptateurDeRestitutionHTML(
-      new Map(),
-    ).genereRestitution(restitution);
+    const informations = await new AdaptateurDeRestitutionHTML(new Map()).genereRestitution(restitution);
 
     expect(informations.informations).toMatchSnapshot();
   });

@@ -57,16 +57,13 @@ export const reducteurUtilisateurAuthentifie = (
       };
   }
 };
-export const initialiseReducteurUtilisateurAuthentifie =
-  (): EtatUtilisateurAuthentifie => {
-    return {
-      enAttenteDeChargement: true,
-      element: null,
-    };
+export const initialiseReducteurUtilisateurAuthentifie = (): EtatUtilisateurAuthentifie => {
+  return {
+    enAttenteDeChargement: true,
+    element: null,
   };
-export const utilisateurCharge = (
-  utilisateur: Utilisateur,
-): ActionUtilisateurAuthentifie => {
+};
+export const utilisateurCharge = (utilisateur: Utilisateur): ActionUtilisateurAuthentifie => {
   return {
     type: TypeActionUtilisateurAuthentifie.UTILISATEUR_CHARGE,
     utilisateur,

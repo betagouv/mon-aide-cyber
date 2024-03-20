@@ -20,10 +20,7 @@ import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 
 export const ComposantCreationEspaceAidant = () => {
-  const [etatCreationEspaceAidant, envoie] = useReducer(
-    reducteurCreationEspaceAidant,
-    initialiseReducteur(),
-  );
+  const [etatCreationEspaceAidant, envoie] = useReducer(reducteurCreationEspaceAidant, initialiseReducteur());
   const navigationMAC = useNavigationMAC();
   const macapi = useMACAPI();
 
@@ -36,21 +33,16 @@ export const ComposantCreationEspaceAidant = () => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
       'creer-espace-aidant',
       (lien: Lien) => {
-        if (
-          etatCreationEspaceAidant.saisieValide() &&
-          etatCreationEspaceAidant.creationEspaceAidantATransmettre
-        ) {
-          const parametresAPI =
-            constructeurParametresAPI<CreationEspaceAidant>()
-              .url(lien.url)
-              .methode(lien.methode!)
-              .corps({
-                cguSignees: etatCreationEspaceAidant.cguSignees,
-                motDePasse: etatCreationEspaceAidant.nouveauMotDePasse,
-                motDePasseTemporaire:
-                  etatCreationEspaceAidant.motDePasseTemporaire,
-              })
-              .construis();
+        if (etatCreationEspaceAidant.saisieValide() && etatCreationEspaceAidant.creationEspaceAidantATransmettre) {
+          const parametresAPI = constructeurParametresAPI<CreationEspaceAidant>()
+            .url(lien.url)
+            .methode(lien.methode!)
+            .corps({
+              cguSignees: etatCreationEspaceAidant.cguSignees,
+              motDePasse: etatCreationEspaceAidant.nouveauMotDePasse,
+              motDePasseTemporaire: etatCreationEspaceAidant.motDePasseTemporaire,
+            })
+            .construis();
           macapi
             .appelle<ReponseHATEOAS, CreationEspaceAidant>(
               parametresAPI,
@@ -58,20 +50,12 @@ export const ComposantCreationEspaceAidant = () => {
             )
             .then((reponse) => {
               envoie(creationEspaceAidantTransmise());
-              navigationMAC.navigue(
-                new MoteurDeLiens(reponse.liens),
-                'lancer-diagnostic',
-                ['creer-espace-aidant'],
-              );
+              navigationMAC.navigue(new MoteurDeLiens(reponse.liens), 'lancer-diagnostic', ['creer-espace-aidant']);
             })
             .catch((erreur) => envoie(creationEspaceAidantInvalidee(erreur)));
         }
       },
-      () =>
-        navigationMAC.navigue(
-          new MoteurDeLiens(navigationMAC.etat),
-          'lancer-diagnostic',
-        ),
+      () => navigationMAC.navigue(new MoteurDeLiens(navigationMAC.etat), 'lancer-diagnostic'),
     );
   }, [navigationMAC, etatCreationEspaceAidant, macapi]);
 
@@ -119,28 +103,21 @@ export const ComposantCreationEspaceAidant = () => {
                           Bienvenue dans la communauté !
                           <br />
                           <br />
-                          Pour finaliser la création de votre espace Aidant,
-                          vous devez définir un nouveau mot de passe. Le mot de
-                          passe doit comporter <b>16 caractères minimum</b>,
-                          dont au moins :
+                          Pour finaliser la création de votre espace Aidant, vous devez définir un nouveau mot de passe.
+                          Le mot de passe doit comporter <b>16 caractères minimum</b>, dont au moins :
                           <ul>
                             <li>1 majuscule</li>
                             <li>1 minuscule</li>
                             <li>1 chiffre</li>
-                            <li>
-                              1 caractère spécial parmi
-                              &#35;?!@&#36;&#37;^&amp;*-&apos;+_&#40;&#41;[]
-                            </li>
+                            <li>1 caractère spécial parmi &#35;?!@&#36;&#37;^&amp;*-&apos;+_&#40;&#41;[]</li>
                           </ul>
                         </p>
                       </div>
                       <div className="mac-callout mac-callout-information">
                         <i className="mac-icone-information" />
                         <div>
-                          Évitez d’utiliser des mots du dictionnaire, des suites
-                          de lettres, des suites de chiffres, des dates, des
-                          informations personnelles (ex: nom, prénom, date de
-                          naissance).
+                          Évitez d’utiliser des mots du dictionnaire, des suites de lettres, des suites de chiffres, des
+                          dates, des informations personnelles (ex: nom, prénom, date de naissance).
                         </div>
                       </div>
                     </div>
@@ -151,10 +128,7 @@ export const ComposantCreationEspaceAidant = () => {
                       </div>
                       <div
                         className={`fr-input-group ${
-                          etatCreationEspaceAidant.erreur
-                            ? etatCreationEspaceAidant.erreur?.motDePasse
-                                ?.className
-                            : ''
+                          etatCreationEspaceAidant.erreur ? etatCreationEspaceAidant.erreur?.motDePasse?.className : ''
                         }`}
                       >
                         <label className="fr-label" htmlFor="mot-de-passe">
@@ -169,17 +143,12 @@ export const ComposantCreationEspaceAidant = () => {
                           name="ancien-mot-de-passe"
                           autoComplete={'current-password'}
                           value={etatCreationEspaceAidant.motDePasseTemporaire}
-                          onChange={(e) =>
-                            surSaisieMotDePasseTemporaire(e.target.value)
-                          }
+                          onChange={(e) => surSaisieMotDePasseTemporaire(e.target.value)}
                         />
                       </div>
                       <div
                         className={`fr-input-group ${
-                          etatCreationEspaceAidant.erreur
-                            ? etatCreationEspaceAidant.erreur?.motDePasse
-                                ?.className
-                            : ''
+                          etatCreationEspaceAidant.erreur ? etatCreationEspaceAidant.erreur?.motDePasse?.className : ''
                         }`}
                       >
                         <label className="fr-label" htmlFor="mot-de-passe">
@@ -194,17 +163,12 @@ export const ComposantCreationEspaceAidant = () => {
                           name="nouveau-mot-de-passe"
                           autoComplete={'new-password'}
                           value={etatCreationEspaceAidant.nouveauMotDePasse}
-                          onChange={(e) =>
-                            surSaisieNouveauMotDePasse(e.target.value)
-                          }
+                          onChange={(e) => surSaisieNouveauMotDePasse(e.target.value)}
                         />
                       </div>
                       <div
                         className={`fr-input-group ${
-                          etatCreationEspaceAidant.erreur
-                            ? etatCreationEspaceAidant.erreur?.motDePasse
-                                ?.className
-                            : ''
+                          etatCreationEspaceAidant.erreur ? etatCreationEspaceAidant.erreur?.motDePasse?.className : ''
                         }`}
                       >
                         <label className="fr-label" htmlFor="mot-de-passe">
@@ -219,14 +183,9 @@ export const ComposantCreationEspaceAidant = () => {
                           name="confirmation-mot-de-passe"
                           autoComplete={'new-password'}
                           value={etatCreationEspaceAidant.motDePasseConfirme}
-                          onChange={(e) =>
-                            surSaisieConfirmationMotDePasse(e.target.value)
-                          }
+                          onChange={(e) => surSaisieConfirmationMotDePasse(e.target.value)}
                         />
-                        {
-                          etatCreationEspaceAidant.erreur?.motDePasse
-                            ?.texteExplicatif
-                        }
+                        {etatCreationEspaceAidant.erreur?.motDePasse?.texteExplicatif}
                       </div>
                       <div className="fr-checkbox-group mac-radio-group">
                         <input
@@ -239,16 +198,11 @@ export const ComposantCreationEspaceAidant = () => {
                         <label className="fr-label" htmlFor="cgu-aidant">
                           J&apos;accepte les &nbsp;
                           <b>
-                            <a href="/cgu">
-                              conditions générales d&apos;utilisation
-                            </a>
+                            <a href="/cgu">conditions générales d&apos;utilisation</a>
                           </b>
                           &nbsp; de MonAideCyber
                         </label>
-                        {
-                          etatCreationEspaceAidant.erreur?.cguSignees
-                            ?.texteExplicatif
-                        }
+                        {etatCreationEspaceAidant.erreur?.cguSignees?.texteExplicatif}
                       </div>
                       <div className="fr-grid-row fr-grid-row--right">
                         <button
@@ -260,9 +214,7 @@ export const ComposantCreationEspaceAidant = () => {
                         </button>
                       </div>
                     </div>
-                    <div className="fr-mt-2w">
-                      {etatCreationEspaceAidant.champsErreur}
-                    </div>
+                    <div className="fr-mt-2w">{etatCreationEspaceAidant.champsErreur}</div>
                   </fieldset>
                 </form>
               </div>

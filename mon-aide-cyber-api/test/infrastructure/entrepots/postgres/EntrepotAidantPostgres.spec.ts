@@ -43,9 +43,7 @@ describe('Entrepot Aidant', () => {
 
     await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
 
-    const aidantRecu = await new EntrepotAidantPostgres(
-      serviceDeChiffrement,
-    ).lis(aidant.identifiant);
+    const aidantRecu = await new EntrepotAidantPostgres(serviceDeChiffrement).lis(aidant.identifiant);
     expect(aidantRecu).toStrictEqual<Aidant>(aidant);
   });
 
@@ -61,9 +59,7 @@ describe('Entrepot Aidant', () => {
       aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
       await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
 
-      const aidantRecu = await new EntrepotAidantPostgres(
-        serviceDeChiffrement,
-      ).lis(aidant.identifiant);
+      const aidantRecu = await new EntrepotAidantPostgres(serviceDeChiffrement).lis(aidant.identifiant);
       expect(aidantRecu.dateSignatureCharte).toStrictEqual(dateSignature);
       expect(aidantRecu.dateSignatureCGU).toStrictEqual(dateSignature);
     });
@@ -84,10 +80,7 @@ describe('Entrepot Aidant', () => {
 
       const aidantRecu = await new EntrepotAidantPostgres(
         serviceDeChiffrement,
-      ).rechercheParIdentifiantConnexionEtMotDePasse(
-        aidant.identifiantConnexion,
-        aidant.motDePasse,
-      );
+      ).rechercheParIdentifiantConnexionEtMotDePasse(aidant.identifiantConnexion, aidant.motDePasse);
       expect(aidantRecu).toStrictEqual<Aidant>(aidant);
     });
 
@@ -95,10 +88,7 @@ describe('Entrepot Aidant', () => {
       expect(
         new EntrepotAidantPostgres(
           new FauxServiceDeChiffrement(new Map()),
-        ).rechercheParIdentifiantConnexionEtMotDePasse(
-          'identifiant-inconnu',
-          'mdp',
-        ),
+        ).rechercheParIdentifiantConnexionEtMotDePasse('identifiant-inconnu', 'mdp'),
       ).rejects.toThrow(new Error("Le aidant demandé n'existe pas."));
     });
   });
@@ -115,18 +105,18 @@ describe('Entrepot Aidant', () => {
       );
       await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
 
-      const aidantTrouve = await new EntrepotAidantPostgres(
-        serviceDeChiffrement,
-      ).rechercheParIdentifiantDeConnexion(aidant.identifiantConnexion);
+      const aidantTrouve = await new EntrepotAidantPostgres(serviceDeChiffrement).rechercheParIdentifiantDeConnexion(
+        aidant.identifiantConnexion,
+      );
 
       expect(aidantTrouve).toStrictEqual<Aidant>(aidant);
     });
 
     it("l'aidant n'est pas trouvé", () => {
       expect(
-        new EntrepotAidantPostgres(
-          new FauxServiceDeChiffrement(new Map()),
-        ).rechercheParIdentifiantDeConnexion('identifiant-inconnu'),
+        new EntrepotAidantPostgres(new FauxServiceDeChiffrement(new Map())).rechercheParIdentifiantDeConnexion(
+          'identifiant-inconnu',
+        ),
       ).rejects.toThrow(new Error("Le aidant demandé n'existe pas."));
     });
   });

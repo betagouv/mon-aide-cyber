@@ -30,10 +30,7 @@ export const construisErreur = (
   return {
     [clef]: {
       texteExplicatif: (
-        <TexteExplicatif
-          id={texteExplicatif.identifiantTexteExplicatif}
-          texte={texteExplicatif.texte}
-        />
+        <TexteExplicatif id={texteExplicatif.identifiantTexteExplicatif} texte={texteExplicatif.texte} />
       ),
       className: 'fr-input-group--error' as ClasseErreurInputGroup,
     },

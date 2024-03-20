@@ -24,11 +24,7 @@ type RepresentationGroupes = {
   numero: number;
   questions: RepresentationQuestion[];
 }[];
-export type RepresentationTypeDeSaisie =
-  | 'choixMultiple'
-  | 'choixUnique'
-  | 'saisieLibre'
-  | 'liste';
+export type RepresentationTypeDeSaisie = 'choixMultiple' | 'choixUnique' | 'saisieLibre' | 'liste';
 type RepresentationThematique = {
   groupes: RepresentationGroupes;
 };
@@ -43,28 +39,25 @@ type RepresentationDiagnostic = {
 
 export const enDiagnostic = (json: Promise<RepresentationDiagnostic>) =>
   json.then((corps) => {
-    const referentiel = Object.entries(corps.referentiel).reduce(
-      (accumulateur, [clef, thematique]) => {
-        const groupes = thematique.groupes.flatMap((groupe) => {
-          const questions = groupe.questions.map((question) => ({
-            ...question,
-            reponseDonnee: {
-              valeur: question.reponseDonnee.valeur,
-              reponses: question.reponseDonnee.reponses.map((rep) => ({
-                identifiant: rep.identifiant,
-                reponses: new Set(rep.reponses),
-              })),
-            },
-          }));
-          return { numero: groupe.numero, questions };
-        });
-        return {
-          ...accumulateur,
-          [clef]: { ...thematique, groupes },
-        };
-      },
-      {},
-    );
+    const referentiel = Object.entries(corps.referentiel).reduce((accumulateur, [clef, thematique]) => {
+      const groupes = thematique.groupes.flatMap((groupe) => {
+        const questions = groupe.questions.map((question) => ({
+          ...question,
+          reponseDonnee: {
+            valeur: question.reponseDonnee.valeur,
+            reponses: question.reponseDonnee.reponses.map((rep) => ({
+              identifiant: rep.identifiant,
+              reponses: new Set(rep.reponses),
+            })),
+          },
+        }));
+        return { numero: groupe.numero, questions };
+      });
+      return {
+        ...accumulateur,
+        [clef]: { ...thematique, groupes },
+      };
+    }, {});
     return {
       ...corps,
       referentiel,

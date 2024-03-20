@@ -1,7 +1,4 @@
-import {
-  construisErreur,
-  PresentationErreur,
-} from '../composants/erreurs/Erreurs.tsx';
+import { construisErreur, PresentationErreur } from '../composants/erreurs/Erreurs.tsx';
 
 enum TypeActionEnvoieMessage {
   NOM_SAISI = 'NOM_SAISI',
@@ -44,21 +41,12 @@ type ActionEnvoieMessage =
       type: TypeActionEnvoieMessage.MESSAGE_SAISI;
     };
 
-const textesExplicatif: Map<
-  'nom' | 'email' | 'message',
-  { texte: string; identifiant: string }
-> = new Map([
+const textesExplicatif: Map<'nom' | 'email' | 'message', { texte: string; identifiant: string }> = new Map([
   ['nom', { texte: 'Veuillez saisir votre nom.', identifiant: 'nom' }],
-  [
-    'email',
-    { texte: 'Veuillez saisir un email valide.', identifiant: 'email' },
-  ],
+  ['email', { texte: 'Veuillez saisir un email valide.', identifiant: 'email' }],
   ['message', { texte: 'Veuillez saisir un message.', identifiant: 'message' }],
 ]);
-export const reducteurEnvoieMessage = (
-  etat: EtatEnvoieMessage,
-  action: ActionEnvoieMessage,
-): EtatEnvoieMessage => {
+export const reducteurEnvoieMessage = (etat: EtatEnvoieMessage, action: ActionEnvoieMessage): EtatEnvoieMessage => {
   const construisErreurEnvoieMessage = (
     clef: 'nom' | 'email' | 'message',
     estValide: () => boolean,
@@ -107,22 +95,18 @@ export const reducteurEnvoieMessage = (
         ...etat,
         erreur,
         message: action.message.trim(),
-        saisieValide: () =>
-          etat.email.length > 0 && etat.nom.length > 0 && estValide,
+        saisieValide: () => etat.email.length > 0 && etat.nom.length > 0 && estValide,
       };
     }
     case TypeActionEnvoieMessage.EMAIL_SAISI: {
-      const estUnEmail = action.email
-        .trim()
-        .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+      const estUnEmail = action.email.trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
       const estValide = (estUnEmail && estUnEmail?.length > 0) || false;
       const erreur = construisErreurEnvoieMessage('email', () => estValide);
       return {
         ...etat,
         erreur,
         email: action.email.trim(),
-        saisieValide: () =>
-          etat.message.length > 0 && etat.nom.length > 0 && estValide,
+        saisieValide: () => etat.message.length > 0 && etat.nom.length > 0 && estValide,
       };
     }
     case TypeActionEnvoieMessage.NOM_SAISI: {
@@ -132,8 +116,7 @@ export const reducteurEnvoieMessage = (
         ...etat,
         erreur,
         nom: action.nom.trim(),
-        saisieValide: () =>
-          etat.email.length > 0 && etat.message.length > 0 && estValide,
+        saisieValide: () => etat.email.length > 0 && etat.message.length > 0 && estValide,
       };
     }
   }

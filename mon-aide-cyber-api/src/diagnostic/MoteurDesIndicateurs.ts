@@ -8,15 +8,11 @@ const estUnNombre = (valeur: Poids | Valeur): valeur is number =>
   (!!valeur || valeur === 0) && typeof valeur === 'number';
 
 export class MoteurDesIndicateurs {
-  static genereLesIndicateurs(
-    valeurs: ValeursDesIndicesAuDiagnostic,
-  ): Indicateurs {
+  static genereLesIndicateurs(valeurs: ValeursDesIndicesAuDiagnostic): Indicateurs {
     return Object.entries(valeurs).reduce(
       (indicateurs, [thematique, indices]) => {
         indicateurs[thematique] = {
-          moyennePonderee:
-            this.calculeLaSommeDesProduitsDesIndices(indices) /
-            this.calculeLaSommeDesPoids(indices),
+          moyennePonderee: this.calculeLaSommeDesProduitsDesIndices(indices) / this.calculeLaSommeDesPoids(indices),
         };
         return indicateurs;
       },

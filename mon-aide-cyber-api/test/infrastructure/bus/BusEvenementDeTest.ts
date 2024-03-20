@@ -1,8 +1,4 @@
-import {
-  ConsommateurEvenement,
-  Evenement,
-  TypeEvenement,
-} from '../../../src/domaine/BusEvenement';
+import { ConsommateurEvenement, Evenement, TypeEvenement } from '../../../src/domaine/BusEvenement';
 import { BusEvenementMAC } from '../../../src/infrastructure/bus/BusEvenementMAC';
 import { fabriqueConsommateursEvenements } from '../../../src/adaptateurs/fabriqueConsommateursEvenements';
 import { EntrepotEvenementJournalMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
@@ -17,19 +13,15 @@ class ConsommateurEvenementDeTest implements ConsommateurEvenement {
 
 export class BusEvenementDeTest extends BusEvenementMAC {
   public evenementRecu: Evenement | undefined;
-  public consommateurs: Map<TypeEvenement, ConsommateurEvenementDeTest> =
-    new Map();
+  public consommateurs: Map<TypeEvenement, ConsommateurEvenementDeTest> = new Map();
 
   constructor(
     public readonly entrepotJournalisation: EntrepotEvenementJournalMemoire = new EntrepotEvenementJournalMemoire(),
   ) {
     const consommateurAidantCree = new ConsommateurEvenementDeTest();
-    const consommateursEvenements = fabriqueConsommateursEvenements(
-      entrepotJournalisation,
-      {
-        aidantCree: () => consommateurAidantCree,
-      },
-    );
+    const consommateursEvenements = fabriqueConsommateursEvenements(entrepotJournalisation, {
+      aidantCree: () => consommateurAidantCree,
+    });
     super(consommateursEvenements);
     this.consommateurs.set('AIDANT_CREE', consommateurAidantCree);
   }

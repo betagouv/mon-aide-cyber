@@ -8,11 +8,8 @@ export const RequiertAuthentification = () => {
   const authentification = useAuthentification();
   const navigationMAC = useNavigationMAC();
   const [doitVerifierReconnexion, setDoitVerifierReconnexion] = useState(true);
-  const [pagePrecedente, setPagePrecedente] = useState(
-    window.location.pathname,
-  );
-  const [chargementUtilisateurEnErreur, setChargementUtilisateurEnErreur] =
-    useState(false);
+  const [pagePrecedente, setPagePrecedente] = useState(window.location.pathname);
+  const [chargementUtilisateurEnErreur, setChargementUtilisateurEnErreur] = useState(false);
   const modale = useModale();
 
   useEffect(() => {
@@ -33,17 +30,7 @@ export const RequiertAuthentification = () => {
           });
         });
     }
-    setDoitVerifierReconnexion(
-      window.location.pathname !== pagePrecedente &&
-        !chargementUtilisateurEnErreur,
-    );
-  }, [
-    modale,
-    authentification,
-    navigationMAC,
-    doitVerifierReconnexion,
-    pagePrecedente,
-    chargementUtilisateurEnErreur,
-  ]);
+    setDoitVerifierReconnexion(window.location.pathname !== pagePrecedente && !chargementUtilisateurEnErreur);
+  }, [modale, authentification, navigationMAC, doitVerifierReconnexion, pagePrecedente, chargementUtilisateurEnErreur]);
   return <Outlet />;
 };

@@ -6,9 +6,7 @@ import crypto from 'crypto';
 
 export type DTO = { id: crypto.UUID };
 
-export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
-  implements Entrepot<T>
-{
+export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO> implements Entrepot<T> {
   protected readonly knex: Knex;
 
   constructor(configuration: Knex.Config = knexfile) {
@@ -21,24 +19,17 @@ export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
       .where('id', identifiant)
       .first()
       .then((ligne: D) =>
-        ligne !== undefined
-          ? this.deDTOAEntite(ligne)
-          : Promise.reject(new AggregatNonTrouve(this.typeAggregat())),
+        ligne !== undefined ? this.deDTOAEntite(ligne) : Promise.reject(new AggregatNonTrouve(this.typeAggregat())),
       );
   }
 
   async persiste(entite: T): Promise<void> {
     const entiteDTO = this.deEntiteADTO(entite);
-    const entiteExistante = await this.knex
-      .from(this.nomTable())
-      .where('id', entiteDTO.id)
-      .first();
+    const entiteExistante = await this.knex.from(this.nomTable()).where('id', entiteDTO.id).first();
     if (!entiteExistante) {
       await this.knex.insert(entiteDTO).into(this.nomTable());
     } else {
-      await this.knex(this.nomTable())
-        .where('id', entiteDTO.id)
-        .update(this.champsAMettreAJour(entiteDTO));
+      await this.knex(this.nomTable()).where('id', entiteDTO.id).update(this.champsAMettreAJour(entiteDTO));
     }
   }
 

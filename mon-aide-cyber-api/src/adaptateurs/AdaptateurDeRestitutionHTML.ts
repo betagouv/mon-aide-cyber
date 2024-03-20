@@ -17,17 +17,13 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
     super();
   }
 
-  protected async genereInformations(
-    restitution: Restitution,
-  ): Promise<ContenuHtml> {
+  protected async genereInformations(restitution: Restitution): Promise<ContenuHtml> {
     return this.genereHtml('informations', {
       ...this.representeInformations(restitution),
     });
   }
 
-  protected async genere(
-    mesures: Promise<ContenuHtml>[],
-  ): Promise<RestitutionHTML> {
+  protected async genere(mesures: Promise<ContenuHtml>[]): Promise<RestitutionHTML> {
     const autresMesures = await mesures[3];
     return Promise.resolve({
       informations: (await mesures[0]).corps,
@@ -37,38 +33,28 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
     });
   }
 
-  protected genereIndicateurs(
-    indicateurs: Indicateurs | undefined,
-  ): Promise<ContenuHtml> {
+  protected genereIndicateurs(indicateurs: Indicateurs | undefined): Promise<ContenuHtml> {
     return this.genereHtml('indicateurs', {
       indicateurs,
       traductions: this.traductionThematiques,
     });
   }
 
-  protected genereMesuresPrioritaires(
-    mesuresPrioritaires: MesurePriorisee[] | undefined,
-  ): Promise<ContenuHtml> {
+  protected genereMesuresPrioritaires(mesuresPrioritaires: MesurePriorisee[] | undefined): Promise<ContenuHtml> {
     return this.genereHtml('mesures', {
       mesures: mesuresPrioritaires,
     });
   }
 
-  protected genereAutresMesures(
-    autresMesures: MesurePriorisee[],
-  ): Promise<ContenuHtml> {
+  protected genereAutresMesures(autresMesures: MesurePriorisee[]): Promise<ContenuHtml> {
     return this.genereHtml('autres-mesures', {
       mesures: autresMesures,
     });
   }
   private representeInformations(restitution: Restitution) {
     return {
-      dateCreation: FournisseurHorloge.formateDate(
-        restitution.informations.dateCreation,
-      ),
-      dateDerniereModification: FournisseurHorloge.formateDate(
-        restitution.informations.dateDerniereModification,
-      ),
+      dateCreation: FournisseurHorloge.formateDate(restitution.informations.dateCreation),
+      dateDerniereModification: FournisseurHorloge.formateDate(restitution.informations.dateDerniereModification),
       identifiant: restitution.identifiant,
       secteurActivite: restitution.informations.secteurActivite,
       zoneGeographique: restitution.informations.zoneGeographique,
@@ -76,20 +62,12 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
   }
 
   async genereHtml(pugCorps: string, paramsCorps: any): Promise<ContenuHtml> {
-    const fonctionInclusionDynamique = (
-      cheminTemplatePug: string,
-      options = {},
-    ) => {
-      return pug.renderFile(
-        `src/infrastructure/restitution/html/modeles/${cheminTemplatePug}`,
-        options,
-      );
+    const fonctionInclusionDynamique = (cheminTemplatePug: string, options = {}) => {
+      return pug.renderFile(`src/infrastructure/restitution/html/modeles/${cheminTemplatePug}`, options);
     };
 
     return Promise.all([
-      pug.compileFile(
-        `src/infrastructure/restitution/html/modeles/${pugCorps}.pug`,
-      )({
+      pug.compileFile(`src/infrastructure/restitution/html/modeles/${pugCorps}.pug`)({
         ...paramsCorps,
         include: fonctionInclusionDynamique,
       }),

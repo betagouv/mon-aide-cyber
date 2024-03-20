@@ -1,9 +1,6 @@
 import { Knex } from 'knex';
 import { Question, QuestionATiroir } from '../../../../diagnostic/Referentiel';
-import {
-  QuestionDiagnostic,
-  Thematique,
-} from '../../../../diagnostic/Diagnostic';
+import { QuestionDiagnostic, Thematique } from '../../../../diagnostic/Diagnostic';
 import crypto from 'crypto';
 
 interface RepresentationRecommandation {
@@ -26,16 +23,10 @@ type RepresentationReponsePossible = {
   questions?: RepresentationQuestionTiroir[];
 };
 
-type RepresentationQuestionTiroir = Omit<
-  QuestionATiroir,
-  'reponsesPossibles'
-> & {
+type RepresentationQuestionTiroir = Omit<QuestionATiroir, 'reponsesPossibles'> & {
   reponsesPossibles: RepresentationReponsePossible[];
 };
-type RepresentationQuestionDiagnostic = Omit<
-  QuestionDiagnostic,
-  'reponsesPossibles'
-> & {
+type RepresentationQuestionDiagnostic = Omit<QuestionDiagnostic, 'reponsesPossibles'> & {
   reponsesPossibles: RepresentationReponsePossible[];
 };
 
@@ -74,22 +65,16 @@ export async function up(knex: Knex): Promise<void> {
           .filter(([thematique]) => thematique !== 'contexte')
           .forEach(([, questions]) => {
             questions.questions.forEach((question) => {
-              question.reponsesPossibles.forEach(
-                (reponsePossible: RepresentationReponsePossible) => {
-                  metsAJour(reponsePossible);
-                  reponsePossible.questions?.forEach((question) => {
-                    question.reponsesPossibles.forEach((reponsePossible) =>
-                      metsAJour(reponsePossible),
-                    );
-                  });
-                },
-              );
+              question.reponsesPossibles.forEach((reponsePossible: RepresentationReponsePossible) => {
+                metsAJour(reponsePossible);
+                reponsePossible.questions?.forEach((question) => {
+                  question.reponsesPossibles.forEach((reponsePossible) => metsAJour(reponsePossible));
+                });
+              });
             });
           });
 
-        return knex('diagnostics')
-          .where('id', ligne.id)
-          .update({ donnees: ligne.donnees });
+        return knex('diagnostics').where('id', ligne.id).update({ donnees: ligne.donnees });
       });
 
       return Promise.all(misesAJour);
@@ -97,4 +82,5 @@ export async function up(knex: Knex): Promise<void> {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 export async function down(_: Knex): Promise<void> {}

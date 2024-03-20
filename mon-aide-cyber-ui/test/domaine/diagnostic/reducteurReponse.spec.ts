@@ -22,13 +22,9 @@ describe('Le réducteur de réponse', () => {
   describe('dans le cas de question simple', () => {
     it('initialise le réducteur', () => {
       const reponse = uneReponsePossible().construis();
-      const question = uneQuestionAChoixUnique()
-        .avecDesReponses([reponse])
-        .construis();
+      const question = uneQuestionAChoixUnique().avecDesReponses([reponse]).construis();
 
-      const etatReponse = initialiseReducteur(question, [
-        uneAction().construis(),
-      ]);
+      const etatReponse = initialiseReducteur(question, [uneAction().construis()]);
 
       expect(etatReponse.reponseDonnee).toStrictEqual({
         reponses: [],
@@ -39,14 +35,9 @@ describe('Le réducteur de réponse', () => {
 
     it('initialise le réducteur avec une réponse donnée', () => {
       const reponse = uneReponsePossible().construis();
-      const question = uneQuestionAChoixUnique()
-        .avecDesReponses([reponse])
-        .avecLaReponseDonnee(reponse)
-        .construis();
+      const question = uneQuestionAChoixUnique().avecDesReponses([reponse]).avecLaReponseDonnee(reponse).construis();
 
-      const etatReponse = initialiseReducteur(question, [
-        uneAction().construis(),
-      ]);
+      const etatReponse = initialiseReducteur(question, [uneAction().construis()]);
 
       expect(etatReponse.reponseDonnee).toStrictEqual({
         reponses: [],
@@ -67,9 +58,7 @@ describe('Le réducteur de réponse', () => {
         reponseUniqueDonnee(nouvelleReponse.identifiant),
       );
 
-      expect(etatReponse.reponseDonnee.valeur).toBe(
-        nouvelleReponse.identifiant,
-      );
+      expect(etatReponse.reponseDonnee.valeur).toBe(nouvelleReponse.identifiant);
       expect(etatReponse.statut).toBe(EtatReponseStatut.MODIFIEE);
     });
   });
@@ -96,20 +85,14 @@ describe('Le réducteur de réponse', () => {
         reponses: [
           {
             identifiant: question.identifiant,
-            reponses: new Set([
-              premiereReponse.identifiant,
-              troisiemeReponse.identifiant,
-            ]),
+            reponses: new Set([premiereReponse.identifiant, troisiemeReponse.identifiant]),
           },
         ],
         valeur: null,
       });
       expect(etatReponse.reponse()).toStrictEqual({
         identifiantQuestion: question.identifiant,
-        reponseDonnee: [
-          troisiemeReponse.identifiant,
-          premiereReponse.identifiant,
-        ],
+        reponseDonnee: [troisiemeReponse.identifiant, premiereReponse.identifiant],
       });
       expect(etatReponse.statut).toStrictEqual(EtatReponseStatut.MODIFIEE);
     });
@@ -164,9 +147,7 @@ describe('Le réducteur de réponse', () => {
       const question = uneQuestionAChoixUnique()
         .avecLibelle('Une question?')
         .avecDesReponses([nouvelleReponse])
-        .avecLaReponseDonnee(nouvelleReponse, [
-          { identifiant: 'qcm', reponses: new Set(['choix-2']) },
-        ])
+        .avecLaReponseDonnee(nouvelleReponse, [{ identifiant: 'qcm', reponses: new Set(['choix-2']) }])
         .construis();
 
       const etatReponse = reducteurReponse(
@@ -179,9 +160,7 @@ describe('Le réducteur de réponse', () => {
 
       expect(etatReponse.reponseDonnee).toStrictEqual({
         valeur: nouvelleReponse.identifiant,
-        reponses: [
-          { identifiant: 'qcm', reponses: new Set(['choix-2', 'choix-3']) },
-        ],
+        reponses: [{ identifiant: 'qcm', reponses: new Set(['choix-2', 'choix-3']) }],
       });
       expect(etatReponse.reponse()).toStrictEqual({
         identifiantQuestion: 'une-question',
@@ -232,9 +211,7 @@ describe('Le réducteur de réponse', () => {
 
       expect(etatReponse.reponseDonnee).toStrictEqual({
         valeur: nouvelleReponse.identifiant,
-        reponses: [
-          { identifiant: 'qcm', reponses: new Set(['choix-2', 'choix-3']) },
-        ],
+        reponses: [{ identifiant: 'qcm', reponses: new Set(['choix-2', 'choix-3']) }],
       });
       expect(etatReponse.reponse()).toStrictEqual({
         identifiantQuestion: 'une-question',
@@ -421,9 +398,7 @@ describe('Le réducteur de réponse', () => {
       const question = uneQuestionAChoixUnique()
         .avecLibelle('une question?')
         .avecDesReponses([nouvelleReponse])
-        .avecLaReponseDonnee(nouvelleReponse, [
-          { identifiant: 'choix-unique', reponses: new Set(['2']) },
-        ])
+        .avecLaReponseDonnee(nouvelleReponse, [{ identifiant: 'choix-unique', reponses: new Set(['2']) }])
         .construis();
 
       const etatReponse = reducteurReponse(

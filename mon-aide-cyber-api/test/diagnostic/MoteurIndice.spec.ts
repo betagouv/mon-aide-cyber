@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import {
-  unDiagnostic,
-  uneReponseDonnee,
-} from '../constructeurs/constructeurDiagnostic';
-import {
-  MoteurIndice,
-  ValeursDesIndicesAuDiagnostic,
-} from '../../src/diagnostic/MoteurIndice';
+import { unDiagnostic, uneReponseDonnee } from '../constructeurs/constructeurDiagnostic';
+import { MoteurIndice, ValeursDesIndicesAuDiagnostic } from '../../src/diagnostic/MoteurIndice';
 import {
   uneQuestion,
   uneQuestionATiroir,
@@ -23,19 +17,11 @@ describe('Moteur Indice', () => {
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
           uneReponsePossible().avecLibelle('42').construis(),
-          uneReponsePossible()
-            .avecLibelle('24')
-            .ayantPourValeurDIndice(0)
-            .construis(),
+          uneReponsePossible().avecLibelle('24').ayantPourValeurDIndice(0).construis(),
         ])
         .construis();
       const diagnostic = unDiagnostic()
-        .avecUnReferentiel(
-          unReferentiel()
-            .sansThematique()
-            .ajouteUneThematique('thematique', [question])
-            .construis(),
-        )
+        .avecUnReferentiel(unReferentiel().sansThematique().ajouteUneThematique('thematique', [question]).construis())
         .ajouteUneReponseDonnee(
           {
             thematique: 'thematique',
@@ -45,8 +31,7 @@ describe('Moteur Indice', () => {
         )
         .construis();
 
-      const valeursDesIndices =
-        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
+      const valeursDesIndices = MoteurIndice.genereLesIndicesDesReponses(diagnostic);
 
       expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
         thematique: [
@@ -64,22 +49,14 @@ describe('Moteur Indice', () => {
         .aChoixUnique('Quelle est la réponse?')
         .avecReponsesPossibles([
           uneReponsePossible().avecLibelle('42').construis(),
-          uneReponsePossible()
-            .avecLibelle('24')
-            .ayantPourValeurDIndice(0)
-            .construis(),
+          uneReponsePossible().avecLibelle('24').ayantPourValeurDIndice(0).construis(),
         ])
         .construis();
-      const question2 = uneQuestion()
-        .avecReponsesPossibles([uneReponsePossible().construis()])
-        .construis();
+      const question2 = uneQuestion().avecReponsesPossibles([uneReponsePossible().construis()]).construis();
 
       const diagnostic = constructeurDiagnostic
         .avecUnReferentiel(
-          unReferentiel()
-            .sansThematique()
-            .ajouteUneThematique('thematique', [question1, question2])
-            .construis(),
+          unReferentiel().sansThematique().ajouteUneThematique('thematique', [question1, question2]).construis(),
         )
         .ajouteUneReponseDonnee(
           {
@@ -90,8 +67,7 @@ describe('Moteur Indice', () => {
         )
         .construis();
 
-      const valeursDesIndices =
-        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
+      const valeursDesIndices = MoteurIndice.genereLesIndicesDesReponses(diagnostic);
 
       expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
         thematique: [
@@ -119,10 +95,7 @@ describe('Moteur Indice', () => {
                 .aChoixUnique('Voulez-vous inverser les chiffres?')
                 .avecReponsesPossibles([
                   uneReponsePossible().avecLibelle('Oui').construis(),
-                  uneReponsePossible()
-                    .avecLibelle('Non')
-                    .ayantPourValeurDIndice(0)
-                    .construis(),
+                  uneReponsePossible().avecLibelle('Non').ayantPourValeurDIndice(0).construis(),
                 ])
                 .construis(),
             )
@@ -131,12 +104,7 @@ describe('Moteur Indice', () => {
         .construis();
 
       const diagnostic = constructeurDiagnostic
-        .avecUnReferentiel(
-          unReferentiel()
-            .sansThematique()
-            .ajouteUneThematique('thematique', [question1])
-            .construis(),
-        )
+        .avecUnReferentiel(unReferentiel().sansThematique().ajouteUneThematique('thematique', [question1]).construis())
         .ajouteUneReponseDonnee(
           {
             thematique: 'thematique',
@@ -154,8 +122,7 @@ describe('Moteur Indice', () => {
         )
         .construis();
 
-      const valeursDesIndices =
-        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
+      const valeursDesIndices = MoteurIndice.genereLesIndicesDesReponses(diagnostic);
 
       expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
         thematique: [
@@ -181,10 +148,7 @@ describe('Moteur Indice', () => {
                 .aChoixUnique('Voulez-vous inverser les chiffres?')
                 .avecReponsesPossibles([
                   uneReponsePossible().avecLibelle('Oui').construis(),
-                  uneReponsePossible()
-                    .avecLibelle('Non')
-                    .ayantPourValeurDIndice(0)
-                    .construis(),
+                  uneReponsePossible().avecLibelle('Non').ayantPourValeurDIndice(0).construis(),
                 ])
                 .construis(),
             )
@@ -193,10 +157,7 @@ describe('Moteur Indice', () => {
                 .avecPoids(3)
                 .aChoixUnique('Une question à tiroir?')
                 .avecReponsesPossibles([
-                  uneReponsePossible()
-                    .avecLibelle('Affirmatif')
-                    .ayantPourValeurDIndice(1)
-                    .construis(),
+                  uneReponsePossible().avecLibelle('Affirmatif').ayantPourValeurDIndice(1).construis(),
                   uneReponsePossible().avecLibelle('Négatif').construis(),
                 ])
                 .construis(),
@@ -206,12 +167,7 @@ describe('Moteur Indice', () => {
         .construis();
 
       const diagnostic = constructeurDiagnostic
-        .avecUnReferentiel(
-          unReferentiel()
-            .sansThematique()
-            .ajouteUneThematique('thematique', [question1])
-            .construis(),
-        )
+        .avecUnReferentiel(unReferentiel().sansThematique().ajouteUneThematique('thematique', [question1]).construis())
         .ajouteUneReponseDonnee(
           {
             thematique: 'thematique',
@@ -233,8 +189,7 @@ describe('Moteur Indice', () => {
         )
         .construis();
 
-      const valeursDesIndices =
-        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
+      const valeursDesIndices = MoteurIndice.genereLesIndicesDesReponses(diagnostic);
 
       expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
         thematique: [
@@ -265,10 +220,7 @@ describe('Moteur Indice', () => {
                 .aChoixUnique('Voulez-vous inverser les chiffres?')
                 .avecReponsesPossibles([
                   uneReponsePossible().avecLibelle('Oui').construis(),
-                  uneReponsePossible()
-                    .avecLibelle('Non')
-                    .ayantPourValeurDIndice(0)
-                    .construis(),
+                  uneReponsePossible().avecLibelle('Non').ayantPourValeurDIndice(0).construis(),
                 ])
                 .construis(),
             )
@@ -277,10 +229,7 @@ describe('Moteur Indice', () => {
                 .avecPoids(3)
                 .aChoixUnique('Une question à tiroir?')
                 .avecReponsesPossibles([
-                  uneReponsePossible()
-                    .avecLibelle('Affirmatif')
-                    .ayantPourValeurDIndice(1)
-                    .construis(),
+                  uneReponsePossible().avecLibelle('Affirmatif').ayantPourValeurDIndice(1).construis(),
                   uneReponsePossible().avecLibelle('Négatif').construis(),
                 ])
                 .construis(),
@@ -291,12 +240,7 @@ describe('Moteur Indice', () => {
         .construis();
 
       const diagnostic = constructeurDiagnostic
-        .avecUnReferentiel(
-          unReferentiel()
-            .sansThematique()
-            .ajouteUneThematique('thematique', [question1])
-            .construis(),
-        )
+        .avecUnReferentiel(unReferentiel().sansThematique().ajouteUneThematique('thematique', [question1]).construis())
         .ajouteUneReponseDonnee(
           {
             thematique: 'thematique',
@@ -318,8 +262,7 @@ describe('Moteur Indice', () => {
         )
         .construis();
 
-      const valeursDesIndices =
-        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
+      const valeursDesIndices = MoteurIndice.genereLesIndicesDesReponses(diagnostic);
 
       expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
         thematique: [
@@ -357,10 +300,7 @@ describe('Moteur Indice', () => {
                 .aChoixUnique('Voulez-vous inverser les chiffres?')
                 .avecReponsesPossibles([
                   uneReponsePossible().avecLibelle('Ne sais pas').construis(),
-                  uneReponsePossible()
-                    .avecLibelle('Non')
-                    .ayantPourValeurDIndice(0)
-                    .construis(),
+                  uneReponsePossible().avecLibelle('Non').ayantPourValeurDIndice(0).construis(),
                 ])
                 .construis(),
             )
@@ -369,12 +309,7 @@ describe('Moteur Indice', () => {
         .construis();
 
       const diagnostic = constructeurDiagnostic
-        .avecUnReferentiel(
-          unReferentiel()
-            .sansThematique()
-            .ajouteUneThematique('thematique', [question1])
-            .construis(),
-        )
+        .avecUnReferentiel(unReferentiel().sansThematique().ajouteUneThematique('thematique', [question1]).construis())
         .ajouteUneReponseDonnee(
           {
             thematique: 'thematique',
@@ -392,8 +327,7 @@ describe('Moteur Indice', () => {
         )
         .construis();
 
-      const valeursDesIndices =
-        MoteurIndice.genereLesIndicesDesReponses(diagnostic);
+      const valeursDesIndices = MoteurIndice.genereLesIndicesDesReponses(diagnostic);
 
       expect(valeursDesIndices).toStrictEqual<ValeursDesIndicesAuDiagnostic>({
         thematique: [

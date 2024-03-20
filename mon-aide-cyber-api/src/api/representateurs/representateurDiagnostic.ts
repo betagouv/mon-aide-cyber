@@ -18,9 +18,7 @@ export const trouveQuestionATranscrire = (
   transcripteur: Transcripteur,
 ): QuestionATranscrire | undefined => {
   return trouveParmiLesQuestions(
-    transcripteur.thematiques[chemin.chemin].groupes.flatMap(
-      (q) => q.questions as QuestionATranscrire[],
-    ),
+    transcripteur.thematiques[chemin.chemin].groupes.flatMap((q) => q.questions as QuestionATranscrire[]),
     chemin.identifiantQuestion,
   );
 };
@@ -54,21 +52,19 @@ const questionTiroirATranscrire = (
 ): RepresentationQuestion[] => {
   return (
     questions?.map((question) => {
-      const questionTiroirATranscrire: QuestionATranscrire | undefined =
-        trouveQuestionATranscrire(
-          {
-            chemin: `contexte`,
-            identifiantQuestion: question.identifiant,
-          },
-          transcripteur,
-        );
+      const questionTiroirATranscrire: QuestionATranscrire | undefined = trouveQuestionATranscrire(
+        {
+          chemin: `contexte`,
+          identifiantQuestion: question.identifiant,
+        },
+        transcripteur,
+      );
       if (questionTiroirATranscrire !== undefined) {
-        const reponsesPossibles: RepresentationReponsePossible[] =
-          trouveReponsesPossibles(
-            question,
-            transcripteur,
-            questionTiroirATranscrire,
-          );
+        const reponsesPossibles: RepresentationReponsePossible[] = trouveReponsesPossibles(
+          question,
+          transcripteur,
+          questionTiroirATranscrire,
+        );
         return {
           type: question.type,
           identifiant: questionTiroirATranscrire.identifiant,
@@ -87,11 +83,7 @@ const questionTiroirATranscrire = (
 const estQuestionATiroir = (
   reponse: ReponsePossible | Omit<ReponsePossible, 'questions'>,
 ): reponse is ReponsePossible => {
-  return (
-    'questions' in reponse &&
-    reponse.questions !== undefined &&
-    reponse.questions?.length > 0
-  );
+  return 'questions' in reponse && reponse.questions !== undefined && reponse.questions?.length > 0;
 };
 export const trouveReponsesPossibles = (
   question: QuestionDiagnostic | QuestionATiroir,
@@ -104,15 +96,9 @@ export const trouveReponsesPossibles = (
     let representationReponsePossible: RepresentationReponsePossible = {
       ...corpsDeReponse,
     } as RepresentationReponsePossible;
-    const reponseATranscrire = trouveReponseATranscrire(
-      reponse.identifiant,
-      questionATranscrire?.reponses,
-    );
+    const reponseATranscrire = trouveReponseATranscrire(reponse.identifiant, questionATranscrire?.reponses);
     if (estQuestionATiroir(reponse)) {
-      const representationQuestionATiroir = questionTiroirATranscrire(
-        reponse.questions,
-        transcripteur,
-      );
+      const representationQuestionATiroir = questionTiroirATranscrire(reponse.questions, transcripteur);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { questions, resultat, ...corpsDeReponse } = reponse;
       representationReponsePossible = {
@@ -131,10 +117,7 @@ const trouveReponseATranscrire = (
   identifiantReponse: string,
   reponsesATranscrire: ReponseATranscrire[] | undefined,
 ): ReponseATranscrire | undefined => {
-  return reponsesATranscrire?.find(
-    (reponseATranscrire) =>
-      reponseATranscrire?.identifiant === identifiantReponse,
-  );
+  return reponsesATranscrire?.find((reponseATranscrire) => reponseATranscrire?.identifiant === identifiantReponse);
 };
 
 export const extraisLesChampsDeLaQuestion = (question: QuestionDiagnostic) => {
@@ -157,58 +140,44 @@ export function representeLeDiagnosticPourLeClient(
   const actions: Action[] = [];
   const representationGroupee = new RepresentationGroupee(transcripteur);
 
-  const referentiel: RepresentationReferentiel = Object.entries(
-    diagnostic.referentiel,
-  )
+  const referentiel: RepresentationReferentiel = Object.entries(diagnostic.referentiel)
     .sort(([thematiqueA], [thematiqueB]) =>
       transcripteur.ordreThematiques &&
-      transcripteur.ordreThematiques?.indexOf(thematiqueA) >
-        transcripteur.ordreThematiques?.indexOf(thematiqueB)
+      transcripteur.ordreThematiques?.indexOf(thematiqueA) > transcripteur.ordreThematiques?.indexOf(thematiqueB)
         ? 1
         : -1,
     )
-    .reduce(
-      (
-        accumulateur: RepresentationReferentiel,
-        [clef, questionsThematique],
-      ) => {
-        actions.push({
-          [clef]: {
-            action: 'repondre',
-            ressource: {
-              url: `/api/diagnostic/${diagnostic.identifiant}`,
-              methode: 'PATCH',
-            },
+    .reduce((accumulateur: RepresentationReferentiel, [clef, questionsThematique]) => {
+      actions.push({
+        [clef]: {
+          action: 'repondre',
+          ressource: {
+            url: `/api/diagnostic/${diagnostic.identifiant}`,
+            methode: 'PATCH',
           },
-        });
-        return {
-          ...accumulateur,
-          [clef]: {
-            actions: [
-              {
-                action: 'repondre',
-                chemin: clef,
-                ressource: {
-                  url: `/api/diagnostic/${diagnostic.identifiant}`,
-                  methode: 'PATCH',
-                },
+        },
+      });
+      return {
+        ...accumulateur,
+        [clef]: {
+          actions: [
+            {
+              action: 'repondre',
+              chemin: clef,
+              ressource: {
+                url: `/api/diagnostic/${diagnostic.identifiant}`,
+                methode: 'PATCH',
               },
-            ],
-            description: transcripteur.thematiques[clef].description,
-            libelle: transcripteur.thematiques[clef].libelle,
-            localisationIconeNavigation:
-              transcripteur.thematiques[clef].localisationIconeNavigation,
-            localisationIllustration:
-              transcripteur.thematiques[clef].localisationIllustration,
-            groupes: representationGroupee.represente(
-              clef,
-              questionsThematique,
-            ),
-          },
-        };
-      },
-      {},
-    );
+            },
+          ],
+          description: transcripteur.thematiques[clef].description,
+          libelle: transcripteur.thematiques[clef].libelle,
+          localisationIconeNavigation: transcripteur.thematiques[clef].localisationIconeNavigation,
+          localisationIllustration: transcripteur.thematiques[clef].localisationIllustration,
+          groupes: representationGroupee.represente(clef, questionsThematique),
+        },
+      };
+    }, {});
 
   return {
     actions,

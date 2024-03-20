@@ -1,11 +1,6 @@
 import { Constructeur } from './Constructeur.ts';
 import { faker } from '@faker-js/faker/locale/fr';
-import {
-  Format,
-  QuestionATiroir,
-  ReponsePossible,
-  TypeDeSaisie,
-} from '../../src/domaine/diagnostic/Referentiel.ts';
+import { Format, QuestionATiroir, ReponsePossible, TypeDeSaisie } from '../../src/domaine/diagnostic/Referentiel.ts';
 import { aseptise } from '../utilitaires/aseptise.ts';
 
 class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
@@ -49,5 +44,4 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   }
 }
 
-export const uneReponsePossible = (): ConstructeurReponsePossible =>
-  new ConstructeurReponsePossible();
+export const uneReponsePossible = (): ConstructeurReponsePossible => new ConstructeurReponsePossible();

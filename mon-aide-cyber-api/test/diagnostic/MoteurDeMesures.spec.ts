@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import {
-  uneQuestionDiagnostic,
-  uneReponseDonnee,
-} from '../constructeurs/constructeurDiagnostic';
-import {
-  uneQuestionATiroir,
-  uneReponsePossible,
-} from '../constructeurs/constructeurReferentiel';
+import { uneQuestionDiagnostic, uneReponseDonnee } from '../constructeurs/constructeurDiagnostic';
+import { uneQuestionATiroir, uneReponsePossible } from '../constructeurs/constructeurReferentiel';
 import { desMesures } from '../constructeurs/constructeurMesures';
 import { MoteurMesures } from '../../src/diagnostic/MoteurMesures';
 import { MesureDiagnostic } from '../../src/diagnostic/Diagnostic';
@@ -32,12 +26,7 @@ describe('Moteur de mesures', () => {
   describe('recommande les mesures aux réponses fournies', () => {
     it('de niveau 1', () => {
       const questionRepondue = uneQuestionDiagnostic()
-        .avecLesReponsesPossibles([
-          uneReponsePossible()
-            .avecLibelle('Non')
-            .associeeAMesure('RGPD', 1, 0)
-            .construis(),
-        ])
+        .avecLesReponsesPossibles([uneReponsePossible().avecLibelle('Non').associeeAMesure('RGPD', 1, 0).construis()])
         .ayantLaReponseUnique('non')
         .construis();
 
@@ -59,10 +48,7 @@ describe('Moteur de mesures', () => {
     it('de niveau 2', () => {
       const questionRepondue = uneQuestionDiagnostic()
         .avecLesReponsesPossibles([
-          uneReponsePossible()
-            .avecLibelle('Oui mais')
-            .associeeAMesure('RGPD', 2, 1)
-            .construis(),
+          uneReponsePossible().avecLibelle('Oui mais').associeeAMesure('RGPD', 2, 1).construis(),
         ])
         .ayantLaReponseUnique('oui-mais')
         .construis();
@@ -154,14 +140,8 @@ describe('Moteur de mesures', () => {
                 uneQuestionATiroir()
                   .aChoixUnique('Quelle année?')
                   .avecReponsesPossibles([
-                    uneReponsePossible()
-                      .avecLibelle('1980')
-                      .associeeAMesure('obsolete-annee-1980', 1, 0)
-                      .construis(),
-                    uneReponsePossible()
-                      .avecLibelle('1990')
-                      .associeeAMesure('obsolete-annee-1990', 2, 2)
-                      .construis(),
+                    uneReponsePossible().avecLibelle('1980').associeeAMesure('obsolete-annee-1980', 1, 0).construis(),
+                    uneReponsePossible().avecLibelle('1990').associeeAMesure('obsolete-annee-1990', 2, 2).construis(),
                   ])
                   .construis(),
               )
@@ -205,23 +185,14 @@ describe('Moteur de mesures', () => {
                 uneQuestionATiroir()
                   .aChoixUnique('Quelle année?')
                   .avecReponsesPossibles([
-                    uneReponsePossible()
-                      .avecLibelle('1980')
-                      .associeeAMesure('obsolete-annee-1980', 1, 0)
-                      .construis(),
-                    uneReponsePossible()
-                      .avecLibelle('1990')
-                      .associeeAMesure('obsolete-annee-1990', 2, 2)
-                      .construis(),
+                    uneReponsePossible().avecLibelle('1980').associeeAMesure('obsolete-annee-1980', 1, 0).construis(),
+                    uneReponsePossible().avecLibelle('1990').associeeAMesure('obsolete-annee-1990', 2, 2).construis(),
                   ])
                   .construis(),
               )
               .ajouteUneQuestionATiroir(
                 uneQuestionATiroir()
-                  .avecReponsesPossibles([
-                    uneReponsePossible().construis(),
-                    uneReponsePossible().construis(),
-                  ])
+                  .avecReponsesPossibles([uneReponsePossible().construis(), uneReponsePossible().construis()])
                   .construis(),
               )
               .associeeAMesure('ordinateur-obsolete', 2, 1)

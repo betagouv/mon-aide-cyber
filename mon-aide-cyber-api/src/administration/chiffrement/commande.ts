@@ -2,14 +2,8 @@ import { program } from 'commander';
 import { adaptateurServiceChiffrement } from '../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 
 program
-  .option(
-    '-c, --chiffre <chaineAChiffrer>',
-    'chiffre la chaine passée en paramètre',
-  )
-  .option(
-    '-d, --dechiffre <chaineADechiffrer>',
-    'déchiffre la chaine passée en paramètre',
-  )
+  .option('-c, --chiffre <chaineAChiffrer>', 'chiffre la chaine passée en paramètre')
+  .option('-d, --dechiffre <chaineADechiffrer>', 'déchiffre la chaine passée en paramètre')
   .parse(process.argv);
 
 const options = program.opts();

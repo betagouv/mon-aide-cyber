@@ -18,10 +18,7 @@ export type EtatBouton = {
   borneThematique: boolean;
   onClick: (thematique: string) => void;
 };
-export const reducteurBoutonThematiqueSuivante = (
-  etat: EtatBouton,
-  action: ActionBouton,
-): EtatBouton => {
+export const reducteurBoutonThematiqueSuivante = (etat: EtatBouton, action: ActionBouton): EtatBouton => {
   function indices(thematiques: string[], thematiqueCourante: string) {
     return {
       indiceThematiqueCourante: thematiques.indexOf(thematiqueCourante),
@@ -43,10 +40,7 @@ export const reducteurBoutonThematiqueSuivante = (
       };
     }
     case TypeActionBouton.CLIQUE: {
-      const { indiceThematiqueCourante, dernierIndiceThematique } = indices(
-        etat.thematiques,
-        etat.thematiqueCourante,
-      );
+      const { indiceThematiqueCourante, dernierIndiceThematique } = indices(etat.thematiques, etat.thematiqueCourante);
       let thematiqueCourante = etat.thematiqueCourante;
       if (indiceThematiqueCourante < dernierIndiceThematique) {
         thematiqueCourante = etat.thematiques[indiceThematiqueCourante + 1];
@@ -61,10 +55,7 @@ export const reducteurBoutonThematiqueSuivante = (
   }
 };
 
-export const reducteurBoutonThematiquePrecedente = (
-  etat: EtatBouton,
-  action: ActionBouton,
-): EtatBouton => {
+export const reducteurBoutonThematiquePrecedente = (etat: EtatBouton, action: ActionBouton): EtatBouton => {
   const indice = (thematiques: string[], thematiqueCour: string) => {
     const indiceThematiqueCourante = thematiques.indexOf(thematiqueCour);
     return { indiceThematiqueCourante, premierIndiceThematique: 0 };
@@ -72,10 +63,7 @@ export const reducteurBoutonThematiquePrecedente = (
 
   switch (action.type) {
     case TypeActionBouton.CLIQUE: {
-      const { indiceThematiqueCourante, premierIndiceThematique } = indice(
-        etat.thematiques,
-        etat.thematiqueCourante,
-      );
+      const { indiceThematiqueCourante, premierIndiceThematique } = indice(etat.thematiques, etat.thematiqueCourante);
       let thematiqueCourante = etat.thematiqueCourante;
       if (premierIndiceThematique < indiceThematiqueCourante) {
         thematiqueCourante = etat.thematiques[indiceThematiqueCourante - 1];
@@ -101,10 +89,7 @@ export const reducteurBoutonThematiquePrecedente = (
     }
   }
 };
-export const thematiqueChargee = (
-  thematiqueCourante: string,
-  thematiques: string[],
-): ActionBouton => {
+export const thematiqueChargee = (thematiqueCourante: string, thematiques: string[]): ActionBouton => {
   return {
     type: TypeActionBouton.CHARGE,
     thematiqueCourante,

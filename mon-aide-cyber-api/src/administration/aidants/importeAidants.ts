@@ -82,9 +82,7 @@ export const importeAidants = async (
       const aidantTranscris = transcris(aidantCourant.split(';'));
       if (aidantTranscris) {
         const aidantExistantRecu = await entrepotAidant
-          .rechercheParIdentifiantDeConnexion(
-            aidantTranscris.identifiantConnexion,
-          )
+          .rechercheParIdentifiantDeConnexion(aidantTranscris.identifiantConnexion)
           .then((aidantDejaCree) => aidantDejaCree)
           .catch(() => undefined);
         if (aidantExistantRecu) {
@@ -146,9 +144,7 @@ const genereMotDePasse = () => {
   const expressionReguliere = /^[a-zA-Z0-9!@#$&()\-.+,/]*$/;
 
   const chaineAleatoire = () => {
-    const valeurAleatoire = String.fromCharCode(
-      crypto.webcrypto.getRandomValues(new Uint8Array(1))[0],
-    );
+    const valeurAleatoire = String.fromCharCode(crypto.webcrypto.getRandomValues(new Uint8Array(1))[0]);
     if (expressionReguliere.test(valeurAleatoire)) {
       return valeurAleatoire;
     }

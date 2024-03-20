@@ -21,15 +21,10 @@ export class ServeurMACMemoire {
   }
 
   find(idDiagnostic: UUID): Promise<Diagnostic> {
-    return Promise.resolve(
-      this.diagnostics.filter((d) => d.identifiant === idDiagnostic)[0],
-    );
+    return Promise.resolve(this.diagnostics.filter((d) => d.identifiant === idDiagnostic)[0]);
   }
 
-  verifieEnvoiReponse(
-    actionRepondre: ActionReponseDiagnostic,
-    reponseDonnee: Reponse,
-  ) {
+  verifieEnvoiReponse(actionRepondre: ActionReponseDiagnostic, reponseDonnee: Reponse) {
     expect(this.actionRepondre).toStrictEqual(actionRepondre);
     expect(this.reponseDonnee).toStrictEqual(reponseDonnee);
   }

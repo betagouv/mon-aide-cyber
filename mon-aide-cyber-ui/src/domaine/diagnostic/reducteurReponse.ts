@@ -68,21 +68,11 @@ type ActionReponse =
   | {
       type: TypeActionReponse.REPONSE_ENVOYEE;
     };
-export const reducteurReponse = (
-  etat: EtatReponse,
-  action: ActionReponse,
-): EtatReponse => {
-  const actionAMener = (
-    actionDemandee: string,
-  ): ActionReponseDiagnostic | undefined => {
-    return etat.actions.find((a) =>
-      Object.entries(a).find(([, a]) => a.action === actionDemandee),
-    );
+export const reducteurReponse = (etat: EtatReponse, action: ActionReponse): EtatReponse => {
+  const actionAMener = (actionDemandee: string): ActionReponseDiagnostic | undefined => {
+    return etat.actions.find((a) => Object.entries(a).find(([, a]) => a.action === actionDemandee));
   };
-  const ajouteLaReponse = (
-    reponses: ReponseMultiple[],
-    elementReponse: ElementReponse,
-  ): void => {
+  const ajouteLaReponse = (reponses: ReponseMultiple[], elementReponse: ElementReponse): void => {
     reponses.push({
       identifiant: elementReponse.identifiantReponse,
       reponses: new Set([elementReponse.reponse]),
@@ -90,23 +80,17 @@ export const reducteurReponse = (
   };
 
   const toutesLesReponses = () => {
-    const reponses: ReponseMultiple[] = etat.reponseDonnee.reponses.map(
-      (rep) => ({
-        identifiant: rep.identifiant,
-        reponses: new Set(rep.reponses),
-      }),
-    );
+    const reponses: ReponseMultiple[] = etat.reponseDonnee.reponses.map((rep) => ({
+      identifiant: rep.identifiant,
+      reponses: new Set(rep.reponses),
+    }));
     return reponses;
   };
 
-  const gereLesReponsesMultiples = (
-    elementReponse: ElementReponse,
-  ): ReponseMultiple[] => {
+  const gereLesReponsesMultiples = (elementReponse: ElementReponse): ReponseMultiple[] => {
     const reponses = toutesLesReponses();
     const doitRetirerUneReponsePrecedemmentSelectionnee = reponses.find(
-      (rep) =>
-        rep.identifiant === elementReponse.reponse ||
-        rep.reponses.has(elementReponse.reponse),
+      (rep) => rep.identifiant === elementReponse.reponse || rep.reponses.has(elementReponse.reponse),
     );
 
     reponses
@@ -119,19 +103,14 @@ export const reducteurReponse = (
         }
       });
 
-    const aDejaUneReponse = reponses.find(
-      (rep) => rep.identifiant === elementReponse.identifiantReponse,
-    );
+    const aDejaUneReponse = reponses.find((rep) => rep.identifiant === elementReponse.identifiantReponse);
     if (!aDejaUneReponse) {
       ajouteLaReponse(reponses, elementReponse);
     }
     return reponses;
   };
 
-  const genereLaReponsePourUneQuestionTiroir = (
-    reponses: ReponseMultiple[],
-    reponse: string,
-  ): (() => Reponse) => {
+  const genereLaReponsePourUneQuestionTiroir = (reponses: ReponseMultiple[], reponse: string): (() => Reponse) => {
     return (): Reponse => ({
       identifiantQuestion: etat.question.identifiant,
       reponseDonnee: {
@@ -144,10 +123,7 @@ export const reducteurReponse = (
     });
   };
 
-  const etatPourUneQuestionTiroir = (
-    reponses: ReponseMultiple[],
-    valeur: string,
-  ): EtatReponse => {
+  const etatPourUneQuestionTiroir = (reponses: ReponseMultiple[], valeur: string): EtatReponse => {
     return {
       ...etat,
       action: (actionDemandee: string) => actionAMener(actionDemandee),
@@ -216,9 +192,7 @@ export const reducteurReponse = (
         reponses = [];
       }
       const elementReponse = action.reponse.elementReponse;
-      const aDejaUneReponse = reponses.find(
-        (rep) => rep.identifiant === elementReponse.identifiantReponse,
-      );
+      const aDejaUneReponse = reponses.find((rep) => rep.identifiant === elementReponse.identifiantReponse);
 
       if (!aDejaUneReponse) {
         ajouteLaReponse(reponses, elementReponse);
@@ -289,12 +263,8 @@ export const reponseEnvoyee = (): ActionReponse => {
   };
 };
 
-export const initialiseReducteur = (
-  question: Question,
-  actions: ActionReponseDiagnostic[],
-): EtatReponse => {
-  const valeur: () => string | undefined = () =>
-    question.reponseDonnee.valeur || undefined;
+export const initialiseReducteur = (question: Question, actions: ActionReponseDiagnostic[]): EtatReponse => {
+  const valeur: () => string | undefined = () => question.reponseDonnee.valeur || undefined;
   return {
     actions,
     action: (__) => undefined,

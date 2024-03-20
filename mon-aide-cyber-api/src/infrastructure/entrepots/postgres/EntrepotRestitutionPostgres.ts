@@ -1,22 +1,13 @@
 import { DTO, EntrepotPostgres } from './EntrepotPostgres';
 import { Restitution } from '../../../restitution/Restitution';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
-import {
-  QuestionDiagnostic,
-  ReponseDonnee,
-  ReponsesMultiples,
-} from '../../../diagnostic/Diagnostic';
+import { QuestionDiagnostic, ReponseDonnee, ReponsesMultiples } from '../../../diagnostic/Diagnostic';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import { Valeur } from '../../../diagnostic/Indice';
 
-class EntrepotRestitutionPostgres extends EntrepotPostgres<
-  Restitution,
-  RestitutionDTO
-> {
+class EntrepotRestitutionPostgres extends EntrepotPostgres<Restitution, RestitutionDTO> {
   constructor(
-    private readonly transcripteur: (
-      dto: RestitutionDTO,
-    ) => MappeurRestitutionDTO = (dto) => mappeurRestitution(dto),
+    private readonly transcripteur: (dto: RestitutionDTO) => MappeurRestitutionDTO = (dto) => mappeurRestitution(dto),
   ) {
     super();
   }
@@ -61,20 +52,14 @@ class EntrepotRestitutionPostgres extends EntrepotPostgres<
       identifiant: dto.id,
       informations: {
         dateCreation: FournisseurHorloge.enDate(dto.datecreation),
-        dateDerniereModification: FournisseurHorloge.enDate(
-          dto.datedernieremodification,
-        ),
+        dateDerniereModification: FournisseurHorloge.enDate(dto.datedernieremodification),
         zoneGeographique,
         secteurActivite,
       },
       indicateurs: restitutionDTO !== null ? restitutionDTO.indicateurs : {},
       mesures: {
-        mesuresPrioritaires:
-          restitutionDTO !== null
-            ? restitutionDTO.mesures.mesuresPrioritaires
-            : [],
-        autresMesures:
-          restitutionDTO !== null ? restitutionDTO.mesures.autresMesures : [],
+        mesuresPrioritaires: restitutionDTO !== null ? restitutionDTO.mesures.mesuresPrioritaires : [],
+        autresMesures: restitutionDTO !== null ? restitutionDTO.mesures.autresMesures : [],
       },
     };
   }
@@ -95,10 +80,7 @@ type ReponseDonneeDTO = Omit<ReponseDonnee, 'reponsesMultiples'> & {
   reponsesMultiples: RepresentationReponsesMultiples[];
 };
 
-type RepresentationQuestionDiagnostic = Omit<
-  QuestionDiagnostic,
-  'reponseDonnee'
-> & {
+type RepresentationQuestionDiagnostic = Omit<QuestionDiagnostic, 'reponseDonnee'> & {
   reponseDonnee: ReponseDonneeDTO;
 };
 
@@ -149,16 +131,12 @@ const mappeurRestitution = (dto: RestitutionDTO): MappeurRestitutionDTO => {
       .concat(departement && region ? ', '.concat(region || '') : region || '');
   };
 
-  const trouveLibelleReponseUniqueDonnee = (
-    question: RepresentationQuestionDiagnostic,
-  ) =>
-    question?.reponsesPossibles.find(
-      (reponse) => reponse.identifiant === question.reponseDonnee.reponseUnique,
-    )?.libelle;
+  const trouveLibelleReponseUniqueDonnee = (question: RepresentationQuestionDiagnostic) =>
+    question?.reponsesPossibles.find((reponse) => reponse.identifiant === question.reponseDonnee.reponseUnique)
+      ?.libelle;
 
   return {
-    secteurActivite:
-      trouveLibelleReponseUniqueDonnee(dto.secteuractivite) || 'non renseigné',
+    secteurActivite: trouveLibelleReponseUniqueDonnee(dto.secteuractivite) || 'non renseigné',
     zoneGeographique: representeZoneGeographique(dto.region, dto.departement),
   };
 };

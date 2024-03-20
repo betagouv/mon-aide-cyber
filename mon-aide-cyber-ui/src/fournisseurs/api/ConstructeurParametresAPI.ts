@@ -44,5 +44,4 @@ class ConstructeurParametresAPI<CORPS = void> {
   }
 }
 
-export const constructeurParametresAPI = <CORPS = void>() =>
-  new ConstructeurParametresAPI<CORPS>();
+export const constructeurParametresAPI = <CORPS = void>() => new ConstructeurParametresAPI<CORPS>();

@@ -1,9 +1,5 @@
 import { ReactElement } from 'react';
-import {
-  ChampsErreur,
-  construisErreur,
-  PresentationErreur,
-} from '../erreurs/Erreurs.tsx';
+import { ChampsErreur, construisErreur, PresentationErreur } from '../erreurs/Erreurs.tsx';
 
 enum TypeActionAuthentification {
   SAISIE_INVALIDEE = 'SAISIE_INVALIDEE',
@@ -72,9 +68,7 @@ export const reducteurAuthentification = (
     case TypeActionAuthentification.IDENTIFIANT_SAISI: {
       let erreur = etat.erreur?.motDePasse
         ? {
-            ...(etat.erreur?.motDePasse
-              ? { motDePasse: { ...etat.erreur.motDePasse } }
-              : undefined),
+            ...(etat.erreur?.motDePasse ? { motDePasse: { ...etat.erreur.motDePasse } } : undefined),
           }
         : undefined;
       if (action.identifiant.length === 0) {
@@ -83,17 +77,14 @@ export const reducteurAuthentification = (
       return {
         ...etat,
         identifiant: action.identifiant,
-        saisieValide: () =>
-          etat.motDePasse.length > 0 && action.identifiant.length > 0,
+        saisieValide: () => etat.motDePasse.length > 0 && action.identifiant.length > 0,
         erreur,
       };
     }
     case TypeActionAuthentification.MOT_DE_PASSE_SAISI: {
       let erreur = etat.erreur?.identifiant
         ? {
-            ...(etat.erreur?.identifiant
-              ? { identifiant: { ...etat.erreur.identifiant } }
-              : undefined),
+            ...(etat.erreur?.identifiant ? { identifiant: { ...etat.erreur.identifiant } } : undefined),
           }
         : undefined;
       if (action.motDePasse.length === 0) {
@@ -102,8 +93,7 @@ export const reducteurAuthentification = (
       return {
         ...etat,
         motDePasse: action.motDePasse,
-        saisieValide: () =>
-          etat.identifiant.length > 0 && action.motDePasse.length > 0,
+        saisieValide: () => etat.identifiant.length > 0 && action.motDePasse.length > 0,
         erreur,
       };
     }
@@ -126,9 +116,7 @@ export const motDePasseSaisi = (motDePasse: string): ActionAuthentification => {
   };
 };
 
-export const identifiantSaisi = (
-  identifiant: string,
-): ActionAuthentification => {
+export const identifiantSaisi = (identifiant: string): ActionAuthentification => {
   return {
     identifiant,
     type: TypeActionAuthentification.IDENTIFIANT_SAISI,
@@ -139,9 +127,7 @@ export const saisieInvalidee = (): ActionAuthentification => {
   return { type: TypeActionAuthentification.SAISIE_INVALIDEE };
 };
 
-export const authentificationInvalidee = (
-  erreur: Error,
-): ActionAuthentification => {
+export const authentificationInvalidee = (erreur: Error): ActionAuthentification => {
   return {
     erreur,
     type: TypeActionAuthentification.AUTHENTIFICATION_INVALIDEE,

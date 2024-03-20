@@ -12,53 +12,32 @@ export class RepresentationGroupee {
     private numeroQuestion: number = 1,
   ) {}
 
-  represente(
-    clef: string,
-    questionsThematique: QuestionsThematique,
-  ): RepresentationGroupes {
-    const representations: RepresentationGroupes =
-      this.transcripteur.thematiques[clef].groupes
-        .filter(
-          (groupe) =>
-            groupe.questions.filter(
-              (q) =>
-                questionsThematique.questions.find(
-                  (qu) => q.identifiant === qu.identifiant,
-                ) !== undefined,
-            ).length > 0,
-        )
-        .map((groupe) => {
-          const questions = groupe.questions.map((questionATranscrire) => {
-            const question = questionsThematique.questions.find(
-              (questionDiagnostic) =>
-                questionDiagnostic.identifiant ===
-                questionATranscrire.identifiant,
-            );
-            const reponsesPossibles = trouveReponsesPossibles(
-              question!,
-              this.transcripteur,
-              questionATranscrire,
-            );
-            const { autresReponses, reste } = extraisLesChampsDeLaQuestion(
-              question!,
-            );
-            return {
-              ...reste,
-              reponseDonnee: autresReponses,
-              reponsesPossibles,
-              type: questionATranscrire?.type || question!.type,
-            };
-          });
-          return { numero: this.numeroQuestion++, questions };
+  represente(clef: string, questionsThematique: QuestionsThematique): RepresentationGroupes {
+    const representations: RepresentationGroupes = this.transcripteur.thematiques[clef].groupes
+      .filter(
+        (groupe) =>
+          groupe.questions.filter(
+            (q) => questionsThematique.questions.find((qu) => q.identifiant === qu.identifiant) !== undefined,
+          ).length > 0,
+      )
+      .map((groupe) => {
+        const questions = groupe.questions.map((questionATranscrire) => {
+          const question = questionsThematique.questions.find(
+            (questionDiagnostic) => questionDiagnostic.identifiant === questionATranscrire.identifiant,
+          );
+          const reponsesPossibles = trouveReponsesPossibles(question!, this.transcripteur, questionATranscrire);
+          const { autresReponses, reste } = extraisLesChampsDeLaQuestion(question!);
+          return {
+            ...reste,
+            reponseDonnee: autresReponses,
+            reponsesPossibles,
+            type: questionATranscrire?.type || question!.type,
+          };
         });
+        return { numero: this.numeroQuestion++, questions };
+      });
 
-    representations.push(
-      ...this.questionsThematiqueNonRepresentees(
-        representations,
-        questionsThematique,
-        clef,
-      ),
-    );
+    representations.push(...this.questionsThematiqueNonRepresentees(representations, questionsThematique, clef));
 
     return representations;
   }
@@ -83,11 +62,7 @@ export class RepresentationGroupee {
         },
         this.transcripteur,
       );
-      const reponsesPossibles = trouveReponsesPossibles(
-        question,
-        this.transcripteur,
-        questionATranscrire,
-      );
+      const reponsesPossibles = trouveReponsesPossibles(question, this.transcripteur, questionATranscrire);
       const { autresReponses, reste } = extraisLesChampsDeLaQuestion(question);
       return {
         numero: this.numeroQuestion++,

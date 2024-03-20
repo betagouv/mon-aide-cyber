@@ -14,10 +14,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
 import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';
 import { uneAction } from '../../test/constructeurs/constructeurActionDiagnostic.ts';
-import {
-  Diagnostic,
-  ReponseQuestionATiroir,
-} from '../domaine/diagnostic/Diagnostic.ts';
+import { Diagnostic, ReponseQuestionATiroir } from '../domaine/diagnostic/Diagnostic.ts';
 import { UUID } from '../types/Types.ts';
 import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
@@ -47,11 +44,8 @@ const diagnosticAvecUneQuestionAChoixUnique = unDiagnostic()
   )
   .construis();
 
-const identifiantQuestionListeDeroulante =
-  '1cdaac38-2ee8-413d-ac00-00f8b5fbad10';
-const reponseSelectionnee = uneReponsePossible()
-  .avecLibelle('Réponse B')
-  .construis();
+const identifiantQuestionListeDeroulante = '1cdaac38-2ee8-413d-ac00-00f8b5fbad10';
+const reponseSelectionnee = uneReponsePossible().avecLibelle('Réponse B').construis();
 const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
   .ajouteAction(actionRepondre)
   .avecIdentifiant(identifiantQuestionListeDeroulante)
@@ -73,16 +67,12 @@ const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
   )
   .construis();
 
-const identifiantDiagnosticAvecPlusieursThematiques =
-  'aa1a75a3-8896-4ab2-81e3-24a773ec994e';
+const identifiantDiagnosticAvecPlusieursThematiques = 'aa1a75a3-8896-4ab2-81e3-24a773ec994e';
 const diagnosticAPlusieursThematiques = unDiagnostic()
   .avecIdentifiant(identifiantDiagnosticAvecPlusieursThematiques)
   .avecUnReferentiel(
     unReferentiel()
-      .ajouteUneThematique('Thème 1', [
-        uneQuestionAChoixUnique().construis(),
-        uneQuestionAChoixUnique().construis(),
-      ])
+      .ajouteUneThematique('Thème 1', [uneQuestionAChoixUnique().construis(), uneQuestionAChoixUnique().construis()])
       .avecUneQuestion(uneQuestionAChoixUnique().construis())
       .construis(),
   )
@@ -127,8 +117,7 @@ const diagnosticAvecQuestionATiroir = unDiagnostic()
   )
   .construis();
 
-const identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple =
-  'df11a788-7375-449d-844f-2b3298546d36';
+const identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple = 'df11a788-7375-449d-844f-2b3298546d36';
 const questionAChoixUnique = uneQuestionAChoixUnique()
   .avecLibelle('Réponse unique')
   .avecDesReponses([
@@ -136,42 +125,35 @@ const questionAChoixUnique = uneQuestionAChoixUnique()
     uneReponsePossible().avecLibelle('rep unique 2').construis(),
     uneReponsePossible().avecLibelle('rep unique 3').construis(),
   ]);
-const diagnosticAvecQuestionATiroirAvecChoixUniqueEtChoixMultiple =
-  unDiagnostic()
-    .ajouteAction(actionRepondre)
-    .avecIdentifiant(identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple)
-    .avecUnReferentiel(
-      unReferentiel()
-        .avecUneQuestion(
-          uneQuestionAChoixUnique()
-            .avecLibelle('Tiroir multiple et unique')
-            .avecDesReponses([
-              uneReponsePossible().avecLibelle('Non').construis(),
-              reponseAvecQuestionAChoixMultiple
-                .avecUneQuestion(questionAChoixUnique.construis())
-                .construis(),
-            ])
-            .avecLaReponseDonnee(
-              reponseAvecQuestionAChoixMultiple.construis(),
-              [
-                {
-                  identifiant: 'la-question',
-                  reponses: new Set(['choix-2', 'choix-4']),
-                },
-                {
-                  identifiant: 'reponse-unique',
-                  reponses: new Set(['rep-unique-2']),
-                },
-              ],
-            )
-            .construis(),
-        )
-        .construis(),
-    )
-    .construis();
+const diagnosticAvecQuestionATiroirAvecChoixUniqueEtChoixMultiple = unDiagnostic()
+  .ajouteAction(actionRepondre)
+  .avecIdentifiant(identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple)
+  .avecUnReferentiel(
+    unReferentiel()
+      .avecUneQuestion(
+        uneQuestionAChoixUnique()
+          .avecLibelle('Tiroir multiple et unique')
+          .avecDesReponses([
+            uneReponsePossible().avecLibelle('Non').construis(),
+            reponseAvecQuestionAChoixMultiple.avecUneQuestion(questionAChoixUnique.construis()).construis(),
+          ])
+          .avecLaReponseDonnee(reponseAvecQuestionAChoixMultiple.construis(), [
+            {
+              identifiant: 'la-question',
+              reponses: new Set(['choix-2', 'choix-4']),
+            },
+            {
+              identifiant: 'reponse-unique',
+              reponses: new Set(['rep-unique-2']),
+            },
+          ])
+          .construis(),
+      )
+      .construis(),
+  )
+  .construis();
 
-const identifiantQuestionATiroirAvecPlusieursChoixUnique =
-  '0170b46d-16d2-4ec4-88e0-85356914388a';
+const identifiantQuestionATiroirAvecPlusieursChoixUnique = '0170b46d-16d2-4ec4-88e0-85356914388a';
 const premiereReponseAChoixUniqueATiroir = uneReponsePossible()
   .avecLibelle('Première réponse unique à tiroir')
   .avecUneQuestion(questionAChoixUnique.construis())
@@ -209,37 +191,32 @@ const secondeReponseAChoixUniqueATiroir = uneReponsePossible()
       .construis(),
   )
   .construis();
-const diagnosticAvecUneQuestionAvecPlusieursQuestionsATiroirAChoixUnique =
-  unDiagnostic()
-    .avecIdentifiant(identifiantQuestionATiroirAvecPlusieursChoixUnique)
-    .ajouteAction(actionRepondre)
-    .avecUnReferentiel(
-      unReferentiel()
-        .avecUneQuestion(
-          uneQuestionAChoixUnique()
-            .avecLibelle('Une question à choix unique à tiroir')
-            .avecDesReponses([
-              premiereReponseAChoixUniqueATiroir,
-              secondeReponseAChoixUniqueATiroir,
-            ])
-            .avecLaReponseDonnee(premiereReponseAChoixUniqueATiroir, [
-              {
-                identifiant: 'reponse-unique',
-                reponses: new Set(['rep-unique-2']),
-              },
-              {
-                identifiant: 'autre-reponse-unique',
-                reponses: new Set(['1-autre-rep-unique-1']),
-              },
-            ])
-            .construis(),
-        )
-        .construis(),
-    )
-    .construis();
+const diagnosticAvecUneQuestionAvecPlusieursQuestionsATiroirAChoixUnique = unDiagnostic()
+  .avecIdentifiant(identifiantQuestionATiroirAvecPlusieursChoixUnique)
+  .ajouteAction(actionRepondre)
+  .avecUnReferentiel(
+    unReferentiel()
+      .avecUneQuestion(
+        uneQuestionAChoixUnique()
+          .avecLibelle('Une question à choix unique à tiroir')
+          .avecDesReponses([premiereReponseAChoixUniqueATiroir, secondeReponseAChoixUniqueATiroir])
+          .avecLaReponseDonnee(premiereReponseAChoixUniqueATiroir, [
+            {
+              identifiant: 'reponse-unique',
+              reponses: new Set(['rep-unique-2']),
+            },
+            {
+              identifiant: 'autre-reponse-unique',
+              reponses: new Set(['1-autre-rep-unique-1']),
+            },
+          ])
+          .construis(),
+      )
+      .construis(),
+  )
+  .construis();
 
-const identifiantQuestionAPlusieursTiroirs =
-  '7e37b7fa-1ed6-434d-ba5b-d473928c08c2';
+const identifiantQuestionAPlusieursTiroirs = '7e37b7fa-1ed6-434d-ba5b-d473928c08c2';
 const diagnosticAvecQuestionsAPlusieursTiroirs = unDiagnostic()
   .avecIdentifiant(identifiantQuestionAPlusieursTiroirs)
   .ajouteAction(actionRepondre)
@@ -280,8 +257,7 @@ const diagnosticAvecQuestionsAPlusieursTiroirs = unDiagnostic()
   )
   .construis();
 
-const identifiantQuestionATiroirAvecReponseUnique =
-  'd01c0e69-7abd-46cf-a109-a38f8b1b26e0';
+const identifiantQuestionATiroirAvecReponseUnique = 'd01c0e69-7abd-46cf-a109-a38f8b1b26e0';
 const diagnosticAvecQuestionsATiroirsAvecReponseUnique = unDiagnostic()
   .avecIdentifiant(identifiantQuestionATiroirAvecReponseUnique)
   .ajouteAction(actionRepondre)
@@ -319,8 +295,7 @@ const diagnosticAvecQuestionsATiroirsAvecReponseUnique = unDiagnostic()
   )
   .construis();
 
-const identifiantQuestionAChoixMultiple =
-  '4196086c-d370-4406-a757-347d964a4e74';
+const identifiantQuestionAChoixMultiple = '4196086c-d370-4406-a757-347d964a4e74';
 const diagnosticAveUneQuestionAChoixMultiple = unDiagnostic()
   .avecIdentifiant(identifiantQuestionAChoixMultiple)
   .ajouteAction(actionRepondre)
@@ -335,9 +310,7 @@ const diagnosticAveUneQuestionAChoixMultiple = unDiagnostic()
             uneReponsePossible().avecLibelle('Réponse 3').construis(),
             uneReponsePossible().avecLibelle('Réponse 4').construis(),
           ])
-          .avecUneReponseMultipleDonnee([
-            uneReponsePossible().avecLibelle('Réponse 1').construis(),
-          ])
+          .avecUneReponseMultipleDonnee([uneReponsePossible().avecLibelle('Réponse 1').construis()])
           .construis(),
       )
       .construis(),
@@ -346,26 +319,14 @@ const diagnosticAveUneQuestionAChoixMultiple = unDiagnostic()
 
 const entrepotDiagnosticMemoire = new ServeurMACMemoire();
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestionAChoixUnique);
-await entrepotDiagnosticMemoire.persiste(
-  diagnosticAvecQuestionSousFormeDeListeDeroulante,
-);
+await entrepotDiagnosticMemoire.persiste(diagnosticAvecQuestionSousFormeDeListeDeroulante);
 await entrepotDiagnosticMemoire.persiste(diagnosticAPlusieursThematiques);
 await entrepotDiagnosticMemoire.persiste(diagnosticAvecQuestionATiroir);
-await entrepotDiagnosticMemoire.persiste(
-  diagnosticAvecQuestionATiroirAvecChoixUniqueEtChoixMultiple,
-);
-await entrepotDiagnosticMemoire.persiste(
-  diagnosticAvecUneQuestionAvecPlusieursQuestionsATiroirAChoixUnique,
-);
-await entrepotDiagnosticMemoire.persiste(
-  diagnosticAvecQuestionsAPlusieursTiroirs,
-);
-await entrepotDiagnosticMemoire.persiste(
-  diagnosticAvecQuestionsATiroirsAvecReponseUnique,
-);
-await entrepotDiagnosticMemoire.persiste(
-  diagnosticAveUneQuestionAChoixMultiple,
-);
+await entrepotDiagnosticMemoire.persiste(diagnosticAvecQuestionATiroirAvecChoixUniqueEtChoixMultiple);
+await entrepotDiagnosticMemoire.persiste(diagnosticAvecUneQuestionAvecPlusieursQuestionsATiroirAChoixUnique);
+await entrepotDiagnosticMemoire.persiste(diagnosticAvecQuestionsAPlusieursTiroirs);
+await entrepotDiagnosticMemoire.persiste(diagnosticAvecQuestionsATiroirsAvecReponseUnique);
+await entrepotDiagnosticMemoire.persiste(diagnosticAveUneQuestionAChoixMultiple);
 
 const meta = {
   title: 'Diagnostic',
@@ -395,9 +356,7 @@ const meta = {
           },
         }}
       >
-        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-          {story()}
-        </ErrorBoundary>
+        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>{story()}</ErrorBoundary>
       </ContexteMacAPI.Provider>
     ),
   ],
@@ -420,21 +379,13 @@ export const SelectionneReponseDiagnostic: Story = {
           ),
         ),
       ).toBeInTheDocument();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('radio', { name: reponseDonneeChoixUnique.libelle }),
-        ),
-      ).toBeChecked();
+      expect(await waitFor(() => canvas.getByRole('radio', { name: reponseDonneeChoixUnique.libelle }))).toBeChecked();
     });
 
     await step('Lorsque l’utilisateur modifie la réponse', async () => {
-      await userEvent.click(
-        canvas.getByRole('radio', { name: /entreprise privée/i }),
-      );
+      await userEvent.click(canvas.getByRole('radio', { name: /entreprise privée/i }));
 
-      expect(
-        canvas.getByRole('radio', { name: /entreprise privée/i }),
-      ).toBeChecked();
+      expect(canvas.getByRole('radio', { name: /entreprise privée/i })).toBeChecked();
       entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
         reponseDonnee: 'entreprise-privee',
         identifiantQuestion: 'quelle-entreprise-etesvous-',
@@ -471,9 +422,7 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
       await userEvent.selectOptions(canvas.getByRole('combobox'), 'Réponse C');
 
       expect(
-        await waitFor(() =>
-          canvas.getByRole('option', { name: /réponse c/i, selected: true }),
-        ),
+        await waitFor(() => canvas.getByRole('option', { name: /réponse c/i, selected: true })),
       ).toBeInTheDocument();
       entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
         reponseDonnee: 'reponse-c',
@@ -499,15 +448,9 @@ export const AfficheLesThematiques: Story = {
       ).toBeInTheDocument();
       expect(await waitFor(() => canvas.getAllByRole('button').length)).toBe(5);
       await waitFor(() =>
-        expect(
-          canvas.queryByRole('button', { name: /thématique précédente/i }),
-        ).not.toBeInTheDocument(),
+        expect(canvas.queryByRole('button', { name: /thématique précédente/i })).not.toBeInTheDocument(),
       );
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('button', { name: /thématique suivante/i }),
-        ),
-      ).toBeInTheDocument();
+      expect(await waitFor(() => canvas.getByRole('button', { name: /thématique suivante/i }))).toBeInTheDocument();
     });
 
     await step('Lorsque l’utilisateur change de thématique', async () => {
@@ -528,15 +471,9 @@ export const AfficheLesThematiques: Story = {
         ),
       ).toBeInTheDocument();
 
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('button', { name: /thématique précédente/i }),
-        ),
-      ).toBeInTheDocument();
+      expect(await waitFor(() => canvas.getByRole('button', { name: /thématique précédente/i }))).toBeInTheDocument();
       await waitFor(() =>
-        expect(
-          canvas.queryByRole('button', { name: /thématique suivante/i }),
-        ).not.toBeInTheDocument(),
+        expect(canvas.queryByRole('button', { name: /thématique suivante/i })).not.toBeInTheDocument(),
       );
     });
   },
@@ -569,9 +506,7 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
       await userEvent.click(canvas.getByRole('checkbox', { name: /choix 3/i }));
       await userEvent.click(canvas.getByRole('checkbox', { name: /choix 4/i }));
 
-      expect(
-        canvas.getByRole('radio', { name: /plusieurs choix/i }),
-      ).toBeChecked();
+      expect(canvas.getByRole('radio', { name: /plusieurs choix/i })).toBeChecked();
       expect(
         await waitFor(() =>
           canvas.getByRole('checkbox', {
@@ -607,40 +542,35 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
       });
     });
 
-    await step(
-      "Lorsque l'utilisateur sélectionne une réponse à choix unique",
-      async () => {
-        await userEvent.click(
-          canvas.getByRole('radio', { name: /un seul choix/i }),
-        );
+    await step("Lorsque l'utilisateur sélectionne une réponse à choix unique", async () => {
+      await userEvent.click(canvas.getByRole('radio', { name: /un seul choix/i }));
 
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /un seul choix/i,
-            }),
-          ),
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('checkbox', {
-              name: /choix 2/i,
-            }),
-          ),
-        ).not.toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('checkbox', {
-              name: /choix 3/i,
-            }),
-          ),
-        ).not.toBeChecked();
-        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-          reponseDonnee: 'un-seul-choix',
-          identifiantQuestion: 'qcm',
-        });
-      },
-    );
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /un seul choix/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('checkbox', {
+            name: /choix 2/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('checkbox', {
+            name: /choix 3/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+        reponseDonnee: 'un-seul-choix',
+        identifiantQuestion: 'qcm',
+      });
+    });
   },
 };
 
@@ -676,13 +606,9 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
 
     await step('Lorsque l’utilisateur modifie la réponse', async () => {
       await userEvent.click(canvas.getByRole('checkbox', { name: /choix 3/i }));
-      await userEvent.click(
-        canvas.getByRole('checkbox', { name: /tiroir 22/i }),
-      );
+      await userEvent.click(canvas.getByRole('checkbox', { name: /tiroir 22/i }));
 
-      expect(
-        canvas.getByRole('radio', { name: /plusieurs tiroirs/i }),
-      ).toBeChecked();
+      expect(canvas.getByRole('radio', { name: /plusieurs tiroirs/i })).toBeChecked();
       expect(
         await waitFor(() =>
           canvas.getByRole('checkbox', {
@@ -738,403 +664,365 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
   },
 };
 
-export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoixUnique: Story =
-  {
-    name: 'Sélectionne les réponses pour les questions à tiroirs à choix multiple et à choix unique',
-    args: {
-      idDiagnostic: identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple,
-    },
-    play: async ({ canvasElement, step }) => {
-      const canvas = within(canvasElement);
+export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoixUnique: Story = {
+  name: 'Sélectionne les réponses pour les questions à tiroirs à choix multiple et à choix unique',
+  args: {
+    idDiagnostic: identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple,
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
 
-      await step(
-        'Lorsque le diagnostic est récupéré depuis l’API',
-        async () => {
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /plusieurs choix?/i,
-              }),
-            ),
-          ).toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('checkbox', {
-                name: /choix 2/i,
-              }),
-            ),
-          ).toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('checkbox', {
-                name: /choix 4/i,
-              }),
-            ),
-          ).toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /rep unique 2/i,
-              }),
-            ),
-          ).toBeChecked();
-        },
-      );
+    await step('Lorsque le diagnostic est récupéré depuis l’API', async () => {
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /plusieurs choix?/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('checkbox', {
+            name: /choix 2/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('checkbox', {
+            name: /choix 4/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /rep unique 2/i,
+          }),
+        ),
+      ).toBeChecked();
+    });
 
-      await step('Lorsque l’utilisateur modifie la réponse', async () => {
-        await userEvent.click(
-          canvas.getByRole('radio', { name: /rep unique 1/i }),
-        );
-        await userEvent.click(
-          canvas.getByRole('checkbox', { name: /choix 3/i }),
-        );
+    await step('Lorsque l’utilisateur modifie la réponse', async () => {
+      await userEvent.click(canvas.getByRole('radio', { name: /rep unique 1/i }));
+      await userEvent.click(canvas.getByRole('checkbox', { name: /choix 3/i }));
 
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', { name: /plusieurs choix?/i }),
-          ),
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('checkbox', {
-              name: /choix 2/i,
-            }),
-          ),
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('checkbox', {
-              name: /choix 3/i,
-            }),
-          ),
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('checkbox', {
-              name: /choix 4/i,
-            }),
-          ),
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /rep unique 1/i,
-            }),
-          ),
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /rep unique 2/i,
-            }),
-          ),
-        ).not.toBeChecked();
-        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-          reponseDonnee: {
-            reponse: 'plusieurs-choix',
-            questions: [
-              {
-                identifiant: 'la-question',
-                reponses: ['choix-2', 'choix-4', 'choix-3'],
-              },
-              {
-                identifiant: 'reponse-unique',
-                reponses: ['rep-unique-1'],
-              },
-            ],
-          },
-          identifiantQuestion: 'tiroir-multiple-et-unique',
-        });
-      });
-
-      await step(
-        'Lorsque l\'utilisateur clique sur la réponse "Non" sans question tiroir',
-        async () => {
-          await userEvent.click(canvas.getByRole('radio', { name: /non/i }));
-
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', { name: /plusieurs choix?/i }),
-            ),
-          ).not.toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('checkbox', {
-                name: /choix 1/i,
-              }),
-            ),
-          ).not.toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('checkbox', {
-                name: /choix 2/i,
-              }),
-            ),
-          ).not.toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('checkbox', {
-                name: /choix 3/i,
-              }),
-            ),
-          ).not.toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('checkbox', {
-                name: /choix 4/i,
-              }),
-            ),
-          ).not.toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /rep unique 1/i,
-              }),
-            ),
-          ).not.toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /rep unique 2/i,
-              }),
-            ),
-          ).not.toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /rep unique 3/i,
-              }),
-            ),
-          ).not.toBeChecked();
-          entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-            reponseDonnee: 'non',
-            identifiantQuestion: 'tiroir-multiple-et-unique',
-          });
-        },
-      );
-    },
-  };
-
-export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique: Story =
-  {
-    name: 'Sélectionne les réponses pour les questions à plusieurs tiroirs à choix unique',
-    args: {
-      idDiagnostic: identifiantQuestionATiroirAvecPlusieursChoixUnique,
-    },
-    play: async ({ canvasElement, step }) => {
-      const canvas = within(canvasElement);
-
-      await step(
-        'Lorsque le diagnostic est récupéré depuis l’API',
-        async () => {
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /première réponse unique à tiroir/i,
-              }),
-            ),
-          ).toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: 'rep unique 2',
-              }),
-            ),
-          ).toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /1 - autre rep unique 1/i,
-              }),
-            ),
-          ).toBeChecked();
-        },
-      );
-
-      await step('Lorsque l’utilisateur modifie la réponse', async () => {
-        await userEvent.click(
-          canvas.getByRole('radio', { name: /1 - autre rep unique 2/i }),
-        );
-
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /première réponse unique à tiroir/i,
-            }),
-          ),
-        ).toBeChecked();
-        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-          reponseDonnee: {
-            reponse: 'premiere-reponse-unique-a-tiroir',
-            questions: [
-              {
-                identifiant: 'reponse-unique',
-                reponses: ['rep-unique-2'],
-              },
-              {
-                identifiant: 'autre-reponse-unique',
-                reponses: ['1-autre-rep-unique-2'],
-              },
-            ],
-          },
-          identifiantQuestion: 'une-question-a-choix-unique-a-tiroir',
-        });
-      });
-
-      await step(
-        "Lorsque l'utilisateur clique sur une autre réponse avec question tiroir",
-        async () => {
-          await userEvent.click(
-            canvas.getByRole('radio', {
-              name: /seconde réponse unique à tiroir/i,
-            }),
-          );
-          await userEvent.click(
-            canvas.getByRole('radio', { name: /2 - rep unique 3/i }),
-          );
-          await userEvent.click(
-            canvas.getByRole('radio', { name: /2 - autre rep unique 1/i }),
-          );
-
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /première réponse unique à tiroir/i,
-              }),
-            ),
-          ).not.toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: 'rep unique 2',
-              }),
-            ),
-          ).not.toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /1 - autre rep unique 2/i,
-              }),
-            ),
-          ).not.toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /seconde réponse unique à tiroir/i,
-              }),
-            ),
-          ).toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /2 - rep unique 3/i,
-              }),
-            ),
-          ).toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /2 - autre rep unique 1/i,
-              }),
-            ),
-          ).toBeChecked();
-          entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-            reponseDonnee: {
-              reponse: 'seconde-reponse-unique-a-tiroir',
-              questions: [
-                {
-                  identifiant: '2-reponse-unique',
-                  reponses: ['2-rep-unique-3'],
-                },
-                {
-                  identifiant: '2-autre-reponse-unique',
-                  reponses: ['2-autre-rep-unique-1'],
-                },
-              ],
+      expect(await waitFor(() => canvas.getByRole('radio', { name: /plusieurs choix?/i }))).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('checkbox', {
+            name: /choix 2/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('checkbox', {
+            name: /choix 3/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('checkbox', {
+            name: /choix 4/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /rep unique 1/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /rep unique 2/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+        reponseDonnee: {
+          reponse: 'plusieurs-choix',
+          questions: [
+            {
+              identifiant: 'la-question',
+              reponses: ['choix-2', 'choix-4', 'choix-3'],
             },
-            identifiantQuestion: 'une-question-a-choix-unique-a-tiroir',
-          });
+            {
+              identifiant: 'reponse-unique',
+              reponses: ['rep-unique-1'],
+            },
+          ],
         },
-      );
-    },
-  };
-
-export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story =
-  {
-    name: 'Sélectionne la réponse pour la question à tiroir avec une réponse unique',
-    args: { idDiagnostic: identifiantQuestionATiroirAvecReponseUnique },
-    play: async ({ canvasElement, step }) => {
-      const canvas = within(canvasElement);
-
-      await step(
-        'Lorsque le diagnostic est récupéré depuis l’API',
-        async () => {
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /choix 1/i,
-              }),
-            ),
-          ).not.toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /choix 2/i,
-              }),
-            ),
-          ).toBeChecked();
-          expect(
-            await waitFor(() =>
-              canvas.getByRole('radio', {
-                name: /choix 3/i,
-              }),
-            ),
-          ).not.toBeChecked();
-        },
-      );
-
-      await step('Lorsque l’utilisateur modifie la réponse', async () => {
-        await userEvent.click(canvas.getByRole('radio', { name: /choix 3/i }));
-
-        expect(
-          canvas.getByRole('radio', { name: /tiroir à choix unique ?/i }),
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /choix 1/i,
-            }),
-          ),
-        ).not.toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /choix 2/i,
-            }),
-          ),
-        ).not.toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /choix 3/i,
-            }),
-          ),
-        ).toBeChecked();
-        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-          reponseDonnee: {
-            reponse: 'tiroir-a-choix-unique-',
-            questions: [
-              {
-                identifiant: 'le-choix-unique-',
-                reponses: ['choix-3'],
-              },
-            ],
-          },
-          identifiantQuestion: 'qcm',
-        });
+        identifiantQuestion: 'tiroir-multiple-et-unique',
       });
-    },
-  };
+    });
+
+    await step('Lorsque l\'utilisateur clique sur la réponse "Non" sans question tiroir', async () => {
+      await userEvent.click(canvas.getByRole('radio', { name: /non/i }));
+
+      expect(await waitFor(() => canvas.getByRole('radio', { name: /plusieurs choix?/i }))).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('checkbox', {
+            name: /choix 1/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('checkbox', {
+            name: /choix 2/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('checkbox', {
+            name: /choix 3/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('checkbox', {
+            name: /choix 4/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /rep unique 1/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /rep unique 2/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /rep unique 3/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+        reponseDonnee: 'non',
+        identifiantQuestion: 'tiroir-multiple-et-unique',
+      });
+    });
+  },
+};
+
+export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique: Story = {
+  name: 'Sélectionne les réponses pour les questions à plusieurs tiroirs à choix unique',
+  args: {
+    idDiagnostic: identifiantQuestionATiroirAvecPlusieursChoixUnique,
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('Lorsque le diagnostic est récupéré depuis l’API', async () => {
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /première réponse unique à tiroir/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: 'rep unique 2',
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /1 - autre rep unique 1/i,
+          }),
+        ),
+      ).toBeChecked();
+    });
+
+    await step('Lorsque l’utilisateur modifie la réponse', async () => {
+      await userEvent.click(canvas.getByRole('radio', { name: /1 - autre rep unique 2/i }));
+
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /première réponse unique à tiroir/i,
+          }),
+        ),
+      ).toBeChecked();
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+        reponseDonnee: {
+          reponse: 'premiere-reponse-unique-a-tiroir',
+          questions: [
+            {
+              identifiant: 'reponse-unique',
+              reponses: ['rep-unique-2'],
+            },
+            {
+              identifiant: 'autre-reponse-unique',
+              reponses: ['1-autre-rep-unique-2'],
+            },
+          ],
+        },
+        identifiantQuestion: 'une-question-a-choix-unique-a-tiroir',
+      });
+    });
+
+    await step("Lorsque l'utilisateur clique sur une autre réponse avec question tiroir", async () => {
+      await userEvent.click(
+        canvas.getByRole('radio', {
+          name: /seconde réponse unique à tiroir/i,
+        }),
+      );
+      await userEvent.click(canvas.getByRole('radio', { name: /2 - rep unique 3/i }));
+      await userEvent.click(canvas.getByRole('radio', { name: /2 - autre rep unique 1/i }));
+
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /première réponse unique à tiroir/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: 'rep unique 2',
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /1 - autre rep unique 2/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /seconde réponse unique à tiroir/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /2 - rep unique 3/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /2 - autre rep unique 1/i,
+          }),
+        ),
+      ).toBeChecked();
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+        reponseDonnee: {
+          reponse: 'seconde-reponse-unique-a-tiroir',
+          questions: [
+            {
+              identifiant: '2-reponse-unique',
+              reponses: ['2-rep-unique-3'],
+            },
+            {
+              identifiant: '2-autre-reponse-unique',
+              reponses: ['2-autre-rep-unique-1'],
+            },
+          ],
+        },
+        identifiantQuestion: 'une-question-a-choix-unique-a-tiroir',
+      });
+    });
+  },
+};
+
+export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story = {
+  name: 'Sélectionne la réponse pour la question à tiroir avec une réponse unique',
+  args: { idDiagnostic: identifiantQuestionATiroirAvecReponseUnique },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('Lorsque le diagnostic est récupéré depuis l’API', async () => {
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /choix 1/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /choix 2/i,
+          }),
+        ),
+      ).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /choix 3/i,
+          }),
+        ),
+      ).not.toBeChecked();
+    });
+
+    await step('Lorsque l’utilisateur modifie la réponse', async () => {
+      await userEvent.click(canvas.getByRole('radio', { name: /choix 3/i }));
+
+      expect(canvas.getByRole('radio', { name: /tiroir à choix unique ?/i })).toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /choix 1/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /choix 2/i,
+          }),
+        ),
+      ).not.toBeChecked();
+      expect(
+        await waitFor(() =>
+          canvas.getByRole('radio', {
+            name: /choix 3/i,
+          }),
+        ),
+      ).toBeChecked();
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
+        reponseDonnee: {
+          reponse: 'tiroir-a-choix-unique-',
+          questions: [
+            {
+              identifiant: 'le-choix-unique-',
+              reponses: ['choix-3'],
+            },
+          ],
+        },
+        identifiantQuestion: 'qcm',
+      });
+    });
+  },
+};
 
 export const SelectionneLaReponsePourUneQuestionAChoixMultiple: Story = {
   name: 'Sélectionne la réponse pour une question à choix multiple',
@@ -1174,9 +1062,7 @@ export const SelectionneLaReponsePourUneQuestionAChoixMultiple: Story = {
     });
 
     await step('Lorsque l’utilisateur modifie la réponse', async () => {
-      await userEvent.click(
-        canvas.getByRole('checkbox', { name: /réponse 3/i }),
-      );
+      await userEvent.click(canvas.getByRole('checkbox', { name: /réponse 3/i }));
 
       expect(
         await waitFor(() =>

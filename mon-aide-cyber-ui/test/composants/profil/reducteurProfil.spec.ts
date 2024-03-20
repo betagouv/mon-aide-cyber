@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  EtatProfil,
-  profilCharge,
-  reducteurProfil,
-} from '../../../src/composants/profil/reducteurProfil.ts';
+import { EtatProfil, profilCharge, reducteurProfil } from '../../../src/composants/profil/reducteurProfil.ts';
 
 describe('reducteur profil', () => {
   const profilVide: EtatProfil = {

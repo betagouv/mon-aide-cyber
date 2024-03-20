@@ -4,10 +4,7 @@ import { ConsignateurErreursMemoire } from '../../../src/infrastructure/adaptate
 import { Request, Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../../src/domaine/erreurMAC';
-import {
-  ErreurAuthentification,
-  ErreurCreationEspaceAidant,
-} from '../../../src/authentification/Aidant';
+import { ErreurAuthentification, ErreurCreationEspaceAidant } from '../../../src/authentification/Aidant';
 import { ErreurAccesRefuse } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';
 import { CorpsRequeteAuthentification } from '../../../src/api/routesAPIAuthentification';
 
@@ -68,9 +65,7 @@ describe("Gestionnaire d'erreur", () => {
     expect(corpsRecu).toStrictEqual({
       message: "MonAideCyber n'est pas en mesure de traiter votre demande.",
     });
-    expect(erreurRecue).toStrictEqual(
-      ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée')),
-    );
+    expect(erreurRecue).toStrictEqual(ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée')));
   });
 
   it("consigne l'erreur en cas d'authentification erronée", () => {
@@ -82,10 +77,7 @@ describe("Gestionnaire d'erreur", () => {
     fausseRequete.body = corpsAuthentification;
 
     gestionnaireErreurGeneralisee(consignateurErreurs)(
-      ErreurMAC.cree(
-        "Demande d'Authentification",
-        new ErreurAuthentification(new Error('Quelque chose est arrivé')),
-      ),
+      ErreurMAC.cree("Demande d'Authentification", new ErreurAuthentification(new Error('Quelque chose est arrivé'))),
       fausseRequete,
       fausseReponse,
       fausseSuite,
@@ -103,18 +95,13 @@ describe("Gestionnaire d'erreur", () => {
 
     const messageInterne = "une explication de l'erreur pour le développeur";
     gestionnaireErreurGeneralisee(consignateurErreurs)(
-      ErreurMAC.cree(
-        'Ajout réponse au diagnostic',
-        new ErreurAccesRefuse(messageInterne),
-      ),
+      ErreurMAC.cree('Ajout réponse au diagnostic', new ErreurAccesRefuse(messageInterne)),
       fausseRequete,
       fausseReponse,
       fausseSuite,
     );
 
-    expect(
-      (consignateurErreurs.tous()[0] as ErreurMAC).erreurOriginelle.message,
-    ).toStrictEqual(messageInterne);
+    expect((consignateurErreurs.tous()[0] as ErreurMAC).erreurOriginelle.message).toStrictEqual(messageInterne);
     expect(codeRecu).toBe(403);
     expect(corpsRecu).toStrictEqual({
       message: "L'accès à la ressource est interdit.",
@@ -132,10 +119,7 @@ describe("Gestionnaire d'erreur", () => {
     fausseRequete.body = corpsAuthentification;
 
     gestionnaireErreurGeneralisee(consignateurErreurs)(
-      ErreurMAC.cree(
-        "Crée l'espace Aidant",
-        new ErreurCreationEspaceAidant('Quelque chose est arrivé'),
-      ),
+      ErreurMAC.cree("Crée l'espace Aidant", new ErreurCreationEspaceAidant('Quelque chose est arrivé')),
       fausseRequete,
       fausseReponse,
       fausseSuite,
@@ -166,12 +150,7 @@ describe("Gestionnaire d'erreur", () => {
     };
     fausseRequete.body = corpsAuthentification;
 
-    gestionnaireErreurGeneralisee(consignateurErreurs)(
-      new Error('Erreur'),
-      fausseRequete,
-      fausseReponse,
-      fausseSuite,
-    );
+    gestionnaireErreurGeneralisee(consignateurErreurs)(new Error('Erreur'), fausseRequete, fausseReponse, fausseSuite);
 
     expect(fausseRequete.body).toStrictEqual({
       cguSignees: true,

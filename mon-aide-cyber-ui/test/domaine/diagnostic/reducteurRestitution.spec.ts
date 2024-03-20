@@ -10,10 +10,7 @@ import { uneRestitution } from '../../constructeurs/constructeurRestitution.ts';
 describe('Réducteur Restitution', () => {
   it('charge la restitution', () => {
     const restitution = uneRestitution().construis();
-    const etatRestitution = reducteurRestitution(
-      {} as EtatRestitution,
-      restitutionChargee(restitution),
-    );
+    const etatRestitution = reducteurRestitution({} as EtatRestitution, restitutionChargee(restitution));
 
     expect(etatRestitution).toStrictEqual({
       restitution,
@@ -23,10 +20,7 @@ describe('Réducteur Restitution', () => {
   it('conserve la rubrique cliquée', () => {
     const restitution = uneRestitution().construis();
 
-    const etatRestitution = reducteurRestitution(
-      { restitution },
-      rubriqueCliquee('informations'),
-    );
+    const etatRestitution = reducteurRestitution({ restitution }, rubriqueCliquee('informations'));
 
     expect(etatRestitution).toStrictEqual<EtatRestitution>({
       restitution: restitution,

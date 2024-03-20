@@ -24,20 +24,13 @@ describe('le serveur MAC sur la route /api/diagnostics', () => {
       await testeurMAC.entrepots.diagnostic().persiste(deuxiemeDiagnostic);
       await testeurMAC.entrepots.diagnostic().persiste(troisiemeDiagnostic);
 
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        '/api/diagnostics',
-        donneesServeur.portEcoute,
-      );
+      const reponse = await executeRequete(donneesServeur.app, 'GET', '/api/diagnostics', donneesServeur.portEcoute);
 
       expect(reponse.statusCode).toBe(200);
       expect(await reponse.json()).toStrictEqual([
         {
           identifiant: premierDiagnostic.identifiant,
-          actions: [
-            { details: `/api/diagnostic/${premierDiagnostic.identifiant}` },
-          ],
+          actions: [{ details: `/api/diagnostic/${premierDiagnostic.identifiant}` }],
         },
         {
           identifiant: deuxiemeDiagnostic.identifiant,
@@ -59,16 +52,9 @@ describe('le serveur MAC sur la route /api/diagnostics', () => {
     });
 
     it('la route est protégée', async () => {
-      await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/diagnostics/`,
-        donneesServeur.portEcoute,
-      );
+      await executeRequete(donneesServeur.app, 'GET', `/api/diagnostics/`, donneesServeur.portEcoute);
 
-      expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
-      ).toBe(true);
+      expect(testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
     });
   });
 });

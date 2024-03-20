@@ -1,17 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import crypto from 'crypto';
 import testeurIntegration from './testeurIntegration';
-import {
-  uneQuestion,
-  uneReponsePossible,
-  unReferentiel,
-} from '../constructeurs/constructeurReferentiel';
+import { uneQuestion, uneReponsePossible, unReferentiel } from '../constructeurs/constructeurReferentiel';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
 import { executeRequete } from './executeurRequete';
-import {
-  RepresentationDiagnostic,
-  RepresentationReferentiel,
-} from '../../src/api/representateurs/types';
+import { RepresentationDiagnostic, RepresentationReferentiel } from '../../src/api/representateurs/types';
 import { Express } from 'express';
 import { unAdaptateurDeRestitutionHTML } from '../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
 import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
@@ -35,11 +28,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
   describe('quand une requête GET est reçue sur /{id}', () => {
     it('retourne le référentiel du diagnostic', async () => {
       const diagnostic = unDiagnostic()
-        .avecUnReferentiel(
-          unReferentiel()
-            .ajouteUneQuestionAuContexte(uneQuestion().construis())
-            .construis(),
-        )
+        .avecUnReferentiel(unReferentiel().ajouteUneQuestionAuContexte(uneQuestion().construis()).construis())
         .construis();
       await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
 
@@ -55,9 +44,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       const premiereReponsePossible = premiereQuestion.reponsesPossibles[0];
       const diagnosticRecu: RepresentationDiagnostic = await reponse.json();
       expect(diagnosticRecu.identifiant).toBe(diagnostic.identifiant);
-      expect(
-        diagnosticRecu.referentiel,
-      ).toStrictEqual<RepresentationReferentiel>({
+      expect(diagnosticRecu.referentiel).toStrictEqual<RepresentationReferentiel>({
         contexte: {
           actions: [
             {
@@ -123,9 +110,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.portEcoute,
       );
 
-      expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
-      ).toBe(true);
+      expect(testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
     });
 
     it('vérifie que les CGU et la charte ont été signées', async () => {
@@ -136,9 +121,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.portEcoute,
       );
 
-      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
-      );
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(true);
     });
   });
 
@@ -147,12 +130,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       const referentiel = unReferentiel().construis();
       testeurMAC.adaptateurReferentiel.ajoute(referentiel);
 
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/diagnostic',
-        donneesServeur.portEcoute,
-      );
+      const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/diagnostic', donneesServeur.portEcoute);
 
       expect(reponse.statusCode).toBe(201);
       expect(reponse.headers['link']).toMatch(
@@ -161,9 +139,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
     });
 
     it('on peut récupérer le diagnostic précédemment lancé', async () => {
-      const referentiel = unReferentiel()
-        .ajouteUneQuestionAuContexte(uneQuestion().construis())
-        .construis();
+      const referentiel = unReferentiel().ajouteUneQuestionAuContexte(uneQuestion().construis()).construis();
       testeurMAC.adaptateurReferentiel.ajoute(referentiel);
       const reponseCreation = await executeRequete(
         donneesServeur.app,
@@ -173,28 +149,16 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       );
       const lien = reponseCreation.headers['link'] as string;
 
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `${lien}`,
-        donneesServeur.portEcoute,
-      );
+      const reponse = await executeRequete(donneesServeur.app, 'GET', `${lien}`, donneesServeur.portEcoute);
 
       const diagnosticRetourne = await reponse.json();
-      expect(diagnosticRetourne.identifiant).toBe(
-        lien?.substring(lien.lastIndexOf('/') + 1),
-      );
+      expect(diagnosticRetourne.identifiant).toBe(lien?.substring(lien.lastIndexOf('/') + 1));
       expect(diagnosticRetourne.referentiel.contexte.groupes).toHaveLength(1);
     });
 
     it("retourne une erreur HTTP 500 lorsque le référentiel n'est pas trouvé", async () => {
       testeurMAC.adaptateurReferentiel.reInitialise();
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/diagnostic',
-        donneesServeur.portEcoute,
-      );
+      const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/diagnostic', donneesServeur.portEcoute);
 
       expect(reponse.statusCode).toBe(500);
       expect(await reponse.json()).toMatchObject({
@@ -203,29 +167,15 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
     });
 
     it('la route est protégée', async () => {
-      await executeRequete(
-        donneesServeur.app,
-        'POST',
-        `/api/diagnostic/`,
-        donneesServeur.portEcoute,
-      );
+      await executeRequete(donneesServeur.app, 'POST', `/api/diagnostic/`, donneesServeur.portEcoute);
 
-      expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
-      ).toBe(true);
+      expect(testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
     });
 
     it('vérifie que les CGU et la charte ont été signées', async () => {
-      await executeRequete(
-        donneesServeur.app,
-        'POST',
-        `/api/diagnostic/`,
-        donneesServeur.portEcoute,
-      );
+      await executeRequete(donneesServeur.app, 'POST', `/api/diagnostic/`, donneesServeur.portEcoute);
 
-      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
-      );
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(true);
     });
   });
 
@@ -260,13 +210,9 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         },
       );
 
-      const diagnosticRetourne = await testeurMAC.entrepots
-        .diagnostic()
-        .lis(diagnostic.identifiant);
+      const diagnosticRetourne = await testeurMAC.entrepots.diagnostic().lis(diagnostic.identifiant);
       expect(reponse.statusCode).toBe(204);
-      expect(
-        diagnosticRetourne.referentiel.contexte.questions[0].reponseDonnee,
-      ).toStrictEqual({
+      expect(diagnosticRetourne.referentiel.contexte.questions[0].reponseDonnee).toStrictEqual({
         reponsesMultiples: [],
         reponseUnique: 'reponse-2',
       });
@@ -299,9 +245,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.portEcoute,
       );
 
-      expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
-      ).toBe(true);
+      expect(testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
     });
 
     it('vérifie que les CGU et la charte ont été signées', async () => {
@@ -312,9 +256,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.portEcoute,
       );
 
-      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
-      );
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(true);
     });
   });
 
@@ -325,12 +267,9 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         .avecMesuresPrioritaires('mesures prioritaires')
         .avecAutresMesures('autres mesures')
         .construis();
-      testeurMAC.adaptateursRestitution.html = () =>
-        adaptateurDeRestitutionHTML;
+      testeurMAC.adaptateursRestitution.html = () => adaptateurDeRestitutionHTML;
       const identifiant = crypto.randomUUID();
-      const restitution = uneRestitution()
-        .avecIdentifiant(identifiant)
-        .construis();
+      const restitution = uneRestitution().avecIdentifiant(identifiant).construis();
       await testeurMAC.entrepots.restitution().persiste(restitution);
 
       const reponse = await executeRequete(
@@ -408,9 +347,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.portEcoute,
       );
 
-      expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
-      ).toBe(true);
+      expect(testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
     });
 
     it('vérifie que les CGU et la charte ont été signées', async () => {
@@ -421,9 +358,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.portEcoute,
       );
 
-      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
-      );
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(true);
     });
 
     it('retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {

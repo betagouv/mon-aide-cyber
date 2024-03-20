@@ -18,28 +18,18 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
   describe('/api/aide/cgu', () => {
     describe('Quand une requête POST est reçue', () => {
       it('Valide les CGU de l’aidé', async () => {
-        FournisseurHorlogeDeTest.initialise(
-          new Date(Date.parse('2024-02-29T14:04:17+01:00')),
-        );
-        const reponse = await executeRequete(
-          donneesServeur.app,
-          'POST',
-          '/api/aide/cgu',
-          donneesServeur.portEcoute,
-          {
-            cguValidees: true,
-            email: 'jean.dupont@aide.com',
-            departement: 'Corse du sud',
-            raisonSociale: 'beta-gouv',
-          },
-        );
+        FournisseurHorlogeDeTest.initialise(new Date(Date.parse('2024-02-29T14:04:17+01:00')));
+        const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/aide/cgu', donneesServeur.portEcoute, {
+          cguValidees: true,
+          email: 'jean.dupont@aide.com',
+          departement: 'Corse du sud',
+          raisonSociale: 'beta-gouv',
+        });
 
         expect(reponse.statusCode).toBe(202);
         const aides = await testeurMAC.entrepots.aides().tous();
         expect(aides).toHaveLength(1);
-        expect(aides[0].dateSignatureCGU).toStrictEqual(
-          FournisseurHorloge.maintenant(),
-        );
+        expect(aides[0].dateSignatureCGU).toStrictEqual(FournisseurHorloge.maintenant());
       });
 
       describe("En ce qui concerne les informations envoyées par l'Aidé", () => {
@@ -52,18 +42,12 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
 
         afterEach(() => testeurMAC.arrete());
         it('Vérifie que les CGU sont signées', async () => {
-          const reponse = await executeRequete(
-            donneesServeur.app,
-            'POST',
-            '/api/aide/cgu',
-            donneesServeur.portEcoute,
-            {
-              cguValidees: false,
-              email: 'jean.dupont@aide.com',
-              departement: 'Paris',
-              raisonSociale: 'beta-gouv',
-            },
-          );
+          const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/aide/cgu', donneesServeur.portEcoute, {
+            cguValidees: false,
+            email: 'jean.dupont@aide.com',
+            departement: 'Paris',
+            raisonSociale: 'beta-gouv',
+          });
 
           expect(reponse.statusCode).toBe(422);
           expect(await reponse.json()).toStrictEqual({
@@ -78,18 +62,12 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
         });
 
         it("Vérifie que l'email est renseigné", async () => {
-          const reponse = await executeRequete(
-            donneesServeur.app,
-            'POST',
-            '/api/aide/cgu',
-            donneesServeur.portEcoute,
-            {
-              cguValidees: true,
-              email: 'ceci-n-est-pas-un-email',
-              departement: 'Gironde',
-              raisonSociale: 'beta-gouv',
-            },
-          );
+          const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/aide/cgu', donneesServeur.portEcoute, {
+            cguValidees: true,
+            email: 'ceci-n-est-pas-un-email',
+            departement: 'Gironde',
+            raisonSociale: 'beta-gouv',
+          });
 
           expect(reponse.statusCode).toBe(422);
           expect(await reponse.json()).toStrictEqual({
@@ -104,23 +82,16 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
         });
 
         it('Vérifie que le département est renseigné', async () => {
-          const reponse = await executeRequete(
-            donneesServeur.app,
-            'POST',
-            '/api/aide/cgu',
-            donneesServeur.portEcoute,
-            {
-              cguValidees: true,
-              email: 'jean.dupont@aide.com',
-              departement: '   ',
-              raisonSociale: 'beta-gouv',
-            },
-          );
+          const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/aide/cgu', donneesServeur.portEcoute, {
+            cguValidees: true,
+            email: 'jean.dupont@aide.com',
+            departement: '   ',
+            raisonSociale: 'beta-gouv',
+          });
 
           expect(reponse.statusCode).toBe(422);
           expect(await reponse.json()).toStrictEqual({
-            message:
-              "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide",
+            message: "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide",
             liens: {
               'demander-validation-cgu-aide': {
                 url: '/api/aide/cgu',
@@ -131,47 +102,30 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
         });
 
         it('La raison sociale est optionnelle', async () => {
-          FournisseurHorlogeDeTest.initialise(
-            new Date(Date.parse('2024-02-29T14:04:17+01:00')),
-          );
-          const reponse = await executeRequete(
-            donneesServeur.app,
-            'POST',
-            '/api/aide/cgu',
-            donneesServeur.portEcoute,
-            {
-              cguValidees: true,
-              email: 'jean.dupont@aide.com',
-              departement: 'Finistère',
-            },
-          );
+          FournisseurHorlogeDeTest.initialise(new Date(Date.parse('2024-02-29T14:04:17+01:00')));
+          const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/aide/cgu', donneesServeur.portEcoute, {
+            cguValidees: true,
+            email: 'jean.dupont@aide.com',
+            departement: 'Finistère',
+          });
 
           expect(reponse.statusCode).toBe(202);
           const aides = await testeurMAC.entrepots.aides().tous();
           expect(aides).toHaveLength(1);
-          expect(aides[0].dateSignatureCGU).toStrictEqual(
-            FournisseurHorloge.maintenant(),
-          );
+          expect(aides[0].dateSignatureCGU).toStrictEqual(FournisseurHorloge.maintenant());
         });
 
         it('La raison sociale, lorsque fournie ne peut pas être vide', async () => {
-          const reponse = await executeRequete(
-            donneesServeur.app,
-            'POST',
-            '/api/aide/cgu',
-            donneesServeur.portEcoute,
-            {
-              cguValidees: true,
-              email: 'jean.dupont@aide.com',
-              departement: 'Bas-Rhin',
-              raisonSociale: '    ',
-            },
-          );
+          const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/aide/cgu', donneesServeur.portEcoute, {
+            cguValidees: true,
+            email: 'jean.dupont@aide.com',
+            departement: 'Bas-Rhin',
+            raisonSociale: '    ',
+          });
 
           expect(reponse.statusCode).toBe(422);
           expect(await reponse.json()).toStrictEqual({
-            message:
-              "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide",
+            message: "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide",
             liens: {
               'demander-validation-cgu-aide': {
                 url: '/api/aide/cgu',

@@ -52,15 +52,10 @@ describe('Entrepot Journalisation Postgres', () => {
   it('persiste une publication', async () => {
     const publication = unePublication().construis();
 
-    await new EntrepotJournalisationPostgres(
-      configurationJournalisation,
-    ).persiste(publication);
+    await new EntrepotJournalisationPostgres(configurationJournalisation).persiste(publication);
 
-    const entrepotJournalisationPostgresLecture =
-      new EntrepotJournalisationPostgresTests(configurationJournalisation);
+    const entrepotJournalisationPostgresLecture = new EntrepotJournalisationPostgresTests(configurationJournalisation);
 
-    expect(
-      await entrepotJournalisationPostgresLecture.lis(publication.identifiant),
-    ).toStrictEqual(publication);
+    expect(await entrepotJournalisationPostgresLecture.lis(publication.identifiant)).toStrictEqual(publication);
   });
 });

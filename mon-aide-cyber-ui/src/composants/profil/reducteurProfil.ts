@@ -17,10 +17,7 @@ type ActionProfil = {
   profil: Profil;
 };
 
-export const reducteurProfil = (
-  etat: EtatProfil,
-  action: ActionProfil,
-): EtatProfil => {
+export const reducteurProfil = (etat: EtatProfil, action: ActionProfil): EtatProfil => {
   switch (action.type) {
     case TypeActionProfil.PROFIL_CHARGE: {
       const nomPrenomSepare = action.profil.nomPrenom.split(' ');

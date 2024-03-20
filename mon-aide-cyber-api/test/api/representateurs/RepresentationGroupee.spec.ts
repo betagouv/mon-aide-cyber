@@ -6,18 +6,9 @@ import { uneQuestionDiagnostic } from '../../constructeurs/constructeurDiagnosti
 describe('Représentation groupée', () => {
   it('numérote les questions', () => {
     const questions = [
-      uneQuestionDiagnostic()
-        .aChoixUnique()
-        .avecLibelle('Quelle est la nature de votre entité?')
-        .construis(),
-      uneQuestionDiagnostic()
-        .aChoixUnique()
-        .avecLibelle("Quel est son secteur d'activité?")
-        .construis(),
-      uneQuestionDiagnostic()
-        .aChoixUnique()
-        .avecLibelle('Combien de personnes compte votre entité?')
-        .construis(),
+      uneQuestionDiagnostic().aChoixUnique().avecLibelle('Quelle est la nature de votre entité?').construis(),
+      uneQuestionDiagnostic().aChoixUnique().avecLibelle("Quel est son secteur d'activité?").construis(),
+      uneQuestionDiagnostic().aChoixUnique().avecLibelle('Combien de personnes compte votre entité?').construis(),
     ];
     const transcripteur = unTranscripteur()
       .avecLesThematiques(['thematique-groupee'])
@@ -32,18 +23,16 @@ describe('Représentation groupée', () => {
               ],
             },
             {
-              questions: [
-                { identifiant: 'combien-de-personnes-compte-votre-entite' },
-              ],
+              questions: [{ identifiant: 'combien-de-personnes-compte-votre-entite' }],
             },
           ],
         },
       ])
       .construis();
 
-    const representationQuestions = new RepresentationGroupee(
-      transcripteur,
-    ).represente('thematique-groupee', { questions });
+    const representationQuestions = new RepresentationGroupee(transcripteur).represente('thematique-groupee', {
+      questions,
+    });
 
     expect(representationQuestions).toStrictEqual([
       {
@@ -82,18 +71,9 @@ describe('Représentation groupée', () => {
 
   it('numérote les questions non représentées', () => {
     const questions = [
-      uneQuestionDiagnostic()
-        .aChoixUnique()
-        .avecLibelle('Quelle est la nature de votre entité?')
-        .construis(),
-      uneQuestionDiagnostic()
-        .aChoixUnique()
-        .avecLibelle("Quel est son secteur d'activité?")
-        .construis(),
-      uneQuestionDiagnostic()
-        .aChoixUnique()
-        .avecLibelle('Combien de personnes compte votre entité?')
-        .construis(),
+      uneQuestionDiagnostic().aChoixUnique().avecLibelle('Quelle est la nature de votre entité?').construis(),
+      uneQuestionDiagnostic().aChoixUnique().avecLibelle("Quel est son secteur d'activité?").construis(),
+      uneQuestionDiagnostic().aChoixUnique().avecLibelle('Combien de personnes compte votre entité?').construis(),
     ];
     const transcripteur = unTranscripteur()
       .avecLesThematiques(['thematique-groupee'])
@@ -112,9 +92,9 @@ describe('Représentation groupée', () => {
       ])
       .construis();
 
-    const representationQuestions = new RepresentationGroupee(
-      transcripteur,
-    ).represente('thematique-groupee', { questions });
+    const representationQuestions = new RepresentationGroupee(transcripteur).represente('thematique-groupee', {
+      questions,
+    });
 
     expect(representationQuestions).toStrictEqual([
       {

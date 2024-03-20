@@ -1,7 +1,4 @@
-export const aseptise = (
-  chaineDeCaractere: string,
-  separateur = '-',
-): string => {
+export const aseptise = (chaineDeCaractere: string, separateur = '-'): string => {
   return chaineDeCaractere
     .toString()
     .normalize('NFD')

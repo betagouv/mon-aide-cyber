@@ -67,8 +67,7 @@ export async function up(knex: Knex): Promise<void> {
           const mesuresRestitution = { ...donnees.restitution.recommandations };
 
           donnees.restitution.mesures = {
-            mesuresPrioritaires:
-              mesuresRestitution.recommandationsPrioritaires || [],
+            mesuresPrioritaires: mesuresRestitution.recommandationsPrioritaires || [],
             autresMesures: mesuresRestitution.autresRecommandations || [],
           };
 
@@ -109,10 +108,7 @@ export async function down(knex: Knex): Promise<void> {
         const { mesures, restitution, ...donneesSansMesure } = donnees;
 
         if (restitution) {
-          const {
-            mesures: mesuresRestituees,
-            ...restitutionSansMesuresRestituees
-          } = restitution;
+          const { mesures: mesuresRestituees, ...restitutionSansMesuresRestituees } = restitution;
 
           return knex('diagnostics')
             .where('id', ligne.id)
@@ -122,8 +118,7 @@ export async function down(knex: Knex): Promise<void> {
                 tableauDesRecommandations: mesures,
                 restitution: {
                   autresRecommandations: mesuresRestituees?.autresMesures || [],
-                  recommandationsPrioritaires:
-                    mesuresRestituees?.mesuresPrioritaires || [],
+                  recommandationsPrioritaires: mesuresRestituees?.mesuresPrioritaires || [],
                   restitutionSansMesuresRestituees,
                 },
               },

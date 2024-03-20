@@ -1,11 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { unDiagnostic } from '../../../constructeurs/constructeurDiagnostic';
 import { nettoieLaBaseDeDonneesDiagnostics } from '../../../utilitaires/nettoyeurBDD';
-import {
-  uneQuestion,
-  uneReponsePossible,
-  unReferentiel,
-} from '../../../constructeurs/constructeurReferentiel';
+import { uneQuestion, uneReponsePossible, unReferentiel } from '../../../constructeurs/constructeurReferentiel';
 import { EntrepotDiagnosticPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotDiagnosticPostgres';
 
 describe('Entrepot Diagnostic Postgres', () => {
@@ -18,9 +14,7 @@ describe('Entrepot Diagnostic Postgres', () => {
     await new EntrepotDiagnosticPostgres().persiste(diagnostic);
 
     const entrepotDiagnosticPostgresLecture = new EntrepotDiagnosticPostgres();
-    expect(
-      await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant),
-    ).toStrictEqual(diagnostic);
+    expect(await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant)).toStrictEqual(diagnostic);
   });
 
   it('persiste un diagnostic avec les réponses données', async () => {
@@ -39,17 +33,12 @@ describe('Entrepot Diagnostic Postgres', () => {
           ])
           .construis(),
       )
-      .avecLesReponsesDonnees('question-set', [
-        { 'sauvegardestu-les-set': ['un-peu', 'beaucoup'] },
-      ])
+      .avecLesReponsesDonnees('question-set', [{ 'sauvegardestu-les-set': ['un-peu', 'beaucoup'] }])
       .construis();
 
     await new EntrepotDiagnosticPostgres().persiste(diagnostic);
 
-    const entrepotDiagnosticPostgresLecture =
-      await new EntrepotDiagnosticPostgres();
-    expect(
-      await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant),
-    ).toStrictEqual(diagnostic);
+    const entrepotDiagnosticPostgresLecture = await new EntrepotDiagnosticPostgres();
+    expect(await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant)).toStrictEqual(diagnostic);
   });
 });

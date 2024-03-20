@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
-import {
-  aidantCree,
-  diagnosticLance,
-  restitutionLancee,
-  reponseAjoutee,
-} from '../../src/journalisation/evenements';
+import { aidantCree, diagnosticLance, restitutionLancee, reponseAjoutee } from '../../src/journalisation/evenements';
 import { EntrepotEvenementJournalMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import crypto from 'crypto';
 

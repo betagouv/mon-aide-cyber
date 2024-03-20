@@ -1,9 +1,5 @@
 import { Constructeur } from './constructeur';
-import {
-  uneListeDe7QuestionsToutesAssociees,
-  uneQuestion,
-  unReferentiel,
-} from './constructeurReferentiel';
+import { uneListeDe7QuestionsToutesAssociees, uneQuestion, unReferentiel } from './constructeurReferentiel';
 import {
   Diagnostic,
   initialiseDiagnostic,
@@ -47,14 +43,9 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
         if (typeof valeur === 'string') {
           constructeurReponseDonnee.ayantPourReponse(valeur);
         } else {
-          constructeurReponseDonnee.avecDesReponsesMultiples([
-            { identifiant: question, reponses: valeur },
-          ]);
+          constructeurReponseDonnee.avecDesReponsesMultiples([{ identifiant: question, reponses: valeur }]);
         }
-        this.ajouteUneReponseDonnee(
-          { thematique, question: question },
-          constructeurReponseDonnee.construis(),
-        );
+        this.ajouteUneReponseDonnee({ thematique, question: question }, constructeurReponseDonnee.construis());
       });
     });
     return this;
@@ -84,9 +75,9 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
   construis(): Diagnostic {
     const diagnostic = initialiseDiagnostic(this.referentiel, this.mesures);
     this.reponsesDonnees.forEach((rep) => {
-      const reponseDonnee = diagnostic.referentiel[
-        rep.identifiant.thematique
-      ].questions.find((q) => q.identifiant === rep.identifiant.question);
+      const reponseDonnee = diagnostic.referentiel[rep.identifiant.thematique].questions.find(
+        (q) => q.identifiant === rep.identifiant.question,
+      );
       if (reponseDonnee) {
         reponseDonnee.reponseDonnee = rep.reponseDonnee;
       }
@@ -121,9 +112,7 @@ class ConstructeurReponseDonnee implements Constructeur<ReponseDonnee> {
   }
 }
 
-class ConstructeurQuestionDiagnostic
-  implements Constructeur<QuestionDiagnostic>
-{
+class ConstructeurQuestionDiagnostic implements Constructeur<QuestionDiagnostic> {
   private libelle = fakerFR.word.words(5);
   private reponsesPossibles: ReponsePossible[] = [];
   private identifiant = fakerFR.string.alpha(10);
@@ -134,16 +123,12 @@ class ConstructeurQuestionDiagnostic
   private type: TypeQuestion = 'choixMultiple';
   private poids: Poids = 1;
 
-  avecLesReponsesPossibles(
-    reponsePossibles: ReponsePossible[],
-  ): ConstructeurQuestionDiagnostic {
+  avecLesReponsesPossibles(reponsePossibles: ReponsePossible[]): ConstructeurQuestionDiagnostic {
     this.reponsesPossibles = reponsePossibles;
     return this;
   }
 
-  ayantLaReponseUnique(
-    identifiantReponse: string,
-  ): ConstructeurQuestionDiagnostic {
+  ayantLaReponseUnique(identifiantReponse: string): ConstructeurQuestionDiagnostic {
     this.reponseDonnee.reponseUnique = identifiantReponse;
     return this;
   }
@@ -154,9 +139,7 @@ class ConstructeurQuestionDiagnostic
     return this;
   }
 
-  ayantLaReponseDonnee(
-    reponseDonnee: ReponseDonnee,
-  ): ConstructeurQuestionDiagnostic {
+  ayantLaReponseDonnee(reponseDonnee: ReponseDonnee): ConstructeurQuestionDiagnostic {
     this.reponseDonnee = reponseDonnee;
     return this;
   }
@@ -216,18 +199,14 @@ export const unDiagnosticEnGironde = () =>
         thematique: 'contexte',
         question: 'contexte-region-siege-social',
       },
-      uneReponseDonnee()
-        .ayantPourReponse('contexte-region-siege-social-nouvelle-aquitaine')
-        .construis(),
+      uneReponseDonnee().ayantPourReponse('contexte-region-siege-social-nouvelle-aquitaine').construis(),
     )
     .ajouteUneReponseDonnee(
       {
         thematique: 'contexte',
         question: 'contexte-departement-tom-siege-social',
       },
-      uneReponseDonnee()
-        .ayantPourReponse('contexte-departement-tom-siege-social-gironde')
-        .construis(),
+      uneReponseDonnee().ayantPourReponse('contexte-departement-tom-siege-social-gironde').construis(),
     );
 
 export const unDiagnosticAvecSecteurActivite = (secteurActivite: string) =>
@@ -252,14 +231,10 @@ export const unDiagnosticAvecSecteurActivite = (secteurActivite: string) =>
         thematique: 'contexte',
         question: 'contexte-secteur-activite',
       },
-      uneReponseDonnee()
-        .ayantPourReponse('contexte-secteur-activite-enseignement')
-        .construis(),
+      uneReponseDonnee().ayantPourReponse('contexte-secteur-activite-enseignement').construis(),
     );
 
-export const unDiagnosticAvecUneThematiqueEtSeptReponsesDonnees = (
-  thematique = 'thematique',
-): ConstructeurDiagnostic =>
+export const unDiagnosticAvecUneThematiqueEtSeptReponsesDonnees = (thematique = 'thematique'): ConstructeurDiagnostic =>
   unDiagnostic()
     .avecUnReferentiel(
       unReferentiel()
@@ -281,5 +256,4 @@ const septReponsesDonnees = () => [
 ];
 export const uneQuestionDiagnostic = () => new ConstructeurQuestionDiagnostic();
 
-export const uneReponseDonnee = (): ConstructeurReponseDonnee =>
-  new ConstructeurReponseDonnee();
+export const uneReponseDonnee = (): ConstructeurReponseDonnee => new ConstructeurReponseDonnee();

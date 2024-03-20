@@ -7,10 +7,7 @@ import {
   reducteurAuthentification,
   saisieInvalidee,
 } from '../../../src/composants/authentification/reducteurAuthentification';
-import {
-  ChampsErreur,
-  TexteExplicatif,
-} from '../../../src/composants/erreurs/Erreurs.tsx';
+import { ChampsErreur, TexteExplicatif } from '../../../src/composants/erreurs/Erreurs.tsx';
 
 describe('Réducteur authentification', () => {
   describe("Lorsque l'authentification est invalidée", () => {
@@ -29,20 +26,12 @@ describe('Réducteur authentification', () => {
       expect(etatAuthentification.erreur).toStrictEqual({
         identifiant: {
           texteExplicatif: (
-            <TexteExplicatif
-              id="identifiant-connexion"
-              texte="Veuillez saisir votre identifiant de connexion."
-            />
+            <TexteExplicatif id="identifiant-connexion" texte="Veuillez saisir votre identifiant de connexion." />
           ),
           className: 'fr-input-group--error',
         },
         motDePasse: {
-          texteExplicatif: (
-            <TexteExplicatif
-              id="mot-de-passe"
-              texte="Veuillez saisir votre mot de passe."
-            />
-          ),
+          texteExplicatif: <TexteExplicatif id="mot-de-passe" texte="Veuillez saisir votre mot de passe." />,
           className: 'fr-input-group--error',
         },
       });
@@ -51,10 +40,7 @@ describe('Réducteur authentification', () => {
 
   describe("Dans le cadre de la saisie de l'identifiant", () => {
     it("l'identifiant est validé", () => {
-      const etatAuthentification = reducteurAuthentification(
-        initialiseReducteur(),
-        identifiantSaisi('identifiant'),
-      );
+      const etatAuthentification = reducteurAuthentification(initialiseReducteur(), identifiantSaisi('identifiant'));
 
       expect(etatAuthentification.identifiant).toBe('identifiant');
       expect(etatAuthentification.motDePasse).toBe('');
@@ -64,19 +50,13 @@ describe('Réducteur authentification', () => {
     });
 
     it("l'identifiant est invalidé", () => {
-      const etatAuthentification = reducteurAuthentification(
-        initialiseReducteur(),
-        identifiantSaisi(''),
-      );
+      const etatAuthentification = reducteurAuthentification(initialiseReducteur(), identifiantSaisi(''));
 
       expect(etatAuthentification.saisieValide()).toBeFalsy();
       expect(etatAuthentification.erreur).toStrictEqual({
         identifiant: {
           texteExplicatif: (
-            <TexteExplicatif
-              id="identifiant-connexion"
-              texte="Veuillez saisir votre identifiant de connexion."
-            />
+            <TexteExplicatif id="identifiant-connexion" texte="Veuillez saisir votre identifiant de connexion." />
           ),
           className: 'fr-input-group--error',
         },
@@ -93,10 +73,7 @@ describe('Réducteur authentification', () => {
           erreur: {
             identifiant: {
               texteExplicatif: (
-                <TexteExplicatif
-                  id="identifiant-connexion"
-                  texte="Veuillez saisir votre identifiant de connexion."
-                />
+                <TexteExplicatif id="identifiant-connexion" texte="Veuillez saisir votre identifiant de connexion." />
               ),
               className: 'fr-input-group--error',
             },
@@ -121,20 +98,12 @@ describe('Réducteur authentification', () => {
           saisieValide: () => false,
           erreur: {
             motDePasse: {
-              texteExplicatif: (
-                <TexteExplicatif
-                  id="mot-de-passe"
-                  texte="Veuillez saisir votre mot de passe."
-                />
-              ),
+              texteExplicatif: <TexteExplicatif id="mot-de-passe" texte="Veuillez saisir votre mot de passe." />,
               className: 'fr-input-group--error',
             },
             identifiant: {
               texteExplicatif: (
-                <TexteExplicatif
-                  id="identifiant-connexion"
-                  texte="Veuillez saisir votre identifiant de connexion."
-                />
+                <TexteExplicatif id="identifiant-connexion" texte="Veuillez saisir votre identifiant de connexion." />
               ),
               className: 'fr-input-group--error',
             },
@@ -149,12 +118,7 @@ describe('Réducteur authentification', () => {
       expect(etatAuthentification.saisieValide()).toBeFalsy();
       expect(etatAuthentification.erreur).toStrictEqual({
         motDePasse: {
-          texteExplicatif: (
-            <TexteExplicatif
-              id="mot-de-passe"
-              texte="Veuillez saisir votre mot de passe."
-            />
-          ),
+          texteExplicatif: <TexteExplicatif id="mot-de-passe" texte="Veuillez saisir votre mot de passe." />,
           className: 'fr-input-group--error',
         },
       });
@@ -183,12 +147,7 @@ describe('Réducteur authentification', () => {
           saisieValide: () => false,
           erreur: {
             motDePasse: {
-              texteExplicatif: (
-                <TexteExplicatif
-                  id="mot-de-passe"
-                  texte="Veuillez saisir votre mot de passe."
-                />
-              ),
+              texteExplicatif: <TexteExplicatif id="mot-de-passe" texte="Veuillez saisir votre mot de passe." />,
               className: 'fr-input-group--error',
             },
           },
@@ -199,20 +158,12 @@ describe('Réducteur authentification', () => {
       expect(etatAuthentification.erreur).toStrictEqual({
         identifiant: {
           texteExplicatif: (
-            <TexteExplicatif
-              id="identifiant-connexion"
-              texte="Veuillez saisir votre identifiant de connexion."
-            />
+            <TexteExplicatif id="identifiant-connexion" texte="Veuillez saisir votre identifiant de connexion." />
           ),
           className: 'fr-input-group--error',
         },
         motDePasse: {
-          texteExplicatif: (
-            <TexteExplicatif
-              id="mot-de-passe"
-              texte="Veuillez saisir votre mot de passe."
-            />
-          ),
+          texteExplicatif: <TexteExplicatif id="mot-de-passe" texte="Veuillez saisir votre mot de passe." />,
           className: 'fr-input-group--error',
         },
       });
@@ -221,10 +172,7 @@ describe('Réducteur authentification', () => {
 
   describe('Dans le cadre de la saisie du mot de passe', () => {
     it('le mot de passe est validé', () => {
-      const etatAuthentification = reducteurAuthentification(
-        initialiseReducteur(),
-        motDePasseSaisi('mdp'),
-      );
+      const etatAuthentification = reducteurAuthentification(initialiseReducteur(), motDePasseSaisi('mdp'));
 
       expect(etatAuthentification.identifiant).toBe('');
       expect(etatAuthentification.motDePasse).toBe('mdp');
@@ -234,20 +182,12 @@ describe('Réducteur authentification', () => {
     });
 
     it('le mot de passe est invalidé', () => {
-      const etatAuthentification = reducteurAuthentification(
-        initialiseReducteur(),
-        motDePasseSaisi(''),
-      );
+      const etatAuthentification = reducteurAuthentification(initialiseReducteur(), motDePasseSaisi(''));
 
       expect(etatAuthentification.saisieValide()).toBeFalsy();
       expect(etatAuthentification.erreur).toStrictEqual({
         motDePasse: {
-          texteExplicatif: (
-            <TexteExplicatif
-              id="mot-de-passe"
-              texte="Veuillez saisir votre mot de passe."
-            />
-          ),
+          texteExplicatif: <TexteExplicatif id="mot-de-passe" texte="Veuillez saisir votre mot de passe." />,
           className: 'fr-input-group--error',
         },
       });
@@ -262,12 +202,7 @@ describe('Réducteur authentification', () => {
           saisieValide: () => false,
           erreur: {
             motDePasse: {
-              texteExplicatif: (
-                <TexteExplicatif
-                  id="mot-de-passe"
-                  texte="Veuillez saisir votre mot de passe."
-                />
-              ),
+              texteExplicatif: <TexteExplicatif id="mot-de-passe" texte="Veuillez saisir votre mot de passe." />,
               className: 'fr-input-group--error',
             },
           },
@@ -291,20 +226,12 @@ describe('Réducteur authentification', () => {
           saisieValide: () => false,
           erreur: {
             motDePasse: {
-              texteExplicatif: (
-                <TexteExplicatif
-                  id="mot-de-passe"
-                  texte="Veuillez saisir votre mot de passe."
-                />
-              ),
+              texteExplicatif: <TexteExplicatif id="mot-de-passe" texte="Veuillez saisir votre mot de passe." />,
               className: 'fr-input-group--error',
             },
             identifiant: {
               texteExplicatif: (
-                <TexteExplicatif
-                  id="identifiant-connexion"
-                  texte="Veuillez saisir votre identifiant de connexion."
-                />
+                <TexteExplicatif id="identifiant-connexion" texte="Veuillez saisir votre identifiant de connexion." />
               ),
               className: 'fr-input-group--error',
             },
@@ -320,10 +247,7 @@ describe('Réducteur authentification', () => {
       expect(etatAuthentification.erreur).toStrictEqual({
         identifiant: {
           texteExplicatif: (
-            <TexteExplicatif
-              id="identifiant-connexion"
-              texte="Veuillez saisir votre identifiant de connexion."
-            />
+            <TexteExplicatif id="identifiant-connexion" texte="Veuillez saisir votre identifiant de connexion." />
           ),
           className: 'fr-input-group--error',
         },
@@ -364,20 +288,12 @@ describe('Réducteur authentification', () => {
       expect(etatAuthentification.erreur).toStrictEqual({
         identifiant: {
           texteExplicatif: (
-            <TexteExplicatif
-              id="identifiant-connexion"
-              texte="Veuillez saisir votre identifiant de connexion."
-            />
+            <TexteExplicatif id="identifiant-connexion" texte="Veuillez saisir votre identifiant de connexion." />
           ),
           className: 'fr-input-group--error',
         },
         motDePasse: {
-          texteExplicatif: (
-            <TexteExplicatif
-              id="mot-de-passe"
-              texte="Veuillez saisir votre mot de passe."
-            />
-          ),
+          texteExplicatif: <TexteExplicatif id="mot-de-passe" texte="Veuillez saisir votre mot de passe." />,
           className: 'fr-input-group--error',
         },
       });
@@ -401,10 +317,7 @@ describe('Réducteur authentification', () => {
       expect(etatAuthentification.erreur).toStrictEqual({
         identifiant: {
           texteExplicatif: (
-            <TexteExplicatif
-              id="identifiant-connexion"
-              texte="Veuillez saisir votre identifiant de connexion."
-            />
+            <TexteExplicatif id="identifiant-connexion" texte="Veuillez saisir votre identifiant de connexion." />
           ),
           className: 'fr-input-group--error',
         },
@@ -428,12 +341,7 @@ describe('Réducteur authentification', () => {
       expect(etatAuthentification.saisieValide()).toBeFalsy();
       expect(etatAuthentification.erreur).toStrictEqual({
         motDePasse: {
-          texteExplicatif: (
-            <TexteExplicatif
-              id="mot-de-passe"
-              texte="Veuillez saisir votre mot de passe."
-            />
-          ),
+          texteExplicatif: <TexteExplicatif id="mot-de-passe" texte="Veuillez saisir votre mot de passe." />,
           className: 'fr-input-group--error',
         },
       });

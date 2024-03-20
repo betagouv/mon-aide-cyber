@@ -70,10 +70,7 @@ type Diagnostic = {
 
 type EntrepotDiagnostic = Entrepot<Diagnostic>;
 
-const initialiseDiagnostic = (
-  r: Referentiel,
-  mesures: ReferentielDeMesures,
-): Diagnostic => {
+const initialiseDiagnostic = (r: Referentiel, mesures: ReferentielDeMesures): Diagnostic => {
   const referentiel: {
     [clef: Thematique]: QuestionsThematique;
   } = Object.entries(r).reduce((accumulateur, [clef, questions]) => {
@@ -102,25 +99,18 @@ const initialiseDiagnostic = (
   };
 };
 
-const ajouteLaReponseAuDiagnostic = (
-  diagnostic: Diagnostic,
-  corpsReponse: CorpsReponse,
-) => {
+const ajouteLaReponseAuDiagnostic = (diagnostic: Diagnostic, corpsReponse: CorpsReponse) => {
   diagnostic.dateDerniereModification = FournisseurHorloge.maintenant();
   const questions = diagnostic.referentiel[corpsReponse.chemin].questions;
-  const questionTrouvee = questions.find(
-    (q) => q.identifiant === corpsReponse.identifiant,
-  );
+  const questionTrouvee = questions.find((q) => q.identifiant === corpsReponse.identifiant);
   if (questionTrouvee !== undefined) {
     StrategieDeReponse.pour(corpsReponse).applique(questionTrouvee);
   }
 };
 
 const genereLaRestitution = (diagnostic: Diagnostic) => {
-  const valeursDesIndices =
-    MoteurIndice.genereLesIndicesDesReponses(diagnostic);
-  const indicateurs =
-    MoteurDesIndicateurs.genereLesIndicateurs(valeursDesIndices);
+  const valeursDesIndices = MoteurIndice.genereLesIndicesDesReponses(diagnostic);
+  const indicateurs = MoteurDesIndicateurs.genereLesIndicateurs(valeursDesIndices);
   const mesures = Object.entries(diagnostic.referentiel)
     .flatMap(([__, questions]) => questions.questions)
     .flatMap((question) => MoteurMesures.genere(question, diagnostic.mesures));
@@ -133,8 +123,7 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
       .map((mesure) => {
         const valeurObtenue = Object.values(valeursDesIndices)
           .flatMap((valeurReponse) => valeurReponse)
-          .find((valeurReponse) => valeurReponse.identifiant === mesure.repondA)
-          ?.indice;
+          .find((valeurReponse) => valeurReponse.identifiant === mesure.repondA)?.indice;
         return {
           titre: mesure.niveau.titre,
           pourquoi: mesure.niveau.pourquoi,
@@ -143,10 +132,7 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
           valeurObtenue: valeurObtenue,
         } as MesurePriorisee;
       })
-      .filter(
-        (mesure) =>
-          mesure.valeurObtenue !== undefined && mesure.valeurObtenue !== null,
-      )
+      .filter((mesure) => mesure.valeurObtenue !== undefined && mesure.valeurObtenue !== null)
       .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
       .sort(
         (a, b) =>

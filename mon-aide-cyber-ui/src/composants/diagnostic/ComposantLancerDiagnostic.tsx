@@ -11,9 +11,7 @@ type ProprietesComposantLancerDiagnostic = {
   style: string;
 };
 
-export const ComposantLancerDiagnostic = ({
-  style,
-}: ProprietesComposantLancerDiagnostic) => {
+export const ComposantLancerDiagnostic = ({ style }: ProprietesComposantLancerDiagnostic) => {
   const { showBoundary } = useErrorBoundary();
   const navigationMAC = useNavigationMAC();
   const macapi = useMACAPI();
@@ -22,10 +20,7 @@ export const ComposantLancerDiagnostic = ({
     (lien: Lien) => {
       macapi
         .appelle<LienRoutage>(
-          constructeurParametresAPI()
-            .url(lien.url)
-            .methode(lien.methode!)
-            .construis(),
+          constructeurParametresAPI().url(lien.url).methode(lien.methode!).construis(),
           async (json) => new LienRoutage((await json) as FormatLien),
         )
         .then((lien) => {
@@ -46,10 +41,7 @@ export const ComposantLancerDiagnostic = ({
   );
 
   const lancerDiagnostic = useCallback(async () => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'lancer-diagnostic',
-      (lien: Lien) => lanceDiagnostic(lien),
-    );
+    new MoteurDeLiens(navigationMAC.etat).trouve('lancer-diagnostic', (lien: Lien) => lanceDiagnostic(lien));
   }, [navigationMAC.etat, lanceDiagnostic]);
 
   return (

@@ -23,6 +23,5 @@ class ConstructeurDiagnostics implements Constructeur<Diagnostics> {
   }
 }
 
-export const lesDiagnostics = (
-  diagnostics: Diagnostic[],
-): ConstructeurDiagnostics => new ConstructeurDiagnostics(diagnostics);
+export const lesDiagnostics = (diagnostics: Diagnostic[]): ConstructeurDiagnostics =>
+  new ConstructeurDiagnostics(diagnostics);

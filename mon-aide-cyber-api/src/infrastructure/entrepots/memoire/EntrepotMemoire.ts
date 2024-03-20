@@ -4,15 +4,9 @@ import { Diagnostic, EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
 import { cloneDeep } from 'lodash';
 import crypto from 'crypto';
 
-import {
-  EntrepotEvenementJournal,
-  Publication,
-} from '../../../journalisation/Publication';
+import { EntrepotEvenementJournal, Publication } from '../../../journalisation/Publication';
 import { Aidant, EntrepotAidant } from '../../../authentification/Aidant';
-import {
-  EntrepotRestitution,
-  Restitution,
-} from '../../../restitution/Restitution';
+import { EntrepotRestitution, Restitution } from '../../../restitution/Restitution';
 import { Aide, EntrepotAide } from '../../../aide/Aide';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
@@ -40,40 +34,27 @@ export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   }
 }
 
-export class EntrepotDiagnosticMemoire
-  extends EntrepotMemoire<Diagnostic>
-  implements EntrepotDiagnostic
-{
+export class EntrepotDiagnosticMemoire extends EntrepotMemoire<Diagnostic> implements EntrepotDiagnostic {
   typeAggregat(): string {
     return 'diagnostic';
   }
 }
 
-export class EntrepotEvenementJournalMemoire
-  extends EntrepotMemoire<Publication>
-  implements EntrepotEvenementJournal {}
+export class EntrepotEvenementJournalMemoire extends EntrepotMemoire<Publication> implements EntrepotEvenementJournal {}
 
-export class EntrepotRestitutionMemoire
-  extends EntrepotMemoire<Restitution>
-  implements EntrepotRestitution
-{
+export class EntrepotRestitutionMemoire extends EntrepotMemoire<Restitution> implements EntrepotRestitution {
   typeAggregat(): string {
     return 'restitution';
   }
 }
 
-export class EntrepotAidantMemoire
-  extends EntrepotMemoire<Aidant>
-  implements EntrepotAidant
-{
+export class EntrepotAidantMemoire extends EntrepotMemoire<Aidant> implements EntrepotAidant {
   async rechercheParIdentifiantConnexionEtMotDePasse(
     identifiantConnexion: string,
     motDePasse: string,
   ): Promise<Aidant> {
     const aidantTrouve = Array.from(this.entites.values()).find(
-      (aidant) =>
-        aidant.identifiantConnexion === identifiantConnexion &&
-        aidant.motDePasse === motDePasse,
+      (aidant) => aidant.identifiantConnexion === identifiantConnexion && aidant.motDePasse === motDePasse,
     );
     if (!aidantTrouve) {
       throw new AggregatNonTrouve('aidant');
@@ -81,9 +62,7 @@ export class EntrepotAidantMemoire
     return Promise.resolve(aidantTrouve);
   }
 
-  rechercheParIdentifiantDeConnexion(
-    identifiantConnexion: string,
-  ): Promise<Aidant> {
+  rechercheParIdentifiantDeConnexion(identifiantConnexion: string): Promise<Aidant> {
     const aidantTrouve = Array.from(this.entites.values()).find(
       (aidant) => aidant.identifiantConnexion === identifiantConnexion,
     );
@@ -98,6 +77,4 @@ export class EntrepotAidantMemoire
   }
 }
 
-export class EntrepotAideMemoire
-  extends EntrepotMemoire<Aide>
-  implements EntrepotAide {}
+export class EntrepotAideMemoire extends EntrepotMemoire<Aide> implements EntrepotAide {}

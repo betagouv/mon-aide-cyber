@@ -1,13 +1,7 @@
 import { Knex } from 'knex';
-import {
-  QuestionATiroir,
-  ReponsePossible,
-} from '../../../../diagnostic/Referentiel';
+import { QuestionATiroir, ReponsePossible } from '../../../../diagnostic/Referentiel';
 import { Poids, Valeur } from '../../../../diagnostic/Indice';
-import {
-  QuestionDiagnostic,
-  Thematique,
-} from '../../../../diagnostic/Diagnostic';
+import { QuestionDiagnostic, Thematique } from '../../../../diagnostic/Diagnostic';
 import crypto from 'crypto';
 
 type NiveauRecommandation = 1 | 2;
@@ -33,10 +27,7 @@ type TableauDeRecommandations = {
   [identifiantQuestion: string]: ObjetDeRecommandation;
 };
 
-type RepresentationReponsePossible = Omit<
-  ReponsePossible,
-  'resultat' | 'questions'
-> & {
+type RepresentationReponsePossible = Omit<ReponsePossible, 'resultat' | 'questions'> & {
   resultat?: {
     recommandations?: Recommandation[];
     indice?: { valeur: Valeur; poids?: Poids };
@@ -47,17 +38,11 @@ type RepresentationReponsePossible = Omit<
   };
   questions?: RepresentationQuestionTiroir[];
 };
-type RepresentationQuestionTiroir = Omit<
-  QuestionATiroir,
-  'reponsesPossibles'
-> & {
+type RepresentationQuestionTiroir = Omit<QuestionATiroir, 'reponsesPossibles'> & {
   reponsesPossibles: RepresentationReponsePossible[];
 };
 
-type RepresentationQuestionDiagnostic = Omit<
-  QuestionDiagnostic,
-  'reponsesPossibles'
-> & {
+type RepresentationQuestionDiagnostic = Omit<QuestionDiagnostic, 'reponsesPossibles'> & {
   reponsesPossibles: RepresentationReponsePossible[];
 };
 type RepresentationQuestionsThematique = {
@@ -68,14 +53,9 @@ type RepresentationReferentiel = {
   [clef: Thematique]: RepresentationQuestionsThematique;
 };
 
-type RepresentationRecommandationPriorisee = Omit<
-  Recommandation,
-  'valeurObtenue'
-> & {
+type RepresentationRecommandationPriorisee = Omit<Recommandation, 'valeurObtenue'> & {
   noteObtenue?: Valeur;
-  valeurObtenue:
-    | { theorique?: Valeur; poids?: Poids; indice?: Valeur }
-    | Valeur;
+  valeurObtenue: { theorique?: Valeur; poids?: Poids; indice?: Valeur } | Valeur;
 };
 
 type RepresentationRecommandations = {
@@ -102,9 +82,7 @@ export async function up(knex: Knex): Promise<void> {
     }
   };
 
-  const metsAJourLesRecommandations = (
-    recommandations: RepresentationRecommandationPriorisee[],
-  ) =>
+  const metsAJourLesRecommandations = (recommandations: RepresentationRecommandationPriorisee[]) =>
     recommandations.map((recommandation) => {
       if (recommandation.valeurObtenue) {
         const { valeurObtenue, ...reste } = recommandation;
@@ -144,30 +122,20 @@ export async function up(knex: Knex): Promise<void> {
               question.reponsesPossibles.forEach((reponsePossible) => {
                 metsAJour(reponsePossible);
                 reponsePossible.questions?.forEach((question) => {
-                  question.reponsesPossibles.forEach((reponsePossible) =>
-                    metsAJour(reponsePossible),
-                  );
+                  question.reponsesPossibles.forEach((reponsePossible) => metsAJour(reponsePossible));
                 });
               });
             });
           });
-        if (
-          ligne.donnees.restitution &&
-          ligne.donnees.restitution.recommandations
-        ) {
-          ligne.donnees.restitution.recommandations.recommandationsPrioritaires =
-            metsAJourLesRecommandations(
-              ligne.donnees.restitution.recommandations
-                .recommandationsPrioritaires,
-            );
-          ligne.donnees.restitution.recommandations.autresRecommandations =
-            metsAJourLesRecommandations(
-              ligne.donnees.restitution.recommandations.autresRecommandations,
-            );
+        if (ligne.donnees.restitution && ligne.donnees.restitution.recommandations) {
+          ligne.donnees.restitution.recommandations.recommandationsPrioritaires = metsAJourLesRecommandations(
+            ligne.donnees.restitution.recommandations.recommandationsPrioritaires,
+          );
+          ligne.donnees.restitution.recommandations.autresRecommandations = metsAJourLesRecommandations(
+            ligne.donnees.restitution.recommandations.autresRecommandations,
+          );
         }
-        return knex('diagnostics')
-          .where('id', ligne.id)
-          .update({ donnees: ligne.donnees });
+        return knex('diagnostics').where('id', ligne.id).update({ donnees: ligne.donnees });
       });
       return Promise.all(misesAJour);
     },

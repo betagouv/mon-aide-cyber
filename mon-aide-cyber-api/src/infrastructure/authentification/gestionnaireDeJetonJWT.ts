@@ -1,9 +1,4 @@
-import {
-  DonneesJetonMAC,
-  GestionnaireDeJeton,
-  Jeton,
-  JwtMACPayload,
-} from '../../authentification/GestionnaireDeJeton';
+import { DonneesJetonMAC, GestionnaireDeJeton, Jeton, JwtMACPayload } from '../../authentification/GestionnaireDeJeton';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
 
@@ -16,9 +11,6 @@ export class GestionnaireDeJetonJWT implements GestionnaireDeJeton {
   }
 
   genereJeton(donnee: DonneesJetonMAC): Jeton {
-    return jwt.sign(
-      { ...donnee, iat: FournisseurHorloge.maintenant().getTime() },
-      this.clef,
-    );
+    return jwt.sign({ ...donnee, iat: FournisseurHorloge.maintenant().getTime() }, this.clef);
   }
 }

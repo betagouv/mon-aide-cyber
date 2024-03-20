@@ -15,17 +15,10 @@ export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => {
     setLienCopie(() => (
       <div className="fr-container">
         <div className="fr-grid-row fr-grid-row--right">
-          <div
-            className="fr-alert fr-alert--success fr-mb-1w fr-col-4"
-            role="alert"
-          >
+          <div className="fr-alert fr-alert--success fr-mb-1w fr-col-4" role="alert">
             <h3 className="fr-alert__title">Lien copié avec succès</h3>
             <p>Le lien du diagnostic a été copié dans votre presse-papier</p>
-            <button
-              className="fr-btn--close fr-btn"
-              title="Masquer le message"
-              onClick={fermeAlerte}
-            >
+            <button className="fr-btn--close fr-btn" title="Masquer le message" onClick={fermeAlerte}>
               Masquer le message
             </button>
           </div>
@@ -42,11 +35,7 @@ export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => {
             <div className="fr-header__brand fr-enlarge-link">
               <div className="fr-header__brand-top"></div>
               <div className="fr-header__service">
-                <img
-                  className="fr-responsive-img logo-mac-diagnostic"
-                  src="/images/logo_mac.svg"
-                  alt="ANSSI"
-                />
+                <img className="fr-responsive-img logo-mac-diagnostic" src="/images/logo_mac.svg" alt="ANSSI" />
               </div>
             </div>
             <div className="fr-header__tools">

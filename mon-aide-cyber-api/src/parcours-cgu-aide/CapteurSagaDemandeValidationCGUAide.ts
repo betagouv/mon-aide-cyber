@@ -10,9 +10,7 @@ export type SagaDemandeValidationCGUAide = Saga & {
   raisonSociale: string;
 };
 
-export class CapteurSagaDemandeValidationCGUAide
-  implements CapteurSaga<SagaDemandeValidationCGUAide, void>
-{
+export class CapteurSagaDemandeValidationCGUAide implements CapteurSaga<SagaDemandeValidationCGUAide, void> {
   constructor(
     private readonly entrepots: Entrepots,
     _busCommande: BusCommande,

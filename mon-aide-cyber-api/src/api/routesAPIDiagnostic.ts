@@ -17,11 +17,7 @@ import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
-  const {
-    adaptateurDeVerificationDeSession: session,
-    adaptateurDeVerificationDeCGU: cgu,
-    busCommande,
-  } = configuration;
+  const { adaptateurDeVerificationDeSession: session, adaptateurDeVerificationDeCGU: cgu, busCommande } = configuration;
 
   routes.post(
     '/',
@@ -38,10 +34,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         .publie<CommandeLanceDiagnostic, Diagnostic>(commande)
         .then((diagnostic) => {
           reponse.status(201);
-          reponse.appendHeader(
-            'Link',
-            `${requete.originalUrl}/${diagnostic.identifiant}`,
-          );
+          reponse.appendHeader('Link', `${requete.originalUrl}/${diagnostic.identifiant}`);
           reponse.send();
         })
         .catch((erreur) => suite(erreur));
@@ -98,17 +91,11 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
 
-      const genereRestitution = (
-        restitution: Restitution,
-      ): Promise<Buffer | RestitutionHTML> => {
+      const genereRestitution = (restitution: Restitution): Promise<Buffer | RestitutionHTML> => {
         if (requete.headers.accept === 'application/pdf') {
-          return configuration.adaptateursRestitution
-            .pdf()
-            .genereRestitution(restitution);
+          return configuration.adaptateursRestitution.pdf().genereRestitution(restitution);
         }
-        return configuration.adaptateursRestitution
-          .html()
-          .genereRestitution(restitution);
+        return configuration.adaptateursRestitution.html().genereRestitution(restitution);
       };
 
       const creerReponse = (restitution: Buffer | RestitutionHTML) => {
@@ -135,9 +122,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         .lis(id)
         .then((restitution) => genereRestitution(restitution))
         .then((pdf) => creerReponse(pdf))
-        .catch((erreur) =>
-          suite(ErreurMAC.cree('Demande la restitution', erreur)),
-        );
+        .catch((erreur) => suite(ErreurMAC.cree('Demande la restitution', erreur)));
     },
   );
 

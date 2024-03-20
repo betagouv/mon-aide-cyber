@@ -4,8 +4,7 @@ export const donneesGouvernance: QuestionsThematique = {
   questions: [
     {
       identifiant: 'gouvernance-infos-et-activites-a-proteger',
-      libelle:
-        'Avez-vous déterminé les informations et les activités métiers à protéger en priorité ?',
+      libelle: 'Avez-vous déterminé les informations et les activités métiers à protéger en priorité ?',
       poids: 2,
       type: 'choixUnique',
       reponsesPossibles: [
@@ -29,10 +28,8 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 1,
         },
         {
-          identifiant:
-            'gouvernance-infos-et-activites-a-proteger-oui-idee-generale',
-          libelle:
-            'Nous avons une idée générale de nos données et activités métiers à protéger en priorité.',
+          identifiant: 'gouvernance-infos-et-activites-a-proteger-oui-idee-generale',
+          libelle: 'Nous avons une idée générale de nos données et activités métiers à protéger en priorité.',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -57,8 +54,7 @@ export const donneesGouvernance: QuestionsThematique = {
     },
     {
       identifiant: 'gouvernance-schema-si-a-jour',
-      libelle:
-        'Existe-t-il un plan du système d’information de l’organisation ?',
+      libelle: 'Existe-t-il un plan du système d’information de l’organisation ?',
       poids: 1,
       type: 'choixUnique',
       reponsesPossibles: [
@@ -83,8 +79,7 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant: 'gouvernance-schema-si-a-jour-oui-macro',
-          libelle:
-            'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
+          libelle: 'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -140,8 +135,7 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-partiel',
-          libelle:
-            'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
+          libelle: 'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -166,8 +160,7 @@ export const donneesGouvernance: QuestionsThematique = {
     },
     {
       identifiant: 'gouvernance-connaissance-rgpd-1',
-      libelle:
-        'Avez-vous listé les données personnelles traitées au sein de votre entité ?',
+      libelle: 'Avez-vous listé les données personnelles traitées au sein de votre entité ?',
       type: 'choixUnique',
       poids: 1,
       reponsesPossibles: [
@@ -192,14 +185,11 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant: 'gouvernance-connaissance-rgpd-1-oui-liste-données',
-          libelle:
-            "Oui, j'ai listé l'ensemble des données personnelles traitées au sein de mon entité",
+          libelle: "Oui, j'ai listé l'ensemble des données personnelles traitées au sein de mon entité",
           ordre: 3,
           resultat: {
             indice: { valeur: 2 },
-            mesures: [
-              { identifiant: 'gouvernance-connaissance-rgpd-1', niveau: 2 },
-            ],
+            mesures: [{ identifiant: 'gouvernance-connaissance-rgpd-1', niveau: 2 }],
           },
         },
         {
@@ -240,14 +230,11 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant: 'gouvernance-connaissance-rgpd-2-oui-liste-données',
-          libelle:
-            "Oui, j'informe les personnes concernées sur l’utilisation de leurs données personnelles.",
+          libelle: "Oui, j'informe les personnes concernées sur l’utilisation de leurs données personnelles.",
           ordre: 3,
           resultat: {
             indice: { valeur: 2 },
-            mesures: [
-              { identifiant: 'gouvernance-connaissance-rgpd-2', niveau: 2 },
-            ],
+            mesures: [{ identifiant: 'gouvernance-connaissance-rgpd-2', niveau: 2 }],
           },
         },
         {
@@ -280,8 +267,7 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant: 'gouvernance-exigence-cyber-securite-presta-non',
-          libelle:
-            'Non, aucune exigence ne figure dans nos contrats de prestation',
+          libelle: 'Non, aucune exigence ne figure dans nos contrats de prestation',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
@@ -294,10 +280,8 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant:
-            'gouvernance-exigence-cyber-securite-presta-oui-formalisee',
-          libelle:
-            'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.',
+          identifiant: 'gouvernance-exigence-cyber-securite-presta-oui-formalisee',
+          libelle: 'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -311,8 +295,7 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant: 'gouvernance-exigence-cyber-securite-presta-oui-fixee',
-          libelle:
-            'Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.',
+          libelle: 'Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -326,28 +309,23 @@ export const donneesGouvernance: QuestionsThematique = {
       type: 'choixUnique',
       reponsesPossibles: [
         {
-          identifiant:
-            'gouvernance-exigence-cyber-securite-presta-si-industriel-na',
+          identifiant: 'gouvernance-exigence-cyber-securite-presta-si-industriel-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
-          identifiant:
-            'gouvernance-exigence-cyber-securite-presta-si-industriel-nsp',
+          identifiant: 'gouvernance-exigence-cyber-securite-presta-si-industriel-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
-          identifiant:
-            'gouvernance-exigence-cyber-securite-presta-si-industriel-non',
-          libelle:
-            'Non, aucune exigence ne figure dans nos contrats de prestation',
+          identifiant: 'gouvernance-exigence-cyber-securite-presta-si-industriel-non',
+          libelle: 'Non, aucune exigence ne figure dans nos contrats de prestation',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant:
-                  'gouvernance-exigence-cyber-securite-presta-si-industriel',
+                identifiant: 'gouvernance-exigence-cyber-securite-presta-si-industriel',
                 niveau: 1,
               },
             ],
@@ -355,16 +333,13 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant:
-            'gouvernance-exigence-cyber-securite-presta-si-industriel-oui-formalisee',
-          libelle:
-            'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.',
+          identifiant: 'gouvernance-exigence-cyber-securite-presta-si-industriel-oui-formalisee',
+          libelle: 'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
               {
-                identifiant:
-                  'gouvernance-exigence-cyber-securite-presta-si-industriel',
+                identifiant: 'gouvernance-exigence-cyber-securite-presta-si-industriel',
                 niveau: 2,
               },
             ],
@@ -372,10 +347,8 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 3,
         },
         {
-          identifiant:
-            'gouvernance-exigence-cyber-securite-presta-si-industriel-oui-fixee',
-          libelle:
-            'Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.',
+          identifiant: 'gouvernance-exigence-cyber-securite-presta-si-industriel-oui-fixee',
+          libelle: 'Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },

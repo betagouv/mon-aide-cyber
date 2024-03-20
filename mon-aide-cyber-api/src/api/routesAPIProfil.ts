@@ -6,11 +6,7 @@ import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge
 import { ErreurMAC } from '../domaine/erreurMAC';
 import { constructeurActionsHATEOAS } from './hateoas/hateoas';
 import { validateurDeNouveauMotDePasse } from './validateurs/validateurs';
-import {
-  FieldValidationError,
-  Result,
-  validationResult,
-} from 'express-validator';
+import { FieldValidationError, Result, validationResult } from 'express-validator';
 import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
 
 type CorpsRequeteChangementMotDerPasse = {
@@ -21,21 +17,13 @@ type CorpsRequeteChangementMotDerPasse = {
 
 export const routesAPIProfil = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
-  const {
-    entrepots,
-    adaptateurDeVerificationDeSession: session,
-    adaptateurDeVerificationDeCGU: cgu,
-  } = configuration;
+  const { entrepots, adaptateurDeVerificationDeSession: session, adaptateurDeVerificationDeCGU: cgu } = configuration;
 
   routes.get(
     '/',
     session.verifie('Accède au profil'),
     cgu.verifie(),
-    async (
-      requete: RequeteUtilisateur,
-      reponse: Response,
-      suite: NextFunction,
-    ) => {
+    async (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       return entrepots
         .aidants()
         .lis(requete.identifiantUtilisateurCourant!)
@@ -43,9 +31,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
           const dateSignatureCGU = aidant.dateSignatureCGU;
           return reponse.status(200).json({
             nomPrenom: aidant.nomPrenom,
-            dateSignatureCGU: dateSignatureCGU
-              ? FournisseurHorloge.formateDate(dateSignatureCGU).date
-              : '',
+            dateSignatureCGU: dateSignatureCGU ? FournisseurHorloge.formateDate(dateSignatureCGU).date : '',
             identifiantConnexion: aidant.identifiantConnexion,
             ...constructeurActionsHATEOAS().affichageProfil().construis(),
           });
@@ -59,26 +45,14 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     express.json(),
     session.verifie('Modifie le mot de passe'),
     cgu.verifie(),
-    validateurDeNouveauMotDePasse(
-      entrepots,
-      'ancienMotDePasse',
-      'motDePasse',
-      'confirmationMotDePasse',
-    ),
-    async (
-      requete: RequeteUtilisateur,
-      reponse: Response,
-      suite: NextFunction,
-    ) => {
+    validateurDeNouveauMotDePasse(entrepots, 'ancienMotDePasse', 'motDePasse', 'confirmationMotDePasse'),
+    async (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const resultatValidation: Result<FieldValidationError> = validationResult(
         requete,
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {
-        const aidant = await entrepots
-          .aidants()
-          .lis(requete.identifiantUtilisateurCourant!);
-        const changementnMotDePasse: CorpsRequeteChangementMotDerPasse =
-          requete.body;
+        const aidant = await entrepots.aidants().lis(requete.identifiantUtilisateurCourant!);
+        const changementnMotDePasse: CorpsRequeteChangementMotDerPasse = requete.body;
         aidant.motDePasse = changementnMotDePasse.motDePasse;
         return entrepots
           .aidants()
@@ -93,10 +67,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
         .map((resultat) => resultat.msg)
         .filter((erreur): erreur is string => !!erreur);
       return suite(
-        ErreurMAC.cree(
-          'Modifie le mot de passe',
-          new ErreurCreationEspaceAidant(erreursValidation.join('\n')),
-        ),
+        ErreurMAC.cree('Modifie le mot de passe', new ErreurCreationEspaceAidant(erreursValidation.join('\n'))),
       );
     },
   );

@@ -12,11 +12,7 @@ export async function up(knex: Knex): Promise<void | number[]> {
       }[],
     ) => {
       const misesAJour = lignes
-        .filter(
-          (ligne) =>
-            !ligne.donnees.dateSignatureCGU ||
-            !ligne.donnees.dateSignatureCharte,
-        )
+        .filter((ligne) => !ligne.donnees.dateSignatureCGU || !ligne.donnees.dateSignatureCharte)
         .map((ligne) => {
           if (!ligne.donnees.dateSignatureCharte) {
             ligne.donnees.dateSignatureCharte = '2023-11-30T12:00:00+01:00';

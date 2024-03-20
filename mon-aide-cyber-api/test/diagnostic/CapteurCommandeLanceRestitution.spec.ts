@@ -27,21 +27,13 @@ describe('Capteur de lancement de la restitution', () => {
   const mesures = desMesuresPour7Questions();
   beforeEach(() => {
     entrepots = new EntrepotsMemoire();
-    capteurCommandeLanceRestitution = new CapteurCommandeLanceRestitution(
-      entrepots,
-      new BusEvenementDeTest(),
-    );
+    capteurCommandeLanceRestitution = new CapteurCommandeLanceRestitution(entrepots, new BusEvenementDeTest());
   });
 
   it('génère les mesures', async () => {
     const questions = uneListeDe7QuestionsToutesAssociees();
     const diagnostic = unDiagnostic()
-      .avecUnReferentiel(
-        unReferentiel()
-          .sansThematique()
-          .ajouteUneThematique('thematique', questions)
-          .construis(),
-      )
+      .avecUnReferentiel(unReferentiel().sansThematique().ajouteUneThematique('thematique', questions).construis())
       .avecLesReponsesDonnees('thematique', [
         { q1: 'reponse-11' },
         { q2: 'reponse-21' },
@@ -55,16 +47,10 @@ describe('Capteur de lancement de la restitution', () => {
       .construis();
     await entrepots.diagnostic().persiste(diagnostic);
 
-    await capteurCommandeLanceRestitution.execute(
-      new ConstructeurCommande(diagnostic.identifiant).construis(),
-    );
+    await capteurCommandeLanceRestitution.execute(new ConstructeurCommande(diagnostic.identifiant).construis());
 
-    const diagnosticRetourne = await entrepots
-      .diagnostic()
-      .lis(diagnostic.identifiant);
-    expect(
-      diagnosticRetourne.restitution?.mesures?.mesuresPrioritaires,
-    ).toStrictEqual<MesurePriorisee[]>([
+    const diagnosticRetourne = await entrepots.diagnostic().lis(diagnostic.identifiant);
+    expect(diagnosticRetourne.restitution?.mesures?.mesuresPrioritaires).toStrictEqual<MesurePriorisee[]>([
       {
         valeurObtenue: 0,
         priorisation: 1,
@@ -108,9 +94,7 @@ describe('Capteur de lancement de la restitution', () => {
         comment: 'comme ça',
       },
     ]);
-    expect(
-      diagnosticRetourne.restitution?.mesures?.autresMesures,
-    ).toStrictEqual([
+    expect(diagnosticRetourne.restitution?.mesures?.autresMesures).toStrictEqual([
       {
         titre: 'mesure 7',
         pourquoi: 'parce-que',
@@ -153,16 +137,10 @@ describe('Capteur de lancement de la restitution', () => {
 
   it('si le diagnostic est inconnu, cela génère un erreur', async () => {
     await expect(() =>
-      new CapteurCommandeLanceRestitution(
-        entrepots,
-        new BusEvenementDeTest(),
-      ).execute(new ConstructeurCommande(crypto.randomUUID()).construis()),
-    ).rejects.toStrictEqual(
-      ErreurMAC.cree(
-        'Demande la restitution',
-        new AggregatNonTrouve('diagnostic'),
+      new CapteurCommandeLanceRestitution(entrepots, new BusEvenementDeTest()).execute(
+        new ConstructeurCommande(crypto.randomUUID()).construis(),
       ),
-    );
+    ).rejects.toStrictEqual(ErreurMAC.cree('Demande la restitution', new AggregatNonTrouve('diagnostic')));
   });
 });
 

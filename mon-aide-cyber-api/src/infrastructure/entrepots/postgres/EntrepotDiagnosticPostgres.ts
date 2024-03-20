@@ -30,8 +30,7 @@ export class EntrepotDiagnosticPostgres
       [thematique: Thematique]: RepresentationQuestionsThematique;
     } = this.transcris(
       entite,
-      <E = Set<string>, S = string[]>(reponses: E) =>
-        Array.from(reponses as Set<string>) as S,
+      <E = Set<string>, S = string[]>(reponses: E) => Array.from(reponses as Set<string>) as S,
     );
     return {
       id: entite.identifiant,
@@ -43,15 +42,12 @@ export class EntrepotDiagnosticPostgres
     const diagnosticDTO = dto.donnees as RepresentationDiagnostic;
     const referentiel = this.transcris(
       diagnosticDTO,
-      <E = string[], S = Set<string>>(reponses: E) =>
-        new Set(reponses as string[]) as S,
+      <E = string[], S = Set<string>>(reponses: E) => new Set(reponses as string[]) as S,
     );
     return {
       ...diagnosticDTO,
       dateCreation: FournisseurHorloge.enDate(diagnosticDTO.dateCreation),
-      dateDerniereModification: FournisseurHorloge.enDate(
-        diagnosticDTO.dateDerniereModification,
-      ),
+      dateDerniereModification: FournisseurHorloge.enDate(diagnosticDTO.dateDerniereModification),
       referentiel: referentiel,
     } as Diagnostic;
   }
@@ -68,22 +64,16 @@ export class EntrepotDiagnosticPostgres
       (reducteur, [thematique, questions]) => ({
         ...reducteur,
         [thematique as Thematique]: {
-          questions: questions.questions.map(
-            (
-              question: QuestionDiagnostic | RepresentationQuestionDiagnostic,
-            ) => ({
-              ...question,
-              reponseDonnee: {
-                ...question.reponseDonnee,
-                reponsesMultiples: question.reponseDonnee.reponsesMultiples.map(
-                  (rep) => ({
-                    ...rep,
-                    reponses: transformeReponsesMultiples(rep.reponses),
-                  }),
-                ),
-              },
-            }),
-          ),
+          questions: questions.questions.map((question: QuestionDiagnostic | RepresentationQuestionDiagnostic) => ({
+            ...question,
+            reponseDonnee: {
+              ...question.reponseDonnee,
+              reponsesMultiples: question.reponseDonnee.reponsesMultiples.map((rep) => ({
+                ...rep,
+                reponses: transformeReponsesMultiples(rep.reponses),
+              })),
+            },
+          })),
         },
       }),
       {},
@@ -97,25 +87,16 @@ type RepresentationReponsesMultiples = Omit<ReponsesMultiples, 'reponses'> & {
 type ReponseDonneeDTO = Omit<ReponseDonnee, 'reponsesMultiples'> & {
   reponsesMultiples: RepresentationReponsesMultiples[];
 };
-type RepresentationQuestionDiagnostic = Omit<
-  QuestionDiagnostic,
-  'reponseDonnee'
-> & {
+type RepresentationQuestionDiagnostic = Omit<QuestionDiagnostic, 'reponseDonnee'> & {
   reponseDonnee: ReponseDonneeDTO;
 };
-type RepresentationQuestionsThematique = Omit<
-  QuestionsThematique,
-  'questions'
-> & {
+type RepresentationQuestionsThematique = Omit<QuestionsThematique, 'questions'> & {
   questions: RepresentationQuestionDiagnostic[];
 };
 type RepresentationReferentielDiagnostic = {
   [thematique: Thematique]: RepresentationQuestionsThematique;
 };
-export type RepresentationDiagnostic = Omit<
-  Diagnostic,
-  'referentiel' | 'dateCreation' | 'dateDerniereModification'
-> & {
+export type RepresentationDiagnostic = Omit<Diagnostic, 'referentiel' | 'dateCreation' | 'dateDerniereModification'> & {
   dateCreation: string;
   dateDerniereModification: string;
   referentiel: RepresentationReferentielDiagnostic;

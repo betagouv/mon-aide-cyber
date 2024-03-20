@@ -14,20 +14,13 @@ export class MoteurDeLiens {
       .forEach(([action, lien]) => {
         const route = ACTIONS.get(action);
         if (route?.includes('{DYNAMIQUE}')) {
-          return (lien.route = route.replace(
-            '{DYNAMIQUE}',
-            lien.url.split('/').at(-1) || '',
-          ));
+          return (lien.route = route.replace('{DYNAMIQUE}', lien.url.split('/').at(-1) || ''));
         }
         return (lien.route = route);
       });
   }
 
-  trouve(
-    lienATrouver: string,
-    enSucces?: (lien: Lien) => void,
-    enErreur?: () => void,
-  ) {
+  trouve(lienATrouver: string, enSucces?: (lien: Lien) => void, enErreur?: () => void) {
     const lien = Object.entries(this.liens)
       .filter(([action]) => action === lienATrouver)
       .map(([, restitution]) => restitution)[0];

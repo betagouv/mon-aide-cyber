@@ -1,8 +1,5 @@
 import { Constructeur } from './constructeur';
-import {
-  InformationsRestitution,
-  Restitution,
-} from '../../src/restitution/Restitution';
+import { InformationsRestitution, Restitution } from '../../src/restitution/Restitution';
 import crypto from 'crypto';
 import { fakerFR } from '@faker-js/faker';
 import { MesurePriorisee } from '../../src/diagnostic/Diagnostic';
@@ -36,10 +33,7 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
     };
   }
 
-  avecIndicateurs(
-    thematique: string,
-    moyenne: number,
-  ): ConstructeurRestitution {
+  avecIndicateurs(thematique: string, moyenne: number): ConstructeurRestitution {
     this.indicateurs = {
       ...this.indicateurs,
       ...{ [thematique]: { moyennePonderee: moyenne } },
@@ -57,17 +51,13 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
     return this;
   }
 
-  avecInformations(
-    informationsRestitution: InformationsRestitution,
-  ): ConstructeurRestitution {
+  avecInformations(informationsRestitution: InformationsRestitution): ConstructeurRestitution {
     this.informationsRestitution = informationsRestitution;
     return this;
   }
 }
 
-class ConstructeurInformationsRestitution
-  implements Constructeur<InformationsRestitution>
-{
+class ConstructeurInformationsRestitution implements Constructeur<InformationsRestitution> {
   private dateCreation: Date = FournisseurHorloge.maintenant();
   private dateDerniereModification: Date = add(this.dateCreation, { days: 1 });
   private secteurActivite: string = fakerFR.commerce.department();
@@ -81,24 +71,18 @@ class ConstructeurInformationsRestitution
     };
   }
 
-  avecSecteurActivite(
-    secteurActivite: string,
-  ): ConstructeurInformationsRestitution {
+  avecSecteurActivite(secteurActivite: string): ConstructeurInformationsRestitution {
     this.secteurActivite = secteurActivite;
     return this;
   }
 
-  avecZoneGeographique(
-    zoneGeogprahique: string,
-  ): ConstructeurInformationsRestitution {
+  avecZoneGeographique(zoneGeogprahique: string): ConstructeurInformationsRestitution {
     this.zoneGeographique = zoneGeogprahique;
     return this;
   }
 }
 
-export const uneRestitution = (): ConstructeurRestitution =>
-  new ConstructeurRestitution();
+export const uneRestitution = (): ConstructeurRestitution => new ConstructeurRestitution();
 
-export const desInformationsDeRestitution =
-  (): ConstructeurInformationsRestitution =>
-    new ConstructeurInformationsRestitution();
+export const desInformationsDeRestitution = (): ConstructeurInformationsRestitution =>
+  new ConstructeurInformationsRestitution();

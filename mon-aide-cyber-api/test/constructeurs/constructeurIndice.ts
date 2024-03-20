@@ -5,17 +5,13 @@ import { fakerFR } from '@faker-js/faker';
 
 type Indice = { identifiant: string; indice: Valeur; poids: Poids };
 
-class ConstructeurDesValeursDesReponsesAuDiagnostic
-  implements Constructeur<ValeursDesIndicesAuDiagnostic>
-{
+class ConstructeurDesValeursDesReponsesAuDiagnostic implements Constructeur<ValeursDesIndicesAuDiagnostic> {
   private thematiques: {
     [thematique: string]: Indice[];
   } = {};
   private thematiqueChoisie = '';
 
-  pourLaThematique(
-    thematique: string,
-  ): ConstructeurDesValeursDesReponsesAuDiagnostic {
+  pourLaThematique(thematique: string): ConstructeurDesValeursDesReponsesAuDiagnostic {
     if (!this.thematiques[thematique]) {
       this.thematiques[thematique] = [];
     }
@@ -75,7 +71,6 @@ class ConstructeurIndice implements Constructeur<Indice> {
   }
 }
 
-export const desValeursDesReponsesAuDiagnostic = () =>
-  new ConstructeurDesValeursDesReponsesAuDiagnostic();
+export const desValeursDesReponsesAuDiagnostic = () => new ConstructeurDesValeursDesReponsesAuDiagnostic();
 
 export const uneValeur = () => new ConstructeurIndice();

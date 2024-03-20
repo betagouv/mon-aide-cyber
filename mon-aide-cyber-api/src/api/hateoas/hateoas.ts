@@ -21,9 +21,7 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  postAuthentification(
-    aidantAuthentifie: AidantAuthentifie,
-  ): ConstructeurActionsHATEOAS {
+  postAuthentification(aidantAuthentifie: AidantAuthentifie): ConstructeurActionsHATEOAS {
     if (!aidantAuthentifie.dateSignatureCGU) {
       return this.creerEspaceAidant();
     }
@@ -124,5 +122,4 @@ class ConstructeurActionsHATEOAS {
   };
 }
 
-export const constructeurActionsHATEOAS = (): ConstructeurActionsHATEOAS =>
-  new ConstructeurActionsHATEOAS();
+export const constructeurActionsHATEOAS = (): ConstructeurActionsHATEOAS => new ConstructeurActionsHATEOAS();

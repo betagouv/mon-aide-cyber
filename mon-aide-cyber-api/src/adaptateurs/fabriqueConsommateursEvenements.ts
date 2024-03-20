@@ -1,9 +1,4 @@
-import {
-  aidantCree,
-  diagnosticLance,
-  restitutionLancee,
-  reponseAjoutee,
-} from '../journalisation/evenements';
+import { aidantCree, diagnosticLance, restitutionLancee, reponseAjoutee } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
 import { ConsommateurEvenement, TypeEvenement } from '../domaine/BusEvenement';

@@ -3,13 +3,7 @@ import { useNavigate } from 'react-router';
 import { useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
-export const AccederALaRestitution = ({
-  idDiagnostic,
-  surAnnuler,
-}: {
-  idDiagnostic: UUID;
-  surAnnuler: () => void;
-}) => {
+export const AccederALaRestitution = ({ idDiagnostic, surAnnuler }: { idDiagnostic: UUID; surAnnuler: () => void }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,9 +17,8 @@ export const AccederALaRestitution = ({
     <>
       <section>
         <div>
-          Vous vous apprêtez à quitter le diagnostic et accéder à la
-          restitution. Votre progression est enregistrée, vous pourrez reprendre
-          et modifier le diagnostic à votre convenance.
+          Vous vous apprêtez à quitter le diagnostic et accéder à la restitution. Votre progression est enregistrée,
+          vous pourrez reprendre et modifier le diagnostic à votre convenance.
         </div>
         <div className="fr-pt-4w">
           <button

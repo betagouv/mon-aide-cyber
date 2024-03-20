@@ -1,11 +1,6 @@
 import { ConfigurationServeur } from '../serveur';
 import express, { Request, Response } from 'express';
-import {
-  body,
-  validationResult,
-  FieldValidationError,
-  Result,
-} from 'express-validator';
+import { body, validationResult, FieldValidationError, Result } from 'express-validator';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../domaine/erreurMAC';
 
@@ -30,9 +25,7 @@ export const routeContact = (configuration: ConfigurationServeur) => {
             reponse.status(202);
             return reponse.send();
           })
-          .catch((erreur) =>
-            suite(ErreurMAC.cree('Envoi un message de contact', erreur)),
-          );
+          .catch((erreur) => suite(ErreurMAC.cree('Envoi un message de contact', erreur)));
       }
       reponse.status(400);
       return reponse.send({

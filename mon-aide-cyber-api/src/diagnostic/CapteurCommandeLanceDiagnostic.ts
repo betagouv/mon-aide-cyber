@@ -9,19 +9,14 @@ import { Referentiel } from './Referentiel';
 import crypto from 'crypto';
 import { ReferentielDeMesures } from './ReferentielDeMesures';
 
-export class CapteurCommandeLanceDiagnostic
-  implements CapteurCommande<CommandeLanceDiagnostic, Diagnostic>
-{
+export class CapteurCommandeLanceDiagnostic implements CapteurCommande<CommandeLanceDiagnostic, Diagnostic> {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,
   ) {}
 
   execute(commande: CommandeLanceDiagnostic): Promise<Diagnostic> {
-    return Promise.all([
-      commande.adaptateurReferentiel.lis(),
-      commande.adaptateurReferentielDeMesures.lis(),
-    ])
+    return Promise.all([commande.adaptateurReferentiel.lis(), commande.adaptateurReferentielDeMesures.lis()])
       .then(async ([ref, rec]) => {
         const diagnostic = initialiseDiagnostic(ref, rec);
         await this.entrepots.diagnostic().persiste(diagnostic);
@@ -36,9 +31,7 @@ export class CapteurCommandeLanceDiagnostic
         });
         return diagnostic;
       })
-      .catch((erreur) =>
-        Promise.reject(ErreurMAC.cree('Lance le diagnostic', erreur)),
-      );
+      .catch((erreur) => Promise.reject(ErreurMAC.cree('Lance le diagnostic', erreur)));
   }
 }
 

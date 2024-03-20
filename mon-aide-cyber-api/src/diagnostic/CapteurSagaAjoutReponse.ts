@@ -51,9 +51,7 @@ class CapteurSagaAjoutReponse implements CapteurSaga<SagaAjoutReponse, void> {
             },
           }),
       )
-      .catch((erreur) =>
-        Promise.reject(ErreurMAC.cree('Ajout réponse au diagnostic', erreur)),
-      );
+      .catch((erreur) => Promise.reject(ErreurMAC.cree('Ajout réponse au diagnostic', erreur)));
   }
 }
 export type CorpsReponseQuestionATiroir = {

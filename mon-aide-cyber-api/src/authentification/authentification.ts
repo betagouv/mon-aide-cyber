@@ -1,10 +1,6 @@
 import { GestionnaireDeJeton } from './GestionnaireDeJeton';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import {
-  AidantAuthentifie,
-  EntrepotAidant,
-  ErreurAuthentification,
-} from './Aidant';
+import { AidantAuthentifie, EntrepotAidant, ErreurAuthentification } from './Aidant';
 
 export const authentifie = (
   entrepotAidant: EntrepotAidant,
@@ -21,11 +17,6 @@ export const authentifie = (
       }),
     }))
     .catch((erreur) => {
-      return Promise.reject(
-        ErreurMAC.cree(
-          "Demande d'Authentification",
-          new ErreurAuthentification(erreur),
-        ),
-      );
+      return Promise.reject(ErreurMAC.cree("Demande d'Authentification", new ErreurAuthentification(erreur)));
     });
 };

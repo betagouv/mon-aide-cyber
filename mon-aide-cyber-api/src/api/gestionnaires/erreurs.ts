@@ -15,23 +15,14 @@ const CORPS_REPONSE_ERREUR_NON_GEREE = {
   message: "MonAideCyber n'est pas en mesure de traiter votre demande.",
 };
 
-const construisReponse = (
-  reponse: Response,
-  codeHTTP: number,
-  corpsReponse: { message: string },
-) => {
+const construisReponse = (reponse: Response, codeHTTP: number, corpsReponse: { message: string }) => {
   reponse.status(codeHTTP);
   reponse.json(corpsReponse);
 };
 
 const erreursGerees: Map<
   string,
-  (
-    erreur: ErreurMAC,
-    requete: Request,
-    consignateur: ConsignateurErreurs,
-    reponse: Response,
-  ) => void
+  (erreur: ErreurMAC, requete: Request, consignateur: ConsignateurErreurs, reponse: Response) => void
 > = new Map([
   [
     'AggregatNonTrouve',
@@ -71,43 +62,21 @@ const erreursGerees: Map<
   ],
 ]);
 
-export const gestionnaireErreurGeneralisee = (
-  consignateurErreur: ConsignateurErreurs,
-) => {
-  return (
-    erreur: Error,
-    requete: Request,
-    reponse: Response,
-    suite: NextFunction,
-  ) => {
+export const gestionnaireErreurGeneralisee = (consignateurErreur: ConsignateurErreurs) => {
+  return (erreur: Error, requete: Request, reponse: Response, suite: NextFunction) => {
     const construisReponseErreurServeur = () => {
-      construisReponse(
-        reponse,
-        HTTP_ERREUR_SERVEUR,
-        CORPS_REPONSE_ERREUR_NON_GEREE,
-      );
+      construisReponse(reponse, HTTP_ERREUR_SERVEUR, CORPS_REPONSE_ERREUR_NON_GEREE);
     };
 
     if (erreur) {
       if (requete.body) {
         Object.keys(requete.body)
-          .filter((attribut) =>
-            attribut.match(
-              /mot[s]?[-]?de[-]?passe[- ]?|mot[s]?[-]?passe[- ]?/i,
-            ),
-          )
-          .forEach(
-            (attribut) => (requete.body[attribut] = '<MOT_DE_PASSE_OBFUSQUE/>'),
-          );
+          .filter((attribut) => attribut.match(/mot[s]?[-]?de[-]?passe[- ]?|mot[s]?[-]?passe[- ]?/i))
+          .forEach((attribut) => (requete.body[attribut] = '<MOT_DE_PASSE_OBFUSQUE/>'));
       }
       if (erreur instanceof ErreurMAC) {
         if (erreursGerees.has(erreur.erreurOriginelle.constructor.name)) {
-          erreursGerees.get(erreur.erreurOriginelle.constructor.name)?.(
-            erreur,
-            requete,
-            consignateurErreur,
-            reponse,
-          );
+          erreursGerees.get(erreur.erreurOriginelle.constructor.name)?.(erreur, requete, consignateurErreur, reponse);
         } else {
           construisReponseErreurServeur();
           suite(erreur);

@@ -1,12 +1,6 @@
 import { describe, expect } from 'vitest';
-import {
-  desMesures,
-  desMesuresPour7Questions,
-} from '../constructeurs/constructeurMesures';
-import {
-  unDiagnostic,
-  uneReponseDonnee,
-} from '../constructeurs/constructeurDiagnostic';
+import { desMesures, desMesuresPour7Questions } from '../constructeurs/constructeurMesures';
+import { unDiagnostic, uneReponseDonnee } from '../constructeurs/constructeurDiagnostic';
 import {
   uneListeDe7QuestionsToutesAssociees,
   uneListeDeQuestions,
@@ -15,18 +9,11 @@ import {
   uneReponsePossible,
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
-import {
-  genereLaRestitution,
-  Indicateurs,
-  MesurePriorisee,
-} from '../../src/diagnostic/Diagnostic';
+import { genereLaRestitution, Indicateurs, MesurePriorisee } from '../../src/diagnostic/Diagnostic';
 import { uneAssociation } from '../constructeurs/constructeurAssociation';
 
 describe('Diagnostic', () => {
-  type PartieCommuneAttendueMesurePriorisee = Omit<
-    MesurePriorisee,
-    'priorisation' | 'titre'
-  >;
+  type PartieCommuneAttendueMesurePriorisee = Omit<MesurePriorisee, 'priorisation' | 'titre'>;
 
   const PARTIE_COMMUNE_ATTENDUE: PartieCommuneAttendueMesurePriorisee = {
     valeurObtenue: 0,
@@ -44,10 +31,7 @@ describe('Diagnostic', () => {
         it('prend en compte la valeur de la réponse pour choisir entre le niveau 1 ou le niveau 2 des mesures', () => {
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
-              unReferentiel()
-                .sansThematique()
-                .ajouteUneThematique('thematique', questions)
-                .construis(),
+              unReferentiel().sansThematique().ajouteUneThematique('thematique', questions).construis(),
             )
             .avecLesReponsesDonnees('thematique', [
               { q1: 'reponse-11' },
@@ -63,9 +47,7 @@ describe('Diagnostic', () => {
 
           genereLaRestitution(diagnostic);
 
-          expect(
-            diagnostic.restitution?.mesures?.mesuresPrioritaires,
-          ).toStrictEqual<MesurePriorisee[]>([
+          expect(diagnostic.restitution?.mesures?.mesuresPrioritaires).toStrictEqual<MesurePriorisee[]>([
             {
               priorisation: 1,
               titre: 'mesure 1',
@@ -100,9 +82,7 @@ describe('Diagnostic', () => {
               valeurObtenue: 1,
             },
           ]);
-          expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual<
-            MesurePriorisee[]
-          >([
+          expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual<MesurePriorisee[]>([
             {
               priorisation: 7,
               titre: 'mesure 72',
@@ -113,9 +93,7 @@ describe('Diagnostic', () => {
         });
 
         it('le niveau 2 est optionnel', () => {
-          const mesures = desMesures().avecLesMesures([
-            { q8: { niveau1: 'mesure 8', priorisation: 7 } },
-          ]);
+          const mesures = desMesures().avecLesMesures([{ q8: { niveau1: 'mesure 8', priorisation: 7 } }]);
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
               unReferentiel()
@@ -124,17 +102,9 @@ describe('Diagnostic', () => {
                   uneQuestion()
                     .aChoixUnique('q8')
                     .avecReponsesPossibles([
-                      uneReponsePossible()
-                        .avecLibelle('Réponse 81')
-                        .associeeAMesure('q8', 1, 0)
-                        .construis(),
-                      uneReponsePossible()
-                        .avecLibelle('Réponse 82')
-                        .associeeAMesure('q8', 1, 1)
-                        .construis(),
-                      uneReponsePossible()
-                        .avecLibelle('Réponse 83')
-                        .construis(),
+                      uneReponsePossible().avecLibelle('Réponse 81').associeeAMesure('q8', 1, 0).construis(),
+                      uneReponsePossible().avecLibelle('Réponse 82').associeeAMesure('q8', 1, 1).construis(),
+                      uneReponsePossible().avecLibelle('Réponse 83').construis(),
                     ])
                     .construis(),
                 ])
@@ -146,9 +116,7 @@ describe('Diagnostic', () => {
 
           genereLaRestitution(diagnostic);
 
-          expect(
-            diagnostic.restitution?.mesures?.mesuresPrioritaires,
-          ).toStrictEqual<MesurePriorisee[]>([
+          expect(diagnostic.restitution?.mesures?.mesuresPrioritaires).toStrictEqual<MesurePriorisee[]>([
             {
               comment: 'comme ça',
               valeurObtenue: 1,
@@ -163,9 +131,7 @@ describe('Diagnostic', () => {
       it('prend en compte les questions ne donnant pas lieu à une mesure', () => {
         const questionContexte = uneQuestion()
           .aChoixUnique('qc')
-          .avecReponsesPossibles([
-            uneReponsePossible().avecLibelle('qc').construis(),
-          ])
+          .avecReponsesPossibles([uneReponsePossible().avecLibelle('qc').construis()])
           .construis();
         const diagnostic = unDiagnostic()
           .avecUnReferentiel(
@@ -189,9 +155,7 @@ describe('Diagnostic', () => {
 
         genereLaRestitution(diagnostic);
 
-        expect(
-          diagnostic.restitution?.mesures?.mesuresPrioritaires,
-        ).toStrictEqual<MesurePriorisee[]>([
+        expect(diagnostic.restitution?.mesures?.mesuresPrioritaires).toStrictEqual<MesurePriorisee[]>([
           {
             ...PARTIE_COMMUNE_ATTENDUE,
             priorisation: 3,
@@ -221,9 +185,7 @@ describe('Diagnostic', () => {
             valeurObtenue: 1,
           },
         ]);
-        expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual(
-          [],
-        );
+        expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual([]);
       });
 
       describe('trie le resultat', () => {
@@ -301,45 +263,26 @@ describe('Diagnostic', () => {
             .avecLesReponsesPossiblesSuivantesAssociees([
               {
                 libelle: 'reponse 81',
-                association: uneAssociation()
-                  .avecIdentifiant('q8')
-                  .deNiveau1()
-                  .ayantPourValeurDIndice(0)
-                  .construis(),
+                association: uneAssociation().avecIdentifiant('q8').deNiveau1().ayantPourValeurDIndice(0).construis(),
               },
               {
                 libelle: 'reponse 82',
-                association: uneAssociation()
-                  .avecIdentifiant('q8')
-                  .deNiveau2()
-                  .ayantPourValeurDIndice(1)
-                  .construis(),
+                association: uneAssociation().avecIdentifiant('q8').deNiveau2().ayantPourValeurDIndice(1).construis(),
               },
               {
                 libelle: 'reponse 91',
-                association: uneAssociation()
-                  .avecIdentifiant('q9')
-                  .deNiveau1()
-                  .ayantPourValeurDIndice(0)
-                  .construis(),
+                association: uneAssociation().avecIdentifiant('q9').deNiveau1().ayantPourValeurDIndice(0).construis(),
               },
               {
                 libelle: 'reponse 92',
-                association: uneAssociation()
-                  .avecIdentifiant('q9')
-                  .deNiveau2()
-                  .ayantPourValeurDIndice(1)
-                  .construis(),
+                association: uneAssociation().avecIdentifiant('q9').deNiveau2().ayantPourValeurDIndice(1).construis(),
               },
             ])
             .construis();
           const diagnostic = unDiagnostic()
             .avecUnReferentiel(
               unReferentiel()
-                .ajouteUneThematique('thematique', [
-                  ...questions,
-                  ...questionsSupplementaires,
-                ])
+                .ajouteUneThematique('thematique', [...questions, ...questionsSupplementaires])
                 .construis(),
             )
             .avecLesReponsesDonnees('contexte', [{ qc: 'rqc' }])
@@ -359,9 +302,7 @@ describe('Diagnostic', () => {
 
           genereLaRestitution(diagnostic);
 
-          expect(
-            diagnostic.restitution?.mesures?.mesuresPrioritaires,
-          ).toStrictEqual<MesurePriorisee[]>([
+          expect(diagnostic.restitution?.mesures?.mesuresPrioritaires).toStrictEqual<MesurePriorisee[]>([
             {
               priorisation: 1,
               titre: 'mesure 4',
@@ -394,9 +335,7 @@ describe('Diagnostic', () => {
               titre: 'mesure 52',
             },
           ]);
-          expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual<
-            MesurePriorisee[]
-          >([
+          expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual<MesurePriorisee[]>([
             {
               ...PARTIE_COMMUNE_ATTENDUE,
               valeurObtenue: 1,
@@ -459,12 +398,7 @@ describe('Diagnostic', () => {
 
         it('prend en compte les réponses aux questions ne donnant pas lieu à une mesure', () => {
           const diagnostic = unDiagnostic()
-            .avecUnReferentiel(
-              unReferentiel()
-                .sansThematique()
-                .ajouteUneThematique('multiple', [question])
-                .construis(),
-            )
+            .avecUnReferentiel(unReferentiel().sansThematique().ajouteUneThematique('multiple', [question]).construis())
             .ajouteUneReponseDonnee(
               { thematique: 'multiple', question: 'q1' },
               uneReponseDonnee()
@@ -490,12 +424,8 @@ describe('Diagnostic', () => {
 
           genereLaRestitution(diagnostic);
 
-          expect(
-            diagnostic.restitution?.mesures?.mesuresPrioritaires,
-          ).toStrictEqual([]);
-          expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual(
-            [],
-          );
+          expect(diagnostic.restitution?.mesures?.mesuresPrioritaires).toStrictEqual([]);
+          expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual([]);
         });
       });
     });
@@ -506,19 +436,11 @@ describe('Diagnostic', () => {
         .avecLesReponsesPossiblesSuivantesAssociees([
           {
             libelle: 'reponse 1',
-            association: uneAssociation()
-              .avecIdentifiant('q1')
-              .deNiveau1()
-              .ayantPourValeurDIndice(2)
-              .construis(),
+            association: uneAssociation().avecIdentifiant('q1').deNiveau1().ayantPourValeurDIndice(2).construis(),
           },
           {
             libelle: 'reponse 2',
-            association: uneAssociation()
-              .avecIdentifiant('q2')
-              .deNiveau2()
-              .ayantPourValeurDIndice(2)
-              .construis(),
+            association: uneAssociation().avecIdentifiant('q2').deNiveau2().ayantPourValeurDIndice(2).construis(),
           },
         ])
         .construis();
@@ -527,19 +449,11 @@ describe('Diagnostic', () => {
         .avecLesReponsesPossiblesSuivantesAssociees([
           {
             libelle: 'reponse 1',
-            association: uneAssociation()
-              .avecIdentifiant('q1')
-              .deNiveau1()
-              .ayantPourValeurDIndice(3)
-              .construis(),
+            association: uneAssociation().avecIdentifiant('q1').deNiveau1().ayantPourValeurDIndice(3).construis(),
           },
           {
             libelle: 'reponse 2',
-            association: uneAssociation()
-              .avecIdentifiant('q2')
-              .deNiveau2()
-              .ayantPourValeurDIndice(3)
-              .construis(),
+            association: uneAssociation().avecIdentifiant('q2').deNiveau2().ayantPourValeurDIndice(3).construis(),
           },
         ])
         .construis();
@@ -553,14 +467,8 @@ describe('Diagnostic', () => {
               .ajouteUneThematique('thematique2', questionsThematique2)
               .construis(),
           )
-          .avecLesReponsesDonnees('thematique1', [
-            { q2: 'reponse-1' },
-            { q1: 'reponse-2' },
-          ])
-          .avecLesReponsesDonnees('thematique2', [
-            { q2: 'reponse-1' },
-            { q1: 'reponse-2' },
-          ])
+          .avecLesReponsesDonnees('thematique1', [{ q2: 'reponse-1' }, { q1: 'reponse-2' }])
+          .avecLesReponsesDonnees('thematique2', [{ q2: 'reponse-1' }, { q1: 'reponse-2' }])
           .avecDesMesures(mesures)
           .construis();
 
@@ -575,9 +483,7 @@ describe('Diagnostic', () => {
       it('ne prend pas en compte les thématiques sans mesure', () => {
         const questionContexte = uneQuestion()
           .aChoixUnique('qc')
-          .avecReponsesPossibles([
-            uneReponsePossible().avecLibelle('qc').construis(),
-          ])
+          .avecReponsesPossibles([uneReponsePossible().avecLibelle('qc').construis()])
           .construis();
         const diagnostic = unDiagnostic()
           .avecUnReferentiel(
@@ -586,10 +492,7 @@ describe('Diagnostic', () => {
               .ajouteUneThematique('thematique1', questionsThematique1)
               .construis(),
           )
-          .avecLesReponsesDonnees('thematique1', [
-            { q2: 'reponse-1' },
-            { q1: 'reponse-2' },
-          ])
+          .avecLesReponsesDonnees('thematique1', [{ q2: 'reponse-1' }, { q1: 'reponse-2' }])
           .avecDesMesures(mesures)
           .construis();
 
@@ -606,9 +509,7 @@ describe('Diagnostic', () => {
             uneReponsePossible()
               .avecLibelle('qc')
               .ajouteUneQuestionATiroir(
-                uneQuestionATiroir()
-                  .avecReponsesPossibles([uneReponsePossible().construis()])
-                  .construis(),
+                uneQuestionATiroir().avecReponsesPossibles([uneReponsePossible().construis()]).construis(),
               )
               .construis(),
           ])
@@ -620,10 +521,7 @@ describe('Diagnostic', () => {
               .ajouteUneThematique('thematique1', questionsThematique1)
               .construis(),
           )
-          .avecLesReponsesDonnees('thematique1', [
-            { q2: 'reponse-1' },
-            { q1: 'reponse-2' },
-          ])
+          .avecLesReponsesDonnees('thematique1', [{ q2: 'reponse-1' }, { q1: 'reponse-2' }])
           .avecDesMesures(mesures)
           .construis();
 

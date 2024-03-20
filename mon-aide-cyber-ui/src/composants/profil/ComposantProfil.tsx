@@ -20,29 +20,20 @@ export const ComposantProfil = () => {
   });
 
   useEffect(() => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'afficher-profil',
-      (lien: Lien) => {
-        if (etatProfil.enCoursDeChargement) {
-          macapi
-            .appelle<Profil>(
-              constructeurParametresAPI()
-                .url(lien.url)
-                .methode(lien.methode!)
-                .construis(),
-              (reponse) => reponse,
-            )
-            .then((profil) => envoie(profilCharge(profil)));
-        }
-      },
-    );
+    new MoteurDeLiens(navigationMAC.etat).trouve('afficher-profil', (lien: Lien) => {
+      if (etatProfil.enCoursDeChargement) {
+        macapi
+          .appelle<Profil>(
+            constructeurParametresAPI().url(lien.url).methode(lien.methode!).construis(),
+            (reponse) => reponse,
+          )
+          .then((profil) => envoie(profilCharge(profil)));
+      }
+    });
   }, [navigationMAC.etat, etatProfil.enCoursDeChargement, macapi]);
 
   const afficherTableauDeBord = useCallback(() => {
-    navigationMAC.navigue(
-      new MoteurDeLiens(navigationMAC.etat),
-      'lancer-diagnostic',
-    );
+    navigationMAC.navigue(new MoteurDeLiens(navigationMAC.etat), 'lancer-diagnostic');
   }, [navigationMAC]);
 
   return (
@@ -60,14 +51,9 @@ export const ComposantProfil = () => {
           <div className="fr-container">
             <div className="fr-grid-row fr-grid-row--center">
               <div className="fr-col-md-8 fr-col-sm-12 section">
-                <div className="fr-mb-2w">
-                  Compte Crée le {etatProfil.dateCreationCompte}
-                </div>
+                <div className="fr-mb-2w">Compte Crée le {etatProfil.dateCreationCompte}</div>
                 <div>
-                  <button
-                    className="bouton-mac bouton-mac-secondaire"
-                    onClick={afficherTableauDeBord}
-                  >
+                  <button className="bouton-mac bouton-mac-secondaire" onClick={afficherTableauDeBord}>
                     Accéder au tableau de bord
                   </button>
                 </div>

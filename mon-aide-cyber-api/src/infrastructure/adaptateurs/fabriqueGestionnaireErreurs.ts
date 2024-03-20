@@ -2,9 +2,8 @@ import { AdaptateurGestionnaireErreurs } from '../../adaptateurs/AdaptateurGesti
 import { AdaptateurGestionnaireErreursSentry } from './AdaptateurGestionnaireErreursSentry';
 import { AdaptateurGestionnaireErreursMemoire } from './AdaptateurGestionnaireErreursMemoire';
 
-export const fabriqueGestionnaireErreurs =
-  (): AdaptateurGestionnaireErreurs => {
-    return process.env.SENTRY_DSN
-      ? new AdaptateurGestionnaireErreursSentry()
-      : new AdaptateurGestionnaireErreursMemoire();
-  };
+export const fabriqueGestionnaireErreurs = (): AdaptateurGestionnaireErreurs => {
+  return process.env.SENTRY_DSN
+    ? new AdaptateurGestionnaireErreursSentry()
+    : new AdaptateurGestionnaireErreursMemoire();
+};

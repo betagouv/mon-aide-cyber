@@ -54,25 +54,9 @@
         var(--couleurs-mac-erreur-mode-fonce),
         var(--couleurs-mac-erreur-mode-fonce)
       ),
-      linear-gradient(
-        0deg,
-        var(--couleurs-mac-erreur-mode-fonce),
-        var(--couleurs-mac-erreur-mode-fonce)
-      ),
-      linear-gradient(
-        0deg,
-        var(--couleurs-mac-erreur-mode-fonce),
-        var(--couleurs-mac-erreur-mode-fonce)
-      ),
-      linear-gradient(
-        0deg,
-        var(--couleurs-mac-erreur-mode-fonce),
-        var(--couleurs-mac-erreur-mode-fonce)
-      ),
-      linear-gradient(
-        0deg,
-        var(--background-flat-error),
-        var(--background-flat-error)
-      );
+      linear-gradient(0deg, var(--couleurs-mac-erreur-mode-fonce), var(--couleurs-mac-erreur-mode-fonce)),
+      linear-gradient(0deg, var(--couleurs-mac-erreur-mode-fonce), var(--couleurs-mac-erreur-mode-fonce)),
+      linear-gradient(0deg, var(--couleurs-mac-erreur-mode-fonce), var(--couleurs-mac-erreur-mode-fonce)),
+      linear-gradient(0deg, var(--background-flat-error), var(--background-flat-error));
   }
 }

@@ -15,19 +15,14 @@ export class ServiceCreationEspaceAidant {
 
   async cree(creationEspaceAidant: CreationEspaceAidant): Promise<void> {
     const leveErreur = (message: string) => {
-      throw ErreurMAC.cree(
-        "Crée l'espace Aidant",
-        new ErreurCreationEspaceAidant(message),
-      );
+      throw ErreurMAC.cree("Crée l'espace Aidant", new ErreurCreationEspaceAidant(message));
     };
     const verifieLesCGU = (creationEspaceAidant: CreationEspaceAidant) => {
       if (!creationEspaceAidant.cguSignees) {
         leveErreur('Vous devez signer les CGU.');
       }
     };
-    const aidant = await this.entrepots
-      .aidants()
-      .lis(creationEspaceAidant.identifiant);
+    const aidant = await this.entrepots.aidants().lis(creationEspaceAidant.identifiant);
     if (aidant.dateSignatureCGU) {
       return;
     }

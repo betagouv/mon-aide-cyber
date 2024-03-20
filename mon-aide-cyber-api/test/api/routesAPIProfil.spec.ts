@@ -26,22 +26,13 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       await testeurMAC.entrepots.aidants().persiste(aidant);
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
 
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/profil/`,
-        donneesServeur.portEcoute,
-      );
+      const reponse = await executeRequete(donneesServeur.app, 'GET', `/api/profil/`, donneesServeur.portEcoute);
 
       expect(reponse.statusCode).toBe(200);
-      expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
-      ).toBe(true);
+      expect(testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
       expect(await reponse.json()).toStrictEqual<Profil>({
         nomPrenom: aidant.nomPrenom,
-        dateSignatureCGU: FournisseurHorloge.formateDate(
-          aidant.dateSignatureCGU!,
-        ).date,
+        dateSignatureCGU: FournisseurHorloge.formateDate(aidant.dateSignatureCGU!).date,
         identifiantConnexion: aidant.identifiantConnexion,
         liens: {
           'lancer-diagnostic': {
@@ -61,25 +52,13 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       const aidant = unAidant().sansEspace().construis();
       await testeurMAC.entrepots.aidants().persiste(aidant);
 
-      await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/profil/`,
-        donneesServeur.portEcoute,
-      );
+      await executeRequete(donneesServeur.app, 'GET', `/api/profil/`, donneesServeur.portEcoute);
 
-      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
-      );
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(true);
     });
 
     it("ne peut pas accéder au profil si l'aidant n'existe pas", async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/profil/`,
-        donneesServeur.portEcoute,
-      );
+      const reponse = await executeRequete(donneesServeur.app, 'GET', `/api/profil/`, donneesServeur.portEcoute);
 
       expect(reponse.statusCode).toBe(404);
       expect(await reponse.json()).toStrictEqual({
@@ -108,9 +87,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       );
 
       expect(reponse.statusCode).toBe(204);
-      const aidantRecupere = await testeurMAC.entrepots
-        .aidants()
-        .lis(aidant.identifiant);
+      const aidantRecupere = await testeurMAC.entrepots.aidants().lis(aidant.identifiant);
       expect(aidantRecupere.motDePasse).toBe(nouveauMotDePasse);
     });
 
@@ -132,16 +109,12 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         },
       );
 
-      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
-      );
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(true);
     });
 
     describe('En ce qui concerne la vérification du mot de passe', async () => {
       const aidant: Aidant = unAidant().construis();
-      beforeEach(
-        async () => await testeurMAC.entrepots.aidants().persiste(aidant),
-      );
+      beforeEach(async () => await testeurMAC.entrepots.aidants().persiste(aidant));
 
       it.each([
         [
@@ -154,8 +127,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             },
             attendu: {
               code: 422,
-              message:
-                'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
+              message: 'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
             },
           },
         ],
@@ -169,8 +141,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             },
             attendu: {
               code: 422,
-              message:
-                'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
+              message: 'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
             },
           },
         ],
@@ -184,8 +155,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             },
             attendu: {
               code: 422,
-              message:
-                'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
+              message: 'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
             },
           },
         ],
@@ -199,8 +169,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             },
             attendu: {
               code: 422,
-              message:
-                'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
+              message: 'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
             },
           },
         ],
@@ -214,8 +183,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             },
             attendu: {
               code: 422,
-              message:
-                'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
+              message: 'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
             },
           },
         ],
@@ -229,8 +197,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             },
             attendu: {
               code: 422,
-              message:
-                "L'ancien mot de passe est obligatoire.\nVotre ancien mot de passe est erroné.",
+              message: "L'ancien mot de passe est obligatoire.\nVotre ancien mot de passe est erroné.",
             },
           },
         ],
@@ -288,15 +255,12 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             },
             attendu: {
               code: 422,
-              message:
-                'La confirmation de votre mot de passe ne correspond pas.',
+              message: 'La confirmation de votre mot de passe ne correspond pas.',
             },
           },
         ],
       ])('%s', async (_, test) => {
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidant,
-        );
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
 
         const reponse = await executeRequete(
           donneesServeur.app,

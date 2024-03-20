@@ -19,21 +19,15 @@ class ConstructeurAdaptateurRestitutionHTML {
         super(new Map());
       }
 
-      protected genereInformations(
-        restitution: Restitution,
-      ): Promise<ContenuHtml> {
+      protected genereInformations(restitution: Restitution): Promise<ContenuHtml> {
         return Promise.resolve({
           entete: '',
-          corps: restitution.informations
-            ? JSON.stringify(restitution.informations)
-            : '',
+          corps: restitution.informations ? JSON.stringify(restitution.informations) : '',
           piedPage: '',
         });
       }
 
-      protected genereMesuresPrioritaires(
-        _: MesurePriorisee[] | undefined,
-      ): Promise<ContenuHtml> {
+      protected genereMesuresPrioritaires(_: MesurePriorisee[] | undefined): Promise<ContenuHtml> {
         return Promise.resolve({
           entete: '',
           corps: corpsMesuresPriorisees,
@@ -41,9 +35,7 @@ class ConstructeurAdaptateurRestitutionHTML {
         });
       }
 
-      protected genereIndicateurs(
-        _: Indicateurs | undefined,
-      ): Promise<ContenuHtml> {
+      protected genereIndicateurs(_: Indicateurs | undefined): Promise<ContenuHtml> {
         return Promise.resolve({
           entete: '',
           corps: corpsIndicateurs,
@@ -51,9 +43,7 @@ class ConstructeurAdaptateurRestitutionHTML {
         });
       }
 
-      protected genereAutresMesures(
-        _: MesurePriorisee[],
-      ): Promise<ContenuHtml> {
+      protected genereAutresMesures(_: MesurePriorisee[]): Promise<ContenuHtml> {
         return Promise.resolve({
           entete: '',
           corps: corpsAutresMesures,
@@ -63,9 +53,7 @@ class ConstructeurAdaptateurRestitutionHTML {
     })();
   }
 
-  avecMesuresPrioritaires(
-    mesuresPrioritaires: string,
-  ): ConstructeurAdaptateurRestitutionHTML {
+  avecMesuresPrioritaires(mesuresPrioritaires: string): ConstructeurAdaptateurRestitutionHTML {
     this.corpsMesuresPrioritaires = mesuresPrioritaires;
 
     return this;
@@ -77,14 +65,11 @@ class ConstructeurAdaptateurRestitutionHTML {
     return this;
   }
 
-  avecAutresMesures(
-    autresMesures: string,
-  ): ConstructeurAdaptateurRestitutionHTML {
+  avecAutresMesures(autresMesures: string): ConstructeurAdaptateurRestitutionHTML {
     this.corpsAutresMesures = autresMesures;
 
     return this;
   }
 }
 
-export const unAdaptateurDeRestitutionHTML = () =>
-  new ConstructeurAdaptateurRestitutionHTML();
+export const unAdaptateurDeRestitutionHTML = () => new ConstructeurAdaptateurRestitutionHTML();

@@ -5,95 +5,77 @@ import { ContenuHtml } from '../../src/infrastructure/adaptateurs/AdaptateurDeRe
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { Restitution } from '../../src/restitution/Restitution';
-import {
-  desInformationsDeRestitution,
-  uneRestitution,
-} from '../constructeurs/constructeurRestitution';
+import { desInformationsDeRestitution, uneRestitution } from '../constructeurs/constructeurRestitution';
 import { uneMesurePriorisee } from '../constructeurs/constructeurMesure';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
 
 describe('Adaptateur de Restitution', () => {
-  beforeEach(() =>
-    FournisseurHorlogeDeTest.initialise(
-      new Date(Date.parse('2023-02-04T10:30+01:00')),
-    ),
-  );
+  beforeEach(() => FournisseurHorlogeDeTest.initialise(new Date(Date.parse('2023-02-04T10:30+01:00'))));
   const entrepots: Entrepots = new EntrepotsMemoire();
-  const adaptateurRestitution =
-    new (class extends AdaptateurDeRestitution<Buffer> {
-      protected genere(htmlMesures: Promise<ContenuHtml>[]): Promise<Buffer> {
-        return Promise.all(htmlMesures).then((htmls) => {
-          const resultat: ContenuHtml[] = [];
+  const adaptateurRestitution = new (class extends AdaptateurDeRestitution<Buffer> {
+    protected genere(htmlMesures: Promise<ContenuHtml>[]): Promise<Buffer> {
+      return Promise.all(htmlMesures).then((htmls) => {
+        const resultat: ContenuHtml[] = [];
 
-          htmls.forEach((html) => {
-            resultat.push(html);
-          });
-
-          return Buffer.from(JSON.stringify(resultat), 'utf-8');
-        });
-      }
-
-      protected genereInformations(
-        restitution: Restitution,
-      ): Promise<ContenuHtml> {
-        return Promise.resolve({
-          corps: JSON.stringify(restitution.informations),
-          entete: '',
-          piedPage: '',
-        });
-      }
-
-      protected genereIndicateurs(
-        indicateurs: Indicateurs | undefined,
-      ): Promise<ContenuHtml> {
-        const resultat: ContenuHtml = {
-          corps: '',
-          entete: 'entete indicateur',
-          piedPage: 'piedPage indicateur',
-        };
-
-        Object.entries(indicateurs || {})?.forEach(
-          ([thematique, indicateur]) => {
-            resultat.corps += JSON.stringify({ thematique, indicateur });
-          },
-        );
-
-        return Promise.resolve(resultat);
-      }
-
-      protected genereAutresMesures(
-        autresMesures: MesurePriorisee[] | undefined,
-      ): Promise<ContenuHtml> {
-        const resultat: ContenuHtml = {
-          corps: '',
-          entete: 'entete',
-          piedPage: 'piedPage',
-        };
-
-        autresMesures?.forEach((mesure) => {
-          resultat.corps += JSON.stringify(mesure);
+        htmls.forEach((html) => {
+          resultat.push(html);
         });
 
-        return Promise.resolve(resultat);
-      }
+        return Buffer.from(JSON.stringify(resultat), 'utf-8');
+      });
+    }
 
-      protected genereMesuresPrioritaires(
-        mesuresPrioritaires: MesurePriorisee[] | undefined,
-      ): Promise<ContenuHtml> {
-        const resultat: ContenuHtml = {
-          corps: '',
-          entete: 'entete',
-          piedPage: 'piedPage',
-        };
+    protected genereInformations(restitution: Restitution): Promise<ContenuHtml> {
+      return Promise.resolve({
+        corps: JSON.stringify(restitution.informations),
+        entete: '',
+        piedPage: '',
+      });
+    }
 
-        mesuresPrioritaires?.forEach((mesure) => {
-          resultat.corps += JSON.stringify(mesure);
-        });
+    protected genereIndicateurs(indicateurs: Indicateurs | undefined): Promise<ContenuHtml> {
+      const resultat: ContenuHtml = {
+        corps: '',
+        entete: 'entete indicateur',
+        piedPage: 'piedPage indicateur',
+      };
 
-        return Promise.resolve(resultat);
-      }
-    })();
+      Object.entries(indicateurs || {})?.forEach(([thematique, indicateur]) => {
+        resultat.corps += JSON.stringify({ thematique, indicateur });
+      });
+
+      return Promise.resolve(resultat);
+    }
+
+    protected genereAutresMesures(autresMesures: MesurePriorisee[] | undefined): Promise<ContenuHtml> {
+      const resultat: ContenuHtml = {
+        corps: '',
+        entete: 'entete',
+        piedPage: 'piedPage',
+      };
+
+      autresMesures?.forEach((mesure) => {
+        resultat.corps += JSON.stringify(mesure);
+      });
+
+      return Promise.resolve(resultat);
+    }
+
+    protected genereMesuresPrioritaires(mesuresPrioritaires: MesurePriorisee[] | undefined): Promise<ContenuHtml> {
+      const resultat: ContenuHtml = {
+        corps: '',
+        entete: 'entete',
+        piedPage: 'piedPage',
+      };
+
+      mesuresPrioritaires?.forEach((mesure) => {
+        resultat.corps += JSON.stringify(mesure);
+      });
+
+      return Promise.resolve(resultat);
+    }
+  })();
 
   it('génère la restitution sans annexe', async () => {
     const restitution = uneRestitution()
@@ -117,11 +99,7 @@ describe('Adaptateur de Restitution', () => {
       .construis();
     entrepots.restitution().persiste(restitution);
 
-    expect(
-      JSON.parse(
-        (await adaptateurRestitution.genereRestitution(restitution)).toString(),
-      ),
-    ).toMatchSnapshot();
+    expect(JSON.parse((await adaptateurRestitution.genereRestitution(restitution)).toString())).toMatchSnapshot();
   });
 
   it('génère la restitution avec annexe', async () => {
@@ -158,11 +136,7 @@ describe('Adaptateur de Restitution', () => {
       .construis();
     entrepots.restitution().persiste(restitution);
 
-    expect(
-      JSON.parse(
-        (await adaptateurRestitution.genereRestitution(restitution)).toString(),
-      ),
-    ).toMatchSnapshot();
+    expect(JSON.parse((await adaptateurRestitution.genereRestitution(restitution)).toString())).toMatchSnapshot();
   });
 
   it("génère une restitution en conservant l'ordre des thématiques", async () => {
@@ -183,10 +157,6 @@ describe('Adaptateur de Restitution', () => {
       .construis();
     entrepots.restitution().persiste(restitution);
 
-    expect(
-      JSON.parse(
-        (await adaptateurRestitution.genereRestitution(restitution)).toString(),
-      ),
-    ).toMatchSnapshot();
+    expect(JSON.parse((await adaptateurRestitution.genereRestitution(restitution)).toString())).toMatchSnapshot();
   });
 });

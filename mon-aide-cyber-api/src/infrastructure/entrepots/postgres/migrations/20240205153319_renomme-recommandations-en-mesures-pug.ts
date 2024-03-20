@@ -8,10 +8,7 @@ function remplaceRecommandationsParMesures(chemin: string) {
   return chemin.replace('recommandations', 'mesures');
 }
 
-function metAJourMesuresRestitution({
-  autresMesures,
-  mesuresPrioritaires,
-}: Mesures): Mesures {
+function metAJourMesuresRestitution({ autresMesures, mesuresPrioritaires }: Mesures): Mesures {
   return {
     autresMesures: autresMesures.map(({ comment, pourquoi, ...mesure }) => {
       return {
@@ -20,15 +17,13 @@ function metAJourMesuresRestitution({
         ...mesure,
       };
     }),
-    mesuresPrioritaires: mesuresPrioritaires.map(
-      ({ comment, pourquoi, ...mesure }) => {
-        return {
-          comment: remplaceRecommandationsParMesures(comment),
-          pourquoi: remplaceRecommandationsParMesures(pourquoi),
-          ...mesure,
-        };
-      },
-    ),
+    mesuresPrioritaires: mesuresPrioritaires.map(({ comment, pourquoi, ...mesure }) => {
+      return {
+        comment: remplaceRecommandationsParMesures(comment),
+        pourquoi: remplaceRecommandationsParMesures(pourquoi),
+        ...mesure,
+      };
+    }),
   };
 }
 
@@ -43,12 +38,8 @@ function metMesuresReferentielAJour(mesures: ReferentielDeMesures) {
           {
             niveau1: {
               titre: mesure.niveau1.titre,
-              pourquoi: remplaceRecommandationsParMesures(
-                mesure.niveau1.pourquoi,
-              ),
-              comment: remplaceRecommandationsParMesures(
-                mesure.niveau1.comment,
-              ),
+              pourquoi: remplaceRecommandationsParMesures(mesure.niveau1.pourquoi),
+              comment: remplaceRecommandationsParMesures(mesure.niveau1.comment),
             },
             niveau2: {
               titre: niveau2.titre,
@@ -65,9 +56,7 @@ function metMesuresReferentielAJour(mesures: ReferentielDeMesures) {
         {
           niveau1: {
             titre: mesure.niveau1.titre,
-            pourquoi: remplaceRecommandationsParMesures(
-              mesure.niveau1.pourquoi,
-            ),
+            pourquoi: remplaceRecommandationsParMesures(mesure.niveau1.pourquoi),
             comment: remplaceRecommandationsParMesures(mesure.niveau1.comment),
           },
           priorisation: mesure.priorisation,
@@ -94,8 +83,7 @@ export async function up(knex: Knex): Promise<void> {
     ) => {
       const misesAJour = lignes.map((ligne) => {
         const donnees = ligne.donnees;
-        const { mesures, restitution, ...donneesSansMesureNiRestitution } =
-          donnees;
+        const { mesures, restitution, ...donneesSansMesureNiRestitution } = donnees;
 
         if (restitution) {
           return knex('diagnostics')
@@ -105,9 +93,7 @@ export async function up(knex: Knex): Promise<void> {
                 mesures: metMesuresReferentielAJour(mesures),
                 restitution: {
                   mesures: {
-                    ...(restitution.mesures
-                      ? metAJourMesuresRestitution(restitution.mesures)
-                      : {}),
+                    ...(restitution.mesures ? metAJourMesuresRestitution(restitution.mesures) : {}),
                   },
                   indicateurs: restitution.indicateurs,
                 },
@@ -131,4 +117,5 @@ export async function up(knex: Knex): Promise<void> {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 export async function down(_: Knex): Promise<void> {}

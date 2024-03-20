@@ -19,44 +19,17 @@ describe('Les réducteurs de diagnostic', () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
-            .avecUneQuestionEtDesReponses(
-              { libelle: 'Première question ?', type: 'choixUnique' },
-              [
-                uneReponsePossible()
-                  .avecLibelle('Réponse D')
-                  .enPosition(3)
-                  .construis(),
-                uneReponsePossible()
-                  .avecLibelle('Réponse B')
-                  .enPosition(1)
-                  .construis(),
-                uneReponsePossible()
-                  .avecLibelle('Réponse A')
-                  .enPosition(0)
-                  .construis(),
-                uneReponsePossible()
-                  .avecLibelle('Réponse C')
-                  .enPosition(2)
-                  .construis(),
-              ],
-            )
-            .avecUneQuestionEtDesReponses(
-              { libelle: 'Deuxième question ?', type: 'choixUnique' },
-              [
-                uneReponsePossible()
-                  .avecLibelle('Réponse B')
-                  .enPosition(1)
-                  .construis(),
-                uneReponsePossible()
-                  .avecLibelle('Réponse C')
-                  .enPosition(2)
-                  .construis(),
-                uneReponsePossible()
-                  .avecLibelle('Réponse A')
-                  .enPosition(0)
-                  .construis(),
-              ],
-            )
+            .avecUneQuestionEtDesReponses({ libelle: 'Première question ?', type: 'choixUnique' }, [
+              uneReponsePossible().avecLibelle('Réponse D').enPosition(3).construis(),
+              uneReponsePossible().avecLibelle('Réponse B').enPosition(1).construis(),
+              uneReponsePossible().avecLibelle('Réponse A').enPosition(0).construis(),
+              uneReponsePossible().avecLibelle('Réponse C').enPosition(2).construis(),
+            ])
+            .avecUneQuestionEtDesReponses({ libelle: 'Deuxième question ?', type: 'choixUnique' }, [
+              uneReponsePossible().avecLibelle('Réponse B').enPosition(1).construis(),
+              uneReponsePossible().avecLibelle('Réponse C').enPosition(2).construis(),
+              uneReponsePossible().avecLibelle('Réponse A').enPosition(0).construis(),
+            ])
             .construis(),
         )
         .construis();
@@ -66,16 +39,9 @@ describe('Les réducteurs de diagnostic', () => {
         diagnosticCharge(diagnostic),
       );
 
-      const questions =
-        etatDiagnostic.diagnostic?.referentiel['contexte'].groupes.flatMap(
-          (q) => q.questions,
-        ) || [];
-      expect(
-        questions[0].reponsesPossibles.map((reponse) => reponse.ordre),
-      ).toStrictEqual([0, 1, 2, 3]);
-      expect(
-        questions[1].reponsesPossibles.map((reponse) => reponse.ordre),
-      ).toStrictEqual([0, 1, 2]);
+      const questions = etatDiagnostic.diagnostic?.referentiel['contexte'].groupes.flatMap((q) => q.questions) || [];
+      expect(questions[0].reponsesPossibles.map((reponse) => reponse.ordre)).toStrictEqual([0, 1, 2, 3]);
+      expect(questions[1].reponsesPossibles.map((reponse) => reponse.ordre)).toStrictEqual([0, 1, 2]);
     });
 
     it('trie les réponses aux questions pour toutes les thématiques', () => {
@@ -85,28 +51,16 @@ describe('Les réducteurs de diagnostic', () => {
             .avecUneQuestion(
               uneQuestionAChoixUnique()
                 .avecDesReponses([
-                  uneReponsePossible()
-                    .avecLibelle('Réponse B')
-                    .enPosition(1)
-                    .construis(),
-                  uneReponsePossible()
-                    .avecLibelle('Réponse A')
-                    .enPosition(0)
-                    .construis(),
+                  uneReponsePossible().avecLibelle('Réponse B').enPosition(1).construis(),
+                  uneReponsePossible().avecLibelle('Réponse A').enPosition(0).construis(),
                 ])
                 .construis(),
             )
             .ajouteUneThematique('Autre thématique', [
               uneQuestionAChoixUnique()
                 .avecDesReponses([
-                  uneReponsePossible()
-                    .avecLibelle('Réponse B')
-                    .enPosition(1)
-                    .construis(),
-                  uneReponsePossible()
-                    .avecLibelle('Réponse A')
-                    .enPosition(0)
-                    .construis(),
+                  uneReponsePossible().avecLibelle('Réponse B').enPosition(1).construis(),
+                  uneReponsePossible().avecLibelle('Réponse A').enPosition(0).construis(),
                 ])
                 .construis(),
             ])
@@ -119,14 +73,10 @@ describe('Les réducteurs de diagnostic', () => {
         diagnosticCharge(diagnostic),
       );
 
-      const thematiqueContexte =
-        etatDiagnostic.diagnostic?.referentiel['contexte'];
-      const thematiqueAutreThematique =
-        etatDiagnostic.diagnostic?.referentiel['Autre thématique'];
+      const thematiqueContexte = etatDiagnostic.diagnostic?.referentiel['contexte'];
+      const thematiqueAutreThematique = etatDiagnostic.diagnostic?.referentiel['Autre thématique'];
       expect(
-        thematiqueContexte?.groupes[0].questions.flatMap((q) =>
-          q.reponsesPossibles.map((reponse) => reponse.ordre),
-        ),
+        thematiqueContexte?.groupes[0].questions.flatMap((q) => q.reponsesPossibles.map((reponse) => reponse.ordre)),
       ).toStrictEqual([0, 1]);
       expect(
         thematiqueAutreThematique?.groupes[0].questions.flatMap((q) =>
@@ -146,28 +96,16 @@ describe('Les réducteurs de diagnostic', () => {
                     .avecUneQuestion(
                       uneQuestionTiroirAChoixUnique()
                         .avecDesReponses([
-                          uneReponsePossible()
-                            .avecLibelle('Réponse B')
-                            .enPosition(1)
-                            .construis(),
-                          uneReponsePossible()
-                            .avecLibelle('Réponse A')
-                            .enPosition(0)
-                            .construis(),
+                          uneReponsePossible().avecLibelle('Réponse B').enPosition(1).construis(),
+                          uneReponsePossible().avecLibelle('Réponse A').enPosition(0).construis(),
                         ])
                         .construis(),
                     )
                     .avecUneQuestion(
                       uneQuestionTiroirAChoixUnique()
                         .avecDesReponses([
-                          uneReponsePossible()
-                            .avecLibelle('Réponse Z')
-                            .enPosition(1)
-                            .construis(),
-                          uneReponsePossible()
-                            .avecLibelle('Réponse Y')
-                            .enPosition(0)
-                            .construis(),
+                          uneReponsePossible().avecLibelle('Réponse Z').enPosition(1).construis(),
+                          uneReponsePossible().avecLibelle('Réponse Y').enPosition(0).construis(),
                         ])
                         .construis(),
                     )
@@ -184,20 +122,10 @@ describe('Les réducteurs de diagnostic', () => {
         diagnosticCharge(diagnostic),
       );
 
-      const thematiqueContexte =
-        etatDiagnostic.diagnostic?.referentiel['contexte'];
-      const reponsesPossible =
-        thematiqueContexte?.groupes[0]?.questions[0].reponsesPossibles[0];
-      expect(
-        reponsesPossible?.questions?.[0]?.reponsesPossibles.map(
-          (reponse) => reponse.ordre,
-        ),
-      ).toStrictEqual([0, 1]);
-      expect(
-        reponsesPossible?.questions?.[1]?.reponsesPossibles.map(
-          (reponse) => reponse.ordre,
-        ),
-      ).toStrictEqual([0, 1]);
+      const thematiqueContexte = etatDiagnostic.diagnostic?.referentiel['contexte'];
+      const reponsesPossible = thematiqueContexte?.groupes[0]?.questions[0].reponsesPossibles[0];
+      expect(reponsesPossible?.questions?.[0]?.reponsesPossibles.map((reponse) => reponse.ordre)).toStrictEqual([0, 1]);
+      expect(reponsesPossible?.questions?.[1]?.reponsesPossibles.map((reponse) => reponse.ordre)).toStrictEqual([0, 1]);
     });
   });
 

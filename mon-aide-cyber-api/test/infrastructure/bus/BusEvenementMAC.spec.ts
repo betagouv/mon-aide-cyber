@@ -1,9 +1,5 @@
 import { describe, it } from 'vitest';
-import {
-  ConsommateurEvenement,
-  Evenement,
-  TypeEvenement,
-} from '../../../src/domaine/BusEvenement';
+import { ConsommateurEvenement, Evenement, TypeEvenement } from '../../../src/domaine/BusEvenement';
 import { BusEvenementMAC } from '../../../src/infrastructure/bus/BusEvenementMAC';
 import { FournisseurHorlogeDeTest } from '../horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
@@ -26,9 +22,7 @@ describe('Bus Événement', () => {
     const consommateur = new ConsommateurEvenementDeTest();
 
     await new BusEvenementMAC(
-      new Map<TypeEvenement, ConsommateurEvenement>([
-        ['DIAGNOSTIC_LANCE', consommateur],
-      ]),
+      new Map<TypeEvenement, ConsommateurEvenement>([['DIAGNOSTIC_LANCE', consommateur]]),
     ).publie({
       identifiant,
       type: 'DIAGNOSTIC_LANCE',

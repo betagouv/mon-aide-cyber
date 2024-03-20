@@ -1,12 +1,7 @@
 import { ConfigurationServeur } from '../../serveur';
 import express, { Request, Router, Response } from 'express';
 import { SagaDemandeValidationCGUAide } from '../../parcours-cgu-aide/CapteurSagaDemandeValidationCGUAide';
-import {
-  FieldValidationError,
-  Result,
-  body,
-  validationResult,
-} from 'express-validator';
+import { FieldValidationError, Result, body, validationResult } from 'express-validator';
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 
 type CorpsRequeteValidationCGUAide = {
@@ -28,19 +23,15 @@ export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
     body('departement')
       .trim()
       .notEmpty()
-      .withMessage(
-        "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide"
-      ),
+      .withMessage("Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide"),
     body('raisonSociale')
       .optional()
       .trim()
       .notEmpty()
-      .withMessage(
-        "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide"
-      ),
+      .withMessage("Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide"),
     async (requete: Request, reponse: Response) => {
       const resultatValidation: Result<FieldValidationError> = validationResult(
-        requete
+        requete,
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {
         const corpsRequete: CorpsRequeteValidationCGUAide = requete.body;
@@ -66,7 +57,7 @@ export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
         message: erreursValidation,
         ...constructeurActionsHATEOAS().demanderValidationCGUAide().construis(),
       });
-    }
+    },
   );
 
   return routes;

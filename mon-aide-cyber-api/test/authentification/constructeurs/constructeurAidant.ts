@@ -12,16 +12,13 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   private nomPrenom: string = fakerFR.person.fullName();
   private motDePasse: string = fakerFR.string.alpha(10);
   private dateSignatureCGU: Date | undefined = FournisseurHorloge.maintenant();
-  private dateSignatureCharte: Date | undefined =
-    FournisseurHorloge.maintenant();
+  private dateSignatureCharte: Date | undefined = FournisseurHorloge.maintenant();
   avecUnNomPrenom(nomPrenom: string): ConstructeurAidant {
     this.nomPrenom = nomPrenom;
     return this;
   }
 
-  avecUnIdentifiantDeConnexion(
-    identifiantConnexion: string,
-  ): ConstructeurAidant {
+  avecUnIdentifiantDeConnexion(identifiantConnexion: string): ConstructeurAidant {
     this.identifiantConnexion = identifiantConnexion;
     return this;
   }

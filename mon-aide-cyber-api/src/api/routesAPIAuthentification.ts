@@ -14,9 +14,7 @@ export type CorpsRequeteAuthentification = {
 };
 export type ReponseAuthentification = ReponseHATEOAS & { nomPrenom: string };
 
-export const routesAPIAuthentification = (
-  configuration: ConfigurationServeur,
-) => {
+export const routesAPIAuthentification = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
   routes.post(
@@ -28,35 +26,24 @@ export const routesAPIAuthentification = (
       reponse: Response<ReponseAuthentification>,
       suite: NextFunction,
     ) => {
-      const { identifiant, motDePasse }: CorpsRequeteAuthentification =
-        requete.body;
-      authentifie(
-        configuration.entrepots.aidants(),
-        configuration.gestionnaireDeJeton,
-        identifiant,
-        motDePasse,
-      )
+      const { identifiant, motDePasse }: CorpsRequeteAuthentification = requete.body;
+      authentifie(configuration.entrepots.aidants(), configuration.gestionnaireDeJeton, identifiant, motDePasse)
         .then((aidantAuthentifie: AidantAuthentifie) => {
           requete.session!.token = aidantAuthentifie.jeton;
           reponse.status(201).json({
             nomPrenom: aidantAuthentifie.nomPrenom,
-            ...constructeurActionsHATEOAS()
-              .postAuthentification(aidantAuthentifie)
-              .construis(),
+            ...constructeurActionsHATEOAS().postAuthentification(aidantAuthentifie).construis(),
           });
         })
         .catch((erreur) => suite(erreur));
     },
   );
 
-  routes.delete(
-    '/',
-    (requete: RequeteUtilisateur, reponse: Response, _suite: NextFunction) => {
-      configuration.adaptateurDeGestionDeCookies.supprime(requete, reponse);
-      reponse.status(200);
-      return reponse.send();
-    },
-  );
+  routes.delete('/', (requete: RequeteUtilisateur, reponse: Response, _suite: NextFunction) => {
+    configuration.adaptateurDeGestionDeCookies.supprime(requete, reponse);
+    reponse.status(200);
+    return reponse.send();
+  });
 
   return routes;
 };

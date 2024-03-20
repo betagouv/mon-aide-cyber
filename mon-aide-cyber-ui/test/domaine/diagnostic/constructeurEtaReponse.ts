@@ -1,15 +1,6 @@
-import {
-  ActionReponseDiagnostic,
-  Reponse,
-} from '../../../src/domaine/diagnostic/Diagnostic';
-import {
-  EtatReponse,
-  EtatReponseStatut,
-} from '../../../src/domaine/diagnostic/reducteurReponse';
-import {
-  Question,
-  ReponseDonnee,
-} from '../../../src/domaine/diagnostic/Referentiel';
+import { ActionReponseDiagnostic, Reponse } from '../../../src/domaine/diagnostic/Diagnostic';
+import { EtatReponse, EtatReponseStatut } from '../../../src/domaine/diagnostic/reducteurReponse';
+import { Question, ReponseDonnee } from '../../../src/domaine/diagnostic/Referentiel';
 
 class ConstructeurEtaReponse {
   private reponse: () => Reponse | null = () => null;
@@ -41,5 +32,4 @@ class ConstructeurEtaReponse {
   }
 }
 
-export const unEtatDeReponse = (question: Question) =>
-  new ConstructeurEtaReponse(question);
+export const unEtatDeReponse = (question: Question) => new ConstructeurEtaReponse(question);

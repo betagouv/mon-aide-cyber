@@ -10,11 +10,7 @@ export const RequiertEspaceAidant = () => {
   useEffect(() => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
       'creer-espace-aidant',
-      () =>
-        navigationMAC.navigue(
-          new MoteurDeLiens(navigationMAC.etat),
-          'creer-espace-aidant',
-        ),
+      () => navigationMAC.navigue(new MoteurDeLiens(navigationMAC.etat), 'creer-espace-aidant'),
       () => setRedirection(<Outlet />),
     );
   }, [navigationMAC]);

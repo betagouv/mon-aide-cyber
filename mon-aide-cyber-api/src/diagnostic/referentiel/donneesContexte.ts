@@ -9,8 +9,7 @@ export const donneesContexte: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant: 'contexte-nature-organisation-organisation-publique',
-          libelle:
-            'Organisation publique (ex : collectivité, administration, syndicats mixte, GIP etc.)',
+          libelle: 'Organisation publique (ex : collectivité, administration, syndicats mixte, GIP etc.)',
           ordre: 0,
         },
         {
@@ -92,8 +91,7 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 10,
         },
         {
-          identifiant:
-            'contexte-secteur-activite-activites-financieres-et-assurance',
+          identifiant: 'contexte-secteur-activite-activites-financieres-et-assurance',
           libelle: "Activités financières et d'assurance",
           ordre: 11,
         },
@@ -103,14 +101,12 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 12,
         },
         {
-          identifiant:
-            'contexte-secteur-activite-activites-specialisees-scientifiques-et-techniques',
+          identifiant: 'contexte-secteur-activite-activites-specialisees-scientifiques-et-techniques',
           libelle: 'Activités spécialisées, scientifiques et techniques',
           ordre: 13,
         },
         {
-          identifiant:
-            'contexte-secteur-activite-activites-de-services-administratifs-et-de-soutien',
+          identifiant: 'contexte-secteur-activite-activites-de-services-administratifs-et-de-soutien',
           libelle: 'Activités de services administratifs et de soutien',
           ordre: 14,
         },
@@ -130,14 +126,12 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 17,
         },
         {
-          identifiant:
-            'contexte-secteur-activite-sante-humaine-et-action-sociale',
+          identifiant: 'contexte-secteur-activite-sante-humaine-et-action-sociale',
           libelle: 'Santé humaine et action sociale',
           ordre: 18,
         },
         {
-          identifiant:
-            'contexte-secteur-activite-arts-spectacles-et-activites-recreatives',
+          identifiant: 'contexte-secteur-activite-arts-spectacles-et-activites-recreatives',
           libelle: 'Arts, spectacles et activités récréatives',
           ordre: 19,
         },
@@ -152,8 +146,7 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 21,
         },
         {
-          identifiant:
-            'contexte-secteur-activite-activites-extra-territoriales',
+          identifiant: 'contexte-secteur-activite-activites-extra-territoriales',
           libelle: 'Activités extra-territoriales',
           ordre: 22,
         },
@@ -231,8 +224,7 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 13,
         },
         {
-          identifiant:
-            'contexte-region-siege-social-provence-alpes-cote-d-azur',
+          identifiant: 'contexte-region-siege-social-provence-alpes-cote-d-azur',
           libelle: "Provence-Alpes-Côte d'Azur",
           ordre: 14,
         },
@@ -241,8 +233,7 @@ export const donneesContexte: QuestionsThematique = {
     },
     {
       identifiant: 'contexte-departement-tom-siege-social',
-      libelle:
-        'Dans quel département, ou DROM-COM, votre siège social est-il basé ?',
+      libelle: 'Dans quel département, ou DROM-COM, votre siège social est-il basé ?',
       poids: 0,
       reponsesPossibles: [
         {
@@ -261,8 +252,7 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 3,
         },
         {
-          identifiant:
-            'contexte-departement-tom-siege-social-alpes-de-haute-provence',
+          identifiant: 'contexte-departement-tom-siege-social-alpes-de-haute-provence',
           libelle: 'Alpes-de-Haute-Provence',
           ordre: 4,
         },
@@ -327,8 +317,7 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 16,
         },
         {
-          identifiant:
-            'contexte-departement-tom-siege-social-charente-maritime',
+          identifiant: 'contexte-departement-tom-siege-social-charente-maritime',
           libelle: 'Charente-Maritime',
           ordre: 17,
         },
@@ -518,8 +507,7 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 53,
         },
         {
-          identifiant:
-            'contexte-departement-tom-siege-social-meurthe-et-moselle',
+          identifiant: 'contexte-departement-tom-siege-social-meurthe-et-moselle',
           libelle: 'Meurthe-et-Moselle',
           ordre: 54,
         },
@@ -569,8 +557,7 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 63,
         },
         {
-          identifiant:
-            'contexte-departement-tom-siege-social-pyrenees-atlantiques',
+          identifiant: 'contexte-departement-tom-siege-social-pyrenees-atlantiques',
           libelle: 'Pyrénées-Atlantiques',
           ordre: 64,
         },
@@ -580,8 +567,7 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 65,
         },
         {
-          identifiant:
-            'contexte-departement-tom-siege-social-pyrenees-orientales',
+          identifiant: 'contexte-departement-tom-siege-social-pyrenees-orientales',
           libelle: 'Pyrénées-Orientales',
           ordre: 66,
         },
@@ -701,8 +687,7 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 89,
         },
         {
-          identifiant:
-            'contexte-departement-tom-siege-social-territoire-de-belfort',
+          identifiant: 'contexte-departement-tom-siege-social-territoire-de-belfort',
           libelle: 'Territoire de Belfort',
           ordre: 90,
         },
@@ -717,8 +702,7 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 92,
         },
         {
-          identifiant:
-            'contexte-departement-tom-siege-social-seine-saint-denis',
+          identifiant: 'contexte-departement-tom-siege-social-seine-saint-denis',
           libelle: 'Seine-Saint-Denis',
           ordre: 93,
         },
@@ -768,8 +752,7 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 978,
         },
         {
-          identifiant:
-            'contexte-departement-tom-siege-social-saintpierreetmiquelon',
+          identifiant: 'contexte-departement-tom-siege-social-saintpierreetmiquelon',
           libelle: 'Collectivité de Saint-Pierre et Miquelon',
           ordre: 979,
         },
@@ -779,14 +762,12 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 980,
         },
         {
-          identifiant:
-            'contexte-departement-tom-siege-social-polynésiefrançaise',
+          identifiant: 'contexte-departement-tom-siege-social-polynésiefrançaise',
           libelle: 'Collectivité de Polynésie Française',
           ordre: 981,
         },
         {
-          identifiant:
-            'contexte-departement-tom-siege-social-nouvellecalédonie',
+          identifiant: 'contexte-departement-tom-siege-social-nouvellecalédonie',
           libelle: 'Collectivité de Nouvelle-Calédonie',
           ordre: 982,
         },
@@ -799,26 +780,22 @@ export const donneesContexte: QuestionsThematique = {
       poids: 0,
       reponsesPossibles: [
         {
-          identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-1-et-9',
+          identifiant: 'contexte-nombre-personnes-dans-organisation-entre-1-et-9',
           libelle: 'Entre 1 et 9',
           ordre: 0,
         },
         {
-          identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-10-et-49',
+          identifiant: 'contexte-nombre-personnes-dans-organisation-entre-10-et-49',
           libelle: 'Entre 10 et 49',
           ordre: 1,
         },
         {
-          identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-50-et-249',
+          identifiant: 'contexte-nombre-personnes-dans-organisation-entre-50-et-249',
           libelle: 'Entre 50 et 249',
           ordre: 2,
         },
         {
-          identifiant:
-            'contexte-nombre-personnes-dans-organisation-plus-de-250',
+          identifiant: 'contexte-nombre-personnes-dans-organisation-plus-de-250',
           libelle: 'Plus de 250',
           ordre: 4,
         },
@@ -831,26 +808,22 @@ export const donneesContexte: QuestionsThematique = {
       poids: 0,
       reponsesPossibles: [
         {
-          identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-1-et-9',
+          identifiant: 'contexte-nombre-postes-travail-dans-organisation-entre-1-et-9',
           libelle: 'Entre 1 et 9',
           ordre: 0,
         },
         {
-          identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-10-et-49',
+          identifiant: 'contexte-nombre-postes-travail-dans-organisation-entre-10-et-49',
           libelle: 'Entre 10 et 49',
           ordre: 1,
         },
         {
-          identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-50-et-249',
+          identifiant: 'contexte-nombre-postes-travail-dans-organisation-entre-50-et-249',
           libelle: 'Entre 50 et 249',
           ordre: 2,
         },
         {
-          identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-plus-de-250',
+          identifiant: 'contexte-nombre-postes-travail-dans-organisation-plus-de-250',
           libelle: 'Plus de 250',
           ordre: 3,
         },
@@ -859,8 +832,7 @@ export const donneesContexte: QuestionsThematique = {
     },
     {
       identifiant: 'contexte-activites-recherche-et-developpement',
-      libelle:
-        'Estimez-vous que votre entité puisse faire l’objet d’espionnage ciblé ?',
+      libelle: 'Estimez-vous que votre entité puisse faire l’objet d’espionnage ciblé ?',
       poids: 0,
       reponsesPossibles: [
         {
@@ -925,61 +897,47 @@ export const donneesContexte: QuestionsThematique = {
               poids: 0,
               reponsesPossibles: [
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-compromission',
-                  libelle:
-                    "Compromission d'un poste, d'une boîte mail ou d'un compte Cloud",
+                  identifiant: 'contexte-cyber-attaque-subie-oui-tiroir-type-compromission',
+                  libelle: "Compromission d'un poste, d'une boîte mail ou d'un compte Cloud",
                   ordre: 0,
                 },
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-usurpation',
+                  identifiant: 'contexte-cyber-attaque-subie-oui-tiroir-type-usurpation',
                   libelle: "Usurpation d'identité",
                   ordre: 1,
                 },
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-rancongiciel',
-                  libelle:
-                    'Rançongiciel ou autre maliciel sur plusieurs postes',
+                  identifiant: 'contexte-cyber-attaque-subie-oui-tiroir-type-rancongiciel',
+                  libelle: 'Rançongiciel ou autre maliciel sur plusieurs postes',
                   ordre: 2,
                 },
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-accès',
+                  identifiant: 'contexte-cyber-attaque-subie-oui-tiroir-type-accès',
                   libelle: "Compromission d'un ou plusieurs accès distants",
                   ordre: 3,
                 },
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-web',
+                  identifiant: 'contexte-cyber-attaque-subie-oui-tiroir-type-web',
                   libelle: "Compromission d'un ou plusieurs services web",
                   ordre: 4,
                 },
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-serveur',
-                  libelle:
-                    "Compromission d'un serveur ou service exposé sur internet",
+                  identifiant: 'contexte-cyber-attaque-subie-oui-tiroir-type-serveur',
+                  libelle: "Compromission d'un serveur ou service exposé sur internet",
                   ordre: 5,
                 },
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-reseaux',
-                  libelle:
-                    "Compromission d'un ou plusieurs équipements réseaux",
+                  identifiant: 'contexte-cyber-attaque-subie-oui-tiroir-type-reseaux',
+                  libelle: "Compromission d'un ou plusieurs équipements réseaux",
                   ordre: 6,
                 },
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-compromission-indirecte',
-                  libelle:
-                    'Compromission indirecte via un prestataire ou un partenaire',
+                  identifiant: 'contexte-cyber-attaque-subie-oui-tiroir-type-compromission-indirecte',
+                  libelle: 'Compromission indirecte via un prestataire ou un partenaire',
                   ordre: 7,
                 },
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-oui-tiroir-type-malveillance',
+                  identifiant: 'contexte-cyber-attaque-subie-oui-tiroir-type-malveillance',
                   libelle: 'Malveillance interne',
                   ordre: 8,
                 },
@@ -988,25 +946,21 @@ export const donneesContexte: QuestionsThematique = {
             },
             {
               identifiant: 'contexte-cyber-attaque-subie-tiroir-plainte',
-              libelle:
-                'Si "Oui": avez-vous déposé plainte ou réalisé un signalement auprès d\'un service judiciaire ?',
+              libelle: 'Si "Oui": avez-vous déposé plainte ou réalisé un signalement auprès d\'un service judiciaire ?',
               poids: 0,
               reponsesPossibles: [
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-tiroir-plainte-nsp',
+                  identifiant: 'contexte-cyber-attaque-subie-tiroir-plainte-nsp',
                   libelle: 'Je ne sais pas',
                   ordre: 0,
                 },
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-tiroir-plainte-non',
+                  identifiant: 'contexte-cyber-attaque-subie-tiroir-plainte-non',
                   libelle: 'Non',
                   ordre: 1,
                 },
                 {
-                  identifiant:
-                    'contexte-cyber-attaque-subie-tiroir-plainte-oui',
+                  identifiant: 'contexte-cyber-attaque-subie-tiroir-plainte-oui',
                   libelle: 'Oui',
                   ordre: 2,
                 },

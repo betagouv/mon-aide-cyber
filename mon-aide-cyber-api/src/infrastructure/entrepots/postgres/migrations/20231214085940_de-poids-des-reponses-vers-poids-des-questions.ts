@@ -1,16 +1,8 @@
 import { Knex } from 'knex';
 import crypto from 'crypto';
-import {
-  QuestionATiroir,
-  ReponsePossible,
-  TypeQuestion,
-} from '../../../../diagnostic/Referentiel';
+import { QuestionATiroir, ReponsePossible, TypeQuestion } from '../../../../diagnostic/Referentiel';
 import { Poids, Valeur } from '../../../../diagnostic/Indice';
-import {
-  ReponseDonnee,
-  Restitution,
-  Thematique,
-} from '../../../../diagnostic/Diagnostic';
+import { ReponseDonnee, Restitution, Thematique } from '../../../../diagnostic/Diagnostic';
 
 type NiveauRecommandation = 1 | 2;
 
@@ -35,17 +27,11 @@ type TableauDeRecommandations = {
   [identifiantQuestion: string]: ObjetDeRecommandation;
 };
 
-type RepresentationQuestionTiroir = Omit<
-  QuestionATiroir,
-  'reponsesPossibles'
-> & {
+type RepresentationQuestionTiroir = Omit<QuestionATiroir, 'reponsesPossibles'> & {
   reponsesPossibles: RepresentationReponsePossible[];
 };
 
-type RepresentationReponsePossible = Omit<
-  ReponsePossible,
-  'resultat' | 'questions'
-> & {
+type RepresentationReponsePossible = Omit<ReponsePossible, 'resultat' | 'questions'> & {
   resultat?: {
     recommandations?: Recommandation[];
     indice: { valeur: Valeur; poids?: Poids };
@@ -65,10 +51,7 @@ type QuestionDiagnostic = RepresentationQuestion & {
   reponseDonnee: ReponseDonnee;
 };
 
-type RepresentationQuestionDiagnostic = Omit<
-  QuestionDiagnostic,
-  'reponsesPossibles'
-> & {
+type RepresentationQuestionDiagnostic = Omit<QuestionDiagnostic, 'reponsesPossibles'> & {
   reponsesPossibles: RepresentationReponsePossible[];
 };
 
@@ -109,20 +92,11 @@ const poidsDesQuestions = new Map([
   ['securite-poste-outils-complementaires-securisation', 2],
   ['securite-poste-r-et-d-disques-chiffres', 2],
   ['securite-infrastructure-pare-feu-deploye', 1],
-  [
-    'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees',
-    2,
-  ],
+  ['securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees', 2],
   ['securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes', 2],
   ['securite-infrastructure-si-industriel-pare-feu-deploye', 2],
-  [
-    'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees',
-    3,
-  ],
-  [
-    'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees',
-    3,
-  ],
+  ['securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees', 3],
+  ['securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees', 3],
   ['securite-infrastructure-outils-securisation-systeme-messagerie', 1],
   ['securite-infrastructure-acces-wifi-securises', 1],
   ['securite-infrastructure-espace-stockage-serveurs', 1],
@@ -131,40 +105,22 @@ const poidsDesQuestions = new Map([
   ['sensibilisation-collaborateurs-soumis-obligations-usages-securises', 2],
   ['sensibilisation-declaration-incidents-encouragee', 1.5],
   ['reaction-surveillance-veille-vulnerabilites-potentielles', 2],
-  [
-    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
-    3,
-  ],
-  [
-    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement',
-    3,
-  ],
-  [
-    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole',
-    3,
-  ],
-  [
-    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement',
-    3,
-  ],
+  ['reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole', 3],
+  ['reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement', 3],
+  ['reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole', 3],
+  ['reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement', 3],
   ['reaction-sauvegardes-donnees-realisees', 3],
   ['reaction-dispositif-gestion-crise-adapte-defini', 3],
 ]);
 
 export async function up(knex: Knex): Promise<void> {
-  const metsAJourLeContexte = (
-    thematique: string,
-    questions: RepresentationQuestionsThematique,
-  ) => {
+  const metsAJourLeContexte = (thematique: string, questions: RepresentationQuestionsThematique) => {
     if (thematique === 'contexte') {
       metsAJourLePoidsDesQuestions(questions, () => 0);
     }
   };
 
-  const metsAJourToutesLesThematiques = (
-    thematique: string,
-    questions: RepresentationQuestionsThematique,
-  ) => {
+  const metsAJourToutesLesThematiques = (thematique: string, questions: RepresentationQuestionsThematique) => {
     if (thematique !== 'contexte') {
       metsAJourLePoidsDesQuestions(questions, (question) => {
         return poidsDesQuestions.get(question.identifiant) || 1;
@@ -174,9 +130,7 @@ export async function up(knex: Knex): Promise<void> {
 
   const metsAJourLePoidsDesQuestions = (
     questions: RepresentationQuestionsThematique,
-    fontionMiseAJour: (
-      question: RepresentationQuestionDiagnostic | RepresentationQuestionTiroir,
-    ) => number,
+    fontionMiseAJour: (question: RepresentationQuestionDiagnostic | RepresentationQuestionTiroir) => number,
   ) => {
     questions.questions.forEach((questionContexte) => {
       questionContexte.poids = fontionMiseAJour(questionContexte);
@@ -204,16 +158,12 @@ export async function up(knex: Knex): Promise<void> {
       }[],
     ) => {
       const misesAJour = lignes.map((ligne) => {
-        Object.entries(ligne.donnees.referentiel).forEach(
-          ([thematique, questions]) => {
-            metsAJourLeContexte(thematique, questions);
-            metsAJourToutesLesThematiques(thematique, questions);
-          },
-        );
+        Object.entries(ligne.donnees.referentiel).forEach(([thematique, questions]) => {
+          metsAJourLeContexte(thematique, questions);
+          metsAJourToutesLesThematiques(thematique, questions);
+        });
 
-        return knex('diagnostics')
-          .where('id', ligne.id)
-          .update({ donnees: ligne.donnees });
+        return knex('diagnostics').where('id', ligne.id).update({ donnees: ligne.donnees });
       });
 
       return Promise.all(misesAJour);

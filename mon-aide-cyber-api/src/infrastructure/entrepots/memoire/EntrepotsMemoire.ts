@@ -12,11 +12,9 @@ import { EntrepotRestitution } from '../../../restitution/Restitution';
 import { EntrepotAide } from '../../../aide/Aide';
 
 export class EntrepotsMemoire implements Entrepots {
-  private entrepotDiagnostic: EntrepotDiagnostic =
-    new EntrepotDiagnosticMemoire();
+  private entrepotDiagnostic: EntrepotDiagnostic = new EntrepotDiagnosticMemoire();
   private entrepotAidants: EntrepotAidant = new EntrepotAidantMemoire();
-  private entrepotRestitution: EntrepotRestitution =
-    new EntrepotRestitutionMemoire();
+  private entrepotRestitution: EntrepotRestitution = new EntrepotRestitutionMemoire();
   private entrepotAides: EntrepotAide = new EntrepotAideMemoire();
 
   diagnostic(): EntrepotDiagnostic {

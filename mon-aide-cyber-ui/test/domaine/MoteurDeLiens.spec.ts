@@ -31,27 +31,22 @@ describe('Le moteur de liens', () => {
       attendu: '/diagnostic/dynamique',
     },
   ])('détermine la route des actions fournies', (liens) => {
-    it(`lorsque l'on recherche le lien correspondant à ${Object.keys(
-      liens.lien,
-    )} et donne comme route ${liens.attendu}`, () => {
+    it(`lorsque l'on recherche le lien correspondant à ${Object.keys(liens.lien)} et donne comme route ${
+      liens.attendu
+    }`, () => {
       let routeAttendue = '';
-      new MoteurDeLiens(liens.lien as unknown as Liens).trouve(
-        Object.keys(liens.lien)[0],
-        (lien: Lien) => {
-          routeAttendue = lien.route!;
-        },
-      );
+      new MoteurDeLiens(liens.lien as unknown as Liens).trouve(Object.keys(liens.lien)[0], (lien: Lien) => {
+        routeAttendue = lien.route!;
+      });
       expect(routeAttendue).toStrictEqual(liens.attendu);
     });
 
-    it(`lorsque l'on extrait les liens correspondants à ${Object.keys(
-      liens.lien,
-    )} et donne comme route ${liens.attendu}`, () => {
+    it(`lorsque l'on extrait les liens correspondants à ${Object.keys(liens.lien)} et donne comme route ${
+      liens.attendu
+    }`, () => {
       const lien = new MoteurDeLiens(liens.lien as unknown as Liens).extrais();
 
-      expect(lien[Object.keys(liens.lien)[0]].route).toStrictEqual(
-        liens.attendu,
-      );
+      expect(lien[Object.keys(liens.lien)[0]].route).toStrictEqual(liens.attendu);
     });
   });
 

@@ -1,11 +1,7 @@
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
 
-export const ComposantAffichageErreur = ({
-  error,
-}: {
-  error: { message: string };
-}) => (
+export const ComposantAffichageErreur = ({ error }: { error: { message: string } }) => (
   <>
     <Header />
     <main role="main">

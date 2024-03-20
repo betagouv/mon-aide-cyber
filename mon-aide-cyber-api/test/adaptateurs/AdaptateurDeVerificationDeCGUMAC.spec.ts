@@ -14,9 +14,7 @@ describe('Adaptateur de Vérification de CGU', () => {
   let adaptateurDeVerificationDeCGU: AdaptateurDeVerificationDeCGU;
   beforeEach(() => {
     entrepots = new EntrepotsMemoire();
-    adaptateurDeVerificationDeCGU = new AdaptateurDeVerificationDeCGUMAC(
-      entrepots,
-    );
+    adaptateurDeVerificationDeCGU = new AdaptateurDeVerificationDeCGUMAC(entrepots);
   });
 
   it('vérifie que les CGU ont bien été signées', async () => {

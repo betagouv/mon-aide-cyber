@@ -26,10 +26,7 @@ class ConstructeurQuestion implements Constructeur<Question> {
     return this;
   }
 
-  avecLaReponseDonnee(
-    reponsePossible: ReponsePossible,
-    reponses: ReponseMultiple[] = [],
-  ): ConstructeurQuestion {
+  avecLaReponseDonnee(reponsePossible: ReponsePossible, reponses: ReponseMultiple[] = []): ConstructeurQuestion {
     this.reponseDonnee = {
       valeur: reponsePossible.identifiant,
       reponses,
@@ -37,9 +34,7 @@ class ConstructeurQuestion implements Constructeur<Question> {
     return this;
   }
 
-  avecUneReponseMultipleDonnee(
-    reponsePossibles: ReponsePossible[],
-  ): ConstructeurQuestion {
+  avecUneReponseMultipleDonnee(reponsePossibles: ReponsePossible[]): ConstructeurQuestion {
     this.reponseDonnee = {
       valeur: null,
       reponses: [
@@ -91,9 +86,7 @@ class ConstructeurQuestionTiroir implements Constructeur<QuestionATiroir> {
     }
     return this;
   }
-  avecDesReponses(
-    reponsePossibles: ReponsePossible[],
-  ): ConstructeurQuestionTiroir {
+  avecDesReponses(reponsePossibles: ReponsePossible[]): ConstructeurQuestionTiroir {
     this.reponsesPossibles.push(...reponsePossibles);
     return this;
   }
@@ -136,13 +129,9 @@ class ConstructeurQuestionAChoixUnique extends ConstructeurQuestion {
   }
 }
 
-export const uneQuestionAChoixMultiple = () =>
-  new ConstructeurQuestionAChoixMultiple();
+export const uneQuestionAChoixMultiple = () => new ConstructeurQuestionAChoixMultiple();
 
-export const uneQuestionAChoixUnique = () =>
-  new ConstructeurQuestionAChoixUnique();
+export const uneQuestionAChoixUnique = () => new ConstructeurQuestionAChoixUnique();
 
-export const uneQuestionTiroirAChoixUnique = () =>
-  new ConstructeurQuestionTiroirAChoixUnique();
-export const uneQuestionTiroirAChoixMultiple = () =>
-  new ConstructeurQuestionTiroirAChoixMultiple();
+export const uneQuestionTiroirAChoixUnique = () => new ConstructeurQuestionTiroirAChoixUnique();
+export const uneQuestionTiroirAChoixMultiple = () => new ConstructeurQuestionTiroirAChoixMultiple();

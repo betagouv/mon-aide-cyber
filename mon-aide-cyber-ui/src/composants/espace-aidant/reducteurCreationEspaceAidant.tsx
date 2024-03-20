@@ -1,8 +1,4 @@
-import {
-  ChampsErreur,
-  construisErreur,
-  PresentationErreur,
-} from '../erreurs/Erreurs.tsx';
+import { ChampsErreur, construisErreur, PresentationErreur } from '../erreurs/Erreurs.tsx';
 import { ReactElement } from 'react';
 
 type ErreurCreationEspaceAidant = {
@@ -75,17 +71,13 @@ export const reducteurCreationEspaceAidant = (
     motDePasseTemporaire: string,
   ) => {
     const motsDePasseIdentiques = nouveauMotDePasse === motDePasseConfirme;
-    const motDePasseTemporaireDifferentDuNouveauMotDePasse =
-      motDePasseTemporaire !== nouveauMotDePasse;
+    const motDePasseTemporaireDifferentDuNouveauMotDePasse = motDePasseTemporaire !== nouveauMotDePasse;
     const motsDePasseNonVides =
       nouveauMotDePasse.trim().length > 0 &&
       motDePasseConfirme.trim().length > 0 &&
       motDePasseTemporaire.trim().length > 0;
     return {
-      valide:
-        motsDePasseIdentiques &&
-        motsDePasseNonVides &&
-        motDePasseTemporaireDifferentDuNouveauMotDePasse,
+      valide: motsDePasseIdentiques && motsDePasseNonVides && motDePasseTemporaireDifferentDuNouveauMotDePasse,
       motsDePasseIdentiques,
       motsDePasseNonVides,
       motDePasseTemporaireDifferentDuNouveauMotDePasse,
@@ -98,25 +90,19 @@ export const reducteurCreationEspaceAidant = (
     valide: boolean;
     motsDePasseIdentiques: boolean;
   }) => {
-    let erreurMotDePasse =
-      !verificationMotsDePasseSaisis.motsDePasseIdentiques && {
+    let erreurMotDePasse = !verificationMotsDePasseSaisis.motsDePasseIdentiques && {
+      ...construisErreur('motDePasse', {
+        texte: 'La confirmation de votre mot de passe ne correspond pas au mot de passe saisi.',
+        identifiantTexteExplicatif: 'motDePasseConfirme',
+      }),
+    };
+    if (!verificationMotsDePasseSaisis.motDePasseTemporaireDifferentDuNouveauMotDePasse) {
+      erreurMotDePasse = !verificationMotsDePasseSaisis.motDePasseTemporaireDifferentDuNouveauMotDePasse && {
         ...construisErreur('motDePasse', {
-          texte:
-            'La confirmation de votre mot de passe ne correspond pas au mot de passe saisi.',
-          identifiantTexteExplicatif: 'motDePasseConfirme',
+          texte: 'Votre nouveau mot de passe doit être différent du mot de passe temporaire.',
+          identifiantTexteExplicatif: 'nouveauMotDePasse',
         }),
       };
-    if (
-      !verificationMotsDePasseSaisis.motDePasseTemporaireDifferentDuNouveauMotDePasse
-    ) {
-      erreurMotDePasse =
-        !verificationMotsDePasseSaisis.motDePasseTemporaireDifferentDuNouveauMotDePasse && {
-          ...construisErreur('motDePasse', {
-            texte:
-              'Votre nouveau mot de passe doit être différent du mot de passe temporaire.',
-            identifiantTexteExplicatif: 'nouveauMotDePasse',
-          }),
-        };
     }
     if (!verificationMotsDePasseSaisis.motsDePasseNonVides) {
       erreurMotDePasse = !verificationMotsDePasseSaisis.motsDePasseNonVides && {
@@ -138,11 +124,7 @@ export const reducteurCreationEspaceAidant = (
         motDePasseTemporaire: action.motDePasseTemporaire,
         saisieValide: () =>
           etat.cguSignees &&
-          verifieLesMotsDePasseSaisis(
-            nouveauMotDePasse,
-            motDePasseConfirme,
-            action.motDePasseTemporaire,
-          ).valide,
+          verifieLesMotsDePasseSaisis(nouveauMotDePasse, motDePasseConfirme, action.motDePasseTemporaire).valide,
       };
     }
     case TypeActionCreationEspaceAidant.NOUVEAU_MOT_DE_PASSE_SAISI: {
@@ -150,11 +132,8 @@ export const reducteurCreationEspaceAidant = (
         ...etat,
         nouveauMotDePasse: action.nouveauMotDePasse,
         saisieValide: () =>
-          verifieLesMotsDePasseSaisis(
-            action.nouveauMotDePasse,
-            etat.motDePasseConfirme,
-            etat.motDePasseTemporaire,
-          ).valide && etat.cguSignees,
+          verifieLesMotsDePasseSaisis(action.nouveauMotDePasse, etat.motDePasseConfirme, etat.motDePasseTemporaire)
+            .valide && etat.cguSignees,
       };
     }
     case TypeActionCreationEspaceAidant.NOUVEAU_MOT_DE_PASSE_CONFIRME: {
@@ -166,11 +145,8 @@ export const reducteurCreationEspaceAidant = (
         motDePasseConfirme: action.motDePasseConfirme,
         saisieValide: () =>
           etat.cguSignees &&
-          verifieLesMotsDePasseSaisis(
-            etat.nouveauMotDePasse,
-            action.motDePasseConfirme,
-            etat.motDePasseTemporaire,
-          ).valide,
+          verifieLesMotsDePasseSaisis(etat.nouveauMotDePasse, action.motDePasseConfirme, etat.motDePasseTemporaire)
+            .valide,
       };
     }
     case TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_INVALIDEE: {
@@ -206,11 +182,8 @@ export const reducteurCreationEspaceAidant = (
         },
         saisieValide: () =>
           cguSignees &&
-          verifieLesMotsDePasseSaisis(
-            etat.nouveauMotDePasse,
-            etat.motDePasseConfirme,
-            etat.motDePasseTemporaire,
-          ).valide,
+          verifieLesMotsDePasseSaisis(etat.nouveauMotDePasse, etat.motDePasseConfirme, etat.motDePasseTemporaire)
+            .valide,
       };
     }
     case TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_VALIDEE: {
@@ -227,12 +200,10 @@ export const reducteurCreationEspaceAidant = (
           }),
           ...construisErreurMotDePasse(verificationMotsDePasseSaisis),
         },
-        saisieValide: () =>
-          etat.cguSignees && verificationMotsDePasseSaisis.valide,
+        saisieValide: () => etat.cguSignees && verificationMotsDePasseSaisis.valide,
         ...(etat.cguSignees &&
           verificationMotsDePasseSaisis.valide && {
-            creationEspaceAidantATransmettre:
-              etat.cguSignees && verificationMotsDePasseSaisis.valide,
+            creationEspaceAidantATransmettre: etat.cguSignees && verificationMotsDePasseSaisis.valide,
           }),
       };
     }
@@ -247,35 +218,26 @@ export const cguCliquees = (): ActionCreationEspaceAidant => ({
   type: TypeActionCreationEspaceAidant.CGU_CLIQUEES,
 });
 
-export const creationEspaceAidantTransmise =
-  (): ActionCreationEspaceAidant => ({
-    type: TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_TRANSMISE,
-  });
+export const creationEspaceAidantTransmise = (): ActionCreationEspaceAidant => ({
+  type: TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_TRANSMISE,
+});
 
-export const creationEspaceAidantInvalidee = (
-  erreur: Error,
-): ActionCreationEspaceAidant => ({
+export const creationEspaceAidantInvalidee = (erreur: Error): ActionCreationEspaceAidant => ({
   erreur,
   type: TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_INVALIDEE,
 });
 
-export const nouveauMotDePasseSaisi = (
-  nouveauMotDePasse: string,
-): ActionCreationEspaceAidant => ({
+export const nouveauMotDePasseSaisi = (nouveauMotDePasse: string): ActionCreationEspaceAidant => ({
   nouveauMotDePasse,
   type: TypeActionCreationEspaceAidant.NOUVEAU_MOT_DE_PASSE_SAISI,
 });
 
-export const nouveauMotDePasseConfirme = (
-  motDePasseConfirme: string,
-): ActionCreationEspaceAidant => ({
+export const nouveauMotDePasseConfirme = (motDePasseConfirme: string): ActionCreationEspaceAidant => ({
   motDePasseConfirme,
   type: TypeActionCreationEspaceAidant.NOUVEAU_MOT_DE_PASSE_CONFIRME,
 });
 
-export const motDePasseTemporaireSaisi = (
-  motDePasseTemporaire: string,
-): ActionCreationEspaceAidant => ({
+export const motDePasseTemporaireSaisi = (motDePasseTemporaire: string): ActionCreationEspaceAidant => ({
   motDePasseTemporaire: motDePasseTemporaire,
   type: TypeActionCreationEspaceAidant.MOT_DE_PASSE_TEMPORAIRE_SAISI,
 });

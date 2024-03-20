@@ -18,10 +18,7 @@ export const FormulaireAuthentification = ({
 }) => {
   const authentification = useAuthentification();
 
-  const [etatAuthentification, envoie] = useReducer(
-    reducteurAuthentification,
-    initialiseReducteur(),
-  );
+  const [etatAuthentification, envoie] = useReducer(reducteurAuthentification, initialiseReducteur());
 
   const surSaisieMoteDePasse = useCallback((motDePasse: string) => {
     envoie(motDePasseSaisi(motDePasse));
@@ -58,11 +55,7 @@ export const FormulaireAuthentification = ({
         <section>
           <div>
             <fieldset className="fr-mb-5w">
-              <div
-                className={`fr-input-group ${
-                  erreur ? erreur?.identifiant?.className : ''
-                }`}
-              >
+              <div className={`fr-input-group ${erreur ? erreur?.identifiant?.className : ''}`}>
                 <label className="fr-label" htmlFor="identifiant-connexion">
                   Votre adresse email
                 </label>
@@ -76,11 +69,7 @@ export const FormulaireAuthentification = ({
                 />
                 {erreur?.identifiant?.texteExplicatif}
               </div>
-              <div
-                className={`fr-input-group ${
-                  erreur ? erreur?.motDePasse?.className : ''
-                }`}
-              >
+              <div className={`fr-input-group ${erreur ? erreur?.motDePasse?.className : ''}`}>
                 <label className="fr-label" htmlFor="mot-de-passe">
                   Votre mot de passe
                 </label>
@@ -106,11 +95,7 @@ export const FormulaireAuthentification = ({
             >
               Annuler
             </button>
-            <button
-              type="submit"
-              key="connexion-aidant"
-              className="fr-btn bouton-mac bouton-mac-primaire"
-            >
+            <button type="submit" key="connexion-aidant" className="fr-btn bouton-mac bouton-mac-primaire">
               Se connecter
             </button>
           </div>

@@ -21,9 +21,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
     ['contexte']: { questions: [] },
   };
 
-  ajouteUneQuestionAuContexte(
-    question: QuestionChoixUnique | QuestionChoixMultiple,
-  ): ConstructeurReferentiel {
+  ajouteUneQuestionAuContexte(question: QuestionChoixUnique | QuestionChoixMultiple): ConstructeurReferentiel {
     this.thematique['contexte'].questions.push(question);
     return this;
   }
@@ -42,21 +40,16 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
   }
 
   construis(): Referentiel {
-    return Object.entries(this.thematique).reduce(
-      (accumulateur, [clef, thematique]) => {
-        return {
-          ...accumulateur,
-          [clef]: thematique,
-        };
-      },
-      {},
-    );
+    return Object.entries(this.thematique).reduce((accumulateur, [clef, thematique]) => {
+      return {
+        ...accumulateur,
+        [clef]: thematique,
+      };
+    }, {});
   }
 }
 
-class ConstructeurQuestion
-  implements Constructeur<QuestionChoixUnique | QuestionChoixMultiple>
-{
+class ConstructeurQuestion implements Constructeur<QuestionChoixUnique | QuestionChoixMultiple> {
   private question: QuestionChoixUnique | QuestionChoixMultiple = {
     type: 'choixUnique',
     identifiant: '',
@@ -115,9 +108,7 @@ class ConstructeurQuestion
     return this;
   }
 
-  avecReponsesPossibles(
-    reponsesPossibles: ReponsePossible[],
-  ): ConstructeurQuestion {
+  avecReponsesPossibles(reponsesPossibles: ReponsePossible[]): ConstructeurQuestion {
     this.question.reponsesPossibles = reponsesPossibles;
     return this;
   }
@@ -133,9 +124,7 @@ class ConstructeurQuestion
   }
 }
 
-class ConstructeurListeDeQuestions
-  implements Constructeur<(QuestionChoixUnique | QuestionChoixMultiple)[]>
-{
+class ConstructeurListeDeQuestions implements Constructeur<(QuestionChoixUnique | QuestionChoixMultiple)[]> {
   private libellesReponsesPossibles: {
     libelle: string;
     association?: Association;
@@ -163,16 +152,13 @@ class ConstructeurListeDeQuestions
         .aChoixUnique(label)
         .avecReponsesPossibles(
           this.libellesReponsesPossibles.map((rep) => {
-            let constructeurReponsePossible = uneReponsePossible().avecLibelle(
-              rep.libelle,
-            );
+            let constructeurReponsePossible = uneReponsePossible().avecLibelle(rep.libelle);
             if (rep.association) {
-              constructeurReponsePossible =
-                constructeurReponsePossible.associeeAMesure(
-                  rep.association?.identifiantMesure,
-                  rep.association?.niveauMesure,
-                  rep.association?.indice?.valeur,
-                );
+              constructeurReponsePossible = constructeurReponsePossible.associeeAMesure(
+                rep.association?.identifiantMesure,
+                rep.association?.niveauMesure,
+                rep.association?.indice?.valeur,
+              );
             }
             return constructeurReponsePossible.construis();
           }),
@@ -196,9 +182,7 @@ class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
     return this;
   };
 
-  avecReponsesPossibles = (
-    reponsePossibles: ReponsePossible[],
-  ): ConstructeurQuestionATiroir => {
+  avecReponsesPossibles = (reponsePossibles: ReponsePossible[]): ConstructeurQuestionATiroir => {
     this.reponsesPossibles = reponsePossibles.map((reponse, index) => ({
       identifiant: reponse.identifiant,
       libelle: reponse.libelle,
@@ -242,9 +226,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     indice: Indice;
   };
 
-  ajouteUneQuestionATiroir(
-    question: QuestionATiroir,
-  ): ConstructeurReponsePossible {
+  ajouteUneQuestionATiroir(question: QuestionATiroir): ConstructeurReponsePossible {
     if (!this.questions) {
       this.questions = [];
     }
@@ -297,8 +279,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   }
 }
 
-export const unReferentiel = (): ConstructeurReferentiel =>
-  new ConstructeurReferentiel();
+export const unReferentiel = (): ConstructeurReferentiel => new ConstructeurReferentiel();
 
 export const unReferentielSansThematiques = (): ConstructeurReferentiel => {
   const constructeurReferentiel = new ConstructeurReferentiel();
@@ -306,147 +287,84 @@ export const unReferentielSansThematiques = (): ConstructeurReferentiel => {
   return constructeurReferentiel;
 };
 
-export const uneQuestion = (): ConstructeurQuestion =>
-  new ConstructeurQuestion();
+export const uneQuestion = (): ConstructeurQuestion => new ConstructeurQuestion();
 
-export const uneListeDeQuestions = (): ConstructeurListeDeQuestions =>
-  new ConstructeurListeDeQuestions();
+export const uneListeDeQuestions = (): ConstructeurListeDeQuestions => new ConstructeurListeDeQuestions();
 
-export const uneQuestionATiroir = (): ConstructeurQuestionATiroir =>
-  new ConstructeurQuestionATiroir();
+export const uneQuestionATiroir = (): ConstructeurQuestionATiroir => new ConstructeurQuestionATiroir();
 
-export const uneReponsePossible = (): ConstructeurReponsePossible =>
-  new ConstructeurReponsePossible();
-export const uneListeDe7QuestionsToutesAssociees = (): (
-  | QuestionChoixUnique
-  | QuestionChoixMultiple
-)[] =>
+export const uneReponsePossible = (): ConstructeurReponsePossible => new ConstructeurReponsePossible();
+export const uneListeDe7QuestionsToutesAssociees = (): (QuestionChoixUnique | QuestionChoixMultiple)[] =>
   uneListeDeQuestions()
     .dontLesLabelsSont(['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'])
     .avecLesReponsesPossiblesSuivantesAssociees([
       {
         libelle: 'reponse 11',
-        association: uneAssociation()
-          .avecIdentifiant('q1')
-          .deNiveau1()
-          .ayantPourValeurDIndice(0)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q1').deNiveau1().ayantPourValeurDIndice(0).construis(),
       },
       {
         libelle: 'reponse 12',
-        association: uneAssociation()
-          .avecIdentifiant('q1')
-          .deNiveau2()
-          .ayantPourValeurDIndice(1)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q1').deNiveau2().ayantPourValeurDIndice(1).construis(),
       },
       { libelle: 'reponse 13' },
       { libelle: 'reponse 14' },
       {
         libelle: 'reponse 21',
-        association: uneAssociation()
-          .avecIdentifiant('q2')
-          .deNiveau1()
-          .ayantPourValeurDIndice(0)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q2').deNiveau1().ayantPourValeurDIndice(0).construis(),
       },
       {
         libelle: 'reponse 22',
-        association: uneAssociation()
-          .avecIdentifiant('q2')
-          .deNiveau2()
-          .ayantPourValeurDIndice(1)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q2').deNiveau2().ayantPourValeurDIndice(1).construis(),
       },
       { libelle: 'reponse 23' },
       { libelle: 'reponse 24' },
       {
         libelle: 'reponse 31',
-        association: uneAssociation()
-          .avecIdentifiant('q3')
-          .deNiveau1()
-          .ayantPourValeurDIndice(0)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q3').deNiveau1().ayantPourValeurDIndice(0).construis(),
       },
       {
         libelle: 'reponse 32',
-        association: uneAssociation()
-          .avecIdentifiant('q3')
-          .deNiveau2()
-          .ayantPourValeurDIndice(1)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q3').deNiveau2().ayantPourValeurDIndice(1).construis(),
       },
       { libelle: 'reponse 33' },
       { libelle: 'reponse 34' },
       {
         libelle: 'reponse 41',
-        association: uneAssociation()
-          .avecIdentifiant('q4')
-          .deNiveau1()
-          .ayantPourValeurDIndice(0)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q4').deNiveau1().ayantPourValeurDIndice(0).construis(),
       },
       {
         libelle: 'reponse 42',
-        association: uneAssociation()
-          .avecIdentifiant('q4')
-          .deNiveau2()
-          .ayantPourValeurDIndice(1)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q4').deNiveau2().ayantPourValeurDIndice(1).construis(),
       },
       { libelle: 'reponse 43' },
       { libelle: 'reponse 44' },
       {
         libelle: 'reponse 51',
-        association: uneAssociation()
-          .avecIdentifiant('q5')
-          .deNiveau1()
-          .ayantPourValeurDIndice(0)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q5').deNiveau1().ayantPourValeurDIndice(0).construis(),
       },
       {
         libelle: 'reponse 52',
-        association: uneAssociation()
-          .avecIdentifiant('q5')
-          .deNiveau2()
-          .ayantPourValeurDIndice(1)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q5').deNiveau2().ayantPourValeurDIndice(1).construis(),
       },
       { libelle: 'reponse 53' },
       { libelle: 'reponse 54' },
       {
         libelle: 'reponse 61',
-        association: uneAssociation()
-          .avecIdentifiant('q6')
-          .deNiveau1()
-          .ayantPourValeurDIndice(0)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q6').deNiveau1().ayantPourValeurDIndice(0).construis(),
       },
       {
         libelle: 'reponse 62',
-        association: uneAssociation()
-          .avecIdentifiant('q6')
-          .deNiveau2()
-          .ayantPourValeurDIndice(1)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q6').deNiveau2().ayantPourValeurDIndice(1).construis(),
       },
       { libelle: 'reponse 63' },
       { libelle: 'reponse 64' },
       {
         libelle: 'reponse 71',
-        association: uneAssociation()
-          .avecIdentifiant('q7')
-          .deNiveau1()
-          .ayantPourValeurDIndice(0)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q7').deNiveau1().ayantPourValeurDIndice(0).construis(),
       },
       {
         libelle: 'reponse 72',
-        association: uneAssociation()
-          .avecIdentifiant('q7')
-          .deNiveau2()
-          .ayantPourValeurDIndice(1)
-          .construis(),
+        association: uneAssociation().avecIdentifiant('q7').deNiveau2().ayantPourValeurDIndice(1).construis(),
       },
       { libelle: 'reponse 73' },
       { libelle: 'reponse 74' },

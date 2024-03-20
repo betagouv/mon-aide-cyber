@@ -9,15 +9,11 @@ type CommePropriete<C extends React.ElementType> = {
   composant?: C;
 };
 
-type ProprietesAOmettre<
-  C extends React.ElementType,
-  P,
-> = keyof (CommePropriete<C> & P);
+type ProprietesAOmettre<C extends React.ElementType, P> = keyof (CommePropriete<C> & P);
 
-type ProprietesComposantIntercepteur<
-  C extends React.ElementType,
-  Proprietes = unknown,
-> = React.PropsWithChildren<Proprietes & CommePropriete<C>> &
+type ProprietesComposantIntercepteur<C extends React.ElementType, Proprietes = unknown> = React.PropsWithChildren<
+  Proprietes & CommePropriete<C>
+> &
   Omit<React.ComponentPropsWithoutRef<C>, ProprietesAOmettre<C, Proprietes>>;
 
 type ProprietesComposant = {

@@ -1,11 +1,4 @@
-import {
-  createContext,
-  PropsWithChildren,
-  ReactElement,
-  useCallback,
-  useEffect,
-  useReducer,
-} from 'react';
+import { createContext, PropsWithChildren, ReactElement, useCallback, useEffect, useReducer } from 'react';
 import {
   ReponseAuthentification,
   ReponseUtilisateur,
@@ -37,19 +30,16 @@ type ContexteAuthentificationType = {
   ) => void;
 };
 
-export const ContexteAuthentification =
-  createContext<ContexteAuthentificationType>(
-    {} as unknown as ContexteAuthentificationType,
-  );
+export const ContexteAuthentification = createContext<ContexteAuthentificationType>(
+  {} as unknown as ContexteAuthentificationType,
+);
 
 export type Identifiants = {
   identifiant: string;
   motDePasse: string;
 };
 
-export const FournisseurAuthentification = ({
-  children,
-}: PropsWithChildren) => {
+export const FournisseurAuthentification = ({ children }: PropsWithChildren) => {
   const macapi = useMACAPI();
   const navigationMAC = useNavigationMAC();
 
@@ -66,42 +56,36 @@ export const FournisseurAuthentification = ({
     surSucces: () => void,
     surErreur: (erreur: Error) => void,
   ) => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'se-connecter',
-      (lien: Lien) => {
-        macapi
-          .appelle<ReponseAuthentification, Identifiants>(
-            constructeurParametresAPI<Identifiants>()
-              .url(lien.url)
-              .methode(lien.methode!)
-              .corps({
-                identifiant: identifiants.identifiant,
-                motDePasse: identifiants.motDePasse,
-              })
-              .construis(),
-            async (reponse) => (await reponse) as ReponseAuthentification,
-          )
-          .then((reponse) => {
-            envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
-            const moteurDeLiens = new MoteurDeLiens({
-              ...reponse.liens,
-              'afficher-tableau-de-bord': { url: '' },
-            });
+    new MoteurDeLiens(navigationMAC.etat).trouve('se-connecter', (lien: Lien) => {
+      macapi
+        .appelle<ReponseAuthentification, Identifiants>(
+          constructeurParametresAPI<Identifiants>()
+            .url(lien.url)
+            .methode(lien.methode!)
+            .corps({
+              identifiant: identifiants.identifiant,
+              motDePasse: identifiants.motDePasse,
+            })
+            .construis(),
+          async (reponse) => (await reponse) as ReponseAuthentification,
+        )
+        .then((reponse) => {
+          envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
+          const moteurDeLiens = new MoteurDeLiens({
+            ...reponse.liens,
+            'afficher-tableau-de-bord': { url: '' },
+          });
 
-            navigationMAC.navigue(moteurDeLiens, 'afficher-tableau-de-bord');
-            surSucces();
-          })
-          .catch(surErreur);
-      },
-    );
+          navigationMAC.navigue(moteurDeLiens, 'afficher-tableau-de-bord');
+          surSucces();
+        })
+        .catch(surErreur);
+    });
   };
 
   const appelleUtilisateur = useCallback(() => {
     return macapi.appelle<ReponseUtilisateur>(
-      constructeurParametresAPI()
-        .url('/api/utilisateur')
-        .methode('GET')
-        .construis(),
+      constructeurParametresAPI().url('/api/utilisateur').methode('GET').construis(),
       (json) => json,
     );
   }, [macapi]);
@@ -116,18 +100,11 @@ export const FournisseurAuthentification = ({
           navigationMAC.ajouteEtat(moteurDeLiens.extrais());
         })
         .catch((erreur) => {
-          navigationMAC.setEtat(
-            new MoteurDeLiens((erreur as ReponseHATEOAS).liens).extrais(),
-          );
+          navigationMAC.setEtat(new MoteurDeLiens((erreur as ReponseHATEOAS).liens).extrais());
           envoie(utilisateurNonAuthentifie());
         });
     }
-  }, [
-    navigationMAC,
-    etatUtilisateurAuthentifie.enAttenteDeChargement,
-    macapi,
-    appelleUtilisateur,
-  ]);
+  }, [navigationMAC, etatUtilisateurAuthentifie.enAttenteDeChargement, macapi, appelleUtilisateur]);
 
   const value: ContexteAuthentificationType = {
     authentifie,
@@ -136,9 +113,5 @@ export const FournisseurAuthentification = ({
     utilisateur: etatUtilisateurAuthentifie.utilisateur,
   };
 
-  return (
-    <ContexteAuthentification.Provider value={value}>
-      {children}
-    </ContexteAuthentification.Provider>
-  );
+  return <ContexteAuthentification.Provider value={value}>{children}</ContexteAuthentification.Provider>;
 };

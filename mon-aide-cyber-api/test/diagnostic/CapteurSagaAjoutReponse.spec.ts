@@ -37,11 +37,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
         .ajouteUneQuestionATiroir(
           uneQuestion()
             .aChoixMultiple('QCM ?')
-            .avecReponsesPossibles([
-              premiereReponse,
-              uneReponsePossible().construis(),
-              secondeReponse,
-            ])
+            .avecReponsesPossibles([premiereReponse, uneReponsePossible().construis(), secondeReponse])
             .construis(),
         )
         .construis();
@@ -59,11 +55,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
-      await new CapteurSagaAjoutReponse(
-        entrepots,
-        new BusDeCommandePourLesTests(),
-        new BusEvenementDeTest(),
-      ).execute(
+      await new CapteurSagaAjoutReponse(entrepots, new BusDeCommandePourLesTests(), new BusEvenementDeTest()).execute(
         new ConstructeurSaga(diagnostic.identifiant)
           .avecUnchemin('contexte')
           .avecUnIdentifiant('question-a-tiroir-')
@@ -72,30 +64,21 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
             questions: [
               {
                 identifiant: 'qcm-',
-                reponses: [
-                  premiereReponse.identifiant,
-                  secondeReponse.identifiant,
-                ],
+                reponses: [premiereReponse.identifiant, secondeReponse.identifiant],
               },
             ],
           })
           .construis(),
       );
 
-      const diagnosticRetourne = await entrepots
-        .diagnostic()
-        .lis(diagnostic.identifiant);
-      const question = diagnosticRetourne.referentiel.contexte
-        .questions[0] as QuestionDiagnostic;
+      const diagnosticRetourne = await entrepots.diagnostic().lis(diagnostic.identifiant);
+      const question = diagnosticRetourne.referentiel.contexte.questions[0] as QuestionDiagnostic;
       expect(question.reponseDonnee).toMatchObject({
         reponseUnique: reponseAvecQuestionATiroir.identifiant,
         reponsesMultiples: [
           {
             identifiant: 'qcm-',
-            reponses: new Set([
-              premiereReponse.identifiant,
-              secondeReponse.identifiant,
-            ]),
+            reponses: new Set([premiereReponse.identifiant, secondeReponse.identifiant]),
           },
         ],
       });
@@ -120,11 +103,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
-      await new CapteurSagaAjoutReponse(
-        entrepots,
-        new BusDeCommandePourLesTests(),
-        busEvenement,
-      ).execute(
+      await new CapteurSagaAjoutReponse(entrepots, new BusDeCommandePourLesTests(), busEvenement).execute(
         new ConstructeurSaga(diagnostic.identifiant)
           .avecUnIdentifiant('avezvous-quelque-chose-a-envoyer-')
           .avecUnchemin('contexte')
@@ -152,19 +131,13 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
         .ajouteUneQuestionATiroir(
           uneQuestionATiroir()
             .aChoixMultiple('tiroir 1 ?')
-            .avecReponsesPossibles([
-              premiereReponse,
-              uneReponsePossible().construis(),
-            ])
+            .avecReponsesPossibles([premiereReponse, uneReponsePossible().construis()])
             .construis(),
         )
         .ajouteUneQuestionATiroir(
           uneQuestionATiroir()
             .aChoixUnique('tiroir 2 ?')
-            .avecReponsesPossibles([
-              secondeReponse,
-              uneReponsePossible().construis(),
-            ])
+            .avecReponsesPossibles([secondeReponse, uneReponsePossible().construis()])
             .construis(),
         )
         .construis();
@@ -182,11 +155,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
-      await new CapteurSagaAjoutReponse(
-        entrepots,
-        new BusDeCommandePourLesTests(),
-        new BusEvenementDeTest(),
-      ).execute(
+      await new CapteurSagaAjoutReponse(entrepots, new BusDeCommandePourLesTests(), new BusEvenementDeTest()).execute(
         new ConstructeurSaga(diagnostic.identifiant)
           .avecUnchemin('contexte')
           .avecUnIdentifiant('question-a-tiroir-')
@@ -206,11 +175,8 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
           .construis(),
       );
 
-      const diagnosticRetourne = await entrepots
-        .diagnostic()
-        .lis(diagnostic.identifiant);
-      const question = diagnosticRetourne.referentiel.contexte
-        .questions[0] as QuestionDiagnostic;
+      const diagnosticRetourne = await entrepots.diagnostic().lis(diagnostic.identifiant);
+      const question = diagnosticRetourne.referentiel.contexte.questions[0] as QuestionDiagnostic;
       expect(question.reponseDonnee).toMatchObject({
         reponseUnique: reponseAvecQuestionsATiroir.identifiant,
         reponsesMultiples: [
@@ -228,23 +194,14 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
 
     it('si le diagnostic est inconnu, cela génère un erreur', async () => {
       await expect(() =>
-        new CapteurSagaAjoutReponse(
-          entrepots,
-          new BusDeCommandePourLesTests(),
-          new BusEvenementDeTest(),
-        ).execute(
+        new CapteurSagaAjoutReponse(entrepots, new BusDeCommandePourLesTests(), new BusEvenementDeTest()).execute(
           new ConstructeurSaga(crypto.randomUUID())
             .avecUnchemin('')
             .avecUnIdentifiant('')
             .avecUneReponse('')
             .construis(),
         ),
-      ).rejects.toStrictEqual(
-        ErreurMAC.cree(
-          'Ajout réponse au diagnostic',
-          new AggregatNonTrouve('diagnostic'),
-        ),
-      );
+      ).rejects.toStrictEqual(ErreurMAC.cree('Ajout réponse au diagnostic', new AggregatNonTrouve('diagnostic')));
     });
 
     it('met à jour la date de dernière modification', async () => {
@@ -267,11 +224,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
       const dateDerniereModification = new Date(2023, 10, 12, 12, 20, 10);
       FournisseurHorlogeDeTest.initialise(dateDerniereModification);
 
-      await new CapteurSagaAjoutReponse(
-        entrepots,
-        new BusDeCommandePourLesTests(),
-        new BusEvenementDeTest(),
-      ).execute(
+      await new CapteurSagaAjoutReponse(entrepots, new BusDeCommandePourLesTests(), new BusEvenementDeTest()).execute(
         new ConstructeurSaga(diagnostic.identifiant)
           .avecUnchemin('contexte')
           .avecUnIdentifiant('avezvous-quelque-chose-a-envoyer-')
@@ -279,31 +232,20 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
           .construis(),
       );
 
-      const diagnosticRetourne = await entrepots
-        .diagnostic()
-        .lis(diagnostic.identifiant);
+      const diagnosticRetourne = await entrepots.diagnostic().lis(diagnostic.identifiant);
       expect(diagnosticRetourne.dateCreation).toStrictEqual(dateCreation);
-      expect(diagnosticRetourne.dateDerniereModification).toStrictEqual(
-        dateDerniereModification,
-      );
+      expect(diagnosticRetourne.dateDerniereModification).toStrictEqual(dateDerniereModification);
     });
 
     it('publie sur le bus de commande la commande de génération de restitution', async () => {
       const question = uneQuestion().construis();
       const diagnostic = unDiagnostic()
-        .avecUnReferentiel(
-          unReferentiel().ajouteUneQuestionAuContexte(question).construis(),
-        )
+        .avecUnReferentiel(unReferentiel().ajouteUneQuestionAuContexte(question).construis())
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
-      const busDeCommande: BusDeCommandePourLesTests =
-        new BusDeCommandePourLesTests();
+      const busDeCommande: BusDeCommandePourLesTests = new BusDeCommandePourLesTests();
 
-      await new CapteurSagaAjoutReponse(
-        entrepots,
-        busDeCommande,
-        new BusEvenementDeTest(),
-      ).execute(
+      await new CapteurSagaAjoutReponse(entrepots, busDeCommande, new BusEvenementDeTest()).execute(
         new ConstructeurSaga(diagnostic.identifiant)
           .avecUnIdentifiant(question.identifiant)
           .avecUnchemin('contexte')
@@ -319,8 +261,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
 class ConstructeurSaga implements Constructeur<SagaAjoutReponse> {
   private chemin: string = fakerFR.string.alpha(10);
   private identifiant: string = fakerFR.string.alpha(10);
-  private reponse: string | string[] | CorpsReponseQuestionATiroir =
-    fakerFR.string.alpha(10);
+  private reponse: string | string[] | CorpsReponseQuestionATiroir = fakerFR.string.alpha(10);
 
   constructor(private readonly idDiagnostic: crypto.UUID) {}
 
@@ -334,9 +275,7 @@ class ConstructeurSaga implements Constructeur<SagaAjoutReponse> {
     return this;
   }
 
-  avecUneReponse(
-    reponse: string | string[] | CorpsReponseQuestionATiroir,
-  ): ConstructeurSaga {
+  avecUneReponse(reponse: string | string[] | CorpsReponseQuestionATiroir): ConstructeurSaga {
     this.reponse = reponse;
     return this;
   }

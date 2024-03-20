@@ -29,16 +29,10 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               .construis(),
           );
 
-        const reponse = await executeRequete(
-          donneesServeur.app,
-          'POST',
-          '/api/token',
-          donneesServeur.portEcoute,
-          {
-            identifiant: 'martin.dupont@email.com',
-            motDePasse: 'mon_Mot-D3p4sse',
-          },
-        );
+        const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/token', donneesServeur.portEcoute, {
+          identifiant: 'martin.dupont@email.com',
+          motDePasse: 'mon_Mot-D3p4sse',
+        });
 
         expect(reponse.statusCode).toBe(201);
         expect(await reponse.json()).toStrictEqual({
@@ -55,28 +49,18 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             },
           },
         });
-        const cookieRecu = (
-          reponse.headers['set-cookie']! as string[]
-        )[0].split('; ');
-        expect(cookieRecu[0]).toStrictEqual(
-          'session=eyJ0b2tlbiI6InVuLWpldG9uIn0=',
-        );
+        const cookieRecu = (reponse.headers['set-cookie']! as string[])[0].split('; ');
+        expect(cookieRecu[0]).toStrictEqual('session=eyJ0b2tlbiI6InVuLWpldG9uIn0=');
         expect(cookieRecu[1]).toStrictEqual('path=/');
         expect(cookieRecu[3]).toStrictEqual('samesite=strict');
         expect(cookieRecu[4]).toStrictEqual('httponly');
       });
 
       it("retourne une erreur http 401 quand l'aidant n'est pas trouvé", async () => {
-        const reponse = await executeRequete(
-          donneesServeur.app,
-          'POST',
-          '/api/token',
-          donneesServeur.portEcoute,
-          {
-            identifiant: 'existe@pas.fr',
-            motDePasse: 'mon_Mot-D3p4sse',
-          },
-        );
+        const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/token', donneesServeur.portEcoute, {
+          identifiant: 'existe@pas.fr',
+          motDePasse: 'mon_Mot-D3p4sse',
+        });
 
         expect(reponse.statusCode).toBe(401);
         expect(await reponse.json()).toStrictEqual({
@@ -95,16 +79,10 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               .construis(),
           );
 
-        const reponse = await executeRequete(
-          donneesServeur.app,
-          'POST',
-          '/api/token',
-          donneesServeur.portEcoute,
-          {
-            identifiant: 'MARTIN.DUPONT@EMAIL.COM',
-            motDePasse: 'mon_Mot-D3p4sse',
-          },
-        );
+        const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/token', donneesServeur.portEcoute, {
+          identifiant: 'MARTIN.DUPONT@EMAIL.COM',
+          motDePasse: 'mon_Mot-D3p4sse',
+        });
 
         expect(reponse.statusCode).toBe(201);
         expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
@@ -133,16 +111,10 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
                 .construis(),
             );
 
-          const reponse = await executeRequete(
-            donneesServeur.app,
-            'POST',
-            '/api/token',
-            donneesServeur.portEcoute,
-            {
-              identifiant: 'jean.dupont@email.com',
-              motDePasse: 'mon_Mot-D3p4sse',
-            },
-          );
+          const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/token', donneesServeur.portEcoute, {
+            identifiant: 'jean.dupont@email.com',
+            motDePasse: 'mon_Mot-D3p4sse',
+          });
 
           expect(reponse.statusCode).toBe(201);
           expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
@@ -162,16 +134,10 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
           await testeurMAC.entrepots.aidants().persiste(aidant);
 
-          const reponse = await executeRequete(
-            donneesServeur.app,
-            'POST',
-            '/api/token',
-            donneesServeur.portEcoute,
-            {
-              identifiant: aidant.identifiantConnexion,
-              motDePasse: aidant.motDePasse,
-            },
-          );
+          const reponse = await executeRequete(donneesServeur.app, 'POST', '/api/token', donneesServeur.portEcoute, {
+            identifiant: aidant.identifiantConnexion,
+            motDePasse: aidant.motDePasse,
+          });
 
           expect(reponse.statusCode).toBe(201);
           expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({

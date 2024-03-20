@@ -38,36 +38,25 @@ describe('Le service de diagnostic', () => {
         )
         .construis();
       const question = uneQuestion()
-        .avecReponsesPossibles([
-          uneReponsePossible().construis(),
-          reponseAttendue,
-        ])
+        .avecReponsesPossibles([uneReponsePossible().construis(), reponseAttendue])
         .construis();
       const referentiel = unReferentiel()
         .ajouteUneQuestionAuContexte(uneQuestion().construis())
         .ajouteUneQuestionAuContexte(question)
         .construis();
-      const diagnostic = unDiagnostic()
-        .avecUnReferentiel(referentiel)
-        .construis();
+      const diagnostic = unDiagnostic().avecUnReferentiel(referentiel).construis();
       adaptateurReferentiel.ajoute(referentiel);
       await entrepots.diagnostic().persiste(diagnostic);
       const serviceDiagnostic = new ServiceDiagnostic(entrepots);
 
-      const diagnosticRetourne = await serviceDiagnostic.diagnostic(
-        diagnostic.identifiant,
-      );
+      const diagnosticRetourne = await serviceDiagnostic.diagnostic(diagnostic.identifiant);
 
       const referentielDiagnostic = diagnosticRetourne.referentiel['contexte'];
-      expect(
-        referentielDiagnostic.questions.map((q) => q.reponseDonnee),
-      ).toMatchObject([
+      expect(referentielDiagnostic.questions.map((q) => q.reponseDonnee)).toMatchObject([
         { reponseUnique: null, reponsesMultiples: new Set() },
         { reponseUnique: null, reponsesMultiples: new Set() },
       ]);
-      expect(
-        referentielDiagnostic.questions[1].reponsesPossibles[1],
-      ).toMatchObject({
+      expect(referentielDiagnostic.questions[1].reponsesPossibles[1]).toMatchObject({
         identifiant: reponseAttendue.identifiant,
         libelle: reponseAttendue.libelle,
         ordre: reponseAttendue.ordre,
@@ -101,33 +90,22 @@ describe('Le service de diagnostic', () => {
         )
         .construis();
       const question = uneQuestion()
-        .avecReponsesPossibles([
-          uneReponsePossible().construis(),
-          reponseAttendue,
-        ])
+        .avecReponsesPossibles([uneReponsePossible().construis(), reponseAttendue])
         .construis();
       const referentiel = unReferentiel()
         .ajouteUneQuestionAuContexte(uneQuestion().construis())
         .ajouteUneQuestionAuContexte(question)
         .construis();
-      const diagnostic = unDiagnostic()
-        .avecUnReferentiel(referentiel)
-        .construis();
+      const diagnostic = unDiagnostic().avecUnReferentiel(referentiel).construis();
       adaptateurReferentiel.ajoute(referentiel);
       await entrepots.diagnostic().persiste(diagnostic);
       const serviceDiagnostic = new ServiceDiagnostic(entrepots);
 
-      const diagnosticRetourne = await serviceDiagnostic.diagnostic(
-        diagnostic.identifiant,
-      );
+      const diagnosticRetourne = await serviceDiagnostic.diagnostic(diagnostic.identifiant);
 
       const referentielDiagnostic = diagnosticRetourne.referentiel['contexte'];
-      expect(referentielDiagnostic.questions[1].reponsesPossibles).toHaveLength(
-        2,
-      );
-      expect(
-        referentielDiagnostic.questions[1].reponsesPossibles[1].questions?.[1],
-      ).toMatchObject({
+      expect(referentielDiagnostic.questions[1].reponsesPossibles).toHaveLength(2);
+      expect(referentielDiagnostic.questions[1].reponsesPossibles[1].questions?.[1]).toMatchObject({
         identifiant: 'autres-reponses-',
         libelle: 'Autres réponses ?',
         reponsesPossibles: [
@@ -140,9 +118,7 @@ describe('Le service de diagnostic', () => {
     });
 
     it('si le diagnostic est inconnu, cela génère un erreur', async () => {
-      await expect(() =>
-        new ServiceDiagnostic(entrepots).diagnostic(crypto.randomUUID()),
-      ).rejects.toStrictEqual(
+      await expect(() => new ServiceDiagnostic(entrepots).diagnostic(crypto.randomUUID())).rejects.toStrictEqual(
         ErreurMAC.cree('Accès diagnostic', new AggregatNonTrouve('diagnostic')),
       );
     });

@@ -19,12 +19,10 @@ export const mesuresSensibilisation = {
   },
   'sensibilisation-risque-espionnage-industriel-r-et-d': {
     niveau1: {
-      titre:
-        'Mener des actions de sensibilisation ciblée auprès du personnel effectuant des déplacements',
+      titre: 'Mener des actions de sensibilisation ciblée auprès du personnel effectuant des déplacements',
       pourquoi:
         '../../mesures/sensibilisation/sensibilisation-risque-espionnage-industriel-r-et-d-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/sensibilisation/sensibilisation-risque-espionnage-industriel-r-et-d-niveau1-comment.pug',
+      comment: '../../mesures/sensibilisation/sensibilisation-risque-espionnage-industriel-r-et-d-niveau1-comment.pug',
     },
     priorisation: 18,
   },
@@ -38,8 +36,7 @@ export const mesuresSensibilisation = {
         '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau1-comment.pug',
     },
     niveau2: {
-      titre:
-        "S'assurer que la charte informatique est annexée au contrat de travail et est signée par les salariés.",
+      titre: "S'assurer que la charte informatique est annexée au contrat de travail et est signée par les salariés.",
       pourquoi:
         '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau2-pourquoi.pug',
       comment:

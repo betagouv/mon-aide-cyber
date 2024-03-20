@@ -53,10 +53,7 @@ export const ConnexionAMonAideCyber: Story = {
               if (parametresAPI.url === '/api/utilisateur' && estConnecte) {
                 return reponseAuthentification as T;
               }
-              if (
-                parametresAPI.url === '/api/token' &&
-                parametresAPI.methode === 'POST'
-              ) {
+              if (parametresAPI.url === '/api/token' && parametresAPI.methode === 'POST') {
                 return reponseAuthentification as T;
               }
               return Promise.reject({
@@ -101,9 +98,7 @@ export const ConnexionAMonAideCyber: Story = {
                     >
                       <Route
                         path="/tableau-de-bord"
-                        element={
-                          <ComposantIntercepteur composant={TableauDeBord} />
-                        }
+                        element={<ComposantIntercepteur composant={TableauDeBord} />}
                       ></Route>
                     </Route>
                   </Routes>
@@ -126,12 +121,8 @@ export const ConnexionAMonAideCyber: Story = {
     const canvas = within(canvasElement);
 
     await step("Lorsque l'aidant se connecte", async () => {
-      await userEvent.click(
-        canvas.getAllByRole('link', { name: /Se connecter/i })[1],
-      );
-      await waitFor(() =>
-        expect(canvas.getByText(/connectez vous/i)).toBeInTheDocument(),
-      );
+      await userEvent.click(canvas.getAllByRole('link', { name: /Se connecter/i })[1]);
+      await waitFor(() => expect(canvas.getByText(/connectez vous/i)).toBeInTheDocument());
       const champsAdresseEmail = await waitFor(() =>
         canvas.getByRole('textbox', {
           name: /votre adresse email/i,
@@ -155,9 +146,7 @@ export const ConnexionAMonAideCyber: Story = {
           }),
         ).not.toBeInTheDocument(),
       );
-      await waitFor(() =>
-        expect(canvas.queryByText(/Jean D\./i)).toBeInTheDocument(),
-      );
+      await waitFor(() => expect(canvas.queryByText(/Jean D\./i)).toBeInTheDocument());
     });
   },
 };

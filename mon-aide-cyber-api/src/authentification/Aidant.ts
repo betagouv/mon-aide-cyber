@@ -9,14 +9,9 @@ export type Aidant = Aggregat & {
   dateSignatureCharte?: Date;
 };
 export interface EntrepotAidant extends Entrepot<Aidant> {
-  rechercheParIdentifiantConnexionEtMotDePasse(
-    identifiantConnexion: string,
-    motDePasse: string,
-  ): Promise<Aidant>;
+  rechercheParIdentifiantConnexionEtMotDePasse(identifiantConnexion: string, motDePasse: string): Promise<Aidant>;
 
-  rechercheParIdentifiantDeConnexion(
-    identifiantConnexion: string,
-  ): Promise<Aidant>;
+  rechercheParIdentifiantDeConnexion(identifiantConnexion: string): Promise<Aidant>;
 }
 export class ErreurAuthentification extends Error {
   constructor(public readonly erreur: Error) {

@@ -22,14 +22,8 @@ describe('Crée un aidant', () => {
       nomPrenom: 'jean Dupont',
     });
 
-    const aidant =
-      await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse(
-        'jean.dupont@beta.fr',
-        'mdp',
-      );
-    expect(
-      busEvenement.consommateurs.get('AIDANT_CREE')?.evenementConsomme,
-    ).toMatchObject({
+    const aidant = await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse('jean.dupont@beta.fr', 'mdp');
+    expect(busEvenement.consommateurs.get('AIDANT_CREE')?.evenementConsomme).toMatchObject({
       type: 'AIDANT_CREE',
       date: FournisseurHorloge.maintenant(),
       corps: { identifiant: aidant.identifiant },

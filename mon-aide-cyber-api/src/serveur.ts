@@ -56,55 +56,39 @@ const creeApp = (config: ConfigurationServeur) => {
     }),
   );
 
-  if (config.avecProtectionCsrf)
-    app.use(csrf({ blocklist: ENDPOINTS_SANS_CSRF }));
+  if (config.avecProtectionCsrf) app.use(csrf({ blocklist: ENDPOINTS_SANS_CSRF }));
 
   app.use(config.gestionnaireErreurs.controleurRequete());
 
-  const dureePeriodeConnexionMs =
-    Number(process.env.MAC_LIMITEUR_TRAFFIC_DUREE_PERIODE_CONNEXIONS_MS) ||
-    5 * 60 * 1000;
+  const dureePeriodeConnexionMs = Number(process.env.MAC_LIMITEUR_TRAFFIC_DUREE_PERIODE_CONNEXIONS_MS) || 5 * 60 * 1000;
   const nombreMaximumDeConnexions =
-    Number(
-      process.env.MAC_LIMITEUR_TRAFFIC_NOMBRE_CONNEXIONS_MAXIMUM_PAR_PERIODE,
-    ) || 100;
+    Number(process.env.MAC_LIMITEUR_TRAFFIC_NOMBRE_CONNEXIONS_MAXIMUM_PAR_PERIODE) || 100;
   const limiteurTrafficUI = rateLimit({
     windowMs: dureePeriodeConnexionMs,
     max: nombreMaximumDeConnexions,
-    message:
-      'Vous avez atteint le nombre maximal de requête. Veuillez réessayer ultérieurement.',
+    message: 'Vous avez atteint le nombre maximal de requête. Veuillez réessayer ultérieurement.',
     standardHeaders: true,
-    keyGenerator: (requete: Request, __: Response) =>
-      requete.headers['x-real-ip'] as string,
+    keyGenerator: (requete: Request, __: Response) => requete.headers['x-real-ip'] as string,
     legacyHeaders: false,
     skip: (requete: Request, __) => requete.path.startsWith('/api'),
   });
   app.use(limiteurTrafficUI);
   app.use((_: Request, reponse: Response, suite: NextFunction) => {
     reponse.setHeader('Content-Security-Policy', process.env.MAC_CSP || '*');
-    reponse.setHeader(
-      'Strict-Transport-Security',
-      'max-age=63072000; includeSubDomains; preload',
-    );
+    reponse.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
     reponse.setHeader('X-Content-Type-Options', 'nosniff');
     suite();
   });
-  app.use(
-    express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist')),
-  );
+  app.use(express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist')));
   app.use('/api', routesAPI(config));
 
   app.use('/contact', routeContact(config));
 
   app.get('*', (_: Request, reponse: Response) =>
-    reponse.sendFile(
-      path.join(__dirname, './../../mon-aide-cyber-ui/dist/index.html'),
-    ),
+    reponse.sendFile(path.join(__dirname, './../../mon-aide-cyber-ui/dist/index.html')),
   );
 
-  app.use(
-    gestionnaireErreurGeneralisee(config.gestionnaireErreurs.consignateur()),
-  );
+  app.use(gestionnaireErreurGeneralisee(config.gestionnaireErreurs.consignateur()));
   app.use(config.gestionnaireErreurs.controleurErreurs());
 
   return app;

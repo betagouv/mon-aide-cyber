@@ -8,21 +8,12 @@ type MessagesErreursValidateurMotDePasse = {
   laConfirmationDuMotDePasseCorrespond?: string;
 };
 
-const validateurDeMotDePasse = (
-  entrepots: Entrepots,
-  messageValidateurs: MessagesErreursValidateurMotDePasse,
-) =>
+const validateurDeMotDePasse = (entrepots: Entrepots, messageValidateurs: MessagesErreursValidateurMotDePasse) =>
   new ExpressValidator({
-    ancienMotDePasseDifferentDuNouveauMotDePasse: (
-      value: string,
-      { req }: Meta,
-    ) => value !== req.body.motDePasse,
-    confirmationMotDePasseCorrespond: (value: string, { req }: Meta) =>
-      value === req.body.motDePasse,
+    ancienMotDePasseDifferentDuNouveauMotDePasse: (value: string, { req }: Meta) => value !== req.body.motDePasse,
+    confirmationMotDePasseCorrespond: (value: string, { req }: Meta) => value === req.body.motDePasse,
     motDePasseUtilisateur: async (value: string, { req }: Meta) => {
-      const aidant = await entrepots
-        .aidants()
-        .lis(req.identifiantUtilisateurCourant);
+      const aidant = await entrepots.aidants().lis(req.identifiantUtilisateurCourant);
       if (aidant.motDePasse !== value) {
         throw new Error(messageValidateurs.correspondAuMotDePasseUtilisateur);
       }
@@ -47,9 +38,7 @@ const validateursDeMotDePasse = (
         minNumbers: 1,
         minSymbols: 1,
       })
-      .withMessage(
-        'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
-      ),
+      .withMessage('Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.'),
     body(ancienMotDePasse)
       .notEmpty()
       .withMessage(messageValidateurs.ancienMotDePasseObligatoire)
@@ -72,19 +61,11 @@ export const validateursDeMotDePasseTemporaire = (
   nouveauMotDePasse: string,
   motDePasseTemporaire: string,
 ) => {
-  return validateursDeMotDePasse(
-    entrepots,
-    nouveauMotDePasse,
-    motDePasseTemporaire,
-    {
-      ancienMotDePasseObligatoire:
-        'Le mot de passe temporaire est obligatoire.',
-      differentDeAncienMotDePasse:
-        'Votre nouveau mot de passe doit être différent du mot de passe temporaire.',
-      correspondAuMotDePasseUtilisateur:
-        'Votre mot de passe temporaire est erroné.',
-    },
-  );
+  return validateursDeMotDePasse(entrepots, nouveauMotDePasse, motDePasseTemporaire, {
+    ancienMotDePasseObligatoire: 'Le mot de passe temporaire est obligatoire.',
+    differentDeAncienMotDePasse: 'Votre nouveau mot de passe doit être différent du mot de passe temporaire.',
+    correspondAuMotDePasseUtilisateur: 'Votre mot de passe temporaire est erroné.',
+  });
 };
 
 export const validateurDeNouveauMotDePasse = (
@@ -99,12 +80,9 @@ export const validateurDeNouveauMotDePasse = (
     ancienMotDepasse,
     {
       ancienMotDePasseObligatoire: "L'ancien mot de passe est obligatoire.",
-      differentDeAncienMotDePasse:
-        'Votre nouveau mot de passe doit être différent de votre ancien mot de passe.',
-      correspondAuMotDePasseUtilisateur:
-        'Votre ancien mot de passe est erroné.',
-      laConfirmationDuMotDePasseCorrespond:
-        'La confirmation de votre mot de passe ne correspond pas.',
+      differentDeAncienMotDePasse: 'Votre nouveau mot de passe doit être différent de votre ancien mot de passe.',
+      correspondAuMotDePasseUtilisateur: 'Votre ancien mot de passe est erroné.',
+      laConfirmationDuMotDePasseCorrespond: 'La confirmation de votre mot de passe ne correspond pas.',
     },
     confirmationNouveauMotDePasse,
   );

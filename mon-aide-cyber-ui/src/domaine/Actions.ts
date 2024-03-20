@@ -10,9 +10,7 @@ export const actions = {
 
 export const routage = {
   pour: (actions: { [clef: string]: string }[], action: ActionsDiagnostics) => {
-    const lienAPI = actions.find(
-      (actionDisponible) => actionDisponible[action] !== undefined,
-    )?.[action];
+    const lienAPI = actions.find((actionDisponible) => actionDisponible[action] !== undefined)?.[action];
     const lien = () => new LienRoutage(lienAPI as FormatLien).route();
     return {
       lien,

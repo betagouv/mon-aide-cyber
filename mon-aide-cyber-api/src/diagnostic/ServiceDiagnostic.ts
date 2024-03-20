@@ -10,7 +10,5 @@ export class ServiceDiagnostic {
     await this.entrepots
       .diagnostic()
       .lis(id)
-      .catch((erreur) =>
-        Promise.reject(ErreurMAC.cree('Accès diagnostic', erreur)),
-      );
+      .catch((erreur) => Promise.reject(ErreurMAC.cree('Accès diagnostic', erreur)));
 }

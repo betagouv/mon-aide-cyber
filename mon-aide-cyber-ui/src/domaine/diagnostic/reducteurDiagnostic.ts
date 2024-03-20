@@ -19,37 +19,24 @@ type ActionDiagnostic =
       clef: string;
       type: TypeActionDiagnostic.THEMATIQUE_AFFICHEE;
     };
-export const reducteurDiagnostic = (
-  etat: EtatDiagnostic,
-  action: ActionDiagnostic,
-): EtatDiagnostic => {
+export const reducteurDiagnostic = (etat: EtatDiagnostic, action: ActionDiagnostic): EtatDiagnostic => {
   switch (action.type) {
     case TypeActionDiagnostic.THEMATIQUE_AFFICHEE:
       return { ...etat, thematiqueAffichee: action.clef };
     case TypeActionDiagnostic.DIAGNOSTIC_CHARGE:
-      Object.entries(action.diagnostic.referentiel).forEach(
-        ([_, thematique]) => {
-          const trieLesReponses = (
-            reponsesPossibles: ReponsePossible[] | undefined,
-          ): void => {
-            reponsesPossibles?.sort(
-              (premiereReponse, secondeReponse) =>
-                premiereReponse.ordre - secondeReponse.ordre,
+      Object.entries(action.diagnostic.referentiel).forEach(([_, thematique]) => {
+        const trieLesReponses = (reponsesPossibles: ReponsePossible[] | undefined): void => {
+          reponsesPossibles?.sort((premiereReponse, secondeReponse) => premiereReponse.ordre - secondeReponse.ordre);
+        };
+        thematique.groupes.forEach((groupe) => {
+          groupe.questions.forEach((question) => {
+            trieLesReponses(question.reponsesPossibles);
+            question.reponsesPossibles.forEach(
+              (reponse) => reponse.questions?.forEach((question) => trieLesReponses(question.reponsesPossibles)),
             );
-          };
-          thematique.groupes.forEach((groupe) => {
-            groupe.questions.forEach((question) => {
-              trieLesReponses(question.reponsesPossibles);
-              question.reponsesPossibles.forEach(
-                (reponse) =>
-                  reponse.questions?.forEach((question) =>
-                    trieLesReponses(question.reponsesPossibles),
-                  ),
-              );
-            });
           });
-        },
-      );
+        });
+      });
       return {
         ...etat,
         diagnostic: action.diagnostic,

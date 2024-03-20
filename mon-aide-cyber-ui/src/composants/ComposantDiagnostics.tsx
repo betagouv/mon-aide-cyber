@@ -11,19 +11,14 @@ import { useMACAPI } from '../fournisseurs/hooks.ts';
 import { constructeurParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 
 export const ComposantDiagnostics = () => {
-  const [diagnostics, setDiagnostics] = useState<Diagnostics | undefined>(
-    undefined,
-  );
+  const [diagnostics, setDiagnostics] = useState<Diagnostics | undefined>(undefined);
   const { showBoundary } = useErrorBoundary();
   const macapi = useMACAPI();
   useEffect(() => {
     if (!diagnostics) {
       macapi
         .appelle<Diagnostics>(
-          constructeurParametresAPI()
-            .url('/api/diagnostics/')
-            .methode('GET')
-            .construis(),
+          constructeurParametresAPI().url('/api/diagnostics/').methode('GET').construis(),
           async (reponse) => (await reponse) as Diagnostics,
         )
         .then((diagnostics) => setDiagnostics(diagnostics))
@@ -50,14 +45,7 @@ export const ComposantDiagnostics = () => {
                 {diagnostics?.map((diagnostic) => {
                   return (
                     <div className="identifiant" key={diagnostic.identifiant}>
-                      <a
-                        href={routage
-                          .pour(
-                            diagnostic.actions,
-                            actions.diagnostics().AFFICHER,
-                          )
-                          .lien()}
-                      >
+                      <a href={routage.pour(diagnostic.actions, actions.diagnostics().AFFICHER).lien()}>
                         {diagnostic.identifiant}
                       </a>
                     </div>

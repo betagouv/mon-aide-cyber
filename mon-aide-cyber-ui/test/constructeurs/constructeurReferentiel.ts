@@ -63,10 +63,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
     return this;
   }
 
-  ajouteUneThematique(
-    theme: string,
-    questions: Question[],
-  ): ConstructeurReferentiel {
+  ajouteUneThematique(theme: string, questions: Question[]): ConstructeurReferentiel {
     this.thematique[theme] = {
       actions: [],
       description: fakerFR.lorem.sentence(),
@@ -82,15 +79,12 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
   }
 
   construis(): Referentiel {
-    return Object.entries(this.thematique).reduce(
-      (accumulateur, [clef, thematique]) => {
-        return {
-          ...accumulateur,
-          [clef]: thematique,
-        };
-      },
-      {},
-    );
+    return Object.entries(this.thematique).reduce((accumulateur, [clef, thematique]) => {
+      return {
+        ...accumulateur,
+        [clef]: thematique,
+      };
+    }, {});
   }
 }
 

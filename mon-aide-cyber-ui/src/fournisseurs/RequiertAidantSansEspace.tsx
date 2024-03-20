@@ -12,10 +12,7 @@ export const RequiertAidantSansEspace = () => {
     moteurDeLiens.trouve(
       'creer-espace-aidant',
       () => setRedirection(<Outlet />),
-      () =>
-        moteurDeLiens.trouve('lancer-diagnostic', () =>
-          navigationMAC.navigue(moteurDeLiens, 'lancer-diagnostic'),
-        ),
+      () => moteurDeLiens.trouve('lancer-diagnostic', () => navigationMAC.navigue(moteurDeLiens, 'lancer-diagnostic')),
     );
   }, [navigationMAC]);
 

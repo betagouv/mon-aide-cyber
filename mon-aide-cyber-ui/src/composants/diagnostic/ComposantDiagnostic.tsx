@@ -1,18 +1,6 @@
-import {
-  ChangeEvent,
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-} from 'react';
+import { ChangeEvent, PropsWithChildren, useCallback, useEffect, useMemo, useReducer } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
-import {
-  Question,
-  ReponseDonnee,
-  ReponsePossible,
-  Thematique,
-} from '../../domaine/diagnostic/Referentiel.ts';
+import { Question, ReponseDonnee, ReponsePossible, Thematique } from '../../domaine/diagnostic/Referentiel.ts';
 import { UUID } from '../../types/Types.ts';
 import {
   diagnosticCharge,
@@ -41,10 +29,7 @@ import '../../assets/styles/_commun.scss';
 import { BoutonThematique } from './BoutonThematique.tsx';
 import '../../assets/styles/_couleurs.scss';
 
-import {
-  reducteurBoutonThematiquePrecedente,
-  reducteurBoutonThematiqueSuivante,
-} from './reducteurBoutonThematique.ts';
+import { reducteurBoutonThematiquePrecedente, reducteurBoutonThematiqueSuivante } from './reducteurBoutonThematique.ts';
 import styled from 'styled-components';
 import { FooterDiagnostic } from './FooterDiagnostic.tsx';
 import { HeaderDiagnostic } from './HeaderDiagnostic.tsx';
@@ -68,12 +53,7 @@ type ProprietesChampsDeSaisie = {
 const ChampsDeSaisie = ({ identifiant }: ProprietesChampsDeSaisie) => {
   return (
     <div>
-      <input
-        id={`asaisir-${identifiant}`}
-        name={identifiant}
-        type="text"
-        required={true}
-      />
+      <input id={`asaisir-${identifiant}`} name={identifiant} type="text" required={true} />
     </div>
   );
 };
@@ -86,9 +66,7 @@ type ProprietesComposantReponsePossible = {
   selectionnee: boolean;
 };
 
-const ComposantReponsePossible = (
-  proprietes: PropsWithChildren<ProprietesComposantReponsePossible>,
-) => {
+const ComposantReponsePossible = (proprietes: PropsWithChildren<ProprietesComposantReponsePossible>) => {
   const champsASaisir =
     proprietes.reponsePossible.type?.type === 'saisieLibre' ? (
       <ChampsDeSaisie identifiant={proprietes.reponsePossible.identifiant} />
@@ -97,9 +75,7 @@ const ComposantReponsePossible = (
     );
 
   return (
-    <div
-      className={`fr-${proprietes.typeDeSaisie}-group mac-${proprietes.typeDeSaisie}-group`}
-    >
+    <div className={`fr-${proprietes.typeDeSaisie}-group mac-${proprietes.typeDeSaisie}-group`}>
       <input
         id={proprietes.reponsePossible.identifiant}
         type={proprietes.typeDeSaisie}
@@ -110,10 +86,7 @@ const ComposantReponsePossible = (
           proprietes.onChange(event.target.value);
         }}
       />
-      <label
-        className="fr-label"
-        htmlFor={proprietes.reponsePossible.identifiant}
-      >
+      <label className="fr-label" htmlFor={proprietes.reponsePossible.identifiant}>
         {proprietes.reponsePossible.libelle}
       </label>
       <div>{champsASaisir}</div>
@@ -128,10 +101,7 @@ type ReponseAEnvoyer = {
   reponse: string | string[] | ReponseQuestionATiroir | null;
 };
 
-const genereParametresAPI = (
-  action: ActionReponseDiagnostic,
-  reponseDonnee: Reponse,
-) => {
+const genereParametresAPI = (action: ActionReponseDiagnostic, reponseDonnee: Reponse) => {
   const actionAMener = Object.entries(action).map(([thematique, action]) => ({
     chemin: thematique,
     ressource: action.ressource,
@@ -148,15 +118,8 @@ const genereParametresAPI = (
     .construis();
 };
 
-const ComposantQuestionListe = ({
-  question,
-  actions,
-  numeroQuestion,
-}: ProprietesComposantQuestion) => {
-  const [etatReponse, envoie] = useReducer(
-    reducteurReponse,
-    initialiseReducteur(question, actions),
-  );
+const ComposantQuestionListe = ({ question, actions, numeroQuestion }: ProprietesComposantQuestion) => {
+  const [etatReponse, envoie] = useReducer(reducteurReponse, initialiseReducteur(question, actions));
   const macapi = useMACAPI();
 
   const repond = useCallback(
@@ -176,9 +139,7 @@ const ComposantQuestionListe = ({
       if (action !== undefined) {
         const reponseDonnee = etatReponse.reponse()!;
         const parametresAPI = genereParametresAPI(action, reponseDonnee);
-        macapi.appelle<void, ReponseAEnvoyer>(parametresAPI, () =>
-          Promise.resolve(),
-        );
+        macapi.appelle<void, ReponseAEnvoyer>(parametresAPI, () => Promise.resolve());
       }
     }
   }, [actions, etatReponse, macapi, question, reponseQuestionEnvoyee]);
@@ -191,11 +152,7 @@ const ComposantQuestionListe = ({
           {question.libelle}
         </h5>
       </label>
-      <select
-        onChange={repond}
-        className="fr-select mac-select"
-        id={`select-${question.identifiant}`}
-      >
+      <select onChange={repond} className="fr-select mac-select" id={`select-${question.identifiant}`}>
         <option value="" disabled hidden selected>
           Sélectionnez une valeur
         </option>
@@ -215,15 +172,8 @@ const ComposantQuestionListe = ({
   );
 };
 
-const ComposantQuestion = ({
-  question,
-  actions,
-  numeroQuestion,
-}: ProprietesComposantQuestion) => {
-  const [etatReponse, envoie] = useReducer(
-    reducteurReponse,
-    initialiseReducteur(question, actions),
-  );
+const ComposantQuestion = ({ question, actions, numeroQuestion }: ProprietesComposantQuestion) => {
+  const [etatReponse, envoie] = useReducer(reducteurReponse, initialiseReducteur(question, actions));
   const macapi = useMACAPI();
 
   const repondQuestionUnique = useCallback(
@@ -274,14 +224,9 @@ const ComposantQuestion = ({
     if (etatReponse.statut === EtatReponseStatut.MODIFIEE) {
       const action = etatReponse.action('repondre');
       if (action !== undefined) {
-        const parametresAPI = genereParametresAPI(
-          action,
-          etatReponse.reponse()!,
-        );
+        const parametresAPI = genereParametresAPI(action, etatReponse.reponse()!);
         macapi
-          .appelle<void, ReponseAEnvoyer>(parametresAPI, () =>
-            Promise.resolve(),
-          )
+          .appelle<void, ReponseAEnvoyer>(parametresAPI, () => Promise.resolve())
           .then(() => {
             reponseQuestionEnvoyee();
           });
@@ -298,8 +243,7 @@ const ComposantQuestion = ({
       </label>
       <div className="fr-fieldset__content">
         {question.reponsesPossibles.map((reponse) => {
-          const typeDeSaisie =
-            question.type === 'choixUnique' ? 'radio' : 'checkbox';
+          const typeDeSaisie = question.type === 'choixUnique' ? 'radio' : 'checkbox';
           return (
             <ComposantReponsePossible
               key={reponse.identifiant}
@@ -317,24 +261,14 @@ const ComposantQuestion = ({
               selectionnee={
                 typeDeSaisie === 'radio'
                   ? etatReponse.valeur() === reponse.identifiant
-                  : etatReponse.reponseDonnee.reponses.some((rep) =>
-                      rep.reponses.has(reponse.identifiant),
-                    )
+                  : etatReponse.reponseDonnee.reponses.some((rep) => rep.reponses.has(reponse.identifiant))
               }
             >
               {reponse.questions?.map((questionTiroir) => (
-                <div
-                  className="question-tiroir"
-                  key={questionTiroir.identifiant}
-                >
-                  <legend className="fr-fieldset__legend">
-                    {questionTiroir.libelle}
-                  </legend>
+                <div className="question-tiroir" key={questionTiroir.identifiant}>
+                  <legend className="fr-fieldset__legend">{questionTiroir.libelle}</legend>
                   {questionTiroir.reponsesPossibles.map((rep) => {
-                    const typeDeSaisie =
-                      questionTiroir?.type === 'choixMultiple'
-                        ? 'checkbox'
-                        : 'radio';
+                    const typeDeSaisie = questionTiroir?.type === 'choixMultiple' ? 'checkbox' : 'radio';
 
                     return (
                       <ComposantReponsePossible
@@ -342,19 +276,15 @@ const ComposantQuestion = ({
                         reponsePossible={rep}
                         identifiantQuestion={questionTiroir.identifiant}
                         typeDeSaisie={typeDeSaisie}
-                        selectionnee={etatReponse.reponseDonnee.reponses.some(
-                          (reponse) => reponse.reponses.has(rep.identifiant),
+                        selectionnee={etatReponse.reponseDonnee.reponses.some((reponse) =>
+                          reponse.reponses.has(rep.identifiant),
                         )}
                         onChange={(identifiantReponse) => {
                           typeDeSaisie === 'checkbox'
-                            ? repondQuestionTiroirMultiple(
-                                reponse.identifiant,
-                                {
-                                  identifiantReponse:
-                                    questionTiroir.identifiant,
-                                  reponse: identifiantReponse,
-                                },
-                              )
+                            ? repondQuestionTiroirMultiple(reponse.identifiant, {
+                                identifiantReponse: questionTiroir.identifiant,
+                                reponse: identifiantReponse,
+                              })
                             : repondQuestionTiroirUnique(reponse.identifiant, {
                                 identifiantReponse: questionTiroir.identifiant,
                                 reponse: identifiantReponse,
@@ -387,9 +317,7 @@ type ProprietesComposantDiagnostic = {
   idDiagnostic: UUID;
 };
 
-export const ComposantDiagnostic = ({
-  idDiagnostic,
-}: ProprietesComposantDiagnostic) => {
+export const ComposantDiagnostic = ({ idDiagnostic }: ProprietesComposantDiagnostic) => {
   const [etatReferentiel, envoie] = useReducer(reducteurDiagnostic, {
     diagnostic: undefined,
     thematiqueAffichee: undefined,
@@ -432,12 +360,7 @@ export const ComposantDiagnostic = ({
     () =>
       affiche({
         titre: 'Accéder à la restitution',
-        corps: (
-          <AccederALaRestitution
-            surAnnuler={ferme}
-            idDiagnostic={idDiagnostic}
-          />
-        ),
+        corps: <AccederALaRestitution surAnnuler={ferme} idDiagnostic={idDiagnostic} />,
       }),
     [affiche, ferme, idDiagnostic],
   );
@@ -448,11 +371,7 @@ export const ComposantDiagnostic = ({
         {thematiques.map(([clef, thematique]) => (
           <li
             key={`li-${clef}`}
-            className={
-              etatReferentiel.thematiqueAffichee === clef
-                ? 'mac-thematique--active'
-                : ''
-            }
+            className={etatReferentiel.thematiqueAffichee === clef ? 'mac-thematique--active' : ''}
           >
             <BoutonNavigueVersThematique
               $localisationIcone={thematique.localisationIconeNavigation}
@@ -477,8 +396,8 @@ export const ComposantDiagnostic = ({
         <div className="fr-grid-row fr-grid-row--gutters fond-clair-mac">
           <div className="conteneur-navigation">{navigation}</div>
           {thematiques.map(([clef, thematique]) => {
-            const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
-              (action) => Object.entries(action).find(([c]) => c === clef),
+            const actionsPossibles: ActionReponseDiagnostic[] = actions.filter((action) =>
+              Object.entries(action).find(([c]) => c === clef),
             ) as ActionReponseDiagnostic[];
             const elements = thematique.groupes.flatMap((groupe) => {
               return (
@@ -488,8 +407,7 @@ export const ComposantDiagnostic = ({
                   className="fr-fieldset fr-mb-5w section"
                 >
                   {groupe.questions.map((question, index) => {
-                    const numeroQuestion =
-                      index === 0 ? groupe.numero : undefined;
+                    const numeroQuestion = index === 0 ? groupe.numero : undefined;
                     return (
                       <>
                         {question.type === 'liste' ? (
@@ -515,11 +433,7 @@ export const ComposantDiagnostic = ({
               <div
                 key={clef}
                 className={`
-                ${
-                  etatReferentiel.thematiqueAffichee === clef
-                    ? `visible`
-                    : `invisible`
-                }
+                ${etatReferentiel.thematiqueAffichee === clef ? `visible` : `invisible`}
                conteneur-thematique`}
               >
                 <div className="bandeau-thematique">
@@ -530,10 +444,7 @@ export const ComposantDiagnostic = ({
                         <p>{thematique.description}</p>
                       </div>
                       <div className="fr-col-5">
-                        <img
-                          src={thematique.localisationIllustration}
-                          alt="illustration de la thématique"
-                        />
+                        <img src={thematique.localisationIllustration} alt="illustration de la thématique" />
                       </div>
                     </div>
                   </div>
@@ -554,25 +465,17 @@ export const ComposantDiagnostic = ({
                       titre="Thématique précédente"
                       reducteur={reducteurBoutonThematiquePrecedente}
                       style="bouton-mac bouton-mac-secondaire"
-                      thematiqueCourante={
-                        etatReferentiel.thematiqueAffichee || ''
-                      }
+                      thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
                       thematiques={thematiques.map(([clef]) => clef)}
-                      onClick={(thematique: string) =>
-                        afficheThematique(thematique)
-                      }
+                      onClick={(thematique: string) => afficheThematique(thematique)}
                     />
                     <BoutonThematique
                       titre="Thématique suivante"
                       reducteur={reducteurBoutonThematiqueSuivante}
                       style="bouton-mac bouton-mac-primaire"
-                      thematiqueCourante={
-                        etatReferentiel.thematiqueAffichee || ''
-                      }
+                      thematiqueCourante={etatReferentiel.thematiqueAffichee || ''}
                       thematiques={thematiques.map(([clef]) => clef)}
-                      onClick={(thematique: string) =>
-                        afficheThematique(thematique)
-                      }
+                      onClick={(thematique: string) => afficheThematique(thematique)}
                     />
                   </div>
                 </div>

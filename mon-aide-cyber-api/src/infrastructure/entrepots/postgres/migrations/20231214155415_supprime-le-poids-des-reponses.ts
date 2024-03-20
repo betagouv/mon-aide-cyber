@@ -1,14 +1,8 @@
 import { Knex } from 'knex';
 import crypto from 'crypto';
-import {
-  QuestionATiroir,
-  ReponsePossible,
-} from '../../../../diagnostic/Referentiel';
+import { QuestionATiroir, ReponsePossible } from '../../../../diagnostic/Referentiel';
 import { Poids, Valeur } from '../../../../diagnostic/Indice';
-import {
-  QuestionDiagnostic,
-  Thematique,
-} from '../../../../diagnostic/Diagnostic';
+import { QuestionDiagnostic, Thematique } from '../../../../diagnostic/Diagnostic';
 
 type NiveauRecommandation = 1 | 2;
 
@@ -33,10 +27,7 @@ type TableauDeRecommandations = {
   [identifiantQuestion: string]: ObjetDeRecommandation;
 };
 
-type RepresentationReponsePossible = Omit<
-  ReponsePossible,
-  'resultat' | 'questions'
-> & {
+type RepresentationReponsePossible = Omit<ReponsePossible, 'resultat' | 'questions'> & {
   resultat?: {
     recommandations?: Recommandation[];
     indice?: { valeur: Valeur; poids?: Poids };
@@ -47,17 +38,11 @@ type RepresentationReponsePossible = Omit<
   };
   questions?: RepresentationQuestionTiroir[];
 };
-type RepresentationQuestionTiroir = Omit<
-  QuestionATiroir,
-  'reponsesPossibles'
-> & {
+type RepresentationQuestionTiroir = Omit<QuestionATiroir, 'reponsesPossibles'> & {
   reponsesPossibles: RepresentationReponsePossible[];
 };
 
-type RepresentationQuestionDiagnostic = Omit<
-  QuestionDiagnostic,
-  'reponsesPossibles'
-> & {
+type RepresentationQuestionDiagnostic = Omit<QuestionDiagnostic, 'reponsesPossibles'> & {
   reponsesPossibles: RepresentationReponsePossible[];
 };
 type RepresentationQuestionsThematique = {
@@ -99,16 +84,12 @@ export async function up(knex: Knex): Promise<void> {
               question.reponsesPossibles.forEach((reponsePossible) => {
                 metsAJour(reponsePossible);
                 reponsePossible.questions?.forEach((question) => {
-                  question.reponsesPossibles.forEach((reponsePossible) =>
-                    metsAJour(reponsePossible),
-                  );
+                  question.reponsesPossibles.forEach((reponsePossible) => metsAJour(reponsePossible));
                 });
               });
             });
           });
-        return knex('diagnostics')
-          .where('id', ligne.id)
-          .update({ donnees: ligne.donnees });
+        return knex('diagnostics').where('id', ligne.id).update({ donnees: ligne.donnees });
       });
       return Promise.all(misesAJour);
     },

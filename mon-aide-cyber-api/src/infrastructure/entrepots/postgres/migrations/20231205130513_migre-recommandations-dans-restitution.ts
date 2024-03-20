@@ -66,9 +66,7 @@ export async function up(knex: Knex): Promise<void> {
             ...reste,
           };
         }
-        return knex('diagnostics')
-          .where('id', ligne.id)
-          .update({ donnees: ligne.donnees });
+        return knex('diagnostics').where('id', ligne.id).update({ donnees: ligne.donnees });
       });
       return Promise.all(misesAJour);
     },

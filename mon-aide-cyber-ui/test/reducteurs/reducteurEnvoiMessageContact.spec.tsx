@@ -9,10 +9,7 @@ import {
   nomSaisi,
   reducteurEnvoiMessageContact,
 } from '../../src/reducteurs/reducteurEnvoiMessageContact.tsx';
-import {
-  ChampsErreur,
-  TexteExplicatif,
-} from '../../src/composants/erreurs/Erreurs.tsx';
+import { ChampsErreur, TexteExplicatif } from '../../src/composants/erreurs/Erreurs.tsx';
 
 describe("Réducteur d'envoie de message de contact", () => {
   const etatInitial: EtatEnvoiMessageContact = {
@@ -24,10 +21,7 @@ describe("Réducteur d'envoie de message de contact", () => {
 
   describe('Sur la saisie du nom', () => {
     it('contient le nom', () => {
-      const etatEnvoieMessage = reducteurEnvoiMessageContact(
-        etatInitial,
-        nomSaisi('Jean Dupont'),
-      );
+      const etatEnvoieMessage = reducteurEnvoiMessageContact(etatInitial, nomSaisi('Jean Dupont'));
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
         nom: 'Jean Dupont',
@@ -97,10 +91,7 @@ describe("Réducteur d'envoie de message de contact", () => {
 
   describe("Sur la saisie de l'adresse email", () => {
     it("contient l'email", () => {
-      const etatEnvoieMessage = reducteurEnvoiMessageContact(
-        etatInitial,
-        emailSaisi('jean-dupont@email.com'),
-      );
+      const etatEnvoieMessage = reducteurEnvoiMessageContact(etatInitial, emailSaisi('jean-dupont@email.com'));
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
         nom: '',
@@ -179,12 +170,7 @@ describe("Réducteur d'envoie de message de contact", () => {
       const etatEnvoieMessage = reducteurEnvoiMessageContact(
         etatInitial,
         messageSaisi(
-          'Bonjour,\n' +
-            "J'aimerai avoir des renseignements.\n" +
-            '\n' +
-            'Cordialement.\n' +
-            '\n' +
-            'Jean Dupont\n',
+          'Bonjour,\n' + "J'aimerai avoir des renseignements.\n" + '\n' + 'Cordialement.\n' + '\n' + 'Jean Dupont\n',
         ),
       );
 
@@ -192,12 +178,7 @@ describe("Réducteur d'envoie de message de contact", () => {
         nom: '',
         email: '',
         message:
-          'Bonjour,\n' +
-          "J'aimerai avoir des renseignements.\n" +
-          '\n' +
-          'Cordialement.\n' +
-          '\n' +
-          'Jean Dupont\n',
+          'Bonjour,\n' + "J'aimerai avoir des renseignements.\n" + '\n' + 'Cordialement.\n' + '\n' + 'Jean Dupont\n',
         erreur: {},
         saisieValide: expect.any(Function),
       });
@@ -302,9 +283,7 @@ describe("Réducteur d'envoie de message de contact", () => {
     );
 
     expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
-      champsErreur: (
-        <ChampsErreur erreur={new Error('Une erreur est survenue')} />
-      ),
+      champsErreur: <ChampsErreur erreur={new Error('Une erreur est survenue')} />,
       nom: 'Jean Dupont',
       email: 'jean-dupont@mail.com',
       message: 'Bonjour le monde!',
@@ -378,9 +357,7 @@ describe("Réducteur d'envoie de message de contact", () => {
         erreur: {
           nom: {
             className: 'fr-input-group--error',
-            texteExplicatif: (
-              <TexteExplicatif id="nom" texte="Veuillez saisir votre nom." />
-            ),
+            texteExplicatif: <TexteExplicatif id="nom" texte="Veuillez saisir votre nom." />,
           },
         },
         saisieValide: expect.any(Function),
@@ -407,12 +384,7 @@ describe("Réducteur d'envoie de message de contact", () => {
         erreur: {
           email: {
             className: 'fr-input-group--error',
-            texteExplicatif: (
-              <TexteExplicatif
-                id="email"
-                texte="Veuillez saisir un email valide."
-              />
-            ),
+            texteExplicatif: <TexteExplicatif id="email" texte="Veuillez saisir un email valide." />,
           },
         },
         saisieValide: expect.any(Function),
@@ -439,12 +411,7 @@ describe("Réducteur d'envoie de message de contact", () => {
         erreur: {
           message: {
             className: 'fr-input-group--error',
-            texteExplicatif: (
-              <TexteExplicatif
-                id="message"
-                texte="Veuillez saisir un message."
-              />
-            ),
+            texteExplicatif: <TexteExplicatif id="message" texte="Veuillez saisir un message." />,
           },
         },
         saisieValide: expect.any(Function),

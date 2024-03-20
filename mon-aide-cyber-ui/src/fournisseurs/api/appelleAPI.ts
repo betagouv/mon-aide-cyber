@@ -12,8 +12,7 @@ export const appelleAPI = async <REPONSE, CORPS = void>(
     }),
     headers: {
       Accept: parametresAPI.headers?.['Accept'] || 'application/json',
-      'Content-Type':
-        parametresAPI.headers?.['Content-Type'] || 'application/json',
+      'Content-Type': parametresAPI.headers?.['Content-Type'] || 'application/json',
     },
   });
   const lien = reponse.headers.get('Link');

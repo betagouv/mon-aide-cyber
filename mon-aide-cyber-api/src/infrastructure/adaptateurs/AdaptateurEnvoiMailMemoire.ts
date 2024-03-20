@@ -1,7 +1,4 @@
-import {
-  AdaptateurEnvoiMail,
-  Message,
-} from '../../adaptateurs/AdaptateurEnvoiMail';
+import { AdaptateurEnvoiMail, Message } from '../../adaptateurs/AdaptateurEnvoiMail';
 
 export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private message?: Message;
@@ -17,10 +14,7 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
 
   aEteEnvoye(nom: string, email: string, message: string): boolean {
     return (
-      (this.message &&
-        this.message.nom === nom &&
-        this.message.email === email &&
-        this.message.message === message) ||
+      (this.message && this.message.nom === nom && this.message.email === email && this.message.message === message) ||
       false
     );
   }

@@ -14,10 +14,7 @@ export const creeAidant = async (
   donneesAidant: DonneesAidant,
 ): Promise<Aidant | null> => {
   return entrepot
-    .rechercheParIdentifiantConnexionEtMotDePasse(
-      donneesAidant.identifiantConnexion,
-      donneesAidant.motDePasse,
-    )
+    .rechercheParIdentifiantConnexionEtMotDePasse(donneesAidant.identifiantConnexion, donneesAidant.motDePasse)
     .then(() => null)
     .catch(async () => {
       const aidant: Aidant = {

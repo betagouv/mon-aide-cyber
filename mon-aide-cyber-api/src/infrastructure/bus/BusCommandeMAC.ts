@@ -20,11 +20,7 @@ const capteurs: Map<string, Capteur> = new Map([
     'SagaAjoutReponse',
     {
       capteur: (parametres) =>
-        new CapteurSagaAjoutReponse(
-          parametres.entrepots,
-          parametres.busCommande!,
-          parametres.busEvenements!,
-        ),
+        new CapteurSagaAjoutReponse(parametres.entrepots, parametres.busCommande!, parametres.busEvenements!),
     },
   ],
   [
@@ -41,21 +37,13 @@ const capteurs: Map<string, Capteur> = new Map([
   [
     'CommandeLanceRestitution',
     {
-      capteur: (parametres) =>
-        new CapteurCommandeLanceRestitution(
-          parametres.entrepots,
-          parametres.busEvenements!,
-        ),
+      capteur: (parametres) => new CapteurCommandeLanceRestitution(parametres.entrepots, parametres.busEvenements!),
     },
   ],
   [
     'CommandeLanceDiagnostic',
     {
-      capteur: (parametres) =>
-        new CapteurCommandeLanceDiagnostic(
-          parametres.entrepots,
-          parametres.busEvenements!,
-        ),
+      capteur: (parametres) => new CapteurCommandeLanceDiagnostic(parametres.entrepots, parametres.busEvenements!),
     },
   ],
 ]);

@@ -15,11 +15,7 @@ export type Thematique = {
 export type Referentiel = {
   [clef: string]: Thematique;
 };
-export type TypeDeSaisie =
-  | 'choixMultiple'
-  | 'choixUnique'
-  | 'saisieLibre'
-  | 'liste';
+export type TypeDeSaisie = 'choixMultiple' | 'choixUnique' | 'saisieLibre' | 'liste';
 export type Format = 'texte' | 'nombre' | undefined;
 export type ReponseMultiple = { identifiant: string; reponses: Set<string> };
 export type ReponseDonnee = {

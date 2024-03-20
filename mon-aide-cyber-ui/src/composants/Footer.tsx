@@ -9,11 +9,7 @@ export const Footer = () => (
           </a>
         </div>
         <div className="fr-col-md-2 fr-col-sm-12">
-          <a
-            href="https://www.gendarmerie.interieur.gouv.fr/"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href="https://www.gendarmerie.interieur.gouv.fr/" target="_blank" rel="noreferrer">
             {' '}
             <img
               id="logo-gendarmerie-nationale"
@@ -29,30 +25,15 @@ export const Footer = () => (
           </a>
         </div>
         <div className="fr-col-md-2 fr-col-sm-12">
-          <a
-            href="https://www.cybermalveillance.gouv.fr/"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href="https://www.cybermalveillance.gouv.fr/" target="_blank" rel="noreferrer">
             {' '}
-            <img
-              id="logo-acyma"
-              src="/images/logo_acyma.svg"
-              alt="CyberMalveillance"
-            />
+            <img id="logo-acyma" src="/images/logo_acyma.svg" alt="CyberMalveillance" />
           </a>
         </div>
         <div className="fr-col-md-2 fr-col-sm-12">
-          <a
-            href="https://www.police-nationale.interieur.gouv.fr/"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href="https://www.police-nationale.interieur.gouv.fr/" target="_blank" rel="noreferrer">
             {' '}
-            <img
-              src="/images/logo_police_nationale.svg"
-              alt="Police Nationale"
-            />
+            <img src="/images/logo_police_nationale.svg" alt="Police Nationale" />
           </a>
         </div>
       </div>
@@ -71,11 +52,9 @@ export const Footer = () => (
           </div>
           <div className="fr-footer__content">
             <p className="fr-footer__content-desc">
-              MonAideCyber aide les entités publiques et privées sensibilisées à
-              la sécurité informatique à passer à l’action. Le dispositif
-              MonAideCyber est développé par l&apos;Agence Nationale de la
-              Sécurité des Systèmes d&apos;Information, en lien avec BetaGouv et
-              la Direction interministérielle du numérique.
+              MonAideCyber aide les entités publiques et privées sensibilisées à la sécurité informatique à passer à
+              l’action. Le dispositif MonAideCyber est développé par l&apos;Agence Nationale de la Sécurité des Systèmes
+              d&apos;Information, en lien avec BetaGouv et la Direction interministérielle du numérique.
             </p>
             <ul className="fr-footer__content-list">
               <li className="fr-footer__content-item">
@@ -89,12 +68,7 @@ export const Footer = () => (
                 </a>
               </li>
               <li className="fr-footer__content-item">
-                <a
-                  className="fr-footer__content-link"
-                  target="_blank"
-                  href="https://gouvernement.fr"
-                  rel="noreferrer"
-                >
+                <a className="fr-footer__content-link" target="_blank" href="https://gouvernement.fr" rel="noreferrer">
                   gouvernement.fr
                 </a>
               </li>
@@ -109,12 +83,7 @@ export const Footer = () => (
                 </a>
               </li>
               <li className="fr-footer__content-item">
-                <a
-                  className="fr-footer__content-link"
-                  target="_blank"
-                  href="https://data.gouv.fr"
-                  rel="noreferrer"
-                >
+                <a className="fr-footer__content-link" target="_blank" href="https://data.gouv.fr" rel="noreferrer">
                   data.gouv.fr
                 </a>
               </li>

@@ -1,7 +1,4 @@
-import {
-  QuestionATranscrire,
-  Transcripteur,
-} from '../../../src/api/representateurs/types';
+import { QuestionATranscrire, Transcripteur } from '../../../src/api/representateurs/types';
 import { Constructeur } from '../../constructeurs/constructeur';
 import { fakerFR } from '@faker-js/faker';
 
@@ -133,16 +130,12 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
     return this;
   }
 
-  ordonneLesThematiques(
-    thematiquesOrdonnees: string[],
-  ): ConstructeurTranscripteur {
+  ordonneLesThematiques(thematiquesOrdonnees: string[]): ConstructeurTranscripteur {
     this.thematiquesOrdonnees = thematiquesOrdonnees;
     return this;
   }
 
-  avecLesDescriptions(
-    descriptions: { thematique: string; description: string }[],
-  ): ConstructeurTranscripteur {
+  avecLesDescriptions(descriptions: { thematique: string; description: string }[]): ConstructeurTranscripteur {
     descriptions.forEach((description) => {
       Object.entries(this.thematiques).forEach(([clef, thematique]) => {
         if (description.thematique === clef) {

@@ -18,22 +18,14 @@ export class ServiceDeChiffrementChacha20 implements ServiceDeChiffrement {
   ) {}
 
   chiffre(chaine: string): string {
-    const chiffrement = crypto.createCipheriv(
-      'chacha20-poly1305',
-      this.clefSecrete,
-      this.iv,
-      {
-        authTagLength: 16,
-      },
-    );
+    const chiffrement = crypto.createCipheriv('chacha20-poly1305', this.clefSecrete, this.iv, {
+      authTagLength: 16,
+    });
     chiffrement.setAAD(this.donneesAdditionnelles, {
       plaintextLength: Buffer.byteLength(chaine),
     });
 
-    const donneesChiffrees = Buffer.concat([
-      chiffrement.update(chaine, 'utf-8'),
-      chiffrement.final(),
-    ]);
+    const donneesChiffrees = Buffer.concat([chiffrement.update(chaine, 'utf-8'), chiffrement.final()]);
     const tag = chiffrement.getAuthTag();
 
     return (
@@ -45,35 +37,20 @@ export class ServiceDeChiffrementChacha20 implements ServiceDeChiffrement {
   }
 
   dechiffre(chaine: string): string {
-    const {
-      chaineDonneesChiffrees,
-      chaineIV,
-      chaineDonneesAdditionnelles,
-      chaineTag,
-    } = decoupeLaChaineChiffree(chaine);
+    const { chaineDonneesChiffrees, chaineIV, chaineDonneesAdditionnelles, chaineTag } =
+      decoupeLaChaineChiffree(chaine);
 
     const iv = Buffer.from(chaineIV, this.encoding);
     const donneesChiffrees = Buffer.from(chaineDonneesChiffrees, this.encoding);
     const tag = Buffer.from(chaineTag, this.encoding);
 
-    const dechiffrement = crypto.createDecipheriv(
-      'chacha20-poly1305',
-      this.clefSecrete,
-      iv,
-      { authTagLength: 16 },
-    );
-    dechiffrement.setAAD(
-      Buffer.from(chaineDonneesAdditionnelles, this.encoding),
-      {
-        plaintextLength: chaineDonneesChiffrees.length,
-      },
-    );
+    const dechiffrement = crypto.createDecipheriv('chacha20-poly1305', this.clefSecrete, iv, { authTagLength: 16 });
+    dechiffrement.setAAD(Buffer.from(chaineDonneesAdditionnelles, this.encoding), {
+      plaintextLength: chaineDonneesChiffrees.length,
+    });
     dechiffrement.setAuthTag(Buffer.from(tag));
 
     const donneesDechiffrees = dechiffrement.update(donneesChiffrees);
-    return Buffer.concat([
-      donneesDechiffrees,
-      dechiffrement.final(),
-    ]).toString();
+    return Buffer.concat([donneesDechiffrees, dechiffrement.final()]).toString();
   }
 }

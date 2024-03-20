@@ -1,9 +1,6 @@
 import { Knex } from 'knex';
 import crypto from 'crypto';
-import {
-  QuestionDiagnostic,
-  Thematique,
-} from '../../../../diagnostic/Diagnostic';
+import { QuestionDiagnostic, Thematique } from '../../../../diagnostic/Diagnostic';
 import { Valeur } from '../../../../diagnostic/Indice';
 
 type NiveauRecommandation = 1 | 2;
@@ -72,10 +69,7 @@ type RepresentationReponsePossible = Omit<ReponsePossible, 'resultat'> & {
   };
 };
 
-type RepresentationQuestionDiagnostic = Omit<
-  QuestionDiagnostic,
-  'reponsesPossibles'
-> & {
+type RepresentationQuestionDiagnostic = Omit<QuestionDiagnostic, 'reponsesPossibles'> & {
   reponsesPossibles: RepresentationReponsePossible[];
 };
 type RepresentationQuestionsThematique = {
@@ -94,10 +88,7 @@ export type RecommandationPriorisee = {
   priorisation: number;
 };
 
-type RepresentationRecommandationPriorisee = Omit<
-  RecommandationPriorisee,
-  'valeurObtenue'
-> & {
+type RepresentationRecommandationPriorisee = Omit<RecommandationPriorisee, 'valeurObtenue'> & {
   noteObtenue?: Valeur;
   valeurObtenue: { theorique: Valeur };
 };
@@ -123,9 +114,7 @@ export async function up(knex: Knex): Promise<void> {
     }
   };
 
-  const metsAJourLesRecommandations = (
-    recommandations: RepresentationRecommandationPriorisee[],
-  ) =>
+  const metsAJourLesRecommandations = (recommandations: RepresentationRecommandationPriorisee[]) =>
     recommandations.map((recommandation) => {
       if (recommandation.noteObtenue) {
         const { noteObtenue, ...reste } = recommandation;
@@ -159,30 +148,20 @@ export async function up(knex: Knex): Promise<void> {
               question.reponsesPossibles.forEach((reponsePossible) => {
                 metsAJour(reponsePossible);
                 reponsePossible.questions?.forEach((question) => {
-                  question.reponsesPossibles.forEach((reponsePossible) =>
-                    metsAJour(reponsePossible),
-                  );
+                  question.reponsesPossibles.forEach((reponsePossible) => metsAJour(reponsePossible));
                 });
               });
             });
           });
-        if (
-          ligne.donnees.restitution &&
-          ligne.donnees.restitution.recommandations
-        ) {
-          ligne.donnees.restitution.recommandations.recommandationsPrioritaires =
-            metsAJourLesRecommandations(
-              ligne.donnees.restitution.recommandations
-                .recommandationsPrioritaires,
-            );
-          ligne.donnees.restitution.recommandations.autresRecommandations =
-            metsAJourLesRecommandations(
-              ligne.donnees.restitution.recommandations.autresRecommandations,
-            );
+        if (ligne.donnees.restitution && ligne.donnees.restitution.recommandations) {
+          ligne.donnees.restitution.recommandations.recommandationsPrioritaires = metsAJourLesRecommandations(
+            ligne.donnees.restitution.recommandations.recommandationsPrioritaires,
+          );
+          ligne.donnees.restitution.recommandations.autresRecommandations = metsAJourLesRecommandations(
+            ligne.donnees.restitution.recommandations.autresRecommandations,
+          );
         }
-        return knex('diagnostics')
-          .where('id', ligne.id)
-          .update({ donnees: ligne.donnees });
+        return knex('diagnostics').where('id', ligne.id).update({ donnees: ligne.donnees });
       });
       return Promise.all(misesAJour);
     },

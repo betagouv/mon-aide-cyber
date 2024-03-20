@@ -2,14 +2,8 @@ import { MesureDiagnostic, QuestionDiagnostic } from './Diagnostic';
 import { ReferentielDeMesures } from './ReferentielDeMesures';
 
 export class MoteurMesures {
-  static genere(
-    question: QuestionDiagnostic,
-    mesures: ReferentielDeMesures,
-  ): MesureDiagnostic[] {
-    return [
-      ...this.mesuresMultiples(question),
-      ...this.mesuresUniques(question),
-    ]
+  static genere(question: QuestionDiagnostic, mesures: ReferentielDeMesures): MesureDiagnostic[] {
+    return [...this.mesuresMultiples(question), ...this.mesuresUniques(question)]
       .map((mesure) => ({
         mesureTrouvee: mesures[mesure.identifiant],
         niveau: mesure.niveau,
@@ -17,10 +11,7 @@ export class MoteurMesures {
       }))
       .flatMap((mesure) => [
         {
-          niveau:
-            mesure.niveau === 1
-              ? mesure.mesureTrouvee.niveau1
-              : mesure.mesureTrouvee.niveau2!,
+          niveau: mesure.niveau === 1 ? mesure.mesureTrouvee.niveau1 : mesure.mesureTrouvee.niveau2!,
           priorisation: mesure.mesureTrouvee.priorisation as number,
           repondA: mesure.repondA,
         },

@@ -40,13 +40,8 @@ command.action(async (...args: any[]) => {
   if (aidantsImportes) {
     const rapport: string[] = [];
     const dateMaintenantISO = FournisseurHorloge.maintenant().toISOString();
-    rapport.push(
-      `Région;nom;charte;mail;Téléphone;TO DO;Qui;Compte Créé ?;commentaires;message avec mot de passe\n`,
-    );
-    const imports: ImportAidant[] = [
-      ...aidantsImportes.aidantsImportes,
-      ...aidantsImportes.aidantsExistants,
-    ];
+    rapport.push(`Région;nom;charte;mail;Téléphone;TO DO;Qui;Compte Créé ?;commentaires;message avec mot de passe\n`);
+    const imports: ImportAidant[] = [...aidantsImportes.aidantsImportes, ...aidantsImportes.aidantsExistants];
     imports.forEach((aidant) => {
       rapport.push(
         ligneCSV(
@@ -61,13 +56,9 @@ command.action(async (...args: any[]) => {
       );
     });
 
-    fs.writeFileSync(
-      `/tmp/rapport-importation-aidants-${dateMaintenantISO}.csv`,
-      rapport.join(''),
-      {
-        encoding: 'utf-8',
-      },
-    );
+    fs.writeFileSync(`/tmp/rapport-importation-aidants-${dateMaintenantISO}.csv`, rapport.join(''), {
+      encoding: 'utf-8',
+    });
   }
   process.exit(0);
 });

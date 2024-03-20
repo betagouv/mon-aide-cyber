@@ -16,10 +16,7 @@ import {
 import { Restitution } from '../../../../src/restitution/Restitution';
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../../horloge/FournisseurHorlogeDeTest';
-import {
-  genereLaRestitution,
-  QuestionDiagnostic,
-} from '../../../../src/diagnostic/Diagnostic';
+import { genereLaRestitution, QuestionDiagnostic } from '../../../../src/diagnostic/Diagnostic';
 import { uneReponsePossible } from '../../../constructeurs/constructeurReferentiel';
 import crypto from 'crypto';
 
@@ -35,9 +32,7 @@ describe('Entrepôt de restitution', () => {
     await new EntrepotDiagnosticPostgres().persiste(diagnostic);
 
     const entrepotRestitution = new EntrepotRestitutionPostgres();
-    expect(
-      await entrepotRestitution.lis(diagnostic.identifiant),
-    ).toStrictEqual<Restitution>({
+    expect(await entrepotRestitution.lis(diagnostic.identifiant)).toStrictEqual<Restitution>({
       identifiant: diagnostic.identifiant,
       informations: {
         dateCreation: FournisseurHorloge.maintenant(),
@@ -57,9 +52,7 @@ describe('Entrepôt de restitution', () => {
     const entrepotRestitution = new EntrepotRestitutionPostgres();
     const identifiant = crypto.randomUUID();
 
-    await expect(entrepotRestitution.lis(identifiant)).rejects.toThrowError(
-      "Le restitution demandé n'existe pas",
-    );
+    await expect(entrepotRestitution.lis(identifiant)).rejects.toThrowError("Le restitution demandé n'existe pas");
   });
 
   describe('retourne les informations de restitution', () => {
@@ -69,9 +62,7 @@ describe('Entrepôt de restitution', () => {
       await new EntrepotDiagnosticPostgres().persiste(diagnostic);
 
       const entrepotRestitution = new EntrepotRestitutionPostgres();
-      expect(
-        await entrepotRestitution.lis(diagnostic.identifiant),
-      ).toStrictEqual<Restitution>({
+      expect(await entrepotRestitution.lis(diagnostic.identifiant)).toStrictEqual<Restitution>({
         identifiant: diagnostic.identifiant,
         informations: {
           dateCreation: FournisseurHorloge.maintenant(),
@@ -88,15 +79,12 @@ describe('Entrepôt de restitution', () => {
     });
 
     it("avec le secteur d'activité", async () => {
-      const diagnostic =
-        unDiagnosticAvecSecteurActivite('Construction').construis();
+      const diagnostic = unDiagnosticAvecSecteurActivite('Construction').construis();
       genereLaRestitution(diagnostic);
       await new EntrepotDiagnosticPostgres().persiste(diagnostic);
 
       const entrepotRestitution = new EntrepotRestitutionPostgres();
-      expect(
-        await entrepotRestitution.lis(diagnostic.identifiant),
-      ).toStrictEqual<Restitution>({
+      expect(await entrepotRestitution.lis(diagnostic.identifiant)).toStrictEqual<Restitution>({
         identifiant: diagnostic.identifiant,
         informations: {
           dateCreation: FournisseurHorloge.maintenant(),
@@ -115,15 +103,12 @@ describe('Entrepôt de restitution', () => {
 
   describe('retourne les mesures', () => {
     it('avec toutes les mesures et indicateurs', async () => {
-      const diagnostic =
-        unDiagnosticCompletEnGirondeAvecDesReponsesDonnees().construis();
+      const diagnostic = unDiagnosticCompletEnGirondeAvecDesReponsesDonnees().construis();
       genereLaRestitution(diagnostic);
       await new EntrepotDiagnosticPostgres().persiste(diagnostic);
 
       const entrepotRestitution = new EntrepotRestitutionPostgres();
-      expect(
-        await entrepotRestitution.lis(diagnostic.identifiant),
-      ).toStrictEqual<Restitution>({
+      expect(await entrepotRestitution.lis(diagnostic.identifiant)).toStrictEqual<Restitution>({
         identifiant: diagnostic.identifiant,
         informations: {
           dateCreation: FournisseurHorloge.maintenant(),
@@ -204,12 +189,10 @@ describe('Mappeur de restitution', () => {
       poids: question.poids,
       reponseDonnee: {
         reponseUnique: question.reponseDonnee.reponseUnique,
-        reponsesMultiples: question.reponseDonnee.reponsesMultiples.map(
-          (rep) => ({
-            identifiant: rep.identifiant,
-            reponses: Array.from(rep.reponses.values()),
-          }),
-        ),
+        reponsesMultiples: question.reponseDonnee.reponsesMultiples.map((rep) => ({
+          identifiant: rep.identifiant,
+          reponses: Array.from(rep.reponses.values()),
+        })),
       },
       reponsesPossibles: question.reponsesPossibles,
       type: question.type,
@@ -219,12 +202,8 @@ describe('Mappeur de restitution', () => {
       id: crypto.randomUUID(),
       datecreation: FournisseurHorloge.maintenant().toISOString(),
       datedernieremodification: FournisseurHorloge.maintenant().toISOString(),
-      departement: enDTO(
-        questions.questionDepartement || uneQuestionDiagnostic().construis(),
-      ),
-      region: enDTO(
-        questions.questionRegion || uneQuestionDiagnostic().construis(),
-      ),
+      departement: enDTO(questions.questionDepartement || uneQuestionDiagnostic().construis()),
+      region: enDTO(questions.questionRegion || uneQuestionDiagnostic().construis()),
       restitution: {
         indicateurs: {},
         mesures: {
@@ -232,9 +211,7 @@ describe('Mappeur de restitution', () => {
           autresMesures: [],
         },
       },
-      secteuractivite: enDTO(
-        questions.questionActivite || uneQuestionDiagnostic().construis(),
-      ),
+      secteuractivite: enDTO(questions.questionActivite || uneQuestionDiagnostic().construis()),
     };
   };
 
@@ -246,9 +223,7 @@ describe('Mappeur de restitution', () => {
           uneReponsePossible().avecLibelle('a').construis(),
           uneReponsePossible().avecLibelle('b').construis(),
         ])
-        .ayantLaReponseDonnee(
-          uneReponseDonnee().ayantPourReponse('b').construis(),
-        )
+        .ayantLaReponseDonnee(uneReponseDonnee().ayantPourReponse('b').construis())
         .construis();
 
       expect(
@@ -287,9 +262,7 @@ describe('Mappeur de restitution', () => {
           uneReponsePossible().avecLibelle('Nouvelle-Aquitaine').construis(),
           uneReponsePossible().avecLibelle('Bretagne').construis(),
         ])
-        .ayantLaReponseDonnee(
-          uneReponseDonnee().ayantPourReponse('nouvelleaquitaine').construis(),
-        )
+        .ayantLaReponseDonnee(uneReponseDonnee().ayantPourReponse('nouvelleaquitaine').construis())
         .construis();
       const questionDepartement = uneQuestionDiagnostic()
         .avecLibelle('Département?')
@@ -297,9 +270,7 @@ describe('Mappeur de restitution', () => {
           uneReponsePossible().avecLibelle('Finistère').construis(),
           uneReponsePossible().avecLibelle('Gironde').construis(),
         ])
-        .ayantLaReponseDonnee(
-          uneReponseDonnee().ayantPourReponse('gironde').construis(),
-        )
+        .ayantLaReponseDonnee(uneReponseDonnee().ayantPourReponse('gironde').construis())
         .construis();
 
       expect(
@@ -319,9 +290,7 @@ describe('Mappeur de restitution', () => {
           uneReponsePossible().avecLibelle('Finistère').construis(),
           uneReponsePossible().avecLibelle('Gironde').construis(),
         ])
-        .ayantLaReponseDonnee(
-          uneReponseDonnee().ayantPourReponse('gironde').construis(),
-        )
+        .ayantLaReponseDonnee(uneReponseDonnee().ayantPourReponse('gironde').construis())
         .construis();
 
       expect(
@@ -340,9 +309,7 @@ describe('Mappeur de restitution', () => {
           uneReponsePossible().avecLibelle('Nouvelle-Aquitaine').construis(),
           uneReponsePossible().avecLibelle('Bretagne').construis(),
         ])
-        .ayantLaReponseDonnee(
-          uneReponseDonnee().ayantPourReponse('nouvelleaquitaine').construis(),
-        )
+        .ayantLaReponseDonnee(uneReponseDonnee().ayantPourReponse('nouvelleaquitaine').construis())
         .construis();
 
       expect(
@@ -355,10 +322,9 @@ describe('Mappeur de restitution', () => {
     });
 
     it("si ni le département ni la région ne sont renseignés, affiche 'non renseigné'", () => {
-      expect(
-        mappeurRestitution(mappeurRestitutionDTODepuisQuestion({}))
-          .zoneGeographique,
-      ).toStrictEqual('non renseigné');
+      expect(mappeurRestitution(mappeurRestitutionDTODepuisQuestion({})).zoneGeographique).toStrictEqual(
+        'non renseigné',
+      );
     });
   });
 });

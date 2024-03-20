@@ -5,9 +5,7 @@ import { ComposantMenuUtilisateur } from './utilisateur/ComposantMenuUtilisateur
 import { Utilisateur } from '../domaine/authentification/Authentification.ts';
 
 export const Header = () => {
-  const [utilisateur, setUtilisateur] = useState<Utilisateur | undefined>(
-    undefined,
-  );
+  const [utilisateur, setUtilisateur] = useState<Utilisateur | undefined>(undefined);
   const authentification = useAuthentification();
 
   useEffect(() => {
@@ -46,21 +44,13 @@ export const Header = () => {
               </div>
               <div className="fr-header__service fr-col-md-5">
                 <a href="/" title="Accueil - MonAideCyber">
-                  <img
-                    className="fr-responsive-img taille-reduite-en-mobile"
-                    src="/images/logo_mac.svg"
-                    alt="ANSSI"
-                  />
+                  <img className="fr-responsive-img taille-reduite-en-mobile" src="/images/logo_mac.svg" alt="ANSSI" />
                 </a>
               </div>
             </div>
             <div className="fr-header__tools">
               <div className="fr-header__tools-links">
-                {utilisateur ? (
-                  <ComposantMenuUtilisateur utilisateur={utilisateur} />
-                ) : (
-                  <SeConnecter />
-                )}
+                {utilisateur ? <ComposantMenuUtilisateur utilisateur={utilisateur} /> : <SeConnecter />}
               </div>
             </div>
           </div>

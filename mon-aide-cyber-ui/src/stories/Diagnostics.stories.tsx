@@ -16,11 +16,7 @@ const premierDiagnostic = unDiagnostic().construis();
 const deuxiemeDiagnostic = unDiagnostic().construis();
 const troisiemeDiagnostic = unDiagnostic().construis();
 
-const diagnostics = lesDiagnostics([
-  premierDiagnostic,
-  deuxiemeDiagnostic,
-  troisiemeDiagnostic,
-])
+const diagnostics = lesDiagnostics([premierDiagnostic, deuxiemeDiagnostic, troisiemeDiagnostic])
   .avecLesActions([actions.diagnostics().AFFICHER])
   .construis();
 
@@ -46,9 +42,7 @@ const meta = {
             },
           }}
         >
-          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            {story()}
-          </ErrorBoundary>
+          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>{story()}</ErrorBoundary>
         </ContexteMacAPI.Provider>
       </BrowserRouter>
     ),
@@ -63,25 +57,11 @@ export const AfficheListeDiagnostics: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
+    expect(await waitFor(() => canvas.getByRole('button', { name: /lancer un diagnostic/i }))).toBeInTheDocument();
+    expect(await waitFor(() => canvas.getByRole('link', { name: premierDiagnostic.identifiant }))).toBeInTheDocument();
+    expect(await waitFor(() => canvas.getByRole('link', { name: deuxiemeDiagnostic.identifiant }))).toBeInTheDocument();
     expect(
-      await waitFor(() =>
-        canvas.getByRole('button', { name: /lancer un diagnostic/i }),
-      ),
-    ).toBeInTheDocument();
-    expect(
-      await waitFor(() =>
-        canvas.getByRole('link', { name: premierDiagnostic.identifiant }),
-      ),
-    ).toBeInTheDocument();
-    expect(
-      await waitFor(() =>
-        canvas.getByRole('link', { name: deuxiemeDiagnostic.identifiant }),
-      ),
-    ).toBeInTheDocument();
-    expect(
-      await waitFor(() =>
-        canvas.getByRole('link', { name: troisiemeDiagnostic.identifiant }),
-      ),
+      await waitFor(() => canvas.getByRole('link', { name: troisiemeDiagnostic.identifiant })),
     ).toBeInTheDocument();
   },
 };

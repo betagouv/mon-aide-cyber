@@ -1,8 +1,5 @@
 import { DTO, EntrepotPostgres } from './EntrepotPostgres';
-import {
-  EntrepotEvenementJournal,
-  Publication,
-} from '../../../journalisation/Publication';
+import { EntrepotEvenementJournal, Publication } from '../../../journalisation/Publication';
 
 type PublicationDTO = DTO & {
   type: string;

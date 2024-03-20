@@ -21,27 +21,18 @@ describe('Réducteur bouton thématique', () => {
       it("devrait avoir la thématique courante 'premiere-thematique' ainsi que la liste des thématiques", () => {
         const etatBouton = reducteurBoutonThematiqueSuivante(
           etatBoutonInitial,
-          thematiqueChargee('premiere-thematique', [
-            'premiere-thematique',
-            'derniere-thematique',
-          ]),
+          thematiqueChargee('premiere-thematique', ['premiere-thematique', 'derniere-thematique']),
         );
 
         expect(etatBouton.thematiqueCourante).toBe('premiere-thematique');
-        expect(etatBouton.thematiques).toStrictEqual([
-          'premiere-thematique',
-          'derniere-thematique',
-        ]);
+        expect(etatBouton.thematiques).toStrictEqual(['premiere-thematique', 'derniere-thematique']);
         expect(etatBouton.borneThematique).to.be.false;
       });
 
       it('devrait être la dernière thématique', () => {
         const etatBouton = reducteurBoutonThematiqueSuivante(
           etatBoutonInitial,
-          thematiqueChargee('derniere-thematique', [
-            'premiere-thematique',
-            'derniere-thematique',
-          ]),
+          thematiqueChargee('derniere-thematique', ['premiere-thematique', 'derniere-thematique']),
         );
 
         expect(etatBouton.borneThematique).to.be.true;
@@ -54,19 +45,12 @@ describe('Réducteur bouton thématique', () => {
       const etatBoutonInitial: EtatBouton = {
         borneThematique: false,
         onClick: (thematique: string) => (thematiqueChoisie = thematique),
-        thematiques: [
-          'premiere-thematique',
-          'deuxieme-thematique',
-          'derniere-thematique',
-        ],
+        thematiques: ['premiere-thematique', 'deuxieme-thematique', 'derniere-thematique'],
         thematiqueCourante: 'premiere-thematique',
       };
 
       it("la thématique choisie devrait être 'deuxieme-thematique'", () => {
-        reducteurBoutonThematiqueSuivante(
-          etatBoutonInitial,
-          boutonThematiqueCliquee(),
-        );
+        reducteurBoutonThematiqueSuivante(etatBoutonInitial, boutonThematiqueCliquee());
 
         expect(thematiqueChoisie).toBe('deuxieme-thematique');
       });
@@ -100,27 +84,18 @@ describe('Réducteur bouton thématique', () => {
       it("devrait avoir la thématique courante 'deuxieme-thematique' ainsi que la liste des thématiques", () => {
         const etatBouton = reducteurBoutonThematiquePrecedente(
           etatBoutonInitial,
-          thematiqueChargee('deuxieme-thematique', [
-            'premiere-thematique',
-            'deuxieme-thematique',
-          ]),
+          thematiqueChargee('deuxieme-thematique', ['premiere-thematique', 'deuxieme-thematique']),
         );
 
         expect(etatBouton.thematiqueCourante).toBe('deuxieme-thematique');
-        expect(etatBouton.thematiques).toStrictEqual([
-          'premiere-thematique',
-          'deuxieme-thematique',
-        ]);
+        expect(etatBouton.thematiques).toStrictEqual(['premiere-thematique', 'deuxieme-thematique']);
         expect(etatBouton.borneThematique).to.be.false;
       });
 
       it('devrait être la première thématique', () => {
         const etatBouton = reducteurBoutonThematiquePrecedente(
           etatBoutonInitial,
-          thematiqueChargee('premiere-thematique', [
-            'premiere-thematique',
-            'deuxieme-thematique',
-          ]),
+          thematiqueChargee('premiere-thematique', ['premiere-thematique', 'deuxieme-thematique']),
         );
 
         expect(etatBouton.borneThematique).to.be.true;
@@ -133,19 +108,12 @@ describe('Réducteur bouton thématique', () => {
       const etatBoutonInitial: EtatBouton = {
         borneThematique: false,
         onClick: (thematique: string) => (thematiqueChoisie = thematique),
-        thematiques: [
-          'premiere-thematique',
-          'deuxieme-thematique',
-          'trousieme-thematique',
-        ],
+        thematiques: ['premiere-thematique', 'deuxieme-thematique', 'trousieme-thematique'],
         thematiqueCourante: 'deuxieme-thematique',
       };
 
       it('la thématique choisie devrait être premiere-thematique', () => {
-        reducteurBoutonThematiquePrecedente(
-          etatBoutonInitial,
-          boutonThematiqueCliquee(),
-        );
+        reducteurBoutonThematiquePrecedente(etatBoutonInitial, boutonThematiqueCliquee());
 
         expect(thematiqueChoisie).toBe('premiere-thematique');
       });

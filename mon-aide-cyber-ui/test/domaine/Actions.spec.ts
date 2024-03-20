@@ -6,10 +6,7 @@ describe('Les actions possibles retournées par l’API', () => {
     expect(
       routage
         .pour(
-          [
-            { autre: '/api/lien/routage/autre' },
-            { details: '/api/lien/routage/interne' },
-          ],
+          [{ autre: '/api/lien/routage/autre' }, { details: '/api/lien/routage/interne' }],
           actions.diagnostics().AFFICHER,
         )
         .lien(),

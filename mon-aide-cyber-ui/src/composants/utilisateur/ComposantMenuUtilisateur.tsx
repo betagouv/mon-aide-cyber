@@ -8,14 +8,11 @@ import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 type ProprietesMenuUtilisateur = {
   utilisateur: Utilisateur;
 };
-export const ComposantMenuUtilisateur = ({
-  utilisateur,
-}: ProprietesMenuUtilisateur) => {
+export const ComposantMenuUtilisateur = ({ utilisateur }: ProprietesMenuUtilisateur) => {
   const macapi = useMACAPI();
   const navigationMAC = useNavigationMAC();
   const { showBoundary } = useErrorBoundary();
-  const [boutonAfficherMonProfil, setBoutonAfficherMonProfil] =
-    useState<ReactElement>(<></>);
+  const [boutonAfficherMonProfil, setBoutonAfficherMonProfil] = useState<ReactElement>(<></>);
 
   let nomUtilisateur = utilisateur.nomPrenom;
   if (utilisateur.nomPrenom.includes(' ')) {
@@ -25,31 +22,19 @@ export const ComposantMenuUtilisateur = ({
 
   const deconnecter = useCallback(() => {
     macapi
-      .appelle<void>(
-        constructeurParametresAPI()
-          .url('/api/token')
-          .methode('DELETE')
-          .construis(),
-        (reponse) => reponse,
-      )
+      .appelle<void>(constructeurParametresAPI().url('/api/token').methode('DELETE').construis(), (reponse) => reponse)
       .then(() => navigationMAC.retourAccueil())
       .catch((erreur) => showBoundary(erreur));
   }, [macapi, navigationMAC, showBoundary]);
 
   const afficherProfil = useCallback(() => {
-    navigationMAC.navigue(
-      new MoteurDeLiens(navigationMAC.etat),
-      'afficher-profil',
-    );
+    navigationMAC.navigue(new MoteurDeLiens(navigationMAC.etat), 'afficher-profil');
   }, [navigationMAC]);
 
   useEffect(() => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
       'afficher-profil',
-      () =>
-        setBoutonAfficherMonProfil(
-          <input type="button" onClick={afficherProfil} value="Mon Profil" />,
-        ),
+      () => setBoutonAfficherMonProfil(<input type="button" onClick={afficherProfil} value="Mon Profil" />),
       () => setBoutonAfficherMonProfil(<></>),
     );
   }, [afficherProfil, navigationMAC.etat]);

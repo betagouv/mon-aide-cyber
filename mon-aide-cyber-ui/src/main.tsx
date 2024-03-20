@@ -59,11 +59,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                   >
                     <Route
                       path="/finalise-creation-espace-aidant"
-                      element={
-                        <ComposantIntercepteur
-                          composant={ComposantCreationEspaceAidant}
-                        />
-                      }
+                      element={<ComposantIntercepteur composant={ComposantCreationEspaceAidant} />}
                     ></Route>
                   </Route>
                   <Route
@@ -75,40 +71,21 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                   >
                     <Route
                       path="/tableau-de-bord"
-                      element={
-                        <ComposantIntercepteur composant={TableauDeBord} />
-                      }
+                      element={<ComposantIntercepteur composant={TableauDeBord} />}
                     ></Route>
                     <Route
                       path="/diagnostics"
-                      element={
-                        <ComposantIntercepteur
-                          composant={ComposantDiagnostics}
-                        />
-                      }
+                      element={<ComposantIntercepteur composant={ComposantDiagnostics} />}
                     ></Route>
                     <Route
                       path="/diagnostic/:idDiagnostic"
-                      element={
-                        <ComposantIntercepteur
-                          composant={ComposantDiagnostic}
-                        />
-                      }
+                      element={<ComposantIntercepteur composant={ComposantDiagnostic} />}
                     ></Route>
                     <Route
                       path="/diagnostic/:idDiagnostic/restitution"
-                      element={
-                        <ComposantIntercepteur
-                          composant={ComposantRestitution}
-                        />
-                      }
+                      element={<ComposantIntercepteur composant={ComposantRestitution} />}
                     ></Route>
-                    <Route
-                      path="/profil"
-                      element={
-                        <ComposantIntercepteur composant={ComposantProfil} />
-                      }
-                    ></Route>
+                    <Route path="/profil" element={<ComposantIntercepteur composant={ComposantProfil} />}></Route>
                   </Route>
                 </Route>
               </Routes>

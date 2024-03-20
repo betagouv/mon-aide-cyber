@@ -1,8 +1,5 @@
 import { QuestionDiagnostic } from './Diagnostic';
-import {
-  CorpsReponse,
-  CorpsReponseQuestionATiroir,
-} from './CapteurSagaAjoutReponse';
+import { CorpsReponse, CorpsReponseQuestionATiroir } from './CapteurSagaAjoutReponse';
 
 interface Strategie {
   applique(questionTrouvee: QuestionDiagnostic | undefined): void;
@@ -60,10 +57,7 @@ export const StrategieDeReponse = {
     if (estReponseQuestionATiroir(corpsReponse.reponse)) {
       return new StrategieQuestionATiroir(corpsReponse.reponse);
     }
-    return new StrategieReponsesMultiples(
-      corpsReponse.identifiant,
-      corpsReponse.reponse,
-    );
+    return new StrategieReponsesMultiples(corpsReponse.identifiant, corpsReponse.reponse);
   },
 };
 const estReponseQuestionATiroir = (
@@ -74,8 +68,6 @@ const estReponseQuestionATiroir = (
     (reponse as CorpsReponseQuestionATiroir).reponse !== null
   );
 };
-const estChaineDeCharactere = (
-  reponse: string | CorpsReponseQuestionATiroir | string[],
-): reponse is string => {
+const estChaineDeCharactere = (reponse: string | CorpsReponseQuestionATiroir | string[]): reponse is string => {
   return typeof reponse === 'string';
 };
