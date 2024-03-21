@@ -50,12 +50,7 @@ export const ComposantProfil = () => {
         }
       },
     );
-  }, [
-    navigationMAC.etat,
-    etatProfil.enCoursDeChargement,
-    macapi,
-    showBoundary,
-  ]);
+  }, [etatProfil.enCoursDeChargement, macapi, showBoundary, navigationMAC]);
 
   const afficherTableauDeBord = useCallback(() => {
     navigationMAC.navigue(
@@ -67,8 +62,8 @@ export const ComposantProfil = () => {
   return (
     <>
       <Header />
-      <main role="main">
-        <div className="mode-fonce ">
+      <main role="main" className="profil">
+        <div className="mode-fonce">
           <div className="fr-container">
             <div className="fr-grid-row">
               <h2 className="titre-profil">Mon profil</h2>
@@ -91,15 +86,57 @@ export const ComposantProfil = () => {
                   </button>
                 </div>
                 <div className="fr-mt-2w">
-                  <p>
-                    <b>Prénom</b> {etatProfil.prenom}
-                  </p>
-                  <p>
-                    <b>Nom</b> {etatProfil.nom}
-                  </p>
-                  <p>
-                    <b>Email</b> {etatProfil.email}
-                  </p>
+                  <fieldset className="fr-mb-5w">
+                    <div className="fr-grid-row fr-grid-row--gutters">
+                      <div className="fr-col-md-6 fr-col-sm-12">
+                        <div className="fr-input-group">
+                          <label className="fr-label" htmlFor="prenom-profil">
+                            Prénom
+                          </label>
+                          <input
+                            className="fr-input"
+                            type="text"
+                            id="prenom-profil"
+                            name="prenom-profil"
+                            disabled={true}
+                            value={etatProfil.prenom}
+                          />
+                        </div>
+                      </div>
+                      <div className="fr-col-md-6 fr-col-sm-12">
+                        <div className="fr-input-group">
+                          <label className="fr-label" htmlFor="nom-profil">
+                            Nom de famille
+                          </label>
+                          <input
+                            className="fr-input"
+                            type="text"
+                            role="textbox"
+                            id="nom-profil"
+                            name="nom-profil"
+                            value={etatProfil.nom}
+                            disabled={true}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="fr-col-md-12 fr-mt-2w">
+                      <div className="fr-input-group">
+                        <label className="fr-label" htmlFor="email-profil">
+                          Email
+                        </label>
+                        <input
+                          className="fr-input"
+                          type="text"
+                          role="textbox"
+                          id="email-profil"
+                          name="email-profil"
+                          value={etatProfil.email}
+                          disabled={true}
+                        />
+                      </div>
+                    </div>
+                  </fieldset>
                 </div>
                 <hr />
                 <ComposantFormulaireModificationMotDePasse
