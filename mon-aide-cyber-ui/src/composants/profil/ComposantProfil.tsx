@@ -86,6 +86,10 @@ export const ComposantProfil = () => {
                   </button>
                 </div>
                 <div className="fr-mt-2w">
+                  <hr />
+                  <div>
+                    <h4>Informations personnelles</h4>
+                  </div>
                   <fieldset className="fr-mb-5w">
                     <div className="fr-grid-row fr-grid-row--gutters">
                       <div className="fr-col-md-6 fr-col-sm-12">
