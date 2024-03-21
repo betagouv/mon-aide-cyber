@@ -16,7 +16,9 @@ export class EntrepotsMAC implements Entrepots {
   );
   private entrepotRestitution: EntrepotRestitution =
     new EntrepotRestitutionPostgres();
-  private readonly entrepotAide: EntrepotAide = new EntrepotAideConcret();
+  private readonly entrepotAide: EntrepotAide = new EntrepotAideConcret(
+    adaptateurServiceChiffrement()
+  );
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
