@@ -2,29 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { nettoieLaBaseDeDonneesAidants } from '../../../utilitaires/nettoyeurBDD';
 import { EntrepotAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAidantPostgres';
 import { unAidant } from '../../../authentification/constructeurs/constructeurAidant';
-
-import { ServiceDeChiffrement } from '../../../../src/securite/ServiceDeChiffrement';
 import { Aidant } from '../../../../src/authentification/Aidant';
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../../horloge/FournisseurHorlogeDeTest';
-
-class FauxServiceDeChiffrement implements ServiceDeChiffrement {
-  constructor(private readonly tableDeChiffrement: Map<string, string>) {}
-
-  chiffre(chaine: string): string {
-    return this.tableDeChiffrement.get(chaine) || '';
-  }
-
-  dechiffre(chaine: string): string {
-    let resultat = '';
-    this.tableDeChiffrement.forEach((clef, valeur) => {
-      if (clef === chaine) {
-        resultat = valeur;
-      }
-    });
-    return resultat;
-  }
-}
+import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
 
 describe('Entrepot Aidant', () => {
   afterEach(async () => {
@@ -38,13 +19,13 @@ describe('Entrepot Aidant', () => {
         [aidant.identifiantConnexion, 'aaa'],
         [aidant.motDePasse, 'bbb'],
         [aidant.nomPrenom, 'ccc'],
-      ]),
+      ])
     );
 
     await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
 
     const aidantRecu = await new EntrepotAidantPostgres(
-      serviceDeChiffrement,
+      serviceDeChiffrement
     ).lis(aidant.identifiant);
     expect(aidantRecu).toStrictEqual<Aidant>(aidant);
   });
@@ -62,7 +43,7 @@ describe('Entrepot Aidant', () => {
       await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
 
       const aidantRecu = await new EntrepotAidantPostgres(
-        serviceDeChiffrement,
+        serviceDeChiffrement
       ).lis(aidant.identifiant);
       expect(aidantRecu.dateSignatureCharte).toStrictEqual(dateSignature);
       expect(aidantRecu.dateSignatureCGU).toStrictEqual(dateSignature);
@@ -77,16 +58,16 @@ describe('Entrepot Aidant', () => {
           [aidant.identifiantConnexion, 'aaa'],
           [aidant.motDePasse, 'bbb'],
           [aidant.nomPrenom, 'ccc'],
-        ]),
+        ])
       );
 
       await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
 
       const aidantRecu = await new EntrepotAidantPostgres(
-        serviceDeChiffrement,
+        serviceDeChiffrement
       ).rechercheParIdentifiantConnexionEtMotDePasse(
         aidant.identifiantConnexion,
-        aidant.motDePasse,
+        aidant.motDePasse
       );
       expect(aidantRecu).toStrictEqual<Aidant>(aidant);
     });
@@ -94,11 +75,11 @@ describe('Entrepot Aidant', () => {
     it("l'aidant n'est pas trouvé", () => {
       expect(
         new EntrepotAidantPostgres(
-          new FauxServiceDeChiffrement(new Map()),
+          new FauxServiceDeChiffrement(new Map())
         ).rechercheParIdentifiantConnexionEtMotDePasse(
           'identifiant-inconnu',
-          'mdp',
-        ),
+          'mdp'
+        )
       ).rejects.toThrow(new Error("Le aidant demandé n'existe pas."));
     });
   });
@@ -111,12 +92,12 @@ describe('Entrepot Aidant', () => {
           [aidant.identifiantConnexion, 'aaa'],
           [aidant.motDePasse, 'bbb'],
           [aidant.nomPrenom, 'ccc'],
-        ]),
+        ])
       );
       await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
 
       const aidantTrouve = await new EntrepotAidantPostgres(
-        serviceDeChiffrement,
+        serviceDeChiffrement
       ).rechercheParIdentifiantDeConnexion(aidant.identifiantConnexion);
 
       expect(aidantTrouve).toStrictEqual<Aidant>(aidant);
@@ -125,8 +106,8 @@ describe('Entrepot Aidant', () => {
     it("l'aidant n'est pas trouvé", () => {
       expect(
         new EntrepotAidantPostgres(
-          new FauxServiceDeChiffrement(new Map()),
-        ).rechercheParIdentifiantDeConnexion('identifiant-inconnu'),
+          new FauxServiceDeChiffrement(new Map())
+        ).rechercheParIdentifiantDeConnexion('identifiant-inconnu')
       ).rejects.toThrow(new Error("Le aidant demandé n'existe pas."));
     });
   });

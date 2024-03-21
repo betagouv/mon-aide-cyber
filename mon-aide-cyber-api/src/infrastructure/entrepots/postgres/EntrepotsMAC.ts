@@ -7,14 +7,16 @@ import { adaptateurServiceChiffrement } from '../../adaptateurs/adaptateurServic
 import { EntrepotRestitution } from '../../../restitution/Restitution';
 import { EntrepotRestitutionPostgres } from './EntrepotRestitutionPostgres';
 import { EntrepotAide } from '../../../aide/Aide';
+import { EntrepotAideConcret } from './EntrepotAideConcret';
 
-export class EntrepotsPostgres implements Entrepots {
+export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
   private readonly entrepotAidant: EntrepotAidant = new EntrepotAidantPostgres(
-    adaptateurServiceChiffrement(),
+    adaptateurServiceChiffrement()
   );
   private entrepotRestitution: EntrepotRestitution =
     new EntrepotRestitutionPostgres();
+  private readonly entrepotAide: EntrepotAide = new EntrepotAideConcret();
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
@@ -29,6 +31,6 @@ export class EntrepotsPostgres implements Entrepots {
   }
 
   aides(): EntrepotAide {
-    throw new Error('Pas encore implémenté');
+    return this.entrepotAide;
   }
 }

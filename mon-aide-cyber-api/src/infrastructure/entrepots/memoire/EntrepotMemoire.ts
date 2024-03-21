@@ -19,7 +19,6 @@ export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
 
   async lis(identifiant: string): Promise<T> {
-    console.log('identifiant: ', identifiant, this.entites);
     const entiteTrouvee = this.entites.get(identifiant as crypto.UUID);
     if (entiteTrouvee) {
       return Promise.resolve(cloneDeep(entiteTrouvee));
