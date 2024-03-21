@@ -143,6 +143,9 @@ export const ComposantProfil = () => {
                   </fieldset>
                 </div>
                 <hr />
+                <div>
+                  <h4>Modifier son mot de passe</h4>
+                </div>
                 <ComposantFormulaireModificationMotDePasse
                   lienModificationMotDePasse={
                     navigationMAC.etat['modifier-mot-de-passe']
