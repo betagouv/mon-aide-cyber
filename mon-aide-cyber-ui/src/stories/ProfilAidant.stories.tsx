@@ -28,7 +28,7 @@ export const AffichagePageProfil: Story = {
         value={{
           appelle: async <T = any, V = void>(
             _parametresAPI: ParametresAPI<V>,
-            _: (contenu: Promise<any>) => Promise<T>
+            _: (contenu: Promise<any>) => Promise<T>,
           ) => {
             return {
               nomPrenom: 'Jean Dupont',
@@ -86,22 +86,22 @@ export const AffichagePageProfil: Story = {
     await step("Avec les informations de l'Aidant", async () => {
       await waitFor(() =>
         expect(
-          canvas.getByText(/compte crée le 11.03.2024/i)
-        ).toBeInTheDocument()
+          canvas.getByText(/compte crée le 11.03.2024/i),
+        ).toBeInTheDocument(),
       );
       await waitFor(() =>
         expect(
-          canvas.getByRole('button', { name: /accéder au tableau de bord/i })
-        ).toBeInTheDocument()
+          canvas.getByRole('button', { name: /accéder au tableau de bord/i }),
+        ).toBeInTheDocument(),
       );
       await waitFor(() =>
-        expect(canvas.getByText(/jean/i)).toBeInTheDocument()
+        expect(canvas.getByDisplayValue(/jean/i)).toBeInTheDocument(),
       );
       await waitFor(() =>
-        expect(canvas.getByText(/dupont/i)).toBeInTheDocument()
+        expect(canvas.getByDisplayValue(/dupont/i)).toBeInTheDocument(),
       );
       await waitFor(() =>
-        expect(canvas.getByText(/j.dup@mail.com/i)).toBeInTheDocument()
+        expect(canvas.getByDisplayValue(/j.dup@mail.com/i)).toBeInTheDocument(),
       );
     });
 
@@ -111,19 +111,19 @@ export const AffichagePageProfil: Story = {
         expect(
           canvas.getByRole('textbox', {
             name: /saisissez votre ancien mot de passe/i,
-          })
+          }),
         ).toBeInTheDocument();
         expect(
           canvas.getByRole('textbox', {
             name: /choisissez un nouveau mot de passe/i,
-          })
+          }),
         ).toBeInTheDocument();
         expect(
           canvas.getByRole('textbox', {
             name: /confirmez votre nouveau mot de passe/i,
-          })
+          }),
         ).toBeInTheDocument();
-      }
+      },
     );
   },
 };
@@ -135,7 +135,7 @@ export const ModificationMotDePasseAidant: Story = {
         value={{
           appelle: async <T = any, V = void>(
             parametresAPI: ParametresAPI<V>,
-            _: (contenu: Promise<any>) => Promise<T>
+            _: (contenu: Promise<any>) => Promise<T>,
           ) => {
             valeursSaisies = parametresAPI.corps!;
             return Promise.resolve({ liens: { url: '' } }) as Promise<T>;
@@ -177,15 +177,15 @@ export const ModificationMotDePasseAidant: Story = {
       "L'Aidant clique sur Modifier le mot de passe sans rien remplir",
       async () => {
         userEvent.click(
-          canvas.getByRole('button', { name: /modifier le mot de passe/i })
+          canvas.getByRole('button', { name: /modifier le mot de passe/i }),
         );
 
         await waitFor(() =>
           expect(
-            canvas.getByText(/vous devez saisir vos mots de passe./i)
-          ).toBeInTheDocument()
+            canvas.getByText(/vous devez saisir vos mots de passe./i),
+          ).toBeInTheDocument(),
         );
-      }
+      },
     );
 
     await step("L'Aidant se trompe dans la confirmation", async () => {
@@ -203,15 +203,15 @@ export const ModificationMotDePasseAidant: Story = {
       userEvent.type(champConfirmationMotDePasse, 'c');
 
       userEvent.click(
-        canvas.getByRole('button', { name: /modifier le mot de passe/i })
+        canvas.getByRole('button', { name: /modifier le mot de passe/i }),
       );
 
       await waitFor(() =>
         expect(
           canvas.getByText(
-            /la confirmation de votre mot de passe ne correspond pas au mot de passe saisi./i
-          )
-        ).toBeInTheDocument()
+            /la confirmation de votre mot de passe ne correspond pas au mot de passe saisi./i,
+          ),
+        ).toBeInTheDocument(),
       );
     });
 
@@ -235,17 +235,17 @@ export const ModificationMotDePasseAidant: Story = {
         userEvent.type(champConfirmationMotDePasse, 'a');
 
         userEvent.click(
-          canvas.getByRole('button', { name: /modifier le mot de passe/i })
+          canvas.getByRole('button', { name: /modifier le mot de passe/i }),
         );
 
         await waitFor(() =>
           expect(
             canvas.getByText(
-              /votre nouveau mot de passe doit être différent de votre ancien mot de passe./i
-            )
-          ).toBeInTheDocument()
+              /votre nouveau mot de passe doit être différent de votre ancien mot de passe./i,
+            ),
+          ).toBeInTheDocument(),
         );
-      }
+      },
     );
 
     await step("L'Aidant modifie son mot de passe", async () => {
@@ -266,20 +266,20 @@ export const ModificationMotDePasseAidant: Story = {
       userEvent.type(champConfirmationMotDePasse, 'b');
 
       userEvent.click(
-        canvas.getByRole('button', { name: /modifier le mot de passe/i })
+        canvas.getByRole('button', { name: /modifier le mot de passe/i }),
       );
 
       await waitFor(() =>
         expect(
-          canvas.queryByText(/mot de passe modifié avec succès/i)
-        ).not.toBeInTheDocument()
+          canvas.queryByText(/mot de passe modifié avec succès/i),
+        ).not.toBeInTheDocument(),
       );
       await waitFor(() =>
         expect(valeursSaisies).toStrictEqual({
           ancienMotDePasse: 'a',
           motDePasse: 'b',
           confirmationMotDePasse: 'b',
-        })
+        }),
       );
     });
   },
