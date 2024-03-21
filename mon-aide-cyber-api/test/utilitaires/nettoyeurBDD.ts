@@ -18,11 +18,21 @@ class EntrepotsPostgresPourLesTests {
   async nettoieAidants() {
     await this.knex('utilisateurs').truncate();
   }
+
+  async nettoieAides() {
+    await this.knex('aides').truncate();
+  }
 }
 
 export const nettoieLaBaseDeDonneesAidants = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
     await new EntrepotsPostgresPourLesTests().nettoieAidants();
+  }
+};
+
+export const nettoieLaBaseDeDonneesAides = async () => {
+  if (process.env.URL_SERVEUR_BASE_DONNEES) {
+    await new EntrepotsPostgresPourLesTests().nettoieAides();
   }
 };
 

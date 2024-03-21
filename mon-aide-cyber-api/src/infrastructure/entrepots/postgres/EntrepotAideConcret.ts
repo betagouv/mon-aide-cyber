@@ -1,6 +1,8 @@
 import { DTO, EntrepotPostgres } from './EntrepotPostgres';
 import { Aide, EntrepotAide } from '../../../aide/Aide';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
+import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
+import crypto from 'crypto';
 
 type DonneesAidesMAC = {
   dateSignatureCGU: string;
@@ -38,28 +40,119 @@ class EntrepotAidePostgres extends EntrepotPostgres<AideMAC, AideMACDTO> {
   }
 }
 
+export type AideDistant = {
+  email: string;
+  identifiantMAC: crypto.UUID;
+  departement: string;
+  raisonSociale?: string;
+};
+
+export type AideDistantDTO = {
+  email: string;
+  attributes: {
+    metadata: string;
+  };
+};
+
+export interface EntrepotAideDistant {
+  persiste(
+    entite: AideDistant,
+    chiffrement: (
+      identifiantMAC: crypto.UUID,
+      departement: string,
+      raisonSociale?: string,
+    ) => string,
+  ): Promise<void>;
+
+  rechercheParEmail(
+    email: string,
+    mappeur: (dto: AideDistantDTO) => AideDistant,
+  ): Promise<AideDistant | undefined>;
+}
+
+class EntrepotAideBrevo implements EntrepotAideDistant {
+  rechercheParEmail(
+    _email: string,
+    _mappeur: (dto: AideDistantDTO) => AideDistant,
+  ): Promise<AideDistant | undefined> {
+    return Promise.resolve(undefined);
+  }
+  persiste(
+    _aide: AideDistant,
+    _chiffrement: (
+      identifiantMAC: crypto.UUID,
+      departement: string,
+      raisonSociale?: string,
+    ) => string,
+  ): Promise<void> {
+    // throw new Error('Method not implemented.');
+    return Promise.resolve();
+  }
+}
+
 export class EntrepotAideConcret implements EntrepotAide {
   constructor(
-    private readonly entrepotAidePostgres = new EntrepotAidePostgres()
+    private readonly serviceChiffrement: ServiceDeChiffrement,
+    private readonly entreprotAideBrevo: EntrepotAideDistant = new EntrepotAideBrevo(),
+    private readonly entrepotAidePostgres = new EntrepotAidePostgres(),
   ) {}
 
-  rechercheParEmail(_email: string): Promise<Aide | undefined> {
-    throw new Error('Method not implemented.');
-  }
-
-  async lis(identifiant: string): Promise<Aide> {
-    const aideMAC = await this.entrepotAidePostgres.lis(identifiant);
+  async rechercheParEmail(email: string): Promise<Aide | undefined> {
+    const aideBrevo = await this.entreprotAideBrevo.rechercheParEmail(
+      email,
+      (dto) => {
+        const metadata: {
+          identifiantMAC: crypto.UUID;
+          departement: string;
+          raisonSociale: string;
+        } = JSON.parse(
+          this.serviceChiffrement.dechiffre(dto.attributes.metadata),
+        );
+        return {
+          email: dto.email,
+          raisonSociale: metadata.raisonSociale,
+          departement: metadata.departement,
+          identifiantMAC: metadata.identifiantMAC,
+        };
+      },
+    );
+    if (aideBrevo === undefined) {
+      return Promise.resolve(undefined);
+    }
+    const aideMAC = await this.entrepotAidePostgres.lis(
+      aideBrevo.identifiantMAC,
+    );
 
     return {
       ...aideMAC,
-      departement: '',
-      raisonSociale: '',
-      email: '',
+      departement: aideBrevo.departement,
+      ...(aideBrevo.raisonSociale && {
+        raisonSociale: aideBrevo.raisonSociale,
+      }),
+      email: aideBrevo.email,
     };
   }
 
-  persiste(entite: Aide): Promise<void> {
-    return this.entrepotAidePostgres.persiste(entite);
+  async lis(_identifiant: string): Promise<Aide> {
+    throw new Error('Method non implémentée.');
+  }
+
+  async persiste(aide: Aide): Promise<void> {
+    await this.entrepotAidePostgres.persiste(aide);
+    await this.entreprotAideBrevo.persiste(
+      {
+        email: aide.email,
+        identifiantMAC: aide.identifiant,
+        departement: aide.departement,
+        ...(aide.raisonSociale && { raisonSociale: aide.raisonSociale }),
+      },
+      (identifiantMAC, departement, raisonSociale) =>
+        this.serviceChiffrement.chiffre(
+          JSON.stringify({ identifiantMAC, departement, raisonSociale }),
+        ),
+    );
+
+    return Promise.resolve();
   }
 
   tous(): Promise<Aide[]> {
