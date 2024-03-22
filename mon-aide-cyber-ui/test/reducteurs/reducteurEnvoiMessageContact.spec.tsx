@@ -308,7 +308,7 @@ describe("Réducteur d'envoie de message de contact", () => {
       nom: 'Jean Dupont',
       email: 'jean-dupont@mail.com',
       message: 'Bonjour le monde!',
-      messageEnvoye: false,
+      messageEnvoye: true,
       erreur: {},
       saisieValide: expect.any(Function),
     });
