@@ -69,6 +69,15 @@ const erreursGerees: Map<
       });
     },
   ],
+  [
+    'ErreurEnvoiMessage',
+    (erreur, _, consignateur, reponse) => {
+      consignateur.consigne(erreur);
+      construisReponse(reponse, HTTP_ERREUR_SERVEUR, {
+        message: erreur.message,
+      });
+    },
+  ],
 ]);
 
 export const gestionnaireErreurGeneralisee = (
