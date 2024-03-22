@@ -2,6 +2,7 @@ import {
   AdaptateurEnvoiMail,
   Message,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
+import { ErreurEnvoiMessage } from '../../api/messagerie/Messagerie';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   envoie(message: Message, destination: string): Promise<void> {
@@ -23,7 +24,9 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
       },
     }).then(async (reponse) => {
       if (!reponse.ok) {
-        return Promise.reject(await reponse.json());
+        throw new ErreurEnvoiMessage(
+          "Une erreur est survenue lors de l'envoi du message.",
+        );
       }
     });
   }

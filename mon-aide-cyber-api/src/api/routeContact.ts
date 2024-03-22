@@ -2,9 +2,9 @@ import { ConfigurationServeur } from '../serveur';
 import express, { Request, Response } from 'express';
 import {
   body,
-  validationResult,
   FieldValidationError,
   Result,
+  validationResult,
 } from 'express-validator';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../domaine/erreurMAC';
