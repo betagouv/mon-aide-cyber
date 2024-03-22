@@ -15,12 +15,21 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     return Promise.resolve();
   }
 
-  aEteEnvoye(nom: string, email: string, message: string): boolean {
+  aEteEnvoye(email: string, message: string, nom?: string): boolean {
     return (
       (this.message &&
-        this.message.corps.includes(nom) &&
+        (nom !== undefined ? this.message.corps.includes(nom) : true) &&
         this.message.corps.includes(email) &&
         this.message.corps.includes(message)) ||
+      false
+    );
+  }
+
+  aEteEnvoyeA(email: string, message: string): boolean {
+    return (
+      (this.message &&
+        this.message.destinataire.email === email &&
+        this.message.corps === message) ||
       false
     );
   }

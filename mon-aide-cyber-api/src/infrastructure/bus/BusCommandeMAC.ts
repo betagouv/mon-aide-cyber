@@ -7,11 +7,13 @@ import { CapteurCommandeLanceDiagnostic } from '../../diagnostic/CapteurCommande
 import { CapteurSagaDemandeValidationCGUAide } from '../../parcours-cgu-aide/CapteurSagaDemandeValidationCGUAide';
 import { CapteurCommandeRechercheAideParEmail } from '../../aide/CapteurCommandeRechercheAideParEmail';
 import { CapteurCommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
+import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 
 type ParametresCapteur = {
   entrepots: Entrepots;
   busCommande?: BusCommande;
   busEvenements?: BusEvenement;
+  adaptateurEnvoiMail?: AdaptateurEnvoiMail;
 };
 
 type Capteur = {
@@ -26,7 +28,7 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurSagaAjoutReponse(
           parametres.entrepots,
           parametres.busCommande!,
-          parametres.busEvenements!
+          parametres.busEvenements!,
         ),
     },
   ],
@@ -37,7 +39,8 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurSagaDemandeValidationCGUAide(
           parametres.entrepots,
           parametres.busCommande!,
-          parametres.busEvenements!
+          parametres.busEvenements!,
+          parametres.adaptateurEnvoiMail!,
         ),
     },
   ],
@@ -61,7 +64,7 @@ const capteurs: Map<string, Capteur> = new Map([
       capteur: (parametres) =>
         new CapteurCommandeLanceRestitution(
           parametres.entrepots,
-          parametres.busEvenements!
+          parametres.busEvenements!,
         ),
     },
   ],
@@ -71,7 +74,7 @@ const capteurs: Map<string, Capteur> = new Map([
       capteur: (parametres) =>
         new CapteurCommandeLanceDiagnostic(
           parametres.entrepots,
-          parametres.busEvenements!
+          parametres.busEvenements!,
         ),
     },
   ],
@@ -80,7 +83,8 @@ const capteurs: Map<string, Capteur> = new Map([
 export class BusCommandeMAC implements BusCommande {
   constructor(
     private readonly entrepots: Entrepots,
-    private readonly busEvenement: BusEvenement
+    private readonly busEvenement: BusEvenement,
+    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
   ) {}
 
   publie<C extends Commande, R>(commande: C): Promise<R> {
@@ -92,6 +96,7 @@ export class BusCommandeMAC implements BusCommande {
           entrepots: this.entrepots,
           busCommande: this,
           busEvenements: this.busEvenement,
+          adaptateurEnvoiMail: this.adaptateurEnvoiMail,
         })
         .execute(commande);
     }

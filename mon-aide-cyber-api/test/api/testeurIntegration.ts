@@ -56,7 +56,11 @@ class TesteurIntegrationMAC {
       adaptateurTranscripteurDonnees: this.adaptateurTranscripteurDonnees,
       adaptateurMesures: this.adaptateurMesures,
       entrepots: this.entrepots,
-      busCommande: new BusCommandeMAC(this.entrepots, this.busEvenement),
+      busCommande: new BusCommandeMAC(
+        this.entrepots,
+        this.busEvenement,
+        this.adaptateurEnvoieMessage,
+      ),
       busEvenement: this.busEvenement,
       gestionnaireErreurs: this.gestionnaireErreurs,
       gestionnaireDeJeton: this.gestionnaireDeJeton,
