@@ -66,9 +66,8 @@ export const Accueil = () => {
             .construis(),
           () => Promise.resolve(),
         )
-        .then(() => messageEnvoye())
-        .catch((erreur) => envoiMessageInvalide(erreur as Error));
-      envoie(messageEnvoye());
+        .then(() => envoie(messageEnvoye()))
+        .catch((erreur) => envoie(envoiMessageInvalide(erreur as Error)));
     }
   }, [etatMessage, macapi]);
 
@@ -583,7 +582,8 @@ export const Accueil = () => {
                             >
                               Envoyer le message
                             </button>
-                            {etatMessage.messageEnvoye ? (
+                            {etatMessage.messageEnvoye &&
+                            !etatMessage.champsErreur ? (
                               <p id="message-envoye" className="fr-valid-text">
                                 Message envoyé
                               </p>

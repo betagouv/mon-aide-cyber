@@ -115,7 +115,7 @@ export const reducteurEnvoiMessageContact = (
       return {
         ...etat,
         champsErreur: <ChampsErreur erreur={action.erreur} />,
-        messageEnvoye: false,
+        messageEnvoye: true,
         erreur: {},
       };
     }
