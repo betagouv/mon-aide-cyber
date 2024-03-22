@@ -18,6 +18,14 @@ type CorpsRequeteValidationCGUAide = {
 export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
+  routes.get('/', async (_requete: Request, reponse: Response) => {
+    return reponse
+      .status(200)
+      .json(
+        constructeurActionsHATEOAS().demanderValidationCGUAide().construis(),
+      );
+  });
+
   routes.post(
     '/',
     express.json(),
@@ -29,18 +37,18 @@ export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
       .trim()
       .notEmpty()
       .withMessage(
-        "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide"
+        "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide",
       ),
     body('raisonSociale')
       .optional()
       .trim()
       .notEmpty()
       .withMessage(
-        "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide"
+        "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide",
       ),
     async (requete: Request, reponse: Response) => {
       const resultatValidation: Result<FieldValidationError> = validationResult(
-        requete
+        requete,
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {
         const corpsRequete: CorpsRequeteValidationCGUAide = requete.body;
@@ -68,7 +76,7 @@ export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
         message: erreursValidation,
         ...constructeurActionsHATEOAS().demanderValidationCGUAide().construis(),
       });
-    }
+    },
   );
 
   return routes;
