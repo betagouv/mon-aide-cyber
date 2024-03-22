@@ -9,7 +9,10 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     return fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       body: JSON.stringify({
-        sender: { name: 'MAC', email: process.env.EMAIL_CONTACT_MAC },
+        sender: {
+          name: 'MonAideCyber',
+          email: process.env.EMAIL_CONTACT_MAC_FROM,
+        },
         subject: 'Contact MAC',
         to: [{ email: destination, name: 'MonAideCyber' }],
         textContent:
