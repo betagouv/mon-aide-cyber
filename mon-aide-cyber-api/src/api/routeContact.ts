@@ -25,7 +25,7 @@ export const routeContact = (configuration: ConfigurationServeur) => {
       if (resultatValidation.isEmpty()) {
         const message = requete.body;
         return configuration.adaptateurEnvoiMessage
-          .envoie(message, process.env.EMAIL_CONTACT_MAC || '')
+          .envoie(message, process.env.EMAIL_CONTACT_MAC_TO || '')
           .then(() => {
             reponse.status(202);
             return reponse.send();
