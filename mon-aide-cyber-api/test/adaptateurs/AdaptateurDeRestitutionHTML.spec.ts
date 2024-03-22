@@ -109,7 +109,7 @@ describe('Adapatateur de Restitution HTML', () => {
 
   it('représente les informations du diagnostic', async () => {
     FournisseurHorlogeDeTest.initialise(
-      new Date(Date.parse('2024-06-01T14:30:00')),
+      new Date(Date.parse('2024-06-01T14:30:00+01:00')),
     );
     const restitution = uneRestitution()
       .avecIdentifiant('63a5fba6-efe0-4da1-ab6f-45d4cb330938')

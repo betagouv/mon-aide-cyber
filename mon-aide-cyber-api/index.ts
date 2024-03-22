@@ -29,6 +29,7 @@ const traductionThematiques =
 
 const entrepots = fabriqueEntrepots();
 const busEvenementMAC = new BusEvenementMAC(fabriqueConsommateursEvenements());
+const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
 const serveurMAC = serveur.creeServeur({
   adaptateursRestitution: {
     pdf: () => new AdaptateurDeRestitutionPDF(traductionThematiques),
@@ -38,7 +39,11 @@ const serveurMAC = serveur.creeServeur({
   adaptateurTranscripteurDonnees: adaptateurTranscripteurDonnees,
   adaptateurMesures: new AdaptateurMesures(),
   entrepots,
-  busCommande: new BusCommandeMAC(entrepots, busEvenementMAC),
+  busCommande: new BusCommandeMAC(
+    entrepots,
+    busEvenementMAC,
+    adaptateurEnvoiMessage,
+  ),
   busEvenement: busEvenementMAC,
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),
   gestionnaireDeJeton: gestionnaireDeJeton,
@@ -50,7 +55,7 @@ const serveurMAC = serveur.creeServeur({
     gestionnaireDeJeton,
   ),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
-  adaptateurEnvoiMessage: fabriqueAdaptateurEnvoiMail(),
+  adaptateurEnvoiMessage: adaptateurEnvoiMessage,
 });
 
 const port = process.env.PORT || 8081;

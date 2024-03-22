@@ -36,9 +36,9 @@ describe('le serveur MAC sur les routes /api/public', () => {
         (
           testeurMAC.adaptateurEnvoieMessage as AdaptateurEnvoiMailMemoire
         ).aEteEnvoye(
-          'Jean Dupont',
           'jean-dupont@email.com',
           'Bonjour le monde!',
+          'Jean Dupont',
         ),
       ).toBe(true);
     });
@@ -146,9 +146,9 @@ describe('le serveur MAC sur les routes /api/public', () => {
           (
             testeurMAC.adaptateurEnvoieMessage as AdaptateurEnvoiMailMemoire
           ).aEteEnvoye(
-            'Jean &lt;b&gt;Dupont&lt;&#x2F;b&gt;',
             'jean-dupont@email.com',
             'Bonjour le monde!',
+            'Jean &lt;b&gt;Dupont&lt;&#x2F;b&gt;',
           ),
         ).toBe(true);
       });
@@ -171,9 +171,9 @@ describe('le serveur MAC sur les routes /api/public', () => {
           (
             testeurMAC.adaptateurEnvoieMessage as AdaptateurEnvoiMailMemoire
           ).aEteEnvoye(
-            'Jean Dupont',
             'jean-dupont@email.com',
             'Bonjour &lt;script&gt;alert(&quot;le monde!&quot;)&lt;&#x2F;script&gt;',
+            'Jean Dupont',
           ),
         ).toBe(true);
       });
