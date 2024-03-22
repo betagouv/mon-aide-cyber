@@ -1,24 +1,23 @@
 import {
   AdaptateurEnvoiMail,
-  Message,
+  Email,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
-import { ErreurEnvoiMessage } from '../../api/messagerie/Messagerie';
+import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
-  envoie(message: Message, destination: string): Promise<void> {
+  envoie(message: Email): Promise<void> {
     return fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       body: JSON.stringify({
         sender: {
           name: 'MonAideCyber',
-          email: process.env.EMAIL_CONTACT_MAC_FROM,
+          email: process.env.EMAIL_CONTACT_MAC_EXPEDITEUR,
         },
-        subject: 'Contact MAC',
-        to: [{ email: destination, name: 'MonAideCyber' }],
-        textContent:
-          `Bonjour, \n` +
-          `${message.nom} (${message.email}) a envoyé le message suivant:\n` +
-          `${message.message}`,
+        subject: message.objet,
+        to: [
+          { email: message.destinataire.email, name: message.destinataire.nom },
+        ],
+        textContent: message.corps,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -27,7 +26,7 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
       },
     }).then(async (reponse) => {
       if (!reponse.ok) {
-        throw new ErreurEnvoiMessage(
+        throw new ErreurEnvoiEmail(
           "Une erreur est survenue lors de l'envoi du message.",
         );
       }

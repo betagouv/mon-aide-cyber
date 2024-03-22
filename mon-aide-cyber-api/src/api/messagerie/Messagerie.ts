@@ -1,4 +1,4 @@
-export class ErreurEnvoiMessage extends Error {
+export class ErreurEnvoiEmail extends Error {
   constructor(message: string) {
     super(message);
   }

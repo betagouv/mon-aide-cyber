@@ -1,13 +1,13 @@
 import {
   AdaptateurEnvoiMail,
-  Message,
+  Email,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
 
 export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
-  private message?: Message;
+  private message?: Email;
   private _genereErreur = false;
 
-  envoie(message: Message, _: string): Promise<void> {
+  envoie(message: Email): Promise<void> {
     if (this._genereErreur) {
       return Promise.reject('Erreur');
     }
@@ -18,9 +18,9 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   aEteEnvoye(nom: string, email: string, message: string): boolean {
     return (
       (this.message &&
-        this.message.nom === nom &&
-        this.message.email === email &&
-        this.message.message === message) ||
+        this.message.corps.includes(nom) &&
+        this.message.corps.includes(email) &&
+        this.message.corps.includes(message)) ||
       false
     );
   }

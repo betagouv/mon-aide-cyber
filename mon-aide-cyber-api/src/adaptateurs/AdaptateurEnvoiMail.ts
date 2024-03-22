@@ -1,10 +1,11 @@
-export type Message = {
-  email: string;
-  nom: string;
-  message: string;
+export type AdresseEmail = string;
+
+export type Email = {
+  objet: string;
+  corps: string;
+  destinataire: { nom?: string; email: AdresseEmail };
 };
-export type Email = string;
 
 export interface AdaptateurEnvoiMail {
-  envoie(message: Message, destination: Email): Promise<void>;
+  envoie(email: Email): Promise<void>;
 }

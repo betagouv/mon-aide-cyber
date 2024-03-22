@@ -22,10 +22,22 @@ export const routeContact = (configuration: ConfigurationServeur) => {
       const resultatValidation: Result<FieldValidationError> = validationResult(
         requete,
       ) as Result<FieldValidationError>;
+
+      const construisMessage = () => ({
+        objet: 'Contact MAC',
+        corps:
+          `Bonjour, \n` +
+          `${requete.body.nom} (${requete.body.email}) a envoyé le message suivant:\n` +
+          `${requete.body.message}`,
+        destinataire: {
+          nom: 'MonAideCyber',
+          email: process.env.EMAIL_CONTACT_MAC_DESTINATAIRE || '',
+        },
+      });
+
       if (resultatValidation.isEmpty()) {
-        const message = requete.body;
         return configuration.adaptateurEnvoiMessage
-          .envoie(message, process.env.EMAIL_CONTACT_MAC_TO || '')
+          .envoie(construisMessage())
           .then(() => {
             reponse.status(202);
             return reponse.send();
