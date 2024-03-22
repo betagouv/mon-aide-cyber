@@ -182,5 +182,26 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
         });
       });
     });
+
+    describe('Quand une requête GET est reçue', () => {
+      it("Retourne le lien 'demander-validation-cgu-aide'", async () => {
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/api/aide/cgu',
+          donneesServeur.portEcoute,
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        expect(await reponse.json()).toStrictEqual({
+          liens: {
+            'demander-validation-cgu-aide': {
+              url: '/api/aide/cgu',
+              methode: 'POST',
+            },
+          },
+        });
+      });
+    });
   });
 });
