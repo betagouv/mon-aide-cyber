@@ -2,6 +2,7 @@ import { CapteurCommande, Commande } from '../domaine/commande';
 import { Entrepots } from '../domaine/Entrepots';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { Aide } from './Aide';
+import crypto from 'crypto';
 
 export type CommandeCreerAide = Omit<Commande, 'type'> & {
   type: 'CommandeCreerAide';

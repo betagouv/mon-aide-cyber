@@ -49,8 +49,13 @@ export type AideDistant = {
 
 export type AideDistantDTO = {
   email: string;
+  metaDonnees: string;
+};
+
+export type AideDistantBrevoDTO = {
+  email: string;
   attributes: {
-    metadata: string;
+    METADONNEES: string;
   };
 };
 
@@ -72,21 +77,61 @@ export interface EntrepotAideDistant {
 
 class EntrepotAideBrevo implements EntrepotAideDistant {
   rechercheParEmail(
-    _email: string,
-    _mappeur: (dto: AideDistantDTO) => AideDistant,
+    email: string,
+    mappeur: (dto: AideDistantDTO) => AideDistant,
   ): Promise<AideDistant | undefined> {
-    return Promise.resolve(undefined);
+    return fetch(`https://api.brevo.com/v3/contacts/${email}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json',
+        'api-key': process.env.BREVO_CLEF_API || '',
+      },
+    }).then(async (reponse) => {
+      const aideBrevo: AideDistantBrevoDTO = await reponse.json();
+      if (!reponse.ok) {
+        if (reponse.status === 404) {
+          return Promise.resolve(undefined);
+        }
+        return Promise.reject(aideBrevo);
+      }
+      return mappeur({
+        email: aideBrevo.email,
+        metaDonnees: aideBrevo.attributes.METADONNEES,
+      });
+    });
   }
   persiste(
-    _aide: AideDistant,
-    _chiffrement: (
+    aide: AideDistant,
+    chiffrement: (
       identifiantMAC: crypto.UUID,
       departement: string,
       raisonSociale?: string,
     ) => string,
   ): Promise<void> {
-    // throw new Error('Method not implemented.');
-    return Promise.resolve();
+    return fetch('https://api.brevo.com/v3/contacts', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: aide.email,
+        attributes: {
+          metadonnees: chiffrement(
+            aide.identifiantMAC,
+            aide.departement,
+            aide.raisonSociale,
+          ),
+        },
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json',
+        'api-key': process.env.BREVO_CLEF_API || '',
+      },
+    }).then(async (reponse) => {
+      if (!reponse.ok) {
+        return Promise.reject(await reponse.json());
+      }
+      return Promise.resolve();
+    });
   }
 }
 
@@ -101,18 +146,16 @@ export class EntrepotAideConcret implements EntrepotAide {
     const aideBrevo = await this.entreprotAideBrevo.rechercheParEmail(
       email,
       (dto) => {
-        const metadata: {
+        const metadonnees: {
           identifiantMAC: crypto.UUID;
           departement: string;
           raisonSociale: string;
-        } = JSON.parse(
-          this.serviceChiffrement.dechiffre(dto.attributes.metadata),
-        );
+        } = JSON.parse(this.serviceChiffrement.dechiffre(dto.metaDonnees));
         return {
           email: dto.email,
-          raisonSociale: metadata.raisonSociale,
-          departement: metadata.departement,
-          identifiantMAC: metadata.identifiantMAC,
+          raisonSociale: metadonnees.raisonSociale,
+          departement: metadonnees.departement,
+          identifiantMAC: metadonnees.identifiantMAC,
         };
       },
     );

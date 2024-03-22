@@ -1,6 +1,7 @@
 import { unAide } from '../../../aide/ConstructeurAide';
 import {
   AideDistant,
+  AideDistantBrevoDTO,
   AideDistantDTO,
   EntrepotAideConcret,
   EntrepotAideDistant,
@@ -113,7 +114,7 @@ describe('Entrepot Aidé Concret', () => {
 });
 
 class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
-  protected entites: Map<string, AideDistantDTO> = new Map();
+  protected entites: Map<string, AideDistantBrevoDTO> = new Map();
   async persiste(
     aide: AideDistant,
     chiffrement: (
@@ -125,7 +126,7 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
     this.entites.set(aide.email, {
       email: aide.email,
       attributes: {
-        metadata: chiffrement(
+        METADONNEES: chiffrement(
           aide.identifiantMAC,
           aide.departement,
           aide.raisonSociale,
@@ -142,7 +143,12 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
     if (aideDistantDTO === undefined) {
       return Promise.resolve(undefined);
     }
-    return Promise.resolve(mappeur(aideDistantDTO));
+    return Promise.resolve(
+      mappeur({
+        email: aideDistantDTO.email,
+        metaDonnees: aideDistantDTO.attributes.METADONNEES,
+      }),
+    );
   }
 }
 class DictionnaireDeChiffrementAide implements DictionnaireDeChiffrement<Aide> {
