@@ -2,6 +2,7 @@ import { Constructeur } from '../constructeurs/constructeur';
 import { Aide } from '../../src/aide/Aide';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { fakerFR } from '@faker-js/faker';
+import crypto from 'crypto';
 
 class ConstructeurAide implements Constructeur<Aide> {
   private dateSignatureCGU: Date = FournisseurHorloge.maintenant();
