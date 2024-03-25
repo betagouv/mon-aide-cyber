@@ -34,6 +34,10 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     );
   }
 
+  mailEnvoye() {
+    return !!this.message;
+  }
+
   genereErreur() {
     this._genereErreur = true;
   }

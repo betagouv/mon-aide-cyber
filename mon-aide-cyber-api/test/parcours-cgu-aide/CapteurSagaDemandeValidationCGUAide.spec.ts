@@ -6,6 +6,10 @@ import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { unAide } from '../aide/ConstructeurAide';
 import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { BusCommandeTest } from '../infrastructure/bus/BusCommandeTest';
+import { CapteurCommandeRechercheAideParEmail } from '../../src/aide/CapteurCommandeRechercheAideParEmail';
+import { CommandeCreerAide } from '../../src/aide/CapteurCommandeCreerAide';
+import { CapteurCommande } from '../../src/domaine/commande';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   describe("si l'Aidé est connu de MAC", () => {
@@ -153,5 +157,42 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         ),
       ).toBe(true);
     });
+
+    describe('Lorsque la validation des CGU a échoué', () => {
+      it("N'envoie pas d'Email de confirmation à l'Aidé", async () => {
+        const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
+        const entrepotsMemoire = new EntrepotsMemoire();
+        const busEvenement = new BusEvenementDeTest();
+        const busCommande = new BusCommandeTest({
+          CommandeRechercheAideParEmail:
+            new CapteurCommandeRechercheAideParEmail(entrepotsMemoire),
+          CommandeCreerAide: new CapteurCommandeCreerAideQuiEchoue(),
+        });
+        const capteur = new CapteurSagaDemandeValidationCGUAide(
+          entrepotsMemoire,
+          busCommande,
+          busEvenement,
+          adaptateurEnvoieMail,
+        );
+
+        await expect(() =>
+          capteur.execute({
+            type: 'SagaDemandeValidationCGUAide',
+            cguValidees: true,
+            email: 'jean-dupont@email.com',
+            departement: 'Gironde',
+          }),
+        ).rejects.toThrowError("Votre demande d'aide n'a pu aboutir");
+        expect(adaptateurEnvoieMail.mailEnvoye()).toBe(false);
+      });
+    });
   });
 });
+
+class CapteurCommandeCreerAideQuiEchoue
+  implements CapteurCommande<CommandeCreerAide, any>
+{
+  execute(_commande: CommandeCreerAide): Promise<any> {
+    throw new Error('une erreur est survenue');
+  }
+}
