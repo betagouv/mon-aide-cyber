@@ -3,6 +3,7 @@ import {
   EntrepotEvenementJournal,
   Publication,
 } from '../../../journalisation/Publication';
+import crypto from 'crypto';
 
 type PublicationDTO = DTO & {
   type: string;
@@ -10,13 +11,26 @@ type PublicationDTO = DTO & {
   donnees: object;
 };
 
+const UUID_REGEX = new RegExp(
+  '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+  'i',
+);
+
 export class EntrepotJournalisationPostgres
   extends EntrepotPostgres<Publication, PublicationDTO>
   implements EntrepotEvenementJournal
 {
   protected deEntiteADTO(entite: Publication): PublicationDTO {
     return {
-      donnees: entite.donnees,
+      donnees: Object.entries(entite.donnees).reduce(
+        (prev, [clef, donnee]) => ({
+          ...prev,
+          [clef]: UUID_REGEX.test(donnee)
+            ? crypto.createHash('sha256').update(donnee).digest('hex')
+            : donnee,
+        }),
+        {},
+      ),
       type: entite.type,
       date: entite.date.toISOString(),
       id: entite.identifiant,
