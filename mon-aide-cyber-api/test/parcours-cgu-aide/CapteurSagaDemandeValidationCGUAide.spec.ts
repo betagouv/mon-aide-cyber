@@ -109,5 +109,49 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         ),
       ).toBe(true);
     });
+
+    it("envoie un email récapitulatif à l’Aidé qui n'a pas saisi de raison sociale", async () => {
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2024-03-19T14:45:17+01:00')),
+      );
+      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
+      const entrepotsMemoire = new EntrepotsMemoire();
+      const busEvenement = new BusEvenementDeTest();
+      const busCommande = new BusCommandeMAC(
+        entrepotsMemoire,
+        busEvenement,
+        adaptateurEnvoieMail,
+      );
+      const capteur = new CapteurSagaDemandeValidationCGUAide(
+        entrepotsMemoire,
+        busCommande,
+        busEvenement,
+        adaptateurEnvoieMail,
+      );
+
+      await capteur.execute({
+        type: 'SagaDemandeValidationCGUAide',
+        cguValidees: true,
+        email: 'jean-dupont@email.com',
+        departement: 'Gironde',
+      });
+
+      expect(
+        adaptateurEnvoieMail.aEteEnvoyeA(
+          'jean-dupont@email.com',
+          'Bonjour,\n' +
+            '\n' +
+            'Votre demande a bien été validée !\n' +
+            '\n' +
+            'Votre demande pour bénéficier d’un accompagnement MonAideCyber a été validée par nos équipes. Vous allez être mis en relation avec un Aidant de proximité, qui vous contactera directement sur l’adresse email que vous nous avez communiquée.\n' +
+            '\n' +
+            'Ci-dessous vous retrouverez les informations que vous avez saisies lors de votre demande :\n' +
+            '- Signature des CGU : 19.03.2024 à 14:45\n' +
+            '- Département: Gironde\n' +
+            '\n' +
+            'Toute l’équipe MonAideCyber reste à votre disposition : monaidecyber@ssi.gouv.fr\n',
+        ),
+      ).toBe(true);
+    });
   });
 });

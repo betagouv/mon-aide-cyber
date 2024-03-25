@@ -63,6 +63,9 @@ const construisMailCGUAide = (
   const formateDate = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant(),
   );
+  const raisonSociale = saga.raisonSociale
+    ? `- Raison sociale: ${saga.raisonSociale}\n`
+    : '';
   return (
     'Bonjour,\n' +
     '\n' +
@@ -73,7 +76,7 @@ const construisMailCGUAide = (
     'Ci-dessous vous retrouverez les informations que vous avez saisies lors de votre demande :\n' +
     `- Signature des CGU : ${formateDate.date} à ${formateDate.heure}\n` +
     `- Département: ${saga.departement}\n` +
-    `- Raison sociale: ${saga.raisonSociale}\n` +
+    raisonSociale +
     '\n' +
     'Toute l’équipe MonAideCyber reste à votre disposition : monaidecyber@ssi.gouv.fr\n'
   );
