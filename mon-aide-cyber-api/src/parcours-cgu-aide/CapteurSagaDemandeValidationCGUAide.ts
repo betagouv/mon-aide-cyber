@@ -20,7 +20,7 @@ export class CapteurSagaDemandeValidationCGUAide
   constructor(
     _entrepots: Entrepots,
     private readonly busCommande: BusCommande,
-    _busEvenement: BusEvenement,
+    private readonly busEvenement: BusEvenement,
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
   ) {}
 
@@ -46,14 +46,23 @@ export class CapteurSagaDemandeValidationCGUAide
 
       await this.busCommande
         .publie<CommandeCreerAide, Aide>(commandeCreerAide)
-        .then(
-          async (aide: Aide) =>
-            await this.adaptateurEnvoiMail.envoie({
-              objet: "Demande d'aide pour MonAideCyber",
-              destinataire: { email: aide.email },
-              corps: construisMailCGUAide(aide),
-            }),
-        );
+        .then(async (aide: Aide) => {
+          await this.adaptateurEnvoiMail.envoie({
+            objet: "Demande d'aide pour MonAideCyber",
+            destinataire: { email: aide.email },
+            corps: construisMailCGUAide(aide),
+          });
+
+          await this.busEvenement.publie({
+            identifiant: aide.identifiant,
+            type: 'AIDE_CREE',
+            date: FournisseurHorloge.maintenant(),
+            corps: {
+              identifiantAide: aide.identifiant,
+            },
+          });
+        });
+
       return Promise.resolve();
     } catch (erreur) {
       return Promise.reject("Votre demande d'aide n'a pu aboutir");

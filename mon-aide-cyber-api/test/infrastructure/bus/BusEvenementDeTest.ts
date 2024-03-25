@@ -24,10 +24,12 @@ export class BusEvenementDeTest extends BusEvenementMAC {
     public readonly entrepotJournalisation: EntrepotEvenementJournalMemoire = new EntrepotEvenementJournalMemoire(),
   ) {
     const consommateurAidantCree = new ConsommateurEvenementDeTest();
+    const consommateurAideCree = new ConsommateurEvenementDeTest();
     const consommateursEvenements = fabriqueConsommateursEvenements(
       entrepotJournalisation,
       {
         aidantCree: () => consommateurAidantCree,
+        aideCree: () => consommateurAideCree,
       },
     );
     super(consommateursEvenements);

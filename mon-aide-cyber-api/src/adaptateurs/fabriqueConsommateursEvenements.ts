@@ -1,8 +1,9 @@
 import {
   aidantCree,
+  aideCree,
   diagnosticLance,
-  restitutionLancee,
   reponseAjoutee,
+  restitutionLancee,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
@@ -18,8 +19,12 @@ const fabriqueEntrepotJournalisation = () => {
 
 export const fabriqueConsommateursEvenements = (
   entrepotJournalisation: EntrepotEvenementJournal = fabriqueEntrepotJournalisation(),
-  configuration: { aidantCree: () => ConsommateurEvenement } = {
+  configuration: {
+    aidantCree: () => ConsommateurEvenement;
+    aideCree: () => ConsommateurEvenement;
+  } = {
     aidantCree: () => aidantCree(entrepotJournalisation),
+    aideCree: () => aideCree(entrepotJournalisation),
   },
 ) => {
   return new Map<TypeEvenement, ConsommateurEvenement>([
@@ -27,5 +32,6 @@ export const fabriqueConsommateursEvenements = (
     ['DIAGNOSTIC_LANCE', diagnosticLance(entrepotJournalisation)],
     ['REPONSE_AJOUTEE', reponseAjoutee(entrepotJournalisation)],
     ['AIDANT_CREE', configuration.aidantCree()],
+    ['AIDE_CREE', configuration.aideCree()],
   ]);
 };

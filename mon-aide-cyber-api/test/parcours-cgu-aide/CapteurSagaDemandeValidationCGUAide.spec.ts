@@ -8,8 +8,12 @@ import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { BusCommandeTest } from '../infrastructure/bus/BusCommandeTest';
 import { CapteurCommandeRechercheAideParEmail } from '../../src/aide/CapteurCommandeRechercheAideParEmail';
-import { CommandeCreerAide } from '../../src/aide/CapteurCommandeCreerAide';
+import {
+  CapteurCommandeCreerAide,
+  CommandeCreerAide,
+} from '../../src/aide/CapteurCommandeCreerAide';
 import { CapteurCommande } from '../../src/domaine/commande';
+import { EntrepotEvenementJournalMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   describe("si l'Aidé est connu de MAC", () => {
@@ -158,6 +162,44 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       ).toBe(true);
     });
 
+    it("publie l'évènement 'AIDE_CREE'", async () => {
+      const maintenant = new Date();
+      FournisseurHorlogeDeTest.initialise(maintenant);
+      const entrepotsMemoire = new EntrepotsMemoire();
+      const busEvenement = new BusEvenementDeTest(
+        new EntrepotEvenementJournalMemoire(),
+      );
+      const busCommande = new BusCommandeTest({
+        CommandeRechercheAideParEmail: new CapteurCommandeRechercheAideParEmail(
+          entrepotsMemoire,
+        ),
+        CommandeCreerAide: new CapteurCommandeCreerAide(entrepotsMemoire),
+      });
+      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
+
+      await new CapteurSagaDemandeValidationCGUAide(
+        entrepotsMemoire,
+        busCommande,
+        busEvenement,
+        adaptateurEnvoieMail,
+      ).execute({
+        type: 'SagaDemandeValidationCGUAide',
+        cguValidees: true,
+        email: 'jean-dupont@email.com',
+        departement: 'Gironde',
+      });
+      const aideRecu = (await entrepotsMemoire.aides().tous())[0];
+
+      expect(busEvenement.evenementRecu).toStrictEqual({
+        identifiant: expect.any(String),
+        type: 'AIDE_CREE',
+        date: maintenant,
+        corps: {
+          identifiantAide: aideRecu.identifiant,
+        },
+      });
+    });
+
     describe('Lorsque la validation des CGU a échoué', () => {
       it("N'envoie pas d'Email de confirmation à l'Aidé", async () => {
         const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
@@ -184,6 +226,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           }),
         ).rejects.toThrowError("Votre demande d'aide n'a pu aboutir");
         expect(adaptateurEnvoieMail.mailEnvoye()).toBe(false);
+        expect(busEvenement.evenementRecu).toBeUndefined();
       });
     });
   });

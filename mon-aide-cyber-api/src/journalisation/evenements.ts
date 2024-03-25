@@ -17,6 +17,8 @@ export const reponseAjoutee = consommateurEvenement();
 
 export const aidantCree = consommateurEvenement();
 
+export const aideCree = consommateurEvenement();
+
 const genereEvenement = <E extends Evenement>(evenement: E) => {
   return {
     date: evenement.date,
