@@ -5,6 +5,7 @@ import { CommandeRechercheAideParEmail } from '../aide/CapteurCommandeRechercheA
 import { CommandeCreerAide } from '../aide/CapteurCommandeCreerAide';
 import { AdaptateurEnvoiMail } from '../adaptateurs/AdaptateurEnvoiMail';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
+import { Aide } from '../aide/Aide';
 
 export type SagaDemandeValidationCGUAide = Saga & {
   cguValidees: boolean;
@@ -24,47 +25,48 @@ export class CapteurSagaDemandeValidationCGUAide
   ) {}
 
   async execute(saga: SagaDemandeValidationCGUAide): Promise<void> {
-    const commandeRechercheAideParEmail: CommandeRechercheAideParEmail = {
-      type: 'CommandeRechercheAideParEmail',
-      email: saga.email,
-    };
+    try {
+      const commandeRechercheAideParEmail: CommandeRechercheAideParEmail = {
+        type: 'CommandeRechercheAideParEmail',
+        email: saga.email,
+      };
 
-    const aide = await this.busCommande.publie(commandeRechercheAideParEmail);
+      const aide = await this.busCommande.publie(commandeRechercheAideParEmail);
 
-    if (aide) {
+      if (aide) {
+        return Promise.resolve();
+      }
+
+      const commandeCreerAide: CommandeCreerAide = {
+        type: 'CommandeCreerAide',
+        departement: saga.departement,
+        email: saga.email,
+        ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
+      };
+
+      await this.busCommande
+        .publie<CommandeCreerAide, Aide>(commandeCreerAide)
+        .then(
+          async (aide: Aide) =>
+            await this.adaptateurEnvoiMail.envoie({
+              objet: "Demande d'aide pour MonAideCyber",
+              destinataire: { email: aide.email },
+              corps: construisMailCGUAide(aide),
+            }),
+        );
       return Promise.resolve();
+    } catch (erreur) {
+      return Promise.reject("Votre demande d'aide n'a pu aboutir");
     }
-
-    const commandeCreerAide: CommandeCreerAide = {
-      type: 'CommandeCreerAide',
-      departement: saga.departement,
-      email: saga.email,
-      ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
-    };
-
-    await this.adaptateurEnvoiMail.envoie({
-      objet: "Demande d'aide pour MonAideCyber",
-      destinataire: { email: saga.email },
-      corps: construisMailCGUAide(saga),
-    });
-
-    return this.busCommande.publie(commandeCreerAide);
   }
 }
 
-const construisMailCGUAide = (
-  saga: Saga & {
-    cguValidees: boolean;
-    email: string;
-    departement: string;
-    raisonSociale?: string;
-  },
-) => {
+const construisMailCGUAide = (aide: Aide) => {
   const formateDate = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant(),
   );
-  const raisonSociale = saga.raisonSociale
-    ? `- Raison sociale: ${saga.raisonSociale}\n`
+  const raisonSociale = aide.raisonSociale
+    ? `- Raison sociale: ${aide.raisonSociale}\n`
     : '';
   return (
     'Bonjour,\n' +
@@ -75,7 +77,7 @@ const construisMailCGUAide = (
     '\n' +
     'Ci-dessous vous retrouverez les informations que vous avez saisies lors de votre demande :\n' +
     `- Signature des CGU : ${formateDate.date} à ${formateDate.heure}\n` +
-    `- Département: ${saga.departement}\n` +
+    `- Département: ${aide.departement}\n` +
     raisonSociale +
     '\n' +
     'Toute l’équipe MonAideCyber reste à votre disposition : monaidecyber@ssi.gouv.fr\n'
