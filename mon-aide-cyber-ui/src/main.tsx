@@ -22,6 +22,7 @@ import { FournisseurNavigationMAC } from './fournisseurs/ContexteNavigationMAC.t
 import { ComposantProfil } from './composants/profil/ComposantProfil.tsx';
 import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
+import { ComposantParcoursCGUAide } from './composants/parcours-cgu-aide/ComposantParcoursCGUAide.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -35,6 +36,10 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                   <Route path="/" element={<Accueil />} />
                   <Route path="/cgu" element={<CGU />} />
                   <Route path="/charte-aidant" element={<CharteAidant />} />
+                  <Route
+                    path="/demande-aide"
+                    element={<ComposantParcoursCGUAide />}
+                  />
                   <Route
                     path="/mentions-legales"
                     element={<MentionsLegales />}
