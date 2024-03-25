@@ -20,4 +20,5 @@ export type TypeEvenement =
   | 'DIAGNOSTIC_LANCE'
   | 'REPONSE_AJOUTEE'
   | 'RESTITUTION_LANCEE'
-  | 'AIDANT_CREE';
+  | 'AIDANT_CREE'
+  | 'AIDE_CREE';
