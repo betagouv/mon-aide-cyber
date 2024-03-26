@@ -326,5 +326,37 @@ describe('Parcours CGU Aidé', () => {
         });
       });
     });
+
+    describe('Pour le département', () => {
+      it("s'assure que le département est présent", () => {
+        const etat = reducteurSaisieInformations(
+          {
+            ...etatInitial,
+            email: 'jean.dupont@mail.fr',
+            cguValidees: true,
+            departement: '',
+          },
+          demandeTerminee(),
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: true,
+          departement: '',
+          email: 'jean.dupont@mail.fr',
+          erreur: {
+            departement: {
+              texteExplicatif: (
+                <TexteExplicatif
+                  id="departement"
+                  texte="Veuillez saisir un département valide."
+                />
+              ),
+              className: 'fr-input-group--error',
+            },
+          },
+          pretPourEnvoi: false,
+        });
+      });
+    });
   });
 });
