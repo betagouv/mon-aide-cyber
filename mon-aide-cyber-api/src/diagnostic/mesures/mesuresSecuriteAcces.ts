@@ -107,7 +107,7 @@ export const mesuresSecuriteAcces = {
   'acces-mesures-securite-robustesse-mdp': {
     niveau1: {
       titre:
-        'Fixer des contraintes de longueur et de complexité des mots de passe exigeant à minima 12 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux',
+        'Fixer des critères de longueur et complexité des mots de passe et encourager l’usage d’un coffre-fort de mots de passe',
       pourquoi:
         '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-pourquoi.pug',
       comment:
