@@ -52,6 +52,24 @@ const estUnEmail = (email: string) => {
   return (emailMatch && emailMatch?.length > 0) || false;
 };
 
+function construisErreurAdresseElectronique(emailValide: boolean) {
+  return !emailValide
+    ? construisErreur('adresseElectronique', {
+        identifiantTexteExplicatif: 'adresse-electronique',
+        texte: 'Veuillez saisir une adresse électronique valide.',
+      })
+    : undefined;
+}
+
+const construisErreurDepartement = (departementValide: boolean) => {
+  return !departementValide
+    ? construisErreur('departement', {
+        identifiantTexteExplicatif: 'departement',
+        texte: 'Veuillez saisir un département valide.',
+      })
+    : undefined;
+};
+
 export const reducteurSaisieInformations = (
   etat: EtatSaisieInformations,
   action: ActionSaisieInformations,
@@ -66,17 +84,17 @@ export const reducteurSaisieInformations = (
     case TypeActionSaisieInformations.DEMANDE_TERMINEE: {
       const emailValide = estUnEmail(etat.email);
       const etatCourant = { ...etat };
+      const departementValide = etat.departement.trim().length > 0;
+      const pretPourEnvoi = emailValide && departementValide;
 
       return {
         ...etat,
-        pretPourEnvoi: emailValide,
-        ...(!emailValide && {
+        pretPourEnvoi,
+        ...(!pretPourEnvoi && {
           erreur: {
             ...etatCourant.erreur,
-            ...construisErreur('adresseElectronique', {
-              identifiantTexteExplicatif: 'adresse-electronique',
-              texte: 'Veuillez saisir une adresse électronique valide.',
-            }),
+            ...construisErreurAdresseElectronique(emailValide),
+            ...construisErreurDepartement(departementValide),
           },
         }),
       };
