@@ -358,5 +358,37 @@ describe('Parcours CGU Aidé', () => {
         });
       });
     });
+
+    describe('Pour les CGU', () => {
+      it("s'assure que les CGU sont signées", () => {
+        const etat = reducteurSaisieInformations(
+          {
+            ...etatInitial,
+            email: 'jean.dupont@mail.fr',
+            cguValidees: false,
+            departement: 'Finistère',
+          },
+          demandeTerminee(),
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: false,
+          departement: 'Finistère',
+          email: 'jean.dupont@mail.fr',
+          erreur: {
+            cguValidees: {
+              texteExplicatif: (
+                <TexteExplicatif
+                  id="cguValidees"
+                  texte="Veuillez valider les CGU."
+                />
+              ),
+              className: 'fr-input-group--error',
+            },
+          },
+          pretPourEnvoi: false,
+        });
+      });
+    });
   });
 });
