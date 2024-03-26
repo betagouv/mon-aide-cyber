@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
   adresseElectroniqueSaisie,
+  departementSaisi,
   EtatSaisieInformations,
   initialiseEtatSaisieInformations,
   reducteurSaisieInformations,
@@ -15,7 +16,7 @@ describe('Parcours CGU Aidé', () => {
 
   describe('Lorsque l’Aidé fait une demande d’aide', () => {
     describe('En ce qui concerne l’adresse électronique', () => {
-      it('La Prend en compte', () => {
+      it('La prend en compte', () => {
         const etat = reducteurSaisieInformations(
           etatInitial,
           adresseElectroniqueSaisie('jean.dupont@email.com'),
@@ -81,6 +82,78 @@ describe('Parcours CGU Aidé', () => {
           cguValidees: false,
           departement: '',
           email: 'jean.dupont@email.com',
+          pretPourEnvoi: false,
+        });
+      });
+    });
+
+    describe('En ce qui concerne le département', () => {
+      it('Le prend en compte', () => {
+        const etat = reducteurSaisieInformations(
+          etatInitial,
+          departementSaisi('Finistère'),
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: false,
+          departement: 'Finistère',
+          email: '',
+          pretPourEnvoi: false,
+        });
+      });
+
+      it('Supprime l’erreur liée au département lorsque l’utilisateur le corrige', () => {
+        const etat = reducteurSaisieInformations(
+          {
+            ...etatInitial,
+            departement: '',
+            erreur: {
+              cguValidees: {
+                texteExplicatif: <>CGU pas validées</>,
+                className: 'fr-input-group--error',
+              },
+              departement: {
+                texteExplicatif: <>Veuillez saisir un département.</>,
+                className: 'fr-input-group--error',
+              },
+            },
+          },
+          departementSaisi('Finistère'),
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: false,
+          departement: 'Finistère',
+          email: '',
+          erreur: {
+            cguValidees: {
+              texteExplicatif: <>CGU pas validées</>,
+              className: 'fr-input-group--error',
+            },
+          },
+          pretPourEnvoi: false,
+        });
+      });
+
+      it('Vide les erreurs', () => {
+        const etat = reducteurSaisieInformations(
+          {
+            ...etatInitial,
+            email: '',
+            erreur: {
+              departement: {
+                texteExplicatif: <>Veuillez saisir un département.</>,
+                className: 'fr-input-group--error',
+              },
+            },
+          },
+          departementSaisi('Finistère'),
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: false,
+          departement: 'Finistère',
+          email: '',
           pretPourEnvoi: false,
         });
       });
