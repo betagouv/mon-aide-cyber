@@ -1,0 +1,18 @@
+div
+    p
+        | Les points d’accès accessible via Internet représentant la première surface d’attaque éprouvée très régulièrement
+        | de manière automatisée par les cyberattaques, il convient donc de les sécuriser davantage. Une solution VPN
+        | « full-tunneling » sera une contrainte supplémentaire pour un cyberattaquant et permet de sécuriser davantage
+        | les flux d’authentification.
+    p
+        | La mise en place d’un VPN permet de bloquer l’accès direct aux applications qu’il est nécessaire d’exposer sur Internet. 
+        | À la place, les applications sont accédées au travers du VPN. Au lieu d’avoir N service exposés sur Internet, seul le service VPN est exposé. 
+        | La “surface d’attaque” disponible pour l’attaquant est donc réduite.
+    p 
+        | Pour avoir accès aux applications, l’utilisateur doit d’abord se connecter au service VPN avant de se connecter aux applications (la connexion au service VPN 
+        | peut être transparente pour les utilisateurs, notamment via la fonctionnalité Always On VPN dans les environnements Microsoft).
+        | Cette stratégie réduit également les efforts (humains) à déployer pour tenir à jour, avec une réactivité plus exigeante, les services exposés sur Internet,
+        | puisque seul le service VPN doit faire l’objet de cette réactivité plus exigeante (au lieu des N applications métiers).
+    p
+        | Attention: si la messagerie électronique est hébergée par l’entité (“on premise”), le service de relai de messagerie (SMTP) ne pourra pas être protégé par 
+        | le VPN (il en va de même pour les sites web institutionnels et/ou de commerce en ligne notamment)

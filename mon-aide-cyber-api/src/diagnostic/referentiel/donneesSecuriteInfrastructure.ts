@@ -34,7 +34,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               identifiant:
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees',
               libelle:
-                'Si "Oui" : Est-ce que seuls les flux strictement nécessaires entre votre système d\'information et Internet (ou autres réseaux externes) sont autorisés ?',
+                'Si "Oui" : Est-ce que seuls les flux entrants et sortants strictement nécessaires entre Internet (ou autres réseaux externes) et votre système d\'information sont autorisés ?',
               poids: 2,
               reponsesPossibles: [
                 {
@@ -63,9 +63,24 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                   identifiant:
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-oui',
                   libelle: 'Oui',
-                  resultat: { indice: { valeur: 3 } },
+                  resultat: { indice: { valeur: 2 } },
+                  mesures: [
+                    {
+                      identifiant:
+                        'securite-infrastructure-pare-feu-deploye-interconnexions-protegees',
+                      niveau: 2,
+                    },
+                  ],
                   ordre: 2,
                 },
+                {
+                  identifiant:
+                    'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-oui',
+                  libelle: 'Oui et les flux entrants se protégés par un VPN',
+                  resultat: { indice: { valeur: 3 } },
+                  ordre: 3,
+                },
+
               ],
               type: 'choixUnique',
             },

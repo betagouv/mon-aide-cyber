@@ -1,0 +1,22 @@
+div
+    p
+        | Selon la technologie de VPN choisie (IPsec ou TLS) les options de configuration pour l’authentification pourront 
+        | être différentes (authentification multifacteur, clef privée stockée dans le poste de travail - idéalement un composant de sécurité de type Trusted Platform Module). 
+        | En se basant sur la liste exhaustive des flux distants ou accès dits « télétravaillés », il est recommandé de les
+        | rendre accessible seulement au travers du VPN, autant que possible.
+        | Selon les cas, la mise en place d’une limitation des tentatives d’authentification et d’un blocage au delà d’un seuil de tentatives d’authentification 
+        | pourraient être opportuns.
+    p           
+        | Il est également utile d’activer la fonction “full-tunneling” (au lieu de, par défaut, “split-tunneling”) du VPN. Cette fonction vise à empêcher 
+        | les postes utilisateur d’émettre des connexions “en dehors” du VPN. Ainsi, lorsque l’utilisateur travaille à distance,
+        | l’ensemble de son trafic Internet (notamment la consultation de site web) est redirigée vers le réseau de l’entité et bénéfice des mêmes fonctions de sécurité
+        | que lorsque l’utilisateur travaille depuis les locaux de l’entité. Les fonctions de sécurité qui peuvent mises en oeuvre sur le trafic Internet sont par 
+        | exemple le filtrage des applications (ports TCP/UDP, notamment en interdisant l’accès direct au DNS sur Internet), la protection contre des sites Internet 
+        | malveillant, ou la journalisation des activités (pour les investigations en cas d’incident)
+        | NB: Si aucune fonction de sécurité n’est mise en oeuvre pour protéger les flux Internet émis à partir du réseau de l’entité, le “full-tunneling” n’a qu’un 
+        | intérêt très limité.
+    p
+        | Il est préconisé de s’appuyer sur les compétences d’un prestataire externe, idéalement labellisé Expert Cyber ou 
+        | référencé par un campus cyber régional pour la mise en œuvre de cette mesure.
+    p  
+        | Pour aller plus loin, le guide ANSSI concernant le nomadisme précise des mesures complémentaires de sécurisation des flux entrants : https://cyber.gouv.fr/sites/default/files/2018/10/guide_nomadisme_anssi_pa_054_v1.pdf
