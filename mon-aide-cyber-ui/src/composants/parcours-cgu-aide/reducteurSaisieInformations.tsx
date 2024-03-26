@@ -89,16 +89,23 @@ export const reducteurSaisieInformations = (
     }
   };
 
+  const estDepartementValide = (departement: string) =>
+    departement.trim().length > 0;
+
   switch (action.type) {
     case TypeActionSaisieInformations.DEMANDE_TERMINEE: {
       const emailValide = estUnEmail(etat.email);
       const etatCourant = { ...etat };
-      const departementValide = etat.departement.trim().length > 0;
+      const departementValide = estDepartementValide(etat.departement);
       const cguValidees = etat.cguValidees;
       const pretPourEnvoi = emailValide && departementValide && cguValidees;
 
+      if (pretPourEnvoi) {
+        delete etatCourant.erreur;
+      }
+
       return {
-        ...etat,
+        ...etatCourant,
         pretPourEnvoi,
         ...(!pretPourEnvoi && {
           erreur: {
@@ -146,7 +153,7 @@ export const reducteurSaisieInformations = (
       };
     }
     case TypeActionSaisieInformations.DEPARTEMENT_SAISI: {
-      const departementValide = action.departement.trim().length > 0;
+      const departementValide = estDepartementValide(action.departement);
       const etatCourant = { ...etat };
 
       if (departementValide) {
