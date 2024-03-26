@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import {
   adresseElectroniqueSaisie,
   cguValidees,
+  demandeEnvoyee,
+  demandeInvalidee,
   demandeTerminee,
   departementSaisi,
   EtatSaisieInformations,
@@ -9,7 +11,10 @@ import {
   raisonSocialeSaisie,
   reducteurSaisieInformations,
 } from '../../../src/composants/parcours-cgu-aide/reducteurSaisieInformations.tsx';
-import { TexteExplicatif } from '../../../src/composants/alertes/Erreurs.tsx';
+import {
+  ChampsErreur,
+  TexteExplicatif,
+} from '../../../src/composants/alertes/Erreurs.tsx';
 
 describe('Parcours CGU Aidé', () => {
   let etatInitial: EtatSaisieInformations = {} as EtatSaisieInformations;
@@ -419,6 +424,43 @@ describe('Parcours CGU Aidé', () => {
         email: 'jean.dupont@mail.fr',
         pretPourEnvoi: true,
       });
+    });
+  });
+
+  it('lorsque la demande est envoyée, réinitialise le formulaire', () => {
+    const etat = reducteurSaisieInformations(
+      {
+        ...etatInitial,
+        email: 'jean.dupont@mail.fr',
+        cguValidees: true,
+        pretPourEnvoi: true,
+        departement: 'Finistère',
+      },
+      demandeEnvoyee(),
+    );
+
+    expect(etat).toStrictEqual<EtatSaisieInformations>(etatInitial);
+  });
+
+  it('lorsque la demande est invalidée, marque la demande comme invalide', () => {
+    const erreur = new Error('Une erreur est survenue.');
+    const etat = reducteurSaisieInformations(
+      {
+        ...etatInitial,
+        email: 'jean.dupont@mail.fr',
+        cguValidees: true,
+        pretPourEnvoi: true,
+        departement: 'Finistère',
+      },
+      demandeInvalidee(erreur),
+    );
+
+    expect(etat).toStrictEqual<EtatSaisieInformations>({
+      email: 'jean.dupont@mail.fr',
+      cguValidees: true,
+      pretPourEnvoi: false,
+      departement: 'Finistère',
+      champsErreur: <ChampsErreur erreur={erreur} />,
     });
   });
 });

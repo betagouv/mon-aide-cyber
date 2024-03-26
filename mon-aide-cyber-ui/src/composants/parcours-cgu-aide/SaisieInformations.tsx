@@ -1,20 +1,90 @@
-import { FormEvent, useCallback, useReducer } from 'react';
+import { FormEvent, useCallback, useEffect, useReducer, useState } from 'react';
 import {
   adresseElectroniqueSaisie,
   cguValidees,
+  demandeEnvoyee,
+  demandeInvalidee,
+  demandeTerminee,
   departementSaisi,
   initialiseEtatSaisieInformations,
   raisonSocialeSaisie,
   reducteurSaisieInformations,
 } from './reducteurSaisieInformations.tsx';
+import { useMACAPI } from '../../fournisseurs/hooks.ts';
+import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
+import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 
 export const SaisieInformations = () => {
   const [etatSaisieInformations, envoie] = useReducer(
     reducteurSaisieInformations,
     initialiseEtatSaisieInformations(),
   );
+  const [demandeAideEnCoursDeChargement, setDemandeAideEnCoursDeChargement] =
+    useState(true);
+  const [lienDemandeAide, setLienDemandeAide] = useState<Lien | undefined>();
+  const macAPI = useMACAPI();
+
+  useEffect(() => {
+    if (demandeAideEnCoursDeChargement) {
+      macAPI
+        .appelle<ReponseHATEOAS>(
+          {
+            url: '/api/aide/cgu',
+            methode: 'GET',
+          },
+          (corps) => corps,
+        )
+        .then((reponse) => {
+          new MoteurDeLiens(reponse.liens).trouve(
+            'demander-validation-cgu-aide',
+            (lien) => setLienDemandeAide(lien),
+          );
+          setDemandeAideEnCoursDeChargement(false);
+        })
+        .catch(() => {
+          setDemandeAideEnCoursDeChargement(false);
+        });
+    }
+  }, [demandeAideEnCoursDeChargement, macAPI]);
+
+  useEffect(() => {
+    if (etatSaisieInformations.pretPourEnvoi && lienDemandeAide) {
+      macAPI
+        .appelle<
+          void,
+          {
+            cguValidees: boolean;
+            email: string;
+            departement: string;
+            raisonSociale?: string;
+          }
+        >(
+          {
+            url: lienDemandeAide.url,
+            methode: lienDemandeAide.methode!,
+            corps: {
+              cguValidees: etatSaisieInformations.cguValidees,
+              departement: etatSaisieInformations.departement,
+              email: etatSaisieInformations.email,
+              ...(etatSaisieInformations.raisonSociale && {
+                raisonSociale: etatSaisieInformations.raisonSociale,
+              }),
+            },
+          },
+          (corps) => corps,
+        )
+        .then(() => {
+          envoie(demandeEnvoyee());
+        })
+        .catch((erreur) => {
+          envoie(demandeInvalidee(erreur));
+        });
+    }
+  }, [etatSaisieInformations, lienDemandeAide, macAPI]);
+
   const envoieDemandeAide = useCallback((e: FormEvent) => {
     e.preventDefault();
+    envoie(demandeTerminee());
   }, []);
 
   const surSaisieAdresseElectronique = useCallback(
@@ -148,6 +218,9 @@ export const SaisieInformations = () => {
               >
                 Terminer
               </button>
+            </div>
+            <div className="fr-mt-2w">
+              {etatSaisieInformations.champsErreur}
             </div>
           </fieldset>
         </form>
