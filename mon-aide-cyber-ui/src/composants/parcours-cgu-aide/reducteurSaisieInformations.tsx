@@ -87,8 +87,12 @@ export const reducteurSaisieInformations = (
         departement: action.departement,
       };
     }
-    case TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE:
-      break;
+    case TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE: {
+      return {
+        ...etat,
+        raisonSociale: action.raisonSociale,
+      };
+    }
   }
   return {} as EtatSaisieInformations;
 };
