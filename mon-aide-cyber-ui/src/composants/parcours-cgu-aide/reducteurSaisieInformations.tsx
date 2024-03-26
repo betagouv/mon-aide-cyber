@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { PresentationErreur } from '../alertes/Erreurs.tsx';
+import { construisErreur, PresentationErreur } from '../alertes/Erreurs.tsx';
 
 type ErreurSaisieInformations = {
   cguValidees?: PresentationErreur;
@@ -59,8 +59,29 @@ export const reducteurSaisieInformations = (
   };
 
   switch (action.type) {
-    case TypeActionSaisieInformations.CGU_VALIDEES:
-      break;
+    case TypeActionSaisieInformations.CGU_VALIDEES: {
+      const cguValidees = !etat.cguValidees;
+      const etatCourant = { ...etat };
+
+      if (cguValidees) {
+        delete etatCourant.erreur?.['cguValidees'];
+        videLesErreurs(etatCourant);
+      }
+
+      return {
+        ...etatCourant,
+        cguValidees: cguValidees,
+        ...(!cguValidees && {
+          erreur: {
+            ...etatCourant.erreur,
+            ...construisErreur('cguValidees', {
+              identifiantTexteExplicatif: 'cguValidees',
+              texte: 'Veuillez valider les CGU.',
+            }),
+          },
+        }),
+      };
+    }
     case TypeActionSaisieInformations.ADRESSE_ELECTRONIQUE_SAISIE: {
       const emailValide = estUnEmail(action.adresseElectronique);
       const etatCourant = { ...etat };

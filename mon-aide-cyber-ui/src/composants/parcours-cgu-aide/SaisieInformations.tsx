@@ -110,7 +110,13 @@ export const SaisieInformations = () => {
                 </div>
               </div>
               <div className="fr-col-12">
-                <div className="fr-checkbox-group mac-radio-group">
+                <div
+                  className={`fr-checkbox-group mac-radio-group ${
+                    etatSaisieInformations.erreur
+                      ? etatSaisieInformations.erreur.cguValidees?.className
+                      : ''
+                  }`}
+                >
                   <input
                     type="checkbox"
                     id="cgu-aide"
