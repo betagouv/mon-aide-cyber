@@ -73,8 +73,20 @@ export const reducteurSaisieInformations = (
         email: action.adresseElectronique,
       };
     }
-    case TypeActionSaisieInformations.DEPARTEMENT_SAISI:
-      break;
+    case TypeActionSaisieInformations.DEPARTEMENT_SAISI: {
+      const departementValide = action.departement.trim().length > 0;
+      const etatCourant = { ...etat };
+
+      if (departementValide) {
+        delete etatCourant.erreur?.['departement'];
+        videLesErreurs(etatCourant);
+      }
+
+      return {
+        ...etatCourant,
+        departement: action.departement,
+      };
+    }
     case TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE:
       break;
   }
