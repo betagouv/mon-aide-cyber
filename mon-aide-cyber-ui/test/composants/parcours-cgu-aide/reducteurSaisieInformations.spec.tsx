@@ -4,6 +4,7 @@ import {
   departementSaisi,
   EtatSaisieInformations,
   initialiseEtatSaisieInformations,
+  raisonSocialeSaisie,
   reducteurSaisieInformations,
 } from '../../../src/composants/parcours-cgu-aide/reducteurSaisieInformations.tsx';
 
@@ -154,6 +155,23 @@ describe('Parcours CGU Aidé', () => {
           cguValidees: false,
           departement: 'Finistère',
           email: '',
+          pretPourEnvoi: false,
+        });
+      });
+    });
+
+    describe('En ce qui concerne la raison sociale', () => {
+      it('La prend en compte', () => {
+        const etat = reducteurSaisieInformations(
+          etatInitial,
+          raisonSocialeSaisie('beta.gouv'),
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: false,
+          departement: '',
+          email: '',
+          raisonSociale: 'beta.gouv',
           pretPourEnvoi: false,
         });
       });
