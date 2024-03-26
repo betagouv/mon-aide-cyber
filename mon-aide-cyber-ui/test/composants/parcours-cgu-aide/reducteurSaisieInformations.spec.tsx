@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import {
   adresseElectroniqueSaisie,
   cguValidees,
+  demandeTerminee,
   departementSaisi,
   EtatSaisieInformations,
   initialiseEtatSaisieInformations,
@@ -268,6 +269,59 @@ describe('Parcours CGU Aidé', () => {
           cguValidees: true,
           departement: '',
           email: '',
+          pretPourEnvoi: false,
+        });
+      });
+    });
+  });
+
+  describe('En ce qui concerne la validation des informations', () => {
+    describe("Pour l'adresse électronique", () => {
+      it("valide l'adresse électronique", () => {
+        const etat = reducteurSaisieInformations(
+          {
+            ...etatInitial,
+            email: 'jean.dupont@mail.fr',
+            cguValidees: true,
+            departement: 'Finistère',
+          },
+          demandeTerminee(),
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: true,
+          departement: 'Finistère',
+          email: 'jean.dupont@mail.fr',
+          pretPourEnvoi: true,
+        });
+      });
+
+      it("invalide l'adresse électronique", () => {
+        const etat = reducteurSaisieInformations(
+          {
+            ...etatInitial,
+            email: 'jean.dupont-incorrect',
+            cguValidees: true,
+            departement: 'Finistère',
+          },
+          demandeTerminee(),
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: true,
+          departement: 'Finistère',
+          email: 'jean.dupont-incorrect',
+          erreur: {
+            adresseElectronique: {
+              texteExplicatif: (
+                <TexteExplicatif
+                  id="adresse-electronique"
+                  texte="Veuillez saisir une adresse électronique valide."
+                />
+              ),
+              className: 'fr-input-group--error',
+            },
+          },
           pretPourEnvoi: false,
         });
       });

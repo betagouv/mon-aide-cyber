@@ -22,6 +22,7 @@ enum TypeActionSaisieInformations {
   DEPARTEMENT_SAISI = 'DEPARTEMENT_SAISI',
   RAISON_SOCIALE_SAISIE = 'RAISON_SOCIALE_SAISIE',
   CGU_VALIDEES = 'CGU_VALIDEES',
+  DEMANDE_TERMINEE = 'DEMANDE_TERMINEE',
 }
 
 type ActionSaisieInformations =
@@ -39,6 +40,9 @@ type ActionSaisieInformations =
   | {
       type: TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE;
       raisonSociale: string;
+    }
+  | {
+      type: TypeActionSaisieInformations.DEMANDE_TERMINEE;
     };
 
 const estUnEmail = (email: string) => {
@@ -59,6 +63,24 @@ export const reducteurSaisieInformations = (
   };
 
   switch (action.type) {
+    case TypeActionSaisieInformations.DEMANDE_TERMINEE: {
+      const emailValide = estUnEmail(etat.email);
+      const etatCourant = { ...etat };
+
+      return {
+        ...etat,
+        pretPourEnvoi: emailValide,
+        ...(!emailValide && {
+          erreur: {
+            ...etatCourant.erreur,
+            ...construisErreur('adresseElectronique', {
+              identifiantTexteExplicatif: 'adresse-electronique',
+              texte: 'Veuillez saisir une adresse électronique valide.',
+            }),
+          },
+        }),
+      };
+    }
     case TypeActionSaisieInformations.CGU_VALIDEES: {
       const cguValidees = !etat.cguValidees;
       const etatCourant = { ...etat };
@@ -115,7 +137,6 @@ export const reducteurSaisieInformations = (
       };
     }
   }
-  return {} as EtatSaisieInformations;
 };
 
 export const adresseElectroniqueSaisie = (
@@ -138,6 +159,9 @@ export const raisonSocialeSaisie = (
 });
 export const cguValidees = (): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.CGU_VALIDEES,
+});
+export const demandeTerminee = (): ActionSaisieInformations => ({
+  type: TypeActionSaisieInformations.DEMANDE_TERMINEE,
 });
 export const initialiseEtatSaisieInformations = (): EtatSaisieInformations => ({
   cguValidees: false,
