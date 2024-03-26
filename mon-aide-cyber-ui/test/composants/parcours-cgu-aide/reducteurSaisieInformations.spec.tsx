@@ -390,5 +390,35 @@ describe('Parcours CGU Aidé', () => {
         });
       });
     });
+
+    it("vide les erreurs lorsque les informations sont prêtes pour l'envoi", () => {
+      const etat = reducteurSaisieInformations(
+        {
+          ...etatInitial,
+          email: 'jean.dupont@mail.fr',
+          cguValidees: true,
+          erreur: {
+            departement: {
+              texteExplicatif: <>CGU pas validées</>,
+              className: 'fr-input-group--error',
+            },
+            adresseElectronique: {
+              texteExplicatif: <>Une erreur</>,
+              className: 'fr-input-group--error',
+            },
+          },
+          departement: 'Finistère',
+          pretPourEnvoi: false,
+        },
+        demandeTerminee(),
+      );
+
+      expect(etat).toStrictEqual<EtatSaisieInformations>({
+        cguValidees: true,
+        departement: 'Finistère',
+        email: 'jean.dupont@mail.fr',
+        pretPourEnvoi: true,
+      });
+    });
   });
 });
