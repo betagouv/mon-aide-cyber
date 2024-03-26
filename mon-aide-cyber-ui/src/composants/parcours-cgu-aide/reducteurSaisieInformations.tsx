@@ -70,6 +70,15 @@ const construisErreurDepartement = (departementValide: boolean) => {
     : undefined;
 };
 
+const construisErreurCGUValidess = (cguValidees: boolean) => {
+  return !cguValidees
+    ? construisErreur('cguValidees', {
+        identifiantTexteExplicatif: 'cguValidees',
+        texte: 'Veuillez valider les CGU.',
+      })
+    : undefined;
+};
+
 export const reducteurSaisieInformations = (
   etat: EtatSaisieInformations,
   action: ActionSaisieInformations,
@@ -85,7 +94,8 @@ export const reducteurSaisieInformations = (
       const emailValide = estUnEmail(etat.email);
       const etatCourant = { ...etat };
       const departementValide = etat.departement.trim().length > 0;
-      const pretPourEnvoi = emailValide && departementValide;
+      const cguValidees = etat.cguValidees;
+      const pretPourEnvoi = emailValide && departementValide && cguValidees;
 
       return {
         ...etat,
@@ -95,6 +105,7 @@ export const reducteurSaisieInformations = (
             ...etatCourant.erreur,
             ...construisErreurAdresseElectronique(emailValide),
             ...construisErreurDepartement(departementValide),
+            ...construisErreurCGUValidess(cguValidees),
           },
         }),
       };
