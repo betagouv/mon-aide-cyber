@@ -1,8 +1,6 @@
 import { useParams } from 'react-router-dom';
 import React from 'react';
 import { UUID } from '../../types/Types.ts';
-import { ErrorBoundary } from 'react-error-boundary';
-import { ComposantAffichageErreur } from '../alertes/ComposantAffichageErreur.tsx';
 
 ('use client');
 type CommePropriete<C extends React.ElementType> = {
@@ -30,9 +28,5 @@ export const ComposantIntercepteur = <C extends React.ElementType = 'div'>({
   const Composant = composant || 'div';
   const params = useParams();
 
-  return (
-    <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-      <Composant {...params} />
-    </ErrorBoundary>
-  );
+  return <Composant {...params} />;
 };
