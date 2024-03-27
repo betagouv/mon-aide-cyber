@@ -35,7 +35,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           identifiant:
             'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-ponctuellement',
           libelle:
-            'Oui, nous menons ponctuellement des actions de sensibilisation.',
+            'Oui, nous avons déjà mené des actions de sensibilisation ces dernières années',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -52,7 +52,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           identifiant:
             'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-regulierement',
           libelle:
-            'Oui, nous menons régulièrement des actions de sensibilisation ciblant des populations spécifiques.',
+            'Oui, nous menons chaque année des actions de sensibilisation à l’attention du personnel et ciblant des populations spécifiques (ex : services supports, services métiers)',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
