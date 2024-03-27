@@ -2,7 +2,7 @@ export const mesuresGouvernance = {
   'gouvernance-infos-et-activites-a-proteger': {
     niveau1: {
       titre:
-        'Établir la liste des activités métiers et des informations à protéger en priorité',
+        'Établir la liste des activités et des données à protéger en priorité',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-infos-et-processus-a-proteger-niveau1-pourquoi.pug',
       comment:

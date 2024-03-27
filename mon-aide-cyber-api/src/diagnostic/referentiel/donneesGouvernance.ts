@@ -5,7 +5,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-infos-et-activites-a-proteger',
       libelle:
-        'Avez-vous déterminé les informations et les activités métiers à protéger en priorité ?',
+        'Avez-vous déterminé les activités et les données à protéger en priorité ?',
       poids: 2,
       type: 'choixUnique',
       reponsesPossibles: [
@@ -32,7 +32,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant:
             'gouvernance-infos-et-activites-a-proteger-oui-idee-generale',
           libelle:
-            'Nous avons une idée générale de nos données et activités métiers à protéger en priorité.',
+            'Nous avons une idée générale de nos activités et données à protéger en priorité.',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -47,7 +47,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-infos-et-activites-a-proteger-oui-precise',
           libelle:
-            'Il existe une liste précise et maintenue à jour de toutes les données et activités métiers à protéger en priorité à l’échelle de l’organisation.',
+            'Il existe une liste précise et maintenue à jour de toutes les activités et données métiers à protéger en priorité à l’échelle de l’organisation.',
           resultat: {
             indice: { valeur: 3 },
           },
