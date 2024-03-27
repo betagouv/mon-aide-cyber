@@ -78,7 +78,7 @@ export const mesuresReaction = {
   'reaction-dispositif-gestion-crise-adapte-defini': {
     niveau1: {
       titre:
-        'Lister les personnes à contacter en cas d’incident de sécurité informatique',
+        'Lister les personnes à contacter en cas de cyberattaque',
       pourquoi:
         '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau1-pourquoi.pug',
       comment:
@@ -86,7 +86,7 @@ export const mesuresReaction = {
     },
     niveau2: {
       titre:
-        'Définir des premières mesures organisationnelles de gestion de crise cyber',
+        "Définir un dispositif de gestion de crise d'origine cyber",
       pourquoi:
         '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau2-pourquoi.pug',
       comment:
