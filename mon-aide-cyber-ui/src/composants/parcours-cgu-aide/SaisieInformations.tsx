@@ -1,91 +1,42 @@
-import { FormEvent, useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 import {
   adresseElectroniqueSaisie,
   cguValidees,
-  demandeEnvoyee,
-  demandeInvalidee,
   demandeTerminee,
   departementSaisi,
   initialiseEtatSaisieInformations,
   raisonSocialeSaisie,
   reducteurSaisieInformations,
 } from './reducteurSaisieInformations.tsx';
-import { useMACAPI } from '../../fournisseurs/hooks.ts';
-import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 
-export const SaisieInformations = () => {
+export type DonneesSaisieInformations = {
+  cguValidees: boolean;
+  email: string;
+  departement: string;
+  raisonSociale?: string;
+};
+
+type ProprietesSaisiesInformations = {
+  onClick: (saisieInformations: DonneesSaisieInformations) => void;
+};
+export const SaisieInformations = (
+  proprietes: ProprietesSaisiesInformations,
+) => {
   const [etatSaisieInformations, envoie] = useReducer(
     reducteurSaisieInformations,
     initialiseEtatSaisieInformations(),
   );
-  const [demandeAideEnCoursDeChargement, setDemandeAideEnCoursDeChargement] =
-    useState(true);
-  const [lienDemandeAide, setLienDemandeAide] = useState<Lien | undefined>();
-  const macAPI = useMACAPI();
 
   useEffect(() => {
-    if (demandeAideEnCoursDeChargement) {
-      macAPI
-        .appelle<ReponseHATEOAS>(
-          {
-            url: '/api/aide/cgu',
-            methode: 'GET',
-          },
-          (corps) => corps,
-        )
-        .then((reponse) => {
-          new MoteurDeLiens(reponse.liens).trouve(
-            'demander-validation-cgu-aide',
-            (lien) => setLienDemandeAide(lien),
-          );
-          setDemandeAideEnCoursDeChargement(false);
-        })
-        .catch(() => {
-          setDemandeAideEnCoursDeChargement(false);
-        });
+    if (etatSaisieInformations.pretPourEnvoi) {
+      proprietes.onClick({
+        cguValidees: etatSaisieInformations.cguValidees,
+        departement: etatSaisieInformations.departement,
+        email: etatSaisieInformations.email,
+        raisonSociale: etatSaisieInformations.raisonSociale,
+      });
     }
-  }, [demandeAideEnCoursDeChargement, macAPI]);
-
-  useEffect(() => {
-    if (etatSaisieInformations.pretPourEnvoi && lienDemandeAide) {
-      macAPI
-        .appelle<
-          void,
-          {
-            cguValidees: boolean;
-            email: string;
-            departement: string;
-            raisonSociale?: string;
-          }
-        >(
-          {
-            url: lienDemandeAide.url,
-            methode: lienDemandeAide.methode!,
-            corps: {
-              cguValidees: etatSaisieInformations.cguValidees,
-              departement: etatSaisieInformations.departement,
-              email: etatSaisieInformations.email,
-              ...(etatSaisieInformations.raisonSociale && {
-                raisonSociale: etatSaisieInformations.raisonSociale,
-              }),
-            },
-          },
-          (corps) => corps,
-        )
-        .then(() => {
-          envoie(demandeEnvoyee());
-        })
-        .catch((erreur) => {
-          envoie(demandeInvalidee(erreur));
-        });
-    }
-  }, [etatSaisieInformations, lienDemandeAide, macAPI]);
-
-  const envoieDemandeAide = useCallback((e: FormEvent) => {
-    e.preventDefault();
-    envoie(demandeTerminee());
-  }, []);
+  }, [etatSaisieInformations, proprietes]);
 
   const surSaisieAdresseElectronique = useCallback(
     (adresseElectronique: string) => {
@@ -117,7 +68,7 @@ export const SaisieInformations = () => {
           <span className="asterisque">*</span>
           <span> Champ obligatoire</span>
         </div>
-        <form onSubmit={envoieDemandeAide}>
+        <form>
           <fieldset className="fr-mb-5w">
             <div className="fr-grid-row fr-grid-row--gutters">
               <div className=" fr-col-12">
@@ -212,15 +163,13 @@ export const SaisieInformations = () => {
             </div>
             <div className="fr-grid-row fr-grid-row--right fr-pt-3w">
               <button
-                type="submit"
+                type="button"
                 key="envoyer-demande-aide"
                 className="fr-btn bouton-mac bouton-mac-primaire"
+                onClick={() => envoie(demandeTerminee())}
               >
                 Terminer
               </button>
-            </div>
-            <div className="fr-mt-2w">
-              {etatSaisieInformations.champsErreur}
             </div>
           </fieldset>
         </form>
