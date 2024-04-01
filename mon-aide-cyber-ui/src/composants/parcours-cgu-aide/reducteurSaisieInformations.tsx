@@ -1,9 +1,4 @@
-import { ReactElement } from 'react';
-import {
-  ChampsErreur,
-  construisErreur,
-  PresentationErreur,
-} from '../alertes/Erreurs.tsx';
+import { construisErreur, PresentationErreur } from '../alertes/Erreurs.tsx';
 
 type ErreurSaisieInformations = {
   cguValidees?: PresentationErreur;
@@ -13,7 +8,6 @@ type ErreurSaisieInformations = {
 
 export type EtatSaisieInformations = {
   cguValidees: boolean;
-  champsErreur?: ReactElement;
   departement: string;
   email: string;
   erreur?: ErreurSaisieInformations;
@@ -27,8 +21,6 @@ enum TypeActionSaisieInformations {
   RAISON_SOCIALE_SAISIE = 'RAISON_SOCIALE_SAISIE',
   CGU_VALIDEES = 'CGU_VALIDEES',
   DEMANDE_TERMINEE = 'DEMANDE_TERMINEE',
-  DEMANDE_ENVOYEE = 'DEMANDE_ENVOYEE',
-  DEMANDE_INVALIDEE = 'DEMANDE_INVALIDEE',
 }
 
 type ActionSaisieInformations =
@@ -49,9 +41,7 @@ type ActionSaisieInformations =
     }
   | {
       type: TypeActionSaisieInformations.DEMANDE_TERMINEE;
-    }
-  | { type: TypeActionSaisieInformations.DEMANDE_ENVOYEE }
-  | { type: TypeActionSaisieInformations.DEMANDE_INVALIDEE; erreur: Error };
+    };
 
 const estUnEmail = (email: string) => {
   const emailMatch = email
@@ -100,16 +90,6 @@ export const reducteurSaisieInformations = (
     departement.trim().length > 0;
 
   switch (action.type) {
-    case TypeActionSaisieInformations.DEMANDE_INVALIDEE: {
-      return {
-        ...etat,
-        pretPourEnvoi: false,
-        champsErreur: <ChampsErreur erreur={action.erreur} />,
-      };
-    }
-    case TypeActionSaisieInformations.DEMANDE_ENVOYEE: {
-      return initialiseEtatSaisieInformations();
-    }
     case TypeActionSaisieInformations.DEMANDE_TERMINEE: {
       const emailValide = estUnEmail(etat.email);
       const etatCourant = { ...etat };
@@ -215,13 +195,6 @@ export const cguValidees = (): ActionSaisieInformations => ({
 });
 export const demandeTerminee = (): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.DEMANDE_TERMINEE,
-});
-export const demandeEnvoyee = (): ActionSaisieInformations => ({
-  type: TypeActionSaisieInformations.DEMANDE_ENVOYEE,
-});
-export const demandeInvalidee = (erreur: Error): ActionSaisieInformations => ({
-  type: TypeActionSaisieInformations.DEMANDE_INVALIDEE,
-  erreur,
 });
 export const initialiseEtatSaisieInformations = (): EtatSaisieInformations => ({
   cguValidees: false,
