@@ -314,7 +314,7 @@ export const donneesReaction: QuestionsThematique = {
     {
       identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
       libelle:
-        'Un dispositif de gestion de crise adapté au risque de cyberattaques a-t-il été défini ?',
+        'Savez-vous comment réagir en cas de cyberattaque ?',
       poids: 3,
       reponsesPossibles: [
         {
@@ -339,7 +339,7 @@ export const donneesReaction: QuestionsThematique = {
         {
           identifiant:
             'reaction-dispositif-gestion-crise-adapte-defini-oui-fiche-reflexe',
-          libelle: 'Nous avons défini une fiche réflexe dédiée.',
+          libelle: 'Oui, nous avons formalisé une fiche réflexe dédiée',
           resultat: {
             mesures: [
               {
@@ -355,7 +355,7 @@ export const donneesReaction: QuestionsThematique = {
           identifiant:
             'reaction-dispositif-gestion-crise-adapte-defini-oui-organisation-gestion-crise-definie',
           libelle:
-            "Oui, une organisation de gestion de crise d'origine cyber a été définie",
+            "Oui, une organisation de gestion de crise d’origine cyber a été définie",
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
