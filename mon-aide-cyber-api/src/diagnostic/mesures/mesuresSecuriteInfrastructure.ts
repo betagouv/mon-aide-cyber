@@ -18,6 +18,14 @@ export const mesuresSecuriteInfrastructure = {
       comment:
         '../../mesures/infras/securite-infrastructure-pare-feu-deploye-interconnexions-protegees-niveau1-comment.pug',
     },
+    niveau2: {
+      titre:
+        'Mettre en œuvre autant que possible un tunnel VPN pour tous les flux entrants',
+      pourquoi:
+        '../../mesures/acces/acces-teletravail-acces-distants-mesures-particulieres-niveau2-pourquoi.pug',
+      comment:
+        '../../mesures/acces/acces-teletravail-acces-distants-mesures-particulieres-niveau2-comment.pug',
+    },
     priorisation: 21,
   },
   'securite-infrastructure-pare-feu-deploye-logs-stockes': {

@@ -49,7 +49,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-liste-compte-utilisateurs',
       libelle:
-        'La liste des comptes utilisateurs (prestataires inclus) est-elle maintenue à jour ?',
+        'Si entité avec risque d’espionnage ciblé : la liste des comptes utilisateurs (prestataires inclus) est-elle maintenue à jour ?',
       poids: 1,
       reponsesPossibles: [
         {
@@ -104,7 +104,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-droits-acces-utilisateurs-limites',
       libelle:
-        'Les droits des utilisateurs sont-ils limités à leurs besoins métiers ?',
+        'Si entité avec risque d’espionnage ciblé, les droits des utilisateurs sont-ils limités à leurs besoins métiers ?',
       poids: 1,
       reponsesPossibles: [
         {
@@ -361,7 +361,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant:
         'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
       libelle:
-        "L'accès des utilisateurs aux ressources et données les plus sensibles fait-il l’objet de mesures de sécurité additionnelles ?",
+        "Si entité avec risque d’espionnage ciblé, l'accès des utilisateurs aux ressources et données les plus sensibles fait-il l’objet de mesures de sécurité additionnelles ?",
       poids: 1,
       reponsesPossibles: [
         {
@@ -423,7 +423,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-teletravail-acces-distants-mesures-particulieres',
       libelle:
-        "Le télétravail et les accès distants (cloud inclus) font-ils l'objet de mesures de sécurité particulières ?",
+        "Le télétravail et les accès distants (cloud inclus) sont-ils protégés par une authentification multifacteur ?",
       poids: 2,
       reponsesPossibles: [
         {
@@ -458,14 +458,14 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-teletravail-acces-distants-mesures-particulieres-mfa',
           libelle:
-            "De l'authentification à double facteur a été mise en place pour les accès distants.",
+            "Certaines connexions à distance sont protégés par une authentification multifacteur",
           resultat: {
-            indice: { valeur: 2 },
+            indice: { valeur: 1 },
             mesures: [
               {
                 identifiant:
                   'acces-teletravail-acces-distants-mesures-particulieres',
-                niveau: 2,
+                niveau: 1,
               },
             ],
           },
@@ -475,7 +475,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-teletravail-acces-distants-mesures-particulieres-vpn',
           libelle:
-            'Les connexions à distance sont réalisées via un VPN, lui même authentifié à double facteur.',
+            'Toutes les connexions à distance sont protégés par une authentification multifacteur',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -486,7 +486,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant:
         'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
       libelle:
-        'Si l’entité dispose de systèmes industriels : les accès distants aux systèmes industriels font-ils l’objet de mesures de sécurité particulières ?',
+        'Si l’entité dispose de systèmes industriels : les accès distants aux systèmes industriels sont-ils protégés par une authentification multifacteur ?',
       poids: 1,
       reponsesPossibles: [
         {
@@ -521,14 +521,14 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-mfa',
           libelle:
-            "De l'authentification à double facteurs a été mise en place pour les accès distants.",
+            "Certaines connexions à distance sont protégés par une authentification multifacteur",
           resultat: {
-            indice: { valeur: 2 },
+            indice: { valeur: 1 },
             mesures: [
               {
                 identifiant:
                   'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
-                niveau: 2,
+                niveau: 1,
               },
             ],
           },
@@ -538,7 +538,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-vpn',
           libelle:
-            'Les connexions à distance sont réalisées via un VPN, lui même authentifié à double facteur.',
+            'Toutes les connexions à distance sont protégés par une authentification multifacteur',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -548,7 +548,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-administrateurs-si-mesures-specifiques',
       libelle:
-        'Les accès des administrateurs font-ils l’objet de mesures de sécurité spécifiques ?',
+        'Les accès des administrateurs font-ils l’objet de mesures de sécurité renforcées ?',
       poids: 2,
       reponsesPossibles: [
         {
