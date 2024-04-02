@@ -1,13 +1,28 @@
 div
-    | A minima tous les mois, et en s’appuyant sur la liste de l’ensemble des produits numériques utilisés par l’entité,
-    | il est recommandé de mettre en place un suivi des vulnérabilités et des bulletins de menace publiées par le CERT-FR
-    | (
+    | Dans un premier temps, une personne de l’entité doit surveiller quotidiennement la publication, par le CERT-FR, des avis
+    | et alertes de sécurité. Ces informations sont publiées sur le site du CERT-FR :
+    |
     a(href="https://www.cert.ssi.gouv.fr/") https://www.cert.ssi.gouv.fr/
-    | )
-    | ainsi que les services d’alerte des fournisseurs et éditeurs concernées.
-    p
-        | Sur le site du CERT-FR, via l’icône rouge tout à droite, il est aussi possible de s’inscrire au Flux RSS automatisé
-        | de l’ANSSI publiant par mail les vulnérabilités dès qu’elles sont connus.
-    p
-    | Il peut également être envisagé de s’appuyer sur un prestataire labellisé Expert Cyber pour souscrire à un service
-    | de veille automatisé.
+    | et via les flux RSS
+    a(href="https://www.cert.ssi.gouv.fr/alerte/feed/") https://www.cert.ssi.gouv.fr/alerte/feed/
+    | et
+    a(href="https://www.cert.ssi.gouv.fr/avis/feed/") https://www.cert.ssi.gouv.fr/avis/feed/
+    | .
+    |
+    | Sur demande à cert-fr@ssi.gouv.fr, il est aussi possible de recevoir ces informations par messagerie électronique.
+    |
+    | Si un avis de sécurité ou une alerte concernant un produit utilisé dans l’entité est publié(e), il faut alors mettre en
+    | oeuvre les recommandations détaillées dans l’avis. Ces recommandations peuvent notamment concerner la mise en œuvre de mesures
+    | d’atténuation du risque ou de détection de compromission.
+    |
+    | Une liste des systèmes et applications utilisés par l’entité est donc requise. Dans un premier temps, cet inventaire pourra
+    | se limiter aux systèmes et applications les plus importants, et parmi ceux-ci, une priorité doit être mise sur les systèmes et
+    | applications exposés sur Internet. Dans un second temps, l’entité devra disposer d’un inventaire complet de l’ensemble des
+    | systèmes et applications utilisés.
+    |
+    | Pour aller plus loin, l’entité peut, à la place de surveiller les avis du CERT-FR, suivre directement les avis de sécurité publiés
+    | par chacun des éditeurs des systèmes et applications utilisés. Dans ce cas, la surveillance quotidienne des alertes du CERT-FR doit
+    | être maintenue.
+    |
+    | Il peut également être envisagé de s’appuyer sur un prestataire labellisé Expert Cyber, ou référencé par un Campus Cyber régional,
+    | pour souscrire à un service de veille automatisé.
