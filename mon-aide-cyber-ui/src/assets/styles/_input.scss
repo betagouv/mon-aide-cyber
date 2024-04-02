@@ -2,3 +2,33 @@ input {
   background-color: var(--couleurs-mac-violet-pale) !important;
   box-shadow: inset 0 -2px 0 0 var(--couleurs-mac-violet-fonce) !important;
 }
+
+.autocomplete {
+  position: relative;
+  display: inline-block;
+}
+
+.autocomplete datalist {
+  display: block;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid var(--couleurs-mac-violet-fonce);
+  border-bottom: none;
+  border-top: none;
+  z-index: 1000;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items option {
+  padding: 0.4rem;
+  cursor: pointer;
+  background-color: var(--couleurs-mac-blanc);
+  border-bottom: 1px solid var(--couleurs-mac-violet-fonce);
+  color: var(--couleurs-mac-violet-fonce);
+}
+.autocomplete-items datalist:hover {
+  background-color: #e9e9e9;
+}
