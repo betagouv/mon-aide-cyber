@@ -6,6 +6,7 @@ type ErreurSaisieInformations = {
   adresseElectronique?: PresentationErreur;
 };
 
+type Departement = { nom: string; code: string };
 export type EtatSaisieInformations = {
   cguValidees: boolean;
   departement: string;
@@ -13,6 +14,8 @@ export type EtatSaisieInformations = {
   erreur?: ErreurSaisieInformations;
   raisonSociale?: string;
   pretPourEnvoi: boolean;
+  departements: Departement[];
+  departementsFiltres: Departement[];
 };
 
 enum TypeActionSaisieInformations {
@@ -21,6 +24,8 @@ enum TypeActionSaisieInformations {
   RAISON_SOCIALE_SAISIE = 'RAISON_SOCIALE_SAISIE',
   CGU_VALIDEES = 'CGU_VALIDEES',
   DEMANDE_TERMINEE = 'DEMANDE_TERMINEE',
+  DEPARTEMENT_SELECTIONNE = 'DEPARTEMENT_SELECTIONNE',
+  SAISIE_DEPARTEMENT_QUITTEE = 'SAISIE_DEPARTEMENT_QUITTEE',
 }
 
 type ActionSaisieInformations =
@@ -34,6 +39,13 @@ type ActionSaisieInformations =
   | {
       type: TypeActionSaisieInformations.DEPARTEMENT_SAISI;
       departement: string;
+    }
+  | {
+      type: TypeActionSaisieInformations.DEPARTEMENT_SELECTIONNE;
+      departement: string;
+    }
+  | {
+      type: TypeActionSaisieInformations.SAISIE_DEPARTEMENT_QUITTEE;
     }
   | {
       type: TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE;
@@ -87,7 +99,9 @@ export const reducteurSaisieInformations = (
   };
 
   const estDepartementValide = (departement: string) =>
-    departement.trim().length > 0;
+    etat.departements.filter(
+      (d) => d.nom.toLowerCase() === departement.toLowerCase().trim(),
+    ).length > 0;
 
   switch (action.type) {
     case TypeActionSaisieInformations.DEMANDE_TERMINEE: {
@@ -158,10 +172,31 @@ export const reducteurSaisieInformations = (
         videLesErreurs(etatCourant);
       }
 
+      const departementsFiltres = etatCourant.departements.filter(
+        (departement) =>
+          departement.nom
+            .toLowerCase()
+            .includes(action.departement.toLowerCase()) ||
+          departement.code.includes(action.departement),
+      );
       return {
         ...etatCourant,
         departement: action.departement,
+        departementsFiltres,
       };
+    }
+    case TypeActionSaisieInformations.DEPARTEMENT_SELECTIONNE: {
+      const etatCourant = { ...etat };
+      delete etatCourant.erreur?.['departement'];
+      videLesErreurs(etatCourant);
+      return {
+        ...etat,
+        departement: action.departement,
+        departementsFiltres: [],
+      };
+    }
+    case TypeActionSaisieInformations.SAISIE_DEPARTEMENT_QUITTEE: {
+      return { ...etat, departementsFiltres: [] };
     }
     case TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE: {
       return {
@@ -196,9 +231,19 @@ export const cguValidees = (): ActionSaisieInformations => ({
 export const demandeTerminee = (): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.DEMANDE_TERMINEE,
 });
-export const initialiseEtatSaisieInformations = (): EtatSaisieInformations => ({
+export const departementSelectionne = (
+  departement: string,
+): ActionSaisieInformations => ({
+  type: TypeActionSaisieInformations.DEPARTEMENT_SELECTIONNE,
+  departement,
+});
+export const initialiseEtatSaisieInformations = (
+  departements: Departement[],
+): EtatSaisieInformations => ({
   cguValidees: false,
   departement: '',
   email: '',
   pretPourEnvoi: false,
+  departements: departements,
+  departementsFiltres: [],
 });

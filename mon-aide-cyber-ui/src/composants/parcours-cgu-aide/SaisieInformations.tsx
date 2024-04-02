@@ -4,10 +4,12 @@ import {
   cguValidees,
   demandeTerminee,
   departementSaisi,
+  departementSelectionne,
   initialiseEtatSaisieInformations,
   raisonSocialeSaisie,
   reducteurSaisieInformations,
 } from './reducteurSaisieInformations.tsx';
+import { AutoCompletion } from './AutoCompletion.tsx';
 
 export type DonneesSaisieInformations = {
   cguValidees: boolean;
@@ -24,7 +26,11 @@ export const SaisieInformations = (
 ) => {
   const [etatSaisieInformations, envoie] = useReducer(
     reducteurSaisieInformations,
-    initialiseEtatSaisieInformations(),
+    initialiseEtatSaisieInformations([
+      { nom: 'Ain', code: '1' },
+      { nom: 'Finistère', code: '29' },
+      { nom: 'Gironde', code: '33' },
+    ]),
   );
 
   useEffect(() => {
@@ -84,10 +90,6 @@ export const SaisieInformations = (
                     <span className="asterisque">*</span>
                     <span> Votre adresse électronique</span>
                   </label>
-                  {
-                    etatSaisieInformations.erreur?.adresseElectronique
-                      ?.texteExplicatif
-                  }
                   <input
                     className="fr-input"
                     type="text"
@@ -97,22 +99,36 @@ export const SaisieInformations = (
                       surSaisieAdresseElectronique(e.target.value)
                     }
                   />
+                  {
+                    etatSaisieInformations.erreur?.adresseElectronique
+                      ?.texteExplicatif
+                  }
                 </div>
               </div>
               <div className=" fr-col-12">
-                <div className="fr-input-group">
+                <div
+                  className={`fr-input-group ${
+                    etatSaisieInformations.erreur
+                      ? etatSaisieInformations.erreur.departement?.className
+                      : ''
+                  }`}
+                >
                   <label className="fr-label" htmlFor="departement">
                     <span className="asterisque">*</span>
                     <span> Le département où se situe votre entité</span>
                   </label>
-                  {etatSaisieInformations.erreur?.departement?.texteExplicatif}
-                  <input
-                    className="fr-input"
-                    type="text"
-                    id="departement"
-                    name="departement"
-                    onChange={(e) => surSaisieDepartement(e.target.value)}
+                  <AutoCompletion
+                    nom="departement"
+                    surChangement={(valeur) => surSaisieDepartement(valeur)}
+                    valeur={etatSaisieInformations.departement}
+                    valeurs={etatSaisieInformations.departementsFiltres.map(
+                      (departement) => departement.nom,
+                    )}
+                    surClick={(departement) =>
+                      envoie(departementSelectionne(departement))
+                    }
                   />
+                  {etatSaisieInformations.erreur?.departement?.texteExplicatif}
                 </div>
               </div>
               <div className=" fr-col-12">
