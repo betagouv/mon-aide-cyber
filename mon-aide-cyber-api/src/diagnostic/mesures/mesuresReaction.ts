@@ -2,7 +2,7 @@ export const mesuresReaction = {
   'reaction-surveillance-veille-vulnerabilites-potentielles': {
     niveau1: {
       titre:
-        "Suivre régulièrement les alertes de sécurité publiées par le centre gouvernemental de veille, d'alerte et de réponses aux cyberattaques",
+        "S’abonner aux alertes de sécurité publiées par le centre gouvernemental de veille, d'alerte et de réponses aux cyberattaques",
       pourquoi:
         '../../mesures/reaction/reaction-surveillance-veille-vulnerabilites-potentielles-niveau1-pourquoi.pug',
       comment:
@@ -31,7 +31,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          "Disposer d'un jeu de sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique",
+          "Disposer d'une copie de sauvegarde des données critiques “hors ligne”, isolé de l'environnement bureautique",
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-niveau1-pourquoi.pug',
         comment:
@@ -43,7 +43,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          'Procéder régulièrement à des tests de restauration des sauvegardes',
+          'Procéder à des tests de restauration des sauvegardes',
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:
@@ -55,7 +55,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          "Disposer d'un jeu de sauvegarde des données critiques stockées dans un environnement sécurisé, isolé de l'environnement bureautique",
+          "Disposer d'une copie de sauvegarde des données critiques “hors ligne”, isolé de l'environnement bureautique",
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-niveau1-pourquoi.pug',
         comment:
@@ -67,7 +67,7 @@ export const mesuresReaction = {
     {
       niveau1: {
         titre:
-          'Procéder régulièrement à des tests de restauration des sauvegardes',
+          'Procéder à des tests de restauration des sauvegardes',
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:
@@ -78,7 +78,7 @@ export const mesuresReaction = {
   'reaction-dispositif-gestion-crise-adapte-defini': {
     niveau1: {
       titre:
-        'Lister les personnes à contacter en cas d’incident de sécurité informatique',
+        'Lister les personnes à contacter en cas de cyberattaque',
       pourquoi:
         '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau1-pourquoi.pug',
       comment:
@@ -86,7 +86,7 @@ export const mesuresReaction = {
     },
     niveau2: {
       titre:
-        'Définir des premières mesures organisationnelles de gestion de crise cyber',
+        "Définir un dispositif de gestion de crise d'origine cyber",
       pourquoi:
         '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau2-pourquoi.pug',
       comment:

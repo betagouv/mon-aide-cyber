@@ -34,7 +34,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               identifiant:
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees',
               libelle:
-                'Si "Oui" : Est-ce que seuls les flux strictement nécessaires entre Internet (ou autres réseaux externes) et votre système d\'information sont autorisés ?',
+                'Si "Oui" : Est-ce que seuls les flux entrants et sortants strictement nécessaires entre Internet et votre système d\'information (ou autres réseaux externes) sont autorisés ?',
               poids: 2,
               reponsesPossibles: [
                 {
