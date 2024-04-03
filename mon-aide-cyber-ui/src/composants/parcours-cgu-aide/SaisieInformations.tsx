@@ -10,6 +10,8 @@ import {
   reducteurSaisieInformations,
 } from './reducteurSaisieInformations.tsx';
 import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
+import { useModale } from '../../fournisseurs/hooks.ts';
+import { ContenuCGU } from '../../vues/CGU.tsx';
 
 export type DonneesSaisieInformations = {
   cguValidees: boolean;
@@ -21,6 +23,7 @@ export type DonneesSaisieInformations = {
 type ProprietesSaisiesInformations = {
   onClick: (saisieInformations: DonneesSaisieInformations) => void;
 };
+
 export const SaisieInformations = (
   proprietes: ProprietesSaisiesInformations,
 ) => {
@@ -59,6 +62,17 @@ export const SaisieInformations = (
   const surCGUValidees = () => {
     envoie(cguValidees());
   };
+  const { affiche } = useModale();
+  const afficheModaleCGU = useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      affiche({
+        titre: 'Conditions générales d’utilisation de MonAideCyber',
+        corps: <ContenuCGU />,
+      });
+    },
+    [affiche],
+  );
   return (
     <>
       <div className="fr-mb-2w">Votre demande</div>
@@ -167,7 +181,7 @@ export const SaisieInformations = (
                       {' '}
                       J&apos;accepte les{' '}
                       <b>
-                        <a href="/cgu">
+                        <a href="#" onClick={afficheModaleCGU}>
                           conditions générales d&apos;utilisation
                         </a>
                       </b>{' '}
