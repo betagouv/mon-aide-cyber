@@ -63,7 +63,16 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                   identifiant:
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-oui',
                   libelle: 'Oui',
-                  resultat: { indice: { valeur: 3 } },
+                  resultat: {
+                    indice: { valeur: 3 },
+                    mesures: [
+                      {
+                        identifiant:
+                          'securite-infrastructure-pare-feu-deploye-interconnexions-protegees',
+                        niveau: 2,
+                      },
+                    ],
+                  },
                   ordre: 2,
                 },
               ],
