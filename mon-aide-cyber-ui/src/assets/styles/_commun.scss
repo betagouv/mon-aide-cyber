@@ -1,10 +1,21 @@
 @import 'icones';
 
-.section {
-  background-color: var(--couleurs-mac-blanc);
-  border-radius: 1rem;
-  padding: 3.5rem 6.375rem !important;
-  margin: 5.5rem 0;
+@media screen and (max-width: 768px) {
+  .section {
+    background-color: var(--couleurs-mac-blanc);
+    border-radius: 0.5rem;
+    padding: 1.5rem 1rem;
+    margin: 5.5rem 0;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .section {
+    background-color: var(--couleurs-mac-blanc);
+    border-radius: 1rem;
+    padding: 3.5rem 6.375rem !important;
+    margin: 5.5rem 0;
+  }
 }
 
 a {

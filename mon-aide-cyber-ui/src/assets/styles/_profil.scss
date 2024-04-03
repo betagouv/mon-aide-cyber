@@ -1,10 +1,34 @@
-.titre-profil {
-  margin-top: 3rem;
-  margin-bottom: 3.5rem;
+@media screen and (max-width: 768px) {
+  #entete-profil {
+    padding: 2rem 1rem;
+  }
+
+  .titre-profil {
+    font-size: 1.25rem;
+    line-height: 2rem !important;
+  }
+
+  #sous-titre-profil {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  #conteneur-champs-saisi-demande-aide {
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
-.profil fieldset {
-  margin: 0;
-  padding: 0;
-  border: none;
+@media screen and (min-width: 769px) {
+  .titre-profil {
+    margin-top: 3rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .profil fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
 }
