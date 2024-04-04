@@ -3,6 +3,7 @@ import { ConsignateurErreursMemoire } from './ConsignateurErreursMemoire';
 import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 import {
   ErrorRequestHandler,
+  Express,
   Request,
   RequestHandler,
   Response,
@@ -12,6 +13,9 @@ import { NextFunction } from 'express-serve-static-core';
 export class AdaptateurGestionnaireErreursMemoire
   implements AdaptateurGestionnaireErreurs
 {
+  initialise(_applicationExpress: Express): void {
+    console.log('Initialise le gestionnaire d’erreur');
+  }
   private readonly _consignateur = new ConsignateurErreursMemoire();
 
   consignateur(): ConsignateurErreurs {
