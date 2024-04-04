@@ -21,10 +21,10 @@ export const mesuresSecuriteInfrastructure = {
     niveau2: {
       titre:
         'Mettre en œuvre autant que possible un tunnel VPN pour tous les flux entrants',
-      pourquoi:
-        '../../mesures/acces/acces-teletravail-acces-distants-mesures-particulieres-niveau2-pourquoi.pug',
+        pourquoi:
+        '../../mesures/infras/securite-infrastructure-pare-feu-deploye-interconnexions-protegees-niveau2-pourquoi.pug',
       comment:
-        '../../mesures/acces/acces-teletravail-acces-distants-mesures-particulieres-niveau2-comment.pug',
+        '../../mesures/infras/securite-infrastructure-pare-feu-deploye-interconnexions-protegees-niveau2-comment.pug',
     },
     priorisation: 21,
   },
