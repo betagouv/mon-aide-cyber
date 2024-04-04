@@ -39,17 +39,25 @@ export const Modale = forwardRef(function Modale(
     };
   });
 
+  const taille = proprietes.taille
+    ? proprietes.taille === 'centree'
+      ? 'fr-col-6'
+      : 'fr-col-12'
+    : 'fr-col-6';
+
   return (
-    <div className="fr-container fr-container--fluid fr-container-md">
+    <div className="fr-container fr-container--fluid">
       <div className="fr-grid-row fr-grid-row--center">
-        <div ref={ref} className="fr-col-12 fr-col-md-8 fr-col-lg-6">
+        <div ref={ref} className={taille}>
           <div
             ref={referenceDialogue}
             className="fr-modal__body modale-mac fr-m-0 fr-p-0"
           >
             <div className="fr-modal__header">{proprietes.boutonFermer}</div>
             <div className="fr-modal__content">
-              <h3 id="titre-modale">{proprietes.titre}</h3>
+              {proprietes.titre && (
+                <h1 id="titre-modale">{proprietes.titre}</h1>
+              )}
               {proprietes.corps}
             </div>
           </div>
@@ -152,6 +160,7 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
               ref={ref}
               titre={elementModale.titre}
               corps={elementModale.corps}
+              taille={elementModale.taille}
               boutonFermer={
                 <button
                   className="fr-btn fr-btn--close"

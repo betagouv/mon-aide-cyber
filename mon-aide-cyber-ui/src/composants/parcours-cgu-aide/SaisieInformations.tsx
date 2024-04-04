@@ -11,7 +11,7 @@ import {
 } from './reducteurSaisieInformations.tsx';
 import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
 import { useModale } from '../../fournisseurs/hooks.ts';
-import { ContenuCGU } from '../../vues/CGU.tsx';
+import { CorpsCGU } from '../../vues/ComposantCGU.tsx';
 
 export type DonneesSaisieInformations = {
   cguValidees: boolean;
@@ -67,8 +67,8 @@ export const SaisieInformations = (
     (event: React.MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
       affiche({
-        titre: 'Conditions générales d’utilisation de MonAideCyber',
-        corps: <ContenuCGU />,
+        corps: <CorpsCGU />,
+        taille: 'large',
       });
     },
     [affiche],

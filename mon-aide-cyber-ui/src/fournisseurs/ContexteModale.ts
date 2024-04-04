@@ -1,8 +1,11 @@
 import { createContext, ReactElement } from 'react';
 
+export type TailleModale = 'centree' | 'large';
+
 export type ElementModale = {
-  titre: string;
+  titre?: string;
   corps: ReactElement;
+  taille?: TailleModale;
 };
 
 export const ContexteModale = createContext<ActionsModale>({
