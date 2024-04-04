@@ -4,38 +4,36 @@ import {
 } from '../../adaptateurs/AdaptateurEnvoiMail';
 
 export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
-  private message?: Email;
+  private messages: Email[] = [];
   private _genereErreur = false;
 
   envoie(message: Email): Promise<void> {
     if (this._genereErreur) {
       return Promise.reject('Erreur');
     }
-    this.message = message;
+    this.messages.push(message);
     return Promise.resolve();
   }
 
   aEteEnvoye(email: string, message: string, nom?: string): boolean {
-    return (
-      (this.message &&
-        (nom !== undefined ? this.message.corps.includes(nom) : true) &&
-        this.message.corps.includes(email) &&
-        this.message.corps.includes(message)) ||
-      false
+    const messageTrouve = this.messages.find(
+      (m) =>
+        (nom !== undefined ? m.corps.includes(nom) : true) &&
+        m.corps.includes(email) &&
+        m.corps.includes(message),
     );
+    return (nom !== undefined && messageTrouve !== undefined) || false;
   }
 
   aEteEnvoyeA(email: string, message: string): boolean {
-    return (
-      (this.message &&
-        this.message.destinataire.email === email &&
-        this.message.corps === message) ||
-      false
+    const messageTrouve = this.messages.find(
+      (m) => m.destinataire.email === email && m.corps === message,
     );
+    return messageTrouve !== undefined || false;
   }
 
   mailEnvoye() {
-    return !!this.message;
+    return this.messages.length > 0;
   }
 
   genereErreur() {
