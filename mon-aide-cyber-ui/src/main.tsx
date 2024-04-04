@@ -22,7 +22,7 @@ import { FournisseurNavigationMAC } from './fournisseurs/ContexteNavigationMAC.t
 import { ComposantProfil } from './composants/profil/ComposantProfil.tsx';
 import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
-import { ComposantParcoursCGUAide } from './composants/parcours-cgu-aide/ComposantParcoursCGUAide.tsx';
+import { ComposantDemandeAide } from './composants/demande-aide/ComposantDemandeAide.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -38,7 +38,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                   <Route path="/charte-aidant" element={<CharteAidant />} />
                   <Route
                     path="/demande-aide"
-                    element={<ComposantParcoursCGUAide />}
+                    element={<ComposantDemandeAide />}
                   />
                   <Route
                     path="/mentions-legales"

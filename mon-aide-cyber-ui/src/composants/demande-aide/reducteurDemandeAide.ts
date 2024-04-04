@@ -15,7 +15,7 @@ type ActionParcoursCGU =
       type: TypeActionParcoursCGU.SAISIE_INFORMATION_EN_ERREUR;
       erreur: Error;
     };
-export const reducteurParcoursCGUAide = (
+export const reducteurDemandeAide = (
   etat: EtatParcoursCGU,
   action: ActionParcoursCGU,
 ): EtatParcoursCGU => {

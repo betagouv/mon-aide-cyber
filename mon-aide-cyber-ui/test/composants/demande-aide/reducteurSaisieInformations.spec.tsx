@@ -8,7 +8,7 @@ import {
   initialiseEtatSaisieInformations,
   raisonSocialeSaisie,
   reducteurSaisieInformations,
-} from '../../../src/composants/parcours-cgu-aide/reducteurSaisieInformations.tsx';
+} from '../../../src/composants/demande-aide/reducteurSaisieInformations.tsx';
 import { TexteExplicatif } from '../../../src/composants/alertes/Erreurs.tsx';
 
 describe('Parcours CGU Aidé', () => {

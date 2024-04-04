@@ -1,34 +1,38 @@
 import { Footer } from '../Footer';
 import { Header } from '../Header';
-import {
-  DonneesSaisieInformations,
-  SaisieInformations,
-} from './SaisieInformations.tsx';
+import { SaisieInformations } from './SaisieInformations.tsx';
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import {
   confirmation,
-  reducteurParcoursCGUAide,
+  reducteurDemandeAide,
   saisieInformationsEnErreur,
-} from './reducteurParcoursCGUAide.ts';
+} from './reducteurDemandeAide.ts';
 import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
-import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
+import { Lien } from '../../domaine/Lien.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Confirmation } from './Confirmation.tsx';
+import {
+  CorpsDemandeAide,
+  Departement,
+  ReponseDemandeAide,
+} from '../../domaine/demande-aide/Aide.ts';
 
-export const ComposantParcoursCGUAide = () => {
-  const [etat, envoie] = useReducer(reducteurParcoursCGUAide, {
+export const ComposantDemandeAide = () => {
+  const [etat, envoie] = useReducer(reducteurDemandeAide, {
     etapeCourante: 'saisieInformations',
   });
   const [demandeAideEnCoursDeChargement, setDemandeAideEnCoursDeChargement] =
     useState(true);
-  const [lienDemandeAide, setLienDemandeAide] = useState<Lien | undefined>();
+  const [demandeAide, setDemandeAide] = useState<
+    { lien: Lien; departements: Departement[] } | undefined
+  >();
   const macAPI = useMACAPI();
   const navigationMAC = useNavigationMAC();
 
   useEffect(() => {
     if (demandeAideEnCoursDeChargement) {
       macAPI
-        .appelle<ReponseHATEOAS>(
+        .appelle<ReponseDemandeAide>(
           {
             url: '/api/aide/cgu',
             methode: 'GET',
@@ -36,9 +40,8 @@ export const ComposantParcoursCGUAide = () => {
           (corps) => corps,
         )
         .then((reponse) => {
-          new MoteurDeLiens(reponse.liens).trouve(
-            'demander-validation-cgu-aide',
-            (lien) => setLienDemandeAide(lien),
+          new MoteurDeLiens(reponse.liens).trouve('demander-aide', (lien) =>
+            setDemandeAide({ lien, departements: reponse.departements }),
           );
           setDemandeAideEnCoursDeChargement(false);
         })
@@ -49,12 +52,12 @@ export const ComposantParcoursCGUAide = () => {
   }, [demandeAideEnCoursDeChargement, macAPI]);
 
   const terminer = useCallback(
-    (saisieInformations: DonneesSaisieInformations) => {
+    (saisieInformations: CorpsDemandeAide) => {
       macAPI
-        .appelle<void, DonneesSaisieInformations>(
+        .appelle<void, CorpsDemandeAide>(
           {
-            url: lienDemandeAide!.url,
-            methode: lienDemandeAide!.methode!,
+            url: demandeAide!.lien.url,
+            methode: demandeAide!.lien.methode!,
             corps: {
               cguValidees: saisieInformations.cguValidees,
               departement: saisieInformations.departement,
@@ -73,7 +76,7 @@ export const ComposantParcoursCGUAide = () => {
           envoie(saisieInformationsEnErreur(erreur));
         });
     },
-    [lienDemandeAide, macAPI],
+    [demandeAide, macAPI],
   );
 
   const retourAccueil = useCallback(() => {
@@ -101,6 +104,7 @@ export const ComposantParcoursCGUAide = () => {
               <div className="fr-col-md-8 fr-col-sm-12 section">
                 {etat.etapeCourante === 'saisieInformations' && (
                   <SaisieInformations
+                    departements={demandeAide?.departements || []}
                     onClick={(saisieInformations) =>
                       terminer(saisieInformations)
                     }
