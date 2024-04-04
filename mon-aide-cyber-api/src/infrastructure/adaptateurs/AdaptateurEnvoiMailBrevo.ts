@@ -25,6 +25,7 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
         'api-key': process.env.BREVO_CLEF_API || '',
       },
     }).then(async (reponse) => {
+      console.error('RÉPONSE', await reponse.json(), reponse.status);
       if (!reponse.ok) {
         throw new ErreurEnvoiEmail(
           "Une erreur est survenue lors de l'envoi du message.",
