@@ -14,7 +14,7 @@ import { PortailModale } from './composants/modale/PortailModale.tsx';
 import { CharteAidant } from './vues/CharteAidant.tsx';
 import { TableauDeBord } from './composants/TableauDeBord.tsx';
 import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution.tsx';
-import { CGU } from './vues/CGU.tsx';
+import { ComposantCGU } from './vues/ComposantCGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
 import { ComposantCreationEspaceAidant } from './composants/espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { FournisseurMacAPI } from './fournisseurs/api/ContexteMacAPI.tsx';
@@ -34,7 +34,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
               <PortailModale>
                 <Routes>
                   <Route path="/" element={<Accueil />} />
-                  <Route path="/cgu" element={<CGU />} />
+                  <Route path="/cgu" element={<ComposantCGU />} />
                   <Route path="/charte-aidant" element={<CharteAidant />} />
                   <Route
                     path="/demande-aide"

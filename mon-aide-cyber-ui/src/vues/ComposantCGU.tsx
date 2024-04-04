@@ -1,7 +1,7 @@
 import { Header } from '../composants/Header.tsx';
 import { Footer } from '../composants/Footer.tsx';
 
-export const ContenuCGU = () => {
+export const CorpsCGU = () => {
   const telechargementCGU = (
     <a
       className="fr-link fr-link--download lien-mac"
@@ -15,6 +15,8 @@ export const ContenuCGU = () => {
 
   return (
     <div id="haut">
+      <h1>Conditions générales d’utilisation de MonAideCyber</h1>
+      En vigueur à compter du 01/01/2024
       <hr />
       {telechargementCGU}
       <p>
@@ -724,7 +726,7 @@ export const ContenuCGU = () => {
   );
 };
 
-export const CGU = () => {
+export const ComposantCGU = () => {
   return (
     <>
       <Header />
@@ -732,9 +734,7 @@ export const CGU = () => {
         <div className="fr-container">
           <div className="fr-grid-row fr-grid-row--center">
             <div className="fr-col-8">
-              <h1>Conditions générales d’utilisation de MonAideCyber</h1>
-              En vigueur à compter du 01/01/2024
-              <ContenuCGU />
+              <CorpsCGU />
             </div>
           </div>
         </div>

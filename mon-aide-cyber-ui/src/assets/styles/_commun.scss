@@ -60,3 +60,49 @@ a {
 .invisible {
   display: none !important;
 }
+
+@mixin mac-h1 {
+  font-size: 3.5rem;
+  line-height: 4.125rem;
+}
+
+@mixin mac-h2 {
+  color: var(--couleurs-mac-violet-fonce);
+  font-size: 3rem;
+  line-height: 3.125rem;
+}
+
+@mixin mac-h3 {
+  font-size: 2.5rem;
+  line-height: 3.125rem;
+}
+
+@mixin mac-h4 {
+  font-size: 2rem;
+  line-height: 2.625rem;
+}
+
+@mixin mac-h5 {
+  font-size: 1.375rem;
+  line-height: 2rem;
+}
+
+h1 {
+  @include mac-h1;
+}
+
+h2 {
+  @include mac-h2;
+}
+
+h3 {
+  @include mac-h3;
+}
+
+h4 {
+  @include mac-h4;
+}
+
+h5 {
+  @include mac-h5;
+}
