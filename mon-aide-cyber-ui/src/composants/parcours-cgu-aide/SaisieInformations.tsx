@@ -3,13 +3,13 @@ import {
   adresseElectroniqueSaisie,
   cguValidees,
   demandeTerminee,
+  Departement,
   departementSaisi,
-  departementSelectionne,
   initialiseEtatSaisieInformations,
   raisonSocialeSaisie,
   reducteurSaisieInformations,
 } from './reducteurSaisieInformations.tsx';
-import { AutoCompletion } from './AutoCompletion.tsx';
+import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
 
 export type DonneesSaisieInformations = {
   cguValidees: boolean;
@@ -117,15 +117,13 @@ export const SaisieInformations = (
                     <span className="asterisque">*</span>
                     <span> Le département où se situe votre entité</span>
                   </label>
-                  <AutoCompletion
+                  <AutoCompletion<Departement>
                     nom="departement"
-                    surChangement={(valeur) => surSaisieDepartement(valeur)}
-                    valeur={etatSaisieInformations.departement}
-                    valeurs={etatSaisieInformations.departementsFiltres.map(
-                      (departement) => departement.nom,
-                    )}
-                    surClick={(departement) =>
-                      envoie(departementSelectionne(departement))
+                    valeur={etatSaisieInformations.valeurSaisieDepartement}
+                    valeurs={etatSaisieInformations.departements}
+                    mappeur={(departement) => departement.nom}
+                    surValidation={(departement) =>
+                      surSaisieDepartement(departement)
                     }
                   />
                   {etatSaisieInformations.erreur?.departement?.texteExplicatif}
