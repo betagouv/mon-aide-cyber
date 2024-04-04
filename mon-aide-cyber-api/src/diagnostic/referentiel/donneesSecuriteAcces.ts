@@ -104,7 +104,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-droits-acces-utilisateurs-limites',
       libelle:
-        'Si entité avec risque d’espionnage ciblé, les droits des utilisateurs sont-ils limités à leurs besoins métiers ?',
+        'Si entité avec risque d’espionnage ciblé : les droits des utilisateurs sont-ils limités à leurs besoins métiers ?',
       poids: 1,
       reponsesPossibles: [
         {
