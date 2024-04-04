@@ -99,7 +99,7 @@ class ConstructeurActionsHATEOAS {
     return this.lancerDiagnostic().modifierMotDePasse().seDeconnecter();
   }
 
-  demanderValidationCGUAide() {
+  demanderAide() {
     this.actions.set('demander-validation-cgu-aide', {
       url: '/api/aide/cgu',
       methode: 'POST',

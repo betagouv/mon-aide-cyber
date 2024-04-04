@@ -8,6 +8,7 @@ import {
   validationResult,
 } from 'express-validator';
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
+import { listeDepartements } from '../../../test/infrastructure/departements/listeDepartements';
 
 type CorpsRequeteValidationCGUAide = {
   cguValidees: boolean;
@@ -19,11 +20,10 @@ export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
   routes.get('/', async (_requete: Request, reponse: Response) => {
-    return reponse
-      .status(200)
-      .json(
-        constructeurActionsHATEOAS().demanderValidationCGUAide().construis(),
-      );
+    return reponse.status(200).json({
+      ...constructeurActionsHATEOAS().demanderAide().construis(),
+      departements: listeDepartements,
+    });
   });
 
   routes.post(
@@ -74,7 +74,7 @@ export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
       reponse.status(422);
       return reponse.json({
         message: erreursValidation,
-        ...constructeurActionsHATEOAS().demanderValidationCGUAide().construis(),
+        ...constructeurActionsHATEOAS().demanderAide().construis(),
       });
     },
   );
