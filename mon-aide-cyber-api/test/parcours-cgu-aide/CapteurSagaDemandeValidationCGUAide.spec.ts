@@ -14,6 +14,7 @@ import {
 } from '../../src/aide/CapteurCommandeCreerAide';
 import { CapteurCommande } from '../../src/domaine/commande';
 import { EntrepotEvenementJournalMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import { adaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   describe("si l'Aidé est connu de MAC", () => {
@@ -114,6 +115,51 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             '- Raison sociale: BetaGouv\n' +
             '\n' +
             'Toute l’équipe MonAideCyber reste à votre disposition : monaidecyber@ssi.gouv.fr\n',
+        ),
+      ).toBe(true);
+    });
+
+    it('envoie un email de demande d’aide à MAC', async () => {
+      adaptateurEnvironnement.messagerie = () => ({
+        emailMAC: () => 'mac@email.com',
+      });
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2024-03-19T14:45:17+01:00')),
+      );
+      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
+      const entrepotsMemoire = new EntrepotsMemoire();
+      const busEvenement = new BusEvenementDeTest();
+      const busCommande = new BusCommandeMAC(
+        entrepotsMemoire,
+        busEvenement,
+        adaptateurEnvoieMail,
+      );
+      const capteur = new CapteurSagaDemandeValidationCGUAide(
+        entrepotsMemoire,
+        busCommande,
+        busEvenement,
+        adaptateurEnvoieMail,
+      );
+
+      await capteur.execute({
+        type: 'SagaDemandeValidationCGUAide',
+        cguValidees: true,
+        email: 'jean-dupont@email.com',
+        departement: 'Gironde',
+        raisonSociale: 'BetaGouv',
+      });
+
+      expect(
+        adaptateurEnvoieMail.aEteEnvoyeA(
+          'mac@email.com',
+          'Bonjour,\n' +
+            '\n' +
+            'Une demande d’aide a été faite par jean-dupont@email.com.\n' +
+            '\n' +
+            'Ci-dessous, les informations concernant cette demande :\n' +
+            '- Date de la demande : 19.03.2024 à 14:45\n' +
+            '- Département: Gironde\n' +
+            '- Raison sociale: BetaGouv\n',
         ),
       ).toBe(true);
     });
