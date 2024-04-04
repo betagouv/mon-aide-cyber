@@ -6,7 +6,7 @@ type ErreurSaisieInformations = {
   adresseElectronique?: PresentationErreur;
 };
 
-type Departement = { nom: string; code: string };
+export type Departement = { nom: string; code: string };
 export type EtatSaisieInformations = {
   cguValidees: boolean;
   departement: string;
@@ -15,7 +15,7 @@ export type EtatSaisieInformations = {
   raisonSociale?: string;
   pretPourEnvoi: boolean;
   departements: Departement[];
-  departementsFiltres: Departement[];
+  valeurSaisieDepartement: string;
 };
 
 enum TypeActionSaisieInformations {
@@ -24,8 +24,6 @@ enum TypeActionSaisieInformations {
   RAISON_SOCIALE_SAISIE = 'RAISON_SOCIALE_SAISIE',
   CGU_VALIDEES = 'CGU_VALIDEES',
   DEMANDE_TERMINEE = 'DEMANDE_TERMINEE',
-  DEPARTEMENT_SELECTIONNE = 'DEPARTEMENT_SELECTIONNE',
-  SAISIE_DEPARTEMENT_QUITTEE = 'SAISIE_DEPARTEMENT_QUITTEE',
 }
 
 type ActionSaisieInformations =
@@ -39,13 +37,6 @@ type ActionSaisieInformations =
   | {
       type: TypeActionSaisieInformations.DEPARTEMENT_SAISI;
       departement: string;
-    }
-  | {
-      type: TypeActionSaisieInformations.DEPARTEMENT_SELECTIONNE;
-      departement: string;
-    }
-  | {
-      type: TypeActionSaisieInformations.SAISIE_DEPARTEMENT_QUITTEE;
     }
   | {
       type: TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE;
@@ -100,14 +91,18 @@ export const reducteurSaisieInformations = (
 
   const estDepartementValide = (departement: string) =>
     etat.departements.filter(
-      (d) => d.nom.toLowerCase() === departement.toLowerCase().trim(),
+      (d) =>
+        d.nom.toLowerCase() === departement.toLowerCase().trim() ||
+        d.code === departement.trim(),
     ).length > 0;
 
   switch (action.type) {
     case TypeActionSaisieInformations.DEMANDE_TERMINEE: {
       const emailValide = estUnEmail(etat.email);
       const etatCourant = { ...etat };
-      const departementValide = estDepartementValide(etat.departement);
+      const departementValide = estDepartementValide(
+        etat.valeurSaisieDepartement,
+      );
       const cguValidees = etat.cguValidees;
       const pretPourEnvoi = emailValide && departementValide && cguValidees;
 
@@ -118,6 +113,14 @@ export const reducteurSaisieInformations = (
       return {
         ...etatCourant,
         pretPourEnvoi,
+        departement: departementValide
+          ? etat.departements.find(
+              (departement) =>
+                departement.nom.toLowerCase() ===
+                  etat.valeurSaisieDepartement.toLowerCase().trim() ||
+                departement.code === etat.valeurSaisieDepartement.trim(),
+            )!.nom
+          : '',
         ...(!pretPourEnvoi && {
           erreur: {
             ...etatCourant.erreur,
@@ -172,31 +175,17 @@ export const reducteurSaisieInformations = (
         videLesErreurs(etatCourant);
       }
 
-      const departementsFiltres = etatCourant.departements.filter(
-        (departement) =>
-          departement.nom
-            .toLowerCase()
-            .includes(action.departement.toLowerCase()) ||
-          departement.code.includes(action.departement),
-      );
+      const departement =
+        etatCourant.departements.find(
+          (departement) =>
+            departement.nom.toLowerCase() ===
+            action.departement.toLowerCase().trim(),
+        )?.nom || action.departement;
       return {
         ...etatCourant,
-        departement: action.departement,
-        departementsFiltres,
+        departement,
+        valeurSaisieDepartement: departement,
       };
-    }
-    case TypeActionSaisieInformations.DEPARTEMENT_SELECTIONNE: {
-      const etatCourant = { ...etat };
-      delete etatCourant.erreur?.['departement'];
-      videLesErreurs(etatCourant);
-      return {
-        ...etat,
-        departement: action.departement,
-        departementsFiltres: [],
-      };
-    }
-    case TypeActionSaisieInformations.SAISIE_DEPARTEMENT_QUITTEE: {
-      return { ...etat, departementsFiltres: [] };
     }
     case TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE: {
       return {
@@ -231,12 +220,6 @@ export const cguValidees = (): ActionSaisieInformations => ({
 export const demandeTerminee = (): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.DEMANDE_TERMINEE,
 });
-export const departementSelectionne = (
-  departement: string,
-): ActionSaisieInformations => ({
-  type: TypeActionSaisieInformations.DEPARTEMENT_SELECTIONNE,
-  departement,
-});
 export const initialiseEtatSaisieInformations = (
   departements: Departement[],
 ): EtatSaisieInformations => ({
@@ -245,5 +228,5 @@ export const initialiseEtatSaisieInformations = (
   email: '',
   pretPourEnvoi: false,
   departements: departements,
-  departementsFiltres: [],
+  valeurSaisieDepartement: '',
 });
