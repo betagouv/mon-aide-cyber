@@ -6,6 +6,7 @@ import { CommandeCreerAide } from '../aide/CapteurCommandeCreerAide';
 import { AdaptateurEnvoiMail } from '../adaptateurs/AdaptateurEnvoiMail';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { Aide } from '../aide/Aide';
+import { adaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement';
 
 export type SagaDemandeValidationCGUAide = Saga & {
   cguValidees: boolean;
@@ -25,6 +26,30 @@ export class CapteurSagaDemandeValidationCGUAide
   ) {}
 
   async execute(saga: SagaDemandeValidationCGUAide): Promise<void> {
+    const envoieConfirmationDemandeAide = async (
+      adaptateurEnvoiMail: AdaptateurEnvoiMail,
+      aide: Aide,
+    ) => {
+      await adaptateurEnvoiMail.envoie({
+        objet: "Demande d'aide pour MonAideCyber",
+        destinataire: { email: aide.email },
+        corps: construisMailCGUAide(aide),
+      });
+    };
+
+    const envoieNotificationDemandeAide = async (
+      adaptateurEnvoiMail: AdaptateurEnvoiMail,
+      aide: Aide,
+    ) => {
+      await adaptateurEnvoiMail.envoie({
+        objet: "Demande d'aide pour MonAideCyber",
+        destinataire: {
+          email: adaptateurEnvironnement.messagerie().emailMAC(),
+        },
+        corps: construisMailDemandeAide(aide),
+      });
+    };
+
     try {
       const commandeRechercheAideParEmail: CommandeRechercheAideParEmail = {
         type: 'CommandeRechercheAideParEmail',
@@ -47,11 +72,8 @@ export class CapteurSagaDemandeValidationCGUAide
       await this.busCommande
         .publie<CommandeCreerAide, Aide>(commandeCreerAide)
         .then(async (aide: Aide) => {
-          await this.adaptateurEnvoiMail.envoie({
-            objet: "Demande d'aide pour MonAideCyber",
-            destinataire: { email: aide.email },
-            corps: construisMailCGUAide(aide),
-          });
+          await envoieConfirmationDemandeAide(this.adaptateurEnvoiMail, aide);
+          await envoieNotificationDemandeAide(this.adaptateurEnvoiMail, aide);
 
           await this.busEvenement.publie({
             identifiant: aide.identifiant,
@@ -69,6 +91,25 @@ export class CapteurSagaDemandeValidationCGUAide
     }
   }
 }
+
+const construisMailDemandeAide = (aide: Aide) => {
+  const formateDate = FournisseurHorloge.formateDate(
+    FournisseurHorloge.maintenant(),
+  );
+  const raisonSociale = aide.raisonSociale
+    ? `- Raison sociale: ${aide.raisonSociale}\n`
+    : '';
+  return (
+    'Bonjour,\n' +
+    '\n' +
+    `Une demande d’aide a été faite par ${aide.email}.\n` +
+    '\n' +
+    'Ci-dessous, les informations concernant cette demande :\n' +
+    `- Date de la demande : ${formateDate.date} à ${formateDate.heure}\n` +
+    `- Département: ${aide.departement}\n` +
+    raisonSociale
+  );
+};
 
 const construisMailCGUAide = (aide: Aide) => {
   const formateDate = FournisseurHorloge.formateDate(

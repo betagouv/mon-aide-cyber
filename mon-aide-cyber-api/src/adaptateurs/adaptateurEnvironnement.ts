@@ -3,4 +3,12 @@ const sentry = () => ({
   environnement: () => process.env.SENTRY_ENVIRONNEMENT,
 });
 
-export { sentry };
+const messagerie = () => ({
+  emailMAC: () => process.env.EMAIL_CONTACT_MAC_DESTINATAIRE || '',
+});
+
+const adaptateurEnvironnement = {
+  messagerie,
+};
+
+export { sentry, adaptateurEnvironnement };

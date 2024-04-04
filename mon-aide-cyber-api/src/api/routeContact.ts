@@ -8,6 +8,7 @@ import {
 } from 'express-validator';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../domaine/erreurMAC';
+import { adaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement';
 
 export const routeContact = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -31,7 +32,7 @@ export const routeContact = (configuration: ConfigurationServeur) => {
           `${requete.body.message}`,
         destinataire: {
           nom: 'MonAideCyber',
-          email: process.env.EMAIL_CONTACT_MAC_DESTINATAIRE || '',
+          email: adaptateurEnvironnement.messagerie().emailMAC(),
         },
       });
 
