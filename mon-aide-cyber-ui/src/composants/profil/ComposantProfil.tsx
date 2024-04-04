@@ -66,7 +66,7 @@ export const ComposantProfil = () => {
         <div className="mode-fonce">
           <div className="fr-container">
             <div className="fr-grid-row">
-              <h2 className="titre-profil">Mon profil</h2>
+              <h2>Mon profil</h2>
             </div>
           </div>
         </div>

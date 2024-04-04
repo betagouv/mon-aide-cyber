@@ -105,16 +105,17 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           'jean-dupont@email.com',
           'Bonjour,\n' +
             '\n' +
-            'Votre demande a bien été validée !\n' +
+            'Votre demande pour bénéficier de MonAideCyber a été prise en compte.\n' +
+            'Un Aidant de proximité vous contactera sur l’adresse email que vous nous avez communiquée dans les meilleurs délais.\n' +
             '\n' +
-            'Votre demande pour bénéficier d’un accompagnement MonAideCyber a été validée par nos équipes. Vous allez être mis en relation avec un Aidant de proximité, qui vous contactera directement sur l’adresse email que vous nous avez communiquée.\n' +
+            'Voici les informations que vous avez renseignées :\n' +
+            `- Signature des CGU le 19.03.2024 à 14:45\n` +
+            `- Département : Gironde\n` +
+            '- Raison sociale : BetaGouv\n' +
             '\n' +
-            'Ci-dessous vous retrouverez les informations que vous avez saisies lors de votre demande :\n' +
-            '- Signature des CGU : 19.03.2024 à 14:45\n' +
-            '- Département: Gironde\n' +
-            '- Raison sociale: BetaGouv\n' +
-            '\n' +
-            'Toute l’équipe MonAideCyber reste à votre disposition : monaidecyber@ssi.gouv.fr\n',
+            'Toute l’équipe reste à votre disposition\n\n' +
+            "L'équipe MonAideCyber\n" +
+            'monaidecyber@ssi.gouv.fr\n',
         ),
       ).toBe(true);
     });
@@ -195,15 +196,16 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           'jean-dupont@email.com',
           'Bonjour,\n' +
             '\n' +
-            'Votre demande a bien été validée !\n' +
+            'Votre demande pour bénéficier de MonAideCyber a été prise en compte.\n' +
+            'Un Aidant de proximité vous contactera sur l’adresse email que vous nous avez communiquée dans les meilleurs délais.\n' +
             '\n' +
-            'Votre demande pour bénéficier d’un accompagnement MonAideCyber a été validée par nos équipes. Vous allez être mis en relation avec un Aidant de proximité, qui vous contactera directement sur l’adresse email que vous nous avez communiquée.\n' +
+            'Voici les informations que vous avez renseignées :\n' +
+            `- Signature des CGU le 19.03.2024 à 14:45\n` +
+            `- Département : Gironde\n` +
             '\n' +
-            'Ci-dessous vous retrouverez les informations que vous avez saisies lors de votre demande :\n' +
-            '- Signature des CGU : 19.03.2024 à 14:45\n' +
-            '- Département: Gironde\n' +
-            '\n' +
-            'Toute l’équipe MonAideCyber reste à votre disposition : monaidecyber@ssi.gouv.fr\n',
+            'Toute l’équipe reste à votre disposition\n\n' +
+            "L'équipe MonAideCyber\n" +
+            'monaidecyber@ssi.gouv.fr\n',
         ),
       ).toBe(true);
     });

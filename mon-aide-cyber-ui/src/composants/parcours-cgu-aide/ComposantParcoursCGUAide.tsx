@@ -83,14 +83,12 @@ export const ComposantParcoursCGUAide = () => {
   return (
     <>
       <Header />
-      <main role="main" className="profil">
+      <main role="main" className="demande-aide">
         <div className="mode-fonce">
-          <div id="entete-profil" className="fr-container entete-profil">
-            <div className="fr-grid-row">
-              <h2 className="titre-profil">
-                Vous souhaitez bénéficier de MonAideCyber
-              </h2>
-              <p id="sous-titre-profil">
+          <div className="fr-container">
+            <div className="fr-grid-row contenu">
+              <h2>Vous souhaitez bénéficier de MonAideCyber</h2>
+              <p>
                 Afin de vous diriger au mieux, merci de répondre à quelques
                 questions.
               </p>

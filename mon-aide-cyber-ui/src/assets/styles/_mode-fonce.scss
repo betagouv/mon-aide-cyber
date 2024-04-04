@@ -7,6 +7,11 @@
     color: var(--couleurs-mac-blanc);
   }
 
+  p {
+    font-size: 1.375rem;
+    margin: unset;
+  }
+
   h1,
   h2,
   h3 {
@@ -74,5 +79,28 @@
         var(--background-flat-error),
         var(--background-flat-error)
       );
+  }
+
+  @media screen and (max-width: 768px) {
+    .contenu {
+      padding: 2rem 1rem;
+    }
+
+    .contenu h2 {
+      font-size: 1.25rem;
+      line-height: 2rem !important;
+    }
+
+    .contenu p {
+      font-size: 1rem !important;
+      margin: 0;
+    }
+  }
+
+  @media screen and (min-width: 769px) {
+    .contenu {
+      padding-top: 3rem;
+      padding-bottom: 3.5rem;
+    }
   }
 }
