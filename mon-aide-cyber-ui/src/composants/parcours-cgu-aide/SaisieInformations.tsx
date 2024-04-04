@@ -89,10 +89,7 @@ export const SaisieInformations = (
           <span> Champ obligatoire</span>
         </div>
         <form>
-          <fieldset
-            id="conteneur-champs-saisi-demande-aide"
-            className="fr-mb-5w"
-          >
+          <fieldset className="fr-mb-5w">
             <div className="fr-grid-row fr-grid-row--gutters">
               <div className=" fr-col-12">
                 <div

@@ -1,0 +1,15 @@
+@media screen and (max-width: 768px) {
+  .demande-aide fieldset {
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .demande-aide fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+}
