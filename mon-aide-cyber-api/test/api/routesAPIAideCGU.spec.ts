@@ -4,6 +4,7 @@ import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { listeDepartements } from '../infrastructure/departements/listeDepartements';
 
 describe('Le serveur MAC, sur les routes CGU Aidé', () => {
   const testeurMAC = testeurIntegration();
@@ -193,14 +194,25 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
         );
 
         expect(reponse.statusCode).toBe(200);
-        expect(await reponse.json()).toStrictEqual({
-          liens: {
-            'demander-validation-cgu-aide': {
-              url: '/api/aide/cgu',
-              methode: 'POST',
-            },
+        expect((await reponse.json()).liens).toStrictEqual({
+          'demander-validation-cgu-aide': {
+            url: '/api/aide/cgu',
+            methode: 'POST',
           },
         });
+      });
+
+      it('Retourne la liste des départements', async () => {
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/api/aide/cgu',
+          donneesServeur.portEcoute,
+        );
+
+        expect((await reponse.json()).departements).toStrictEqual([
+          ...listeDepartements,
+        ]);
       });
     });
   });
