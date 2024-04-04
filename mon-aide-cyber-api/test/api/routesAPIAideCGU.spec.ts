@@ -70,7 +70,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
           expect(await reponse.json()).toStrictEqual({
             message: 'Veuillez signer les CGU',
             liens: {
-              'demander-validation-cgu-aide': {
+              'demander-aide': {
                 url: '/api/aide/cgu',
                 methode: 'POST',
               },
@@ -96,7 +96,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
           expect(await reponse.json()).toStrictEqual({
             message: 'Veuillez renseigner votre Email',
             liens: {
-              'demander-validation-cgu-aide': {
+              'demander-aide': {
                 url: '/api/aide/cgu',
                 methode: 'POST',
               },
@@ -123,7 +123,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
             message:
               "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide",
             liens: {
-              'demander-validation-cgu-aide': {
+              'demander-aide': {
                 url: '/api/aide/cgu',
                 methode: 'POST',
               },
@@ -174,7 +174,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
             message:
               "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide",
             liens: {
-              'demander-validation-cgu-aide': {
+              'demander-aide': {
                 url: '/api/aide/cgu',
                 methode: 'POST',
               },
@@ -185,7 +185,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
     });
 
     describe('Quand une requête GET est reçue', () => {
-      it("Retourne le lien 'demander-validation-cgu-aide'", async () => {
+      it("Retourne le lien 'demander-aide'", async () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
@@ -195,7 +195,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
 
         expect(reponse.statusCode).toBe(200);
         expect((await reponse.json()).liens).toStrictEqual({
-          'demander-validation-cgu-aide': {
+          'demander-aide': {
             url: '/api/aide/cgu',
             methode: 'POST',
           },

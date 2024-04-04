@@ -100,7 +100,7 @@ class ConstructeurActionsHATEOAS {
   }
 
   demanderAide() {
-    this.actions.set('demander-validation-cgu-aide', {
+    this.actions.set('demander-aide', {
       url: '/api/aide/cgu',
       methode: 'POST',
     });

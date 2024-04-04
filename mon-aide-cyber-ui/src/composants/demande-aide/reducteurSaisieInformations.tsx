@@ -1,4 +1,5 @@
 import { construisErreur, PresentationErreur } from '../alertes/Erreurs.tsx';
+import { Departement } from '../../domaine/demande-aide/Aide.ts';
 
 type ErreurSaisieInformations = {
   cguValidees?: PresentationErreur;
@@ -6,7 +7,6 @@ type ErreurSaisieInformations = {
   adresseElectronique?: PresentationErreur;
 };
 
-export type Departement = { nom: string; code: string };
 export type EtatSaisieInformations = {
   cguValidees: boolean;
   departement: string;
@@ -24,9 +24,14 @@ enum TypeActionSaisieInformations {
   RAISON_SOCIALE_SAISIE = 'RAISON_SOCIALE_SAISIE',
   CGU_VALIDEES = 'CGU_VALIDEES',
   DEMANDE_TERMINEE = 'DEMANDE_TERMINEE',
+  DEPARTEMENTS_CHARGES = 'DEPARTEMENTS_CHARGES',
 }
 
 type ActionSaisieInformations =
+  | {
+      type: TypeActionSaisieInformations.DEPARTEMENTS_CHARGES;
+      departements: Departement[];
+    }
   | {
       type: TypeActionSaisieInformations.ADRESSE_ELECTRONIQUE_SAISIE;
       adresseElectronique: string;
@@ -97,6 +102,12 @@ export const reducteurSaisieInformations = (
     ).length > 0;
 
   switch (action.type) {
+    case TypeActionSaisieInformations.DEPARTEMENTS_CHARGES: {
+      return {
+        ...etat,
+        departements: action.departements,
+      };
+    }
     case TypeActionSaisieInformations.DEMANDE_TERMINEE: {
       const emailValide = estUnEmail(etat.email);
       const etatCourant = { ...etat };
@@ -196,6 +207,12 @@ export const reducteurSaisieInformations = (
   }
 };
 
+export const departementsCharges = (
+  departements: Departement[],
+): ActionSaisieInformations => ({
+  type: TypeActionSaisieInformations.DEPARTEMENTS_CHARGES,
+  departements,
+});
 export const adresseElectroniqueSaisie = (
   adresseElectronique: string,
 ): ActionSaisieInformations => ({

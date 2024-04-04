@@ -3,25 +3,23 @@ import {
   adresseElectroniqueSaisie,
   cguValidees,
   demandeTerminee,
-  Departement,
   departementSaisi,
+  departementsCharges,
   initialiseEtatSaisieInformations,
   raisonSocialeSaisie,
   reducteurSaisieInformations,
 } from './reducteurSaisieInformations.tsx';
 import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
+import {
+  CorpsDemandeAide,
+  Departement,
+} from '../../domaine/demande-aide/Aide.ts';
 import { useModale } from '../../fournisseurs/hooks.ts';
 import { CorpsCGU } from '../../vues/ComposantCGU.tsx';
 
-export type DonneesSaisieInformations = {
-  cguValidees: boolean;
-  email: string;
-  departement: string;
-  raisonSociale?: string;
-};
-
 type ProprietesSaisiesInformations = {
-  onClick: (saisieInformations: DonneesSaisieInformations) => void;
+  departements: Departement[];
+  onClick: (saisieInformations: CorpsDemandeAide) => void;
 };
 
 export const SaisieInformations = (
@@ -29,11 +27,7 @@ export const SaisieInformations = (
 ) => {
   const [etatSaisieInformations, envoie] = useReducer(
     reducteurSaisieInformations,
-    initialiseEtatSaisieInformations([
-      { nom: 'Ain', code: '1' },
-      { nom: 'Finistère', code: '29' },
-      { nom: 'Gironde', code: '33' },
-    ]),
+    initialiseEtatSaisieInformations(proprietes.departements),
   );
 
   useEffect(() => {
@@ -46,6 +40,11 @@ export const SaisieInformations = (
       });
     }
   }, [etatSaisieInformations, proprietes]);
+
+  useEffect(
+    () => envoie(departementsCharges(proprietes.departements)),
+    [proprietes.departements],
+  );
 
   const surSaisieAdresseElectronique = useCallback(
     (adresseElectronique: string) => {
