@@ -1,7 +1,13 @@
 import { Footer } from '../Footer';
 import { Header } from '../Header';
 import { SaisieInformations } from './SaisieInformations.tsx';
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import {
+  ReactElement,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 import {
   confirmation,
   reducteurDemandeAide,
@@ -16,6 +22,7 @@ import {
   Departement,
   ReponseDemandeAide,
 } from '../../domaine/demande-aide/Aide.ts';
+import { ChampsErreur } from '../alertes/Erreurs.tsx';
 
 export const ComposantDemandeAide = () => {
   const [etat, envoie] = useReducer(reducteurDemandeAide, {
@@ -26,6 +33,9 @@ export const ComposantDemandeAide = () => {
   const [demandeAide, setDemandeAide] = useState<
     { lien: Lien; departements: Departement[] } | undefined
   >();
+  const [retourEnvoiDemandeAide, setRetourEnvoiDemandeAide] = useState<
+    ReactElement | undefined
+  >(undefined);
   const macAPI = useMACAPI();
   const navigationMAC = useNavigationMAC();
 
@@ -74,6 +84,7 @@ export const ComposantDemandeAide = () => {
         })
         .catch((erreur) => {
           envoie(saisieInformationsEnErreur(erreur));
+          setRetourEnvoiDemandeAide(<ChampsErreur erreur={erreur} />);
         });
     },
     [demandeAide, macAPI],
@@ -105,14 +116,17 @@ export const ComposantDemandeAide = () => {
                 {etat.etapeCourante === 'saisieInformations' && (
                   <SaisieInformations
                     departements={demandeAide?.departements || []}
-                    onClick={(saisieInformations) =>
-                      terminer(saisieInformations)
-                    }
+                    surValidation={{
+                      erreur: etat.erreur,
+                      execute: (saisieInformations) =>
+                        terminer(saisieInformations),
+                    }}
                   />
                 )}
                 {etat.etapeCourante === 'confirmation' && (
                   <Confirmation onClick={() => retourAccueil()} />
                 )}
+                <div>{retourEnvoiDemandeAide}</div>
               </div>
             </div>
           </div>

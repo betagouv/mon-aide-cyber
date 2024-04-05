@@ -19,7 +19,10 @@ import { CorpsCGU } from '../../vues/ComposantCGU.tsx';
 
 type ProprietesSaisiesInformations = {
   departements: Departement[];
-  onClick: (saisieInformations: CorpsDemandeAide) => void;
+  surValidation: {
+    erreur?: Error;
+    execute: (saisieInformations: CorpsDemandeAide) => void;
+  };
 };
 
 export const SaisieInformations = (
@@ -32,12 +35,14 @@ export const SaisieInformations = (
 
   useEffect(() => {
     if (etatSaisieInformations.pretPourEnvoi) {
-      proprietes.onClick({
-        cguValidees: etatSaisieInformations.cguValidees,
-        departement: etatSaisieInformations.departement,
-        email: etatSaisieInformations.email,
-        raisonSociale: etatSaisieInformations.raisonSociale,
-      });
+      if (!proprietes.surValidation.erreur) {
+        proprietes.surValidation.execute({
+          cguValidees: etatSaisieInformations.cguValidees,
+          departement: etatSaisieInformations.departement,
+          email: etatSaisieInformations.email,
+          raisonSociale: etatSaisieInformations.raisonSociale,
+        });
+      }
     }
   }, [etatSaisieInformations, proprietes]);
 

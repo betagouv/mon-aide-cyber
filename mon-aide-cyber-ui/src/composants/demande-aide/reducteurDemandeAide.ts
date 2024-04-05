@@ -3,8 +3,9 @@ enum TypeActionParcoursCGU {
   SAISIE_INFORMATION_EN_ERREUR = 'SAISIE_INFORMATION_EN_ERREUR',
 }
 
-type EtatParcoursCGU = {
+export type EtatParcoursCGU = {
   etapeCourante: 'saisieInformations' | 'confirmation';
+  erreur?: Error;
 };
 
 type ActionParcoursCGU =
@@ -21,8 +22,10 @@ export const reducteurDemandeAide = (
 ): EtatParcoursCGU => {
   switch (action.type) {
     case TypeActionParcoursCGU.CONFIRMATION: {
+      const etatCourant = { ...etat };
+      delete etatCourant['erreur'];
       return {
-        ...etat,
+        ...etatCourant,
         etapeCourante: 'confirmation',
       };
     }
@@ -30,6 +33,7 @@ export const reducteurDemandeAide = (
       return {
         ...etat,
         etapeCourante: 'saisieInformations',
+        erreur: action.erreur,
       };
   }
 };
