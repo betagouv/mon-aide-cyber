@@ -8,15 +8,15 @@ import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge
 import { Aide } from '../aide/Aide';
 import { adaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement';
 
-export type SagaDemandeValidationCGUAide = Saga & {
+export type SagaDemandeAide = Saga & {
   cguValidees: boolean;
   email: string;
   departement: string;
   raisonSociale?: string;
 };
 
-export class CapteurSagaDemandeValidationCGUAide
-  implements CapteurSaga<SagaDemandeValidationCGUAide, void>
+export class CapteurSagaDemandeAide
+  implements CapteurSaga<SagaDemandeAide, void>
 {
   constructor(
     _entrepots: Entrepots,
@@ -25,7 +25,7 @@ export class CapteurSagaDemandeValidationCGUAide
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
   ) {}
 
-  async execute(saga: SagaDemandeValidationCGUAide): Promise<void> {
+  async execute(saga: SagaDemandeAide): Promise<void> {
     const envoieConfirmationDemandeAide = async (
       adaptateurEnvoiMail: AdaptateurEnvoiMail,
       aide: Aide,
@@ -33,11 +33,11 @@ export class CapteurSagaDemandeValidationCGUAide
       await adaptateurEnvoiMail.envoie({
         objet: "Demande d'aide pour MonAideCyber",
         destinataire: { email: aide.email },
-        corps: construisMailCGUAide(aide),
+        corps: construisMailConfirmationDemandeAide(aide),
       });
     };
 
-    const envoieNotificationDemandeAide = async (
+    const envoieRecapitulatifDemandeAide = async (
       adaptateurEnvoiMail: AdaptateurEnvoiMail,
       aide: Aide,
     ) => {
@@ -46,7 +46,7 @@ export class CapteurSagaDemandeValidationCGUAide
         destinataire: {
           email: adaptateurEnvironnement.messagerie().emailMAC(),
         },
-        corps: construisMailDemandeAide(aide),
+        corps: construisMailRecapitulatifDemandeAide(aide),
       });
     };
 
@@ -73,7 +73,7 @@ export class CapteurSagaDemandeValidationCGUAide
         .publie<CommandeCreerAide, Aide>(commandeCreerAide)
         .then(async (aide: Aide) => {
           await envoieConfirmationDemandeAide(this.adaptateurEnvoiMail, aide);
-          await envoieNotificationDemandeAide(this.adaptateurEnvoiMail, aide);
+          await envoieRecapitulatifDemandeAide(this.adaptateurEnvoiMail, aide);
 
           await this.busEvenement.publie({
             identifiant: aide.identifiant,
@@ -92,7 +92,7 @@ export class CapteurSagaDemandeValidationCGUAide
   }
 }
 
-const construisMailDemandeAide = (aide: Aide) => {
+const construisMailRecapitulatifDemandeAide = (aide: Aide) => {
   const formateDate = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant(),
   );
@@ -111,7 +111,7 @@ const construisMailDemandeAide = (aide: Aide) => {
   );
 };
 
-const construisMailCGUAide = (aide: Aide) => {
+const construisMailConfirmationDemandeAide = (aide: Aide) => {
   const formateDate = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant(),
   );
