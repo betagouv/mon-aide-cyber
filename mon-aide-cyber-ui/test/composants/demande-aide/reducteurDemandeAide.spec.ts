@@ -1,7 +1,7 @@
 import { describe, expect } from 'vitest';
 import {
   confirmation,
-  EtatParcoursCGU,
+  EtatEtapesDemandeAide,
   reducteurDemandeAide,
   saisieInformationsEnErreur,
 } from '../../../src/composants/demande-aide/reducteurDemandeAide.ts';
@@ -14,7 +14,7 @@ describe('Réducteur Demande d’aide', () => {
       saisieInformationsEnErreur(erreur),
     );
 
-    expect(etat).toStrictEqual<EtatParcoursCGU>({
+    expect(etat).toStrictEqual<EtatEtapesDemandeAide>({
       etapeCourante: 'saisieInformations',
       erreur,
     });
@@ -27,7 +27,7 @@ describe('Réducteur Demande d’aide', () => {
       confirmation(),
     );
 
-    expect(etat).toStrictEqual<EtatParcoursCGU>({
+    expect(etat).toStrictEqual<EtatEtapesDemandeAide>({
       etapeCourante: 'confirmation',
     });
   });
