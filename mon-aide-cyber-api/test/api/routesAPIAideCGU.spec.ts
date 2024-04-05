@@ -43,6 +43,30 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
         );
       });
 
+      it('Renvoie une erreur si la demande n’a pu aller au bout', async () => {
+        const testeurMAC = testeurIntegration();
+        const donneesServeur: { portEcoute: number; app: Express } =
+          testeurMAC.initialise();
+        testeurMAC.adaptateurEnvoieMessage.envoie = () => Promise.reject();
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/aide/cgu',
+          donneesServeur.portEcoute,
+          {
+            cguValidees: true,
+            email: 'jean.dupont@aide.com',
+            departement: 'Corse du sud',
+            raisonSociale: 'beta-gouv',
+          },
+        );
+
+        expect(reponse.statusCode).toBe(500);
+        expect(await reponse.json()).toStrictEqual({
+          message: "Votre demande d'aide n'a pu aboutir",
+        });
+      });
+
       describe("En ce qui concerne les informations envoyées par l'Aidé", () => {
         const testeurMAC = testeurIntegration();
         let donneesServeur: { portEcoute: number; app: Express };
