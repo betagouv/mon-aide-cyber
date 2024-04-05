@@ -1,23 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
-import { SeConnecter } from '../composants/authentification/SeConnecter.tsx';
 import { PortailModale } from '../composants/modale/PortailModale.tsx';
 import { ReponseAuthentification } from '../domaine/authentification/Authentification.ts';
 import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { Diagnostic } from '../domaine/diagnostic/Diagnostic.ts';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { ComposantConnexion } from '../composants/connexion/ComposantConnexion.tsx';
+import { Suspense } from 'react';
+import { RequiertAuthentification } from '../fournisseurs/RequiertAuthentification.tsx';
+import { ComposantIntercepteur } from '../composants/intercepteurs/ComposantIntercepteur.tsx';
+import { TableauDeBord } from '../composants/TableauDeBord.tsx';
 
 const meta = {
   title: 'Authentification',
-  component: SeConnecter,
+  component: ComposantConnexion,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof SeConnecter>;
+} satisfies Meta<typeof ComposantConnexion>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -25,7 +29,7 @@ type Story = StoryObj<typeof meta>;
 export const ModaleDeConnexion: Story = {
   decorators: [
     (story) => (
-      <BrowserRouter>
+      <MemoryRouter>
         <ContexteMacAPI.Provider
           value={{
             appelle: async <T = Diagnostic, V = void>(
@@ -41,81 +45,59 @@ export const ModaleDeConnexion: Story = {
           }}
         >
           <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            <PortailModale>{story()}</PortailModale>
+            <PortailModale>
+              <Routes>
+                <Route path="/connexion" element={<ComposantConnexion />} />
+                <Route
+                  element={
+                    <Suspense>
+                      <RequiertAuthentification />
+                    </Suspense>
+                  }
+                >
+                  <Route
+                    path="/tableau-de-bord"
+                    element={
+                      <ComposantIntercepteur composant={TableauDeBord} />
+                    }
+                  ></Route>
+                </Route>
+              </Routes>
+              {story()}
+            </PortailModale>
           </ErrorBoundary>
         </ContexteMacAPI.Provider>
-      </BrowserRouter>
+      </MemoryRouter>
     ),
   ],
   name: 'Modale de connexion',
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    await step(
-      'Affiche la modale lorsque l’aidant clique sur "Se connecter"',
-      async () => {
-        await userEvent.click(
-          canvas.getByRole('link', { name: /Se connecter/i }),
-        );
-
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('textbox', { name: /votre adresse email/i }),
-          ),
-        ).toBeInTheDocument();
-
-        expect(
-          await canvas.findByLabelText(/votre mot de passe/i),
-        ).toBeInTheDocument();
-
-        expect(
-          await waitFor(() => canvas.getByRole('button', { name: /annuler/i })),
-        ).toBeInTheDocument();
-
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('button', { name: /se connecter/i }),
-          ),
-        ).toBeInTheDocument();
-      },
-    );
-
-    await step(
-      "La modale disparaît lorsque l'aidant clique en dehors de la modale",
-      async () => {
-        await userEvent.click(document.body);
-
+    await step('Affiche la page de connexion', async () => {
+      expect(
         await waitFor(() =>
-          expect(canvas.queryByText(/connectez vous/i)).not.toBeInTheDocument(),
-        );
-      },
-    );
+          canvas.getByRole('textbox', { name: /votre adresse électronique/i }),
+        ),
+      ).toBeInTheDocument();
 
-    await step(
-      'La modale disparaît lorsque l’aidant clique sur le bouton "Annuler"',
-      async () => {
-        await userEvent.click(
-          canvas.getByRole('link', { name: /Se connecter/i }),
-        );
+      expect(
+        await canvas.findByLabelText(/votre mot de passe/i),
+      ).toBeInTheDocument();
 
-        await userEvent.click(canvas.getByRole('button', { name: /annuler/i }));
-
+      expect(
         await waitFor(() =>
-          expect(canvas.queryByText(/connectez vous/i)).not.toBeInTheDocument(),
-        );
-      },
-    );
+          canvas.getByRole('button', { name: /se connecter/i }),
+        ),
+      ).toBeInTheDocument();
+    });
 
     await step(
       'Affiche "Veuillez saisir votre identifiant." lorsque l’aidant saisi un caractère vide',
       async () => {
-        await userEvent.click(
-          canvas.getByRole('link', { name: /Se connecter/i }),
-        );
-
         const champsAdresseEmail = await waitFor(() =>
           canvas.getByRole('textbox', {
-            name: /votre adresse email/i,
+            name: /votre adresse électronique/i,
           }),
         );
         userEvent.type(champsAdresseEmail, 'identifiant');
@@ -134,10 +116,6 @@ export const ModaleDeConnexion: Story = {
     await step(
       'Affiche "Veuillez saisir votre mot de passe." lorsque l’aidant saisi un caractère vide',
       async () => {
-        await userEvent.click(
-          canvas.getByRole('link', { name: /Se connecter/i }),
-        );
-
         const champsMotDePasse = await waitFor(() =>
           canvas.getByRole('textbox', {
             name: /votre mot de passe/i,
