@@ -6,6 +6,7 @@ const ACTIONS: Map<Action | string, string> = new Map<Action | string, string>([
   ['creer-espace-aidant', '/finalise-creation-espace-aidant'],
   ['lancer-diagnostic', '/tableau-de-bord'],
   ['modifier-diagnostic', '/diagnostic/{DYNAMIQUE}'],
+  ['se-connecter', '/connexion'],
 ]);
 export class MoteurDeLiens {
   constructor(private readonly liens: Liens) {

@@ -39,9 +39,13 @@ export const Header = () => {
                   />
                 </div>
                 <div className="fr-header__navbar icone-se-connecter-mobile">
-                  <button className="fr-btn fr-btn--lg fr-icon-account-circle-line">
-                    <SeConnecter />
-                  </button>
+                  {utilisateur ? (
+                    <ComposantMenuUtilisateur utilisateur={utilisateur} />
+                  ) : (
+                    <button className="fr-btn fr-btn--lg fr-icon-account-circle-line">
+                      <SeConnecter />
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="fr-header__service fr-col-md-5">
