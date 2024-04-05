@@ -1,6 +1,5 @@
 import { useAuthentification, useModale, useNavigationMAC } from './hooks.ts';
 import { useEffect, useState } from 'react';
-import { afficheModaleSessionExpiree } from '../composants/authentification/modalesAuthentification.tsx';
 import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
 import { Outlet } from 'react-router-dom';
 
@@ -26,11 +25,15 @@ export const RequiertAuthentification = () => {
         })
         .catch((erreur) => {
           setChargementUtilisateurEnErreur(true);
-          navigationMAC.setEtat(new MoteurDeLiens(erreur.liens).extrais());
-          afficheModaleSessionExpiree(modale, () => {
-            modale.ferme();
-            navigationMAC.retourAccueil();
-          });
+          const moteurDeLiens = new MoteurDeLiens(erreur.liens);
+          moteurDeLiens.trouve(
+            'rediriger',
+            (lien) => (window.location.href = lien.url),
+            () => {
+              navigationMAC.setEtat(moteurDeLiens.extrais());
+              navigationMAC.navigue(moteurDeLiens, 'se-connecter');
+            },
+          );
         });
     }
     setDoitVerifierReconnexion(

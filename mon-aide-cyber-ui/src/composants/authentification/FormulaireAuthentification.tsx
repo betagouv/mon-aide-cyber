@@ -9,13 +9,7 @@ import {
   saisieInvalidee,
 } from './reducteurAuthentification.tsx';
 
-export const FormulaireAuthentification = ({
-  surAnnuler,
-  surSeConnecter,
-}: {
-  surAnnuler: () => void;
-  surSeConnecter: () => void;
-}) => {
+export const FormulaireAuthentification = () => {
   const authentification = useAuthentification();
 
   const [etatAuthentification, envoie] = useReducer(
@@ -43,12 +37,11 @@ export const FormulaireAuthentification = ({
             identifiant: etatAuthentification.identifiant,
             motDePasse: etatAuthentification.motDePasse,
           },
-          surSeConnecter,
           (erreur) => envoie(authentificationInvalidee(erreur)),
         );
       }
     },
-    [etatAuthentification, authentification, surSeConnecter],
+    [etatAuthentification, authentification],
   );
 
   const erreur = etatAuthentification.erreur;
@@ -64,7 +57,7 @@ export const FormulaireAuthentification = ({
                 }`}
               >
                 <label className="fr-label" htmlFor="identifiant-connexion">
-                  Votre adresse email
+                  Votre adresse électronique
                 </label>
                 <input
                   className="fr-input"
@@ -97,15 +90,7 @@ export const FormulaireAuthentification = ({
               </div>
             </fieldset>
           </div>
-          <div>
-            <button
-              type="button"
-              key="annule-connexion-aidant"
-              className="fr-btn bouton-mac bouton-mac-secondaire fr-mr-2w"
-              onClick={surAnnuler}
-            >
-              Annuler
-            </button>
+          <div className="fr-grid-row fr-grid-row--center">
             <button
               type="submit"
               key="connexion-aidant"

@@ -23,6 +23,7 @@ import { ComposantProfil } from './composants/profil/ComposantProfil.tsx';
 import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
 import { ComposantDemandeAide } from './composants/demande-aide/ComposantDemandeAide.tsx';
+import { ComposantConnexion } from './composants/connexion/ComposantConnexion.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -44,6 +45,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     path="/mentions-legales"
                     element={<MentionsLegales />}
                   />
+                  <Route path="/connexion" element={<ComposantConnexion />} />
                   <Route
                     element={
                       <Suspense>

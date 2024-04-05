@@ -23,18 +23,18 @@ import {
 } from './reducteurUtilisateurAuthentifie.tsx';
 import { Lien, ReponseHATEOAS } from '../domaine/Lien.ts';
 
+type Authentifie = (
+  identifiants: {
+    identifiant: string;
+    motDePasse: string;
+  },
+  surErreur: (erreur: Error) => void,
+) => void;
 type ContexteAuthentificationType = {
   utilisateur?: Utilisateur;
   element: ReactElement | null;
   appelleUtilisateur: () => Promise<ReponseUtilisateur>;
-  authentifie: (
-    identifiants: {
-      identifiant: string;
-      motDePasse: string;
-    },
-    surSucces: () => void,
-    surErreur: (erreur: Error) => void,
-  ) => void;
+  authentifie: Authentifie;
 };
 
 export const ContexteAuthentification =
@@ -58,12 +58,11 @@ export const FournisseurAuthentification = ({
     initialiseReducteurUtilisateurAuthentifie(),
   );
 
-  const authentifie = (
+  const authentifie: Authentifie = (
     identifiants: {
       identifiant: string;
       motDePasse: string;
     },
-    surSucces: () => void,
     surErreur: (erreur: Error) => void,
   ) => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
@@ -89,7 +88,6 @@ export const FournisseurAuthentification = ({
             });
 
             navigationMAC.navigue(moteurDeLiens, 'afficher-tableau-de-bord');
-            surSucces();
           })
           .catch(surErreur);
       },
