@@ -5,6 +5,7 @@ export type Contexte =
   | 'Accès diagnostic'
   | 'Ajout réponse au diagnostic'
   | "Crée l'espace Aidant"
+  | "Demande d'aide"
   | "Demande d'Authentification"
   | 'Demande la restitution'
   | 'Envoi un message de contact'

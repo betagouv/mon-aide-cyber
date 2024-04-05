@@ -9,6 +9,8 @@ import {
 } from 'express-validator';
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 import { listeDepartements } from '../../../test/infrastructure/departements/listeDepartements';
+import { NextFunction } from 'express-serve-static-core';
+import { ErreurMAC } from '../../domaine/erreurMAC';
 
 type CorpsRequeteValidationCGUAide = {
   cguValidees: boolean;
@@ -16,6 +18,13 @@ type CorpsRequeteValidationCGUAide = {
   departement: string;
   raisonSociale?: string;
 };
+
+class ErreurDemandeAide extends Error {
+  constructor(public readonly message: string) {
+    super(message);
+  }
+}
+
 export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
@@ -46,7 +55,7 @@ export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
       .withMessage(
         "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide",
       ),
-    async (requete: Request, reponse: Response) => {
+    async (requete: Request, reponse: Response, suite: NextFunction) => {
       const resultatValidation: Result<FieldValidationError> = validationResult(
         requete,
       ) as Result<FieldValidationError>;
@@ -61,10 +70,17 @@ export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
             raisonSociale: corpsRequete.raisonSociale,
           }),
         };
-        return configuration.busCommande.publie(saga).then(() => {
-          reponse.status(202);
-          return reponse.send();
-        });
+        return configuration.busCommande
+          .publie(saga)
+          .then(() => {
+            reponse.status(202);
+            return reponse.send();
+          })
+          .catch((erreur) =>
+            suite(
+              ErreurMAC.cree("Demande d'aide", new ErreurDemandeAide(erreur)),
+            ),
+          );
       }
       const erreursValidation = resultatValidation
         .array()
