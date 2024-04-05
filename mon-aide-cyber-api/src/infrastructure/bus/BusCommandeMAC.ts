@@ -4,7 +4,7 @@ import { BusEvenement } from '../../domaine/BusEvenement';
 import { CapteurSagaAjoutReponse } from '../../diagnostic/CapteurSagaAjoutReponse';
 import { CapteurCommandeLanceRestitution } from '../../diagnostic/CapteurCommandeLanceRestitution';
 import { CapteurCommandeLanceDiagnostic } from '../../diagnostic/CapteurCommandeLanceDiagnostic';
-import { CapteurSagaDemandeValidationCGUAide } from '../../parcours-cgu-aide/CapteurSagaDemandeValidationCGUAide';
+import { CapteurSagaDemandeAide } from '../../demande-aide/CapteurSagaDemandeAide';
 import { CapteurCommandeRechercheAideParEmail } from '../../aide/CapteurCommandeRechercheAideParEmail';
 import { CapteurCommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
@@ -33,10 +33,10 @@ const capteurs: Map<string, Capteur> = new Map([
     },
   ],
   [
-    'SagaDemandeValidationCGUAide',
+    'SagaDemandeAide',
     {
       capteur: (parametres) =>
-        new CapteurSagaDemandeValidationCGUAide(
+        new CapteurSagaDemandeAide(
           parametres.entrepots,
           parametres.busCommande!,
           parametres.busEvenements!,

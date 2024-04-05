@@ -12,7 +12,7 @@ import { listeDepartements } from '../../../test/infrastructure/departements/lis
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 
-type CorpsRequeteValidationCGUAide = {
+type CorpsRequeteDemandeAide = {
   cguValidees: boolean;
   email: string;
   departement: string;
@@ -25,7 +25,7 @@ class ErreurDemandeAide extends Error {
   }
 }
 
-export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
+export const routesAPIAideDemande = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
   routes.get('/', async (_requete: Request, reponse: Response) => {
@@ -60,7 +60,7 @@ export const routesAPIAideCGU = (configuration: ConfigurationServeur) => {
         requete,
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {
-        const corpsRequete: CorpsRequeteValidationCGUAide = requete.body;
+        const corpsRequete: CorpsRequeteDemandeAide = requete.body;
         const saga: SagaDemandeAide = {
           type: 'SagaDemandeAide',
           cguValidees: corpsRequete.cguValidees,

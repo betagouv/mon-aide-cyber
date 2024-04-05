@@ -101,7 +101,7 @@ class ConstructeurActionsHATEOAS {
 
   demanderAide() {
     this.actions.set('demander-aide', {
-      url: '/api/aide/cgu',
+      url: '/api/aide/demande',
       methode: 'POST',
     });
     return this;

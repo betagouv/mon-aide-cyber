@@ -6,7 +6,7 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { listeDepartements } from '../infrastructure/departements/listeDepartements';
 
-describe('Le serveur MAC, sur les routes CGU Aidé', () => {
+describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { portEcoute: number; app: Express };
 
@@ -16,16 +16,16 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
 
   afterEach(() => testeurMAC.arrete());
 
-  describe('/api/aide/cgu', () => {
+  describe('/api/aide/demande', () => {
     describe('Quand une requête POST est reçue', () => {
-      it('Valide les CGU de l’aidé', async () => {
+      it('Valide la demande de l’aidé', async () => {
         FournisseurHorlogeDeTest.initialise(
           new Date(Date.parse('2024-02-29T14:04:17+01:00')),
         );
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
-          '/api/aide/cgu',
+          '/api/aide/demande',
           donneesServeur.portEcoute,
           {
             cguValidees: true,
@@ -51,7 +51,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
-          '/api/aide/cgu',
+          '/api/aide/demande',
           donneesServeur.portEcoute,
           {
             cguValidees: true,
@@ -80,7 +80,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
           const reponse = await executeRequete(
             donneesServeur.app,
             'POST',
-            '/api/aide/cgu',
+            '/api/aide/demande',
             donneesServeur.portEcoute,
             {
               cguValidees: false,
@@ -95,7 +95,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
             message: 'Veuillez signer les CGU',
             liens: {
               'demander-aide': {
-                url: '/api/aide/cgu',
+                url: '/api/aide/demande',
                 methode: 'POST',
               },
             },
@@ -106,7 +106,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
           const reponse = await executeRequete(
             donneesServeur.app,
             'POST',
-            '/api/aide/cgu',
+            '/api/aide/demande',
             donneesServeur.portEcoute,
             {
               cguValidees: true,
@@ -121,7 +121,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
             message: 'Veuillez renseigner votre Email',
             liens: {
               'demander-aide': {
-                url: '/api/aide/cgu',
+                url: '/api/aide/demande',
                 methode: 'POST',
               },
             },
@@ -132,7 +132,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
           const reponse = await executeRequete(
             donneesServeur.app,
             'POST',
-            '/api/aide/cgu',
+            '/api/aide/demande',
             donneesServeur.portEcoute,
             {
               cguValidees: true,
@@ -148,7 +148,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
               "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide",
             liens: {
               'demander-aide': {
-                url: '/api/aide/cgu',
+                url: '/api/aide/demande',
                 methode: 'POST',
               },
             },
@@ -162,7 +162,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
           const reponse = await executeRequete(
             donneesServeur.app,
             'POST',
-            '/api/aide/cgu',
+            '/api/aide/demande',
             donneesServeur.portEcoute,
             {
               cguValidees: true,
@@ -183,7 +183,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
           const reponse = await executeRequete(
             donneesServeur.app,
             'POST',
-            '/api/aide/cgu',
+            '/api/aide/demande',
             donneesServeur.portEcoute,
             {
               cguValidees: true,
@@ -199,7 +199,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
               "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide",
             liens: {
               'demander-aide': {
-                url: '/api/aide/cgu',
+                url: '/api/aide/demande',
                 methode: 'POST',
               },
             },
@@ -213,14 +213,14 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/api/aide/cgu',
+          '/api/aide/demande',
           donneesServeur.portEcoute,
         );
 
         expect(reponse.statusCode).toBe(200);
         expect((await reponse.json()).liens).toStrictEqual({
           'demander-aide': {
-            url: '/api/aide/cgu',
+            url: '/api/aide/demande',
             methode: 'POST',
           },
         });
@@ -230,7 +230,7 @@ describe('Le serveur MAC, sur les routes CGU Aidé', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/api/aide/cgu',
+          '/api/aide/demande',
           donneesServeur.portEcoute,
         );
 
