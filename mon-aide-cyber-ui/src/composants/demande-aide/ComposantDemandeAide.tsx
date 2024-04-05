@@ -116,9 +116,11 @@ export const ComposantDemandeAide = () => {
                 {etat.etapeCourante === 'saisieInformations' && (
                   <SaisieInformations
                     departements={demandeAide?.departements || []}
-                    onClick={(saisieInformations) =>
-                      terminer(saisieInformations)
-                    }
+                    surValidation={{
+                      erreur: etat.erreur,
+                      execute: (saisieInformations) =>
+                        terminer(saisieInformations),
+                    }}
                   />
                 )}
                 {etat.etapeCourante === 'confirmation' && (
