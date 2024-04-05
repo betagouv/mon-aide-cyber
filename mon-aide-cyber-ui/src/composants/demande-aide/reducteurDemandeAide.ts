@@ -1,27 +1,27 @@
-enum TypeActionParcoursCGU {
+enum TypeActionEtapesDemandeAide {
   CONFIRMATION = 'CONFIRMATION',
   SAISIE_INFORMATION_EN_ERREUR = 'SAISIE_INFORMATION_EN_ERREUR',
 }
 
-export type EtatParcoursCGU = {
+export type EtatEtapesDemandeAide = {
   etapeCourante: 'saisieInformations' | 'confirmation';
   erreur?: Error;
 };
 
-type ActionParcoursCGU =
+type ActionEtapesDemandeAide =
   | {
-      type: TypeActionParcoursCGU.CONFIRMATION;
+      type: TypeActionEtapesDemandeAide.CONFIRMATION;
     }
   | {
-      type: TypeActionParcoursCGU.SAISIE_INFORMATION_EN_ERREUR;
+      type: TypeActionEtapesDemandeAide.SAISIE_INFORMATION_EN_ERREUR;
       erreur: Error;
     };
 export const reducteurDemandeAide = (
-  etat: EtatParcoursCGU,
-  action: ActionParcoursCGU,
-): EtatParcoursCGU => {
+  etat: EtatEtapesDemandeAide,
+  action: ActionEtapesDemandeAide,
+): EtatEtapesDemandeAide => {
   switch (action.type) {
-    case TypeActionParcoursCGU.CONFIRMATION: {
+    case TypeActionEtapesDemandeAide.CONFIRMATION: {
       const etatCourant = { ...etat };
       delete etatCourant['erreur'];
       return {
@@ -29,7 +29,7 @@ export const reducteurDemandeAide = (
         etapeCourante: 'confirmation',
       };
     }
-    case TypeActionParcoursCGU.SAISIE_INFORMATION_EN_ERREUR:
+    case TypeActionEtapesDemandeAide.SAISIE_INFORMATION_EN_ERREUR:
       return {
         ...etat,
         etapeCourante: 'saisieInformations',
@@ -38,13 +38,13 @@ export const reducteurDemandeAide = (
   }
 };
 
-export const confirmation = (): ActionParcoursCGU => ({
-  type: TypeActionParcoursCGU.CONFIRMATION,
+export const confirmation = (): ActionEtapesDemandeAide => ({
+  type: TypeActionEtapesDemandeAide.CONFIRMATION,
 });
 
 export const saisieInformationsEnErreur = (
   erreur: Error,
-): ActionParcoursCGU => ({
-  type: TypeActionParcoursCGU.SAISIE_INFORMATION_EN_ERREUR,
+): ActionEtapesDemandeAide => ({
+  type: TypeActionEtapesDemandeAide.SAISIE_INFORMATION_EN_ERREUR,
   erreur,
 });

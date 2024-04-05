@@ -44,7 +44,7 @@ export const ComposantDemandeAide = () => {
       macAPI
         .appelle<ReponseDemandeAide>(
           {
-            url: '/api/aide/cgu',
+            url: '/api/aide/demande',
             methode: 'GET',
           },
           (corps) => corps,
