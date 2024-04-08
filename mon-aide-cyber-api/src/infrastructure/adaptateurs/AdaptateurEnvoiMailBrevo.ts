@@ -3,33 +3,32 @@ import {
   Email,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
+import { adaptateursRequeteBrevo } from './adaptateursRequeteBrevo';
+import { unConstructeurEnvoiDeMail } from '../brevo/ConstructeursBrevo';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   envoie(message: Email): Promise<void> {
-    return fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      body: JSON.stringify({
-        sender: {
-          name: 'MonAideCyber',
-          email: process.env.EMAIL_CONTACT_MAC_EXPEDITEUR,
-        },
-        subject: message.objet,
-        to: [
-          { email: message.destinataire.email, name: message.destinataire.nom },
-        ],
-        textContent: message.corps,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-        'api-key': process.env.BREVO_CLEF_API || '',
-      },
-    }).then(async (reponse) => {
-      if (!reponse.ok) {
-        throw new ErreurEnvoiEmail(
-          "Une erreur est survenue lors de l'envoi du message.",
-        );
-      }
-    });
+    const envoiDeMail = unConstructeurEnvoiDeMail()
+      .ayantPourExpediteur(
+        'MonAideCyber',
+        adaptateurEnvironnement.messagerie().expediteurMAC(),
+      )
+      .ayantPourDestinataires([
+        [message.destinataire.email, message.destinataire.nom],
+      ])
+      .ayantPourSujet(message.objet)
+      .ayantPourContenu(message.corps)
+      .construis();
+    return adaptateursRequeteBrevo()
+      .envoiMail()
+      .execute(envoiDeMail)
+      .then((reponse) => {
+        if (!reponse.ok) {
+          throw new ErreurEnvoiEmail(
+            "Une erreur est survenue lors de l'envoi du message.",
+          );
+        }
+      });
   }
 }

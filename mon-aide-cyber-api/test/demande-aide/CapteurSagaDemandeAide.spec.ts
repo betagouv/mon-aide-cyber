@@ -123,6 +123,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     it('envoie un email de demande d’aide à MAC', async () => {
       adaptateurEnvironnement.messagerie = () => ({
         emailMAC: () => 'mac@email.com',
+        expediteurMAC: () => 'expéditeur',
+        clefAPI: () => 'clef',
       });
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00')),
