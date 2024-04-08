@@ -17,8 +17,8 @@ export const TableauDeBord = () => {
       <Header />
       <main role="main">
         <div className="mode-fonce">
-          <div className="fr-grid-row fr-grid-row--gutters fr-pt-8w">
-            <div className="fr-col-12 fr-col-offset-2 fr-pb-8w">
+          <div className="fr-container">
+            <div className="fr-grid-row contenu">
               <h2>Bonjour {nomPrenom} !</h2>
             </div>
           </div>
