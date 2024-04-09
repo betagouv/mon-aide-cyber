@@ -3,6 +3,8 @@ import { Aide, EntrepotAide } from '../../../aide/Aide';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import crypto from 'crypto';
+import { unConstructeurCreationDeContact } from '../../brevo/ConstructeursBrevo';
+import { adaptateursRequeteBrevo } from '../../adaptateurs/adaptateursRequeteBrevo';
 
 type DonneesAidesMAC = {
   dateSignatureCGU: string;
@@ -109,29 +111,25 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
       raisonSociale?: string,
     ) => string,
   ): Promise<void> {
-    return fetch('https://api.brevo.com/v3/contacts', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: aide.email,
-        attributes: {
-          metadonnees: chiffrement(
-            aide.identifiantMAC,
-            aide.departement,
-            aide.raisonSociale,
-          ),
-        },
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-        'api-key': process.env.BREVO_CLEF_API || '',
-      },
-    }).then(async (reponse) => {
-      if (!reponse.ok) {
-        return Promise.reject(await reponse.json());
-      }
-      return Promise.resolve();
-    });
+    const requete = unConstructeurCreationDeContact()
+      .ayantPourEmail(aide.email)
+      .ayantPourAttributs({
+        metadonnees: chiffrement(
+          aide.identifiantMAC,
+          aide.departement,
+          aide.raisonSociale,
+        ),
+      })
+      .construis();
+    return adaptateursRequeteBrevo()
+      .creationContact()
+      .execute(requete)
+      .then(async (reponse) => {
+        if (!reponse.ok) {
+          return Promise.reject(await reponse.json());
+        }
+        return Promise.resolve();
+      });
   }
 }
 
