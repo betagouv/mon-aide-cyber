@@ -1,5 +1,7 @@
-type ReponseBrevo = Response & {
-  code?:
+type ReponseBrevo = Response;
+
+interface ReponseBrevoEnErreur extends ReponseBrevo {
+  code:
     | 'invalid_parameter'
     | 'missing_parameter'
     | 'out_of_range'
@@ -16,49 +18,68 @@ type ReponseBrevo = Response & {
     | 'account_under_validation'
     | 'not_acceptable'
     | 'bad_request';
-  message?: string;
+  message: string;
+}
+
+type ReponseEnvoiMail = ReponseBrevo & {
+  messageId: string;
+  messageIds: string[];
 };
+type ReponseCreationContact = ReponseBrevo & {
+  id: string;
+};
+
 interface AdaptateurRequeteBrevo<REQUETE, REPONSE extends ReponseBrevo> {
   execute(requete: REQUETE): Promise<REPONSE>;
 }
-type ReponseEnvoiMail = ReponseBrevo & {
-  messageId?: string;
-  messageIds?: string[];
-};
-
-export type APIBrevo = {
+export type APIBrevo<T> = {
   methode: 'GET' | 'POST';
-};
-export type EnvoiMailBrevo = APIBrevo & {
-  corps: {
-    sender: {
-      name?: string;
-      email: string;
-    };
-    subject: string;
-    to: { email: string; name?: string }[];
-    textContent: string;
-  };
   headers: Record<string, string>;
+  corps: T;
 };
+export type EnvoiMailBrevo = {
+  sender: {
+    name?: string;
+    email: string;
+  };
+  subject: string;
+  to: { email: string; name?: string }[];
+  textContent: string;
+};
+
 export type EmailBrevo = { name?: string; email: string };
+export type CreationContactBrevo = {
+  email: string;
+  attributes: Record<string, string>;
+};
 
-class AdaptateurRequeteEnvoiMailBrevo
-  implements AdaptateurRequeteBrevo<EnvoiMailBrevo, ReponseEnvoiMail>
-{
-  constructor(private readonly url = 'https://api.brevo.com/v3/smtp/email') {}
-  execute(requete: EnvoiMailBrevo): Promise<ReponseEnvoiMail> {
-    return fetch(this.url, {
-      method: requete.methode,
-      headers: requete.headers,
-      body: JSON.stringify(requete.corps),
-    });
+export class AdaptateursRequeteBrevo {
+  envoiMail(): AdaptateurRequeteBrevo<
+    APIBrevo<EnvoiMailBrevo>,
+    ReponseEnvoiMail
+  > {
+    return this.adaptateur('https://api.brevo.com/v3/smtp/email');
   }
-}
 
-class AdaptateursRequeteBrevo {
-  envoiMail(): AdaptateurRequeteBrevo<EnvoiMailBrevo, ReponseEnvoiMail> {
-    return new AdaptateurRequeteEnvoiMailBrevo();
+  creationContact(): AdaptateurRequeteBrevo<
+    APIBrevo<CreationContactBrevo>,
+    ReponseCreationContact
+  > {
+    return this.adaptateur('https://api.brevo.com/v3/contacts');
+  }
+
+  protected adaptateur<T, R extends ReponseBrevo | ReponseBrevoEnErreur>(
+    url: string,
+  ) {
+    return new (class implements AdaptateurRequeteBrevo<APIBrevo<T>, R> {
+      execute(requete: APIBrevo<T>): Promise<R> {
+        return fetch(url, {
+          method: requete.methode,
+          headers: requete.headers,
+          body: JSON.stringify(requete.corps),
+        }) as unknown as Promise<R>;
+      }
+    })();
   }
 }
 export const adaptateursRequeteBrevo = () => new AdaptateursRequeteBrevo();
