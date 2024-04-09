@@ -1,13 +1,15 @@
 import { describe, it } from 'vitest';
 import {
   AdaptateursRequeteBrevo,
-  APIBrevo,
   CreationContactBrevo,
   EnvoiMailBrevo,
+  RechercheContactBrevo,
+  RequeteBrevo,
 } from '../../src/infrastructure/adaptateurs/adaptateursRequeteBrevo';
 import {
   unConstructeurCreationDeContact,
   unConstructeurEnvoiDeMail,
+  unConstructeurRechercheDeContact,
 } from '../../src/infrastructure/brevo/ConstructeursBrevo';
 import { adaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement';
 
@@ -15,9 +17,9 @@ class AdaptateursRequeteBrevoDeTest extends AdaptateursRequeteBrevo {
   requeteAttendue: any;
 
   protected adaptateur<T, R>(
-    url: string,
+    url: string
   ): {
-    execute(requete: APIBrevo<T>): Promise<R>;
+    execute(requete: RequeteBrevo<T>): Promise<R>;
   } {
     return {
       execute: (requete) => {
@@ -46,11 +48,11 @@ describe('Adaptateurs requete Brevo', () => {
           unConstructeurCreationDeContact()
             .ayantPourEmail('jean.dupont@mail.com')
             .ayantPourAttributs({ donnees: 'donnees' })
-            .construis(),
+            .construis()
         );
 
       expect(adaptateur.requeteAttendue).toStrictEqual<
-        APIBrevo<CreationContactBrevo> & { url: string }
+        RequeteBrevo<CreationContactBrevo> & { url: string }
       >({
         methode: 'POST',
         corps: {
@@ -67,9 +69,29 @@ describe('Adaptateurs requete Brevo', () => {
         url: 'https://api.brevo.com/v3/contacts',
       });
     });
+
+    it('Exécute une recherche par email', async () => {
+      const adaptateur = new AdaptateursRequeteBrevoDeTest();
+
+      await adaptateur
+        .rechercheContact('jean.dupont@mail.com')
+        .execute(unConstructeurRechercheDeContact().construis());
+
+      expect(adaptateur.requeteAttendue).toStrictEqual<
+        RequeteBrevo<RechercheContactBrevo> & { url: string }
+      >({
+        methode: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          accept: 'application/json',
+          'api-key': 'une clef',
+        },
+        url: 'https://api.brevo.com/v3/contacts/jean.dupont@mail.com',
+      });
+    });
   });
 
-  describe('Envoi de mail', () => {
+  describe('API de mail', () => {
     it('Exécute un envoi de mail', async () => {
       const adaptateur = new AdaptateursRequeteBrevoDeTest();
 
@@ -79,11 +101,11 @@ describe('Adaptateurs requete Brevo', () => {
           .ayantPourDestinataires([['jean.dupont@email.com', 'Jean Dupont']])
           .ayantPourSujet('Un sujet')
           .ayantPourContenu('Un contenu')
-          .construis(),
+          .construis()
       );
 
       expect(adaptateur.requeteAttendue).toStrictEqual<
-        APIBrevo<EnvoiMailBrevo> & { url: string }
+        RequeteBrevo<EnvoiMailBrevo> & { url: string }
       >({
         methode: 'POST',
         corps: {

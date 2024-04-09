@@ -3,7 +3,10 @@ import {
   Email,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
-import { adaptateursRequeteBrevo } from './adaptateursRequeteBrevo';
+import {
+  adaptateursRequeteBrevo,
+  estReponseEnErreur,
+} from './adaptateursRequeteBrevo';
 import { unConstructeurEnvoiDeMail } from '../brevo/ConstructeursBrevo';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
@@ -23,8 +26,8 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     return adaptateursRequeteBrevo()
       .envoiMail()
       .execute(envoiDeMail)
-      .then((reponse) => {
-        if (!reponse.ok) {
+      .then(async (reponse) => {
+        if (estReponseEnErreur(reponse)) {
           throw new ErreurEnvoiEmail(
             "Une erreur est survenue lors de l'envoi du message.",
           );

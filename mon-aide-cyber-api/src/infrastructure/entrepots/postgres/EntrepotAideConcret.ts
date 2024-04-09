@@ -3,8 +3,14 @@ import { Aide, EntrepotAide } from '../../../aide/Aide';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import crypto from 'crypto';
-import { unConstructeurCreationDeContact } from '../../brevo/ConstructeursBrevo';
-import { adaptateursRequeteBrevo } from '../../adaptateurs/adaptateursRequeteBrevo';
+import {
+  unConstructeurCreationDeContact,
+  unConstructeurRechercheDeContact,
+} from '../../brevo/ConstructeursBrevo';
+import {
+  adaptateursRequeteBrevo,
+  estReponseEnErreur,
+} from '../../adaptateurs/adaptateursRequeteBrevo';
 
 type DonneesAidesMAC = {
   dateSignatureCGU: string;
@@ -82,26 +88,25 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
     email: string,
     mappeur: (dto: AideDistantDTO) => AideDistant,
   ): Promise<AideDistant | undefined> {
-    return fetch(`https://api.brevo.com/v3/contacts/${email}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-        'api-key': process.env.BREVO_CLEF_API || '',
-      },
-    }).then(async (reponse) => {
-      const aideBrevo: AideDistantBrevoDTO = await reponse.json();
-      if (!reponse.ok) {
-        if (reponse.status === 404) {
-          return Promise.resolve(undefined);
+    return adaptateursRequeteBrevo()
+      .rechercheContact(email)
+      .execute(unConstructeurRechercheDeContact().construis())
+      .then(async (reponse) => {
+        if (estReponseEnErreur(reponse)) {
+          if (reponse.status === 404) {
+            return Promise.resolve(undefined);
+          }
+          return Promise.reject(reponse.message);
         }
-        return Promise.reject(aideBrevo);
-      }
-      return mappeur({
-        email: aideBrevo.email,
-        metaDonnees: aideBrevo.attributes.METADONNEES,
+        const aideBrevo: AideDistantBrevoDTO = {
+          email: reponse.email,
+          attributes: { METADONNEES: reponse.attributes.METADONNEES },
+        };
+        return mappeur({
+          email: aideBrevo.email,
+          metaDonnees: aideBrevo.attributes.METADONNEES,
+        });
       });
-    });
   }
   persiste(
     aide: AideDistant,
@@ -124,9 +129,9 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
     return adaptateursRequeteBrevo()
       .creationContact()
       .execute(requete)
-      .then(async (reponse) => {
-        if (!reponse.ok) {
-          return Promise.reject(await reponse.json());
+      .then((reponse) => {
+        if (estReponseEnErreur(reponse)) {
+          return Promise.reject(reponse.message);
         }
         return Promise.resolve();
       });
