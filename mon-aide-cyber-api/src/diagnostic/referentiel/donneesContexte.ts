@@ -3,6 +3,24 @@ import { QuestionsThematique } from '../Referentiel';
 export const donneesContexte: QuestionsThematique = {
   questions: [
     {
+      identifiant: 'contexte-cgu-signees',
+      libelle: 'Avez-vous signé les CGU ?',
+      poids: 0,
+      reponsesPossibles: [
+        {
+          identifiant: 'contexte-nature-cgu-signe-oui',
+          libelle: 'oui',
+          ordre: 0,
+        },
+        {
+          identifiant: 'contexte-nature-cgu-signe-non',
+          libelle: 'non',
+          ordre: 1,
+        },
+      ],
+      type: 'choixUnique',
+    },
+    {
       identifiant: 'contexte-nature-organisation',
       libelle: 'Quelle est la nature de votre organisation ?',
       poids: 0,
