@@ -28,14 +28,19 @@ type ReponseEnvoiMail = ReponseBrevo & {
 type ReponseCreationContact = ReponseBrevo & {
   id: string;
 };
+type ReponseRechercheContact = ReponseBrevo & {
+  email: string;
+  id: string;
+  attributes: any;
+};
 
 interface AdaptateurRequeteBrevo<REQUETE, REPONSE extends ReponseBrevo> {
   execute(requete: REQUETE): Promise<REPONSE>;
 }
-export type APIBrevo<T> = {
+export type RequeteBrevo<T = void> = {
   methode: 'GET' | 'POST';
   headers: Record<string, string>;
-  corps: T;
+  corps?: T;
 };
 export type EnvoiMailBrevo = {
   sender: {
@@ -52,34 +57,57 @@ export type CreationContactBrevo = {
   email: string;
   attributes: Record<string, string>;
 };
+export type RechercheContactBrevo = string;
 
 export class AdaptateursRequeteBrevo {
   envoiMail(): AdaptateurRequeteBrevo<
-    APIBrevo<EnvoiMailBrevo>,
-    ReponseEnvoiMail
+    RequeteBrevo<EnvoiMailBrevo>,
+    ReponseEnvoiMail | ReponseBrevoEnErreur
   > {
     return this.adaptateur('https://api.brevo.com/v3/smtp/email');
   }
 
   creationContact(): AdaptateurRequeteBrevo<
-    APIBrevo<CreationContactBrevo>,
-    ReponseCreationContact
+    RequeteBrevo<CreationContactBrevo>,
+    ReponseCreationContact | ReponseBrevoEnErreur
   > {
     return this.adaptateur('https://api.brevo.com/v3/contacts');
+  }
+
+  rechercheContact(
+    email: string,
+  ): AdaptateurRequeteBrevo<
+    RequeteBrevo<RechercheContactBrevo>,
+    ReponseRechercheContact | ReponseBrevoEnErreur
+  > {
+    return this.adaptateur(`https://api.brevo.com/v3/contacts/${email}`);
   }
 
   protected adaptateur<T, R extends ReponseBrevo | ReponseBrevoEnErreur>(
     url: string,
   ) {
-    return new (class implements AdaptateurRequeteBrevo<APIBrevo<T>, R> {
-      execute(requete: APIBrevo<T>): Promise<R> {
+    return new (class implements AdaptateurRequeteBrevo<RequeteBrevo<T>, R> {
+      execute(requete: RequeteBrevo<T>): Promise<R> {
         return fetch(url, {
           method: requete.methode,
           headers: requete.headers,
-          body: JSON.stringify(requete.corps),
-        }) as unknown as Promise<R>;
+          ...(requete.methode === 'POST' && {
+            body: JSON.stringify(requete.corps),
+          }),
+        })
+          .then(async (reponse) => {
+            const corpsReponse = await reponse.json();
+            return { ...reponse, ...corpsReponse };
+          })
+          .catch((erreur) => Promise.reject(erreur));
       }
     })();
   }
 }
 export const adaptateursRequeteBrevo = () => new AdaptateursRequeteBrevo();
+
+export const estReponseEnErreur = (
+  reponse: ReponseBrevo | ReponseBrevoEnErreur,
+): reponse is ReponseBrevoEnErreur => {
+  return !reponse.ok;
+};

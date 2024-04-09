@@ -1,19 +1,20 @@
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import {
-  APIBrevo,
   CreationContactBrevo,
   EmailBrevo,
   EnvoiMailBrevo,
+  RechercheContactBrevo,
+  RequeteBrevo,
 } from '../adaptateurs/adaptateursRequeteBrevo';
 
 abstract class ConstructeurBrevo<T> {
-  abstract construisCorps(): T;
+  constructor(private readonly methode: 'POST' | 'GET') {}
+  protected abstract construisCorps(): T;
 
-  construis(): APIBrevo<T> {
-    const corps = this.construisCorps();
+  construis(): RequeteBrevo<T> {
     return {
-      methode: 'POST',
-      corps: corps,
+      methode: this.methode,
+      ...(this.methode === 'POST' && { corps: this.construisCorps() }),
       headers: {
         'Content-Type': 'application/json',
         accept: 'application/json',
@@ -31,6 +32,10 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevo> {
   private destinataires: EmailBrevo[] = [];
   private sujet = '';
   private contenu = '';
+
+  constructor() {
+    super('POST');
+  }
 
   ayantPourExpediteur(nom: string, email: string): ConstructeurBrevoEnvoiMail {
     this.expediteur = { name: nom, email };
@@ -57,7 +62,7 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevo> {
     return this;
   }
 
-  construisCorps() {
+  protected construisCorps() {
     return {
       sender: this.expediteur,
       to: this.destinataires,
@@ -71,6 +76,10 @@ class ConstructeurBrevoCreationContact extends ConstructeurBrevo<CreationContact
   private email: Email = '';
   private attributs: Record<string, string> = {} as Record<string, string>;
 
+  constructor() {
+    super('POST');
+  }
+
   ayantPourEmail(email: Email): ConstructeurBrevoCreationContact {
     this.email = email;
     return this;
@@ -83,23 +92,24 @@ class ConstructeurBrevoCreationContact extends ConstructeurBrevo<CreationContact
     return this;
   }
 
-  construisCorps(): CreationContactBrevo {
+  protected construisCorps(): CreationContactBrevo {
     return { email: this.email, attributes: this.attributs };
   }
 }
 
-class ConstructeursBrevo {
-  envoiMail(): ConstructeurBrevoEnvoiMail {
-    return new ConstructeurBrevoEnvoiMail();
+class ConstructeurBrevoRechercheContact extends ConstructeurBrevo<RechercheContactBrevo> {
+  constructor() {
+    super('GET');
   }
-
-  creationContact(): ConstructeurBrevoCreationContact {
-    return new ConstructeurBrevoCreationContact();
+  protected construisCorps(): RechercheContactBrevo {
+    throw new Error('Méthode non implémentée');
   }
 }
 
-export const unConstructeurEnvoiDeMail = () =>
-  new ConstructeursBrevo().envoiMail();
+export const unConstructeurEnvoiDeMail = () => new ConstructeurBrevoEnvoiMail();
 
 export const unConstructeurCreationDeContact = () =>
-  new ConstructeursBrevo().creationContact();
+  new ConstructeurBrevoCreationContact();
+
+export const unConstructeurRechercheDeContact = () =>
+  new ConstructeurBrevoRechercheContact();
