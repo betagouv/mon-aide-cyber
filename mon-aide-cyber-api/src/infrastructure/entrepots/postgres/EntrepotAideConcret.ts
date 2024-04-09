@@ -93,6 +93,14 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
       .execute(unConstructeurRechercheDeContact().construis())
       .then(async (reponse) => {
         if (estReponseEnErreur(reponse)) {
+          console.error(
+            'ERREUR BREVO',
+            JSON.stringify({
+              contexte: 'Recherche contact',
+              code: reponse.code,
+              message: reponse.message,
+            }),
+          );
           if (reponse.status === 404) {
             return Promise.resolve(undefined);
           }
@@ -131,6 +139,14 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
       .execute(requete)
       .then((reponse) => {
         if (estReponseEnErreur(reponse)) {
+          console.error(
+            'ERREUR BREVO',
+            JSON.stringify({
+              contexte: 'Création contact',
+              code: reponse.code,
+              message: reponse.message,
+            }),
+          );
           return Promise.reject(reponse.message);
         }
         return Promise.resolve();
