@@ -28,6 +28,14 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
       .execute(envoiDeMail)
       .then(async (reponse) => {
         if (estReponseEnErreur(reponse)) {
+          console.error(
+            'ERREUR BREVO',
+            JSON.stringify({
+              contexte: 'Envoi mail',
+              code: reponse.code,
+              message: reponse.message,
+            }),
+          );
           throw new ErreurEnvoiEmail(
             "Une erreur est survenue lors de l'envoi du message.",
           );
