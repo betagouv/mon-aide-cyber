@@ -15,6 +15,7 @@ export type EtatSaisieInformations = {
   raisonSociale?: string;
   pretPourEnvoi: boolean;
   departements: Departement[];
+  relationAidantSaisie: boolean;
   valeurSaisieDepartement: string;
 };
 
@@ -25,6 +26,7 @@ enum TypeActionSaisieInformations {
   CGU_VALIDEES = 'CGU_VALIDEES',
   DEMANDE_TERMINEE = 'DEMANDE_TERMINEE',
   DEPARTEMENTS_CHARGES = 'DEPARTEMENTS_CHARGES',
+  RELATION_AIDANT_CLIQUEE = 'RELATION_AIDANT_CLIQUEE',
 }
 
 type ActionSaisieInformations =
@@ -46,6 +48,9 @@ type ActionSaisieInformations =
   | {
       type: TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE;
       raisonSociale: string;
+    }
+  | {
+      type: TypeActionSaisieInformations.RELATION_AIDANT_CLIQUEE;
     }
   | {
       type: TypeActionSaisieInformations.DEMANDE_TERMINEE;
@@ -102,6 +107,9 @@ export const reducteurSaisieInformations = (
     ).length > 0;
 
   switch (action.type) {
+    case TypeActionSaisieInformations.RELATION_AIDANT_CLIQUEE: {
+      return { ...etat, relationAidantSaisie: !etat.relationAidantSaisie };
+    }
     case TypeActionSaisieInformations.DEPARTEMENTS_CHARGES: {
       return {
         ...etat,
@@ -237,6 +245,9 @@ export const cguValidees = (): ActionSaisieInformations => ({
 export const demandeTerminee = (): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.DEMANDE_TERMINEE,
 });
+export const relationAidantCliquee = (): ActionSaisieInformations => ({
+  type: TypeActionSaisieInformations.RELATION_AIDANT_CLIQUEE,
+});
 export const initialiseEtatSaisieInformations = (
   departements: Departement[],
 ): EtatSaisieInformations => ({
@@ -245,5 +256,6 @@ export const initialiseEtatSaisieInformations = (
   email: '',
   pretPourEnvoi: false,
   departements: departements,
+  relationAidantSaisie: false,
   valeurSaisieDepartement: '',
 });

@@ -8,6 +8,7 @@ import {
   initialiseEtatSaisieInformations,
   raisonSocialeSaisie,
   reducteurSaisieInformations,
+  relationAidantCliquee,
 } from '../../../src/composants/demande-aide/reducteurSaisieInformations.tsx';
 import { TexteExplicatif } from '../../../src/composants/alertes/Erreurs.tsx';
 
@@ -32,6 +33,7 @@ describe('Parcours CGU Aidé', () => {
           email: 'jean.dupont@email.com',
           pretPourEnvoi: false,
           departements: [],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: '',
         });
       });
@@ -67,6 +69,7 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: '',
         });
       });
@@ -92,6 +95,7 @@ describe('Parcours CGU Aidé', () => {
           email: 'jean.dupont@email.com',
           pretPourEnvoi: false,
           departements: [],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: '',
         });
       });
@@ -110,6 +114,7 @@ describe('Parcours CGU Aidé', () => {
           email: '',
           pretPourEnvoi: false,
           departements: [],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: 'Finistère',
         });
       });
@@ -146,6 +151,7 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [{ nom: 'Finistère', code: '29' }],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: 'Finistère',
         });
       });
@@ -172,6 +178,7 @@ describe('Parcours CGU Aidé', () => {
           email: '',
           pretPourEnvoi: false,
           departements: [{ nom: 'Finistère', code: '29' }],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: 'Finistère',
         });
       });
@@ -202,6 +209,7 @@ describe('Parcours CGU Aidé', () => {
             { nom: 'Morbihan', code: '56' },
             { nom: 'Gironde', code: '33' },
           ],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: 'Gironde',
         });
       });
@@ -221,6 +229,7 @@ describe('Parcours CGU Aidé', () => {
           raisonSociale: 'beta.gouv',
           pretPourEnvoi: false,
           departements: [],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: '',
         });
       });
@@ -236,6 +245,7 @@ describe('Parcours CGU Aidé', () => {
           email: '',
           pretPourEnvoi: false,
           departements: [],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: '',
         });
       });
@@ -263,6 +273,7 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: '',
         });
       });
@@ -298,6 +309,7 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: '',
         });
       });
@@ -323,6 +335,26 @@ describe('Parcours CGU Aidé', () => {
           email: '',
           pretPourEnvoi: false,
           departements: [],
+          relationAidantSaisie: false,
+          valeurSaisieDepartement: '',
+        });
+      });
+    });
+
+    describe("En ce qui concerne la relation avec l'Aidant", () => {
+      it('La prend en compte', () => {
+        const etat = reducteurSaisieInformations(
+          etatInitial,
+          relationAidantCliquee(),
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: false,
+          departement: '',
+          email: '',
+          pretPourEnvoi: false,
+          departements: [],
+          relationAidantSaisie: true,
           valeurSaisieDepartement: '',
         });
       });
@@ -350,6 +382,7 @@ describe('Parcours CGU Aidé', () => {
           email: 'jean.dupont@mail.fr',
           pretPourEnvoi: true,
           departements: [{ nom: 'Finistère', code: '29' }],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: 'Finistère',
         });
       });
@@ -384,6 +417,7 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [{ nom: 'Finistère', code: '29' }],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: 'Finistère',
         });
       });
@@ -418,6 +452,7 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: '',
         });
       });
@@ -458,6 +493,7 @@ describe('Parcours CGU Aidé', () => {
             { nom: 'Creuse', code: '23' },
             { nom: 'Morbihan', code: '56' },
           ],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: 'département inconnu',
         });
       });
@@ -489,6 +525,7 @@ describe('Parcours CGU Aidé', () => {
             { nom: 'Morbihan', code: '56' },
             { nom: 'Gironde', code: '33' },
           ],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: '33',
         });
       });
@@ -525,6 +562,7 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [{ nom: 'Finistère', code: '29' }],
+          relationAidantSaisie: false,
           valeurSaisieDepartement: 'Finistère',
         });
       });
@@ -560,6 +598,7 @@ describe('Parcours CGU Aidé', () => {
         email: 'jean.dupont@mail.fr',
         pretPourEnvoi: true,
         departements: [{ nom: 'Finistère', code: '29' }],
+        relationAidantSaisie: false,
         valeurSaisieDepartement: 'Finistère',
       });
     });
