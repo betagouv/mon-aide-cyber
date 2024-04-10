@@ -15,9 +15,9 @@ import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateu
 import { BusCommandeMAC } from '../../src/infrastructure/bus/BusCommandeMAC';
 import { AdaptateurEnvoiMail } from '../../src/adaptateurs/AdaptateurEnvoiMail';
 import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
-
 import { AdapatateurDeVerificationDeCGUDeTest } from '../adaptateurs/AdaptateurDeVerificationDeCGUDeTest';
 import { AdaptateurDeGestionDeCookiesDeTest } from '../adaptateurs/AdaptateurDeGestionDeCookiesDeTest';
+import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 
 class TesteurIntegrationMAC {
   private serveurDeTest:
@@ -52,6 +52,9 @@ class TesteurIntegrationMAC {
 
   initialise() {
     this.serveurDeTest = serveur.creeServeur({
+      adaptateurRelations: new AdaptateurRelationsMAC(
+        this.entrepots.relation(),
+      ),
       adaptateurReferentiel: this.adaptateurReferentiel,
       adaptateurTranscripteurDonnees: this.adaptateurTranscripteurDonnees,
       adaptateurMesures: this.adaptateurMesures,

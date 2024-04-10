@@ -19,16 +19,17 @@ import { BusCommande } from './domaine/commande';
 import { routeContact } from './api/routeContact';
 import { AdaptateurEnvoiMail } from './adaptateurs/AdaptateurEnvoiMail';
 import { ReferentielDeMesures } from './diagnostic/ReferentielDeMesures';
-import CookieSession = require('cookie-session');
-
 import { AdaptateurDeVerificationDeCGU } from './adaptateurs/AdaptateurDeVerificationDeCGU';
 import { AdaptateurDeGestionDeCookies } from './adaptateurs/AdaptateurDeGestionDeCookies';
+import { AdaptateurRelations } from './relation/AdaptateurRelations';
+import CookieSession from 'cookie-session';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
 const COOKIE_DUREE_SESSION = 180 * 60 * 1000;
 
 export type ConfigurationServeur = {
+  adaptateurRelations: AdaptateurRelations;
   adaptateurEnvoiMessage: AdaptateurEnvoiMail;
   adaptateurReferentiel: Adaptateur<Referentiel>;
   adaptateursRestitution: AdaptateursRestitution;

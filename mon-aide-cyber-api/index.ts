@@ -14,6 +14,7 @@ import { BusCommandeMAC } from './src/infrastructure/bus/BusCommandeMAC';
 import { fabriqueAdaptateurEnvoiMail } from './src/infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
 import { AdaptateurDeVerificationDeCGUMAC } from './src/adaptateurs/AdaptateurDeVerificationDeCGUMAC';
 import { AdaptateurDeGestionDeCookiesMAC } from './src/adaptateurs/AdaptateurDeGestionDeCookiesMAC';
+import { AdaptateurRelationsMAC } from './src/relation/AdaptateurRelationsMAC';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut',
@@ -31,6 +32,7 @@ const entrepots = fabriqueEntrepots();
 const busEvenementMAC = new BusEvenementMAC(fabriqueConsommateursEvenements());
 const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
 const serveurMAC = serveur.creeServeur({
+  adaptateurRelations: new AdaptateurRelationsMAC(entrepots.relation()),
   adaptateursRestitution: {
     pdf: () => new AdaptateurDeRestitutionPDF(traductionThematiques),
     html: () => new AdaptateurDeRestitutionHTML(traductionThematiques),

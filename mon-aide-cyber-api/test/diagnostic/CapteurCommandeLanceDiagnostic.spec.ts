@@ -17,16 +17,21 @@ import {
 } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
 import crypto from 'crypto';
+import { Tuple } from '../../src/relation/Tuple';
+import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
+import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 
 describe('Capteur pour lancer un diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
   let adaptateurMesures: AdaptateurMesuresTest;
+  let adaptateurRelations: AdaptateurRelations;
   let entrepots: Entrepots;
 
   beforeEach(() => {
     adaptateurReferentiel = new AdaptateurReferentielDeTest();
     adaptateurMesures = new AdaptateurMesuresTest();
     entrepots = new EntrepotsMemoire();
+    adaptateurRelations = new AdaptateurRelationsMAC(entrepots.relation());
   });
 
   it('copie le référentiel disponible et le persiste', async () => {
@@ -42,6 +47,7 @@ describe('Capteur pour lancer un diagnostic', () => {
     ).execute({
       type: 'CommandeLanceDiagnostic',
       adaptateurReferentiel,
+      adaptateurRelations,
       adaptateurReferentielDeMesures: adaptateurMesures,
       identifiantAidant: crypto.randomUUID(),
     });
@@ -75,6 +81,7 @@ describe('Capteur pour lancer un diagnostic', () => {
     ).execute({
       type: 'CommandeLanceDiagnostic',
       adaptateurReferentiel,
+      adaptateurRelations,
       adaptateurReferentielDeMesures: adaptateurMesures,
       identifiantAidant: crypto.randomUUID(),
     });
@@ -103,6 +110,7 @@ describe('Capteur pour lancer un diagnostic', () => {
     ).execute({
       type: 'CommandeLanceDiagnostic',
       adaptateurReferentiel,
+      adaptateurRelations,
       adaptateurReferentielDeMesures: adaptateurMesures,
       identifiantAidant,
     });
@@ -118,6 +126,38 @@ describe('Capteur pour lancer un diagnostic', () => {
     });
   });
 
+  it("lie le diagnostic à l'aidant qui l'initie", async () => {
+    FournisseurHorlogeDeTest.initialise(new Date());
+    adaptateurReferentiel.ajoute(unReferentiel().construis());
+
+    const identifiantAidant = crypto.randomUUID();
+    const diagnostic = await new CapteurCommandeLanceDiagnostic(
+      entrepots,
+      new BusEvenementDeTest(),
+    ).execute({
+      type: 'CommandeLanceDiagnostic',
+      adaptateurReferentiel,
+      adaptateurRelations,
+      adaptateurReferentielDeMesures: adaptateurMesures,
+      identifiantAidant,
+    });
+
+    const relationRecue = (await entrepots.relation().tous())[0];
+
+    expect(relationRecue).toStrictEqual<Tuple>({
+      identifiant: expect.any(String),
+      utilisateur: {
+        type: 'aidant',
+        identifiant: identifiantAidant,
+      },
+      relation: 'initiateur',
+      objet: {
+        type: 'diagnostic',
+        identifiant: diagnostic.identifiant,
+      },
+    });
+  });
+
   it('cela peut générer une erreur', async () => {
     await expect(() =>
       new CapteurCommandeLanceDiagnostic(
@@ -126,6 +166,7 @@ describe('Capteur pour lancer un diagnostic', () => {
       ).execute({
         type: 'CommandeLanceDiagnostic',
         adaptateurReferentiel,
+        adaptateurRelations,
         adaptateurReferentielDeMesures: adaptateurMesures,
         identifiantAidant: crypto.randomUUID(),
       }),
