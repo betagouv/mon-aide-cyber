@@ -5,6 +5,7 @@ export type CorpsDemandeAide = {
   email: string;
   departement: string;
   raisonSociale?: string;
+  relationAidant: boolean;
 };
 
 export type Departement = { nom: string; code: string };

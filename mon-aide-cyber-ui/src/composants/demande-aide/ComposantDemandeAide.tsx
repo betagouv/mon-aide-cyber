@@ -72,6 +72,7 @@ export const ComposantDemandeAide = () => {
               cguValidees: saisieInformations.cguValidees,
               departement: saisieInformations.departement,
               email: saisieInformations.email,
+              relationAidant: saisieInformations.relationAidant,
               ...(saisieInformations.raisonSociale && {
                 raisonSociale: saisieInformations.raisonSociale,
               }),

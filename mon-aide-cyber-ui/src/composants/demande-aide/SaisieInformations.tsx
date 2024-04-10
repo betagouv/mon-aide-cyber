@@ -8,6 +8,7 @@ import {
   initialiseEtatSaisieInformations,
   raisonSocialeSaisie,
   reducteurSaisieInformations,
+  relationAidantCliquee,
 } from './reducteurSaisieInformations.tsx';
 import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
 import {
@@ -41,6 +42,7 @@ export const SaisieInformations = (
           departement: etatSaisieInformations.departement,
           email: etatSaisieInformations.email,
           raisonSociale: etatSaisieInformations.raisonSociale,
+          relationAidant: etatSaisieInformations.relationAidantSaisie,
         });
       }
     }
@@ -60,12 +62,12 @@ export const SaisieInformations = (
   const surSaisieDepartement = useCallback((departement: string) => {
     envoie(departementSaisi(departement));
   }, []);
-  const surSaisieRaisonSociale = (raisonSociale: string) => {
+  const surSaisieRaisonSociale = useCallback((raisonSociale: string) => {
     envoie(raisonSocialeSaisie(raisonSociale));
-  };
-  const surCGUValidees = () => {
+  }, []);
+  const surCGUValidees = useCallback(() => {
     envoie(cguValidees());
-  };
+  }, []);
   const { affiche } = useModale();
   const afficheModaleCGU = useCallback(
     (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -77,6 +79,9 @@ export const SaisieInformations = (
     },
     [affiche],
   );
+  const surRelationAidant = useCallback(() => {
+    envoie(relationAidantCliquee());
+  }, []);
   return (
     <>
       <div className="fr-mb-2w">Votre demande</div>
@@ -190,6 +195,20 @@ export const SaisieInformations = (
                     </span>
                   </label>
                   {etatSaisieInformations.erreur?.cguValidees?.texteExplicatif}
+                </div>
+              </div>
+              <div className="fr-col-12">
+                <div className="fr-checkbox-group mac-radio-group">
+                  <input
+                    type="checkbox"
+                    id="relation-aidant"
+                    name="relation-aidant"
+                    onClick={surRelationAidant}
+                    checked={etatSaisieInformations.relationAidantSaisie}
+                  />
+                  <label className="fr-label" htmlFor="relation-aidant">
+                    <span>Je suis déjà en relation avec un Aidant</span>
+                  </label>
                 </div>
               </div>
             </div>
