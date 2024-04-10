@@ -17,6 +17,7 @@ type CorpsRequeteDemandeAide = {
   email: string;
   departement: string;
   raisonSociale?: string;
+  relationAidant: boolean;
 };
 
 class ErreurDemandeAide extends Error {
@@ -69,6 +70,7 @@ export const routesAPIAideDemande = (configuration: ConfigurationServeur) => {
           ...(corpsRequete.raisonSociale && {
             raisonSociale: corpsRequete.raisonSociale,
           }),
+          relationAidant: corpsRequete.relationAidant,
         };
         return configuration.busCommande
           .publie(saga)

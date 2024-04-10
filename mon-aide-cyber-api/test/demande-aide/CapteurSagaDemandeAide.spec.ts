@@ -37,6 +37,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         email: aide.email,
         departement: aide.departement,
         raisonSociale: aide.raisonSociale!,
+        relationAidant: false,
       });
 
       expect(await entrepots.aides().tous()).toHaveLength(1);
@@ -66,6 +67,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         cguValidees: true,
         email: 'un email',
         departement: 'un departement',
+        relationAidant: false,
       });
 
       expect(
@@ -73,7 +75,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       ).not.toBeUndefined();
     });
 
-    it('envoie un email récapitulatif à l’Aidé', async () => {
+    it('envoie un email de confirmation à l’Aidé', async () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00')),
       );
@@ -98,6 +100,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         email: 'jean-dupont@email.com',
         departement: 'Gironde',
         raisonSociale: 'BetaGouv',
+        relationAidant: false,
       });
 
       expect(
@@ -150,6 +153,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         email: 'jean-dupont@email.com',
         departement: 'Gironde',
         raisonSociale: 'BetaGouv',
+        relationAidant: false,
       });
 
       expect(
@@ -167,7 +171,12 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       ).toBe(true);
     });
 
-    it("envoie un email récapitulatif à l’Aidé qui n'a pas saisi de raison sociale", async () => {
+    it('envoie un email de demande d’aide à MAC en prenant en compte la relation existante avec un Aidant', async () => {
+      adaptateurEnvironnement.messagerie = () => ({
+        emailMAC: () => 'mac@email.com',
+        expediteurMAC: () => 'expéditeur',
+        clefAPI: () => 'clef',
+      });
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00')),
       );
@@ -191,6 +200,51 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         cguValidees: true,
         email: 'jean-dupont@email.com',
         departement: 'Gironde',
+        raisonSociale: 'BetaGouv',
+        relationAidant: true,
+      });
+
+      expect(
+        adaptateurEnvoieMail.aEteEnvoyeA(
+          'mac@email.com',
+          'Bonjour,\n' +
+            '\n' +
+            'Une demande d’aide a été faite par jean-dupont@email.com.\n' +
+            '\n' +
+            'Ci-dessous, les informations concernant cette demande :\n' +
+            '- Est déjà en relation avec un Aidant\n' +
+            '- Date de la demande : 19.03.2024 à 14:45\n' +
+            '- Département: Gironde\n' +
+            '- Raison sociale: BetaGouv\n',
+        ),
+      ).toBe(true);
+    });
+
+    it("envoie un email de confirmation à l’Aidé qui n'a pas saisi de raison sociale", async () => {
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2024-03-19T14:45:17+01:00')),
+      );
+      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
+      const entrepotsMemoire = new EntrepotsMemoire();
+      const busEvenement = new BusEvenementDeTest();
+      const busCommande = new BusCommandeMAC(
+        entrepotsMemoire,
+        busEvenement,
+        adaptateurEnvoieMail,
+      );
+      const capteur = new CapteurSagaDemandeAide(
+        entrepotsMemoire,
+        busCommande,
+        busEvenement,
+        adaptateurEnvoieMail,
+      );
+
+      await capteur.execute({
+        type: 'SagaDemandeValidationCGUAide',
+        cguValidees: true,
+        email: 'jean-dupont@email.com',
+        departement: 'Gironde',
+        relationAidant: false,
       });
 
       expect(
@@ -237,6 +291,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         cguValidees: true,
         email: 'jean-dupont@email.com',
         departement: 'Gironde',
+        relationAidant: false,
       });
       const aideRecu = (await entrepotsMemoire.aides().tous())[0];
 
@@ -273,6 +328,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             cguValidees: true,
             email: 'jean-dupont@email.com',
             departement: 'Gironde',
+            relationAidant: false,
           }),
         ).rejects.toThrowError("Votre demande d'aide n'a pu aboutir");
         expect(adaptateurEnvoieMail.mailEnvoye()).toBe(false);

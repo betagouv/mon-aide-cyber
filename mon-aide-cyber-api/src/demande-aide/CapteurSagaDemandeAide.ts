@@ -13,6 +13,7 @@ export type SagaDemandeAide = Saga & {
   email: string;
   departement: string;
   raisonSociale?: string;
+  relationAidant: boolean;
 };
 
 export class CapteurSagaDemandeAide
@@ -40,13 +41,14 @@ export class CapteurSagaDemandeAide
     const envoieRecapitulatifDemandeAide = async (
       adaptateurEnvoiMail: AdaptateurEnvoiMail,
       aide: Aide,
+      relationAidant: boolean,
     ) => {
       await adaptateurEnvoiMail.envoie({
         objet: "Demande d'aide pour MonAideCyber",
         destinataire: {
           email: adaptateurEnvironnement.messagerie().emailMAC(),
         },
-        corps: construisMailRecapitulatifDemandeAide(aide),
+        corps: construisMailRecapitulatifDemandeAide(aide, relationAidant),
       });
     };
 
@@ -73,7 +75,11 @@ export class CapteurSagaDemandeAide
         .publie<CommandeCreerAide, Aide>(commandeCreerAide)
         .then(async (aide: Aide) => {
           await envoieConfirmationDemandeAide(this.adaptateurEnvoiMail, aide);
-          await envoieRecapitulatifDemandeAide(this.adaptateurEnvoiMail, aide);
+          await envoieRecapitulatifDemandeAide(
+            this.adaptateurEnvoiMail,
+            aide,
+            saga.relationAidant,
+          );
 
           await this.busEvenement.publie({
             identifiant: aide.identifiant,
@@ -92,12 +98,18 @@ export class CapteurSagaDemandeAide
   }
 }
 
-const construisMailRecapitulatifDemandeAide = (aide: Aide) => {
+const construisMailRecapitulatifDemandeAide = (
+  aide: Aide,
+  relationAidant: boolean,
+) => {
   const formateDate = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant(),
   );
   const raisonSociale = aide.raisonSociale
     ? `- Raison sociale: ${aide.raisonSociale}\n`
+    : '';
+  const miseEnRelation = relationAidant
+    ? '- Est déjà en relation avec un Aidant\n'
     : '';
   return (
     'Bonjour,\n' +
@@ -105,6 +117,7 @@ const construisMailRecapitulatifDemandeAide = (aide: Aide) => {
     `Une demande d’aide a été faite par ${aide.email}.\n` +
     '\n' +
     'Ci-dessous, les informations concernant cette demande :\n' +
+    miseEnRelation +
     `- Date de la demande : ${formateDate.date} à ${formateDate.heure}\n` +
     `- Département: ${aide.departement}\n` +
     raisonSociale
