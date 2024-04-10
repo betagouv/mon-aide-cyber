@@ -10,7 +10,8 @@ export type Contexte =
   | 'Demande la restitution'
   | 'Envoi un message de contact'
   | 'Lance le diagnostic'
-  | 'Modifie le mot de passe';
+  | 'Modifie le mot de passe'
+  | "Recherche d'un Aidé";
 
 export class ErreurMAC extends Error {
   private constructor(
