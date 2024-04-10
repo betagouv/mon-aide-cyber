@@ -46,6 +46,9 @@ export const Accueil = () => {
     },
     [],
   );
+  const demandeAide = useCallback(() => {
+    window.location.href = '/demande-aide';
+  }, []);
   const envoieMessage = useCallback(async (e: FormEvent) => {
     e.preventDefault();
     envoie(messageComplete());
@@ -473,7 +476,7 @@ export const Accueil = () => {
                       <button
                         type="button"
                         className="fr-btn bouton-mac bouton-mac-primaire"
-                        onClick={mailMonAideCyber}
+                        onClick={demandeAide}
                       >
                         Je veux être Aidé
                       </button>
