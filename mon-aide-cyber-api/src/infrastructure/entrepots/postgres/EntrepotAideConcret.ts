@@ -11,6 +11,7 @@ import {
   adaptateursRequeteBrevo,
   estReponseEnErreur,
 } from '../../adaptateurs/adaptateursRequeteBrevo';
+import { AggregatNonTrouve } from '../../../domaine/Aggregat';
 
 type DonneesAidesMAC = {
   dateSignatureCGU: string;
@@ -45,6 +46,10 @@ class EntrepotAidePostgres extends EntrepotPostgres<AideMAC, AideMACDTO> {
       identifiant: dto.id,
       dateSignatureCGU: FournisseurHorloge.enDate(dto.donnees.dateSignatureCGU),
     };
+  }
+
+  typeAggregat(): string {
+    return 'Aide';
   }
 }
 
@@ -97,7 +102,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
             'ERREUR BREVO',
             JSON.stringify({
               contexte: 'Recherche contact',
-              code: reponse.code,
+              details: reponse.code,
               message: reponse.message,
             }),
           );
@@ -143,7 +148,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
             'ERREUR BREVO',
             JSON.stringify({
               contexte: 'Création contact',
-              code: reponse.code,
+              details: reponse.code,
               message: reponse.message,
             }),
           );
@@ -195,6 +200,17 @@ export class EntrepotAideConcret implements EntrepotAide {
         email: aideBrevo.email,
       };
     } catch (erreur) {
+      if (erreur instanceof AggregatNonTrouve) {
+        console.error(
+          "L'Aidé demandé n'existe pas.",
+          JSON.stringify({
+            contexte: 'Recherche par Email',
+            aide: email,
+            erreur,
+          }),
+        );
+        return Promise.reject("L'Aidé demandé n'existe pas.");
+      }
       console.error(
         "ERREUR LORS DE LA RÉCUPÉRATION DES INFORMATIONS DE L'AIDÉ",
         JSON.stringify({
