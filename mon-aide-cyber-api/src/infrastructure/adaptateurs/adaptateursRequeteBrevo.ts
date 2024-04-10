@@ -1,6 +1,6 @@
 type ReponseBrevo = Response;
 
-interface ReponseBrevoEnErreur extends ReponseBrevo {
+type CorpsReponseEnErreur = {
   code:
     | 'invalid_parameter'
     | 'missing_parameter'
@@ -19,24 +19,32 @@ interface ReponseBrevoEnErreur extends ReponseBrevo {
     | 'not_acceptable'
     | 'bad_request';
   message: string;
-}
+};
+type ReponseBrevoEnErreur = Omit<ReponseBrevo, 'json'> & {
+  json: () => Promise<CorpsReponseEnErreur>;
+};
 
-type ReponseEnvoiMail = ReponseBrevo & {
-  messageId: string;
-  messageIds: string[];
+type CorpsReponseEnvoiMail = { messageId: string; messageIds: string[] };
+type ReponseEnvoiMail = Omit<ReponseBrevo, 'json'> & {
+  json: () => Promise<CorpsReponseEnvoiMail>;
 };
-type ReponseCreationContact = ReponseBrevo & {
-  id: string;
+type CorpsReponseCreationContact = { id: string };
+type ReponseCreationContact = Omit<ReponseBrevo, 'json'> & {
+  json: () => Promise<CorpsReponseCreationContact>;
 };
-type ReponseRechercheContact = ReponseBrevo & {
+type CorpsReponseRechercheContact = {
   email: string;
   id: string;
   attributes: any;
 };
+type ReponseRechercheContact = Omit<ReponseBrevo, 'json'> & {
+  json: () => Promise<CorpsReponseRechercheContact>;
+};
 
-interface AdaptateurRequeteBrevo<REQUETE, REPONSE extends ReponseBrevo> {
+interface AdaptateurRequeteBrevo<REQUETE, REPONSE extends Response> {
   execute(requete: REQUETE): Promise<REPONSE>;
 }
+
 export type RequeteBrevo<T = void> = {
   methode: 'GET' | 'POST';
   headers: Record<string, string>;
@@ -87,23 +95,23 @@ export class AdaptateursRequeteBrevo {
     url: string,
   ) {
     return new (class implements AdaptateurRequeteBrevo<RequeteBrevo<T>, R> {
-      execute(requete: RequeteBrevo<T>): Promise<R> {
-        return fetch(url, {
-          method: requete.methode,
-          headers: requete.headers,
-          ...(requete.methode === 'POST' && {
-            body: JSON.stringify(requete.corps),
-          }),
-        })
-          .then(async (reponse) => {
-            const corpsReponse = await reponse.json();
-            return { ...reponse, ...corpsReponse };
-          })
-          .catch((erreur) => Promise.reject(erreur));
+      async execute(requete: RequeteBrevo<T>): Promise<R> {
+        try {
+          return (await fetch(url, {
+            method: requete.methode,
+            headers: requete.headers,
+            ...(requete.methode === 'POST' && {
+              body: JSON.stringify(requete.corps),
+            }),
+          })) as unknown as R;
+        } catch (erreur) {
+          return await Promise.reject(erreur);
+        }
       }
     })();
   }
 }
+
 export const adaptateursRequeteBrevo = () => new AdaptateursRequeteBrevo();
 
 export const estReponseEnErreur = (
