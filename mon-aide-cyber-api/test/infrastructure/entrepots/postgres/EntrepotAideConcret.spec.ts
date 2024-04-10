@@ -110,11 +110,36 @@ describe('Entrepot Aidé Concret', () => {
 
       expect(aideRecherche).toBeUndefined();
     });
+
+    it('Une erreur est remontée si le contact Brevo existe mais que l’on arrive pas à récupérer les informations de l’Aidé', async () => {
+      const aide = unAide()
+        .avecUneDateDeSignatureDesCGU(
+          FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00'),
+        )
+        .construis();
+      const entrepotAideBrevoMemoire =
+        new EntrepotAideBrevoMemoire().sansMetadonnees();
+      const serviceDeChiffrement = new FauxServiceDeChiffrement(
+        new DictionnaireDeChiffrementAide().avec(aide).construis(),
+      );
+      const entrepotAideConcret = new EntrepotAideConcret(
+        serviceDeChiffrement,
+        entrepotAideBrevoMemoire,
+      );
+      await entrepotAideConcret.persiste(aide);
+
+      await expect(() =>
+        entrepotAideConcret.rechercheParEmail(aide.email),
+      ).rejects.toThrowError(
+        "Impossible de récupérer les informations de l'Aidé.",
+      );
+    });
   });
 });
 
 class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
   protected entites: Map<string, AideDistantBrevoDTO> = new Map();
+  private avecMetaDonnees = true;
   async persiste(
     aide: AideDistant,
     chiffrement: (
@@ -123,16 +148,21 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
       raisonSociale?: string,
     ) => string,
   ) {
-    this.entites.set(aide.email, {
+    const contactBrevo: Omit<AideDistantBrevoDTO, 'attributes'> & {
+      attributes: { METADONNEES?: string };
+    } = {
       email: aide.email,
       attributes: {
-        METADONNEES: chiffrement(
-          aide.identifiantMAC,
-          aide.departement,
-          aide.raisonSociale,
-        ),
+        ...(this.avecMetaDonnees && {
+          METADONNEES: chiffrement(
+            aide.identifiantMAC,
+            aide.departement,
+            aide.raisonSociale,
+          ),
+        }),
       },
-    });
+    };
+    this.entites.set(aide.email, contactBrevo as AideDistantBrevoDTO);
   }
 
   rechercheParEmail(
@@ -149,6 +179,11 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
         metaDonnees: aideDistantDTO.attributes.METADONNEES,
       }),
     );
+  }
+
+  sansMetadonnees(): EntrepotAideBrevoMemoire {
+    this.avecMetaDonnees = false;
+    return this;
   }
 }
 class DictionnaireDeChiffrementAide implements DictionnaireDeChiffrement<Aide> {
