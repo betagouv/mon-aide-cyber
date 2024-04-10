@@ -8,6 +8,7 @@ import { Adaptateur } from '../adaptateurs/Adaptateur';
 import { Referentiel } from './Referentiel';
 import crypto from 'crypto';
 import { ReferentielDeMesures } from './ReferentielDeMesures';
+import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 
 export class CapteurCommandeLanceDiagnostic
   implements CapteurCommande<CommandeLanceDiagnostic, Diagnostic>
@@ -25,6 +26,10 @@ export class CapteurCommandeLanceDiagnostic
       .then(async ([ref, rec]) => {
         const diagnostic = initialiseDiagnostic(ref, rec);
         await this.entrepots.diagnostic().persiste(diagnostic);
+        await commande.adaptateurRelations.aidantInitieDiagnostic(
+          commande.identifiantAidant,
+          diagnostic.identifiant,
+        );
         await this.busEvenement?.publie<DiagnosticLance>({
           identifiant: diagnostic.identifiant,
           type: 'DIAGNOSTIC_LANCE',
@@ -46,6 +51,7 @@ export type CommandeLanceDiagnostic = Omit<Commande, 'type'> & {
   type: 'CommandeLanceDiagnostic';
   adaptateurReferentiel: Adaptateur<Referentiel>;
   adaptateurReferentielDeMesures: Adaptateur<ReferentielDeMesures>;
+  adaptateurRelations: AdaptateurRelations;
   identifiantAidant: crypto.UUID;
 };
 

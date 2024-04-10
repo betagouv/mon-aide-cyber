@@ -9,6 +9,7 @@ import { MoteurMesures } from './MoteurMesures';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { MoteurDesIndicateurs } from './MoteurDesIndicateurs';
 import { CorpsReponse } from './CapteurSagaAjoutReponse';
+import { Aggregat } from '../domaine/Aggregat';
 
 export type Thematique = string;
 
@@ -59,10 +60,9 @@ export type Restitution = {
   mesures?: Mesures;
 };
 
-type Diagnostic = {
+type Diagnostic = Aggregat & {
   dateCreation: Date;
   dateDerniereModification: Date;
-  identifiant: crypto.UUID;
   restitution?: Restitution;
   referentiel: ReferentielDiagnostic;
   mesures: ReferentielDeMesures;
