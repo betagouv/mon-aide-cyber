@@ -134,6 +134,42 @@ describe('Entrepot Aidé Concret', () => {
         "Impossible de récupérer les informations de l'Aidé.",
       );
     });
+
+    it('Une erreur est remontée si le contact Brevo retourné ne correspond pas à un Aidé', async () => {
+      const aide = unAide()
+        .avecUneDateDeSignatureDesCGU(
+          FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00'),
+        )
+        .construis();
+      const entrepotAideBrevoMemoire = new EntrepotAideBrevoMemoire();
+      const tableDeChiffrement = new DictionnaireDeChiffrementAide()
+        .avec(aide)
+        .construis();
+      entrepotAideBrevoMemoire.persiste(
+        {
+          email: aide.email,
+          departement: aide.departement,
+          raisonSociale: aide.departement,
+          identifiantMAC: aide.identifiant,
+          ...(aide.raisonSociale && { raisonSociale: aide.raisonSociale }),
+        },
+        (identifiantMAC, departement, raisonSociale) =>
+          tableDeChiffrement.get(
+            JSON.stringify({ identifiantMAC, departement, raisonSociale }),
+          )!,
+      );
+      const serviceDeChiffrement = new FauxServiceDeChiffrement(
+        tableDeChiffrement,
+      );
+      const entrepotAideConcret = new EntrepotAideConcret(
+        serviceDeChiffrement,
+        entrepotAideBrevoMemoire,
+      );
+
+      await expect(() =>
+        entrepotAideConcret.rechercheParEmail(aide.email),
+      ).rejects.toThrowError("L'Aidé demandé n'existe pas.");
+    });
   });
 });
 
