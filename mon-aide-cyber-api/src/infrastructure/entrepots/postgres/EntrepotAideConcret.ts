@@ -162,37 +162,50 @@ export class EntrepotAideConcret implements EntrepotAide {
   ) {}
 
   async rechercheParEmail(email: string): Promise<Aide | undefined> {
-    const aideBrevo = await this.entreprotAideBrevo.rechercheParEmail(
-      email,
-      (dto) => {
-        const metadonnees: {
-          identifiantMAC: crypto.UUID;
-          departement: string;
-          raisonSociale: string;
-        } = JSON.parse(this.serviceChiffrement.dechiffre(dto.metaDonnees));
-        return {
-          email: dto.email,
-          raisonSociale: metadonnees.raisonSociale,
-          departement: metadonnees.departement,
-          identifiantMAC: metadonnees.identifiantMAC,
-        };
-      },
-    );
-    if (aideBrevo === undefined) {
-      return Promise.resolve(undefined);
-    }
-    const aideMAC = await this.entrepotAidePostgres.lis(
-      aideBrevo.identifiantMAC,
-    );
+    try {
+      const aideBrevo = await this.entreprotAideBrevo.rechercheParEmail(
+        email,
+        (dto) => {
+          const metadonnees: {
+            identifiantMAC: crypto.UUID;
+            departement: string;
+            raisonSociale: string;
+          } = JSON.parse(this.serviceChiffrement.dechiffre(dto.metaDonnees));
+          return {
+            email: dto.email,
+            raisonSociale: metadonnees.raisonSociale,
+            departement: metadonnees.departement,
+            identifiantMAC: metadonnees.identifiantMAC,
+          };
+        },
+      );
+      if (aideBrevo === undefined) {
+        return Promise.resolve(undefined);
+      }
+      const aideMAC = await this.entrepotAidePostgres.lis(
+        aideBrevo.identifiantMAC,
+      );
 
-    return {
-      ...aideMAC,
-      departement: aideBrevo.departement,
-      ...(aideBrevo.raisonSociale && {
-        raisonSociale: aideBrevo.raisonSociale,
-      }),
-      email: aideBrevo.email,
-    };
+      return {
+        ...aideMAC,
+        departement: aideBrevo.departement,
+        ...(aideBrevo.raisonSociale && {
+          raisonSociale: aideBrevo.raisonSociale,
+        }),
+        email: aideBrevo.email,
+      };
+    } catch (erreur) {
+      console.error(
+        "ERREUR LORS DE LA RÉCUPÉRATION DES INFORMATIONS DE L'AIDÉ",
+        JSON.stringify({
+          contexte: 'Recherche par Email',
+          erreur,
+        }),
+      );
+      return Promise.reject(
+        "Impossible de récupérer les informations de l'Aidé.",
+      );
+    }
   }
 
   async lis(_identifiant: string): Promise<Aide> {
