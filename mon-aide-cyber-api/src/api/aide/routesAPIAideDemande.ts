@@ -8,9 +8,9 @@ import {
   validationResult,
 } from 'express-validator';
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
-import { listeDepartements } from '../../../test/infrastructure/departements/listeDepartements';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../domaine/erreurMAC';
+import { listeDepartements } from '../../infrastructure/departements/listeDepartements.ts/listeDepartements';
 
 type CorpsRequeteDemandeAide = {
   cguValidees: boolean;

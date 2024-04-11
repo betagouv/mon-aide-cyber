@@ -4,7 +4,7 @@ import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { listeDepartements } from '../infrastructure/departements/listeDepartements';
+import { listeDepartements } from '../../src/infrastructure/departements/listeDepartements.ts/listeDepartements';
 
 describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
   const testeurMAC = testeurIntegration();
