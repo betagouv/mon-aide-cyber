@@ -6,14 +6,14 @@ export const Confirmation = (proprietes: ProprietesConfirmation) => {
     <>
       <div>
         <div className="fr-mt-2w">
-          <h4>Votre demande d’inscription a bien été prise en compte !</h4>
+          <h4>Votre demande a bien été prise en compte !</h4>
         </div>
         <div className="fr-mt-2w">
           <p>
             Celle-ci sera traitée dans les meilleurs délais.
             <br />
             Vous recevrez un email de validation lorsque votre demande sera
-            traitée.
+            affectée à un Aidant.
           </p>
           <p>
             Pensez à vérifier dans vos spams ou contactez-nous à{' '}
