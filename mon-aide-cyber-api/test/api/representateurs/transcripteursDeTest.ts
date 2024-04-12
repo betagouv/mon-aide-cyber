@@ -33,6 +33,7 @@ const transcripteurAvecSaisiesLibres = {
       ],
     },
   },
+  generateurInfoBulle: (infoBulle) => infoBulle,
 } as Transcripteur;
 
 const transcripteurQuestionTiroir = {
@@ -67,6 +68,7 @@ const transcripteurQuestionTiroir = {
       ],
     },
   },
+  generateurInfoBulle: (infoBulle) => infoBulle,
 } as Transcripteur;
 
 const transcripteurMultipleTiroir = {
@@ -106,6 +108,7 @@ const transcripteurMultipleTiroir = {
       ],
     },
   },
+  generateurInfoBulle: (infoBulle) => infoBulle,
 } as Transcripteur;
 
 class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
@@ -173,6 +176,7 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
     return {
       ordreThematiques: this.thematiquesOrdonnees,
       thematiques: { ...this.thematiques },
+      generateurInfoBulle: (infoBulles) => infoBulles,
     };
   }
 }
@@ -188,6 +192,7 @@ const fabriqueTranscripteurVide = (): Transcripteur => {
         groupes: [],
       },
     },
+    generateurInfoBulle: (infoBulle) => infoBulle,
   };
 };
 

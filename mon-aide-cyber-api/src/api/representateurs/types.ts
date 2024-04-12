@@ -58,6 +58,7 @@ export type RepresentationQuestion = {
   reponseDonnee: RepresentationReponseDonnee;
   reponsesPossibles: RepresentationReponsePossible[];
   type?: TypeDeSaisie | undefined;
+  'info-bulles'?: InfoBulle[];
 };
 export type RepresentationQuestionChoixMultiple = RepresentationQuestion & {
   type?: Exclude<TypeDeSaisie, 'choixUnique'> | undefined;
@@ -94,10 +95,12 @@ export type ReponseATranscrire = {
   question?: QuestionATranscrire | undefined;
   type?: { format: Format; type: TypeDeSaisie };
 };
+type InfoBulle = string;
 export type QuestionATranscrire = {
   identifiant: string;
   reponses?: ReponseATranscrire[];
   type?: TypeDeSaisie;
+  'info-bulles'?: InfoBulle[];
 };
 export type Thematique = {
   description: string;
@@ -113,5 +116,6 @@ type Thematiques = {
 export type Transcripteur = {
   ordreThematiques?: string[];
   thematiques: Thematiques;
+  generateurInfoBulle: (infoBulles: InfoBulle[]) => string[];
 };
 export type Chemin = string;
