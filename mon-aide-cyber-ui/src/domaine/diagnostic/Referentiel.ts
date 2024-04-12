@@ -40,4 +40,5 @@ export type Question = {
   reponseDonnee: ReponseDonnee;
   reponsesPossibles: ReponsePossible[];
   type: Exclude<TypeDeSaisie, 'saisieLibre'>;
+  'info-bulles'?: string[];
 };
