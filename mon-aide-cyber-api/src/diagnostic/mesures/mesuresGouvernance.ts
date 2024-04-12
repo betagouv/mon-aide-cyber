@@ -104,7 +104,7 @@ export const mesuresGouvernance = {
     },
     niveau2: {
       titre:
-        'Fixer des exigences de sécurité aux prestataires, en vérifier leur application et imposer des pénalités en cas de non-respect',
+        "Vérifier l'application et imposer des pénalités aux prestataires en cas de non-respect des exigences de cybersécurité",
       pourquoi:
         '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-niveau2-pourquoi.pug',
       comment:
@@ -114,7 +114,7 @@ export const mesuresGouvernance = {
   },
   'gouvernance-exigence-cyber-securite-presta-si-industriel': {
     niveau1: {
-      titre: 'Fixer des exigences de cybersécurité aux prestataires',
+      titre: "Fixer des exigences de cybersécurité aux prestataires accèdant aux systèmes industriels",
       pourquoi:
         '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-si-industriel-niveau1-pourquoi.pug',
       comment:
@@ -122,7 +122,7 @@ export const mesuresGouvernance = {
     },
     niveau2: {
       titre:
-        'Fixer des exigences de sécurité aux prestataires, en vérifier leur application et imposer des pénalités en cas de non-respect',
+        "Vérifier l'application et imposer des pénalités aux prestataires accèdant aux systèmes industriels en cas de non-respect des exigences de cybersécurité",
       pourquoi:
         '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-si-industriel-niveau2-pourquoi.pug',
       comment:
