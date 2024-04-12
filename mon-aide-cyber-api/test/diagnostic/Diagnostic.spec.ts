@@ -405,6 +405,126 @@ describe('Diagnostic', () => {
             },
           ]);
         });
+
+        it('en priorisant les 8 mesures les plus prioritaires quelque soit le niveau des autres', () => {
+          const mesures = desMesures()
+            .avecLesMesures([
+              {
+                q1: {
+                  niveau1: 'mesure 1',
+                  niveau2: 'mesure 12',
+                  priorisation: 3,
+                },
+              },
+              {
+                q2: {
+                  niveau1: 'mesure 2',
+                  niveau2: 'mesure 22',
+                  priorisation: 8,
+                },
+              },
+              {
+                q3: {
+                  niveau1: 'mesure 3',
+                  niveau2: 'mesure 32',
+                  priorisation: 9,
+                },
+              },
+            ])
+            .construis();
+          const questions = uneListeDeQuestions()
+            .dontLesLabelsSont(['q1', 'q2', 'q3'])
+            .avecLesReponsesPossiblesSuivantesAssociees([
+              {
+                libelle: 'reponse 1',
+                association: uneAssociation()
+                  .avecIdentifiant('q1')
+                  .deNiveau1()
+                  .ayantPourValeurDIndice(0)
+                  .construis(),
+              },
+              {
+                libelle: 'reponse 21',
+                association: uneAssociation()
+                  .avecIdentifiant('q1')
+                  .deNiveau2()
+                  .ayantPourValeurDIndice(1)
+                  .construis(),
+              },
+              {
+                libelle: 'reponse 2',
+                association: uneAssociation()
+                  .avecIdentifiant('q2')
+                  .deNiveau1()
+                  .ayantPourValeurDIndice(0)
+                  .construis(),
+              },
+              {
+                libelle: 'reponse 22',
+                association: uneAssociation()
+                  .avecIdentifiant('q2')
+                  .deNiveau2()
+                  .ayantPourValeurDIndice(1)
+                  .construis(),
+              },
+              {
+                libelle: 'reponse 3',
+                association: uneAssociation()
+                  .avecIdentifiant('q3')
+                  .deNiveau1()
+                  .ayantPourValeurDIndice(0)
+                  .construis(),
+              },
+              {
+                libelle: 'reponse 32',
+                association: uneAssociation()
+                  .avecIdentifiant('q3')
+                  .deNiveau2()
+                  .ayantPourValeurDIndice(1)
+                  .construis(),
+              },
+            ])
+            .construis();
+          const diagnostic = unDiagnostic()
+            .avecUnReferentiel(
+              unReferentiel()
+                .ajouteUneThematique('thematique', [...questions])
+                .construis(),
+            )
+            .avecLesReponsesDonnees('thematique', [
+              { q2: 'reponse-22' },
+              { q1: 'reponse-1' },
+              { q3: 'reponse-3' },
+            ])
+            .avecDesMesures(mesures)
+            .construis();
+
+          genereLaRestitution(diagnostic);
+
+          expect(
+            diagnostic.restitution?.mesures?.mesuresPrioritaires,
+          ).toStrictEqual<MesurePriorisee[]>([
+            {
+              priorisation: 3,
+              titre: 'mesure 1',
+              ...PARTIE_COMMUNE_ATTENDUE,
+            },
+            {
+              priorisation: 8,
+              titre: 'mesure 22',
+              ...PARTIE_COMMUNE_ATTENDUE,
+              valeurObtenue: 1,
+            },
+            {
+              priorisation: 9,
+              titre: 'mesure 3',
+              ...PARTIE_COMMUNE_ATTENDUE,
+            },
+          ]);
+          expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual<
+            MesurePriorisee[]
+          >([]);
+        });
       });
 
       describe("pour des questions dont le résultat dépend d'une règle de calcul", () => {
