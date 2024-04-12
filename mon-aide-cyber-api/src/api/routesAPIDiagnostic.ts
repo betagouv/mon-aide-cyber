@@ -116,7 +116,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
           reponse.contentType('application/pdf').send(restitution);
         } else {
           const reponseHATEOAS = constructeurActionsHATEOAS()
-            .tableauDeBord()
             .lancerDiagnostic()
             .restituerDiagnostic(id)
             .modifierDiagnostic(id)

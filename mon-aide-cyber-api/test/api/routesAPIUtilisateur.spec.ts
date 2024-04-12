@@ -71,9 +71,6 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
             url: '/api/espace-aidant/cree',
             methode: 'POST',
           },
-          suite: {
-            url: '/finalise-creation-compte',
-          },
         },
       });
     });

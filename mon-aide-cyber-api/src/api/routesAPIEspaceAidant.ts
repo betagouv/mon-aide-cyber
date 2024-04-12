@@ -50,7 +50,6 @@ export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
           });
           reponse.status(200).json({
             ...constructeurActionsHATEOAS()
-              .tableauDeBord()
               .lancerDiagnostic()
               .afficherProfil()
               .construis(),
