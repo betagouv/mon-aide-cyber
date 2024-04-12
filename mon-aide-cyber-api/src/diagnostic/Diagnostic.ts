@@ -129,7 +129,7 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
     mesures: MesureDiagnostic[],
     valeursDesIndices: ValeursDesIndicesAuDiagnostic,
   ): MesurePriorisee[] => {
-    return mesures
+    const mesurePriorisees = mesures
       .map((mesure) => {
         const valeurObtenue = Object.values(valeursDesIndices)
           .flatMap((valeurReponse) => valeurReponse)
@@ -147,7 +147,9 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
         (mesure) =>
           mesure.valeurObtenue !== undefined && mesure.valeurObtenue !== null,
       )
-      .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0)
+      .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0);
+    const les8MesuresLesPlusPrioritaires = mesurePriorisees
+      .filter((mesure) => mesure.priorisation < 9)
       .sort(
         (a, b) =>
           (laValeurEstDefinie(a.valeurObtenue) &&
@@ -156,6 +158,18 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
             ? -1
             : 1) || 0,
       );
+    const lesAutresMesures = mesurePriorisees
+      .filter((mesure) => mesure.priorisation > 8)
+      .sort(
+        (a, b) =>
+          (laValeurEstDefinie(a.valeurObtenue) &&
+          laValeurEstDefinie(b.valeurObtenue) &&
+          a.valeurObtenue < b.valeurObtenue
+            ? -1
+            : 1) || 0,
+      );
+
+    return [...les8MesuresLesPlusPrioritaires, ...lesAutresMesures];
   };
   const mesuresPriorisees = prioriseLesMesures(mesures, valeursDesIndices);
 
