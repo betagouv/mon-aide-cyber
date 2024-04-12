@@ -13,10 +13,14 @@ export const transcripteurContexte: Thematique = {
     },
     {
       questions: [
-        { identifiant: 'contexte-nature-organisation' },
+        {
+          identifiant: 'contexte-nature-organisation',
+          'info-bulles': ['contexte/nature-organisation.pug'],
+        },
         {
           identifiant: 'contexte-secteur-activite',
           type: 'liste',
+          'info-bulles': ['contexte/secteur-activite.pug'],
         },
         {
           identifiant: 'contexte-region-siege-social',

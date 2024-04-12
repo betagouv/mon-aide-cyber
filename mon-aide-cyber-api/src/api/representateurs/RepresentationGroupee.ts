@@ -47,6 +47,11 @@ export class RepresentationGroupee {
               reponseDonnee: autresReponses,
               reponsesPossibles,
               type: questionATranscrire?.type || question!.type,
+              ...(questionATranscrire['info-bulles'] && {
+                'info-bulles': this.transcripteur.generateurInfoBulle(
+                  questionATranscrire['info-bulles'],
+                ),
+              }),
             };
           });
           return { numero: this.numeroQuestion++, questions };

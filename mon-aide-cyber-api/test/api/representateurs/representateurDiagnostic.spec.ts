@@ -151,6 +151,7 @@ describe('Le représentateur de diagnostic', () => {
               ],
             },
           },
+          generateurInfoBulle: (infoBulle) => infoBulle,
         },
       );
 
@@ -850,6 +851,73 @@ describe('Le représentateur de diagnostic', () => {
           ],
         },
       ]);
+    });
+  });
+
+  describe('Afin de représenter les infos bulles', () => {
+    it('Génère les infos bulles pour une question donnée', () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .sansThematique()
+            .ajouteUneThematique('une-thematique', [
+              uneQuestion()
+                .aChoixUnique('Quelle est la nature de votre entité?')
+                .construis(),
+              uneQuestion()
+                .aChoixUnique("Quel est son secteur d'activité?")
+                .construis(),
+              uneQuestion()
+                .aChoixUnique('Combien de personnes compte votre entité?')
+                .construis(),
+            ])
+            .construis(),
+        )
+        .construis();
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        unTranscripteur()
+          .avecLesThematiques(['une-thematique'])
+          .avecLesQuestionsGroupees([
+            {
+              thematique: 'une-thematique',
+              groupes: [
+                {
+                  questions: [
+                    {
+                      identifiant: 'quelle-est-la-nature-de-votre-entite',
+                      'info-bulles': [
+                        'info bulle schéma 1',
+                        'info bulle schéma 2',
+                      ],
+                    },
+                    {
+                      identifiant: 'quel-est-son-secteur-dactivite',
+                      'info-bulles': ['info bulle nature entité'],
+                    },
+                  ],
+                },
+                {
+                  questions: [
+                    { identifiant: 'combien-de-personnes-compte-votre-entite' },
+                  ],
+                },
+              ],
+            },
+          ])
+          .construis(),
+      );
+
+      const thematique = representationDiagnostic.referentiel['une-thematique'];
+      expect(thematique.groupes[0].questions[0]['info-bulles']).toStrictEqual([
+        'info bulle schéma 1',
+        'info bulle schéma 2',
+      ]);
+      expect(thematique.groupes[0].questions[1]['info-bulles']).toStrictEqual([
+        'info bulle nature entité',
+      ]);
+      expect(thematique.groupes[1].questions[0]['info-bulles']).toBeUndefined();
     });
   });
 });

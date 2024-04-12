@@ -9,6 +9,7 @@ import { transcripteurSecuriteInfrastructure } from './transcripteurSecuriteInfr
 import { transcripteurSensibilisation } from './transcripteurSensibilisation';
 import { transcripteurReaction } from './transcripteurReaction';
 import { ORDRE_THEMATIQUES } from '../../../diagnostic/Diagnostic';
+import pug from 'pug';
 
 export const adaptateurTranscripteur = () =>
   new (class implements AdaptateurTranscripteur {
@@ -24,6 +25,12 @@ export const adaptateurTranscripteur = () =>
           sensibilisation: transcripteurSensibilisation,
           reaction: transcripteurReaction,
         },
+        generateurInfoBulle: (infoBulles) =>
+          infoBulles.map((infoBulle) =>
+            pug.renderFile(
+              `src/infrastructure/adaptateurs/transcripteur/info-bulles/${infoBulle}`,
+            ),
+          ),
       };
     }
   })();
