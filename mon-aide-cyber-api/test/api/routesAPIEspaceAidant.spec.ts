@@ -54,7 +54,6 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       ).toBe(true);
       expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
         liens: {
-          suite: { url: '/tableau-de-bord' },
           'lancer-diagnostic': {
             url: '/api/diagnostic',
             methode: 'POST',

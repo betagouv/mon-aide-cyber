@@ -1,8 +1,7 @@
 import { AidantAuthentifie } from '../../authentification/Aidant';
 
 type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
-type SuiteHATEOAS = { suite?: Options };
-type LiensHATEOAS = SuiteHATEOAS | Record<string, Options>;
+type LiensHATEOAS = Record<string, Options>;
 export type ReponseHATEOAS = {
   liens: LiensHATEOAS;
 };
@@ -11,7 +10,6 @@ type Options = { url: string; methode?: Methode; contentType?: string };
 
 class ConstructeurActionsHATEOAS {
   private readonly actions: Map<string, Options> = new Map();
-  private suite?: Options;
 
   lancerDiagnostic(): ConstructeurActionsHATEOAS {
     this.actions.set('lancer-diagnostic', {
@@ -28,7 +26,7 @@ class ConstructeurActionsHATEOAS {
       return this.creerEspaceAidant();
     }
 
-    return this.tableauDeBord().lancerDiagnostic().afficherProfil();
+    return this.lancerDiagnostic().afficherProfil();
   }
 
   afficherProfil(): ConstructeurActionsHATEOAS {
@@ -41,19 +39,12 @@ class ConstructeurActionsHATEOAS {
   }
 
   creerEspaceAidant(): ConstructeurActionsHATEOAS {
-    this.suite = { url: '/finalise-creation-compte' };
     this.actions.set('creer-espace-aidant', {
       url: '/api/espace-aidant/cree',
       methode: 'POST',
     });
     return this;
   }
-
-  tableauDeBord(): ConstructeurActionsHATEOAS {
-    this.suite = { url: '/tableau-de-bord' };
-    return this;
-  }
-
   restituerDiagnostic(idDiagnostic: string): ConstructeurActionsHATEOAS {
     this.actions.set('restitution-pdf', {
       url: `/api/diagnostic/${idDiagnostic}/restitution`,
@@ -110,7 +101,6 @@ class ConstructeurActionsHATEOAS {
   construis = (): ReponseHATEOAS => {
     return {
       liens: {
-        ...(this.suite && { suite: this.suite }),
         ...(this.actions.size > 0 &&
           Array.from(this.actions).reduce(
             (accumulateur, [action, lien]) => ({

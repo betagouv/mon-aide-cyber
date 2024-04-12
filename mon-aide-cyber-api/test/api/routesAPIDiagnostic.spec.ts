@@ -364,9 +364,6 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
             url: '/api/profil',
             methode: 'GET',
           },
-          suite: {
-            url: '/tableau-de-bord',
-          },
         },
         autresMesures: '',
         indicateurs: 'indicateurs',

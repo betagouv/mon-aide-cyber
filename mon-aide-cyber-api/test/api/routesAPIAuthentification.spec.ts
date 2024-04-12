@@ -44,7 +44,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         expect(await reponse.json()).toStrictEqual({
           nomPrenom: 'Martin Dupont',
           liens: {
-            suite: { url: '/tableau-de-bord' },
             'lancer-diagnostic': {
               url: '/api/diagnostic',
               methode: 'POST',
@@ -110,7 +109,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
           nomPrenom: 'Martin Dupont',
           liens: {
-            suite: { url: '/tableau-de-bord' },
             'lancer-diagnostic': { url: '/api/diagnostic', methode: 'POST' },
             'afficher-profil': {
               url: '/api/profil',
@@ -148,7 +146,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
             nomPrenom: 'Jean Dupont',
             liens: {
-              suite: { url: '/finalise-creation-compte' },
               'creer-espace-aidant': {
                 url: '/api/espace-aidant/cree',
                 methode: 'POST',
@@ -177,7 +174,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
             nomPrenom: aidant.nomPrenom,
             liens: {
-              suite: { url: '/finalise-creation-compte' },
               'creer-espace-aidant': {
                 url: '/api/espace-aidant/cree',
                 methode: 'POST',
