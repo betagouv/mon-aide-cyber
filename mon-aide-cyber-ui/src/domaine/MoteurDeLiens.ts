@@ -41,7 +41,6 @@ export class MoteurDeLiens {
 
   extrais(exclusion?: (Action | string)[]): Liens {
     return Object.entries(this.liens)
-      .filter(([action]) => action !== 'suite')
       .filter(([lien]) => !exclusion?.includes(lien))
       .reduce(
         (accumulateur, [action, lien]) => ({
