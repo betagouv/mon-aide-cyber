@@ -14,6 +14,7 @@ export class AdaptateurTranscripteurDeTest implements AdaptateurTranscripteur {
           groupes: [],
         },
       },
+      generateurInfoBulle: (infoBulle) => infoBulle,
     };
   }
 }

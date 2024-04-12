@@ -480,35 +480,53 @@ export const ComposantDiagnostic = ({
             const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
               (action) => Object.entries(action).find(([c]) => c === clef),
             ) as ActionReponseDiagnostic[];
-            const elements = thematique.groupes.flatMap((groupe) => {
+            const questionsGroupees = thematique.groupes.flatMap((groupe) => {
               return (
-                <fieldset
-                  key={`groupe-${groupe.numero}`}
-                  id={`groupe-${groupe.numero}`}
-                  className="fr-fieldset fr-mb-5w section"
-                >
-                  {groupe.questions.map((question, index) => {
-                    const numeroQuestion =
-                      index === 0 ? groupe.numero : undefined;
-                    return (
-                      <>
-                        {question.type === 'liste' ? (
-                          <ComposantQuestionListe
-                            question={question}
-                            actions={actionsPossibles}
-                            numeroQuestion={numeroQuestion}
-                          />
-                        ) : (
-                          <ComposantQuestion
-                            question={question}
-                            actions={actionsPossibles}
-                            numeroQuestion={numeroQuestion}
-                          />
-                        )}
-                      </>
-                    );
-                  })}
-                </fieldset>
+                <div className="fr-grid-row fr-grid-row--gutters">
+                  <div className="fr-col-md-8 fr-col-8">
+                    <fieldset
+                      key={`groupe-${groupe.numero}`}
+                      id={`groupe-${groupe.numero}`}
+                      className="fr-fieldset section"
+                    >
+                      {groupe.questions.map((question, index) => {
+                        const numeroQuestion =
+                          index === 0 ? groupe.numero : undefined;
+                        return (
+                          <>
+                            {question.type === 'liste' ? (
+                              <ComposantQuestionListe
+                                question={question}
+                                actions={actionsPossibles}
+                                numeroQuestion={numeroQuestion}
+                              />
+                            ) : (
+                              <ComposantQuestion
+                                question={question}
+                                actions={actionsPossibles}
+                                numeroQuestion={numeroQuestion}
+                              />
+                            )}
+                          </>
+                        );
+                      })}
+                    </fieldset>
+                  </div>
+                  <div className="fr-col-md-4 fr-col-4">
+                    {groupe.questions.map(
+                      (question) =>
+                        question['info-bulles']?.map((infoBulle) => (
+                          <div
+                            className="info-bulle"
+                            key={`${question.identifiant}-info-bulle`}
+                            dangerouslySetInnerHTML={{
+                              __html: infoBulle,
+                            }}
+                          ></div>
+                        )),
+                    )}
+                  </div>
+                </div>
               );
             });
             return (
@@ -540,11 +558,11 @@ export const ComposantDiagnostic = ({
                 </div>
                 <div className="fr-container">
                   <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-                    <div className="fr-col-md-8 fr-col-8">
-                      <form id={clef}>
-                        <section className="question">{elements}</section>
-                      </form>
-                    </div>
+                    <form id={clef}>
+                      <section className="question">
+                        {questionsGroupees}
+                      </section>
+                    </form>
                     <div className="fr-col-md-4 fr-col-4"></div>
                   </div>
                 </div>
