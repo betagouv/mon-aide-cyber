@@ -473,7 +473,7 @@ export const ComposantDiagnostic = ({
           accederALaRestitution: () => afficheModaleAccederALaRestitution(),
         }}
       />
-      <main role="main" className="diagnostic-main">
+      <main role="main" className="diagnostic">
         <div className="fr-grid-row fr-grid-row--gutters fond-clair-mac">
           <div className="conteneur-navigation">{navigation}</div>
           {thematiques.map(([clef, thematique]) => {
@@ -567,7 +567,7 @@ export const ComposantDiagnostic = ({
                   </div>
                 </div>
                 <div className="fr-container">
-                  <div className="fr-grid-row">
+                  <div className="fr-grid-row fr-grid-row--gutters fr-mt-5w">
                     <BoutonThematique
                       titre="Thématique précédente"
                       reducteur={reducteurBoutonThematiquePrecedente}
