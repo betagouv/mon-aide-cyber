@@ -42,6 +42,22 @@
 
   .info-bulle {
     margin: 2.5rem 0 0;
+    background-color: var(--couleurs-mac-jaune-clair);
+    border-radius: 1rem;
+    padding: 1rem !important;
+    font-size: 0.875rem;
+    line-height: 1rem;
+  }
+
+  .info-bulle h5 {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .info-bulle p {
+    font-size: 0.875rem;
+    line-height: 1rem;
+    margin: 0;
   }
 }
 
