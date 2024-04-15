@@ -39,6 +39,7 @@ export const transcripteurContexte: Thematique = {
         },
         {
           identifiant: 'contexte-nombre-postes-travail-dans-organisation',
+          'info-bulles': ['contexte/nombre-de-postes.pug'],
         },
       ],
     },
@@ -46,6 +47,7 @@ export const transcripteurContexte: Thematique = {
       questions: [
         {
           identifiant: 'contexte-activites-recherche-et-developpement',
+          'info-bulles': ['contexte/espionnage-cible.pug'],
         },
       ],
     },
@@ -53,11 +55,17 @@ export const transcripteurContexte: Thematique = {
       questions: [
         {
           identifiant: 'contexte-opere-systemes-information-industriels',
+          'info-bulles': ['contexte/systemes-industriels.pug'],
         },
       ],
     },
     {
-      questions: [{ identifiant: 'contexte-cyber-attaque-subie' }],
+      questions: [
+        {
+          identifiant: 'contexte-cyber-attaque-subie',
+          'info-bulles': ['contexte/cyberattaque.pug'],
+        },
+      ],
     },
     {
       questions: [{ identifiant: 'contexte-usage-cloud' }],
