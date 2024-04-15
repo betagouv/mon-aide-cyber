@@ -12,26 +12,59 @@ export const transcripteurGouvernance: Thematique = {
       questions: [{ identifiant: 'gouvernance-infos-et-processus-a-proteger' }],
     },
     {
-      questions: [{ identifiant: 'gouvernance-infos-et-activites-a-proteger' }],
-    },
-    {
       questions: [
-        { identifiant: 'gouvernance-schema-si-a-jour' },
-        { identifiant: 'gouvernance-schema-si-industriel-a-jour' },
+        {
+          identifiant: 'gouvernance-infos-et-activites-a-proteger',
+          'info-bulles': ['gouvernance/infos-et-activites-a-proteger.pug'],
+        },
       ],
     },
     {
-      questions: [{ identifiant: 'gouvernance-connaissance-rgpd' }],
+      questions: [
+        {
+          identifiant: 'gouvernance-schema-si-a-jour',
+          'info-bulles': [
+            'gouvernance/schema-si-composants.pug',
+            'gouvernance/schema-si-interconnexions-exterieur.pug',
+            'gouvernance/schema-si-composants-organisation-publique.pug',
+          ],
+        },
+        {
+          identifiant: 'gouvernance-schema-si-industriel-a-jour',
+        },
+      ],
     },
     {
-      questions: [{ identifiant: 'gouvernance-connaissance-rgpd-1' }],
+      questions: [
+        {
+          identifiant: 'gouvernance-connaissance-rgpd',
+          'info-bulles': [
+            'gouvernance/cnil.pug',
+            'gouvernance/donnees-personnelles.pug',
+          ],
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-1',
+          'info-bulles': [
+            'gouvernance/cnil.pug',
+            'gouvernance/gestion-droits.pug',
+          ],
+        },
+      ],
     },
     {
       questions: [{ identifiant: 'gouvernance-connaissance-rgpd-2' }],
     },
     {
       questions: [
-        { identifiant: 'gouvernance-exigence-cyber-securite-presta' },
+        {
+          identifiant: 'gouvernance-exigence-cyber-securite-presta',
+          'info-bulles': ['gouvernance/contrat-prestataires.pug'],
+        },
         {
           identifiant:
             'gouvernance-exigence-cyber-securite-presta-si-industriel',
