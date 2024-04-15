@@ -78,7 +78,7 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  private seDeconnecter(): ConstructeurActionsHATEOAS {
+  seDeconnecter(): ConstructeurActionsHATEOAS {
     this.actions.set('se-deconnecter', {
       url: '/api/token',
       methode: 'DELETE',

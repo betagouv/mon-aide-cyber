@@ -1,5 +1,4 @@
 import { Tuple } from './Tuple';
-import crypto from 'crypto';
 import { Aggregat } from './Aggregat';
 
 export interface Entrepot<T extends Aggregat> {
@@ -9,5 +8,5 @@ export interface Entrepot<T extends Aggregat> {
 }
 
 export interface EntrepotRelation extends Entrepot<Tuple> {
-  trouveDiagnosticsInitiePar(identifiantAidant: crypto.UUID): Promise<Tuple[]>;
+  trouveDiagnosticsInitiePar(identifiantAidant: string): Promise<Tuple[]>;
 }

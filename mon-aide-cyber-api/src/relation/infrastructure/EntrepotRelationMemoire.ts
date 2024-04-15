@@ -22,7 +22,7 @@ export class EntrepotRelationMemoire
   extends EntrepotMemoire<Tuple>
   implements EntrepotRelation
 {
-  trouveDiagnosticsInitiePar(identifiantAidant: crypto.UUID): Promise<Tuple[]> {
+  trouveDiagnosticsInitiePar(identifiantAidant: string): Promise<Tuple[]> {
     const tuples = Array.from(this.entites.values()).filter(
       (tuple) =>
         tuple.utilisateur.identifiant === identifiantAidant &&

@@ -83,7 +83,7 @@ export class EntrepotRelationPostgres
     return 'relations';
   }
 
-  trouveDiagnosticsInitiePar(_: crypto.UUID): Promise<Tuple[]> {
+  trouveDiagnosticsInitiePar(_: string): Promise<Tuple[]> {
     throw new Error('Non implémenté');
   }
 }

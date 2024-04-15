@@ -12,9 +12,12 @@ import { constructeurActionsHATEOAS } from './hateoas/hateoas';
 import { ErreurMAC } from '../domaine/erreurMAC';
 import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
 import { validateursDeMotDePasseTemporaire } from './validateurs/validateurs';
+import { routesAPITableauDeBord } from '../espace-aidant/tableau-de-bord/routesAPITableauDeBord';
 
 export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
+
+  routes.use('/tableau-de-bord', routesAPITableauDeBord(configuration));
 
   const { entrepots, adaptateurDeVerificationDeSession: session } =
     configuration;

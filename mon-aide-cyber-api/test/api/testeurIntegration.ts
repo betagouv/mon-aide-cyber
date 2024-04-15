@@ -18,6 +18,7 @@ import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs
 import { AdapatateurDeVerificationDeCGUDeTest } from '../adaptateurs/AdaptateurDeVerificationDeCGUDeTest';
 import { AdaptateurDeGestionDeCookiesDeTest } from '../adaptateurs/AdaptateurDeGestionDeCookiesDeTest';
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
+import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 
 class TesteurIntegrationMAC {
   private serveurDeTest:
@@ -28,6 +29,9 @@ class TesteurIntegrationMAC {
       }
     | undefined = undefined;
   constructor(
+    public adaptateurRelations = new AdaptateurRelationsMAC(
+      new EntrepotRelationMemoire(),
+    ),
     public adaptateurReferentiel = new AdaptateurReferentielDeTest(),
     public adaptateurMesures = new AdaptateurMesuresTest(),
     public adaptateurTranscripteurDonnees = new AdaptateurTranscripteurDeTest(),
@@ -52,7 +56,7 @@ class TesteurIntegrationMAC {
 
   initialise() {
     this.serveurDeTest = serveur.creeServeur({
-      adaptateurRelations: new AdaptateurRelationsMAC(),
+      adaptateurRelations: this.adaptateurRelations,
       adaptateurReferentiel: this.adaptateurReferentiel,
       adaptateurTranscripteurDonnees: this.adaptateurTranscripteurDonnees,
       adaptateurMesures: this.adaptateurMesures,
