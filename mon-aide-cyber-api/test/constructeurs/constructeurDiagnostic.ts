@@ -31,7 +31,6 @@ class ConstructeurDiagnostic implements Constructeur<Diagnostic> {
     identifiant: { thematique: string; question: string };
     reponseDonnee: ReponseDonnee;
   }[] = [];
-
   avecUnReferentiel(referentiel: Referentiel): ConstructeurDiagnostic {
     this.referentiel = referentiel;
     return this;
@@ -185,6 +184,34 @@ export const unDiagnosticCompletEnGirondeAvecDesReponsesDonnees = () =>
     .ajouteAuReferentiel('thematique', uneListeDe7QuestionsToutesAssociees())
     .avecLesReponsesDonnees('thematique', septReponsesDonnees())
     .avecDesMesures(desMesuresPour7Questions());
+
+export const unDiagnosticEnRegion = (region: string) =>
+  unDiagnostic()
+    .avecUnReferentiel(
+      unReferentiel()
+        .ajouteUneThematique('contexte', [
+          uneQuestion()
+            .avecIdentifiant('contexte-region-siege-social')
+            .aChoixUnique('région siège social ?', [
+              {
+                identifiant: `contexte-region-siege-social-nouvelle-${region}`,
+                libelle: region,
+              },
+            ])
+            .construis(),
+        ])
+        .construis(),
+    )
+    .ajouteUneReponseDonnee(
+      {
+        thematique: 'contexte',
+        question: 'contexte-region-siege-social',
+      },
+      uneReponseDonnee()
+        .ayantPourReponse(`contexte-region-siege-social-nouvelle-${region}`)
+        .construis(),
+    );
+
 export const unDiagnosticEnGironde = () =>
   unDiagnostic()
     .avecUnReferentiel(
@@ -230,11 +257,89 @@ export const unDiagnosticEnGironde = () =>
         .construis(),
     );
 
+export const unDiagnosticDansLeDepartement = (departement: string) =>
+  unDiagnostic()
+    .avecUnReferentiel(
+      unReferentiel()
+        .ajouteUneThematique('contexte', [
+          uneQuestion()
+            .avecIdentifiant('contexte-departement-tom-siege-social')
+            .aChoixUnique('département ?', [
+              {
+                identifiant: `contexte-departement-tom-siege-social-${departement}`,
+                libelle: departement,
+              },
+            ])
+            .construis(),
+        ])
+        .construis(),
+    )
+    .ajouteUneReponseDonnee(
+      {
+        thematique: 'contexte',
+        question: 'contexte-departement-tom-siege-social',
+      },
+      uneReponseDonnee()
+        .ayantPourReponse(
+          `contexte-departement-tom-siege-social-${departement}`,
+        )
+        .construis(),
+    );
+
 export const unDiagnosticAvecSecteurActivite = (secteurActivite: string) =>
   unDiagnostic()
     .avecUnReferentiel(
       unReferentiel()
         .ajouteUneThematique('contexte', [
+          uneQuestion()
+            .avecIdentifiant('contexte-secteur-activite')
+            .aChoixUnique("secteur d'activité ?", [
+              {
+                identifiant: `contexte-secteur-activite-${secteurActivite}`,
+                libelle: secteurActivite,
+              },
+            ])
+            .construis(),
+        ])
+        .construis(),
+    )
+    .ajouteUneReponseDonnee(
+      {
+        thematique: 'contexte',
+        question: 'contexte-secteur-activite',
+      },
+      uneReponseDonnee()
+        .ayantPourReponse(`contexte-secteur-activite-${secteurActivite}`)
+        .construis(),
+    );
+
+export const unDiagnosticEnRegionDansLeDepartementAvecSecteurActivite = (
+  region: string,
+  departement: string,
+  secteurActivite: string,
+): ConstructeurDiagnostic =>
+  unDiagnostic()
+    .avecUnReferentiel(
+      unReferentiel()
+        .ajouteUneThematique('contexte', [
+          uneQuestion()
+            .avecIdentifiant('contexte-region-siege-social')
+            .aChoixUnique('région siège social ?', [
+              {
+                identifiant: 'contexte-region-siege-social-nouvelle-aquitaine',
+                libelle: region,
+              },
+            ])
+            .construis(),
+          uneQuestion()
+            .avecIdentifiant('contexte-departement-tom-siege-social')
+            .aChoixUnique('département siège social ?', [
+              {
+                identifiant: 'contexte-departement-tom-siege-social-gironde',
+                libelle: departement,
+              },
+            ])
+            .construis(),
           uneQuestion()
             .avecIdentifiant('contexte-secteur-activite')
             .aChoixUnique("secteur d'activité ?", [
@@ -250,25 +355,30 @@ export const unDiagnosticAvecSecteurActivite = (secteurActivite: string) =>
     .ajouteUneReponseDonnee(
       {
         thematique: 'contexte',
+        question: 'contexte-region-siege-social',
+      },
+      uneReponseDonnee()
+        .ayantPourReponse('contexte-region-siege-social-nouvelle-aquitaine')
+        .construis(),
+    )
+    .ajouteUneReponseDonnee(
+      {
+        thematique: 'contexte',
+        question: 'contexte-departement-tom-siege-social',
+      },
+      uneReponseDonnee()
+        .ayantPourReponse('contexte-departement-tom-siege-social-gironde')
+        .construis(),
+    )
+    .ajouteUneReponseDonnee(
+      {
+        thematique: 'contexte',
         question: 'contexte-secteur-activite',
       },
       uneReponseDonnee()
         .ayantPourReponse('contexte-secteur-activite-enseignement')
         .construis(),
     );
-
-export const unDiagnosticAvecUneThematiqueEtSeptReponsesDonnees = (
-  thematique = 'thematique',
-): ConstructeurDiagnostic =>
-  unDiagnostic()
-    .avecUnReferentiel(
-      unReferentiel()
-        .sansThematique()
-        .ajouteUneThematique(thematique, uneListeDe7QuestionsToutesAssociees())
-        .construis(),
-    )
-    .avecLesReponsesDonnees(thematique, septReponsesDonnees())
-    .avecDesMesures(desMesuresPour7Questions());
 
 const septReponsesDonnees = () => [
   { q1: 'reponse-11' },

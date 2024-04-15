@@ -1,5 +1,6 @@
 export type Contexte =
   | 'Accède au profil'
+  | 'Accède au Tableau de Bord'
   | 'Accède aux diagnostics'
   | "Accède aux informations de l'utilisateur"
   | 'Accès diagnostic'

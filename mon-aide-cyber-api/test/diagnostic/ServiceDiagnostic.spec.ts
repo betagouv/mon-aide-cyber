@@ -5,14 +5,24 @@ import {
   uneReponsePossible,
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
-import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
-import { ServiceDiagnostic } from '../../src/diagnostic/ServiceDiagnostic';
+import {
+  unDiagnostic,
+  unDiagnosticAvecSecteurActivite,
+  unDiagnosticEnGironde,
+  unDiagnosticEnRegion,
+  unDiagnosticEnRegionDansLeDepartementAvecSecteurActivite,
+} from '../constructeurs/constructeurDiagnostic';
+import {
+  Contexte,
+  ServiceDiagnostic,
+} from '../../src/diagnostic/ServiceDiagnostic';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { AggregatNonTrouve } from '../../src/domaine/Aggregat';
 import crypto from 'crypto';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
+import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe('Le service de diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -145,6 +155,91 @@ describe('Le service de diagnostic', () => {
       ).rejects.toStrictEqual(
         ErreurMAC.cree('Accès diagnostic', new AggregatNonTrouve('diagnostic')),
       );
+    });
+  });
+
+  describe("Lorsque l'on veut récupérer le contexte d'un diagnostic", () => {
+    const dateCreation = new Date(Date.parse('2024-04-17T12:00:00+02:00'));
+
+    beforeEach(() => {
+      FournisseurHorlogeDeTest.initialise(dateCreation);
+    });
+
+    it('retourne la région du siège social lorsque renseignée', async () => {
+      const region = 'Corse';
+      const diagnostic = unDiagnosticEnRegion(region).construis();
+      await entrepots.diagnostic().persiste(diagnostic);
+
+      const contexte = await new ServiceDiagnostic(entrepots).contexte(
+        diagnostic.identifiant,
+      );
+
+      expect(contexte).toStrictEqual<Contexte>({ dateCreation, region });
+    });
+
+    it('retourne le département du siège social lorsque renseigné', async () => {
+      const diagnostic = unDiagnosticEnGironde().construis();
+      await entrepots.diagnostic().persiste(diagnostic);
+
+      const contexte = await new ServiceDiagnostic(entrepots).contexte(
+        diagnostic.identifiant,
+      );
+
+      expect(contexte).toStrictEqual<Contexte>({
+        dateCreation,
+        region: 'Nouvelle-Aquitaine',
+        departement: 'Gironde',
+      });
+    });
+
+    it("retourne le secteur d'activité du siège social lorsque renseigné", async () => {
+      const secteurActivite = 'enseignement';
+      const diagnostic =
+        unDiagnosticAvecSecteurActivite(secteurActivite).construis();
+      await entrepots.diagnostic().persiste(diagnostic);
+
+      const contexte = await new ServiceDiagnostic(entrepots).contexte(
+        diagnostic.identifiant,
+      );
+
+      expect(contexte).toStrictEqual({ dateCreation, secteurActivite });
+    });
+
+    it('retourne les informations de contexte lorsque renseignées', async () => {
+      const departement = 'Corse-du-Sud';
+      const region = 'Corse';
+      const secteurActivite = 'enseignement';
+      const dateCreation = new Date(Date.parse('1970-01-01T12:00:00+02:00'));
+      FournisseurHorlogeDeTest.initialise(dateCreation);
+      const diagnostic =
+        unDiagnosticEnRegionDansLeDepartementAvecSecteurActivite(
+          region,
+          departement,
+          secteurActivite,
+        ).construis();
+      await entrepots.diagnostic().persiste(diagnostic);
+
+      const contexte = await new ServiceDiagnostic(entrepots).contexte(
+        diagnostic.identifiant,
+      );
+
+      expect(contexte).toStrictEqual<Contexte>({
+        region,
+        departement,
+        secteurActivite,
+        dateCreation,
+      });
+    });
+
+    it('retourne un contexte avec uniquement la date de création lorsque les informations ne sont pas renseignées', async () => {
+      const diagnostic = unDiagnostic().construis();
+      await entrepots.diagnostic().persiste(diagnostic);
+
+      const contexte = await new ServiceDiagnostic(entrepots).contexte(
+        diagnostic.identifiant,
+      );
+
+      expect(contexte).toStrictEqual<Contexte>({ dateCreation });
     });
   });
 });

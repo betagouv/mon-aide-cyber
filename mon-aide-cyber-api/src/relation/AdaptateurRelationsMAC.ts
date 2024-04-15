@@ -2,10 +2,7 @@ import { unObjet, unTuple, unUtilisateur } from './Tuple';
 import crypto from 'crypto';
 import { AdaptateurRelations } from './AdaptateurRelations';
 import { EntrepotRelation } from './EntrepotRelation';
-import { EntrepotRelationMemoire } from './infrastructure/EntrepotRelationMemoire';
-
-const fabriqueEntrepotRelations = (): EntrepotRelation =>
-  new EntrepotRelationMemoire();
+import { fabriqueEntrepotRelations } from './infrastructure/fabriqueEntrepotRelations';
 
 export class AdaptateurRelationsMAC implements AdaptateurRelations {
   private tupleEntrepot: EntrepotRelation;
