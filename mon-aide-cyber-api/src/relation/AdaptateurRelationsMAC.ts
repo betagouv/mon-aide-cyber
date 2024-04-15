@@ -2,7 +2,7 @@ import { unObjet, unTuple, unUtilisateur } from './Tuple';
 import crypto from 'crypto';
 import { AdaptateurRelations } from './AdaptateurRelations';
 import { EntrepotRelation } from './EntrepotRelation';
-import { EntrepotRelationMemoire } from './EntrepotRelationMemoire';
+import { EntrepotRelationMemoire } from './infrastructure/EntrepotRelationMemoire';
 
 const fabriqueEntrepotRelations = (): EntrepotRelation =>
   new EntrepotRelationMemoire();

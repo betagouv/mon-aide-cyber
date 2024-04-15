@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest';
 import { AdaptateurRelationsMAC } from '../../../src/relation/AdaptateurRelationsMAC';
-import { EntrepotRelationMemoire } from '../../../src/relation/EntrepotRelationMemoire';
+import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { aidantInitieDiagnostic } from '../../../src/espace-aidant/tableau-de-bord/consommateursEvenements';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { DiagnosticLance } from '../../../src/diagnostic/CapteurCommandeLanceDiagnostic';

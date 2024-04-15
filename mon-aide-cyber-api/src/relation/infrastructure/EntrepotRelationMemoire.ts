@@ -1,8 +1,22 @@
-import { EntrepotMemoire } from '../infrastructure/entrepots/memoire/EntrepotMemoire';
-import { Tuple } from './Tuple';
+import { Tuple } from '../Tuple';
 
-import { EntrepotRelation } from './EntrepotRelation';
+import { Entrepot, EntrepotRelation } from '../EntrepotRelation';
 import crypto from 'crypto';
+import { Aggregat } from '../Aggregat';
+import { cloneDeep } from 'lodash';
+
+export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
+  protected entites: Map<crypto.UUID, T> = new Map();
+
+  async persiste(entite: T) {
+    const entiteClonee = cloneDeep(entite);
+    this.entites.set(entite.identifiant, entiteClonee);
+  }
+
+  typeAggregat(): string {
+    throw new Error('Non implémenté');
+  }
+}
 
 export class EntrepotRelationMemoire
   extends EntrepotMemoire<Tuple>
@@ -19,6 +33,7 @@ export class EntrepotRelationMemoire
 
     return Promise.resolve(tuples);
   }
+
   typeAggregat(): string {
     return 'relation';
   }

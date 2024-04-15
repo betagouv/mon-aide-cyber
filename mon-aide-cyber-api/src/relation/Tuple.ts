@@ -1,15 +1,17 @@
 import { Constructeur } from '../../test/constructeurs/constructeur';
 import crypto from 'crypto';
-import { Aggregat } from '../domaine/Aggregat';
+import { Aggregat } from './Aggregat';
 
-type Relation = 'initiateur';
+export type Relation = 'initiateur';
+
+export type TypeUtilisateur = 'aidant';
 
 export type Utilisateur = {
-  type: string;
+  type: TypeUtilisateur;
   identifiant: string;
 };
 
-type Objet = {
+export type Objet = {
   type: string;
   identifiant: string;
 };
@@ -21,13 +23,17 @@ export type Tuple = Aggregat & {
 };
 
 class ConstructeurUtilisateur implements Constructeur<Utilisateur> {
-  private type = '';
+  private type: TypeUtilisateur | undefined;
   private identifiant = '';
 
-  deTypeAidant(): ConstructeurUtilisateur {
-    this.type = 'aidant';
+  deType(type: TypeUtilisateur) {
+    this.type = type;
 
     return this;
+  }
+
+  deTypeAidant(): ConstructeurUtilisateur {
+    return this.deType('aidant');
   }
 
   avecIdentifiant(identifiant: string): ConstructeurUtilisateur {
@@ -38,7 +44,7 @@ class ConstructeurUtilisateur implements Constructeur<Utilisateur> {
 
   construis(): Utilisateur {
     return {
-      type: this.type,
+      type: this.type!,
       identifiant: this.identifiant,
     };
   }
