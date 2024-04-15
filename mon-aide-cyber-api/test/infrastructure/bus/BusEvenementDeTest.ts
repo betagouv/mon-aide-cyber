@@ -8,7 +8,7 @@ import { fabriqueConsommateursEvenements } from '../../../src/adaptateurs/fabriq
 import { EntrepotEvenementJournalMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { AdaptateurRelations } from '../../../src/relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../../../src/relation/AdaptateurRelationsMAC';
-import { EntrepotRelationMemoire } from '../../../src/relation/EntrepotRelationMemoire';
+import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { EntrepotEvenementJournal } from '../../../src/journalisation/Publication';
 
 class ConsommateurEvenementDeTest implements ConsommateurEvenement {
