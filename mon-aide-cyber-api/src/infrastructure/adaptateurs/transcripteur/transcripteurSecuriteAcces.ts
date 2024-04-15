@@ -10,24 +10,53 @@ export const transcripteurSecuriteAcces: Thematique = {
     '/images/diagnostic/securite-acces/illustration.svg',
   groupes: [
     {
-      questions: [{ identifiant: 'acces-outil-gestion-des-comptes' }],
+      questions: [
+        {
+          identifiant: 'acces-outil-gestion-des-comptes',
+          'info-bulles': [
+            'acces/gestion-comptes-organisations-publiques.pug',
+            'acces/gestion-comptes-active-directory.pug',
+          ],
+        },
+      ],
     },
     {
-      questions: [{ identifiant: 'acces-liste-compte-utilisateurs' }],
+      questions: [
+        {
+          identifiant: 'acces-liste-compte-utilisateurs',
+          'info-bulles': ['acces/comptes-utilisateurs.pug'],
+        },
+      ],
     },
     {
-      questions: [{ identifiant: 'acces-droits-acces-utilisateurs-limites' }],
+      questions: [
+        {
+          identifiant: 'acces-droits-acces-utilisateurs-limites',
+          'info-bulles': ['acces/droits-utilisateurs.pug'],
+        },
+      ],
     },
     {
-      questions: [{ identifiant: 'acces-utilisateurs-administrateurs-poste' }],
+      questions: [
+        {
+          identifiant: 'acces-utilisateurs-administrateurs-poste',
+          'info-bulles': ['acces/utilisateurs-administrateurs.pug'],
+        },
+      ],
     },
     {
-      questions: [{ identifiant: 'acces-mesures-securite-robustesse-mdp' }],
+      questions: [
+        {
+          identifiant: 'acces-mesures-securite-robustesse-mdp',
+          'info-bulles': ['acces/robustesse-mot-de-passe.pug'],
+        },
+      ],
     },
     {
       questions: [
         {
           identifiant: 'acces-administrateurs-informatiques-suivie-et-limitee',
+          'info-bulles': ['acces/liste-comptes-administration.pug'],
         },
       ],
     },
@@ -36,6 +65,9 @@ export const transcripteurSecuriteAcces: Thematique = {
         {
           identifiant:
             'acces-utilisation-comptes-administrateurs-droits-limitee',
+          'info-bulles': [
+            'acces/comptes-administration-limites-administration.pug',
+          ],
         },
       ],
     },
@@ -43,6 +75,8 @@ export const transcripteurSecuriteAcces: Thematique = {
       questions: [
         {
           identifiant: 'acces-administrateurs-si-mesures-specifiques',
+
+          'info-bulles': ['acces/mesures-specifiques-acces-administrateur.pug'],
         },
       ],
     },
@@ -51,6 +85,7 @@ export const transcripteurSecuriteAcces: Thematique = {
         {
           identifiant:
             'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
+          'info-bulles': ['acces/acces-utilisateurs-donnees-sensibles.pug'],
         },
       ],
     },
@@ -58,6 +93,7 @@ export const transcripteurSecuriteAcces: Thematique = {
       questions: [
         {
           identifiant: 'acces-teletravail-acces-distants-mesures-particulieres',
+          'info-bulles': ['acces/teletravail-acces-distants.pug'],
         },
         {
           identifiant:
