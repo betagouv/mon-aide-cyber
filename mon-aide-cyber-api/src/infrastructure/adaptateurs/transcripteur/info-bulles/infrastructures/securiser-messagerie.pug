@@ -1,0 +1,17 @@
+div
+    h5 Mécanismes de protection
+    div
+        | Les mécanismes de protection de mails illégitimes à paramétrer sur le serveur DNS sont :
+        ul
+            li
+                | Sender Policy Framework (SPF) qui permet de spécifier les adresses IP des serveurs autorisés à
+                | émettre les mails d’un domaine ;
+            li
+                | DomainKeys Identified Mail (DKIM) qui permet l’authentification du domaine de messagerie d’un mail à
+                | l’aide d’une signature cryptographique
+            li
+                | Domain-based Message Authentication, Reporting and Conformance (DMARC) qui permet notamment à une
+                | entité de définir une politique de traitement de ses mails envoyés en fonction des résultats de conformité SPF et DKIM
+    div
+        | Si l’entité (ou son prestataire) ne maitrise pas ces éléments, il est conseillé de se faire accompagner par un
+        | prestataire spécialisé.
