@@ -1,4 +1,5 @@
 import { AidantAuthentifie } from '../../authentification/Aidant';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
 type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
 type SuiteHATEOAS = { suite?: Options };
@@ -75,7 +76,13 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
   seConnecter(): ConstructeurActionsHATEOAS {
-    this.actions.set('se-connecter', { url: '/api/token', methode: 'POST' });
+    if (adaptateurEnvironnement.estProduction()) {
+      this.actions.set('rediriger', {
+        url: 'https://demo.monaidecyber.ssi.gouv.fr/connexion',
+      });
+    } else {
+      this.actions.set('se-connecter', { url: '/api/token', methode: 'POST' });
+    }
     return this;
   }
 

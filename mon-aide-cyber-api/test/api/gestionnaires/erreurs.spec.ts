@@ -10,6 +10,7 @@ import {
 } from '../../../src/authentification/Aidant';
 import { ErreurAccesRefuse } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';
 import { CorpsRequeteAuthentification } from '../../../src/api/routesAPIAuthentification';
+import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 
 describe("Gestionnaire d'erreur", () => {
   let codeRecu = 0;
@@ -98,7 +99,36 @@ describe("Gestionnaire d'erreur", () => {
     });
   });
 
+  it('Redirige vers la démo si on essaie d’accéder à la production', () => {
+    adaptateurEnvironnement.estProduction = () => true;
+    const consignateurErreurs = new ConsignateurErreursMemoire();
+    const corpsAuthentification: CorpsRequeteAuthentification = {
+      identifiant: 'jean',
+      motDePasse: 'abc123',
+    };
+    fausseRequete.body = corpsAuthentification;
+
+    gestionnaireErreurGeneralisee(consignateurErreurs)(
+      ErreurMAC.cree(
+        "Accède aux informations de l'utilisateur",
+        new ErreurAccesRefuse('Quelque chose est arrivé'),
+      ),
+      fausseRequete,
+      fausseReponse,
+      fausseSuite,
+    );
+
+    expect(consignateurErreurs.tous()).toHaveLength(1);
+    expect(corpsRecu).toStrictEqual({
+      liens: {
+        rediriger: { url: 'https://demo.monaidecyber.ssi.gouv.fr/connexion' },
+      },
+      message: "L'accès à la ressource est interdit.",
+    });
+  });
+
   it("génère une erreur 403 lorsqu'une erreur MAC 'Accès ressource protégée' est reçue et consigne l'erreur avec le détail", () => {
+    adaptateurEnvironnement.estProduction = () => false;
     const consignateurErreurs = new ConsignateurErreursMemoire();
 
     const messageInterne = "une explication de l'erreur pour le développeur";
