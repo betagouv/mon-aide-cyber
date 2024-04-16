@@ -11,9 +11,13 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
   groupes: [
     {
       questions: [
-        { identifiant: 'securite-infrastructure-pare-feu-deploye' },
+        {
+          identifiant: 'securite-infrastructure-pare-feu-deploye',
+          'info-bulles': ['infrastructures/pare-feu-deploye.pug'],
+        },
         {
           identifiant: 'securite-infrastructure-si-industriel-pare-feu-deploye',
+          'info-bulles': ['infrastructures/cloisonnement-si-industriels.pug'],
         },
       ],
     },
@@ -22,6 +26,7 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
         {
           identifiant:
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees',
+          'info-bulles': ['infrastructures/maj-equipements-securite.pug'],
         },
       ],
     },
@@ -30,6 +35,9 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
         {
           identifiant:
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees',
+          'info-bulles': [
+            'infrastructures/maj-serveurs-services-administration.pug',
+          ],
         },
       ],
     },
@@ -38,6 +46,7 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
         {
           identifiant:
             'securite-infrastructure-outils-securisation-systeme-messagerie',
+          'info-bulles': ['infrastructures/securiser-messagerie.pug'],
         },
       ],
     },
@@ -45,6 +54,7 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
       questions: [
         {
           identifiant: 'securite-infrastructure-acces-wifi-securises',
+          'info-bulles': ['infrastructures/securiser-wifi.pug'],
         },
       ],
     },
@@ -52,6 +62,10 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
       questions: [
         {
           identifiant: 'securite-infrastructure-espace-stockage-serveurs',
+          'info-bulles': [
+            'infrastructures/acces-serveurs.pug',
+            'infrastructures/expert-surete-gendarmerie.pug',
+          ],
         },
       ],
     },
