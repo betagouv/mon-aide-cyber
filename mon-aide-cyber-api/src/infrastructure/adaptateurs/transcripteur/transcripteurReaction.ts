@@ -13,16 +13,26 @@ export const transcripteurReaction: Thematique = {
         {
           identifiant:
             'reaction-surveillance-veille-vulnerabilites-potentielles',
+          'info-bulles': [
+            'reaction/veille-vulnerabilites-organisations-publiques.pug',
+            'reaction/suivi-alertes-vulnerabilites.pug',
+          ],
         },
       ],
     },
     {
-      questions: [{ identifiant: 'reaction-sauvegardes-donnees-realisees' }],
+      questions: [
+        {
+          identifiant: 'reaction-sauvegardes-donnees-realisees',
+          'info-bulles': ['reaction/jeu-sauvegarde-isole.pug'],
+        },
+      ],
     },
     {
       questions: [
         {
           identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
+          'info-bulles': ['reaction/organisation-gestion-crise.pug'],
         },
       ],
     },
