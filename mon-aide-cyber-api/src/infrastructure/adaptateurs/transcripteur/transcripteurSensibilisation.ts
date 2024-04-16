@@ -14,9 +14,13 @@ export const transcripteurSensibilisation: Thematique = {
         {
           identifiant:
             'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
+          'info-bulles': ['sensibilisation/actions-sensibilisation.pug'],
         },
         {
           identifiant: 'sensibilisation-risque-espionnage-industriel-r-et-d',
+          'info-bulles': [
+            'sensibilisation/passeport-conseils-cyber-voyageurs.pug',
+          ],
         },
       ],
     },
