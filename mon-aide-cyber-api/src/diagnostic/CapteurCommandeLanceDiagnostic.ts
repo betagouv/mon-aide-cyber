@@ -26,10 +26,6 @@ export class CapteurCommandeLanceDiagnostic
       .then(async ([ref, rec]) => {
         const diagnostic = initialiseDiagnostic(ref, rec);
         await this.entrepots.diagnostic().persiste(diagnostic);
-        await commande.adaptateurRelations.aidantInitieDiagnostic(
-          commande.identifiantAidant,
-          diagnostic.identifiant,
-        );
         await this.busEvenement?.publie<DiagnosticLance>({
           identifiant: diagnostic.identifiant,
           type: 'DIAGNOSTIC_LANCE',

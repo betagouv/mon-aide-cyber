@@ -17,7 +17,6 @@ import {
 } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
 import crypto from 'crypto';
-import { Tuple } from '../../src/relation/Tuple';
 import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 
@@ -122,38 +121,6 @@ describe('Capteur pour lancer un diagnostic', () => {
       corps: {
         identifiantDiagnostic: diagnostic.identifiant,
         identifiantAidant,
-      },
-    });
-  });
-
-  it("lie le diagnostic à l'aidant qui l'initie", async () => {
-    FournisseurHorlogeDeTest.initialise(new Date());
-    adaptateurReferentiel.ajoute(unReferentiel().construis());
-
-    const identifiantAidant = crypto.randomUUID();
-    const diagnostic = await new CapteurCommandeLanceDiagnostic(
-      entrepots,
-      new BusEvenementDeTest(),
-    ).execute({
-      type: 'CommandeLanceDiagnostic',
-      adaptateurReferentiel,
-      adaptateurRelations,
-      adaptateurReferentielDeMesures: adaptateurMesures,
-      identifiantAidant,
-    });
-
-    const relationRecue = (await entrepots.relation().tous())[0];
-
-    expect(relationRecue).toStrictEqual<Tuple>({
-      identifiant: expect.any(String),
-      utilisateur: {
-        type: 'aidant',
-        identifiant: identifiantAidant,
-      },
-      relation: 'initiateur',
-      objet: {
-        type: 'diagnostic',
-        identifiant: diagnostic.identifiant,
       },
     });
   });

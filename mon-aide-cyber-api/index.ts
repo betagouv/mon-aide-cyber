@@ -29,10 +29,13 @@ const traductionThematiques =
   ) || new Map();
 
 const entrepots = fabriqueEntrepots();
-const busEvenementMAC = new BusEvenementMAC(fabriqueConsommateursEvenements());
+const adaptateurRelations = new AdaptateurRelationsMAC();
+const busEvenementMAC = new BusEvenementMAC(
+  fabriqueConsommateursEvenements(adaptateurRelations),
+);
 const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
 const serveurMAC = serveur.creeServeur({
-  adaptateurRelations: new AdaptateurRelationsMAC(entrepots.relation()),
+  adaptateurRelations: adaptateurRelations,
   adaptateursRestitution: {
     pdf: () => new AdaptateurDeRestitutionPDF(traductionThematiques),
     html: () => new AdaptateurDeRestitutionHTML(traductionThematiques),
