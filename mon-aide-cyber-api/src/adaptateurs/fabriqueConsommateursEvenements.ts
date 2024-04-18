@@ -26,12 +26,12 @@ export const fabriqueConsommateursEvenements = (
     aidantCree: () => aidantCree(entrepotJournalisation),
     aideCree: () => aideCree(entrepotJournalisation),
   },
-) => {
-  return new Map<TypeEvenement, ConsommateurEvenement>([
-    ['RESTITUTION_LANCEE', restitutionLancee(entrepotJournalisation)],
-    ['DIAGNOSTIC_LANCE', diagnosticLance(entrepotJournalisation)],
-    ['REPONSE_AJOUTEE', reponseAjoutee(entrepotJournalisation)],
-    ['AIDANT_CREE', configuration.aidantCree()],
-    ['AIDE_CREE', configuration.aideCree()],
+): Map<TypeEvenement, ConsommateurEvenement[]> => {
+  return new Map<TypeEvenement, ConsommateurEvenement[]>([
+    ['RESTITUTION_LANCEE', [restitutionLancee(entrepotJournalisation)]],
+    ['DIAGNOSTIC_LANCE', [diagnosticLance(entrepotJournalisation)]],
+    ['REPONSE_AJOUTEE', [reponseAjoutee(entrepotJournalisation)]],
+    ['AIDANT_CREE', [configuration.aidantCree()]],
+    ['AIDE_CREE', [configuration.aideCree()]],
   ]);
 };
