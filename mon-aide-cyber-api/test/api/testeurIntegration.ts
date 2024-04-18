@@ -52,9 +52,7 @@ class TesteurIntegrationMAC {
 
   initialise() {
     this.serveurDeTest = serveur.creeServeur({
-      adaptateurRelations: new AdaptateurRelationsMAC(
-        this.entrepots.relation(),
-      ),
+      adaptateurRelations: new AdaptateurRelationsMAC(),
       adaptateurReferentiel: this.adaptateurReferentiel,
       adaptateurTranscripteurDonnees: this.adaptateurTranscripteurDonnees,
       adaptateurMesures: this.adaptateurMesures,

@@ -8,7 +8,6 @@ import { Adaptateur } from '../adaptateurs/Adaptateur';
 import { Referentiel } from './Referentiel';
 import crypto from 'crypto';
 import { ReferentielDeMesures } from './ReferentielDeMesures';
-import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 
 export class CapteurCommandeLanceDiagnostic
   implements CapteurCommande<CommandeLanceDiagnostic, Diagnostic>
@@ -47,7 +46,6 @@ export type CommandeLanceDiagnostic = Omit<Commande, 'type'> & {
   type: 'CommandeLanceDiagnostic';
   adaptateurReferentiel: Adaptateur<Referentiel>;
   adaptateurReferentielDeMesures: Adaptateur<ReferentielDeMesures>;
-  adaptateurRelations: AdaptateurRelations;
   identifiantAidant: crypto.UUID;
 };
 
