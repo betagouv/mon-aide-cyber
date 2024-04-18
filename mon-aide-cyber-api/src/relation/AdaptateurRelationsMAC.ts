@@ -1,12 +1,15 @@
-import { Entrepot } from '../domaine/Entrepot';
-import { Tuple, unObjet, unTuple, unUtilisateur } from './Tuple';
+import { unObjet, unTuple, unUtilisateur } from './Tuple';
 import crypto from 'crypto';
 import { AdaptateurRelations } from './AdaptateurRelations';
+import { EntrepotRelation } from './EntrepotRelation';
+import { EntrepotRelationMemoire } from './EntrepotRelationMemoire';
+
+const fabriqueEntrepotRelations = (): EntrepotRelation =>
+  new EntrepotRelationMemoire();
 
 export class AdaptateurRelationsMAC implements AdaptateurRelations {
-  private tupleEntrepot: Entrepot<Tuple>;
-
-  constructor(tupleEntrepot: Entrepot<Tuple>) {
+  private tupleEntrepot: EntrepotRelation;
+  constructor(tupleEntrepot: EntrepotRelation = fabriqueEntrepotRelations()) {
     this.tupleEntrepot = tupleEntrepot;
   }
 
@@ -31,5 +34,11 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
         )
         .construis(),
     );
+  }
+
+  diagnosticsInitiePar(identifiantAidant: crypto.UUID): Promise<string[]> {
+    return this.tupleEntrepot
+      .trouveDiagnosticsInitiePar(identifiantAidant)
+      .then((tuples) => tuples.map((tuple) => tuple.objet.identifiant));
   }
 }

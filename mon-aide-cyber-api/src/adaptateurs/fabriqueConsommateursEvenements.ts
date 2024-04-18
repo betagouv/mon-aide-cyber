@@ -10,6 +10,9 @@ import configurationJournalisation from '../infrastructure/entrepots/postgres/co
 import { ConsommateurEvenement, TypeEvenement } from '../domaine/BusEvenement';
 import { EntrepotEvenementJournalMemoire } from '../infrastructure/entrepots/memoire/EntrepotMemoire';
 import { EntrepotEvenementJournal } from '../journalisation/Publication';
+import { AdaptateurRelations } from '../relation/AdaptateurRelations';
+import { AdaptateurRelationsMAC } from '../relation/AdaptateurRelationsMAC';
+import { aidantInitieDiagnostic } from '../espace-aidant/tableau-de-bord/consommateursEvenements';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -18,8 +21,9 @@ const fabriqueEntrepotJournalisation = () => {
 };
 
 export const fabriqueConsommateursEvenements = (
+  adaptateurRelations: AdaptateurRelations = new AdaptateurRelationsMAC(),
   entrepotJournalisation: EntrepotEvenementJournal = fabriqueEntrepotJournalisation(),
-  configuration: {
+  consommateurs: {
     aidantCree: () => ConsommateurEvenement;
     aideCree: () => ConsommateurEvenement;
   } = {
@@ -29,9 +33,15 @@ export const fabriqueConsommateursEvenements = (
 ): Map<TypeEvenement, ConsommateurEvenement[]> => {
   return new Map<TypeEvenement, ConsommateurEvenement[]>([
     ['RESTITUTION_LANCEE', [restitutionLancee(entrepotJournalisation)]],
-    ['DIAGNOSTIC_LANCE', [diagnosticLance(entrepotJournalisation)]],
+    [
+      'DIAGNOSTIC_LANCE',
+      [
+        diagnosticLance(entrepotJournalisation),
+        aidantInitieDiagnostic(adaptateurRelations),
+      ],
+    ],
     ['REPONSE_AJOUTEE', [reponseAjoutee(entrepotJournalisation)]],
-    ['AIDANT_CREE', [configuration.aidantCree()]],
-    ['AIDE_CREE', [configuration.aideCree()]],
+    ['AIDANT_CREE', [consommateurs.aidantCree()]],
+    ['AIDE_CREE', [consommateurs.aideCree()]],
   ]);
 };

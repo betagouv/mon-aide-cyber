@@ -13,7 +13,6 @@ import {
   CommandeCreerAide,
 } from '../../src/aide/CapteurCommandeCreerAide';
 import { CapteurCommande } from '../../src/domaine/commande';
-import { EntrepotEvenementJournalMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { adaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
@@ -264,9 +263,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const maintenant = new Date();
       FournisseurHorlogeDeTest.initialise(maintenant);
       const entrepotsMemoire = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest(
-        new EntrepotEvenementJournalMemoire(),
-      );
+      const busEvenement = new BusEvenementDeTest();
       const busCommande = new BusCommandeTest({
         CommandeRechercheAideParEmail: new CapteurCommandeRechercheAideParEmail(
           entrepotsMemoire,
