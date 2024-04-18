@@ -37,7 +37,6 @@ const capteurs: Map<string, Capteur> = new Map([
     {
       capteur: (parametres) =>
         new CapteurSagaDemandeAide(
-          parametres.entrepots,
           parametres.busCommande!,
           parametres.busEvenements!,
           parametres.adaptateurEnvoiMail!,

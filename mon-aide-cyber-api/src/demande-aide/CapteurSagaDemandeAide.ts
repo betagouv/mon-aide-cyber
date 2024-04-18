@@ -1,5 +1,4 @@
 import { BusCommande, CapteurSaga, Saga } from '../domaine/commande';
-import { Entrepots } from '../domaine/Entrepots';
 import { BusEvenement } from '../domaine/BusEvenement';
 import { CommandeRechercheAideParEmail } from '../aide/CapteurCommandeRechercheAideParEmail';
 import { CommandeCreerAide } from '../aide/CapteurCommandeCreerAide';
@@ -20,7 +19,6 @@ export class CapteurSagaDemandeAide
   implements CapteurSaga<SagaDemandeAide, void>
 {
   constructor(
-    _entrepots: Entrepots,
     private readonly busCommande: BusCommande,
     private readonly busEvenement: BusEvenement,
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,

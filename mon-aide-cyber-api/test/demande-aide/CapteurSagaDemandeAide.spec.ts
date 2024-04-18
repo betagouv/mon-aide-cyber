@@ -24,7 +24,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const busEvenement = new BusEvenementDeTest();
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       const capteur = new CapteurSagaDemandeAide(
-        entrepots,
         new BusCommandeMAC(entrepots, busEvenement, adaptateurEnvoiMail),
         busEvenement,
         adaptateurEnvoiMail,
@@ -56,7 +55,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         adaptateurEnvoiMail,
       );
       const capteur = new CapteurSagaDemandeAide(
-        entrepotsMemoire,
         busCommande,
         busEvenement,
         adaptateurEnvoiMail,
@@ -88,7 +86,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         adaptateurEnvoieMail,
       );
       const capteur = new CapteurSagaDemandeAide(
-        entrepotsMemoire,
         busCommande,
         busEvenement,
         adaptateurEnvoieMail,
@@ -141,7 +138,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         adaptateurEnvoieMail,
       );
       const capteur = new CapteurSagaDemandeAide(
-        entrepotsMemoire,
         busCommande,
         busEvenement,
         adaptateurEnvoieMail,
@@ -189,7 +185,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         adaptateurEnvoieMail,
       );
       const capteur = new CapteurSagaDemandeAide(
-        entrepotsMemoire,
         busCommande,
         busEvenement,
         adaptateurEnvoieMail,
@@ -233,7 +228,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         adaptateurEnvoieMail,
       );
       const capteur = new CapteurSagaDemandeAide(
-        entrepotsMemoire,
         busCommande,
         busEvenement,
         adaptateurEnvoieMail,
@@ -282,7 +276,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
 
       await new CapteurSagaDemandeAide(
-        entrepotsMemoire,
         busCommande,
         busEvenement,
         adaptateurEnvoieMail,
@@ -316,7 +309,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           CommandeCreerAide: new CapteurCommandeCreerAideQuiEchoue(),
         });
         const capteur = new CapteurSagaDemandeAide(
-          entrepotsMemoire,
           busCommande,
           busEvenement,
           adaptateurEnvoieMail,
