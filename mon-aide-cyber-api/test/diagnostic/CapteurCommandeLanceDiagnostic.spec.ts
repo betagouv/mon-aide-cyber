@@ -17,20 +17,16 @@ import {
 } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
 import crypto from 'crypto';
-import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
-import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 
 describe('Capteur pour lancer un diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
   let adaptateurMesures: AdaptateurMesuresTest;
-  let adaptateurRelations: AdaptateurRelations;
   let entrepots: Entrepots;
 
   beforeEach(() => {
     adaptateurReferentiel = new AdaptateurReferentielDeTest();
     adaptateurMesures = new AdaptateurMesuresTest();
     entrepots = new EntrepotsMemoire();
-    adaptateurRelations = new AdaptateurRelationsMAC(entrepots.relation());
   });
 
   it('copie le référentiel disponible et le persiste', async () => {
@@ -46,7 +42,6 @@ describe('Capteur pour lancer un diagnostic', () => {
     ).execute({
       type: 'CommandeLanceDiagnostic',
       adaptateurReferentiel,
-      adaptateurRelations,
       adaptateurReferentielDeMesures: adaptateurMesures,
       identifiantAidant: crypto.randomUUID(),
     });
@@ -80,7 +75,6 @@ describe('Capteur pour lancer un diagnostic', () => {
     ).execute({
       type: 'CommandeLanceDiagnostic',
       adaptateurReferentiel,
-      adaptateurRelations,
       adaptateurReferentielDeMesures: adaptateurMesures,
       identifiantAidant: crypto.randomUUID(),
     });
@@ -109,7 +103,6 @@ describe('Capteur pour lancer un diagnostic', () => {
     ).execute({
       type: 'CommandeLanceDiagnostic',
       adaptateurReferentiel,
-      adaptateurRelations,
       adaptateurReferentielDeMesures: adaptateurMesures,
       identifiantAidant,
     });
@@ -133,7 +126,6 @@ describe('Capteur pour lancer un diagnostic', () => {
       ).execute({
         type: 'CommandeLanceDiagnostic',
         adaptateurReferentiel,
-        adaptateurRelations,
         adaptateurReferentielDeMesures: adaptateurMesures,
         identifiantAidant: crypto.randomUUID(),
       }),

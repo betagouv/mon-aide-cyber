@@ -32,7 +32,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         type: 'CommandeLanceDiagnostic',
         adaptateurReferentiel: configuration.adaptateurReferentiel,
         adaptateurReferentielDeMesures: configuration.adaptateurMesures,
-        adaptateurRelations: configuration.adaptateurRelations,
         identifiantAidant: requete.identifiantUtilisateurCourant!,
       };
       busCommande
