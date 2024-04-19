@@ -450,7 +450,7 @@ export const SelectionneReponseDiagnostic: Story = {
 };
 
 export const SelectionneReponseDiagnosticDansUneListe: Story = {
-  name: 'Sélectionne la réponse donnée dans la liste',
+  name: 'Sélectionne la réponse donnée dans la liste d’auto complétion',
   args: { idDiagnostic: identifiantQuestionListeDeroulante },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
@@ -463,24 +463,19 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
           ),
         ),
       ).toBeInTheDocument();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('option', {
-            name: reponseSelectionnee.libelle,
-            selected: true,
-          }),
-        ),
-      ).toBeInTheDocument();
+      expect(await waitFor(() => canvas.getByRole('textbox'))).toHaveValue(
+        reponseSelectionnee.libelle,
+      );
     });
 
     await step('Lorsque l’utilisateur modifie la réponse', async () => {
-      await userEvent.selectOptions(canvas.getByRole('combobox'), 'Réponse C');
+      const champSaisie = await waitFor(() => canvas.getByRole('textbox'));
+      await waitFor(() => userEvent.clear(champSaisie));
+      userEvent.type(champSaisie, 'Réponse C');
 
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('option', { name: /réponse c/i, selected: true }),
-        ),
-      ).toBeInTheDocument();
+      expect(await waitFor(() => canvas.getByRole('textbox'))).toHaveValue(
+        'Réponse C',
+      );
       entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
         reponseDonnee: 'reponse-c',
         identifiantQuestion: 'une-liste-deroulante',

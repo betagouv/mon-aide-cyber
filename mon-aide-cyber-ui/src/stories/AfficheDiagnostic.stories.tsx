@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts';
-import { waitFor, within } from '@storybook/testing-library';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 import {
   uneQuestionAChoixUnique,
@@ -253,22 +253,22 @@ export const AfficheDiagnosticAvecPlusieursQuestions: Story = {
 };
 
 export const AfficheDiagnosticQuestionListeDeroulante: Story = {
-  name: 'Affiche les réponses possibles à une question sous forme de liste déroulante',
+  name: 'Affiche les réponses possibles à une question sous forme de champ de saisie avec auto complétion',
   args: { idDiagnostic: identifiantQuestionListeDeroulante },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const champSaisie = await waitFor(() => canvas.getByRole('textbox'));
 
+    expect(await waitFor(() => champSaisie)).toBeInTheDocument();
+    userEvent.type(champSaisie, 'r');
     expect(
-      await waitFor(() => canvas.getByRole('combobox')),
+      await waitFor(() => canvas.getByRole('button', { name: /réponse a/i })),
     ).toBeInTheDocument();
     expect(
-      await waitFor(() => canvas.getByRole('option', { name: /réponse a/i })),
+      await waitFor(() => canvas.getByRole('button', { name: /réponse B/i })),
     ).toBeInTheDocument();
     expect(
-      await waitFor(() => canvas.getByRole('option', { name: /réponse B/i })),
-    ).toBeInTheDocument();
-    expect(
-      await waitFor(() => canvas.getByRole('option', { name: /réponse c/i })),
+      await waitFor(() => canvas.getByRole('button', { name: /réponse c/i })),
     ).toBeInTheDocument();
     expect(await entrepotMemoire.verifieReponseNonEnvoyee()).toBe(true);
   },
