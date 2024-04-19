@@ -58,6 +58,10 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
             url: '/api/diagnostic',
             methode: 'POST',
           },
+          'afficher-tableau-de-bord': {
+            methode: 'GET',
+            url: '/api/espace-aidant/tableau-de-bord',
+          },
           'afficher-profil': {
             url: '/api/profil',
             methode: 'GET',

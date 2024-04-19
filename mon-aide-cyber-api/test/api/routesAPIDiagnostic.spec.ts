@@ -347,6 +347,10 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
             methode: 'POST',
             url: '/api/diagnostic',
           },
+          'afficher-tableau-de-bord': {
+            methode: 'GET',
+            url: '/api/espace-aidant/tableau-de-bord',
+          },
           'modifier-diagnostic': {
             url: `/diagnostic/${identifiant}`,
           },

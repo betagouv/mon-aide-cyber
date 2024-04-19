@@ -16,6 +16,10 @@ class ConstructeurActionsHATEOAS {
       url: '/api/diagnostic',
       methode: 'POST',
     });
+    this.actions.set('afficher-tableau-de-bord', {
+      url: '/api/espace-aidant/tableau-de-bord',
+      methode: 'GET',
+    });
     return this;
   }
 
@@ -78,7 +82,7 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  seDeconnecter(): ConstructeurActionsHATEOAS {
+  private seDeconnecter(): ConstructeurActionsHATEOAS {
     this.actions.set('se-deconnecter', {
       url: '/api/token',
       methode: 'DELETE',
@@ -96,6 +100,14 @@ class ConstructeurActionsHATEOAS {
       methode: 'POST',
     });
     return this;
+  }
+
+  actionsTableauDeBord(): ConstructeurActionsHATEOAS {
+    this.actions.set('lancer-diagnostic', {
+      url: '/api/diagnostic',
+      methode: 'POST',
+    });
+    return this.afficherProfil().seDeconnecter();
   }
 
   construis = (): ReponseHATEOAS => {
