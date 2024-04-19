@@ -36,11 +36,7 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
 
       reponse.status(200).json({
         diagnostics,
-        ...constructeurActionsHATEOAS()
-          .lancerDiagnostic()
-          .afficherProfil()
-          .seDeconnecter()
-          .construis(),
+        ...constructeurActionsHATEOAS().actionsTableauDeBord().construis(),
       });
 
       return reponse.send();

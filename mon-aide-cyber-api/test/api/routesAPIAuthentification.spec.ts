@@ -48,6 +48,10 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               url: '/api/diagnostic',
               methode: 'POST',
             },
+            'afficher-tableau-de-bord': {
+              methode: 'GET',
+              url: '/api/espace-aidant/tableau-de-bord',
+            },
             'afficher-profil': {
               url: '/api/profil',
               methode: 'GET',
@@ -110,6 +114,10 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           nomPrenom: 'Martin Dupont',
           liens: {
             'lancer-diagnostic': { url: '/api/diagnostic', methode: 'POST' },
+            'afficher-tableau-de-bord': {
+              methode: 'GET',
+              url: '/api/espace-aidant/tableau-de-bord',
+            },
             'afficher-profil': {
               url: '/api/profil',
               methode: 'GET',
