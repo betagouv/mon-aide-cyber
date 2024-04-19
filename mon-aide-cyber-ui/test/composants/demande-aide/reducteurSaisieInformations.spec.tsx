@@ -11,7 +11,7 @@ import {
   relationAidantCliquee,
 } from '../../../src/composants/demande-aide/reducteurSaisieInformations.tsx';
 import { TexteExplicatif } from '../../../src/composants/alertes/Erreurs.tsx';
-
+import { Departement } from '../../../src/domaine/demande-aide/Aide.ts';
 describe('Parcours CGU Aidé', () => {
   let etatInitial: EtatSaisieInformations = {} as EtatSaisieInformations;
 
@@ -29,7 +29,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: false,
-          departement: '',
+          departement: {} as Departement,
           email: 'jean.dupont@email.com',
           pretPourEnvoi: false,
           departements: [],
@@ -59,7 +59,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: false,
-          departement: '',
+          departement: {} as Departement,
           email: 'jean.dupont@email.com',
           erreur: {
             cguValidees: {
@@ -91,7 +91,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: false,
-          departement: '',
+          departement: {} as Departement,
           email: 'jean.dupont@email.com',
           pretPourEnvoi: false,
           departements: [],
@@ -104,16 +104,25 @@ describe('Parcours CGU Aidé', () => {
     describe('En ce qui concerne le département', () => {
       it('Le prend en compte', () => {
         const etat = reducteurSaisieInformations(
-          etatInitial,
+          {
+            ...etatInitial,
+            departements: [
+              { nom: 'Finistère', code: '29' },
+              { nom: 'Gironde', code: '33' },
+            ],
+          },
           departementSaisi('Finistère'),
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: false,
-          departement: 'Finistère',
+          departement: { nom: 'Finistère', code: '29' },
           email: '',
           pretPourEnvoi: false,
-          departements: [],
+          departements: [
+            { nom: 'Finistère', code: '29' },
+            { nom: 'Gironde', code: '33' },
+          ],
           relationAidantSaisie: false,
           valeurSaisieDepartement: 'Finistère',
         });
@@ -123,7 +132,7 @@ describe('Parcours CGU Aidé', () => {
         const etat = reducteurSaisieInformations(
           {
             ...etatInitial,
-            departement: '',
+            departement: {} as Departement,
             erreur: {
               cguValidees: {
                 texteExplicatif: <>CGU pas validées</>,
@@ -141,7 +150,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: false,
-          departement: 'Finistère',
+          departement: { nom: 'Finistère', code: '29' },
           email: '',
           erreur: {
             cguValidees: {
@@ -174,7 +183,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: false,
-          departement: 'Finistère',
+          departement: { nom: 'Finistère', code: '29' },
           email: '',
           pretPourEnvoi: false,
           departements: [{ nom: 'Finistère', code: '29' }],
@@ -189,7 +198,7 @@ describe('Parcours CGU Aidé', () => {
             ...etatInitial,
             email: 'jean.dupont@mail.fr',
             cguValidees: true,
-            departement: '',
+            departement: {} as Departement,
             departements: [
               { nom: 'Creuse', code: '23' },
               { nom: 'Morbihan', code: '56' },
@@ -201,7 +210,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: true,
-          departement: 'Gironde',
+          departement: { nom: 'Gironde', code: '33' },
           email: 'jean.dupont@mail.fr',
           pretPourEnvoi: false,
           departements: [
@@ -224,7 +233,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: false,
-          departement: '',
+          departement: {} as Departement,
           email: '',
           raisonSociale: 'beta.gouv',
           pretPourEnvoi: false,
@@ -241,7 +250,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: true,
-          departement: '',
+          departement: {} as Departement,
           email: '',
           pretPourEnvoi: false,
           departements: [],
@@ -258,7 +267,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: false,
-          departement: '',
+          departement: {} as Departement,
           email: '',
           erreur: {
             cguValidees: {
@@ -282,7 +291,7 @@ describe('Parcours CGU Aidé', () => {
         const etat = reducteurSaisieInformations(
           {
             ...etatInitial,
-            departement: '',
+            departement: {} as Departement,
             erreur: {
               cguValidees: {
                 texteExplicatif: <>CGU pas validées</>,
@@ -299,7 +308,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: true,
-          departement: '',
+          departement: {} as Departement,
           email: '',
           erreur: {
             departement: {
@@ -331,7 +340,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: true,
-          departement: '',
+          departement: {} as Departement,
           email: '',
           pretPourEnvoi: false,
           departements: [],
@@ -350,7 +359,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: false,
-          departement: '',
+          departement: {} as Departement,
           email: '',
           pretPourEnvoi: false,
           departements: [],
@@ -369,7 +378,7 @@ describe('Parcours CGU Aidé', () => {
             ...etatInitial,
             email: 'jean.dupont@mail.fr',
             cguValidees: true,
-            departement: 'Finistère',
+            departement: { nom: 'Finistère', code: '29' },
             departements: [{ nom: 'Finistère', code: '29' }],
             valeurSaisieDepartement: 'Finistère',
           },
@@ -378,7 +387,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: true,
-          departement: 'Finistère',
+          departement: { nom: 'Finistère', code: '29' },
           email: 'jean.dupont@mail.fr',
           pretPourEnvoi: true,
           departements: [{ nom: 'Finistère', code: '29' }],
@@ -393,7 +402,7 @@ describe('Parcours CGU Aidé', () => {
             ...etatInitial,
             email: 'jean.dupont-incorrect',
             cguValidees: true,
-            departement: 'Finistère',
+            departement: { nom: 'Finistère', code: '29' },
             departements: [{ nom: 'Finistère', code: '29' }],
             valeurSaisieDepartement: 'Finistère',
           },
@@ -402,7 +411,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: true,
-          departement: 'Finistère',
+          departement: { nom: 'Finistère', code: '29' },
           email: 'jean.dupont-incorrect',
           erreur: {
             adresseElectronique: {
@@ -430,14 +439,14 @@ describe('Parcours CGU Aidé', () => {
             ...etatInitial,
             email: 'jean.dupont@mail.fr',
             cguValidees: true,
-            departement: '',
+            departement: {} as Departement,
           },
           demandeTerminee(),
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: true,
-          departement: '',
+          departement: {} as Departement,
           email: 'jean.dupont@mail.fr',
           erreur: {
             departement: {
@@ -463,7 +472,7 @@ describe('Parcours CGU Aidé', () => {
             ...etatInitial,
             email: 'jean.dupont@mail.fr',
             cguValidees: true,
-            departement: 'département inconnu',
+            departement: 'département inconnu' as unknown as Departement,
             departements: [
               { nom: 'Creuse', code: '23' },
               { nom: 'Morbihan', code: '56' },
@@ -475,7 +484,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: true,
-          departement: '',
+          departement: {} as Departement,
           email: 'jean.dupont@mail.fr',
           erreur: {
             departement: {
@@ -504,7 +513,7 @@ describe('Parcours CGU Aidé', () => {
             ...etatInitial,
             email: 'jean.dupont@mail.fr',
             cguValidees: true,
-            departement: '',
+            departement: {} as Departement,
             departements: [
               { nom: 'Creuse', code: '23' },
               { nom: 'Morbihan', code: '56' },
@@ -517,7 +526,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: true,
-          departement: 'Gironde',
+          departement: { nom: 'Gironde', code: '33' },
           email: 'jean.dupont@mail.fr',
           pretPourEnvoi: true,
           departements: [
@@ -538,7 +547,7 @@ describe('Parcours CGU Aidé', () => {
             ...etatInitial,
             email: 'jean.dupont@mail.fr',
             cguValidees: false,
-            departement: 'Finistère',
+            departement: { nom: 'Finistère', code: '29' },
             departements: [{ nom: 'Finistère', code: '29' }],
             valeurSaisieDepartement: 'Finistère',
           },
@@ -547,7 +556,7 @@ describe('Parcours CGU Aidé', () => {
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
           cguValidees: false,
-          departement: 'Finistère',
+          departement: { nom: 'Finistère', code: '29' },
           email: 'jean.dupont@mail.fr',
           erreur: {
             cguValidees: {
@@ -584,7 +593,7 @@ describe('Parcours CGU Aidé', () => {
               className: 'fr-input-group--error',
             },
           },
-          departement: 'Finistère',
+          departement: { nom: 'Finistère', code: '29' },
           departements: [{ nom: 'Finistère', code: '29' }],
           pretPourEnvoi: false,
           valeurSaisieDepartement: 'Finistère',
@@ -594,7 +603,7 @@ describe('Parcours CGU Aidé', () => {
 
       expect(etat).toStrictEqual<EtatSaisieInformations>({
         cguValidees: true,
-        departement: 'Finistère',
+        departement: { nom: 'Finistère', code: '29' },
         email: 'jean.dupont@mail.fr',
         pretPourEnvoi: true,
         departements: [{ nom: 'Finistère', code: '29' }],
