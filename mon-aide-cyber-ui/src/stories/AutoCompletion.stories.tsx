@@ -28,8 +28,8 @@ export const AutoCompletionTexte: Story = {
               args: {
                 nom: 'faites-un-choix',
                 mappeur: (valeur) => valeur as string,
-                valeurs: valeursTextuelles,
-                valeur: '',
+                suggestionsInitiales: valeursTextuelles,
+                valeurSaisie: '',
                 // eslint-disable-next-line @typescript-eslint/no-empty-function
                 surSaisie: () => {},
                 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -44,19 +44,19 @@ export const AutoCompletionTexte: Story = {
   args: {
     nom: 'faites-un-choix',
     mappeur: (valeur) => valeur as string,
-    valeurs: valeursTextuelles,
-    valeur: '',
+    suggestionsInitiales: valeursTextuelles,
+    valeurSaisie: '',
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     surSaisie: () => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     surSelection: () => {},
   },
-  name: 'Propose l’auto complétion pour des valeurs textuelles',
+  name: 'Propose l’auto complétion pour des mots',
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
     await step(
-      "Filtre les valeurs lorsque l'on saisit au clavier",
+      "Filtre les suggestions lorsque l'on saisit au clavier",
       async () => {
         expect(
           canvas.getByRole('textbox', {
@@ -70,23 +70,15 @@ export const AutoCompletionTexte: Story = {
         userEvent.type(champDeSaisie, 'a');
 
         await waitFor(() =>
-          expect(canvas.getAllByRole('option')).toHaveLength(2),
-        );
-        await waitFor(() =>
           expect(
-            canvas.getByRole('option', { name: 'Ain' }),
-          ).toBeInTheDocument(),
-        );
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('option', { name: 'Aisne' }),
-          ).toBeInTheDocument(),
+            canvas.getAllByRole('button').map((button) => button.innerText),
+          ).toStrictEqual(['Ain', 'Aisne']),
         );
       },
     );
 
     await step(
-      'Sélectionne une des valeurs lorsque l’on clique dessus',
+      'Sélectionne une des suggestions lorsque l’on clique dessus',
       async () => {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
@@ -96,10 +88,10 @@ export const AutoCompletionTexte: Story = {
 
         await waitFor(() =>
           expect(
-            canvas.getByRole('option', { name: 'Finistère' }),
+            canvas.getByRole('button', { name: 'Finistère' }),
           ).toBeInTheDocument(),
         );
-        userEvent.click(canvas.getByRole('option', { name: 'Finistère' }));
+        userEvent.click(canvas.getByRole('button', { name: 'Finistère' }));
 
         await waitFor(() =>
           expect(
@@ -112,7 +104,7 @@ export const AutoCompletionTexte: Story = {
     );
 
     await step(
-      'Utilise la valeur correspondante lorsque la saisie au clavier est égale à une des valeurs fournies',
+      'Utilise la suggestion correspondante lorsque la saisie au clavier est égale à une des suggestions fournies',
       async () => {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
@@ -122,7 +114,7 @@ export const AutoCompletionTexte: Story = {
         userEvent.type(champDeSaisie, 'finistère');
         await waitFor(() =>
           expect(
-            canvas.getByRole('option', { name: 'Finistère' }),
+            canvas.getByRole('button', { name: 'Finistère' }),
           ).toBeInTheDocument(),
         );
 
@@ -132,6 +124,37 @@ export const AutoCompletionTexte: Story = {
               name: /faites un choix/i,
             }),
           ).toHaveValue('Finistère'),
+        );
+      },
+    );
+
+    await step(
+      'Ferme la liste déroulante lorsque l’on clique en dehors',
+      async () => {
+        const champDeSaisie = canvas.getByRole('textbox', {
+          name: /faites un choix/i,
+        });
+        await waitFor(() => userEvent.clear(champDeSaisie));
+        userEvent.type(champDeSaisie, 'finistère');
+        await waitFor(() =>
+          expect(
+            canvas.getByRole('button', { name: 'Finistère' }),
+          ).toBeInTheDocument(),
+        );
+
+        userEvent.click(canvas.getByText(/faites un choix/i));
+
+        await waitFor(() =>
+          expect(
+            canvas.getByRole('textbox', {
+              name: /faites un choix/i,
+            }),
+          ).toHaveValue('Finistère'),
+        );
+        await waitFor(() =>
+          expect(
+            canvas.queryByRole('button', { name: 'Finistère' }),
+          ).not.toBeInTheDocument(),
         );
       },
     );
@@ -148,6 +171,9 @@ const valeursStructurees: Departement[] = [
   { code: '19', nom: 'Corrèze' },
   { code: '29', nom: 'Finistère' },
   { code: '33', nom: 'Gironde' },
+  { code: '25', nom: 'Doubs' },
+  { code: '26', nom: 'Drôme' },
+  { code: '36', nom: 'Indre' },
 ];
 
 export const AutoCompletionObjet: Story = {
@@ -163,8 +189,8 @@ export const AutoCompletionObjet: Story = {
               args: {
                 nom: 'faites-un-choix',
                 mappeur: (valeur) => (valeur as Departement).nom,
-                valeurs: valeursStructurees,
-                valeur: '',
+                suggestionsInitiales: valeursStructurees,
+                valeurSaisie: '',
                 // eslint-disable-next-line @typescript-eslint/no-empty-function
                 surSaisie: () => {},
                 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -179,19 +205,19 @@ export const AutoCompletionObjet: Story = {
   args: {
     nom: 'faites-un-choix',
     mappeur: (valeur) => (valeur as Departement).nom,
-    valeurs: valeursStructurees,
-    valeur: '',
+    suggestionsInitiales: valeursStructurees,
+    valeurSaisie: '',
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     surSaisie: () => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     surSelection: () => {},
   },
-  name: 'Propose l’auto complétion pour des valeurs structurées',
+  name: 'Propose l’auto complétion pour des suggestions structurées',
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
     await step(
-      "Filtre les valeurs lorsque l'on saisit au clavier",
+      "Filtre les suggestions lorsque l'on saisit au clavier",
       async () => {
         expect(
           canvas.getByRole('textbox', {
@@ -205,49 +231,46 @@ export const AutoCompletionObjet: Story = {
         userEvent.type(champDeSaisie, 'a');
 
         await waitFor(() =>
-          expect(canvas.getAllByRole('option')).toHaveLength(2),
-        );
-        await waitFor(() =>
           expect(
-            canvas.getByRole('option', { name: 'Ain' }),
+            canvas.getByRole('button', { name: 'Ain' }),
           ).toBeInTheDocument(),
         );
         await waitFor(() =>
           expect(
-            canvas.getByRole('option', { name: 'Aisne' }),
+            canvas.getByRole('button', { name: 'Aisne' }),
           ).toBeInTheDocument(),
         );
       },
     );
 
     await step(
-      'Sélectionne une des valeurs lorsque l’on clique dessus',
+      'Sélectionne une des suggestions lorsque l’on clique dessus',
       async () => {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
         });
         await waitFor(() => userEvent.clear(champDeSaisie));
-        userEvent.type(champDeSaisie, 'fin');
+        userEvent.type(champDeSaisie, 'ai');
 
         await waitFor(() =>
           expect(
-            canvas.getByRole('option', { name: 'Finistère' }),
+            canvas.getByRole('button', { name: 'Aisne' }),
           ).toBeInTheDocument(),
         );
-        userEvent.click(canvas.getByRole('option', { name: 'Finistère' }));
+        userEvent.click(canvas.getByRole('button', { name: 'Aisne' }));
 
         await waitFor(() =>
           expect(
             canvas.getByRole('textbox', {
               name: /faites un choix/i,
             }),
-          ).toHaveValue('Finistère'),
+          ).toHaveValue('Aisne'),
         );
       },
     );
 
     await step(
-      'Utilise la valeur correspondante lorsque la saisie au clavier est égale à une des valeurs fournies',
+      'Utilise la suggestion correspondante lorsque la saisie au clavier est égale à une des suggestions fournies',
       async () => {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
@@ -257,7 +280,7 @@ export const AutoCompletionObjet: Story = {
         userEvent.type(champDeSaisie, 'finistère');
         await waitFor(() =>
           expect(
-            canvas.getByRole('option', { name: 'Finistère' }),
+            canvas.getByRole('button', { name: 'Finistère' }),
           ).toBeInTheDocument(),
         );
 
@@ -267,6 +290,30 @@ export const AutoCompletionObjet: Story = {
               name: /faites un choix/i,
             }),
           ).toHaveValue('Finistère'),
+        );
+      },
+    );
+
+    await step(
+      'Utilise la navigation clavier pour dérouler la liste vers le bas',
+      async () => {
+        const champDeSaisie = canvas.getByRole('textbox', {
+          name: /faites un choix/i,
+        });
+        await waitFor(() => userEvent.clear(champDeSaisie));
+        userEvent.type(champDeSaisie, 'd');
+        const button = canvas.getByRole('button', { name: /doubs/i });
+
+        userEvent.keyboard('[ArrowDown]');
+        userEvent.keyboard('[ArrowDown]');
+        userEvent.type(button, '{Enter}');
+
+        await waitFor(() =>
+          expect(
+            canvas.getByRole('textbox', {
+              name: /faites un choix/i,
+            }),
+          ).toHaveValue('Doubs'),
         );
       },
     );

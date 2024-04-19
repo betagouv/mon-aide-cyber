@@ -9,7 +9,7 @@ type ErreurSaisieInformations = {
 
 export type EtatSaisieInformations = {
   cguValidees: boolean;
-  departement: string;
+  departement: Departement;
   email: string;
   erreur?: ErreurSaisieInformations;
   raisonSociale?: string;
@@ -43,7 +43,7 @@ type ActionSaisieInformations =
     }
   | {
       type: TypeActionSaisieInformations.DEPARTEMENT_SAISI;
-      departement: string;
+      departement: Departement | string;
     }
   | {
       type: TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE;
@@ -99,12 +99,35 @@ export const reducteurSaisieInformations = (
     }
   };
 
-  const estDepartementValide = (departement: string) =>
+  const estChaineDeCaractere = (
+    departement: Departement | string,
+  ): departement is string => typeof departement === 'string';
+
+  const departementUniqueTrouve = (departement: string) =>
     etat.departements.filter(
       (d) =>
         d.nom.toLowerCase() === departement.toLowerCase().trim() ||
         d.code === departement.trim(),
-    ).length > 0;
+    ).length === 1;
+
+  const estDepartementValide = (departement: Departement | string) =>
+    estChaineDeCaractere(departement)
+      ? departementUniqueTrouve(departement)
+      : true;
+
+  const trouveDepartement = (
+    departementCherche: Departement | string,
+  ): Departement => {
+    const valeurSaisie = departementCherche;
+    return estChaineDeCaractere(valeurSaisie)
+      ? etat.departements.find(
+          (departement) =>
+            departement.nom.toLowerCase() ===
+              valeurSaisie.toLowerCase().trim() ||
+            departement.code === valeurSaisie.trim(),
+        ) || ({} as Departement)
+      : valeurSaisie;
+  };
 
   switch (action.type) {
     case TypeActionSaisieInformations.RELATION_AIDANT_CLIQUEE: {
@@ -133,13 +156,8 @@ export const reducteurSaisieInformations = (
         ...etatCourant,
         pretPourEnvoi,
         departement: departementValide
-          ? etat.departements.find(
-              (departement) =>
-                departement.nom.toLowerCase() ===
-                  etat.valeurSaisieDepartement.toLowerCase().trim() ||
-                departement.code === etat.valeurSaisieDepartement.trim(),
-            )!.nom
-          : '',
+          ? trouveDepartement(etat.valeurSaisieDepartement)
+          : ({} as Departement),
         ...(!pretPourEnvoi && {
           erreur: {
             ...etatCourant.erreur,
@@ -194,16 +212,11 @@ export const reducteurSaisieInformations = (
         videLesErreurs(etatCourant);
       }
 
-      const departement =
-        etatCourant.departements.find(
-          (departement) =>
-            departement.nom.toLowerCase() ===
-            action.departement.toLowerCase().trim(),
-        )?.nom || action.departement;
+      const departement = trouveDepartement(action.departement);
       return {
         ...etatCourant,
         departement,
-        valeurSaisieDepartement: departement,
+        valeurSaisieDepartement: departement.nom,
       };
     }
     case TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE: {
@@ -228,7 +241,7 @@ export const adresseElectroniqueSaisie = (
   adresseElectronique,
 });
 export const departementSaisi = (
-  departement: string,
+  departement: Departement | string,
 ): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.DEPARTEMENT_SAISI,
   departement,
@@ -252,7 +265,7 @@ export const initialiseEtatSaisieInformations = (
   departements: Departement[],
 ): EtatSaisieInformations => ({
   cguValidees: false,
-  departement: '',
+  departement: {} as Departement,
   email: '',
   pretPourEnvoi: false,
   departements: departements,

@@ -39,7 +39,7 @@ export const SaisieInformations = (
       if (!proprietes.surValidation.erreur) {
         proprietes.surValidation.execute({
           cguValidees: etatSaisieInformations.cguValidees,
-          departement: etatSaisieInformations.departement,
+          departement: etatSaisieInformations.departement.nom,
           email: etatSaisieInformations.email,
           raisonSociale: etatSaisieInformations.raisonSociale,
           relationAidant: etatSaisieInformations.relationAidantSaisie,
@@ -59,9 +59,12 @@ export const SaisieInformations = (
     },
     [],
   );
-  const surSaisieDepartement = useCallback((departement: string) => {
-    envoie(departementSaisi(departement));
-  }, []);
+  const surSaisieDepartement = useCallback(
+    (departement: Departement | string) => {
+      envoie(departementSaisi(departement));
+    },
+    [],
+  );
   const surSaisieRaisonSociale = useCallback((raisonSociale: string) => {
     envoie(raisonSocialeSaisie(raisonSociale));
   }, []);
@@ -82,6 +85,13 @@ export const SaisieInformations = (
   const surRelationAidant = useCallback(() => {
     envoie(relationAidantCliquee());
   }, []);
+  const estDepartement = (
+    departement: string | Departement,
+  ): departement is Departement => {
+    return (
+      typeof departement !== 'string' && !!departement.code && !!departement.nom
+    );
+  };
   return (
     <>
       <div className="fr-mb-2w">Votre demande</div>
@@ -142,15 +152,21 @@ export const SaisieInformations = (
                   </label>
                   <AutoCompletion<Departement>
                     nom="departement"
-                    valeur={etatSaisieInformations.valeurSaisieDepartement}
-                    valeurs={etatSaisieInformations.departements}
-                    mappeur={(departement) => departement.nom}
+                    valeurSaisie={etatSaisieInformations.departement}
+                    suggestionsInitiales={etatSaisieInformations.departements}
+                    mappeur={(departement) => {
+                      return estDepartement(departement)
+                        ? `${departement.code} - ${departement.nom}`
+                        : typeof departement === 'string'
+                        ? departement
+                        : '';
+                    }}
                     surSelection={(departement) =>
                       surSaisieDepartement(departement)
                     }
-                    surSaisie={(departement) =>
-                      surSaisieDepartement(departement)
-                    }
+                    surSaisie={(departement) => {
+                      surSaisieDepartement(departement);
+                    }}
                   />
                   {etatSaisieInformations.erreur?.departement?.texteExplicatif}
                 </div>
