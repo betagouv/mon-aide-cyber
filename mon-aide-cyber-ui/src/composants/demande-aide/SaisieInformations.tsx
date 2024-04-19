@@ -145,7 +145,10 @@ export const SaisieInformations = (
                     valeur={etatSaisieInformations.valeurSaisieDepartement}
                     valeurs={etatSaisieInformations.departements}
                     mappeur={(departement) => departement.nom}
-                    surValidation={(departement) =>
+                    surSelection={(departement) =>
+                      surSaisieDepartement(departement)
+                    }
+                    surSaisie={(departement) =>
                       surSaisieDepartement(departement)
                     }
                   />

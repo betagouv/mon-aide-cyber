@@ -7,6 +7,7 @@ enum TypeActionAutoCompletion {
 }
 export type EtatAutoCompletion = {
   nom: string;
+  valeur: any;
   valeurs: (string | object)[];
   valeursFiltrees: (string | object)[];
   visibilite: 'visible' | 'invisible';
@@ -42,6 +43,24 @@ export type ActionAutoCompletion =
 const estUneChaineDeCaractere = (valeur: string | object): valeur is string =>
   typeof valeur === 'string';
 
+const valeurAffichee = (
+  valeursFiltrees: (string | object)[],
+  valeurSaisie: string,
+): string => {
+  if (valeursFiltrees.length === 1) {
+    if (
+      estUneChaineDeCaractere(valeursFiltrees[0]) &&
+      valeursFiltrees[0].toLowerCase() === valeurSaisie.toLowerCase()
+    ) {
+      return valeursFiltrees[0];
+    }
+    return Object.values(valeursFiltrees[0]).find(
+      (val) => val.toLowerCase() === valeurSaisie.toLowerCase(),
+    );
+  }
+  return valeurSaisie;
+};
+
 export const reducteurAutoCompletion = (
   etat: EtatAutoCompletion,
   action: ActionAutoCompletion,
@@ -51,24 +70,27 @@ export const reducteurAutoCompletion = (
       action.execute(action.valeur);
       return {
         ...etat,
+        valeur: action.valeur,
         valeursFiltrees: [],
         visibilite: 'invisible',
       };
     }
     case TypeActionAutoCompletion.VALEUR_SAISIE: {
-      const valeur = action.valeur;
+      const valeurSaisie = action.valeur;
       const valeursFiltrees = etat.valeurs.filter((val) => {
         if (estUneChaineDeCaractere(val)) {
-          return val.toLowerCase().includes(valeur.toLowerCase());
+          return val.toLowerCase().includes(valeurSaisie.toLowerCase());
         }
         const filter = Object.values(val).filter((val) =>
-          val.toLowerCase().includes(valeur.toLowerCase()),
+          val.toLowerCase().includes(valeurSaisie.toLowerCase()),
         );
         return filter.length > 0;
       });
-      action.execute(valeur);
+      action.execute(valeurSaisie);
+      const valeur = valeurAffichee(valeursFiltrees, valeurSaisie);
       return {
         ...etat,
+        valeur,
         valeursFiltrees,
         visibilite: 'visible',
       };
@@ -94,8 +116,10 @@ export const reducteurAutoCompletion = (
 
 export const initialiseEtatAutoCompletion = (
   nom: string,
+  valeur: any,
 ): EtatAutoCompletion => ({
   nom,
+  valeur,
   valeurs: [],
   valeursFiltrees: [],
   visibilite: 'invisible',

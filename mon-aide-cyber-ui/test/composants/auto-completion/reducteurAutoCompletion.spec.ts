@@ -10,13 +10,14 @@ import {
 } from '../../../src/composants/auto-completion/reducteurAutoCompletion.ts';
 
 describe('Réducteur Auto complétion', () => {
-  const etatInitial = initialiseEtatAutoCompletion('auto-complétion');
+  const etatInitial = initialiseEtatAutoCompletion('auto-complétion', '');
 
   it('Initialise l’état', () => {
-    const etat = initialiseEtatAutoCompletion('auto-complétion');
+    const etat = initialiseEtatAutoCompletion('auto-complétion', '');
 
     expect(etat).toStrictEqual<EtatAutoCompletion>({
       nom: 'auto-complétion',
+      valeur: '',
       valeurs: [],
       valeursFiltrees: [],
       visibilite: 'invisible',
@@ -33,6 +34,7 @@ describe('Réducteur Auto complétion', () => {
     expect(etat).toStrictEqual<EtatAutoCompletion>({
       nom: 'auto-complétion',
       valeurs: ['1', '2', '3'],
+      valeur: '2',
       valeursFiltrees: [],
       visibilite: 'invisible',
     });
@@ -48,6 +50,7 @@ describe('Réducteur Auto complétion', () => {
 
       expect(etat).toStrictEqual<EtatAutoCompletion>({
         nom: 'auto-complétion',
+        valeur: '',
         valeurs: [],
         valeursFiltrees: [],
         visibilite: 'invisible',
@@ -64,6 +67,7 @@ describe('Réducteur Auto complétion', () => {
 
       expect(etat).toStrictEqual<EtatAutoCompletion>({
         nom: 'auto-complétion',
+        valeur: '',
         valeurs: ['1', '2', '3'],
         valeursFiltrees: ['1', '2', '3'],
         visibilite: 'invisible',
@@ -79,6 +83,7 @@ describe('Réducteur Auto complétion', () => {
 
       expect(etat).toStrictEqual<EtatAutoCompletion>({
         nom: 'auto-complétion',
+        valeur: '3',
         valeurs: ['1', '13', '2', '3', '33'],
         valeursFiltrees: ['13', '3', '33'],
         visibilite: 'visible',
@@ -95,6 +100,7 @@ describe('Réducteur Auto complétion', () => {
 
       expect(etat).toStrictEqual<EtatAutoCompletion>({
         nom: 'auto-complétion',
+        valeur: 'a',
         valeurs: ['A', 'B', 'aC', 'D', 'Ea'],
         valeursFiltrees: ['A', 'aC', 'Ea'],
         visibilite: 'visible',
@@ -112,6 +118,7 @@ describe('Réducteur Auto complétion', () => {
 
       expect(etat).toStrictEqual<EtatAutoCompletion>({
         nom: 'auto-complétion',
+        valeur: '',
         valeurs: [{ a: '1' }, { b: '2' }, { c: '3' }],
         valeursFiltrees: [{ a: '1' }, { b: '2' }, { c: '3' }],
         visibilite: 'invisible',
@@ -134,6 +141,7 @@ describe('Réducteur Auto complétion', () => {
 
       expect(etat).toStrictEqual<EtatAutoCompletion>({
         nom: 'auto-complétion',
+        valeur: '3',
         valeurs: [
           { a: '1', b: '2', c: '3' },
           { a: '1', b: '23', c: '3' },
@@ -164,6 +172,7 @@ describe('Réducteur Auto complétion', () => {
 
       expect(etat).toStrictEqual<EtatAutoCompletion>({
         nom: 'auto-complétion',
+        valeur: 'a',
         valeurs: [
           { a: 'A', b: 'B', c: 'aC' },
           { a: 'A', b: 'AB', c: 'AC' },
