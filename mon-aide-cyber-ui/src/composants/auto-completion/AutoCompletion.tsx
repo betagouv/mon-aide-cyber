@@ -3,89 +3,160 @@ import {
   useCallback,
   useEffect,
   useReducer,
+  useRef,
   useState,
 } from 'react';
 import {
-  ActionAutoCompletion,
   focusEnCours,
   initialiseEtatAutoCompletion,
-  optionChoisie,
+  suggestionChoisie,
   reducteurAutoCompletion,
   toucheClavierAppuyee,
-  valeursChargees,
+  suggestionsInitialesChargees,
   valeurSaisie,
+  surClickEnDehors,
 } from './reducteurAutoCompletion.ts';
 
 type ProprietesAutoCompletion<T extends object | string> = {
   nom: string;
-  mappeur: (valeur: T) => string;
-  surSelection: (valeur: string) => void;
-  surSaisie: (valeur: string) => void;
-  valeur: string;
-  valeurs: T[];
+  mappeur: (valeur: T | string) => string;
+  surSelection: (valeur: T) => void;
+  surSaisie: (valeur: T | string) => void;
+  valeurSaisie: T;
+  suggestionsInitiales: T[];
 };
+
 export const AutoCompletion = <T extends object | string>(
   proprietes: PropsWithChildren<ProprietesAutoCompletion<T>>,
 ) => {
+  const referenceConteneur = useRef<HTMLDivElement | null>(null);
   const [etat, envoie] = useReducer(
-    reducteurAutoCompletion,
-    initialiseEtatAutoCompletion(proprietes.nom, proprietes.valeur),
+    reducteurAutoCompletion<T>(),
+    initialiseEtatAutoCompletion<T>()(proprietes.nom, proprietes.valeurSaisie),
   );
-  const [valeursEnCoursDeChargement, setValeursEnCoursDeChargement] =
+  const [suggestionsEnCoursDeChargement, setSuggestionsEnCoursDeChargement] =
     useState(true);
 
   useEffect(() => {
-    if (valeursEnCoursDeChargement) {
+    if (suggestionsEnCoursDeChargement) {
       envoie(
-        valeursChargees({
-          valeurs: proprietes.valeurs,
+        suggestionsInitialesChargees({
+          suggestionsInitiales: proprietes.suggestionsInitiales,
         }),
       );
-      setValeursEnCoursDeChargement(false);
+      setSuggestionsEnCoursDeChargement(false);
     }
-  }, [proprietes, valeursEnCoursDeChargement]);
+  }, [proprietes, suggestionsEnCoursDeChargement]);
+
+  const clickEnDehors = useCallback((e: MouseEvent) => {
+    if (
+      referenceConteneur &&
+      referenceConteneur.current &&
+      !referenceConteneur.current.contains(e.target as Node)
+    ) {
+      envoie(surClickEnDehors());
+    }
+  }, []);
+
+  useEffect(() => {
+    addEventListener('click', clickEnDehors, true);
+
+    return () => {
+      removeEventListener('click', clickEnDehors);
+    };
+  });
 
   const surSelection = useCallback(
-    (
-      valeur: string,
-      execute: (
-        valeur: string,
-        fonction: (valeur: string) => void,
-      ) => ActionAutoCompletion,
-    ) => {
-      envoie(execute(valeur, proprietes.surSelection));
+    (valeur: T) => {
+      envoie(suggestionChoisie(valeur, proprietes.surSelection));
     },
     [proprietes],
   );
 
+  const surSaisie = useCallback(
+    (valeur: string) => {
+      envoie(valeurSaisie(valeur, proprietes.surSaisie));
+    },
+    [proprietes],
+  );
+
+  const surToucheClavierPressee = useCallback((touche: string) => {
+    envoie(toucheClavierAppuyee(touche));
+  }, []);
+
+  const surSelectionClavier = useCallback(
+    (touche: string, valeur: T) => {
+      if (touche === 'Enter') {
+        surSelection(valeur);
+      }
+      if (touche === 'ArrowDown' || touche === 'ArrowUp') {
+        surToucheClavierPressee(touche);
+      }
+    },
+    [surSelection, surToucheClavierPressee],
+  );
+
   const liste = (
-    <datalist className={`autocomplete-items ${etat.visibilite}`}>
-      {etat.valeursFiltrees.map((valeur, index) => (
-        <option
-          key={`auto-completion-${index}`}
-          onClick={(e) =>
-            surSelection(e.currentTarget.textContent!, optionChoisie)
-          }
-        >
-          {proprietes.mappeur(valeur as T)}
-        </option>
+    <div className={`autocomplete-items ${etat.suggestionsVisibles}`}>
+      {etat.suggestions.map((valeur, index) => (
+        <Suggestion
+          key={`option-${proprietes.nom}-${index}`}
+          suggestion={valeur}
+          suggestionCourante={etat.elementNavigationCourant}
+          surSelection={surSelection}
+          surSelectionClavier={surSelectionClavier}
+          mappeur={proprietes.mappeur}
+        />
       ))}
-    </datalist>
+    </div>
   );
 
   return (
-    <div className="autocomplete fr-col-12">
+    <div className="autocomplete fr-col-12" ref={referenceConteneur}>
       <input
         className="fr-input"
         type="text"
         id={etat.nom}
         name={etat.nom}
-        onFocus={() => envoie(focusEnCours(proprietes.valeurs as T[]))}
-        onChange={(e) => surSelection(e.target.value, valeurSaisie)}
-        onKeyDown={(e) => envoie(toucheClavierAppuyee(e.key))}
-        value={etat.valeur}
+        onFocus={() =>
+          envoie(focusEnCours(proprietes.suggestionsInitiales as T[]))
+        }
+        onChange={(e) => surSaisie(e.target.value)}
+        onKeyDown={(e) => surToucheClavierPressee(e.key)}
+        value={proprietes.mappeur(etat.valeurSaisie)}
       />
       {liste}
     </div>
+  );
+};
+
+const Suggestion = <T extends object | string>(proprietes: {
+  suggestion: T;
+  suggestionCourante?: { valeur: T; index: number };
+  surSelection: (valeur: T) => void;
+  surSelectionClavier: (touche: string, valeur: T) => void;
+  mappeur: (valeur: T) => string;
+}) => {
+  const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (
+      proprietes.suggestion === proprietes.suggestionCourante?.valeur &&
+      ref.current
+    ) {
+      ref.current.focus();
+    }
+  }, [proprietes.suggestionCourante?.valeur, proprietes.suggestion]);
+  return (
+    <button
+      ref={ref}
+      key={`auto-completion-${proprietes.suggestionCourante?.index}`}
+      onClick={() => proprietes.surSelection(proprietes.suggestion)}
+      onKeyDown={(e) =>
+        proprietes.surSelectionClavier(e.key, proprietes.suggestion)
+      }
+    >
+      {proprietes.mappeur(proprietes.suggestion)}
+    </button>
   );
 };

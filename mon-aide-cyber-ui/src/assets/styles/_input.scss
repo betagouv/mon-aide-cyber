@@ -6,6 +6,7 @@ input {
 .autocomplete {
   position: relative;
   display: inline-block;
+  margin-top: 0.5rem;
 }
 
 .autocomplete datalist {
@@ -13,6 +14,8 @@ input {
 }
 
 .autocomplete-items {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   border: 1px solid var(--couleurs-mac-violet-fonce);
   border-bottom: none;
@@ -22,13 +25,17 @@ input {
   left: 0;
   right: 0;
 }
-.autocomplete-items option {
+.autocomplete-items button {
   padding: 0.4rem;
   cursor: pointer;
   background-color: var(--couleurs-mac-blanc);
   border-bottom: 1px solid var(--couleurs-mac-violet-fonce);
   color: var(--couleurs-mac-violet-fonce);
+  text-align: left;
 }
-.autocomplete-items datalist:hover {
-  background-color: #e9e9e9;
+.autocomplete-items button:hover {
+  background-color: var(--couleurs-mac-violet-leger);
+}
+.autocomplete-items button:focus {
+  background-color: var(--couleurs-mac-violet-leger);
 }

@@ -1,163 +1,271 @@
 enum TypeActionAutoCompletion {
   TOUCHE_CLAVIER_APPUYEE = 'TOUCHE_CLAVIER_APPUYEE',
   FOCUS_EN_COURS = 'FOCUS_EN_COURS',
-  VALEURS_CHARGEES = 'VALEURS_CHARGEES',
+  SUGGESTIONS_INITIALES_CHARGEES = 'SUGGESTIONS_INITIALES_CHARGEES',
   VALEUR_SAISIE = 'VALEUR_SAISIE',
-  OPTION_CHOISIE = 'OPTION_CHOISIE',
+  SUGGESTION_CHOISIE = 'SUGGESTION_CHOISIE',
+  CLICK_EN_DEHORS = 'CLICK_EN_DEHORS',
 }
-export type EtatAutoCompletion = {
+
+export type EtatAutoCompletion<T> = {
+  elementNavigationCourant?: { valeur: T; index: number };
   nom: string;
-  valeur: any;
-  valeurs: (string | object)[];
-  valeursFiltrees: (string | object)[];
-  visibilite: 'visible' | 'invisible';
+  valeurSaisie: T | string;
+  suggestionsInitiales: T[];
+  suggestions: T[];
+  navigationClavierReinitialisee: boolean;
+  suggestionsVisibles: 'visible' | 'invisible';
 };
 
-export type ActionAutoCompletion =
+type ActionAutoCompletion<T> =
   | {
       type: TypeActionAutoCompletion.TOUCHE_CLAVIER_APPUYEE;
       touche: string;
     }
   | {
-      type: TypeActionAutoCompletion.VALEURS_CHARGEES;
+      type: TypeActionAutoCompletion.SUGGESTIONS_INITIALES_CHARGEES;
       proprietes: {
-        valeurs: (string | object)[];
+        suggestionsInitiales: T[];
         valeur?: string;
       };
     }
   | {
       type: TypeActionAutoCompletion.VALEUR_SAISIE;
       valeur: string;
-      execute: (valeur: string) => void;
+      execute: (valeur: T | string) => void;
     }
   | {
-      type: TypeActionAutoCompletion.OPTION_CHOISIE;
-      valeur: string;
-      execute: (valeur: string) => void;
+      type: TypeActionAutoCompletion.SUGGESTION_CHOISIE;
+      valeur: T;
+      execute: (valeur: T) => void;
     }
   | {
       type: TypeActionAutoCompletion.FOCUS_EN_COURS;
-      valeurs: (string | object)[];
+      valeurs: T[];
+    }
+  | {
+      type: TypeActionAutoCompletion.CLICK_EN_DEHORS;
     };
 
-const estUneChaineDeCaractere = (valeur: string | object): valeur is string =>
-  typeof valeur === 'string';
+export const reducteurAutoCompletion = <T extends object | string>() => {
+  return (
+    etat: EtatAutoCompletion<T>,
+    action: ActionAutoCompletion<T>,
+  ): EtatAutoCompletion<T> => {
+    const estUneChaineDeCaractere = (valeur: T | string): valeur is string =>
+      typeof valeur === 'string';
 
-const valeurAffichee = (
-  valeursFiltrees: (string | object)[],
-  valeurSaisie: string,
-): string => {
-  if (valeursFiltrees.length === 1) {
-    if (
-      estUneChaineDeCaractere(valeursFiltrees[0]) &&
-      valeursFiltrees[0].toLowerCase() === valeurSaisie.toLowerCase()
-    ) {
-      return valeursFiltrees[0];
-    }
-    return Object.values(valeursFiltrees[0]).find(
-      (val) => val.toLowerCase() === valeurSaisie.toLowerCase(),
-    );
-  }
-  return valeurSaisie;
-};
-
-export const reducteurAutoCompletion = (
-  etat: EtatAutoCompletion,
-  action: ActionAutoCompletion,
-): EtatAutoCompletion => {
-  switch (action.type) {
-    case TypeActionAutoCompletion.OPTION_CHOISIE: {
-      action.execute(action.valeur);
-      return {
-        ...etat,
-        valeur: action.valeur,
-        valeursFiltrees: [],
-        visibilite: 'invisible',
-      };
-    }
-    case TypeActionAutoCompletion.VALEUR_SAISIE: {
-      const valeurSaisie = action.valeur;
-      const valeursFiltrees = etat.valeurs.filter((val) => {
-        if (estUneChaineDeCaractere(val)) {
-          return val.toLowerCase().includes(valeurSaisie.toLowerCase());
+    const valeurAffichee = (
+      valeursFiltrees: T[],
+      valeurSaisie: string,
+    ): string | T => {
+      if (valeursFiltrees.length === 1) {
+        const valeurFiltree = valeursFiltrees[0];
+        if (
+          estUneChaineDeCaractere(valeurFiltree) &&
+          valeurFiltree.toLowerCase() === valeurSaisie.toLowerCase()
+        ) {
+          return valeurFiltree;
         }
-        const filter = Object.values(val).filter((val) =>
-          val.toLowerCase().includes(valeurSaisie.toLowerCase()),
-        );
-        return filter.length > 0;
-      });
-      action.execute(valeurSaisie);
-      const valeur = valeurAffichee(valeursFiltrees, valeurSaisie);
-      return {
-        ...etat,
-        valeur,
-        valeursFiltrees,
-        visibilite: 'visible',
-      };
-    }
-    case TypeActionAutoCompletion.VALEURS_CHARGEES: {
-      return {
-        ...etat,
-        valeurs: action.proprietes.valeurs,
-        valeursFiltrees: action.proprietes.valeurs,
-      };
-    }
-    case TypeActionAutoCompletion.FOCUS_EN_COURS: {
-      return { ...etat, valeurs: action.valeurs };
-    }
-    case TypeActionAutoCompletion.TOUCHE_CLAVIER_APPUYEE: {
-      if (action.touche === 'Tab') {
-        return { ...etat, valeurs: [], visibilite: 'invisible' };
+        const valeurTrouvee =
+          !estUneChaineDeCaractere(valeurFiltree) &&
+          Object.values(valeurFiltree).find(
+            (val) => String(val).toLowerCase() === valeurSaisie.toLowerCase(),
+          );
+        return valeurTrouvee ? valeurFiltree : valeurSaisie;
       }
-      return { ...etat };
+      return valeurSaisie;
+    };
+
+    const chaineDeCaractereStrictementEgaleALaValeurSaisie = (
+      valeurFiltree: T,
+      valeurSaisie: string,
+    ) =>
+      estUneChaineDeCaractere(valeurFiltree) &&
+      valeurFiltree.toLowerCase() === valeurSaisie.toLowerCase();
+
+    function objetDontUnChampAUneValeurStrictementEgalALaValeurSaisie(
+      valeurFiltree: T,
+      valeurSaisie: string,
+    ) {
+      return (
+        !estUneChaineDeCaractere(valeurFiltree) &&
+        Object.values(valeurFiltree).filter(
+          (val) => String(val).toLowerCase() === valeurSaisie.toLowerCase(),
+        ).length > 0
+      );
     }
-  }
+
+    switch (action.type) {
+      case TypeActionAutoCompletion.CLICK_EN_DEHORS:
+        return {
+          ...etat,
+          suggestionsVisibles: 'invisible',
+        };
+      case TypeActionAutoCompletion.SUGGESTION_CHOISIE: {
+        const valeurSaisie = action.valeur;
+        action.execute(valeurSaisie);
+        return {
+          ...etat,
+          valeurSaisie,
+          suggestions: [],
+          suggestionsVisibles: 'invisible',
+        };
+      }
+      case TypeActionAutoCompletion.VALEUR_SAISIE: {
+        const valeur = action.valeur;
+        const suggestions = etat.suggestionsInitiales.filter((val) => {
+          if (estUneChaineDeCaractere(val)) {
+            return val.toLowerCase().startsWith(valeur.toLowerCase());
+          }
+          return (
+            Object.values(val).filter((val) =>
+              String(val).toLowerCase().startsWith(valeur.toLowerCase()),
+            ).length > 0
+          );
+        });
+
+        if (
+          suggestions.length === 1 &&
+          (chaineDeCaractereStrictementEgaleALaValeurSaisie(
+            suggestions[0],
+            valeur,
+          ) ||
+            objetDontUnChampAUneValeurStrictementEgalALaValeurSaisie(
+              suggestions[0],
+              valeur,
+            ))
+        ) {
+          action.execute(suggestions[0]);
+        } else {
+          action.execute(valeur);
+        }
+        const valeurSaisie = valeurAffichee(suggestions, valeur);
+        return {
+          ...etat,
+          navigationClavierReinitialisee: true,
+          valeurSaisie,
+          suggestions,
+          suggestionsVisibles: 'visible',
+        };
+      }
+      case TypeActionAutoCompletion.SUGGESTIONS_INITIALES_CHARGEES: {
+        return {
+          ...etat,
+          suggestionsInitiales: action.proprietes.suggestionsInitiales,
+          suggestions: action.proprietes.suggestionsInitiales,
+        };
+      }
+      case TypeActionAutoCompletion.FOCUS_EN_COURS: {
+        return { ...etat, suggestionsInitiales: action.valeurs };
+      }
+      case TypeActionAutoCompletion.TOUCHE_CLAVIER_APPUYEE: {
+        const navigationClavier = () => {
+          const valeurs =
+            etat.suggestions.length > 0
+              ? etat.suggestions
+              : etat.suggestionsInitiales;
+          return {
+            valeurs,
+            indexSuivant: (indexSuivant: number) => {
+              const elementSuivant = valeurs[indexSuivant];
+              return {
+                ...etat,
+                elementNavigationCourant: {
+                  valeur: elementSuivant,
+                  index: indexSuivant,
+                },
+                navigationClavierReinitialisee: false,
+              };
+            },
+          };
+        };
+        if (action.touche === 'Tab') {
+          return {
+            ...etat,
+            suggestionsInitiales: [],
+            suggestionsVisibles: 'invisible',
+          };
+        }
+        const navigation = navigationClavier();
+        if (action.touche === 'ArrowDown') {
+          const borne = 0;
+          return navigation.indexSuivant(
+            etat.elementNavigationCourant &&
+              etat.elementNavigationCourant.index >= 0 &&
+              etat.elementNavigationCourant.index + 1 !==
+                navigation.valeurs.length &&
+              !etat.navigationClavierReinitialisee
+              ? etat.elementNavigationCourant.index + 1
+              : borne,
+          );
+        }
+        if (action.touche === 'ArrowUp') {
+          const borne = etat.navigationClavierReinitialisee
+            ? 0
+            : navigation.valeurs.length - 1;
+          const indexSuivant =
+            etat.elementNavigationCourant &&
+            etat.elementNavigationCourant.index &&
+            !etat.navigationClavierReinitialisee
+              ? etat.elementNavigationCourant.index - 1
+              : borne;
+          return navigation.indexSuivant(indexSuivant);
+        }
+        return { ...etat };
+      }
+    }
+  };
 };
 
-export const initialiseEtatAutoCompletion = (
-  nom: string,
-  valeur: any,
-): EtatAutoCompletion => ({
-  nom,
-  valeur,
-  valeurs: [],
-  valeursFiltrees: [],
-  visibilite: 'invisible',
-});
+export const initialiseEtatAutoCompletion =
+  <T>() =>
+  (nom: string, valeurSaisie: T | string): EtatAutoCompletion<T> => ({
+    nom,
+    valeurSaisie,
+    suggestionsInitiales: [],
+    suggestions: [],
+    navigationClavierReinitialisee: false,
+    suggestionsVisibles: 'invisible',
+  });
 
-export const toucheClavierAppuyee = (touche: string): ActionAutoCompletion => ({
+export const toucheClavierAppuyee = <T>(
+  touche: string,
+): ActionAutoCompletion<T> => ({
   type: TypeActionAutoCompletion.TOUCHE_CLAVIER_APPUYEE,
   touche,
 });
 
-export const focusEnCours = (
-  valeurs: (string | object)[],
-): ActionAutoCompletion => ({
+export const focusEnCours = <T>(valeurs: T[]): ActionAutoCompletion<T> => ({
   type: TypeActionAutoCompletion.FOCUS_EN_COURS,
   valeurs,
 });
 
-export const valeursChargees = (proprietes: {
-  valeurs: (string | object)[];
-}): ActionAutoCompletion => ({
-  type: TypeActionAutoCompletion.VALEURS_CHARGEES,
+export const suggestionsInitialesChargees = <T>(proprietes: {
+  suggestionsInitiales: T[];
+}): ActionAutoCompletion<T> => ({
+  type: TypeActionAutoCompletion.SUGGESTIONS_INITIALES_CHARGEES,
   proprietes,
 });
 
-export const valeurSaisie = (
+export const valeurSaisie = <T>(
   valeur: string,
-  execute: (valeur: string) => void,
-): ActionAutoCompletion => ({
+  execute: (valeur: T | string) => void,
+): ActionAutoCompletion<T> => ({
   type: TypeActionAutoCompletion.VALEUR_SAISIE,
   valeur,
   execute,
 });
 
-export const optionChoisie = (
-  valeur: string,
-  execute: (valeur: string) => void,
-): ActionAutoCompletion => ({
-  type: TypeActionAutoCompletion.OPTION_CHOISIE,
+export const suggestionChoisie = <T>(
+  valeur: T,
+  execute: (valeur: T) => void,
+): ActionAutoCompletion<T> => ({
+  type: TypeActionAutoCompletion.SUGGESTION_CHOISIE,
   valeur,
   execute,
+});
+
+export const surClickEnDehors = <T>(): ActionAutoCompletion<T> => ({
+  type: TypeActionAutoCompletion.CLICK_EN_DEHORS,
 });
