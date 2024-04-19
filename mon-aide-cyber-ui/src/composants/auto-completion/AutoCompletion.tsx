@@ -19,7 +19,8 @@ import {
 type ProprietesAutoCompletion<T extends object | string> = {
   nom: string;
   mappeur: (valeur: T) => string;
-  surValidation: (valeur: string) => void;
+  surSelection: (valeur: string) => void;
+  surSaisie: (valeur: string) => void;
   valeur: string;
   valeurs: T[];
 };
@@ -28,7 +29,7 @@ export const AutoCompletion = <T extends object | string>(
 ) => {
   const [etat, envoie] = useReducer(
     reducteurAutoCompletion,
-    initialiseEtatAutoCompletion(proprietes.nom),
+    initialiseEtatAutoCompletion(proprietes.nom, proprietes.valeur),
   );
   const [valeursEnCoursDeChargement, setValeursEnCoursDeChargement] =
     useState(true);
@@ -44,7 +45,7 @@ export const AutoCompletion = <T extends object | string>(
     }
   }, [proprietes, valeursEnCoursDeChargement]);
 
-  const surValidation = useCallback(
+  const surSelection = useCallback(
     (
       valeur: string,
       execute: (
@@ -52,7 +53,7 @@ export const AutoCompletion = <T extends object | string>(
         fonction: (valeur: string) => void,
       ) => ActionAutoCompletion,
     ) => {
-      envoie(execute(valeur, proprietes.surValidation));
+      envoie(execute(valeur, proprietes.surSelection));
     },
     [proprietes],
   );
@@ -63,7 +64,7 @@ export const AutoCompletion = <T extends object | string>(
         <option
           key={`auto-completion-${index}`}
           onClick={(e) =>
-            surValidation(e.currentTarget.textContent!, optionChoisie)
+            surSelection(e.currentTarget.textContent!, optionChoisie)
           }
         >
           {proprietes.mappeur(valeur as T)}
@@ -80,9 +81,9 @@ export const AutoCompletion = <T extends object | string>(
         id={etat.nom}
         name={etat.nom}
         onFocus={() => envoie(focusEnCours(proprietes.valeurs as T[]))}
-        onChange={(e) => surValidation(e.target.value, valeurSaisie)}
+        onChange={(e) => surSelection(e.target.value, valeurSaisie)}
         onKeyDown={(e) => envoie(toucheClavierAppuyee(e.key))}
-        value={proprietes.valeur}
+        value={etat.valeur}
       />
       {liste}
     </div>
