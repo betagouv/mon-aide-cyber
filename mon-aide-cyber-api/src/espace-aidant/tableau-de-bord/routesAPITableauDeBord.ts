@@ -34,12 +34,10 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
         new ServiceDiagnostic(configuration.entrepots),
       ).diagnosticsInitiesPar(requete.identifiantUtilisateurCourant!);
 
-      reponse.status(200).json({
+      return reponse.status(200).json({
         diagnostics,
         ...constructeurActionsHATEOAS().actionsTableauDeBord().construis(),
       });
-
-      return reponse.send();
     },
   );
 
