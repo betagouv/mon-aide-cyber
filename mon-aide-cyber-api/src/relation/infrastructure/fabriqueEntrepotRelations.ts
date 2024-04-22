@@ -6,6 +6,5 @@ export function fabriqueEntrepotRelations(): EntrepotRelation {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
     return new EntrepotRelationPostgres();
   }
-
   return new EntrepotRelationMemoire();
 }

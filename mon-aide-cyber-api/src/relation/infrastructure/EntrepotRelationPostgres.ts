@@ -83,7 +83,16 @@ export class EntrepotRelationPostgres
     return 'relations';
   }
 
-  trouveDiagnosticsInitiePar(_: string): Promise<Tuple[]> {
-    throw new Error('Non implémenté');
+  trouveDiagnosticsInitiePar(identifiant: string): Promise<Tuple[]> {
+    return this.knex
+      .from(this.nomTable())
+      .whereRaw(
+        "(donnees->'utilisateur'->>'identifiant')::uuid = ?",
+        identifiant,
+      )
+      .select(`${this.nomTable()}.*`)
+      .then((lignes: TupleDTO[]) =>
+        lignes.map((ligne) => this.deDTOAEntite(ligne)),
+      );
   }
 }
