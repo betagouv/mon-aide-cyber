@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
-import { EntrepotAidantMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import { Aidant } from '../../../src/authentification/Aidant';
+import * as fs from 'fs';
+import { BusEvenementDeTest } from '../../../infrastructure/bus/BusEvenementDeTest';
+import { FournisseurHorlogeDeTest } from '../../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import {
   AidantTranscris,
   importeAidants,
   ResultatImportationAidants,
-} from '../../../src/administration/aidants/importeAidants';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
-import * as fs from 'fs';
-import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
-import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
+} from '../../../../src/administration/aidants/importe/importeAidants';
+import { EntrepotAidantMemoire } from '../../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
+import { Aidant } from '../../../../src/authentification/Aidant';
+import { unAidant } from '../../../authentification/constructeurs/constructeurAidant';
 
 const enTeteCsv =
   'Région;nom;charte;mail;telephone;TO DO;qui;Compte Créé ?;commentaires;message avec mot de passe\n';
@@ -453,7 +453,7 @@ describe('Importe des aidants', () => {
   it("importe les aidants à partir d'un fichier", async () => {
     const entrepot = new EntrepotAidantMemoire();
     const aidantsAImporter = fs.readFileSync(
-      './test/administration/aidants/beta_testeur.csv',
+      './test/administration/aidants/importe/beta_testeur.csv',
       {
         encoding: 'utf-8',
       },

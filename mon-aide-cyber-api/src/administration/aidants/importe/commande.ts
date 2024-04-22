@@ -1,11 +1,11 @@
 import { program } from 'commander';
-import { EntrepotAidantPostgres } from '../../infrastructure/entrepots/postgres/EntrepotAidantPostgres';
-import { BusEvenementMAC } from '../../infrastructure/bus/BusEvenementMAC';
-import { fabriqueConsommateursEvenements } from '../../adaptateurs/fabriqueConsommateursEvenements';
 import { ImportAidant, importeAidants } from './importeAidants';
 import * as fs from 'fs';
-import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
-import { adaptateurServiceChiffrement } from '../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
+import { EntrepotAidantPostgres } from '../../../infrastructure/entrepots/postgres/EntrepotAidantPostgres';
+import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
+import { BusEvenementMAC } from '../../../infrastructure/bus/BusEvenementMAC';
+import { fabriqueConsommateursEvenements } from '../../../adaptateurs/fabriqueConsommateursEvenements';
+import { FournisseurHorloge } from '../../../infrastructure/horloge/FournisseurHorloge';
 
 const command = program
   .description('Importe des aidants')
