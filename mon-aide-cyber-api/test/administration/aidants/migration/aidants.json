@@ -1,0 +1,19 @@
+[
+  {
+    "identifiant": "e5af4e97-e987-45b5-a710-c14e594d438a",
+    "aidant": {
+      "nomPrenom": "Jean Dujardin",
+      "motDePasse": "mdp",
+      "identifiantConnexion": "jean.dujardin@mail.com"
+    }
+  },
+  {
+    "identifiant": "7fef39ab-84f6-4d0c-aaa8-c9a41f9dbd43",
+    "aidant": {
+      "nomPrenom": "Jean Dupont",
+      "motDePasse": "mdp",
+      "dateSignatureCGU": "2024-02-27T09:02:37.080Z",
+      "identifiantConnexion": "jean.dupont@mail.com"
+    }
+  }
+]

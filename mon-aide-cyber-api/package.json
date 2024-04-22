@@ -8,6 +8,7 @@
     "dev": "knex migrate:latest --knexfile src/infrastructure/entrepots/postgres/knexfile.ts --migrations-directory migrations && nodemon --require dotenv/config index.ts",
     "administration:cree-aidant": "ts-node --transpile-only --require dotenv/config src/administration/aidant/commande.ts",
     "administration:importe-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/importe/commande.ts",
+    "administration:migre-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/migration/commande.ts",
     "administration:recherche-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/recherche/commande.ts",
     "administration:chiffrement": "ts-node --transpile-only --require dotenv/config src/administration/chiffrement/commande.ts",
     "ci:initialise": "ts-node --transpile-only --require dotenv/config test/infrastructure/entrepots/postgres/integration_continue.ts",
