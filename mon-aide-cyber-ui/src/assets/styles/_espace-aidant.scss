@@ -4,3 +4,13 @@
     padding-top: 1rem;
   }
 }
+
+.bandeau-violet-clair {
+  background-color: var(--couleurs-mac-violet-tres-clair);
+
+  margin-bottom: 2rem;
+
+  .encart-gauche {
+    padding: 3rem 0 3rem 0;
+  }
+}

@@ -18,6 +18,7 @@ import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurPa
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien } from '../../domaine/Lien.ts';
 import { LienMAC } from '../LienMAC.tsx';
+import { ComposantIdentifiantDiagnostic } from '../ComposantIdentifiantDiagnostic.tsx';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
@@ -125,7 +126,7 @@ export const ComposantRestitution = ({
             </div>
             <div className="fr-grid-row fr-pt-md-2w">
               <div className="identifiant-diagnostic">
-                ID {idDiagnostic?.substring(0, 8)}
+                ID <ComposantIdentifiantDiagnostic identifiant={idDiagnostic} />
               </div>
             </div>
             <div className="fr-grid-row fr-grid-row--right">

@@ -56,7 +56,7 @@ export const ComposantProfil = () => {
   const afficherTableauDeBord = useCallback(() => {
     navigationMAC.navigue(
       new MoteurDeLiens(navigationMAC.etat),
-      'lancer-diagnostic',
+      'afficher-tableau-de-bord',
     );
   }, [navigationMAC]);
 

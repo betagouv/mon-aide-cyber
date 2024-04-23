@@ -12,7 +12,7 @@ import { ComposantConnexion } from '../composants/connexion/ComposantConnexion.t
 import { Suspense } from 'react';
 import { RequiertAuthentification } from '../fournisseurs/RequiertAuthentification.tsx';
 import { ComposantIntercepteur } from '../composants/intercepteurs/ComposantIntercepteur.tsx';
-import { TableauDeBord } from '../composants/TableauDeBord.tsx';
+import { TableauDeBord } from '../composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
 
 const meta = {
   title: 'Connexion',
