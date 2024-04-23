@@ -24,7 +24,7 @@ export const FournisseurNavigationMAC = ({ children }: PropsWithChildren) => {
   const navigue = (
     moteurDeLiens: MoteurDeLiens,
     action: Action,
-    exclusion?: Action[]
+    exclusion?: Action[],
   ) => {
     moteurDeLiens.trouve(
       action,

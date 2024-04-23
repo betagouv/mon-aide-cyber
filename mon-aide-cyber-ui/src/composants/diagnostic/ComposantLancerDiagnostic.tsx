@@ -8,7 +8,7 @@ import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien } from '../../domaine/Lien.ts';
 
 type ProprietesComposantLancerDiagnostic = {
-  style: string;
+  style?: string;
 };
 
 export const ComposantLancerDiagnostic = ({
@@ -53,8 +53,8 @@ export const ComposantLancerDiagnostic = ({
   }, [navigationMAC.etat, lanceDiagnostic]);
 
   return (
-    <button className={style} onClick={lancerDiagnostic}>
+    <a href="#" className={style} onClick={lancerDiagnostic}>
       Lancer un diagnostic
-    </button>
+    </a>
   );
 };

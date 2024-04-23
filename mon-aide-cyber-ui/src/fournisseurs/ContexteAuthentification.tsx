@@ -84,10 +84,20 @@ export const FournisseurAuthentification = ({
             envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
             const moteurDeLiens = new MoteurDeLiens({
               ...reponse.liens,
-              'afficher-tableau-de-bord': { url: '' },
             });
 
-            navigationMAC.navigue(moteurDeLiens, 'afficher-tableau-de-bord');
+            moteurDeLiens.trouve(
+              'afficher-tableau-de-bord',
+              () =>
+                navigationMAC.navigue(
+                  moteurDeLiens,
+                  'afficher-tableau-de-bord',
+                ),
+              () =>
+                moteurDeLiens.trouve('creer-espace-aidant', () =>
+                  navigationMAC.navigue(moteurDeLiens, 'creer-espace-aidant'),
+                ),
+            );
           })
           .catch(surErreur);
       },

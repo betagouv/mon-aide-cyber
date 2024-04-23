@@ -12,7 +12,6 @@ import { RequiertAuthentification } from './fournisseurs/RequiertAuthentificatio
 import { FournisseurAuthentification } from './fournisseurs/ContexteAuthentification.tsx';
 import { PortailModale } from './composants/modale/PortailModale.tsx';
 import { CharteAidant } from './vues/CharteAidant.tsx';
-import { TableauDeBord } from './composants/TableauDeBord.tsx';
 import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution.tsx';
 import { ComposantCGU } from './vues/ComposantCGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
@@ -24,6 +23,7 @@ import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspac
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
 import { ComposantDemandeAide } from './composants/demande-aide/ComposantDemandeAide.tsx';
 import { ComposantConnexion } from './composants/connexion/ComposantConnexion.tsx';
+import { TableauDeBord } from './composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

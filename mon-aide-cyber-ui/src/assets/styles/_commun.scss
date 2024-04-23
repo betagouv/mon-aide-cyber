@@ -116,3 +116,21 @@ fieldset {
 .texte-centre {
   text-align: center;
 }
+
+.tableau > div:first-child {
+  border-radius: 0.5rem 0.5rem 0 0;
+  background-color: var(--couleurs-mac-jaune-clair);
+  padding: 1rem;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  border-bottom: 0.125rem solid var(--couleurs-mac-violet-leger);
+}
+
+.tableau {
+  .rang {
+    background-color: var(--couleurs-mac-violet-tres-clair);
+    padding: 1rem;
+    border-bottom: 0.0625rem solid var(--couleurs-mac-violet-leger);
+  }
+}
