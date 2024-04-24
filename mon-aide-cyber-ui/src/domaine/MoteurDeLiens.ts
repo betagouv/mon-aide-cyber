@@ -17,7 +17,7 @@ export class MoteurDeLiens {
         if (route?.includes('{DYNAMIQUE}')) {
           return (lien.route = route.replace(
             '{DYNAMIQUE}',
-            lien.url.split('/').at(-1) || '',
+            lien.url.split('/').at(-1) || ''
           ));
         }
         return (lien.route = route);
@@ -25,9 +25,9 @@ export class MoteurDeLiens {
   }
 
   trouve(
-    lienATrouver: string,
+    lienATrouver: Action,
     enSucces?: (lien: Lien) => void,
-    enErreur?: () => void,
+    enErreur?: () => void
   ) {
     const lien = Object.entries(this.liens)
       .filter(([action]) => action === lienATrouver)
@@ -48,7 +48,7 @@ export class MoteurDeLiens {
           ...accumulateur,
           [action]: lien,
         }),
-        {},
+        {}
       );
   }
 }

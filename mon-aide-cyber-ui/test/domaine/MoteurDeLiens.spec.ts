@@ -1,6 +1,6 @@
 import { describe, expect } from 'vitest';
 import { MoteurDeLiens } from '../../src/domaine/MoteurDeLiens.ts';
-import { Lien, Liens } from '../../src/domaine/Lien.ts';
+import { Action, Lien, Liens } from '../../src/domaine/Lien.ts';
 
 describe('Le moteur de liens', () => {
   describe.each([
@@ -36,7 +36,7 @@ describe('Le moteur de liens', () => {
     )} et donne comme route ${liens.attendu}`, () => {
       let routeAttendue = '';
       new MoteurDeLiens(liens.lien as unknown as Liens).trouve(
-        Object.keys(liens.lien)[0],
+        Object.keys(liens.lien)[0] as Action,
         (lien: Lien) => {
           routeAttendue = lien.route!;
         },
@@ -61,7 +61,7 @@ describe('Le moteur de liens', () => {
       new MoteurDeLiens({
         'mon-lien': { url: '/une/url', methode: 'GET' },
         'un-autre-lien': { url: '/une/autre/url', methode: 'POST' },
-      }).trouve('mon-lien', (lien: Lien) => (lienAttendu = lien));
+      }).trouve('mon-lien' as Action, (lien: Lien) => (lienAttendu = lien));
       expect(lienAttendu).toStrictEqual<Lien>({
         url: '/une/url',
         methode: 'GET',
@@ -76,7 +76,7 @@ describe('Le moteur de liens', () => {
       new MoteurDeLiens({
         'mon-lien': { url: '/une/url', methode: 'GET' },
         'un-autre-lien': { url: '/une/autre/url', methode: 'POST' },
-      }).trouve('lien-introuvable', enSucces, enErreur);
+      }).trouve('lien-introuvable' as Action, enSucces, enErreur);
 
       expect(enSuccesRecu).toBeUndefined();
       expect(enErreurAppele).toBeTruthy();

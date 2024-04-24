@@ -13,6 +13,7 @@ export type Action =
   | 'afficher-profil'
   | 'afficher-tableau-de-bord'
   | 'creer-espace-aidant'
+  | 'demander-aide'
   | 'lancer-diagnostic'
   | 'modifier-diagnostic'
   | 'modifier-mot-de-passe'
