@@ -7,7 +7,6 @@ import { ComposantIntercepteur } from './composants/intercepteurs/ComposantInter
 import { ComposantAffichageErreur } from './composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ComposantDiagnostic } from './composants/diagnostic/ComposantDiagnostic.tsx';
-import { ComposantDiagnostics } from './composants/ComposantDiagnostics.tsx';
 import { RequiertAuthentification } from './fournisseurs/RequiertAuthentification.tsx';
 import { FournisseurAuthentification } from './fournisseurs/ContexteAuthentification.tsx';
 import { PortailModale } from './composants/modale/PortailModale.tsx';
@@ -75,11 +74,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                       <Route
                         path="/tableau-de-bord"
                         element={<TableauDeBord />}
-                      ></Route>
-                      /
-                      <Route
-                        path="/diagnostics"
-                        element={<ComposantDiagnostics />}
                       ></Route>
                       <Route
                         path="/diagnostic/:idDiagnostic"
