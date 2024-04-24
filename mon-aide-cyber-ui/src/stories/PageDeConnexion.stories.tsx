@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
-import { PortailModale } from '../composants/modale/PortailModale.tsx';
 import { ReponseAuthentification } from '../domaine/authentification/Authentification.ts';
 import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -16,7 +15,7 @@ import { ComposantIntercepteur } from '../composants/intercepteurs/ComposantInte
 import { TableauDeBord } from '../composants/TableauDeBord.tsx';
 
 const meta = {
-  title: 'Authentification',
+  title: 'Connexion',
   component: ComposantConnexion,
   parameters: {
     layout: 'fullscreen',
@@ -26,7 +25,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const ModaleDeConnexion: Story = {
+export const PageDeConnexion: Story = {
   decorators: [
     (story) => (
       <MemoryRouter>
@@ -45,32 +44,28 @@ export const ModaleDeConnexion: Story = {
           }}
         >
           <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            <PortailModale>
-              <Routes>
-                <Route path="/connexion" element={<ComposantConnexion />} />
+            <Routes>
+              <Route path="/connexion" element={<ComposantConnexion />} />
+              <Route
+                element={
+                  <Suspense>
+                    <RequiertAuthentification />
+                  </Suspense>
+                }
+              >
                 <Route
-                  element={
-                    <Suspense>
-                      <RequiertAuthentification />
-                    </Suspense>
-                  }
-                >
-                  <Route
-                    path="/tableau-de-bord"
-                    element={
-                      <ComposantIntercepteur composant={TableauDeBord} />
-                    }
-                  ></Route>
-                </Route>
-              </Routes>
-              {story()}
-            </PortailModale>
+                  path="/tableau-de-bord"
+                  element={<ComposantIntercepteur composant={TableauDeBord} />}
+                ></Route>
+              </Route>
+            </Routes>
+            {story()}
           </ErrorBoundary>
         </ContexteMacAPI.Provider>
       </MemoryRouter>
     ),
   ],
-  name: 'Modale de connexion',
+  name: 'Page de connexion',
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
