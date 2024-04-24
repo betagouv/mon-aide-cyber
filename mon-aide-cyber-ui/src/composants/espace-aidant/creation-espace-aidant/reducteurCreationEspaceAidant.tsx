@@ -1,10 +1,10 @@
+import { ReactElement } from 'react';
 import {
   ChampsErreur,
   construisErreur,
   PresentationErreur,
-} from '../alertes/Erreurs.tsx';
-import { ReactElement } from 'react';
-import { ModificationMotDePasse } from '../mot-de-passe/ComposantMotDePasse.tsx';
+} from '../../alertes/Erreurs.tsx';
+import { ModificationMotDePasse } from '../../mot-de-passe/ComposantMotDePasse.tsx';
 
 type ErreurCreationEspaceAidant = {
   cguSignees?: PresentationErreur;

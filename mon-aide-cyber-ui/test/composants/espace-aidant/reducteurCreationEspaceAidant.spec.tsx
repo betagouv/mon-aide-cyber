@@ -1,17 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import {
-  cguCliquees,
-  EtatCreationEspaceAidant,
-  creationEspaceAidantInvalidee,
-  creationEspaceAidantTransmise,
-  creationEspaceAidantValidee,
-  initialiseReducteur,
-  reducteurCreationEspaceAidant,
-} from '../../../src/composants/espace-aidant/reducteurCreationEspaceAidant.tsx';
-import {
   ChampsErreur,
   TexteExplicatif,
 } from '../../../src/composants/alertes/Erreurs.tsx';
+import {
+  cguCliquees,
+  creationEspaceAidantInvalidee,
+  creationEspaceAidantTransmise,
+  creationEspaceAidantValidee,
+  EtatCreationEspaceAidant,
+  initialiseReducteur,
+  reducteurCreationEspaceAidant,
+} from '../../../src/composants/espace-aidant/creation-espace-aidant/reducteurCreationEspaceAidant.tsx';
 
 describe("Réducteur de création de l'espace Aidant", () => {
   const etatInitialCreationEspaceAidant: EtatCreationEspaceAidant =

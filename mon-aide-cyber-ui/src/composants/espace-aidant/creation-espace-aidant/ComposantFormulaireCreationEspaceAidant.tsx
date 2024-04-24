@@ -7,17 +7,17 @@ import {
   initialiseReducteur,
   reducteurCreationEspaceAidant,
 } from './reducteurCreationEspaceAidant.tsx';
-import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
-import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { CreationEspaceAidant } from '../../domaine/espace-aidant/EspaceAidant.ts';
-import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
-import { ComposantMotDePasse } from '../mot-de-passe/ComposantMotDePasse.tsx';
+import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks.ts';
+import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
+import { Lien, ReponseHATEOAS } from '../../../domaine/Lien.ts';
+import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { CreationEspaceAidant } from '../../../domaine/espace-aidant/EspaceAidant.ts';
+import { ComposantMotDePasse } from '../../mot-de-passe/ComposantMotDePasse.tsx';
 
 export const ComposantFormulaireCreationEspaceAidant = () => {
   const [etatCreationEspaceAidant, envoie] = useReducer(
     reducteurCreationEspaceAidant,
-    initialiseReducteur()
+    initialiseReducteur(),
   );
   const [boutonValiderClique, setBoutonValiderClique] = useState(false);
   const navigationMAC = useNavigationMAC();
@@ -51,14 +51,14 @@ export const ComposantFormulaireCreationEspaceAidant = () => {
           macapi
             .appelle<ReponseHATEOAS, CreationEspaceAidant>(
               parametresAPI,
-              async (json) => (await json) as unknown as ReponseHATEOAS
+              async (json) => (await json) as unknown as ReponseHATEOAS,
             )
             .then((reponse) => {
               envoie(creationEspaceAidantTransmise());
               navigationMAC.navigue(
                 new MoteurDeLiens(reponse.liens),
                 'lancer-diagnostic',
-                ['creer-espace-aidant']
+                ['creer-espace-aidant'],
               );
             })
             .catch((erreur) => envoie(creationEspaceAidantInvalidee(erreur)));
@@ -67,8 +67,8 @@ export const ComposantFormulaireCreationEspaceAidant = () => {
       () =>
         navigationMAC.navigue(
           new MoteurDeLiens(navigationMAC.etat),
-          'lancer-diagnostic'
-        )
+          'lancer-diagnostic',
+        ),
     );
   }, [navigationMAC, etatCreationEspaceAidant, macapi]);
 

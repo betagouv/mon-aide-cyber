@@ -133,4 +133,10 @@ fieldset {
     padding: 1rem;
     border-bottom: 0.0625rem solid var(--couleurs-mac-violet-leger);
   }
+
+  .rang > div {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 }
