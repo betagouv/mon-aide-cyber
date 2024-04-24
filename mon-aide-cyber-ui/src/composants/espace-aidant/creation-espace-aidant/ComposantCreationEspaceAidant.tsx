@@ -1,7 +1,7 @@
 import { ComposantFormulaireCreationEspaceAidant } from './ComposantFormulaireCreationEspaceAidant.tsx';
-import { Header } from '../Header.tsx';
-import { LienMAC } from '../LienMAC.tsx';
-import { Footer } from '../Footer.tsx';
+import { Header } from '../../Header.tsx';
+import { LienMAC } from '../../LienMAC.tsx';
+import { Footer } from '../../Footer.tsx';
 
 export const ComposantCreationEspaceAidant = () => {
   return (

@@ -15,7 +15,6 @@ import { CharteAidant } from './vues/CharteAidant.tsx';
 import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution.tsx';
 import { ComposantCGU } from './vues/ComposantCGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
-import { ComposantCreationEspaceAidant } from './composants/espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { FournisseurMacAPI } from './fournisseurs/api/ContexteMacAPI.tsx';
 import { FournisseurNavigationMAC } from './fournisseurs/ContexteNavigationMAC.tsx';
 import { ComposantProfil } from './composants/profil/ComposantProfil.tsx';
@@ -24,6 +23,7 @@ import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
 import { ComposantDemandeAide } from './composants/demande-aide/ComposantDemandeAide.tsx';
 import { ComposantConnexion } from './composants/connexion/ComposantConnexion.tsx';
 import { TableauDeBord } from './composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
+import { ComposantCreationEspaceAidant } from './composants/espace-aidant/creation-espace-aidant/ComposantCreationEspaceAidant.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
