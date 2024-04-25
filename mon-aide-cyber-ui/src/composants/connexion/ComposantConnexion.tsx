@@ -1,11 +1,12 @@
 import { FormulaireAuthentification } from '../authentification/FormulaireAuthentification.tsx';
 import { Header } from '../Header.tsx';
 import { Footer } from '../Footer.tsx';
+import { LienMAC } from '../LienMAC.tsx';
 
 export const ComposantConnexion = () => {
   return (
     <>
-      <Header />
+      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
       <main role="main" className="connectez-vous">
         <div className="fond-clair-mac">
           <div className="fr-container">

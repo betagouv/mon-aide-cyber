@@ -1,10 +1,10 @@
 import { SeConnecter } from './authentification/SeConnecter.tsx';
 import { useAuthentification } from '../fournisseurs/hooks.ts';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { ComposantMenuUtilisateur } from './utilisateur/ComposantMenuUtilisateur.tsx';
 import { Utilisateur } from '../domaine/authentification/Authentification.ts';
 
-export const Header = () => {
+export const Header = ({ lienMAC }: { lienMAC: ReactElement }) => {
   const [utilisateur, setUtilisateur] = useState<Utilisateur | undefined>(
     undefined,
   );
@@ -48,15 +48,7 @@ export const Header = () => {
                   )}
                 </div>
               </div>
-              <div className="fr-header__service fr-col-md-5">
-                <a href="/" title="Accueil - MonAideCyber">
-                  <img
-                    className="fr-responsive-img taille-reduite-en-mobile"
-                    src="/images/logo_mac.svg"
-                    alt="ANSSI"
-                  />
-                </a>
-              </div>
+              <div className="fr-header__service fr-col-md-5">{lienMAC}</div>
             </div>
             <div className="fr-header__tools">
               <div className="fr-header__tools-links">

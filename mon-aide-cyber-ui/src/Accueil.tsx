@@ -16,6 +16,7 @@ import { Message } from './domaine/contact/Message.ts';
 import { useMACAPI } from './fournisseurs/hooks.ts';
 
 import { constructeurParametresAPI } from './fournisseurs/api/ConstructeurParametresAPI.ts';
+import { LienMAC } from './composants/LienMAC.tsx';
 
 export const Accueil = () => {
   // const [motDGClique, setMotDGClique] = useState<boolean>(true);
@@ -85,7 +86,7 @@ export const Accueil = () => {
   }, []);
   return (
     <>
-      <Header />
+      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
       <main role="main">
         <div className="mode-fonce accueil">
           <div id="presentation" className="fr-container">

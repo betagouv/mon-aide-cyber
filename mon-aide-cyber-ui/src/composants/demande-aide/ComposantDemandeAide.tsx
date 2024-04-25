@@ -23,6 +23,7 @@ import {
   ReponseDemandeAide,
 } from '../../domaine/demande-aide/Aide.ts';
 import { ChampsErreur } from '../alertes/Erreurs.tsx';
+import { LienMAC } from '../LienMAC.tsx';
 
 export const ComposantDemandeAide = () => {
   const [etat, envoie] = useReducer(reducteurDemandeAide, {
@@ -97,7 +98,7 @@ export const ComposantDemandeAide = () => {
 
   return (
     <>
-      <Header />
+      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
       <main role="main" className="demande-aide">
         <div className="mode-fonce">
           <div className="fr-container">

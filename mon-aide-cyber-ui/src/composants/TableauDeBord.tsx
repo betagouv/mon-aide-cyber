@@ -3,6 +3,7 @@ import { useAuthentification } from '../fournisseurs/hooks.ts';
 import { ComposantLancerDiagnostic } from './diagnostic/ComposantLancerDiagnostic.tsx';
 import { Footer } from './Footer.tsx';
 import { Header } from './Header.tsx';
+import { LienMAC } from './LienMAC.tsx';
 
 export const TableauDeBord = () => {
   const [nomPrenom, setNomPrenom] = useState<string>('');
@@ -14,7 +15,7 @@ export const TableauDeBord = () => {
 
   return (
     <>
-      <Header />
+      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
       <main role="main">
         <div className="mode-fonce">
           <div className="fr-container">

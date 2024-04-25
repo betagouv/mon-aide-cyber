@@ -17,6 +17,7 @@ import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien } from '../../domaine/Lien.ts';
+import { LienMAC } from '../LienMAC.tsx';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
@@ -103,7 +104,14 @@ export const ComposantRestitution = ({
 
   return (
     <>
-      <Header />
+      <Header
+        lienMAC={
+          <LienMAC
+            titre="Espace Aidant - MonAideCyber"
+            route="/tableau-de-bord"
+          />
+        }
+      />
       <main role="main">
         <div className="mode-fonce fr-pt-md-4w fr-pb-md-8w">
           <div className="fr-container">
