@@ -185,33 +185,6 @@ export const unDiagnosticCompletEnGirondeAvecDesReponsesDonnees = () =>
     .avecLesReponsesDonnees('thematique', septReponsesDonnees())
     .avecDesMesures(desMesuresPour7Questions());
 
-export const unDiagnosticEnRegion = (region: string) =>
-  unDiagnostic()
-    .avecUnReferentiel(
-      unReferentiel()
-        .ajouteUneThematique('contexte', [
-          uneQuestion()
-            .avecIdentifiant('contexte-region-siege-social')
-            .aChoixUnique('région siège social ?', [
-              {
-                identifiant: `contexte-region-siege-social-nouvelle-${region}`,
-                libelle: region,
-              },
-            ])
-            .construis(),
-        ])
-        .construis(),
-    )
-    .ajouteUneReponseDonnee(
-      {
-        thematique: 'contexte',
-        question: 'contexte-region-siege-social',
-      },
-      uneReponseDonnee()
-        .ayantPourReponse(`contexte-region-siege-social-nouvelle-${region}`)
-        .construis(),
-    );
-
 export const unDiagnosticEnGironde = () =>
   unDiagnostic()
     .avecUnReferentiel(
@@ -313,8 +286,7 @@ export const unDiagnosticAvecSecteurActivite = (secteurActivite: string) =>
         .construis(),
     );
 
-export const unDiagnosticEnRegionDansLeDepartementAvecSecteurActivite = (
-  region: string,
+export const unDiagnosticDansLeDepartementAvecSecteurActivite = (
   departement: string,
   secteurActivite: string,
 ): ConstructeurDiagnostic =>
@@ -324,12 +296,6 @@ export const unDiagnosticEnRegionDansLeDepartementAvecSecteurActivite = (
         .ajouteUneThematique('contexte', [
           uneQuestion()
             .avecIdentifiant('contexte-region-siege-social')
-            .aChoixUnique('région siège social ?', [
-              {
-                identifiant: 'contexte-region-siege-social-nouvelle-aquitaine',
-                libelle: region,
-              },
-            ])
             .construis(),
           uneQuestion()
             .avecIdentifiant('contexte-departement-tom-siege-social')

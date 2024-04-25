@@ -56,7 +56,6 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
 
       const diagnosticInitie = await unDiagnosticInitiePar(
-        'Corse',
         'Corse-du-Sud',
         'enseignement',
         aidant,
@@ -78,7 +77,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
             identifiant: diagnosticInitie.identifiant,
             secteurActivite: 'enseignement',
             dateCreation: '04.02.2024',
-            zoneGeographique: `Corse / Corse-du-Sud`,
+            zoneGeographique: `Corse-du-Sud`,
           },
         ],
         liens: {
