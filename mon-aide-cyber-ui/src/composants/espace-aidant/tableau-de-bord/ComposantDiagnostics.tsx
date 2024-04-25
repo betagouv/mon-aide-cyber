@@ -1,12 +1,25 @@
 import { ComposantLancerDiagnostic } from '../../diagnostic/ComposantLancerDiagnostic.tsx';
 import { ComposantIdentifiantDiagnostic } from '../../ComposantIdentifiantDiagnostic.tsx';
 import { Diagnostic } from './TableauDeBord.tsx';
+import { useCallback } from 'react';
+import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
+import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
+import { UUID } from '../../../types/Types.ts';
 
 export const ComposantDiagnostics = ({
   diagnostics,
 }: {
   diagnostics: Diagnostic[];
 }) => {
+  const navigationMAC = useNavigationMAC();
+  const afficherDiagnostic = useCallback(
+    (idDiagnostic: UUID) =>
+      navigationMAC.navigue(
+        new MoteurDeLiens(navigationMAC.etat),
+        `afficher-diagnostic-${idDiagnostic}`,
+      ),
+    [navigationMAC],
+  );
   return (
     <>
       <div className="bandeau-violet-clair">
@@ -45,7 +58,11 @@ export const ComposantDiagnostics = ({
               <div className="fr-col-5">Secteur d&apos;activité</div>
             </div>
             {diagnostics.map((diag, index) => (
-              <div key={index} className="fr-grid-row rang">
+              <div
+                key={index}
+                className="fr-grid-row rang"
+                onClick={() => afficherDiagnostic(diag.identifiant)}
+              >
                 <div className="fr-col-2">
                   <ComposantIdentifiantDiagnostic
                     identifiant={diag.identifiant}

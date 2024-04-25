@@ -12,6 +12,24 @@ describe('Le moteur de liens', () => {
     },
     {
       lien: {
+        'afficher-diagnostic-6c6ae6e2-96e1-4e6c-87a3-8817bd505bc2': {
+          url: '/une/1/url',
+          methode: 'GET',
+        },
+      },
+      attendu: '/diagnostic/6c6ae6e2-96e1-4e6c-87a3-8817bd505bc2/restitution',
+    },
+    {
+      lien: {
+        'afficher-diagnostic-c4b21920-cb04-488b-abfa-7514d1c698b9': {
+          url: '/une/2/url',
+          methode: 'GET',
+        },
+      },
+      attendu: '/diagnostic/c4b21920-cb04-488b-abfa-7514d1c698b9/restitution',
+    },
+    {
+      lien: {
         'afficher-tableau-de-bord': { url: '/une/url', methode: 'GET' },
       },
       attendu: '/tableau-de-bord',

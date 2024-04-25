@@ -1,3 +1,5 @@
+import { UUID } from '../types/Types.ts';
+
 export type Lien = {
   url: string;
   methode?: string;
@@ -10,6 +12,7 @@ export type ReponseHATEOAS = {
 };
 export type Action =
   | 'afficher-diagnostic'
+  | `afficher-diagnostic-${UUID}`
   | 'afficher-profil'
   | 'afficher-tableau-de-bord'
   | 'creer-espace-aidant'

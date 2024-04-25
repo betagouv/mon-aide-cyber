@@ -6,10 +6,11 @@ import { constructeurParametresAPI } from '../../../fournisseurs/api/Constructeu
 import { ComposantDiagnostics } from './ComposantDiagnostics.tsx';
 import { HeaderEspaceAidant } from '../HeaderEspaceAidant.tsx';
 import { FooterEspaceAidant } from '../FooterEspaceAidant.tsx';
+import { UUID } from '../../../types/Types.ts';
 
 export type Diagnostic = {
   dateCreation: string;
-  identifiant: string;
+  identifiant: UUID;
   secteurActivite: string;
   zoneGeographique: string;
 };
