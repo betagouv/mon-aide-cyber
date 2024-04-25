@@ -34,21 +34,28 @@ export const ComposantRestitution = ({
   const macapi = useMACAPI();
 
   useEffect(() => {
-    if (!etatRestitution.restitution) {
-      macapi
-        .appelle<Restitution>(
-          constructeurParametresAPI()
-            .url(`/api/diagnostic/${idDiagnostic}/restitution`)
-            .methode('GET')
-            .construis(),
-          async (json) => Promise.resolve((await json) as Restitution),
-        )
-        .then((restitution) => {
-          navigationMAC.setEtat(new MoteurDeLiens(restitution.liens).extrais());
-          envoie(restitutionChargee(restitution));
-        })
-        .catch((erreur) => showBoundary(erreur));
-    }
+    new MoteurDeLiens(navigationMAC.etat).trouve(
+      `afficher-diagnostic-${idDiagnostic}`,
+      (lien: Lien) => {
+        if (!etatRestitution.restitution) {
+          macapi
+            .appelle<Restitution>(
+              constructeurParametresAPI()
+                .url(lien.url)
+                .methode(lien.methode!)
+                .construis(),
+              async (json) => Promise.resolve((await json) as Restitution),
+            )
+            .then((restitution) => {
+              navigationMAC.setEtat(
+                new MoteurDeLiens(restitution.liens).extrais(),
+              );
+              envoie(restitutionChargee(restitution));
+            })
+            .catch((erreur) => showBoundary(erreur));
+        }
+      },
+    );
   }, [
     navigationMAC,
     envoie,

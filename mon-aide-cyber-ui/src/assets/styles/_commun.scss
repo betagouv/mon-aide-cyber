@@ -132,6 +132,11 @@ fieldset {
     background-color: var(--couleurs-mac-violet-tres-clair);
     padding: 1rem;
     border-bottom: 0.0625rem solid var(--couleurs-mac-violet-leger);
+    cursor: pointer;
+  }
+
+  .rang:hover {
+    background-color: var(--couleurs-mac-violet-clair);
   }
 
   .rang > div {
