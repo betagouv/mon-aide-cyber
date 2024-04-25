@@ -22,20 +22,6 @@ export class ServiceTableauDeBord {
     const identifiantDiagnosticsLie =
       await this.adaptateurRelation.diagnosticsInitiePar(identifiantAidant);
 
-    const formateZoneGeographique = (
-      region: string | undefined,
-      departement: string | undefined,
-    ) => {
-      return ''
-        .concat(!departement && !region ? 'non renseigné' : '')
-        .concat(region || '')
-        .concat(
-          region && departement
-            ? ' / '.concat(departement || '')
-            : departement || '',
-        );
-    };
-
     return Promise.all(
       identifiantDiagnosticsLie.map(async (identifiantDiagnostic) => {
         const contexte = await this.serviceDiagnostic.contexte(
@@ -47,10 +33,9 @@ export class ServiceTableauDeBord {
             .date,
           identifiant: identifiantDiagnostic,
           secteurActivite: contexte.secteurActivite || 'non renseigné',
-          zoneGeographique: formateZoneGeographique(
-            contexte.region,
-            contexte.departement,
-          ),
+          zoneGeographique: contexte.departement
+            ? contexte.departement
+            : 'non renseigné',
         };
       }),
     );

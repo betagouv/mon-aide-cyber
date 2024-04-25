@@ -90,62 +90,6 @@ describe('Service Tableau De Bord', () => {
           zoneGeographique: departement,
         });
       });
-
-      it('Comprends seulement la région si seulement celle-ci est renseignée', async () => {
-        const region = 'Corse';
-        const identifiantAidant = crypto.randomUUID();
-        const identifiantDiagnostic = crypto.randomUUID();
-
-        const diagnosticTableauDeBord = await new ServiceTableauDeBord(
-          new AdaptateurRelationsTest(
-            new Map([[identifiantAidant, [identifiantDiagnostic]]]),
-          ),
-          new ServiceDiagnosticTest(
-            new Map([
-              [
-                identifiantDiagnostic,
-                unContexte().enRegion('Corse').construis(),
-              ],
-            ]),
-          ),
-        ).diagnosticsInitiesPar(identifiantAidant);
-
-        expect(diagnosticTableauDeBord[0]).toStrictEqual({
-          dateCreation: '17.04.2024',
-          identifiant: identifiantDiagnostic,
-          secteurActivite: 'non renseigné',
-          zoneGeographique: region,
-        });
-      });
-
-      it('Comprends la région et le département si les deux sont renseignés', async () => {
-        const identifiantAidant = crypto.randomUUID();
-        const identifiantDiagnostic = crypto.randomUUID();
-
-        const diagnosticTableauDeBord = await new ServiceTableauDeBord(
-          new AdaptateurRelationsTest(
-            new Map([[identifiantAidant, [identifiantDiagnostic]]]),
-          ),
-          new ServiceDiagnosticTest(
-            new Map([
-              [
-                identifiantDiagnostic,
-                unContexte()
-                  .enRegion('Nouvelle-Aquitaine')
-                  .avecLeDepartement('Gironde')
-                  .construis(),
-              ],
-            ]),
-          ),
-        ).diagnosticsInitiesPar(identifiantAidant);
-
-        expect(diagnosticTableauDeBord[0]).toStrictEqual<Diagnostic>({
-          dateCreation: '17.04.2024',
-          identifiant: identifiantDiagnostic,
-          secteurActivite: 'non renseigné',
-          zoneGeographique: 'Nouvelle-Aquitaine / Gironde',
-        });
-      });
     });
 
     it("Avec le secteur d'activité si celui-ci est renseigné", async () => {
@@ -220,13 +164,13 @@ describe('Service Tableau De Bord', () => {
           dateCreation: '17.04.2024',
           identifiant: identifiantDiagnosticInitie1,
           secteurActivite: 'enseignement',
-          zoneGeographique: 'Corse / Corse-du-Sud',
+          zoneGeographique: 'Corse-du-Sud',
         },
         {
           dateCreation: '17.04.2024',
           identifiant: identifiantDiagnosticInitie2,
           secteurActivite: 'Arts, spectacles et activités récréatives',
-          zoneGeographique: 'Bretagne / Finistère',
+          zoneGeographique: 'Finistère',
         },
       ]);
     });

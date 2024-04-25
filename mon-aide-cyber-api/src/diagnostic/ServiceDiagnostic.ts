@@ -4,7 +4,6 @@ import { Entrepots } from '../domaine/Entrepots';
 import { ErreurMAC } from '../domaine/erreurMAC';
 
 export type Contexte = {
-  region?: string;
   departement?: string;
   secteurActivite?: string;
   dateCreation: Date;
@@ -37,9 +36,6 @@ export class ServiceDiagnostic {
       )?.libelle;
     };
 
-    const region = trouveLibelleReponseDonneeDansContexte(
-      'contexte-region-siege-social',
-    );
     const departement = trouveLibelleReponseDonneeDansContexte(
       'contexte-departement-tom-siege-social',
     );
@@ -48,7 +44,6 @@ export class ServiceDiagnostic {
     );
 
     return {
-      ...(region && { region }),
       ...(departement && { departement }),
       ...(secteurActivite && { secteurActivite }),
       dateCreation: diagnostic.dateCreation,
