@@ -8,15 +8,15 @@ import {
 } from '../constructeurs/constructeurReferentiel';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
 import { executeRequete } from './executeurRequete';
-import {
-  RepresentationDiagnostic,
-  RepresentationReferentiel,
-} from '../../src/api/representateurs/types';
+import { RepresentationDiagnostic } from '../../src/api/representateurs/types';
 import { Express } from 'express';
 import { unAdaptateurDeRestitutionHTML } from '../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
 import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
 import { uneRestitution } from '../constructeurs/constructeurRestitution';
-import { ReprensentationRestitution } from '../../src/api/routesAPIDiagnostic';
+import {
+  ReponseDiagnostic,
+  ReprensentationRestitution,
+} from '../../src/api/routesAPIDiagnostic';
 
 describe('le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -54,48 +54,69 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       const premiereQuestion = diagnostic.referentiel.contexte.questions[0];
       const premiereReponsePossible = premiereQuestion.reponsesPossibles[0];
       const diagnosticRecu: RepresentationDiagnostic = await reponse.json();
-      expect(diagnosticRecu.identifiant).toBe(diagnostic.identifiant);
-      expect(
-        diagnosticRecu.referentiel,
-      ).toStrictEqual<RepresentationReferentiel>({
-        contexte: {
-          actions: [
-            {
+      expect(diagnosticRecu).toStrictEqual<ReponseDiagnostic>({
+        actions: [
+          {
+            contexte: {
               action: 'repondre',
-              chemin: 'contexte',
               ressource: {
                 methode: 'PATCH',
                 url: `/api/diagnostic/${diagnostic.identifiant}`,
               },
             },
-          ],
-          description: 'Description du contexte',
-          libelle: 'Contexte',
-          localisationIconeNavigation: '/chemin/icone/contexte',
-          localisationIllustration: '/chemin/illustration/contexte',
-          groupes: [
-            {
-              numero: 1,
-              questions: [
-                {
-                  identifiant: premiereQuestion.identifiant,
-                  libelle: premiereQuestion.libelle,
-                  reponseDonnee: {
-                    valeur: null,
-                    reponses: [],
-                  },
-                  reponsesPossibles: [
-                    {
-                      identifiant: premiereReponsePossible.identifiant,
-                      libelle: premiereReponsePossible.libelle,
-                      ordre: 0,
-                    },
-                  ],
-                  type: 'choixUnique',
+          },
+        ],
+        identifiant: diagnostic.identifiant,
+        referentiel: {
+          contexte: {
+            actions: [
+              {
+                action: 'repondre',
+                chemin: 'contexte',
+                ressource: {
+                  methode: 'PATCH',
+                  url: `/api/diagnostic/${diagnostic.identifiant}`,
                 },
-              ],
-            },
-          ],
+              },
+            ],
+            description: 'Description du contexte',
+            libelle: 'Contexte',
+            localisationIconeNavigation: '/chemin/icone/contexte',
+            localisationIllustration: '/chemin/illustration/contexte',
+            groupes: [
+              {
+                numero: 1,
+                questions: [
+                  {
+                    identifiant: premiereQuestion.identifiant,
+                    libelle: premiereQuestion.libelle,
+                    reponseDonnee: {
+                      valeur: null,
+                      reponses: [],
+                    },
+                    reponsesPossibles: [
+                      {
+                        identifiant: premiereReponsePossible.identifiant,
+                        libelle: premiereReponsePossible.libelle,
+                        ordre: 0,
+                      },
+                    ],
+                    type: 'choixUnique',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+        liens: {
+          [`afficher-diagnostic-${diagnostic.identifiant}`]: {
+            url: `/api/diagnostic/${diagnostic.identifiant}/restitution`,
+            methode: 'GET',
+          },
+          'afficher-tableau-de-bord': {
+            url: '/api/espace-aidant/tableau-de-bord',
+            methode: 'GET',
+          },
         },
       });
     });

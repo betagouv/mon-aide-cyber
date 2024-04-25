@@ -1,5 +1,6 @@
-import { Action } from '../../domaine/diagnostic/Diagnostic.ts';
+import { Action, Diagnostic } from '../../domaine/diagnostic/Diagnostic.ts';
 import { UUID } from '../../types/Types.ts';
+import { ReponseHATEOAS } from '../../domaine/Lien.ts';
 
 type RepresentationReponseDonnee = {
   valeur: string | null;
@@ -35,13 +36,19 @@ type RepresentationThematique = {
 type RepresentationReferentiel = {
   [clef: string]: RepresentationThematique;
 };
-type RepresentationDiagnostic = {
+export type RepresentationDiagnostic = ReponseHATEOAS & {
+  diagnostic: Diagnostic;
+};
+
+export type ReponseDiagnostic = ReponseHATEOAS & {
   identifiant: UUID;
   referentiel: RepresentationReferentiel;
   actions: Action[];
 };
 
-export const enDiagnostic = (json: Promise<RepresentationDiagnostic>) =>
+export const enDiagnostic = (
+  json: Promise<ReponseDiagnostic>,
+): Promise<RepresentationDiagnostic> =>
   json.then((corps) => {
     const referentiel = Object.entries(corps.referentiel).reduce(
       (accumulateur, [clef, thematique]) => {
@@ -66,7 +73,11 @@ export const enDiagnostic = (json: Promise<RepresentationDiagnostic>) =>
       {},
     );
     return {
-      ...corps,
-      referentiel,
+      liens: corps.liens,
+      diagnostic: {
+        identifiant: corps.identifiant,
+        actions: corps.actions,
+        referentiel,
+      },
     };
   });

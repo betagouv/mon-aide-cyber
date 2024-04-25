@@ -1,4 +1,5 @@
 import { AidantAuthentifie } from '../../authentification/Aidant';
+import crypto from 'crypto';
 
 type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
 type LiensHATEOAS = Record<string, Options>;
@@ -16,11 +17,15 @@ class ConstructeurActionsHATEOAS {
       url: '/api/diagnostic',
       methode: 'POST',
     });
+    this.afficherTableauDeBord();
+    return this;
+  }
+
+  private afficherTableauDeBord() {
     this.actions.set('afficher-tableau-de-bord', {
       url: '/api/espace-aidant/tableau-de-bord',
       methode: 'GET',
     });
-    return this;
   }
 
   postAuthentification(
@@ -102,12 +107,29 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  actionsTableauDeBord(): ConstructeurActionsHATEOAS {
+  actionsTableauDeBord(idDiagnostics: string[]): ConstructeurActionsHATEOAS {
     this.actions.set('lancer-diagnostic', {
       url: '/api/diagnostic',
       methode: 'POST',
     });
+    idDiagnostics.forEach((idDiagnostic) =>
+      this.actions.set(`afficher-diagnostic-${idDiagnostic}`, {
+        url: `/api/diagnostic/${idDiagnostic}/restitution`,
+        methode: 'GET',
+      }),
+    );
     return this.afficherProfil().seDeconnecter();
+  }
+
+  actionsDiagnosticLance(
+    idDiagnostic: crypto.UUID,
+  ): ConstructeurActionsHATEOAS {
+    this.actions.set(`afficher-diagnostic-${idDiagnostic}`, {
+      url: `/api/diagnostic/${idDiagnostic}/restitution`,
+      methode: 'GET',
+    });
+    this.afficherTableauDeBord();
+    return this;
   }
 
   construis = (): ReponseHATEOAS => {

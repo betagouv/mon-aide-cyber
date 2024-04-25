@@ -13,6 +13,9 @@ import { RequeteUtilisateur } from './routesAPI';
 import { CommandeLanceDiagnostic } from '../diagnostic/CapteurCommandeLanceDiagnostic';
 import { Diagnostic } from '../diagnostic/Diagnostic';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
+import { RepresentationDiagnostic } from './representateurs/types';
+
+export type ReponseDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -57,12 +60,15 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       new ServiceDiagnostic(configuration.entrepots)
         .diagnostic(id as crypto.UUID)
         .then((diagnostic) =>
-          reponse.json(
-            representeLeDiagnosticPourLeClient(
+          reponse.json({
+            ...representeLeDiagnosticPourLeClient(
               diagnostic,
               configuration.adaptateurTranscripteurDonnees.transcripteur(),
             ),
-          ),
+            ...constructeurActionsHATEOAS()
+              .actionsDiagnosticLance(diagnostic.identifiant)
+              .construis(),
+          }),
         )
         .catch((erreur) => suite(erreur));
     },

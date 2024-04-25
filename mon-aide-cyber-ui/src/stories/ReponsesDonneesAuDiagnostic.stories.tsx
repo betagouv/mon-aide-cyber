@@ -22,6 +22,8 @@ import { UUID } from '../types/Types.ts';
 import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { MemoryRouter } from 'react-router-dom';
+import { FournisseurNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 
 const actionRepondre = uneAction().contexte().construis();
 
@@ -375,30 +377,34 @@ const meta = {
   },
   decorators: [
     (story) => (
-      <ContexteMacAPI.Provider
-        value={{
-          appelle: async <T = Diagnostic, V = void>(
-            parametresAPI: ParametresAPI<V>,
-            _: (contenu: Promise<any>) => Promise<T>,
-          ) => {
-            if (parametresAPI.methode === 'PATCH') {
-              entrepotDiagnosticMemoire.envoieReponse(
-                parametresAPI as ParametresAPI<{
-                  chemin: string;
-                  identifiant: string;
-                  reponse: string | string[] | ReponseQuestionATiroir | null;
-                }>,
-              );
-            }
-            const idDiagnostic = parametresAPI.url.split('/').at(-1);
-            return entrepotDiagnosticMemoire.find(idDiagnostic as UUID) as T;
-          },
-        }}
-      >
-        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-          {story()}
-        </ErrorBoundary>
-      </ContexteMacAPI.Provider>
+      <MemoryRouter>
+        <ContexteMacAPI.Provider
+          value={{
+            appelle: async <T = Diagnostic, V = void>(
+              parametresAPI: ParametresAPI<V>,
+              _: (contenu: Promise<any>) => Promise<T>,
+            ) => {
+              if (parametresAPI.methode === 'PATCH') {
+                entrepotDiagnosticMemoire.envoieReponse(
+                  parametresAPI as ParametresAPI<{
+                    chemin: string;
+                    identifiant: string;
+                    reponse: string | string[] | ReponseQuestionATiroir | null;
+                  }>,
+                );
+              }
+              const idDiagnostic = parametresAPI.url.split('/').at(-1);
+              return entrepotDiagnosticMemoire.find(idDiagnostic as UUID) as T;
+            },
+          }}
+        >
+          <FournisseurNavigationMAC>
+            <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+              {story()}
+            </ErrorBoundary>
+          </FournisseurNavigationMAC>
+        </ContexteMacAPI.Provider>
+      </MemoryRouter>
     ),
   ],
 } satisfies Meta<typeof ComposantDiagnostic>;
