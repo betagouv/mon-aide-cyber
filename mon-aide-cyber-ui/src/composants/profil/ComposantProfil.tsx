@@ -13,6 +13,7 @@ import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurPa
 import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { ComposantFormulaireModificationMotDePasse } from './ComposantFormulaireModificationMotDePasse.tsx';
+import { LienMAC } from '../LienMAC.tsx';
 
 export const ComposantProfil = () => {
   const { showBoundary } = useErrorBoundary();
@@ -61,7 +62,7 @@ export const ComposantProfil = () => {
 
   return (
     <>
-      <Header />
+      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
       <main role="main" className="profil">
         <div className="mode-fonce">
           <div className="fr-container">

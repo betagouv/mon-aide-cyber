@@ -9,6 +9,7 @@ import { Header } from './Header.tsx';
 import { useMACAPI } from '../fournisseurs/hooks.ts';
 
 import { constructeurParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { LienMAC } from './LienMAC.tsx';
 
 export const ComposantDiagnostics = () => {
   const [diagnostics, setDiagnostics] = useState<Diagnostics | undefined>(
@@ -32,7 +33,7 @@ export const ComposantDiagnostics = () => {
   }, [diagnostics, macapi, setDiagnostics, showBoundary]);
   return (
     <>
-      <Header />
+      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
       <main role="main">
         <div className="fr-container">
           <div className="fr-grid-row">

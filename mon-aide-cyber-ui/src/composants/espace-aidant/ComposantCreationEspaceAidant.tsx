@@ -1,11 +1,12 @@
-import { Header } from '../Header.tsx';
-import { Footer } from '../Footer.tsx';
 import { ComposantFormulaireCreationEspaceAidant } from './ComposantFormulaireCreationEspaceAidant.tsx';
+import { Header } from '../Header.tsx';
+import { LienMAC } from '../LienMAC.tsx';
+import { Footer } from '../Footer.tsx';
 
 export const ComposantCreationEspaceAidant = () => {
   return (
     <>
-      <Header />
+      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
       <main role="main">
         <div className="mode-fonce fr-pt-md-6w fr-pb-md-7w">
           <div className="fr-container">

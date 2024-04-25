@@ -1,10 +1,11 @@
 import { Header } from '../composants/Header.tsx';
 import { Footer } from '../composants/Footer.tsx';
+import { LienMAC } from '../composants/LienMAC.tsx';
 
 export const MentionsLegales = () => {
   return (
     <>
-      <Header />
+      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
       <main role="main">
         <div className="fr-container">
           <div className="fr-grid-row fr-grid-row--center">
