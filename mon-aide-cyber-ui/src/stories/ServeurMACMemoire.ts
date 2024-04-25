@@ -8,6 +8,7 @@ import { expect } from '@storybook/jest';
 import { UUID } from '../types/Types.ts';
 
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { RepresentationDiagnostic } from '../fournisseurs/api/APIDiagnostic.ts';
 
 export class ServeurMACMemoire {
   private reponseEnvoyee = false;
@@ -20,9 +21,13 @@ export class ServeurMACMemoire {
     this.diagnostics.push(diagnostic);
   }
 
-  find(idDiagnostic: UUID): Promise<Diagnostic> {
+  find(idDiagnostic: UUID): Promise<RepresentationDiagnostic> {
     return Promise.resolve(
-      this.diagnostics.filter((d) => d.identifiant === idDiagnostic)[0],
+      this.diagnostics
+        .filter((d) => d.identifiant === idDiagnostic)
+        .map((d) => {
+          return { diagnostic: d, liens: {} };
+        })[0],
     );
   }
 

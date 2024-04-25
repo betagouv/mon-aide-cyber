@@ -32,7 +32,6 @@ import {
 import {
   Action,
   ActionReponseDiagnostic,
-  Diagnostic,
   Reponse,
   ReponseQuestionATiroir,
 } from '../../domaine/diagnostic/Diagnostic.ts';
@@ -48,9 +47,16 @@ import {
 import styled from 'styled-components';
 import { FooterDiagnostic } from './FooterDiagnostic.tsx';
 import { HeaderDiagnostic } from './HeaderDiagnostic.tsx';
-import { useMACAPI, useModale } from '../../fournisseurs/hooks.ts';
+import {
+  useMACAPI,
+  useModale,
+  useNavigationMAC,
+} from '../../fournisseurs/hooks.ts';
 import { AccederALaRestitution } from './AccederALaRestitution.tsx';
-import { enDiagnostic } from '../../fournisseurs/api/APIDiagnostic.ts';
+import {
+  enDiagnostic,
+  RepresentationDiagnostic,
+} from '../../fournisseurs/api/APIDiagnostic.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 
@@ -397,21 +403,32 @@ export const ComposantDiagnostic = ({
   const { showBoundary } = useErrorBoundary();
   const { affiche, ferme } = useModale();
   const macapi = useMACAPI();
+  const navigationMAC = useNavigationMAC();
 
   useEffect(() => {
     if (!etatReferentiel.diagnostic) {
       macapi
-        .appelle<Diagnostic>(
+        .appelle<RepresentationDiagnostic>(
           {
             url: `/api/diagnostic/${idDiagnostic}`,
             methode: 'GET',
           },
           enDiagnostic,
         )
-        .then((diagnostic) => envoie(diagnosticCharge(diagnostic)))
+        .then((reponse) => {
+          envoie(diagnosticCharge(reponse.diagnostic));
+          navigationMAC.ajouteEtat(reponse.liens);
+        })
         .catch((erreur) => showBoundary(erreur));
     }
-  }, [idDiagnostic, envoie, showBoundary, macapi, etatReferentiel]);
+  }, [
+    idDiagnostic,
+    envoie,
+    showBoundary,
+    macapi,
+    etatReferentiel,
+    navigationMAC,
+  ]);
 
   let thematiques: [string, Thematique][] = [];
   let actions: Action[] = useMemo(() => [], []);

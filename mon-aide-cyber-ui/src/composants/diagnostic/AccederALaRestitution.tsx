@@ -1,7 +1,7 @@
 import { UUID } from '../../types/Types.ts';
-import { useNavigate } from 'react-router';
 import { useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
+import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 
 export const AccederALaRestitution = ({
   idDiagnostic,
@@ -10,15 +10,15 @@ export const AccederALaRestitution = ({
   idDiagnostic: UUID;
   surAnnuler: () => void;
 }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigationMAC = useNavigationMAC();
 
   const surQuitterLeDiagnostic = useCallback(() => {
     surAnnuler();
-    navigate(`/diagnostic/${idDiagnostic}/restitution/`, {
-      state: location.state,
-    });
-  }, [idDiagnostic, location.state, navigate, surAnnuler]);
+    navigationMAC.navigue(
+      new MoteurDeLiens(navigationMAC.etat),
+      `afficher-diagnostic-${idDiagnostic}`,
+    );
+  }, [idDiagnostic, navigationMAC, surAnnuler]);
   return (
     <>
       <section>
