@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { PropsWithChildren, useCallback } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { useNavigationMAC, useMACAPI } from '../../fournisseurs/hooks.ts';
 import { FormatLien, LienRoutage } from '../../domaine/LienRoutage.ts';
@@ -7,13 +7,7 @@ import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurPa
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien } from '../../domaine/Lien.ts';
 
-type ProprietesComposantLancerDiagnostic = {
-  style?: string;
-};
-
-export const ComposantLancerDiagnostic = ({
-  style,
-}: ProprietesComposantLancerDiagnostic) => {
+export const ComposantLancerDiagnostic = ({ children }: PropsWithChildren) => {
   const { showBoundary } = useErrorBoundary();
   const navigationMAC = useNavigationMAC();
   const macapi = useMACAPI();
@@ -52,9 +46,5 @@ export const ComposantLancerDiagnostic = ({
     );
   }, [navigationMAC.etat, lanceDiagnostic]);
 
-  return (
-    <a href="#" className={style} onClick={lancerDiagnostic}>
-      Lancer un diagnostic
-    </a>
-  );
+  return <div onClick={lancerDiagnostic}>{children}</div>;
 };

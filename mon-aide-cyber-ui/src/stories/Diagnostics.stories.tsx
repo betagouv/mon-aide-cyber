@@ -65,7 +65,7 @@ export const AfficheListeDiagnostics: Story = {
 
     expect(
       await waitFor(() =>
-        canvas.getByRole('link', { name: /lancer un diagnostic/i }),
+        canvas.getByRole('button', { name: /lancer un diagnostic/i }),
       ),
     ).toBeInTheDocument();
     expect(

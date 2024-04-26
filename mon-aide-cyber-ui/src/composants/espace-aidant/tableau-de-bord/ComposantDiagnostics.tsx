@@ -20,6 +20,42 @@ export const ComposantDiagnostics = ({
       ),
     [navigationMAC],
   );
+
+  const tableauDiagnostics =
+    diagnostics.length > 0 ? (
+      <div className="fr-col-10 tableau fr-col-offset-2">
+        <div className="fr-grid-row">
+          <div className="fr-col-2">ID</div>
+          <div className="fr-col-2">Date</div>
+          <div className="fr-col-3">Département</div>
+          <div className="fr-col-5">Secteur d&apos;activité</div>
+        </div>
+        {diagnostics.map((diag, index) => (
+          <div
+            key={index}
+            className="fr-grid-row rang"
+            onClick={() => afficherDiagnostic(diag.identifiant)}
+          >
+            <div className="fr-col-2">
+              <ComposantIdentifiantDiagnostic identifiant={diag.identifiant} />
+            </div>
+            <div className="fr-col-2">{diag.dateCreation}</div>
+            <div className="fr-col-3">{diag.zoneGeographique}</div>
+            <div className="fr-col-5">{diag.secteurActivite}</div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div className="fr-col-10 fr-col-offset-2">
+        <h4>Vous n’avez pas encore effectué de diagnostic. </h4>
+        <ComposantLancerDiagnostic>
+          <button className="bouton-mac bouton-mac-primaire">
+            Lancer un diagnostic
+          </button>
+        </ComposantLancerDiagnostic>
+      </div>
+    );
+
   return (
     <>
       <div className="bandeau-violet-clair">
@@ -41,7 +77,14 @@ export const ComposantDiagnostics = ({
                     diagnostic et de validation des CGU :
                   </div>
                   <br />
-                  <ComposantLancerDiagnostic style="fr-icon-arrow-go-forward-line fr-link--icon-right" />
+                  <ComposantLancerDiagnostic>
+                    <a
+                      href="#"
+                      className="fr-icon-arrow-go-forward-line fr-link--icon-right"
+                    >
+                      Lancer un diagnostic
+                    </a>
+                  </ComposantLancerDiagnostic>
                 </div>
               </div>
             </div>
@@ -50,30 +93,7 @@ export const ComposantDiagnostics = ({
       </div>
       <div className="fr-container">
         <div className="fr-grid-row fr-grid-row--gutters">
-          <div className="fr-col-10 tableau fr-col-offset-2">
-            <div className="fr-grid-row">
-              <div className="fr-col-2">ID</div>
-              <div className="fr-col-2">Date</div>
-              <div className="fr-col-3">Département</div>
-              <div className="fr-col-5">Secteur d&apos;activité</div>
-            </div>
-            {diagnostics.map((diag, index) => (
-              <div
-                key={index}
-                className="fr-grid-row rang"
-                onClick={() => afficherDiagnostic(diag.identifiant)}
-              >
-                <div className="fr-col-2">
-                  <ComposantIdentifiantDiagnostic
-                    identifiant={diag.identifiant}
-                  />
-                </div>
-                <div className="fr-col-2">{diag.dateCreation}</div>
-                <div className="fr-col-3">{diag.zoneGeographique}</div>
-                <div className="fr-col-5">{diag.secteurActivite}</div>
-              </div>
-            ))}
-          </div>
+          {tableauDiagnostics}
         </div>
       </div>
     </>
