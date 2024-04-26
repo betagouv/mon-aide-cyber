@@ -174,5 +174,65 @@ describe('Service Tableau De Bord', () => {
         },
       ]);
     });
+
+    it('Liste les diagnostics par ordre chronologique du plus récent au plus ancien', async () => {
+      const identifiantAidant = crypto.randomUUID();
+      const identifiantDiagnosticInitie1 = crypto.randomUUID();
+      const identifiantDiagnosticInitie2 = crypto.randomUUID();
+
+      const relations = new Map<string, string[]>([
+        [
+          identifiantAidant,
+          [identifiantDiagnosticInitie1, identifiantDiagnosticInitie2],
+        ],
+      ]);
+
+      const diagnosticTableauDeBord = await new ServiceTableauDeBord(
+        new AdaptateurRelationsTest(relations),
+        new ServiceDiagnosticTest(
+          new Map([
+            [
+              identifiantDiagnosticInitie1,
+              unContexte()
+                .avecDateCreation(
+                  new Date(Date.parse('2024-02-04T14:30:00+01:00')),
+                )
+                .enRegion('Corse')
+                .avecLeDepartement('Corse-du-Sud')
+                .avecSecteurActivite('enseignement')
+                .construis(),
+            ],
+            [
+              identifiantDiagnosticInitie2,
+              unContexte()
+                .avecDateCreation(
+                  new Date(Date.parse('2024-02-17T14:32:00+01:00')),
+                )
+                .enRegion('Bretagne')
+                .avecLeDepartement('Finistère')
+                .avecSecteurActivite(
+                  'Arts, spectacles et activités récréatives',
+                )
+                .construis(),
+            ],
+          ]),
+        ),
+      ).diagnosticsInitiesPar(identifiantAidant);
+
+      expect(diagnosticTableauDeBord).toStrictEqual<Diagnostic[]>([
+        {
+          dateCreation: '17.02.2024',
+          identifiant: identifiantDiagnosticInitie2,
+          secteurActivite: 'Arts, spectacles et activités récréatives',
+          zoneGeographique: 'Finistère',
+        },
+        {
+          dateCreation: '04.02.2024',
+          identifiant: identifiantDiagnosticInitie1,
+          secteurActivite: 'enseignement',
+          zoneGeographique: 'Corse-du-Sud',
+        },
+      ]);
+    });
   });
 });

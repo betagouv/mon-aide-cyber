@@ -22,22 +22,35 @@ export class ServiceTableauDeBord {
     const identifiantDiagnosticsLie =
       await this.adaptateurRelation.diagnosticsInitiePar(identifiantAidant);
 
-    return Promise.all(
-      identifiantDiagnosticsLie.map(async (identifiantDiagnostic) => {
+    const contextes = identifiantDiagnosticsLie.map(
+      async (identifiantDiagnostic) => {
         const contexte = await this.serviceDiagnostic.contexte(
           identifiantDiagnostic as crypto.UUID,
         );
-
-        return {
-          dateCreation: FournisseurHorloge.formateDate(contexte.dateCreation)
-            .date,
-          identifiant: identifiantDiagnostic,
-          secteurActivite: contexte.secteurActivite || 'non renseigné',
-          zoneGeographique: contexte.departement
-            ? contexte.departement
-            : 'non renseigné',
-        };
-      }),
+        return { ...contexte, identifiantDiagnostic };
+      },
     );
+
+    return Promise.all(contextes)
+      .then((contextes) =>
+        contextes.sort((contexte1, contexte2) =>
+          contexte1.dateCreation > contexte2.dateCreation ? -1 : 1,
+        ),
+      )
+      .then((contextes) =>
+        contextes.map(
+          (contexte) =>
+            ({
+              dateCreation: FournisseurHorloge.formateDate(
+                contexte.dateCreation,
+              ).date,
+              identifiant: contexte.identifiantDiagnostic,
+              secteurActivite: contexte.secteurActivite || 'non renseigné',
+              zoneGeographique: contexte.departement
+                ? contexte.departement
+                : 'non renseigné',
+            }) as Diagnostic,
+        ),
+      );
   }
 }

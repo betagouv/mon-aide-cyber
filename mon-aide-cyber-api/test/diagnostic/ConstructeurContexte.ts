@@ -25,6 +25,12 @@ class ConstructeurContexte implements Constructeur<Contexte> {
     return this;
   }
 
+  avecSecteurActivite(secteurActivite: string): ConstructeurContexte {
+    this.secteurActivite = secteurActivite;
+
+    return this;
+  }
+
   construis(): Contexte {
     return {
       dateCreation: this.date,
@@ -32,12 +38,6 @@ class ConstructeurContexte implements Constructeur<Contexte> {
       ...(this.region && { region: this.region }),
       ...(this.secteurActivite && { secteurActivite: this.secteurActivite }),
     } as Contexte;
-  }
-
-  avecSecteurActivite(secteurActivite: string): ConstructeurContexte {
-    this.secteurActivite = secteurActivite;
-
-    return this;
   }
 }
 
