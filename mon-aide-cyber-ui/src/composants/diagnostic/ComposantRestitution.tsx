@@ -120,7 +120,7 @@ export const ComposantRestitution = ({
               <div>
                 <i className="mac-icone-retour" />
                 <a href="#" onClick={navigueVersTableauDeBord}>
-                  Retour à la liste des bénéficiaires
+                  Retour à la liste des diagnostics
                 </a>
               </div>
             </div>
