@@ -39,7 +39,11 @@ export const ComposantDiagnostics = () => {
           <div className="fr-grid-row">
             <div className="conteneur-diagnostics">
               <div className="droite">
-                <ComposantLancerDiagnostic style="bouton-mac bouton-mac-primaire" />
+                <ComposantLancerDiagnostic>
+                  <button className="bouton-mac bouton-mac-primaire">
+                    Lancer un diagnostic
+                  </button>
+                </ComposantLancerDiagnostic>
               </div>
               <div className="diagnostics">
                 <div className="en-tete un">ID</div>
