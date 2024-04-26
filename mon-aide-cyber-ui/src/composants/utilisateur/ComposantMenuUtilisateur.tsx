@@ -16,6 +16,8 @@ export const ComposantMenuUtilisateur = ({
   const { showBoundary } = useErrorBoundary();
   const [boutonAfficherMonProfil, setBoutonAfficherMonProfil] =
     useState<ReactElement>(<></>);
+  const [boutonAfficherTableauDeBord, setBoutonAfficherTableauDeBord] =
+    useState<ReactElement>(<></>);
 
   let nomUtilisateur = utilisateur.nomPrenom;
   if (utilisateur.nomPrenom.includes(' ')) {
@@ -54,12 +56,35 @@ export const ComposantMenuUtilisateur = ({
     );
   }, [afficherProfil, navigationMAC.etat]);
 
+  const afficherTableauDeBord = useCallback(() => {
+    navigationMAC.navigue(
+      new MoteurDeLiens(navigationMAC.etat),
+      'afficher-tableau-de-bord',
+    );
+  }, [navigationMAC]);
+
+  useEffect(() => {
+    new MoteurDeLiens(navigationMAC.etat).trouve(
+      'afficher-tableau-de-bord',
+      () =>
+        setBoutonAfficherTableauDeBord(
+          <input
+            type="button"
+            onClick={afficherTableauDeBord}
+            value="Diagnostics"
+          />,
+        ),
+      () => setBoutonAfficherTableauDeBord(<></>),
+    );
+  }, [afficherTableauDeBord, navigationMAC.etat]);
+
   return (
     <div className="menu-utilisateur">
       <div className="menu-utilisateur-contenu">
         <details>
           <summary>{nomUtilisateur}</summary>
           <div id="conteneur">
+            {boutonAfficherTableauDeBord}
             {boutonAfficherMonProfil}
             <input type="button" onClick={deconnecter} value="Me Déconnecter" />
           </div>
