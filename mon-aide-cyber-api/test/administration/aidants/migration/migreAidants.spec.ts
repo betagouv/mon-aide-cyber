@@ -11,6 +11,7 @@ import {
   ServiceDeChiffrementEnErreurSur,
 } from '../../../../src/administration/aidants/migration/ServiceDeChiffrementClair';
 import fs from 'fs';
+import { unAidant } from '../../../authentification/constructeurs/constructeurAidant';
 
 class ConstructeurMigration {
   construis(): MigrationAidant {
@@ -73,7 +74,7 @@ describe('Migration des Aidants', () => {
         ),
       },
     ]);
-    expect(aidantsMigres).toStrictEqual({ succes: 2, total: 2 });
+    expect(aidantsMigres).toStrictEqual({ migres: 2, total: 2 });
   });
 
   it('Migre les aidants à partir d’un fichier', async () => {
@@ -106,10 +107,37 @@ describe('Migration des Aidants', () => {
         nomPrenom: 'Jean Dupont',
       },
     ]);
-    expect(aidantsMigres).toStrictEqual({ succes: 2, total: 2 });
+    expect(aidantsMigres).toStrictEqual({ migres: 2, total: 2 });
   });
 
-  it('Migre les aidants et collecte les erreurs lors du déchiffrement', async () => {
+  it('Ne migre pas les Aidants ayant déjà un compte', async () => {
+    const entrepot = new EntrepotAidantMemoire();
+    const premiereMigration = uneMigration().construis();
+    const deuxiemeMigration = uneMigration().construis();
+    const troisiemeMigration = uneMigration().construis();
+    entrepot.persiste(
+      unAidant()
+        .avecUnIdentifiantDeConnexion(
+          premiereMigration.aidant.identifiantConnexion,
+        )
+        .construis(),
+    );
+
+    const aidantsMigres = await migreAidants(
+      entrepot,
+      new ServiceDeChiffrementClair(),
+      [premiereMigration, deuxiemeMigration, troisiemeMigration],
+    );
+
+    expect(await entrepot.tous()).toHaveLength(3);
+    expect(aidantsMigres).toStrictEqual({
+      migres: 2,
+      total: 3,
+      aidantsDejaExistants: [premiereMigration.aidant.identifiantConnexion],
+    });
+  });
+
+  it('Migre les Aidants et collecte les erreurs lors du déchiffrement', async () => {
     const entrepot = new EntrepotAidantMemoire();
     const premiereMigration = uneMigration().construis();
     const deuxiemeMigration = uneMigration().construis();
@@ -122,7 +150,7 @@ describe('Migration des Aidants', () => {
     );
 
     expect(aidantsMigres).toStrictEqual({
-      succes: 2,
+      migres: 2,
       total: 3,
       erreurs: [deuxiemeMigration.identifiant],
     });
@@ -141,7 +169,7 @@ describe('Migration des Aidants', () => {
     );
 
     expect(aidantsMigres).toStrictEqual({
-      succes: 2,
+      migres: 2,
       total: 3,
       erreurs: [deuxiemeMigration.identifiant],
     });
