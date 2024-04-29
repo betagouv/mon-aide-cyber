@@ -21,7 +21,7 @@ type AidantDTO = {
 };
 
 type AidantsMigres = {
-  succes: number;
+  migres: number;
   total: number;
   erreurs?: string[];
 };
@@ -32,6 +32,7 @@ export const migreAidants = async (
   migration: MigrationAidant[],
 ): Promise<AidantsMigres> => {
   const erreurs: string[] = [];
+  const aidantsDejaExistants: string[] = [];
   const migrations = Promise.all(
     migration
       .map((migration) => {
@@ -61,22 +62,29 @@ export const migreAidants = async (
       })
       .filter((aidant): aidant is AidantDTO => !!aidant)
       .map(async (aidant) => {
-        try {
-          await entrepot.persiste({
-            nomPrenom: aidant.nomPrenom,
-            motDePasse: aidant.motDePasse,
-            identifiantConnexion: aidant.identifiantConnexion,
-            identifiant: aidant.identifiant,
-            ...(aidant.dateSignatureCGU && {
-              dateSignatureCGU: aidant.dateSignatureCGU,
-            }),
+        return entrepot
+          .rechercheParIdentifiantDeConnexion(aidant.identifiantConnexion)
+          .then((aidant) =>
+            aidantsDejaExistants.push(aidant.identifiantConnexion),
+          )
+          .catch(async () => {
+            try {
+              await entrepot.persiste({
+                nomPrenom: aidant.nomPrenom,
+                motDePasse: aidant.motDePasse,
+                identifiantConnexion: aidant.identifiantConnexion,
+                identifiant: aidant.identifiant,
+                ...(aidant.dateSignatureCGU && {
+                  dateSignatureCGU: aidant.dateSignatureCGU,
+                }),
+              });
+              return 'OK';
+            } catch (erreur) {
+              console.log('Erreur étape persistance', erreur);
+              erreurs.push(aidant.identifiant);
+              return undefined;
+            }
           });
-          return 'OK';
-        } catch (erreur) {
-          console.log('Erreur étape persistance', erreur);
-          erreurs.push(aidant.identifiant);
-          return undefined;
-        }
       }),
   );
   return migrations.then((migrations) => {
@@ -84,9 +92,10 @@ export const migreAidants = async (
       (resultat): resultat is 'OK' => !!resultat && resultat === 'OK',
     );
     return {
-      succes: migrationsEnSucces.length,
+      migres: migrationsEnSucces.length,
       total: migration.length,
       ...(erreurs.length > 0 && { erreurs }),
+      ...(aidantsDejaExistants.length > 0 && { aidantsDejaExistants }),
     };
   });
 };

@@ -37,7 +37,7 @@ command.action(async (...args: any[]) => {
       ? `Aidants non migrés :\n${aidantsMigres.erreurs.join('\n')}`
       : '';
     console.log(
-      `${aidantsMigres.succes} migrés sur ${aidantsMigres.total} ${erreurs}`,
+      `${aidantsMigres.migres} migrés sur ${aidantsMigres.total} ${erreurs}`,
     );
 
     process.exit(0);
