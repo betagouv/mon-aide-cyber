@@ -23,86 +23,89 @@ import { ComposantDemandeAide } from './composants/demande-aide/ComposantDemande
 import { ComposantConnexion } from './composants/connexion/ComposantConnexion.tsx';
 import { TableauDeBord } from './composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
 import { ComposantCreationEspaceAidant } from './composants/espace-aidant/creation-espace-aidant/ComposantCreationEspaceAidant.tsx';
+import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-      <BrowserRouter>
-        <FournisseurMacAPI>
-          <FournisseurNavigationMAC>
-            <FournisseurAuthentification>
-              <PortailModale>
-                <Routes>
-                  <Route path="/" element={<Accueil />} />
-                  <Route path="/cgu" element={<ComposantCGU />} />
-                  <Route path="/charte-aidant" element={<CharteAidant />} />
-                  <Route
-                    path="/demande-aide"
-                    element={<ComposantDemandeAide />}
-                  />
-                  <Route
-                    path="/mentions-legales"
-                    element={<MentionsLegales />}
-                  />
-                  <Route path="/connexion" element={<ComposantConnexion />} />
-                  <Route
-                    element={
-                      <Suspense>
-                        <RequiertAuthentification />
-                      </Suspense>
-                    }
-                  >
+    <FournisseurMatomo>
+      <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+        <BrowserRouter>
+          <FournisseurMacAPI>
+            <FournisseurNavigationMAC>
+              <FournisseurAuthentification>
+                <PortailModale>
+                  <Routes>
+                    <Route path="/" element={<Accueil />} />
+                    <Route path="/cgu" element={<ComposantCGU />} />
+                    <Route path="/charte-aidant" element={<CharteAidant />} />
+                    <Route
+                      path="/demande-aide"
+                      element={<ComposantDemandeAide />}
+                    />
+                    <Route
+                      path="/mentions-legales"
+                      element={<MentionsLegales />}
+                    />
+                    <Route path="/connexion" element={<ComposantConnexion />} />
                     <Route
                       element={
                         <Suspense>
-                          <RequiertAidantSansEspace />
+                          <RequiertAuthentification />
                         </Suspense>
                       }
                     >
                       <Route
-                        path="/finalise-creation-espace-aidant"
-                        element={<ComposantCreationEspaceAidant />}
-                      ></Route>
-                    </Route>
-                    <Route
-                      element={
-                        <Suspense>
-                          <RequiertEspaceAidant />
-                        </Suspense>
-                      }
-                    >
-                      <Route
-                        path="/tableau-de-bord"
-                        element={<TableauDeBord />}
-                      ></Route>
-                      <Route
-                        path="/diagnostic/:idDiagnostic"
                         element={
-                          <ComposantIntercepteur
-                            composant={ComposantDiagnostic}
-                          />
+                          <Suspense>
+                            <RequiertAidantSansEspace />
+                          </Suspense>
                         }
-                      ></Route>
+                      >
+                        <Route
+                          path="/finalise-creation-espace-aidant"
+                          element={<ComposantCreationEspaceAidant />}
+                        ></Route>
+                      </Route>
                       <Route
-                        path="/diagnostic/:idDiagnostic/restitution"
                         element={
-                          <ComposantIntercepteur
-                            composant={ComposantRestitution}
-                          />
+                          <Suspense>
+                            <RequiertEspaceAidant />
+                          </Suspense>
                         }
-                      ></Route>
-                      <Route
-                        path="/profil"
-                        element={<ComposantProfil />}
-                      ></Route>
+                      >
+                        <Route
+                          path="/tableau-de-bord"
+                          element={<TableauDeBord />}
+                        ></Route>
+                        <Route
+                          path="/diagnostic/:idDiagnostic"
+                          element={
+                            <ComposantIntercepteur
+                              composant={ComposantDiagnostic}
+                            />
+                          }
+                        ></Route>
+                        <Route
+                          path="/diagnostic/:idDiagnostic/restitution"
+                          element={
+                            <ComposantIntercepteur
+                              composant={ComposantRestitution}
+                            />
+                          }
+                        ></Route>
+                        <Route
+                          path="/profil"
+                          element={<ComposantProfil />}
+                        ></Route>
+                      </Route>
                     </Route>
-                  </Route>
-                </Routes>
-              </PortailModale>
-            </FournisseurAuthentification>
-          </FournisseurNavigationMAC>
-        </FournisseurMacAPI>
-      </BrowserRouter>
-    </ErrorBoundary>
+                  </Routes>
+                </PortailModale>
+              </FournisseurAuthentification>
+            </FournisseurNavigationMAC>
+          </FournisseurMacAPI>
+        </BrowserRouter>
+      </ErrorBoundary>
+    </FournisseurMatomo>
   </React.StrictMode>,
 );
