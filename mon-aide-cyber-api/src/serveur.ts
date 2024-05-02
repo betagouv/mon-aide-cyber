@@ -79,7 +79,10 @@ const creeApp = (config: ConfigurationServeur) => {
     keyGenerator: (requete: Request, __: Response) =>
       requete.headers['x-real-ip'] as string,
     legacyHeaders: false,
-    skip: (requete: Request, __) => requete.path.startsWith('/api'),
+    skip: (requete: Request, __) =>
+      ['/assets/', '/fontes/', '/images/'].some((req) =>
+        requete.path.startsWith(req),
+      ),
   });
   app.use(limiteurTrafficUI);
   app.use((_: Request, reponse: Response, suite: NextFunction) => {
