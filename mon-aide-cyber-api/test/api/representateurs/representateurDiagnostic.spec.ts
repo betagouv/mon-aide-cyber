@@ -136,6 +136,9 @@ describe('Le représentateur de diagnostic', () => {
             contexte: {
               description: 'Description du contexte',
               libelle: 'Contexte',
+              styles: {
+                navigation: 'navigation-contexte',
+              },
               localisationIconeNavigation: '/chemin/icone/contexte',
               localisationIllustration: '/chemin/illustration/contexte',
               groupes: [
@@ -464,6 +467,9 @@ describe('Le représentateur de diagnostic', () => {
         ],
         description,
         libelle: nomThematique,
+        styles: {
+          navigation: `navigation-${nomThematique}`,
+        },
         localisationIllustration: `/chemin/illustration/${nomThematique}`,
         localisationIconeNavigation: `/chemin/icone/${nomThematique}`,
         groupes: [

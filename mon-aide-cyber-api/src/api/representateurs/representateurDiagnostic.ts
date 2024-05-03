@@ -196,6 +196,9 @@ export function representeLeDiagnosticPourLeClient(
             ],
             description: transcripteur.thematiques[clef].description,
             libelle: transcripteur.thematiques[clef].libelle,
+            styles: {
+              navigation: transcripteur.thematiques[clef].styles.navigation,
+            },
             localisationIconeNavigation:
               transcripteur.thematiques[clef].localisationIconeNavigation,
             localisationIllustration:

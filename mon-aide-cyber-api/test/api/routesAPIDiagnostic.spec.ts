@@ -81,6 +81,9 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
             ],
             description: 'Description du contexte',
             libelle: 'Contexte',
+            styles: {
+              navigation: 'navigation-contexte',
+            },
             localisationIconeNavigation: '/chemin/icone/contexte',
             localisationIllustration: '/chemin/illustration/contexte',
             groupes: [
