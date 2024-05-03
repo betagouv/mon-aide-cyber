@@ -139,7 +139,6 @@ describe('Le représentateur de diagnostic', () => {
               styles: {
                 navigation: 'navigation-contexte',
               },
-              localisationIconeNavigation: '/chemin/icone/contexte',
               localisationIllustration: '/chemin/illustration/contexte',
               groupes: [
                 {
@@ -471,7 +470,6 @@ describe('Le représentateur de diagnostic', () => {
           navigation: `navigation-${nomThematique}`,
         },
         localisationIllustration: `/chemin/illustration/${nomThematique}`,
-        localisationIconeNavigation: `/chemin/icone/${nomThematique}`,
         groupes: [
           {
             numero,

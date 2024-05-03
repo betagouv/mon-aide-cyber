@@ -82,7 +82,6 @@ export type RepresentationThematique = {
   libelle: string;
   styles: StyleThematique;
   localisationIllustration: string;
-  localisationIconeNavigation: string;
   groupes: RepresentationGroupes;
 };
 export type RepresentationReferentiel = {
@@ -110,7 +109,6 @@ export type Thematique = {
   styles: StyleThematique;
   description: string;
   libelle: string;
-  localisationIconeNavigation: string;
   localisationIllustration: string;
   groupes: { questions: QuestionATranscrire[] }[];
 };

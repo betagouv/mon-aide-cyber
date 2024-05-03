@@ -7,8 +7,6 @@ export const transcripteurSecuriteAcces: Thematique = {
   styles: {
     navigation: 'navigation-securite-acces',
   },
-  localisationIconeNavigation:
-    '/images/diagnostic/securite-acces/icone-navigation.svg',
   localisationIllustration:
     '/images/diagnostic/securite-acces/illustration.svg',
   groupes: [

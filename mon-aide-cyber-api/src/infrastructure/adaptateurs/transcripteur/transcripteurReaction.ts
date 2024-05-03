@@ -8,8 +8,6 @@ export const transcripteurReaction: Thematique = {
   styles: {
     navigation: 'navigation-reaction',
   },
-  localisationIconeNavigation:
-    '/images/diagnostic/reaction/icone-navigation.svg',
   localisationIllustration: '/images/diagnostic/reaction/illustration.svg',
   groupes: [
     {

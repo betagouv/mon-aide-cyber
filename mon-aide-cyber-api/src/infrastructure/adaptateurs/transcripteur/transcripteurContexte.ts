@@ -7,8 +7,6 @@ export const transcripteurContexte: Thematique = {
   styles: {
     navigation: 'navigation-contexte',
   },
-  localisationIconeNavigation:
-    '/images/diagnostic/contexte/icone-navigation.svg',
   localisationIllustration: '/images/diagnostic/contexte/illustration.svg',
   groupes: [
     {

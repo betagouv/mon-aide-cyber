@@ -7,8 +7,6 @@ export const transcripteurSensibilisation: Thematique = {
   styles: {
     navigation: 'navigation-sensibilisation',
   },
-  localisationIconeNavigation:
-    '/images/diagnostic/sensibilisation/icone-navigation.svg',
   localisationIllustration:
     '/images/diagnostic/sensibilisation/illustration.svg',
   groupes: [

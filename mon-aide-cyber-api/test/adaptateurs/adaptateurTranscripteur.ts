@@ -12,7 +12,6 @@ export class AdaptateurTranscripteurDeTest implements AdaptateurTranscripteur {
           styles: {
             navigation: 'navigation-contexte',
           },
-          localisationIconeNavigation: '/chemin/icone/contexte',
           localisationIllustration: '/chemin/illustration/contexte',
           groupes: [],
         },

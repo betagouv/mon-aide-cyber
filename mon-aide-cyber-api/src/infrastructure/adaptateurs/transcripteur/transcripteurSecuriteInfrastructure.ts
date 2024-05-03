@@ -7,8 +7,6 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
   styles: {
     navigation: 'navigation-securite-infrastructure',
   },
-  localisationIconeNavigation:
-    '/images/diagnostic/securite-infrastructures/icone-navigation.svg',
   localisationIllustration:
     '/images/diagnostic/securite-infrastructures/illustration.svg',
   groupes: [
