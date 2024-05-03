@@ -73,10 +73,14 @@ export type RepresentationGroupes = {
     | RepresentationQuestionChoixMultiple
   )[];
 }[];
+type StyleThematique = {
+  navigation: `navigation-${string}`;
+};
 export type RepresentationThematique = {
   actions: ActionDiagnostic[];
   description: string;
   libelle: string;
+  styles: StyleThematique;
   localisationIllustration: string;
   localisationIconeNavigation: string;
   groupes: RepresentationGroupes;
@@ -103,6 +107,7 @@ export type QuestionATranscrire = {
   'info-bulles'?: InfoBulle[];
 };
 export type Thematique = {
+  styles: StyleThematique;
   description: string;
   libelle: string;
   localisationIconeNavigation: string;

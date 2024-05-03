@@ -4,6 +4,9 @@ export const transcripteurGouvernance: Thematique = {
   description:
     "La gouvernance des systèmes d’information implique initialement l'établissement d'objectifs pour ces systèmes, alignés sur la stratégie de l'entreprise. Cette approche vise à déterminer comment le système d'information participe à la création de valeur pour l'entreprise et précise le rôle des différents acteurs.",
   libelle: 'Gouvernance',
+  styles: {
+    navigation: 'navigation-gouvernance',
+  },
   localisationIconeNavigation:
     '/images/diagnostic/gouvernance/icone-navigation.svg',
   localisationIllustration: '/images/diagnostic/gouvernance/illustration.svg',

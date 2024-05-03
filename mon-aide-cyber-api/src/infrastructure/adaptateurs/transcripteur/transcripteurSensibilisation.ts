@@ -4,6 +4,9 @@ export const transcripteurSensibilisation: Thematique = {
   description:
     "Il est important d’éduquer tous les utilisateurs, qu'ils fassent partie de l'organisation ou non, qui manipulent des données personnelles, aux risques liés aux libertés et à la vie privée des individus. Il faut fournir des informations sur les actions entreprises pour gérer ces risques, ainsi que sur les conséquences possibles en cas de non-respect des directives.",
   libelle: 'Sensibilisation des utilisateurs',
+  styles: {
+    navigation: 'navigation-sensibilisation',
+  },
   localisationIconeNavigation:
     '/images/diagnostic/sensibilisation/icone-navigation.svg',
   localisationIllustration:

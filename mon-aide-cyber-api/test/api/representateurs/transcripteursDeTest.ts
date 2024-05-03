@@ -10,6 +10,10 @@ const transcripteurAvecSaisiesLibres = {
     contexte: {
       description: fakerFR.lorem.sentence(),
       libelle: 'Contexte',
+      styles: {
+        navigation: 'navigation-contexte',
+        illustration: 'illustration-contexte',
+      },
       localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
       groupes: [
@@ -41,6 +45,10 @@ const transcripteurQuestionTiroir = {
     contexte: {
       description: fakerFR.lorem.sentence(),
       libelle: 'Contexte',
+      styles: {
+        navigation: 'navigation-contexte',
+        illustration: 'illustration-contexte',
+      },
       localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
       groupes: [
@@ -76,6 +84,10 @@ const transcripteurMultipleTiroir = {
     contexte: {
       description: fakerFR.lorem.sentence(),
       libelle: 'Contexte',
+      styles: {
+        navigation: 'navigation-contexte',
+        illustration: 'illustration-contexte',
+      },
       localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
       groupes: [
@@ -115,6 +127,10 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
   private thematiques: {
     [clef: string]: {
       libelle: string;
+      styles: {
+        navigation: `navigation-${string}`;
+        illustration: `illustration-${string}`;
+      };
       localisationIconeNavigation: string;
       localisationIllustration: string;
       description: string;
@@ -127,6 +143,10 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
     thematiques.forEach((thematique) => {
       this.thematiques[thematique] = {
         libelle: thematique,
+        styles: {
+          navigation: `navigation-${thematique}`,
+          illustration: `illustration-${thematique}`,
+        },
         localisationIconeNavigation: `/chemin/icone/${thematique}`,
         localisationIllustration: `/chemin/illustration/${thematique}`,
         description: fakerFR.lorem.sentence(),
@@ -187,6 +207,9 @@ const fabriqueTranscripteurVide = (): Transcripteur => {
       contexte: {
         description: fakerFR.lorem.sentence(),
         libelle: 'Contexte',
+        styles: {
+          navigation: 'navigation-contexte',
+        },
         localisationIconeNavigation: '/chemin/icone/contexte',
         localisationIllustration: '/chemin/illustration/contexte',
         groupes: [],

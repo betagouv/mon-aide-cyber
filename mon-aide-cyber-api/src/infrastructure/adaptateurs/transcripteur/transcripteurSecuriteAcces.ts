@@ -4,6 +4,9 @@ export const transcripteurSecuriteAcces: Thematique = {
   description:
     "La sécurité de l'information englobe la protection des données et des renseignements contre tout accès, usage, divulgation, altération, perturbation ou destruction non autorisés. Elle représente une préoccupation essentielle tant pour les individus que pour les organisations.",
   libelle: "Sécurité des accès au système d'information",
+  styles: {
+    navigation: 'navigation-securite-acces',
+  },
   localisationIconeNavigation:
     '/images/diagnostic/securite-acces/icone-navigation.svg',
   localisationIllustration:

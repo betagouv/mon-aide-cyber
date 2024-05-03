@@ -4,6 +4,9 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
   description:
     "La sécurité des infrastructures et des données est vitale pour protéger systèmes, réseaux et informations contre les menaces numériques. Le pare-feu, le cryptage et la détection d'intrusions pour prévenir, détecter et limiter les attaques sont entre autres utilisés.",
   libelle: 'Sécurité des infrastructures',
+  styles: {
+    navigation: 'navigation-securite-infrastructure',
+  },
   localisationIconeNavigation:
     '/images/diagnostic/securite-infrastructures/icone-navigation.svg',
   localisationIllustration:

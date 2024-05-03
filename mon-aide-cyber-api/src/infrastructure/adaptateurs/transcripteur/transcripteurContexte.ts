@@ -4,6 +4,9 @@ export const transcripteurContexte: Thematique = {
   description:
     "Les informations contextuelles d'une entreprise aident à situer sa position par rapport à d'autres dans le même secteur, à cerner les défis cyber propres à son domaine d'activité et en fonction du nombre d'employés.",
   libelle: 'Contexte',
+  styles: {
+    navigation: 'navigation-contexte',
+  },
   localisationIconeNavigation:
     '/images/diagnostic/contexte/icone-navigation.svg',
   localisationIllustration: '/images/diagnostic/contexte/illustration.svg',
