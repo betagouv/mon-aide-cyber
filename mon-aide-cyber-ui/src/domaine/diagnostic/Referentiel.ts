@@ -8,7 +8,7 @@ export type Thematique = {
   actions: ActionReponseDiagnostic[];
   description: string;
   libelle: string;
-  localisationIconeNavigation: string;
+  styles: { navigation: `navigation-${string}` };
   localisationIllustration: string;
   groupes: Groupes;
 };

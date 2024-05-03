@@ -19,7 +19,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
       groupes: [],
       libelle: fakerFR.word.words(4),
       description: fakerFR.lorem.sentence(),
-      localisationIconeNavigation: '',
+      styles: { navigation: 'navigation-' },
       localisationIllustration: '',
     },
   };
@@ -75,7 +75,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
         questions: [q],
       })),
       libelle: theme,
-      localisationIconeNavigation: '',
+      styles: { navigation: 'navigation-' },
       localisationIllustration: '',
     };
     return this;

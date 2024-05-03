@@ -17,12 +17,22 @@
   position: fixed;
   top: 0;
   box-shadow:
-    0px 8px 16px 0px rgba(0, 0, 0, 0.1),
-    0px 16px 16px -16px rgba(0, 0, 0, 0.32);
+    0 8px 16px 0 rgba(0, 0, 0, 0.1),
+    0 16px 16px -16px rgba(0, 0, 0, 0.32);
 }
 
 .logo-mac-diagnostic {
   width: 18.157rem;
+}
+@mixin bouton-navigation($image) {
+  mask-image: $image;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: $image;
+  -webkit-mask-repeat: no-repeat;
+  background-color: var(--couleurs-mac-blanc);
+  &:hover {
+    background-color: var(--couleurs-mac-blanc);
+  }
 }
 
 .diagnostic {
@@ -58,6 +68,34 @@
     font-size: 0.875rem;
     line-height: 1rem;
     margin: 0;
+  }
+
+  .navigation-sensibilisation {
+    @include bouton-navigation($sensibilisation);
+  }
+
+  .navigation-securite-poste {
+    @include bouton-navigation($securite-poste);
+  }
+
+  .navigation-securite-infrastructure {
+    @include bouton-navigation($securite-infrastructure);
+  }
+
+  .navigation-securite-acces {
+    @include bouton-navigation($securite-acces);
+  }
+
+  .navigation-reaction {
+    @include bouton-navigation($reaction);
+  }
+
+  .navigation-gouvernance {
+    @include bouton-navigation($gouvernance);
+  }
+
+  .navigation-contexte {
+    @include bouton-navigation($contexte);
   }
 }
 

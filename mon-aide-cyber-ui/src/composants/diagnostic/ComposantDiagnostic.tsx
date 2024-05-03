@@ -44,7 +44,6 @@ import {
   reducteurBoutonThematiquePrecedente,
   reducteurBoutonThematiqueSuivante,
 } from './reducteurBoutonThematique.ts';
-import styled from 'styled-components';
 import { FooterDiagnostic } from './FooterDiagnostic.tsx';
 import { HeaderDiagnostic } from './HeaderDiagnostic.tsx';
 import {
@@ -379,16 +378,6 @@ const ComposantQuestion = ({
   );
 };
 
-const BoutonNavigueVersThematique = styled.button<{
-  $localisationIcone: string;
-}>`
-  mask-image: url(${(props) => props.$localisationIcone});
-  mask-repeat: no-repeat;
-  -webkit-mask-image: url(${(props) => props.$localisationIcone});
-  -webkit-mask-repeat: no-repeat;
-  background-color: var(--couleurs-mac-blanc) !important;
-`;
-
 type ProprietesComposantDiagnostic = {
   idDiagnostic: UUID;
 };
@@ -471,9 +460,8 @@ export const ComposantDiagnostic = ({
                 : ''
             }
           >
-            <BoutonNavigueVersThematique
-              $localisationIcone={thematique.localisationIconeNavigation}
-              className={`fr-btn`}
+            <button
+              className={`fr-btn ${thematique.styles.navigation}`}
               onClick={() => afficheThematique(clef)}
               title=""
             />
