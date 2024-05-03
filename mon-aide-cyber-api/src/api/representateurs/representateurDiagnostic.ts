@@ -199,8 +199,6 @@ export function representeLeDiagnosticPourLeClient(
             styles: {
               navigation: transcripteur.thematiques[clef].styles.navigation,
             },
-            localisationIconeNavigation:
-              transcripteur.thematiques[clef].localisationIconeNavigation,
             localisationIllustration:
               transcripteur.thematiques[clef].localisationIllustration,
             groupes: representationGroupee.represente(

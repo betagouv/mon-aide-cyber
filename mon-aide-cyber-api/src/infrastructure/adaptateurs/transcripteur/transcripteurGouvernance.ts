@@ -7,8 +7,6 @@ export const transcripteurGouvernance: Thematique = {
   styles: {
     navigation: 'navigation-gouvernance',
   },
-  localisationIconeNavigation:
-    '/images/diagnostic/gouvernance/icone-navigation.svg',
   localisationIllustration: '/images/diagnostic/gouvernance/illustration.svg',
   groupes: [
     {

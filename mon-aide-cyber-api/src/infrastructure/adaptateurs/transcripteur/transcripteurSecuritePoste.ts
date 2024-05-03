@@ -7,8 +7,6 @@ export const transcripteurSecuritePoste: Thematique = {
   styles: {
     navigation: 'navigation-securite-poste',
   },
-  localisationIconeNavigation:
-    '/images/diagnostic/securite-postes/icone-navigation.svg',
   localisationIllustration:
     '/images/diagnostic/securite-postes/illustration.svg',
   groupes: [

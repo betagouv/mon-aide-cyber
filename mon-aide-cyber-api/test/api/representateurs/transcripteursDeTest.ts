@@ -14,7 +14,6 @@ const transcripteurAvecSaisiesLibres = {
         navigation: 'navigation-contexte',
         illustration: 'illustration-contexte',
       },
-      localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
       groupes: [
         {
@@ -49,7 +48,6 @@ const transcripteurQuestionTiroir = {
         navigation: 'navigation-contexte',
         illustration: 'illustration-contexte',
       },
-      localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
       groupes: [
         {
@@ -88,7 +86,6 @@ const transcripteurMultipleTiroir = {
         navigation: 'navigation-contexte',
         illustration: 'illustration-contexte',
       },
-      localisationIconeNavigation: '/chemin/icone/contexte',
       localisationIllustration: '/chemin/illustration/contexte',
       groupes: [
         {
@@ -210,7 +207,6 @@ const fabriqueTranscripteurVide = (): Transcripteur => {
         styles: {
           navigation: 'navigation-contexte',
         },
-        localisationIconeNavigation: '/chemin/icone/contexte',
         localisationIllustration: '/chemin/illustration/contexte',
         groupes: [],
       },
