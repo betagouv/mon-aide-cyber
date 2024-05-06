@@ -7,7 +7,7 @@ export type Diagnostic = {
   dateCreation: string;
   identifiant: string;
   secteurActivite: string | 'non renseigné';
-  zoneGeographique: string | 'non renseigné';
+  secteurGeographique: string | 'non renseigné';
 };
 
 export class ServiceTableauDeBord {
@@ -46,9 +46,7 @@ export class ServiceTableauDeBord {
               ).date,
               identifiant: contexte.identifiantDiagnostic,
               secteurActivite: contexte.secteurActivite || 'non renseigné',
-              zoneGeographique: contexte.departement
-                ? contexte.departement
-                : 'non renseigné',
+              secteurGeographique: contexte.departement || 'non renseigné',
             }) as Diagnostic,
         ),
       );

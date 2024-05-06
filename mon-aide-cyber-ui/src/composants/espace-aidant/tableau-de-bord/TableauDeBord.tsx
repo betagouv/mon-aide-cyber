@@ -12,7 +12,7 @@ export type Diagnostic = {
   dateCreation: string;
   identifiant: UUID;
   secteurActivite: string;
-  zoneGeographique: string;
+  secteurGeographique: string;
 };
 type ReponseTableauDeBord = ReponseHATEOAS & {
   diagnostics: Diagnostic[];
