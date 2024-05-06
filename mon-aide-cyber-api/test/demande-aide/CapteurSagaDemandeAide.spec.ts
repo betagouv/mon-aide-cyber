@@ -156,7 +156,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           'mac@email.com',
           'Bonjour,\n' +
             '\n' +
-            'Une demande d’aide a été faite par jean-dupont@email.com.\n' +
+            'Une demande d’aide a été faite par jean-dupont@email.com\n' +
             '\n' +
             'Ci-dessous, les informations concernant cette demande :\n' +
             '- Date de la demande : 19.03.2024 à 14:45\n' +
@@ -203,7 +203,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           'mac@email.com',
           'Bonjour,\n' +
             '\n' +
-            'Une demande d’aide a été faite par jean-dupont@email.com.\n' +
+            'Une demande d’aide a été faite par jean-dupont@email.com\n' +
             '\n' +
             'Ci-dessous, les informations concernant cette demande :\n' +
             '- Est déjà en relation avec un Aidant\n' +

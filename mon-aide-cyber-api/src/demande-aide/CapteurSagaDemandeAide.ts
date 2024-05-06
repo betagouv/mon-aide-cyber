@@ -112,7 +112,7 @@ const construisMailRecapitulatifDemandeAide = (
   return (
     'Bonjour,\n' +
     '\n' +
-    `Une demande d’aide a été faite par ${aide.email}.\n` +
+    `Une demande d’aide a été faite par ${aide.email}\n` +
     '\n' +
     'Ci-dessous, les informations concernant cette demande :\n' +
     miseEnRelation +
