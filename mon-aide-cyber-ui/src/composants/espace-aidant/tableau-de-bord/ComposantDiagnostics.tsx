@@ -27,7 +27,7 @@ export const ComposantDiagnostics = ({
         <div className="fr-grid-row">
           <div className="fr-col-2">ID</div>
           <div className="fr-col-2">Date</div>
-          <div className="fr-col-3">Département</div>
+          <div className="fr-col-3">Secteur géographique</div>
           <div className="fr-col-5">Secteur d&apos;activité</div>
         </div>
         {diagnostics.map((diag, index) => (
@@ -40,7 +40,7 @@ export const ComposantDiagnostics = ({
               <ComposantIdentifiantDiagnostic identifiant={diag.identifiant} />
             </div>
             <div className="fr-col-2">{diag.dateCreation}</div>
-            <div className="fr-col-3">{diag.zoneGeographique}</div>
+            <div className="fr-col-3">{diag.secteurGeographique}</div>
             <div className="fr-col-5">{diag.secteurActivite}</div>
           </div>
         ))}
@@ -64,7 +64,7 @@ export const ComposantDiagnostics = ({
             <div className="fr-col-10 fr-col-offset-2">
               <div className="fr-grid-row">
                 <div className="encart-gauche fr-col-12">
-                  <h2>Diagnostics</h2>
+                  <h2>Mes Diagnostics</h2>
                   <div>
                     Retrouvez ici l’ensemble des diagnostics que vous avez
                     menés.

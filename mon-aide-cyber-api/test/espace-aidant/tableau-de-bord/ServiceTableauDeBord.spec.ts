@@ -32,7 +32,7 @@ describe('Service Tableau De Bord', () => {
         identifiant: identifiantDiagnostic,
         dateCreation: '17.04.2024',
         secteurActivite: 'non renseigné',
-        zoneGeographique: 'non renseigné',
+        secteurGeographique: 'non renseigné',
       });
     });
 
@@ -59,7 +59,7 @@ describe('Service Tableau De Bord', () => {
         dateCreation: '28.04.2024',
         identifiant: identifiantDiagnostic,
         secteurActivite: 'non renseigné',
-        zoneGeographique: 'non renseigné',
+        secteurGeographique: 'non renseigné',
       });
     });
 
@@ -87,7 +87,7 @@ describe('Service Tableau De Bord', () => {
           dateCreation: '17.04.2024',
           identifiant: identifiantDiagnostic,
           secteurActivite: 'non renseigné',
-          zoneGeographique: departement,
+          secteurGeographique: departement,
         });
       });
     });
@@ -116,7 +116,7 @@ describe('Service Tableau De Bord', () => {
         dateCreation: '17.04.2024',
         identifiant: identifiantDiagnostic,
         secteurActivite: secteurActivite,
-        zoneGeographique: 'non renseigné',
+        secteurGeographique: 'non renseigné',
       });
     });
 
@@ -164,13 +164,13 @@ describe('Service Tableau De Bord', () => {
           dateCreation: '17.04.2024',
           identifiant: identifiantDiagnosticInitie1,
           secteurActivite: 'enseignement',
-          zoneGeographique: 'Corse-du-Sud',
+          secteurGeographique: 'Corse-du-Sud',
         },
         {
           dateCreation: '17.04.2024',
           identifiant: identifiantDiagnosticInitie2,
           secteurActivite: 'Arts, spectacles et activités récréatives',
-          zoneGeographique: 'Finistère',
+          secteurGeographique: 'Finistère',
         },
       ]);
     });
@@ -224,13 +224,13 @@ describe('Service Tableau De Bord', () => {
           dateCreation: '17.02.2024',
           identifiant: identifiantDiagnosticInitie2,
           secteurActivite: 'Arts, spectacles et activités récréatives',
-          zoneGeographique: 'Finistère',
+          secteurGeographique: 'Finistère',
         },
         {
           dateCreation: '04.02.2024',
           identifiant: identifiantDiagnosticInitie1,
           secteurActivite: 'enseignement',
-          zoneGeographique: 'Corse-du-Sud',
+          secteurGeographique: 'Corse-du-Sud',
         },
       ]);
     });

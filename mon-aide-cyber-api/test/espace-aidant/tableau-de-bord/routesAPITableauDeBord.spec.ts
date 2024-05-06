@@ -30,7 +30,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
         donneesServeur.app,
         'GET',
         `/api/espace-aidant/tableau-de-bord`,
-        donneesServeur.portEcoute
+        donneesServeur.portEcoute,
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -49,7 +49,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
 
     it("retourne les diagnostics initiés par l'Aidant", async () => {
       FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-02-04T13:54:07+01:00'))
+        new Date(Date.parse('2024-02-04T13:54:07+01:00')),
       );
       const aidant = unAidant().construis();
       await testeurMAC.entrepots.aidants().persiste(aidant);
@@ -59,21 +59,21 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
         'enseignement',
         aidant,
         testeurMAC.entrepots.diagnostic(),
-        testeurMAC.adaptateurRelations
+        testeurMAC.adaptateurRelations,
       );
       const deuxiemeDiagnostic = await unDiagnosticInitiePar(
         'Corse-du-Sud',
         'enseignement',
         aidant,
         testeurMAC.entrepots.diagnostic(),
-        testeurMAC.adaptateurRelations
+        testeurMAC.adaptateurRelations,
       );
 
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
         `/api/espace-aidant/tableau-de-bord`,
-        donneesServeur.portEcoute
+        donneesServeur.portEcoute,
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -83,13 +83,13 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
             identifiant: premierDiagnostic.identifiant,
             secteurActivite: 'enseignement',
             dateCreation: '04.02.2024',
-            zoneGeographique: `Corse-du-Sud`,
+            secteurGeographique: `Corse-du-Sud`,
           },
           {
             identifiant: deuxiemeDiagnostic.identifiant,
             secteurActivite: 'enseignement',
             dateCreation: '04.02.2024',
-            zoneGeographique: `Corse-du-Sud`,
+            secteurGeographique: `Corse-du-Sud`,
           },
         ],
         liens: {
@@ -119,11 +119,11 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
         donneesServeur.app,
         'GET',
         `/api/espace-aidant/tableau-de-bord`,
-        donneesServeur.portEcoute
+        donneesServeur.portEcoute,
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true
+        true,
       );
     });
   });

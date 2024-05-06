@@ -71,7 +71,7 @@ export const ComposantMenuUtilisateur = ({
           <input
             type="button"
             onClick={afficherTableauDeBord}
-            value="Diagnostics"
+            value="Mes diagnostics"
           />,
         ),
       () => setBoutonAfficherTableauDeBord(<></>),
