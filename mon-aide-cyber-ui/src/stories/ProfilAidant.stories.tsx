@@ -91,7 +91,7 @@ export const AffichagePageProfil: Story = {
       );
       await waitFor(() =>
         expect(
-          canvas.getByRole('button', { name: /accéder au tableau de bord/i }),
+          canvas.getByRole('button', { name: /mes diagnostics/i }),
         ).toBeInTheDocument(),
       );
       await waitFor(() =>
