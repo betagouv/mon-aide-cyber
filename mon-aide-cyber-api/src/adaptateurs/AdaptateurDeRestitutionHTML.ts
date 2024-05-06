@@ -71,7 +71,7 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
       ),
       identifiant: restitution.identifiant,
       secteurActivite: restitution.informations.secteurActivite,
-      zoneGeographique: restitution.informations.zoneGeographique,
+      secteurGeographique: restitution.informations.secteurGeographique,
     };
   }
 

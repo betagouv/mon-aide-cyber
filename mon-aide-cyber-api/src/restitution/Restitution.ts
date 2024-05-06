@@ -6,7 +6,7 @@ type InformationsRestitution = {
   dateCreation: Date;
   dateDerniereModification: Date;
   secteurActivite: string;
-  zoneGeographique: string;
+  secteurGeographique: string;
 };
 type Restitution = {
   identifiant: crypto.UUID;

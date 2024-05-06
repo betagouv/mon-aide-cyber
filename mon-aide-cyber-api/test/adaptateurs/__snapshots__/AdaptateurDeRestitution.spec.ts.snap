@@ -3,7 +3,7 @@
 exports[`Adaptateur de Restitution > génère la restitution avec annexe 1`] = `
 [
   {
-    "corps": "{"dateCreation":"2023-02-04T09:30:00.000Z","dateDerniereModification":"2023-02-05T09:30:00.000Z","secteurActivite":"Administration","zoneGeographique":"Bretagne, Finistère"}",
+    "corps": "{"dateCreation":"2023-02-04T09:30:00.000Z","dateDerniereModification":"2023-02-05T09:30:00.000Z","secteurActivite":"Administration","secteurGeographique":"Bretagne, Finistère"}",
     "entete": "",
     "piedPage": "",
   },
@@ -28,7 +28,7 @@ exports[`Adaptateur de Restitution > génère la restitution avec annexe 1`] = `
 exports[`Adaptateur de Restitution > génère la restitution sans annexe 1`] = `
 [
   {
-    "corps": "{"dateCreation":"2023-02-04T09:30:00.000Z","dateDerniereModification":"2023-02-05T09:30:00.000Z","secteurActivite":"Loisir","zoneGeographique":"Ile de France, Paris"}",
+    "corps": "{"dateCreation":"2023-02-04T09:30:00.000Z","dateDerniereModification":"2023-02-05T09:30:00.000Z","secteurActivite":"Loisir","secteurGeographique":"Ile de France, Paris"}",
     "entete": "",
     "piedPage": "",
   },
@@ -48,7 +48,7 @@ exports[`Adaptateur de Restitution > génère la restitution sans annexe 1`] = `
 exports[`Adaptateur de Restitution > génère une restitution en conservant l'ordre des thématiques 1`] = `
 [
   {
-    "corps": "{"dateCreation":"2023-02-04T09:30:00.000Z","dateDerniereModification":"2023-02-05T09:30:00.000Z","secteurActivite":"Administration","zoneGeographique":"Bretagne, Finistère"}",
+    "corps": "{"dateCreation":"2023-02-04T09:30:00.000Z","dateDerniereModification":"2023-02-05T09:30:00.000Z","secteurActivite":"Administration","secteurGeographique":"Bretagne, Finistère"}",
     "entete": "",
     "piedPage": "",
   },

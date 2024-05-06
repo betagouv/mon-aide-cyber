@@ -42,7 +42,7 @@ describe('Entrepôt de restitution', () => {
       informations: {
         dateCreation: FournisseurHorloge.maintenant(),
         dateDerniereModification: FournisseurHorloge.maintenant(),
-        zoneGeographique: 'non renseigné',
+        secteurGeographique: 'non renseigné',
         secteurActivite: 'non renseigné',
       },
       indicateurs: {},
@@ -76,7 +76,7 @@ describe('Entrepôt de restitution', () => {
         informations: {
           dateCreation: FournisseurHorloge.maintenant(),
           dateDerniereModification: FournisseurHorloge.maintenant(),
-          zoneGeographique: 'Gironde, Nouvelle-Aquitaine',
+          secteurGeographique: 'Gironde, Nouvelle-Aquitaine',
           secteurActivite: 'non renseigné',
         },
         indicateurs: {},
@@ -101,7 +101,7 @@ describe('Entrepôt de restitution', () => {
         informations: {
           dateCreation: FournisseurHorloge.maintenant(),
           dateDerniereModification: FournisseurHorloge.maintenant(),
-          zoneGeographique: 'non renseigné',
+          secteurGeographique: 'non renseigné',
           secteurActivite: 'Construction',
         },
         indicateurs: {},
@@ -128,7 +128,7 @@ describe('Entrepôt de restitution', () => {
         informations: {
           dateCreation: FournisseurHorloge.maintenant(),
           dateDerniereModification: FournisseurHorloge.maintenant(),
-          zoneGeographique: 'Gironde, Nouvelle-Aquitaine',
+          secteurGeographique: 'Gironde, Nouvelle-Aquitaine',
           secteurActivite: 'non renseigné',
         },
         indicateurs: { thematique: { moyennePonderee: 0 } },
@@ -308,7 +308,7 @@ describe('Mappeur de restitution', () => {
             questionRegion: questionRegion,
             questionDepartement: questionDepartement,
           }),
-        ).zoneGeographique,
+        ).secteurGeographique,
       ).toStrictEqual('Gironde, Nouvelle-Aquitaine');
     });
 
@@ -329,7 +329,7 @@ describe('Mappeur de restitution', () => {
           mappeurRestitutionDTODepuisQuestion({
             questionDepartement: questionDepartement,
           }),
-        ).zoneGeographique,
+        ).secteurGeographique,
       ).toStrictEqual('Gironde');
     });
 
@@ -350,14 +350,14 @@ describe('Mappeur de restitution', () => {
           mappeurRestitutionDTODepuisQuestion({
             questionRegion: questionRegion,
           }),
-        ).zoneGeographique,
+        ).secteurGeographique,
       ).toStrictEqual('Nouvelle-Aquitaine');
     });
 
     it("si ni le département ni la région ne sont renseignés, affiche 'non renseigné'", () => {
       expect(
         mappeurRestitution(mappeurRestitutionDTODepuisQuestion({}))
-          .zoneGeographique,
+          .secteurGeographique,
       ).toStrictEqual('non renseigné');
     });
   });

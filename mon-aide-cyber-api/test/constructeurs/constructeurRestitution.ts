@@ -21,7 +21,7 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
       refDate: this.dateCreation,
     }),
     secteurActivite: fakerFR.commerce.department(),
-    zoneGeographique: fakerFR.location.city(),
+    secteurGeographique: fakerFR.location.city(),
   };
 
   construis(): Restitution {
@@ -77,7 +77,7 @@ class ConstructeurInformationsRestitution
       dateCreation: this.dateCreation,
       dateDerniereModification: this.dateDerniereModification,
       secteurActivite: this.secteurActivite,
-      zoneGeographique: this.zoneGeographique,
+      secteurGeographique: this.zoneGeographique,
     };
   }
 

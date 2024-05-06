@@ -55,7 +55,7 @@ class EntrepotRestitutionPostgres extends EntrepotPostgres<
   }
 
   protected deDTOAEntite(dto: RestitutionDTO): Restitution {
-    const { zoneGeographique, secteurActivite } = this.transcripteur(dto);
+    const { secteurGeographique, secteurActivite } = this.transcripteur(dto);
     const restitutionDTO = dto.restitution;
     return {
       identifiant: dto.id,
@@ -64,7 +64,7 @@ class EntrepotRestitutionPostgres extends EntrepotPostgres<
         dateDerniereModification: FournisseurHorloge.enDate(
           dto.datedernieremodification,
         ),
-        zoneGeographique,
+        secteurGeographique: secteurGeographique,
         secteurActivite,
       },
       indicateurs: restitutionDTO !== null ? restitutionDTO.indicateurs : {},
@@ -132,7 +132,7 @@ type RestitutionDTO = DTO & {
 };
 
 type MappeurRestitutionDTO = {
-  zoneGeographique: string;
+  secteurGeographique: string;
   secteurActivite: string;
 };
 
@@ -159,7 +159,10 @@ const mappeurRestitution = (dto: RestitutionDTO): MappeurRestitutionDTO => {
   return {
     secteurActivite:
       trouveLibelleReponseUniqueDonnee(dto.secteuractivite) || 'non renseigné',
-    zoneGeographique: representeZoneGeographique(dto.region, dto.departement),
+    secteurGeographique: representeZoneGeographique(
+      dto.region,
+      dto.departement,
+    ),
   };
 };
 
