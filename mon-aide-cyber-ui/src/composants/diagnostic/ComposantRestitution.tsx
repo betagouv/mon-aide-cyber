@@ -87,17 +87,22 @@ export const ComposantRestitution = ({
           .accept(lien.contentType!)
           .construis();
         macapi
-          .appelle<Window>(
-            parametresAPI,
-            async (blob) => window.open(URL.createObjectURL(await blob))!,
-          )
+          .appelle<void>(parametresAPI, (blob: Promise<Blob>) => {
+            return blob.then((b) => {
+              const fichier = URL.createObjectURL(b);
+              const lien = document.createElement('a');
+              lien.href = fichier;
+              lien.download = `restitution-${idDiagnostic}.pdf`;
+              lien.click();
+            });
+          })
           .then(() => {
             setBoutonDesactive(false);
           });
       },
     );
     setBoutonDesactive(true);
-  }, [etatRestitution.restitution, macapi]);
+  }, [etatRestitution.restitution, idDiagnostic, macapi]);
 
   const navigueVersTableauDeBord = useCallback(() => {
     const liens = etatRestitution.restitution!.liens;
