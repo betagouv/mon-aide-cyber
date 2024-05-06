@@ -1,4 +1,8 @@
-import { ComposantLancerDiagnostic } from '../../diagnostic/ComposantLancerDiagnostic.tsx';
+import {
+  ComposantBoutonLancerDiagnostic,
+  ComposantLancerDiagnostic,
+  ComposantLienLancerDiagnostic,
+} from '../../diagnostic/ComposantLancerDiagnostic.tsx';
 import { ComposantIdentifiantDiagnostic } from '../../ComposantIdentifiantDiagnostic.tsx';
 import { Diagnostic } from './TableauDeBord.tsx';
 import { useCallback } from 'react';
@@ -48,11 +52,9 @@ export const ComposantDiagnostics = ({
     ) : (
       <div className="fr-col-10 fr-col-offset-2">
         <h4>Vous n’avez pas encore effectué de diagnostic. </h4>
-        <ComposantLancerDiagnostic>
-          <button className="bouton-mac bouton-mac-primaire">
-            Lancer un diagnostic
-          </button>
-        </ComposantLancerDiagnostic>
+        <ComposantLancerDiagnostic
+          composant={ComposantBoutonLancerDiagnostic}
+        />
       </div>
     );
 
@@ -77,14 +79,9 @@ export const ComposantDiagnostics = ({
                     diagnostic et de validation des CGU :
                   </div>
                   <br />
-                  <ComposantLancerDiagnostic>
-                    <a
-                      href="#"
-                      className="fr-icon-arrow-go-forward-line fr-link--icon-right"
-                    >
-                      Lancer un diagnostic
-                    </a>
-                  </ComposantLancerDiagnostic>
+                  <ComposantLancerDiagnostic
+                    composant={ComposantLienLancerDiagnostic}
+                  />
                 </div>
               </div>
             </div>
