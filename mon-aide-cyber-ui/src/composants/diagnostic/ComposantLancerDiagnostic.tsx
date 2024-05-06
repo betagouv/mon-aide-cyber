@@ -18,17 +18,17 @@ type ProprietesComposantLancerDiagnostic = {
   >;
 };
 
-export const ComposantBoutonLancerDiagnostic = ({
+export const ComposantBoutonCreerDiagnostic = ({
   surClick,
 }: ProprietesComposant): ReactElement<HTMLButtonElement> => {
   return (
     <button className="bouton-mac bouton-mac-primaire" onClick={surClick}>
-      Lancer un diagnostic
+      Créer un diagnostic
     </button>
   );
 };
 
-export const ComposantLienLancerDiagnostic = ({
+export const ComposantLienCreerDiagnostic = ({
   surClick,
 }: ProprietesComposant): ReactElement<HTMLAnchorElement> => {
   return (
@@ -37,7 +37,7 @@ export const ComposantLienLancerDiagnostic = ({
       className="fr-icon-arrow-go-forward-line fr-link--icon-right"
       onClick={surClick}
     >
-      Lancer un diagnostic
+      Créer un diagnostic
     </a>
   );
 };
