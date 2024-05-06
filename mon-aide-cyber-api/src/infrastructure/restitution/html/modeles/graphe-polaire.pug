@@ -2,7 +2,7 @@
 - const size = 100;
 - const height = 106
 
-svg(viewbox=`0 -5 ${size} ${height}`)
+svg(viewbox=`0 -5 ${size} ${height}` class="indicateur-polaire")
   - const [cx, cy] = [size/2, size/2]
   - const radius = size/2
   - const polarToCartesian = (r, a) => ({ x: cx + (r * Math.cos(a)), y: cy + (r * Math.sin(a))})
@@ -17,4 +17,4 @@ svg(viewbox=`0 -5 ${size} ${height}`)
     - const ordinateCoordinate = (-(i-5) / 5 * radius) - 1.5
     - const abscissaCoordinate = cx - 5
     circle(cx=cx cy=cy r=r stroke='#eeeeee' fill='none' stroke-width=0.3)
-    text(x=abscissaCoordinate y=ordinateCoordinate style="font-size: 4px;") !{i}
+    text(x=abscissaCoordinate y=ordinateCoordinate) !{i}
