@@ -83,7 +83,7 @@ export const ComposantProfil = () => {
                     className="bouton-mac bouton-mac-secondaire"
                     onClick={afficherTableauDeBord}
                   >
-                    Accéder au tableau de bord
+                    Mes diagnostics
                   </button>
                 </div>
                 <div className="fr-mt-2w">

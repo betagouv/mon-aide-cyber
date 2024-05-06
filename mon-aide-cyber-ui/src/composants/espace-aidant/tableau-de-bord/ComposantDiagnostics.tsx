@@ -1,7 +1,7 @@
 import {
-  ComposantBoutonLancerDiagnostic,
+  ComposantBoutonCreerDiagnostic,
   ComposantLancerDiagnostic,
-  ComposantLienLancerDiagnostic,
+  ComposantLienCreerDiagnostic,
 } from '../../diagnostic/ComposantLancerDiagnostic.tsx';
 import { ComposantIdentifiantDiagnostic } from '../../ComposantIdentifiantDiagnostic.tsx';
 import { Diagnostic } from './TableauDeBord.tsx';
@@ -52,9 +52,7 @@ export const ComposantDiagnostics = ({
     ) : (
       <div className="fr-col-10 fr-col-offset-2">
         <h4>Vous n’avez pas encore effectué de diagnostic. </h4>
-        <ComposantLancerDiagnostic
-          composant={ComposantBoutonLancerDiagnostic}
-        />
+        <ComposantLancerDiagnostic composant={ComposantBoutonCreerDiagnostic} />
       </div>
     );
 
@@ -80,7 +78,7 @@ export const ComposantDiagnostics = ({
                   </div>
                   <br />
                   <ComposantLancerDiagnostic
-                    composant={ComposantLienLancerDiagnostic}
+                    composant={ComposantLienCreerDiagnostic}
                   />
                 </div>
               </div>
