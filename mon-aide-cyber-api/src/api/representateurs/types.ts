@@ -66,13 +66,14 @@ export type RepresentationQuestionChoixMultiple = RepresentationQuestion & {
 type RepresentationQuestionChoixUnique = RepresentationQuestion & {
   type?: Exclude<TypeDeSaisie, 'choixMultiple'> | undefined;
 };
-export type RepresentationGroupes = {
+export type ElementRepresentationGroupe = {
   numero: number;
   questions: (
     | RepresentationQuestionChoixUnique
     | RepresentationQuestionChoixMultiple
   )[];
-}[];
+};
+export type RepresentationGroupes = ElementRepresentationGroupe[];
 type StyleThematique = {
   navigation: `navigation-${string}`;
 };

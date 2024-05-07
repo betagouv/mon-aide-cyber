@@ -1,5 +1,9 @@
 import { QuestionsThematique } from '../../diagnostic/Diagnostic';
-import { RepresentationGroupes, Transcripteur } from './types';
+import {
+  ElementRepresentationGroupe,
+  RepresentationGroupes,
+  Transcripteur,
+} from './types';
 import {
   extraisLesChampsDeLaQuestion,
   trouveQuestionATranscrire,
@@ -28,33 +32,40 @@ export class RepresentationGroupee {
             ).length > 0,
         )
         .map((groupe) => {
-          const questions = groupe.questions.map((questionATranscrire) => {
-            const question = questionsThematique.questions.find(
-              (questionDiagnostic) =>
-                questionDiagnostic.identifiant ===
-                questionATranscrire.identifiant,
-            );
-            const reponsesPossibles = trouveReponsesPossibles(
-              question!,
-              this.transcripteur,
-              questionATranscrire,
-            );
-            const { autresReponses, reste } = extraisLesChampsDeLaQuestion(
-              question!,
-            );
-            return {
-              ...reste,
-              reponseDonnee: autresReponses,
-              reponsesPossibles,
-              type: questionATranscrire?.type || question!.type,
-              ...(questionATranscrire['info-bulles'] && {
-                'info-bulles': this.transcripteur.generateurInfoBulle(
-                  questionATranscrire['info-bulles'],
-                ),
-              }),
-            };
-          });
-          return { numero: this.numeroQuestion++, questions };
+          const questions = groupe.questions
+            .map((questionATranscrire) => {
+              const question = questionsThematique.questions.find(
+                (questionDiagnostic) =>
+                  questionDiagnostic.identifiant ===
+                  questionATranscrire.identifiant,
+              );
+              if (question) {
+                const reponsesPossibles = trouveReponsesPossibles(
+                  question,
+                  this.transcripteur,
+                  questionATranscrire,
+                );
+                const { autresReponses, reste } =
+                  extraisLesChampsDeLaQuestion(question);
+                return {
+                  ...reste,
+                  reponseDonnee: autresReponses,
+                  reponsesPossibles,
+                  type: questionATranscrire?.type || question.type,
+                  ...(questionATranscrire['info-bulles'] && {
+                    'info-bulles': this.transcripteur.generateurInfoBulle(
+                      questionATranscrire['info-bulles'],
+                    ),
+                  }),
+                };
+              }
+              return undefined;
+            })
+            .filter((q) => !!q);
+          return {
+            numero: this.numeroQuestion++,
+            questions,
+          } as ElementRepresentationGroupe;
         });
 
     representations.push(

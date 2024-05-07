@@ -112,22 +112,4 @@ export const mesuresGouvernance = {
     },
     priorisation: 24,
   },
-  'gouvernance-exigence-cyber-securite-presta-si-industriel': {
-    niveau1: {
-      titre: "Fixer des exigences de cybersécurité aux prestataires accèdant aux systèmes industriels",
-      pourquoi:
-        '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-si-industriel-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-si-industriel-niveau1-comment.pug',
-    },
-    niveau2: {
-      titre:
-        "Vérifier l'application et imposer des pénalités aux prestataires accèdant aux systèmes industriels en cas de non-respect des exigences de cybersécurité",
-      pourquoi:
-        '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-si-industriel-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-si-industriel-niveau2-comment.pug',
-    },
-    priorisation: 24,
-  },
 };
