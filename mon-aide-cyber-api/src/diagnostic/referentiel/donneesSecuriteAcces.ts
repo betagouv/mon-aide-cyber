@@ -94,7 +94,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: 'acces-liste-compte-utilisateurs-revue-en-continu',
           libelle:
-            "La liste des comptes des utilisateurs est mise à jour en continu dans le cadre d'un processus de suppression systématique des comptes inactifs. Une revue annuelle est également réalisée.",
+            "La liste des comptes des utilisateurs est mise à jour en continu dans le cadre d'un processus de désactivation systématique des comptes inactifs. Une revue annuelle est également réalisée.",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -293,7 +293,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-administrateurs-informatiques-suivie-et-limitee-revue-continue',
           libelle:
-            "La liste des comptes des administrateurs est mise à jour en continu dans le cadre d'un processus de suppression systématique des comptes inactifs. Une revue annuelle est également réalisée.",
+            "La liste des comptes des administrateurs est mise à jour en continu dans le cadre d'un processus de désactivation systématique des comptes inactifs. Une revue annuelle est également réalisée.",
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
