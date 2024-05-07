@@ -52,13 +52,16 @@ export const transcripteurGouvernance: Thematique = {
           identifiant: 'gouvernance-connaissance-rgpd-1',
           'info-bulles': [
             'gouvernance/cnil.pug',
-            'gouvernance/gestion-droits.pug',
           ],
         },
       ],
     },
     {
-      questions: [{ identifiant: 'gouvernance-connaissance-rgpd-2' }],
+      questions: [{ identifiant: 'gouvernance-connaissance-rgpd-2',
+      'info-bulles': [
+        'gouvernance/utilisation-donnees-personnelles.pug',
+      ],
+       }],
     },
     {
       questions: [
