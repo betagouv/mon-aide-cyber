@@ -458,7 +458,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-teletravail-acces-distants-mesures-particulieres-mfa',
           libelle:
-            "Certaines connexions à distance sont protégés par une authentification multifacteur",
+            "Certaines connexions à distance sont protégées par une authentification multifacteur",
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -475,7 +475,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-teletravail-acces-distants-mesures-particulieres-vpn',
           libelle:
-            'Toutes les connexions à distance sont protégés par une authentification multifacteur',
+            'Toutes les connexions à distance sont protégées par une authentification multifacteur',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
