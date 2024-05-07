@@ -1,4 +1,11 @@
-import { unObjet, unTuple, unUtilisateur } from './Tuple';
+import {
+  Objet,
+  Relation,
+  unObjet,
+  unTuple,
+  unUtilisateur,
+  Utilisateur,
+} from './Tuple';
 import crypto from 'crypto';
 import { AdaptateurRelations } from './AdaptateurRelations';
 import { EntrepotRelation } from './EntrepotRelation';
@@ -37,5 +44,13 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
     return this.tupleEntrepot
       .trouveDiagnosticsInitiePar(identifiantAidant)
       .then((tuples) => tuples.map((tuple) => tuple.objet.identifiant));
+  }
+
+  relationExiste(
+    relation: Relation,
+    utilisateur: Utilisateur,
+    objet: Objet,
+  ): Promise<boolean> {
+    return this.tupleEntrepot?.relationExiste(relation, utilisateur, objet);
   }
 }

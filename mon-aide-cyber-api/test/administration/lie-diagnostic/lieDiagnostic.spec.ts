@@ -6,23 +6,13 @@ import {
   lieDiagnostic,
   Relation,
 } from '../../../src/administration/lie-diagnostic/lieDiagnostic';
-import { AdaptateurRelations } from '../../../src/relation/AdaptateurRelations';
 import {
   EntrepotAidantMemoire,
   EntrepotDiagnosticMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { unDiagnostic } from '../../constructeurs/constructeurDiagnostic';
 import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
-
-class AdaptateurRelationsEnErreur implements AdaptateurRelations {
-  aidantInitieDiagnostic(_: crypto.UUID, __: crypto.UUID): Promise<void> {
-    throw new Error('Erreur attendue');
-  }
-
-  diagnosticsInitiePar(_: crypto.UUID): Promise<string[]> {
-    return Promise.resolve([]);
-  }
-}
+import { AdaptateurRelationsEnErreur } from './AdaptateurRelationsEnErreur';
 
 describe('Lie un diagnostic', () => {
   it("créé une nouvelle relation lorsque le diagnostic n'est pas encore lié", async () => {

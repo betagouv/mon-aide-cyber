@@ -95,4 +95,12 @@ export class EntrepotRelationPostgres
         lignes.map((ligne) => this.deDTOAEntite(ligne)),
       );
   }
+
+  relationExiste(
+    _relation: Relation,
+    _utilisateur: Utilisateur,
+    _objet: Objet,
+  ): Promise<boolean> {
+    return Promise.resolve(false);
+  }
 }

@@ -132,6 +132,11 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
+  actionsAccesDiagnosticNonAutorise(): ConstructeurActionsHATEOAS {
+    this.afficherTableauDeBord();
+    return this.afficherProfil().seDeconnecter();
+  }
+
   construis = (): ReponseHATEOAS => {
     return {
       liens: {
