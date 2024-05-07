@@ -1,9 +1,9 @@
-import { Tuple } from '../Tuple';
+import { Objet, Relation, Tuple, Utilisateur } from '../Tuple';
 
 import { Entrepot, EntrepotRelation } from '../EntrepotRelation';
 import crypto from 'crypto';
 import { Aggregat } from '../Aggregat';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -36,5 +36,19 @@ export class EntrepotRelationMemoire
 
   typeAggregat(): string {
     return 'relation';
+  }
+
+  relationExiste(
+    relation: Relation,
+    utilisateur: Utilisateur,
+    objet: Objet,
+  ): Promise<boolean> {
+    return Promise.resolve(
+      Array.from(this.entites.values()).filter((tuple) => {
+        const user = isEqual(tuple.utilisateur, utilisateur);
+        const obj = isEqual(tuple.objet, objet);
+        return user && tuple.relation === relation && obj;
+      }).length > 0,
+    );
   }
 }

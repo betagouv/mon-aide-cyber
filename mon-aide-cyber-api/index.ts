@@ -15,15 +15,7 @@ import { fabriqueAdaptateurEnvoiMail } from './src/infrastructure/adaptateurs/fa
 import { AdaptateurDeVerificationDeCGUMAC } from './src/adaptateurs/AdaptateurDeVerificationDeCGUMAC';
 import { AdaptateurDeGestionDeCookiesMAC } from './src/adaptateurs/AdaptateurDeGestionDeCookiesMAC';
 import { AdaptateurRelationsMAC } from './src/relation/AdaptateurRelationsMAC';
-import {
-  ConstructeurObjet,
-  ConstructeurUtilisateur,
-} from './src/definition-type/relations';
-import { RequestHandler, Response } from 'express';
-import { Relation } from './src/relation/Tuple';
-import { RequeteUtilisateur } from './src/api/routesAPI';
-import { NextFunction } from 'express-serve-static-core';
-import { AdaptateurDeVerificationDesAcces } from './src/adaptateurs/AdaptateurDeVerificationDesAcces';
+import { AdaptateurDeVerificationDesAccesMAC } from './src/adaptateurs/AdaptateurDeVerificationDesAccesMAC';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
@@ -43,6 +35,7 @@ const busEvenementMAC = new BusEvenementMAC(
   fabriqueConsommateursEvenements(adaptateurRelations)
 );
 const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
+
 const serveurMAC = serveur.creeServeur({
   adaptateurRelations: adaptateurRelations,
   adaptateursRestitution: {
@@ -68,23 +61,9 @@ const serveurMAC = serveur.creeServeur({
   adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(
     gestionnaireDeJeton
   ),
-  adaptateurDeVerificationDeRelations: new (class
-    implements AdaptateurDeVerificationDesAcces
-  {
-    verifie(
-      _relation: Relation,
-      _utilisateur: typeof ConstructeurUtilisateur,
-      _objet: typeof ConstructeurObjet
-    ): RequestHandler {
-      return (
-        _requete: RequeteUtilisateur,
-        _reponse: Response,
-        suite: NextFunction
-      ) => {
-        suite();
-      };
-    }
-  })(),
+  adaptateurDeVerificationDeRelations: new AdaptateurDeVerificationDesAccesMAC(
+    adaptateurRelations
+  ),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
   adaptateurEnvoiMessage: adaptateurEnvoiMessage,
 });
