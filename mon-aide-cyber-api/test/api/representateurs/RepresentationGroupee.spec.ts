@@ -150,4 +150,53 @@ describe('Représentation groupée', () => {
       },
     ]);
   });
+
+  it('Passe si la question n’est plus présente dans le référentiel', () => {
+    const questions = [
+      uneQuestionDiagnostic()
+        .aChoixUnique()
+        .avecLibelle('Quelle est la nature de votre entité?')
+        .construis(),
+    ];
+    const transcripteur = unTranscripteur()
+      .avecLesThematiques(['thematique-groupee'])
+      .avecLesQuestionsGroupees([
+        {
+          thematique: 'thematique-groupee',
+          groupes: [
+            {
+              questions: [
+                { identifiant: 'quelle-est-la-nature-de-votre-entite' },
+                { identifiant: 'quel-est-son-secteur-dactivite' },
+              ],
+            },
+            {
+              questions: [
+                { identifiant: 'combien-de-personnes-compte-votre-entite' },
+              ],
+            },
+          ],
+        },
+      ])
+      .construis();
+
+    const representationQuestions = new RepresentationGroupee(
+      transcripteur,
+    ).represente('thematique-groupee', { questions });
+
+    expect(representationQuestions).toStrictEqual([
+      {
+        numero: 1,
+        questions: [
+          {
+            type: 'choixUnique',
+            identifiant: 'quelle-est-la-nature-de-votre-entite',
+            libelle: 'Quelle est la nature de votre entité?',
+            reponseDonnee: { valeur: null, reponses: [] },
+            reponsesPossibles: [],
+          },
+        ],
+      },
+    ]);
+  });
 });
