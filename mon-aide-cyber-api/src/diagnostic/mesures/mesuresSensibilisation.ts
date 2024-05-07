@@ -9,7 +9,7 @@ export const mesuresSensibilisation = {
     },
     niveau2: {
       titre:
-        "En complément des pratiques déjà en œuvre, mettre en place des mesures complémentaires de sécurisation de l'espace dédié au stockage des serveurs d'administration et des équipements réseau.",
+        "En complément des pratiques déjà en œuvre, mettre en place des actions de sensibilisation additionnelles",
       pourquoi:
         '../../mesures/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-niveau2-pourquoi.pug',
       comment:
