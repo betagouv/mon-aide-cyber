@@ -18,7 +18,7 @@ import {
   ReprensentationRestitution,
 } from '../../src/api/routesAPIDiagnostic';
 
-describe('le serveur MAC sur les routes /api/diagnostic', () => {
+describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { portEcoute: number; app: Express };
 
@@ -32,8 +32,8 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
     testeurMAC.arrete();
   });
 
-  describe('quand une requête GET est reçue sur /{id}', () => {
-    it('retourne le référentiel du diagnostic', async () => {
+  describe('Quand une requête GET est reçue sur /{id}', () => {
+    it('Retourne le référentiel du diagnostic', async () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
@@ -123,7 +123,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       });
     });
 
-    it("renvoie une erreur HTTP 404 diagnostic non trouvé si le diagnostic n'existe pas", async () => {
+    it("Renvoie une erreur HTTP 404 diagnostic non trouvé si le diagnostic n'existe pas", async () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
@@ -138,7 +138,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       });
     });
 
-    it('la route est protégée', async () => {
+    it('La route est protégée', async () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
@@ -151,7 +151,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       ).toBe(true);
     });
 
-    it('vérifie que les CGU et la charte ont été signées', async () => {
+    it('Vérifie que les CGU et la charte ont été signées', async () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
@@ -163,10 +163,23 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         true,
       );
     });
+
+    it('Vérifie que l’Aidant peut accéder au diagnostic', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste(),
+      ).toBe(true);
+    });
   });
 
-  describe('quand une requête POST est reçue', () => {
-    it('lance un nouveau diagnostic', async () => {
+  describe('Quand une requête POST est reçue', () => {
+    it('Lance un nouveau diagnostic', async () => {
       const referentiel = unReferentiel().construis();
       testeurMAC.adaptateurReferentiel.ajoute(referentiel);
 
@@ -183,7 +196,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       );
     });
 
-    it('on peut récupérer le diagnostic précédemment lancé', async () => {
+    it('On peut récupérer le diagnostic précédemment lancé', async () => {
       const referentiel = unReferentiel()
         .ajouteUneQuestionAuContexte(uneQuestion().construis())
         .construis();
@@ -210,7 +223,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       expect(diagnosticRetourne.referentiel.contexte.groupes).toHaveLength(1);
     });
 
-    it("retourne une erreur HTTP 500 lorsque le référentiel n'est pas trouvé", async () => {
+    it("Retourne une erreur HTTP 500 lorsque le référentiel n'est pas trouvé", async () => {
       testeurMAC.adaptateurReferentiel.reInitialise();
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -225,7 +238,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       });
     });
 
-    it('la route est protégée', async () => {
+    it('La route est protégée', async () => {
       await executeRequete(
         donneesServeur.app,
         'POST',
@@ -238,7 +251,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       ).toBe(true);
     });
 
-    it('vérifie que les CGU et la charte ont été signées', async () => {
+    it('Vérifie que les CGU et la charte ont été signées', async () => {
       await executeRequete(
         donneesServeur.app,
         'POST',
@@ -252,8 +265,8 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
     });
   });
 
-  describe('quand une requête PATCH est reçue sur /{id}', () => {
-    it('on peut donner une réponse à une question', async () => {
+  describe('Quand une requête PATCH est reçue sur /{id}', () => {
+    it('On peut donner une réponse à une question', async () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
@@ -295,7 +308,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       });
     });
 
-    it('retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {
+    it('Retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'PATCH',
@@ -314,7 +327,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       });
     });
 
-    it('la route est protégée', async () => {
+    it('La route est protégée', async () => {
       await executeRequete(
         donneesServeur.app,
         'PATCH',
@@ -327,7 +340,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       ).toBe(true);
     });
 
-    it('vérifie que les CGU et la charte ont été signées', async () => {
+    it('Vérifie que les CGU et la charte ont été signées', async () => {
       await executeRequete(
         donneesServeur.app,
         'PATCH',
@@ -339,10 +352,23 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
         true,
       );
     });
+
+    it('Vérifie que l’Aidant peut répondre au diagnostic', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste(),
+      ).toBe(true);
+    });
   });
 
-  describe('quand une requête GET est reçue sur /{id}/restitution', () => {
-    it('retourne la restitution', async () => {
+  describe('Quand une requête GET est reçue sur /{id}/restitution', () => {
+    it('Retourne la restitution', async () => {
       const adaptateurDeRestitutionHTML = unAdaptateurDeRestitutionHTML()
         .avecIndicateurs('indicateurs')
         .avecMesuresPrioritaires('mesures prioritaires')
@@ -399,7 +425,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       });
     });
 
-    it('retourne la restitution au format PDF', async () => {
+    it('Retourne la restitution au format PDF', async () => {
       let adaptateurPDFAppele = false;
       const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
       adaptateurRestitutionPDF.genereRestitution = () => {
@@ -424,7 +450,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       expect(adaptateurPDFAppele).toBe(true);
     });
 
-    it('la route est protégée', async () => {
+    it('La route est protégée', async () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
@@ -437,7 +463,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       ).toBe(true);
     });
 
-    it('vérifie que les CGU et la charte ont été signées', async () => {
+    it('Vérifie que les CGU et la charte ont été signées', async () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
@@ -450,7 +476,7 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       );
     });
 
-    it('retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {
+    it('Retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
@@ -462,6 +488,19 @@ describe('le serveur MAC sur les routes /api/diagnostic', () => {
       expect(await reponse.json()).toMatchObject({
         message: "Le restitution demandé n'existe pas.",
       });
+    });
+
+    it('Vérifie que l’Aidant peut accéder à la restitution', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47/restitution`,
+        donneesServeur.portEcoute,
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste(),
+      ).toBe(true);
     });
   });
 });

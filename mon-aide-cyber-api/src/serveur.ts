@@ -23,6 +23,7 @@ import { AdaptateurDeVerificationDeCGU } from './adaptateurs/AdaptateurDeVerific
 import { AdaptateurDeGestionDeCookies } from './adaptateurs/AdaptateurDeGestionDeCookies';
 import { AdaptateurRelations } from './relation/AdaptateurRelations';
 import CookieSession from 'cookie-session';
+import { AdaptateurDeVerificationDesAcces } from './adaptateurs/AdaptateurDeVerificationDesAcces';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -38,6 +39,7 @@ export type ConfigurationServeur = {
   adaptateurDeGestionDeCookies: AdaptateurDeGestionDeCookies;
   adaptateurDeVerificationDeCGU: AdaptateurDeVerificationDeCGU;
   adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
+  adaptateurDeVerificationDeRelations: AdaptateurDeVerificationDesAcces;
   avecProtectionCsrf: boolean;
   busCommande: BusCommande;
   busEvenement: BusEvenement;
