@@ -78,7 +78,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                 {
                   identifiant:
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees-oui-VPN',
-                  libelle: 'Oui et les flux entrants se protégés par un VPN',
+                  libelle: 'Oui et les flux entrants sont protégés par un VPN',
                   resultat: {
                     indice: { valeur: 3 },
                   },
