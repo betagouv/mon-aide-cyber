@@ -4,7 +4,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
   questions: [
     {
       identifiant: 'securite-infrastructure-pare-feu-deploye',
-      libelle: 'Votre connexion à Internet est-elle protégée par un pare-feu ?',
+      libelle: 'La connexion à Internet est-elle protégée par un pare-feu ?',
       poids: 1,
       reponsesPossibles: [
         {
@@ -34,7 +34,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               identifiant:
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees',
               libelle:
-                'Si "Oui" : Est-ce que seuls les flux entrants et sortants strictement nécessaires entre Internet et votre système d\'information (ou autres réseaux externes) sont autorisés ?',
+                'Si "Oui" : Est-ce que seuls les flux entrants et sortants strictement nécessaires entre Internet et le système d\'information (ou autres réseaux externes) sont autorisés ?',
               poids: 2,
               reponsesPossibles: [
                 {
@@ -91,7 +91,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               identifiant:
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes',
               libelle:
-                'Si "Oui" : stockez-vous les journaux des flux entrants, sortants et bloqués générés par votre pare-feu ?',
+                'Si "Oui" : les journaux des flux entrants, sortants et bloqués (générés par le pare-feu) sont-ils stockés ?',
               poids: 2,
               reponsesPossibles: [
                 {
