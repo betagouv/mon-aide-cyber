@@ -15,23 +15,32 @@ import { fabriqueAdaptateurEnvoiMail } from './src/infrastructure/adaptateurs/fa
 import { AdaptateurDeVerificationDeCGUMAC } from './src/adaptateurs/AdaptateurDeVerificationDeCGUMAC';
 import { AdaptateurDeGestionDeCookiesMAC } from './src/adaptateurs/AdaptateurDeGestionDeCookiesMAC';
 import { AdaptateurRelationsMAC } from './src/relation/AdaptateurRelationsMAC';
+import {
+  ConstructeurObjet,
+  ConstructeurUtilisateur,
+} from './src/definition-type/relations';
+import { RequestHandler, Response } from 'express';
+import { Relation } from './src/relation/Tuple';
+import { RequeteUtilisateur } from './src/api/routesAPI';
+import { NextFunction } from 'express-serve-static-core';
+import { AdaptateurDeVerificationDesAcces } from './src/adaptateurs/AdaptateurDeVerificationDesAcces';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
-  process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut',
+  process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
 );
 
 const adaptateurTranscripteurDonnees = adaptateurTranscripteur();
 const traductionThematiques =
   new Map(
     Object.entries(
-      adaptateurTranscripteurDonnees.transcripteur().thematiques,
-    ).map(([clef, thematique]) => [clef, thematique.libelle]),
+      adaptateurTranscripteurDonnees.transcripteur().thematiques
+    ).map(([clef, thematique]) => [clef, thematique.libelle])
   ) || new Map();
 
 const entrepots = fabriqueEntrepots();
 const adaptateurRelations = new AdaptateurRelationsMAC();
 const busEvenementMAC = new BusEvenementMAC(
-  fabriqueConsommateursEvenements(adaptateurRelations),
+  fabriqueConsommateursEvenements(adaptateurRelations)
 );
 const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
 const serveurMAC = serveur.creeServeur({
@@ -47,18 +56,35 @@ const serveurMAC = serveur.creeServeur({
   busCommande: new BusCommandeMAC(
     entrepots,
     busEvenementMAC,
-    adaptateurEnvoiMessage,
+    adaptateurEnvoiMessage
   ),
   busEvenement: busEvenementMAC,
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),
   gestionnaireDeJeton: gestionnaireDeJeton,
   adaptateurDeGestionDeCookies: new AdaptateurDeGestionDeCookiesMAC(),
   adaptateurDeVerificationDeCGU: new AdaptateurDeVerificationDeCGUMAC(
-    entrepots,
+    entrepots
   ),
   adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(
-    gestionnaireDeJeton,
+    gestionnaireDeJeton
   ),
+  adaptateurDeVerificationDeRelations: new (class
+    implements AdaptateurDeVerificationDesAcces
+  {
+    verifie(
+      _relation: Relation,
+      _utilisateur: typeof ConstructeurUtilisateur,
+      _objet: typeof ConstructeurObjet
+    ): RequestHandler {
+      return (
+        _requete: RequeteUtilisateur,
+        _reponse: Response,
+        suite: NextFunction
+      ) => {
+        suite();
+      };
+    }
+  })(),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
   adaptateurEnvoiMessage: adaptateurEnvoiMessage,
 });

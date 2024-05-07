@@ -19,6 +19,7 @@ import { AdapatateurDeVerificationDeCGUDeTest } from '../adaptateurs/AdaptateurD
 import { AdaptateurDeGestionDeCookiesDeTest } from '../adaptateurs/AdaptateurDeGestionDeCookiesDeTest';
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
+import { AdaptateurDeVerificationDesAccesDeTest } from '../adaptateurs/AdaptateurDeVerificationDesAccesDeTest';
 
 class TesteurIntegrationMAC {
   private serveurDeTest:
@@ -40,6 +41,7 @@ class TesteurIntegrationMAC {
     public gestionnaireDeJeton = new FauxGestionnaireDeJeton(),
     public adaptateurDeVerificationDeCGU = new AdapatateurDeVerificationDeCGUDeTest(),
     public adaptateurDeVerificationDeSession = new AdaptateurDeVerificationDeSessionDeTest(),
+    public adaptateurDeVerificationDeRelations = new AdaptateurDeVerificationDesAccesDeTest(),
     public gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire(),
     public adaptateurEnvoieMessage: AdaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire(),
     public adaptateurDeGestionDeCookies: AdaptateurDeGestionDeCookiesDeTest = new AdaptateurDeGestionDeCookiesDeTest(),
@@ -72,6 +74,8 @@ class TesteurIntegrationMAC {
       adaptateurDeGestionDeCookies: this.adaptateurDeGestionDeCookies,
       adaptateurDeVerificationDeCGU: this.adaptateurDeVerificationDeCGU,
       adaptateurDeVerificationDeSession: this.adaptateurDeVerificationDeSession,
+      adaptateurDeVerificationDeRelations:
+        this.adaptateurDeVerificationDeRelations,
       adaptateursRestitution: this.adaptateursRestitution,
       avecProtectionCsrf: false,
       adaptateurEnvoiMessage: this.adaptateurEnvoieMessage,

@@ -14,6 +14,7 @@ import { CommandeLanceDiagnostic } from '../diagnostic/CapteurCommandeLanceDiagn
 import { Diagnostic } from '../diagnostic/Diagnostic';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
 import { RepresentationDiagnostic } from './representateurs/types';
+import { unObjet, unUtilisateur } from '../relation/Tuple';
 
 export type ReponseDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 
@@ -23,6 +24,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const {
     adaptateurDeVerificationDeSession: session,
     adaptateurDeVerificationDeCGU: cgu,
+    adaptateurDeVerificationDeRelations: relations,
     busCommande,
   } = configuration;
 
@@ -55,6 +57,11 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id',
     session.verifie('Accès diagnostic'),
     cgu.verifie(),
+    relations.verifie(
+      'initiateur',
+      unUtilisateur().deTypeAidant(),
+      unObjet().deTypeDiagnostic(),
+    ),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       new ServiceDiagnostic(configuration.entrepots)
@@ -78,6 +85,11 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id',
     session.verifie('Ajout réponse au diagnostic'),
     cgu.verifie(),
+    relations.verifie(
+      'initiateur',
+      unUtilisateur().deTypeAidant(),
+      unObjet().deTypeDiagnostic(),
+    ),
     bodyParser.json(),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
@@ -101,6 +113,11 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id/restitution',
     session.verifie('Demande la restitution'),
     cgu.verifie(),
+    relations.verifie(
+      'initiateur',
+      unUtilisateur().deTypeAidant(),
+      unObjet().deTypeDiagnostic(),
+    ),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
 
