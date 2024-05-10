@@ -10,7 +10,12 @@ export const transcripteurContexte: Thematique = {
   localisationIllustration: '/images/diagnostic/contexte/illustration.svg',
   groupes: [
     {
-      questions: [{ identifiant: 'contexte-cgu-signees' }],
+      questions: [
+        {
+          identifiant: 'contexte-cgu-signees',
+          'info-bulles': ['contexte/cgu-signees.pug'],
+        },
+      ],
     },
     {
       questions: [
