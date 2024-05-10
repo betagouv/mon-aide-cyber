@@ -50,24 +50,26 @@ export const transcripteurGouvernance: Thematique = {
       questions: [
         {
           identifiant: 'gouvernance-connaissance-rgpd-1',
-          'info-bulles': [
-            'gouvernance/cnil.pug',
-          ],
+          'info-bulles': ['gouvernance/cnil.pug'],
         },
       ],
     },
     {
-      questions: [{ identifiant: 'gouvernance-connaissance-rgpd-2',
-      'info-bulles': [
-        'gouvernance/utilisation-donnees-personnelles.pug',
+      questions: [
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-2',
+          'info-bulles': ['gouvernance/utilisation-donnees-personnelles.pug'],
+        },
       ],
-       }],
     },
     {
       questions: [
         {
           identifiant: 'gouvernance-exigence-cyber-securite-presta',
-          'info-bulles': ['gouvernance/contrat-prestataires.pug'],
+          'info-bulles': [
+            'gouvernance/contrat-prestataires.pug',
+            'gouvernance/contrat-prestataires-si-industriels.pug',
+          ],
         },
         {
           identifiant:
