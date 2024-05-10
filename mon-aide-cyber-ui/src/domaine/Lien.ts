@@ -24,10 +24,3 @@ export type Action =
   | 'restitution-pdf'
   | 'se-connecter'
   | 'se-deconnecter';
-new Map([
-  ['afficher-diagnostic', 'Afficher le diagnostic'],
-  ['afficher-profil', 'Mon profil'],
-  ['afficher-tableau-de-bord', 'Mes diagnostics'],
-  ['se-connecter', 'Se connecter'],
-  ['se-deconnecter', 'Se déconnecter'],
-]);
