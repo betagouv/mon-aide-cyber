@@ -13,7 +13,7 @@ export const ComposantMenuUtilisateur = ({
 }: ProprietesMenuUtilisateur) => {
   const macapi = useMACAPI();
   const navigationMAC = useNavigationMAC();
-  const { showBoundary } = useErrorBoundary();
+  const { showBoundary, resetBoundary } = useErrorBoundary();
   const [boutonAfficherMonProfil, setBoutonAfficherMonProfil] =
     useState<ReactElement>(<></>);
   const [boutonAfficherTableauDeBord, setBoutonAfficherTableauDeBord] =
@@ -26,6 +26,7 @@ export const ComposantMenuUtilisateur = ({
   }
 
   const deconnecter = useCallback(() => {
+    resetBoundary();
     macapi
       .appelle<void>(
         constructeurParametresAPI()
@@ -36,14 +37,15 @@ export const ComposantMenuUtilisateur = ({
       )
       .then(() => navigationMAC.retourAccueil())
       .catch((erreur) => showBoundary(erreur));
-  }, [macapi, navigationMAC, showBoundary]);
+  }, [macapi, navigationMAC, resetBoundary, showBoundary]);
 
   const afficherProfil = useCallback(() => {
+    resetBoundary();
     navigationMAC.navigue(
       new MoteurDeLiens(navigationMAC.etat),
       'afficher-profil',
     );
-  }, [navigationMAC]);
+  }, [navigationMAC, resetBoundary]);
 
   useEffect(() => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
@@ -57,11 +59,12 @@ export const ComposantMenuUtilisateur = ({
   }, [afficherProfil, navigationMAC.etat]);
 
   const afficherTableauDeBord = useCallback(() => {
+    resetBoundary();
     navigationMAC.navigue(
       new MoteurDeLiens(navigationMAC.etat),
       'afficher-tableau-de-bord',
     );
-  }, [navigationMAC]);
+  }, [navigationMAC, resetBoundary]);
 
   useEffect(() => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
