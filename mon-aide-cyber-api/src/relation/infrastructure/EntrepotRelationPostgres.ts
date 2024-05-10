@@ -97,10 +97,16 @@ export class EntrepotRelationPostgres
   }
 
   relationExiste(
-    _relation: Relation,
-    _utilisateur: Utilisateur,
-    _objet: Objet,
+    relation: Relation,
+    utilisateur: Utilisateur,
+    objet: Objet,
   ): Promise<boolean> {
-    return Promise.resolve(false);
+    return this.knex
+      .from(this.nomTable())
+      .whereRaw("(donnees->'utilisateur') @> :utilisateur", { utilisateur })
+      .andWhereRaw("(donnees->>'relation') = ?", relation)
+      .andWhereRaw("(donnees->'objet') @> :objet", { objet })
+      .select(`${this.nomTable()}.*`)
+      .then((lignes) => lignes.length > 0);
   }
 }

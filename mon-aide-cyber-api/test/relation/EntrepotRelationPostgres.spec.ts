@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
   Tuple,
   unObjet,
@@ -107,5 +107,31 @@ describe('Entrepot Relation Postgres', () => {
       );
 
     expect(tuplesRecus).toStrictEqual<Tuple[]>([premierTuple, deuxiemeTuple]);
+  });
+
+  it('Vérifie l’existance d’une relation', async () => {
+    const utilisateur = unUtilisateur()
+      .avecIdentifiant(crypto.randomUUID())
+      .deTypeAidant()
+      .construis();
+    const tuple = unTuple()
+      .avecRelationInitiateur()
+      .avecUtilisateur(utilisateur)
+      .avecObjet(
+        unObjet()
+          .avecIdentifiant(crypto.randomUUID())
+          .deTypeDiagnostic()
+          .construis(),
+      )
+      .construis();
+    await new EntrepotRelationPostgres().persiste(tuple);
+
+    expect(
+      await new EntrepotRelationPostgres().relationExiste(
+        tuple.relation,
+        tuple.utilisateur,
+        tuple.objet,
+      ),
+    ).toBe(true);
   });
 });
