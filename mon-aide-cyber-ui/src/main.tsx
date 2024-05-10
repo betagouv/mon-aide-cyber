@@ -28,11 +28,11 @@ import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <FournisseurMatomo>
-      <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-        <BrowserRouter>
-          <FournisseurMacAPI>
-            <FournisseurNavigationMAC>
-              <FournisseurAuthentification>
+      <BrowserRouter>
+        <FournisseurMacAPI>
+          <FournisseurNavigationMAC>
+            <FournisseurAuthentification>
+              <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
                 <PortailModale>
                   <Routes>
                     <Route path="/" element={<Accueil />} />
@@ -101,11 +101,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     </Route>
                   </Routes>
                 </PortailModale>
-              </FournisseurAuthentification>
-            </FournisseurNavigationMAC>
-          </FournisseurMacAPI>
-        </BrowserRouter>
-      </ErrorBoundary>
+              </ErrorBoundary>
+            </FournisseurAuthentification>
+          </FournisseurNavigationMAC>
+        </FournisseurMacAPI>
+      </BrowserRouter>
     </FournisseurMatomo>
   </React.StrictMode>,
 );

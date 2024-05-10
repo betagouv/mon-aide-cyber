@@ -86,3 +86,12 @@ h5 {
   font-family: 'Marianne ExtraBold';
   font-weight: 800;
 }
+
+.composant-erreur {
+  div {
+    --ul-type: none;
+    --ol-type: none;
+    --ul-start: 0;
+    --ol-start: 0;
+  }
+}
