@@ -47,4 +47,7 @@ Les tests sont lancés manuellement et nécessitent une première installation d
 
 ### mon-aide-cyber-ui
 
-- `VITE_ACTIVATION_LANCEMENT_DIAGNOSTIC` à true pour pouvoir afficher le bouton de lancement
+- `VITE_INFORMATION_A_AFFICHER` à true pour pouvoir afficher le message pour accéder à la plateforme de production sur la page de connexion
+- `VITE_MAC_URL_OFFICIELLE` URL vers l’environnement cible lorsque l’on affiche le message pour accéder à la plateforme de production sur la page de connexion
+- `VITE_MATOMO_SITE_ID` identifiant de l’instance matomo
+- `VITE_MATOMO_URL` URL du script Matomo suivant l’environnement désiré (`dev`, `staging`, `live`)
