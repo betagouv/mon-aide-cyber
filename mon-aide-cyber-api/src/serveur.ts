@@ -58,6 +58,8 @@ const creeApp = (config: ConfigurationServeur) => {
     }),
   );
 
+  app.disable('x-powered-by');
+
   if (config.avecProtectionCsrf)
     app.use(csrf({ blocklist: ENDPOINTS_SANS_CSRF }));
 
