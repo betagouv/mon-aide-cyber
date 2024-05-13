@@ -25,6 +25,7 @@ type ProprietesAutoCompletion<T extends object | string> = {
   surSaisie: (valeur: T | string) => void;
   valeurSaisie: T;
   suggestionsInitiales: T[];
+  clefsFiltrage?: (keyof T)[];
 };
 
 export const AutoCompletion = <T extends object | string>(
@@ -33,7 +34,11 @@ export const AutoCompletion = <T extends object | string>(
   const referenceConteneur = useRef<HTMLDivElement | null>(null);
   const [etat, envoie] = useReducer(
     reducteurAutoCompletion<T>(),
-    initialiseEtatAutoCompletion<T>()(proprietes.nom, proprietes.valeurSaisie)
+    initialiseEtatAutoCompletion<T>()(
+      proprietes.nom,
+      proprietes.valeurSaisie,
+      proprietes.clefsFiltrage
+    )
   );
   const [suggestionsEnCoursDeChargement, setSuggestionsEnCoursDeChargement] =
     useState(true);
