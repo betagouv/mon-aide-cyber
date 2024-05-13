@@ -209,7 +209,11 @@ const ComposantQuestionListe = ({
   }, [actions, etatReponse, macapi, question, reponseQuestionEnvoyee]);
 
   return (
-    <div className={`fr-select-group ${!numeroQuestion ? 'fr-pt-2w' : ''}`}>
+    <div
+      className={`fr-select-group ${
+        !numeroQuestion ? 'fr-pt-2w' : ''
+      } fr-col-12`}
+    >
       <label className="fr-label" htmlFor={`select-${question.identifiant}`}>
         <h5>
           {numeroQuestion ? `${numeroQuestion}. ` : ''}
@@ -223,12 +227,13 @@ const ComposantQuestionListe = ({
         }
         surSelection={(reponse) => surSelection(reponse)}
         surSaisie={(reponse) => surSaisie(reponse)}
-        valeur={
+        valeurSaisie={
           question.reponsesPossibles.find(
             (rep) => rep.identifiant === etatReponse.valeur()
           ) || ({} as ReponsePossible)
         }
-        valeurs={question.reponsesPossibles}
+        suggestionsInitiales={question.reponsesPossibles}
+        clefsFiltrage={['libelle']}
       />
     </div>
   );
