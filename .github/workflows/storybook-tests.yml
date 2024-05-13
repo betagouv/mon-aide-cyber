@@ -1,7 +1,5 @@
 name: 'Tests MAC UI'
 on: push
-env:
-  VITE_ACTIVATION_LANCEMENT_DIAGNOSTIC: true
 jobs:
   test:
     timeout-minutes: 60
