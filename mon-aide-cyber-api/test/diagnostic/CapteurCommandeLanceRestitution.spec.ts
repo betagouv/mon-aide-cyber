@@ -147,7 +147,11 @@ describe('Capteur de lancement de la restitution', () => {
       identifiant: diagnostic.identifiant,
       type: 'RESTITUTION_LANCEE',
       date: maintenant,
-      corps: { identifiantDiagnostic: diagnostic.identifiant },
+      corps: {
+        identifiantDiagnostic: diagnostic.identifiant,
+        indicateurs: {},
+        mesures: [],
+      },
     });
   });
 
