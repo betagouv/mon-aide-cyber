@@ -1,7 +1,7 @@
 import { CapteurCommande, Commande } from '../domaine/commande';
 import { Entrepots } from '../domaine/Entrepots';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
-import { genereLaRestitution } from './Diagnostic';
+import { genereLaRestitution, MesurePriorisee } from './Diagnostic';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
 import crypto from 'crypto';
@@ -37,7 +37,15 @@ export class CapteurCommandeLanceRestitution
             identifiant: diagnostic.identifiant,
             type: 'RESTITUTION_LANCEE',
             date: FournisseurHorloge.maintenant(),
-            corps: { identifiantDiagnostic: diagnostic.identifiant },
+            corps: {
+              identifiantDiagnostic: diagnostic.identifiant,
+              ...(diagnostic.restitution?.indicateurs && {
+                indicateurs: diagnostic.restitution?.indicateurs,
+              }),
+              ...(diagnostic.restitution?.mesures && {
+                mesures: diagnostic.restitution.mesures.mesuresPrioritaires,
+              }),
+            },
           }),
       )
       .catch((erreur) =>
@@ -49,5 +57,7 @@ export class CapteurCommandeLanceRestitution
 type RestitutionLancee = Omit<Evenement, 'corps'> & {
   corps: {
     identifiantDiagnostic: crypto.UUID;
+    indicateurs?: { [thematique: string]: { moyennePonderee: number } };
+    mesures?: MesurePriorisee[];
   };
 };
