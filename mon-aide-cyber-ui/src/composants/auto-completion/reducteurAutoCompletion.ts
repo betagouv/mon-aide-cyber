@@ -5,6 +5,7 @@ enum TypeActionAutoCompletion {
   VALEUR_SAISIE = 'VALEUR_SAISIE',
   SUGGESTION_CHOISIE = 'SUGGESTION_CHOISIE',
   CLICK_EN_DEHORS = 'CLICK_EN_DEHORS',
+  BASCULE_AFFICHAGE_VALEURS = 'BASCULE_AFFICHAGE_VALEURS',
 }
 
 export type EtatAutoCompletion<T> = {
@@ -45,9 +46,14 @@ type ActionAutoCompletion<T> =
     }
   | {
       type: TypeActionAutoCompletion.CLICK_EN_DEHORS;
+    }
+  | {
+      type: TypeActionAutoCompletion.BASCULE_AFFICHAGE_VALEURS;
     };
 
 export const reducteurAutoCompletion = <T extends object | string>() => {
+  const basculeVisibilite = (suggestionsVisibles: 'visible' | 'invisible') =>
+    suggestionsVisibles === 'visible' ? 'invisible' : 'visible';
   return (
     etat: EtatAutoCompletion<T>,
     action: ActionAutoCompletion<T>,
@@ -97,6 +103,12 @@ export const reducteurAutoCompletion = <T extends object | string>() => {
     }
 
     switch (action.type) {
+      case TypeActionAutoCompletion.BASCULE_AFFICHAGE_VALEURS:
+        return {
+          ...etat,
+          suggestions: etat.suggestionsInitiales,
+          suggestionsVisibles: basculeVisibilite(etat.suggestionsVisibles),
+        };
       case TypeActionAutoCompletion.CLICK_EN_DEHORS:
         return {
           ...etat,
@@ -268,4 +280,8 @@ export const suggestionChoisie = <T>(
 
 export const surClickEnDehors = <T>(): ActionAutoCompletion<T> => ({
   type: TypeActionAutoCompletion.CLICK_EN_DEHORS,
+});
+
+export const basculeAffichageValeurs = <T>(): ActionAutoCompletion<T> => ({
+  type: TypeActionAutoCompletion.BASCULE_AFFICHAGE_VALEURS,
 });

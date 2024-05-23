@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 import {
+  basculeAffichageValeurs,
   focusEnCours,
   initialiseEtatAutoCompletion,
   suggestionChoisie,
@@ -27,22 +28,23 @@ type ProprietesAutoCompletion<T extends object | string> = {
 };
 
 export const AutoCompletion = <T extends object | string>(
-  proprietes: PropsWithChildren<ProprietesAutoCompletion<T>>,
+  proprietes: PropsWithChildren<ProprietesAutoCompletion<T>>
 ) => {
   const referenceConteneur = useRef<HTMLDivElement | null>(null);
   const [etat, envoie] = useReducer(
     reducteurAutoCompletion<T>(),
-    initialiseEtatAutoCompletion<T>()(proprietes.nom, proprietes.valeurSaisie),
+    initialiseEtatAutoCompletion<T>()(proprietes.nom, proprietes.valeurSaisie)
   );
   const [suggestionsEnCoursDeChargement, setSuggestionsEnCoursDeChargement] =
     useState(true);
+  const [iconeFlecheBas, setIconeFlecheBas] = useState(true);
 
   useEffect(() => {
     if (suggestionsEnCoursDeChargement) {
       envoie(
         suggestionsInitialesChargees({
           suggestionsInitiales: proprietes.suggestionsInitiales,
-        }),
+        })
       );
       setSuggestionsEnCoursDeChargement(false);
     }
@@ -54,6 +56,7 @@ export const AutoCompletion = <T extends object | string>(
       referenceConteneur.current &&
       !referenceConteneur.current.contains(e.target as Node)
     ) {
+      setIconeFlecheBas(true);
       envoie(surClickEnDehors());
     }
   }, []);
@@ -69,15 +72,16 @@ export const AutoCompletion = <T extends object | string>(
   const surSelection = useCallback(
     (valeur: T) => {
       envoie(suggestionChoisie(valeur, proprietes.surSelection));
+      setIconeFlecheBas(!iconeFlecheBas);
     },
-    [proprietes],
+    [iconeFlecheBas, proprietes.surSelection]
   );
 
   const surSaisie = useCallback(
     (valeur: string) => {
       envoie(valeurSaisie(valeur, proprietes.surSaisie));
     },
-    [proprietes],
+    [proprietes]
   );
 
   const surToucheClavierPressee = useCallback((touche: string) => {
@@ -93,7 +97,7 @@ export const AutoCompletion = <T extends object | string>(
         surToucheClavierPressee(touche);
       }
     },
-    [surSelection, surToucheClavierPressee],
+    [surSelection, surToucheClavierPressee]
   );
 
   const liste = (
@@ -111,20 +115,38 @@ export const AutoCompletion = <T extends object | string>(
     </div>
   );
 
+  const surFocusChampDeSaisie = useCallback(() => {
+    envoie(focusEnCours(proprietes.suggestionsInitiales as T[]));
+    envoie(basculeAffichageValeurs());
+    setIconeFlecheBas(!iconeFlecheBas);
+  }, [iconeFlecheBas, proprietes.suggestionsInitiales]);
+
   return (
     <div className="autocomplete fr-col-12" ref={referenceConteneur}>
-      <input
-        className="fr-input"
-        type="text"
-        id={etat.nom}
-        name={etat.nom}
-        onFocus={() =>
-          envoie(focusEnCours(proprietes.suggestionsInitiales as T[]))
-        }
-        onChange={(e) => surSaisie(e.target.value)}
-        onKeyDown={(e) => surToucheClavierPressee(e.key)}
-        value={proprietes.mappeur(etat.valeurSaisie)}
-      />
+      <div className="autocomplete-labellise">
+        <input
+          className="fr-input"
+          type="text"
+          id={etat.nom}
+          name={etat.nom}
+          onFocus={() => surFocusChampDeSaisie()}
+          onChange={(e) => surSaisie(e.target.value)}
+          onKeyDown={(e) => surToucheClavierPressee(e.key)}
+          value={proprietes.mappeur(etat.valeurSaisie)}
+        />
+        <button
+          type="button"
+          className={`autocomplete-labellise-label ${
+            iconeFlecheBas
+              ? `fr-icon-arrow-down-s-line`
+              : `fr-icon-arrow-up-s-line`
+          }`}
+          onClick={(e) => {
+            e.stopPropagation();
+            surFocusChampDeSaisie();
+          }}
+        />
+      </div>
       {liste}
     </div>
   );
