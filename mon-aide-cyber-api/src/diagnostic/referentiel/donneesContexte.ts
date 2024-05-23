@@ -5,7 +5,7 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-cgu-signees',
       libelle:
-        'Avez-vous signé les Conditions Générales d’Utilisation du dispositif MonAideCyber ?',
+        'Avez-vous validé les Conditions Générales d’Utilisation du dispositif MonAideCyber ?',
       poids: 0,
       reponsesPossibles: [
         {
@@ -15,7 +15,7 @@ export const donneesContexte: QuestionsThematique = {
         },
         {
           identifiant: 'contexte-nature-cgu-signe-non',
-          libelle: 'Si non : merci de les signer maintenant',
+          libelle: 'Si non : merci de les valider maintenant',
           ordre: 1,
         },
       ],
