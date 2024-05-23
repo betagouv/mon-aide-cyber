@@ -21,9 +21,12 @@ export const AutoCompletionTexte: Story = {
       return (
         <div>
           <div>
-            <label className="fr-label" htmlFor="faites-un-choix">
-              <span>Faites un choix</span>
-            </label>
+            <div>Auto completion</div>
+            <div>
+              <label className="fr-label" htmlFor="faites-un-choix">
+                <span>Faites un choix</span>
+              </label>
+            </div>
             {story({
               args: {
                 nom: 'faites-un-choix',
@@ -72,7 +75,7 @@ export const AutoCompletionTexte: Story = {
         await waitFor(() =>
           expect(
             canvas.getAllByRole('button').map((button) => button.innerText),
-          ).toStrictEqual(['Ain', 'Aisne']),
+          ).toStrictEqual(['', 'Ain', 'Aisne']),
         );
       },
     );
@@ -142,7 +145,7 @@ export const AutoCompletionTexte: Story = {
           ).toBeInTheDocument(),
         );
 
-        userEvent.click(canvas.getByText(/faites un choix/i));
+        userEvent.click(canvas.getByText(/auto completion/i));
 
         await waitFor(() =>
           expect(
