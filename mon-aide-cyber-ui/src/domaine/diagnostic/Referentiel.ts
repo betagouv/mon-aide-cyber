@@ -15,16 +15,15 @@ export type Thematique = {
 export type Referentiel = {
   [clef: string]: Thematique;
 };
-export type ChoixOptions = {
+export type Suggestions = {
   clefsFiltrage: (keyof Omit<ReponsePossible, 'questions'>)[];
   champsAAfficher: (keyof Omit<ReponsePossible, 'questions'>)[];
 };
 export type TypeDeSaisie =
   | 'choixMultiple'
   | 'choixUnique'
-  | 'saisieLibre'
   | 'liste'
-  | ChoixOptions;
+  | Suggestions;
 export type Format = 'texte' | 'nombre' | undefined;
 export type ReponseMultiple = { identifiant: string; reponses: Set<string> };
 export type ReponseDonnee = {
@@ -37,13 +36,12 @@ export type ReponsePossible = {
   libelle: string;
   ordre: number;
   questions?: QuestionATiroir[];
-  type?: { type: TypeDeSaisie; format?: Format };
 };
 export type Question = {
   identifiant: string;
   libelle: string;
   reponseDonnee: ReponseDonnee;
   reponsesPossibles: ReponsePossible[];
-  type: Exclude<TypeDeSaisie, 'saisieLibre'>;
+  type: TypeDeSaisie;
   'info-bulles'?: string[];
 };

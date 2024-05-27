@@ -19,7 +19,7 @@ type RepresentationQuestion = {
   libelle: string;
   reponseDonnee: RepresentationReponseDonnee;
   reponsesPossibles: RepresentationReponsePossible[];
-  type?: Exclude<RepresentationTypeDeSaisie, 'saisieLibre'>;
+  type?: RepresentationTypeDeSaisie;
 };
 type RepresentationGroupes = {
   numero: number;
@@ -28,7 +28,6 @@ type RepresentationGroupes = {
 export type RepresentationTypeDeSaisie =
   | 'choixMultiple'
   | 'choixUnique'
-  | 'saisieLibre'
   | 'liste';
 type RepresentationThematique = {
   groupes: RepresentationGroupes;

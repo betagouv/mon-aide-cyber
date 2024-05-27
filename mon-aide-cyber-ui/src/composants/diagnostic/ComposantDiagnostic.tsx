@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import {
-  ChoixOptions,
+  Suggestions,
   Question,
   ReponseDonnee,
   ReponsePossible,
@@ -68,23 +68,6 @@ type ProprietesComposantQuestion = {
   reponseDonnee?: ReponseDonnee;
 };
 
-type ProprietesChampsDeSaisie = {
-  identifiant: string;
-};
-
-const ChampsDeSaisie = ({ identifiant }: ProprietesChampsDeSaisie) => {
-  return (
-    <div>
-      <input
-        id={`asaisir-${identifiant}`}
-        name={identifiant}
-        type="text"
-        required={true}
-      />
-    </div>
-  );
-};
-
 type ProprietesComposantReponsePossible = {
   identifiantQuestion: string;
   reponsePossible: ReponsePossible;
@@ -96,13 +79,6 @@ type ProprietesComposantReponsePossible = {
 const ComposantReponsePossible = (
   proprietes: PropsWithChildren<ProprietesComposantReponsePossible>,
 ) => {
-  const champsASaisir =
-    proprietes.reponsePossible.type?.type === 'saisieLibre' ? (
-      <ChampsDeSaisie identifiant={proprietes.reponsePossible.identifiant} />
-    ) : (
-      ''
-    );
-
   return (
     <div
       className={`fr-${proprietes.typeDeSaisie}-group mac-${proprietes.typeDeSaisie}-group`}
@@ -123,7 +99,6 @@ const ComposantReponsePossible = (
       >
         {proprietes.reponsePossible.libelle}
       </label>
-      <div>{champsASaisir}</div>
       {proprietes.children}
     </div>
   );
@@ -180,11 +155,11 @@ const ComposantQuestionListe = ({
   const clefsFiltrage: (keyof ReponsePossible)[] =
     question.type === 'liste'
       ? ['libelle']
-      : (question.type as ChoixOptions).clefsFiltrage;
+      : (question.type as Suggestions).clefsFiltrage;
   const champsAAfficher: (keyof ReponsePossible)[] =
     question.type === 'liste'
       ? ['libelle']
-      : (question.type as ChoixOptions).champsAAfficher;
+      : (question.type as Suggestions).champsAAfficher;
 
   const surSelection = useCallback(
     (reponse: ReponsePossible) => {
@@ -502,8 +477,8 @@ export const ComposantDiagnostic = ({
     </nav>
   );
 
-  const estUneListe = (type: TypeDeSaisie): type is ChoixOptions | 'liste' => {
-    const choixOptions = type as ChoixOptions;
+  const estUneListe = (type: TypeDeSaisie): type is Suggestions | 'liste' => {
+    const choixOptions = type as Suggestions;
     return (
       type === 'liste' ||
       (!!choixOptions.champsAAfficher && !!choixOptions.clefsFiltrage)
