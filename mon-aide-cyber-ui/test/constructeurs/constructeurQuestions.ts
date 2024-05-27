@@ -15,7 +15,7 @@ class ConstructeurQuestion implements Constructeur<Question> {
   protected identifiant = faker.string.alpha(10);
   protected libelle = faker.word.words().concat(' ?');
   protected reponsesPossibles: ReponsePossible[] = [];
-  protected type: Exclude<TypeDeSaisie, 'saisieLibre'> = 'choixUnique';
+  protected type: TypeDeSaisie = 'choixUnique';
   private reponseDonnee: ReponseDonnee = {
     valeur: null,
     reponses: [],
@@ -77,7 +77,7 @@ class ConstructeurQuestionTiroir implements Constructeur<QuestionATiroir> {
   protected identifiant = faker.string.alpha(10);
   protected libelle = faker.word.words().concat(' ?');
   protected reponsesPossibles: ReponsePossible[] = [];
-  protected type: Exclude<TypeDeSaisie, 'saisieLibre'> = 'choixMultiple';
+  protected type: TypeDeSaisie = 'choixMultiple';
 
   avecLibelle(libelle: string): ConstructeurQuestionTiroir {
     this.identifiant = aseptise(libelle);

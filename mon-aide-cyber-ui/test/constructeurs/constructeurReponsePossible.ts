@@ -29,11 +29,6 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     return this;
   }
 
-  auFormatTexteDeSaisieLibre(): ConstructeurReponsePossible {
-    this.type = { type: 'saisieLibre', format: 'texte' };
-    return this;
-  }
-
   enPosition(ordre: number): ConstructeurReponsePossible {
     this.ordre = ordre;
     return this;
