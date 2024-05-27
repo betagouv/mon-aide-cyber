@@ -15,11 +15,16 @@ export type Thematique = {
 export type Referentiel = {
   [clef: string]: Thematique;
 };
+export type ChoixOptions = {
+  clefsFiltrage: (keyof Omit<ReponsePossible, 'questions'>)[];
+  champsAAfficher: (keyof Omit<ReponsePossible, 'questions'>)[];
+};
 export type TypeDeSaisie =
   | 'choixMultiple'
   | 'choixUnique'
   | 'saisieLibre'
-  | 'liste';
+  | 'liste'
+  | ChoixOptions;
 export type Format = 'texte' | 'nombre' | undefined;
 export type ReponseMultiple = { identifiant: string; reponses: Set<string> };
 export type ReponseDonnee = {
