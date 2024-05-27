@@ -37,28 +37,6 @@ const diagnosticAvecUneQuestion = unDiagnostic()
       .construis(),
   )
   .construis();
-const identifiantChampsDeSaise = '19aea878-6593-4b2e-b092-678777270d31';
-const diagnosticAvecUnChampsDeSaisie = unDiagnostic()
-  .avecIdentifiant(identifiantChampsDeSaise)
-  .avecUnReferentiel(
-    unReferentiel()
-      .avecUneQuestion(
-        uneQuestionAChoixUnique()
-          .avecLibelle('Quelle entreprise êtes-vous ?')
-          .avecDesReponses([
-            uneReponsePossible()
-              .avecLibelle('Entreprise privée (ex. TPE, PME, ETI)')
-              .construis(),
-            uneReponsePossible()
-              .avecLibelle('Autre')
-              .auFormatTexteDeSaisieLibre()
-              .construis(),
-          ])
-          .construis(),
-      )
-      .construis(),
-  )
-  .construis();
 const identifiantPlusieursQuestions = '684a9219-83b2-40f5-9752-17675aa00b22';
 const diagnosticAvecPlusieursQuestions = unDiagnostic()
   .avecIdentifiant(identifiantPlusieursQuestions)
@@ -111,11 +89,7 @@ const diagnosticAvecReponseEntrainantQuestion = unDiagnostic()
               .avecUneQuestion(
                 uneQuestionTiroirAChoixMultiple()
                   .avecNReponses(4)
-                  .avecDesReponses([
-                    uneReponsePossible()
-                      .auFormatTexteDeSaisieLibre()
-                      .construis(),
-                  ])
+                  .avecDesReponses([uneReponsePossible().construis()])
                   .construis(),
               )
               .construis(),
@@ -156,7 +130,6 @@ const unDiagnosticAvecQuestionTiroirAChoixUnique = unDiagnostic()
 
 const entrepotMemoire = new ServeurMACMemoire();
 entrepotMemoire.persiste(diagnosticAvecUneQuestion);
-entrepotMemoire.persiste(diagnosticAvecUnChampsDeSaisie);
 entrepotMemoire.persiste(diagnosticAvecPlusieursQuestions);
 entrepotMemoire.persiste(diagnosticAvecQuestionSousFormeDeListeDeroulante);
 entrepotMemoire.persiste(diagnosticAvecReponseEntrainantQuestion);
@@ -218,17 +191,6 @@ export const QuestionDiagnostic: Story = {
   },
 };
 
-export const AfficheQuestionDiagnosticAvecChampsSaisie: Story = {
-  name: 'Affiche une question avec plusieurs réponses dont un champs de saisie pour la réponse',
-  args: { idDiagnostic: identifiantChampsDeSaise },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    expect(
-      await waitFor(() => canvas.getByRole('textbox')),
-    ).toBeInTheDocument();
-  },
-};
 export const AfficheDiagnosticAvecPlusieursQuestions: Story = {
   name: 'Affiche plusieurs questions',
   args: { idDiagnostic: identifiantPlusieursQuestions },
@@ -291,9 +253,6 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
       ),
     ).toBeInTheDocument();
     expect(await waitFor(() => canvas.getAllByRole('checkbox').length)).toBe(7);
-    expect(
-      await waitFor(() => canvas.getByRole('textbox')),
-    ).toBeInTheDocument();
   },
 };
 

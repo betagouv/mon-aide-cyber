@@ -27,7 +27,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
   avecUneQuestionEtDesReponses(
     question: {
       libelle: string;
-      type: Exclude<TypeDeSaisie, 'aCocher' | 'saisieLibre'>;
+      type: TypeDeSaisie;
     },
     reponsePossibles: ReponsePossible[] = [],
   ): ConstructeurReferentiel {
@@ -43,7 +43,6 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
         ordre: reponse.ordre !== undefined ? reponse.ordre : index,
         libelle: reponse.libelle,
         identifiant: faker.string.alpha(10),
-        type: reponse.type,
       })),
       type: question.type,
     });
