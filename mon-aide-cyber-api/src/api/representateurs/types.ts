@@ -75,11 +75,16 @@ export type RepresentationThematique = {
 export type RepresentationReferentiel = {
   [clef: string]: RepresentationThematique;
 };
+type ChoixOptions = {
+  clefsFiltrage: (keyof Omit<RepresentationReponsePossible, 'questions'>)[];
+  champsAAfficher: (keyof Omit<RepresentationReponsePossible, 'questions'>)[];
+};
 export type TypeDeSaisie =
   | 'choixMultiple'
   | 'choixUnique'
   | 'liste'
-  | 'saisieLibre';
+  | 'saisieLibre'
+  | ChoixOptions;
 export type ReponseATranscrire = {
   identifiant: string;
   question?: QuestionATranscrire | undefined;
