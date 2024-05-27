@@ -34,7 +34,10 @@ export const transcripteurContexte: Thematique = {
         },
         {
           identifiant: 'contexte-departement-tom-siege-social',
-          type: 'liste',
+          type: {
+            champsAAfficher: ['ordre', 'libelle'],
+            clefsFiltrage: ['ordre', 'libelle'],
+          },
         },
       ],
     },
