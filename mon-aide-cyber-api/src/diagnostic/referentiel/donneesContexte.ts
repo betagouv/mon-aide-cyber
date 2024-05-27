@@ -44,7 +44,7 @@ export const donneesContexte: QuestionsThematique = {
         },
         {
           identifiant: 'contexte-nature-organisation-autre',
-          libelle: 'Autre : préciser',
+          libelle: 'Autre',
           ordre: 3,
         },
       ],
