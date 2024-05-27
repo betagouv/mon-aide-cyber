@@ -43,7 +43,6 @@ export class RepresentationGroupee {
                 const reponsesPossibles = trouveReponsesPossibles(
                   question,
                   this.transcripteur,
-                  questionATranscrire,
                 );
                 const { autresReponses, reste } =
                   extraisLesChampsDeLaQuestion(question);
@@ -83,7 +82,7 @@ export class RepresentationGroupee {
     representations: RepresentationGroupes,
     questionsThematique: QuestionsThematique,
     clef: string,
-  ) {
+  ): RepresentationGroupes {
     const tousLesIdentifiants = representations.flatMap((representation) =>
       representation.questions.map((question) => question.identifiant),
     );
@@ -102,7 +101,6 @@ export class RepresentationGroupee {
       const reponsesPossibles = trouveReponsesPossibles(
         question,
         this.transcripteur,
-        questionATranscrire,
       );
       const { autresReponses, reste } = extraisLesChampsDeLaQuestion(question);
       return {

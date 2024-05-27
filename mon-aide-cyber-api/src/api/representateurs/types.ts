@@ -46,7 +46,6 @@ export type RepresentationReponsePossible = {
     | RepresentationQuestionChoixUnique
     | RepresentationQuestionChoixMultiple
   )[];
-  type?: { type: TypeDeSaisie; format: Format };
 };
 type RepresentationReponseDonnee = {
   valeur: string | null;
@@ -57,7 +56,7 @@ export type RepresentationQuestion = {
   libelle: string;
   reponseDonnee: RepresentationReponseDonnee;
   reponsesPossibles: RepresentationReponsePossible[];
-  type?: TypeDeSaisie | undefined;
+  type?: TypeDeSaisie;
   'info-bulles'?: InfoBulle[];
 };
 export type RepresentationQuestionChoixMultiple = RepresentationQuestion & {
@@ -93,11 +92,9 @@ export type TypeDeSaisie =
   | 'choixUnique'
   | 'liste'
   | 'saisieLibre';
-export type Format = 'nombre' | 'texte';
 export type ReponseATranscrire = {
   identifiant: string;
   question?: QuestionATranscrire | undefined;
-  type?: { format: Format; type: TypeDeSaisie };
 };
 type InfoBulle = string;
 export type QuestionATranscrire = {

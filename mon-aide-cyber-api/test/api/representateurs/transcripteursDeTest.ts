@@ -23,11 +23,9 @@ const transcripteurAvecSaisiesLibres = {
               reponses: [
                 {
                   identifiant: 'reponse1',
-                  type: { type: 'saisieLibre', format: 'texte' },
                 },
                 {
                   identifiant: 'reponse2',
-                  type: { type: 'saisieLibre', format: 'nombre' },
                 },
               ],
             },
@@ -62,7 +60,6 @@ const transcripteurQuestionTiroir = {
                     reponses: [
                       {
                         identifiant: 'reponse-3',
-                        type: { type: 'saisieLibre', format: 'texte' },
                       },
                     ],
                   },
