@@ -22,6 +22,7 @@ import { Question, ReponsePossible } from '../../../src/diagnostic/Referentiel';
 import {
   RepresentationDiagnostic,
   RepresentationGroupes,
+  RepresentationReponsePossible,
   RepresentationThematique,
 } from '../../../src/api/representateurs/types';
 import { Diagnostic } from '../../../src/diagnostic/Diagnostic';
@@ -84,39 +85,6 @@ describe('Le représentateur de diagnostic', () => {
         valeur: null,
         reponses: [],
       });
-    });
-    it("définit le type de saisie que doit faire l'utilisateur", () => {
-      const question = uneQuestion()
-        .aChoixUnique('Quelle est la question?', [
-          { identifiant: 'reponse1', libelle: 'réponse 1' },
-          { identifiant: 'reponse2', libelle: 'réponse 2' },
-          { identifiant: 'reponse3', libelle: 'réponse 3' },
-        ])
-        .construis();
-      const diagnostic = unDiagnostic()
-        .avecUnReferentiel(
-          unReferentiel().ajouteUneQuestionAuContexte(question).construis(),
-        )
-        .construis();
-
-      const diagnosticRepresente = representeLeDiagnosticPourLeClient(
-        diagnostic,
-        transcripteurAvecSaisiesLibres,
-      );
-
-      const questionRetournee =
-        diagnosticRepresente.referentiel.contexte.groupes[0].questions[0];
-      const reponsesPossibles = questionRetournee.reponsesPossibles;
-      expect(questionRetournee.type).toBe('choixUnique');
-      expect(reponsesPossibles[0].type).toStrictEqual({
-        type: 'saisieLibre',
-        format: 'texte',
-      });
-      expect(reponsesPossibles[1].type).toStrictEqual({
-        type: 'saisieLibre',
-        format: 'nombre',
-      });
-      expect(reponsesPossibles[2].type).toBeUndefined();
     });
 
     it('définit la manière dont est présentée la question sous forme de liste', () => {
@@ -277,11 +245,10 @@ describe('Le représentateur de diagnostic', () => {
           expect(questionTiroir?.questions?.[0].type).toBe('choixMultiple');
           expect(
             questionTiroir?.questions?.[0].reponsesPossibles[2],
-          ).toMatchObject({
+          ).toStrictEqual<RepresentationReponsePossible>({
             identifiant: 'reponse-3',
             libelle: 'Réponse 3',
             ordre: 2,
-            type: { type: 'saisieLibre', format: 'texte' },
           });
         });
 
@@ -320,11 +287,12 @@ describe('Le représentateur de diagnostic', () => {
           const questionTiroir =
             diagnosticRepresente.referentiel.contexte.groupes[0].questions[0]
               .reponsesPossibles[0]?.questions?.[0];
-          expect(questionTiroir?.reponsesPossibles[0]).toMatchObject({
+          expect(
+            questionTiroir?.reponsesPossibles[0],
+          ).toStrictEqual<RepresentationReponsePossible>({
             identifiant: 'reponse-3',
             libelle: 'Réponse 3',
             ordre: 0,
-            type: { type: 'saisieLibre', format: 'texte' },
           });
         });
         it('avec plusieurs questions à tiroir', () => {

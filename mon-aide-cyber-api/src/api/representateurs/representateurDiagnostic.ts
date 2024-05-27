@@ -64,11 +64,7 @@ const questionTiroirATranscrire = (
         );
       if (questionTiroirATranscrire !== undefined) {
         const reponsesPossibles: RepresentationReponsePossible[] =
-          trouveReponsesPossibles(
-            question,
-            transcripteur,
-            questionTiroirATranscrire,
-          );
+          trouveReponsesPossibles(question, transcripteur);
         return {
           type: question.type,
           identifiant: questionTiroirATranscrire.identifiant,
@@ -96,7 +92,6 @@ const estQuestionATiroir = (
 export const trouveReponsesPossibles = (
   question: QuestionDiagnostic | QuestionATiroir,
   transcripteur: Transcripteur,
-  questionATranscrire: QuestionATranscrire | undefined,
 ): RepresentationReponsePossible[] => {
   return question.reponsesPossibles.map((reponse) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -104,10 +99,6 @@ export const trouveReponsesPossibles = (
     let representationReponsePossible: RepresentationReponsePossible = {
       ...corpsDeReponse,
     } as RepresentationReponsePossible;
-    const reponseATranscrire = trouveReponseATranscrire(
-      reponse.identifiant,
-      questionATranscrire?.reponses,
-    );
     if (estQuestionATiroir(reponse)) {
       const representationQuestionATiroir = questionTiroirATranscrire(
         reponse.questions,
@@ -122,19 +113,8 @@ export const trouveReponsesPossibles = (
     }
     return {
       ...representationReponsePossible,
-      ...(reponseATranscrire?.type && { type: reponseATranscrire?.type }),
     };
   });
-};
-
-const trouveReponseATranscrire = (
-  identifiantReponse: string,
-  reponsesATranscrire: ReponseATranscrire[] | undefined,
-): ReponseATranscrire | undefined => {
-  return reponsesATranscrire?.find(
-    (reponseATranscrire) =>
-      reponseATranscrire?.identifiant === identifiantReponse,
-  );
 };
 
 export const extraisLesChampsDeLaQuestion = (question: QuestionDiagnostic) => {
