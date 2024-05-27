@@ -42,10 +42,7 @@ export type RepresentationReponsePossible = {
   identifiant: string;
   libelle: string;
   ordre: number;
-  questions?: (
-    | RepresentationQuestionChoixUnique
-    | RepresentationQuestionChoixMultiple
-  )[];
+  questions?: RepresentationQuestion[];
 };
 type RepresentationReponseDonnee = {
   valeur: string | null;
@@ -59,18 +56,9 @@ export type RepresentationQuestion = {
   type?: TypeDeSaisie;
   'info-bulles'?: InfoBulle[];
 };
-export type RepresentationQuestionChoixMultiple = RepresentationQuestion & {
-  type?: Exclude<TypeDeSaisie, 'choixUnique'> | undefined;
-};
-type RepresentationQuestionChoixUnique = RepresentationQuestion & {
-  type?: Exclude<TypeDeSaisie, 'choixMultiple'> | undefined;
-};
 export type ElementRepresentationGroupe = {
   numero: number;
-  questions: (
-    | RepresentationQuestionChoixUnique
-    | RepresentationQuestionChoixMultiple
-  )[];
+  questions: RepresentationQuestion[];
 };
 export type RepresentationGroupes = ElementRepresentationGroupe[];
 type StyleThematique = {
