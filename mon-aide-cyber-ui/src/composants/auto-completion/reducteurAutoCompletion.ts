@@ -57,14 +57,14 @@ export const reducteurAutoCompletion = <T extends object | string>() => {
     suggestionsVisibles === 'visible' ? 'invisible' : 'visible';
   return (
     etat: EtatAutoCompletion<T>,
-    action: ActionAutoCompletion<T>
+    action: ActionAutoCompletion<T>,
   ): EtatAutoCompletion<T> => {
     const estUneChaineDeCaractere = (valeur: T | string): valeur is string =>
       typeof valeur === 'string';
 
     const valeurAffichee = (
       valeursFiltrees: T[],
-      valeurSaisie: string
+      valeurSaisie: string,
     ): string | T => {
       if (valeursFiltrees.length === 1) {
         const valeurFiltree = valeursFiltrees[0];
@@ -77,7 +77,7 @@ export const reducteurAutoCompletion = <T extends object | string>() => {
         const valeurTrouvee =
           !estUneChaineDeCaractere(valeurFiltree) &&
           Object.values(valeurFiltree).find(
-            (val) => String(val).toLowerCase() === valeurSaisie.toLowerCase()
+            (val) => String(val).toLowerCase() === valeurSaisie.toLowerCase(),
           );
         return valeurTrouvee ? valeurFiltree : valeurSaisie;
       }
@@ -86,19 +86,19 @@ export const reducteurAutoCompletion = <T extends object | string>() => {
 
     const chaineDeCaractereStrictementEgaleALaValeurSaisie = (
       valeurFiltree: T,
-      valeurSaisie: string
+      valeurSaisie: string,
     ) =>
       estUneChaineDeCaractere(valeurFiltree) &&
       valeurFiltree.toLowerCase() === valeurSaisie.toLowerCase();
 
     function objetDontUnChampAUneValeurStrictementEgalALaValeurSaisie(
       valeurFiltree: T,
-      valeurSaisie: string
+      valeurSaisie: string,
     ) {
       return (
         !estUneChaineDeCaractere(valeurFiltree) &&
         Object.values(valeurFiltree).filter(
-          (val) => String(val).toLowerCase() === valeurSaisie.toLowerCase()
+          (val) => String(val).toLowerCase() === valeurSaisie.toLowerCase(),
         ).length > 0
       );
     }
@@ -128,22 +128,31 @@ export const reducteurAutoCompletion = <T extends object | string>() => {
       case TypeActionAutoCompletion.VALEUR_SAISIE: {
         const valeur = action.valeur;
         const suggestions = etat.suggestionsInitiales.filter((val) => {
+          const commencePar = (
+            valeurAComparer: string,
+            comparaison: string,
+          ) => {
+            const sansAccents = (chaine: string) =>
+              chaine.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
+            return sansAccents(String(valeurAComparer))
+              .toLowerCase()
+              .startsWith(sansAccents(comparaison.toLowerCase()));
+          };
+
           if (estUneChaineDeCaractere(val)) {
-            return val.toLowerCase().startsWith(valeur.toLowerCase());
+            return commencePar(val, valeur);
           }
           if (etat.clefsFiltrage) {
             return (
               Object.values(etat.clefsFiltrage).filter((clef: keyof T) =>
-                String(val[clef])
-                  .toLowerCase()
-                  .startsWith(valeur.toLowerCase())
+                commencePar(val[clef], valeur),
               ).length > 0
             );
           }
           return (
-            Object.values(val).filter((val) =>
-              String(val).toLowerCase().startsWith(valeur.toLowerCase())
-            ).length > 0
+            Object.values(val).filter((val) => commencePar(val, valeur))
+              .length > 0
           );
         });
 
@@ -151,11 +160,11 @@ export const reducteurAutoCompletion = <T extends object | string>() => {
           suggestions.length === 1 &&
           (chaineDeCaractereStrictementEgaleALaValeurSaisie(
             suggestions[0],
-            valeur
+            valeur,
           ) ||
             objetDontUnChampAUneValeurStrictementEgalALaValeurSaisie(
               suggestions[0],
-              valeur
+              valeur,
             ))
         ) {
           action.execute(suggestions[0]);
@@ -219,7 +228,7 @@ export const reducteurAutoCompletion = <T extends object | string>() => {
                 navigation.valeurs.length &&
               !etat.navigationClavierReinitialisee
               ? etat.elementNavigationCourant.index + 1
-              : borne
+              : borne,
           );
         }
         if (action.touche === 'ArrowUp') {
@@ -245,7 +254,7 @@ export const initialiseEtatAutoCompletion =
   (
     nom: string,
     valeurSaisie: T | string,
-    clefsFiltrage?: (keyof T)[]
+    clefsFiltrage?: (keyof T)[],
   ): EtatAutoCompletion<T> => ({
     nom,
     valeurSaisie,
@@ -257,7 +266,7 @@ export const initialiseEtatAutoCompletion =
   });
 
 export const toucheClavierAppuyee = <T>(
-  touche: string
+  touche: string,
 ): ActionAutoCompletion<T> => ({
   type: TypeActionAutoCompletion.TOUCHE_CLAVIER_APPUYEE,
   touche,
@@ -277,7 +286,7 @@ export const suggestionsInitialesChargees = <T>(proprietes: {
 
 export const valeurSaisie = <T>(
   valeur: string,
-  execute: (valeur: T | string) => void
+  execute: (valeur: T | string) => void,
 ): ActionAutoCompletion<T> => ({
   type: TypeActionAutoCompletion.VALEUR_SAISIE,
   valeur,
@@ -286,7 +295,7 @@ export const valeurSaisie = <T>(
 
 export const suggestionChoisie = <T>(
   valeur: T,
-  execute: (valeur: T) => void
+  execute: (valeur: T) => void,
 ): ActionAutoCompletion<T> => ({
   type: TypeActionAutoCompletion.SUGGESTION_CHOISIE,
   valeur,
