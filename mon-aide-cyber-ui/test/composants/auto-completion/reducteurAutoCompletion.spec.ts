@@ -549,52 +549,69 @@ describe('Réducteur Auto complétion', () => {
       expect(appelRecu).toStrictEqual('3');
     });
 
-    it('Réduit les suggestions possibles sur tous les champs de l’objet en étant insensible à la casse', () => {
-      const etatInitial = initialiseEtatAutoCompletion<Test>()(
-        'auto-complétion',
-        '',
-      );
-      let appelRecu = {} as Test;
-      const etat = reducteurAutoCompletion<Test>()(
-        {
-          ...etatInitial,
+    describe('Normalise la recherche et les éléments de suggestion', () => {
+      it('En réduisant les suggestions possibles sur tous les champs de l’objet en étant insensible à la casse', () => {
+        const etatInitial = initialiseEtatAutoCompletion<Test>()(
+          'auto-complétion',
+          '',
+        );
+        let appelRecu = {} as Test;
+        const etat = reducteurAutoCompletion<Test>()(
+          {
+            ...etatInitial,
+            suggestionsInitiales: [
+              { a: 'A', b: 'B', c: 'aC' },
+              { a: 'A', b: 'AB', c: 'AC' },
+              { a: 'C', b: 'B', c: 'D' },
+              { a: 'Da', b: 'BA', c: 'D' },
+            ],
+          },
+          valeurSaisie('a', (valeur) => (appelRecu = valeur as Test)),
+        );
+
+        expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
+          nom: 'auto-complétion',
+          navigationClavierReinitialisee: true,
+          valeurSaisie: 'a',
           suggestionsInitiales: [
             { a: 'A', b: 'B', c: 'aC' },
             { a: 'A', b: 'AB', c: 'AC' },
             { a: 'C', b: 'B', c: 'D' },
             { a: 'Da', b: 'BA', c: 'D' },
           ],
-        },
-        valeurSaisie('a', (valeur) => (appelRecu = valeur as Test)),
-      );
-
-      expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
-        nom: 'auto-complétion',
-        navigationClavierReinitialisee: true,
-        valeurSaisie: 'a',
-        suggestionsInitiales: [
-          { a: 'A', b: 'B', c: 'aC' },
-          { a: 'A', b: 'AB', c: 'AC' },
-          { a: 'C', b: 'B', c: 'D' },
-          { a: 'Da', b: 'BA', c: 'D' },
-        ],
-        suggestions: [
-          { a: 'A', b: 'B', c: 'aC' },
-          { a: 'A', b: 'AB', c: 'AC' },
-        ],
-        suggestionsVisibles: 'visible',
+          suggestions: [
+            { a: 'A', b: 'B', c: 'aC' },
+            { a: 'A', b: 'AB', c: 'AC' },
+          ],
+          suggestionsVisibles: 'visible',
+        });
+        expect(appelRecu).toStrictEqual('a');
       });
-      expect(appelRecu).toStrictEqual('a');
-    });
 
-    it('Réduit les suggestions possibles en prenant en compte les caractère accentués', () => {
-      const etatInitial = initialiseEtatAutoCompletion<Test>()(
-        'auto-complétion',
-        '',
-      );
-      const etat = reducteurAutoCompletion<Test>()(
-        {
-          ...etatInitial,
+      it('En réduisant les suggestions possibles en prenant en compte les caractère accentués', () => {
+        const etatInitial = initialiseEtatAutoCompletion<Test>()(
+          'auto-complétion',
+          '',
+        );
+        const etat = reducteurAutoCompletion<Test>()(
+          {
+            ...etatInitial,
+            suggestionsInitiales: [
+              { a: 'il', b: 'b', c: 'c' },
+              { a: 'île', b: 'b', c: 'c' },
+              { a: 'ïloise', b: 'b', c: 'c' },
+              { a: 'an', b: 'b', c: 'c' },
+              { a: 'encens', b: 'b', c: 'c' },
+            ],
+          },
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          valeurSaisie('i', (_) => {}),
+        );
+
+        expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
+          nom: 'auto-complétion',
+          navigationClavierReinitialisee: true,
+          valeurSaisie: 'i',
           suggestionsInitiales: [
             { a: 'il', b: 'b', c: 'c' },
             { a: 'île', b: 'b', c: 'c' },
@@ -602,86 +619,87 @@ describe('Réducteur Auto complétion', () => {
             { a: 'an', b: 'b', c: 'c' },
             { a: 'encens', b: 'b', c: 'c' },
           ],
-        },
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        valeurSaisie('i', (_) => {}),
-      );
-
-      expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
-        nom: 'auto-complétion',
-        navigationClavierReinitialisee: true,
-        valeurSaisie: 'i',
-        suggestionsInitiales: [
-          { a: 'il', b: 'b', c: 'c' },
-          { a: 'île', b: 'b', c: 'c' },
-          { a: 'ïloise', b: 'b', c: 'c' },
-          { a: 'an', b: 'b', c: 'c' },
-          { a: 'encens', b: 'b', c: 'c' },
-        ],
-        suggestions: [
-          { a: 'il', b: 'b', c: 'c' },
-          { a: 'île', b: 'b', c: 'c' },
-          { a: 'ïloise', b: 'b', c: 'c' },
-        ],
-        suggestionsVisibles: 'visible',
+          suggestions: [
+            { a: 'il', b: 'b', c: 'c' },
+            { a: 'île', b: 'b', c: 'c' },
+            { a: 'ïloise', b: 'b', c: 'c' },
+          ],
+          suggestionsVisibles: 'visible',
+        });
       });
-    });
 
-    it('Réduit les suggestions en accord avec la clef de filtrage fournie', () => {
-      let appelRecu = '';
-      const suggestionsInitiales = [
-        { identifiant: 'contexte-administration', valeur: 'Administration' },
-        {
-          identifiant: 'contexte-information-et-communication',
-          valeur: 'Information et communication',
-        },
-        { identifiant: 'contexte-enseignement', valeur: 'Enseignement' },
-        { identifiant: 'contexte-transport', valeur: 'Transport' },
-        { identifiant: 'contexte-construction', valeur: 'Construction' },
-      ];
+      it('En réduisant les suggestions en accord avec la clef de filtrage fournie', () => {
+        let appelRecu = '';
+        const suggestionsInitiales = [
+          { identifiant: 'contexte-administration', valeur: 'Administration' },
+          {
+            identifiant: 'contexte-information-et-communication',
+            valeur: 'Information et communication',
+          },
+          { identifiant: 'contexte-enseignement', valeur: 'Enseignement' },
+          { identifiant: 'contexte-transport', valeur: 'Transport' },
+          { identifiant: 'contexte-construction', valeur: 'Construction' },
+        ];
 
-      const etat = reducteurAutoCompletion<{
-        identifiant: string;
-        valeur: string;
-      }>()(
-        {
-          ...etatInitial,
+        const etat = reducteurAutoCompletion<{
+          identifiant: string;
+          valeur: string;
+        }>()(
+          {
+            ...etatInitial,
+            clefsFiltrage: ['valeur'],
+            elementNavigationCourant: undefined,
+            navigationClavierReinitialisee: false,
+            suggestionsInitiales,
+            suggestions: suggestionsInitiales,
+            valeurSaisie: 'Enseignement',
+          },
+          valeurSaisie('co', (valeur) => (appelRecu = valeur as string)),
+        );
+
+        expect(etat).toStrictEqual<
+          EtatAutoCompletion<{ identifiant: string; valeur: string }>
+        >({
+          nom: 'auto-complétion',
           clefsFiltrage: ['valeur'],
           elementNavigationCourant: undefined,
-          navigationClavierReinitialisee: false,
-          suggestionsInitiales,
-          suggestions: suggestionsInitiales,
-          valeurSaisie: 'Enseignement',
-        },
-        valeurSaisie('co', (valeur) => (appelRecu = valeur as string)),
-      );
-
-      expect(etat).toStrictEqual<
-        EtatAutoCompletion<{ identifiant: string; valeur: string }>
-      >({
-        nom: 'auto-complétion',
-        clefsFiltrage: ['valeur'],
-        elementNavigationCourant: undefined,
-        navigationClavierReinitialisee: true,
-        valeurSaisie: 'co',
-        suggestionsInitiales: suggestionsInitiales,
-        suggestions: [
-          { identifiant: 'contexte-construction', valeur: 'Construction' },
-        ],
-        suggestionsVisibles: 'visible',
+          navigationClavierReinitialisee: true,
+          valeurSaisie: 'co',
+          suggestionsInitiales: suggestionsInitiales,
+          suggestions: [
+            { identifiant: 'contexte-construction', valeur: 'Construction' },
+          ],
+          suggestionsVisibles: 'visible',
+        });
+        expect(appelRecu).toStrictEqual('co');
       });
-      expect(appelRecu).toStrictEqual('co');
-    });
 
-    it('Réduit les suggestions possibles en prenant en compte les caractères accentués et une clef de filtrage fournie', () => {
-      const etatInitial = initialiseEtatAutoCompletion<Test>()(
-        'auto-complétion',
-        '',
-      );
-      const etat = reducteurAutoCompletion<Test>()(
-        {
-          ...etatInitial,
+      it('En réduisant les suggestions possibles en prenant en compte les caractères accentués et une clef de filtrage fournie', () => {
+        const etatInitial = initialiseEtatAutoCompletion<Test>()(
+          'auto-complétion',
+          '',
+        );
+        const etat = reducteurAutoCompletion<Test>()(
+          {
+            ...etatInitial,
+            clefsFiltrage: ['a', 'b'],
+            suggestionsInitiales: [
+              { a: 'il', b: 'b', c: 'c' },
+              { a: 'a', b: 'île', c: 'c' },
+              { a: 'ïloise', b: 'b', c: 'c' },
+              { a: 'an', b: 'b', c: 'île' },
+              { a: 'encens', b: 'b', c: 'c' },
+            ],
+          },
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          valeurSaisie('í', (_) => {}),
+        );
+
+        expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
+          nom: 'auto-complétion',
           clefsFiltrage: ['a', 'b'],
+          navigationClavierReinitialisee: true,
+          valeurSaisie: 'í',
           suggestionsInitiales: [
             { a: 'il', b: 'b', c: 'c' },
             { a: 'a', b: 'île', c: 'c' },
@@ -689,33 +707,58 @@ describe('Réducteur Auto complétion', () => {
             { a: 'an', b: 'b', c: 'île' },
             { a: 'encens', b: 'b', c: 'c' },
           ],
-        },
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        valeurSaisie('í', (_) => {}),
-      );
+          suggestions: [
+            { a: 'il', b: 'b', c: 'c' },
+            { a: 'a', b: 'île', c: 'c' },
+            { a: 'ïloise', b: 'b', c: 'c' },
+          ],
+          suggestionsVisibles: 'visible',
+        });
+      });
 
-      expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
-        nom: 'auto-complétion',
-        clefsFiltrage: ['a', 'b'],
-        navigationClavierReinitialisee: true,
-        valeurSaisie: 'í',
-        suggestionsInitiales: [
-          { a: 'il', b: 'b', c: 'c' },
-          { a: 'a', b: 'île', c: 'c' },
-          { a: 'ïloise', b: 'b', c: 'c' },
-          { a: 'an', b: 'b', c: 'île' },
-          { a: 'encens', b: 'b', c: 'c' },
-        ],
-        suggestions: [
-          { a: 'il', b: 'b', c: 'c' },
-          { a: 'a', b: 'île', c: 'c' },
-          { a: 'ïloise', b: 'b', c: 'c' },
-        ],
-        suggestionsVisibles: 'visible',
+      it('En réduisant les suggestions possibles en prenant en compte les traits d’union', () => {
+        const etatInitial = initialiseEtatAutoCompletion<Test>()(
+          'auto-complétion',
+          '',
+        );
+        const etat = reducteurAutoCompletion<Test>()(
+          {
+            ...etatInitial,
+            clefsFiltrage: ['a', 'b'],
+            suggestionsInitiales: [
+              { a: 'ile-de-france', b: 'b', c: 'c' },
+              { a: 'ile de ré', b: 'île', c: 'c' },
+              { a: 'ïloise', b: 'b', c: 'c' },
+              { a: 'an', b: 'b', c: 'île' },
+              { a: 'encens', b: 'b', c: 'c' },
+            ],
+          },
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          valeurSaisie('ile de', (_) => {}),
+        );
+
+        expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
+          nom: 'auto-complétion',
+          clefsFiltrage: ['a', 'b'],
+          navigationClavierReinitialisee: true,
+          valeurSaisie: 'ile de',
+          suggestionsInitiales: [
+            { a: 'ile-de-france', b: 'b', c: 'c' },
+            { a: 'ile de ré', b: 'île', c: 'c' },
+            { a: 'ïloise', b: 'b', c: 'c' },
+            { a: 'an', b: 'b', c: 'île' },
+            { a: 'encens', b: 'b', c: 'c' },
+          ],
+          suggestions: [
+            { a: 'ile-de-france', b: 'b', c: 'c' },
+            { a: 'ile de ré', b: 'île', c: 'c' },
+          ],
+          suggestionsVisibles: 'visible',
+        });
       });
     });
 
-    it('filtre les valeurs suivant les clefs de filtrages fournie', () => {
+    it('Filtre les valeurs suivant les clefs de filtrages fournie', () => {
       let appelRecu = '';
       const valeurs = [
         { code: '33', nom: 'Gironde' },

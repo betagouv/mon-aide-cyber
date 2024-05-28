@@ -127,19 +127,20 @@ export const reducteurAutoCompletion = <T extends object | string>() => {
       }
       case TypeActionAutoCompletion.VALEUR_SAISIE: {
         const valeur = action.valeur;
-        const suggestions = etat.suggestionsInitiales.filter((val) => {
-          const commencePar = (
-            valeurAComparer: string,
-            comparaison: string,
-          ) => {
-            const sansAccents = (chaine: string) =>
-              chaine.normalize('NFD').replace(/\p{Diacritic}/gu, '');
-
-            return sansAccents(String(valeurAComparer))
+        const commencePar = (valeurAComparer: string, comparaison: string) => {
+          const normalise = (chaine: string) =>
+            chaine
               .toLowerCase()
-              .startsWith(sansAccents(comparaison.toLowerCase()));
-          };
+              .normalize('NFD')
+              .replace(/\p{Diacritic}/gu, '')
+              .replace('-', ' ');
 
+          return normalise(String(valeurAComparer)).startsWith(
+            normalise(comparaison),
+          );
+        };
+
+        const suggestions = etat.suggestionsInitiales.filter((val) => {
           if (estUneChaineDeCaractere(val)) {
             return commencePar(val, valeur);
           }
