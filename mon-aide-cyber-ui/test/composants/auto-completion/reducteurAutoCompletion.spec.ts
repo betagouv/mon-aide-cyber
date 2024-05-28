@@ -366,6 +366,26 @@ describe('Réducteur Auto complétion', () => {
       expect(appelRecu).toStrictEqual('a');
     });
 
+    it('Réduit les suggestions possibles en prenant en compte les caractère accentués', () => {
+      const etat = reducteurAutoCompletion<string>()(
+        {
+          ...etatInitial,
+          suggestionsInitiales: ['il', 'île', 'ïloise', 'an', 'encens'],
+        },
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        valeurSaisie('i', (_) => {}),
+      );
+
+      expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
+        nom: 'auto-complétion',
+        navigationClavierReinitialisee: true,
+        valeurSaisie: 'i',
+        suggestionsInitiales: ['il', 'île', 'ïloise', 'an', 'encens'],
+        suggestions: ['il', 'île', 'ïloise'],
+        suggestionsVisibles: 'visible',
+      });
+    });
+
     it('N’exécute pas la fonction sur les valeurs filtrées', () => {
       let appelRecu = '';
       const etat = reducteurAutoCompletion<string>()(
@@ -567,6 +587,46 @@ describe('Réducteur Auto complétion', () => {
       expect(appelRecu).toStrictEqual('a');
     });
 
+    it('Réduit les suggestions possibles en prenant en compte les caractère accentués', () => {
+      const etatInitial = initialiseEtatAutoCompletion<Test>()(
+        'auto-complétion',
+        '',
+      );
+      const etat = reducteurAutoCompletion<Test>()(
+        {
+          ...etatInitial,
+          suggestionsInitiales: [
+            { a: 'il', b: 'b', c: 'c' },
+            { a: 'île', b: 'b', c: 'c' },
+            { a: 'ïloise', b: 'b', c: 'c' },
+            { a: 'an', b: 'b', c: 'c' },
+            { a: 'encens', b: 'b', c: 'c' },
+          ],
+        },
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        valeurSaisie('i', (_) => {}),
+      );
+
+      expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
+        nom: 'auto-complétion',
+        navigationClavierReinitialisee: true,
+        valeurSaisie: 'i',
+        suggestionsInitiales: [
+          { a: 'il', b: 'b', c: 'c' },
+          { a: 'île', b: 'b', c: 'c' },
+          { a: 'ïloise', b: 'b', c: 'c' },
+          { a: 'an', b: 'b', c: 'c' },
+          { a: 'encens', b: 'b', c: 'c' },
+        ],
+        suggestions: [
+          { a: 'il', b: 'b', c: 'c' },
+          { a: 'île', b: 'b', c: 'c' },
+          { a: 'ïloise', b: 'b', c: 'c' },
+        ],
+        suggestionsVisibles: 'visible',
+      });
+    });
+
     it('Réduit les suggestions en accord avec la clef de filtrage fournie', () => {
       let appelRecu = '';
       const suggestionsInitiales = [
@@ -611,6 +671,48 @@ describe('Réducteur Auto complétion', () => {
         suggestionsVisibles: 'visible',
       });
       expect(appelRecu).toStrictEqual('co');
+    });
+
+    it('Réduit les suggestions possibles en prenant en compte les caractères accentués et une clef de filtrage fournie', () => {
+      const etatInitial = initialiseEtatAutoCompletion<Test>()(
+        'auto-complétion',
+        '',
+      );
+      const etat = reducteurAutoCompletion<Test>()(
+        {
+          ...etatInitial,
+          clefsFiltrage: ['a', 'b'],
+          suggestionsInitiales: [
+            { a: 'il', b: 'b', c: 'c' },
+            { a: 'a', b: 'île', c: 'c' },
+            { a: 'ïloise', b: 'b', c: 'c' },
+            { a: 'an', b: 'b', c: 'île' },
+            { a: 'encens', b: 'b', c: 'c' },
+          ],
+        },
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        valeurSaisie('í', (_) => {}),
+      );
+
+      expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
+        nom: 'auto-complétion',
+        clefsFiltrage: ['a', 'b'],
+        navigationClavierReinitialisee: true,
+        valeurSaisie: 'í',
+        suggestionsInitiales: [
+          { a: 'il', b: 'b', c: 'c' },
+          { a: 'a', b: 'île', c: 'c' },
+          { a: 'ïloise', b: 'b', c: 'c' },
+          { a: 'an', b: 'b', c: 'île' },
+          { a: 'encens', b: 'b', c: 'c' },
+        ],
+        suggestions: [
+          { a: 'il', b: 'b', c: 'c' },
+          { a: 'a', b: 'île', c: 'c' },
+          { a: 'ïloise', b: 'b', c: 'c' },
+        ],
+        suggestionsVisibles: 'visible',
+      });
     });
 
     it('filtre les valeurs suivant les clefs de filtrages fournie', () => {
