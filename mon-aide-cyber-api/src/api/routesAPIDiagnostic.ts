@@ -26,6 +26,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     adaptateurDeVerificationDeCGU: cgu,
     adaptateurDeVerificationDeRelations: relations,
     busCommande,
+    processeurs,
   } = configuration;
 
   routes.post(
@@ -121,34 +122,45 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
 
-      const genereRestitution = (
-        restitution: Restitution,
-      ): Promise<Buffer | RestitutionHTML> => {
+      const genereRestitution = (restitution: Restitution): void => {
         if (requete.headers.accept === 'application/pdf') {
-          return configuration.adaptateursRestitution
-            .pdf()
-            .genereRestitution(restitution);
+          processeurs
+            .pdf<Restitution>()
+            .execute(restitution, creerReponsePDF, (message) =>
+              suite(
+                ErreurMAC.cree(
+                  'Génération restitution format PDF',
+                  new Error(message),
+                ),
+              ),
+            );
+        } else {
+          configuration.adaptateursRestitution
+            .html()
+            .genereRestitution(restitution)
+            .then(creerReponseHTML);
         }
-        return configuration.adaptateursRestitution
-          .html()
-          .genereRestitution(restitution);
       };
 
-      const creerReponse = (restitution: Buffer | RestitutionHTML) => {
-        if (requete.headers.accept === 'application/pdf') {
-          reponse.contentType('application/pdf').send(restitution);
-        } else {
+      const creerReponseHTML = (restitution: RestitutionHTML) => {
+        if (requete.headers.accept !== 'application/pdf') {
           const reponseHATEOAS = constructeurActionsHATEOAS()
             .lancerDiagnostic()
             .restituerDiagnostic(id)
             .modifierDiagnostic(id)
             .afficherProfil()
             .construis();
-          const resultat: ReprensentationRestitution = {
+
+          reponse.json({
             ...reponseHATEOAS,
             ...(restitution as RestitutionHTML),
-          };
-          reponse.json(resultat);
+          });
+        }
+      };
+
+      const creerReponsePDF = (restitution: Buffer) => {
+        if (requete.headers.accept === 'application/pdf') {
+          reponse.contentType('application/pdf').send(restitution);
         }
       };
 
@@ -156,7 +168,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         .restitution()
         .lis(id)
         .then((restitution) => genereRestitution(restitution))
-        .then((pdf) => creerReponse(pdf))
         .catch((erreur) =>
           suite(ErreurMAC.cree('Demande la restitution', erreur)),
         );

@@ -24,6 +24,7 @@ import { AdaptateurDeGestionDeCookies } from './adaptateurs/AdaptateurDeGestionD
 import { AdaptateurRelations } from './relation/AdaptateurRelations';
 import CookieSession from 'cookie-session';
 import { AdaptateurDeVerificationDesAcces } from './adaptateurs/AdaptateurDeVerificationDesAcces';
+import { Processeur } from './processus/Processus';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -46,6 +47,9 @@ export type ConfigurationServeur = {
   entrepots: Entrepots;
   gestionnaireDeJeton: GestionnaireDeJeton;
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
+  processeurs: {
+    pdf: <T>() => Processeur<Buffer, T>;
+  };
 };
 const creeApp = (config: ConfigurationServeur) => {
   const app = express();

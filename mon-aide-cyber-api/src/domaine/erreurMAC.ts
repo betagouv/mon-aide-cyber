@@ -10,6 +10,7 @@ export type Contexte =
   | "Demande d'Authentification"
   | 'Demande la restitution'
   | 'Envoi un message de contact'
+  | 'Génération restitution format PDF'
   | 'Lance le diagnostic'
   | 'Modifie le mot de passe'
   | "Recherche d'un Aidé";

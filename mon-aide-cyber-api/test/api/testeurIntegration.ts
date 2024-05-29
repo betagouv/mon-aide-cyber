@@ -20,6 +20,7 @@ import { AdaptateurDeGestionDeCookiesDeTest } from '../adaptateurs/AdaptateurDeG
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { AdaptateurDeVerificationDesAccesDeTest } from '../adaptateurs/AdaptateurDeVerificationDesAccesDeTest';
+import { ProcesseurPDFDeTest } from '../infrastructure/processus/processeurs';
 
 class TesteurIntegrationMAC {
   private serveurDeTest:
@@ -46,13 +47,12 @@ class TesteurIntegrationMAC {
     public adaptateurEnvoieMessage: AdaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire(),
     public adaptateurDeGestionDeCookies: AdaptateurDeGestionDeCookiesDeTest = new AdaptateurDeGestionDeCookiesDeTest(),
     public adaptateursRestitution: AdaptateursRestitution = {
-      html() {
-        return unAdaptateurDeRestitutionHTML().construis();
-      },
+      html: () => unAdaptateurDeRestitutionHTML().construis(),
 
-      pdf() {
-        return unAdaptateurRestitutionPDF();
-      },
+      pdf: () => unAdaptateurRestitutionPDF(),
+    },
+    public processeurs = {
+      pdf: <T>() => new ProcesseurPDFDeTest<T>(),
     },
   ) {}
 
@@ -79,6 +79,7 @@ class TesteurIntegrationMAC {
       adaptateursRestitution: this.adaptateursRestitution,
       avecProtectionCsrf: false,
       adaptateurEnvoiMessage: this.adaptateurEnvoieMessage,
+      processeurs: this.processeurs,
     });
     const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
     // eslint-disable-next-line @typescript-eslint/no-empty-function

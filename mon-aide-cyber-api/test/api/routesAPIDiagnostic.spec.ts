@@ -11,12 +11,12 @@ import { executeRequete } from './executeurRequete';
 import { RepresentationDiagnostic } from '../../src/api/representateurs/types';
 import { Express } from 'express';
 import { unAdaptateurDeRestitutionHTML } from '../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
-import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
 import { uneRestitution } from '../constructeurs/constructeurRestitution';
 import {
   ReponseDiagnostic,
   ReprensentationRestitution,
 } from '../../src/api/routesAPIDiagnostic';
+import { ProcesseurPDFDeTest } from '../infrastructure/processus/processeurs';
 
 describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -426,13 +426,8 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
     });
 
     it('Retourne la restitution au format PDF', async () => {
-      let adaptateurPDFAppele = false;
-      const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
-      adaptateurRestitutionPDF.genereRestitution = () => {
-        adaptateurPDFAppele = true;
-        return Promise.resolve(Buffer.from('PDF Mesures généré'));
-      };
-      testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
+      const processeurPDF = new ProcesseurPDFDeTest();
+      testeurMAC.processeurs.pdf = () => processeurPDF;
       const restitution = uneRestitution().construis();
       testeurMAC.entrepots.restitution().persiste(restitution);
 
@@ -447,7 +442,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
 
       expect(reponse.statusCode).toBe(200);
       expect(reponse.headers['content-type']).toBe('application/pdf');
-      expect(adaptateurPDFAppele).toBe(true);
+      expect(processeurPDF.aEteExecute()).toBe(true);
     });
 
     it('La route est protégée', async () => {

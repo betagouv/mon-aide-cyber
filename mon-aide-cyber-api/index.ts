@@ -16,23 +16,24 @@ import { AdaptateurDeVerificationDeCGUMAC } from './src/adaptateurs/AdaptateurDe
 import { AdaptateurDeGestionDeCookiesMAC } from './src/adaptateurs/AdaptateurDeGestionDeCookiesMAC';
 import { AdaptateurRelationsMAC } from './src/relation/AdaptateurRelationsMAC';
 import { AdaptateurDeVerificationDesAccesMAC } from './src/adaptateurs/AdaptateurDeVerificationDesAccesMAC';
+import { ProcesseurPDF } from './src/infrastructure/processus/pdf/ProcesseurPDF';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
-  process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
+  process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut',
 );
 
 const adaptateurTranscripteurDonnees = adaptateurTranscripteur();
 const traductionThematiques =
   new Map(
     Object.entries(
-      adaptateurTranscripteurDonnees.transcripteur().thematiques
-    ).map(([clef, thematique]) => [clef, thematique.libelle])
+      adaptateurTranscripteurDonnees.transcripteur().thematiques,
+    ).map(([clef, thematique]) => [clef, thematique.libelle]),
   ) || new Map();
 
 const entrepots = fabriqueEntrepots();
 const adaptateurRelations = new AdaptateurRelationsMAC();
 const busEvenementMAC = new BusEvenementMAC(
-  fabriqueConsommateursEvenements(adaptateurRelations)
+  fabriqueConsommateursEvenements(adaptateurRelations),
 );
 const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
 
@@ -49,23 +50,26 @@ const serveurMAC = serveur.creeServeur({
   busCommande: new BusCommandeMAC(
     entrepots,
     busEvenementMAC,
-    adaptateurEnvoiMessage
+    adaptateurEnvoiMessage,
   ),
   busEvenement: busEvenementMAC,
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),
   gestionnaireDeJeton: gestionnaireDeJeton,
   adaptateurDeGestionDeCookies: new AdaptateurDeGestionDeCookiesMAC(),
   adaptateurDeVerificationDeCGU: new AdaptateurDeVerificationDeCGUMAC(
-    entrepots
+    entrepots,
   ),
   adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(
-    gestionnaireDeJeton
+    gestionnaireDeJeton,
   ),
   adaptateurDeVerificationDeRelations: new AdaptateurDeVerificationDesAccesMAC(
-    adaptateurRelations
+    adaptateurRelations,
   ),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
   adaptateurEnvoiMessage: adaptateurEnvoiMessage,
+  processeurs: {
+    pdf: <T>() => new ProcesseurPDF<T>(),
+  },
 });
 
 const port = process.env.PORT || 8081;
