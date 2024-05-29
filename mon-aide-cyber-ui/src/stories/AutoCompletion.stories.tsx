@@ -235,8 +235,8 @@ export const AutoCompletionObjet: Story = {
 
         await waitFor(() =>
           expect(
-            canvas.getByRole('button', { name: 'Ain' }),
-          ).toBeInTheDocument(),
+            canvas.getAllByRole('button').map((b) => b.innerText),
+          ).toStrictEqual(['', 'Ain', 'Aisne']),
         );
         await waitFor(() =>
           expect(
@@ -317,6 +317,27 @@ export const AutoCompletionObjet: Story = {
               name: /faites un choix/i,
             }),
           ).toHaveValue('Doubs'),
+        );
+      },
+    );
+
+    await step(
+      'On peut continuer à saisir dans le champ de saisie lorsque l’on utilise la navigation au clavier',
+      async () => {
+        const champDeSaisie = canvas.getByRole('textbox', {
+          name: /faites un choix/i,
+        });
+        await waitFor(() => userEvent.clear(champDeSaisie));
+        userEvent.type(champDeSaisie, 'ai');
+
+        userEvent.keyboard('[ArrowDown]');
+        userEvent.keyboard('[ArrowDown]');
+        userEvent.type(champDeSaisie, 's');
+
+        await waitFor(() =>
+          expect(
+            canvas.getAllByRole('button').map((b) => b.innerText),
+          ).toStrictEqual(['', 'Aisne']),
         );
       },
     );

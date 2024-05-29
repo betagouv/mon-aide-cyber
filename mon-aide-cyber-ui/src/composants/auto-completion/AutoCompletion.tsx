@@ -29,16 +29,17 @@ type ProprietesAutoCompletion<T extends object | string> = {
 };
 
 export const AutoCompletion = <T extends object | string>(
-  proprietes: PropsWithChildren<ProprietesAutoCompletion<T>>
+  proprietes: PropsWithChildren<ProprietesAutoCompletion<T>>,
 ) => {
   const referenceConteneur = useRef<HTMLDivElement | null>(null);
+  const referenceChampSaisie = useRef<HTMLInputElement | null>(null);
   const [etat, envoie] = useReducer(
     reducteurAutoCompletion<T>(),
     initialiseEtatAutoCompletion<T>()(
       proprietes.nom,
       proprietes.valeurSaisie,
-      proprietes.clefsFiltrage
-    )
+      proprietes.clefsFiltrage,
+    ),
   );
   const [suggestionsEnCoursDeChargement, setSuggestionsEnCoursDeChargement] =
     useState(true);
@@ -49,7 +50,7 @@ export const AutoCompletion = <T extends object | string>(
       envoie(
         suggestionsInitialesChargees({
           suggestionsInitiales: proprietes.suggestionsInitiales,
-        })
+        }),
       );
       setSuggestionsEnCoursDeChargement(false);
     }
@@ -79,14 +80,14 @@ export const AutoCompletion = <T extends object | string>(
       envoie(suggestionChoisie(valeur, proprietes.surSelection));
       setIconeFlecheBas(!iconeFlecheBas);
     },
-    [iconeFlecheBas, proprietes.surSelection]
+    [iconeFlecheBas, proprietes.surSelection],
   );
 
   const surSaisie = useCallback(
     (valeur: string) => {
       envoie(valeurSaisie(valeur, proprietes.surSaisie));
     },
-    [proprietes]
+    [proprietes],
   );
 
   const surToucheClavierPressee = useCallback((touche: string) => {
@@ -97,12 +98,13 @@ export const AutoCompletion = <T extends object | string>(
     (touche: string, valeur: T) => {
       if (touche === 'Enter') {
         surSelection(valeur);
-      }
-      if (touche === 'ArrowDown' || touche === 'ArrowUp') {
+      } else if (touche === 'ArrowDown' || touche === 'ArrowUp') {
         surToucheClavierPressee(touche);
+      } else if (referenceChampSaisie.current) {
+        referenceChampSaisie.current.focus();
       }
     },
-    [surSelection, surToucheClavierPressee]
+    [surSelection, surToucheClavierPressee],
   );
 
   const liste = (
@@ -131,6 +133,7 @@ export const AutoCompletion = <T extends object | string>(
       <div className="autocomplete-labellise">
         <input
           className="fr-input"
+          ref={referenceChampSaisie}
           type="text"
           id={etat.nom}
           name={etat.nom}
