@@ -110,7 +110,7 @@ const fusionnePdfs = (pdfs: Buffer[]): Promise<Buffer> => {
 
 export type ContenuHtml = { corps: string; entete: string; piedPage: string };
 
-const generePdfs = (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
+const generePdfs = async (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
   const pagesHtmlRemplies = pagesHtml.filter(
     (pageHtml) =>
       pageHtml.entete !== '' &&
@@ -118,26 +118,26 @@ const generePdfs = (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
       pageHtml.piedPage !== '',
   );
 
-  return lanceNavigateur()
-    .then((navigateur) => {
-      const pages = pagesHtmlRemplies.map((pageHtml) =>
-        navigateur
-          .newPage()
-          .then((page) => page.setContent(pageHtml.corps).then(() => page))
-          .then((page) =>
-            page.pdf(formatPdfA4(pageHtml.entete, pageHtml.piedPage)),
-          )
+  const navigateur = await lanceNavigateur();
+  try {
+    const pages = pagesHtmlRemplies.map((pageHtml) =>
+      navigateur.newPage().then((page) =>
+        page
+          .setContent(pageHtml.corps)
+          .then(() => page.pdf(formatPdfA4(pageHtml.entete, pageHtml.piedPage)))
           .catch((erreur) => {
             console.log(erreur);
             throw erreur;
           }),
-      );
-      return Promise.all(pages);
-    })
-    .catch((erreur) => {
-      console.log(erreur);
-      throw erreur;
-    });
+      ),
+    );
+    return await Promise.all(pages);
+  } catch (erreur) {
+    console.log(erreur);
+    throw erreur;
+  } finally {
+    navigateur.close();
+  }
 };
 
 const formatPdfA4 = (enteteHtml: string, piedPageHtml: string): PDFOptions => ({
