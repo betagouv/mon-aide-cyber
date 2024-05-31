@@ -210,7 +210,10 @@ const ComposantQuestionListe = ({
         mappeur={(reponse) =>
           typeof reponse === 'string'
             ? reponse
-            : champsAAfficher.map((champ) => reponse[champ]).join(' - ')
+            : champsAAfficher
+                .map((champ) => reponse[champ])
+                .filter((champ) => !!champ)
+                .join(' - ')
         }
         surSelection={(reponse) => surSelection(reponse)}
         surSaisie={(reponse) => surSaisie(reponse)}
