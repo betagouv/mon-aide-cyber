@@ -81,4 +81,35 @@ describe('Cohérence du référentiel et des mesures', () => {
       });
     },
   );
+
+  it('Les réponses sont uniques', () => {
+    const toutesLesReponses = Object.entries(referentiel)
+      .filter(([thematique]) => thematique !== 'contexte')
+      .flatMap(([_, questions]) => {
+        return {
+          reponses: questions.questions.flatMap((q) => {
+            const identifiants: string[] = [];
+            return q.reponsesPossibles.reduce((prev, cur) => {
+              prev.push(cur.identifiant);
+              if (cur.questions) {
+                const strings = cur.questions
+                  ?.flatMap((q) =>
+                    q.reponsesPossibles.flatMap((r) => r.identifiant),
+                  )
+                  .filter((r) => !!r);
+                prev.push(...strings);
+              }
+              return prev;
+            }, identifiants);
+          }),
+        };
+      })
+      .flatMap((r) => r.reponses);
+
+    const set = toutesLesReponses.reduce((prev, curr) => {
+      return new Set([...prev, curr]);
+    }, new Set());
+
+    expect(toutesLesReponses.length).toStrictEqual(set.size);
+  });
 });

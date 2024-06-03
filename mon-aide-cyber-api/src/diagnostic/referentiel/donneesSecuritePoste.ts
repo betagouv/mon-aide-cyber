@@ -305,7 +305,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         },
         {
           identifiant:
-            'securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr',
+            'securite-poste-outils-complementaires-securisation-oui-systematique-outil-complementaire-type-edr',
           libelle:
             'Oui, un outil de type EDR a été mis en place et ses alertes sont systématiquement traitées',
           resultat: { indice: { valeur: 3 } },
@@ -317,7 +317,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     {
       identifiant: 'securite-poste-r-et-d-disques-chiffres',
       libelle:
-        "Si entité avec risque d’espionnage ciblé, les disques durs des matériels nomades sont-ils chiffrés ?",
+        'Si entité avec risque d’espionnage ciblé, les disques durs des matériels nomades sont-ils chiffrés ?',
       poids: 2,
       reponsesPossibles: [
         {
