@@ -143,7 +143,7 @@ export const importeAidants = async (
 };
 
 const genereMotDePasse = () => {
-  const expressionReguliere = /^[a-hj-km-np-zA-HJ-KM-NP-Z1-9!@#&()\-.+,/]*$/;
+  const expressionReguliere = /^[a-hj-km-np-zA-HJ-KM-NP-Z1-9!@#&()\-.+/]*$/;
 
   const chaineAleatoire = () => {
     const valeurAleatoire = String.fromCharCode(
@@ -155,7 +155,7 @@ const genereMotDePasse = () => {
     return undefined;
   };
 
-  return new Array(16)
+  return new Array(19)
     .fill('')
     .map(() => {
       let caractereAleatoire = undefined;
