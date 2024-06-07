@@ -3,25 +3,6 @@ import { QuestionsThematique } from '../Referentiel';
 export const donneesContexte: QuestionsThematique = {
   questions: [
     {
-      identifiant: 'contexte-cgu-signees',
-      libelle:
-        'Avez-vous validé les Conditions Générales d’Utilisation du dispositif MonAideCyber ?',
-      poids: 0,
-      reponsesPossibles: [
-        {
-          identifiant: 'contexte-nature-cgu-signe-oui',
-          libelle: 'Oui, j’atteste avoir validé les CGU',
-          ordre: 0,
-        },
-        {
-          identifiant: 'contexte-nature-cgu-signe-non',
-          libelle: 'Si non : merci de les valider maintenant',
-          ordre: 1,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
       identifiant: 'contexte-nature-organisation',
       libelle: 'Quelle est la nature de votre organisation ?',
       poids: 0,
