@@ -1,6 +1,6 @@
 import { createContext, ReactElement } from 'react';
 
-export type TailleModale = 'centree' | 'large';
+export type TailleModale = 'centree' | 'moyenne' | 'large';
 
 export type ElementModale = {
   titre?: string;

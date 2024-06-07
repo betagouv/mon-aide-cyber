@@ -1,6 +1,7 @@
 import {
   ContexteModale,
   ElementModale,
+  TailleModale,
 } from '../../fournisseurs/ContexteModale.ts';
 import { createPortal } from 'react-dom';
 import {
@@ -18,6 +19,12 @@ type ProprietesElementModale = ElementModale & {
   boutonFermer: ReactElement;
   surClickEnDehors: () => void;
 };
+
+const taillesModale: Map<TailleModale, string> = new Map<TailleModale, string>([
+  ['centree', 'fr-col-6'],
+  ['moyenne', 'fr-col-8'],
+  ['large', 'fr-col-12'],
+]);
 
 export const Modale = forwardRef(function Modale(
   proprietes: PropsWithChildren<ProprietesElementModale>,
@@ -39,11 +46,8 @@ export const Modale = forwardRef(function Modale(
     };
   });
 
-  const taille = proprietes.taille
-    ? proprietes.taille === 'centree'
-      ? 'fr-col-6'
-      : 'fr-col-12'
-    : 'fr-col-6';
+  const taille =
+    taillesModale.get(proprietes.taille || 'centree') || 'fr-col-6';
 
   return (
     <div className="fr-container fr-container--fluid">
@@ -53,13 +57,17 @@ export const Modale = forwardRef(function Modale(
             ref={referenceDialogue}
             className="fr-modal__body modale-mac fr-m-0 fr-p-0"
           >
-            <div className="fr-modal__header">{proprietes.boutonFermer}</div>
-            <div className="fr-modal__content">
-              {proprietes.titre && (
-                <h1 id="titre-modale">{proprietes.titre}</h1>
-              )}
-              {proprietes.corps}
+            <div className="fr-modal__header">
+              <div className="fr-grid-row fr-col-12">
+                <div className="fr-col-10">
+                  {proprietes.titre && (
+                    <h4 id="titre-modale">{proprietes.titre}</h4>
+                  )}
+                </div>
+                <div className="fr-col-2">{proprietes.boutonFermer}</div>
+              </div>
             </div>
+            <div className="fr-modal__content">{proprietes.corps}</div>
           </div>
         </div>
       </div>
