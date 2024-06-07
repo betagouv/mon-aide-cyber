@@ -10,11 +10,13 @@ export class BusEvenementMAC implements BusEvenement {
     private readonly consomateurs: Map<TypeEvenement, ConsommateurEvenement[]>,
   ) {}
 
-  publie<E extends Evenement>(evenement: E): Promise<void> {
-    return (
-      this.consomateurs
-        .get(evenement.type)
-        ?.forEach((value) => value.consomme(evenement)) || Promise.resolve()
-    );
+  async publie<E extends Evenement>(evenement: E): Promise<void> {
+    const consommateurEvenements = this.consomateurs.get(evenement.type);
+    if (consommateurEvenements) {
+      const consommations = consommateurEvenements.map((consommateur) =>
+        consommateur.consomme(evenement),
+      );
+      await Promise.all(consommations);
+    }
   }
 }
