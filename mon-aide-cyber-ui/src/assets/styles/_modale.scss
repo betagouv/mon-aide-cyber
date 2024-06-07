@@ -1,8 +1,16 @@
 @import 'commun';
 
+.fr-modal__content {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+.fr-modal__header {
+  padding: 1rem 1rem 0.5rem !important;
+}
 .modale-mac {
   border-radius: 16px;
-  padding: 56px;
+  padding: 48px 56px !important;
 
   fieldset {
     margin: 0;
@@ -20,10 +28,5 @@
 
   h3 {
     @include mac-h5;
-  }
-
-  h4 {
-    font-size: 1rem;
-    line-height: 1.5rem;
   }
 }
