@@ -29,7 +29,7 @@ export const mesuresSecuritePoste = {
     },
     niveau2: {
       titre:
-        'Mettre en œuvre des mesures de sécurité supplémentaires sur les systèmes ne pouvant pas bénéficier des mises à jour',
+        'Mettre en œuvre des mesures de sécurité supplémentaires sur les systèmes industriels ne pouvant pas bénéficier des mises à jour',
       pourquoi:
         '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau2-pourquoi.pug',
       comment:
