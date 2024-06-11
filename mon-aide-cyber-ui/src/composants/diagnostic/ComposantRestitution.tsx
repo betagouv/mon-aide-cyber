@@ -3,6 +3,7 @@ import { Footer } from '../Footer.tsx';
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import '../../assets/styles/_restitution.scss';
+import '../../assets/styles/_restitution_print.scss';
 import '../../assets/styles/_commun.scss';
 import {
   reducteurRestitution,
@@ -64,6 +65,20 @@ export const ComposantRestitution = ({
     macapi,
     showBoundary,
   ]);
+
+  useEffect(() => {
+    window.addEventListener('beforeprint', () => {
+      const details = document.querySelectorAll('details');
+      details.forEach((d) => d.setAttribute('open', ''));
+    });
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('afterprint', () => {
+      const details = document.querySelectorAll('details');
+      details.forEach((d) => d.removeAttribute('open'));
+    });
+  }, []);
 
   const modifierLeDiagnostic = useCallback(() => {
     return navigationMAC.navigue(

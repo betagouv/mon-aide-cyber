@@ -1,15 +1,20 @@
 extends base
 
 block page
-    h2 Les 6 mesures prioritaires
-    each mesure, index in mesures
-        div
-            h3=index + 1 + '. ' + mesure.titre
-            div
-                h4 Pourquoi?
-                div
-                    | !{include(mesure.pourquoi)}
-            div
-                h4 Comment mettre en œuvre cette mesure ?
-                div
-                    | !{include(mesure.comment)}
+    div(class="fr-container restitution")
+        div(class="fr-grid-row")
+            div(class="fr-col-md-9 fr-col-9 section")
+                h4 Les 6 mesures prioritaires
+                each mesure, index in mesures
+                    details(open="")
+                        summary
+                            | !{index + 1} . !{mesure.titre}
+                        div
+                            div
+                                b Pourquoi ?
+                                div(class='fr-pt-md-2w fr-pb-md-3w')
+                                    | !{include(mesure.pourquoi)}
+                            div
+                                b Comment mettre en œuvre cette mesure ?
+                                div(class='fr-pt-md-2w fr-pb-md-3w')
+                                    | !{include(mesure.comment)}

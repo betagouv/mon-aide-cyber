@@ -27,11 +27,11 @@ type ProprietesSaisiesInformations = {
 };
 
 export const SaisieInformations = (
-  proprietes: ProprietesSaisiesInformations
+  proprietes: ProprietesSaisiesInformations,
 ) => {
   const [etatSaisieInformations, envoie] = useReducer(
     reducteurSaisieInformations,
-    initialiseEtatSaisieInformations(proprietes.departements)
+    initialiseEtatSaisieInformations(proprietes.departements),
   );
 
   useEffect(() => {
@@ -50,14 +50,14 @@ export const SaisieInformations = (
 
   useEffect(
     () => envoie(departementsCharges(proprietes.departements)),
-    [proprietes.departements]
+    [proprietes.departements],
   );
 
   const surSaisieAdresseElectronique = useCallback(
     (adresseElectronique: string) => {
       envoie(adresseElectroniqueSaisie(adresseElectronique));
     },
-    []
+    [],
   );
   const surSaisieDepartement = useCallback(
     (departement: Departement | string) => {
@@ -80,7 +80,7 @@ export const SaisieInformations = (
         taille: 'large',
       });
     },
-    [affiche]
+    [affiche],
   );
   const surRelationAidant = useCallback(() => {
     envoie(relationAidantCliquee());
@@ -211,7 +211,8 @@ export const SaisieInformations = (
                           conditions générales d&apos;utilisation
                         </a>
                       </b>{' '}
-                      de MonAideCyber au nom de l&apos;entité que je représente
+                      de MonAideCyber au nom de l&apos;entité que je
+                      représente
                     </span>
                   </label>
                   {etatSaisieInformations.erreur?.cguValidees?.texteExplicatif}

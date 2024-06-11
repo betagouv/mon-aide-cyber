@@ -1,20 +1,4 @@
-.indicateur-polaire {
-  font-size: 2px;
-}
-
-:root {
-  --couleurs-mac-blanc: white;
-  --couleurs-mac-violet-fonce: #5d2a9d;
-  --couleurs-mac-noir: #282828;
-  --couleurs-mac-violet-clair: #f1e2fd;
-  --couleurs-mac-violet-tres-clair: #f5f1f9;
-  --couleurs-mac-gouvernance: #fc7530;
-  --couleurs-mac-securiteacces: #9c51d0;
-  --couleurs-mac-securiteposte: #fdc8d5;
-  --couleurs-mac-securiteinfrastructure: #fdc82e;
-  --couleurs-mac-sensibilisation: #5d2a9d;
-  --couleurs-mac-reaction: #fd8eb9;
-}
+@import '../styles/icones';
 
 @media print {
   @page {
@@ -166,11 +150,16 @@
       width: 16px;
       height: 16px;
       margin-left: 16px;
-
+      mask-image: $icone-plus;
       mask-size: 16px 16px;
       mask-repeat: no-repeat;
       background: var(--couleurs-mac-violet-fonce);
       flex-shrink: 0;
+    }
+
+    details[open] > summary::after {
+      mask-image: $icone-moins;
+      background: var(--couleurs-mac-noir);
     }
 
     .fr-sidemenu__inner {
@@ -320,6 +309,7 @@
     border-radius: 5rem;
     margin-top: 0.4rem;
     -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   .legende .sous-legende {
