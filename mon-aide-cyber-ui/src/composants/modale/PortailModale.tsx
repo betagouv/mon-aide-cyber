@@ -1,5 +1,6 @@
 import {
   ContexteModale,
+  Couleur,
   ElementModale,
   TailleModale,
 } from '../../fournisseurs/ContexteModale.ts';
@@ -49,6 +50,19 @@ export const Modale = forwardRef(function Modale(
   const taille =
     taillesModale.get(proprietes.taille || 'centree') || 'fr-col-6';
 
+  const estChaineDeCaractere = (
+    titre: string | { texte: string; couleur: Couleur } | undefined,
+  ): titre is string => {
+    return titre !== undefined && typeof titre === 'string';
+  };
+  const titre = estChaineDeCaractere(proprietes.titre) ? (
+    <h4 id="titre-modale">{proprietes.titre}</h4>
+  ) : (
+    <h4 id="titre-modale" className={proprietes.titre?.couleur}>
+      {proprietes.titre?.texte}
+    </h4>
+  );
+
   return (
     <div className="fr-container fr-container--fluid">
       <div className="fr-grid-row fr-grid-row--center">
@@ -59,11 +73,7 @@ export const Modale = forwardRef(function Modale(
           >
             <div className="fr-modal__header">
               <div className="fr-grid-row fr-col-12">
-                <div className="fr-col-10">
-                  {proprietes.titre && (
-                    <h4 id="titre-modale">{proprietes.titre}</h4>
-                  )}
-                </div>
+                <div className="fr-col-10">{titre}</div>
                 <div className="fr-col-2">{proprietes.boutonFermer}</div>
               </div>
             </div>

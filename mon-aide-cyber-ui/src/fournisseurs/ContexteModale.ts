@@ -1,9 +1,10 @@
 import { createContext, ReactElement } from 'react';
 
 export type TailleModale = 'centree' | 'moyenne' | 'large';
+export type Couleur = 'violet-fonce';
 
 export type ElementModale = {
-  titre?: string;
+  titre?: string | { texte: string; couleur: Couleur };
   corps: ReactElement;
   taille?: TailleModale;
 };
