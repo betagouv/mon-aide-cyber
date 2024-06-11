@@ -62,7 +62,8 @@ function ValidationCGU(proprietesValidationCGU: {
         <div>
           Vous vous apprêtez à réaliser un diagnostic.
           <br />
-          Est-ce que l&apos;entité a validé les CGU de MonAideCyber ?
+          Est-ce-que le bénéficiaire a rempli le formulaire de demande
+          d&apos;aide sur MonAideCyber ?
         </div>
         <div className="fr-radio-group mac-radio-group fr-pt-4w">
           <input
@@ -73,8 +74,8 @@ function ValidationCGU(proprietesValidationCGU: {
           />
           <label className="fr-label" htmlFor="radio-validation-cgu-oui">
             <div>
-              L&apos;entité confirme avoir rempli le&nbsp;
-              <a href="/demande-aide">formulaire</a> et accepté les CGU
+              Le bénéficiaire confirme avoir rempli{' '}
+              <a href="/demande-aide">le formulaire de demande d&apos;aide</a>.
             </div>
           </label>
         </div>
@@ -87,13 +88,19 @@ function ValidationCGU(proprietesValidationCGU: {
           />
           <label className="fr-label" htmlFor="radio-validation-cgu-non">
             <div>
-              L&apos;entité n&apos;a pas encore accepté les CGU.
+              Le bénéficiaire n&apos;a pas encore rempli{' '}
+              <a href="/demande-aide">le formulaire de demande d&apos;aide</a>.
+              <br />
+              <br />
+              <b>
+                Vous devez faire valider les CGU au bénéficiaire de
+                l&apos;entité aidée.
+              </b>
               <br />
               L&apos;utilisation du diagnostic nécessite l&apos;acceptation des
-              CGU par l&apos;entité diagnostiquée. Veuillez partager à
-              l&apos;entité&nbsp;
-              <a href="/demande-aide">le lien du formulaire</a> afin
-              qu&apos;elle accepte les CGU avant de démarrer le diagnostic :
+              CGU par le bénéficiaire. Veuillez l&apos;orienter vers{' '}
+              <a href="/demande-aide">le lien du formulaire</a> afin qu&apos;il
+              puisse accepter les CGU avant de démarrer le diagnostic
               <br />
               <a href={`${import.meta.env['VITE_URL_MAC']}/demande-aide`}>
                 {`${import.meta.env['VITE_URL_MAC']}/demande-aide`}
@@ -171,7 +178,10 @@ export const ComposantLancerDiagnostic = ({
 
   const afficherModale = useCallback(() => {
     affiche({
-      titre: "Acceptation des CGU par l'entité",
+      titre: {
+        texte: 'Pré-requis à la réalisation du diagnostic',
+        couleur: 'violet-fonce',
+      },
       corps: (
         <ValidationCGU
           surFermeture={ferme}
