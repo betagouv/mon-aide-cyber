@@ -10,7 +10,7 @@
 }
 .modale-mac {
   border-radius: 16px;
-  padding: 48px 56px !important;
+  padding: 2rem 2.5rem !important;
 
   fieldset {
     margin: 0;
@@ -28,5 +28,20 @@
 
   h3 {
     @include mac-h5;
+  }
+
+  .fr-btn--close {
+    color: var(--couleurs-mac-violet-fonce);
+    margin-top: -1.5rem;
+  }
+
+  .fr-btn--close:hover {
+    background-color: unset !important;
+  }
+
+  .fr-btn--close:after {
+    width: 2rem;
+    height: 2rem;
+    margin-right: -1.2rem;
   }
 }

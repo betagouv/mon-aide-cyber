@@ -178,10 +178,7 @@ export const ComposantLancerDiagnostic = ({
 
   const afficherModale = useCallback(() => {
     affiche({
-      titre: {
-        texte: 'Pré-requis à la réalisation du diagnostic',
-        couleur: 'violet-fonce',
-      },
+      titre: 'Prérequis à la réalisation du diagnostic',
       corps: (
         <ValidationCGU
           surFermeture={ferme}
