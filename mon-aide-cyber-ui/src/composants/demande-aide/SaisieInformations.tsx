@@ -203,17 +203,20 @@ export const SaisieInformations = (
                     checked={etatSaisieInformations.cguValidees}
                   />
                   <label className="fr-label" htmlFor="cgu-aide">
-                    <span>
-                      {' '}
-                      J&apos;accepte les{' '}
-                      <b>
-                        <a href="#" onClick={afficheModaleCGU}>
-                          conditions générales d&apos;utilisation
-                        </a>
-                      </b>{' '}
-                      de MonAideCyber au nom de l&apos;entité que je
-                      représente
-                    </span>
+                    <div>
+                      <span className="asterisque">*</span>
+                      <span>
+                        {' '}
+                        J&apos;accepte les{' '}
+                        <b>
+                          <a href="#" onClick={afficheModaleCGU}>
+                            conditions générales d&apos;utilisation
+                          </a>
+                        </b>{' '}
+                        de MonAideCyber au nom de l&apos;entité que je
+                        représente
+                      </span>
+                    </div>
                   </label>
                   {etatSaisieInformations.erreur?.cguValidees?.texteExplicatif}
                 </div>
