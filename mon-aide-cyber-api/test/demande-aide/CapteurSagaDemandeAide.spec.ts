@@ -221,7 +221,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         clefAPI: () => 'clef',
       });
       FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-03-19T14:45:17+01:00')),
+        new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
       const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
       const entrepotsMemoire = new EntrepotsMemoire();
@@ -229,12 +229,12 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const busCommande = new BusCommandeMAC(
         entrepotsMemoire,
         busEvenement,
-        adaptateurEnvoieMail,
+        adaptateurEnvoieMail
       );
       const capteur = new CapteurSagaDemandeAide(
         busCommande,
         busEvenement,
-        adaptateurEnvoieMail,
+        adaptateurEnvoieMail
       );
 
       await capteur.execute({
@@ -261,8 +261,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             '\n' +
             'Toute l’équipe reste à votre disposition,\n\n' +
             "L'équipe MonAideCyber\n" +
-            'monaidecyber@ssi.gouv.fr\n',
-        ),
+            'monaidecyber@ssi.gouv.fr\n'
+        )
       ).toBe(true);
     });
 

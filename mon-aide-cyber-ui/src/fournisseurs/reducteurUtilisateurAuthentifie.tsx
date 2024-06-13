@@ -27,7 +27,7 @@ type ActionUtilisateurAuthentifie =
     };
 export const reducteurUtilisateurAuthentifie = (
   etat: EtatUtilisateurAuthentifie,
-  action: ActionUtilisateurAuthentifie,
+  action: ActionUtilisateurAuthentifie
 ): EtatUtilisateurAuthentifie => {
   switch (action.type) {
     case TypeActionUtilisateurAuthentifie.UTILISATEUR_RECHARGE: {
@@ -65,7 +65,7 @@ export const initialiseReducteurUtilisateurAuthentifie =
     };
   };
 export const utilisateurCharge = (
-  utilisateur: Utilisateur,
+  utilisateur: Utilisateur
 ): ActionUtilisateurAuthentifie => {
   return {
     type: TypeActionUtilisateurAuthentifie.UTILISATEUR_CHARGE,

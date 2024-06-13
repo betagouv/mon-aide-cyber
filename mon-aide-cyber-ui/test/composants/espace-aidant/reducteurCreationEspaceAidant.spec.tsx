@@ -28,7 +28,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           nouveauMotDePasse: 'mdp',
           confirmationNouveauMotDePasse: 'mdp',
           valide: true,
-        }),
+        })
       );
 
       expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
@@ -56,7 +56,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           nouveauMotDePasse: 'mdp',
           confirmationNouveauMotDePasse: 'mdp',
           valide: true,
-        }),
+        })
       );
 
       expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
@@ -95,7 +95,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           nouveauMotDePasse: 'mot-de-passe',
           confirmationNouveauMotDePasse: 'mot-de-passe',
           valide: false,
-        }),
+        })
       );
 
       expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
@@ -126,7 +126,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           },
           erreur: {},
         },
-        cguCliquees(),
+        cguCliquees()
       );
 
       expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
@@ -150,7 +150,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           cguSignees: true,
           erreur: {},
         },
-        cguCliquees(),
+        cguCliquees()
       );
 
       expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
@@ -188,7 +188,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
             valide: true,
           },
         },
-        cguCliquees(),
+        cguCliquees()
       );
 
       expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
@@ -218,7 +218,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           },
           saisieValide: () => false,
         },
-        cguCliquees(),
+        cguCliquees()
       );
 
       expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
@@ -250,7 +250,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
             valide: true,
           },
         },
-        creationEspaceAidantTransmise(),
+        creationEspaceAidantTransmise()
       );
 
       expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
@@ -276,7 +276,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           },
           saisieValide: () => true,
         },
-        creationEspaceAidantInvalidee(new Error('Une erreur est survenue')),
+        creationEspaceAidantInvalidee(new Error('Une erreur est survenue'))
       );
 
       expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({

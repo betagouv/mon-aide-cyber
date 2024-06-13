@@ -28,7 +28,7 @@ type Authentifie = (
     identifiant: string;
     motDePasse: string;
   },
-  surErreur: (erreur: Error) => void,
+  surErreur: (erreur: Error) => void
 ) => void;
 type ContexteAuthentificationType = {
   utilisateur?: Utilisateur;
@@ -39,7 +39,7 @@ type ContexteAuthentificationType = {
 
 export const ContexteAuthentification =
   createContext<ContexteAuthentificationType>(
-    {} as unknown as ContexteAuthentificationType,
+    {} as unknown as ContexteAuthentificationType
   );
 
 export type Identifiants = {
@@ -55,7 +55,7 @@ export const FournisseurAuthentification = ({
 
   const [etatUtilisateurAuthentifie, envoie] = useReducer(
     reducteurUtilisateurAuthentifie,
-    initialiseReducteurUtilisateurAuthentifie(),
+    initialiseReducteurUtilisateurAuthentifie()
   );
 
   const authentifie: Authentifie = (
@@ -63,7 +63,7 @@ export const FournisseurAuthentification = ({
       identifiant: string;
       motDePasse: string;
     },
-    surErreur: (erreur: Error) => void,
+    surErreur: (erreur: Error) => void
   ) => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
       'se-connecter',
@@ -78,7 +78,7 @@ export const FournisseurAuthentification = ({
                 motDePasse: identifiants.motDePasse,
               })
               .construis(),
-            async (reponse) => (await reponse) as ReponseAuthentification,
+            async (reponse) => (await reponse) as ReponseAuthentification
           )
           .then((reponse) => {
             envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
@@ -91,16 +91,16 @@ export const FournisseurAuthentification = ({
               () =>
                 navigationMAC.navigue(
                   moteurDeLiens,
-                  'afficher-tableau-de-bord',
+                  'afficher-tableau-de-bord'
                 ),
               () =>
                 moteurDeLiens.trouve('creer-espace-aidant', () =>
-                  navigationMAC.navigue(moteurDeLiens, 'creer-espace-aidant'),
-                ),
+                  navigationMAC.navigue(moteurDeLiens, 'creer-espace-aidant')
+                )
             );
           })
           .catch(surErreur);
-      },
+      }
     );
   };
 
@@ -110,7 +110,7 @@ export const FournisseurAuthentification = ({
         .url('/api/utilisateur')
         .methode('GET')
         .construis(),
-      (json) => json,
+      (json) => json
     );
   }, [macapi]);
 
@@ -125,7 +125,7 @@ export const FournisseurAuthentification = ({
         })
         .catch((erreur) => {
           navigationMAC.setEtat(
-            new MoteurDeLiens((erreur as ReponseHATEOAS).liens).extrais(),
+            new MoteurDeLiens((erreur as ReponseHATEOAS).liens).extrais()
           );
           envoie(utilisateurNonAuthentifie());
         });

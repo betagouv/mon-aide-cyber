@@ -64,7 +64,7 @@ export const AutoCompletionTexte: Story = {
         expect(
           canvas.getByRole('textbox', {
             name: /faites un choix/i,
-          }),
+          })
         ).toBeInTheDocument();
 
         const champDeSaisie = canvas.getByRole('textbox', {
@@ -74,10 +74,10 @@ export const AutoCompletionTexte: Story = {
 
         await waitFor(() =>
           expect(
-            canvas.getAllByRole('button').map((button) => button.innerText),
-          ).toStrictEqual(['', 'Ain', 'Aisne']),
+            canvas.getAllByRole('button').map((button) => button.innerText)
+          ).toStrictEqual(['', 'Ain', 'Aisne'])
         );
-      },
+      }
     );
 
     await step(
@@ -91,8 +91,8 @@ export const AutoCompletionTexte: Story = {
 
         await waitFor(() =>
           expect(
-            canvas.getByRole('button', { name: 'Finistère' }),
-          ).toBeInTheDocument(),
+            canvas.getByRole('button', { name: 'Finistère' })
+          ).toBeInTheDocument()
         );
         userEvent.click(canvas.getByRole('button', { name: 'Finistère' }));
 
@@ -100,10 +100,10 @@ export const AutoCompletionTexte: Story = {
           expect(
             canvas.getByRole('textbox', {
               name: /faites un choix/i,
-            }),
-          ).toHaveValue('Finistère'),
+            })
+          ).toHaveValue('Finistère')
         );
-      },
+      }
     );
 
     await step(
@@ -117,18 +117,18 @@ export const AutoCompletionTexte: Story = {
         userEvent.type(champDeSaisie, 'finistère');
         await waitFor(() =>
           expect(
-            canvas.getByRole('button', { name: 'Finistère' }),
-          ).toBeInTheDocument(),
+            canvas.getByRole('button', { name: 'Finistère' })
+          ).toBeInTheDocument()
         );
 
         await waitFor(() =>
           expect(
             canvas.getByRole('textbox', {
               name: /faites un choix/i,
-            }),
-          ).toHaveValue('Finistère'),
+            })
+          ).toHaveValue('Finistère')
         );
-      },
+      }
     );
 
     await step(
@@ -141,8 +141,8 @@ export const AutoCompletionTexte: Story = {
         userEvent.type(champDeSaisie, 'finistère');
         await waitFor(() =>
           expect(
-            canvas.getByRole('button', { name: 'Finistère' }),
-          ).toBeInTheDocument(),
+            canvas.getByRole('button', { name: 'Finistère' })
+          ).toBeInTheDocument()
         );
 
         userEvent.click(canvas.getByText(/auto completion/i));
@@ -151,15 +151,15 @@ export const AutoCompletionTexte: Story = {
           expect(
             canvas.getByRole('textbox', {
               name: /faites un choix/i,
-            }),
-          ).toHaveValue('Finistère'),
+            })
+          ).toHaveValue('Finistère')
         );
         await waitFor(() =>
           expect(
-            canvas.queryByRole('button', { name: 'Finistère' }),
-          ).not.toBeInTheDocument(),
+            canvas.queryByRole('button', { name: 'Finistère' })
+          ).not.toBeInTheDocument()
         );
-      },
+      }
     );
   },
 };
@@ -225,7 +225,7 @@ export const AutoCompletionObjet: Story = {
         expect(
           canvas.getByRole('textbox', {
             name: /faites un choix/i,
-          }),
+          })
         ).toBeInTheDocument();
 
         const champDeSaisie = canvas.getByRole('textbox', {
@@ -235,15 +235,15 @@ export const AutoCompletionObjet: Story = {
 
         await waitFor(() =>
           expect(
-            canvas.getAllByRole('button').map((b) => b.innerText),
-          ).toStrictEqual(['', 'Ain', 'Aisne']),
+            canvas.getAllByRole('button').map((b) => b.innerText)
+          ).toStrictEqual(['', 'Ain', 'Aisne'])
         );
         await waitFor(() =>
           expect(
-            canvas.getByRole('button', { name: 'Aisne' }),
-          ).toBeInTheDocument(),
+            canvas.getByRole('button', { name: 'Aisne' })
+          ).toBeInTheDocument()
         );
-      },
+      }
     );
 
     await step(
@@ -257,8 +257,8 @@ export const AutoCompletionObjet: Story = {
 
         await waitFor(() =>
           expect(
-            canvas.getByRole('button', { name: 'Aisne' }),
-          ).toBeInTheDocument(),
+            canvas.getByRole('button', { name: 'Aisne' })
+          ).toBeInTheDocument()
         );
         userEvent.click(canvas.getByRole('button', { name: 'Aisne' }));
 
@@ -266,10 +266,10 @@ export const AutoCompletionObjet: Story = {
           expect(
             canvas.getByRole('textbox', {
               name: /faites un choix/i,
-            }),
-          ).toHaveValue('Aisne'),
+            })
+          ).toHaveValue('Aisne')
         );
-      },
+      }
     );
 
     await step(
@@ -283,18 +283,18 @@ export const AutoCompletionObjet: Story = {
         userEvent.type(champDeSaisie, 'finistère');
         await waitFor(() =>
           expect(
-            canvas.getByRole('button', { name: 'Finistère' }),
-          ).toBeInTheDocument(),
+            canvas.getByRole('button', { name: 'Finistère' })
+          ).toBeInTheDocument()
         );
 
         await waitFor(() =>
           expect(
             canvas.getByRole('textbox', {
               name: /faites un choix/i,
-            }),
-          ).toHaveValue('Finistère'),
+            })
+          ).toHaveValue('Finistère')
         );
-      },
+      }
     );
 
     await step(
@@ -315,10 +315,10 @@ export const AutoCompletionObjet: Story = {
           expect(
             canvas.getByRole('textbox', {
               name: /faites un choix/i,
-            }),
-          ).toHaveValue('Doubs'),
+            })
+          ).toHaveValue('Doubs')
         );
-      },
+      }
     );
 
     await step(
@@ -336,10 +336,10 @@ export const AutoCompletionObjet: Story = {
 
         await waitFor(() =>
           expect(
-            canvas.getAllByRole('button').map((b) => b.innerText),
-          ).toStrictEqual(['', 'Aisne']),
+            canvas.getAllByRole('button').map((b) => b.innerText)
+          ).toStrictEqual(['', 'Aisne'])
         );
-      },
+      }
     );
   },
 };

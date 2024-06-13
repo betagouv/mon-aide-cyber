@@ -11,7 +11,7 @@ describe('Réducteur Demande d’aide', () => {
     const erreur = new Error('Une erreur');
     const etat = reducteurDemandeAide(
       { etapeCourante: 'saisieInformations' },
-      saisieInformationsEnErreur(erreur),
+      saisieInformationsEnErreur(erreur)
     );
 
     expect(etat).toStrictEqual<EtatEtapesDemandeAide>({
@@ -24,7 +24,7 @@ describe('Réducteur Demande d’aide', () => {
     const erreur = new Error('Une erreur');
     const etat = reducteurDemandeAide(
       { etapeCourante: 'saisieInformations', erreur },
-      confirmation(),
+      confirmation()
     );
 
     expect(etat).toStrictEqual<EtatEtapesDemandeAide>({

@@ -45,7 +45,7 @@ export const Accueil = () => {
       window.location.href = 'mailto:monaidecyber@ssi.gouv.fr';
       e.preventDefault();
     },
-    [],
+    []
   );
   const demandeAide = useCallback(() => {
     window.location.href = '/demande-aide';
@@ -68,7 +68,7 @@ export const Accueil = () => {
               message: etatMessage.message,
             })
             .construis(),
-          () => Promise.resolve(),
+          () => Promise.resolve()
         )
         .then(() => envoie(messageEnvoye()))
         .catch((erreur) => envoie(envoiMessageInvalide(erreur as Error)));

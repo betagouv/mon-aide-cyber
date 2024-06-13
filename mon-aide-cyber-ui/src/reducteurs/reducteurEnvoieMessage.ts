@@ -57,11 +57,11 @@ const textesExplicatif: Map<
 ]);
 export const reducteurEnvoieMessage = (
   etat: EtatEnvoieMessage,
-  action: ActionEnvoieMessage,
+  action: ActionEnvoieMessage
 ): EtatEnvoieMessage => {
   const construisErreurEnvoieMessage = (
     clef: 'nom' | 'email' | 'message',
-    estValide: () => boolean,
+    estValide: () => boolean
   ): ErreurEnvoieMessage => {
     const erreur: ErreurEnvoieMessage = { ...etat.erreur };
     delete erreur[clef];

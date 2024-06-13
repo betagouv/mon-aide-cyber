@@ -32,9 +32,9 @@ const diagnosticAvecUneQuestion = unDiagnostic()
               .avecLibelle('Entreprise privée (ex. TPE, PME, ETI)')
               .construis(),
           ])
-          .construis(),
+          .construis()
       )
-      .construis(),
+      .construis()
   )
   .construis();
 const identifiantPlusieursQuestions = '684a9219-83b2-40f5-9752-17675aa00b22';
@@ -43,14 +43,12 @@ const diagnosticAvecPlusieursQuestions = unDiagnostic()
   .avecUnReferentiel(
     unReferentiel()
       .avecUneQuestion(
-        uneQuestionAChoixUnique().avecLibelle('Une question?').construis(),
+        uneQuestionAChoixUnique().avecLibelle('Une question?').construis()
       )
       .avecUneQuestion(
-        uneQuestionAChoixUnique()
-          .avecLibelle('Une autre question?')
-          .construis(),
+        uneQuestionAChoixUnique().avecLibelle('Une autre question?').construis()
       )
-      .construis(),
+      .construis()
   )
   .construis();
 const identifiantQuestionListeDeroulante =
@@ -65,9 +63,9 @@ const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
           uneReponsePossible().avecLibelle('Réponse A').construis(),
           uneReponsePossible().avecLibelle('Réponse B').construis(),
           uneReponsePossible().avecLibelle('Réponse C').construis(),
-        ],
+        ]
       )
-      .construis(),
+      .construis()
   )
   .construis();
 
@@ -84,19 +82,19 @@ const diagnosticAvecReponseEntrainantQuestion = unDiagnostic()
             uneReponsePossible().construis(),
             uneReponsePossible()
               .avecUneQuestion(
-                uneQuestionTiroirAChoixMultiple().avecNReponses(2).construis(),
+                uneQuestionTiroirAChoixMultiple().avecNReponses(2).construis()
               )
               .avecUneQuestion(
                 uneQuestionTiroirAChoixMultiple()
                   .avecNReponses(4)
                   .avecDesReponses([uneReponsePossible().construis()])
-                  .construis(),
+                  .construis()
               )
               .construis(),
           ])
-          .construis(),
+          .construis()
       )
-      .construis(),
+      .construis()
   )
   .construis();
 
@@ -118,13 +116,13 @@ const unDiagnosticAvecQuestionTiroirAChoixUnique = unDiagnostic()
                       .avecLibelle('un libelle de réponse possible')
                       .construis(),
                   ])
-                  .construis(),
+                  .construis()
               )
               .construis(),
           ])
-          .construis(),
+          .construis()
       )
-      .construis(),
+      .construis()
   )
   .construis();
 
@@ -148,7 +146,7 @@ const meta = {
           value={{
             appelle: async <T = RepresentationDiagnostic, V = void>(
               parametresAPI: ParametresAPI<V>,
-              _: (contenu: Promise<any>) => Promise<T>,
+              _: (contenu: Promise<any>) => Promise<T>
             ) => {
               const idDiagnostic = parametresAPI.url.split('/').at(-1);
               return entrepotMemoire.find(idDiagnostic as UUID) as T;
@@ -178,14 +176,14 @@ export const QuestionDiagnostic: Story = {
     expect(
       await waitFor(() =>
         canvas.getByText(
-          `1. ${diagnosticAvecUneQuestion.referentiel.contexte.groupes[0].questions[0].libelle}`,
-        ),
-      ),
+          `1. ${diagnosticAvecUneQuestion.referentiel.contexte.groupes[0].questions[0].libelle}`
+        )
+      )
     ).toBeInTheDocument();
     expect(
       await waitFor(() =>
-        canvas.getByLabelText('Entreprise privée (ex. TPE, PME, ETI)'),
-      ),
+        canvas.getByLabelText('Entreprise privée (ex. TPE, PME, ETI)')
+      )
     ).toBeInTheDocument();
     expect(await entrepotMemoire.verifieReponseNonEnvoyee()).toBe(true);
   },
@@ -200,16 +198,16 @@ export const AfficheDiagnosticAvecPlusieursQuestions: Story = {
     expect(
       await waitFor(() =>
         canvas.getByText(
-          `1. ${diagnosticAvecPlusieursQuestions.referentiel.contexte.groupes[0].questions[0].libelle}`,
-        ),
-      ),
+          `1. ${diagnosticAvecPlusieursQuestions.referentiel.contexte.groupes[0].questions[0].libelle}`
+        )
+      )
     ).toBeInTheDocument();
     expect(
       await waitFor(() =>
         canvas.getByText(
-          `2. ${diagnosticAvecPlusieursQuestions.referentiel.contexte.groupes[1].questions[0].libelle}`,
-        ),
-      ),
+          `2. ${diagnosticAvecPlusieursQuestions.referentiel.contexte.groupes[1].questions[0].libelle}`
+        )
+      )
     ).toBeInTheDocument();
   },
 };
@@ -224,13 +222,13 @@ export const AfficheDiagnosticQuestionListeDeroulante: Story = {
     expect(await waitFor(() => champSaisie)).toBeInTheDocument();
     userEvent.type(champSaisie, 'r');
     expect(
-      await waitFor(() => canvas.getByRole('button', { name: /réponse a/i })),
+      await waitFor(() => canvas.getByRole('button', { name: /réponse a/i }))
     ).toBeInTheDocument();
     expect(
-      await waitFor(() => canvas.getByRole('button', { name: /réponse B/i })),
+      await waitFor(() => canvas.getByRole('button', { name: /réponse B/i }))
     ).toBeInTheDocument();
     expect(
-      await waitFor(() => canvas.getByRole('button', { name: /réponse c/i })),
+      await waitFor(() => canvas.getByRole('button', { name: /réponse c/i }))
     ).toBeInTheDocument();
     expect(await entrepotMemoire.verifieReponseNonEnvoyee()).toBe(true);
   },
@@ -248,9 +246,9 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
     expect(
       await waitFor(() =>
         canvas.findByText(
-          reponseEntrainantQuestion.questions?.[0].libelle || '',
-        ),
-      ),
+          reponseEntrainantQuestion.questions?.[0].libelle || ''
+        )
+      )
     ).toBeInTheDocument();
     expect(await waitFor(() => canvas.getAllByRole('checkbox').length)).toBe(7);
   },
@@ -264,13 +262,13 @@ export const AfficheDiagnosticAvecQuestionTiroirAChoixUnique: Story = {
 
     expect(
       await waitFor(() =>
-        canvas.getByText('un libelle de question à choix unique'),
-      ),
+        canvas.getByText('un libelle de question à choix unique')
+      )
     ).toBeInTheDocument();
     expect(
       await waitFor(() =>
-        canvas.getByRole('radio', { name: /un libelle de réponse possible/i }),
-      ),
+        canvas.getByRole('radio', { name: /un libelle de réponse possible/i })
+      )
     ).toBeInTheDocument();
   },
 };

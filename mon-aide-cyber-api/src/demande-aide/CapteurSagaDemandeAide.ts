@@ -76,7 +76,7 @@ export class CapteurSagaDemandeAide
           await envoieConfirmationDemandeAide(
             this.adaptateurEnvoiMail,
             aide,
-            saga.relationAidant,
+            saga.relationAidant
           );
           await envoieRecapitulatifDemandeAide(
             this.adaptateurEnvoiMail,
@@ -129,7 +129,7 @@ const construisMailRecapitulatifDemandeAide = (
 
 const construisMailConfirmationDemandeAide = (
   aide: Aide,
-  relationAidant: boolean,
+  relationAidant: boolean
 ) => {
   const formateDate = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant()

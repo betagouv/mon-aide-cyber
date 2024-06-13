@@ -24,7 +24,7 @@ describe('Réducteur bouton thématique', () => {
           thematiqueChargee('premiere-thematique', [
             'premiere-thematique',
             'derniere-thematique',
-          ]),
+          ])
         );
 
         expect(etatBouton.thematiqueCourante).toBe('premiere-thematique');
@@ -41,7 +41,7 @@ describe('Réducteur bouton thématique', () => {
           thematiqueChargee('derniere-thematique', [
             'premiere-thematique',
             'derniere-thematique',
-          ]),
+          ])
         );
 
         expect(etatBouton.borneThematique).to.be.true;
@@ -65,7 +65,7 @@ describe('Réducteur bouton thématique', () => {
       it("la thématique choisie devrait être 'deuxieme-thematique'", () => {
         reducteurBoutonThematiqueSuivante(
           etatBoutonInitial,
-          boutonThematiqueCliquee(),
+          boutonThematiqueCliquee()
         );
 
         expect(thematiqueChoisie).toBe('deuxieme-thematique');
@@ -77,7 +77,7 @@ describe('Réducteur bouton thématique', () => {
             ...etatBoutonInitial,
             thematiqueCourante: 'derniere-thematique',
           },
-          boutonThematiqueCliquee(),
+          boutonThematiqueCliquee()
         );
 
         expect(etatBouton.borneThematique).to.be.true;
@@ -103,7 +103,7 @@ describe('Réducteur bouton thématique', () => {
           thematiqueChargee('deuxieme-thematique', [
             'premiere-thematique',
             'deuxieme-thematique',
-          ]),
+          ])
         );
 
         expect(etatBouton.thematiqueCourante).toBe('deuxieme-thematique');
@@ -120,7 +120,7 @@ describe('Réducteur bouton thématique', () => {
           thematiqueChargee('premiere-thematique', [
             'premiere-thematique',
             'deuxieme-thematique',
-          ]),
+          ])
         );
 
         expect(etatBouton.borneThematique).to.be.true;
@@ -144,7 +144,7 @@ describe('Réducteur bouton thématique', () => {
       it('la thématique choisie devrait être premiere-thematique', () => {
         reducteurBoutonThematiquePrecedente(
           etatBoutonInitial,
-          boutonThematiqueCliquee(),
+          boutonThematiqueCliquee()
         );
 
         expect(thematiqueChoisie).toBe('premiere-thematique');
@@ -156,7 +156,7 @@ describe('Réducteur bouton thématique', () => {
             ...etatBoutonInitial,
             thematiqueCourante: 'premiere-thematique',
           },
-          boutonThematiqueCliquee(),
+          boutonThematiqueCliquee()
         );
 
         expect(etatBouton.borneThematique).to.be.true;

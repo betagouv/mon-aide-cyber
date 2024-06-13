@@ -38,7 +38,7 @@ describe('Les réducteurs de diagnostic', () => {
                   .avecLibelle('Réponse C')
                   .enPosition(2)
                   .construis(),
-              ],
+              ]
             )
             .avecUneQuestionEtDesReponses(
               { libelle: 'Deuxième question ?', type: 'choixUnique' },
@@ -55,26 +55,26 @@ describe('Les réducteurs de diagnostic', () => {
                   .avecLibelle('Réponse A')
                   .enPosition(0)
                   .construis(),
-              ],
+              ]
             )
-            .construis(),
+            .construis()
         )
         .construis();
 
       const etatDiagnostic = reducteurDiagnostic(
         { diagnostic: undefined, thematiqueAffichee: undefined },
-        diagnosticCharge(diagnostic),
+        diagnosticCharge(diagnostic)
       );
 
       const questions =
         etatDiagnostic.diagnostic?.referentiel['contexte'].groupes.flatMap(
-          (q) => q.questions,
+          (q) => q.questions
         ) || [];
       expect(
-        questions[0].reponsesPossibles.map((reponse) => reponse.ordre),
+        questions[0].reponsesPossibles.map((reponse) => reponse.ordre)
       ).toStrictEqual([0, 1, 2, 3]);
       expect(
-        questions[1].reponsesPossibles.map((reponse) => reponse.ordre),
+        questions[1].reponsesPossibles.map((reponse) => reponse.ordre)
       ).toStrictEqual([0, 1, 2]);
     });
 
@@ -94,7 +94,7 @@ describe('Les réducteurs de diagnostic', () => {
                     .enPosition(0)
                     .construis(),
                 ])
-                .construis(),
+                .construis()
             )
             .ajouteUneThematique('Autre thématique', [
               uneQuestionAChoixUnique()
@@ -110,13 +110,13 @@ describe('Les réducteurs de diagnostic', () => {
                 ])
                 .construis(),
             ])
-            .construis(),
+            .construis()
         )
         .construis();
 
       const etatDiagnostic = reducteurDiagnostic(
         { diagnostic: undefined, thematiqueAffichee: undefined },
-        diagnosticCharge(diagnostic),
+        diagnosticCharge(diagnostic)
       );
 
       const thematiqueContexte =
@@ -125,13 +125,13 @@ describe('Les réducteurs de diagnostic', () => {
         etatDiagnostic.diagnostic?.referentiel['Autre thématique'];
       expect(
         thematiqueContexte?.groupes[0].questions.flatMap((q) =>
-          q.reponsesPossibles.map((reponse) => reponse.ordre),
-        ),
+          q.reponsesPossibles.map((reponse) => reponse.ordre)
+        )
       ).toStrictEqual([0, 1]);
       expect(
         thematiqueAutreThematique?.groupes[0].questions.flatMap((q) =>
-          q.reponsesPossibles.map((reponse) => reponse.ordre),
-        ),
+          q.reponsesPossibles.map((reponse) => reponse.ordre)
+        )
       ).toStrictEqual([0, 1]);
     });
 
@@ -155,7 +155,7 @@ describe('Les réducteurs de diagnostic', () => {
                             .enPosition(0)
                             .construis(),
                         ])
-                        .construis(),
+                        .construis()
                     )
                     .avecUneQuestion(
                       uneQuestionTiroirAChoixUnique()
@@ -169,19 +169,19 @@ describe('Les réducteurs de diagnostic', () => {
                             .enPosition(0)
                             .construis(),
                         ])
-                        .construis(),
+                        .construis()
                     )
                     .construis(),
                 ])
-                .construis(),
+                .construis()
             )
-            .construis(),
+            .construis()
         )
         .construis();
 
       const etatDiagnostic = reducteurDiagnostic(
         { diagnostic: undefined, thematiqueAffichee: undefined },
-        diagnosticCharge(diagnostic),
+        diagnosticCharge(diagnostic)
       );
 
       const thematiqueContexte =
@@ -190,13 +190,13 @@ describe('Les réducteurs de diagnostic', () => {
         thematiqueContexte?.groupes[0]?.questions[0].reponsesPossibles[0];
       expect(
         reponsesPossible?.questions?.[0]?.reponsesPossibles.map(
-          (reponse) => reponse.ordre,
-        ),
+          (reponse) => reponse.ordre
+        )
       ).toStrictEqual([0, 1]);
       expect(
         reponsesPossible?.questions?.[1]?.reponsesPossibles.map(
-          (reponse) => reponse.ordre,
-        ),
+          (reponse) => reponse.ordre
+        )
       ).toStrictEqual([0, 1]);
     });
   });
@@ -208,7 +208,7 @@ describe('Les réducteurs de diagnostic', () => {
           diagnostic: undefined,
           thematiqueAffichee: undefined,
         },
-        thematiqueAffichee('nouvelle-thematique'),
+        thematiqueAffichee('nouvelle-thematique')
       );
       expect(etatDiagnostic.thematiqueAffichee).toBe('nouvelle-thematique');
     });

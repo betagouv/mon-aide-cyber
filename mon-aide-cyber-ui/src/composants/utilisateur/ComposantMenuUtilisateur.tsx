@@ -33,7 +33,7 @@ export const ComposantMenuUtilisateur = ({
           .url('/api/token')
           .methode('DELETE')
           .construis(),
-        (reponse) => reponse,
+        (reponse) => reponse
       )
       .then(() => navigationMAC.retourAccueil())
       .catch((erreur) => showBoundary(erreur));
@@ -43,7 +43,7 @@ export const ComposantMenuUtilisateur = ({
     resetBoundary();
     navigationMAC.navigue(
       new MoteurDeLiens(navigationMAC.etat),
-      'afficher-profil',
+      'afficher-profil'
     );
   }, [navigationMAC, resetBoundary]);
 
@@ -52,9 +52,9 @@ export const ComposantMenuUtilisateur = ({
       'afficher-profil',
       () =>
         setBoutonAfficherMonProfil(
-          <input type="button" onClick={afficherProfil} value="Mon Profil" />,
+          <input type="button" onClick={afficherProfil} value="Mon Profil" />
         ),
-      () => setBoutonAfficherMonProfil(<></>),
+      () => setBoutonAfficherMonProfil(<></>)
     );
   }, [afficherProfil, navigationMAC.etat]);
 
@@ -62,7 +62,7 @@ export const ComposantMenuUtilisateur = ({
     resetBoundary();
     navigationMAC.navigue(
       new MoteurDeLiens(navigationMAC.etat),
-      'afficher-tableau-de-bord',
+      'afficher-tableau-de-bord'
     );
   }, [navigationMAC, resetBoundary]);
 
@@ -75,9 +75,9 @@ export const ComposantMenuUtilisateur = ({
             type="button"
             onClick={afficherTableauDeBord}
             value="Mes diagnostics"
-          />,
+          />
         ),
-      () => setBoutonAfficherTableauDeBord(<></>),
+      () => setBoutonAfficherTableauDeBord(<></>)
     );
   }, [afficherTableauDeBord, navigationMAC.etat]);
 

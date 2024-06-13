@@ -7,7 +7,7 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
     private autresMesures: string = fakerFR.lorem.text(),
     private indicateurs: string = fakerFR.lorem.text(),
     private informations: string = fakerFR.lorem.text(),
-    private mesuresPrioritaires: string = fakerFR.lorem.text(),
+    private mesuresPrioritaires: string = fakerFR.lorem.text()
   ) {}
 
   construis(): Restitution {

@@ -14,7 +14,7 @@ export const FormulaireAuthentification = () => {
 
   const [etatAuthentification, envoie] = useReducer(
     reducteurAuthentification,
-    initialiseReducteur(),
+    initialiseReducteur()
   );
 
   const surSaisieMoteDePasse = useCallback((motDePasse: string) => {
@@ -37,11 +37,11 @@ export const FormulaireAuthentification = () => {
             identifiant: etatAuthentification.identifiant,
             motDePasse: etatAuthentification.motDePasse,
           },
-          (erreur) => envoie(authentificationInvalidee(erreur)),
+          (erreur) => envoie(authentificationInvalidee(erreur))
         );
       }
     },
-    [etatAuthentification, authentification],
+    [etatAuthentification, authentification]
   );
 
   const erreur = etatAuthentification.erreur;

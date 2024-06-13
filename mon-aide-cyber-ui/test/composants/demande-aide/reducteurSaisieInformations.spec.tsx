@@ -24,7 +24,7 @@ describe('Parcours CGU Aidé', () => {
       it('La prend en compte', () => {
         const etat = reducteurSaisieInformations(
           etatInitial,
-          adresseElectroniqueSaisie('jean.dupont@email.com'),
+          adresseElectroniqueSaisie('jean.dupont@email.com')
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -54,7 +54,7 @@ describe('Parcours CGU Aidé', () => {
               },
             },
           },
-          adresseElectroniqueSaisie('jean.dupont@email.com'),
+          adresseElectroniqueSaisie('jean.dupont@email.com')
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -86,7 +86,7 @@ describe('Parcours CGU Aidé', () => {
               },
             },
           },
-          adresseElectroniqueSaisie('jean.dupont@email.com'),
+          adresseElectroniqueSaisie('jean.dupont@email.com')
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -111,7 +111,7 @@ describe('Parcours CGU Aidé', () => {
               { nom: 'Gironde', code: '33' },
             ],
           },
-          departementSaisi('Finistère'),
+          departementSaisi('Finistère')
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -145,7 +145,7 @@ describe('Parcours CGU Aidé', () => {
             },
             departements: [{ nom: 'Finistère', code: '29' }],
           },
-          departementSaisi('Finistère'),
+          departementSaisi('Finistère')
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -178,7 +178,7 @@ describe('Parcours CGU Aidé', () => {
             },
             departements: [{ nom: 'Finistère', code: '29' }],
           },
-          departementSaisi('Finistère'),
+          departementSaisi('Finistère')
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -205,7 +205,7 @@ describe('Parcours CGU Aidé', () => {
               { nom: 'Gironde', code: '33' },
             ],
           },
-          departementSaisi('girOnde'),
+          departementSaisi('girOnde')
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -228,7 +228,7 @@ describe('Parcours CGU Aidé', () => {
       it('La prend en compte', () => {
         const etat = reducteurSaisieInformations(
           etatInitial,
-          raisonSocialeSaisie('beta.gouv'),
+          raisonSocialeSaisie('beta.gouv')
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -262,7 +262,7 @@ describe('Parcours CGU Aidé', () => {
       it('invalide les CGU précédemment validées', () => {
         const etat = reducteurSaisieInformations(
           { ...etatInitial, cguValidees: true },
-          cguValidees(),
+          cguValidees()
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -303,7 +303,7 @@ describe('Parcours CGU Aidé', () => {
               },
             },
           },
-          cguValidees(),
+          cguValidees()
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -335,7 +335,7 @@ describe('Parcours CGU Aidé', () => {
               },
             },
           },
-          cguValidees(),
+          cguValidees()
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -354,7 +354,7 @@ describe('Parcours CGU Aidé', () => {
       it('La prend en compte', () => {
         const etat = reducteurSaisieInformations(
           etatInitial,
-          relationAidantCliquee(),
+          relationAidantCliquee()
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -382,7 +382,7 @@ describe('Parcours CGU Aidé', () => {
             departements: [{ nom: 'Finistère', code: '29' }],
             valeurSaisieDepartement: 'Finistère',
           },
-          demandeTerminee(),
+          demandeTerminee()
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -406,7 +406,7 @@ describe('Parcours CGU Aidé', () => {
             departements: [{ nom: 'Finistère', code: '29' }],
             valeurSaisieDepartement: 'Finistère',
           },
-          demandeTerminee(),
+          demandeTerminee()
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -441,7 +441,7 @@ describe('Parcours CGU Aidé', () => {
             cguValidees: true,
             departement: {} as Departement,
           },
-          demandeTerminee(),
+          demandeTerminee()
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -479,7 +479,7 @@ describe('Parcours CGU Aidé', () => {
             ],
             valeurSaisieDepartement: 'département inconnu',
           },
-          demandeTerminee(),
+          demandeTerminee()
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -521,7 +521,7 @@ describe('Parcours CGU Aidé', () => {
             ],
             valeurSaisieDepartement: '33',
           },
-          demandeTerminee(),
+          demandeTerminee()
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -551,7 +551,7 @@ describe('Parcours CGU Aidé', () => {
             departements: [{ nom: 'Finistère', code: '29' }],
             valeurSaisieDepartement: 'Finistère',
           },
-          demandeTerminee(),
+          demandeTerminee()
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -598,7 +598,7 @@ describe('Parcours CGU Aidé', () => {
           pretPourEnvoi: false,
           valeurSaisieDepartement: 'Finistère',
         },
-        demandeTerminee(),
+        demandeTerminee()
       );
 
       expect(etat).toStrictEqual<EtatSaisieInformations>({

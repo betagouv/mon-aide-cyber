@@ -13,9 +13,9 @@ export const RequiertEspaceAidant = () => {
       () =>
         navigationMAC.navigue(
           new MoteurDeLiens(navigationMAC.etat),
-          'creer-espace-aidant',
+          'creer-espace-aidant'
         ),
-      () => setRedirection(<Outlet />),
+      () => setRedirection(<Outlet />)
     );
   }, [navigationMAC]);
 

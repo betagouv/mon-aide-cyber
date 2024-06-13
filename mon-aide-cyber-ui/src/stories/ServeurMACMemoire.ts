@@ -27,13 +27,13 @@ export class ServeurMACMemoire {
         .filter((d) => d.identifiant === idDiagnostic)
         .map((d) => {
           return { diagnostic: d, liens: {} };
-        })[0],
+        })[0]
     );
   }
 
   verifieEnvoiReponse(
     actionRepondre: ActionReponseDiagnostic,
-    reponseDonnee: Reponse,
+    reponseDonnee: Reponse
   ) {
     expect(this.actionRepondre).toStrictEqual(actionRepondre);
     expect(this.reponseDonnee).toStrictEqual(reponseDonnee);
@@ -48,7 +48,7 @@ export class ServeurMACMemoire {
       chemin: string;
       identifiant: string;
       reponse: string | string[] | ReponseQuestionATiroir | null;
-    }>,
+    }>
   ) {
     this.actionRepondre = {
       [parametresAPI.corps!.chemin]: {

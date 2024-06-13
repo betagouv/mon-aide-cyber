@@ -28,7 +28,7 @@ class ConstructeurQuestion implements Constructeur<Question> {
 
   avecLaReponseDonnee(
     reponsePossible: ReponsePossible,
-    reponses: ReponseMultiple[] = [],
+    reponses: ReponseMultiple[] = []
   ): ConstructeurQuestion {
     this.reponseDonnee = {
       valeur: reponsePossible.identifiant,
@@ -38,7 +38,7 @@ class ConstructeurQuestion implements Constructeur<Question> {
   }
 
   avecUneReponseMultipleDonnee(
-    reponsePossibles: ReponsePossible[],
+    reponsePossibles: ReponsePossible[]
   ): ConstructeurQuestion {
     this.reponseDonnee = {
       valeur: null,
@@ -92,7 +92,7 @@ class ConstructeurQuestionTiroir implements Constructeur<QuestionATiroir> {
     return this;
   }
   avecDesReponses(
-    reponsePossibles: ReponsePossible[],
+    reponsePossibles: ReponsePossible[]
   ): ConstructeurQuestionTiroir {
     this.reponsesPossibles.push(...reponsePossibles);
     return this;

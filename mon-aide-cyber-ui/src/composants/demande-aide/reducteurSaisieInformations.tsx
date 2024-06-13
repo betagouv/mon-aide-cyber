@@ -91,7 +91,7 @@ const construisErreurCGUValidess = (cguValidees: boolean) => {
 
 export const reducteurSaisieInformations = (
   etat: EtatSaisieInformations,
-  action: ActionSaisieInformations,
+  action: ActionSaisieInformations
 ): EtatSaisieInformations => {
   const videLesErreurs = (etatCourant: EtatSaisieInformations) => {
     if (etatCourant.erreur && Object.keys(etatCourant.erreur).length === 0) {
@@ -100,14 +100,14 @@ export const reducteurSaisieInformations = (
   };
 
   const estChaineDeCaractere = (
-    departement: Departement | string,
+    departement: Departement | string
   ): departement is string => typeof departement === 'string';
 
   const departementUniqueTrouve = (departement: string) =>
     etat.departements.filter(
       (d) =>
         d.nom.toLowerCase() === departement.toLowerCase().trim() ||
-        d.code === departement.trim(),
+        d.code === departement.trim()
     ).length === 1;
 
   const estDepartementValide = (departement: Departement | string) =>
@@ -116,7 +116,7 @@ export const reducteurSaisieInformations = (
       : true;
 
   const trouveDepartement = (
-    departementCherche: Departement | string,
+    departementCherche: Departement | string
   ): Departement => {
     const valeurSaisie = departementCherche;
     return estChaineDeCaractere(valeurSaisie)
@@ -124,7 +124,7 @@ export const reducteurSaisieInformations = (
           (departement) =>
             departement.nom.toLowerCase() ===
               valeurSaisie.toLowerCase().trim() ||
-            departement.code === valeurSaisie.trim(),
+            departement.code === valeurSaisie.trim()
         ) || ({} as Departement)
       : valeurSaisie;
   };
@@ -143,7 +143,7 @@ export const reducteurSaisieInformations = (
       const emailValide = estUnEmail(etat.email);
       const etatCourant = { ...etat };
       const departementValide = estDepartementValide(
-        etat.valeurSaisieDepartement,
+        etat.valeurSaisieDepartement
       );
       const cguValidees = etat.cguValidees;
       const pretPourEnvoi = emailValide && departementValide && cguValidees;
@@ -229,25 +229,25 @@ export const reducteurSaisieInformations = (
 };
 
 export const departementsCharges = (
-  departements: Departement[],
+  departements: Departement[]
 ): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.DEPARTEMENTS_CHARGES,
   departements,
 });
 export const adresseElectroniqueSaisie = (
-  adresseElectronique: string,
+  adresseElectronique: string
 ): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.ADRESSE_ELECTRONIQUE_SAISIE,
   adresseElectronique,
 });
 export const departementSaisi = (
-  departement: Departement | string,
+  departement: Departement | string
 ): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.DEPARTEMENT_SAISI,
   departement,
 });
 export const raisonSocialeSaisie = (
-  raisonSociale: string,
+  raisonSociale: string
 ): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE,
   raisonSociale,
@@ -262,7 +262,7 @@ export const relationAidantCliquee = (): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.RELATION_AIDANT_CLIQUEE,
 });
 export const initialiseEtatSaisieInformations = (
-  departements: Departement[],
+  departements: Departement[]
 ): EtatSaisieInformations => ({
   cguValidees: false,
   departement: {} as Departement,

@@ -44,7 +44,7 @@ type ActionCreationEspaceAidant =
 
 export const reducteurCreationEspaceAidant = (
   etat: EtatCreationEspaceAidant,
-  action: ActionCreationEspaceAidant,
+  action: ActionCreationEspaceAidant
 ): EtatCreationEspaceAidant => {
   const construisErreurCGU = () =>
     construisErreur('cguSignees', {
@@ -116,7 +116,7 @@ export const reducteurCreationEspaceAidant = (
 };
 
 export const creationEspaceAidantValidee = (
-  motDePasse: ModificationMotDePasse,
+  motDePasse: ModificationMotDePasse
 ): ActionCreationEspaceAidant => ({
   motDePasse,
   type: TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_VALIDEE,
@@ -132,7 +132,7 @@ export const creationEspaceAidantTransmise =
   });
 
 export const creationEspaceAidantInvalidee = (
-  erreur: Error,
+  erreur: Error
 ): ActionCreationEspaceAidant => ({
   erreur,
   type: TypeActionCreationEspaceAidant.CREATION_ESPACE_AIDANT_INVALIDEE,

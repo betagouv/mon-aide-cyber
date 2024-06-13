@@ -31,7 +31,7 @@ export const ComposantMotDePasse = ({
 }: ProprieteseComposantMotDePasse) => {
   const [etatModificationMotDePasse, envoie] = useReducer(
     reducteurModificationMotDePasse,
-    initialiseReducteur(messagesErreurs),
+    initialiseReducteur(messagesErreurs)
   );
 
   useEffect(() => {

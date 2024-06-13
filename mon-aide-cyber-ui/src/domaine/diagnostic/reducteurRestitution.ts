@@ -22,7 +22,7 @@ enum TypeActionRestitution {
 
 export const reducteurRestitution = (
   etat: EtatRestitution,
-  action: ActionRestitution,
+  action: ActionRestitution
 ): EtatRestitution => {
   switch (action.type) {
     case TypeActionRestitution.RUBRIQUE_CLIQUEE:
@@ -33,7 +33,7 @@ export const reducteurRestitution = (
 };
 
 export const restitutionChargee = (
-  restitution: Restitution,
+  restitution: Restitution
 ): ActionRestitution => ({
   restitution: restitution,
   type: TypeActionRestitution.RESTITUTION_CHARGEE,

@@ -16,7 +16,7 @@ export const AccederALaRestitution = ({
     surAnnuler();
     navigationMAC.navigue(
       new MoteurDeLiens(navigationMAC.etat),
-      `afficher-diagnostic-${idDiagnostic}`,
+      `afficher-diagnostic-${idDiagnostic}`
     );
   }, [idDiagnostic, navigationMAC, surAnnuler]);
   return (

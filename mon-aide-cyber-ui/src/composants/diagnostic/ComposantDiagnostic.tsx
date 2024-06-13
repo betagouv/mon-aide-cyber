@@ -77,7 +77,7 @@ type ProprietesComposantReponsePossible = {
 };
 
 const ComposantReponsePossible = (
-  proprietes: PropsWithChildren<ProprietesComposantReponsePossible>,
+  proprietes: PropsWithChildren<ProprietesComposantReponsePossible>
 ) => {
   return (
     <div
@@ -112,7 +112,7 @@ type ReponseAEnvoyer = {
 
 const genereParametresAPI = (
   action: ActionReponseDiagnostic,
-  reponseDonnee: Reponse,
+  reponseDonnee: Reponse
 ) => {
   const actionAMener = Object.entries(action).map(([thematique, action]) => ({
     chemin: thematique,
@@ -131,7 +131,7 @@ const genereParametresAPI = (
 };
 
 const estReponsePossible = (
-  reponse: ReponsePossible | string,
+  reponse: ReponsePossible | string
 ): reponse is ReponsePossible => {
   const reponsePossible = reponse as ReponsePossible;
   return (
@@ -149,7 +149,7 @@ const ComposantQuestionListe = ({
 }: ProprietesComposantQuestion) => {
   const [etatReponse, envoie] = useReducer(
     reducteurReponse,
-    initialiseReducteur(question, actions),
+    initialiseReducteur(question, actions)
   );
   const macapi = useMACAPI();
   const clefsFiltrage: (keyof ReponsePossible)[] =
@@ -165,7 +165,7 @@ const ComposantQuestionListe = ({
     (reponse: ReponsePossible) => {
       envoie(reponseUniqueDonnee(reponse.identifiant));
     },
-    [envoie],
+    [envoie]
   );
   const surSaisie = useCallback(
     (reponse: ReponsePossible | string) => {
@@ -173,7 +173,7 @@ const ComposantQuestionListe = ({
         envoie(reponseUniqueDonnee(reponse.identifiant));
       }
     },
-    [envoie],
+    [envoie]
   );
 
   const reponseQuestionEnvoyee = useCallback(() => {
@@ -187,7 +187,7 @@ const ComposantQuestionListe = ({
         const reponseDonnee = etatReponse.reponse()!;
         const parametresAPI = genereParametresAPI(action, reponseDonnee);
         macapi.appelle<void, ReponseAEnvoyer>(parametresAPI, () =>
-          Promise.resolve(),
+          Promise.resolve()
         );
       }
     }
@@ -219,7 +219,7 @@ const ComposantQuestionListe = ({
         surSaisie={(reponse) => surSaisie(reponse)}
         valeurSaisie={
           question.reponsesPossibles.find(
-            (rep) => rep.identifiant === etatReponse.valeur(),
+            (rep) => rep.identifiant === etatReponse.valeur()
           ) || ({} as ReponsePossible)
         }
         suggestionsInitiales={question.reponsesPossibles}
@@ -236,7 +236,7 @@ const ComposantQuestion = ({
 }: ProprietesComposantQuestion) => {
   const [etatReponse, envoie] = useReducer(
     reducteurReponse,
-    initialiseReducteur(question, actions),
+    initialiseReducteur(question, actions)
   );
   const macapi = useMACAPI();
 
@@ -244,14 +244,14 @@ const ComposantQuestion = ({
     (identifiantReponse: string) => {
       envoie(reponseUniqueDonnee(identifiantReponse));
     },
-    [envoie],
+    [envoie]
   );
 
   const repondQuestionMultiple = useCallback(
     (elementReponse: { identifiantReponse: string; reponse: string }) => {
       envoie(reponseMultipleDonnee(elementReponse));
     },
-    [envoie],
+    [envoie]
   );
 
   const repondQuestionTiroirUnique = useCallback(
@@ -260,11 +260,11 @@ const ComposantQuestion = ({
       elementReponse: {
         identifiantReponse: string;
         reponse: string;
-      },
+      }
     ) => {
       envoie(reponseTiroirUniqueDonnee(identifiantReponse, elementReponse));
     },
-    [envoie],
+    [envoie]
   );
 
   const repondQuestionTiroirMultiple = useCallback(
@@ -273,11 +273,11 @@ const ComposantQuestion = ({
       elementReponse: {
         identifiantReponse: string;
         reponse: string;
-      },
+      }
     ) => {
       envoie(reponseTiroirMultipleDonnee(identifiantReponse, elementReponse));
     },
-    [envoie],
+    [envoie]
   );
 
   const reponseQuestionEnvoyee = useCallback(() => {
@@ -290,11 +290,11 @@ const ComposantQuestion = ({
       if (action !== undefined) {
         const parametresAPI = genereParametresAPI(
           action,
-          etatReponse.reponse()!,
+          etatReponse.reponse()!
         );
         macapi
           .appelle<void, ReponseAEnvoyer>(parametresAPI, () =>
-            Promise.resolve(),
+            Promise.resolve()
           )
           .then(() => {
             reponseQuestionEnvoyee();
@@ -332,7 +332,7 @@ const ComposantQuestion = ({
                 typeDeSaisie === 'radio'
                   ? etatReponse.valeur() === reponse.identifiant
                   : etatReponse.reponseDonnee.reponses.some((rep) =>
-                      rep.reponses.has(reponse.identifiant),
+                      rep.reponses.has(reponse.identifiant)
                     )
               }
             >
@@ -357,7 +357,7 @@ const ComposantQuestion = ({
                         identifiantQuestion={questionTiroir.identifiant}
                         typeDeSaisie={typeDeSaisie}
                         selectionnee={etatReponse.reponseDonnee.reponses.some(
-                          (reponse) => reponse.reponses.has(rep.identifiant),
+                          (reponse) => reponse.reponses.has(rep.identifiant)
                         )}
                         onChange={(identifiantReponse) => {
                           typeDeSaisie === 'checkbox'
@@ -367,7 +367,7 @@ const ComposantQuestion = ({
                                   identifiantReponse:
                                     questionTiroir.identifiant,
                                   reponse: identifiantReponse,
-                                },
+                                }
                               )
                             : repondQuestionTiroirUnique(reponse.identifiant, {
                                 identifiantReponse: questionTiroir.identifiant,
@@ -411,7 +411,7 @@ export const ComposantDiagnostic = ({
             url: `/api/diagnostic/${idDiagnostic}`,
             methode: 'GET',
           },
-          enDiagnostic,
+          enDiagnostic
         )
         .then((reponse) => {
           envoie(diagnosticCharge(reponse.diagnostic));
@@ -440,7 +440,7 @@ export const ComposantDiagnostic = ({
       envoie(thematiqueAffichee(clef));
       window.scrollTo({ top: 0 });
     },
-    [envoie],
+    [envoie]
   );
 
   const afficheModaleAccederALaRestitution = useCallback(
@@ -454,7 +454,7 @@ export const ComposantDiagnostic = ({
           />
         ),
       }),
-    [affiche, ferme, idDiagnostic],
+    [affiche, ferme, idDiagnostic]
   );
 
   const navigation = (
@@ -500,7 +500,7 @@ export const ComposantDiagnostic = ({
           <div className="conteneur-navigation">{navigation}</div>
           {thematiques.map(([clef, thematique]) => {
             const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
-              (action) => Object.entries(action).find(([c]) => c === clef),
+              (action) => Object.entries(action).find(([c]) => c === clef)
             ) as ActionReponseDiagnostic[];
             const questionsGroupees = thematique.groupes.flatMap((groupe) => {
               return (
@@ -535,17 +535,16 @@ export const ComposantDiagnostic = ({
                     </fieldset>
                   </div>
                   <div className="fr-col-md-4 fr-col-4">
-                    {groupe.questions.map(
-                      (question) =>
-                        question['info-bulles']?.map((infoBulle) => (
-                          <div
-                            className="info-bulle"
-                            key={`${question.identifiant}-info-bulle`}
-                            dangerouslySetInnerHTML={{
-                              __html: infoBulle,
-                            }}
-                          ></div>
-                        )),
+                    {groupe.questions.map((question) =>
+                      question['info-bulles']?.map((infoBulle) => (
+                        <div
+                          className="info-bulle"
+                          key={`${question.identifiant}-info-bulle`}
+                          dangerouslySetInnerHTML={{
+                            __html: infoBulle,
+                          }}
+                        ></div>
+                      ))
                     )}
                   </div>
                 </div>

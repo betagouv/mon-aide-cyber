@@ -8,7 +8,7 @@ export const RequiertAuthentification = () => {
   const navigationMAC = useNavigationMAC();
   const [doitVerifierReconnexion, setDoitVerifierReconnexion] = useState(true);
   const [pagePrecedente, setPagePrecedente] = useState(
-    window.location.pathname,
+    window.location.pathname
   );
   const [chargementUtilisateurEnErreur, setChargementUtilisateurEnErreur] =
     useState(false);
@@ -27,13 +27,13 @@ export const RequiertAuthentification = () => {
           setChargementUtilisateurEnErreur(true);
           const moteurDeLiens = new MoteurDeLiens(erreur.liens);
           moteurDeLiens.trouve('se-connecter', () =>
-            navigationMAC.navigue(moteurDeLiens, 'se-connecter'),
+            navigationMAC.navigue(moteurDeLiens, 'se-connecter')
           );
         });
     }
     setDoitVerifierReconnexion(
       window.location.pathname !== pagePrecedente &&
-        !chargementUtilisateurEnErreur,
+        !chargementUtilisateurEnErreur
     );
   }, [
     modale,
