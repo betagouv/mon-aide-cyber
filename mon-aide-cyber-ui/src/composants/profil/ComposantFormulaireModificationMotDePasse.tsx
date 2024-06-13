@@ -33,7 +33,7 @@ export const ComposantFormulaireModificationMotDePasse = ({
     useState<ReactElement | undefined>(undefined);
   const modifierMotDePasse = useMemo(
     () => lienModificationMotDePasse,
-    [lienModificationMotDePasse],
+    [lienModificationMotDePasse]
   );
 
   const modifieMotDePasse = useCallback(
@@ -51,12 +51,12 @@ export const ComposantFormulaireModificationMotDePasse = ({
                   modificationMotDePasse.confirmationNouveauMotDePasse,
               })
               .construis(),
-            () => Promise.resolve(),
+            () => Promise.resolve()
           )
           .then(() => {
             setModificationMotDePasseATransmettre(false);
             setRetourModificationMotDePasse(
-              <ChampSucces message="Mot de passe modifié avec succès" />,
+              <ChampSucces message="Mot de passe modifié avec succès" />
             );
             setFormulaireMotDePasseAVider(true);
           })
@@ -67,7 +67,7 @@ export const ComposantFormulaireModificationMotDePasse = ({
           });
       }
     },
-    [macapi, modifierMotDePasse],
+    [macapi, modifierMotDePasse]
   );
 
   const modifieLeMotDePasse = useCallback((e: FormEvent) => {

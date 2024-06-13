@@ -32,11 +32,11 @@ describe('Réducteur de modification de mot de passe', () => {
           motDePasseConfirme: 'un-autre-mot-de-passe',
           saisieValide: () => false,
         },
-        modificationMotDePasseValidee(),
+        modificationMotDePasseValidee()
       );
 
       expect(
-        etatModificationMotDePasse,
+        etatModificationMotDePasse
       ).toStrictEqual<EtatModificationMotDePasse>({
         ancienMotDePasse: 'ancien-mot-de-passe',
         nouveauMotDePasse: 'un-mot-de-passe',
@@ -67,11 +67,11 @@ describe('Réducteur de modification de mot de passe', () => {
           motDePasseConfirme: 'mot-de-passe',
           saisieValide: () => false,
         },
-        modificationMotDePasseValidee(),
+        modificationMotDePasseValidee()
       );
 
       expect(
-        etatModificationMotDePasse,
+        etatModificationMotDePasse
       ).toStrictEqual<EtatModificationMotDePasse>({
         ancienMotDePasse: 'mot-de-passe',
         nouveauMotDePasse: 'mot-de-passe',
@@ -102,11 +102,11 @@ describe('Réducteur de modification de mot de passe', () => {
           motDePasseConfirme: '',
           saisieValide: () => false,
         },
-        modificationMotDePasseValidee(),
+        modificationMotDePasseValidee()
       );
 
       expect(
-        etatModificationMotDePasse,
+        etatModificationMotDePasse
       ).toStrictEqual<EtatModificationMotDePasse>({
         ancienMotDePasse: '',
         nouveauMotDePasse: '',
@@ -137,11 +137,11 @@ describe('Réducteur de modification de mot de passe', () => {
             ...etatInitialModificationMotDePasse,
             saisieValide: () => true,
           },
-          nouveauMotDePasseSaisi('un-mot-de-passe'),
+          nouveauMotDePasseSaisi('un-mot-de-passe')
         );
 
         expect(
-          etatModificationMotDePasse,
+          etatModificationMotDePasse
         ).toStrictEqual<EtatModificationMotDePasse>({
           ancienMotDePasse: '',
           nouveauMotDePasse: 'un-mot-de-passe',
@@ -161,11 +161,11 @@ describe('Réducteur de modification de mot de passe', () => {
             ancienMotDePasse: 'ancien-mot-de-passe',
             saisieValide: () => false,
           },
-          nouveauMotDePasseSaisi('   '),
+          nouveauMotDePasseSaisi('   ')
         );
 
         expect(
-          etatModificationMotDePasse,
+          etatModificationMotDePasse
         ).toStrictEqual<EtatModificationMotDePasse>({
           ancienMotDePasse: 'ancien-mot-de-passe',
           nouveauMotDePasse: '   ',
@@ -185,11 +185,11 @@ describe('Réducteur de modification de mot de passe', () => {
             ancienMotDePasse: ' ',
             saisieValide: () => false,
           },
-          nouveauMotDePasseSaisi('mdp'),
+          nouveauMotDePasseSaisi('mdp')
         );
 
         expect(
-          etatModificationMotDePasse,
+          etatModificationMotDePasse
         ).toStrictEqual<EtatModificationMotDePasse>({
           ancienMotDePasse: ' ',
           nouveauMotDePasse: 'mdp',
@@ -211,11 +211,11 @@ describe('Réducteur de modification de mot de passe', () => {
             motDePasseConfirme: 'mot-de-passe-qui-ne-correspond-pas',
             saisieValide: () => false,
           },
-          ancienMotDePasseSaisi('ancien-mot-de-passe'),
+          ancienMotDePasseSaisi('ancien-mot-de-passe')
         );
 
         expect(
-          etatModificationMotDePasse,
+          etatModificationMotDePasse
         ).toStrictEqual<EtatModificationMotDePasse>({
           ancienMotDePasse: 'ancien-mot-de-passe',
           nouveauMotDePasse: 'un-mot-de-passe',
@@ -235,11 +235,11 @@ describe('Réducteur de modification de mot de passe', () => {
             motDePasseConfirme: 'mot-de-passe',
             saisieValide: () => false,
           },
-          ancienMotDePasseSaisi('mot-de-passe'),
+          ancienMotDePasseSaisi('mot-de-passe')
         );
 
         expect(
-          etatModificationMotDePasse,
+          etatModificationMotDePasse
         ).toStrictEqual<EtatModificationMotDePasse>({
           ancienMotDePasse: 'mot-de-passe',
           nouveauMotDePasse: 'mot-de-passe',
@@ -259,11 +259,11 @@ describe('Réducteur de modification de mot de passe', () => {
             motDePasseConfirme: '   ',
             saisieValide: () => false,
           },
-          ancienMotDePasseSaisi('ancien-mot-de-passe'),
+          ancienMotDePasseSaisi('ancien-mot-de-passe')
         );
 
         expect(
-          etatModificationMotDePasse,
+          etatModificationMotDePasse
         ).toStrictEqual<EtatModificationMotDePasse>({
           ancienMotDePasse: 'ancien-mot-de-passe',
           nouveauMotDePasse: '   ',
@@ -283,7 +283,7 @@ describe('Réducteur de modification de mot de passe', () => {
             motDePasseConfirme: 'un-mot-de-passe',
             saisieValide: () => false,
           },
-          ancienMotDePasseSaisi('ancien-mot-de-passe'),
+          ancienMotDePasseSaisi('ancien-mot-de-passe')
         );
 
         expect(etatModificationMotDePasse.saisieValide()).toBe(true);
@@ -306,11 +306,11 @@ describe('Réducteur de modification de mot de passe', () => {
             },
             saisieValide: () => false,
           },
-          nouveauMotDePasseConfirme('un-mot-de-passe'),
+          nouveauMotDePasseConfirme('un-mot-de-passe')
         );
 
         expect(
-          etatModificationMotDePasse,
+          etatModificationMotDePasse
         ).toStrictEqual<EtatModificationMotDePasse>({
           ancienMotDePasse: 'ancien-mot-de-passe',
           nouveauMotDePasse: 'un-mot-de-passe',
@@ -330,11 +330,11 @@ describe('Réducteur de modification de mot de passe', () => {
             ancienMotDePasse: ' ',
             saisieValide: () => false,
           },
-          nouveauMotDePasseConfirme('mdp'),
+          nouveauMotDePasseConfirme('mdp')
         );
 
         expect(
-          etatModificationMotDePasse,
+          etatModificationMotDePasse
         ).toStrictEqual<EtatModificationMotDePasse>({
           ancienMotDePasse: ' ',
           nouveauMotDePasse: 'mdp',
@@ -354,11 +354,11 @@ describe('Réducteur de modification de mot de passe', () => {
             nouveauMotDePasse: 'un-mot-de-passe',
             saisieValide: () => false,
           },
-          nouveauMotDePasseConfirme('un-mot-de-passe'),
+          nouveauMotDePasseConfirme('un-mot-de-passe')
         );
 
         expect(
-          etatModificationMotDePasse,
+          etatModificationMotDePasse
         ).toStrictEqual<EtatModificationMotDePasse>({
           ancienMotDePasse: 'ancien-mot-de-passe',
           nouveauMotDePasse: 'un-mot-de-passe',
@@ -389,11 +389,11 @@ describe('Réducteur de modification de mot de passe', () => {
           messagesErreurs,
           saisieValide: () => false,
         },
-        reinitialiseLeReducteur(),
+        reinitialiseLeReducteur()
       );
 
       expect(
-        etatModificationMotDePasse,
+        etatModificationMotDePasse
       ).toStrictEqual<EtatModificationMotDePasse>({
         ancienMotDePasse: '',
         nouveauMotDePasse: '',

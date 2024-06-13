@@ -21,7 +21,7 @@ type ActionDiagnostic =
     };
 export const reducteurDiagnostic = (
   etat: EtatDiagnostic,
-  action: ActionDiagnostic,
+  action: ActionDiagnostic
 ): EtatDiagnostic => {
   switch (action.type) {
     case TypeActionDiagnostic.THEMATIQUE_AFFICHEE:
@@ -30,25 +30,24 @@ export const reducteurDiagnostic = (
       Object.entries(action.diagnostic.referentiel).forEach(
         ([_, thematique]) => {
           const trieLesReponses = (
-            reponsesPossibles: ReponsePossible[] | undefined,
+            reponsesPossibles: ReponsePossible[] | undefined
           ): void => {
             reponsesPossibles?.sort(
               (premiereReponse, secondeReponse) =>
-                premiereReponse.ordre - secondeReponse.ordre,
+                premiereReponse.ordre - secondeReponse.ordre
             );
           };
           thematique.groupes.forEach((groupe) => {
             groupe.questions.forEach((question) => {
               trieLesReponses(question.reponsesPossibles);
-              question.reponsesPossibles.forEach(
-                (reponse) =>
-                  reponse.questions?.forEach((question) =>
-                    trieLesReponses(question.reponsesPossibles),
-                  ),
+              question.reponsesPossibles.forEach((reponse) =>
+                reponse.questions?.forEach((question) =>
+                  trieLesReponses(question.reponsesPossibles)
+                )
               );
             });
           });
-        },
+        }
       );
       return {
         ...etat,

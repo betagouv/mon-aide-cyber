@@ -29,7 +29,7 @@ type ProprietesAutoCompletion<T extends object | string> = {
 };
 
 export const AutoCompletion = <T extends object | string>(
-  proprietes: PropsWithChildren<ProprietesAutoCompletion<T>>,
+  proprietes: PropsWithChildren<ProprietesAutoCompletion<T>>
 ) => {
   const referenceConteneur = useRef<HTMLDivElement | null>(null);
   const referenceChampSaisie = useRef<HTMLInputElement | null>(null);
@@ -38,8 +38,8 @@ export const AutoCompletion = <T extends object | string>(
     initialiseEtatAutoCompletion<T>()(
       proprietes.nom,
       proprietes.valeurSaisie,
-      proprietes.clefsFiltrage,
-    ),
+      proprietes.clefsFiltrage
+    )
   );
   const [suggestionsEnCoursDeChargement, setSuggestionsEnCoursDeChargement] =
     useState(true);
@@ -50,7 +50,7 @@ export const AutoCompletion = <T extends object | string>(
       envoie(
         suggestionsInitialesChargees({
           suggestionsInitiales: proprietes.suggestionsInitiales,
-        }),
+        })
       );
       setSuggestionsEnCoursDeChargement(false);
     }
@@ -80,14 +80,14 @@ export const AutoCompletion = <T extends object | string>(
       envoie(suggestionChoisie(valeur, proprietes.surSelection));
       setIconeFlecheBas(!iconeFlecheBas);
     },
-    [iconeFlecheBas, proprietes.surSelection],
+    [iconeFlecheBas, proprietes.surSelection]
   );
 
   const surSaisie = useCallback(
     (valeur: string) => {
       envoie(valeurSaisie(valeur, proprietes.surSaisie));
     },
-    [proprietes],
+    [proprietes]
   );
 
   const surToucheClavierPressee = useCallback((touche: string) => {
@@ -104,7 +104,7 @@ export const AutoCompletion = <T extends object | string>(
         referenceChampSaisie.current.focus();
       }
     },
-    [surSelection, surToucheClavierPressee],
+    [surSelection, surToucheClavierPressee]
   );
 
   const liste = (

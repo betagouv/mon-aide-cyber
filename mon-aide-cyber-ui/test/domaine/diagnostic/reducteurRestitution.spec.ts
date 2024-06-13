@@ -12,7 +12,7 @@ describe('Réducteur Restitution', () => {
     const restitution = uneRestitution().construis();
     const etatRestitution = reducteurRestitution(
       {} as EtatRestitution,
-      restitutionChargee(restitution),
+      restitutionChargee(restitution)
     );
 
     expect(etatRestitution).toStrictEqual({
@@ -25,7 +25,7 @@ describe('Réducteur Restitution', () => {
 
     const etatRestitution = reducteurRestitution(
       { restitution },
-      rubriqueCliquee('informations'),
+      rubriqueCliquee('informations')
     );
 
     expect(etatRestitution).toStrictEqual<EtatRestitution>({

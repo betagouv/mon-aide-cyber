@@ -10,7 +10,7 @@ type ContexteNavigationMACType = {
   navigue: (
     moteurDeLiens: MoteurDeLiens,
     action: Action,
-    exclusion?: Action[],
+    exclusion?: Action[]
   ) => void;
   retourAccueil: () => void;
 };
@@ -24,7 +24,7 @@ export const FournisseurNavigationMAC = ({ children }: PropsWithChildren) => {
   const navigue = (
     moteurDeLiens: MoteurDeLiens,
     action: Action,
-    exclusion?: Action[],
+    exclusion?: Action[]
   ) => {
     moteurDeLiens.trouve(
       action,
@@ -33,7 +33,7 @@ export const FournisseurNavigationMAC = ({ children }: PropsWithChildren) => {
       },
       () => {
         navigate('/');
-      },
+      }
     );
     setEtat(moteurDeLiens.extrais(exclusion));
   };

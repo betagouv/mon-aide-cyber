@@ -27,11 +27,11 @@ type ProprietesSaisiesInformations = {
 };
 
 export const SaisieInformations = (
-  proprietes: ProprietesSaisiesInformations,
+  proprietes: ProprietesSaisiesInformations
 ) => {
   const [etatSaisieInformations, envoie] = useReducer(
     reducteurSaisieInformations,
-    initialiseEtatSaisieInformations(proprietes.departements),
+    initialiseEtatSaisieInformations(proprietes.departements)
   );
 
   useEffect(() => {
@@ -50,20 +50,20 @@ export const SaisieInformations = (
 
   useEffect(
     () => envoie(departementsCharges(proprietes.departements)),
-    [proprietes.departements],
+    [proprietes.departements]
   );
 
   const surSaisieAdresseElectronique = useCallback(
     (adresseElectronique: string) => {
       envoie(adresseElectroniqueSaisie(adresseElectronique));
     },
-    [],
+    []
   );
   const surSaisieDepartement = useCallback(
     (departement: Departement | string) => {
       envoie(departementSaisi(departement));
     },
-    [],
+    []
   );
   const surSaisieRaisonSociale = useCallback((raisonSociale: string) => {
     envoie(raisonSocialeSaisie(raisonSociale));
@@ -80,13 +80,13 @@ export const SaisieInformations = (
         taille: 'large',
       });
     },
-    [affiche],
+    [affiche]
   );
   const surRelationAidant = useCallback(() => {
     envoie(relationAidantCliquee());
   }, []);
   const estDepartement = (
-    departement: string | Departement,
+    departement: string | Departement
   ): departement is Departement => {
     return (
       typeof departement !== 'string' && !!departement.code && !!departement.nom
@@ -158,8 +158,8 @@ export const SaisieInformations = (
                       return estDepartement(departement)
                         ? `${departement.code} - ${departement.nom}`
                         : typeof departement === 'string'
-                        ? departement
-                        : '';
+                          ? departement
+                          : '';
                     }}
                     surSelection={(departement) =>
                       surSaisieDepartement(departement)

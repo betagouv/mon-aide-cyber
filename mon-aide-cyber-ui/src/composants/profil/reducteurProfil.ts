@@ -24,7 +24,7 @@ type ActionProfil =
 
 export const reducteurProfil = (
   etat: EtatProfil,
-  action: ActionProfil,
+  action: ActionProfil
 ): EtatProfil => {
   switch (action.type) {
     case TypeActionProfil.PROFIL_CHARGE_EN_ERREUR: {

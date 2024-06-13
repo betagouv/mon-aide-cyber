@@ -38,7 +38,7 @@ export class MoteurDeLiens {
   trouve(
     lienATrouver: Action,
     enSucces?: (lien: Lien) => void,
-    enErreur?: () => void,
+    enErreur?: () => void
   ) {
     const lien = Object.entries(this.liens)
       .filter(([action]) => action === lienATrouver)
@@ -59,7 +59,7 @@ export class MoteurDeLiens {
           ...accumulateur,
           [action]: lien,
         }),
-        {},
+        {}
       );
   }
 }

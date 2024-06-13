@@ -33,7 +33,7 @@ export const PageDeConnexion: Story = {
           value={{
             appelle: async <T = Diagnostic, V = void>(
               _parametresAPI: ParametresAPI<V>,
-              _: (contenu: Promise<any>) => Promise<T>,
+              _: (contenu: Promise<any>) => Promise<T>
             ) => {
               const reponseAuthentification: ReponseAuthentification = {
                 nomPrenom: 'Jean Dupont',
@@ -72,18 +72,18 @@ export const PageDeConnexion: Story = {
     await step('Affiche la page de connexion', async () => {
       expect(
         await waitFor(() =>
-          canvas.getByRole('textbox', { name: /votre adresse électronique/i }),
-        ),
+          canvas.getByRole('textbox', { name: /votre adresse électronique/i })
+        )
       ).toBeInTheDocument();
 
       expect(
-        await canvas.findByLabelText(/votre mot de passe/i),
+        await canvas.findByLabelText(/votre mot de passe/i)
       ).toBeInTheDocument();
 
       expect(
         await waitFor(() =>
-          canvas.getByRole('button', { name: /se connecter/i }),
-        ),
+          canvas.getByRole('button', { name: /se connecter/i })
+        )
       ).toBeInTheDocument();
     });
 
@@ -93,7 +93,7 @@ export const PageDeConnexion: Story = {
         const champsAdresseEmail = await waitFor(() =>
           canvas.getByRole('textbox', {
             name: /votre adresse électronique/i,
-          }),
+          })
         );
         userEvent.type(champsAdresseEmail, 'identifiant');
         userEvent.clear(champsAdresseEmail);
@@ -101,11 +101,11 @@ export const PageDeConnexion: Story = {
         await waitFor(() =>
           expect(
             canvas.queryByText(
-              /veuillez saisir votre identifiant de connexion./i,
-            ),
-          ).toBeInTheDocument(),
+              /veuillez saisir votre identifiant de connexion./i
+            )
+          ).toBeInTheDocument()
         );
-      },
+      }
     );
 
     await step(
@@ -114,17 +114,17 @@ export const PageDeConnexion: Story = {
         const champsMotDePasse = await waitFor(() =>
           canvas.getByRole('textbox', {
             name: /votre mot de passe/i,
-          }),
+          })
         );
         userEvent.type(champsMotDePasse, 'mdp');
         userEvent.clear(champsMotDePasse);
 
         await waitFor(() =>
           expect(
-            canvas.queryByText(/veuillez saisir votre mot de passe./i),
-          ).toBeInTheDocument(),
+            canvas.queryByText(/veuillez saisir votre mot de passe./i)
+          ).toBeInTheDocument()
         );
-      },
+      }
     );
   },
 };

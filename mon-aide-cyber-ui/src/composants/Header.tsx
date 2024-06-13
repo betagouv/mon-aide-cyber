@@ -6,7 +6,7 @@ import { Utilisateur } from '../domaine/authentification/Authentification.ts';
 
 export const Header = ({ lienMAC }: { lienMAC: ReactElement }) => {
   const [utilisateur, setUtilisateur] = useState<Utilisateur | undefined>(
-    undefined,
+    undefined
   );
   const authentification = useAuthentification();
 

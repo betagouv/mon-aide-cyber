@@ -45,17 +45,17 @@ export const ComposantRestitution = ({
                 .url(lien.url)
                 .methode(lien.methode!)
                 .construis(),
-              async (json) => Promise.resolve((await json) as Restitution),
+              async (json) => Promise.resolve((await json) as Restitution)
             )
             .then((restitution) => {
               navigationMAC.setEtat(
-                new MoteurDeLiens(restitution.liens).extrais(),
+                new MoteurDeLiens(restitution.liens).extrais()
               );
               envoie(restitutionChargee(restitution));
             })
             .catch((erreur) => showBoundary(erreur));
         }
-      },
+      }
     );
   }, [
     navigationMAC,
@@ -83,13 +83,13 @@ export const ComposantRestitution = ({
   const modifierLeDiagnostic = useCallback(() => {
     return navigationMAC.navigue(
       new MoteurDeLiens(etatRestitution.restitution!.liens),
-      'modifier-diagnostic',
+      'modifier-diagnostic'
     );
   }, [etatRestitution, navigationMAC]);
 
   const rubriqueCliqueee = useCallback(
     (rubrique: string) => envoie(rubriqueCliquee(rubrique)),
-    [envoie],
+    [envoie]
   );
 
   const telechargerRestitution = useCallback(() => {
@@ -114,7 +114,7 @@ export const ComposantRestitution = ({
           .then(() => {
             setBoutonDesactive(false);
           });
-      },
+      }
     );
     setBoutonDesactive(true);
   }, [etatRestitution.restitution, idDiagnostic, macapi]);

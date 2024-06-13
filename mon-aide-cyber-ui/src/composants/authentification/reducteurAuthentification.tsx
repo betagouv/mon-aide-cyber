@@ -56,7 +56,7 @@ const construisErreurMotDePasse = () => {
 
 export const reducteurAuthentification = (
   etat: EtatAuthentification,
-  action: ActionAuthentification,
+  action: ActionAuthentification
 ): EtatAuthentification => {
   switch (action.type) {
     case TypeActionAuthentification.AUTHENTIFICATION_INVALIDEE: {
@@ -127,7 +127,7 @@ export const motDePasseSaisi = (motDePasse: string): ActionAuthentification => {
 };
 
 export const identifiantSaisi = (
-  identifiant: string,
+  identifiant: string
 ): ActionAuthentification => {
   return {
     identifiant,
@@ -140,7 +140,7 @@ export const saisieInvalidee = (): ActionAuthentification => {
 };
 
 export const authentificationInvalidee = (
-  erreur: Error,
+  erreur: Error
 ): ActionAuthentification => {
   return {
     erreur,

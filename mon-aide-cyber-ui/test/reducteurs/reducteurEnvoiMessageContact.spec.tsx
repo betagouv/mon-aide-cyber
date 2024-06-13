@@ -26,7 +26,7 @@ describe("Réducteur d'envoie de message de contact", () => {
     it('contient le nom', () => {
       const etatEnvoieMessage = reducteurEnvoiMessageContact(
         etatInitial,
-        nomSaisi('Jean Dupont'),
+        nomSaisi('Jean Dupont')
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -46,7 +46,7 @@ describe("Réducteur d'envoie de message de contact", () => {
             nom: { className: 'fr-input-group--error', texteExplicatif: <></> },
           },
         },
-        nomSaisi('   '),
+        nomSaisi('   ')
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -68,7 +68,7 @@ describe("Réducteur d'envoie de message de contact", () => {
             nom: { className: 'fr-input-group--error', texteExplicatif: <></> },
           },
         },
-        nomSaisi('Jean Dupont'),
+        nomSaisi('Jean Dupont')
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -88,7 +88,7 @@ describe("Réducteur d'envoie de message de contact", () => {
           nom: '',
           saisieValide: () => false,
         },
-        nomSaisi('Jean Dupont'),
+        nomSaisi('Jean Dupont')
       );
 
       expect(etatEnvoieMessage.saisieValide()).toBe(false);
@@ -99,7 +99,7 @@ describe("Réducteur d'envoie de message de contact", () => {
     it("contient l'email", () => {
       const etatEnvoieMessage = reducteurEnvoiMessageContact(
         etatInitial,
-        emailSaisi('jean-dupont@email.com'),
+        emailSaisi('jean-dupont@email.com')
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -122,7 +122,7 @@ describe("Réducteur d'envoie de message de contact", () => {
             },
           },
         },
-        emailSaisi('   '),
+        emailSaisi('   ')
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -147,7 +147,7 @@ describe("Réducteur d'envoie de message de contact", () => {
             },
           },
         },
-        emailSaisi('jean-dupont@mail.com'),
+        emailSaisi('jean-dupont@mail.com')
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -167,7 +167,7 @@ describe("Réducteur d'envoie de message de contact", () => {
           nom: 'Jean Dupont',
           saisieValide: () => false,
         },
-        emailSaisi('jean-dupont@email.com'),
+        emailSaisi('jean-dupont@email.com')
       );
 
       expect(etatEnvoieMessage.saisieValide()).toBe(false);
@@ -184,8 +184,8 @@ describe("Réducteur d'envoie de message de contact", () => {
             '\n' +
             'Cordialement.\n' +
             '\n' +
-            'Jean Dupont\n',
-        ),
+            'Jean Dupont\n'
+        )
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -214,7 +214,7 @@ describe("Réducteur d'envoie de message de contact", () => {
             },
           },
         },
-        messageSaisi('   '),
+        messageSaisi('   ')
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -242,7 +242,7 @@ describe("Réducteur d'envoie de message de contact", () => {
             },
           },
         },
-        messageSaisi('Bonjour le monde!'),
+        messageSaisi('Bonjour le monde!')
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -262,7 +262,7 @@ describe("Réducteur d'envoie de message de contact", () => {
           nom: 'Jean Dupont',
           saisieValide: () => false,
         },
-        messageSaisi('Un message'),
+        messageSaisi('Un message')
       );
 
       expect(etatEnvoieMessage.saisieValide()).toBe(false);
@@ -277,7 +277,7 @@ describe("Réducteur d'envoie de message de contact", () => {
         nom: 'Jean Dupont',
         saisieValide: () => true,
       },
-      messageEnvoye(),
+      messageEnvoye()
     );
 
     expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -298,7 +298,7 @@ describe("Réducteur d'envoie de message de contact", () => {
         nom: 'Jean Dupont',
         saisieValide: () => true,
       },
-      envoiMessageInvalide(new Error('Une erreur est survenue')),
+      envoiMessageInvalide(new Error('Une erreur est survenue'))
     );
 
     expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -323,7 +323,7 @@ describe("Réducteur d'envoie de message de contact", () => {
           email: 'jean-dupont@email.com',
           message: 'Bonjour, le monde!',
         },
-        messageComplete(),
+        messageComplete()
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -346,7 +346,7 @@ describe("Réducteur d'envoie de message de contact", () => {
           message: 'Bonjour, le monde!',
           messageEnvoye: true,
         },
-        messageComplete(),
+        messageComplete()
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -368,7 +368,7 @@ describe("Réducteur d'envoie de message de contact", () => {
           email: 'jean-dupont@email.com',
           message: 'Bonjour, le monde!',
         },
-        messageComplete(),
+        messageComplete()
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -397,7 +397,7 @@ describe("Réducteur d'envoie de message de contact", () => {
           email: 'email-non-valide.com',
           message: 'Bonjour, le monde!',
         },
-        messageComplete(),
+        messageComplete()
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({
@@ -429,7 +429,7 @@ describe("Réducteur d'envoie de message de contact", () => {
           email: 'jean-dupont@email.com',
           message: '   ',
         },
-        messageComplete(),
+        messageComplete()
       );
 
       expect(etatEnvoieMessage).toStrictEqual<EtatEnvoiMessageContact>({

@@ -9,9 +9,7 @@ $border-radius: 0.5rem;
 @mixin primaire($couleur-texte, $couleur-fond, $couleur-fond-survol-et-actif) {
   background-color: $couleur-fond;
   color: $couleur-texte;
-  box-shadow:
-    0 0 0 2px transparent,
-    0 0 0 4px transparent;
+  box-shadow: 0 0 0 2px transparent, 0 0 0 4px transparent;
 
   --hover: none;
 
@@ -89,9 +87,7 @@ $border-radius: 0.5rem;
 }
 
 @mixin box-shadow($box1: white, $box2: var(--couleurs-mac-violet-moyen)) {
-  box-shadow:
-    0 0 0 2px $box1,
-    0 0 0 4px $box2;
+  box-shadow: 0 0 0 2px $box1, 0 0 0 4px $box2;
 }
 
 .bouton-mac {
@@ -175,26 +171,11 @@ $border-radius: 0.5rem;
 }
 
 .mac-radio-group input[type='checkbox'] + label::before {
-  background-size:
-    0.25rem 0.25rem,
-    calc(100% - 0.25rem) 1px,
-    0.25rem 0.25rem,
-    1px calc(100% - 0.5rem),
-    0.25rem 0.25rem,
-    calc(100% - 0.5rem) 1px,
-    0.25rem 0.25rem,
-    1px calc(100% - 0.5rem),
-    1rem !important;
-  background-position:
-    0 0,
-    0.25rem 0,
-    100% 0,
-    0 0.25rem,
-    100% 100%,
-    calc(100% - 0.25rem) 100%,
-    0 100%,
-    100% 0.25rem,
-    center !important;
+  background-size: 0.25rem 0.25rem, calc(100% - 0.25rem) 1px, 0.25rem 0.25rem,
+    1px calc(100% - 0.5rem), 0.25rem 0.25rem, calc(100% - 0.5rem) 1px,
+    0.25rem 0.25rem, 1px calc(100% - 0.5rem), 1rem !important;
+  background-position: 0 0, 0.25rem 0, 100% 0, 0 0.25rem, 100% 100%,
+    calc(100% - 0.25rem) 100%, 0 100%, 100% 0.25rem, center !important;
   background-repeat: no-repeat;
   background-image: radial-gradient(
       at 5px 4px,

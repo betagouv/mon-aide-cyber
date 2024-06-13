@@ -5,18 +5,18 @@ import { appelleAPI } from './appelleAPI.ts';
 type ContexteMacAPIType = {
   appelle: <REPONSE, CORPS = void>(
     parametresAPI: ParametresAPI<CORPS>,
-    transcris: (contenu: Promise<any>) => Promise<REPONSE>,
+    transcris: (contenu: Promise<any>) => Promise<REPONSE>
   ) => Promise<REPONSE>;
 };
 
 export const ContexteMacAPI = createContext<ContexteMacAPIType>(
-  {} as unknown as ContexteMacAPIType,
+  {} as unknown as ContexteMacAPIType
 );
 
 export const FournisseurMacAPI = ({ children }: PropsWithChildren) => {
   const appelle = async <REPONSE, CORPS = void>(
     parametresAPI: ParametresAPI<CORPS>,
-    transcris: (contenu: Promise<any>) => Promise<REPONSE>,
+    transcris: (contenu: Promise<any>) => Promise<REPONSE>
   ) => {
     try {
       return appelleAPI(parametresAPI, fetch, transcris);

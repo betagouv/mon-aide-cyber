@@ -150,7 +150,7 @@ export const ComposantLancerDiagnostic = ({
             .url(lien.url)
             .methode(lien.methode!)
             .construis(),
-          async (json) => new LienRoutage((await json) as FormatLien),
+          async (json) => new LienRoutage((await json) as FormatLien)
         )
         .then((lien) => {
           return navigationMAC.navigue(
@@ -161,18 +161,18 @@ export const ComposantLancerDiagnostic = ({
                 methode: 'GET',
               },
             }),
-            'afficher-diagnostic',
+            'afficher-diagnostic'
           );
         })
         .catch((erreur) => showBoundary(erreur));
     },
-    [macapi, navigationMAC, showBoundary],
+    [macapi, navigationMAC, showBoundary]
   );
 
   const lancerDiagnostic = useCallback(async () => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
       'lancer-diagnostic',
-      (lien: Lien) => lanceDiagnostic(lien),
+      (lien: Lien) => lanceDiagnostic(lien)
     );
   }, [navigationMAC.etat, lanceDiagnostic]);
 

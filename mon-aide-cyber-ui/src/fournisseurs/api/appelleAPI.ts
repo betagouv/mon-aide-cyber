@@ -3,7 +3,7 @@ import { ParametresAPI } from './ConstructeurParametresAPI.ts';
 export const appelleAPI = async <REPONSE, CORPS = void>(
   parametresAPI: ParametresAPI<CORPS>,
   appel: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>,
-  transcris: (contenu: Promise<any>) => Promise<REPONSE>,
+  transcris: (contenu: Promise<any>) => Promise<REPONSE>
 ): Promise<REPONSE> => {
   const reponse = await appel(parametresAPI.url, {
     method: parametresAPI.methode,

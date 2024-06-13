@@ -49,12 +49,12 @@ type ActionModificationMotDePasse =
 
 export const reducteurModificationMotDePasse = (
   etat: EtatModificationMotDePasse,
-  action: ActionModificationMotDePasse,
+  action: ActionModificationMotDePasse
 ): EtatModificationMotDePasse => {
   const verifieLesMotsDePasseSaisis = (
     nouveauMotDePasse: string,
     motDePasseConfirme: string,
-    ancienMotDePasse: string,
+    ancienMotDePasse: string
   ) => {
     const motsDePasseIdentiques = nouveauMotDePasse === motDePasseConfirme;
     const ancienMotDePasseDifferentDuNouveauMotDePasse =
@@ -133,7 +133,7 @@ export const reducteurModificationMotDePasse = (
           verifieLesMotsDePasseSaisis(
             nouveauMotDePasse,
             motDePasseConfirme,
-            action.ancienMotDePasse,
+            action.ancienMotDePasse
           ).valide,
       };
     }
@@ -145,7 +145,7 @@ export const reducteurModificationMotDePasse = (
           verifieLesMotsDePasseSaisis(
             action.nouveauMotDePasse,
             etat.motDePasseConfirme,
-            etat.ancienMotDePasse,
+            etat.ancienMotDePasse
           ).valide,
       };
     }
@@ -160,7 +160,7 @@ export const reducteurModificationMotDePasse = (
           verifieLesMotsDePasseSaisis(
             etat.nouveauMotDePasse,
             action.motDePasseConfirme,
-            etat.ancienMotDePasse,
+            etat.ancienMotDePasse
           ).valide,
       };
     }
@@ -178,7 +178,7 @@ export const reducteurModificationMotDePasse = (
       const verificationMotsDePasseSaisis = verifieLesMotsDePasseSaisis(
         etat.nouveauMotDePasse,
         etat.motDePasseConfirme,
-        etat.ancienMotDePasse,
+        etat.ancienMotDePasse
       );
       return {
         ...etat,
@@ -197,21 +197,21 @@ export const modificationMotDePasseValidee =
   });
 
 export const nouveauMotDePasseSaisi = (
-  nouveauMotDePasse: string,
+  nouveauMotDePasse: string
 ): ActionModificationMotDePasse => ({
   nouveauMotDePasse,
   type: TypeActionModificationMotDePasse.NOUVEAU_MOT_DE_PASSE_SAISI,
 });
 
 export const nouveauMotDePasseConfirme = (
-  motDePasseConfirme: string,
+  motDePasseConfirme: string
 ): ActionModificationMotDePasse => ({
   motDePasseConfirme,
   type: TypeActionModificationMotDePasse.NOUVEAU_MOT_DE_PASSE_CONFIRME,
 });
 
 export const ancienMotDePasseSaisi = (
-  ancienMotDePasse: string,
+  ancienMotDePasse: string
 ): ActionModificationMotDePasse => ({
   ancienMotDePasse: ancienMotDePasse,
   type: TypeActionModificationMotDePasse.ANCIEN_MOT_DE_PASSE_SAISI,
@@ -227,7 +227,7 @@ export type MessagesErreurs = {
   motsDePasseConfirmeDifferent: string;
 };
 export const initialiseReducteur = (
-  messagesErreurs: MessagesErreurs,
+  messagesErreurs: MessagesErreurs
 ): EtatModificationMotDePasse => ({
   nouveauMotDePasse: '',
   motDePasseConfirme: '',

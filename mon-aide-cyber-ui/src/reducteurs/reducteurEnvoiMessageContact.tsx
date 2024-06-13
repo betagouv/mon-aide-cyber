@@ -65,11 +65,11 @@ const textesExplicatif: Map<
 ]);
 export const reducteurEnvoiMessageContact = (
   etat: EtatEnvoiMessageContact,
-  action: ActionEnvoiMessageContact,
+  action: ActionEnvoiMessageContact
 ): EtatEnvoiMessageContact => {
   const construisErreurEnvoieMessage = (
     clef: 'nom' | 'email' | 'message',
-    estValide: () => boolean,
+    estValide: () => boolean
   ): ErreurEnvoiMessageContact => {
     const erreur: ErreurEnvoiMessageContact = { ...etat.erreur };
     delete erreur[clef];
@@ -94,12 +94,12 @@ export const reducteurEnvoiMessageContact = (
       const emailEstValide = (estUnEmail && estUnEmail?.length > 0) || false;
       const erreurEmail = construisErreurEnvoieMessage(
         'email',
-        () => emailEstValide,
+        () => emailEstValide
       );
       const messageEstValide = etat.message.trim().length > 0;
       const erreurMessage = construisErreurEnvoieMessage(
         'message',
-        () => messageEstValide,
+        () => messageEstValide
       );
       return {
         ...etat,
@@ -193,7 +193,7 @@ export const messageEnvoye = (): ActionEnvoiMessageContact => {
 };
 
 export const envoiMessageInvalide = (
-  erreur: Error,
+  erreur: Error
 ): ActionEnvoiMessageContact => {
   return {
     erreur,

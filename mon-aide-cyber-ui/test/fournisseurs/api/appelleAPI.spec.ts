@@ -59,10 +59,10 @@ describe('Appelle API', () => {
             headers: init!.headers! as Headers,
           };
           return Promise.resolve(
-            new ConstructeurDeReponse().ok().json(infos).construis(),
+            new ConstructeurDeReponse().ok().json(infos).construis()
           );
         },
-        (contenu) => contenu,
+        (contenu) => contenu
       );
 
       expect(reponse).toStrictEqual<InformationsEnvoyees>({

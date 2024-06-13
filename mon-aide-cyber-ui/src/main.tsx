@@ -107,5 +107,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </FournisseurMacAPI>
       </BrowserRouter>
     </FournisseurMatomo>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

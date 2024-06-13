@@ -41,7 +41,7 @@ export const TableauDeBord = () => {
                 .url(lien.url)
                 .methode(lien.methode!)
                 .construis(),
-              (reponse) => reponse,
+              (reponse) => reponse
             )
             .then((tableauDeBord) => {
               navigationMAC.ajouteEtat(tableauDeBord.liens);
@@ -52,7 +52,7 @@ export const TableauDeBord = () => {
               console.log(erreur);
             });
         }
-      },
+      }
     );
   }, [enCoursDeChargement, macAPI, navigationMAC]);
 

@@ -45,10 +45,10 @@ export const ComposantAffichageErreur = ({
             <div className="fr-col-md-8 fr-col-sm-12 section">
               <ul>
                 {Object.entries(
-                  new MoteurDeLiens(error.liens).extrais() || [],
+                  new MoteurDeLiens(error.liens).extrais() || []
                 ).map(
                   ([nom, lien]) =>
-                    ActionsDisponibles.get(nom as Action)?.(lien) || <></>,
+                    ActionsDisponibles.get(nom as Action)?.(lien) || <></>
                 )}
               </ul>
             </div>

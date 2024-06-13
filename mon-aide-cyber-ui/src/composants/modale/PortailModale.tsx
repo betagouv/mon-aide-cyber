@@ -28,7 +28,7 @@ const taillesModale: Map<TailleModale, string> = new Map<TailleModale, string>([
 
 export const Modale = forwardRef(function Modale(
   proprietes: PropsWithChildren<ProprietesElementModale>,
-  referenceDialogue: ForwardedRef<any>,
+  referenceDialogue: ForwardedRef<any>
 ) {
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -75,10 +75,10 @@ export const Modale = forwardRef(function Modale(
 
 export const PortailModale = ({ children }: PropsWithChildren) => {
   const [elementModale, setElementModale] = useState<null | ElementModale>(
-    null,
+    null
   );
   const [classModale, setClasseModale] = useState<string | undefined>(
-    undefined,
+    undefined
   );
   const [ariaModale, setAriaModale] = useState<boolean>(false);
   const [modaleOuverte, setModaleOuverte] = useState<boolean>(false);
@@ -96,18 +96,18 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
     if (modaleOuverte && modaleCourante) {
       const focusable: NodeListOf<HTMLElement> | undefined =
         modaleCourante.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
 
       const premierElement = focusable?.[0];
       const premierElementInput =
         Array.from(focusable.values()).find(
-          (element) => element instanceof HTMLInputElement,
+          (element) => element instanceof HTMLInputElement
         ) || focusable?.[0];
       const dernierElement = focusable?.[focusable.length - 1];
       const timeoutSurPremierChamps = setTimeout(
         () => premierElementInput?.focus(),
-        10,
+        10
       );
 
       const surTabulation = (e: KeyboardEvent) => {
@@ -178,7 +178,7 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
               }
               surClickEnDehors={fermeModale}
             />,
-            document.getElementById('modale') as Element,
+            document.getElementById('modale') as Element
           )
         : null}
     </ContexteModale.Provider>

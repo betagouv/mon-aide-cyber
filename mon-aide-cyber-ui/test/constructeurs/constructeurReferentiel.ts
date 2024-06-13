@@ -29,7 +29,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
       libelle: string;
       type: TypeDeSaisie;
     },
-    reponsePossibles: ReponsePossible[] = [],
+    reponsePossibles: ReponsePossible[] = []
   ): ConstructeurReferentiel {
     if (reponsePossibles.length === 0) {
       reponsePossibles.push(uneReponsePossible().construis());
@@ -64,7 +64,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
 
   ajouteUneThematique(
     theme: string,
-    questions: Question[],
+    questions: Question[]
   ): ConstructeurReferentiel {
     this.thematique[theme] = {
       actions: [],
@@ -88,7 +88,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
           [clef]: thematique,
         };
       },
-      {},
+      {}
     );
   }
 }

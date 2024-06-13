@@ -20,7 +20,7 @@ export type EtatBouton = {
 };
 export const reducteurBoutonThematiqueSuivante = (
   etat: EtatBouton,
-  action: ActionBouton,
+  action: ActionBouton
 ): EtatBouton => {
   function indices(thematiques: string[], thematiqueCourante: string) {
     return {
@@ -33,7 +33,7 @@ export const reducteurBoutonThematiqueSuivante = (
     case TypeActionBouton.CHARGE: {
       const { indiceThematiqueCourante, dernierIndiceThematique } = indices(
         action.thematiques,
-        action.thematiqueCourante,
+        action.thematiqueCourante
       );
       return {
         ...etat,
@@ -45,7 +45,7 @@ export const reducteurBoutonThematiqueSuivante = (
     case TypeActionBouton.CLIQUE: {
       const { indiceThematiqueCourante, dernierIndiceThematique } = indices(
         etat.thematiques,
-        etat.thematiqueCourante,
+        etat.thematiqueCourante
       );
       let thematiqueCourante = etat.thematiqueCourante;
       if (indiceThematiqueCourante < dernierIndiceThematique) {
@@ -63,7 +63,7 @@ export const reducteurBoutonThematiqueSuivante = (
 
 export const reducteurBoutonThematiquePrecedente = (
   etat: EtatBouton,
-  action: ActionBouton,
+  action: ActionBouton
 ): EtatBouton => {
   const indice = (thematiques: string[], thematiqueCour: string) => {
     const indiceThematiqueCourante = thematiques.indexOf(thematiqueCour);
@@ -74,7 +74,7 @@ export const reducteurBoutonThematiquePrecedente = (
     case TypeActionBouton.CLIQUE: {
       const { indiceThematiqueCourante, premierIndiceThematique } = indice(
         etat.thematiques,
-        etat.thematiqueCourante,
+        etat.thematiqueCourante
       );
       let thematiqueCourante = etat.thematiqueCourante;
       if (premierIndiceThematique < indiceThematiqueCourante) {
@@ -90,7 +90,7 @@ export const reducteurBoutonThematiquePrecedente = (
     case TypeActionBouton.CHARGE: {
       const { indiceThematiqueCourante, premierIndiceThematique } = indice(
         action.thematiques,
-        action.thematiqueCourante,
+        action.thematiqueCourante
       );
       return {
         ...etat,
@@ -103,7 +103,7 @@ export const reducteurBoutonThematiquePrecedente = (
 };
 export const thematiqueChargee = (
   thematiqueCourante: string,
-  thematiques: string[],
+  thematiques: string[]
 ): ActionBouton => {
   return {
     type: TypeActionBouton.CHARGE,

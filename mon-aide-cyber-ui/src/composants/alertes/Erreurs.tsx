@@ -25,7 +25,7 @@ export type PresentationErreur = {
 };
 export const construisErreur = (
   clef: string,
-  texteExplicatif: { identifiantTexteExplicatif: string; texte: string },
+  texteExplicatif: { identifiantTexteExplicatif: string; texte: string }
 ) => {
   return {
     [clef]: {

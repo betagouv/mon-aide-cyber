@@ -14,8 +14,8 @@ export const RequiertAidantSansEspace = () => {
       () => setRedirection(<Outlet />),
       () =>
         moteurDeLiens.trouve('lancer-diagnostic', () =>
-          navigationMAC.navigue(moteurDeLiens, 'lancer-diagnostic'),
-        ),
+          navigationMAC.navigue(moteurDeLiens, 'lancer-diagnostic')
+        )
     );
   }, [navigationMAC]);
 

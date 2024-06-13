@@ -20,9 +20,9 @@ export const ComposantDiagnostics = ({
     (idDiagnostic: UUID) =>
       navigationMAC.navigue(
         new MoteurDeLiens(navigationMAC.etat),
-        `afficher-diagnostic-${idDiagnostic}`,
+        `afficher-diagnostic-${idDiagnostic}`
       ),
-    [navigationMAC],
+    [navigationMAC]
   );
 
   const tableauDiagnostics =

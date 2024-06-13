@@ -17,13 +17,13 @@ describe('Réducteur authentification', () => {
     it("affiche le champs d'erreur", () => {
       const etatAuthentification = reducteurAuthentification(
         initialiseReducteur(),
-        authentificationInvalidee(new Error('Identifiants incorrects')),
+        authentificationInvalidee(new Error('Identifiants incorrects'))
       );
 
       expect(etatAuthentification.identifiant).toBe('');
       expect(etatAuthentification.motDePasse).toBe('');
       expect(etatAuthentification.champsErreur).toStrictEqual(
-        <ChampsErreur erreur={new Error('Identifiants incorrects')} />,
+        <ChampsErreur erreur={new Error('Identifiants incorrects')} />
       );
       expect(etatAuthentification.saisieValide()).toBeFalsy();
       expect(etatAuthentification.erreur).toStrictEqual({
@@ -53,7 +53,7 @@ describe('Réducteur authentification', () => {
     it("l'identifiant est validé", () => {
       const etatAuthentification = reducteurAuthentification(
         initialiseReducteur(),
-        identifiantSaisi('identifiant'),
+        identifiantSaisi('identifiant')
       );
 
       expect(etatAuthentification.identifiant).toBe('identifiant');
@@ -66,7 +66,7 @@ describe('Réducteur authentification', () => {
     it("l'identifiant est invalidé", () => {
       const etatAuthentification = reducteurAuthentification(
         initialiseReducteur(),
-        identifiantSaisi(''),
+        identifiantSaisi('')
       );
 
       expect(etatAuthentification.saisieValide()).toBeFalsy();
@@ -102,7 +102,7 @@ describe('Réducteur authentification', () => {
             },
           },
         },
-        identifiantSaisi('nouvelle-saisie'),
+        identifiantSaisi('nouvelle-saisie')
       );
 
       expect(etatAuthentification.identifiant).toBe('nouvelle-saisie');
@@ -140,7 +140,7 @@ describe('Réducteur authentification', () => {
             },
           },
         },
-        identifiantSaisi('nouvelle-saisie'),
+        identifiantSaisi('nouvelle-saisie')
       );
 
       expect(etatAuthentification.identifiant).toBe('nouvelle-saisie');
@@ -168,7 +168,7 @@ describe('Réducteur authentification', () => {
           motDePasse: 'mdp',
           saisieValide: () => false,
         },
-        identifiantSaisi('nouvelle-saisie'),
+        identifiantSaisi('nouvelle-saisie')
       );
 
       expect(etatAuthentification.saisieValide()).toBe(true);
@@ -193,7 +193,7 @@ describe('Réducteur authentification', () => {
             },
           },
         },
-        identifiantSaisi(''),
+        identifiantSaisi('')
       );
 
       expect(etatAuthentification.erreur).toStrictEqual({
@@ -223,7 +223,7 @@ describe('Réducteur authentification', () => {
     it('le mot de passe est validé', () => {
       const etatAuthentification = reducteurAuthentification(
         initialiseReducteur(),
-        motDePasseSaisi('mdp'),
+        motDePasseSaisi('mdp')
       );
 
       expect(etatAuthentification.identifiant).toBe('');
@@ -236,7 +236,7 @@ describe('Réducteur authentification', () => {
     it('le mot de passe est invalidé', () => {
       const etatAuthentification = reducteurAuthentification(
         initialiseReducteur(),
-        motDePasseSaisi(''),
+        motDePasseSaisi('')
       );
 
       expect(etatAuthentification.saisieValide()).toBeFalsy();
@@ -272,7 +272,7 @@ describe('Réducteur authentification', () => {
             },
           },
         },
-        motDePasseSaisi('nouvelle-saisie'),
+        motDePasseSaisi('nouvelle-saisie')
       );
 
       expect(etatAuthentification.identifiant).toBe('');
@@ -310,7 +310,7 @@ describe('Réducteur authentification', () => {
             },
           },
         },
-        motDePasseSaisi('nouvelle-saisie'),
+        motDePasseSaisi('nouvelle-saisie')
       );
 
       expect(etatAuthentification.identifiant).toBe('');
@@ -338,7 +338,7 @@ describe('Réducteur authentification', () => {
           motDePasse: '',
           saisieValide: () => false,
         },
-        motDePasseSaisi('nouvelle-saisie'),
+        motDePasseSaisi('nouvelle-saisie')
       );
 
       expect(etatAuthentification.saisieValide()).toBe(true);
@@ -354,7 +354,7 @@ describe('Réducteur authentification', () => {
           motDePasse: '',
           saisieValide: () => false,
         },
-        saisieInvalidee(),
+        saisieInvalidee()
       );
 
       expect(etatAuthentification.identifiant).toBe('');
@@ -391,7 +391,7 @@ describe('Réducteur authentification', () => {
           motDePasse: 'mdp',
           saisieValide: () => false,
         },
-        saisieInvalidee(),
+        saisieInvalidee()
       );
 
       expect(etatAuthentification.identifiant).toBe('');
@@ -419,7 +419,7 @@ describe('Réducteur authentification', () => {
           motDePasse: '',
           saisieValide: () => false,
         },
-        saisieInvalidee(),
+        saisieInvalidee()
       );
 
       expect(etatAuthentification.identifiant).toBe('identifiant');

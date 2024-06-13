@@ -13,7 +13,7 @@ describe('Réducteur utilisateur authentifié', () => {
     const utilisateur = unUtilisateur().construis();
     const etatUtilisateurAuthentifie = reducteurUtilisateurAuthentifie(
       initialiseReducteurUtilisateurAuthentifie(),
-      utilisateurCharge(utilisateur),
+      utilisateurCharge(utilisateur)
     );
 
     expect(etatUtilisateurAuthentifie).toStrictEqual({
@@ -26,7 +26,7 @@ describe('Réducteur utilisateur authentifié', () => {
   it("redirige l'utilisateur", () => {
     const etatUtilisateurAuthentifie = reducteurUtilisateurAuthentifie(
       initialiseReducteurUtilisateurAuthentifie(),
-      utilisateurNonAuthentifie(),
+      utilisateurNonAuthentifie()
     );
 
     expect(etatUtilisateurAuthentifie).toStrictEqual({

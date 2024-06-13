@@ -13,7 +13,7 @@ import {
 describe('Réducteur Auto complétion', () => {
   const etatInitial = initialiseEtatAutoCompletion<string>()(
     'auto-complétion',
-    '',
+    ''
   );
 
   it('Initialise l’état', () => {
@@ -32,7 +32,7 @@ describe('Réducteur Auto complétion', () => {
   it('Déploie la liste des valeurs', () => {
     const etat = reducteurAutoCompletion<string>()(
       { ...etatInitial, suggestionsInitiales: ['un', 'deux', 'trois'] },
-      basculeAffichageValeurs(),
+      basculeAffichageValeurs()
     );
 
     expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -52,7 +52,7 @@ describe('Réducteur Auto complétion', () => {
         suggestionsInitiales: ['un', 'deux', 'trois'],
         suggestionsVisibles: 'visible',
       },
-      basculeAffichageValeurs(),
+      basculeAffichageValeurs()
     );
 
     expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -73,7 +73,7 @@ describe('Réducteur Auto complétion', () => {
           suggestionsInitiales: ['1', '2', '3'],
           suggestionsVisibles: 'visible',
         },
-        toucheClavierAppuyee('Tab'),
+        toucheClavierAppuyee('Tab')
       );
 
       expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -94,7 +94,7 @@ describe('Réducteur Auto complétion', () => {
             suggestionsInitiales: ['1', '2', '3'],
             suggestionsVisibles: 'visible',
           },
-          toucheClavierAppuyee('ArrowDown'),
+          toucheClavierAppuyee('ArrowDown')
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -116,7 +116,7 @@ describe('Réducteur Auto complétion', () => {
             suggestionsVisibles: 'visible',
             elementNavigationCourant: { valeur: '1', index: 0 },
           },
-          toucheClavierAppuyee('ArrowDown'),
+          toucheClavierAppuyee('ArrowDown')
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -138,7 +138,7 @@ describe('Réducteur Auto complétion', () => {
             suggestions: ['12', '22', '23'],
             suggestionsVisibles: 'visible',
           },
-          toucheClavierAppuyee('ArrowDown'),
+          toucheClavierAppuyee('ArrowDown')
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -162,7 +162,7 @@ describe('Réducteur Auto complétion', () => {
             suggestionsVisibles: 'visible',
             navigationClavierReinitialisee: true,
           },
-          toucheClavierAppuyee('ArrowDown'),
+          toucheClavierAppuyee('ArrowDown')
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -184,7 +184,7 @@ describe('Réducteur Auto complétion', () => {
             suggestionsVisibles: 'visible',
             elementNavigationCourant: { valeur: '3', index: 2 },
           },
-          toucheClavierAppuyee('ArrowDown'),
+          toucheClavierAppuyee('ArrowDown')
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -207,7 +207,7 @@ describe('Réducteur Auto complétion', () => {
             suggestionsInitiales: ['1', '2', '3'],
             suggestionsVisibles: 'visible',
           },
-          toucheClavierAppuyee('ArrowUp'),
+          toucheClavierAppuyee('ArrowUp')
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -229,7 +229,7 @@ describe('Réducteur Auto complétion', () => {
             suggestionsVisibles: 'visible',
             elementNavigationCourant: { valeur: '2', index: 1 },
           },
-          toucheClavierAppuyee('ArrowUp'),
+          toucheClavierAppuyee('ArrowUp')
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -251,7 +251,7 @@ describe('Réducteur Auto complétion', () => {
             suggestions: ['12', '22', '23'],
             suggestionsVisibles: 'visible',
           },
-          toucheClavierAppuyee('ArrowUp'),
+          toucheClavierAppuyee('ArrowUp')
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -275,7 +275,7 @@ describe('Réducteur Auto complétion', () => {
             suggestionsVisibles: 'visible',
             navigationClavierReinitialisee: true,
           },
-          toucheClavierAppuyee('ArrowUp'),
+          toucheClavierAppuyee('ArrowUp')
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -295,7 +295,7 @@ describe('Réducteur Auto complétion', () => {
     it('Charge les suggestions initiales sans valeur saisie par défaut', () => {
       const etat = reducteurAutoCompletion<string>()(
         etatInitial,
-        suggestionsInitialesChargees({ suggestionsInitiales: ['1', '2', '3'] }),
+        suggestionsInitialesChargees({ suggestionsInitiales: ['1', '2', '3'] })
       );
 
       expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -316,7 +316,7 @@ describe('Réducteur Auto complétion', () => {
           suggestionsInitiales: ['1', '2', '3'],
           suggestionsVisibles: 'visible',
         },
-        suggestionChoisie('2', (valeur) => (appelRecu = valeur)),
+        suggestionChoisie('2', (valeur) => (appelRecu = valeur))
       );
 
       expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -334,7 +334,7 @@ describe('Réducteur Auto complétion', () => {
       let appelRecu = '';
       const etat = reducteurAutoCompletion<string>()(
         { ...etatInitial, suggestionsInitiales: ['1', '13', '2', '3', '33'] },
-        valeurSaisie('3', (valeur) => (appelRecu = valeur)),
+        valeurSaisie('3', (valeur) => (appelRecu = valeur))
       );
 
       expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -352,7 +352,7 @@ describe('Réducteur Auto complétion', () => {
       let appelRecu = '';
       const etat = reducteurAutoCompletion<string>()(
         { ...etatInitial, suggestionsInitiales: ['A', 'B', 'aC', 'D', 'Ea'] },
-        valeurSaisie('a', (valeur) => (appelRecu = valeur)),
+        valeurSaisie('a', (valeur) => (appelRecu = valeur))
       );
 
       expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -373,7 +373,7 @@ describe('Réducteur Auto complétion', () => {
           suggestionsInitiales: ['il', 'île', 'ïloise', 'an', 'encens'],
         },
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        valeurSaisie('i', (_) => {}),
+        valeurSaisie('i', (_) => {})
       );
 
       expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -393,7 +393,7 @@ describe('Réducteur Auto complétion', () => {
           ...etatInitial,
           suggestionsInitiales: ['un', 'deux', 'trois', 'quatre', 'cinq'],
         },
-        valeurSaisie('d', (valeur) => (appelRecu = valeur)),
+        valeurSaisie('d', (valeur) => (appelRecu = valeur))
       );
 
       expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -421,7 +421,7 @@ describe('Réducteur Auto complétion', () => {
           ],
           valeurSaisie: 'Finistère',
         },
-        valeurSaisie('Finistèr', (valeur) => (appelRecu = valeur)),
+        valeurSaisie('Finistèr', (valeur) => (appelRecu = valeur))
       );
 
       expect(etat).toStrictEqual<EtatAutoCompletion<string>>({
@@ -457,7 +457,7 @@ describe('Réducteur Auto complétion', () => {
         etatInitial,
         suggestionsInitialesChargees<{ [clef: string]: string }>({
           suggestionsInitiales: [{ a: '1' }, { b: '2' }, { c: '3' }],
-        }),
+        })
       );
 
       expect(etat).toStrictEqual<
@@ -490,8 +490,8 @@ describe('Réducteur Auto complétion', () => {
         },
         suggestionChoisie(
           { code: '2', valeur: '2' },
-          (valeur) => (appelRecu = valeur),
-        ),
+          (valeur) => (appelRecu = valeur)
+        )
       );
 
       expect(etat).toStrictEqual<
@@ -514,7 +514,7 @@ describe('Réducteur Auto complétion', () => {
     it('Réduit les suggestions possibles sur tous les champs de l’objet', () => {
       const etatInitial = initialiseEtatAutoCompletion<Test>()(
         'auto-complétion',
-        '',
+        ''
       );
       let appelRecu = '';
       const etat = reducteurAutoCompletion<Test>()(
@@ -527,7 +527,7 @@ describe('Réducteur Auto complétion', () => {
             { a: '13', b: '2', c: '4' },
           ],
         },
-        valeurSaisie('3', (valeur) => (appelRecu = valeur as string)),
+        valeurSaisie('3', (valeur) => (appelRecu = valeur as string))
       );
 
       expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
@@ -553,7 +553,7 @@ describe('Réducteur Auto complétion', () => {
       it('En réduisant les suggestions possibles sur tous les champs de l’objet en étant insensible à la casse', () => {
         const etatInitial = initialiseEtatAutoCompletion<Test>()(
           'auto-complétion',
-          '',
+          ''
         );
         let appelRecu = {} as Test;
         const etat = reducteurAutoCompletion<Test>()(
@@ -566,7 +566,7 @@ describe('Réducteur Auto complétion', () => {
               { a: 'Da', b: 'BA', c: 'D' },
             ],
           },
-          valeurSaisie('a', (valeur) => (appelRecu = valeur as Test)),
+          valeurSaisie('a', (valeur) => (appelRecu = valeur as Test))
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
@@ -591,7 +591,7 @@ describe('Réducteur Auto complétion', () => {
       it('En réduisant les suggestions possibles en prenant en compte les caractère accentués', () => {
         const etatInitial = initialiseEtatAutoCompletion<Test>()(
           'auto-complétion',
-          '',
+          ''
         );
         const etat = reducteurAutoCompletion<Test>()(
           {
@@ -605,7 +605,7 @@ describe('Réducteur Auto complétion', () => {
             ],
           },
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          valeurSaisie('i', (_) => {}),
+          valeurSaisie('i', (_) => {})
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
@@ -654,7 +654,7 @@ describe('Réducteur Auto complétion', () => {
             suggestions: suggestionsInitiales,
             valeurSaisie: 'Enseignement',
           },
-          valeurSaisie('co', (valeur) => (appelRecu = valeur as string)),
+          valeurSaisie('co', (valeur) => (appelRecu = valeur as string))
         );
 
         expect(etat).toStrictEqual<
@@ -677,7 +677,7 @@ describe('Réducteur Auto complétion', () => {
       it('En réduisant les suggestions possibles en prenant en compte les caractères accentués et une clef de filtrage fournie', () => {
         const etatInitial = initialiseEtatAutoCompletion<Test>()(
           'auto-complétion',
-          '',
+          ''
         );
         const etat = reducteurAutoCompletion<Test>()(
           {
@@ -692,7 +692,7 @@ describe('Réducteur Auto complétion', () => {
             ],
           },
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          valeurSaisie('í', (_) => {}),
+          valeurSaisie('í', (_) => {})
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
@@ -719,7 +719,7 @@ describe('Réducteur Auto complétion', () => {
       it('En réduisant les suggestions possibles en prenant en compte les traits d’union', () => {
         const etatInitial = initialiseEtatAutoCompletion<Test>()(
           'auto-complétion',
-          '',
+          ''
         );
         const etat = reducteurAutoCompletion<Test>()(
           {
@@ -734,7 +734,7 @@ describe('Réducteur Auto complétion', () => {
             ],
           },
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          valeurSaisie('ile de', (_) => {}),
+          valeurSaisie('ile de', (_) => {})
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
@@ -774,7 +774,7 @@ describe('Réducteur Auto complétion', () => {
           suggestions: valeurs,
           valeurSaisie: { code: '33', nom: 'Gironde' },
         },
-        valeurSaisie('75', (valeur) => (appelRecu = valeur as string)),
+        valeurSaisie('75', (valeur) => (appelRecu = valeur as string))
       );
 
       expect(etat).toStrictEqual<
@@ -795,7 +795,7 @@ describe('Réducteur Auto complétion', () => {
     it('Récupère la valeur saisie sous forme d’objet si la saisie correspond', () => {
       const etatInitial = initialiseEtatAutoCompletion<Test>()(
         'auto-complétion',
-        '',
+        ''
       );
       let appelRecu = {} as Test;
 
@@ -808,7 +808,7 @@ describe('Réducteur Auto complétion', () => {
             { a: '31', b: '32', c: '33' },
           ],
         },
-        valeurSaisie('22', (valeur) => (appelRecu = valeur as Test)),
+        valeurSaisie('22', (valeur) => (appelRecu = valeur as Test))
       );
 
       expect(etat).toStrictEqual<EtatAutoCompletion<Test>>({
@@ -831,7 +831,7 @@ describe('Réducteur Auto complétion', () => {
       it('Réduit les suggestions possibles suite à la saisie de l’utilisateur', () => {
         const etatInitial = initialiseEtatAutoCompletion<Objet>()(
           'auto-complétion',
-          '',
+          ''
         );
         let appelRecu = {} as Objet;
         const etat = reducteurAutoCompletion<Objet>()(
@@ -843,7 +843,7 @@ describe('Réducteur Auto complétion', () => {
               { a: '1', b: 33 },
             ],
           },
-          valeurSaisie('3', (valeur) => (appelRecu = valeur as Objet)),
+          valeurSaisie('3', (valeur) => (appelRecu = valeur as Objet))
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<Objet>>({
@@ -864,7 +864,7 @@ describe('Réducteur Auto complétion', () => {
       it('Choisit la suggestion', () => {
         const etatInitial = initialiseEtatAutoCompletion<Objet>()(
           'auto-complétion',
-          '',
+          ''
         );
         let appelRecu = {} as Objet;
 
@@ -877,10 +877,7 @@ describe('Réducteur Auto complétion', () => {
               { a: '1', b: 23 },
             ],
           },
-          suggestionChoisie(
-            { a: '1', b: 23 },
-            (valeur) => (appelRecu = valeur),
-          ),
+          suggestionChoisie({ a: '1', b: 23 }, (valeur) => (appelRecu = valeur))
         );
 
         expect(etat).toStrictEqual<EtatAutoCompletion<Objet>>({
@@ -920,7 +917,7 @@ describe('Réducteur Auto complétion', () => {
           clefsFiltrage: undefined,
           elementNavigationCourant: undefined,
         },
-        valeurSaisie('Finistèr', (valeur) => (appelRecu = valeur as string)),
+        valeurSaisie('Finistèr', (valeur) => (appelRecu = valeur as string))
       );
 
       expect(etat).toStrictEqual<

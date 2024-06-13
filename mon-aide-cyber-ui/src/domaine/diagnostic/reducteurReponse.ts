@@ -70,18 +70,18 @@ type ActionReponse =
     };
 export const reducteurReponse = (
   etat: EtatReponse,
-  action: ActionReponse,
+  action: ActionReponse
 ): EtatReponse => {
   const actionAMener = (
-    actionDemandee: string,
+    actionDemandee: string
   ): ActionReponseDiagnostic | undefined => {
     return etat.actions.find((a) =>
-      Object.entries(a).find(([, a]) => a.action === actionDemandee),
+      Object.entries(a).find(([, a]) => a.action === actionDemandee)
     );
   };
   const ajouteLaReponse = (
     reponses: ReponseMultiple[],
-    elementReponse: ElementReponse,
+    elementReponse: ElementReponse
   ): void => {
     reponses.push({
       identifiant: elementReponse.identifiantReponse,
@@ -94,19 +94,19 @@ export const reducteurReponse = (
       (rep) => ({
         identifiant: rep.identifiant,
         reponses: new Set(rep.reponses),
-      }),
+      })
     );
     return reponses;
   };
 
   const gereLesReponsesMultiples = (
-    elementReponse: ElementReponse,
+    elementReponse: ElementReponse
   ): ReponseMultiple[] => {
     const reponses = toutesLesReponses();
     const doitRetirerUneReponsePrecedemmentSelectionnee = reponses.find(
       (rep) =>
         rep.identifiant === elementReponse.reponse ||
-        rep.reponses.has(elementReponse.reponse),
+        rep.reponses.has(elementReponse.reponse)
     );
 
     reponses
@@ -120,7 +120,7 @@ export const reducteurReponse = (
       });
 
     const aDejaUneReponse = reponses.find(
-      (rep) => rep.identifiant === elementReponse.identifiantReponse,
+      (rep) => rep.identifiant === elementReponse.identifiantReponse
     );
     if (!aDejaUneReponse) {
       ajouteLaReponse(reponses, elementReponse);
@@ -130,7 +130,7 @@ export const reducteurReponse = (
 
   const genereLaReponsePourUneQuestionTiroir = (
     reponses: ReponseMultiple[],
-    reponse: string,
+    reponse: string
   ): (() => Reponse) => {
     return (): Reponse => ({
       identifiantQuestion: etat.question.identifiant,
@@ -146,7 +146,7 @@ export const reducteurReponse = (
 
   const etatPourUneQuestionTiroir = (
     reponses: ReponseMultiple[],
-    valeur: string,
+    valeur: string
   ): EtatReponse => {
     return {
       ...etat,
@@ -210,14 +210,14 @@ export const reducteurReponse = (
             etat.question.reponsesPossibles
               .filter((rep) => rep.identifiant === action.reponse.valeur)
               .flatMap((rep) => rep.questions?.map((q) => q.identifiant))
-              .includes(rep),
+              .includes(rep)
           )
       ) {
         reponses = [];
       }
       const elementReponse = action.reponse.elementReponse;
       const aDejaUneReponse = reponses.find(
-        (rep) => rep.identifiant === elementReponse.identifiantReponse,
+        (rep) => rep.identifiant === elementReponse.identifiantReponse
       );
 
       if (!aDejaUneReponse) {
@@ -259,7 +259,7 @@ export const reponseMultipleDonnee = (elementReponse: {
 
 export const reponseTiroirUniqueDonnee = (
   reponse: string,
-  elementReponse: { identifiantReponse: string; reponse: string },
+  elementReponse: { identifiantReponse: string; reponse: string }
 ): ActionReponse => {
   return {
     reponse: {
@@ -272,7 +272,7 @@ export const reponseTiroirUniqueDonnee = (
 
 export const reponseTiroirMultipleDonnee = (
   reponse: string,
-  elementReponse: { identifiantReponse: string; reponse: string },
+  elementReponse: { identifiantReponse: string; reponse: string }
 ): ActionReponse => {
   return {
     reponse: {
@@ -291,7 +291,7 @@ export const reponseEnvoyee = (): ActionReponse => {
 
 export const initialiseReducteur = (
   question: Question,
-  actions: ActionReponseDiagnostic[],
+  actions: ActionReponseDiagnostic[]
 ): EtatReponse => {
   const valeur: () => string | undefined = () =>
     question.reponseDonnee.valeur || undefined;

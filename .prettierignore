@@ -1,0 +1,6 @@
+mon-aide-cyber-ui/dist/
+mon-aide-cyber-ui/public/dsfr/
+**/*.html
+**/*.scss
+**/*.css
+**/coverage

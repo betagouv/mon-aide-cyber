@@ -48,11 +48,11 @@ export const ComposantDemandeAide = () => {
             url: '/api/aide/demande',
             methode: 'GET',
           },
-          (corps) => corps,
+          (corps) => corps
         )
         .then((reponse) => {
           new MoteurDeLiens(reponse.liens).trouve('demander-aide', (lien) =>
-            setDemandeAide({ lien, departements: reponse.departements }),
+            setDemandeAide({ lien, departements: reponse.departements })
           );
           setDemandeAideEnCoursDeChargement(false);
         })
@@ -79,7 +79,7 @@ export const ComposantDemandeAide = () => {
               }),
             },
           },
-          (corps) => corps,
+          (corps) => corps
         )
         .then(() => {
           envoie(confirmation());
@@ -89,7 +89,7 @@ export const ComposantDemandeAide = () => {
           setRetourEnvoiDemandeAide(<ChampsErreur erreur={erreur} />);
         });
     },
-    [demandeAide, macAPI],
+    [demandeAide, macAPI]
   );
 
   const retourAccueil = useCallback(() => {

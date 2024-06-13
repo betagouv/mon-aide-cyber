@@ -46,7 +46,7 @@ export type ReponseDiagnostic = ReponseHATEOAS & {
 };
 
 export const enDiagnostic = (
-  json: Promise<ReponseDiagnostic>,
+  json: Promise<ReponseDiagnostic>
 ): Promise<RepresentationDiagnostic> =>
   json.then((corps) => {
     const referentiel = Object.entries(corps.referentiel).reduce(
@@ -69,7 +69,7 @@ export const enDiagnostic = (
           [clef]: { ...thematique, groupes },
         };
       },
-      {},
+      {}
     );
     return {
       liens: corps.liens,

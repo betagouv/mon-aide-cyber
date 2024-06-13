@@ -22,7 +22,7 @@ describe('reducteur profil', () => {
         nomPrenom: 'Jean Dupont',
         dateSignatureCGU: '03.12.2023',
         identifiantConnexion: 'jean.dupont@email.fr',
-      }),
+      })
     );
 
     expect(etatProfil).toStrictEqual({

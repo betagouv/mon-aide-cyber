@@ -38,7 +38,7 @@ export const ComposantProfil = () => {
                 .url(lien.url)
                 .methode(lien.methode!)
                 .construis(),
-              (reponse) => reponse,
+              (reponse) => reponse
             )
             .then((profil) => {
               navigationMAC.ajouteEtat(profil.liens);
@@ -49,14 +49,14 @@ export const ComposantProfil = () => {
               showBoundary(erreur);
             });
         }
-      },
+      }
     );
   }, [etatProfil.enCoursDeChargement, macapi, showBoundary, navigationMAC]);
 
   const afficherTableauDeBord = useCallback(() => {
     navigationMAC.navigue(
       new MoteurDeLiens(navigationMAC.etat),
-      'afficher-tableau-de-bord',
+      'afficher-tableau-de-bord'
     );
   }, [navigationMAC]);
 

@@ -18,7 +18,7 @@ type ActionEtapesDemandeAide =
     };
 export const reducteurDemandeAide = (
   etat: EtatEtapesDemandeAide,
-  action: ActionEtapesDemandeAide,
+  action: ActionEtapesDemandeAide
 ): EtatEtapesDemandeAide => {
   switch (action.type) {
     case TypeActionEtapesDemandeAide.CONFIRMATION: {
@@ -43,7 +43,7 @@ export const confirmation = (): ActionEtapesDemandeAide => ({
 });
 
 export const saisieInformationsEnErreur = (
-  erreur: Error,
+  erreur: Error
 ): ActionEtapesDemandeAide => ({
   type: TypeActionEtapesDemandeAide.SAISIE_INFORMATION_EN_ERREUR,
   erreur,
