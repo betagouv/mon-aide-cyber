@@ -1,16 +1,11 @@
 import { AdaptateurDeRestitution } from '../../adaptateurs/AdaptateurDeRestitution';
-import {
-  Indicateurs,
-  MesurePriorisee,
-  Restitution,
-} from '../../diagnostic/Diagnostic';
 import * as pug from 'pug';
 import puppeteer, { Browser, PDFOptions } from 'puppeteer';
 import { PDFDocument } from 'pdf-lib';
 
 export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> {
-  constructor(private readonly traductionThematiques: Map<string, string>) {
-    super();
+  constructor(traductionThematiques: Map<string, string>) {
+    super(traductionThematiques);
   }
 
   protected genere(mesures: Promise<ContenuHtml>[]) {
@@ -23,60 +18,25 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
       });
   }
 
-  protected genereInformations(_: Restitution): Promise<ContenuHtml> {
-    return Promise.resolve({ entete: '', corps: '', piedPage: '' });
-  }
-
-  protected genereIndicateurs(
-    indicateurs: Indicateurs | undefined,
-  ): Promise<ContenuHtml> {
-    return this.genereHtml('restitution-page-de-garde', {
-      indicateurs,
-      traductions: this.traductionThematiques,
-    });
-  }
-
-  protected genereAutresMesures(
-    autresMesures: MesurePriorisee[] | undefined,
-  ): Promise<ContenuHtml> {
-    return this.genereHtml('mesures.annexe', {
-      mesures: autresMesures,
-    });
-  }
-
-  protected genereMesuresPrioritaires(
-    mesuresPrioritaires: MesurePriorisee[] | undefined,
-  ): Promise<ContenuHtml> {
-    return this.genereHtml('mesures', {
-      mesures: mesuresPrioritaires,
-    });
-  }
-
   async genereHtml(pugCorps: string, paramsCorps: any): Promise<ContenuHtml> {
     const fonctionInclusionDynamique = (
       cheminTemplatePug: string,
-      options = {},
+      options = {}
     ) => {
       return pug.renderFile(
         `src/infrastructure/restitution/pdf/modeles/${cheminTemplatePug}`,
-        options,
+        options
       );
     };
-    const piedPage = pug.compileFile(
-      `src/infrastructure/restitution/pdf/modeles/${pugCorps}.piedpage.pug`,
-    )();
     return Promise.all([
       pug.compileFile(
-        `src/infrastructure/restitution/pdf/modeles/${pugCorps}.pug`,
+        `src/infrastructure/restitution/pdf/modeles/${pugCorps}.pug`
       )({
         ...paramsCorps,
         include: fonctionInclusionDynamique,
       }),
-      pug.compileFile(
-        `src/infrastructure/restitution/pdf/modeles/${pugCorps}.entete.pug`,
-      )(),
     ])
-      .then(([corps, entete]) => ({ corps, entete, piedPage }))
+      .then(([corps]) => ({ corps, entete: '', piedPage: '' }))
       .catch((erreur) => {
         console.log('Erreur génération HTML', erreur);
         throw new Error(erreur);
@@ -113,23 +73,38 @@ export type ContenuHtml = { corps: string; entete: string; piedPage: string };
 const generePdfs = async (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
   const pagesHtmlRemplies = pagesHtml.filter(
     (pageHtml) =>
-      pageHtml.entete !== '' &&
-      pageHtml.corps !== '' &&
-      pageHtml.piedPage !== '',
+      pageHtml.corps !== '',
   );
 
   const navigateur = await lanceNavigateur();
   try {
-    const contenu = pagesHtmlRemplies.reduce((prev, current) => {
-      prev.corps += `${current.corps}`;
-      prev.entete = current.entete;
-      prev.piedPage = current.piedPage;
-      return prev;
-    }, {} as ContenuHtml);
+    const contenu = pagesHtmlRemplies.reduce(
+      (contenuPrecedent, contenuCourant) => {
+        contenuPrecedent.corps += contenuCourant.corps;
+
+        return contenuPrecedent;
+      },
+      {
+        corps: pug.compileFile(
+          `src/infrastructure/restitution/pdf/modeles/restitution.pug`,
+        )(),
+      } as ContenuHtml,
+    );
+    const contenuFinal: ContenuHtml = {
+      corps: contenu.corps,
+      entete: pug.compileFile(
+        `src/infrastructure/restitution/pdf/modeles/restitution.entete.pug`
+      )(),
+      piedPage: pug.compileFile(
+        `src/infrastructure/restitution/pdf/modeles/restitution.piedpage.pug`
+      )(),
+    };
     const resultat = navigateur.newPage().then((page) => {
       return page
-        .setContent(contenu.corps)
-        .then(() => page.pdf(formatPdfA4(contenu.entete, contenu.piedPage)))
+        .setContent(contenuFinal.corps)
+        .then(() =>
+          page.pdf(formatPdfA4(contenuFinal.entete, contenuFinal.piedPage)),
+        )
         .catch((erreur) => {
           console.log(erreur);
           throw erreur;

@@ -22,6 +22,9 @@ describe('Adaptateur de Restitution', () => {
   const entrepots: Entrepots = new EntrepotsMemoire();
   const adaptateurRestitution =
     new (class extends AdaptateurDeRestitution<Buffer> {
+      genereHtml(_: string, __: any): Promise<ContenuHtml> {
+        return Promise.resolve({} as ContenuHtml);
+      }
       protected genere(htmlMesures: Promise<ContenuHtml>[]): Promise<Buffer> {
         return Promise.all(htmlMesures).then((htmls) => {
           const resultat: ContenuHtml[] = [];
@@ -35,7 +38,7 @@ describe('Adaptateur de Restitution', () => {
       }
 
       protected genereInformations(
-        restitution: Restitution,
+        restitution: Restitution
       ): Promise<ContenuHtml> {
         return Promise.resolve({
           corps: JSON.stringify(restitution.informations),
@@ -45,7 +48,7 @@ describe('Adaptateur de Restitution', () => {
       }
 
       protected genereIndicateurs(
-        indicateurs: Indicateurs | undefined,
+        indicateurs: Indicateurs | undefined
       ): Promise<ContenuHtml> {
         const resultat: ContenuHtml = {
           corps: '',
@@ -56,14 +59,14 @@ describe('Adaptateur de Restitution', () => {
         Object.entries(indicateurs || {})?.forEach(
           ([thematique, indicateur]) => {
             resultat.corps += JSON.stringify({ thematique, indicateur });
-          },
+          }
         );
 
         return Promise.resolve(resultat);
       }
 
       protected genereAutresMesures(
-        autresMesures: MesurePriorisee[] | undefined,
+        autresMesures: MesurePriorisee[] | undefined
       ): Promise<ContenuHtml> {
         const resultat: ContenuHtml = {
           corps: '',
@@ -79,7 +82,7 @@ describe('Adaptateur de Restitution', () => {
       }
 
       protected genereMesuresPrioritaires(
-        mesuresPrioritaires: MesurePriorisee[] | undefined,
+        mesuresPrioritaires: MesurePriorisee[] | undefined
       ): Promise<ContenuHtml> {
         const resultat: ContenuHtml = {
           corps: '',
@@ -93,7 +96,7 @@ describe('Adaptateur de Restitution', () => {
 
         return Promise.resolve(resultat);
       }
-    })();
+    })(new Map());
 
   it('génère la restitution sans annexe', async () => {
     const restitution = uneRestitution()
