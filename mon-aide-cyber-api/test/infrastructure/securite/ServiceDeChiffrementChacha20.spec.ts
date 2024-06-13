@@ -6,11 +6,11 @@ describe('Service de chiffrement', () => {
     const chaineChiffree = new ServiceDeChiffrementChacha20(
       Buffer.from('ivlongueur12'),
       Buffer.from('assoc-longueur16'),
-      'ma-clef-secrete-de-longueur-0032',
+      'ma-clef-secrete-de-longueur-0032'
     ).chiffre('contenu à chiffrer');
 
     expect(chaineChiffree).toBe(
-      '69766c6f6e677565757231326173736f632d6c6f6e67756575723136edb9dabf70ccb254aa95be2682b4fe9ef399822cab7c76219230aee727cb907a0bb7ff',
+      '69766c6f6e677565757231326173736f632d6c6f6e67756575723136edb9dabf70ccb254aa95be2682b4fe9ef399822cab7c76219230aee727cb907a0bb7ff'
     );
   });
 
@@ -19,9 +19,9 @@ describe('Service de chiffrement', () => {
     const chaineDechiffree = new ServiceDeChiffrementChacha20(
       Buffer.from('ivlongueur12'),
       Buffer.from('assoc-longueur16'),
-      'ma-clef-secrete-de-longueur-0032',
+      'ma-clef-secrete-de-longueur-0032'
     ).dechiffre(
-      '69766c6f6e677565757231326173736f632d6c6f6e67756575723136edb9dabf70ccb254aa95be2682b4fe9ef399822cab7c76219230aee727cb907a0bb7ff',
+      '69766c6f6e677565757231326173736f632d6c6f6e67756575723136edb9dabf70ccb254aa95be2682b4fe9ef399822cab7c76219230aee727cb907a0bb7ff'
     );
 
     expect(chaineDechiffree).toBe('contenu à chiffrer');

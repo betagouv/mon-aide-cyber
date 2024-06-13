@@ -80,7 +80,7 @@ export async function up(knex: Knex): Promise<void> {
           referentiel: RepresentationReferentiel;
           tableauDesRecommandations: TableauDeRecommandations;
         };
-      }[],
+      }[]
     ) => {
       const misesAjour = lignes.map((ligne) => {
         Object.entries(ligne.donnees.referentiel)
@@ -90,32 +90,32 @@ export async function up(knex: Knex): Promise<void> {
             questions.filter(
               (question) =>
                 question.identifiant ===
-                'reaction-sauvegardes-donnees-realisees',
-            ),
+                'reaction-sauvegardes-donnees-realisees'
+            )
           )
           .flatMap((question) => question.map((q) => q.reponsesPossibles))
           .filter((reponsePossible) =>
             reponsePossible.filter(
               (rep) =>
                 rep.identifiant ===
-                'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere',
-            ),
+                'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere'
+            )
           )
           .flatMap((reponsesPossibles) =>
             reponsesPossibles
               .flatMap((reponsePossible) => reponsePossible.questions)
-              .flatMap((question) => question?.reponsesPossibles),
+              .flatMap((question) => question?.reponsesPossibles)
           )
           .filter(
             (
-              reponsePossible: RepresentationReponsePossible | undefined,
+              reponsePossible: RepresentationReponsePossible | undefined
             ): reponsePossible is RepresentationReponsePossible =>
-              !!reponsePossible,
+              !!reponsePossible
           )
           .filter(
             (reponsePossible) =>
               reponsePossible.identifiant ===
-              'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-oui',
+              'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-oui'
           )
           .forEach((ligne) => delete ligne.resultat?.['recommandations']);
 
@@ -124,7 +124,7 @@ export async function up(knex: Knex): Promise<void> {
           .update({ donnees: ligne.donnees });
       });
       return Promise.all(misesAjour);
-    },
+    }
   );
 }
 

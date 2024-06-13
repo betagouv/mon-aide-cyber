@@ -14,7 +14,7 @@ export class ServiceDeChiffrementChacha20 implements ServiceDeChiffrement {
   constructor(
     private readonly iv: Buffer = crypto.randomBytes(12),
     private readonly donneesAdditionnelles = crypto.randomBytes(16),
-    private readonly clefSecrete = process.env.CLEF_SECRETE_CHIFFREMENT || '',
+    private readonly clefSecrete = process.env.CLEF_SECRETE_CHIFFREMENT || ''
   ) {}
 
   chiffre(chaine: string): string {
@@ -24,7 +24,7 @@ export class ServiceDeChiffrementChacha20 implements ServiceDeChiffrement {
       this.iv,
       {
         authTagLength: 16,
-      },
+      }
     );
     chiffrement.setAAD(this.donneesAdditionnelles, {
       plaintextLength: Buffer.byteLength(chaine),
@@ -60,13 +60,13 @@ export class ServiceDeChiffrementChacha20 implements ServiceDeChiffrement {
       'chacha20-poly1305',
       this.clefSecrete,
       iv,
-      { authTagLength: 16 },
+      { authTagLength: 16 }
     );
     dechiffrement.setAAD(
       Buffer.from(chaineDonneesAdditionnelles, this.encoding),
       {
         plaintextLength: chaineDonneesChiffrees.length,
-      },
+      }
     );
     dechiffrement.setAuthTag(Buffer.from(tag));
 

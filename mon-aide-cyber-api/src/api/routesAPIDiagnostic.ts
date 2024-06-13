@@ -45,12 +45,12 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
           reponse.status(201);
           reponse.appendHeader(
             'Link',
-            `${requete.originalUrl}/${diagnostic.identifiant}`,
+            `${requete.originalUrl}/${diagnostic.identifiant}`
           );
           reponse.send();
         })
         .catch((erreur) => suite(erreur));
-    },
+    }
   );
 
   routes.get(
@@ -60,7 +60,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     relations.verifie(
       'initiateur',
       unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic(),
+      unObjet().deTypeDiagnostic()
     ),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
@@ -70,15 +70,15 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
           reponse.json({
             ...representeLeDiagnosticPourLeClient(
               diagnostic,
-              configuration.adaptateurTranscripteurDonnees.transcripteur(),
+              configuration.adaptateurTranscripteurDonnees.transcripteur()
             ),
             ...constructeurActionsHATEOAS()
               .actionsDiagnosticLance(diagnostic.identifiant)
               .construis(),
-          }),
+          })
         )
         .catch((erreur) => suite(erreur));
-    },
+    }
   );
 
   routes.patch(
@@ -88,7 +88,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     relations.verifie(
       'initiateur',
       unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic(),
+      unObjet().deTypeDiagnostic()
     ),
     bodyParser.json(),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
@@ -106,7 +106,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
           reponse.send();
         })
         .catch((erreur) => suite(erreur));
-    },
+    }
   );
 
   routes.get(
@@ -116,13 +116,13 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     relations.verifie(
       'initiateur',
       unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic(),
+      unObjet().deTypeDiagnostic()
     ),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
 
       const genereRestitution = (
-        restitution: Restitution,
+        restitution: Restitution
       ): Promise<Buffer | RestitutionHTML> => {
         if (requete.headers.accept === 'application/pdf') {
           return configuration.adaptateursRestitution
@@ -158,9 +158,9 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         .then((restitution) => genereRestitution(restitution))
         .then((pdf) => creerReponse(pdf))
         .catch((erreur) =>
-          suite(ErreurMAC.cree('Demande la restitution', erreur)),
+          suite(ErreurMAC.cree('Demande la restitution', erreur))
         );
-    },
+    }
   );
 
   return routes;

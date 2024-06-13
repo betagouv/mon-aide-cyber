@@ -19,26 +19,26 @@ export class AdaptateurDeVerificationDeSessionHttp
     fabriqueLesCookies: (
       contexte: Contexte,
       requete: Request,
-      reponse: Response,
+      reponse: Response
     ) => MACCookies = (contexte, requete, reponse) =>
-      fabriqueDeCookies(contexte, requete, reponse),
+      fabriqueDeCookies(contexte, requete, reponse)
   ): RequestHandler {
     return (
       requete: RequeteUtilisateur,
       reponse: Response,
-      suite: NextFunction,
+      suite: NextFunction
     ) => {
       try {
         const cookies: MACCookies = fabriqueLesCookies(
           contexte,
           requete,
-          reponse,
+          reponse
         );
         const sessionDecodee = JSON.parse(
-          Buffer.from(cookies.session, 'base64').toString(),
+          Buffer.from(cookies.session, 'base64').toString()
         );
         const jwtPayload = this.gestionnaireDeJeton.verifie(
-          sessionDecodee.token,
+          sessionDecodee.token
         );
         requete.identifiantUtilisateurCourant = jwtPayload.identifiant;
       } catch (e) {
@@ -46,7 +46,7 @@ export class AdaptateurDeVerificationDeSessionHttp
           contexte,
           e instanceof ErreurMAC
             ? e.erreurOriginelle
-            : new ErreurAccesRefuse('Session invalide.'),
+            : new ErreurAccesRefuse('Session invalide.')
         );
       }
 

@@ -78,20 +78,20 @@ export interface EntrepotAideDistant {
     chiffrement: (
       identifiantMAC: crypto.UUID,
       departement: string,
-      raisonSociale?: string,
-    ) => string,
+      raisonSociale?: string
+    ) => string
   ): Promise<void>;
 
   rechercheParEmail(
     email: string,
-    mappeur: (dto: AideDistantDTO) => AideDistant,
+    mappeur: (dto: AideDistantDTO) => AideDistant
   ): Promise<AideDistant | undefined>;
 }
 
 class EntrepotAideBrevo implements EntrepotAideDistant {
   rechercheParEmail(
     email: string,
-    mappeur: (dto: AideDistantDTO) => AideDistant,
+    mappeur: (dto: AideDistantDTO) => AideDistant
   ): Promise<AideDistant | undefined> {
     return adaptateursRequeteBrevo()
       .rechercheContact(email)
@@ -105,7 +105,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
               contexte: 'Recherche contact',
               details: corpsReponse.code,
               message: corpsReponse.message,
-            }),
+            })
           );
           if (reponse.status === 404) {
             return Promise.resolve(undefined);
@@ -128,8 +128,8 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
     chiffrement: (
       identifiantMAC: crypto.UUID,
       departement: string,
-      raisonSociale?: string,
-    ) => string,
+      raisonSociale?: string
+    ) => string
   ): Promise<void> {
     const requete = unConstructeurCreationDeContact()
       .ayantPourEmail(aide.email)
@@ -137,7 +137,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
         metadonnees: chiffrement(
           aide.identifiantMAC,
           aide.departement,
-          aide.raisonSociale,
+          aide.raisonSociale
         ),
       })
       .construis();
@@ -153,7 +153,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
               contexte: 'Création contact',
               details: corpsReponse.code,
               message: corpsReponse.message,
-            }),
+            })
           );
           return Promise.reject(corpsReponse.message);
         }
@@ -166,7 +166,7 @@ export class EntrepotAideConcret implements EntrepotAide {
   constructor(
     private readonly serviceChiffrement: ServiceDeChiffrement,
     private readonly entreprotAideBrevo: EntrepotAideDistant = new EntrepotAideBrevo(),
-    private readonly entrepotAidePostgres = new EntrepotAidePostgres(),
+    private readonly entrepotAidePostgres = new EntrepotAidePostgres()
   ) {}
 
   async rechercheParEmail(email: string): Promise<Aide | undefined> {
@@ -185,13 +185,13 @@ export class EntrepotAideConcret implements EntrepotAide {
             departement: metadonnees.departement,
             identifiantMAC: metadonnees.identifiantMAC,
           };
-        },
+        }
       );
       if (aideBrevo === undefined) {
         return Promise.resolve(undefined);
       }
       const aideMAC = await this.entrepotAidePostgres.lis(
-        aideBrevo.identifiantMAC,
+        aideBrevo.identifiantMAC
       );
 
       return {
@@ -210,7 +210,7 @@ export class EntrepotAideConcret implements EntrepotAide {
             contexte: 'Recherche par Email',
             aide: email,
             erreur,
-          }),
+          })
         );
         return Promise.reject("L'Aidé demandé n'existe pas.");
       }
@@ -219,10 +219,10 @@ export class EntrepotAideConcret implements EntrepotAide {
         JSON.stringify({
           contexte: 'Recherche par Email',
           erreur,
-        }),
+        })
       );
       return Promise.reject(
-        "Impossible de récupérer les informations de l'Aidé.",
+        "Impossible de récupérer les informations de l'Aidé."
       );
     }
   }
@@ -242,8 +242,8 @@ export class EntrepotAideConcret implements EntrepotAide {
       },
       (identifiantMAC, departement, raisonSociale) =>
         this.serviceChiffrement.chiffre(
-          JSON.stringify({ identifiantMAC, departement, raisonSociale }),
-        ),
+          JSON.stringify({ identifiantMAC, departement, raisonSociale })
+        )
     );
 
     return Promise.resolve();

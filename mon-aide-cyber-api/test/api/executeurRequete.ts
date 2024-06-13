@@ -8,7 +8,7 @@ export const executeRequete = (
   chemin: string,
   port: number,
   corps: object | undefined = undefined,
-  headers: IncomingHttpHeaders | undefined = undefined,
+  headers: IncomingHttpHeaders | undefined = undefined
 ): Promise<Response> => {
   return inject(app, {
     method: verbe,

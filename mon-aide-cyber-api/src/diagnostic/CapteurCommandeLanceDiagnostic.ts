@@ -14,7 +14,7 @@ export class CapteurCommandeLanceDiagnostic
 {
   constructor(
     private readonly entrepots: Entrepots,
-    private readonly busEvenement: BusEvenement,
+    private readonly busEvenement: BusEvenement
   ) {}
 
   execute(commande: CommandeLanceDiagnostic): Promise<Diagnostic> {
@@ -37,7 +37,7 @@ export class CapteurCommandeLanceDiagnostic
         return diagnostic;
       })
       .catch((erreur) =>
-        Promise.reject(ErreurMAC.cree('Lance le diagnostic', erreur)),
+        Promise.reject(ErreurMAC.cree('Lance le diagnostic', erreur))
       );
   }
 }

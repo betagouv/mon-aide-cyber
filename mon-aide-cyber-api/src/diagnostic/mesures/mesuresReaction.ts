@@ -42,8 +42,7 @@ export const mesuresReaction = {
   'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement':
     {
       niveau1: {
-        titre:
-          'Procéder à des tests de restauration des sauvegardes',
+        titre: 'Procéder à des tests de restauration des sauvegardes',
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:
@@ -66,8 +65,7 @@ export const mesuresReaction = {
   'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement':
     {
       niveau1: {
-        titre:
-          'Procéder à des tests de restauration des sauvegardes',
+        titre: 'Procéder à des tests de restauration des sauvegardes',
         pourquoi:
           '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
         comment:
@@ -77,16 +75,14 @@ export const mesuresReaction = {
     },
   'reaction-dispositif-gestion-crise-adapte-defini': {
     niveau1: {
-      titre:
-        'Lister les personnes à contacter en cas de cyberattaque',
+      titre: 'Lister les personnes à contacter en cas de cyberattaque',
       pourquoi:
         '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau1-pourquoi.pug',
       comment:
         '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau1-comment.pug',
     },
     niveau2: {
-      titre:
-        "Définir un dispositif de gestion de crise d'origine cyber",
+      titre: "Définir un dispositif de gestion de crise d'origine cyber",
       pourquoi:
         '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau2-pourquoi.pug',
       comment:

@@ -20,7 +20,7 @@ class ConstructeurAdaptateurRestitutionHTML {
       }
 
       protected genereInformations(
-        restitution: Restitution,
+        restitution: Restitution
       ): Promise<ContenuHtml> {
         return Promise.resolve({
           entete: '',
@@ -32,7 +32,7 @@ class ConstructeurAdaptateurRestitutionHTML {
       }
 
       protected genereMesuresPrioritaires(
-        _: MesurePriorisee[] | undefined,
+        _: MesurePriorisee[] | undefined
       ): Promise<ContenuHtml> {
         return Promise.resolve({
           entete: '',
@@ -42,7 +42,7 @@ class ConstructeurAdaptateurRestitutionHTML {
       }
 
       protected genereIndicateurs(
-        _: Indicateurs | undefined,
+        _: Indicateurs | undefined
       ): Promise<ContenuHtml> {
         return Promise.resolve({
           entete: '',
@@ -52,7 +52,7 @@ class ConstructeurAdaptateurRestitutionHTML {
       }
 
       protected genereAutresMesures(
-        _: MesurePriorisee[],
+        _: MesurePriorisee[]
       ): Promise<ContenuHtml> {
         return Promise.resolve({
           entete: '',
@@ -64,7 +64,7 @@ class ConstructeurAdaptateurRestitutionHTML {
   }
 
   avecMesuresPrioritaires(
-    mesuresPrioritaires: string,
+    mesuresPrioritaires: string
   ): ConstructeurAdaptateurRestitutionHTML {
     this.corpsMesuresPrioritaires = mesuresPrioritaires;
 
@@ -78,7 +78,7 @@ class ConstructeurAdaptateurRestitutionHTML {
   }
 
   avecAutresMesures(
-    autresMesures: string,
+    autresMesures: string
   ): ConstructeurAdaptateurRestitutionHTML {
     this.corpsAutresMesures = autresMesures;
 

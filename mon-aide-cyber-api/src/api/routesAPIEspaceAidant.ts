@@ -34,12 +34,12 @@ export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
     validateursDeMotDePasseTemporaire(
       entrepots,
       'motDePasse',
-      'motDePasseTemporaire',
+      'motDePasseTemporaire'
     ),
     async (
       requete: RequeteUtilisateur,
       reponse: Response,
-      suite: NextFunction,
+      suite: NextFunction
     ) => {
       try {
         const resultatValidation: Result<FieldValidationError> =
@@ -66,13 +66,13 @@ export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
         return suite(
           ErreurMAC.cree(
             "Crée l'espace Aidant",
-            new ErreurCreationEspaceAidant(erreursValidation.join('\n')),
-          ),
+            new ErreurCreationEspaceAidant(erreursValidation.join('\n'))
+          )
         );
       } catch (erreur) {
         suite(erreur);
       }
-    },
+    }
   );
 
   return routes;

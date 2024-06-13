@@ -26,12 +26,12 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'GET',
         `/api/utilisateur/`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(reponse.statusCode).toBe(200);
       expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
       ).toBe(true);
       expect(await reponse.json()).toStrictEqual({
         nomPrenom: aidant.nomPrenom,
@@ -61,12 +61,12 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'GET',
         `/api/utilisateur/`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(reponse.statusCode).toBe(200);
       expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
       ).toBe(true);
       expect(await reponse.json()).toStrictEqual({
         nomPrenom: aidant.nomPrenom,
@@ -85,12 +85,12 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'GET',
         `/api/utilisateur/`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(reponse.statusCode).toBe(404);
       expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
       ).toBe(true);
       expect(await reponse.json()).toStrictEqual({
         message: "Le aidant demandé n'existe pas.",

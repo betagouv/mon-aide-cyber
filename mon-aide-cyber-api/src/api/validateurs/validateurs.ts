@@ -10,12 +10,12 @@ type MessagesErreursValidateurMotDePasse = {
 
 const validateurDeMotDePasse = (
   entrepots: Entrepots,
-  messageValidateurs: MessagesErreursValidateurMotDePasse,
+  messageValidateurs: MessagesErreursValidateurMotDePasse
 ) =>
   new ExpressValidator({
     ancienMotDePasseDifferentDuNouveauMotDePasse: (
       value: string,
-      { req }: Meta,
+      { req }: Meta
     ) => value !== req.body.motDePasse,
     confirmationMotDePasseCorrespond: (value: string, { req }: Meta) =>
       value === req.body.motDePasse,
@@ -35,7 +35,7 @@ const validateursDeMotDePasse = (
   nouveauMotDePasse: string,
   ancienMotDePasse: string,
   messageValidateurs: MessagesErreursValidateurMotDePasse,
-  confirmationNouveauMotDePasse?: string,
+  confirmationNouveauMotDePasse?: string
 ) => {
   const { body } = validateurDeMotDePasse(entrepots, messageValidateurs);
   const validateurs = [
@@ -48,7 +48,7 @@ const validateursDeMotDePasse = (
         minSymbols: 1,
       })
       .withMessage(
-        'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.',
+        'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.'
       ),
     body(ancienMotDePasse)
       .notEmpty()
@@ -61,7 +61,7 @@ const validateursDeMotDePasse = (
     validateurs.push(
       body(confirmationNouveauMotDePasse)
         .confirmationMotDePasseCorrespond()
-        .withMessage(messageValidateurs.laConfirmationDuMotDePasseCorrespond!),
+        .withMessage(messageValidateurs.laConfirmationDuMotDePasseCorrespond!)
     );
   }
   return validateurs;
@@ -70,7 +70,7 @@ const validateursDeMotDePasse = (
 export const validateursDeMotDePasseTemporaire = (
   entrepots: Entrepots,
   nouveauMotDePasse: string,
-  motDePasseTemporaire: string,
+  motDePasseTemporaire: string
 ) => {
   return validateursDeMotDePasse(
     entrepots,
@@ -83,7 +83,7 @@ export const validateursDeMotDePasseTemporaire = (
         'Votre nouveau mot de passe doit être différent du mot de passe temporaire.',
       correspondAuMotDePasseUtilisateur:
         'Votre mot de passe temporaire est erroné.',
-    },
+    }
   );
 };
 
@@ -91,7 +91,7 @@ export const validateurDeNouveauMotDePasse = (
   entrepots: Entrepots,
   ancienMotDepasse: string,
   nouveauMotDePasse: string,
-  confirmationNouveauMotDePasse: string,
+  confirmationNouveauMotDePasse: string
 ) => {
   return validateursDeMotDePasse(
     entrepots,
@@ -106,6 +106,6 @@ export const validateurDeNouveauMotDePasse = (
       laConfirmationDuMotDePasseCorrespond:
         'La confirmation de votre mot de passe ne correspond pas.',
     },
-    confirmationNouveauMotDePasse,
+    confirmationNouveauMotDePasse
   );
 };

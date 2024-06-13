@@ -16,7 +16,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     async (
       requete: RequeteUtilisateur,
       reponse: Response,
-      suite: NextFunction,
+      suite: NextFunction
     ) => {
       return entrepots
         .aidants()
@@ -37,10 +37,10 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         })
         .catch((erreur) =>
           suite(
-            ErreurMAC.cree("Accède aux informations de l'utilisateur", erreur),
-          ),
+            ErreurMAC.cree("Accède aux informations de l'utilisateur", erreur)
+          )
         );
-    },
+    }
   );
 
   return routes;

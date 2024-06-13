@@ -11,7 +11,7 @@ class CapteurSagaAjoutReponse implements CapteurSaga<SagaAjoutReponse, void> {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busCommande: BusCommande,
-    private readonly busEvenement?: BusEvenement,
+    private readonly busEvenement?: BusEvenement
   ) {}
   execute(commande: SagaAjoutReponse): Promise<void> {
     return this.entrepots
@@ -37,22 +37,21 @@ class CapteurSagaAjoutReponse implements CapteurSaga<SagaAjoutReponse, void> {
         await this.busCommande.publie(commande);
         return diagnostic;
       })
-      .then(
-        (diagnostic) =>
-          this.busEvenement?.publie<ReponseAjoutee>({
-            identifiant: diagnostic.identifiant,
-            type: 'REPONSE_AJOUTEE',
-            date: FournisseurHorloge.maintenant(),
-            corps: {
-              identifiantDiagnostic: diagnostic.identifiant,
-              thematique: commande.chemin,
-              identifiantQuestion: commande.identifiant,
-              reponse: commande.reponse,
-            },
-          }),
+      .then((diagnostic) =>
+        this.busEvenement?.publie<ReponseAjoutee>({
+          identifiant: diagnostic.identifiant,
+          type: 'REPONSE_AJOUTEE',
+          date: FournisseurHorloge.maintenant(),
+          corps: {
+            identifiantDiagnostic: diagnostic.identifiant,
+            thematique: commande.chemin,
+            identifiantQuestion: commande.identifiant,
+            reponse: commande.reponse,
+          },
+        })
       )
       .catch((erreur) =>
-        Promise.reject(ErreurMAC.cree('Ajout réponse au diagnostic', erreur)),
+        Promise.reject(ErreurMAC.cree('Ajout réponse au diagnostic', erreur))
       );
   }
 }

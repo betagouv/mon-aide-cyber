@@ -21,7 +21,7 @@ export const mesuresSecuriteInfrastructure = {
     niveau2: {
       titre:
         'Mettre en œuvre autant que possible un tunnel VPN pour tous les flux entrants',
-        pourquoi:
+      pourquoi:
         '../../mesures/infras/securite-infrastructure-pare-feu-deploye-interconnexions-protegees-niveau2-pourquoi.pug',
       comment:
         '../../mesures/infras/securite-infrastructure-pare-feu-deploye-interconnexions-protegees-niveau2-comment.pug',

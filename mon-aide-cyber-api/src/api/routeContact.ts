@@ -21,7 +21,7 @@ export const routeContact = (configuration: ConfigurationServeur) => {
     body('message').trim().notEmpty().escape(),
     (requete: Request, reponse: Response, suite: NextFunction) => {
       const resultatValidation: Result<FieldValidationError> = validationResult(
-        requete,
+        requete
       ) as Result<FieldValidationError>;
 
       const construisMessage = () => ({
@@ -44,7 +44,7 @@ export const routeContact = (configuration: ConfigurationServeur) => {
             return reponse.send();
           })
           .catch((erreur) =>
-            suite(ErreurMAC.cree('Envoi un message de contact', erreur)),
+            suite(ErreurMAC.cree('Envoi un message de contact', erreur))
           );
       }
       reponse.status(400);
@@ -54,7 +54,7 @@ export const routeContact = (configuration: ConfigurationServeur) => {
           .map((erreur) => `'${erreur.path}'`)
           .join(' - ')}`,
       });
-    },
+    }
   );
 
   return routes;

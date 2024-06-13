@@ -36,7 +36,7 @@ class StrategieQuestionATiroir implements Strategie {
 class StrategieReponsesMultiples implements Strategie {
   constructor(
     private readonly identifiant: string,
-    private readonly reponse: string[],
+    private readonly reponse: string[]
   ) {}
 
   applique(questionTrouvee: QuestionDiagnostic): void {
@@ -62,12 +62,12 @@ export const StrategieDeReponse = {
     }
     return new StrategieReponsesMultiples(
       corpsReponse.identifiant,
-      corpsReponse.reponse,
+      corpsReponse.reponse
     );
   },
 };
 const estReponseQuestionATiroir = (
-  reponse: string | CorpsReponseQuestionATiroir | string[],
+  reponse: string | CorpsReponseQuestionATiroir | string[]
 ): reponse is CorpsReponseQuestionATiroir => {
   return (
     (reponse as CorpsReponseQuestionATiroir).reponse !== undefined &&
@@ -75,7 +75,7 @@ const estReponseQuestionATiroir = (
   );
 };
 const estChaineDeCharactere = (
-  reponse: string | CorpsReponseQuestionATiroir | string[],
+  reponse: string | CorpsReponseQuestionATiroir | string[]
 ): reponse is string => {
   return typeof reponse === 'string';
 };

@@ -11,7 +11,7 @@ const command = program
   .description('Importe des aidants')
   .argument(
     '<cheminFichier>',
-    'le chemin du fichier contenant les aidants à importer (au format csv, séparation avec ";")',
+    'le chemin du fichier contenant les aidants à importer (au format csv, séparation avec ";")'
   );
 
 function ligneCSV(
@@ -21,7 +21,7 @@ function ligneCSV(
   messageAvecMotDePasse: string,
   charte: string,
   todo: string,
-  qui: string,
+  qui: string
 ) {
   return `${aidant.region};${aidant.nomPrenom};${charte};${aidant.email};${aidant.telephone};${todo};${qui};${estCompteCree};${commentaire};${messageAvecMotDePasse}\n`;
 }
@@ -32,7 +32,7 @@ command.action(async (...args: any[]) => {
   const aidantsImportes = await importeAidants(
     entrepot,
     new BusEvenementMAC(fabriqueConsommateursEvenements()),
-    fs.readFileSync(args[0], { encoding: 'utf-8' }),
+    fs.readFileSync(args[0], { encoding: 'utf-8' })
   );
 
   console.log('%d aidants importés ', aidantsImportes.aidantsImportes.length);
@@ -41,7 +41,7 @@ command.action(async (...args: any[]) => {
     const rapport: string[] = [];
     const dateMaintenantISO = FournisseurHorloge.maintenant().toISOString();
     rapport.push(
-      `Région;nom;charte;mail;Téléphone;TO DO;Qui;Compte Créé ?;commentaires;message avec mot de passe\n`,
+      `Région;nom;charte;mail;Téléphone;TO DO;Qui;Compte Créé ?;commentaires;message avec mot de passe\n`
     );
     const imports: ImportAidant[] = [
       ...aidantsImportes.aidantsImportes,
@@ -56,8 +56,8 @@ command.action(async (...args: any[]) => {
           aidant.messageAvecMDP,
           aidant.charte,
           aidant.todo,
-          aidant.qui,
-        ),
+          aidant.qui
+        )
       );
     });
 
@@ -66,7 +66,7 @@ command.action(async (...args: any[]) => {
       rapport.join(''),
       {
         encoding: 'utf-8',
-      },
+      }
     );
   }
   process.exit(0);

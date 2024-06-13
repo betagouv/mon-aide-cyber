@@ -15,7 +15,7 @@ export const lieDiagnostic = async (
   adaptateurRelations: AdaptateurRelations,
   entrepotDiagnostic: EntrepotDiagnostic,
   entrepotAidant: EntrepotAidant,
-  relation: Relation,
+  relation: Relation
 ): Promise<Relation> => {
   const identifiantDiagnostic = relation.identifiantDiagnostic;
   const identifiantAidant = relation.identifiantAidant;
@@ -46,7 +46,7 @@ export const lieDiagnostic = async (
     try {
       await adaptateurRelations.aidantInitieDiagnostic(
         identifiantAidant,
-        identifiantDiagnostic,
+        identifiantDiagnostic
       );
     } catch (erreur) {
       return { ...relation, message: 'erreur pendant la persistence' };

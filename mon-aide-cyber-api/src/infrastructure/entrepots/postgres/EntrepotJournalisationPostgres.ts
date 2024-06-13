@@ -13,7 +13,7 @@ type PublicationDTO = DTO & {
 
 const UUID_REGEX = new RegExp(
   '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
-  'i',
+  'i'
 );
 
 export class EntrepotJournalisationPostgres
@@ -29,7 +29,7 @@ export class EntrepotJournalisationPostgres
             ? crypto.createHash('sha256').update(donnee).digest('hex')
             : donnee,
         }),
-        {},
+        {}
       ),
       type: entite.type,
       date: entite.date.toISOString(),

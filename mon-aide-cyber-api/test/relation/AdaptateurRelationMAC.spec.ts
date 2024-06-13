@@ -11,12 +11,12 @@ describe('Adaptateur De Relation MAC', () => {
     const diagnostic = unDiagnostic().construis();
     await entrepots.diagnostic().persiste(diagnostic);
     const adaptateurRelationsMAC = new AdaptateurRelationsMAC(
-      new EntrepotRelationMemoire(),
+      new EntrepotRelationMemoire()
     );
     const aidant = unAidant().construis();
     await adaptateurRelationsMAC.aidantInitieDiagnostic(
       aidant.identifiant,
-      diagnostic.identifiant,
+      diagnostic.identifiant
     );
 
     const identifiantDiagnostics =
@@ -29,16 +29,16 @@ describe('Adaptateur De Relation MAC', () => {
     const identifiantDiagnostic1 = crypto.randomUUID();
     const identifiantDiagnostic2 = crypto.randomUUID();
     const adaptateurRelationsMAC = new AdaptateurRelationsMAC(
-      new EntrepotRelationMemoire(),
+      new EntrepotRelationMemoire()
     );
     const identifiantAidant = crypto.randomUUID();
     await adaptateurRelationsMAC.aidantInitieDiagnostic(
       identifiantAidant,
-      identifiantDiagnostic1,
+      identifiantDiagnostic1
     );
     await adaptateurRelationsMAC.aidantInitieDiagnostic(
       identifiantAidant,
-      identifiantDiagnostic2,
+      identifiantDiagnostic2
     );
 
     const identifiantDiagnostics =
@@ -54,18 +54,18 @@ describe('Adaptateur De Relation MAC', () => {
     const diagnosticInitie = crypto.randomUUID();
     const autreDiagnostic = crypto.randomUUID();
     const adaptateurRelationsMAC = new AdaptateurRelationsMAC(
-      new EntrepotRelationMemoire(),
+      new EntrepotRelationMemoire()
     );
     const identifiantAidant = crypto.randomUUID();
     await adaptateurRelationsMAC.aidantInitieDiagnostic(
       identifiantAidant,
-      diagnosticInitie,
+      diagnosticInitie
     );
 
     const identifiantAutreAidant = crypto.randomUUID();
     await adaptateurRelationsMAC.aidantInitieDiagnostic(
       identifiantAutreAidant,
-      autreDiagnostic,
+      autreDiagnostic
     );
 
     const identifiantDiagnostics =

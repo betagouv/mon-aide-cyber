@@ -13,6 +13,6 @@ export interface EntrepotRelation extends Entrepot<Tuple> {
   relationExiste(
     relation: Relation,
     utilisateur: Utilisateur,
-    objet: Objet,
+    objet: Objet
   ): Promise<boolean>;
 }

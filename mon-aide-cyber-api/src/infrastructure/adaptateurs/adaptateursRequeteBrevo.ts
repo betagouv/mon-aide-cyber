@@ -83,7 +83,7 @@ export class AdaptateursRequeteBrevo {
   }
 
   rechercheContact(
-    email: string,
+    email: string
   ): AdaptateurRequeteBrevo<
     RequeteBrevo<RechercheContactBrevo>,
     ReponseRechercheContact | ReponseBrevoEnErreur
@@ -92,7 +92,7 @@ export class AdaptateursRequeteBrevo {
   }
 
   protected adaptateur<T, R extends ReponseBrevo | ReponseBrevoEnErreur>(
-    url: string,
+    url: string
   ) {
     return new (class implements AdaptateurRequeteBrevo<RequeteBrevo<T>, R> {
       async execute(requete: RequeteBrevo<T>): Promise<R> {
@@ -115,7 +115,7 @@ export class AdaptateursRequeteBrevo {
 export const adaptateursRequeteBrevo = () => new AdaptateursRequeteBrevo();
 
 export const estReponseEnErreur = (
-  reponse: ReponseBrevo | ReponseBrevoEnErreur,
+  reponse: ReponseBrevo | ReponseBrevoEnErreur
 ): reponse is ReponseBrevoEnErreur => {
   return !reponse.ok;
 };

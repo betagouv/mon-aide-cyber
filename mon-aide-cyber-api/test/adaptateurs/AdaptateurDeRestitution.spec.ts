@@ -16,8 +16,8 @@ import crypto from 'crypto';
 describe('Adaptateur de Restitution', () => {
   beforeEach(() =>
     FournisseurHorlogeDeTest.initialise(
-      new Date(Date.parse('2023-02-04T10:30+01:00')),
-    ),
+      new Date(Date.parse('2023-02-04T10:30+01:00'))
+    )
   );
   const entrepots: Entrepots = new EntrepotsMemoire();
   const adaptateurRestitution =
@@ -105,7 +105,7 @@ describe('Adaptateur de Restitution', () => {
         desInformationsDeRestitution()
           .avecSecteurActivite('Loisir')
           .avecZoneGeographique('Ile de France, Paris')
-          .construis(),
+          .construis()
       )
       .avecIndicateurs('thematique', 0)
       .avecMesures([
@@ -122,8 +122,8 @@ describe('Adaptateur de Restitution', () => {
 
     expect(
       JSON.parse(
-        (await adaptateurRestitution.genereRestitution(restitution)).toString(),
-      ),
+        (await adaptateurRestitution.genereRestitution(restitution)).toString()
+      )
     ).toMatchSnapshot();
   });
 
@@ -141,7 +141,7 @@ describe('Adaptateur de Restitution', () => {
         desInformationsDeRestitution()
           .avecSecteurActivite('Administration')
           .avecZoneGeographique('Bretagne, Finistère')
-          .construis(),
+          .construis()
       )
       .avecIndicateurs('thematique', 0)
       .avecMesures(
@@ -155,16 +155,16 @@ describe('Adaptateur de Restitution', () => {
               .avecPriorisation(3)
               .avecValeurObtenue(0)
               .construis(),
-            6,
-          ),
+            6
+          )
       )
       .construis();
     entrepots.restitution().persiste(restitution);
 
     expect(
       JSON.parse(
-        (await adaptateurRestitution.genereRestitution(restitution)).toString(),
-      ),
+        (await adaptateurRestitution.genereRestitution(restitution)).toString()
+      )
     ).toMatchSnapshot();
   });
 
@@ -175,7 +175,7 @@ describe('Adaptateur de Restitution', () => {
         desInformationsDeRestitution()
           .avecSecteurActivite('Administration')
           .avecZoneGeographique('Bretagne, Finistère')
-          .construis(),
+          .construis()
       )
       .avecIndicateurs('reaction', 2)
       .avecIndicateurs('gouvernance', 2.5)
@@ -188,8 +188,8 @@ describe('Adaptateur de Restitution', () => {
 
     expect(
       JSON.parse(
-        (await adaptateurRestitution.genereRestitution(restitution)).toString(),
-      ),
+        (await adaptateurRestitution.genereRestitution(restitution)).toString()
+      )
     ).toMatchSnapshot();
   });
 });

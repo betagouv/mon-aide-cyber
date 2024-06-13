@@ -10,7 +10,7 @@ export class BusCommandeTest implements BusCommande {
   constructor(
     private readonly capteurs?: {
       [nomCommande: string]: CapteurCommande<any, any>;
-    },
+    }
   ) {}
 
   publie<C extends Commande, R>(commande: C): Promise<R> {

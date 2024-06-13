@@ -9,7 +9,7 @@ const command = program
   .description('Crée un aidant')
   .argument(
     '<identifiantConnexion>',
-    'Un identifiant de connexion (adresse email par exemple',
+    'Un identifiant de connexion (adresse email par exemple'
   )
   .argument('<motDePasse>', 'Un mot de passe (Robuste!)')
   .argument('<nomPrenom>', 'Nom et Prénom séparé par un espace');
@@ -26,7 +26,7 @@ command.action(async (...args: any[]) => {
   const aidant = await creeAidant(
     entrepot,
     new BusEvenementMAC(fabriqueConsommateursEvenements()),
-    identifiants,
+    identifiants
   );
   if (aidant) {
     console.log('Utilisateur %s créé', aidant.nomPrenom);

@@ -52,7 +52,7 @@ export async function up(knex: Knex): Promise<void> {
           restitution?: RepresentationRestitution;
           tableauDesRecommandations: ReferentielDeMesures;
         };
-      }[],
+      }[]
     ) => {
       const misesAJour = lignes.map((ligne) => {
         const donnees: RepresentationDiagnostic = {
@@ -81,7 +81,7 @@ export async function up(knex: Knex): Promise<void> {
       });
 
       return Promise.all(misesAJour);
-    },
+    }
   );
 }
 
@@ -102,7 +102,7 @@ export async function down(knex: Knex): Promise<void> {
           mesures: ReferentielDeMesures;
           restitution: Restitution;
         };
-      }[],
+      }[]
     ) => {
       const misesAJour = lignes.map((ligne) => {
         const donnees = ligne.donnees;
@@ -141,6 +141,6 @@ export async function down(knex: Knex): Promise<void> {
       });
 
       return Promise.all(misesAJour);
-    },
+    }
   );
 }

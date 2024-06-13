@@ -53,14 +53,14 @@ describe('Entrepot Journalisation Postgres', () => {
     const publication = unePublication().construis();
 
     await new EntrepotJournalisationPostgres(
-      configurationJournalisation,
+      configurationJournalisation
     ).persiste(publication);
 
     const entrepotJournalisationPostgresLecture =
       new EntrepotJournalisationPostgresTests(configurationJournalisation);
 
     expect(
-      await entrepotJournalisationPostgresLecture.lis(publication.identifiant),
+      await entrepotJournalisationPostgresLecture.lis(publication.identifiant)
     ).toStrictEqual(publication);
   });
 });

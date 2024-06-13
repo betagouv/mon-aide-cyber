@@ -21,14 +21,14 @@ export class CapteurSagaDemandeAide
   constructor(
     private readonly busCommande: BusCommande,
     private readonly busEvenement: BusEvenement,
-    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
+    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail
   ) {}
 
   async execute(saga: SagaDemandeAide): Promise<void> {
     const envoieConfirmationDemandeAide = async (
       adaptateurEnvoiMail: AdaptateurEnvoiMail,
       aide: Aide,
-      relationAidant: boolean,
+      relationAidant: boolean
     ) => {
       await adaptateurEnvoiMail.envoie({
         objet: "Demande d'aide pour MonAideCyber",
@@ -40,7 +40,7 @@ export class CapteurSagaDemandeAide
     const envoieRecapitulatifDemandeAide = async (
       adaptateurEnvoiMail: AdaptateurEnvoiMail,
       aide: Aide,
-      relationAidant: boolean,
+      relationAidant: boolean
     ) => {
       await adaptateurEnvoiMail.envoie({
         objet: "Demande d'aide pour MonAideCyber",
@@ -81,7 +81,7 @@ export class CapteurSagaDemandeAide
           await envoieRecapitulatifDemandeAide(
             this.adaptateurEnvoiMail,
             aide,
-            saga.relationAidant,
+            saga.relationAidant
           );
 
           await this.busEvenement.publie({
@@ -103,10 +103,10 @@ export class CapteurSagaDemandeAide
 
 const construisMailRecapitulatifDemandeAide = (
   aide: Aide,
-  relationAidant: boolean,
+  relationAidant: boolean
 ) => {
   const formateDate = FournisseurHorloge.formateDate(
-    FournisseurHorloge.maintenant(),
+    FournisseurHorloge.maintenant()
   );
   const raisonSociale = aide.raisonSociale
     ? `- Raison sociale: ${aide.raisonSociale}\n`
@@ -132,7 +132,7 @@ const construisMailConfirmationDemandeAide = (
   relationAidant: boolean,
 ) => {
   const formateDate = FournisseurHorloge.formateDate(
-    FournisseurHorloge.maintenant(),
+    FournisseurHorloge.maintenant()
   );
   const raisonSociale = aide.raisonSociale
     ? `- Raison sociale : ${aide.raisonSociale}\n`

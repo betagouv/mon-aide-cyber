@@ -23,33 +23,33 @@ export async function up(knex: Knex): Promise<void> {
         donnees: {
           tableauDesRecommandations: TableauDeRecommandations;
         };
-      }[],
+      }[]
     ) => {
       const misesAJour = lignes.map((ligne) => {
         Object.entries(ligne.donnees.tableauDesRecommandations).map(
           ([, objetDeRecommandation]) => {
             objetDeRecommandation.niveau1.pourquoi = '../../'.concat(
-              objetDeRecommandation.niveau1.pourquoi,
+              objetDeRecommandation.niveau1.pourquoi
             );
             objetDeRecommandation.niveau1.comment = '../../'.concat(
-              objetDeRecommandation.niveau1.comment,
+              objetDeRecommandation.niveau1.comment
             );
             if (objetDeRecommandation.niveau2) {
               objetDeRecommandation.niveau2.pourquoi = '../../'.concat(
-                objetDeRecommandation.niveau2.pourquoi,
+                objetDeRecommandation.niveau2.pourquoi
               );
               objetDeRecommandation.niveau2.comment = '../../'.concat(
-                objetDeRecommandation.niveau2.comment,
+                objetDeRecommandation.niveau2.comment
               );
             }
-          },
+          }
         );
         return knex('diagnostics')
           .where('id', ligne.id)
           .update({ donnees: ligne.donnees });
       });
       return Promise.all(misesAJour);
-    },
+    }
   );
 }
 

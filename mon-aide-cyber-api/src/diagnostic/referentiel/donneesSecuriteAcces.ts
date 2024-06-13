@@ -423,7 +423,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-teletravail-acces-distants-mesures-particulieres',
       libelle:
-        "Le télétravail et les accès distants (cloud inclus) sont-ils protégés par une authentification multifacteur ?",
+        'Le télétravail et les accès distants (cloud inclus) sont-ils protégés par une authentification multifacteur ?',
       poids: 2,
       reponsesPossibles: [
         {
@@ -458,7 +458,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-teletravail-acces-distants-mesures-particulieres-mfa',
           libelle:
-            "Certaines connexions à distance sont protégées par une authentification multifacteur",
+            'Certaines connexions à distance sont protégées par une authentification multifacteur',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -521,7 +521,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-mfa',
           libelle:
-            "Certaines connexions à distance sont protégés par une authentification multifacteur",
+            'Certaines connexions à distance sont protégés par une authentification multifacteur',
           resultat: {
             indice: { valeur: 1 },
             mesures: [

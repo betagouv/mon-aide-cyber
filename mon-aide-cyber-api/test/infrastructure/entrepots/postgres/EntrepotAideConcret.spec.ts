@@ -27,18 +27,18 @@ describe('Entrepot Aidé Concret', () => {
     it('MAC génère un identifiant et conserve la date de signature', async () => {
       const aide = unAide().construis();
       const fauxServiceDeChiffrement = new FauxServiceDeChiffrement(
-        new DictionnaireDeChiffrementAide().avec(aide).construis(),
+        new DictionnaireDeChiffrementAide().avec(aide).construis()
       );
       const entrepotAideBrevoMemoire = new EntrepotAideBrevoMemoire();
 
       await new EntrepotAideConcret(
         fauxServiceDeChiffrement,
-        entrepotAideBrevoMemoire,
+        entrepotAideBrevoMemoire
       ).persiste(aide);
 
       const aideRecu = await new EntrepotAideConcret(
         fauxServiceDeChiffrement,
-        entrepotAideBrevoMemoire,
+        entrepotAideBrevoMemoire
       ).rechercheParEmail(aide.email);
       expect(aideRecu).not.toBeUndefined();
       expect(aideRecu!.identifiant).toStrictEqual(aide.identifiant);
@@ -48,18 +48,18 @@ describe('Entrepot Aidé Concret', () => {
     it('MAC contacte Brevo pour créer le contact correspondant en chiffrant les parties sensibles', async () => {
       const aide = unAide().construis();
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
-        new DictionnaireDeChiffrementAide().avec(aide).construis(),
+        new DictionnaireDeChiffrementAide().avec(aide).construis()
       );
       const entrepotAideBrevoMemoire = new EntrepotAideBrevoMemoire();
 
       await new EntrepotAideConcret(
         serviceDeChiffrement,
-        entrepotAideBrevoMemoire,
+        entrepotAideBrevoMemoire
       ).persiste(aide);
 
       const aideRecu = await new EntrepotAideConcret(
         serviceDeChiffrement,
-        entrepotAideBrevoMemoire,
+        entrepotAideBrevoMemoire
       ).rechercheParEmail(aide.email);
       expect(aideRecu).toStrictEqual(aide);
     });
@@ -69,33 +69,33 @@ describe('Entrepot Aidé Concret', () => {
     it('Récupère l’Aidé ciblé', async () => {
       const premierAide = unAide()
         .avecUneDateDeSignatureDesCGU(
-          FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00'),
+          FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00')
         )
         .construis();
       const secondAide = unAide()
         .avecUneDateDeSignatureDesCGU(
-          FournisseurHorloge.enDate('2024-03-09T04:04:34+01:00'),
+          FournisseurHorloge.enDate('2024-03-09T04:04:34+01:00')
         )
         .construis();
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
         new DictionnaireDeChiffrementAide()
           .avec(premierAide)
           .avec(secondAide)
-          .construis(),
+          .construis()
       );
       const entrepotAideBrevoMemoire = new EntrepotAideBrevoMemoire();
       await new EntrepotAideConcret(
         serviceDeChiffrement,
-        entrepotAideBrevoMemoire,
+        entrepotAideBrevoMemoire
       ).persiste(premierAide);
       await new EntrepotAideConcret(
         serviceDeChiffrement,
-        entrepotAideBrevoMemoire,
+        entrepotAideBrevoMemoire
       ).persiste(secondAide);
 
       const aideRecherche = await new EntrepotAideConcret(
         serviceDeChiffrement,
-        entrepotAideBrevoMemoire,
+        entrepotAideBrevoMemoire
       ).rechercheParEmail(secondAide.email);
 
       expect(aideRecherche).toStrictEqual(secondAide);
@@ -105,7 +105,7 @@ describe('Entrepot Aidé Concret', () => {
       const entrepotAideBrevoMemoire = new EntrepotAideBrevoMemoire();
       const aideRecherche = await new EntrepotAideConcret(
         new FauxServiceDeChiffrement(new Map()),
-        entrepotAideBrevoMemoire,
+        entrepotAideBrevoMemoire
       ).rechercheParEmail('email@inconnu.com');
 
       expect(aideRecherche).toBeUndefined();
@@ -114,31 +114,31 @@ describe('Entrepot Aidé Concret', () => {
     it('Une erreur est remontée si le contact Brevo existe mais que l’on arrive pas à récupérer les informations de l’Aidé', async () => {
       const aide = unAide()
         .avecUneDateDeSignatureDesCGU(
-          FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00'),
+          FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00')
         )
         .construis();
       const entrepotAideBrevoMemoire =
         new EntrepotAideBrevoMemoire().sansMetadonnees();
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
-        new DictionnaireDeChiffrementAide().avec(aide).construis(),
+        new DictionnaireDeChiffrementAide().avec(aide).construis()
       );
       const entrepotAideConcret = new EntrepotAideConcret(
         serviceDeChiffrement,
-        entrepotAideBrevoMemoire,
+        entrepotAideBrevoMemoire
       );
       await entrepotAideConcret.persiste(aide);
 
       await expect(() =>
-        entrepotAideConcret.rechercheParEmail(aide.email),
+        entrepotAideConcret.rechercheParEmail(aide.email)
       ).rejects.toThrowError(
-        "Impossible de récupérer les informations de l'Aidé.",
+        "Impossible de récupérer les informations de l'Aidé."
       );
     });
 
     it('Une erreur est remontée si le contact Brevo retourné ne correspond pas à un Aidé', async () => {
       const aide = unAide()
         .avecUneDateDeSignatureDesCGU(
-          FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00'),
+          FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00')
         )
         .construis();
       const entrepotAideBrevoMemoire = new EntrepotAideBrevoMemoire();
@@ -155,19 +155,19 @@ describe('Entrepot Aidé Concret', () => {
         },
         (identifiantMAC, departement, raisonSociale) =>
           tableDeChiffrement.get(
-            JSON.stringify({ identifiantMAC, departement, raisonSociale }),
-          )!,
+            JSON.stringify({ identifiantMAC, departement, raisonSociale })
+          )!
       );
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
-        tableDeChiffrement,
+        tableDeChiffrement
       );
       const entrepotAideConcret = new EntrepotAideConcret(
         serviceDeChiffrement,
-        entrepotAideBrevoMemoire,
+        entrepotAideBrevoMemoire
       );
 
       await expect(() =>
-        entrepotAideConcret.rechercheParEmail(aide.email),
+        entrepotAideConcret.rechercheParEmail(aide.email)
       ).rejects.toThrowError("L'Aidé demandé n'existe pas.");
     });
   });
@@ -181,8 +181,8 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
     chiffrement: (
       identifiantMAC: crypto.UUID,
       departement: string,
-      raisonSociale?: string,
-    ) => string,
+      raisonSociale?: string
+    ) => string
   ) {
     const contactBrevo: Omit<AideDistantBrevoDTO, 'attributes'> & {
       attributes: { METADONNEES?: string };
@@ -193,7 +193,7 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
           METADONNEES: chiffrement(
             aide.identifiantMAC,
             aide.departement,
-            aide.raisonSociale,
+            aide.raisonSociale
           ),
         }),
       },
@@ -203,7 +203,7 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
 
   rechercheParEmail(
     email: string,
-    mappeur: (dto: AideDistantDTO) => AideDistant,
+    mappeur: (dto: AideDistantDTO) => AideDistant
   ): Promise<AideDistant | undefined> {
     const aideDistantDTO = this.entites.get(email);
     if (aideDistantDTO === undefined) {
@@ -213,7 +213,7 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
       mappeur({
         email: aideDistantDTO.email,
         metaDonnees: aideDistantDTO.attributes.METADONNEES,
-      }),
+      })
     );
   }
 

@@ -18,12 +18,12 @@ describe("Service de création d'espace Aidant", () => {
         cguSignees: false,
         motDePasse: 'mdp',
         identifiant: aidant.identifiant,
-      }),
+      })
     ).rejects.toThrowError(
       ErreurMAC.cree(
         "Crée l'espace Aidant",
-        new ErreurCreationEspaceAidant('Vous devez signer les CGU.'),
-      ),
+        new ErreurCreationEspaceAidant('Vous devez signer les CGU.')
+      )
     );
   });
 
@@ -36,7 +36,7 @@ describe("Service de création d'espace Aidant", () => {
     const service = new ServiceCreationEspaceAidant(entrepots);
 
     FournisseurHorlogeDeTest.initialise(
-      new Date(Date.parse('2024-01-15T10:14:37+01:00')),
+      new Date(Date.parse('2024-01-15T10:14:37+01:00'))
     );
     await service.cree({
       cguSignees: true,

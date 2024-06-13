@@ -27,7 +27,7 @@ function metAJourMesuresRestitution({
           pourquoi: remplaceRecommandationsParMesures(pourquoi),
           ...mesure,
         };
-      },
+      }
     ),
   };
 }
@@ -44,10 +44,10 @@ function metMesuresReferentielAJour(mesures: ReferentielDeMesures) {
             niveau1: {
               titre: mesure.niveau1.titre,
               pourquoi: remplaceRecommandationsParMesures(
-                mesure.niveau1.pourquoi,
+                mesure.niveau1.pourquoi
               ),
               comment: remplaceRecommandationsParMesures(
-                mesure.niveau1.comment,
+                mesure.niveau1.comment
               ),
             },
             niveau2: {
@@ -66,14 +66,14 @@ function metMesuresReferentielAJour(mesures: ReferentielDeMesures) {
           niveau1: {
             titre: mesure.niveau1.titre,
             pourquoi: remplaceRecommandationsParMesures(
-              mesure.niveau1.pourquoi,
+              mesure.niveau1.pourquoi
             ),
             comment: remplaceRecommandationsParMesures(mesure.niveau1.comment),
           },
           priorisation: mesure.priorisation,
         },
       ];
-    }),
+    })
   );
 }
 
@@ -90,7 +90,7 @@ export async function up(knex: Knex): Promise<void> {
           mesures: ReferentielDeMesures;
           restitution: Restitution;
         };
-      }[],
+      }[]
     ) => {
       const misesAJour = lignes.map((ligne) => {
         const donnees = ligne.donnees;
@@ -127,7 +127,7 @@ export async function up(knex: Knex): Promise<void> {
       });
 
       return Promise.all(misesAJour);
-    },
+    }
   );
 }
 

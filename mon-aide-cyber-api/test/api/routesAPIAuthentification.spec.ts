@@ -26,7 +26,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               .avecUnNomPrenom('Martin Dupont')
               .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
               .avecUnMotDePasse('mon_Mot-D3p4sse')
-              .construis(),
+              .construis()
           );
 
         const reponse = await executeRequete(
@@ -37,7 +37,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           {
             identifiant: 'martin.dupont@email.com',
             motDePasse: 'mon_Mot-D3p4sse',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(201);
@@ -62,7 +62,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           reponse.headers['set-cookie']! as string[]
         )[0].split('; ');
         expect(cookieRecu[0]).toStrictEqual(
-          'session=eyJ0b2tlbiI6InVuLWpldG9uIn0=',
+          'session=eyJ0b2tlbiI6InVuLWpldG9uIn0='
         );
         expect(cookieRecu[1]).toStrictEqual('path=/');
         expect(cookieRecu[3]).toStrictEqual('samesite=strict');
@@ -78,7 +78,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           {
             identifiant: 'existe@pas.fr',
             motDePasse: 'mon_Mot-D3p4sse',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(401);
@@ -95,7 +95,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               .avecUnNomPrenom('Martin Dupont')
               .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
               .avecUnMotDePasse('mon_Mot-D3p4sse')
-              .construis(),
+              .construis()
           );
 
         const reponse = await executeRequete(
@@ -106,7 +106,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           {
             identifiant: 'MARTIN.DUPONT@EMAIL.COM',
             motDePasse: 'mon_Mot-D3p4sse',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(201);
@@ -136,7 +136,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
                 .avecUnNomPrenom('Jean Dupont')
                 .avecUnIdentifiantDeConnexion('jean.dupont@email.com')
                 .avecUnMotDePasse('mon_Mot-D3p4sse')
-                .construis(),
+                .construis()
             );
 
           const reponse = await executeRequete(
@@ -147,7 +147,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             {
               identifiant: 'jean.dupont@email.com',
               motDePasse: 'mon_Mot-D3p4sse',
-            },
+            }
           );
 
           expect(reponse.statusCode).toBe(201);
@@ -175,7 +175,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             {
               identifiant: aidant.identifiantConnexion,
               motDePasse: aidant.motDePasse,
-            },
+            }
           );
 
           expect(reponse.statusCode).toBe(201);
@@ -201,7 +201,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               .avecUnNomPrenom('Martin Dupont')
               .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
               .avecUnMotDePasse('mon_Mot-D3p4sse')
-              .construis(),
+              .construis()
           );
 
         const reponse = await executeRequete(
@@ -210,7 +210,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           '/api/token',
           donneesServeur.portEcoute,
           undefined,
-          { 'set-cookie': [] },
+          { 'set-cookie': [] }
         );
 
         expect(reponse.statusCode).toBe(200);

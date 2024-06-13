@@ -8,7 +8,7 @@ program
   .action(async (options) => {
     console.log('Recherche des aidants en cours');
     const aidants = await new EntrepotAidantPostgres(
-      adaptateurServiceChiffrement(),
+      adaptateurServiceChiffrement()
     ).tous();
     const aidantsTrouves = aidants
       .map((aidant) => ({
@@ -22,12 +22,12 @@ program
               .toLowerCase()
               .trim()
               .includes(options.nom.toLowerCase().trim())
-          : true,
+          : true
       );
     console.log(
       `Il y a %s aidant(s) et %s trouvé(s)`,
       aidants.length,
-      aidantsTrouves.length,
+      aidantsTrouves.length
     );
     console.log(JSON.stringify(aidantsTrouves, undefined, 2));
     process.exit(0);

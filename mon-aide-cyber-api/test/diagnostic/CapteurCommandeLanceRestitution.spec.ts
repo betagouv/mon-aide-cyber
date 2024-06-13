@@ -29,7 +29,7 @@ describe('Capteur de lancement de la restitution', () => {
     entrepots = new EntrepotsMemoire();
     capteurCommandeLanceRestitution = new CapteurCommandeLanceRestitution(
       entrepots,
-      new BusEvenementDeTest(),
+      new BusEvenementDeTest()
     );
   });
 
@@ -40,7 +40,7 @@ describe('Capteur de lancement de la restitution', () => {
         unReferentiel()
           .sansThematique()
           .ajouteUneThematique('thematique', questions)
-          .construis(),
+          .construis()
       )
       .avecLesReponsesDonnees('thematique', [
         { q1: 'reponse-11' },
@@ -56,14 +56,14 @@ describe('Capteur de lancement de la restitution', () => {
     await entrepots.diagnostic().persiste(diagnostic);
 
     await capteurCommandeLanceRestitution.execute(
-      new ConstructeurCommande(diagnostic.identifiant).construis(),
+      new ConstructeurCommande(diagnostic.identifiant).construis()
     );
 
     const diagnosticRetourne = await entrepots
       .diagnostic()
       .lis(diagnostic.identifiant);
     expect(
-      diagnosticRetourne.restitution?.mesures?.mesuresPrioritaires,
+      diagnosticRetourne.restitution?.mesures?.mesuresPrioritaires
     ).toStrictEqual<MesurePriorisee[]>([
       {
         valeurObtenue: 0,
@@ -109,7 +109,7 @@ describe('Capteur de lancement de la restitution', () => {
       },
     ]);
     expect(
-      diagnosticRetourne.restitution?.mesures?.autresMesures,
+      diagnosticRetourne.restitution?.mesures?.autresMesures
     ).toStrictEqual([
       {
         titre: 'mesure 7',
@@ -132,15 +132,15 @@ describe('Capteur de lancement de la restitution', () => {
             uneQuestion()
               .aChoixUnique('Avez-vous quelque chose à envoyer ?')
               .avecReponsesPossibles([uneReponsePossible().construis()])
-              .construis(),
+              .construis()
           )
-          .construis(),
+          .construis()
       )
       .construis();
     await entrepots.diagnostic().persiste(diagnostic);
 
     await new CapteurCommandeLanceRestitution(entrepots, busEvenement).execute(
-      new ConstructeurCommande(diagnostic.identifiant).construis(),
+      new ConstructeurCommande(diagnostic.identifiant).construis()
     );
 
     expect(busEvenement.evenementRecu).toStrictEqual({
@@ -159,13 +159,13 @@ describe('Capteur de lancement de la restitution', () => {
     await expect(() =>
       new CapteurCommandeLanceRestitution(
         entrepots,
-        new BusEvenementDeTest(),
-      ).execute(new ConstructeurCommande(crypto.randomUUID()).construis()),
+        new BusEvenementDeTest()
+      ).execute(new ConstructeurCommande(crypto.randomUUID()).construis())
     ).rejects.toStrictEqual(
       ErreurMAC.cree(
         'Demande la restitution',
-        new AggregatNonTrouve('diagnostic'),
-      ),
+        new AggregatNonTrouve('diagnostic')
+      )
     );
   });
 });

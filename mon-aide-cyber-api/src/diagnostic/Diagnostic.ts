@@ -72,7 +72,7 @@ type EntrepotDiagnostic = Entrepot<Diagnostic>;
 
 const initialiseDiagnostic = (
   r: Referentiel,
-  mesures: ReferentielDeMesures,
+  mesures: ReferentielDeMesures
 ): Diagnostic => {
   const referentiel: {
     [clef: Thematique]: QuestionsThematique;
@@ -88,7 +88,7 @@ const initialiseDiagnostic = (
                 reponseUnique: null,
                 reponsesMultiples: [],
               },
-            }) as QuestionDiagnostic,
+            }) as QuestionDiagnostic
         ),
       },
     };
@@ -104,12 +104,12 @@ const initialiseDiagnostic = (
 
 const ajouteLaReponseAuDiagnostic = (
   diagnostic: Diagnostic,
-  corpsReponse: CorpsReponse,
+  corpsReponse: CorpsReponse
 ) => {
   diagnostic.dateDerniereModification = FournisseurHorloge.maintenant();
   const questions = diagnostic.referentiel[corpsReponse.chemin].questions;
   const questionTrouvee = questions.find(
-    (q) => q.identifiant === corpsReponse.identifiant,
+    (q) => q.identifiant === corpsReponse.identifiant
   );
   if (questionTrouvee !== undefined) {
     StrategieDeReponse.pour(corpsReponse).applique(questionTrouvee);
@@ -127,14 +127,15 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
 
   const prioriseLesMesures = (
     mesures: MesureDiagnostic[],
-    valeursDesIndices: ValeursDesIndicesAuDiagnostic,
+    valeursDesIndices: ValeursDesIndicesAuDiagnostic
   ): MesurePriorisee[] => {
     const mesurePriorisees = mesures
       .map((mesure) => {
         const valeurObtenue = Object.values(valeursDesIndices)
           .flatMap((valeurReponse) => valeurReponse)
-          .find((valeurReponse) => valeurReponse.identifiant === mesure.repondA)
-          ?.indice;
+          .find(
+            (valeurReponse) => valeurReponse.identifiant === mesure.repondA
+          )?.indice;
         return {
           titre: mesure.niveau.titre,
           pourquoi: mesure.niveau.pourquoi,
@@ -145,7 +146,7 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
       })
       .filter(
         (mesure) =>
-          mesure.valeurObtenue !== undefined && mesure.valeurObtenue !== null,
+          mesure.valeurObtenue !== undefined && mesure.valeurObtenue !== null
       )
       .sort((a, b) => (a.priorisation < b.priorisation ? -1 : 1) || 0);
     const les8MesuresLesPlusPrioritaires = mesurePriorisees
@@ -156,7 +157,7 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
           laValeurEstDefinie(b.valeurObtenue) &&
           a.valeurObtenue < b.valeurObtenue
             ? -1
-            : 1) || 0,
+            : 1) || 0
       );
     const lesAutresMesures = mesurePriorisees
       .filter((mesure) => mesure.priorisation > 8)
@@ -166,7 +167,7 @@ const genereLaRestitution = (diagnostic: Diagnostic) => {
           laValeurEstDefinie(b.valeurObtenue) &&
           a.valeurObtenue < b.valeurObtenue
             ? -1
-            : 1) || 0,
+            : 1) || 0
       );
 
     return [...les8MesuresLesPlusPrioritaires, ...lesAutresMesures];

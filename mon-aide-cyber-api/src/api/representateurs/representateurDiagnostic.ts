@@ -15,18 +15,18 @@ import { RepresentationGroupee } from './RepresentationGroupee';
 
 export const trouveQuestionATranscrire = (
   chemin: { chemin: Chemin; identifiantQuestion: string },
-  transcripteur: Transcripteur,
+  transcripteur: Transcripteur
 ): QuestionATranscrire | undefined => {
   return trouveParmiLesQuestions(
     transcripteur.thematiques[chemin.chemin].groupes.flatMap(
-      (q) => q.questions as QuestionATranscrire[],
+      (q) => q.questions as QuestionATranscrire[]
     ),
-    chemin.identifiantQuestion,
+    chemin.identifiantQuestion
   );
 };
 const trouveParmiLesQuestions = (
   questions: QuestionATranscrire[],
-  identifiantQuestion: string,
+  identifiantQuestion: string
 ): QuestionATranscrire | undefined => {
   for (const question of questions) {
     if (question.identifiant === identifiantQuestion) {
@@ -50,7 +50,7 @@ const trouveParmiLesQuestions = (
 };
 const questionTiroirATranscrire = (
   questions: QuestionATiroir[] | undefined,
-  transcripteur: Transcripteur,
+  transcripteur: Transcripteur
 ): RepresentationQuestion[] => {
   return (
     questions?.map((question) => {
@@ -60,7 +60,7 @@ const questionTiroirATranscrire = (
             chemin: `contexte`,
             identifiantQuestion: question.identifiant,
           },
-          transcripteur,
+          transcripteur
         );
       if (questionTiroirATranscrire !== undefined) {
         const reponsesPossibles: RepresentationReponsePossible[] =
@@ -81,7 +81,7 @@ const questionTiroirATranscrire = (
 };
 
 const estQuestionATiroir = (
-  reponse: ReponsePossible | Omit<ReponsePossible, 'questions'>,
+  reponse: ReponsePossible | Omit<ReponsePossible, 'questions'>
 ): reponse is ReponsePossible => {
   return (
     'questions' in reponse &&
@@ -91,7 +91,7 @@ const estQuestionATiroir = (
 };
 export const trouveReponsesPossibles = (
   question: QuestionDiagnostic | QuestionATiroir,
-  transcripteur: Transcripteur,
+  transcripteur: Transcripteur
 ): RepresentationReponsePossible[] => {
   return question.reponsesPossibles.map((reponse) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -102,7 +102,7 @@ export const trouveReponsesPossibles = (
     if (estQuestionATiroir(reponse)) {
       const representationQuestionATiroir = questionTiroirATranscrire(
         reponse.questions,
-        transcripteur,
+        transcripteur
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { questions, resultat, ...corpsDeReponse } = reponse;
@@ -132,25 +132,25 @@ export const extraisLesChampsDeLaQuestion = (question: QuestionDiagnostic) => {
 
 export function representeLeDiagnosticPourLeClient(
   diagnostic: Diagnostic,
-  transcripteur: Transcripteur,
+  transcripteur: Transcripteur
 ): RepresentationDiagnostic {
   const actions: Action[] = [];
   const representationGroupee = new RepresentationGroupee(transcripteur);
 
   const referentiel: RepresentationReferentiel = Object.entries(
-    diagnostic.referentiel,
+    diagnostic.referentiel
   )
     .sort(([thematiqueA], [thematiqueB]) =>
       transcripteur.ordreThematiques &&
       transcripteur.ordreThematiques?.indexOf(thematiqueA) >
         transcripteur.ordreThematiques?.indexOf(thematiqueB)
         ? 1
-        : -1,
+        : -1
     )
     .reduce(
       (
         accumulateur: RepresentationReferentiel,
-        [clef, questionsThematique],
+        [clef, questionsThematique]
       ) => {
         actions.push({
           [clef]: {
@@ -183,12 +183,12 @@ export function representeLeDiagnosticPourLeClient(
               transcripteur.thematiques[clef].localisationIllustration,
             groupes: representationGroupee.represente(
               clef,
-              questionsThematique,
+              questionsThematique
             ),
           },
         };
       },
-      {},
+      {}
     );
 
   return {

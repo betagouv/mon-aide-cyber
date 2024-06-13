@@ -4,11 +4,11 @@ import { adaptateurServiceChiffrement } from '../../infrastructure/adaptateurs/a
 program
   .option(
     '-c, --chiffre <chaineAChiffrer>',
-    'chiffre la chaine passée en paramètre',
+    'chiffre la chaine passée en paramètre'
   )
   .option(
     '-d, --dechiffre <chaineADechiffrer>',
-    'déchiffre la chaine passée en paramètre',
+    'déchiffre la chaine passée en paramètre'
   )
   .parse(process.argv);
 

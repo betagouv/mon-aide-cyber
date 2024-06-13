@@ -12,12 +12,12 @@ import { EntrepotAideConcret } from './EntrepotAideConcret';
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
   private readonly entrepotAidant: EntrepotAidant = new EntrepotAidantPostgres(
-    adaptateurServiceChiffrement(),
+    adaptateurServiceChiffrement()
   );
   private entrepotRestitution: EntrepotRestitution =
     new EntrepotRestitutionPostgres();
   private readonly entrepotAide: EntrepotAide = new EntrepotAideConcret(
-    adaptateurServiceChiffrement(),
+    adaptateurServiceChiffrement()
   );
 
   diagnostic(): EntrepotDiagnostic {

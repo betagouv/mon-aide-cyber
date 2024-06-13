@@ -27,11 +27,11 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
     async (
       requete: RequeteUtilisateur,
       reponse: Response,
-      __suite: NextFunction,
+      __suite: NextFunction
     ) => {
       const diagnostics = await new ServiceTableauDeBord(
         configuration.adaptateurRelations,
-        new ServiceDiagnostic(configuration.entrepots),
+        new ServiceDiagnostic(configuration.entrepots)
       ).diagnosticsInitiesPar(requete.identifiantUtilisateurCourant!);
 
       return reponse.status(200).json({
@@ -40,7 +40,7 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
           .actionsTableauDeBord(diagnostics.map((d) => d.identifiant))
           .construis(),
       });
-    },
+    }
   );
 
   return routes;

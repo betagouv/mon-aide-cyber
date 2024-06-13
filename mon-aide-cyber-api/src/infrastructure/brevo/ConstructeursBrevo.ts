@@ -43,7 +43,7 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevo> {
   }
 
   ayantPourDestinataires(
-    destinataires: [Email, Nom | undefined][],
+    destinataires: [Email, Nom | undefined][]
   ): ConstructeurBrevoEnvoiMail {
     this.destinataires = destinataires.map(([email, nom]) => ({
       email,
@@ -86,7 +86,7 @@ class ConstructeurBrevoCreationContact extends ConstructeurBrevo<CreationContact
   }
 
   ayantPourAttributs(
-    attributs: Record<string, string>,
+    attributs: Record<string, string>
   ): ConstructeurBrevoCreationContact {
     this.attributs = attributs;
     return this;

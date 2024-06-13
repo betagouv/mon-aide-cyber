@@ -32,7 +32,7 @@ export class AdaptateurGestionnaireErreursMemoire
       erreur: Error,
       _requete: Request,
       _reponse: Response,
-      _suite: NextFunction,
+      _suite: NextFunction
     ) => {
       console.error('Une erreur est survenue: %s', erreur);
     };

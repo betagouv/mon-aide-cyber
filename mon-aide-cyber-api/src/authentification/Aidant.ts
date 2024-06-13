@@ -11,11 +11,11 @@ export type Aidant = Aggregat & {
 export interface EntrepotAidant extends Entrepot<Aidant> {
   rechercheParIdentifiantConnexionEtMotDePasse(
     identifiantConnexion: string,
-    motDePasse: string,
+    motDePasse: string
   ): Promise<Aidant>;
 
   rechercheParIdentifiantDeConnexion(
-    identifiantConnexion: string,
+    identifiantConnexion: string
   ): Promise<Aidant>;
 }
 export class ErreurAuthentification extends Error {

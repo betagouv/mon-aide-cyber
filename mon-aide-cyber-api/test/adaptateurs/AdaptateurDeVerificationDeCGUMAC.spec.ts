@@ -15,7 +15,7 @@ describe('Adaptateur de Vérification de CGU', () => {
   beforeEach(() => {
     entrepots = new EntrepotsMemoire();
     adaptateurDeVerificationDeCGU = new AdaptateurDeVerificationDeCGUMAC(
-      entrepots,
+      entrepots
     );
   });
 
@@ -40,7 +40,7 @@ describe('Adaptateur de Vérification de CGU', () => {
       reponse,
       () => {
         suiteAppelee = true;
-      },
+      }
     );
 
     expect(codeRecu).toBe(302);
@@ -67,7 +67,7 @@ describe('Adaptateur de Vérification de CGU', () => {
       {} as Response,
       () => {
         suiteAppelee = true;
-      },
+      }
     );
 
     expect(suiteAppelee).toBe(true);

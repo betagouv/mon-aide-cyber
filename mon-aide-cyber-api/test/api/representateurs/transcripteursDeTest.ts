@@ -151,14 +151,14 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
   }
 
   ordonneLesThematiques(
-    thematiquesOrdonnees: string[],
+    thematiquesOrdonnees: string[]
   ): ConstructeurTranscripteur {
     this.thematiquesOrdonnees = thematiquesOrdonnees;
     return this;
   }
 
   avecLesDescriptions(
-    descriptions: { thematique: string; description: string }[],
+    descriptions: { thematique: string; description: string }[]
   ): ConstructeurTranscripteur {
     descriptions.forEach((description) => {
       Object.entries(this.thematiques).forEach(([clef, thematique]) => {
@@ -174,7 +174,7 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
     groupes: {
       groupes: { questions: QuestionATranscrire[] }[];
       thematique: string;
-    }[],
+    }[]
   ): ConstructeurTranscripteur {
     groupes.forEach((groupe) => {
       groupe.groupes.forEach((g) => {

@@ -38,7 +38,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         .avecUnReferentiel(
           unReferentiel()
             .ajouteUneQuestionAuContexte(uneQuestion().construis())
-            .construis(),
+            .construis()
         )
         .construis();
       await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
@@ -47,7 +47,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic/${diagnostic.identifiant}`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -128,7 +128,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic/id-inexistant`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -143,11 +143,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
       ).toBe(true);
     });
 
@@ -156,11 +156,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
+        true
       );
     });
 
@@ -169,11 +169,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste(),
+        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
       ).toBe(true);
     });
   });
@@ -187,12 +187,12 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'POST',
         '/api/diagnostic',
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(reponse.statusCode).toBe(201);
       expect(reponse.headers['link']).toMatch(
-        /api\/diagnostic\/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+        /api\/diagnostic\/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/
       );
     });
 
@@ -205,7 +205,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'POST',
         '/api/diagnostic',
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
       const lien = reponseCreation.headers['link'] as string;
 
@@ -213,12 +213,12 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `${lien}`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       const diagnosticRetourne = await reponse.json();
       expect(diagnosticRetourne.identifiant).toBe(
-        lien?.substring(lien.lastIndexOf('/') + 1),
+        lien?.substring(lien.lastIndexOf('/') + 1)
       );
       expect(diagnosticRetourne.referentiel.contexte.groupes).toHaveLength(1);
     });
@@ -229,7 +229,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'POST',
         '/api/diagnostic',
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(reponse.statusCode).toBe(500);
@@ -243,11 +243,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'POST',
         `/api/diagnostic/`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
       ).toBe(true);
     });
 
@@ -256,11 +256,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'POST',
         `/api/diagnostic/`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
+        true
       );
     });
   });
@@ -277,9 +277,9 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
                   uneReponsePossible().avecLibelle('Réponse 1').construis(),
                   uneReponsePossible().avecLibelle('Réponse 2').construis(),
                 ])
-                .construis(),
+                .construis()
             )
-            .construis(),
+            .construis()
         )
         .construis();
       await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
@@ -293,7 +293,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
           chemin: 'contexte',
           identifiant: 'une-question-',
           reponse: 'reponse-2',
-        },
+        }
       );
 
       const diagnosticRetourne = await testeurMAC.entrepots
@@ -301,7 +301,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         .lis(diagnostic.identifiant);
       expect(reponse.statusCode).toBe(204);
       expect(
-        diagnosticRetourne.referentiel.contexte.questions[0].reponseDonnee,
+        diagnosticRetourne.referentiel.contexte.questions[0].reponseDonnee
       ).toStrictEqual({
         reponsesMultiples: [],
         reponseUnique: 'reponse-2',
@@ -318,7 +318,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
           chemin: 'contexte',
           identifiant: 'une-question-',
           reponse: 'reponse-2',
-        },
+        }
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -332,11 +332,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'PATCH',
         `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
       ).toBe(true);
     });
 
@@ -345,11 +345,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'PATCH',
         `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
+        true
       );
     });
 
@@ -358,11 +358,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'PATCH',
         `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste(),
+        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
       ).toBe(true);
     });
   });
@@ -386,7 +386,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic/${identifiant}/restitution`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -442,7 +442,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         `/api/diagnostic/${restitution.identifiant}/restitution`,
         donneesServeur.portEcoute,
         undefined,
-        { accept: 'application/pdf' },
+        { accept: 'application/pdf' }
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -455,11 +455,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic/${crypto.randomUUID()}/restitution`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
       ).toBe(true);
     });
 
@@ -468,11 +468,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic/${crypto.randomUUID()}/restitution`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
+        true
       );
     });
 
@@ -481,7 +481,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic/${crypto.randomUUID()}/restitution`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -495,11 +495,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47/restitution`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste(),
+        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
       ).toBe(true);
     });
   });

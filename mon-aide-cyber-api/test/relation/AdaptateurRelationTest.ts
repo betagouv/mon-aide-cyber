@@ -16,12 +16,12 @@ export class AdaptateurRelationsTest implements AdaptateurRelations {
   relationExiste(
     _relation: Relation,
     utilisateur: Utilisateur,
-    objet: Objet,
+    objet: Objet
   ): Promise<boolean> {
     return Promise.resolve(
       !!this.relations
         .get(utilisateur.identifiant)
-        ?.filter((d) => d === objet.identifiant),
+        ?.filter((d) => d === objet.identifiant)
     );
   }
 }

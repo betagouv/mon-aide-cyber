@@ -28,8 +28,8 @@ export const adaptateurTranscripteur = () =>
         generateurInfoBulle: (infoBulles) =>
           infoBulles.map((infoBulle) =>
             pug.renderFile(
-              `src/infrastructure/adaptateurs/transcripteur/info-bulles/${infoBulle}`,
-            ),
+              `src/infrastructure/adaptateurs/transcripteur/info-bulles/${infoBulle}`
+            )
           ),
       };
     }

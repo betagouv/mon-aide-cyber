@@ -14,7 +14,7 @@ export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
   relationExiste(
     _relation: Relation,
     _utilisateur: Utilisateur,
-    _objet: Objet,
+    _objet: Objet
   ): Promise<boolean> {
     return Promise.resolve(false);
   }

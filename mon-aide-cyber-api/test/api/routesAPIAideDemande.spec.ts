@@ -20,7 +20,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
     describe('Quand une requête POST est reçue', () => {
       it('Valide la demande de l’aidé', async () => {
         FournisseurHorlogeDeTest.initialise(
-          new Date(Date.parse('2024-02-29T14:04:17+01:00')),
+          new Date(Date.parse('2024-02-29T14:04:17+01:00'))
         );
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -33,14 +33,14 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             departement: 'Corse du sud',
             raisonSociale: 'beta-gouv',
             relationAidant: true,
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(202);
         const aides = await testeurMAC.entrepots.aides().tous();
         expect(aides).toHaveLength(1);
         expect(aides[0].dateSignatureCGU).toStrictEqual(
-          FournisseurHorloge.maintenant(),
+          FournisseurHorloge.maintenant()
         );
       });
 
@@ -59,7 +59,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             email: 'jean.dupont@aide.com',
             departement: 'Corse du sud',
             raisonSociale: 'beta-gouv',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(500);
@@ -88,7 +88,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               email: 'jean.dupont@aide.com',
               departement: 'Paris',
               raisonSociale: 'beta-gouv',
-            },
+            }
           );
 
           expect(reponse.statusCode).toBe(422);
@@ -114,7 +114,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               email: 'ceci-n-est-pas-un-email',
               departement: 'Gironde',
               raisonSociale: 'beta-gouv',
-            },
+            }
           );
 
           expect(reponse.statusCode).toBe(422);
@@ -140,7 +140,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               email: 'jean.dupont@aide.com',
               departement: '   ',
               raisonSociale: 'beta-gouv',
-            },
+            }
           );
 
           expect(reponse.statusCode).toBe(422);
@@ -158,7 +158,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
 
         it('La raison sociale est optionnelle', async () => {
           FournisseurHorlogeDeTest.initialise(
-            new Date(Date.parse('2024-02-29T14:04:17+01:00')),
+            new Date(Date.parse('2024-02-29T14:04:17+01:00'))
           );
           const reponse = await executeRequete(
             donneesServeur.app,
@@ -169,14 +169,14 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               cguValidees: true,
               email: 'jean.dupont@aide.com',
               departement: 'Finistère',
-            },
+            }
           );
 
           expect(reponse.statusCode).toBe(202);
           const aides = await testeurMAC.entrepots.aides().tous();
           expect(aides).toHaveLength(1);
           expect(aides[0].dateSignatureCGU).toStrictEqual(
-            FournisseurHorloge.maintenant(),
+            FournisseurHorloge.maintenant()
           );
         });
 
@@ -191,7 +191,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               email: 'jean.dupont@aide.com',
               departement: 'Bas-Rhin',
               raisonSociale: '    ',
-            },
+            }
           );
 
           expect(reponse.statusCode).toBe(422);
@@ -215,7 +215,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           donneesServeur.app,
           'GET',
           '/api/aide/demande',
-          donneesServeur.portEcoute,
+          donneesServeur.portEcoute
         );
 
         expect(reponse.statusCode).toBe(200);
@@ -232,7 +232,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           donneesServeur.app,
           'GET',
           '/api/aide/demande',
-          donneesServeur.portEcoute,
+          donneesServeur.portEcoute
         );
 
         expect((await reponse.json()).departements).toStrictEqual([

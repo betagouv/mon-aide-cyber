@@ -30,10 +30,10 @@ export class BusEvenementDeTest extends BusEvenementMAC {
       entrepotJournalisation?: EntrepotEvenementJournal;
     } = {
       adaptateurRelations: new AdaptateurRelationsMAC(
-        new EntrepotRelationMemoire(),
+        new EntrepotRelationMemoire()
       ),
       entrepotJournalisation: new EntrepotEvenementJournalMemoire(),
-    },
+    }
   ) {
     const consommateurAidantCree = new ConsommateurEvenementDeTest();
     const consommateurAideCree = new ConsommateurEvenementDeTest();
@@ -43,7 +43,7 @@ export class BusEvenementDeTest extends BusEvenementMAC {
       {
         aidantCree: () => consommateurAidantCree,
         aideCree: () => consommateurAideCree,
-      },
+      }
     );
     super(consommateursEvenements);
     this.consommateurs.set('AIDANT_CREE', consommateurAidantCree);

@@ -1,6 +1,6 @@
 export const aseptise = (
   chaineDeCaractere: string,
-  separateur = '-',
+  separateur = '-'
 ): string => {
   return chaineDeCaractere
     .toString()

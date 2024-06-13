@@ -154,7 +154,7 @@ const poidsDesQuestions = new Map([
 export async function up(knex: Knex): Promise<void> {
   const metsAJourLeContexte = (
     thematique: string,
-    questions: RepresentationQuestionsThematique,
+    questions: RepresentationQuestionsThematique
   ) => {
     if (thematique === 'contexte') {
       metsAJourLePoidsDesQuestions(questions, () => 0);
@@ -163,7 +163,7 @@ export async function up(knex: Knex): Promise<void> {
 
   const metsAJourToutesLesThematiques = (
     thematique: string,
-    questions: RepresentationQuestionsThematique,
+    questions: RepresentationQuestionsThematique
   ) => {
     if (thematique !== 'contexte') {
       metsAJourLePoidsDesQuestions(questions, (question) => {
@@ -175,8 +175,8 @@ export async function up(knex: Knex): Promise<void> {
   const metsAJourLePoidsDesQuestions = (
     questions: RepresentationQuestionsThematique,
     fontionMiseAJour: (
-      question: RepresentationQuestionDiagnostic | RepresentationQuestionTiroir,
-    ) => number,
+      question: RepresentationQuestionDiagnostic | RepresentationQuestionTiroir
+    ) => number
   ) => {
     questions.questions.forEach((questionContexte) => {
       questionContexte.poids = fontionMiseAJour(questionContexte);
@@ -201,14 +201,14 @@ export async function up(knex: Knex): Promise<void> {
           referentiel: RepresentationReferentiel;
           tableauDesRecommandations: TableauDeRecommandations;
         };
-      }[],
+      }[]
     ) => {
       const misesAJour = lignes.map((ligne) => {
         Object.entries(ligne.donnees.referentiel).forEach(
           ([thematique, questions]) => {
             metsAJourLeContexte(thematique, questions);
             metsAJourToutesLesThematiques(thematique, questions);
-          },
+          }
         );
 
         return knex('diagnostics')
@@ -217,7 +217,7 @@ export async function up(knex: Knex): Promise<void> {
       });
 
       return Promise.all(misesAJour);
-    },
+    }
   );
 }
 

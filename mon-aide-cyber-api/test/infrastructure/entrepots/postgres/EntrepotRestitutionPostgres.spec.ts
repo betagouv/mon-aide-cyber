@@ -36,7 +36,7 @@ describe('Entrepôt de restitution', () => {
 
     const entrepotRestitution = new EntrepotRestitutionPostgres();
     expect(
-      await entrepotRestitution.lis(diagnostic.identifiant),
+      await entrepotRestitution.lis(diagnostic.identifiant)
     ).toStrictEqual<Restitution>({
       identifiant: diagnostic.identifiant,
       informations: {
@@ -58,7 +58,7 @@ describe('Entrepôt de restitution', () => {
     const identifiant = crypto.randomUUID();
 
     await expect(entrepotRestitution.lis(identifiant)).rejects.toThrowError(
-      "Le restitution demandé n'existe pas",
+      "Le restitution demandé n'existe pas"
     );
   });
 
@@ -70,7 +70,7 @@ describe('Entrepôt de restitution', () => {
 
       const entrepotRestitution = new EntrepotRestitutionPostgres();
       expect(
-        await entrepotRestitution.lis(diagnostic.identifiant),
+        await entrepotRestitution.lis(diagnostic.identifiant)
       ).toStrictEqual<Restitution>({
         identifiant: diagnostic.identifiant,
         informations: {
@@ -95,7 +95,7 @@ describe('Entrepôt de restitution', () => {
 
       const entrepotRestitution = new EntrepotRestitutionPostgres();
       expect(
-        await entrepotRestitution.lis(diagnostic.identifiant),
+        await entrepotRestitution.lis(diagnostic.identifiant)
       ).toStrictEqual<Restitution>({
         identifiant: diagnostic.identifiant,
         informations: {
@@ -122,7 +122,7 @@ describe('Entrepôt de restitution', () => {
 
       const entrepotRestitution = new EntrepotRestitutionPostgres();
       expect(
-        await entrepotRestitution.lis(diagnostic.identifiant),
+        await entrepotRestitution.lis(diagnostic.identifiant)
       ).toStrictEqual<Restitution>({
         identifiant: diagnostic.identifiant,
         informations: {
@@ -208,7 +208,7 @@ describe('Mappeur de restitution', () => {
           (rep) => ({
             identifiant: rep.identifiant,
             reponses: Array.from(rep.reponses.values()),
-          }),
+          })
         ),
       },
       reponsesPossibles: question.reponsesPossibles,
@@ -220,10 +220,10 @@ describe('Mappeur de restitution', () => {
       datecreation: FournisseurHorloge.maintenant().toISOString(),
       datedernieremodification: FournisseurHorloge.maintenant().toISOString(),
       departement: enDTO(
-        questions.questionDepartement || uneQuestionDiagnostic().construis(),
+        questions.questionDepartement || uneQuestionDiagnostic().construis()
       ),
       region: enDTO(
-        questions.questionRegion || uneQuestionDiagnostic().construis(),
+        questions.questionRegion || uneQuestionDiagnostic().construis()
       ),
       restitution: {
         indicateurs: {},
@@ -233,7 +233,7 @@ describe('Mappeur de restitution', () => {
         },
       },
       secteuractivite: enDTO(
-        questions.questionActivite || uneQuestionDiagnostic().construis(),
+        questions.questionActivite || uneQuestionDiagnostic().construis()
       ),
     };
   };
@@ -247,7 +247,7 @@ describe('Mappeur de restitution', () => {
           uneReponsePossible().avecLibelle('b').construis(),
         ])
         .ayantLaReponseDonnee(
-          uneReponseDonnee().ayantPourReponse('b').construis(),
+          uneReponseDonnee().ayantPourReponse('b').construis()
         )
         .construis();
 
@@ -255,8 +255,8 @@ describe('Mappeur de restitution', () => {
         mappeurRestitution(
           mappeurRestitutionDTODepuisQuestion({
             questionActivite: questionSecteurActivite,
-          }),
-        ).secteurActivite,
+          })
+        ).secteurActivite
       ).toStrictEqual('b');
     });
 
@@ -273,8 +273,8 @@ describe('Mappeur de restitution', () => {
         mappeurRestitution(
           mappeurRestitutionDTODepuisQuestion({
             questionActivite: questionSecteurActivite,
-          }),
-        ).secteurActivite,
+          })
+        ).secteurActivite
       ).toStrictEqual('non renseigné');
     });
   });
@@ -288,7 +288,7 @@ describe('Mappeur de restitution', () => {
           uneReponsePossible().avecLibelle('Bretagne').construis(),
         ])
         .ayantLaReponseDonnee(
-          uneReponseDonnee().ayantPourReponse('nouvelleaquitaine').construis(),
+          uneReponseDonnee().ayantPourReponse('nouvelleaquitaine').construis()
         )
         .construis();
       const questionDepartement = uneQuestionDiagnostic()
@@ -298,7 +298,7 @@ describe('Mappeur de restitution', () => {
           uneReponsePossible().avecLibelle('Gironde').construis(),
         ])
         .ayantLaReponseDonnee(
-          uneReponseDonnee().ayantPourReponse('gironde').construis(),
+          uneReponseDonnee().ayantPourReponse('gironde').construis()
         )
         .construis();
 
@@ -307,8 +307,8 @@ describe('Mappeur de restitution', () => {
           mappeurRestitutionDTODepuisQuestion({
             questionRegion: questionRegion,
             questionDepartement: questionDepartement,
-          }),
-        ).secteurGeographique,
+          })
+        ).secteurGeographique
       ).toStrictEqual('Gironde, Nouvelle-Aquitaine');
     });
 
@@ -320,7 +320,7 @@ describe('Mappeur de restitution', () => {
           uneReponsePossible().avecLibelle('Gironde').construis(),
         ])
         .ayantLaReponseDonnee(
-          uneReponseDonnee().ayantPourReponse('gironde').construis(),
+          uneReponseDonnee().ayantPourReponse('gironde').construis()
         )
         .construis();
 
@@ -328,8 +328,8 @@ describe('Mappeur de restitution', () => {
         mappeurRestitution(
           mappeurRestitutionDTODepuisQuestion({
             questionDepartement: questionDepartement,
-          }),
-        ).secteurGeographique,
+          })
+        ).secteurGeographique
       ).toStrictEqual('Gironde');
     });
 
@@ -341,7 +341,7 @@ describe('Mappeur de restitution', () => {
           uneReponsePossible().avecLibelle('Bretagne').construis(),
         ])
         .ayantLaReponseDonnee(
-          uneReponseDonnee().ayantPourReponse('nouvelleaquitaine').construis(),
+          uneReponseDonnee().ayantPourReponse('nouvelleaquitaine').construis()
         )
         .construis();
 
@@ -349,15 +349,15 @@ describe('Mappeur de restitution', () => {
         mappeurRestitution(
           mappeurRestitutionDTODepuisQuestion({
             questionRegion: questionRegion,
-          }),
-        ).secteurGeographique,
+          })
+        ).secteurGeographique
       ).toStrictEqual('Nouvelle-Aquitaine');
     });
 
     it("si ni le département ni la région ne sont renseignés, affiche 'non renseigné'", () => {
       expect(
         mappeurRestitution(mappeurRestitutionDTODepuisQuestion({}))
-          .secteurGeographique,
+          .secteurGeographique
       ).toStrictEqual('non renseigné');
     });
   });

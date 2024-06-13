@@ -30,17 +30,17 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         donneesServeur.app,
         'GET',
         `/api/profil/`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(reponse.statusCode).toBe(200);
       expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
       ).toBe(true);
       expect(await reponse.json()).toStrictEqual<Profil>({
         nomPrenom: aidant.nomPrenom,
         dateSignatureCGU: FournisseurHorloge.formateDate(
-          aidant.dateSignatureCGU!,
+          aidant.dateSignatureCGU!
         ).date,
         identifiantConnexion: aidant.identifiantConnexion,
         liens: {
@@ -69,11 +69,11 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         donneesServeur.app,
         'GET',
         `/api/profil/`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
+        true
       );
     });
 
@@ -82,7 +82,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         donneesServeur.app,
         'GET',
         `/api/profil/`,
-        donneesServeur.portEcoute,
+        donneesServeur.portEcoute
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -108,7 +108,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           ancienMotDePasse: aidant.motDePasse,
           motDePasse: nouveauMotDePasse,
           confirmationMotDePasse: nouveauMotDePasse,
-        },
+        }
       );
 
       expect(reponse.statusCode).toBe(204);
@@ -133,18 +133,18 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           ancienMotDePasse: aidant.motDePasse,
           motDePasse: nouveauMotDePasse,
           confirmationMotDePasse: nouveauMotDePasse,
-        },
+        }
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true,
+        true
       );
     });
 
     describe('En ce qui concerne la vérification du mot de passe', async () => {
       const aidant: Aidant = unAidant().construis();
       beforeEach(
-        async () => await testeurMAC.entrepots.aidants().persiste(aidant),
+        async () => await testeurMAC.entrepots.aidants().persiste(aidant)
       );
 
       it.each([
@@ -299,7 +299,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         ],
       ])('%s', async (_, test) => {
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidant,
+          aidant
         );
 
         const reponse = await executeRequete(
@@ -309,7 +309,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           donneesServeur.portEcoute,
           {
             ...test.corps,
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(test.attendu.code);

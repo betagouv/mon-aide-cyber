@@ -31,7 +31,7 @@ export class EntrepotDiagnosticPostgres
     } = this.transcris(
       entite,
       <E = Set<string>, S = string[]>(reponses: E) =>
-        Array.from(reponses as Set<string>) as S,
+        Array.from(reponses as Set<string>) as S
     );
     return {
       id: entite.identifiant,
@@ -44,13 +44,13 @@ export class EntrepotDiagnosticPostgres
     const referentiel = this.transcris(
       diagnosticDTO,
       <E = string[], S = Set<string>>(reponses: E) =>
-        new Set(reponses as string[]) as S,
+        new Set(reponses as string[]) as S
     );
     return {
       ...diagnosticDTO,
       dateCreation: FournisseurHorloge.enDate(diagnosticDTO.dateCreation),
       dateDerniereModification: FournisseurHorloge.enDate(
-        diagnosticDTO.dateDerniereModification,
+        diagnosticDTO.dateDerniereModification
       ),
       referentiel: referentiel,
     } as Diagnostic;
@@ -62,7 +62,7 @@ export class EntrepotDiagnosticPostgres
 
   private transcris(
     entite: Diagnostic | RepresentationDiagnostic,
-    transformeReponsesMultiples: <E, S>(reponses: E) => S,
+    transformeReponsesMultiples: <E, S>(reponses: E) => S
   ) {
     return Object.entries(entite.referentiel).reduce(
       (reducteur, [thematique, questions]) => ({
@@ -70,7 +70,7 @@ export class EntrepotDiagnosticPostgres
         [thematique as Thematique]: {
           questions: questions.questions.map(
             (
-              question: QuestionDiagnostic | RepresentationQuestionDiagnostic,
+              question: QuestionDiagnostic | RepresentationQuestionDiagnostic
             ) => ({
               ...question,
               reponseDonnee: {
@@ -79,14 +79,14 @@ export class EntrepotDiagnosticPostgres
                   (rep) => ({
                     ...rep,
                     reponses: transformeReponsesMultiples(rep.reponses),
-                  }),
+                  })
                 ),
               },
-            }),
+            })
           ),
         },
       }),
-      {},
+      {}
     );
   }
 }

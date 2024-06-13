@@ -23,7 +23,7 @@ export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
       .then((ligne: D) =>
         ligne !== undefined
           ? this.deDTOAEntite(ligne)
-          : Promise.reject(new AggregatNonTrouve(this.typeAggregat())),
+          : Promise.reject(new AggregatNonTrouve(this.typeAggregat()))
       );
   }
 

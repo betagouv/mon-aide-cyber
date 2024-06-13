@@ -51,12 +51,12 @@ const fusionnePdfs = (pdfs: Buffer[]): Promise<Buffer> => {
         pdfDocument.then((f) =>
           PDFDocument.load(pdf)
             .then((document) =>
-              f.copyPages(document, document.getPageIndices()),
+              f.copyPages(document, document.getPageIndices())
             )
             .then((copie) => copie.forEach((page) => f.addPage(page)))
-            .then(() => pdfDocument),
+            .then(() => pdfDocument)
         ),
-      Promise.resolve(fusion),
+      Promise.resolve(fusion)
     );
   };
 
@@ -72,8 +72,7 @@ export type ContenuHtml = { corps: string; entete: string; piedPage: string };
 
 const generePdfs = async (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
   const pagesHtmlRemplies = pagesHtml.filter(
-    (pageHtml) =>
-      pageHtml.corps !== '',
+    (pageHtml) => pageHtml.corps !== ''
   );
 
   const navigateur = await lanceNavigateur();
@@ -86,9 +85,9 @@ const generePdfs = async (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
       },
       {
         corps: pug.compileFile(
-          `src/infrastructure/restitution/pdf/modeles/restitution.pug`,
+          `src/infrastructure/restitution/pdf/modeles/restitution.pug`
         )(),
-      } as ContenuHtml,
+      } as ContenuHtml
     );
     const contenuFinal: ContenuHtml = {
       corps: contenu.corps,
@@ -103,7 +102,7 @@ const generePdfs = async (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
       return page
         .setContent(contenuFinal.corps)
         .then(() =>
-          page.pdf(formatPdfA4(contenuFinal.entete, contenuFinal.piedPage)),
+          page.pdf(formatPdfA4(contenuFinal.entete, contenuFinal.piedPage))
         )
         .catch((erreur) => {
           console.log(erreur);

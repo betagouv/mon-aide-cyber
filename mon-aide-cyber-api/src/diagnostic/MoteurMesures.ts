@@ -4,7 +4,7 @@ import { ReferentielDeMesures } from './ReferentielDeMesures';
 export class MoteurMesures {
   static genere(
     question: QuestionDiagnostic,
-    mesures: ReferentielDeMesures,
+    mesures: ReferentielDeMesures
   ): MesureDiagnostic[] {
     return [
       ...this.mesuresMultiples(question),
@@ -34,7 +34,7 @@ export class MoteurMesures {
         reponses: questionATiroir.reponsesPossibles.filter((reponsePossible) =>
           question.reponseDonnee.reponsesMultiples
             .flatMap((reponsesDonnees) => Array.from(reponsesDonnees.reponses))
-            .includes(reponsePossible.identifiant),
+            .includes(reponsePossible.identifiant)
         ),
         identifiantQuestion: questionATiroir.identifiant,
       }))
@@ -44,8 +44,8 @@ export class MoteurMesures {
             reponse.resultat?.mesures?.map((rec) => ({
               ...rec,
               repondA: rep.identifiantQuestion,
-            })) || [],
-        ),
+            })) || []
+        )
       );
   }
 
@@ -57,7 +57,7 @@ export class MoteurMesures {
           rep.resultat?.mesures?.map((rec) => ({
             ...rec,
             repondA: question.identifiant,
-          })) || [],
+          })) || []
       );
   }
 }

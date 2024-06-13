@@ -20,12 +20,12 @@ export class AdaptateurDeVerificationDesAccesDeTest
   verifie(
     _relation: Relation,
     _utilisateur: typeof ConstructeurUtilisateur,
-    _objet: typeof ConstructeurObjet,
+    _objet: typeof ConstructeurObjet
   ): RequestHandler {
     return (
       _requete: RequeteUtilisateur,
       _reponse: Response,
-      suite: NextFunction,
+      suite: NextFunction
     ) => {
       this.verifieLaRelation = true;
       suite();

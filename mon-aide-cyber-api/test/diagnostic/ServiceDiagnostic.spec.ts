@@ -43,7 +43,7 @@ describe('Le service de diagnostic', () => {
               uneReponsePossible().avecLibelle('Réponse B').construis(),
               uneReponsePossible().avecLibelle('Réponse C').construis(),
             ])
-            .construis(),
+            .construis()
         )
         .construis();
       const question = uneQuestion()
@@ -64,18 +64,18 @@ describe('Le service de diagnostic', () => {
       const serviceDiagnostic = new ServiceDiagnostic(entrepots);
 
       const diagnosticRetourne = await serviceDiagnostic.diagnostic(
-        diagnostic.identifiant,
+        diagnostic.identifiant
       );
 
       const referentielDiagnostic = diagnosticRetourne.referentiel['contexte'];
       expect(
-        referentielDiagnostic.questions.map((q) => q.reponseDonnee),
+        referentielDiagnostic.questions.map((q) => q.reponseDonnee)
       ).toMatchObject([
         { reponseUnique: null, reponsesMultiples: new Set() },
         { reponseUnique: null, reponsesMultiples: new Set() },
       ]);
       expect(
-        referentielDiagnostic.questions[1].reponsesPossibles[1],
+        referentielDiagnostic.questions[1].reponsesPossibles[1]
       ).toMatchObject({
         identifiant: reponseAttendue.identifiant,
         libelle: reponseAttendue.libelle,
@@ -106,7 +106,7 @@ describe('Le service de diagnostic', () => {
               uneReponsePossible().avecLibelle('BB').construis(),
               uneReponsePossible().avecLibelle('CC').construis(),
             ])
-            .construis(),
+            .construis()
         )
         .construis();
       const question = uneQuestion()
@@ -127,15 +127,15 @@ describe('Le service de diagnostic', () => {
       const serviceDiagnostic = new ServiceDiagnostic(entrepots);
 
       const diagnosticRetourne = await serviceDiagnostic.diagnostic(
-        diagnostic.identifiant,
+        diagnostic.identifiant
       );
 
       const referentielDiagnostic = diagnosticRetourne.referentiel['contexte'];
       expect(referentielDiagnostic.questions[1].reponsesPossibles).toHaveLength(
-        2,
+        2
       );
       expect(
-        referentielDiagnostic.questions[1].reponsesPossibles[1].questions?.[1],
+        referentielDiagnostic.questions[1].reponsesPossibles[1].questions?.[1]
       ).toMatchObject({
         identifiant: 'autres-reponses-',
         libelle: 'Autres réponses ?',
@@ -150,9 +150,9 @@ describe('Le service de diagnostic', () => {
 
     it('si le diagnostic est inconnu, cela génère un erreur', async () => {
       await expect(() =>
-        new ServiceDiagnostic(entrepots).diagnostic(crypto.randomUUID()),
+        new ServiceDiagnostic(entrepots).diagnostic(crypto.randomUUID())
       ).rejects.toStrictEqual(
-        ErreurMAC.cree('Accès diagnostic', new AggregatNonTrouve('diagnostic')),
+        ErreurMAC.cree('Accès diagnostic', new AggregatNonTrouve('diagnostic'))
       );
     });
   });
@@ -169,7 +169,7 @@ describe('Le service de diagnostic', () => {
       await entrepots.diagnostic().persiste(diagnostic);
 
       const contexte = await new ServiceDiagnostic(entrepots).contexte(
-        diagnostic.identifiant,
+        diagnostic.identifiant
       );
 
       expect(contexte).toStrictEqual<Contexte>({
@@ -185,7 +185,7 @@ describe('Le service de diagnostic', () => {
       await entrepots.diagnostic().persiste(diagnostic);
 
       const contexte = await new ServiceDiagnostic(entrepots).contexte(
-        diagnostic.identifiant,
+        diagnostic.identifiant
       );
 
       expect(contexte).toStrictEqual({ dateCreation, secteurActivite });
@@ -198,12 +198,12 @@ describe('Le service de diagnostic', () => {
       FournisseurHorlogeDeTest.initialise(dateCreation);
       const diagnostic = unDiagnosticDansLeDepartementAvecSecteurActivite(
         departement,
-        secteurActivite,
+        secteurActivite
       ).construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
       const contexte = await new ServiceDiagnostic(entrepots).contexte(
-        diagnostic.identifiant,
+        diagnostic.identifiant
       );
 
       expect(contexte).toStrictEqual<Contexte>({
@@ -218,7 +218,7 @@ describe('Le service de diagnostic', () => {
       await entrepots.diagnostic().persiste(diagnostic);
 
       const contexte = await new ServiceDiagnostic(entrepots).contexte(
-        diagnostic.identifiant,
+        diagnostic.identifiant
       );
 
       expect(contexte).toStrictEqual<Contexte>({ dateCreation });

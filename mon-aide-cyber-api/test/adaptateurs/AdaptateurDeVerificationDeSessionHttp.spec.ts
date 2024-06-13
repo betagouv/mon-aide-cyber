@@ -23,36 +23,36 @@ describe('Adaptateur de vérification de session', () => {
     } as Request;
 
     new AdaptateurDeVerificationDeSessionHttp(fauxGestionnaireDeJeton).verifie(
-      'Accède aux diagnostics',
+      'Accède aux diagnostics'
     )(requete, reponse, fausseSuite);
 
     fauxGestionnaireDeJeton.verifieToken(
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWFudCI6ImNiYTMzYTRmLTAyMjQtNGQ4MS1iODk5LTE1MjEwNWM2YjhhZiIsImlhdCI6MTcwMDkwMjY1MTk2MH0.WxgG3fHtTPyzGwyOdjpQGq9klq4yBo6UF9nwkYmKsho',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWFudCI6ImNiYTMzYTRmLTAyMjQtNGQ4MS1iODk5LTE1MjEwNWM2YjhhZiIsImlhdCI6MTcwMDkwMjY1MTk2MH0.WxgG3fHtTPyzGwyOdjpQGq9klq4yBo6UF9nwkYmKsho'
     );
   });
 
   it('lève une erreur quand les cookies de session sont absents', () => {
     expect(() => {
       new AdaptateurDeVerificationDeSessionHttp(
-        new FauxGestionnaireDeJeton(),
+        new FauxGestionnaireDeJeton()
       ).verifie('Accès diagnostic')(requete, reponse, fausseSuite);
     }).toThrowError(
       ErreurMAC.cree(
         'Accès diagnostic',
-        new ErreurAccesRefuse('Cookie invalide.'),
-      ),
+        new ErreurAccesRefuse('Cookie invalide.')
+      )
     );
   });
 
   it("vérifie que l'erreur levée est de type Accès Refusé", () => {
     try {
       new AdaptateurDeVerificationDeSessionHttp(
-        new FauxGestionnaireDeJeton(),
+        new FauxGestionnaireDeJeton()
       ).verifie('Accès diagnostic')(requete, reponse, fausseSuite);
       assert.fail('Ce test est sensé échouer');
     } catch (e) {
       expect((e as ErreurMAC).erreurOriginelle).toBeInstanceOf(
-        ErreurAccesRefuse,
+        ErreurAccesRefuse
       );
     }
   });
@@ -65,7 +65,7 @@ describe('Adaptateur de vérification de session', () => {
 
     expect(() => {
       new AdaptateurDeVerificationDeSessionHttp(
-        new FauxGestionnaireDeJeton(),
+        new FauxGestionnaireDeJeton()
       ).verifie('Accès diagnostic')(requete, reponse, fausseSuite);
     }).toThrow(`Cookie invalide.`);
   });
@@ -76,13 +76,13 @@ describe('Adaptateur de vérification de session', () => {
 
     expect(() => {
       new AdaptateurDeVerificationDeSessionHttp(
-        new FauxGestionnaireDeJeton(),
+        new FauxGestionnaireDeJeton()
       ).verifie(
         'Accès diagnostic',
         () =>
           ({
             session: cookieDeSession,
-          }) as MACCookies,
+          }) as MACCookies
       )(requete, reponse, fausseSuite);
     }).toThrow(`Session invalide.`);
   });
@@ -94,13 +94,13 @@ describe('Adaptateur de vérification de session', () => {
 
     expect(() => {
       new AdaptateurDeVerificationDeSessionHttp(
-        fauxGestionnaireDeJeton,
+        fauxGestionnaireDeJeton
       ).verifie(
         'Accès diagnostic',
         () =>
           ({
             session: cookieDeSession,
-          }) as MACCookies,
+          }) as MACCookies
       )(requete, reponse, fausseSuite);
     }).toThrow(`Session invalide.`);
   });
@@ -114,11 +114,11 @@ describe('Adaptateur de vérification de session', () => {
     } as RequeteUtilisateur;
 
     new AdaptateurDeVerificationDeSessionHttp(fauxGestionnaireDeJeton).verifie(
-      'Accède aux diagnostics',
+      'Accède aux diagnostics'
     )(requete, reponse, fausseSuite);
 
     expect(requete.identifiantUtilisateurCourant).toStrictEqual(
-      'cba33a4f-0224-4d81-b899-152105c6b8af',
+      'cba33a4f-0224-4d81-b899-152105c6b8af'
     );
   });
 });

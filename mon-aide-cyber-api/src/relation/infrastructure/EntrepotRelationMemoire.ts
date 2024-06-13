@@ -28,7 +28,7 @@ export class EntrepotRelationMemoire
         tuple.utilisateur.identifiant === identifiantAidant &&
         tuple.utilisateur.type === 'aidant' &&
         tuple.relation === 'initiateur' &&
-        tuple.objet.type === 'diagnostic',
+        tuple.objet.type === 'diagnostic'
     );
 
     return Promise.resolve(tuples);
@@ -41,14 +41,14 @@ export class EntrepotRelationMemoire
   relationExiste(
     relation: Relation,
     utilisateur: Utilisateur,
-    objet: Objet,
+    objet: Objet
   ): Promise<boolean> {
     return Promise.resolve(
       Array.from(this.entites.values()).filter((tuple) => {
         const user = isEqual(tuple.utilisateur, utilisateur);
         const obj = isEqual(tuple.objet, objet);
         return user && tuple.relation === relation && obj;
-      }).length > 0,
+      }).length > 0
     );
   }
 }

@@ -14,14 +14,14 @@ const command = program
   .description('Lie des diagnostics à aidants')
   .argument(
     '<cheminFichier>',
-    'le chemin du fichier contenant les diagnotics à rattacher (au format csv, séparation avec ";")',
+    'le chemin du fichier contenant les diagnotics à rattacher (au format csv, séparation avec ";")'
   );
 
 const lieDiagnostics = async (
   adaptateurRelations: AdaptateurRelations,
   entrepotDiagnostic: EntrepotDiagnostic,
   entrepotAidant: EntrepotAidant,
-  relations: Relation[],
+  relations: Relation[]
 ): Promise<Relation[]> => {
   return Promise.all(
     relations.map(
@@ -30,9 +30,9 @@ const lieDiagnostics = async (
           adaptateurRelations,
           entrepotDiagnostic,
           entrepotAidant,
-          diagnostic,
-        ),
-    ),
+          diagnostic
+        )
+    )
   );
 };
 
@@ -58,14 +58,14 @@ command.action(async (...args: any[]) => {
     new AdaptateurRelationsMAC(fabriqueEntrepotRelations()),
     fabriqueEntrepots().diagnostic(),
     fabriqueEntrepots().aidants(),
-    relations,
+    relations
   );
 
   if (resultats) {
     const rapport: string[] = [];
     const dateMaintenantISO = FournisseurHorloge.maintenant().toISOString();
     rapport.push(
-      `mailAidant;identifianAidant;identifiantDiagnostic;migré ?;commentaire\n`,
+      `mailAidant;identifianAidant;identifiantDiagnostic;migré ?;commentaire\n`
     );
 
     resultats.forEach((resultat) => {
@@ -74,7 +74,7 @@ command.action(async (...args: any[]) => {
       rapport.push(
         `${resultat.mailAidant};${resultat.identifiantAidant};${
           resultat.identifiantDiagnostic
-        };${resultat.estPersiste ? 'oui' : 'non'};${message}\n`,
+        };${resultat.estPersiste ? 'oui' : 'non'};${message}\n`
       );
     });
 
@@ -83,7 +83,7 @@ command.action(async (...args: any[]) => {
       rapport.join(''),
       {
         encoding: 'utf-8',
-      },
+      }
     );
   }
   process.exit(0);

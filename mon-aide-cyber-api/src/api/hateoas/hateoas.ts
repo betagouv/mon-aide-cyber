@@ -29,7 +29,7 @@ class ConstructeurActionsHATEOAS {
   }
 
   postAuthentification(
-    aidantAuthentifie: AidantAuthentifie,
+    aidantAuthentifie: AidantAuthentifie
   ): ConstructeurActionsHATEOAS {
     if (!aidantAuthentifie.dateSignatureCGU) {
       return this.creerEspaceAidant();
@@ -116,13 +116,13 @@ class ConstructeurActionsHATEOAS {
       this.actions.set(`afficher-diagnostic-${idDiagnostic}`, {
         url: `/api/diagnostic/${idDiagnostic}/restitution`,
         methode: 'GET',
-      }),
+      })
     );
     return this.afficherProfil().seDeconnecter();
   }
 
   actionsDiagnosticLance(
-    idDiagnostic: crypto.UUID,
+    idDiagnostic: crypto.UUID
   ): ConstructeurActionsHATEOAS {
     this.actions.set(`afficher-diagnostic-${idDiagnostic}`, {
       url: `/api/diagnostic/${idDiagnostic}/restitution`,
@@ -146,7 +146,7 @@ class ConstructeurActionsHATEOAS {
               ...accumulateur,
               [action]: lien,
             }),
-            {},
+            {}
           )),
       },
     };

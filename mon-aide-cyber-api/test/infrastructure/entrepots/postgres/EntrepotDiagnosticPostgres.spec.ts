@@ -19,7 +19,7 @@ describe('Entrepot Diagnostic Postgres', () => {
 
     const entrepotDiagnosticPostgresLecture = new EntrepotDiagnosticPostgres();
     expect(
-      await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant),
+      await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant)
     ).toStrictEqual(diagnostic);
   });
 
@@ -37,7 +37,7 @@ describe('Entrepot Diagnostic Postgres', () => {
               ])
               .construis(),
           ])
-          .construis(),
+          .construis()
       )
       .avecLesReponsesDonnees('question-set', [
         { 'sauvegardestu-les-set': ['un-peu', 'beaucoup'] },
@@ -49,7 +49,7 @@ describe('Entrepot Diagnostic Postgres', () => {
     const entrepotDiagnosticPostgresLecture =
       await new EntrepotDiagnosticPostgres();
     expect(
-      await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant),
+      await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant)
     ).toStrictEqual(diagnostic);
   });
 });

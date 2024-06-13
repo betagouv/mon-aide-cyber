@@ -8,7 +8,7 @@ import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurH
 describe('Authentification', () => {
   it('génère un jeton JWT', async () => {
     FournisseurHorlogeDeTest.initialise(
-      new Date(Date.parse('2023-02-04T10:00:00+01:00')),
+      new Date(Date.parse('2023-02-04T10:00:00+01:00'))
     );
 
     const entrepotAidant = new EntrepotAidantMemoire();
@@ -24,10 +24,10 @@ describe('Authentification', () => {
       entrepotAidant,
       new GestionnaireDeJetonJWT('ma-clef-secrete'),
       'Thomas',
-      'motDePasse',
+      'motDePasse'
     );
     expect(aidantAuthentifie.jeton).toStrictEqual(
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWFudCI6Ijk4ZmI0NWY1LWRiNzQtNDBkMi04YWI4LTBjNzc0ZTM5ZGYzNiIsImlhdCI6MTY3NTUwMTIwMDAwMH0.XaNT7-A3lUv4NgZEbpD6gc-Nrv0fE19RN554t3IUjTM',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWFudCI6Ijk4ZmI0NWY1LWRiNzQtNDBkMi04YWI4LTBjNzc0ZTM5ZGYzNiIsImlhdCI6MTY3NTUwMTIwMDAwMH0.XaNT7-A3lUv4NgZEbpD6gc-Nrv0fE19RN554t3IUjTM'
     );
   });
 });

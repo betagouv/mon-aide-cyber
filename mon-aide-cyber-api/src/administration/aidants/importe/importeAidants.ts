@@ -51,7 +51,7 @@ export const importeAidants = async (
   entrepotAidant: EntrepotAidant,
   busEvenement: BusEvenement,
   aidants: string,
-  generateurMotDePasse: () => string = genereMotDePasse,
+  generateurMotDePasse: () => string = genereMotDePasse
 ): Promise<ResultatImportationAidants> => {
   const resultat: ResultatImportationAidants = {
     aidantsImportes: [],
@@ -83,7 +83,7 @@ export const importeAidants = async (
       if (aidantTranscris) {
         const aidantExistantRecu = await entrepotAidant
           .rechercheParIdentifiantDeConnexion(
-            aidantTranscris.identifiantConnexion,
+            aidantTranscris.identifiantConnexion
           )
           .then((aidantDejaCree) => aidantDejaCree)
           .catch(() => undefined);
@@ -125,7 +125,7 @@ export const importeAidants = async (
         return importAidant;
       }
       return undefined;
-    }),
+    })
   );
   return importAidants.then((aidants) => {
     aidants
@@ -147,7 +147,7 @@ const genereMotDePasse = () => {
 
   const chaineAleatoire = () => {
     const valeurAleatoire = String.fromCharCode(
-      crypto.webcrypto.getRandomValues(new Uint8Array(1))[0],
+      crypto.webcrypto.getRandomValues(new Uint8Array(1))[0]
     );
     if (expressionReguliere.test(valeurAleatoire)) {
       return valeurAleatoire;

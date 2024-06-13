@@ -28,7 +28,7 @@ describe('le serveur MAC sur les routes /api/public', () => {
           nom: 'Jean Dupont',
           email: 'jean-dupont@email.com',
           message: 'Bonjour le monde!',
-        },
+        }
       );
 
       expect(reponse.statusCode).toBe(202);
@@ -38,8 +38,8 @@ describe('le serveur MAC sur les routes /api/public', () => {
         ).aEteEnvoye(
           'jean-dupont@email.com',
           'Bonjour le monde!',
-          'Jean Dupont',
-        ),
+          'Jean Dupont'
+        )
       ).toBe(true);
     });
 
@@ -56,7 +56,7 @@ describe('le serveur MAC sur les routes /api/public', () => {
           nom: 'Jean Dupont',
           email: 'jean-dupont@email.com',
           message: 'Bonjour le monde!',
-        },
+        }
       );
 
       expect(reponse.statusCode).toBe(500);
@@ -76,7 +76,7 @@ describe('le serveur MAC sur les routes /api/public', () => {
             nom: ' ',
             email: 'jean-dupont@email.com',
             message: 'Bonjour le monde!',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(400);
@@ -96,7 +96,7 @@ describe('le serveur MAC sur les routes /api/public', () => {
             nom: 'Jean Dupont',
             email: 'mauvais-email.com',
             message: 'Bonjour le monde!',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(400);
@@ -116,7 +116,7 @@ describe('le serveur MAC sur les routes /api/public', () => {
             nom: 'Jean Dupont',
             email: 'jean-dupont@email.com',
             message: ' ',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(400);
@@ -138,7 +138,7 @@ describe('le serveur MAC sur les routes /api/public', () => {
             nom: 'Jean <b>Dupont</b>',
             email: 'jean-dupont@email.com',
             message: 'Bonjour le monde!',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(202);
@@ -148,8 +148,8 @@ describe('le serveur MAC sur les routes /api/public', () => {
           ).aEteEnvoye(
             'jean-dupont@email.com',
             'Bonjour le monde!',
-            'Jean &lt;b&gt;Dupont&lt;&#x2F;b&gt;',
-          ),
+            'Jean &lt;b&gt;Dupont&lt;&#x2F;b&gt;'
+          )
         ).toBe(true);
       });
 
@@ -163,7 +163,7 @@ describe('le serveur MAC sur les routes /api/public', () => {
             nom: 'Jean Dupont',
             email: 'jean-dupont@email.com',
             message: 'Bonjour <script>alert("le monde!")</script>',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(202);
@@ -173,8 +173,8 @@ describe('le serveur MAC sur les routes /api/public', () => {
           ).aEteEnvoye(
             'jean-dupont@email.com',
             'Bonjour &lt;script&gt;alert(&quot;le monde!&quot;)&lt;&#x2F;script&gt;',
-            'Jean Dupont',
-          ),
+            'Jean Dupont'
+          )
         ).toBe(true);
       });
     });

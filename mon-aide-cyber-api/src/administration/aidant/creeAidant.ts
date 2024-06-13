@@ -11,12 +11,12 @@ export type DonneesAidant = {
 export const creeAidant = async (
   entrepot: EntrepotAidant,
   busEvenement: BusEvenement,
-  donneesAidant: DonneesAidant,
+  donneesAidant: DonneesAidant
 ): Promise<Aidant | null> => {
   return entrepot
     .rechercheParIdentifiantConnexionEtMotDePasse(
       donneesAidant.identifiantConnexion,
-      donneesAidant.motDePasse,
+      donneesAidant.motDePasse
     )
     .then(() => null)
     .catch(async () => {

@@ -20,7 +20,7 @@ export async function up(knex: Knex): Promise<void | number[]> {
         });
       });
       return Promise.all(misesAJour);
-    },
+    }
   );
 }
 
