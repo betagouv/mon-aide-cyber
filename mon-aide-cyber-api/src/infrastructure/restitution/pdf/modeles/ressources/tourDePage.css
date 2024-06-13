@@ -22,6 +22,14 @@ html {
   content: var(--logo-anssi);
 }
 
+.entete .logo-mac {
+  width: 12rem;
+  align-content: revert;
+  justify-content: revert;
+  align-items: revert;
+  content: var(--logo-mac);
+}
+
 .entete h2 {
   font-size: 12px;
   text-transform: uppercase;
