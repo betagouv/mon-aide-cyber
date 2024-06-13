@@ -120,18 +120,22 @@ const generePdfs = async (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
 
   const navigateur = await lanceNavigateur();
   try {
-    const pages = pagesHtmlRemplies.map((pageHtml) =>
-      navigateur.newPage().then((page) =>
-        page
-          .setContent(pageHtml.corps)
-          .then(() => page.pdf(formatPdfA4(pageHtml.entete, pageHtml.piedPage)))
-          .catch((erreur) => {
-            console.log(erreur);
-            throw erreur;
-          }),
-      ),
-    );
-    return await Promise.all(pages);
+    const contenu = pagesHtmlRemplies.reduce((prev, current) => {
+      prev.corps += `${current.corps}`;
+      prev.entete = current.entete;
+      prev.piedPage = current.piedPage;
+      return prev;
+    }, {} as ContenuHtml);
+    const resultat = navigateur.newPage().then((page) => {
+      return page
+        .setContent(contenu.corps)
+        .then(() => page.pdf(formatPdfA4(contenu.entete, contenu.piedPage)))
+        .catch((erreur) => {
+          console.log(erreur);
+          throw erreur;
+        });
+    });
+    return await Promise.all([resultat]);
   } catch (erreur) {
     console.log(erreur);
     throw erreur;
