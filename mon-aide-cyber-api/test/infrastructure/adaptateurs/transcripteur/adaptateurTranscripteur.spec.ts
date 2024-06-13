@@ -20,13 +20,13 @@ describe('Cohérence du transcripteur avec le référentiel', () => {
   const toutesLesQuestionsReferenceesDansLeTranscripteur: {
     identifiantQuestion: string;
   }[] = Object.entries(
-    adaptateurTranscripteur().transcripteur().thematiques,
+    adaptateurTranscripteur().transcripteur().thematiques
   ).flatMap(([, thematique]) =>
     thematique.groupes.flatMap((groupe) =>
       groupe.questions.flatMap((q) => ({
         identifiantQuestion: q.identifiant,
-      })),
-    ),
+      }))
+    )
   );
 
   describe.each(toutesLesQuestions())(
@@ -37,11 +37,11 @@ describe('Cohérence du transcripteur avec le référentiel', () => {
         (question) => {
           expect(
             toutesLesQuestionsReferenceesDansLeTranscripteur.find(
-              (q) => q.identifiantQuestion === question.question,
-            ),
+              (q) => q.identifiantQuestion === question.question
+            )
           ).not.toBeUndefined();
-        },
+        }
       );
-    },
+    }
   );
 });

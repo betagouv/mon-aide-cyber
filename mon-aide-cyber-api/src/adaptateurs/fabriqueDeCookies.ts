@@ -7,7 +7,7 @@ export type MACCookies = { session: string };
 export const fabriqueDeCookies = (
   contexte: Contexte,
   requete: Request,
-  reponse: Response,
+  reponse: Response
 ): MACCookies => {
   const cookies = new Cookies(requete, reponse, {
     keys: [process.env.SECRET_COOKIE || ''],

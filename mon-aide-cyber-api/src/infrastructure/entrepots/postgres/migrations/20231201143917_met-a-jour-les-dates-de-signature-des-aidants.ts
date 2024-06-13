@@ -9,13 +9,13 @@ export async function up(knex: Knex): Promise<void | number[]> {
         id: crypto.UUID;
         type: 'AIDANT' | 'REFERENT';
         donnees: DonneesUtilisateur;
-      }[],
+      }[]
     ) => {
       const misesAJour = lignes
         .filter(
           (ligne) =>
             !ligne.donnees.dateSignatureCGU ||
-            !ligne.donnees.dateSignatureCharte,
+            !ligne.donnees.dateSignatureCharte
         )
         .map((ligne) => {
           if (!ligne.donnees.dateSignatureCharte) {
@@ -29,7 +29,7 @@ export async function up(knex: Knex): Promise<void | number[]> {
           });
         });
       return Promise.all(misesAJour);
-    },
+    }
   );
 }
 

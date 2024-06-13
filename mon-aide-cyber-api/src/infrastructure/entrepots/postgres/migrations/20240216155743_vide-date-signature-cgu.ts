@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void | number[]> {
         id: crypto.UUID;
         type: 'AIDANT' | 'REFERENT';
         donnees: DonneesUtilisateur;
-      }[],
+      }[]
     ) => {
       const misesAJour = lignes.map((ligne) => {
         delete ligne.donnees.dateSignatureCharte;
@@ -19,7 +19,7 @@ export async function up(knex: Knex): Promise<void | number[]> {
         });
       });
       return Promise.all(misesAJour);
-    },
+    }
   );
 }
 

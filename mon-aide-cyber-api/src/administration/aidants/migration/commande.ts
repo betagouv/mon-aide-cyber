@@ -12,7 +12,7 @@ const command = program
   .argument(
     '<cheminFichier>',
     'le chemin du fichier contenant les aidants à migrer (au format json)\n' +
-      "Requête pour avoir les Aidants au bon format SELECT json_agg(json_build_object('identifiant', u.id, 'aidant', u.donnees)) FROM utilisateurs u;",
+      "Requête pour avoir les Aidants au bon format SELECT json_agg(json_build_object('identifiant', u.id, 'aidant', u.donnees)) FROM utilisateurs u;"
   );
 
 const serviceChiffrementOrigine =
@@ -20,7 +20,7 @@ const serviceChiffrementOrigine =
     ? new ServiceDeChiffrementChacha20(
         crypto.randomBytes(12),
         crypto.randomBytes(16),
-        process.env.CLEF_SECRETE_CHIFFREMENT_ORIGINE,
+        process.env.CLEF_SECRETE_CHIFFREMENT_ORIGINE
       )
     : new ServiceDeChiffrementClair();
 
@@ -30,14 +30,14 @@ command.action(async (...args: any[]) => {
     const aidantsMigres = await migreAidants(
       entrepot,
       serviceChiffrementOrigine,
-      JSON.parse(fs.readFileSync(args[0], { encoding: 'utf-8' })),
+      JSON.parse(fs.readFileSync(args[0], { encoding: 'utf-8' }))
     );
 
     const erreurs = aidantsMigres.erreurs
       ? `Aidants non migrés :\n${aidantsMigres.erreurs.join('\n')}`
       : '';
     console.log(
-      `${aidantsMigres.migres} migrés sur ${aidantsMigres.total} ${erreurs}`,
+      `${aidantsMigres.migres} migrés sur ${aidantsMigres.total} ${erreurs}`
     );
 
     process.exit(0);

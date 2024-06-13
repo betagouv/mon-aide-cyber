@@ -26,11 +26,11 @@ describe("Consignateur de gestion d'erreurr", () => {
           chemin: 'contexte',
           identifiant: 'une-question-',
           reponse: 'reponse-2',
-        },
+        }
       );
 
       expect(testeurMAC.gestionnaireErreurs.consignateur().tous()).toHaveLength(
-        1,
+        1
       );
     });
   });

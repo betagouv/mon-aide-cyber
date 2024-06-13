@@ -22,12 +22,12 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
   describe('quand une requête POST est reçue sur /cree', () => {
     it('marque les CGU à signées', async () => {
       FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-02-04T13:04:25+01:00')),
+        new Date(Date.parse('2024-02-04T13:04:25+01:00'))
       );
       const aidantCreantSonEspace = unAidant().sansEspace().construis();
       await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        aidantCreantSonEspace,
+        aidantCreantSonEspace
       );
 
       const reponse = await executeRequete(
@@ -39,7 +39,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
           cguSignees: true,
           motDePasse: 'EgLw5R0ItVRxkl%#>cPd',
           motDePasseTemporaire: aidantCreantSonEspace.motDePasse,
-        },
+        }
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -47,10 +47,10 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
         .aidants()
         .lis(aidantCreantSonEspace.identifiant);
       expect(aidantRetrouve.dateSignatureCGU).toStrictEqual(
-        FournisseurHorloge.maintenant(),
+        FournisseurHorloge.maintenant()
       );
       expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage(),
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
       ).toBe(true);
       expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
         liens: {
@@ -75,7 +75,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
+          aidantCreantSonEspace
         );
 
         const reponse = await executeRequete(
@@ -87,7 +87,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
             cguSignees: true,
             motDePasse: 'EgLwVRxkl%#>cPd',
             motDePasseTemporaire: aidantCreantSonEspace.motDePasse,
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(422);
@@ -101,7 +101,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
+          aidantCreantSonEspace
         );
 
         const reponse = await executeRequete(
@@ -113,7 +113,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
             cguSignees: true,
             motDePasse: 'EGLW5R0ITVRXKL%#>CPD',
             motDePasseTemporaire: aidantCreantSonEspace.motDePasse,
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(422);
@@ -127,7 +127,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
+          aidantCreantSonEspace
         );
 
         const reponse = await executeRequete(
@@ -139,7 +139,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
             cguSignees: true,
             motDePasse: 'eglw5r0itvrxkl%#>cpd',
             motDePasseTemporaire: aidantCreantSonEspace.motDePasse,
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(422);
@@ -153,7 +153,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
+          aidantCreantSonEspace
         );
 
         const reponse = await executeRequete(
@@ -165,7 +165,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
             cguSignees: true,
             motDePasse: 'EgLwCRDItVRxkl%#>cPd',
             motDePasseTemporaire: aidantCreantSonEspace.motDePasse,
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(422);
@@ -179,7 +179,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
+          aidantCreantSonEspace
         );
 
         const reponse = await executeRequete(
@@ -191,7 +191,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
             cguSignees: true,
             motDePasse: 'EgLwCRD0tVRxklAbCcPd',
             motDePasseTemporaire: aidantCreantSonEspace.motDePasse,
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(422);
@@ -205,7 +205,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
+          aidantCreantSonEspace
         );
 
         const reponse = await executeRequete(
@@ -217,7 +217,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
             cguSignees: true,
             motDePasse: 'EgLwCRD0tVRxkl>AbCcPd',
             motDePasseTemporaire: '',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(422);
@@ -231,7 +231,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
+          aidantCreantSonEspace
         );
 
         const reponse = await executeRequete(
@@ -243,7 +243,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
             cguSignees: true,
             motDePasse: 'EgLwCRD0tVRxklAbCcPd',
             motDePasseTemporaire: '',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(422);
@@ -257,7 +257,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
+          aidantCreantSonEspace
         );
 
         const reponse = await executeRequete(
@@ -269,7 +269,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
             cguSignees: true,
             motDePasse: 'EgLwCRD0tVRxkl>AbCcPd',
             motDePasseTemporaire: 'EgLwCRD0tVRxkl>AbCcPd',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(422);
@@ -283,7 +283,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
         const aidantCreantSonEspace = unAidant().sansEspace().construis();
         await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantCreantSonEspace,
+          aidantCreantSonEspace
         );
 
         const reponse = await executeRequete(
@@ -295,7 +295,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
             cguSignees: true,
             motDePasse: 'EgLwCRD0tVRxkl>AbCcPd',
             motDePasseTemporaire: 'mauvais-mdp',
-          },
+          }
         );
 
         expect(reponse.statusCode).toBe(422);
@@ -307,12 +307,12 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
 
     it('renvoie une erreur HTTP 422 si les CGU ne sont pas acceptées', async () => {
       FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-02-04T13:04:25+01:00')),
+        new Date(Date.parse('2024-02-04T13:04:25+01:00'))
       );
       const aidantCreantSonEspace = unAidant().sansEspace().construis();
       await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        aidantCreantSonEspace,
+        aidantCreantSonEspace
       );
 
       const reponse = await executeRequete(
@@ -324,7 +324,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
           cguSignees: false,
           motDePasse: 'EgLw5R0ItVRxkl%#>cPd',
           motDePasseTemporaire: aidantCreantSonEspace.motDePasse,
-        },
+        }
       );
 
       expect(reponse.statusCode).toBe(422);

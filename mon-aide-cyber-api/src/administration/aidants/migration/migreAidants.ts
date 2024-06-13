@@ -29,7 +29,7 @@ type AidantsMigres = {
 export const migreAidants = async (
   entrepot: EntrepotAidant,
   serviceChiffrementOrigine: ServiceDeChiffrement,
-  migration: MigrationAidant[],
+  migration: MigrationAidant[]
 ): Promise<AidantsMigres> => {
   const erreurs: string[] = [];
   const aidantsDejaExistants: string[] = [];
@@ -40,17 +40,17 @@ export const migreAidants = async (
           return {
             identifiant: migration.identifiant,
             identifiantConnexion: serviceChiffrementOrigine.dechiffre(
-              migration.aidant.identifiantConnexion,
+              migration.aidant.identifiantConnexion
             ),
             nomPrenom: serviceChiffrementOrigine.dechiffre(
-              migration.aidant.nomPrenom,
+              migration.aidant.nomPrenom
             ),
             motDePasse: serviceChiffrementOrigine.dechiffre(
-              migration.aidant.motDePasse,
+              migration.aidant.motDePasse
             ),
             ...(migration.aidant.dateSignatureCGU && {
               dateSignatureCGU: new Date(
-                Date.parse(migration.aidant.dateSignatureCGU),
+                Date.parse(migration.aidant.dateSignatureCGU)
               ),
             }),
           } as AidantDTO;
@@ -65,7 +65,7 @@ export const migreAidants = async (
         return entrepot
           .rechercheParIdentifiantDeConnexion(aidant.identifiantConnexion)
           .then((aidant) =>
-            aidantsDejaExistants.push(aidant.identifiantConnexion),
+            aidantsDejaExistants.push(aidant.identifiantConnexion)
           )
           .catch(async () => {
             try {
@@ -85,11 +85,11 @@ export const migreAidants = async (
               return undefined;
             }
           });
-      }),
+      })
   );
   return migrations.then((migrations) => {
     const migrationsEnSucces = migrations.filter(
-      (resultat): resultat is 'OK' => !!resultat && resultat === 'OK',
+      (resultat): resultat is 'OK' => !!resultat && resultat === 'OK'
     );
     return {
       migres: migrationsEnSucces.length,

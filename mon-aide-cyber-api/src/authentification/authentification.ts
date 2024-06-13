@@ -10,7 +10,7 @@ export const authentifie = (
   entrepotAidant: EntrepotAidant,
   gestionnaireDeJeton: GestionnaireDeJeton,
   identifiant: string,
-  motDePasse: string,
+  motDePasse: string
 ): Promise<AidantAuthentifie> => {
   return entrepotAidant
     .rechercheParIdentifiantConnexionEtMotDePasse(identifiant, motDePasse)
@@ -24,8 +24,8 @@ export const authentifie = (
       return Promise.reject(
         ErreurMAC.cree(
           "Demande d'Authentification",
-          new ErreurAuthentification(erreur),
-        ),
+          new ErreurAuthentification(erreur)
+        )
       );
     });
 };

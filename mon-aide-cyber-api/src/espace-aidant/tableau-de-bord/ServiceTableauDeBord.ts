@@ -13,11 +13,11 @@ export type Diagnostic = {
 export class ServiceTableauDeBord {
   constructor(
     private readonly adaptateurRelation: AdaptateurRelations,
-    private readonly serviceDiagnostic: ServiceDiagnostic,
+    private readonly serviceDiagnostic: ServiceDiagnostic
   ) {}
 
   async diagnosticsInitiesPar(
-    identifiantAidant: crypto.UUID,
+    identifiantAidant: crypto.UUID
   ): Promise<Diagnostic[]> {
     const identifiantDiagnosticsLie =
       await this.adaptateurRelation.diagnosticsInitiePar(identifiantAidant);
@@ -25,30 +25,30 @@ export class ServiceTableauDeBord {
     const contextes = identifiantDiagnosticsLie.map(
       async (identifiantDiagnostic) => {
         const contexte = await this.serviceDiagnostic.contexte(
-          identifiantDiagnostic as crypto.UUID,
+          identifiantDiagnostic as crypto.UUID
         );
         return { ...contexte, identifiantDiagnostic };
-      },
+      }
     );
 
     return Promise.all(contextes)
       .then((contextes) =>
         contextes.sort((contexte1, contexte2) =>
-          contexte1.dateCreation > contexte2.dateCreation ? -1 : 1,
-        ),
+          contexte1.dateCreation > contexte2.dateCreation ? -1 : 1
+        )
       )
       .then((contextes) =>
         contextes.map(
           (contexte) =>
             ({
               dateCreation: FournisseurHorloge.formateDate(
-                contexte.dateCreation,
+                contexte.dateCreation
               ).date,
               identifiant: contexte.identifiantDiagnostic,
               secteurActivite: contexte.secteurActivite || 'non renseigné',
               secteurGeographique: contexte.departement || 'non renseigné',
-            }) as Diagnostic,
-        ),
+            }) as Diagnostic
+        )
       );
   }
 }

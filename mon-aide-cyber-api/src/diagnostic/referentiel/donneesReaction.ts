@@ -313,8 +313,7 @@ export const donneesReaction: QuestionsThematique = {
     },
     {
       identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
-      libelle:
-        'Savez-vous comment réagir en cas de cyberattaque ?',
+      libelle: 'Savez-vous comment réagir en cas de cyberattaque ?',
       poids: 3,
       reponsesPossibles: [
         {
@@ -355,7 +354,7 @@ export const donneesReaction: QuestionsThematique = {
           identifiant:
             'reaction-dispositif-gestion-crise-adapte-defini-oui-organisation-gestion-crise-definie',
           libelle:
-            "Oui, une organisation de gestion de crise d’origine cyber a été définie",
+            'Oui, une organisation de gestion de crise d’origine cyber a été définie',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },

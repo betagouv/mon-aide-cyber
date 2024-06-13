@@ -16,7 +16,7 @@ export class CapteurCommandeLanceRestitution
 {
   constructor(
     public readonly entrepots: Entrepots,
-    public readonly busEvenement: BusEvenement,
+    public readonly busEvenement: BusEvenement
   ) {}
 
   execute(commande: CommandeLanceRestitution): Promise<void> {
@@ -31,25 +31,24 @@ export class CapteurCommandeLanceRestitution
         await this.entrepots.diagnostic().persiste(diagnostic);
         return diagnostic;
       })
-      .then(
-        (diagnostic) =>
-          this.busEvenement?.publie<RestitutionLancee>({
-            identifiant: diagnostic.identifiant,
-            type: 'RESTITUTION_LANCEE',
-            date: FournisseurHorloge.maintenant(),
-            corps: {
-              identifiantDiagnostic: diagnostic.identifiant,
-              ...(diagnostic.restitution?.indicateurs && {
-                indicateurs: diagnostic.restitution?.indicateurs,
-              }),
-              ...(diagnostic.restitution?.mesures && {
-                mesures: diagnostic.restitution.mesures.mesuresPrioritaires,
-              }),
-            },
-          }),
+      .then((diagnostic) =>
+        this.busEvenement?.publie<RestitutionLancee>({
+          identifiant: diagnostic.identifiant,
+          type: 'RESTITUTION_LANCEE',
+          date: FournisseurHorloge.maintenant(),
+          corps: {
+            identifiantDiagnostic: diagnostic.identifiant,
+            ...(diagnostic.restitution?.indicateurs && {
+              indicateurs: diagnostic.restitution?.indicateurs,
+            }),
+            ...(diagnostic.restitution?.mesures && {
+              mesures: diagnostic.restitution.mesures.mesuresPrioritaires,
+            }),
+          },
+        })
       )
       .catch((erreur) =>
-        Promise.reject(ErreurMAC.cree('Demande la restitution', erreur)),
+        Promise.reject(ErreurMAC.cree('Demande la restitution', erreur))
       );
   }
 }

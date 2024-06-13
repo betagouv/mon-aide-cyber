@@ -22,7 +22,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
   };
 
   ajouteUneQuestionAuContexte(
-    question: QuestionChoixUnique | QuestionChoixMultiple,
+    question: QuestionChoixUnique | QuestionChoixMultiple
   ): ConstructeurReferentiel {
     this.thematique['contexte'].questions.push(question);
     return this;
@@ -30,7 +30,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
 
   ajouteUneThematique(
     theme: string,
-    question: (QuestionChoixUnique | QuestionChoixMultiple)[],
+    question: (QuestionChoixUnique | QuestionChoixMultiple)[]
   ): ConstructeurReferentiel {
     this.thematique[theme] = { questions: [...question] };
     return this;
@@ -49,7 +49,7 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
           [clef]: thematique,
         };
       },
-      {},
+      {}
     );
   }
 }
@@ -79,7 +79,7 @@ class ConstructeurQuestion
 
   aChoixUnique(
     libelleQuestion: string,
-    reponsesPossibles: { identifiant: string; libelle: string }[] = [],
+    reponsesPossibles: { identifiant: string; libelle: string }[] = []
   ): ConstructeurQuestion {
     this.question.reponsesPossibles = [];
     this.question.libelle = libelleQuestion;
@@ -89,7 +89,7 @@ class ConstructeurQuestion
         identifiant: reponse.identifiant,
         libelle: reponse.libelle,
         ordre: index,
-      }),
+      })
     );
     return this;
   }
@@ -99,7 +99,7 @@ class ConstructeurQuestion
     reponsesPossibles: {
       identifiant: string;
       libelle: string;
-    }[] = [],
+    }[] = []
   ): ConstructeurQuestion {
     this.question.reponsesPossibles = [];
     this.question.libelle ||= libelleQuestion;
@@ -110,13 +110,13 @@ class ConstructeurQuestion
         identifiant: reponse.identifiant,
         libelle: reponse.libelle,
         ordre: index,
-      }),
+      })
     );
     return this;
   }
 
   avecReponsesPossibles(
-    reponsesPossibles: ReponsePossible[],
+    reponsesPossibles: ReponsePossible[]
   ): ConstructeurQuestion {
     this.question.reponsesPossibles = reponsesPossibles;
     return this;
@@ -146,7 +146,7 @@ class ConstructeurListeDeQuestions
     libellesReponsesPossibles: {
       libelle: string;
       association?: Association;
-    }[],
+    }[]
   ): ConstructeurListeDeQuestions {
     this.libellesReponsesPossibles = libellesReponsesPossibles;
     return this;
@@ -164,20 +164,20 @@ class ConstructeurListeDeQuestions
         .avecReponsesPossibles(
           this.libellesReponsesPossibles.map((rep) => {
             let constructeurReponsePossible = uneReponsePossible().avecLibelle(
-              rep.libelle,
+              rep.libelle
             );
             if (rep.association) {
               constructeurReponsePossible =
                 constructeurReponsePossible.associeeAMesure(
                   rep.association?.identifiantMesure,
                   rep.association?.niveauMesure,
-                  rep.association?.indice?.valeur,
+                  rep.association?.indice?.valeur
                 );
             }
             return constructeurReponsePossible.construis();
-          }),
+          })
         )
-        .construis(),
+        .construis()
     );
   }
 }
@@ -197,7 +197,7 @@ class ConstructeurQuestionATiroir implements Constructeur<QuestionATiroir> {
   };
 
   avecReponsesPossibles = (
-    reponsePossibles: ReponsePossible[],
+    reponsePossibles: ReponsePossible[]
   ): ConstructeurQuestionATiroir => {
     this.reponsesPossibles = reponsePossibles.map((reponse, index) => ({
       identifiant: reponse.identifiant,
@@ -243,7 +243,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   };
 
   ajouteUneQuestionATiroir(
-    question: QuestionATiroir,
+    question: QuestionATiroir
   ): ConstructeurReponsePossible {
     if (!this.questions) {
       this.questions = [];
@@ -261,7 +261,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   associeeAMesure(
     identifiantMesure: string,
     niveauMesure: NiveauMesure,
-    valeurIndice: Valeur,
+    valeurIndice: Valeur
   ): ConstructeurReponsePossible {
     const mesures = [];
     mesures.push({

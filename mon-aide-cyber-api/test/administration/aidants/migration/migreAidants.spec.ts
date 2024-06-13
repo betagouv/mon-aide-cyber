@@ -51,7 +51,7 @@ describe('Migration des Aidants', () => {
     const aidantsMigres = await migreAidants(
       entrepot,
       new ServiceDeChiffrementClair(),
-      [premiereMigration, deuxiemeMigration],
+      [premiereMigration, deuxiemeMigration]
     );
 
     expect(await entrepot.tous()).toStrictEqual<Aidant[]>([
@@ -61,7 +61,7 @@ describe('Migration des Aidants', () => {
         motDePasse: premiereMigration.aidant.motDePasse,
         identifiantConnexion: premiereMigration.aidant.identifiantConnexion,
         dateSignatureCGU: new Date(
-          Date.parse(premiereMigration.aidant.dateSignatureCGU!),
+          Date.parse(premiereMigration.aidant.dateSignatureCGU!)
         ),
       },
       {
@@ -70,7 +70,7 @@ describe('Migration des Aidants', () => {
         motDePasse: deuxiemeMigration.aidant.motDePasse,
         identifiantConnexion: deuxiemeMigration.aidant.identifiantConnexion,
         dateSignatureCGU: new Date(
-          Date.parse(deuxiemeMigration.aidant.dateSignatureCGU!),
+          Date.parse(deuxiemeMigration.aidant.dateSignatureCGU!)
         ),
       },
     ]);
@@ -83,13 +83,13 @@ describe('Migration des Aidants', () => {
       './test/administration/aidants/migration/aidants.json',
       {
         encoding: 'utf-8',
-      },
+      }
     );
 
     const aidantsMigres = await migreAidants(
       entrepot,
       new ServiceDeChiffrementClair(),
-      JSON.parse(aidantsAMigrer),
+      JSON.parse(aidantsAMigrer)
     );
 
     expect(await entrepot.tous()).toStrictEqual<Aidant[]>([
@@ -118,15 +118,15 @@ describe('Migration des Aidants', () => {
     entrepot.persiste(
       unAidant()
         .avecUnIdentifiantDeConnexion(
-          premiereMigration.aidant.identifiantConnexion,
+          premiereMigration.aidant.identifiantConnexion
         )
-        .construis(),
+        .construis()
     );
 
     const aidantsMigres = await migreAidants(
       entrepot,
       new ServiceDeChiffrementClair(),
-      [premiereMigration, deuxiemeMigration, troisiemeMigration],
+      [premiereMigration, deuxiemeMigration, troisiemeMigration]
     );
 
     expect(await entrepot.tous()).toHaveLength(3);
@@ -146,7 +146,7 @@ describe('Migration des Aidants', () => {
     const aidantsMigres = await migreAidants(
       entrepot,
       new ServiceDeChiffrementEnErreurSur(deuxiemeMigration),
-      [premiereMigration, deuxiemeMigration, troisiemeMigration],
+      [premiereMigration, deuxiemeMigration, troisiemeMigration]
     );
 
     expect(aidantsMigres).toStrictEqual({
@@ -165,7 +165,7 @@ describe('Migration des Aidants', () => {
     const aidantsMigres = await migreAidants(
       entrepot,
       new ServiceDeChiffrementClair(),
-      [premiereMigration, deuxiemeMigration, troisiemeMigration],
+      [premiereMigration, deuxiemeMigration, troisiemeMigration]
     );
 
     expect(aidantsMigres).toStrictEqual({

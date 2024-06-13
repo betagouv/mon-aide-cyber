@@ -10,13 +10,13 @@ describe("Les consommateurs d'évènements du tableau de bord", () => {
   describe("Lorsque l'évènement 'DIAGNOSTIC_LANCE' est consommé", () => {
     it("Créé une relation entre l'aidant et le diagnostic", async () => {
       const adaptateurRelations = new AdaptateurRelationsMAC(
-        new EntrepotRelationMemoire(),
+        new EntrepotRelationMemoire()
       );
       const identifiantAidant = crypto.randomUUID();
       const identifiantDiagnostic = crypto.randomUUID();
 
       await aidantInitieDiagnostic(
-        adaptateurRelations,
+        adaptateurRelations
       ).consomme<DiagnosticLance>({
         corps: {
           identifiantDiagnostic,
@@ -28,7 +28,7 @@ describe("Les consommateurs d'évènements du tableau de bord", () => {
       });
 
       expect(
-        await adaptateurRelations.diagnosticsInitiePar(identifiantAidant),
+        await adaptateurRelations.diagnosticsInitiePar(identifiantAidant)
       ).toStrictEqual([identifiantDiagnostic]);
     });
   });

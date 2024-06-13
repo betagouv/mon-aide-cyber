@@ -14,7 +14,7 @@ class ConstructeurDesValeursDesReponsesAuDiagnostic
   private thematiqueChoisie = '';
 
   pourLaThematique(
-    thematique: string,
+    thematique: string
   ): ConstructeurDesValeursDesReponsesAuDiagnostic {
     if (!this.thematiques[thematique]) {
       this.thematiques[thematique] = [];

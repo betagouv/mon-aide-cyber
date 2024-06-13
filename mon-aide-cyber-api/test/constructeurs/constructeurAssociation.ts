@@ -9,7 +9,7 @@ class ConstructeurAssociation implements Constructeur<Association> {
   constructor(
     private identifiantMesure: string = faker.string.alpha(10),
     private niveauMesure: NiveauMesure = 1,
-    private _indice: Indice = { valeur: 0 },
+    private _indice: Indice = { valeur: 0 }
   ) {}
 
   avecIdentifiant(identifiant: string): ConstructeurAssociation {

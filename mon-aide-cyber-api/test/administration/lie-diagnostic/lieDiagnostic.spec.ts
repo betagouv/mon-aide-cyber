@@ -17,7 +17,7 @@ import { AdaptateurRelationsEnErreur } from './AdaptateurRelationsEnErreur';
 describe('Lie un diagnostic', () => {
   it("créé une nouvelle relation lorsque le diagnostic n'est pas encore lié", async () => {
     const adaptateurRelations = new AdaptateurRelationsMAC(
-      new EntrepotRelationMemoire(),
+      new EntrepotRelationMemoire()
     );
     const aidant = unAidant().construis();
     const entrepotAidant = new EntrepotAidantMemoire();
@@ -37,11 +37,11 @@ describe('Lie un diagnostic', () => {
         identifiantAidant,
         identifiantDiagnostic,
         estPersiste: false,
-      },
+      }
     );
 
     expect(
-      await adaptateurRelations.diagnosticsInitiePar(aidant.identifiant),
+      await adaptateurRelations.diagnosticsInitiePar(aidant.identifiant)
     ).toStrictEqual([identifiantDiagnostic]);
     expect(relation).toStrictEqual<Relation>({
       mailAidant: aidant.identifiantConnexion,
@@ -53,7 +53,7 @@ describe('Lie un diagnostic', () => {
 
   it('ne recréé pas de nouvelle relation si le diagnostic est déjà lié', async () => {
     const adaptateurRelations = new AdaptateurRelationsMAC(
-      new EntrepotRelationMemoire(),
+      new EntrepotRelationMemoire()
     );
     const entrepotDiagnostic = new EntrepotDiagnosticMemoire();
     const diagnostic = unDiagnostic().construis();
@@ -63,7 +63,7 @@ describe('Lie un diagnostic', () => {
     await entrepotAidant.persiste(aidant);
     await adaptateurRelations.aidantInitieDiagnostic(
       aidant.identifiant,
-      diagnostic.identifiant,
+      diagnostic.identifiant
     );
 
     const relation = await lieDiagnostic(
@@ -75,11 +75,11 @@ describe('Lie un diagnostic', () => {
         identifiantAidant: aidant.identifiant,
         identifiantDiagnostic: diagnostic.identifiant,
         estPersiste: false,
-      },
+      }
     );
 
     expect(
-      await adaptateurRelations.diagnosticsInitiePar(aidant.identifiant),
+      await adaptateurRelations.diagnosticsInitiePar(aidant.identifiant)
     ).toStrictEqual([diagnostic.identifiant]);
     expect(relation).toStrictEqual<Relation>({
       ...relation,
@@ -105,7 +105,7 @@ describe('Lie un diagnostic', () => {
           identifiantAidant: aidant.identifiant,
           identifiantDiagnostic: diagnostic.identifiant,
           estPersiste: false,
-        },
+        }
       );
 
       expect(relation).toStrictEqual<Relation>({
@@ -131,7 +131,7 @@ describe('Lie un diagnostic', () => {
           identifiantAidant: aidant.identifiant,
           identifiantDiagnostic: identifiantDiagnosticNonTrouve,
           estPersiste: false,
-        },
+        }
       );
 
       expect(relation).toStrictEqual<Relation>({
@@ -157,7 +157,7 @@ describe('Lie un diagnostic', () => {
           identifiantAidant: identifiantAidantNonTrouve,
           identifiantDiagnostic: diagnostic.identifiant,
           estPersiste: false,
-        },
+        }
       );
 
       expect(relation).toStrictEqual<Relation>({

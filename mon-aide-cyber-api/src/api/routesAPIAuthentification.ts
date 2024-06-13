@@ -15,7 +15,7 @@ export type CorpsRequeteAuthentification = {
 export type ReponseAuthentification = ReponseHATEOAS & { nomPrenom: string };
 
 export const routesAPIAuthentification = (
-  configuration: ConfigurationServeur,
+  configuration: ConfigurationServeur
 ) => {
   const routes = express.Router();
 
@@ -26,7 +26,7 @@ export const routesAPIAuthentification = (
     (
       requete: Request<CorpsRequeteAuthentification>,
       reponse: Response<ReponseAuthentification>,
-      suite: NextFunction,
+      suite: NextFunction
     ) => {
       const { identifiant, motDePasse }: CorpsRequeteAuthentification =
         requete.body;
@@ -34,7 +34,7 @@ export const routesAPIAuthentification = (
         configuration.entrepots.aidants(),
         configuration.gestionnaireDeJeton,
         identifiant,
-        motDePasse,
+        motDePasse
       )
         .then((aidantAuthentifie: AidantAuthentifie) => {
           requete.session!.token = aidantAuthentifie.jeton;
@@ -46,7 +46,7 @@ export const routesAPIAuthentification = (
           });
         })
         .catch((erreur) => suite(erreur));
-    },
+    }
   );
 
   routes.delete(
@@ -55,7 +55,7 @@ export const routesAPIAuthentification = (
       configuration.adaptateurDeGestionDeCookies.supprime(requete, reponse);
       reponse.status(200);
       return reponse.send();
-    },
+    }
   );
 
   return routes;

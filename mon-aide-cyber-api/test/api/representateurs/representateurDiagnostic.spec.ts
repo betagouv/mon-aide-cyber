@@ -34,11 +34,11 @@ describe('Le représentateur de diagnostic', () => {
 
       const representationDiagnostic = representeLeDiagnosticPourLeClient(
         diagnostic,
-        fabriqueTranscripteurVide(),
+        fabriqueTranscripteurVide()
       );
 
       expect(
-        representationDiagnostic.referentiel.contexte.actions,
+        representationDiagnostic.referentiel.contexte.actions
       ).toStrictEqual([
         {
           action: 'repondre',
@@ -67,20 +67,20 @@ describe('Le représentateur de diagnostic', () => {
         .avecUnReferentiel(
           unReferentiel()
             .ajouteUneQuestionAuContexte(
-              uneQuestion().aChoixUnique('Des réponses?').construis(),
+              uneQuestion().aChoixUnique('Des réponses?').construis()
             )
-            .construis(),
+            .construis()
         )
         .construis();
 
       const diagnosticRepresente = representeLeDiagnosticPourLeClient(
         diagnostic,
-        transcripteurAvecSaisiesLibres,
+        transcripteurAvecSaisiesLibres
       );
 
       expect(
         diagnosticRepresente.referentiel['contexte'].groupes[0].questions[0]
-          .reponseDonnee,
+          .reponseDonnee
       ).toStrictEqual({
         valeur: null,
         reponses: [],
@@ -92,9 +92,9 @@ describe('Le représentateur de diagnostic', () => {
         .avecUnReferentiel(
           unReferentiel()
             .ajouteUneQuestionAuContexte(
-              uneQuestion().aChoixUnique('Question liste?').construis(),
+              uneQuestion().aChoixUnique('Question liste?').construis()
             )
-            .construis(),
+            .construis()
         )
         .construis();
       const diagnosticRepresente = representeLeDiagnosticPourLeClient(
@@ -122,7 +122,7 @@ describe('Le représentateur de diagnostic', () => {
             },
           },
           generateurInfoBulle: (infoBulle) => infoBulle,
-        },
+        }
       );
 
       const question =
@@ -142,7 +142,7 @@ describe('Le représentateur de diagnostic', () => {
               uneQuestionATiroir()
                 .aChoixMultiple('Question tiroir?')
                 .avecReponsesPossibles([reponse])
-                .construis(),
+                .construis()
             )
             .construis();
           const diagnostic = unDiagnostic()
@@ -152,21 +152,21 @@ describe('Le représentateur de diagnostic', () => {
                   uneQuestion()
                     .aChoixUnique('Question avec réponse tiroir?')
                     .avecReponsesPossibles([reponsePossible])
-                    .construis(),
+                    .construis()
                 )
-                .construis(),
+                .construis()
             )
             .construis();
 
           const diagnosticRepresente = representeLeDiagnosticPourLeClient(
             diagnostic,
-            transcripteurQuestionTiroir,
+            transcripteurQuestionTiroir
           );
 
           expect(
             diagnosticRepresente.referentiel.contexte.groupes.flatMap(
-              (q) => q.questions,
-            ),
+              (q) => q.questions
+            )
           ).toMatchObject([
             {
               identifiant: 'question-avec-reponse-tiroir',
@@ -218,33 +218,33 @@ describe('Le représentateur de diagnostic', () => {
                               uneReponsePossible().construis(),
                               reponse3,
                             ])
-                            .construis(),
+                            .construis()
                         )
                         .construis(),
                     ])
-                    .construis(),
+                    .construis()
                 )
-                .construis(),
+                .construis()
             )
             .construis();
 
           const diagnosticRepresente = representeLeDiagnosticPourLeClient(
             diagnostic,
-            transcripteurQuestionTiroir,
+            transcripteurQuestionTiroir
           );
 
           const questionTiroir =
             diagnosticRepresente.referentiel.contexte.groupes[0].questions[0]
               .reponsesPossibles[0];
           expect(questionTiroir?.questions?.[0].identifiant).toBe(
-            'question-tiroir',
+            'question-tiroir'
           );
           expect(questionTiroir?.questions?.[0].libelle).toBe(
-            'Question tiroir?',
+            'Question tiroir?'
           );
           expect(questionTiroir?.questions?.[0].type).toBe('choixMultiple');
           expect(
-            questionTiroir?.questions?.[0].reponsesPossibles[2],
+            questionTiroir?.questions?.[0].reponsesPossibles[2]
           ).toStrictEqual<RepresentationReponsePossible>({
             identifiant: 'reponse-3',
             libelle: 'Réponse 3',
@@ -269,26 +269,26 @@ describe('Le représentateur de diagnostic', () => {
                           uneQuestionATiroir()
                             .aChoixMultiple('Question tiroir?')
                             .avecReponsesPossibles([reponse])
-                            .construis(),
+                            .construis()
                         )
                         .construis(),
                     ])
-                    .construis(),
+                    .construis()
                 )
-                .construis(),
+                .construis()
             )
             .construis();
 
           const diagnosticRepresente = representeLeDiagnosticPourLeClient(
             diagnostic,
-            transcripteurQuestionTiroir,
+            transcripteurQuestionTiroir
           );
 
           const questionTiroir =
             diagnosticRepresente.referentiel.contexte.groupes[0].questions[0]
               .reponsesPossibles[0]?.questions?.[0];
           expect(
-            questionTiroir?.reponsesPossibles[0],
+            questionTiroir?.reponsesPossibles[0]
           ).toStrictEqual<RepresentationReponsePossible>({
             identifiant: 'reponse-3',
             libelle: 'Réponse 3',
@@ -311,7 +311,7 @@ describe('Le représentateur de diagnostic', () => {
                   uneQuestionATiroir()
                     .aChoixMultiple('Question 11')
                     .avecReponsesPossibles([reponse1])
-                    .construis(),
+                    .construis()
                 )
                 .construis(),
             ])
@@ -325,7 +325,7 @@ describe('Le représentateur de diagnostic', () => {
                   uneQuestionATiroir()
                     .aChoixMultiple('Question 21')
                     .avecReponsesPossibles([reponse2])
-                    .construis(),
+                    .construis()
                 )
                 .construis(),
             ])
@@ -335,13 +335,13 @@ describe('Le représentateur de diagnostic', () => {
               unReferentiel()
                 .ajouteUneQuestionAuContexte(premiereQuestion)
                 .ajouteUneQuestionAuContexte(secondeQuestion)
-                .construis(),
+                .construis()
             )
             .construis();
 
           const representationDiagnostic = representeLeDiagnosticPourLeClient(
             diagnostic,
-            transcripteurMultipleTiroir,
+            transcripteurMultipleTiroir
           );
 
           const premiereQuestionTiroir =
@@ -356,7 +356,7 @@ describe('Le représentateur de diagnostic', () => {
             representationDiagnostic.referentiel.contexte.groupes[0]
               .questions[1].reponsesPossibles[0]?.questions?.[0];
           expect(
-            deuxiemeQuestionTiroir?.reponsesPossibles[0],
+            deuxiemeQuestionTiroir?.reponsesPossibles[0]
           ).toStrictEqual<ReponsePossible>({
             identifiant: 'reponse-21',
             libelle: 'Réponse 21',
@@ -376,19 +376,19 @@ describe('Le représentateur de diagnostic', () => {
                         .ajouteUneQuestionATiroir(
                           uneQuestionATiroir()
                             .aChoixUnique('Une question tiroir à choix unique?')
-                            .construis(),
+                            .construis()
                         )
                         .construis(),
                     ])
-                    .construis(),
+                    .construis()
                 )
-                .construis(),
+                .construis()
             )
             .construis();
 
           const representationDiagnostic = representeLeDiagnosticPourLeClient(
             diagnostic,
-            fabriqueTranscripteurVide(),
+            fabriqueTranscripteurVide()
           );
 
           const question =
@@ -417,10 +417,10 @@ describe('Le représentateur de diagnostic', () => {
       reponsePossible: ReponsePossible,
       diagnostic: Diagnostic,
       description: string,
-      numero = 1,
+      numero = 1
     ) => {
       expect(
-        representationDiagnostic.referentiel[nomThematique],
+        representationDiagnostic.referentiel[nomThematique]
       ).toStrictEqual<RepresentationThematique>({
         actions: [
           {
@@ -472,7 +472,7 @@ describe('Le représentateur de diagnostic', () => {
           unReferentielSansThematiques()
             .ajouteUneThematique('theme 1', [questionTheme1])
             .ajouteUneThematique('theme 2', [questionTheme2])
-            .construis(),
+            .construis()
         )
         .construis();
 
@@ -482,7 +482,7 @@ describe('Le représentateur de diagnostic', () => {
         .construis();
       const representationDiagnostic = representeLeDiagnosticPourLeClient(
         diagnostic,
-        transcripteur,
+        transcripteur
       );
 
       const reponsePossibleQuestionTheme1 = questionTheme1.reponsesPossibles[0];
@@ -493,7 +493,7 @@ describe('Le représentateur de diagnostic', () => {
         questionTheme1,
         reponsePossibleQuestionTheme1,
         diagnostic,
-        transcripteur.thematiques['theme 1'].description,
+        transcripteur.thematiques['theme 1'].description
       );
       expectThematique(
         representationDiagnostic,
@@ -502,7 +502,7 @@ describe('Le représentateur de diagnostic', () => {
         reponsePossibleQuestionTheme2,
         diagnostic,
         transcripteur.thematiques['theme 2'].description,
-        2,
+        2
       );
     });
 
@@ -513,7 +513,7 @@ describe('Le représentateur de diagnostic', () => {
             .ajouteUneThematique('b-3', [])
             .ajouteUneThematique('c-1', [])
             .ajouteUneThematique('a-2', [])
-            .construis(),
+            .construis()
         )
         .construis();
 
@@ -522,7 +522,7 @@ describe('Le représentateur de diagnostic', () => {
         unTranscripteur()
           .avecLesThematiques(['a-2', 'b-3', 'c-1'])
           .ordonneLesThematiques(['c-1', 'a-2', 'b-3'])
-          .construis(),
+          .construis()
       );
 
       expect(Object.keys(representationDiagnostic.referentiel)).toStrictEqual([
@@ -538,7 +538,7 @@ describe('Le représentateur de diagnostic', () => {
           unReferentielSansThematiques()
             .ajouteUneThematique('thematique-1', [])
             .ajouteUneThematique('thematique-2', [])
-            .construis(),
+            .construis()
         )
         .construis();
 
@@ -556,13 +556,13 @@ describe('Le représentateur de diagnostic', () => {
               description: 'Description thématique 2',
             },
           ])
-          .construis(),
+          .construis()
       );
 
       expect(
         Object.entries(representationDiagnostic.referentiel).map(
-          ([, thematique]) => thematique.description,
-        ),
+          ([, thematique]) => thematique.description
+        )
       ).toStrictEqual(['Description thématique 2', 'Description thématique 1']);
     });
   });
@@ -583,7 +583,7 @@ describe('Le représentateur de diagnostic', () => {
                 ])
                 .construis(),
             ])
-            .construis(),
+            .construis()
         )
         .ajouteUneReponseDonnee(
           {
@@ -594,13 +594,13 @@ describe('Le représentateur de diagnostic', () => {
             .avecDesReponsesMultiples([
               { identifiant: 'ma-question-', reponses: ['rep1', 'rep3'] },
             ])
-            .construis(),
+            .construis()
         )
         .construis();
 
       const representationDiagnostic = representeLeDiagnosticPourLeClient(
         diagnostic,
-        unTranscripteur().avecLesThematiques(['multiple']).construis(),
+        unTranscripteur().avecLesThematiques(['multiple']).construis()
       );
 
       const reponse =
@@ -628,13 +628,13 @@ describe('Le représentateur de diagnostic', () => {
           uneQuestionATiroir()
             .aChoixMultiple('q1')
             .avecReponsesPossibles([premiereReponse, deuxiemeReponse])
-            .construis(),
+            .construis()
         )
         .ajouteUneQuestionATiroir(
           uneQuestionATiroir()
             .aChoixUnique('q2')
             .avecReponsesPossibles([troisiemeReponse])
-            .construis(),
+            .construis()
         )
         .construis();
       const question = uneQuestion()
@@ -643,7 +643,7 @@ describe('Le représentateur de diagnostic', () => {
         .construis();
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
-          unReferentiel().ajouteUneQuestionAuContexte(question).construis(),
+          unReferentiel().ajouteUneQuestionAuContexte(question).construis()
         )
         .ajouteUneReponseDonnee(
           { thematique: 'contexte', question: 'question' },
@@ -659,13 +659,13 @@ describe('Le représentateur de diagnostic', () => {
               },
               { identifiant: 'q2', reponses: [troisiemeReponse.identifiant] },
             ])
-            .construis(),
+            .construis()
         )
         .construis();
 
       const representationDiagnostic = representeLeDiagnosticPourLeClient(
         diagnostic,
-        fabriqueTranscripteurVide(),
+        fabriqueTranscripteurVide()
       );
 
       const reponseDonnee =
@@ -698,7 +698,7 @@ describe('Le représentateur de diagnostic', () => {
                 .aChoixUnique('Combien de personnes compte votre entité?')
                 .construis(),
             ])
-            .construis(),
+            .construis()
         )
         .construis();
 
@@ -724,11 +724,11 @@ describe('Le représentateur de diagnostic', () => {
               ],
             },
           ])
-          .construis(),
+          .construis()
       );
 
       expect(
-        representationDiagnostic.referentiel['thematique-groupee'].groupes,
+        representationDiagnostic.referentiel['thematique-groupee'].groupes
       ).toStrictEqual([
         {
           numero: 1,
@@ -779,7 +779,7 @@ describe('Le représentateur de diagnostic', () => {
                 .aChoixUnique('Quelle est la nature de votre entité?')
                 .construis(),
             ])
-            .construis(),
+            .construis()
         )
         .construis();
 
@@ -788,11 +788,11 @@ describe('Le représentateur de diagnostic', () => {
         unTranscripteur()
           .avecLesThematiques(['premiere-thematique', 'seconde-thematique'])
           .ordonneLesThematiques(['premiere-thematique', 'seconde-thematique'])
-          .construis(),
+          .construis()
       );
 
       expect(
-        representationDiagnostic.referentiel['premiere-thematique'].groupes,
+        representationDiagnostic.referentiel['premiere-thematique'].groupes
       ).toStrictEqual<RepresentationGroupes>([
         {
           numero: 1,
@@ -808,7 +808,7 @@ describe('Le représentateur de diagnostic', () => {
         },
       ]);
       expect(
-        representationDiagnostic.referentiel['seconde-thematique'].groupes,
+        representationDiagnostic.referentiel['seconde-thematique'].groupes
       ).toStrictEqual<RepresentationGroupes>([
         {
           numero: 2,
@@ -843,7 +843,7 @@ describe('Le représentateur de diagnostic', () => {
                 .aChoixUnique('Combien de personnes compte votre entité?')
                 .construis(),
             ])
-            .construis(),
+            .construis()
         )
         .construis();
 
@@ -878,7 +878,7 @@ describe('Le représentateur de diagnostic', () => {
               ],
             },
           ])
-          .construis(),
+          .construis()
       );
 
       const thematique = representationDiagnostic.referentiel['une-thematique'];

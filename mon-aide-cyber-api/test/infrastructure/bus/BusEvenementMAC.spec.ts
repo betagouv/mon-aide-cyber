@@ -28,7 +28,7 @@ describe('Bus Événement', () => {
     await new BusEvenementMAC(
       new Map<TypeEvenement, ConsommateurEvenement[]>([
         ['DIAGNOSTIC_LANCE', [consommateur]],
-      ]),
+      ])
     ).publie({
       identifiant,
       type: 'DIAGNOSTIC_LANCE',
@@ -56,7 +56,7 @@ describe('Bus Événement', () => {
       new Map<TypeEvenement, ConsommateurEvenement[]>([
         ['DIAGNOSTIC_LANCE', [premierConsommateur]],
         ['RESTITUTION_LANCEE', [secondConsommateur]],
-      ]),
+      ])
     ).publie({
       identifiant,
       type: 'RESTITUTION_LANCEE',

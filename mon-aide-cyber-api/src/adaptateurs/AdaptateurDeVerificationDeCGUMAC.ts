@@ -14,7 +14,7 @@ export class AdaptateurDeVerificationDeCGUMAC
     return async (
       requete: RequeteUtilisateur,
       reponse: Response,
-      suite: NextFunction,
+      suite: NextFunction
     ) => {
       const aidant = await this.entrepots
         .aidants()

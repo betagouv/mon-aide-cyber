@@ -15,7 +15,7 @@ export class AdaptateurDeVerificationDeSessionDeTest
     return (
       _requete: RequeteUtilisateur,
       _reponse: Response,
-      suite: NextFunction,
+      suite: NextFunction
     ) => {
       this.estPassee = true;
       if (this._utilisateurConnecte) {

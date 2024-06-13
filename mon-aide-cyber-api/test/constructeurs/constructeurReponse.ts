@@ -21,14 +21,14 @@ class ConstructeurDeCorpsDeReponse implements Constructeur<CorpsReponse> {
   }
 
   concernantLaQuestion(
-    question: QuestionChoixUnique | QuestionChoixMultiple,
+    question: QuestionChoixUnique | QuestionChoixMultiple
   ): ConstructeurDeCorpsDeReponse {
     this.identifiant = question.identifiant;
     return this;
   }
 
   avecLaReponse(
-    reponse: string | CorpsReponseQuestionATiroir,
+    reponse: string | CorpsReponseQuestionATiroir
   ): ConstructeurDeCorpsDeReponse {
     this.reponse = reponse;
     return this;

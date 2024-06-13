@@ -56,7 +56,7 @@ export async function up(knex: Knex): Promise<void> {
           referentiel: ReferentielDiagnostic;
           tableauDesRecommandations: TableauDeRecommandations;
         };
-      }[],
+      }[]
     ) => {
       const misesAJour = lignes.map((ligne) => {
         if (ligne.donnees.recommandations) {
@@ -71,7 +71,7 @@ export async function up(knex: Knex): Promise<void> {
           .update({ donnees: ligne.donnees });
       });
       return Promise.all(misesAJour);
-    },
+    }
   );
 }
 

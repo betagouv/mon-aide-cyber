@@ -17,30 +17,30 @@ export class ServiceDiagnostic {
       .diagnostic()
       .lis(id)
       .catch((erreur) =>
-        Promise.reject(ErreurMAC.cree('Accès diagnostic', erreur)),
+        Promise.reject(ErreurMAC.cree('Accès diagnostic', erreur))
       );
 
   contexte = async (id: crypto.UUID): Promise<Contexte> => {
     const diagnostic = await this.diagnostic(id);
 
     const trouveLibelleReponseDonneeDansContexte = (
-      identifiantQuestion: string,
+      identifiantQuestion: string
     ) => {
       const question = diagnostic.referentiel['contexte'].questions.find(
-        (question) => question.identifiant === identifiantQuestion,
+        (question) => question.identifiant === identifiantQuestion
       );
 
       return question?.reponsesPossibles.find(
         (reponsePossible) =>
-          reponsePossible.identifiant === question.reponseDonnee.reponseUnique,
+          reponsePossible.identifiant === question.reponseDonnee.reponseUnique
       )?.libelle;
     };
 
     const departement = trouveLibelleReponseDonneeDansContexte(
-      'contexte-departement-tom-siege-social',
+      'contexte-departement-tom-siege-social'
     );
     const secteurActivite = trouveLibelleReponseDonneeDansContexte(
-      'contexte-secteur-activite',
+      'contexte-secteur-activite'
     );
 
     return {

@@ -21,19 +21,19 @@ describe('Adaptateur de vérification de relations MAC', () => {
       unTuple()
         .avecRelationInitiateur()
         .avecObjet(
-          unObjet().deTypeDiagnostic().avecIdentifiant(diagnostic).construis(),
+          unObjet().deTypeDiagnostic().avecIdentifiant(diagnostic).construis()
         )
         .avecUtilisateur(
-          unUtilisateur().deTypeAidant().avecIdentifiant(aidant).construis(),
+          unUtilisateur().deTypeAidant().avecIdentifiant(aidant).construis()
         )
-        .construis(),
+        .construis()
     );
     const adaptateurRelation = new AdaptateurRelationsMAC(entrepotRelation);
 
     await new AdaptateurDeVerificationDesAccesMAC(adaptateurRelation).verifie(
       'initiateur',
       unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic(),
+      unObjet().deTypeDiagnostic()
     )(
       {
         identifiantUtilisateurCourant: aidant,
@@ -42,7 +42,7 @@ describe('Adaptateur de vérification de relations MAC', () => {
       reponse,
       () => {
         suiteAppelee = true;
-      },
+      }
     );
 
     expect(suiteAppelee).toBe(true);
@@ -59,13 +59,13 @@ describe('Adaptateur de vérification de relations MAC', () => {
       },
     } as Response;
     const adaptateurRelations = new AdaptateurRelationsMAC(
-      new EntrepotRelationMemoire(),
+      new EntrepotRelationMemoire()
     );
 
     await new AdaptateurDeVerificationDesAccesMAC(adaptateurRelations).verifie(
       'initiateur',
       unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic(),
+      unObjet().deTypeDiagnostic()
     )(
       {
         identifiantUtilisateurCourant: crypto.randomUUID(),
@@ -74,7 +74,7 @@ describe('Adaptateur de vérification de relations MAC', () => {
       reponse,
       () => {
         suiteAppelee = true;
-      },
+      }
     );
 
     expect(codeRecu).toBe(403);

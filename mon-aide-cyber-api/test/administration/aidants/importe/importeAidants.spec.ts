@@ -17,7 +17,7 @@ const enTeteCsv =
 describe('Importe des aidants', () => {
   let busEvenement: BusEvenementDeTest;
   FournisseurHorlogeDeTest.initialise(
-    new Date(Date.parse('2024-01-12T13:24:31+01:00')),
+    new Date(Date.parse('2024-01-12T13:24:31+01:00'))
   );
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('Importe des aidants', () => {
   function genereFichierCsv(aidantsCsv: AidantTranscris[]) {
     const ligne = aidantsCsv.map(
       (aidantCsv) =>
-        `${aidantCsv.region};${aidantCsv.nomPrenom};${aidantCsv.charte};${aidantCsv.identifiantConnexion};${aidantCsv.numeroTelephone};${aidantCsv.todo};${aidantCsv.qui};${aidantCsv.compteCree};${aidantCsv.commentaires};${aidantCsv.messageAvecMDP}`,
+        `${aidantCsv.region};${aidantCsv.nomPrenom};${aidantCsv.charte};${aidantCsv.identifiantConnexion};${aidantCsv.numeroTelephone};${aidantCsv.todo};${aidantCsv.qui};${aidantCsv.compteCree};${aidantCsv.commentaires};${aidantCsv.messageAvecMDP}`
     );
     return enTeteCsv + `${ligne.join('\n')}`;
   }
@@ -52,13 +52,13 @@ describe('Importe des aidants', () => {
           compteCree: 'non',
         },
       ]),
-      () => 'un-mot-de-passe',
+      () => 'un-mot-de-passe'
     );
 
     const aidant =
       await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse(
         'jean.dupont@mail.com',
-        'un-mot-de-passe',
+        'un-mot-de-passe'
       );
 
     expect(resultat).toStrictEqual<ResultatImportationAidants>({
@@ -107,13 +107,13 @@ describe('Importe des aidants', () => {
           compteCree: 'non',
         },
       ]),
-      () => 'un-mot-de-passe',
+      () => 'un-mot-de-passe'
     );
 
     const aidant =
       await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse(
         'jean.dupont@mail.com',
-        'un-mot-de-passe',
+        'un-mot-de-passe'
       );
     expect(resultat).toStrictEqual<ResultatImportationAidants>({
       aidantsImportes: [
@@ -173,18 +173,18 @@ describe('Importe des aidants', () => {
           compteCree: 'non',
         },
       ]),
-      () => 'un-mot-de-passe',
+      () => 'un-mot-de-passe'
     );
 
     const jeanDupont =
       await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse(
         'jean.dupont@mail.com',
-        'un-mot-de-passe',
+        'un-mot-de-passe'
       );
     const charlesMartin =
       await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse(
         'charles.martin@mail.com',
-        'un-mot-de-passe',
+        'un-mot-de-passe'
       );
     expect(resultat).toStrictEqual<ResultatImportationAidants>({
       aidantsImportes: [
@@ -261,14 +261,14 @@ describe('Importe des aidants', () => {
           compteCree: 'non',
         },
       ]),
-      () => 'un-mot-de-passe',
+      () => 'un-mot-de-passe'
     );
 
     expect(await entrepotAidant.tous()).toHaveLength(2);
     const charlesMartin =
       await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse(
         'charles.martin@mail.com',
-        'un-mot-de-passe',
+        'un-mot-de-passe'
       );
     expect(resultat).toStrictEqual<ResultatImportationAidants>({
       aidantsImportes: [
@@ -340,14 +340,14 @@ describe('Importe des aidants', () => {
           compteCree: 'non',
         },
       ]),
-      () => 'un-mot-de-passe',
+      () => 'un-mot-de-passe'
     );
 
     expect(await entrepotAidant.tous()).toHaveLength(2);
     const charlesMartin =
       await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse(
         'charles.martin@mail.com',
-        'un-mot-de-passe',
+        'un-mot-de-passe'
       );
     expect(resultat).toStrictEqual<ResultatImportationAidants>({
       aidantsImportes: [
@@ -403,13 +403,13 @@ describe('Importe des aidants', () => {
           compteCree: 'non',
         },
       ]),
-      () => 'un-mot-de-passe',
+      () => 'un-mot-de-passe'
     );
 
     const aidant =
       await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse(
         'jean.dupont@mail.com',
-        'un-mot-de-passe',
+        'un-mot-de-passe'
       );
     expect(resultat).toStrictEqual<ResultatImportationAidants>({
       aidantsImportes: [
@@ -444,7 +444,7 @@ describe('Importe des aidants', () => {
       entrepotAidant,
       busEvenement,
       enTeteCsv + ';;;;;;;;;;;',
-      () => 'un-mot-de-passe',
+      () => 'un-mot-de-passe'
     );
 
     expect(resultat.aidantsImportes).toHaveLength(0);
@@ -456,13 +456,13 @@ describe('Importe des aidants', () => {
       './test/administration/aidants/importe/beta_testeur.csv',
       {
         encoding: 'utf-8',
-      },
+      }
     );
 
     const aidantsImportes = await importeAidants(
       entrepot,
       new BusEvenementDeTest(),
-      aidantsAImporter,
+      aidantsAImporter
     );
 
     expect(aidantsImportes.aidantsImportes).toHaveLength(1);

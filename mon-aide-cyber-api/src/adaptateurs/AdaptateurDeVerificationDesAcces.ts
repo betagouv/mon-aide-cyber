@@ -9,6 +9,6 @@ export interface AdaptateurDeVerificationDesAcces {
   verifie(
     relation: Relation,
     utilisateur: typeof ConstructeurUtilisateur,
-    objet: typeof ConstructeurObjet,
+    objet: typeof ConstructeurObjet
   ): RequestHandler;
 }

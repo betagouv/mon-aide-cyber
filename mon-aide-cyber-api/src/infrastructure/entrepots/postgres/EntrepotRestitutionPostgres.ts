@@ -15,8 +15,8 @@ class EntrepotRestitutionPostgres extends EntrepotPostgres<
 > {
   constructor(
     private readonly transcripteur: (
-      dto: RestitutionDTO,
-    ) => MappeurRestitutionDTO = (dto) => mappeurRestitution(dto),
+      dto: RestitutionDTO
+    ) => MappeurRestitutionDTO = (dto) => mappeurRestitution(dto)
   ) {
     super();
   }
@@ -37,7 +37,7 @@ class EntrepotRestitutionPostgres extends EntrepotPostgres<
                                     '$.referentiel.contexte.questions[*] \\? (@.identifiant=="contexte-secteur-activite")')             as secteurActivite
             FROM diagnostics
             WHERE id = ?`,
-        [identifiant],
+        [identifiant]
       )
       .then(({ rows }: { rows: RestitutionDTO[] }) => {
         return rows[0] !== undefined
@@ -62,7 +62,7 @@ class EntrepotRestitutionPostgres extends EntrepotPostgres<
       informations: {
         dateCreation: FournisseurHorloge.enDate(dto.datecreation),
         dateDerniereModification: FournisseurHorloge.enDate(
-          dto.datedernieremodification,
+          dto.datedernieremodification
         ),
         secteurGeographique: secteurGeographique,
         secteurActivite,
@@ -139,7 +139,7 @@ type MappeurRestitutionDTO = {
 const mappeurRestitution = (dto: RestitutionDTO): MappeurRestitutionDTO => {
   const representeZoneGeographique = (
     questionRegion: RepresentationQuestionDiagnostic,
-    questionDepartement: RepresentationQuestionDiagnostic,
+    questionDepartement: RepresentationQuestionDiagnostic
   ) => {
     const region = trouveLibelleReponseUniqueDonnee(questionRegion);
     const departement = trouveLibelleReponseUniqueDonnee(questionDepartement);
@@ -150,10 +150,10 @@ const mappeurRestitution = (dto: RestitutionDTO): MappeurRestitutionDTO => {
   };
 
   const trouveLibelleReponseUniqueDonnee = (
-    question: RepresentationQuestionDiagnostic,
+    question: RepresentationQuestionDiagnostic
   ) =>
     question?.reponsesPossibles.find(
-      (reponse) => reponse.identifiant === question.reponseDonnee.reponseUnique,
+      (reponse) => reponse.identifiant === question.reponseDonnee.reponseUnique
     )?.libelle;
 
   return {
@@ -161,7 +161,7 @@ const mappeurRestitution = (dto: RestitutionDTO): MappeurRestitutionDTO => {
       trouveLibelleReponseUniqueDonnee(dto.secteuractivite) || 'non renseigné',
     secteurGeographique: representeZoneGeographique(
       dto.region,
-      dto.departement,
+      dto.departement
     ),
   };
 };

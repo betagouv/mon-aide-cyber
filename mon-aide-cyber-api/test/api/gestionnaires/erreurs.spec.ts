@@ -42,7 +42,7 @@ describe("Gestionnaire d'erreur", () => {
       new Error('Quelque chose est arrivé'),
       fausseRequete,
       fausseReponse,
-      fausseSuite,
+      fausseSuite
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(0);
@@ -60,7 +60,7 @@ describe("Gestionnaire d'erreur", () => {
       ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée')),
       fausseRequete,
       fausseReponse,
-      fausseSuite,
+      fausseSuite
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(0);
@@ -69,7 +69,7 @@ describe("Gestionnaire d'erreur", () => {
       message: "MonAideCyber n'est pas en mesure de traiter votre demande.",
     });
     expect(erreurRecue).toStrictEqual(
-      ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée')),
+      ErreurMAC.cree('Accès diagnostic', new Error('Erreur non identifiée'))
     );
   });
 
@@ -84,11 +84,11 @@ describe("Gestionnaire d'erreur", () => {
     gestionnaireErreurGeneralisee(consignateurErreurs)(
       ErreurMAC.cree(
         "Demande d'Authentification",
-        new ErreurAuthentification(new Error('Quelque chose est arrivé')),
+        new ErreurAuthentification(new Error('Quelque chose est arrivé'))
       ),
       fausseRequete,
       fausseReponse,
-      fausseSuite,
+      fausseSuite
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(1);
@@ -105,15 +105,15 @@ describe("Gestionnaire d'erreur", () => {
     gestionnaireErreurGeneralisee(consignateurErreurs)(
       ErreurMAC.cree(
         'Ajout réponse au diagnostic',
-        new ErreurAccesRefuse(messageInterne),
+        new ErreurAccesRefuse(messageInterne)
       ),
       fausseRequete,
       fausseReponse,
-      fausseSuite,
+      fausseSuite
     );
 
     expect(
-      (consignateurErreurs.tous()[0] as ErreurMAC).erreurOriginelle.message,
+      (consignateurErreurs.tous()[0] as ErreurMAC).erreurOriginelle.message
     ).toStrictEqual(messageInterne);
     expect(codeRecu).toBe(403);
     expect(corpsRecu).toStrictEqual({
@@ -134,11 +134,11 @@ describe("Gestionnaire d'erreur", () => {
     gestionnaireErreurGeneralisee(consignateurErreurs)(
       ErreurMAC.cree(
         "Crée l'espace Aidant",
-        new ErreurCreationEspaceAidant('Quelque chose est arrivé'),
+        new ErreurCreationEspaceAidant('Quelque chose est arrivé')
       ),
       fausseRequete,
       fausseReponse,
-      fausseSuite,
+      fausseSuite
     );
 
     expect(consignateurErreurs.tous()).toHaveLength(1);
@@ -170,7 +170,7 @@ describe("Gestionnaire d'erreur", () => {
       new Error('Erreur'),
       fausseRequete,
       fausseReponse,
-      fausseSuite,
+      fausseSuite
     );
 
     expect(fausseRequete.body).toStrictEqual({

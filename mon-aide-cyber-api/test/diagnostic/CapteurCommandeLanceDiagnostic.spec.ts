@@ -38,7 +38,7 @@ describe('Capteur pour lancer un diagnostic', () => {
 
     const diagnostic = await new CapteurCommandeLanceDiagnostic(
       entrepots,
-      new BusEvenementDeTest(),
+      new BusEvenementDeTest()
     ).execute({
       type: 'CommandeLanceDiagnostic',
       adaptateurReferentiel,
@@ -71,7 +71,7 @@ describe('Capteur pour lancer un diagnostic', () => {
 
     const diagnostic = await new CapteurCommandeLanceDiagnostic(
       entrepots,
-      new BusEvenementDeTest(),
+      new BusEvenementDeTest()
     ).execute({
       type: 'CommandeLanceDiagnostic',
       adaptateurReferentiel,
@@ -83,10 +83,10 @@ describe('Capteur pour lancer un diagnostic', () => {
       .diagnostic()
       .lis(diagnostic.identifiant);
     expect(diagnosticRetourne.dateCreation).toStrictEqual(
-      FournisseurHorloge.maintenant(),
+      FournisseurHorloge.maintenant()
     );
     expect(diagnosticRetourne.dateDerniereModification).toStrictEqual(
-      FournisseurHorloge.maintenant(),
+      FournisseurHorloge.maintenant()
     );
   });
 
@@ -99,7 +99,7 @@ describe('Capteur pour lancer un diagnostic', () => {
 
     const diagnostic = await new CapteurCommandeLanceDiagnostic(
       entrepots,
-      busEvenement,
+      busEvenement
     ).execute({
       type: 'CommandeLanceDiagnostic',
       adaptateurReferentiel,
@@ -122,15 +122,15 @@ describe('Capteur pour lancer un diagnostic', () => {
     await expect(() =>
       new CapteurCommandeLanceDiagnostic(
         entrepots,
-        new BusEvenementDeTest(),
+        new BusEvenementDeTest()
       ).execute({
         type: 'CommandeLanceDiagnostic',
         adaptateurReferentiel,
         adaptateurReferentielDeMesures: adaptateurMesures,
         identifiantAidant: crypto.randomUUID(),
-      }),
+      })
     ).rejects.toStrictEqual(
-      ErreurMAC.cree('Lance le diagnostic', new Error('Referentiel non connu')),
+      ErreurMAC.cree('Lance le diagnostic', new Error('Referentiel non connu'))
     );
   });
 });

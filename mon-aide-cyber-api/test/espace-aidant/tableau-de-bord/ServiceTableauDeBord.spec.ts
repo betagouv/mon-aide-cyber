@@ -11,7 +11,7 @@ import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/Fournisse
 
 describe('Service Tableau De Bord', () => {
   FournisseurHorlogeDeTest.initialise(
-    new Date(Date.parse('2024-04-17T18:06:00+02:00')),
+    new Date(Date.parse('2024-04-17T18:06:00+02:00'))
   );
 
   describe('Liste le diagnostic initié par un aidant', () => {
@@ -21,11 +21,11 @@ describe('Service Tableau De Bord', () => {
 
       const diagnosticTableauDeBord = await new ServiceTableauDeBord(
         new AdaptateurRelationsTest(
-          new Map([[identifiantAidant, [identifiantDiagnostic]]]),
+          new Map([[identifiantAidant, [identifiantDiagnostic]]])
         ),
         new ServiceDiagnosticTest(
-          new Map([[identifiantDiagnostic, unContexte().construis()]]),
-        ),
+          new Map([[identifiantDiagnostic, unContexte().construis()]])
+        )
       ).diagnosticsInitiesPar(identifiantAidant);
 
       expect(diagnosticTableauDeBord[0]).toStrictEqual<Diagnostic>({
@@ -43,7 +43,7 @@ describe('Service Tableau De Bord', () => {
 
       const diagnosticTableauDeBord = await new ServiceTableauDeBord(
         new AdaptateurRelationsTest(
-          new Map([[identifiantAidant, [identifiantDiagnostic]]]),
+          new Map([[identifiantAidant, [identifiantDiagnostic]]])
         ),
         new ServiceDiagnosticTest(
           new Map([
@@ -51,8 +51,8 @@ describe('Service Tableau De Bord', () => {
               identifiantDiagnostic,
               unContexte().avecDateCreation(date).construis(),
             ],
-          ]),
-        ),
+          ])
+        )
       ).diagnosticsInitiesPar(identifiantAidant);
 
       expect(diagnosticTableauDeBord[0]).toStrictEqual<Diagnostic>({
@@ -71,7 +71,7 @@ describe('Service Tableau De Bord', () => {
 
         const diagnosticTableauDeBord = await new ServiceTableauDeBord(
           new AdaptateurRelationsTest(
-            new Map([[identifiantAidant, [identifiantDiagnostic]]]),
+            new Map([[identifiantAidant, [identifiantDiagnostic]]])
           ),
           new ServiceDiagnosticTest(
             new Map([
@@ -79,8 +79,8 @@ describe('Service Tableau De Bord', () => {
                 identifiantDiagnostic,
                 unContexte().avecLeDepartement(departement).construis(),
               ],
-            ]),
-          ),
+            ])
+          )
         ).diagnosticsInitiesPar(identifiantAidant);
 
         expect(diagnosticTableauDeBord[0]).toStrictEqual<Diagnostic>({
@@ -100,7 +100,7 @@ describe('Service Tableau De Bord', () => {
 
       const diagnosticTableauDeBord = await new ServiceTableauDeBord(
         new AdaptateurRelationsTest(
-          new Map([[identifiantAidant, [identifiantDiagnostic]]]),
+          new Map([[identifiantAidant, [identifiantDiagnostic]]])
         ),
         new ServiceDiagnosticTest(
           new Map([
@@ -108,8 +108,8 @@ describe('Service Tableau De Bord', () => {
               identifiantDiagnostic,
               unContexte().avecSecteurActivite(secteurActivite).construis(),
             ],
-          ]),
-        ),
+          ])
+        )
       ).diagnosticsInitiesPar(identifiantAidant);
 
       expect(diagnosticTableauDeBord[0]).toStrictEqual<Diagnostic>({
@@ -151,12 +151,12 @@ describe('Service Tableau De Bord', () => {
                 .enRegion('Bretagne')
                 .avecLeDepartement('Finistère')
                 .avecSecteurActivite(
-                  'Arts, spectacles et activités récréatives',
+                  'Arts, spectacles et activités récréatives'
                 )
                 .construis(),
             ],
-          ]),
-        ),
+          ])
+        )
       ).diagnosticsInitiesPar(identifiantAidant);
 
       expect(diagnosticTableauDeBord).toStrictEqual<Diagnostic[]>([
@@ -195,7 +195,7 @@ describe('Service Tableau De Bord', () => {
               identifiantDiagnosticInitie1,
               unContexte()
                 .avecDateCreation(
-                  new Date(Date.parse('2024-02-04T14:30:00+01:00')),
+                  new Date(Date.parse('2024-02-04T14:30:00+01:00'))
                 )
                 .enRegion('Corse')
                 .avecLeDepartement('Corse-du-Sud')
@@ -206,17 +206,17 @@ describe('Service Tableau De Bord', () => {
               identifiantDiagnosticInitie2,
               unContexte()
                 .avecDateCreation(
-                  new Date(Date.parse('2024-02-17T14:32:00+01:00')),
+                  new Date(Date.parse('2024-02-17T14:32:00+01:00'))
                 )
                 .enRegion('Bretagne')
                 .avecLeDepartement('Finistère')
                 .avecSecteurActivite(
-                  'Arts, spectacles et activités récréatives',
+                  'Arts, spectacles et activités récréatives'
                 )
                 .construis(),
             ],
-          ]),
-        ),
+          ])
+        )
       ).diagnosticsInitiesPar(identifiantAidant);
 
       expect(diagnosticTableauDeBord).toStrictEqual<Diagnostic[]>([

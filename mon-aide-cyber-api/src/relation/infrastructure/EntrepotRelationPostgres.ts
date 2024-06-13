@@ -88,18 +88,18 @@ export class EntrepotRelationPostgres
       .from(this.nomTable())
       .whereRaw(
         "(donnees->'utilisateur'->>'identifiant')::uuid = ?",
-        identifiant,
+        identifiant
       )
       .select(`${this.nomTable()}.*`)
       .then((lignes: TupleDTO[]) =>
-        lignes.map((ligne) => this.deDTOAEntite(ligne)),
+        lignes.map((ligne) => this.deDTOAEntite(ligne))
       );
   }
 
   relationExiste(
     relation: Relation,
     utilisateur: Utilisateur,
-    objet: Objet,
+    objet: Objet
   ): Promise<boolean> {
     return this.knex
       .from(this.nomTable())

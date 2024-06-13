@@ -163,7 +163,7 @@ describe('Moteur de mesures', () => {
                       .associeeAMesure('obsolete-annee-1990', 2, 2)
                       .construis(),
                   ])
-                  .construis(),
+                  .construis()
               )
               .construis(),
           ])
@@ -176,7 +176,7 @@ describe('Moteur de mesures', () => {
                   reponses: ['1980'],
                 },
               ])
-              .construis(),
+              .construis()
           )
           .construis();
 
@@ -214,7 +214,7 @@ describe('Moteur de mesures', () => {
                       .associeeAMesure('obsolete-annee-1990', 2, 2)
                       .construis(),
                   ])
-                  .construis(),
+                  .construis()
               )
               .ajouteUneQuestionATiroir(
                 uneQuestionATiroir()
@@ -222,7 +222,7 @@ describe('Moteur de mesures', () => {
                     uneReponsePossible().construis(),
                     uneReponsePossible().construis(),
                   ])
-                  .construis(),
+                  .construis()
               )
               .associeeAMesure('ordinateur-obsolete', 2, 1)
               .construis(),
@@ -236,7 +236,7 @@ describe('Moteur de mesures', () => {
                   reponses: ['1980'],
                 },
               ])
-              .construis(),
+              .construis()
           )
           .construis();
 

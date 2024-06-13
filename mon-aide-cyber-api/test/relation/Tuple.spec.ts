@@ -18,14 +18,14 @@ describe('Tuple', () => {
         unUtilisateur()
           .deTypeAidant()
           .avecIdentifiant(aidant.identifiant)
-          .construis(),
+          .construis()
       )
       .avecRelationInitiateur()
       .avecObjet(
         unObjet()
           .deTypeDiagnostic()
           .avecIdentifiant(diagnostic.identifiant)
-          .construis(),
+          .construis()
       )
       .construis();
 

@@ -89,7 +89,7 @@ export async function up(knex: Knex): Promise<void> {
           referentiel: RepresentationReferentiel;
           tableauDesRecommandations: TableauDeRecommandations;
         };
-      }[],
+      }[]
     ) => {
       const misesAJour = lignes.map((ligne) => {
         Object.entries(ligne.donnees.referentiel)
@@ -100,7 +100,7 @@ export async function up(knex: Knex): Promise<void> {
                 metsAJour(reponsePossible);
                 reponsePossible.questions?.forEach((question) => {
                   question.reponsesPossibles.forEach((reponsePossible) =>
-                    metsAJour(reponsePossible),
+                    metsAJour(reponsePossible)
                   );
                 });
               });
@@ -111,7 +111,7 @@ export async function up(knex: Knex): Promise<void> {
           .update({ donnees: ligne.donnees });
       });
       return Promise.all(misesAJour);
-    },
+    }
   );
 }
 

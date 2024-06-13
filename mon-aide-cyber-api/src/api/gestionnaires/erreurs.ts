@@ -18,7 +18,7 @@ const CORPS_REPONSE_ERREUR_NON_GEREE = {
 const construisReponse = (
   reponse: Response,
   codeHTTP: number,
-  corpsReponse: { message: string },
+  corpsReponse: { message: string }
 ) => {
   reponse.status(codeHTTP);
   reponse.json(corpsReponse);
@@ -30,7 +30,7 @@ const erreursGerees: Map<
     erreur: ErreurMAC,
     requete: Request,
     consignateur: ConsignateurErreurs,
-    reponse: Response,
+    reponse: Response
   ) => void
 > = new Map([
   [
@@ -90,19 +90,19 @@ const erreursGerees: Map<
 ]);
 
 export const gestionnaireErreurGeneralisee = (
-  consignateurErreur: ConsignateurErreurs,
+  consignateurErreur: ConsignateurErreurs
 ) => {
   return (
     erreur: Error,
     requete: Request,
     reponse: Response,
-    suite: NextFunction,
+    suite: NextFunction
   ) => {
     const construisReponseErreurServeur = () => {
       construisReponse(
         reponse,
         HTTP_ERREUR_SERVEUR,
-        CORPS_REPONSE_ERREUR_NON_GEREE,
+        CORPS_REPONSE_ERREUR_NON_GEREE
       );
     };
 
@@ -110,12 +110,10 @@ export const gestionnaireErreurGeneralisee = (
       if (requete.body) {
         Object.keys(requete.body)
           .filter((attribut) =>
-            attribut.match(
-              /mot[s]?[-]?de[-]?passe[- ]?|mot[s]?[-]?passe[- ]?/i,
-            ),
+            attribut.match(/mot[s]?[-]?de[-]?passe[- ]?|mot[s]?[-]?passe[- ]?/i)
           )
           .forEach(
-            (attribut) => (requete.body[attribut] = '<MOT_DE_PASSE_OBFUSQUE/>'),
+            (attribut) => (requete.body[attribut] = '<MOT_DE_PASSE_OBFUSQUE/>')
           );
       }
       if (erreur instanceof ErreurMAC) {
@@ -124,7 +122,7 @@ export const gestionnaireErreurGeneralisee = (
             erreur,
             requete,
             consignateurErreur,
-            reponse,
+            reponse
           );
         } else {
           construisReponseErreurServeur();

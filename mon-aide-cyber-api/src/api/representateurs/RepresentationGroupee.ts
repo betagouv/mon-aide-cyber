@@ -13,12 +13,12 @@ import {
 export class RepresentationGroupee {
   constructor(
     private readonly transcripteur: Transcripteur,
-    private numeroQuestion: number = 1,
+    private numeroQuestion: number = 1
   ) {}
 
   represente(
     clef: string,
-    questionsThematique: QuestionsThematique,
+    questionsThematique: QuestionsThematique
   ): RepresentationGroupes {
     const representations: RepresentationGroupes =
       this.transcripteur.thematiques[clef].groupes
@@ -27,9 +27,9 @@ export class RepresentationGroupee {
             groupe.questions.filter(
               (q) =>
                 questionsThematique.questions.find(
-                  (qu) => q.identifiant === qu.identifiant,
-                ) !== undefined,
-            ).length > 0,
+                  (qu) => q.identifiant === qu.identifiant
+                ) !== undefined
+            ).length > 0
         )
         .map((groupe) => {
           const questions = groupe.questions
@@ -37,12 +37,12 @@ export class RepresentationGroupee {
               const question = questionsThematique.questions.find(
                 (questionDiagnostic) =>
                   questionDiagnostic.identifiant ===
-                  questionATranscrire.identifiant,
+                  questionATranscrire.identifiant
               );
               if (question) {
                 const reponsesPossibles = trouveReponsesPossibles(
                   question,
-                  this.transcripteur,
+                  this.transcripteur
                 );
                 const { autresReponses, reste } =
                   extraisLesChampsDeLaQuestion(question);
@@ -53,7 +53,7 @@ export class RepresentationGroupee {
                   type: questionATranscrire?.type || question.type,
                   ...(questionATranscrire['info-bulles'] && {
                     'info-bulles': this.transcripteur.generateurInfoBulle(
-                      questionATranscrire['info-bulles'],
+                      questionATranscrire['info-bulles']
                     ),
                   }),
                 };
@@ -71,8 +71,8 @@ export class RepresentationGroupee {
       ...this.questionsThematiqueNonRepresentees(
         representations,
         questionsThematique,
-        clef,
-      ),
+        clef
+      )
     );
 
     return representations;
@@ -81,13 +81,13 @@ export class RepresentationGroupee {
   private questionsThematiqueNonRepresentees(
     representations: RepresentationGroupes,
     questionsThematique: QuestionsThematique,
-    clef: string,
+    clef: string
   ): RepresentationGroupes {
     const tousLesIdentifiants = representations.flatMap((representation) =>
-      representation.questions.map((question) => question.identifiant),
+      representation.questions.map((question) => question.identifiant)
     );
     const questionsNonRepresentees = questionsThematique.questions.filter(
-      (question) => !tousLesIdentifiants.includes(question.identifiant),
+      (question) => !tousLesIdentifiants.includes(question.identifiant)
     );
 
     return questionsNonRepresentees.map((question) => {
@@ -96,11 +96,11 @@ export class RepresentationGroupee {
           chemin: clef,
           identifiantQuestion: question.identifiant,
         },
-        this.transcripteur,
+        this.transcripteur
       );
       const reponsesPossibles = trouveReponsesPossibles(
         question,
-        this.transcripteur,
+        this.transcripteur
       );
       const { autresReponses, reste } = extraisLesChampsDeLaQuestion(question);
       return {

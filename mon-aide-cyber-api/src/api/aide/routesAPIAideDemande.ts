@@ -47,18 +47,18 @@ export const routesAPIAideDemande = (configuration: ConfigurationServeur) => {
       .trim()
       .notEmpty()
       .withMessage(
-        "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide",
+        "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide"
       ),
     body('raisonSociale')
       .optional()
       .trim()
       .notEmpty()
       .withMessage(
-        "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide",
+        "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide"
       ),
     async (requete: Request, reponse: Response, suite: NextFunction) => {
       const resultatValidation: Result<FieldValidationError> = validationResult(
-        requete,
+        requete
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {
         const corpsRequete: CorpsRequeteDemandeAide = requete.body;
@@ -80,8 +80,8 @@ export const routesAPIAideDemande = (configuration: ConfigurationServeur) => {
           })
           .catch((erreur) =>
             suite(
-              ErreurMAC.cree("Demande d'aide", new ErreurDemandeAide(erreur)),
-            ),
+              ErreurMAC.cree("Demande d'aide", new ErreurDemandeAide(erreur))
+            )
           );
       }
       const erreursValidation = resultatValidation
@@ -94,7 +94,7 @@ export const routesAPIAideDemande = (configuration: ConfigurationServeur) => {
         message: erreursValidation,
         ...constructeurActionsHATEOAS().demanderAide().construis(),
       });
-    },
+    }
   );
 
   return routes;

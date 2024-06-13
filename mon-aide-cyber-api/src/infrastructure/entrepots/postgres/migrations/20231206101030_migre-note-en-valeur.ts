@@ -124,7 +124,7 @@ export async function up(knex: Knex): Promise<void> {
   };
 
   const metsAJourLesRecommandations = (
-    recommandations: RepresentationRecommandationPriorisee[],
+    recommandations: RepresentationRecommandationPriorisee[]
   ) =>
     recommandations.map((recommandation) => {
       if (recommandation.noteObtenue) {
@@ -149,7 +149,7 @@ export async function up(knex: Knex): Promise<void> {
           referentiel: RepresentationReferentiel;
           tableauDesRecommandations: TableauDeRecommandations;
         };
-      }[],
+      }[]
     ) => {
       const misesAJour = lignes.map((ligne) => {
         Object.entries(ligne.donnees.referentiel)
@@ -160,7 +160,7 @@ export async function up(knex: Knex): Promise<void> {
                 metsAJour(reponsePossible);
                 reponsePossible.questions?.forEach((question) => {
                   question.reponsesPossibles.forEach((reponsePossible) =>
-                    metsAJour(reponsePossible),
+                    metsAJour(reponsePossible)
                   );
                 });
               });
@@ -173,11 +173,11 @@ export async function up(knex: Knex): Promise<void> {
           ligne.donnees.restitution.recommandations.recommandationsPrioritaires =
             metsAJourLesRecommandations(
               ligne.donnees.restitution.recommandations
-                .recommandationsPrioritaires,
+                .recommandationsPrioritaires
             );
           ligne.donnees.restitution.recommandations.autresRecommandations =
             metsAJourLesRecommandations(
-              ligne.donnees.restitution.recommandations.autresRecommandations,
+              ligne.donnees.restitution.recommandations.autresRecommandations
             );
         }
         return knex('diagnostics')
@@ -185,7 +185,7 @@ export async function up(knex: Knex): Promise<void> {
           .update({ donnees: ligne.donnees });
       });
       return Promise.all(misesAJour);
-    },
+    }
   );
 }
 

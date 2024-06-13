@@ -16,13 +16,13 @@ describe('Cohérence du référentiel et des mesures', () => {
     );
   };
   const tousLesIdentifiantsDeMesures = (
-    q: QuestionChoixUnique | QuestionChoixMultiple,
+    q: QuestionChoixUnique | QuestionChoixMultiple
   ): string[] => {
     return q.reponsesPossibles.flatMap((r) => {
       return [
         ...identifiantsDeMesures(r),
         ...(r.questions?.flatMap((q) =>
-          q.reponsesPossibles.flatMap((r) => identifiantsDeMesures(r)),
+          q.reponsesPossibles.flatMap((r) => identifiantsDeMesures(r))
         ) || []),
       ];
     });
@@ -54,17 +54,17 @@ describe('Cohérence du référentiel et des mesures', () => {
             'portant la mesure "%s" est référencée dans les mesures',
             (reco) => {
               const toutesLesMesures = Object.entries(tableauMesures).map(
-                ([reco]) => reco,
+                ([reco]) => reco
               );
 
               expect(
-                toutesLesMesures.find((r) => r === reco),
+                toutesLesMesures.find((r) => r === reco)
               ).not.toBeUndefined();
-            },
+            }
           );
-        },
+        }
       );
-    },
+    }
   );
 
   describe.each(Object.entries(tableauMesures).map(([reco]) => reco))(
@@ -74,12 +74,12 @@ describe('Cohérence du référentiel et des mesures', () => {
         expect(
           new Set(
             toutesLesQuestions().flatMap((q) =>
-              q.questions.flatMap((q) => Array.from(q.recos)),
-            ),
-          ).has(reco),
+              q.questions.flatMap((q) => Array.from(q.recos))
+            )
+          ).has(reco)
         ).toBeTruthy();
       });
-    },
+    }
   );
 
   it('Les réponses sont uniques', () => {
@@ -94,7 +94,7 @@ describe('Cohérence du référentiel et des mesures', () => {
               if (cur.questions) {
                 const strings = cur.questions
                   ?.flatMap((q) =>
-                    q.reponsesPossibles.flatMap((r) => r.identifiant),
+                    q.reponsesPossibles.flatMap((r) => r.identifiant)
                   )
                   .filter((r) => !!r);
                 prev.push(...strings);

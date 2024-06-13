@@ -19,7 +19,7 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
 
   async aidantInitieDiagnostic(
     identifiantAidant: crypto.UUID,
-    identifiantDiagnostic: crypto.UUID,
+    identifiantDiagnostic: crypto.UUID
   ) {
     await this.tupleEntrepot.persiste(
       unTuple()
@@ -27,16 +27,16 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
           unUtilisateur()
             .deTypeAidant()
             .avecIdentifiant(identifiantAidant)
-            .construis(),
+            .construis()
         )
         .avecRelationInitiateur()
         .avecObjet(
           unObjet()
             .deTypeDiagnostic()
             .avecIdentifiant(identifiantDiagnostic)
-            .construis(),
+            .construis()
         )
-        .construis(),
+        .construis()
     );
   }
 
@@ -49,7 +49,7 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
   relationExiste(
     relation: Relation,
     utilisateur: Utilisateur,
-    objet: Objet,
+    objet: Objet
   ): Promise<boolean> {
     return this.tupleEntrepot?.relationExiste(relation, utilisateur, objet);
   }

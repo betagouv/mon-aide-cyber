@@ -20,14 +20,14 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
       (m) =>
         (nom !== undefined ? m.corps.includes(nom) : true) &&
         m.corps.includes(email) &&
-        m.corps.includes(message),
+        m.corps.includes(message)
     );
     return (nom !== undefined && messageTrouve !== undefined) || false;
   }
 
   aEteEnvoyeA(email: string, message: string): boolean {
     const messageTrouve = this.messages.find(
-      (m) => m.destinataire.email === email && m.corps === message,
+      (m) => m.destinataire.email === email && m.corps === message
     );
     return messageTrouve !== undefined || false;
   }

@@ -34,7 +34,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     async (
       requete: RequeteUtilisateur,
       reponse: Response,
-      suite: NextFunction,
+      suite: NextFunction
     ) => {
       return entrepots
         .aidants()
@@ -51,7 +51,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
           });
         })
         .catch((erreur) => suite(ErreurMAC.cree('Accède au profil', erreur)));
-    },
+    }
   );
 
   routes.post(
@@ -63,15 +63,15 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
       entrepots,
       'ancienMotDePasse',
       'motDePasse',
-      'confirmationMotDePasse',
+      'confirmationMotDePasse'
     ),
     async (
       requete: RequeteUtilisateur,
       reponse: Response,
-      suite: NextFunction,
+      suite: NextFunction
     ) => {
       const resultatValidation: Result<FieldValidationError> = validationResult(
-        requete,
+        requete
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {
         const aidant = await entrepots
@@ -95,10 +95,10 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
       return suite(
         ErreurMAC.cree(
           'Modifie le mot de passe',
-          new ErreurCreationEspaceAidant(erreursValidation.join('\n')),
-        ),
+          new ErreurCreationEspaceAidant(erreursValidation.join('\n'))
+        )
       );
-    },
+    }
   );
 
   return routes;

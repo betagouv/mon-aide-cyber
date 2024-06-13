@@ -10,8 +10,8 @@ describe('Bus de commande MAC', () => {
       new BusCommandeMAC(
         new EntrepotsMemoire(),
         new BusEvenementDeTest(),
-        new AdaptateurEnvoiMailMemoire(),
-      ).publie({ type: 'CommandeInexistante' }),
+        new AdaptateurEnvoiMailMemoire()
+      ).publie({ type: 'CommandeInexistante' })
     ).toThrowError("Impossible d'exécuter la demande 'CommandeInexistante'");
   });
 });

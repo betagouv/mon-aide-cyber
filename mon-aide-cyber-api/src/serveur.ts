@@ -57,7 +57,7 @@ const creeApp = (config: ConfigurationServeur) => {
       secure: process.env.NODE_ENV === 'production',
       maxAge: COOKIE_DUREE_SESSION,
       keys: [process.env.SECRET_COOKIE || ''],
-    }),
+    })
   );
 
   app.disable('x-powered-by');
@@ -72,7 +72,7 @@ const creeApp = (config: ConfigurationServeur) => {
     5 * 60 * 1000;
   const nombreMaximumDeConnexions =
     Number(
-      process.env.MAC_LIMITEUR_TRAFFIC_NOMBRE_CONNEXIONS_MAXIMUM_PAR_PERIODE,
+      process.env.MAC_LIMITEUR_TRAFFIC_NOMBRE_CONNEXIONS_MAXIMUM_PAR_PERIODE
     ) || 100;
   const limiteurTrafficUI = rateLimit({
     windowMs: dureePeriodeConnexionMs,
@@ -85,7 +85,7 @@ const creeApp = (config: ConfigurationServeur) => {
     legacyHeaders: false,
     skip: (requete: Request, __) =>
       ['/assets/', '/fontes/', '/images/'].some((req) =>
-        requete.path.startsWith(req),
+        requete.path.startsWith(req)
       ),
   });
   app.use(limiteurTrafficUI);
@@ -93,13 +93,13 @@ const creeApp = (config: ConfigurationServeur) => {
     reponse.setHeader('Content-Security-Policy', process.env.MAC_CSP || '*');
     reponse.setHeader(
       'Strict-Transport-Security',
-      'max-age=63072000; includeSubDomains; preload',
+      'max-age=63072000; includeSubDomains; preload'
     );
     reponse.setHeader('X-Content-Type-Options', 'nosniff');
     suite();
   });
   app.use(
-    express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist')),
+    express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist'))
   );
   app.use('/api', routesAPI(config));
 
@@ -107,12 +107,12 @@ const creeApp = (config: ConfigurationServeur) => {
 
   app.get('*', (_: Request, reponse: Response) =>
     reponse.sendFile(
-      path.join(__dirname, './../../mon-aide-cyber-ui/dist/index.html'),
-    ),
+      path.join(__dirname, './../../mon-aide-cyber-ui/dist/index.html')
+    )
   );
 
   app.use(
-    gestionnaireErreurGeneralisee(config.gestionnaireErreurs.consignateur()),
+    gestionnaireErreurGeneralisee(config.gestionnaireErreurs.consignateur())
   );
   app.use(config.gestionnaireErreurs.controleurErreurs());
 

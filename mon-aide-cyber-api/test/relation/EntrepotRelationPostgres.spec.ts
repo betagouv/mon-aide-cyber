@@ -21,7 +21,7 @@ class EntrepotRelationPostgresTest extends EntrepotRelationPostgres {
       .then((ligne: TupleDTO) =>
         ligne !== undefined
           ? this.deDTOAEntite(ligne)
-          : Promise.reject(new AggregatNonTrouve(this.typeAggregat())),
+          : Promise.reject(new AggregatNonTrouve(this.typeAggregat()))
       );
   }
 }
@@ -38,20 +38,20 @@ describe('Entrepot Relation Postgres', () => {
         unUtilisateur()
           .avecIdentifiant(crypto.randomUUID())
           .deTypeAidant()
-          .construis(),
+          .construis()
       )
       .avecObjet(
         unObjet()
           .avecIdentifiant(crypto.randomUUID())
           .deTypeDiagnostic()
-          .construis(),
+          .construis()
       )
       .construis();
 
     await new EntrepotRelationPostgres().persiste(tuple);
 
     const tupleRecu = await new EntrepotRelationPostgresTest().lis(
-      tuple.identifiant,
+      tuple.identifiant
     );
 
     expect(tupleRecu).toStrictEqual<Tuple>(tuple);
@@ -69,7 +69,7 @@ describe('Entrepot Relation Postgres', () => {
         unObjet()
           .avecIdentifiant(crypto.randomUUID())
           .deTypeDiagnostic()
-          .construis(),
+          .construis()
       )
       .construis();
     const deuxiemeTuple = unTuple()
@@ -79,7 +79,7 @@ describe('Entrepot Relation Postgres', () => {
         unObjet()
           .avecIdentifiant(crypto.randomUUID())
           .deTypeDiagnostic()
-          .construis(),
+          .construis()
       )
       .construis();
     const troisiemeTuple = unTuple()
@@ -88,13 +88,13 @@ describe('Entrepot Relation Postgres', () => {
         unUtilisateur()
           .avecIdentifiant(crypto.randomUUID())
           .deTypeAidant()
-          .construis(),
+          .construis()
       )
       .avecObjet(
         unObjet()
           .avecIdentifiant(crypto.randomUUID())
           .deTypeDiagnostic()
-          .construis(),
+          .construis()
       )
       .construis();
     await new EntrepotRelationPostgres().persiste(premierTuple);
@@ -103,7 +103,7 @@ describe('Entrepot Relation Postgres', () => {
 
     const tuplesRecus =
       await new EntrepotRelationPostgresTest().trouveDiagnosticsInitiePar(
-        utilisateur.identifiant,
+        utilisateur.identifiant
       );
 
     expect(tuplesRecus).toStrictEqual<Tuple[]>([premierTuple, deuxiemeTuple]);
@@ -121,7 +121,7 @@ describe('Entrepot Relation Postgres', () => {
         unObjet()
           .avecIdentifiant(crypto.randomUUID())
           .deTypeDiagnostic()
-          .construis(),
+          .construis()
       )
       .construis();
     await new EntrepotRelationPostgres().persiste(tuple);
@@ -130,8 +130,8 @@ describe('Entrepot Relation Postgres', () => {
       await new EntrepotRelationPostgres().relationExiste(
         tuple.relation,
         tuple.utilisateur,
-        tuple.objet,
-      ),
+        tuple.objet
+      )
     ).toBe(true);
   });
 });

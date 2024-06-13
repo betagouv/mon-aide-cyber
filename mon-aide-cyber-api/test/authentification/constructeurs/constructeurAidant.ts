@@ -20,7 +20,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   }
 
   avecUnIdentifiantDeConnexion(
-    identifiantConnexion: string,
+    identifiantConnexion: string
   ): ConstructeurAidant {
     this.identifiantConnexion = identifiantConnexion;
     return this;

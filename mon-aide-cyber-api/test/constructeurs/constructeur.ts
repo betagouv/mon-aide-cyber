@@ -16,7 +16,7 @@ export abstract class ConstructeurDeTableau<T extends { [q: string]: any }>
           (accumulateur, [identifiant, valeur]) => {
             return { ...accumulateur, [identifiant]: valeur };
           },
-          {},
+          {}
         ),
       };
     });

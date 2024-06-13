@@ -38,7 +38,7 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
 
   avecIndicateurs(
     thematique: string,
-    moyenne: number,
+    moyenne: number
   ): ConstructeurRestitution {
     this.indicateurs = {
       ...this.indicateurs,
@@ -58,7 +58,7 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
   }
 
   avecInformations(
-    informationsRestitution: InformationsRestitution,
+    informationsRestitution: InformationsRestitution
   ): ConstructeurRestitution {
     this.informationsRestitution = informationsRestitution;
     return this;
@@ -82,14 +82,14 @@ class ConstructeurInformationsRestitution
   }
 
   avecSecteurActivite(
-    secteurActivite: string,
+    secteurActivite: string
   ): ConstructeurInformationsRestitution {
     this.secteurActivite = secteurActivite;
     return this;
   }
 
   avecZoneGeographique(
-    zoneGeogprahique: string,
+    zoneGeogprahique: string
   ): ConstructeurInformationsRestitution {
     this.zoneGeographique = zoneGeogprahique;
     return this;

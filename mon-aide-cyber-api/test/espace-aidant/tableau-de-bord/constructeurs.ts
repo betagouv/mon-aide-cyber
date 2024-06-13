@@ -8,16 +8,16 @@ export const unDiagnosticInitiePar = async (
   secteurActivite: string,
   aidant: Aidant,
   diagnosticEntrepot: EntrepotDiagnostic,
-  adaptateurRelations: AdaptateurRelationsMAC,
+  adaptateurRelations: AdaptateurRelationsMAC
 ) => {
   const diagnosticInitie = unDiagnosticDansLeDepartementAvecSecteurActivite(
     departement,
-    secteurActivite,
+    secteurActivite
   ).construis();
   await diagnosticEntrepot.persiste(diagnosticInitie);
   await adaptateurRelations.aidantInitieDiagnostic(
     aidant.identifiant,
-    diagnosticInitie.identifiant,
+    diagnosticInitie.identifiant
   );
   return diagnosticInitie;
 };

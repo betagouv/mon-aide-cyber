@@ -372,7 +372,8 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
     },
     {
       identifiant: 'securite-infrastructure-acces-wifi-securises',
-      libelle: 'Si entité avec risque d’espionnage ciblé : les points d’accès wifi sont-ils sécurisés ?',
+      libelle:
+        'Si entité avec risque d’espionnage ciblé : les points d’accès wifi sont-ils sécurisés ?',
       poids: 1,
       reponsesPossibles: [
         {

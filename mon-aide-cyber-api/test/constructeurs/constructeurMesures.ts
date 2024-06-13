@@ -9,7 +9,7 @@ class ConstructeurMesures extends ConstructeurDeTableau<ReferentielDeMesures> {
         niveau2?: string;
         priorisation: number;
       };
-    }[],
+    }[]
   ): ConstructeurMesures {
     mesures.forEach((mesure) => {
       this.tableau.push(
@@ -29,7 +29,7 @@ class ConstructeurMesures extends ConstructeurDeTableau<ReferentielDeMesures> {
             }),
             priorisation: mesure.priorisation,
           },
-        })),
+        }))
       );
     });
     return this;

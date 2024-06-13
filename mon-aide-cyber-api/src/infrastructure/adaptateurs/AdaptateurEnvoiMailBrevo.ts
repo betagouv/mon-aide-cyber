@@ -15,7 +15,7 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     const envoiDeMail = unConstructeurEnvoiDeMail()
       .ayantPourExpediteur(
         'MonAideCyber',
-        adaptateurEnvironnement.messagerie().expediteurMAC(),
+        adaptateurEnvironnement.messagerie().expediteurMAC()
       )
       .ayantPourDestinataires([
         [message.destinataire.email, message.destinataire.nom],
@@ -35,10 +35,10 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
               contexte: 'Envoi mail',
               code: corpsReponse.code,
               message: corpsReponse.message,
-            }),
+            })
           );
           throw new ErreurEnvoiEmail(
-            "Une erreur est survenue lors de l'envoi du message.",
+            "Une erreur est survenue lors de l'envoi du message."
           );
         }
       });

@@ -17,7 +17,7 @@ export class ServiceCreationEspaceAidant {
     const leveErreur = (message: string) => {
       throw ErreurMAC.cree(
         "Crée l'espace Aidant",
-        new ErreurCreationEspaceAidant(message),
+        new ErreurCreationEspaceAidant(message)
       );
     };
     const verifieLesCGU = (creationEspaceAidant: CreationEspaceAidant) => {

@@ -9,7 +9,7 @@ const estUnNombre = (valeur: Poids | Valeur): valeur is number =>
 
 export class MoteurDesIndicateurs {
   static genereLesIndicateurs(
-    valeurs: ValeursDesIndicesAuDiagnostic,
+    valeurs: ValeursDesIndicesAuDiagnostic
   ): Indicateurs {
     return Object.entries(valeurs).reduce(
       (indicateurs, [thematique, indices]) => {
@@ -20,7 +20,7 @@ export class MoteurDesIndicateurs {
         };
         return indicateurs;
       },
-      {} as unknown as Indicateurs,
+      {} as unknown as Indicateurs
     );
   }
 

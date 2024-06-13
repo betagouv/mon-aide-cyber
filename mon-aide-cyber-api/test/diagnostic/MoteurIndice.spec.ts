@@ -34,14 +34,14 @@ describe('Moteur Indice', () => {
           unReferentiel()
             .sansThematique()
             .ajouteUneThematique('thematique', [question])
-            .construis(),
+            .construis()
         )
         .ajouteUneReponseDonnee(
           {
             thematique: 'thematique',
             question: 'quelle-est-la-reponse',
           },
-          uneReponseDonnee().ayantPourReponse('24').construis(),
+          uneReponseDonnee().ayantPourReponse('24').construis()
         )
         .construis();
 
@@ -79,14 +79,14 @@ describe('Moteur Indice', () => {
           unReferentiel()
             .sansThematique()
             .ajouteUneThematique('thematique', [question1, question2])
-            .construis(),
+            .construis()
         )
         .ajouteUneReponseDonnee(
           {
             thematique: 'thematique',
             question: 'quelle-est-la-reponse',
           },
-          uneReponseDonnee().ayantPourReponse('24').construis(),
+          uneReponseDonnee().ayantPourReponse('24').construis()
         )
         .construis();
 
@@ -124,7 +124,7 @@ describe('Moteur Indice', () => {
                     .ayantPourValeurDIndice(0)
                     .construis(),
                 ])
-                .construis(),
+                .construis()
             )
             .construis(),
         ])
@@ -135,7 +135,7 @@ describe('Moteur Indice', () => {
           unReferentiel()
             .sansThematique()
             .ajouteUneThematique('thematique', [question1])
-            .construis(),
+            .construis()
         )
         .ajouteUneReponseDonnee(
           {
@@ -150,7 +150,7 @@ describe('Moteur Indice', () => {
                 reponses: ['non'],
               },
             ])
-            .construis(),
+            .construis()
         )
         .construis();
 
@@ -186,7 +186,7 @@ describe('Moteur Indice', () => {
                     .ayantPourValeurDIndice(0)
                     .construis(),
                 ])
-                .construis(),
+                .construis()
             )
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
@@ -199,7 +199,7 @@ describe('Moteur Indice', () => {
                     .construis(),
                   uneReponsePossible().avecLibelle('Négatif').construis(),
                 ])
-                .construis(),
+                .construis()
             )
             .construis(),
         ])
@@ -210,7 +210,7 @@ describe('Moteur Indice', () => {
           unReferentiel()
             .sansThematique()
             .ajouteUneThematique('thematique', [question1])
-            .construis(),
+            .construis()
         )
         .ajouteUneReponseDonnee(
           {
@@ -229,7 +229,7 @@ describe('Moteur Indice', () => {
                 reponses: ['affirmatif'],
               },
             ])
-            .construis(),
+            .construis()
         )
         .construis();
 
@@ -270,7 +270,7 @@ describe('Moteur Indice', () => {
                     .ayantPourValeurDIndice(0)
                     .construis(),
                 ])
-                .construis(),
+                .construis()
             )
             .ajouteUneQuestionATiroir(
               uneQuestionATiroir()
@@ -283,7 +283,7 @@ describe('Moteur Indice', () => {
                     .construis(),
                   uneReponsePossible().avecLibelle('Négatif').construis(),
                 ])
-                .construis(),
+                .construis()
             )
             .ayantPourValeurDIndice(0)
             .construis(),
@@ -295,7 +295,7 @@ describe('Moteur Indice', () => {
           unReferentiel()
             .sansThematique()
             .ajouteUneThematique('thematique', [question1])
-            .construis(),
+            .construis()
         )
         .ajouteUneReponseDonnee(
           {
@@ -314,7 +314,7 @@ describe('Moteur Indice', () => {
                 reponses: ['affirmatif'],
               },
             ])
-            .construis(),
+            .construis()
         )
         .construis();
 
@@ -362,7 +362,7 @@ describe('Moteur Indice', () => {
                     .ayantPourValeurDIndice(0)
                     .construis(),
                 ])
-                .construis(),
+                .construis()
             )
             .construis(),
         ])
@@ -373,7 +373,7 @@ describe('Moteur Indice', () => {
           unReferentiel()
             .sansThematique()
             .ajouteUneThematique('thematique', [question1])
-            .construis(),
+            .construis()
         )
         .ajouteUneReponseDonnee(
           {
@@ -388,7 +388,7 @@ describe('Moteur Indice', () => {
                 reponses: ['ne-sais-pas'],
               },
             ])
-            .construis(),
+            .construis()
         )
         .construis();
 

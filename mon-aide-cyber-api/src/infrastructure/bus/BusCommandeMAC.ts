@@ -28,7 +28,7 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurSagaAjoutReponse(
           parametres.entrepots,
           parametres.busCommande!,
-          parametres.busEvenements!,
+          parametres.busEvenements!
         ),
     },
   ],
@@ -39,7 +39,7 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurSagaDemandeAide(
           parametres.busCommande!,
           parametres.busEvenements!,
-          parametres.adaptateurEnvoiMail!,
+          parametres.adaptateurEnvoiMail!
         ),
     },
   ],
@@ -63,7 +63,7 @@ const capteurs: Map<string, Capteur> = new Map([
       capteur: (parametres) =>
         new CapteurCommandeLanceRestitution(
           parametres.entrepots,
-          parametres.busEvenements!,
+          parametres.busEvenements!
         ),
     },
   ],
@@ -73,7 +73,7 @@ const capteurs: Map<string, Capteur> = new Map([
       capteur: (parametres) =>
         new CapteurCommandeLanceDiagnostic(
           parametres.entrepots,
-          parametres.busEvenements!,
+          parametres.busEvenements!
         ),
     },
   ],
@@ -83,7 +83,7 @@ export class BusCommandeMAC implements BusCommande {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,
-    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
+    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail
   ) {}
 
   publie<C extends Commande, R>(commande: C): Promise<R> {

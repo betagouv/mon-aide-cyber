@@ -17,7 +17,7 @@ export type Contexte =
 export class ErreurMAC extends Error {
   private constructor(
     public readonly contexte: string,
-    public readonly erreurOriginelle: Error,
+    public readonly erreurOriginelle: Error
   ) {
     super(erreurOriginelle.message);
   }

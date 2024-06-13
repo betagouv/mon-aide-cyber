@@ -31,7 +31,7 @@ class TesteurIntegrationMAC {
     | undefined = undefined;
   constructor(
     public adaptateurRelations = new AdaptateurRelationsMAC(
-      new EntrepotRelationMemoire(),
+      new EntrepotRelationMemoire()
     ),
     public adaptateurReferentiel = new AdaptateurReferentielDeTest(),
     public adaptateurMesures = new AdaptateurMesuresTest(),
@@ -53,7 +53,7 @@ class TesteurIntegrationMAC {
       pdf() {
         return unAdaptateurRestitutionPDF();
       },
-    },
+    }
   ) {}
 
   initialise() {
@@ -66,7 +66,7 @@ class TesteurIntegrationMAC {
       busCommande: new BusCommandeMAC(
         this.entrepots,
         this.busEvenement,
-        this.adaptateurEnvoieMessage,
+        this.adaptateurEnvoieMessage
       ),
       busEvenement: this.busEvenement,
       gestionnaireErreurs: this.gestionnaireErreurs,

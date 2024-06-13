@@ -34,18 +34,18 @@ export class EntrepotAidantPostgres
     return {
       identifiant: dto.id,
       identifiantConnexion: this.chiffrement.dechiffre(
-        dto.donnees.identifiantConnexion,
+        dto.donnees.identifiantConnexion
       ),
       motDePasse: this.chiffrement.dechiffre(dto.donnees.motDePasse),
       nomPrenom: this.chiffrement.dechiffre(dto.donnees.nomPrenom),
       ...(dto.donnees.dateSignatureCGU && {
         dateSignatureCGU: FournisseurHorloge.enDate(
-          dto.donnees.dateSignatureCGU,
+          dto.donnees.dateSignatureCGU
         ),
       }),
       ...(dto.donnees.dateSignatureCharte && {
         dateSignatureCharte: FournisseurHorloge.enDate(
-          dto.donnees.dateSignatureCharte,
+          dto.donnees.dateSignatureCharte
         ),
       }),
     };
@@ -57,7 +57,7 @@ export class EntrepotAidantPostgres
       type: 'AIDANT',
       donnees: {
         identifiantConnexion: this.chiffrement.chiffre(
-          entite.identifiantConnexion,
+          entite.identifiantConnexion
         ),
         motDePasse: this.chiffrement.chiffre(entite.motDePasse),
         nomPrenom: this.chiffrement.chiffre(entite.nomPrenom),
@@ -81,7 +81,7 @@ export class EntrepotAidantPostgres
 
   rechercheParIdentifiantConnexionEtMotDePasse(
     identifiantConnexion: string,
-    motDePasse: string,
+    motDePasse: string
   ): Promise<Aidant> {
     return this.knex
       .from(`${this.nomTable()}`)
@@ -91,8 +91,8 @@ export class EntrepotAidantPostgres
           (a) =>
             this.chiffrement.dechiffre(a.donnees.identifiantConnexion) ===
               identifiantConnexion &&
-            this.chiffrement.dechiffre(a.donnees.motDePasse) === motDePasse,
-        ),
+            this.chiffrement.dechiffre(a.donnees.motDePasse) === motDePasse
+        )
       )
       .then((ligne) => {
         if (!ligne) {
@@ -103,7 +103,7 @@ export class EntrepotAidantPostgres
   }
 
   rechercheParIdentifiantDeConnexion(
-    identifiantConnexion: string,
+    identifiantConnexion: string
   ): Promise<Aidant> {
     return this.knex
       .from(`${this.nomTable()}`)
@@ -112,8 +112,8 @@ export class EntrepotAidantPostgres
         aidants.find(
           (a) =>
             this.chiffrement.dechiffre(a.donnees.identifiantConnexion) ===
-            identifiantConnexion,
-        ),
+            identifiantConnexion
+        )
       )
       .then((ligne) => {
         if (!ligne) {

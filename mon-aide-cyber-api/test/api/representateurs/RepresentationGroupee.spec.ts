@@ -42,7 +42,7 @@ describe('Représentation groupée', () => {
       .construis();
 
     const representationQuestions = new RepresentationGroupee(
-      transcripteur,
+      transcripteur
     ).represente('thematique-groupee', { questions });
 
     expect(representationQuestions).toStrictEqual([
@@ -113,7 +113,7 @@ describe('Représentation groupée', () => {
       .construis();
 
     const representationQuestions = new RepresentationGroupee(
-      transcripteur,
+      transcripteur
     ).represente('thematique-groupee', { questions });
 
     expect(representationQuestions).toStrictEqual([
@@ -181,7 +181,7 @@ describe('Représentation groupée', () => {
       .construis();
 
     const representationQuestions = new RepresentationGroupee(
-      transcripteur,
+      transcripteur
     ).represente('thematique-groupee', { questions });
 
     expect(representationQuestions).toStrictEqual([

@@ -26,12 +26,12 @@ export class AdaptateurDeVerificationDesAccesMAC
   verifie(
     relation: Relation,
     utilisateur: typeof ConstructeurUtilisateur,
-    objet: typeof ConstructeurObjet,
+    objet: typeof ConstructeurObjet
   ): RequestHandler {
     return async (
       requete: RequeteUtilisateur,
       reponse: Response,
-      suite: NextFunction,
+      suite: NextFunction
     ) => {
       const { id } = requete.params;
       const relationExiste = await this.adaptateurRelation.relationExiste(
@@ -39,7 +39,7 @@ export class AdaptateurDeVerificationDesAccesMAC
         utilisateur
           .avecIdentifiant(requete.identifiantUtilisateurCourant!)
           .construis(),
-        objet.avecIdentifiant(id).construis(),
+        objet.avecIdentifiant(id).construis()
       );
       if (!relationExiste) {
         reponse.status(403).json({

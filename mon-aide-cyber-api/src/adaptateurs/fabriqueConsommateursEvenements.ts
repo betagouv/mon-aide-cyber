@@ -29,7 +29,7 @@ export const fabriqueConsommateursEvenements = (
   } = {
     aidantCree: () => aidantCree(entrepotJournalisation),
     aideCree: () => aideCree(entrepotJournalisation),
-  },
+  }
 ): Map<TypeEvenement, ConsommateurEvenement[]> => {
   return new Map<TypeEvenement, ConsommateurEvenement[]>([
     ['RESTITUTION_LANCEE', [restitutionLancee(entrepotJournalisation)]],

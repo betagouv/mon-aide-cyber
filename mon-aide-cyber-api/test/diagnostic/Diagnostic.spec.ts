@@ -47,7 +47,7 @@ describe('Diagnostic', () => {
               unReferentiel()
                 .sansThematique()
                 .ajouteUneThematique('thematique', questions)
-                .construis(),
+                .construis()
             )
             .avecLesReponsesDonnees('thematique', [
               { q1: 'reponse-11' },
@@ -64,7 +64,7 @@ describe('Diagnostic', () => {
           genereLaRestitution(diagnostic);
 
           expect(
-            diagnostic.restitution?.mesures?.mesuresPrioritaires,
+            diagnostic.restitution?.mesures?.mesuresPrioritaires
           ).toStrictEqual<MesurePriorisee[]>([
             {
               priorisation: 1,
@@ -138,7 +138,7 @@ describe('Diagnostic', () => {
                     ])
                     .construis(),
                 ])
-                .construis(),
+                .construis()
             )
             .avecLesReponsesDonnees('thematique', [{ q8: 'reponse-82' }])
             .avecDesMesures(mesures.construis())
@@ -147,7 +147,7 @@ describe('Diagnostic', () => {
           genereLaRestitution(diagnostic);
 
           expect(
-            diagnostic.restitution?.mesures?.mesuresPrioritaires,
+            diagnostic.restitution?.mesures?.mesuresPrioritaires
           ).toStrictEqual<MesurePriorisee[]>([
             {
               comment: 'comme ça',
@@ -172,7 +172,7 @@ describe('Diagnostic', () => {
             unReferentiel()
               .ajouteUneThematique('thematique', questions)
               .ajouteUneQuestionAuContexte(questionContexte)
-              .construis(),
+              .construis()
           )
           .avecLesReponsesDonnees('contexte', [{ qc: 'rqc' }])
           .avecLesReponsesDonnees('thematique', [
@@ -190,7 +190,7 @@ describe('Diagnostic', () => {
         genereLaRestitution(diagnostic);
 
         expect(
-          diagnostic.restitution?.mesures?.mesuresPrioritaires,
+          diagnostic.restitution?.mesures?.mesuresPrioritaires
         ).toStrictEqual<MesurePriorisee[]>([
           {
             ...PARTIE_COMMUNE_ATTENDUE,
@@ -222,7 +222,7 @@ describe('Diagnostic', () => {
           },
         ]);
         expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual(
-          [],
+          []
         );
       });
 
@@ -340,7 +340,7 @@ describe('Diagnostic', () => {
                   ...questions,
                   ...questionsSupplementaires,
                 ])
-                .construis(),
+                .construis()
             )
             .avecLesReponsesDonnees('contexte', [{ qc: 'rqc' }])
             .avecLesReponsesDonnees('thematique', [
@@ -360,7 +360,7 @@ describe('Diagnostic', () => {
           genereLaRestitution(diagnostic);
 
           expect(
-            diagnostic.restitution?.mesures?.mesuresPrioritaires,
+            diagnostic.restitution?.mesures?.mesuresPrioritaires
           ).toStrictEqual<MesurePriorisee[]>([
             {
               priorisation: 1,
@@ -489,7 +489,7 @@ describe('Diagnostic', () => {
             .avecUnReferentiel(
               unReferentiel()
                 .ajouteUneThematique('thematique', [...questions])
-                .construis(),
+                .construis()
             )
             .avecLesReponsesDonnees('thematique', [
               { q2: 'reponse-22' },
@@ -502,7 +502,7 @@ describe('Diagnostic', () => {
           genereLaRestitution(diagnostic);
 
           expect(
-            diagnostic.restitution?.mesures?.mesuresPrioritaires,
+            diagnostic.restitution?.mesures?.mesuresPrioritaires
           ).toStrictEqual<MesurePriorisee[]>([
             {
               priorisation: 3,
@@ -553,7 +553,7 @@ describe('Diagnostic', () => {
                     uneReponsePossible().avecLibelle('Réponse 311').construis(),
                     uneReponsePossible().avecLibelle('Réponse 312').construis(),
                   ])
-                  .construis(),
+                  .construis()
               )
               .ajouteUneQuestionATiroir(
                 uneQuestionATiroir()
@@ -562,7 +562,7 @@ describe('Diagnostic', () => {
                     uneReponsePossible().avecLibelle('Réponse 321').construis(),
                     uneReponsePossible().avecLibelle('Réponse 322').construis(),
                   ])
-                  .construis(),
+                  .construis()
               )
               .ajouteUneQuestionATiroir(
                 uneQuestionATiroir()
@@ -571,7 +571,7 @@ describe('Diagnostic', () => {
                     uneReponsePossible().avecLibelle('Réponse 331').construis(),
                     uneReponsePossible().avecLibelle('Réponse 332').construis(),
                   ])
-                  .construis(),
+                  .construis()
               )
               .construis(),
           ])
@@ -583,7 +583,7 @@ describe('Diagnostic', () => {
               unReferentiel()
                 .sansThematique()
                 .ajouteUneThematique('multiple', [question])
-                .construis(),
+                .construis()
             )
             .ajouteUneReponseDonnee(
               { thematique: 'multiple', question: 'q1' },
@@ -603,7 +603,7 @@ describe('Diagnostic', () => {
                     reponses: ['reponse-330'],
                   },
                 ])
-                .construis(),
+                .construis()
             )
             .avecDesMesures(mesures)
             .construis();
@@ -611,10 +611,10 @@ describe('Diagnostic', () => {
           genereLaRestitution(diagnostic);
 
           expect(
-            diagnostic.restitution?.mesures?.mesuresPrioritaires,
+            diagnostic.restitution?.mesures?.mesuresPrioritaires
           ).toStrictEqual([]);
           expect(diagnostic.restitution?.mesures?.autresMesures).toStrictEqual(
-            [],
+            []
           );
         });
       });
@@ -671,7 +671,7 @@ describe('Diagnostic', () => {
               .sansThematique()
               .ajouteUneThematique('thematique1', questionsThematique1)
               .ajouteUneThematique('thematique2', questionsThematique2)
-              .construis(),
+              .construis()
           )
           .avecLesReponsesDonnees('thematique1', [
             { q2: 'reponse-1' },
@@ -704,7 +704,7 @@ describe('Diagnostic', () => {
             unReferentiel()
               .ajouteUneQuestionAuContexte(questionContexte)
               .ajouteUneThematique('thematique1', questionsThematique1)
-              .construis(),
+              .construis()
           )
           .avecLesReponsesDonnees('thematique1', [
             { q2: 'reponse-1' },
@@ -728,7 +728,7 @@ describe('Diagnostic', () => {
               .ajouteUneQuestionATiroir(
                 uneQuestionATiroir()
                   .avecReponsesPossibles([uneReponsePossible().construis()])
-                  .construis(),
+                  .construis()
               )
               .construis(),
           ])
@@ -738,7 +738,7 @@ describe('Diagnostic', () => {
             unReferentiel()
               .ajouteUneQuestionAuContexte(questionContexte)
               .ajouteUneThematique('thematique1', questionsThematique1)
-              .construis(),
+              .construis()
           )
           .avecLesReponsesDonnees('thematique1', [
             { q2: 'reponse-1' },

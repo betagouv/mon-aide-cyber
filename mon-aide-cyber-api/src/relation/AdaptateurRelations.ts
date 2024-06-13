@@ -8,7 +8,7 @@ export type Diagnostic = {
 export interface AdaptateurRelations {
   aidantInitieDiagnostic(
     identifiantAidant: crypto.UUID,
-    identifiantDiagnostic: crypto.UUID,
+    identifiantDiagnostic: crypto.UUID
   ): Promise<void>;
 
   diagnosticsInitiePar(identifiantAidant: crypto.UUID): Promise<string[]>;
@@ -16,6 +16,6 @@ export interface AdaptateurRelations {
   relationExiste(
     relation: Relation,
     utilisateur: Utilisateur,
-    objet: Objet,
+    objet: Objet
   ): Promise<boolean>;
 }
