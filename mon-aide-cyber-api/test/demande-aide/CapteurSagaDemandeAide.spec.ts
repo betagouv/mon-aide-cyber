@@ -112,7 +112,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             `- Département : Gironde\n` +
             '- Raison sociale : BetaGouv\n' +
             '\n' +
-            'Toute l’équipe reste à votre disposition\n\n' +
+            'Toute l’équipe reste à votre disposition,\n\n' +
             "L'équipe MonAideCyber\n" +
             'monaidecyber@ssi.gouv.fr\n',
         ),
@@ -214,6 +214,58 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       ).toBe(true);
     });
 
+    it("Envoie un email de confirmation l'Aidé en prenant en compte la relation existante avec un Aidant", async () => {
+      adaptateurEnvironnement.messagerie = () => ({
+        emailMAC: () => 'mac@email.com',
+        expediteurMAC: () => 'expéditeur',
+        clefAPI: () => 'clef',
+      });
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2024-03-19T14:45:17+01:00')),
+      );
+      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
+      const entrepotsMemoire = new EntrepotsMemoire();
+      const busEvenement = new BusEvenementDeTest();
+      const busCommande = new BusCommandeMAC(
+        entrepotsMemoire,
+        busEvenement,
+        adaptateurEnvoieMail,
+      );
+      const capteur = new CapteurSagaDemandeAide(
+        busCommande,
+        busEvenement,
+        adaptateurEnvoieMail,
+      );
+
+      await capteur.execute({
+        type: 'SagaDemandeValidationCGUAide',
+        cguValidees: true,
+        email: 'jean-dupont@email.com',
+        departement: 'Gironde',
+        raisonSociale: 'BetaGouv',
+        relationAidant: true,
+      });
+
+      expect(
+        adaptateurEnvoieMail.aEteEnvoyeA(
+          'jean-dupont@email.com',
+          'Bonjour,\n' +
+            '\n' +
+            'Votre demande a bien été prise en compte.\n' +
+            '\n' +
+            'Votre Aidant va vous accompagner dans la suite de votre démarche MonAideCyber.\n' +
+            'Voici les informations que vous avez renseignées :\n' +
+            `- Signature des CGU le 19.03.2024 à 14:45\n` +
+            `- Département : Gironde\n` +
+            '- Raison sociale : BetaGouv\n' +
+            '\n' +
+            'Toute l’équipe reste à votre disposition,\n\n' +
+            "L'équipe MonAideCyber\n" +
+            'monaidecyber@ssi.gouv.fr\n',
+        ),
+      ).toBe(true);
+    });
+
     it("envoie un email de confirmation à l’Aidé qui n'a pas saisi de raison sociale", async () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00')),
@@ -252,7 +304,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             `- Signature des CGU le 19.03.2024 à 14:45\n` +
             `- Département : Gironde\n` +
             '\n' +
-            'Toute l’équipe reste à votre disposition\n\n' +
+            'Toute l’équipe reste à votre disposition,\n\n' +
             "L'équipe MonAideCyber\n" +
             'monaidecyber@ssi.gouv.fr\n',
         ),
