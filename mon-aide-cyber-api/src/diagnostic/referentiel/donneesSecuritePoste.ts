@@ -34,7 +34,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-exceptions',
           libelle:
-            'Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.',
+            'Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -51,7 +51,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles',
           libelle:
-            "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires.",
+            "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -97,7 +97,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-exceptions',
           libelle:
-            'Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement.',
+            'Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -114,7 +114,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles',
           libelle:
-            "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires.",
+            "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -165,7 +165,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant:
             'securite-poste-antivirus-deploye-oui-alertes-toujours-traitees',
-          libelle: 'Oui et ses alertes sont systématiquement traitées.',
+          libelle: 'Oui et ses alertes sont systématiquement traitées',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
@@ -220,7 +220,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant:
             'securite-poste-si-industriel-antivirus-deploye-oui-alertes-toujours-traitees',
-          libelle: 'Oui et ses alertes sont systématiquement traitées.',
+          libelle: 'Oui et ses alertes sont systématiquement traitées',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -290,7 +290,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr',
           libelle:
-            'Oui, un outil de type EDR a été mis en place mais ses alertes ne sont pas toujours traitées.',
+            'Oui, un outil de type EDR a été mis en place mais ses alertes ne sont pas toujours traitées',
           resultat: {
             indice: { valeur: 1 },
             mesures: [

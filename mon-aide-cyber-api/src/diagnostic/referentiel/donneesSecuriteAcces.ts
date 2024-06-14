@@ -79,7 +79,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: 'acces-liste-compte-utilisateurs-revue-reguliere',
           libelle:
-            'Les comptes des utilisateurs et leurs accès sont régulièrement revus (ex : liste du personnel vs liste des comptes).',
+            'Les comptes des utilisateurs et leurs accès sont régulièrement revus (ex : liste du personnel vs liste des comptes)',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -94,7 +94,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: 'acces-liste-compte-utilisateurs-revue-en-continu',
           libelle:
-            "La liste des comptes des utilisateurs est mise à jour en continu dans le cadre d'un processus de désactivation systématique des comptes inactifs. Une revue annuelle est également réalisée.",
+            "La liste des comptes des utilisateurs est mise à jour en continu dans le cadre d'un processus de désactivation systématique des comptes inactifs. Une revue annuelle est également réalisée",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -135,7 +135,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-droits-acces-utilisateurs-limites-restrictions-ponctuelles',
           libelle:
-            'Des restrictions d’accès à certaines données sont ponctuellement mises en place.',
+            'Des restrictions d’accès à certaines données sont ponctuellement mises en place',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -151,7 +151,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-droits-acces-utilisateurs-limites-restrictions-limitees',
           libelle:
-            'L’accès des utilisateurs aux données, aux systèmes et aux applications sont limités aux seuls accès nécessaires à leur activité.',
+            'L’accès des utilisateurs aux données, aux systèmes et aux applications sont limités aux seuls accès nécessaires à leur activité',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -186,7 +186,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-utilisateurs-administrateurs-poste-suppression-privilege-en-cours',
           libelle:
-            'La suppression de ce privilège est en cours de traitement, plusieurs utilisateurs sont toujours administrateurs de leur poste.',
+            'La suppression de ce privilège est en cours de traitement, plusieurs utilisateurs sont toujours administrateurs de leur poste',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -201,7 +201,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant:
             'acces-utilisateurs-administrateurs-poste-non-exceptions-justifiees',
-          libelle: 'Non, et les rares exceptions sont justifiées.',
+          libelle: 'Non, et les rares exceptions sont justifiées',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
@@ -237,7 +237,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-mesures-securite-robustesse-mdp-contraintes-par-defaut',
           libelle:
-            "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte.",
+            "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte",
           resultat: { indice: { valeur: 3 } },
           ordre: 2,
         },
@@ -276,7 +276,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-administrateurs-informatiques-suivie-et-limitee-revue-reguliere',
           libelle:
-            'Les comptes des administrateurs sont régulièrement revus (ex : liste du personnel vs liste des comptes).',
+            'Les comptes des administrateurs sont régulièrement revus (ex : liste du personnel vs liste des comptes)',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -293,7 +293,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-administrateurs-informatiques-suivie-et-limitee-revue-continue',
           libelle:
-            "La liste des comptes des administrateurs est mise à jour en continu dans le cadre d'un processus de désactivation systématique des comptes inactifs. Une revue annuelle est également réalisée.",
+            "La liste des comptes des administrateurs est mise à jour en continu dans le cadre d'un processus de désactivation systématique des comptes inactifs. Une revue annuelle est également réalisée",
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
@@ -316,7 +316,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-utilisation-comptes-administrateurs-droits-limitee-non',
           libelle:
-            'Non, des utilisateurs disposent de privilèges d’administration sans restriction particulière.',
+            'Non, des utilisateurs disposent de privilèges d’administration sans restriction particulière',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
@@ -333,7 +333,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-utilisation-comptes-administrateurs-droits-quelques-restrictions',
           libelle:
-            "La mise à disposition des comptes d'administration fait l'objet de quelques restrictions.",
+            "La mise à disposition des comptes d'administration fait l'objet de quelques restrictions",
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -350,7 +350,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-utilisation-comptes-administrateurs-droits-justifies',
           libelle:
-            'Tous les comptes administration sont justifiés, et dédiés aux seules tâches d’administration.',
+            'Tous les comptes administration sont justifiés, et dédiés aux seules tâches d’administration',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
@@ -396,7 +396,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-mesures-authentification-renforcees',
           libelle:
-            "Oui, des mesures renforçant l'accès à ces données ont été mises en œuvre.",
+            "Oui, des mesures renforçant l'accès à ces données ont été mises en œuvre",
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -413,7 +413,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-mesures-authentification-renforcees-et-donnees-chiffrees',
           libelle:
-            "Oui, des mesures renforçant l'accès à ces données ont été mises en œuvre et les données sont chiffrées.",
+            "Oui, des mesures renforçant l'accès à ces données ont été mises en œuvre et les données sont chiffrées",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -574,7 +574,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees',
           libelle:
-            "Oui, des mesures renforçant l'authentification ont été mises en œuvre.",
+            "Oui, des mesures renforçant l'authentification ont été mises en œuvre",
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -590,7 +590,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees-postes-dedies-administration',
           libelle:
-            "Oui, des mesures renforçant l'authentification ont été mises en œuvre et des postes dédiés à l'administration sont utilisés.",
+            "Oui, des mesures renforçant l'authentification ont été mises en œuvre et des postes dédiés à l'administration sont utilisés",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },

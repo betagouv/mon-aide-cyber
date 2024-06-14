@@ -67,13 +67,13 @@ export const donneesSensibilisation: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant: 'sensibilisation-risque-espionnage-industriel-r-et-d-na',
-          libelle: 'Non applicable.',
+          libelle: 'Non applicable',
           ordre: 0,
         },
         {
           identifiant:
             'sensibilisation-risque-espionnage-industriel-r-et-d-nsp',
-          libelle: 'Je ne sais pas.',
+          libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
@@ -134,7 +134,7 @@ export const donneesSensibilisation: QuestionsThematique = {
         {
           identifiant:
             'sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-communiquee',
-          libelle: 'Oui, une charte est communiquée aux collaborateurs.',
+          libelle: 'Oui, une charte est communiquée aux collaborateurs',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -151,7 +151,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           identifiant:
             'sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-signee',
           libelle:
-            'Oui, une charte est signée par chaque collaborateur et elle est annexée au règlement intérieur.',
+            'Oui, une charte est signée par chaque collaborateur et elle est annexée au règlement intérieur',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },

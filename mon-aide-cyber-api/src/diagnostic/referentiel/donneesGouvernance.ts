@@ -32,7 +32,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant:
             'gouvernance-infos-et-activites-a-proteger-oui-idee-generale',
           libelle:
-            'Nous avons une idée générale de nos activités et données à protéger en priorité.',
+            'Nous avons une idée générale de nos activités et données à protéger en priorité',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -47,7 +47,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-infos-et-activites-a-proteger-oui-precise',
           libelle:
-            'Il existe une liste précise et maintenue à jour de toutes les activités et données métiers à protéger en priorité à l’échelle de l’organisation.',
+            'Il existe une liste précise et maintenue à jour de toutes les activités et données métiers à protéger en priorité à l’échelle de l’organisation',
           resultat: {
             indice: { valeur: 3 },
           },
@@ -69,7 +69,7 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant: 'gouvernance-schema-si-a-jour-non',
-          libelle: "Non / Nous avons un plan historique qui n'est pas à jour",
+          libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
@@ -82,9 +82,24 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 1,
         },
         {
+          identifiant:
+            'gouvernance-schema-si-a-jour-non-plan-historique-obsolete',
+          libelle: "Nous avons un plan historique qui n'est pas à jour",
+          resultat: {
+            indice: { valeur: 0.5 },
+            mesures: [
+              {
+                identifiant: 'gouvernance-schema-si-a-jour',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
           identifiant: 'gouvernance-schema-si-a-jour-oui-macro',
           libelle:
-            'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
+            'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -94,16 +109,16 @@ export const donneesGouvernance: QuestionsThematique = {
               },
             ],
           },
-          ordre: 2,
+          ordre: 3,
         },
         {
           identifiant: 'gouvernance-schema-si-a-jour-oui-detaille',
           libelle:
-            "Il existe un schéma détaillé à jour, incluant la liste exhaustive des interconnexions vers l'extérieur.",
+            "Il existe un schéma détaillé à jour, incluant la liste exhaustive des interconnexions vers l'extérieur",
           resultat: {
             indice: { valeur: 3 },
           },
-          ordre: 3,
+          ordre: 4,
         },
       ],
     },
@@ -141,7 +156,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-partiel',
           libelle:
-            'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour.',
+            'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -156,7 +171,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-detaille',
           libelle:
-            'Il existe un plan détaillé, incluant la liste détaillée des composants du système d’information et la liste exhaustive des interconnexions vers l’extérieur.',
+            'Il existe un plan détaillé, incluant la liste détaillée des composants du système d’information et la liste exhaustive des interconnexions vers l’extérieur',
           resultat: {
             indice: { valeur: 3 },
           },
@@ -241,7 +256,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-connaissance-rgpd-2-oui-liste-données',
           libelle:
-            "Oui, j'informe les personnes concernées sur l’utilisation de leurs données personnelles.",
+            "Oui, j'informe les personnes concernées sur l’utilisation de leurs données personnelles",
           ordre: 3,
           resultat: {
             indice: { valeur: 2 },
@@ -297,7 +312,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant:
             'gouvernance-exigence-cyber-securite-presta-oui-formalisee',
           libelle:
-            'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires.',
+            'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -312,7 +327,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-exigence-cyber-securite-presta-oui-fixee',
           libelle:
-            'Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires.',
+            'Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
