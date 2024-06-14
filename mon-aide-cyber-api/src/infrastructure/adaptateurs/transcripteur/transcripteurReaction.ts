@@ -16,7 +16,7 @@ export const transcripteurReaction: Thematique = {
           identifiant:
             'reaction-surveillance-veille-vulnerabilites-potentielles',
           'info-bulles': [
-            'reaction/veille-vulnerabilites-organisations-publiques.pug',
+            'reaction/veille-vulnerabilites-entites-publiques.pug',
             'reaction/suivi-alertes-vulnerabilites.pug',
           ],
         },

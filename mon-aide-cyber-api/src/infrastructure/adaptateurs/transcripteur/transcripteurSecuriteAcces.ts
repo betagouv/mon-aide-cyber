@@ -15,7 +15,7 @@ export const transcripteurSecuriteAcces: Thematique = {
         {
           identifiant: 'acces-outil-gestion-des-comptes',
           'info-bulles': [
-            'acces/gestion-comptes-organisations-publiques.pug',
+            'acces/gestion-comptes-entites-publiques.pug',
             'acces/gestion-comptes-active-directory.pug',
           ],
         },

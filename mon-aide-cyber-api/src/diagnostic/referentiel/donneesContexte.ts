@@ -4,7 +4,7 @@ export const donneesContexte: QuestionsThematique = {
   questions: [
     {
       identifiant: 'contexte-nature-organisation',
-      libelle: 'Quelle est la nature de votre organisation ?',
+      libelle: 'Quelle est la nature de votre entité ?',
       poids: 0,
       reponsesPossibles: [
         {
@@ -989,7 +989,7 @@ export const donneesContexte: QuestionsThematique = {
             {
               identifiant: 'contexte-cyber-attaque-subie-tiroir-plainte',
               libelle:
-                'Si "Oui": avez-vous déposé plainte ou réalisé un signalement auprès d\'un service judiciaire ?',
+                'Si Oui : avez-vous déposé plainte ou réalisé un signalement auprès d\'un service judiciaire ?',
               poids: 0,
               reponsesPossibles: [
                 {

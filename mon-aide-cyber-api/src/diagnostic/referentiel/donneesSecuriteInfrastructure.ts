@@ -34,7 +34,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               identifiant:
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees',
               libelle:
-                'Si "Oui" : Est-ce que seuls les flux entrants et sortants strictement nécessaires entre Internet et le système d\'information (ou autres réseaux externes) sont autorisés ?',
+                'Si Oui : Est-ce que seuls les flux entrants et sortants strictement nécessaires entre Internet et le système d\'information (ou autres réseaux externes) sont autorisés ?',
               poids: 2,
               reponsesPossibles: [
                 {
@@ -91,7 +91,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               identifiant:
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes',
               libelle:
-                'Si "Oui" : les journaux des flux entrants, sortants et bloqués (générés par le pare-feu) sont-ils stockés ?',
+                'Si Oui : les journaux des flux entrants, sortants et bloqués (générés par le pare-feu) sont-ils stockés ?',
               poids: 2,
               reponsesPossibles: [
                 {
@@ -136,7 +136,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                   identifiant:
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-oui-logs-stockes-conserves-6-mois',
                   libelle:
-                    "Oui, nous stockons les journaux du pare-feu avec une durée de conservation d'au moins 6 mois.",
+                    "Oui, nous stockons les journaux du pare-feu avec une durée de conservation d'au moins 6 mois",
                   resultat: { indice: { valeur: 3 } },
                   ordre: 2,
                 },
@@ -186,7 +186,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         {
           identifiant:
             'securite-infrastructure-si-industriel-pare-feu-deploye-oui-flux-necessaires-bloques',
-          libelle: 'Oui, tous les flux réseau non nécessaires sont bloqués.',
+          libelle: 'Oui, tous les flux réseau non nécessaires sont bloqués',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -203,7 +203,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-si-industriel-pare-feu-deploye-oui-segmentation-stricte',
           libelle:
-            "Oui, une segmentation réseau stricte a été mise en œuvre pour isoler l'environnement industriel de l'environnement bureautique (hors besoin métier justifié).",
+            "Oui, une segmentation réseau stricte a été mise en œuvre pour isoler l'environnement industriel de l'environnement bureautique (hors besoin métier justifié)",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -219,9 +219,15 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
+            'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployee-na',
+          libelle: 'Non applicable',
+          ordre: 0,
+        },
+        {
+          identifiant:
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-nsp',
           libelle: 'Je ne sais pas',
-          ordre: 0,
+          ordre: 1,
         },
         {
           identifiant:
@@ -237,13 +243,13 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               },
             ],
           },
-          ordre: 1,
+          ordre: 2,
         },
         {
           identifiant:
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-equipements-securite-deployees-des-que-possible',
           libelle:
-            'Toutes les mises à jour logicielles sont déployées dès que celles-ci sont disponibles et fonctionnelles.',
+            'Toutes les mises à jour logicielles sont déployées dès que celles-ci sont disponibles et fonctionnelles',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
@@ -259,9 +265,15 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant:
+            'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-na',
+          libelle: 'Non applicable',
+          ordre: 0,
+        },
+        {
+          identifiant:
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-nsp',
           libelle: 'Je ne sais pas',
-          ordre: 0,
+          ordre: 1,
         },
         {
           identifiant:
@@ -277,13 +289,13 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               },
             ],
           },
-          ordre: 1,
+          ordre: 2,
         },
         {
           identifiant:
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-a-intervalle-regulier',
           libelle:
-            'Des mises à jour logicielles sont déployées à intervalle régulier.',
+            'Des mises à jour logicielles sont déployées à intervalle régulier',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -294,15 +306,15 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               },
             ],
           },
-          ordre: 2,
+          ordre: 3,
         },
         {
           identifiant:
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-des-que-possible',
           libelle:
-            'Toutes les mises à jour logicielles sont déployées dès que celles-ci sont disponibles et fonctionnelles.',
+            'Toutes les mises à jour logicielles sont déployées dès que celles-ci sont disponibles et fonctionnelles',
           resultat: { indice: { valeur: 3 } },
-          ordre: 3,
+          ordre: 4,
         },
       ],
       type: 'choixUnique',
@@ -317,13 +329,13 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         {
           identifiant:
             'securite-infrastructure-outils-securisation-systeme-messagerie-na',
-          libelle: 'Non applicable.',
+          libelle: 'Non applicable',
           ordre: 0,
         },
         {
           identifiant:
             'securite-infrastructure-outils-securisation-systeme-messagerie-nsp',
-          libelle: 'Je ne sais pas.',
+          libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
@@ -346,7 +358,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-outils-securisation-systeme-messagerie-antispam',
           libelle:
-            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre.",
+            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre",
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -363,7 +375,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-outils-securisation-systeme-messagerie-webmail',
           libelle:
-            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre et les mécanismes complémentaires de protection de mails illégitimes sont activés.",
+            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre et les mécanismes complémentaires de protection de mails illégitimes sont activés",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -403,7 +415,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
         {
           identifiant:
             'securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste',
-          libelle: 'Oui, le chiffrement de la connexion wifi est robuste.',
+          libelle: 'Oui, le chiffrement de la connexion wifi est robuste',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -419,7 +431,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-acces-wifi-securises-oui-chiffrement-robuste-acces-visiteur-restreint',
           libelle:
-            "Oui, le chiffrement de la connexion wifi est robuste et les visiteurs n'ont pas accès au réseau interne.",
+            "Oui, le chiffrement de la connexion wifi est robuste et les visiteurs n'ont pas accès au réseau interne",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },

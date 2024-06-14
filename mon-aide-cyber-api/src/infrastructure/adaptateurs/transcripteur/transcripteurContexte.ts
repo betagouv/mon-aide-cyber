@@ -21,7 +21,7 @@ export const transcripteurContexte: Thematique = {
       questions: [
         {
           identifiant: 'contexte-nature-organisation',
-          'info-bulles': ['contexte/nature-organisation.pug'],
+          'info-bulles': ['contexte/nature-entite.pug'],
         },
         {
           identifiant: 'contexte-secteur-activite',
