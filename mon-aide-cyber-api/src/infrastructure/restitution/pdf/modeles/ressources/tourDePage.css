@@ -18,16 +18,20 @@ html {
 }
 
 .entete .logo-anssi {
-  width: 36px;
+  width: 8rem;
   content: var(--logo-anssi);
 }
 
 .entete .logo-mac {
-  width: 12rem;
+  width: 16rem;
   align-content: revert;
   justify-content: revert;
   align-items: revert;
   content: var(--logo-mac);
+}
+
+.logo-mac-diagnostic {
+  width: 12rem;
 }
 
 .entete h2 {
