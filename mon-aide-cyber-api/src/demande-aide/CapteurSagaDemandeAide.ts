@@ -28,11 +28,12 @@ export class CapteurSagaDemandeAide
     const envoieConfirmationDemandeAide = async (
       adaptateurEnvoiMail: AdaptateurEnvoiMail,
       aide: Aide,
+      relationAidant: boolean,
     ) => {
       await adaptateurEnvoiMail.envoie({
         objet: "Demande d'aide pour MonAideCyber",
         destinataire: { email: aide.email },
-        corps: construisMailConfirmationDemandeAide(aide),
+        corps: construisMailConfirmationDemandeAide(aide, relationAidant),
       });
     };
 
@@ -72,7 +73,11 @@ export class CapteurSagaDemandeAide
       await this.busCommande
         .publie<CommandeCreerAide, Aide>(commandeCreerAide)
         .then(async (aide: Aide) => {
-          await envoieConfirmationDemandeAide(this.adaptateurEnvoiMail, aide);
+          await envoieConfirmationDemandeAide(
+            this.adaptateurEnvoiMail,
+            aide,
+            saga.relationAidant,
+          );
           await envoieRecapitulatifDemandeAide(
             this.adaptateurEnvoiMail,
             aide,
@@ -122,25 +127,34 @@ const construisMailRecapitulatifDemandeAide = (
   );
 };
 
-const construisMailConfirmationDemandeAide = (aide: Aide) => {
+const construisMailConfirmationDemandeAide = (
+  aide: Aide,
+  relationAidant: boolean,
+) => {
   const formateDate = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant(),
   );
   const raisonSociale = aide.raisonSociale
     ? `- Raison sociale : ${aide.raisonSociale}\n`
     : '';
+  const messageIntroduction = relationAidant
+    ? 'Votre demande a bien été prise en compte.\n' +
+      '\n' +
+      'Votre Aidant va vous accompagner dans la suite de votre démarche MonAideCyber.\n' +
+      'Voici les informations que vous avez renseignées :\n'
+    : 'Votre demande pour bénéficier de MonAideCyber a été prise en compte.\n' +
+      'Un Aidant de proximité vous contactera sur l’adresse email que vous nous avez communiquée dans les meilleurs délais.\n' +
+      '\n' +
+      'Voici les informations que vous avez renseignées :\n';
   return (
     'Bonjour,\n' +
     '\n' +
-    'Votre demande pour bénéficier de MonAideCyber a été prise en compte.\n' +
-    'Un Aidant de proximité vous contactera sur l’adresse email que vous nous avez communiquée dans les meilleurs délais.\n' +
-    '\n' +
-    'Voici les informations que vous avez renseignées :\n' +
+    messageIntroduction +
     `- Signature des CGU le ${formateDate.date} à ${formateDate.heure}\n` +
     `- Département : ${aide.departement}\n` +
     raisonSociale +
     '\n' +
-    'Toute l’équipe reste à votre disposition\n\n' +
+    'Toute l’équipe reste à votre disposition,\n\n' +
     "L'équipe MonAideCyber\n" +
     'monaidecyber@ssi.gouv.fr\n'
   );
