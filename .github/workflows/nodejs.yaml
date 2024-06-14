@@ -34,4 +34,5 @@ jobs:
       - run: npm ci
       - run: npm run build --workspaces
       - run: npm run ci:initialise -w mon-aide-cyber-api
+      - run: npm run format:verifie
       - run: npm test
