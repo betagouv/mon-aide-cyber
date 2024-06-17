@@ -495,8 +495,8 @@ export const ComposantDiagnostic = ({
           accederALaRestitution: () => afficheModaleAccederALaRestitution(),
         }}
       />
-      <main role="main" className="diagnostic">
-        <div className="fr-grid-row fr-grid-row--gutters fond-clair-mac">
+      <main role="main" className="diagnostic fond-clair-mac">
+        <div className="fr-grid-row fr-col-12">
           <div className="conteneur-navigation">{navigation}</div>
           {thematiques.map(([clef, thematique]) => {
             const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
@@ -538,12 +538,17 @@ export const ComposantDiagnostic = ({
                     {groupe.questions.map((question) =>
                       question['info-bulles']?.map((infoBulle) => (
                         <div
-                          className="info-bulle"
-                          key={`${question.identifiant}-info-bulle`}
-                          dangerouslySetInnerHTML={{
-                            __html: infoBulle,
-                          }}
-                        ></div>
+                          key={`${question.identifiant}-conteneur-info-bulle`}
+                        >
+                          <div
+                            className="info-bulle"
+                            key={`${question.identifiant}-info-bulle`}
+                            dangerouslySetInnerHTML={{
+                              __html: infoBulle,
+                            }}
+                          ></div>
+                          <div className="bordure-info-bulle"></div>
+                        </div>
                       ))
                     )}
                   </div>
@@ -559,12 +564,12 @@ export const ComposantDiagnostic = ({
                     ? `visible`
                     : `invisible`
                 }
-               conteneur-thematique`}
+               conteneur-thematique fr-col-12`}
               >
                 <div className="bandeau-thematique">
                   <div className="fr-container fr-pt-md-4w">
                     <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-                      <div className="fr-col-7 fr-mt-8w introduction-thematique">
+                      <div className="fr-col-6 fr-mt-8w introduction-thematique">
                         <h2>{thematique.libelle}</h2>
                         <p>{thematique.description}</p>
                       </div>
@@ -588,7 +593,7 @@ export const ComposantDiagnostic = ({
                   </div>
                 </div>
                 <div className="fr-container">
-                  <div className="fr-grid-row fr-grid-row--gutters fr-mt-5w">
+                  <div className="fr-grid-row fr-grid-row--gutters fr-mt-5w boutons-navigation">
                     <BoutonThematique
                       titre="Thématique précédente"
                       reducteur={reducteurBoutonThematiquePrecedente}

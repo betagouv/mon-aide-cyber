@@ -35,7 +35,7 @@
 }
 
 .diagnostic {
-  margin-top: 7.5rem;
+  margin-top: 6.7rem;
 
   @media screen and (max-width: 768px) {
     .section {
@@ -48,6 +48,39 @@
       margin: 2.5rem 0 0;
     }
   }
+
+  @media screen and (max-width: 1439px) {
+
+    .bandeau-thematique img {
+      width: 21.4375rem;
+    }
+    .conteneur-navigation {
+     padding-top: 0;
+    }
+
+    .question {
+      padding-left: 1.75rem;
+    }
+
+    .section {
+      padding: 3.5rem 2.5rem !important;
+    }
+
+    .conteneur-thematique {
+      padding-top: 0;
+      padding-left: 4rem;
+    }
+
+    .boutons-navigation {
+      padding-left: 1.75rem;
+    }
+  }
+
+  @media screen and (max-width: 1023px) {
+    margin-top: 5.2rem;
+  }
+
+
 
   .info-bulle {
     margin: 2.5rem 0 0;
@@ -107,10 +140,6 @@
   flex: 0 0 100%;
 }
 
-.conteneur-navigation {
-  background-color: var(--couleurs-mac-violet-fonce);
-}
-
 .piedpage-diagnostic {
   display: flex;
 }
@@ -127,11 +156,8 @@
 
 .navigation-thematiqes {
   position: fixed;
-  //top: 6.67rem;
-  //left: 0;
   height: 100vh;
   background-color: var(--couleurs-mac-violet-fonce);
-  //max-height: 100vh;
 }
 
 .navigation-thematiqes ul {
