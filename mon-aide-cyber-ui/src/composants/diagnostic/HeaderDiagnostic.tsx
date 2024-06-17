@@ -52,7 +52,7 @@ export const HeaderDiagnostic = (propietes: ProprietesHeaderDiagnostic) => {
             <div className="fr-header__tools">
               <div className="fr-header__tools-links">
                 <ul className="fr-btns-group">
-                  <li className="fr-pr-2w">
+                  <li>
                     <button
                       className="bouton-mac bouton-mac-primaire"
                       title="Accéder à la restitution"
