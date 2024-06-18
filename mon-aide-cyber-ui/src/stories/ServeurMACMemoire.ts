@@ -4,7 +4,7 @@ import {
   Reponse,
   ReponseQuestionATiroir,
 } from '../domaine/diagnostic/Diagnostic.ts';
-import { expect } from '@storybook/jest';
+import { expect } from '@storybook/test';
 import { UUID } from '../types/Types.ts';
 
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';

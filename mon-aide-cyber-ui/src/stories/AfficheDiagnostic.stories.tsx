@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import {
   uneQuestionAChoixUnique,
   uneQuestionTiroirAChoixMultiple,

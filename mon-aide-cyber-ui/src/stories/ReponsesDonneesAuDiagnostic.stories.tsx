@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import {
   uneQuestionAChoixMultiple,
   uneQuestionAChoixUnique,
@@ -473,8 +472,8 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
       await waitFor(() => userEvent.clear(champSaisie));
       userEvent.type(champSaisie, 'Réponse C');
 
-      expect(await waitFor(() => canvas.getByRole('textbox'))).toHaveValue(
-        'Réponse C'
+      await waitFor(() =>
+        expect(canvas.getByRole('textbox')).toHaveValue('Réponse C')
       );
       entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
         reponseDonnee: 'reponse-c',

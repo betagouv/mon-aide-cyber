@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { ReponseAuthentification } from '../domaine/authentification/Authentification.ts';
 import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -95,8 +94,8 @@ export const PageDeConnexion: Story = {
             name: /votre adresse électronique/i,
           })
         );
-        userEvent.type(champsAdresseEmail, 'identifiant');
-        userEvent.clear(champsAdresseEmail);
+        await userEvent.type(champsAdresseEmail, 'identifiant');
+        await userEvent.clear(champsAdresseEmail);
 
         await waitFor(() =>
           expect(
@@ -116,8 +115,8 @@ export const PageDeConnexion: Story = {
             name: /votre mot de passe/i,
           })
         );
-        userEvent.type(champsMotDePasse, 'mdp');
-        userEvent.clear(champsMotDePasse);
+        await userEvent.type(champsMotDePasse, 'mdp');
+        await userEvent.clear(champsMotDePasse);
 
         await waitFor(() =>
           expect(

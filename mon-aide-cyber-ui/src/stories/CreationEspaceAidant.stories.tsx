@@ -1,9 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { expect } from '@storybook/jest';
 import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
+import { expect, userEvent, within } from '@storybook/test';
 import { ComposantFormulaireCreationEspaceAidant } from '../composants/espace-aidant/creation-espace-aidant/ComposantFormulaireCreationEspaceAidant.tsx';
 
 const meta = {
@@ -89,18 +88,14 @@ export const CreationEspaceAidant: Story = {
     await step(
       "L'utilisateur clique sur Valider sans rien remplir",
       async () => {
-        userEvent.click(canvas.getByRole('button', { name: /valider/i }));
+        await userEvent.click(canvas.getByRole('button', { name: /valider/i }));
 
-        await waitFor(() =>
-          expect(
-            canvas.getByText(/vous devez saisir vos mots de passe./i)
-          ).toBeInTheDocument()
-        );
-        await waitFor(() =>
-          expect(
-            canvas.getByText(/veuillez accepter les cgu./i)
-          ).toBeInTheDocument()
-        );
+        await expect(
+          canvas.getByText(/vous devez saisir vos mots de passe./i)
+        ).toBeInTheDocument();
+        await expect(
+          canvas.getByText(/veuillez accepter les cgu./i)
+        ).toBeInTheDocument();
       }
     );
 
@@ -114,24 +109,21 @@ export const CreationEspaceAidant: Story = {
       const champConfirmationMotDePasse = canvas.getByRole('textbox', {
         name: /confirmez votre nouveau mot de passe/i,
       });
-      userEvent.type(champMotDePasseTemporaire, 'a');
-      userEvent.type(champNouveauMotDePasse, 'b');
-      userEvent.type(champConfirmationMotDePasse, 'c');
+      await userEvent.type(champMotDePasseTemporaire, 'a');
+      await userEvent.type(champNouveauMotDePasse, 'b');
+      await userEvent.type(champConfirmationMotDePasse, 'c');
 
-      userEvent.click(canvas.getByRole('button', { name: /valider/i }));
+      await userEvent.click(canvas.getByRole('button', { name: /valider/i }));
 
-      await waitFor(() =>
-        expect(
-          canvas.getByText(
-            /la confirmation de votre mot de passe ne correspond pas au mot de passe saisi./i
-          )
-        ).toBeInTheDocument()
-      );
-      await waitFor(() =>
-        expect(
-          canvas.getByText(/veuillez accepter les cgu./i)
-        ).toBeInTheDocument()
-      );
+      await expect(
+        canvas.getByText(
+          /la confirmation de votre mot de passe ne correspond pas au mot de passe saisi./i
+        )
+      ).toBeInTheDocument();
+
+      await expect(
+        canvas.getByText(/veuillez accepter les cgu./i)
+      ).toBeInTheDocument();
     });
 
     await step(
@@ -146,27 +138,23 @@ export const CreationEspaceAidant: Story = {
         const champConfirmationMotDePasse = canvas.getByRole('textbox', {
           name: /confirmez votre nouveau mot de passe/i,
         });
-        userEvent.clear(champMotDePasseTemporaire);
-        userEvent.clear(champNouveauMotDePasse);
-        userEvent.clear(champConfirmationMotDePasse);
-        userEvent.type(champMotDePasseTemporaire, 'a');
-        userEvent.type(champNouveauMotDePasse, 'a');
-        userEvent.type(champConfirmationMotDePasse, 'a');
+        await userEvent.clear(champMotDePasseTemporaire);
+        await userEvent.clear(champNouveauMotDePasse);
+        await userEvent.clear(champConfirmationMotDePasse);
+        await userEvent.type(champMotDePasseTemporaire, 'a');
+        await userEvent.type(champNouveauMotDePasse, 'a');
+        await userEvent.type(champConfirmationMotDePasse, 'a');
 
-        userEvent.click(canvas.getByRole('button', { name: /valider/i }));
+        await userEvent.click(canvas.getByRole('button', { name: /valider/i }));
 
-        await waitFor(() =>
-          expect(
-            canvas.getByText(
-              /votre nouveau mot de passe doit être différent du mot de passe temporaire./i
-            )
-          ).toBeInTheDocument()
-        );
-        await waitFor(() =>
-          expect(
-            canvas.getByText(/veuillez accepter les cgu./i)
-          ).toBeInTheDocument()
-        );
+        await expect(
+          canvas.getByText(
+            /votre nouveau mot de passe doit être différent du mot de passe temporaire./i
+          )
+        ).toBeInTheDocument();
+        await expect(
+          canvas.getByText(/veuillez accepter les cgu./i)
+        ).toBeInTheDocument();
       }
     );
 
@@ -180,32 +168,28 @@ export const CreationEspaceAidant: Story = {
       const champConfirmationMotDePasse = canvas.getByRole('textbox', {
         name: /confirmez votre nouveau mot de passe/i,
       });
-      userEvent.clear(champMotDePasseTemporaire);
-      userEvent.clear(champNouveauMotDePasse);
-      userEvent.clear(champConfirmationMotDePasse);
-      userEvent.type(champMotDePasseTemporaire, 'a');
-      userEvent.type(champNouveauMotDePasse, 'a');
-      userEvent.type(champConfirmationMotDePasse, 'a');
+      await userEvent.clear(champMotDePasseTemporaire);
+      await userEvent.clear(champNouveauMotDePasse);
+      await userEvent.clear(champConfirmationMotDePasse);
+      await userEvent.type(champMotDePasseTemporaire, 'a');
+      await userEvent.type(champNouveauMotDePasse, 'a');
+      await userEvent.type(champConfirmationMotDePasse, 'a');
 
-      userEvent.click(
+      await userEvent.click(
         canvas.getByRole('checkbox', {
           name: /j'accepte les conditions générales d'utilisation/i,
         })
       );
-      userEvent.click(canvas.getByRole('button', { name: /valider/i }));
+      await userEvent.click(canvas.getByRole('button', { name: /valider/i }));
 
-      await waitFor(() =>
-        expect(
-          canvas.getByText(
-            /votre nouveau mot de passe doit être différent du mot de passe temporaire./i
-          )
-        ).toBeInTheDocument()
-      );
-      await waitFor(() =>
-        expect(
-          canvas.queryByText(/veuillez accepter les cgu./i)
-        ).not.toBeInTheDocument()
-      );
+      await expect(
+        canvas.getByText(
+          /votre nouveau mot de passe doit être différent du mot de passe temporaire./i
+        )
+      ).toBeInTheDocument();
+      await expect(
+        canvas.queryByText(/veuillez accepter les cgu./i)
+      ).not.toBeInTheDocument();
     });
 
     await step("L'utilisateur crée son espace aidant", async () => {
@@ -221,29 +205,27 @@ export const CreationEspaceAidant: Story = {
       const champCGU = canvas.getByRole('checkbox', {
         name: /j'accepte les conditions générales d'utilisation/i,
       });
-      userEvent.clear(champMotDePasseTemporaire);
-      userEvent.clear(champNouveauMotDePasse);
-      userEvent.clear(champConfirmationMotDePasse);
-      userEvent.clear(champCGU);
-      userEvent.type(champMotDePasseTemporaire, 'a');
-      userEvent.type(champNouveauMotDePasse, 'b');
-      userEvent.type(champConfirmationMotDePasse, 'b');
-      userEvent.click(champCGU);
 
-      userEvent.click(canvas.getByRole('button', { name: /valider/i }));
+      await userEvent.clear(champMotDePasseTemporaire);
+      await userEvent.clear(champNouveauMotDePasse);
+      await userEvent.clear(champConfirmationMotDePasse);
+      await userEvent.click(champCGU);
+      await userEvent.type(champMotDePasseTemporaire, 'a');
+      await userEvent.type(champNouveauMotDePasse, 'b');
+      await userEvent.type(champConfirmationMotDePasse, 'b');
+      await userEvent.click(champCGU);
 
-      await waitFor(() =>
-        expect(
-          canvas.queryByText(/veuillez accepter les cgu./i)
-        ).not.toBeInTheDocument()
-      );
-      await waitFor(() =>
-        expect(valeursSaisies).toStrictEqual({
-          cguSignees: true,
-          motDePasse: 'b',
-          motDePasseTemporaire: 'a',
-        })
-      );
+      await userEvent.click(canvas.getByRole('button', { name: /valider/i }));
+
+      await expect(
+        canvas.queryByText(/veuillez accepter les cgu./i)
+      ).not.toBeInTheDocument();
+
+      await expect(valeursSaisies).toStrictEqual({
+        cguSignees: true,
+        motDePasse: 'b',
+        motDePasseTemporaire: 'a',
+      });
     });
   },
 };
