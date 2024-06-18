@@ -50,7 +50,10 @@ export const transcripteurGouvernance: Thematique = {
       questions: [
         {
           identifiant: 'gouvernance-connaissance-rgpd-1',
-          'info-bulles': ['gouvernance/cnil.pug'],
+          'info-bulles': [
+            'gouvernance/cnil.pug',
+            'gouvernance/donnees-personnelles.pug',
+          ],
         },
       ],
     },
