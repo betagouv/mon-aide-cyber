@@ -12,7 +12,21 @@
 
 .question-tiroir {
   margin-left: 50px;
+  border-left: 0.25rem solid var(--couleurs-mac-violet-fonce);
+  padding: 0 1rem;
+}
+
+.question-tiroir-visible {
   margin-top: 10px;
+  max-height: 100vh;
+  overflow: hidden;
+  transition: max-height .5s ease-in;
+}
+
+.question-tiroir-invisible {
+  max-height: 0;
+  transition: max-height 0.5s ease-out;
+  overflow: hidden;
 }
 
 .reponses-complementaires {

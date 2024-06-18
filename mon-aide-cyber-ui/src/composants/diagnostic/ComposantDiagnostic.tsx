@@ -1,16 +1,10 @@
-import {
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-} from 'react';
+import { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import {
-  Suggestions,
   Question,
   ReponseDonnee,
   ReponsePossible,
+  Suggestions,
   Thematique,
   TypeDeSaisie,
 } from '../../domaine/diagnostic/Referentiel.ts';
@@ -60,48 +54,13 @@ import {
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
+import { ConteneurReponsePossible } from './ConteneurReponsePossible.tsx';
 
 type ProprietesComposantQuestion = {
   actions: ActionReponseDiagnostic[];
   numeroQuestion: number | undefined;
   question: Question;
   reponseDonnee?: ReponseDonnee;
-};
-
-type ProprietesComposantReponsePossible = {
-  identifiantQuestion: string;
-  reponsePossible: ReponsePossible;
-  typeDeSaisie: 'radio' | 'checkbox';
-  onChange: (identifiantReponse: string) => void;
-  selectionnee: boolean;
-};
-
-const ComposantReponsePossible = (
-  proprietes: PropsWithChildren<ProprietesComposantReponsePossible>
-) => {
-  return (
-    <div
-      className={`fr-${proprietes.typeDeSaisie}-group mac-${proprietes.typeDeSaisie}-group`}
-    >
-      <input
-        id={proprietes.reponsePossible.identifiant}
-        type={proprietes.typeDeSaisie}
-        name={proprietes.identifiantQuestion}
-        value={proprietes.reponsePossible.identifiant}
-        checked={proprietes.selectionnee}
-        onChange={(event) => {
-          proprietes.onChange(event.target.value);
-        }}
-      />
-      <label
-        className="fr-label"
-        htmlFor={proprietes.reponsePossible.identifiant}
-      >
-        {proprietes.reponsePossible.libelle}
-      </label>
-      {proprietes.children}
-    </div>
-  );
 };
 
 type ReponseAEnvoyer = {
@@ -303,7 +262,10 @@ const ComposantQuestion = ({
     }
   }, [actions, etatReponse, macapi, question, reponseQuestionEnvoyee]);
   return (
-    <div className={!numeroQuestion ? `fr-pt-2w` : ''}>
+    <div
+      id={question.identifiant}
+      className={`${!numeroQuestion ? `fr-pt-2w` : ''}`}
+    >
       <label className="fr-label">
         <h5>
           {numeroQuestion ? `${numeroQuestion}. ` : ''}
@@ -315,71 +277,20 @@ const ComposantQuestion = ({
           const typeDeSaisie =
             question.type === 'choixUnique' ? 'radio' : 'checkbox';
           return (
-            <ComposantReponsePossible
-              key={reponse.identifiant}
-              reponsePossible={reponse}
-              identifiantQuestion={question.identifiant}
+            <ConteneurReponsePossible
+              key={`conteneur-reponse-possible-${reponse.identifiant}`}
+              question={question}
+              reponse={reponse}
+              reponseDonnee={{
+                valeur: etatReponse.valeur,
+                reponses: etatReponse.reponseDonnee.reponses,
+              }}
               typeDeSaisie={typeDeSaisie}
-              onChange={(identifiantReponse) =>
-                typeDeSaisie === 'radio'
-                  ? repondQuestionUnique(identifiantReponse)
-                  : repondQuestionMultiple({
-                      identifiantReponse: question.identifiant,
-                      reponse: identifiantReponse,
-                    })
-              }
-              selectionnee={
-                typeDeSaisie === 'radio'
-                  ? etatReponse.valeur() === reponse.identifiant
-                  : etatReponse.reponseDonnee.reponses.some((rep) =>
-                      rep.reponses.has(reponse.identifiant)
-                    )
-              }
-            >
-              {reponse.questions?.map((questionTiroir) => (
-                <div
-                  className="question-tiroir"
-                  key={questionTiroir.identifiant}
-                >
-                  <legend className="fr-fieldset__legend">
-                    {questionTiroir.libelle}
-                  </legend>
-                  {questionTiroir.reponsesPossibles.map((rep) => {
-                    const typeDeSaisie =
-                      questionTiroir?.type === 'choixMultiple'
-                        ? 'checkbox'
-                        : 'radio';
-
-                    return (
-                      <ComposantReponsePossible
-                        key={rep.identifiant}
-                        reponsePossible={rep}
-                        identifiantQuestion={questionTiroir.identifiant}
-                        typeDeSaisie={typeDeSaisie}
-                        selectionnee={etatReponse.reponseDonnee.reponses.some(
-                          (reponse) => reponse.reponses.has(rep.identifiant)
-                        )}
-                        onChange={(identifiantReponse) => {
-                          typeDeSaisie === 'checkbox'
-                            ? repondQuestionTiroirMultiple(
-                                reponse.identifiant,
-                                {
-                                  identifiantReponse:
-                                    questionTiroir.identifiant,
-                                  reponse: identifiantReponse,
-                                }
-                              )
-                            : repondQuestionTiroirUnique(reponse.identifiant, {
-                                identifiantReponse: questionTiroir.identifiant,
-                                reponse: identifiantReponse,
-                              });
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              ))}
-            </ComposantReponsePossible>
+              repondQuestionUnique={repondQuestionUnique}
+              repondQuestionMultiple={repondQuestionMultiple}
+              repondQuestionTiroirMultiple={repondQuestionTiroirMultiple}
+              repondQuestionTiroirUnique={repondQuestionTiroirUnique}
+            />
           );
         })}
       </div>
