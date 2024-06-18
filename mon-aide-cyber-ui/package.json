@@ -26,15 +26,14 @@
     "react-router-dom": "^6.14.0"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "^7.6.16",
-    "@storybook/addon-interactions": "^7.6.16",
-    "@storybook/addon-links": "^7.6.16",
-    "@storybook/blocks": "^7.6.16",
-    "@storybook/jest": "^0.2.3",
-    "@storybook/react": "^7.6.16",
-    "@storybook/react-vite": "^7.6.16",
-    "@storybook/test-runner": "^0.15.2",
-    "@storybook/testing-library": "^0.0.14-next.2",
+    "@storybook/addon-essentials": "^8.1.10",
+    "@storybook/addon-interactions": "^8.1.10",
+    "@storybook/addon-links": "^8.1.10",
+    "@storybook/blocks": "^8.1.10",
+    "@storybook/react": "^8.1.10",
+    "@storybook/react-vite": "^8.1.10",
+    "@storybook/test": "^8.1.10",
+    "@storybook/test-runner": "^0.18.2",
     "@swc/cli": "^0.1.62",
     "@swc/core": "^1.3.66",
     "@types/react": "^18.0.37",
@@ -50,8 +49,8 @@
     "happy-dom": "^9.20.3",
     "prop-types": "^15.8.1",
     "sass": "^1.63.6",
-    "storybook": "^7.6.16",
-    "storybook-addon-react-router-v6": "^2.0.10"
+    "storybook": "^8.1.10",
+    "storybook-addon-remix-react-router": "^3.0.0"
   },
   "eslintConfig": {
     "extends": [

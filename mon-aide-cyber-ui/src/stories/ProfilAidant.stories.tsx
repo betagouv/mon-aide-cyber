@@ -1,9 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { expect } from '@storybook/jest';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { ComposantProfil } from '../composants/profil/ComposantProfil.tsx';
 import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -198,21 +197,19 @@ export const ModificationMotDePasseAidant: Story = {
       const champConfirmationMotDePasse = canvas.getByRole('textbox', {
         name: /confirmez votre nouveau mot de passe/i,
       });
-      userEvent.type(champAncienMotDePasse, 'a');
-      userEvent.type(champNouveauMotDePasse, 'b');
-      userEvent.type(champConfirmationMotDePasse, 'c');
+      await userEvent.type(champAncienMotDePasse, 'a');
+      await userEvent.type(champNouveauMotDePasse, 'b');
+      await userEvent.type(champConfirmationMotDePasse, 'c');
 
-      userEvent.click(
+      await userEvent.click(
         canvas.getByRole('button', { name: /modifier le mot de passe/i })
       );
 
-      await waitFor(() =>
-        expect(
-          canvas.getByText(
-            /la confirmation de votre mot de passe ne correspond pas au mot de passe saisi./i
-          )
-        ).toBeInTheDocument()
-      );
+      await expect(
+        canvas.getByText(
+          /la confirmation de votre mot de passe ne correspond pas au mot de passe saisi./i
+        )
+      ).toBeInTheDocument();
     });
 
     await step(
@@ -227,24 +224,22 @@ export const ModificationMotDePasseAidant: Story = {
         const champConfirmationMotDePasse = canvas.getByRole('textbox', {
           name: /confirmez votre nouveau mot de passe/i,
         });
-        userEvent.clear(champAncienMotDePasse);
-        userEvent.clear(champNouveauMotDePasse);
-        userEvent.clear(champConfirmationMotDePasse);
-        userEvent.type(champAncienMotDePasse, 'a');
-        userEvent.type(champNouveauMotDePasse, 'a');
-        userEvent.type(champConfirmationMotDePasse, 'a');
+        await userEvent.clear(champAncienMotDePasse);
+        await userEvent.clear(champNouveauMotDePasse);
+        await userEvent.clear(champConfirmationMotDePasse);
+        await userEvent.type(champAncienMotDePasse, 'a');
+        await userEvent.type(champNouveauMotDePasse, 'a');
+        await userEvent.type(champConfirmationMotDePasse, 'a');
 
-        userEvent.click(
+        await userEvent.click(
           canvas.getByRole('button', { name: /modifier le mot de passe/i })
         );
 
-        await waitFor(() =>
-          expect(
-            canvas.getByText(
-              /votre nouveau mot de passe doit être différent de votre ancien mot de passe./i
-            )
-          ).toBeInTheDocument()
-        );
+        await expect(
+          canvas.getByText(
+            /votre nouveau mot de passe doit être différent de votre ancien mot de passe./i
+          )
+        ).toBeInTheDocument();
       }
     );
 
@@ -258,29 +253,26 @@ export const ModificationMotDePasseAidant: Story = {
       const champConfirmationMotDePasse = canvas.getByRole('textbox', {
         name: /confirmez votre nouveau mot de passe/i,
       });
-      userEvent.clear(champAncienMotDePasse);
-      userEvent.clear(champNouveauMotDePasse);
-      userEvent.clear(champConfirmationMotDePasse);
-      userEvent.type(champAncienMotDePasse, 'a');
-      userEvent.type(champNouveauMotDePasse, 'b');
-      userEvent.type(champConfirmationMotDePasse, 'b');
+      await userEvent.clear(champAncienMotDePasse);
+      await userEvent.clear(champNouveauMotDePasse);
+      await userEvent.clear(champConfirmationMotDePasse);
+      await userEvent.type(champAncienMotDePasse, 'a');
+      await userEvent.type(champNouveauMotDePasse, 'b');
+      await userEvent.type(champConfirmationMotDePasse, 'b');
 
-      userEvent.click(
+      await userEvent.click(
         canvas.getByRole('button', { name: /modifier le mot de passe/i })
       );
 
-      await waitFor(() =>
-        expect(
-          canvas.queryByText(/mot de passe modifié avec succès/i)
-        ).not.toBeInTheDocument()
-      );
-      await waitFor(() =>
-        expect(valeursSaisies).toStrictEqual({
-          ancienMotDePasse: 'a',
-          motDePasse: 'b',
-          confirmationMotDePasse: 'b',
-        })
-      );
+      await expect(
+        canvas.queryByText(/mot de passe modifié avec succès/i)
+      ).toBeInTheDocument();
+
+      await expect(valeursSaisies).toStrictEqual({
+        ancienMotDePasse: 'a',
+        motDePasse: 'b',
+        confirmationMotDePasse: 'b',
+      });
     });
   },
 };

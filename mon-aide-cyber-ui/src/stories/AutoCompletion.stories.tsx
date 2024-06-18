@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { expect } from '@storybook/jest';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
+import { expect, userEvent, within } from '@storybook/test';
 import { AutoCompletion } from '../composants/auto-completion/AutoCompletion.tsx';
 
 const meta = {
@@ -61,7 +60,7 @@ export const AutoCompletionTexte: Story = {
     await step(
       "Filtre les suggestions lorsque l'on saisit au clavier",
       async () => {
-        expect(
+        await expect(
           canvas.getByRole('textbox', {
             name: /faites un choix/i,
           })
@@ -70,13 +69,11 @@ export const AutoCompletionTexte: Story = {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
         });
-        userEvent.type(champDeSaisie, 'a');
+        await userEvent.type(champDeSaisie, 'a');
 
-        await waitFor(() =>
-          expect(
-            canvas.getAllByRole('button').map((button) => button.innerText)
-          ).toStrictEqual(['', 'Ain', 'Aisne'])
-        );
+        await expect(
+          canvas.getAllByRole('button').map((button) => button.innerText)
+        ).toStrictEqual(['', 'Ain', 'Aisne']);
       }
     );
 
@@ -86,23 +83,22 @@ export const AutoCompletionTexte: Story = {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
         });
-        await waitFor(() => userEvent.clear(champDeSaisie));
-        userEvent.type(champDeSaisie, 'fin');
+        await userEvent.clear(champDeSaisie);
+        await userEvent.type(champDeSaisie, 'fin');
 
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('button', { name: 'Finistère' })
-          ).toBeInTheDocument()
-        );
-        userEvent.click(canvas.getByRole('button', { name: 'Finistère' }));
+        await expect(
+          canvas.getByRole('button', { name: 'Finistère' })
+        ).toBeInTheDocument();
 
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('textbox', {
-              name: /faites un choix/i,
-            })
-          ).toHaveValue('Finistère')
+        await userEvent.click(
+          canvas.getByRole('button', { name: 'Finistère' })
         );
+
+        await expect(
+          canvas.getByRole('textbox', {
+            name: /faites un choix/i,
+          })
+        ).toHaveValue('Finistère');
       }
     );
 
@@ -112,22 +108,18 @@ export const AutoCompletionTexte: Story = {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
         });
-        await waitFor(() => userEvent.clear(champDeSaisie));
+        await userEvent.clear(champDeSaisie);
+        await userEvent.type(champDeSaisie, 'finistère');
 
-        userEvent.type(champDeSaisie, 'finistère');
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('button', { name: 'Finistère' })
-          ).toBeInTheDocument()
-        );
+        await expect(
+          canvas.getByRole('button', { name: 'Finistère' })
+        ).toBeInTheDocument();
 
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('textbox', {
-              name: /faites un choix/i,
-            })
-          ).toHaveValue('Finistère')
-        );
+        await expect(
+          canvas.getByRole('textbox', {
+            name: /faites un choix/i,
+          })
+        ).toHaveValue('Finistère');
       }
     );
 
@@ -137,28 +129,24 @@ export const AutoCompletionTexte: Story = {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
         });
-        await waitFor(() => userEvent.clear(champDeSaisie));
-        userEvent.type(champDeSaisie, 'finistère');
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('button', { name: 'Finistère' })
-          ).toBeInTheDocument()
-        );
+        await userEvent.clear(champDeSaisie);
+        await userEvent.type(champDeSaisie, 'finistère');
 
-        userEvent.click(canvas.getByText(/auto completion/i));
+        await expect(
+          canvas.getByRole('button', { name: 'Finistère' })
+        ).toBeInTheDocument();
 
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('textbox', {
-              name: /faites un choix/i,
-            })
-          ).toHaveValue('Finistère')
-        );
-        await waitFor(() =>
-          expect(
-            canvas.queryByRole('button', { name: 'Finistère' })
-          ).not.toBeInTheDocument()
-        );
+        await userEvent.click(canvas.getByText(/auto completion/i));
+
+        await expect(
+          canvas.getByRole('textbox', {
+            name: /faites un choix/i,
+          })
+        ).toHaveValue('Finistère');
+
+        await expect(
+          canvas.queryByRole('button', { name: 'Finistère' })
+        ).not.toBeInTheDocument();
       }
     );
   },
@@ -222,27 +210,26 @@ export const AutoCompletionObjet: Story = {
     await step(
       "Filtre les suggestions lorsque l'on saisit au clavier",
       async () => {
-        expect(
+        await expect(
           canvas.getByRole('textbox', {
             name: /faites un choix/i,
           })
         ).toBeInTheDocument();
 
-        const champDeSaisie = canvas.getByRole('textbox', {
-          name: /faites un choix/i,
-        });
-        userEvent.type(champDeSaisie, 'a');
+        await userEvent.type(
+          canvas.getByRole('textbox', {
+            name: /faites un choix/i,
+          }),
+          'a'
+        );
 
-        await waitFor(() =>
-          expect(
-            canvas.getAllByRole('button').map((b) => b.innerText)
-          ).toStrictEqual(['', 'Ain', 'Aisne'])
-        );
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('button', { name: 'Aisne' })
-          ).toBeInTheDocument()
-        );
+        await expect(
+          canvas.getAllByRole('button').map((b) => b.innerText)
+        ).toStrictEqual(['', 'Ain', 'Aisne']);
+
+        await expect(
+          canvas.getByRole('button', { name: 'Aisne' })
+        ).toBeInTheDocument();
       }
     );
 
@@ -252,23 +239,20 @@ export const AutoCompletionObjet: Story = {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
         });
-        await waitFor(() => userEvent.clear(champDeSaisie));
-        userEvent.type(champDeSaisie, 'ai');
+        await userEvent.clear(champDeSaisie);
+        await userEvent.type(champDeSaisie, 'ai');
 
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('button', { name: 'Aisne' })
-          ).toBeInTheDocument()
-        );
-        userEvent.click(canvas.getByRole('button', { name: 'Aisne' }));
+        await expect(
+          canvas.getByRole('button', { name: 'Aisne' })
+        ).toBeInTheDocument();
 
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('textbox', {
-              name: /faites un choix/i,
-            })
-          ).toHaveValue('Aisne')
-        );
+        await userEvent.click(canvas.getByRole('button', { name: 'Aisne' }));
+
+        await expect(
+          canvas.getByRole('textbox', {
+            name: /faites un choix/i,
+          })
+        ).toHaveValue('Aisne');
       }
     );
 
@@ -278,22 +262,17 @@ export const AutoCompletionObjet: Story = {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
         });
-        await waitFor(() => userEvent.clear(champDeSaisie));
+        await userEvent.clear(champDeSaisie);
+        await userEvent.type(champDeSaisie, 'finistère');
+        await expect(
+          canvas.getByRole('button', { name: 'Finistère' })
+        ).toBeInTheDocument();
 
-        userEvent.type(champDeSaisie, 'finistère');
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('button', { name: 'Finistère' })
-          ).toBeInTheDocument()
-        );
-
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('textbox', {
-              name: /faites un choix/i,
-            })
-          ).toHaveValue('Finistère')
-        );
+        await expect(
+          canvas.getByRole('textbox', {
+            name: /faites un choix/i,
+          })
+        ).toHaveValue('Finistère');
       }
     );
 
@@ -303,21 +282,20 @@ export const AutoCompletionObjet: Story = {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
         });
-        await waitFor(() => userEvent.clear(champDeSaisie));
-        userEvent.type(champDeSaisie, 'd');
-        const button = canvas.getByRole('button', { name: /doubs/i });
-
-        userEvent.keyboard('[ArrowDown]');
-        userEvent.keyboard('[ArrowDown]');
-        userEvent.type(button, '{Enter}');
-
-        await waitFor(() =>
-          expect(
-            canvas.getByRole('textbox', {
-              name: /faites un choix/i,
-            })
-          ).toHaveValue('Doubs')
+        await userEvent.clear(champDeSaisie);
+        await userEvent.type(champDeSaisie, 'd');
+        await userEvent.keyboard('[ArrowDown]');
+        await userEvent.keyboard('[ArrowDown]');
+        await userEvent.type(
+          canvas.getByRole('button', { name: /doubs/i }),
+          '{Enter}'
         );
+
+        await expect(
+          canvas.getByRole('textbox', {
+            name: /faites un choix/i,
+          })
+        ).toHaveValue('Doubs');
       }
     );
 
@@ -327,18 +305,15 @@ export const AutoCompletionObjet: Story = {
         const champDeSaisie = canvas.getByRole('textbox', {
           name: /faites un choix/i,
         });
-        await waitFor(() => userEvent.clear(champDeSaisie));
-        userEvent.type(champDeSaisie, 'ai');
+        await userEvent.clear(champDeSaisie);
+        await userEvent.type(champDeSaisie, 'ai');
+        await userEvent.keyboard('[ArrowDown]');
+        await userEvent.keyboard('[ArrowDown]');
+        await userEvent.type(champDeSaisie, 's');
 
-        userEvent.keyboard('[ArrowDown]');
-        userEvent.keyboard('[ArrowDown]');
-        userEvent.type(champDeSaisie, 's');
-
-        await waitFor(() =>
-          expect(
-            canvas.getAllByRole('button').map((b) => b.innerText)
-          ).toStrictEqual(['', 'Aisne'])
-        );
+        await expect(
+          canvas.getAllByRole('button').map((b) => b.innerText)
+        ).toStrictEqual(['', 'Aisne']);
       }
     );
   },
