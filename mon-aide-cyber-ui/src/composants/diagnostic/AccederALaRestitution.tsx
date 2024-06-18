@@ -42,7 +42,7 @@ export const AccederALaRestitution = ({
             className="fr-btn bouton-mac bouton-mac-primaire"
             onClick={surQuitterLeDiagnostic}
           >
-            Quitter le diagnostic
+            Accéder à la restitution
           </button>
         </div>
       </section>

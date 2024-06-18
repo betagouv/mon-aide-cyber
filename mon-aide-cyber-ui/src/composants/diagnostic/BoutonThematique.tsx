@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useReducer } from 'react';
 import {
   ActionBouton,
-  thematiqueChargee,
   boutonThematiqueCliquee,
   EtatBouton,
+  thematiqueChargee,
 } from './reducteurBoutonThematique.ts';
+import { BoutonDiagnostic } from './BoutonDiagnostic.tsx';
 
 type ProprietesBoutonThematique = {
   onClick: (thematique: string) => void;
@@ -39,14 +40,11 @@ export const BoutonThematique = ({
   }, [envoie]);
 
   return (
-    <div
-      className={`fr-pr-2w ${
-        etatBouton.borneThematique ? `invisible` : `visible`
-      }`}
-    >
-      <button className={`fr-btn bouton-mac ${style}`} onClick={surClick}>
-        {titre}
-      </button>
-    </div>
+    <BoutonDiagnostic
+      visible={!etatBouton.borneThematique}
+      style={style}
+      onClick={surClick}
+      titre={titre}
+    />
   );
 };
