@@ -55,6 +55,7 @@ import {
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
 import { ConteneurReponsePossible } from './ConteneurReponsePossible.tsx';
+import { TerminerDiagnostic } from './TerminerDiagnostic.tsx';
 
 type ProprietesComposantQuestion = {
   actions: ActionReponseDiagnostic[];
@@ -355,9 +356,9 @@ export const ComposantDiagnostic = ({
   );
 
   const afficheModaleAccederALaRestitution = useCallback(
-    () =>
+    (titre: string) =>
       affiche({
-        titre: 'Accéder à la restitution',
+        titre,
         corps: (
           <AccederALaRestitution
             surAnnuler={ferme}
@@ -403,7 +404,8 @@ export const ComposantDiagnostic = ({
     <>
       <HeaderDiagnostic
         quitter={{
-          accederALaRestitution: () => afficheModaleAccederALaRestitution(),
+          accederALaRestitution: () =>
+            afficheModaleAccederALaRestitution('Accéder à la restitution'),
         }}
       />
       <main role="main" className="diagnostic fond-clair-mac">
@@ -527,6 +529,18 @@ export const ComposantDiagnostic = ({
                       thematiques={thematiques.map(([clef]) => clef)}
                       onClick={(thematique: string) =>
                         afficheThematique(thematique)
+                      }
+                    />
+                    <TerminerDiagnostic
+                      style="bouton-mac bouton-mac-primaire"
+                      thematiqueCourante={
+                        etatReferentiel.thematiqueAffichee || ''
+                      }
+                      thematiques={thematiques.map(([clef]) => clef)}
+                      onClick={() =>
+                        afficheModaleAccederALaRestitution(
+                          'Terminer le diagnostic'
+                        )
                       }
                     />
                   </div>
