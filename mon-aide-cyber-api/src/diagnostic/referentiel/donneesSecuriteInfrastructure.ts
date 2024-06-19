@@ -358,7 +358,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-outils-securisation-systeme-messagerie-antispam',
           libelle:
-            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre",
+            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en œuvre",
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -375,7 +375,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-outils-securisation-systeme-messagerie-webmail',
           libelle:
-            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en oeuvre et les mécanismes complémentaires de protection de mails illégitimes sont activés",
+            "Oui, un outil d'anti-spam et d'anti-hameçonnage a été mis en œuvre et les mécanismes complémentaires de protection de mails illégitimes sont activés",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
