@@ -25,13 +25,13 @@ export const transcripteurGouvernance: Thematique = {
         {
           identifiant: 'gouvernance-schema-si-a-jour',
           'info-bulles': [
-            'gouvernance/schema-si-composants.pug',
             'gouvernance/schema-si-interconnexions-exterieur.pug',
             'gouvernance/schema-si-composants-entite-publique.pug',
           ],
         },
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour',
+          'info-bulles': ['gouvernance/schema-si-composants.pug'],
         },
       ],
     },
