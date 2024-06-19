@@ -22,12 +22,10 @@ export const reducteurBoutonThematiqueSuivante = (
   etat: EtatBouton,
   action: ActionBouton
 ): EtatBouton => {
-  function indices(thematiques: string[], thematiqueCourante: string) {
-    return {
-      indiceThematiqueCourante: thematiques.indexOf(thematiqueCourante),
-      dernierIndiceThematique: thematiques.length - 1,
-    };
-  }
+  const indices = (thematiques: string[], thematiqueCourante: string) => ({
+    indiceThematiqueCourante: thematiques.indexOf(thematiqueCourante),
+    dernierIndiceThematique: thematiques.length - 1,
+  });
 
   switch (action.type) {
     case TypeActionBouton.CHARGE: {
@@ -65,14 +63,13 @@ export const reducteurBoutonThematiquePrecedente = (
   etat: EtatBouton,
   action: ActionBouton
 ): EtatBouton => {
-  const indice = (thematiques: string[], thematiqueCour: string) => {
-    const indiceThematiqueCourante = thematiques.indexOf(thematiqueCour);
-    return { indiceThematiqueCourante, premierIndiceThematique: 0 };
-  };
+  const indice = (thematiques: string[], thematiqueCour: string) =>
+    thematiques.indexOf(thematiqueCour);
+  const premierIndiceThematique = 0;
 
   switch (action.type) {
     case TypeActionBouton.CLIQUE: {
-      const { indiceThematiqueCourante, premierIndiceThematique } = indice(
+      const indiceThematiqueCourante = indice(
         etat.thematiques,
         etat.thematiqueCourante
       );
@@ -88,7 +85,7 @@ export const reducteurBoutonThematiquePrecedente = (
       };
     }
     case TypeActionBouton.CHARGE: {
-      const { indiceThematiqueCourante, premierIndiceThematique } = indice(
+      const indiceThematiqueCourante = indice(
         action.thematiques,
         action.thematiqueCourante
       );
