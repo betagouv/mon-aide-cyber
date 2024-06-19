@@ -61,7 +61,10 @@ export const transcripteurGouvernance: Thematique = {
       questions: [
         {
           identifiant: 'gouvernance-connaissance-rgpd-2',
-          'info-bulles': ['gouvernance/utilisation-donnees-personnelles.pug'],
+          'info-bulles': [
+            'gouvernance/cnil.pug',
+            'gouvernance/utilisation-donnees-personnelles.pug',
+          ],
         },
       ],
     },
