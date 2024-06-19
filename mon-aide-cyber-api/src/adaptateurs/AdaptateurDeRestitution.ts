@@ -7,7 +7,7 @@ import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestituti
 import { Restitution } from '../restitution/Restitution';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
-const estMesurePrioritaire = (
+export const estMesurePrioritaire = (
   mesurePrioritaire: MesurePriorisee[] | undefined
 ): mesurePrioritaire is MesurePriorisee[] => {
   return mesurePrioritaire !== undefined && mesurePrioritaire.length > 0;

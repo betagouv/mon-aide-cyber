@@ -94,6 +94,18 @@ h4 {
 
 #mesures-prioritaires {
   page-break-after: always;
+
+    h4 {
+        font-size: 2.2rem !important;
+        line-height: 2rem !important;
+        border-left: 8px solid var(--couleurs-mac-violet-fonce);
+        border-image: linear-gradient(
+                to top,
+                var(--couleurs-mac-violet-fonce) 0 85%,
+                rgba(0, 0, 0, 0) 15%
+        );
+        border-image-slice: 1;
+    }
 }
 
 #autres-mesures {
@@ -127,7 +139,8 @@ h4 {
     --active: none;
     background-color: unset;
     color: var(--couleurs-mac-noir) !important;
-    font-size: 16px;
+    font-size: 1.2rem;
+      font-family: "Marianne ExtraBold";
   }
 
   summary + div {
@@ -300,5 +313,23 @@ h4 {
   span {
     padding-right: 1rem;
   }
+}
+
+.page-de-garde {
+    h1 {
+        font-size: 2.2rem;
+        line-height: 3.2rem;
+        border: unset;
+    }
+
+    h2 {
+        line-height: 2.8rem;
+    }
+
+    p {
+        margin: unset;
+        padding: unset;
+    }
+
 }
 /* stylelint-enable */

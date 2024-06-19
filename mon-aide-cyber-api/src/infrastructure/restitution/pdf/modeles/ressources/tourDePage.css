@@ -1,22 +1,27 @@
 html {
-  font-family: Marianne;
-  font-size: 12px;
+    font-family: Marianne;
+    font-size: 12px;
 }
 
-.logo-anssi {
-  width: 16rem;
-  content: var(--logo-anssi);
+.logo-republique-francaise-anssi {
+    width: 16rem;
+    content: var(--logo-republique-francaise-anssi);
+    margin-bottom: 10mm;
 }
 
 .logo-mac {
-  width: 40rem;
-  content: var(--logo-mac);
+    width: 40rem;
+    content: var(--logo-mac);
+    padding-bottom: 20mm;
 }
 
 .illustration-dialogue-mac {
-  margin: auto;
-  width: 56rem;
-  content: var(--illustration-dialogue-mac);
+    margin: auto;
+    width: 48rem;
+    justify-content: center;
+    align-content: center;
+    content: var(--illustration-dialogue-mac);
+    padding-bottom: 20mm;
 }
 
 .piedpage {
@@ -24,17 +29,26 @@ html {
   flex: 1;
   flex-direction: row;
   justify-content: space-between;
-  margin: 0 1cm 3mm;
-  font-size: 8px;
+  margin-left: 15mm;
+  margin-right: 15mm;
+    margin-bottom: 10mm;
+  font-size: 10px;
 }
 
 .piedpage .mac {
   color: var(--couleurs-mac-gris);
   font-weight: bold;
+    opacity: 0.7;
+}
+
+.piedpage .identifiant {
+    color: var(--couleurs-mac-gris);
+    opacity: 0.5;
 }
 
 .piedpage .pagination {
   display: flex;
+    opacity: 0.7;
 }
 
 :is(.piedpage .pagenumber, .piedpage .totalpages) {
