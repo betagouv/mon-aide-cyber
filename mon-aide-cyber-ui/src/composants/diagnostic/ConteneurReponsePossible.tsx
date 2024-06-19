@@ -92,6 +92,9 @@ export const ConteneurReponsePossible = ({
         >
           <legend className="fr-fieldset__legend">
             <h5>{questionTiroir.libelle}</h5>
+            {questionTiroir.type === 'choixMultiple' && (
+              <p>Cette question est à choix multiple</p>
+            )}
           </legend>
           {questionTiroir.reponsesPossibles.map((rep) => {
             const typeDeSaisie =
