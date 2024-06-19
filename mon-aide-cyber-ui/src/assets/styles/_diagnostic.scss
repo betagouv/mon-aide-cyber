@@ -112,6 +112,10 @@
     padding-left: 0.5rem;
   }
 
+  .info-bulle li::marker {
+    font-weight: inherit;
+  }
+
   .bordure-info-bulle {
     width: 0;
     height: 0;
