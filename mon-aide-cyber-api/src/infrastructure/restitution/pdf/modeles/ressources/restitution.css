@@ -1,99 +1,99 @@
 /* stylelint-disable */
 .indicateur-polaire {
-  font-size: 2px;
+    font-size: 2px;
 }
 
 :root {
-  --couleurs-mac-blanc: white;
-  --couleurs-mac-violet-fonce: #5d2a9d;
-  --couleurs-mac-noir: #282828;
-  --couleurs-mac-violet-clair: #f1e2fd;
-  --couleurs-mac-violet-tres-clair: #f5f1f9;
-  --couleurs-mac-gouvernance: #fc7530;
-  --couleurs-mac-securiteacces: #9c51d0;
-  --couleurs-mac-securiteposte: #fdc8d5;
-  --couleurs-mac-securiteinfrastructure: #fdc82e;
-  --couleurs-mac-sensibilisation: #5d2a9d;
-  --couleurs-mac-reaction: #fd8eb9;
+    --couleurs-mac-blanc: white;
+    --couleurs-mac-violet-fonce: #5d2a9d;
+    --couleurs-mac-noir: #282828;
+    --couleurs-mac-violet-clair: #f1e2fd;
+    --couleurs-mac-violet-tres-clair: #f5f1f9;
+    --couleurs-mac-gouvernance: #fc7530;
+    --couleurs-mac-securiteacces: #9c51d0;
+    --couleurs-mac-securiteposte: #fdc8d5;
+    --couleurs-mac-securiteinfrastructure: #fdc82e;
+    --couleurs-mac-sensibilisation: #5d2a9d;
+    --couleurs-mac-reaction: #fd8eb9;
 }
 
 html {
-  scroll-padding-top: 200px;
+    scroll-padding-top: 200px;
 }
 
 body {
-  font-size: 12px;
-  line-height: 1.5rem;
-
-  p {
     font-size: 12px;
-  }
+    line-height: 1.5rem;
+
+    p {
+        font-size: 12px;
+    }
 }
 
 main {
-  background-color: var(--couleurs-mac-blanc);
+    background-color: var(--couleurs-mac-blanc);
 }
 
 footer {
-  display: none;
+    display: none;
 }
 
 header {
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 .fr-header {
-  filter: none !important;
-  background-color: unset !important;
-  box-shadow: none !important;
-  border: none !important;
+    filter: none !important;
+    background-color: unset !important;
+    box-shadow: none !important;
+    border: none !important;
 }
 
 .fr-header__body {
-  filter: none !important;
-  background-color: unset !important;
-  box-shadow: none !important;
+    filter: none !important;
+    background-color: unset !important;
+    box-shadow: none !important;
 }
 
 .fr-header__service {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
 .fr-header__tools {
-  display: none;
+    display: none;
 }
 
 .fr-col-md-9 {
-  flex: 0 0 100%;
-  max-width: 100%;
-  width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
 }
 
 .fr-col-9 {
-  flex: 0 0 100%;
-  max-width: 100%;
-  width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
 }
 
 .section h3:first-child {
-  display: none;
+    display: none;
 }
 
 h4 {
-  font-size: 16px !important;
-  line-height: 16px !important;
-  border-left: 5px solid var(--couleurs-mac-violet-fonce);
-  padding-left: 1.5rem;
+    font-size: 16px !important;
+    line-height: 16px !important;
+    border-left: 5px solid var(--couleurs-mac-violet-fonce);
+    padding-left: 1.5rem;
 }
 
 #indicateurs {
-  page-break-after: always;
+    page-break-after: always;
 }
 
 #mesures-prioritaires {
-  page-break-after: always;
+    page-break-after: always;
 
     h4 {
         font-size: 2.2rem !important;
@@ -109,75 +109,80 @@ h4 {
 }
 
 #autres-mesures {
-  page-break-before: always;
+    page-break-before: always;
+
+    h4 {
+        font-size: 2.2rem !important;
+        line-height: 2rem !important;
+        border-left: 8px solid var(--couleurs-mac-violet-fonce);
+        border-image: linear-gradient(
+                to top,
+                var(--couleurs-mac-violet-fonce) 0 85%,
+                rgba(0, 0, 0, 0) 15%
+        );
+        border-image-slice: 1;
+    }
 }
 
 .mode-fonce {
-  display: none;
+    display: none;
 }
 
 .restitution {
-  .menu-restitution {
-    display: none;
-  }
 
-  details {
-    position: relative;
+    details {
+        position: relative;
 
-    b {
-      font-size: 12px !important;
-      color: var(--couleurs-mac-violet-fonce);
+        b {
+            font-size: 12px !important;
+            color: var(--couleurs-mac-violet-fonce);
+        }
+
+        p {
+            padding-bottom: 0 !important;
+        }
     }
 
-    p {
-      padding-bottom: 1rem !important;
+    summary + div {
+        padding-left: 12mm;
     }
-  }
 
-  details[open] > summary {
-    --hover: none;
-    --active: none;
-    background-color: unset;
-    color: var(--couleurs-mac-noir) !important;
-    font-size: 1.2rem;
-      font-family: "Marianne ExtraBold";
-  }
+    details[open] > summary {
+        --hover: none;
+        --active: none;
+        background-color: unset;
+        color: var(--couleurs-mac-noir) !important;
+        font-size: 1.2rem;
+        font-family: "Marianne ExtraBold";
+        padding: 1rem 0 1.5rem 0;
+    }
 
-  summary + div {
-    margin: 0 -0.25rem;
-    padding: 1rem 1rem 1.5rem 1rem;
-  }
+    .section-mesure > div {
+        padding-bottom: 5mm;
+    }
 
-  summary {
-    user-select: none;
-    display: inline-flex;
-    align-items: baseline;
-    padding: 0.75rem 1rem 0.75rem 2rem;
-    margin: -1px 0 0 -1px;
-    width: 100%;
-    justify-content: space-between;
-    border-top: none !important;
-    border-left: 5px solid var(--couleurs-mac-violet-clair);
-    border-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 20px,
-      var(--couleurs-mac-violet-clair) 20px 40px,
-      rgba(0, 0, 0, 0) 40px
-    );
-    border-image-slice: 1;
-  }
+    .section-mesure > div > b{
+        font-family: "Marianne ExtraBold";
+    }
 
-  summary:after {
-    content: '';
-    width: 16px;
-    height: 16px;
-    margin-left: 16px;
+    summary {
+        user-select: none;
+        display: inline-flex;
+        align-items: baseline;
+        vertical-align: top !important;
+        width: 100%;
+    }
 
-    mask-size: 16px 16px;
-    mask-repeat: no-repeat;
-    background: var(--couleurs-mac-violet-fonce);
-    flex-shrink: 0;
-  }
+
+    summary:before {
+        content: '';
+        width: 1mm;
+        height: 4mm;
+        margin-right: 11mm;
+        mask-repeat: no-repeat;
+        background: var(--couleurs-mac-violet-clair);
+        flex-shrink: 0;
+    }
 
     div[id^='mesures-prioritaires'] {
         b {
@@ -185,134 +190,116 @@ h4 {
         }
     }
 
-  .indicateur-polaire {
-    font-size: 4px;
-  }
+    .indicateur-polaire {
+        font-size: 4px;
+    }
 }
 
 .identifiant-diagnostic {
-  font-size: 48px;
-  line-height: 48px;
-  font-weight: 800;
-}
-
-#information-contenu {
-  border-radius: 17px;
-  padding: 32px;
-  line-height: 28px;
-  font-size: 16px;
-
-  #information-id {
-    font-size: 22px;
-    font-family: 'Marianne ExtraBold';
+    font-size: 48px;
+    line-height: 48px;
     font-weight: 800;
-  }
-
-  p {
-    margin-bottom: 0;
-    font-weight: 400;
-
-    strong {
-      font-family: 'Marianne ExtraBold';
-      font-weight: 400;
-    }
-  }
 }
 
 .intersection {
-  margin: 2.5rem 0;
-  color: var(--couleurs-mac-violet-tres-clair);
-  height: 40px;
+    margin: 2.5rem 0;
+    color: var(--couleurs-mac-violet-tres-clair);
+    height: 40px;
 }
 
 #contacts-et-liens-utiles-conteneur {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-  align-self: stretch;
-
-  h4 {
-    margin-bottom: 0;
-  }
-}
-
-#contacts-et-liens-utiles {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2.5rem;
-  align-self: stretch;
-
-  .contact-ou-lien-utile {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
     align-self: stretch;
 
-    p {
-      margin: 0;
+    h4 {
+        margin-bottom: 0;
     }
+}
 
-    .logos {
-      display: flex;
-      align-items: start;
-      justify-content: left;
-      gap: 1.5rem;
+#contacts-et-liens-utiles {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.5rem;
+    align-self: stretch;
 
-      img {
-        max-width: 19rem;
-        max-height: 7.5rem;
-      }
+    .contact-ou-lien-utile {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        align-self: stretch;
+
+        p {
+            margin: 0;
+        }
+
+        .logos {
+            display: flex;
+            align-items: start;
+            justify-content: left;
+            gap: 1.5rem;
+
+            img {
+                max-width: 19rem;
+                max-height: 7.5rem;
+            }
+        }
+
+        .titre {
+            font-family: 'Marianne ExtraBold';
+            font-weight: 800;
+            line-height: 2rem;
+            font-size: 1.375rem;
+        }
+
+        .lien {
+            color: var(--couleurs-mac-violet-fonce);
+        }
     }
-
-    .titre {
-      font-family: 'Marianne ExtraBold';
-      font-weight: 800;
-      line-height: 2rem;
-      font-size: 1.375rem;
-    }
-
-    .lien {
-      color: var(--couleurs-mac-violet-fonce);
-    }
-  }
 }
 
 .badge-gouvernance {
-  background-color: var(--couleurs-mac-gouvernance);
+    background-color: var(--couleurs-mac-gouvernance);
 }
+
 .badge-securiteacces {
-  background-color: var(--couleurs-mac-securiteacces);
+    background-color: var(--couleurs-mac-securiteacces);
 }
+
 .badge-securiteposte {
-  background-color: var(--couleurs-mac-securiteposte);
+    background-color: var(--couleurs-mac-securiteposte);
 }
+
 .badge-securiteinfrastructure {
-  background-color: var(--couleurs-mac-securiteinfrastructure);
+    background-color: var(--couleurs-mac-securiteinfrastructure);
 }
+
 .badge-sensibilisation {
-  background-color: var(--couleurs-mac-sensibilisation);
+    background-color: var(--couleurs-mac-sensibilisation);
 }
+
 .badge-reaction {
-  background-color: var(--couleurs-mac-reaction);
+    background-color: var(--couleurs-mac-reaction);
 }
 
 .badge {
-  width: 2.5rem;
-  height: 0.8rem;
-  display: inline-flex;
-  line-height: 1.5rem;
-  border-radius: 5rem;
-  margin-top: 0.4rem;
-  -webkit-print-color-adjust: exact;
+    width: 2.5rem;
+    height: 0.8rem;
+    display: inline-flex;
+    line-height: 1.5rem;
+    border-radius: 5rem;
+    margin-top: 0.4rem;
+    -webkit-print-color-adjust: exact;
 }
 
 .legende .sous-legende {
-  span {
-    padding-right: 1rem;
-  }
+    span {
+        padding-right: 1rem;
+    }
 }
 
 .page-de-garde {
@@ -332,4 +319,5 @@ h4 {
     }
 
 }
+
 /* stylelint-enable */

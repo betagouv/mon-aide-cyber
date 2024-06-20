@@ -5,11 +5,13 @@ div(class='fr-pt-md-5w')
             summary
                 | !{index + 7} . !{mesure.titre}
             div
-                div
-                    b Pourquoi ?
+                div(class="section-mesure")
+                    div
+                        b Pourquoi ?
                     div(class='fr-pt-md-2w fr-pb-md-3w')
                         | !{include(mesure.pourquoi)}
-                div
-                    b Comment mettre en œuvre cette mesure ?
+                div(class="section-mesure")
+                    div
+                        b Comment mettre en œuvre cette mesure ?
                     div(class='fr-pt-md-2w fr-pb-md-3w')
                         | !{include(mesure.comment)}
