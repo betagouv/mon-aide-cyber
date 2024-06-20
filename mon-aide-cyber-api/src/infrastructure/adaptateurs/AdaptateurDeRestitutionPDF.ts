@@ -50,6 +50,11 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
     );
     const autresMesures = restitution.mesures.autresMesures;
 
+    const contactsLiensUtilesEtRessources = this.genereHtml(
+      'contacts-liens-ressources',
+      {}
+    );
+
     const entete = pug.compileFile(
       `src/infrastructure/restitution/pdf/modeles/restitution.entete.pug`
     )();
@@ -63,6 +68,7 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
           pageDeGarde,
           indicateurs,
           mesuresPrioritaires,
+          contactsLiensUtilesEtRessources,
           this.genereAutresMesures(autresMesures),
         ],
         entete,
@@ -71,7 +77,12 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
     }
 
     return this.generePDF(
-      [pageDeGarde, indicateurs, mesuresPrioritaires],
+      [
+        pageDeGarde,
+        indicateurs,
+        mesuresPrioritaires,
+        contactsLiensUtilesEtRessources,
+      ],
       entete,
       piedPage
     );
