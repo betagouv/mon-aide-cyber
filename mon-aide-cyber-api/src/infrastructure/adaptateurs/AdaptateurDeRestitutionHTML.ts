@@ -19,7 +19,7 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
   protected async genere(
     mesures: Promise<ContenuHtml>[]
   ): Promise<RestitutionHTML> {
-    const autresMesures = await mesures[3];
+    const autresMesures = await mesures[5];
     return Promise.resolve({
       informations: (await mesures[0]).corps,
       indicateurs: (await mesures[1]).corps,
