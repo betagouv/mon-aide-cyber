@@ -149,7 +149,20 @@ html {
   height: 40px;
 }
 
-#contacts-et-liens-utiles-conteneur {
+#informations {
+  padding-top: 2.5rem;
+}
+#indicateurs {
+  padding-top: 2.5rem;
+}
+#mesures-prioritaires {
+  padding-top: 2.5rem;
+}
+
+
+#contacts-liens-utiles {
+  padding-top: 2.5rem;
+
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -159,48 +172,48 @@ html {
   h4 {
     margin-bottom: 0;
   }
-}
 
-#contacts-et-liens-utiles {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2.5rem;
-  align-self: stretch;
+  .titre {
+    font-family: 'Marianne ExtraBold';
+    font-weight: 800;
+    line-height: 2rem;
+    font-size: 1rem;
+    padding-bottom: 1rem;
+  }
 
-  .contact-ou-lien-utile {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-    align-self: stretch;
+  [class*="logo-"] {
+    width: 8rem;
+    height: 8rem;
+  }
 
-    p {
-      margin: 0;
-    }
+  @media screen and (min-width: 1440px) {
+    .contact {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
 
-    .logos {
-      display: flex;
-      align-items: start;
-      justify-content: left;
-      gap: 1.5rem;
-
-      img {
-        max-width: 19rem;
-        max-height: 7.5rem;
+      .logo {
+        text-align: left;
       }
     }
+  }
 
-    .titre {
-      font-family: 'Marianne ExtraBold';
-      font-weight: 800;
-      line-height: 2rem;
-      font-size: 1.375rem;
-    }
+  .logo {
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+  }
 
-    .lien {
-      color: var(--couleurs-mac-violet-fonce);
-    }
+}
+
+#ressources {
+  padding-top: 2.5rem;
+  .titre {
+    font-family: 'Marianne ExtraBold';
+    font-weight: 800;
+    line-height: 2rem;
+    font-size: 1rem;
+    padding-bottom: 1rem;
   }
 }
 

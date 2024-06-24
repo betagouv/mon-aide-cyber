@@ -14,9 +14,11 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
     return {
       liens: {},
       autresMesures: this.autresMesures,
+      contactsEtLiensUtiles: '',
       indicateurs: this.indicateurs,
       informations: this.informations,
       mesuresPrioritaires: this.mesuresPrioritaires,
+      ressources: '',
     };
   }
 }
