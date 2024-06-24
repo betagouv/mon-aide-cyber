@@ -249,22 +249,21 @@ export const ComposantRestitution = ({
                         </li>
                         <li
                           className={`fr-sidemenu__item ${
-                            etatRestitution.rubrique ===
-                            'contacts-et-liens-utiles'
+                            etatRestitution.rubrique === 'contacts-liens-utiles'
                               ? 'fr-sidemenu__item--active'
                               : ''
                           }`}
                         >
                           <a
                             className="fr-sidemenu__link"
-                            href="#contacts-et-liens-utiles"
+                            href="#contacts-liens-utiles"
                             target="_self"
                             {...(etatRestitution.rubrique ===
-                              'contacts-et-liens-utiles' && {
+                              'contacts-liens-utiles' && {
                               'aria-current': 'page',
                             })}
                             onClick={() =>
-                              rubriqueCliqueee('contacts-et-liens-utiles')
+                              rubriqueCliqueee('contacts-liens-utiles')
                             }
                           >
                             Contacts et liens utiles
@@ -314,163 +313,19 @@ export const ComposantRestitution = ({
                       etatRestitution.restitution?.mesuresPrioritaires || '',
                   }}
                 ></div>
-                <hr className="intersection" />
-                <div id="contacts-et-liens-utiles-conteneur">
-                  <h4>Contacts et liens utiles</h4>
-                  <div id="contacts-et-liens-utiles">
-                    <div className="contact-ou-lien-utile">
-                      <div className="logo">
-                        <img
-                          src="/images/logo_acyma.svg"
-                          alt="logo de Cybermalveillance"
-                          className="fr-responsive-img"
-                        />
-                      </div>
-                      <div className="titre">Cybermalveillance.gouv.fr</div>
-                      <div className="corps">
-                        Pour vous aider dans vos démarches de sécurisation avec
-                        des prestataires de confiance, Cybermalveillance.gouv.fr
-                        vous met en relation avec des professionnels labellisés
-                        ExpertCyber.
-                      </div>
-                      <div className="lien">
-                        <a
-                          href="https://www.cybermalveillance.gouv.fr/accompagnement"
-                          target="_blank"
-                          rel="noopener external noreferrer"
-                        >
-                          cybermalveillance.gouv.fr/accompagnement
-                        </a>
-                      </div>
-                    </div>
-                    <div className="contact-ou-lien-utile">
-                      <div className="logos">
-                        <img
-                          src="/images/logo_anssi.png"
-                          alt="logo de l'ANSSI"
-                          className="fr-responsive-img"
-                        />
-                      </div>
-                      <div className="titre">L&apos;ANSSI</div>
-                      <div className="corps">
-                        L’Agence nationale de la sécurité des systèmes
-                        d’informations. Son action pour la protection de la
-                        Nation face aux cyberattaques se traduit en quatre
-                        grandes missions : défendre, connaître, partager,
-                        accompagner.
-                      </div>
-                      <div className="lien">
-                        <a
-                          href="https://cyber.gouv.fr/"
-                          target="_blank"
-                          rel="noopener external noreferrer"
-                        >
-                          cyber.gouv.fr/
-                        </a>
-                      </div>
-                    </div>
-                    <div className="contact-ou-lien-utile">
-                      <div className="logos">
-                        <img
-                          src="/images/logo_republique_française.png"
-                          alt="logo et devise la République française"
-                          className="fr-responsive-img"
-                        />
-                        <img
-                          src="/images/logo_gendarmerie_nationale.svg"
-                          alt="logo de la gendarmerie nationale"
-                          className="fr-responsive-img"
-                        />
-                        <img
-                          src="/images/logo_police_nationale.svg"
-                          alt="logo de la police nationale"
-                          className="fr-responsive-img"
-                        />
-                      </div>
-                      <div className="titre">
-                        Ma sécurité, service de l&apos;État
-                      </div>
-                      <div className="corps">
-                        La gendarmerie et la police nationales vous accompagnent
-                        dans vos démarches de sécurité cyber.
-                      </div>
-                      <div className="lien">
-                        <a
-                          href="https://www.masecurite.interieur.gouv.fr/fr"
-                          target="_blank"
-                          rel="noopener external noreferrer"
-                        >
-                          masecurite.interieur.gouv.fr/fr
-                        </a>
-                      </div>
-                    </div>
-                    <div className="contact-ou-lien-utile">
-                      <div className="titre">La charte de L&apos;aidant</div>
-                      <div className="corps">
-                        <p>
-                          Vous avez effectué un diagnostic Mon Aide Cyber auprès
-                          d’un Aidant. Ce dernier doit respecter des règles,
-                          établies dans une charte.
-                        </p>
-                        <p>
-                          Le diagnostic MonAideCyber est une démarche gratuite
-                          et bénévole. Aucune proposition commerciale ne peut
-                          être établie à l’initiative de l’aidant ayant réalisé
-                          le diagnostic sauf s’il s’agit d’une demande de
-                          l’entité aidée, de sa propre initiative et en dehors
-                          du cadre de la démarche MonAideCyber.
-                        </p>
-                        <p>
-                          Il vous est possible à tout moment de prendre contact
-                          auprès d’un agent de l’ANSSI pour remonter toute
-                          problématique et/ou écart de conduite de l’aidant
-                          constaté via le mail suivant :{' '}
-                          <a href="mailto:monaidecyber@ssi.gouv.fr">
-                            monaidecyber@ssi.gouv.fr
-                          </a>
-                          .
-                        </p>
-                        <p>
-                          L’Aidant observe un devoir de confidentialité des
-                          échanges avec vous, et fait preuve de discrétion
-                          professionnelle de tous les faits et informations dont
-                          il a pris connaissance.
-                        </p>{' '}
-                        <br />
-                        Pour accéder à la charte de l’Aidant :
-                      </div>
-                      <div className="lien">
-                        <a
-                          href="https://monaidecyber.ssi.gouv.fr/charte-aidant"
-                          target="_blank"
-                          rel="noopener external noreferrer"
-                        >
-                          monaidecyber.ssi.gouv.fr/charte-aidant
-                        </a>
-                      </div>
-                    </div>
-                    <div className="contact-ou-lien-utile">
-                      <div className="logos">
-                        <img
-                          src="/images/logo_mac.svg"
-                          alt="logo de Mon Aide Cyber"
-                          className="fr-responsive-img"
-                        />
-                      </div>
-                      <div className="titre">L&apos;équipe MonAideCyber</div>
-                      <div className="corps">
-                        Si vous avez des remarques, des questions ou des
-                        remontées suite à votre diagnostic à partager, toute
-                        l’équipe de MonAideCyber se tient à votre écoute !
-                      </div>
-                      <div className="lien">
-                        <a href="mailto:monaidecyber@ssi.gouv.fr">
-                          monaidecyber@ssi.gouv.fr
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <div
+                  id="contacts-liens-utiles"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      etatRestitution.restitution?.contactsEtLiensUtiles || '',
+                  }}
+                ></div>
+                <div
+                  id="ressources"
+                  dangerouslySetInnerHTML={{
+                    __html: etatRestitution.restitution?.ressources || '',
+                  }}
+                ></div>
 
                 <div
                   id="autres-mesures"

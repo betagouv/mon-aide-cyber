@@ -252,7 +252,9 @@
     height: 40px;
   }
 
-  #contacts-et-liens-utiles-conteneur {
+  #contacts-liens-utiles {
+    page-break-before: always;
+
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -262,49 +264,14 @@
     h4 {
       margin-bottom: 0;
     }
-  }
 
-  #contacts-et-liens-utiles {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2.5rem;
-    align-self: stretch;
-
-    .contact-ou-lien-utile {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-      align-self: stretch;
-
-      p {
-        margin: 0;
-      }
-
-      .logos {
-        display: flex;
-        align-items: start;
-        justify-content: left;
-        gap: 1.5rem;
-
-        img {
-          max-width: 19rem;
-          max-height: 7.5rem;
-        }
-      }
-
-      .titre {
-        font-family: 'Marianne ExtraBold';
-        font-weight: 800;
-        line-height: 2rem;
-        font-size: 1.375rem;
-      }
-
-      .lien {
-        color: var(--couleurs-mac-violet-fonce);
-      }
+    [class*="logo-"] {
+      width: 8rem;
+      height: 8rem;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
+
   }
 
   .badge-gouvernance {

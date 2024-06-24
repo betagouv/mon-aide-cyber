@@ -65,6 +65,23 @@
   cursor: pointer;
 }
 
+.logo-anssi-leger {
+  background: $logo-anssi no-repeat;
+  background-size: 8rem;
+}
+
+.logo-acyma {
+  background: $logo-acyma no-repeat;
+}
+
+.logo-gendarmerie {
+  background: $logo-gendarmerie no-repeat;
+}
+
+.logo-police-nationale {
+  background: $logo-police-nationale no-repeat;
+}
+
 .lien-mac {
   color: var(--couleurs-mac-violet-primaire);
 }
