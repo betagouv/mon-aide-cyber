@@ -34,9 +34,11 @@ describe('Adapatateur de Restitution HTML', () => {
 
       expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: '',
+        contactsEtLiensUtiles: '',
         indicateurs: '',
         informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: 'une mesure prioritaire',
+        ressources: '',
       });
     });
 
@@ -56,9 +58,11 @@ describe('Adapatateur de Restitution HTML', () => {
 
       expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: '',
+        contactsEtLiensUtiles: '',
         indicateurs: '',
         informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: 'une mesure prioritaire',
+        ressources: '',
       });
     });
 
@@ -78,9 +82,11 @@ describe('Adapatateur de Restitution HTML', () => {
 
       expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: '',
+        contactsEtLiensUtiles: '',
         indicateurs: "un graphe d'indicateurs",
         informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: '',
+        ressources: '',
       });
     });
 
@@ -100,9 +106,11 @@ describe('Adapatateur de Restitution HTML', () => {
 
       expect(restitutionHTML).toStrictEqual<RestitutionHTML>({
         autresMesures: 'une mesure non prioritaire',
+        contactsEtLiensUtiles: '',
         indicateurs: '',
         informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: '',
+        ressources: '',
       });
     });
   });

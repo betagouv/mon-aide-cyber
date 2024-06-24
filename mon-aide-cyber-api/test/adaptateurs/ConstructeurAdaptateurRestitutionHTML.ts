@@ -60,6 +60,22 @@ class ConstructeurAdaptateurRestitutionHTML {
           piedPage: '',
         });
       }
+
+      protected genereContactsEtLiensUtiles(): Promise<ContenuHtml> {
+        return Promise.resolve({
+          entete: '',
+          corps: '',
+          piedPage: '',
+        });
+      }
+
+      protected genereRessources(): Promise<ContenuHtml> {
+        return Promise.resolve({
+          entete: '',
+          corps: '',
+          piedPage: '',
+        });
+      }
     })();
   }
 

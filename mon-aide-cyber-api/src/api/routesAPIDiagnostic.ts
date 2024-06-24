@@ -168,7 +168,9 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
 
 export type ReprensentationRestitution = ReponseHATEOAS & {
   autresMesures: string;
+  contactsEtLiensUtiles: string;
   indicateurs: string;
   informations: string;
   mesuresPrioritaires: string;
+  ressources: string;
 };
