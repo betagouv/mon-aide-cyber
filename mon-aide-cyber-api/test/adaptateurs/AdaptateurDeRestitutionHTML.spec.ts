@@ -1,10 +1,6 @@
 import { describe, it } from 'vitest';
 
 import { unAdaptateurDeRestitutionHTML } from './ConstructeurAdaptateurRestitutionHTML';
-import {
-  AdaptateurDeRestitutionHTML,
-  RestitutionHTML,
-} from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import {
@@ -14,6 +10,10 @@ import {
 import { uneMesurePriorisee } from '../constructeurs/constructeurMesure';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
+import {
+  AdaptateurDeRestitutionHTML,
+  RestitutionHTML,
+} from '../../src/infrastructure/adaptateurs/AdaptateurDeRestitutionHTML';
 
 describe('Adapatateur de Restitution HTML', () => {
   const entrepots: Entrepots = new EntrepotsMemoire();

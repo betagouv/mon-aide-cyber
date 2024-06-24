@@ -1,5 +1,6 @@
 import {
   AdaptateurDeRestitution,
+  ContenuHtml,
   estMesurePrioritaire,
 } from '../../adaptateurs/AdaptateurDeRestitution';
 import * as pug from 'pug';
@@ -157,8 +158,6 @@ const fusionnePdfs = (pdfs: Buffer[]): Promise<Buffer> => {
     .then((fusion) => fusion.save())
     .then((pdf) => Buffer.from(pdf));
 };
-
-export type ContenuHtml = { corps: string; entete: string; piedPage: string };
 
 const generePdfs = async (
   pagesHtml: ContenuHtml[],

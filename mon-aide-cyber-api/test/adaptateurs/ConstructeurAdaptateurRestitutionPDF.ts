@@ -1,6 +1,8 @@
-import { ContenuHtml } from '../../src/infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import { Diagnostic, MesurePriorisee } from '../../src/diagnostic/Diagnostic';
-import { AdaptateurDeRestitution } from '../../src/adaptateurs/AdaptateurDeRestitution';
+import {
+  AdaptateurDeRestitution,
+  ContenuHtml,
+} from '../../src/adaptateurs/AdaptateurDeRestitution';
 import { Entrepots } from '../../src/domaine/Entrepots';
 
 export const unAdaptateurRestitutionPDF = () =>

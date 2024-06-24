@@ -3,7 +3,6 @@ import {
   MesurePriorisee,
   ORDRE_THEMATIQUES,
 } from '../diagnostic/Diagnostic';
-import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import { Restitution } from '../restitution/Restitution';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
@@ -12,6 +11,8 @@ export const estMesurePrioritaire = (
 ): mesurePrioritaire is MesurePriorisee[] => {
   return mesurePrioritaire !== undefined && mesurePrioritaire.length > 0;
 };
+
+export type ContenuHtml = { corps: string; entete: string; piedPage: string };
 
 export abstract class AdaptateurDeRestitution<T> {
   constructor(private readonly traductionThematiques: Map<string, string>) {}

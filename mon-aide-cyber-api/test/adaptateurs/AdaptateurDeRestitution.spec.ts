@@ -1,7 +1,9 @@
 import { describe, it } from 'vitest';
-import { AdaptateurDeRestitution } from '../../src/adaptateurs/AdaptateurDeRestitution';
+import {
+  AdaptateurDeRestitution,
+  ContenuHtml,
+} from '../../src/adaptateurs/AdaptateurDeRestitution';
 import { Indicateurs, MesurePriorisee } from '../../src/diagnostic/Diagnostic';
-import { ContenuHtml } from '../../src/infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { Restitution } from '../../src/restitution/Restitution';
