@@ -32,6 +32,7 @@ export const transcripteurGouvernance: Thematique = {
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour',
           'info-bulles': ['gouvernance/schema-si-composants.pug'],
+          perimetre: 'SYSTEME-INDUSTRIEL',
         },
       ],
     },

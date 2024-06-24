@@ -56,6 +56,9 @@ export class RepresentationGroupee {
                       questionATranscrire['info-bulles']
                     ),
                   }),
+                  ...(questionATranscrire['perimetre'] && {
+                    perimetre: questionATranscrire['perimetre'],
+                  }),
                 };
               }
               return undefined;

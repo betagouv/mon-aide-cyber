@@ -18,6 +18,7 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
         },
         {
           identifiant: 'securite-infrastructure-si-industriel-pare-feu-deploye',
+          perimetre: 'SYSTEME-INDUSTRIEL',
           'info-bulles': ['infrastructures/cloisonnement-si-industriels.pug'],
         },
       ],

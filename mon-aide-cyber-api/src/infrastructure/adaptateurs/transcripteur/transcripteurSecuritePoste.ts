@@ -24,6 +24,7 @@ export const transcripteurSecuritePoste: Thematique = {
         {
           identifiant:
             'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
+          perimetre: 'SYSTEME-INDUSTRIEL',
         },
       ],
     },
@@ -38,6 +39,7 @@ export const transcripteurSecuritePoste: Thematique = {
         },
         {
           identifiant: 'securite-poste-si-industriel-antivirus-deploye',
+          perimetre: 'SYSTEME-INDUSTRIEL',
         },
       ],
     },

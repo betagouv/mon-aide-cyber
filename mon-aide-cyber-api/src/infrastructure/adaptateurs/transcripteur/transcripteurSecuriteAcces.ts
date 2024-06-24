@@ -99,6 +99,7 @@ export const transcripteurSecuriteAcces: Thematique = {
         {
           identifiant:
             'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
+          perimetre: 'SYSTEME-INDUSTRIEL',
         },
       ],
     },

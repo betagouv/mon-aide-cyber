@@ -48,7 +48,9 @@ type RepresentationReponseDonnee = {
   valeur: string | null;
   reponses: { identifiant: string; reponses: string[] }[];
 };
+type Perimetre = 'SYSTEME-INDUSTRIEL';
 export type RepresentationQuestion = {
+  perimetre?: Perimetre;
   identifiant: string;
   libelle: string;
   reponseDonnee: RepresentationReponseDonnee;
@@ -91,10 +93,11 @@ export type ReponseATranscrire = {
 };
 type InfoBulle = string;
 export type QuestionATranscrire = {
+  perimetre?: Perimetre;
   identifiant: string;
+  'info-bulles'?: InfoBulle[];
   reponses?: ReponseATranscrire[];
   type?: TypeDeSaisie;
-  'info-bulles'?: InfoBulle[];
 };
 export type Thematique = {
   styles: StyleThematique;
