@@ -419,6 +419,8 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
           },
         },
         autresMesures: '',
+        contactsEtLiensUtiles: '',
+        ressources: '',
         indicateurs: 'indicateurs',
         informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: 'mesures prioritaires',

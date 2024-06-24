@@ -6,6 +6,8 @@ import {
 
 export type RestitutionHTML = {
   autresMesures: string;
+  contactsEtLiensUtiles: string;
+  ressources: string;
   indicateurs: string;
   informations: string;
   mesuresPrioritaires: string;
@@ -24,6 +26,8 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
       informations: (await mesures[0]).corps,
       indicateurs: (await mesures[1]).corps,
       mesuresPrioritaires: (await mesures[2]).corps,
+      contactsEtLiensUtiles: (await mesures[3]).corps,
+      ressources: (await mesures[4]).corps,
       autresMesures: autresMesures ? autresMesures.corps : '',
     });
   }
