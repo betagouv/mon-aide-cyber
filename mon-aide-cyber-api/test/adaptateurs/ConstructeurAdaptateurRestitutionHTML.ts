@@ -1,8 +1,8 @@
 import { Indicateurs, MesurePriorisee } from '../../src/diagnostic/Diagnostic';
-import { ContenuHtml } from '../../src/infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 
-import { AdaptateurDeRestitutionHTML } from '../../src/adaptateurs/AdaptateurDeRestitutionHTML';
 import { Restitution } from '../../src/restitution/Restitution';
+import { ContenuHtml } from '../../src/adaptateurs/AdaptateurDeRestitution';
+import { AdaptateurDeRestitutionHTML } from '../../src/infrastructure/adaptateurs/AdaptateurDeRestitutionHTML';
 
 class ConstructeurAdaptateurRestitutionHTML {
   private corpsMesuresPrioritaires = '';

@@ -8,13 +8,13 @@ import bodyParser from 'body-parser';
 import { SagaAjoutReponse } from '../diagnostic/CapteurSagaAjoutReponse';
 import { ErreurMAC } from '../domaine/erreurMAC';
 import { Restitution } from '../restitution/Restitution';
-import { RestitutionHTML } from '../adaptateurs/AdaptateurDeRestitutionHTML';
 import { RequeteUtilisateur } from './routesAPI';
 import { CommandeLanceDiagnostic } from '../diagnostic/CapteurCommandeLanceDiagnostic';
 import { Diagnostic } from '../diagnostic/Diagnostic';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
 import { RepresentationDiagnostic } from './representateurs/types';
 import { unObjet, unUtilisateur } from '../relation/Tuple';
+import { RestitutionHTML } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionHTML';
 
 export type ReponseDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 

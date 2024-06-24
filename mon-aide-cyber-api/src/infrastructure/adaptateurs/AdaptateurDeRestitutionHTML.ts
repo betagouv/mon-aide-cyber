@@ -1,6 +1,8 @@
-import { AdaptateurDeRestitution } from './AdaptateurDeRestitution';
-import { ContenuHtml } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionPDF';
 import * as pug from 'pug';
+import {
+  AdaptateurDeRestitution,
+  ContenuHtml,
+} from '../../adaptateurs/AdaptateurDeRestitution';
 
 export type RestitutionHTML = {
   autresMesures: string;
