@@ -41,15 +41,26 @@ export abstract class AdaptateurDeRestitution<T> {
     );
     const autresMesures = restitution.mesures.autresMesures;
 
+    const contactsLiensUtiles = this.genereContactsEtLiensUtiles();
+    const ressources = this.genereRessources();
+
     if (estMesurePrioritaire(autresMesures)) {
       return this.genere([
         informations,
         indicateurs,
         mesuresPrioritaires,
+        contactsLiensUtiles,
+        ressources,
         this.genereAutresMesures(autresMesures),
       ]);
     }
-    return this.genere([informations, indicateurs, mesuresPrioritaires]);
+    return this.genere([
+      informations,
+      indicateurs,
+      mesuresPrioritaires,
+      contactsLiensUtiles,
+      ressources,
+    ]);
   }
 
   protected abstract genere(mesures: Promise<ContenuHtml>[]): Promise<T>;
@@ -101,5 +112,13 @@ export abstract class AdaptateurDeRestitution<T> {
     return this.genereHtml('mesures', {
       mesures: mesuresPrioritaires,
     });
+  }
+
+  protected genereContactsEtLiensUtiles(): Promise<ContenuHtml> {
+    return this.genereHtml('contacts-liens-utiles', {});
+  }
+
+  protected genereRessources(): Promise<ContenuHtml> {
+    return this.genereHtml('ressources', {});
   }
 }

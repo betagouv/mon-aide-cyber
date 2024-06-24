@@ -1,13 +1,11 @@
 import {
   AdaptateurDeRestitution,
   ContenuHtml,
-  estMesurePrioritaire,
 } from '../../adaptateurs/AdaptateurDeRestitution';
 import * as pug from 'pug';
 import puppeteer, { Browser, PDFOptions } from 'puppeteer';
 import { PDFDocument } from 'pdf-lib';
 import { Restitution } from '../../restitution/Restitution';
-import { Indicateurs, ORDRE_THEMATIQUES } from '../../diagnostic/Diagnostic';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
 
 const forgeIdentifiant = (identifiant: string): string =>
@@ -17,96 +15,31 @@ const forgeIdentifiant = (identifiant: string): string =>
   )} ${identifiant.substring(6, 8)}`.toUpperCase();
 
 export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> {
+  private identifiant = '';
   constructor(traductionThematiques: Map<string, string>) {
     super(traductionThematiques);
   }
 
   genereRestitution(restitution: Restitution): Promise<Buffer> {
-    const identifiant = forgeIdentifiant(restitution.identifiant);
+    this.identifiant = forgeIdentifiant(restitution.identifiant);
+    return super.genereRestitution(restitution);
+  }
+
+  protected genere(mesures: Promise<ContenuHtml>[]) {
     const pageDeGarde = this.genereHtml('restitution.page-de-garde', {
       dateGeneration: FournisseurHorloge.formateDate(
         FournisseurHorloge.maintenant()
       ),
-      identifiant,
+      identifiant: this.identifiant,
     });
-    const indicateursRestitution: Indicateurs = Object.entries(
-      restitution.indicateurs
-    )
-      .sort(([thematiqueA], [thematiqueB]) =>
-        ORDRE_THEMATIQUES.indexOf(thematiqueA) >
-        ORDRE_THEMATIQUES.indexOf(thematiqueB)
-          ? 1
-          : -1
-      )
-      .reduce(
-        (accumulateur, [thematique, indicateur]) => ({
-          ...accumulateur,
-          [thematique]: indicateur,
-        }),
-        {}
-      );
-    const indicateurs = this.genereIndicateurs(indicateursRestitution);
-    const mesuresPrioritaires = this.genereMesuresPrioritaires(
-      restitution.mesures.mesuresPrioritaires
-    );
-    const autresMesures = restitution.mesures.autresMesures;
-
-    const contactsLiensUtilesEtRessources = this.genereHtml(
-      'contacts-liens-ressources',
-      {}
-    );
-
-    const entete = pug.compileFile(
-      `src/infrastructure/restitution/pdf/modeles/restitution.entete.pug`
-    )();
-    const piedPage = pug.compileFile(
-      `src/infrastructure/restitution/pdf/modeles/restitution.piedpage.pug`
-    )({ identifiant });
-
-    if (estMesurePrioritaire(autresMesures)) {
-      return this.generePDF(
-        [
-          pageDeGarde,
-          indicateurs,
-          mesuresPrioritaires,
-          contactsLiensUtilesEtRessources,
-          this.genereAutresMesures(autresMesures),
-        ],
-        entete,
-        piedPage
-      );
-    }
-
-    return this.generePDF(
-      [
-        pageDeGarde,
-        indicateurs,
-        mesuresPrioritaires,
-        contactsLiensUtilesEtRessources,
-      ],
-      entete,
-      piedPage
-    );
-  }
-
-  private generePDF(
-    contenuHtml: Promise<ContenuHtml>[],
-    entete: string,
-    piedPage: string
-  ) {
-    return Promise.all(contenuHtml)
-      .then((htmls) => generePdfs(htmls, entete, piedPage))
+    mesures.unshift(pageDeGarde);
+    return Promise.all(mesures)
+      .then((htmls) => generePdfs(htmls, this.identifiant))
       .then((pdfs) => fusionnePdfs(pdfs))
       .catch((erreur) => {
-        console.log('Erreur génération recos', erreur);
+        console.log('Erreur génération restitution', erreur);
         throw new Error(erreur);
       });
-  }
-
-  protected genere(_mesures: Promise<ContenuHtml>[]): Promise<Buffer> {
-    throw new Error(
-      'Non implémenté car la gérénation PDF diffère de la génération HTML'
-    );
   }
 
   async genereHtml(pugCorps: string, paramsCorps: any): Promise<ContenuHtml> {
@@ -161,8 +94,7 @@ const fusionnePdfs = (pdfs: Buffer[]): Promise<Buffer> => {
 
 const generePdfs = async (
   pagesHtml: ContenuHtml[],
-  entete: string,
-  piedPage: string
+  identifiant: string
 ): Promise<Buffer[]> => {
   const pagesHtmlRemplies = pagesHtml.filter(
     (pageHtml) => pageHtml.corps !== ''
@@ -180,10 +112,15 @@ const generePdfs = async (
         corps: '',
       } as ContenuHtml
     );
+
     const contenuFinal: ContenuHtml = {
       corps: contenu.corps,
-      entete,
-      piedPage,
+      entete: pug.compileFile(
+        'src/infrastructure/restitution/pdf/modeles/restitution.entete.pug'
+      )(),
+      piedPage: pug.compileFile(
+        'src/infrastructure/restitution/pdf/modeles/restitution.piedpage.pug'
+      )({ identifiant }),
     };
     const resultat = navigateur.newPage().then((page) => {
       return page
