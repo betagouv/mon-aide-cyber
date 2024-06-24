@@ -22,6 +22,7 @@ import { Question, ReponsePossible } from '../../../src/diagnostic/Referentiel';
 import {
   RepresentationDiagnostic,
   RepresentationGroupes,
+  RepresentationQuestion,
   RepresentationReponsePossible,
   RepresentationThematique,
 } from '../../../src/api/representateurs/types';
@@ -405,6 +406,64 @@ describe('Le représentateur de diagnostic', () => {
             type: 'choixUnique',
           });
         });
+      });
+    });
+
+    it('indique si la question concerne un périmètre', () => {
+      const reponse = uneReponsePossible().construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .sansThematique()
+            .ajouteUneThematique('systeme-indus', [
+              uneQuestion()
+                .aChoixUnique('Une question pour systeme industriel ?')
+                .avecReponsesPossibles([reponse])
+                .construis(),
+            ])
+            .construis()
+        )
+        .construis();
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        unTranscripteur()
+          .avecLesThematiques(['systeme-indus'])
+          .avecLesQuestionsGroupees([
+            {
+              groupes: [
+                {
+                  questions: [
+                    {
+                      identifiant: 'une-question-pour-systeme-industriel-',
+                      reponses: [],
+                      perimetre: 'SYSTEME-INDUSTRIEL',
+                    },
+                  ],
+                },
+              ],
+              thematique: 'systeme-indus',
+            },
+          ])
+          .construis()
+      );
+
+      expect(
+        representationDiagnostic.referentiel['systeme-indus'].groupes[0]
+          .questions[0]
+      ).toStrictEqual<RepresentationQuestion>({
+        perimetre: 'SYSTEME-INDUSTRIEL',
+        identifiant: 'une-question-pour-systeme-industriel-',
+        libelle: 'Une question pour systeme industriel ?',
+        reponsesPossibles: [
+          {
+            identifiant: reponse.identifiant,
+            libelle: reponse.libelle,
+            ordre: reponse.ordre,
+          },
+        ],
+        reponseDonnee: { valeur: null, reponses: [] },
+        type: 'choixUnique',
       });
     });
   });
