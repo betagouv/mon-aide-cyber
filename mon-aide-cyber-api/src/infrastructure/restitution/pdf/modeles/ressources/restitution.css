@@ -152,7 +152,8 @@ h4 {
     }
 }
 
-#ressources {
+#section-ressources {
+    margin-top: 20mm;
     page-break-after: always;
 
     h4 {
