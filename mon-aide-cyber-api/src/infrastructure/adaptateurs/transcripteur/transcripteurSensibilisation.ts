@@ -19,6 +19,7 @@ export const transcripteurSensibilisation: Thematique = {
         },
         {
           identifiant: 'sensibilisation-risque-espionnage-industriel-r-et-d',
+          perimetre: 'ESPIONNAGE-CIBLE',
           'info-bulles': [
             'sensibilisation/passeport-conseils-cyber-voyageurs.pug',
           ],

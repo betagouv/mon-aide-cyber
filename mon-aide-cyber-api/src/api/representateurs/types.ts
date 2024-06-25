@@ -48,7 +48,7 @@ type RepresentationReponseDonnee = {
   valeur: string | null;
   reponses: { identifiant: string; reponses: string[] }[];
 };
-type Perimetre = 'SYSTEME-INDUSTRIEL';
+type Perimetre = 'SYSTEME-INDUSTRIEL' | 'ESPIONNAGE-CIBLE';
 export type RepresentationQuestion = {
   perimetre?: Perimetre;
   identifiant: string;

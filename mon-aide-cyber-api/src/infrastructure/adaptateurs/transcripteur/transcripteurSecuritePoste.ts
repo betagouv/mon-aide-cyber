@@ -63,6 +63,7 @@ export const transcripteurSecuritePoste: Thematique = {
       questions: [
         {
           identifiant: 'securite-poste-r-et-d-disques-chiffres',
+          perimetre: 'ESPIONNAGE-CIBLE',
           'info-bulles': [
             'postes/windows-bitlocker-installe.pug',
             'postes/materiels-nomades.pug',
