@@ -486,7 +486,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant:
         'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
       libelle:
-        'Si l’entité dispose de systèmes industriels : les accès distants aux systèmes industriels sont-ils protégés par une authentification multifacteur ?',
+        'Les accès distants aux systèmes industriels sont-ils protégés par une authentification multifacteur ?',
       poids: 1,
       reponsesPossibles: [
         {

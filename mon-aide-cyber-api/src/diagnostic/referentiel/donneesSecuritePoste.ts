@@ -62,7 +62,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
       identifiant:
         'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
       libelle:
-        "Si l'entité dispose de systèmes industriels : les mises à jour fonctionnelles et de sécurité sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?",
+        'Les mises à jour fonctionnelles et de sécurité sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?',
       poids: 2,
       reponsesPossibles: [
         {
@@ -175,7 +175,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     {
       identifiant: 'securite-poste-si-industriel-antivirus-deploye',
       libelle:
-        "Si l'entité dispose de systèmes industriels : Un antivirus à jour est-il déployé sur chaque poste de travail du SI industriel ?",
+        'Un antivirus à jour est-il déployé sur chaque poste de travail du SI industriel ?',
       poids: 2,
       reponsesPossibles: [
         {
