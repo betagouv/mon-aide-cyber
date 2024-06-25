@@ -316,8 +316,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     },
     {
       identifiant: 'securite-poste-r-et-d-disques-chiffres',
-      libelle:
-        'Si entité avec risque d’espionnage ciblé, les disques durs des matériels nomades sont-ils chiffrés ?',
+      libelle: 'Les disques durs des matériels nomades sont-ils chiffrés ?',
       poids: 2,
       reponsesPossibles: [
         {

@@ -49,7 +49,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-liste-compte-utilisateurs',
       libelle:
-        'Si entité avec risque d’espionnage ciblé : la liste des comptes utilisateurs (prestataires inclus) est-elle maintenue à jour ?',
+        'La liste des comptes utilisateurs (prestataires inclus) est-elle maintenue à jour ?',
       poids: 1,
       reponsesPossibles: [
         {
@@ -104,7 +104,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-droits-acces-utilisateurs-limites',
       libelle:
-        'Si entité avec risque d’espionnage ciblé : les droits des utilisateurs sont-ils limités à leurs besoins métiers ?',
+        'Les droits des utilisateurs sont-ils limités à leurs besoins métiers ?',
       poids: 1,
       reponsesPossibles: [
         {
@@ -361,7 +361,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       identifiant:
         'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
       libelle:
-        "Si entité avec risque d’espionnage ciblé, l'accès des utilisateurs aux ressources et données les plus sensibles fait-il l’objet de mesures de sécurité additionnelles ?",
+        "L'accès des utilisateurs aux ressources et données les plus sensibles fait-il l’objet de mesures de sécurité additionnelles ?",
       poids: 1,
       reponsesPossibles: [
         {
