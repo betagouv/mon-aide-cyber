@@ -125,7 +125,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-schema-si-industriel-a-jour',
       libelle:
-        "Si l'entité dispose de systèmes industriels : Existe-t-il un plan et un inventaire des systèmes d'informations industriels de l'organisation ?",
+        "Existe-t-il un plan et un inventaire des systèmes d'informations industriels de l'organisation ?",
       poids: 1,
       type: 'choixUnique',
       reponsesPossibles: [
