@@ -185,6 +185,7 @@ h4 {
 }
 
 .restitution {
+    padding-right: 13mm;
 
     details {
         position: relative;
