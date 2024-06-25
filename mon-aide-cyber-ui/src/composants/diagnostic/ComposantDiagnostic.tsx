@@ -157,7 +157,7 @@ const ComposantQuestionListe = ({
     <div
       className={`fr-select-group ${
         !numeroQuestion ? 'fr-pt-2w' : ''
-      } fr-col-12`}
+      } fr-col-12 conteneur-question conteneur-question-liste`}
     >
       <label className="fr-label" htmlFor={`select-${question.identifiant}`}>
         <h5>
@@ -262,11 +262,19 @@ const ComposantQuestion = ({
       }
     }
   }, [actions, etatReponse, macapi, question, reponseQuestionEnvoyee]);
+
+  const badge = question.perimetre ? (
+    <p className="fr-icon-database-fill badge-diagnostic">SYSTÈME INDUSTRIEL</p>
+  ) : (
+    <></>
+  );
+
   return (
     <div
       id={question.identifiant}
-      className={`${!numeroQuestion ? `fr-pt-2w` : ''}`}
+      className={`${!numeroQuestion ? `fr-pt-2w` : ''} ${question.perimetre ? 'contexte' : ''} conteneur-question`}
     >
+      {badge}
       <label className="fr-label">
         <h5>
           {numeroQuestion ? `${numeroQuestion}. ` : ''}

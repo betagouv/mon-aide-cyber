@@ -37,15 +37,62 @@
 .diagnostic {
   margin-top: 6.7rem;
 
+  .section {
+    padding: 0 !important;
+    margin: 2.5rem 0 0 !important;
+  }
+
+  .section > div:first-child {
+    padding-bottom: 0.5rem !important;
+  }
+
+  .section > div:only-child {
+    padding-bottom: 3.5rem !important;
+  }
+
+  .section > div:not(:first-child) {
+    padding-top: 0.5rem !important;
+  }
+
+  .section > div:not(:first-child)[class*="conteneur-question-liste"] {
+    padding-top: 0 !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  .section > div:last-child[class*="conteneur-question-liste"] {
+    padding-top: 0 !important;
+    padding-bottom: 3.5rem !important;
+  }
+
+  .section > div:not(:first-child)[class*="contexte"] {
+    padding-top: 0 !important;
+  }
+
+  .conteneur-question {
+    padding: 3rem 6.375rem;
+  }
+
+  .contexte {
+    background-color: rgba(#fdc82e, 0.1);
+  }
+
   @media screen and (max-width: 768px) {
-    .section {
-      margin: 2.5rem 0 0;
+    .contexte {
+      border-radius: 0 0 0.5rem 0.5rem;
+    }
+    .conteneur-question {
+      margin: 0 !important;
+      padding: 1.5rem 1rem;
     }
   }
 
   @media screen and (min-width: 769px) {
-    .section {
-      margin: 2.5rem 0 0;
+    .contexte {
+      border-radius: 0 0 1rem 1rem;
+    }
+    .conteneur-question {
+      margin: 0 !important;
+      padding: 3.5rem 6.375rem !important;
     }
   }
 
@@ -62,7 +109,7 @@
       padding-left: 1.75rem;
     }
 
-    .section {
+    .conteneur-question {
       padding: 3.5rem 2.5rem !important;
     }
 
@@ -152,6 +199,40 @@
   .navigation-contexte {
     @include bouton-navigation($contexte);
   }
+
+  .badge-diagnostic {
+    --text-spacing: 0;
+    --title-spacing: 0;
+    --underline-img: none;
+    --hover-tint: var(--hover);
+    --idle: transparent;
+    --hover: var(--background-contrast-grey-hover);
+    --active: var(--background-contrast-grey-active);
+    align-items: center;
+    border-radius: .25rem;
+    display: inline-flex;
+    flex-direction: row;
+    font-weight: 700;
+    max-height: none;
+    max-width: 100%;
+    overflow: initial;
+    text-transform: uppercase;
+    width: fit-content;
+    font-size: .75rem;
+    line-height: 1.25rem;
+    min-height: 1.125rem;
+    padding: 0 .375rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    background-color: var(--couleurs-mac-jaune-fonce) !important;
+    color: var(--couleurs-mac-violet-fonce);
+  }
+
+  [class^=fr-icon-]:before {
+    --icon-size: 0.75rem;
+    margin-right: 0.25rem;
+  }
+
 }
 
 .bandeau-thematique {
@@ -213,9 +294,10 @@
   background-color: var(--couleurs-mac-noir) !important;
 }
 
-.question > fieldset {
+.question .fieldset {
   margin-right: 0 !important;
   margin-left: 0 !important;
+  padding: 0 !important;
 }
 
 .introduction-thematique {

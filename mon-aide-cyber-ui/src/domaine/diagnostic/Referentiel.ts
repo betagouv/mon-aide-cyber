@@ -44,4 +44,5 @@ export type Question = {
   reponsesPossibles: ReponsePossible[];
   type: TypeDeSaisie;
   'info-bulles'?: string[];
+  perimetre?: 'SYSTEME-INDUSTRIEL';
 };
