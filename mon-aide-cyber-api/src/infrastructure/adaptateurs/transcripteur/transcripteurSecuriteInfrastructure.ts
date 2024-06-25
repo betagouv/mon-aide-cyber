@@ -56,6 +56,7 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
       questions: [
         {
           identifiant: 'securite-infrastructure-acces-wifi-securises',
+          perimetre: 'ESPIONNAGE-CIBLE',
           'info-bulles': ['infrastructures/securiser-wifi.pug'],
         },
       ],
@@ -64,6 +65,7 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
       questions: [
         {
           identifiant: 'securite-infrastructure-espace-stockage-serveurs',
+          perimetre: 'ESPIONNAGE-CIBLE',
           'info-bulles': [
             'infrastructures/acces-serveurs.pug',
             'infrastructures/expert-surete-gendarmerie.pug',

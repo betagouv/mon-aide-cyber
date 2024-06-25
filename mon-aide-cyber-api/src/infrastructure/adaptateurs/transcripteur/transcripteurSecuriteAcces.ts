@@ -25,6 +25,7 @@ export const transcripteurSecuriteAcces: Thematique = {
       questions: [
         {
           identifiant: 'acces-liste-compte-utilisateurs',
+          perimetre: 'ESPIONNAGE-CIBLE',
           'info-bulles': ['acces/comptes-utilisateurs.pug'],
         },
       ],
@@ -33,6 +34,7 @@ export const transcripteurSecuriteAcces: Thematique = {
       questions: [
         {
           identifiant: 'acces-droits-acces-utilisateurs-limites',
+          perimetre: 'ESPIONNAGE-CIBLE',
           'info-bulles': ['acces/droits-utilisateurs.pug'],
         },
       ],
@@ -86,6 +88,7 @@ export const transcripteurSecuriteAcces: Thematique = {
         {
           identifiant:
             'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
+          perimetre: 'ESPIONNAGE-CIBLE',
           'info-bulles': ['acces/acces-utilisateurs-donnees-sensibles.pug'],
         },
       ],
