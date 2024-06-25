@@ -384,8 +384,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
     },
     {
       identifiant: 'securite-infrastructure-acces-wifi-securises',
-      libelle:
-        'Si entité avec risque d’espionnage ciblé : les points d’accès wifi sont-ils sécurisés ?',
+      libelle: 'Les points d’accès wifi sont-ils sécurisés ?',
       poids: 1,
       reponsesPossibles: [
         {
@@ -441,7 +440,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
     {
       identifiant: 'securite-infrastructure-espace-stockage-serveurs',
       libelle:
-        "Si entité avec risque d’espionnage ciblé : l'accès à la salle ou à l'espace dédié au stockage des serveurs d'administration, baies informatiques et des équipements réseau est-il protégé par une porte sécurisée ?",
+        "L'accès à la salle ou à l'espace dédié au stockage des serveurs d'administration, baies informatiques et des équipements réseau est-il protégé par une porte sécurisée ?",
       poids: 1,
       reponsesPossibles: [
         {

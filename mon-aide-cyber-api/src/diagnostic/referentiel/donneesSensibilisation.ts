@@ -62,7 +62,7 @@ export const donneesSensibilisation: QuestionsThematique = {
     {
       identifiant: 'sensibilisation-risque-espionnage-industriel-r-et-d',
       libelle:
-        "Si entité avec risque d’espionnage ciblé : menez-vous des actions de sensibilisation ciblant spécifiquement les collaborateurs effectuant des missions à l'étranger ?",
+        "Menez-vous des actions de sensibilisation ciblant spécifiquement les collaborateurs effectuant des missions à l'étranger ?",
       poids: 2,
       reponsesPossibles: [
         {
