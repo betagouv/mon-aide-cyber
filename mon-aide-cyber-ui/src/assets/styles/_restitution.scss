@@ -3,6 +3,7 @@
 html {
   scroll-padding-top: 200px;
 }
+
 .restitution {
   .menu-restitution {
     margin: 5.5rem 0;
@@ -11,10 +12,12 @@ html {
   h3 {
     color: var(--couleurs-mac-violet-fonce);
   }
+
   h4 {
     font-size: 32px;
     line-height: 42px;
   }
+
   h5 {
     button {
       color: var(--couleurs-mac-violet-fonce) !important;
@@ -22,7 +25,11 @@ html {
       line-height: 32px;
       padding-right: 16px;
     }
-    color: var(--couleurs-mac-violet-fonce) !important;
+
+    font-family: 'Marianne ExtraBold';
+    font-weight: 800;
+    line-height: 2rem;
+    font-size: 1.375rem;
   }
 
   details {
@@ -173,14 +180,6 @@ html {
     margin-bottom: 0;
   }
 
-  .titre {
-    font-family: 'Marianne ExtraBold';
-    font-weight: 800;
-    line-height: 2rem;
-    font-size: 1rem;
-    padding-bottom: 1rem;
-  }
-
   [class*="logo-"] {
     height: 8rem;
   }
@@ -207,13 +206,6 @@ html {
 
 #ressources {
   padding-top: 2.5rem;
-  .titre {
-    font-family: 'Marianne ExtraBold';
-    font-weight: 800;
-    line-height: 2rem;
-    font-size: 1rem;
-    padding-bottom: 1rem;
-  }
 }
 
 .badge-gouvernance {
