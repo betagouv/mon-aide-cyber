@@ -37,6 +37,7 @@ export type ReponsePossible = {
   ordre: number;
   questions?: QuestionATiroir[];
 };
+export type Perimetre = 'SYSTEME-INDUSTRIEL' | 'ESPIONNAGE-CIBLE';
 export type Question = {
   identifiant: string;
   libelle: string;
@@ -44,5 +45,5 @@ export type Question = {
   reponsesPossibles: ReponsePossible[];
   type: TypeDeSaisie;
   'info-bulles'?: string[];
-  perimetre?: 'SYSTEME-INDUSTRIEL';
+  perimetre?: Perimetre;
 };
