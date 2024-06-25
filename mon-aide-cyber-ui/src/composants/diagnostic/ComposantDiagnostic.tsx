@@ -56,6 +56,7 @@ import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurPa
 import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
 import { ConteneurReponsePossible } from './ConteneurReponsePossible.tsx';
 import { TerminerDiagnostic } from './TerminerDiagnostic.tsx';
+import { BadgePerimetre } from './BadgePerimetre.tsx';
 
 type ProprietesComposantQuestion = {
   actions: ActionReponseDiagnostic[];
@@ -264,7 +265,7 @@ const ComposantQuestion = ({
   }, [actions, etatReponse, macapi, question, reponseQuestionEnvoyee]);
 
   const badge = question.perimetre ? (
-    <p className="fr-icon-database-fill badge-diagnostic">SYSTÈME INDUSTRIEL</p>
+    <BadgePerimetre perimetre={question.perimetre} />
   ) : (
     <></>
   );
