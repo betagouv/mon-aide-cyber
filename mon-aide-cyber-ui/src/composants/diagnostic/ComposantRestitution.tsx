@@ -35,6 +35,38 @@ export const ComposantRestitution = ({
   const macapi = useMACAPI();
 
   useEffect(() => {
+    if (etatRestitution.restitution) {
+      const observateurDIntersection = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const nomRubriqueConsultee = entry.target.parentElement?.id;
+
+              nomRubriqueConsultee &&
+                envoie(rubriqueCliquee(nomRubriqueConsultee));
+            }
+          });
+        },
+        {
+          rootMargin: '-20% 0% -60% 0%',
+        }
+      );
+
+      const titresRubriques = document.querySelectorAll('.restitution h4');
+
+      titresRubriques.forEach((titreRubrique) =>
+        observateurDIntersection.observe(titreRubrique)
+      );
+
+      return () => {
+        titresRubriques.forEach((titreRubrique) =>
+          observateurDIntersection.unobserve(titreRubrique)
+        );
+      };
+    }
+  }, [etatRestitution.restitution]);
+
+  useEffect(() => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
       `afficher-diagnostic-${idDiagnostic}`,
       (lien: Lien) => {
@@ -86,11 +118,6 @@ export const ComposantRestitution = ({
       'modifier-diagnostic'
     );
   }, [etatRestitution, navigationMAC]);
-
-  const rubriqueCliqueee = useCallback(
-    (rubrique: string) => envoie(rubriqueCliquee(rubrique)),
-    [envoie]
-  );
 
   const telechargerRestitution = useCallback(() => {
     new MoteurDeLiens(etatRestitution.restitution!.liens).trouve(
@@ -178,7 +205,7 @@ export const ComposantRestitution = ({
           </div>
         </div>
         <div className="fond-clair-mac">
-          <div className="fr-container restitution">
+          <div id="restitution" className="fr-container restitution">
             <div className="fr-grid-row">
               <div className="fr-col-md-3 fr-col-3 menu-restitution">
                 <nav
@@ -201,7 +228,6 @@ export const ComposantRestitution = ({
                             target="_self"
                             {...(etatRestitution.rubrique ===
                               'informations' && { 'aria-current': 'page' })}
-                            onClick={() => rubriqueCliqueee('informations')}
                           >
                             Informations
                           </a>
@@ -220,7 +246,6 @@ export const ComposantRestitution = ({
                             {...(etatRestitution.rubrique === 'indicateurs' && {
                               'aria-current': 'page',
                             })}
-                            onClick={() => rubriqueCliqueee('indicateurs')}
                           >
                             Indicateurs de maturité
                           </a>
@@ -240,9 +265,6 @@ export const ComposantRestitution = ({
                               'mesures-prioritaires' && {
                               'aria-current': 'page',
                             })}
-                            onClick={() =>
-                              rubriqueCliqueee('mesures-prioritaires')
-                            }
                           >
                             Les 6 mesures prioritaires
                           </a>
@@ -262,9 +284,6 @@ export const ComposantRestitution = ({
                               'contacts-liens-utiles' && {
                               'aria-current': 'page',
                             })}
-                            onClick={() =>
-                              rubriqueCliqueee('contacts-liens-utiles')
-                            }
                           >
                             Contacts et liens utiles
                           </a>
@@ -300,7 +319,6 @@ export const ComposantRestitution = ({
                             target="_self"
                             {...(etatRestitution.rubrique ===
                               'autres-mesures' && { 'aria-current': 'page' })}
-                            onClick={() => rubriqueCliqueee('autres-mesures')}
                           >
                             Les autres mesures
                           </a>
@@ -314,18 +332,21 @@ export const ComposantRestitution = ({
                 <h3>Récapitulatif</h3>
                 <div
                   id="informations"
+                  className="rubrique"
                   dangerouslySetInnerHTML={{
                     __html: etatRestitution.restitution?.informations || '',
                   }}
                 ></div>
                 <div
                   id="indicateurs"
+                  className="rubrique"
                   dangerouslySetInnerHTML={{
                     __html: etatRestitution.restitution?.indicateurs || '',
                   }}
                 ></div>
                 <div
                   id="mesures-prioritaires"
+                  className="rubrique"
                   dangerouslySetInnerHTML={{
                     __html:
                       etatRestitution.restitution?.mesuresPrioritaires || '',
@@ -333,6 +354,7 @@ export const ComposantRestitution = ({
                 ></div>
                 <div
                   id="contacts-liens-utiles"
+                  className="rubrique"
                   dangerouslySetInnerHTML={{
                     __html:
                       etatRestitution.restitution?.contactsEtLiensUtiles || '',
@@ -340,6 +362,7 @@ export const ComposantRestitution = ({
                 ></div>
                 <div
                   id="ressources"
+                  className="rubrique"
                   dangerouslySetInnerHTML={{
                     __html: etatRestitution.restitution?.ressources || '',
                   }}
@@ -347,6 +370,7 @@ export const ComposantRestitution = ({
 
                 <div
                   id="autres-mesures"
+                  className="rubrique fr-pt-md-5w"
                   dangerouslySetInnerHTML={{
                     __html: etatRestitution.restitution?.autresMesures || '',
                   }}
