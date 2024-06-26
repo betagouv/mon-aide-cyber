@@ -100,10 +100,17 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         ...corpsReponse,
       };
       busCommande
-        .publie(commande)
-        .then(() => {
-          reponse.status(204);
-          reponse.send();
+        .publie<SagaAjoutReponse, Diagnostic>(commande)
+        .then((diagnostic) => {
+          reponse.json({
+            ...representeLeDiagnosticPourLeClient(
+              diagnostic,
+              configuration.adaptateurTranscripteurDonnees.transcripteur()
+            ),
+            ...constructeurActionsHATEOAS()
+              .reponseDonneeAuDiagnostic(diagnostic.identifiant)
+              .construis(),
+          });
         })
         .catch((erreur) => suite(erreur));
     }

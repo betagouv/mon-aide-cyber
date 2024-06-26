@@ -7,7 +7,10 @@ import {
 } from '../constructeurs/constructeurReferentiel';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
-import { QuestionDiagnostic } from '../../src/diagnostic/Diagnostic';
+import {
+  QuestionDiagnostic,
+  ReponseDonnee,
+} from '../../src/diagnostic/Diagnostic';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
@@ -22,6 +25,7 @@ import {
 import { Constructeur } from '../constructeurs/constructeur';
 import { fakerFR } from '@faker-js/faker';
 import { BusCommandeTest } from '../infrastructure/bus/BusCommandeTest';
+import { Evenement } from '../../src/domaine/BusEvenement';
 
 describe("Capteur d'ajout de réponse au diagnostic", () => {
   let entrepots: Entrepots;
@@ -59,7 +63,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
         .construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
-      await new CapteurSagaAjoutReponse(
+      const diagnosticRetourne = await new CapteurSagaAjoutReponse(
         entrepots,
         new BusCommandeTest(),
         new BusEvenementDeTest()
@@ -82,12 +86,12 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
           .construis()
       );
 
-      const diagnosticRetourne = await entrepots
+      const diagnosticLu = await entrepots
         .diagnostic()
         .lis(diagnostic.identifiant);
-      const question = diagnosticRetourne.referentiel.contexte
+      const question = diagnosticLu.referentiel.contexte
         .questions[0] as QuestionDiagnostic;
-      expect(question.reponseDonnee).toMatchObject({
+      expect(question.reponseDonnee).toStrictEqual<ReponseDonnee>({
         reponseUnique: reponseAvecQuestionATiroir.identifiant,
         reponsesMultiples: [
           {
@@ -99,6 +103,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
           },
         ],
       });
+      expect(diagnosticRetourne).toStrictEqual(diagnosticLu);
     });
 
     it("publie sur un bus d'événement ReponseAjoutee", async () => {
@@ -132,7 +137,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
           .construis()
       );
 
-      expect(busEvenement.evenementRecu).toStrictEqual({
+      expect(busEvenement.evenementRecu).toStrictEqual<Evenement>({
         identifiant: diagnostic.identifiant,
         type: 'REPONSE_AJOUTEE',
         date: maintenant,
@@ -211,7 +216,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
         .lis(diagnostic.identifiant);
       const question = diagnosticRetourne.referentiel.contexte
         .questions[0] as QuestionDiagnostic;
-      expect(question.reponseDonnee).toMatchObject({
+      expect(question.reponseDonnee).toStrictEqual<ReponseDonnee>({
         reponseUnique: reponseAvecQuestionsATiroir.identifiant,
         reponsesMultiples: [
           {
