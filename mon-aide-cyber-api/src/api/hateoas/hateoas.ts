@@ -2,7 +2,7 @@ import { AidantAuthentifie } from '../../authentification/Aidant';
 import crypto from 'crypto';
 
 type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
-type LiensHATEOAS = Record<string, Options>;
+export type LiensHATEOAS = Record<string, Options>;
 export type ReponseHATEOAS = {
   liens: LiensHATEOAS;
 };
@@ -113,10 +113,7 @@ class ConstructeurActionsHATEOAS {
       methode: 'POST',
     });
     idDiagnostics.forEach((idDiagnostic) =>
-      this.actions.set(`afficher-diagnostic-${idDiagnostic}`, {
-        url: `/api/diagnostic/${idDiagnostic}/restitution`,
-        methode: 'GET',
-      })
+      this.afficherDiagnostic(idDiagnostic as crypto.UUID)
     );
     return this.afficherProfil().seDeconnecter();
   }
@@ -124,17 +121,28 @@ class ConstructeurActionsHATEOAS {
   actionsDiagnosticLance(
     idDiagnostic: crypto.UUID
   ): ConstructeurActionsHATEOAS {
+    this.afficherDiagnostic(idDiagnostic);
+    this.afficherTableauDeBord();
+    return this;
+  }
+
+  private afficherDiagnostic(idDiagnostic: crypto.UUID) {
     this.actions.set(`afficher-diagnostic-${idDiagnostic}`, {
       url: `/api/diagnostic/${idDiagnostic}/restitution`,
       methode: 'GET',
     });
-    this.afficherTableauDeBord();
-    return this;
   }
 
   actionsAccesDiagnosticNonAutorise(): ConstructeurActionsHATEOAS {
     this.afficherTableauDeBord();
     return this.afficherProfil().seDeconnecter();
+  }
+
+  reponseDonneeAuDiagnostic(
+    identifiantDiagnostic: crypto.UUID
+  ): ConstructeurActionsHATEOAS {
+    this.afficherDiagnostic(identifiantDiagnostic);
+    return this;
   }
 
   construis = (): ReponseHATEOAS => {

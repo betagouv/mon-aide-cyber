@@ -17,6 +17,8 @@ import {
   ReponseDiagnostic,
   ReprensentationRestitution,
 } from '../../src/api/routesAPIDiagnostic';
+import { Diagnostic } from '../../src/diagnostic/Diagnostic';
+import { LiensHATEOAS } from '../../src/api/hateoas/hateoas';
 
 describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -51,66 +53,9 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(reponse.statusCode).toBe(200);
-      const premiereQuestion = diagnostic.referentiel.contexte.questions[0];
-      const premiereReponsePossible = premiereQuestion.reponsesPossibles[0];
       const diagnosticRecu: RepresentationDiagnostic = await reponse.json();
-      expect(diagnosticRecu).toStrictEqual<ReponseDiagnostic>({
-        actions: [
-          {
-            contexte: {
-              action: 'repondre',
-              ressource: {
-                methode: 'PATCH',
-                url: `/api/diagnostic/${diagnostic.identifiant}`,
-              },
-            },
-          },
-        ],
-        identifiant: diagnostic.identifiant,
-        referentiel: {
-          contexte: {
-            actions: [
-              {
-                action: 'repondre',
-                chemin: 'contexte',
-                ressource: {
-                  methode: 'PATCH',
-                  url: `/api/diagnostic/${diagnostic.identifiant}`,
-                },
-              },
-            ],
-            description: 'Description du contexte',
-            libelle: 'Contexte',
-            styles: {
-              navigation: 'navigation-contexte',
-            },
-            localisationIllustration: '/chemin/illustration/contexte',
-            groupes: [
-              {
-                numero: 1,
-                questions: [
-                  {
-                    identifiant: premiereQuestion.identifiant,
-                    libelle: premiereQuestion.libelle,
-                    reponseDonnee: {
-                      valeur: null,
-                      reponses: [],
-                    },
-                    reponsesPossibles: [
-                      {
-                        identifiant: premiereReponsePossible.identifiant,
-                        libelle: premiereReponsePossible.libelle,
-                        ordre: 0,
-                      },
-                    ],
-                    type: 'choixUnique',
-                  },
-                ],
-              },
-            ],
-          },
-        },
-        liens: {
+      expect(diagnosticRecu).toStrictEqual<ReponseDiagnostic>(
+        forgeReponseDiagnostic(diagnostic, {
           [`afficher-diagnostic-${diagnostic.identifiant}`]: {
             url: `/api/diagnostic/${diagnostic.identifiant}/restitution`,
             methode: 'GET',
@@ -119,8 +64,8 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
             url: '/api/espace-aidant/tableau-de-bord',
             methode: 'GET',
           },
-        },
-      });
+        })
+      );
     });
 
     it("Renvoie une erreur HTTP 404 diagnostic non trouvé si le diagnostic n'existe pas", async () => {
@@ -299,13 +244,25 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       const diagnosticRetourne = await testeurMAC.entrepots
         .diagnostic()
         .lis(diagnostic.identifiant);
-      expect(reponse.statusCode).toBe(204);
+      expect(reponse.statusCode).toBe(200);
       expect(
         diagnosticRetourne.referentiel.contexte.questions[0].reponseDonnee
       ).toStrictEqual({
         reponsesMultiples: [],
         reponseUnique: 'reponse-2',
       });
+      expect(await reponse.json()).toStrictEqual(
+        forgeReponseDiagnostic(
+          diagnostic,
+          {
+            [`afficher-diagnostic-${diagnostic.identifiant}`]: {
+              url: `/api/diagnostic/${diagnostic.identifiant}/restitution`,
+              methode: 'GET',
+            },
+          },
+          'reponse-2'
+        )
+      );
     });
 
     it('Retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {
@@ -506,3 +463,77 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
     });
   });
 });
+
+const forgeReponseDiagnostic = (
+  diagnostic: Diagnostic,
+  liens: LiensHATEOAS = {
+    [`afficher-diagnostic-${diagnostic.identifiant}`]: {
+      url: `/api/diagnostic/${diagnostic.identifiant}/restitution`,
+      methode: 'GET',
+    },
+    'afficher-tableau-de-bord': {
+      url: '/api/espace-aidant/tableau-de-bord',
+      methode: 'GET',
+    },
+  },
+  reponseDonnee?: string
+): ReponseDiagnostic => {
+  return {
+    actions: [
+      {
+        contexte: {
+          action: 'repondre',
+          ressource: {
+            methode: 'PATCH',
+            url: `/api/diagnostic/${diagnostic.identifiant}`,
+          },
+        },
+      },
+    ],
+    identifiant: diagnostic.identifiant,
+    referentiel: {
+      contexte: {
+        actions: [
+          {
+            action: 'repondre',
+            chemin: 'contexte',
+            ressource: {
+              methode: 'PATCH',
+              url: `/api/diagnostic/${diagnostic.identifiant}`,
+            },
+          },
+        ],
+        description: 'Description du contexte',
+        libelle: 'Contexte',
+        styles: {
+          navigation: 'navigation-contexte',
+        },
+        localisationIllustration: '/chemin/illustration/contexte',
+        groupes: [
+          {
+            numero: 1,
+            questions: diagnostic.referentiel.contexte.questions.map((q) => {
+              return {
+                identifiant: q.identifiant,
+                libelle: q.libelle,
+                reponseDonnee: {
+                  valeur: reponseDonnee ? reponseDonnee : null,
+                  reponses: [],
+                },
+                reponsesPossibles: q.reponsesPossibles.map((r) => {
+                  return {
+                    identifiant: r.identifiant,
+                    libelle: r.libelle,
+                    ordre: r.ordre,
+                  };
+                }),
+                type: 'choixUnique',
+              };
+            }),
+          },
+        ],
+      },
+    },
+    liens,
+  };
+};
