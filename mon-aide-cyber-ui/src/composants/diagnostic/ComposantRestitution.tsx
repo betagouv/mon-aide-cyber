@@ -271,6 +271,24 @@ export const ComposantRestitution = ({
                         </li>
                         <li
                           className={`fr-sidemenu__item ${
+                            etatRestitution.rubrique === 'ressources'
+                              ? 'fr-sidemenu__item--active'
+                              : ''
+                          }`}
+                        >
+                          <a
+                            className="fr-sidemenu__link"
+                            href="#ressources"
+                            target="_self"
+                            {...(etatRestitution.rubrique === 'ressources' && {
+                              'aria-current': 'page',
+                            })}
+                          >
+                            Ressources
+                          </a>
+                        </li>
+                        <li
+                          className={`fr-sidemenu__item ${
                             etatRestitution.rubrique === 'autres-mesures'
                               ? 'fr-sidemenu__item--active'
                               : ''
