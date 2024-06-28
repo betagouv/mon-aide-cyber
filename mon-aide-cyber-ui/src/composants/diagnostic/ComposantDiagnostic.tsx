@@ -16,18 +16,15 @@ import {
   thematiqueAffichee,
 } from '../../domaine/diagnostic/reducteurDiagnostic.ts';
 import {
-  initialiseReducteur,
-  reducteurReponse,
+  Action,
+  actionAMener,
+  ActionReponseDiagnostic,
+  Reponse,
   reponseMultipleDonnee,
+  ReponseQuestionATiroir,
   reponseTiroirMultipleDonnee,
   reponseTiroirUniqueDonnee,
   reponseUniqueDonnee,
-} from '../../domaine/diagnostic/reducteurReponse.ts';
-import {
-  Action,
-  ActionReponseDiagnostic,
-  Reponse,
-  ReponseQuestionATiroir,
 } from '../../domaine/diagnostic/Diagnostic.ts';
 import '../../assets/styles/_diagnostic.scss';
 import '../../assets/styles/_commun.scss';
@@ -53,7 +50,10 @@ import {
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
-import { ConteneurReponsePossible } from './ConteneurReponsePossible.tsx';
+import {
+  ConteneurReponsePossible,
+  ReponseTiroir,
+} from './ConteneurReponsePossible.tsx';
 import { TerminerDiagnostic } from './TerminerDiagnostic.tsx';
 import { BadgePerimetre } from './BadgePerimetre.tsx';
 
@@ -109,11 +109,6 @@ const ComposantQuestionListe = ({
   numeroQuestion,
   surReponse,
 }: ProprietesComposantQuestion) => {
-  const [etatReponse, envoie] = useReducer(
-    reducteurReponse,
-    initialiseReducteur(question, actions, surReponse)
-  );
-  // const macapi = useMACAPI();
   const clefsFiltrage: (keyof ReponsePossible)[] =
     question.type === 'liste'
       ? ['libelle']
@@ -125,17 +120,21 @@ const ComposantQuestionListe = ({
 
   const surSelection = useCallback(
     (reponse: ReponsePossible) => {
-      envoie(reponseUniqueDonnee(reponse.identifiant));
+      actionAMener(actions, 'repondre', (action) =>
+        surReponse(reponseUniqueDonnee(question, reponse.identifiant), action)
+      );
     },
-    [envoie]
+    [actions, question, surReponse]
   );
   const surSaisie = useCallback(
     (reponse: ReponsePossible | string) => {
       if (estReponsePossible(reponse)) {
-        envoie(reponseUniqueDonnee(reponse.identifiant));
+        actionAMener(actions, 'repondre', (action) =>
+          surReponse(reponseUniqueDonnee(question, reponse.identifiant), action)
+        );
       }
     },
-    [envoie]
+    [actions, question, surReponse]
   );
 
   return (
@@ -164,7 +163,7 @@ const ComposantQuestionListe = ({
         surSaisie={(reponse) => surSaisie(reponse)}
         valeurSaisie={
           question.reponsesPossibles.find(
-            (rep) => rep.identifiant === etatReponse.valeur()
+            (rep) => rep.identifiant === question.reponseDonnee.valeur
           ) || ({} as ReponsePossible)
         }
         suggestionsInitiales={question.reponsesPossibles}
@@ -180,49 +179,40 @@ const ComposantQuestion = ({
   numeroQuestion,
   surReponse,
 }: ProprietesComposantQuestion) => {
-  const [etatReponse, envoie] = useReducer(
-    reducteurReponse,
-    initialiseReducteur(question, actions, surReponse)
-  );
-
   const repondQuestionUnique = useCallback(
     (identifiantReponse: string) => {
-      envoie(reponseUniqueDonnee(identifiantReponse));
+      actionAMener(actions, 'repondre', (action) =>
+        surReponse(reponseUniqueDonnee(question, identifiantReponse), action)
+      );
     },
-    [envoie]
+    [actions, question, surReponse]
   );
 
   const repondQuestionMultiple = useCallback(
-    (elementReponse: { identifiantReponse: string; reponse: string }) => {
-      envoie(reponseMultipleDonnee(elementReponse));
+    (reponse: string) => {
+      actionAMener(actions, 'repondre', (action) =>
+        surReponse(reponseMultipleDonnee(question, reponse), action)
+      );
     },
-    [envoie]
+    [actions, question, surReponse]
   );
 
   const repondQuestionTiroirUnique = useCallback(
-    (
-      identifiantReponse: string,
-      elementReponse: {
-        identifiantReponse: string;
-        reponse: string;
-      }
-    ) => {
-      envoie(reponseTiroirUniqueDonnee(identifiantReponse, elementReponse));
+    (reponse: ReponseTiroir) => {
+      actionAMener(actions, 'repondre', (action) =>
+        surReponse(reponseTiroirUniqueDonnee(question, reponse), action)
+      );
     },
-    [envoie]
+    [actions, question, surReponse]
   );
 
   const repondQuestionTiroirMultiple = useCallback(
-    (
-      identifiantReponse: string,
-      elementReponse: {
-        identifiantReponse: string;
-        reponse: string;
-      }
-    ) => {
-      envoie(reponseTiroirMultipleDonnee(identifiantReponse, elementReponse));
+    (reponse: ReponseTiroir) => {
+      actionAMener(actions, 'repondre', (action) =>
+        surReponse(reponseTiroirMultipleDonnee(question, reponse), action)
+      );
     },
-    [envoie]
+    [actions, question, surReponse]
   );
 
   const badge = question.perimetre ? (
@@ -252,10 +242,6 @@ const ComposantQuestion = ({
               key={`conteneur-reponse-possible-${reponse.identifiant}`}
               question={question}
               reponse={reponse}
-              reponseDonnee={{
-                valeur: etatReponse.valeur,
-                reponses: etatReponse.reponseDonnee.reponses,
-              }}
               typeDeSaisie={typeDeSaisie}
               repondQuestionUnique={repondQuestionUnique}
               repondQuestionMultiple={repondQuestionMultiple}

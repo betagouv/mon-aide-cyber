@@ -24,7 +24,7 @@ import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts'
 import { MemoryRouter } from 'react-router-dom';
 import { FournisseurNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 
-const actionRepondre = uneAction().contexte().construis();
+const actionRepondre = uneAction().contexte();
 
 const identifiantQuestionAChoixUnique = '6dadad14-8fa0-4be7-a8da-473d538eb6c1';
 const reponseDonneeChoixUnique = uneReponsePossible().construis();
@@ -384,7 +384,7 @@ const meta = {
               _: (contenu: Promise<any>) => Promise<T>
             ) => {
               if (parametresAPI.methode === 'PATCH') {
-                entrepotDiagnosticMemoire.envoieReponse(
+                await entrepotDiagnosticMemoire.envoieReponse(
                   parametresAPI as ParametresAPI<{
                     chemin: string;
                     identifiant: string;
@@ -440,10 +440,15 @@ export const SelectionneReponseDiagnostic: Story = {
       expect(
         canvas.getByRole('radio', { name: /entreprise privée/i })
       ).toBeChecked();
-      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-        reponseDonnee: 'entreprise-privee',
-        identifiantQuestion: 'quelle-entreprise-etesvous-',
-      });
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(
+        actionRepondre
+          .avecIdDiagnostic(identifiantQuestionAChoixUnique)
+          .construis(),
+        {
+          reponseDonnee: 'entreprise-privee',
+          identifiantQuestion: 'quelle-entreprise-etesvous-',
+        }
+      );
     });
   },
 };
@@ -475,10 +480,15 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
       await waitFor(() =>
         expect(canvas.getByRole('textbox')).toHaveValue('Réponse C')
       );
-      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-        reponseDonnee: 'reponse-c',
-        identifiantQuestion: 'une-liste-deroulante',
-      });
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(
+        actionRepondre
+          .avecIdDiagnostic(identifiantQuestionListeDeroulante)
+          .construis(),
+        {
+          reponseDonnee: 'reponse-c',
+          identifiantQuestion: 'une-liste-deroulante',
+        }
+      );
     });
   },
 };
@@ -593,18 +603,21 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
           })
         )
       ).not.toBeChecked();
-      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-        reponseDonnee: {
-          reponse: 'plusieurs-choix',
-          questions: [
-            {
-              identifiant: 'la-question',
-              reponses: ['choix-2', 'choix-3'],
-            },
-          ],
-        },
-        identifiantQuestion: 'qcm',
-      });
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(
+        actionRepondre.avecIdDiagnostic(identifiantQuestionATiroir).construis(),
+        {
+          reponseDonnee: {
+            reponse: 'plusieurs-choix',
+            questions: [
+              {
+                identifiant: 'la-question',
+                reponses: ['choix-2', 'choix-3'],
+              },
+            ],
+          },
+          identifiantQuestion: 'qcm',
+        }
+      );
     });
 
     await step(
@@ -635,10 +648,15 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
             })
           )
         ).not.toBeChecked();
-        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-          reponseDonnee: 'un-seul-choix',
-          identifiantQuestion: 'qcm',
-        });
+        entrepotDiagnosticMemoire.verifieEnvoiReponse(
+          actionRepondre
+            .avecIdDiagnostic(identifiantQuestionATiroir)
+            .construis(),
+          {
+            reponseDonnee: 'un-seul-choix',
+            identifiantQuestion: 'qcm',
+          }
+        );
       }
     );
   },
@@ -718,22 +736,27 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
           })
         )
       ).toBeChecked();
-      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-        reponseDonnee: {
-          reponse: 'plusieurs-tiroirs',
-          questions: [
-            {
-              identifiant: 'la-question',
-              reponses: ['choix-2', 'choix-4', 'choix-3'],
-            },
-            {
-              identifiant: 'second-tiroir',
-              reponses: ['tiroir-21', 'tiroir-22'],
-            },
-          ],
-        },
-        identifiantQuestion: 'qcm',
-      });
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(
+        actionRepondre
+          .avecIdDiagnostic(identifiantQuestionAPlusieursTiroirs)
+          .construis(),
+        {
+          reponseDonnee: {
+            reponse: 'plusieurs-tiroirs',
+            questions: [
+              {
+                identifiant: 'la-question',
+                reponses: ['choix-2', 'choix-4', 'choix-3'],
+              },
+              {
+                identifiant: 'second-tiroir',
+                reponses: ['tiroir-21', 'tiroir-22'],
+              },
+            ],
+          },
+          identifiantQuestion: 'qcm',
+        }
+      );
     });
   },
 };
@@ -829,22 +852,29 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
             })
           )
         ).not.toBeChecked();
-        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-          reponseDonnee: {
-            reponse: 'plusieurs-choix',
-            questions: [
-              {
-                identifiant: 'la-question',
-                reponses: ['choix-2', 'choix-4', 'choix-3'],
-              },
-              {
-                identifiant: 'reponse-unique',
-                reponses: ['rep-unique-1'],
-              },
-            ],
-          },
-          identifiantQuestion: 'tiroir-multiple-et-unique',
-        });
+        entrepotDiagnosticMemoire.verifieEnvoiReponse(
+          actionRepondre
+            .avecIdDiagnostic(
+              identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple
+            )
+            .construis(),
+          {
+            reponseDonnee: {
+              reponse: 'plusieurs-choix',
+              questions: [
+                {
+                  identifiant: 'la-question',
+                  reponses: ['choix-2', 'choix-4', 'choix-3'],
+                },
+                {
+                  identifiant: 'reponse-unique',
+                  reponses: ['rep-unique-1'],
+                },
+              ],
+            },
+            identifiantQuestion: 'tiroir-multiple-et-unique',
+          }
+        );
       });
 
       await step(
@@ -906,10 +936,17 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
               })
             )
           ).not.toBeChecked();
-          entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-            reponseDonnee: 'non',
-            identifiantQuestion: 'tiroir-multiple-et-unique',
-          });
+          entrepotDiagnosticMemoire.verifieEnvoiReponse(
+            actionRepondre
+              .avecIdDiagnostic(
+                identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple
+              )
+              .construis(),
+            {
+              reponseDonnee: 'non',
+              identifiantQuestion: 'tiroir-multiple-et-unique',
+            }
+          );
         }
       );
     },
@@ -963,22 +1000,29 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
             })
           )
         ).toBeChecked();
-        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-          reponseDonnee: {
-            reponse: 'premiere-reponse-unique-a-tiroir',
-            questions: [
-              {
-                identifiant: 'reponse-unique',
-                reponses: ['rep-unique-2'],
-              },
-              {
-                identifiant: 'autre-reponse-unique',
-                reponses: ['1-autre-rep-unique-2'],
-              },
-            ],
-          },
-          identifiantQuestion: 'une-question-a-choix-unique-a-tiroir',
-        });
+        entrepotDiagnosticMemoire.verifieEnvoiReponse(
+          actionRepondre
+            .avecIdDiagnostic(
+              identifiantQuestionATiroirAvecPlusieursChoixUnique
+            )
+            .construis(),
+          {
+            reponseDonnee: {
+              reponse: 'premiere-reponse-unique-a-tiroir',
+              questions: [
+                {
+                  identifiant: 'reponse-unique',
+                  reponses: ['rep-unique-2'],
+                },
+                {
+                  identifiant: 'autre-reponse-unique',
+                  reponses: ['1-autre-rep-unique-2'],
+                },
+              ],
+            },
+            identifiantQuestion: 'une-question-a-choix-unique-a-tiroir',
+          }
+        );
       });
 
       await step(
@@ -1038,22 +1082,29 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
               })
             )
           ).toBeChecked();
-          entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-            reponseDonnee: {
-              reponse: 'seconde-reponse-unique-a-tiroir',
-              questions: [
-                {
-                  identifiant: '2-reponse-unique',
-                  reponses: ['2-rep-unique-3'],
-                },
-                {
-                  identifiant: '2-autre-reponse-unique',
-                  reponses: ['2-autre-rep-unique-1'],
-                },
-              ],
-            },
-            identifiantQuestion: 'une-question-a-choix-unique-a-tiroir',
-          });
+          entrepotDiagnosticMemoire.verifieEnvoiReponse(
+            actionRepondre
+              .avecIdDiagnostic(
+                identifiantQuestionATiroirAvecPlusieursChoixUnique
+              )
+              .construis(),
+            {
+              reponseDonnee: {
+                reponse: 'seconde-reponse-unique-a-tiroir',
+                questions: [
+                  {
+                    identifiant: '2-reponse-unique',
+                    reponses: ['2-rep-unique-3'],
+                  },
+                  {
+                    identifiant: '2-autre-reponse-unique',
+                    reponses: ['2-autre-rep-unique-1'],
+                  },
+                ],
+              },
+              identifiantQuestion: 'une-question-a-choix-unique-a-tiroir',
+            }
+          );
         }
       );
     },
@@ -1094,9 +1145,11 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
       );
 
       await step('Lorsque l’utilisateur modifie la réponse', async () => {
+        // Pour ce test uniquement, obligé d’appeler 2 fois car le teet n’attend pas la fin du traitement asynchrone
+        await userEvent.click(canvas.getByRole('radio', { name: /choix 3/i }));
         await userEvent.click(canvas.getByRole('radio', { name: /choix 3/i }));
 
-        expect(
+        await expect(
           canvas.getByRole('radio', { name: /tiroir à choix unique ?/i })
         ).toBeChecked();
         expect(
@@ -1120,18 +1173,23 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
             })
           )
         ).toBeChecked();
-        entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-          reponseDonnee: {
-            reponse: 'tiroir-a-choix-unique-',
-            questions: [
-              {
-                identifiant: 'le-choix-unique-',
-                reponses: ['choix-3'],
-              },
-            ],
-          },
-          identifiantQuestion: 'qcm',
-        });
+        entrepotDiagnosticMemoire.verifieEnvoiReponse(
+          actionRepondre
+            .avecIdDiagnostic(identifiantQuestionATiroirAvecReponseUnique)
+            .construis(),
+          {
+            reponseDonnee: {
+              reponse: 'tiroir-a-choix-unique-',
+              questions: [
+                {
+                  identifiant: 'le-choix-unique-',
+                  reponses: ['choix-3'],
+                },
+              ],
+            },
+            identifiantQuestion: 'qcm',
+          }
+        );
       });
     },
   };
@@ -1206,10 +1264,15 @@ export const SelectionneLaReponsePourUneQuestionAChoixMultiple: Story = {
           })
         )
       ).not.toBeChecked();
-      entrepotDiagnosticMemoire.verifieEnvoiReponse(actionRepondre, {
-        reponseDonnee: ['reponse-1', 'reponse-3'],
-        identifiantQuestion: 'question-a-choix-multiple-',
-      });
+      entrepotDiagnosticMemoire.verifieEnvoiReponse(
+        actionRepondre
+          .avecIdDiagnostic(identifiantQuestionAChoixMultiple)
+          .construis(),
+        {
+          reponseDonnee: ['reponse-1', 'reponse-3'],
+          identifiantQuestion: 'question-a-choix-multiple-',
+        }
+      );
     });
   },
 };

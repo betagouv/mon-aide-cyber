@@ -1,38 +1,25 @@
 import { ComposantReponsePossible } from './ComposantReponsePossible.tsx';
 import {
   Question,
-  ReponseMultiple,
   ReponsePossible,
 } from '../../domaine/diagnostic/Referentiel.ts';
 import { useEffect, useState } from 'react';
 
+export type ReponseTiroir = {
+  identifiant: string;
+  questionTiroir: {
+    identifiant: string;
+    valeur: string;
+  };
+};
 type ProprietesConteneurReponsePossible = {
   reponse: ReponsePossible;
   question: Question;
   typeDeSaisie: 'radio' | 'checkbox';
   repondQuestionUnique: (identifiantReponse: string) => void;
-  repondQuestionMultiple: (elementReponse: {
-    identifiantReponse: string;
-    reponse: string;
-  }) => void;
-  repondQuestionTiroirMultiple: (
-    identifiantReponse: string,
-    elementReponse: {
-      identifiantReponse: string;
-      reponse: string;
-    }
-  ) => void;
-  repondQuestionTiroirUnique: (
-    identifiantReponse: string,
-    elementReponse: {
-      identifiantReponse: string;
-      reponse: string;
-    }
-  ) => void;
-  reponseDonnee: {
-    valeur: () => string | undefined;
-    reponses: ReponseMultiple[];
-  };
+  repondQuestionMultiple: (reponse: string) => void;
+  repondQuestionTiroirMultiple: (reponse: ReponseTiroir) => void;
+  repondQuestionTiroirUnique: (reponse: ReponseTiroir) => void;
 };
 
 export const ConteneurReponsePossible = ({
@@ -43,15 +30,15 @@ export const ConteneurReponsePossible = ({
   repondQuestionMultiple,
   repondQuestionTiroirMultiple,
   repondQuestionTiroirUnique,
-  reponseDonnee,
 }: ProprietesConteneurReponsePossible) => {
   const [deploieTiroir, setDeploieTiroir] = useState(
-    reponseDonnee.valeur() === reponse.identifiant
+    question.reponseDonnee.valeur === reponse.identifiant
   );
 
   useEffect(() => {
-    setDeploieTiroir(reponseDonnee.valeur() === reponse.identifiant);
-  }, [reponse.identifiant, reponseDonnee]);
+    setDeploieTiroir(question.reponseDonnee.valeur === reponse.identifiant);
+  }, [question.reponseDonnee.valeur, reponse.identifiant]);
+
   useEffect(() => {
     if (deploieTiroir) {
       new Promise((r) => setTimeout(r, 500)).then(() =>
@@ -72,15 +59,12 @@ export const ConteneurReponsePossible = ({
         setDeploieTiroir(!deploieTiroir);
         typeDeSaisie === 'radio'
           ? repondQuestionUnique(identifiantReponse)
-          : repondQuestionMultiple({
-              identifiantReponse: question.identifiant,
-              reponse: identifiantReponse,
-            });
+          : repondQuestionMultiple(identifiantReponse);
       }}
       selectionnee={
         typeDeSaisie === 'radio'
-          ? reponseDonnee.valeur() === reponse.identifiant
-          : reponseDonnee.reponses.some((rep) =>
+          ? question.reponseDonnee.valeur === reponse.identifiant
+          : question.reponseDonnee.reponses.some((rep) =>
               rep.reponses.has(reponse.identifiant)
             )
       }
@@ -106,18 +90,24 @@ export const ConteneurReponsePossible = ({
                 reponsePossible={rep}
                 identifiantQuestion={questionTiroir.identifiant}
                 typeDeSaisie={typeDeSaisie}
-                selectionnee={reponseDonnee.reponses.some((reponse) =>
+                selectionnee={question.reponseDonnee.reponses.some((reponse) =>
                   reponse.reponses.has(rep.identifiant)
                 )}
                 onChange={(identifiantReponse) => {
                   typeDeSaisie === 'checkbox'
-                    ? repondQuestionTiroirMultiple(reponse.identifiant, {
-                        identifiantReponse: questionTiroir.identifiant,
-                        reponse: identifiantReponse,
+                    ? repondQuestionTiroirMultiple({
+                        identifiant: reponse.identifiant,
+                        questionTiroir: {
+                          identifiant: questionTiroir.identifiant,
+                          valeur: identifiantReponse,
+                        },
                       })
-                    : repondQuestionTiroirUnique(reponse.identifiant, {
-                        identifiantReponse: questionTiroir.identifiant,
-                        reponse: identifiantReponse,
+                    : repondQuestionTiroirUnique({
+                        identifiant: reponse.identifiant,
+                        questionTiroir: {
+                          identifiant: questionTiroir.identifiant,
+                          valeur: identifiantReponse,
+                        },
                       });
                 }}
               />
