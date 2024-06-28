@@ -17,6 +17,10 @@ import {
 } from '../../constructeurs/constructeurQuestions';
 import { unEtatDeReponse } from './constructeurEtaReponse';
 import { uneAction } from '../../constructeurs/constructeurActionDiagnostic';
+import {
+  ActionReponseDiagnostic,
+  Reponse,
+} from '../../../src/domaine/diagnostic/Diagnostic.ts';
 
 describe('Le réducteur de réponse', () => {
   describe('dans le cas de question simple', () => {
@@ -26,9 +30,12 @@ describe('Le réducteur de réponse', () => {
         .avecDesReponses([reponse])
         .construis();
 
-      const etatReponse = initialiseReducteur(question, [
-        uneAction().construis(),
-      ]);
+      const etatReponse = initialiseReducteur(
+        question,
+        [uneAction().construis()],
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        (__reponse) => {}
+      );
 
       expect(etatReponse.reponseDonnee).toStrictEqual({
         reponses: [],
@@ -44,9 +51,12 @@ describe('Le réducteur de réponse', () => {
         .avecLaReponseDonnee(reponse)
         .construis();
 
-      const etatReponse = initialiseReducteur(question, [
-        uneAction().construis(),
-      ]);
+      const etatReponse = initialiseReducteur(
+        question,
+        [uneAction().construis()],
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        (__reponse) => {}
+      );
 
       expect(etatReponse.reponseDonnee).toStrictEqual({
         reponses: [],
@@ -56,6 +66,8 @@ describe('Le réducteur de réponse', () => {
     });
 
     it('change la réponse donnée et modifie le statut', () => {
+      let reponseRecue: Reponse | undefined = undefined;
+      let actionRecue: ActionReponseDiagnostic | undefined = undefined;
       const nouvelleReponse = uneReponsePossible().construis();
       const question = uneQuestionAChoixUnique()
         .avecLibelle('Une question?')
@@ -63,7 +75,13 @@ describe('Le réducteur de réponse', () => {
         .construis();
 
       const etatReponse = reducteurReponse(
-        unEtatDeReponse(question).reponseChargee().construis(),
+        {
+          ...unEtatDeReponse(question).reponseChargee().construis(),
+          surReponse: (reponse, action) => {
+            reponseRecue = reponse;
+            actionRecue = action;
+          },
+        },
         reponseUniqueDonnee(nouvelleReponse.identifiant)
       );
 
@@ -71,11 +89,20 @@ describe('Le réducteur de réponse', () => {
         nouvelleReponse.identifiant
       );
       expect(etatReponse.statut).toBe(EtatReponseStatut.MODIFIEE);
+      expect(reponseRecue).toStrictEqual<Reponse>({
+        reponseDonnee: nouvelleReponse.identifiant,
+        identifiantQuestion: question.identifiant,
+      });
+      expect(actionRecue).toStrictEqual<ActionReponseDiagnostic>({
+        test: { action: 'repondre', ressource: { url: 'url', methode: 'GET' } },
+      });
     });
   });
 
   describe('dans le cas de question à choix multiples', () => {
     it("prend en compte l'ajout d'une réponse", () => {
+      let reponseRecue: Reponse | undefined = undefined;
+      let actionRecue: ActionReponseDiagnostic | undefined = undefined;
       const premiereReponse = uneReponsePossible().construis();
       const deuxiemeReponse = uneReponsePossible().construis();
       const troisiemeReponse = uneReponsePossible().construis();
@@ -85,7 +112,13 @@ describe('Le réducteur de réponse', () => {
         .construis();
 
       const etatReponse = reducteurReponse(
-        unEtatDeReponse(question).reponseChargee().construis(),
+        {
+          ...unEtatDeReponse(question).reponseChargee().construis(),
+          surReponse: (reponse, action) => {
+            reponseRecue = reponse;
+            actionRecue = action;
+          },
+        },
         reponseMultipleDonnee({
           identifiantReponse: question.identifiant,
           reponse: premiereReponse.identifiant,
@@ -112,9 +145,20 @@ describe('Le réducteur de réponse', () => {
         ],
       });
       expect(etatReponse.statut).toStrictEqual(EtatReponseStatut.MODIFIEE);
+      expect(reponseRecue).toStrictEqual<Reponse>({
+        identifiantQuestion: question.identifiant,
+        reponseDonnee: [
+          troisiemeReponse.identifiant,
+          premiereReponse.identifiant,
+        ],
+      });
+      expect(actionRecue).toStrictEqual<ActionReponseDiagnostic>({
+        test: { action: 'repondre', ressource: { url: 'url', methode: 'GET' } },
+      });
     });
 
     it("retire un élément de la réponse lorsqu'il est déja présent (l'utilisateur désélectionne cet élément)", () => {
+      let reponseRecue: Reponse | undefined = undefined;
       const premiereReponse = uneReponsePossible().construis();
       const deuxiemeReponse = uneReponsePossible().construis();
       const troisiemeReponse = uneReponsePossible().construis();
@@ -124,7 +168,10 @@ describe('Le réducteur de réponse', () => {
         .construis();
 
       const etatReponse = reducteurReponse(
-        unEtatDeReponse(question).reponseChargee().construis(),
+        {
+          ...unEtatDeReponse(question).reponseChargee().construis(),
+          surReponse: (reponse) => (reponseRecue = reponse),
+        },
         reponseMultipleDonnee({
           identifiantReponse: question.identifiant,
           reponse: premiereReponse.identifiant,
@@ -145,11 +192,16 @@ describe('Le réducteur de réponse', () => {
         reponseDonnee: [troisiemeReponse.identifiant],
       });
       expect(etatReponse.statut).toStrictEqual(EtatReponseStatut.MODIFIEE);
+      expect(reponseRecue).toStrictEqual<Reponse>({
+        identifiantQuestion: question.identifiant,
+        reponseDonnee: [troisiemeReponse.identifiant],
+      });
     });
   });
 
   describe('dans le cas de question à tiroir', () => {
     it('prend en compte les réponses à choix multiple', () => {
+      let reponseRecue: Reponse | undefined = undefined;
       const nouvelleReponse = uneReponsePossible()
         .avecUneQuestion(
           uneQuestionTiroirAChoixMultiple()
@@ -170,7 +222,10 @@ describe('Le réducteur de réponse', () => {
         .construis();
 
       const etatReponse = reducteurReponse(
-        unEtatDeReponse(question).reponseChargee().construis(),
+        {
+          ...unEtatDeReponse(question).reponseChargee().construis(),
+          surReponse: (reponse) => (reponseRecue = reponse),
+        },
         reponseTiroirMultipleDonnee(nouvelleReponse.identifiant, {
           identifiantReponse: 'qcm',
           reponse: 'choix-3',
@@ -195,10 +250,23 @@ describe('Le réducteur de réponse', () => {
           ],
         },
       });
+      expect(reponseRecue).toStrictEqual<Reponse>({
+        identifiantQuestion: 'une-question',
+        reponseDonnee: {
+          reponse: nouvelleReponse.identifiant,
+          questions: [
+            {
+              identifiant: 'qcm',
+              reponses: ['choix-2', 'choix-3'],
+            },
+          ],
+        },
+      });
       expect(etatReponse.statut).toBe(EtatReponseStatut.MODIFIEE);
     });
 
     it("retire un élément de la réponse lorsqu'il est déja présent (l'utilisateur désélectionne cet élément)", () => {
+      let reponseRecue: Reponse | undefined = undefined;
       const nouvelleReponse = uneReponsePossible()
         .avecUneQuestion(
           uneQuestionTiroirAChoixMultiple()
@@ -223,7 +291,10 @@ describe('Le réducteur de réponse', () => {
         .construis();
 
       const etatReponse = reducteurReponse(
-        unEtatDeReponse(question).reponseChargee().construis(),
+        {
+          ...unEtatDeReponse(question).reponseChargee().construis(),
+          surReponse: (reponse) => (reponseRecue = reponse),
+        },
         reponseTiroirMultipleDonnee(nouvelleReponse.identifiant, {
           identifiantReponse: 'qcm',
           reponse: 'choix-4',
@@ -248,10 +319,23 @@ describe('Le réducteur de réponse', () => {
           ],
         },
       });
+      expect(reponseRecue).toStrictEqual<Reponse>({
+        identifiantQuestion: 'une-question',
+        reponseDonnee: {
+          reponse: nouvelleReponse.identifiant,
+          questions: [
+            {
+              identifiant: 'qcm',
+              reponses: ['choix-2', 'choix-3'],
+            },
+          ],
+        },
+      });
       expect(etatReponse.statut).toBe(EtatReponseStatut.MODIFIEE);
     });
 
     it('prend en compte les réponses à plusieurs questions à tiroir', () => {
+      let reponseRecue: Reponse | undefined = undefined;
       const nouvelleReponse = uneReponsePossible()
         .avecUneQuestion(
           uneQuestionTiroirAChoixMultiple()
@@ -288,7 +372,10 @@ describe('Le réducteur de réponse', () => {
         .construis();
 
       const etatReponse = reducteurReponse(
-        unEtatDeReponse(question).reponseChargee().construis(),
+        {
+          ...unEtatDeReponse(question).reponseChargee().construis(),
+          surReponse: (reponse) => (reponseRecue = reponse),
+        },
         reponseTiroirMultipleDonnee(nouvelleReponse.identifiant, {
           identifiantReponse: 'tiroir-2',
           reponse: 'choix-23',
@@ -318,10 +405,21 @@ describe('Le réducteur de réponse', () => {
           ],
         },
       });
+      expect(reponseRecue).toStrictEqual<Reponse>({
+        identifiantQuestion: 'une-question',
+        reponseDonnee: {
+          reponse: nouvelleReponse.identifiant,
+          questions: [
+            { identifiant: 'tiroir-1', reponses: ['choix-12', 'choix-13'] },
+            { identifiant: 'tiroir-2', reponses: ['choix-21', 'choix-23'] },
+          ],
+        },
+      });
       expect(etatReponse.statut).toBe(EtatReponseStatut.MODIFIEE);
     });
 
     it('prend en compte les réponses à choix unique avec plusieurs questions à tiroir', () => {
+      let reponseRecue: Reponse | undefined = undefined;
       const nouvelleReponse = uneReponsePossible()
         .avecUneQuestion(
           uneQuestionTiroirAChoixUnique()
@@ -365,7 +463,10 @@ describe('Le réducteur de réponse', () => {
         .construis();
 
       const premierEtatReponse = reducteurReponse(
-        unEtatDeReponse(question).reponseChargee().construis(),
+        {
+          ...unEtatDeReponse(question).reponseChargee().construis(),
+          surReponse: (reponse) => (reponseRecue = reponse),
+        },
         reponseTiroirUniqueDonnee(uneAutreReponse.identifiant, {
           identifiantReponse: 'tiroir-2',
           reponse: 'choix-23',
@@ -402,10 +503,22 @@ describe('Le réducteur de réponse', () => {
           ],
         },
       });
+      expect(reponseRecue).toStrictEqual<Reponse>({
+        identifiantQuestion: 'une-question',
+        reponseDonnee: {
+          reponse: uneAutreReponse.identifiant,
+          questions: [
+            { identifiant: 'tiroir-2', reponses: ['choix-23'] },
+            { identifiant: 'tiroir-3', reponses: ['choix-32'] },
+          ],
+        },
+      });
       expect(etatReponse.statut).toBe(EtatReponseStatut.MODIFIEE);
     });
 
     it('prend en compte les réponses à choix unique', () => {
+      let reponseRecue: Reponse | undefined = undefined;
+      let actionRecue: ActionReponseDiagnostic | undefined = undefined;
       const nouvelleReponse = uneReponsePossible()
         .avecUneQuestion(
           uneQuestionAChoixUnique()
@@ -427,7 +540,13 @@ describe('Le réducteur de réponse', () => {
         .construis();
 
       const etatReponse = reducteurReponse(
-        unEtatDeReponse(question).reponseChargee().construis(),
+        {
+          ...unEtatDeReponse(question).reponseChargee().construis(),
+          surReponse: (reponse, action) => {
+            reponseRecue = reponse;
+            actionRecue = action;
+          },
+        },
         reponseTiroirUniqueDonnee(nouvelleReponse.identifiant, {
           identifiantReponse: 'choix-unique',
           reponse: '1',
@@ -449,6 +568,16 @@ describe('Le réducteur de réponse', () => {
           reponse: nouvelleReponse.identifiant,
           questions: [{ identifiant: 'choix-unique', reponses: ['1'] }],
         },
+      });
+      expect(reponseRecue).toStrictEqual<Reponse>({
+        identifiantQuestion: 'une-question',
+        reponseDonnee: {
+          reponse: nouvelleReponse.identifiant,
+          questions: [{ identifiant: 'choix-unique', reponses: ['1'] }],
+        },
+      });
+      expect(actionRecue).toStrictEqual<ActionReponseDiagnostic>({
+        test: { action: 'repondre', ressource: { url: 'url', methode: 'GET' } },
       });
     });
   });

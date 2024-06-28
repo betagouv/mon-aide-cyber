@@ -3,6 +3,7 @@ import { unReferentiel } from '../../constructeurs/constructeurReferentiel';
 import { unDiagnostic } from '../../constructeurs/constructeurDiagnostic';
 import {
   diagnosticCharge,
+  diagnosticModifie,
   reducteurDiagnostic,
   thematiqueAffichee,
 } from '../../../src/domaine/diagnostic/reducteurDiagnostic';
@@ -14,7 +15,10 @@ import {
 } from '../../constructeurs/constructeurQuestions';
 
 describe('Les réducteurs de diagnostic', () => {
-  describe('Lorsque le diagnostic est chargé', () => {
+  describe.each([
+    { test: 'chargé', fonction: diagnosticCharge },
+    { test: 'modifié', fonction: diagnosticModifie },
+  ])('Lorsque le diagnostic est "$test"', ({ fonction }) => {
     it("trie les réponses aux questions par l'ordre définit pour la thématique 'Contexte'", () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
@@ -63,7 +67,7 @@ describe('Les réducteurs de diagnostic', () => {
 
       const etatDiagnostic = reducteurDiagnostic(
         { diagnostic: undefined, thematiqueAffichee: undefined },
-        diagnosticCharge(diagnostic)
+        fonction(diagnostic)
       );
 
       const questions =
@@ -116,7 +120,7 @@ describe('Les réducteurs de diagnostic', () => {
 
       const etatDiagnostic = reducteurDiagnostic(
         { diagnostic: undefined, thematiqueAffichee: undefined },
-        diagnosticCharge(diagnostic)
+        fonction(diagnostic)
       );
 
       const thematiqueContexte =
@@ -181,7 +185,7 @@ describe('Les réducteurs de diagnostic', () => {
 
       const etatDiagnostic = reducteurDiagnostic(
         { diagnostic: undefined, thematiqueAffichee: undefined },
-        diagnosticCharge(diagnostic)
+        fonction(diagnostic)
       );
 
       const thematiqueContexte =

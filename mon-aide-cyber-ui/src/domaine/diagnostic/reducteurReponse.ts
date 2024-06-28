@@ -23,6 +23,7 @@ export type EtatReponse = {
   reponse: () => Reponse | null;
   statut: EtatReponseStatut;
   valeur: () => string | undefined;
+  surReponse: (reponse: Reponse, action: ActionReponseDiagnostic) => void;
 };
 
 type ElementReponse = {
@@ -148,6 +149,8 @@ export const reducteurReponse = (
     reponses: ReponseMultiple[],
     valeur: string
   ): EtatReponse => {
+    const reponse = genereLaReponsePourUneQuestionTiroir(reponses, valeur);
+    etat.surReponse(reponse(), actionAMener('repondre')!);
     return {
       ...etat,
       action: (actionDemandee: string) => actionAMener(actionDemandee),
@@ -155,7 +158,7 @@ export const reducteurReponse = (
         valeur,
         reponses,
       },
-      reponse: genereLaReponsePourUneQuestionTiroir(reponses, valeur),
+      reponse: reponse,
       statut: EtatReponseStatut.MODIFIEE,
       valeur: () => valeur,
     };
@@ -168,38 +171,44 @@ export const reducteurReponse = (
         statut: EtatReponseStatut.ENVOYEE,
       };
     case TypeActionReponse.REPONSE_UNIQUE_DONNEE: {
-      return {
+      const reponseDonnee = {
+        valeur: action.reponse.valeur,
+        reponses: [],
+      };
+      const reponse: Reponse = {
+        identifiantQuestion: etat.question.identifiant,
+        reponseDonnee: action.reponse.valeur,
+      };
+      etat.surReponse(reponse, actionAMener('repondre')!);
+      const nouvelEtat: EtatReponse = {
         ...etat,
         action: (actionDemandee) => actionAMener(actionDemandee),
-        reponseDonnee: {
-          valeur: action.reponse.valeur,
-          reponses: [],
-        },
-        reponse: () => ({
-          identifiantQuestion: etat.question.identifiant,
-          reponseDonnee: action.reponse.valeur,
-        }),
+        reponseDonnee: reponseDonnee,
+        reponse: () => reponse,
         statut: EtatReponseStatut.MODIFIEE,
         valeur: () => action.reponse.valeur,
       };
+      return nouvelEtat;
     }
     case TypeActionReponse.REPONSE_MULTIPLE_DONNEE: {
       const reponses = gereLesReponsesMultiples(action.reponse.elementReponse);
-
-      return {
+      const reponse: Reponse = {
+        identifiantQuestion: etat.question.identifiant,
+        reponseDonnee: reponses.flatMap((rep) => Array.from(rep.reponses)),
+      };
+      etat.surReponse(reponse, actionAMener('repondre')!);
+      const nouvelEtat: EtatReponse = {
         ...etat,
         action: (actionDemandee) => actionAMener(actionDemandee),
         reponseDonnee: {
           valeur: null,
           reponses,
         },
-        reponse: () => ({
-          identifiantQuestion: etat.question.identifiant,
-          reponseDonnee: reponses.flatMap((rep) => Array.from(rep.reponses)),
-        }),
+        reponse: () => reponse,
         statut: EtatReponseStatut.MODIFIEE,
         valeur: () => undefined,
       };
+      return nouvelEtat;
     }
     case TypeActionReponse.REPONSE_TIROIR_UNIQUE_DONNEE: {
       let reponses: ReponseMultiple[] = toutesLesReponses();
@@ -291,7 +300,8 @@ export const reponseEnvoyee = (): ActionReponse => {
 
 export const initialiseReducteur = (
   question: Question,
-  actions: ActionReponseDiagnostic[]
+  actions: ActionReponseDiagnostic[],
+  surReponse: (reponse: Reponse, action: ActionReponseDiagnostic) => void
 ): EtatReponse => {
   const valeur: () => string | undefined = () =>
     question.reponseDonnee.valeur || undefined;
@@ -303,5 +313,6 @@ export const initialiseReducteur = (
     reponse: () => null,
     statut: EtatReponseStatut.CHARGEE,
     valeur,
+    surReponse,
   };
 };
