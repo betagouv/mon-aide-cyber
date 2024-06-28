@@ -1,9 +1,10 @@
 import { Diagnostic } from './Diagnostic.ts';
-import { ReponsePossible } from './Referentiel.ts';
+import { Referentiel, ReponsePossible } from './Referentiel.ts';
 
 enum TypeActionDiagnostic {
   DIAGNOSTIC_CHARGE = 'DIAGNOSTIC_CHARGE',
   THEMATIQUE_AFFICHEE = 'THEMATIQUE_AFFICHEE',
+  DIAGNOSTIC_MODIFIE = 'DIAGNOSTIC_MODIFIE',
 }
 
 type EtatDiagnostic = {
@@ -16,6 +17,10 @@ type ActionDiagnostic =
       type: TypeActionDiagnostic.DIAGNOSTIC_CHARGE;
     }
   | {
+      diagnostic: Diagnostic;
+      type: TypeActionDiagnostic.DIAGNOSTIC_MODIFIE;
+    }
+  | {
       clef: string;
       type: TypeActionDiagnostic.THEMATIQUE_AFFICHEE;
     };
@@ -23,32 +28,40 @@ export const reducteurDiagnostic = (
   etat: EtatDiagnostic,
   action: ActionDiagnostic
 ): EtatDiagnostic => {
+  const trieLesReponses = (referentiel: Referentiel) => {
+    Object.entries(referentiel).forEach(([_, thematique]) => {
+      const trieLesReponses = (
+        reponsesPossibles: ReponsePossible[] | undefined
+      ): void => {
+        reponsesPossibles?.sort(
+          (premiereReponse, secondeReponse) =>
+            premiereReponse.ordre - secondeReponse.ordre
+        );
+      };
+      thematique.groupes.forEach((groupe) => {
+        groupe.questions.forEach((question) => {
+          trieLesReponses(question.reponsesPossibles);
+          question.reponsesPossibles.forEach((reponse) =>
+            reponse.questions?.forEach((question) =>
+              trieLesReponses(question.reponsesPossibles)
+            )
+          );
+        });
+      });
+    });
+  };
+
   switch (action.type) {
     case TypeActionDiagnostic.THEMATIQUE_AFFICHEE:
       return { ...etat, thematiqueAffichee: action.clef };
+    case TypeActionDiagnostic.DIAGNOSTIC_MODIFIE:
+      trieLesReponses(action.diagnostic.referentiel);
+      return {
+        ...etat,
+        diagnostic: action.diagnostic,
+      };
     case TypeActionDiagnostic.DIAGNOSTIC_CHARGE:
-      Object.entries(action.diagnostic.referentiel).forEach(
-        ([_, thematique]) => {
-          const trieLesReponses = (
-            reponsesPossibles: ReponsePossible[] | undefined
-          ): void => {
-            reponsesPossibles?.sort(
-              (premiereReponse, secondeReponse) =>
-                premiereReponse.ordre - secondeReponse.ordre
-            );
-          };
-          thematique.groupes.forEach((groupe) => {
-            groupe.questions.forEach((question) => {
-              trieLesReponses(question.reponsesPossibles);
-              question.reponsesPossibles.forEach((reponse) =>
-                reponse.questions?.forEach((question) =>
-                  trieLesReponses(question.reponsesPossibles)
-                )
-              );
-            });
-          });
-        }
-      );
+      trieLesReponses(action.diagnostic.referentiel);
       return {
         ...etat,
         diagnostic: action.diagnostic,
@@ -60,7 +73,14 @@ export const reducteurDiagnostic = (
 export const diagnosticCharge = (diagnostic: Diagnostic): ActionDiagnostic => {
   return {
     type: TypeActionDiagnostic.DIAGNOSTIC_CHARGE,
-    diagnostic: diagnostic,
+    diagnostic,
+  };
+};
+
+export const diagnosticModifie = (diagnostic: Diagnostic): ActionDiagnostic => {
+  return {
+    type: TypeActionDiagnostic.DIAGNOSTIC_MODIFIE,
+    diagnostic,
   };
 };
 

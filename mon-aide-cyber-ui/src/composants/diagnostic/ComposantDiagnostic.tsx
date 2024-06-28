@@ -11,14 +11,13 @@ import {
 import { UUID } from '../../types/Types.ts';
 import {
   diagnosticCharge,
+  diagnosticModifie,
   reducteurDiagnostic,
   thematiqueAffichee,
 } from '../../domaine/diagnostic/reducteurDiagnostic.ts';
 import {
-  EtatReponseStatut,
   initialiseReducteur,
   reducteurReponse,
-  reponseEnvoyee,
   reponseMultipleDonnee,
   reponseTiroirMultipleDonnee,
   reponseTiroirUniqueDonnee,
@@ -63,6 +62,7 @@ type ProprietesComposantQuestion = {
   numeroQuestion: number | undefined;
   question: Question;
   reponseDonnee?: ReponseDonnee;
+  surReponse: (reponse: Reponse, action: ActionReponseDiagnostic) => void;
 };
 
 type ReponseAEnvoyer = {
@@ -107,12 +107,13 @@ const ComposantQuestionListe = ({
   question,
   actions,
   numeroQuestion,
+  surReponse,
 }: ProprietesComposantQuestion) => {
   const [etatReponse, envoie] = useReducer(
     reducteurReponse,
-    initialiseReducteur(question, actions)
+    initialiseReducteur(question, actions, surReponse)
   );
-  const macapi = useMACAPI();
+  // const macapi = useMACAPI();
   const clefsFiltrage: (keyof ReponsePossible)[] =
     question.type === 'liste'
       ? ['libelle']
@@ -136,23 +137,6 @@ const ComposantQuestionListe = ({
     },
     [envoie]
   );
-
-  const reponseQuestionEnvoyee = useCallback(() => {
-    envoie(reponseEnvoyee());
-  }, [envoie]);
-
-  useEffect(() => {
-    if (etatReponse.statut === EtatReponseStatut.MODIFIEE) {
-      const action = etatReponse.action('repondre');
-      if (action !== undefined) {
-        const reponseDonnee = etatReponse.reponse()!;
-        const parametresAPI = genereParametresAPI(action, reponseDonnee);
-        macapi.appelle<void, ReponseAEnvoyer>(parametresAPI, () =>
-          Promise.resolve()
-        );
-      }
-    }
-  }, [actions, etatReponse, macapi, question, reponseQuestionEnvoyee]);
 
   return (
     <div
@@ -194,12 +178,12 @@ const ComposantQuestion = ({
   question,
   actions,
   numeroQuestion,
+  surReponse,
 }: ProprietesComposantQuestion) => {
   const [etatReponse, envoie] = useReducer(
     reducteurReponse,
-    initialiseReducteur(question, actions)
+    initialiseReducteur(question, actions, surReponse)
   );
-  const macapi = useMACAPI();
 
   const repondQuestionUnique = useCallback(
     (identifiantReponse: string) => {
@@ -240,29 +224,6 @@ const ComposantQuestion = ({
     },
     [envoie]
   );
-
-  const reponseQuestionEnvoyee = useCallback(() => {
-    envoie(reponseEnvoyee());
-  }, [envoie]);
-
-  useEffect(() => {
-    if (etatReponse.statut === EtatReponseStatut.MODIFIEE) {
-      const action = etatReponse.action('repondre');
-      if (action !== undefined) {
-        const parametresAPI = genereParametresAPI(
-          action,
-          etatReponse.reponse()!
-        );
-        macapi
-          .appelle<void, ReponseAEnvoyer>(parametresAPI, () =>
-            Promise.resolve()
-          )
-          .then(() => {
-            reponseQuestionEnvoyee();
-          });
-      }
-    }
-  }, [actions, etatReponse, macapi, question, reponseQuestionEnvoyee]);
 
   const badge = question.perimetre ? (
     <BadgePerimetre perimetre={question.perimetre} />
@@ -409,6 +370,22 @@ export const ComposantDiagnostic = ({
     );
   };
 
+  const surReponse = useCallback(
+    (reponse: Reponse, action: ActionReponseDiagnostic) => {
+      const parametresAPI = genereParametresAPI(action, reponse);
+      macapi
+        .appelle<
+          RepresentationDiagnostic,
+          ReponseAEnvoyer
+        >(parametresAPI, enDiagnostic)
+        .then((diagnostic) => {
+          envoie(diagnosticModifie(diagnostic.diagnostic));
+          navigationMAC.ajouteEtat(diagnostic.liens);
+        });
+    },
+    [macapi, navigationMAC]
+  );
+
   return (
     <>
       <HeaderDiagnostic
@@ -443,12 +420,14 @@ export const ComposantDiagnostic = ({
                                 question={question}
                                 actions={actionsPossibles}
                                 numeroQuestion={numeroQuestion}
+                                surReponse={surReponse}
                               />
                             ) : (
                               <ComposantQuestion
                                 question={question}
                                 actions={actionsPossibles}
                                 numeroQuestion={numeroQuestion}
+                                surReponse={surReponse}
                               />
                             )}
                           </>
