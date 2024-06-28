@@ -43,7 +43,7 @@ export class ServeurMACMemoire {
     return Promise.resolve(!this.reponseEnvoyee);
   }
 
-  envoieReponse(
+  async envoieReponse(
     parametresAPI: ParametresAPI<{
       chemin: string;
       identifiant: string;
@@ -60,5 +60,61 @@ export class ServeurMACMemoire {
       reponseDonnee: parametresAPI.corps!.reponse,
       identifiantQuestion: parametresAPI.corps!.identifiant,
     };
+    const idDiagnostic = parametresAPI.url.split('/').at(-1);
+
+    const estReponseQuestionATiroir = (
+      reponse: string | string[] | ReponseQuestionATiroir | null | undefined
+    ): reponse is ReponseQuestionATiroir =>
+      reponse !== null &&
+      reponse !== undefined &&
+      (reponse as ReponseQuestionATiroir) !== null &&
+      (reponse as ReponseQuestionATiroir) !== undefined &&
+      (reponse as ReponseQuestionATiroir).reponse !== null &&
+      (reponse as ReponseQuestionATiroir).reponse !== undefined;
+
+    const estReponseQuestionAChoixMultilpe = (
+      reponse: string | string[] | null | undefined
+    ): reponse is string[] => Array.isArray(reponse);
+
+    if (idDiagnostic) {
+      const representationDiagnosticPromise = await this.find(
+        idDiagnostic as UUID
+      );
+      representationDiagnosticPromise.diagnostic.referentiel[
+        parametresAPI.corps!.chemin
+      ].groupes.forEach((g) => {
+        const question = g.questions.find(
+          (q) => q.identifiant === parametresAPI.corps!.identifiant
+        );
+
+        if (question !== undefined) {
+          const reponseCorps = parametresAPI.corps?.reponse;
+          if (estReponseQuestionATiroir(reponseCorps)) {
+            question.reponseDonnee = {
+              valeur: reponseCorps.reponse,
+              reponses: reponseCorps.questions.map((q) => ({
+                reponses: new Set(q.reponses),
+                identifiant: q.identifiant,
+              })),
+            };
+          } else if (estReponseQuestionAChoixMultilpe(reponseCorps)) {
+            question.reponseDonnee = {
+              valeur: parametresAPI.corps!.identifiant,
+              reponses: [
+                {
+                  identifiant: parametresAPI.corps!.identifiant,
+                  reponses: new Set(reponseCorps),
+                },
+              ],
+            };
+          } else {
+            question.reponseDonnee = {
+              valeur: parametresAPI.corps!.reponse as string | null,
+              reponses: [],
+            };
+          }
+        }
+      });
+    }
   }
 }
