@@ -3,7 +3,7 @@ import {
   EtatRestitution,
   reducteurRestitution,
   restitutionChargee,
-  rubriqueCliquee,
+  rubriqueConsultee,
 } from '../../../src/domaine/diagnostic/reducteurRestitution';
 import { uneRestitution } from '../../constructeurs/constructeurRestitution.ts';
 
@@ -25,12 +25,12 @@ describe('Réducteur Restitution', () => {
 
     const etatRestitution = reducteurRestitution(
       { restitution },
-      rubriqueCliquee('informations')
+      rubriqueConsultee('informations')
     );
 
     expect(etatRestitution).toStrictEqual<EtatRestitution>({
       restitution: restitution,
-      rubrique: 'informations',
+      nomRubriqueConsultee: 'informations',
     });
   });
 });

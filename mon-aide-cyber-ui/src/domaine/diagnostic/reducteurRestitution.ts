@@ -2,7 +2,7 @@ import { Restitution } from './Restitution.ts';
 
 export type EtatRestitution = {
   restitution?: Restitution;
-  rubrique?: string;
+  nomRubriqueConsultee?: string;
 };
 
 type ActionRestitution =
@@ -11,13 +11,13 @@ type ActionRestitution =
       type: TypeActionRestitution.RESTITUTION_CHARGEE;
     }
   | {
-      rubrique: string;
-      type: TypeActionRestitution.RUBRIQUE_CLIQUEE;
+      nomRubrique: string;
+      type: TypeActionRestitution.RUBRIQUE_CONSULTEE;
     };
 
 enum TypeActionRestitution {
   RESTITUTION_CHARGEE = 'RESTITUTION_CHARGEE',
-  RUBRIQUE_CLIQUEE = 'RUBRIQUE_CLIQUEE',
+  RUBRIQUE_CONSULTEE = 'RUBRIQUE_CONSULTEE',
 }
 
 export const reducteurRestitution = (
@@ -25,8 +25,8 @@ export const reducteurRestitution = (
   action: ActionRestitution
 ): EtatRestitution => {
   switch (action.type) {
-    case TypeActionRestitution.RUBRIQUE_CLIQUEE:
-      return { ...etat, rubrique: action.rubrique };
+    case TypeActionRestitution.RUBRIQUE_CONSULTEE:
+      return { ...etat, nomRubriqueConsultee: action.nomRubrique };
     case TypeActionRestitution.RESTITUTION_CHARGEE:
       return { ...etat, restitution: action.restitution };
   }
@@ -39,7 +39,7 @@ export const restitutionChargee = (
   type: TypeActionRestitution.RESTITUTION_CHARGEE,
 });
 
-export const rubriqueCliquee = (rubrique: string): ActionRestitution => ({
-  rubrique,
-  type: TypeActionRestitution.RUBRIQUE_CLIQUEE,
+export const rubriqueConsultee = (nomRubrique: string): ActionRestitution => ({
+  nomRubrique,
+  type: TypeActionRestitution.RUBRIQUE_CONSULTEE,
 });

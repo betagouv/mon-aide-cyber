@@ -8,7 +8,7 @@ import '../../assets/styles/_commun.scss';
 import {
   reducteurRestitution,
   restitutionChargee,
-  rubriqueCliquee,
+  rubriqueConsultee,
 } from '../../domaine/diagnostic/reducteurRestitution.ts';
 import { UUID } from '../../types/Types.ts';
 import { Restitution } from '../../domaine/diagnostic/Restitution.ts';
@@ -43,7 +43,7 @@ export const ComposantRestitution = ({
               const nomRubriqueConsultee = entry.target.parentElement?.id;
 
               nomRubriqueConsultee &&
-                envoie(rubriqueCliquee(nomRubriqueConsultee));
+                envoie(rubriqueConsultee(nomRubriqueConsultee));
             }
           });
         },
@@ -217,7 +217,8 @@ export const ComposantRestitution = ({
                       <ul className="fr-sidemenu__list">
                         <li
                           className={`fr-sidemenu__item ${
-                            etatRestitution.rubrique === 'informations'
+                            etatRestitution.nomRubriqueConsultee ===
+                            'informations'
                               ? 'fr-sidemenu__item--active'
                               : ''
                           }`}
@@ -226,7 +227,7 @@ export const ComposantRestitution = ({
                             className="fr-sidemenu__link"
                             href="#informations"
                             target="_self"
-                            {...(etatRestitution.rubrique ===
+                            {...(etatRestitution.nomRubriqueConsultee ===
                               'informations' && { 'aria-current': 'page' })}
                           >
                             Informations
@@ -234,7 +235,8 @@ export const ComposantRestitution = ({
                         </li>
                         <li
                           className={`fr-sidemenu__item ${
-                            etatRestitution.rubrique === 'indicateurs'
+                            etatRestitution.nomRubriqueConsultee ===
+                            'indicateurs'
                               ? 'fr-sidemenu__item--active'
                               : ''
                           }`}
@@ -243,7 +245,8 @@ export const ComposantRestitution = ({
                             className="fr-sidemenu__link"
                             href="#indicateurs"
                             target="_self"
-                            {...(etatRestitution.rubrique === 'indicateurs' && {
+                            {...(etatRestitution.nomRubriqueConsultee ===
+                              'indicateurs' && {
                               'aria-current': 'page',
                             })}
                           >
@@ -252,7 +255,8 @@ export const ComposantRestitution = ({
                         </li>
                         <li
                           className={`fr-sidemenu__item ${
-                            etatRestitution.rubrique === 'mesures-prioritaires'
+                            etatRestitution.nomRubriqueConsultee ===
+                            'mesures-prioritaires'
                               ? 'fr-sidemenu__item--active'
                               : ''
                           }`}
@@ -261,7 +265,7 @@ export const ComposantRestitution = ({
                             className="fr-sidemenu__link"
                             href="#mesures-prioritaires"
                             target="_self"
-                            {...(etatRestitution.rubrique ===
+                            {...(etatRestitution.nomRubriqueConsultee ===
                               'mesures-prioritaires' && {
                               'aria-current': 'page',
                             })}
@@ -271,7 +275,8 @@ export const ComposantRestitution = ({
                         </li>
                         <li
                           className={`fr-sidemenu__item ${
-                            etatRestitution.rubrique === 'contacts-liens-utiles'
+                            etatRestitution.nomRubriqueConsultee ===
+                            'contacts-liens-utiles'
                               ? 'fr-sidemenu__item--active'
                               : ''
                           }`}
@@ -280,7 +285,7 @@ export const ComposantRestitution = ({
                             className="fr-sidemenu__link"
                             href="#contacts-liens-utiles"
                             target="_self"
-                            {...(etatRestitution.rubrique ===
+                            {...(etatRestitution.nomRubriqueConsultee ===
                               'contacts-liens-utiles' && {
                               'aria-current': 'page',
                             })}
@@ -290,7 +295,8 @@ export const ComposantRestitution = ({
                         </li>
                         <li
                           className={`fr-sidemenu__item ${
-                            etatRestitution.rubrique === 'ressources'
+                            etatRestitution.nomRubriqueConsultee ===
+                            'ressources'
                               ? 'fr-sidemenu__item--active'
                               : ''
                           }`}
@@ -299,7 +305,8 @@ export const ComposantRestitution = ({
                             className="fr-sidemenu__link"
                             href="#ressources"
                             target="_self"
-                            {...(etatRestitution.rubrique === 'ressources' && {
+                            {...(etatRestitution.nomRubriqueConsultee ===
+                              'ressources' && {
                               'aria-current': 'page',
                             })}
                           >
@@ -308,7 +315,8 @@ export const ComposantRestitution = ({
                         </li>
                         <li
                           className={`fr-sidemenu__item ${
-                            etatRestitution.rubrique === 'autres-mesures'
+                            etatRestitution.nomRubriqueConsultee ===
+                            'autres-mesures'
                               ? 'fr-sidemenu__item--active'
                               : ''
                           }`}
@@ -317,7 +325,7 @@ export const ComposantRestitution = ({
                             className="fr-sidemenu__link"
                             href="#autres-mesures"
                             target="_self"
-                            {...(etatRestitution.rubrique ===
+                            {...(etatRestitution.nomRubriqueConsultee ===
                               'autres-mesures' && { 'aria-current': 'page' })}
                           >
                             Les autres mesures
