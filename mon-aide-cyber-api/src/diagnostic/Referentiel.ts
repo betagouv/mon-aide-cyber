@@ -17,6 +17,12 @@ type ReponsePossible = {
   ordre: number;
   questions?: QuestionATiroir[];
   resultat?: Resultat;
+  regle?: RegleDeGestionAjouteReponse;
+};
+
+export type RegleDeGestionAjouteReponse = {
+  strategie: 'AJOUTE_REPONSE';
+  reponses: { reponseDonnee: string; identifiantQuestion: string }[];
 };
 
 type TypeQuestion = 'choixMultiple' | 'choixUnique';

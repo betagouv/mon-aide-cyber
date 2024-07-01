@@ -6,6 +6,7 @@ import {
   QuestionChoixUnique,
   QuestionsThematique,
   Referentiel,
+  RegleDeGestionAjouteReponse,
   ReponsePossible,
   TypeQuestion,
 } from '../../src/diagnostic/Referentiel';
@@ -57,23 +58,20 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
 class ConstructeurQuestion
   implements Constructeur<QuestionChoixUnique | QuestionChoixMultiple>
 {
-  private question: QuestionChoixUnique | QuestionChoixMultiple = {
-    type: 'choixUnique',
-    identifiant: '',
-    libelle: 'Quelle est la réponse?',
-    reponsesPossibles: [
-      {
-        identifiant: faker.string.alpha(10),
-        libelle: faker.word.words(),
-        ordre: 0,
-      },
-    ],
-    poids: 1,
-  };
+  private type: 'choixUnique' | 'choixMultiple' = 'choixUnique';
+  private identifiant: string | undefined = undefined;
+  private libelle = 'Quelle est la réponse?';
+  private reponsesPossibles = [
+    {
+      identifiant: faker.string.alpha(10),
+      libelle: faker.word.words(),
+      ordre: 0,
+    },
+  ];
+  private poids: Poids = 1;
 
   avecPoids(poids: Poids): ConstructeurQuestion {
-    this.question.poids = poids;
-
+    this.poids = poids;
     return this;
   }
 
@@ -81,11 +79,11 @@ class ConstructeurQuestion
     libelleQuestion: string,
     reponsesPossibles: { identifiant: string; libelle: string }[] = []
   ): ConstructeurQuestion {
-    this.question.reponsesPossibles = [];
-    this.question.libelle = libelleQuestion;
-    this.question.identifiant ||= aseptise(libelleQuestion);
+    this.reponsesPossibles = [];
+    this.libelle = libelleQuestion;
+    this.identifiant ||= aseptise(libelleQuestion);
     reponsesPossibles.forEach((reponse, index) =>
-      this.question.reponsesPossibles.push({
+      this.reponsesPossibles.push({
         identifiant: reponse.identifiant,
         libelle: reponse.libelle,
         ordre: index,
@@ -101,12 +99,12 @@ class ConstructeurQuestion
       libelle: string;
     }[] = []
   ): ConstructeurQuestion {
-    this.question.reponsesPossibles = [];
-    this.question.libelle ||= libelleQuestion;
-    this.question.identifiant = aseptise(libelleQuestion);
-    this.question.type = 'choixMultiple';
+    this.reponsesPossibles = [];
+    this.libelle ||= libelleQuestion;
+    this.identifiant = aseptise(libelleQuestion);
+    this.type = 'choixMultiple';
     reponsesPossibles.forEach((reponse, index) =>
-      this.question.reponsesPossibles.push({
+      this.reponsesPossibles.push({
         identifiant: reponse.identifiant,
         libelle: reponse.libelle,
         ordre: index,
@@ -118,18 +116,25 @@ class ConstructeurQuestion
   avecReponsesPossibles(
     reponsesPossibles: ReponsePossible[]
   ): ConstructeurQuestion {
-    this.question.reponsesPossibles = reponsesPossibles;
+    this.reponsesPossibles = reponsesPossibles;
     return this;
   }
 
   avecIdentifiant(identifiant: string) {
-    this.question.identifiant = identifiant;
-
+    this.identifiant = identifiant;
     return this;
   }
 
   construis(): QuestionChoixUnique | QuestionChoixMultiple {
-    return this.question;
+    return {
+      type: this.type,
+      ...((this.identifiant && { identifiant: this.identifiant }) || {
+        identifiant: faker.string.alpha(10),
+      }),
+      libelle: this.libelle,
+      reponsesPossibles: this.reponsesPossibles,
+      poids: this.poids,
+    };
   }
 }
 
@@ -241,6 +246,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     mesures?: Mesure[];
     indice: Indice;
   };
+  private regleDeGestion: RegleDeGestionAjouteReponse | undefined = undefined;
 
   ajouteUneQuestionATiroir(
     question: QuestionATiroir
@@ -284,6 +290,16 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     return this;
   }
 
+  ajouteUneRegleAjouteReponses(
+    reglesDeGestion: { reponseDonnee: string; identifiantQuestion: string }[]
+  ): ConstructeurReponsePossible {
+    this.regleDeGestion = {
+      strategie: 'AJOUTE_REPONSE',
+      reponses: reglesDeGestion,
+    };
+    return this;
+  }
+
   construis(): ReponsePossible {
     return {
       identifiant: this.identifiant,
@@ -293,6 +309,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
         resultat: this.resultat,
       }),
       ...(this.questions && { questions: this.questions }),
+      ...(this.regleDeGestion !== undefined && { regle: this.regleDeGestion }),
     };
   }
 }

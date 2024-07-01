@@ -111,8 +111,32 @@ const ajouteLaReponseAuDiagnostic = (
   const questionTrouvee = questions.find(
     (q) => q.identifiant === corpsReponse.identifiant
   );
+
+  const appliqueLesReglesDeGestion = (questionTrouvee: QuestionDiagnostic) => {
+    const reponsePossible = questionTrouvee.reponsesPossibles.find(
+      (r) => r.identifiant === corpsReponse.reponse
+    );
+    if (reponsePossible?.regle?.strategie === 'AJOUTE_REPONSE') {
+      reponsePossible?.regle?.reponses.forEach((reponse) => {
+        const questions = Object.entries(diagnostic.referentiel)
+          .flatMap(([_, question]) => question.questions)
+          .filter(
+            (questions) => questions.identifiant === reponse.identifiantQuestion
+          );
+        questions.forEach(
+          (q) =>
+            (q.reponseDonnee = {
+              reponseUnique: reponse.reponseDonnee,
+              reponsesMultiples: [],
+            })
+        );
+      });
+    }
+  };
+
   if (questionTrouvee !== undefined) {
     StrategieDeReponse.pour(corpsReponse).applique(questionTrouvee);
+    appliqueLesReglesDeGestion(questionTrouvee);
   }
 };
 
