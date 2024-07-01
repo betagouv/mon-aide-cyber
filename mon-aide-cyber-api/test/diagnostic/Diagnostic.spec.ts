@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
   desMesures,
   desMesuresPour7Questions,
@@ -16,11 +16,14 @@ import {
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
 import {
+  ajouteLaReponseAuDiagnostic,
   genereLaRestitution,
   Indicateurs,
   MesurePriorisee,
 } from '../../src/diagnostic/Diagnostic';
 import { uneAssociation } from '../constructeurs/constructeurAssociation';
+import { Question, ReponsePossible } from '../../src/diagnostic/Referentiel';
+import { unCorspsDeReponse } from '../constructeurs/constructeurReponse';
 
 describe('Diagnostic', () => {
   type PartieCommuneAttendueMesurePriorisee = Omit<
@@ -37,6 +40,86 @@ describe('Diagnostic', () => {
   const mesures = desMesuresPour7Questions();
 
   const questions = uneListeDe7QuestionsToutesAssociees();
+
+  describe('Réponses au diagnostic', () => {
+    const unDiagnosticAvecUneRegleDeGestionAjouteReponse = (
+      premiereQuestion: Question,
+      premiereReponsePossible: ReponsePossible,
+      deuxiemeQuestion: Question,
+      deuxiemeReponsePossible: ReponsePossible
+    ) =>
+      unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique('Question à tiroir ?')
+                .avecReponsesPossibles([
+                  uneReponsePossible()
+                    .ajouteUneRegleAjouteReponses([
+                      {
+                        identifiantQuestion: premiereQuestion.identifiant,
+                        reponseDonnee: premiereReponsePossible.identifiant,
+                      },
+                      {
+                        identifiantQuestion: deuxiemeQuestion.identifiant,
+                        reponseDonnee: deuxiemeReponsePossible.identifiant,
+                      },
+                    ])
+                    .construis(),
+                ])
+                .construis()
+            )
+            .ajouteUneThematique('thematique-1', [premiereQuestion])
+            .ajouteUneThematique('thematique-2', [deuxiemeQuestion])
+            .construis()
+        )
+        .construis();
+
+    it('Applique la règle de gestion AJOUTE_REPONSE liée à la question', async () => {
+      const premiereReponsePossible = uneReponsePossible().construis();
+      const premiereQuestion = uneQuestion()
+        .avecReponsesPossibles([
+          premiereReponsePossible,
+          uneReponsePossible().construis(),
+        ])
+        .construis();
+      const deuxiemeReponsePossible = uneReponsePossible().construis();
+      const deuxiemeQuestion = uneQuestion()
+        .avecReponsesPossibles([
+          uneReponsePossible().construis(),
+          deuxiemeReponsePossible,
+        ])
+        .construis();
+      const diagnostic = unDiagnosticAvecUneRegleDeGestionAjouteReponse(
+        premiereQuestion,
+        premiereReponsePossible,
+        deuxiemeQuestion,
+        deuxiemeReponsePossible
+      );
+
+      ajouteLaReponseAuDiagnostic(
+        diagnostic,
+        unCorspsDeReponse()
+          .concernantLaQuestion(diagnostic.referentiel.contexte.questions[0])
+          .pourLaThematique('contexte')
+          .avecLaReponse(
+            diagnostic.referentiel.contexte.questions[0].reponsesPossibles[0]
+              .identifiant
+          )
+          .construis()
+      );
+
+      expect(
+        diagnostic.referentiel['thematique-1'].questions[0].reponseDonnee
+          .reponseUnique
+      ).toStrictEqual(premiereReponsePossible.identifiant);
+      expect(
+        diagnostic.referentiel['thematique-2'].questions[0].reponseDonnee
+          .reponseUnique
+      ).toStrictEqual(deuxiemeReponsePossible.identifiant);
+    });
+  });
 
   describe('restitution', () => {
     describe("lorsque l'on génère les mesures", () => {
