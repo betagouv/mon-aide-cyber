@@ -11,6 +11,8 @@ html {
 
   h3 {
     color: var(--couleurs-mac-violet-fonce);
+    padding-bottom: 2rem;
+    margin-bottom: 0;
   }
 
   h4 {
@@ -157,9 +159,6 @@ html {
   height: 40px;
 }
 
-#informations {
-  padding-top: 2.5rem;
-}
 #indicateurs {
   padding-top: 2.5rem;
 }
