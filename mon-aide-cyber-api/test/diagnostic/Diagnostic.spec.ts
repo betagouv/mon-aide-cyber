@@ -20,6 +20,7 @@ import {
   genereLaRestitution,
   Indicateurs,
   MesurePriorisee,
+  ReponseDonnee,
 } from '../../src/diagnostic/Diagnostic';
 import { uneAssociation } from '../constructeurs/constructeurAssociation';
 import { Question, ReponsePossible } from '../../src/diagnostic/Referentiel';
@@ -118,6 +119,91 @@ describe('Diagnostic', () => {
         diagnostic.referentiel['thematique-2'].questions[0].reponseDonnee
           .reponseUnique
       ).toStrictEqual(deuxiemeReponsePossible.identifiant);
+    });
+
+    const unDiagnosticAvecUneRegleDeGestionSupprimeReponse = (
+      premiereQuestion: Question,
+      deuxiemeQuestion: Question
+    ) =>
+      unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique('Question à tiroir ?')
+                .avecReponsesPossibles([
+                  uneReponsePossible()
+                    .ajouteUneRegleSupprimeReponses([
+                      premiereQuestion.identifiant,
+                      deuxiemeQuestion.identifiant,
+                    ])
+                    .construis(),
+                ])
+                .construis()
+            )
+            .ajouteUneThematique('thematique-1', [
+              uneQuestion()
+                .avecReponsesPossibles([uneReponsePossible().construis()])
+                .construis(),
+              premiereQuestion,
+            ])
+            .ajouteUneThematique('thematique-2', [deuxiemeQuestion])
+            .construis()
+        )
+        .construis();
+
+    it('Applique la règle de gestion SUPPRIME_REPONSE liée à la question', async () => {
+      const premiereReponsePossible = uneReponsePossible().construis();
+      const premiereQuestion = uneQuestion()
+        .avecReponsesPossibles([
+          premiereReponsePossible,
+          uneReponsePossible().construis(),
+        ])
+        .construis();
+      const deuxiemeReponsePossible = uneReponsePossible().construis();
+      const deuxiemeQuestion = uneQuestion()
+        .avecReponsesPossibles([
+          uneReponsePossible().construis(),
+          deuxiemeReponsePossible,
+        ])
+        .construis();
+      const diagnostic = unDiagnosticAvecUneRegleDeGestionSupprimeReponse(
+        premiereQuestion,
+        deuxiemeQuestion
+      );
+
+      ajouteLaReponseAuDiagnostic(
+        diagnostic,
+        unCorspsDeReponse()
+          .concernantLaQuestion(premiereQuestion)
+          .pourLaThematique('thematique-1')
+          .avecLaReponse(premiereQuestion.reponsesPossibles[0].identifiant)
+          .construis()
+      );
+      ajouteLaReponseAuDiagnostic(
+        diagnostic,
+        unCorspsDeReponse()
+          .concernantLaQuestion(diagnostic.referentiel.contexte.questions[0])
+          .pourLaThematique('contexte')
+          .avecLaReponse(
+            diagnostic.referentiel.contexte.questions[0].reponsesPossibles[0]
+              .identifiant
+          )
+          .construis()
+      );
+
+      expect(
+        diagnostic.referentiel['thematique-1'].questions[1].reponseDonnee
+      ).toStrictEqual<ReponseDonnee>({
+        reponseUnique: null,
+        reponsesMultiples: [],
+      });
+      expect(
+        diagnostic.referentiel['thematique-2'].questions[0].reponseDonnee
+      ).toStrictEqual<ReponseDonnee>({
+        reponseUnique: null,
+        reponsesMultiples: [],
+      });
     });
   });
 
