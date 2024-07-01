@@ -31,6 +31,6 @@
     "@faker-js/faker": "^8.0.2",
     "@types/cookies": "^0.7.10",
     "prettier": "^3.3.2",
-    "vitest": "^1.2.2"
+    "vitest": "^1.6.0"
   }
 }
