@@ -218,7 +218,7 @@ h4 {
         padding-bottom: 5mm;
     }
 
-    .section-mesure > div > b{
+    .section-mesure > div > b {
         font-family: "Marianne ExtraBold";
     }
 
@@ -255,13 +255,13 @@ h4 {
 .contact {
     align-items: center;
 }
+
 .contact::before {
     content: '';
     width: 1mm;
     height: 4mm;
     margin-right: 11mm;
     mask-repeat: no-repeat;
-    background-color: var(--couleurs-mac-violet-clair);
     flex-shrink: 0;
 }
 
@@ -282,14 +282,6 @@ h4 {
     align-items: center;
     align-content: center;
     text-align: center;
-
-    border-left: 7px solid var(--couleurs-mac-violet-clair);
-    border-image: linear-gradient(
-            to bottom,
-            rgba(0, 0, 0, 0) 10px,
-            var(--couleurs-mac-violet-clair) 10px 30px,
-            rgba(0, 0, 0, 0) 30px
-    );
     border-image-slice: 1;
     margin-left: -2mm !important;
     padding-left: -2mm !important;
