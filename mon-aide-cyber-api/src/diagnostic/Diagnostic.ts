@@ -10,6 +10,7 @@ import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge
 import { MoteurDesIndicateurs } from './MoteurDesIndicateurs';
 import { CorpsReponse } from './CapteurSagaAjoutReponse';
 import { Aggregat } from '../domaine/Aggregat';
+import { StrategiesRegleDeGestion } from './StrategieRegleDeGestion';
 
 export type Thematique = string;
 
@@ -116,21 +117,13 @@ const ajouteLaReponseAuDiagnostic = (
     const reponsePossible = questionTrouvee.reponsesPossibles.find(
       (r) => r.identifiant === corpsReponse.reponse
     );
-    if (reponsePossible?.regle?.strategie === 'AJOUTE_REPONSE') {
-      reponsePossible?.regle?.reponses.forEach((reponse) => {
-        const questions = Object.entries(diagnostic.referentiel)
-          .flatMap(([_, question]) => question.questions)
-          .filter(
-            (questions) => questions.identifiant === reponse.identifiantQuestion
-          );
-        questions.forEach(
-          (q) =>
-            (q.reponseDonnee = {
-              reponseUnique: reponse.reponseDonnee,
-              reponsesMultiples: [],
-            })
-        );
-      });
+
+    const regleDeGestion = reponsePossible?.regle;
+    if (regleDeGestion) {
+      StrategiesRegleDeGestion.get(regleDeGestion.strategie)?.applique(
+        regleDeGestion,
+        diagnostic
+      );
     }
   };
 
