@@ -7,8 +7,8 @@ const perimetres: Map<Perimetre, { style: string; titre: string }> = new Map([
     { style: 'fr-icon-database-fill', titre: 'SYSTÈME INDUSTRIEL' },
   ],
   [
-    'ESPIONNAGE-CIBLE',
-    { style: 'fr-icon-test-tube-fill', titre: 'ESPIONNAGE CIBLÉ' },
+    'ATTAQUE-CIBLEE',
+    { style: 'fr-icon-map-pin-user-fill', titre: 'ATTAQUE CIBLÉE' },
   ],
 ]);
 

@@ -56,7 +56,7 @@ export const transcripteurContexte: Thematique = {
       questions: [
         {
           identifiant: 'contexte-activites-recherche-et-developpement',
-          'info-bulles': ['contexte/espionnage-cible.pug'],
+          'info-bulles': ['contexte/attaque-ciblee.pug'],
         },
       ],
     },
