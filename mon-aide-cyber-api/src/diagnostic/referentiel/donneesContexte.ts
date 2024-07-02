@@ -891,7 +891,6 @@ export const donneesContexte: QuestionsThematique = {
           libelle: 'Non',
           ordre: 2,
           regle: {
-            strategie: 'AJOUTE_REPONSE',
             reponses: [
               {
                 identifiantQuestion: 'gouvernance-schema-si-industriel-a-jour',
@@ -927,16 +926,6 @@ export const donneesContexte: QuestionsThematique = {
         {
           identifiant: 'contexte-opere-systemes-information-industriels-oui',
           libelle: 'Oui',
-          regle: {
-            strategie: 'SUPPRIME_REPONSE',
-            questions: [
-              'gouvernance-schema-si-industriel-a-jour',
-              'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
-              'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
-              'securite-poste-si-industriel-antivirus-deploye',
-              'securite-infrastructure-si-industriel-pare-feu-deploye',
-            ],
-          },
           ordre: 3,
         },
       ],

@@ -7,7 +7,6 @@ import {
   QuestionsThematique,
   Referentiel,
   RegleDeGestionAjouteReponse,
-  RegleDeGestionSupprimeReponse,
   ReponsePossible,
   TypeQuestion,
 } from '../../src/diagnostic/Referentiel';
@@ -247,10 +246,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     mesures?: Mesure[];
     indice: Indice;
   };
-  private regleDeGestion:
-    | RegleDeGestionAjouteReponse
-    | RegleDeGestionSupprimeReponse
-    | undefined = undefined;
+  private regleDeGestion: RegleDeGestionAjouteReponse | undefined = undefined;
 
   ajouteUneQuestionATiroir(
     question: QuestionATiroir
@@ -294,22 +290,11 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     return this;
   }
 
-  ajouteUneRegleAjouteReponses(
-    reglesDeGestion: { reponseDonnee: string; identifiantQuestion: string }[]
+  ajouteUneRegleDeGestion(
+    regleDeGestion: { reponseDonnee: string; identifiantQuestion: string }[]
   ): ConstructeurReponsePossible {
     this.regleDeGestion = {
-      strategie: 'AJOUTE_REPONSE',
-      reponses: reglesDeGestion,
-    };
-    return this;
-  }
-
-  ajouteUneRegleSupprimeReponses(
-    questions: string[]
-  ): ConstructeurReponsePossible {
-    this.regleDeGestion = {
-      strategie: 'SUPPRIME_REPONSE',
-      questions: questions,
+      reponses: regleDeGestion,
     };
     return this;
   }

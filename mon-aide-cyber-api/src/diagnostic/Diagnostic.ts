@@ -10,7 +10,7 @@ import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge
 import { MoteurDesIndicateurs } from './MoteurDesIndicateurs';
 import { CorpsReponse } from './CapteurSagaAjoutReponse';
 import { Aggregat } from '../domaine/Aggregat';
-import { StrategiesRegleDeGestion } from './StrategieRegleDeGestion';
+import { appliqueRegleDeGestion } from './regleDeGestion';
 
 export type Thematique = string;
 
@@ -120,10 +120,7 @@ const ajouteLaReponseAuDiagnostic = (
 
     const regleDeGestion = reponsePossible?.regle;
     if (regleDeGestion) {
-      StrategiesRegleDeGestion.get(regleDeGestion.strategie)?.applique(
-        regleDeGestion,
-        diagnostic
-      );
+      appliqueRegleDeGestion(regleDeGestion, diagnostic);
     }
   };
 
