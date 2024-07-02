@@ -5,7 +5,6 @@ import {
   QuestionChoixMultiple,
   QuestionChoixUnique,
   RegleDeGestionAjouteReponse,
-  RegleDeGestionSupprimeReponse,
   ReponsePossible,
 } from '../../src/diagnostic/Referentiel';
 
@@ -116,11 +115,9 @@ describe('Cohérence du référentiel et des mesures', () => {
   });
 
   describe('Les règles de gestion', () => {
-    const toutesLesReglesCorrespondantes = (
-      strategie: 'AJOUTE_REPONSE' | 'SUPPRIME_REPONSE'
-    ): {
+    const toutesLesReglesDeGestion = (): {
       question: string;
-      regle: RegleDeGestionAjouteReponse | RegleDeGestionSupprimeReponse;
+      regle: RegleDeGestionAjouteReponse;
     }[] =>
       Object.entries(referentiel)
         .flatMap(([_, questions]) =>
@@ -136,11 +133,10 @@ describe('Cohérence du référentiel et des mesures', () => {
             r
           ): r is {
             question: string;
-            regle: RegleDeGestionAjouteReponse | RegleDeGestionSupprimeReponse;
+            regle: RegleDeGestionAjouteReponse;
           } => !!r
         )
-        .filter((r) => r.regle !== undefined)
-        .filter((r) => r.regle.strategie === strategie);
+        .filter((r) => r.regle !== undefined);
 
     const questionsEtReponses = Object.entries(referentiel)
       .filter(([thematique]) => thematique !== 'contexte')
@@ -153,13 +149,8 @@ describe('Cohérence du référentiel et des mesures', () => {
         };
       });
 
-    const reglesAjouteReponse =
-      toutesLesReglesCorrespondantes('AJOUTE_REPONSE');
-    const reglesSupprimeReponse =
-      toutesLesReglesCorrespondantes('SUPPRIME_REPONSE');
-
-    describe.each(reglesAjouteReponse)(
-      'Pour la question $question et la règle AJOUTE_REPONSE',
+    describe.each(toutesLesReglesDeGestion())(
+      'Pour la question $question',
       (regle) => {
         it.each((regle.regle as RegleDeGestionAjouteReponse).reponses)(
           'La reponse $reponseDonnee et la question $identifiantQuestion existent',
@@ -174,22 +165,6 @@ describe('Cohérence du référentiel et des mesures', () => {
                 questions.questions.flatMap((q) => q.reponses.flatMap((r) => r))
               )
             ).contains(reponse.reponseDonnee);
-          }
-        );
-      }
-    );
-
-    describe.each(reglesSupprimeReponse)(
-      'Pour la question $question et la règle SUPPRIME_REPONSE',
-      (regle) => {
-        it.each((regle.regle as RegleDeGestionSupprimeReponse).questions)(
-          'La question %s existe',
-          (question) => {
-            expect(
-              questionsEtReponses.flatMap((questions) =>
-                questions.questions.flatMap((q) => q.question)
-              )
-            ).contains(question);
           }
         );
       }
