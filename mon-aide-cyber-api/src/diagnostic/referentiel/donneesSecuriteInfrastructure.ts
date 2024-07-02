@@ -119,7 +119,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
                 {
                   identifiant:
                     'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes-oui-logs-stockes',
-                  libelle: 'Oui, nous stockons quelques journaux du pare-feu.',
+                  libelle: 'Oui, nous stockons quelques journaux du pare-feu',
                   resultat: {
                     indice: { valeur: 1 },
                     mesures: [

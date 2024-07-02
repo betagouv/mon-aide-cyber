@@ -11,12 +11,12 @@ export const donneesGouvernance: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant: 'gouvernance-infos-et-activites-a-proteger-nsp',
-          libelle: 'Je ne sais pas.',
+          libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
           identifiant: 'gouvernance-infos-et-activites-a-proteger-non',
-          libelle: 'Non.',
+          libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
@@ -63,7 +63,7 @@ export const donneesGouvernance: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant: 'gouvernance-schema-si-a-jour-nsp',
-          libelle: 'Je ne sais pas.',
+          libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
@@ -140,7 +140,7 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour-non',
-          libelle: 'Non.',
+          libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
@@ -187,12 +187,12 @@ export const donneesGouvernance: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant: 'gouvernance-connaissance-rgpd-1-nsp',
-          libelle: 'Je ne sais pas.',
+          libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
           identifiant: 'gouvernance-connaissance-rgpd-1-non',
-          libelle: 'Non.',
+          libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
@@ -235,12 +235,12 @@ export const donneesGouvernance: QuestionsThematique = {
       reponsesPossibles: [
         {
           identifiant: 'gouvernance-connaissance-rgpd-2-nsp',
-          libelle: 'Je ne sais pas.',
+          libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
           identifiant: 'gouvernance-connaissance-rgpd-2-non',
-          libelle: 'Non.',
+          libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
