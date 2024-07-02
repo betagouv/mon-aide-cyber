@@ -867,6 +867,46 @@ export const donneesContexte: QuestionsThematique = {
           identifiant: 'contexte-activites-recherche-et-developpement-non',
           libelle: 'Non',
           ordre: 1,
+          regle: {
+            reponses: [
+              {
+                identifiantQuestion: 'acces-liste-compte-utilisateurs',
+                reponseDonnee: 'acces-liste-compte-utilisateurs-na',
+              },
+              {
+                identifiantQuestion: 'acces-droits-acces-utilisateurs-limites',
+                reponseDonnee: 'acces-droits-acces-utilisateurs-limites-na',
+              },
+              {
+                identifiantQuestion:
+                  'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
+                reponseDonnee:
+                  'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-na',
+              },
+              {
+                identifiantQuestion: 'securite-poste-r-et-d-disques-chiffres',
+                reponseDonnee: 'securite-poste-r-et-d-disques-chiffres-na',
+              },
+              {
+                identifiantQuestion:
+                  'securite-infrastructure-acces-wifi-securises',
+                reponseDonnee:
+                  'securite-infrastructure-acces-wifi-securises-na',
+              },
+              {
+                identifiantQuestion:
+                  'securite-infrastructure-espace-stockage-serveurs',
+                reponseDonnee:
+                  'securite-infrastructure-espace-stockage-serveurs-na',
+              },
+              {
+                identifiantQuestion:
+                  'sensibilisation-risque-espionnage-industriel-r-et-d',
+                reponseDonnee:
+                  'sensibilisation-risque-espionnage-industriel-r-et-d-na',
+              },
+            ],
+          },
         },
         {
           identifiant: 'contexte-activites-recherche-et-developpement-oui',
