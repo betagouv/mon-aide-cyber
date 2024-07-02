@@ -25,6 +25,10 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
     return super.genereRestitution(restitution);
   }
 
+  protected async genereInformations(_: Restitution): Promise<ContenuHtml> {
+    return { corps: '', entete: '', piedPage: '' };
+  }
+
   protected genere(mesures: Promise<ContenuHtml>[]) {
     const pageDeGarde = this.genereHtml('restitution.page-de-garde', {
       dateGeneration: FournisseurHorloge.formateDate(
