@@ -890,10 +890,53 @@ export const donneesContexte: QuestionsThematique = {
           identifiant: 'contexte-opere-systemes-information-industriels-non',
           libelle: 'Non',
           ordre: 2,
+          regle: {
+            strategie: 'AJOUTE_REPONSE',
+            reponses: [
+              {
+                identifiantQuestion: 'gouvernance-schema-si-industriel-a-jour',
+                reponseDonnee: 'gouvernance-schema-si-industriel-a-jour-na',
+              },
+              {
+                identifiantQuestion:
+                  'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
+                reponseDonnee:
+                  'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-na',
+              },
+              {
+                identifiantQuestion:
+                  'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
+                reponseDonnee:
+                  'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-na',
+              },
+              {
+                identifiantQuestion:
+                  'securite-poste-si-industriel-antivirus-deploye',
+                reponseDonnee:
+                  'securite-poste-si-industriel-antivirus-deploye-na',
+              },
+              {
+                identifiantQuestion:
+                  'securite-infrastructure-si-industriel-pare-feu-deploye',
+                reponseDonnee:
+                  'securite-infrastructure-si-industriel-pare-feu-deploye-na',
+              },
+            ],
+          },
         },
         {
           identifiant: 'contexte-opere-systemes-information-industriels-oui',
           libelle: 'Oui',
+          regle: {
+            strategie: 'SUPPRIME_REPONSE',
+            questions: [
+              'gouvernance-schema-si-industriel-a-jour',
+              'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
+              'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
+              'securite-poste-si-industriel-antivirus-deploye',
+              'securite-infrastructure-si-industriel-pare-feu-deploye',
+            ],
+          },
           ordre: 3,
         },
       ],
