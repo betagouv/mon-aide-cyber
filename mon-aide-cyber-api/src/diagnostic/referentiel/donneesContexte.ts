@@ -3,28 +3,28 @@ import { QuestionsThematique } from '../Referentiel';
 export const donneesContexte: QuestionsThematique = {
   questions: [
     {
-      identifiant: 'contexte-nature-organisation',
+      identifiant: 'contexte-nature-entite',
       libelle: 'Quelle est la nature de votre entité ?',
       poids: 0,
       reponsesPossibles: [
         {
-          identifiant: 'contexte-nature-organisation-organisation-publique',
+          identifiant: 'contexte-nature-entite-entite-publique',
           libelle:
-            'Organisation publique (ex : collectivité, administration, syndicats mixte, GIP etc.)',
+            'Entité publique (ex : collectivité, administration, syndicats mixte, GIP etc.)',
           ordre: 0,
         },
         {
-          identifiant: 'contexte-nature-organisation-entreprise-privee',
+          identifiant: 'contexte-nature-entite-entreprise-privee',
           libelle: 'Entreprise privée (ex : TPE, PME, ETI)',
           ordre: 1,
         },
         {
-          identifiant: 'contexte-nature-organisation-association',
+          identifiant: 'contexte-nature-entite-association',
           libelle: 'Association (ex : association loi 1901)',
           ordre: 2,
         },
         {
-          identifiant: 'contexte-nature-organisation-autre',
+          identifiant: 'contexte-nature-entite-autre',
           libelle: 'Autre',
           ordre: 3,
         },
@@ -794,31 +794,27 @@ export const donneesContexte: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'contexte-nombre-personnes-dans-organisation',
-      libelle: 'Combien de personnes compte votre organisation ?',
+      identifiant: 'contexte-nombre-personnes-dans-entite',
+      libelle: 'Combien de personnes compte votre entité ?',
       poids: 0,
       reponsesPossibles: [
         {
-          identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-1-et-9',
+          identifiant: 'contexte-nombre-personnes-dans-entite-entre-1-et-9',
           libelle: 'Entre 1 et 9',
           ordre: 0,
         },
         {
-          identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-10-et-49',
+          identifiant: 'contexte-nombre-personnes-dans-entite-entre-10-et-49',
           libelle: 'Entre 10 et 49',
           ordre: 1,
         },
         {
-          identifiant:
-            'contexte-nombre-personnes-dans-organisation-entre-50-et-249',
+          identifiant: 'contexte-nombre-personnes-dans-entite-entre-50-et-249',
           libelle: 'Entre 50 et 249',
           ordre: 2,
         },
         {
-          identifiant:
-            'contexte-nombre-personnes-dans-organisation-plus-de-250',
+          identifiant: 'contexte-nombre-personnes-dans-entite-plus-de-250',
           libelle: 'Plus de 250',
           ordre: 4,
         },
@@ -826,31 +822,30 @@ export const donneesContexte: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'contexte-nombre-postes-travail-dans-organisation',
-      libelle: 'Combien de postes de travail compte votre organisation ?',
+      identifiant: 'contexte-nombre-postes-travail-dans-entite',
+      libelle: 'Combien de postes de travail compte votre entité ?',
       poids: 0,
       reponsesPossibles: [
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-1-et-9',
+            'contexte-nombre-postes-travail-dans-entite-entre-1-et-9',
           libelle: 'Entre 1 et 9',
           ordre: 0,
         },
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-10-et-49',
+            'contexte-nombre-postes-travail-dans-entite-entre-10-et-49',
           libelle: 'Entre 10 et 49',
           ordre: 1,
         },
         {
           identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-entre-50-et-249',
+            'contexte-nombre-postes-travail-dans-entite-entre-50-et-249',
           libelle: 'Entre 50 et 249',
           ordre: 2,
         },
         {
-          identifiant:
-            'contexte-nombre-postes-travail-dans-organisation-plus-de-250',
+          identifiant: 'contexte-nombre-postes-travail-dans-entite-plus-de-250',
           libelle: 'Plus de 250',
           ordre: 3,
         },
@@ -918,7 +913,7 @@ export const donneesContexte: QuestionsThematique = {
     },
     {
       identifiant: 'contexte-opere-systemes-information-industriels',
-      libelle: 'Votre organisation opère-t-elle des systèmes industriels ?',
+      libelle: 'Votre entité opère-t-elle des systèmes industriels ?',
       poids: 0,
       reponsesPossibles: [
         {

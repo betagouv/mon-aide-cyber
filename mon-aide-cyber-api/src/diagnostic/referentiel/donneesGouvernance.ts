@@ -47,7 +47,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-infos-et-activites-a-proteger-oui-precise',
           libelle:
-            'Il existe une liste précise et maintenue à jour de toutes les activités et données métiers à protéger en priorité à l’échelle de l’organisation',
+            'Il existe une liste précise et maintenue à jour de toutes les activités et données métiers à protéger en priorité à l’échelle de l’entité',
           resultat: {
             indice: { valeur: 3 },
           },
@@ -57,8 +57,7 @@ export const donneesGouvernance: QuestionsThematique = {
     },
     {
       identifiant: 'gouvernance-schema-si-a-jour',
-      libelle:
-        'Existe-t-il un plan du système d’information de l’organisation ?',
+      libelle: 'Existe-t-il un plan du système d’information de l’entité ?',
       poids: 1,
       type: 'choixUnique',
       reponsesPossibles: [
@@ -125,7 +124,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-schema-si-industriel-a-jour',
       libelle:
-        "Existe-t-il un plan et un inventaire des systèmes d'informations industriels de l'organisation ?",
+        "Existe-t-il un plan et un inventaire des systèmes d'informations industriels de l'entité ?",
       poids: 1,
       type: 'choixUnique',
       reponsesPossibles: [

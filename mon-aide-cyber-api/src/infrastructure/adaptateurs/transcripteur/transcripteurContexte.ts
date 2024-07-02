@@ -24,6 +24,10 @@ export const transcripteurContexte: Thematique = {
           'info-bulles': ['contexte/nature-entite.pug'],
         },
         {
+          identifiant: 'contexte-nature-entite',
+          'info-bulles': ['contexte/nature-entite.pug'],
+        },
+        {
           identifiant: 'contexte-secteur-activite',
           type: 'liste',
           'info-bulles': ['contexte/secteur-activite.pug'],
@@ -47,7 +51,14 @@ export const transcripteurContexte: Thematique = {
           identifiant: 'contexte-nombre-personnes-dans-organisation',
         },
         {
+          identifiant: 'contexte-nombre-personnes-dans-entite',
+        },
+        {
           identifiant: 'contexte-nombre-postes-travail-dans-organisation',
+          'info-bulles': ['contexte/nombre-de-postes.pug'],
+        },
+        {
+          identifiant: 'contexte-nombre-postes-travail-dans-entite',
           'info-bulles': ['contexte/nombre-de-postes.pug'],
         },
       ],
