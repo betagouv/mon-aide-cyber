@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { ReferentielDiagnostic } from '../../diagnostic/Diagnostic';
 
 type ActionBase = {
   action: string;
@@ -110,9 +111,17 @@ type Thematiques = {
   [thematique: string]: Thematique;
 };
 
+export type Conditions = { [question: string]: string };
+export type ConditionPerimetre = {
+  [thematique: keyof ReferentielDiagnostic]: Conditions;
+};
+export type ConditionsPerimetre = {
+  [identifiantQuestion: string]: ConditionPerimetre;
+};
 export type Transcripteur = {
   ordreThematiques?: string[];
   thematiques: Thematiques;
   generateurInfoBulle: (infoBulles: InfoBulle[]) => string[];
+  conditionsPerimetre: ConditionsPerimetre;
 };
 export type Chemin = string;

@@ -123,6 +123,7 @@ describe('Le représentateur de diagnostic', () => {
             },
           },
           generateurInfoBulle: (infoBulle) => infoBulle,
+          conditionsPerimetre: {},
         }
       );
 
@@ -949,6 +950,81 @@ describe('Le représentateur de diagnostic', () => {
         'info bulle nature entité',
       ]);
       expect(thematique.groupes[1].questions[0]['info-bulles']).toBeUndefined();
+    });
+  });
+
+  describe('Afin de représenter les questions soumises à conditions liées au périmètre', () => {
+    it('Retire les questions visées par le périmètre', () => {
+      const reponseDonnee = uneReponsePossible().construis();
+      const question = uneQuestion()
+        .aChoixUnique('Quelle est la nature de votre entité?')
+        .avecReponsesPossibles([
+          reponseDonnee,
+          uneReponsePossible().construis(),
+        ])
+        .construis();
+      const questionANePasRemonter = uneQuestion().construis();
+      const questionARemonter = uneQuestion().construis();
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .sansThematique()
+            .ajouteUneThematique('une-thematique', [question])
+            .ajouteUneThematique('thematique-impactee', [
+              questionARemonter,
+              questionANePasRemonter,
+            ])
+            .construis()
+        )
+        .avecLesReponsesDonnees('une-thematique', [
+          { [question.identifiant]: reponseDonnee.identifiant },
+        ])
+        .construis();
+
+      const representationDiagnostic = representeLeDiagnosticPourLeClient(
+        diagnostic,
+        unTranscripteur()
+          .avecLesThematiques(['une-thematique', 'thematique-impactee'])
+          .avecLesQuestionsGroupees([
+            {
+              thematique: 'une-thematique',
+              groupes: [{ questions: [question] }],
+            },
+            {
+              thematique: 'thematique-impactee',
+              groupes: [
+                { questions: [questionARemonter, questionANePasRemonter] },
+              ],
+            },
+          ])
+          .avecLesConditionsDePerimetre({
+            [questionANePasRemonter.identifiant]: {
+              'une-thematique': {
+                [question.identifiant]: reponseDonnee.identifiant,
+              },
+            },
+          })
+          .construis()
+      );
+
+      const thematique =
+        representationDiagnostic.referentiel['thematique-impactee'];
+      expect(thematique.groupes[0].questions).toHaveLength(1);
+      expect(
+        thematique.groupes[0].questions[0]
+      ).toStrictEqual<RepresentationQuestion>({
+        identifiant: questionARemonter.identifiant,
+        libelle: questionARemonter.libelle,
+        reponseDonnee: { valeur: null, reponses: [] },
+        reponsesPossibles: [
+          {
+            identifiant: questionARemonter.reponsesPossibles[0].identifiant,
+            libelle: questionARemonter.reponsesPossibles[0].libelle,
+            ordre: 0,
+          },
+        ],
+        type: 'choixUnique',
+      });
     });
   });
 });
