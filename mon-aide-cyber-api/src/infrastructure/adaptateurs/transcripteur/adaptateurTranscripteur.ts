@@ -31,6 +31,40 @@ export const adaptateurTranscripteur = () =>
               `src/infrastructure/adaptateurs/transcripteur/info-bulles/${infoBulle}`
             )
           ),
+        conditionsPerimetre: {
+          'gouvernance-schema-si-industriel-a-jour': {
+            contexte: {
+              'contexte-opere-systemes-information-industriels':
+                'contexte-opere-systemes-information-industriels-non',
+            },
+          },
+          'acces-si-industriel-teletravail-acces-distants-mesures-particulieres':
+            {
+              contexte: {
+                'contexte-opere-systemes-information-industriels':
+                  'contexte-opere-systemes-information-industriels-non',
+              },
+            },
+          'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees':
+            {
+              contexte: {
+                'contexte-opere-systemes-information-industriels':
+                  'contexte-opere-systemes-information-industriels-non',
+              },
+            },
+          'securite-poste-si-industriel-antivirus-deploye': {
+            contexte: {
+              'contexte-opere-systemes-information-industriels':
+                'contexte-opere-systemes-information-industriels-non',
+            },
+          },
+          'securite-infrastructure-si-industriel-pare-feu-deploye': {
+            contexte: {
+              'contexte-opere-systemes-information-industriels':
+                'contexte-opere-systemes-information-industriels-non',
+            },
+          },
+        },
       };
     }
   })();

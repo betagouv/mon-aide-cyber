@@ -1,8 +1,13 @@
-import { Diagnostic, QuestionDiagnostic } from '../../diagnostic/Diagnostic';
+import {
+  Diagnostic,
+  QuestionDiagnostic,
+  QuestionsThematique,
+} from '../../diagnostic/Diagnostic';
 import { QuestionATiroir, ReponsePossible } from '../../diagnostic/Referentiel';
 import {
   Action,
   Chemin,
+  ConditionPerimetre,
   QuestionATranscrire,
   ReponseATranscrire,
   RepresentationDiagnostic,
@@ -137,6 +142,33 @@ export function representeLeDiagnosticPourLeClient(
   const actions: Action[] = [];
   const representationGroupee = new RepresentationGroupee(transcripteur);
 
+  const recupereLesQuestionsSuivantLesConditionsDePerimetre = (
+    questionsThematique: QuestionsThematique
+  ) => {
+    const conditionVerifiee = (conditionPerimetre: ConditionPerimetre) =>
+      Object.entries(conditionPerimetre).filter(
+        ([thematique, conditions]) =>
+          Object.entries(conditions).filter(
+            ([question, reponse]) =>
+              !!diagnostic.referentiel[thematique].questions.find(
+                (qu) =>
+                  qu.identifiant === question &&
+                  qu.reponseDonnee.reponseUnique === reponse
+              )
+          ).length > 0
+      ).length > 0;
+
+    return questionsThematique.questions
+      .map((q) => {
+        const conditionPerimetre =
+          transcripteur.conditionsPerimetre[q.identifiant];
+        return conditionPerimetre && conditionVerifiee(conditionPerimetre)
+          ? undefined
+          : q;
+      })
+      .filter((q): q is QuestionDiagnostic => !!q);
+  };
+
   const referentiel: RepresentationReferentiel = Object.entries(
     diagnostic.referentiel
   )
@@ -181,10 +213,12 @@ export function representeLeDiagnosticPourLeClient(
             },
             localisationIllustration:
               transcripteur.thematiques[clef].localisationIllustration,
-            groupes: representationGroupee.represente(
-              clef,
-              questionsThematique
-            ),
+            groupes: representationGroupee.represente(clef, {
+              questions:
+                recupereLesQuestionsSuivantLesConditionsDePerimetre(
+                  questionsThematique
+                ),
+            }),
           },
         };
       },

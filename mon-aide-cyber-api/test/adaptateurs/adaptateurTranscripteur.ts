@@ -17,6 +17,7 @@ export class AdaptateurTranscripteurDeTest implements AdaptateurTranscripteur {
         },
       },
       generateurInfoBulle: (infoBulle) => infoBulle,
+      conditionsPerimetre: {},
     };
   }
 }

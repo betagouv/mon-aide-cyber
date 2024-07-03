@@ -1,4 +1,5 @@
 import {
+  ConditionsPerimetre,
   QuestionATranscrire,
   Transcripteur,
 } from '../../../src/api/representateurs/types';
@@ -35,6 +36,7 @@ const transcripteurAvecSaisiesLibres = {
     },
   },
   generateurInfoBulle: (infoBulle) => infoBulle,
+  conditionsPerimetre: {},
 } as Transcripteur;
 
 const transcripteurQuestionTiroir = {
@@ -72,6 +74,7 @@ const transcripteurQuestionTiroir = {
     },
   },
   generateurInfoBulle: (infoBulle) => infoBulle,
+  conditionsPerimetre: {},
 } as Transcripteur;
 
 const transcripteurMultipleTiroir = {
@@ -115,6 +118,7 @@ const transcripteurMultipleTiroir = {
     },
   },
   generateurInfoBulle: (infoBulle) => infoBulle,
+  conditionsPerimetre: {},
 } as Transcripteur;
 
 class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
@@ -132,6 +136,7 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
     };
   } = {};
   private thematiquesOrdonnees: string[] = [];
+  private conditionsPerimetre: ConditionsPerimetre = {};
 
   avecLesThematiques(thematiques: string[]): ConstructeurTranscripteur {
     thematiques.forEach((thematique) => {
@@ -186,11 +191,19 @@ class ConstructeurTranscripteur implements Constructeur<Transcripteur> {
     return this;
   }
 
+  avecLesConditionsDePerimetre(
+    conditions: ConditionsPerimetre
+  ): ConstructeurTranscripteur {
+    this.conditionsPerimetre = conditions;
+    return this;
+  }
+
   construis(): Transcripteur {
     return {
       ordreThematiques: this.thematiquesOrdonnees,
       thematiques: { ...this.thematiques },
       generateurInfoBulle: (infoBulles) => infoBulles,
+      conditionsPerimetre: this.conditionsPerimetre,
     };
   }
 }
@@ -209,6 +222,7 @@ const fabriqueTranscripteurVide = (): Transcripteur => {
       },
     },
     generateurInfoBulle: (infoBulle) => infoBulle,
+    conditionsPerimetre: {},
   };
 };
 
