@@ -1,9 +1,10 @@
 import { ComposantReponsePossible } from './ComposantReponsePossible.tsx';
 import {
   Question,
+  QuestionATiroir,
   ReponsePossible,
 } from '../../domaine/diagnostic/Referentiel.ts';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export type ReponseTiroir = {
   identifiant: string;
@@ -31,23 +32,69 @@ export const ConteneurReponsePossible = ({
   repondQuestionTiroirMultiple,
   repondQuestionTiroirUnique,
 }: ProprietesConteneurReponsePossible) => {
+  const estUneQuestionTiroirAvecReponse = useCallback(
+    (
+      reponseDonnee: string | null,
+      identifiant: string,
+      questions: QuestionATiroir[] | undefined
+    ) => reponseDonnee === identifiant && questions && questions.length > 0,
+    []
+  );
+
   const [deploieTiroir, setDeploieTiroir] = useState(
-    question.reponseDonnee.valeur === reponse.identifiant
+    estUneQuestionTiroirAvecReponse(
+      question.reponseDonnee.valeur,
+      reponse.identifiant,
+      reponse.questions
+    )
   );
 
   useEffect(() => {
-    setDeploieTiroir(question.reponseDonnee.valeur === reponse.identifiant);
-  }, [question.reponseDonnee.valeur, reponse.identifiant]);
+    setDeploieTiroir(
+      estUneQuestionTiroirAvecReponse(
+        question.reponseDonnee.valeur,
+        reponse.identifiant,
+        reponse.questions
+      )
+    );
+  }, [
+    estUneQuestionTiroirAvecReponse,
+    question.reponseDonnee.valeur,
+    reponse.identifiant,
+    reponse.questions,
+  ]);
 
-  useEffect(() => {
-    if (deploieTiroir) {
-      new Promise((r) => setTimeout(r, 500)).then(() =>
-        document
-          .getElementById(question.identifiant)
-          ?.scrollIntoView({ behavior: 'smooth' })
-      );
-    }
-  }, [deploieTiroir, question.identifiant]);
+  const surReponse = useCallback(
+    (identifiantReponse: string) => {
+      if (
+        estUneQuestionTiroirAvecReponse(
+          identifiantReponse,
+          reponse.identifiant,
+          reponse.questions
+        )
+      ) {
+        new Promise((r) => setTimeout(r, 500)).then(() =>
+          document
+            .getElementById(question.identifiant)
+            ?.scrollIntoView({ behavior: 'smooth' })
+        );
+      }
+      setDeploieTiroir(!deploieTiroir);
+      typeDeSaisie === 'radio'
+        ? repondQuestionUnique(identifiantReponse)
+        : repondQuestionMultiple(identifiantReponse);
+    },
+    [
+      deploieTiroir,
+      estUneQuestionTiroirAvecReponse,
+      question.identifiant,
+      repondQuestionMultiple,
+      repondQuestionUnique,
+      reponse.identifiant,
+      reponse.questions,
+      typeDeSaisie,
+    ]
+  );
 
   return (
     <ComposantReponsePossible
@@ -56,10 +103,7 @@ export const ConteneurReponsePossible = ({
       identifiantQuestion={question.identifiant}
       typeDeSaisie={typeDeSaisie}
       onChange={(identifiantReponse) => {
-        setDeploieTiroir(!deploieTiroir);
-        typeDeSaisie === 'radio'
-          ? repondQuestionUnique(identifiantReponse)
-          : repondQuestionMultiple(identifiantReponse);
+        surReponse(identifiantReponse);
       }}
       selectionnee={
         typeDeSaisie === 'radio'
