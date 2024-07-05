@@ -82,7 +82,7 @@ export const mesuresSecuriteInfrastructure = {
       },
       niveau2: {
         titre:
-          'Mettre en œuvre des mesures de sécurité supplémentaires sur les systèmes ne pouvant pas bénéficier des mises à jour',
+          "Mettre en œuvre des mesures de sécurité supplémentaires sur les serveurs, services et logiciels d'administration ne pouvant pas bénéficier des mises à jour",
         pourquoi:
           '../../mesures/infras/securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-niveau2-pourquoi.pug',
         comment:

@@ -62,7 +62,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
       identifiant:
         'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
       libelle:
-        'Les mises à jour fonctionnelles et de sécurité sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?',
+        'Les mises à jour fonctionnelles et de sécurité sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs des systèmes industriels ?',
       poids: 2,
       reponsesPossibles: [
         {
@@ -253,7 +253,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         },
         {
           identifiant: 'securite-poste-pare-feu-local-active-oui',
-          libelle: 'Oui',
+          libelle: 'Oui et les flux sortants sont bloqués',
           resultat: { indice: { valeur: 3 } },
           ordre: 2,
         },

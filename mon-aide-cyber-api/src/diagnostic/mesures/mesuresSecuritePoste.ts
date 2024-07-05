@@ -58,14 +58,15 @@ export const mesuresSecuritePoste = {
   'securite-poste-si-industriel-antivirus-deploye': {
     niveau1: {
       titre:
-        'Installer de manière systématique un antivirus sur les postes de travail du SI Industriel, vérifier régulièrement leur bon fonctionnement et leurs mises à jour.',
+        'Installer de manière systématique un antivirus sur les postes de travail des systèmes industriels, vérifier régulièrement leur bon fonctionnement et leurs mises à jour.',
       pourquoi:
         '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau1-pourquoi.pug',
       comment:
         '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau1-comment.pug',
     },
     niveau2: {
-      titre: "Traiter systématiquement les alertes générées par l'antivirus",
+      titre:
+        "Traiter systématiquement les alertes générées par l'antivirus des postes de travail des systèmes industriels",
       pourquoi:
         '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau2-pourquoi.pug',
       comment:
@@ -76,7 +77,7 @@ export const mesuresSecuritePoste = {
   'securite-poste-pare-feu-local-active': {
     niveau1: {
       titre:
-        'Activer systématiquement le pare-feu local sur les postes de tavail',
+        'Activer systématiquement le pare-feu local sur les postes de travail',
       pourquoi:
         '../../mesures/postes/securite-poste-pare-feu-local-active-niveau1-pourquoi.pug',
       comment:
