@@ -1,6 +1,14 @@
 div
-    | Il est recommandé d'activer les fonctions de mises à jour automatique proposées par les éditeurs. Pour certaines mises
-    | à jour importantes (systèmes d’exploitation serveurs, base de données, etc.) un délai de qualification interne
-    | peut être nécessaire pour s’assurer que la mise à jour n’impacte pas le bon fonctionnement du système. Des exceptions
-    | peuvent être rencontrées (exemple : applications métiers ne fonctionnant que via un système obsolète), mais il
-    | convient alors de bien les identifier comme à risque.
+    p
+        | Il est recommandé d’activer les fonctions de mises à jour automatique proposées par les éditeurs.
+        | Certaines mises à jours nécessitent un redémarrage des équipements afin d’être effectives.
+        | Il est donc nécessaire de vérifier périodiquement que les équipements ne sont pas en attente de redémarrage et de planifier
+        | les redémarrages d’équipements ayant un impact sur la disponibilité des systèmes.
+    p
+        | Certains équipements peuvent être configurés pour notifier les administrateurs d’une mise à jour en attente de redémarrage.
+        | Par exemple, le rédémarrage d’un pare-feu pour l’application d’une mise à jour peut interrompre l’accès à Internet ou encore les communications entre les différentes zones cloisonnées du réseau.
+        | De manière à permettre ces mises à jours au fur et à mesure, dans les meilleurs délais (et qu’elles ne nécessitent pas systématiquement une autorisation hérarchique),
+        | un créneau hebdomadaire ou quotidien peut être consacré à ces courtes interruptions de service de maintenance, et une procédure d’information des utilisateurs instaurée.
+        | Sinon, la mise en place de systèmes de tolérance aux pannes (souvent plus coûteux) permet généralement aux équipements de rédémarrer sans interrompre le service.
+    p
+        | Les équipements de sécurité doivent être strictement maintenus à jour : si un équipement de sécurité n’est plus maintenu par l’éditeur, alors il doit être remplacé dans les meilleurs délais.

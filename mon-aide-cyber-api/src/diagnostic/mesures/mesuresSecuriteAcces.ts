@@ -181,7 +181,7 @@ export const mesuresSecuriteAcces = {
   },
   'acces-administrateurs-si-mesures-specifiques': {
     niveau1: {
-      titre: 'Protéger de manière spéficique les accès des admininistrateurs',
+      titre: 'Protéger de manière spécifique les accès des admininistrateurs',
       pourquoi:
         '../../mesures/acces/acces-administrateurs-si-mesures-specifiques-niveau1-pourquoi.pug',
       comment:

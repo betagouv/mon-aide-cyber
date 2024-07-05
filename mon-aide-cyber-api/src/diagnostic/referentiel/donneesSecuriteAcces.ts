@@ -170,7 +170,8 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant: 'acces-utilisateurs-administrateurs-poste-oui',
-          libelle: 'Oui',
+          libelle:
+            'Oui, les comptes d’accès des utilisateurs disposent des privilèges d’administration du poste de travail',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
