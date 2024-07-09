@@ -11,7 +11,7 @@
 
   body {
     font-size: 12px;
-    line-height: 1.5rem;
+    line-height: 1rem;
     p {
       font-size: 12px;
     }
@@ -265,11 +265,19 @@
       margin-bottom: 0;
     }
 
+    .contact {
+      width: 100%;
+    }
+
     [class*="logo-"] {
-      width: 8rem;
-      height: 8rem;
+      max-width: 8rem;
+      max-height: 6rem;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
+    }
+
+    .logo-anssi-leger {
+      background-size: 6rem;
     }
 
   }

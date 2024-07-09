@@ -254,6 +254,7 @@ h4 {
 
 .contact {
     align-items: center;
+    width: 100%;
 }
 
 .contact::before {
@@ -278,13 +279,15 @@ h4 {
 }
 
 .logo {
-    justify-content: center;
-    align-items: center;
-    align-content: center;
     text-align: center;
     border-image-slice: 1;
     margin-left: -2mm !important;
     padding-left: -2mm !important;
+}
+
+[class*="logo-"] {
+    max-width: 8rem;
+    max-height: 8rem;
 }
 
 .identifiant-diagnostic {
@@ -359,6 +362,7 @@ h4 {
 
 .logo-acyma {
     content: var(--logo-acyma);
+    background-size: 8rem;
 }
 
 .logo-gendarmerie {
