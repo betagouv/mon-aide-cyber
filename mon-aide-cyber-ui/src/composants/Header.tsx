@@ -34,7 +34,7 @@ export const Header = ({ lienMAC }: { lienMAC: ReactElement }) => {
                   <img
                     style={{ maxWidth: '3.5rem' }}
                     className="fr-responsive-img"
-                    src="/images/logo_anssi.png"
+                    src="/images/logo_anssi.svg"
                     alt="ANSSI"
                   />
                 </div>
