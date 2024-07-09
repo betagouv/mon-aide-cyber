@@ -42,16 +42,14 @@ const erreursGerees: Map<
   ],
   [
     'ErreurAuthentification',
-    (erreur, requete, consignateur, reponse) => {
+    (erreur, requete, _consignateur, reponse) => {
       requete.body['motDePasse'] = '<MOT_DE_PASSE_OBFUSQUE/>';
-      consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_NON_AUTORISE, { message: erreur.message });
     },
   ],
   [
     'ErreurAccesRefuse',
-    (erreur, _, consignateur, reponse) => {
-      consignateur.consigne(erreur);
+    (_erreur, _, _consignateur, reponse) => {
       construisReponse(reponse, HTTP_ACCES_REFUSE, {
         message: "L'accès à la ressource est interdit.",
         ...constructeurActionsHATEOAS().seConnecter().construis(),
