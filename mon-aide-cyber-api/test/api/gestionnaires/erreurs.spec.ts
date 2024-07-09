@@ -73,7 +73,7 @@ describe("Gestionnaire d'erreur", () => {
     );
   });
 
-  it("consigne l'erreur en cas d'authentification erronée", () => {
+  it("Ne consigne pas l'erreur en cas d'authentification erronée", () => {
     const consignateurErreurs = new ConsignateurErreursMemoire();
     const corpsAuthentification: CorpsRequeteAuthentification = {
       identifiant: 'jean',
@@ -91,14 +91,14 @@ describe("Gestionnaire d'erreur", () => {
       fausseSuite
     );
 
-    expect(consignateurErreurs.tous()).toHaveLength(1);
+    expect(consignateurErreurs.tous()).toHaveLength(0);
     expect(fausseRequete.body).toStrictEqual<CorpsRequeteAuthentification>({
       identifiant: 'jean',
       motDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
     });
   });
 
-  it("génère une erreur 403 lorsqu'une erreur MAC 'Accès ressource protégée' est reçue et consigne l'erreur avec le détail", () => {
+  it("génère une erreur 403 lorsqu'une erreur MAC 'Accès ressource protégée' est reçue et ne consigne pas l'erreur", () => {
     const consignateurErreurs = new ConsignateurErreursMemoire();
 
     const messageInterne = "une explication de l'erreur pour le développeur";
@@ -112,9 +112,7 @@ describe("Gestionnaire d'erreur", () => {
       fausseSuite
     );
 
-    expect(
-      (consignateurErreurs.tous()[0] as ErreurMAC).erreurOriginelle.message
-    ).toStrictEqual(messageInterne);
+    expect(consignateurErreurs.tous()).toHaveLength(0);
     expect(codeRecu).toBe(403);
     expect(corpsRecu).toStrictEqual({
       message: "L'accès à la ressource est interdit.",
