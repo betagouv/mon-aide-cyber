@@ -371,6 +371,7 @@ h4 {
 
 .logo-anssi-leger {
     content: var(--logo-anssi-leger);
+    max-width: 16rem;
 }
 
 /* stylelint-enable */
