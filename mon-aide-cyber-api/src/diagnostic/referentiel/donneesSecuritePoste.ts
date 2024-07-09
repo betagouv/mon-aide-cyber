@@ -175,7 +175,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     {
       identifiant: 'securite-poste-si-industriel-antivirus-deploye',
       libelle:
-        'Un antivirus à jour est-il déployé sur chaque poste de travail du SI industriel ?',
+        'Un antivirus à jour est-il déployé sur chaque poste de travail des systèmes industriels ?',
       poids: 2,
       reponsesPossibles: [
         {
