@@ -101,8 +101,8 @@ h4 {
         border-left: 8px solid var(--couleurs-mac-violet-fonce);
         border-image: linear-gradient(
                 to top,
-                var(--couleurs-mac-violet-fonce) 0 85%,
-                rgba(0, 0, 0, 0) 15%
+                var(--couleurs-mac-violet-fonce) 0 95%,
+                rgba(0, 0, 0, 0) 5%
         );
         border-image-slice: 1;
     }
@@ -117,8 +117,8 @@ h4 {
         border-left: 8px solid var(--couleurs-mac-violet-fonce);
         border-image: linear-gradient(
                 to top,
-                var(--couleurs-mac-violet-fonce) 0 85%,
-                rgba(0, 0, 0, 0) 15%
+                var(--couleurs-mac-violet-fonce) 0 95%,
+                rgba(0, 0, 0, 0) 5%
         );
         border-image-slice: 1;
     }
@@ -133,8 +133,8 @@ h4 {
         border-left: 8px solid var(--couleurs-mac-violet-fonce);
         border-image: linear-gradient(
                 to top,
-                var(--couleurs-mac-violet-fonce) 0 85%,
-                rgba(0, 0, 0, 0) 15%
+                var(--couleurs-mac-violet-fonce) 0 95%,
+                rgba(0, 0, 0, 0) 5%
         );
         border-image-slice: 1;
     }
@@ -150,6 +150,11 @@ h4 {
         font-size: 1rem;
         padding-bottom: 1rem;
     }
+
+    [class*="logo-"] {
+        max-width: 8rem;
+        max-height: 8rem;
+    }
 }
 
 #section-ressources {
@@ -162,8 +167,8 @@ h4 {
         border-left: 8px solid var(--couleurs-mac-violet-fonce);
         border-image: linear-gradient(
                 to top,
-                var(--couleurs-mac-violet-fonce) 0 85%,
-                rgba(0, 0, 0, 0) 15%
+                var(--couleurs-mac-violet-fonce) 0 95%,
+                rgba(0, 0, 0, 0) 5%
         );
         border-image-slice: 1;
     }
@@ -283,11 +288,6 @@ h4 {
     border-image-slice: 1;
     margin-left: -2mm !important;
     padding-left: -2mm !important;
-}
-
-[class*="logo-"] {
-    max-width: 8rem;
-    max-height: 8rem;
 }
 
 .identifiant-diagnostic {
