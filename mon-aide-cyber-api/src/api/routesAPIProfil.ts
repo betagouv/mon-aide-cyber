@@ -5,13 +5,15 @@ import { NextFunction } from 'express-serve-static-core';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
 import { constructeurActionsHATEOAS } from './hateoas/hateoas';
-import { validateurDeNouveauMotDePasse } from './validateurs/validateurs';
+import {
+  ErreurValidationMotDePasse,
+  validateurDeNouveauMotDePasse,
+} from './validateurs/validateurs';
 import {
   FieldValidationError,
   Result,
   validationResult,
 } from 'express-validator';
-import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
 
 type CorpsRequeteChangementMotDerPasse = {
   ancienMotDePasse: string;
@@ -95,7 +97,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
       return suite(
         ErreurMAC.cree(
           'Modifie le mot de passe',
-          new ErreurCreationEspaceAidant(erreursValidation.join('\n'))
+          new ErreurValidationMotDePasse(erreursValidation.join('\n'))
         )
       );
     }
