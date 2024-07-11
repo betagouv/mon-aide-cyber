@@ -10,8 +10,10 @@ import { NextFunction } from 'express-serve-static-core';
 import { ServiceCreationEspaceAidant } from '../espace-aidant/ServiceCreationEspaceAidant';
 import { constructeurActionsHATEOAS } from './hateoas/hateoas';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
-import { validateursDeMotDePasseTemporaire } from './validateurs/validateurs';
+import {
+  ErreurValidationMotDePasse,
+  validateursDeMotDePasseTemporaire,
+} from './validateurs/validateurs';
 import { routesAPITableauDeBord } from '../espace-aidant/tableau-de-bord/routesAPITableauDeBord';
 
 export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
@@ -66,7 +68,7 @@ export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
         return suite(
           ErreurMAC.cree(
             "Crée l'espace Aidant",
-            new ErreurCreationEspaceAidant(erreursValidation.join('\n'))
+            new ErreurValidationMotDePasse(erreursValidation.join('\n'))
           )
         );
       } catch (erreur) {

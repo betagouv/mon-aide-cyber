@@ -68,6 +68,16 @@ const erreursGerees: Map<
     },
   ],
   [
+    'ErreurValidationMotDePasse',
+    (erreur, requete, _consignateur, reponse) => {
+      requete.body['motDePasse'] = '<MOT_DE_PASSE_OBFUSQUE/>';
+      requete.body['motDePasseTemporaire'] = '<MOT_DE_PASSE_OBFUSQUE/>';
+      construisReponse(reponse, HTTP_NON_TRAITABLE, {
+        message: erreur.message,
+      });
+    },
+  ],
+  [
     'ErreurEnvoiMessage',
     (erreur, _, consignateur, reponse) => {
       consignateur.consigne(erreur);
