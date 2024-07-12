@@ -1,11 +1,11 @@
-import { BusCommande, CapteurSaga, Saga } from '../domaine/commande';
-import { BusEvenement } from '../domaine/BusEvenement';
-import { CommandeRechercheAideParEmail } from '../aide/CapteurCommandeRechercheAideParEmail';
-import { CommandeCreerAide } from '../aide/CapteurCommandeCreerAide';
-import { AdaptateurEnvoiMail } from '../adaptateurs/AdaptateurEnvoiMail';
-import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
-import { Aide } from '../aide/Aide';
-import { adaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement';
+import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
+import { BusEvenement } from '../../domaine/BusEvenement';
+import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
+import { Aide } from '../../aide/Aide';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import { CommandeRechercheAideParEmail } from '../../aide/CapteurCommandeRechercheAideParEmail';
+import { CommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
+import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 
 export type SagaDemandeAide = Saga & {
   cguValidees: boolean;

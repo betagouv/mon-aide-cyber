@@ -1,6 +1,5 @@
 import { ConfigurationServeur } from '../../serveur';
 import express, { Request, Response, Router } from 'express';
-import { SagaDemandeAide } from '../../demande-aide/CapteurSagaDemandeAide';
 import {
   body,
   FieldValidationError,
@@ -11,6 +10,7 @@ import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { listeDepartements } from '../../infrastructure/departements/listeDepartements.ts/listeDepartements';
+import { SagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
 
 type CorpsRequeteDemandeAide = {
   cguValidees: boolean;

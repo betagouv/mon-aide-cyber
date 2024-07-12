@@ -1,19 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import { CapteurSagaDemandeAide } from '../../src/demande-aide/CapteurSagaDemandeAide';
-import { BusCommandeMAC } from '../../src/infrastructure/bus/BusCommandeMAC';
-import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
-import { unAide } from '../aide/ConstructeurAide';
-import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
-import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { BusCommandeTest } from '../infrastructure/bus/BusCommandeTest';
-import { CapteurCommandeRechercheAideParEmail } from '../../src/aide/CapteurCommandeRechercheAideParEmail';
+import { unAide } from '../../aide/ConstructeurAide';
+import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
+import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
+import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
+import { CapteurSagaDemandeAide } from '../../../src/gestion-demandes/aide/CapteurSagaDemandeAide';
+import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
+import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
+import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
+import { CapteurCommandeRechercheAideParEmail } from '../../../src/aide/CapteurCommandeRechercheAideParEmail';
 import {
   CapteurCommandeCreerAide,
   CommandeCreerAide,
-} from '../../src/aide/CapteurCommandeCreerAide';
-import { CapteurCommande } from '../../src/domaine/commande';
-import { adaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement';
+} from '../../../src/aide/CapteurCommandeCreerAide';
+import { CapteurCommande } from '../../../src/domaine/commande';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   describe("si l'Aidé est connu de MAC", () => {
