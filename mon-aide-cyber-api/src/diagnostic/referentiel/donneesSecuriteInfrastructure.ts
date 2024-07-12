@@ -295,9 +295,9 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-a-intervalle-regulier',
           libelle:
-            'Des mises à jour logicielles sont déployées à intervalle régulier',
+            'Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement',
           resultat: {
-            indice: { valeur: 2 },
+            indice: { valeur: 1.5 },
             mesures: [
               {
                 identifiant:
@@ -312,7 +312,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
           identifiant:
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees-des-que-possible',
           libelle:
-            'Toutes les mises à jour logicielles sont déployées dès que celles-ci sont disponibles et fonctionnelles',
+            "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
