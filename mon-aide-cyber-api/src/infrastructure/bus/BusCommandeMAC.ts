@@ -4,10 +4,10 @@ import { BusEvenement } from '../../domaine/BusEvenement';
 import { CapteurSagaAjoutReponse } from '../../diagnostic/CapteurSagaAjoutReponse';
 import { CapteurCommandeLanceRestitution } from '../../diagnostic/CapteurCommandeLanceRestitution';
 import { CapteurCommandeLanceDiagnostic } from '../../diagnostic/CapteurCommandeLanceDiagnostic';
-import { CapteurSagaDemandeAide } from '../../demande-aide/CapteurSagaDemandeAide';
 import { CapteurCommandeRechercheAideParEmail } from '../../aide/CapteurCommandeRechercheAideParEmail';
 import { CapteurCommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
+import { CapteurSagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
 
 type ParametresCapteur = {
   entrepots: Entrepots;
