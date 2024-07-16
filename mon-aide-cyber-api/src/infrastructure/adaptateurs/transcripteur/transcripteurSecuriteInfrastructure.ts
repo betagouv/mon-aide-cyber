@@ -39,6 +39,7 @@ export const transcripteurSecuriteInfrastructure: Thematique = {
             'securite-infrastructure-mises-a-jour-fonctionnelles-securite-systemes-exploitation-securite-deployees',
           'info-bulles': [
             'infrastructures/maj-serveurs-services-administration.pug',
+            'infrastructures/maj-mesures-complementaires.pug',
           ],
         },
       ],
