@@ -96,7 +96,7 @@ export const mesuresSecuriteAcces = {
   'acces-utilisateurs-administrateurs-poste': {
     niveau1: {
       titre:
-        'Limiter drastiquement le nombre d’utilisateurs disposant du privilège d’administration local sur leur machine.',
+        'Limiter drastiquement le nombre d’utilisateurs disposant du privilège d’administration local sur leur machine',
       pourquoi:
         '../../mesures/acces/acces-utilisateurs-administrateurs-poste-niveau1-pourquoi.pug',
       comment:

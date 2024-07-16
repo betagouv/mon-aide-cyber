@@ -1,7 +1,7 @@
 export const mesuresSensibilisation = {
   'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques': {
     niveau1: {
-      titre: 'Mettre en œuvre des bonnes pratiques de sensibilisation.',
+      titre: 'Mettre en œuvre des bonnes pratiques de sensibilisation',
       pourquoi:
         '../../mesures/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-niveau1-pourquoi.pug',
       comment:
@@ -31,7 +31,7 @@ export const mesuresSensibilisation = {
   'sensibilisation-collaborateurs-soumis-obligations-usages-securises': {
     niveau1: {
       titre:
-        "Établir une charte informatique répertoriant les moyens informatiques mis à disposition, clarifiant la gestion des terminaux personnels et rappelant à minima les exigences de cybersécurité liées à la gestion des comptes d'accès, des mots de passe, des données à protéger en priorités, de l'utilisation de la messagerie et des ressources cloud.",
+        "Établir une charte informatique répertoriant les moyens informatiques mis à disposition, clarifiant la gestion des terminaux personnels et rappelant à minima les exigences de cybersécurité liées à la gestion des comptes d'accès, des mots de passe, des données à protéger en priorités, de l'utilisation de la messagerie et des ressources cloud",
       pourquoi:
         '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau1-pourquoi.pug',
       comment:
