@@ -64,6 +64,49 @@ export const adaptateurTranscripteur = () =>
                 'contexte-opere-systemes-information-industriels-non',
             },
           },
+          'acces-liste-compte-utilisateurs': {
+            contexte: {
+              'contexte-activites-recherche-et-developpement':
+                'contexte-activites-recherche-et-developpement-non',
+            },
+          },
+          'acces-droits-acces-utilisateurs-limites': {
+            contexte: {
+              'contexte-activites-recherche-et-developpement':
+                'contexte-activites-recherche-et-developpement-non',
+            },
+          },
+          'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles':
+            {
+              contexte: {
+                'contexte-activites-recherche-et-developpement':
+                  'contexte-activites-recherche-et-developpement-non',
+              },
+            },
+          'securite-poste-r-et-d-disques-chiffres': {
+            contexte: {
+              'contexte-activites-recherche-et-developpement':
+                'contexte-activites-recherche-et-developpement-non',
+            },
+          },
+          'securite-infrastructure-acces-wifi-securises': {
+            contexte: {
+              'contexte-activites-recherche-et-developpement':
+                'contexte-activites-recherche-et-developpement-non',
+            },
+          },
+          'securite-infrastructure-espace-stockage-serveurs': {
+            contexte: {
+              'contexte-activites-recherche-et-developpement':
+                'contexte-activites-recherche-et-developpement-non',
+            },
+          },
+          'sensibilisation-risque-espionnage-industriel-r-et-d': {
+            contexte: {
+              'contexte-activites-recherche-et-developpement':
+                'contexte-activites-recherche-et-developpement-non',
+            },
+          },
         },
       };
     }
