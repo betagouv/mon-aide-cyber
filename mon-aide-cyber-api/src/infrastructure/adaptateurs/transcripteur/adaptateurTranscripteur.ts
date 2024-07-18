@@ -107,6 +107,12 @@ export const adaptateurTranscripteur = () =>
                 'contexte-activites-recherche-et-developpement-non',
             },
           },
+          'acces-outil-gestion-des-comptes': {
+            contexte: {
+              'contexte-nombre-postes-travail-dans-entite':
+                'contexte-nombre-postes-travail-dans-entite-entre-1-et-9',
+            },
+          },
         },
       };
     }

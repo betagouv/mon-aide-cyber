@@ -831,6 +831,14 @@ export const donneesContexte: QuestionsThematique = {
             'contexte-nombre-postes-travail-dans-entite-entre-1-et-9',
           libelle: 'Entre 1 et 9',
           ordre: 0,
+          regle: {
+            reponses: [
+              {
+                identifiantQuestion: 'acces-outil-gestion-des-comptes',
+                reponseDonnee: 'acces-outil-gestion-des-comptes-na',
+              },
+            ],
+          },
         },
         {
           identifiant:
