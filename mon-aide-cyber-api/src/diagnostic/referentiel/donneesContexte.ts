@@ -837,6 +837,11 @@ export const donneesContexte: QuestionsThematique = {
                 identifiantQuestion: 'acces-outil-gestion-des-comptes',
                 reponseDonnee: 'acces-outil-gestion-des-comptes-na',
               },
+              {
+                identifiantQuestion:
+                  'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
+                reponseDonnee: '',
+              },
             ],
           },
         },
