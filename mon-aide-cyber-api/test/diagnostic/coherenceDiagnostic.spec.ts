@@ -150,21 +150,31 @@ describe('Cohérence du référentiel et des mesures', () => {
       });
 
     describe.each(toutesLesReglesDeGestion())(
-      'Pour la question $question',
+      'Pour la question de la règle de gestion $question',
       (regle) => {
         it.each((regle.regle as RegleDeGestionAjouteReponse).reponses)(
-          'La reponse $reponseDonnee et la question $identifiantQuestion existent',
+          'La question $identifiantQuestion est présente dans le référentiel',
           (reponse) => {
             expect(
               questionsEtReponses.flatMap((questions) =>
                 questions.questions.flatMap((q) => q.question)
               )
             ).contains(reponse.identifiantQuestion);
-            expect(
-              questionsEtReponses.flatMap((questions) =>
+          }
+        );
+
+        it.each((regle.regle as RegleDeGestionAjouteReponse).reponses)(
+          'La reponse $reponseDonnee est présente dans le référentiel ou vide (indiquant sa réinitialisation)',
+          (reponse) => {
+            const réponsesDuReferentielEtReponseVide = questionsEtReponses
+              .flatMap((questions) =>
                 questions.questions.flatMap((q) => q.reponses.flatMap((r) => r))
               )
-            ).contains(reponse.reponseDonnee);
+              .concat(['']);
+
+            expect(réponsesDuReferentielEtReponseVide).contains(
+              reponse.reponseDonnee
+            );
           }
         );
       }
