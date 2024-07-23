@@ -111,6 +111,8 @@ export const adaptateurTranscripteur = () =>
             contexte: {
               'contexte-nombre-postes-travail-dans-entite':
                 'contexte-nombre-postes-travail-dans-entite-entre-1-et-9',
+              'contexte-nombre-postes-travail-dans-organisation':
+                'contexte-nombre-postes-travail-dans-organisation-entre-1-et-9',
             },
           },
           'sensibilisation-collaborateurs-soumis-obligations-usages-securises':
@@ -118,6 +120,8 @@ export const adaptateurTranscripteur = () =>
               contexte: {
                 'contexte-nombre-postes-travail-dans-entite':
                   'contexte-nombre-postes-travail-dans-entite-entre-1-et-9',
+                'contexte-nombre-postes-travail-dans-organisation':
+                  'contexte-nombre-postes-travail-dans-organisation-entre-1-et-9',
               },
             },
         },
