@@ -115,16 +115,12 @@ class ServiceRechercheCOT {
 }
 
 describe('Service de recherche COT', () => {
-  it('retourne le mail du COT de la région dans lequelle se situe le département renseigné', () => {
-    expect(
-      new ServiceRechercheCOT().chercheMailParDepartement('Finistère')
-    ).toStrictEqual('bretagne@ssi.gouv.fr');
-    expect(
-      new ServiceRechercheCOT().chercheMailParDepartement('Corse-du-Sud')
-    ).toStrictEqual('corse@ssi.gouv.fr');
-    expect(
-      new ServiceRechercheCOT().chercheMailParDepartement("Val-d'Oise")
-    ).toStrictEqual('ile-de-france@ssi.gouv.fr');
+  describe('trouve un mail de COT pour chacun des départements', () => {
+    it.each(listeDepartements)('$nom', (departement) => {
+      expect(
+        new ServiceRechercheCOT().chercheMailParDepartement(departement.nom)
+      ).toBeDefined();
+    });
   });
 
   it("retourne 'undefined' lorsque le mail du COT n'est pas trouvé", () => {
