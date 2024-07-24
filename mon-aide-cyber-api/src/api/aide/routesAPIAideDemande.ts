@@ -9,8 +9,11 @@ import {
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../domaine/erreurMAC';
-import { listeDepartements } from '../../infrastructure/departements/listeDepartements.ts/listeDepartements';
 import { SagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
+import {
+  Departement,
+  listeDepartements,
+} from '../../infrastructure/departements/listeDepartements/listeDepartements';
 
 type CorpsRequeteDemandeAide = {
   cguValidees: boolean;
@@ -30,9 +33,15 @@ export const routesAPIAideDemande = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
   routes.get('/', async (_requete: Request, reponse: Response) => {
+    const extraitNomsEtCodes = (departements: Departement[]) =>
+      departements.map(({ nom, code }) => ({
+        nom,
+        code,
+      }));
+
     return reponse.status(200).json({
       ...constructeurActionsHATEOAS().demanderAide().construis(),
-      departements: listeDepartements,
+      departements: extraitNomsEtCodes(listeDepartements),
     });
   });
 
