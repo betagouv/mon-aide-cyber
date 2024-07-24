@@ -1,38 +1,53 @@
+import { listeDepartements } from '../../src/infrastructure/departements/listeDepartements/listeDepartements';
+
 class ServiceRechercheCOT {
-  chercheMailGeneriqueParDepartement(departement: string) {
-    const departementsParCot = [
+  chercheMailParDepartement(nomDepartement: string): string | undefined {
+    const annuaireCOT = [
       {
-        departements: ["Val-d'Oise"],
-        mailGeneriqueCot: 'ile-de-france@ssi.gouv.fr',
+        codeRegion: '11',
+        mail: 'ile-de-france@ssi.gouv.fr',
       },
       {
-        departements: ['Corse-du-Sud'],
-        mailGeneriqueCot: 'corse@ssi.gouv.fr',
+        codeRegion: '94',
+        mail: 'corse@ssi.gouv.fr',
       },
       {
-        departements: ['Finistère'],
-        mailGeneriqueCot: 'bretagne@ssi.gouv.fr',
+        codeRegion: '53',
+        mail: 'bretagne@ssi.gouv.fr',
       },
     ];
 
-    return departementsParCot.find((zoneAdministreeParCot) =>
-      zoneAdministreeParCot.departements.find((dep) => dep === departement)
-    )!.mailGeneriqueCot;
+    const codeRegionDepartement = listeDepartements.find(
+      ({ nom }) => nom === nomDepartement
+    )?.codeRegion;
+
+    return codeRegionDepartement
+      ? annuaireCOT.find(
+          ({ codeRegion: codeRegionCOT }) =>
+            codeRegionCOT === codeRegionDepartement
+        )?.mail
+      : undefined;
   }
 }
 
 describe('Service de recherche COT', () => {
-  it('retourne le mail générique du COT de la région dans lequelle se situe le département renseigné', () => {
+  it('retourne le mail du COT de la région dans lequelle se situe le département renseigné', () => {
     expect(
-      new ServiceRechercheCOT().chercheMailGeneriqueParDepartement('Finistère')
+      new ServiceRechercheCOT().chercheMailParDepartement('Finistère')
     ).toStrictEqual('bretagne@ssi.gouv.fr');
     expect(
-      new ServiceRechercheCOT().chercheMailGeneriqueParDepartement(
-        'Corse-du-Sud'
-      )
+      new ServiceRechercheCOT().chercheMailParDepartement('Corse-du-Sud')
     ).toStrictEqual('corse@ssi.gouv.fr');
     expect(
-      new ServiceRechercheCOT().chercheMailGeneriqueParDepartement("Val-d'Oise")
+      new ServiceRechercheCOT().chercheMailParDepartement("Val-d'Oise")
     ).toStrictEqual('ile-de-france@ssi.gouv.fr');
+  });
+
+  it("retourne 'undefined' lorsque le mail du COT n'est pas trouvé", () => {
+    expect(
+      new ServiceRechercheCOT().chercheMailParDepartement(
+        'département-introuvable'
+      )
+    ).toBeUndefined();
   });
 });
