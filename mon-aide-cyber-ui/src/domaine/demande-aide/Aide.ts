@@ -1,4 +1,4 @@
-import { ReponseHATEOAS } from '../Lien.ts';
+import { ReponseHATEOAS } from '../Lien';
 
 export type CorpsDemandeAide = {
   cguValidees: boolean;

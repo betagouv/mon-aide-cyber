@@ -1,7 +1,8 @@
-type Departement = {
+export type Departement = {
   nom: string;
   code: string;
 };
+
 export const listeDepartements: Departement[] = [
   {
     nom: 'Ain',

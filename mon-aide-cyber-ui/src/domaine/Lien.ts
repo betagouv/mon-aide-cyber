@@ -1,4 +1,4 @@
-import { UUID } from '../types/Types.ts';
+import { UUID } from '../types/Types';
 
 export type Lien = {
   url: string;
