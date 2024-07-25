@@ -147,12 +147,12 @@ export const listeDepartements: Departement[] = [
   },
   {
     nom: 'Corse-du-Sud',
-    code: '2',
+    code: '2A',
     codeRegion: '94',
   },
   {
     nom: 'Haute-Corse',
-    code: '2',
+    code: '2B',
     codeRegion: '94',
   },
   {
