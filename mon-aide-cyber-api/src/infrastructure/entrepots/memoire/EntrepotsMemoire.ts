@@ -18,7 +18,6 @@ export class EntrepotsMemoire implements Entrepots {
   private entrepotRestitution: EntrepotRestitution =
     new EntrepotRestitutionMemoire();
   private entrepotAides: EntrepotAide = new EntrepotAideMemoire();
-
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
   }
