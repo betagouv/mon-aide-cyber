@@ -7,10 +7,19 @@ import { routesAPIUtilisateur } from './routesAPIUtilisateur';
 import { routesAPIEspaceAidant } from './routesAPIEspaceAidant';
 import { routesAPIProfil } from './routesAPIProfil';
 import { routesAPIAide } from './aide/routesAPIAide';
+import { routesAPIDemandesDevenirAidant } from './demandes/routeAPIDemandeDevenirAidant';
 
 export interface RequeteUtilisateur extends Request {
   identifiantUtilisateurCourant?: crypto.UUID;
 }
+
+const routesAPIDemandes = (_configuration: ConfigurationServeur) => {
+  const routes: Router = express.Router();
+
+  routes.use('/devenir-aidant', routesAPIDemandesDevenirAidant());
+
+  return routes;
+};
 
 const routesAPI = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
@@ -21,6 +30,7 @@ const routesAPI = (configuration: ConfigurationServeur) => {
   routes.use('/espace-aidant', routesAPIEspaceAidant(configuration));
   routes.use('/profil', routesAPIProfil(configuration));
   routes.use('/aide', routesAPIAide(configuration));
+  routes.use('/demandes', routesAPIDemandes(configuration));
 
   return routes;
 };
