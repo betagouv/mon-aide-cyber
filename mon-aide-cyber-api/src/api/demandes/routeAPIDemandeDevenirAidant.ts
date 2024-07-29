@@ -13,6 +13,7 @@ export const routesAPIDemandesDevenirAidant = () => {
     express.json(),
     body('nom').exists().notEmpty().trim(),
     body('prenom').exists().notEmpty().trim(),
+    body('mail').exists().notEmpty().isEmail().trim(),
     async (requete: Request, reponse: Response, _suite: NextFunction) => {
       const resultatValidation: Result<FieldValidationError> = validationResult(
         requete
@@ -25,9 +26,13 @@ export const routesAPIDemandesDevenirAidant = () => {
           reponse.json({
             message: 'Veuillez renseigner votre prénom',
           });
-        } else {
+        } else if (resultatValidation.array()?.at(0)?.path === 'nom') {
           reponse.json({
             message: 'Veuillez renseigner votre nom',
+          });
+        } else {
+          reponse.json({
+            message: 'Veuillez renseigner votre e-mail',
           });
         }
 
