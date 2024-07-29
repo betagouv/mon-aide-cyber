@@ -20,6 +20,10 @@ export const routesAPIDemandesDevenirAidant = () => {
       .isEmail()
       .trim()
       .withMessage('Veuillez renseigner votre e-mail'),
+    body('departement')
+      .notEmpty()
+      .trim()
+      .withMessage('Veuillez renseigner un département'),
     async (requete: Request, reponse: Response, _suite: NextFunction) => {
       const resultatsValidation: Result<FieldValidationError> =
         validationResult(requete) as Result<FieldValidationError>;
