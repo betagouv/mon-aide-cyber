@@ -20,7 +20,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         'POST',
         '/api/demandes/devenir-aidant',
         donneesServeur.portEcoute,
-        { nom: 'nom' }
+        { nom: 'nom', prenom: 'prenom' }
       );
 
       expect(reponse.statusCode).toStrictEqual(200);
@@ -47,12 +47,42 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         'POST',
         '/api/demandes/devenir-aidant',
         donneesServeur.portEcoute,
-        { nom: '' }
+        { nom: '', prenom: 'prenom' }
       );
 
       expect(reponse.statusCode).toBe(422);
       expect(JSON.parse(reponse.body).message).toBe(
         'Veuillez renseigner votre nom'
+      );
+    });
+
+    it("retourne une erreur et un message informant que le prénom de l'aidant est requis si le champs 'prenom' est absent", async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/devenir-aidant',
+        donneesServeur.portEcoute,
+        { prenom: '', nom: 'nom' }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(JSON.parse(reponse.body).message).toBe(
+        'Veuillez renseigner votre prénom'
+      );
+    });
+
+    it("retourne une erreur et un message informant que le prénom l'aidant est requis si le champs 'prenom' est vide", async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/devenir-aidant',
+        donneesServeur.portEcoute,
+        { prenom: '', nom: 'nom' }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(JSON.parse(reponse.body).message).toBe(
+        'Veuillez renseigner votre prénom'
       );
     });
   });
