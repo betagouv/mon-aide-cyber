@@ -20,7 +20,12 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         'POST',
         '/api/demandes/devenir-aidant',
         donneesServeur.portEcoute,
-        { nom: 'nom', prenom: 'prenom', mail: 'mail@fournisseur.fr' }
+        {
+          nom: 'nom',
+          prenom: 'prenom',
+          mail: 'mail@fournisseur.fr',
+          departement: 'departement',
+        }
       );
 
       expect(reponse.statusCode).toStrictEqual(200);
@@ -46,6 +51,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           nom: 'nom',
           prenom: 'prenom',
           mail: 'mail-invalide',
+          departement: 'département',
         };
 
         const reponse = await executeRequete(
@@ -66,6 +72,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           nom: '',
           prenom: 'prenom',
           mail: 'mail-invalide',
+          departement: 'département',
         };
 
         const reponse = await executeRequete(
