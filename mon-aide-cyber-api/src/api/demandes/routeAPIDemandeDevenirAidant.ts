@@ -11,30 +11,28 @@ export const routesAPIDemandesDevenirAidant = () => {
   routes.post(
     '/',
     express.json(),
-    body('nom').exists().notEmpty().trim(),
-    body('prenom').exists().notEmpty().trim(),
-    body('mail').exists().notEmpty().isEmail().trim(),
+    body('nom').notEmpty().trim().withMessage('Veuillez renseigner votre nom'),
+    body('prenom')
+      .notEmpty()
+      .trim()
+      .withMessage('Veuillez renseigner votre prénom'),
+    body('mail')
+      .isEmail()
+      .trim()
+      .withMessage('Veuillez renseigner votre e-mail'),
     async (requete: Request, reponse: Response, _suite: NextFunction) => {
-      const resultatValidation: Result<FieldValidationError> = validationResult(
-        requete
-      ) as Result<FieldValidationError>;
+      const resultatsValidation: Result<FieldValidationError> =
+        validationResult(requete) as Result<FieldValidationError>;
 
-      if (!resultatValidation.isEmpty()) {
+      if (!resultatsValidation.isEmpty()) {
         reponse.status(422);
 
-        if (resultatValidation.array()?.at(0)?.path === 'prenom') {
-          reponse.json({
-            message: 'Veuillez renseigner votre prénom',
-          });
-        } else if (resultatValidation.array()?.at(0)?.path === 'nom') {
-          reponse.json({
-            message: 'Veuillez renseigner votre nom',
-          });
-        } else {
-          reponse.json({
-            message: 'Veuillez renseigner votre e-mail',
-          });
-        }
+        reponse.json({
+          message: resultatsValidation
+            .array()
+            .map((resultatValidation) => resultatValidation.msg)
+            .join(', '),
+        });
 
         return reponse.send();
       }
