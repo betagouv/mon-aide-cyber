@@ -14,15 +14,46 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
   afterEach(() => testeurMAC.arrete());
 
   describe('Quand une requête POST est reçue', () => {
-    it('Connaît la route', async () => {
+    it('Réponds à la requête', async () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
         '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute
+        donneesServeur.portEcoute,
+        { nom: 'nom' }
       );
 
-      expect(reponse.statusCode).not.toStrictEqual(404);
+      expect(reponse.statusCode).toStrictEqual(200);
+    });
+
+    it("retourne une erreur et un message informant que le nom de l'aidant est requis si le champs 'nom' est absent", async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/devenir-aidant',
+        donneesServeur.portEcoute,
+        {}
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(JSON.parse(reponse.body).message).toBe(
+        'Veuillez renseigner votre nom'
+      );
+    });
+
+    it("retourne une erreur et un message informant que le nom l'aidant est requis si le champs 'nom' est vide", async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/devenir-aidant',
+        donneesServeur.portEcoute,
+        { nom: '' }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(JSON.parse(reponse.body).message).toBe(
+        'Veuillez renseigner votre nom'
+      );
     });
   });
 });
