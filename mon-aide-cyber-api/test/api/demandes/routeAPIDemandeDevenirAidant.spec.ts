@@ -26,109 +26,60 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       expect(reponse.statusCode).toStrictEqual(200);
     });
 
-    it("retourne une erreur et un message informant que le nom de l'aidant est requis si le champs 'nom' est absent", async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute,
-        {}
-      );
+    describe('Valide les paramètres de la requête', () => {
+      it("Retourne le code 422 en cas d'invalidité", async () => {
+        const corpsDeRequeteInvalide = {};
 
-      expect(reponse.statusCode).toBe(422);
-      expect(JSON.parse(reponse.body).message).toBe(
-        'Veuillez renseigner votre nom'
-      );
-    });
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant',
+          donneesServeur.portEcoute,
+          corpsDeRequeteInvalide
+        );
 
-    it("retourne une erreur et un message informant que le nom l'aidant est requis si le champs 'nom' est vide", async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute,
-        { nom: '', prenom: 'prenom' }
-      );
+        expect(reponse.statusCode).toStrictEqual(422);
+      });
 
-      expect(reponse.statusCode).toBe(422);
-      expect(JSON.parse(reponse.body).message).toBe(
-        'Veuillez renseigner votre nom'
-      );
-    });
+      it("Précise l'erreur dans un message, si une erreur est rencontré", async () => {
+        const corpsDeRequeteAvecMailInvalide = {
+          nom: 'nom',
+          prenom: 'prenom',
+          mail: 'mail-invalide',
+        };
 
-    it("retourne une erreur et un message informant que le prénom de l'aidant est requis si le champs 'prenom' est absent", async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute,
-        { prenom: '', nom: 'nom' }
-      );
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant',
+          donneesServeur.portEcoute,
+          corpsDeRequeteAvecMailInvalide
+        );
 
-      expect(reponse.statusCode).toBe(422);
-      expect(JSON.parse(reponse.body).message).toBe(
-        'Veuillez renseigner votre prénom'
-      );
-    });
+        expect(JSON.parse(reponse.body).message).toStrictEqual(
+          'Veuillez renseigner votre e-mail'
+        );
+      });
 
-    it("retourne une erreur et un message informant que le prénom l'aidant est requis si le champs 'prenom' est vide", async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute,
-        { prenom: '', nom: 'nom' }
-      );
+      it('Précise toutes les erreurs dans un message, si plusieurs erreurs sont rencontrés', async () => {
+        const corpsDeRequeteAvecMailEtNomInvalides = {
+          nom: '',
+          prenom: 'prenom',
+          mail: 'mail-invalide',
+        };
 
-      expect(reponse.statusCode).toBe(422);
-      expect(JSON.parse(reponse.body).message).toBe(
-        'Veuillez renseigner votre prénom'
-      );
-    });
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant',
+          donneesServeur.portEcoute,
+          corpsDeRequeteAvecMailEtNomInvalides
+        );
 
-    it("retourne une erreur et un message informant que le mail de l'aidant est requis si le champs 'mail' est absent", async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute,
-        { prenom: 'prenom', nom: 'nom' }
-      );
-
-      expect(reponse.statusCode).toBe(422);
-      expect(JSON.parse(reponse.body).message).toBe(
-        'Veuillez renseigner votre e-mail'
-      );
-    });
-
-    it("retourne une erreur et un message informant que le mail l'aidant est requis si le champs 'mail' est vide", async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute,
-        { prenom: 'prenom', nom: 'nom', mail: '' }
-      );
-
-      expect(reponse.statusCode).toBe(422);
-      expect(JSON.parse(reponse.body).message).toBe(
-        'Veuillez renseigner votre e-mail'
-      );
-    });
-
-    it("retourne une erreur et un message informant que le mail l'aidant est requis si le champs 'mail' est malformé", async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute,
-        { prenom: 'prenom', nom: 'nom', mail: 'pas-un-mail' }
-      );
-
-      expect(reponse.statusCode).toBe(422);
-      expect(JSON.parse(reponse.body).message).toBe(
-        'Veuillez renseigner votre e-mail'
-      );
+        expect(JSON.parse(reponse.body).message).toStrictEqual(
+          'Veuillez renseigner votre nom, Veuillez renseigner votre e-mail'
+        );
+      });
     });
   });
 });
