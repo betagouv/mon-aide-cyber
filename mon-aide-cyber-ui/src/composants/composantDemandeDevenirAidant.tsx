@@ -94,7 +94,7 @@ export const ComposantDemandeDevenirAidant = () => {
                 <p>
                   Pour cela, il convient d&apos;effectuer une formation.
                   Complétez le formulaire pour être averti de la prochaine
-                  formation prévue dans votre territoir !
+                  formation prévue sur votre territoire !
                 </p>
               </div>
             </div>
@@ -109,20 +109,20 @@ export const ComposantDemandeDevenirAidant = () => {
                   <div className="fr-mt-2w">
                     <div>
                       <h5>Vous souhaitez devenir Aidant MonAideCyber</h5>
-                      <p>Pour devenir aidant, il est nécessaire de :</p>
+                      <p>Pour devenir aidant, il est nécessaire de&nbsp;:</p>
                       <ul>
                         <li>
                           participer à une formation animée par l&apos;ANSSI
                         </li>
                         <li>
-                          prende connaissance de la charte de l&apos;aidant, qui
-                          rappelle notamment le principe de gratuité du
-                          dispositif, la signer avant ou après la formation
+                          prendre connaissance de la charte de l&apos;aidant,
+                          qui rappelle notamment le principe de gratuité du
+                          dispositif, et la signer avant ou après la formation
                         </li>
                       </ul>
                       <p>
                         Veuillez compléter les informations ci-dessous pour être
-                        averti de la prochaine session de formation prévue dans
+                        averti de la prochaine session de formation prévue sur
                         votre territoire.
                       </p>
                     </div>
