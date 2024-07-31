@@ -30,8 +30,7 @@ export const mesuresSensibilisation = {
   },
   'sensibilisation-collaborateurs-soumis-obligations-usages-securises': {
     niveau1: {
-      titre:
-        "Établir une charte informatique répertoriant les moyens informatiques mis à disposition, clarifiant la gestion des terminaux personnels et rappelant à minima les exigences de cybersécurité liées à la gestion des comptes d'accès, des mots de passe, des données à protéger en priorités, de l'utilisation de la messagerie et des ressources cloud",
+      titre: 'Établir une charte informatique',
       pourquoi:
         '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau1-pourquoi.pug',
       comment:
@@ -39,7 +38,7 @@ export const mesuresSensibilisation = {
     },
     niveau2: {
       titre:
-        "S'assurer que la charte informatique est annexée au contrat de travail et est signée par les salariés.",
+        "S'assurer que la charte informatique est annexée au contrat de travail et est signée par les salariés",
       pourquoi:
         '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau2-pourquoi.pug',
       comment:

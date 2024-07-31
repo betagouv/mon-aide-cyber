@@ -48,7 +48,7 @@ export const mesuresGouvernance = {
     },
     niveau2: {
       titre:
-        'Disposer de la liste des équipements et applicatifs concourant au fonctionnement du système d’information industriel',
+        'Disposer de la liste des équipements et applicatifs concourant au fonctionnement des systèmes industriels',
       pourquoi:
         '../../mesures/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau2-pourquoi.pug',
       comment:

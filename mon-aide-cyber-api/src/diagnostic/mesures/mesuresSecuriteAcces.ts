@@ -115,7 +115,7 @@ export const mesuresSecuriteAcces = {
     },
     niveau2: {
       titre:
-        'Mettre à disposition des utilisateurs une coffre fort de mots de passe et les former régulièrement à la création de mots de passe robustes.',
+        'Mettre à disposition des utilisateurs une coffre fort de mots de passe et les former régulièrement à la création de mots de passe robustes',
       pourquoi:
         '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau1-pourquoi.pug',
       comment:
