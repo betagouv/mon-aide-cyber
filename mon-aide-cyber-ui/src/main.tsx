@@ -24,7 +24,6 @@ import { ComposantConnexion } from './composants/connexion/ComposantConnexion.ts
 import { TableauDeBord } from './composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
 import { ComposantCreationEspaceAidant } from './composants/espace-aidant/creation-espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
-import { ComposantDemandeDevenirAidant } from './composants/composantDemandeDevenirAidant.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -42,10 +41,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     <Route
                       path="/demande-aide"
                       element={<ComposantDemandeAide />}
-                    />
-                    <Route
-                      path="/demandes/devenir-aidant"
-                      element={<ComposantDemandeDevenirAidant />}
                     />
                     <Route
                       path="/mentions-legales"
