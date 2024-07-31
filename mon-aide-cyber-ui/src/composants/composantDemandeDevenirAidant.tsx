@@ -1,41 +1,9 @@
-import { useReducer } from 'react';
 import { Footer } from './Footer.tsx';
 import { Header } from './Header.tsx';
 import { LienMAC } from './LienMAC.tsx';
 import { AutoCompletion } from './auto-completion/AutoCompletion.tsx';
 
-type EtatDemande = {
-  prenom: string;
-};
-
-enum ActionDemandesDevenirAidant {
-  ENVOI_DEMANDE = 'ENVOI_DEMANDE',
-}
-
-type Action = { type: ActionDemandesDevenirAidant.ENVOI_DEMANDE };
-
-const reducteurDemandeDevenirAidant = (
-  etatDemande: EtatDemande,
-  action: Action
-): EtatDemande => {
-  switch (action.type) {
-    case ActionDemandesDevenirAidant.ENVOI_DEMANDE: {
-      return {
-        ...etatDemande,
-      };
-    }
-  }
-};
-
-const envoieDemande = () => ({
-  type: ActionDemandesDevenirAidant.ENVOI_DEMANDE,
-});
-
 export function ComposantDemandeDevenirAidant() {
-  const [_, envoie] = useReducer(reducteurDemandeDevenirAidant, {
-    prenom: '',
-  });
-
   return (
     <>
       <>
@@ -181,7 +149,9 @@ export function ComposantDemandeDevenirAidant() {
                           type="button"
                           key="envoyer-demande-devenir-aidant"
                           className="fr-btn bouton-mac bouton-mac-primaire"
-                          onClick={() => envoie(envoieDemande())}
+                          onClick={() => {
+                            return;
+                          }}
                         >
                           Envoyer
                         </button>
