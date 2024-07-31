@@ -1,40 +1,84 @@
-import { useReducer } from 'react';
+import { useCallback, useReducer } from 'react';
 import { Footer } from './Footer.tsx';
 import { Header } from './Header.tsx';
 import { LienMAC } from './LienMAC.tsx';
 import { AutoCompletion } from './auto-completion/AutoCompletion.tsx';
+import { construisErreur, PresentationErreur } from './alertes/Erreurs.tsx';
+
+type ErreursSaisieDemande = {
+  prenom?: PresentationErreur;
+};
 
 type EtatDemande = {
   prenom: string;
+  erreurs?: ErreursSaisieDemande;
 };
 
 enum ActionDemandesDevenirAidant {
-  ENVOI_DEMANDE = 'ENVOI_DEMANDE',
+  DEMANDE_ENVOYEE = 'DEMANDE_ENVOYEE',
+  PRENOM_SAISI = 'PRENOM_SAISI',
 }
 
-type Action = { type: ActionDemandesDevenirAidant.ENVOI_DEMANDE };
+type Action =
+  | { type: ActionDemandesDevenirAidant.DEMANDE_ENVOYEE }
+  | { type: ActionDemandesDevenirAidant.PRENOM_SAISI; saisie: string };
+
+const estVide = (chaine: string): boolean => chaine === '';
+
+const contientUnChiffre = (chaine: string): boolean =>
+  chaine.match(/[0-9]+/) !== null;
+
+const estPrenomValide = (prenom: string): boolean =>
+  !estVide(prenom) && !contientUnChiffre(prenom);
 
 const reducteurDemandeDevenirAidant = (
   etatDemande: EtatDemande,
   action: Action
 ): EtatDemande => {
   switch (action.type) {
-    case ActionDemandesDevenirAidant.ENVOI_DEMANDE: {
+    case ActionDemandesDevenirAidant.DEMANDE_ENVOYEE: {
+      delete etatDemande.erreurs;
+
+      return {
+        erreurs: {
+          ...(!estPrenomValide(etatDemande.prenom)
+            ? construisErreur('prenom', {
+                identifiantTexteExplicatif: 'prenom',
+                texte: 'Veuillez saisir un prénom valide',
+              })
+            : undefined),
+        },
+        ...etatDemande,
+      };
+    }
+
+    case ActionDemandesDevenirAidant.PRENOM_SAISI: {
+      delete etatDemande.erreurs?.prenom;
+
       return {
         ...etatDemande,
+        prenom: action.saisie,
       };
     }
   }
 };
 
-const envoieDemande = () => ({
-  type: ActionDemandesDevenirAidant.ENVOI_DEMANDE,
+const envoieDemande = (): Action => ({
+  type: ActionDemandesDevenirAidant.DEMANDE_ENVOYEE,
 });
 
-export function ComposantDemandeDevenirAidant() {
-  const [_, envoie] = useReducer(reducteurDemandeDevenirAidant, {
+function saisiPrenom(saisie: string): Action {
+  return { type: ActionDemandesDevenirAidant.PRENOM_SAISI, saisie };
+}
+
+export const ComposantDemandeDevenirAidant = () => {
+  const [etatDemande, envoie] = useReducer(reducteurDemandeDevenirAidant, {
     prenom: '',
   });
+
+  const surSaisiePrenom = useCallback((saisie: string) => {
+    envoie(saisiPrenom(saisie));
+  }, []);
 
   return (
     <>
@@ -92,17 +136,29 @@ export function ComposantDemandeDevenirAidant() {
                       <div className="fr-grid-row fr-grid-row--gutters">
                         <div className="fr-col-12">
                           <div className="fr-input-group">
-                            <label className="fr-label" htmlFor="prenom">
-                              <span className="asterisque">*</span>
-                              <span> Votre prénom :</span>
-                            </label>
-                            <input
-                              className="fr-input"
-                              type="text"
-                              id="prenom"
-                              name="prenom"
-                              placeholder="Exemple : Martin"
-                            />
+                            <div
+                              className={`fr-input-group ${
+                                etatDemande.erreurs
+                                  ? etatDemande.erreurs.prenom?.className
+                                  : ''
+                              }`}
+                            >
+                              <label className="fr-label" htmlFor="prenom">
+                                <span className="asterisque">*</span>
+                                <span> Votre prénom :</span>
+                              </label>
+                              <input
+                                className="fr-input"
+                                type="text"
+                                id="prenom"
+                                name="prenom"
+                                placeholder="Exemple : Martin"
+                                onChange={(e) =>
+                                  surSaisiePrenom(e.target.value)
+                                }
+                              />
+                              {etatDemande.erreurs?.prenom?.texteExplicatif}
+                            </div>
                           </div>
                         </div>
                         <div className="fr-col-12">
@@ -197,4 +253,4 @@ export function ComposantDemandeDevenirAidant() {
       </>
     </>
   );
-}
+};
