@@ -118,7 +118,7 @@ export const importeAidants = async (
           charte: aidantTranscris.charte,
           qui: '',
           todo: 'message à envoyer',
-          messageAvecMDP: `"Bonjour,\nVotre mot de passe MonAideCyber : ${motDePasse}\nPour toute information monaidecyber@ssi.gouv.fr\nBonne journée\nL'équipe MonAideCyber"`,
+          messageAvecMDP: `"Bonjour,\nVotre mot de passe MonAideCyber : ${motDePasse}\nVotre login est votre mail et l'URL de connexion est ${process.env.VITE_URL_MAC}\nPour toute information monaidecyber@ssi.gouv.fr\nBonne journée"`,
           compteCree: 'oui',
           commentaires: `importé le ${FournisseurHorloge.maintenant().toISOString()}`,
         };
