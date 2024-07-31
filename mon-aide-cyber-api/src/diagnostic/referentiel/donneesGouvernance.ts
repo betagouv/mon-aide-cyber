@@ -207,7 +207,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-connaissance-rgpd-1-oui-liste-données',
           libelle:
-            "Oui, j'ai listé l'ensemble des données personnelles traitées au sein de mon entité",
+            "Oui, nous avons listé l'ensemble des données personnelles traitées au sein de mon entité",
           ordre: 3,
           resultat: {
             indice: { valeur: 2 },
@@ -218,7 +218,7 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant: 'gouvernance-connaissance-rgpd-1-oui-registre',
-          libelle: 'Oui, je tiens à jour un registre des traitements',
+          libelle: 'Oui, nous tenons à jour un registre des traitements',
           ordre: 4,
           resultat: {
             indice: { valeur: 3 },
