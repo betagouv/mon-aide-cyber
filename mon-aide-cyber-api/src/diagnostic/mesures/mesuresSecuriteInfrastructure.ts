@@ -117,11 +117,11 @@ export const mesuresSecuriteInfrastructure = {
         '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau1-comment.pug',
     },
     niveau2: {
-      titre: 'Mettre en place des mesures de sécurisation wifi',
+      titre: 'Créer un sous-réseau wifi dédié aux visiteurs',
       pourquoi:
-        '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau1-pourquoi.pug',
+        '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau2-pourquoi.pug',
       comment:
-        '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau1-comment.pug',
+        '../../mesures/infras/securite-infrastructure-acces-wifi-securises-niveau2-comment.pug',
     },
     priorisation: 36,
   },
