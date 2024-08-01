@@ -6,17 +6,21 @@ import { AutoCompletion } from './auto-completion/AutoCompletion.tsx';
 import { construisErreur, PresentationErreur } from './alertes/Erreurs.tsx';
 import { useMACAPI } from '../fournisseurs/hooks.ts';
 import { Departement } from '../domaine/demande-aide/Aide.ts';
+import { estDepartement } from './demande-aide/SaisieInformations.tsx';
 
 type ErreursSaisieDemande = {
   prenom?: PresentationErreur;
   nom?: PresentationErreur;
   mail?: PresentationErreur;
+  departement?: PresentationErreur;
 };
 
 type EtatDemande = {
   prenom: string;
   nom: string;
   mail: string;
+  departementSaisi: Departement;
+  departementsProposes: Departement[];
   erreurs?: ErreursSaisieDemande;
 };
 
@@ -25,13 +29,17 @@ enum TypeAction {
   PRENOM_SAISI = 'PRENOM_SAISI',
   NOM_SAISI = 'NOM_SAISI',
   MAIL_SAISI = 'MAIL_SAISI',
+  DEPARTEMENT_SAISI = 'DEPARTEMENT_SAISI',
+  DEPARTEMENTS_PROPOSES = 'DEPARTEMENT_PROPOSES',
 }
 
 type Action =
   | { type: TypeAction.DEMANDE_ENVOYEE }
   | { type: TypeAction.PRENOM_SAISI; saisie: string }
   | { type: TypeAction.NOM_SAISI; saisie: string }
-  | { type: TypeAction.MAIL_SAISI; saisie: string };
+  | { type: TypeAction.MAIL_SAISI; saisie: string }
+  | { type: TypeAction.DEPARTEMENT_SAISI; saisie: string | Departement }
+  | { type: TypeAction.DEPARTEMENTS_PROPOSES; departements: Departement[] };
 
 const estVide = (chaine: string): boolean => chaine === '';
 
@@ -44,6 +52,12 @@ const estPrenomValide = (prenom: string): boolean =>
 const estMailValide = (email: string) =>
   email.trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) !==
   null;
+
+const trouveDepartement = (
+  nomDepartement: string,
+  listeDepartements: Departement[]
+): Departement | undefined =>
+  listeDepartements.find(({ nom }) => nom === nomDepartement);
 
 const reducteurDemandeDevenirAidant = (
   etatDemande: EtatDemande,
@@ -71,6 +85,15 @@ const reducteurDemandeDevenirAidant = (
             ? construisErreur('mail', {
                 identifiantTexteExplicatif: 'mail',
                 texte: 'Veuillez saisir un mail valide',
+              })
+            : undefined),
+          ...(!trouveDepartement(
+            etatDemande.departementSaisi.nom || '',
+            etatDemande.departementsProposes
+          )
+            ? construisErreur('departement', {
+                identifiantTexteExplicatif: 'departement',
+                texte: 'Veuillez sélectionner un département dans la liste',
               })
             : undefined),
         },
@@ -104,8 +127,46 @@ const reducteurDemandeDevenirAidant = (
         mail: action.saisie,
       };
     }
+
+    case TypeAction.DEPARTEMENT_SAISI: {
+      delete etatDemande.erreurs?.departement;
+
+      const nomDepartementSaisi = estDepartement(action.saisie)
+        ? action.saisie.nom
+        : action.saisie;
+
+      return {
+        ...etatDemande,
+        departementSaisi:
+          trouveDepartement(
+            nomDepartementSaisi,
+            etatDemande.departementsProposes
+          ) || ({} as Departement),
+      };
+    }
+
+    case TypeAction.DEPARTEMENTS_PROPOSES: {
+      return {
+        ...etatDemande,
+        departementsProposes: action.departements,
+      };
+    }
   }
 };
+
+type ReponseDemandeInitiee = PreRequisDemande;
+
+type PreRequisDemande = {
+  departements: Departement[];
+};
+
+const initialiseDemande = (): EtatDemande => ({
+  prenom: '',
+  nom: '',
+  mail: '',
+  departementSaisi: {} as Departement,
+  departementsProposes: [],
+});
 
 const envoieDemande = (): Action => ({
   type: TypeAction.DEMANDE_ENVOYEE,
@@ -121,22 +182,22 @@ const saisieNom = (saisie: string): Action => ({
   saisie,
 });
 
-const initialiseDemande = (): EtatDemande => ({
-  prenom: '',
-  nom: '',
-  mail: '',
-});
-
 const saisieMail = (saisie: string): Action => ({
   type: TypeAction.MAIL_SAISI,
   saisie,
 });
 
-type ReponseDemandeInitiee = PreRequisDemande;
+const saisieDepartement = (saisie: Departement | string): Action => ({
+  type: TypeAction.DEPARTEMENT_SAISI,
+  saisie,
+});
 
-type PreRequisDemande = {
-  departements: Departement[];
-};
+function proposeDepartements(departements: Departement[]): Action {
+  return {
+    type: TypeAction.DEPARTEMENTS_PROPOSES,
+    departements,
+  };
+}
 
 export const ComposantDemandeDevenirAidant = () => {
   const macAPI = useMACAPI();
@@ -157,7 +218,13 @@ export const ComposantDemandeDevenirAidant = () => {
       .then((reponse) => {
         setPrerequisDemande({ departements: reponse.departements });
       });
-  }, []);
+  }, [macAPI]);
+
+  useEffect(() => {
+    if (prerequisDemande) {
+      envoie(proposeDepartements(prerequisDemande.departements));
+    }
+  }, [prerequisDemande]);
 
   const surSaisiePrenom = useCallback((saisie: string) => {
     envoie(saisiPrenom(saisie));
@@ -169,6 +236,10 @@ export const ComposantDemandeDevenirAidant = () => {
 
   const surSaisieMail = useCallback((saisie: string) => {
     envoie(saisieMail(saisie));
+  }, []);
+
+  const surSaisieDepartement = useCallback((saisie: Departement | string) => {
+    envoie(saisieDepartement(saisie));
   }, []);
 
   return (
@@ -299,42 +370,48 @@ export const ComposantDemandeDevenirAidant = () => {
                       </div>
                       <div className="fr-col-12">
                         <div className="fr-input-group">
-                          <label
-                            className="fr-label"
-                            htmlFor="departement-drom-com"
+                          <div
+                            className={`fr-input-group ${
+                              etatDemande.erreurs
+                                ? etatDemande.erreurs.departement?.className
+                                : ''
+                            }`}
                           >
-                            <span className="asterisque">*</span>
-                            <span>
-                              {' '}
-                              Dans quel département ou DROM-COM êtes-vous situé
-                              ?
-                            </span>
-                          </label>
-                          <AutoCompletion<{ nom: string }>
-                            nom="departement"
-                            suggestionsInitiales={
-                              prerequisDemande?.departements || []
-                            }
-                            mappeur={(departement: string | Departement) => {
-                              return typeof departement !== 'string' &&
-                                !!departement.code &&
-                                !!departement.nom
-                                ? `${departement.code} - ${departement.nom}`
-                                : typeof departement === 'string'
-                                  ? departement
-                                  : '';
-                            }}
-                            surSelection={() => {
-                              return;
-                            }}
-                            surSaisie={() => {
-                              return;
-                            }}
-                            clefsFiltrage={['nom']}
-                            valeurSaisie={{
-                              nom: 'Exemple : Gironde',
-                            }}
-                          />
+                            <label
+                              className="fr-label"
+                              htmlFor="departement-drom-com"
+                            >
+                              <span className="asterisque">*</span>
+                              <span>
+                                {' '}
+                                Dans quel département ou DROM-COM êtes-vous
+                                situé ?
+                              </span>
+                            </label>
+
+                            <AutoCompletion<Departement>
+                              nom="departement"
+                              suggestionsInitiales={
+                                prerequisDemande?.departements || []
+                              }
+                              mappeur={(departement) =>
+                                estDepartement(departement)
+                                  ? `${departement.code} - ${departement.nom}`
+                                  : typeof departement === 'string'
+                                    ? departement
+                                    : ''
+                              }
+                              surSelection={(departement) => {
+                                surSaisieDepartement(departement);
+                              }}
+                              surSaisie={(departement) => {
+                                surSaisieDepartement(departement);
+                              }}
+                              clefsFiltrage={['code', 'nom']}
+                              valeurSaisie={etatDemande.departementSaisi}
+                            />
+                            {etatDemande.erreurs?.departement?.texteExplicatif}
+                          </div>
                         </div>
                       </div>
                     </div>
