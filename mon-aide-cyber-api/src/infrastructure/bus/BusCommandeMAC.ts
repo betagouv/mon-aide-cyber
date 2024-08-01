@@ -8,6 +8,7 @@ import { CapteurCommandeRechercheAideParEmail } from '../../aide/CapteurCommande
 import { CapteurCommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { CapteurSagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
+import { CapteurCommandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 
 type ParametresCapteur = {
   entrepots: Entrepots;
@@ -75,6 +76,13 @@ const capteurs: Map<string, Capteur> = new Map([
           parametres.entrepots,
           parametres.busEvenements!
         ),
+    },
+  ],
+  [
+    'CommandeDevenirAidant',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeDevenirAidant(parametres.entrepots),
     },
   ],
 ]);

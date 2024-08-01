@@ -9,8 +9,12 @@ import {
   Departement,
   listeDepartements,
 } from '../../infrastructure/departements/listeDepartements/listeDepartements';
+import { ConfigurationServeur } from '../../serveur';
+import { CommandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 
-export const routesAPIDemandesDevenirAidant = () => {
+export const routesAPIDemandesDevenirAidant = (
+  configuration: ConfigurationServeur
+) => {
   const routes: Router = express.Router();
 
   routes.get('/', async (_requete: Request, reponse: Response) => {
@@ -46,17 +50,23 @@ export const routesAPIDemandesDevenirAidant = () => {
         validationResult(requete) as Result<FieldValidationError>;
 
       if (!resultatsValidation.isEmpty()) {
-        reponse.status(422);
-
-        reponse.json({
+        reponse.status(422).json({
           message: resultatsValidation
             .array()
             .map((resultatValidation) => resultatValidation.msg)
             .join(', '),
         });
-
-        return reponse.send();
       }
+
+      const commande: CommandeDevenirAidant = {
+        type: 'CommandeDevenirAidant',
+        departement: requete.body.departement,
+        mail: requete.body.mail,
+        nom: requete.body.nom,
+        prenom: requete.body.prenom,
+      };
+
+      await configuration.busCommande.publie(commande);
 
       reponse.status(200);
 
