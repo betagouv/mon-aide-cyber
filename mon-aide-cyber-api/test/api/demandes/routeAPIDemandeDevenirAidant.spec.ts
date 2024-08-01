@@ -37,6 +37,13 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
   });
 
   describe('Quand une requête POST est reçue', () => {
+    let donneesServeur: { portEcoute: number; app: Express };
+
+    beforeEach(() => {
+      donneesServeur = testeurMAC.initialise();
+    });
+
+    afterEach(() => testeurMAC.arrete());
     it('Réponds OK à la requête', async () => {
       const reponse = await executeRequete(
         donneesServeur.app,

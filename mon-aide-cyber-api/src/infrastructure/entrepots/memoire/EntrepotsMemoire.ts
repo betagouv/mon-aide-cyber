@@ -3,6 +3,7 @@ import { Entrepots } from '../../../domaine/Entrepots';
 import {
   EntrepotAidantMemoire,
   EntrepotAideMemoire,
+  EntrepotDemandeDevenirAidantMemoire,
   EntrepotDiagnosticMemoire,
   EntrepotRestitutionMemoire,
 } from './EntrepotMemoire';
@@ -18,6 +19,9 @@ export class EntrepotsMemoire implements Entrepots {
   private entrepotRestitution: EntrepotRestitution =
     new EntrepotRestitutionMemoire();
   private entrepotAides: EntrepotAide = new EntrepotAideMemoire();
+  private entrepotDemandeDevenirAidant =
+    new EntrepotDemandeDevenirAidantMemoire();
+
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
   }
@@ -32,5 +36,9 @@ export class EntrepotsMemoire implements Entrepots {
 
   aides() {
     return this.entrepotAides;
+  }
+
+  demandesDevenirAidant() {
+    return this.entrepotDemandeDevenirAidant;
   }
 }

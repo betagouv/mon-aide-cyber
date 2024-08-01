@@ -14,6 +14,10 @@ import {
   Restitution,
 } from '../../../restitution/Restitution';
 import { Aide, EntrepotAide } from '../../../aide/Aide';
+import {
+  DemandeDevenirAidant,
+  EntrepotDemandeDevenirAidant,
+} from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -110,5 +114,14 @@ export class EntrepotAideMemoire
     return aides.length > 0
       ? Promise.resolve(aides[0])
       : Promise.resolve(undefined);
+  }
+}
+
+export class EntrepotDemandeDevenirAidantMemoire
+  extends EntrepotMemoire<DemandeDevenirAidant>
+  implements EntrepotDemandeDevenirAidant
+{
+  typeAggregat(): string {
+    return 'DemandeDevenirAidant';
   }
 }

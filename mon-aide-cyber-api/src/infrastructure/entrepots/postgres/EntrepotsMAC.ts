@@ -8,6 +8,8 @@ import { EntrepotRestitution } from '../../../restitution/Restitution';
 import { EntrepotRestitutionPostgres } from './EntrepotRestitutionPostgres';
 import { EntrepotAide } from '../../../aide/Aide';
 import { EntrepotAideConcret } from './EntrepotAideConcret';
+import { EntrepotDemandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
+import { EntrepotDemandeDevenirAidantMemoire } from '../memoire/EntrepotMemoire';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -19,6 +21,8 @@ export class EntrepotsMAC implements Entrepots {
   private readonly entrepotAide: EntrepotAide = new EntrepotAideConcret(
     adaptateurServiceChiffrement()
   );
+  private entrepotDemandeDevenirAidantMemoire =
+    new EntrepotDemandeDevenirAidantMemoire();
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
@@ -31,8 +35,11 @@ export class EntrepotsMAC implements Entrepots {
   restitution(): EntrepotRestitution {
     return this.entrepotRestitution;
   }
-
   aides(): EntrepotAide {
     return this.entrepotAide;
+  }
+
+  demandesDevenirAidant(): EntrepotDemandeDevenirAidant {
+    return this.entrepotDemandeDevenirAidantMemoire;
   }
 }

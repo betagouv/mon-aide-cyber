@@ -13,10 +13,10 @@ export interface RequeteUtilisateur extends Request {
   identifiantUtilisateurCourant?: crypto.UUID;
 }
 
-const routesAPIDemandes = (_configuration: ConfigurationServeur) => {
+const routesAPIDemandes = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
-  routes.use('/devenir-aidant', routesAPIDemandesDevenirAidant());
+  routes.use('/devenir-aidant', routesAPIDemandesDevenirAidant(configuration));
 
   return routes;
 };
