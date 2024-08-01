@@ -5,9 +5,26 @@ import {
   Result,
   validationResult,
 } from 'express-validator';
+import {
+  Departement,
+  listeDepartements,
+} from '../../infrastructure/departements/listeDepartements/listeDepartements';
 
 export const routesAPIDemandesDevenirAidant = () => {
   const routes: Router = express.Router();
+
+  routes.get('/', async (_requete: Request, reponse: Response) => {
+    const extraitNomsEtCodes = (departements: Departement[]) =>
+      departements.map(({ nom, code }) => ({
+        nom,
+        code,
+      }));
+
+    return reponse.status(200).json({
+      departements: extraitNomsEtCodes(listeDepartements),
+    });
+  });
+
   routes.post(
     '/',
     express.json(),

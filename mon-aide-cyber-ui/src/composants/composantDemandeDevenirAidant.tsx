@@ -1,9 +1,11 @@
-import { useCallback, useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { Footer } from './Footer.tsx';
 import { Header } from './Header.tsx';
 import { LienMAC } from './LienMAC.tsx';
 import { AutoCompletion } from './auto-completion/AutoCompletion.tsx';
 import { construisErreur, PresentationErreur } from './alertes/Erreurs.tsx';
+import { useMACAPI } from '../fournisseurs/hooks.ts';
+import { Departement } from '../domaine/demande-aide/Aide.ts';
 
 type ErreursSaisieDemande = {
   prenom?: PresentationErreur;
@@ -130,11 +132,32 @@ const saisieMail = (saisie: string): Action => ({
   saisie,
 });
 
+type ReponseDemandeInitiee = PreRequisDemande;
+
+type PreRequisDemande = {
+  departements: Departement[];
+};
+
 export const ComposantDemandeDevenirAidant = () => {
+  const macAPI = useMACAPI();
+  const [prerequisDemande, setPrerequisDemande] = useState<
+    PreRequisDemande | undefined
+  >();
   const [etatDemande, envoie] = useReducer(
     reducteurDemandeDevenirAidant,
     initialiseDemande()
   );
+
+  useEffect(() => {
+    macAPI
+      .appelle<ReponseDemandeInitiee>(
+        { url: '/api/demandes/devenir-aidant', methode: 'GET' },
+        (corps) => corps
+      )
+      .then((reponse) => {
+        setPrerequisDemande({ departements: reponse.departements });
+      });
+  }, []);
 
   const surSaisiePrenom = useCallback((saisie: string) => {
     envoie(saisiPrenom(saisie));
@@ -289,17 +312,17 @@ export const ComposantDemandeDevenirAidant = () => {
                           </label>
                           <AutoCompletion<{ nom: string }>
                             nom="departement"
-                            suggestionsInitiales={[
-                              { nom: 'departement 1' },
-                              { nom: 'departement 2' },
-                              { nom: 'departement 3' },
-                            ]}
-                            mappeur={(
-                              departement: string | { nom: string }
-                            ) => {
-                              return typeof departement === 'string'
-                                ? departement
-                                : departement.nom;
+                            suggestionsInitiales={
+                              prerequisDemande?.departements || []
+                            }
+                            mappeur={(departement: string | Departement) => {
+                              return typeof departement !== 'string' &&
+                                !!departement.code &&
+                                !!departement.nom
+                                ? `${departement.code} - ${departement.nom}`
+                                : typeof departement === 'string'
+                                  ? departement
+                                  : '';
                             }}
                             surSelection={() => {
                               return;
