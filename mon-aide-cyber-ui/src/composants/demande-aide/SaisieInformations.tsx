@@ -26,6 +26,14 @@ type ProprietesSaisiesInformations = {
   };
 };
 
+export const estDepartement = (
+  departement: string | Departement
+): departement is Departement => {
+  return (
+    typeof departement !== 'string' && !!departement.code && !!departement.nom
+  );
+};
+
 export const SaisieInformations = (
   proprietes: ProprietesSaisiesInformations
 ) => {
@@ -85,13 +93,6 @@ export const SaisieInformations = (
   const surRelationAidant = useCallback(() => {
     envoie(relationAidantCliquee());
   }, []);
-  const estDepartement = (
-    departement: string | Departement
-  ): departement is Departement => {
-    return (
-      typeof departement !== 'string' && !!departement.code && !!departement.nom
-    );
-  };
   return (
     <>
       <div className="fr-mb-2w">Votre demande</div>
