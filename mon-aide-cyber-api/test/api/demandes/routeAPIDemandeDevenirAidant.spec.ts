@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { executeRequete } from '../executeurRequete';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
+import { listeDepartements } from '../../../src/infrastructure/departements/listeDepartements/listeDepartements';
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -13,8 +14,30 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
 
   afterEach(() => testeurMAC.arrete());
 
+  describe('Quand une requête GET est reçue', () => {
+    it('Fournis la liste des départements et leurs codes', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/api/demandes/devenir-aidant',
+        donneesServeur.portEcoute
+      );
+
+      const newVar = await reponse.json();
+
+      console.log(newVar);
+
+      expect(newVar.departements).toStrictEqual(
+        listeDepartements.map(({ nom, code }) => ({
+          nom,
+          code,
+        }))
+      );
+    });
+  });
+
   describe('Quand une requête POST est reçue', () => {
-    it('Réponds à la requête', async () => {
+    it('Réponds OK à la requête', async () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
