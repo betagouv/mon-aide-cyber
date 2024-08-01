@@ -25,7 +25,7 @@ type EtatDemande = {
 };
 
 enum TypeAction {
-  DEMANDE_ENVOYEE = 'DEMANDE_ENVOYEE',
+  DEMANDE_VALIDEE = 'DEMANDE_VALIDEE',
   PRENOM_SAISI = 'PRENOM_SAISI',
   NOM_SAISI = 'NOM_SAISI',
   MAIL_SAISI = 'MAIL_SAISI',
@@ -34,7 +34,7 @@ enum TypeAction {
 }
 
 type Action =
-  | { type: TypeAction.DEMANDE_ENVOYEE }
+  | { type: TypeAction.DEMANDE_VALIDEE }
   | { type: TypeAction.PRENOM_SAISI; saisie: string }
   | { type: TypeAction.NOM_SAISI; saisie: string }
   | { type: TypeAction.MAIL_SAISI; saisie: string }
@@ -64,7 +64,7 @@ const reducteurDemandeDevenirAidant = (
   action: Action
 ): EtatDemande => {
   switch (action.type) {
-    case TypeAction.DEMANDE_ENVOYEE: {
+    case TypeAction.DEMANDE_VALIDEE: {
       delete etatDemande.erreurs;
 
       return {
@@ -168,8 +168,8 @@ const initialiseDemande = (): EtatDemande => ({
   departementsProposes: [],
 });
 
-const envoieDemande = (): Action => ({
-  type: TypeAction.DEMANDE_ENVOYEE,
+const valideDemande = (): Action => ({
+  type: TypeAction.DEMANDE_VALIDEE,
 });
 
 const saisiPrenom = (saisie: string): Action => ({
@@ -420,7 +420,7 @@ export const ComposantDemandeDevenirAidant = () => {
                         type="button"
                         key="envoyer-demande-devenir-aidant"
                         className="fr-btn bouton-mac bouton-mac-primaire"
-                        onClick={() => envoie(envoieDemande())}
+                        onClick={() => envoie(valideDemande())}
                       >
                         Envoyer
                       </button>
