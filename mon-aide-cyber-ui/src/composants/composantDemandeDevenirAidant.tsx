@@ -8,11 +8,13 @@ import { construisErreur, PresentationErreur } from './alertes/Erreurs.tsx';
 type ErreursSaisieDemande = {
   prenom?: PresentationErreur;
   nom?: PresentationErreur;
+  mail?: PresentationErreur;
 };
 
 type EtatDemande = {
   prenom: string;
   nom: string;
+  mail: string;
   erreurs?: ErreursSaisieDemande;
 };
 
@@ -20,12 +22,14 @@ enum TypeAction {
   DEMANDE_ENVOYEE = 'DEMANDE_ENVOYEE',
   PRENOM_SAISI = 'PRENOM_SAISI',
   NOM_SAISI = 'NOM_SAISI',
+  MAIL_SAISI = 'MAIL_SAISI',
 }
 
 type Action =
   | { type: TypeAction.DEMANDE_ENVOYEE }
   | { type: TypeAction.PRENOM_SAISI; saisie: string }
-  | { type: TypeAction.NOM_SAISI; saisie: string };
+  | { type: TypeAction.NOM_SAISI; saisie: string }
+  | { type: TypeAction.MAIL_SAISI; saisie: string };
 
 const estVide = (chaine: string): boolean => chaine === '';
 
@@ -34,6 +38,10 @@ const contientUnChiffre = (chaine: string): boolean =>
 
 const estPrenomValide = (prenom: string): boolean =>
   !estVide(prenom) && !contientUnChiffre(prenom);
+
+const estMailValide = (email: string) =>
+  email.trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) !==
+  null;
 
 const reducteurDemandeDevenirAidant = (
   etatDemande: EtatDemande,
@@ -55,6 +63,12 @@ const reducteurDemandeDevenirAidant = (
             ? construisErreur('nom', {
                 identifiantTexteExplicatif: 'nom',
                 texte: 'Veuillez saisir un nom valide',
+              })
+            : undefined),
+          ...(!estMailValide(etatDemande.mail)
+            ? construisErreur('mail', {
+                identifiantTexteExplicatif: 'mail',
+                texte: 'Veuillez saisir un mail valide',
               })
             : undefined),
         },
@@ -79,6 +93,15 @@ const reducteurDemandeDevenirAidant = (
         nom: action.saisie,
       };
     }
+
+    case TypeAction.MAIL_SAISI: {
+      delete etatDemande.erreurs?.mail;
+
+      return {
+        ...etatDemande,
+        mail: action.saisie,
+      };
+    }
   }
 };
 
@@ -99,6 +122,12 @@ const saisieNom = (saisie: string): Action => ({
 const initialiseDemande = (): EtatDemande => ({
   prenom: '',
   nom: '',
+  mail: '',
+});
+
+const saisieMail = (saisie: string): Action => ({
+  type: TypeAction.MAIL_SAISI,
+  saisie,
 });
 
 export const ComposantDemandeDevenirAidant = () => {
@@ -113,6 +142,10 @@ export const ComposantDemandeDevenirAidant = () => {
 
   const surSaisieNom = useCallback((saisie: string) => {
     envoie(saisieNom(saisie));
+  }, []);
+
+  const surSaisieMail = useCallback((saisie: string) => {
+    envoie(saisieMail(saisie));
   }, []);
 
   return (
@@ -218,17 +251,27 @@ export const ComposantDemandeDevenirAidant = () => {
                       </div>
                       <div className="fr-col-12">
                         <div className="fr-input-group">
-                          <label className="fr-label" htmlFor="mail">
-                            <span className="asterisque">*</span>
-                            <span> Votre adresse électronique :</span>
-                          </label>
-                          <input
-                            className="fr-input"
-                            type="text"
-                            id="mail"
-                            name="mail"
-                            placeholder="Exemple : martin@mail.com"
-                          />
+                          <div
+                            className={`fr-input-group ${
+                              etatDemande.erreurs
+                                ? etatDemande.erreurs.mail?.className
+                                : ''
+                            }`}
+                          >
+                            <label className="fr-label" htmlFor="mail">
+                              <span className="asterisque">*</span>
+                              <span> Votre adresse électronique :</span>
+                            </label>
+                            <input
+                              className="fr-input"
+                              type="text"
+                              id="mail"
+                              name="mail"
+                              placeholder="Exemple : martin@mail.com"
+                              onChange={(e) => surSaisieMail(e.target.value)}
+                            />
+                            {etatDemande.erreurs?.mail?.texteExplicatif}
+                          </div>
                         </div>
                       </div>
                       <div className="fr-col-12">
