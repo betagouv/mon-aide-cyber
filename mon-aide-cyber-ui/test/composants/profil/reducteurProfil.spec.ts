@@ -33,4 +33,24 @@ describe('reducteur profil', () => {
       enCoursDeChargement: false,
     });
   });
+
+  it('charge un profil avec nom composé', () => {
+    const etatProfil = reducteurProfil(
+      profilVide,
+      profilCharge({
+        liens: { 'modifier-profil': { url: '' }, suite: { url: '' } },
+        nomPrenom: 'Jean Du Jardin',
+        dateSignatureCGU: '03.12.2023',
+        identifiantConnexion: 'jean.dupont@email.fr',
+      })
+    );
+
+    expect(etatProfil).toStrictEqual({
+      nom: 'Du Jardin',
+      prenom: 'Jean',
+      email: 'jean.dupont@email.fr',
+      dateCreationCompte: '03.12.2023',
+      enCoursDeChargement: false,
+    });
+  });
 });

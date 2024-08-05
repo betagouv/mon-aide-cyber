@@ -31,13 +31,10 @@ export const reducteurProfil = (
       return { ...etat, enCoursDeChargement: false };
     }
     case TypeActionProfil.PROFIL_CHARGE: {
-      const nomPrenomSepare = action.profil.nomPrenom.split(' ');
-      const prenom = nomPrenomSepare[0];
-      const nom = nomPrenomSepare[1];
-
+      const [prenom, ...nom] = action.profil.nomPrenom.split(' ');
       return {
         ...etat,
-        nom,
+        nom: nom.join(' '),
         prenom,
         email: action.profil.identifiantConnexion,
         dateCreationCompte: action.profil.dateSignatureCGU,
