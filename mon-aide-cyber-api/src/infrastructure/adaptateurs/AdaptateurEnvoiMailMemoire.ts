@@ -32,6 +32,20 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     return messageTrouve !== undefined || false;
   }
 
+  aEteEnvoyeEnCopieA(email: string, message: string): boolean {
+    const messageTrouve = this.messages.find(
+      (m) => m.copie === email && m.corps === message
+    );
+    return messageTrouve !== undefined || false;
+  }
+
+  aEteEnvoyeEnCopieInvisibleA(email: string, message: string): boolean {
+    const messageTrouve = this.messages.find(
+      (m) => m.copieInvisible === email && m.corps === message
+    );
+    return messageTrouve !== undefined || false;
+  }
+
   mailEnvoye() {
     return this.messages.length > 0;
   }

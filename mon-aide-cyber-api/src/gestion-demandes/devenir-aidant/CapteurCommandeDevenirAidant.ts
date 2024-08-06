@@ -4,6 +4,9 @@ import { Entrepots } from '../../domaine/Entrepots';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { Departement } from '../departements';
+import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
+import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
 export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   type: 'CommandeDevenirAidant';
@@ -22,7 +25,13 @@ class ErreurDemandeDevenirAidant extends Error {
 export class CapteurCommandeDevenirAidant
   implements CapteurCommande<CommandeDevenirAidant, DemandeDevenirAidant>
 {
-  constructor(private readonly entrepots: Entrepots) {}
+  constructor(
+    private readonly entrepots: Entrepots,
+    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
+    private readonly annuaireCOT: () => {
+      rechercheEmailParDepartement: (departement: Departement) => string;
+    }
+  ) {}
 
   async execute(
     commande: CommandeDevenirAidant
@@ -52,7 +61,28 @@ export class CapteurCommandeDevenirAidant
     };
 
     await this.entrepots.demandesDevenirAidant().persiste(demandeDevenirAidant);
+    await this.envoieLeMailDeMiseEnRelation(demandeDevenirAidant);
 
     return Promise.resolve(demandeDevenirAidant);
+  }
+
+  private async envoieLeMailDeMiseEnRelation(
+    demandeDevenirAidant: DemandeDevenirAidant
+  ) {
+    await this.adaptateurEnvoiMail.envoie({
+      objet:
+        'MonAideCyber - Demande de participation à une session de formation Aidant ANSSI',
+      destinataire: {
+        nom: `${demandeDevenirAidant.nom} ${demandeDevenirAidant.prenom}`,
+        email: demandeDevenirAidant.mail,
+      },
+      corps: adaptateurCorpsMessage
+        .demandeDevenirAidant()
+        .genereCorpsMessage(demandeDevenirAidant),
+      copie: this.annuaireCOT().rechercheEmailParDepartement(
+        demandeDevenirAidant.departement
+      ),
+      copieInvisible: adaptateurEnvironnement.messagerie().emailMAC(),
+    });
   }
 }

@@ -20,6 +20,8 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
       .ayantPourDestinataires([
         [message.destinataire.email, message.destinataire.nom],
       ])
+      .ayantEnCopie(message.copie)
+      .ayantEnCopieInvisible(message.copieInvisible)
       .ayantPourSujet(message.objet)
       .ayantPourContenu(message.corps)
       .construis();

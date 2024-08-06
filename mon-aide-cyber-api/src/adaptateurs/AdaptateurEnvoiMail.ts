@@ -4,6 +4,8 @@ export type Email = {
   objet: string;
   corps: string;
   destinataire: { nom?: string; email: AdresseEmail };
+  copie?: string;
+  copieInvisible?: string;
 };
 
 export interface AdaptateurEnvoiMail {

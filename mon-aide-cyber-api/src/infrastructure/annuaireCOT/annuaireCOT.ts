@@ -1,3 +1,5 @@
+import { Departement } from '../../gestion-demandes/departements';
+
 export type COT = {
   codesRegions: string[];
   mail: string;
@@ -73,3 +75,8 @@ export const annuaireCOT: COT[] = [
     mail: 'corse@ssi.gouv.fr',
   },
 ];
+
+export const emailCOTDeLaRegion = (departement: Departement): string =>
+  annuaireCOT.filter((cot) =>
+    cot.codesRegions.includes(departement.codeRegion)
+  )[0].mail;
