@@ -10,7 +10,7 @@ import {
 } from '../../../src/authentification/Aidant';
 import { ErreurAccesRefuse } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';
 import { CorpsRequeteAuthentification } from '../../../src/api/routesAPIAuthentification';
-import { ErreurValidationMotDePasse } from '../../../src/api/validateurs/validateurs';
+import { ErreurValidationMotDePasse } from '../../../src/api/validateurs/motDePasse';
 
 describe("Gestionnaire d'erreur", () => {
   let codeRecu = 0;
