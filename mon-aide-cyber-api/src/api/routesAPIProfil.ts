@@ -5,15 +5,16 @@ import { NextFunction } from 'express-serve-static-core';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
 import { constructeurActionsHATEOAS } from './hateoas/hateoas';
-import {
-  ErreurValidationMotDePasse,
-  validateurDeNouveauMotDePasse,
-} from './validateurs/validateurs';
+
 import {
   FieldValidationError,
   Result,
   validationResult,
 } from 'express-validator';
+import {
+  ErreurValidationMotDePasse,
+  validateurDeNouveauMotDePasse,
+} from './validateurs/motDePasse';
 
 type CorpsRequeteChangementMotDerPasse = {
   ancienMotDePasse: string;

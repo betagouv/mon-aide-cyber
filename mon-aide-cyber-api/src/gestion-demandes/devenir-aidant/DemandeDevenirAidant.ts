@@ -1,12 +1,13 @@
 import { Aggregat } from '../../domaine/Aggregat';
 import { Entrepot } from '../../domaine/Entrepot';
+import { Departement } from '../departements';
 
 export type DemandeDevenirAidant = Aggregat & {
   date: Date;
   nom: string;
   prenom: string;
   mail: string;
-  departement: string;
+  departement: Departement;
 };
 export interface EntrepotDemandeDevenirAidant
   extends Entrepot<DemandeDevenirAidant> {

@@ -5,12 +5,13 @@ import {
   Result,
   validationResult,
 } from 'express-validator';
-import {
-  Departement,
-  listeDepartements,
-} from '../../infrastructure/departements/listeDepartements/listeDepartements';
 import { ConfigurationServeur } from '../../serveur';
 import { CommandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
+import { validateurDeDepartement } from '../validateurs/departements';
+import {
+  nomsEtCodesDesDepartements,
+  rechercheParNomDepartement,
+} from '../../gestion-demandes/departements';
 
 export const routesAPIDemandesDevenirAidant = (
   configuration: ConfigurationServeur
@@ -18,14 +19,8 @@ export const routesAPIDemandesDevenirAidant = (
   const routes: Router = express.Router();
 
   routes.get('/', async (_requete: Request, reponse: Response) => {
-    const extraitNomsEtCodes = (departements: Departement[]) =>
-      departements.map(({ nom, code }) => ({
-        nom,
-        code,
-      }));
-
     return reponse.status(200).json({
-      departements: extraitNomsEtCodes(listeDepartements),
+      departements: nomsEtCodesDesDepartements(),
     });
   });
 
@@ -41,10 +36,7 @@ export const routesAPIDemandesDevenirAidant = (
       .isEmail()
       .trim()
       .withMessage('Veuillez renseigner votre e-mail'),
-    body('departement')
-      .notEmpty()
-      .trim()
-      .withMessage('Veuillez renseigner un département'),
+    validateurDeDepartement(),
     async (requete: Request, reponse: Response, suite: NextFunction) => {
       try {
         const resultatsValidation: Result<FieldValidationError> =
@@ -60,7 +52,7 @@ export const routesAPIDemandesDevenirAidant = (
 
         const commande: CommandeDevenirAidant = {
           type: 'CommandeDevenirAidant',
-          departement: requete.body.departement,
+          departement: rechercheParNomDepartement(requete.body.departement),
           mail: requete.body.mail,
           nom: requete.body.nom,
           prenom: requete.body.prenom,

@@ -3,10 +3,11 @@ import { DemandeDevenirAidant } from './DemandeDevenirAidant';
 import { Entrepots } from '../../domaine/Entrepots';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../../domaine/erreurMAC';
+import { Departement } from '../departements';
 
 export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   type: 'CommandeDevenirAidant';
-  departement: string;
+  departement: Departement;
   mail: string;
   prenom: string;
   nom: string;
@@ -41,7 +42,7 @@ export class CapteurCommandeDevenirAidant
       );
     }
 
-    const demandeDevenirAidant = {
+    const demandeDevenirAidant: DemandeDevenirAidant = {
       date: FournisseurHorloge.maintenant(),
       departement: commande.departement,
       identifiant: crypto.randomUUID(),

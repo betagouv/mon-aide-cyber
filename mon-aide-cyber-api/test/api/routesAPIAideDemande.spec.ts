@@ -4,7 +4,7 @@ import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { listeDepartements } from '../../src/infrastructure/departements/listeDepartements/listeDepartements';
+import { departements } from '../../src/gestion-demandes/departements';
 
 describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
   const testeurMAC = testeurIntegration();
@@ -236,7 +236,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         );
 
         expect((await reponse.json()).departements).toStrictEqual(
-          listeDepartements.map(({ nom, code }) => ({
+          departements.map(({ nom, code }) => ({
             nom,
             code,
           }))

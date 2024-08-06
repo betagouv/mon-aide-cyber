@@ -3,6 +3,7 @@ import { DemandeDevenirAidant } from '../../../src/gestion-demandes/devenir-aida
 import { fakerFR } from '@faker-js/faker';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { UUID } from 'crypto';
+import { departements } from '../../../src/gestion-demandes/departements';
 
 class ConstructeurDemandeDevenirAidant
   implements Constructeur<DemandeDevenirAidant>
@@ -17,7 +18,10 @@ class ConstructeurDemandeDevenirAidant
   construis(): DemandeDevenirAidant {
     return {
       date: FournisseurHorloge.maintenant(),
-      departement: fakerFR.location.state(),
+      departement:
+        departements[
+          fakerFR.number.int({ min: 0, max: departements.length - 1 })
+        ],
       identifiant: fakerFR.string.uuid() as UUID,
       mail: this.email,
       nom: fakerFR.person.lastName(),

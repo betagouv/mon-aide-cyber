@@ -4,6 +4,7 @@ import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/
 import { DemandeDevenirAidant } from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { CapteurCommandeDevenirAidant } from '../../../src/gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 import { unConstructeurDeDemandeDevenirAidant } from './constructeurDeDemandeDevenirAidant';
+import { departements } from '../../../src/gestion-demandes/departements';
 
 describe('Capteur de commande devenir aidant', () => {
   it('Créé la demande', async () => {
@@ -14,7 +15,7 @@ describe('Capteur de commande devenir aidant', () => {
     const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
       new EntrepotsMemoire()
     ).execute({
-      departement: 'departement',
+      departement: departements[1],
       mail: 'email',
       nom: 'nom',
       prenom: 'prenom',
@@ -22,7 +23,7 @@ describe('Capteur de commande devenir aidant', () => {
     });
 
     expect(demandeDevenirAidant).toStrictEqual<DemandeDevenirAidant>({
-      departement: 'departement',
+      departement: { nom: 'Aisne', code: '2', codeRegion: '32' },
       mail: 'email',
       nom: 'nom',
       prenom: 'prenom',
@@ -44,7 +45,7 @@ describe('Capteur de commande devenir aidant', () => {
 
     await expect(() =>
       new CapteurCommandeDevenirAidant(entrepots).execute({
-        departement: 'departement',
+        departement: departements[0],
         mail: 'email',
         nom: 'nom',
         prenom: 'prenom',
