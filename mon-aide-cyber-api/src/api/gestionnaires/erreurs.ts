@@ -5,6 +5,7 @@ import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 
+const HTTP_MAUVAISE_REQUETE = 400;
 const HTTP_NON_AUTORISE = 401;
 const HTTP_ACCES_REFUSE = 403;
 const HTTP_NON_TROUVE = 404;
@@ -91,6 +92,14 @@ const erreursGerees: Map<
     (erreur, _, consignateur, reponse) => {
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_ERREUR_SERVEUR, {
+        message: erreur.message,
+      });
+    },
+  ],
+  [
+    'ErreurDemandeDevenirAidant',
+    (erreur, _, _consignateur, reponse) => {
+      construisReponse(reponse, HTTP_MAUVAISE_REQUETE, {
         message: erreur.message,
       });
     },

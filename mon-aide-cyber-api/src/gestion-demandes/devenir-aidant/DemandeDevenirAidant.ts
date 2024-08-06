@@ -8,4 +8,7 @@ export type DemandeDevenirAidant = Aggregat & {
   mail: string;
   departement: string;
 };
-export type EntrepotDemandeDevenirAidant = Entrepot<DemandeDevenirAidant>;
+export interface EntrepotDemandeDevenirAidant
+  extends Entrepot<DemandeDevenirAidant> {
+  demandeExiste(mail: string): Promise<boolean>;
+}

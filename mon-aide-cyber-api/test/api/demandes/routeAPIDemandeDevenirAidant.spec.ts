@@ -3,6 +3,7 @@ import { executeRequete } from '../executeurRequete';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import { listeDepartements } from '../../../src/infrastructure/departements/listeDepartements/listeDepartements';
+import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -24,8 +25,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       );
 
       const newVar = await reponse.json();
-
-      console.log(newVar);
 
       expect(newVar.departements).toStrictEqual(
         listeDepartements.map(({ nom, code }) => ({
@@ -59,6 +58,34 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       );
 
       expect(reponse.statusCode).toStrictEqual(200);
+    });
+
+    it("Renvoie une erreur 400 si l'utilisateur a déjà fait une demande préalable", async () => {
+      await testeurMAC.entrepots.demandesDevenirAidant().persiste({
+        nom: 'nom',
+        prenom: 'prenom',
+        mail: 'mail@fournisseur.fr',
+        departement: 'Hautes-Alpes',
+        identifiant: crypto.randomUUID(),
+        date: FournisseurHorloge.maintenant(),
+      });
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/devenir-aidant',
+        donneesServeur.portEcoute,
+        {
+          nom: 'nom',
+          prenom: 'prenom',
+          mail: 'mail@fournisseur.fr',
+          departement: 'Hautes-Alpes',
+        }
+      );
+
+      expect(reponse.statusCode).toStrictEqual(400);
+      expect(await reponse.json()).toStrictEqual({
+        message: 'Une demande pour ce compte existe déjà',
+      });
     });
 
     describe('Valide les paramètres de la requête', () => {

@@ -2,6 +2,7 @@ import { CapteurCommande, Commande } from '../../domaine/commande';
 import { DemandeDevenirAidant } from './DemandeDevenirAidant';
 import { Entrepots } from '../../domaine/Entrepots';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { ErreurMAC } from '../../domaine/erreurMAC';
 
 export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   type: 'CommandeDevenirAidant';
@@ -11,6 +12,12 @@ export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   nom: string;
 };
 
+class ErreurDemandeDevenirAidant extends Error {
+  constructor(public readonly message: string) {
+    super(message);
+  }
+}
+
 export class CapteurCommandeDevenirAidant
   implements CapteurCommande<CommandeDevenirAidant, DemandeDevenirAidant>
 {
@@ -19,6 +26,21 @@ export class CapteurCommandeDevenirAidant
   async execute(
     commande: CommandeDevenirAidant
   ): Promise<DemandeDevenirAidant> {
+    const demandeExiste = await this.entrepots
+      .demandesDevenirAidant()
+      .demandeExiste(commande.mail);
+
+    if (demandeExiste) {
+      return Promise.reject(
+        ErreurMAC.cree(
+          'Demande devenir Aidant',
+          new ErreurDemandeDevenirAidant(
+            'Une demande pour ce compte existe déjà'
+          )
+        )
+      );
+    }
+
     const demandeDevenirAidant = {
       date: FournisseurHorloge.maintenant(),
       departement: commande.departement,

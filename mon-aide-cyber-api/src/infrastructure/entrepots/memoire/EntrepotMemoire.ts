@@ -121,6 +121,14 @@ export class EntrepotDemandeDevenirAidantMemoire
   extends EntrepotMemoire<DemandeDevenirAidant>
   implements EntrepotDemandeDevenirAidant
 {
+  demandeExiste(mail: string): Promise<boolean> {
+    return Promise.resolve(
+      Array.from(this.entites.values()).some(
+        (demandeDevenirAidant) => demandeDevenirAidant.mail === mail
+      )
+    );
+  }
+
   typeAggregat(): string {
     return 'DemandeDevenirAidant';
   }
