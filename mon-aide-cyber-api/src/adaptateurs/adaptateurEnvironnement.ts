@@ -9,8 +9,13 @@ const messagerie = () => ({
   expediteurMAC: () => process.env.EMAIL_CONTACT_MAC_EXPEDITEUR || '',
 });
 
+const mac = () => ({
+  urlMAC: () => process.env.URL_MAC || '',
+});
+
 const adaptateurEnvironnement = {
   messagerie,
+  mac,
 };
 
 export { sentry, adaptateurEnvironnement };

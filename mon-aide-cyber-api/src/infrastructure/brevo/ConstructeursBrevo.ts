@@ -9,6 +9,7 @@ import {
 
 abstract class ConstructeurBrevo<T> {
   constructor(private readonly methode: 'POST' | 'GET') {}
+
   protected abstract construisCorps(): T;
 
   construis(): RequeteBrevo<T> {
@@ -32,6 +33,8 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevo> {
   private destinataires: EmailBrevo[] = [];
   private sujet = '';
   private contenu = '';
+  private copie?: EmailBrevo[] = [];
+  private copieInvisible?: EmailBrevo[] = [];
 
   constructor() {
     super('POST');
@@ -62,12 +65,29 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevo> {
     return this;
   }
 
+  ayantEnCopie(email?: Email): ConstructeurBrevoEnvoiMail {
+    if (email) {
+      this.copie?.push({ email });
+    }
+    return this;
+  }
+
+  ayantEnCopieInvisible(email?: Email): ConstructeurBrevoEnvoiMail {
+    if (email) {
+      this.copieInvisible?.push({ email });
+    }
+    return this;
+  }
+
   protected construisCorps() {
     return {
       sender: this.expediteur,
       to: this.destinataires,
       subject: this.sujet,
       textContent: this.contenu,
+      ...(this.copie && this.copie.length > 0 && { cc: this.copie }),
+      ...(this.copieInvisible &&
+        this.copieInvisible.length > 0 && { bcc: this.copieInvisible }),
     };
   }
 }
@@ -101,6 +121,7 @@ class ConstructeurBrevoRechercheContact extends ConstructeurBrevo<RechercheConta
   constructor() {
     super('GET');
   }
+
   protected construisCorps(): RechercheContactBrevo {
     throw new Error('Méthode non implémentée');
   }
