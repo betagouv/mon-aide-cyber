@@ -8,6 +8,7 @@ export type Contexte =
   | "Crée l'espace Aidant"
   | "Demande d'aide"
   | "Demande d'Authentification"
+  | 'Demande devenir Aidant'
   | 'Demande la restitution'
   | 'Envoi un message de contact'
   | 'Lance le diagnostic'

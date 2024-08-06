@@ -45,32 +45,33 @@ export const routesAPIDemandesDevenirAidant = (
       .notEmpty()
       .trim()
       .withMessage('Veuillez renseigner un département'),
-    async (requete: Request, reponse: Response, _suite: NextFunction) => {
-      const resultatsValidation: Result<FieldValidationError> =
-        validationResult(requete) as Result<FieldValidationError>;
+    async (requete: Request, reponse: Response, suite: NextFunction) => {
+      try {
+        const resultatsValidation: Result<FieldValidationError> =
+          validationResult(requete) as Result<FieldValidationError>;
+        if (!resultatsValidation.isEmpty()) {
+          reponse.status(422).json({
+            message: resultatsValidation
+              .array()
+              .map((resultatValidation) => resultatValidation.msg)
+              .join(', '),
+          });
+        }
 
-      if (!resultatsValidation.isEmpty()) {
-        reponse.status(422).json({
-          message: resultatsValidation
-            .array()
-            .map((resultatValidation) => resultatValidation.msg)
-            .join(', '),
-        });
+        const commande: CommandeDevenirAidant = {
+          type: 'CommandeDevenirAidant',
+          departement: requete.body.departement,
+          mail: requete.body.mail,
+          nom: requete.body.nom,
+          prenom: requete.body.prenom,
+        };
+
+        await configuration.busCommande.publie(commande);
+        reponse.status(200);
+        return reponse.send();
+      } catch (error) {
+        return suite(error);
       }
-
-      const commande: CommandeDevenirAidant = {
-        type: 'CommandeDevenirAidant',
-        departement: requete.body.departement,
-        mail: requete.body.mail,
-        nom: requete.body.nom,
-        prenom: requete.body.prenom,
-      };
-
-      await configuration.busCommande.publie(commande);
-
-      reponse.status(200);
-
-      return reponse.send();
     }
   );
 
