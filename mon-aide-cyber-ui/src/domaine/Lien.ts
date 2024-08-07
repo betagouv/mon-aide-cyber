@@ -17,6 +17,7 @@ export type Action =
   | 'afficher-tableau-de-bord'
   | 'creer-espace-aidant'
   | 'demander-aide'
+  | 'demande-devenir-aidant'
   | 'lancer-diagnostic'
   | 'modifier-diagnostic'
   | 'modifier-mot-de-passe'

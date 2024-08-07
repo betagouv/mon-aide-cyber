@@ -52,7 +52,7 @@ const erreursGerees: Map<
     (_erreur, _, _consignateur, reponse) => {
       construisReponse(reponse, HTTP_ACCES_REFUSE, {
         message: "L'accès à la ressource est interdit.",
-        ...constructeurActionsHATEOAS().seConnecter().construis(),
+        ...constructeurActionsHATEOAS().actionsPubliques().construis(),
       });
     },
   ],

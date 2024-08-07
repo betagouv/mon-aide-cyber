@@ -117,7 +117,13 @@ describe("Gestionnaire d'erreur", () => {
     expect(codeRecu).toBe(403);
     expect(corpsRecu).toStrictEqual({
       message: "L'accès à la ressource est interdit.",
-      liens: { 'se-connecter': { url: '/api/token', methode: 'POST' } },
+      liens: {
+        'se-connecter': { url: '/api/token', methode: 'POST' },
+        'demande-devenir-aidant': {
+          url: '/api/demandes/devenir-aidant',
+          methode: 'GET',
+        },
+      },
     });
   });
 

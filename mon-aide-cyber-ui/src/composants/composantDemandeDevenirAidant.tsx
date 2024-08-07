@@ -4,9 +4,12 @@ import { Header } from './Header.tsx';
 import { LienMAC } from './LienMAC.tsx';
 import { AutoCompletion } from './auto-completion/AutoCompletion.tsx';
 import { construisErreur, PresentationErreur } from './alertes/Erreurs.tsx';
-import { useMACAPI } from '../fournisseurs/hooks.ts';
+import { useMACAPI, useNavigationMAC } from '../fournisseurs/hooks.ts';
 import { Departement } from '../domaine/demande-aide/Aide.ts';
 import { estDepartement } from './demande-aide/SaisieInformations.tsx';
+import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
+import { constructeurParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { Lien } from '../domaine/Lien.ts';
 
 type ErreursSaisieDemande = {
   prenom?: PresentationErreur;
@@ -204,21 +207,30 @@ export const ComposantDemandeDevenirAidant = () => {
   const [prerequisDemande, setPrerequisDemande] = useState<
     PreRequisDemande | undefined
   >();
+  const navigationMAC = useNavigationMAC();
   const [etatDemande, envoie] = useReducer(
     reducteurDemandeDevenirAidant,
     initialiseDemande()
   );
 
   useEffect(() => {
-    macAPI
-      .appelle<ReponseDemandeInitiee>(
-        { url: '/api/demandes/devenir-aidant', methode: 'GET' },
-        (corps) => corps
-      )
-      .then((reponse) => {
-        setPrerequisDemande({ departements: reponse.departements });
-      });
-  }, [macAPI]);
+    new MoteurDeLiens(navigationMAC.etat).trouve(
+      'demande-devenir-aidant',
+      (lien: Lien) => {
+        macAPI
+          .appelle<ReponseDemandeInitiee>(
+            constructeurParametresAPI()
+              .url(lien.url)
+              .methode(lien.methode!)
+              .construis(),
+            (corps) => corps
+          )
+          .then((reponse) => {
+            setPrerequisDemande({ departements: reponse.departements });
+          });
+      }
+    );
+  }, [macAPI, navigationMAC.etat]);
 
   useEffect(() => {
     if (prerequisDemande) {
