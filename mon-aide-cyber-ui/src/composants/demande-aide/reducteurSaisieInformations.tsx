@@ -1,5 +1,6 @@
 import { construisErreur, PresentationErreur } from '../alertes/Erreurs.tsx';
 import { Departement } from '../../domaine/demande-aide/Aide.ts';
+import { estMailValide } from '../../validateurs/email.ts';
 
 type ErreurSaisieInformations = {
   cguValidees?: PresentationErreur;
@@ -55,13 +56,6 @@ type ActionSaisieInformations =
   | {
       type: TypeActionSaisieInformations.DEMANDE_TERMINEE;
     };
-
-const estUnEmail = (email: string) => {
-  const emailMatch = email
-    .trim()
-    .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
-  return (emailMatch && emailMatch?.length > 0) || false;
-};
 
 const construisErreurAdresseElectronique = (emailValide: boolean) =>
   !emailValide
@@ -140,7 +134,7 @@ export const reducteurSaisieInformations = (
       };
     }
     case TypeActionSaisieInformations.DEMANDE_TERMINEE: {
-      const emailValide = estUnEmail(etat.email);
+      const emailValide = estMailValide(etat.email);
       const etatCourant = { ...etat };
       const departementValide = estDepartementValide(
         etat.valeurSaisieDepartement
@@ -192,7 +186,7 @@ export const reducteurSaisieInformations = (
       };
     }
     case TypeActionSaisieInformations.ADRESSE_ELECTRONIQUE_SAISIE: {
-      const emailValide = estUnEmail(action.adresseElectronique);
+      const emailValide = estMailValide(action.adresseElectronique);
       const etatCourant = { ...etat };
       if (emailValide) {
         delete etatCourant.erreur?.['adresseElectronique'];

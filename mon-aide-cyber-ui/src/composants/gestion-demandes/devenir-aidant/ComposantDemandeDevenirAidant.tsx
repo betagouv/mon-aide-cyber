@@ -1,224 +1,113 @@
-import { useCallback, useEffect, useReducer, useState } from 'react';
-import { Footer } from './Footer.tsx';
-import { Header } from './Header.tsx';
-import { LienMAC } from './LienMAC.tsx';
-import { AutoCompletion } from './auto-completion/AutoCompletion.tsx';
-import { construisErreur, PresentationErreur } from './alertes/Erreurs.tsx';
-import { useMACAPI } from '../fournisseurs/hooks.ts';
-import { Departement } from '../domaine/demande-aide/Aide.ts';
-import { estDepartement } from './demande-aide/SaisieInformations.tsx';
+import {
+  ReactElement,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
+import { Departement } from '../../../domaine/demande-aide/Aide.ts';
+import { estDepartement } from '../../demande-aide/SaisieInformations.tsx';
+import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks.ts';
+import { Header } from '../../Header.tsx';
+import { LienMAC } from '../../LienMAC.tsx';
+import { AutoCompletion } from '../../auto-completion/AutoCompletion.tsx';
+import { Footer } from '../../Footer.tsx';
+import {
+  confirmation,
+  initialiseDemande,
+  proposeDepartements,
+  reducteurDemandeDevenirAidant,
+  saisieDepartement,
+  saisieMail,
+  saisieNom,
+  saisiPrenom,
+  valideDemande,
+} from './reducteurDevenirAidant.tsx';
+import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
+import { Lien, ReponseHATEOAS } from '../../../domaine/Lien.ts';
+import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { ChampsErreur } from '../../alertes/Erreurs.tsx';
 
-type ErreursSaisieDemande = {
-  prenom?: PresentationErreur;
-  nom?: PresentationErreur;
-  mail?: PresentationErreur;
-  departement?: PresentationErreur;
-};
-
-type EtatDemande = {
-  prenom: string;
-  nom: string;
-  mail: string;
-  departementSaisi: Departement;
-  departementsProposes: Departement[];
-  erreurs?: ErreursSaisieDemande;
-};
-
-enum TypeAction {
-  DEMANDE_VALIDEE = 'DEMANDE_VALIDEE',
-  PRENOM_SAISI = 'PRENOM_SAISI',
-  NOM_SAISI = 'NOM_SAISI',
-  MAIL_SAISI = 'MAIL_SAISI',
-  DEPARTEMENT_SAISI = 'DEPARTEMENT_SAISI',
-  DEPARTEMENTS_PROPOSES = 'DEPARTEMENT_PROPOSES',
-}
-
-type Action =
-  | { type: TypeAction.DEMANDE_VALIDEE }
-  | { type: TypeAction.PRENOM_SAISI; saisie: string }
-  | { type: TypeAction.NOM_SAISI; saisie: string }
-  | { type: TypeAction.MAIL_SAISI; saisie: string }
-  | { type: TypeAction.DEPARTEMENT_SAISI; saisie: string | Departement }
-  | { type: TypeAction.DEPARTEMENTS_PROPOSES; departements: Departement[] };
-
-const estVide = (chaine: string): boolean => chaine === '';
-
-const contientUnChiffre = (chaine: string): boolean =>
-  chaine.match(/[0-9]+/) !== null;
-
-const estPrenomValide = (prenom: string): boolean =>
-  !estVide(prenom) && !contientUnChiffre(prenom);
-
-const estMailValide = (email: string) =>
-  email.trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) !==
-  null;
-
-const trouveDepartement = (
-  nomDepartement: string,
-  listeDepartements: Departement[]
-): Departement | undefined =>
-  listeDepartements.find(({ nom }) => nom === nomDepartement);
-
-const reducteurDemandeDevenirAidant = (
-  etatDemande: EtatDemande,
-  action: Action
-): EtatDemande => {
-  switch (action.type) {
-    case TypeAction.DEMANDE_VALIDEE: {
-      delete etatDemande.erreurs;
-
-      return {
-        erreurs: {
-          ...(!estPrenomValide(etatDemande.prenom)
-            ? construisErreur('prenom', {
-                identifiantTexteExplicatif: 'prenom',
-                texte: 'Veuillez saisir un prénom valide',
-              })
-            : undefined),
-          ...(!estPrenomValide(etatDemande.nom)
-            ? construisErreur('nom', {
-                identifiantTexteExplicatif: 'nom',
-                texte: 'Veuillez saisir un nom valide',
-              })
-            : undefined),
-          ...(!estMailValide(etatDemande.mail)
-            ? construisErreur('mail', {
-                identifiantTexteExplicatif: 'mail',
-                texte: 'Veuillez saisir un mail valide',
-              })
-            : undefined),
-          ...(!trouveDepartement(
-            etatDemande.departementSaisi.nom || '',
-            etatDemande.departementsProposes
-          )
-            ? construisErreur('departement', {
-                identifiantTexteExplicatif: 'departement',
-                texte: 'Veuillez sélectionner un département dans la liste',
-              })
-            : undefined),
-        },
-        ...etatDemande,
-      };
-    }
-
-    case TypeAction.PRENOM_SAISI: {
-      delete etatDemande.erreurs?.prenom;
-
-      return {
-        ...etatDemande,
-        prenom: action.saisie,
-      };
-    }
-
-    case TypeAction.NOM_SAISI: {
-      delete etatDemande.erreurs?.nom;
-
-      return {
-        ...etatDemande,
-        nom: action.saisie,
-      };
-    }
-
-    case TypeAction.MAIL_SAISI: {
-      delete etatDemande.erreurs?.mail;
-
-      return {
-        ...etatDemande,
-        mail: action.saisie,
-      };
-    }
-
-    case TypeAction.DEPARTEMENT_SAISI: {
-      delete etatDemande.erreurs?.departement;
-
-      const nomDepartementSaisi = estDepartement(action.saisie)
-        ? action.saisie.nom
-        : action.saisie;
-
-      return {
-        ...etatDemande,
-        departementSaisi:
-          trouveDepartement(
-            nomDepartementSaisi,
-            etatDemande.departementsProposes
-          ) || ({} as Departement),
-      };
-    }
-
-    case TypeAction.DEPARTEMENTS_PROPOSES: {
-      return {
-        ...etatDemande,
-        departementsProposes: action.departements,
-      };
-    }
-  }
-};
-
-type ReponseDemandeInitiee = PreRequisDemande;
+type ReponseDemandeInitiee = ReponseHATEOAS & PreRequisDemande;
 
 type PreRequisDemande = {
   departements: Departement[];
 };
 
-const initialiseDemande = (): EtatDemande => ({
-  prenom: '',
-  nom: '',
-  mail: '',
-  departementSaisi: {} as Departement,
-  departementsProposes: [],
-});
-
-const valideDemande = (): Action => ({
-  type: TypeAction.DEMANDE_VALIDEE,
-});
-
-const saisiPrenom = (saisie: string): Action => ({
-  type: TypeAction.PRENOM_SAISI,
-  saisie,
-});
-
-const saisieNom = (saisie: string): Action => ({
-  type: TypeAction.NOM_SAISI,
-  saisie,
-});
-
-const saisieMail = (saisie: string): Action => ({
-  type: TypeAction.MAIL_SAISI,
-  saisie,
-});
-
-const saisieDepartement = (saisie: Departement | string): Action => ({
-  type: TypeAction.DEPARTEMENT_SAISI,
-  saisie,
-});
-
-function proposeDepartements(departements: Departement[]): Action {
-  return {
-    type: TypeAction.DEPARTEMENTS_PROPOSES,
-    departements,
-  };
-}
+type CorpsDemandeDevenirAidant = {
+  nom: string;
+  prenom: string;
+  mail: string;
+  departement: string;
+};
 
 export const ComposantDemandeDevenirAidant = () => {
   const macAPI = useMACAPI();
   const [prerequisDemande, setPrerequisDemande] = useState<
     PreRequisDemande | undefined
   >();
+  const [enCoursDeChargement, setEnCoursDeChargement] = useState(true);
+  const [retourEnvoiDemandeDevenirAidant, setRetourEnvoiDemandeDevenirAidant] =
+    useState<ReactElement | undefined>(undefined);
+  const navigationMAC = useNavigationMAC();
   const [etatDemande, envoie] = useReducer(
     reducteurDemandeDevenirAidant,
     initialiseDemande()
   );
 
   useEffect(() => {
-    macAPI
-      .appelle<ReponseDemandeInitiee>(
-        { url: '/api/demandes/devenir-aidant', methode: 'GET' },
-        (corps) => corps
-      )
-      .then((reponse) => {
-        setPrerequisDemande({ departements: reponse.departements });
-      });
-  }, [macAPI]);
+    if (!etatDemande.pretPourEnvoi) {
+      return;
+    }
+    new MoteurDeLiens(navigationMAC.etat).trouve(
+      'envoyer-demande-devenir-aidant',
+      (lien: Lien) => {
+        macAPI
+          .appelle(
+            constructeurParametresAPI<CorpsDemandeDevenirAidant>()
+              .url(lien.url)
+              .methode(lien.methode!)
+              .corps({
+                nom: etatDemande.nom,
+                prenom: etatDemande.prenom,
+                mail: etatDemande.mail,
+                departement: estDepartement(etatDemande.departementSaisi)
+                  ? etatDemande.departementSaisi.nom
+                  : etatDemande.departementSaisi,
+              })
+              .construis(),
+            (corps) => corps
+          )
+          .then(() => envoie(confirmation()))
+          .catch((erreur) =>
+            setRetourEnvoiDemandeDevenirAidant(<ChampsErreur erreur={erreur} />)
+          );
+      }
+    );
+  }, [etatDemande, macAPI, navigationMAC.etat]);
+
+  useEffect(() => {
+    new MoteurDeLiens(navigationMAC.etat).trouve(
+      'demande-devenir-aidant',
+      (lien: Lien) => {
+        if (enCoursDeChargement) {
+          macAPI
+            .appelle<ReponseDemandeInitiee>(
+              constructeurParametresAPI()
+                .url(lien.url)
+                .methode(lien.methode!)
+                .construis(),
+              (corps) => corps
+            )
+            .then((reponse) => {
+              navigationMAC.ajouteEtat(reponse.liens);
+              setEnCoursDeChargement(false);
+              setPrerequisDemande({ departements: reponse.departements });
+            });
+        }
+      }
+    );
+  }, [enCoursDeChargement, macAPI, navigationMAC]);
 
   useEffect(() => {
     if (prerequisDemande) {
@@ -397,9 +286,7 @@ export const ComposantDemandeDevenirAidant = () => {
                               mappeur={(departement) =>
                                 estDepartement(departement)
                                   ? `${departement.code} - ${departement.nom}`
-                                  : typeof departement === 'string'
-                                    ? departement
-                                    : ''
+                                  : departement
                               }
                               surSelection={(departement) => {
                                 surSaisieDepartement(departement);
@@ -408,7 +295,9 @@ export const ComposantDemandeDevenirAidant = () => {
                                 surSaisieDepartement(departement);
                               }}
                               clefsFiltrage={['code', 'nom']}
-                              valeurSaisie={etatDemande.departementSaisi}
+                              valeurSaisie={
+                                etatDemande.departementSaisi as Departement
+                              }
                             />
                             {etatDemande.erreurs?.departement?.texteExplicatif}
                           </div>
@@ -427,6 +316,7 @@ export const ComposantDemandeDevenirAidant = () => {
                     </div>
                   </fieldset>
                 </form>
+                <div>{retourEnvoiDemandeDevenirAidant}</div>
               </div>
             </div>
           </div>

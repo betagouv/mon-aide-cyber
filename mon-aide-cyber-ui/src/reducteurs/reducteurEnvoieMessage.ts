@@ -2,6 +2,7 @@ import {
   construisErreur,
   PresentationErreur,
 } from '../composants/alertes/Erreurs.tsx';
+import { estMailValide } from '../validateurs/email.ts';
 
 enum TypeActionEnvoieMessage {
   NOM_SAISI = 'NOM_SAISI',
@@ -112,10 +113,7 @@ export const reducteurEnvoieMessage = (
       };
     }
     case TypeActionEnvoieMessage.EMAIL_SAISI: {
-      const estUnEmail = action.email
-        .trim()
-        .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
-      const estValide = (estUnEmail && estUnEmail?.length > 0) || false;
+      const estValide = estMailValide(action.email);
       const erreur = construisErreurEnvoieMessage('email', () => estValide);
       return {
         ...etat,

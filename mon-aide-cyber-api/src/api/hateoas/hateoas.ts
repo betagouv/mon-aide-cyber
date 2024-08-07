@@ -74,7 +74,8 @@ class ConstructeurActionsHATEOAS {
     });
     return this;
   }
-  seConnecter(): ConstructeurActionsHATEOAS {
+
+  private seConnecter(): ConstructeurActionsHATEOAS {
     this.actions.set('se-connecter', { url: '/api/token', methode: 'POST' });
     return this;
   }
@@ -142,6 +143,23 @@ class ConstructeurActionsHATEOAS {
     identifiantDiagnostic: crypto.UUID
   ): ConstructeurActionsHATEOAS {
     this.afficherDiagnostic(identifiantDiagnostic);
+    return this;
+  }
+
+  actionsPubliques(): ConstructeurActionsHATEOAS {
+    this.actions.set('demande-devenir-aidant', {
+      url: '/api/demandes/devenir-aidant',
+      methode: 'GET',
+    });
+
+    return this.seConnecter();
+  }
+
+  actionsDemandeDevenirAidant(): ConstructeurActionsHATEOAS {
+    this.actions.set('envoyer-demande-devenir-aidant', {
+      url: '/api/demandes/devenir-aidant',
+      methode: 'POST',
+    });
     return this;
   }
 
