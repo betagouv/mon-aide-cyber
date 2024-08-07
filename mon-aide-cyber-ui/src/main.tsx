@@ -24,7 +24,7 @@ import { ComposantConnexion } from './composants/connexion/ComposantConnexion.ts
 import { TableauDeBord } from './composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
 import { ComposantCreationEspaceAidant } from './composants/espace-aidant/creation-espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
-import { ComposantDemandeDevenirAidant } from './composants/composantDemandeDevenirAidant.tsx';
+import { ComposantDemandeDevenirAidant } from './composants/gestion-demandes/devenir-aidant/ComposantDemandeDevenirAidant.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

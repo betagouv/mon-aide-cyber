@@ -12,6 +12,7 @@ import {
   nomsEtCodesDesDepartements,
   rechercheParNomDepartement,
 } from '../../gestion-demandes/departements';
+import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 
 export const routesAPIDemandesDevenirAidant = (
   configuration: ConfigurationServeur
@@ -21,6 +22,7 @@ export const routesAPIDemandesDevenirAidant = (
   routes.get('/', async (_requete: Request, reponse: Response) => {
     return reponse.status(200).json({
       departements: nomsEtCodesDesDepartements(),
+      ...constructeurActionsHATEOAS().actionsDemandeDevenirAidant().construis(),
     });
   });
 

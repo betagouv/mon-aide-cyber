@@ -27,14 +27,18 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         donneesServeur.portEcoute
       );
 
-      const newVar = await reponse.json();
-
-      expect(newVar.departements).toStrictEqual(
-        departements.map(({ nom, code }) => ({
+      expect(await reponse.json()).toStrictEqual({
+        departements: departements.map(({ nom, code }) => ({
           nom,
           code,
-        }))
-      );
+        })),
+        liens: {
+          'envoyer-demande-devenir-aidant': {
+            url: '/api/demandes/devenir-aidant',
+            methode: 'POST',
+          },
+        },
+      });
     });
   });
 

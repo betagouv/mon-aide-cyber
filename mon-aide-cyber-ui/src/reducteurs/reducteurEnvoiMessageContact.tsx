@@ -4,6 +4,7 @@ import {
   PresentationErreur,
 } from '../composants/alertes/Erreurs.tsx';
 import { ReactElement } from 'react';
+import { estMailValide } from '../validateurs/email.ts';
 
 enum TypeActionEnvoiMessageContact {
   NOM_SAISI = 'NOM_SAISI',
@@ -88,10 +89,7 @@ export const reducteurEnvoiMessageContact = (
     case TypeActionEnvoiMessageContact.MESSAGE_COMPLETE: {
       const nomEstValide = etat.nom.trim().length > 0;
       const erreurNom = construisErreurEnvoieMessage('nom', () => nomEstValide);
-      const estUnEmail = etat.email
-        .trim()
-        .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
-      const emailEstValide = (estUnEmail && estUnEmail?.length > 0) || false;
+      const emailEstValide = estMailValide(etat.email);
       const erreurEmail = construisErreurEnvoieMessage(
         'email',
         () => emailEstValide
@@ -141,10 +139,7 @@ export const reducteurEnvoiMessageContact = (
       };
     }
     case TypeActionEnvoiMessageContact.EMAIL_SAISI: {
-      const estUnEmail = action.email
-        .trim()
-        .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
-      const estValide = (estUnEmail && estUnEmail?.length > 0) || false;
+      const estValide = estMailValide(action.email);
       const erreur = { ...etat.erreur };
       estValide && delete erreur['email'];
       return {
