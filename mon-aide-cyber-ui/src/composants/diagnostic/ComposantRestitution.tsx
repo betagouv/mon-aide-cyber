@@ -17,9 +17,10 @@ import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
-import { Lien } from '../../domaine/Lien.ts';
+import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { LienMAC } from '../LienMAC.tsx';
 import { ComposantIdentifiantDiagnostic } from '../ComposantIdentifiantDiagnostic.tsx';
+import { ReponseTableauDeBord } from '../espace-aidant/tableau-de-bord/TableauDeBord.tsx';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
@@ -31,6 +32,7 @@ export const ComposantRestitution = ({
   const { showBoundary } = useErrorBoundary();
   const navigationMAC = useNavigationMAC();
   const [etatRestitution, envoie] = useReducer(reducteurRestitution, {});
+  const [estTableauDeBordCharge, setEstTableauDeBordCharge] = useState(false);
   const [boutonDesactive, setBoutonDesactive] = useState<boolean>(false);
   const macapi = useMACAPI();
 
@@ -68,9 +70,41 @@ export const ComposantRestitution = ({
 
   useEffect(() => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
+      'afficher-tableau-de-bord',
+      (lien: Lien) => {
+        if (estTableauDeBordCharge) {
+          return;
+        }
+
+        macapi
+          .appelle<ReponseTableauDeBord>(
+            constructeurParametresAPI()
+              .url(lien.url)
+              .methode(lien.methode!)
+              .construis(),
+            (reponse) => reponse
+          )
+          .then((tableauDeBord) => {
+            navigationMAC.ajouteEtat(tableauDeBord.liens);
+            setEstTableauDeBordCharge(true);
+          })
+          .catch((erreur: ReponseHATEOAS) => {
+            console.log(erreur);
+          });
+      }
+    );
+  }, [
+    estTableauDeBordCharge,
+    etatRestitution.restitution,
+    macapi,
+    navigationMAC,
+  ]);
+
+  useEffect(() => {
+    new MoteurDeLiens(navigationMAC.etat).trouve(
       `afficher-diagnostic-${idDiagnostic}`,
       (lien: Lien) => {
-        if (!etatRestitution.restitution) {
+        if (estTableauDeBordCharge && !etatRestitution.restitution) {
           macapi
             .appelle<Restitution>(
               constructeurParametresAPI()
@@ -96,6 +130,7 @@ export const ComposantRestitution = ({
     idDiagnostic,
     macapi,
     showBoundary,
+    estTableauDeBordCharge,
   ]);
 
   useEffect(() => {

@@ -14,7 +14,7 @@ export type Diagnostic = {
   secteurActivite: string;
   secteurGeographique: string;
 };
-type ReponseTableauDeBord = ReponseHATEOAS & {
+export type ReponseTableauDeBord = ReponseHATEOAS & {
   diagnostics: Diagnostic[];
 };
 
