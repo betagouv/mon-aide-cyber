@@ -25,6 +25,8 @@ import { TableauDeBord } from './composants/espace-aidant/tableau-de-bord/Tablea
 import { ComposantCreationEspaceAidant } from './composants/espace-aidant/creation-espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
 import { ComposantDemandeDevenirAidant } from './composants/composantDemandeDevenirAidant.tsx';
+import KitDeCommunication from './composants/a-propos/KitDeCommunication.tsx';
+import Layout from './composants/Layout.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -38,6 +40,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                   <Routes>
                     <Route path="/" element={<Accueil />} />
                     <Route path="/cgu" element={<ComposantCGU />} />
+                    <Route path='global' element={<Layout />}>
+                      <Route index path="kit-de-communication" element={<KitDeCommunication />} />
+                    </Route>
                     <Route path="/charte-aidant" element={<CharteAidant />} />
                     <Route
                       path="/demande-aide"
