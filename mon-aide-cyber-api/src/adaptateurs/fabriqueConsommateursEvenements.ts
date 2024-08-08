@@ -1,6 +1,7 @@
 import {
   aidantCree,
   aideCree,
+  demandeDevenirAidantCree,
   diagnosticLance,
   reponseAjoutee,
   restitutionLancee,
@@ -43,5 +44,9 @@ export const fabriqueConsommateursEvenements = (
     ['REPONSE_AJOUTEE', [reponseAjoutee(entrepotJournalisation)]],
     ['AIDANT_CREE', [consommateurs.aidantCree()]],
     ['AIDE_CREE', [consommateurs.aideCree()]],
+    [
+      'DEMANDE_DEVENIR_AIDANT_CREEE',
+      [demandeDevenirAidantCree(entrepotJournalisation)],
+    ],
   ]);
 };

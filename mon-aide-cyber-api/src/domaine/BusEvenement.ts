@@ -21,4 +21,5 @@ export type TypeEvenement =
   | 'REPONSE_AJOUTEE'
   | 'RESTITUTION_LANCEE'
   | 'AIDANT_CREE'
-  | 'AIDE_CREE';
+  | 'AIDE_CREE'
+  | 'DEMANDE_DEVENIR_AIDANT_CREEE';
