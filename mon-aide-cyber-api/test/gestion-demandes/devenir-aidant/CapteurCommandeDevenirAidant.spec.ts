@@ -2,7 +2,10 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { DemandeDevenirAidant } from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
-import { CapteurCommandeDevenirAidant } from '../../../src/gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
+import {
+  CapteurCommandeDevenirAidant,
+  DemandeDevenirAidantCreee,
+} from '../../../src/gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 import { unConstructeurDeDemandeDevenirAidant } from './constructeurDeDemandeDevenirAidant';
 import {
   Departement,
@@ -11,6 +14,8 @@ import {
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { adaptateurCorpsMessage } from '../../../src/gestion-demandes/devenir-aidant/adaptateurCorpsMessage';
+import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
+import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 
 describe('Capteur de commande devenir aidant', () => {
   const annuaireCot = () => ({
@@ -25,6 +30,7 @@ describe('Capteur de commande devenir aidant', () => {
 
     const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
       new EntrepotsMemoire(),
+      new BusEvenementDeTest(),
       new AdaptateurEnvoiMailMemoire(),
       annuaireCot
     ).execute({
@@ -45,6 +51,39 @@ describe('Capteur de commande devenir aidant', () => {
     });
   });
 
+  it('Publie l’événement DemandeDevenirAidantCréée', async () => {
+    FournisseurHorlogeDeTest.initialise(
+      new Date(Date.parse('2024-08-01T14:45:17+01:00'))
+    );
+    const busEvenementDeTest = new BusEvenementDeTest();
+
+    const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
+      new EntrepotsMemoire(),
+      busEvenementDeTest,
+      new AdaptateurEnvoiMailMemoire(),
+      annuaireCot
+    ).execute({
+      departement: departements[1],
+      mail: 'email',
+      nom: 'nom',
+      prenom: 'prenom',
+      type: 'CommandeDevenirAidant',
+    });
+
+    expect(
+      busEvenementDeTest.evenementRecu
+    ).toStrictEqual<DemandeDevenirAidantCreee>({
+      identifiant: demandeDevenirAidant.identifiant,
+      type: 'DEMANDE_DEVENIR_AIDANT_CREEE',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        date: FournisseurHorloge.maintenant(),
+        identifiantDemande: demandeDevenirAidant.identifiant,
+        departement: demandeDevenirAidant.departement.nom,
+      },
+    });
+  });
+
   it('Créé la demande avec un mail unique', async () => {
     FournisseurHorlogeDeTest.initialise(
       new Date(Date.parse('2024-08-01T14:45:17+01:00'))
@@ -59,6 +98,7 @@ describe('Capteur de commande devenir aidant', () => {
     await expect(() =>
       new CapteurCommandeDevenirAidant(
         entrepots,
+        new BusEvenementDeTest(),
         new AdaptateurEnvoiMailMemoire(),
         annuaireCot
       ).execute({
@@ -71,18 +111,19 @@ describe('Capteur de commande devenir aidant', () => {
     ).rejects.toThrowError('Une demande pour ce compte existe déjà');
   });
 
-  describe('Effectue la mise en relation', () => {
+  describe('Lors de la mise en relation', () => {
     beforeEach(
       () =>
         (adaptateurCorpsMessage.demandeDevenirAidant = () => ({
           genereCorpsMessage: () => 'Bonjour le monde!',
         }))
     );
-    it("En envoyant le mail récapitulatif à l'Aidant", async () => {
+    it("Envoie le mail récapitulatif à l'Aidant", async () => {
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
 
       await new CapteurCommandeDevenirAidant(
         new EntrepotsMemoire(),
+        new BusEvenementDeTest(),
         adaptateurEnvoiMail,
         annuaireCot
       ).execute({
@@ -98,11 +139,12 @@ describe('Capteur de commande devenir aidant', () => {
       ).toBe(true);
     });
 
-    it('En envoyant le mail récapitulatif en copie au COT', async () => {
+    it('Envoie le mail récapitulatif en copie au COT', async () => {
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
 
       await new CapteurCommandeDevenirAidant(
         new EntrepotsMemoire(),
+        new BusEvenementDeTest(),
         adaptateurEnvoiMail,
         () => ({
           rechercheEmailParDepartement: (__departement) =>
@@ -124,17 +166,17 @@ describe('Capteur de commande devenir aidant', () => {
       ).toBe(true);
     });
 
-    it('En envoyant le mail récapitulatif en copie invisible à MonAideCyber', async () => {
+    it('Envoie le mail récapitulatif en copie invisible à MonAideCyber', async () => {
       adaptateurEnvironnement.messagerie = () => ({
         emailMAC: () => 'mac@email.com',
         expediteurMAC: () => 'expéditeur',
         clefAPI: () => 'clef',
       });
-
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
 
       await new CapteurCommandeDevenirAidant(
         new EntrepotsMemoire(),
+        new BusEvenementDeTest(),
         adaptateurEnvoiMail,
         annuaireCot
       ).execute({

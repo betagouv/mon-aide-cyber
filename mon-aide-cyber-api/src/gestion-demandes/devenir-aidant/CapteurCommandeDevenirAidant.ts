@@ -7,6 +7,8 @@ import { Departement } from '../departements';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
+import crypto from 'crypto';
 
 export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   type: 'CommandeDevenirAidant';
@@ -27,6 +29,7 @@ export class CapteurCommandeDevenirAidant
 {
   constructor(
     private readonly entrepots: Entrepots,
+    private readonly busEvenement: BusEvenement,
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
     private readonly annuaireCOT: () => {
       rechercheEmailParDepartement: (departement: Departement) => string;
@@ -61,6 +64,7 @@ export class CapteurCommandeDevenirAidant
     };
 
     await this.entrepots.demandesDevenirAidant().persiste(demandeDevenirAidant);
+    await this.publieLaDemandeCree(demandeDevenirAidant);
     await this.envoieLeMailDeMiseEnRelation(demandeDevenirAidant);
 
     return Promise.resolve(demandeDevenirAidant);
@@ -85,4 +89,27 @@ export class CapteurCommandeDevenirAidant
       copieInvisible: adaptateurEnvironnement.messagerie().emailMAC(),
     });
   }
+
+  private async publieLaDemandeCree(
+    demandeDevenirAidant: DemandeDevenirAidant
+  ) {
+    await this.busEvenement.publie<DemandeDevenirAidantCreee>({
+      type: 'DEMANDE_DEVENIR_AIDANT_CREEE',
+      identifiant: demandeDevenirAidant.identifiant,
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        date: demandeDevenirAidant.date,
+        departement: demandeDevenirAidant.departement.nom,
+        identifiantDemande: demandeDevenirAidant.identifiant,
+      },
+    });
+  }
 }
+
+export type DemandeDevenirAidantCreee = Omit<Evenement, 'corps'> & {
+  corps: {
+    date: Date;
+    departement: string;
+    identifiantDemande: crypto.UUID;
+  };
+};
