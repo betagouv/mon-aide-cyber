@@ -9,7 +9,6 @@ export const validateurDeDepartement = () => {
 
   return body('departement')
     .trim()
-    .notEmpty()
     .departementConnu()
     .withMessage('Veuillez renseigner un département');
 };

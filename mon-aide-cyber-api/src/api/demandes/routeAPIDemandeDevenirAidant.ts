@@ -29,16 +29,19 @@ export const routesAPIDemandesDevenirAidant = (
   routes.post(
     '/',
     express.json(),
-    body('nom').notEmpty().trim().withMessage('Veuillez renseigner votre nom'),
+    body('nom').trim().notEmpty().withMessage('Veuillez renseigner votre nom'),
     body('prenom')
-      .notEmpty()
       .trim()
+      .notEmpty()
       .withMessage('Veuillez renseigner votre prénom'),
     body('mail')
-      .isEmail()
       .trim()
+      .isEmail()
       .withMessage('Veuillez renseigner votre e-mail'),
     validateurDeDepartement(),
+    body('cguValidees')
+      .custom((value: boolean) => value)
+      .withMessage('Veuillez valider les CGU'),
     async (requete: Request, reponse: Response, suite: NextFunction) => {
       try {
         const resultatsValidation: Result<FieldValidationError> =

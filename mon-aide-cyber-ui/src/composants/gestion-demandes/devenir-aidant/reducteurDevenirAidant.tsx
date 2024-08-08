@@ -4,12 +4,14 @@ import { Departement } from '../../../domaine/demande-aide/Aide.ts';
 import { estMailValide } from '../../../validateurs/email.ts';
 
 type ErreursSaisieDemande = {
+  cguValidees?: PresentationErreur;
   prenom?: PresentationErreur;
   nom?: PresentationErreur;
   mail?: PresentationErreur;
   departement?: PresentationErreur;
 };
 type EtatDemande = {
+  cguValidees: boolean;
   prenom: string;
   nom: string;
   mail: string;
@@ -27,6 +29,7 @@ enum TypeAction {
   DEPARTEMENT_SAISI = 'DEPARTEMENT_SAISI',
   DEPARTEMENTS_PROPOSES = 'DEPARTEMENT_PROPOSES',
   DEMANDE_ENVOYEE = 'DEMANDE_ENVOYEE',
+  CGU_VALIDEES = 'CGU_VALIDEES',
 }
 
 type Action =
@@ -36,7 +39,8 @@ type Action =
   | { type: TypeAction.MAIL_SAISI; saisie: string }
   | { type: TypeAction.DEPARTEMENT_SAISI; saisie: string | Departement }
   | { type: TypeAction.DEPARTEMENTS_PROPOSES; departements: Departement[] }
-  | { type: TypeAction.DEMANDE_ENVOYEE };
+  | { type: TypeAction.DEMANDE_ENVOYEE }
+  | { type: TypeAction.CGU_VALIDEES };
 const estVide = (chaine: string): boolean => chaine === '';
 const contientUnChiffre = (chaine: string): boolean =>
   chaine.match(/[0-9]+/) !== null;
@@ -53,6 +57,26 @@ export const reducteurDemandeDevenirAidant = (
   action: Action
 ): EtatDemande => {
   switch (action.type) {
+    case TypeAction.CGU_VALIDEES: {
+      const cguValidees = !etatDemande.cguValidees;
+      const etatCourant = { ...etatDemande };
+
+      if (cguValidees) {
+        delete etatCourant.erreurs?.['cguValidees'];
+      }
+      return {
+        ...etatCourant,
+        cguValidees,
+        ...(!cguValidees && {
+          erreurs: {
+            ...construisErreur('cguValidees', {
+              identifiantTexteExplicatif: 'cguValidees',
+              texte: 'Veuillez valider les CGU.',
+            }),
+          },
+        }),
+      };
+    }
     case TypeAction.DEMANDE_ENVOYEE:
       return {
         ...etatDemande,
@@ -91,6 +115,11 @@ export const reducteurDemandeDevenirAidant = (
                 texte: 'Veuillez sélectionner un département dans la liste',
               })
             : undefined),
+          ...(!etatDemande.cguValidees &&
+            construisErreur('cguValidees', {
+              identifiantTexteExplicatif: 'cguValidees',
+              texte: 'Veuillez valider les CGU.',
+            })),
         },
         ...etatDemande,
         pretPourEnvoi: true,
@@ -156,6 +185,7 @@ export const initialiseDemande = (): EtatDemande => ({
   departementSaisi: '',
   departementsProposes: [],
   pretPourEnvoi: false,
+  cguValidees: false,
 });
 export const valideDemande = (): Action => ({
   type: TypeAction.DEMANDE_VALIDEE,
@@ -175,6 +205,9 @@ export const saisieMail = (saisie: string): Action => ({
 export const saisieDepartement = (saisie: Departement | string): Action => ({
   type: TypeAction.DEPARTEMENT_SAISI,
   saisie,
+});
+export const cguValidees = (): Action => ({
+  type: TypeAction.CGU_VALIDEES,
 });
 export const confirmation = (): Action => ({
   type: TypeAction.DEMANDE_ENVOYEE,

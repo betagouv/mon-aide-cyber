@@ -7,12 +7,17 @@ import {
 } from 'react';
 import { Departement } from '../../../domaine/demande-aide/Aide.ts';
 import { estDepartement } from '../../demande-aide/SaisieInformations.tsx';
-import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks.ts';
+import {
+  useMACAPI,
+  useModale,
+  useNavigationMAC,
+} from '../../../fournisseurs/hooks.ts';
 import { Header } from '../../Header.tsx';
 import { LienMAC } from '../../LienMAC.tsx';
 import { AutoCompletion } from '../../auto-completion/AutoCompletion.tsx';
 import { Footer } from '../../Footer.tsx';
 import {
+  cguValidees,
   confirmation,
   initialiseDemande,
   proposeDepartements,
@@ -27,6 +32,7 @@ import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
 import { Lien, ReponseHATEOAS } from '../../../domaine/Lien.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ChampsErreur } from '../../alertes/Erreurs.tsx';
+import { CorpsCGU } from '../../../vues/ComposantCGU.tsx';
 
 type ReponseDemandeInitiee = ReponseHATEOAS & PreRequisDemande;
 
@@ -39,6 +45,7 @@ type CorpsDemandeDevenirAidant = {
   prenom: string;
   mail: string;
   departement: string;
+  cguValidees: boolean;
 };
 
 export const ComposantDemandeDevenirAidant = () => {
@@ -74,6 +81,7 @@ export const ComposantDemandeDevenirAidant = () => {
                 departement: estDepartement(etatDemande.departementSaisi)
                   ? etatDemande.departementSaisi.nom
                   : etatDemande.departementSaisi,
+                cguValidees: etatDemande.cguValidees,
               })
               .construis(),
             (corps) => corps
@@ -115,6 +123,18 @@ export const ComposantDemandeDevenirAidant = () => {
     }
   }, [prerequisDemande]);
 
+  const { affiche } = useModale();
+  const afficheModaleCGU = useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      affiche({
+        corps: <CorpsCGU />,
+        taille: 'large',
+      });
+    },
+    [affiche]
+  );
+
   const surSaisiePrenom = useCallback((saisie: string) => {
     envoie(saisiPrenom(saisie));
   }, []);
@@ -131,6 +151,9 @@ export const ComposantDemandeDevenirAidant = () => {
     envoie(saisieDepartement(saisie));
   }, []);
 
+  const surCGUValidees = useCallback(() => {
+    envoie(cguValidees());
+  }, []);
   return (
     <>
       <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
@@ -301,6 +324,43 @@ export const ComposantDemandeDevenirAidant = () => {
                             />
                             {etatDemande.erreurs?.departement?.texteExplicatif}
                           </div>
+                        </div>
+                      </div>
+                      <div className="fr-col-12">
+                        <div
+                          className={`fr-checkbox-group mac-radio-group ${
+                            etatDemande.erreurs
+                              ? etatDemande.erreurs.cguValidees?.className
+                              : ''
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            id="cgu-demande-devenir-aidant"
+                            name="cgu-demande-devenir-aidant"
+                            onClick={surCGUValidees}
+                            checked={etatDemande.cguValidees}
+                          />
+                          <label
+                            className="fr-label"
+                            htmlFor="cgu-demande-devenir-aidant"
+                          >
+                            <div>
+                              <span className="asterisque">*</span>
+                              <span>
+                                {' '}
+                                J&apos;accepte les{' '}
+                                <b>
+                                  <a href="#" onClick={afficheModaleCGU}>
+                                    conditions générales d&apos;utilisation
+                                  </a>
+                                </b>{' '}
+                                de MonAideCyber au nom de l&apos;entité que je
+                                représente
+                              </span>
+                            </div>
+                          </label>
+                          {etatDemande.erreurs?.cguValidees?.texteExplicatif}
                         </div>
                       </div>
                     </div>
