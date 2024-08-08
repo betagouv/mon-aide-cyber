@@ -9,6 +9,7 @@ import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import crypto from 'crypto';
+import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
 
 export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   type: 'CommandeDevenirAidant';
@@ -63,11 +64,24 @@ export class CapteurCommandeDevenirAidant
       prenom: commande.prenom,
     };
 
-    await this.entrepots.demandesDevenirAidant().persiste(demandeDevenirAidant);
-    await this.publieLaDemandeCree(demandeDevenirAidant);
-    await this.envoieLeMailDeMiseEnRelation(demandeDevenirAidant);
-
-    return Promise.resolve(demandeDevenirAidant);
+    return this.entrepots
+      .demandesDevenirAidant()
+      .persiste(demandeDevenirAidant)
+      .then(async () => {
+        await this.publieLaDemandeCree(demandeDevenirAidant);
+        return this.envoieLeMailDeMiseEnRelation(demandeDevenirAidant)
+          .then(() => demandeDevenirAidant)
+          .catch(() =>
+            Promise.reject(
+              ErreurMAC.cree(
+                'Demande devenir Aidant',
+                new ErreurEnvoiEmail(
+                  'Le mail de mise en relation n’a pu être remis.'
+                )
+              )
+            )
+          );
+      });
   }
 
   private async envoieLeMailDeMiseEnRelation(

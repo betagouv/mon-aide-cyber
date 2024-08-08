@@ -79,7 +79,7 @@ const erreursGerees: Map<
     },
   ],
   [
-    'ErreurEnvoiMessage',
+    'ErreurEnvoiMail',
     (erreur, _, consignateur, reponse) => {
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_ERREUR_SERVEUR, {
