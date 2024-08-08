@@ -194,5 +194,30 @@ describe('Capteur de commande devenir aidant', () => {
         )
       ).toBe(true);
     });
+
+    it('Remonte une erreur en cas d’échec de l’envoi du mail de mise en relation', async () => {
+      adaptateurEnvironnement.messagerie = () => ({
+        emailMAC: () => 'mac@email.com',
+        expediteurMAC: () => 'expéditeur',
+        clefAPI: () => 'clef',
+      });
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      adaptateurEnvoiMail.genereErreur();
+
+      expect(
+        new CapteurCommandeDevenirAidant(
+          new EntrepotsMemoire(),
+          new BusEvenementDeTest(),
+          adaptateurEnvoiMail,
+          annuaireCot
+        ).execute({
+          departement: departements[1],
+          mail: 'email',
+          nom: 'nom',
+          prenom: 'prenom',
+          type: 'CommandeDevenirAidant',
+        })
+      ).rejects.toThrowError('Le mail de mise en relation n’a pu être remis.');
+    });
   });
 });
