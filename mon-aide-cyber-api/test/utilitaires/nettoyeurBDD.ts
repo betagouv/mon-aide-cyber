@@ -26,6 +26,10 @@ class EntrepotsPostgresPourLesTests {
   async nettoieRelations() {
     await this.knex('relations').truncate();
   }
+
+  async nettoieDemandeDevenirAidant() {
+    await this.knex('demandes-devenir-aidant').truncate();
+  }
 }
 
 export const nettoieLaBaseDeDonneesAidants = async () => {
@@ -55,5 +59,11 @@ export const nettoieLaBaseDeDonneesDiagnostics = async () => {
 export const nettoieLaBaseDeDonneesRelations = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
     await new EntrepotsPostgresPourLesTests().nettoieRelations();
+  }
+};
+
+export const nettoieLaBaseDeDonneesDemandeDevenirAidant = async () => {
+  if (process.env.URL_SERVEUR_BASE_DONNEES) {
+    await new EntrepotsPostgresPourLesTests().nettoieDemandeDevenirAidant();
   }
 };
