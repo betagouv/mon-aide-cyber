@@ -1,25 +1,11 @@
+import HeroBloc from "../communs/HeroBloc.tsx"
 
 function KitDeCommunication() {
   return (
     <article>
-        <div className="mode-fonce accueil">
-          <div id="presentation" className="fr-container">
-            <div className="fr-grid-row fr-grid-row--middle fr-py-20v">
-              <div id="corps" className="fr-col-md-6 fr-col-sm-12">
-                <h1 className="fr-mb-5w">Kit de communication</h1>
-                <p>
-                Vous êtes convaincus de l’utilité de MonAideCyber et souhaitez en parler autour de vous ? Retrouvez ici toutes les ressources de communication mises à votre disposition !
-                </p>
-              </div>
-              <div id="illustration" className="fr-col-md-6 fr-col-sm-12">
-                <img
-                  src="/images/illustration-marelle.svg"
-                  alt="scène d'un aidant et d'un aidé faisant un diagnostic"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        <HeroBloc titre="Kit de communication"
+          description="Vous êtes convaincus de l’utilité de MonAideCyber et souhaitez en parler autour de vous ? Retrouvez ici toutes les ressources de communication mises à votre disposition !"
+          lienIcone="/images/illustration-marelle.svg" />
         <div className="fond-clair-mac">
           <div className="fr-container restitution">
             <div className="fr-grid-row">
