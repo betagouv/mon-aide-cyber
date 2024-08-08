@@ -7,6 +7,7 @@ import {
   departements,
 } from '../../../src/gestion-demandes/departements';
 import { unConstructeurDeDemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/constructeurDeDemandeDevenirAidant';
+import { uneRequeteDemandeDevenirAidant } from './constructeurRequeteDemandeDevenirAidant';
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -56,12 +57,9 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         'POST',
         '/api/demandes/devenir-aidant',
         donneesServeur.portEcoute,
-        {
-          nom: 'nom',
-          prenom: 'prenom',
-          mail: 'mail@fournisseur.fr',
-          departement: 'Hautes-Alpes',
-        }
+        uneRequeteDemandeDevenirAidant()
+          .dansLeDepartement('Hautes-Alpes')
+          .construis()
       );
 
       expect(reponse.statusCode).toStrictEqual(200);
@@ -88,12 +86,9 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         'POST',
         '/api/demandes/devenir-aidant',
         donneesServeur.portEcoute,
-        {
-          nom: 'nom',
-          prenom: 'prenom',
-          mail: 'mail@fournisseur.fr',
-          departement: 'Hautes-Alpes',
-        }
+        uneRequeteDemandeDevenirAidant()
+          .avecUnMail('mail@fournisseur.fr')
+          .construis()
       );
 
       expect(reponse.statusCode).toStrictEqual(400);
@@ -126,12 +121,9 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       });
 
       it("Précise l'erreur dans un message, si une erreur est rencontré", async () => {
-        const corpsDeRequeteAvecMailInvalide = {
-          nom: 'nom',
-          prenom: 'prenom',
-          mail: 'mail-invalide',
-          departement: 'Allier',
-        };
+        const corpsDeRequeteAvecMailInvalide = uneRequeteDemandeDevenirAidant()
+          .avecUnMail('mail-invalide')
+          .construis();
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -146,13 +138,12 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         );
       });
 
-      it('Précise toutes les erreurs dans un message, si plusieurs erreurs sont rencontrés', async () => {
-        const corpsDeRequeteAvecMailEtNomInvalides = {
-          nom: '',
-          prenom: 'prenom',
-          mail: 'mail-invalide',
-          departement: 'Allier',
-        };
+      it('Précise toutes les erreurs dans un message, si plusieurs erreurs sont rencontrées', async () => {
+        const corpsDeRequeteAvecMailEtNomInvalides =
+          uneRequeteDemandeDevenirAidant()
+            .avecUnMail('mail-invalide')
+            .avecUnNomVide()
+            .construis();
 
         const reponse = await executeRequete(
           donneesServeur.app,
