@@ -10,13 +10,13 @@ import {
   reducteurSaisieInformations,
   relationAidantCliquee,
 } from './reducteurSaisieInformations.tsx';
-import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
 import {
   CorpsDemandeAide,
   Departement,
-} from '../../domaine/demande-aide/Aide.ts';
-import { useModale } from '../../fournisseurs/hooks.ts';
-import { CorpsCGU } from '../../vues/ComposantCGU.tsx';
+} from '../../../domaine/demande-aide/Aide.ts';
+import { useModale } from '../../../fournisseurs/hooks.ts';
+import { CorpsCGU } from '../../../vues/ComposantCGU.tsx';
+import { AutoCompletion } from '../../auto-completion/AutoCompletion.tsx';
 
 type ProprietesSaisiesInformations = {
   departements: Departement[];

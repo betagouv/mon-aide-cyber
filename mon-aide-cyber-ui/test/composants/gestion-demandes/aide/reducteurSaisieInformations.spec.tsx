@@ -9,9 +9,9 @@ import {
   raisonSocialeSaisie,
   reducteurSaisieInformations,
   relationAidantCliquee,
-} from '../../../src/composants/demande-aide/reducteurSaisieInformations.tsx';
-import { TexteExplicatif } from '../../../src/composants/alertes/Erreurs.tsx';
-import { Departement } from '../../../src/domaine/demande-aide/Aide.ts';
+} from '../../../../src/composants/gestion-demandes/aide/reducteurSaisieInformations.tsx';
+import { Departement } from '../../../../src/domaine/demande-aide/Aide.ts';
+import { TexteExplicatif } from '../../../../src/composants/alertes/Erreurs.tsx';
 describe('Parcours CGU Aidé', () => {
   let etatInitial: EtatSaisieInformations = {} as EtatSaisieInformations;
 

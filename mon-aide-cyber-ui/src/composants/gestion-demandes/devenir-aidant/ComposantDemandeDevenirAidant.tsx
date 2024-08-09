@@ -6,7 +6,6 @@ import {
   useState,
 } from 'react';
 import { Departement } from '../../../domaine/demande-aide/Aide.ts';
-import { estDepartement } from '../../demande-aide/SaisieInformations.tsx';
 import {
   useMACAPI,
   useModale,
@@ -33,6 +32,7 @@ import { Lien, ReponseHATEOAS } from '../../../domaine/Lien.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ChampsErreur } from '../../alertes/Erreurs.tsx';
 import { CorpsCGU } from '../../../vues/ComposantCGU.tsx';
+import { estDepartement } from '../aide/SaisieInformations.tsx';
 
 type ReponseDemandeInitiee = ReponseHATEOAS & PreRequisDemande;
 
