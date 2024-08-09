@@ -20,6 +20,7 @@ import {
 
 type ProprietesAutoCompletion<T extends object | string> = {
   nom: string;
+  placeholder?: string;
   mappeur: (valeur: T | string) => string;
   surSelection: (valeur: T) => void;
   surSaisie: (valeur: T | string) => void;
@@ -134,6 +135,7 @@ export const AutoCompletion = <T extends object | string>(
         <input
           className="fr-input"
           ref={referenceChampSaisie}
+          placeholder={proprietes.placeholder}
           type="text"
           id={etat.nom}
           name={etat.nom}
