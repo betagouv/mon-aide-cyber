@@ -21,10 +21,12 @@ type EtatDemande = {
   departementsProposes: Departement[];
   erreurs?: ErreursSaisieDemande;
   pretPourEnvoi: boolean;
+  envoiReussi: boolean;
 };
 
 enum TypeAction {
   DEMANDE_VALIDEE = 'DEMANDE_VALIDEE',
+  DEMANDE_INVALIDEE = 'DEMANDE_INVALIDEE',
   PRENOM_SAISI = 'PRENOM_SAISI',
   NOM_SAISI = 'NOM_SAISI',
   MAIL_SAISI = 'MAIL_SAISI',
@@ -36,6 +38,7 @@ enum TypeAction {
 
 type Action =
   | { type: TypeAction.DEMANDE_VALIDEE }
+  | { type: TypeAction.DEMANDE_INVALIDEE }
   | { type: TypeAction.PRENOM_SAISI; saisie: string }
   | { type: TypeAction.NOM_SAISI; saisie: string }
   | { type: TypeAction.MAIL_SAISI; saisie: string }
@@ -43,6 +46,53 @@ type Action =
   | { type: TypeAction.DEPARTEMENTS_PROPOSES; departements: Departement[] }
   | { type: TypeAction.DEMANDE_ENVOYEE }
   | { type: TypeAction.CGU_VALIDEES };
+
+const construisErreurPrenom = (prenomValide: boolean) => {
+  return !prenomValide
+    ? construisErreur('prenom', {
+        identifiantTexteExplicatif: 'prenom',
+        texte: 'Veuillez saisir un prénom valide',
+      })
+    : undefined;
+};
+
+const construisErreurNom = (nomValide: boolean) => {
+  return !nomValide
+    ? construisErreur('nom', {
+        identifiantTexteExplicatif: 'nom',
+        texte: 'Veuillez saisir un nom valide',
+      })
+    : undefined;
+};
+
+const construisErreurMail = (mailValide: boolean) => {
+  return !mailValide
+    ? construisErreur('mail', {
+        identifiantTexteExplicatif: 'mail',
+        texte: 'Veuillez saisir un mail valide',
+      })
+    : undefined;
+};
+
+const construisErreurDepartement = (departementvalide: boolean) => {
+  return !departementvalide
+    ? construisErreur('departement', {
+        identifiantTexteExplicatif: 'departement',
+        texte: 'Veuillez sélectionner un département dans la liste',
+      })
+    : undefined;
+};
+
+const construisErreurCgu = (cguValidees: boolean) => {
+  return (
+    !cguValidees &&
+    construisErreur('cguValidees', {
+      identifiantTexteExplicatif: 'cguValidees',
+      texte: 'Veuillez valider les CGU.',
+    })
+  );
+};
+
 const estVide = (chaine: string): boolean => chaine === '';
 const contientUnChiffre = (chaine: string): boolean =>
   chaine.match(/[0-9]+/) !== null;
@@ -83,48 +133,51 @@ export const reducteurDemandeDevenirAidant = (
       return {
         ...etatDemande,
         pretPourEnvoi: false,
+        envoiReussi: true,
       };
     case TypeAction.DEMANDE_VALIDEE: {
       delete etatDemande.erreurs;
+
+      const nomValide = estPrenomValide(etatDemande.nom);
+      const prenomValide = estPrenomValide(etatDemande.prenom);
+      const mailValide = estMailValide(etatDemande.mail);
+      const departement = trouveDepartement(
+        estDepartement(etatDemande.departementSaisi)
+          ? etatDemande.departementSaisi.nom
+          : etatDemande.departementSaisi,
+        etatDemande.departementsProposes
+      );
+      const departementvalide = !!departement;
+
+      const pretPourEnvoi =
+        nomValide &&
+        prenomValide &&
+        mailValide &&
+        departementvalide &&
+        etatDemande.cguValidees;
+
+      const erreurs = {
+        ...construisErreurPrenom(prenomValide),
+        ...construisErreurNom(nomValide),
+        ...construisErreurMail(mailValide),
+        ...construisErreurDepartement(departementvalide),
+        ...construisErreurCgu(etatDemande.cguValidees),
+      };
+
       return {
-        erreurs: {
-          ...(!estPrenomValide(etatDemande.prenom)
-            ? construisErreur('prenom', {
-                identifiantTexteExplicatif: 'prenom',
-                texte: 'Veuillez saisir un prénom valide',
-              })
-            : undefined),
-          ...(!estPrenomValide(etatDemande.nom)
-            ? construisErreur('nom', {
-                identifiantTexteExplicatif: 'nom',
-                texte: 'Veuillez saisir un nom valide',
-              })
-            : undefined),
-          ...(!estMailValide(etatDemande.mail)
-            ? construisErreur('mail', {
-                identifiantTexteExplicatif: 'mail',
-                texte: 'Veuillez saisir un mail valide',
-              })
-            : undefined),
-          ...(!trouveDepartement(
-            estDepartement(etatDemande.departementSaisi)
-              ? etatDemande.departementSaisi.nom
-              : etatDemande.departementSaisi,
-            etatDemande.departementsProposes
-          )
-            ? construisErreur('departement', {
-                identifiantTexteExplicatif: 'departement',
-                texte: 'Veuillez sélectionner un département dans la liste',
-              })
-            : undefined),
-          ...(!etatDemande.cguValidees &&
-            construisErreur('cguValidees', {
-              identifiantTexteExplicatif: 'cguValidees',
-              texte: 'Veuillez valider les CGU.',
-            })),
-        },
         ...etatDemande,
-        pretPourEnvoi: true,
+        ...(!pretPourEnvoi && {
+          erreurs,
+        }),
+        pretPourEnvoi,
+      };
+    }
+
+    case TypeAction.DEMANDE_INVALIDEE: {
+      return {
+        ...etatDemande,
+        pretPourEnvoi: false,
+        envoiReussi: false,
       };
     }
 
@@ -188,9 +241,13 @@ export const initialiseDemande = (): EtatDemande => ({
   departementsProposes: [],
   pretPourEnvoi: false,
   cguValidees: false,
+  envoiReussi: false,
 });
 export const valideDemande = (): Action => ({
   type: TypeAction.DEMANDE_VALIDEE,
+});
+export const invalideDemande = (): Action => ({
+  type: TypeAction.DEMANDE_INVALIDEE,
 });
 export const saisiPrenom = (saisie: string): Action => ({
   type: TypeAction.PRENOM_SAISI,
