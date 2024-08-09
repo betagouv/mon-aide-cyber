@@ -4,7 +4,7 @@ import {
   EtatEtapesDemandeAide,
   reducteurDemandeAide,
   saisieInformationsEnErreur,
-} from '../../../src/composants/demande-aide/reducteurDemandeAide.ts';
+} from '../../../../src/composants/gestion-demandes/aide/reducteurDemandeAide.ts';
 
 describe('Réducteur Demande d’aide', () => {
   it('Marque la demande d’aide en erreur', () => {
