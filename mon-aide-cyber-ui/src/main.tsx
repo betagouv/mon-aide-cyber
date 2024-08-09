@@ -19,12 +19,12 @@ import { FournisseurNavigationMAC } from './fournisseurs/ContexteNavigationMAC.t
 import { ComposantProfil } from './composants/profil/ComposantProfil.tsx';
 import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
-import { ComposantDemandeAide } from './composants/demande-aide/ComposantDemandeAide.tsx';
 import { ComposantConnexion } from './composants/connexion/ComposantConnexion.tsx';
 import { TableauDeBord } from './composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
 import { ComposantCreationEspaceAidant } from './composants/espace-aidant/creation-espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
 import { ComposantDemandeDevenirAidant } from './composants/gestion-demandes/devenir-aidant/ComposantDemandeDevenirAidant.tsx';
+import { ComposantDemandeAide } from './composants/gestion-demandes/aide/ComposantDemandeAide.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

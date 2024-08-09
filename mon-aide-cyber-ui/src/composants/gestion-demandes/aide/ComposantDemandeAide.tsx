@@ -1,5 +1,3 @@
-import { Footer } from '../Footer';
-import { Header } from '../Header';
 import { SaisieInformations } from './SaisieInformations.tsx';
 import {
   ReactElement,
@@ -13,17 +11,19 @@ import {
   reducteurDemandeAide,
   saisieInformationsEnErreur,
 } from './reducteurDemandeAide.ts';
-import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
-import { Lien } from '../../domaine/Lien.ts';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
-import { Confirmation } from './Confirmation.tsx';
-import { ChampsErreur } from '../alertes/Erreurs.tsx';
-import { LienMAC } from '../LienMAC.tsx';
+import { Lien } from '../../../domaine/Lien.ts';
+import { Departement } from '../../../domaine/gestion-demandes/departement.ts';
+import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import {
   CorpsDemandeAide,
   ReponseDemandeAide,
-} from '../../domaine/gestion-demandes/aide/Aide.ts';
-import { Departement } from '../../domaine/gestion-demandes/departement.ts';
+} from '../../../domaine/gestion-demandes/aide/Aide.ts';
+import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
+import { ChampsErreur } from '../../alertes/Erreurs.tsx';
+import { Header } from '../../Header.tsx';
+import { LienMAC } from '../../LienMAC.tsx';
+import { Confirmation } from './Confirmation.tsx';
+import { Footer } from '../../Footer.tsx';
 
 export const ComposantDemandeAide = () => {
   const [etat, envoie] = useReducer(reducteurDemandeAide, {
