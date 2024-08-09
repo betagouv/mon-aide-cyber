@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom';
+
 export const SeConnecter = () => {
   return (
-    <a href="/connexion" className="violet-fonce">
+    <Link to="/global/connexion" className="violet-fonce">
       Se connecter
-    </a>
+    </Link>
   );
 };

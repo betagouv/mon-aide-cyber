@@ -26,7 +26,7 @@ import { ComposantCreationEspaceAidant } from './composants/espace-aidant/creati
 import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
 import { ComposantDemandeDevenirAidant } from './composants/composantDemandeDevenirAidant.tsx';
 import KitDeCommunication from './composants/a-propos/KitDeCommunication.tsx';
-import Layout from './composants/Layout.tsx';
+import PublicLayout from './composants/PublicLayout.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -39,24 +39,33 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 <PortailModale>
                   <Routes>
                     <Route path="/" element={<Accueil />} />
-                    <Route path="/cgu" element={<ComposantCGU />} />
-                    <Route path='global' element={<Layout />}>
-                      <Route index path="kit-de-communication" element={<KitDeCommunication />} />
+                    <Route path="global" element={<PublicLayout />}>
+                      <Route index element={<Accueil />} />
+                      <Route path="cgu" element={<ComposantCGU />} />
+                      <Route
+                        index
+                        path="kit-de-communication"
+                        element={<KitDeCommunication />}
+                      />
+                      <Route path="charte-aidant" element={<CharteAidant />} />
+                      <Route
+                        path="demande-aide"
+                        element={<ComposantDemandeAide />}
+                      />
+                      <Route
+                        path="mentions-legales"
+                        element={<MentionsLegales />}
+                      />
+                      <Route
+                        path="connexion"
+                        element={<ComposantConnexion />}
+                      />
+                      <Route
+                        path="demandes/devenir-aidant"
+                        element={<ComposantDemandeDevenirAidant />}
+                      />
                     </Route>
-                    <Route path="/charte-aidant" element={<CharteAidant />} />
-                    <Route
-                      path="/demande-aide"
-                      element={<ComposantDemandeAide />}
-                    />
-                    <Route
-                      path="/demandes/devenir-aidant"
-                      element={<ComposantDemandeDevenirAidant />}
-                    />
-                    <Route
-                      path="/mentions-legales"
-                      element={<MentionsLegales />}
-                    />
-                    <Route path="/connexion" element={<ComposantConnexion />} />
+
                     <Route
                       element={
                         <Suspense>

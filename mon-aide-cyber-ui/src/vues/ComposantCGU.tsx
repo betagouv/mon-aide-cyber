@@ -1,7 +1,3 @@
-import { Header } from '../composants/Header.tsx';
-import { Footer } from '../composants/Footer.tsx';
-import { LienMAC } from '../composants/LienMAC.tsx';
-
 export const CorpsCGU = () => {
   const telechargementCGU = (
     <a
@@ -729,18 +725,14 @@ export const CorpsCGU = () => {
 
 export const ComposantCGU = () => {
   return (
-    <>
-      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
-      <main role="main">
-        <div className="fr-container">
-          <div className="fr-grid-row fr-grid-row--center">
-            <div className="fr-col-8">
-              <CorpsCGU />
-            </div>
+    <main role="main">
+      <div className="fr-container">
+        <div className="fr-grid-row fr-grid-row--center">
+          <div className="fr-col-8">
+            <CorpsCGU />
           </div>
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </main>
   );
 };

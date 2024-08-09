@@ -1,7 +1,4 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
-import { Footer } from './Footer.tsx';
-import { Header } from './Header.tsx';
-import { LienMAC } from './LienMAC.tsx';
 import { AutoCompletion } from './auto-completion/AutoCompletion.tsx';
 import { construisErreur, PresentationErreur } from './alertes/Erreurs.tsx';
 import { useMACAPI } from '../fournisseurs/hooks.ts';
@@ -243,196 +240,190 @@ export const ComposantDemandeDevenirAidant = () => {
   }, []);
 
   return (
-    <>
-      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
-      <main role="main" className="demande-aide">
-        <div className="mode-fonce">
-          <div className="fr-container">
-            <div className="fr-grid-row contenu">
-              <h2>Vous souhaitez devenir Aidant MonAideCyber</h2>
-              <p>
-                Pour cela, il convient d&apos;effectuer une formation. Complétez
-                le formulaire pour être averti de la prochaine formation prévue
-                sur votre territoire !
-              </p>
-            </div>
+    <main role="main" className="demande-aide">
+      <div className="mode-fonce">
+        <div className="fr-container">
+          <div className="fr-grid-row contenu">
+            <h2>Vous souhaitez devenir Aidant MonAideCyber</h2>
+            <p>
+              Pour cela, il convient d&apos;effectuer une formation. Complétez
+              le formulaire pour être averti de la prochaine formation prévue
+              sur votre territoire !
+            </p>
           </div>
         </div>
-        <div className="fond-clair-mac">
-          <div className="fr-container">
-            <div className="fr-grid-row fr-grid-row--center">
-              <div className="fr-col-md-8 fr-col-sm-12 section">
-                <div className="fr-mb-2w">
-                  Demande d&apos;inscription à une formation MonAideCyber
-                </div>
-                <div className="fr-mt-2w">
-                  <div>
-                    <h5>Vous souhaitez devenir Aidant MonAideCyber</h5>
-                    <p>Pour devenir aidant, il est nécessaire de&nbsp;:</p>
-                    <ul>
-                      <li>
-                        participer à une formation animée par l&apos;ANSSI
-                      </li>
-                      <li>
-                        prendre connaissance de la charte de l&apos;aidant, qui
-                        rappelle notamment le principe de gratuité du
-                        dispositif, et la signer avant ou après la formation
-                      </li>
-                    </ul>
-                    <p>
-                      Veuillez compléter les informations ci-dessous pour être
-                      averti de la prochaine session de formation prévue sur
-                      votre territoire.
-                    </p>
-                  </div>
-                </div>
-                <div className="champs-obligatoire">
-                  <span className="asterisque">*</span>
-                  <span> Champ obligatoire</span>
-                </div>
-                <form>
-                  <fieldset className="fr-mb-5w">
-                    <div className="fr-grid-row fr-grid-row--gutters">
-                      <div className="fr-col-12">
-                        <div className="fr-input-group">
-                          <div
-                            className={`fr-input-group ${
-                              etatDemande.erreurs
-                                ? etatDemande.erreurs.prenom?.className
-                                : ''
-                            }`}
-                          >
-                            <label className="fr-label" htmlFor="prenom">
-                              <span className="asterisque">*</span>
-                              <span> Votre prénom :</span>
-                            </label>
-                            <input
-                              className="fr-input"
-                              type="text"
-                              id="prenom"
-                              name="prenom"
-                              placeholder="Exemple : Martin"
-                              onChange={(e) => surSaisiePrenom(e.target.value)}
-                            />
-                            {etatDemande.erreurs?.prenom?.texteExplicatif}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="fr-col-12">
-                        <div className="fr-input-group">
-                          <div
-                            className={`fr-input-group ${
-                              etatDemande.erreurs
-                                ? etatDemande.erreurs.nom?.className
-                                : ''
-                            }`}
-                          >
-                            <label className="fr-label" htmlFor="nom">
-                              <span className="asterisque">*</span>
-                              <span> Votre nom :</span>
-                            </label>
-                            <input
-                              className="fr-input"
-                              type="text"
-                              id="nom"
-                              name="nom"
-                              placeholder="Exemple : Dubois"
-                              onChange={(e) => surSaisieNom(e.target.value)}
-                            />
-                            {etatDemande.erreurs?.nom?.texteExplicatif}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="fr-col-12">
-                        <div className="fr-input-group">
-                          <div
-                            className={`fr-input-group ${
-                              etatDemande.erreurs
-                                ? etatDemande.erreurs.mail?.className
-                                : ''
-                            }`}
-                          >
-                            <label className="fr-label" htmlFor="mail">
-                              <span className="asterisque">*</span>
-                              <span> Votre adresse électronique :</span>
-                            </label>
-                            <input
-                              className="fr-input"
-                              type="text"
-                              id="mail"
-                              name="mail"
-                              placeholder="Exemple : martin@mail.com"
-                              onChange={(e) => surSaisieMail(e.target.value)}
-                            />
-                            {etatDemande.erreurs?.mail?.texteExplicatif}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="fr-col-12">
-                        <div className="fr-input-group">
-                          <div
-                            className={`fr-input-group ${
-                              etatDemande.erreurs
-                                ? etatDemande.erreurs.departement?.className
-                                : ''
-                            }`}
-                          >
-                            <label
-                              className="fr-label"
-                              htmlFor="departement-drom-com"
-                            >
-                              <span className="asterisque">*</span>
-                              <span>
-                                {' '}
-                                Dans quel département ou DROM-COM êtes-vous
-                                situé ?
-                              </span>
-                            </label>
-
-                            <AutoCompletion<Departement>
-                              nom="departement"
-                              suggestionsInitiales={
-                                prerequisDemande?.departements || []
-                              }
-                              mappeur={(departement) =>
-                                estDepartement(departement)
-                                  ? `${departement.code} - ${departement.nom}`
-                                  : typeof departement === 'string'
-                                    ? departement
-                                    : ''
-                              }
-                              surSelection={(departement) => {
-                                surSaisieDepartement(departement);
-                              }}
-                              surSaisie={(departement) => {
-                                surSaisieDepartement(departement);
-                              }}
-                              clefsFiltrage={['code', 'nom']}
-                              valeurSaisie={etatDemande.departementSaisi}
-                            />
-                            {etatDemande.erreurs?.departement?.texteExplicatif}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="fr-grid-row fr-grid-row--right fr-pt-3w">
-                      <button
-                        type="button"
-                        key="envoyer-demande-devenir-aidant"
-                        className="fr-btn bouton-mac bouton-mac-primaire"
-                        onClick={() => envoie(valideDemande())}
-                      >
-                        Envoyer
-                      </button>
-                    </div>
-                  </fieldset>
-                </form>
+      </div>
+      <div className="fond-clair-mac">
+        <div className="fr-container">
+          <div className="fr-grid-row fr-grid-row--center">
+            <div className="fr-col-md-8 fr-col-sm-12 section">
+              <div className="fr-mb-2w">
+                Demande d&apos;inscription à une formation MonAideCyber
               </div>
+              <div className="fr-mt-2w">
+                <div>
+                  <h5>Vous souhaitez devenir Aidant MonAideCyber</h5>
+                  <p>Pour devenir aidant, il est nécessaire de&nbsp;:</p>
+                  <ul>
+                    <li>participer à une formation animée par l&apos;ANSSI</li>
+                    <li>
+                      prendre connaissance de la charte de l&apos;aidant, qui
+                      rappelle notamment le principe de gratuité du dispositif,
+                      et la signer avant ou après la formation
+                    </li>
+                  </ul>
+                  <p>
+                    Veuillez compléter les informations ci-dessous pour être
+                    averti de la prochaine session de formation prévue sur votre
+                    territoire.
+                  </p>
+                </div>
+              </div>
+              <div className="champs-obligatoire">
+                <span className="asterisque">*</span>
+                <span> Champ obligatoire</span>
+              </div>
+              <form>
+                <fieldset className="fr-mb-5w">
+                  <div className="fr-grid-row fr-grid-row--gutters">
+                    <div className="fr-col-12">
+                      <div className="fr-input-group">
+                        <div
+                          className={`fr-input-group ${
+                            etatDemande.erreurs
+                              ? etatDemande.erreurs.prenom?.className
+                              : ''
+                          }`}
+                        >
+                          <label className="fr-label" htmlFor="prenom">
+                            <span className="asterisque">*</span>
+                            <span> Votre prénom :</span>
+                          </label>
+                          <input
+                            className="fr-input"
+                            type="text"
+                            id="prenom"
+                            name="prenom"
+                            placeholder="Exemple : Martin"
+                            onChange={(e) => surSaisiePrenom(e.target.value)}
+                          />
+                          {etatDemande.erreurs?.prenom?.texteExplicatif}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="fr-col-12">
+                      <div className="fr-input-group">
+                        <div
+                          className={`fr-input-group ${
+                            etatDemande.erreurs
+                              ? etatDemande.erreurs.nom?.className
+                              : ''
+                          }`}
+                        >
+                          <label className="fr-label" htmlFor="nom">
+                            <span className="asterisque">*</span>
+                            <span> Votre nom :</span>
+                          </label>
+                          <input
+                            className="fr-input"
+                            type="text"
+                            id="nom"
+                            name="nom"
+                            placeholder="Exemple : Dubois"
+                            onChange={(e) => surSaisieNom(e.target.value)}
+                          />
+                          {etatDemande.erreurs?.nom?.texteExplicatif}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="fr-col-12">
+                      <div className="fr-input-group">
+                        <div
+                          className={`fr-input-group ${
+                            etatDemande.erreurs
+                              ? etatDemande.erreurs.mail?.className
+                              : ''
+                          }`}
+                        >
+                          <label className="fr-label" htmlFor="mail">
+                            <span className="asterisque">*</span>
+                            <span> Votre adresse électronique :</span>
+                          </label>
+                          <input
+                            className="fr-input"
+                            type="text"
+                            id="mail"
+                            name="mail"
+                            placeholder="Exemple : martin@mail.com"
+                            onChange={(e) => surSaisieMail(e.target.value)}
+                          />
+                          {etatDemande.erreurs?.mail?.texteExplicatif}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="fr-col-12">
+                      <div className="fr-input-group">
+                        <div
+                          className={`fr-input-group ${
+                            etatDemande.erreurs
+                              ? etatDemande.erreurs.departement?.className
+                              : ''
+                          }`}
+                        >
+                          <label
+                            className="fr-label"
+                            htmlFor="departement-drom-com"
+                          >
+                            <span className="asterisque">*</span>
+                            <span>
+                              {' '}
+                              Dans quel département ou DROM-COM êtes-vous situé
+                              ?
+                            </span>
+                          </label>
+
+                          <AutoCompletion<Departement>
+                            nom="departement"
+                            suggestionsInitiales={
+                              prerequisDemande?.departements || []
+                            }
+                            mappeur={(departement) =>
+                              estDepartement(departement)
+                                ? `${departement.code} - ${departement.nom}`
+                                : typeof departement === 'string'
+                                  ? departement
+                                  : ''
+                            }
+                            surSelection={(departement) => {
+                              surSaisieDepartement(departement);
+                            }}
+                            surSaisie={(departement) => {
+                              surSaisieDepartement(departement);
+                            }}
+                            clefsFiltrage={['code', 'nom']}
+                            valeurSaisie={etatDemande.departementSaisi}
+                          />
+                          {etatDemande.erreurs?.departement?.texteExplicatif}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="fr-grid-row fr-grid-row--right fr-pt-3w">
+                    <button
+                      type="button"
+                      key="envoyer-demande-devenir-aidant"
+                      className="fr-btn bouton-mac bouton-mac-primaire"
+                      onClick={() => envoie(valideDemande())}
+                    >
+                      Envoyer
+                    </button>
+                  </div>
+                </fieldset>
+              </form>
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </main>
   );
 };

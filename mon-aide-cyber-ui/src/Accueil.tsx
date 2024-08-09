@@ -48,7 +48,7 @@ export const Accueil = () => {
     []
   );
   const demandeAide = useCallback(() => {
-    window.location.href = '/demande-aide';
+    window.location.href = '/global/demande-aide';
   }, []);
   const envoieMessage = useCallback(async (e: FormEvent) => {
     e.preventDefault();

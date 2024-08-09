@@ -129,17 +129,23 @@ export const Footer = () => (
               </a>
             </li>
             <li className="fr-footer__bottom-item">
-              <a className="fr-footer__bottom-link" href="/mentions-legales">
+              <a
+                className="fr-footer__bottom-link"
+                href="/global/mentions-legales"
+              >
                 Mentions légales
               </a>
             </li>
             <li className="fr-footer__bottom-item">
-              <a className="fr-footer__bottom-link" href="/charte-aidant">
+              <a
+                className="fr-footer__bottom-link"
+                href="/global/charte-aidant"
+              >
                 La charte de l&apos;aidant
               </a>
             </li>
             <li className="fr-footer__bottom-item">
-              <a className="fr-footer__bottom-link" href="/cgu">
+              <a className="fr-footer__bottom-link" href="/global/cgu">
                 Les CGU
               </a>
             </li>

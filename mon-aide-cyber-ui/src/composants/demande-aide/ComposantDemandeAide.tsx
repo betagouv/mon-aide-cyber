@@ -1,5 +1,3 @@
-import { Footer } from '../Footer';
-import { Header } from '../Header';
 import { SaisieInformations } from './SaisieInformations.tsx';
 import {
   ReactElement,
@@ -23,7 +21,6 @@ import {
   ReponseDemandeAide,
 } from '../../domaine/demande-aide/Aide.ts';
 import { ChampsErreur } from '../alertes/Erreurs.tsx';
-import { LienMAC } from '../LienMAC.tsx';
 
 export const ComposantDemandeAide = () => {
   const [etat, envoie] = useReducer(reducteurDemandeAide, {
@@ -97,44 +94,40 @@ export const ComposantDemandeAide = () => {
   }, [navigationMAC]);
 
   return (
-    <>
-      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
-      <main role="main" className="demande-aide">
-        <div className="mode-fonce">
-          <div className="fr-container">
-            <div className="fr-grid-row contenu">
-              <h2>Vous souhaitez bénéficier de MonAideCyber</h2>
-              <p>
-                Afin de vous diriger au mieux, merci de répondre à quelques
-                questions.
-              </p>
+    <main role="main" className="demande-aide">
+      <div className="mode-fonce">
+        <div className="fr-container">
+          <div className="fr-grid-row contenu">
+            <h2>Vous souhaitez bénéficier de MonAideCyber</h2>
+            <p>
+              Afin de vous diriger au mieux, merci de répondre à quelques
+              questions.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="fond-clair-mac">
+        <div className="fr-container">
+          <div className="fr-grid-row fr-grid-row--center">
+            <div className="fr-col-md-8 fr-col-sm-12 section">
+              {etat.etapeCourante === 'saisieInformations' && (
+                <SaisieInformations
+                  departements={demandeAide?.departements || []}
+                  surValidation={{
+                    erreur: etat.erreur,
+                    execute: (saisieInformations) =>
+                      terminer(saisieInformations),
+                  }}
+                />
+              )}
+              {etat.etapeCourante === 'confirmation' && (
+                <Confirmation onClick={() => retourAccueil()} />
+              )}
+              <div>{retourEnvoiDemandeAide}</div>
             </div>
           </div>
         </div>
-        <div className="fond-clair-mac">
-          <div className="fr-container">
-            <div className="fr-grid-row fr-grid-row--center">
-              <div className="fr-col-md-8 fr-col-sm-12 section">
-                {etat.etapeCourante === 'saisieInformations' && (
-                  <SaisieInformations
-                    departements={demandeAide?.departements || []}
-                    surValidation={{
-                      erreur: etat.erreur,
-                      execute: (saisieInformations) =>
-                        terminer(saisieInformations),
-                    }}
-                  />
-                )}
-                {etat.etapeCourante === 'confirmation' && (
-                  <Confirmation onClick={() => retourAccueil()} />
-                )}
-                <div>{retourEnvoiDemandeAide}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </main>
   );
 };
