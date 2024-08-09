@@ -11,7 +11,8 @@ import {
   relationAidantCliquee,
 } from '../../../src/composants/demande-aide/reducteurSaisieInformations.tsx';
 import { TexteExplicatif } from '../../../src/composants/alertes/Erreurs.tsx';
-import { Departement } from '../../../src/domaine/demande-aide/Aide.ts';
+
+import { Departement } from '../../../src/domaine/gestion-demandes/departement.ts';
 describe('Parcours CGU Aidé', () => {
   let etatInitial: EtatSaisieInformations = {} as EtatSaisieInformations;
 

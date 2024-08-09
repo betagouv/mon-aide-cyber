@@ -1,7 +1,9 @@
 import { construisErreur, PresentationErreur } from '../../alertes/Erreurs.tsx';
-import { estDepartement } from '../../demande-aide/SaisieInformations.tsx';
-import { Departement } from '../../../domaine/demande-aide/Aide.ts';
 import { estMailValide } from '../../../validateurs/email.ts';
+import {
+  Departement,
+  estDepartement,
+} from '../../../domaine/gestion-demandes/departement.ts';
 
 type ErreursSaisieDemande = {
   cguValidees?: PresentationErreur;
