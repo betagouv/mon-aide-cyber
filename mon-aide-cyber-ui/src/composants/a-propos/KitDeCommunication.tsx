@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import HeroBloc from '../communs/HeroBloc.tsx';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
@@ -27,6 +27,11 @@ function ScrollToAnchor() {
   return null;
 }
 
+export type AncreHtml = {
+  id: ANCRES_POSSIBLES;
+  libelle: string;
+};
+
 export enum ANCRES_POSSIBLES {
   KIT_DE_COMMUNICATION = 'kit-de-communication',
   LOGOS_POLICES_COULEURS = 'logos-polices-couleurs',
@@ -34,10 +39,33 @@ export enum ANCRES_POSSIBLES {
   BONNES_PRATIQUES = 'bonnes-pratiques',
 }
 
+const liensNavigation: AncreHtml[] = [
+  {
+    id: ANCRES_POSSIBLES.KIT_DE_COMMUNICATION,
+    libelle: 'Kit de communication',
+  },
+  {
+    id: ANCRES_POSSIBLES.LOGOS_POLICES_COULEURS,
+    libelle: 'Logo, polices et couleurs',
+  },
+  {
+    id: ANCRES_POSSIBLES.ILLUSTRATIONS,
+    libelle: 'Illlustrations',
+  },
+  {
+    id: ANCRES_POSSIBLES.BONNES_PRATIQUES,
+    libelle: 'Bonnes pratiques',
+  },
+];
+
 function KitDeCommunication() {
-  const liensNavigation: ANCRES_POSSIBLES[] = [
-    ...Object.values(ANCRES_POSSIBLES),
-  ];
+  const location = useLocation();
+  const ancreCourante = location.hash;
+
+  function estLienCourant(ancre: ANCRES_POSSIBLES, ancreCourante: string) {
+    if (!ancreCourante || !ancre) return false;
+    return ancreCourante === `#${ancre}`;
+  }
 
   return (
     <article>
@@ -58,16 +86,19 @@ function KitDeCommunication() {
                 <div className="fr-sidemenu__inner">
                   <div className="fr-collapse" id="fr-sidemenu-wrapper">
                     <ul className="fr-sidemenu__list">
-                      {liensNavigation.map((lienNavigation) => (
+                      {liensNavigation?.map(({ id, libelle }) => (
                         <li
-                          key={lienNavigation}
+                          key={id}
                           className={`fr-sidemenu__item fr-sidemenu__item--active`}
                         >
                           <Link
                             className="fr-sidemenu__link"
-                            to={`#${lienNavigation}`}
+                            to={`#${id}`}
+                            {...(estLienCourant(id, ancreCourante) && {
+                              'aria-current': 'page',
+                            })}
                           >
-                            {lienNavigation}
+                            {libelle}
                           </Link>
                         </li>
                       ))}
