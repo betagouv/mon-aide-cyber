@@ -17,13 +17,13 @@ import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { Lien } from '../../domaine/Lien.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Confirmation } from './Confirmation.tsx';
-import {
-  CorpsDemandeAide,
-  Departement,
-  ReponseDemandeAide,
-} from '../../domaine/demande-aide/Aide.ts';
 import { ChampsErreur } from '../alertes/Erreurs.tsx';
 import { LienMAC } from '../LienMAC.tsx';
+import {
+  CorpsDemandeAide,
+  ReponseDemandeAide,
+} from '../../domaine/gestion-demandes/aide/Aide.ts';
+import { Departement } from '../../domaine/gestion-demandes/departement.ts';
 
 export const ComposantDemandeAide = () => {
   const [etat, envoie] = useReducer(reducteurDemandeAide, {

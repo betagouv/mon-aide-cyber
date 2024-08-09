@@ -1,4 +1,5 @@
-import { ReponseHATEOAS } from '../Lien';
+import { ReponseHATEOAS } from '../../Lien.ts';
+import { Departement } from '../departement.ts';
 
 export type CorpsDemandeAide = {
   cguValidees: boolean;
@@ -7,8 +8,6 @@ export type CorpsDemandeAide = {
   raisonSociale?: string;
   relationAidant: boolean;
 };
-
-export type Departement = { nom: string; code: string };
 
 export type ReponseDemandeAide = ReponseHATEOAS & {
   departements: Departement[];

@@ -11,12 +11,13 @@ import {
   relationAidantCliquee,
 } from './reducteurSaisieInformations.tsx';
 import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
-import {
-  CorpsDemandeAide,
-  Departement,
-} from '../../domaine/demande-aide/Aide.ts';
 import { useModale } from '../../fournisseurs/hooks.ts';
 import { CorpsCGU } from '../../vues/ComposantCGU.tsx';
+import { CorpsDemandeAide } from '../../domaine/gestion-demandes/aide/Aide.ts';
+import {
+  Departement,
+  estDepartement,
+} from '../../domaine/gestion-demandes/departement.ts';
 
 type ProprietesSaisiesInformations = {
   departements: Departement[];
@@ -24,14 +25,6 @@ type ProprietesSaisiesInformations = {
     erreur?: Error;
     execute: (saisieInformations: CorpsDemandeAide) => void;
   };
-};
-
-export const estDepartement = (
-  departement: string | Departement
-): departement is Departement => {
-  return (
-    typeof departement !== 'string' && !!departement.code && !!departement.nom
-  );
 };
 
 export const SaisieInformations = (
