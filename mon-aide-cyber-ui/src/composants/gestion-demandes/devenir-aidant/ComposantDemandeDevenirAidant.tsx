@@ -27,7 +27,7 @@ import {
   valideDemande,
 } from './reducteurDevenirAidant.tsx';
 import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
-import { Lien, ReponseHATEOAS } from '../../../domaine/Lien.ts';
+import { Lien } from '../../../domaine/Lien.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ChampsErreur } from '../../alertes/Erreurs.tsx';
 import { CorpsCGU } from '../../../vues/ComposantCGU.tsx';
@@ -35,20 +35,11 @@ import {
   Departement,
   estDepartement,
 } from '../../../domaine/gestion-demandes/departement.ts';
-
-type ReponseDemandeInitiee = ReponseHATEOAS & PreRequisDemande;
-
-type PreRequisDemande = {
-  departements: Departement[];
-};
-
-type CorpsDemandeDevenirAidant = {
-  nom: string;
-  prenom: string;
-  mail: string;
-  departement: string;
-  cguValidees: boolean;
-};
+import {
+  CorpsDemandeDevenirAidant,
+  PreRequisDemande,
+  ReponseDemandeInitiee,
+} from '../../../domaine/gestion-demandes/devenir-aidant/DevenirAidant.ts';
 
 export const ComposantDemandeDevenirAidant = () => {
   const macAPI = useMACAPI();
