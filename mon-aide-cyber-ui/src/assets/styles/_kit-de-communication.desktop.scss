@@ -1,0 +1,61 @@
+
+.kit-de-communication {
+    nav {
+        margin: 5.5rem 0;
+    }
+
+    .fr-sidemenu__inner { /* Bypass du style du dsfr */
+        box-shadow: unset;
+    }
+
+    .fr-grid-row.gap-2 {
+        gap: 2rem;
+    }
+
+    .grille-logos {
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+
+        .grille-logos-1 {
+            padding: 2rem;
+            grid-column: span 2;
+        }
+        .grille-logos-2 {
+            padding: 1.5rem;
+            grid-column: 1;
+        }
+        .grille-logos-3 {
+            padding: 4rem 1.5rem;
+            grid-column: 2;
+        }
+    }
+
+    div.cadre-petite-bordure {
+        border: 1px solid #DDDDDD;
+
+        img {
+            width: 100%;
+        }
+
+        &.centree {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h4 {
+            margin: 0;
+            line-break: anywhere;
+        }
+    }
+
+    .grille-typos {
+        display: grid;
+        grid-template-columns: repeat(3, 181px);
+        grid-template-rows: 1fr 1fr;
+        column-gap: 1rem;
+        row-gap: 1.5rem;
+    }
+}
