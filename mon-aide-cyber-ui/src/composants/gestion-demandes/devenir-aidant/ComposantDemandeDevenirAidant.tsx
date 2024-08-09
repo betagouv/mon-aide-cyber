@@ -356,6 +356,7 @@ export const ComposantDemandeDevenirAidant = () => {
                                 valeurSaisie={
                                   etatDemande.departementSaisi as Departement
                                 }
+                                placeholder="Exemple : Gironde"
                               />
                               {
                                 etatDemande.erreurs?.departement
