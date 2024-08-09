@@ -10,14 +10,14 @@ import {
   reducteurSaisieInformations,
   relationAidantCliquee,
 } from './reducteurSaisieInformations.tsx';
-import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
-import { useModale } from '../../fournisseurs/hooks.ts';
-import { CorpsCGU } from '../../vues/ComposantCGU.tsx';
-import { CorpsDemandeAide } from '../../domaine/gestion-demandes/aide/Aide.ts';
 import {
   Departement,
   estDepartement,
-} from '../../domaine/gestion-demandes/departement.ts';
+} from '../../../domaine/gestion-demandes/departement.ts';
+import { CorpsDemandeAide } from '../../../domaine/gestion-demandes/aide/Aide.ts';
+import { useModale } from '../../../fournisseurs/hooks.ts';
+import { CorpsCGU } from '../../../vues/ComposantCGU.tsx';
+import { AutoCompletion } from '../../auto-completion/AutoCompletion.tsx';
 
 type ProprietesSaisiesInformations = {
   departements: Departement[];
