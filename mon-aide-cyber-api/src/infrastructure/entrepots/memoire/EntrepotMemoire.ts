@@ -2,7 +2,7 @@ import { Aggregat, AggregatNonTrouve } from '../../../domaine/Aggregat';
 import { Entrepot } from '../../../domaine/Entrepot';
 import { Diagnostic, EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
 import { cloneDeep } from 'lodash';
-import crypto from 'crypto';
+import crypto, { UUID } from 'crypto';
 
 import {
   EntrepotEvenementJournal,
@@ -50,6 +50,16 @@ export class EntrepotDiagnosticMemoire
 {
   typeAggregat(): string {
     return 'diagnostic';
+  }
+
+  tousLesDiagnosticsAyantPourIdentifiant(
+    identifiantDiagnosticsLie: UUID[]
+  ): Promise<Diagnostic[]> {
+    return Promise.resolve(
+      identifiantDiagnosticsLie
+        .map((id) => this.entites.get(id))
+        .filter((d): d is Diagnostic => !!d)
+    );
   }
 }
 

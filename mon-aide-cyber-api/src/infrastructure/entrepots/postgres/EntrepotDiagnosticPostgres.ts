@@ -9,6 +9,7 @@ import {
 } from '../../../diagnostic/Diagnostic';
 import { DTO, EntrepotPostgres } from './EntrepotPostgres';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
+import { UUID } from 'crypto';
 
 export type DiagnosticDTO = DTO & {
   donnees: object;
@@ -88,6 +89,15 @@ export class EntrepotDiagnosticPostgres
       }),
       {}
     );
+  }
+
+  tousLesDiagnosticsAyantPourIdentifiant(
+    identifiantDiagnosticsLie: UUID[]
+  ): Promise<Diagnostic[]> {
+    return this.knex
+      .from(this.nomTable())
+      .whereIn('id', identifiantDiagnosticsLie)
+      .then((lignes) => lignes.map((ligne) => this.deDTOAEntite(ligne)));
   }
 }
 
