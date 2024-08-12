@@ -2,6 +2,7 @@ import { Diagnostic } from './Diagnostic';
 import * as crypto from 'crypto';
 import { Entrepots } from '../domaine/Entrepots';
 import { ErreurMAC } from '../domaine/erreurMAC';
+import { UUID } from 'crypto';
 
 export type Contexte = {
   departement?: string;
@@ -20,9 +21,21 @@ export class ServiceDiagnostic {
         Promise.reject(ErreurMAC.cree('Accès diagnostic', erreur))
       );
 
-  contexte = async (id: crypto.UUID): Promise<Contexte> => {
-    const diagnostic = await this.diagnostic(id);
+  contextes = async (
+    identifiantDiagnosticsLie: UUID[]
+  ): Promise<Record<UUID, Contexte>> => {
+    const diagnostics = await this.entrepots
+      .diagnostic()
+      .tousLesDiagnosticsAyantPourIdentifiant(identifiantDiagnosticsLie);
+    return diagnostics.reduce((prev, curr) => {
+      return {
+        ...prev,
+        [curr.identifiant]: ServiceDiagnostic.extraisLeContexte(curr),
+      };
+    }, {});
+  };
 
+  private static extraisLeContexte(diagnostic: Diagnostic) {
     const trouveLibelleReponseDonneeDansContexte = (
       identifiantQuestion: string
     ) => {
@@ -48,5 +61,5 @@ export class ServiceDiagnostic {
       ...(secteurActivite && { secteurActivite }),
       dateCreation: diagnostic.dateCreation,
     };
-  };
+  }
 }

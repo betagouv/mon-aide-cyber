@@ -168,11 +168,11 @@ describe('Le service de diagnostic', () => {
       const diagnostic = unDiagnosticEnGironde().construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
-      const contexte = await new ServiceDiagnostic(entrepots).contexte(
-        diagnostic.identifiant
-      );
+      const contexte = await new ServiceDiagnostic(entrepots).contextes([
+        diagnostic.identifiant,
+      ]);
 
-      expect(contexte).toStrictEqual<Contexte>({
+      expect(contexte[diagnostic.identifiant]).toStrictEqual<Contexte>({
         dateCreation,
         departement: 'Gironde',
       });
@@ -184,11 +184,14 @@ describe('Le service de diagnostic', () => {
         unDiagnosticAvecSecteurActivite(secteurActivite).construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
-      const contexte = await new ServiceDiagnostic(entrepots).contexte(
-        diagnostic.identifiant
-      );
+      const contexte = await new ServiceDiagnostic(entrepots).contextes([
+        diagnostic.identifiant,
+      ]);
 
-      expect(contexte).toStrictEqual({ dateCreation, secteurActivite });
+      expect(contexte[diagnostic.identifiant]).toStrictEqual({
+        dateCreation,
+        secteurActivite,
+      });
     });
 
     it('retourne les informations de contexte lorsque renseignées', async () => {
@@ -202,11 +205,11 @@ describe('Le service de diagnostic', () => {
       ).construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
-      const contexte = await new ServiceDiagnostic(entrepots).contexte(
-        diagnostic.identifiant
-      );
+      const contexte = await new ServiceDiagnostic(entrepots).contextes([
+        diagnostic.identifiant,
+      ]);
 
-      expect(contexte).toStrictEqual<Contexte>({
+      expect(contexte[diagnostic.identifiant]).toStrictEqual<Contexte>({
         departement,
         secteurActivite,
         dateCreation,
@@ -217,11 +220,46 @@ describe('Le service de diagnostic', () => {
       const diagnostic = unDiagnostic().construis();
       await entrepots.diagnostic().persiste(diagnostic);
 
-      const contexte = await new ServiceDiagnostic(entrepots).contexte(
-        diagnostic.identifiant
-      );
+      const contexte = await new ServiceDiagnostic(entrepots).contextes([
+        diagnostic.identifiant,
+      ]);
 
-      expect(contexte).toStrictEqual<Contexte>({ dateCreation });
+      expect(contexte[diagnostic.identifiant]).toStrictEqual<Contexte>({
+        dateCreation,
+      });
+    });
+  });
+
+  describe('Lorsque l’on veut récupérer les contextes de plusieurs diagnostics', () => {
+    it('retourne les informations du contexte pour chacun des diagnostics', async () => {
+      const dateCreation = new Date(Date.parse('2024-02-05T12:00:00+02:00'));
+      FournisseurHorlogeDeTest.initialise(dateCreation);
+      const diagnostic1 = unDiagnosticDansLeDepartementAvecSecteurActivite(
+        'Finistère',
+        'activité 1'
+      ).construis();
+      const diagnostic2 = unDiagnosticDansLeDepartementAvecSecteurActivite(
+        'Ile-et-vilaine',
+        'activité 2'
+      ).construis();
+      await entrepots.diagnostic().persiste(diagnostic1);
+      await entrepots.diagnostic().persiste(diagnostic2);
+
+      const contexte = await new ServiceDiagnostic(entrepots).contextes([
+        diagnostic1.identifiant,
+        diagnostic2.identifiant,
+      ]);
+
+      expect(contexte[diagnostic1.identifiant]).toStrictEqual<Contexte>({
+        departement: 'Finistère',
+        secteurActivite: 'activité 1',
+        dateCreation,
+      });
+      expect(contexte[diagnostic2.identifiant]).toStrictEqual<Contexte>({
+        departement: 'Ile-et-vilaine',
+        secteurActivite: 'activité 2',
+        dateCreation,
+      });
     });
   });
 });

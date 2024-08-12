@@ -52,4 +52,20 @@ describe('Entrepot Diagnostic Postgres', () => {
       await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant)
     ).toStrictEqual(diagnostic);
   });
+
+  it('Récupère les diagnostics pour les identifiants donnés', async () => {
+    const diagnostic1 = unDiagnostic().construis();
+    const diagnostic2 = unDiagnostic().construis();
+
+    await new EntrepotDiagnosticPostgres().persiste(diagnostic1);
+    await new EntrepotDiagnosticPostgres().persiste(diagnostic2);
+
+    const entrepotDiagnosticPostgresLecture =
+      await new EntrepotDiagnosticPostgres();
+    expect(
+      await entrepotDiagnosticPostgresLecture.tousLesDiagnosticsAyantPourIdentifiant(
+        [diagnostic1.identifiant, diagnostic2.identifiant]
+      )
+    ).toStrictEqual([diagnostic1, diagnostic2]);
+  });
 });

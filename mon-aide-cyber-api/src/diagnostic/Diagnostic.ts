@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto, { UUID } from 'crypto';
 import { Mesure, Question, Referentiel } from './Referentiel';
 import { Entrepot } from '../domaine/Entrepot';
 import { laValeurEstDefinie, Valeur } from './Indice';
@@ -69,7 +69,11 @@ type Diagnostic = Aggregat & {
   mesures: ReferentielDeMesures;
 };
 
-type EntrepotDiagnostic = Entrepot<Diagnostic>;
+interface EntrepotDiagnostic extends Entrepot<Diagnostic> {
+  tousLesDiagnosticsAyantPourIdentifiant(
+    identifiantDiagnosticsLie: UUID[]
+  ): Promise<Diagnostic[]>;
+}
 
 const initialiseDiagnostic = (
   r: Referentiel,

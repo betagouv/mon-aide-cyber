@@ -3,7 +3,7 @@ import {
   ServiceDiagnostic,
 } from '../../src/diagnostic/ServiceDiagnostic';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import crypto from 'crypto';
+import { UUID } from 'crypto';
 import { unContexteVide } from './ConstructeurContexte';
 
 export class ServiceDiagnosticTest extends ServiceDiagnostic {
@@ -11,10 +11,14 @@ export class ServiceDiagnosticTest extends ServiceDiagnostic {
     super(new EntrepotsMemoire());
   }
 
-  contexte = async (identifiantDiagnostic: crypto.UUID): Promise<Contexte> => {
-    return (
-      this.diagnostics.get(identifiantDiagnostic) ||
-      unContexteVide().construis()
-    );
+  contextes = async (
+    identifiantDiagnosticsLie: UUID[]
+  ): Promise<Record<UUID, Contexte>> => {
+    return identifiantDiagnosticsLie.reduce((prev, curr) => {
+      return {
+        ...prev,
+        [curr]: this.diagnostics.get(curr) || unContexteVide().construis(),
+      };
+    }, {});
   };
 }
