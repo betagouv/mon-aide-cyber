@@ -219,8 +219,11 @@ export const ComposantDemandeDevenirAidant = () => {
                           participer à une formation animée par l&apos;ANSSI
                         </li>
                         <li>
-                          prendre connaissance de la charte de l&apos;aidant,
-                          qui rappelle notamment le principe de gratuité du
+                          prendre connaissance de{' '}
+                          <a href="/charte-aidant">
+                            la charte de l&apos;aidant
+                          </a>
+                          , qui rappelle notamment le principe de gratuité du
                           dispositif, et la signer avant ou après la formation
                         </li>
                       </ul>
