@@ -158,7 +158,7 @@ export const ComposantDemandeDevenirAidant = () => {
   return (
     <>
       <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
-      <main role="main" className="demande-aide">
+      <main role="main" className="demande-devenir-aidant">
         <div className="mode-fonce">
           <div className="fr-container">
             <div className="fr-grid-row contenu">
@@ -223,6 +223,7 @@ export const ComposantDemandeDevenirAidant = () => {
                           , qui rappelle notamment le principe de gratuité du
                           dispositif, et la signer avant ou après la formation
                         </li>
+                        <br />
                       </ul>
                       <p>
                         Veuillez compléter les informations ci-dessous pour être
@@ -238,7 +239,7 @@ export const ComposantDemandeDevenirAidant = () => {
                   <form>
                     <fieldset className="fr-mb-5w">
                       <div className="fr-grid-row fr-grid-row--gutters">
-                        <div className="fr-col-12">
+                        <div className="fr-col-12 champs">
                           <div className="fr-input-group">
                             <div
                               className={`fr-input-group ${
@@ -265,7 +266,7 @@ export const ComposantDemandeDevenirAidant = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="fr-col-12">
+                        <div className="fr-col-12 champs">
                           <div className="fr-input-group">
                             <div
                               className={`fr-input-group ${
@@ -290,7 +291,7 @@ export const ComposantDemandeDevenirAidant = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="fr-col-12">
+                        <div className="fr-col-12 champs">
                           <div className="fr-input-group">
                             <div
                               className={`fr-input-group ${
@@ -315,7 +316,7 @@ export const ComposantDemandeDevenirAidant = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="fr-col-12">
+                        <div className="fr-col-12 champs">
                           <div className="fr-input-group">
                             <div
                               className={`fr-input-group ${
@@ -365,7 +366,7 @@ export const ComposantDemandeDevenirAidant = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="fr-col-12">
+                        <div className="fr-col-12 champs">
                           <div
                             className={`fr-checkbox-group mac-radio-group ${
                               etatDemande.erreurs
