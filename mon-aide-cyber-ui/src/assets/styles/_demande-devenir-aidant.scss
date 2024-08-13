@@ -1,0 +1,25 @@
+.demande-devenir-aidant {
+
+  p {
+    margin: 0;
+  }
+
+  .champs-obligatoire {
+    margin: 2rem 0;
+  }
+
+  .champs {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 2rem;
+
+    input::placeholder {
+
+      font-style: normal;
+      color: var(--couleurs-mac-violet-fonce);
+      opacity: 0.5;
+    }
+  }
+}
+
+
