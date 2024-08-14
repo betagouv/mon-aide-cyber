@@ -207,7 +207,7 @@ export const ComposantDemandeDevenirAidant = () => {
                   <div className="fr-mb-2w">
                     Demande d&apos;inscription à une formation MonAideCyber
                   </div>
-                  <div className="fr-mt-2w">
+                  <div className="fr-mt-2w introduction">
                     <div>
                       <h5>Vous souhaitez devenir Aidant MonAideCyber</h5>
                       <p>Pour devenir aidant, il est nécessaire de&nbsp;:</p>
