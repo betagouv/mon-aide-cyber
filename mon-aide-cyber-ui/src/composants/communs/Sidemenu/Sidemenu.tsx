@@ -1,17 +1,27 @@
 import { PropsWithChildren } from 'react';
 import { Link as RouterLink, To } from 'react-router-dom';
-type SideMenuProps = { sticky: boolean } & PropsWithChildren<
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
+type SideMenuProps = { sticky: boolean } & React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLElement>,
+  HTMLElement
 >;
-function Sidemenu({ children, sticky, ...proprietes }: SideMenuProps) {
+function Sidemenu({
+  children,
+  sticky,
+  ...proprietes
+}: PropsWithChildren<SideMenuProps>) {
+  const { className } = proprietes;
+
+  const classesAConcatener = [
+    className ? `${className}` : null,
+    'mac-sidemenu',
+    sticky ? 'mac-sticky' : null,
+  ];
+
+  const classNameEntier = classesAConcatener.join(' ');
+
   return (
-    <nav
-      {...proprietes}
-      className={`fr-sidemenu ${sticky ? 'fr-sidemenu--sticky' : null}`}
-    >
-      <div className="fr-sidemenu__inner">
-        <ul className="fr-sidemenu__list">{children}</ul>
-      </div>
+    <nav {...proprietes} className={classNameEntier}>
+      <ul className="">{children}</ul>
     </nav>
   );
 }
@@ -22,8 +32,8 @@ function Link({
   anchorId,
 }: PropsWithChildren<{ to: To; anchorId: string }>) {
   return (
-    <li className={`fr-sidemenu__item fr-sidemenu__item--active`}>
-      <RouterLink to={to} className={`fr-sidemenu__link ${anchorId}`}>
+    <li className={``}>
+      <RouterLink to={to} className={`${anchorId}`}>
         {children}
       </RouterLink>
     </li>
