@@ -1,0 +1,20 @@
+$points-de-rupture: (
+    xs: ( max-width: 320px ),
+    sm: ( max-width: 576px ),
+    md: ( max-width: 767px ),
+    lg: ( max-width: 992px ),
+    xl: ( max-width: 1440px )
+) !default;
+
+@mixin jusqu-a($point-de-rupture) {
+    @if map-has-key($points-de-rupture, $point-de-rupture) {
+      @media #{inspect(map-get($points-de-rupture, $point-de-rupture))} {
+        @content;
+      }
+    }
+
+    @else {
+      @warn "Un point de rupture inconnu (`#{$point-de-rupture}`) a été utilisé. "
+          + "Les points de rupture disponibles sont: #{map-keys($points-de-rupture)}.";
+    }
+  }
