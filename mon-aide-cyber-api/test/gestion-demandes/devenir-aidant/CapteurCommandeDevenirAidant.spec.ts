@@ -16,6 +16,7 @@ import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvi
 import { adaptateurCorpsMessage } from '../../../src/gestion-demandes/devenir-aidant/adaptateurCorpsMessage';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
 
 describe('Capteur de commande devenir aidant', () => {
   const annuaireCot = () => ({
@@ -108,7 +109,33 @@ describe('Capteur de commande devenir aidant', () => {
         prenom: 'prenom',
         type: 'CommandeDevenirAidant',
       })
-    ).rejects.toThrowError('Une demande pour ce compte existe déjà');
+    ).rejects.toThrowError('Une demande existe déjà');
+  });
+
+  it('Empêche la création de la demande si le mail est associé à un aidant', async () => {
+    FournisseurHorlogeDeTest.initialise(
+      new Date(Date.parse('2024-08-01T14:45:17+01:00'))
+    );
+
+    const entrepots = new EntrepotsMemoire();
+
+    const aidant = unAidant().construis();
+    await entrepots.aidants().persiste(aidant);
+
+    await expect(() =>
+      new CapteurCommandeDevenirAidant(
+        entrepots,
+        new BusEvenementDeTest(),
+        new AdaptateurEnvoiMailMemoire(),
+        annuaireCot
+      ).execute({
+        departement: departements[0],
+        mail: aidant.identifiantConnexion,
+        nom: 'nom',
+        prenom: 'prenom',
+        type: 'CommandeDevenirAidant',
+      })
+    ).rejects.toThrowError('Cette adresse électronique est déja utilisée');
   });
 
   describe('Lors de la mise en relation', () => {

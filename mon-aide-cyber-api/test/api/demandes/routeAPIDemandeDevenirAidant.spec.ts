@@ -93,7 +93,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
 
       expect(reponse.statusCode).toStrictEqual(400);
       expect(await reponse.json()).toStrictEqual({
-        message: 'Une demande pour ce compte existe déjà',
+        message: 'Une demande existe déjà',
       });
     });
 
