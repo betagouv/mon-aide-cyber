@@ -1,21 +1,11 @@
 import { Header } from './composants/Header.tsx';
 import { Footer } from './composants/Footer.tsx';
-import React, { useCallback } from 'react';
 import { LienMAC } from './composants/LienMAC.tsx';
 import FormulaireDeContact from './composants/communs/FormulaireDeContact/FormulaireDeContact.tsx';
+import TuileActionDemandeAide from './composants/communs/tuiles/TuileActionDemandeAide.tsx';
+import TuileActionDevenirAidant from './composants/communs/tuiles/TuileActionDevenirAidant.tsx';
 
 export const Accueil = () => {
-  const mailMonAideCyber = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      window.location.href = 'mailto:monaidecyber@ssi.gouv.fr';
-      e.preventDefault();
-    },
-    []
-  );
-  const demandeAide = useCallback(() => {
-    window.location.href = '/demande-aide';
-  }, []);
-
   return (
     <>
       <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
@@ -365,57 +355,10 @@ export const Accueil = () => {
                 </div>
                 <div className="fr-grid-row fr-grid-row--gutters">
                   <div className="fr-col-md-6 fr-col-sm-12">
-                    <div className="tuile tuile-grande">
-                      <div className="illustration">
-                        <img
-                          src="/images/illustration-devenir-aidant.svg"
-                          alt="Deux personnes souhaitant devenir Aidant MonAideCyber"
-                        />
-                      </div>
-                      <div className="corps">
-                        <h4>Devenir Aidant</h4>
-                        <p>
-                          Vous êtes un <b>agent du service public</b>, un{' '}
-                          <b>professionnel</b>, un <b>bénévole</b> ou un{' '}
-                          <b>passionné</b> de Cyber et vous souhaitez{' '}
-                          <b className="violet-fonce">devenir Aidant</b> ?
-                        </p>
-                        <button
-                          type="button"
-                          className="fr-btn bouton-mac bouton-mac-primaire"
-                          onClick={mailMonAideCyber}
-                        >
-                          Je veux être Aidant
-                        </button>
-                      </div>
-                    </div>
+                    <TuileActionDevenirAidant />
                   </div>
                   <div className="fr-col-md-6 fr-col-sm-12">
-                    <div className="tuile tuile-grande">
-                      <div className="illustration">
-                        <img
-                          src="/images/diagnostic/gouvernance/illustration.svg"
-                          alt="Des personnes portées par une main leur montrant le chemin."
-                        />
-                      </div>
-                      <div className="corps">
-                        <h4>Être Aidé</h4>
-                        <p>
-                          Vous êtes décideur ou employé d’une{' '}
-                          <b>collectivité territoriale</b>, d’une{' '}
-                          <b>association</b>, ou d’une <b>entreprise</b> (TPE,
-                          PME, ETI...) et vous souhaitez{' '}
-                          <b className="violet-fonce">être Aidé</b> ?
-                        </p>
-                        <button
-                          type="button"
-                          className="fr-btn bouton-mac bouton-mac-primaire"
-                          onClick={demandeAide}
-                        >
-                          Je veux être Aidé
-                        </button>
-                      </div>
-                    </div>
+                    <TuileActionDemandeAide />
                   </div>
                 </div>
               </div>
