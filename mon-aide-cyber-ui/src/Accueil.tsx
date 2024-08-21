@@ -1,45 +1,10 @@
 import { Header } from './composants/Header.tsx';
 import { Footer } from './composants/Footer.tsx';
-import React, { FormEvent, useCallback, useEffect, useReducer } from 'react';
-import {
-  emailSaisi,
-  envoiMessageInvalide,
-  messageComplete,
-  messageEnvoye,
-  messageSaisi,
-  nomSaisi,
-  reducteurEnvoiMessageContact,
-} from './reducteurs/reducteurEnvoiMessageContact.tsx';
-
-import { Message } from './domaine/contact/Message.ts';
-
-import { useMACAPI } from './fournisseurs/hooks.ts';
-
-import { constructeurParametresAPI } from './fournisseurs/api/ConstructeurParametresAPI.ts';
+import React, { useCallback } from 'react';
 import { LienMAC } from './composants/LienMAC.tsx';
+import FormulaireDeContact from './composants/communs/FormulaireDeContact/FormulaireDeContact.tsx';
 
 export const Accueil = () => {
-  // const [motDGClique, setMotDGClique] = useState<boolean>(true);
-  // const [motGeneralClique, setMotGeneralClique] = useState<boolean>(false);
-  const [etatMessage, envoie] = useReducer(reducteurEnvoiMessageContact, {
-    nom: '',
-    email: '',
-    message: '',
-    erreur: {},
-    saisieValide: () => false,
-  });
-  const erreur = etatMessage.erreur;
-  const macapi = useMACAPI();
-
-  // const surCliqueMotDG = useCallback(() => {
-  //   setMotGeneralClique(false);
-  //   setMotDGClique(true);
-  // }, []);
-  //
-  // const surCliqueMotGeneral = useCallback(() => {
-  //   setMotDGClique(false);
-  //   setMotGeneralClique(true);
-  // }, []);
   const mailMonAideCyber = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       window.location.href = 'mailto:monaidecyber@ssi.gouv.fr';
@@ -50,40 +15,7 @@ export const Accueil = () => {
   const demandeAide = useCallback(() => {
     window.location.href = '/demande-aide';
   }, []);
-  const envoieMessage = useCallback(async (e: FormEvent) => {
-    e.preventDefault();
-    envoie(messageComplete());
-  }, []);
 
-  useEffect(() => {
-    if (etatMessage.saisieValide() && !etatMessage.messageEnvoye) {
-      macapi
-        .appelle<void, Message>(
-          constructeurParametresAPI<Message>()
-            .url('/contact')
-            .methode('POST')
-            .corps({
-              nom: etatMessage.nom,
-              email: etatMessage.email,
-              message: etatMessage.message,
-            })
-            .construis(),
-          () => Promise.resolve()
-        )
-        .then(() => envoie(messageEnvoye()))
-        .catch((erreur) => envoie(envoiMessageInvalide(erreur as Error)));
-    }
-  }, [etatMessage, macapi]);
-
-  const surSaisieNom = useCallback((nom: string) => {
-    envoie(nomSaisi(nom));
-  }, []);
-  const surSaisieEmail = useCallback((email: string) => {
-    envoie(emailSaisi(email));
-  }, []);
-  const surSaisieMessage = useCallback((message: string) => {
-    envoie(messageSaisi(message));
-  }, []);
   return (
     <>
       <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
@@ -425,186 +357,70 @@ export const Accueil = () => {
               </div>
             </div>
           </div>
-          <div className="fr-container participer">
-            <div className="conteneur-participer">
-              <div className="fr-col-12">
-                <h2>Vous souhaitez participer ?</h2>
-              </div>
-              <div className="fr-grid-row fr-grid-row--gutters">
-                <div className="fr-col-md-6 fr-col-sm-12">
-                  <div className="tuile tuile-grande">
-                    <div className="illustration">
-                      <img
-                        src="/images/illustration-devenir-aidant.svg"
-                        alt="Deux personnes souhaitant devenir Aidant MonAideCyber"
-                      />
-                    </div>
-                    <div className="corps">
-                      <h4>Devenir Aidant</h4>
-                      <p>
-                        Vous êtes un <b>agent du service public</b>, un{' '}
-                        <b>professionnel</b>, un <b>bénévole</b> ou un{' '}
-                        <b>passionné</b> de Cyber et vous souhaitez{' '}
-                        <b className="violet-fonce">devenir Aidant</b> ?
-                      </p>
-                      <button
-                        type="button"
-                        className="fr-btn bouton-mac bouton-mac-primaire"
-                        onClick={mailMonAideCyber}
-                      >
-                        Je veux être Aidant
-                      </button>
-                    </div>
-                  </div>
+          <div>
+            <div className="fr-container participer">
+              <div className="conteneur-participer">
+                <div className="fr-col-12">
+                  <h2>Vous souhaitez participer ?</h2>
                 </div>
-                <div className="fr-col-md-6 fr-col-sm-12">
-                  <div className="tuile tuile-grande">
-                    <div className="illustration">
-                      <img
-                        src="/images/diagnostic/gouvernance/illustration.svg"
-                        alt="Des personnes portées par une main leur montrant le chemin."
-                      />
-                    </div>
-                    <div className="corps">
-                      <h4>Être Aidé</h4>
-                      <p>
-                        Vous êtes décideur ou employé d’une{' '}
-                        <b>collectivité territoriale</b>, d’une{' '}
-                        <b>association</b>, ou d’une <b>entreprise</b> (TPE,
-                        PME, ETI...) et vous souhaitez{' '}
-                        <b className="violet-fonce">être Aidé</b> ?
-                      </p>
-                      <button
-                        type="button"
-                        className="fr-btn bouton-mac bouton-mac-primaire"
-                        onClick={demandeAide}
-                      >
-                        Je veux être Aidé
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="mode-fonce contactez-nous">
-            <div className="fr-container">
-              <div className="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
-                <div className="fr-col-md-5 fr-col-sm-12 fr-col-offset-1--right">
-                  <h2>Contactez-nous !</h2>
-                  <p>
-                    Vous avez des <b>questions</b> sur MonAideCyber ?
-                    <br />
-                    Toute l’équipe est à votre écoute.
-                  </p>
-                </div>
-                <div className="fr-col-md-6 fr-col-sm-12">
-                  <form onSubmit={envoieMessage}>
-                    <section>
-                      <div className="fr-col-12">
-                        <fieldset>
-                          <div className="fr-grid-row fr-grid-row--gutters">
-                            <div className="fr-col-md-6 fr-col-sm-12">
-                              <div
-                                className={`fr-input-group ${
-                                  erreur ? erreur?.nom?.className : ''
-                                }`}
-                              >
-                                <label className="fr-label" htmlFor="votre-nom">
-                                  Votre Nom
-                                </label>
-                                <input
-                                  className="fr-input"
-                                  type="text"
-                                  id={'votre-nom'}
-                                  name="votre-nom"
-                                  autoComplete={'name'}
-                                  onChange={(e) => surSaisieNom(e.target.value)}
-                                  value={etatMessage.nom}
-                                />
-                                {erreur?.nom?.texteExplicatif}
-                              </div>
-                            </div>
-                            <div className="fr-col-md-6 fr-col-sm-12">
-                              <div
-                                className={`fr-input-group ${
-                                  erreur ? erreur?.email?.className : ''
-                                }`}
-                              >
-                                <label
-                                  className="fr-label"
-                                  htmlFor="votre-email"
-                                >
-                                  Votre adresse email
-                                </label>
-                                <input
-                                  className="fr-input"
-                                  type="text"
-                                  role="textbox"
-                                  id="votre-email"
-                                  name="votre-email"
-                                  autoComplete={'email'}
-                                  onChange={(e) =>
-                                    surSaisieEmail(e.target.value)
-                                  }
-                                  value={etatMessage.email}
-                                />
-                                {erreur?.email?.texteExplicatif}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="fr-mt-3w">
-                            <div
-                              className={`fr-input-group ${
-                                erreur ? erreur?.message?.className : ''
-                              }`}
-                            >
-                              <label
-                                className="fr-label"
-                                htmlFor="votre-message"
-                              >
-                                Votre message
-                              </label>
-                              <textarea
-                                className="fr-input"
-                                id="votre-message"
-                                name="votre-message"
-                                rows={4}
-                                onChange={(e) =>
-                                  surSaisieMessage(e.target.value)
-                                }
-                                value={etatMessage.message}
-                              ></textarea>
-                              {erreur?.message?.texteExplicatif}
-                            </div>
-                          </div>
-                          <div className="fr-mt-3w">
-                            <button
-                              type="submit"
-                              key="connexion-aidant"
-                              className="fr-btn bouton-mac bouton-mac-primaire-inverse"
-                            >
-                              Envoyer le message
-                            </button>
-                            {etatMessage.messageEnvoye &&
-                            !etatMessage.champsErreur ? (
-                              <p id="message-envoye" className="fr-valid-text">
-                                Message envoyé
-                              </p>
-                            ) : (
-                              <></>
-                            )}
-                          </div>
-                          <div className="fr-mt-2w">
-                            {etatMessage.champsErreur}
-                          </div>
-                        </fieldset>
+                <div className="fr-grid-row fr-grid-row--gutters">
+                  <div className="fr-col-md-6 fr-col-sm-12">
+                    <div className="tuile tuile-grande">
+                      <div className="illustration">
+                        <img
+                          src="/images/illustration-devenir-aidant.svg"
+                          alt="Deux personnes souhaitant devenir Aidant MonAideCyber"
+                        />
                       </div>
-                    </section>
-                  </form>
+                      <div className="corps">
+                        <h4>Devenir Aidant</h4>
+                        <p>
+                          Vous êtes un <b>agent du service public</b>, un{' '}
+                          <b>professionnel</b>, un <b>bénévole</b> ou un{' '}
+                          <b>passionné</b> de Cyber et vous souhaitez{' '}
+                          <b className="violet-fonce">devenir Aidant</b> ?
+                        </p>
+                        <button
+                          type="button"
+                          className="fr-btn bouton-mac bouton-mac-primaire"
+                          onClick={mailMonAideCyber}
+                        >
+                          Je veux être Aidant
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="fr-col-md-6 fr-col-sm-12">
+                    <div className="tuile tuile-grande">
+                      <div className="illustration">
+                        <img
+                          src="/images/diagnostic/gouvernance/illustration.svg"
+                          alt="Des personnes portées par une main leur montrant le chemin."
+                        />
+                      </div>
+                      <div className="corps">
+                        <h4>Être Aidé</h4>
+                        <p>
+                          Vous êtes décideur ou employé d’une{' '}
+                          <b>collectivité territoriale</b>, d’une{' '}
+                          <b>association</b>, ou d’une <b>entreprise</b> (TPE,
+                          PME, ETI...) et vous souhaitez{' '}
+                          <b className="violet-fonce">être Aidé</b> ?
+                        </p>
+                        <button
+                          type="button"
+                          className="fr-btn bouton-mac bouton-mac-primaire"
+                          onClick={demandeAide}
+                        >
+                          Je veux être Aidé
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+            <FormulaireDeContact />
           </div>
         </div>
       </main>

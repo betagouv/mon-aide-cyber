@@ -7,6 +7,7 @@ import Sidemenu from '../communs/Sidemenu/Sidemenu.tsx';
 import Cadre from './Cadre.tsx';
 import { Footer } from '../Footer.tsx';
 import IconeInformation from '../communs/IconeInformation.tsx';
+import FormulaireDeContact from '../communs/FormulaireDeContact/FormulaireDeContact.tsx';
 
 export type AncreHtml = {
   id: ANCRES_POSSIBLES;
@@ -339,8 +340,59 @@ function KitDeCommunication() {
           </div>
         </div>
       </article>
+      <ActionsPiedDePage />
+      <FormulaireDeContact />
       <Footer />
     </>
+  );
+}
+
+export function ActionsPiedDePage({ children }: PropsWithChildren) {
+  return (
+    <section className="fond-clair-mac  participer">
+      <div className="fr-container conteneur-participer">
+        <div className="fr-col-12">
+          <h2>Vous souhaitez participer ?</h2>
+        </div>
+        <div className="fr-grid-row fr-grid-row--gutters">
+          <div className="fr-col-12 fr-col-md-6">
+            <TuileActionDevenirAidant />
+          </div>
+          <div className="fr-col-12 fr-col-md-6">
+            <TuileActionDevenirAidant />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function TuileActionDevenirAidant() {
+  return (
+    <div className="tuile tuile-grande">
+      <div className="illustration">
+        <img
+          src="/images/illustration-devenir-aidant.svg"
+          alt="Deux personnes souhaitant devenir Aidant MonAideCyber"
+        />
+      </div>
+      <div className="corps">
+        <h4>Devenir Aidant</h4>
+        <p>
+          Vous êtes un <b>agent du service public</b>, un <b>professionnel</b>,
+          un <b>bénévole</b> ou un <b>passionné</b> de Cyber et vous souhaitez{' '}
+          <b className="violet-fonce">devenir Aidant</b> ?
+        </p>
+        <a href="mailto:monaidecyber@ssi.gouv.fr">
+          <button
+            type="button"
+            className="fr-btn bouton-mac bouton-mac-primaire"
+          >
+            Je veux être Aidant
+          </button>
+        </a>
+      </div>
+    </div>
   );
 }
 

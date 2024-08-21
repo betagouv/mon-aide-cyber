@@ -282,7 +282,7 @@ $taille-padding-dsfr-7v: 3.5rem;
 
 .contactez-nous {
   z-index: 0;
-  margin-top: -14.5rem;
+  margin-top: -7.5rem;
   padding-bottom: 5rem;
 
   fieldset {
@@ -307,8 +307,11 @@ $taille-padding-dsfr-7v: 3.5rem;
     color: var(--couleurs-mac-blanc);
   }
 
+  > .fr-container {
+    padding-top: 11rem;
+  }
   > div {
-    margin-top: 11rem;
+    // margin-top: 11rem;
     z-index: 1;
   }
 }
