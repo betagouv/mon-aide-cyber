@@ -10,6 +10,7 @@ import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironneme
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import crypto from 'crypto';
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
+import { ServiceChercheAidant } from '../../authentification/ServiceChercheAidant';
 
 export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   type: 'CommandeDevenirAidant';
@@ -40,16 +41,23 @@ export class CapteurCommandeDevenirAidant
   async execute(
     commande: CommandeDevenirAidant
   ): Promise<DemandeDevenirAidant> {
-    const demandeExiste = await this.entrepots
-      .demandesDevenirAidant()
-      .demandeExiste(commande.mail);
+    const mailDemandeur = commande.mail;
 
-    if (demandeExiste) {
+    if (await this.demandeExiste(mailDemandeur)) {
+      return Promise.reject(
+        ErreurMAC.cree(
+          'Demande devenir Aidant',
+          new ErreurDemandeDevenirAidant('Une demande existe déjà')
+        )
+      );
+    }
+
+    if (await this.aidantExiste(mailDemandeur)) {
       return Promise.reject(
         ErreurMAC.cree(
           'Demande devenir Aidant',
           new ErreurDemandeDevenirAidant(
-            'Une demande pour ce compte existe déjà'
+            'Cette adresse électronique est déja utilisée'
           )
         )
       );
@@ -59,7 +67,7 @@ export class CapteurCommandeDevenirAidant
       date: FournisseurHorloge.maintenant(),
       departement: commande.departement,
       identifiant: crypto.randomUUID(),
-      mail: commande.mail,
+      mail: mailDemandeur,
       nom: commande.nom,
       prenom: commande.prenom,
     };
@@ -82,6 +90,16 @@ export class CapteurCommandeDevenirAidant
             )
           );
       });
+  }
+
+  private async demandeExiste(mail: string): Promise<boolean> {
+    return await this.entrepots.demandesDevenirAidant().demandeExiste(mail);
+  }
+
+  private async aidantExiste(mailDemandeur: string) {
+    return !!(await new ServiceChercheAidant(
+      this.entrepots.aidants()
+    ).chercheParMail(mailDemandeur));
   }
 
   private async envoieLeMailDeMiseEnRelation(
