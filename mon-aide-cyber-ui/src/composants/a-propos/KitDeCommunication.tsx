@@ -81,7 +81,10 @@ function observeLeDefilement() {
           `nav ul li a.${entry.target.id}`
         );
 
-        if (!lienDeSection) return;
+        if (!lienDeSection) {
+          return;
+        }
+
         if (entry.isIntersecting) {
           lienDeSection.setAttribute('aria-current', 'page');
         } else {
@@ -94,7 +97,9 @@ function observeLeDefilement() {
     }
   );
 
-  const titresRubriques = document.querySelectorAll('section');
+  const titresRubriques = document.querySelectorAll(
+    '.kit-de-communication section'
+  );
   titresRubriques.forEach((titreRubrique) =>
     observateurDIntersection.observe(titreRubrique)
   );
