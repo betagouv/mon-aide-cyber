@@ -122,6 +122,14 @@ $border-radius: 0.5rem;
     var(--couleurs-mac-violet-fonce),
     var(--couleurs-mac-violet-moyen)
   );
+
+  &.dark {
+      @include primaire(
+        var(--couleurs-mac-violet-fonce),
+        var(--couleurs-mac-blanc),
+        var(--couleurs-mac-violet-leger)
+      );
+  }
 }
 
 .bouton-mac-primaire-inverse {
@@ -154,6 +162,23 @@ $border-radius: 0.5rem;
   );
   @include box-shadow(transparent, transparent);
 }
+
+.bouton-mac-lien {
+    color: var(--couleurs-mac-violet-fonce);
+    transition: background-size 0s;
+
+    &:not(:disabled):hover {
+      background: none;
+      text-decoration: underline;
+  }
+}
+.bouton-mac-texte {
+  color: var(--couleurs-mac-violet-fonce);
+  background-repeat: no-repeat,no-repeat;
+  background-size: var(--underline-hover-width) calc(var(--underline-thickness)*2),var(--underline-idle-width) var(--underline-thickness);
+  transition: background-size 0s
+}
+
 
 .mac-radio-group input[type='radio'] + label {
   background-image: radial-gradient(
