@@ -1,13 +1,7 @@
 .kit-de-communication {
   @include jusqu-a(lg) {
     padding: 0;
-  }
 
-  nav {
-    margin: 5.5rem 0;
-  }
-
-  @include jusqu-a(lg) {
     .section {
       margin: 0;
     }
@@ -24,6 +18,10 @@
       flex-direction: row;
       overflow-x: scroll;
     }
+  }
+
+  nav {
+    margin: 5.5rem 0;
   }
 
   .fr-grid-row.gap-2 {
@@ -43,6 +41,7 @@
     .grille-logos-2 {
       padding: 1.5rem;
       grid-column: 1;
+      background-color: var(--couleurs-mac-noir),
     }
     .grille-logos-3 {
       padding: 2rem 1.5rem;
@@ -82,6 +81,7 @@
       margin: 0;
       line-break: anywhere;
     }
+
   }
 
   .grille-illustrations {
@@ -95,12 +95,29 @@
     }
   }
 
-  .grille-typos {
+  .grille-couleurs {
     display: grid;
     grid-template-columns: repeat(auto-fill, 181px);
     grid-template-rows: 1fr 1fr;
     column-gap: 1.5rem;
     row-gap: 1rem;
+
+    .cadre-petite-bordure {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .palette-couleur {
+      width: 100%;
+      height: 81px;
+    }
+
+    .palette-nom {
+      width: 100%;
+      padding: 0.5rem 0 0.5rem 0;
+
+    }
   }
 }
 
@@ -229,4 +246,8 @@
       white-space: normal;
     }
   }
+}
+
+#affichage-typo {
+  padding: 2rem .5rem;
 }
