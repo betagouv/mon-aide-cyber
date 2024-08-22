@@ -44,37 +44,63 @@ const liensNavigation: AncreHtml[] = [
 
 type Couleur = {
   nom: string;
-  codehexadecimal: string;
+  codeHexadecimal: string;
 };
 
 const couleursMAC: Couleur[] = [
   {
     nom: 'Purple Dark',
-    codehexadecimal: '#5D2A9D',
+    codeHexadecimal: '#5D2A9D',
   },
   {
     nom: 'Purple Light',
-    codehexadecimal: '#E1CBF1',
+    codeHexadecimal: '#E1CBF1',
   },
   {
     nom: 'Purple Extra Light',
-    codehexadecimal: '#F5F1F9',
+    codeHexadecimal: '#F5F1F9',
   },
   {
     nom: 'Yellow',
-    codehexadecimal: '#FDC82E',
+    codeHexadecimal: '#FDC82E',
   },
   {
     nom: 'Yellow Light',
-    codehexadecimal: '#FFE7A0',
+    codeHexadecimal: '#FFE7A0',
   },
   {
     nom: 'Grey Dark',
-    codehexadecimal: '#282828',
+    codeHexadecimal: '#282828',
   },
 ];
 
-function observeLeDefilement() {
+const TuileIllustration = ({
+  ...restProps
+}: React.ImgHTMLAttributes<HTMLImageElement>) => (
+  <Cadre className="centree" style={{ padding: '0.5rem' }}>
+    <img alt={restProps.alt} {...restProps} />
+  </Cadre>
+);
+
+const ActionsPiedDePage = () => (
+  <section className="fond-clair-mac participer">
+    <div className="fr-container conteneur-participer">
+      <div className="fr-col-12">
+        <h2>Vous souhaitez participer ?</h2>
+      </div>
+      <div className="fr-grid-row fr-grid-row--gutters">
+        <div className="fr-col-12 fr-col-md-6">
+          <TuileActionDemandeAide />
+        </div>
+        <div className="fr-col-12 fr-col-md-6">
+          <TuileActionDevenirAidant />
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const activeSectionsObservesDansMenu = () => {
   const observateurDIntersection = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -101,17 +127,20 @@ function observeLeDefilement() {
   const titresRubriques = document.querySelectorAll(
     '.kit-de-communication section'
   );
+
   titresRubriques.forEach((titreRubrique) =>
     observateurDIntersection.observe(titreRubrique)
   );
-}
 
-function KitDeCommunication() {
+  return () =>
+    titresRubriques.forEach((titreRubrique) =>
+      observateurDIntersection.unobserve(titreRubrique)
+    );
+};
+
+export const KitDeCommunication = () => {
   useDefilementFluide();
-
-  useEffect(() => {
-    observeLeDefilement();
-  }, []);
+  useEffect(() => activeSectionsObservesDansMenu(), []);
 
   return (
     <>
@@ -136,7 +165,7 @@ function KitDeCommunication() {
             >
               <img
                 src="/images/illustration-tornade.svg"
-                style={{ width: '100%' }}
+                className="w-100"
                 alt="scène d'un aidant et d'un aidé faisant un diagnostic"
               />
             </div>
@@ -168,10 +197,7 @@ function KitDeCommunication() {
                     imprimer. Elle détaille de façon synthétique le rôle, le
                     fonctionnement et l&apos;impact de MonAideCyber.
                   </p>
-                  <img
-                    style={{ width: '100%' }}
-                    src="/images/illustration-tuto.svg"
-                  />{' '}
+                  <img className="w-100" src="/images/illustration-tuto.svg" />{' '}
                   <br />
                   <a
                     href="/fichiers/Plaquette_MonAideCyber.pdf"
@@ -193,18 +219,22 @@ function KitDeCommunication() {
                   <br />
                   <div className="grille-logos">
                     <Cadre className="grille-logos-1 centree">
-                      <img src="/images/logo_mac.svg" />
+                      <img
+                        src="/images/logo_mac.svg"
+                        alt="logo de MonAideCyber"
+                      />
                     </Cadre>
-                    <Cadre
-                      className="grille-logos-2 centree"
-                      style={{
-                        backgroundColor: '#282828',
-                      }}
-                    >
-                      <img src="/images/MonAideCyber_Logo_Long.svg" />
+                    <Cadre className="grille-logos-2 centree">
+                      <img
+                        src="/images/MonAideCyber_Logo_Long.svg"
+                        alt="logo long de MonAideCyber"
+                      />
                     </Cadre>
                     <Cadre className="grille-logos-3 centree">
-                      <img src="/images/MonAideCyber_Logo_Haut.svg" />
+                      <img
+                        src="/images/MonAideCyber_Logo_Haut.svg"
+                        alt="logo vertical de MonAideCyber"
+                      />
                     </Cadre>
                   </div>
                   <br />
@@ -222,12 +252,7 @@ function KitDeCommunication() {
                     </u>
                     .
                   </p>
-                  <Cadre
-                    style={{
-                      padding: '2rem .5rem',
-                    }}
-                    className="centree"
-                  >
+                  <Cadre id="affichage-typo" className="centree">
                     <h4>
                       ABCDEFGHIJKLMNOPQRSTUVWXYZ
                       <br />
@@ -253,32 +278,18 @@ function KitDeCommunication() {
                     Vous pouvez utiliser les codes hexadécimaux qui sont
                     indiqués.
                   </p>
-                  <div className="grille-typos">
+                  <div className="grille-couleurs">
                     {couleursMAC.map((couleurMac) => (
-                      <Cadre
-                        key={couleurMac.nom}
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                        }}
-                      >
+                      <Cadre key={couleurMac.nom}>
                         <div
+                          className="palette-couleur"
                           style={{
-                            width: '100%',
-                            height: '81px',
-                            backgroundColor: couleurMac.codehexadecimal,
+                            backgroundColor: couleurMac.codeHexadecimal,
                           }}
                         ></div>
-                        <div
-                          className="flex flex-column items-center"
-                          style={{
-                            width: '100%',
-                            padding: '0.5rem 0 0.5rem 0',
-                          }}
-                        >
+                        <div className="flex flex-column items-center palette-nom">
                           <span>{couleurMac.nom}</span>
-                          <b>{couleurMac.codehexadecimal}</b>
+                          <b>{couleurMac.codeHexadecimal}</b>
                         </div>
                       </Cadre>
                     ))}
@@ -294,10 +305,22 @@ function KitDeCommunication() {
                     communication.
                   </p>
                   <div className="grille-illustrations">
-                    <TuileIllustration src="/images/illustration-dialogue-mac.svg" />
-                    <TuileIllustration src="/images/illustration-avancer-ensemble.svg" />
-                    <TuileIllustration src="/images/illustration-marelle.svg" />
-                    <TuileIllustration src="/images/illustration-deux-personnes.svg" />
+                    <TuileIllustration
+                      src="/images/illustration-dialogue-mac.svg"
+                      alt="illustration de deux personnes dialoguant"
+                    />
+                    <TuileIllustration
+                      src="/images/illustration-avancer-ensemble.svg"
+                      alt="illustration de trois personnes grimpant sur le dos d'une main pointant vers le haut"
+                    />
+                    <TuileIllustration
+                      src="/images/illustration-marelle.svg"
+                      alt="illustration d'une personne jouant à la marelle"
+                    />
+                    <TuileIllustration
+                      src="/images/illustration-deux-personnes.svg"
+                      alt="illustration de deux personnes de face bras croisés et souriants"
+                    />
                   </div>
                   <br />
                   <a href="/fichiers/MAC_4_illustrations.zip">
@@ -353,36 +376,4 @@ function KitDeCommunication() {
       <Footer />
     </>
   );
-}
-
-export function ActionsPiedDePage() {
-  return (
-    <section className="fond-clair-mac participer">
-      <div className="fr-container conteneur-participer">
-        <div className="fr-col-12">
-          <h2>Vous souhaitez participer ?</h2>
-        </div>
-        <div className="fr-grid-row fr-grid-row--gutters">
-          <div className="fr-col-12 fr-col-md-6">
-            <TuileActionDemandeAide />
-          </div>
-          <div className="fr-col-12 fr-col-md-6">
-            <TuileActionDevenirAidant />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function TuileIllustration({
-  texteByPass,
-  ...restProps
-}: { texteByPass?: string } & React.ImgHTMLAttributes<HTMLImageElement>) {
-  return (
-    <Cadre className="centree" style={{ padding: '0.5rem' }}>
-      {texteByPass ? texteByPass : <img {...restProps} />}
-    </Cadre>
-  );
-}
-export default KitDeCommunication;
+};
