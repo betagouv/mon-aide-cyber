@@ -73,6 +73,7 @@ const couleursMAC: Couleur[] = [
     codehexadecimal: '#282828',
   },
 ];
+
 function observeLeDefilement() {
   const observateurDIntersection = new IntersectionObserver(
     (entries) => {
