@@ -354,7 +354,7 @@ function KitDeCommunication() {
   );
 }
 
-export function ActionsPiedDePage({ children }: PropsWithChildren) {
+export function ActionsPiedDePage() {
   return (
     <section className="fond-clair-mac participer">
       <div className="fr-container conteneur-participer">
