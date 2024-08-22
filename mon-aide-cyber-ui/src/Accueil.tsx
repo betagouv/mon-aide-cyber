@@ -2,8 +2,7 @@ import { Header } from './composants/Header.tsx';
 import { Footer } from './composants/Footer.tsx';
 import { LienMAC } from './composants/LienMAC.tsx';
 import FormulaireDeContact from './composants/communs/FormulaireDeContact/FormulaireDeContact.tsx';
-import TuileActionDemandeAide from './composants/communs/tuiles/TuileActionDemandeAide.tsx';
-import TuileActionDevenirAidant from './composants/communs/tuiles/TuileActionDevenirAidant.tsx';
+import { ActionsPiedDePage } from './composants/communs/ActionsPiedDePage.tsx';
 
 export const Accueil = () => {
   return (
@@ -348,21 +347,7 @@ export const Accueil = () => {
             </div>
           </div>
           <div>
-            <div className="fr-container participer">
-              <div className="conteneur-participer">
-                <div className="fr-col-12">
-                  <h2>Vous souhaitez participer ?</h2>
-                </div>
-                <div className="fr-grid-row fr-grid-row--gutters">
-                  <div className="fr-col-md-6 fr-col-sm-12">
-                    <TuileActionDevenirAidant />
-                  </div>
-                  <div className="fr-col-md-6 fr-col-sm-12">
-                    <TuileActionDemandeAide />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ActionsPiedDePage />
             <FormulaireDeContact />
           </div>
         </div>

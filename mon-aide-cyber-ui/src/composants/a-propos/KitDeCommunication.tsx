@@ -8,8 +8,7 @@ import Cadre from './Cadre.tsx';
 import { Footer } from '../Footer.tsx';
 import IconeInformation from '../communs/IconeInformation.tsx';
 import FormulaireDeContact from '../communs/FormulaireDeContact/FormulaireDeContact.tsx';
-import TuileActionDevenirAidant from '../communs/tuiles/TuileActionDevenirAidant.tsx';
-import TuileActionDemandeAide from '../communs/tuiles/TuileActionDemandeAide.tsx';
+import { ActionsPiedDePage } from '../communs/ActionsPiedDePage.tsx';
 
 export type AncreHtml = {
   id: ANCRES_POSSIBLES;
@@ -80,24 +79,6 @@ const TuileIllustration = ({
   <Cadre className="centree" style={{ padding: '0.5rem' }}>
     <img alt={restProps.alt} {...restProps} />
   </Cadre>
-);
-
-const ActionsPiedDePage = () => (
-  <section className="fond-clair-mac participer">
-    <div className="fr-container conteneur-participer">
-      <div className="fr-col-12">
-        <h2>Vous souhaitez participer ?</h2>
-      </div>
-      <div className="fr-grid-row fr-grid-row--gutters">
-        <div className="fr-col-12 fr-col-md-6">
-          <TuileActionDemandeAide />
-        </div>
-        <div className="fr-col-12 fr-col-md-6">
-          <TuileActionDevenirAidant />
-        </div>
-      </div>
-    </div>
-  </section>
 );
 
 const activeSectionsObservesDansMenu = () => {
@@ -371,7 +352,7 @@ export const KitDeCommunication = () => {
           </div>
         </div>
       </article>
-      <ActionsPiedDePage />
+      <ActionsPiedDePage className="fond-clair-mac" />
       <FormulaireDeContact />
       <Footer />
     </>
