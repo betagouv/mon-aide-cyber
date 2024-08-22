@@ -119,7 +119,7 @@
   height: 100%;
 
   background-color: var(--couleurs-mac-violet-tres-clair);
-  
+
   ul {
     list-style-type: none;
     display: flex;
@@ -190,23 +190,11 @@
   }
 }
 
-.mac-sticky {
-  position: sticky;
-  top: 0;
-}
-
-.test-sticky {
-  position: sticky;
-  background-color: green;
-  top: 0;
-}
-
-
 .information-message {
   display: flex;
   gap: .5rem;
   padding: 1rem;
-  
+
   background-color: var(--couleurs-mac-violet-tres-clair);
   border-radius: .5rem;
   line-height: 28px;
