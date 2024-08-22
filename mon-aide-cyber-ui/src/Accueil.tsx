@@ -1,7 +1,7 @@
 import { Header } from './composants/Header.tsx';
 import { Footer } from './composants/Footer.tsx';
 import { LienMAC } from './composants/LienMAC.tsx';
-import FormulaireDeContact from './composants/communs/FormulaireDeContact/FormulaireDeContact.tsx';
+import { FormulaireDeContact } from './composants/communs/FormulaireDeContact/FormulaireDeContact.tsx';
 import { ActionsPiedDePage } from './composants/communs/ActionsPiedDePage.tsx';
 
 export const Accueil = () => {
