@@ -12,7 +12,7 @@ import { useMACAPI } from '../../../fournisseurs/hooks';
 import { Message } from '../../../domaine/contact/Message';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
 
-function FormulaireDeContact() {
+export const FormulaireDeContact = () => {
   const [etatMessage, envoie] = useReducer(reducteurEnvoiMessageContact, {
     nom: '',
     email: '',
@@ -167,6 +167,4 @@ function FormulaireDeContact() {
       </div>
     </section>
   );
-}
-
-export default FormulaireDeContact;
+};

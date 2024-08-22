@@ -7,7 +7,7 @@ import Sidemenu from '../communs/Sidemenu/Sidemenu.tsx';
 import Cadre from './Cadre.tsx';
 import { Footer } from '../Footer.tsx';
 import IconeInformation from '../communs/IconeInformation.tsx';
-import FormulaireDeContact from '../communs/FormulaireDeContact/FormulaireDeContact.tsx';
+import { FormulaireDeContact } from '../communs/FormulaireDeContact/FormulaireDeContact.tsx';
 import { ActionsPiedDePage } from '../communs/ActionsPiedDePage.tsx';
 
 export type AncreHtml = {
