@@ -24,7 +24,7 @@
   }
 
   .tuile-grande {
-    @include tuile(31.4rem);
+    @include tuile(100%);
     padding: 2.5rem 3.5rem;
     gap: 1.5rem;
 

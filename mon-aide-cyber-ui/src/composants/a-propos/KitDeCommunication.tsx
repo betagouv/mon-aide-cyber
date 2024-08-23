@@ -33,7 +33,7 @@ const liensNavigation: AncreHtml[] = [
   },
   {
     id: ANCRES_POSSIBLES.ILLUSTRATIONS,
-    libelle: 'Illlustrations',
+    libelle: 'Illustrations',
   },
   {
     id: ANCRES_POSSIBLES.BONNES_PRATIQUES,
@@ -228,9 +228,13 @@ export const KitDeCommunication = () => {
                   <p>
                     MonAideCyber utilise la typographie Marianne, qui est
                     l&apos;une{' '}
-                    <u>
+                    <a
+                      href="https://www.systeme-de-design.gouv.fr/fondamentaux/typographie"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       des typographies officielles de la charte de l&apos;État
-                    </u>
+                    </a>
                     .
                   </p>
                   <Cadre id="affichage-typo" className="centree">
@@ -249,7 +253,7 @@ export const KitDeCommunication = () => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Aller sur le site de téléchargement (site officiel) (pdf)
+                    Aller sur le site de téléchargement (site officiel)
                   </a>
                   <br />
                   <br />
@@ -352,7 +356,7 @@ export const KitDeCommunication = () => {
           </div>
         </div>
       </article>
-      <ActionsPiedDePage className="fond-clair-mac" />
+      <ActionsPiedDePage className="fond-clair-mac fr-pt-4w" />
       <FormulaireDeContact />
       <Footer />
     </>
