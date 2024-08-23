@@ -229,6 +229,7 @@ export const KitDeCommunication = () => {
                     MonAideCyber utilise la typographie Marianne, qui est
                     l&apos;une{' '}
                     <a
+                      className="noir"
                       href="https://www.systeme-de-design.gouv.fr/fondamentaux/typographie"
                       target="_blank"
                       rel="noreferrer"
