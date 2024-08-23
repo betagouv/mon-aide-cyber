@@ -1,4 +1,9 @@
 .kit-de-communication {
+
+  a.noir {
+    color: var(--couleurs-mac-noir)
+  }
+
   @include jusqu-a(lg) {
     padding: 0;
 
