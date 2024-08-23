@@ -22,6 +22,10 @@
 
   nav {
     margin: 5.5rem 0;
+
+    @include jusqu-a(md) {
+      margin: 0;
+    }
   }
 
   .fr-grid-row.gap-2 {
