@@ -106,6 +106,13 @@ function useComposantRestitution(idDiagnostic: UUID) {
               envoie(restitutionChargee(restitution));
             })
             .catch((erreur) => showBoundary(erreur));
+        },
+        () => {
+          console.error(`Pas accès au diagnostic ${idDiagnostic}`);
+          showBoundary({
+            titre: 'Un problème est survenu',
+            message: `Vous n'avez pas accès au diagnostic ${idDiagnostic}`,
+          });
         }
       );
     }
