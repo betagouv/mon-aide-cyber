@@ -11,7 +11,7 @@ import { RequiertAuthentification } from './fournisseurs/RequiertAuthentificatio
 import { FournisseurAuthentification } from './fournisseurs/ContexteAuthentification.tsx';
 import { PortailModale } from './composants/modale/PortailModale.tsx';
 import { CharteAidant } from './vues/CharteAidant.tsx';
-import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution.tsx';
+import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { ComposantCGU } from './vues/ComposantCGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
 import { FournisseurMacAPI } from './fournisseurs/api/ContexteMacAPI.tsx';
