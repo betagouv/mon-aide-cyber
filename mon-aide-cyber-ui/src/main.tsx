@@ -45,7 +45,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                       element={<ComposantDemandeAide />}
                     />
                     <Route
-                      path="kit-de-communication"
+                      path="/a-propos/kit-de-communication"
                       element={<KitDeCommunication />}
                     />
                     <Route
