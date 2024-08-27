@@ -1,4 +1,5 @@
 @import 'icones';
+@import 'points-de-rupture';
 
 @media screen and (max-width: 768px) {
   .section {
@@ -89,6 +90,10 @@ a {
 
 h1 {
   @include mac-h1;
+  @include jusqu-a(md) {
+    font-size: 2.5rem;
+    line-height: 2.5rem;
+  }
 }
 
 h2 {

@@ -12,7 +12,9 @@ function HeroBloc({ children, ...proprietes }: HeroBlocProprietes) {
 
   return (
     <div className={classNameEntier}>
-      <div className="fr-container">{children}</div>
+      <div id="presentation" className="fr-container">
+        {children}
+      </div>
     </div>
   );
 }
