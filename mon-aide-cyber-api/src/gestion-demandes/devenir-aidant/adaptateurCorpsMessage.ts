@@ -17,7 +17,7 @@ export const genereCorpsMessage = (
     '\n' +
     '<b>Comment bien préparer ma formation Aidant ?</b>\n' +
     '\n' +
-    `\t - En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/kit-de-communication">la plaquette informative</a>\n` +
+    `\t - En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/a-propos/kit-de-communication">la plaquette informative</a>\n` +
     `\t - Consulter <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">la charte Aidant</a> qui rappelle le principe de gratuité du dispositif à signer avant, pendant ou après la formation\n` +
     '\t - Noter qu’aucun autre pré-requis n’est demandé pour participer à cette formation\n' +
     '\n' +
