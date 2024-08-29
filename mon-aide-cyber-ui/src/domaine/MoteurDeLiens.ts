@@ -40,19 +40,16 @@ export class MoteurDeLiens {
     enSucces?: (lien: Lien) => void,
     enErreur?: () => void
   ) {
-    if (enErreur && (!this.liens || Object.entries(this.liens).length === 0)) {
-      return;
-    }
     const lien = Object.entries(this.liens)
       .filter(([action]) => action === lienATrouver)
       .map(([, lien]) => lien)[0];
 
     if (lien && enSucces) {
       enSucces(lien);
-      return;
-    } else if (enErreur) {
-      enErreur();
-      return;
+    } else {
+      if (enErreur) {
+        enErreur();
+      }
     }
   }
 
