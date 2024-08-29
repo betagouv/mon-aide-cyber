@@ -130,12 +130,7 @@ export const FournisseurAuthentification = ({
           envoie(utilisateurNonAuthentifie());
         });
     }
-  }, [
-    navigationMAC,
-    etatUtilisateurAuthentifie.enAttenteDeChargement,
-    macapi,
-    appelleUtilisateur,
-  ]);
+  }, [navigationMAC, etatUtilisateurAuthentifie.enAttenteDeChargement, macapi]);
 
   const value: ContexteAuthentificationType = {
     authentifie,
