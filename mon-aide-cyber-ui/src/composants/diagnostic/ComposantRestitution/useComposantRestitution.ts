@@ -1,25 +1,18 @@
-import { useErrorBoundary } from 'react-error-boundary';
-import { Lien, ReponseHATEOAS } from '../../../domaine/Lien';
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { Lien } from '../../../domaine/Lien';
+import { useCallback, useEffect, useState } from 'react';
 import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens';
 import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks';
-import {
-  reducteurRestitution,
-  restitutionChargee,
-  rubriqueConsultee,
-} from '../../../domaine/diagnostic/reducteurRestitution';
-import { ReponseTableauDeBord } from '../../espace-aidant/tableau-de-bord/TableauDeBord';
+import { rubriqueConsultee } from '../../../domaine/diagnostic/reducteurRestitution';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
-import { Restitution } from '../../../domaine/diagnostic/Restitution';
 import { UUID } from '../../../types/Types';
+import useRecupereLaRestitution from './useRecupereLaRestitution';
 
 function useComposantRestitution(idDiagnostic: UUID) {
-  const { showBoundary } = useErrorBoundary();
   const navigationMAC = useNavigationMAC();
   const macapi = useMACAPI();
 
-  const [etatRestitution, envoie] = useReducer(reducteurRestitution, {});
-  const [estTableauDeBordCharge, setEstTableauDeBordCharge] = useState(false);
+  const { etatRestitution, envoie } = useRecupereLaRestitution(idDiagnostic);
+
   const [boutonDesactive, setBoutonDesactive] = useState<boolean>(false);
 
   useEffect(() => {
@@ -52,79 +45,7 @@ function useComposantRestitution(idDiagnostic: UUID) {
         );
       };
     }
-  }, [etatRestitution.restitution]);
-
-  useEffect(() => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'afficher-tableau-de-bord',
-      (lien: Lien) => {
-        if (estTableauDeBordCharge) {
-          return;
-        }
-
-        macapi
-          .appelle<ReponseTableauDeBord>(
-            constructeurParametresAPI()
-              .url(lien.url)
-              .methode(lien.methode!)
-              .construis(),
-            (reponse) => reponse
-          )
-          .then((tableauDeBord) => {
-            navigationMAC.ajouteEtat(tableauDeBord.liens);
-            setEstTableauDeBordCharge(true);
-          })
-          .catch((erreur: ReponseHATEOAS) => {
-            console.log(erreur);
-          });
-      }
-    );
-  }, [
-    estTableauDeBordCharge,
-    etatRestitution.restitution,
-    macapi,
-    navigationMAC,
-  ]);
-
-  useEffect(() => {
-    if (estTableauDeBordCharge && !etatRestitution.restitution) {
-      new MoteurDeLiens(navigationMAC.etat).trouve(
-        `afficher-diagnostic-${idDiagnostic}`,
-        (lien: Lien) => {
-          macapi
-            .appelle<Restitution>(
-              constructeurParametresAPI()
-                .url(lien.url)
-                .methode(lien.methode!)
-                .construis(),
-              async (json) => Promise.resolve((await json) as Restitution)
-            )
-            .then((restitution) => {
-              navigationMAC.setEtat(
-                new MoteurDeLiens(restitution.liens).extrais()
-              );
-              envoie(restitutionChargee(restitution));
-            })
-            .catch((erreur) => showBoundary(erreur));
-        },
-        () => {
-          console.error(`Pas accès au diagnostic ${idDiagnostic}`);
-          showBoundary({
-            titre: 'Un problème est survenu',
-            message: `Vous n'avez pas accès au diagnostic ${idDiagnostic}`,
-          });
-        }
-      );
-    }
-  }, [
-    navigationMAC,
-    envoie,
-    etatRestitution,
-    idDiagnostic,
-    macapi,
-    showBoundary,
-    estTableauDeBordCharge,
-  ]);
+  }, [etatRestitution.restitution, envoie]);
 
   useEffect(() => {
     window.addEventListener('beforeprint', () => {
