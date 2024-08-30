@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest';
-import { appelleAPI } from '../../../src/fournisseurs/api/appelleAPI.ts';
+import { execute } from '../../../src/fournisseurs/api/macAPI.ts';
 
 type Headers = {
   Accept: string;
@@ -50,9 +50,9 @@ class ConstructeurDeReponse {
 describe('Appelle API', () => {
   describe('pour des requêtes GET', () => {
     it("les headers sont positionnés par défaut à 'application/json'", async () => {
-      const reponse = await appelleAPI<InformationsEnvoyees>(
+      const reponse = await execute<InformationsEnvoyees>(
         { url: 'url', methode: 'GET' },
-        (input, init) => {
+        (input: any, init: RequestInit | undefined) => {
           const infos: InformationsEnvoyees = {
             url: input as RequestInfo as string,
             methode: init!.method!,
@@ -62,7 +62,7 @@ describe('Appelle API', () => {
             new ConstructeurDeReponse().ok().json(infos).construis()
           );
         },
-        (contenu) => contenu
+        (contenu: Promise<InformationsEnvoyees>) => contenu
       );
 
       expect(reponse).toStrictEqual<InformationsEnvoyees>({

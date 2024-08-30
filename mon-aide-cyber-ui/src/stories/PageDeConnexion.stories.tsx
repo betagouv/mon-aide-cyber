@@ -4,14 +4,13 @@ import { ReponseAuthentification } from '../domaine/authentification/Authentific
 import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
-import { Diagnostic } from '../domaine/diagnostic/Diagnostic.ts';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ComposantConnexion } from '../composants/connexion/ComposantConnexion.tsx';
 import { Suspense } from 'react';
 import { RequiertAuthentification } from '../fournisseurs/RequiertAuthentification.tsx';
 import { ComposantIntercepteur } from '../composants/intercepteurs/ComposantIntercepteur.tsx';
 import { TableauDeBord } from '../composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
+import { macAPI } from '../fournisseurs/api/macAPI.ts';
 
 const meta = {
   title: 'Connexion',
@@ -21,6 +20,17 @@ const meta = {
   },
 } satisfies Meta<typeof ComposantConnexion>;
 
+macAPI.execute = <T, U, V = void>(
+  _parametresAPI: ParametresAPI<V>,
+  _transcris: (contenu: Promise<U>) => Promise<T>
+) => {
+  const reponseAuthentification: ReponseAuthentification = {
+    nomPrenom: 'Jean Dupont',
+    liens: {},
+  };
+  return Promise.resolve(reponseAuthentification as T);
+};
+
 export default meta;
 type Story = StoryObj<typeof meta>;
 
@@ -28,39 +38,24 @@ export const PageDeConnexion: Story = {
   decorators: [
     (story) => (
       <MemoryRouter>
-        <ContexteMacAPI.Provider
-          value={{
-            appelle: async <T = Diagnostic, V = void>(
-              _parametresAPI: ParametresAPI<V>,
-              _: (contenu: Promise<any>) => Promise<T>
-            ) => {
-              const reponseAuthentification: ReponseAuthentification = {
-                nomPrenom: 'Jean Dupont',
-                liens: {},
-              };
-              return reponseAuthentification as T;
-            },
-          }}
-        >
-          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            <Routes>
-              <Route path="/connexion" element={<ComposantConnexion />} />
+        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+          <Routes>
+            <Route path="/connexion" element={<ComposantConnexion />} />
+            <Route
+              element={
+                <Suspense>
+                  <RequiertAuthentification />
+                </Suspense>
+              }
+            >
               <Route
-                element={
-                  <Suspense>
-                    <RequiertAuthentification />
-                  </Suspense>
-                }
-              >
-                <Route
-                  path="/tableau-de-bord"
-                  element={<ComposantIntercepteur composant={TableauDeBord} />}
-                ></Route>
-              </Route>
-            </Routes>
-            {story()}
-          </ErrorBoundary>
-        </ContexteMacAPI.Provider>
+                path="/tableau-de-bord"
+                element={<ComposantIntercepteur composant={TableauDeBord} />}
+              ></Route>
+            </Route>
+          </Routes>
+          {story()}
+        </ErrorBoundary>
       </MemoryRouter>
     ),
   ],

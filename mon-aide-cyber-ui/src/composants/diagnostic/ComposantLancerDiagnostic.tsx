@@ -1,15 +1,12 @@
 import { ReactElement, useCallback, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
-import {
-  useNavigationMAC,
-  useMACAPI,
-  useModale,
-} from '../../fournisseurs/hooks.ts';
+import { useNavigationMAC, useModale } from '../../fournisseurs/hooks.ts';
 import { FormatLien, LienRoutage } from '../../domaine/LienRoutage.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien } from '../../domaine/Lien.ts';
+import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 
 type ProprietesComposant = {
   surClick: () => void;
@@ -139,18 +136,17 @@ export const ComposantLancerDiagnostic = ({
 }: ProprietesComposantLancerDiagnostic) => {
   const { showBoundary } = useErrorBoundary();
   const navigationMAC = useNavigationMAC();
-  const macapi = useMACAPI();
   const { affiche, ferme } = useModale();
 
   const lanceDiagnostic = useCallback(
     (lien: Lien) => {
-      macapi
-        .appelle<LienRoutage>(
+      macAPI
+        .execute<LienRoutage, FormatLien>(
           constructeurParametresAPI()
             .url(lien.url)
             .methode(lien.methode!)
             .construis(),
-          async (json) => new LienRoutage((await json) as FormatLien)
+          async (json) => new LienRoutage(await json)
         )
         .then((lien) => {
           return navigationMAC.navigue(
@@ -166,7 +162,7 @@ export const ComposantLancerDiagnostic = ({
         })
         .catch((erreur) => showBoundary(erreur));
     },
-    [macapi, navigationMAC, showBoundary]
+    [navigationMAC, showBoundary]
   );
 
   const lancerDiagnostic = useCallback(async () => {
