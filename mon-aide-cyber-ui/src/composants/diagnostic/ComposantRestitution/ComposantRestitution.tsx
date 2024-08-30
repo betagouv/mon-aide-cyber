@@ -5,8 +5,8 @@ import '../../../assets/styles/_restitution_print.scss';
 import '../../../assets/styles/_commun.scss';
 import { UUID } from '../../../types/Types.ts';
 import { LienMAC } from '../../LienMAC.tsx';
-import useComposantRestitution from './useComposantRestitution.ts';
 import { ComposantIdentifiantDiagnostic } from '../../ComposantIdentifiantDiagnostic.tsx';
+import { useComposantRestitution } from './useComposantRestitution.ts';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;

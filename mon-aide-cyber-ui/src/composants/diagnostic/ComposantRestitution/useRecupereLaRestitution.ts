@@ -12,7 +12,7 @@ import {
 import { useErrorBoundary } from 'react-error-boundary';
 import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks';
 
-function useRecupereLaRestitution(idDiagnostic: UUID) {
+export const useRecupereLaRestitution = (idDiagnostic: UUID) => {
   const navigationMAC = useNavigationMAC();
   const macapi = useMACAPI();
   const { showBoundary } = useErrorBoundary();
@@ -78,6 +78,4 @@ function useRecupereLaRestitution(idDiagnostic: UUID) {
     etatRestitution,
     envoie,
   };
-}
-
-export default useRecupereLaRestitution;
+};
