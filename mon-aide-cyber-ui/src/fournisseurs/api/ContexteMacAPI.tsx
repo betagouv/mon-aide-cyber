@@ -2,7 +2,7 @@ import { createContext, PropsWithChildren } from 'react';
 import { ParametresAPI } from './ConstructeurParametresAPI.ts';
 import { appelleAPI } from './appelleAPI.ts';
 
-type ContexteMacAPIType = {
+export type ContexteMacAPIType = {
   appelle: <REPONSE, CORPS = void>(
     parametresAPI: ParametresAPI<CORPS>,
     transcris: (contenu: Promise<any>) => Promise<REPONSE>
