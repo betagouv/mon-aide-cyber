@@ -5,9 +5,9 @@ import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks';
 import { rubriqueConsultee } from '../../../domaine/diagnostic/reducteurRestitution';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
 import { UUID } from '../../../types/Types';
-import useRecupereLaRestitution from './useRecupereLaRestitution';
+import { useRecupereLaRestitution } from './useRecupereLaRestitution';
 
-function useComposantRestitution(idDiagnostic: UUID) {
+export const useComposantRestitution = (idDiagnostic: UUID) => {
   const navigationMAC = useNavigationMAC();
   const macapi = useMACAPI();
 
@@ -113,6 +113,4 @@ function useComposantRestitution(idDiagnostic: UUID) {
     modifierLeDiagnostic,
     boutonDesactive,
   };
-}
-
-export default useComposantRestitution;
+};
