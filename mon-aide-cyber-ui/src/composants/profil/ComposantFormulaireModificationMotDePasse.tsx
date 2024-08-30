@@ -6,8 +6,8 @@ import { FormEvent, ReactElement, useCallback, useMemo, useState } from 'react';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ChampSucces } from '../alertes/Succes.tsx';
 import { ChampsErreur } from '../alertes/Erreurs.tsx';
-import { useMACAPI } from '../../fournisseurs/hooks.ts';
 import { Lien } from '../../domaine/Lien.ts';
+import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 
 type CorpsModificationMotDePasse = {
   ancienMotDePasse: string;
@@ -21,8 +21,6 @@ type ProprietesComposantFormulaireModificationMotDePasse = {
 export const ComposantFormulaireModificationMotDePasse = ({
   lienModificationMotDePasse,
 }: ProprietesComposantFormulaireModificationMotDePasse) => {
-  const macapi = useMACAPI();
-
   const [
     modificationMotDePasseTransmise,
     setModificationMotDePasseATransmettre,
@@ -39,8 +37,8 @@ export const ComposantFormulaireModificationMotDePasse = ({
   const modifieMotDePasse = useCallback(
     (modificationMotDePasse: ModificationMotDePasse) => {
       if (modificationMotDePasse.valide) {
-        macapi
-          .appelle<void, CorpsModificationMotDePasse>(
+        macAPI
+          .execute<void, void, CorpsModificationMotDePasse>(
             constructeurParametresAPI<CorpsModificationMotDePasse>()
               .url(modifierMotDePasse.url)
               .methode(modifierMotDePasse.methode!)
@@ -67,7 +65,7 @@ export const ComposantFormulaireModificationMotDePasse = ({
           });
       }
     },
-    [macapi, modifierMotDePasse]
+    [modifierMotDePasse]
   );
 
   const modifieLeMotDePasse = useCallback((e: FormEvent) => {

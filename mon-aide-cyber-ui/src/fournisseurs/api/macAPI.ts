@@ -1,6 +1,6 @@
 import { ParametresAPI } from './ConstructeurParametresAPI.ts';
 
-export const appelleAPI = async <REPONSE, CORPS = void>(
+export const execute = async <REPONSE, CORPS = void>(
   parametresAPI: ParametresAPI<CORPS>,
   appel: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>,
   transcris: (contenu: Promise<any>) => Promise<REPONSE>
@@ -34,4 +34,17 @@ export const appelleAPI = async <REPONSE, CORPS = void>(
     return transcris(reponse.json());
   }
   return Promise.resolve() as Promise<REPONSE>;
+};
+
+export const macAPI = {
+  execute: async <REPONSE, REPONSEAPI, CORPS = void>(
+    parametresAPI: ParametresAPI<CORPS>,
+    transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
+  ) => {
+    try {
+      return execute(parametresAPI, fetch, transcris);
+    } catch (erreur) {
+      return await Promise.reject(erreur);
+    }
+  },
 };

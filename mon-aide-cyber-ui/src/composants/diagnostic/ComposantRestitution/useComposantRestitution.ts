@@ -1,15 +1,15 @@
 import { Lien } from '../../../domaine/Lien';
 import { useCallback, useEffect, useState } from 'react';
 import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens';
-import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks';
+import { useNavigationMAC } from '../../../fournisseurs/hooks';
 import { rubriqueConsultee } from '../../../domaine/diagnostic/reducteurRestitution';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
 import { UUID } from '../../../types/Types';
 import { useRecupereLaRestitution } from './useRecupereLaRestitution';
+import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 
 export const useComposantRestitution = (idDiagnostic: UUID) => {
   const navigationMAC = useNavigationMAC();
-  const macapi = useMACAPI();
 
   const { etatRestitution, envoie } = useRecupereLaRestitution(idDiagnostic);
 
@@ -77,8 +77,8 @@ export const useComposantRestitution = (idDiagnostic: UUID) => {
           .methode(lien.methode!)
           .accept(lien.contentType!)
           .construis();
-        macapi
-          .appelle<void>(parametresAPI, (blob: Promise<Blob>) => {
+        macAPI
+          .execute<void, Blob>(parametresAPI, (blob: Promise<Blob>) => {
             return blob.then((b) => {
               const fichier = URL.createObjectURL(b);
               const lien = document.createElement('a');
@@ -93,7 +93,7 @@ export const useComposantRestitution = (idDiagnostic: UUID) => {
       }
     );
     setBoutonDesactive(true);
-  }, [etatRestitution.restitution, idDiagnostic, macapi]);
+  }, [etatRestitution.restitution, idDiagnostic]);
 
   const navigueVersTableauDeBord = useCallback(() => {
     const liens = etatRestitution.restitution!.liens;

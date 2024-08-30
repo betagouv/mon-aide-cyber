@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 import { expect, userEvent, within } from '@storybook/test';
 import { ComposantFormulaireCreationEspaceAidant } from '../composants/espace-aidant/creation-espace-aidant/ComposantFormulaireCreationEspaceAidant.tsx';
+import { macAPI } from '../fournisseurs/api/macAPI.ts';
 
 const meta = {
   title: "Création de l'espace Aidant",
@@ -13,46 +13,42 @@ const meta = {
   },
 } satisfies Meta<typeof ComposantFormulaireCreationEspaceAidant>;
 
+let valeursSaisies = {};
+macAPI.execute = <T, U, V = void>(
+  parametresAPI: ParametresAPI<V>,
+  _transcris: (contenu: Promise<U>) => Promise<T>
+) => {
+  valeursSaisies = parametresAPI.corps!;
+  return Promise.resolve({ liens: { url: '' } }) as Promise<T>;
+};
+
 export default meta;
 type Story = StoryObj<typeof meta>;
-let valeursSaisies = {};
 
 export const CreationEspaceAidant: Story = {
   decorators: [
     (story) => (
-      <ContexteMacAPI.Provider
+      <ContexteNavigationMAC.Provider
         value={{
-          appelle: async <T = any, V = void>(
-            parametresAPI: ParametresAPI<V>,
-            _: (contenu: Promise<any>) => Promise<T>
-          ) => {
-            valeursSaisies = parametresAPI.corps!;
-            return Promise.resolve({ liens: { url: '' } }) as Promise<T>;
+          etat: {
+            'creer-espace-aidant': {
+              url: '/api/creer-espace-aidant',
+              methode: 'POST',
+            },
           },
+          setEtat: () => {
+            return;
+          },
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          ajouteEtat: () => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          navigue: (_moteurDeLiens, _action, _exclusion) => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          retourAccueil: () => {},
         }}
       >
-        <ContexteNavigationMAC.Provider
-          value={{
-            etat: {
-              'creer-espace-aidant': {
-                url: '/api/creer-espace-aidant',
-                methode: 'POST',
-              },
-            },
-            setEtat: () => {
-              return;
-            },
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            ajouteEtat: () => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            navigue: (_moteurDeLiens, _action, _exclusion) => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            retourAccueil: () => {},
-          }}
-        >
-          {story()}
-        </ContexteNavigationMAC.Provider>
-      </ContexteMacAPI.Provider>
+        {story()}
+      </ContexteNavigationMAC.Provider>
     ),
   ],
   name: "Crée l'espace de l'aidant",

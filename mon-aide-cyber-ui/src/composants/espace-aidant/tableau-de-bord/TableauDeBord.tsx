@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Lien, ReponseHATEOAS } from '../../../domaine/Lien.ts';
-import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks.ts';
+import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ComposantDiagnostics } from './ComposantDiagnostics.tsx';
 import { HeaderEspaceAidant } from '../HeaderEspaceAidant.tsx';
 import { FooterEspaceAidant } from '../FooterEspaceAidant.tsx';
 import { UUID } from '../../../types/Types.ts';
+import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 
 export type Diagnostic = {
   dateCreation: string;
@@ -24,7 +25,6 @@ export const TableauDeBord = () => {
   const [enCoursDeChargement, setEnCoursDeChargement] = useState(true);
   const [diagnostics, setDiagnostics] = useState<Diagnostic[]>([]);
   const navigationMAC = useNavigationMAC();
-  const macAPI = useMACAPI();
 
   // useEffect(() => {
   //   setNomPrenom(authentification.utilisateur?.nomPrenom || '');
@@ -36,7 +36,7 @@ export const TableauDeBord = () => {
       (lien: Lien) => {
         if (enCoursDeChargement) {
           macAPI
-            .appelle<ReponseTableauDeBord>(
+            .execute<ReponseTableauDeBord, ReponseTableauDeBord>(
               constructeurParametresAPI()
                 .url(lien.url)
                 .methode(lien.methode!)
@@ -54,7 +54,7 @@ export const TableauDeBord = () => {
         }
       }
     );
-  }, [enCoursDeChargement, macAPI, navigationMAC]);
+  }, [enCoursDeChargement, navigationMAC]);
 
   return (
     <>

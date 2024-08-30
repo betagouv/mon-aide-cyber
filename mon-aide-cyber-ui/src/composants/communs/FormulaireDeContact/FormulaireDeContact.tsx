@@ -8,9 +8,9 @@ import {
   nomSaisi,
   reducteurEnvoiMessageContact,
 } from '../../../reducteurs/reducteurEnvoiMessageContact';
-import { useMACAPI } from '../../../fournisseurs/hooks';
 import { Message } from '../../../domaine/contact/Message';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
+import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 
 export const FormulaireDeContact = () => {
   const [etatMessage, envoie] = useReducer(reducteurEnvoiMessageContact, {
@@ -21,7 +21,6 @@ export const FormulaireDeContact = () => {
     saisieValide: () => false,
   });
   const erreur = etatMessage.erreur;
-  const macapi = useMACAPI();
 
   const envoieMessage = useCallback(async (e: FormEvent) => {
     e.preventDefault();
@@ -30,8 +29,8 @@ export const FormulaireDeContact = () => {
 
   useEffect(() => {
     if (etatMessage.saisieValide() && !etatMessage.messageEnvoye) {
-      macapi
-        .appelle<void, Message>(
+      macAPI
+        .execute<void, void, Message>(
           constructeurParametresAPI<Message>()
             .url('/contact')
             .methode('POST')
@@ -46,7 +45,7 @@ export const FormulaireDeContact = () => {
         .then(() => envoie(messageEnvoye()))
         .catch((erreur) => envoie(envoiMessageInvalide(erreur as Error)));
     }
-  }, [etatMessage, macapi]);
+  }, [etatMessage]);
 
   const surSaisieNom = useCallback((nom: string) => {
     envoie(nomSaisi(nom));

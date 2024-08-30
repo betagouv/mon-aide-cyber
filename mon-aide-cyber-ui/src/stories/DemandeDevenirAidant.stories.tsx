@@ -1,11 +1,11 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComposantDemandeDevenirAidant } from '../composants/gestion-demandes/devenir-aidant/ComposantDemandeDevenirAidant.tsx';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { expect, userEvent, within } from '@storybook/test';
 import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
+import { macAPI } from '../fournisseurs/api/macAPI.ts';
 
 const meta = {
   title: 'Demande pour devenir Aidant',
@@ -19,66 +19,62 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 // let valeursSaisies = {};
 
+macAPI.execute = <T, U, V = void>(
+  parametresAPI: ParametresAPI<V>,
+  _transcris: (contenu: Promise<U>) => Promise<T>
+) => {
+  const reponse = {
+    departements: [
+      {
+        nom: 'Ain',
+        code: '1',
+      },
+      {
+        nom: 'Aisne',
+        code: '2',
+      },
+    ],
+    liens: {},
+  };
+  if (parametresAPI.url.includes('devenir-aidant')) {
+    return Promise.resolve(reponse as T);
+  }
+  // if (parametresAPI.corps) {
+  //   valeursSaisies = parametresAPI.corps;
+  // }
+  return Promise.resolve({} as T);
+};
+
 export const DemandeDevenirAidant: Story = {
   decorators: [
     (story) => (
-      <ContexteMacAPI.Provider
+      <ContexteNavigationMAC.Provider
         value={{
-          appelle: async <T = any, V = void>(
-            parametresAPI: ParametresAPI<V>,
-            _: (contenu: Promise<any>) => Promise<T>
-          ) => {
-            const reponse = {
-              departements: [
-                {
-                  nom: 'Ain',
-                  code: '1',
-                },
-                {
-                  nom: 'Aisne',
-                  code: '2',
-                },
-              ],
-              liens: {},
-            };
-            if (parametresAPI.url.includes('devenir-aidant')) {
-              return Promise.resolve(reponse as T);
-            }
-            // if (parametresAPI.corps) {
-            //   valeursSaisies = parametresAPI.corps;
-            // }
-            return {} as T;
+          etat: {
+            // 'demande-devenir-aidant': {
+            //   url: '/api/demandes/devenir-aidant',
+            //   methode: 'GET',
+            // },
+            // 'envoyer-demande-devenir-aidant': {
+            //   url: '/api/demandes/devenir-aidant',
+            //   methode: 'POST',
+            // },
           },
+          setEtat: () => {
+            return;
+          },
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          ajouteEtat: () => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          navigue: (_moteurDeLiens, _action, _exclusion) => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          retourAccueil: () => {},
         }}
       >
-        <ContexteNavigationMAC.Provider
-          value={{
-            etat: {
-              // 'demande-devenir-aidant': {
-              //   url: '/api/demandes/devenir-aidant',
-              //   methode: 'GET',
-              // },
-              // 'envoyer-demande-devenir-aidant': {
-              //   url: '/api/demandes/devenir-aidant',
-              //   methode: 'POST',
-              // },
-            },
-            setEtat: () => {
-              return;
-            },
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            ajouteEtat: () => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            navigue: (_moteurDeLiens, _action, _exclusion) => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            retourAccueil: () => {},
-          }}
-        >
-          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            {story()}
-          </ErrorBoundary>
-        </ContexteNavigationMAC.Provider>
-      </ContexteMacAPI.Provider>
+        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+          {story()}
+        </ErrorBoundary>
+      </ContexteNavigationMAC.Provider>
     ),
   ],
   name: 'Formulaire de demande pour devenir Aidant',

@@ -7,17 +7,17 @@ import {
   reducteurProfil,
 } from './reducteurProfil.ts';
 import { Profil } from 'mon-aide-cyber-api/src/api/representateurs/profil/Profil.ts';
-import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
+import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { ComposantFormulaireModificationMotDePasse } from './ComposantFormulaireModificationMotDePasse.tsx';
 import { LienMAC } from '../LienMAC.tsx';
+import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 
 export const ComposantProfil = () => {
   const { showBoundary } = useErrorBoundary();
-  const macapi = useMACAPI();
   const navigationMAC = useNavigationMAC();
   const [etatProfil, envoie] = useReducer(reducteurProfil, {
     nom: '',
@@ -32,8 +32,8 @@ export const ComposantProfil = () => {
       'afficher-profil',
       (lien: Lien) => {
         if (etatProfil.enCoursDeChargement) {
-          macapi
-            .appelle<Profil>(
+          macAPI
+            .execute<Profil, Profil>(
               constructeurParametresAPI()
                 .url(lien.url)
                 .methode(lien.methode!)
@@ -51,7 +51,7 @@ export const ComposantProfil = () => {
         }
       }
     );
-  }, [etatProfil.enCoursDeChargement, macapi, showBoundary, navigationMAC]);
+  }, [etatProfil.enCoursDeChargement, showBoundary, navigationMAC]);
 
   const afficherTableauDeBord = useCallback(() => {
     navigationMAC.navigue(

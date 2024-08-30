@@ -13,7 +13,7 @@ import {
 } from './reducteurDemandeAide.ts';
 import { Lien } from '../../../domaine/Lien.ts';
 import { Departement } from '../../../domaine/gestion-demandes/departement.ts';
-import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks.ts';
+import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import {
   CorpsDemandeAide,
   ReponseDemandeAide,
@@ -24,6 +24,7 @@ import { Header } from '../../Header.tsx';
 import { LienMAC } from '../../LienMAC.tsx';
 import { Confirmation } from './Confirmation.tsx';
 import { Footer } from '../../Footer.tsx';
+import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 
 export const ComposantDemandeAide = () => {
   const [etat, envoie] = useReducer(reducteurDemandeAide, {
@@ -37,13 +38,12 @@ export const ComposantDemandeAide = () => {
   const [retourEnvoiDemandeAide, setRetourEnvoiDemandeAide] = useState<
     ReactElement | undefined
   >(undefined);
-  const macAPI = useMACAPI();
   const navigationMAC = useNavigationMAC();
 
   useEffect(() => {
     if (demandeAideEnCoursDeChargement) {
       macAPI
-        .appelle<ReponseDemandeAide>(
+        .execute<ReponseDemandeAide, ReponseDemandeAide>(
           {
             url: '/api/aide/demande',
             methode: 'GET',
@@ -60,12 +60,12 @@ export const ComposantDemandeAide = () => {
           setDemandeAideEnCoursDeChargement(false);
         });
     }
-  }, [demandeAideEnCoursDeChargement, macAPI]);
+  }, [demandeAideEnCoursDeChargement]);
 
   const terminer = useCallback(
     (saisieInformations: CorpsDemandeAide) => {
       macAPI
-        .appelle<void, CorpsDemandeAide>(
+        .execute<void, void, CorpsDemandeAide>(
           {
             url: demandeAide!.lien.url,
             methode: demandeAide!.lien.methode!,

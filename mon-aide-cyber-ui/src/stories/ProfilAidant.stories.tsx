@@ -1,12 +1,12 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, waitFor, within } from '@storybook/test';
-import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 import { ComposantProfil } from '../composants/profil/ComposantProfil.tsx';
 import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Liens } from '../domaine/Lien.ts';
+import { macAPI } from '../fournisseurs/api/macAPI.ts';
 
 const meta = {
   title: "Page profil de l'Aidant",
@@ -16,66 +16,64 @@ const meta = {
   },
 } satisfies Meta<typeof ComposantProfil>;
 
+let valeursSaisies = {};
+
+macAPI.execute = <T, U, V = void>(
+  parametresAPI: ParametresAPI<V>,
+  _transcris: (contenu: Promise<U>) => Promise<T>
+) => {
+  valeursSaisies = parametresAPI.corps!;
+  return Promise.resolve({
+    nomPrenom: 'Jean Dupont',
+    dateSignatureCGU: '11.03.2024',
+    identifiantConnexion: 'j.dup@mail.com',
+    liens: {
+      'lancer-diagnostic': {
+        url: '/api/diagnostic',
+        methode: 'POST',
+      },
+      'modifier-mot-de-passe': {
+        url: '/api/profil/modifier-mot-de-passe',
+        methode: 'POST',
+      },
+      'se-deconnecter': {
+        url: '/api/token',
+        methode: 'DELETE',
+      },
+    },
+  } as T);
+};
+
 export default meta;
 type Story = StoryObj<typeof meta>;
-let valeursSaisies = {};
 
 export const AffichagePageProfil: Story = {
   decorators: [
     (story) => (
-      <ContexteMacAPI.Provider
+      <ContexteNavigationMAC.Provider
         value={{
-          appelle: async <T = any, V = void>(
-            _parametresAPI: ParametresAPI<V>,
-            _: (contenu: Promise<any>) => Promise<T>
-          ) => {
-            return {
-              nomPrenom: 'Jean Dupont',
-              dateSignatureCGU: '11.03.2024',
-              identifiantConnexion: 'j.dup@mail.com',
-              liens: {
-                'lancer-diagnostic': {
-                  url: '/api/diagnostic',
-                  methode: 'POST',
-                },
-                'modifier-mot-de-passe': {
-                  url: '/api/profil/modifier-mot-de-passe',
-                  methode: 'POST',
-                },
-                'se-deconnecter': {
-                  url: '/api/token',
-                  methode: 'DELETE',
-                },
-              },
-            } as T;
+          etat: {
+            'afficher-profil': {
+              url: '/api/afficher-profil',
+              methode: 'GET',
+            },
           },
+          setEtat: () => {
+            return;
+          },
+          ajouteEtat: (_liens: Liens) => {
+            return;
+          },
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          navigue: (_moteurDeLiens, _action, _exclusion) => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          retourAccueil: () => {},
         }}
       >
-        <ContexteNavigationMAC.Provider
-          value={{
-            etat: {
-              'afficher-profil': {
-                url: '/api/afficher-profil',
-                methode: 'GET',
-              },
-            },
-            setEtat: () => {
-              return;
-            },
-            ajouteEtat: (_liens: Liens) => {
-              return;
-            },
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            navigue: (_moteurDeLiens, _action, _exclusion) => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            retourAccueil: () => {},
-          }}
-        >
-          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            {story()}
-          </ErrorBoundary>
-        </ContexteNavigationMAC.Provider>
-      </ContexteMacAPI.Provider>
+        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+          {story()}
+        </ErrorBoundary>
+      </ContexteNavigationMAC.Provider>
     ),
   ],
   name: "Affiche la page profil de l'Aidant",
@@ -130,42 +128,30 @@ export const AffichagePageProfil: Story = {
 export const ModificationMotDePasseAidant: Story = {
   decorators: [
     (story) => (
-      <ContexteMacAPI.Provider
+      <ContexteNavigationMAC.Provider
         value={{
-          appelle: async <T = any, V = void>(
-            parametresAPI: ParametresAPI<V>,
-            _: (contenu: Promise<any>) => Promise<T>
-          ) => {
-            valeursSaisies = parametresAPI.corps!;
-            return Promise.resolve({ liens: { url: '' } }) as Promise<T>;
+          etat: {
+            'modifier-mot-de-passe': {
+              url: '/api/modifier-mot-de-passe',
+              methode: 'POST',
+            },
           },
+          setEtat: () => {
+            return;
+          },
+          ajouteEtat: (_liens: Liens) => {
+            return;
+          },
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          navigue: (_moteurDeLiens, _action, _exclusion) => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          retourAccueil: () => {},
         }}
       >
-        <ContexteNavigationMAC.Provider
-          value={{
-            etat: {
-              'modifier-mot-de-passe': {
-                url: '/api/modifier-mot-de-passe',
-                methode: 'POST',
-              },
-            },
-            setEtat: () => {
-              return;
-            },
-            ajouteEtat: (_liens: Liens) => {
-              return;
-            },
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            navigue: (_moteurDeLiens, _action, _exclusion) => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            retourAccueil: () => {},
-          }}
-        >
-          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            {story()}
-          </ErrorBoundary>
-        </ContexteNavigationMAC.Provider>
-      </ContexteMacAPI.Provider>
+        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+          {story()}
+        </ErrorBoundary>
+      </ContexteNavigationMAC.Provider>
     ),
   ],
   name: 'Modifie le mot de passe',

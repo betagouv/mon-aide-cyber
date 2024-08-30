@@ -7,12 +7,13 @@ import {
   initialiseReducteur,
   reducteurCreationEspaceAidant,
 } from './reducteurCreationEspaceAidant.tsx';
-import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks.ts';
+import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
 import { Lien, ReponseHATEOAS } from '../../../domaine/Lien.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { CreationEspaceAidant } from '../../../domaine/espace-aidant/EspaceAidant.ts';
 import { ComposantMotDePasse } from '../../mot-de-passe/ComposantMotDePasse.tsx';
+import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 
 export const ComposantFormulaireCreationEspaceAidant = () => {
   const [etatCreationEspaceAidant, envoie] = useReducer(
@@ -21,7 +22,6 @@ export const ComposantFormulaireCreationEspaceAidant = () => {
   );
   const [boutonValiderClique, setBoutonValiderClique] = useState(false);
   const navigationMAC = useNavigationMAC();
-  const macapi = useMACAPI();
 
   const creeEspaceAidant = useCallback(async (e: FormEvent) => {
     e.preventDefault();
@@ -48,10 +48,10 @@ export const ComposantFormulaireCreationEspaceAidant = () => {
                   etatCreationEspaceAidant.motDePasse!.ancienMotDePasse,
               })
               .construis();
-          macapi
-            .appelle<ReponseHATEOAS, CreationEspaceAidant>(
+          macAPI
+            .execute<ReponseHATEOAS, ReponseHATEOAS, CreationEspaceAidant>(
               parametresAPI,
-              async (json) => (await json) as unknown as ReponseHATEOAS
+              async (json) => await json
             )
             .then((reponse) => {
               envoie(creationEspaceAidantTransmise());
@@ -70,7 +70,7 @@ export const ComposantFormulaireCreationEspaceAidant = () => {
           'lancer-diagnostic'
         )
     );
-  }, [navigationMAC, etatCreationEspaceAidant, macapi]);
+  }, [navigationMAC, etatCreationEspaceAidant]);
 
   const surCGUSignees = useCallback(() => {
     envoie(cguCliquees());

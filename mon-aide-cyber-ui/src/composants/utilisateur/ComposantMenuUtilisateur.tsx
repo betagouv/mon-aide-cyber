@@ -1,9 +1,10 @@
 import { Utilisateur } from '../../domaine/authentification/Authentification.ts';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
-import { useMACAPI, useNavigationMAC } from '../../fournisseurs/hooks.ts';
+import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 
 type ProprietesMenuUtilisateur = {
   utilisateur: Utilisateur;
@@ -11,7 +12,6 @@ type ProprietesMenuUtilisateur = {
 export const ComposantMenuUtilisateur = ({
   utilisateur,
 }: ProprietesMenuUtilisateur) => {
-  const macapi = useMACAPI();
   const navigationMAC = useNavigationMAC();
   const { showBoundary, resetBoundary } = useErrorBoundary();
   const [boutonAfficherMonProfil, setBoutonAfficherMonProfil] =
@@ -27,8 +27,8 @@ export const ComposantMenuUtilisateur = ({
 
   const deconnecter = useCallback(() => {
     resetBoundary();
-    macapi
-      .appelle<void>(
+    macAPI
+      .execute<void, void>(
         constructeurParametresAPI()
           .url('/api/token')
           .methode('DELETE')
@@ -37,7 +37,7 @@ export const ComposantMenuUtilisateur = ({
       )
       .then(() => navigationMAC.retourAccueil())
       .catch((erreur) => showBoundary(erreur));
-  }, [macapi, navigationMAC, resetBoundary, showBoundary]);
+  }, [navigationMAC, resetBoundary, showBoundary]);
 
   const afficherProfil = useCallback(() => {
     resetBoundary();

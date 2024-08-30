@@ -11,7 +11,7 @@ import {
   ReponseUtilisateur,
   Utilisateur,
 } from '../domaine/authentification/Authentification.ts';
-import { useMACAPI, useNavigationMAC } from './hooks.ts';
+import { useNavigationMAC } from './hooks.ts';
 
 import { constructeurParametresAPI } from './api/ConstructeurParametresAPI.ts';
 import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
@@ -22,6 +22,7 @@ import {
   utilisateurNonAuthentifie,
 } from './reducteurUtilisateurAuthentifie.tsx';
 import { Lien, ReponseHATEOAS } from '../domaine/Lien.ts';
+import { macAPI } from './api/macAPI.ts';
 
 type Authentifie = (
   identifiants: {
@@ -50,7 +51,6 @@ export type Identifiants = {
 export const FournisseurAuthentification = ({
   children,
 }: PropsWithChildren) => {
-  const macapi = useMACAPI();
   const navigationMAC = useNavigationMAC();
 
   const [etatUtilisateurAuthentifie, envoie] = useReducer(
@@ -68,8 +68,12 @@ export const FournisseurAuthentification = ({
     new MoteurDeLiens(navigationMAC.etat).trouve(
       'se-connecter',
       (lien: Lien) => {
-        macapi
-          .appelle<ReponseAuthentification, Identifiants>(
+        macAPI
+          .execute<
+            ReponseAuthentification,
+            ReponseAuthentification,
+            Identifiants
+          >(
             constructeurParametresAPI<Identifiants>()
               .url(lien.url)
               .methode(lien.methode!)
@@ -78,7 +82,7 @@ export const FournisseurAuthentification = ({
                 motDePasse: identifiants.motDePasse,
               })
               .construis(),
-            async (reponse) => (await reponse) as ReponseAuthentification
+            async (reponse) => await reponse
           )
           .then((reponse) => {
             envoie(utilisateurCharge({ nomPrenom: reponse.nomPrenom }));
@@ -105,14 +109,14 @@ export const FournisseurAuthentification = ({
   };
 
   const appelleUtilisateur = useCallback(() => {
-    return macapi.appelle<ReponseUtilisateur>(
+    return macAPI.execute<ReponseUtilisateur, ReponseUtilisateur>(
       constructeurParametresAPI()
         .url('/api/utilisateur')
         .methode('GET')
         .construis(),
       (json) => json
     );
-  }, [macapi]);
+  }, []);
 
   useEffect(() => {
     if (etatUtilisateurAuthentifie.enAttenteDeChargement) {
@@ -130,7 +134,7 @@ export const FournisseurAuthentification = ({
           envoie(utilisateurNonAuthentifie());
         });
     }
-  }, [navigationMAC, etatUtilisateurAuthentifie.enAttenteDeChargement, macapi]);
+  }, [navigationMAC, etatUtilisateurAuthentifie.enAttenteDeChargement]);
 
   const value: ContexteAuthentificationType = {
     authentifie,

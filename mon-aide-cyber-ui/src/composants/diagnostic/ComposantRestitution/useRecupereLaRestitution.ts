@@ -10,11 +10,11 @@ import {
   restitutionChargee,
 } from '../../../domaine/diagnostic/reducteurRestitution';
 import { useErrorBoundary } from 'react-error-boundary';
-import { useMACAPI, useNavigationMAC } from '../../../fournisseurs/hooks';
-import { ContexteMacAPIType } from '../../../fournisseurs/api/ContexteMacAPI';
+import { useNavigationMAC } from '../../../fournisseurs/hooks';
+import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 
-const appelleAPI = <REPONSE>(macapi: ContexteMacAPIType, lien: Lien) =>
-  macapi.appelle<REPONSE>(
+const appelleAPI = <REPONSE>(lien: Lien) =>
+  macAPI.execute<REPONSE, REPONSE>(
     constructeurParametresAPI()
       .url(lien.url)
       .methode(lien.methode!)
@@ -24,13 +24,12 @@ const appelleAPI = <REPONSE>(macapi: ContexteMacAPIType, lien: Lien) =>
 
 export const useRecupereLaRestitution = (idDiagnostic: UUID) => {
   const navigationMAC = useNavigationMAC();
-  const macapi = useMACAPI();
   const { showBoundary } = useErrorBoundary();
   const [etatRestitution, envoie] = useReducer(reducteurRestitution, {});
 
   async function chargeRestitution(lien: Lien) {
     try {
-      const restitution = await appelleAPI<Restitution>(macapi, lien);
+      const restitution = await appelleAPI<Restitution>(lien);
 
       navigationMAC.setEtat(new MoteurDeLiens(restitution.liens).extrais());
       envoie(restitutionChargee(restitution));
@@ -52,10 +51,7 @@ export const useRecupereLaRestitution = (idDiagnostic: UUID) => {
       'afficher-tableau-de-bord',
       async (lien: Lien) => {
         try {
-          const tableauDeBord = await appelleAPI<ReponseTableauDeBord>(
-            macapi,
-            lien
-          );
+          const tableauDeBord = await appelleAPI<ReponseTableauDeBord>(lien);
           new MoteurDeLiens(tableauDeBord.liens).trouve(
             `afficher-diagnostic-${idDiagnostic}`,
             async (lien: Lien) => await chargeRestitution(lien),

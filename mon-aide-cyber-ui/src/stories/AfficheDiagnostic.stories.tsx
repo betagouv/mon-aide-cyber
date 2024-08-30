@@ -10,13 +10,12 @@ import { ComposantAffichageErreur } from '../composants/alertes/ComposantAfficha
 import { ErrorBoundary } from 'react-error-boundary';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
 import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';
-import { ContexteMacAPI } from '../fournisseurs/api/ContexteMacAPI.tsx';
 import { UUID } from '../types/Types.ts';
 import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
-import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { RepresentationDiagnostic } from '../fournisseurs/api/APIDiagnostic.ts';
 import { FournisseurNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 import { MemoryRouter } from 'react-router-dom';
+import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { macAPI } from '../fournisseurs/api/macAPI.ts';
 
 const identifiantUneQuestion = '6dadad14-8fa0-4be7-a8da-473d538eb6c1';
 const diagnosticAvecUneQuestion = unDiagnostic()
@@ -132,6 +131,13 @@ entrepotMemoire.persiste(diagnosticAvecQuestionSousFormeDeListeDeroulante);
 entrepotMemoire.persiste(diagnosticAvecReponseEntrainantQuestion);
 entrepotMemoire.persiste(unDiagnosticAvecQuestionTiroirAChoixUnique);
 
+macAPI.execute = <T, U, V = void>(
+  parametresAPI: ParametresAPI<V>,
+  _transcris: (contenu: Promise<U>) => Promise<T>
+) => {
+  const idDiagnostic = parametresAPI.url.split('/').at(-1);
+  return Promise.resolve(entrepotMemoire.find(idDiagnostic as UUID) as T);
+};
 const meta = {
   title: 'Diagnostic',
   component: ComposantDiagnostic,
@@ -141,23 +147,11 @@ const meta = {
   decorators: [
     (story) => (
       <MemoryRouter>
-        <ContexteMacAPI.Provider
-          value={{
-            appelle: async <T = RepresentationDiagnostic, V = void>(
-              parametresAPI: ParametresAPI<V>,
-              _: (contenu: Promise<any>) => Promise<T>
-            ) => {
-              const idDiagnostic = parametresAPI.url.split('/').at(-1);
-              return entrepotMemoire.find(idDiagnostic as UUID) as T;
-            },
-          }}
-        >
-          <FournisseurNavigationMAC>
-            <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-              {story()}
-            </ErrorBoundary>
-          </FournisseurNavigationMAC>
-        </ContexteMacAPI.Provider>
+        <FournisseurNavigationMAC>
+          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+            {story()}
+          </ErrorBoundary>
+        </FournisseurNavigationMAC>
       </MemoryRouter>
     ),
   ],

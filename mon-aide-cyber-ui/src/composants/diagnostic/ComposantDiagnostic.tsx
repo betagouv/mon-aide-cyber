@@ -37,14 +37,11 @@ import {
 } from './reducteurBoutonThematique.ts';
 import { FooterDiagnostic } from './FooterDiagnostic.tsx';
 import { HeaderDiagnostic } from './HeaderDiagnostic.tsx';
-import {
-  useMACAPI,
-  useModale,
-  useNavigationMAC,
-} from '../../fournisseurs/hooks.ts';
+import { useModale, useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { AccederALaRestitution } from './AccederALaRestitution.tsx';
 import {
   enDiagnostic,
+  ReponseDiagnostic,
   RepresentationDiagnostic,
 } from '../../fournisseurs/api/APIDiagnostic.ts';
 
@@ -56,6 +53,7 @@ import {
 } from './ConteneurReponsePossible.tsx';
 import { TerminerDiagnostic } from './TerminerDiagnostic.tsx';
 import { BadgePerimetre } from './BadgePerimetre.tsx';
+import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 
 type ProprietesComposantQuestion = {
   actions: ActionReponseDiagnostic[];
@@ -268,13 +266,12 @@ export const ComposantDiagnostic = ({
   });
   const { showBoundary } = useErrorBoundary();
   const { affiche, ferme } = useModale();
-  const macapi = useMACAPI();
   const navigationMAC = useNavigationMAC();
 
   useEffect(() => {
     if (!etatReferentiel.diagnostic) {
-      macapi
-        .appelle<RepresentationDiagnostic>(
+      macAPI
+        .execute<RepresentationDiagnostic, ReponseDiagnostic>(
           {
             url: `/api/diagnostic/${idDiagnostic}`,
             methode: 'GET',
@@ -287,14 +284,7 @@ export const ComposantDiagnostic = ({
         })
         .catch((erreur) => showBoundary(erreur));
     }
-  }, [
-    idDiagnostic,
-    envoie,
-    showBoundary,
-    macapi,
-    etatReferentiel,
-    navigationMAC,
-  ]);
+  }, [idDiagnostic, envoie, showBoundary, etatReferentiel, navigationMAC]);
 
   let thematiques: [string, Thematique][] = [];
   let actions: Action[] = useMemo(() => [], []);
@@ -359,9 +349,10 @@ export const ComposantDiagnostic = ({
   const surReponse = useCallback(
     (reponse: Reponse, action: ActionReponseDiagnostic) => {
       const parametresAPI = genereParametresAPI(action, reponse);
-      macapi
-        .appelle<
+      macAPI
+        .execute<
           RepresentationDiagnostic,
+          ReponseDiagnostic,
           ReponseAEnvoyer
         >(parametresAPI, enDiagnostic)
         .then((diagnostic) => {
@@ -369,7 +360,7 @@ export const ComposantDiagnostic = ({
           navigationMAC.ajouteEtat(diagnostic.liens);
         });
     },
-    [macapi, navigationMAC]
+    [navigationMAC]
   );
 
   return (

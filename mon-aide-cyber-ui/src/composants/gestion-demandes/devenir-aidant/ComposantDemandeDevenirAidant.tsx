@@ -5,11 +5,7 @@ import {
   useReducer,
   useState,
 } from 'react';
-import {
-  useMACAPI,
-  useModale,
-  useNavigationMAC,
-} from '../../../fournisseurs/hooks.ts';
+import { useModale, useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { Header } from '../../Header.tsx';
 import { LienMAC } from '../../LienMAC.tsx';
 import { AutoCompletion } from '../../auto-completion/AutoCompletion.tsx';
@@ -41,9 +37,9 @@ import {
   PreRequisDemande,
   ReponseDemandeInitiee,
 } from '../../../domaine/gestion-demandes/devenir-aidant/DevenirAidant.ts';
+import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 
 export const ComposantDemandeDevenirAidant = () => {
-  const macAPI = useMACAPI();
   const [prerequisDemande, setPrerequisDemande] = useState<
     PreRequisDemande | undefined
   >();
@@ -64,7 +60,7 @@ export const ComposantDemandeDevenirAidant = () => {
       'envoyer-demande-devenir-aidant',
       (lien: Lien) => {
         macAPI
-          .appelle(
+          .execute<void, void, CorpsDemandeDevenirAidant>(
             constructeurParametresAPI<CorpsDemandeDevenirAidant>()
               .url(lien.url)
               .methode(lien.methode!)
@@ -89,7 +85,7 @@ export const ComposantDemandeDevenirAidant = () => {
           });
       }
     );
-  }, [etatDemande.pretPourEnvoi, macAPI, navigationMAC.etat]);
+  }, [etatDemande.pretPourEnvoi, navigationMAC.etat]);
 
   useEffect(() => {
     if (etatDemande.envoiReussi) window.scrollTo({ top: 0 });
@@ -101,7 +97,7 @@ export const ComposantDemandeDevenirAidant = () => {
       (lien: Lien) => {
         if (enCoursDeChargement) {
           macAPI
-            .appelle<ReponseDemandeInitiee>(
+            .execute<ReponseDemandeInitiee, ReponseDemandeInitiee>(
               constructeurParametresAPI()
                 .url(lien.url)
                 .methode(lien.methode!)
@@ -116,7 +112,7 @@ export const ComposantDemandeDevenirAidant = () => {
         }
       }
     );
-  }, [enCoursDeChargement, macAPI, navigationMAC]);
+  }, [enCoursDeChargement, navigationMAC]);
 
   useEffect(() => {
     if (prerequisDemande) {
