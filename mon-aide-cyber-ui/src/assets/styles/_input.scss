@@ -6,8 +6,11 @@ input {
   @include proprietes-input;
 }
 
+.fr-input-group {
+  position:static;
+}
+
 .autocomplete {
-  position: relative;
   display: inline-block;
   margin-top: 0.5rem;
 }

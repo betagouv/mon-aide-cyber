@@ -1,30 +1,14 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Accueil } from './Accueil.tsx';
 import './assets/styles/index.scss';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
+import { BrowserRouter } from 'react-router-dom';
 import { ComposantAffichageErreur } from './composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
-import { ComposantDiagnostic } from './composants/diagnostic/ComposantDiagnostic.tsx';
-import { RequiertAuthentification } from './fournisseurs/RequiertAuthentification.tsx';
 import { FournisseurAuthentification } from './fournisseurs/ContexteAuthentification.tsx';
 import { PortailModale } from './composants/modale/PortailModale.tsx';
-import { CharteAidant } from './vues/CharteAidant.tsx';
-import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
-import { ComposantCGU } from './vues/ComposantCGU.tsx';
-import { MentionsLegales } from './vues/MentionsLegales.tsx';
 import { FournisseurNavigationMAC } from './fournisseurs/ContexteNavigationMAC.tsx';
-import { ComposantProfil } from './composants/profil/ComposantProfil.tsx';
-import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
-import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
-import { ComposantConnexion } from './composants/connexion/ComposantConnexion.tsx';
-import { TableauDeBord } from './composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
-import { ComposantCreationEspaceAidant } from './composants/espace-aidant/creation-espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
-import { ComposantDemandeDevenirAidant } from './composants/gestion-demandes/devenir-aidant/ComposantDemandeDevenirAidant.tsx';
-import { ComposantDemandeEtreAide } from './composants/gestion-demandes/etre-aide/ComposantDemandeEtreAide.tsx';
-import { KitDeCommunication } from './composants/a-propos/KitDeCommunication.tsx';
+import { AppRouteur } from './AppRouteur.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -34,80 +18,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <FournisseurAuthentification>
             <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
               <PortailModale>
-                <Routes>
-                  <Route path="/" element={<Accueil />} />
-                  <Route path="/cgu" element={<ComposantCGU />} />
-                  <Route path="/charte-aidant" element={<CharteAidant />} />
-                  <Route
-                    path="/demandes/etre-aide"
-                    element={<ComposantDemandeEtreAide />}
-                  />
-                  <Route
-                    path="/a-propos/kit-de-communication"
-                    element={<KitDeCommunication />}
-                  />
-                  <Route
-                    path="/demandes/devenir-aidant"
-                    element={<ComposantDemandeDevenirAidant />}
-                  />
-                  <Route
-                    path="/mentions-legales"
-                    element={<MentionsLegales />}
-                  />
-                  <Route path="/connexion" element={<ComposantConnexion />} />
-                  <Route
-                    element={
-                      <Suspense>
-                        <RequiertAuthentification />
-                      </Suspense>
-                    }
-                  >
-                    <Route
-                      element={
-                        <Suspense>
-                          <RequiertAidantSansEspace />
-                        </Suspense>
-                      }
-                    >
-                      <Route
-                        path="/finalise-creation-espace-aidant"
-                        element={<ComposantCreationEspaceAidant />}
-                      ></Route>
-                    </Route>
-                    <Route
-                      element={
-                        <Suspense>
-                          <RequiertEspaceAidant />
-                        </Suspense>
-                      }
-                    >
-                      <Route
-                        path="/tableau-de-bord"
-                        element={<TableauDeBord />}
-                      ></Route>
-                      <Route
-                        path="/diagnostic/:idDiagnostic"
-                        element={
-                          <ComposantIntercepteur
-                            composant={ComposantDiagnostic}
-                          />
-                        }
-                      ></Route>
-                      <Route
-                        path="/diagnostic/:idDiagnostic/restitution"
-                        element={
-                          <ComposantIntercepteur
-                            composant={ComposantRestitution}
-                          />
-                        }
-                      ></Route>
-                      <Route
-                        path="/profil"
-                        element={<ComposantProfil />}
-                      ></Route>
-                    </Route>
-                  </Route>
-                </Routes>
+                <AppRouteur />
               </PortailModale>
             </ErrorBoundary>
           </FournisseurAuthentification>

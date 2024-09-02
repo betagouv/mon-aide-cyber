@@ -1,5 +1,4 @@
-import { Header } from '../Header.tsx';
-import { Footer } from '../Footer.tsx';
+import { Footer } from '../layout/Footer.tsx';
 import { useCallback, useEffect, useReducer } from 'react';
 import {
   profilCharge,
@@ -13,8 +12,8 @@ import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurPa
 import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { ComposantFormulaireModificationMotDePasse } from './ComposantFormulaireModificationMotDePasse.tsx';
-import { LienMAC } from '../LienMAC.tsx';
 import { macAPI } from '../../fournisseurs/api/macAPI.ts';
+import { HeaderEspaceAidant } from '../espace-aidant/HeaderEspaceAidant.tsx';
 
 export const ComposantProfil = () => {
   const { showBoundary } = useErrorBoundary();
@@ -62,7 +61,7 @@ export const ComposantProfil = () => {
 
   return (
     <>
-      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
+      <HeaderEspaceAidant />
       <main role="main" className="profil">
         <div className="mode-fonce">
           <div className="fr-container">

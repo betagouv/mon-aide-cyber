@@ -1,10 +1,11 @@
-import { SeConnecter } from './authentification/SeConnecter.tsx';
-import { useAuthentification } from '../fournisseurs/hooks.ts';
-import { ReactElement, useEffect, useState } from 'react';
-import { ComposantMenuUtilisateur } from './utilisateur/ComposantMenuUtilisateur.tsx';
-import { Utilisateur } from '../domaine/authentification/Authentification.ts';
+import { useEffect, useState } from 'react';
+import { HeaderProprietes } from './Header';
+import { Utilisateur } from '../../domaine/authentification/Authentification';
+import { useAuthentification } from '../../fournisseurs/hooks';
+import { SeConnecter } from '../authentification/SeConnecter';
+import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateur';
 
-export const Header = ({ lienMAC }: { lienMAC: ReactElement }) => {
+export const HeaderAidant = ({ lienMAC }: HeaderProprietes) => {
   const [utilisateur, setUtilisateur] = useState<Utilisateur | undefined>(
     undefined
   );
@@ -17,7 +18,7 @@ export const Header = ({ lienMAC }: { lienMAC: ReactElement }) => {
   }, [authentification, utilisateur]);
 
   return (
-    <header role="banner" className="fr-header">
+    <header role="banner" className="fr-header public mac-sticky">
       <div className="fr-header__body">
         <div className="fr-container">
           <div className="fr-header__body-row">

@@ -1,5 +1,5 @@
-import { Header } from '../Header.tsx';
-import { Footer } from '../Footer.tsx';
+import { Header } from '../layout/Header.tsx';
+import { Footer } from '../layout/Footer.tsx';
 import { LienMAC } from '../LienMAC.tsx';
 import { useAuthentification } from '../../fournisseurs/hooks.ts';
 import { ReactElement, useEffect, useState } from 'react';
@@ -38,24 +38,22 @@ export const ComposantAffichageErreur = ({
   }, [authentification.utilisateur]);
 
   const actions = error.liens ? (
-    <>
-      <div className="fond-clair-mac">
-        <div className="fr-container">
-          <div className="fr-grid-row fr-grid-row--center">
-            <div className="fr-col-md-8 fr-col-sm-12 section">
-              <ul>
-                {Object.entries(
-                  new MoteurDeLiens(error.liens).extrais() || []
-                ).map(
-                  ([nom, lien]) =>
-                    ActionsDisponibles.get(nom as Action)?.(lien) || <></>
-                )}
-              </ul>
-            </div>
+    <div className="fond-clair-mac">
+      <div className="fr-container">
+        <div className="fr-grid-row fr-grid-row--center">
+          <div className="fr-col-md-8 fr-col-sm-12 section">
+            <ul>
+              {Object.entries(
+                new MoteurDeLiens(error.liens).extrais() || []
+              ).map(
+                ([nom, lien]) =>
+                  ActionsDisponibles.get(nom as Action)?.(lien) || <></>
+              )}
+            </ul>
           </div>
         </div>
       </div>
-    </>
+    </div>
   ) : (
     <></>
   );

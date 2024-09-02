@@ -1,11 +1,8 @@
 import HeroBloc from '../communs/HeroBloc.tsx';
 import { useEffect } from 'react';
-import { Header } from '../Header.tsx';
-import { LienMAC } from '../LienMAC.tsx';
 import useDefilementFluide from '../../hooks/useDefilementFluide.ts';
 import Sidemenu from '../communs/Sidemenu/Sidemenu.tsx';
 import Cadre from './Cadre.tsx';
-import { Footer } from '../Footer.tsx';
 import IconeInformation from '../communs/IconeInformation.tsx';
 import { FormulaireDeContact } from '../communs/FormulaireDeContact/FormulaireDeContact.tsx';
 import { ActionsPiedDePage } from '../communs/ActionsPiedDePage.tsx';
@@ -125,7 +122,6 @@ export const KitDeCommunication = () => {
 
   return (
     <>
-      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
       <article>
         <HeroBloc>
           <div className="fr-grid-row fr-grid-row--middle fr-py-4w fr-py-lg-0w">
@@ -359,7 +355,6 @@ export const KitDeCommunication = () => {
       </article>
       <ActionsPiedDePage className="fond-clair-mac fr-pt-4w" />
       <FormulaireDeContact />
-      <Footer />
     </>
   );
 };

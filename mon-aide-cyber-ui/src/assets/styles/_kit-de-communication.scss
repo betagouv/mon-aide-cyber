@@ -11,13 +11,6 @@
       margin: 0;
     }
 
-    nav {
-      position: sticky;
-      top: 0;
-      margin: 0;
-      padding: 1rem 0;
-    }
-
     .fr-sidemenu__list {
       display: flex;
       flex-direction: row;
@@ -27,9 +20,16 @@
 
   nav {
     margin: 5.5rem 0;
-
+    top: 10.5rem;
+    
     @include jusqu-a(md) {
       margin: 0;
+    }
+
+    @include jusqu-a(lg) { 
+      position: sticky;
+      margin: 0;
+      padding: 1rem 0;
     }
   }
 
