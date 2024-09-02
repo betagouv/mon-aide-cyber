@@ -23,7 +23,7 @@ import { TableauDeBord } from './composants/espace-aidant/tableau-de-bord/Tablea
 import { ComposantCreationEspaceAidant } from './composants/espace-aidant/creation-espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
 import { ComposantDemandeDevenirAidant } from './composants/gestion-demandes/devenir-aidant/ComposantDemandeDevenirAidant.tsx';
-import { ComposantDemandeAide } from './composants/gestion-demandes/aide/ComposantDemandeAide.tsx';
+import { ComposantDemandeEtreAide } from './composants/gestion-demandes/etre-aide/ComposantDemandeEtreAide.tsx';
 import { KitDeCommunication } from './composants/a-propos/KitDeCommunication.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -39,8 +39,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                   <Route path="/cgu" element={<ComposantCGU />} />
                   <Route path="/charte-aidant" element={<CharteAidant />} />
                   <Route
-                    path="/demande-aide"
-                    element={<ComposantDemandeAide />}
+                    path="/demandes/etre-aide"
+                    element={<ComposantDemandeEtreAide />}
                   />
                   <Route
                     path="/a-propos/kit-de-communication"

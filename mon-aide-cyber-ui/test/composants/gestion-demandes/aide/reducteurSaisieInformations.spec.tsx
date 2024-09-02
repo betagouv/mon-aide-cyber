@@ -9,7 +9,7 @@ import {
   raisonSocialeSaisie,
   reducteurSaisieInformations,
   relationAidantCliquee,
-} from '../../../../src/composants/gestion-demandes/aide/reducteurSaisieInformations.tsx';
+} from '../../../../src/composants/gestion-demandes/etre-aide/reducteurSaisieInformations.tsx';
 
 import { Departement } from '../../../../src/domaine/gestion-demandes/departement.ts';
 import { TexteExplicatif } from '../../../../src/composants/alertes/Erreurs.tsx';

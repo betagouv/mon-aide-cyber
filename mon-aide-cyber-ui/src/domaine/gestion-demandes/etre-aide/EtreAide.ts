@@ -1,7 +1,7 @@
 import { ReponseHATEOAS } from '../../Lien.ts';
 import { Departement } from '../departement.ts';
 
-export type CorpsDemandeAide = {
+export type CorpsDemandeEtreAide = {
   cguValidees: boolean;
   email: string;
   departement: string;
@@ -9,6 +9,6 @@ export type CorpsDemandeAide = {
   relationAidant: boolean;
 };
 
-export type ReponseDemandeAide = ReponseHATEOAS & {
+export type ReponseDemandeEtreAide = ReponseHATEOAS & {
   departements: Departement[];
 };

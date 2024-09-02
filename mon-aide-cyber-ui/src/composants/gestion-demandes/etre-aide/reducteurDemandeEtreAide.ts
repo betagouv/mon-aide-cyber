@@ -16,7 +16,7 @@ type ActionEtapesDemandeAide =
       type: TypeActionEtapesDemandeAide.SAISIE_INFORMATION_EN_ERREUR;
       erreur: Error;
     };
-export const reducteurDemandeAide = (
+export const reducteurDemandeEtreAide = (
   etat: EtatEtapesDemandeAide,
   action: ActionEtapesDemandeAide
 ): EtatEtapesDemandeAide => {

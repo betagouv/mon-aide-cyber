@@ -14,16 +14,16 @@ import {
   Departement,
   estDepartement,
 } from '../../../domaine/gestion-demandes/departement.ts';
-import { CorpsDemandeAide } from '../../../domaine/gestion-demandes/aide/Aide.ts';
 import { useModale } from '../../../fournisseurs/hooks.ts';
 import { CorpsCGU } from '../../../vues/ComposantCGU.tsx';
 import { AutoCompletion } from '../../auto-completion/AutoCompletion.tsx';
+import { CorpsDemandeEtreAide } from '../../../domaine/gestion-demandes/etre-aide/EtreAide.ts';
 
 type ProprietesSaisiesInformations = {
   departements: Departement[];
   surValidation: {
     erreur?: Error;
-    execute: (saisieInformations: CorpsDemandeAide) => void;
+    execute: (saisieInformations: CorpsDemandeEtreAide) => void;
   };
 };
 
