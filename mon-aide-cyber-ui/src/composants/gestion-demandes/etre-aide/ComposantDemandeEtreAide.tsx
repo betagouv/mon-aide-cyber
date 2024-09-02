@@ -8,16 +8,12 @@ import {
 } from 'react';
 import {
   confirmation,
-  reducteurDemandeAide,
+  reducteurDemandeEtreAide,
   saisieInformationsEnErreur,
-} from './reducteurDemandeAide.ts';
+} from './reducteurDemandeEtreAide.ts';
 import { Lien } from '../../../domaine/Lien.ts';
 import { Departement } from '../../../domaine/gestion-demandes/departement.ts';
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
-import {
-  CorpsDemandeAide,
-  ReponseDemandeAide,
-} from '../../../domaine/gestion-demandes/aide/Aide.ts';
 import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
 import { ChampsErreur } from '../../alertes/Erreurs.tsx';
 import { Header } from '../../Header.tsx';
@@ -25,25 +21,31 @@ import { LienMAC } from '../../LienMAC.tsx';
 import { Confirmation } from './Confirmation.tsx';
 import { Footer } from '../../Footer.tsx';
 import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
+import {
+  CorpsDemandeEtreAide,
+  ReponseDemandeEtreAide,
+} from '../../../domaine/gestion-demandes/etre-aide/EtreAide.ts';
 
-export const ComposantDemandeAide = () => {
-  const [etat, envoie] = useReducer(reducteurDemandeAide, {
+export const ComposantDemandeEtreAide = () => {
+  const [etat, envoie] = useReducer(reducteurDemandeEtreAide, {
     etapeCourante: 'saisieInformations',
   });
-  const [demandeAideEnCoursDeChargement, setDemandeAideEnCoursDeChargement] =
-    useState(true);
-  const [demandeAide, setDemandeAide] = useState<
+  const [
+    demandeEtreAideEnCoursDeChargement,
+    setDemandeEtreAideEnCoursDeChargement,
+  ] = useState(true);
+  const [demandeEtreAide, setDemandeEtreAide] = useState<
     { lien: Lien; departements: Departement[] } | undefined
   >();
-  const [retourEnvoiDemandeAide, setRetourEnvoiDemandeAide] = useState<
+  const [retourEnvoiDemandeEtreAide, setRetourEnvoiDemandeEtreAide] = useState<
     ReactElement | undefined
   >(undefined);
   const navigationMAC = useNavigationMAC();
 
   useEffect(() => {
-    if (demandeAideEnCoursDeChargement) {
+    if (demandeEtreAideEnCoursDeChargement) {
       macAPI
-        .execute<ReponseDemandeAide, ReponseDemandeAide>(
+        .execute<ReponseDemandeEtreAide, ReponseDemandeEtreAide>(
           {
             url: '/api/aide/demande',
             methode: 'GET',
@@ -52,23 +54,23 @@ export const ComposantDemandeAide = () => {
         )
         .then((reponse) => {
           new MoteurDeLiens(reponse.liens).trouve('demander-aide', (lien) =>
-            setDemandeAide({ lien, departements: reponse.departements })
+            setDemandeEtreAide({ lien, departements: reponse.departements })
           );
-          setDemandeAideEnCoursDeChargement(false);
+          setDemandeEtreAideEnCoursDeChargement(false);
         })
         .catch(() => {
-          setDemandeAideEnCoursDeChargement(false);
+          setDemandeEtreAideEnCoursDeChargement(false);
         });
     }
-  }, [demandeAideEnCoursDeChargement]);
+  }, [demandeEtreAideEnCoursDeChargement]);
 
   const terminer = useCallback(
-    (saisieInformations: CorpsDemandeAide) => {
+    (saisieInformations: CorpsDemandeEtreAide) => {
       macAPI
-        .execute<void, void, CorpsDemandeAide>(
+        .execute<void, void, CorpsDemandeEtreAide>(
           {
-            url: demandeAide!.lien.url,
-            methode: demandeAide!.lien.methode!,
+            url: demandeEtreAide!.lien.url,
+            methode: demandeEtreAide!.lien.methode!,
             corps: {
               cguValidees: saisieInformations.cguValidees,
               departement: saisieInformations.departement,
@@ -86,10 +88,10 @@ export const ComposantDemandeAide = () => {
         })
         .catch((erreur) => {
           envoie(saisieInformationsEnErreur(erreur));
-          setRetourEnvoiDemandeAide(<ChampsErreur erreur={erreur} />);
+          setRetourEnvoiDemandeEtreAide(<ChampsErreur erreur={erreur} />);
         });
     },
-    [demandeAide, macAPI]
+    [demandeEtreAide, macAPI]
   );
 
   const retourAccueil = useCallback(() => {
@@ -117,7 +119,7 @@ export const ComposantDemandeAide = () => {
               <div className="fr-col-md-8 fr-col-sm-12 section">
                 {etat.etapeCourante === 'saisieInformations' && (
                   <SaisieInformations
-                    departements={demandeAide?.departements || []}
+                    departements={demandeEtreAide?.departements || []}
                     surValidation={{
                       erreur: etat.erreur,
                       execute: (saisieInformations) =>
@@ -128,7 +130,7 @@ export const ComposantDemandeAide = () => {
                 {etat.etapeCourante === 'confirmation' && (
                   <Confirmation onClick={() => retourAccueil()} />
                 )}
-                <div>{retourEnvoiDemandeAide}</div>
+                <div>{retourEnvoiDemandeEtreAide}</div>
               </div>
             </div>
           </div>

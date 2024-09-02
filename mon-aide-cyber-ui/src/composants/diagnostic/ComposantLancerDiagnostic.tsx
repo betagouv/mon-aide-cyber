@@ -72,7 +72,10 @@ function ValidationCGU(proprietesValidationCGU: {
           <label className="fr-label" htmlFor="radio-validation-cgu-oui">
             <div>
               Le bénéficiaire confirme avoir rempli{' '}
-              <a href="/demande-aide">le formulaire de demande d&apos;aide</a>.
+              <a href="/demandes/etre-aide">
+                le formulaire de demande d&apos;aide
+              </a>
+              .
             </div>
           </label>
         </div>
@@ -86,7 +89,10 @@ function ValidationCGU(proprietesValidationCGU: {
           <label className="fr-label" htmlFor="radio-validation-cgu-non">
             <div>
               Le bénéficiaire n&apos;a pas encore rempli{' '}
-              <a href="/demande-aide">le formulaire de demande d&apos;aide</a>.
+              <a href="/demandes/etre-aide">
+                le formulaire de demande d&apos;aide
+              </a>
+              .
               <br />
               <br />
               <b>
@@ -96,8 +102,8 @@ function ValidationCGU(proprietesValidationCGU: {
               <br />
               L&apos;utilisation du diagnostic nécessite l&apos;acceptation des
               CGU par le bénéficiaire. Veuillez l&apos;orienter vers{' '}
-              <a href="/demande-aide">le lien du formulaire</a> afin qu&apos;il
-              puisse accepter les CGU avant de démarrer le diagnostic
+              <a href="/demandes/etre-aide">le lien du formulaire</a> afin
+              qu&apos;il puisse accepter les CGU avant de démarrer le diagnostic
               <br />
               <a href={`${import.meta.env['VITE_URL_MAC']}/demande-aide`}>
                 {`${import.meta.env['VITE_URL_MAC']}/demande-aide`}

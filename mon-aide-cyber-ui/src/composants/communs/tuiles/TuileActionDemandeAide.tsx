@@ -14,7 +14,7 @@ function TuileActionDemandeAide() {
           d’une <b>association</b>, ou d’une <b>entreprise</b> (TPE, PME,
           ETI...) et vous souhaitez <b className="violet-fonce">être aidé</b> ?
         </p>
-        <a href="/demande-aide">
+        <a href="/demandes/etre-aide">
           <button
             type="button"
             className="fr-btn bouton-mac bouton-mac-primaire"
