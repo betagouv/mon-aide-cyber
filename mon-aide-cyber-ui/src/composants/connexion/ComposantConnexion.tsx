@@ -1,7 +1,4 @@
 import { FormulaireAuthentification } from '../authentification/FormulaireAuthentification.tsx';
-import { Header } from '../Header.tsx';
-import { Footer } from '../Footer.tsx';
-import { LienMAC } from '../LienMAC.tsx';
 import { useState } from 'react';
 
 export const ComposantConnexion = () => {
@@ -76,23 +73,19 @@ export const ComposantConnexion = () => {
   );
 
   return (
-    <>
-      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
-      <main role="main" className="connectez-vous">
-        <div className="fond-clair-mac">
-          <div className="fr-container">
-            <div className="fr-grid-row fr-grid-row--center">
-              <div className="fr-col-md-10 fr-col-sm-12 section">
-                {import.meta.env['VITE_INFORMATION_A_AFFICHER'] === 'true' &&
-                !informationAEteAfficheeUneFois
-                  ? information
-                  : formulaireConnexion}
-              </div>
+    <main role="main" className="connectez-vous">
+      <div className="fond-clair-mac">
+        <div className="fr-container">
+          <div className="fr-grid-row fr-grid-row--center">
+            <div className="fr-col-md-10 fr-col-sm-12 section">
+              {import.meta.env['VITE_INFORMATION_A_AFFICHER'] === 'true' &&
+              !informationAEteAfficheeUneFois
+                ? information
+                : formulaireConnexion}
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </main>
   );
 };

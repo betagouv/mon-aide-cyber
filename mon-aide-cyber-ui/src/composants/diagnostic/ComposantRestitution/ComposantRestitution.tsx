@@ -1,12 +1,11 @@
-import { Header } from '../../Header.tsx';
-import { Footer } from '../../Footer.tsx';
+import { Footer } from '../../layout/Footer.tsx';
 import '../../../assets/styles/_restitution.scss';
 import '../../../assets/styles/_restitution_print.scss';
 import '../../../assets/styles/_commun.scss';
 import { UUID } from '../../../types/Types.ts';
-import { LienMAC } from '../../LienMAC.tsx';
 import { ComposantIdentifiantDiagnostic } from '../../ComposantIdentifiantDiagnostic.tsx';
 import { useComposantRestitution } from './useComposantRestitution.ts';
+import { HeaderEspaceAidant } from '../../espace-aidant/HeaderEspaceAidant.tsx';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
@@ -25,14 +24,7 @@ export const ComposantRestitution = ({
 
   return (
     <>
-      <Header
-        lienMAC={
-          <LienMAC
-            titre="Espace Aidant - MonAideCyber"
-            route="/tableau-de-bord"
-          />
-        }
-      />
+      <HeaderEspaceAidant />
       <main role="main">
         <div className="mode-fonce fr-pt-md-4w fr-pb-md-8w">
           <div className="fr-container">
