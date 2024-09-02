@@ -1,6 +1,6 @@
 import { ReactElement, useCallback, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
-import { useNavigationMAC, useModale } from '../../fournisseurs/hooks.ts';
+import { useModale, useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { FormatLien, LienRoutage } from '../../domaine/LienRoutage.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
@@ -105,8 +105,8 @@ function ValidationCGU(proprietesValidationCGU: {
               <a href="/demandes/etre-aide">le lien du formulaire</a> afin
               qu&apos;il puisse accepter les CGU avant de démarrer le diagnostic
               <br />
-              <a href={`${import.meta.env['VITE_URL_MAC']}/demande-aide`}>
-                {`${import.meta.env['VITE_URL_MAC']}/demande-aide`}
+              <a href={`${import.meta.env['VITE_URL_MAC']}/demandes/etre-aide`}>
+                {`${import.meta.env['VITE_URL_MAC']}/demandes/etre-aide`}
               </a>
             </div>
           </label>

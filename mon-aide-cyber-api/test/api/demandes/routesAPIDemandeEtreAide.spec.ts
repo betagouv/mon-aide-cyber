@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { executeRequete } from './executeurRequete';
-import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
-import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
-import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { departements } from '../../src/gestion-demandes/departements';
+import testeurIntegration from '../testeurIntegration';
+import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { executeRequete } from '../executeurRequete';
+import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { departements } from '../../../src/gestion-demandes/departements';
 
 describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
   const testeurMAC = testeurIntegration();
@@ -16,7 +16,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
 
   afterEach(() => testeurMAC.arrete());
 
-  describe('/api/aide/demande', () => {
+  describe('/api/demandes/etre-aide', () => {
     describe('Quand une requête POST est reçue', () => {
       it('Valide la demande de l’aidé', async () => {
         FournisseurHorlogeDeTest.initialise(
@@ -25,7 +25,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
-          '/api/aide/demande',
+          '/api/demandes/etre-aide',
           donneesServeur.portEcoute,
           {
             cguValidees: true,
@@ -52,7 +52,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
-          '/api/aide/demande',
+          '/api/demandes/etre-aide',
           donneesServeur.portEcoute,
           {
             cguValidees: true,
@@ -81,7 +81,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           const reponse = await executeRequete(
             donneesServeur.app,
             'POST',
-            '/api/aide/demande',
+            '/api/demandes/etre-aide',
             donneesServeur.portEcoute,
             {
               cguValidees: false,
@@ -96,7 +96,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             message: 'Veuillez signer les CGU',
             liens: {
               'demander-aide': {
-                url: '/api/aide/demande',
+                url: '/api/demandes/etre-aide',
                 methode: 'POST',
               },
             },
@@ -107,7 +107,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           const reponse = await executeRequete(
             donneesServeur.app,
             'POST',
-            '/api/aide/demande',
+            '/api/demandes/etre-aide',
             donneesServeur.portEcoute,
             {
               cguValidees: true,
@@ -122,7 +122,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             message: 'Veuillez renseigner votre Email',
             liens: {
               'demander-aide': {
-                url: '/api/aide/demande',
+                url: '/api/demandes/etre-aide',
                 methode: 'POST',
               },
             },
@@ -133,7 +133,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           const reponse = await executeRequete(
             donneesServeur.app,
             'POST',
-            '/api/aide/demande',
+            '/api/demandes/etre-aide',
             donneesServeur.portEcoute,
             {
               cguValidees: true,
@@ -149,7 +149,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide",
             liens: {
               'demander-aide': {
-                url: '/api/aide/demande',
+                url: '/api/demandes/etre-aide',
                 methode: 'POST',
               },
             },
@@ -163,7 +163,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           const reponse = await executeRequete(
             donneesServeur.app,
             'POST',
-            '/api/aide/demande',
+            '/api/demandes/etre-aide',
             donneesServeur.portEcoute,
             {
               cguValidees: true,
@@ -184,7 +184,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           const reponse = await executeRequete(
             donneesServeur.app,
             'POST',
-            '/api/aide/demande',
+            '/api/demandes/etre-aide',
             donneesServeur.portEcoute,
             {
               cguValidees: true,
@@ -200,7 +200,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide",
             liens: {
               'demander-aide': {
-                url: '/api/aide/demande',
+                url: '/api/demandes/etre-aide',
                 methode: 'POST',
               },
             },
@@ -214,14 +214,14 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/api/aide/demande',
+          '/api/demandes/etre-aide',
           donneesServeur.portEcoute
         );
 
         expect(reponse.statusCode).toBe(200);
         expect((await reponse.json()).liens).toStrictEqual({
           'demander-aide': {
-            url: '/api/aide/demande',
+            url: '/api/demandes/etre-aide',
             methode: 'POST',
           },
         });
@@ -231,7 +231,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/api/aide/demande',
+          '/api/demandes/etre-aide',
           donneesServeur.portEcoute
         );
 

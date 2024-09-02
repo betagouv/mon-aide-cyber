@@ -25,6 +25,7 @@ import {
   CorpsDemandeEtreAide,
   ReponseDemandeEtreAide,
 } from '../../../domaine/gestion-demandes/etre-aide/EtreAide.ts';
+import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 
 export const ComposantDemandeEtreAide = () => {
   const [etat, envoie] = useReducer(reducteurDemandeEtreAide, {
@@ -43,26 +44,31 @@ export const ComposantDemandeEtreAide = () => {
   const navigationMAC = useNavigationMAC();
 
   useEffect(() => {
-    if (demandeEtreAideEnCoursDeChargement) {
-      macAPI
-        .execute<ReponseDemandeEtreAide, ReponseDemandeEtreAide>(
-          {
-            url: '/api/aide/demande',
-            methode: 'GET',
-          },
-          (corps) => corps
-        )
-        .then((reponse) => {
-          new MoteurDeLiens(reponse.liens).trouve('demander-aide', (lien) =>
-            setDemandeEtreAide({ lien, departements: reponse.departements })
-          );
-          setDemandeEtreAideEnCoursDeChargement(false);
-        })
-        .catch(() => {
-          setDemandeEtreAideEnCoursDeChargement(false);
-        });
-    }
-  }, [demandeEtreAideEnCoursDeChargement]);
+    new MoteurDeLiens(navigationMAC.etat).trouve(
+      'demande-etre-aide',
+      (lien) => {
+        if (demandeEtreAideEnCoursDeChargement) {
+          macAPI
+            .execute<ReponseDemandeEtreAide, ReponseDemandeEtreAide>(
+              constructeurParametresAPI()
+                .url(lien.url)
+                .methode(lien.methode!)
+                .construis(),
+              (corps) => corps
+            )
+            .then((reponse) => {
+              new MoteurDeLiens(reponse.liens).trouve('demander-aide', (lien) =>
+                setDemandeEtreAide({ lien, departements: reponse.departements })
+              );
+              setDemandeEtreAideEnCoursDeChargement(false);
+            })
+            .catch(() => {
+              setDemandeEtreAideEnCoursDeChargement(false);
+            });
+        }
+      }
+    );
+  }, [demandeEtreAideEnCoursDeChargement, navigationMAC.etat]);
 
   const terminer = useCallback(
     (saisieInformations: CorpsDemandeEtreAide) => {

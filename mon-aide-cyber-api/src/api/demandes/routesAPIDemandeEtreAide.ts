@@ -26,7 +26,9 @@ class ErreurDemandeAide extends Error {
   }
 }
 
-export const routesAPIAideDemande = (configuration: ConfigurationServeur) => {
+export const routesAPIDemandeEtreAide = (
+  configuration: ConfigurationServeur
+) => {
   const routes: Router = express.Router();
 
   routes.get('/', async (_requete: Request, reponse: Response) => {
