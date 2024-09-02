@@ -123,6 +123,10 @@ describe("Gestionnaire d'erreur", () => {
           url: '/api/demandes/devenir-aidant',
           methode: 'GET',
         },
+        'demande-etre-aide': {
+          url: '/api/demandes/etre-aide',
+          methode: 'GET',
+        },
       },
     });
   });

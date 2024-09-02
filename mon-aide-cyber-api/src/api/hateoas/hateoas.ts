@@ -102,7 +102,7 @@ class ConstructeurActionsHATEOAS {
 
   demanderAide() {
     this.actions.set('demander-aide', {
-      url: '/api/aide/demande',
+      url: '/api/demandes/etre-aide',
       methode: 'POST',
     });
     return this;
@@ -149,6 +149,11 @@ class ConstructeurActionsHATEOAS {
   actionsPubliques(): ConstructeurActionsHATEOAS {
     this.actions.set('demande-devenir-aidant', {
       url: '/api/demandes/devenir-aidant',
+      methode: 'GET',
+    });
+
+    this.actions.set('demande-etre-aide', {
+      url: '/api/demandes/etre-aide',
       methode: 'GET',
     });
 
