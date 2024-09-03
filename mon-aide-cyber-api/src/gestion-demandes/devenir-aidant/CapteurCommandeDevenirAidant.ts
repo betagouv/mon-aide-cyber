@@ -10,7 +10,8 @@ import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironneme
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import crypto from 'crypto';
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
-import { ServiceChercheAidant } from '../../authentification/ServiceChercheAidant';
+
+import { ServiceAidant } from '../../authentification/ServiceAidant';
 
 export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   type: 'CommandeDevenirAidant';
@@ -35,7 +36,8 @@ export class CapteurCommandeDevenirAidant
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
     private readonly annuaireCOT: () => {
       rechercheEmailParDepartement: (departement: Departement) => string;
-    }
+    },
+    private readonly serviceAidant: ServiceAidant
   ) {}
 
   async execute(
@@ -97,9 +99,7 @@ export class CapteurCommandeDevenirAidant
   }
 
   private async aidantExiste(mailDemandeur: string) {
-    return !!(await new ServiceChercheAidant(
-      this.entrepots.aidants()
-    ).chercheParMail(mailDemandeur));
+    return !!(await this.serviceAidant.rechercheParMail(mailDemandeur));
   }
 
   private async envoieLeMailDeMiseEnRelation(

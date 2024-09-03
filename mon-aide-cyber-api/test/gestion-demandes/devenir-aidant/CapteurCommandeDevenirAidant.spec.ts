@@ -17,6 +17,7 @@ import { adaptateurCorpsMessage } from '../../../src/gestion-demandes/devenir-ai
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
+import { unServiceAidant } from '../../../src/authentification/ServiceAidantMAC';
 
 describe('Capteur de commande devenir aidant', () => {
   const annuaireCot = () => ({
@@ -25,15 +26,17 @@ describe('Capteur de commande devenir aidant', () => {
   });
 
   it('Créé la demande', async () => {
+    const entrepots = new EntrepotsMemoire();
     FournisseurHorlogeDeTest.initialise(
       new Date(Date.parse('2024-08-01T14:45:17+01:00'))
     );
 
     const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
-      new EntrepotsMemoire(),
+      entrepots,
       new BusEvenementDeTest(),
       new AdaptateurEnvoiMailMemoire(),
-      annuaireCot
+      annuaireCot,
+      unServiceAidant(entrepots.aidants())
     ).execute({
       departement: departements[1],
       mail: 'email',
@@ -57,12 +60,14 @@ describe('Capteur de commande devenir aidant', () => {
       new Date(Date.parse('2024-08-01T14:45:17+01:00'))
     );
     const busEvenementDeTest = new BusEvenementDeTest();
+    const entrepots = new EntrepotsMemoire();
 
     const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
-      new EntrepotsMemoire(),
+      entrepots,
       busEvenementDeTest,
       new AdaptateurEnvoiMailMemoire(),
-      annuaireCot
+      annuaireCot,
+      unServiceAidant(entrepots.aidants())
     ).execute({
       departement: departements[1],
       mail: 'email',
@@ -101,7 +106,8 @@ describe('Capteur de commande devenir aidant', () => {
         entrepots,
         new BusEvenementDeTest(),
         new AdaptateurEnvoiMailMemoire(),
-        annuaireCot
+        annuaireCot,
+        unServiceAidant(entrepots.aidants())
       ).execute({
         departement: departements[0],
         mail: 'email',
@@ -127,7 +133,8 @@ describe('Capteur de commande devenir aidant', () => {
         entrepots,
         new BusEvenementDeTest(),
         new AdaptateurEnvoiMailMemoire(),
-        annuaireCot
+        annuaireCot,
+        unServiceAidant(entrepots.aidants())
       ).execute({
         departement: departements[0],
         mail: aidant.identifiantConnexion,
@@ -147,12 +154,14 @@ describe('Capteur de commande devenir aidant', () => {
     );
     it("Envoie le mail récapitulatif à l'Aidant", async () => {
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      const entrepots = new EntrepotsMemoire();
 
       await new CapteurCommandeDevenirAidant(
-        new EntrepotsMemoire(),
+        entrepots,
         new BusEvenementDeTest(),
         adaptateurEnvoiMail,
-        annuaireCot
+        annuaireCot,
+        unServiceAidant(entrepots.aidants())
       ).execute({
         departement: departements[1],
         mail: 'email',
@@ -168,15 +177,17 @@ describe('Capteur de commande devenir aidant', () => {
 
     it('Envoie le mail récapitulatif en copie au COT', async () => {
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      const entrepots = new EntrepotsMemoire();
 
       await new CapteurCommandeDevenirAidant(
-        new EntrepotsMemoire(),
+        entrepots,
         new BusEvenementDeTest(),
         adaptateurEnvoiMail,
         () => ({
           rechercheEmailParDepartement: (__departement) =>
             'hauts-de-france@ssi.gouv.fr',
-        })
+        }),
+        unServiceAidant(entrepots.aidants())
       ).execute({
         departement: departements[1],
         mail: 'email',
@@ -200,12 +211,14 @@ describe('Capteur de commande devenir aidant', () => {
         clefAPI: () => 'clef',
       });
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      const entrepots = new EntrepotsMemoire();
 
       await new CapteurCommandeDevenirAidant(
-        new EntrepotsMemoire(),
+        entrepots,
         new BusEvenementDeTest(),
         adaptateurEnvoiMail,
-        annuaireCot
+        annuaireCot,
+        unServiceAidant(entrepots.aidants())
       ).execute({
         departement: departements[1],
         mail: 'email',
@@ -230,13 +243,15 @@ describe('Capteur de commande devenir aidant', () => {
       });
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       adaptateurEnvoiMail.genereErreur();
+      const entrepots = new EntrepotsMemoire();
 
       expect(
         new CapteurCommandeDevenirAidant(
-          new EntrepotsMemoire(),
+          entrepots,
           new BusEvenementDeTest(),
           adaptateurEnvoiMail,
-          annuaireCot
+          annuaireCot,
+          unServiceAidant(entrepots.aidants())
         ).execute({
           departement: departements[1],
           mail: 'email',
