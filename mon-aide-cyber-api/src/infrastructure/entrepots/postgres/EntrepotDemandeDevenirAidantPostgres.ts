@@ -26,6 +26,11 @@ export class EntrepotDemandeDevenirAidantPostgres
   constructor(private readonly chiffrement: ServiceDeChiffrement) {
     super();
   }
+
+  rechercheParMail(_mail: string): Promise<DemandeDevenirAidant | undefined> {
+    throw new Error('Method not implemented.');
+  }
+
   protected nomTable(): string {
     return 'demandes-devenir-aidant';
   }
