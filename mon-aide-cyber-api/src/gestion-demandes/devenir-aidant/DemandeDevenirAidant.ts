@@ -12,4 +12,6 @@ export type DemandeDevenirAidant = Aggregat & {
 export interface EntrepotDemandeDevenirAidant
   extends Entrepot<DemandeDevenirAidant> {
   demandeExiste(mail: string): Promise<boolean>;
+
+  rechercheParMail(mail: string): Promise<DemandeDevenirAidant | undefined>;
 }
