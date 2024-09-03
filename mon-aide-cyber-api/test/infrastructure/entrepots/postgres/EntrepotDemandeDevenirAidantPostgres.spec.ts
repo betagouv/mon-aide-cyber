@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { nettoieLaBaseDeDonneesDemandeDevenirAidant } from '../../../utilitaires/nettoyeurBDD';
 import { unConstructeurDeDemandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/constructeurDeDemandeDevenirAidant';
 import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
@@ -85,7 +85,6 @@ describe('Entrepot Demande Devenir Aidant', () => {
         [demandeDevenirAidant.departement.nom, 'ddd'],
       ])
     );
-
     await new EntrepotDemandeDevenirAidantPostgres(
       serviceDeChiffrement
     ).persiste(demandeDevenirAidant);
@@ -95,5 +94,34 @@ describe('Entrepot Demande Devenir Aidant', () => {
         serviceDeChiffrement
       ).demandeExiste(demandeDevenirAidant.mail)
     ).toBe(true);
+  });
+
+  it('recherche une demande par mail', async () => {
+    const demandeDevenirAidant =
+      unConstructeurDeDemandeDevenirAidant().construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [demandeDevenirAidant.nom, 'aaa'],
+        [demandeDevenirAidant.prenom, 'bbb'],
+        [demandeDevenirAidant.mail, 'ccc'],
+        [demandeDevenirAidant.departement.nom, 'ddd'],
+      ])
+    );
+    await new EntrepotDemandeDevenirAidantPostgres(
+      serviceDeChiffrement
+    ).persiste(demandeDevenirAidant);
+
+    const demandeRecherchee = await new EntrepotDemandeDevenirAidantPostgres(
+      serviceDeChiffrement
+    ).rechercheParMail(demandeDevenirAidant.mail);
+
+    expect(demandeRecherchee).toStrictEqual<DemandeDevenirAidant>({
+      identifiant: demandeDevenirAidant.identifiant,
+      date: demandeDevenirAidant.date,
+      nom: demandeDevenirAidant.nom,
+      prenom: demandeDevenirAidant.prenom,
+      mail: demandeDevenirAidant.mail,
+      departement: demandeDevenirAidant.departement,
+    });
   });
 });

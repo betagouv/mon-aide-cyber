@@ -27,13 +27,21 @@ export class EntrepotDemandeDevenirAidantPostgres
     super();
   }
 
-  rechercheParMail(_mail: string): Promise<DemandeDevenirAidant | undefined> {
-    throw new Error('Method not implemented.');
+  demandeExiste(mail: string): Promise<boolean> {
+    return this.tous().then((demandes) =>
+      demandes.some((demande) => demande.mail === mail)
+    );
   }
 
+  rechercheParMail(mail: string): Promise<DemandeDevenirAidant | undefined> {
+    return this.tous().then((demandes) =>
+      demandes.find((demande) => demande.mail === mail)
+    );
+  }
   protected nomTable(): string {
     return 'demandes-devenir-aidant';
   }
+
   protected champsAMettreAJour(
     _entiteDTO: DemandeDevenirAidantDTO
   ): Partial<DemandeDevenirAidantDTO> {
@@ -74,11 +82,5 @@ export class EntrepotDemandeDevenirAidantPostgres
       mail: this.chiffrement.dechiffre(dto.donnees.mail),
       departement: departementDechiffre,
     };
-  }
-
-  demandeExiste(mail: string): Promise<boolean> {
-    return this.tous().then((demandes) =>
-      demandes.some((demande) => demande.mail === mail)
-    );
   }
 }
