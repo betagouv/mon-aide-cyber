@@ -20,6 +20,7 @@ import { AdaptateurDeGestionDeCookiesDeTest } from '../adaptateurs/AdaptateurDeG
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { AdaptateurDeVerificationDesAccesDeTest } from '../adaptateurs/AdaptateurDeVerificationDesAccesDeTest';
+import { unServiceAidant } from '../../src/authentification/ServiceAidantMAC';
 
 class TesteurIntegrationMAC {
   private serveurDeTest:
@@ -66,7 +67,8 @@ class TesteurIntegrationMAC {
       busCommande: new BusCommandeMAC(
         this.entrepots,
         this.busEvenement,
-        this.adaptateurEnvoieMessage
+        this.adaptateurEnvoieMessage,
+        { aidant: unServiceAidant(this.entrepots.aidants()) }
       ),
       busEvenement: this.busEvenement,
       gestionnaireErreurs: this.gestionnaireErreurs,
