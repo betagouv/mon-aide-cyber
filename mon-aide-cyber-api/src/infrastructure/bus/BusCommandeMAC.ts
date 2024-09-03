@@ -11,11 +11,18 @@ import { CapteurSagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaD
 import { CapteurCommandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 import { fabriqueAnnuaireCOT } from '../adaptateurs/fabriqueAnnuaireCOT';
 
+import { ServiceAidant } from '../../authentification/ServiceAidant';
+
+type Services = {
+  aidant: ServiceAidant;
+};
+
 type ParametresCapteur = {
   entrepots: Entrepots;
   busCommande?: BusCommande;
   busEvenements?: BusEvenement;
   adaptateurEnvoiMail?: AdaptateurEnvoiMail;
+  services: Services;
 };
 
 type Capteur = {
@@ -87,7 +94,8 @@ const capteurs: Map<string, Capteur> = new Map([
           parametres.entrepots,
           parametres.busEvenements!,
           parametres.adaptateurEnvoiMail!,
-          fabriqueAnnuaireCOT().annuaireCOT
+          fabriqueAnnuaireCOT().annuaireCOT,
+          parametres.services.aidant
         ),
     },
   ],
@@ -97,7 +105,8 @@ export class BusCommandeMAC implements BusCommande {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,
-    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail
+    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
+    private readonly services: Services
   ) {}
 
   publie<C extends Commande, R>(commande: C): Promise<R> {
@@ -110,6 +119,9 @@ export class BusCommandeMAC implements BusCommande {
           busCommande: this,
           busEvenements: this.busEvenement,
           adaptateurEnvoiMail: this.adaptateurEnvoiMail,
+          services: {
+            aidant: this.services.aidant,
+          },
         })
         .execute(commande);
     }
