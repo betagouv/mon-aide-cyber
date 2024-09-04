@@ -10,6 +10,7 @@ import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { CapteurSagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
 import { CapteurCommandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 import { fabriqueAnnuaireCOT } from '../adaptateurs/fabriqueAnnuaireCOT';
+import { CapteurCommandeCreeCompteAidant } from '../../authentification/CapteurCommandeCreeCompteAidant';
 
 import { ServiceAidant } from '../../authentification/ServiceAidant';
 
@@ -96,6 +97,16 @@ const capteurs: Map<string, Capteur> = new Map([
           parametres.adaptateurEnvoiMail!,
           fabriqueAnnuaireCOT().annuaireCOT,
           parametres.services.aidant
+        ),
+    },
+  ],
+  [
+    'CommandeCreeCompteAidant',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeCreeCompteAidant(
+          parametres.entrepots,
+          parametres.busEvenements!
         ),
     },
   ],
