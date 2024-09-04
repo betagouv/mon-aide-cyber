@@ -4,6 +4,7 @@ import { BusEvenement } from '../domaine/BusEvenement';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { AidantCree } from '../administration/aidant/creeAidant';
 import crypto from 'crypto';
+import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 
 export type CommandeCreeCompteAidant = Omit<Commande, 'type'> & {
   type: 'CommandeCreeCompteAidant';
@@ -30,7 +31,7 @@ export class CapteurCommandeCreeCompteAidant
   async execute(commande: CommandeCreeCompteAidant): Promise<CompteAidantCree> {
     const aidant = {
       dateSignatureCGU: commande.dateSignatureCGU,
-      identifiant: crypto.randomUUID(),
+      identifiant: adaptateurUUID.genereUUID(),
       identifiantConnexion: commande.identifiantConnexion,
       motDePasse: this.generateurMotDePasse(),
       nomPrenom: commande.nomPrenom,
