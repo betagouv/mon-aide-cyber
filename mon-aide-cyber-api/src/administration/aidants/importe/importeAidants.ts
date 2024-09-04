@@ -1,8 +1,8 @@
-import crypto from 'crypto';
 import { EntrepotAidant } from '../../../authentification/Aidant';
 import { BusEvenement } from '../../../domaine/BusEvenement';
 import { creeAidant } from '../../aidant/creeAidant';
 import { FournisseurHorloge } from '../../../infrastructure/horloge/FournisseurHorloge';
+import { genereMotDePasse } from '../../../authentification/CapteurCommandeCreeCompteAidant';
 
 type StatusImportation = 'importé' | 'existant';
 
@@ -140,29 +140,4 @@ export const importeAidants = async (
 
     return resultat;
   });
-};
-
-const genereMotDePasse = () => {
-  const expressionReguliere = /^[a-hj-km-np-zA-HJ-KM-NP-Z1-9/]*$/;
-
-  const chaineAleatoire = () => {
-    const valeurAleatoire = String.fromCharCode(
-      crypto.webcrypto.getRandomValues(new Uint8Array(1))[0]
-    );
-    if (expressionReguliere.test(valeurAleatoire)) {
-      return valeurAleatoire;
-    }
-    return undefined;
-  };
-
-  return new Array(21)
-    .fill('')
-    .map(() => {
-      let caractereAleatoire = undefined;
-      while (caractereAleatoire === undefined) {
-        caractereAleatoire = chaineAleatoire();
-      }
-      return caractereAleatoire;
-    })
-    .join('');
 };
