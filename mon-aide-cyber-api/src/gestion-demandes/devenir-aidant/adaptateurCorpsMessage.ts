@@ -1,7 +1,7 @@
 import { DemandeDevenirAidant } from './DemandeDevenirAidant';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
-export const genereCorpsMessage = (
+const genereCorpsDemandeDevenirAidant = (
   demandeDevenirAidant: DemandeDevenirAidant
 ) => {
   return (
@@ -31,10 +31,35 @@ export const genereCorpsMessage = (
   );
 };
 
+const genereCorpsFinalisationDemandeDevenirAidant = (
+  nomPrenom: string,
+  url: string
+) => {
+  return (
+    `Bonjour ${nomPrenom} \n` +
+    '\n' +
+    'Vous êtes invités à vous créer un compte sur MonAideCyber en suivant ce lien sécurisé : \n' +
+    '\n' +
+    `${url}\n` +
+    '\n' +
+    'Ce lien vous permettra de créer votre accès en définissant vous-même votre mot de passe pour accéder à votre espace membre.\n' +
+    '\n' +
+    'Toute l’équipe reste à votre disposition,\n' +
+    '\n' +
+    'Pour toute remarque ou question, n’hésitez pas à nous contacter sur monaidecyber@ssi.gouv.fr\n' +
+    '\n' +
+    "<b>L'équipe MonAideCyber</b>"
+  );
+};
+
 const adaptateurCorpsMessage = {
+  finaliseDemandeDevenirAidant: () => ({
+    genereCorpsMessage: (nomPrenom: string, url: string) =>
+      genereCorpsFinalisationDemandeDevenirAidant(nomPrenom, url),
+  }),
   demandeDevenirAidant: () => ({
     genereCorpsMessage: (demandeDevenirAidant: DemandeDevenirAidant) =>
-      genereCorpsMessage(demandeDevenirAidant),
+      genereCorpsDemandeDevenirAidant(demandeDevenirAidant),
   }),
 };
 

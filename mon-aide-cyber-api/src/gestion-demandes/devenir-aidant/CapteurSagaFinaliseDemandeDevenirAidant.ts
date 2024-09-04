@@ -5,6 +5,10 @@ import {
   CommandeCreeCompteAidant,
   CompteAidantCree,
 } from '../../authentification/CapteurCommandeCreeCompteAidant';
+import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
+import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
+import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
 type CommandeFinaliseDemandeDevenirAidant = Omit<Commande, 'type'> & {
   type: 'CommandeFinaliseDemandeDevenirAidant';
@@ -23,7 +27,9 @@ export class CapteurSagaFinaliseDemandeDevenirAidant
 {
   constructor(
     private readonly busCommande: BusCommande,
-    private readonly service: ServiceDevenirAidant
+    private readonly service: ServiceDevenirAidant,
+    private readonly adaptateurEnvoiDeMail: AdaptateurEnvoiMail,
+    private readonly serviceDeChiffrement: ServiceDeChiffrement
   ) {}
 
   execute(
@@ -38,9 +44,24 @@ export class CapteurSagaFinaliseDemandeDevenirAidant
             nomPrenom: `${demande.prenom} ${demande.nom}`,
             type: 'CommandeCreeCompteAidant',
           })
-          .then((aidantCree) => ({
-            identifiantAidant: aidantCree.identifiant,
-          }));
+          .then((aidantCree) => {
+            const partieChiffree = this.serviceDeChiffrement.chiffre(
+              aidantCree.identifiant
+            );
+            this.adaptateurEnvoiDeMail.envoie({
+              objet: 'Mon Aide Cyber - Création de votre compte Aidant',
+              corps: adaptateurCorpsMessage
+                .finaliseDemandeDevenirAidant()
+                .genereCorpsMessage(
+                  aidantCree.nomPrenom,
+                  `${adaptateurEnvironnement.mac().urlMAC()}/demandes/devenir-aidant/finalise?token=${partieChiffree}`
+                ),
+              destinataire: { email: aidantCree.email },
+            });
+            return {
+              identifiantAidant: aidantCree.identifiant,
+            };
+          });
       }
       return undefined;
     });
