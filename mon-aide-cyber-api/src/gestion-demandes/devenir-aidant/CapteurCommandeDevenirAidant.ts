@@ -138,10 +138,8 @@ export class CapteurCommandeDevenirAidant
   }
 }
 
-export type DemandeDevenirAidantCreee = Omit<Evenement, 'corps'> & {
-  corps: {
-    date: Date;
-    departement: string;
-    identifiantDemande: crypto.UUID;
-  };
-};
+export type DemandeDevenirAidantCreee = Evenement<{
+  date: Date;
+  departement: string;
+  identifiantDemande: crypto.UUID;
+}>;

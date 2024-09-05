@@ -53,10 +53,8 @@ export class CapteurCommandeLanceRestitution
   }
 }
 
-type RestitutionLancee = Omit<Evenement, 'corps'> & {
-  corps: {
-    identifiantDiagnostic: crypto.UUID;
-    indicateurs?: { [thematique: string]: { moyennePonderee: number } };
-    mesures?: MesurePriorisee[];
-  };
-};
+type RestitutionLancee = Evenement<{
+  identifiantDiagnostic: crypto.UUID;
+  indicateurs?: { [thematique: string]: { moyennePonderee: number } };
+  mesures?: MesurePriorisee[];
+}>;

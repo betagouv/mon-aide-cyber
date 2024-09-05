@@ -49,9 +49,7 @@ export type CommandeLanceDiagnostic = Omit<Commande, 'type'> & {
   identifiantAidant: crypto.UUID;
 };
 
-export type DiagnosticLance = Omit<Evenement, 'corps'> & {
-  corps: {
-    identifiantDiagnostic: crypto.UUID;
-    identifiantAidant: crypto.UUID;
-  };
-};
+export type DiagnosticLance = Evenement<{
+  identifiantDiagnostic: crypto.UUID;
+  identifiantAidant: crypto.UUID;
+}>;

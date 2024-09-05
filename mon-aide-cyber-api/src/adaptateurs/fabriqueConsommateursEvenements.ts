@@ -2,6 +2,7 @@ import {
   aidantCree,
   aideCree,
   demandeDevenirAidantCree,
+  demandeDevenirAidantFinalisee,
   diagnosticLance,
   reponseAjoutee,
   restitutionLancee,
@@ -47,6 +48,10 @@ export const fabriqueConsommateursEvenements = (
     [
       'DEMANDE_DEVENIR_AIDANT_CREEE',
       [demandeDevenirAidantCree(entrepotJournalisation)],
+    ],
+    [
+      'DEMANDE_DEVENIR_AIDANT_FINALISEE',
+      [demandeDevenirAidantFinalisee(entrepotJournalisation)],
     ],
   ]);
 };

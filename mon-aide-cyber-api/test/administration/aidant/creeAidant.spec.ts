@@ -28,7 +28,7 @@ describe('Crée un aidant', () => {
         'mdp'
       );
     expect(
-      busEvenement.consommateurs.get('AIDANT_CREE')?.evenementConsomme
+      busEvenement.consommateursTestes.get('AIDANT_CREE')?.[0].evenementConsomme
     ).toMatchObject({
       type: 'AIDANT_CREE',
       date: FournisseurHorloge.maintenant(),

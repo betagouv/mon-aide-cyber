@@ -12,17 +12,20 @@ import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/En
 import { EntrepotEvenementJournal } from '../../../src/journalisation/Publication';
 
 class ConsommateurEvenementDeTest implements ConsommateurEvenement {
-  public evenementConsomme?: Evenement = undefined;
-  consomme<E extends Evenement>(evenement: E): Promise<void> {
+  public evenementConsomme?: Evenement<unknown> = undefined;
+  consomme<E extends Evenement<unknown>>(evenement: E): Promise<void> {
     this.evenementConsomme = evenement;
     return Promise.resolve(undefined);
   }
 }
 
 export class BusEvenementDeTest extends BusEvenementMAC {
-  public evenementRecu: Evenement | undefined;
-  public consommateurs: Map<TypeEvenement, ConsommateurEvenementDeTest> =
-    new Map();
+  public evenementRecu: Evenement<unknown> | undefined;
+  public consommateursTestes: Map<
+    TypeEvenement,
+    ConsommateurEvenementDeTest[]
+  > = new Map();
+  private _genereErreur = false;
 
   constructor(
     public readonly configuration: {
@@ -45,12 +48,22 @@ export class BusEvenementDeTest extends BusEvenementMAC {
         aideCree: () => consommateurAideCree,
       }
     );
+    consommateursEvenements.set('DEMANDE_DEVENIR_AIDANT_FINALISEE', [
+      new ConsommateurEvenementDeTest(),
+    ]);
     super(consommateursEvenements);
-    this.consommateurs.set('AIDANT_CREE', consommateurAidantCree);
+    this.consommateursTestes = consommateursEvenements;
   }
 
-  publie(evenement: Evenement): Promise<void> {
+  publie(evenement: Evenement<unknown>): Promise<void> {
+    if (this._genereErreur) {
+      return Promise.reject();
+    }
     this.evenementRecu = evenement;
     return super.publie(evenement);
+  }
+
+  genereUneErreur() {
+    this._genereErreur = true;
   }
 }

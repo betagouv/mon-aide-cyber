@@ -1,19 +1,20 @@
 import crypto from 'crypto';
 
-export type Corps = object;
-export type Evenement = {
+export type Corps<T> = T;
+
+export type Evenement<T> = {
   identifiant: crypto.UUID;
   type: TypeEvenement;
   date: Date;
-  corps: Corps;
+  corps: Corps<T>;
 };
 
 export interface BusEvenement {
-  publie<E extends Evenement>(evenement: E): Promise<void>;
+  publie<E extends Evenement<unknown>>(evenement: E): Promise<void>;
 }
 
 export interface ConsommateurEvenement {
-  consomme<E extends Evenement>(evenement: E): Promise<void>;
+  consomme<E extends Evenement<unknown>>(evenement: E): Promise<void>;
 }
 
 export type TypeEvenement =
@@ -22,4 +23,5 @@ export type TypeEvenement =
   | 'RESTITUTION_LANCEE'
   | 'AIDANT_CREE'
   | 'AIDE_CREE'
-  | 'DEMANDE_DEVENIR_AIDANT_CREEE';
+  | 'DEMANDE_DEVENIR_AIDANT_CREEE'
+  | 'DEMANDE_DEVENIR_AIDANT_FINALISEE';
