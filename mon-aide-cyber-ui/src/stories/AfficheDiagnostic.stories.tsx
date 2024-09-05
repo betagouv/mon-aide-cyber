@@ -6,16 +6,13 @@ import {
   uneQuestionTiroirAChoixMultiple,
 } from '../../test/constructeurs/constructeurQuestions.ts';
 import { uneReponsePossible } from '../../test/constructeurs/constructeurReponsePossible.ts';
-import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
-import { ErrorBoundary } from 'react-error-boundary';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
 import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';
 import { UUID } from '../types/Types.ts';
 import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
-import { FournisseurNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
-import { MemoryRouter } from 'react-router-dom';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { macAPI } from '../fournisseurs/api/macAPI.ts';
+import { decorateurComposantDiagnostic } from './DecorateurComposantDiagnostic.tsx';
 
 const identifiantUneQuestion = '6dadad14-8fa0-4be7-a8da-473d538eb6c1';
 const diagnosticAvecUneQuestion = unDiagnostic()
@@ -144,17 +141,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
   },
-  decorators: [
-    (story) => (
-      <MemoryRouter>
-        <FournisseurNavigationMAC>
-          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            {story()}
-          </ErrorBoundary>
-        </FournisseurNavigationMAC>
-      </MemoryRouter>
-    ),
-  ],
 } satisfies Meta<typeof ComposantDiagnostic>;
 
 export default meta;
@@ -163,6 +149,9 @@ type Story = StoryObj<typeof meta>;
 export const QuestionDiagnostic: Story = {
   name: 'Affiche une seule question du diagnostic',
   args: { idDiagnostic: identifiantUneQuestion },
+  decorators: [
+    (story) => decorateurComposantDiagnostic(story, identifiantUneQuestion),
+  ],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
@@ -185,6 +174,10 @@ export const QuestionDiagnostic: Story = {
 export const AfficheDiagnosticAvecPlusieursQuestions: Story = {
   name: 'Affiche plusieurs questions',
   args: { idDiagnostic: identifiantPlusieursQuestions },
+  decorators: [
+    (story) =>
+      decorateurComposantDiagnostic(story, identifiantPlusieursQuestions),
+  ],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
@@ -208,6 +201,10 @@ export const AfficheDiagnosticAvecPlusieursQuestions: Story = {
 export const AfficheDiagnosticQuestionListeDeroulante: Story = {
   name: 'Affiche les réponses possibles à une question sous forme de champ de saisie avec auto complétion',
   args: { idDiagnostic: identifiantQuestionListeDeroulante },
+  decorators: [
+    (story) =>
+      decorateurComposantDiagnostic(story, identifiantQuestionListeDeroulante),
+  ],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const champSaisie = await waitFor(() => canvas.getByRole('textbox'));
@@ -230,6 +227,13 @@ export const AfficheDiagnosticQuestionListeDeroulante: Story = {
 export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
   name: "Affiche les réponses possibles à une question ainsi qu'une question reliée à une réponse",
   args: { idDiagnostic: identifiantReponseEntrainantQuestion },
+  decorators: [
+    (story) =>
+      decorateurComposantDiagnostic(
+        story,
+        identifiantReponseEntrainantQuestion
+      ),
+  ],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
@@ -250,6 +254,13 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
 export const AfficheDiagnosticAvecQuestionTiroirAChoixUnique: Story = {
   name: 'Affiche la question avec réponses à choix unique sous forme de boutton radio',
   args: { idDiagnostic: identifiantDiagnosticAvecQuestionTiroirAChoixUnique },
+  decorators: [
+    (story) =>
+      decorateurComposantDiagnostic(
+        story,
+        identifiantDiagnosticAvecQuestionTiroirAChoixUnique
+      ),
+  ],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
