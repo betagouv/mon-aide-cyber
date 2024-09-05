@@ -20,12 +20,12 @@ import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/Ent
 import {
   CapteurSagaAjoutReponse,
   CorpsReponseQuestionATiroir,
+  ReponseAjoutee,
   SagaAjoutReponse,
 } from '../../src/diagnostic/CapteurSagaAjoutReponse';
 import { Constructeur } from '../constructeurs/constructeur';
 import { fakerFR } from '@faker-js/faker';
 import { BusCommandeTest } from '../infrastructure/bus/BusCommandeTest';
-import { Evenement } from '../../src/domaine/BusEvenement';
 
 describe("Capteur d'ajout de réponse au diagnostic", () => {
   let entrepots: Entrepots;
@@ -137,7 +137,7 @@ describe("Capteur d'ajout de réponse au diagnostic", () => {
           .construis()
       );
 
-      expect(busEvenement.evenementRecu).toStrictEqual<Evenement>({
+      expect(busEvenement.evenementRecu).toStrictEqual<ReponseAjoutee>({
         identifiant: diagnostic.identifiant,
         type: 'REPONSE_AJOUTEE',
         date: maintenant,

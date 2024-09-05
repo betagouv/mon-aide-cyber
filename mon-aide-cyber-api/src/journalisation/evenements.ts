@@ -1,10 +1,10 @@
 import { ConsommateurEvenement, Evenement } from '../domaine/BusEvenement';
 import crypto from 'crypto';
-import { EntrepotEvenementJournal } from './Publication';
+import { EntrepotEvenementJournal, Publication } from './Publication';
 
 const consommateurEvenement = () => (entrepot: EntrepotEvenementJournal) =>
   new (class implements ConsommateurEvenement {
-    consomme<E extends Evenement>(evenement: E): Promise<void> {
+    consomme<E extends Evenement<unknown>>(evenement: E): Promise<void> {
       return entrepot.persiste(genereEvenement(evenement));
     }
   })();
@@ -21,10 +21,14 @@ export const aideCree = consommateurEvenement();
 
 export const demandeDevenirAidantCree = consommateurEvenement();
 
-const genereEvenement = <E extends Evenement>(evenement: E) => {
+export const demandeDevenirAidantFinalisee = consommateurEvenement();
+
+const genereEvenement = <E extends Evenement<unknown>>(
+  evenement: E
+): Publication => {
   return {
     date: evenement.date,
-    donnees: evenement.corps,
+    donnees: evenement.corps as object,
     identifiant: crypto.randomUUID(),
     type: evenement.type,
   };

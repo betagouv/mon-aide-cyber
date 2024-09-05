@@ -6,7 +6,7 @@ export const aidantInitieDiagnostic = (
   adaptateurRelations: AdaptateurRelations
 ) =>
   new (class implements ConsommateurEvenement {
-    async consomme<E extends Evenement = DiagnosticLance>(
+    async consomme<E extends Evenement<unknown> = DiagnosticLance>(
       evenement: E
     ): Promise<void> {
       const diagnosticLance = evenement as DiagnosticLance;

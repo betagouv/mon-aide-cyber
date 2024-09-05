@@ -7,11 +7,11 @@ import {
 
 export class BusEvenementMAC implements BusEvenement {
   constructor(
-    private readonly consomateurs: Map<TypeEvenement, ConsommateurEvenement[]>
+    private readonly consommateurs: Map<TypeEvenement, ConsommateurEvenement[]>
   ) {}
 
-  async publie<E extends Evenement>(evenement: E): Promise<void> {
-    const consommateurEvenements = this.consomateurs.get(evenement.type);
+  async publie<E extends Evenement<unknown>>(evenement: E): Promise<void> {
+    const consommateurEvenements = this.consommateurs.get(evenement.type);
     if (consommateurEvenements) {
       const consommations = consommateurEvenements.map((consommateur) =>
         consommateur.consomme(evenement)

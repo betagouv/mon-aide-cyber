@@ -9,9 +9,9 @@ import { FournisseurHorlogeDeTest } from '../horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
 
 class ConsommateurEvenementDeTest implements ConsommateurEvenement {
-  consommation?: Evenement;
+  consommation?: Evenement<unknown>;
   nombreConsommation = 0;
-  consomme<E extends Evenement>(evenement: E): Promise<void> {
+  consomme<E extends Evenement<unknown>>(evenement: E): Promise<void> {
     this.consommation = evenement;
     this.nombreConsommation++;
     return Promise.resolve(undefined);
@@ -36,7 +36,7 @@ describe('Bus Événement', () => {
       corps: {},
     });
 
-    expect(consommateur.consommation).toStrictEqual<Evenement>({
+    expect(consommateur.consommation).toStrictEqual<Evenement<unknown>>({
       identifiant,
       type: 'DIAGNOSTIC_LANCE',
       date: maintenant,
@@ -66,7 +66,7 @@ describe('Bus Événement', () => {
 
     expect(premierConsommateur.nombreConsommation).toBe(0);
     expect(secondConsommateur.nombreConsommation).toBe(1);
-    expect(secondConsommateur.consommation).toStrictEqual<Evenement>({
+    expect(secondConsommateur.consommation).toStrictEqual<Evenement<object>>({
       identifiant,
       type: 'RESTITUTION_LANCEE',
       date: maintenant,

@@ -9,8 +9,11 @@ import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { Entrepots } from '../../domaine/Entrepots';
+import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
+import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { adaptateurUUID } from '../../infrastructure/adaptateurs/adaptateurUUID';
 
-type CommandeFinaliseDemandeDevenirAidant = Omit<Commande, 'type'> & {
+export type CommandeFinaliseDemandeDevenirAidant = Omit<Commande, 'type'> & {
   type: 'CommandeFinaliseDemandeDevenirAidant';
   mail: string;
 };
@@ -28,6 +31,7 @@ export class CapteurSagaFinaliseDemandeDevenirAidant
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busCommande: BusCommande,
+    private readonly busEvenement: BusEvenement,
     private readonly adaptateurEnvoiDeMail: AdaptateurEnvoiMail,
     private readonly serviceDeChiffrement: ServiceDeChiffrement
   ) {}
@@ -35,6 +39,10 @@ export class CapteurSagaFinaliseDemandeDevenirAidant
   execute(
     commande: CommandeFinaliseDemandeDevenirAidant
   ): Promise<DemandeDevenirAidantFinalisee | undefined> {
+    const demandeDevenirAidantFinalisee = (aidantCree: CompteAidantCree) => ({
+      identifiantAidant: aidantCree.identifiant,
+    });
+
     return this.entrepots
       .demandesDevenirAidant()
       .rechercheParMail(commande.mail)
@@ -48,25 +56,46 @@ export class CapteurSagaFinaliseDemandeDevenirAidant
               type: 'CommandeCreeCompteAidant',
             })
             .then((aidantCree) => {
-              const partieChiffree = this.serviceDeChiffrement.chiffre(
-                aidantCree.identifiant
-              );
-              this.adaptateurEnvoiDeMail.envoie({
-                objet: 'Mon Aide Cyber - Création de votre compte Aidant',
-                corps: adaptateurCorpsMessage
-                  .finaliseDemandeDevenirAidant()
-                  .genereCorpsMessage(
-                    aidantCree.nomPrenom,
-                    `${adaptateurEnvironnement.mac().urlMAC()}/demandes/devenir-aidant/finalise?token=${partieChiffree}`
-                  ),
-                destinataire: { email: aidantCree.email },
-              });
-              return {
-                identifiantAidant: aidantCree.identifiant,
-              };
+              return this.envoieMail(aidantCree)
+                .then(() => {
+                  return this.busEvenement
+                    .publie<EvenementDemandeDevenirAidantFinalisee>({
+                      corps: {
+                        identifiantAidant: aidantCree.identifiant,
+                        identifiantDemande: demande.identifiant,
+                      },
+                      date: FournisseurHorloge.maintenant(),
+                      identifiant: adaptateurUUID.genereUUID(),
+                      type: 'DEMANDE_DEVENIR_AIDANT_FINALISEE',
+                    })
+                    .then(() => demandeDevenirAidantFinalisee(aidantCree))
+                    .catch(() => demandeDevenirAidantFinalisee(aidantCree));
+                })
+                .catch(() => demandeDevenirAidantFinalisee(aidantCree));
             });
         }
         return undefined;
       });
   }
+
+  private envoieMail(aidantCree: CompteAidantCree): Promise<void> {
+    const partieChiffree = this.serviceDeChiffrement.chiffre(
+      aidantCree.identifiant
+    );
+    return this.adaptateurEnvoiDeMail.envoie({
+      objet: 'Mon Aide Cyber - Création de votre compte Aidant',
+      corps: adaptateurCorpsMessage
+        .finaliseDemandeDevenirAidant()
+        .genereCorpsMessage(
+          aidantCree.nomPrenom,
+          `${adaptateurEnvironnement.mac().urlMAC()}/demandes/devenir-aidant/finalise?token=${partieChiffree}`
+        ),
+      destinataire: { email: aidantCree.email },
+    });
+  }
 }
+
+export type EvenementDemandeDevenirAidantFinalisee = Evenement<{
+  identifiantDemande: UUID;
+  identifiantAidant: UUID;
+}>;

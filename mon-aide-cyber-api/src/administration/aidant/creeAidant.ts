@@ -37,4 +37,4 @@ export const creeAidant = async (
     });
 };
 
-export type AidantCree = Evenement;
+export type AidantCree = Evenement<{ identifiant: crypto.UUID }>;
