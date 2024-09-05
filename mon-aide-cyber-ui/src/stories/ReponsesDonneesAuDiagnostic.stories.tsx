@@ -8,8 +8,6 @@ import {
   uneQuestionTiroirAChoixUnique,
 } from '../../test/constructeurs/constructeurQuestions.ts';
 import { uneReponsePossible } from '../../test/constructeurs/constructeurReponsePossible.ts';
-import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
-import { ErrorBoundary } from 'react-error-boundary';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
 import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';
 import { uneAction } from '../../test/constructeurs/constructeurActionDiagnostic.ts';
@@ -17,9 +15,8 @@ import { ReponseQuestionATiroir } from '../domaine/diagnostic/Diagnostic.ts';
 import { UUID } from '../types/Types.ts';
 import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { MemoryRouter } from 'react-router-dom';
-import { FournisseurNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 import { macAPI } from '../fournisseurs/api/macAPI.ts';
+import { decorateurComposantDiagnostic } from './DecorateurComposantDiagnostic.tsx';
 
 const actionRepondre = uneAction().contexte();
 
@@ -390,17 +387,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
   },
-  decorators: [
-    (story) => (
-      <MemoryRouter>
-        <FournisseurNavigationMAC>
-          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            {story()}
-          </ErrorBoundary>
-        </FournisseurNavigationMAC>
-      </MemoryRouter>
-    ),
-  ],
 } satisfies Meta<typeof ComposantDiagnostic>;
 
 export default meta;
@@ -409,6 +395,10 @@ type Story = StoryObj<typeof meta>;
 export const SelectionneReponseDiagnostic: Story = {
   name: 'Coche la réponse donnée',
   args: { idDiagnostic: identifiantQuestionAChoixUnique },
+  decorators: [
+    (story) =>
+      decorateurComposantDiagnostic(story, identifiantQuestionAChoixUnique),
+  ],
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
@@ -451,6 +441,10 @@ export const SelectionneReponseDiagnostic: Story = {
 export const SelectionneReponseDiagnosticDansUneListe: Story = {
   name: 'Sélectionne la réponse donnée dans la liste d’auto complétion',
   args: { idDiagnostic: identifiantQuestionListeDeroulante },
+  decorators: [
+    (story) =>
+      decorateurComposantDiagnostic(story, identifiantQuestionListeDeroulante),
+  ],
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
@@ -491,6 +485,13 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
 export const AfficheLesThematiques: Story = {
   name: 'Affiche les thématiques et peut interagir avec',
   args: { idDiagnostic: identifiantDiagnosticAvecPlusieursThematiques },
+  decorators: [
+    (story) =>
+      decorateurComposantDiagnostic(
+        story,
+        identifiantDiagnosticAvecPlusieursThematiques
+      ),
+  ],
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
@@ -550,6 +551,9 @@ export const AfficheLesThematiques: Story = {
 export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
   name: 'Sélectionne les réponses pour les questions à tiroir',
   args: { idDiagnostic: identifiantQuestionATiroir },
+  decorators: [
+    (story) => decorateurComposantDiagnostic(story, identifiantQuestionATiroir),
+  ],
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
@@ -660,6 +664,13 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
 export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
   name: 'Sélectionne les réponses pour les questions à plusieurs tiroirs',
   args: { idDiagnostic: identifiantQuestionAPlusieursTiroirs },
+  decorators: [
+    (story) =>
+      decorateurComposantDiagnostic(
+        story,
+        identifiantQuestionAPlusieursTiroirs
+      ),
+  ],
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
@@ -762,6 +773,13 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
     args: {
       idDiagnostic: identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple,
     },
+    decorators: [
+      (story) =>
+        decorateurComposantDiagnostic(
+          story,
+          identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple
+        ),
+    ],
     play: async ({ canvasElement, step }) => {
       const canvas = within(canvasElement);
 
@@ -953,6 +971,13 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
     args: {
       idDiagnostic: identifiantQuestionATiroirAvecPlusieursChoixUnique,
     },
+    decorators: [
+      (story) =>
+        decorateurComposantDiagnostic(
+          story,
+          identifiantQuestionATiroirAvecPlusieursChoixUnique
+        ),
+    ],
     play: async ({ canvasElement, step }) => {
       const canvas = within(canvasElement);
 
@@ -1109,6 +1134,13 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
   {
     name: 'Sélectionne la réponse pour la question à tiroir avec une réponse unique',
     args: { idDiagnostic: identifiantQuestionATiroirAvecReponseUnique },
+    decorators: [
+      (story) =>
+        decorateurComposantDiagnostic(
+          story,
+          identifiantQuestionATiroirAvecReponseUnique
+        ),
+    ],
     play: async ({ canvasElement, step }) => {
       const canvas = within(canvasElement);
 
@@ -1192,6 +1224,10 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
 export const SelectionneLaReponsePourUneQuestionAChoixMultiple: Story = {
   name: 'Sélectionne la réponse pour une question à choix multiple',
   args: { idDiagnostic: identifiantQuestionAChoixMultiple },
+  decorators: [
+    (story) =>
+      decorateurComposantDiagnostic(story, identifiantQuestionAChoixMultiple),
+  ],
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 

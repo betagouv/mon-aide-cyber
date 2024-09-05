@@ -54,6 +54,7 @@ import {
 import { TerminerDiagnostic } from './TerminerDiagnostic.tsx';
 import { BadgePerimetre } from './BadgePerimetre.tsx';
 import { macAPI } from '../../fournisseurs/api/macAPI.ts';
+import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 
 type ProprietesComposantQuestion = {
   actions: ActionReponseDiagnostic[];
@@ -269,21 +270,26 @@ export const ComposantDiagnostic = ({
   const navigationMAC = useNavigationMAC();
 
   useEffect(() => {
-    if (!etatReferentiel.diagnostic) {
-      macAPI
-        .execute<RepresentationDiagnostic, ReponseDiagnostic>(
-          {
-            url: `/api/diagnostic/${idDiagnostic}`,
-            methode: 'GET',
-          },
-          enDiagnostic
-        )
-        .then((reponse) => {
-          envoie(diagnosticCharge(reponse.diagnostic));
-          navigationMAC.ajouteEtat(reponse.liens);
-        })
-        .catch((erreur) => showBoundary(erreur));
-    }
+    new MoteurDeLiens(navigationMAC.etat).trouve(
+      'modifier-diagnostic',
+      (lien) => {
+        if (!etatReferentiel.diagnostic) {
+          macAPI
+            .execute<RepresentationDiagnostic, ReponseDiagnostic>(
+              {
+                url: lien.url,
+                methode: lien.methode!,
+              },
+              enDiagnostic
+            )
+            .then((reponse) => {
+              envoie(diagnosticCharge(reponse.diagnostic));
+              navigationMAC.ajouteEtat(reponse.liens);
+            })
+            .catch((erreur) => showBoundary(erreur));
+        }
+      }
+    );
   }, [idDiagnostic, envoie, showBoundary, etatReferentiel, navigationMAC]);
 
   let thematiques: [string, Thematique][] = [];

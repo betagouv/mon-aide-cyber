@@ -70,7 +70,8 @@ class ConstructeurActionsHATEOAS {
 
   modifierDiagnostic(idDiagnostic: string): ConstructeurActionsHATEOAS {
     this.actions.set('modifier-diagnostic', {
-      url: `/diagnostic/${idDiagnostic}`,
+      url: `/api/diagnostic/${idDiagnostic}`,
+      methode: 'GET',
     });
     return this;
   }
