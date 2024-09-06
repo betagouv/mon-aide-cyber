@@ -3,7 +3,6 @@ import { Aidant } from '../../../src/authentification/Aidant';
 import { unConstructeurDeDemandeDevenirAidant } from './constructeurDeDemandeDevenirAidant';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
-import { ServiceDevenirAidant } from '../../../src/gestion-demandes/devenir-aidant/ServiceDevenirAidant';
 import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import {
@@ -22,7 +21,6 @@ describe('Capteur de commande pour finaliser la demande devenir Aidant', () => {
   const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
   let entrepots = new EntrepotsMemoire();
   let busCommande: BusCommande;
-  let serviceDevenirAidant: ServiceDevenirAidant;
 
   beforeEach(() => {
     entrepots = new EntrepotsMemoire();
@@ -32,9 +30,6 @@ describe('Capteur de commande pour finaliser la demande devenir Aidant', () => {
       adaptateurEnvoiMail,
       { aidant: unServiceAidant(entrepots.aidants()) }
     );
-    serviceDevenirAidant = new ServiceDevenirAidant(
-      entrepots.demandesDevenirAidant()
-    );
   });
 
   it('Finalise la demande en créant le compte Aidant', async () => {
@@ -42,8 +37,8 @@ describe('Capteur de commande pour finaliser la demande devenir Aidant', () => {
     await entrepots.demandesDevenirAidant().persiste(demande);
 
     const demandeFinalisee = await new CapteurSagaFinaliseDemandeDevenirAidant(
+      entrepots,
       busCommande,
-      serviceDevenirAidant,
       adaptateurEnvoiMail,
       adaptateurServiceChiffrement()
     ).execute({
@@ -68,8 +63,8 @@ describe('Capteur de commande pour finaliser la demande devenir Aidant', () => {
 
   it('ne peut finaliser une demande inexistante', async () => {
     const demandeFinalisee = await new CapteurSagaFinaliseDemandeDevenirAidant(
+      entrepots,
       busCommande,
-      serviceDevenirAidant,
       adaptateurEnvoiMail,
       adaptateurServiceChiffrement()
     ).execute({
@@ -100,8 +95,8 @@ describe('Capteur de commande pour finaliser la demande devenir Aidant', () => {
       adaptateurUUID.genereUUID = () => idAidant;
 
       await new CapteurSagaFinaliseDemandeDevenirAidant(
+        entrepots,
         busCommande,
-        serviceDevenirAidant,
         adaptateurEnvoiMail,
         new FauxServiceDeChiffrement(new Map([[idAidant, 'aaa']]))
       ).execute({
