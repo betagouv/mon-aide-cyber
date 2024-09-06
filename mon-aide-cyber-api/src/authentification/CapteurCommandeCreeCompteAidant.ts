@@ -5,6 +5,7 @@ import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge
 import { AidantCree } from '../administration/aidant/creeAidant';
 import crypto from 'crypto';
 import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
+import { AggregatNonTrouve } from '../domaine/Aggregat';
 
 export type CommandeCreeCompteAidant = Omit<Commande, 'type'> & {
   type: 'CommandeCreeCompteAidant';
@@ -19,6 +20,12 @@ export type CompteAidantCree = {
   nomPrenom: string;
 };
 
+export class ErreurCreationCompteAidant extends Error {
+  constructor(public readonly message: string) {
+    super(message);
+  }
+}
+
 export class CapteurCommandeCreeCompteAidant
   implements CapteurCommande<CommandeCreeCompteAidant, CompteAidantCree>
 {
@@ -29,29 +36,44 @@ export class CapteurCommandeCreeCompteAidant
   ) {}
 
   async execute(commande: CommandeCreeCompteAidant): Promise<CompteAidantCree> {
-    const aidant = {
-      dateSignatureCGU: commande.dateSignatureCGU,
-      identifiant: adaptateurUUID.genereUUID(),
-      identifiantConnexion: commande.identifiantConnexion,
-      motDePasse: this.generateurMotDePasse(),
-      nomPrenom: commande.nomPrenom,
-    };
     return this.entrepots
       .aidants()
-      .persiste(aidant)
-      .then(() => {
-        return this.busEvenement
-          .publie<AidantCree>({
-            corps: { identifiant: aidant.identifiant },
-            date: FournisseurHorloge.maintenant(),
-            identifiant: aidant.identifiant,
-            type: 'AIDANT_CREE',
-          })
-          .then(() => ({
-            identifiant: aidant.identifiant,
-            email: aidant.identifiantConnexion,
-            nomPrenom: aidant.nomPrenom,
-          }));
+      .rechercheParIdentifiantDeConnexion(commande.identifiantConnexion)
+      .then(() =>
+        Promise.reject(
+          new ErreurCreationCompteAidant(
+            'Un compte Aidant avec cette adresse email existe déjà.'
+          )
+        )
+      )
+      .catch((erreur) => {
+        if (erreur instanceof AggregatNonTrouve) {
+          const aidant = {
+            dateSignatureCGU: commande.dateSignatureCGU,
+            identifiant: adaptateurUUID.genereUUID(),
+            identifiantConnexion: commande.identifiantConnexion,
+            motDePasse: this.generateurMotDePasse(),
+            nomPrenom: commande.nomPrenom,
+          };
+          return this.entrepots
+            .aidants()
+            .persiste(aidant)
+            .then(() => {
+              return this.busEvenement
+                .publie<AidantCree>({
+                  corps: { identifiant: aidant.identifiant },
+                  date: FournisseurHorloge.maintenant(),
+                  identifiant: aidant.identifiant,
+                  type: 'AIDANT_CREE',
+                })
+                .then(() => ({
+                  identifiant: aidant.identifiant,
+                  email: aidant.identifiantConnexion,
+                  nomPrenom: aidant.nomPrenom,
+                }));
+            });
+        }
+        return Promise.reject(erreur);
       });
   }
 }
