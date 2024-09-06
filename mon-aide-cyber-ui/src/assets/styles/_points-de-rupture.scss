@@ -1,4 +1,4 @@
-$points-de-rupture: (
+$points-de-rupture-jusqua: (
     xs: ( max-width: 320px ),
     sm: ( max-width: 576px ),
     md: ( max-width: 767px ),
@@ -6,15 +6,37 @@ $points-de-rupture: (
     xl: ( max-width: 1440px )
 ) !default;
 
+$points-de-rupture-a-partir-de: (
+    xs: ( min-width: 320px ),
+    sm: ( min-width: 576px ),
+    md: ( min-width: 767px ),
+    lg: ( min-width: 992px ),
+    xl: ( min-width: 1440px )
+) !default;
+
 @mixin jusqu-a($point-de-rupture) {
-    @if map-has-key($points-de-rupture, $point-de-rupture) {
-      @media #{inspect(map-get($points-de-rupture, $point-de-rupture))} {
+    @if map-has-key($points-de-rupture-jusqua, $point-de-rupture) {
+      @media #{inspect(map-get($points-de-rupture-jusqua, $point-de-rupture))} {
         @content;
       }
     }
 
     @else {
       @warn "Un point de rupture inconnu (`#{$point-de-rupture}`) a été utilisé. "
-          + "Les points de rupture disponibles sont: #{map-keys($points-de-rupture)}.";
+          + "Les points de rupture disponibles sont: #{map-keys($points-de-rupture-jusqua)}.";
     }
   }
+
+
+@mixin a-partir-de($point-de-rupture) {
+  @if map-has-key($points-de-rupture-a-partir-de, $point-de-rupture) {
+    @media #{inspect(map-get($points-de-rupture-a-partir-de, $point-de-rupture))} {
+      @content;
+    }
+  }
+
+  @else {
+    @warn "Un point de rupture inconnu (`#{$point-de-rupture}`) a été utilisé. "
+        + "Les points de rupture disponibles sont: #{map-keys($points-de-rupture-a-partir-de)}.";
+  }
+}
