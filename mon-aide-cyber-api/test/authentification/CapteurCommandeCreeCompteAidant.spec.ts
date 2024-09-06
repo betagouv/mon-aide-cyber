@@ -6,9 +6,11 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 import {
   CompteAidantCree,
   CapteurCommandeCreeCompteAidant,
+  ErreurCreationCompteAidant,
 } from '../../src/authentification/CapteurCommandeCreeCompteAidant';
 import { AidantCree } from '../../src/administration/aidant/creeAidant';
 import { Aidant } from '../../src/authentification/Aidant';
+import { unAidant } from './constructeurs/constructeurAidant';
 
 describe('Capteur de commande de création de compte Aidant', () => {
   it('Crée un compte Aidant', async () => {
@@ -40,6 +42,32 @@ describe('Capteur de commande de création de compte Aidant', () => {
       email: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
     });
+  });
+
+  it('Ne crée pas l’Aidant si un compte existe déjà avec le même email', async () => {
+    const entrepots = new EntrepotsMemoire();
+    const dateSignatureCGU = new Date(Date.parse('2024-08-30T14:38:25'));
+    const aidant = unAidant().construis();
+    entrepots.aidants().persiste(aidant);
+
+    const compteAidantCree = new CapteurCommandeCreeCompteAidant(
+      entrepots,
+      new BusEvenementDeTest(),
+      () => 'mdp'
+    ).execute({
+      dateSignatureCGU,
+      identifiantConnexion: aidant.identifiantConnexion,
+      nomPrenom: 'Jean Dupont',
+      type: 'CommandeCreeCompteAidant',
+    });
+
+    const aidants = await entrepots.aidants().tous();
+    expect(aidants).toHaveLength(1);
+    await expect(compteAidantCree).rejects.toStrictEqual(
+      new ErreurCreationCompteAidant(
+        'Un compte Aidant avec cette adresse email existe déjà.'
+      )
+    );
   });
 
   it('Publie l’événement "AIDANT_CREE"', async () => {
