@@ -40,7 +40,7 @@ const genereCorpsFinalisationDemandeDevenirAidant = (
     '\n' +
     'Vous êtes invités à vous créer un compte sur MonAideCyber en suivant ce lien sécurisé : \n' +
     '\n' +
-    `${url}\n` +
+    `<a href="${url}" target="_blank">${url}</a> \n` +
     '\n' +
     'Ce lien vous permettra de créer votre accès en définissant vous-même votre mot de passe pour accéder à votre espace membre.\n' +
     '\n' +
