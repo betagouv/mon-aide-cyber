@@ -46,11 +46,15 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     return messageTrouve !== undefined || false;
   }
 
-  mailEnvoye() {
+  mailEnvoye(): boolean {
     return this.messages.length > 0;
   }
 
   genereErreur() {
     this._genereErreur = true;
+  }
+
+  mailNonEnvoye(): boolean {
+    return !this.mailEnvoye();
   }
 }

@@ -38,19 +38,16 @@ export class BusEvenementDeTest extends BusEvenementMAC {
       entrepotJournalisation: new EntrepotEvenementJournalMemoire(),
     }
   ) {
-    const consommateurAidantCree = new ConsommateurEvenementDeTest();
-    const consommateurAideCree = new ConsommateurEvenementDeTest();
     const consommateursEvenements = fabriqueConsommateursEvenements(
       configuration.adaptateurRelations,
-      configuration.entrepotJournalisation,
-      {
-        aidantCree: () => consommateurAidantCree,
-        aideCree: () => consommateurAideCree,
-      }
+      configuration.entrepotJournalisation
     );
-    consommateursEvenements.set('DEMANDE_DEVENIR_AIDANT_FINALISEE', [
-      new ConsommateurEvenementDeTest(),
-    ]);
+    for (const [clef, evenements] of consommateursEvenements.entries()) {
+      consommateursEvenements.set(
+        clef,
+        evenements.map(() => new ConsommateurEvenementDeTest())
+      );
+    }
     super(consommateursEvenements);
     this.consommateursTestes = consommateursEvenements;
   }
@@ -61,9 +58,5 @@ export class BusEvenementDeTest extends BusEvenementMAC {
     }
     this.evenementRecu = evenement;
     return super.publie(evenement);
-  }
-
-  genereUneErreur() {
-    this._genereErreur = true;
   }
 }

@@ -13,7 +13,7 @@ import { fabriqueAnnuaireCOT } from '../adaptateurs/fabriqueAnnuaireCOT';
 import { CapteurCommandeCreeCompteAidant } from '../../authentification/CapteurCommandeCreeCompteAidant';
 
 import { ServiceAidant } from '../../authentification/ServiceAidant';
-import { CapteurSagaFinaliseDemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/CapteurSagaFinaliseDemandeDevenirAidant';
+import { CapteurCommandeEnvoiMailCreationCompteAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeEnvoiMailCreationCompteAidant';
 import { adaptateurServiceChiffrement } from '../adaptateurs/adaptateurServiceChiffrement';
 
 type Services = {
@@ -113,12 +113,11 @@ const capteurs: Map<string, Capteur> = new Map([
     },
   ],
   [
-    'CommandeFinaliseDemandeDevenirAidant',
+    'CommandeEnvoiMailCreationCompteAidant',
     {
       capteur: (parametres) =>
-        new CapteurSagaFinaliseDemandeDevenirAidant(
+        new CapteurCommandeEnvoiMailCreationCompteAidant(
           parametres.entrepots,
-          parametres.busCommande!,
           parametres.busEvenements!,
           parametres.adaptateurEnvoiMail!,
           adaptateurServiceChiffrement()
