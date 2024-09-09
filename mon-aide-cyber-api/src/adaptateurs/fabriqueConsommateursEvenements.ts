@@ -2,10 +2,11 @@ import {
   aidantCree,
   aideCree,
   demandeDevenirAidantCree,
-  demandeDevenirAidantFinalisee,
+  mailCreationCompteAidantEnvoye,
   diagnosticLance,
   reponseAjoutee,
   restitutionLancee,
+  mailCreationCompteAidantNonEnvoye,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
@@ -50,8 +51,12 @@ export const fabriqueConsommateursEvenements = (
       [demandeDevenirAidantCree(entrepotJournalisation)],
     ],
     [
-      'DEMANDE_DEVENIR_AIDANT_FINALISEE',
-      [demandeDevenirAidantFinalisee(entrepotJournalisation)],
+      'MAIL_CREATION_COMPTE_AIDANT_ENVOYE',
+      [mailCreationCompteAidantEnvoye(entrepotJournalisation)],
+    ],
+    [
+      'MAIL_CREATION_COMPTE_AIDANT_NON_ENVOYE',
+      [mailCreationCompteAidantNonEnvoye(entrepotJournalisation)],
     ],
   ]);
 };

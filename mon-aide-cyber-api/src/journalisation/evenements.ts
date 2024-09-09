@@ -21,7 +21,9 @@ export const aideCree = consommateurEvenement();
 
 export const demandeDevenirAidantCree = consommateurEvenement();
 
-export const demandeDevenirAidantFinalisee = consommateurEvenement();
+export const mailCreationCompteAidantEnvoye = consommateurEvenement();
+
+export const mailCreationCompteAidantNonEnvoye = consommateurEvenement();
 
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E
