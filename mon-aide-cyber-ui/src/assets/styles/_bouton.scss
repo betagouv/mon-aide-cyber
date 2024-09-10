@@ -78,9 +78,9 @@ $border-radius: 0.5rem;
   }
 
   &:disabled {
-    outline: 2px solid var(--couleurs-mac-violet-moyen) $important;
-    background-color: var(--couleurs-mac-violet-fonce);
-    color: var(--couleurs-mac-violet-moyen) $important;
+    outline: 2px solid var(--couleurs-mac-gris-clair) $important;
+    background-color: var(--couleurs-mac-blanc);
+    color: var(--couleurs-mac-gris-clair) $important;
   }
 
   --hover: none;

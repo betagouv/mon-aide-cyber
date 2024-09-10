@@ -1,0 +1,57 @@
+@import './../../../assets/styles/points-de-rupture';
+
+.marelle-etapes {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  
+  .marelle-etape > div > h4 {
+    font-size: 2rem;
+    line-height: 2.625rem;
+  }
+  
+  .marelle-etape > div > p > b {
+    color: var(--couleurs-mac-violet-fonce);
+  }
+
+  @include a-partir-de(xl) {
+    .marelle-etape {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 54px;
+      position: relative;
+    }
+  
+    .marelle-etape.pair {
+      flex-direction: row-reverse;
+    }
+  
+    .numero-etape {
+      min-width: 120px;
+      min-height: 120px;
+      z-index: 1;
+    }
+  
+    .marelle-etape .chemin {
+      position: absolute;
+      left: 44%;
+      top: 245px;
+    }
+  
+    .marelle-etape .chemin.pair {
+      position: absolute;
+      left: 54%;
+      top: 258px;
+      transform: rotate(180deg);
+    }
+  }
+  
+  @media screen and (max-width: 1439px) {
+    .visible-uniquement-desktop {
+      display: none;
+    }
+  }
+  

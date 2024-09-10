@@ -1,3 +1,5 @@
+import { TypographieH4 } from '../typographie/TypographieH4/TypographieH4';
+
 function TuileActionDemandeAide() {
   return (
     <div className="tuile tuile-grande">
@@ -8,7 +10,7 @@ function TuileActionDemandeAide() {
         />
       </div>
       <div className="corps">
-        <h4>Bénéficier de MonAideCyber</h4>
+        <TypographieH4>Bénéficier de MonAideCyber</TypographieH4>
         <p>
           Vous êtes décideur ou employé d’une <b>collectivité territoriale</b>,
           d’une <b>association</b>, ou d’une <b>entreprise</b> (TPE, PME,

@@ -73,7 +73,7 @@ $taille-padding-dsfr-7v: 3.5rem;
 
 .tuile-grande {
   @include tuile(100%);
-  padding: 2.5rem 3.5rem;
+  padding: 2.5rem 1.5rem;
   gap: 1.5rem;
 
   .illustration {
@@ -82,6 +82,10 @@ $taille-padding-dsfr-7v: 3.5rem;
 
   img {
     width: 100%;
+  }
+
+  @include a-partir-de (md) {
+    padding: 2.5rem 3.5rem;
   }
 }
 
@@ -320,11 +324,4 @@ $taille-padding-dsfr-7v: 3.5rem;
 .bientot-disponible {
   background-color: #efefef;
   filter: grayscale(90%);
-}
-
-@media screen and (max-width: 768px) {
-  h1 {
-    font-size: 2.5rem !important;
-    line-height: 2.5rem;
-  }
 }

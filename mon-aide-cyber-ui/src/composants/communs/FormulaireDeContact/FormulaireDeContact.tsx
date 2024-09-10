@@ -11,6 +11,7 @@ import {
 import { Message } from '../../../domaine/contact/Message';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
 import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
+import { TypographieH2 } from '../typographie/TypographieH2/TypographieH2.tsx';
 
 export const FormulaireDeContact = () => {
   const [etatMessage, envoie] = useReducer(reducteurEnvoiMessageContact, {
@@ -62,7 +63,7 @@ export const FormulaireDeContact = () => {
       <div className="fr-container">
         <div className="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
           <div className="fr-col-md-5 fr-col-sm-12 fr-col-offset-1--right">
-            <h2>Contactez-nous !</h2>
+            <TypographieH2>Contactez-nous !</TypographieH2>
             <p>
               Vous avez des <b>questions</b> sur MonAideCyber ?
               <br />
