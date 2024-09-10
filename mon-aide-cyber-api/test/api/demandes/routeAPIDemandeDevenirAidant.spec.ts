@@ -9,6 +9,7 @@ import {
 import { unConstructeurDeDemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/constructeurDeDemandeDevenirAidant';
 import { uneRequeteDemandeDevenirAidant } from './constructeurRequeteDemandeDevenirAidant';
 import crypto from 'crypto';
+import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServiceDeChiffrement';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
@@ -212,40 +213,40 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       });
     });
 
-    it('Vérifie la correspondance entre les deux mots de passes saisis', async () => {
-      const demande = unConstructeurDeDemandeDevenirAidant().construis();
-      await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
-      const token = Buffer.from(
-        JSON.stringify({ demande: demande.identifiant, mail: demande.mail }),
-        'binary'
-      ).toString('base64');
+    describe('Lors de la phase de validation', () => {
+      it('Vérifie la correspondance entre les deux mots de passes saisis', async () => {
+        const demande = unConstructeurDeDemandeDevenirAidant().construis();
+        await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
+        const token = Buffer.from(
+          JSON.stringify({ demande: demande.identifiant, mail: demande.mail }),
+          'binary'
+        ).toString('base64');
 
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/demandes/devenir-aidant/creation-compte',
-        donneesServeur.portEcoute,
-        {
-          motDePasse: 'mon_Mot-D3p4sse',
-          confirmationMotDePasse: 'mon_Mot-D3p4sseeeeeee',
-          token,
-          cguSignees: true,
-        }
-      );
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant/creation-compte',
+          donneesServeur.portEcoute,
+          {
+            motDePasse: 'mon_Mot-D3p4sse',
+            confirmationMotDePasse: 'mon_Mot-D3p4sseeeeeee',
+            token,
+          cguSignees: true,}
+        );
 
-      expect(reponse.statusCode).toBe(422);
-      expect(await reponse.json()).toStrictEqual({
-        message:
-          'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber., Les deux mots de passe saisis ne correspondent pas.',
+        expect(reponse.statusCode).toBe(422);
+        expect(await reponse.json()).toStrictEqual({
+          message:
+            'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber., Les deux mots de passe saisis ne correspondent pas.',
+        });
       });
-    });
 
-    it('Vérifie que les CGU sont signées', async () => {
-      const demande = unConstructeurDeDemandeDevenirAidant().construis();
-      await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
-      const token = btoa(
-        JSON.stringify({ demande: demande.identifiant, mail: demande.mail })
-      );
+      it('Vérifie que les CGU sont signées', async () => {
+        const demande = unConstructeurDeDemandeDevenirAidant().construis();
+        await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
+        const token = btoa(
+          JSON.stringify({ demande: demande.identifiant, mail: demande.mail })
+        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -260,72 +261,89 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           }
         );
 
-      expect(reponse.statusCode).toBe(422);
-      expect(await reponse.json()).toStrictEqual({
-        message: 'Veuillez signer les CGU.',
+        expect(reponse.statusCode).toBe(422);
+        expect(await reponse.json()).toStrictEqual({
+          message: 'Veuillez signer les CGU.',
+        });
+      });
+
+      describe('De la demande', () => {
+        beforeEach(() => {
+          testeurMAC.serviceDeChiffrement = new FauxServiceDeChiffrement(
+            new Map()
+          );
+          donneesServeur = testeurMAC.initialise();
+        });
+
+        afterEach(() => testeurMAC.arrete());
+
+        it('Vérifie que la demande est connue', async () => {
+          const token = Buffer.from(
+            JSON.stringify({
+              demande: crypto.randomUUID(),
+              mail: 'jean.dupont@email.com',
+            }),
+            'binary'
+          ).toString('base64');
+          const fauxServiceDeChiffrement =
+            testeurMAC.serviceDeChiffrement as FauxServiceDeChiffrement;
+          fauxServiceDeChiffrement.ajoute(token, 'cccc');
+
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/demandes/devenir-aidant/creation-compte',
+            donneesServeur.portEcoute,
+            {
+              motDePasse: 'mon_Mot-D3p4ssee',
+              confirmationMotDePasse: 'mon_Mot-D3p4ssee',
+              token: 'cccc',
+            cguSignees: true,}
+          );
+
+          expect(reponse.statusCode).toBe(422);
+          expect(await reponse.json()).toStrictEqual({
+            message: 'Aucune demande ne correspond.',
+          });
+          expect(fauxServiceDeChiffrement.aEteAppele()).toBe(true);
+        });
+
+        it('Vérifie que le mail est bien rattaché à la demande', async () => {
+          const demande = unConstructeurDeDemandeDevenirAidant()
+            .avecUnMail('jean.dupont@mail.fr')
+            .construis();
+          await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
+          const token = Buffer.from(
+            JSON.stringify({
+              demande: demande.identifiant,
+              mail: 'marc.dupont@mail.fr',
+            }),
+            'binary'
+          ).toString('base64');
+          const fauxServiceDeChiffrement =
+            testeurMAC.serviceDeChiffrement as FauxServiceDeChiffrement;
+          fauxServiceDeChiffrement.ajoute(token, 'aaa');
+
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/demandes/devenir-aidant/creation-compte',
+            donneesServeur.portEcoute,
+            {
+              motDePasse: 'mon_Mot-D3p4ssee',
+              confirmationMotDePasse: 'mon_Mot-D3p4ssee',
+              token: 'aaa',
+            cguSignees: true,}
+          );
+
+          expect(reponse.statusCode).toBe(422);
+          expect(await reponse.json()).toStrictEqual({
+            message: 'Aucune demande ne correspond.',
+          });
+          expect(fauxServiceDeChiffrement.aEteAppele()).toBe(true);
+        });
       });
     });
-
-    it('Vérifie que la demande est connue', async () => {
-      const token = Buffer.from(
-        JSON.stringify({
-          demande: crypto.randomUUID(),
-          mail: 'jean.dupont@email.com',
-        }),
-        'binary'
-      ).toString('base64');
-
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/demandes/devenir-aidant/creation-compte',
-        donneesServeur.portEcoute,
-        {
-          motDePasse: 'mon_Mot-D3p4ssee',
-          confirmationMotDePasse: 'mon_Mot-D3p4ssee',
-          token,
-          cguSignees: true,
-        }
-      );
-
-      expect(reponse.statusCode).toBe(422);
-      expect(await reponse.json()).toStrictEqual({
-        message: 'Aucune demande ne correspond.',
-      });
-    });
-
-    it('Vérifie que le mail est bien rattaché à la demande', async () => {
-      const demande = unConstructeurDeDemandeDevenirAidant()
-        .avecUnMail('jean.dupont@mail.fr')
-        .construis();
-      await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
-      const token = Buffer.from(
-        JSON.stringify({
-          demande: demande.identifiant,
-          mail: 'marc.dupont@mail.fr',
-        }),
-        'binary'
-      ).toString('base64');
-
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/demandes/devenir-aidant/creation-compte',
-        donneesServeur.portEcoute,
-        {
-          motDePasse: 'mon_Mot-D3p4ssee',
-          confirmationMotDePasse: 'mon_Mot-D3p4ssee',
-          token,
-          cguSignees: true,
-        }
-      );
-
-      expect(reponse.statusCode).toBe(422);
-      expect(await reponse.json()).toStrictEqual({
-        message: 'Aucune demande ne correspond.',
-      });
-    });
-
     it('Vérifie que le mail est bien rattaché à une demande en cours', async () => {
       const demande = unConstructeurDeDemandeDevenirAidant()
         .traitee()
@@ -337,6 +355,9 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           mail: demande.mail,
         })
       );
+      const fauxServiceDeChiffrement =
+        testeurMAC.serviceDeChiffrement as FauxServiceDeChiffrement;
+      fauxServiceDeChiffrement.ajoute(token, 'bbbb');
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -346,15 +367,15 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         {
           motDePasse: 'mon_Mot-D3p4ssee',
           confirmationMotDePasse: 'mon_Mot-D3p4ssee',
-          token,
-          cguSignees: true,
-        }
+          token: 'bbbb',
+        cguSignees: true,}
       );
 
       expect(reponse.statusCode).toBe(422);
       expect(await reponse.json()).toStrictEqual({
         message: 'Aucune demande ne correspond.',
       });
+      expect(fauxServiceDeChiffrement.aEteAppele()).toBe(true);
     });
   });
 });

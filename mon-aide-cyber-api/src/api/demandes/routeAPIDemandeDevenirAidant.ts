@@ -16,12 +16,16 @@ import {
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 import { validateursDeCreationDeMotDePasse } from '../validateurs/motDePasse';
 import { Entrepots } from '../../domaine/Entrepots';
+import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 
-export const validateurDemande = (entrepots: Entrepots) => {
+export const validateurDemande = (
+  entrepots: Entrepots,
+  serviceDeChiffrement: ServiceDeChiffrement
+) => {
   const { body } = new ExpressValidator({
     verifieCoherenceDeLaDemande: async (value: string) => {
       const tokenConverti: { demande: string; mail: string } = JSON.parse(
-        atob(value)
+        atob(serviceDeChiffrement.dechiffre(value))
       );
 
       await entrepots.demandesDevenirAidant().lis(tokenConverti.demande);
@@ -51,7 +55,7 @@ export const routesAPIDemandesDevenirAidant = (
 ) => {
   const routes: Router = express.Router();
 
-  const { entrepots } = configuration;
+  const { entrepots, serviceDeChiffrement } = configuration;
 
   routes.get('/', async (_requete: Request, reponse: Response) => {
     return reponse.status(200).json({
@@ -113,7 +117,7 @@ export const routesAPIDemandesDevenirAidant = (
       .custom((value: boolean) => value)
       .withMessage('Veuillez signer les CGU.'),
     validateursDeCreationDeMotDePasse(),
-    validateurDemande(entrepots),
+    validateurDemande(entrepots, serviceDeChiffrement),
     async (requete: Request, reponse: Response, _suite: NextFunction) => {
       const resultatsValidation: Result<FieldValidationError> =
         validationResult(requete) as Result<FieldValidationError>;
