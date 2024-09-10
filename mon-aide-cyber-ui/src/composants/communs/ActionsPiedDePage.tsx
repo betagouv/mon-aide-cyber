@@ -1,5 +1,6 @@
 import TuileActionDemandeAide from './tuiles/TuileActionDemandeAide.tsx';
 import TuileActionDevenirAidant from './tuiles/TuileActionDevenirAidant.tsx';
+import { TypographieH2 } from './typographie/TypographieH2/TypographieH2.tsx';
 
 type ActionsPiedDePageProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -17,7 +18,7 @@ export const ActionsPiedDePage = ({
     <section {...proprietesRestantes} className={nomsDeClasseEntier}>
       <div className="fr-container conteneur-participer">
         <div className="fr-col-12">
-          <h2>Vous souhaitez participer ?</h2>
+          <TypographieH2>Vous souhaitez participer ?</TypographieH2>
         </div>
         <div className="fr-grid-row fr-grid-row--gutters">
           <div className="fr-col-12 fr-col-md-6">

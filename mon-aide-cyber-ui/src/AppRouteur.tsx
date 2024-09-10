@@ -23,6 +23,7 @@ import { LayoutAidant } from './composants/layout/LayoutAidant.tsx';
 import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { LayoutCreationEspaceAidant } from './composants/layout/LayoutCreationEspaceAidant.tsx';
 import { EcranCreationEspaceAidant } from './domaine/espace-aidant/creation-espace-aidant/EcranCreationEspaceAidant.tsx';
+import { EcranDevenirAidant } from './domaine/vitrine/ecran-devenir-aidant/EcranDevenirAidant.tsx';
 
 export const AppRouteur = () => {
   return (
@@ -38,6 +39,7 @@ export const AppRouteur = () => {
         <Route path="/a-propos">
           <Route path="kit-de-communication" element={<KitDeCommunication />} />
         </Route>
+        <Route path="/devenir-aidant" element={<EcranDevenirAidant />} />
         <Route
           path="/demandes/devenir-aidant"
           element={<ComposantDemandeDevenirAidant />}

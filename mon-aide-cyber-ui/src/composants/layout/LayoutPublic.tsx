@@ -19,7 +19,7 @@ export const liensNavigation: LienNavigation[] = [
     nom: 'Bénéficier du dispositif',
   },
   {
-    route: '/demandes/devenir-aidant',
+    route: '/devenir-aidant',
     nom: 'Devenir aidant',
   },
   {
