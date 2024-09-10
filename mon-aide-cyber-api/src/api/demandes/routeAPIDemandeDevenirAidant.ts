@@ -17,6 +17,8 @@ import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 import { validateursDeCreationDeMotDePasse } from '../validateurs/motDePasse';
 import { Entrepots } from '../../domaine/Entrepots';
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
+import { SagaDemandeAidantCreeEspaceAidant } from '../../gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
+import { ErreurMAC } from '../../domaine/erreurMAC';
 
 export const validateurDemande = (
   entrepots: Entrepots,
@@ -111,14 +113,14 @@ export const routesAPIDemandesDevenirAidant = (
   );
 
   routes.post(
-    '/creation-compte',
+    '/creation-espace-aidant',
     express.json(),
     body('cguValidees')
       .custom((value: boolean) => value)
       .withMessage('Veuillez valider les CGU.'),
     validateursDeCreationDeMotDePasse(),
     validateurDemande(entrepots, serviceDeChiffrement),
-    async (requete: Request, reponse: Response, _suite: NextFunction) => {
+    async (requete: Request, reponse: Response, suite: NextFunction) => {
       const resultatsValidation: Result<FieldValidationError> =
         validationResult(requete) as Result<FieldValidationError>;
 
@@ -131,9 +133,28 @@ export const routesAPIDemandesDevenirAidant = (
         });
       }
 
-      return reponse.status(201).json({
-        ...constructeurActionsHATEOAS().actionsCreationCompte().construis(),
-      });
+      const { demande } = JSON.parse(
+        atob(serviceDeChiffrement.dechiffre(requete.body.token))
+      );
+      return configuration.busCommande
+        .publie<SagaDemandeAidantCreeEspaceAidant, void>({
+          type: 'SagaDemandeAidantEspaceAidant',
+          idDemande: demande,
+          motDePasse: requete.body.motDePasse,
+        })
+        .then(() =>
+          reponse.status(201).json({
+            ...constructeurActionsHATEOAS().actionsCreationCompte().construis(),
+          })
+        )
+        .catch((erreur) =>
+          suite(
+            ErreurMAC.cree(
+              'Demande devenir Aidant - crée espace Aidant',
+              erreur
+            )
+          )
+        );
     }
   );
 
