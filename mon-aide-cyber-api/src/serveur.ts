@@ -24,6 +24,7 @@ import { AdaptateurDeGestionDeCookies } from './adaptateurs/AdaptateurDeGestionD
 import { AdaptateurRelations } from './relation/AdaptateurRelations';
 import CookieSession from 'cookie-session';
 import { AdaptateurDeVerificationDesAcces } from './adaptateurs/AdaptateurDeVerificationDesAcces';
+import { ServiceDeChiffrement } from './securite/ServiceDeChiffrement';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -40,6 +41,7 @@ export type ConfigurationServeur = {
   adaptateurDeVerificationDeCGU: AdaptateurDeVerificationDeCGU;
   adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
   adaptateurDeVerificationDeRelations: AdaptateurDeVerificationDesAcces;
+  serviceDeChiffrement: ServiceDeChiffrement;
   avecProtectionCsrf: boolean;
   busCommande: BusCommande;
   busEvenement: BusEvenement;
