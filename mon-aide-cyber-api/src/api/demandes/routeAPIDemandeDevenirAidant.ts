@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
 import {
   body,
+  ExpressValidator,
   FieldValidationError,
   Result,
   validationResult,
@@ -14,11 +15,43 @@ import {
 } from '../../gestion-demandes/departements';
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 import { validateursDeCreationDeMotDePasse } from '../validateurs/motDePasse';
+import { Entrepots } from '../../domaine/Entrepots';
+
+export const validateurDemande = (entrepots: Entrepots) => {
+  const { body } = new ExpressValidator({
+    verifieCoherenceDeLaDemande: async (value: string) => {
+      const tokenConverti: { demande: string; mail: string } = JSON.parse(
+        atob(value)
+      );
+
+      await entrepots.demandesDevenirAidant().lis(tokenConverti.demande);
+
+      const demande = await entrepots
+        .demandesDevenirAidant()
+        .rechercheDemandeEnCoursParMail(tokenConverti.mail);
+      if (demande === undefined) {
+        throw new Error(
+          `Le mail fourni dans le token de création d'Aidant ne correspond pas à la demande (${tokenConverti.mail}).`
+        );
+      }
+
+      return true;
+    },
+  });
+
+  return [
+    body('token')
+      .verifieCoherenceDeLaDemande()
+      .withMessage('Aucune demande ne correspond.'),
+  ];
+};
 
 export const routesAPIDemandesDevenirAidant = (
   configuration: ConfigurationServeur
 ) => {
   const routes: Router = express.Router();
+
+  const { entrepots } = configuration;
 
   routes.get('/', async (_requete: Request, reponse: Response) => {
     return reponse.status(200).json({
@@ -76,7 +109,11 @@ export const routesAPIDemandesDevenirAidant = (
   routes.post(
     '/creation-compte',
     express.json(),
+    body('cguSignees')
+      .custom((value: boolean) => value)
+      .withMessage('Veuillez signer les CGU.'),
     validateursDeCreationDeMotDePasse(),
+    validateurDemande(entrepots),
     async (requete: Request, reponse: Response, _suite: NextFunction) => {
       const resultatsValidation: Result<FieldValidationError> =
         validationResult(requete) as Result<FieldValidationError>;
