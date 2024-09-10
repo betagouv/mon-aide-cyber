@@ -8,6 +8,14 @@ type MessagesErreursValidateurMotDePasse = {
   laConfirmationDuMotDePasseCorrespond?: string;
 };
 
+const reglesRobustesseMotDePasseMAC = {
+  minLength: 16,
+  minLowercase: 1,
+  minUppercase: 1,
+  minNumbers: 1,
+  minSymbols: 1,
+};
+
 const validateurDeMotDePasse = (
   entrepots: Entrepots,
   messageValidateurs: MessagesErreursValidateurMotDePasse
@@ -40,13 +48,7 @@ const validateursDeMotDePasse = (
   const { body } = validateurDeMotDePasse(entrepots, messageValidateurs);
   const validateurs = [
     body(nouveauMotDePasse)
-      .isStrongPassword({
-        minLength: 16,
-        minLowercase: 1,
-        minUppercase: 1,
-        minNumbers: 1,
-        minSymbols: 1,
-      })
+      .isStrongPassword(reglesRobustesseMotDePasseMAC)
       .withMessage(
         'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.'
       ),
@@ -64,6 +66,25 @@ const validateursDeMotDePasse = (
         .withMessage(messageValidateurs.laConfirmationDuMotDePasseCorrespond!)
     );
   }
+  return validateurs;
+};
+
+export const validateursDeCreationDeMotDePasse = () => {
+  const { body } = new ExpressValidator({
+    confirmationMotDePasseCorrespond: (value: string, { req }: Meta) =>
+      value === req.body.motDePasse,
+  });
+
+  const validateurs = [
+    body('motDePasse')
+      .isStrongPassword(reglesRobustesseMotDePasseMAC)
+      .withMessage(
+        'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.'
+      ),
+    body('confirmationMotDePasse')
+      .confirmationMotDePasseCorrespond()
+      .withMessage('Les deux mots de passe saisis ne correspondent pas.'),
+  ];
   return validateurs;
 };
 

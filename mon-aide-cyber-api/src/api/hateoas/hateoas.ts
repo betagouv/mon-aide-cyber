@@ -169,6 +169,11 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
+  actionsCreationCompte(): ConstructeurActionsHATEOAS {
+    this.seConnecter();
+    return this;
+  }
+
   construis = (): ReponseHATEOAS => {
     return {
       liens: {

@@ -43,7 +43,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
     });
   });
 
-  describe('Quand une requête POST est reçue', () => {
+  describe('Quand une requête POST est reçue /api/demandes/devenir-aidant', () => {
     let donneesServeur: { portEcoute: number; app: Express };
 
     beforeEach(() => {
@@ -173,6 +173,63 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         );
 
         expect(reponse.statusCode).toStrictEqual(422);
+      });
+    });
+  });
+
+  describe('Quand une requête POST est reçue sur /api/demandes/devenir-aidant/creation-compte', async () => {
+    it('Crée le compte de l’Aidant', async () => {
+      const demande = unConstructeurDeDemandeDevenirAidant().construis();
+      await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
+      const token = Buffer.from(
+        JSON.stringify({ demande: demande.identifiant, mail: demande.mail }),
+        'binary'
+      ).toString('base64');
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/devenir-aidant/creation-compte',
+        donneesServeur.portEcoute,
+        {
+          motDePasse: 'mon_Mot-D3p4ssee',
+          confirmationMotDePasse: 'mon_Mot-D3p4ssee',
+          token,
+        }
+      );
+
+      expect(reponse.statusCode).toStrictEqual(201);
+      expect(await reponse.json()).toStrictEqual({
+        liens: {
+          'se-connecter': { url: '/api/token', methode: 'POST' },
+        },
+      });
+    });
+
+    it('Vérifie la correspondance entre les deux mots de passes saisis', async () => {
+      const demande = unConstructeurDeDemandeDevenirAidant().construis();
+      await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
+      const token = Buffer.from(
+        JSON.stringify({ demande: demande.identifiant, mail: demande.mail }),
+        'binary'
+      ).toString('base64');
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/devenir-aidant/creation-compte',
+        donneesServeur.portEcoute,
+        {
+          motDePasse: 'mon_Mot-D3p4sse',
+          confirmationMotDePasse: 'mon_Mot-D3p4sseeeeeee',
+          token,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(await reponse.json()).toStrictEqual({
+        message:
+          'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber., Les deux mots de passe saisis ne correspondent pas.',
       });
     });
   });
