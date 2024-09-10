@@ -13,6 +13,7 @@ import {
   rechercheParNomDepartement,
 } from '../../gestion-demandes/departements';
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
+import { validateursDeCreationDeMotDePasse } from '../validateurs/motDePasse';
 
 export const routesAPIDemandesDevenirAidant = (
   configuration: ConfigurationServeur
@@ -69,6 +70,29 @@ export const routesAPIDemandesDevenirAidant = (
       } catch (error) {
         return suite(error);
       }
+    }
+  );
+
+  routes.post(
+    '/creation-compte',
+    express.json(),
+    validateursDeCreationDeMotDePasse(),
+    async (requete: Request, reponse: Response, _suite: NextFunction) => {
+      const resultatsValidation: Result<FieldValidationError> =
+        validationResult(requete) as Result<FieldValidationError>;
+
+      if (!resultatsValidation.isEmpty()) {
+        return reponse.status(422).json({
+          message: resultatsValidation
+            .array()
+            .map((resultatValidation) => resultatValidation.msg)
+            .join(', '),
+        });
+      }
+
+      return reponse.status(201).json({
+        ...constructeurActionsHATEOAS().actionsCreationCompte().construis(),
+      });
     }
   );
 
