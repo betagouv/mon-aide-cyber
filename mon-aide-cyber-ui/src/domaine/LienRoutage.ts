@@ -6,4 +6,8 @@ export class LienRoutage {
   route(): string {
     return this.lien.slice(this.lien.indexOf('/api') + 4);
   }
+
+  url(): string {
+    return this.lien;
+  }
 }

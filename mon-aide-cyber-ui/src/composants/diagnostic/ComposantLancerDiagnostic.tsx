@@ -157,13 +157,13 @@ export const ComposantLancerDiagnostic = ({
         .then((lien) => {
           return navigationMAC.navigue(
             new MoteurDeLiens({
-              'afficher-diagnostic': {
-                url: '',
+              'modifier-diagnostic': {
+                url: lien.url(),
                 route: lien.route(),
                 methode: 'GET',
               },
             }),
-            'afficher-diagnostic'
+            'modifier-diagnostic'
           );
         })
         .catch((erreur) => showBoundary(erreur));

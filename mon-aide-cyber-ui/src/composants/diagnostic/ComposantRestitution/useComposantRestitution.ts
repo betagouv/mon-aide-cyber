@@ -102,7 +102,6 @@ export const useComposantRestitution = (idDiagnostic: UUID) => {
       'modifier-diagnostic',
       'restitution-pdf',
       'restitution-json',
-      'afficher-diagnostic',
     ]);
   }, [etatRestitution.restitution, navigationMAC]);
 
