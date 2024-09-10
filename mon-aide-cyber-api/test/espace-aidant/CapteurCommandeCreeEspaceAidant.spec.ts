@@ -21,12 +21,12 @@ describe('Capteur de commande de création de compte Aidant', () => {
 
     const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
-      new BusEvenementDeTest(),
-      () => 'mdp'
+      new BusEvenementDeTest()
     ).execute({
       dateSignatureCGU,
       identifiantConnexion: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
+      motDePasse: 'toto12345',
       type: 'CommandeCreeEspaceAidant',
     });
 
@@ -37,7 +37,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
       identifiantConnexion: 'jean.dupont@beta.fr',
       dateSignatureCGU,
       nomPrenom: 'Jean Dupont',
-      motDePasse: 'mdp',
+      motDePasse: 'toto12345',
     });
     expect(aidantCree).toStrictEqual<EspaceAidantCree>({
       identifiant: expect.any(String),
@@ -54,12 +54,12 @@ describe('Capteur de commande de création de compte Aidant', () => {
 
     const compteAidantCree = new CapteurCommandeCreeEspaceAidant(
       entrepots,
-      new BusEvenementDeTest(),
-      () => 'mdp'
+      new BusEvenementDeTest()
     ).execute({
       dateSignatureCGU,
       identifiantConnexion: aidant.identifiantConnexion,
       nomPrenom: 'Jean Dupont',
+      motDePasse: '',
       type: 'CommandeCreeEspaceAidant',
     });
 
@@ -85,6 +85,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
       dateSignatureCGU,
       identifiantConnexion: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
+      motDePasse: '',
       type: 'CommandeCreeEspaceAidant',
     });
 
