@@ -15,6 +15,7 @@ import { ServiceAidant } from '../../authentification/ServiceAidant';
 import { CapteurCommandeEnvoiMailCreationCompteAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeEnvoiMailCreationCompteAidant';
 import { adaptateurServiceChiffrement } from '../adaptateurs/adaptateurServiceChiffrement';
 import { CapteurCommandeCreeEspaceAidant } from '../../espace-aidant/CapteurCommandeCreeEspaceAidant';
+import { CapteurSagaDemandeAidantCreeEspaceAidant } from '../../gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
 
 type Services = {
   aidant: ServiceAidant;
@@ -121,6 +122,17 @@ const capteurs: Map<string, Capteur> = new Map([
           parametres.busEvenements!,
           parametres.adaptateurEnvoiMail!,
           adaptateurServiceChiffrement()
+        ),
+    },
+  ],
+  [
+    'SagaDemandeAidantEspaceAidant',
+    {
+      capteur: (parametres) =>
+        new CapteurSagaDemandeAidantCreeEspaceAidant(
+          parametres.entrepots,
+          parametres.busCommande!,
+          parametres.busEvenements!
         ),
     },
   ],

@@ -7,12 +7,12 @@ import crypto from 'crypto';
 import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 import { AggregatNonTrouve } from '../domaine/Aggregat';
 import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
-import { genereMotDePasse } from '../administration/aidants/importe/importeAidants';
 
 export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
   type: 'CommandeCreeEspaceAidant';
   dateSignatureCGU: Date;
   identifiantConnexion: string;
+  motDePasse: string;
   nomPrenom: string;
 };
 
@@ -27,8 +27,7 @@ export class CapteurCommandeCreeEspaceAidant
 {
   constructor(
     private readonly entrepots: Entrepots,
-    private readonly busEvenement: BusEvenement,
-    private readonly generateurMotDePasse: () => string = genereMotDePasse
+    private readonly busEvenement: BusEvenement
   ) {}
 
   async execute(commande: CommandeCreeEspaceAidant): Promise<EspaceAidantCree> {
@@ -48,7 +47,7 @@ export class CapteurCommandeCreeEspaceAidant
             dateSignatureCGU: commande.dateSignatureCGU,
             identifiant: adaptateurUUID.genereUUID(),
             identifiantConnexion: commande.identifiantConnexion,
-            motDePasse: this.generateurMotDePasse(),
+            motDePasse: commande.motDePasse,
             nomPrenom: commande.nomPrenom,
           };
           return this.entrepots
