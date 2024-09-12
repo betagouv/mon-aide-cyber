@@ -6,28 +6,24 @@ import { AidantCree } from '../administration/aidant/creeAidant';
 import crypto from 'crypto';
 import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 import { AggregatNonTrouve } from '../domaine/Aggregat';
+import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
+import { genereMotDePasse } from '../administration/aidants/importe/importeAidants';
 
-export type CommandeCreeCompteAidant = Omit<Commande, 'type'> & {
-  type: 'CommandeCreeCompteAidant';
+export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
+  type: 'CommandeCreeEspaceAidant';
   dateSignatureCGU: Date;
   identifiantConnexion: string;
   nomPrenom: string;
 };
 
-export type CompteAidantCree = {
+export type EspaceAidantCree = {
   identifiant: crypto.UUID;
   email: string;
   nomPrenom: string;
 };
 
-export class ErreurCreationCompteAidant extends Error {
-  constructor(public readonly message: string) {
-    super(message);
-  }
-}
-
-export class CapteurCommandeCreeCompteAidant
-  implements CapteurCommande<CommandeCreeCompteAidant, CompteAidantCree>
+export class CapteurCommandeCreeEspaceAidant
+  implements CapteurCommande<CommandeCreeEspaceAidant, EspaceAidantCree>
 {
   constructor(
     private readonly entrepots: Entrepots,
@@ -35,13 +31,13 @@ export class CapteurCommandeCreeCompteAidant
     private readonly generateurMotDePasse: () => string = genereMotDePasse
   ) {}
 
-  async execute(commande: CommandeCreeCompteAidant): Promise<CompteAidantCree> {
+  async execute(commande: CommandeCreeEspaceAidant): Promise<EspaceAidantCree> {
     return this.entrepots
       .aidants()
       .rechercheParIdentifiantDeConnexion(commande.identifiantConnexion)
       .then(() =>
         Promise.reject(
-          new ErreurCreationCompteAidant(
+          new ErreurCreationEspaceAidant(
             'Un compte Aidant avec cette adresse email existe déjà.'
           )
         )
@@ -77,27 +73,3 @@ export class CapteurCommandeCreeCompteAidant
       });
   }
 }
-export const genereMotDePasse = () => {
-  const expressionReguliere = /^[a-hj-km-np-zA-HJ-KM-NP-Z1-9/]*$/;
-
-  const chaineAleatoire = () => {
-    const valeurAleatoire = String.fromCharCode(
-      crypto.webcrypto.getRandomValues(new Uint8Array(1))[0]
-    );
-    if (expressionReguliere.test(valeurAleatoire)) {
-      return valeurAleatoire;
-    }
-    return undefined;
-  };
-
-  return new Array(21)
-    .fill('')
-    .map(() => {
-      let caractereAleatoire = undefined;
-      while (caractereAleatoire === undefined) {
-        caractereAleatoire = chaineAleatoire();
-      }
-      return caractereAleatoire;
-    })
-    .join('');
-};
