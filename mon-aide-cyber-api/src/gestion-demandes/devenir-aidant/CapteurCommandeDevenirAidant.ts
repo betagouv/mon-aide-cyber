@@ -1,5 +1,5 @@
 import { CapteurCommande, Commande } from '../../domaine/commande';
-import { DemandeDevenirAidant } from './DemandeDevenirAidant';
+import { DemandeDevenirAidant, StatutDemande } from './DemandeDevenirAidant';
 import { Entrepots } from '../../domaine/Entrepots';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../../domaine/erreurMAC';
@@ -72,6 +72,7 @@ export class CapteurCommandeDevenirAidant
       mail: mailDemandeur,
       nom: commande.nom,
       prenom: commande.prenom,
+      statut: StatutDemande.EN_COURS,
     };
 
     return this.entrepots
