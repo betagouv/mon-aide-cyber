@@ -3,21 +3,23 @@ import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
-import {
-  CompteAidantCree,
-  CapteurCommandeCreeCompteAidant,
-  ErreurCreationCompteAidant,
-} from '../../src/authentification/CapteurCommandeCreeCompteAidant';
 import { AidantCree } from '../../src/administration/aidant/creeAidant';
-import { Aidant } from '../../src/authentification/Aidant';
-import { unAidant } from './constructeurs/constructeurAidant';
+import {
+  Aidant,
+  ErreurCreationEspaceAidant,
+} from '../../src/authentification/Aidant';
+import {
+  CapteurCommandeCreeEspaceAidant,
+  EspaceAidantCree,
+} from '../../src/espace-aidant/CapteurCommandeCreeEspaceAidant';
+import { unAidant } from '../authentification/constructeurs/constructeurAidant';
 
 describe('Capteur de commande de création de compte Aidant', () => {
   it('Crée un compte Aidant', async () => {
     const entrepots = new EntrepotsMemoire();
     const dateSignatureCGU = new Date(Date.parse('2024-08-30T14:38:25'));
 
-    const aidantCree = await new CapteurCommandeCreeCompteAidant(
+    const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
       new BusEvenementDeTest(),
       () => 'mdp'
@@ -25,7 +27,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
       dateSignatureCGU,
       identifiantConnexion: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
-      type: 'CommandeCreeCompteAidant',
+      type: 'CommandeCreeEspaceAidant',
     });
 
     const aidants = await entrepots.aidants().tous();
@@ -37,7 +39,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
       nomPrenom: 'Jean Dupont',
       motDePasse: 'mdp',
     });
-    expect(aidantCree).toStrictEqual<CompteAidantCree>({
+    expect(aidantCree).toStrictEqual<EspaceAidantCree>({
       identifiant: expect.any(String),
       email: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
@@ -50,7 +52,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const aidant = unAidant().construis();
     entrepots.aidants().persiste(aidant);
 
-    const compteAidantCree = new CapteurCommandeCreeCompteAidant(
+    const compteAidantCree = new CapteurCommandeCreeEspaceAidant(
       entrepots,
       new BusEvenementDeTest(),
       () => 'mdp'
@@ -58,13 +60,13 @@ describe('Capteur de commande de création de compte Aidant', () => {
       dateSignatureCGU,
       identifiantConnexion: aidant.identifiantConnexion,
       nomPrenom: 'Jean Dupont',
-      type: 'CommandeCreeCompteAidant',
+      type: 'CommandeCreeEspaceAidant',
     });
 
     const aidants = await entrepots.aidants().tous();
     expect(aidants).toHaveLength(1);
     await expect(compteAidantCree).rejects.toStrictEqual(
-      new ErreurCreationCompteAidant(
+      new ErreurCreationEspaceAidant(
         'Un compte Aidant avec cette adresse email existe déjà.'
       )
     );
@@ -76,14 +78,14 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const dateSignatureCGU = new Date(Date.parse('2024-08-30T14:38:25'));
     const busEvenement = new BusEvenementDeTest();
 
-    const aidantCree = await new CapteurCommandeCreeCompteAidant(
+    const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
       busEvenement
     ).execute({
       dateSignatureCGU,
       identifiantConnexion: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
-      type: 'CommandeCreeCompteAidant',
+      type: 'CommandeCreeEspaceAidant',
     });
 
     expect(busEvenement.evenementRecu).toStrictEqual<AidantCree>({

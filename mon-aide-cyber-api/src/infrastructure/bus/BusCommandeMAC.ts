@@ -10,11 +10,11 @@ import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { CapteurSagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
 import { CapteurCommandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 import { fabriqueAnnuaireCOT } from '../adaptateurs/fabriqueAnnuaireCOT';
-import { CapteurCommandeCreeCompteAidant } from '../../authentification/CapteurCommandeCreeCompteAidant';
 
 import { ServiceAidant } from '../../authentification/ServiceAidant';
 import { CapteurCommandeEnvoiMailCreationCompteAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeEnvoiMailCreationCompteAidant';
 import { adaptateurServiceChiffrement } from '../adaptateurs/adaptateurServiceChiffrement';
+import { CapteurCommandeCreeEspaceAidant } from '../../espace-aidant/CapteurCommandeCreeEspaceAidant';
 
 type Services = {
   aidant: ServiceAidant;
@@ -103,10 +103,10 @@ const capteurs: Map<string, Capteur> = new Map([
     },
   ],
   [
-    'CommandeCreeCompteAidant',
+    'CommandeCreeEspaceAidant',
     {
       capteur: (parametres) =>
-        new CapteurCommandeCreeCompteAidant(
+        new CapteurCommandeCreeEspaceAidant(
           parametres.entrepots,
           parametres.busEvenements!
         ),
