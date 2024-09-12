@@ -100,7 +100,7 @@ describe('Entrepot Demande Devenir Aidant', () => {
     ).toBe(true);
   });
 
-  it('Recherche une demande par mail', async () => {
+  it('Recherche une demande en cours par mail', async () => {
     const demandeDevenirAidant =
       unConstructeurDeDemandeDevenirAidant().construis();
     const serviceDeChiffrement = new FauxServiceDeChiffrement(
@@ -117,7 +117,7 @@ describe('Entrepot Demande Devenir Aidant', () => {
 
     const demandeRecherchee = await new EntrepotDemandeDevenirAidantPostgres(
       serviceDeChiffrement
-    ).rechercheParMail(demandeDevenirAidant.mail);
+    ).rechercheDemandeEnCoursParMail(demandeDevenirAidant.mail);
 
     expect(demandeRecherchee).toStrictEqual<DemandeDevenirAidant>({
       identifiant: demandeDevenirAidant.identifiant,
@@ -128,6 +128,29 @@ describe('Entrepot Demande Devenir Aidant', () => {
       departement: demandeDevenirAidant.departement,
       statut: StatutDemande.EN_COURS,
     });
+  });
+
+  it('Ne retourne pas la demande si elle a été traitée', async () => {
+    const demandeDevenirAidant = unConstructeurDeDemandeDevenirAidant()
+      .traitee()
+      .construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [demandeDevenirAidant.nom, 'aaa'],
+        [demandeDevenirAidant.prenom, 'bbb'],
+        [demandeDevenirAidant.mail, 'ccc'],
+        [demandeDevenirAidant.departement.nom, 'ddd'],
+      ])
+    );
+    await new EntrepotDemandeDevenirAidantPostgres(
+      serviceDeChiffrement
+    ).persiste(demandeDevenirAidant);
+
+    const demandeRecherchee = await new EntrepotDemandeDevenirAidantPostgres(
+      serviceDeChiffrement
+    ).rechercheDemandeEnCoursParMail(demandeDevenirAidant.mail);
+
+    expect(demandeRecherchee).toBeUndefined();
   });
 
   it('Met à jour le statut de la demande', async () => {
