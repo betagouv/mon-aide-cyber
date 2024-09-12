@@ -2,6 +2,7 @@ import { rechercheParNomDepartement } from '../../../gestion-demandes/departemen
 import {
   DemandeDevenirAidant,
   EntrepotDemandeDevenirAidant,
+  StatutDemande,
 } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
@@ -17,6 +18,7 @@ export type DonneesDemandeDevenirAidant = {
 
 export type DemandeDevenirAidantDTO = DTO & {
   donnees: DonneesDemandeDevenirAidant;
+  statut: StatutDemande;
 };
 
 export class EntrepotDemandeDevenirAidantPostgres
@@ -43,9 +45,9 @@ export class EntrepotDemandeDevenirAidantPostgres
   }
 
   protected champsAMettreAJour(
-    _entiteDTO: DemandeDevenirAidantDTO
+    demandeDTO: DemandeDevenirAidantDTO
   ): Partial<DemandeDevenirAidantDTO> {
-    throw new Error('Method not implemented.');
+    return { donnees: demandeDTO.donnees, statut: demandeDTO.statut };
   }
 
   protected deEntiteADTO(
@@ -60,6 +62,7 @@ export class EntrepotDemandeDevenirAidantPostgres
         mail: this.chiffrement.chiffre(entite.mail),
         nomDepartement: this.chiffrement.chiffre(entite.departement.nom),
       },
+      statut: entite.statut,
     };
   }
 
@@ -81,6 +84,7 @@ export class EntrepotDemandeDevenirAidantPostgres
       prenom: this.chiffrement.dechiffre(dto.donnees.prenom),
       mail: this.chiffrement.dechiffre(dto.donnees.mail),
       departement: departementDechiffre,
+      statut: dto.statut,
     };
   }
 }

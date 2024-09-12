@@ -1,7 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import { DemandeDevenirAidant } from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
+import {
+  DemandeDevenirAidant,
+  StatutDemande,
+} from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import {
   CapteurCommandeDevenirAidant,
   DemandeDevenirAidantCreee,
@@ -52,6 +55,7 @@ describe('Capteur de commande devenir aidant', () => {
       prenom: 'prenom',
       identifiant: expect.any(String),
       date: new Date(Date.parse('2024-08-01T14:45:17+01:00')),
+      statut: StatutDemande.EN_COURS,
     });
   });
 

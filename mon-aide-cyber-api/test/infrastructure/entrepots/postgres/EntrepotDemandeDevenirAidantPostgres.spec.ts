@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { nettoieLaBaseDeDonneesDemandeDevenirAidant } from '../../../utilitaires/nettoyeurBDD';
 import { unConstructeurDeDemandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/constructeurDeDemandeDevenirAidant';
 import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
-import { DemandeDevenirAidant } from '../../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
+import {
+  DemandeDevenirAidant,
+  StatutDemande,
+} from '../../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import {
   DemandeDevenirAidantDTO,
   EntrepotDemandeDevenirAidantPostgres,
@@ -16,7 +19,7 @@ describe('Entrepot Demande Devenir Aidant', () => {
     await nettoieLaBaseDeDonneesDemandeDevenirAidant();
   });
 
-  it('persiste une demande devenir aidant', async () => {
+  it('Persiste une demande devenir aidant', async () => {
     const demandeDevenirAidant =
       unConstructeurDeDemandeDevenirAidant().construis();
     const serviceDeChiffrement = new FauxServiceDeChiffrement(
@@ -51,6 +54,7 @@ describe('Entrepot Demande Devenir Aidant', () => {
         mail: 'ccc',
         date: FournisseurHorloge.maintenant().toISOString(),
       },
+      statut: StatutDemande.EN_COURS,
     };
     await knex(knexfile)
       .insert(demandeDevenirAidantDTO)
@@ -74,7 +78,7 @@ describe('Entrepot Demande Devenir Aidant', () => {
     );
   });
 
-  it("vérifie qu'une demande existe", async () => {
+  it("Vérifie qu'une demande existe", async () => {
     const demandeDevenirAidant =
       unConstructeurDeDemandeDevenirAidant().construis();
     const serviceDeChiffrement = new FauxServiceDeChiffrement(
@@ -96,7 +100,7 @@ describe('Entrepot Demande Devenir Aidant', () => {
     ).toBe(true);
   });
 
-  it('recherche une demande par mail', async () => {
+  it('Recherche une demande par mail', async () => {
     const demandeDevenirAidant =
       unConstructeurDeDemandeDevenirAidant().construis();
     const serviceDeChiffrement = new FauxServiceDeChiffrement(
@@ -122,6 +126,40 @@ describe('Entrepot Demande Devenir Aidant', () => {
       prenom: demandeDevenirAidant.prenom,
       mail: demandeDevenirAidant.mail,
       departement: demandeDevenirAidant.departement,
+      statut: StatutDemande.EN_COURS,
+    });
+  });
+
+  it('Met à jour le statut de la demande', async () => {
+    const demandeDevenirAidant =
+      unConstructeurDeDemandeDevenirAidant().construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [demandeDevenirAidant.nom, 'aaa'],
+        [demandeDevenirAidant.prenom, 'bbb'],
+        [demandeDevenirAidant.mail, 'ccc'],
+        [demandeDevenirAidant.departement.nom, 'ddd'],
+      ])
+    );
+    await new EntrepotDemandeDevenirAidantPostgres(
+      serviceDeChiffrement
+    ).persiste(demandeDevenirAidant);
+
+    await new EntrepotDemandeDevenirAidantPostgres(
+      serviceDeChiffrement
+    ).persiste({ ...demandeDevenirAidant, statut: StatutDemande.TRAITEE });
+    const demandeRecue = await new EntrepotDemandeDevenirAidantPostgres(
+      serviceDeChiffrement
+    ).lis(demandeDevenirAidant.identifiant);
+
+    expect(demandeRecue).toStrictEqual<DemandeDevenirAidant>({
+      identifiant: demandeDevenirAidant.identifiant,
+      date: demandeDevenirAidant.date,
+      nom: demandeDevenirAidant.nom,
+      prenom: demandeDevenirAidant.prenom,
+      mail: demandeDevenirAidant.mail,
+      departement: demandeDevenirAidant.departement,
+      statut: StatutDemande.TRAITEE,
     });
   });
 });
