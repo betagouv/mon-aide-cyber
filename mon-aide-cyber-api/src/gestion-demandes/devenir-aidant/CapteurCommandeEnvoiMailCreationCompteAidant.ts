@@ -41,7 +41,7 @@ export class CapteurCommandeEnvoiMailCreationCompteAidant
 
     return this.entrepots
       .demandesDevenirAidant()
-      .rechercheParMail(commande.mail)
+      .rechercheDemandeEnCoursParMail(commande.mail)
       .then((demande) => {
         if (demande) {
           return this.envoieMail(demande)

@@ -19,6 +19,11 @@ class ConstructeurDemandeDevenirAidant
     return this;
   }
 
+  traitee(): ConstructeurDemandeDevenirAidant {
+    this.statut = StatutDemande.TRAITEE;
+    return this;
+  }
+
   construis(): DemandeDevenirAidant {
     return {
       date: FournisseurHorloge.maintenant(),

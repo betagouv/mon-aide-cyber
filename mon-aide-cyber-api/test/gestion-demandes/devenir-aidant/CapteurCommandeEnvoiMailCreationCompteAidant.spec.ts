@@ -90,6 +90,31 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
     expect(adaptateurEnvoiMail.mailNonEnvoye()).toBe(true);
   });
 
+  it('Ne peut envoyer le mail pour une demande déjà traitée', async () => {
+    const demande = unConstructeurDeDemandeDevenirAidant()
+      .traitee()
+      .construis();
+    await entrepots.demandesDevenirAidant().persiste(demande);
+    const demandeFinalisee =
+      await new CapteurCommandeEnvoiMailCreationCompteAidant(
+        entrepots,
+        busEvenement,
+        adaptateurEnvoiMail,
+        adaptateurServiceChiffrement()
+      ).execute({
+        mail: demande.mail,
+        type: 'CommandeEnvoiMailCreationCompteAidant',
+      });
+
+    expect(demandeFinalisee).toBeUndefined();
+    expect(
+      busEvenement.consommateursTestes.get(
+        'MAIL_CREATION_COMPTE_AIDANT_ENVOYE'
+      )?.[0].evenementConsomme
+    ).toBeUndefined();
+    expect(adaptateurEnvoiMail.mailNonEnvoye()).toBe(true);
+  });
+
   it('Publie l’événement MAIL_CREATION_COMPTE_AIDANT_ENVOYE', async () => {
     FournisseurHorlogeDeTest.initialise(
       new Date(Date.parse('2024-07-07T13:44:38'))

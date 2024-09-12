@@ -35,9 +35,14 @@ export class EntrepotDemandeDevenirAidantPostgres
     );
   }
 
-  rechercheParMail(mail: string): Promise<DemandeDevenirAidant | undefined> {
+  rechercheDemandeEnCoursParMail(
+    mail: string
+  ): Promise<DemandeDevenirAidant | undefined> {
     return this.tous().then((demandes) =>
-      demandes.find((demande) => demande.mail === mail)
+      demandes.find(
+        (demande) =>
+          demande.mail === mail && demande.statut === StatutDemande.EN_COURS
+      )
     );
   }
   protected nomTable(): string {

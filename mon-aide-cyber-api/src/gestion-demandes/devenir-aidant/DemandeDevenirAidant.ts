@@ -19,5 +19,7 @@ export interface EntrepotDemandeDevenirAidant
   extends Entrepot<DemandeDevenirAidant> {
   demandeExiste(mail: string): Promise<boolean>;
 
-  rechercheParMail(mail: string): Promise<DemandeDevenirAidant | undefined>;
+  rechercheDemandeEnCoursParMail(
+    mail: string
+  ): Promise<DemandeDevenirAidant | undefined>;
 }

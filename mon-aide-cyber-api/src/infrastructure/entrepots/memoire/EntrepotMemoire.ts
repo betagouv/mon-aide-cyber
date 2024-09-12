@@ -17,6 +17,7 @@ import { Aide, EntrepotAide } from '../../../aide/Aide';
 import {
   DemandeDevenirAidant,
   EntrepotDemandeDevenirAidant,
+  StatutDemande,
 } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
@@ -131,9 +132,14 @@ export class EntrepotDemandeDevenirAidantMemoire
   extends EntrepotMemoire<DemandeDevenirAidant>
   implements EntrepotDemandeDevenirAidant
 {
-  rechercheParMail(mail: string): Promise<DemandeDevenirAidant | undefined> {
+  rechercheDemandeEnCoursParMail(
+    mail: string
+  ): Promise<DemandeDevenirAidant | undefined> {
     return Promise.resolve(
-      Array.from(this.entites.values()).find((demande) => demande.mail === mail)
+      Array.from(this.entites.values()).find(
+        (demande) =>
+          demande.mail === mail && demande.statut === StatutDemande.EN_COURS
+      )
     );
   }
 
