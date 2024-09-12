@@ -14,7 +14,7 @@ const command = program
 command.action(async (...args: any[]) => {
   const dateDebutPeriode: Date = new Date(Date.parse(args[0].toLowerCase()));
 
-  const rapport: string[] = ['Date;Nom - Prénom;Département;\n'];
+  const rapport: string[] = ['Date;Email;Nom - Prénom;Département;\n'];
 
   const entrepot = new EntrepotDemandeDevenirAidantPostgres(
     adaptateurServiceChiffrement()
@@ -31,13 +31,14 @@ command.action(async (...args: any[]) => {
         date: demande.date,
         nom: demande.nom,
         prenom: demande.prenom,
+        mail: demande.mail,
         departement: demande.departement.nom,
       }))
   );
 
   demandes.forEach((demande) => {
     rapport.push(
-      `${format(demande.date, 'dd-MM-yyyy')};${demande.nom} ${demande.prenom};${demande.departement};\n`
+      `${format(demande.date, 'dd-MM-yyyy')};${demande.mail};${demande.prenom} ${demande.nom};${demande.departement};\n`
     );
   });
 
