@@ -18,9 +18,12 @@ import { ComposantDemandeDevenirAidant } from './composants/gestion-demandes/dev
 import { KitDeCommunication } from './composants/a-propos/KitDeCommunication.tsx';
 import { LayoutPublic } from './composants/layout/LayoutPublic.tsx';
 import { ComposantDemandeEtreAide } from './composants/gestion-demandes/etre-aide/ComposantDemandeEtreAide.tsx';
+import { EcranCreationEspaceAidant as ComposantDemandeAidantCreationEspaceAidant } from './domaine/espace-aidant/demande-aidant-creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { LayoutAidant } from './composants/layout/LayoutAidant.tsx';
 import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
+import { LayoutCreationEspaceAidant } from './composants/layout/LayoutCreationEspaceAidant.tsx';
 import { EcranCreationEspaceAidant } from './domaine/espace-aidant/creation-espace-aidant/EcranCreationEspaceAidant.tsx';
+
 export const AppRouteur = () => {
   return (
     <Routes>
@@ -41,6 +44,17 @@ export const AppRouteur = () => {
         />
         <Route path="/mentions-legales" element={<MentionsLegales />} />
         <Route path="/connexion" element={<ComposantConnexion />} />
+      </Route>
+
+      <Route path="/" element={<LayoutCreationEspaceAidant />}>
+        <Route
+          path="/demandes/devenir-aidant/finalise"
+          element={
+            <ComposantIntercepteur
+              composant={ComposantDemandeAidantCreationEspaceAidant}
+            />
+          }
+        />
       </Route>
 
       <Route
