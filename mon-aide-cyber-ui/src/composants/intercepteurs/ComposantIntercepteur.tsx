@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import React from 'react';
 import { UUID } from '../../types/Types.ts';
 
@@ -20,6 +20,7 @@ type ProprietesComposantIntercepteur<
 
 type ProprietesComposant = {
   idDiagnostic?: UUID;
+  token?: string;
 };
 
 export const ComposantIntercepteur = <C extends React.ElementType = 'div'>({
@@ -27,6 +28,10 @@ export const ComposantIntercepteur = <C extends React.ElementType = 'div'>({
 }: ProprietesComposantIntercepteur<C, ProprietesComposant>) => {
   const Composant = composant || 'div';
   const params = useParams();
-
-  return <Composant {...params} />;
+  const location = useLocation();
+  const urlSearchParams = new URLSearchParams(location.search);
+  const queryParams = Object.entries(
+    Object.fromEntries(urlSearchParams.entries())
+  ).reduce((prev, [clef, valeur]) => ({ ...prev, [clef]: valeur }), {});
+  return <Composant {...{ ...params, ...queryParams }} />;
 };

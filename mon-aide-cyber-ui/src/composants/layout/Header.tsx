@@ -6,9 +6,12 @@ import { Utilisateur } from '../../domaine/authentification/Authentification.ts'
 import { liensNavigation } from './LayoutPublic.tsx';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 
-export type HeaderProprietes = PropsWithChildren<{ lienMAC: ReactElement }>;
+export type HeaderProprietes = PropsWithChildren<{
+  lienMAC: ReactElement;
+  enteteSimple?: boolean;
+}>;
 
-export const Header = ({ lienMAC }: HeaderProprietes) => {
+export const Header = ({ lienMAC, enteteSimple }: HeaderProprietes) => {
   const location = useLocation();
   const [utilisateur, setUtilisateur] = useState<Utilisateur | undefined>(
     undefined
@@ -23,6 +26,60 @@ export const Header = ({ lienMAC }: HeaderProprietes) => {
       setUtilisateur(authentification.utilisateur);
     }
   }, [authentification, utilisateur]);
+
+  const accesRapide = enteteSimple ? (
+    ''
+  ) : (
+    <div className="fr-header__tools">
+      <div className="fr-header__tools-links">
+        {utilisateur ? (
+          <ComposantMenuUtilisateur utilisateur={utilisateur} />
+        ) : (
+          <SeConnecter />
+        )}
+      </div>
+    </div>
+  );
+
+  const navigation = enteteSimple ? (
+    ''
+  ) : (
+    <div
+      className="fr-header__menu fr-modal"
+      id="modal-491"
+      aria-labelledby="button-492"
+    >
+      <div className="fr-container">
+        <button
+          className="fr-btn--close fr-btn bouton-mac bouton-mac-secondaire"
+          aria-controls="modal-491"
+          title="Fermer"
+        >
+          Fermer
+        </button>
+        <div className="fr-header__menu-links"></div>
+        <nav
+          className="barre-navigation"
+          id="navigation-493"
+          role="navigation"
+          aria-label="Menu principal"
+        >
+          <ul className="fr-nav__list">
+            {liensNavigation.map((lien) => (
+              <li
+                className={`fr-nav__item ${estCheminCourant(lien.route) ? 'lien actif' : 'lien'}`}
+                key={lien.nom}
+              >
+                <Link className="fr-nav__link" to={lien.route}>
+                  {lien.nom}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  );
 
   return (
     <header role="banner" className="fr-header public mac-sticky">
@@ -60,53 +117,11 @@ export const Header = ({ lienMAC }: HeaderProprietes) => {
               </div>
               <div className="fr-header__service fr-col-md-5">{lienMAC}</div>
             </div>
-            <div className="fr-header__tools">
-              <div className="fr-header__tools-links">
-                {utilisateur ? (
-                  <ComposantMenuUtilisateur utilisateur={utilisateur} />
-                ) : (
-                  <SeConnecter />
-                )}
-              </div>
-            </div>
+            {accesRapide}
           </div>
         </div>
       </div>
-      <div
-        className="fr-header__menu fr-modal"
-        id="modal-491"
-        aria-labelledby="button-492"
-      >
-        <div className="fr-container">
-          <button
-            className="fr-btn--close fr-btn bouton-mac bouton-mac-secondaire"
-            aria-controls="modal-491"
-            title="Fermer"
-          >
-            Fermer
-          </button>
-          <div className="fr-header__menu-links"></div>
-          <nav
-            className="barre-navigation"
-            id="navigation-493"
-            role="navigation"
-            aria-label="Menu principal"
-          >
-            <ul className="fr-nav__list">
-              {liensNavigation.map((lien) => (
-                <li
-                  className={`fr-nav__item ${estCheminCourant(lien.route) ? 'lien actif' : 'lien'}`}
-                  key={lien.nom}
-                >
-                  <Link className="fr-nav__link" to={lien.route}>
-                    {lien.nom}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      </div>
+      {navigation}
     </header>
   );
 };
