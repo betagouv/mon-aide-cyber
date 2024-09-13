@@ -87,7 +87,7 @@ export class CapteurCommandeEnvoiMailCreationCompteAidant
       ).toString('base64')
     );
     return this.adaptateurEnvoiDeMail.envoie({
-      objet: 'Mon Aide Cyber - Création de votre compte Aidant',
+      objet: 'MonAideCyber - Création de votre espace Aidant',
       corps: adaptateurCorpsMessage
         .finaliseDemandeDevenirAidant()
         .genereCorpsMessage(
