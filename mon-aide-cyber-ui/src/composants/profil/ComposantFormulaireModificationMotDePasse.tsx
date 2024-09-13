@@ -1,7 +1,7 @@
 import {
-  ComposantMotDePasse,
+  ComposantModificationMotDePasse,
   ModificationMotDePasse,
-} from '../mot-de-passe/ComposantMotDePasse.tsx';
+} from '../mot-de-passe/ComposantModificationMotDePasse.tsx';
 import { FormEvent, ReactElement, useCallback, useMemo, useState } from 'react';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ChampSucces } from '../alertes/Succes.tsx';
@@ -77,7 +77,7 @@ export const ComposantFormulaireModificationMotDePasse = ({
     <form onSubmit={modifieLeMotDePasse}>
       <fieldset className="fr-fieldset">
         <div className="fr-fieldset__content">
-          <ComposantMotDePasse
+          <ComposantModificationMotDePasse
             titreSaisieAncienMotDePasse="Saisissez votre ancien mot de passe"
             messagesErreurs={{
               motsDePasseConfirmeDifferent:

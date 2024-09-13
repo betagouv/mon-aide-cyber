@@ -8,14 +8,14 @@ import {
   reducteurCreationEspaceAidant,
 } from './reducteurCreationEspaceAidant.tsx';
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
-import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
-import { Lien, ReponseHATEOAS } from '../../../domaine/Lien.ts';
+import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
+import { Lien, ReponseHATEOAS } from '../../Lien.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { CreationEspaceAidant } from '../../../domaine/espace-aidant/EspaceAidant.ts';
-import { ComposantMotDePasse } from '../../mot-de-passe/ComposantMotDePasse.tsx';
+import { CreationEspaceAidant } from '../EspaceAidant.ts';
 import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
+import { ComposantModificationMotDePasse } from '../../../composants/mot-de-passe/ComposantModificationMotDePasse.tsx';
 
-export const ComposantFormulaireCreationEspaceAidant = () => {
+export const FormulaireCreationEspaceAidant = () => {
   const [etatCreationEspaceAidant, envoie] = useReducer(
     reducteurCreationEspaceAidant,
     initialiseReducteur()
@@ -96,7 +96,7 @@ export const ComposantFormulaireCreationEspaceAidant = () => {
           </div>
         </div>
         <div className="fr-fieldset__content">
-          <ComposantMotDePasse
+          <ComposantModificationMotDePasse
             titreSaisieAncienMotDePasse="Saisissez votre mot de passe temporaire"
             messagesErreurs={{
               motsDePasseConfirmeDifferent:

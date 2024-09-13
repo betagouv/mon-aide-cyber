@@ -3,8 +3,8 @@ import {
   ChampsErreur,
   construisErreur,
   PresentationErreur,
-} from '../../alertes/Erreurs.tsx';
-import { ModificationMotDePasse } from '../../mot-de-passe/ComposantMotDePasse.tsx';
+} from '../../../composants/alertes/Erreurs.tsx';
+import { ModificationMotDePasse } from '../../../composants/mot-de-passe/ComposantModificationMotDePasse.tsx';
 
 type ErreurCreationEspaceAidant = {
   cguSignees?: PresentationErreur;
