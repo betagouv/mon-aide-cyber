@@ -2,16 +2,16 @@ import { Meta, StoryObj } from '@storybook/react';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 import { expect, userEvent, within } from '@storybook/test';
-import { ComposantFormulaireCreationEspaceAidant } from '../composants/espace-aidant/creation-espace-aidant/ComposantFormulaireCreationEspaceAidant.tsx';
 import { macAPI } from '../fournisseurs/api/macAPI.ts';
+import { FormulaireCreationEspaceAidant } from '../domaine/espace-aidant/creation-espace-aidant/FormulaireCreationEspaceAidant.tsx';
 
 const meta = {
   title: "Création de l'espace Aidant",
-  component: ComposantFormulaireCreationEspaceAidant,
+  component: FormulaireCreationEspaceAidant,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof ComposantFormulaireCreationEspaceAidant>;
+} satisfies Meta<typeof FormulaireCreationEspaceAidant>;
 
 let valeursSaisies = {};
 macAPI.execute = <T, U, V = void>(

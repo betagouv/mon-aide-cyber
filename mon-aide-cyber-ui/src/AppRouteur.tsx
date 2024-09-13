@@ -14,14 +14,13 @@ import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspac
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
 import { ComposantConnexion } from './composants/connexion/ComposantConnexion.tsx';
 import { TableauDeBord } from './composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
-import { ComposantCreationEspaceAidant } from './composants/espace-aidant/creation-espace-aidant/ComposantCreationEspaceAidant.tsx';
 import { ComposantDemandeDevenirAidant } from './composants/gestion-demandes/devenir-aidant/ComposantDemandeDevenirAidant.tsx';
 import { KitDeCommunication } from './composants/a-propos/KitDeCommunication.tsx';
 import { LayoutPublic } from './composants/layout/LayoutPublic.tsx';
 import { ComposantDemandeEtreAide } from './composants/gestion-demandes/etre-aide/ComposantDemandeEtreAide.tsx';
 import { LayoutAidant } from './composants/layout/LayoutAidant.tsx';
 import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
-
+import { EcranCreationEspaceAidant } from './domaine/espace-aidant/creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 export const AppRouteur = () => {
   return (
     <Routes>
@@ -60,7 +59,7 @@ export const AppRouteur = () => {
         >
           <Route
             path="/finalise-creation-espace-aidant"
-            element={<ComposantCreationEspaceAidant />}
+            element={<EcranCreationEspaceAidant />}
           ></Route>
         </Route>
         <Route
