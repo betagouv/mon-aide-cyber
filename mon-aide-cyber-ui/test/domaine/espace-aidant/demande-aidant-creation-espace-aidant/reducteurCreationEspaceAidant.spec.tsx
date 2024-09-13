@@ -11,7 +11,7 @@ import {
   EtatCreationEspaceAidant,
   initialiseReducteur,
   reducteurCreationEspaceAidant,
-} from '../../../../src/domaine/espace-aidant/creation-espace-aidant/reducteurCreationEspaceAidant.tsx';
+} from '../../../../src/domaine/espace-aidant/demande-aidant-creation-espace-aidant/reducteurCreationEspaceAidant.tsx';
 
 describe("Réducteur de création de l'espace Aidant", () => {
   const etatInitialCreationEspaceAidant: EtatCreationEspaceAidant =
@@ -24,7 +24,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
           cguSignees: true,
         },
         creationEspaceAidantValidee({
-          ancienMotDePasse: 'mdp-temporaire',
           nouveauMotDePasse: 'mdp',
           confirmationNouveauMotDePasse: 'mdp',
           valide: true,
@@ -34,7 +33,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
       expect(etatCreationEspaceAidant).toStrictEqual<EtatCreationEspaceAidant>({
         cguSignees: true,
         motDePasse: {
-          ancienMotDePasse: 'mdp-temporaire',
           nouveauMotDePasse: 'mdp',
           confirmationNouveauMotDePasse: 'mdp',
           valide: true,
@@ -52,7 +50,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
           ...etatInitialCreationEspaceAidant,
         },
         creationEspaceAidantValidee({
-          ancienMotDePasse: 'mdp-temporaire',
           nouveauMotDePasse: 'mdp',
           confirmationNouveauMotDePasse: 'mdp',
           valide: true,
@@ -73,7 +70,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
           },
         },
         motDePasse: {
-          ancienMotDePasse: 'mdp-temporaire',
           nouveauMotDePasse: 'mdp',
           confirmationNouveauMotDePasse: 'mdp',
           valide: true,
@@ -91,7 +87,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
           saisieValide: () => false,
         },
         creationEspaceAidantValidee({
-          ancienMotDePasse: 'mot-de-passe',
           nouveauMotDePasse: 'mot-de-passe',
           confirmationNouveauMotDePasse: 'mot-de-passe',
           valide: false,
@@ -102,7 +97,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
         cguSignees: true,
         erreur: {},
         motDePasse: {
-          ancienMotDePasse: 'mot-de-passe',
           nouveauMotDePasse: 'mot-de-passe',
           confirmationNouveauMotDePasse: 'mot-de-passe',
           valide: false,
@@ -119,7 +113,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
         {
           ...etatInitialCreationEspaceAidant,
           motDePasse: {
-            ancienMotDePasse: 'mot-de-passe',
             nouveauMotDePasse: 'mdp',
             confirmationNouveauMotDePasse: 'mdp',
             valide: true,
@@ -133,7 +126,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
         cguSignees: true,
         erreur: {},
         motDePasse: {
-          ancienMotDePasse: 'mot-de-passe',
           nouveauMotDePasse: 'mdp',
           confirmationNouveauMotDePasse: 'mdp',
           valide: true,
@@ -182,7 +174,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
             },
           },
           motDePasse: {
-            ancienMotDePasse: 'mot-de-passe',
             nouveauMotDePasse: 'mdp',
             confirmationNouveauMotDePasse: 'mdp',
             valide: true,
@@ -195,7 +186,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
         cguSignees: true,
         erreur: {},
         motDePasse: {
-          ancienMotDePasse: 'mot-de-passe',
           nouveauMotDePasse: 'mdp',
           confirmationNouveauMotDePasse: 'mdp',
           valide: true,
@@ -211,7 +201,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
           ...etatInitialCreationEspaceAidant,
           cguSignees: false,
           motDePasse: {
-            ancienMotDePasse: 'mot-de-passe',
             nouveauMotDePasse: 'mdp',
             confirmationNouveauMotDePasse: 'incorrect',
             valide: false,
@@ -225,7 +214,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
         cguSignees: true,
         erreur: {},
         motDePasse: {
-          ancienMotDePasse: 'mot-de-passe',
           nouveauMotDePasse: 'mdp',
           confirmationNouveauMotDePasse: 'incorrect',
           valide: false,
@@ -244,7 +232,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
           creationEspaceAidantATransmettre: true,
           cguSignees: true,
           motDePasse: {
-            ancienMotDePasse: 'mot-de-passe',
             nouveauMotDePasse: 'mdp',
             confirmationNouveauMotDePasse: 'mdp',
             valide: true,
@@ -269,7 +256,6 @@ describe("Réducteur de création de l'espace Aidant", () => {
           cguSignees: true,
           creationEspaceAidantATransmettre: true,
           motDePasse: {
-            ancienMotDePasse: 'mot-de-passe',
             nouveauMotDePasse: 'mdp',
             confirmationNouveauMotDePasse: 'mdp',
             valide: true,
