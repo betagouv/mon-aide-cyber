@@ -23,7 +23,7 @@ type ProprieteseComposantMotDePasse = {
   titreSaisieAncienMotDePasse: string;
 };
 
-export const ComposantMotDePasse = ({
+export const ComposantModificationMotDePasse = ({
   messagesErreurs,
   reinitialise,
   surValidation,

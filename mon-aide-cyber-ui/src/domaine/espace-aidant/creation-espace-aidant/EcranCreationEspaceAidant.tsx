@@ -1,9 +1,9 @@
-import { ComposantFormulaireCreationEspaceAidant } from './ComposantFormulaireCreationEspaceAidant.tsx';
-import { Header } from '../../layout/Header.tsx';
-import { LienMAC } from '../../LienMAC.tsx';
-import { Footer } from '../../layout/Footer.tsx';
+import { FormulaireCreationEspaceAidant } from './FormulaireCreationEspaceAidant.tsx';
+import { Header } from '../../../composants/layout/Header.tsx';
+import { LienMAC } from '../../../composants/LienMAC.tsx';
+import { Footer } from '../../../composants/layout/Footer.tsx';
 
-export const ComposantCreationEspaceAidant = () => {
+export const EcranCreationEspaceAidant = () => {
   return (
     <>
       <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
@@ -22,7 +22,7 @@ export const ComposantCreationEspaceAidant = () => {
           <div className="fr-container">
             <div className="fr-grid-row fr-grid-row--gutters fr-grid-row--center">
               <div className="fr-col-8">
-                <ComposantFormulaireCreationEspaceAidant />
+                <FormulaireCreationEspaceAidant />
               </div>
             </div>
           </div>
