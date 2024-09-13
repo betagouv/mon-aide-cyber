@@ -1,11 +1,12 @@
 import { Constructeur } from '../../../constructeurs/constructeur';
-import { AidantTranscris } from '../../../../src/administration/aidants/importe/importeAidants';
+import { AidantCSV } from '../../../../src/administration/aidants/espace-aidant/initialiseCreationEspacesAidants';
 import { fakerFR } from '@faker-js/faker';
 
-class ConstructeurAidantTranscris implements Constructeur<AidantTranscris> {
+class ConstructeurAidantCSV implements Constructeur<AidantCSV> {
   private charte: 'OK' | 'NOK' = 'NOK';
+  private formation: 'OK' | 'NOK' = 'NOK';
   private telephone: string = fakerFR.phone.number();
-  private email: string = fakerFR.internet.email();
+  private email: string = fakerFR.internet.email().toLowerCase();
   private nomPrenom: string = fakerFR.person.fullName();
   private region = 'BFC';
   private commentaires = '';
@@ -14,32 +15,37 @@ class ConstructeurAidantTranscris implements Constructeur<AidantTranscris> {
   private qui = '';
   private todo = '';
 
-  charteOK(): ConstructeurAidantTranscris {
+  charteOK(): ConstructeurAidantCSV {
     this.charte = 'OK';
     return this;
   }
 
-  avecUnTelephone(telephone: string): ConstructeurAidantTranscris {
+  formationOK(): ConstructeurAidantCSV {
+    this.formation = 'OK';
+    return this;
+  }
+
+  avecUnTelephone(telephone: string): ConstructeurAidantCSV {
     this.telephone = telephone;
     return this;
   }
 
-  avecUnEmail(email: string): ConstructeurAidantTranscris {
+  avecUnEmail(email: string): ConstructeurAidantCSV {
     this.email = email;
     return this;
   }
 
-  avecLeNom(nomPrenom: string): ConstructeurAidantTranscris {
+  avecLeNom(nomPrenom: string): ConstructeurAidantCSV {
     this.nomPrenom = nomPrenom;
     return this;
   }
 
-  enRegion(region: string): ConstructeurAidantTranscris {
+  enRegion(region: string): ConstructeurAidantCSV {
     this.region = region;
     return this;
   }
 
-  dejaImporte(): ConstructeurAidantTranscris {
+  dejaImporte(): ConstructeurAidantCSV {
     this.commentaires = `importé le 2024-01-05`;
     this.compteCree = 'oui';
     this.messageAvecMDP = 'Message';
@@ -48,9 +54,10 @@ class ConstructeurAidantTranscris implements Constructeur<AidantTranscris> {
     return this;
   }
 
-  construis(): AidantTranscris {
+  construis(): AidantCSV {
     return {
       charte: this.charte,
+      formation: this.formation,
       commentaires: this.commentaires,
       compteCree: this.compteCree,
       identifiantConnexion: this.email,
@@ -64,5 +71,4 @@ class ConstructeurAidantTranscris implements Constructeur<AidantTranscris> {
   }
 }
 
-export const unConstructeurAidantTranscris = () =>
-  new ConstructeurAidantTranscris();
+export const unConstructeurAidantCSV = () => new ConstructeurAidantCSV();
