@@ -6,10 +6,6 @@ input {
   @include proprietes-input;
 }
 
-.fr-input-group {
-  position:static;
-}
-
 .autocomplete {
   display: inline-block;
   margin-top: 0.5rem;
@@ -56,7 +52,7 @@ input {
   position: absolute;
   border: 1px solid var(--couleurs-mac-violet-fonce);
   border-top: none;
-  z-index: 1000;
+  z-index: 1;
   top: 100%;
   left: 0;
   right: 0;
