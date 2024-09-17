@@ -121,7 +121,7 @@ export const CreationEspaceAidant: Story = {
       await userEvent.clear(champNouveauMotDePasse);
       await userEvent.clear(champConfirmationMotDePasse);
       await userEvent.type(champNouveauMotDePasse, 'a');
-      await userEvent.type(champConfirmationMotDePasse, 'a');
+      await userEvent.type(champConfirmationMotDePasse, 'b');
 
       await userEvent.click(
         canvas.getByRole('checkbox', {
@@ -165,6 +165,10 @@ export const CreationEspaceAidant: Story = {
         confirmationMotDePasse: 'b',
         token: 'aaaa',
       });
+
+      await expect(
+        canvas.getByText(/votre espace Aidant est disponible !/i)
+      ).toBeInTheDocument();
     });
   },
 };
