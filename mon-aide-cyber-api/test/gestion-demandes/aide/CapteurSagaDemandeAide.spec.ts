@@ -3,7 +3,10 @@ import { unAide } from '../../aide/ConstructeurAide';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
-import { CapteurSagaDemandeAide } from '../../../src/gestion-demandes/aide/CapteurSagaDemandeAide';
+import {
+  CapteurSagaDemandeAide,
+  DemandeAideCree,
+} from '../../../src/gestion-demandes/aide/CapteurSagaDemandeAide';
 import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
@@ -67,7 +70,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         type: 'SagaDemandeValidationCGUAide',
         cguValidees: true,
         email: 'un email',
-        departement: 'un departement',
+        departement: 'Allier',
         relationAidant: false,
       });
 
@@ -346,12 +349,13 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       });
       const aideRecu = (await entrepotsMemoire.aides().tous())[0];
 
-      expect(busEvenement.evenementRecu).toStrictEqual({
+      expect(busEvenement.evenementRecu).toStrictEqual<DemandeAideCree>({
         identifiant: expect.any(String),
         type: 'AIDE_CREE',
         date: maintenant,
         corps: {
           identifiantAide: aideRecu.identifiant,
+          departement: '33',
         },
       });
     });

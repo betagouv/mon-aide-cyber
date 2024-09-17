@@ -30,7 +30,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           {
             cguValidees: true,
             email: 'jean.dupont@aide.com',
-            departement: 'Corse du sud',
+            departement: 'Corse-du-Sud',
             raisonSociale: 'beta-gouv',
             relationAidant: true,
           }
