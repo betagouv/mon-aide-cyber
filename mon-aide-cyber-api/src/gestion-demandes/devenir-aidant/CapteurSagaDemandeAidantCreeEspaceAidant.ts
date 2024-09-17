@@ -37,6 +37,7 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
             nomPrenom: `${demande.prenom} ${demande.nom}`,
             motDePasse: saga.motDePasse,
             type: 'CommandeCreeEspaceAidant',
+            departement: demande.departement,
           })
           .then((compte) => {
             return this.entrepots

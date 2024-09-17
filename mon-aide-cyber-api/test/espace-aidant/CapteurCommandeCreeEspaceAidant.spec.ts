@@ -3,12 +3,12 @@ import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
-import { AidantCree } from '../../src/administration/aidant/creeAidant';
 import {
   Aidant,
   ErreurCreationEspaceAidant,
 } from '../../src/authentification/Aidant';
 import {
+  AidantCree,
   CapteurCommandeCreeEspaceAidant,
   EspaceAidantCree,
 } from '../../src/espace-aidant/CapteurCommandeCreeEspaceAidant';
@@ -28,6 +28,11 @@ describe('Capteur de commande de création de compte Aidant', () => {
       nomPrenom: 'Jean Dupont',
       motDePasse: 'toto12345',
       type: 'CommandeCreeEspaceAidant',
+      departement: {
+        nom: 'Alpes-de-Haute-Provence',
+        code: '4',
+        codeRegion: '93',
+      },
     });
 
     const aidants = await entrepots.aidants().tous();
@@ -61,6 +66,11 @@ describe('Capteur de commande de création de compte Aidant', () => {
       nomPrenom: 'Jean Dupont',
       motDePasse: '',
       type: 'CommandeCreeEspaceAidant',
+      departement: {
+        nom: 'Ariège',
+        code: '9',
+        codeRegion: '76',
+      },
     });
 
     const aidants = await entrepots.aidants().tous();
@@ -87,13 +97,18 @@ describe('Capteur de commande de création de compte Aidant', () => {
       nomPrenom: 'Jean Dupont',
       motDePasse: '',
       type: 'CommandeCreeEspaceAidant',
+      departement: {
+        nom: 'Guadeloupe',
+        code: '971',
+        codeRegion: '01',
+      },
     });
 
     expect(busEvenement.evenementRecu).toStrictEqual<AidantCree>({
       identifiant: aidantCree.identifiant,
       type: 'AIDANT_CREE',
       date: FournisseurHorloge.maintenant(),
-      corps: { identifiant: aidantCree.identifiant },
+      corps: { identifiant: aidantCree.identifiant, departement: '971' },
     });
   });
 });

@@ -1,12 +1,12 @@
 import { CapteurCommande, Commande } from '../domaine/commande';
 import { Entrepots } from '../domaine/Entrepots';
-import { BusEvenement } from '../domaine/BusEvenement';
+import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
-import { AidantCree } from '../administration/aidant/creeAidant';
 import crypto from 'crypto';
 import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 import { AggregatNonTrouve } from '../domaine/Aggregat';
 import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
+import { Departement } from '../gestion-demandes/departements';
 
 export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
   type: 'CommandeCreeEspaceAidant';
@@ -14,6 +14,7 @@ export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
   identifiantConnexion: string;
   motDePasse: string;
   nomPrenom: string;
+  departement: Departement;
 };
 
 export type EspaceAidantCree = {
@@ -21,6 +22,11 @@ export type EspaceAidantCree = {
   email: string;
   nomPrenom: string;
 };
+
+export type AidantCree = Evenement<{
+  identifiant: crypto.UUID;
+  departement?: string;
+}>;
 
 export class CapteurCommandeCreeEspaceAidant
   implements CapteurCommande<CommandeCreeEspaceAidant, EspaceAidantCree>
@@ -56,7 +62,10 @@ export class CapteurCommandeCreeEspaceAidant
             .then(() => {
               return this.busEvenement
                 .publie<AidantCree>({
-                  corps: { identifiant: aidant.identifiant },
+                  corps: {
+                    identifiant: aidant.identifiant,
+                    departement: commande.departement.code,
+                  },
                   date: FournisseurHorloge.maintenant(),
                   identifiant: aidant.identifiant,
                   type: 'AIDANT_CREE',
