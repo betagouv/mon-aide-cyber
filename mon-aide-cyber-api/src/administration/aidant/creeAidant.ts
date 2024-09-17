@@ -1,7 +1,8 @@
 import { Aidant, EntrepotAidant } from '../../authentification/Aidant';
 import crypto from 'crypto';
-import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
+import { BusEvenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { AidantCree } from '../../espace-aidant/CapteurCommandeCreeEspaceAidant';
 
 export type DonneesAidant = {
   identifiantConnexion: string;
@@ -36,5 +37,3 @@ export const creeAidant = async (
       return aidant;
     });
 };
-
-export type AidantCree = Evenement<{ identifiant: crypto.UUID }>;
