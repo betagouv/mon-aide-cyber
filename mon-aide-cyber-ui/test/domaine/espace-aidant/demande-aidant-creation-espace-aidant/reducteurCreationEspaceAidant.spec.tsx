@@ -40,6 +40,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
         erreur: {},
         creationEspaceAidantATransmettre: true,
         saisieValide: expect.any(Function),
+        demandeTransmise: false,
       });
       expect(etatCreationEspaceAidant.saisieValide()).toBe(true);
     });
@@ -75,6 +76,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           valide: true,
         },
         saisieValide: expect.any(Function),
+        demandeTransmise: false,
       });
       expect(etatCreationEspaceAidant.saisieValide()).toBe(false);
     });
@@ -101,6 +103,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           confirmationNouveauMotDePasse: 'mot-de-passe',
           valide: false,
         },
+        demandeTransmise: false,
         saisieValide: expect.any(Function),
       });
       expect(etatCreationEspaceAidant.saisieValide()).toBe(false);
@@ -130,6 +133,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           confirmationNouveauMotDePasse: 'mdp',
           valide: true,
         },
+        demandeTransmise: false,
         saisieValide: expect.any(Function),
       });
       expect(etatCreationEspaceAidant.saisieValide()).toBe(true);
@@ -158,6 +162,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
             ),
           },
         },
+        demandeTransmise: false,
         saisieValide: expect.any(Function),
       });
       expect(etatCreationEspaceAidant.saisieValide()).toBe(false);
@@ -190,6 +195,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           confirmationNouveauMotDePasse: 'mdp',
           valide: true,
         },
+        demandeTransmise: false,
         saisieValide: expect.any(Function),
       });
       expect(etatCreationEspaceAidant.saisieValide()).toBe(true);
@@ -218,6 +224,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
           confirmationNouveauMotDePasse: 'incorrect',
           valide: false,
         },
+        demandeTransmise: false,
         saisieValide: expect.any(Function),
       });
       expect(etatCreationEspaceAidant.saisieValide()).toBe(false);
@@ -244,6 +251,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
         cguSignees: true,
         erreur: {},
         saisieValide: expect.any(Function),
+        demandeTransmise: true,
       });
     });
   });
@@ -269,6 +277,7 @@ describe("Réducteur de création de l'espace Aidant", () => {
         cguSignees: false,
         erreur: {},
         saisieValide: expect.any(Function),
+        demandeTransmise: false,
         champsErreur: (
           <ChampsErreur erreur={new Error('Une erreur est survenue')} />
         ),

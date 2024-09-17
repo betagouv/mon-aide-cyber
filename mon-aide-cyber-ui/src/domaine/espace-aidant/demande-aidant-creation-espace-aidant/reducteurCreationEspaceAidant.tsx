@@ -16,6 +16,7 @@ export type EtatCreationEspaceAidant = {
   champsErreur?: ReactElement;
   erreur?: ErreurCreationEspaceAidant;
   creationEspaceAidantATransmettre?: boolean;
+  demandeTransmise: boolean;
   saisieValide: () => boolean;
 };
 
@@ -70,6 +71,7 @@ export const reducteurCreationEspaceAidant = (
       delete etatCourant['motDePasse'];
       return {
         ...etatCourant,
+        demandeTransmise: true,
       };
     }
     case TypeActionCreationEspaceAidant.CGU_CLIQUEES: {
@@ -138,6 +140,7 @@ export const creationEspaceAidantInvalidee = (
 });
 export const initialiseReducteur = (): EtatCreationEspaceAidant => ({
   cguSignees: false,
+  demandeTransmise: false,
   saisieValide: () => false,
   erreur: {},
 });

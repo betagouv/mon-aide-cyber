@@ -61,10 +61,7 @@ export const FormulaireCreationEspaceAidant = ({
         )
         .then((reponse) => {
           envoie(creationEspaceAidantTransmise());
-          navigationMAC.navigue(
-            new MoteurDeLiens(reponse.liens),
-            'se-connecter'
-          );
+          navigationMAC.ajouteEtat(reponse.liens);
         })
         .catch((erreur) => envoie(creationEspaceAidantInvalidee(erreur)));
     }
@@ -74,68 +71,92 @@ export const FormulaireCreationEspaceAidant = ({
     envoie(cguCliquees());
   }, []);
 
+  const jeMeConnecte = useCallback(() => {
+    navigationMAC.navigue(
+      new MoteurDeLiens(navigationMAC.etat),
+      'se-connecter'
+    );
+  }, [navigationMAC]);
+
   return (
-    <form onSubmit={creeEspaceAidant}>
-      <fieldset className="fr-fieldset section">
-        <div>
-          <div>
-            <label className="fr-label">
-              <h5>Première connexion à votre espace Aidant</h5>
-            </label>
-          </div>
-          <div className="bienvenue">
-            <p>
-              Bienvenue dans la communauté !
-              <br />
-              <br />
-              Pour finaliser la création de votre espace Aidant, vous devez
-              définir un nouveau mot de passe.
-            </p>
-          </div>
+    <>
+      {etatCreationEspaceAidant.demandeTransmise ? (
+        <div className="section confirmation">
+          <h4>Votre espace Aidant est disponible !</h4>
+          <p>Cliquez sur le bouton ci-dessous pour y accéder.</p>
+          <button
+            className="fr-btn bouton-mac bouton-mac-primaire"
+            onClick={jeMeConnecte}
+          >
+            Je me connecte
+          </button>
         </div>
-        <div className="fr-fieldset__content">
-          <ComposantCreationMotDePasse
-            messagesErreurs={{
-              motsDePasseConfirmeDifferent:
-                'La confirmation de votre mot de passe ne correspond pas au mot de passe saisi.',
-              motsDePasseVides: 'Vous devez saisir vos mots de passe.',
-            }}
-            {...(boutonValiderClique && {
-              surValidation: (creationMotDePasse) => {
-                envoie(creationEspaceAidantValidee(creationMotDePasse));
-                setBoutonValiderClique(false);
-              },
-            })}
-          />
-          <div className="fr-checkbox-group mac-radio-group">
-            <input
-              type="checkbox"
-              id="cgu-aidant"
-              name="cgu-aidant"
-              onClick={surCGUSignees}
-              checked={etatCreationEspaceAidant.cguSignees}
-            />
-            <label className="fr-label" htmlFor="cgu-aidant">
-              J&apos;accepte les &nbsp;
-              <b>
-                <a href="/cgu">conditions générales d&apos;utilisation</a>
-              </b>
-              &nbsp; de MonAideCyber
-            </label>
-            {etatCreationEspaceAidant.erreur?.cguSignees?.texteExplicatif}
-          </div>
-          <div className="fr-grid-row fr-grid-row--right">
-            <button
-              type="submit"
-              key="creation-espace-aidant"
-              className="fr-btn bouton-mac bouton-mac-primaire"
-            >
-              Valider
-            </button>
-          </div>
-        </div>
-        <div className="fr-mt-2w">{etatCreationEspaceAidant.champsErreur}</div>
-      </fieldset>
-    </form>
+      ) : (
+        <form onSubmit={creeEspaceAidant}>
+          <fieldset className="fr-fieldset section">
+            <div>
+              <div>
+                <label className="fr-label">
+                  <h5>Première connexion à votre espace Aidant</h5>
+                </label>
+              </div>
+              <div className="bienvenue">
+                <p>
+                  Bienvenue dans la communauté !
+                  <br />
+                  <br />
+                  Pour finaliser la création de votre espace Aidant, vous devez
+                  définir un nouveau mot de passe.
+                </p>
+              </div>
+            </div>
+            <div className="fr-fieldset__content">
+              <ComposantCreationMotDePasse
+                messagesErreurs={{
+                  motsDePasseConfirmeDifferent:
+                    'La confirmation de votre mot de passe ne correspond pas au mot de passe saisi.',
+                  motsDePasseVides: 'Vous devez saisir vos mots de passe.',
+                }}
+                {...(boutonValiderClique && {
+                  surValidation: (creationMotDePasse) => {
+                    envoie(creationEspaceAidantValidee(creationMotDePasse));
+                    setBoutonValiderClique(false);
+                  },
+                })}
+              />
+              <div className="fr-checkbox-group mac-radio-group">
+                <input
+                  type="checkbox"
+                  id="cgu-aidant"
+                  name="cgu-aidant"
+                  onClick={surCGUSignees}
+                  checked={etatCreationEspaceAidant.cguSignees}
+                />
+                <label className="fr-label" htmlFor="cgu-aidant">
+                  J&apos;accepte les &nbsp;
+                  <b>
+                    <a href="/cgu">conditions générales d&apos;utilisation</a>
+                  </b>
+                  &nbsp; de MonAideCyber
+                </label>
+                {etatCreationEspaceAidant.erreur?.cguSignees?.texteExplicatif}
+              </div>
+              <div className="fr-grid-row fr-grid-row--right">
+                <button
+                  type="submit"
+                  key="creation-espace-aidant"
+                  className="fr-btn bouton-mac bouton-mac-primaire"
+                >
+                  Valider
+                </button>
+              </div>
+            </div>
+            <div className="fr-mt-2w">
+              {etatCreationEspaceAidant.champsErreur}
+            </div>
+          </fieldset>
+        </form>
+      )}
+    </>
   );
 };
