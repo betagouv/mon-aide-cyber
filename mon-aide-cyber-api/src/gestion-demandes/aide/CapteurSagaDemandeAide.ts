@@ -1,11 +1,13 @@
 import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
-import { BusEvenement } from '../../domaine/BusEvenement';
+import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { Aide } from '../../aide/Aide';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { CommandeRechercheAideParEmail } from '../../aide/CapteurCommandeRechercheAideParEmail';
 import { CommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import crypto from 'crypto';
+import { rechercheParNomDepartement } from '../departements';
 
 export type SagaDemandeAide = Saga & {
   cguValidees: boolean;
@@ -14,6 +16,11 @@ export type SagaDemandeAide = Saga & {
   raisonSociale?: string;
   relationAidant: boolean;
 };
+
+export type DemandeAideCree = Evenement<{
+  identifiantAide: crypto.UUID;
+  departement: string;
+}>;
 
 export class CapteurSagaDemandeAide
   implements CapteurSaga<SagaDemandeAide, void>
@@ -84,12 +91,13 @@ export class CapteurSagaDemandeAide
             saga.relationAidant
           );
 
-          await this.busEvenement.publie({
+          await this.busEvenement.publie<DemandeAideCree>({
             identifiant: aide.identifiant,
             type: 'AIDE_CREE',
             date: FournisseurHorloge.maintenant(),
             corps: {
               identifiantAide: aide.identifiant,
+              departement: rechercheParNomDepartement(saga.departement).code,
             },
           });
         });
