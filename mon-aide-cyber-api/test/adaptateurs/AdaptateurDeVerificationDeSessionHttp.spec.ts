@@ -51,9 +51,9 @@ describe('Adaptateur de vérification de session', () => {
       ).verifie('Accès diagnostic')(requete, reponse, fausseSuite);
       assert.fail('Ce test est sensé échouer');
     } catch (e) {
-      expect((e as ErreurMAC).erreurOriginelle).toBeInstanceOf(
-        ErreurAccesRefuse
-      );
+      expect(
+        (e as ErreurMAC<ErreurAccesRefuse>).erreurOriginelle
+      ).toBeInstanceOf(ErreurAccesRefuse);
     }
   });
 

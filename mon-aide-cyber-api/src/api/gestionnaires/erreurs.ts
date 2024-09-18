@@ -4,6 +4,11 @@ import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
+import { ErreurAccesRefuse } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
+import { AggregatNonTrouve } from '../../domaine/Aggregat';
+import { ErreurCreationEspaceAidant } from '../../authentification/Aidant';
+import { ErreurValidationMotDePasse } from '../validateurs/motDePasse';
+import { ErreurEnvoiEmail } from '../messagerie/Messagerie';
 
 const HTTP_MAUVAISE_REQUETE = 400;
 const HTTP_NON_AUTORISE = 401;
@@ -27,8 +32,8 @@ const construisReponse = (
 
 const erreursGerees: Map<
   string,
-  (
-    erreur: ErreurMAC,
+  <T extends Error>(
+    erreur: ErreurMAC<T>,
     requete: Request,
     consignateur: ConsignateurErreurs,
     reponse: Response
@@ -36,7 +41,7 @@ const erreursGerees: Map<
 > = new Map([
   [
     'AggregatNonTrouve',
-    (erreur, _, consignateur, reponse) => {
+    (erreur: ErreurMAC<AggregatNonTrouve>, _, consignateur, reponse) => {
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_NON_TROUVE, { message: erreur.message });
     },
@@ -50,7 +55,7 @@ const erreursGerees: Map<
   ],
   [
     'ErreurAccesRefuse',
-    (_erreur, _, _consignateur, reponse) => {
+    (_erreur: ErreurMAC<ErreurAccesRefuse>, _, _consignateur, reponse) => {
       construisReponse(reponse, HTTP_ACCES_REFUSE, {
         message: "L'accès à la ressource est interdit.",
         ...constructeurActionsHATEOAS().actionsPubliques().construis(),
@@ -59,7 +64,12 @@ const erreursGerees: Map<
   ],
   [
     'ErreurCreationEspaceAidant',
-    (erreur, requete, consignateur, reponse) => {
+    (
+      erreur: ErreurMAC<ErreurCreationEspaceAidant>,
+      requete,
+      consignateur,
+      reponse
+    ) => {
       requete.body['motDePasse'] = '<MOT_DE_PASSE_OBFUSQUE/>';
       requete.body['motDePasseTemporaire'] = '<MOT_DE_PASSE_OBFUSQUE/>';
       consignateur.consigne(erreur);
@@ -70,7 +80,12 @@ const erreursGerees: Map<
   ],
   [
     'ErreurValidationMotDePasse',
-    (erreur, requete, _consignateur, reponse) => {
+    (
+      erreur: ErreurMAC<ErreurValidationMotDePasse>,
+      requete,
+      _consignateur,
+      reponse
+    ) => {
       requete.body['motDePasse'] = '<MOT_DE_PASSE_OBFUSQUE/>';
       requete.body['motDePasseTemporaire'] = '<MOT_DE_PASSE_OBFUSQUE/>';
       construisReponse(reponse, HTTP_NON_TRAITABLE, {
@@ -80,7 +95,7 @@ const erreursGerees: Map<
   ],
   [
     'ErreurEnvoiMail',
-    (erreur, _, consignateur, reponse) => {
+    (erreur: ErreurMAC<ErreurEnvoiEmail>, _, consignateur, reponse) => {
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_ERREUR_SERVEUR, {
         message: erreur.message,

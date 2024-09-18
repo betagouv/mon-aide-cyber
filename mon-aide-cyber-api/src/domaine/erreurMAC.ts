@@ -16,15 +16,15 @@ export type Contexte =
   | 'Modifie le mot de passe'
   | "Recherche d'un Aidé";
 
-export class ErreurMAC extends Error {
+export class ErreurMAC<T extends Error> extends Error {
   private constructor(
     public readonly contexte: string,
-    public readonly erreurOriginelle: Error
+    public readonly erreurOriginelle: T
   ) {
     super(erreurOriginelle.message);
   }
 
-  public static cree(contexte: Contexte, erreur: Error) {
-    return new ErreurMAC(contexte, erreur);
+  public static cree<T extends Error>(contexte: Contexte, erreur: T) {
+    return new ErreurMAC<T>(contexte, erreur);
   }
 }
