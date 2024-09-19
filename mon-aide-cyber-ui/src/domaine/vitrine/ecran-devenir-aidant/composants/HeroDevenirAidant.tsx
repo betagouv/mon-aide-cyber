@@ -6,7 +6,7 @@ import { TypographieH1 } from '../../../../composants/communs/typographie/Typogr
 export const HeroDevenirAidant = () => {
   return (
     <HeroBloc>
-      <div className="fr-container hero-layout">
+      <div id="corps" className="fr-container hero-layout">
         <section>
           <TypographieH1>Devenir Aidant</TypographieH1>
           <p>
