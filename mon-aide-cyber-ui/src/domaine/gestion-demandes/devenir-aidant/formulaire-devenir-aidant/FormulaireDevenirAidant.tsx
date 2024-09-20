@@ -151,7 +151,7 @@ export const FormulaireDevenirAidant = () => {
     envoie(cguValidees());
   }, []);
   return (
-    <div className="fr-grid-row fr-grid-row--center formulaire-devenir-aidant-layout">
+    <div className="fr-container fr-grid-row fr-grid-row--center formulaire-devenir-aidant-layout">
       {etatDemande.envoiReussi ? (
         <div className="fr-col-md-8 fr-col-sm-12 section confirmation">
           <TypographieH4>
