@@ -3,9 +3,8 @@ import { ComposantDemandeDevenirAidant } from '../composants/gestion-demandes/de
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { expect, userEvent, within } from '@storybook/test';
 import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
-import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
-import { ErrorBoundary } from 'react-error-boundary';
 import { macAPI } from '../fournisseurs/api/macAPI.ts';
+import { useContexteNavigation } from '../hooks/useContexteNavigation.ts';
 
 const meta = {
   title: 'Demande pour devenir Aidant',
@@ -17,7 +16,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-// let valeursSaisies = {};
 
 macAPI.execute = <T, U, V = void>(
   parametresAPI: ParametresAPI<V>,
@@ -39,10 +37,12 @@ macAPI.execute = <T, U, V = void>(
   if (parametresAPI.url.includes('devenir-aidant')) {
     return Promise.resolve(reponse as T);
   }
-  // if (parametresAPI.corps) {
-  //   valeursSaisies = parametresAPI.corps;
-  // }
   return Promise.resolve({} as T);
+};
+
+const ContexteNavigationMock = () => {
+  useContexteNavigation().recupereContexteNavigation = () => Promise.resolve();
+  return <></>;
 };
 
 export const DemandeDevenirAidant: Story = {
@@ -71,9 +71,10 @@ export const DemandeDevenirAidant: Story = {
           retourAccueil: () => {},
         }}
       >
-        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-          {story()}
-        </ErrorBoundary>
+        <ContexteNavigationMock />
+        {/*<ErrorBoundary FallbackComponent={ComposantAffichageErreur}>*/}
+        {story()}
+        {/*</ErrorBoundary>*/}
       </ContexteNavigationMAC.Provider>
     ),
   ],

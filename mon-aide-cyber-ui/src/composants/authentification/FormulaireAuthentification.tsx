@@ -1,4 +1,4 @@
-import { useAuthentification } from '../../fournisseurs/hooks.ts';
+import { useNavigationMAC, useUtilisateur } from '../../fournisseurs/hooks.ts';
 import { FormEvent, useCallback, useReducer } from 'react';
 import {
   authentificationInvalidee,
@@ -8,9 +8,19 @@ import {
   reducteurAuthentification,
   saisieInvalidee,
 } from './reducteurAuthentification.tsx';
+import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import { Lien } from '../../domaine/Lien.ts';
+import { macAPI } from '../../fournisseurs/api/macAPI.ts';
+import { ReponseAuthentification } from '../../domaine/authentification/Authentification.ts';
+import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 
+export type Identifiants = {
+  identifiant: string;
+  motDePasse: string;
+};
 export const FormulaireAuthentification = () => {
-  const authentification = useAuthentification();
+  const navigationMAC = useNavigationMAC();
+  const { setUtilisateur } = useUtilisateur();
 
   const [etatAuthentification, envoie] = useReducer(
     reducteurAuthentification,
@@ -32,16 +42,55 @@ export const FormulaireAuthentification = () => {
       if (!saisieValide) {
         envoie(saisieInvalidee());
       } else {
-        authentification.authentifie(
-          {
-            identifiant: etatAuthentification.identifiant,
-            motDePasse: etatAuthentification.motDePasse,
-          },
-          (erreur) => envoie(authentificationInvalidee(erreur))
+        new MoteurDeLiens(navigationMAC.etat).trouve(
+          'se-connecter',
+          (lien: Lien) => {
+            macAPI
+              .execute<
+                ReponseAuthentification,
+                ReponseAuthentification,
+                Identifiants
+              >(
+                constructeurParametresAPI<Identifiants>()
+                  .url(lien.url)
+                  .methode(lien.methode!)
+                  .corps({
+                    identifiant: etatAuthentification.identifiant,
+                    motDePasse: etatAuthentification.motDePasse,
+                  })
+                  .construis(),
+                async (reponse) => await reponse
+              )
+              .then((reponse) => {
+                setUtilisateur({
+                  nomPrenom: reponse.nomPrenom,
+                });
+                const moteurDeLiens = new MoteurDeLiens({
+                  ...reponse.liens,
+                });
+
+                moteurDeLiens.trouve(
+                  'afficher-tableau-de-bord',
+                  () =>
+                    navigationMAC.navigue(
+                      moteurDeLiens,
+                      'afficher-tableau-de-bord'
+                    ),
+                  () =>
+                    moteurDeLiens.trouve('creer-espace-aidant', () =>
+                      navigationMAC.navigue(
+                        moteurDeLiens,
+                        'creer-espace-aidant'
+                      )
+                    )
+                );
+              })
+              .catch((erreur) => envoie(authentificationInvalidee(erreur)));
+          }
         );
       }
     },
-    [etatAuthentification, authentification]
+    [etatAuthentification]
   );
 
   const erreur = etatAuthentification.erreur;

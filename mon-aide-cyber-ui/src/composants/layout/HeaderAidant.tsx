@@ -1,21 +1,10 @@
-import { useEffect, useState } from 'react';
 import { HeaderProprietes } from './Header';
-import { Utilisateur } from '../../domaine/authentification/Authentification';
-import { useAuthentification } from '../../fournisseurs/hooks';
+import { useUtilisateur } from '../../fournisseurs/hooks';
 import { SeConnecter } from '../authentification/SeConnecter';
 import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateur';
 
 export const HeaderAidant = ({ lienMAC }: HeaderProprietes) => {
-  const [utilisateur, setUtilisateur] = useState<Utilisateur | undefined>(
-    undefined
-  );
-  const authentification = useAuthentification();
-
-  useEffect(() => {
-    if (!utilisateur) {
-      setUtilisateur(authentification.utilisateur);
-    }
-  }, [authentification, utilisateur]);
+  const { utilisateur } = useUtilisateur();
 
   return (
     <header role="banner" className="fr-header public mac-sticky">

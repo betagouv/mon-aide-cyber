@@ -23,6 +23,7 @@ import {
   ReponseDemandeEtreAide,
 } from '../../../domaine/gestion-demandes/etre-aide/EtreAide.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { useContexteNavigation } from '../../../hooks/useContexteNavigation.ts';
 
 export const ComposantDemandeEtreAide = () => {
   const [etat, envoie] = useReducer(reducteurDemandeEtreAide, {
@@ -39,6 +40,14 @@ export const ComposantDemandeEtreAide = () => {
     ReactElement | undefined
   >(undefined);
   const navigationMAC = useNavigationMAC();
+  const navigationUtilisateur = useContexteNavigation();
+
+  useEffect(() => {
+    navigationUtilisateur
+      .recupereContexteNavigation({ contexte: 'demande-etre-aide' })
+      .then()
+      .catch();
+  }, []);
 
   useEffect(() => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
