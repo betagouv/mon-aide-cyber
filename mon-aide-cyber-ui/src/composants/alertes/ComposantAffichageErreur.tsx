@@ -1,11 +1,11 @@
 import { Header } from '../layout/Header.tsx';
 import { Footer } from '../layout/Footer.tsx';
 import { LienMAC } from '../LienMAC.tsx';
-import { useAuthentification } from '../../fournisseurs/hooks.ts';
 import { ReactElement, useEffect, useState } from 'react';
 import { Action, Lien, Liens } from '../../domaine/Lien.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { FallbackProps } from 'react-error-boundary';
+import { useUtilisateur } from '../../fournisseurs/hooks.ts';
 
 type ProprietesComposantAffichageErreur = Omit<FallbackProps, 'error'> & {
   error: { message: string; liens?: Liens; titre?: string };
@@ -27,15 +27,14 @@ export const ComposantAffichageErreur = ({
 }: ProprietesComposantAffichageErreur) => {
   const [titreLien, setTitreLien] = useState('Accueil - MonAideCyber');
   const [route, setRoute] = useState('/');
-
-  const authentification = useAuthentification();
+  const { utilisateur } = useUtilisateur();
 
   useEffect(() => {
-    if (authentification.utilisateur) {
+    if (utilisateur) {
       setTitreLien('Espace Aidant - MonAideCyber');
-      setRoute('/tableau-de-bord');
+      setRoute('/aidant/tableau-de-bord');
     }
-  }, [authentification.utilisateur]);
+  }, [utilisateur]);
 
   const actions = error.liens ? (
     <div className="fond-clair-mac">

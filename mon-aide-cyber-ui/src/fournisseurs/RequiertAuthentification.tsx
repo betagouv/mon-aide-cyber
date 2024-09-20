@@ -1,24 +1,35 @@
-import { useAuthentification, useModale, useNavigationMAC } from './hooks.ts';
+import { useNavigationMAC, useUtilisateur } from './hooks.ts';
 import { useEffect, useState } from 'react';
 import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
 import { Outlet } from 'react-router-dom';
+import { macAPI } from './api/macAPI.ts';
+import { ReponseUtilisateur } from '../domaine/authentification/Authentification.ts';
+import { constructeurParametresAPI } from './api/ConstructeurParametresAPI.ts';
 
 export const RequiertAuthentification = () => {
-  const authentification = useAuthentification();
   const navigationMAC = useNavigationMAC();
+  const { setUtilisateur } = useUtilisateur();
   const [doitVerifierReconnexion, setDoitVerifierReconnexion] = useState(true);
   const [pagePrecedente, setPagePrecedente] = useState(
     window.location.pathname
   );
   const [chargementUtilisateurEnErreur, setChargementUtilisateurEnErreur] =
     useState(false);
-  const modale = useModale();
 
   useEffect(() => {
     if (doitVerifierReconnexion) {
-      authentification
-        .appelleUtilisateur()
+      macAPI
+        .execute<ReponseUtilisateur, ReponseUtilisateur>(
+          constructeurParametresAPI()
+            .url('/api/utilisateur')
+            .methode('GET')
+            .construis(),
+          (json) => json
+        )
         .then((utilisateur) => {
+          setUtilisateur({
+            nomPrenom: utilisateur.nomPrenom,
+          });
           navigationMAC.ajouteEtat(utilisateur.liens);
           setPagePrecedente(window.location.pathname);
           setChargementUtilisateurEnErreur(false);
@@ -36,8 +47,6 @@ export const RequiertAuthentification = () => {
         !chargementUtilisateurEnErreur
     );
   }, [
-    modale,
-    authentification,
     navigationMAC,
     doitVerifierReconnexion,
     pagePrecedente,

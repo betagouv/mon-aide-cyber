@@ -4,26 +4,26 @@ import './assets/styles/index.scss';
 import { BrowserRouter } from 'react-router-dom';
 import { ComposantAffichageErreur } from './composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
-import { FournisseurAuthentification } from './fournisseurs/ContexteAuthentification.tsx';
 import { PortailModale } from './composants/modale/PortailModale.tsx';
 import { FournisseurNavigationMAC } from './fournisseurs/ContexteNavigationMAC.tsx';
 import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
 import { RouteurPrive } from './RouteurPrive.tsx';
 import { RouteurPublic } from './RouteurPublic.tsx';
+import { FournisseurUtilisateur } from './fournisseurs/ContexteUtilisateur.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <FournisseurMatomo>
       <BrowserRouter>
         <FournisseurNavigationMAC>
-          <FournisseurAuthentification>
+          <FournisseurUtilisateur>
             <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
               <PortailModale>
                 <RouteurPublic />
                 <RouteurPrive />
               </PortailModale>
             </ErrorBoundary>
-          </FournisseurAuthentification>
+          </FournisseurUtilisateur>
         </FournisseurNavigationMAC>
       </BrowserRouter>
     </FournisseurMatomo>

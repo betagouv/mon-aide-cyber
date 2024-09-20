@@ -34,9 +34,11 @@ import { ChampsErreur } from '../../../../composants/alertes/Erreurs';
 import { AutoCompletion } from '../../../../composants/auto-completion/AutoCompletion';
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4';
+import { useContexteNavigation } from '../../../../hooks/useContexteNavigation.ts';
 
 export const FormulaireDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
+  const navigationUtilisateur = useContexteNavigation();
   const [prerequisDemande, setPrerequisDemande] = useState<
     PreRequisDemande | undefined
   >();
@@ -49,6 +51,15 @@ export const FormulaireDevenirAidant = () => {
     reducteurDemandeDevenirAidant,
     initialiseDemande()
   );
+
+  useEffect(() => {
+    navigationUtilisateur
+      .recupereContexteNavigation({
+        contexte: 'demande-devenir-aidant:demande-devenir-aidant',
+      })
+      .then()
+      .catch();
+  }, []);
 
   useEffect(() => {
     if (!etatDemande.pretPourEnvoi) {
