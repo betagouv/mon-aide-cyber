@@ -14,6 +14,7 @@ import { useErrorBoundary } from 'react-error-boundary';
 import { ComposantFormulaireModificationMotDePasse } from './ComposantFormulaireModificationMotDePasse.tsx';
 import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 import { HeaderEspaceAidant } from '../espace-aidant/HeaderEspaceAidant.tsx';
+import { TypographieH2 } from '../communs/typographie/TypographieH2/TypographieH2.tsx';
 
 export const ComposantProfil = () => {
   const { showBoundary } = useErrorBoundary();
@@ -60,103 +61,104 @@ export const ComposantProfil = () => {
   }, [navigationMAC]);
 
   return (
-    <>
-      <HeaderEspaceAidant />
-      <main role="main" className="profil">
-        <div className="mode-fonce">
-          <div className="fr-container">
-            <div className="fr-grid-row contenu">
-              <h2>Mon profil</h2>
-            </div>
-          </div>
+    <article
+      className="w-100"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <div className="fond-clair-mac">
+        <div style={{ padding: '3.5rem 6.375rem' }}>
+          <TypographieH2>Mon profil</TypographieH2>
         </div>
-        <div className="fond-clair-mac">
-          <div className="fr-container">
-            <div className="fr-grid-row fr-grid-row--center">
-              <div className="fr-col-md-8 fr-col-sm-12 section">
-                <div className="fr-mb-2w">
-                  Compte Crée le {etatProfil.dateCreationCompte}
-                </div>
-                <div>
-                  <button
-                    className="bouton-mac bouton-mac-secondaire"
-                    onClick={afficherTableauDeBord}
-                  >
-                    Mes diagnostics
-                  </button>
-                </div>
-                <div className="fr-mt-2w">
-                  <hr />
-                  <div>
-                    <h4>Informations personnelles</h4>
-                  </div>
-                  <fieldset className="fr-mb-5w">
-                    <div className="fr-grid-row fr-grid-row--gutters">
-                      <div className="fr-col-md-6 fr-col-sm-12">
-                        <div className="fr-input-group">
-                          <label className="fr-label" htmlFor="prenom-profil">
-                            Prénom
-                          </label>
-                          <input
-                            className="fr-input"
-                            type="text"
-                            id="prenom-profil"
-                            name="prenom-profil"
-                            disabled={true}
-                            value={etatProfil.prenom}
-                          />
-                        </div>
-                      </div>
-                      <div className="fr-col-md-6 fr-col-sm-12">
-                        <div className="fr-input-group">
-                          <label className="fr-label" htmlFor="nom-profil">
-                            Nom de famille
-                          </label>
-                          <input
-                            className="fr-input"
-                            type="text"
-                            role="textbox"
-                            id="nom-profil"
-                            name="nom-profil"
-                            value={etatProfil.nom}
-                            disabled={true}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="fr-col-md-12 fr-mt-2w">
-                      <div className="fr-input-group">
-                        <label className="fr-label" htmlFor="email-profil">
-                          Email
-                        </label>
-                        <input
-                          className="fr-input"
-                          type="text"
-                          role="textbox"
-                          id="email-profil"
-                          name="email-profil"
-                          value={etatProfil.email}
-                          disabled={true}
-                        />
-                      </div>
-                    </div>
-                  </fieldset>
-                </div>
-                <hr />
-                <div>
-                  <h4>Modifier son mot de passe</h4>
-                </div>
-                <ComposantFormulaireModificationMotDePasse
-                  lienModificationMotDePasse={
-                    navigationMAC.etat['modifier-mot-de-passe']
-                  }
-                />
+      </div>
+      <div>
+        <div className="fr-grid-row">
+          <div
+            className="fr-col-md-8 fr-col-sm-12"
+            style={{ padding: '3.5rem 6.375rem' }}
+          >
+            <div className="fr-mb-2w">
+              Compte Crée le {etatProfil.dateCreationCompte}
+            </div>
+            <div>
+              <button
+                className="bouton-mac bouton-mac-secondaire"
+                onClick={afficherTableauDeBord}
+              >
+                Mes diagnostics
+              </button>
+            </div>
+            <div className="fr-mt-2w">
+              <hr />
+              <div>
+                <h4>Informations personnelles</h4>
               </div>
+              <fieldset className="fr-mb-5w">
+                <div className="fr-grid-row fr-grid-row--gutters">
+                  <div className="fr-col-md-6 fr-col-sm-12">
+                    <div className="fr-input-group">
+                      <label className="fr-label" htmlFor="prenom-profil">
+                        Prénom
+                      </label>
+                      <input
+                        className="fr-input"
+                        type="text"
+                        id="prenom-profil"
+                        name="prenom-profil"
+                        disabled={true}
+                        value={etatProfil.prenom}
+                      />
+                    </div>
+                  </div>
+                  <div className="fr-col-md-6 fr-col-sm-12">
+                    <div className="fr-input-group">
+                      <label className="fr-label" htmlFor="nom-profil">
+                        Nom de famille
+                      </label>
+                      <input
+                        className="fr-input"
+                        type="text"
+                        role="textbox"
+                        id="nom-profil"
+                        name="nom-profil"
+                        value={etatProfil.nom}
+                        disabled={true}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="fr-col-md-12 fr-mt-2w">
+                  <div className="fr-input-group">
+                    <label className="fr-label" htmlFor="email-profil">
+                      Email
+                    </label>
+                    <input
+                      className="fr-input"
+                      type="text"
+                      role="textbox"
+                      id="email-profil"
+                      name="email-profil"
+                      value={etatProfil.email}
+                      disabled={true}
+                    />
+                  </div>
+                </div>
+              </fieldset>
             </div>
+            <hr />
+            <div>
+              <h4>Modifier son mot de passe</h4>
+            </div>
+            <ComposantFormulaireModificationMotDePasse
+              lienModificationMotDePasse={
+                navigationMAC.etat['modifier-mot-de-passe']
+              }
+            />
           </div>
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </article>
   );
 };

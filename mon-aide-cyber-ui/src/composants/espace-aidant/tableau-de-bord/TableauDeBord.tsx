@@ -1,68 +1,31 @@
-import { useEffect, useState } from 'react';
-import { Lien, ReponseHATEOAS } from '../../../domaine/Lien.ts';
-import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
-import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
-import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { ComposantDiagnostics } from './ComposantDiagnostics.tsx';
-import { HeaderEspaceAidant } from '../HeaderEspaceAidant.tsx';
-import { FooterEspaceAidant } from '../FooterEspaceAidant.tsx';
-import { UUID } from '../../../types/Types.ts';
-import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
-
-export type Diagnostic = {
-  dateCreation: string;
-  identifiant: UUID;
-  secteurActivite: string;
-  secteurGeographique: string;
-};
-export type ReponseTableauDeBord = ReponseHATEOAS & {
-  diagnostics: Diagnostic[];
-};
+import { TypographieH2 } from '../../communs/typographie/TypographieH2/TypographieH2';
 
 export const TableauDeBord = () => {
-  // const [nomPrenom, setNomPrenom] = useState<string>('');
-  // const authentification = useAuthentification();
-  const [enCoursDeChargement, setEnCoursDeChargement] = useState(true);
-  const [diagnostics, setDiagnostics] = useState<Diagnostic[]>([]);
-  const navigationMAC = useNavigationMAC();
-
-  // useEffect(() => {
-  //   setNomPrenom(authentification.utilisateur?.nomPrenom || '');
-  // }, [authentification, setNomPrenom]);
-
-  useEffect(() => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'afficher-tableau-de-bord',
-      (lien: Lien) => {
-        if (enCoursDeChargement) {
-          macAPI
-            .execute<ReponseTableauDeBord, ReponseTableauDeBord>(
-              constructeurParametresAPI()
-                .url(lien.url)
-                .methode(lien.methode!)
-                .construis(),
-              (reponse) => reponse
-            )
-            .then((tableauDeBord) => {
-              navigationMAC.ajouteEtat(tableauDeBord.liens);
-              setEnCoursDeChargement(false);
-              setDiagnostics(tableauDeBord.diagnostics);
-            })
-            .catch((erreur: ReponseHATEOAS) => {
-              console.log(erreur);
-            });
-        }
-      }
-    );
-  }, [enCoursDeChargement, navigationMAC]);
-
   return (
-    <>
-      <HeaderEspaceAidant />
-      <main role="main" className="tableau-de-bord">
-        <ComposantDiagnostics diagnostics={diagnostics} />
-      </main>
-      <FooterEspaceAidant />
-    </>
+    <section className="w-100">
+      <div className="bandeau-violet-clair">
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '3rem 4.25rem',
+          }}
+        >
+          <TypographieH2>Bonjour Martin !</TypographieH2>
+          <p>Bienvenue sur votre espace Aidant MonAideCyber</p>
+          <div className="grille-premieres-tuiles">
+            <div>
+              <img
+                style={{ width: '40%' }}
+                src="/images/illustration-marelle.svg"
+              />
+            </div>
+            <div className="tuile-tdb">Mes demandes</div>
+            <div className="tuile-tdb">Statistiques</div>
+            <div className="tuile-tdb">Mes diagnostics</div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };

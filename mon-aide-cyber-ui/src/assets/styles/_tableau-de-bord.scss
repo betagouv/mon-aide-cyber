@@ -1,2 +1,42 @@
 .tableau-de-bord {
+    display: flex;
+}
+
+.grille-premieres-tuiles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1.5rem;
+
+}
+
+.tuile-tdb {
+    background-color: var(--couleurs-mac-blanc);
+    border-radius: 1rem;
+    padding: 2rem;
+}
+
+.menu-lateral {
+    
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+
+        a {
+            color: var(--couleurs-mac-blanc);
+            background: none;
+        }
+        
+        li {
+            background-color: var(--couleurs-mac-violet-fonce);
+        
+            
+         }
+         li.actif {
+            background-color: var(--couleurs-mac-blanc);
+        
+                color: var(--couleurs-mac-violet-moyen)
+            
+         }
+ 
 }

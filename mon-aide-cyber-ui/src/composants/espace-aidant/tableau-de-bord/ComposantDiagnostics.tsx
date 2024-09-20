@@ -1,14 +1,13 @@
 import {
   ComposantBoutonCreerDiagnostic,
   ComposantLancerDiagnostic,
-  ComposantLienCreerDiagnostic,
 } from '../../diagnostic/ComposantLancerDiagnostic.tsx';
 import { ComposantIdentifiantDiagnostic } from '../../ComposantIdentifiantDiagnostic.tsx';
-import { Diagnostic } from './TableauDeBord.tsx';
 import { useCallback } from 'react';
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
 import { UUID } from '../../../types/Types.ts';
+import { Diagnostic } from '../../../domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
 
 export const ComposantDiagnostics = ({
   diagnostics,
@@ -27,7 +26,7 @@ export const ComposantDiagnostics = ({
 
   const tableauDiagnostics =
     diagnostics.length > 0 ? (
-      <div className="fr-col-10 tableau fr-col-offset-2">
+      <div className="fr-col-12 tableau">
         <div className="fr-grid-row">
           <div className="fr-col-2">ID</div>
           <div className="fr-col-2">Date</div>
@@ -50,47 +49,11 @@ export const ComposantDiagnostics = ({
         ))}
       </div>
     ) : (
-      <div className="fr-col-10 fr-col-offset-2">
+      <div className="fr-col-10">
         <h4>Vous n’avez pas encore effectué de diagnostic. </h4>
         <ComposantLancerDiagnostic composant={ComposantBoutonCreerDiagnostic} />
       </div>
     );
 
-  return (
-    <>
-      <div className="bandeau-violet-clair">
-        <div className="fr-container">
-          <div className="fr-grid-row fr-grid-row--gutters">
-            <div className="fr-col-10 fr-col-offset-2">
-              <div className="fr-grid-row">
-                <div className="encart-gauche fr-col-12">
-                  <h2>Mes Diagnostics</h2>
-                  <div>
-                    Retrouvez ici l’ensemble des diagnostics que vous avez
-                    menés.
-                    <br />
-                    <br />
-                    Vous souhaitez créer un diagnostic ? Il est impératif que le
-                    contact de l’entité souhaitant bénéficier du diagnostic
-                    valide les CGU avant de le réaliser. Cliquez sur le bouton
-                    ci-dessous pour effectuer une demande de création de
-                    diagnostic et de validation des CGU :
-                  </div>
-                  <br />
-                  <ComposantLancerDiagnostic
-                    composant={ComposantLienCreerDiagnostic}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="fr-container">
-        <div className="fr-grid-row fr-grid-row--gutters">
-          {tableauDiagnostics}
-        </div>
-      </div>
-    </>
-  );
+  return <div className="fr-grid-row">{tableauDiagnostics}</div>;
 };

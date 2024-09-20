@@ -1,7 +1,6 @@
 import { useEffect, useReducer } from 'react';
 import { UUID } from '../../../types/Types';
 import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens';
-import { ReponseTableauDeBord } from '../../espace-aidant/tableau-de-bord/TableauDeBord';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
 import { Lien } from '../../../domaine/Lien';
 import { Restitution } from '../../../domaine/diagnostic/Restitution';
@@ -12,6 +11,7 @@ import {
 import { useErrorBoundary } from 'react-error-boundary';
 import { useNavigationMAC } from '../../../fournisseurs/hooks';
 import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
+import { ReponseTableauDeBord } from '../../../domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
 
 const appelleAPI = <REPONSE>(lien: Lien) =>
   macAPI.execute<REPONSE, REPONSE>(
