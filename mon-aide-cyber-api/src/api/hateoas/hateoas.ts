@@ -1,5 +1,6 @@
 import { AidantAuthentifie } from '../../authentification/Aidant';
 import crypto from 'crypto';
+import { InformationsContexte } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
 
 type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
 export type LiensHATEOAS = Record<string, Options>;
@@ -8,6 +9,87 @@ export type ReponseHATEOAS = {
 };
 
 type Options = { url: string; methode?: Methode; contentType?: string };
+
+type ContexteSpecifique = {
+  [clef: string]: Options;
+};
+type ContexteGeneral = {
+  [clef: string]: ContexteSpecifique | Options;
+};
+
+const estInformationContexte = (
+  informationsContexte: InformationsContexte | undefined
+): informationsContexte is InformationsContexte =>
+  !!informationsContexte && !!informationsContexte.contexte;
+
+const estOption = (option: Options | ContexteSpecifique): option is Options => {
+  const opt = option as Options;
+  return !!opt.url && !!opt.methode;
+};
+
+class ConstructeurActionsDepuisContexte {
+  private readonly contextes: Map<string, ContexteGeneral> = new Map([
+    [
+      'demande-devenir-aidant',
+      {
+        'finalise-creation-espace-aidant': {
+          'finalise-creation-espace-aidant': {
+            url: '/api/demandes/devenir-aidant/creation-espace-aidant',
+            methode: 'POST',
+          },
+        },
+        'demande-devenir-aidant': {
+          'envoyer-demande-devenir-aidant': {
+            url: '/api/demandes/devenir-aidant',
+            methode: 'POST',
+          },
+          'demande-devenir-aidant': {
+            url: '/api/demandes/devenir-aidant',
+            methode: 'GET',
+          },
+        },
+      },
+    ],
+    [
+      'demande-etre-aide',
+      {
+        'demande-etre-aide': {
+          url: '/api/demandes/etre-aide',
+          methode: 'GET',
+        },
+        'demander-aide': {
+          url: '/api/demandes/etre-aide',
+          methode: 'POST',
+        },
+      },
+    ],
+    [
+      'se-connecter',
+      { 'se-connecter': { url: '/api/token', methode: 'POST' } },
+    ],
+  ]);
+  private readonly actions: Map<string, Options> = new Map();
+
+  constructor(informationsContexte: InformationsContexte) {
+    const contextes = informationsContexte.contexte.split(':');
+    const options = this.contextes.get(contextes[0]);
+    if (options) {
+      if (contextes[1]) {
+        Object.entries(options[contextes[1]]).forEach(([clef, opt]) =>
+          this.actions.set(clef, opt)
+        );
+      } else {
+        Object.entries(options)
+          .filter(([, opt]) => estOption(opt))
+          .forEach(([clef, opt]) => this.actions.set(clef, opt as Options));
+      }
+    }
+  }
+
+  construis(): Map<string, Options> {
+    return this.actions;
+  }
+}
 
 class ConstructeurActionsHATEOAS {
   private readonly actions: Map<string, Options> = new Map();
@@ -54,6 +136,7 @@ class ConstructeurActionsHATEOAS {
     });
     return this;
   }
+
   restituerDiagnostic(idDiagnostic: string): ConstructeurActionsHATEOAS {
     this.actions.set('restitution-pdf', {
       url: `/api/diagnostic/${idDiagnostic}/restitution`,
@@ -171,6 +254,24 @@ class ConstructeurActionsHATEOAS {
 
   actionsCreationCompte(): ConstructeurActionsHATEOAS {
     this.seConnecter();
+    return this;
+  }
+
+  pour(
+    informationsContexte: InformationsContexte | undefined
+  ): ConstructeurActionsHATEOAS {
+    if (estInformationContexte(informationsContexte)) {
+      const actions = Object.entries(
+        Object.fromEntries(
+          new ConstructeurActionsDepuisContexte(informationsContexte)
+            .construis()
+            .entries()
+        )
+      );
+      actions.forEach(([clef, options]) => this.actions.set(clef, options));
+    } else {
+      this.actionsPubliques();
+    }
     return this;
   }
 

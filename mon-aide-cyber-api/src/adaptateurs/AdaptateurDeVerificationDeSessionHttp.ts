@@ -4,6 +4,7 @@ import { NextFunction } from 'express-serve-static-core';
 import {
   AdaptateurDeVerificationDeSession,
   ErreurAccesRefuse,
+  InformationsContexte,
 } from './AdaptateurDeVerificationDeSession';
 import { Contexte, ErreurMAC } from '../domaine/erreurMAC';
 import { fabriqueDeCookies, MACCookies } from './fabriqueDeCookies';
@@ -46,7 +47,10 @@ export class AdaptateurDeVerificationDeSessionHttp
           contexte,
           e instanceof ErreurMAC
             ? e.erreurOriginelle
-            : new ErreurAccesRefuse('Session invalide.')
+            : new ErreurAccesRefuse(
+                'Session invalide.',
+                requete.query as InformationsContexte
+              )
         );
       }
 

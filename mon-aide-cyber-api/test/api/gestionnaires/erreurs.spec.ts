@@ -99,35 +99,63 @@ describe("Gestionnaire d'erreur", () => {
     });
   });
 
-  it("génère une erreur 403 lorsqu'une erreur MAC 'Accès ressource protégée' est reçue et ne consigne pas l'erreur", () => {
-    const consignateurErreurs = new ConsignateurErreursMemoire();
+  describe('Dans le cadre d’un accès refusé', () => {
+    it("génère une erreur 403 lorsqu'une erreur MAC 'Accès ressource protégée' est reçue et ne consigne pas l'erreur", () => {
+      const consignateurErreurs = new ConsignateurErreursMemoire();
 
-    const messageInterne = "une explication de l'erreur pour le développeur";
-    gestionnaireErreurGeneralisee(consignateurErreurs)(
-      ErreurMAC.cree(
-        'Ajout réponse au diagnostic',
-        new ErreurAccesRefuse(messageInterne)
-      ),
-      fausseRequete,
-      fausseReponse,
-      fausseSuite
-    );
+      const messageInterne = "une explication de l'erreur pour le développeur";
+      gestionnaireErreurGeneralisee(consignateurErreurs)(
+        ErreurMAC.cree(
+          'Ajout réponse au diagnostic',
+          new ErreurAccesRefuse(messageInterne)
+        ),
+        fausseRequete,
+        fausseReponse,
+        fausseSuite
+      );
 
-    expect(consignateurErreurs.tous()).toHaveLength(0);
-    expect(codeRecu).toBe(403);
-    expect(corpsRecu).toStrictEqual({
-      message: "L'accès à la ressource est interdit.",
-      liens: {
-        'se-connecter': { url: '/api/token', methode: 'POST' },
-        'demande-devenir-aidant': {
-          url: '/api/demandes/devenir-aidant',
-          methode: 'GET',
+      expect(consignateurErreurs.tous()).toHaveLength(0);
+      expect(codeRecu).toBe(403);
+      expect(corpsRecu).toStrictEqual({
+        message: "L'accès à la ressource est interdit.",
+        liens: {
+          'se-connecter': { url: '/api/token', methode: 'POST' },
+          'demande-devenir-aidant': {
+            url: '/api/demandes/devenir-aidant',
+            methode: 'GET',
+          },
+          'demande-etre-aide': {
+            url: '/api/demandes/etre-aide',
+            methode: 'GET',
+          },
         },
-        'demande-etre-aide': {
-          url: '/api/demandes/etre-aide',
-          methode: 'GET',
+      });
+    });
+
+    it('Retourne le lien correspondant à une finalisation de demande devenir Aidant', () => {
+      const consignateurErreurs = new ConsignateurErreursMemoire();
+
+      gestionnaireErreurGeneralisee(consignateurErreurs)(
+        ErreurMAC.cree(
+          'Ajout réponse au diagnostic',
+          new ErreurAccesRefuse('', {
+            contexte: 'demande-devenir-aidant:finalise-creation-espace-aidant',
+          })
+        ),
+        fausseRequete,
+        fausseReponse,
+        fausseSuite
+      );
+
+      expect(corpsRecu).toStrictEqual({
+        message: "L'accès à la ressource est interdit.",
+        liens: {
+          'finalise-creation-espace-aidant': {
+            url: '/api/demandes/devenir-aidant/creation-espace-aidant',
+            methode: 'POST',
+          },
         },
-      },
+      });
     });
   });
 
