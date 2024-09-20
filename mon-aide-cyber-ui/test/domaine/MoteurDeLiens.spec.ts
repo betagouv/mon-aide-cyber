@@ -8,7 +8,7 @@ describe('Le moteur de liens', () => {
       lien: {
         'afficher-profil': { url: '/une/url', methode: 'GET' },
       },
-      attendu: '/profil',
+      attendu: '/aidant/profil',
     },
     {
       lien: {
@@ -17,7 +17,8 @@ describe('Le moteur de liens', () => {
           methode: 'GET',
         },
       },
-      attendu: '/diagnostic/6c6ae6e2-96e1-4e6c-87a3-8817bd505bc2/restitution',
+      attendu:
+        '/aidant/diagnostic/6c6ae6e2-96e1-4e6c-87a3-8817bd505bc2/restitution',
     },
     {
       lien: {
@@ -26,27 +27,28 @@ describe('Le moteur de liens', () => {
           methode: 'GET',
         },
       },
-      attendu: '/diagnostic/c4b21920-cb04-488b-abfa-7514d1c698b9/restitution',
+      attendu:
+        '/aidant/diagnostic/c4b21920-cb04-488b-abfa-7514d1c698b9/restitution',
     },
     {
       lien: {
         'afficher-tableau-de-bord': { url: '/une/url', methode: 'GET' },
       },
-      attendu: '/tableau-de-bord',
+      attendu: '/aidant/tableau-de-bord',
     },
     {
       lien: { 'creer-espace-aidant': { url: '/une/url', methode: 'GET' } },
-      attendu: '/finalise-creation-espace-aidant',
+      attendu: '/aidant/finalise-creation-espace-aidant',
     },
     {
       lien: { 'lancer-diagnostic': { url: '/une/url', methode: 'GET' } },
-      attendu: '/tableau-de-bord',
+      attendu: '/aidant/tableau-de-bord',
     },
     {
       lien: {
         'modifier-diagnostic': { url: '/une/url/dynamique', methode: 'GET' },
       },
-      attendu: '/diagnostic/dynamique',
+      attendu: '/aidant/diagnostic/dynamique',
     },
   ])('détermine la route des actions fournies', (liens) => {
     it(`lorsque l'on recherche le lien correspondant à ${Object.keys(
