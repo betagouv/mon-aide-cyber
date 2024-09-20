@@ -33,6 +33,11 @@ $border-radius: 0.5rem;
     outline: none;
     @include box-shadow();
   }
+
+  &:disabled {
+    background-color: var(--couleurs-mac-gris-tres-clair);
+    color: var(--couleurs-mac-gris-clair);
+  }
 }
 
 @mixin secondaire(

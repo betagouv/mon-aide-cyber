@@ -2,7 +2,7 @@ export const FooterEspaceAidant = () => (
   <footer role="contentinfo" id="footer">
     <div>
       <div className="fr-container">
-        <div className="fr-footer__bottom fr-col-offset-2">
+        <div className="fr-col-offset-2">
           <ul className="fr-footer__bottom-list">
             <li className="fr-footer__bottom-item">
               <a className="fr-footer__bottom-link" href="#">

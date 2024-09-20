@@ -24,6 +24,7 @@ import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { LayoutCreationEspaceAidant } from './composants/layout/LayoutCreationEspaceAidant.tsx';
 import { EcranCreationEspaceAidant } from './domaine/espace-aidant/creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { EcranDevenirAidant } from './domaine/vitrine/ecran-devenir-aidant/EcranDevenirAidant.tsx';
+import { EcranDiagnostics } from './domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
 
 export const AppRouteur = () => {
   return (
@@ -94,8 +95,12 @@ export const AppRouteur = () => {
             ></Route>
           </Route>
           <Route path="/" element={<LayoutAidant />}>
-            <Route path="/tableau-de-bord" element={<TableauDeBord />}></Route>
-
+            {/* @todo remettre cette route quand TDB développé <Route path="/tableau-de-bord" element={<TableauDeBord />}></Route>*/}
+            <Route
+              path="/tableau-de-bord"
+              element={<EcranDiagnostics />}
+            ></Route>
+            <Route path="/diagnostics" element={<EcranDiagnostics />}></Route>
             <Route
               path="/diagnostic/:idDiagnostic/restitution"
               element={
