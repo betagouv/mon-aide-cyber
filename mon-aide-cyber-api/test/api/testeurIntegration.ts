@@ -43,7 +43,7 @@ class TesteurIntegrationMAC {
     public busEvenement = new BusEvenementDeTest(),
     public gestionnaireDeJeton = new FauxGestionnaireDeJeton(),
     public adaptateurDeVerificationDeCGU = new AdapatateurDeVerificationDeCGUDeTest(),
-    public adaptateurDeVerificationDeSession = new AdaptateurDeVerificationDeSessionDeTest(),
+    public adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest = new AdaptateurDeVerificationDeSessionDeTest(),
     public adaptateurDeVerificationDeRelations = new AdaptateurDeVerificationDesAccesDeTest(),
     public gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire(),
     public adaptateurEnvoieMessage: AdaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire(),

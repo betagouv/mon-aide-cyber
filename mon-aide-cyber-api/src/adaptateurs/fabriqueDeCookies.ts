@@ -1,7 +1,10 @@
 import { Request, Response } from 'express';
 import Cookies from 'cookies';
 import { Contexte, ErreurMAC } from '../domaine/erreurMAC';
-import { ErreurAccesRefuse } from './AdaptateurDeVerificationDeSession';
+import {
+  ErreurAccesRefuse,
+  InformationsContexte,
+} from './AdaptateurDeVerificationDeSession';
 
 export type MACCookies = { session: string };
 export const fabriqueDeCookies = (
@@ -13,7 +16,13 @@ export const fabriqueDeCookies = (
     keys: [process.env.SECRET_COOKIE || ''],
   }).get('session', { signed: true });
   if (!cookies) {
-    throw ErreurMAC.cree(contexte, new ErreurAccesRefuse('Cookie invalide.'));
+    throw ErreurMAC.cree(
+      contexte,
+      new ErreurAccesRefuse(
+        'Cookie invalide.',
+        requete.query as InformationsContexte
+      )
+    );
   }
   return {
     session: cookies,

@@ -55,10 +55,12 @@ const erreursGerees: Map<
   ],
   [
     'ErreurAccesRefuse',
-    (_erreur: ErreurMAC<ErreurAccesRefuse>, _, _consignateur, reponse) => {
+    (erreur: ErreurMAC<ErreurAccesRefuse>, _, _consignateur, reponse) => {
       construisReponse(reponse, HTTP_ACCES_REFUSE, {
         message: "L'accès à la ressource est interdit.",
-        ...constructeurActionsHATEOAS().actionsPubliques().construis(),
+        ...constructeurActionsHATEOAS()
+          .pour(erreur.erreurOriginelle.informationsContexte)
+          .construis(),
       });
     },
   ],
