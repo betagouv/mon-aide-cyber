@@ -4,7 +4,6 @@ import {
   profilChargeEnErreur,
   reducteurProfil,
 } from './reducteurProfil.ts';
-import { Profil } from 'mon-aide-cyber-api/src/api/representateurs/profil/Profil.ts';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
@@ -13,6 +12,7 @@ import { useErrorBoundary } from 'react-error-boundary';
 import { ComposantFormulaireModificationMotDePasse } from './ComposantFormulaireModificationMotDePasse.tsx';
 import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 import { TypographieH2 } from '../communs/typographie/TypographieH2/TypographieH2.tsx';
+import { Profil } from '../../domaine/profil/Profil.ts';
 
 export const ComposantProfil = () => {
   const { showBoundary } = useErrorBoundary();
