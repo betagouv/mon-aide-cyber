@@ -4,16 +4,21 @@ type ActionsStatiques = {
   [clef: string]: { applique: (lien: Lien) => string };
 };
 
+export const ROUTE_AIDANT = '/aidant';
+
 const actionsStatiques: ActionsStatiques = {
-  'afficher-profil': { applique: (lien) => (lien.route = '/profil') },
+  'afficher-profil': {
+    applique: (lien) => (lien.route = `${ROUTE_AIDANT}/profil`),
+  },
   'afficher-tableau-de-bord': {
-    applique: (lien) => (lien.route = '/tableau-de-bord'),
+    applique: (lien) => (lien.route = `${ROUTE_AIDANT}/tableau-de-bord`),
   },
   'lancer-diagnostic': {
-    applique: (lien) => (lien.route = '/tableau-de-bord'),
+    applique: (lien) => (lien.route = `${ROUTE_AIDANT}/tableau-de-bord`),
   },
   'creer-espace-aidant': {
-    applique: (lien) => (lien.route = '/finalise-creation-espace-aidant'),
+    applique: (lien) =>
+      (lien.route = `${ROUTE_AIDANT}/finalise-creation-espace-aidant`),
   },
   'se-connecter': { applique: (lien) => (lien.route = '/connexion') },
 };
@@ -25,12 +30,12 @@ export class MoteurDeLiens {
         .filter(([clef]) => clef === action)
         .forEach(([, valeur]) => valeur.applique(lien));
       if (action?.startsWith('afficher-diagnostic-')) {
-        lien.route = `/diagnostic/${action
+        lien.route = `${ROUTE_AIDANT}/diagnostic/${action
           .split('afficher-diagnostic-')
           .at(-1)}/restitution`;
       }
       if (action === 'modifier-diagnostic') {
-        lien.route = `/diagnostic/${lien?.url.split('/').at(-1)}`;
+        lien.route = `${ROUTE_AIDANT}/diagnostic/${lien?.url.split('/').at(-1)}`;
       }
     });
   }

@@ -124,7 +124,7 @@ export const BarreNavigationLaterale = () => {
               ? [
                   {
                     nom: 'Mes diagnostics',
-                    route: '/tableau-de-bord',
+                    route: '/aidant/tableau-de-bord',
                     actif: true,
                     enfants: [
                       //{ nom: 'Mes demandes', route: '/mes-demandes', actif: false },
@@ -140,7 +140,9 @@ export const BarreNavigationLaterale = () => {
       <Separateur />
       <div>
         <MenuNavigation
-          elements={[{ nom: 'Mon compte', route: '/profil', actif: true }]}
+          elements={[
+            { nom: 'Mon compte', route: '/aidant/profil', actif: true },
+          ]}
         />
       </div>
     </aside>

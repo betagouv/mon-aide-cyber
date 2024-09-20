@@ -8,7 +8,8 @@ import { FournisseurAuthentification } from './fournisseurs/ContexteAuthentifica
 import { PortailModale } from './composants/modale/PortailModale.tsx';
 import { FournisseurNavigationMAC } from './fournisseurs/ContexteNavigationMAC.tsx';
 import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
-import { AppRouteur } from './AppRouteur.tsx';
+import { RouteurPrive } from './RouteurPrive.tsx';
+import { RouteurPublic } from './RouteurPublic.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -18,7 +19,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <FournisseurAuthentification>
             <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
               <PortailModale>
-                <AppRouteur />
+                <RouteurPublic />
+                <RouteurPrive />
               </PortailModale>
             </ErrorBoundary>
           </FournisseurAuthentification>
