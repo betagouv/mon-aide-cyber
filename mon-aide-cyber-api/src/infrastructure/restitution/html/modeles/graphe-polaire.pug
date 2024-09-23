@@ -11,7 +11,7 @@ svg(viewbox=`0 -5 ${size} ${height}` class="indicateur-polaire")
   each v, i in values
     - const startAngle = angleStep * i - Math.PI / 2;
     - const r = v !== 0 ? (v  / valueMax) * radius : 2
-    path(d=pathForSlice(r, startAngle, startAngle + angleStep) fill=colors[i])
+    path(d=pathForSlice(r, startAngle, startAngle + angleStep) fill=colors[i] stroke='#ffffff' stroke-width=1)
   each i in new Array(5).fill(0).map((_, i) => i + 1)
     - const r = i / 5 * radius;
     - const ordinateCoordinate = (-(i-5) / 5 * radius) - 1.5
