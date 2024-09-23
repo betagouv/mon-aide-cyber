@@ -1,7 +1,16 @@
 .menu-utilisateur {
-  display: inline-block;
+  display: flex;
+  gap: 1.5rem;
+  color: var(--couleurs-mac-violet-fonce);
+  
+  .element {
+    display: flex;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
 }
 
+/*
 .menu-utilisateur-contenu {
   details {
     position: relative;
@@ -50,3 +59,4 @@
     flex-shrink: 0;
   }
 }
+*/

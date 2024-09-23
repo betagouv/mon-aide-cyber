@@ -1,5 +1,6 @@
 .tableau-de-bord {
     display: flex;
+    min-height: 100vh;
 }
 
 .grille-premieres-tuiles {
@@ -39,4 +40,8 @@
             
          }
  
+}
+
+.separateur-footer {
+    border: 1px solid var(--couleurs-mac-violet-fonce);
 }
