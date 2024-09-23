@@ -35,6 +35,13 @@ export class MoteurDeLiens {
     });
   }
 
+  existe(lienATrouver: Action) {
+    const lien = Object.entries(this.liens)
+      .filter(([action]) => action === lienATrouver)
+      .map(([, lien]) => lien)[0];
+    return !!lien;
+  }
+
   trouve(
     lienATrouver: Action,
     enSucces?: (lien: Lien) => void,

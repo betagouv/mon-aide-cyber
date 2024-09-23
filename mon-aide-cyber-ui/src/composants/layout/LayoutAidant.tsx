@@ -6,6 +6,7 @@ import { TypographieH6 } from '../communs/typographie/TypographieH6/TypographieH
 import { Theme } from '../a-propos/Cadre';
 import { LienNavigation } from './LayoutPublic';
 import { useState } from 'react';
+import { useMoteurDeLiens } from '../../hooks/useMoteurDeLiens';
 export type MenuNavigationElement = LienNavigation & {
   actif: boolean;
   enfants?: MenuNavigationElement[];
@@ -127,6 +128,7 @@ export const MenuNavigation = ({
 }: {
   elements: MenuNavigationElement[];
 }) => {
+  console.log('ele', elements);
   return (
     <ul className="menu-lateral">
       {elements?.map((element) => (
@@ -137,6 +139,10 @@ export const MenuNavigation = ({
 };
 
 export const BarreNavigationLaterale = () => {
+  const { accedeALaRessource: peutAfficherTableauDeBord } = useMoteurDeLiens(
+    'afficher-tableau-de-bord'
+  );
+
   return (
     <aside className="mode-fonce" style={{ width: '256px', minWidth: '256px' }}>
       <TypographieH6
@@ -148,17 +154,20 @@ export const BarreNavigationLaterale = () => {
       <div>
         <MenuNavigation
           elements={[
-            // { nom: 'Tableau de bord', route: '/tableau-de-bord', actif: true },
-            {
-              nom: 'Mes diagnostics',
-              route: '/diagnostics',
-              actif: true,
-              enfants: [
-                //{ nom: 'Mes demandes', route: '/mes-demandes', actif: false },
-                //{ nom: 'Mes diagnostics', route: '/diagnostics', actif: true },
-                //{ nom: 'Mes tests', route: '/mes-tests', actif: false },
-              ],
-            },
+            ...(peutAfficherTableauDeBord
+              ? [
+                  {
+                    nom: 'Mes diagnostics',
+                    route: '/diagnostics',
+                    actif: true,
+                    enfants: [
+                      //{ nom: 'Mes demandes', route: '/mes-demandes', actif: false },
+                      //{ nom: 'Mes diagnostics', route: '/diagnostics', actif: true },
+                      //{ nom: 'Mes tests', route: '/mes-tests', actif: false },
+                    ],
+                  },
+                ]
+              : []),
           ]}
         />
       </div>

@@ -1,10 +1,11 @@
 import { Utilisateur } from '../../domaine/authentification/Authentification.ts';
-import { ReactElement, useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { macAPI } from '../../fournisseurs/api/macAPI.ts';
+import { useMoteurDeLiens } from '../../hooks/useMoteurDeLiens.ts';
 
 type ProprietesMenuUtilisateur = {
   utilisateur: Utilisateur;
@@ -14,10 +15,6 @@ export const ComposantMenuUtilisateur = ({
 }: ProprietesMenuUtilisateur) => {
   const navigationMAC = useNavigationMAC();
   const { showBoundary, resetBoundary } = useErrorBoundary();
-  const [boutonAfficherMonProfil, setBoutonAfficherMonProfil] =
-    useState<ReactElement>(<></>);
-  const [boutonAfficherTableauDeBord, setBoutonAfficherTableauDeBord] =
-    useState<ReactElement>(<></>);
 
   let nomUtilisateur = utilisateur.nomPrenom;
   if (utilisateur.nomPrenom.includes(' ')) {
@@ -47,16 +44,11 @@ export const ComposantMenuUtilisateur = ({
     );
   }, [navigationMAC, resetBoundary]);
 
-  useEffect(() => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'afficher-profil',
-      () =>
-        setBoutonAfficherMonProfil(
-          <input type="button" onClick={afficherProfil} value="Mon Profil" />
-        ),
-      () => setBoutonAfficherMonProfil(<></>)
-    );
-  }, [afficherProfil, navigationMAC.etat]);
+  const { accedeALaRessource: peutAfficherTableauDeBord } = useMoteurDeLiens(
+    'afficher-tableau-de-bord'
+  );
+  const { accedeALaRessource: peutAfficherLeProfil } =
+    useMoteurDeLiens('afficher-profil');
 
   const afficherTableauDeBord = useCallback(() => {
     resetBoundary();
@@ -66,29 +58,28 @@ export const ComposantMenuUtilisateur = ({
     );
   }, [navigationMAC, resetBoundary]);
 
-  useEffect(() => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'afficher-tableau-de-bord',
-      () =>
-        setBoutonAfficherTableauDeBord(
-          <input
-            type="button"
-            onClick={afficherTableauDeBord}
-            value="Mes diagnostics"
-          />
-        ),
-      () => setBoutonAfficherTableauDeBord(<></>)
-    );
-  }, [afficherTableauDeBord, navigationMAC.etat]);
-
   return (
     <div className="menu-utilisateur">
       <div className="menu-utilisateur-contenu">
         <details>
-          <summary>{nomUtilisateur}</summary>
+          <summary>
+            <button type="button">{nomUtilisateur}</button>
+          </summary>
           <div id="conteneur">
-            {boutonAfficherTableauDeBord}
-            {boutonAfficherMonProfil}
+            {peutAfficherTableauDeBord ? (
+              <input
+                type="button"
+                onClick={afficherTableauDeBord}
+                value="Mes diagnostics"
+              />
+            ) : null}
+            {peutAfficherLeProfil ? (
+              <input
+                type="button"
+                onClick={afficherProfil}
+                value="Mon Profil"
+              />
+            ) : null}
             <input type="button" onClick={deconnecter} value="Me Déconnecter" />
           </div>
         </details>
