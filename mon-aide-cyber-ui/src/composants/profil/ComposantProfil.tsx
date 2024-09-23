@@ -1,4 +1,3 @@
-import { Footer } from '../layout/Footer.tsx';
 import { useCallback, useEffect, useReducer } from 'react';
 import {
   profilCharge,
@@ -13,7 +12,6 @@ import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { ComposantFormulaireModificationMotDePasse } from './ComposantFormulaireModificationMotDePasse.tsx';
 import { macAPI } from '../../fournisseurs/api/macAPI.ts';
-import { HeaderEspaceAidant } from '../espace-aidant/HeaderEspaceAidant.tsx';
 import { TypographieH2 } from '../communs/typographie/TypographieH2/TypographieH2.tsx';
 
 export const ComposantProfil = () => {
@@ -61,24 +59,13 @@ export const ComposantProfil = () => {
   }, [navigationMAC]);
 
   return (
-    <article
-      className="w-100"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <div className="fond-clair-mac">
-        <div style={{ padding: '3.5rem 6.375rem' }}>
-          <TypographieH2>Mon profil</TypographieH2>
-        </div>
-      </div>
-      <div>
+    <article className="w-100 ecran-profil">
+      <section className="fond-clair-mac">
+        <TypographieH2>Mon profil</TypographieH2>
+      </section>
+      <section>
         <div className="fr-grid-row">
-          <div
-            className="fr-col-md-8 fr-col-sm-12"
-            style={{ padding: '3.5rem 6.375rem' }}
-          >
+          <div className="fr-col-md-6 fr-col-sm-12">
             <div className="fr-mb-2w">
               Compte Crée le {etatProfil.dateCreationCompte}
             </div>
@@ -158,7 +145,7 @@ export const ComposantProfil = () => {
             />
           </div>
         </div>
-      </div>
+      </section>
     </article>
   );
 };

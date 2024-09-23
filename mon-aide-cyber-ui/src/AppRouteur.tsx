@@ -13,7 +13,6 @@ import { ComposantProfil } from './composants/profil/ComposantProfil.tsx';
 import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
 import { ComposantConnexion } from './composants/connexion/ComposantConnexion.tsx';
-import { TableauDeBord } from './composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
 import { ComposantDemandeDevenirAidant } from './composants/gestion-demandes/devenir-aidant/ComposantDemandeDevenirAidant.tsx';
 import { KitDeCommunication } from './composants/a-propos/KitDeCommunication.tsx';
 import { LayoutPublic } from './composants/layout/LayoutPublic.tsx';
@@ -93,6 +92,12 @@ export const AppRouteur = () => {
                 <ComposantIntercepteur composant={ComposantDiagnostic} />
               }
             ></Route>
+            <Route
+              path="/diagnostic/:idDiagnostic/restitution"
+              element={
+                <ComposantIntercepteur composant={ComposantRestitution} />
+              }
+            ></Route>
           </Route>
           <Route path="/" element={<LayoutAidant />}>
             {/* @todo remettre cette route quand TDB développé <Route path="/tableau-de-bord" element={<TableauDeBord />}></Route>*/}
@@ -101,12 +106,7 @@ export const AppRouteur = () => {
               element={<EcranDiagnostics />}
             ></Route>
             <Route path="/diagnostics" element={<EcranDiagnostics />}></Route>
-            <Route
-              path="/diagnostic/:idDiagnostic/restitution"
-              element={
-                <ComposantIntercepteur composant={ComposantRestitution} />
-              }
-            ></Route>
+
             <Route path="/profil" element={<ComposantProfil />}></Route>
           </Route>
         </Route>

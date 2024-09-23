@@ -15,7 +15,8 @@
     color: var(--couleurs-mac-violet-fonce);
     font-size: 1.75rem;
     line-height: 2.25rem;
-  
+    margin: 0;
+    
     @include a-partir-de(md) {
       font-size: 2rem;
       line-height: 2.5rem;

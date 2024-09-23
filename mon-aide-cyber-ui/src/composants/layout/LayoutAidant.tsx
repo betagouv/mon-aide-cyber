@@ -3,7 +3,6 @@ import { LienMAC } from '../LienMAC';
 import { FooterEspaceAidant } from '../espace-aidant/FooterEspaceAidant';
 import { HeaderAidant } from './HeaderAidant';
 import { TypographieH6 } from '../communs/typographie/TypographieH6/TypographieH6';
-import { Theme } from '../a-propos/Cadre';
 import { LienNavigation } from './LayoutPublic';
 import { useState } from 'react';
 import { useMoteurDeLiens } from '../../hooks/useMoteurDeLiens';
@@ -12,21 +11,8 @@ export type MenuNavigationElement = LienNavigation & {
   enfants?: MenuNavigationElement[];
 };
 
-const Separateur = ({ theme }: { theme: Theme }) => {
-  const couleurSelonTheme = {
-    light: 'black',
-    dark: 'white',
-  };
-
-  return (
-    <div
-      style={{
-        height: '1px',
-        backgroundColor: couleurSelonTheme[theme],
-        width: '100%',
-      }}
-    ></div>
-  );
+const Separateur = () => {
+  return <div className="separateur"></div>;
 };
 
 export const LienMenuNavigation = ({
@@ -53,12 +39,7 @@ export const LienMenuNavigation = ({
         }}
       >
         <div
-          style={{
-            padding: '1.5rem',
-            cursor: 'pointer',
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
+          className="lien-navigation"
           onClick={() => setDeplie((prev) => !prev)}
         >
           <span>{element.nom}</span>
@@ -80,9 +61,7 @@ export const LienMenuNavigation = ({
                   <li
                     className={`${estCheminCourant(enfant.route) ? 'actif' : ''}`}
                   >
-                    <div style={{ padding: '1.5rem 1.5rem 1.5rem 40px' }}>
-                      {enfant.nom}
-                    </div>
+                    <div className="lien-navigation-enfant">{enfant.nom}</div>
                   </li>
                 </Link>
               ) : (
@@ -93,9 +72,7 @@ export const LienMenuNavigation = ({
                     }}
                     className={`${estCheminCourant(enfant.route) ? 'actif' : ''}`}
                   >
-                    <div style={{ padding: '1.5rem 1.5rem 1.5rem 40px' }}>
-                      {enfant.nom}
-                    </div>
+                    <div className="lien-navigation-enfant">{enfant.nom}</div>
                   </li>
                 </Link>
               )
@@ -110,13 +87,7 @@ export const LienMenuNavigation = ({
         <li
           className={`${estCheminCourant(element.route) && !aUnEnfantOuvert ? 'actif' : ''}`}
         >
-          <div
-            style={{
-              padding: '1.5rem',
-            }}
-          >
-            {element.nom}
-          </div>
+          <div className="lien-navigation">{element.nom}</div>
         </li>
       </Link>
     );
@@ -128,7 +99,6 @@ export const MenuNavigation = ({
 }: {
   elements: MenuNavigationElement[];
 }) => {
-  console.log('ele', elements);
   return (
     <ul className="menu-lateral">
       {elements?.map((element) => (
@@ -144,13 +114,9 @@ export const BarreNavigationLaterale = () => {
   );
 
   return (
-    <aside className="mode-fonce" style={{ width: '256px', minWidth: '256px' }}>
-      <TypographieH6
-        style={{ color: 'white', padding: '1.5rem 1.5rem 0 1.5rem' }}
-      >
-        Mon espace Aidant
-      </TypographieH6>
-      <Separateur theme="dark" />
+    <aside className="barre-navigation-laterale mode-fonce">
+      <TypographieH6>Mon espace Aidant</TypographieH6>
+      <Separateur />
       <div>
         <MenuNavigation
           elements={[
@@ -158,7 +124,7 @@ export const BarreNavigationLaterale = () => {
               ? [
                   {
                     nom: 'Mes diagnostics',
-                    route: '/diagnostics',
+                    route: '/tableau-de-bord',
                     actif: true,
                     enfants: [
                       //{ nom: 'Mes demandes', route: '/mes-demandes', actif: false },
@@ -171,7 +137,7 @@ export const BarreNavigationLaterale = () => {
           ]}
         />
       </div>
-      <Separateur theme="dark" />
+      <Separateur />
       <div>
         <MenuNavigation
           elements={[{ nom: 'Mon compte', route: '/profil', actif: true }]}
@@ -187,15 +153,11 @@ export const LayoutAidant = () => {
       <HeaderAidant
         lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />}
       />
-      <main
-        style={{ minHeight: '100vh' }}
-        role="main"
-        className="tableau-de-bord"
-      >
+      <main role="main" className="tableau-de-bord">
         <BarreNavigationLaterale />
         <Outlet />
       </main>
-
+      <div className="separateur-footer w-100"></div>
       <FooterEspaceAidant />
     </div>
   );

@@ -53,22 +53,13 @@ export const EcranDiagnostics = () => {
   }, [enCoursDeChargement, navigationMAC]);
 
   return (
-    <article
-      className="w-100"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <section
-        style={{ padding: '3rem 7.5rem 3rem 4.25rem' }}
-        className="violet-clair"
-      >
+    <article className="w-100 ecran-diagnostics">
+      <section className="mes-diagnostics-cta">
         <TypographieH2>Mes Diagnostics</TypographieH2>
 
-        <div style={{ display: 'flex', gap: '3.5rem' }}>
+        <div className="cartes">
           <div className="w-100">
-            <p style={{ fontSize: '14px' }}>
+            <p>
               Retrouvez ici l’ensemble des diagnostics que vous avez menés.
               <br />
               <br />
@@ -105,9 +96,9 @@ export const EcranDiagnostics = () => {
           </div>
         </div>
       </section>
-      <div style={{ padding: '3rem 7.5rem 3rem 4.25rem' }}>
+      <section>
         <ComposantDiagnostics diagnostics={diagnostics} />
-      </div>
+      </section>
     </article>
   );
 };
