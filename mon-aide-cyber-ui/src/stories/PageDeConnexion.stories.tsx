@@ -11,6 +11,7 @@ import { RequiertAuthentification } from '../fournisseurs/RequiertAuthentificati
 import { ComposantIntercepteur } from '../composants/intercepteurs/ComposantIntercepteur.tsx';
 import { TableauDeBord } from '../composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
 import { macAPI } from '../fournisseurs/api/macAPI.ts';
+import { FournisseurNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 
 const meta = {
   title: 'Connexion',
@@ -24,6 +25,11 @@ macAPI.execute = <T, U, V = void>(
   _parametresAPI: ParametresAPI<V>,
   _transcris: (contenu: Promise<U>) => Promise<T>
 ) => {
+  if (_parametresAPI.url.includes('contexte')) {
+    return Promise.resolve({
+      liens: { 'se-connecter': { url: '', methode: 'POST' } },
+    } as T);
+  }
   const reponseAuthentification: ReponseAuthentification = {
     nomPrenom: 'Jean Dupont',
     liens: {},
@@ -38,24 +44,26 @@ export const PageDeConnexion: Story = {
   decorators: [
     (story) => (
       <MemoryRouter>
-        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-          <Routes>
-            <Route path="/connexion" element={<ComposantConnexion />} />
-            <Route
-              element={
-                <Suspense>
-                  <RequiertAuthentification />
-                </Suspense>
-              }
-            >
+        <FournisseurNavigationMAC>
+          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+            <Routes>
+              <Route path="/connexion" element={<ComposantConnexion />} />
               <Route
-                path="/tableau-de-bord"
-                element={<ComposantIntercepteur composant={TableauDeBord} />}
-              ></Route>
-            </Route>
-          </Routes>
-          {story()}
-        </ErrorBoundary>
+                element={
+                  <Suspense>
+                    <RequiertAuthentification />
+                  </Suspense>
+                }
+              >
+                <Route
+                  path="/tableau-de-bord"
+                  element={<ComposantIntercepteur composant={TableauDeBord} />}
+                ></Route>
+              </Route>
+            </Routes>
+            {story()}
+          </ErrorBoundary>
+        </FournisseurNavigationMAC>
       </MemoryRouter>
     ),
   ],

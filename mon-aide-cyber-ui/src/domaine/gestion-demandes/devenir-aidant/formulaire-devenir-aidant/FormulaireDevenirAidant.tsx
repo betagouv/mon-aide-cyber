@@ -22,7 +22,7 @@ import {
 } from '../../../../composants/gestion-demandes/devenir-aidant/reducteurDevenirAidant';
 import { Departement, estDepartement } from '../../departement';
 import { MoteurDeLiens } from '../../../MoteurDeLiens';
-import { Lien } from '../../../Lien';
+import { Lien, ReponseHATEOAS } from '../../../Lien';
 import { macAPI } from '../../../../fournisseurs/api/macAPI';
 import {
   CorpsDemandeDevenirAidant,
@@ -57,7 +57,9 @@ export const FormulaireDevenirAidant = () => {
       .recupereContexteNavigation({
         contexte: 'demande-devenir-aidant:demande-devenir-aidant',
       })
-      .then()
+      .then((reponse) =>
+        navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens)
+      )
       .catch();
   }, []);
 

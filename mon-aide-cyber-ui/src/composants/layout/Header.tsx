@@ -1,20 +1,11 @@
 import { SeConnecter } from '../authentification/SeConnecter.tsx';
-import { PropsWithChildren, ReactElement, useEffect, useReducer } from 'react';
-import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateur.tsx';
+import { PropsWithChildren, ReactElement, useEffect } from 'react';
 import { liensNavigation } from './LayoutPublic.tsx';
 import { Link, matchPath, useLocation } from 'react-router-dom';
-import { useNavigationMAC, useUtilisateur } from '../../fournisseurs/hooks.ts';
-import { macAPI } from '../../fournisseurs/api/macAPI.ts';
-import { ReponseUtilisateur } from '../../domaine/authentification/Authentification.ts';
-import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { ReponseHATEOAS } from '../../domaine/Lien.ts';
-import {
-  initialiseReducteurUtilisateurAuthentifie,
-  reducteurUtilisateurAuthentifie,
-  utilisateurCharge,
-  utilisateurNonAuthentifie,
-} from '../authentification/reducteurUtilisateurAuthentifie.ts';
+import { useContexteNavigation } from '../../hooks/useContexteNavigation.ts';
 
 export type HeaderProprietes = PropsWithChildren<{
   lienMAC: ReactElement;
@@ -23,54 +14,32 @@ export type HeaderProprietes = PropsWithChildren<{
 
 export const Header = ({ lienMAC, enteteSimple }: HeaderProprietes) => {
   const location = useLocation();
-  const { utilisateur, setUtilisateur } = useUtilisateur();
   const navigationMAC = useNavigationMAC();
-  const [etatUtilisateurAuthentifie, envoie] = useReducer(
-    reducteurUtilisateurAuthentifie,
-    initialiseReducteurUtilisateurAuthentifie()
-  );
+  const contexteNavigation = useContexteNavigation();
 
   const estCheminCourant = (cheminATester: string) =>
     !!matchPath(location.pathname, cheminATester);
 
   useEffect(() => {
-    if (etatUtilisateurAuthentifie.enAttenteDeChargement) {
-      macAPI
-        .execute<ReponseUtilisateur, ReponseUtilisateur>(
-          constructeurParametresAPI()
-            .url('/api/utilisateur')
-            .methode('GET')
-            .construis(),
-          (json) => json
-        )
-        .then((utilisateur) => {
-          envoie(utilisateurCharge());
-          setUtilisateur({
-            nomPrenom: utilisateur.nomPrenom,
-          });
-          const moteurDeLiens = new MoteurDeLiens(utilisateur.liens);
-
-          navigationMAC.ajouteEtat(moteurDeLiens.extrais());
-        })
-        .catch((erreur) => {
-          navigationMAC.setEtat(
-            new MoteurDeLiens((erreur as ReponseHATEOAS).liens).extrais()
+    contexteNavigation
+      .recupereContexteNavigation({ contexte: '' })
+      .then((reponse) => {
+        const rep = reponse as ReponseHATEOAS;
+        if (rep.liens['afficher-tableau-de-bord']) {
+          navigationMAC.navigue(
+            new MoteurDeLiens(rep.liens),
+            'afficher-tableau-de-bord'
           );
-          envoie(utilisateurNonAuthentifie());
-        });
-    }
-  }, [navigationMAC, etatUtilisateurAuthentifie.enAttenteDeChargement]);
+        }
+      });
+  }, []);
 
   const accesRapide = enteteSimple ? (
     ''
   ) : (
     <div className="fr-header__tools">
       <div className="fr-header__tools-links">
-        {utilisateur ? (
-          <ComposantMenuUtilisateur utilisateur={utilisateur} />
-        ) : (
-          <SeConnecter />
-        )}
+        <SeConnecter />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useNavigationMAC, useUtilisateur } from '../../fournisseurs/hooks.ts';
-import { FormEvent, useCallback, useReducer } from 'react';
+import { FormEvent, useCallback, useEffect, useReducer } from 'react';
 import {
   authentificationInvalidee,
   identifiantSaisi,
@@ -9,10 +9,11 @@ import {
   saisieInvalidee,
 } from './reducteurAuthentification.tsx';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
-import { Lien } from '../../domaine/Lien.ts';
+import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 import { ReponseAuthentification } from '../../domaine/authentification/Authentification.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { useContexteNavigation } from '../../hooks/useContexteNavigation.ts';
 
 export type Identifiants = {
   identifiant: string;
@@ -20,6 +21,7 @@ export type Identifiants = {
 };
 export const FormulaireAuthentification = () => {
   const navigationMAC = useNavigationMAC();
+  const contexteNavigation = useContexteNavigation();
   const { setUtilisateur } = useUtilisateur();
 
   const [etatAuthentification, envoie] = useReducer(
@@ -33,6 +35,15 @@ export const FormulaireAuthentification = () => {
 
   const surSaisieIdentifiant = useCallback((identifiant: string) => {
     envoie(identifiantSaisi(identifiant));
+  }, []);
+
+  useEffect(() => {
+    contexteNavigation
+      .recupereContexteNavigation({ contexte: 'se-connecter' })
+      .then((reponse) =>
+        navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens)
+      )
+      .catch();
   }, []);
 
   const connexion = useCallback(
