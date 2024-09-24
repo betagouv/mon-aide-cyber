@@ -11,7 +11,7 @@ import {
   reducteurDemandeEtreAide,
   saisieInformationsEnErreur,
 } from './reducteurDemandeEtreAide.ts';
-import { Lien } from '../../../domaine/Lien.ts';
+import { Lien, ReponseHATEOAS } from '../../../domaine/Lien.ts';
 import { Departement } from '../../../domaine/gestion-demandes/departement.ts';
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
@@ -45,7 +45,9 @@ export const ComposantDemandeEtreAide = () => {
   useEffect(() => {
     navigationUtilisateur
       .recupereContexteNavigation({ contexte: 'demande-etre-aide' })
-      .then()
+      .then((reponse) => {
+        navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens);
+      })
       .catch();
   }, []);
 

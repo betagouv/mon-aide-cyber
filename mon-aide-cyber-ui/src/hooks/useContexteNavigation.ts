@@ -12,9 +12,9 @@ export const useContexteNavigation = () => {
   const recupereContexteNavigation = useCallback(
     (parametres: { contexte: string }) => {
       return macAPI
-        .execute<void | ReponseHATEOAS, ReponseHATEOAS>(
+        .execute<ReponseHATEOAS, ReponseHATEOAS>(
           constructeurParametresAPI()
-            .url(`/api/utilisateur?contexte=${parametres.contexte}`)
+            .url(`/api/contexte?contexte=${parametres.contexte}`)
             .methode('GET')
             .construis(),
           (json) => json
