@@ -7,6 +7,7 @@ import { routesAPIUtilisateur } from './routesAPIUtilisateur';
 import { routesAPIEspaceAidant } from './routesAPIEspaceAidant';
 import { routesAPIProfil } from './routesAPIProfil';
 import { routesAPIDemandes } from './demandes/routesAPIDemandes';
+import { routeAPIContexte } from './routeAPIContexte';
 
 export interface RequeteUtilisateur extends Request {
   identifiantUtilisateurCourant?: crypto.UUID;
@@ -15,6 +16,7 @@ export interface RequeteUtilisateur extends Request {
 const routesAPI = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
+  routes.use('/contexte', routeAPIContexte(configuration));
   routes.use('/diagnostic', routesAPIDiagnostic(configuration));
   routes.use('/token', routesAPIAuthentification(configuration));
   routes.use('/utilisateur', routesAPIUtilisateur(configuration));

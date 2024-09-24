@@ -103,11 +103,12 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  private afficherTableauDeBord() {
+  public afficherTableauDeBord(): ConstructeurActionsHATEOAS {
     this.actions.set('afficher-tableau-de-bord', {
       url: '/api/espace-aidant/tableau-de-bord',
       methode: 'GET',
     });
+    return this;
   }
 
   postAuthentification(

@@ -7,14 +7,21 @@ import {
 } from './AdaptateurDeVerificationDeSession';
 
 export type MACCookies = { session: string };
+
+export const recuperateurDeCookies = (
+  requete: Request,
+  reponse: Response
+): string | undefined =>
+  new Cookies(requete, reponse, {
+    keys: [process.env.SECRET_COOKIE || ''],
+  }).get('session', { signed: true });
+
 export const fabriqueDeCookies = (
   contexte: Contexte,
   requete: Request,
   reponse: Response
 ): MACCookies => {
-  const cookies = new Cookies(requete, reponse, {
-    keys: [process.env.SECRET_COOKIE || ''],
-  }).get('session', { signed: true });
+  const cookies = recuperateurDeCookies(requete, reponse);
   if (!cookies) {
     throw ErreurMAC.cree(
       contexte,
