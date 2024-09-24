@@ -48,6 +48,10 @@ export type ConfigurationServeur = {
   entrepots: Entrepots;
   gestionnaireDeJeton: GestionnaireDeJeton;
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
+  recuperateurDeCookies: (
+    requete: Request,
+    reponse: Response
+  ) => string | undefined;
 };
 const creeApp = (config: ConfigurationServeur) => {
   const app = express();

@@ -2,7 +2,7 @@ import serveur from '../../src/serveur';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { AdaptateurTranscripteurDeTest } from '../adaptateurs/adaptateurTranscripteur';
 import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
-import { Express } from 'express';
+import { Express, Request, Response } from 'express';
 import { fakerFR } from '@faker-js/faker';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
@@ -32,6 +32,7 @@ class TesteurIntegrationMAC {
         ecoute: (port: number, succes: () => void) => void;
       }
     | undefined = undefined;
+
   constructor(
     public adaptateurRelations = new AdaptateurRelationsMAC(
       new EntrepotRelationMemoire()
@@ -57,7 +58,11 @@ class TesteurIntegrationMAC {
       pdf() {
         return unAdaptateurRestitutionPDF();
       },
-    }
+    },
+    public recuperateurDeCookies: (
+      requete: Request,
+      reponse: Response
+    ) => string | undefined = () => undefined
   ) {}
 
   initialise() {
@@ -85,6 +90,7 @@ class TesteurIntegrationMAC {
       avecProtectionCsrf: false,
       adaptateurEnvoiMessage: this.adaptateurEnvoieMessage,
       serviceDeChiffrement: this.serviceDeChiffrement,
+      recuperateurDeCookies: this.recuperateurDeCookies,
     });
     const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
     // eslint-disable-next-line @typescript-eslint/no-empty-function

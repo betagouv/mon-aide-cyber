@@ -18,6 +18,7 @@ import { AdaptateurDeVerificationDesAccesMAC } from './src/adaptateurs/Adaptateu
 import { AdaptateurDeRestitutionHTML } from './src/infrastructure/adaptateurs/AdaptateurDeRestitutionHTML';
 import { unServiceAidant } from './src/authentification/ServiceAidantMAC';
 import { adaptateurServiceChiffrement } from './src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
+import { recuperateurDeCookies } from './src/adaptateurs/fabriqueDeCookies';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
@@ -70,6 +71,7 @@ const serveurMAC = serveur.creeServeur({
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
   adaptateurEnvoiMessage: adaptateurEnvoiMessage,
   serviceDeChiffrement: adaptateurServiceChiffrement(),
+  recuperateurDeCookies: recuperateurDeCookies,
 });
 
 const port = process.env.PORT || 8081;
