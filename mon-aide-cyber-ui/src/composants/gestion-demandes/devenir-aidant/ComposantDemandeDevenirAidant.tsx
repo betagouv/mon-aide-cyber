@@ -1,4 +1,5 @@
 import { FormulaireDevenirAidant } from '../../../domaine/gestion-demandes/devenir-aidant/formulaire-devenir-aidant/FormulaireDevenirAidant.tsx';
+import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 
 export const ComposantDemandeDevenirAidant = () => {
   return (
@@ -17,7 +18,7 @@ export const ComposantDemandeDevenirAidant = () => {
       </div>
       <div className="fond-clair-mac">
         <div className="fr-container">
-          <FormulaireDevenirAidant />
+          <FormulaireDevenirAidant macAPI={macAPI} />
         </div>
       </div>
     </main>

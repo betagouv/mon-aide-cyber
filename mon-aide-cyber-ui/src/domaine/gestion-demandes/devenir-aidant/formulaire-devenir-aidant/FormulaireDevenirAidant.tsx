@@ -23,22 +23,35 @@ import {
 import { Departement, estDepartement } from '../../departement';
 import { MoteurDeLiens } from '../../../MoteurDeLiens';
 import { Lien, ReponseHATEOAS } from '../../../Lien';
-import { macAPI } from '../../../../fournisseurs/api/macAPI';
 import {
   CorpsDemandeDevenirAidant,
   PreRequisDemande,
   ReponseDemandeInitiee,
 } from '../DevenirAidant';
-import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI';
+import {
+  constructeurParametresAPI,
+  ParametresAPI,
+} from '../../../../fournisseurs/api/ConstructeurParametresAPI';
 import { ChampsErreur } from '../../../../composants/alertes/Erreurs';
 import { AutoCompletion } from '../../../../composants/auto-completion/AutoCompletion';
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4';
 import { useContexteNavigation } from '../../../../hooks/useContexteNavigation.ts';
 
-export const FormulaireDevenirAidant = () => {
+type ProprietesFormulaireDevenirAidant = {
+  macAPI: {
+    execute: <REPONSE, REPONSEAPI, CORPS = void>(
+      parametresAPI: ParametresAPI<CORPS>,
+      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
+    ) => Promise<REPONSE>;
+  };
+};
+
+export const FormulaireDevenirAidant = ({
+  macAPI,
+}: ProprietesFormulaireDevenirAidant) => {
   const navigationMAC = useNavigationMAC();
-  const navigationUtilisateur = useContexteNavigation();
+  const navigationUtilisateur = useContexteNavigation(macAPI);
   const [prerequisDemande, setPrerequisDemande] = useState<
     PreRequisDemande | undefined
   >();
@@ -362,7 +375,7 @@ export const FormulaireDevenirAidant = () => {
                       type="checkbox"
                       id="cgu-demande-devenir-aidant"
                       name="cgu-demande-devenir-aidant"
-                      onClick={surCGUValidees}
+                      onChange={surCGUValidees}
                       checked={etatDemande.cguValidees}
                     />
                     <label

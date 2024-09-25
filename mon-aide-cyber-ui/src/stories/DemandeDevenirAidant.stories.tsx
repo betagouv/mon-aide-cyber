@@ -1,51 +1,49 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { ComposantDemandeDevenirAidant } from '../composants/gestion-demandes/devenir-aidant/ComposantDemandeDevenirAidant.tsx';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { expect, userEvent, within } from '@storybook/test';
 import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
-import { macAPI } from '../fournisseurs/api/macAPI.ts';
-import { useContexteNavigation } from '../hooks/useContexteNavigation.ts';
+import { FormulaireDevenirAidant } from '../domaine/gestion-demandes/devenir-aidant/formulaire-devenir-aidant/FormulaireDevenirAidant.tsx';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 
 const meta = {
   title: 'Demande pour devenir Aidant',
-  component: ComposantDemandeDevenirAidant,
+  component: FormulaireDevenirAidant,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof ComposantDemandeDevenirAidant>;
+} satisfies Meta<typeof FormulaireDevenirAidant>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-macAPI.execute = <T, U, V = void>(
-  parametresAPI: ParametresAPI<V>,
-  _transcris: (contenu: Promise<U>) => Promise<T>
-) => {
-  const reponse = {
-    departements: [
-      {
-        nom: 'Ain',
-        code: '1',
-      },
-      {
-        nom: 'Aisne',
-        code: '2',
-      },
-    ],
-    liens: {},
-  };
-  if (parametresAPI.url.includes('devenir-aidant')) {
-    return Promise.resolve(reponse as T);
-  }
-  return Promise.resolve({} as T);
-};
-
-const ContexteNavigationMock = () => {
-  useContexteNavigation().recupereContexteNavigation = () => Promise.resolve();
-  return <></>;
+const macAPIMemoire = {
+  execute: <T, U, V = void>(
+    parametresAPI: ParametresAPI<V>,
+    _transcris: (contenu: Promise<U>) => Promise<T>
+  ) => {
+    const reponse = {
+      departements: [
+        {
+          nom: 'Ain',
+          code: '1',
+        },
+        {
+          nom: 'Aisne',
+          code: '2',
+        },
+      ],
+      liens: {},
+    };
+    if (parametresAPI.url.includes('devenir-aidant')) {
+      return Promise.resolve(reponse as T);
+    }
+    return Promise.resolve({} as T);
+  },
 };
 
 export const DemandeDevenirAidant: Story = {
+  args: { macAPI: macAPIMemoire },
   decorators: [
     (story) => (
       <ContexteNavigationMAC.Provider
@@ -71,10 +69,9 @@ export const DemandeDevenirAidant: Story = {
           retourAccueil: () => {},
         }}
       >
-        <ContexteNavigationMock />
-        {/*<ErrorBoundary FallbackComponent={ComposantAffichageErreur}>*/}
-        {story()}
-        {/*</ErrorBoundary>*/}
+        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+          {story()}
+        </ErrorBoundary>
       </ContexteNavigationMAC.Provider>
     ),
   ],
