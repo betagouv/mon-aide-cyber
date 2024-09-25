@@ -179,6 +179,10 @@ $border-radius: 0.5rem;
   transition: background-size 0s
 }
 
+.bouton-mac-icone-conteneur {
+  display: flex;
+  gap: 0.5rem;
+}
 
 .mac-radio-group input[type='radio'] + label {
   background-image: radial-gradient(
