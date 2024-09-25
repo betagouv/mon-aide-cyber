@@ -8,7 +8,7 @@ describe('Le moteur de liens', () => {
       lien: {
         'afficher-profil': { url: '/une/url', methode: 'GET' },
       },
-      attendu: '/aidant/profil',
+      attendu: '/aidant/mes-informations',
     },
     {
       lien: {

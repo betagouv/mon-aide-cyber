@@ -75,7 +75,7 @@ export const ComposantProfilAidant = ({
   return (
     <article className="w-100 ecran-profil">
       <section className="fond-clair-mac">
-        <TypographieH2>Mon profil</TypographieH2>
+        <TypographieH2>Mes informations</TypographieH2>
       </section>
       <section>
         <div className="fr-grid-row">

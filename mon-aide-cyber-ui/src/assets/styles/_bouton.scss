@@ -166,11 +166,16 @@ $border-radius: 0.5rem;
 .bouton-mac-lien {
     color: var(--couleurs-mac-violet-fonce);
     transition: background-size 0s;
-
+    padding: 0;
+    
     &:not(:disabled):hover {
       background: none;
       text-decoration: underline;
-  }
+    }
+    &:not(:disabled):active {
+        background: none;
+        text-decoration: underline;      
+    }
 }
 .bouton-mac-texte {
   color: var(--couleurs-mac-violet-fonce);

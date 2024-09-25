@@ -34,7 +34,7 @@ a {
 
 .mac-callout {
   display: flex;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   align-items: flex-start;
   gap: 0.5rem;
   align-self: stretch;
@@ -43,6 +43,26 @@ a {
   i {
     width: 3rem;
     height: 2rem;
+  }
+
+  &.succes {
+    width: fit-content;
+    background: var(--couleurs-mac-succes);
+    color: var(--couleurs-mac-blanc);
+  }
+  &.erreur {
+    width: fit-content;
+    background: var(--couleurs-mac-erreur-mode-fonce);
+    color: var(--couleurs-mac-blanc);
+  }
+  &.attention {
+    width: fit-content;
+    background: var(--couleurs-mac-jaune-clair);
+    color: #8f7118;
+  }
+  &.information {
+    width: fit-content;
+    background: var(--couleurs-mac-jaune-clair);
   }
 }
 
