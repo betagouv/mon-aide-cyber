@@ -7,6 +7,7 @@ import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurPa
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien } from '../../domaine/Lien.ts';
 import { macAPI } from '../../fournisseurs/api/macAPI.ts';
+import Button from '../atomes/Button/Button.tsx';
 
 type ProprietesComposant = {
   surClick: () => void;
@@ -33,13 +34,14 @@ export const ComposantLienCreerDiagnostic = ({
   surClick,
 }: ProprietesComposant): ReactElement<HTMLAnchorElement> => {
   return (
-    <a
-      href="#"
-      className="fr-icon-arrow-go-forward-line fr-link--icon-right"
+    <Button
+      className="bouton-mac-icone-conteneur"
+      variant="link"
       onClick={surClick}
     >
-      Créer un nouveau diagnostic
-    </a>
+      <span>Créer un nouveau diagnostic</span>
+      <span className="fr-icon-arrow-go-forward-line"></span>
+    </Button>
   );
 };
 
@@ -178,7 +180,9 @@ export const ComposantLancerDiagnostic = ({
     );
   }, [navigationMAC.etat, lanceDiagnostic]);
 
-  const afficherModale = useCallback(() => {
+  const afficherModale = () => {
+    console.log('affiche modale');
+
     affiche({
       titre: 'Prérequis à la réalisation du diagnostic',
       corps: (
@@ -192,7 +196,7 @@ export const ComposantLancerDiagnostic = ({
       ),
       taille: 'moyenne',
     });
-  }, [affiche, ferme, lancerDiagnostic]);
+  };
 
   return composant({ surClick: afficherModale });
 };
