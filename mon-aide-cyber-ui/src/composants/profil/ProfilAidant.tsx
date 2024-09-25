@@ -6,7 +6,10 @@ import {
 } from './reducteurProfil.ts';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
-import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import {
+  constructeurParametresAPI,
+  ParametresAPI,
+} from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { ComposantFormulaireModificationMotDePasse } from './ComposantFormulaireModificationMotDePasse.tsx';
@@ -14,7 +17,18 @@ import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 import { TypographieH2 } from '../communs/typographie/TypographieH2/TypographieH2.tsx';
 import { Profil } from '../../domaine/profil/Profil.ts';
 
-export const ComposantProfil = () => {
+type ProprietesComposantProfilAidant = {
+  macAPI: {
+    execute: <REPONSE, REPONSEAPI, CORPS = void>(
+      parametresAPI: ParametresAPI<CORPS>,
+      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
+    ) => Promise<REPONSE>;
+  };
+};
+
+export const ComposantProfilAidant = ({
+  macAPI,
+}: ProprietesComposantProfilAidant) => {
   const { showBoundary } = useErrorBoundary();
   const navigationMAC = useNavigationMAC();
   const [etatProfil, envoie] = useReducer(reducteurProfil, {
@@ -142,10 +156,15 @@ export const ComposantProfil = () => {
               lienModificationMotDePasse={
                 navigationMAC.etat['modifier-mot-de-passe']
               }
+              macAPI={macAPI}
             />
           </div>
         </div>
       </section>
     </article>
   );
+};
+
+export const ProfilAidant = () => {
+  return <ComposantProfilAidant macAPI={macAPI} />;
 };

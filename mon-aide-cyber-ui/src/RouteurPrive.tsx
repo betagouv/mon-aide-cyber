@@ -5,7 +5,7 @@ import { ComposantIntercepteur } from './composants/intercepteurs/ComposantInter
 import { EcranDiagnostic } from './composants/diagnostic/EcranDiagnostic.tsx';
 import { RequiertAuthentification } from './fournisseurs/RequiertAuthentification.tsx';
 import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
-import { ComposantProfil } from './composants/profil/ComposantProfil.tsx';
+import { ProfilAidant } from './composants/profil/ProfilAidant.tsx';
 import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
 import { LayoutAidant } from './composants/layout/LayoutAidant.tsx';
@@ -63,7 +63,7 @@ export const RouteurPrive = () => {
             ></Route>
             <Route path="diagnostics" element={<EcranDiagnostics />}></Route>
 
-            <Route path="profil" element={<ComposantProfil />}></Route>
+            <Route path="profil" element={<ProfilAidant />}></Route>
           </Route>
         </Route>
       </Route>
