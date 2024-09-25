@@ -5,49 +5,54 @@ import { ComposantAffichageErreur } from '../composants/alertes/ComposantAfficha
 import { ErrorBoundary } from 'react-error-boundary';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { ComposantConnexion } from '../composants/connexion/ComposantConnexion.tsx';
 import { Suspense } from 'react';
 import { RequiertAuthentification } from '../fournisseurs/RequiertAuthentification.tsx';
 import { ComposantIntercepteur } from '../composants/intercepteurs/ComposantIntercepteur.tsx';
 import { TableauDeBord } from '../composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
-import { macAPI } from '../fournisseurs/api/macAPI.ts';
 import { FournisseurNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
+import { ComposantAuthentification } from '../composants/authentification/FormulaireAuthentification.tsx';
 
 const meta = {
   title: 'Connexion',
-  component: ComposantConnexion,
+  component: ComposantAuthentification,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof ComposantConnexion>;
+} satisfies Meta<typeof ComposantAuthentification>;
 
-macAPI.execute = <T, U, V = void>(
-  _parametresAPI: ParametresAPI<V>,
-  _transcris: (contenu: Promise<U>) => Promise<T>
-) => {
-  if (_parametresAPI.url.includes('contexte')) {
-    return Promise.resolve({
-      liens: { 'se-connecter': { url: '', methode: 'POST' } },
-    } as T);
-  }
-  const reponseAuthentification: ReponseAuthentification = {
-    nomPrenom: 'Jean Dupont',
-    liens: {},
-  };
-  return Promise.resolve(reponseAuthentification as T);
+const macAPIMemoire = {
+  execute: <T, U, V = void>(
+    _parametresAPI: ParametresAPI<V>,
+    _transcris: (contenu: Promise<U>) => Promise<T>
+  ) => {
+    if (_parametresAPI.url.includes('contexte')) {
+      return Promise.resolve({
+        liens: { 'se-connecter': { url: '', methode: 'POST' } },
+      } as T);
+    }
+    const reponseAuthentification: ReponseAuthentification = {
+      nomPrenom: 'Jean Dupont',
+      liens: {},
+    };
+    return Promise.resolve(reponseAuthentification as T);
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const PageDeConnexion: Story = {
+  args: { macAPI: macAPIMemoire },
   decorators: [
     (story) => (
       <MemoryRouter>
         <FournisseurNavigationMAC>
           <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
             <Routes>
-              <Route path="/connexion" element={<ComposantConnexion />} />
+              <Route
+                path="/connexion"
+                element={<ComposantAuthentification macAPI={macAPIMemoire} />}
+              />
               <Route
                 element={
                   <Suspense>
