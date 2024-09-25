@@ -10,7 +10,10 @@ import {
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
 import { ReponseHATEOAS } from '../../Lien.ts';
-import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import {
+  constructeurParametresAPI,
+  ParametresAPI,
+} from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 import { ComposantCreationMotDePasse } from '../../../composants/mot-de-passe/ComposantCreationMotDePasse.tsx';
 
@@ -20,12 +23,24 @@ type CreationEspaceAidant = {
   confirmationMotDePasse: string;
   token: string;
 };
-type ProprietesComposantFormulaireCreationEspaceAidant = {
+type ProprietesFormulaireCreationEspaceAidant = {
   token: string;
 };
-export const FormulaireCreationEspaceAidant = ({
+
+type ProprietesComposantCreationEspaceAidant =
+  ProprietesFormulaireCreationEspaceAidant & {
+    macAPI: {
+      execute: <REPONSE, REPONSEAPI, CORPS = void>(
+        parametresAPI: ParametresAPI<CORPS>,
+        transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
+      ) => Promise<REPONSE>;
+    };
+  };
+
+export const ComposantCreationEspaceAidant = ({
+  macAPI,
   token,
-}: ProprietesComposantFormulaireCreationEspaceAidant) => {
+}: ProprietesComposantCreationEspaceAidant) => {
   const [etatCreationEspaceAidant, envoie] = useReducer(
     reducteurCreationEspaceAidant,
     initialiseReducteur()
@@ -129,7 +144,7 @@ export const FormulaireCreationEspaceAidant = ({
                   type="checkbox"
                   id="cgu-aidant"
                   name="cgu-aidant"
-                  onClick={surCGUSignees}
+                  onChange={surCGUSignees}
                   checked={etatCreationEspaceAidant.cguSignees}
                 />
                 <label className="fr-label" htmlFor="cgu-aidant">
@@ -159,4 +174,9 @@ export const FormulaireCreationEspaceAidant = ({
       )}
     </>
   );
+};
+export const FormulaireCreationEspaceAidant = ({
+  token,
+}: ProprietesFormulaireCreationEspaceAidant) => {
+  return <ComposantCreationEspaceAidant token={token} macAPI={macAPI} />;
 };

@@ -2,33 +2,34 @@ import { Meta, StoryObj } from '@storybook/react';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 import { expect, userEvent, within } from '@storybook/test';
-import { macAPI } from '../fournisseurs/api/macAPI.ts';
-import { FormulaireCreationEspaceAidant } from '../domaine/espace-aidant/demande-aidant-creation-espace-aidant/FormulaireCreationEspaceAidant.tsx';
+import { ComposantCreationEspaceAidant } from '../domaine/espace-aidant/demande-aidant-creation-espace-aidant/FormulaireCreationEspaceAidant.tsx';
 
 const meta = {
   title: "Création de l'espace Aidant suite à une demande devenir Aidant",
-  component: FormulaireCreationEspaceAidant,
+  component: ComposantCreationEspaceAidant,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof FormulaireCreationEspaceAidant>;
+} satisfies Meta<typeof ComposantCreationEspaceAidant>;
 
 let valeursSaisies = {};
-macAPI.execute = <T, U, V = void>(
-  parametresAPI: ParametresAPI<V>,
-  _transcris: (contenu: Promise<U>) => Promise<T>
-) => {
-  if (parametresAPI.corps) {
-    valeursSaisies = parametresAPI.corps;
-  }
-  return Promise.resolve({ liens: { url: '' } }) as Promise<T>;
+const macAPIMemoire = {
+  execute: <T, U, V = void>(
+    parametresAPI: ParametresAPI<V>,
+    _transcris: (contenu: Promise<U>) => Promise<T>
+  ) => {
+    if (parametresAPI.corps) {
+      valeursSaisies = parametresAPI.corps;
+    }
+    return Promise.resolve({ liens: { url: '' } }) as Promise<T>;
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const CreationEspaceAidant: Story = {
-  args: { token: 'aaaa' },
+  args: { token: 'aaaa', macAPI: macAPIMemoire },
   decorators: [
     (story) => (
       <ContexteNavigationMAC.Provider
