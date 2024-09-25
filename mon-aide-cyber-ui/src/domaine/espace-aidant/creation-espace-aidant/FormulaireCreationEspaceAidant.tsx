@@ -10,12 +10,26 @@ import {
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
 import { Lien, ReponseHATEOAS } from '../../Lien.ts';
-import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import {
+  constructeurParametresAPI,
+  ParametresAPI,
+} from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { CreationEspaceAidant } from '../EspaceAidant.ts';
 import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 import { ComposantModificationMotDePasse } from '../../../composants/mot-de-passe/ComposantModificationMotDePasse.tsx';
 
-export const FormulaireCreationEspaceAidant = () => {
+type ProprietesComposantCreationEspaceAidant = {
+  macAPI: {
+    execute: <REPONSE, REPONSEAPI, CORPS = void>(
+      parametresAPI: ParametresAPI<CORPS>,
+      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
+    ) => Promise<REPONSE>;
+  };
+};
+
+export const ComposantCreationEspaceAidant = ({
+  macAPI,
+}: ProprietesComposantCreationEspaceAidant) => {
   const [etatCreationEspaceAidant, envoie] = useReducer(
     reducteurCreationEspaceAidant,
     initialiseReducteur()
@@ -117,7 +131,7 @@ export const FormulaireCreationEspaceAidant = () => {
               type="checkbox"
               id="cgu-aidant"
               name="cgu-aidant"
-              onClick={surCGUSignees}
+              onChange={surCGUSignees}
               checked={etatCreationEspaceAidant.cguSignees}
             />
             <label className="fr-label" htmlFor="cgu-aidant">
@@ -143,4 +157,8 @@ export const FormulaireCreationEspaceAidant = () => {
       </fieldset>
     </form>
   );
+};
+
+export const FormulaireCreationEspaceAidant = () => {
+  return <ComposantCreationEspaceAidant macAPI={macAPI} />;
 };
