@@ -6,7 +6,7 @@ import { FormatLien, LienRoutage } from '../../domaine/LienRoutage.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien } from '../../domaine/Lien.ts';
-import { macAPI } from '../../fournisseurs/api/macAPI.ts';
+import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import Button from '../atomes/Button/Button.tsx';
 
 type ProprietesComposant = {
@@ -144,6 +144,7 @@ export const ComposantLancerDiagnostic = ({
 }: ProprietesComposantLancerDiagnostic) => {
   const { showBoundary } = useErrorBoundary();
   const navigationMAC = useNavigationMAC();
+  const macAPI = useMACAPI();
   const { affiche, ferme } = useModale();
 
   const lanceDiagnostic = useCallback(

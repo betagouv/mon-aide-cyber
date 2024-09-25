@@ -56,8 +56,8 @@ import {
 } from './ConteneurReponsePossible.tsx';
 import { TerminerDiagnostic } from './TerminerDiagnostic.tsx';
 import { BadgePerimetre } from './BadgePerimetre.tsx';
-import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 
 type ProprietesComposantQuestion = {
   actions: ActionReponseDiagnostic[];
@@ -543,5 +543,7 @@ export const ComposantDiagnostic = ({
 export const EcranDiagnostic = ({
   idDiagnostic,
 }: ProprietesEcranDiagnostic) => {
-  return <ComposantDiagnostic idDiagnostic={idDiagnostic} macAPI={macAPI} />;
+  return (
+    <ComposantDiagnostic idDiagnostic={idDiagnostic} macAPI={useMACAPI()} />
+  );
 };

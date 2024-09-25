@@ -9,7 +9,7 @@ import { LesEngagementsDeLAidant } from './composants/LesEngagementsDeLAidant';
 import { QuiEstConcerne } from './composants/QuiEstConcerne';
 import { Temoignages } from './composants/Temoignages';
 import './ecran-devenir-aidant.scss';
-import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
+import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 
 export const EcranDevenirAidant = () => {
   useDefilementFluide();
@@ -21,7 +21,7 @@ export const EcranDevenirAidant = () => {
       <CommentDevenirAidant />
       <LesEngagementsDeLAidant />
       <section id="formulaire-formation" className="fond-clair-mac">
-        <FormulaireDevenirAidant macAPI={macAPI} />
+        <FormulaireDevenirAidant macAPI={useMACAPI()} />
       </section>
       <Temoignages verbatims={verbatims} />
       <ActionsPiedDePage className="fond-clair-mac fr-pt-4w" />

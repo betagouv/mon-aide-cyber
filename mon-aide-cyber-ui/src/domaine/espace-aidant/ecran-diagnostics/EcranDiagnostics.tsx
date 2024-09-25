@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Lien, ReponseHATEOAS } from '../../../domaine/Lien.ts';
+import { Lien, ReponseHATEOAS } from '../../Lien.ts';
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
-import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
+import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { UUID } from '../../../types/Types.ts';
-import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 import { ComposantDiagnostics } from '../../../composants/espace-aidant/tableau-de-bord/ComposantDiagnostics.tsx';
 import {
   ComposantLancerDiagnostic,
   ComposantLienCreerDiagnostic,
 } from '../../../composants/diagnostic/ComposantLancerDiagnostic.tsx';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
+import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 
 export type Diagnostic = {
   dateCreation: string;
@@ -25,6 +25,7 @@ export const EcranDiagnostics = () => {
   const [enCoursDeChargement, setEnCoursDeChargement] = useState(true);
   const [diagnostics, setDiagnostics] = useState<Diagnostic[]>([]);
   const navigationMAC = useNavigationMAC();
+  const macAPI = useMACAPI();
 
   useEffect(() => {
     new MoteurDeLiens(navigationMAC.etat).trouve(

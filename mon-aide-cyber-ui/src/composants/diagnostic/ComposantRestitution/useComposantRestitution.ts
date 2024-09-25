@@ -6,10 +6,11 @@ import { rubriqueConsultee } from '../../../domaine/diagnostic/reducteurRestitut
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
 import { UUID } from '../../../types/Types';
 import { useRecupereLaRestitution } from './useRecupereLaRestitution';
-import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
+import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 
 export const useComposantRestitution = (idDiagnostic: UUID) => {
   const navigationMAC = useNavigationMAC();
+  const macAPI = useMACAPI();
 
   const { etatRestitution, envoie } = useRecupereLaRestitution(idDiagnostic);
 
