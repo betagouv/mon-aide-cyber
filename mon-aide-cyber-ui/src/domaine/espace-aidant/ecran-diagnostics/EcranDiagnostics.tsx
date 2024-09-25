@@ -63,13 +63,13 @@ export const EcranDiagnostics = () => {
               Retrouvez ici l’ensemble des diagnostics que vous avez menés.
               <br />
               <br />
-              Vous souhaitez créer un diagnostic ? Il est impératif que le
-              contact de l’entité souhaitant bénéficier du diagnostic valide les
-              CGU avant de le réaliser. Cliquez sur le bouton ci-dessous pour
-              effectuer une demande de création de diagnostic et de validation
-              des CGU :
+              Pour créer un nouveau diagnostic, cliquez sur le bouton
+              ci-dessous.
+              <br />
+              N&apos;oubliez pas de faire valider les Conditions Générales
+              d&apos;Utilisation à l&apos;entité souhaitant bénéficier du
+              service
             </p>
-            <br />
             <ComposantLancerDiagnostic
               composant={ComposantLienCreerDiagnostic}
             />

@@ -38,7 +38,7 @@ export const ComposantLienCreerDiagnostic = ({
       className="fr-icon-arrow-go-forward-line fr-link--icon-right"
       onClick={surClick}
     >
-      Créer un diagnostic
+      Créer un nouveau diagnostic
     </a>
   );
 };
