@@ -12,16 +12,31 @@ import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 import { ReponseAuthentification } from '../../domaine/authentification/Authentification.ts';
-import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import {
+  constructeurParametresAPI,
+  ParametresAPI,
+} from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useContexteNavigation } from '../../hooks/useContexteNavigation.ts';
 
 export type Identifiants = {
   identifiant: string;
   motDePasse: string;
 };
-export const FormulaireAuthentification = () => {
+
+type ProprietesComposantAuthentification = {
+  macAPI: {
+    execute: <REPONSE, REPONSEAPI, CORPS = void>(
+      parametresAPI: ParametresAPI<CORPS>,
+      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
+    ) => Promise<REPONSE>;
+  };
+};
+
+export const ComposantAuthentification = ({
+  macAPI,
+}: ProprietesComposantAuthentification) => {
   const navigationMAC = useNavigationMAC();
-  const contexteNavigation = useContexteNavigation();
+  const contexteNavigation = useContexteNavigation(macAPI);
   const { setUtilisateur } = useUtilisateur();
 
   const [etatAuthentification, envoie] = useReducer(
@@ -164,4 +179,7 @@ export const FormulaireAuthentification = () => {
       </form>
     </>
   );
+};
+export const FormulaireAuthentification = () => {
+  return <ComposantAuthentification macAPI={macAPI} />;
 };
