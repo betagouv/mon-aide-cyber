@@ -10,13 +10,13 @@ import {
 } from './reducteurAuthentification.tsx';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
-import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 import { ReponseAuthentification } from '../../domaine/authentification/Authentification.ts';
 import {
   constructeurParametresAPI,
   ParametresAPI,
 } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useContexteNavigation } from '../../hooks/useContexteNavigation.ts';
+import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 
 export type Identifiants = {
   identifiant: string;
@@ -181,5 +181,5 @@ export const ComposantAuthentification = ({
   );
 };
 export const FormulaireAuthentification = () => {
-  return <ComposantAuthentification macAPI={macAPI} />;
+  return <ComposantAuthentification macAPI={useMACAPI()} />;
 };

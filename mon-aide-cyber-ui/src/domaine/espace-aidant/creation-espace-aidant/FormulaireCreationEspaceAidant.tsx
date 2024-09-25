@@ -15,8 +15,8 @@ import {
   ParametresAPI,
 } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { CreationEspaceAidant } from '../EspaceAidant.ts';
-import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 import { ComposantModificationMotDePasse } from '../../../composants/mot-de-passe/ComposantModificationMotDePasse.tsx';
+import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 
 type ProprietesComposantCreationEspaceAidant = {
   macAPI: {
@@ -160,5 +160,5 @@ export const ComposantCreationEspaceAidant = ({
 };
 
 export const FormulaireCreationEspaceAidant = () => {
-  return <ComposantCreationEspaceAidant macAPI={macAPI} />;
+  return <ComposantCreationEspaceAidant macAPI={useMACAPI()} />;
 };

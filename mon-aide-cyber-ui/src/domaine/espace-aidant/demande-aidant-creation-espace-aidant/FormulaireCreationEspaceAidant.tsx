@@ -14,8 +14,8 @@ import {
   constructeurParametresAPI,
   ParametresAPI,
 } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 import { ComposantCreationMotDePasse } from '../../../composants/mot-de-passe/ComposantCreationMotDePasse.tsx';
+import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 
 type CreationEspaceAidant = {
   cguSignees: boolean;
@@ -178,5 +178,5 @@ export const ComposantCreationEspaceAidant = ({
 export const FormulaireCreationEspaceAidant = ({
   token,
 }: ProprietesFormulaireCreationEspaceAidant) => {
-  return <ComposantCreationEspaceAidant token={token} macAPI={macAPI} />;
+  return <ComposantCreationEspaceAidant token={token} macAPI={useMACAPI()} />;
 };

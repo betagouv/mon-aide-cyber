@@ -13,9 +13,9 @@ import {
 import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { ComposantFormulaireModificationMotDePasse } from './ComposantFormulaireModificationMotDePasse.tsx';
-import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 import { TypographieH2 } from '../communs/typographie/TypographieH2/TypographieH2.tsx';
 import { Profil } from '../../domaine/profil/Profil.ts';
+import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 
 type ProprietesComposantProfilAidant = {
   macAPI: {
@@ -166,5 +166,5 @@ export const ComposantProfilAidant = ({
 };
 
 export const ProfilAidant = () => {
-  return <ComposantProfilAidant macAPI={macAPI} />;
+  return <ComposantProfilAidant macAPI={useMACAPI()} />;
 };

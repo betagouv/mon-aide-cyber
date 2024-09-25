@@ -17,13 +17,13 @@ import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
 import { ChampsErreur } from '../../alertes/Erreurs.tsx';
 import { Confirmation } from './Confirmation.tsx';
-import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 import {
   CorpsDemandeEtreAide,
   ReponseDemandeEtreAide,
 } from '../../../domaine/gestion-demandes/etre-aide/EtreAide.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useContexteNavigation } from '../../../hooks/useContexteNavigation.ts';
+import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 
 export const ComposantDemandeEtreAide = () => {
   const [etat, envoie] = useReducer(reducteurDemandeEtreAide, {
@@ -40,6 +40,7 @@ export const ComposantDemandeEtreAide = () => {
     ReactElement | undefined
   >(undefined);
   const navigationMAC = useNavigationMAC();
+  const macAPI = useMACAPI();
   const navigationUtilisateur = useContexteNavigation();
 
   useEffect(() => {

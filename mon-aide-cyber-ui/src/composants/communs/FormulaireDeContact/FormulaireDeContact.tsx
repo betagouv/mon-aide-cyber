@@ -10,8 +10,8 @@ import {
 } from '../../../reducteurs/reducteurEnvoiMessageContact';
 import { Message } from '../../../domaine/contact/Message';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
-import { macAPI } from '../../../fournisseurs/api/macAPI.ts';
 import { TypographieH2 } from '../typographie/TypographieH2/TypographieH2.tsx';
+import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 
 export const FormulaireDeContact = () => {
   const [etatMessage, envoie] = useReducer(reducteurEnvoiMessageContact, {
@@ -21,6 +21,7 @@ export const FormulaireDeContact = () => {
     erreur: {},
     saisieValide: () => false,
   });
+  const macAPI = useMACAPI();
   const erreur = etatMessage.erreur;
 
   const envoieMessage = useCallback(async (e: FormEvent) => {

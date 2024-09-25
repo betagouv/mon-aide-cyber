@@ -2,12 +2,13 @@ import { useNavigationMAC, useUtilisateur } from './hooks.ts';
 import { useEffect, useState } from 'react';
 import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
 import { Outlet } from 'react-router-dom';
-import { macAPI } from './api/macAPI.ts';
 import { ReponseUtilisateur } from '../domaine/authentification/Authentification.ts';
 import { constructeurParametresAPI } from './api/ConstructeurParametresAPI.ts';
+import { useMACAPI } from './api/useMACAPI.ts';
 
 export const RequiertAuthentification = () => {
   const navigationMAC = useNavigationMAC();
+  const macAPI = useMACAPI();
   const { setUtilisateur } = useUtilisateur();
   const [doitVerifierReconnexion, setDoitVerifierReconnexion] = useState(true);
   const [pagePrecedente, setPagePrecedente] = useState(

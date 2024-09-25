@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useErrorBoundary } from 'react-error-boundary';
-import { macAPI } from '../../fournisseurs/api/macAPI.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 
 type ProprietesMenuUtilisateur = {
   utilisateur: Utilisateur;
@@ -13,6 +13,7 @@ export const ComposantMenuUtilisateur = ({
   utilisateur,
 }: ProprietesMenuUtilisateur) => {
   const navigationMAC = useNavigationMAC();
+  const macAPI = useMACAPI();
   const { showBoundary, resetBoundary } = useErrorBoundary();
 
   let nomUtilisateur = utilisateur.nomPrenom;
