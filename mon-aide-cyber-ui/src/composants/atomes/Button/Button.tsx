@@ -11,13 +11,13 @@ export type Theme = 'dark' | 'light';
 export type ButtonProps = PropsWithChildren<
   React.ButtonHTMLAttributes<HTMLButtonElement>
 > & {
-  variant: ButtonVariants;
+  variant?: ButtonVariants;
   theme?: Theme;
 };
 
 function Button({
   children,
-  variant,
+  variant = 'default',
   theme = 'light',
   ...restProps
 }: ButtonProps) {
