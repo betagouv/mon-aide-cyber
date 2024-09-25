@@ -1,0 +1,196 @@
+@import './../../../assets/styles/points-de-rupture';
+
+.ecran-beneficier-du-dispositif {
+    .hero-layout {
+        width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        gap: 1rem;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+
+        @include a-partir-de(md) {
+            flex-direction: row;
+            padding-top: 2.5rem;
+            padding-bottom: 2.5rem;
+        }
+        
+        section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            @include a-partir-de(md) {
+                gap: 2rem;
+            }
+
+            h1 {
+                margin: 0;
+            }
+            
+            button {
+                width: 100%;
+                
+                @include a-partir-de(md) {
+                    width: fit-content;
+                }
+            }
+        }
+
+        img {
+            width: 80%;
+            align-self: center;
+        } 
+    }
+
+    .qui-est-concerne-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+
+        @include a-partir-de(md) {
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            padding-top: 5rem;
+            padding-bottom: 5rem; 
+        }
+
+        img {
+            align-self: center;
+        }
+
+        div {
+            flex: 1;
+        }
+    }
+
+    .comment-fonctionne-le-dispositif-layout {
+        padding-top: 5rem;
+        padding-bottom: 5rem; 
+    }
+
+
+    .temoignages-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        padding-top: 5rem; 
+        padding-bottom: 5rem; 
+
+        .temoignages-liste {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+
+            @include a-partir-de (md) {
+                flex-direction: row;
+            }
+        }
+
+        .temoignage-contenu {
+            border-left: 4px solid var(--couleurs-mac-violet-leger);
+            padding: 0 1rem;
+
+            img {
+                width: 4rem;
+            }
+        }
+        .temoignage-auteur {
+            padding: 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .temoignages-boutons-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+   
+            button {
+                display: flex;
+                gap: .5rem;
+                align-items: center;
+
+                .temoignages-bouton-pagination-texte {
+                    display: none;
+                }
+            }
+
+            @include a-partir-de (md) {
+                flex-direction: row;
+                justify-content: center;
+
+                button {
+                    .temoignages-bouton-pagination-texte { display: block; }
+                }
+            }
+        }
+    }
+
+    .focus-restitution-layout {
+        width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        gap: 1rem;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+
+        @include a-partir-de(md) {
+            flex-direction: row;
+            padding-top: 5rem;
+            padding-bottom: 5rem; 
+        }
+        
+        section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            @include a-partir-de(md) {
+                gap: 2rem;
+            }
+
+            h1 {
+                margin: 0;
+            }
+            
+            button {
+                width: 100%;
+                
+                @include a-partir-de(md) {
+                    width: fit-content;
+                }
+            }
+        }
+
+        img {
+            flex: 1;
+            width: 80%;
+            align-self: center;
+        } 
+    }
+
+    .formulaire-etre-aide-layout {
+        padding-left: 0;
+        padding-right: 0;
+
+        @include a-partir-de(md) {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+    }
+
+}
