@@ -8,7 +8,7 @@ export const ROUTE_AIDANT = '/aidant';
 
 const actionsStatiques: ActionsStatiques = {
   'afficher-profil': {
-    applique: (lien) => (lien.route = `${ROUTE_AIDANT}/profil`),
+    applique: (lien) => (lien.route = `${ROUTE_AIDANT}/mes-informations`),
   },
   'afficher-tableau-de-bord': {
     applique: (lien) => (lien.route = `${ROUTE_AIDANT}/tableau-de-bord`),

@@ -36,11 +36,11 @@ export const ComposantLienCreerDiagnostic = ({
   return (
     <Button
       className="bouton-mac-icone-conteneur"
-      variant="link"
+      variant="primary"
       onClick={surClick}
     >
-      <span>Créer un nouveau diagnostic</span>
-      <span className="fr-icon-arrow-go-forward-line"></span>
+      <span className="fr-icon-add-line"></span>
+      <span>Créer un diagnostic</span>
     </Button>
   );
 };

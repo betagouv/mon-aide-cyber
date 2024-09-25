@@ -6,6 +6,8 @@ import { TypographieH6 } from '../communs/typographie/TypographieH6/TypographieH
 import { LienNavigation } from './LayoutPublic';
 import { useState } from 'react';
 import { useMoteurDeLiens } from '../../hooks/useMoteurDeLiens';
+import { useFeatureFlag } from '../../hooks/useFeatureFlag';
+import { ROUTE_AIDANT } from '../../domaine/MoteurDeLiens';
 export type MenuNavigationElement = LienNavigation & {
   actif: boolean;
   enfants?: MenuNavigationElement[];
@@ -113,37 +115,63 @@ export const BarreNavigationLaterale = () => {
     'afficher-tableau-de-bord'
   );
 
+  const { estFonctionaliteActive } = useFeatureFlag(
+    'ESPACE_AIDANT_ECRAN_MES_PREFERENCES'
+  );
+
   return (
     <aside className="barre-navigation-laterale mode-fonce">
-      <TypographieH6>Mon espace Aidant</TypographieH6>
-      <Separateur />
-      <div>
-        <MenuNavigation
-          elements={[
-            ...(peutAfficherTableauDeBord
-              ? [
-                  {
-                    nom: 'Mes diagnostics',
-                    route: '/aidant/tableau-de-bord',
-                    actif: true,
-                    enfants: [
-                      //{ nom: 'Mes demandes', route: '/mes-demandes', actif: false },
-                      //{ nom: 'Mes diagnostics', route: '/diagnostics', actif: true },
-                      //{ nom: 'Mes tests', route: '/mes-tests', actif: false },
-                    ],
-                  },
-                ]
-              : []),
-          ]}
-        />
-      </div>
-      <Separateur />
-      <div>
-        <MenuNavigation
-          elements={[
-            { nom: 'Mon compte', route: '/aidant/profil', actif: true },
-          ]}
-        />
+      <div className="barre-navigation-laterale-sticky">
+        <TypographieH6>Mon espace Aidant</TypographieH6>
+        <Separateur />
+        <div>
+          <MenuNavigation
+            elements={[
+              ...(peutAfficherTableauDeBord
+                ? [
+                    {
+                      nom: 'Mes diagnostics',
+                      route: '/aidant/tableau-de-bord',
+                      actif: true,
+                      enfants: [
+                        //{ nom: 'Mes demandes', route: '/mes-demandes', actif: false },
+                        //{ nom: 'Mes diagnostics', route: '/diagnostics', actif: true },
+                        //{ nom: 'Mes tests', route: '/mes-tests', actif: false },
+                      ],
+                    },
+                  ]
+                : []),
+            ]}
+          />
+        </div>
+        <Separateur />
+        <div>
+          <MenuNavigation
+            elements={[
+              {
+                nom: 'Mon compte',
+                route: `${ROUTE_AIDANT}/mes-informations`,
+                actif: true,
+                enfants: [
+                  ...(estFonctionaliteActive
+                    ? [
+                        {
+                          nom: 'Mes informations',
+                          route: `${ROUTE_AIDANT}/mes-informations`,
+                          actif: true,
+                        },
+                        {
+                          nom: 'Mes préférences',
+                          route: `${ROUTE_AIDANT}/mes-preferences`,
+                          actif: true,
+                        },
+                      ]
+                    : []),
+                ],
+              },
+            ]}
+          />
+        </div>
       </div>
     </aside>
   );

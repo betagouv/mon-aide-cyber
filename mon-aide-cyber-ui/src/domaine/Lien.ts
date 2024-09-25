@@ -12,6 +12,7 @@ export type ReponseHATEOAS = {
 };
 export type Action =
   | `afficher-diagnostic-${UUID}`
+  | 'afficher-preferences'
   | 'afficher-profil'
   | 'afficher-tableau-de-bord'
   | 'creer-espace-aidant'
@@ -23,6 +24,7 @@ export type Action =
   | 'lancer-diagnostic'
   | 'modifier-diagnostic'
   | 'modifier-mot-de-passe'
+  | 'modifier-preferences'
   | 'restitution-json'
   | 'restitution-pdf'
   | 'se-connecter'

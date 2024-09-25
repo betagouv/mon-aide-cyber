@@ -12,6 +12,7 @@ import { LayoutAidant } from './composants/layout/LayoutAidant.tsx';
 import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { EcranCreationEspaceAidant } from './domaine/espace-aidant/creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { EcranDiagnostics } from './domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
+import { EcranMesPreferences } from './domaine/espace-aidant/mon-compte/ecran-mes-preferences/EcranMesPreferences.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -63,7 +64,11 @@ export const RouteurPrive = () => {
             ></Route>
             <Route path="diagnostics" element={<EcranDiagnostics />}></Route>
 
-            <Route path="profil" element={<ProfilAidant />}></Route>
+            <Route path="mes-informations" element={<ProfilAidant />}></Route>
+            <Route
+              path="mes-preferences"
+              element={<EcranMesPreferences />}
+            ></Route>
           </Route>
         </Route>
       </Route>
