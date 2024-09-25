@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import './assets/styles/index.scss';
 import { Route, Routes } from 'react-router-dom';
 import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
-import { ComposantDiagnostic } from './composants/diagnostic/ComposantDiagnostic.tsx';
+import { EcranDiagnostic } from './composants/diagnostic/EcranDiagnostic.tsx';
 import { RequiertAuthentification } from './fournisseurs/RequiertAuthentification.tsx';
 import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { ComposantProfil } from './composants/profil/ComposantProfil.tsx';
@@ -46,9 +46,7 @@ export const RouteurPrive = () => {
           <Route element={<LayoutDiagnostic />}>
             <Route
               path="diagnostic/:idDiagnostic"
-              element={
-                <ComposantIntercepteur composant={ComposantDiagnostic} />
-              }
+              element={<ComposantIntercepteur composant={EcranDiagnostic} />}
             ></Route>
             <Route
               path="diagnostic/:idDiagnostic/restitution"

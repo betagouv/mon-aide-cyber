@@ -7,12 +7,11 @@ import {
 } from '../../test/constructeurs/constructeurQuestions.ts';
 import { uneReponsePossible } from '../../test/constructeurs/constructeurReponsePossible.ts';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
-import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';
 import { UUID } from '../types/Types.ts';
 import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { macAPI } from '../fournisseurs/api/macAPI.ts';
 import { decorateurComposantDiagnostic } from './DecorateurComposantDiagnostic.tsx';
+import { ComposantDiagnostic } from '../composants/diagnostic/EcranDiagnostic.tsx';
 
 const identifiantUneQuestion = '6dadad14-8fa0-4be7-a8da-473d538eb6c1';
 const diagnosticAvecUneQuestion = unDiagnostic()
@@ -128,12 +127,14 @@ entrepotMemoire.persiste(diagnosticAvecQuestionSousFormeDeListeDeroulante);
 entrepotMemoire.persiste(diagnosticAvecReponseEntrainantQuestion);
 entrepotMemoire.persiste(unDiagnosticAvecQuestionTiroirAChoixUnique);
 
-macAPI.execute = <T, U, V = void>(
-  parametresAPI: ParametresAPI<V>,
-  _transcris: (contenu: Promise<U>) => Promise<T>
-) => {
-  const idDiagnostic = parametresAPI.url.split('/').at(-1);
-  return Promise.resolve(entrepotMemoire.find(idDiagnostic as UUID) as T);
+const macAPIMemoire = {
+  execute: <T, U, V = void>(
+    parametresAPI: ParametresAPI<V>,
+    _transcris: (contenu: Promise<U>) => Promise<T>
+  ) => {
+    const idDiagnostic = parametresAPI.url.split('/').at(-1);
+    return Promise.resolve(entrepotMemoire.find(idDiagnostic as UUID) as T);
+  },
 };
 const meta = {
   title: 'Diagnostic',
@@ -148,7 +149,7 @@ type Story = StoryObj<typeof meta>;
 
 export const QuestionDiagnostic: Story = {
   name: 'Affiche une seule question du diagnostic',
-  args: { idDiagnostic: identifiantUneQuestion },
+  args: { idDiagnostic: identifiantUneQuestion, macAPI: macAPIMemoire },
   decorators: [
     (story) => decorateurComposantDiagnostic(story, identifiantUneQuestion),
   ],
@@ -173,7 +174,7 @@ export const QuestionDiagnostic: Story = {
 
 export const AfficheDiagnosticAvecPlusieursQuestions: Story = {
   name: 'Affiche plusieurs questions',
-  args: { idDiagnostic: identifiantPlusieursQuestions },
+  args: { idDiagnostic: identifiantPlusieursQuestions, macAPI: macAPIMemoire },
   decorators: [
     (story) =>
       decorateurComposantDiagnostic(story, identifiantPlusieursQuestions),
@@ -200,7 +201,10 @@ export const AfficheDiagnosticAvecPlusieursQuestions: Story = {
 
 export const AfficheDiagnosticQuestionListeDeroulante: Story = {
   name: 'Affiche les réponses possibles à une question sous forme de champ de saisie avec auto complétion',
-  args: { idDiagnostic: identifiantQuestionListeDeroulante },
+  args: {
+    idDiagnostic: identifiantQuestionListeDeroulante,
+    macAPI: macAPIMemoire,
+  },
   decorators: [
     (story) =>
       decorateurComposantDiagnostic(story, identifiantQuestionListeDeroulante),
@@ -226,7 +230,10 @@ export const AfficheDiagnosticQuestionListeDeroulante: Story = {
 
 export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
   name: "Affiche les réponses possibles à une question ainsi qu'une question reliée à une réponse",
-  args: { idDiagnostic: identifiantReponseEntrainantQuestion },
+  args: {
+    idDiagnostic: identifiantReponseEntrainantQuestion,
+    macAPI: macAPIMemoire,
+  },
   decorators: [
     (story) =>
       decorateurComposantDiagnostic(
@@ -253,7 +260,10 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
 
 export const AfficheDiagnosticAvecQuestionTiroirAChoixUnique: Story = {
   name: 'Affiche la question avec réponses à choix unique sous forme de boutton radio',
-  args: { idDiagnostic: identifiantDiagnosticAvecQuestionTiroirAChoixUnique },
+  args: {
+    idDiagnostic: identifiantDiagnosticAvecQuestionTiroirAChoixUnique,
+    macAPI: macAPIMemoire,
+  },
   decorators: [
     (story) =>
       decorateurComposantDiagnostic(

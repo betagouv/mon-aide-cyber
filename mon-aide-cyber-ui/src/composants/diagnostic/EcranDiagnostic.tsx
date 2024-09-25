@@ -45,7 +45,10 @@ import {
   RepresentationDiagnostic,
 } from '../../fournisseurs/api/APIDiagnostic.ts';
 
-import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import {
+  constructeurParametresAPI,
+  ParametresAPI,
+} from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
 import {
   ConteneurReponsePossible,
@@ -254,12 +257,23 @@ const ComposantQuestion = ({
   );
 };
 
+type ProprietesEcranDiagnostic = {
+  idDiagnostic: UUID;
+};
+
 type ProprietesComposantDiagnostic = {
   idDiagnostic: UUID;
+  macAPI: {
+    execute: <REPONSE, REPONSEAPI, CORPS = void>(
+      parametresAPI: ParametresAPI<CORPS>,
+      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
+    ) => Promise<REPONSE>;
+  };
 };
 
 export const ComposantDiagnostic = ({
   idDiagnostic,
+  macAPI,
 }: ProprietesComposantDiagnostic) => {
   const [etatReferentiel, envoie] = useReducer(reducteurDiagnostic, {
     diagnostic: undefined,
@@ -524,4 +538,10 @@ export const ComposantDiagnostic = ({
       <FooterDiagnostic />
     </>
   );
+};
+
+export const EcranDiagnostic = ({
+  idDiagnostic,
+}: ProprietesEcranDiagnostic) => {
+  return <ComposantDiagnostic idDiagnostic={idDiagnostic} macAPI={macAPI} />;
 };

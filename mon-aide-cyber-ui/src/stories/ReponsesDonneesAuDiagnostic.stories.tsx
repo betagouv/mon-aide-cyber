@@ -9,14 +9,13 @@ import {
 } from '../../test/constructeurs/constructeurQuestions.ts';
 import { uneReponsePossible } from '../../test/constructeurs/constructeurReponsePossible.ts';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
-import { ComposantDiagnostic } from '../composants/diagnostic/ComposantDiagnostic.tsx';
 import { uneAction } from '../../test/constructeurs/constructeurActionDiagnostic.ts';
 import { ReponseQuestionATiroir } from '../domaine/diagnostic/Diagnostic.ts';
 import { UUID } from '../types/Types.ts';
 import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { macAPI } from '../fournisseurs/api/macAPI.ts';
 import { decorateurComposantDiagnostic } from './DecorateurComposantDiagnostic.tsx';
+import { ComposantDiagnostic } from '../composants/diagnostic/EcranDiagnostic.tsx';
 
 const actionRepondre = uneAction().contexte();
 
@@ -362,23 +361,25 @@ await entrepotDiagnosticMemoire.persiste(
   diagnosticAveUneQuestionAChoixMultiple
 );
 
-macAPI.execute = async <T, U, V = void>(
-  parametresAPI: ParametresAPI<V>,
-  _transcris: (contenu: Promise<U>) => Promise<T>
-) => {
-  if (parametresAPI.methode === 'PATCH') {
-    await entrepotDiagnosticMemoire.envoieReponse(
-      parametresAPI as ParametresAPI<{
-        chemin: string;
-        identifiant: string;
-        reponse: string | string[] | ReponseQuestionATiroir | null;
-      }>
+const macAPIMemoire = {
+  execute: async <T, U, V = void>(
+    parametresAPI: ParametresAPI<V>,
+    _transcris: (contenu: Promise<U>) => Promise<T>
+  ) => {
+    if (parametresAPI.methode === 'PATCH') {
+      await entrepotDiagnosticMemoire.envoieReponse(
+        parametresAPI as ParametresAPI<{
+          chemin: string;
+          identifiant: string;
+          reponse: string | string[] | ReponseQuestionATiroir | null;
+        }>
+      );
+    }
+    const idDiagnostic = parametresAPI.url.split('/').at(-1);
+    return Promise.resolve(
+      entrepotDiagnosticMemoire.find(idDiagnostic as UUID) as T
     );
-  }
-  const idDiagnostic = parametresAPI.url.split('/').at(-1);
-  return Promise.resolve(
-    entrepotDiagnosticMemoire.find(idDiagnostic as UUID) as T
-  );
+  },
 };
 
 const meta = {
@@ -394,7 +395,10 @@ type Story = StoryObj<typeof meta>;
 
 export const SelectionneReponseDiagnostic: Story = {
   name: 'Coche la réponse donnée',
-  args: { idDiagnostic: identifiantQuestionAChoixUnique },
+  args: {
+    idDiagnostic: identifiantQuestionAChoixUnique,
+    macAPI: macAPIMemoire,
+  },
   decorators: [
     (story) =>
       decorateurComposantDiagnostic(story, identifiantQuestionAChoixUnique),
@@ -440,7 +444,10 @@ export const SelectionneReponseDiagnostic: Story = {
 
 export const SelectionneReponseDiagnosticDansUneListe: Story = {
   name: 'Sélectionne la réponse donnée dans la liste d’auto complétion',
-  args: { idDiagnostic: identifiantQuestionListeDeroulante },
+  args: {
+    idDiagnostic: identifiantQuestionListeDeroulante,
+    macAPI: macAPIMemoire,
+  },
   decorators: [
     (story) =>
       decorateurComposantDiagnostic(story, identifiantQuestionListeDeroulante),
@@ -484,7 +491,10 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
 
 export const AfficheLesThematiques: Story = {
   name: 'Affiche les thématiques et peut interagir avec',
-  args: { idDiagnostic: identifiantDiagnosticAvecPlusieursThematiques },
+  args: {
+    idDiagnostic: identifiantDiagnosticAvecPlusieursThematiques,
+    macAPI: macAPIMemoire,
+  },
   decorators: [
     (story) =>
       decorateurComposantDiagnostic(
@@ -550,7 +560,7 @@ export const AfficheLesThematiques: Story = {
 
 export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
   name: 'Sélectionne les réponses pour les questions à tiroir',
-  args: { idDiagnostic: identifiantQuestionATiroir },
+  args: { idDiagnostic: identifiantQuestionATiroir, macAPI: macAPIMemoire },
   decorators: [
     (story) => decorateurComposantDiagnostic(story, identifiantQuestionATiroir),
   ],
@@ -663,7 +673,10 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
 
 export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
   name: 'Sélectionne les réponses pour les questions à plusieurs tiroirs',
-  args: { idDiagnostic: identifiantQuestionAPlusieursTiroirs },
+  args: {
+    idDiagnostic: identifiantQuestionAPlusieursTiroirs,
+    macAPI: macAPIMemoire,
+  },
   decorators: [
     (story) =>
       decorateurComposantDiagnostic(
@@ -772,6 +785,7 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
     name: 'Sélectionne les réponses pour les questions à tiroirs à choix multiple et à choix unique',
     args: {
       idDiagnostic: identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple,
+      macAPI: macAPIMemoire,
     },
     decorators: [
       (story) =>
@@ -970,6 +984,7 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
     name: 'Sélectionne les réponses pour les questions à plusieurs tiroirs à choix unique',
     args: {
       idDiagnostic: identifiantQuestionATiroirAvecPlusieursChoixUnique,
+      macAPI: macAPIMemoire,
     },
     decorators: [
       (story) =>
@@ -1133,7 +1148,10 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
 export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story =
   {
     name: 'Sélectionne la réponse pour la question à tiroir avec une réponse unique',
-    args: { idDiagnostic: identifiantQuestionATiroirAvecReponseUnique },
+    args: {
+      idDiagnostic: identifiantQuestionATiroirAvecReponseUnique,
+      macAPI: macAPIMemoire,
+    },
     decorators: [
       (story) =>
         decorateurComposantDiagnostic(
@@ -1223,7 +1241,10 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
 
 export const SelectionneLaReponsePourUneQuestionAChoixMultiple: Story = {
   name: 'Sélectionne la réponse pour une question à choix multiple',
-  args: { idDiagnostic: identifiantQuestionAChoixMultiple },
+  args: {
+    idDiagnostic: identifiantQuestionAChoixMultiple,
+    macAPI: macAPIMemoire,
+  },
   decorators: [
     (story) =>
       decorateurComposantDiagnostic(story, identifiantQuestionAChoixMultiple),
