@@ -9,12 +9,12 @@ import { ComposantConnexion } from './composants/connexion/ComposantConnexion.ts
 import { ComposantDemandeDevenirAidant } from './composants/gestion-demandes/devenir-aidant/ComposantDemandeDevenirAidant.tsx';
 import { KitDeCommunication } from './composants/a-propos/KitDeCommunication.tsx';
 import { LayoutPublic } from './composants/layout/LayoutPublic.tsx';
-import { ComposantDemandeEtreAide } from './composants/gestion-demandes/etre-aide/ComposantDemandeEtreAide.tsx';
 import { EcranCreationEspaceAidant as ComposantDemandeAidantCreationEspaceAidant } from './domaine/espace-aidant/demande-aidant-creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { LayoutCreationEspaceAidant } from './composants/layout/LayoutCreationEspaceAidant.tsx';
 import { EcranDevenirAidant } from './domaine/vitrine/ecran-devenir-aidant/EcranDevenirAidant.tsx';
 import { EcranAccessibilite } from './vues/EcranAccessibilite.tsx';
 import { EcranStatistiques } from './domaine/vitrine/ecran-statistiques/EcranStatistiques.tsx';
+import { EcranBeneficierDuDispositif } from './domaine/vitrine/ecran-beneficier-du-dispositif/EcranBeneficierDuDispositif.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -26,7 +26,7 @@ export const RouteurPublic = () => {
         <Route path="charte-aidant" element={<CharteAidant />} />
         <Route
           path="demandes/etre-aide"
-          element={<ComposantDemandeEtreAide />}
+          element={<EcranBeneficierDuDispositif />}
         />
         <Route path="a-propos">
           <Route path="statistiques" element={<EcranStatistiques />} />
