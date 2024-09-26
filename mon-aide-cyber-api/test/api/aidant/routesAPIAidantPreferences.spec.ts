@@ -17,6 +17,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     donneesServeur = testeurMAC.initialise();
     adaptateurDeVerificationDeSession =
       testeurMAC.adaptateurDeVerificationDeSession as AdaptateurDeVerificationDeSessionDeTest;
+    testeurMAC.adaptateurDeVerificationDeCGU.reinitialise();
   });
 
   afterEach(() => {
@@ -54,6 +55,19 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
           },
         },
       });
+    });
+
+    it('Vérifie que les CGU sont signées', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/aidant/preferences`,
+        donneesServeur.portEcoute
+      );
+
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
+        true
+      );
     });
   });
 });
