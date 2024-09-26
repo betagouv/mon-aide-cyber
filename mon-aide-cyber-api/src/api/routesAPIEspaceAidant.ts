@@ -54,10 +54,7 @@ export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
             identifiant: requete.identifiantUtilisateurCourant!,
           });
           reponse.status(200).json({
-            ...constructeurActionsHATEOAS()
-              .lancerDiagnostic()
-              .afficherProfil()
-              .construis(),
+            ...constructeurActionsHATEOAS().creeEspaceAidant().construis(),
           });
           return reponse.send();
         }

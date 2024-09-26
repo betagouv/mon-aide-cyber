@@ -62,7 +62,7 @@ export const routesAPIDemandesDevenirAidant = (
   routes.get('/', async (_requete: Request, reponse: Response) => {
     return reponse.status(200).json({
       departements: nomsEtCodesDesDepartements(),
-      ...constructeurActionsHATEOAS().actionsDemandeDevenirAidant().construis(),
+      ...constructeurActionsHATEOAS().demandeDevenirAidant().construis(),
     });
   });
 

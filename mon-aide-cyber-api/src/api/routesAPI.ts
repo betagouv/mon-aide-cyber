@@ -8,6 +8,7 @@ import { routesAPIEspaceAidant } from './routesAPIEspaceAidant';
 import { routesAPIProfil } from './routesAPIProfil';
 import { routesAPIDemandes } from './demandes/routesAPIDemandes';
 import { routeAPIContexte } from './routeAPIContexte';
+import { routesAPIAidant } from './aidant/routesAPIAidant';
 
 export interface RequeteUtilisateur extends Request {
   identifiantUtilisateurCourant?: crypto.UUID;
@@ -20,6 +21,7 @@ const routesAPI = (configuration: ConfigurationServeur) => {
   routes.use('/diagnostic', routesAPIDiagnostic(configuration));
   routes.use('/token', routesAPIAuthentification(configuration));
   routes.use('/utilisateur', routesAPIUtilisateur(configuration));
+  routes.use('/aidant', routesAPIAidant(configuration));
   routes.use('/espace-aidant', routesAPIEspaceAidant(configuration));
   routes.use('/profil', routesAPIProfil(configuration));
   routes.use('/demandes', routesAPIDemandes(configuration));

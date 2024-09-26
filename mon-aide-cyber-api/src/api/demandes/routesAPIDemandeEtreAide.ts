@@ -33,7 +33,7 @@ export const routesAPIDemandeEtreAide = (
 
   routes.get('/', async (_requete: Request, reponse: Response) => {
     return reponse.status(200).json({
-      ...constructeurActionsHATEOAS().demanderAide().construis(),
+      ...constructeurActionsHATEOAS().demandeAide().construis(),
       departements: nomsEtCodesDesDepartements(),
     });
   });
@@ -94,7 +94,7 @@ export const routesAPIDemandeEtreAide = (
       reponse.status(422);
       return reponse.json({
         message: erreursValidation,
-        ...constructeurActionsHATEOAS().demanderAide().construis(),
+        ...constructeurActionsHATEOAS().demandeAide().construis(),
       });
     }
   );

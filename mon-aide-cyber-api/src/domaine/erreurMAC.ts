@@ -3,6 +3,7 @@ export type Contexte =
   | 'Accède au Tableau de Bord'
   | 'Accède aux diagnostics'
   | "Accède aux informations de l'utilisateur"
+  | 'Accède aux préférences de l’Aidant'
   | 'Accès diagnostic'
   | 'Ajout réponse au diagnostic'
   | "Crée l'espace Aidant"
