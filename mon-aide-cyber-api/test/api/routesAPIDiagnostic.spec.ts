@@ -375,6 +375,10 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
             url: '/api/profil',
             methode: 'GET',
           },
+          'afficher-preferences': {
+            url: '/api/aidant/preferences',
+            methode: 'GET',
+          },
         },
         autresMesures: '',
         contactsEtLiensUtiles: '',

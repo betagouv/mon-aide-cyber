@@ -56,6 +56,10 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               url: '/api/profil',
               methode: 'GET',
             },
+            'afficher-preferences': {
+              url: '/api/aidant/preferences',
+              methode: 'GET',
+            },
           },
         });
         const cookieRecu = (
@@ -120,6 +124,10 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             },
             'afficher-profil': {
               url: '/api/profil',
+              methode: 'GET',
+            },
+            'afficher-preferences': {
+              url: '/api/aidant/preferences',
               methode: 'GET',
             },
           },

@@ -109,7 +109,7 @@ class ConstructeurActionsHATEOAS {
       return this.creerEspaceAidant();
     }
 
-    return this.lancerDiagnostic().afficherProfil();
+    return this.lancerDiagnostic().afficherMesInformations();
   }
 
   public creerEspaceAidant(): ConstructeurActionsHATEOAS {
@@ -124,12 +124,12 @@ class ConstructeurActionsHATEOAS {
     this.lancerDiagnostic()
       .restituerDiagnostic(identifiant)
       .modifierDiagnostic(identifiant)
-      .afficherProfil();
+      .afficherMesInformations();
     return this;
   }
 
   public creeEspaceAidant(): ConstructeurActionsHATEOAS {
-    this.lancerDiagnostic().afficherProfil();
+    this.lancerDiagnostic().afficherMesInformations();
     return this;
   }
 
@@ -155,7 +155,7 @@ class ConstructeurActionsHATEOAS {
     idDiagnostics.forEach((idDiagnostic) =>
       this.afficherDiagnostic(idDiagnostic as crypto.UUID)
     );
-    return this.afficherProfil().seDeconnecter();
+    return this.afficherMesInformations().seDeconnecter();
   }
 
   public accesDiagnostic(
@@ -167,7 +167,9 @@ class ConstructeurActionsHATEOAS {
   }
 
   public actionsAccesDiagnosticNonAutorise(): ConstructeurActionsHATEOAS {
-    return this.afficherTableauDeBord().afficherProfil().seDeconnecter();
+    return this.afficherTableauDeBord()
+      .afficherMesInformations()
+      .seDeconnecter();
   }
 
   public ajoutReponseAuDiagnostic(
@@ -231,7 +233,7 @@ class ConstructeurActionsHATEOAS {
   }
 
   public accedeAuxInformationsUtilisateur(): ConstructeurActionsHATEOAS {
-    this.lancerDiagnostic().afficherProfil();
+    this.lancerDiagnostic().afficherMesInformations();
     return this;
   }
 
@@ -259,9 +261,13 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  private afficherProfil(): ConstructeurActionsHATEOAS {
+  private afficherMesInformations(): ConstructeurActionsHATEOAS {
     this.actions.set('afficher-profil', {
       url: '/api/profil',
+      methode: 'GET',
+    });
+    this.actions.set('afficher-preferences', {
+      url: '/api/aidant/preferences',
       methode: 'GET',
     });
 
