@@ -21,11 +21,15 @@ export const routesAPIAidantPreferences = (
   configuration: ConfigurationServeur
 ) => {
   const routes = express.Router();
-  const { adaptateurDeVerificationDeSession: session } = configuration;
+  const {
+    adaptateurDeVerificationDeSession: session,
+    adaptateurDeVerificationDeCGU: cgu,
+  } = configuration;
 
   routes.get(
     '/',
     session.verifie('Accède aux préférences de l’Aidant'),
+    cgu.verifie(),
     async (
       _requete: RequeteUtilisateur,
       reponse: Response<ReponsePreferencesAidantAPI>,
