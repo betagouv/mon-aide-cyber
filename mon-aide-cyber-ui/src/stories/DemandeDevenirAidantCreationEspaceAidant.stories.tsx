@@ -21,7 +21,9 @@ const macAPIMemoire = {
     if (parametresAPI.corps) {
       valeursSaisies = parametresAPI.corps;
     }
-    return Promise.resolve({ liens: { url: '' } }) as Promise<T>;
+    return Promise.resolve({
+      liens: { 'finalise-creation-espace-aidant': { url: '' } },
+    }) as Promise<T>;
   },
 };
 
@@ -34,7 +36,7 @@ export const CreationEspaceAidant: Story = {
     (story) => (
       <ContexteNavigationMAC.Provider
         value={{
-          etat: {},
+          etat: { 'finalise-creation-espace-aidant': { url: '' } },
           setEtat: () => {
             return;
           },
