@@ -8,7 +8,7 @@ export type ReponseHATEOAS = {
   liens: LiensHATEOAS;
 };
 
-type Options = { url: string; methode?: Methode; contentType?: string };
+export type Options = { url: string; methode?: Methode; contentType?: string };
 
 type ContexteSpecifique = {
   [clef: string]: Options;
@@ -94,15 +94,6 @@ class ConstructeurActionsDepuisContexte {
 class ConstructeurActionsHATEOAS {
   private readonly actions: Map<string, Options> = new Map();
 
-  lancerDiagnostic(): ConstructeurActionsHATEOAS {
-    this.actions.set('lancer-diagnostic', {
-      url: '/api/diagnostic',
-      methode: 'POST',
-    });
-    this.afficherTableauDeBord();
-    return this;
-  }
-
   public afficherTableauDeBord(): ConstructeurActionsHATEOAS {
     this.actions.set('afficher-tableau-de-bord', {
       url: '/api/espace-aidant/tableau-de-bord',
@@ -111,7 +102,7 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  postAuthentification(
+  public postAuthentification(
     aidantAuthentifie: AidantAuthentifie
   ): ConstructeurActionsHATEOAS {
     if (!aidantAuthentifie.dateSignatureCGU) {
@@ -121,16 +112,7 @@ class ConstructeurActionsHATEOAS {
     return this.lancerDiagnostic().afficherProfil();
   }
 
-  afficherProfil(): ConstructeurActionsHATEOAS {
-    this.actions.set('afficher-profil', {
-      url: '/api/profil',
-      methode: 'GET',
-    });
-
-    return this;
-  }
-
-  creerEspaceAidant(): ConstructeurActionsHATEOAS {
+  public creerEspaceAidant(): ConstructeurActionsHATEOAS {
     this.actions.set('creer-espace-aidant', {
       url: '/api/espace-aidant/cree',
       methode: 'POST',
@@ -138,54 +120,24 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  restituerDiagnostic(idDiagnostic: string): ConstructeurActionsHATEOAS {
-    this.actions.set('restitution-pdf', {
-      url: `/api/diagnostic/${idDiagnostic}/restitution`,
-      methode: 'GET',
-      contentType: 'application/pdf',
-    });
-    this.actions.set('restitution-json', {
-      url: `/api/diagnostic/${idDiagnostic}/restitution`,
-      methode: 'GET',
-      contentType: 'application/json',
-    });
+  public demandeLaRestitution(identifiant: string): ConstructeurActionsHATEOAS {
+    this.lancerDiagnostic()
+      .restituerDiagnostic(identifiant)
+      .modifierDiagnostic(identifiant)
+      .afficherProfil();
     return this;
   }
 
-  modifierDiagnostic(idDiagnostic: string): ConstructeurActionsHATEOAS {
-    this.actions.set('modifier-diagnostic', {
-      url: `/api/diagnostic/${idDiagnostic}`,
-      methode: 'GET',
-    });
+  public creeEspaceAidant(): ConstructeurActionsHATEOAS {
+    this.lancerDiagnostic().afficherProfil();
     return this;
   }
 
-  private seConnecter(): ConstructeurActionsHATEOAS {
-    this.actions.set('se-connecter', { url: '/api/token', methode: 'POST' });
-    return this;
-  }
-
-  modifierMotDePasse(): ConstructeurActionsHATEOAS {
-    this.actions.set('modifier-mot-de-passe', {
-      url: '/api/profil/modifier-mot-de-passe',
-      methode: 'POST',
-    });
-    return this;
-  }
-
-  private seDeconnecter(): ConstructeurActionsHATEOAS {
-    this.actions.set('se-deconnecter', {
-      url: '/api/token',
-      methode: 'DELETE',
-    });
-    return this;
-  }
-
-  affichageProfil(): ConstructeurActionsHATEOAS {
+  public accedeAuProfil(): ConstructeurActionsHATEOAS {
     return this.lancerDiagnostic().modifierMotDePasse().seDeconnecter();
   }
 
-  demanderAide() {
+  public demandeAide() {
     this.actions.set('demander-aide', {
       url: '/api/demandes/etre-aide',
       methode: 'POST',
@@ -193,7 +145,9 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  actionsTableauDeBord(idDiagnostics: string[]): ConstructeurActionsHATEOAS {
+  public accedeAuTableauDeBord(
+    idDiagnostics: string[]
+  ): ConstructeurActionsHATEOAS {
     this.actions.set('lancer-diagnostic', {
       url: '/api/diagnostic',
       methode: 'POST',
@@ -204,7 +158,7 @@ class ConstructeurActionsHATEOAS {
     return this.afficherProfil().seDeconnecter();
   }
 
-  actionsDiagnosticLance(
+  public accesDiagnostic(
     idDiagnostic: crypto.UUID
   ): ConstructeurActionsHATEOAS {
     this.afficherDiagnostic(idDiagnostic);
@@ -212,26 +166,18 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  private afficherDiagnostic(idDiagnostic: crypto.UUID) {
-    this.actions.set(`afficher-diagnostic-${idDiagnostic}`, {
-      url: `/api/diagnostic/${idDiagnostic}/restitution`,
-      methode: 'GET',
-    });
+  public actionsAccesDiagnosticNonAutorise(): ConstructeurActionsHATEOAS {
+    return this.afficherTableauDeBord().afficherProfil().seDeconnecter();
   }
 
-  actionsAccesDiagnosticNonAutorise(): ConstructeurActionsHATEOAS {
-    this.afficherTableauDeBord();
-    return this.afficherProfil().seDeconnecter();
-  }
-
-  reponseDonneeAuDiagnostic(
+  public ajoutReponseAuDiagnostic(
     identifiantDiagnostic: crypto.UUID
   ): ConstructeurActionsHATEOAS {
     this.afficherDiagnostic(identifiantDiagnostic);
     return this;
   }
 
-  actionsPubliques(): ConstructeurActionsHATEOAS {
+  public actionsPubliques(): ConstructeurActionsHATEOAS {
     this.actions.set('demande-devenir-aidant', {
       url: '/api/demandes/devenir-aidant',
       methode: 'GET',
@@ -245,7 +191,7 @@ class ConstructeurActionsHATEOAS {
     return this.seConnecter();
   }
 
-  actionsDemandeDevenirAidant(): ConstructeurActionsHATEOAS {
+  public demandeDevenirAidant(): ConstructeurActionsHATEOAS {
     this.actions.set('envoyer-demande-devenir-aidant', {
       url: '/api/demandes/devenir-aidant',
       methode: 'POST',
@@ -253,12 +199,12 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  actionsCreationCompte(): ConstructeurActionsHATEOAS {
+  public actionsCreationCompte(): ConstructeurActionsHATEOAS {
     this.seConnecter();
     return this;
   }
 
-  pour(
+  public pour(
     informationsContexte: InformationsContexte | undefined
   ): ConstructeurActionsHATEOAS {
     if (estInformationContexte(informationsContexte)) {
@@ -276,6 +222,19 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
+  public modifierPreferences(): ConstructeurActionsHATEOAS {
+    this.actions.set('modifier-preferences', {
+      url: '/api/aidant/preferences',
+      methode: 'PATCH',
+    });
+    return this;
+  }
+
+  public accedeAuxInformationsUtilisateur(): ConstructeurActionsHATEOAS {
+    this.lancerDiagnostic().afficherProfil();
+    return this;
+  }
+
   construis = (): ReponseHATEOAS => {
     return {
       liens: {
@@ -290,6 +249,77 @@ class ConstructeurActionsHATEOAS {
       },
     };
   };
+
+  private lancerDiagnostic(): ConstructeurActionsHATEOAS {
+    this.actions.set('lancer-diagnostic', {
+      url: '/api/diagnostic',
+      methode: 'POST',
+    });
+    this.afficherTableauDeBord();
+    return this;
+  }
+
+  private afficherProfil(): ConstructeurActionsHATEOAS {
+    this.actions.set('afficher-profil', {
+      url: '/api/profil',
+      methode: 'GET',
+    });
+
+    return this;
+  }
+
+  private restituerDiagnostic(
+    idDiagnostic: string
+  ): ConstructeurActionsHATEOAS {
+    this.actions.set('restitution-pdf', {
+      url: `/api/diagnostic/${idDiagnostic}/restitution`,
+      methode: 'GET',
+      contentType: 'application/pdf',
+    });
+    this.actions.set('restitution-json', {
+      url: `/api/diagnostic/${idDiagnostic}/restitution`,
+      methode: 'GET',
+      contentType: 'application/json',
+    });
+    return this;
+  }
+
+  private modifierDiagnostic(idDiagnostic: string): ConstructeurActionsHATEOAS {
+    this.actions.set('modifier-diagnostic', {
+      url: `/api/diagnostic/${idDiagnostic}`,
+      methode: 'GET',
+    });
+    return this;
+  }
+
+  private seConnecter(): ConstructeurActionsHATEOAS {
+    this.actions.set('se-connecter', { url: '/api/token', methode: 'POST' });
+    return this;
+  }
+
+  private modifierMotDePasse(): ConstructeurActionsHATEOAS {
+    this.actions.set('modifier-mot-de-passe', {
+      url: '/api/profil/modifier-mot-de-passe',
+      methode: 'POST',
+    });
+    return this;
+  }
+
+  private seDeconnecter(): ConstructeurActionsHATEOAS {
+    this.actions.set('se-deconnecter', {
+      url: '/api/token',
+      methode: 'DELETE',
+    });
+    return this;
+  }
+
+  private afficherDiagnostic(idDiagnostic: crypto.UUID) {
+    this.actions.set(`afficher-diagnostic-${idDiagnostic}`, {
+      url: `/api/diagnostic/${idDiagnostic}/restitution`,
+      methode: 'GET',
+    });
+    return this;
+  }
 }
 
 export const constructeurActionsHATEOAS = (): ConstructeurActionsHATEOAS =>

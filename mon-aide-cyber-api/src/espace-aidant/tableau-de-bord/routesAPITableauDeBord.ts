@@ -37,7 +37,7 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
       return reponse.status(200).json({
         diagnostics,
         ...constructeurActionsHATEOAS()
-          .actionsTableauDeBord(diagnostics.map((d) => d.identifiant))
+          .accedeAuTableauDeBord(diagnostics.map((d) => d.identifiant))
           .construis(),
       });
     }

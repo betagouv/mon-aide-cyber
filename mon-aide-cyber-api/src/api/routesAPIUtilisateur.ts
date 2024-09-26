@@ -27,8 +27,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
             ...(aidant.dateSignatureCGU
               ? {
                   ...actionsHATEOAS
-                    .lancerDiagnostic()
-                    .afficherProfil()
+                    .accedeAuxInformationsUtilisateur()
                     .construis(),
                 }
               : { ...actionsHATEOAS.creerEspaceAidant().construis() }),

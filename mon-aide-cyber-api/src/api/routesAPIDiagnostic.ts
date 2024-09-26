@@ -73,7 +73,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
               configuration.adaptateurTranscripteurDonnees.transcripteur()
             ),
             ...constructeurActionsHATEOAS()
-              .actionsDiagnosticLance(diagnostic.identifiant)
+              .accesDiagnostic(diagnostic.identifiant)
               .construis(),
           })
         )
@@ -108,7 +108,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
               configuration.adaptateurTranscripteurDonnees.transcripteur()
             ),
             ...constructeurActionsHATEOAS()
-              .reponseDonneeAuDiagnostic(diagnostic.identifiant)
+              .ajoutReponseAuDiagnostic(diagnostic.identifiant)
               .construis(),
           });
         })
@@ -146,10 +146,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
           reponse.contentType('application/pdf').send(restitution);
         } else {
           const reponseHATEOAS = constructeurActionsHATEOAS()
-            .lancerDiagnostic()
-            .restituerDiagnostic(id)
-            .modifierDiagnostic(id)
-            .afficherProfil()
+            .demandeLaRestitution(id)
             .construis();
           const resultat: ReprensentationRestitution = {
             ...reponseHATEOAS,
