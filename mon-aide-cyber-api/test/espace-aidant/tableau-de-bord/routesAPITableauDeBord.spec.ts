@@ -42,6 +42,10 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
             methode: 'POST',
           },
           'afficher-profil': { url: '/api/profil', methode: 'GET' },
+          'afficher-preferences': {
+            url: '/api/aidant/preferences',
+            methode: 'GET',
+          },
           'se-deconnecter': { url: '/api/token', methode: 'DELETE' },
         },
       });
@@ -106,6 +110,10 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
             methode: 'GET',
           },
           'afficher-profil': { url: '/api/profil', methode: 'GET' },
+          'afficher-preferences': {
+            url: '/api/aidant/preferences',
+            methode: 'GET',
+          },
           'se-deconnecter': { url: '/api/token', methode: 'DELETE' },
         },
       });

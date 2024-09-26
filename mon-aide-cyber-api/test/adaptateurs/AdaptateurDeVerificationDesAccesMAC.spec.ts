@@ -86,6 +86,10 @@ describe('Adaptateur de vérification de relations MAC', () => {
           methode: 'GET',
           url: '/api/profil',
         },
+        'afficher-preferences': {
+          methode: 'GET',
+          url: '/api/aidant/preferences',
+        },
         'afficher-tableau-de-bord': {
           url: '/api/espace-aidant/tableau-de-bord',
           methode: 'GET',
