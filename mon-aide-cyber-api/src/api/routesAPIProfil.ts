@@ -69,7 +69,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
       'confirmationMotDePasse'
     ),
     async (
-      requete: RequeteUtilisateur,
+      requete: RequeteUtilisateur<CorpsRequeteChangementMotDerPasse>,
       reponse: Response,
       suite: NextFunction
     ) => {
@@ -80,8 +80,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
         const aidant = await entrepots
           .aidants()
           .lis(requete.identifiantUtilisateurCourant!);
-        const changementnMotDePasse: CorpsRequeteChangementMotDerPasse =
-          requete.body;
+        const changementnMotDePasse = requete.body;
         aidant.motDePasse = changementnMotDePasse.motDePasse;
         return entrepots
           .aidants()

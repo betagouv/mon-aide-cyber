@@ -39,7 +39,7 @@ export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
       'motDePasseTemporaire'
     ),
     async (
-      requete: RequeteUtilisateur,
+      requete: RequeteUtilisateur<CorpsRequeteCreationEspaceAidant>,
       reponse: Response,
       suite: NextFunction
     ) => {
@@ -47,8 +47,7 @@ export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
         const resultatValidation: Result<FieldValidationError> =
           validationResult(requete) as Result<FieldValidationError>;
         if (resultatValidation.isEmpty()) {
-          const creationEspaceAidant: CorpsRequeteCreationEspaceAidant =
-            requete.body;
+          const creationEspaceAidant = requete.body;
           await new ServiceCreationEspaceAidant(entrepots).cree({
             ...creationEspaceAidant,
             identifiant: requete.identifiantUtilisateurCourant!,

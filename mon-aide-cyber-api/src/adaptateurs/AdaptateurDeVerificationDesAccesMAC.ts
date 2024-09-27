@@ -23,13 +23,13 @@ export class AdaptateurDeVerificationDesAccesMAC
 {
   constructor(private readonly adaptateurRelation: AdaptateurRelations) {}
 
-  verifie(
+  verifie<T>(
     relation: Relation,
     utilisateur: typeof ConstructeurUtilisateur,
     objet: typeof ConstructeurObjet
   ): RequestHandler {
     return async (
-      requete: RequeteUtilisateur,
+      requete: RequeteUtilisateur<T>,
       reponse: Response,
       suite: NextFunction
     ) => {
