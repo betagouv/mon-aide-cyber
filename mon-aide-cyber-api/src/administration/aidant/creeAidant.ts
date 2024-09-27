@@ -26,6 +26,10 @@ export const creeAidant = async (
         identifiantConnexion: donneesAidant.identifiantConnexion,
         motDePasse: donneesAidant.motDePasse,
         nomPrenom: donneesAidant.nomPrenom,
+        preferences: {
+          secteursActivite: [],
+          departements: [],
+        },
       };
       await entrepot.persiste(aidant);
       await busEvenement.publie<AidantCree>({
