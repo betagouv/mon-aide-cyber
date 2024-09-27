@@ -6,6 +6,10 @@ import { executeRequete } from '../executeurRequete';
 import { departements } from '../../../src/gestion-demandes/departements';
 import { secteursActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
 import { ReponsePreferencesAidantAPI } from '../../../src/api/aidant/routesAPIAidantPreferences';
+import {
+  typesEntites,
+  TypesEntites,
+} from '../../../src/authentification/Aidant';
 
 describe('Le serveur MAC sur les routes /api/aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -42,10 +46,12 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         preferencesAidant: {
           secteursActivite: [],
           departements: [],
+          typesEntites: [],
         },
         referentiel: {
           secteursActivite: secteursActivite.map((s) => s.nom),
           departements: departements.map((d) => ({ code: d.code, nom: d.nom })),
+          typesEntites,
         },
         liens: {
           'modifier-preferences': {
@@ -108,6 +114,47 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         {
           nom: allier.nom,
           code: allier.code,
+        },
+      ]);
+    });
+
+    it('Retourne les types d’entités dans lesquels l’Aidant peut intervenir', async () => {
+      const aidant = unAidant()
+        .ayantPourTypesEntite([
+          {
+            nom: 'Organisations publiques',
+            libelle:
+              'Organisations publiques (ex. collectivité, administration, etc.)',
+          },
+          {
+            nom: 'Associations',
+            libelle: 'Associations (ex. association loi 1901, GIP)',
+          },
+        ])
+        .construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/aidant/preferences`,
+        donneesServeur.portEcoute
+      );
+
+      const reponsePreferences =
+        (await reponse.json()) as ReponsePreferencesAidantAPI;
+      expect(
+        reponsePreferences.preferencesAidant.typesEntites
+      ).toStrictEqual<TypesEntites>([
+        {
+          nom: 'Organisations publiques',
+          libelle:
+            'Organisations publiques (ex. collectivité, administration, etc.)',
+        },
+        {
+          nom: 'Associations',
+          libelle: 'Associations (ex. association loi 1901, GIP)',
         },
       ]);
     });

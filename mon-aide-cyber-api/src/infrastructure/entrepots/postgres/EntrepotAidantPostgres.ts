@@ -51,6 +51,7 @@ export class EntrepotAidantPostgres
       preferences: {
         secteursActivite: [],
         departements: [],
+        typesEntites: [],
       },
     };
   }
