@@ -15,6 +15,7 @@ export type Contexte =
   | 'Envoi un message de contact'
   | 'Lance le diagnostic'
   | 'Modifie le mot de passe'
+  | 'Modifie les préférences de l’Aidant'
   | "Recherche d'un Aidé";
 
 export class ErreurMAC<T extends Error> extends Error {

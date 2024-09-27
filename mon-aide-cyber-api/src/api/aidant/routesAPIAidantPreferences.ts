@@ -7,12 +7,14 @@ import { departements } from '../../gestion-demandes/departements';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from '../hateoas/hateoas';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { typesEntites, TypesEntites } from '../../authentification/Aidant';
+import bodyParser from 'body-parser';
+import { ServicePreferencesAidant } from '../../espace-aidant/preferences/ServicePreferencesAidant';
 
 export type ReponsePreferencesAidantAPI = ReponseHATEOAS & {
   preferencesAidant: {
     secteursActivite: string[];
-    departements: { code: string; nom: string }[];
-    typesEntites: TypesEntites;
+    departements: string[];
+    typesEntites: string[];
   };
   referentiel: {
     secteursActivite: string[];
@@ -49,11 +51,8 @@ export const routesAPIAidantPreferences = (
               secteursActivite: aidant.preferences.secteursActivite.map(
                 (s) => s.nom
               ),
-              departements: aidant.preferences.departements.map((d) => ({
-                nom: d.nom,
-                code: d.code,
-              })),
-              typesEntites: aidant.preferences.typesEntites,
+              departements: aidant.preferences.departements.map((d) => d.nom),
+              typesEntites: aidant.preferences.typesEntites.map((t) => t.nom),
             },
             referentiel: {
               secteursActivite: secteursActivite.map((s) => s.nom),
@@ -72,5 +71,30 @@ export const routesAPIAidantPreferences = (
     }
   );
 
+  routes.patch(
+    '/',
+    session.verifie('Modifie les préférences de l’Aidant'),
+    bodyParser.json(),
+    async (
+      requete: RequeteUtilisateur<PatchRequestPreferencesAidant>,
+      reponse: Response<ReponsePreferencesAidantAPI>,
+      _suite: NextFunction
+    ) => {
+      await new ServicePreferencesAidant(entrepots.aidants()).metsAJour({
+        identifiantAidant: requete.identifiantUtilisateurCourant!,
+        preferences: { ...requete.body.preferencesAidant },
+      });
+      reponse.status(204).send();
+    }
+  );
+
   return routes;
+};
+
+type PatchRequestPreferencesAidant = {
+  preferencesAidant: {
+    secteursActivite?: string[];
+    departements?: string[];
+    typesEntites: string[];
+  };
 };
