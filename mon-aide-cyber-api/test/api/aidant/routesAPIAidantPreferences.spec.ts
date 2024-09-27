@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect } from 'vitest';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
-import { AdaptateurDeVerificationDeSessionDeTest } from '../../adaptateurs/AdaptateurDeVerificationDeSessionDeTest';
 import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
 import { executeRequete } from '../executeurRequete';
 import { departements } from '../../../src/gestion-demandes/departements';
@@ -11,12 +10,10 @@ import { ReponsePreferencesAidantAPI } from '../../../src/api/aidant/routesAPIAi
 describe('Le serveur MAC sur les routes /api/aidant', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { portEcoute: number; app: Express };
-  let adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
-    adaptateurDeVerificationDeSession =
-      testeurMAC.adaptateurDeVerificationDeSession as AdaptateurDeVerificationDeSessionDeTest;
+    testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
     testeurMAC.adaptateurDeVerificationDeCGU.reinitialise();
   });
 
@@ -28,7 +25,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     it('Retourne les préférences de l’Aidant', async () => {
       const aidant = unAidant().construis();
       await testeurMAC.entrepots.aidants().persiste(aidant);
-      adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -38,7 +35,9 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       );
 
       expect(reponse.statusCode).toBe(200);
-      expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
+      expect(
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
+      ).toBe(true);
       expect(await reponse.json()).toStrictEqual<ReponsePreferencesAidantAPI>({
         preferencesAidant: {
           secteursActivite: [],
@@ -68,6 +67,20 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
         true
       );
+    });
+
+    it('Retourne une erreur HTTP 404 si l’Aidant n’est pas connu', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/aidant/preferences`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toStrictEqual({
+        message: "Le aidant demandé n'existe pas.",
+      });
     });
   });
 });
