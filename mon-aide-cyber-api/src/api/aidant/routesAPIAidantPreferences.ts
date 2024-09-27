@@ -87,7 +87,9 @@ export const routesAPIAidantPreferences = (
           preferences: { ...requete.body.preferencesAidant },
         })
         .then(() => reponse.status(204).send())
-        .catch(() => suite());
+        .catch((erreur) =>
+          suite(ErreurMAC.cree('Modifie les préférences de l’Aidant', erreur))
+        );
     }
   );
 
