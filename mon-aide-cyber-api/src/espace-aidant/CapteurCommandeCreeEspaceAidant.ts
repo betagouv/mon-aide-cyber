@@ -5,7 +5,7 @@ import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge
 import crypto from 'crypto';
 import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 import { AggregatNonTrouve } from '../domaine/Aggregat';
-import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
+import { Aidant, ErreurCreationEspaceAidant } from '../authentification/Aidant';
 import { Departement } from '../gestion-demandes/departements';
 
 export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
@@ -49,12 +49,16 @@ export class CapteurCommandeCreeEspaceAidant
       )
       .catch((erreur) => {
         if (erreur instanceof AggregatNonTrouve) {
-          const aidant = {
+          const aidant: Aidant = {
             dateSignatureCGU: commande.dateSignatureCGU,
             identifiant: adaptateurUUID.genereUUID(),
             identifiantConnexion: commande.identifiantConnexion,
             motDePasse: commande.motDePasse,
             nomPrenom: commande.nomPrenom,
+            preferences: {
+              departements: [commande.departement],
+              secteursActivite: [],
+            },
           };
           return this.entrepots
             .aidants()

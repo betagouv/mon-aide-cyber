@@ -40,11 +40,16 @@ export const routesAPIAidantPreferences = (
       entrepots
         .aidants()
         .lis(requete.identifiantUtilisateurCourant!)
-        .then(() => {
+        .then((aidant) => {
           reponse.json({
             preferencesAidant: {
-              secteursActivite: [],
-              departements: [],
+              secteursActivite: aidant.preferences.secteursActivite.map(
+                (s) => s.nom
+              ),
+              departements: aidant.preferences.departements.map((d) => ({
+                nom: d.nom,
+                code: d.code,
+              })),
             },
             referentiel: {
               secteursActivite: secteursActivite.map((s) => s.nom),

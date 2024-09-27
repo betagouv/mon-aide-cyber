@@ -48,6 +48,10 @@ export class EntrepotAidantPostgres
           dto.donnees.dateSignatureCharte
         ),
       }),
+      preferences: {
+        secteursActivite: [],
+        departements: [],
+      },
     };
   }
 

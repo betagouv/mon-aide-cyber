@@ -151,6 +151,10 @@ describe('Initialise la création de l’espace des aidants', () => {
         motDePasse: 'un-mot-de-passe',
         identifiantConnexion: 'jean.dupont@mail.com',
         identifiant: aidant.identifiant,
+        preferences: {
+          departements: [],
+          secteursActivite: [],
+        },
       });
     });
 
@@ -190,6 +194,10 @@ describe('Initialise la création de l’espace des aidants', () => {
         motDePasse: 'un-mot-de-passe',
         identifiantConnexion: 'jean.dupont@mail.com',
         identifiant: aidant.identifiant,
+        preferences: {
+          departements: [],
+          secteursActivite: [],
+        },
       });
     });
 
@@ -246,6 +254,10 @@ describe('Initialise la création de l’espace des aidants', () => {
         motDePasse: 'un-mot-de-passe',
         identifiantConnexion: 'charles.martin@mail.com',
         identifiant: charlesMartin.identifiant,
+        preferences: {
+          departements: [],
+          secteursActivite: [],
+        },
       });
     });
 
@@ -418,6 +430,10 @@ describe('Initialise la création de l’espace des aidants', () => {
         motDePasse: 'un-mot-de-passe',
         identifiantConnexion: 'jean.dupont@mail.com',
         identifiant: aidant.identifiant,
+        preferences: {
+          departements: [],
+          secteursActivite: [],
+        },
       });
     });
 

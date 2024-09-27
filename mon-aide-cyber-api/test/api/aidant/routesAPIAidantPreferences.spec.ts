@@ -56,6 +56,62 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       });
     });
 
+    it('Retourne les secteurs d’activité que l’Aidant a conservé', async () => {
+      const aidant = unAidant()
+        .ayantPourSecteursActivite([
+          { nom: 'Administration' },
+          { nom: 'Commerce' },
+          { nom: 'Transports' },
+        ])
+        .construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/aidant/preferences`,
+        donneesServeur.portEcoute
+      );
+
+      const reponsePreferences =
+        (await reponse.json()) as ReponsePreferencesAidantAPI;
+      expect(
+        reponsePreferences.preferencesAidant.secteursActivite
+      ).toStrictEqual<string[]>(['Administration', 'Commerce', 'Transports']);
+    });
+
+    it('Retourne les départements dans lesquels l’Aidant peut intervenir', async () => {
+      const ain = departements[0];
+      const aisne = departements[1];
+      const allier = departements[2];
+      const aidant = unAidant()
+        .ayantPourDepartements([ain, aisne, allier])
+        .construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/aidant/preferences`,
+        donneesServeur.portEcoute
+      );
+
+      const reponsePreferences =
+        (await reponse.json()) as ReponsePreferencesAidantAPI;
+      expect(reponsePreferences.preferencesAidant.departements).toStrictEqual<
+        { code: string; nom: string }[]
+      >([
+        { nom: ain.nom, code: ain.code },
+        { nom: aisne.nom, code: aisne.code },
+        {
+          nom: allier.nom,
+          code: allier.code,
+        },
+      ]);
+    });
+
     it('Vérifie que les CGU sont signées', async () => {
       await executeRequete(
         donneesServeur.app,
