@@ -213,5 +213,24 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         true
       );
     });
+
+    it('Retourne une erreur HTTP 404 si l’Aidant n’est pas connu', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/aidant/preferences`,
+        donneesServeur.portEcoute,
+        {
+          preferencesAidant: {
+            typesEntites: ['Organisations publiques', 'Associations'],
+          },
+        }
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toStrictEqual({
+        message: "Le aidant demandé n'existe pas.",
+      });
+    });
   });
 });
