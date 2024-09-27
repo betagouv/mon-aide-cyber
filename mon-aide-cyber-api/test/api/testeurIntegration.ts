@@ -22,7 +22,7 @@ import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/Entre
 import { AdaptateurDeVerificationDesAccesDeTest } from '../adaptateurs/AdaptateurDeVerificationDesAccesDeTest';
 import { unServiceAidant } from '../../src/authentification/ServiceAidantMAC';
 import { ServiceDeChiffrement } from '../../src/securite/ServiceDeChiffrement';
-import { ServiceDeChiffrementClair } from '../../src/administration/aidants/migration/ServiceDeChiffrementClair';
+import { ServiceDeChiffrementClair } from '../infrastructure/securite/ServiceDeChiffrementClair';
 
 class TesteurIntegrationMAC {
   private serveurDeTest:
