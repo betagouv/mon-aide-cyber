@@ -195,5 +195,23 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
       ).toBe(true);
     });
+
+    it('Vérifie les CGU', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/aidant/preferences`,
+        donneesServeur.portEcoute,
+        {
+          preferencesAidant: {
+            typesEntites: ['Organisations publiques', 'Associations'],
+          },
+        }
+      );
+
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
+        true
+      );
+    });
   });
 });
