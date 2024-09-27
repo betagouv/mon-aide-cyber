@@ -1,9 +1,21 @@
 import { DTO, EntrepotPostgres } from './EntrepotPostgres';
-import { Aidant, EntrepotAidant } from '../../../authentification/Aidant';
+import {
+  Aidant,
+  EntrepotAidant,
+  typesEntites,
+} from '../../../authentification/Aidant';
 
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
+import { departements } from '../../../gestion-demandes/departements';
+import { secteursActivite } from '../../../espace-aidant/preferences/secteursActivite';
+
+type PreferencesDTO = {
+  secteursActivite: string[];
+  departements: string[];
+  typesEntites: string[];
+};
 
 export type DonneesUtilisateur = {
   dateSignatureCharte?: string;
@@ -11,6 +23,7 @@ export type DonneesUtilisateur = {
   identifiantConnexion: string;
   nomPrenom: string;
   motDePasse: string;
+  preferences: PreferencesDTO;
 };
 
 type AidantDTO = DTO & {
@@ -49,9 +62,21 @@ export class EntrepotAidantPostgres
         ),
       }),
       preferences: {
-        secteursActivite: [],
-        departements: [],
-        typesEntites: [],
+        secteursActivite: secteursActivite.filter(
+          (s) =>
+            dto.donnees.preferences.secteursActivite.filter((d) => d === s.nom)
+              .length > 0
+        ),
+        departements: departements.filter(
+          (dep) =>
+            dto.donnees.preferences.departements.filter((d) => d === dep.nom)
+              .length > 0
+        ),
+        typesEntites: typesEntites.filter(
+          (t) =>
+            dto.donnees.preferences.typesEntites.filter((d) => d === t.nom)
+              .length > 0
+        ),
       },
     };
   }
@@ -72,6 +97,13 @@ export class EntrepotAidantPostgres
         ...(entite.dateSignatureCharte && {
           dateSignatureCharte: entite.dateSignatureCharte.toISOString(),
         }),
+        preferences: {
+          secteursActivite: entite.preferences.secteursActivite.map(
+            (s) => s.nom
+          ),
+          departements: entite.preferences.departements.map((d) => d.nom),
+          typesEntites: entite.preferences.typesEntites.map((t) => t.nom),
+        },
       },
     };
   }
