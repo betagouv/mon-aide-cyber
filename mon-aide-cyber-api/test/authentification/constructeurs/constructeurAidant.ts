@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { fakerFR } from '@faker-js/faker';
-import { Aidant } from '../../../src/authentification/Aidant';
+import { Aidant, TypesEntites } from '../../../src/authentification/Aidant';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { SecteurActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
 import { Departement } from '../../../src/gestion-demandes/departements';
@@ -19,6 +19,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     FournisseurHorloge.maintenant();
   private secteursActivite: SecteurActivite[] = [];
   private departements: Departement[] = [];
+  private typesEntites: TypesEntites = [];
 
   avecUnNomPrenom(nomPrenom: string): ConstructeurAidant {
     this.nomPrenom = nomPrenom;
@@ -60,6 +61,11 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  ayantPourTypesEntite(typesEntites: TypesEntites): ConstructeurAidant {
+    this.typesEntites = typesEntites;
+    return this;
+  }
+
   construis(): Aidant {
     return {
       identifiant: this.identifiant,
@@ -73,6 +79,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
       preferences: {
         secteursActivite: this.secteursActivite,
         departements: this.departements,
+        typesEntites: this.typesEntites,
       },
     };
   }

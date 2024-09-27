@@ -58,6 +58,7 @@ export class CapteurCommandeCreeEspaceAidant
             preferences: {
               departements: [commande.departement],
               secteursActivite: [],
+              typesEntites: [],
             },
           };
           return this.entrepots

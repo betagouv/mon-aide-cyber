@@ -29,6 +29,7 @@ export const creeAidant = async (
         preferences: {
           secteursActivite: [],
           departements: [],
+          typesEntites: [],
         },
       };
       await entrepot.persiste(aidant);

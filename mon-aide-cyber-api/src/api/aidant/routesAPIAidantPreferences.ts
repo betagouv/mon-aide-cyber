@@ -6,15 +6,18 @@ import { secteursActivite } from '../../espace-aidant/preferences/secteursActivi
 import { departements } from '../../gestion-demandes/departements';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from '../hateoas/hateoas';
 import { ErreurMAC } from '../../domaine/erreurMAC';
+import { typesEntites, TypesEntites } from '../../authentification/Aidant';
 
 export type ReponsePreferencesAidantAPI = ReponseHATEOAS & {
   preferencesAidant: {
     secteursActivite: string[];
     departements: { code: string; nom: string }[];
+    typesEntites: TypesEntites;
   };
   referentiel: {
     secteursActivite: string[];
     departements: { code: string; nom: string }[];
+    typesEntites: TypesEntites;
   };
 };
 
@@ -50,6 +53,7 @@ export const routesAPIAidantPreferences = (
                 nom: d.nom,
                 code: d.code,
               })),
+              typesEntites: aidant.preferences.typesEntites,
             },
             referentiel: {
               secteursActivite: secteursActivite.map((s) => s.nom),
@@ -57,6 +61,7 @@ export const routesAPIAidantPreferences = (
                 code: d.code,
                 nom: d.nom,
               })),
+              typesEntites,
             },
             ...constructeurActionsHATEOAS().modifierPreferences().construis(),
           });

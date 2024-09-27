@@ -154,6 +154,7 @@ describe('Initialise la création de l’espace des aidants', () => {
         preferences: {
           departements: [],
           secteursActivite: [],
+          typesEntites: [],
         },
       });
     });
@@ -197,6 +198,7 @@ describe('Initialise la création de l’espace des aidants', () => {
         preferences: {
           departements: [],
           secteursActivite: [],
+          typesEntites: [],
         },
       });
     });
@@ -257,6 +259,7 @@ describe('Initialise la création de l’espace des aidants', () => {
         preferences: {
           departements: [],
           secteursActivite: [],
+          typesEntites: [],
         },
       });
     });
@@ -433,6 +436,7 @@ describe('Initialise la création de l’espace des aidants', () => {
         preferences: {
           departements: [],
           secteursActivite: [],
+          typesEntites: [],
         },
       });
     });

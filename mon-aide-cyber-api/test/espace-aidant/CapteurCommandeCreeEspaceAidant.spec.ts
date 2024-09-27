@@ -52,6 +52,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
             codeRegion: '93',
           },
         ],
+        typesEntites: [],
       },
     });
     expect(aidantCree).toStrictEqual<EspaceAidantCree>({
