@@ -6,10 +6,7 @@ import { executeRequete } from '../executeurRequete';
 import { departements } from '../../../src/gestion-demandes/departements';
 import { secteursActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
 import { ReponsePreferencesAidantAPI } from '../../../src/api/aidant/routesAPIAidantPreferences';
-import {
-  typesEntites,
-  TypesEntites,
-} from '../../../src/authentification/Aidant';
+import { typesEntites } from '../../../src/authentification/Aidant';
 
 describe('Le serveur MAC sur les routes /api/aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -107,15 +104,8 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       const reponsePreferences =
         (await reponse.json()) as ReponsePreferencesAidantAPI;
       expect(reponsePreferences.preferencesAidant.departements).toStrictEqual<
-        { code: string; nom: string }[]
-      >([
-        { nom: ain.nom, code: ain.code },
-        { nom: aisne.nom, code: aisne.code },
-        {
-          nom: allier.nom,
-          code: allier.code,
-        },
-      ]);
+        string[]
+      >([ain.nom, aisne.nom, allier.nom]);
     });
 
     it('Retourne les types d’entités dans lesquels l’Aidant peut intervenir', async () => {
@@ -144,19 +134,9 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
 
       const reponsePreferences =
         (await reponse.json()) as ReponsePreferencesAidantAPI;
-      expect(
-        reponsePreferences.preferencesAidant.typesEntites
-      ).toStrictEqual<TypesEntites>([
-        {
-          nom: 'Organisations publiques',
-          libelle:
-            'Organisations publiques (ex. collectivité, administration, etc.)',
-        },
-        {
-          nom: 'Associations',
-          libelle: 'Associations (ex. association loi 1901, GIP)',
-        },
-      ]);
+      expect(reponsePreferences.preferencesAidant.typesEntites).toStrictEqual<
+        string[]
+      >(['Organisations publiques', 'Associations']);
     });
 
     it('Vérifie que les CGU sont signées', async () => {
@@ -184,6 +164,36 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       expect(await reponse.json()).toStrictEqual({
         message: "Le aidant demandé n'existe pas.",
       });
+    });
+  });
+
+  describe('Quand une requête PATCH est reçue sur /preferences', () => {
+    it('vérifie la session de l’Aidant', async () => {
+      const aidant = unAidant()
+        .ayantPourSecteursActivite([
+          { nom: 'Administration' },
+          { nom: 'Commerce' },
+        ])
+        .construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/aidant/preferences`,
+        donneesServeur.portEcoute,
+        {
+          preferencesAidant: {
+            secteursActivite: ['Administration', 'Transports'],
+          },
+        }
+      );
+
+      expect(reponse.statusCode).toBe(204);
+      expect(
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
+      ).toBe(true);
     });
   });
 });

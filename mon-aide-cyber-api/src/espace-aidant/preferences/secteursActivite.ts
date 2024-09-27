@@ -25,7 +25,7 @@ export type SecteurActivite = {
     | 'Activités extra-territoriales';
 };
 
-export const secteursActivite: SecteurActivite[] = [
+const secteursActivite: SecteurActivite[] = [
   {
     nom: 'Administration',
   },
@@ -96,3 +96,8 @@ export const secteursActivite: SecteurActivite[] = [
     nom: 'Activités extra-territoriales',
   },
 ];
+
+const secteurActiviteParNom = (nom: string): SecteurActivite | undefined =>
+  secteursActivite.find((s) => s.nom === nom);
+
+export { secteursActivite, secteurActiviteParNom };
