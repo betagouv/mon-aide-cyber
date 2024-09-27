@@ -74,17 +74,20 @@ export const routesAPIAidantPreferences = (
   routes.patch(
     '/',
     session.verifie('Modifie les préférences de l’Aidant'),
+    cgu.verifie(),
     bodyParser.json(),
     async (
       requete: RequeteUtilisateur<PatchRequestPreferencesAidant>,
       reponse: Response<ReponsePreferencesAidantAPI>,
-      _suite: NextFunction
+      suite: NextFunction
     ) => {
-      await new ServicePreferencesAidant(entrepots.aidants()).metsAJour({
-        identifiantAidant: requete.identifiantUtilisateurCourant!,
-        preferences: { ...requete.body.preferencesAidant },
-      });
-      reponse.status(204).send();
+      new ServicePreferencesAidant(entrepots.aidants())
+        .metsAJour({
+          identifiantAidant: requete.identifiantUtilisateurCourant!,
+          preferences: { ...requete.body.preferencesAidant },
+        })
+        .then(() => reponse.status(204).send())
+        .catch(() => suite());
     }
   );
 
