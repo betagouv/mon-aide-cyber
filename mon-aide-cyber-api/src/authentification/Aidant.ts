@@ -1,5 +1,12 @@
 import { Entrepot } from '../domaine/Entrepot';
 import { Aggregat } from '../domaine/Aggregat';
+import { SecteurActivite } from '../espace-aidant/preferences/secteursActivite';
+import { Departement } from '../gestion-demandes/departements';
+
+type Preferences = {
+  secteursActivite: SecteurActivite[];
+  departements: Departement[];
+};
 
 export type Aidant = Aggregat & {
   identifiantConnexion: string;
@@ -7,6 +14,7 @@ export type Aidant = Aggregat & {
   motDePasse: string;
   dateSignatureCGU?: Date;
   dateSignatureCharte?: Date;
+  preferences: Preferences;
 };
 export interface EntrepotAidant extends Entrepot<Aidant> {
   rechercheParIdentifiantConnexionEtMotDePasse(

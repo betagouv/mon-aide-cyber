@@ -43,6 +43,16 @@ describe('Capteur de commande de création de compte Aidant', () => {
       dateSignatureCGU,
       nomPrenom: 'Jean Dupont',
       motDePasse: 'toto12345',
+      preferences: {
+        secteursActivite: [],
+        departements: [
+          {
+            nom: 'Alpes-de-Haute-Provence',
+            code: '4',
+            codeRegion: '93',
+          },
+        ],
+      },
     });
     expect(aidantCree).toStrictEqual<EspaceAidantCree>({
       identifiant: expect.any(String),
