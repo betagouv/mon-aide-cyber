@@ -1,11 +1,14 @@
 import { ConfigurationServeur } from '../serveur';
 import express, { Response } from 'express';
-import crypto from 'crypto';
+import crypto, { UUID } from 'crypto';
 import { ServiceDiagnostic } from '../diagnostic/ServiceDiagnostic';
 import { representeLeDiagnosticPourLeClient } from './representateurs/representateurDiagnostic';
 import { NextFunction } from 'express-serve-static-core';
 import bodyParser from 'body-parser';
-import { SagaAjoutReponse } from '../diagnostic/CapteurSagaAjoutReponse';
+import {
+  CorpsReponse,
+  SagaAjoutReponse,
+} from '../diagnostic/CapteurSagaAjoutReponse';
 import { ErreurMAC } from '../domaine/erreurMAC';
 import { Restitution } from '../restitution/Restitution';
 import { RequeteUtilisateur } from './routesAPI';
@@ -91,7 +94,11 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       unObjet().deTypeDiagnostic()
     ),
     bodyParser.json(),
-    (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
+    (
+      requete: RequeteUtilisateur<CorpsReponse, { id: UUID }>,
+      reponse: Response,
+      suite: NextFunction
+    ) => {
       const { id } = requete.params;
       const corpsReponse = requete.body;
       const commande: SagaAjoutReponse = {

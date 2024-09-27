@@ -73,12 +73,10 @@ export type ReponseAjoutee = Evenement<{
   identifiantQuestion: string;
   reponse: string | string[] | CorpsReponseQuestionATiroir;
 }>;
-export type SagaAjoutReponse = Omit<Saga, 'type'> & {
-  type: 'SagaAjoutReponse';
-  idDiagnostic: crypto.UUID;
-  chemin: string;
-  identifiant: string;
-  reponse: string | string[] | CorpsReponseQuestionATiroir;
-};
+export type SagaAjoutReponse = Omit<Saga, 'type'> &
+  CorpsReponse & {
+    type: 'SagaAjoutReponse';
+    idDiagnostic: crypto.UUID;
+  };
 
 export { CapteurSagaAjoutReponse };

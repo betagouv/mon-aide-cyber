@@ -9,9 +9,15 @@ import { routesAPIProfil } from './routesAPIProfil';
 import { routesAPIDemandes } from './demandes/routesAPIDemandes';
 import { routeAPIContexte } from './routeAPIContexte';
 import { routesAPIAidant } from './aidant/routesAPIAidant';
+import * as core from 'express-serve-static-core';
 
-export interface RequeteUtilisateur extends Request {
+export interface RequeteUtilisateur<
+  CORPS = void,
+  PARAMS extends core.ParamsDictionary = core.ParamsDictionary,
+> extends Request {
   identifiantUtilisateurCourant?: crypto.UUID;
+  body: CORPS;
+  params: PARAMS;
 }
 
 const routesAPI = (configuration: ConfigurationServeur) => {

@@ -10,9 +10,9 @@ export class AdaptateurDeVerificationDeCGUMAC
 {
   constructor(private readonly entrepots: Entrepots) {}
 
-  verifie(): RequestHandler {
+  verifie<T>(): RequestHandler {
     return async (
-      requete: RequeteUtilisateur,
+      requete: RequeteUtilisateur<T>,
       reponse: Response,
       suite: NextFunction
     ) => {
