@@ -27,6 +27,8 @@ export const mailCreationCompteAidantNonEnvoye = consommateurEvenement();
 
 export const demandeDevenirAidantespaceAidantCree = consommateurEvenement();
 
+export const preferencesAidantModifiees = consommateurEvenement();
+
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E
 ): Publication => {

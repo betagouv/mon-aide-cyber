@@ -8,6 +8,7 @@ import {
   restitutionLancee,
   mailCreationCompteAidantNonEnvoye,
   demandeDevenirAidantespaceAidantCree,
+  preferencesAidantModifiees,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
@@ -62,6 +63,10 @@ export const fabriqueConsommateursEvenements = (
     [
       'DEMANDE_DEVENIR_AIDANT_ESPACE_AIDANT_CREE',
       [demandeDevenirAidantespaceAidantCree(entrepotJournalisation)],
+    ],
+    [
+      'PREFERENCES_AIDANT_MODIFIEES',
+      [preferencesAidantModifiees(entrepotJournalisation)],
     ],
   ]);
 };
