@@ -13,12 +13,14 @@ import { ComposantDemandeEtreAide } from './composants/gestion-demandes/etre-aid
 import { EcranCreationEspaceAidant as ComposantDemandeAidantCreationEspaceAidant } from './domaine/espace-aidant/demande-aidant-creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { LayoutCreationEspaceAidant } from './composants/layout/LayoutCreationEspaceAidant.tsx';
 import { EcranDevenirAidant } from './domaine/vitrine/ecran-devenir-aidant/EcranDevenirAidant.tsx';
+import { EcranAccessibilite } from './vues/EcranAccessibilite.tsx';
 
 export const RouteurPublic = () => {
   return (
     <Routes>
       <Route path="/" element={<LayoutPublic />}>
         <Route index element={<Accueil />} />
+        <Route path="accessibilite" element={<EcranAccessibilite />} />
         <Route path="cgu" element={<ComposantCGU />} />
         <Route path="charte-aidant" element={<CharteAidant />} />
         <Route
