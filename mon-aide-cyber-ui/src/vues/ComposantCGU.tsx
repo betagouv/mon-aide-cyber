@@ -728,7 +728,7 @@ export const ComposantCGU = () => {
     <main role="main">
       <div className="fr-container">
         <div className="fr-grid-row fr-grid-row--center">
-          <div className="fr-col-8">
+          <div className="fr-col-8 fr-pt-6w">
             <CorpsCGU />
           </div>
         </div>
