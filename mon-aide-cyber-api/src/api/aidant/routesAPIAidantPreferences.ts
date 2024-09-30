@@ -7,8 +7,14 @@ import { departements } from '../../gestion-demandes/departements';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from '../hateoas/hateoas';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { typesEntites, TypesEntites } from '../../authentification/Aidant';
-import bodyParser from 'body-parser';
 import { ServicePreferencesAidant } from '../../espace-aidant/preferences/ServicePreferencesAidant';
+import {
+  ExpressValidator,
+  FieldValidationError,
+  Meta,
+  Result,
+  validationResult,
+} from 'express-validator';
 
 export type ReponsePreferencesAidantAPI = ReponseHATEOAS & {
   preferencesAidant: {
@@ -21,6 +27,59 @@ export type ReponsePreferencesAidantAPI = ReponseHATEOAS & {
     departements: { code: string; nom: string }[];
     typesEntites: TypesEntites;
   };
+};
+
+const valideLesPreferences = () => {
+  const verifieLaValiditeDuChamp = (
+    champsRecu: any,
+    listeDeComparaison: string[],
+    messageEnCasErreur: string
+  ) => {
+    if (!champsRecu) {
+      return true;
+    }
+    const tousLesChampsRecus = champsRecu.every(
+      (s: string) =>
+        listeDeComparaison.filter((comparaison) => comparaison === s).length > 0
+    );
+    if (!tousLesChampsRecus) {
+      throw new Error(messageEnCasErreur);
+    }
+    return true;
+  };
+
+  const { body } = new ExpressValidator({
+    secteursActiviteExistants: (__: any, { req }: Meta) => {
+      return verifieLaValiditeDuChamp(
+        req.body.preferencesAidant.secteursActivite,
+        secteursActivite.map((s) => s.nom),
+        "Les secteurs d'activité sont erronés."
+      );
+    },
+    departementsExistants: (__: any, { req }: Meta) => {
+      return verifieLaValiditeDuChamp(
+        req.body.preferencesAidant.departements,
+        departements.map((d) => d.nom),
+        'Les départements sont erronés.'
+      );
+    },
+    typesEntitesExistants: (__: any, { req }: Meta) => {
+      return verifieLaValiditeDuChamp(
+        req.body.preferencesAidant.typesEntites,
+        typesEntites.map((t) => t.nom),
+        'Les types d’entites sont erronés.'
+      );
+    },
+  });
+  return [
+    body()
+      .secteursActiviteExistants()
+      .withMessage("Les secteurs d'activité sont erronés.")
+      .departementsExistants()
+      .withMessage('Les départements sont erronés.')
+      .typesEntitesExistants()
+      .withMessage('Les types d’entités sont erronés.'),
+  ];
 };
 
 export const routesAPIAidantPreferences = (
@@ -75,26 +134,49 @@ export const routesAPIAidantPreferences = (
     '/',
     session.verifie('Modifie les préférences de l’Aidant'),
     cgu.verifie(),
-    bodyParser.json(),
+    express.json(),
+    valideLesPreferences(),
     async (
       requete: RequeteUtilisateur<PatchRequestPreferencesAidant>,
       reponse: Response<ReponsePreferencesAidantAPI>,
       suite: NextFunction
     ) => {
-      new ServicePreferencesAidant(entrepots.aidants())
-        .metsAJour({
-          identifiantAidant: requete.identifiantUtilisateurCourant!,
-          preferences: { ...requete.body.preferencesAidant },
-        })
-        .then(() => reponse.status(204).send())
-        .catch((erreur) =>
-          suite(ErreurMAC.cree('Modifie les préférences de l’Aidant', erreur))
-        );
+      const resultatValidation: Result<FieldValidationError> = validationResult(
+        requete
+      ) as Result<FieldValidationError>;
+
+      if (resultatValidation.isEmpty()) {
+        return new ServicePreferencesAidant(entrepots.aidants())
+          .metsAJour({
+            identifiantAidant: requete.identifiantUtilisateurCourant!,
+            preferences: { ...requete.body.preferencesAidant },
+          })
+          .then(() => reponse.status(204).send())
+          .catch((erreur) =>
+            suite(ErreurMAC.cree('Modifie les préférences de l’Aidant', erreur))
+          );
+      }
+      const erreursValidation = resultatValidation
+        .array()
+        .map((resultat) => resultat.msg)
+        .filter((erreur): erreur is string => !!erreur);
+      return suite(
+        ErreurMAC.cree(
+          'Modifie les préférences de l’Aidant',
+          new ErreurModificationPreferences(erreursValidation.join('\n'))
+        )
+      );
     }
   );
 
   return routes;
 };
+
+export class ErreurModificationPreferences extends Error {
+  constructor(public readonly message: string) {
+    super(message);
+  }
+}
 
 type PatchRequestPreferencesAidant = {
   preferencesAidant: {
