@@ -90,6 +90,7 @@ export const routesAPIAidantPreferences = (
     adaptateurDeVerificationDeSession: session,
     adaptateurDeVerificationDeCGU: cgu,
     entrepots,
+    busEvenement,
   } = configuration;
 
   routes.get(
@@ -146,7 +147,7 @@ export const routesAPIAidantPreferences = (
       ) as Result<FieldValidationError>;
 
       if (resultatValidation.isEmpty()) {
-        return new ServicePreferencesAidant(entrepots.aidants())
+        return new ServicePreferencesAidant(entrepots.aidants(), busEvenement)
           .metsAJour({
             identifiantAidant: requete.identifiantUtilisateurCourant!,
             preferences: { ...requete.body.preferencesAidant },

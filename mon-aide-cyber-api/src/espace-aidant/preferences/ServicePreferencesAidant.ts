@@ -1,7 +1,9 @@
-import { UUID } from 'crypto';
+import crypto, { UUID } from 'crypto';
 import { EntrepotAidant, typesEntites } from '../../authentification/Aidant';
 import { SecteurActivite, secteurActiviteParNom } from './secteursActivite';
 import { rechercheParNomDepartement } from '../../gestion-demandes/departements';
+import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
+import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 
 type MetsAJourPreferenceAidant = {
   preferences: {
@@ -13,7 +15,10 @@ type MetsAJourPreferenceAidant = {
 };
 
 export class ServicePreferencesAidant {
-  constructor(private readonly entrepotAidant: EntrepotAidant) {}
+  constructor(
+    private readonly entrepotAidant: EntrepotAidant,
+    private readonly busEvenement: BusEvenement
+  ) {}
 
   async metsAJour(miseAJour: MetsAJourPreferenceAidant): Promise<void> {
     await this.entrepotAidant
@@ -38,7 +43,42 @@ export class ServicePreferencesAidant {
             );
         }
 
-        return this.entrepotAidant.persiste(aidant);
+        return this.entrepotAidant.persiste(aidant).then(() =>
+          this.busEvenement.publie<PreferencesAidantModifiees>({
+            identifiant: aidant.identifiant,
+            type: 'PREFERENCES_AIDANT_MODIFIEES',
+            date: FournisseurHorloge.maintenant(),
+            corps: {
+              identifiant: aidant.identifiant,
+              preferences: {
+                ...(miseAJour.preferences.secteursActivite && {
+                  secteursActivite: aidant.preferences.secteursActivite.map(
+                    (s) => s.nom
+                  ),
+                }),
+                ...(miseAJour.preferences.departements && {
+                  departements: aidant.preferences.departements.map(
+                    (d) => d.code
+                  ),
+                }),
+                ...(miseAJour.preferences.typesEntites && {
+                  typesEntites: aidant.preferences.typesEntites.map(
+                    (t) => t.libelle
+                  ),
+                }),
+              },
+            },
+          })
+        );
       });
   }
 }
+
+export type PreferencesAidantModifiees = Evenement<{
+  identifiant: crypto.UUID;
+  preferences: {
+    departements?: string[];
+    secteursActivite?: string[];
+    typesEntites?: string[];
+  };
+}>;
