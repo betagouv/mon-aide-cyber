@@ -232,5 +232,82 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         message: "Le aidant demandé n'existe pas.",
       });
     });
+
+    describe('Lors de la phase de validation', () => {
+      it("Valide les secteurs d'activité passés dans la requête", async () => {
+        const aidant = unAidant().construis();
+        await testeurMAC.entrepots.aidants().persiste(aidant);
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          aidant
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'PATCH',
+          `/api/aidant/preferences`,
+          donneesServeur.portEcoute,
+          {
+            preferencesAidant: {
+              secteursActivite: ['Inconnu', 'Inexistant'],
+            },
+          }
+        );
+
+        expect(reponse.statusCode).toBe(422);
+        expect(await reponse.json()).toStrictEqual({
+          message: "Les secteurs d'activité sont erronés.",
+        });
+      });
+
+      it('Valide les départements passés dans la requête', async () => {
+        const aidant = unAidant().construis();
+        await testeurMAC.entrepots.aidants().persiste(aidant);
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          aidant
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'PATCH',
+          `/api/aidant/preferences`,
+          donneesServeur.portEcoute,
+          {
+            preferencesAidant: {
+              departements: ['Inconnu', 'Inexistant'],
+            },
+          }
+        );
+
+        expect(reponse.statusCode).toBe(422);
+        expect(await reponse.json()).toStrictEqual({
+          message: 'Les départements sont erronés.',
+        });
+      });
+
+      it('Valide les types d’entités passés dans la requête', async () => {
+        const aidant = unAidant().construis();
+        await testeurMAC.entrepots.aidants().persiste(aidant);
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          aidant
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'PATCH',
+          `/api/aidant/preferences`,
+          donneesServeur.portEcoute,
+          {
+            preferencesAidant: {
+              typesEntites: ['Inconnu', 'Inexistant'],
+            },
+          }
+        );
+
+        expect(reponse.statusCode).toBe(422);
+        expect(await reponse.json()).toStrictEqual({
+          message: 'Les types d’entités sont erronés.',
+        });
+      });
+    });
   });
 });

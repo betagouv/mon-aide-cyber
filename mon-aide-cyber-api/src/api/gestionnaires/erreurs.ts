@@ -9,6 +9,7 @@ import { AggregatNonTrouve } from '../../domaine/Aggregat';
 import { ErreurCreationEspaceAidant } from '../../authentification/Aidant';
 import { ErreurValidationMotDePasse } from '../validateurs/motDePasse';
 import { ErreurEnvoiEmail } from '../messagerie/Messagerie';
+import { ErreurModificationPreferences } from '../aidant/routesAPIAidantPreferences';
 
 const HTTP_MAUVAISE_REQUETE = 400;
 const HTTP_NON_AUTORISE = 401;
@@ -117,6 +118,19 @@ const erreursGerees: Map<
     'ErreurDemandeDevenirAidant',
     (erreur, _, _consignateur, reponse) => {
       construisReponse(reponse, HTTP_MAUVAISE_REQUETE, {
+        message: erreur.message,
+      });
+    },
+  ],
+  [
+    'ErreurModificationPreferences',
+    (
+      erreur: ErreurMAC<ErreurModificationPreferences>,
+      _requete,
+      _consignateur,
+      reponse
+    ) => {
+      construisReponse(reponse, HTTP_NON_TRAITABLE, {
         message: erreur.message,
       });
     },
