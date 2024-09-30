@@ -12,11 +12,8 @@ export const CharteAidant = () => {
   return (
     <main role="main">
       <div className="fr-container mac-contenu-charte">
-        <div className="fr-grid-row fr-grid-row--gutters">
-          <div
-            className="fr-col-offset-4 fr-col-offset-md-3 fr-col-8 fr-col-lg-9"
-            id="top"
-          >
+        <div className="fr-grid-row fr-grid-row--center">
+          <div className="fr-col-8 fr-col-lg-9" id="top">
             <h3>La Charte de l’Aidant</h3>
             <hr />
             {telechargementCharte}
