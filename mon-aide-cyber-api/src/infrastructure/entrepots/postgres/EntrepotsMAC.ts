@@ -11,6 +11,7 @@ import { EntrepotAideConcret } from './EntrepotAideConcret';
 import { EntrepotDemandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { EntrepotDemandeDevenirAidantPostgres } from './EntrepotDemandeDevenirAidantPostgres';
 import { EntrepotStatistiques } from '../../../statistiques/statistiques';
+import { EntrepotStatistiquesPostgres } from './EntrepotStatistiquesPostgres';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -24,6 +25,8 @@ export class EntrepotsMAC implements Entrepots {
   );
   private entrepotDemandeDevenirAidant: EntrepotDemandeDevenirAidant =
     new EntrepotDemandeDevenirAidantPostgres(adaptateurServiceChiffrement());
+  private entrepotStatistiques: EntrepotStatistiques =
+    new EntrepotStatistiquesPostgres();
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
   }
@@ -44,6 +47,6 @@ export class EntrepotsMAC implements Entrepots {
   }
 
   statistiques(): EntrepotStatistiques {
-    throw new Error('Entrepôt statistiques non implémenté');
+    return this.entrepotStatistiques;
   }
 }
