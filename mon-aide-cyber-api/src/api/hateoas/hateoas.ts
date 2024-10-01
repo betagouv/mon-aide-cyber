@@ -67,6 +67,10 @@ class ConstructeurActionsDepuisContexte {
       'se-connecter',
       { 'se-connecter': { url: '/api/token', methode: 'POST' } },
     ],
+    [
+      'afficher-statistiques',
+      { 'afficher-statistiques': { url: '/statistiques', methode: 'GET' } },
+    ],
   ]);
   private readonly actions: Map<string, Options> = new Map();
 

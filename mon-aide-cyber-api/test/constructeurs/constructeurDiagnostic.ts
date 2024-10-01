@@ -229,36 +229,6 @@ export const unDiagnosticEnGironde = () =>
         .ayantPourReponse('contexte-departement-tom-siege-social-gironde')
         .construis()
     );
-
-export const unDiagnosticDansLeDepartement = (departement: string) =>
-  unDiagnostic()
-    .avecUnReferentiel(
-      unReferentiel()
-        .ajouteUneThematique('contexte', [
-          uneQuestion()
-            .avecIdentifiant('contexte-departement-tom-siege-social')
-            .aChoixUnique('département ?', [
-              {
-                identifiant: `contexte-departement-tom-siege-social-${departement}`,
-                libelle: departement,
-              },
-            ])
-            .construis(),
-        ])
-        .construis()
-    )
-    .ajouteUneReponseDonnee(
-      {
-        thematique: 'contexte',
-        question: 'contexte-departement-tom-siege-social',
-      },
-      uneReponseDonnee()
-        .ayantPourReponse(
-          `contexte-departement-tom-siege-social-${departement}`
-        )
-        .construis()
-    );
-
 export const unDiagnosticAvecSecteurActivite = (secteurActivite: string) =>
   unDiagnostic()
     .avecUnReferentiel(

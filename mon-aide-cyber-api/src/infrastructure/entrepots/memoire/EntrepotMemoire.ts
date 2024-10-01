@@ -19,6 +19,10 @@ import {
   EntrepotDemandeDevenirAidant,
   StatutDemande,
 } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
+import {
+  EntrepotStatistiques,
+  Statistiques,
+} from '../../../statistiques/statistiques';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -153,5 +157,21 @@ export class EntrepotDemandeDevenirAidantMemoire
 
   typeAggregat(): string {
     return 'DemandeDevenirAidant';
+  }
+}
+
+export class EntrepotStatistiquesMemoire
+  extends EntrepotMemoire<Statistiques>
+  implements EntrepotStatistiques
+{
+  lis(): Promise<Statistiques> {
+    const statistiques = Object.entries(Object.fromEntries(this.entites)).map(
+      ([_, stats]) => stats
+    )[0];
+    return Promise.resolve({
+      identifiant: crypto.randomUUID(),
+      nombreDiagnostics: statistiques.nombreDiagnostics,
+      nombreAidants: statistiques.nombreAidants,
+    });
   }
 }
