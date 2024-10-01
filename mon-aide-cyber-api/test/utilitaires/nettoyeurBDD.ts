@@ -67,3 +67,10 @@ export const nettoieLaBaseDeDonneesDemandeDevenirAidant = async () => {
     await new EntrepotsPostgresPourLesTests().nettoieDemandeDevenirAidant();
   }
 };
+
+export const nettoieLaBaseDeDonneesStatistiques = async () => {
+  if (process.env.URL_SERVEUR_BASE_DONNEES) {
+    await new EntrepotsPostgresPourLesTests().nettoieDiagnostics();
+    await new EntrepotsPostgresPourLesTests().nettoieAidants();
+  }
+};
