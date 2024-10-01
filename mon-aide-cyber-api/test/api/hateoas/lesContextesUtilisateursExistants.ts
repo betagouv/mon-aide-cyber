@@ -91,4 +91,16 @@ export const lesContextesUtilisateursExistants = [
       },
     },
   },
+  {
+    contexte: 'Afficher les statistiques',
+    informationContexte: {
+      contexte: 'afficher-statistiques',
+    },
+    liens: {
+      'afficher-statistiques': {
+        url: '/statistiques',
+        methode: 'GET',
+      },
+    },
+  },
 ];

@@ -25,6 +25,7 @@ import { AdaptateurRelations } from './relation/AdaptateurRelations';
 import CookieSession from 'cookie-session';
 import { AdaptateurDeVerificationDesAcces } from './adaptateurs/AdaptateurDeVerificationDesAcces';
 import { ServiceDeChiffrement } from './securite/ServiceDeChiffrement';
+import { routesStatistiques } from './api/statistiques/routesStatistiques';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -110,6 +111,7 @@ const creeApp = (config: ConfigurationServeur) => {
   app.use('/api', routesAPI(config));
 
   app.use('/contact', routeContact(config));
+  app.use('/statistiques', routesStatistiques(config));
 
   app.get('*', (_: Request, reponse: Response) =>
     reponse.sendFile(
