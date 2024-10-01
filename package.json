@@ -30,7 +30,8 @@
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
     "@types/cookies": "^0.7.10",
+    "@vitest/ui": "^2.1.1",
     "prettier": "^3.3.2",
-    "vitest": "^1.6.0"
+    "vitest": "^2.1.1"
   }
 }
