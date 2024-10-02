@@ -20,9 +20,14 @@ export class EntrepotStatistiquesPostgres implements EntrepotStatistiques {
       .count({ count: '*' })
       .first();
     const nombreDiagnostics: Count = await this.knex
-      .from('diagnostics')
-      .count({ count: '*' })
-      .first();
+      .raw(
+        `SELECT COUNT(*)
+            FROM relations
+            WHERE donnees -> 'objet' ->> 'type' = 'diagnostic'`
+      )
+      .then(({ rows }: { rows: Count[] }) => {
+        return rows[0] !== undefined ? rows[0] : { count: '0' };
+      });
     return {
       identifiant: crypto.randomUUID(),
       nombreAidants: parseInt(nombreAidants.count),
