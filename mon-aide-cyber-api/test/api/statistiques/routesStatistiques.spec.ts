@@ -53,7 +53,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
   });
 
   describe('Quand une requête GET est reçue sur /statistiques', () => {
-    it('Retourne le nombre de diagnostics effectués', async () => {
+    it('Retourne le nombre de diagnostics effectués en prenant en compte les 500 Excels et en démo', async () => {
       const statistiques = unConstructeurDeStatistiques()
         .avecDesDiagnosticsAuNombreDe(754)
         .construis();
@@ -69,7 +69,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
 
       expect(reponse.statusCode).toBe(200);
       expect(await reponse.json()).toStrictEqual<ReponseStatistiques>({
-        nombreDiagnostics: 754,
+        nombreDiagnostics: 1254,
         nombreAidantsFormes: expect.any(Number),
         nombreSessionFamiliarisation: expect.any(Number),
       });
