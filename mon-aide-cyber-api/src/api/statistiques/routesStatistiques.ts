@@ -18,7 +18,7 @@ export const routesStatistiques = (configuration: ConfigurationServeur) => {
         .lis()
         .then((statistiques) =>
           reponse.json({
-            nombreDiagnostics: statistiques.nombreDiagnostics,
+            nombreDiagnostics: statistiques.nombreDiagnostics + 500,
             nombreAidantsFormes: statistiques.nombreAidants,
             nombreSessionFamiliarisation: 45,
           })
