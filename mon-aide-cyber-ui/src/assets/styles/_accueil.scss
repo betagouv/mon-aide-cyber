@@ -57,6 +57,8 @@ $taille-padding-dsfr-7v: 3.5rem;
 }
 
 .conteneur-participer {
+  display: flex;
+  flex-direction: column;
   gap: 3rem;
 }
 
