@@ -3,14 +3,22 @@ import { nettoieLaBaseDeDonneesStatistiques } from '../../../utilitaires/nettoye
 import { EntrepotAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAidantPostgres';
 import { ServiceDeChiffrementClair } from '../../securite/ServiceDeChiffrementClair';
 import { unAidant } from '../../../authentification/constructeurs/constructeurAidant';
-import { EntrepotDiagnosticPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotDiagnosticPostgres';
-import { unDiagnostic } from '../../../constructeurs/constructeurDiagnostic';
 import { EntrepotStatistiquesPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesPostgres';
 import { Statistiques } from '../../../../src/statistiques/statistiques';
+import { EntrepotRelationPostgres } from '../../../../src/relation/infrastructure/EntrepotRelationPostgres';
+import { Tuple } from '../../../../src/relation/Tuple';
+import { UUID } from 'crypto';
 
 describe('Entrepot Statistiques Postgres', () => {
   beforeEach(async () => await nettoieLaBaseDeDonneesStatistiques());
   afterEach(async () => await nettoieLaBaseDeDonneesStatistiques());
+
+  const unTupleDiagnostic = (identifiant: UUID): Tuple => ({
+    identifiant,
+    relation: 'initiateur',
+    objet: { type: 'diagnostic', identifiant: '' },
+    utilisateur: { type: 'aidant', identifiant: '' },
+  });
 
   it('Retourne les statistiques', async () => {
     const entrepotAidant = new EntrepotAidantPostgres(
@@ -18,11 +26,24 @@ describe('Entrepot Statistiques Postgres', () => {
     );
     await entrepotAidant.persiste(unAidant().construis());
     await entrepotAidant.persiste(unAidant().construis());
-    const entrepotDiagnostic = new EntrepotDiagnosticPostgres();
-    await entrepotDiagnostic.persiste(unDiagnostic().construis());
-    await entrepotDiagnostic.persiste(unDiagnostic().construis());
-    await entrepotDiagnostic.persiste(unDiagnostic().construis());
-    await entrepotDiagnostic.persiste(unDiagnostic().construis());
+    await new EntrepotRelationPostgres().persiste(
+      unTupleDiagnostic(crypto.randomUUID())
+    );
+    await new EntrepotRelationPostgres().persiste(
+      unTupleDiagnostic(crypto.randomUUID())
+    );
+    await new EntrepotRelationPostgres().persiste(
+      unTupleDiagnostic(crypto.randomUUID())
+    );
+    await new EntrepotRelationPostgres().persiste(
+      unTupleDiagnostic(crypto.randomUUID())
+    );
+    await new EntrepotRelationPostgres().persiste({
+      identifiant: crypto.randomUUID(),
+      relation: 'initiateur',
+      objet: { type: 'autre', identifiant: '' },
+      utilisateur: { type: 'aidant', identifiant: '' },
+    });
 
     const statistiques = await new EntrepotStatistiquesPostgres().lis();
 
