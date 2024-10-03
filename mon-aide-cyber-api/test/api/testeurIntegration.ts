@@ -23,6 +23,7 @@ import { AdaptateurDeVerificationDesAccesDeTest } from '../adaptateurs/Adaptateu
 import { unServiceAidant } from '../../src/authentification/ServiceAidantMAC';
 import { ServiceDeChiffrement } from '../../src/securite/ServiceDeChiffrement';
 import { ServiceDeChiffrementClair } from '../infrastructure/securite/ServiceDeChiffrementClair';
+import { AdaptateurMetabaseMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurMetabaseMemoire';
 
 class TesteurIntegrationMAC {
   private serveurDeTest:
@@ -59,6 +60,7 @@ class TesteurIntegrationMAC {
         return unAdaptateurRestitutionPDF();
       },
     },
+    public adaptateurMetabase: AdaptateurMetabaseMemoire = new AdaptateurMetabaseMemoire(),
     public recuperateurDeCookies: (
       requete: Request,
       reponse: Response
@@ -91,6 +93,7 @@ class TesteurIntegrationMAC {
       adaptateurEnvoiMessage: this.adaptateurEnvoieMessage,
       serviceDeChiffrement: this.serviceDeChiffrement,
       recuperateurDeCookies: this.recuperateurDeCookies,
+      adaptateurMetabase: this.adaptateurMetabase,
     });
     const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
