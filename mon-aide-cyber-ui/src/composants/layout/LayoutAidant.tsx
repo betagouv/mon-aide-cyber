@@ -58,27 +58,30 @@ export const LienMenuNavigation = ({
               backgroundColor: aUnEnfantOuvert ? '#7D55B1' : '#5d2a9d',
             }}
           >
-            {element.enfants.map((enfant) =>
-              enfant.actif ? (
-                <Link key={enfant.nom} to={enfant.route}>
-                  <li
-                    className={`${estCheminCourant(enfant.route) ? 'actif' : ''}`}
-                  >
-                    <div className="lien-navigation-enfant">{enfant.nom}</div>
-                  </li>
-                </Link>
-              ) : (
-                <Link key={enfant.nom} to={enfant.route}>
-                  <li
-                    style={{
-                      backgroundColor: aUnEnfantOuvert ? '#9C51D0' : '#5d2a9d',
-                    }}
-                    className={`${estCheminCourant(enfant.route) ? 'actif' : ''}`}
-                  >
-                    <div className="lien-navigation-enfant">{enfant.nom}</div>
-                  </li>
-                </Link>
-              )
+            {element.enfants.map(
+              (enfant: LienNavigation & MenuNavigationElement) =>
+                enfant.actif ? (
+                  <Link key={enfant.nom} to={enfant.route}>
+                    <li
+                      className={`${estCheminCourant(enfant.route) ? 'actif' : ''}`}
+                    >
+                      <div className="lien-navigation-enfant">{enfant.nom}</div>
+                    </li>
+                  </Link>
+                ) : (
+                  <Link key={enfant.nom} to={enfant.route}>
+                    <li
+                      style={{
+                        backgroundColor: aUnEnfantOuvert
+                          ? '#9C51D0'
+                          : '#5d2a9d',
+                      }}
+                      className={`${estCheminCourant(enfant.route) ? 'actif' : ''}`}
+                    >
+                      <div className="lien-navigation-enfant">{enfant.nom}</div>
+                    </li>
+                  </Link>
+                )
             )}
           </div>
         ) : null}

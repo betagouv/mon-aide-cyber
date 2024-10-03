@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { ActionsPiedDePage } from '../../../composants/communs/ActionsPiedDePage';
 import { FormulaireDeContact } from '../../../composants/communs/FormulaireDeContact/FormulaireDeContact';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2';
 import { HeroStatistiques } from './composants/HeroStatistiques';
@@ -10,6 +9,10 @@ import { useNavigationMAC } from '../../../fournisseurs/hooks';
 import { Lien, ReponseHATEOAS } from '../../Lien';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
 import { useContexteNavigation } from '../../../hooks/useContexteNavigation';
+import carteDiagsTemporaire from '../../../../public/images/diagnostics-par-departement.png';
+import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3';
+import TuileActionDemandeAide from '../../../composants/communs/tuiles/TuileActionDemandeAide';
+import TuileActionKitDeCommunication from '../../../composants/communs/tuiles/TuileActionKitDeCommunication';
 
 export type Statistiques = {
   nombreDiagnostics: number;
@@ -106,10 +109,34 @@ export const EcranStatistiques = () => {
           ) : (
             <>Chargement...</>
           )}
-          <div className="statistique">Carte des diagnostics</div>
+          <div className="carte">
+            <TypographieH3>
+              Répartition des diagnostics par territoire
+            </TypographieH3>
+            <div>
+              <img
+                src={carteDiagsTemporaire}
+                alt="Carte des territoires de répartition des diagnostics"
+              ></img>
+            </div>
+          </div>
         </div>
       </section>
-      <ActionsPiedDePage className="fond-clair-mac fr-pt-4w" />
+      <section className="fond-clair-mac fr-pt-4w participer">
+        <div className="fr-container conteneur-participer">
+          <div className="fr-col-12">
+            <TypographieH2>Vous souhaitez participer ?</TypographieH2>
+          </div>
+          <div className="fr-grid-row fr-grid-row--gutters">
+            <div className="fr-col-12 fr-col-md-6">
+              <TuileActionDemandeAide />
+            </div>
+            <div className="fr-col-12 fr-col-md-6">
+              <TuileActionKitDeCommunication />
+            </div>
+          </div>
+        </div>
+      </section>
       <FormulaireDeContact />
     </main>
   );

@@ -1,5 +1,11 @@
 @import './../../../assets/styles/points-de-rupture';
 
+@property --num {
+    syntax: '<integer>';
+    initial-value: 0;
+    inherits: false;
+}
+
 .ecran-statistiques {
 
     .hero-layout {
@@ -15,6 +21,18 @@
         padding-bottom: 2rem;
 
         @include a-partir-de(md) {
+            flex-direction: row;
+            padding-top: 2.5rem;
+            padding-bottom: 1rem;
+        }
+
+        @include a-partir-de(lg) {
+            flex-direction: row;
+            padding-top: 2.5rem;
+            padding-bottom: 1rem;
+        }
+
+        @include a-partir-de(xl) {
             flex-direction: row;
             padding-top: 2.5rem;
             padding-bottom: 0;
@@ -80,8 +98,9 @@
             line-height: 66px;
             font-weight: 800;
             height: 100%;
-            color: var(--couleurs-mac-noir)
+            color: var(--couleurs-mac-noir);
         }
+
         .description {
             margin-bottom: auto;
             text-align: center;
@@ -89,6 +108,25 @@
 
         span {
             
+        }
+    }
+
+    .carte {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2.5rem 3rem;
+        background-color: var(--couleurs-mac-blanc);
+        border-radius: 1rem;
+
+        @include a-partir-de(md) {
+            gap: 3rem;
+            padding: 2.5rem 6.5rem;
+        }
+
+        img {
+            width: 100%;
         }
     }
 }
