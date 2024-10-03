@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useMoteurDeLiens } from '../../hooks/useMoteurDeLiens';
 import { useFeatureFlag } from '../../hooks/useFeatureFlag';
 import { ROUTE_AIDANT } from '../../domaine/MoteurDeLiens';
+
 export type MenuNavigationElement = LienNavigation & {
   actif: boolean;
   enfants?: MenuNavigationElement[];
@@ -37,7 +38,7 @@ export const LienMenuNavigation = ({
     return (
       <div
         style={{
-          backgroundColor: aUnEnfantOuvert ? '#9C51D0' : '#5d2a9d',
+          backgroundColor: aUnEnfantOuvert ? '#7D55B1' : '#5d2a9d',
         }}
       >
         <div
@@ -54,7 +55,7 @@ export const LienMenuNavigation = ({
         {deplie ? (
           <div
             style={{
-              backgroundColor: aUnEnfantOuvert ? '#9C51D0' : '#5d2a9d',
+              backgroundColor: aUnEnfantOuvert ? '#7D55B1' : '#5d2a9d',
             }}
           >
             {element.enfants.map((enfant) =>

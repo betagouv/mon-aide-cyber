@@ -28,4 +28,5 @@ export type Action =
   | 'restitution-json'
   | 'restitution-pdf'
   | 'se-connecter'
-  | 'se-deconnecter';
+  | 'se-deconnecter'
+  | 'afficher-statistiques';
