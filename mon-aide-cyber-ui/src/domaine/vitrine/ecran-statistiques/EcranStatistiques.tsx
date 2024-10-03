@@ -9,7 +9,6 @@ import { useNavigationMAC } from '../../../fournisseurs/hooks';
 import { Lien, ReponseHATEOAS } from '../../Lien';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
 import { useContexteNavigation } from '../../../hooks/useContexteNavigation';
-import carteDiagsTemporaire from '../../../../public/images/diagnostics-par-departement.png';
 import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3';
 import TuileActionDemandeAide from '../../../composants/communs/tuiles/TuileActionDemandeAide';
 import TuileActionKitDeCommunication from '../../../composants/communs/tuiles/TuileActionKitDeCommunication';
@@ -18,6 +17,7 @@ export type Statistiques = {
   nombreDiagnostics: number;
   nombreAidantsFormes: number;
   nombreSessionFamiliarisation: number;
+  metabase: string;
 };
 export type ReponseStatistiques = Statistiques;
 
@@ -113,12 +113,7 @@ export const EcranStatistiques = () => {
             <TypographieH3>
               Répartition des diagnostics par territoire
             </TypographieH3>
-            <div>
-              <img
-                src={carteDiagsTemporaire}
-                alt="Carte des territoires de répartition des diagnostics"
-              ></img>
-            </div>
+            <iframe src={statistiques?.metabase || ''}></iframe>
           </div>
         </div>
       </section>
