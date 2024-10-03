@@ -1,6 +1,6 @@
 import { SeConnecter } from '../authentification/SeConnecter.tsx';
-import { PropsWithChildren, ReactElement, useEffect } from 'react';
-import { liensNavigation } from './LayoutPublic.tsx';
+import { PropsWithChildren, ReactElement, useCallback, useEffect } from 'react';
+import { LienNavigation, liensNavigation } from './LayoutPublic.tsx';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
@@ -12,13 +12,87 @@ export type HeaderProprietes = PropsWithChildren<{
   enteteSimple?: boolean;
 }>;
 
-export const Header = ({ lienMAC, enteteSimple }: HeaderProprietes) => {
+const LienNavigationPubliqueMajeur = ({ lien }: { lien: LienNavigation }) => {
   const location = useLocation();
-  const navigationMAC = useNavigationMAC();
-  const contexteNavigation = useContexteNavigation();
+
+  const estCheminCourant = useCallback(
+    (cheminATester: string) => !!matchPath(location.pathname, cheminATester),
+    [location]
+  );
+
+  const aUnEnfantOuvert = (liensEnfants: LienNavigation[] | undefined) => {
+    if (!liensEnfants || liensEnfants.length === 0) return false;
+
+    return liensEnfants.filter((x) => estCheminCourant(x.route)).length > 0;
+  };
+
+  return (
+    <li
+      className={`fr-nav__item ${estCheminCourant(lien.route) || aUnEnfantOuvert(lien.enfants) ? 'lien actif' : 'lien'}`}
+    >
+      <button
+        className="fr-nav__btn"
+        aria-expanded="false"
+        aria-controls={`menu-${lien.clef}`}
+      >
+        {lien.nom}
+      </button>
+      <div className="fr-collapse fr-menu" id={`menu-${lien.clef}`}>
+        <ul className="fr-menu__list">
+          {lien.enfants?.map((x) => (
+            <li key={x.nom}>
+              <Link className="fr-nav__link" to={x.route}>
+                {x.nom}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </li>
+  );
+};
+
+const NavigationPublique = ({
+  liensNavigation,
+}: {
+  liensNavigation: LienNavigation[];
+}) => {
+  const location = useLocation();
 
   const estCheminCourant = (cheminATester: string) =>
     !!matchPath(location.pathname, cheminATester);
+
+  return (
+    <nav
+      className="barre-navigation"
+      id="navigation-493"
+      role="navigation"
+      aria-label="Menu principal"
+    >
+      <ul className="fr-nav__list">
+        {liensNavigation.map((lien) => {
+          if (!!lien.enfants && lien.enfants.length > 0) {
+            return <LienNavigationPubliqueMajeur key={lien.nom} lien={lien} />;
+          }
+          return (
+            <li
+              className={`fr-nav__item ${estCheminCourant(lien.route) ? 'lien actif' : 'lien'}`}
+              key={lien.nom}
+            >
+              <Link className="fr-nav__link" to={lien.route}>
+                {lien.nom}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+};
+
+export const Header = ({ lienMAC, enteteSimple }: HeaderProprietes) => {
+  const navigationMAC = useNavigationMAC();
+  const contexteNavigation = useContexteNavigation();
 
   useEffect(() => {
     contexteNavigation
@@ -61,25 +135,7 @@ export const Header = ({ lienMAC, enteteSimple }: HeaderProprietes) => {
           Fermer
         </button>
         <div className="fr-header__menu-links"></div>
-        <nav
-          className="barre-navigation"
-          id="navigation-493"
-          role="navigation"
-          aria-label="Menu principal"
-        >
-          <ul className="fr-nav__list">
-            {liensNavigation.map((lien) => (
-              <li
-                className={`fr-nav__item ${estCheminCourant(lien.route) ? 'lien actif' : 'lien'}`}
-                key={lien.nom}
-              >
-                <Link className="fr-nav__link" to={lien.route}>
-                  {lien.nom}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <NavigationPublique liensNavigation={liensNavigation} />
       </div>
     </div>
   );

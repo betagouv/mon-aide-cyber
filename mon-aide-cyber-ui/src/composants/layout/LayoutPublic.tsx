@@ -5,8 +5,10 @@ import { Footer } from './Footer';
 import { useLayoutEffect } from 'react';
 
 export type LienNavigation = {
+  clef?: number;
   route: string;
   nom: string;
+  enfants?: LienNavigation[];
 };
 
 export const liensNavigation: LienNavigation[] = [
@@ -23,10 +25,22 @@ export const liensNavigation: LienNavigation[] = [
     nom: 'Devenir aidant',
   },
   {
-    route: '/a-propos/kit-de-communication',
-    nom: 'Kit de communication',
+    route: '/a-propos',
+    nom: 'À propos',
+    clef: 776,
+    enfants: [
+      {
+        route: '/a-propos/kit-de-communication',
+        nom: 'Kit de communication',
+      },
+      {
+        route: '/a-propos/statistiques',
+        nom: 'Statistiques',
+      },
+    ],
   },
 ];
+
 export const LayoutPublic = () => {
   const location = useLocation();
 

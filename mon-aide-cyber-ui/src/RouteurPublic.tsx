@@ -14,6 +14,7 @@ import { EcranCreationEspaceAidant as ComposantDemandeAidantCreationEspaceAidant
 import { LayoutCreationEspaceAidant } from './composants/layout/LayoutCreationEspaceAidant.tsx';
 import { EcranDevenirAidant } from './domaine/vitrine/ecran-devenir-aidant/EcranDevenirAidant.tsx';
 import { EcranAccessibilite } from './vues/EcranAccessibilite.tsx';
+import { EcranStatistiques } from './domaine/vitrine/ecran-statistiques/EcranStatistiques.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -28,6 +29,7 @@ export const RouteurPublic = () => {
           element={<ComposantDemandeEtreAide />}
         />
         <Route path="a-propos">
+          <Route path="statistiques" element={<EcranStatistiques />} />
           <Route path="kit-de-communication" element={<KitDeCommunication />} />
         </Route>
         <Route path="devenir-aidant" element={<EcranDevenirAidant />} />
