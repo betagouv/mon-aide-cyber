@@ -1,5 +1,15 @@
 .carte {
-  padding: 24px 16px 24px 16px;
+  padding: 1.5rem 1rem 1.5rem 0.5rem;
   border-radius: 8px;
   background-color: var(--couleurs-mac-violet-clair);
+
+  iframe {
+    height: 400px;
+
+    @include a-partir-de(md) {
+      height: 1000px;
+    }
+
+    width: 100%;
+  }
 }
