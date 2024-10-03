@@ -26,6 +26,7 @@ import CookieSession from 'cookie-session';
 import { AdaptateurDeVerificationDesAcces } from './adaptateurs/AdaptateurDeVerificationDesAcces';
 import { ServiceDeChiffrement } from './securite/ServiceDeChiffrement';
 import { routesStatistiques } from './api/statistiques/routesStatistiques';
+import { AdaptateurMetabase } from './adaptateurs/AdaptateurMetabase';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -53,6 +54,7 @@ export type ConfigurationServeur = {
     requete: Request,
     reponse: Response
   ) => string | undefined;
+  adaptateurMetabase: AdaptateurMetabase;
 };
 const creeApp = (config: ConfigurationServeur) => {
   const app = express();

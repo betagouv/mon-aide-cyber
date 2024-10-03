@@ -37,6 +37,7 @@ class ConstructeurDeStatistiques implements Constructeur<Statistiques> {
 }
 
 const unConstructeurDeStatistiques = () => new ConstructeurDeStatistiques();
+
 describe('Le serveur MAC sur les routes /statistiques', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { portEcoute: number; app: Express };
@@ -72,6 +73,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
         nombreDiagnostics: 1254,
         nombreAidantsFormes: expect.any(Number),
         nombreSessionFamiliarisation: expect.any(Number),
+        metabase: '',
       });
     });
 
@@ -94,6 +96,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
         nombreAidantsFormes: 238,
         nombreDiagnostics: expect.any(Number),
         nombreSessionFamiliarisation: expect.any(Number),
+        metabase: '',
       });
     });
 
@@ -114,7 +117,26 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
         nombreAidantsFormes: expect.any(Number),
         nombreDiagnostics: expect.any(Number),
         nombreSessionFamiliarisation: 45,
+        metabase: '',
       });
+    });
+
+    it('Appelle metabase pour retourner les statistiques', async () => {
+      const statistiques = unConstructeurDeStatistiques().construis();
+      await (
+        testeurMAC.entrepots.statistiques() as EntrepotStatistiquesMemoire
+      ).persiste(statistiques);
+      testeurMAC.adaptateurMetabase.retourReponse('metabase');
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/statistiques`,
+        donneesServeur.portEcoute
+      );
+
+      const corprDeReponse: ReponseStatistiques = await reponse.json();
+      expect(corprDeReponse.metabase).toStrictEqual('metabase');
     });
   });
 });
