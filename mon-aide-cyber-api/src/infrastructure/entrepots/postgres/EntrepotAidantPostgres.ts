@@ -78,6 +78,7 @@ export class EntrepotAidantPostgres
               .length > 0
         ),
       },
+      consentementAnnuaire: false,
     };
   }
 

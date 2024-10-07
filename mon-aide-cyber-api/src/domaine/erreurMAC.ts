@@ -15,6 +15,7 @@ export type Contexte =
   | 'Envoi un message de contact'
   | 'Lance le diagnostic'
   | 'Modifie le mot de passe'
+  | 'Modifie le profil Aidant'
   | 'Modifie les préférences de l’Aidant'
   | "Recherche d'un Aidé";
 

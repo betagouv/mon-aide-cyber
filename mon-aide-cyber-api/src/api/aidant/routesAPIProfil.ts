@@ -22,6 +22,10 @@ type CorpsRequeteChangementMotDerPasse = {
   confirmationMotDePasse: string;
 };
 
+type CorpsRequeteModifieProfilAidant = {
+  consentementAnnuaire: boolean;
+};
+
 export const routesAPIProfil = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
   const {
@@ -54,6 +58,28 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
           });
         })
         .catch((erreur) => suite(ErreurMAC.cree('Accède au profil', erreur)));
+    }
+  );
+
+  routes.patch(
+    '/',
+    express.json(),
+    session.verifie('Modifie le profil Aidant'),
+    async (
+      requete: RequeteUtilisateur<CorpsRequeteModifieProfilAidant>,
+      reponse: Response,
+      _suite
+    ) => {
+      return entrepots
+        .aidants()
+        .lis(requete.identifiantUtilisateurCourant!)
+        .then((aidant) => {
+          aidant.consentementAnnuaire = requete.body.consentementAnnuaire;
+          entrepots
+            .aidants()
+            .persiste(aidant)
+            .then(() => reponse.status(204).send());
+        });
     }
   );
 

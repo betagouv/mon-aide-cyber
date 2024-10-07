@@ -20,6 +20,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   private secteursActivite: SecteurActivite[] = [];
   private departements: Departement[] = [];
   private typesEntites: TypesEntites = [];
+  private consentementAnnuaire = false;
 
   avecUnNomPrenom(nomPrenom: string): ConstructeurAidant {
     this.nomPrenom = nomPrenom;
@@ -66,6 +67,11 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  ayantConsentiPourLAnnuaire(): ConstructeurAidant {
+    this.consentementAnnuaire = true;
+    return this;
+  }
+
   construis(): Aidant {
     return {
       identifiant: this.identifiant,
@@ -81,6 +87,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
         departements: this.departements,
         typesEntites: this.typesEntites,
       },
+      consentementAnnuaire: this.consentementAnnuaire,
     };
   }
 }

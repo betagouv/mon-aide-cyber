@@ -93,7 +93,75 @@ describe('le serveur MAC sur les routes /api/profil', () => {
     });
   });
 
-  describe('quand une requête POST est reçue sur /modifier-mot-de-passe', () => {
+  describe('Quand une requête PATCH est reçue sur /', () => {
+    it("Modifie le consentement pour apparaître dans l'annuaire", async () => {
+      const aidant = unAidant().construis();
+      testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        '/api/profil',
+        donneesServeur.portEcoute,
+        {
+          consentementAnnuaire: true,
+        }
+      );
+
+      const aidantModifie = await testeurMAC.entrepots
+        .aidants()
+        .lis(aidant.identifiant);
+      expect(reponse.statusCode).toBe(204);
+      expect(aidantModifie.consentementAnnuaire).toBe(true);
+    });
+
+    it("Modifie le consentement pour ne plus apparaître dans l'annuaire", async () => {
+      const aidant = unAidant().ayantConsentiPourLAnnuaire().construis();
+      testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        '/api/profil',
+        donneesServeur.portEcoute,
+        {
+          consentementAnnuaire: false,
+        }
+      );
+
+      const aidantModifie = await testeurMAC.entrepots
+        .aidants()
+        .lis(aidant.identifiant);
+      expect(reponse.statusCode).toBe(204);
+      expect(aidantModifie.consentementAnnuaire).toBe(false);
+    });
+
+    it('Ne modifie pas le consentement si il n’y a pas de changements', async () => {
+      const aidant = unAidant().construis();
+      testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        '/api/profil',
+        donneesServeur.portEcoute,
+        {
+          consentementAnnuaire: false,
+        }
+      );
+
+      const aidantModifie = await testeurMAC.entrepots
+        .aidants()
+        .lis(aidant.identifiant);
+      expect(reponse.statusCode).toBe(204);
+      expect(aidantModifie.consentementAnnuaire).toBe(false);
+    });
+  });
+
+  describe('Quand une requête POST est reçue sur /modifier-mot-de-passe', () => {
     it('modifie le mot de passe', async () => {
       const aidant = unAidant().construis();
       testeurMAC.entrepots.aidants().persiste(aidant);
