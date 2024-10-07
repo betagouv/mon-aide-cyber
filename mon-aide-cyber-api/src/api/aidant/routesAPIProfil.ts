@@ -66,6 +66,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     '/',
     express.json(),
     session.verifie('Modifie le profil Aidant'),
+    cgu.verifie(),
     async (
       requete: RequeteUtilisateur<CorpsRequeteModifieProfilAidant>,
       reponse: Response,
