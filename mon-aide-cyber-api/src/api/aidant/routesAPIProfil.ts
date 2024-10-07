@@ -1,20 +1,20 @@
-import { ConfigurationServeur } from '../serveur';
 import express, { Response } from 'express';
-import { RequeteUtilisateur } from './routesAPI';
 import { NextFunction } from 'express-serve-static-core';
-import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
-import { ErreurMAC } from '../domaine/erreurMAC';
-import { constructeurActionsHATEOAS } from './hateoas/hateoas';
 
 import {
   FieldValidationError,
   Result,
   validationResult,
 } from 'express-validator';
+import { ConfigurationServeur } from '../../serveur';
+import { RequeteUtilisateur } from '../routesAPI';
+import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
+import { ErreurMAC } from '../../domaine/erreurMAC';
 import {
   ErreurValidationMotDePasse,
   validateurDeNouveauMotDePasse,
-} from './validateurs/motDePasse';
+} from '../validateurs/motDePasse';
 
 type CorpsRequeteChangementMotDerPasse = {
   ancienMotDePasse: string;

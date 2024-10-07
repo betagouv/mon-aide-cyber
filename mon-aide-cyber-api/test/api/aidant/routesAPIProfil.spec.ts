@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { unAidant } from '../authentification/constructeurs/constructeurAidant';
-import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
-import { executeRequete } from './executeurRequete';
-import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
-import { Profil } from '../../src/api/representateurs/profil/Profil';
-import { Aidant } from '../../src/authentification/Aidant';
+import testeurIntegration from '../testeurIntegration';
+import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
+import { executeRequete } from '../executeurRequete';
+import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { Aidant } from '../../../src/authentification/Aidant';
+import { Profil } from '../../../src/api/representateurs/profil/Profil';
 
 describe('le serveur MAC sur les routes /api/profil', () => {
   const testeurMAC = testeurIntegration();
@@ -14,6 +14,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
     testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
+    testeurMAC.adaptateurDeVerificationDeCGU.reinitialise();
   });
 
   afterEach(() => {
@@ -21,7 +22,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
   });
 
   describe('quand une requête GET est reçue sur /', () => {
-    it("retourne les informations le l'utilisateur", async () => {
+    it("retourne les informations le l'Aidant", async () => {
       const aidant = unAidant().construis();
       await testeurMAC.entrepots.aidants().persiste(aidant);
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
@@ -120,14 +121,14 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
     it('vérifie que les CGU ont été signées', async () => {
       const aidant = unAidant().construis();
-      testeurMAC.entrepots.aidants().persiste(aidant);
+      await testeurMAC.entrepots.aidants().persiste(aidant);
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
 
       const nouveauMotDePasse = 'EgLw5R0ItVRxkl%#>cPd';
       await executeRequete(
         donneesServeur.app,
-        'GET',
-        '/api/profil/changement-mot-de-passe',
+        'POST',
+        '/api/profil/modifier-mot-de-passe',
         donneesServeur.portEcoute,
         {
           ancienMotDePasse: aidant.motDePasse,
@@ -269,7 +270,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           },
         ],
         [
-          "vérifie que l'ancien mot de passe est bien celui de l'utilisateur",
+          "vérifie que l'ancien mot de passe est bien celui de l'Aidant",
           {
             corps: {
               ancienMotDePasse: 'mauvais-mdp',
