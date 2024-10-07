@@ -165,7 +165,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       expect(aidantModifie.consentementAnnuaire).toBe(false);
     });
 
-    it('vérifie que les CGU ont été signées', async () => {
+    it('Vérifie que les CGU ont été signées', async () => {
       const aidant = unAidant().construis();
       await testeurMAC.entrepots.aidants().persiste(aidant);
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
@@ -183,6 +183,28 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
         true
       );
+    });
+
+    it('Valide que le corps de la requête correspond au consentement', async () => {
+      const aidant = unAidant().construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        '/api/profil',
+        donneesServeur.portEcoute,
+        {
+          consentemetAnnaire: 'true',
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(await reponse.json()).toStrictEqual({
+        message:
+          "Une erreur est survenue, vos modifications n'ont pas été prises en compte. Veuillez recharger la page et vérifier vos informations.",
+      });
     });
   });
 
