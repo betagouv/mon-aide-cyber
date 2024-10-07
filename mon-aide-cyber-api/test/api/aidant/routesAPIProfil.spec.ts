@@ -164,6 +164,26 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       expect(reponse.statusCode).toBe(204);
       expect(aidantModifie.consentementAnnuaire).toBe(false);
     });
+
+    it('vérifie que les CGU ont été signées', async () => {
+      const aidant = unAidant().construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+
+      await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        '/api/profil',
+        donneesServeur.portEcoute,
+        {
+          consentementAnnuaire: true,
+        }
+      );
+
+      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
+        true
+      );
+    });
   });
 
   describe('Quand une requête POST est reçue sur /modifier-mot-de-passe', () => {
