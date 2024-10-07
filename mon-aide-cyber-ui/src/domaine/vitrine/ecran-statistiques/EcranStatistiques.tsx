@@ -91,7 +91,7 @@ export const EcranStatistiques = () => {
                   </TypographieH2>
                 </div>
                 <div className="description">
-                  <span>Aidants Cyber formés</span>
+                  <span>Aidants Cyber référencés</span>
                 </div>
               </article>
               <article className="statistique">
