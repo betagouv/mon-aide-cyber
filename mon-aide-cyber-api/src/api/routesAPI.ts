@@ -5,11 +5,11 @@ import { routesAPIAuthentification } from './routesAPIAuthentification';
 import crypto from 'crypto';
 import { routesAPIUtilisateur } from './routesAPIUtilisateur';
 import { routesAPIEspaceAidant } from './routesAPIEspaceAidant';
-import { routesAPIProfil } from './routesAPIProfil';
 import { routesAPIDemandes } from './demandes/routesAPIDemandes';
 import { routeAPIContexte } from './routeAPIContexte';
 import { routesAPIAidant } from './aidant/routesAPIAidant';
 import * as core from 'express-serve-static-core';
+import { routesAPIProfil } from './aidant/routesAPIProfil';
 
 export interface RequeteUtilisateur<
   CORPS = void,
