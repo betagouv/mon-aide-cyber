@@ -506,32 +506,32 @@ type Mayotte = {
 };
 type CollectiviteDeSaintMartin = {
   nom: 'Collectivité de Saint-Martin';
-  code: '977';
+  code: '978';
   codeRegion: '978';
 };
 type CollectiviteDeSaintBarthelemy = {
   nom: 'Collectivité de Saint-Barthélémy';
-  code: '978';
+  code: '977';
   codeRegion: '977';
 };
 type CollectiviteDeSaintPierreEtMiquelon = {
   nom: 'Collectivité de Saint-Pierre et Miquelon';
-  code: '979';
+  code: '975';
   codeRegion: '975';
 };
 type CollectiviteDeWallisEtFutuna = {
   nom: 'Collectivité de Wallis & Futuna';
-  code: '980';
+  code: '986';
   codeRegion: '986';
 };
 type CollectiviteDePolynesieFrancaise = {
   nom: 'Collectivité de Polynésie Française';
-  code: '981';
+  code: '987';
   codeRegion: '987';
 };
 type CollectiviteDeNouvelleCaledonie = {
   nom: 'Collectivité de Nouvelle-Calédonie';
-  code: '982';
+  code: '988';
   codeRegion: '988';
 };
 export type Departement =
@@ -1151,32 +1151,32 @@ export const departements: Departement[] = [
   },
   {
     nom: 'Collectivité de Saint-Martin',
-    code: '977',
+    code: '978',
     codeRegion: '978',
   },
   {
     nom: 'Collectivité de Saint-Barthélémy',
-    code: '978',
+    code: '977',
     codeRegion: '977',
   },
   {
     nom: 'Collectivité de Saint-Pierre et Miquelon',
-    code: '979',
+    code: '975',
     codeRegion: '975',
   },
   {
     nom: 'Collectivité de Wallis & Futuna',
-    code: '980',
+    code: '986',
     codeRegion: '986',
   },
   {
     nom: 'Collectivité de Polynésie Française',
-    code: '981',
+    code: '987',
     codeRegion: '987',
   },
   {
     nom: 'Collectivité de Nouvelle-Calédonie',
-    code: '982',
+    code: '988',
     codeRegion: '988',
   },
 ];
