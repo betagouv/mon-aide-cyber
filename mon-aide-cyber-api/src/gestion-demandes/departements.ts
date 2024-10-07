@@ -740,6 +740,16 @@ export const departements: Departement[] = [
     codeRegion: '75',
   },
   {
+    nom: 'Corse-du-Sud',
+    code: '2A',
+    codeRegion: '94',
+  },
+  {
+    nom: 'Haute-Corse',
+    code: '2B',
+    codeRegion: '94',
+  },
+  {
     nom: "Côte-d'Or",
     code: '21',
     codeRegion: '27',
@@ -783,16 +793,6 @@ export const departements: Departement[] = [
     nom: 'Finistère',
     code: '29',
     codeRegion: '53',
-  },
-  {
-    nom: 'Corse-du-Sud',
-    code: '2A',
-    codeRegion: '94',
-  },
-  {
-    nom: 'Haute-Corse',
-    code: '2B',
-    codeRegion: '94',
   },
   {
     nom: 'Gard',
