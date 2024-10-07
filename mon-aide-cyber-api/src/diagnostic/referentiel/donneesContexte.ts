@@ -760,35 +760,35 @@ export const donneesContexte: QuestionsThematique = {
         {
           identifiant: 'contexte-departement-tom-siege-social-saintmartin',
           libelle: 'Collectivité de Saint-Martin',
-          ordre: 977,
+          ordre: 978,
         },
         {
           identifiant: 'contexte-departement-tom-siege-social-saintbarthélémy',
           libelle: 'Collectivité de Saint-Barthélémy',
-          ordre: 978,
+          ordre: 977,
         },
         {
           identifiant:
             'contexte-departement-tom-siege-social-saintpierreetmiquelon',
           libelle: 'Collectivité de Saint-Pierre et Miquelon',
-          ordre: 979,
+          ordre: 975,
         },
         {
           identifiant: 'contexte-departement-tom-siege-social-wallisetfutuna',
           libelle: 'Collectivité de Wallis & Futuna',
-          ordre: 980,
+          ordre: 986,
         },
         {
           identifiant:
             'contexte-departement-tom-siege-social-polynésiefrançaise',
           libelle: 'Collectivité de Polynésie Française',
-          ordre: 981,
+          ordre: 987,
         },
         {
           identifiant:
             'contexte-departement-tom-siege-social-nouvellecalédonie',
           libelle: 'Collectivité de Nouvelle-Calédonie',
-          ordre: 982,
+          ordre: 988,
         },
       ],
       type: 'choixUnique',
