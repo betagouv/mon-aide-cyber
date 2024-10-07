@@ -54,6 +54,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
         ],
         typesEntites: [],
       },
+      consentementAnnuaire: false,
     });
     expect(aidantCree).toStrictEqual<EspaceAidantCree>({
       identifiant: expect.any(String),

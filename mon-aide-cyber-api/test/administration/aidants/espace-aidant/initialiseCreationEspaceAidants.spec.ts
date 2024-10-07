@@ -156,6 +156,7 @@ describe('Initialise la création de l’espace des aidants', () => {
           secteursActivite: [],
           typesEntites: [],
         },
+        consentementAnnuaire: false,
       });
     });
 
@@ -200,6 +201,7 @@ describe('Initialise la création de l’espace des aidants', () => {
           secteursActivite: [],
           typesEntites: [],
         },
+        consentementAnnuaire: false,
       });
     });
 
@@ -261,6 +263,7 @@ describe('Initialise la création de l’espace des aidants', () => {
           secteursActivite: [],
           typesEntites: [],
         },
+        consentementAnnuaire: false,
       });
     });
 
@@ -438,6 +441,7 @@ describe('Initialise la création de l’espace des aidants', () => {
           secteursActivite: [],
           typesEntites: [],
         },
+        consentementAnnuaire: false,
       });
     });
 

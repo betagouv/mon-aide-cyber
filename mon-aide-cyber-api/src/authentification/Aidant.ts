@@ -52,6 +52,7 @@ export type Aidant = Aggregat & {
   dateSignatureCGU?: Date;
   dateSignatureCharte?: Date;
   preferences: Preferences;
+  consentementAnnuaire: boolean;
 };
 
 export interface EntrepotAidant extends Entrepot<Aidant> {

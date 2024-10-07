@@ -60,6 +60,7 @@ export class CapteurCommandeCreeEspaceAidant
               secteursActivite: [],
               typesEntites: [],
             },
+            consentementAnnuaire: false,
           };
           return this.entrepots
             .aidants()

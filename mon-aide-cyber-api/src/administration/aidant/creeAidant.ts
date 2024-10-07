@@ -31,6 +31,7 @@ export const creeAidant = async (
           departements: [],
           typesEntites: [],
         },
+        consentementAnnuaire: false,
       };
       await entrepot.persiste(aidant);
       await busEvenement.publie<AidantCree>({
