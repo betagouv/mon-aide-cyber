@@ -4,6 +4,7 @@ import { NextFunction } from 'express-serve-static-core';
 import {
   FieldValidationError,
   Result,
+  body,
   validationResult,
 } from 'express-validator';
 import { ConfigurationServeur } from '../../serveur';
@@ -67,21 +68,40 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     express.json(),
     session.verifie('Modifie le profil Aidant'),
     cgu.verifie(),
+    body('consentementAnnuaire')
+      .isBoolean()
+      .withMessage(
+        "Une erreur est survenue, vos modifications n'ont pas été prises en compte. Veuillez recharger la page et vérifier vos informations."
+      ),
     async (
       requete: RequeteUtilisateur<CorpsRequeteModifieProfilAidant>,
       reponse: Response,
       _suite
     ) => {
-      return entrepots
-        .aidants()
-        .lis(requete.identifiantUtilisateurCourant!)
-        .then((aidant) => {
-          aidant.consentementAnnuaire = requete.body.consentementAnnuaire;
-          entrepots
-            .aidants()
-            .persiste(aidant)
-            .then(() => reponse.status(204).send());
-        });
+      const resultatValidation: Result<FieldValidationError> = validationResult(
+        requete
+      ) as Result<FieldValidationError>;
+      if (resultatValidation.isEmpty()) {
+        return entrepots
+          .aidants()
+          .lis(requete.identifiantUtilisateurCourant!)
+          .then((aidant) => {
+            aidant.consentementAnnuaire = requete.body.consentementAnnuaire;
+            entrepots
+              .aidants()
+              .persiste(aidant)
+              .then(() => reponse.status(204).send());
+          });
+      }
+      const erreursValidation = resultatValidation
+        .array()
+        .map((resultat) => resultat.msg)
+        .filter((erreur): erreur is string => !!erreur)
+        .join(', ');
+      reponse.status(422);
+      return reponse.json({
+        message: erreursValidation,
+      });
     }
   );
 
