@@ -4,6 +4,7 @@ export type EtatProfil = {
   nom: string;
   prenom: string;
   email: string;
+  consentementAnnuaire: boolean;
   dateCreationCompte: string;
   enCoursDeChargement: boolean;
 };
@@ -11,6 +12,7 @@ export type EtatProfil = {
 enum TypeActionProfil {
   PROFIL_CHARGE = 'PROFIL_CHARGE',
   PROFIL_CHARGE_EN_ERREUR = 'PROFIL_CHARGE_EN_ERREUR',
+  COCHE_CONSENTEMENT_ANNUAIRE = 'COCHE_CONSENTEMENT_ANNUAIRE',
 }
 
 type ActionProfil =
@@ -20,6 +22,9 @@ type ActionProfil =
     }
   | {
       type: TypeActionProfil.PROFIL_CHARGE_EN_ERREUR;
+    }
+  | {
+      type: TypeActionProfil.COCHE_CONSENTEMENT_ANNUAIRE;
     };
 
 export const reducteurProfil = (
@@ -38,7 +43,14 @@ export const reducteurProfil = (
         prenom,
         email: action.profil.identifiantConnexion,
         dateCreationCompte: action.profil.dateSignatureCGU,
+        consentementAnnuaire: action.profil.consentementAnnuaire,
         enCoursDeChargement: false,
+      };
+    }
+    case TypeActionProfil.COCHE_CONSENTEMENT_ANNUAIRE: {
+      return {
+        ...etat,
+        consentementAnnuaire: !etat.consentementAnnuaire,
       };
     }
   }
@@ -54,5 +66,11 @@ export const profilCharge = (profil: Profil): ActionProfil => {
 export const profilChargeEnErreur = (): ActionProfil => {
   return {
     type: TypeActionProfil.PROFIL_CHARGE_EN_ERREUR,
+  };
+};
+
+export const cocheConsentementAnnuaire = (): ActionProfil => {
+  return {
+    type: TypeActionProfil.COCHE_CONSENTEMENT_ANNUAIRE,
   };
 };

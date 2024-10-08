@@ -1,18 +1,17 @@
-import { useCallback, useEffect, useReducer } from 'react';
-import {
-  profilCharge,
-  profilChargeEnErreur,
-  reducteurProfil,
-} from './reducteurProfil.ts';
+import { ReactElement, useCallback, useState } from 'react';
+
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
-import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
-import { useErrorBoundary } from 'react-error-boundary';
+import { ParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ComposantFormulaireModificationMotDePasse } from './ComposantFormulaireModificationMotDePasse.tsx';
 import { TypographieH2 } from '../communs/typographie/TypographieH2/TypographieH2.tsx';
-import { Profil } from '../../domaine/profil/Profil.ts';
 import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
+import { useFormulaireInformationsAidant } from './useFormulaireInformationsAidant.ts';
+import Button from '../atomes/Button/Button.tsx';
+import { cocheConsentementAnnuaire } from './reducteurProfil.ts';
+import { ChampCaseACocher } from '../communs/ChampCaseACocher/ChampCaseACocher.tsx';
+import { useFeatureFlag } from '../../hooks/useFeatureFlag.ts';
+import { Toast } from '../communs/Toasts/Toast.tsx';
 
 type ProprietesComposantProfilAidant = {
   macAPI: MACAPIType;
@@ -21,41 +20,42 @@ type ProprietesComposantProfilAidant = {
 export const ComposantProfilAidant = ({
   macAPI,
 }: ProprietesComposantProfilAidant) => {
-  const { showBoundary } = useErrorBoundary();
-  const navigationMAC = useNavigationMAC();
-  const [etatProfil, envoie] = useReducer(reducteurProfil, {
-    nom: '',
-    prenom: '',
-    email: '',
-    dateCreationCompte: '',
-    enCoursDeChargement: true,
-  });
+  const { estFonctionaliteActive } = useFeatureFlag(
+    'ESPACE_AIDANT_ECRAN_MES_PREFERENCES'
+  );
 
-  useEffect(() => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'afficher-profil',
-      (lien: Lien) => {
-        if (etatProfil.enCoursDeChargement) {
-          macAPI
-            .execute<Profil, Profil>(
-              constructeurParametresAPI()
-                .url(lien.url)
-                .methode(lien.methode!)
-                .construis(),
-              (reponse) => reponse
-            )
-            .then((profil) => {
-              navigationMAC.ajouteEtat(profil.liens);
-              envoie(profilCharge(profil));
-            })
-            .catch((erreur: ReponseHATEOAS) => {
-              envoie(profilChargeEnErreur());
-              showBoundary(erreur);
-            });
-        }
-      }
-    );
-  }, [etatProfil.enCoursDeChargement, showBoundary, navigationMAC]);
+  const navigationMAC = useNavigationMAC();
+  const { etatProfil, declencheActionReducteur, enregistreProfil } =
+    useFormulaireInformationsAidant();
+  const [
+    messageEnregistrementProfilAidant,
+    setMessageEnregistrementProfilAidant,
+  ] = useState<ReactElement | undefined>(undefined);
+
+  const enregistreProfilAidant = () => {
+    enregistreProfil(() => {
+      setMessageEnregistrementProfilAidant(
+        <Toast
+          message="Vos informations ont bien été enregistrées"
+          type="INFO"
+        />
+      );
+      setTimeout(() => {
+        setMessageEnregistrementProfilAidant((_prev) => undefined);
+      }, 10000);
+      () => {
+        setMessageEnregistrementProfilAidant(
+          <Toast
+            message="Une erreur est survenue lors de l'enregistrement de vos informations"
+            type="ERREUR"
+          />
+        );
+        setTimeout(() => {
+          setMessageEnregistrementProfilAidant((_prev) => undefined);
+        }, 10000);
+      };
+    });
+  };
 
   const afficherTableauDeBord = useCallback(() => {
     navigationMAC.navigue(
@@ -72,9 +72,11 @@ export const ComposantProfilAidant = ({
       <section>
         <div className="fr-grid-row">
           <div className="fr-col-md-6 fr-col-sm-12">
-            <div className="fr-mb-2w">
-              Compte Crée le {etatProfil.dateCreationCompte}
-            </div>
+            {!estFonctionaliteActive ? (
+              <div className="fr-mb-2w">
+                Compte Créé le {etatProfil.dateCreationCompte}
+              </div>
+            ) : null}
             <div>
               <button
                 className="bouton-mac bouton-mac-secondaire"
@@ -138,6 +140,36 @@ export const ComposantProfilAidant = ({
                     />
                   </div>
                 </div>
+                {estFonctionaliteActive ? (
+                  <>
+                    <div className="fr-mt-2w fr-mb-2w fr-checkbox-group mac-radio-group">
+                      <ChampCaseACocher
+                        label="Je souhaite que mon nom apparaisse sur l’annuaire des aidants"
+                        element={{
+                          code: 'consentement-annuaire',
+                          nom: 'Je souhaite que mon nom apparaisse sur l’annuaire des aidants',
+                        }}
+                        checked={etatProfil.consentementAnnuaire}
+                        aria-checked={etatProfil.consentementAnnuaire}
+                        onChange={() =>
+                          declencheActionReducteur(cocheConsentementAnnuaire())
+                        }
+                      />
+                    </div>
+                    <div className="fr-mt-2w fr-mb-2w">
+                      Compte Crée le {etatProfil.dateCreationCompte}
+                    </div>
+                    {messageEnregistrementProfilAidant}
+                    <Button
+                      className="fr-mt-2w"
+                      type="button"
+                      role="button"
+                      onClick={enregistreProfilAidant}
+                    >
+                      Enregistrer les modifications
+                    </Button>
+                  </>
+                ) : null}
               </fieldset>
             </div>
             <hr />
