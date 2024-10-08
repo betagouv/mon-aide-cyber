@@ -43,6 +43,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         dateSignatureCGU: FournisseurHorloge.formateDate(
           aidant.dateSignatureCGU!
         ).date,
+        consentementAnnuaire: aidant.consentementAnnuaire,
         identifiantConnexion: aidant.identifiantConnexion,
         liens: {
           'lancer-diagnostic': {
@@ -57,6 +58,10 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           'modifier-mot-de-passe': {
             url: '/api/profil/modifier-mot-de-passe',
             methode: 'POST',
+          },
+          'modifier-profil': {
+            url: '/api/profil',
+            methode: 'PATCH',
           },
         },
       });
