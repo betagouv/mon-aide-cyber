@@ -25,6 +25,7 @@ export type Action =
   | 'modifier-diagnostic'
   | 'modifier-mot-de-passe'
   | 'modifier-preferences'
+  | 'modifier-profil'
   | 'restitution-json'
   | 'restitution-pdf'
   | 'se-connecter'
