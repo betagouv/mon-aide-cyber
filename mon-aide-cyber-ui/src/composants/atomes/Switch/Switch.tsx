@@ -1,10 +1,14 @@
 import './switch.scss';
 
-export const Switch = ({ label }: { label: string }) => {
+type ProprietesSwitch = {
+  label: string;
+} & React.InputHTMLAttributes<HTMLInputElement>;
+
+export const Switch = ({ label, ...proprietesRestantes }: ProprietesSwitch) => {
   return (
     <div style={{ display: 'flex', gap: '2rem' }}>
       <div className="mac-switch">
-        <input type="checkbox" role="switch" aria-checked={'false'} />
+        <input {...proprietesRestantes} type="checkbox" role="switch" />
         <span className="mac-switch-slider"></span>
       </div>
       <label>{label}</label>
