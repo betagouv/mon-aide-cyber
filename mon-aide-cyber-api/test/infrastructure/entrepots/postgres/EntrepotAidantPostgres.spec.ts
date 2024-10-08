@@ -38,88 +38,90 @@ describe('Entrepot Aidant', () => {
     expect(aidantRecu).toStrictEqual<Aidant>(aidant);
   });
 
-  it('Persiste les types d’entités de l’Aidant', async () => {
-    const organisationsPubliques: EntitesOrganisationsPubliques = {
-      nom: 'Organisations publiques',
-      libelle:
-        'Organisations publiques (ex. collectivité, administration, etc.)',
-    };
-    const associations: EntitesAssociations = {
-      nom: 'Associations',
-      libelle: 'Associations (ex. association loi 1901, GIP)',
-    };
-    const aidant = unAidant()
-      .ayantPourTypesEntite([organisationsPubliques, associations])
-      .construis();
-    const serviceDeChiffrement = new ServiceDeChiffrementClair();
+  describe('Met à jour les préférences', () => {
+    it('Persiste les types d’entités de l’Aidant', async () => {
+      const organisationsPubliques: EntitesOrganisationsPubliques = {
+        nom: 'Organisations publiques',
+        libelle:
+          'Organisations publiques (ex. collectivité, administration, etc.)',
+      };
+      const associations: EntitesAssociations = {
+        nom: 'Associations',
+        libelle: 'Associations (ex. association loi 1901, GIP)',
+      };
+      const aidant = unAidant()
+        .ayantPourTypesEntite([organisationsPubliques, associations])
+        .construis();
+      const serviceDeChiffrement = new ServiceDeChiffrementClair();
 
-    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
 
-    const aidantRecu = await new EntrepotAidantPostgres(
-      serviceDeChiffrement
-    ).lis(aidant.identifiant);
-    expect(aidantRecu.preferences.typesEntites).toStrictEqual<TypesEntites>([
-      organisationsPubliques,
-      associations,
-    ]);
+      const aidantRecu = await new EntrepotAidantPostgres(
+        serviceDeChiffrement
+      ).lis(aidant.identifiant);
+      expect(aidantRecu.preferences.typesEntites).toStrictEqual<TypesEntites>([
+        organisationsPubliques,
+        associations,
+      ]);
+    });
+
+    it('Persiste les départements où l’Aidant souhaite intervenir', async () => {
+      const finistere: Departement = {
+        nom: 'Finistère',
+        code: '29',
+        codeRegion: '53',
+      };
+      const gironde: Departement = {
+        nom: 'Gironde',
+        code: '33',
+        codeRegion: '75',
+      };
+      const gard: Departement = {
+        nom: 'Gard',
+        code: '30',
+        codeRegion: '76',
+      };
+      const aidant = unAidant()
+        .ayantPourDepartements([finistere, gironde, gard])
+        .construis();
+      const serviceDeChiffrement = new ServiceDeChiffrementClair();
+
+      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+
+      const aidantRecu = await new EntrepotAidantPostgres(
+        serviceDeChiffrement
+      ).lis(aidant.identifiant);
+      expect(aidantRecu.preferences.departements).toStrictEqual<Departement[]>([
+        finistere,
+        gard,
+        gironde,
+      ]);
+    });
+
+    it('Persiste les secteurs d’activité pour lesquels l’Aidant peut intervenir', async () => {
+      const administration: SecteurActivite = {
+        nom: 'Administration',
+      };
+      const industrie: SecteurActivite = {
+        nom: 'Industrie',
+      };
+      const aidant = unAidant()
+        .ayantPourSecteursActivite([administration, industrie])
+        .construis();
+      const serviceDeChiffrement = new ServiceDeChiffrementClair();
+
+      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+
+      const aidantRecu = await new EntrepotAidantPostgres(
+        serviceDeChiffrement
+      ).lis(aidant.identifiant);
+      expect(aidantRecu.preferences.secteursActivite).toStrictEqual<
+        SecteurActivite[]
+      >([administration, industrie]);
+    });
   });
 
-  it('Persiste les départements où l’Aidant souhaite intervenir', async () => {
-    const finistere: Departement = {
-      nom: 'Finistère',
-      code: '29',
-      codeRegion: '53',
-    };
-    const gironde: Departement = {
-      nom: 'Gironde',
-      code: '33',
-      codeRegion: '75',
-    };
-    const gard: Departement = {
-      nom: 'Gard',
-      code: '30',
-      codeRegion: '76',
-    };
-    const aidant = unAidant()
-      .ayantPourDepartements([finistere, gironde, gard])
-      .construis();
-    const serviceDeChiffrement = new ServiceDeChiffrementClair();
-
-    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
-
-    const aidantRecu = await new EntrepotAidantPostgres(
-      serviceDeChiffrement
-    ).lis(aidant.identifiant);
-    expect(aidantRecu.preferences.departements).toStrictEqual<Departement[]>([
-      finistere,
-      gard,
-      gironde,
-    ]);
-  });
-
-  it('Persiste les secteurs d’activité pour lesquels l’Aidant peut intervenir', async () => {
-    const administration: SecteurActivite = {
-      nom: 'Administration',
-    };
-    const industrie: SecteurActivite = {
-      nom: 'Industrie',
-    };
-    const aidant = unAidant()
-      .ayantPourSecteursActivite([administration, industrie])
-      .construis();
-    const serviceDeChiffrement = new ServiceDeChiffrementClair();
-
-    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
-
-    const aidantRecu = await new EntrepotAidantPostgres(
-      serviceDeChiffrement
-    ).lis(aidant.identifiant);
-    expect(aidantRecu.preferences.secteursActivite).toStrictEqual<
-      SecteurActivite[]
-    >([administration, industrie]);
-  });
-
-  describe('Mets à jour un aidant', () => {
+  describe('Met à jour un aidant', () => {
     it('Mets à jour les dates de signature des CGU et de la charte', async () => {
       const dateSignature = new Date(Date.parse('2024-02-04T13:25:17+01:00'));
       FournisseurHorlogeDeTest.initialise(dateSignature);
@@ -136,6 +138,20 @@ describe('Entrepot Aidant', () => {
       ).lis(aidant.identifiant);
       expect(aidantRecu.dateSignatureCharte).toStrictEqual(dateSignature);
       expect(aidantRecu.dateSignatureCGU).toStrictEqual(dateSignature);
+    });
+
+    it('Met à jour le consentement pour apparaître dans l’annuaire', async () => {
+      const aidant = unAidant().construis();
+      const serviceDeChiffrement = new ServiceDeChiffrementClair();
+      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+
+      aidant.consentementAnnuaire = true;
+      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+
+      const aidantRecu = await new EntrepotAidantPostgres(
+        serviceDeChiffrement
+      ).lis(aidant.identifiant);
+      expect(aidantRecu.consentementAnnuaire).toBe(true);
     });
   });
 
