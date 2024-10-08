@@ -24,6 +24,7 @@ export type DonneesUtilisateur = {
   nomPrenom: string;
   motDePasse: string;
   preferences: PreferencesDTO;
+  consentementAnnuaire: boolean;
 };
 
 type AidantDTO = DTO & {
@@ -78,7 +79,7 @@ export class EntrepotAidantPostgres
               .length > 0
         ),
       },
-      consentementAnnuaire: false,
+      consentementAnnuaire: dto.donnees.consentementAnnuaire,
     };
   }
 
@@ -105,6 +106,7 @@ export class EntrepotAidantPostgres
           departements: entite.preferences.departements.map((d) => d.nom),
           typesEntites: entite.preferences.typesEntites.map((t) => t.nom),
         },
+        consentementAnnuaire: entite.consentementAnnuaire,
       },
     };
   }
