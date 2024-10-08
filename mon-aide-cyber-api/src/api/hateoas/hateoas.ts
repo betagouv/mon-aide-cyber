@@ -138,7 +138,10 @@ class ConstructeurActionsHATEOAS {
   }
 
   public accedeAuProfil(): ConstructeurActionsHATEOAS {
-    return this.lancerDiagnostic().modifierMotDePasse().seDeconnecter();
+    return this.lancerDiagnostic()
+      .modifierProfil()
+      .modifierMotDePasse()
+      .seDeconnecter();
   }
 
   public demandeAide() {
@@ -241,21 +244,6 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  construis = (): ReponseHATEOAS => {
-    return {
-      liens: {
-        ...(this.actions.size > 0 &&
-          Array.from(this.actions).reduce(
-            (accumulateur, [action, lien]) => ({
-              ...accumulateur,
-              [action]: lien,
-            }),
-            {}
-          )),
-      },
-    };
-  };
-
   private lancerDiagnostic(): ConstructeurActionsHATEOAS {
     this.actions.set('lancer-diagnostic', {
       url: '/api/diagnostic',
@@ -323,13 +311,38 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  private afficherDiagnostic(idDiagnostic: crypto.UUID) {
+  private afficherDiagnostic(
+    idDiagnostic: crypto.UUID
+  ): ConstructeurActionsHATEOAS {
     this.actions.set(`afficher-diagnostic-${idDiagnostic}`, {
       url: `/api/diagnostic/${idDiagnostic}/restitution`,
       methode: 'GET',
     });
     return this;
   }
+
+  private modifierProfil(): ConstructeurActionsHATEOAS {
+    this.actions.set('modifier-profil', {
+      url: '/api/profil',
+      methode: 'PATCH',
+    });
+    return this;
+  }
+
+  construis = (): ReponseHATEOAS => {
+    return {
+      liens: {
+        ...(this.actions.size > 0 &&
+          Array.from(this.actions).reduce(
+            (accumulateur, [action, lien]) => ({
+              ...accumulateur,
+              [action]: lien,
+            }),
+            {}
+          )),
+      },
+    };
+  };
 }
 
 export const constructeurActionsHATEOAS = (): ConstructeurActionsHATEOAS =>
