@@ -1,13 +1,16 @@
-import {
-  ComposantModificationMotDePasse,
-  ModificationMotDePasse,
-} from '../mot-de-passe/ComposantModificationMotDePasse.tsx';
 import { FormEvent, ReactElement, useCallback, useMemo, useState } from 'react';
-import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { ChampSucces } from '../alertes/Succes.tsx';
-import { ChampsErreur } from '../alertes/Erreurs.tsx';
-import { Lien } from '../../domaine/Lien.ts';
-import { MACAPIType } from '../../fournisseurs/api/useMACAPI.ts';
+import { ChampsErreur } from '../../../../../../composants/alertes/Erreurs';
+import { ChampSucces } from '../../../../../../composants/alertes/Succes';
+import {
+  ModificationMotDePasse,
+  ComposantModificationMotDePasse,
+} from '../../../../../../composants/mot-de-passe/ComposantModificationMotDePasse';
+import {
+  ParametresAPI,
+  constructeurParametresAPI,
+} from '../../../../../../fournisseurs/api/ConstructeurParametresAPI';
+import { Lien } from '../../../../../Lien';
+import { MACAPIType } from '../../../../../../fournisseurs/api/useMACAPI';
 
 type CorpsModificationMotDePasse = {
   ancienMotDePasse: string;
@@ -15,14 +18,14 @@ type CorpsModificationMotDePasse = {
   confirmationMotDePasse: string;
 };
 
-type ProprietesComposantFormulaireModificationMotDePasse = {
+type ProprietesFormulaireModificationMotDePasse = {
   lienModificationMotDePasse: Lien;
   macAPI: MACAPIType;
 };
-export const ComposantFormulaireModificationMotDePasse = ({
+export const FormulaireModificationMotDePasse = ({
   lienModificationMotDePasse,
   macAPI,
-}: ProprietesComposantFormulaireModificationMotDePasse) => {
+}: ProprietesFormulaireModificationMotDePasse) => {
   const [
     modificationMotDePasseTransmise,
     setModificationMotDePasseATransmettre,

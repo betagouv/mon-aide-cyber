@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useReducer } from 'react';
-import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI';
-import { useMACAPI } from '../../fournisseurs/api/useMACAPI';
 import { useErrorBoundary } from 'react-error-boundary';
 import {
   profilCharge,
   profilChargeEnErreur,
   reducteurProfil,
-} from './reducteurProfil';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens';
-import { useNavigationMAC } from '../../fournisseurs/hooks';
-import { Lien, ReponseHATEOAS } from '../../domaine/Lien';
-import { Profil } from '../../domaine/profil/Profil';
-import { useFeatureFlag } from '../../hooks/useFeatureFlag';
+} from '../reducteurProfil';
+import { constructeurParametresAPI } from '../../../../../../fournisseurs/api/ConstructeurParametresAPI';
+import { useMACAPI } from '../../../../../../fournisseurs/api/useMACAPI';
+import { useNavigationMAC } from '../../../../../../fournisseurs/hooks';
+import { useFeatureFlag } from '../../../../../../hooks/useFeatureFlag';
+import { Lien, ReponseHATEOAS } from '../../../../../Lien';
+import { MoteurDeLiens } from '../../../../../MoteurDeLiens';
+import { Profil } from '../../../../../profil/Profil';
 
 type CorpsModificationProfil = {
   consentementAnnuaire: boolean;
