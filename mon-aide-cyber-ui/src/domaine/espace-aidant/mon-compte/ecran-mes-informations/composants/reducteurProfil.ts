@@ -1,4 +1,4 @@
-import { Profil } from '../../domaine/profil/Profil.ts';
+import { Profil } from '../../../../profil/Profil';
 
 export type EtatProfil = {
   nom: string;

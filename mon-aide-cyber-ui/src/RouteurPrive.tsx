@@ -5,7 +5,6 @@ import { ComposantIntercepteur } from './composants/intercepteurs/ComposantInter
 import { EcranDiagnostic } from './composants/diagnostic/EcranDiagnostic.tsx';
 import { RequiertAuthentification } from './fournisseurs/RequiertAuthentification.tsx';
 import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
-import { ProfilAidant } from './composants/profil/ProfilAidant.tsx';
 import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
 import { LayoutAidant } from './composants/layout/LayoutAidant.tsx';
@@ -13,6 +12,7 @@ import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { EcranCreationEspaceAidant } from './domaine/espace-aidant/creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { EcranDiagnostics } from './domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
 import { EcranMesPreferences } from './domaine/espace-aidant/mon-compte/ecran-mes-preferences/EcranMesPreferences.tsx';
+import { EcranMesInformations } from './domaine/espace-aidant/mon-compte/ecran-mes-informations/EcranMesInformations.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -64,7 +64,10 @@ export const RouteurPrive = () => {
             ></Route>
             <Route path="diagnostics" element={<EcranDiagnostics />}></Route>
 
-            <Route path="mes-informations" element={<ProfilAidant />}></Route>
+            <Route
+              path="mes-informations"
+              element={<EcranMesInformations />}
+            ></Route>
             <Route
               path="mes-preferences"
               element={<EcranMesPreferences />}

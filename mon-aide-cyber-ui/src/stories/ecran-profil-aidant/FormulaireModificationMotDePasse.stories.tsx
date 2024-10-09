@@ -1,19 +1,19 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, waitFor, within } from '@storybook/test';
-import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
-import { ComposantProfilAidant } from '../composants/profil/ProfilAidant.tsx';
-import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
+import { ParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { ContexteNavigationMAC } from '../../fournisseurs/ContexteNavigationMAC.tsx';
+import { ComposantAffichageErreur } from '../../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Liens } from '../domaine/Lien.ts';
+import { Liens } from '../../domaine/Lien.ts';
+import { FormulaireModificationMotDePasse } from '../../domaine/espace-aidant/mon-compte/ecran-mes-informations/composants/formulaire-modification-mot-de-passe/FormulaireModificationMotDePasse.tsx';
 
-const meta = {
-  title: "Page profil de l'Aidant",
-  component: ComposantProfilAidant,
+const meta: Meta<typeof FormulaireModificationMotDePasse> = {
+  title: "Information sur le profil de l'Aidant",
+  component: FormulaireModificationMotDePasse,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof ComposantProfilAidant>;
+};
 
 let valeursSaisies = {};
 
@@ -26,6 +26,7 @@ const macAPIMemoire = {
     return Promise.resolve({
       nomPrenom: 'Jean Dupont',
       dateSignatureCGU: '11.03.2024',
+      consentementAnnuaire: true,
       identifiantConnexion: 'j.dup@mail.com',
       liens: {
         'lancer-diagnostic': {
@@ -46,89 +47,17 @@ const macAPIMemoire = {
 };
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
-export const AffichagePageProfil: Story = {
-  args: { macAPI: macAPIMemoire },
-  decorators: [
-    (story) => (
-      <ContexteNavigationMAC.Provider
-        value={{
-          etat: {
-            'afficher-profil': {
-              url: '/api/afficher-profil',
-              methode: 'GET',
-            },
-          },
-          setEtat: () => {
-            return;
-          },
-          ajouteEtat: (_liens: Liens) => {
-            return;
-          },
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          navigue: (_moteurDeLiens, _action, _exclusion) => {},
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          retourAccueil: () => {},
-        }}
-      >
-        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-          {story()}
-        </ErrorBoundary>
-      </ContexteNavigationMAC.Provider>
-    ),
-  ],
-  name: "Affiche la page profil de l'Aidant",
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-
-    await step("Avec les informations de l'Aidant", async () => {
-      await waitFor(() =>
-        expect(
-          canvas.getByText(/compte crée le 11.03.2024/i)
-        ).toBeInTheDocument()
-      );
-      await waitFor(() =>
-        expect(
-          canvas.getByRole('button', { name: /mes diagnostics/i })
-        ).toBeInTheDocument()
-      );
-      await waitFor(() =>
-        expect(canvas.getByDisplayValue(/jean/i)).toBeInTheDocument()
-      );
-      await waitFor(() =>
-        expect(canvas.getByDisplayValue(/dupont/i)).toBeInTheDocument()
-      );
-      await waitFor(() =>
-        expect(canvas.getByDisplayValue(/j.dup@mail.com/i)).toBeInTheDocument()
-      );
-    });
-
-    await step(
-      "Avec le formulaire de modification de mot de passe de l'Aidant",
-      async () => {
-        expect(
-          canvas.getByRole('textbox', {
-            name: /saisissez votre ancien mot de passe/i,
-          })
-        ).toBeInTheDocument();
-        expect(
-          canvas.getByRole('textbox', {
-            name: /choisissez un nouveau mot de passe/i,
-          })
-        ).toBeInTheDocument();
-        expect(
-          canvas.getByRole('textbox', {
-            name: /confirmez votre nouveau mot de passe/i,
-          })
-        ).toBeInTheDocument();
-      }
-    );
+export const StoryFormulaireModificationMotDePasse: Story = {
+  args: {
+    macAPI: macAPIMemoire,
+    lienModificationMotDePasse: {
+      url: '/api/profil/modifier-mot-de-passe',
+      methode: 'POST',
+    },
   },
-};
-
-export const ModificationMotDePasseAidant: Story = {
-  args: { macAPI: macAPIMemoire },
   decorators: [
     (story) => (
       <ContexteNavigationMAC.Provider
