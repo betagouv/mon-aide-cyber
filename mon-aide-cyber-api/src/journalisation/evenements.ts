@@ -29,6 +29,8 @@ export const demandeDevenirAidantespaceAidantCree = consommateurEvenement();
 
 export const preferencesAidantModifiees = consommateurEvenement();
 
+export const profilAidantModifie = consommateurEvenement();
+
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E
 ): Publication => {
