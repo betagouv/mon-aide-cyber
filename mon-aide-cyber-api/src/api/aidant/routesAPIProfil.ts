@@ -2,9 +2,9 @@ import express, { Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 
 import {
+  body,
   FieldValidationError,
   Result,
-  body,
   validationResult,
 } from 'express-validator';
 import { ConfigurationServeur } from '../../serveur';
@@ -16,6 +16,7 @@ import {
   ErreurValidationMotDePasse,
   validateurDeNouveauMotDePasse,
 } from '../validateurs/motDePasse';
+import { ServiceProfilAidant } from '../../espace-aidant/profil/ServiceProfilAidant';
 
 type CorpsRequeteChangementMotDerPasse = {
   ancienMotDePasse: string;
@@ -33,6 +34,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     entrepots,
     adaptateurDeVerificationDeSession: session,
     adaptateurDeVerificationDeCGU: cgu,
+    busEvenement,
   } = configuration;
 
   routes.get(
@@ -82,16 +84,11 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
         requete
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {
-        return entrepots
-          .aidants()
-          .lis(requete.identifiantUtilisateurCourant!)
-          .then((aidant) => {
-            aidant.consentementAnnuaire = requete.body.consentementAnnuaire;
-            entrepots
-              .aidants()
-              .persiste(aidant)
-              .then(() => reponse.status(204).send());
-          });
+        return new ServiceProfilAidant(entrepots.aidants(), busEvenement)
+          .modifie(requete.identifiantUtilisateurCourant!, {
+            consentementAnnuaire: requete.body.consentementAnnuaire,
+          })
+          .then(() => reponse.status(204).send());
       }
       const erreursValidation = resultatValidation
         .array()
