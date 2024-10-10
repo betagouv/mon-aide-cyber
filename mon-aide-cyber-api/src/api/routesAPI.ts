@@ -10,6 +10,7 @@ import { routeAPIContexte } from './routeAPIContexte';
 import { routesAPIAidant } from './aidant/routesAPIAidant';
 import * as core from 'express-serve-static-core';
 import { routesAPIProfil } from './aidant/routesAPIProfil';
+import { routesAPIAnnuaireAidants } from './annuaire-aidants/routeAPIAnnuaireAidants';
 
 export interface RequeteUtilisateur<
   CORPS = void,
@@ -31,6 +32,7 @@ const routesAPI = (configuration: ConfigurationServeur) => {
   routes.use('/espace-aidant', routesAPIEspaceAidant(configuration));
   routes.use('/profil', routesAPIProfil(configuration));
   routes.use('/demandes', routesAPIDemandes(configuration));
+  routes.use('/annuaire-aidants', routesAPIAnnuaireAidants(configuration));
 
   return routes;
 };
