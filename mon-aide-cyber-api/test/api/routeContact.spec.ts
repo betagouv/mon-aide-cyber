@@ -4,7 +4,7 @@ import { Express } from 'express';
 import { executeRequete } from './executeurRequete';
 import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 
-describe('le serveur MAC sur les routes /api/public', () => {
+describe('le serveur MAC sur les routes /contact', () => {
   let testeurMAC = testeurIntegration();
   let donneesServeur: { portEcoute: number; app: Express };
 
