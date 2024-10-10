@@ -3,13 +3,11 @@ import {
   ModificationMotDePasse,
 } from '../mot-de-passe/ComposantModificationMotDePasse.tsx';
 import { FormEvent, ReactElement, useCallback, useMemo, useState } from 'react';
-import {
-  constructeurParametresAPI,
-  ParametresAPI,
-} from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ChampSucces } from '../alertes/Succes.tsx';
 import { ChampsErreur } from '../alertes/Erreurs.tsx';
 import { Lien } from '../../domaine/Lien.ts';
+import { MACAPIType } from '../../fournisseurs/api/useMACAPI.ts';
 
 type CorpsModificationMotDePasse = {
   ancienMotDePasse: string;
@@ -19,12 +17,7 @@ type CorpsModificationMotDePasse = {
 
 type ProprietesComposantFormulaireModificationMotDePasse = {
   lienModificationMotDePasse: Lien;
-  macAPI: {
-    execute: <REPONSE, REPONSEAPI, CORPS = void>(
-      parametresAPI: ParametresAPI<CORPS>,
-      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
-    ) => Promise<REPONSE>;
-  };
+  macAPI: MACAPIType;
 };
 export const ComposantFormulaireModificationMotDePasse = ({
   lienModificationMotDePasse,

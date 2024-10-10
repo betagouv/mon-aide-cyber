@@ -1,8 +1,13 @@
 import { ParametresAPI } from './ConstructeurParametresAPI.ts';
 
-export const useMACAPI = () => {
-  // const { setUtilisateur } = useUtilisateur();
+export type MACAPIType = {
+  execute: <REPONSE, REPONSEAPI, CORPS = void>(
+    parametresAPI: ParametresAPI<CORPS>,
+    transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
+  ) => Promise<REPONSE>;
+};
 
+export const useMACAPI = () => {
   const execute = async <REPONSE, CORPS = void>(
     parametresAPI: ParametresAPI<CORPS>,
     transcris: (contenu: Promise<any>) => Promise<REPONSE>,

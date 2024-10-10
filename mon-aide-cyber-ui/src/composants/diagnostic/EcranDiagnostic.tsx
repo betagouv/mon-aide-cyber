@@ -45,10 +45,7 @@ import {
   RepresentationDiagnostic,
 } from '../../fournisseurs/api/APIDiagnostic.ts';
 
-import {
-  constructeurParametresAPI,
-  ParametresAPI,
-} from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { AutoCompletion } from '../auto-completion/AutoCompletion.tsx';
 import {
   ConteneurReponsePossible,
@@ -57,7 +54,7 @@ import {
 import { TerminerDiagnostic } from './TerminerDiagnostic.tsx';
 import { BadgePerimetre } from './BadgePerimetre.tsx';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
-import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
+import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 
 type ProprietesComposantQuestion = {
   actions: ActionReponseDiagnostic[];
@@ -263,12 +260,7 @@ type ProprietesEcranDiagnostic = {
 
 type ProprietesComposantDiagnostic = {
   idDiagnostic: UUID;
-  macAPI: {
-    execute: <REPONSE, REPONSEAPI, CORPS = void>(
-      parametresAPI: ParametresAPI<CORPS>,
-      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
-    ) => Promise<REPONSE>;
-  };
+  macAPI: MACAPIType;
 };
 
 export const ComposantDiagnostic = ({

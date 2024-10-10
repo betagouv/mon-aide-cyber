@@ -11,12 +11,9 @@ import {
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { ReponseAuthentification } from '../../domaine/authentification/Authentification.ts';
-import {
-  constructeurParametresAPI,
-  ParametresAPI,
-} from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useContexteNavigation } from '../../hooks/useContexteNavigation.ts';
-import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
+import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 
 export type Identifiants = {
   identifiant: string;
@@ -24,12 +21,7 @@ export type Identifiants = {
 };
 
 type ProprietesComposantAuthentification = {
-  macAPI: {
-    execute: <REPONSE, REPONSEAPI, CORPS = void>(
-      parametresAPI: ParametresAPI<CORPS>,
-      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
-    ) => Promise<REPONSE>;
-  };
+  macAPI: MACAPIType;
 };
 
 export const ComposantAuthentification = ({
