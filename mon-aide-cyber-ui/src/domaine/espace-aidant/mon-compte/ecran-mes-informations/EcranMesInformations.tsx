@@ -32,7 +32,7 @@ export const EcranMesInformations = () => {
                 Mes diagnostics
               </button>
             </div>
-            <FormulaireInformationsAidant />
+            <FormulaireInformationsAidant macAPI={useMACAPI()} />
             <hr />
             <div>
               <h4>Modifier son mot de passe</h4>

@@ -6,7 +6,7 @@ import {
   reducteurProfil,
 } from '../reducteurProfil';
 import { constructeurParametresAPI } from '../../../../../../fournisseurs/api/ConstructeurParametresAPI';
-import { useMACAPI } from '../../../../../../fournisseurs/api/useMACAPI';
+import { MACAPIType } from '../../../../../../fournisseurs/api/useMACAPI';
 import { useNavigationMAC } from '../../../../../../fournisseurs/hooks';
 import { useFeatureFlag } from '../../../../../../hooks/useFeatureFlag';
 import { Lien, ReponseHATEOAS } from '../../../../../Lien';
@@ -17,14 +17,13 @@ type CorpsModificationProfil = {
   consentementAnnuaire: boolean;
 };
 
-export const useFormulaireInformationsAidant = () => {
+export const useFormulaireInformationsAidant = (macAPI: MACAPIType) => {
   const { estFonctionaliteActive } = useFeatureFlag(
     'ESPACE_AIDANT_ECRAN_MES_PREFERENCES'
   );
 
   const navigationMAC = useNavigationMAC();
   const { showBoundary } = useErrorBoundary();
-  const macAPI = useMACAPI();
 
   const [etatProfil, declencheActionReducteur] = useReducer(reducteurProfil, {
     nom: '',

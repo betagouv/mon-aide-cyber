@@ -4,7 +4,7 @@ import {
   EtatProfil,
   profilCharge,
   reducteurProfil,
-} from '../../../src/composants/profil/reducteurProfil.ts';
+} from '../../../src/domaine/espace-aidant/mon-compte/ecran-mes-informations/composants/reducteurProfil.ts';
 
 describe('reducteur profil', () => {
   const profilVide: EtatProfil = {
