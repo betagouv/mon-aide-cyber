@@ -17,8 +17,18 @@ export const liensNavigation: LienNavigation[] = [
     nom: 'Accueil',
   },
   {
-    route: '/demandes/etre-aide',
+    route: '/beneficier-du-dispositif',
     nom: 'Bénéficier du dispositif',
+    enfants: [
+      {
+        route: '/beneficier-du-dispositif/etre-aide',
+        nom: 'Bénéficier du dispositif',
+      },
+      {
+        route: '/beneficier-du-dispositif/annuaire',
+        nom: "L'annuaire des Aidants",
+      },
+    ],
   },
   {
     route: '/devenir-aidant',
