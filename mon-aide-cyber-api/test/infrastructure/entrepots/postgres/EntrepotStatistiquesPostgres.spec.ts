@@ -8,6 +8,11 @@ import { Statistiques } from '../../../../src/statistiques/statistiques';
 import { EntrepotRelationPostgres } from '../../../../src/relation/infrastructure/EntrepotRelationPostgres';
 import { Tuple } from '../../../../src/relation/Tuple';
 import { UUID } from 'crypto';
+import {
+  unDiagnostic,
+  unDiagnosticEnGironde,
+} from '../../../constructeurs/constructeurDiagnostic';
+import { EntrepotDiagnosticPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotDiagnosticPostgres';
 
 describe('Entrepot Statistiques Postgres', () => {
   beforeEach(async () => await nettoieLaBaseDeDonneesStatistiques());
@@ -16,34 +21,49 @@ describe('Entrepot Statistiques Postgres', () => {
   const unTupleDiagnostic = (identifiant: UUID): Tuple => ({
     identifiant,
     relation: 'initiateur',
-    objet: { type: 'diagnostic', identifiant: '' },
+    objet: { type: 'diagnostic', identifiant: identifiant },
     utilisateur: { type: 'aidant', identifiant: '' },
   });
 
   it('Retourne les statistiques', async () => {
+    const premierDiagnosticEnGironde = unDiagnosticEnGironde().construis();
+    const deuxiemeDiagnosticEnGironde = unDiagnosticEnGironde().construis();
+    const troisiemeDiagnosticEnGironde = unDiagnosticEnGironde().construis();
+    const unDiagnosticSansDepartement = unDiagnostic().construis();
+    const quatriemeDiagnosticEnGironde = unDiagnosticEnGironde().construis();
     const entrepotAidant = new EntrepotAidantPostgres(
       new ServiceDeChiffrementClair()
     );
     await entrepotAidant.persiste(unAidant().construis());
     await entrepotAidant.persiste(unAidant().construis());
-    await new EntrepotRelationPostgres().persiste(
-      unTupleDiagnostic(crypto.randomUUID())
+    await new EntrepotDiagnosticPostgres().persiste(premierDiagnosticEnGironde);
+    await new EntrepotDiagnosticPostgres().persiste(
+      deuxiemeDiagnosticEnGironde
+    );
+    await new EntrepotDiagnosticPostgres().persiste(
+      troisiemeDiagnosticEnGironde
+    );
+    await new EntrepotDiagnosticPostgres().persiste(
+      quatriemeDiagnosticEnGironde
+    );
+    await new EntrepotDiagnosticPostgres().persiste(
+      unDiagnosticSansDepartement
     );
     await new EntrepotRelationPostgres().persiste(
-      unTupleDiagnostic(crypto.randomUUID())
+      unTupleDiagnostic(premierDiagnosticEnGironde.identifiant)
     );
     await new EntrepotRelationPostgres().persiste(
-      unTupleDiagnostic(crypto.randomUUID())
+      unTupleDiagnostic(deuxiemeDiagnosticEnGironde.identifiant)
     );
     await new EntrepotRelationPostgres().persiste(
-      unTupleDiagnostic(crypto.randomUUID())
+      unTupleDiagnostic(troisiemeDiagnosticEnGironde.identifiant)
     );
-    await new EntrepotRelationPostgres().persiste({
-      identifiant: crypto.randomUUID(),
-      relation: 'initiateur',
-      objet: { type: 'autre', identifiant: '' },
-      utilisateur: { type: 'aidant', identifiant: '' },
-    });
+    await new EntrepotRelationPostgres().persiste(
+      unTupleDiagnostic(quatriemeDiagnosticEnGironde.identifiant)
+    );
+    await new EntrepotRelationPostgres().persiste(
+      unTupleDiagnostic(unDiagnosticSansDepartement.identifiant)
+    );
 
     const statistiques = await new EntrepotStatistiquesPostgres().lis();
 

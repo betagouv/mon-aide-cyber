@@ -21,9 +21,11 @@ export class EntrepotStatistiquesPostgres implements EntrepotStatistiques {
       .first();
     const nombreDiagnostics: Count = await this.knex
       .raw(
-        `SELECT COUNT(*)
-            FROM relations
-            WHERE donnees -> 'objet' ->> 'type' = 'diagnostic'`
+        `SELECT COUNT(avec_departements)
+         FROM (SELECT id, jsonb_path_query(donnees -> 'referentiel' -> 'contexte', '$.questions[*]\\?(@.identifiant == "contexte-departement-tom-siege-social").reponseDonnee\\?(@.reponseUnique != null)')
+               FROM diagnostics d) AS avec_departements
+         WHERE avec_departements.id::text IN (SELECT donnees -> 'objet' ->> 'identifiant' FROM relations as id);
+        `
       )
       .then(({ rows }: { rows: Count[] }) => {
         return rows[0] !== undefined ? rows[0] : { count: '0' };
