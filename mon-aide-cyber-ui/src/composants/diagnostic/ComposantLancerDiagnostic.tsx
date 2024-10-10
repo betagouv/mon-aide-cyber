@@ -74,7 +74,7 @@ function ValidationCGU(proprietesValidationCGU: {
           <label className="fr-label" htmlFor="radio-validation-cgu-oui">
             <div>
               Le bénéficiaire confirme avoir rempli{' '}
-              <a href="/demandes/etre-aide">
+              <a href="/beneficier-du-dispositif/etre-aide">
                 le formulaire de demande d&apos;aide
               </a>
               .
@@ -91,7 +91,7 @@ function ValidationCGU(proprietesValidationCGU: {
           <label className="fr-label" htmlFor="radio-validation-cgu-non">
             <div>
               Le bénéficiaire n&apos;a pas encore rempli{' '}
-              <a href="/demandes/etre-aide">
+              <a href="/beneficier-du-dispositif/etre-aide">
                 le formulaire de demande d&apos;aide
               </a>
               .
@@ -104,11 +104,16 @@ function ValidationCGU(proprietesValidationCGU: {
               <br />
               L&apos;utilisation du diagnostic nécessite l&apos;acceptation des
               CGU par le bénéficiaire. Veuillez l&apos;orienter vers{' '}
-              <a href="/demandes/etre-aide">le lien du formulaire</a> afin
-              qu&apos;il puisse accepter les CGU avant de démarrer le diagnostic
+              <a href="/beneficier-du-dispositif/etre-aide">
+                le lien du formulaire
+              </a>{' '}
+              afin qu&apos;il puisse accepter les CGU avant de démarrer le
+              diagnostic
               <br />
-              <a href={`${import.meta.env['VITE_URL_MAC']}/demandes/etre-aide`}>
-                {`${import.meta.env['VITE_URL_MAC']}/demandes/etre-aide`}
+              <a
+                href={`${import.meta.env['VITE_URL_MAC']}/beneficier-du-dispositif/etre-aide`}
+              >
+                {`${import.meta.env['VITE_URL_MAC']}/beneficier-du-dispositif/etre-aide`}
               </a>
             </div>
           </label>
