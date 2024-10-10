@@ -99,6 +99,23 @@ describe('le serveur MAC sur les routes /api/profil', () => {
   });
 
   describe('Quand une requête PATCH est reçue sur /', () => {
+    it('Retourne une erreur HTTP 404 si l’Aidant n’est pas connu', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/profil`,
+        donneesServeur.portEcoute,
+        {
+          consentementAnnuaire: true,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toStrictEqual({
+        message: "Le aidant demandé n'existe pas.",
+      });
+    });
+
     it("Modifie le consentement pour apparaître dans l'annuaire", async () => {
       const aidant = unAidant().construis();
       testeurMAC.entrepots.aidants().persiste(aidant);
