@@ -78,7 +78,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     async (
       requete: RequeteUtilisateur<CorpsRequeteModifieProfilAidant>,
       reponse: Response,
-      _suite
+      suite
     ) => {
       const resultatValidation: Result<FieldValidationError> = validationResult(
         requete
@@ -88,17 +88,22 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
           .modifie(requete.identifiantUtilisateurCourant!, {
             consentementAnnuaire: requete.body.consentementAnnuaire,
           })
-          .then(() => reponse.status(204).send());
+          .then(() => reponse.status(204).send())
+          .catch((erreur) =>
+            suite(ErreurMAC.cree('Modifie le profil Aidant', erreur))
+          );
       }
       const erreursValidation = resultatValidation
         .array()
         .map((resultat) => resultat.msg)
         .filter((erreur): erreur is string => !!erreur)
-        .join(', ');
-      reponse.status(422);
-      return reponse.json({
-        message: erreursValidation,
-      });
+        .join('\n');
+      return suite(
+        ErreurMAC.cree(
+          'Modifie le profil Aidant',
+          new ErreurModificationProfil(erreursValidation)
+        )
+      );
     }
   );
 
@@ -150,3 +155,9 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
 
   return routes;
 };
+
+export class ErreurModificationProfil extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}

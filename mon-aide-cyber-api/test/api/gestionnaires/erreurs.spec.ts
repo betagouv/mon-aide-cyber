@@ -11,6 +11,7 @@ import {
 import { ErreurAccesRefuse } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';
 import { CorpsRequeteAuthentification } from '../../../src/api/routesAPIAuthentification';
 import { ErreurValidationMotDePasse } from '../../../src/api/validateurs/motDePasse';
+import { ErreurModificationProfil } from '../../../src/api/aidant/routesAPIProfil';
 
 describe("Gestionnaire d'erreur", () => {
   let codeRecu = 0;
@@ -159,63 +160,91 @@ describe("Gestionnaire d'erreur", () => {
     });
   });
 
-  it("consigne l'erreur en cas d'échec de création d'espace Aidant", () => {
-    const consignateurErreurs = new ConsignateurErreursMemoire();
-    const corpsAuthentification = {
-      cguSignees: true,
-      motDePasse: 'abc123',
-      motDePasseTemporaire: 'tmp',
-    };
-    fausseRequete.body = corpsAuthentification;
+  describe('Dans le cadre de la création de l’espace Aidant', () => {
+    it("Consigne l'erreur en cas d'échec", () => {
+      const consignateurErreurs = new ConsignateurErreursMemoire();
+      const corpsAuthentification = {
+        cguSignees: true,
+        motDePasse: 'abc123',
+        motDePasseTemporaire: 'tmp',
+      };
+      fausseRequete.body = corpsAuthentification;
 
-    gestionnaireErreurGeneralisee(consignateurErreurs)(
-      ErreurMAC.cree(
-        "Crée l'espace Aidant",
-        new ErreurCreationEspaceAidant('Quelque chose est arrivé')
-      ),
-      fausseRequete,
-      fausseReponse,
-      fausseSuite
-    );
+      gestionnaireErreurGeneralisee(consignateurErreurs)(
+        ErreurMAC.cree(
+          "Crée l'espace Aidant",
+          new ErreurCreationEspaceAidant('Quelque chose est arrivé')
+        ),
+        fausseRequete,
+        fausseReponse,
+        fausseSuite
+      );
 
-    expect(consignateurErreurs.tous()).toHaveLength(1);
-    expect(fausseRequete.body).toStrictEqual({
-      cguSignees: true,
-      motDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
-      motDePasseTemporaire: '<MOT_DE_PASSE_OBFUSQUE/>',
+      expect(consignateurErreurs.tous()).toHaveLength(1);
+      expect(fausseRequete.body).toStrictEqual({
+        cguSignees: true,
+        motDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
+        motDePasseTemporaire: '<MOT_DE_PASSE_OBFUSQUE/>',
+      });
+    });
+
+    it("Ne consigne pas l'erreur en cas d'échec sur une erreur de validation", () => {
+      const consignateurErreurs = new ConsignateurErreursMemoire();
+      const corpsAuthentification = {
+        cguSignees: true,
+        motDePasse: 'abc123',
+        motDePasseTemporaire: 'tmp',
+      };
+      fausseRequete.body = corpsAuthentification;
+
+      gestionnaireErreurGeneralisee(consignateurErreurs)(
+        ErreurMAC.cree(
+          "Crée l'espace Aidant",
+          new ErreurValidationMotDePasse(
+            'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.'
+          )
+        ),
+        fausseRequete,
+        fausseReponse,
+        fausseSuite
+      );
+
+      expect(consignateurErreurs.tous()).toHaveLength(0);
+      expect(fausseRequete.body).toStrictEqual({
+        cguSignees: true,
+        motDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
+        motDePasseTemporaire: '<MOT_DE_PASSE_OBFUSQUE/>',
+      });
     });
   });
 
-  it("ne consigne pas l'erreur en cas d'échec de création d'espace Aidant sur une erreur de validation", () => {
-    const consignateurErreurs = new ConsignateurErreursMemoire();
-    const corpsAuthentification = {
-      cguSignees: true,
-      motDePasse: 'abc123',
-      motDePasseTemporaire: 'tmp',
-    };
-    fausseRequete.body = corpsAuthentification;
+  describe('Danse le cadre de la modification du profil de l’Aidant', () => {
+    it('Consigne l’erreur', () => {
+      const consignateurErreurs = new ConsignateurErreursMemoire();
+      fausseRequete.body = {
+        consentementAnnuaire: true,
+      };
 
-    gestionnaireErreurGeneralisee(consignateurErreurs)(
-      ErreurMAC.cree(
-        "Crée l'espace Aidant",
-        new ErreurValidationMotDePasse(
-          'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.'
-        )
-      ),
-      fausseRequete,
-      fausseReponse,
-      fausseSuite
-    );
+      gestionnaireErreurGeneralisee(consignateurErreurs)(
+        ErreurMAC.cree(
+          'Modifie le profil Aidant',
+          new ErreurModificationProfil(
+            'Votre nouveau mot de passe ne respecte pas les règles de MonAideCyber.'
+          )
+        ),
+        fausseRequete,
+        fausseReponse,
+        fausseSuite
+      );
 
-    expect(consignateurErreurs.tous()).toHaveLength(0);
-    expect(fausseRequete.body).toStrictEqual({
-      cguSignees: true,
-      motDePasse: '<MOT_DE_PASSE_OBFUSQUE/>',
-      motDePasseTemporaire: '<MOT_DE_PASSE_OBFUSQUE/>',
+      expect(consignateurErreurs.tous()).toHaveLength(1);
+      expect(fausseRequete.body).toStrictEqual({
+        consentementAnnuaire: true,
+      });
     });
   });
 
-  it("obfusque quelconque attribut ayant un nom la chaine de caractère contenant 'mot de passe'", () => {
+  it("Obfusque quelconque attribut ayant en nom la chaine de caractère contenant 'mot de passe'", () => {
     const consignateurErreurs = new ConsignateurErreursMemoire();
     const corpsAuthentification = {
       cguSignees: true,
