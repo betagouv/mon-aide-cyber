@@ -2,13 +2,21 @@ import { FormulaireDeContact } from '../../../composants/communs/FormulaireDeCon
 import TuileActionDemandeAide from '../../../composants/communs/tuiles/TuileActionDemandeAide';
 import TuileActionKitDeCommunication from '../../../composants/communs/tuiles/TuileActionKitDeCommunication';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2';
+import { CarteAidant } from './composants/CarteAidant';
 import { HeroAnnuaire } from './composants/HeroAnnuaire';
 
 export const EcranAnnuaire = () => {
   return (
-    <main role="main" className="ecran-annuaire">
+    <main role="main" className="ecran-annuaire-aidants">
       <HeroAnnuaire />
-      <section className="fond-clair-mac"></section>
+      <section className="fond-clair-mac">
+        <div className="fr-container cartes-aidants">
+          <CarteAidant nomPrenom="Marc ETOURNEAU" />
+          <CarteAidant nomPrenom="Marc ETOURNEAU" />
+          <CarteAidant nomPrenom="Marc ETOURNEAU" />
+          <CarteAidant nomPrenom="Marc ETOURNEAU" />
+        </div>
+      </section>
       <section className="fond-clair-mac fr-pt-4w participer">
         <div className="fr-container conteneur-participer">
           <div className="fr-col-12">
