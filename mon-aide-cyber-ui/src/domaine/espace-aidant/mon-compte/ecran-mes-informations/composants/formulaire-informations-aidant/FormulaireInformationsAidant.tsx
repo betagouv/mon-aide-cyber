@@ -5,13 +5,20 @@ import Button from '../../../../../../composants/atomes/Button/Button';
 import { ChampCaseACocher } from '../../../../../../composants/communs/ChampCaseACocher/ChampCaseACocher';
 import { Toast } from '../../../../../../composants/communs/Toasts/Toast';
 import { useFeatureFlag } from '../../../../../../hooks/useFeatureFlag';
+import { MACAPIType } from '../../../../../../fournisseurs/api/useMACAPI.ts';
 
-export const FormulaireInformationsAidant = () => {
+type ProprietesFormulaireInformationsAidant = {
+  macAPI: MACAPIType;
+};
+
+export const FormulaireInformationsAidant = ({
+  macAPI,
+}: ProprietesFormulaireInformationsAidant) => {
   const { estFonctionaliteActive } = useFeatureFlag(
     'ESPACE_AIDANT_ECRAN_MES_PREFERENCES'
   );
   const { etatProfil, declencheActionReducteur, enregistreProfil } =
-    useFormulaireInformationsAidant();
+    useFormulaireInformationsAidant(macAPI);
   const [
     messageEnregistrementProfilAidant,
     setMessageEnregistrementProfilAidant,

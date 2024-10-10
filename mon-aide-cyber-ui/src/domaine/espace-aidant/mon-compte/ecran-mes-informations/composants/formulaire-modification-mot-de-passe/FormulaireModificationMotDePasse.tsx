@@ -2,15 +2,12 @@ import { FormEvent, ReactElement, useCallback, useMemo, useState } from 'react';
 import { ChampsErreur } from '../../../../../../composants/alertes/Erreurs';
 import { ChampSucces } from '../../../../../../composants/alertes/Succes';
 import {
-  ModificationMotDePasse,
   ComposantModificationMotDePasse,
+  ModificationMotDePasse,
 } from '../../../../../../composants/mot-de-passe/ComposantModificationMotDePasse';
-import {
-  ParametresAPI,
-  constructeurParametresAPI,
-} from '../../../../../../fournisseurs/api/ConstructeurParametresAPI';
+import { constructeurParametresAPI } from '../../../../../../fournisseurs/api/ConstructeurParametresAPI';
 import { Lien } from '../../../../../Lien';
-import { MACAPIType } from '../../../../../../fournisseurs/api/useMACAPI';
+import { MACAPIType } from '../../../../../../fournisseurs/api/useMACAPI.ts';
 
 type CorpsModificationMotDePasse = {
   ancienMotDePasse: string;

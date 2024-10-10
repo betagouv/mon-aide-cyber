@@ -1,14 +1,13 @@
 import { Meta, StoryObj } from '@storybook/react';
+import { FormulaireModificationMotDePasse } from '../../domaine/espace-aidant/mon-compte/ecran-mes-informations/composants/formulaire-modification-mot-de-passe/FormulaireModificationMotDePasse.tsx';
+import { ContexteNavigationMAC } from '../../fournisseurs/ContexteNavigationMAC.tsx';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ComposantAffichageErreur } from '../../composants/alertes/ComposantAffichageErreur.tsx';
+import { Liens } from '../../domaine/Lien.ts';
 import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { ParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { ContexteNavigationMAC } from '../../fournisseurs/ContexteNavigationMAC.tsx';
-import { ComposantAffichageErreur } from '../../composants/alertes/ComposantAffichageErreur.tsx';
-import { ErrorBoundary } from 'react-error-boundary';
-import { Liens } from '../../domaine/Lien.ts';
-import { FormulaireModificationMotDePasse } from '../../domaine/espace-aidant/mon-compte/ecran-mes-informations/composants/formulaire-modification-mot-de-passe/FormulaireModificationMotDePasse.tsx';
 
 const meta: Meta<typeof FormulaireModificationMotDePasse> = {
-  title: "Information sur le profil de l'Aidant",
   component: FormulaireModificationMotDePasse,
   parameters: {
     layout: 'fullscreen',
@@ -51,6 +50,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const StoryFormulaireModificationMotDePasse: Story = {
+  name: 'Modifie le mot de passe',
   args: {
     macAPI: macAPIMemoire,
     lienModificationMotDePasse: {
@@ -86,7 +86,6 @@ export const StoryFormulaireModificationMotDePasse: Story = {
       </ContexteNavigationMAC.Provider>
     ),
   ],
-  name: 'Modifie le mot de passe',
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
