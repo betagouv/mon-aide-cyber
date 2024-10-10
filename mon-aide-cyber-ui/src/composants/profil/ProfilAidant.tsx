@@ -6,24 +6,16 @@ import {
 } from './reducteurProfil.ts';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
-import {
-  constructeurParametresAPI,
-  ParametresAPI,
-} from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { ComposantFormulaireModificationMotDePasse } from './ComposantFormulaireModificationMotDePasse.tsx';
 import { TypographieH2 } from '../communs/typographie/TypographieH2/TypographieH2.tsx';
 import { Profil } from '../../domaine/profil/Profil.ts';
-import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
+import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 
 type ProprietesComposantProfilAidant = {
-  macAPI: {
-    execute: <REPONSE, REPONSEAPI, CORPS = void>(
-      parametresAPI: ParametresAPI<CORPS>,
-      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
-    ) => Promise<REPONSE>;
-  };
+  macAPI: MACAPIType;
 };
 
 export const ComposantProfilAidant = ({

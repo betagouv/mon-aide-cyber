@@ -28,23 +28,16 @@ import {
   PreRequisDemande,
   ReponseDemandeInitiee,
 } from '../DevenirAidant';
-import {
-  constructeurParametresAPI,
-  ParametresAPI,
-} from '../../../../fournisseurs/api/ConstructeurParametresAPI';
+import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI';
 import { ChampsErreur } from '../../../../composants/alertes/Erreurs';
 import { AutoCompletion } from '../../../../composants/auto-completion/AutoCompletion';
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4';
 import { useContexteNavigation } from '../../../../hooks/useContexteNavigation.ts';
+import { MACAPIType } from '../../../../fournisseurs/api/useMACAPI.ts';
 
 type ProprietesFormulaireDevenirAidant = {
-  macAPI: {
-    execute: <REPONSE, REPONSEAPI, CORPS = void>(
-      parametresAPI: ParametresAPI<CORPS>,
-      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
-    ) => Promise<REPONSE>;
-  };
+  macAPI: MACAPIType;
 };
 
 export const FormulaireDevenirAidant = ({

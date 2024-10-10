@@ -10,21 +10,13 @@ import {
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
 import { Lien, ReponseHATEOAS } from '../../Lien.ts';
-import {
-  constructeurParametresAPI,
-  ParametresAPI,
-} from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { CreationEspaceAidant } from '../EspaceAidant.ts';
 import { ComposantModificationMotDePasse } from '../../../composants/mot-de-passe/ComposantModificationMotDePasse.tsx';
-import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
+import { MACAPIType, useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 
 type ProprietesComposantCreationEspaceAidant = {
-  macAPI: {
-    execute: <REPONSE, REPONSEAPI, CORPS = void>(
-      parametresAPI: ParametresAPI<CORPS>,
-      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
-    ) => Promise<REPONSE>;
-  };
+  macAPI: MACAPIType;
 };
 
 export const ComposantCreationEspaceAidant = ({
