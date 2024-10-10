@@ -2,6 +2,7 @@ import { FormulaireDeContact } from '../../../composants/communs/FormulaireDeCon
 import TuileActionDemandeAide from '../../../composants/communs/tuiles/TuileActionDemandeAide';
 import TuileActionKitDeCommunication from '../../../composants/communs/tuiles/TuileActionKitDeCommunication';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2';
+import { CarteAidant } from './composants/CarteAidant';
 import { HeroAnnuaire } from './composants/HeroAnnuaire';
 import { UUID } from '../../../types/Types';
 import './ecran-annuaire.scss';
