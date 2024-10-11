@@ -12,6 +12,7 @@ import { EntrepotDemandeDevenirAidant } from '../../../gestion-demandes/devenir-
 import { EntrepotDemandeDevenirAidantPostgres } from './EntrepotDemandeDevenirAidantPostgres';
 import { EntrepotStatistiques } from '../../../statistiques/statistiques';
 import { EntrepotStatistiquesPostgres } from './EntrepotStatistiquesPostgres';
+import { EntrepotAnnuaireAidants } from '../../../annuaire-aidants/annuaireAidants';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -30,7 +31,6 @@ export class EntrepotsMAC implements Entrepots {
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
   }
-
   aidants(): EntrepotAidant {
     return this.entrepotAidant;
   }
@@ -42,11 +42,15 @@ export class EntrepotsMAC implements Entrepots {
   aides(): EntrepotAide {
     return this.entrepotAide;
   }
+
   demandesDevenirAidant(): EntrepotDemandeDevenirAidant {
     return this.entrepotDemandeDevenirAidant;
   }
-
   statistiques(): EntrepotStatistiques {
     return this.entrepotStatistiques;
+  }
+
+  annuaireAidants(): EntrepotAnnuaireAidants {
+    throw new Error('Method not implemented.');
   }
 }

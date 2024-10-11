@@ -1,17 +1,9 @@
-import { EntrepotAidant } from '../authentification/Aidant';
-import { UUID } from 'crypto';
-
-export type AnnuaireDTO = { identifiant: UUID; nomPrenom: string };
+import { Aidant, EntrepotAnnuaireAidants } from './annuaireAidants';
 
 export class ServiceAnnuaireAidants {
-  constructor(private readonly entrepotAidant: EntrepotAidant) {}
+  constructor(private readonly entrepotAidant: EntrepotAnnuaireAidants) {}
 
-  recherche(): Promise<AnnuaireDTO[]> {
-    return this.entrepotAidant.tous().then((aidants) =>
-      aidants.map((aidant) => ({
-        identifiant: aidant.identifiant,
-        nomPrenom: aidant.nomPrenom,
-      }))
-    );
+  recherche(): Promise<Aidant[]> {
+    return this.entrepotAidant.tous();
   }
 }

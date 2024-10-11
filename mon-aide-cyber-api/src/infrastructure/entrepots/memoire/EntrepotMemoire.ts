@@ -23,6 +23,10 @@ import {
   EntrepotStatistiques,
   Statistiques,
 } from '../../../statistiques/statistiques';
+import {
+  EntrepotAnnuaireAidants,
+  Aidant as AnnuaireAidant,
+} from '../../../annuaire-aidants/annuaireAidants';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -175,3 +179,7 @@ export class EntrepotStatistiquesMemoire
     });
   }
 }
+
+export class EntrepotAnnuaireAidantsMemoire
+  extends EntrepotMemoire<AnnuaireAidant>
+  implements EntrepotAnnuaireAidants {}

@@ -5,6 +5,7 @@ import { EntrepotAide } from '../aide/Aide';
 
 import { EntrepotDemandeDevenirAidant } from '../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { EntrepotStatistiques } from '../statistiques/statistiques';
+import { EntrepotAnnuaireAidants } from '../annuaire-aidants/annuaireAidants';
 
 export interface Entrepots {
   diagnostic(): EntrepotDiagnostic;
@@ -13,4 +14,5 @@ export interface Entrepots {
   aides(): EntrepotAide;
   demandesDevenirAidant(): EntrepotDemandeDevenirAidant;
   statistiques(): EntrepotStatistiques;
+  annuaireAidants(): EntrepotAnnuaireAidants;
 }

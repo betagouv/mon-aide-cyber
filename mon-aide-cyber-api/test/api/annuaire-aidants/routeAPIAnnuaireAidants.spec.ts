@@ -2,8 +2,8 @@ import { afterEach, beforeEach, describe, expect } from 'vitest';
 import { Express } from 'express';
 import testeurIntegration from '../testeurIntegration';
 import { executeRequete } from '../executeurRequete';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
 import { ReponseAPIAnnuaireAidants } from '../../../src/api/annuaire-aidants/routeAPIAnnuaireAidants';
+import { unAidant } from '../../annuaire-aidants/constructeurAidant';
 
 describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   let testeurMAC = testeurIntegration();
@@ -19,8 +19,8 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   });
 
   it('Retourne un Aidant', async () => {
-    const aidant = unAidant().ayantConsentiPourLAnnuaire().construis();
-    await testeurMAC.entrepots.aidants().persiste(aidant);
+    const aidant = unAidant().construis();
+    await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
 
     const reponse = await executeRequete(
       donneesServeur.app,
