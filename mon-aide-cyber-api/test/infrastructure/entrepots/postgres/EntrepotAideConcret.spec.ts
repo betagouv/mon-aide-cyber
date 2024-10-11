@@ -7,7 +7,7 @@ import {
   EntrepotAideDistant,
 } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAideConcret';
 import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
-import { afterEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { nettoieLaBaseDeDonneesAides } from '../../../utilitaires/nettoyeurBDD';
 import crypto from 'crypto';
 import { Aide } from '../../../../src/aide/Aide';
@@ -19,7 +19,7 @@ import {
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
 
 describe('Entrepot Aidé Concret', () => {
-  afterEach(async () => {
+  beforeEach(async () => {
     await nettoieLaBaseDeDonneesAides();
   });
 

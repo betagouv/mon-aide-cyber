@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { nettoieLaBaseDeDonneesAidants } from '../../../utilitaires/nettoyeurBDD';
 import { EntrepotAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAidantPostgres';
 import { unAidant } from '../../../authentification/constructeurs/constructeurAidant';
@@ -16,7 +16,7 @@ import { ServiceDeChiffrementClair } from '../../securite/ServiceDeChiffrementCl
 import { SecteurActivite } from '../../../../src/espace-aidant/preferences/secteursActivite';
 
 describe('Entrepot Aidant', () => {
-  afterEach(async () => {
+  beforeEach(async () => {
     await nettoieLaBaseDeDonneesAidants();
   });
 
