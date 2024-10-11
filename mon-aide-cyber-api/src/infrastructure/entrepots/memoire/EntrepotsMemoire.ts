@@ -3,6 +3,7 @@ import { Entrepots } from '../../../domaine/Entrepots';
 import {
   EntrepotAidantMemoire,
   EntrepotAideMemoire,
+  EntrepotAnnuaireAidantsMemoire,
   EntrepotDemandeDevenirAidantMemoire,
   EntrepotDiagnosticMemoire,
   EntrepotRestitutionMemoire,
@@ -13,6 +14,7 @@ import { EntrepotAidant } from '../../../authentification/Aidant';
 import { EntrepotRestitution } from '../../../restitution/Restitution';
 import { EntrepotAide } from '../../../aide/Aide';
 import { EntrepotStatistiques } from '../../../statistiques/statistiques';
+import { EntrepotAnnuaireAidants } from '../../../annuaire-aidants/annuaireAidants';
 
 export class EntrepotsMemoire implements Entrepots {
   private entrepotDiagnostic: EntrepotDiagnostic =
@@ -25,6 +27,8 @@ export class EntrepotsMemoire implements Entrepots {
     new EntrepotDemandeDevenirAidantMemoire();
   private entrepotStatistiques: EntrepotStatistiques =
     new EntrepotStatistiquesMemoire();
+  private entrepotAnnuaireAidants: EntrepotAnnuaireAidants =
+    new EntrepotAnnuaireAidantsMemoire();
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
@@ -48,5 +52,9 @@ export class EntrepotsMemoire implements Entrepots {
 
   statistiques() {
     return this.entrepotStatistiques;
+  }
+
+  annuaireAidants() {
+    return this.entrepotAnnuaireAidants;
   }
 }

@@ -20,7 +20,7 @@ export const routesAPIAnnuaireAidants = (
       reponse: Response<ReponseAPIAnnuaireAidants>,
       _suite: NextFunction
     ) => {
-      return new ServiceAnnuaireAidants(entrepots.aidants())
+      return new ServiceAnnuaireAidants(entrepots.annuaireAidants())
         .recherche()
         .then((annuaire) => reponse.status(200).json(annuaire));
     }
