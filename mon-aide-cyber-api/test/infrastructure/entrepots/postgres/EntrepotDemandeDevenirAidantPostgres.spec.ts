@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { nettoieLaBaseDeDonneesDemandeDevenirAidant } from '../../../utilitaires/nettoyeurBDD';
 import { unConstructeurDeDemandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/constructeurDeDemandeDevenirAidant';
 import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
@@ -15,7 +15,7 @@ import knexfile from '../../../../src/infrastructure/entrepots/postgres/knexfile
 import knex from 'knex';
 
 describe('Entrepot Demande Devenir Aidant', () => {
-  afterEach(async () => {
+  beforeEach(async () => {
     await nettoieLaBaseDeDonneesDemandeDevenirAidant();
   });
 

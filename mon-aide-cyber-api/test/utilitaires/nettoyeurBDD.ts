@@ -72,5 +72,6 @@ export const nettoieLaBaseDeDonneesStatistiques = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
     await new EntrepotsPostgresPourLesTests().nettoieRelations();
     await new EntrepotsPostgresPourLesTests().nettoieAidants();
+    await new EntrepotsPostgresPourLesTests().nettoieDiagnostics();
   }
 };

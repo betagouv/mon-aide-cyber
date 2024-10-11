@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import {
   Tuple,
   unObjet,
@@ -27,7 +27,7 @@ class EntrepotRelationPostgresTest extends EntrepotRelationPostgres {
 }
 
 describe('Entrepot Relation Postgres', () => {
-  afterEach(async () => {
+  beforeEach(async () => {
     await nettoieLaBaseDeDonneesRelations();
   });
 
