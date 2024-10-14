@@ -5,7 +5,7 @@ import annuaireAidantSvg from '../../../../../public/images/illustration-annuair
 export const HeroAnnuaire = () => {
   return (
     <HeroBloc>
-      <div id="corps" className="fr-container hero-layout">
+      <div id="corps" className="hero-layout">
         <section>
           <TypographieH1>Annuaire des Aidants</TypographieH1>
           <p>

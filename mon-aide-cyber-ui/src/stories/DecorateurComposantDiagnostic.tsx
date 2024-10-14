@@ -18,7 +18,7 @@ export const decorateurComposantDiagnostic = (
           ['modifier-diagnostic']: {
             url: `/diagnostic/${identifiantDiagnostic}`,
             route: '',
-            methode: '',
+            methode: undefined,
             contentType: '',
           },
         },
