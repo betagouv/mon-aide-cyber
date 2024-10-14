@@ -2,7 +2,7 @@ import { UUID } from '../types/Types';
 
 export type Lien = {
   url: string;
-  methode?: string;
+  methode?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   contentType?: string;
   route?: string;
 };
@@ -15,6 +15,7 @@ export type Action =
   | 'afficher-preferences'
   | 'afficher-profil'
   | 'afficher-tableau-de-bord'
+  | 'afficher-annuaire-aidants'
   | 'creer-espace-aidant'
   | 'demander-aide'
   | 'demande-devenir-aidant'
