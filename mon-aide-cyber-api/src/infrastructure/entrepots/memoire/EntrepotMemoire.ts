@@ -27,6 +27,7 @@ import {
   EntrepotAnnuaireAidants,
   Aidant as AnnuaireAidant,
 } from '../../../annuaire-aidants/annuaireAidants';
+import { CriteresDeRecherche } from '../../../annuaire-aidants/ServiceAnnuaireAidants';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -182,4 +183,22 @@ export class EntrepotStatistiquesMemoire
 
 export class EntrepotAnnuaireAidantsMemoire
   extends EntrepotMemoire<AnnuaireAidant>
-  implements EntrepotAnnuaireAidants {}
+  implements EntrepotAnnuaireAidants
+{
+  rechercheParCriteres(
+    criteresDeRecherche?: CriteresDeRecherche
+  ): Promise<AnnuaireAidant[]> {
+    const tousLesAidants = Array.from(this.entites.values());
+
+    if (criteresDeRecherche) {
+      return Promise.resolve(
+        tousLesAidants.filter((a) =>
+          a.departements
+            .map((a) => a.nom as string)
+            .includes(criteresDeRecherche.territoires)
+        )
+      );
+    }
+    return Promise.resolve(tousLesAidants);
+  }
+}
