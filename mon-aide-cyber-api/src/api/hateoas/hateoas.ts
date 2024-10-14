@@ -71,6 +71,15 @@ class ConstructeurActionsDepuisContexte {
       'afficher-statistiques',
       { 'afficher-statistiques': { url: '/statistiques', methode: 'GET' } },
     ],
+    [
+      'afficher-annuaire-aidants',
+      {
+        'afficher-annuaire-aidants': {
+          url: '/api/annuaire-aidants',
+          methode: 'GET',
+        },
+      },
+    ],
   ]);
   private readonly actions: Map<string, Options> = new Map();
 
