@@ -103,4 +103,17 @@ export const lesContextesUtilisateursExistants = [
       },
     },
   },
+
+  {
+    contexte: 'Afficher l’annuaire Aidants',
+    informationContexte: {
+      contexte: 'afficher-annuaire-aidants',
+    },
+    liens: {
+      'afficher-annuaire-aidants': {
+        url: '/api/annuaire-aidants',
+        methode: 'GET',
+      },
+    },
+  },
 ];
