@@ -5,10 +5,13 @@ import {
 } from '../../../annuaire-aidants/annuaireAidants';
 import { UUID } from 'crypto';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
+import { CriteresDeRecherche } from '../../../annuaire-aidants/ServiceAnnuaireAidants';
+import { rechercheParNomDepartement } from '../../../gestion-demandes/departements';
 
 type AidantDTO = DTO & {
   identifiant: UUID;
   nomPrenom: string;
+  departements: string[];
 };
 
 export class EntrepotAnnuaireAidantsPostgres
@@ -18,15 +21,31 @@ export class EntrepotAnnuaireAidantsPostgres
   constructor(private readonly chiffrement: ServiceDeChiffrement) {
     super();
   }
+
   async tous(): Promise<Aidant[]> {
-    return await this.knex
-      .raw(
-        `
-        SELECT id as identifiant, donnees ->> 'nomPrenom' as "nomPrenom"
+    throw new Error(
+      'La méthode pour récupérer tous les Aidants n’est pas disponible sur l’annuaire des Aidants.'
+    );
+  }
+
+  async rechercheParCriteres(
+    criteresDeRecherche?: CriteresDeRecherche | undefined
+  ): Promise<Aidant[]> {
+    let requete = `
+        SELECT id as identifiant,
+               donnees ->> 'nomPrenom' as "nomPrenom", donnees -> 'preferences' -> 'departements' as "departements"
         FROM utilisateurs
         WHERE type = 'AIDANT'
-          AND (donnees ->> 'consentementAnnuaire')::bool is TRUE`
-      )
+          AND (donnees ->> 'consentementAnnuaire')::bool is TRUE`;
+    const parametres = criteresDeRecherche && {
+      departements: '["' + criteresDeRecherche?.territoires + '"]',
+    };
+    requete = criteresDeRecherche?.territoires
+      ? `${requete} AND donnees -> 'preferences' -> 'departements' @> :departements`
+      : requete;
+
+    return await this.knex
+      .raw(requete, parametres || {})
       .then(({ rows }: { rows: AidantDTO[] }) =>
         rows.map((r) => this.deDTOAEntite(r))
       );
@@ -40,6 +59,7 @@ export class EntrepotAnnuaireAidantsPostgres
     return {
       identifiant: dto.identifiant,
       nomPrenom: this.chiffrement.dechiffre(dto.nomPrenom),
+      departements: dto.departements.map((d) => rechercheParNomDepartement(d)),
     };
   }
 

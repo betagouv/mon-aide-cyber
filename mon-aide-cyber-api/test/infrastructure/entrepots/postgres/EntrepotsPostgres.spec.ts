@@ -37,15 +37,19 @@ import {
   genereLaRestitution,
   QuestionDiagnostic,
 } from '../../../../src/diagnostic/Diagnostic';
-import { Aidant } from '../../../../src/annuaire-aidants/annuaireAidants';
 import { EntrepotAnnuaireAidantsPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAnnuaireAidantsPostgres';
 import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
 import {
+  Aidant,
   EntitesAssociations,
   EntitesOrganisationsPubliques,
   TypesEntites,
 } from '../../../../src/authentification/Aidant';
-import { Departement } from '../../../../src/gestion-demandes/departements';
+import { Aidant as AnnuaireAidant } from '../../../../src/annuaire-aidants/annuaireAidants';
+import {
+  Departement,
+  departements,
+} from '../../../../src/gestion-demandes/departements';
 import { SecteurActivite } from '../../../../src/espace-aidant/preferences/secteursActivite';
 
 describe('Entrepots Postgres', () => {
@@ -748,16 +752,18 @@ describe('Entrepot Annuaire Aidants Postgres', () => {
 
     const tousLesAidants = await new EntrepotAnnuaireAidantsPostgres(
       new ServiceDeChiffrementClair()
-    ).tous();
+    ).rechercheParCriteres();
 
-    expect(tousLesAidants).toStrictEqual<Aidant[]>([
+    expect(tousLesAidants).toStrictEqual<AnnuaireAidant[]>([
       {
         identifiant: premierAidantAvecConsentement.identifiant,
         nomPrenom: premierAidantAvecConsentement.nomPrenom,
+        departements: premierAidantAvecConsentement.preferences.departements,
       },
       {
         identifiant: secondAidantAvecConsentement.identifiant,
         nomPrenom: secondAidantAvecConsentement.nomPrenom,
+        departements: secondAidantAvecConsentement.preferences.departements,
       },
     ]);
   });
@@ -775,13 +781,46 @@ describe('Entrepot Annuaire Aidants Postgres', () => {
 
     const tousLesAidants = await new EntrepotAnnuaireAidantsPostgres(
       serviceDeChiffrement
-    ).tous();
+    ).rechercheParCriteres();
 
-    expect(tousLesAidants).toStrictEqual<Aidant[]>([
+    expect(tousLesAidants).toStrictEqual<AnnuaireAidant[]>([
       {
         identifiant: aidant.identifiant,
         nomPrenom: 'Jean Dupont',
+        departements: aidant.preferences.departements,
       },
     ]);
+  });
+
+  describe('Lorsque l’on filtre', () => {
+    describe('Par territoire', () => {
+      it('Retourne les Aidants pouvant intervenir dans le département', async () => {
+        const premierAidantAvecConsentement = unAidant()
+          .ayantConsentiPourLAnnuaire()
+          .ayantPourDepartements([departements[0], departements[32]])
+          .construis();
+        const secondAidantAvecConsentement = unAidant()
+          .ayantConsentiPourLAnnuaire()
+          .ayantPourDepartements([departements[0]])
+          .construis();
+        const entrepotAidant = new EntrepotAidantPostgres(
+          new ServiceDeChiffrementClair()
+        );
+        await entrepotAidant.persiste(premierAidantAvecConsentement);
+        await entrepotAidant.persiste(secondAidantAvecConsentement);
+
+        const tousLesAidants = await new EntrepotAnnuaireAidantsPostgres(
+          new ServiceDeChiffrementClair()
+        ).rechercheParCriteres({ territoires: 'Gers' });
+
+        expect(tousLesAidants).toStrictEqual<AnnuaireAidant[]>([
+          {
+            identifiant: premierAidantAvecConsentement.identifiant,
+            nomPrenom: premierAidantAvecConsentement.nomPrenom,
+            departements: [departements[0], departements[32]],
+          },
+        ]);
+      });
+    });
   });
 });
