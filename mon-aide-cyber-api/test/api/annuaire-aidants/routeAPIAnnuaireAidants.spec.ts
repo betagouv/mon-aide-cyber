@@ -30,10 +30,28 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
     );
 
     expect(reponse.statusCode).toBe(200);
-    const newVar = await reponse.json();
-    expect(newVar).toStrictEqual<ReponseAPIAnnuaireAidants>([
+    const reponseJson: ReponseAPIAnnuaireAidants = await reponse.json();
+    expect(reponseJson.aidants).toStrictEqual([
       { identifiant: aidant.identifiant, nomPrenom: aidant.nomPrenom },
     ]);
+  });
+
+  it('Retourne le nombre d’Aidants', async () => {
+    const aidant = unAidant().enGironde().construis();
+    const autreAidant = unAidant().enCorreze().construis();
+    await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
+    await testeurMAC.entrepots.annuaireAidants().persiste(autreAidant);
+
+    const reponse = await executeRequete(
+      donneesServeur.app,
+      'GET',
+      '/api/annuaire-aidants',
+      donneesServeur.portEcoute
+    );
+
+    expect(reponse.statusCode).toBe(200);
+    const reponseJson: ReponseAPIAnnuaireAidants = await reponse.json();
+    expect(reponseJson.nombreAidants).toStrictEqual(2);
   });
 
   describe('Lorsque l’on filtre', () => {
@@ -52,10 +70,38 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
         );
 
         expect(reponse.statusCode).toBe(200);
-        const newVar = await reponse.json();
-        expect(newVar).toStrictEqual<ReponseAPIAnnuaireAidants>([
+        const reponseJson: ReponseAPIAnnuaireAidants = await reponse.json();
+        expect(reponseJson.aidants).toStrictEqual([
           { identifiant: aidant.identifiant, nomPrenom: aidant.nomPrenom },
         ]);
+        expect(reponseJson.nombreAidants).toStrictEqual(1);
+      });
+
+      it('Retourne les liens HATEOAS dans le corps de la réponse', async () => {
+        const aidant = unAidant().enGironde().construis();
+        const autreAidant = unAidant().enCorreze().construis();
+        await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
+        await testeurMAC.entrepots.annuaireAidants().persiste(autreAidant);
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/api/annuaire-aidants?departement=Gironde',
+          donneesServeur.portEcoute
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        const reponseJson: ReponseAPIAnnuaireAidants = await reponse.json();
+        expect(reponseJson.liens).toStrictEqual({
+          'afficher-annuaire-aidants': {
+            url: '/api/annuaire-aidants',
+            methode: 'GET',
+          },
+          'afficher-annuaire-aidants-parametre': {
+            url: '/api/annuaire-aidants?departement=Gironde',
+            methode: 'GET',
+          },
+        });
       });
     });
   });
