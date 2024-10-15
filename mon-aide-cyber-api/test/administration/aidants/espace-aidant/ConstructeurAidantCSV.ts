@@ -11,7 +11,7 @@ class ConstructeurAidantCSV implements Constructeur<AidantCSV> {
   private region = 'BFC';
   private commentaires = '';
   private compteCree = '';
-  private messageAvecMDP = '';
+  private lieuDeFormation = '';
   private qui = '';
   private todo = '';
 
@@ -45,12 +45,8 @@ class ConstructeurAidantCSV implements Constructeur<AidantCSV> {
     return this;
   }
 
-  dejaImporte(): ConstructeurAidantCSV {
-    this.commentaires = `importé le 2024-01-05`;
-    this.compteCree = 'oui';
-    this.messageAvecMDP = 'Message';
-    this.qui = 'FC';
-    this.todo = 'en attente de réponse';
+  auLieuDeFormation(lieuDeFormation: string): ConstructeurAidantCSV {
+    this.lieuDeFormation = lieuDeFormation;
     return this;
   }
 
@@ -61,7 +57,7 @@ class ConstructeurAidantCSV implements Constructeur<AidantCSV> {
       commentaires: this.commentaires,
       compteCree: this.compteCree,
       identifiantConnexion: this.email,
-      messageAvecMDP: this.messageAvecMDP,
+      lieuDeFormation: this.lieuDeFormation,
       nomPrenom: this.nomPrenom,
       numeroTelephone: this.telephone,
       qui: this.qui,
