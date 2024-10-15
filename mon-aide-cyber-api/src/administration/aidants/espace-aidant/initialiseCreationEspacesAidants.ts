@@ -15,7 +15,8 @@ import { Departement } from '../../../gestion-demandes/departements';
 export type StatusImportation =
   | 'email-creation-espace-aidant-envoyé'
   | 'demande-en-attente'
-  | 'demande-devenir-aidant-envoyee';
+  | 'demande-devenir-aidant-envoyee'
+  | 'en-erreur';
 
 export type TraitementCreationEspaceAidant = {
   email: string;
@@ -36,6 +37,7 @@ export type ResultatCreationEspacesAidants = {
   demandesDevenirAidant: TraitementCreationEspaceAidant[];
   mailsCreationEspaceAidantEnvoyes: TraitementCreationEspaceAidant[];
   mailsCreationEspaceAidantEnAttente: TraitementCreationEspaceAidant[];
+  erreurs: TraitementCreationEspaceAidant[];
 };
 export const EN_TETES_FICHIER_CSV = [
   'Région',
@@ -98,6 +100,7 @@ export const initialiseCreationEspacesAidants = async (
     demandesDevenirAidant: [],
     mailsCreationEspaceAidantEnvoyes: [],
     mailsCreationEspaceAidantEnAttente: [],
+    erreurs: [],
   };
 
   const transcris = (aidant: string[]): AidantCSV | undefined => {
@@ -205,19 +208,26 @@ export const initialiseCreationEspacesAidants = async (
       recupereListeAidants(aidants).map(async (aidantCourant) => {
         const aidantCSV = transcris(aidantCourant.split(';'));
         if (aidantCSV) {
-          const demandeEnCours = await entrepots
-            .demandesDevenirAidant()
-            .rechercheDemandeEnCoursParMail(aidantCSV.identifiantConnexion);
-          if (demandeEnCours) {
-            return await traiteLaDemandeAidantEnCours(
-              aidantCSV,
-              demandeEnCours
-            );
+          try {
+            const demandeEnCours = await entrepots
+              .demandesDevenirAidant()
+              .rechercheDemandeEnCoursParMail(aidantCSV.identifiantConnexion);
+            if (demandeEnCours) {
+              return await traiteLaDemandeAidantEnCours(
+                aidantCSV,
+                demandeEnCours
+              );
+            }
+            if (!charteSigneeEtFormationFaite(aidantCSV)) {
+              return await creeLaDemandeDevenirAidant(aidantCSV);
+            }
+            return await initieUnParcoursDevenirAidantComplet(aidantCSV);
+          } catch (erreur: unknown | Error) {
+            return ConstructeursImportAidant.enErreur(
+              erreur as Error,
+              aidantCSV
+            ).construis();
           }
-          if (!charteSigneeEtFormationFaite(aidantCSV)) {
-            return await creeLaDemandeDevenirAidant(aidantCSV);
-          }
-          return await initieUnParcoursDevenirAidantComplet(aidantCSV);
         }
         return undefined;
       })
@@ -253,6 +263,10 @@ const mappeurResultat: Map<
     'demande-devenir-aidant-envoyee',
     (resultat, importAidant) =>
       resultat.demandesDevenirAidant.push(importAidant),
+  ],
+  [
+    'en-erreur',
+    (resultat, importAidant) => resultat.erreurs.push(importAidant),
   ],
 ]);
 export const genereMotDePasse = () => {
