@@ -25,7 +25,7 @@ export const EcranAnnuaire = () => {
       <section className="fond-clair-mac fr-pt-4w participer">
         <div className="fr-container conteneur-participer">
           <div className="fr-col-12">
-            <TypographieH2>Vous souhaitez participer ?</TypographieH2>
+            <TypographieH2>Pour aller plus loin</TypographieH2>
           </div>
           <div className="fr-grid-row fr-grid-row--gutters">
             <div className="fr-col-12 fr-col-md-6">

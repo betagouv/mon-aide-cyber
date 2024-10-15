@@ -8,6 +8,9 @@ import { MoteurDeLiens } from '../../../MoteurDeLiens';
 import { AidantAnnuaire, ReponseAidantAnnuaire } from '../EcranAnnuaire';
 import { CarteAidant } from './CarteAidant';
 import { TypographieH6 } from '../../../../composants/communs/typographie/TypographieH6/TypographieH6';
+import illustrationFAQFemme from '../../../../../public/images/illustration-faq-femme.svg';
+import Button from '../../../../composants/atomes/Button/Button';
+import { Link } from 'react-router-dom';
 
 export const ListeAidants = () => {
   const macAPI = useMACAPI();
@@ -65,10 +68,17 @@ export const ListeAidants = () => {
   if (!enCoursDeChargement && aidants?.length === 0)
     return (
       <div className="cartes-aidants-messages">
-        <TypographieH6>
-          Aucun Aidant n&apos;a souhaité apparaitre dans l&apos;annuaire pour le
-          moment
-        </TypographieH6>
+        <img src={illustrationFAQFemme} alt="" />
+        <p>
+          Malheureusement, aucun résultat ne correspond à votre recherche.
+          <br />
+          Vous pouvez faire une nouvelle recherche dans un territoire proche du
+          votre, <br /> ou bien effectuer une demande en ligne, à laquelle un
+          aidant répondra !
+        </p>
+        <Link to="/beneficier-du-dispositif/etre-aide#formulaire-demande-aide">
+          <Button type="button">Je fais une demande</Button>
+        </Link>
       </div>
     );
 
@@ -78,7 +88,8 @@ export const ListeAidants = () => {
         Il y a actuellement <b>{aidants.length}</b> Aidant
         {afficheUnPlurielSiMultiplesResultats(aidants)} ayant souhaité
         apparaître publiquement
-        {afficheUnPlurielSiMultiplesResultats(aidants)} au sein de MonAideCyber.
+        {afficheUnPlurielSiMultiplesResultats(aidants)} dans l&apos;annuaire de
+        MonAideCyber.
       </p>
       <div className="cartes-aidants">
         {aidants?.map((aidant) => (
