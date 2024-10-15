@@ -35,6 +35,7 @@ import { TypographieH5 } from '../../../../composants/communs/typographie/Typogr
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4';
 import { useContexteNavigation } from '../../../../hooks/useContexteNavigation.ts';
 import { MACAPIType } from '../../../../fournisseurs/api/useMACAPI.ts';
+import { useRecupereContexteNavigation } from '../../../../hooks/useRecupereContexteNavigation.ts';
 
 type ProprietesFormulaireDevenirAidant = {
   macAPI: MACAPIType;
@@ -45,6 +46,12 @@ export const FormulaireDevenirAidant = ({
 }: ProprietesFormulaireDevenirAidant) => {
   const navigationMAC = useNavigationMAC();
   const navigationUtilisateur = useContexteNavigation(macAPI);
+
+  const { contexteRecupere } = useRecupereContexteNavigation(
+    macAPI,
+    'demande-devenir-aidant:demande-devenir-aidant'
+  );
+
   const [prerequisDemande, setPrerequisDemande] = useState<
     PreRequisDemande | undefined
   >();
@@ -57,17 +64,6 @@ export const FormulaireDevenirAidant = ({
     reducteurDemandeDevenirAidant,
     initialiseDemande()
   );
-
-  useEffect(() => {
-    navigationUtilisateur
-      .recupereContexteNavigation({
-        contexte: 'demande-devenir-aidant:demande-devenir-aidant',
-      })
-      .then((reponse) =>
-        navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens)
-      )
-      .catch();
-  }, []);
 
   useEffect(() => {
     if (!etatDemande.pretPourEnvoi) {
