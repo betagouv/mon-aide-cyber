@@ -26,6 +26,8 @@ const LienNavigationPubliqueMajeur = ({ lien }: { lien: LienNavigation }) => {
     return liensEnfants.filter((x) => estCheminCourant(x.route)).length > 0;
   };
 
+  const menuId = `menu-${lien.clef}`;
+
   return (
     <li
       className={`fr-nav__item ${estCheminCourant(lien.route) || aUnEnfantOuvert(lien.enfants) ? 'lien actif' : 'lien'}`}
@@ -33,11 +35,11 @@ const LienNavigationPubliqueMajeur = ({ lien }: { lien: LienNavigation }) => {
       <button
         className="fr-nav__btn"
         aria-expanded="false"
-        aria-controls={`menu-${lien.clef}`}
+        aria-controls={menuId}
       >
         {lien.nom}
       </button>
-      <div className="fr-collapse fr-menu" id={`menu-${lien.clef}`}>
+      <div className="fr-collapse fr-menu" id={menuId}>
         <ul className="fr-menu__list">
           {lien.enfants?.map((x) => (
             <li key={x.nom}>
@@ -64,8 +66,8 @@ const NavigationPublique = ({
 
   return (
     <nav
-      className="barre-navigation"
-      id="navigation-493"
+      className="fr-nav barre-navigation"
+      id="navigation-773"
       role="navigation"
       aria-label="Menu principal"
     >
@@ -79,7 +81,7 @@ const NavigationPublique = ({
               className={`fr-nav__item ${estCheminCourant(lien.route) ? 'lien actif' : 'lien'}`}
               key={lien.nom}
             >
-              <Link className="fr-nav__link" to={lien.route}>
+              <Link className="fr-nav__link" to={lien.route} target="_self">
                 {lien.nom}
               </Link>
             </li>
