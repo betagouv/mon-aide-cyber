@@ -7,13 +7,17 @@ import {
 } from '../../annuaire-aidants/ServiceAnnuaireAidants';
 import { UUID } from 'crypto';
 import { ParsedQs } from 'qs';
+import { ReponseHATEOAS } from '../hateoas/hateoas';
 
 type AidantDTO = {
   identifiant: UUID;
   nomPrenom: string;
 };
 
-export type ReponseAPIAnnuaireAidants = AidantDTO[];
+export type ReponseAPIAnnuaireAidants = ReponseHATEOAS & {
+  aidants: AidantDTO[];
+  nombreAidants: number;
+};
 
 export const routesAPIAnnuaireAidants = (
   configuration: ConfigurationServeur
@@ -40,12 +44,23 @@ export const routesAPIAnnuaireAidants = (
       return new ServiceAnnuaireAidants(entrepots.annuaireAidants())
         .recherche(criteresDeRecherche)
         .then((annuaire) =>
-          reponse.status(200).json(
-            annuaire.map((a) => ({
+          reponse.status(200).json({
+            aidants: annuaire.map((a) => ({
               identifiant: a.identifiant,
               nomPrenom: a.nomPrenom,
-            }))
-          )
+            })),
+            nombreAidants: annuaire.length,
+            liens: {
+              'afficher-annuaire-aidants': {
+                url: '/api/annuaire-aidants',
+                methode: 'GET',
+              },
+              'afficher-annuaire-aidants-parametre': {
+                url: `/api/annuaire-aidants${criteresDeRecherche ? `?departement=${criteresDeRecherche.departement}` : ''}`,
+                methode: 'GET',
+              },
+            },
+          })
         );
     }
   );
