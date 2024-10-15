@@ -1,5 +1,4 @@
 import { BusEvenement } from '../../../domaine/BusEvenement';
-import { creeAidant } from '../../aidant/creeAidant';
 import crypto from 'crypto';
 import { CapteurCommandeEnvoiMailCreationCompteAidant } from '../../../gestion-demandes/devenir-aidant/CapteurCommandeEnvoiMailCreationCompteAidant';
 import { fabriqueAdaptateurEnvoiMail } from '../../../infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
@@ -7,12 +6,16 @@ import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateur
 import { Entrepots } from '../../../domaine/Entrepots';
 import { ConstructeursImportAidant } from './constructeursImportAidant';
 import { DemandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
+import { CapteurCommandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
+import { fabriqueAnnuaireCOT } from '../../../infrastructure/adaptateurs/fabriqueAnnuaireCOT';
+import { unServiceAidant } from '../../../authentification/ServiceAidantMAC';
+import { mappeurDROMCOM, mappeurRegionsCSV } from './mappeurRegions';
+import { Departement } from '../../../gestion-demandes/departements';
 
 export type StatusImportation =
-  | 'importé'
-  | 'existant'
-  | 'email-envoyé'
-  | 'demande-en-attente';
+  | 'email-creation-espace-aidant-envoyé'
+  | 'demande-en-attente'
+  | 'demande-devenir-aidant-envoyee';
 
 export type TraitementCreationEspaceAidant = {
   email: string;
@@ -26,12 +29,11 @@ export type TraitementCreationEspaceAidant = {
   qui: string;
   compteCree: string;
   commentaires: string;
-  messageAvecMDP: string;
+  lieuDeFormation: string;
 };
 
 export type ResultatCreationEspacesAidants = {
-  aidantsImportes: TraitementCreationEspaceAidant[];
-  aidantsExistants: TraitementCreationEspaceAidant[];
+  demandesDevenirAidant: TraitementCreationEspaceAidant[];
   mailsCreationEspaceAidantEnvoyes: TraitementCreationEspaceAidant[];
   mailsCreationEspaceAidantEnAttente: TraitementCreationEspaceAidant[];
 };
@@ -46,7 +48,7 @@ export const EN_TETES_FICHIER_CSV = [
   'qui',
   'Compte Créé ?',
   'commentaires',
-  'message avec mot de passe',
+  'lieu de formation',
 ];
 
 const recupereListeAidants = (aidants: string) => {
@@ -81,18 +83,19 @@ export type AidantCSV = {
   qui: string;
   compteCree: string;
   commentaires: string;
-  messageAvecMDP: string;
+  lieuDeFormation: string;
 };
+
+const charteSigneeEtFormationFaite = (aidantCSV: AidantCSV) =>
+  aidantCSV.formation === 'OK' && aidantCSV.charte === 'OK';
 
 export const initialiseCreationEspacesAidants = async (
   entrepots: Entrepots,
   busEvenement: BusEvenement,
-  aidants: string,
-  generateurMotDePasse: () => string = genereMotDePasse
+  aidants: string
 ): Promise<ResultatCreationEspacesAidants> => {
   const resultat: ResultatCreationEspacesAidants = {
-    aidantsImportes: [],
-    aidantsExistants: [],
+    demandesDevenirAidant: [],
     mailsCreationEspaceAidantEnvoyes: [],
     mailsCreationEspaceAidantEnAttente: [],
   };
@@ -104,7 +107,7 @@ export const initialiseCreationEspacesAidants = async (
     }
     return {
       identifiantConnexion: identifiant.toLowerCase().trim(),
-      nomPrenom: aidant[1],
+      nomPrenom: aidant[1].trim(),
       numeroTelephone: aidant[5],
       region: aidant[0],
       charte: aidant[3] as Statut,
@@ -113,47 +116,30 @@ export const initialiseCreationEspacesAidants = async (
       qui: aidant[7],
       compteCree: aidant[8],
       commentaires: aidant[9],
-      messageAvecMDP: aidant[10],
+      lieuDeFormation: aidant[10],
     };
   };
 
-  const creeEspaceAidantTemporaire = async (
-    aidantCSV: AidantCSV
-  ): Promise<TraitementCreationEspaceAidant> => {
-    const aidantExistantRecu = await entrepots
-      .aidants()
-      .rechercheParIdentifiantDeConnexion(aidantCSV.identifiantConnexion)
-      .then((aidantDejaCree) => aidantDejaCree)
-      .catch(() => undefined);
-    if (aidantExistantRecu) {
-      return ConstructeursImportAidant.aidantExistant(aidantCSV).construis();
-    }
-    const aidantImporte = await creeAidant(entrepots.aidants(), busEvenement, {
-      identifiantConnexion: aidantCSV.identifiantConnexion,
-      motDePasse: generateurMotDePasse(),
-      nomPrenom: aidantCSV.nomPrenom,
+  const executeLaCommandeEnvoiMailCreationEspaceAidant = async (
+    demandeEnCours: DemandeDevenirAidant
+  ) =>
+    await new CapteurCommandeEnvoiMailCreationCompteAidant(
+      entrepots,
+      busEvenement,
+      fabriqueAdaptateurEnvoiMail(),
+      adaptateurServiceChiffrement()
+    ).execute({
+      mail: demandeEnCours.mail,
+      type: 'CommandeEnvoiMailCreationCompteAidant',
     });
-    return ConstructeursImportAidant.importe(
-      aidantImporte!,
-      aidantCSV
-    ).construis();
-  };
 
   const traiteLaDemandeAidantEnCours = async (
     aidantCSV: AidantCSV,
     demandeEnCours: DemandeDevenirAidant
   ) => {
-    if (aidantCSV.formation === 'OK' && aidantCSV.charte === 'OK') {
+    if (charteSigneeEtFormationFaite(aidantCSV)) {
       const demandeCreationEspaceAidantTransmise =
-        await new CapteurCommandeEnvoiMailCreationCompteAidant(
-          entrepots,
-          busEvenement,
-          fabriqueAdaptateurEnvoiMail(),
-          adaptateurServiceChiffrement()
-        ).execute({
-          mail: demandeEnCours.mail,
-          type: 'CommandeEnvoiMailCreationCompteAidant',
-        });
+        await executeLaCommandeEnvoiMailCreationEspaceAidant(demandeEnCours);
       if (demandeCreationEspaceAidantTransmise) {
         return ConstructeursImportAidant.mailCreationEspaceAidantEnvoye(
           aidantCSV
@@ -161,6 +147,55 @@ export const initialiseCreationEspacesAidants = async (
       }
     }
     return ConstructeursImportAidant.demandeEnAttenteDeValidation(
+      aidantCSV
+    ).construis();
+  };
+
+  const executeLaCommandeDemandeDevenirAidant = async (
+    aidantCSV: AidantCSV
+  ): Promise<DemandeDevenirAidant> => {
+    const nomPrenom = aidantCSV.nomPrenom.split(' ');
+
+    const mapDepartement = (): Departement => {
+      const paris: Departement = {
+        nom: 'Paris',
+        code: '75',
+        codeRegion: '11',
+      };
+      if (aidantCSV.region.trim() === 'DROM COM') {
+        return mappeurDROMCOM.get(aidantCSV.lieuDeFormation) || paris;
+      }
+      return mappeurRegionsCSV.get(aidantCSV.region) || paris;
+    };
+
+    const departement = mapDepartement();
+    return await new CapteurCommandeDevenirAidant(
+      entrepots,
+      busEvenement,
+      fabriqueAdaptateurEnvoiMail(),
+      fabriqueAnnuaireCOT().annuaireCOT,
+      unServiceAidant(entrepots.aidants())
+    ).execute({
+      type: 'CommandeDevenirAidant',
+      departement,
+      mail: aidantCSV.identifiantConnexion,
+      prenom: nomPrenom.at(0)!.trim(),
+      nom: nomPrenom.slice(1).join(' ').trim(),
+    });
+  };
+
+  const creeLaDemandeDevenirAidant = async (aidantCSV: AidantCSV) => {
+    await executeLaCommandeDemandeDevenirAidant(aidantCSV);
+    return ConstructeursImportAidant.demandeDevenirAidantCree(
+      aidantCSV
+    ).construis();
+  };
+
+  const initieUnParcoursDevenirAidantComplet = async (aidantCSV: AidantCSV) => {
+    const demandeDevenirAidant =
+      await executeLaCommandeDemandeDevenirAidant(aidantCSV);
+    await executeLaCommandeEnvoiMailCreationEspaceAidant(demandeDevenirAidant);
+    return ConstructeursImportAidant.parcoursDevenirAidantComplet(
       aidantCSV
     ).construis();
   };
@@ -179,7 +214,10 @@ export const initialiseCreationEspacesAidants = async (
               demandeEnCours
             );
           }
-          return await creeEspaceAidantTemporaire(aidantCSV);
+          if (!charteSigneeEtFormationFaite(aidantCSV)) {
+            return await creeLaDemandeDevenirAidant(aidantCSV);
+          }
+          return await initieUnParcoursDevenirAidantComplet(aidantCSV);
         }
         return undefined;
       })
@@ -202,15 +240,7 @@ const mappeurResultat: Map<
   ) => void
 > = new Map([
   [
-    'existant',
-    (resultat, importAidant) => resultat.aidantsExistants.push(importAidant),
-  ],
-  [
-    'importé',
-    (resultat, importAidant) => resultat.aidantsImportes.push(importAidant),
-  ],
-  [
-    'email-envoyé',
+    'email-creation-espace-aidant-envoyé',
     (resultat, importAidant) =>
       resultat.mailsCreationEspaceAidantEnvoyes.push(importAidant),
   ],
@@ -218,6 +248,11 @@ const mappeurResultat: Map<
     'demande-en-attente',
     (resultat, importAidant) =>
       resultat.mailsCreationEspaceAidantEnAttente.push(importAidant),
+  ],
+  [
+    'demande-devenir-aidant-envoyee',
+    (resultat, importAidant) =>
+      resultat.demandesDevenirAidant.push(importAidant),
   ],
 ]);
 export const genereMotDePasse = () => {
