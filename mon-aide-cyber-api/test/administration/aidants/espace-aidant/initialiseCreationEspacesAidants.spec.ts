@@ -17,6 +17,7 @@ import {
   DemandeDevenirAidant,
   StatutDemande,
 } from '../../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
+import { unAidant } from '../../../authentification/constructeurs/constructeurAidant';
 
 const enTeteCsv =
   'Région;nom;formation;charte;mail;telephone;TO DO;qui;Compte Créé ?;commentaires;lieu de formation\n';
@@ -124,6 +125,7 @@ describe('Initialise la création de l’espace des aidants', () => {
           ],
           mailsCreationEspaceAidantEnvoyes: [],
           mailsCreationEspaceAidantEnAttente: [],
+          erreurs: [],
         });
         const aidant = await entrepotAidant.rechercheDemandeEnCoursParMail(
           'jean.dupont@mail.com'
@@ -210,6 +212,7 @@ describe('Initialise la création de l’espace des aidants', () => {
             importAidantMailDemandeDevenirAidantEnvoyeAttendu(aidantCSV),
           ],
           mailsCreationEspaceAidantEnAttente: [],
+          erreurs: [],
         });
         const aidant = await entrepotAidant.rechercheDemandeEnCoursParMail(
           'jean.dupont@mail.com'
@@ -276,6 +279,7 @@ describe('Initialise la création de l’espace des aidants', () => {
           importAidantMailEnvoyeAttendu(aidantCSV),
         ],
         mailsCreationEspaceAidantEnAttente: [],
+        erreurs: [],
       });
     });
 
@@ -298,6 +302,7 @@ describe('Initialise la création de l’espace des aidants', () => {
         mailsCreationEspaceAidantEnAttente: [
           importAidantMailEnvoyeAttendu(aidantCSV, true),
         ],
+        erreurs: [],
       });
       expect(busEvenement.evenementRecu).toBeUndefined();
     });
@@ -321,6 +326,7 @@ describe('Initialise la création de l’espace des aidants', () => {
         mailsCreationEspaceAidantEnAttente: [
           importAidantMailEnvoyeAttendu(aidantCSV, true),
         ],
+        erreurs: [],
       });
       expect(busEvenement.evenementRecu).toBeUndefined();
     });
@@ -372,5 +378,98 @@ describe('Initialise la création de l’espace des aidants', () => {
     expect(aidantsImportes.mailsCreationEspaceAidantEnvoyes).toHaveLength(2);
     expect(aidantsImportes.demandesDevenirAidant).toHaveLength(0);
     expect(aidantsImportes.mailsCreationEspaceAidantEnAttente).toHaveLength(2);
+  });
+
+  describe('', () => {
+    const importAidantEnErreur = (
+      aidantCSV: AidantCSV
+    ): TraitementCreationEspaceAidant => {
+      return {
+        email: aidantCSV.identifiantConnexion,
+        nomPrenom: aidantCSV.nomPrenom,
+        telephone: aidantCSV.numeroTelephone,
+        status: 'en-erreur',
+        region: aidantCSV.region,
+        charte: aidantCSV.charte,
+        formation: aidantCSV.formation,
+        qui: 'MAC',
+        todo: '',
+        commentaires: `Une erreur a eu lieu lors de la prise en compte de cet Aidant : 'Cette adresse électronique est déja utilisée'`,
+        compteCree: '',
+        lieuDeFormation: '',
+      };
+    };
+    const importAidantMailDemandeDevenirAidantEnvoyeAttendu = (
+      aidantCSV: AidantCSV
+    ): TraitementCreationEspaceAidant => {
+      return {
+        email: aidantCSV.identifiantConnexion,
+        nomPrenom: aidantCSV.nomPrenom,
+        telephone: aidantCSV.numeroTelephone,
+        status: 'email-creation-espace-aidant-envoyé',
+        region: aidantCSV.region,
+        charte: aidantCSV.charte,
+        formation: aidantCSV.formation,
+        qui: 'MAC',
+        todo: 'RAS',
+        commentaires:
+          'La demande devenir Aidant ainsi que le mail de création de l’espace Aidant ont été pris en compte.',
+        compteCree: 'non',
+        lieuDeFormation: '',
+      };
+    };
+
+    it('Continue l’import en cas d’erreur', async () => {
+      const aidant = unAidant().construis();
+      await entrepots.aidants().persiste(aidant);
+      const aidantCSV = unConstructeurAidantCSV()
+        .avecUnEmail(aidant.identifiantConnexion)
+        .formationOK()
+        .construis();
+      const autreAidantCSV = unConstructeurAidantCSV()
+        .charteOK()
+        .formationOK()
+        .construis();
+
+      const aidantsImportes = await initialiseCreationEspacesAidants(
+        entrepots,
+        busEvenement,
+        genereFichierCsv([aidantCSV, autreAidantCSV])
+      );
+
+      expect(aidantsImportes.mailsCreationEspaceAidantEnvoyes).toHaveLength(1);
+      expect(aidantsImportes.demandesDevenirAidant).toHaveLength(0);
+      expect(aidantsImportes.mailsCreationEspaceAidantEnAttente).toHaveLength(
+        0
+      );
+    });
+
+    it('Ajoute dans le rapport les erreurs ayant eu lieu', async () => {
+      const aidant = unAidant().construis();
+      await entrepots.aidants().persiste(aidant);
+      const aidantCSV = unConstructeurAidantCSV()
+        .avecUnEmail(aidant.identifiantConnexion)
+        .formationOK()
+        .construis();
+      const autreAidantCSV = unConstructeurAidantCSV()
+        .charteOK()
+        .formationOK()
+        .construis();
+
+      const resultat = await initialiseCreationEspacesAidants(
+        entrepots,
+        busEvenement,
+        genereFichierCsv([aidantCSV, autreAidantCSV])
+      );
+
+      expect(resultat).toStrictEqual<ResultatCreationEspacesAidants>({
+        demandesDevenirAidant: [],
+        mailsCreationEspaceAidantEnvoyes: [
+          importAidantMailDemandeDevenirAidantEnvoyeAttendu(autreAidantCSV),
+        ],
+        mailsCreationEspaceAidantEnAttente: [],
+        erreurs: [importAidantEnErreur(aidantCSV)],
+      });
+    });
   });
 });

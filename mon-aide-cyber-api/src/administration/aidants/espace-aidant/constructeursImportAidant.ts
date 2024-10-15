@@ -99,6 +99,20 @@ class ConstructeurImportAidantParcoursDevenirAidantCompletTraite extends Constru
   }
 }
 
+class ConstructeurImportAidantEnErreur extends ConstructeurImportAidant {
+  constructor(aidantCSV: AidantCSV, erreur: Error) {
+    super({
+      ...aidantCSV,
+      email: aidantCSV?.identifiantConnexion,
+      status: 'en-erreur',
+      telephone: aidantCSV.numeroTelephone,
+      qui: 'MAC',
+      todo: '',
+      commentaires: `Une erreur a eu lieu lors de la prise en compte de cet Aidant : '${erreur.message}'`,
+    });
+  }
+}
+
 export class ConstructeursImportAidant {
   static mailCreationEspaceAidantEnvoye(
     aidantCSV: AidantCSV
@@ -126,5 +140,12 @@ export class ConstructeursImportAidant {
     return new ConstructeurImportAidantParcoursDevenirAidantCompletTraite(
       aidantCSV
     );
+  }
+
+  static enErreur(
+    erreur: Error,
+    aidantCSV: AidantCSV
+  ): ConstructeurImportAidant {
+    return new ConstructeurImportAidantEnErreur(aidantCSV, erreur);
   }
 }
