@@ -38,9 +38,9 @@ export class EntrepotAnnuaireAidantsPostgres
         WHERE type = 'AIDANT'
           AND (donnees ->> 'consentementAnnuaire')::bool is TRUE`;
     const parametres = criteresDeRecherche && {
-      departements: '["' + criteresDeRecherche?.territoires + '"]',
+      departements: '["' + criteresDeRecherche?.departement + '"]',
     };
-    requete = criteresDeRecherche?.territoires
+    requete = criteresDeRecherche?.departement
       ? `${requete} AND donnees -> 'preferences' -> 'departements' @> :departements`
       : requete;
 

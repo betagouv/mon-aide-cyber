@@ -32,7 +32,7 @@ export const routesAPIAnnuaireAidants = (
       const estCriteresDeRecherche = (
         criteresDeRecherche: CriteresDeRecherche | ParsedQs
       ): criteresDeRecherche is CriteresDeRecherche => {
-        return criteresDeRecherche && !!criteresDeRecherche.territoires;
+        return criteresDeRecherche && !!criteresDeRecherche.departement;
       };
       const criteresDeRecherche = estCriteresDeRecherche(requete.query)
         ? requete.query
