@@ -10,22 +10,27 @@ import { FournisseurMatomo } from './fournisseurs/ContexteMatomo.tsx';
 import { RouteurPrive } from './RouteurPrive.tsx';
 import { RouteurPublic } from './RouteurPublic.tsx';
 import { FournisseurUtilisateur } from './fournisseurs/ContexteUtilisateur.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <FournisseurMatomo>
-      <BrowserRouter>
-        <FournisseurNavigationMAC>
-          <FournisseurUtilisateur>
-            <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-              <PortailModale>
-                <RouteurPublic />
-                <RouteurPrive />
-              </PortailModale>
-            </ErrorBoundary>
-          </FournisseurUtilisateur>
-        </FournisseurNavigationMAC>
-      </BrowserRouter>
-    </FournisseurMatomo>
+    <QueryClientProvider client={queryClient}>
+      <FournisseurMatomo>
+        <BrowserRouter>
+          <FournisseurNavigationMAC>
+            <FournisseurUtilisateur>
+              <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+                <PortailModale>
+                  <RouteurPublic />
+                  <RouteurPrive />
+                </PortailModale>
+              </ErrorBoundary>
+            </FournisseurUtilisateur>
+          </FournisseurNavigationMAC>
+        </BrowserRouter>
+      </FournisseurMatomo>
+    </QueryClientProvider>
   </React.StrictMode>
 );

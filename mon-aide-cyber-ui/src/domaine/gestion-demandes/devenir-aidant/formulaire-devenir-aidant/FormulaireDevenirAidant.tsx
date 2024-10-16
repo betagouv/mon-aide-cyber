@@ -22,7 +22,7 @@ import {
 } from '../../../../composants/gestion-demandes/devenir-aidant/reducteurDevenirAidant';
 import { Departement, estDepartement } from '../../departement';
 import { MoteurDeLiens } from '../../../MoteurDeLiens';
-import { Lien, ReponseHATEOAS } from '../../../Lien';
+import { Lien } from '../../../Lien';
 import {
   CorpsDemandeDevenirAidant,
   PreRequisDemande,

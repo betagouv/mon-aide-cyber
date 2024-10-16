@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react';
 import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI';
 import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI';
 import { useNavigationMAC } from '../../../../fournisseurs/hooks';
-import { useContexteNavigation } from '../../../../hooks/useContexteNavigation';
-import { ReponseHATEOAS, Lien } from '../../../Lien';
 import { MoteurDeLiens } from '../../../MoteurDeLiens';
 import { AidantAnnuaire, ReponseAidantAnnuaire } from '../EcranAnnuaire';
 import { CarteAidant } from './CarteAidant';
@@ -11,62 +8,63 @@ import { TypographieH6 } from '../../../../composants/communs/typographie/Typogr
 import illustrationFAQFemme from '../../../../../public/images/illustration-faq-femme.svg';
 import Button from '../../../../composants/atomes/Button/Button';
 import { Link } from 'react-router-dom';
+import { useRecupereContexteNavigation } from '../../../../hooks/useRecupereContexteNavigation';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 export const ListeAidants = () => {
   const macAPI = useMACAPI();
   const navigationMAC = useNavigationMAC();
-  const { recupereContexteNavigation } = useContexteNavigation();
-  const [enCoursDeChargement, setEnCoursDeChargement] = useState(true);
-  const [aidants, setAidants] = useState<AidantAnnuaire[]>([]);
+
+  useRecupereContexteNavigation(macAPI, 'afficher-annuaire-aidants');
 
   const afficheUnPlurielSiMultiplesResultats = (tableau: unknown[]) => {
     return tableau && tableau.length > 1 ? 's' : '';
   };
 
-  useEffect(() => {
-    recupereContexteNavigation({ contexte: 'afficher-annuaire-aidants' }).then(
-      (reponse) => {
-        navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens);
-      }
-    );
-  }, []);
+  const {
+    data: annuaire,
+    isLoading: enCoursDeChargement,
+    isError: enErreur,
+    error,
+  } = useQuery<ReponseAidantAnnuaire>({
+    queryKey: ['afficher-annuaire-aidants', navigationMAC.etat],
+    queryFn: () => {
+      const lien = new MoteurDeLiens(navigationMAC.etat).trouveSansCallback(
+        'afficher-annuaire-aidants'
+      );
+
+      return macAPI.execute<ReponseAidantAnnuaire, ReponseAidantAnnuaire>(
+        constructeurParametresAPI()
+          .url(lien.url)
+          .methode(lien.methode!)
+          .construis(),
+        (reponse) => reponse
+      );
+    },
+  });
+
+  const aidants = annuaire?.aidants;
 
   useEffect(() => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'afficher-annuaire-aidants',
-      (lien: Lien) => {
-        if (enCoursDeChargement) {
-          macAPI
-            .execute<ReponseAidantAnnuaire, ReponseAidantAnnuaire>(
-              constructeurParametresAPI()
-                .url(lien.url)
-                .methode(lien.methode!)
-                .construis(),
-              (reponse) => reponse
-            )
-            .then((reponse: ReponseAidantAnnuaire) => {
-              navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens);
-              setAidants(reponse.aidants!);
-            })
-            .catch((erreur: ReponseHATEOAS) => {
-              console.log(erreur);
-            })
-            .finally(() => {
-              setEnCoursDeChargement(false);
-            });
-        }
-      }
-    );
-  }, [navigationMAC.etat]);
+    if (annuaire?.liens) {
+      navigationMAC.ajouteEtat(annuaire?.liens);
+    }
+  }, [annuaire]);
 
-  if (enCoursDeChargement)
+  if (enCoursDeChargement) {
     return (
-      <div className="cartes-aidants">
+      <div className="cartes-aidants-messages">
         <TypographieH6>Chargement des Aidants...</TypographieH6>
       </div>
     );
+  }
 
-  if (!enCoursDeChargement && aidants?.length === 0)
+  if (enErreur) {
+    return <></>;
+  }
+
+  if (!aidants || aidants?.length === 0) {
     return (
       <div className="cartes-aidants-messages">
         <img src={illustrationFAQFemme} alt="" />
@@ -82,6 +80,7 @@ export const ListeAidants = () => {
         </Link>
       </div>
     );
+  }
 
   return (
     <div className="liste-aidants">
