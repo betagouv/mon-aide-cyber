@@ -65,7 +65,7 @@ export class MoteurDeLiens {
     }
   }
 
-  trouveSansCallback(lienATrouver: Action): Lien {
+  trouveEtRenvoie(lienATrouver: Action): Lien {
     const lien = Object.entries(this.liens)
       .filter(([action]) => action === lienATrouver)
       .map(([, lien]) => lien)[0];

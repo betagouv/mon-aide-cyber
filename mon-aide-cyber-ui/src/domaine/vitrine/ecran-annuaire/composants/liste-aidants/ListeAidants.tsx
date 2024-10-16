@@ -23,13 +23,18 @@ export const ListeAidants = () => {
   };
 
   const {
-    data: annuaire,
+    data: ressourceAnnuaireAidant,
     isLoading: enCoursDeChargement,
     isError: enErreur,
+    refetch: relanceLaRecherche,
   } = useQuery<ReponseAidantAnnuaire>({
-    queryKey: ['afficher-annuaire-aidants', navigationMAC.etat],
+    queryKey: ['afficher-annuaire-aidants'],
+    enabled: new MoteurDeLiens(navigationMAC.etat).existe(
+      'afficher-annuaire-aidants'
+    ),
+    refetchOnWindowFocus: false,
     queryFn: () => {
-      const lien = new MoteurDeLiens(navigationMAC.etat).trouveSansCallback(
+      const lien = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
         'afficher-annuaire-aidants'
       );
 
@@ -43,13 +48,13 @@ export const ListeAidants = () => {
     },
   });
 
-  const aidants = annuaire?.aidants;
+  const aidants = ressourceAnnuaireAidant?.aidants;
 
   useEffect(() => {
-    if (annuaire?.liens) {
-      navigationMAC.ajouteEtat(annuaire?.liens);
+    if (ressourceAnnuaireAidant?.liens) {
+      navigationMAC.ajouteEtat(ressourceAnnuaireAidant?.liens);
     }
-  }, [annuaire]);
+  }, [ressourceAnnuaireAidant]);
 
   if (enCoursDeChargement) {
     return (
@@ -60,7 +65,15 @@ export const ListeAidants = () => {
   }
 
   if (enErreur) {
-    return <></>;
+    return (
+      <div className="cartes-aidants-messages">
+        <img src={illustrationFAQFemme} alt="" />
+        <p>Une erreur est survenue lors de la recherche d&apos;Aidants...</p>
+        <Button type="button" onClick={() => relanceLaRecherche()}>
+          Relancer la recherche d&apos;Aidants
+        </Button>
+      </div>
+    );
   }
 
   if (!aidants || aidants?.length === 0) {
@@ -84,7 +97,8 @@ export const ListeAidants = () => {
   return (
     <div className="liste-aidants">
       <p>
-        Il y a actuellement <b>{aidants.length}</b> Aidant
+        Il y a actuellement <b>{ressourceAnnuaireAidant.nombreAidants}</b>{' '}
+        Aidant
         {afficheUnPlurielSiMultiplesResultats(aidants)} ayant souhaité
         apparaître publiquement dans l&apos;annuaire de MonAideCyber.
       </p>
