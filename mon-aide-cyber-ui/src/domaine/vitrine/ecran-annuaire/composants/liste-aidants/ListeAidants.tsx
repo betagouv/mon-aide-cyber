@@ -2,7 +2,6 @@ import { constructeurParametresAPI } from '../../../../../fournisseurs/api/Const
 import { useMACAPI } from '../../../../../fournisseurs/api/useMACAPI';
 import { useNavigationMAC } from '../../../../../fournisseurs/hooks';
 import { MoteurDeLiens } from '../../../../MoteurDeLiens';
-import { ReponseAidantAnnuaire } from '../../EcranAnnuaire';
 import { CarteAidant } from '../CarteAidant';
 import { TypographieH6 } from '../../../../../composants/communs/typographie/TypographieH6/TypographieH6';
 import illustrationFAQFemme from '../../../../../public/images/illustration-faq-femme.svg';
@@ -11,12 +10,13 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useRecupereContexteNavigation } from '../../../../../hooks/useRecupereContexteNavigation';
+import { ReponseAidantAnnuaire } from './useListeAidants';
 
 export const ListeAidants = () => {
   const macAPI = useMACAPI();
   const navigationMAC = useNavigationMAC();
 
-  useRecupereContexteNavigation(macAPI, 'afficher-annuaire-aidants');
+  useRecupereContexteNavigation('afficher-annuaire-aidants');
 
   const afficheUnPlurielSiMultiplesResultats = (tableau: unknown[]) => {
     return tableau && tableau.length > 1 ? 's' : '';

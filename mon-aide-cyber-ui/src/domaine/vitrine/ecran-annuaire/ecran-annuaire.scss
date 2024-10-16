@@ -52,13 +52,30 @@
     .layout-annuaire {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        grid-template-areas: "cartes cartes cartes cartes";
+        grid-template-areas: "filtres cartes cartes cartes";
         padding: 3rem .75rem;
+        gap: 1.5rem;
         
     }
 
     .filtres {
         grid-area: filtres;
+        position: relative;
+
+        .autocomplete {
+            .autocomplete-labellise {
+                input {
+                    background-color: var(--couleurs-mac-blanc);
+                }
+                button {
+                    background-color: var(--couleurs-mac-blanc);
+                }
+            }
+            
+            .autocomplete-items button {
+                background-color: var(--couleurs-mac-blanc);
+            }
+        }
     }
 
     .liste-aidants {
