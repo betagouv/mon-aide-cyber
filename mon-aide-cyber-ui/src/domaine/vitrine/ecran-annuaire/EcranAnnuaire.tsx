@@ -6,12 +6,20 @@ import { HeroAnnuaire } from './composants/HeroAnnuaire';
 import { UUID } from '../../../types/Types';
 import './ecran-annuaire.scss';
 import { ListeAidants } from './composants/ListeAidants';
+import { ReponseHATEOAS } from '../../Lien';
 
 export type AidantAnnuaire = {
   identifiant: UUID;
   nomPrenom: string;
 };
-export type ReponseAidantAnnuaire = AidantAnnuaire[];
+
+export type ReponseAnnuaire = {
+  aidants?: AidantAnnuaire[];
+  departements: string[];
+  nombreAidants: number;
+};
+
+export type ReponseAidantAnnuaire = ReponseAnnuaire & ReponseHATEOAS;
 
 export const EcranAnnuaire = () => {
   return (
