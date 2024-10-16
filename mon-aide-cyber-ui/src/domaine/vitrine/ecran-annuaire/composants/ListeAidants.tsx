@@ -2,15 +2,15 @@ import { constructeurParametresAPI } from '../../../../fournisseurs/api/Construc
 import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI';
 import { useNavigationMAC } from '../../../../fournisseurs/hooks';
 import { MoteurDeLiens } from '../../../MoteurDeLiens';
-import { AidantAnnuaire, ReponseAidantAnnuaire } from '../EcranAnnuaire';
+import { ReponseAidantAnnuaire } from '../EcranAnnuaire';
 import { CarteAidant } from './CarteAidant';
 import { TypographieH6 } from '../../../../composants/communs/typographie/TypographieH6/TypographieH6';
 import illustrationFAQFemme from '../../../../../public/images/illustration-faq-femme.svg';
 import Button from '../../../../composants/atomes/Button/Button';
 import { Link } from 'react-router-dom';
-import { useRecupereContexteNavigation } from '../../../../hooks/useRecupereContexteNavigation';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { useRecupereContexteNavigation } from '../../../../hooks/useRecupereContexteNavigation';
 
 export const ListeAidants = () => {
   const macAPI = useMACAPI();
@@ -23,14 +23,18 @@ export const ListeAidants = () => {
   };
 
   const {
-    data: annuaire,
+    data: ressourceAnnuaireAidant,
     isLoading: enCoursDeChargement,
     isError: enErreur,
-    error,
+    refetch: relanceLaRecherche,
   } = useQuery<ReponseAidantAnnuaire>({
-    queryKey: ['afficher-annuaire-aidants', navigationMAC.etat],
+    queryKey: ['afficher-annuaire-aidants'],
+    enabled: new MoteurDeLiens(navigationMAC.etat).existe(
+      'afficher-annuaire-aidants'
+    ),
+    refetchOnWindowFocus: false,
     queryFn: () => {
-      const lien = new MoteurDeLiens(navigationMAC.etat).trouveSansCallback(
+      const lien = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
         'afficher-annuaire-aidants'
       );
 
@@ -44,13 +48,13 @@ export const ListeAidants = () => {
     },
   });
 
-  const aidants = annuaire?.aidants;
+  const aidants = ressourceAnnuaireAidant?.aidants;
 
   useEffect(() => {
-    if (annuaire?.liens) {
-      navigationMAC.ajouteEtat(annuaire?.liens);
+    if (ressourceAnnuaireAidant?.liens) {
+      navigationMAC.ajouteEtat(ressourceAnnuaireAidant?.liens);
     }
-  }, [annuaire]);
+  }, [ressourceAnnuaireAidant]);
 
   if (enCoursDeChargement) {
     return (
@@ -61,7 +65,15 @@ export const ListeAidants = () => {
   }
 
   if (enErreur) {
-    return <></>;
+    return (
+      <div className="cartes-aidants-messages">
+        <img src={illustrationFAQFemme} alt="" />
+        <p>Une erreur est survenue lors de la recherche d&apos;Aidants...</p>
+        <Button type="button" onClick={() => relanceLaRecherche()}>
+          Relancer la recherche d&apos;Aidants
+        </Button>
+      </div>
+    );
   }
 
   if (!aidants || aidants?.length === 0) {
@@ -85,7 +97,8 @@ export const ListeAidants = () => {
   return (
     <div className="liste-aidants">
       <p>
-        Il y a actuellement <b>{aidants.length}</b> Aidant
+        Il y a actuellement <b>{ressourceAnnuaireAidant.nombreAidants}</b>{' '}
+        Aidant
         {afficheUnPlurielSiMultiplesResultats(aidants)} ayant souhaité
         apparaître publiquement
         {afficheUnPlurielSiMultiplesResultats(aidants)} dans l&apos;annuaire de
