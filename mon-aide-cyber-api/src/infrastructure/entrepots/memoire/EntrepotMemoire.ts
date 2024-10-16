@@ -195,7 +195,7 @@ export class EntrepotAnnuaireAidantsMemoire
         tousLesAidants.filter((a) =>
           a.departements
             .map((a) => a.nom as string)
-            .includes(criteresDeRecherche.territoires)
+            .includes(criteresDeRecherche.departement)
         )
       );
     }

@@ -37,7 +37,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   });
 
   describe('Lorsque l’on filtre', () => {
-    describe('Par territoire', () => {
+    describe('Par département', () => {
       it('Retourne un Aidant dans le département désiré', async () => {
         const aidant = unAidant().enGironde().construis();
         const autreAidant = unAidant().enCorreze().construis();
@@ -47,7 +47,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/api/annuaire-aidants?territoires=Gironde',
+          '/api/annuaire-aidants?departement=Gironde',
           donneesServeur.portEcoute
         );
 

@@ -811,7 +811,7 @@ describe('Entrepot Annuaire Aidants Postgres', () => {
 
         const tousLesAidants = await new EntrepotAnnuaireAidantsPostgres(
           new ServiceDeChiffrementClair()
-        ).rechercheParCriteres({ territoires: 'Gers' });
+        ).rechercheParCriteres({ departement: 'Gers' });
 
         expect(tousLesAidants).toStrictEqual<AnnuaireAidant[]>([
           {

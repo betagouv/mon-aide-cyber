@@ -1,7 +1,7 @@
 import { Aidant, EntrepotAnnuaireAidants } from './annuaireAidants';
 
 export type CriteresDeRecherche = {
-  territoires: string;
+  departement: string;
 };
 
 export class ServiceAnnuaireAidants {
