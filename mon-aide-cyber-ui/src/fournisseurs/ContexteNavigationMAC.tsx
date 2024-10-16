@@ -39,7 +39,11 @@ export const FournisseurNavigationMAC = ({ children }: PropsWithChildren) => {
   };
 
   const retourAccueil = () => window.location.replace('/');
-  const ajouteEtat = (liens: Liens) => setEtat({ ...etat, ...liens });
+
+  const ajouteEtat = (liens: Liens) => {
+    setEtat((prev) => ({ ...prev, ...liens }));
+  };
+
   return (
     <ContexteNavigationMAC.Provider
       value={{
