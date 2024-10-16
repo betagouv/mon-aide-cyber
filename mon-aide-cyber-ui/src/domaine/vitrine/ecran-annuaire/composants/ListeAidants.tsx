@@ -44,8 +44,9 @@ export const ListeAidants = () => {
                 .construis(),
               (reponse) => reponse
             )
-            .then((reponse) => {
-              setAidants(reponse);
+            .then((reponse: ReponseAidantAnnuaire) => {
+              navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens);
+              setAidants(reponse.aidants!);
             })
             .catch((erreur: ReponseHATEOAS) => {
               console.log(erreur);
