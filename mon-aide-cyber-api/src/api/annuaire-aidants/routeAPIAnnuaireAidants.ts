@@ -9,17 +9,29 @@ import { UUID } from 'crypto';
 import { ParsedQs } from 'qs';
 import { ReponseHATEOAS } from '../hateoas/hateoas';
 import { departements } from '../../gestion-demandes/departements';
+import { validateurDeDepartement } from '../validateurs/departements';
+import {
+  FieldValidationError,
+  Result,
+  validationResult,
+} from 'express-validator';
 
 type AidantDTO = {
   identifiant: UUID;
   nomPrenom: string;
 };
 
-export type ReponseAPIAnnuaireAidants = ReponseHATEOAS & {
+export type ReponseAPIAnnuaireAidantsSucces = ReponseHATEOAS & {
   aidants: AidantDTO[];
   nombreAidants: number;
   departements: string[];
 };
+export type ReponseAPIAnnuaireAidantsErreur = ReponseHATEOAS & {
+  message: string;
+};
+export type ReponseAPIAnnuaireAidants =
+  | ReponseAPIAnnuaireAidantsSucces
+  | ReponseAPIAnnuaireAidantsErreur;
 
 export const routesAPIAnnuaireAidants = (
   configuration: ConfigurationServeur
@@ -30,6 +42,11 @@ export const routesAPIAnnuaireAidants = (
 
   routes.get(
     '/',
+    validateurDeDepartement({
+      nomChamp: 'departement',
+      emplacement: 'PARAMETRE_REQUETE',
+      presence: 'OPTIONELLE',
+    }),
     async (
       requete: Request,
       reponse: Response<ReponseAPIAnnuaireAidants>,
@@ -40,6 +57,24 @@ export const routesAPIAnnuaireAidants = (
       ): criteresDeRecherche is CriteresDeRecherche => {
         return criteresDeRecherche && !!criteresDeRecherche.departement;
       };
+
+      const resultatsValidation: Result<FieldValidationError> =
+        validationResult(requete) as Result<FieldValidationError>;
+      if (!resultatsValidation.isEmpty()) {
+        return reponse.status(400).json({
+          message: resultatsValidation
+            .array()
+            .map((resultatValidation) => resultatValidation.msg)
+            .join('\n'),
+          liens: {
+            'afficher-annuaire-aidants': {
+              url: '/api/annuaire-aidants',
+              methode: 'GET',
+            },
+          },
+        });
+      }
+
       const criteresDeRecherche = estCriteresDeRecherche(requete.query)
         ? requete.query
         : undefined;
