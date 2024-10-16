@@ -4,6 +4,7 @@ import testeurIntegration from '../testeurIntegration';
 import { executeRequete } from '../executeurRequete';
 import { ReponseAPIAnnuaireAidants } from '../../../src/api/annuaire-aidants/routeAPIAnnuaireAidants';
 import { unAidant } from '../../annuaire-aidants/constructeurAidant';
+import { departements } from '../../../src/gestion-demandes/departements';
 
 describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   let testeurMAC = testeurIntegration();
@@ -34,6 +35,22 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
     expect(reponseJson.aidants).toStrictEqual([
       { identifiant: aidant.identifiant, nomPrenom: aidant.nomPrenom },
     ]);
+    expect(reponseJson.departements).not.empty;
+  });
+
+  it('Retourne la liste des départements', async () => {
+    const reponse = await executeRequete(
+      donneesServeur.app,
+      'GET',
+      '/api/annuaire-aidants',
+      donneesServeur.portEcoute
+    );
+
+    expect(reponse.statusCode).toBe(200);
+    const reponseJson: ReponseAPIAnnuaireAidants = await reponse.json();
+    expect(reponseJson.departements).toStrictEqual(
+      departements.map((d) => d.nom)
+    );
   });
 
   it('Retourne le nombre d’Aidants', async () => {
@@ -75,6 +92,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
           { identifiant: aidant.identifiant, nomPrenom: aidant.nomPrenom },
         ]);
         expect(reponseJson.nombreAidants).toStrictEqual(1);
+        expect(reponseJson.departements).not.empty;
       });
 
       it('Retourne les liens HATEOAS dans le corps de la réponse', async () => {
