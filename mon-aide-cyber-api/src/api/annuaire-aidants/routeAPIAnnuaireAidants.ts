@@ -8,6 +8,7 @@ import {
 import { UUID } from 'crypto';
 import { ParsedQs } from 'qs';
 import { ReponseHATEOAS } from '../hateoas/hateoas';
+import { departements } from '../../gestion-demandes/departements';
 
 type AidantDTO = {
   identifiant: UUID;
@@ -17,6 +18,7 @@ type AidantDTO = {
 export type ReponseAPIAnnuaireAidants = ReponseHATEOAS & {
   aidants: AidantDTO[];
   nombreAidants: number;
+  departements: string[];
 };
 
 export const routesAPIAnnuaireAidants = (
@@ -49,6 +51,7 @@ export const routesAPIAnnuaireAidants = (
               identifiant: a.identifiant,
               nomPrenom: a.nomPrenom,
             })),
+            departements: departements.map((d) => d.nom),
             nombreAidants: annuaire.length,
             liens: {
               'afficher-annuaire-aidants': {
