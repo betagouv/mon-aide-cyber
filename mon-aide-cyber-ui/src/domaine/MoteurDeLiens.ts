@@ -65,6 +65,14 @@ export class MoteurDeLiens {
     }
   }
 
+  trouveSansCallback(lienATrouver: Action): Lien {
+    const lien = Object.entries(this.liens)
+      .filter(([action]) => action === lienATrouver)
+      .map(([, lien]) => lien)[0];
+
+    return lien;
+  }
+
   extrais(exclusion?: (Action | string)[]): Liens {
     return Object.entries(this.liens)
       .filter(([lien]) => !exclusion?.includes(lien))

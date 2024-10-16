@@ -11,7 +11,7 @@ export const useRecupereContexteNavigation = (
   const navigationMAC = useNavigationMAC();
   const navigationUtilisateur = useContexteNavigation(macAPI);
 
-  const [contexteRecupere, setContexteRecupere] = useState(true);
+  const [contexteRecupere, setContexteRecupere] = useState(false);
 
   useEffect(() => {
     if (contexteRecupere) return;
