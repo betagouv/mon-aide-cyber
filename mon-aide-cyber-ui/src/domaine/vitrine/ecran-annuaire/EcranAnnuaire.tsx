@@ -5,7 +5,7 @@ import { TypographieH2 } from '../../../composants/communs/typographie/Typograph
 import { HeroAnnuaire } from './composants/HeroAnnuaire';
 import { UUID } from '../../../types/Types';
 import './ecran-annuaire.scss';
-import { ListeAidants } from './composants/ListeAidants';
+import { ListeAidants } from './composants/liste-aidants/ListeAidants';
 import { ReponseHATEOAS } from '../../Lien';
 
 export type AidantAnnuaire = {
