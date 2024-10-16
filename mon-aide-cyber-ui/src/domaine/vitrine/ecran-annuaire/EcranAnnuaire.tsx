@@ -3,30 +3,18 @@ import TuileActionDemandeAide from '../../../composants/communs/tuiles/TuileActi
 import TuileActionKitDeCommunication from '../../../composants/communs/tuiles/TuileActionKitDeCommunication';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2';
 import { HeroAnnuaire } from './composants/HeroAnnuaire';
-import { UUID } from '../../../types/Types';
 import './ecran-annuaire.scss';
-import { ListeAidants } from './composants/liste-aidants/ListeAidants';
-import { ReponseHATEOAS } from '../../Lien';
-
-export type AidantAnnuaire = {
-  identifiant: UUID;
-  nomPrenom: string;
-};
-
-export type ReponseAnnuaire = {
-  aidants?: AidantAnnuaire[];
-  departements: string[];
-  nombreAidants: number;
-};
-
-export type ReponseAidantAnnuaire = ReponseAnnuaire & ReponseHATEOAS;
+import { ListeAidants } from './composants/liste-aidants';
+import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation';
 
 export const EcranAnnuaire = () => {
+  useRecupereContexteNavigation('afficher-annuaire-aidants');
+
   return (
     <main role="main" className="ecran-annuaire-aidants">
       <HeroAnnuaire />
       <section className="fond-clair-mac">
-        <div className="fr-container layout-annuaire">
+        <div className="fr-container">
           <ListeAidants />
         </div>
       </section>

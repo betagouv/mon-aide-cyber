@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { ReponseHATEOAS } from '../domaine/Lien';
-import { MACAPIType } from '../fournisseurs/api/useMACAPI';
+import { useMACAPI } from '../fournisseurs/api/useMACAPI';
 import { useContexteNavigation } from './useContexteNavigation';
 import { useNavigationMAC } from '../fournisseurs/hooks';
 
-export const useRecupereContexteNavigation = (
-  macAPI: MACAPIType,
-  contexte: string
-) => {
+export const useRecupereContexteNavigation = (contexte: string) => {
+  const macAPI = useMACAPI();
   const navigationMAC = useNavigationMAC();
   const navigationUtilisateur = useContexteNavigation(macAPI);
   const [contexteRecupere, setContexteRecupere] = useState(false);
