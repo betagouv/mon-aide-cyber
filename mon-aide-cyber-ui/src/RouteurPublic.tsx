@@ -5,7 +5,6 @@ import { ComposantIntercepteur } from './composants/intercepteurs/ComposantInter
 import { CharteAidant } from './vues/CharteAidant.tsx';
 import { ComposantCGU } from './vues/ComposantCGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
-import { ComposantConnexion } from './composants/connexion/ComposantConnexion.tsx';
 import { ComposantDemandeDevenirAidant } from './composants/gestion-demandes/devenir-aidant/ComposantDemandeDevenirAidant.tsx';
 import { KitDeCommunication } from './composants/a-propos/KitDeCommunication.tsx';
 import { LayoutPublic } from './composants/layout/LayoutPublic.tsx';
@@ -16,6 +15,7 @@ import { EcranAccessibilite } from './vues/EcranAccessibilite.tsx';
 import { EcranStatistiques } from './domaine/vitrine/ecran-statistiques/EcranStatistiques.tsx';
 import { EcranBeneficierDuDispositif } from './domaine/vitrine/ecran-beneficier-du-dispositif/EcranBeneficierDuDispositif.tsx';
 import { EcranAnnuaire } from './domaine/vitrine/ecran-annuaire/EcranAnnuaire.tsx';
+import { EcranConnexion } from './domaine/connexion/EcranConnexion.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -39,7 +39,7 @@ export const RouteurPublic = () => {
           element={<ComposantDemandeDevenirAidant />}
         />
         <Route path="mentions-legales" element={<MentionsLegales />} />
-        <Route path="connexion" element={<ComposantConnexion />} />
+        <Route path="connexion" element={<EcranConnexion />} />
       </Route>
 
       <Route element={<LayoutCreationEspaceAidant />}>
