@@ -5,6 +5,10 @@ import {
   ErreurAccesRefuse,
   InformationsContexte,
 } from './AdaptateurDeVerificationDeSession';
+import {
+  GestionnaireDeJeton,
+  JwtMACPayload,
+} from '../authentification/GestionnaireDeJeton';
 
 export type MACCookies = { session: string };
 
@@ -34,4 +38,13 @@ export const fabriqueDeCookies = (
   return {
     session: cookies,
   };
+};
+export const jwtPayload = (
+  cookies: MACCookies,
+  gestionnaireDeJeton: GestionnaireDeJeton
+): JwtMACPayload => {
+  const sessionDecodee = JSON.parse(
+    Buffer.from(cookies.session, 'base64').toString()
+  );
+  return gestionnaireDeJeton.verifie(sessionDecodee.token);
 };

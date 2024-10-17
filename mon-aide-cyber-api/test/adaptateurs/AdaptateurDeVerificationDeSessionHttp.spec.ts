@@ -22,13 +22,21 @@ describe('Adaptateur de vérification de session', () => {
       headers: { cookie: cookieDeSession },
     } as Request;
 
+    const token = JSON.stringify({
+      identifiant: 'cba33a4f-0224-4d81-b899-152105c6b8af',
+    });
     new AdaptateurDeVerificationDeSessionHttp(fauxGestionnaireDeJeton).verifie(
-      'Accède aux diagnostics'
+      'Accède aux diagnostics',
+      () => ({
+        session: btoa(
+          JSON.stringify({
+            token,
+          })
+        ),
+      })
     )(requete, reponse, fausseSuite);
 
-    fauxGestionnaireDeJeton.verifieToken(
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWFudCI6ImNiYTMzYTRmLTAyMjQtNGQ4MS1iODk5LTE1MjEwNWM2YjhhZiIsImlhdCI6MTcwMDkwMjY1MTk2MH0.WxgG3fHtTPyzGwyOdjpQGq9klq4yBo6UF9nwkYmKsho'
-    );
+    fauxGestionnaireDeJeton.verifieToken(token);
   });
 
   it('lève une erreur quand les cookies de session sont absents', () => {
@@ -107,14 +115,22 @@ describe('Adaptateur de vérification de session', () => {
 
   it("ajoute l'identifiant de l'utilisateur lorsque le jeton est vérifié", () => {
     const fauxGestionnaireDeJeton = new FauxGestionnaireDeJeton();
-    const cookieDeSession =
-      'session=eyJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwWkdWdWRHbG1hV0Z1ZENJNkltTmlZVE16WVRSbUxUQXlNalF0TkdRNE1TMWlPRGs1TFRFMU1qRXdOV00yWWpoaFppSXNJbWxoZENJNk1UY3dNRGt3TWpZMU1UazJNSDAuV3hnRzNmSHRUUHl6R3d5T2RqcFFHcTlrbHE0eUJvNlVGOW53a1ltS3NobyJ9; session.sig=n5DahOjdSBgjYBonCTddV0mqZto';
+    const cookieDeSession = `session=eyJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwWkdWdWRHbG1hV0Z1ZENJNkltTmlZVE16WVRSbUxUQXlNalF0TkdRNE1TMWlPRGs1TFRFMU1qRXdOV00yWWpoaFppSXNJbWxoZENJNk1UY3dNRGt3TWpZMU1UazJNSDAuV3hnRzNmSHRUUHl6R3d5T2RqcFFHcTlrbHE0eUJvNlVGOW53a1ltS3NobyJ9; session.sig=n5DahOjdSBgjYBonCTddV0mqZto`;
     const requete: RequeteUtilisateur = {
       headers: { cookie: cookieDeSession },
     } as RequeteUtilisateur;
 
     new AdaptateurDeVerificationDeSessionHttp(fauxGestionnaireDeJeton).verifie(
-      'Accède aux diagnostics'
+      'Accède aux diagnostics',
+      () => ({
+        session: btoa(
+          JSON.stringify({
+            token: JSON.stringify({
+              identifiant: 'cba33a4f-0224-4d81-b899-152105c6b8af',
+            }),
+          })
+        ),
+      })
     )(requete, reponse, fausseSuite);
 
     expect(requete.identifiantUtilisateurCourant).toStrictEqual(
