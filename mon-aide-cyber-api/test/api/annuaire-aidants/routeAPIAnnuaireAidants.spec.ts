@@ -23,7 +23,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   });
 
   it('Retourne un Aidant', async () => {
-    const aidant = unAidant().construis();
+    const aidant = unAidant().avecNomPrenom('Jean DUPONT').construis();
     await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
 
     const reponse = await executeRequete(
@@ -36,7 +36,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
     expect(reponse.statusCode).toBe(200);
     const reponseJson: ReponseAPIAnnuaireAidantsSucces = await reponse.json();
     expect(reponseJson.aidants).toStrictEqual([
-      { identifiant: aidant.identifiant, nomPrenom: aidant.nomPrenom },
+      { identifiant: aidant.identifiant, nomPrenom: 'Jean D.' },
     ]);
     expect(reponseJson.departements).not.empty;
   });
@@ -77,7 +77,10 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   describe('Lorsque l’on filtre', () => {
     describe('Par département', () => {
       it('Retourne un Aidant dans le département désiré', async () => {
-        const aidant = unAidant().enGironde().construis();
+        const aidant = unAidant()
+          .avecNomPrenom('Jean DUPONT')
+          .enGironde()
+          .construis();
         const autreAidant = unAidant().enCorreze().construis();
         await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
         await testeurMAC.entrepots.annuaireAidants().persiste(autreAidant);
@@ -93,7 +96,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
         const reponseJson: ReponseAPIAnnuaireAidantsSucces =
           await reponse.json();
         expect(reponseJson.aidants).toStrictEqual([
-          { identifiant: aidant.identifiant, nomPrenom: aidant.nomPrenom },
+          { identifiant: aidant.identifiant, nomPrenom: 'Jean D.' },
         ]);
         expect(reponseJson.nombreAidants).toStrictEqual(1);
         expect(reponseJson.departements).not.empty;
