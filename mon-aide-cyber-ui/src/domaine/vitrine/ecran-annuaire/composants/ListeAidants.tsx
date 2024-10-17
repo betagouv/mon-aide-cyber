@@ -88,9 +88,7 @@ export const ListeAidants = () => {
       <p>
         Il y a actuellement <b>{aidants.length}</b> Aidant
         {afficheUnPlurielSiMultiplesResultats(aidants)} ayant souhaité
-        apparaître publiquement
-        {afficheUnPlurielSiMultiplesResultats(aidants)} dans l&apos;annuaire de
-        MonAideCyber.
+        apparaître publiquement dans l&apos;annuaire de MonAideCyber.
       </p>
       <div className="cartes-aidants">
         {aidants?.map((aidant) => (
