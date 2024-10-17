@@ -1,9 +1,20 @@
-import { FormulaireAuthentification } from '../authentification/FormulaireAuthentification.tsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
+import { MoteurDeLiens } from '../MoteurDeLiens.ts';
+import { FormulaireAuthentification } from '../../composants/authentification/FormulaireAuthentification.tsx';
 
-export const ComposantConnexion = () => {
+export const EcranConnexion = () => {
   const [informationAEteAfficheeUneFois, setInformationAEteAfficheeUneFois] =
     useState(false);
+
+  const navigationMAC = useNavigationMAC();
+
+  useEffect(() => {
+    const moteurDeLiens = new MoteurDeLiens(navigationMAC.etat);
+    moteurDeLiens.trouve('creer-espace-aidant', () =>
+      navigationMAC.navigue(moteurDeLiens, 'creer-espace-aidant')
+    );
+  }, [navigationMAC.etat]);
 
   const formulaireConnexion = (
     <>
