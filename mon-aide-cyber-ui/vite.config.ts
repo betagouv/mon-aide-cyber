@@ -8,7 +8,16 @@ export default defineConfig({
       'top-level-await': true,
     },
   },
-  plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['@tanstack/react-query', '@tanstack/query-core'],
+        },
+      },
+    },
+  },
+  plugins: [react() /* , splitVendorChunkPlugin() */],
   server: {
     watch: {
       usePolling: true,

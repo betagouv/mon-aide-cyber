@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { constructeurParametresAPI } from '../../../../../fournisseurs/api/ConstructeurParametresAPI';
 import { UUID } from '../../../../../types/Types';
-import { ReponseHATEOAS } from '../../../../Lien';
+import { Liens, ReponseHATEOAS } from '../../../../Lien';
 import { MoteurDeLiens } from '../../../../MoteurDeLiens';
 import { useNavigationMAC } from '../../../../../fournisseurs/hooks';
-import { useMACAPI } from '../../../../../fournisseurs/api/useMACAPI';
+import {
+  MACAPIType,
+  useMACAPI,
+} from '../../../../../fournisseurs/api/useMACAPI';
 import { useEffect, useState } from 'react';
 
 export type AidantAnnuaire = {
@@ -19,6 +22,29 @@ export type ReponseAnnuaire = {
 };
 
 export type ReponseAidantAnnuaire = ReponseAnnuaire & ReponseHATEOAS;
+
+const recupereAnnuaireAidants = (
+  macAPI: MACAPIType,
+  liens: Liens,
+  departementARechercher: string
+) => {
+  const lien = new MoteurDeLiens(liens).trouveEtRenvoie(
+    'afficher-annuaire-aidants'
+  );
+
+  let urlComplete = lien.url;
+  if (!!departementARechercher && departementARechercher !== '') {
+    urlComplete = `${lien.url}?departement=${departementARechercher}`;
+  }
+
+  return macAPI.execute<ReponseAidantAnnuaire, ReponseAidantAnnuaire>(
+    constructeurParametresAPI()
+      .url(urlComplete)
+      .methode(lien.methode!)
+      .construis(),
+    (reponse) => reponse
+  );
+};
 
 export const useListeAidants = () => {
   const macAPI = useMACAPI();
@@ -38,22 +64,12 @@ export const useListeAidants = () => {
       'afficher-annuaire-aidants'
     ),
     refetchOnWindowFocus: false,
-    queryFn: () => {
-      const lien = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
-        'afficher-annuaire-aidants'
-      );
-
-      if (!!departementARechercher && departementARechercher !== '') {
-        lien.url = `${lien.url}?departement=${departementARechercher}`;
-      }
-      return macAPI.execute<ReponseAidantAnnuaire, ReponseAidantAnnuaire>(
-        constructeurParametresAPI()
-          .url(lien.url)
-          .methode(lien.methode!)
-          .construis(),
-        (reponse) => reponse
-      );
-    },
+    queryFn: () =>
+      recupereAnnuaireAidants(
+        macAPI,
+        navigationMAC.etat,
+        departementARechercher
+      ),
   });
 
   const aidants = ressourceAnnuaireAidant?.aidants;
