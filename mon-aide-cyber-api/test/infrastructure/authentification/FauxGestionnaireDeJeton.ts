@@ -5,7 +5,7 @@ import {
   JwtMACPayload,
 } from '../../../src/authentification/GestionnaireDeJeton';
 import { expect } from 'vitest';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 
 export class FauxGestionnaireDeJeton implements GestionnaireDeJeton {
   constructor(private readonly jetonInvalide = false) {}
@@ -16,7 +16,7 @@ export class FauxGestionnaireDeJeton implements GestionnaireDeJeton {
       throw new Error('Jeton invalide');
     }
     this.token = jeton;
-    const payload = jwt.decode(jeton) as JwtPayload;
+    const payload = JSON.parse(jeton) as JwtPayload;
     return { ...payload, identifiant: payload.identifiant };
   }
 
