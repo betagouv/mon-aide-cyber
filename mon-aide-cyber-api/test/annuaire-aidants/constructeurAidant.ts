@@ -2,9 +2,17 @@ import { unAidant as unAidantDuDomaineAidant } from '../authentification/constru
 import { Constructeur } from '../constructeurs/constructeur';
 import { Aidant } from '../../src/annuaire-aidants/annuaireAidants';
 import { Departement } from '../../src/gestion-demandes/departements';
+import { fakerFR } from '@faker-js/faker';
 
 class ConstructeurAidant implements Constructeur<Aidant> {
+  private nomPrenom: string = fakerFR.person.fullName();
+
   private departements: Departement[] = [];
+
+  avecNomPrenom(nomPrenom: string): ConstructeurAidant {
+    this.nomPrenom = nomPrenom;
+    return this;
+  }
 
   enGironde(): ConstructeurAidant {
     this.departements.push({ code: '33', nom: 'Gironde', codeRegion: '75' });
@@ -18,6 +26,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
 
   construis(): Aidant {
     const aidant = unAidantDuDomaineAidant()
+      .avecUnNomPrenom(this.nomPrenom)
       .ayantConsentiPourLAnnuaire()
       .ayantPourDepartements(this.departements)
       .construis();
