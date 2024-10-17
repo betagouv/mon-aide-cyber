@@ -1,61 +1,34 @@
-import { constructeurParametresAPI } from '../../../../../fournisseurs/api/ConstructeurParametresAPI';
-import { useMACAPI } from '../../../../../fournisseurs/api/useMACAPI';
-import { useNavigationMAC } from '../../../../../fournisseurs/hooks';
-import { MoteurDeLiens } from '../../../../MoteurDeLiens';
 import { CarteAidant } from '../CarteAidant';
 import { TypographieH6 } from '../../../../../composants/communs/typographie/TypographieH6/TypographieH6';
-import illustrationFAQFemme from '../../../../../public/images/illustration-faq-femme.svg';
+import illustrationFAQFemme from '../../../../../../public/images/illustration-faq-femme.svg';
 import Button from '../../../../../composants/atomes/Button/Button';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { useRecupereContexteNavigation } from '../../../../../hooks/useRecupereContexteNavigation';
-import { ReponseAidantAnnuaire } from './useListeAidants';
+import { AidantAnnuaire, useListeAidants } from './useListeAidants';
+import { AutoCompletion } from '../../../../../composants/auto-completion/AutoCompletion';
+import {
+  Departement,
+  estDepartement,
+} from '../../../../gestion-demandes/departement';
 
-export const ListeAidants = () => {
-  const macAPI = useMACAPI();
-  const navigationMAC = useNavigationMAC();
+const afficheUnPlurielSiMultiplesResultats = (tableau: unknown[]) => {
+  return tableau && tableau.length > 1 ? 's' : '';
+};
 
-  useRecupereContexteNavigation('afficher-annuaire-aidants');
+export type CartesAidant = {
+  aidants: AidantAnnuaire[] | undefined;
+  nombreAidants: number | undefined;
+  enCoursDeChargement: boolean;
+  enErreur: boolean;
+  relanceLaRecherche: () => void;
+};
 
-  const afficheUnPlurielSiMultiplesResultats = (tableau: unknown[]) => {
-    return tableau && tableau.length > 1 ? 's' : '';
-  };
-
-  const {
-    data: ressourceAnnuaireAidant,
-    isLoading: enCoursDeChargement,
-    isError: enErreur,
-    refetch: relanceLaRecherche,
-  } = useQuery<ReponseAidantAnnuaire>({
-    queryKey: ['afficher-annuaire-aidants'],
-    enabled: new MoteurDeLiens(navigationMAC.etat).existe(
-      'afficher-annuaire-aidants'
-    ),
-    refetchOnWindowFocus: false,
-    queryFn: () => {
-      const lien = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
-        'afficher-annuaire-aidants'
-      );
-
-      return macAPI.execute<ReponseAidantAnnuaire, ReponseAidantAnnuaire>(
-        constructeurParametresAPI()
-          .url(lien.url)
-          .methode(lien.methode!)
-          .construis(),
-        (reponse) => reponse
-      );
-    },
-  });
-
-  const aidants = ressourceAnnuaireAidant?.aidants;
-
-  useEffect(() => {
-    if (ressourceAnnuaireAidant?.liens) {
-      navigationMAC.ajouteEtat(ressourceAnnuaireAidant?.liens);
-    }
-  }, [ressourceAnnuaireAidant]);
-
+export const CartesAidant = ({
+  aidants,
+  nombreAidants,
+  enCoursDeChargement,
+  enErreur,
+  relanceLaRecherche,
+}: CartesAidant) => {
   if (enCoursDeChargement) {
     return (
       <div className="cartes-aidants-messages">
@@ -95,10 +68,9 @@ export const ListeAidants = () => {
   }
 
   return (
-    <div className="liste-aidants">
+    <div>
       <p>
-        Il y a actuellement <b>{ressourceAnnuaireAidant.nombreAidants}</b>{' '}
-        Aidant
+        Il y a actuellement <b>{nombreAidants}</b> Aidant
         {afficheUnPlurielSiMultiplesResultats(aidants)} ayant souhaité
         apparaître publiquement dans l&apos;annuaire de MonAideCyber.
       </p>
@@ -106,6 +78,67 @@ export const ListeAidants = () => {
         {aidants?.map((aidant) => (
           <CarteAidant key={aidant.identifiant} nomPrenom={aidant.nomPrenom} />
         ))}
+      </div>
+    </div>
+  );
+};
+
+export const ListeAidants = () => {
+  const {
+    aidants,
+    nombreAidants,
+    enCoursDeChargement,
+    enErreur,
+    relanceLaRecherche,
+    referentielDepartements,
+    selectionneDepartement,
+  } = useListeAidants();
+
+  const departements: Departement[] | undefined = referentielDepartements?.map(
+    (x) => ({
+      nom: x,
+      code: x,
+    })
+  );
+
+  return (
+    <div className="layout-annuaire">
+      <div className="filtres">
+        <span className="titre">Où est située votre entité ?</span>
+        {!!departements && departements.length > 0 ? (
+          <div className="fr-input-group">
+            <AutoCompletion<Departement>
+              nom="departement"
+              valeurSaisie={{} as Departement}
+              suggestionsInitiales={departements}
+              mappeur={(departement) => {
+                return estDepartement(departement)
+                  ? `${departement.code} - ${departement.nom}`
+                  : typeof departement === 'string'
+                    ? departement
+                    : '';
+              }}
+              surSelection={(departement) => {
+                console.log('saisie dpt', departement);
+                selectionneDepartement(departement.nom);
+              }}
+              surSaisie={(departement) => {
+                console.log('saisie dpt', departement);
+              }}
+              clefsFiltrage={['code', 'nom']}
+            />
+          </div>
+        ) : null}
+      </div>
+      <div className="liste-aidants">
+        <span className="titre">Aidants trouvés</span>
+        <CartesAidant
+          aidants={aidants}
+          nombreAidants={nombreAidants}
+          enCoursDeChargement={enCoursDeChargement}
+          enErreur={enErreur}
+          relanceLaRecherche={relanceLaRecherche}
+        />
       </div>
     </div>
   );

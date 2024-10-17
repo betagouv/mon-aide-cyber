@@ -56,6 +56,12 @@
         padding: 3rem .75rem;
         gap: 1.5rem;
         
+        .titre {
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 20px; /* 142.857% */
+        }
     }
 
     .filtres {
@@ -63,17 +69,12 @@
         position: relative;
 
         .autocomplete {
+            margin-top: 0;
             .autocomplete-labellise {
+                background-color: var(--couleurs-mac-blanc)!important;
                 input {
-                    background-color: var(--couleurs-mac-blanc);
+                    background-color: var(--couleurs-mac-blanc)!important;
                 }
-                button {
-                    background-color: var(--couleurs-mac-blanc);
-                }
-            }
-            
-            .autocomplete-items button {
-                background-color: var(--couleurs-mac-blanc);
             }
         }
     }
