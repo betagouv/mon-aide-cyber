@@ -24,7 +24,7 @@ type AidantDTO = {
 export type ReponseAPIAnnuaireAidantsSucces = ReponseHATEOAS & {
   aidants: AidantDTO[];
   nombreAidants: number;
-  departements: string[];
+  departements: { code: string; nom: string }[];
 };
 export type ReponseAPIAnnuaireAidantsErreur = ReponseHATEOAS & {
   message: string;
@@ -86,7 +86,10 @@ export const routesAPIAnnuaireAidants = (
               identifiant: a.identifiant,
               nomPrenom: a.nomPrenom,
             })),
-            departements: departements.map((d) => d.nom),
+            departements: departements.map((d) => ({
+              code: d.code,
+              nom: d.nom,
+            })),
             nombreAidants: annuaire.length,
             liens: {
               'afficher-annuaire-aidants': {

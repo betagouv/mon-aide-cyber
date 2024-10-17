@@ -52,7 +52,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
     expect(reponse.statusCode).toBe(200);
     const reponseJson: ReponseAPIAnnuaireAidantsSucces = await reponse.json();
     expect(reponseJson.departements).toStrictEqual(
-      departements.map((d) => d.nom)
+      departements.map((d) => ({ code: d.code, nom: d.nom }))
     );
   });
 
