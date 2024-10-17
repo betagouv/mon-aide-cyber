@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { constructeurParametresAPI } from '../../../../../fournisseurs/api/ConstructeurParametresAPI';
-import { UUID } from '../../../../../types/Types';
 import { Liens, ReponseHATEOAS } from '../../../../Lien';
 import { MoteurDeLiens } from '../../../../MoteurDeLiens';
 import { useNavigationMAC } from '../../../../../fournisseurs/hooks';
@@ -10,17 +9,7 @@ import {
 } from '../../../../../fournisseurs/api/useMACAPI';
 import { useEffect, useState } from 'react';
 import { Departement } from '../../../../gestion-demandes/departement';
-
-export type AidantAnnuaire = {
-  identifiant: UUID;
-  nomPrenom: string;
-};
-
-export type ReponseAnnuaire = {
-  aidants?: AidantAnnuaire[];
-  departements: Departement[];
-  nombreAidants: number;
-};
+import { ReponseAnnuaire } from '../../AidantAnnuaire.ts';
 
 export type ReponseAidantAnnuaire = ReponseAnnuaire & ReponseHATEOAS;
 

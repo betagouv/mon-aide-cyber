@@ -3,12 +3,20 @@ import { TypographieH6 } from '../../../../../composants/communs/typographie/Typ
 import illustrationFAQFemme from '../../../../../../public/images/illustration-faq-femme.svg';
 import Button from '../../../../../composants/atomes/Button/Button';
 import { Link } from 'react-router-dom';
-import { AidantAnnuaire, useListeAidants } from './useListeAidants';
 import { AutoCompletion } from '../../../../../composants/auto-completion/AutoCompletion';
 import {
   Departement,
   estDepartement,
 } from '../../../../gestion-demandes/departement';
+import React, { useCallback, useEffect, useReducer } from 'react';
+import { AidantAnnuaire } from '../../AidantAnnuaire.ts';
+import { useListeAidants } from './useListeAidants.ts';
+import {
+  accedePageSuivante,
+  chargeAidants,
+  initialiseEtatPagination,
+  reducteurPagination,
+} from './reducteurPagination.ts';
 
 const afficheUnPlurielSiMultiplesResultats = (tableau: unknown[]) => {
   return tableau && tableau.length > 1 ? 's' : '';
@@ -94,6 +102,46 @@ export const ListeAidants = () => {
     departementARechercher,
     selectionneDepartement,
   } = useListeAidants();
+  const [etatPagination, envoie] = useReducer(
+    reducteurPagination,
+    initialiseEtatPagination()
+  );
+
+  useEffect(() => {
+    envoie(chargeAidants(aidants || []));
+  }, [aidants]);
+
+  const pageSuivante = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    envoie(accedePageSuivante());
+  }, []);
+
+  const boutonActif = (proprietesBouton: {
+    titreBouton: 'Page suivante';
+    action: (e: React.MouseEvent) => void;
+  }) => (
+    <a
+      href="#"
+      className="fr-pagination__link fr-pagination__link--next fr-pagination__link--lg-label"
+      onClick={(e) => proprietesBouton.action(e)}
+      aria-disabled={false}
+    >
+      {' '}
+      {proprietesBouton.titreBouton}{' '}
+    </a>
+  );
+
+  const boutonInactif = (proprietesBouton: {
+    titreBouton: 'Page suivante';
+  }) => (
+    <a
+      className="fr-pagination__link fr-pagination__link--next fr-pagination__link--lg-label"
+      aria-disabled={true}
+    >
+      {' '}
+      {proprietesBouton.titreBouton}{' '}
+    </a>
+  );
 
   return (
     <div className="layout-annuaire">
@@ -129,12 +177,70 @@ export const ListeAidants = () => {
       <div className="liste-aidants">
         <span className="titre">Aidants trouvés</span>
         <CartesAidant
-          aidants={aidants}
+          aidants={etatPagination.aidantsCourants}
           nombreAidants={nombreAidants}
           enCoursDeChargement={enCoursDeChargement}
           enErreur={enErreur}
           relanceLaRecherche={relanceLaRecherche}
         />
+        <div>
+          <nav
+            role="navigation"
+            className="fr-pagination"
+            aria-label="Pagination"
+          >
+            <ul className="fr-pagination__list">
+              {/*<li>*/}
+              {/*  <a*/}
+              {/*    className="fr-pagination__link fr-pagination__link--first"*/}
+              {/*    aria-disabled="true"*/}
+              {/*    role="link"*/}
+              {/*  >*/}
+              {/*    {' '}*/}
+              {/*    Première page{' '}*/}
+              {/*  </a>*/}
+              {/*</li>*/}
+              {/*<li>*/}
+              {/*  <a*/}
+              {/*    className="fr-pagination__link fr-pagination__link--prev fr-pagination__link--lg-label"*/}
+              {/*    aria-disabled="true"*/}
+              {/*    role="link"*/}
+              {/*  >*/}
+              {/*    {' '}*/}
+              {/*    Page précédente{' '}*/}
+              {/*  </a>*/}
+              {/*</li>*/}
+              {/*<li>*/}
+              {/*  <a*/}
+              {/*    className="fr-pagination__link"*/}
+              {/*    aria-current="page"*/}
+              {/*    title="Page 1"*/}
+              {/*  >*/}
+              {/*    {' '}*/}
+              {/*    1{' '}*/}
+              {/*  </a>*/}
+              {/*</li>*/}
+              {/*<li>*/}
+              {/*  <a*/}
+              {/*    className="fr-pagination__link"*/}
+              {/*    onClick={(e) => pageSuivante(e)}*/}
+              {/*    title="Page 2"*/}
+              {/*  >*/}
+              {/*    {' '}*/}
+              {/*    2{' '}*/}
+              {/*  </a>*/}
+              {/*</li>*/}
+              <li>
+                {etatPagination.pageSuivante
+                  ? boutonActif({
+                      titreBouton: 'Page suivante',
+                      action: (e) => pageSuivante(e),
+                    })
+                  : boutonInactif({ titreBouton: 'Page suivante' })}
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </div>
   );
