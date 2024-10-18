@@ -52,7 +52,8 @@
     .layout-annuaire {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        grid-template-areas: "filtres cartes cartes cartes";
+        grid-template-areas: "filtres filtres . ."
+                             "cartes cartes cartes cartes";
         padding: 3rem .75rem;
         gap: 1.5rem;
         
@@ -67,6 +68,9 @@
     .filtres {
         grid-area: filtres;
         position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
 
         .autocomplete {
             margin-top: 0;
@@ -84,7 +88,7 @@
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 2rem;
+        gap: 1rem;
     }
 
     .cartes-aidants-messages {
