@@ -4,6 +4,7 @@ import { Constructeur } from '../../../../../constructeurs/Constructeur.ts';
 import { AidantAnnuaire } from '../../../../../../src/domaine/vitrine/ecran-annuaire/AidantAnnuaire.ts';
 import { UUID } from '../../../../../../src/types/Types.ts';
 import {
+  accedePagePrecedente,
   accedePageSuivante,
   chargeAidants,
   EtatReducteurPagination,
@@ -85,6 +86,7 @@ describe('Réducteur pagination', () => {
         aidantsCourants: aidants.slice(12),
         page: 2,
         nombreDePages: 2,
+        pagePrecedente: 1,
       });
     });
 
@@ -108,6 +110,7 @@ describe('Réducteur pagination', () => {
         page: 2,
         nombreDePages: 3,
         pageSuivante: 3,
+        pagePrecedente: 1,
       });
     });
 
@@ -130,6 +133,81 @@ describe('Réducteur pagination', () => {
         aidantsCourants: aidants.slice(24),
         page: 3,
         nombreDePages: 3,
+        pagePrecedente: 2,
+      });
+    });
+  });
+
+  describe('Pour aller à la page précédente', () => {
+    it('Retourne à la page 2 de 3', () => {
+      const aidants = unAnnuaireAidants().auNombreDe(26).construis();
+
+      const etat = reducteurPagination(
+        {
+          ...initialiseEtatPagination(),
+          aidantsInitiaux: aidants,
+          page: 3,
+          nombreDePages: 3,
+          pagePrecedente: 2,
+        },
+        accedePagePrecedente()
+      );
+
+      expect(etat).toStrictEqual<EtatReducteurPagination>({
+        aidantsInitiaux: aidants,
+        aidantsCourants: aidants.slice(12, 24),
+        page: 2,
+        nombreDePages: 3,
+        pagePrecedente: 1,
+        pageSuivante: 3,
+      });
+    });
+
+    it('Retourne à la page 1 de 3', () => {
+      const aidants = unAnnuaireAidants().auNombreDe(26).construis();
+
+      const etat = reducteurPagination(
+        {
+          ...initialiseEtatPagination(),
+          aidantsInitiaux: aidants,
+          page: 2,
+          nombreDePages: 3,
+          pagePrecedente: 1,
+          pageSuivante: 3,
+        },
+        accedePagePrecedente()
+      );
+
+      expect(etat).toStrictEqual<EtatReducteurPagination>({
+        aidantsInitiaux: aidants,
+        aidantsCourants: aidants.slice(0, 12),
+        page: 1,
+        nombreDePages: 3,
+        pageSuivante: 2,
+      });
+    });
+
+    it('Retourne à la page 3 de 4', () => {
+      const aidants = unAnnuaireAidants().auNombreDe(46).construis();
+
+      const etat = reducteurPagination(
+        {
+          ...initialiseEtatPagination(),
+          aidantsInitiaux: aidants,
+          page: 4,
+          nombreDePages: 4,
+          pagePrecedente: 3,
+        },
+        accedePagePrecedente()
+      );
+
+      expect(etat).toStrictEqual<EtatReducteurPagination>({
+        aidantsInitiaux: aidants,
+        aidantsCourants: aidants.slice(24, 36),
+        page: 3,
+        nombreDePages: 4,
+        pageSuivante: 4,
+        pagePrecedente: 2,
       });
     });
   });
