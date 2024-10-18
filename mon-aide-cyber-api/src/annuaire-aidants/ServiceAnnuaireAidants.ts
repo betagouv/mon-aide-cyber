@@ -7,9 +7,9 @@ export type CriteresDeRecherche = {
 export class ServiceAnnuaireAidants {
   constructor(private readonly entrepotAidant: EntrepotAnnuaireAidants) {}
 
-  formateLeNom(nomPrenom: string): string {
+  private formateLeNom(nomPrenom: string): string {
     const [prenom, nom] = nomPrenom.split(' ');
-    return `${prenom} ${nom[0]}.`;
+    return `${prenom} ${nom ? `${nom[0]}.` : ''}`.trim();
   }
 
   recherche(
