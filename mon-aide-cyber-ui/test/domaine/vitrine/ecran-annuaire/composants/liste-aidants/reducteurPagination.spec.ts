@@ -4,7 +4,9 @@ import { Constructeur } from '../../../../../constructeurs/Constructeur.ts';
 import { AidantAnnuaire } from '../../../../../../src/domaine/vitrine/ecran-annuaire/AidantAnnuaire.ts';
 import { UUID } from '../../../../../../src/types/Types.ts';
 import {
+  accedeALaDernierePage,
   accedeALaPage,
+  accedeALaPremierePage,
   accedePagePrecedente,
   accedePageSuivante,
   chargeAidants,
@@ -288,6 +290,57 @@ describe('Réducteur pagination', () => {
           pageSuivante: 4,
         },
         accedeALaPage(1)
+      );
+
+      expect(etat).toStrictEqual<EtatReducteurPagination>({
+        aidantsInitiaux: aidants,
+        aidantsCourants: aidants.slice(0, 12),
+        page: 1,
+        nombreDePages: 4,
+        pageSuivante: 2,
+        taillePagination: 12,
+      });
+    });
+  });
+
+  describe('Pour aller directement à la première ou dernière page', () => {
+    it('Accède directement à la dernière page', () => {
+      const aidants = unAnnuaireAidants().auNombreDe(46).construis();
+
+      const etat = reducteurPagination(
+        {
+          ...etatPaginationInitiale,
+          aidantsInitiaux: aidants,
+          page: 2,
+          nombreDePages: 4,
+          pagePrecedente: 1,
+          pageSuivante: 3,
+        },
+        accedeALaDernierePage()
+      );
+
+      expect(etat).toStrictEqual<EtatReducteurPagination>({
+        aidantsInitiaux: aidants,
+        aidantsCourants: aidants.slice(36),
+        page: 4,
+        nombreDePages: 4,
+        pagePrecedente: 3,
+        taillePagination: 12,
+      });
+    });
+
+    it('Accède directement à la première page', () => {
+      const aidants = unAnnuaireAidants().auNombreDe(46).construis();
+
+      const etat = reducteurPagination(
+        {
+          ...etatPaginationInitiale,
+          aidantsInitiaux: aidants,
+          page: 4,
+          nombreDePages: 4,
+          pagePrecedente: 3,
+        },
+        accedeALaPremierePage()
       );
 
       expect(etat).toStrictEqual<EtatReducteurPagination>({

@@ -13,7 +13,9 @@ import React, { useCallback, useEffect, useReducer } from 'react';
 import { AidantAnnuaire } from '../../AidantAnnuaire.ts';
 import { useListeAidants } from './useListeAidants.ts';
 import {
+  accedeALaDernierePage,
   accedeALaPage,
+  accedeALaPremierePage,
   accedePagePrecedente,
   accedePageSuivante,
   chargeAidants,
@@ -94,13 +96,20 @@ export const CartesAidant = ({
   );
 };
 
-type TitreBouton = 'Page suivante' | 'Page précédente' | number;
+type TitreBouton =
+  | 'Page suivante'
+  | 'Page précédente'
+  | 'Première page'
+  | 'Dernière page'
+  | number;
 const classeBoutonPagination: Map<TitreBouton, string> = new Map([
   [
     'Page précédente',
     'fr-pagination__link--prev fr-pagination__link--lg-label',
   ],
   ['Page suivante', 'fr-pagination__link--next fr-pagination__link--lg-label'],
+  ['Première page', 'fr-pagination__link--first'],
+  ['Dernière page', 'fr-pagination__link--last'],
 ]);
 
 export const ListeAidants = () => {
@@ -128,16 +137,25 @@ export const ListeAidants = () => {
     envoie(accedePageSuivante());
   }, []);
 
-  const pagePrecedente = (e: React.MouseEvent) => {
+  const pagePrecedente = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     envoie(accedePagePrecedente());
-  };
+  }, []);
 
-  const pageIndex = (e: React.MouseEvent, indexPage: number) => {
+  const pageIndex = useCallback((e: React.MouseEvent, indexPage: number) => {
     e.preventDefault();
     envoie(accedeALaPage(indexPage));
-  };
+  }, []);
 
+  const accedePremierePage = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    envoie(accedeALaPremierePage());
+  }, []);
+
+  const accedeDernierePage = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    envoie(accedeALaDernierePage());
+  }, []);
   const boutonActif = (proprietesBouton: {
     titreBouton: TitreBouton;
     titreSurvol: string;
@@ -154,7 +172,6 @@ export const ListeAidants = () => {
       {proprietesBouton.titreBouton}{' '}
     </a>
   );
-
   const boutonInactif = (proprietesBouton: {
     titreBouton: TitreBouton;
     ariaCurrent: boolean;
@@ -215,16 +232,18 @@ export const ListeAidants = () => {
             aria-label="Pagination"
           >
             <ul className="fr-pagination__list">
-              {/*<li>*/}
-              {/*  <a*/}
-              {/*    className="fr-pagination__link fr-pagination__link--first"*/}
-              {/*    aria-disabled="true"*/}
-              {/*    role="link"*/}
-              {/*  >*/}
-              {/*    {' '}*/}
-              {/*    Première page{' '}*/}
-              {/*  </a>*/}
-              {/*</li>*/}
+              <li>
+                {etatPagination.pagePrecedente
+                  ? boutonActif({
+                      titreBouton: 'Première page',
+                      titreSurvol: 'Première page',
+                      action: (e) => accedePremierePage(e),
+                    })
+                  : boutonInactif({
+                      titreBouton: 'Première page',
+                      ariaCurrent: false,
+                    })}
+              </li>
               <li>
                 {etatPagination.pagePrecedente
                   ? boutonActif({
@@ -269,6 +288,18 @@ export const ListeAidants = () => {
                     })
                   : boutonInactif({
                       titreBouton: 'Page suivante',
+                      ariaCurrent: false,
+                    })}
+              </li>
+              <li>
+                {etatPagination.pageSuivante
+                  ? boutonActif({
+                      titreBouton: 'Dernière page',
+                      titreSurvol: 'Dernière page',
+                      action: (e) => accedeDernierePage(e),
+                    })
+                  : boutonInactif({
+                      titreBouton: 'Dernière page',
                       ariaCurrent: false,
                     })}
               </li>
