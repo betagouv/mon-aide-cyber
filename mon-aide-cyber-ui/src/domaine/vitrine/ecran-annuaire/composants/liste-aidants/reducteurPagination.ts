@@ -15,6 +15,8 @@ enum TypeActionPagination {
   PAGE_SUIVANTE = 'PAGE_SUIVANTE',
   PAGE_PRECEDENTE = 'PAGE_PRECEDENTE',
   PAGE_INDEX = 'PAGE_INDEX',
+  DERNIERE_PAGE = 'DERNIERE_PAGE',
+  PREMIERE_PAGE = 'PREMIERE_PAGE',
 }
 
 type ActionPagination =
@@ -24,6 +26,8 @@ type ActionPagination =
     }
   | { type: TypeActionPagination.PAGE_SUIVANTE }
   | { type: TypeActionPagination.PAGE_PRECEDENTE }
+  | { type: TypeActionPagination.DERNIERE_PAGE }
+  | { type: TypeActionPagination.PREMIERE_PAGE }
   | { type: TypeActionPagination.PAGE_INDEX; indexPage: number };
 
 const TAILLE_PARTITION = 18;
@@ -34,14 +38,34 @@ export const reducteurPagination = (
 ): EtatReducteurPagination => {
   const retourneLesAidantsCourants = (
     borneInferieure: number,
-    borneSuperieure: number
+    borneSuperieure?: number
   ) =>
     etat.aidantsInitiaux.slice(
       borneInferieure * etat.taillePagination,
-      borneSuperieure * etat.taillePagination
+      borneSuperieure ? borneSuperieure * etat.taillePagination : undefined
     );
 
   switch (action.type) {
+    case TypeActionPagination.PREMIERE_PAGE: {
+      const etatCourant = { ...etat };
+      delete etatCourant['pagePrecedente'];
+      return {
+        ...etatCourant,
+        aidantsCourants: retourneLesAidantsCourants(0, 1),
+        page: 1,
+        pageSuivante: 2,
+      };
+    }
+    case TypeActionPagination.DERNIERE_PAGE: {
+      const etatCourant = { ...etat };
+      delete etatCourant['pageSuivante'];
+      return {
+        ...etatCourant,
+        aidantsCourants: retourneLesAidantsCourants(etat.nombreDePages - 1),
+        page: etat.nombreDePages,
+        pagePrecedente: etat.nombreDePages - 1,
+      };
+    }
     case TypeActionPagination.PAGE_INDEX: {
       const etatCourant = { ...etat };
       delete etatCourant['pagePrecedente'];
@@ -115,6 +139,14 @@ export const accedePagePrecedente = (): ActionPagination => ({
 export const accedeALaPage = (indexPage: number): ActionPagination => ({
   type: TypeActionPagination.PAGE_INDEX,
   indexPage,
+});
+
+export const accedeALaDernierePage = (): ActionPagination => ({
+  type: TypeActionPagination.DERNIERE_PAGE,
+});
+
+export const accedeALaPremierePage = (): ActionPagination => ({
+  type: TypeActionPagination.PREMIERE_PAGE,
 });
 
 export const initialiseEtatPagination = (): EtatReducteurPagination => ({
