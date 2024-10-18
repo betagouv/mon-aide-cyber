@@ -1,3 +1,4 @@
+import './pagination.scss';
 import { CarteAidant } from '../CarteAidant';
 import { TypographieH6 } from '../../../../../composants/communs/typographie/TypographieH6/TypographieH6';
 import illustrationFAQFemme from '../../../../../../public/images/illustration-faq-femme.svg';
@@ -12,6 +13,7 @@ import React, { useCallback, useEffect, useReducer } from 'react';
 import { AidantAnnuaire } from '../../AidantAnnuaire.ts';
 import { useListeAidants } from './useListeAidants.ts';
 import {
+  accedeALaPage,
   accedePagePrecedente,
   accedePageSuivante,
   chargeAidants,
@@ -92,10 +94,13 @@ export const CartesAidant = ({
   );
 };
 
-type TitreBouton = 'Page suivante' | 'Page précédente';
+type TitreBouton = 'Page suivante' | 'Page précédente' | number;
 const classeBoutonPagination: Map<TitreBouton, string> = new Map([
-  ['Page précédente', 'fr-pagination__link--prev'],
-  ['Page suivante', 'fr-pagination__link--next'],
+  [
+    'Page précédente',
+    'fr-pagination__link--prev fr-pagination__link--lg-label',
+  ],
+  ['Page suivante', 'fr-pagination__link--next fr-pagination__link--lg-label'],
 ]);
 
 export const ListeAidants = () => {
@@ -128,25 +133,36 @@ export const ListeAidants = () => {
     envoie(accedePagePrecedente());
   };
 
+  const pageIndex = (e: React.MouseEvent, indexPage: number) => {
+    e.preventDefault();
+    envoie(accedeALaPage(indexPage));
+  };
+
   const boutonActif = (proprietesBouton: {
     titreBouton: TitreBouton;
+    titreSurvol: string;
     action: (e: React.MouseEvent) => void;
   }) => (
     <a
       href="#"
-      className={`fr-pagination__link  ${classeBoutonPagination.get(proprietesBouton.titreBouton) || ''} fr-pagination__link--lg-label`}
-      onClick={(e) => proprietesBouton.action(e)}
+      className={`fr-pagination__link  ${classeBoutonPagination.get(proprietesBouton.titreBouton) || ''}`}
+      onClick={proprietesBouton.action}
       aria-disabled={false}
+      title={`${proprietesBouton.titreSurvol}`}
     >
       {' '}
       {proprietesBouton.titreBouton}{' '}
     </a>
   );
 
-  const boutonInactif = (proprietesBouton: { titreBouton: TitreBouton }) => (
+  const boutonInactif = (proprietesBouton: {
+    titreBouton: TitreBouton;
+    ariaCurrent: boolean;
+  }) => (
     <a
-      className={`fr-pagination__link ${classeBoutonPagination.get(proprietesBouton.titreBouton) || ''} fr-pagination__link--lg-label`}
+      className={`fr-pagination__link ${classeBoutonPagination.get(proprietesBouton.titreBouton) || ''}`}
       aria-disabled={true}
+      aria-current={proprietesBouton.ariaCurrent}
     >
       {' '}
       {proprietesBouton.titreBouton}{' '}
@@ -192,7 +208,7 @@ export const ListeAidants = () => {
           enErreur={enErreur}
           relanceLaRecherche={relanceLaRecherche}
         />
-        <div>
+        <div className="pagination">
           <nav
             role="navigation"
             className="fr-pagination"
@@ -213,37 +229,48 @@ export const ListeAidants = () => {
                 {etatPagination.pagePrecedente
                   ? boutonActif({
                       titreBouton: 'Page précédente',
+                      titreSurvol: 'Page précédente',
                       action: (e) => pagePrecedente(e),
                     })
-                  : boutonInactif({ titreBouton: 'Page précédente' })}
+                  : boutonInactif({
+                      titreBouton: 'Page précédente',
+                      ariaCurrent: false,
+                    })}
               </li>
-              {/*<li>*/}
-              {/*  <a*/}
-              {/*    className="fr-pagination__link"*/}
-              {/*    aria-current="page"*/}
-              {/*    title="Page 1"*/}
-              {/*  >*/}
-              {/*    {' '}*/}
-              {/*    1{' '}*/}
-              {/*  </a>*/}
-              {/*</li>*/}
-              {/*<li>*/}
-              {/*  <a*/}
-              {/*    className="fr-pagination__link"*/}
-              {/*    onClick={(e) => pageSuivante(e)}*/}
-              {/*    title="Page 2"*/}
-              {/*  >*/}
-              {/*    {' '}*/}
-              {/*    2{' '}*/}
-              {/*  </a>*/}
-              {/*</li>*/}
+              {new Array(etatPagination.nombreDePages)
+                .fill(0)
+                .map((_, index) => {
+                  if (etatPagination.page === index + 1) {
+                    return (
+                      <li key={`pagination-index-${index}`}>
+                        {boutonInactif({
+                          titreBouton: index + 1,
+                          ariaCurrent: true,
+                        })}
+                      </li>
+                    );
+                  }
+                  return (
+                    <li key={`pagination-index-${index}`}>
+                      {boutonActif({
+                        titreBouton: index + 1,
+                        titreSurvol: `Page ${index + 1}`,
+                        action: (e) => pageIndex(e, index + 1),
+                      })}
+                    </li>
+                  );
+                })}
               <li>
                 {etatPagination.pageSuivante
                   ? boutonActif({
                       titreBouton: 'Page suivante',
+                      titreSurvol: 'Page suivante',
                       action: (e) => pageSuivante(e),
                     })
-                  : boutonInactif({ titreBouton: 'Page suivante' })}
+                  : boutonInactif({
+                      titreBouton: 'Page suivante',
+                      ariaCurrent: false,
+                    })}
               </li>
             </ul>
           </nav>
