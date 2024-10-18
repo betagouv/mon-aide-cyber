@@ -4,6 +4,7 @@ import { Constructeur } from '../../../../../constructeurs/Constructeur.ts';
 import { AidantAnnuaire } from '../../../../../../src/domaine/vitrine/ecran-annuaire/AidantAnnuaire.ts';
 import { UUID } from '../../../../../../src/types/Types.ts';
 import {
+  accedeALaPage,
   accedePagePrecedente,
   accedePageSuivante,
   chargeAidants,
@@ -33,11 +34,16 @@ class ConstructeurAnnuaireAidants implements Constructeur<AidantAnnuaire[]> {
 
 const unAnnuaireAidants = () => new ConstructeurAnnuaireAidants();
 describe('Réducteur pagination', () => {
+  const etatPaginationInitiale = {
+    ...initialiseEtatPagination(),
+    taillePagination: 12,
+  };
+
   it('Charge les Aidants', () => {
     const aidants = unAnnuaireAidants().auNombreDe(8).construis();
 
     const etat = reducteurPagination(
-      initialiseEtatPagination(),
+      etatPaginationInitiale,
       chargeAidants(aidants)
     );
 
@@ -46,6 +52,7 @@ describe('Réducteur pagination', () => {
       aidantsCourants: aidants,
       page: 1,
       nombreDePages: 1,
+      taillePagination: 12,
     });
   });
 
@@ -53,7 +60,7 @@ describe('Réducteur pagination', () => {
     const aidants = unAnnuaireAidants().auNombreDe(14).construis();
 
     const etat = reducteurPagination(
-      initialiseEtatPagination(),
+      etatPaginationInitiale,
       chargeAidants(aidants)
     );
 
@@ -63,6 +70,7 @@ describe('Réducteur pagination', () => {
       page: 1,
       nombreDePages: 2,
       pageSuivante: 2,
+      taillePagination: 12,
     });
   });
 
@@ -72,7 +80,7 @@ describe('Réducteur pagination', () => {
 
       const etat = reducteurPagination(
         {
-          ...initialiseEtatPagination(),
+          ...etatPaginationInitiale,
           aidantsInitiaux: aidants,
           page: 1,
           nombreDePages: 2,
@@ -87,6 +95,7 @@ describe('Réducteur pagination', () => {
         page: 2,
         nombreDePages: 2,
         pagePrecedente: 1,
+        taillePagination: 12,
       });
     });
 
@@ -95,7 +104,7 @@ describe('Réducteur pagination', () => {
 
       const etat = reducteurPagination(
         {
-          ...initialiseEtatPagination(),
+          ...etatPaginationInitiale,
           aidantsInitiaux: aidants,
           page: 1,
           nombreDePages: 3,
@@ -111,6 +120,7 @@ describe('Réducteur pagination', () => {
         nombreDePages: 3,
         pageSuivante: 3,
         pagePrecedente: 1,
+        taillePagination: 12,
       });
     });
 
@@ -119,7 +129,7 @@ describe('Réducteur pagination', () => {
 
       const etat = reducteurPagination(
         {
-          ...initialiseEtatPagination(),
+          ...etatPaginationInitiale,
           aidantsInitiaux: aidants,
           page: 2,
           nombreDePages: 3,
@@ -134,6 +144,7 @@ describe('Réducteur pagination', () => {
         page: 3,
         nombreDePages: 3,
         pagePrecedente: 2,
+        taillePagination: 12,
       });
     });
   });
@@ -144,7 +155,7 @@ describe('Réducteur pagination', () => {
 
       const etat = reducteurPagination(
         {
-          ...initialiseEtatPagination(),
+          ...etatPaginationInitiale,
           aidantsInitiaux: aidants,
           page: 3,
           nombreDePages: 3,
@@ -160,6 +171,7 @@ describe('Réducteur pagination', () => {
         nombreDePages: 3,
         pagePrecedente: 1,
         pageSuivante: 3,
+        taillePagination: 12,
       });
     });
 
@@ -168,7 +180,7 @@ describe('Réducteur pagination', () => {
 
       const etat = reducteurPagination(
         {
-          ...initialiseEtatPagination(),
+          ...etatPaginationInitiale,
           aidantsInitiaux: aidants,
           page: 2,
           nombreDePages: 3,
@@ -184,6 +196,7 @@ describe('Réducteur pagination', () => {
         page: 1,
         nombreDePages: 3,
         pageSuivante: 2,
+        taillePagination: 12,
       });
     });
 
@@ -192,7 +205,7 @@ describe('Réducteur pagination', () => {
 
       const etat = reducteurPagination(
         {
-          ...initialiseEtatPagination(),
+          ...etatPaginationInitiale,
           aidantsInitiaux: aidants,
           page: 4,
           nombreDePages: 4,
@@ -208,6 +221,82 @@ describe('Réducteur pagination', () => {
         nombreDePages: 4,
         pageSuivante: 4,
         pagePrecedente: 2,
+        taillePagination: 12,
+      });
+    });
+  });
+
+  describe('Pour aller à l’index désiré', () => {
+    it('Accède directement à la page 3', () => {
+      const aidants = unAnnuaireAidants().auNombreDe(46).construis();
+
+      const etat = reducteurPagination(
+        {
+          ...etatPaginationInitiale,
+          aidantsInitiaux: aidants,
+          page: 1,
+          nombreDePages: 4,
+        },
+        accedeALaPage(3)
+      );
+
+      expect(etat).toStrictEqual<EtatReducteurPagination>({
+        aidantsInitiaux: aidants,
+        aidantsCourants: aidants.slice(24, 36),
+        page: 3,
+        nombreDePages: 4,
+        pageSuivante: 4,
+        pagePrecedente: 2,
+        taillePagination: 12,
+      });
+    });
+
+    it('Accède directement à la page 4', () => {
+      const aidants = unAnnuaireAidants().auNombreDe(46).construis();
+
+      const etat = reducteurPagination(
+        {
+          ...etatPaginationInitiale,
+          aidantsInitiaux: aidants,
+          page: 1,
+          nombreDePages: 4,
+          pageSuivante: 2,
+        },
+        accedeALaPage(4)
+      );
+
+      expect(etat).toStrictEqual<EtatReducteurPagination>({
+        aidantsInitiaux: aidants,
+        aidantsCourants: aidants.slice(36),
+        page: 4,
+        nombreDePages: 4,
+        pagePrecedente: 3,
+        taillePagination: 12,
+      });
+    });
+
+    it('Accède directement à la page 1', () => {
+      const aidants = unAnnuaireAidants().auNombreDe(46).construis();
+
+      const etat = reducteurPagination(
+        {
+          ...etatPaginationInitiale,
+          aidantsInitiaux: aidants,
+          page: 3,
+          nombreDePages: 4,
+          pagePrecedente: 2,
+          pageSuivante: 4,
+        },
+        accedeALaPage(1)
+      );
+
+      expect(etat).toStrictEqual<EtatReducteurPagination>({
+        aidantsInitiaux: aidants,
+        aidantsCourants: aidants.slice(0, 12),
+        page: 1,
+        nombreDePages: 4,
+        pageSuivante: 2,
+        taillePagination: 12,
       });
     });
   });
