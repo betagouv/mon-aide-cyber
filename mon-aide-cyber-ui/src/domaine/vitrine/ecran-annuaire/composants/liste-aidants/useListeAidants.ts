@@ -9,6 +9,7 @@ import {
   useMACAPI,
 } from '../../../../../fournisseurs/api/useMACAPI';
 import { useEffect, useState } from 'react';
+import { Departement } from '../../../../gestion-demandes/departement';
 
 export type AidantAnnuaire = {
   identifiant: UUID;
@@ -17,7 +18,7 @@ export type AidantAnnuaire = {
 
 export type ReponseAnnuaire = {
   aidants?: AidantAnnuaire[];
-  departements: string[];
+  departements: Departement[];
   nombreAidants: number;
 };
 
@@ -26,14 +27,14 @@ export type ReponseAidantAnnuaire = ReponseAnnuaire & ReponseHATEOAS;
 const recupereAnnuaireAidants = (
   macAPI: MACAPIType,
   liens: Liens,
-  departementARechercher: string
+  departementARechercher: string | undefined
 ) => {
   const lien = new MoteurDeLiens(liens).trouveEtRenvoie(
     'afficher-annuaire-aidants'
   );
 
   let urlComplete = lien.url;
-  if (!!departementARechercher && departementARechercher !== '') {
+  if (departementARechercher && departementARechercher !== '') {
     urlComplete = `${lien.url}?departement=${departementARechercher}`;
   }
 
@@ -51,7 +52,7 @@ export const useListeAidants = () => {
   const navigationMAC = useNavigationMAC();
 
   const [departementARechercher, setDepartementARechercher] =
-    useState<string>('');
+    useState<Departement>();
 
   const {
     data: ressourceAnnuaireAidant,
@@ -68,12 +69,12 @@ export const useListeAidants = () => {
       recupereAnnuaireAidants(
         macAPI,
         navigationMAC.etat,
-        departementARechercher
+        departementARechercher?.nom
       ),
   });
 
   const aidants = ressourceAnnuaireAidant?.aidants;
-  const referentielDepartements = ressourceAnnuaireAidant?.departements;
+  const referentielDepartements = ressourceAnnuaireAidant?.departements || [];
 
   useEffect(() => {
     if (ressourceAnnuaireAidant?.liens) {
@@ -81,7 +82,7 @@ export const useListeAidants = () => {
     }
   }, [ressourceAnnuaireAidant]);
 
-  const selectionneDepartement = (departement: string) => {
+  const selectionneDepartement = (departement: Departement) => {
     setDepartementARechercher(departement);
   };
 
@@ -92,6 +93,7 @@ export const useListeAidants = () => {
     enErreur,
     relanceLaRecherche,
     referentielDepartements,
+    departementARechercher,
     selectionneDepartement,
   };
 };

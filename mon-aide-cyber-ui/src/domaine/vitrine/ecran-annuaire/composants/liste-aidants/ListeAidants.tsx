@@ -91,44 +91,40 @@ export const ListeAidants = () => {
     enErreur,
     relanceLaRecherche,
     referentielDepartements,
+    departementARechercher,
     selectionneDepartement,
   } = useListeAidants();
-
-  const departements: Departement[] | undefined = referentielDepartements?.map(
-    (x) => ({
-      nom: x,
-      code: x,
-    })
-  );
 
   return (
     <div className="layout-annuaire">
       <div className="filtres">
         <span className="titre">Où est située votre entité ?</span>
-        {!!departements && departements.length > 0 ? (
-          <div className="fr-input-group">
-            <AutoCompletion<Departement>
-              nom="departement"
-              valeurSaisie={{} as Departement}
-              suggestionsInitiales={departements}
-              mappeur={(departement) => {
-                return estDepartement(departement)
-                  ? `${departement.code} - ${departement.nom}`
-                  : typeof departement === 'string'
-                    ? departement
-                    : '';
-              }}
-              surSelection={(departement) => {
-                console.log('saisie dpt', departement);
-                selectionneDepartement(departement.nom);
-              }}
-              surSaisie={(departement) => {
-                console.log('saisie dpt', departement);
-              }}
-              clefsFiltrage={['code', 'nom']}
-            />
-          </div>
-        ) : null}
+        <div className="fr-input-group">
+          <AutoCompletion<Departement>
+            nom="departement"
+            placeholder="Sélectionnez un territoire"
+            valeurSaisie={departementARechercher || ({} as Departement)}
+            suggestionsInitiales={referentielDepartements}
+            mappeur={(departement) => {
+              return estDepartement(departement)
+                ? `${departement.code} - ${departement.nom}`
+                : typeof departement === 'string'
+                  ? departement
+                  : '';
+            }}
+            surSelection={(departement) => {
+              selectionneDepartement(departement);
+            }}
+            surSaisie={(departement) => {
+              selectionneDepartement(
+                estDepartement(departement)
+                  ? departement
+                  : referentielDepartements.find((x) => x.nom === departement)!
+              );
+            }}
+            clefsFiltrage={['code', 'nom']}
+          />
+        </div>
       </div>
       <div className="liste-aidants">
         <span className="titre">Aidants trouvés</span>
