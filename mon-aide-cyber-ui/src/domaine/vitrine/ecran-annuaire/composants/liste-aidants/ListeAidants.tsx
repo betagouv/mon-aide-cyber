@@ -12,6 +12,7 @@ import React, { useCallback, useEffect, useReducer } from 'react';
 import { AidantAnnuaire } from '../../AidantAnnuaire.ts';
 import { useListeAidants } from './useListeAidants.ts';
 import {
+  accedePagePrecedente,
   accedePageSuivante,
   chargeAidants,
   initialiseEtatPagination,
@@ -91,6 +92,12 @@ export const CartesAidant = ({
   );
 };
 
+type TitreBouton = 'Page suivante' | 'Page précédente';
+const classeBoutonPagination: Map<TitreBouton, string> = new Map([
+  ['Page précédente', 'fr-pagination__link--prev'],
+  ['Page suivante', 'fr-pagination__link--next'],
+]);
+
 export const ListeAidants = () => {
   const {
     aidants,
@@ -116,13 +123,18 @@ export const ListeAidants = () => {
     envoie(accedePageSuivante());
   }, []);
 
+  const pagePrecedente = (e: React.MouseEvent) => {
+    e.preventDefault();
+    envoie(accedePagePrecedente());
+  };
+
   const boutonActif = (proprietesBouton: {
-    titreBouton: 'Page suivante';
+    titreBouton: TitreBouton;
     action: (e: React.MouseEvent) => void;
   }) => (
     <a
       href="#"
-      className="fr-pagination__link fr-pagination__link--next fr-pagination__link--lg-label"
+      className={`fr-pagination__link  ${classeBoutonPagination.get(proprietesBouton.titreBouton) || ''} fr-pagination__link--lg-label`}
       onClick={(e) => proprietesBouton.action(e)}
       aria-disabled={false}
     >
@@ -131,18 +143,15 @@ export const ListeAidants = () => {
     </a>
   );
 
-  const boutonInactif = (proprietesBouton: {
-    titreBouton: 'Page suivante';
-  }) => (
+  const boutonInactif = (proprietesBouton: { titreBouton: TitreBouton }) => (
     <a
-      className="fr-pagination__link fr-pagination__link--next fr-pagination__link--lg-label"
+      className={`fr-pagination__link ${classeBoutonPagination.get(proprietesBouton.titreBouton) || ''} fr-pagination__link--lg-label`}
       aria-disabled={true}
     >
       {' '}
       {proprietesBouton.titreBouton}{' '}
     </a>
   );
-
   return (
     <div className="layout-annuaire">
       <div className="filtres">
@@ -200,16 +209,14 @@ export const ListeAidants = () => {
               {/*    Première page{' '}*/}
               {/*  </a>*/}
               {/*</li>*/}
-              {/*<li>*/}
-              {/*  <a*/}
-              {/*    className="fr-pagination__link fr-pagination__link--prev fr-pagination__link--lg-label"*/}
-              {/*    aria-disabled="true"*/}
-              {/*    role="link"*/}
-              {/*  >*/}
-              {/*    {' '}*/}
-              {/*    Page précédente{' '}*/}
-              {/*  </a>*/}
-              {/*</li>*/}
+              <li>
+                {etatPagination.pagePrecedente
+                  ? boutonActif({
+                      titreBouton: 'Page précédente',
+                      action: (e) => pagePrecedente(e),
+                    })
+                  : boutonInactif({ titreBouton: 'Page précédente' })}
+              </li>
               {/*<li>*/}
               {/*  <a*/}
               {/*    className="fr-pagination__link"*/}
