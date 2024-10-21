@@ -1,10 +1,16 @@
-import { Link, matchPath, Outlet, useLocation } from 'react-router-dom';
+import {
+  Link,
+  matchPath,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { LienMAC } from '../LienMAC';
 import { FooterEspaceAidant } from '../espace-aidant/FooterEspaceAidant';
 import { HeaderAidant } from './HeaderAidant';
 import { TypographieH6 } from '../communs/typographie/TypographieH6/TypographieH6';
 import { LienNavigation } from './LayoutPublic';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useMoteurDeLiens } from '../../hooks/useMoteurDeLiens';
 import { useFeatureFlag } from '../../hooks/useFeatureFlag';
 import { ROUTE_AIDANT } from '../../domaine/MoteurDeLiens';
@@ -24,15 +30,31 @@ export const LienMenuNavigation = ({
   element: MenuNavigationElement;
 }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const estCheminCourant = (cheminATester: string) =>
-    !!matchPath(location.pathname, cheminATester);
+  const estCheminCourant = useCallback(
+    (cheminATester: string) => !!matchPath(location.pathname, cheminATester),
+    [location]
+  );
 
   const aUnEnfantOuvert = element.enfants?.some((x) =>
     estCheminCourant(x.route)
   );
 
   const [deplie, setDeplie] = useState(aUnEnfantOuvert);
+
+  useEffect(() => {
+    if (!aUnEnfantOuvert) {
+      setDeplie(false);
+    }
+  }, [aUnEnfantOuvert]);
+
+  const surParentClique = () => {
+    setDeplie((prev) => !prev);
+    if (!aUnEnfantOuvert) {
+      navigate(element.route);
+    }
+  };
 
   if (element.enfants && element.enfants.length > 0) {
     return (
@@ -41,17 +63,18 @@ export const LienMenuNavigation = ({
           backgroundColor: aUnEnfantOuvert ? '#7D55B1' : '#5d2a9d',
         }}
       >
-        <div
+        <li
+          key={element.nom}
           className="lien-navigation"
-          onClick={() => setDeplie((prev) => !prev)}
+          onClick={surParentClique}
         >
-          <span>{element.nom}</span>
+          <div>{element.nom}</div>
           <span
             className={
               deplie ? 'fr-icon-arrow-up-s-line' : 'fr-icon-arrow-down-s-line'
             }
           ></span>
-        </div>
+        </li>
         {deplie ? (
           <div
             style={{
@@ -63,9 +86,9 @@ export const LienMenuNavigation = ({
                 enfant.actif ? (
                   <Link key={enfant.nom} to={enfant.route}>
                     <li
-                      className={`${estCheminCourant(enfant.route) ? 'actif' : ''}`}
+                      className={`lien-navigation-enfant ${estCheminCourant(enfant.route) ? 'actif' : ''}`}
                     >
-                      <div className="lien-navigation-enfant">{enfant.nom}</div>
+                      <div>{enfant.nom}</div>
                     </li>
                   </Link>
                 ) : (

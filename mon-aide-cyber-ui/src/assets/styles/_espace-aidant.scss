@@ -68,10 +68,11 @@ aside.barre-navigation-laterale {
   cursor: pointer;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .lien-navigation-enfant {
-  padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+  padding: 0.75rem 2.5rem 0.75rem 3rem;
 }
 
 .ecran-profil {
