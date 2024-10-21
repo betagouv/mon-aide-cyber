@@ -7,7 +7,7 @@ import { RequiertAuthentification } from './fournisseurs/RequiertAuthentificatio
 import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
-import { LayoutAidant } from './composants/layout/LayoutAidant.tsx';
+import { LayoutAidant } from './composants/layout/layout-aidant/LayoutAidant.tsx';
 import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { EcranCreationEspaceAidant } from './domaine/espace-aidant/creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { EcranDiagnostics } from './domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
