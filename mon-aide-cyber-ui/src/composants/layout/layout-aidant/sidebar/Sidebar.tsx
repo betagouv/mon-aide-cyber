@@ -54,7 +54,6 @@ export const Sidebar = () => {
             ]}
           />
         </section>
-        <Separateur />
         <section>
           <MenuNavigation
             elements={[
