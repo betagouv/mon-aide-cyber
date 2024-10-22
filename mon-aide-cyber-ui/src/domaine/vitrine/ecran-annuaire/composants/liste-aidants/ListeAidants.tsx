@@ -2,7 +2,7 @@ import { CarteAidant } from '../CarteAidant';
 import { TypographieH6 } from '../../../../../composants/communs/typographie/TypographieH6/TypographieH6';
 import illustrationFAQFemme from '../../../../../../public/images/illustration-faq-femme.svg';
 import Button from '../../../../../composants/atomes/Button/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AutoCompletion } from '../../../../../composants/auto-completion/AutoCompletion';
 import {
   Departement,
@@ -32,6 +32,17 @@ export const CartesAidant = ({
   enErreur,
   relanceLaRecherche,
 }: CartesAidant) => {
+  const navigate = useNavigate();
+
+  const ouvreFormulaireEtreAide = (aidant: AidantAnnuaire) => {
+    navigate('/beneficier-du-dispositif/annuaire/' + aidant.nomPrenom);
+    /* navigate(
+      '/beneficier-du-dispositif/etre-aide?aidant=' +
+        aidant.nomPrenom +
+        '#formulaire-demande-aide'
+    ); */
+  };
+
   if (enCoursDeChargement) {
     return (
       <div className="cartes-aidants-messages">
@@ -79,7 +90,21 @@ export const CartesAidant = ({
       </p>
       <div className="cartes-aidants">
         {aidants?.map((aidant) => (
-          <CarteAidant key={aidant.identifiant} nomPrenom={aidant.nomPrenom} />
+          <CarteAidant key={aidant.identifiant}>
+            <i className="fr-icon-user-line"></i>
+            <span>
+              <b>{aidant.nomPrenom}</b>
+            </span>
+            <Button
+              type="button"
+              variant="link"
+              style={{ display: 'flex', gap: '.5rem' }}
+              onClick={() => ouvreFormulaireEtreAide(aidant)}
+            >
+              <span>Solliciter une aide</span>
+              <i className="fr-icon-arrow-right-line"></i>
+            </Button>
+          </CarteAidant>
         ))}
       </div>
     </div>
