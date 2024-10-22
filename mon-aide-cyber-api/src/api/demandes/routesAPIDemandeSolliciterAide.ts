@@ -10,6 +10,7 @@ import {
   Result,
   validationResult,
 } from 'express-validator';
+import { validateurDeDepartement } from '../validateurs/departements';
 
 type CorpsRequeteDemandeSolliciterAide = {
   cguValidees: boolean;
@@ -42,6 +43,11 @@ export const routesAPIDemandeSolliciterAide = (
     '/',
     express.json(),
     validateurAidant(entrepots.aidants()),
+    validateurDeDepartement({
+      emplacement: 'CORPS',
+      presence: 'OPTIONELLE',
+      nomChamp: 'departement',
+    }),
     async (
       requete: Request<CorpsRequeteDemandeSolliciterAide>,
       reponse: Response<ReponseDemandeSolliciterAideEnErreur>,

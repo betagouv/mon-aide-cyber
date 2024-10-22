@@ -82,5 +82,45 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
         },
       });
     });
+
+    it('Valide le département', async () => {
+      const aidant = unAidant()
+        .ayantPourDepartements([
+          {
+            nom: 'Corse-du-Sud',
+            code: '2A',
+            codeRegion: '94',
+          },
+        ])
+        .construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/solliciter-aide',
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+          email: 'jean.dupont@aide.com',
+          departement: 'Département-inconnu',
+          raisonSociale: 'beta-gouv',
+          aidantSollicite: aidant.identifiant,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(
+        await reponse.json()
+      ).toStrictEqual<ReponseDemandeSolliciterAideEnErreur>({
+        message: 'Veuillez renseigner un département',
+        liens: {
+          'solliciter-aide': {
+            methode: 'POST',
+            url: '/api/demandes/solliciter-aide',
+          },
+        },
+      });
+    });
   });
 });
