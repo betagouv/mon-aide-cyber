@@ -1,4 +1,10 @@
-import { AidantAnnuaire } from '../../AidantAnnuaire.ts';
+import { AidantAnnuaire } from '../../../AidantAnnuaire.ts';
+
+export type Indexation = {
+  indexPage: number;
+  pageCourante?: boolean;
+  pageIntermediaire?: boolean;
+};
 
 export type EtatReducteurPagination = {
   readonly aidantsInitiaux: AidantAnnuaire[];
@@ -8,6 +14,7 @@ export type EtatReducteurPagination = {
   pageSuivante?: number;
   pagePrecedente?: number;
   nombreDePages: number;
+  indexation: Indexation[];
 };
 
 enum TypeActionPagination {
@@ -45,6 +52,56 @@ export const reducteurPagination = (
       borneSuperieure ? borneSuperieure * etat.taillePagination : undefined
     );
 
+  const genereIndexation = (nombreDePages: number) => {
+    const INDEX_PAGE_INTERMEDIAIRE = 3;
+    return [...Array(nombreDePages).keys()].reduce((precedent, courant) => {
+      if (courant > INDEX_PAGE_INTERMEDIAIRE) {
+        return precedent;
+      }
+      const indexation: Indexation = { indexPage: courant + 1 };
+      const queue: Indexation[] = [];
+      if (courant === 0) {
+        indexation.pageCourante = true;
+      }
+      if (courant === INDEX_PAGE_INTERMEDIAIRE) {
+        indexation.pageIntermediaire = true;
+        queue.push({ indexPage: nombreDePages - 2 });
+        queue.push({ indexPage: nombreDePages - 1 });
+        queue.push({ indexPage: nombreDePages });
+      }
+      precedent.push(...[indexation, ...queue]);
+
+      return precedent;
+    }, [] as Indexation[]);
+  };
+
+  const recreeIndexationPourLaNouvellePageCourante = (
+    indexNouvellePageCourante: number
+  ) => {
+    const borneInferieure = 3;
+    const borneSuperieure = etat.nombreDePages - 2;
+    return [...etat.indexation].map((indexation) => {
+      const estPageIntermediaire =
+        indexation.indexPage > borneInferieure &&
+        indexation.indexPage < borneSuperieure &&
+        indexNouvellePageCourante > borneInferieure &&
+        indexNouvellePageCourante < borneSuperieure;
+      const pageCourante =
+        indexation.indexPage === indexNouvellePageCourante ||
+        estPageIntermediaire;
+      const indexPage = estPageIntermediaire
+        ? indexNouvellePageCourante
+        : indexation.indexPage;
+      return {
+        indexPage,
+        ...(indexation.pageIntermediaire && {
+          pageIntermediaire: indexation.pageIntermediaire,
+        }),
+        ...(pageCourante && { pageCourante: true }),
+      };
+    });
+  };
+
   switch (action.type) {
     case TypeActionPagination.PREMIERE_PAGE: {
       const etatCourant = { ...etat };
@@ -54,6 +111,7 @@ export const reducteurPagination = (
         aidantsCourants: retourneLesAidantsCourants(0, 1),
         page: 1,
         pageSuivante: 2,
+        indexation: recreeIndexationPourLaNouvellePageCourante(1),
       };
     }
     case TypeActionPagination.DERNIERE_PAGE: {
@@ -64,6 +122,9 @@ export const reducteurPagination = (
         aidantsCourants: retourneLesAidantsCourants(etat.nombreDePages - 1),
         page: etat.nombreDePages,
         pagePrecedente: etat.nombreDePages - 1,
+        indexation: recreeIndexationPourLaNouvellePageCourante(
+          etat.nombreDePages
+        ),
       };
     }
     case TypeActionPagination.PAGE_INDEX: {
@@ -81,6 +142,9 @@ export const reducteurPagination = (
         ...(action.indexPage < etat.nombreDePages && {
           pageSuivante: action.indexPage + 1,
         }),
+        indexation: recreeIndexationPourLaNouvellePageCourante(
+          action.indexPage
+        ),
       };
     }
     case TypeActionPagination.PAGE_PRECEDENTE: {
@@ -93,6 +157,7 @@ export const reducteurPagination = (
         ...(page > 1 && { pagePrecedente: page - 1 }),
         pageSuivante: page + 1,
         page,
+        indexation: recreeIndexationPourLaNouvellePageCourante(page),
       };
     }
     case TypeActionPagination.PAGE_SUIVANTE: {
@@ -105,19 +170,23 @@ export const reducteurPagination = (
         pagePrecedente: page - 1,
         ...(page < etat.nombreDePages && { pageSuivante: page + 1 }),
         page,
+        indexation: recreeIndexationPourLaNouvellePageCourante(page),
       };
     }
     case TypeActionPagination.AIDANTS_CHARGE: {
       const nombreDePages = Math.ceil(
         action.aidants.length / etat.taillePagination
       );
+      const etatCourant = { ...etat };
+      delete etatCourant['pagePrecedente'];
       return {
-        ...etat,
+        ...etatCourant,
         aidantsInitiaux: action.aidants,
         aidantsCourants: action.aidants.slice(0, etat.taillePagination),
         page: 1,
         ...(nombreDePages > 1 && { pageSuivante: 2 }),
         nombreDePages,
+        indexation: genereIndexation(nombreDePages),
       };
     }
   }
@@ -155,4 +224,5 @@ export const initialiseEtatPagination = (): EtatReducteurPagination => ({
   nombreDePages: 0,
   page: 0,
   taillePagination: TAILLE_PARTITION,
+  indexation: [],
 });

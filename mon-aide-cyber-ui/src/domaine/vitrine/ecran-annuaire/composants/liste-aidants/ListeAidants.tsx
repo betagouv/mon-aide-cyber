@@ -1,4 +1,3 @@
-import './pagination.scss';
 import { CarteAidant } from '../CarteAidant';
 import { TypographieH6 } from '../../../../../composants/communs/typographie/TypographieH6/TypographieH6';
 import illustrationFAQFemme from '../../../../../../public/images/illustration-faq-femme.svg';
@@ -12,7 +11,7 @@ import {
 import { useState } from 'react';
 import { AidantAnnuaire } from '../../AidantAnnuaire.ts';
 import { useListeAidants } from './useListeAidants.ts';
-import { Pagination } from './Pagination.tsx';
+import { Pagination } from './pagination/Pagination.tsx';
 
 const afficheUnPlurielSiMultiplesResultats = (tableau: unknown[]) => {
   return tableau && tableau.length > 1 ? 's' : '';
@@ -87,6 +86,34 @@ export const CartesAidant = ({
   );
 };
 
+type ProprietesListeAidantsPaginee = {
+  aidants: AidantAnnuaire[] | undefined;
+  nombreAidants: number | undefined;
+  enCoursDeChargement: boolean;
+  enErreur: boolean;
+  relanceLaRecherche: () => void;
+};
+const ListeAidantsPaginee = (proprietes: ProprietesListeAidantsPaginee) => {
+  const [aidantsCourant, setAidantsCourant] = useState<AidantAnnuaire[]>([]);
+
+  return (
+    <div className="liste-aidants">
+      <span className="titre">Aidants trouvés</span>
+      <CartesAidant
+        aidants={aidantsCourant}
+        nombreAidants={proprietes.nombreAidants}
+        enCoursDeChargement={proprietes.enCoursDeChargement}
+        enErreur={proprietes.enErreur}
+        relanceLaRecherche={proprietes.relanceLaRecherche}
+      />
+      <Pagination
+        elements={proprietes.aidants || []}
+        surClick={setAidantsCourant}
+      />
+    </div>
+  );
+};
+
 export const ListeAidants = () => {
   const {
     aidants,
@@ -98,7 +125,6 @@ export const ListeAidants = () => {
     departementARechercher,
     selectionneDepartement,
   } = useListeAidants();
-  const [aidantsCourant, setAidantsCourant] = useState<AidantAnnuaire[]>([]);
 
   return (
     <div className="layout-annuaire">
@@ -131,20 +157,13 @@ export const ListeAidants = () => {
           />
         </div>
       </div>
-      <div className="liste-aidants">
-        <span className="titre">Aidants trouvés</span>
-        <CartesAidant
-          aidants={aidantsCourant}
-          nombreAidants={nombreAidants}
-          enCoursDeChargement={enCoursDeChargement}
-          enErreur={enErreur}
-          relanceLaRecherche={relanceLaRecherche}
-        />
-        <Pagination
-          elements={aidants || []}
-          surClick={(aidants) => setAidantsCourant(aidants)}
-        />
-      </div>
+      <ListeAidantsPaginee
+        aidants={aidants}
+        nombreAidants={nombreAidants}
+        enCoursDeChargement={enCoursDeChargement}
+        enErreur={enErreur}
+        relanceLaRecherche={relanceLaRecherche}
+      />
     </div>
   );
 };
