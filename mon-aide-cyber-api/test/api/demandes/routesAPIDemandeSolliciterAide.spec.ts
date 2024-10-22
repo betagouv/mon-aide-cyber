@@ -5,6 +5,8 @@ import { Express } from 'express';
 import { executeRequete } from '../executeurRequete';
 import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
+import crypto from 'crypto';
+import { ReponseDemandeSolliciterAideEnErreur } from '../../../src/api/demandes/routesAPIDemandeSolliciterAide';
 
 describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de l’Aidé pour un Aidant donné', () => {
   const testeurMAC = testeurIntegration();
@@ -50,6 +52,35 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
       expect(aides[0].dateSignatureCGU).toStrictEqual(
         FournisseurHorloge.maintenant()
       );
+    });
+
+    it('Valide l’Aidant', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/solliciter-aide',
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+          email: 'jean.dupont@aide.com',
+          departement: 'Corse-du-Sud',
+          raisonSociale: 'beta-gouv',
+          aidantSollicite: crypto.randomUUID(),
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(
+        await reponse.json()
+      ).toStrictEqual<ReponseDemandeSolliciterAideEnErreur>({
+        message: 'L’Aidant demandé n’existe pas.',
+        liens: {
+          'solliciter-aide': {
+            methode: 'POST',
+            url: '/api/demandes/solliciter-aide',
+          },
+        },
+      });
     });
   });
 });
