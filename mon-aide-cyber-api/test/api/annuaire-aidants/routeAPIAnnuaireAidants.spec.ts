@@ -126,6 +126,10 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
             url: '/api/annuaire-aidants?departement=Gironde',
             methode: 'GET',
           },
+          'solliciter-aide': {
+            methode: 'POST',
+            url: '/api/demandes/solliciter-aide',
+          },
         });
       });
 
