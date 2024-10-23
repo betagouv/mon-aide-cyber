@@ -11,6 +11,7 @@ import {
   validationResult,
 } from 'express-validator';
 import { validateurDeDepartement } from '../validateurs/departements';
+import { SagaDemandeSolliciterAide } from '../../gestion-demandes/aide/CapteurSagaDemandeSolliciterAide';
 
 type CorpsRequeteDemandeSolliciterAide = {
   cguValidees: boolean;
@@ -37,7 +38,7 @@ export const routesAPIDemandeSolliciterAide = (
   configuration: ConfigurationServeur
 ) => {
   const routes: Router = express.Router();
-  const { entrepots } = configuration;
+  const { entrepots, busCommande } = configuration;
 
   routes.post(
     '/',
@@ -70,13 +71,15 @@ export const routesAPIDemandeSolliciterAide = (
         });
       }
       const corps = requete.body;
-      await entrepots.aides().persiste({
-        identifiant: crypto.randomUUID(),
+      const saga: SagaDemandeSolliciterAide = {
         dateSignatureCGU: FournisseurHorloge.maintenant(),
         email: corps.email,
         departement: corps.departement,
-      });
-      return reponse.status(202).send();
+        type: 'SagaDemandeSolliciterAide',
+      };
+      return busCommande
+        .publie<SagaDemandeSolliciterAide, void>(saga)
+        .then(() => reponse.status(202).send());
     }
   );
 
