@@ -123,7 +123,7 @@ export const SaisieInformations = (
                     id="adresse-electronique"
                     name="adresse-electronique"
                     onBlur={(e) => {
-                      surSaisieAdresseElectronique(e.target.value)
+                      surSaisieAdresseElectronique(e.target.value);
                     }}
                   />
                   {
