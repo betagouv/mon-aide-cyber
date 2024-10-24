@@ -98,7 +98,7 @@ export const routesAPIDemandesDevenirAidant = (
         const commande: CommandeDevenirAidant = {
           type: 'CommandeDevenirAidant',
           departement: rechercheParNomDepartement(requete.body.departement),
-          mail: requete.body.mail,
+          mail: requete.body.mail.toLowerCase(),
           nom: requete.body.nom,
           prenom: requete.body.prenom,
         };

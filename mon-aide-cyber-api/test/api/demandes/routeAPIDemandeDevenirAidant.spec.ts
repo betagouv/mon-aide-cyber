@@ -78,6 +78,28 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       });
     });
 
+    it('Réponds OK à la requête lorsque le mail contient des majuscules', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/devenir-aidant',
+        donneesServeur.portEcoute,
+        uneRequeteDemandeDevenirAidant()
+          .avecUnMail('JeaN.DupOnT@mail.com')
+          .dansLeDepartement('Hautes-Alpes')
+          .construis()
+      );
+
+      expect(reponse.statusCode).toStrictEqual(200);
+      expect(
+        (
+          await testeurMAC.entrepots
+            .demandesDevenirAidant()
+            .rechercheDemandeEnCoursParMail('jean.dupont@mail.com')
+        )?.mail
+      ).toStrictEqual('jean.dupont@mail.com');
+    });
+
     it("Renvoie une erreur 400 si l'utilisateur a déjà fait une demande préalable", async () => {
       await testeurMAC.entrepots
         .demandesDevenirAidant()
