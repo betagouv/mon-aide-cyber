@@ -192,9 +192,23 @@ export const reducteurSaisieInformations = (
         delete etatCourant.erreur?.['adresseElectronique'];
         videLesErreurs(etatCourant);
       }
+
+      const departementValide = estDepartementValide(
+        etat.valeurSaisieDepartement
+      );
+      const cguValidees = etat.cguValidees;
+      const pretPourEnvoi = emailValide && departementValide && cguValidees;
+
       return {
         ...etatCourant,
+        pretPourEnvoi,
         email: action.adresseElectronique,
+        ...(!pretPourEnvoi && {
+          erreur: {
+            ...etatCourant.erreur,
+            ...construisErreurAdresseElectronique(emailValide),
+          },
+        }),
       };
     }
     case TypeActionSaisieInformations.DEPARTEMENT_SAISI: {
