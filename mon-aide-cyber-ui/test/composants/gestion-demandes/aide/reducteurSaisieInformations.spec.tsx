@@ -36,6 +36,7 @@ describe('Parcours CGU Aidé', () => {
           departements: [],
           relationAidantSaisie: false,
           valeurSaisieDepartement: '',
+          erreur: {}
         });
       });
 
@@ -98,6 +99,7 @@ describe('Parcours CGU Aidé', () => {
           departements: [],
           relationAidantSaisie: false,
           valeurSaisieDepartement: '',
+          erreur: {}
         });
       });
     });
@@ -377,13 +379,12 @@ describe('Parcours CGU Aidé', () => {
         const etat = reducteurSaisieInformations(
           {
             ...etatInitial,
-            email: 'jean.dupont@mail.fr',
             cguValidees: true,
             departement: { nom: 'Finistère', code: '29' },
             departements: [{ nom: 'Finistère', code: '29' }],
             valeurSaisieDepartement: 'Finistère',
           },
-          demandeTerminee()
+          adresseElectroniqueSaisie('jean.dupont@mail.fr')
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({
@@ -407,7 +408,7 @@ describe('Parcours CGU Aidé', () => {
             departements: [{ nom: 'Finistère', code: '29' }],
             valeurSaisieDepartement: 'Finistère',
           },
-          demandeTerminee()
+          adresseElectroniqueSaisie('jean.dupont-incorrect')
         );
 
         expect(etat).toStrictEqual<EtatSaisieInformations>({

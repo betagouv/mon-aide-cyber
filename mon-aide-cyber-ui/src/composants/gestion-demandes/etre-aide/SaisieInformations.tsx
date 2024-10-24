@@ -122,9 +122,9 @@ export const SaisieInformations = (
                     type="text"
                     id="adresse-electronique"
                     name="adresse-electronique"
-                    onChange={(e) =>
+                    onBlur={(e) => {
                       surSaisieAdresseElectronique(e.target.value)
-                    }
+                    }}
                   />
                   {
                     etatSaisieInformations.erreur?.adresseElectronique
