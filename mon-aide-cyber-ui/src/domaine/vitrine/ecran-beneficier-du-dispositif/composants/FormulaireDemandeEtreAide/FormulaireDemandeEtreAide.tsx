@@ -12,11 +12,10 @@ import {
   reducteurDemandeEtreAide,
   saisieInformationsEnErreur,
 } from '../../../../../composants/gestion-demandes/etre-aide/reducteurDemandeEtreAide';
-import { Lien, ReponseHATEOAS } from '../../../../Lien';
+import { Lien } from '../../../../Lien';
 import { Departement } from '../../../../gestion-demandes/departement';
 import { useNavigationMAC } from '../../../../../fournisseurs/hooks';
 import { useMACAPI } from '../../../../../fournisseurs/api/useMACAPI';
-import { useContexteNavigation } from '../../../../../hooks/useContexteNavigation';
 import { MoteurDeLiens } from '../../../../MoteurDeLiens';
 import {
   CorpsDemandeEtreAide,
@@ -24,8 +23,11 @@ import {
 } from '../../../../gestion-demandes/etre-aide/EtreAide';
 import { constructeurParametresAPI } from '../../../../../fournisseurs/api/ConstructeurParametresAPI';
 import { ChampsErreur } from '../../../../../composants/alertes/Erreurs';
+import { useRecupereContexteNavigation } from '../../../../../hooks/useRecupereContexteNavigation.ts';
 
 export const FormulaireDemandeEtreAide = () => {
+  useRecupereContexteNavigation('demande-etre-aide');
+
   const [etat, envoie] = useReducer(reducteurDemandeEtreAide, {
     etapeCourante: 'saisieInformations',
   });
@@ -33,24 +35,16 @@ export const FormulaireDemandeEtreAide = () => {
     demandeEtreAideEnCoursDeChargement,
     setDemandeEtreAideEnCoursDeChargement,
   ] = useState(true);
-  const [demandeEtreAide, setDemandeEtreAide] = useState<
-    { lien: Lien; departements: Departement[] } | undefined
+
+  const [referentielDepartements, setReferentielDepartements] = useState<
+    Departement[] | undefined
   >();
+
   const [retourEnvoiDemandeEtreAide, setRetourEnvoiDemandeEtreAide] = useState<
     ReactElement | undefined
   >(undefined);
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
-  const navigationUtilisateur = useContexteNavigation();
-
-  useEffect(() => {
-    navigationUtilisateur
-      .recupereContexteNavigation({ contexte: 'demande-etre-aide' })
-      .then((reponse) => {
-        navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens);
-      })
-      .catch();
-  }, []);
 
   useEffect(() => {
     new MoteurDeLiens(navigationMAC.etat).trouve(
@@ -66,9 +60,8 @@ export const FormulaireDemandeEtreAide = () => {
               (corps) => corps
             )
             .then((reponse) => {
-              new MoteurDeLiens(reponse.liens).trouve('demander-aide', (lien) =>
-                setDemandeEtreAide({ lien, departements: reponse.departements })
-              );
+              setReferentielDepartements(reponse.departements);
+              navigationMAC.ajouteEtat(reponse.liens);
               setDemandeEtreAideEnCoursDeChargement(false);
             })
             .catch(() => {
@@ -81,32 +74,37 @@ export const FormulaireDemandeEtreAide = () => {
 
   const terminer = useCallback(
     (saisieInformations: CorpsDemandeEtreAide) => {
-      macAPI
-        .execute<void, void, CorpsDemandeEtreAide>(
-          {
-            url: demandeEtreAide!.lien.url,
-            methode: demandeEtreAide!.lien.methode!,
-            corps: {
-              cguValidees: saisieInformations.cguValidees,
-              departement: saisieInformations.departement,
-              email: saisieInformations.email,
-              relationAidant: saisieInformations.relationAidant,
-              ...(saisieInformations.raisonSociale && {
-                raisonSociale: saisieInformations.raisonSociale,
-              }),
-            },
-          },
-          (corps) => corps
-        )
-        .then(() => {
-          envoie(confirmation());
-        })
-        .catch((erreur) => {
-          envoie(saisieInformationsEnErreur(erreur));
-          setRetourEnvoiDemandeEtreAide(<ChampsErreur erreur={erreur} />);
-        });
+      new MoteurDeLiens(navigationMAC.etat).trouve(
+        'demander-aide',
+        (lien: Lien) => {
+          macAPI
+            .execute<void, void, CorpsDemandeEtreAide>(
+              {
+                url: lien.url,
+                methode: lien.methode!,
+                corps: {
+                  cguValidees: saisieInformations.cguValidees,
+                  departement: saisieInformations.departement,
+                  email: saisieInformations.email,
+                  relationAidant: saisieInformations.relationAidant,
+                  ...(saisieInformations.raisonSociale && {
+                    raisonSociale: saisieInformations.raisonSociale,
+                  }),
+                },
+              },
+              (corps) => corps
+            )
+            .then(() => {
+              envoie(confirmation());
+            })
+            .catch((erreur) => {
+              envoie(saisieInformationsEnErreur(erreur));
+              setRetourEnvoiDemandeEtreAide(<ChampsErreur erreur={erreur} />);
+            });
+        }
+      );
     },
-    [demandeEtreAide]
+    [referentielDepartements]
   );
 
   const retourAccueil = useCallback(() => {
@@ -118,7 +116,7 @@ export const FormulaireDemandeEtreAide = () => {
       <div className="fr-col-md-8 fr-col-sm-12 section">
         {etat.etapeCourante === 'saisieInformations' && (
           <SaisieInformations
-            departements={demandeEtreAide?.departements || []}
+            departements={referentielDepartements || []}
             surValidation={{
               erreur: etat.erreur,
               execute: (saisieInformations) => terminer(saisieInformations),
