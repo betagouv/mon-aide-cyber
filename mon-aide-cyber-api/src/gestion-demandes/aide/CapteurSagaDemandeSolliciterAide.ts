@@ -1,6 +1,6 @@
-import { CapteurSaga, Saga } from '../../domaine/commande';
+import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
 import { Entrepots } from '../../domaine/Entrepots';
-import crypto from 'crypto';
+import { CommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 
 export type SagaDemandeSolliciterAide = Omit<Saga, 'type'> & {
   dateSignatureCGU: Date;
@@ -12,14 +12,17 @@ export type SagaDemandeSolliciterAide = Omit<Saga, 'type'> & {
 export class CapteurSagaDemandeSolliciterAide
   implements CapteurSaga<SagaDemandeSolliciterAide, void>
 {
-  constructor(private readonly entrepots: Entrepots) {}
+  constructor(
+    _entrepots: Entrepots,
+    private readonly busCommande: BusCommande
+  ) {}
 
   execute(saga: SagaDemandeSolliciterAide): Promise<void> {
-    return this.entrepots.aides().persiste({
-      identifiant: crypto.randomUUID(),
-      dateSignatureCGU: saga.dateSignatureCGU,
-      email: saga.email,
+    const commande: CommandeCreerAide = {
+      type: 'CommandeCreerAide',
       departement: saga.departement,
-    });
+      email: saga.email,
+    };
+    return this.busCommande.publie<CommandeCreerAide, void>(commande);
   }
 }
