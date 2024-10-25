@@ -2,7 +2,6 @@ import { useCallback, useEffect, useReducer } from 'react';
 import {
   adresseElectroniqueSaisie,
   cguValidees,
-  demandeTerminee,
   departementSaisi,
   departementsCharges,
   initialiseEtatSaisieInformations,
@@ -35,23 +34,28 @@ export const SaisieInformations = (
     initialiseEtatSaisieInformations(proprietes.departements)
   );
 
-  useEffect(() => {
-    if (etatSaisieInformations.pretPourEnvoi) {
-      if (!proprietes.surValidation.erreur) {
-        proprietes.surValidation.execute({
-          cguValidees: etatSaisieInformations.cguValidees,
-          departement: etatSaisieInformations.departement.nom,
-          email: etatSaisieInformations.email,
-          raisonSociale: etatSaisieInformations.raisonSociale,
-          relationAidant: etatSaisieInformations.relationAidantSaisie,
-        });
-      }
-    }
-  }, [etatSaisieInformations, proprietes]);
-
   useEffect(
     () => envoie(departementsCharges(proprietes.departements)),
     [proprietes.departements]
+  );
+
+  const surSoumissionFormulaire = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      if (proprietes.surValidation.erreur) {
+        return;
+      }
+
+      proprietes.surValidation.execute({
+        cguValidees: etatSaisieInformations.cguValidees,
+        departement: etatSaisieInformations.departement.nom,
+        email: etatSaisieInformations.email,
+        raisonSociale: etatSaisieInformations.raisonSociale,
+        relationAidant: etatSaisieInformations.relationAidantSaisie,
+      });
+    },
+    [etatSaisieInformations.pretPourEnvoi]
   );
 
   const surSaisieAdresseElectronique = useCallback(
@@ -101,7 +105,10 @@ export const SaisieInformations = (
           <span className="asterisque">*</span>
           <span> Champ obligatoire</span>
         </div>
-        <form>
+        <form
+          className="formulaire-etre-aide-layout"
+          onSubmit={(e) => surSoumissionFormulaire(e)}
+        >
           <fieldset className="fr-mb-5w">
             <div className="fr-grid-row fr-grid-row--gutters">
               <div className=" fr-col-12">
@@ -232,10 +239,10 @@ export const SaisieInformations = (
             </div>
             <div className="fr-grid-row fr-grid-row--right fr-pt-3w">
               <button
-                type="button"
+                type="submit"
+                disabled={!etatSaisieInformations.pretPourEnvoi}
                 key="envoyer-demande-aide"
-                className="fr-btn bouton-mac bouton-mac-primaire"
-                onClick={() => envoie(demandeTerminee())}
+                className="bouton-mac bouton-mac-primaire bouton-demande-etre-aide"
               >
                 Terminer
               </button>

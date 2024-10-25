@@ -95,6 +95,9 @@ export const FormulaireDemandeEtreAide = () => {
               (corps) => corps
             )
             .then(() => {
+              document
+                .getElementById('formulaire-demande-aide')
+                ?.scrollIntoView();
               envoie(confirmation());
             })
             .catch((erreur) => {
