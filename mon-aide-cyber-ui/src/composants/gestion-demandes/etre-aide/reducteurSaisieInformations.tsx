@@ -25,7 +25,6 @@ enum TypeActionSaisieInformations {
   DEPARTEMENT_SAISI = 'DEPARTEMENT_SAISI',
   RAISON_SOCIALE_SAISIE = 'RAISON_SOCIALE_SAISIE',
   CGU_VALIDEES = 'CGU_VALIDEES',
-  DEMANDE_TERMINEE = 'DEMANDE_TERMINEE',
   DEPARTEMENTS_CHARGES = 'DEPARTEMENTS_CHARGES',
   RELATION_AIDANT_CLIQUEE = 'RELATION_AIDANT_CLIQUEE',
 }
@@ -52,9 +51,6 @@ type ActionSaisieInformations =
     }
   | {
       type: TypeActionSaisieInformations.RELATION_AIDANT_CLIQUEE;
-    }
-  | {
-      type: TypeActionSaisieInformations.DEMANDE_TERMINEE;
     };
 
 const construisErreurAdresseElectronique = (emailValide: boolean) =>
@@ -154,9 +150,9 @@ export const reducteurSaisieInformations = (
         },
       }),
       ...Object.entries(parametres.ajouteAuNouvelEtat()).reduce(
-        (prev, [clef, valeur]) => {
-          prev[clef] = valeur;
-          return prev;
+        (etatPrecedent, [clef, valeur]) => {
+          etatPrecedent[clef] = valeur;
+          return etatPrecedent;
         },
         {} as ChampNouvelEtat
       ),
@@ -171,35 +167,6 @@ export const reducteurSaisieInformations = (
       return {
         ...etat,
         departements: action.departements,
-      };
-    }
-    case TypeActionSaisieInformations.DEMANDE_TERMINEE: {
-      const emailValide = estMailValide(etat.email);
-      const etatCourant = { ...etat };
-      const departementValide = estDepartementValide(
-        etat.valeurSaisieDepartement
-      );
-      const cguValidees = etat.cguValidees;
-      const pretPourEnvoi = emailValide && departementValide && cguValidees;
-
-      if (pretPourEnvoi) {
-        delete etatCourant.erreur;
-      }
-
-      return {
-        ...etatCourant,
-        pretPourEnvoi,
-        departement: departementValide
-          ? trouveDepartement(etat.valeurSaisieDepartement)
-          : ({} as Departement),
-        ...(!pretPourEnvoi && {
-          erreur: {
-            ...etatCourant.erreur,
-            ...construisErreurAdresseElectronique(emailValide),
-            ...construisErreurDepartement(departementValide),
-            ...construisErreurCGUValidess(cguValidees),
-          },
-        }),
       };
     }
     case TypeActionSaisieInformations.CGU_VALIDEES: {
@@ -279,9 +246,6 @@ export const raisonSocialeSaisie = (
 });
 export const cguValidees = (): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.CGU_VALIDEES,
-});
-export const demandeTerminee = (): ActionSaisieInformations => ({
-  type: TypeActionSaisieInformations.DEMANDE_TERMINEE,
 });
 export const relationAidantCliquee = (): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.RELATION_AIDANT_CLIQUEE,

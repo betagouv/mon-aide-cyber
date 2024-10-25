@@ -9,7 +9,7 @@ export const QuiEstConcerne = () => {
       <div className="flex justify-center">
         <img
           src={illustrationQuiEstConcerne}
-          alt="Deux futurs Aidants MonAideCyber"
+          alt="Un aidé pensant à toutes les problématiques cyber de son entité"
         />
       </div>
       <div>
