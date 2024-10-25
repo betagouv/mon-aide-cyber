@@ -73,7 +73,7 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
       expect(
         await reponse.json()
       ).toStrictEqual<ReponseDemandeSolliciterAideEnErreur>({
-        message: 'L’Aidant demandé n’existe pas.',
+        message: "Le aidant demandé n'existe pas.",
         liens: {
           'solliciter-aide': {
             methode: 'POST',
@@ -113,7 +113,90 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
       expect(
         await reponse.json()
       ).toStrictEqual<ReponseDemandeSolliciterAideEnErreur>({
-        message: 'Veuillez renseigner un département',
+        message:
+          'Veuillez renseigner un département.\n' +
+          'L’Aidant n’intervient pas sur ce département.',
+        liens: {
+          'solliciter-aide': {
+            methode: 'POST',
+            url: '/api/demandes/solliciter-aide',
+          },
+        },
+      });
+    });
+
+    it('Le département est obligatoire', async () => {
+      const aidant = unAidant()
+        .ayantPourDepartements([
+          {
+            nom: 'Corse-du-Sud',
+            code: '2A',
+            codeRegion: '94',
+          },
+        ])
+        .construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/solliciter-aide',
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+          email: 'jean.dupont@aide.com',
+          raisonSociale: 'beta-gouv',
+          aidantSollicite: aidant.identifiant,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(
+        await reponse.json()
+      ).toStrictEqual<ReponseDemandeSolliciterAideEnErreur>({
+        message:
+          'Veuillez renseigner un département.\n' +
+          'L’Aidant n’intervient pas sur ce département.',
+        liens: {
+          'solliciter-aide': {
+            methode: 'POST',
+            url: '/api/demandes/solliciter-aide',
+          },
+        },
+      });
+    });
+
+    it('Valide que l’Aidant est bien dans le département saisi', async () => {
+      const aidant = unAidant()
+        .ayantPourDepartements([
+          {
+            nom: 'Corse-du-Sud',
+            code: '2A',
+            codeRegion: '94',
+          },
+        ])
+        .construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/solliciter-aide',
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+          email: 'jean.dupont@aide.com',
+          departement: 'Finistère',
+          raisonSociale: 'beta-gouv',
+          aidantSollicite: aidant.identifiant,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(
+        await reponse.json()
+      ).toStrictEqual<ReponseDemandeSolliciterAideEnErreur>({
+        message: 'L’Aidant n’intervient pas sur ce département.',
         liens: {
           'solliciter-aide': {
             methode: 'POST',
