@@ -23,6 +23,7 @@ export type CartesAidant = {
   enCoursDeChargement: boolean;
   enErreur: boolean;
   relanceLaRecherche: () => void;
+  solliciteAidant: (aidant: AidantAnnuaire) => void;
 };
 
 export const CartesAidant = ({
@@ -31,18 +32,8 @@ export const CartesAidant = ({
   enCoursDeChargement,
   enErreur,
   relanceLaRecherche,
+  solliciteAidant,
 }: CartesAidant) => {
-  const navigate = useNavigate();
-
-  const ouvreFormulaireEtreAide = (aidant: AidantAnnuaire) => {
-    navigate('/beneficier-du-dispositif/annuaire/' + aidant.nomPrenom);
-    /* navigate(
-      '/beneficier-du-dispositif/etre-aide?aidant=' +
-        aidant.nomPrenom +
-        '#formulaire-demande-aide'
-    ); */
-  };
-
   if (enCoursDeChargement) {
     return (
       <div className="cartes-aidants-messages">
@@ -99,7 +90,7 @@ export const CartesAidant = ({
               type="button"
               variant="link"
               style={{ display: 'flex', gap: '.5rem' }}
-              onClick={() => ouvreFormulaireEtreAide(aidant)}
+              onClick={() => solliciteAidant(aidant)}
             >
               <span>Solliciter une aide</span>
               <i className="fr-icon-arrow-right-line"></i>
@@ -117,6 +108,7 @@ type ProprietesListeAidantsPaginee = {
   enCoursDeChargement: boolean;
   enErreur: boolean;
   relanceLaRecherche: () => void;
+  solliciteAidant: (aidant: AidantAnnuaire) => void;
 };
 const ListeAidantsPaginee = (proprietes: ProprietesListeAidantsPaginee) => {
   const [aidantsCourant, setAidantsCourant] = useState<AidantAnnuaire[]>([]);
@@ -130,6 +122,7 @@ const ListeAidantsPaginee = (proprietes: ProprietesListeAidantsPaginee) => {
         enCoursDeChargement={proprietes.enCoursDeChargement}
         enErreur={proprietes.enErreur}
         relanceLaRecherche={proprietes.relanceLaRecherche}
+        solliciteAidant={proprietes.solliciteAidant}
       />
       <Pagination
         elements={proprietes.aidants || []}
@@ -150,6 +143,18 @@ export const ListeAidants = () => {
     departementARechercher,
     selectionneDepartement,
   } = useListeAidants();
+  const navigate = useNavigate();
+
+  const ouvreFormulaireEtreAide = (
+    aidant: AidantAnnuaire,
+    departement?: Departement
+  ) => {
+    if (!departement) return;
+
+    navigate(
+      `/beneficier-du-dispositif/annuaire/solliciter?aidant=${aidant.identifiant}&nomPrenom=${aidant.nomPrenom}&dpt=${departement.nom}`
+    );
+  };
 
   return (
     <div className="layout-annuaire">
@@ -188,6 +193,9 @@ export const ListeAidants = () => {
         enCoursDeChargement={enCoursDeChargement}
         enErreur={enErreur}
         relanceLaRecherche={relanceLaRecherche}
+        solliciteAidant={(aidant) =>
+          ouvreFormulaireEtreAide(aidant, departementARechercher)
+        }
       />
     </div>
   );

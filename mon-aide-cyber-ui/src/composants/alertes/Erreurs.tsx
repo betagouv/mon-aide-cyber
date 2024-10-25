@@ -39,3 +39,11 @@ export const construisErreur = (
     },
   };
 };
+
+export type ErreurFormulaire = string;
+
+export const construisErreurSimple = (clef: string, message: string) => {
+  return {
+    [clef]: message,
+  };
+};
