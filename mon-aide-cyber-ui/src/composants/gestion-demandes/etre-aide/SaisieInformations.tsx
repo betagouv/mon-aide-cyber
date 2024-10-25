@@ -34,11 +34,6 @@ export const SaisieInformations = (
     initialiseEtatSaisieInformations(proprietes.departements)
   );
 
-  const [params, setParams] = useSearchParams();
-  const aidantAContacter = new URLSearchParams(params).get('aidant');
-
-  console.log({ aidantAContacter });
-
   useEffect(
     () => envoie(departementsCharges(proprietes.departements)),
     [proprietes.departements]

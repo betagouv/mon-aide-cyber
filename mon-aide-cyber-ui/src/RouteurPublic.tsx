@@ -29,7 +29,7 @@ export const RouteurPublic = () => {
         <Route path="beneficier-du-dispositif">
           <Route path="annuaire">
             <Route index element={<EcranAnnuaire />} />
-            <Route path=":aidant" element={<EcranAidant />} />
+            <Route path="solliciter" element={<EcranAidant />} />
           </Route>
           <Route path="etre-aide" element={<EcranBeneficierDuDispositif />} />
         </Route>
