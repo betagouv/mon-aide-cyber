@@ -31,5 +31,5 @@ export const validateurDeDepartement = (
   return chaineDeValidation
     .trim()
     .departementConnu()
-    .withMessage('Veuillez renseigner un département');
+    .withMessage('Veuillez renseigner un département.');
 };

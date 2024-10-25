@@ -7,6 +7,7 @@ import { EntrepotAidant } from '../../authentification/Aidant';
 import {
   ExpressValidator,
   FieldValidationError,
+  Meta,
   Result,
   validationResult,
 } from 'express-validator';
@@ -25,14 +26,21 @@ export type ReponseDemandeSolliciterAideEnErreur = ReponseHATEOAS & {
   message: string;
 };
 
-const validateurAidant = (entrepotAidant: EntrepotAidant) => {
+const validateurSollicitation = (entrepotAidant: EntrepotAidant) => {
   const { body } = new ExpressValidator({
-    aidantConnu: async (identifiant: string) =>
-      await entrepotAidant.lis(identifiant),
+    aidantConnu: async (identifiant: string, { req }: Meta) =>
+      entrepotAidant.lis(identifiant).then((aidant) => {
+        if (
+          !aidant.preferences.departements.some(
+            (d) => d.nom === req.body.departement
+          )
+        ) {
+          throw new Error('L’Aidant n’intervient pas sur ce département.');
+        }
+        return aidant;
+      }),
   });
-  return body('aidantSollicite')
-    .aidantConnu()
-    .withMessage('L’Aidant demandé n’existe pas.');
+  return [validateurDeDepartement(), body('aidantSollicite').aidantConnu()];
 };
 export const routesAPIDemandeSolliciterAide = (
   configuration: ConfigurationServeur
@@ -43,12 +51,7 @@ export const routesAPIDemandeSolliciterAide = (
   routes.post(
     '/',
     express.json(),
-    validateurAidant(entrepots.aidants()),
-    validateurDeDepartement({
-      emplacement: 'CORPS',
-      presence: 'OPTIONELLE',
-      nomChamp: 'departement',
-    }),
+    validateurSollicitation(entrepots.aidants()),
     async (
       requete: Request<CorpsRequeteDemandeSolliciterAide>,
       reponse: Response<ReponseDemandeSolliciterAideEnErreur>,

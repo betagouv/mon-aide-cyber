@@ -143,7 +143,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
 
         expect(reponse.statusCode).toBe(400);
         expect(await reponse.json()).toStrictEqual({
-          message: 'Veuillez renseigner un département',
+          message: 'Veuillez renseigner un département.',
           liens: {
             'afficher-annuaire-aidants': {
               url: '/api/annuaire-aidants',
