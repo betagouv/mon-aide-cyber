@@ -1,19 +1,53 @@
 import { AidantAnnuaire } from '../AidantAnnuaire.ts';
-import { useReducer } from 'react';
-import { reducteurFormulaireSolliciterAidant } from './reducteurFormulaireSolliciterAidant.ts';
+import { useCallback, useReducer } from 'react';
+import {
+  adresseElectroniqueSaisie,
+  cguCliquees,
+  initialiseFormulaireSolliciterAidant,
+  raisonSocialeSaisie,
+  reducteurFormulaireSolliciterAidant,
+} from './reducteurFormulaireSolliciterAidant.ts';
+import { CorpsDemandeSolliciterAidant } from '../../../gestion-demandes/etre-aide/EtreAide.ts';
+import { CorpsCGU } from '../../../../vues/ComposantCGU.tsx';
+import { useModale } from '../../../../fournisseurs/hooks.ts';
 
 type ProprietetsFormulaireSolliciterAidant = {
   aidant: AidantAnnuaire;
   departement: string;
+  soumetFormulaire: (formulaire: CorpsDemandeSolliciterAidant) => void;
 };
 
 export const FormulaireSolliciterAidant = ({
   aidant,
   departement,
+  soumetFormulaire,
 }: ProprietetsFormulaireSolliciterAidant) => {
+  const { affiche } = useModale();
+
   const [etatFormulaire, declencheChangement] = useReducer(
     reducteurFormulaireSolliciterAidant,
-    {}
+    initialiseFormulaireSolliciterAidant()
+  );
+
+  const surSoumission = () => {
+    soumetFormulaire({
+      aidant: aidant,
+      cguValidees: etatFormulaire.cguValidees,
+      departement: departement,
+      email: etatFormulaire.email,
+      raisonSociale: etatFormulaire.raisonSociale,
+    });
+  };
+
+  const afficheModaleCGU = useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      affiche({
+        corps: <CorpsCGU />,
+        taille: 'large',
+      });
+    },
+    [affiche]
   );
 
   return (
@@ -32,7 +66,7 @@ export const FormulaireSolliciterAidant = ({
           <span> Champ obligatoire</span>
         </div>
       </div>
-      <form>
+      <form onSubmit={surSoumission}>
         <fieldset className="fr-mb-5w">
           <div className="fr-grid-row fr-grid-row--gutters">
             <div className="fr-col-12">
@@ -59,8 +93,8 @@ export const FormulaireSolliciterAidant = ({
             <div className=" fr-col-12">
               <div
                 className={`fr-input-group ${
-                  etatFormulaire.erreur
-                    ? etatFormulaire.erreur.adresseElectronique?.className
+                  etatFormulaire.erreurs?.adresseElectronique
+                    ? 'fr-input-group--error'
                     : ''
                 }`}
               >
@@ -73,19 +107,17 @@ export const FormulaireSolliciterAidant = ({
                   type="text"
                   id="adresse-electronique"
                   name="adresse-electronique"
-                  onChange={(e) => surSaisieAdresseElectronique(e.target.value)}
+                  onChange={(e) =>
+                    declencheChangement(
+                      adresseElectroniqueSaisie(e.target.value)
+                    )
+                  }
                 />
-                {etatFormulaire.erreur?.adresseElectronique?.texteExplicatif}
+                {etatFormulaire.erreurs?.adresseElectronique}
               </div>
             </div>
             <div className=" fr-col-12">
-              <div
-                className={`fr-input-group ${
-                  etatFormulaire.erreur
-                    ? etatFormulaire.erreur.departement?.className
-                    : ''
-                }`}
-              >
+              <div className={`fr-input-group`}>
                 <label className="fr-label" htmlFor="departement">
                   <span className="asterisque">*</span>
                   <span> Le département où se situe votre entité</span>
@@ -102,7 +134,7 @@ export const FormulaireSolliciterAidant = ({
                 </div>
               </div>
             </div>
-            <div className=" fr-col-12">
+            <div className="fr-col-12">
               <div className="fr-input-group">
                 <label className="fr-label" htmlFor="raison-sociale">
                   Raison sociale
@@ -113,15 +145,17 @@ export const FormulaireSolliciterAidant = ({
                   type="text"
                   id="raison-sociale"
                   name="raison-sociale"
-                  onChange={(e) => surSaisieRaisonSociale(e.target.value)}
+                  onChange={(e) =>
+                    declencheChangement(raisonSocialeSaisie(e.target.value))
+                  }
                 />
               </div>
             </div>
             <div className="fr-col-12">
               <div
                 className={`fr-checkbox-group mac-radio-group ${
-                  etatFormulaire.erreur
-                    ? etatFormulaire.erreur.cguValidees?.className
+                  etatFormulaire.erreurs?.cguValidees
+                    ? 'fr-input-group--error'
                     : ''
                 }`}
               >
@@ -129,7 +163,7 @@ export const FormulaireSolliciterAidant = ({
                   type="checkbox"
                   id="cgu-aide"
                   name="cgu-aide"
-                  onClick={surCGUValidees}
+                  onClick={() => declencheChangement(cguCliquees())}
                   checked={etatFormulaire.cguValidees}
                 />
                 <label className="fr-label" htmlFor="cgu-aide">
@@ -147,16 +181,15 @@ export const FormulaireSolliciterAidant = ({
                     </span>
                   </div>
                 </label>
-                {etatFormulaire.erreur?.cguValidees?.texteExplicatif}
+                {etatFormulaire.erreurs?.cguValidees}
               </div>
             </div>
           </div>
           <div className="fr-grid-row fr-grid-row--right fr-pt-3w">
             <button
-              type="button"
+              type="submit"
               key="envoyer-demande-aide"
               className="fr-btn bouton-mac bouton-mac-primaire"
-              onClick={() => declencheChangement()}
             >
               Terminer
             </button>

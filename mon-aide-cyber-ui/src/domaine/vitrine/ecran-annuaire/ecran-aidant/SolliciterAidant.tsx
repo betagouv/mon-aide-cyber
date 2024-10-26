@@ -1,12 +1,10 @@
 import { useRecupereContexteNavigation } from '../../../../hooks/useRecupereContexteNavigation';
-import { Departement } from '../../../gestion-demandes/departement';
 import { AidantAnnuaire } from '../AidantAnnuaire';
 import { Confirmation } from '../../../../composants/gestion-demandes/etre-aide/Confirmation.tsx';
-import { useCallback, useEffect, useReducer, useState } from 'react';
-import { reducteurDemandeEtreAide } from '../../../../composants/gestion-demandes/etre-aide/reducteurDemandeEtreAide.ts';
-import { useMutation } from '@tanstack/react-query';
+import { useCallback, useEffect } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
-  CorpsDemandeEtreAide,
+  CorpsDemandeSolliciterAidant,
   ReponseDemandeEtreAide,
 } from '../../../gestion-demandes/etre-aide/EtreAide.ts';
 import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
@@ -26,93 +24,94 @@ export const SolliciterAidant = ({
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
 
-  const [etat, envoie] = useReducer(reducteurDemandeEtreAide, {
-    etapeCourante: 'saisieInformations',
+  const { data: ressourceSolliciterAidant } = useQuery({
+    queryKey: ['recupere-contexte-solliciter-aidant'],
+    enabled: new MoteurDeLiens(navigationMAC.etat).existe('demande-etre-aide'),
+    queryFn: () => {
+      const action = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
+        'demande-etre-aide'
+      );
+      return macAPI.execute<ReponseDemandeEtreAide, ReponseDemandeEtreAide>(
+        constructeurParametresAPI()
+          .url(action.url)
+          .methode(action.methode!)
+          .construis(),
+        (corps) => corps
+      );
+    },
   });
 
-  const [
-    demandeEtreAideEnCoursDeChargement,
-    setDemandeEtreAideEnCoursDeChargement,
-  ] = useState(true);
-
-  const [referentielDepartements, setReferentielDepartements] = useState<
-    Departement[] | undefined
-  >();
-
   useEffect(() => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'demande-etre-aide',
-      (lien) => {
-        if (demandeEtreAideEnCoursDeChargement) {
-          macAPI
-            .execute<ReponseDemandeEtreAide, ReponseDemandeEtreAide>(
-              constructeurParametresAPI()
-                .url(lien.url)
-                .methode(lien.methode!)
-                .construis(),
-              (corps) => corps
-            )
-            .then((reponse) => {
-              setReferentielDepartements(reponse.departements);
-              navigationMAC.ajouteEtat(reponse.liens);
-              setDemandeEtreAideEnCoursDeChargement(false);
-            })
-            .catch(() => {
-              setDemandeEtreAideEnCoursDeChargement(false);
-            });
-        }
-      }
-    );
-  }, [demandeEtreAideEnCoursDeChargement, navigationMAC.etat]);
+    if (ressourceSolliciterAidant?.liens) {
+      navigationMAC.ajouteEtat(ressourceSolliciterAidant?.liens);
+    }
+  }, [ressourceSolliciterAidant]);
 
-  const { mutate: soumettreFormulaire, isPending: estEnTrainDeSoumettre } =
-    useMutation({
-      mutationKey: ['solliciter-aidant'],
-      mutationFn: (demandeEtreAide: CorpsDemandeEtreAide) => {
-        const actionSoumettre = new MoteurDeLiens(
-          navigationMAC.etat
-        ).trouveEtRenvoie('demander-aide');
+  const {
+    mutate: soumettreFormulaire,
+    isError,
+    error,
+    isSuccess,
+    isPending,
+  } = useMutation({
+    mutationKey: ['solliciter-aidant'],
+    mutationFn: (demandeSolliciterAidant: CorpsDemandeSolliciterAidant) => {
+      const actionSoumettre = new MoteurDeLiens(
+        navigationMAC.etat
+      ).trouveEtRenvoie('demander-aide');
 
-        return macAPI
-          .execute<void, void, CorpsDemandeEtreAide>(
-            {
-              url: actionSoumettre.url,
-              methode: actionSoumettre.methode!,
-              corps: {
-                cguValidees: demandeEtreAide.cguValidees,
-                departement: demandeEtreAide.departement,
-                email: demandeEtreAide.email,
-                relationAidant: demandeEtreAide.relationAidant,
-                ...(demandeEtreAide.raisonSociale && {
-                  raisonSociale: demandeEtreAide.raisonSociale,
-                }),
-              },
+      return macAPI
+        .execute<void, void, CorpsDemandeSolliciterAidant>(
+          {
+            url: actionSoumettre.url,
+            methode: actionSoumettre.methode!,
+            corps: {
+              cguValidees: demandeSolliciterAidant.cguValidees,
+              departement: demandeSolliciterAidant.departement,
+              email: demandeSolliciterAidant.email,
+              ...(demandeSolliciterAidant.raisonSociale && {
+                raisonSociale: demandeSolliciterAidant.raisonSociale,
+              }),
             },
-            (corps) => corps
-          )
-          .then((reponse) => reponse);
-      },
-    });
+          },
+          (corps) => corps
+        )
+        .then((reponse) => reponse);
+    },
+  });
 
   const retourAccueil = useCallback(() => {
     navigationMAC.retourAccueil();
   }, [navigationMAC]);
 
   console.log(`<SolliciterAidant />`, { aidant });
+
+  if (isPending) {
+    return <div className="fr-grid-row fr-grid-row--center">Chargement</div>;
+  }
+
+  if (isError) {
+    return (
+      <div className="fr-grid-row fr-grid-row--center">{error.message}</div>
+    );
+  }
+
+  if (isSuccess) {
+    return (
+      <div className="fr-grid-row fr-grid-row--center">
+        <Confirmation onClick={() => retourAccueil()} />
+      </div>
+    );
+  }
+
   return (
     <div className="fr-grid-row fr-grid-row--center">
-      <div className="fr-col-md-8 fr-col-sm-12 section">
-        {etat.etapeCourante === 'saisieInformations' && (
-          <FormulaireSolliciterAidant
-            departement={nomDepartement}
-            aidant={aidant}
-          />
-        )}
-        {etat.etapeCourante === 'confirmation' && (
-          <Confirmation onClick={() => retourAccueil()} />
-        )}
-        {/*<div>{retourEnvoiDemandeEtreAide}</div>*/}
-      </div>
+      <FormulaireSolliciterAidant
+        departement={nomDepartement}
+        aidant={aidant}
+        soumetFormulaire={soumettreFormulaire}
+      />
+      {/*<div>{retourEnvoiDemandeEtreAide}</div>*/}
     </div>
   );
 };
