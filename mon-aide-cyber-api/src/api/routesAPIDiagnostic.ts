@@ -38,8 +38,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const commande: CommandeLanceDiagnostic = {
         type: 'CommandeLanceDiagnostic',
-        adaptateurReferentiel: configuration.adaptateurReferentiel,
-        adaptateurReferentielDeMesures: configuration.adaptateurMesures,
         identifiantAidant: requete.identifiantUtilisateurCourant!,
       };
       busCommande

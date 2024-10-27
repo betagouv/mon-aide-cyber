@@ -18,9 +18,16 @@ import { CapteurCommandeCreeEspaceAidant } from '../../espace-aidant/CapteurComm
 import { CapteurSagaDemandeAidantCreeEspaceAidant } from '../../gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
 
 import { CapteurSagaDemandeSolliciterAide } from '../../gestion-demandes/aide/CapteurSagaDemandeSolliciterAide';
+import { Adaptateur } from '../../adaptateurs/Adaptateur';
+import { Referentiel } from '../../diagnostic/Referentiel';
+import { ReferentielDeMesures } from '../../diagnostic/ReferentielDeMesures';
 
-type Services = {
+export type Services = {
   aidant: ServiceAidant;
+  referentiels: {
+    diagnostic: Adaptateur<Referentiel>;
+    mesures: Adaptateur<ReferentielDeMesures>;
+  };
 };
 
 type ParametresCapteur = {
@@ -88,7 +95,9 @@ const capteurs: Map<string, Capteur> = new Map([
       capteur: (parametres) =>
         new CapteurCommandeLanceDiagnostic(
           parametres.entrepots,
-          parametres.busEvenements!
+          parametres.busEvenements!,
+          parametres.services.referentiels.diagnostic,
+          parametres.services.referentiels.mesures
         ),
     },
   ],
@@ -170,6 +179,10 @@ export class BusCommandeMAC implements BusCommande {
           adaptateurEnvoiMail: this.adaptateurEnvoiMail,
           services: {
             aidant: this.services.aidant,
+            referentiels: {
+              diagnostic: this.services.referentiels.diagnostic,
+              mesures: this.services.referentiels.mesures,
+            },
           },
         })
         .execute(commande);
