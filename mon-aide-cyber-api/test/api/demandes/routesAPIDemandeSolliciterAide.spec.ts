@@ -6,7 +6,7 @@ import { executeRequete } from '../executeurRequete';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
 import { ReponseDemandeSolliciterAideEnErreur } from '../../../src/api/demandes/routesAPIDemandeSolliciterAide';
-import { unReferentiel } from '../../constructeurs/constructeurReferentiel';
+import { unReferentielAvecContexteComplet } from '../../constructeurs/constructeurReferentiel';
 import { adaptateurUUID } from '../../../src/infrastructure/adaptateurs/adaptateurUUID';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 
@@ -22,7 +22,7 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
 
   describe('Quand une requête POST est reçue', () => {
     it('Traite la demande de sollicitation de l’Aidé', async () => {
-      const referentiel = unReferentiel().construis();
+      const referentiel = unReferentielAvecContexteComplet().construis();
       testeurMAC.adaptateurReferentiel.ajoute(referentiel);
       FournisseurHorlogeDeTest.initialise(new Date());
       const aidant = unAidant()

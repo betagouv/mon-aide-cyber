@@ -19,7 +19,10 @@ import { Entrepots } from '../../domaine/Entrepots';
 import { Adaptateur } from '../../adaptateurs/Adaptateur';
 import { Referentiel } from '../../diagnostic/Referentiel';
 import { ReferentielDeMesures } from '../../diagnostic/ReferentielDeMesures';
-import { initialiseDiagnostic } from '../../diagnostic/Diagnostic';
+import {
+  ajouteLaReponseAuDiagnostic,
+  initialiseDiagnostic,
+} from '../../diagnostic/Diagnostic';
 
 export type SagaDemandeSolliciterAide = Omit<Saga, 'type'> & {
   email: string;
@@ -149,13 +152,24 @@ export class CapteurCommandeInitieDiagnosticAide
   constructor(
     private readonly entrepots: Entrepots,
     private readonly diagnostic: Adaptateur<Referentiel>,
-    private readonly mesures: Adaptateur<ReferentielDeMesures>
+    private readonly mesures: Adaptateur<ReferentielDeMesures>,
+    private readonly _questionDepartementEntite = 'contexte-departement-tom-siege-social'
   ) {}
 
-  execute(_commande: CommandeInitieDiagnosticAide): Promise<crypto.UUID> {
+  execute(commande: CommandeInitieDiagnosticAide): Promise<crypto.UUID> {
     return Promise.all([this.diagnostic.lis(), this.mesures.lis()]).then(
       async ([referentiel, mesures]) => {
         const diagnostic = initialiseDiagnostic(referentiel, mesures);
+        const reponse = diagnostic.referentiel['contexte'].questions
+          .find((q) => q.identifiant === this._questionDepartementEntite)
+          ?.reponsesPossibles.find(
+            (q) => q.libelle === commande.departement.nom
+          );
+        ajouteLaReponseAuDiagnostic(diagnostic, {
+          identifiant: this._questionDepartementEntite,
+          reponse: reponse!.identifiant,
+          chemin: 'contexte',
+        });
         return this.entrepots
           .diagnostic()
           .persiste(diagnostic)
