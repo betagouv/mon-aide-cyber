@@ -17,8 +17,8 @@ import {
   CommandeCreerAide,
 } from '../../../src/aide/CapteurCommandeCreerAide';
 import { CapteurCommande } from '../../../src/domaine/commande';
+import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
-import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   describe("si l'Aidé est connu de MAC", () => {
@@ -28,9 +28,12 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const busEvenement = new BusEvenementDeTest();
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       const capteur = new CapteurSagaDemandeAide(
-        new BusCommandeMAC(entrepots, busEvenement, adaptateurEnvoiMail, {
-          aidant: unServiceAidant(entrepots.aidants()),
-        }),
+        new BusCommandeMAC(
+          entrepots,
+          busEvenement,
+          adaptateurEnvoiMail,
+          unConstructeurDeServices(entrepots.aidants())
+        ),
         busEvenement,
         adaptateurEnvoiMail
       );
@@ -59,7 +62,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         entrepotsMemoire,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepotsMemoire.aidants()) }
+        unConstructeurDeServices(entrepotsMemoire.aidants())
       );
       const capteur = new CapteurSagaDemandeAide(
         busCommande,
@@ -91,7 +94,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         entrepotsMemoire,
         busEvenement,
         adaptateurEnvoieMail,
-        { aidant: unServiceAidant(entrepotsMemoire.aidants()) }
+        unConstructeurDeServices(entrepotsMemoire.aidants())
       );
       const capteur = new CapteurSagaDemandeAide(
         busCommande,
@@ -141,7 +144,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         entrepotsMemoire,
         busEvenement,
         adaptateurEnvoieMail,
-        { aidant: unServiceAidant(entrepotsMemoire.aidants()) }
+        unConstructeurDeServices(entrepotsMemoire.aidants())
       );
       const capteur = new CapteurSagaDemandeAide(
         busCommande,
@@ -186,7 +189,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         entrepotsMemoire,
         busEvenement,
         adaptateurEnvoieMail,
-        { aidant: unServiceAidant(entrepotsMemoire.aidants()) }
+        unConstructeurDeServices(entrepotsMemoire.aidants())
       );
       const capteur = new CapteurSagaDemandeAide(
         busCommande,
@@ -232,7 +235,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         entrepotsMemoire,
         busEvenement,
         adaptateurEnvoieMail,
-        { aidant: unServiceAidant(entrepotsMemoire.aidants()) }
+        unConstructeurDeServices(entrepotsMemoire.aidants())
       );
       const capteur = new CapteurSagaDemandeAide(
         busCommande,
@@ -280,7 +283,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         entrepotsMemoire,
         busEvenement,
         adaptateurEnvoieMail,
-        { aidant: unServiceAidant(entrepotsMemoire.aidants()) }
+        unConstructeurDeServices(entrepotsMemoire.aidants())
       );
       const capteur = new CapteurSagaDemandeAide(
         busCommande,

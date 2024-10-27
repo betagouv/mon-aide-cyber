@@ -54,7 +54,13 @@ const serveurMAC = serveur.creeServeur({
     entrepots,
     busEvenementMAC,
     adaptateurEnvoiMessage,
-    { aidant: unServiceAidant(entrepots.aidants()) }
+    {
+      aidant: unServiceAidant(entrepots.aidants()),
+      referentiels: {
+        diagnostic: new AdaptateurReferentielMAC(),
+        mesures: new AdaptateurMesures(),
+      },
+    }
   ),
   busEvenement: busEvenementMAC,
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),
