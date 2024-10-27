@@ -1,15 +1,21 @@
 import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
 import crypto from 'crypto';
-import { Objet, Relation, Utilisateur } from '../../src/relation/Tuple';
+import { Objet, Relation, Tuple, Utilisateur } from '../../src/relation/Tuple';
 
 export class AdaptateurRelationsTest implements AdaptateurRelations {
   constructor(private readonly relations: Map<string, string[]>) {}
+
+  creeTuple(_tuple: Tuple): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 
   aidantInitieDiagnostic(_: crypto.UUID, __: crypto.UUID): Promise<void> {
     return Promise.resolve();
   }
 
-  diagnosticsInitiePar(identifiantAidant: crypto.UUID): Promise<string[]> {
+  identifiantsObjetsLiesAUtilisateur(
+    identifiantAidant: crypto.UUID
+  ): Promise<string[]> {
     return Promise.resolve(this.relations.get(identifiantAidant) || []);
   }
 

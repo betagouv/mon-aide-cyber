@@ -83,7 +83,7 @@ export class EntrepotRelationPostgres
     return 'relations';
   }
 
-  trouveDiagnosticsInitiePar(identifiant: string): Promise<Tuple[]> {
+  trouveObjetsLiesAUtilisateur(identifiant: string): Promise<Tuple[]> {
     return this.knex
       .from(this.nomTable())
       .whereRaw(

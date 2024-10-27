@@ -2,6 +2,7 @@ import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
 import crypto from 'crypto';
 import { EntrepotDiagnostic } from '../../diagnostic/Diagnostic';
 import { EntrepotAidant } from '../../authentification/Aidant';
+import { unTupleAidantInitieDiagnostic } from '../../diagnostic/tuples';
 
 export type Relation = {
   mailAidant: string;
@@ -39,15 +40,18 @@ export const lieDiagnostic = async (
   }
 
   const identifiantDiagnosticInitieTrouve = (
-    await adaptateurRelations.diagnosticsInitiePar(identifiantAidant)
+    await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+      identifiantAidant
+    )
   ).find((diagnosticInitie) => diagnosticInitie === identifiantDiagnostic);
 
   if (!identifiantDiagnosticInitieTrouve) {
     try {
-      await adaptateurRelations.aidantInitieDiagnostic(
+      const tuple = unTupleAidantInitieDiagnostic(
         identifiantAidant,
         identifiantDiagnostic
       );
+      await adaptateurRelations.creeTuple(tuple);
     } catch (erreur) {
       return { ...relation, message: 'erreur pendant la persistence' };
     }

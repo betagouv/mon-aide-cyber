@@ -28,7 +28,9 @@ describe("Les consommateurs d'évènements du tableau de bord", () => {
       });
 
       expect(
-        await adaptateurRelations.diagnosticsInitiePar(identifiantAidant)
+        await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+          identifiantAidant
+        )
       ).toStrictEqual([identifiantDiagnostic]);
     });
   });
