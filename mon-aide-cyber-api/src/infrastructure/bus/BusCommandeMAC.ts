@@ -14,7 +14,10 @@ import { CapteurCommandeEnvoiMailCreationCompteAidant } from '../../gestion-dema
 import { adaptateurServiceChiffrement } from '../adaptateurs/adaptateurServiceChiffrement';
 import { CapteurCommandeCreeEspaceAidant } from '../../espace-aidant/CapteurCommandeCreeEspaceAidant';
 import { CapteurSagaDemandeAidantCreeEspaceAidant } from '../../gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
-import { CapteurSagaDemandeSolliciterAide } from '../../gestion-demandes/aide/CapteurSagaDemandeSolliciterAide';
+import {
+  CapteurCommandeInitieDiagnosticAide,
+  CapteurSagaDemandeSolliciterAide,
+} from '../../gestion-demandes/aide/CapteurSagaDemandeSolliciterAide';
 import { Adaptateur } from '../../adaptateurs/Adaptateur';
 import { Referentiel } from '../../diagnostic/Referentiel';
 import { ReferentielDeMesures } from '../../diagnostic/ReferentielDeMesures';
@@ -175,6 +178,17 @@ const capteurs: Map<string, Capteur> = new Map([
           parametres.busEvenements!,
           parametres.adaptateurEnvoiMail!,
           adaptateurServiceChiffrement()
+        ),
+    },
+  ],
+  [
+    'CommandeInitieDiagnosticAide',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeInitieDiagnosticAide(
+          parametres.entrepots,
+          parametres.services.referentiels.diagnostic,
+          parametres.services.referentiels.mesures
         ),
     },
   ],

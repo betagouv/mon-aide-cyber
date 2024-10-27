@@ -20,7 +20,7 @@ import { CapteurCommande } from '../../../src/domaine/commande';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 
-describe('Capteur saga demande de validation de CGU Aidé', () => {
+describe('Capteur saga demande d’Aide', () => {
   describe("si l'Aidé est connu de MAC", () => {
     it('interrompt le parcours', async () => {
       const aide = unAide().construis();
