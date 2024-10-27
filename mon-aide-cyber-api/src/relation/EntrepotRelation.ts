@@ -8,7 +8,7 @@ export interface Entrepot<T extends Aggregat> {
 }
 
 export interface EntrepotRelation extends Entrepot<Tuple> {
-  trouveDiagnosticsInitiePar(identifiantAidant: string): Promise<Tuple[]>;
+  trouveObjetsLiesAUtilisateur(identifiantAidant: string): Promise<Tuple[]>;
 
   relationExiste(
     relation: Relation,

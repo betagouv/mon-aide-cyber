@@ -1,10 +1,9 @@
-import { Constructeur } from '../../test/constructeurs/constructeur';
 import crypto from 'crypto';
 import { Aggregat } from './Aggregat';
 
-export type Relation = 'initiateur';
+export type Relation = string;
 
-export type TypeUtilisateur = 'aidant';
+export type TypeUtilisateur = string;
 
 export type Utilisateur = {
   type: TypeUtilisateur;
@@ -22,18 +21,17 @@ export type Tuple = Aggregat & {
   objet: Objet;
 };
 
+interface Constructeur<T> {
+  construis(): T;
+}
+
 class ConstructeurUtilisateur implements Constructeur<Utilisateur> {
   private type: TypeUtilisateur | undefined;
   private identifiant = '';
 
-  deType(type: TypeUtilisateur) {
+  deType(type: string): ConstructeurUtilisateur {
     this.type = type;
-
     return this;
-  }
-
-  deTypeAidant(): ConstructeurUtilisateur {
-    return this.deType('aidant');
   }
 
   avecIdentifiant(identifiant: string): ConstructeurUtilisateur {
@@ -54,15 +52,13 @@ class ConstructeurObjet implements Constructeur<Objet> {
   private type = '';
   private identifiant = '';
 
-  deTypeDiagnostic(): ConstructeurObjet {
-    this.type = 'diagnostic';
-
+  avecIdentifiant(identifiant: string): ConstructeurObjet {
+    this.identifiant = identifiant;
     return this;
   }
 
-  avecIdentifiant(identifiant: string): ConstructeurObjet {
-    this.identifiant = identifiant;
-
+  deType(type: string): ConstructeurObjet {
+    this.type = type;
     return this;
   }
 
@@ -74,26 +70,29 @@ class ConstructeurObjet implements Constructeur<Objet> {
   }
 }
 
-class ConstructeurTuple implements Constructeur<Tuple> {
+class ConstructeurTuple<DEFINITION_TUPLE extends DefinitionTuple>
+  implements Constructeur<Tuple>
+{
+  constructor(private readonly dsl: DSL<DEFINITION_TUPLE>) {}
+
   private utilisateur = {} as Utilisateur;
-  private relation = '' as Relation;
   private objet = {} as Objet;
 
-  avecUtilisateur(utilisateur: Utilisateur) {
-    this.utilisateur = utilisateur;
-
+  avecUtilisateur(
+    identifiant: crypto.UUID
+  ): ConstructeurTuple<DEFINITION_TUPLE> {
+    this.utilisateur = new ConstructeurUtilisateur()
+      .deType(this.dsl.definition.typeUtilisateur)
+      .avecIdentifiant(identifiant)
+      .construis();
     return this;
   }
 
-  avecRelationInitiateur(): ConstructeurTuple {
-    this.relation = 'initiateur';
-
-    return this;
-  }
-
-  avecObjet(objet: Objet) {
-    this.objet = objet;
-
+  avecObjet(identifiant: crypto.UUID): ConstructeurTuple<DEFINITION_TUPLE> {
+    this.objet = new ConstructeurObjet()
+      .deType(this.dsl.definition.typeObjet)
+      .avecIdentifiant(identifiant)
+      .construis();
     return this;
   }
 
@@ -101,15 +100,23 @@ class ConstructeurTuple implements Constructeur<Tuple> {
     return {
       identifiant: crypto.randomUUID(),
       utilisateur: this.utilisateur,
-      relation: this.relation,
+      relation: this.dsl.definition.relation,
       objet: this.objet,
     };
   }
 }
 
-export const unUtilisateur = (): ConstructeurUtilisateur =>
-  new ConstructeurUtilisateur();
+export type DefinitionTuple = {
+  typeObjet: string;
+  relation: string;
+  typeUtilisateur: string;
+};
 
-export const unObjet = (): ConstructeurObjet => new ConstructeurObjet();
+export interface DSL<DEFINITION_TUPLE extends DefinitionTuple> {
+  definition: DEFINITION_TUPLE;
+}
 
-export const unTuple = (): ConstructeurTuple => new ConstructeurTuple();
+export const unTuple = <DEFINITION_TUPLE extends DefinitionTuple>(
+  dsl: DSL<DEFINITION_TUPLE>
+): ConstructeurTuple<DEFINITION_TUPLE> =>
+  new ConstructeurTuple<DEFINITION_TUPLE>(dsl);

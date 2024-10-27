@@ -13,6 +13,7 @@ import {
 import { unDiagnostic } from '../../constructeurs/constructeurDiagnostic';
 import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
 import { AdaptateurRelationsEnErreur } from './AdaptateurRelationsEnErreur';
+import { unTupleAidantInitieDiagnostic } from '../../../src/diagnostic/tuples';
 
 describe('Lie un diagnostic', () => {
   it("créé une nouvelle relation lorsque le diagnostic n'est pas encore lié", async () => {
@@ -41,7 +42,9 @@ describe('Lie un diagnostic', () => {
     );
 
     expect(
-      await adaptateurRelations.diagnosticsInitiePar(aidant.identifiant)
+      await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+        aidant.identifiant
+      )
     ).toStrictEqual([identifiantDiagnostic]);
     expect(relation).toStrictEqual<Relation>({
       mailAidant: aidant.identifiantConnexion,
@@ -61,10 +64,11 @@ describe('Lie un diagnostic', () => {
     const aidant = unAidant().construis();
     const entrepotAidant = new EntrepotAidantMemoire();
     await entrepotAidant.persiste(aidant);
-    await adaptateurRelations.aidantInitieDiagnostic(
+    const tuple = unTupleAidantInitieDiagnostic(
       aidant.identifiant,
       diagnostic.identifiant
     );
+    await adaptateurRelations.creeTuple(tuple);
 
     const relation = await lieDiagnostic(
       adaptateurRelations,
@@ -79,7 +83,9 @@ describe('Lie un diagnostic', () => {
     );
 
     expect(
-      await adaptateurRelations.diagnosticsInitiePar(aidant.identifiant)
+      await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+        aidant.identifiant
+      )
     ).toStrictEqual([diagnostic.identifiant]);
     expect(relation).toStrictEqual<Relation>({
       ...relation,

@@ -16,8 +16,11 @@ import { CommandeLanceDiagnostic } from '../diagnostic/CapteurCommandeLanceDiagn
 import { Diagnostic } from '../diagnostic/Diagnostic';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
 import { RepresentationDiagnostic } from './representateurs/types';
-import { unObjet, unUtilisateur } from '../relation/Tuple';
 import { RestitutionHTML } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionHTML';
+import {
+  DefinitionAidantInitieDiagnostic,
+  definitionAidantInitieDiagnostic,
+} from '../diagnostic/tuples';
 
 export type ReponseDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 
@@ -60,10 +63,8 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id',
     session.verifie('Accès diagnostic'),
     cgu.verifie(),
-    relations.verifie(
-      'initiateur',
-      unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic()
+    relations.verifie<DefinitionAidantInitieDiagnostic>(
+      definitionAidantInitieDiagnostic.definition
     ),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
@@ -88,10 +89,8 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id',
     session.verifie('Ajout réponse au diagnostic'),
     cgu.verifie(),
-    relations.verifie(
-      'initiateur',
-      unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic()
+    relations.verifie<DefinitionAidantInitieDiagnostic>(
+      definitionAidantInitieDiagnostic.definition
     ),
     bodyParser.json(),
     (
@@ -127,10 +126,8 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id/restitution',
     session.verifie('Demande la restitution'),
     cgu.verifie(),
-    relations.verifie(
-      'initiateur',
-      unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic()
+    relations.verifie<DefinitionAidantInitieDiagnostic>(
+      definitionAidantInitieDiagnostic.definition
     ),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;

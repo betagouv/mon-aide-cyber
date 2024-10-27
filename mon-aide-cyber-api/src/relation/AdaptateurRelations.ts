@@ -1,17 +1,16 @@
 import crypto from 'crypto';
-import { Objet, Relation, Utilisateur } from './Tuple';
+import { Objet, Relation, Tuple, Utilisateur } from './Tuple';
 
 export type Diagnostic = {
   identifiant: crypto.UUID;
 };
 
 export interface AdaptateurRelations {
-  aidantInitieDiagnostic(
-    identifiantAidant: crypto.UUID,
-    identifiantDiagnostic: crypto.UUID
-  ): Promise<void>;
+  creeTuple(tuple: Tuple): Promise<void>;
 
-  diagnosticsInitiePar(identifiantAidant: crypto.UUID): Promise<string[]>;
+  identifiantsObjetsLiesAUtilisateur(
+    identifiantAidant: crypto.UUID
+  ): Promise<string[]>;
 
   relationExiste(
     relation: Relation,

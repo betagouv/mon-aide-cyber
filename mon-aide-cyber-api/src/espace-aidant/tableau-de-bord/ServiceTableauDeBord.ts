@@ -20,7 +20,9 @@ export class ServiceTableauDeBord {
     identifiantAidant: crypto.UUID
   ): Promise<Diagnostic[]> {
     const identifiantDiagnosticsLie =
-      await this.adaptateurRelation.diagnosticsInitiePar(identifiantAidant);
+      await this.adaptateurRelation.identifiantsObjetsLiesAUtilisateur(
+        identifiantAidant
+      );
 
     return this.serviceDiagnostic
       .contextes(identifiantDiagnosticsLie as UUID[])

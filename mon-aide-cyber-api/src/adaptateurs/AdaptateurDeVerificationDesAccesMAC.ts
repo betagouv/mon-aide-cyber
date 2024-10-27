@@ -1,9 +1,5 @@
 import { AdaptateurDeVerificationDesAcces } from './AdaptateurDeVerificationDesAcces';
-import { Relation } from '../relation/Tuple';
-import {
-  ConstructeurObjet,
-  ConstructeurUtilisateur,
-} from '../definition-type/relations';
+import { DefinitionTuple } from '../relation/Tuple';
 import { RequestHandler, Response } from 'express';
 import { RequeteUtilisateur } from '../api/routesAPI';
 import { NextFunction } from 'express-serve-static-core';
@@ -23,10 +19,8 @@ export class AdaptateurDeVerificationDesAccesMAC
 {
   constructor(private readonly adaptateurRelation: AdaptateurRelations) {}
 
-  verifie<T>(
-    relation: Relation,
-    utilisateur: typeof ConstructeurUtilisateur,
-    objet: typeof ConstructeurObjet
+  verifie<DEFINITION extends DefinitionTuple, T>(
+    definition: DEFINITION
   ): RequestHandler {
     return async (
       requete: RequeteUtilisateur<T>,
@@ -35,11 +29,12 @@ export class AdaptateurDeVerificationDesAccesMAC
     ) => {
       const { id } = requete.params;
       const relationExiste = await this.adaptateurRelation.relationExiste(
-        relation,
-        utilisateur
-          .avecIdentifiant(requete.identifiantUtilisateurCourant!)
-          .construis(),
-        objet.avecIdentifiant(id).construis()
+        definition.relation,
+        {
+          identifiant: requete.identifiantUtilisateurCourant!,
+          type: definition.typeUtilisateur,
+        },
+        { identifiant: id, type: definition.typeObjet }
       );
       if (!relationExiste) {
         reponse.status(403).json({
