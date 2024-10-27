@@ -1,6 +1,7 @@
 import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
 import { ConsommateurEvenement, Evenement } from '../../domaine/BusEvenement';
-import { DiagnosticLance } from '../../diagnostic/CapteurCommandeLanceDiagnostic';
+
+import { DiagnosticLance } from '../../diagnostic/evenements';
 
 export const aidantInitieDiagnostic = (
   adaptateurRelations: AdaptateurRelations
@@ -12,7 +13,7 @@ export const aidantInitieDiagnostic = (
       const diagnosticLance = evenement as DiagnosticLance;
 
       return adaptateurRelations.aidantInitieDiagnostic(
-        diagnosticLance.corps.identifiantAidant,
+        diagnosticLance.corps.origine.identifiant,
         diagnosticLance.corps.identifiantDiagnostic
       );
     }

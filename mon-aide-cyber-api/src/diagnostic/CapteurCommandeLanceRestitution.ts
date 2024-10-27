@@ -1,10 +1,10 @@
 import { CapteurCommande, Commande } from '../domaine/commande';
 import { Entrepots } from '../domaine/Entrepots';
-import { BusEvenement, Evenement } from '../domaine/BusEvenement';
-import { genereLaRestitution, MesurePriorisee } from './Diagnostic';
+import { BusEvenement } from '../domaine/BusEvenement';
+import { genereLaRestitution } from './Diagnostic';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import crypto from 'crypto';
+import { RestitutionLancee } from './evenements';
 
 export type CommandeLanceRestitution = Omit<Commande, 'type'> & {
   type: 'CommandeLanceRestitution';
@@ -52,9 +52,3 @@ export class CapteurCommandeLanceRestitution
       );
   }
 }
-
-type RestitutionLancee = Evenement<{
-  identifiantDiagnostic: crypto.UUID;
-  indicateurs?: { [thematique: string]: { moyennePonderee: number } };
-  mesures?: MesurePriorisee[];
-}>;
