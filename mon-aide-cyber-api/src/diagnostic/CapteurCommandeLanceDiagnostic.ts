@@ -1,6 +1,6 @@
 import { CapteurCommande, Commande } from '../domaine/commande';
 import { Entrepots } from '../domaine/Entrepots';
-import { BusEvenement, Evenement } from '../domaine/BusEvenement';
+import { BusEvenement } from '../domaine/BusEvenement';
 import { Diagnostic, initialiseDiagnostic } from './Diagnostic';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
@@ -8,6 +8,7 @@ import { Adaptateur } from '../adaptateurs/Adaptateur';
 import { Referentiel } from './Referentiel';
 import crypto from 'crypto';
 import { ReferentielDeMesures } from './ReferentielDeMesures';
+import { DiagnosticLance } from './evenements';
 
 export class CapteurCommandeLanceDiagnostic
   implements CapteurCommande<CommandeLanceDiagnostic, Diagnostic>
@@ -31,7 +32,10 @@ export class CapteurCommandeLanceDiagnostic
           date: FournisseurHorloge.maintenant(),
           corps: {
             identifiantDiagnostic: diagnostic.identifiant,
-            identifiantAidant: commande.identifiantAidant,
+            origine: {
+              identifiant: commande.identifiantAidant,
+              type: 'AIDANT',
+            },
           },
         });
         return diagnostic;
@@ -48,8 +52,3 @@ export type CommandeLanceDiagnostic = Omit<Commande, 'type'> & {
   adaptateurReferentielDeMesures: Adaptateur<ReferentielDeMesures>;
   identifiantAidant: crypto.UUID;
 };
-
-export type DiagnosticLance = Evenement<{
-  identifiantDiagnostic: crypto.UUID;
-  identifiantAidant: crypto.UUID;
-}>;

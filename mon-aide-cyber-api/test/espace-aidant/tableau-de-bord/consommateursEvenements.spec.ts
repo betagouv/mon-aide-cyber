@@ -3,8 +3,8 @@ import { AdaptateurRelationsMAC } from '../../../src/relation/AdaptateurRelation
 import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { aidantInitieDiagnostic } from '../../../src/espace-aidant/tableau-de-bord/consommateursEvenements';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
-import { DiagnosticLance } from '../../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import crypto from 'crypto';
+import { DiagnosticLance } from '../../../src/diagnostic/evenements';
 
 describe("Les consommateurs d'évènements du tableau de bord", () => {
   describe("Lorsque l'évènement 'DIAGNOSTIC_LANCE' est consommé", () => {
@@ -20,7 +20,7 @@ describe("Les consommateurs d'évènements du tableau de bord", () => {
       ).consomme<DiagnosticLance>({
         corps: {
           identifiantDiagnostic,
-          identifiantAidant,
+          origine: { identifiant: identifiantAidant, type: 'AIDANT' },
         },
         identifiant: crypto.randomUUID(),
         type: 'DIAGNOSTIC_LANCE',

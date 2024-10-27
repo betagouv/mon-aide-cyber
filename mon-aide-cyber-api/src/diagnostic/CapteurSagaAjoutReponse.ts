@@ -1,11 +1,12 @@
 import crypto from 'crypto';
 import { Entrepots } from '../domaine/Entrepots';
-import { BusEvenement, Evenement } from '../domaine/BusEvenement';
+import { BusEvenement } from '../domaine/BusEvenement';
 import { ajouteLaReponseAuDiagnostic, Diagnostic } from './Diagnostic';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
 import { BusCommande, CapteurSaga, Saga } from '../domaine/commande';
 import { CommandeLanceRestitution } from './CapteurCommandeLanceRestitution';
+import { ReponseAjoutee } from './evenements';
 
 class CapteurSagaAjoutReponse
   implements CapteurSaga<SagaAjoutReponse, Diagnostic>
@@ -67,12 +68,6 @@ export type CorpsReponse = {
   identifiant: string;
   reponse: string | string[] | CorpsReponseQuestionATiroir;
 };
-export type ReponseAjoutee = Evenement<{
-  identifiantDiagnostic: crypto.UUID;
-  thematique: string;
-  identifiantQuestion: string;
-  reponse: string | string[] | CorpsReponseQuestionATiroir;
-}>;
 export type SagaAjoutReponse = Omit<Saga, 'type'> &
   CorpsReponse & {
     type: 'SagaAjoutReponse';
