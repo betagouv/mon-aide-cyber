@@ -1,6 +1,6 @@
 import { ReponseHATEOAS } from '../../Lien.ts';
 import { Departement } from '../departement.ts';
-import { AidantAnnuaire } from '../../vitrine/ecran-annuaire/AidantAnnuaire.ts';
+import { UUID } from '../../../types/Types.ts';
 
 export type CorpsDemandeEtreAide = {
   cguValidees: boolean;
@@ -15,7 +15,7 @@ export type CorpsDemandeSolliciterAidant = {
   email: string;
   departement: string;
   raisonSociale?: string;
-  aidant?: AidantAnnuaire;
+  aidantSollicite: UUID;
 };
 
 export type ReponseDemandeEtreAide = ReponseHATEOAS & {

@@ -9,9 +9,42 @@ import {
 } from '../../../gestion-demandes/etre-aide/EtreAide.ts';
 import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
 import { MoteurDeLiens } from '../../../MoteurDeLiens.ts';
-import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import {
+  constructeurParametresAPI,
+  ParametresAPI,
+} from '../../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useNavigationMAC } from '../../../../fournisseurs/hooks.ts';
 import { FormulaireSolliciterAidant } from './FormulaireSolliciterAidant.tsx';
+import { Lien } from '../../../Lien.ts';
+
+async function executeAppelSolliciterAidant(
+  macAPI: {
+    execute: <REPONSE, REPONSEAPI, CORPS = void>(
+      parametresAPI: ParametresAPI<CORPS>,
+      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>,
+      call?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+    ) => Promise<REPONSE>;
+  },
+  actionSoumettre: Lien,
+  demandeSolliciterAidant: CorpsDemandeSolliciterAidant
+) {
+  return await macAPI.execute<void, void, CorpsDemandeSolliciterAidant>(
+    {
+      url: actionSoumettre.url,
+      methode: actionSoumettre.methode!,
+      corps: {
+        cguValidees: demandeSolliciterAidant.cguValidees,
+        departement: demandeSolliciterAidant.departement,
+        aidantSollicite: demandeSolliciterAidant.aidantSollicite,
+        email: demandeSolliciterAidant.email,
+        ...(demandeSolliciterAidant.raisonSociale && {
+          raisonSociale: demandeSolliciterAidant.raisonSociale,
+        }),
+      },
+    },
+    (corps) => corps
+  );
+}
 
 export const SolliciterAidant = ({
   aidant,
@@ -58,33 +91,18 @@ export const SolliciterAidant = ({
     mutationFn: (demandeSolliciterAidant: CorpsDemandeSolliciterAidant) => {
       const actionSoumettre = new MoteurDeLiens(
         navigationMAC.etat
-      ).trouveEtRenvoie('demander-aide');
-
-      return macAPI
-        .execute<void, void, CorpsDemandeSolliciterAidant>(
-          {
-            url: actionSoumettre.url,
-            methode: actionSoumettre.methode!,
-            corps: {
-              cguValidees: demandeSolliciterAidant.cguValidees,
-              departement: demandeSolliciterAidant.departement,
-              email: demandeSolliciterAidant.email,
-              ...(demandeSolliciterAidant.raisonSociale && {
-                raisonSociale: demandeSolliciterAidant.raisonSociale,
-              }),
-            },
-          },
-          (corps) => corps
-        )
-        .then((reponse) => reponse);
+      ).trouveEtRenvoie('solliciter-aide');
+      return executeAppelSolliciterAidant(
+        macAPI,
+        actionSoumettre,
+        demandeSolliciterAidant
+      );
     },
   });
 
   const retourAccueil = useCallback(() => {
     navigationMAC.retourAccueil();
   }, [navigationMAC]);
-
-  console.log(`<SolliciterAidant />`, { aidant });
 
   if (isPending) {
     return <div className="fr-grid-row fr-grid-row--center">Chargement</div>;

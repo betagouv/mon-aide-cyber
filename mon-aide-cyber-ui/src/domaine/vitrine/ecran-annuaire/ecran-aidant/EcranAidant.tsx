@@ -5,10 +5,7 @@ import { UUID } from '../../../../types/Types.ts';
 
 export const EcranAidant = () => {
   const [params] = useSearchParams();
-
   const parametresUrl = new URLSearchParams(params);
-
-  console.log({ params });
 
   const nomPrenomAidant = parametresUrl.get('nomPrenom')!;
   const identifiantAidant = parametresUrl.get('aidant')!;
@@ -25,9 +22,7 @@ export const EcranAidant = () => {
         <div className="fr-container">
           {aidant ? (
             <SolliciterAidant aidant={aidant} nomDepartement={nomDepartement} />
-          ) : (
-            <>Problème</>
-          )}
+          ) : null}
         </div>
       </div>
     </main>
