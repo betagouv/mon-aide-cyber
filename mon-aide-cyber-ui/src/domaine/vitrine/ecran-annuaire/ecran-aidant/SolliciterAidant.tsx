@@ -16,6 +16,7 @@ import {
 import { useNavigationMAC } from '../../../../fournisseurs/hooks.ts';
 import { FormulaireSolliciterAidant } from './FormulaireSolliciterAidant.tsx';
 import { Lien } from '../../../Lien.ts';
+import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
 
 async function executeAppelSolliciterAidant(
   macAPI: {
@@ -105,19 +106,38 @@ export const SolliciterAidant = ({
   }, [navigationMAC]);
 
   if (isPending) {
-    return <div className="fr-grid-row fr-grid-row--center">Chargement</div>;
+    return (
+      <div className="fr-grid-row fr-grid-row--center">
+        <div className="fr-col-md-8 fr-col-sm-12 section">
+          <TypographieH4>
+            Veuillez patienter, nous traitons votre demande
+          </TypographieH4>
+          <p>
+            Si ce temps d&apos;attente persiste, merci de rafraichir la page et
+            réessayer.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   if (isError) {
     return (
-      <div className="fr-grid-row fr-grid-row--center">{error.message}</div>
+      <div className="fr-grid-row fr-grid-row--center">
+        <div className="fr-col-md-8 fr-col-sm-12 section">
+          <TypographieH4>Une erreur est survenue.</TypographieH4>
+          <p>Raison : {error?.message}</p>
+        </div>
+      </div>
     );
   }
 
   if (isSuccess) {
     return (
       <div className="fr-grid-row fr-grid-row--center">
-        <Confirmation onClick={() => retourAccueil()} />
+        <div className="fr-col-md-8 fr-col-sm-12 section">
+          <Confirmation onClick={() => retourAccueil()} />
+        </div>
       </div>
     );
   }
@@ -129,7 +149,6 @@ export const SolliciterAidant = ({
         aidant={aidant}
         soumetFormulaire={soumettreFormulaire}
       />
-      {/*<div>{retourEnvoiDemandeEtreAide}</div>*/}
     </div>
   );
 };
