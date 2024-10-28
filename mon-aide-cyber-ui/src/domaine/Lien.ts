@@ -18,6 +18,7 @@ export type Action =
   | 'afficher-annuaire-aidants'
   | 'creer-espace-aidant'
   | 'demander-aide'
+  | 'solliciter-aide'
   | 'demande-devenir-aidant'
   | 'demande-etre-aide'
   | 'envoyer-demande-devenir-aidant'

@@ -1,5 +1,5 @@
 import { AidantAnnuaire } from '../AidantAnnuaire.ts';
-import { useCallback, useReducer } from 'react';
+import { FormEvent, useCallback, useReducer } from 'react';
 import {
   adresseElectroniqueSaisie,
   cguCliquees,
@@ -29,9 +29,11 @@ export const FormulaireSolliciterAidant = ({
     initialiseFormulaireSolliciterAidant()
   );
 
-  const surSoumission = () => {
+  const surSoumission = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     soumetFormulaire({
-      aidant: aidant,
+      aidantSollicite: aidant.identifiant,
       cguValidees: etatFormulaire.cguValidees,
       departement: departement,
       email: etatFormulaire.email,
@@ -66,7 +68,7 @@ export const FormulaireSolliciterAidant = ({
           <span> Champ obligatoire</span>
         </div>
       </div>
-      <form onSubmit={surSoumission}>
+      <form onSubmit={(e) => surSoumission(e)}>
         <fieldset className="fr-mb-5w">
           <div className="fr-grid-row fr-grid-row--gutters">
             <div className="fr-col-12">
@@ -107,17 +109,21 @@ export const FormulaireSolliciterAidant = ({
                   type="text"
                   id="adresse-electronique"
                   name="adresse-electronique"
-                  onChange={(e) =>
+                  onBlur={(e) =>
                     declencheChangement(
                       adresseElectroniqueSaisie(e.target.value)
                     )
                   }
                 />
-                {etatFormulaire.erreurs?.adresseElectronique}
+                {etatFormulaire.erreurs?.adresseElectronique ? (
+                  <p className="fr-error-text">
+                    {etatFormulaire.erreurs?.adresseElectronique}
+                  </p>
+                ) : null}
               </div>
             </div>
-            <div className=" fr-col-12">
-              <div className={`fr-input-group`}>
+            <div className="fr-col-12">
+              <div className="fr-input-group">
                 <label className="fr-label" htmlFor="departement">
                   <span className="asterisque">*</span>
                   <span> Le département où se situe votre entité</span>
@@ -145,7 +151,7 @@ export const FormulaireSolliciterAidant = ({
                   type="text"
                   id="raison-sociale"
                   name="raison-sociale"
-                  onChange={(e) =>
+                  onBlur={(e) =>
                     declencheChangement(raisonSocialeSaisie(e.target.value))
                   }
                 />
@@ -181,7 +187,11 @@ export const FormulaireSolliciterAidant = ({
                     </span>
                   </div>
                 </label>
-                {etatFormulaire.erreurs?.cguValidees}
+                {etatFormulaire.erreurs?.cguValidees ? (
+                  <p className="fr-error-text">
+                    {etatFormulaire.erreurs?.cguValidees}
+                  </p>
+                ) : null}
               </div>
             </div>
           </div>
