@@ -77,6 +77,10 @@ export const lesContextesUtilisateursExistants = [
         url: '/api/demandes/etre-aide',
         methode: 'POST',
       },
+      'solliciter-aide': {
+        url: '/api/demandes/solliciter-aide',
+        methode: 'POST',
+      },
     },
   },
   {
