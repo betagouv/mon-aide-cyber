@@ -2,7 +2,7 @@ import { CapteurCommande, Commande } from '../domaine/commande';
 import { Entrepots } from '../domaine/Entrepots';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { Aide } from './Aide';
-import crypto from 'crypto';
+import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 
 export type CommandeCreerAide = Omit<Commande, 'type'> & {
   type: 'CommandeCreerAide';
@@ -21,7 +21,7 @@ export class CapteurCommandeCreerAide
       dateSignatureCGU: FournisseurHorloge.maintenant(),
       departement: commande.departement,
       email: commande.email,
-      identifiant: crypto.randomUUID(),
+      identifiant: adaptateurUUID.genereUUID(),
       ...(commande.raisonSociale && { raisonSociale: commande.raisonSociale }),
     };
 

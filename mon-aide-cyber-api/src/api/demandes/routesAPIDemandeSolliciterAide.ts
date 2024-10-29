@@ -17,7 +17,7 @@ type CorpsRequeteDemandeSolliciterAide = {
   cguValidees: boolean;
   email: string;
   departement: string;
-  raisonSociale: string;
+  raisonSociale?: string;
   aidantSollicite: crypto.UUID;
 };
 
@@ -77,6 +77,7 @@ export const routesAPIDemandeSolliciterAide = (
         email: corps.email,
         departement: corps.departement,
         identifiantAidant: corps.aidantSollicite,
+        ...(corps.raisonSociale && { raisonSociale: corps.raisonSociale }),
         type: 'SagaDemandeSolliciterAide',
       };
       return busCommande
