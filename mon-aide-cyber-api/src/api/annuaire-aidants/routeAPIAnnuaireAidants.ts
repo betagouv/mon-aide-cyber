@@ -22,8 +22,8 @@ type AidantDTO = {
 };
 
 export type ReponseAPIAnnuaireAidantsSucces = ReponseHATEOAS & {
-  aidants: AidantDTO[];
-  nombreAidants: number;
+  aidants?: AidantDTO[];
+  nombreAidants?: number;
   departements: { code: string; nom: string }[];
 };
 export type ReponseAPIAnnuaireAidantsErreur = ReponseHATEOAS & {
@@ -82,15 +82,17 @@ export const routesAPIAnnuaireAidants = (
         .recherche(criteresDeRecherche)
         .then((annuaire) =>
           reponse.status(200).json({
-            aidants: annuaire.map((a) => ({
-              identifiant: a.identifiant,
-              nomPrenom: a.nomPrenom,
-            })),
+            ...(annuaire && {
+              aidants: annuaire.map((a) => ({
+                identifiant: a.identifiant,
+                nomPrenom: a.nomPrenom,
+              })),
+            }),
             departements: departements.map((d) => ({
               code: d.code,
               nom: d.nom,
             })),
-            nombreAidants: annuaire.length,
+            ...(annuaire && { nombreAidants: annuaire.length }),
             liens: {
               'afficher-annuaire-aidants': {
                 url: '/api/annuaire-aidants',

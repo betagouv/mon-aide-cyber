@@ -14,7 +14,10 @@ export class ServiceAnnuaireAidants {
 
   recherche(
     criteresDeRecherche: CriteresDeRecherche | undefined
-  ): Promise<Aidant[]> {
+  ): Promise<Aidant[] | undefined> {
+    if (!criteresDeRecherche?.departement) {
+      return Promise.resolve(undefined);
+    }
     return this.entrepotAidant
       .rechercheParCriteres(criteresDeRecherche)
       .then((aidants) => {
