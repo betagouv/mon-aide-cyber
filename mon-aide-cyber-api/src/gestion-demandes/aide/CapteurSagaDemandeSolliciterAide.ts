@@ -9,6 +9,7 @@ export type SagaDemandeSolliciterAide = Omit<Saga, 'type'> & {
   email: string;
   departement: string;
   identifiantAidant: crypto.UUID;
+  raisonSociale?: string;
   type: 'SagaDemandeSolliciterAide';
 };
 
@@ -26,6 +27,7 @@ export class CapteurSagaDemandeSolliciterAide
       type: 'CommandeCreerAide',
       departement: saga.departement,
       email: saga.email,
+      ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
     };
     return this.busCommande.publie<CommandeCreerAide, void>(commande).then(() =>
       this.entrepots
@@ -36,10 +38,17 @@ export class CapteurSagaDemandeSolliciterAide
             {
               corps: adaptateurCorpsMessage
                 .notificationAidantSollicitation()
-                .genereCorpsMessage(aidant.nomPrenom, saga.departement),
+                .genereCorpsMessage({
+                  departement: saga.departement,
+                  mailEntite: saga.email,
+                  nomPrenom: aidant.nomPrenom,
+                  ...(saga.raisonSociale && {
+                    raisonSocialeEntite: saga.raisonSociale,
+                  }),
+                }),
               destinataire: { email: aidant.identifiantConnexion },
               objet:
-                'MonAideCyber - Une entité a fait appel à vous depuis l’annuaire des Aidants cyber.',
+                'MonAideCyber - Une entité vous sollicite depuis l’annuaire des Aidants cyber.',
             },
             'INFO'
           )

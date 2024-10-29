@@ -7,6 +7,7 @@ import { unAidant } from '../../authentification/constructeurs/constructeurAidan
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
 import { ReponseDemandeSolliciterAideEnErreur } from '../../../src/api/demandes/routesAPIDemandeSolliciterAide';
+import { adaptateurUUID } from '../../../src/infrastructure/adaptateurs/adaptateurUUID';
 
 describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de l’Aidé pour un Aidant donné', () => {
   const testeurMAC = testeurIntegration();
@@ -41,7 +42,6 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
           cguValidees: true,
           email: 'jean.dupont@aide.com',
           departement: 'Corse-du-Sud',
-          raisonSociale: 'beta-gouv',
           aidantSollicite: aidant.identifiant,
         }
       );
@@ -64,7 +64,6 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
           cguValidees: true,
           email: 'jean.dupont@aide.com',
           departement: 'Corse-du-Sud',
-          raisonSociale: 'beta-gouv',
           aidantSollicite: crypto.randomUUID(),
         }
       );
@@ -104,7 +103,6 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
           cguValidees: true,
           email: 'jean.dupont@aide.com',
           departement: 'Département-inconnu',
-          raisonSociale: 'beta-gouv',
           aidantSollicite: aidant.identifiant,
         }
       );
@@ -145,7 +143,6 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
         {
           cguValidees: true,
           email: 'jean.dupont@aide.com',
-          raisonSociale: 'beta-gouv',
           aidantSollicite: aidant.identifiant,
         }
       );
@@ -187,7 +184,6 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
           cguValidees: true,
           email: 'jean.dupont@aide.com',
           departement: 'Finistère',
-          raisonSociale: 'beta-gouv',
           aidantSollicite: aidant.identifiant,
         }
       );
@@ -204,6 +200,41 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
           },
         },
       });
+    });
+
+    it('Prend en compte la raison sociale', async () => {
+      const uuid = crypto.randomUUID();
+      adaptateurUUID.genereUUID = () => uuid;
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const aidant = unAidant()
+        .ayantPourDepartements([
+          {
+            nom: 'Corse-du-Sud',
+            code: '2A',
+            codeRegion: '94',
+          },
+        ])
+        .construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/solliciter-aide',
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+          email: 'jean.dupont@aide.com',
+          departement: 'Corse-du-Sud',
+          raisonSociale: 'Beta-gouv',
+          aidantSollicite: aidant.identifiant,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(202);
+      expect((await testeurMAC.entrepots.aides().lis(uuid)).raisonSociale).toBe(
+        'Beta-gouv'
+      );
     });
   });
 });
