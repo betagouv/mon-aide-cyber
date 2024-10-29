@@ -1,7 +1,6 @@
 import { ConfigurationServeur } from '../../serveur';
 import express, { NextFunction, Request, Response, Router } from 'express';
 import crypto from 'crypto';
-import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { ReponseHATEOAS } from '../hateoas/hateoas';
 import { EntrepotAidant } from '../../authentification/Aidant';
 import {
@@ -73,11 +72,11 @@ export const routesAPIDemandeSolliciterAide = (
           },
         });
       }
-      const corps = requete.body;
+      const corps: CorpsRequeteDemandeSolliciterAide = requete.body;
       const saga: SagaDemandeSolliciterAide = {
-        dateSignatureCGU: FournisseurHorloge.maintenant(),
         email: corps.email,
         departement: corps.departement,
+        identifiantAidant: corps.aidantSollicite,
         type: 'SagaDemandeSolliciterAide',
       };
       return busCommande
