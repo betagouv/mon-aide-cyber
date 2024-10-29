@@ -21,6 +21,7 @@ import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest'
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
 import { unServiceAidant } from '../../../src/authentification/ServiceAidantMAC';
+import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 
 describe('Capteur de commande devenir aidant', () => {
   const annuaireCot = () => ({
@@ -209,11 +210,8 @@ describe('Capteur de commande devenir aidant', () => {
     });
 
     it('Envoie le mail récapitulatif en copie invisible à MonAideCyber', async () => {
-      adaptateurEnvironnement.messagerie = () => ({
-        emailMAC: () => 'mac@email.com',
-        expediteurMAC: () => 'expéditeur',
-        clefAPI: () => 'clef',
-      });
+      adaptateurEnvironnement.messagerie = () =>
+        adaptateursEnvironnementDeTest.messagerie();
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       const entrepots = new EntrepotsMemoire();
 
@@ -240,11 +238,8 @@ describe('Capteur de commande devenir aidant', () => {
     });
 
     it('Remonte une erreur en cas d’échec de l’envoi du mail de mise en relation', async () => {
-      adaptateurEnvironnement.messagerie = () => ({
-        emailMAC: () => 'mac@email.com',
-        expediteurMAC: () => 'expéditeur',
-        clefAPI: () => 'clef',
-      });
+      adaptateurEnvironnement.messagerie = () =>
+        adaptateursEnvironnementDeTest.messagerie();
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       adaptateurEnvoiMail.genereErreur();
       const entrepots = new EntrepotsMemoire();
