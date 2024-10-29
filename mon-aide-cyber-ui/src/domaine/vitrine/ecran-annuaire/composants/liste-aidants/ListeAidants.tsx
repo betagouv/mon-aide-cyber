@@ -111,7 +111,23 @@ type ProprietesListeAidantsPaginee = {
   solliciteAidant: (aidant: AidantAnnuaire) => void;
 };
 const ListeAidantsPaginee = (proprietes: ProprietesListeAidantsPaginee) => {
-  const [aidantsCourant, setAidantsCourant] = useState<AidantAnnuaire[]>([]);
+  const [aidantsCourant, setAidantsCourant] = useState<
+    AidantAnnuaire[] | undefined
+  >(proprietes.aidants);
+
+  if (!proprietes.aidants) {
+    return (
+      <div className="liste-aidants">
+        <div className="cartes-aidants-messages">
+          <img src={illustrationFAQFemme} alt="" />
+          <p>
+            Pour trouver des Aidants cyber, veuillez tout d&apos;abord choisir
+            le territoire concerné.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="liste-aidants">
@@ -124,10 +140,7 @@ const ListeAidantsPaginee = (proprietes: ProprietesListeAidantsPaginee) => {
         relanceLaRecherche={proprietes.relanceLaRecherche}
         solliciteAidant={proprietes.solliciteAidant}
       />
-      <Pagination
-        elements={proprietes.aidants || []}
-        surClick={setAidantsCourant}
-      />
+      <Pagination elements={proprietes.aidants} surClick={setAidantsCourant} />
     </div>
   );
 };
