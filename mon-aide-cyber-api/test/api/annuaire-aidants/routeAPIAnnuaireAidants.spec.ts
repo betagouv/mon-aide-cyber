@@ -62,10 +62,6 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
           methode: 'GET',
           url: '/api/annuaire-aidants',
         },
-        'solliciter-aide': {
-          methode: 'POST',
-          url: '/api/demandes/solliciter-aide',
-        },
       },
     });
   });

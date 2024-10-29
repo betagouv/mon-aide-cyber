@@ -102,10 +102,12 @@ export const routesAPIAnnuaireAidants = (
                 url: `/api/annuaire-aidants${criteresDeRecherche ? `?departement=${criteresDeRecherche.departement}` : ''}`,
                 methode: 'GET',
               },
-              'solliciter-aide': {
-                url: '/api/demandes/solliciter-aide',
-                methode: 'POST',
-              },
+              ...(annuaire && {
+                'solliciter-aide': {
+                  url: '/api/demandes/solliciter-aide',
+                  methode: 'POST',
+                },
+              }),
             },
           })
         );
