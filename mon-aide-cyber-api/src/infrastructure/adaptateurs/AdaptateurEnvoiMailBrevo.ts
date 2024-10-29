@@ -1,6 +1,7 @@
 import {
   AdaptateurEnvoiMail,
   Email,
+  Expediteur,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
 import {
@@ -11,11 +12,16 @@ import { unConstructeurEnvoiDeMail } from '../brevo/ConstructeursBrevo';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
-  envoie(message: Email): Promise<void> {
+  envoie(
+    message: Email,
+    expediteur: Expediteur = 'MONAIDECYBER'
+  ): Promise<void> {
     const envoiDeMail = unConstructeurEnvoiDeMail()
       .ayantPourExpediteur(
         'MonAideCyber',
-        adaptateurEnvironnement.messagerie().expediteurMAC()
+        expediteur === 'MONAIDECYBER'
+          ? adaptateurEnvironnement.messagerie().expediteurMAC()
+          : adaptateurEnvironnement.messagerie().expediteurInfoMAC()
       )
       .ayantPourDestinataires([
         [message.destinataire.email, message.destinataire.nom],

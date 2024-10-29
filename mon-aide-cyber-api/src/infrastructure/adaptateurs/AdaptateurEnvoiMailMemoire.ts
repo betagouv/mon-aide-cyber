@@ -1,17 +1,23 @@
 import {
   AdaptateurEnvoiMail,
   Email,
+  Expediteur,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
 
 export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private messages: Email[] = [];
   private _genereErreur = false;
+  private expediteur: Expediteur = 'MONAIDECYBER';
 
-  envoie(message: Email): Promise<void> {
+  envoie(
+    message: Email,
+    expediteur: Expediteur = 'MONAIDECYBER'
+  ): Promise<void> {
     if (this._genereErreur) {
       return Promise.reject('Erreur');
     }
     this.messages.push(message);
+    this.expediteur = expediteur;
     return Promise.resolve();
   }
 
@@ -23,6 +29,9 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
         m.corps.includes(message)
     );
     return (nom !== undefined && messageTrouve !== undefined) || false;
+  }
+  aEteEnvoyePar(expediteur: Expediteur): boolean {
+    return this.expediteur === expediteur;
   }
 
   aEteEnvoyeA(email: string, message: string): boolean {

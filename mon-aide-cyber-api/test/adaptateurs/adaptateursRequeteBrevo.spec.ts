@@ -12,6 +12,7 @@ import {
   unConstructeurRechercheDeContact,
 } from '../../src/infrastructure/brevo/ConstructeursBrevo';
 import { adaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement';
+import { adaptateursEnvironnementDeTest } from './adaptateursEnvironnementDeTest';
 
 class AdaptateursRequeteBrevoDeTest extends AdaptateursRequeteBrevo {
   requeteAttendue: any;
@@ -31,13 +32,13 @@ class AdaptateursRequeteBrevoDeTest extends AdaptateursRequeteBrevo {
 }
 
 describe('Adaptateurs requete Brevo', () => {
-  adaptateurEnvironnement.messagerie = () => {
-    return {
-      clefAPI: () => 'une clef',
-      expediteurMAC: () => 'expéditeur',
-      emailMAC: () => 'email',
-    };
-  };
+  adaptateurEnvironnement.messagerie = () =>
+    adaptateursEnvironnementDeTest.messagerie(
+      'email',
+      'expéditeur',
+      'une clef'
+    );
+
   describe('Création de contact', () => {
     it('Exécute une création de contact', async () => {
       const adaptateur = new AdaptateursRequeteBrevoDeTest();

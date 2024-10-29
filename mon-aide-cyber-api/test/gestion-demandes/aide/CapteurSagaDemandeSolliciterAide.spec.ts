@@ -46,6 +46,7 @@ describe('Capteur saga demande solliciter Aide', () => {
           'Bonjour Aidant!'
         )
       ).toBe(true);
+      expect(adaptateurEnvoiMail.aEteEnvoyePar('INFO')).toBe(true);
     });
   });
 });

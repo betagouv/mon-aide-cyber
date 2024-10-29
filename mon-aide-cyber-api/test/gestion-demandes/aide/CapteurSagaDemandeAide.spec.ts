@@ -18,6 +18,7 @@ import {
 } from '../../../src/aide/CapteurCommandeCreerAide';
 import { CapteurCommande } from '../../../src/domaine/commande';
 import { unServiceAidant } from '../../../src/authentification/ServiceAidantMAC';
+import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   describe("si l'Aidé est connu de MAC", () => {
@@ -128,11 +129,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     });
 
     it('envoie un email de demande d’aide à MAC', async () => {
-      adaptateurEnvironnement.messagerie = () => ({
-        emailMAC: () => 'mac@email.com',
-        expediteurMAC: () => 'expéditeur',
-        clefAPI: () => 'clef',
-      });
+      adaptateurEnvironnement.messagerie = () =>
+        adaptateursEnvironnementDeTest.messagerie('mac@email.com');
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
@@ -176,11 +174,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     });
 
     it('envoie un email de demande d’aide à MAC en prenant en compte la relation existante avec un Aidant', async () => {
-      adaptateurEnvironnement.messagerie = () => ({
-        emailMAC: () => 'mac@email.com',
-        expediteurMAC: () => 'expéditeur',
-        clefAPI: () => 'clef',
-      });
+      adaptateurEnvironnement.messagerie = () =>
+        adaptateursEnvironnementDeTest.messagerie('mac@email.com');
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
@@ -225,11 +220,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     });
 
     it("Envoie un email de confirmation l'Aidé en prenant en compte la relation existante avec un Aidant", async () => {
-      adaptateurEnvironnement.messagerie = () => ({
-        emailMAC: () => 'mac@email.com',
-        expediteurMAC: () => 'expéditeur',
-        clefAPI: () => 'clef',
-      });
+      adaptateurEnvironnement.messagerie = () =>
+        adaptateursEnvironnementDeTest.messagerie();
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );

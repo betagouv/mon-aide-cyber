@@ -32,14 +32,17 @@ export class CapteurSagaDemandeSolliciterAide
         .aidants()
         .lis(saga.identifiantAidant)
         .then((aidant) =>
-          this.adaptateurEnvoiMail.envoie({
-            corps: adaptateurCorpsMessage
-              .notificationAidantSollicitation()
-              .genereCorpsMessage(aidant.nomPrenom, saga.departement),
-            destinataire: { email: aidant.identifiantConnexion },
-            objet:
-              'MonAideCyber - Une entité a fait appel à vous depuis l’annuaire des Aidants cyber.',
-          })
+          this.adaptateurEnvoiMail.envoie(
+            {
+              corps: adaptateurCorpsMessage
+                .notificationAidantSollicitation()
+                .genereCorpsMessage(aidant.nomPrenom, saga.departement),
+              destinataire: { email: aidant.identifiantConnexion },
+              objet:
+                'MonAideCyber - Une entité a fait appel à vous depuis l’annuaire des Aidants cyber.',
+            },
+            'INFO'
+          )
         )
     );
   }
