@@ -4,6 +4,7 @@ import { CommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import crypto from 'crypto';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
 export type SagaDemandeSolliciterAide = Omit<Saga, 'type'> & {
   email: string;
@@ -34,25 +35,45 @@ export class CapteurSagaDemandeSolliciterAide
         .aidants()
         .lis(saga.identifiantAidant)
         .then((aidant) =>
-          this.adaptateurEnvoiMail.envoie(
-            {
+          Promise.all([
+            this.adaptateurEnvoiMail.envoie(
+              {
+                corps: adaptateurCorpsMessage
+                  .notificationAidantSollicitation()
+                  .genereCorpsMessage({
+                    departement: saga.departement,
+                    mailEntite: saga.email,
+                    nomPrenom: aidant.nomPrenom,
+                    ...(saga.raisonSociale && {
+                      raisonSocialeEntite: saga.raisonSociale,
+                    }),
+                  }),
+                destinataire: { email: aidant.identifiantConnexion },
+                objet:
+                  'MonAideCyber - Une entité vous sollicite depuis l’annuaire des Aidants cyber.',
+              },
+              'INFO'
+            ),
+            this.adaptateurEnvoiMail.envoie({
               corps: adaptateurCorpsMessage
-                .notificationAidantSollicitation()
+                .recapitulatifMAC()
                 .genereCorpsMessage({
+                  aidant: aidant.nomPrenom,
                   departement: saga.departement,
                   mailEntite: saga.email,
-                  nomPrenom: aidant.nomPrenom,
                   ...(saga.raisonSociale && {
-                    raisonSocialeEntite: saga.raisonSociale,
+                    raisonSociale: saga.raisonSociale,
                   }),
                 }),
-              destinataire: { email: aidant.identifiantConnexion },
+              destinataire: {
+                email: adaptateurEnvironnement.messagerie().emailMAC(),
+              },
               objet:
-                'MonAideCyber - Une entité vous sollicite depuis l’annuaire des Aidants cyber.',
-            },
-            'INFO'
-          )
+                'MonAideCyber - Une entité a sollicité un Aidant depuis l’annuaire des Aidants cyber',
+            }),
+          ])
         )
+        .then(() => Promise.resolve())
     );
   }
 }

@@ -34,10 +34,32 @@ const genereCorpsNotificationAidantSollicitation = (
   );
 };
 
+export type ProprietesMessageRecapitulatif = {
+  raisonSociale?: string;
+  mailEntite: string;
+  aidant: string;
+  departement: string;
+};
+
 const adaptateurCorpsMessage = {
   notificationAidantSollicitation: () => ({
     genereCorpsMessage: (proprietesMessage: ProprietesMessageAidant): string =>
       genereCorpsNotificationAidantSollicitation(proprietesMessage),
+  }),
+  recapitulatifMAC: () => ({
+    genereCorpsMessage: (proprietes: ProprietesMessageRecapitulatif) => {
+      return (
+        '<html lang="fr">' +
+        '<body>' +
+        'Bonjour,\n' +
+        '\n' +
+        `Aujourd’hui, l’entité ${proprietes.raisonSociale ? `(${proprietes.raisonSociale})` : ''} sous l’adresse ${proprietes.mailEntite} a sollicité l’Aidant cyber ${proprietes.aidant} situé dans le département ${proprietes.departement}.\n` +
+        '\n' +
+        "L'équipe MonAideCyber" +
+        '</body>' +
+        '</html>'
+      );
+    },
   }),
 };
 
