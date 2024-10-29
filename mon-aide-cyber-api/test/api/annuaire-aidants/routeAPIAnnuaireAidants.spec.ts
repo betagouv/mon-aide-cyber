@@ -29,7 +29,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
     const reponse = await executeRequete(
       donneesServeur.app,
       'GET',
-      '/api/annuaire-aidants',
+      `/api/annuaire-aidants?departement=${aidant.departements[0].nom}`,
       donneesServeur.portEcoute
     );
 
@@ -51,13 +51,27 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
 
     expect(reponse.statusCode).toBe(200);
     const reponseJson: ReponseAPIAnnuaireAidantsSucces = await reponse.json();
-    expect(reponseJson.departements).toStrictEqual(
-      departements.map((d) => ({ code: d.code, nom: d.nom }))
-    );
+    expect(reponseJson).toStrictEqual<ReponseAPIAnnuaireAidantsSucces>({
+      departements: departements.map((d) => ({ code: d.code, nom: d.nom })),
+      liens: {
+        'afficher-annuaire-aidants': {
+          methode: 'GET',
+          url: '/api/annuaire-aidants',
+        },
+        'afficher-annuaire-aidants-parametre': {
+          methode: 'GET',
+          url: '/api/annuaire-aidants',
+        },
+        'solliciter-aide': {
+          methode: 'POST',
+          url: '/api/demandes/solliciter-aide',
+        },
+      },
+    });
   });
 
   it('Retourne le nombre d’Aidants', async () => {
-    const aidant = unAidant().enGironde().construis();
+    const aidant = unAidant().enGironde().enCorreze().construis();
     const autreAidant = unAidant().enCorreze().construis();
     await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
     await testeurMAC.entrepots.annuaireAidants().persiste(autreAidant);
@@ -65,7 +79,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
     const reponse = await executeRequete(
       donneesServeur.app,
       'GET',
-      '/api/annuaire-aidants',
+      '/api/annuaire-aidants?departement=Corrèze',
       donneesServeur.portEcoute
     );
 

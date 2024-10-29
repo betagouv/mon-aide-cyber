@@ -1,7 +1,10 @@
 import { unAidant as unAidantDuDomaineAidant } from '../authentification/constructeurs/constructeurAidant';
 import { Constructeur } from '../constructeurs/constructeur';
 import { Aidant } from '../../src/annuaire-aidants/annuaireAidants';
-import { Departement } from '../../src/gestion-demandes/departements';
+import {
+  Departement,
+  departements,
+} from '../../src/gestion-demandes/departements';
 import { fakerFR } from '@faker-js/faker';
 
 class ConstructeurAidant implements Constructeur<Aidant> {
@@ -25,15 +28,26 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   }
 
   construis(): Aidant {
+    const departementsAidant =
+      this.departements.length > 0
+        ? this.departements
+        : [
+            departements[
+              fakerFR.number.int({
+                min: 0,
+                max: 105,
+              })
+            ],
+          ];
     const aidant = unAidantDuDomaineAidant()
       .avecUnNomPrenom(this.nomPrenom)
       .ayantConsentiPourLAnnuaire()
-      .ayantPourDepartements(this.departements)
+      .ayantPourDepartements(departementsAidant)
       .construis();
     return {
       identifiant: aidant.identifiant,
       nomPrenom: aidant.nomPrenom,
-      departements: this.departements,
+      departements: departementsAidant,
     };
   }
 }
