@@ -70,6 +70,20 @@ export class CapteurSagaDemandeSolliciterAide
               objet:
                 'MonAideCyber - Une entité a sollicité un Aidant depuis l’annuaire des Aidants cyber',
             }),
+            this.adaptateurEnvoiMail.envoie(
+              {
+                corps: adaptateurCorpsMessage
+                  .recapitulatifSollicitationAide({
+                    departement: saga.departement,
+                    nomPrenom: aidant!.nomUsage,
+                  })
+                  .genereCorpsMessage(),
+                destinataire: { email: saga.email },
+                objet:
+                  'MonAideCyber - Mise en relation avec l’Aidant cyber de votre choix',
+              },
+              'INFO'
+            ),
           ])
         )
         .then(() => Promise.resolve())
