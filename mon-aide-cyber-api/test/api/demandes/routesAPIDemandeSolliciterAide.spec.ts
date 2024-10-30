@@ -236,5 +236,91 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
         'Beta-gouv'
       );
     });
+
+    it("Valide le mail de l'Aidé", async () => {
+      const uuid = crypto.randomUUID();
+      adaptateurUUID.genereUUID = () => uuid;
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const aidant = unAidant()
+        .ayantPourDepartements([
+          {
+            nom: 'Corse-du-Sud',
+            code: '2A',
+            codeRegion: '94',
+          },
+        ])
+        .construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/solliciter-aide',
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+          email: '',
+          departement: 'Corse-du-Sud',
+          raisonSociale: 'Beta-gouv',
+          aidantSollicite: aidant.identifiant,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(
+        await reponse.json()
+      ).toStrictEqual<ReponseDemandeSolliciterAideEnErreur>({
+        message: 'Veuillez renseigner votre email.',
+        liens: {
+          'solliciter-aide': {
+            methode: 'POST',
+            url: '/api/demandes/solliciter-aide',
+          },
+        },
+      });
+    });
+
+    it('Valide que les CGU ont été signées', async () => {
+      const uuid = crypto.randomUUID();
+      adaptateurUUID.genereUUID = () => uuid;
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const aidant = unAidant()
+        .ayantPourDepartements([
+          {
+            nom: 'Corse-du-Sud',
+            code: '2A',
+            codeRegion: '94',
+          },
+        ])
+        .construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/solliciter-aide',
+        donneesServeur.portEcoute,
+        {
+          cguValidees: false,
+          email: 'mail@mail.com',
+          departement: 'Corse-du-Sud',
+          raisonSociale: 'Beta-gouv',
+          aidantSollicite: aidant.identifiant,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(
+        await reponse.json()
+      ).toStrictEqual<ReponseDemandeSolliciterAideEnErreur>({
+        message: 'Veuillez valider les CGU.',
+        liens: {
+          'solliciter-aide': {
+            methode: 'POST',
+            url: '/api/demandes/solliciter-aide',
+          },
+        },
+      });
+    });
   });
 });
