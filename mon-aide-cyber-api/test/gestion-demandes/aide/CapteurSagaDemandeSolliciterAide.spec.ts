@@ -167,4 +167,42 @@ describe('Capteur saga demande solliciter Aide', () => {
       ).toBe(true);
     });
   });
+
+  describe("En ce qui concerne l'Aidé", () => {
+    beforeEach(
+      () =>
+        (adaptateurCorpsMessage.recapitulatifSollicitationAide = () => ({
+          genereCorpsMessage: () => 'Bonjour Aidé!',
+        }))
+    );
+
+    it("Envoie le mail récapitulatif de la sollicitation à l'Aidé", async () => {
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      const entrepots = new EntrepotsMemoire();
+      const busCommande = new BusCommandeMAC(
+        entrepots,
+        new BusEvenementDeTest(),
+        adaptateurEnvoiMail,
+        { aidant: unServiceAidant(entrepots.aidants()) }
+      );
+      const aidant = unAidant().construis();
+      await entrepots.aidants().persiste(aidant);
+
+      await new CapteurSagaDemandeSolliciterAide(
+        busCommande,
+        adaptateurEnvoiMail,
+        unServiceAidant(entrepots.aidants())
+      ).execute({
+        type: 'SagaDemandeSolliciterAide',
+        email: 'entite@mail.com',
+        departement: 'Finistère',
+        identifiantAidant: aidant.identifiant,
+      });
+
+      expect(
+        adaptateurEnvoiMail.aEteEnvoyeA('entite@mail.com', 'Bonjour Aidé!')
+      ).toBe(true);
+      expect(adaptateurEnvoiMail.aEteEnvoyePar('INFO')).toBe(true);
+    });
+  });
 });

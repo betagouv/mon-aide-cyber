@@ -1,3 +1,5 @@
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+
 export type ProprietesMessageAidant = {
   nomPrenom: string;
   departement: string;
@@ -34,6 +36,36 @@ const genereCorpsNotificationAidantSollicitation = (
   );
 };
 
+type ProprietesMessageRecapitulatifSollicitationAide = {
+  nomPrenom: string;
+  departement: string;
+};
+
+const genereRecapitulatifSollicitationAide = (
+  proprietesMessage: ProprietesMessageRecapitulatifSollicitationAide
+) =>
+  '<html lang="fr">' +
+  '<body>' +
+  'Bonjour\n' +
+  '\n' +
+  `Vous avez sollicité l'Aidant cyber ${proprietesMessage.nomPrenom} référencé sur l’annuaire MonAideCyber pour la réalisation d’un diagnostic dans le département ${proprietesMessage.departement}.\n` +
+  '\n' +
+  "Votre demande a bien été affectée à l'Aidant cyber qui prendra contact avec vous prochainement en vue de convenir d’un rendez-vous.\n" +
+  '\n' +
+  "En cas d’empêchement de l'Aidant cyber, nous allons automatiquement attribuer votre demande à un Aidant cyber disponible sur le même département.\n" +
+  '\n' +
+  'Vous serez informé de ce changement par mail.\n' +
+  '\n' +
+  '<h3>Quelques conseils pour préparer son rdv</h3>\n' +
+  '\t - Prévoyez un <b>créneau d’1H30</b> en moyenne\n' +
+  '\t - Il est fortement recommandé qu’un membre du comité de direction et votre prestataire informatique (si existant) soient également présents durant le diagnostic\n' +
+  `\t - Consultez notre <a href="${adaptateurEnvironnement.mac().urlMAC()}/a-propos/kit-de-communication" target="_blank">kit de communication</a> pour mieux comprendre le dispositif MonAideCyber` +
+  'Toute l’équipe reste à votre disposition,\n' +
+  '\n' +
+  "<b>L'équipe MonAideCyber</b>" +
+  '</body>' +
+  '</html>';
+
 export type ProprietesMessageRecapitulatif = {
   raisonSociale?: string;
   mailEntite: string;
@@ -60,6 +92,12 @@ const adaptateurCorpsMessage = {
         '</html>'
       );
     },
+  }),
+  recapitulatifSollicitationAide: (
+    proprietesMessage: ProprietesMessageRecapitulatifSollicitationAide
+  ) => ({
+    genereCorpsMessage: (): string =>
+      genereRecapitulatifSollicitationAide(proprietesMessage),
   }),
 };
 
