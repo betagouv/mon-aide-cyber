@@ -1,18 +1,12 @@
 import { useRecupereContexteNavigation } from '../../../../hooks/useRecupereContexteNavigation';
 import { AidantAnnuaire } from '../AidantAnnuaire';
 import { Confirmation } from '../../../../composants/gestion-demandes/etre-aide/Confirmation.tsx';
-import { useCallback, useEffect } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import {
-  CorpsDemandeSolliciterAidant,
-  ReponseDemandeEtreAide,
-} from '../../../gestion-demandes/etre-aide/EtreAide.ts';
+import { useCallback } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { CorpsDemandeSolliciterAidant } from '../../../gestion-demandes/etre-aide/EtreAide.ts';
 import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
 import { MoteurDeLiens } from '../../../MoteurDeLiens.ts';
-import {
-  constructeurParametresAPI,
-  ParametresAPI,
-} from '../../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { ParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useNavigationMAC } from '../../../../fournisseurs/hooks.ts';
 import { FormulaireSolliciterAidant } from './FormulaireSolliciterAidant.tsx';
 import { Lien } from '../../../Lien.ts';
@@ -54,32 +48,9 @@ export const SolliciterAidant = ({
   aidant: AidantAnnuaire;
   nomDepartement: string;
 }) => {
-  useRecupereContexteNavigation('demande-etre-aide');
+  useRecupereContexteNavigation('solliciter-aide');
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
-
-  const { data: ressourceSolliciterAidant } = useQuery({
-    queryKey: ['recupere-contexte-solliciter-aidant'],
-    enabled: new MoteurDeLiens(navigationMAC.etat).existe('demande-etre-aide'),
-    queryFn: () => {
-      const action = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
-        'demande-etre-aide'
-      );
-      return macAPI.execute<ReponseDemandeEtreAide, ReponseDemandeEtreAide>(
-        constructeurParametresAPI()
-          .url(action.url)
-          .methode(action.methode!)
-          .construis(),
-        (corps) => corps
-      );
-    },
-  });
-
-  useEffect(() => {
-    if (ressourceSolliciterAidant?.liens) {
-      navigationMAC.ajouteEtat(ressourceSolliciterAidant?.liens);
-    }
-  }, [ressourceSolliciterAidant]);
 
   const {
     mutate: soumettreFormulaire,
@@ -103,7 +74,7 @@ export const SolliciterAidant = ({
 
   const retourAccueil = useCallback(() => {
     navigationMAC.retourAccueil();
-  }, [navigationMAC]);
+  }, [navigationMAC.etat]);
 
   if (isPending) {
     return (
