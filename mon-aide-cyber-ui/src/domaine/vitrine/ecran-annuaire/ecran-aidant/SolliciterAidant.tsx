@@ -70,6 +70,9 @@ export const SolliciterAidant = ({
         demandeSolliciterAidant
       );
     },
+    onSettled: () => {
+      document.getElementById('formulaire-solliciter-aidant')?.scrollIntoView();
+    },
   });
 
   const retourAccueil = useCallback(() => {
