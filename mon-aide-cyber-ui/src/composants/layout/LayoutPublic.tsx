@@ -19,17 +19,6 @@ export const liensNavigation: LienNavigation[] = [
   {
     route: '/beneficier-du-dispositif/etre-aide',
     nom: 'Bénéficier du dispositif',
-    clef: 773,
-    enfants: [
-      {
-        route: '/beneficier-du-dispositif/etre-aide',
-        nom: 'Faire une demande',
-      },
-      {
-        route: '/beneficier-du-dispositif/annuaire',
-        nom: 'Annuaire des Aidants cyber',
-      },
-    ],
   },
   {
     route: '/devenir-aidant',
