@@ -36,9 +36,9 @@ describe('Capteur saga demande solliciter Aide', () => {
       await entrepots.aidants().persiste(aidant);
 
       await new CapteurSagaDemandeSolliciterAide(
-        entrepots,
         busCommande,
-        adaptateurEnvoiMail
+        adaptateurEnvoiMail,
+        unServiceAidant(entrepots.aidants())
       ).execute({
         type: 'SagaDemandeSolliciterAide',
         email: 'entite@mail.com',
@@ -72,9 +72,9 @@ describe('Capteur saga demande solliciter Aide', () => {
       await entrepots.aidants().persiste(aidant);
 
       await new CapteurSagaDemandeSolliciterAide(
-        entrepots,
         busCommande,
-        adaptateurEnvoiMail
+        adaptateurEnvoiMail,
+        unServiceAidant(entrepots.aidants())
       ).execute({
         type: 'SagaDemandeSolliciterAide',
         email: 'entite@mail.com',
@@ -116,9 +116,9 @@ describe('Capteur saga demande solliciter Aide', () => {
       await entrepots.aidants().persiste(aidant);
 
       await new CapteurSagaDemandeSolliciterAide(
-        entrepots,
         busCommande,
-        adaptateurEnvoiMail
+        adaptateurEnvoiMail,
+        unServiceAidant(entrepots.aidants())
       ).execute({
         type: 'SagaDemandeSolliciterAide',
         email: 'entite@mail.com',
@@ -151,9 +151,9 @@ describe('Capteur saga demande solliciter Aide', () => {
       await entrepots.aidants().persiste(aidant);
 
       await new CapteurSagaDemandeSolliciterAide(
-        entrepots,
         busCommande,
-        adaptateurEnvoiMail
+        adaptateurEnvoiMail,
+        unServiceAidant(entrepots.aidants())
       ).execute({
         type: 'SagaDemandeSolliciterAide',
         email: 'entite@mail.com',
