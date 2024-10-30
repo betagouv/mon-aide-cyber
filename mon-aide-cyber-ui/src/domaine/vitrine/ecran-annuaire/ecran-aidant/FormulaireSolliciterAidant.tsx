@@ -10,8 +10,9 @@ import {
 import { CorpsDemandeSolliciterAidant } from '../../../gestion-demandes/etre-aide/EtreAide.ts';
 import { CorpsCGU } from '../../../../vues/ComposantCGU.tsx';
 import { useModale } from '../../../../fournisseurs/hooks.ts';
+import Button from '../../../../composants/atomes/Button/Button.tsx';
 
-type ProprietetsFormulaireSolliciterAidant = {
+type ProprietesFormulaireSolliciterAidant = {
   aidant: AidantAnnuaire;
   departement: string;
   soumetFormulaire: (formulaire: CorpsDemandeSolliciterAidant) => void;
@@ -21,7 +22,7 @@ export const FormulaireSolliciterAidant = ({
   aidant,
   departement,
   soumetFormulaire,
-}: ProprietetsFormulaireSolliciterAidant) => {
+}: ProprietesFormulaireSolliciterAidant) => {
   const { affiche } = useModale();
 
   const [etatFormulaire, declencheChangement] = useReducer(
@@ -196,13 +197,13 @@ export const FormulaireSolliciterAidant = ({
             </div>
           </div>
           <div className="fr-grid-row fr-grid-row--right fr-pt-3w">
-            <button
+            <Button
               type="submit"
               key="envoyer-demande-aide"
-              className="fr-btn bouton-mac bouton-mac-primaire"
+              disabled={!etatFormulaire.pretPourEnvoi}
             >
               Terminer
-            </button>
+            </Button>
           </div>
         </fieldset>
       </form>
