@@ -64,6 +64,15 @@ class ConstructeurActionsDepuisContexte {
       },
     ],
     [
+      'solliciter-aide',
+      {
+        'solliciter-aide': {
+          url: '/api/demandes/solliciter-aide',
+          methode: 'POST',
+        },
+      },
+    ],
+    [
       'se-connecter',
       { 'se-connecter': { url: '/api/token', methode: 'POST' } },
     ],
