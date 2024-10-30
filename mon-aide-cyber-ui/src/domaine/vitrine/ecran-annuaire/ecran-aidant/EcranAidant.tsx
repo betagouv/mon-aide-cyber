@@ -17,9 +17,9 @@ export const EcranAidant = () => {
   };
 
   return (
-    <main role="main" className="">
+    <main role="main">
       <div className="fond-clair-mac">
-        <div className="fr-container">
+        <div className="fr-container" id="formulaire-solliciter-aidant">
           {aidant ? (
             <SolliciterAidant aidant={aidant} nomDepartement={nomDepartement} />
           ) : null}
