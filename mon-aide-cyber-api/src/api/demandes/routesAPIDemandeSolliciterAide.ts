@@ -39,7 +39,17 @@ const validateurSollicitation = (entrepotAidant: EntrepotAidant) => {
         return aidant;
       }),
   });
-  return [validateurDeDepartement(), body('aidantSollicite').aidantConnu()];
+  return [
+    validateurDeDepartement(),
+    body('aidantSollicite').aidantConnu(),
+    body('email')
+      .trim()
+      .isEmail()
+      .withMessage('Veuillez renseigner votre email.'),
+    body('cguValidees')
+      .custom((value: boolean) => value)
+      .withMessage('Veuillez valider les CGU.'),
+  ];
 };
 export const routesAPIDemandeSolliciterAide = (
   configuration: ConfigurationServeur
