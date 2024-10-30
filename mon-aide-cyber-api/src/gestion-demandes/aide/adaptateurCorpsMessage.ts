@@ -60,6 +60,7 @@ const genereRecapitulatifSollicitationAide = (
   '\t - Prévoyez un <b>créneau d’1H30</b> en moyenne\n' +
   '\t - Il est fortement recommandé qu’un membre du comité de direction et votre prestataire informatique (si existant) soient également présents durant le diagnostic\n' +
   `\t - Consultez notre <a href="${adaptateurEnvironnement.mac().urlMAC()}/a-propos/kit-de-communication" target="_blank">kit de communication</a> pour mieux comprendre le dispositif MonAideCyber` +
+  '\n' +
   'Toute l’équipe reste à votre disposition,\n' +
   '\n' +
   "<b>L'équipe MonAideCyber</b>" +
