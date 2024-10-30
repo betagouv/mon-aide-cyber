@@ -1,10 +1,10 @@
 import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
-import { Entrepots } from '../../domaine/Entrepots';
 import { CommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import crypto from 'crypto';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import { ServiceAidant } from '../../authentification/ServiceAidant';
 
 export type SagaDemandeSolliciterAide = Omit<Saga, 'type'> & {
   email: string;
@@ -18,9 +18,9 @@ export class CapteurSagaDemandeSolliciterAide
   implements CapteurSaga<SagaDemandeSolliciterAide, void>
 {
   constructor(
-    private readonly entrepots: Entrepots,
     private readonly busCommande: BusCommande,
-    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail
+    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
+    private readonly serviceAidant: ServiceAidant
   ) {}
 
   execute(saga: SagaDemandeSolliciterAide): Promise<void> {
@@ -31,9 +31,8 @@ export class CapteurSagaDemandeSolliciterAide
       ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
     };
     return this.busCommande.publie<CommandeCreerAide, void>(commande).then(() =>
-      this.entrepots
-        .aidants()
-        .lis(saga.identifiantAidant)
+      this.serviceAidant
+        .parIdentifiant(saga.identifiantAidant)
         .then((aidant) =>
           Promise.all([
             this.adaptateurEnvoiMail.envoie(
@@ -43,12 +42,12 @@ export class CapteurSagaDemandeSolliciterAide
                   .genereCorpsMessage({
                     departement: saga.departement,
                     mailEntite: saga.email,
-                    nomPrenom: aidant.nomPrenom,
+                    nomPrenom: aidant!.nomUsage,
                     ...(saga.raisonSociale && {
                       raisonSocialeEntite: saga.raisonSociale,
                     }),
                   }),
-                destinataire: { email: aidant.identifiantConnexion },
+                destinataire: { email: aidant!.email },
                 objet:
                   'MonAideCyber - Une entité vous sollicite depuis l’annuaire des Aidants cyber.',
               },
@@ -58,7 +57,7 @@ export class CapteurSagaDemandeSolliciterAide
               corps: adaptateurCorpsMessage
                 .recapitulatifMAC()
                 .genereCorpsMessage({
-                  aidant: aidant.nomPrenom,
+                  aidant: aidant!.nomUsage,
                   departement: saga.departement,
                   mailEntite: saga.email,
                   ...(saga.raisonSociale && {
