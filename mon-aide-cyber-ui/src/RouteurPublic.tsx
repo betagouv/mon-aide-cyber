@@ -17,6 +17,7 @@ import { EcranBeneficierDuDispositif } from './domaine/vitrine/ecran-beneficier-
 import { EcranAnnuaire } from './domaine/vitrine/ecran-annuaire/EcranAnnuaire.tsx';
 import { EcranConnexion } from './domaine/connexion/EcranConnexion.tsx';
 import { EcranAidant } from './domaine/vitrine/ecran-annuaire/ecran-aidant/EcranAidant.tsx';
+import { EcranDiagnosticSansAidant } from './domaine/vitrine/ecran-diagnostic-sans-aidant/EcranDiagnosticSansAidant.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -32,6 +33,10 @@ export const RouteurPublic = () => {
             <Route path="solliciter" element={<EcranAidant />} />
           </Route>
           <Route path="etre-aide" element={<EcranBeneficierDuDispositif />} />
+          <Route
+            path="auto-diagnostic"
+            element={<EcranDiagnosticSansAidant />}
+          />
         </Route>
         <Route path="a-propos">
           <Route path="statistiques" element={<EcranStatistiques />} />
