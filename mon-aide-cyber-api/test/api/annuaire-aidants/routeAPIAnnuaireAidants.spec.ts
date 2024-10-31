@@ -143,6 +143,39 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
         });
       });
 
+      it('Encode le département dans les liens HATEOAS de la réponse', async () => {
+        const aidant = unAidant()
+          .dansLeDepartement(departements[102])
+          .construis();
+        const autreAidant = unAidant().enCorreze().construis();
+        await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
+        await testeurMAC.entrepots.annuaireAidants().persiste(autreAidant);
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/api/annuaire-aidants?departement=Collectivit%C3%A9%20de%20Wallis%20%26%20Futuna',
+          donneesServeur.portEcoute
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        const reponseJson: ReponseAPIAnnuaireAidants = await reponse.json();
+        expect(reponseJson.liens).toStrictEqual({
+          'afficher-annuaire-aidants': {
+            url: '/api/annuaire-aidants',
+            methode: 'GET',
+          },
+          'afficher-annuaire-aidants-parametre': {
+            url: '/api/annuaire-aidants?departement=Collectivit%C3%A9%20de%20Wallis%20%26%20Futuna',
+            methode: 'GET',
+          },
+          'solliciter-aide': {
+            methode: 'POST',
+            url: '/api/demandes/solliciter-aide',
+          },
+        });
+      });
+
       it('Valide le département passé en paramètre', async () => {
         const reponse = await executeRequete(
           donneesServeur.app,

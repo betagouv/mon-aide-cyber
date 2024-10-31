@@ -27,6 +27,11 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  dansLeDepartement(departement: Departement): ConstructeurAidant {
+    this.departements.push(departement);
+    return this;
+  }
+
   construis(): Aidant {
     const departementsAidant =
       this.departements.length > 0
