@@ -15,6 +15,7 @@ import {
   Result,
   validationResult,
 } from 'express-validator';
+import { adaptateurConfigurationLimiteurTraffic } from '../adaptateurLimiteurTraffic';
 
 type AidantDTO = {
   identifiant: UUID;
@@ -39,9 +40,11 @@ export const routesAPIAnnuaireAidants = (
   const routes = express.Router();
 
   const { entrepots } = configuration;
+  const limiteurTraffic = adaptateurConfigurationLimiteurTraffic('STANDARD');
 
   routes.get(
     '/',
+    limiteurTraffic,
     validateurDeDepartement({
       nomChamp: 'departement',
       emplacement: 'PARAMETRE_REQUETE',
