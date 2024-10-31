@@ -24,7 +24,7 @@ const recupereAnnuaireAidants = (
 
   let urlComplete = lien.url;
   if (departementARechercher && departementARechercher !== '') {
-    urlComplete = `${lien.url}?departement=${departementARechercher}`;
+    urlComplete = `${lien.url}?departement=${encodeURIComponent(departementARechercher)}`;
   }
 
   return macAPI.execute<ReponseAidantAnnuaire, ReponseAidantAnnuaire>(

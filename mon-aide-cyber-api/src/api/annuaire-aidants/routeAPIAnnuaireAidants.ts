@@ -99,7 +99,7 @@ export const routesAPIAnnuaireAidants = (
                 methode: 'GET',
               },
               'afficher-annuaire-aidants-parametre': {
-                url: `/api/annuaire-aidants${criteresDeRecherche ? `?departement=${criteresDeRecherche.departement}` : ''}`,
+                url: `/api/annuaire-aidants${criteresDeRecherche ? `?departement=${encodeURIComponent(criteresDeRecherche.departement)}` : ''}`,
                 methode: 'GET',
               },
               ...(annuaire && {
