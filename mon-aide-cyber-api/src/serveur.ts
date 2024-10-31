@@ -1,7 +1,6 @@
 import * as path from 'path';
 import express, { Request, Response } from 'express';
 import * as http from 'http';
-import rateLimit from 'express-rate-limit';
 import routesAPI from './api/routesAPI';
 import { AdaptateurTranscripteur } from './adaptateurs/AdaptateurTranscripteur';
 import { Entrepots } from './domaine/Entrepots';
@@ -27,6 +26,7 @@ import { AdaptateurDeVerificationDesAcces } from './adaptateurs/AdaptateurDeVeri
 import { ServiceDeChiffrement } from './securite/ServiceDeChiffrement';
 import { routesStatistiques } from './api/statistiques/routesStatistiques';
 import { AdaptateurMetabase } from './adaptateurs/AdaptateurMetabase';
+import { adaptateurConfigurationLimiteurTraffic } from './api/adaptateurLimiteurTraffic';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -56,6 +56,7 @@ export type ConfigurationServeur = {
   ) => string | undefined;
   adaptateurMetabase: AdaptateurMetabase;
 };
+
 const creeApp = (config: ConfigurationServeur) => {
   const app = express();
   config.gestionnaireErreurs.initialise(app);
@@ -76,27 +77,7 @@ const creeApp = (config: ConfigurationServeur) => {
 
   app.use(config.gestionnaireErreurs.controleurRequete());
 
-  const dureePeriodeConnexionMs =
-    Number(process.env.MAC_LIMITEUR_TRAFFIC_DUREE_PERIODE_CONNEXIONS_MS) ||
-    5 * 60 * 1000;
-  const nombreMaximumDeConnexions =
-    Number(
-      process.env.MAC_LIMITEUR_TRAFFIC_NOMBRE_CONNEXIONS_MAXIMUM_PAR_PERIODE
-    ) || 100;
-  const limiteurTrafficUI = rateLimit({
-    windowMs: dureePeriodeConnexionMs,
-    max: nombreMaximumDeConnexions,
-    message:
-      'Vous avez atteint le nombre maximal de requête. Veuillez réessayer ultérieurement.',
-    standardHeaders: true,
-    keyGenerator: (requete: Request, __: Response) =>
-      requete.headers['x-real-ip'] as string,
-    legacyHeaders: false,
-    skip: (requete: Request, __) =>
-      ['/assets/', '/fontes/', '/images/'].some((req) =>
-        requete.path.startsWith(req)
-      ),
-  });
+  const limiteurTrafficUI = adaptateurConfigurationLimiteurTraffic('STANDARD');
   app.use(limiteurTrafficUI);
   app.use((_: Request, reponse: Response, suite: NextFunction) => {
     reponse.setHeader('Content-Security-Policy', process.env.MAC_CSP || '*');

@@ -7,6 +7,7 @@ import { body } from 'express-validator';
 import { authentifie } from '../authentification/authentification';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
 import { RequeteUtilisateur } from './routesAPI';
+import { adaptateurConfigurationLimiteurTraffic } from './adaptateurLimiteurTraffic';
 
 export type CorpsRequeteAuthentification = {
   identifiant: string;
@@ -19,8 +20,12 @@ export const routesAPIAuthentification = (
 ) => {
   const routes = express.Router();
 
+  const limiteurTrafficAuthentification =
+    adaptateurConfigurationLimiteurTraffic('AUTHENTIFICATION');
+
   routes.post(
     '/',
+    limiteurTrafficAuthentification,
     bodyParser.json(),
     body('identifiant').toLowerCase(),
     (

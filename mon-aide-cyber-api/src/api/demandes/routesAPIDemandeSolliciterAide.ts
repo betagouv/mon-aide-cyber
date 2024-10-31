@@ -12,8 +12,10 @@ import {
 } from 'express-validator';
 import { validateurDeDepartement } from '../validateurs/departements';
 import { SagaDemandeSolliciterAide } from '../../gestion-demandes/aide/CapteurSagaDemandeSolliciterAide';
+import { adaptateurConfigurationLimiteurTraffic } from '../adaptateurLimiteurTraffic';
+import * as core from 'express-serve-static-core';
 
-type CorpsRequeteDemandeSolliciterAide = {
+type CorpsRequeteDemandeSolliciterAide = core.ParamsDictionary & {
   cguValidees: boolean;
   email: string;
   departement: string;
@@ -56,9 +58,11 @@ export const routesAPIDemandeSolliciterAide = (
 ) => {
   const routes: Router = express.Router();
   const { entrepots, busCommande } = configuration;
+  const limiteurTraffic = adaptateurConfigurationLimiteurTraffic('LIMITE');
 
   routes.post(
     '/',
+    limiteurTraffic,
     express.json(),
     validateurSollicitation(entrepots.aidants()),
     async (
