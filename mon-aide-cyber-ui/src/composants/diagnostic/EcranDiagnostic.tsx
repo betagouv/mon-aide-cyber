@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useReducer } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import {
   Question,
@@ -16,9 +16,6 @@ import {
   thematiqueAffichee,
 } from '../../domaine/diagnostic/reducteurDiagnostic.ts';
 import {
-  Action,
-  actionAMener,
-  ActionReponseDiagnostic,
   Reponse,
   reponseMultipleDonnee,
   ReponseQuestionATiroir,
@@ -58,11 +55,11 @@ import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { Lien } from '../../domaine/Lien.ts';
 
 type ProprietesComposantQuestion = {
-  actions: ActionReponseDiagnostic[];
+  thematique: string;
   numeroQuestion: number | undefined;
   question: Question;
   reponseDonnee?: ReponseDonnee;
-  surReponse: (reponse: Reponse, action: ActionReponseDiagnostic) => void;
+  surReponse: (reponse: Reponse, thematique: string) => void;
 };
 
 type ReponseAEnvoyer = {
@@ -72,16 +69,12 @@ type ReponseAEnvoyer = {
 };
 
 const genereParametresAPI = (
+  thematique: string,
   lien: Lien,
-  action: ActionReponseDiagnostic,
   reponseDonnee: Reponse
 ) => {
-  const actionAMener = Object.entries(action).map(([thematique, action]) => ({
-    chemin: thematique,
-    ressource: action.ressource,
-  }))[0];
   const corps: ReponseAEnvoyer = {
-    chemin: actionAMener.chemin,
+    chemin: thematique,
     identifiant: reponseDonnee.identifiantQuestion,
     reponse: reponseDonnee.reponseDonnee,
   };
@@ -105,8 +98,8 @@ const estReponsePossible = (
 };
 
 const ComposantQuestionListe = ({
+  thematique,
   question,
-  actions,
   numeroQuestion,
   surReponse,
 }: ProprietesComposantQuestion) => {
@@ -121,21 +114,23 @@ const ComposantQuestionListe = ({
 
   const surSelection = useCallback(
     (reponse: ReponsePossible) => {
-      actionAMener(actions, 'repondre', (action) =>
-        surReponse(reponseUniqueDonnee(question, reponse.identifiant), action)
+      surReponse(
+        reponseUniqueDonnee(question, reponse.identifiant),
+        thematique
       );
     },
-    [actions, question, surReponse]
+    [question, surReponse]
   );
   const surSaisie = useCallback(
     (reponse: ReponsePossible | string) => {
       if (estReponsePossible(reponse)) {
-        actionAMener(actions, 'repondre', (action) =>
-          surReponse(reponseUniqueDonnee(question, reponse.identifiant), action)
+        surReponse(
+          reponseUniqueDonnee(question, reponse.identifiant),
+          thematique
         );
       }
     },
-    [actions, question, surReponse]
+    [question, surReponse]
   );
 
   return (
@@ -175,45 +170,37 @@ const ComposantQuestionListe = ({
 };
 
 const ComposantQuestion = ({
+  thematique,
   question,
-  actions,
   numeroQuestion,
   surReponse,
 }: ProprietesComposantQuestion) => {
   const repondQuestionUnique = useCallback(
     (identifiantReponse: string) => {
-      actionAMener(actions, 'repondre', (action) =>
-        surReponse(reponseUniqueDonnee(question, identifiantReponse), action)
-      );
+      surReponse(reponseUniqueDonnee(question, identifiantReponse), thematique);
     },
-    [actions, question, surReponse]
+    [question, surReponse]
   );
 
   const repondQuestionMultiple = useCallback(
     (reponse: string) => {
-      actionAMener(actions, 'repondre', (action) =>
-        surReponse(reponseMultipleDonnee(question, reponse), action)
-      );
+      surReponse(reponseMultipleDonnee(question, reponse), thematique);
     },
-    [actions, question, surReponse]
+    [question, surReponse]
   );
 
   const repondQuestionTiroirUnique = useCallback(
     (reponse: ReponseTiroir) => {
-      actionAMener(actions, 'repondre', (action) =>
-        surReponse(reponseTiroirUniqueDonnee(question, reponse), action)
-      );
+      surReponse(reponseTiroirUniqueDonnee(question, reponse), thematique);
     },
-    [actions, question, surReponse]
+    [question, surReponse]
   );
 
   const repondQuestionTiroirMultiple = useCallback(
     (reponse: ReponseTiroir) => {
-      actionAMener(actions, 'repondre', (action) =>
-        surReponse(reponseTiroirMultipleDonnee(question, reponse), action)
-      );
+      surReponse(reponseTiroirMultipleDonnee(question, reponse), thematique);
     },
-    [actions, question, surReponse]
+    [question, surReponse]
   );
 
   const badge = question.perimetre ? (
@@ -301,10 +288,8 @@ export const ComposantDiagnostic = ({
   }, [idDiagnostic, envoie, showBoundary, etatReferentiel, navigationMAC]);
 
   let thematiques: [string, Thematique][] = [];
-  let actions: Action[] = useMemo(() => [], []);
   if (etatReferentiel.diagnostic?.referentiel !== undefined) {
     thematiques = Object.entries(etatReferentiel.diagnostic!.referentiel!);
-    actions = etatReferentiel.diagnostic!.actions;
   }
 
   const afficheThematique = useCallback(
@@ -361,11 +346,11 @@ export const ComposantDiagnostic = ({
   };
 
   const surReponse = useCallback(
-    (reponse: Reponse, action: ActionReponseDiagnostic) => {
+    (reponse: Reponse, thematique: string) => {
       new MoteurDeLiens(navigationMAC.etat).trouve(
         'repondre-diagnostic',
         (lien) => {
-          const parametresAPI = genereParametresAPI(lien, action, reponse);
+          const parametresAPI = genereParametresAPI(thematique, lien, reponse);
           macAPI
             .execute<
               RepresentationDiagnostic,
@@ -394,9 +379,6 @@ export const ComposantDiagnostic = ({
         <div className="fr-grid-row fr-col-12">
           <div className="conteneur-navigation">{navigation}</div>
           {thematiques.map(([clef, thematique]) => {
-            const actionsPossibles: ActionReponseDiagnostic[] = actions.filter(
-              (action) => Object.entries(action).find(([c]) => c === clef)
-            ) as ActionReponseDiagnostic[];
             const questionsGroupees = thematique.groupes.flatMap((groupe) => {
               return (
                 <div className="fr-grid-row fr-grid-row--gutters">
@@ -413,15 +395,15 @@ export const ComposantDiagnostic = ({
                           <>
                             {estUneListe(question.type) ? (
                               <ComposantQuestionListe
+                                thematique={clef}
                                 question={question}
-                                actions={actionsPossibles}
                                 numeroQuestion={numeroQuestion}
                                 surReponse={surReponse}
                               />
                             ) : (
                               <ComposantQuestion
+                                thematique={clef}
                                 question={question}
-                                actions={actionsPossibles}
                                 numeroQuestion={numeroQuestion}
                                 surReponse={surReponse}
                               />
