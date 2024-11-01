@@ -187,8 +187,18 @@ class ConstructeurActionsHATEOAS {
     idDiagnostic: crypto.UUID
   ): ConstructeurActionsHATEOAS {
     this.afficherDiagnostic(idDiagnostic);
+    this.repondreDiagnostic(idDiagnostic);
     this.afficherTableauDeBord();
     return this;
+  }
+
+  private repondreDiagnostic(
+    idDiagnostic: `${string}-${string}-${string}-${string}-${string}`
+  ) {
+    this.actions.set('repondre-diagnostic', {
+      url: `/api/diagnostic/${idDiagnostic}`,
+      methode: 'PATCH',
+    });
   }
 
   public actionsAccesDiagnosticNonAutorise(): ConstructeurActionsHATEOAS {
@@ -201,6 +211,7 @@ class ConstructeurActionsHATEOAS {
     identifiantDiagnostic: crypto.UUID
   ): ConstructeurActionsHATEOAS {
     this.afficherDiagnostic(identifiantDiagnostic);
+    this.repondreDiagnostic(identifiantDiagnostic);
     return this;
   }
 

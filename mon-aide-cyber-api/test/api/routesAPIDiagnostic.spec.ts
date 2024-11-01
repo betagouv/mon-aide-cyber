@@ -60,6 +60,10 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
             url: `/api/diagnostic/${diagnostic.identifiant}/restitution`,
             methode: 'GET',
           },
+          'repondre-diagnostic': {
+            url: `/api/diagnostic/${diagnostic.identifiant}`,
+            methode: 'PATCH',
+          },
           'afficher-tableau-de-bord': {
             url: '/api/espace-aidant/tableau-de-bord',
             methode: 'GET',
@@ -258,6 +262,10 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
             [`afficher-diagnostic-${diagnostic.identifiant}`]: {
               url: `/api/diagnostic/${diagnostic.identifiant}/restitution`,
               methode: 'GET',
+            },
+            'repondre-diagnostic': {
+              url: `/api/diagnostic/${diagnostic.identifiant}`,
+              methode: 'PATCH',
             },
           },
           'reponse-2'
