@@ -55,6 +55,7 @@ import { TerminerDiagnostic } from './TerminerDiagnostic.tsx';
 import { BadgePerimetre } from './BadgePerimetre.tsx';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
+import { Lien } from '../../domaine/Lien.ts';
 
 type ProprietesComposantQuestion = {
   actions: ActionReponseDiagnostic[];
@@ -71,6 +72,7 @@ type ReponseAEnvoyer = {
 };
 
 const genereParametresAPI = (
+  lien: Lien,
   action: ActionReponseDiagnostic,
   reponseDonnee: Reponse
 ) => {
@@ -84,8 +86,8 @@ const genereParametresAPI = (
     reponse: reponseDonnee.reponseDonnee,
   };
   return constructeurParametresAPI<ReponseAEnvoyer>()
-    .url(actionAMener.ressource.url)
-    .methode(actionAMener.ressource.methode)
+    .url(lien.url)
+    .methode(lien.methode!)
     .corps(corps)
     .construis();
 };
@@ -360,17 +362,22 @@ export const ComposantDiagnostic = ({
 
   const surReponse = useCallback(
     (reponse: Reponse, action: ActionReponseDiagnostic) => {
-      const parametresAPI = genereParametresAPI(action, reponse);
-      macAPI
-        .execute<
-          RepresentationDiagnostic,
-          ReponseDiagnostic,
-          ReponseAEnvoyer
-        >(parametresAPI, enDiagnostic)
-        .then((diagnostic) => {
-          envoie(diagnosticModifie(diagnostic.diagnostic));
-          navigationMAC.ajouteEtat(diagnostic.liens);
-        });
+      new MoteurDeLiens(navigationMAC.etat).trouve(
+        'repondre-diagnostic',
+        (lien) => {
+          const parametresAPI = genereParametresAPI(lien, action, reponse);
+          macAPI
+            .execute<
+              RepresentationDiagnostic,
+              ReponseDiagnostic,
+              ReponseAEnvoyer
+            >(parametresAPI, enDiagnostic)
+            .then((diagnostic) => {
+              envoie(diagnosticModifie(diagnostic.diagnostic));
+              navigationMAC.ajouteEtat(diagnostic.liens);
+            });
+        }
+      );
     },
     [navigationMAC]
   );

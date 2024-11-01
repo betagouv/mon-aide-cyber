@@ -12,7 +12,7 @@ import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.
 import { uneAction } from '../../test/constructeurs/constructeurActionDiagnostic.ts';
 import { ReponseQuestionATiroir } from '../domaine/diagnostic/Diagnostic.ts';
 import { UUID } from '../types/Types.ts';
-import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
+import { ServeurMACMemoire, unLienHATEOAS } from './ServeurMACMemoire.ts';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { decorateurComposantDiagnostic } from './DecorateurComposantDiagnostic.tsx';
 import { ComposantDiagnostic } from '../composants/diagnostic/EcranDiagnostic.tsx';
@@ -430,8 +430,8 @@ export const SelectionneReponseDiagnostic: Story = {
         canvas.getByRole('radio', { name: /entreprise privée/i })
       ).toBeChecked();
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
-        actionRepondre
-          .avecIdDiagnostic(identifiantQuestionAChoixUnique)
+        unLienHATEOAS()
+          .repondreDiagnostic(identifiantQuestionAChoixUnique)
           .construis(),
         {
           reponseDonnee: 'entreprise-privee',
@@ -477,8 +477,8 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
         expect(canvas.getByRole('textbox')).toHaveValue('Réponse C')
       );
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
-        actionRepondre
-          .avecIdDiagnostic(identifiantQuestionListeDeroulante)
+        unLienHATEOAS()
+          .repondreDiagnostic(identifiantQuestionListeDeroulante)
           .construis(),
         {
           reponseDonnee: 'reponse-c',
@@ -613,7 +613,9 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
         )
       ).not.toBeChecked();
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
-        actionRepondre.avecIdDiagnostic(identifiantQuestionATiroir).construis(),
+        unLienHATEOAS()
+          .repondreDiagnostic(identifiantQuestionATiroir)
+          .construis(),
         {
           reponseDonnee: {
             reponse: 'plusieurs-choix',
@@ -658,8 +660,8 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
           )
         ).not.toBeChecked();
         entrepotDiagnosticMemoire.verifieEnvoiReponse(
-          actionRepondre
-            .avecIdDiagnostic(identifiantQuestionATiroir)
+          unLienHATEOAS()
+            .repondreDiagnostic(identifiantQuestionATiroir)
             .construis(),
           {
             reponseDonnee: 'un-seul-choix',
@@ -756,8 +758,8 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
         )
       ).toBeChecked();
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
-        actionRepondre
-          .avecIdDiagnostic(identifiantQuestionAPlusieursTiroirs)
+        unLienHATEOAS()
+          .repondreDiagnostic(identifiantQuestionAPlusieursTiroirs)
           .construis(),
         {
           reponseDonnee: {
@@ -880,8 +882,8 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
           )
         ).not.toBeChecked();
         entrepotDiagnosticMemoire.verifieEnvoiReponse(
-          actionRepondre
-            .avecIdDiagnostic(
+          unLienHATEOAS()
+            .repondreDiagnostic(
               identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple
             )
             .construis(),
@@ -964,8 +966,8 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
             )
           ).not.toBeChecked();
           entrepotDiagnosticMemoire.verifieEnvoiReponse(
-            actionRepondre
-              .avecIdDiagnostic(
+            unLienHATEOAS()
+              .repondreDiagnostic(
                 identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple
               )
               .construis(),
@@ -1036,8 +1038,8 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
           )
         ).toBeChecked();
         entrepotDiagnosticMemoire.verifieEnvoiReponse(
-          actionRepondre
-            .avecIdDiagnostic(
+          unLienHATEOAS()
+            .repondreDiagnostic(
               identifiantQuestionATiroirAvecPlusieursChoixUnique
             )
             .construis(),
@@ -1118,8 +1120,8 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
             )
           ).toBeChecked();
           entrepotDiagnosticMemoire.verifieEnvoiReponse(
-            actionRepondre
-              .avecIdDiagnostic(
+            unLienHATEOAS()
+              .repondreDiagnostic(
                 identifiantQuestionATiroirAvecPlusieursChoixUnique
               )
               .construis(),
@@ -1219,8 +1221,8 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
           )
         ).toBeChecked();
         entrepotDiagnosticMemoire.verifieEnvoiReponse(
-          actionRepondre
-            .avecIdDiagnostic(identifiantQuestionATiroirAvecReponseUnique)
+          unLienHATEOAS()
+            .repondreDiagnostic(identifiantQuestionATiroirAvecReponseUnique)
             .construis(),
           {
             reponseDonnee: {
@@ -1317,8 +1319,8 @@ export const SelectionneLaReponsePourUneQuestionAChoixMultiple: Story = {
         )
       ).not.toBeChecked();
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
-        actionRepondre
-          .avecIdDiagnostic(identifiantQuestionAChoixMultiple)
+        unLienHATEOAS()
+          .repondreDiagnostic(identifiantQuestionAChoixMultiple)
           .construis(),
         {
           reponseDonnee: ['reponse-1', 'reponse-3'],

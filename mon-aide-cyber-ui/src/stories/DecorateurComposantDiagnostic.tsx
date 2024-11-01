@@ -21,6 +21,10 @@ export const decorateurComposantDiagnostic = (
             methode: undefined,
             contentType: '',
           },
+          'repondre-diagnostic': {
+            url: `/diagnostic/${identifiantDiagnostic}`,
+            methode: 'PATCH',
+          },
         },
         navigue: (
           _moteurDeLiens: MoteurDeLiens,

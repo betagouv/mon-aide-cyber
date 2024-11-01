@@ -12,6 +12,7 @@ export type ReponseHATEOAS = {
 };
 export type Action =
   | `afficher-diagnostic-${UUID}`
+  | 'repondre-diagnostic'
   | 'afficher-preferences'
   | 'afficher-profil'
   | 'afficher-tableau-de-bord'
