@@ -5,7 +5,6 @@ import {
 } from '../../diagnostic/Diagnostic';
 import { QuestionATiroir, ReponsePossible } from '../../diagnostic/Referentiel';
 import {
-  Action,
   Chemin,
   ConditionPerimetre,
   QuestionATranscrire,
@@ -139,7 +138,6 @@ export function representeLeDiagnosticPourLeClient(
   diagnostic: Diagnostic,
   transcripteur: Transcripteur
 ): RepresentationDiagnostic {
-  const actions: Action[] = [];
   const representationGroupee = new RepresentationGroupee(transcripteur);
 
   const recupereLesQuestionsSuivantLesConditionsDePerimetre = (
@@ -184,28 +182,9 @@ export function representeLeDiagnosticPourLeClient(
         accumulateur: RepresentationReferentiel,
         [clef, questionsThematique]
       ) => {
-        actions.push({
-          [clef]: {
-            action: 'repondre',
-            ressource: {
-              url: `/api/diagnostic/${diagnostic.identifiant}`,
-              methode: 'PATCH',
-            },
-          },
-        });
         return {
           ...accumulateur,
           [clef]: {
-            actions: [
-              {
-                action: 'repondre',
-                chemin: clef,
-                ressource: {
-                  url: `/api/diagnostic/${diagnostic.identifiant}`,
-                  methode: 'PATCH',
-                },
-              },
-            ],
             description: transcripteur.thematiques[clef].description,
             libelle: transcripteur.thematiques[clef].libelle,
             styles: {
@@ -226,7 +205,6 @@ export function representeLeDiagnosticPourLeClient(
     );
 
   return {
-    actions,
     identifiant: diagnostic.identifiant,
     referentiel,
   };

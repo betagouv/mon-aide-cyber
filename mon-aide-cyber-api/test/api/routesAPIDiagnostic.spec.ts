@@ -492,30 +492,9 @@ const forgeReponseDiagnostic = (
   reponseDonnee?: string
 ): ReponseDiagnostic => {
   return {
-    actions: [
-      {
-        contexte: {
-          action: 'repondre',
-          ressource: {
-            methode: 'PATCH',
-            url: `/api/diagnostic/${diagnostic.identifiant}`,
-          },
-        },
-      },
-    ],
     identifiant: diagnostic.identifiant,
     referentiel: {
       contexte: {
-        actions: [
-          {
-            action: 'repondre',
-            chemin: 'contexte',
-            ressource: {
-              methode: 'PATCH',
-              url: `/api/diagnostic/${diagnostic.identifiant}`,
-            },
-          },
-        ],
         description: 'Description du contexte',
         libelle: 'Contexte',
         styles: {

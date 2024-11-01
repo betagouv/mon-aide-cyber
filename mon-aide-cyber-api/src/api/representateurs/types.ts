@@ -1,19 +1,6 @@
 import crypto from 'crypto';
 import { ReferentielDiagnostic } from '../../diagnostic/Diagnostic';
 
-type ActionBase = {
-  action: string;
-  ressource: { url: string; methode: 'PATCH' | 'GET' };
-};
-
-export type Action =
-  | ActionDiagnostic
-  | ActionRepondreDiagnostic
-  | ActionRestituer
-  | ActionLancerDiagnostic;
-export type ActionLancerDiagnostic = ActionBase & {
-  action: 'lancer-diagnostic';
-};
 export type RessourceActionRestituer = {
   ressource: {
     url: string;
@@ -24,20 +11,10 @@ export type RessourceActionRestituer = {
 export type TypeActionRestituer = {
   [type: string]: RessourceActionRestituer;
 };
-type ActionRestituer = Omit<ActionBase, 'ressource'> & {
-  types: TypeActionRestituer;
-};
-type ActionRepondreDiagnostic = {
-  [thematique: string]: ActionBase & { action: 'repondre' };
-};
-type ActionDiagnostic = ActionBase & {
-  action: 'repondre';
-  chemin: string;
-};
+
 export type RepresentationDiagnostic = {
   identifiant: crypto.UUID;
   referentiel: RepresentationReferentiel;
-  actions: Action[];
 };
 export type RepresentationReponsePossible = {
   identifiant: string;
@@ -68,7 +45,6 @@ type StyleThematique = {
   navigation: `navigation-${string}`;
 };
 export type RepresentationThematique = {
-  actions: ActionDiagnostic[];
   description: string;
   libelle: string;
   styles: StyleThematique;
