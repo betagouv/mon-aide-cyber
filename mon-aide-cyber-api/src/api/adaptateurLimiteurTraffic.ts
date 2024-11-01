@@ -61,7 +61,7 @@ const adaptateurLimiteurTraffic = (
     windowMs: dureePeriodeConnexionMs,
     max: nombreMaximumDeConnexions,
     message:
-      'Vous avez atteint le nombre maximal de requête. Veuillez réessayer ultérieurement.',
+      "Vous avez atteint le nombre maximal d'appel à MonAideCyber. Veuillez réessayer ultérieurement.",
     standardHeaders: true,
     keyGenerator: (requete: Request, __: Response) =>
       requete.headers['x-real-ip'] as string,
@@ -70,6 +70,8 @@ const adaptateurLimiteurTraffic = (
       ['/assets/', '/fontes/', '/images/'].some((req) =>
         requete.path.startsWith(req)
       ),
+    handler: (_requete, reponse, _next, options) =>
+      reponse.status(options.statusCode).json({ message: options.message }),
   });
 
 export const adaptateurConfigurationLimiteurTraffic = (
