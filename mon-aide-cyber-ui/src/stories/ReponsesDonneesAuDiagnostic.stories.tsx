@@ -9,7 +9,6 @@ import {
 } from '../../test/constructeurs/constructeurQuestions.ts';
 import { uneReponsePossible } from '../../test/constructeurs/constructeurReponsePossible.ts';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
-import { uneAction } from '../../test/constructeurs/constructeurActionDiagnostic.ts';
 import { ReponseQuestionATiroir } from '../domaine/diagnostic/Diagnostic.ts';
 import { UUID } from '../types/Types.ts';
 import { ServeurMACMemoire, unLienHATEOAS } from './ServeurMACMemoire.ts';
@@ -17,12 +16,9 @@ import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts'
 import { decorateurComposantDiagnostic } from './DecorateurComposantDiagnostic.tsx';
 import { ComposantDiagnostic } from '../composants/diagnostic/EcranDiagnostic.tsx';
 
-const actionRepondre = uneAction().contexte();
-
 const identifiantQuestionAChoixUnique = '6dadad14-8fa0-4be7-a8da-473d538eb6c1';
 const reponseDonneeChoixUnique = uneReponsePossible().construis();
 const diagnosticAvecUneQuestionAChoixUnique = unDiagnostic()
-  .ajouteAction(actionRepondre)
   .avecIdentifiant(identifiantQuestionAChoixUnique)
   .avecUnReferentiel(
     unReferentiel()
@@ -47,7 +43,6 @@ const reponseSelectionnee = uneReponsePossible()
   .avecLibelle('Réponse B')
   .construis();
 const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
-  .ajouteAction(actionRepondre)
   .avecIdentifiant(identifiantQuestionListeDeroulante)
   .avecUnReferentiel(
     unReferentiel()
@@ -98,7 +93,6 @@ const reponseAvecQuestionAChoixMultiple = uneReponsePossible()
   );
 const diagnosticAvecQuestionATiroir = unDiagnostic()
   .avecIdentifiant(identifiantQuestionATiroir)
-  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
       .avecUneQuestion(
@@ -132,7 +126,6 @@ const questionAChoixUnique = uneQuestionAChoixUnique()
   ]);
 const diagnosticAvecQuestionATiroirAvecChoixUniqueEtChoixMultiple =
   unDiagnostic()
-    .ajouteAction(actionRepondre)
     .avecIdentifiant(identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple)
     .avecUnReferentiel(
       unReferentiel()
@@ -206,7 +199,6 @@ const secondeReponseAChoixUniqueATiroir = uneReponsePossible()
 const diagnosticAvecUneQuestionAvecPlusieursQuestionsATiroirAChoixUnique =
   unDiagnostic()
     .avecIdentifiant(identifiantQuestionATiroirAvecPlusieursChoixUnique)
-    .ajouteAction(actionRepondre)
     .avecUnReferentiel(
       unReferentiel()
         .avecUneQuestion(
@@ -236,7 +228,6 @@ const identifiantQuestionAPlusieursTiroirs =
   '7e37b7fa-1ed6-434d-ba5b-d473928c08c2';
 const diagnosticAvecQuestionsAPlusieursTiroirs = unDiagnostic()
   .avecIdentifiant(identifiantQuestionAPlusieursTiroirs)
-  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
       .avecUneQuestion(
@@ -278,7 +269,6 @@ const identifiantQuestionATiroirAvecReponseUnique =
   'd01c0e69-7abd-46cf-a109-a38f8b1b26e0';
 const diagnosticAvecQuestionsATiroirsAvecReponseUnique = unDiagnostic()
   .avecIdentifiant(identifiantQuestionATiroirAvecReponseUnique)
-  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
       .avecUneQuestion(
@@ -317,7 +307,6 @@ const identifiantQuestionAChoixMultiple =
   '4196086c-d370-4406-a757-347d964a4e74';
 const diagnosticAveUneQuestionAChoixMultiple = unDiagnostic()
   .avecIdentifiant(identifiantQuestionAChoixMultiple)
-  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
       .avecUneQuestion(

@@ -2,19 +2,8 @@ import { Question, Referentiel, ReponseMultiple } from './Referentiel.ts';
 import { Aggregat } from '../Aggregat.ts';
 import { ReponseTiroir } from '../../composants/diagnostic/ConteneurReponsePossible.tsx';
 
-export type ActionReponseDiagnostic = {
-  [thematique: string]: ActionBase;
-};
-
-export type ActionBase = {
-  action: string;
-  ressource: { url: string; methode: string };
-};
-export type Action = ActionBase | ActionReponseDiagnostic;
-
 export type Diagnostic = Aggregat & {
   referentiel: Referentiel;
-  actions: Action[];
 };
 export type ReponseQuestionATiroir = {
   reponse: string;
@@ -22,18 +11,6 @@ export type ReponseQuestionATiroir = {
     identifiant: string;
     reponses: string[];
   }[];
-};
-export const actionAMener = (
-  actions: ActionReponseDiagnostic[],
-  actionDemandee: string,
-  surAction: (action: ActionReponseDiagnostic) => void
-): void => {
-  const action = actions.find((a) =>
-    Object.entries(a).find(([, a]) => a.action === actionDemandee)
-  );
-  if (action) {
-    surAction(action);
-  }
 };
 
 export type Reponse = {

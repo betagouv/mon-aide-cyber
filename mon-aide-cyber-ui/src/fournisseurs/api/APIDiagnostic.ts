@@ -1,4 +1,4 @@
-import { Action, Diagnostic } from '../../domaine/diagnostic/Diagnostic.ts';
+import { Diagnostic } from '../../domaine/diagnostic/Diagnostic.ts';
 import { UUID } from '../../types/Types.ts';
 import { ReponseHATEOAS } from '../../domaine/Lien.ts';
 
@@ -42,7 +42,6 @@ export type RepresentationDiagnostic = ReponseHATEOAS & {
 export type ReponseDiagnostic = ReponseHATEOAS & {
   identifiant: UUID;
   referentiel: RepresentationReferentiel;
-  actions: Action[];
 };
 
 export const enDiagnostic = (
@@ -75,7 +74,6 @@ export const enDiagnostic = (
       liens: corps.liens,
       diagnostic: {
         identifiant: corps.identifiant,
-        actions: corps.actions,
         referentiel,
       },
     };
