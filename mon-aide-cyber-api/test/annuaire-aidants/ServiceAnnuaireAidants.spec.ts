@@ -24,9 +24,12 @@ describe('Service d’annuaire des Aidants', () => {
     await entrepot.persiste(jean);
     await entrepot.persiste(martin);
 
-    const aidants = await new ServiceAnnuaireAidants(entrepot).recherche({
-      departement: 'Gironde',
-    });
+    const aidants = await new ServiceAnnuaireAidants(entrepot).recherche(
+      {
+        departement: 'Gironde',
+      },
+      (aidants) => aidants
+    );
 
     expect(aidants).toStrictEqual<Aidant[]>([
       {
@@ -53,4 +56,30 @@ describe('Service d’annuaire des Aidants', () => {
       },
     ]);
   });
+
+  it("Retourne aléatoirement la liste d'Aidants", async () => {
+    const entrepot = new EntrepotAnnuaireAidantsMemoire();
+    await persistePlusieursAidants(entrepot);
+
+    const premiereRecherche = await new ServiceAnnuaireAidants(
+      entrepot
+    ).recherche({
+      departement: 'Gironde',
+    });
+    const secondeRecherche = await new ServiceAnnuaireAidants(
+      entrepot
+    ).recherche({
+      departement: 'Gironde',
+    });
+
+    expect(premiereRecherche).not.toStrictEqual(secondeRecherche);
+  });
+
+  const persistePlusieursAidants = async (
+    entrepot: EntrepotAnnuaireAidantsMemoire
+  ) => {
+    for (let i = 0; i < 10; i++) {
+      await entrepot.persiste(unAidant().enGironde().construis());
+    }
+  };
 });
