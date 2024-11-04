@@ -4,7 +4,7 @@ import {
   ServiceProfilAidant,
 } from '../../../src/espace-aidant/profil/ServiceProfilAidant';
 import { EntrepotAidantMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';

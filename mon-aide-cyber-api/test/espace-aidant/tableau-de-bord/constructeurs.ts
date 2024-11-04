@@ -1,4 +1,4 @@
-import { Aidant } from '../../../src/authentification/Aidant';
+import { Aidant } from '../../../src/espace-aidant/Aidant';
 import { unDiagnosticDansLeDepartementAvecSecteurActivite } from '../../constructeurs/constructeurDiagnostic';
 import { EntrepotDiagnostic } from '../../../src/diagnostic/Diagnostic';
 import { AdaptateurRelationsMAC } from '../../../src/relation/AdaptateurRelationsMAC';

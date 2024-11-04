@@ -1,6 +1,6 @@
+import crypto from 'crypto';
 import { EntrepotAidant } from './Aidant';
 import { AidantDTO, ServiceAidant } from './ServiceAidant';
-import crypto from 'crypto';
 
 class ServiceAidantMAC implements ServiceAidant {
   constructor(private readonly entrepotAidant: EntrepotAidant) {}

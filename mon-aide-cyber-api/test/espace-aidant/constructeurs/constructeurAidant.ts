@@ -1,9 +1,9 @@
 import crypto from 'crypto';
 import { fakerFR } from '@faker-js/faker';
-import { Aidant, TypesEntites } from '../../../src/authentification/Aidant';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { SecteurActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
 import { Departement } from '../../../src/gestion-demandes/departements';
+import { Aidant, TypesEntites } from '../../../src/espace-aidant/Aidant';
 
 interface Constructeur<T> {
   construis(): T;

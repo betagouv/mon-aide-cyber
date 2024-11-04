@@ -6,7 +6,7 @@ import {
 } from '../../../utilitaires/nettoyeurBDD';
 import { EntrepotAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAidantPostgres';
 import { ServiceDeChiffrementClair } from '../../securite/ServiceDeChiffrementClair';
-import { unAidant } from '../../../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../../../espace-aidant/constructeurs/constructeurAidant';
 import { EntrepotStatistiquesPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesPostgres';
 import { Statistiques } from '../../../../src/statistiques/statistiques';
 import { EntrepotRelationPostgres } from '../../../../src/relation/infrastructure/EntrepotRelationPostgres';
@@ -39,12 +39,6 @@ import {
 } from '../../../../src/diagnostic/Diagnostic';
 import { EntrepotAnnuaireAidantsPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAnnuaireAidantsPostgres';
 import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
-import {
-  Aidant,
-  EntitesAssociations,
-  EntitesOrganisationsPubliques,
-  TypesEntites,
-} from '../../../../src/authentification/Aidant';
 import { Aidant as AnnuaireAidant } from '../../../../src/annuaire-aidants/annuaireAidants';
 import {
   Departement,
@@ -54,6 +48,12 @@ import { SecteurActivite } from '../../../../src/espace-aidant/preferences/secte
 import { unUtilisateur } from '../../../authentification/constructeurs/constructeurUtilisateur';
 import { EntrepotUtilisateurPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotUtilisateurPostgres';
 import { Utilisateur } from '../../../../src/authentification/Utilisateur';
+import {
+  Aidant,
+  EntitesAssociations,
+  EntitesOrganisationsPubliques,
+  TypesEntites,
+} from '../../../../src/espace-aidant/Aidant';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {

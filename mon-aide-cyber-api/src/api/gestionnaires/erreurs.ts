@@ -6,11 +6,11 @@ import { ErreurMAC } from '../../domaine/erreurMAC';
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 import { ErreurAccesRefuse } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
 import { AggregatNonTrouve } from '../../domaine/Aggregat';
-import { ErreurCreationEspaceAidant } from '../../authentification/Aidant';
 import { ErreurValidationMotDePasse } from '../validateurs/motDePasse';
 import { ErreurEnvoiEmail } from '../messagerie/Messagerie';
 import { ErreurModificationPreferences } from '../aidant/routesAPIAidantPreferences';
 import { ErreurModificationProfil } from '../aidant/routesAPIProfil';
+import { ErreurCreationEspaceAidant } from '../../espace-aidant/Aidant';
 
 const HTTP_MAUVAISE_REQUETE = 400;
 const HTTP_NON_AUTORISE = 401;

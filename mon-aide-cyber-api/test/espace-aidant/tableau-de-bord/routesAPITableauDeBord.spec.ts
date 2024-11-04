@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import testeurIntegration from '../../api/testeurIntegration';
 import { executeRequete } from '../../api/executeurRequete';
 import { Express } from 'express';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { unDiagnosticInitiePar } from './constructeurs';
 import { ReponseDiagnostics } from '../../../src/espace-aidant/tableau-de-bord/routesAPITableauDeBord';

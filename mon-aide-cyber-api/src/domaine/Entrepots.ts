@@ -1,5 +1,4 @@
 import { EntrepotDiagnostic } from '../diagnostic/Diagnostic';
-import { EntrepotAidant } from '../authentification/Aidant';
 import { EntrepotRestitution } from '../restitution/Restitution';
 import { EntrepotAide } from '../aide/Aide';
 
@@ -7,6 +6,7 @@ import { EntrepotDemandeDevenirAidant } from '../gestion-demandes/devenir-aidant
 import { EntrepotStatistiques } from '../statistiques/statistiques';
 import { EntrepotAnnuaireAidants } from '../annuaire-aidants/annuaireAidants';
 import { EntrepotUtilisateur } from '../authentification/Utilisateur';
+import { EntrepotAidant } from '../espace-aidant/Aidant';
 
 export interface Entrepots {
   diagnostic(): EntrepotDiagnostic;

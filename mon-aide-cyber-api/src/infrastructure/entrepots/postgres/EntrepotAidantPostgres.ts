@@ -1,15 +1,15 @@
 import { DTO, EntrepotPostgres } from './EntrepotPostgres';
-import {
-  Aidant,
-  EntrepotAidant,
-  typesEntites,
-} from '../../../authentification/Aidant';
 
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import { departements } from '../../../gestion-demandes/departements';
 import { secteursActivite } from '../../../espace-aidant/preferences/secteursActivite';
+import {
+  Aidant,
+  EntrepotAidant,
+  typesEntites,
+} from '../../../espace-aidant/Aidant';
 
 type PreferencesDTO = {
   secteursActivite: string[];

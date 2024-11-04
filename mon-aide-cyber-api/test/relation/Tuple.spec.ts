@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest';
-import { unAidant } from '../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
 import { Tuple, unTuple } from '../../src/relation/Tuple';
 import { DefinitionAidantInitieDiagnostic } from '../../src/diagnostic/tuples';

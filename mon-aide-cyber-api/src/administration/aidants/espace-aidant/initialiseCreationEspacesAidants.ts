@@ -8,9 +8,9 @@ import { ConstructeursImportAidant } from './constructeursImportAidant';
 import { DemandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { CapteurCommandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 import { fabriqueAnnuaireCOT } from '../../../infrastructure/adaptateurs/fabriqueAnnuaireCOT';
-import { unServiceAidant } from '../../../authentification/ServiceAidantMAC';
 import { mappeurDROMCOM, mappeurRegionsCSV } from './mappeurRegions';
 import { Departement } from '../../../gestion-demandes/departements';
+import { unServiceAidant } from '../../../espace-aidant/ServiceAidantMAC';
 
 export type StatusImportation =
   | 'email-creation-espace-aidant-envoyé'

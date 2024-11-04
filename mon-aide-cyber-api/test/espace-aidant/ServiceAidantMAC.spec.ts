@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { EntrepotAidantMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import { unAidant } from './constructeurs/constructeurAidant';
-import { unServiceAidant } from '../../src/authentification/ServiceAidantMAC';
-import { Aidant } from '../../src/authentification/Aidant';
-import { AidantDTO } from '../../src/authentification/ServiceAidant';
 import crypto from 'crypto';
+import { Aidant } from '../../src/espace-aidant/Aidant';
+import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
+import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
+import { AidantDTO } from '../../src/espace-aidant/ServiceAidant';
 
 describe('Service Aidant', () => {
   describe('Recherche par mail', () => {

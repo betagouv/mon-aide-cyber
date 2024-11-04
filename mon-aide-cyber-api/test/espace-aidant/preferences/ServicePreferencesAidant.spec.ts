@@ -1,11 +1,11 @@
 import { describe, expect } from 'vitest';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { SecteurActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
 import { Departement } from '../../../src/gestion-demandes/departements';
 import {
   EntitesOrganisationsPubliques,
   TypesEntites,
-} from '../../../src/authentification/Aidant';
+} from '../../../src/espace-aidant/Aidant';
 import {
   PreferencesAidantModifiees,
   ServicePreferencesAidant,

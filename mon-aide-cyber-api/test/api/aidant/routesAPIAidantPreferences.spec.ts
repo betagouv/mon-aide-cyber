@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect } from 'vitest';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { executeRequete } from '../executeurRequete';
 import { departements } from '../../../src/gestion-demandes/departements';
 import { secteursActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
 import { ReponsePreferencesAidantAPI } from '../../../src/api/aidant/routesAPIAidantPreferences';
-import { typesEntites } from '../../../src/authentification/Aidant';
+import { typesEntites } from '../../../src/espace-aidant/Aidant';
 
 describe('Le serveur MAC sur les routes /api/aidant', () => {
   const testeurMAC = testeurIntegration();

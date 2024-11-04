@@ -5,10 +5,10 @@ import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
-import { ServiceAidant } from '../../authentification/ServiceAidant';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { rechercheParNomDepartement } from '../departements';
 import { Aide } from '../../aide/Aide';
+import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
 
 export type SagaDemandeSolliciterAide = Omit<Saga, 'type'> & {
   email: string;

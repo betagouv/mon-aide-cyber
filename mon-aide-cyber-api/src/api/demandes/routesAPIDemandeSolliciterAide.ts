@@ -2,7 +2,7 @@ import { ConfigurationServeur } from '../../serveur';
 import express, { NextFunction, Request, Response, Router } from 'express';
 import crypto from 'crypto';
 import { ReponseHATEOAS } from '../hateoas/hateoas';
-import { EntrepotAidant } from '../../authentification/Aidant';
+import { EntrepotAidant } from '../../espace-aidant/Aidant';
 import {
   ExpressValidator,
   FieldValidationError,

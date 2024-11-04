@@ -3,7 +3,7 @@ import { FournisseurHorloge } from '../../../src/infrastructure/horloge/Fourniss
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from '../executeurRequete';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import crypto from 'crypto';
 import { ReponseDemandeSolliciterAideEnErreur } from '../../../src/api/demandes/routesAPIDemandeSolliciterAide';

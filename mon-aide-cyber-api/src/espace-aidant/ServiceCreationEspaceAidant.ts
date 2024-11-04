@@ -1,8 +1,8 @@
 import { Entrepots } from '../domaine/Entrepots';
 import crypto from 'crypto';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
+import { ErreurCreationEspaceAidant } from './Aidant';
 
 type CreationEspaceAidant = {
   cguSignees: boolean;

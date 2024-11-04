@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
-import { unAidant } from '../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';

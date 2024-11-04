@@ -1,9 +1,9 @@
 import crypto, { UUID } from 'crypto';
-import { EntrepotAidant, typesEntites } from '../../authentification/Aidant';
 import { SecteurActivite, secteurActiviteParNom } from './secteursActivite';
 import { rechercheParNomDepartement } from '../../gestion-demandes/departements';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { EntrepotAidant, typesEntites } from '../Aidant';
 
 type MetsAJourPreferenceAidant = {
   preferences: {

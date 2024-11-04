@@ -1,9 +1,9 @@
 import { describe, it } from 'vitest';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
-import { ErreurCreationEspaceAidant } from '../../src/authentification/Aidant';
+import { ErreurCreationEspaceAidant } from '../../src/espace-aidant/Aidant';
 import { ServiceCreationEspaceAidant } from '../../src/espace-aidant/ServiceCreationEspaceAidant';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import { unAidant } from '../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe("Service de création d'espace Aidant", () => {

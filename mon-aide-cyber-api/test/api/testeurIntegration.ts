@@ -20,10 +20,10 @@ import { AdaptateurDeGestionDeCookiesDeTest } from '../adaptateurs/AdaptateurDeG
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { AdaptateurDeVerificationDesAccesDeTest } from '../adaptateurs/AdaptateurDeVerificationDesAccesDeTest';
-import { unServiceAidant } from '../../src/authentification/ServiceAidantMAC';
 import { ServiceDeChiffrement } from '../../src/securite/ServiceDeChiffrement';
 import { ServiceDeChiffrementClair } from '../infrastructure/securite/ServiceDeChiffrementClair';
 import { AdaptateurMetabaseMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurMetabaseMemoire';
+import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
 
 class TesteurIntegrationMAC {
   private serveurDeTest:

@@ -4,14 +4,12 @@ import { ConsignateurErreursMemoire } from '../../../src/infrastructure/adaptate
 import { Request, Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../../src/domaine/erreurMAC';
-import {
-  ErreurAuthentification,
-  ErreurCreationEspaceAidant,
-} from '../../../src/authentification/Aidant';
 import { ErreurAccesRefuse } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';
 import { CorpsRequeteAuthentification } from '../../../src/api/routesAPIAuthentification';
 import { ErreurValidationMotDePasse } from '../../../src/api/validateurs/motDePasse';
 import { ErreurModificationProfil } from '../../../src/api/aidant/routesAPIProfil';
+import { ErreurAuthentification } from '../../../src/authentification/Utilisateur';
+import { ErreurCreationEspaceAidant } from '../../../src/espace-aidant/Aidant';
 
 describe("Gestionnaire d'erreur", () => {
   let codeRecu = 0;

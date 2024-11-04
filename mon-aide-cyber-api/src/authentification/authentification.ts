@@ -1,7 +1,10 @@
 import { GestionnaireDeJeton } from './GestionnaireDeJeton';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import { ErreurAuthentification } from './Aidant';
-import { EntrepotUtilisateur, UtilisateurAuthentifie } from './Utilisateur';
+import {
+  EntrepotUtilisateur,
+  ErreurAuthentification,
+  UtilisateurAuthentifie,
+} from './Utilisateur';
 
 export const authentifie = (
   entrepotUtilisateur: EntrepotUtilisateur,

@@ -6,13 +6,13 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 import {
   Aidant,
   ErreurCreationEspaceAidant,
-} from '../../src/authentification/Aidant';
+} from '../../src/espace-aidant/Aidant';
 import {
   AidantCree,
   CapteurCommandeCreeEspaceAidant,
   EspaceAidantCree,
 } from '../../src/espace-aidant/CapteurCommandeCreeEspaceAidant';
-import { unAidant } from '../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 
 describe('Capteur de commande de création de compte Aidant', () => {
   it('Crée un compte Aidant', async () => {

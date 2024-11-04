@@ -11,7 +11,7 @@ import {
   EntrepotDiagnosticMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { unDiagnostic } from '../../constructeurs/constructeurDiagnostic';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { AdaptateurRelationsEnErreur } from './AdaptateurRelationsEnErreur';
 import { unTupleAidantInitieDiagnostic } from '../../../src/diagnostic/tuples';
 
