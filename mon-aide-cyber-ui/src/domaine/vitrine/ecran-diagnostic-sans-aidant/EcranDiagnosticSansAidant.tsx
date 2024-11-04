@@ -1,10 +1,14 @@
 import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../../composants/atomes/Button/Button.tsx';
 import illustrationAutodiagSvg from '../../../../public/images/illustration-autodiag.svg';
 import './ecran-diagnostic-sans-aidant.scss';
-import illustrationDialogue from '../../../../public/images/illustration-dialogue-mac.svg';
+import illustrationDialogue from '../../../../public/images/illustration-echange.svg';
 import { TypographieH4 } from '../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
+import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
+import { FormulaireDeContact } from '../../../composants/communs/FormulaireDeContact/FormulaireDeContact.tsx';
+import TuileActionKitDeCommunication from '../../../composants/communs/tuiles/TuileActionKitDeCommunication.tsx';
+import TuileActionDemandeAide from '../../../composants/communs/tuiles/TuileActionDemandeAide.tsx';
 
 export const EcranDiagnosticSansAidant = () => {
   const navigate = useNavigate();
@@ -12,7 +16,7 @@ export const EcranDiagnosticSansAidant = () => {
   return (
     <main role="main" className="ecran-diagnostic-sans-aidant">
       <div>
-        <div className="fr-container explication-page-layout">
+        <section className="fr-container explication-page-layout">
           <section>
             <TypographieH3>Faire un diagnostic sans Aidant</TypographieH3>
             <p>
@@ -34,9 +38,14 @@ export const EcranDiagnosticSansAidant = () => {
             </p>
 
             <div>
-              <Link to="">
-                <Button>Je commence le diagnostic</Button>
-              </Link>
+              <Button
+                type="button"
+                onClick={() =>
+                  navigate('/beneficier-du-dispositif/auto-diagnostic/demande')
+                }
+              >
+                Je commence le diagnostic
+              </Button>
             </div>
           </section>
           <section>
@@ -45,8 +54,8 @@ export const EcranDiagnosticSansAidant = () => {
               alt="Représentation graphique de la restitution sous forme de radar par catégorie cyber"
             />
           </section>
-        </div>
-        <div className="fr-container preferer-etre-accompagne-layout">
+        </section>
+        <section className="fr-container preferer-etre-accompagne-layout">
           <div className="flex justify-center">
             <img
               src={illustrationDialogue}
@@ -85,8 +94,24 @@ export const EcranDiagnosticSansAidant = () => {
               </Button>
             </div>
           </div>
-        </div>
+        </section>
       </div>
+      <section className="participer fr-pt-4w">
+        <div className="fr-container conteneur-participer">
+          <div className="fr-col-12">
+            <TypographieH2>Pour aller plus loin</TypographieH2>
+          </div>
+          <div className="fr-grid-row fr-grid-row--gutters">
+            <div className="fr-col-12 fr-col-md-6">
+              <TuileActionDemandeAide />
+            </div>
+            <div className="fr-col-12 fr-col-md-6">
+              <TuileActionKitDeCommunication />
+            </div>
+          </div>
+        </div>
+      </section>
+      <FormulaireDeContact />
     </main>
   );
 };
