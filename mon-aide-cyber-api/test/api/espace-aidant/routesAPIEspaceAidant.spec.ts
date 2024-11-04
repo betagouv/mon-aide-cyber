@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect } from 'vitest';
-import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
-import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
-import { executeRequete } from './executeurRequete';
-import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
-import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { ReponseHATEOAS } from '../../src/api/hateoas/hateoas';
+import testeurIntegration from '../testeurIntegration';
+import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
+import { executeRequete } from '../executeurRequete';
+import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { ReponseHATEOAS } from '../../../src/api/hateoas/hateoas';
 
 describe('le serveur MAC sur les routes /api/espace-aidant', () => {
   const testeurMAC = testeurIntegration();
