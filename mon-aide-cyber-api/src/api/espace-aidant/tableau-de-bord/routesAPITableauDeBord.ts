@@ -1,13 +1,16 @@
-import { ConfigurationServeur } from '../../serveur';
 import express, { Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 import {
   constructeurActionsHATEOAS,
   ReponseHATEOAS,
-} from '../../api/hateoas/hateoas';
-import { RequeteUtilisateur } from '../../api/routesAPI';
-import { Diagnostic, ServiceTableauDeBord } from './ServiceTableauDeBord';
-import { ServiceDiagnostic } from '../../diagnostic/ServiceDiagnostic';
+} from '../../hateoas/hateoas';
+import {
+  Diagnostic,
+  ServiceTableauDeBord,
+} from '../../../espace-aidant/tableau-de-bord/ServiceTableauDeBord';
+import { ConfigurationServeur } from '../../../serveur';
+import { RequeteUtilisateur } from '../../routesAPI';
+import { ServiceDiagnostic } from '../../../diagnostic/ServiceDiagnostic';
 
 export type ReponseDiagnostics = ReponseHATEOAS & {
   diagnostics: Diagnostic[];

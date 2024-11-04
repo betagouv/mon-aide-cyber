@@ -5,7 +5,7 @@ import { Express } from 'express';
 import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { unDiagnosticInitiePar } from './constructeurs';
-import { ReponseDiagnostics } from '../../../src/espace-aidant/tableau-de-bord/routesAPITableauDeBord';
+import { ReponseDiagnostics } from '../../../src/api/espace-aidant/tableau-de-bord/routesAPITableauDeBord';
 
 describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () => {
   describe('quand une requête GET est reçue sur /', () => {
