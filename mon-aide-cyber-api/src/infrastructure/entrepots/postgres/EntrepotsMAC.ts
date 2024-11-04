@@ -15,6 +15,7 @@ import { EntrepotStatistiquesPostgres } from './EntrepotStatistiquesPostgres';
 import { EntrepotAnnuaireAidants } from '../../../annuaire-aidants/annuaireAidants';
 import { EntrepotAnnuaireAidantsPostgres } from './EntrepotAnnuaireAidantsPostgres';
 import { EntrepotUtilisateur } from '../../../authentification/Utilisateur';
+import { EntrepotUtilisateurPostgres } from './EntrepotUtilisateurPostgres';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -32,6 +33,8 @@ export class EntrepotsMAC implements Entrepots {
     new EntrepotStatistiquesPostgres();
   private entrepotAnnuaireAidants: EntrepotAnnuaireAidants =
     new EntrepotAnnuaireAidantsPostgres(adaptateurServiceChiffrement());
+  private entrepotUtilisateurs: EntrepotUtilisateur =
+    new EntrepotUtilisateurPostgres(adaptateurServiceChiffrement());
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
@@ -62,6 +65,6 @@ export class EntrepotsMAC implements Entrepots {
   }
 
   utilisateurs(): EntrepotUtilisateur {
-    throw new Error();
+    return this.entrepotUtilisateurs;
   }
 }

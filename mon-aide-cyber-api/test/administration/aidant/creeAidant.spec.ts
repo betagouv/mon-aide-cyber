@@ -22,11 +22,9 @@ describe('Crée un aidant', () => {
       nomPrenom: 'jean Dupont',
     });
 
-    const aidant =
-      await entrepotAidant.rechercheParIdentifiantConnexionEtMotDePasse(
-        'jean.dupont@beta.fr',
-        'mdp'
-      );
+    const aidant = await entrepotAidant.rechercheParIdentifiantDeConnexion(
+      'jean.dupont@beta.fr'
+    );
     expect(
       busEvenement.consommateursTestes.get('AIDANT_CREE')?.[0].evenementConsomme
     ).toMatchObject({
