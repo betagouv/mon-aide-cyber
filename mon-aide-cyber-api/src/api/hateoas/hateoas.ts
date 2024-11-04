@@ -1,6 +1,6 @@
-import { AidantAuthentifie } from '../../authentification/Aidant';
 import crypto from 'crypto';
 import { InformationsContexte } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
+import { UtilisateurAuthentifie } from '../../authentification/Utilisateur';
 
 type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
 export type LiensHATEOAS = Record<string, Options>;
@@ -125,9 +125,9 @@ class ConstructeurActionsHATEOAS {
   }
 
   public postAuthentification(
-    aidantAuthentifie: AidantAuthentifie
+    utilisateurAuthentifie: UtilisateurAuthentifie
   ): ConstructeurActionsHATEOAS {
-    if (!aidantAuthentifie.dateSignatureCGU) {
+    if (!utilisateurAuthentifie.dateSignatureCGU) {
       return this.creerEspaceAidant();
     }
 

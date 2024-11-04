@@ -24,10 +24,14 @@ import {
   Statistiques,
 } from '../../../statistiques/statistiques';
 import {
-  EntrepotAnnuaireAidants,
   Aidant as AnnuaireAidant,
+  EntrepotAnnuaireAidants,
 } from '../../../annuaire-aidants/annuaireAidants';
 import { CriteresDeRecherche } from '../../../annuaire-aidants/ServiceAnnuaireAidants';
+import {
+  EntrepotUtilisateur,
+  Utilisateur,
+} from '../../../authentification/Utilisateur';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -200,5 +204,25 @@ export class EntrepotAnnuaireAidantsMemoire
       );
     }
     return Promise.resolve(tousLesAidants);
+  }
+}
+
+export class EntrepotUtilisateurMemoire
+  extends EntrepotMemoire<Utilisateur>
+  implements EntrepotUtilisateur
+{
+  async rechercheParIdentifiantConnexionEtMotDePasse(
+    identifiantConnexion: string,
+    motDePasse: string
+  ): Promise<Utilisateur> {
+    const utilisateurTrouve = Array.from(this.entites.values()).find(
+      (utilisateur) =>
+        utilisateur.identifiantConnexion === identifiantConnexion &&
+        utilisateur.motDePasse === motDePasse
+    );
+    if (!utilisateurTrouve) {
+      throw new AggregatNonTrouve('utilisateur');
+    }
+    return Promise.resolve(utilisateurTrouve);
   }
 }

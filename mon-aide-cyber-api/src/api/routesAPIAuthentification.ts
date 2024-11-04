@@ -1,6 +1,5 @@
 import { ConfigurationServeur } from '../serveur';
 import express, { Request, Response } from 'express';
-import { AidantAuthentifie } from '../authentification/Aidant';
 import { NextFunction } from 'express-serve-static-core';
 import bodyParser from 'body-parser';
 import { body } from 'express-validator';
@@ -8,6 +7,7 @@ import { authentifie } from '../authentification/authentification';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
 import { RequeteUtilisateur } from './routesAPI';
 import { adaptateurConfigurationLimiteurTraffic } from './adaptateurLimiteurTraffic';
+import { UtilisateurAuthentifie } from '../authentification/Utilisateur';
 
 export type CorpsRequeteAuthentification = {
   identifiant: string;
@@ -36,17 +36,17 @@ export const routesAPIAuthentification = (
       const { identifiant, motDePasse }: CorpsRequeteAuthentification =
         requete.body;
       authentifie(
-        configuration.entrepots.aidants(),
+        configuration.entrepots.utilisateurs(),
         configuration.gestionnaireDeJeton,
         identifiant,
         motDePasse
       )
-        .then((aidantAuthentifie: AidantAuthentifie) => {
-          requete.session!.token = aidantAuthentifie.jeton;
+        .then((utilisateurAuthentifie: UtilisateurAuthentifie) => {
+          requete.session!.token = utilisateurAuthentifie.jeton;
           reponse.status(201).json({
-            nomPrenom: aidantAuthentifie.nomPrenom,
+            nomPrenom: utilisateurAuthentifie.nomPrenom,
             ...constructeurActionsHATEOAS()
-              .postAuthentification(aidantAuthentifie)
+              .postAuthentification(utilisateurAuthentifie)
               .construis(),
           });
         })
