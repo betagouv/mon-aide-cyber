@@ -10,6 +10,7 @@
     "administration:initialise-creation-espaces-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/espace-aidant/commande.ts",
     "administration:envoi-mail-creation-compte-aidant": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/creation-compte/commande.ts",
     "administration:rapport-demandes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/demandes-en-cours/commande.ts",
+    "administration:recherche-demandes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/recherche/commande.ts",
     "administration:recherche-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/recherche/commande.ts",
     "administration:recupere-aidants-cci": "ts-node --transpile-only --require dotenv/config src/administration/aidants/cci/commande.ts",
     "administration:chiffrement": "ts-node --transpile-only --require dotenv/config src/administration/chiffrement/commande.ts",
