@@ -6,7 +6,6 @@ import { secteursActivite } from '../../espace-aidant/preferences/secteursActivi
 import { departements } from '../../gestion-demandes/departements';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from '../hateoas/hateoas';
 import { ErreurMAC } from '../../domaine/erreurMAC';
-import { typesEntites, TypesEntites } from '../../authentification/Aidant';
 import { ServicePreferencesAidant } from '../../espace-aidant/preferences/ServicePreferencesAidant';
 import {
   ExpressValidator,
@@ -15,6 +14,7 @@ import {
   Result,
   validationResult,
 } from 'express-validator';
+import { typesEntites, TypesEntites } from '../../espace-aidant/Aidant';
 
 export type ReponsePreferencesAidantAPI = ReponseHATEOAS & {
   preferencesAidant: {

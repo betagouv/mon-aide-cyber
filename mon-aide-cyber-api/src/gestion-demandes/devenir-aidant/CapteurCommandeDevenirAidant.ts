@@ -10,8 +10,7 @@ import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironneme
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import crypto from 'crypto';
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
-
-import { ServiceAidant } from '../../authentification/ServiceAidant';
+import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
 
 export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   type: 'CommandeDevenirAidant';

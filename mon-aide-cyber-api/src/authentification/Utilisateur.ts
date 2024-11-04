@@ -22,3 +22,9 @@ export type UtilisateurAuthentifie = {
   dateSignatureCGU?: Date;
   jeton: string;
 };
+
+export class ErreurAuthentification extends Error {
+  constructor(public readonly erreur: Error) {
+    super('Identifiants incorrects.');
+  }
+}

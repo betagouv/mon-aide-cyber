@@ -66,12 +66,6 @@ export interface EntrepotAidant extends Entrepot<Aidant> {
   ): Promise<Aidant>;
 }
 
-export class ErreurAuthentification extends Error {
-  constructor(public readonly erreur: Error) {
-    super('Identifiants incorrects.');
-  }
-}
-
 export class ErreurCreationEspaceAidant extends Error {
   constructor(public readonly message: string) {
     super(message);

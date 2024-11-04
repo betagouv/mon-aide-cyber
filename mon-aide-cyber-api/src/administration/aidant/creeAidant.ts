@@ -1,8 +1,8 @@
-import { Aidant, EntrepotAidant } from '../../authentification/Aidant';
 import crypto from 'crypto';
 import { BusEvenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { AidantCree } from '../../espace-aidant/CapteurCommandeCreeEspaceAidant';
+import { Aidant, EntrepotAidant } from '../../espace-aidant/Aidant';
 
 export type DonneesAidant = {
   identifiantConnexion: string;

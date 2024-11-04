@@ -1,7 +1,7 @@
-import { EntrepotAidant } from '../../authentification/Aidant';
 import crypto from 'crypto';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { EntrepotAidant } from '../Aidant';
 
 export type ProfilAidantModifie = Evenement<{
   identifiant: crypto.UUID;

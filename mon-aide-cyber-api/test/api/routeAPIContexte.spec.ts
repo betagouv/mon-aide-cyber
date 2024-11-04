@@ -3,7 +3,7 @@ import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from './executeurRequete';
 import { ReponseHATEOAS } from '../../src/api/hateoas/hateoas';
-import { unAidant } from '../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { FauxGestionnaireDeJeton } from '../infrastructure/authentification/FauxGestionnaireDeJeton';
 
 describe('Route contexte', () => {

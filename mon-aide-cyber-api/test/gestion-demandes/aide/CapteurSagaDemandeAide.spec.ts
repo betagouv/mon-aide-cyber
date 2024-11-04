@@ -17,8 +17,8 @@ import {
   CommandeCreerAide,
 } from '../../../src/aide/CapteurCommandeCreerAide';
 import { CapteurCommande } from '../../../src/domaine/commande';
-import { unServiceAidant } from '../../../src/authentification/ServiceAidantMAC';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
+import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   describe("si l'Aidé est connu de MAC", () => {

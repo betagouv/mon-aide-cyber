@@ -1,13 +1,13 @@
 import { describe, expect } from 'vitest';
 import { AdaptateurDeVerificationDeCGUMAC } from '../../src/adaptateurs/AdaptateurDeVerificationDeCGUMAC';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import { unAidant } from '../authentification/constructeurs/constructeurAidant';
 import { RequeteUtilisateur } from '../../src/api/routesAPI';
 import { Response } from 'express';
 import { ReponseHATEOAS } from '../../src/api/hateoas/hateoas';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { AdaptateurDeVerificationDeCGU } from '../../src/adaptateurs/AdaptateurDeVerificationDeCGU';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
+import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 
 describe('Adaptateur de Vérification de CGU', () => {
   let entrepots: Entrepots;

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect } from 'vitest';
-import { unAidant } from '../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from './executeurRequete';

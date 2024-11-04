@@ -5,8 +5,8 @@ import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge
 import crypto from 'crypto';
 import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 import { AggregatNonTrouve } from '../domaine/Aggregat';
-import { Aidant, ErreurCreationEspaceAidant } from '../authentification/Aidant';
 import { Departement } from '../gestion-demandes/departements';
+import { Aidant, ErreurCreationEspaceAidant } from './Aidant';
 
 export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
   type: 'CommandeCreeEspaceAidant';

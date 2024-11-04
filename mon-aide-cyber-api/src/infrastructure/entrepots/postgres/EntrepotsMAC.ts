@@ -1,7 +1,6 @@
 import { Entrepots } from '../../../domaine/Entrepots';
 import { EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
 import { EntrepotDiagnosticPostgres } from './EntrepotDiagnosticPostgres';
-import { EntrepotAidant } from '../../../authentification/Aidant';
 import { EntrepotAidantPostgres } from './EntrepotAidantPostgres';
 import { adaptateurServiceChiffrement } from '../../adaptateurs/adaptateurServiceChiffrement';
 import { EntrepotRestitution } from '../../../restitution/Restitution';
@@ -16,6 +15,7 @@ import { EntrepotAnnuaireAidants } from '../../../annuaire-aidants/annuaireAidan
 import { EntrepotAnnuaireAidantsPostgres } from './EntrepotAnnuaireAidantsPostgres';
 import { EntrepotUtilisateur } from '../../../authentification/Utilisateur';
 import { EntrepotUtilisateurPostgres } from './EntrepotUtilisateurPostgres';
+import { EntrepotAidant } from '../../../espace-aidant/Aidant';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();

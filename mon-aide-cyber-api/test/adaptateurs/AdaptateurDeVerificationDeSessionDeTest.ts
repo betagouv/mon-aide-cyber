@@ -2,8 +2,8 @@ import { AdaptateurDeVerificationDeSession } from '../../src/adaptateurs/Adaptat
 import { NextFunction } from 'express-serve-static-core';
 import { RequestHandler, Response } from 'express';
 import { Contexte } from '../../src/domaine/erreurMAC';
-import { Aidant } from '../../src/authentification/Aidant';
 import { RequeteUtilisateur } from '../../src/api/routesAPI';
+import { Aidant } from '../../src/espace-aidant/Aidant';
 
 export class AdaptateurDeVerificationDeSessionDeTest
   implements AdaptateurDeVerificationDeSession

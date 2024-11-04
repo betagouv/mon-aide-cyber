@@ -1,8 +1,8 @@
 import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
 import crypto from 'crypto';
 import { EntrepotDiagnostic } from '../../diagnostic/Diagnostic';
-import { EntrepotAidant } from '../../authentification/Aidant';
 import { unTupleAidantInitieDiagnostic } from '../../diagnostic/tuples';
+import { EntrepotAidant } from '../../espace-aidant/Aidant';
 
 export type Relation = {
   mailAidant: string;

@@ -8,7 +8,6 @@ import {
   EntrepotEvenementJournal,
   Publication,
 } from '../../../journalisation/Publication';
-import { Aidant, EntrepotAidant } from '../../../authentification/Aidant';
 import {
   EntrepotRestitution,
   Restitution,
@@ -32,6 +31,7 @@ import {
   EntrepotUtilisateur,
   Utilisateur,
 } from '../../../authentification/Utilisateur';
+import { Aidant, EntrepotAidant } from '../../../espace-aidant/Aidant';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();

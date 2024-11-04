@@ -1,4 +1,4 @@
-import { unAidant as unAidantDuDomaineAidant } from '../authentification/constructeurs/constructeurAidant';
+import { unAidant as unAidantDuDomaineAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { Constructeur } from '../constructeurs/constructeur';
 import { Aidant } from '../../src/annuaire-aidants/annuaireAidants';
 import {

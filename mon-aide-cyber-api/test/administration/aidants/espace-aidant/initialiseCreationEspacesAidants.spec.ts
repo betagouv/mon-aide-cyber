@@ -17,7 +17,7 @@ import {
   DemandeDevenirAidant,
   StatutDemande,
 } from '../../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
-import { unAidant } from '../../../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../../../espace-aidant/constructeurs/constructeurAidant';
 
 const enTeteCsv =
   'Région;nom;formation;charte;mail;telephone;TO DO;qui;Compte Créé ?;commentaires;lieu de formation\n';

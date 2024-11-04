@@ -7,7 +7,6 @@ import { adaptateurUUID } from '../../../src/infrastructure/adaptateurs/adaptate
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
-import { unServiceAidant } from '../../../src/authentification/ServiceAidantMAC';
 import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
 import { BusCommande } from '../../../src/domaine/commande';
 import {
@@ -18,6 +17,7 @@ import {
   CapteurSagaDemandeAidantCreeEspaceAidant,
   DemandeDevenirAidantEspaceAidantCree,
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
+import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 
 describe('Capteur de saga pour créer un espace Aidant correspondant à une demande', () => {
   let busEvenementDeTest = new BusEvenementDeTest();

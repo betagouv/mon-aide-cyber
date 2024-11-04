@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { Express } from 'express';
 import testeurIntegration from '../testeurIntegration';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { executeRequete } from '../executeurRequete';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
-import { Aidant } from '../../../src/authentification/Aidant';
 import { Profil } from '../../../src/api/representateurs/profil/Profil';
+import { Aidant } from '../../../src/espace-aidant/Aidant';
 
 describe('le serveur MAC sur les routes /api/profil', () => {
   const testeurMAC = testeurIntegration();

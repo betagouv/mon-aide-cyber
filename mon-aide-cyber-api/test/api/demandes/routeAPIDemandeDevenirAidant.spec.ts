@@ -10,7 +10,7 @@ import { unConstructeurDeDemandeDevenirAidant } from '../../gestion-demandes/dev
 import { uneRequeteDemandeDevenirAidant } from './constructeurRequeteDemandeDevenirAidant';
 import crypto from 'crypto';
 import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServiceDeChiffrement';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
+import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 
