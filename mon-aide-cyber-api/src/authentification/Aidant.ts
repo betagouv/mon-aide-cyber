@@ -77,7 +77,3 @@ export class ErreurCreationEspaceAidant extends Error {
     super(message);
   }
 }
-
-export type AidantAuthentifie = Aidant & {
-  jeton: string;
-};

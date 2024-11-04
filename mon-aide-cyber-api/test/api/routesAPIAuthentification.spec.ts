@@ -4,7 +4,7 @@ import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { unAidant } from '../authentification/constructeurs/constructeurAidant';
 import { ReponseAuthentification } from '../../src/api/routesAPIAuthentification';
-import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
+import { unUtilisateur } from '../authentification/constructeurs/constructeurUtilisateur';
 
 describe("Le serveur MAC, sur les routes d'authentification", () => {
   const testeurMAC = testeurIntegration();
@@ -20,12 +20,12 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
     describe('Quand une requête POST est reçue', () => {
       it('génère un token', async () => {
         await testeurMAC.entrepots
-          .aidants()
+          .utilisateurs()
           .persiste(
-            unAidant()
-              .avecUnNomPrenom('Martin Dupont')
+            unUtilisateur()
               .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
               .avecUnMotDePasse('mon_Mot-D3p4sse')
+              .avecUnNomPrenom('Martin Dupont')
               .construis()
           );
 
@@ -73,7 +73,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         expect(cookieRecu[4]).toStrictEqual('httponly');
       });
 
-      it("retourne une erreur http 401 quand l'aidant n'est pas trouvé", async () => {
+      it("retourne une erreur http 401 quand l'utilisateur n'est pas trouvé", async () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
@@ -134,16 +134,16 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         });
       });
 
-      describe("dans le cas où un aidant n'a pas encore d'espace", () => {
+      describe("dans le cas où un utilisateur n'a pas encore d'espace aidant", () => {
         it("renvoie un lien pour créer l'espace Aidant", async () => {
           await testeurMAC.entrepots
-            .aidants()
+            .utilisateurs()
             .persiste(
-              unAidant()
-                .sansEspace()
+              unUtilisateur()
                 .avecUnNomPrenom('Jean Dupont')
                 .avecUnIdentifiantDeConnexion('jean.dupont@email.com')
                 .avecUnMotDePasse('mon_Mot-D3p4sse')
+                .sansCGUSignees()
                 .construis()
             );
 
@@ -161,34 +161,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           expect(reponse.statusCode).toBe(201);
           expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
             nomPrenom: 'Jean Dupont',
-            liens: {
-              'creer-espace-aidant': {
-                url: '/api/espace-aidant/cree',
-                methode: 'POST',
-              },
-            },
-          });
-        });
-
-        it("renvoie un lien pour créer l'espace Aidant si les CGU ne sont pas signées", async () => {
-          const aidant = unAidant().sansEspace().construis();
-          aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
-          await testeurMAC.entrepots.aidants().persiste(aidant);
-
-          const reponse = await executeRequete(
-            donneesServeur.app,
-            'POST',
-            '/api/token',
-            donneesServeur.portEcoute,
-            {
-              identifiant: aidant.identifiantConnexion,
-              motDePasse: aidant.motDePasse,
-            }
-          );
-
-          expect(reponse.statusCode).toBe(201);
-          expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
-            nomPrenom: aidant.nomPrenom,
             liens: {
               'creer-espace-aidant': {
                 url: '/api/espace-aidant/cree',

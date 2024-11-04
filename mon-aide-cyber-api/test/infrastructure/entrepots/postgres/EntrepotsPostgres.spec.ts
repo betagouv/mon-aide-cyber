@@ -51,6 +51,9 @@ import {
   departements,
 } from '../../../../src/gestion-demandes/departements';
 import { SecteurActivite } from '../../../../src/espace-aidant/preferences/secteursActivite';
+import { unUtilisateur } from '../../../authentification/constructeurs/constructeurUtilisateur';
+import { EntrepotUtilisateurPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotUtilisateurPostgres';
+import { Utilisateur } from '../../../../src/authentification/Utilisateur';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {
@@ -668,40 +671,6 @@ describe('Entrepot Aidant', () => {
     });
   });
 
-  describe('Recherche par identifiant et mot de passe', () => {
-    it("l'aidant est trouvé", async () => {
-      const aidant = unAidant().construis();
-      const serviceDeChiffrement = new FauxServiceDeChiffrement(
-        new Map([
-          [aidant.identifiantConnexion, 'aaa'],
-          [aidant.motDePasse, 'bbb'],
-          [aidant.nomPrenom, 'ccc'],
-        ])
-      );
-
-      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
-
-      const aidantRecu = await new EntrepotAidantPostgres(
-        serviceDeChiffrement
-      ).rechercheParIdentifiantConnexionEtMotDePasse(
-        aidant.identifiantConnexion,
-        aidant.motDePasse
-      );
-      expect(aidantRecu).toStrictEqual<Aidant>(aidant);
-    });
-
-    it("l'aidant n'est pas trouvé", () => {
-      expect(
-        new EntrepotAidantPostgres(
-          new FauxServiceDeChiffrement(new Map())
-        ).rechercheParIdentifiantConnexionEtMotDePasse(
-          'identifiant-inconnu',
-          'mdp'
-        )
-      ).rejects.toThrow(new Error("Le aidant demandé n'existe pas."));
-    });
-  });
-
   describe('Recherche par identifiant', () => {
     it("l'aidant est trouvé", async () => {
       const aidant = unAidant().construis();
@@ -821,6 +790,90 @@ describe('Entrepot Annuaire Aidants Postgres', () => {
           },
         ]);
       });
+    });
+  });
+});
+
+describe('Entrepot Utilisateur', () => {
+  beforeEach(async () => {
+    await nettoieLaBaseDeDonneesAidants();
+  });
+
+  it('Persiste un utilisateur', async () => {
+    const utilisateur = unUtilisateur().construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [utilisateur.identifiantConnexion, 'aaa'],
+        [utilisateur.motDePasse, 'bbb'],
+        [utilisateur.nomPrenom, 'ccc'],
+      ])
+    );
+    const entrepotUtilisateurPostgres = new EntrepotUtilisateurPostgres(
+      serviceDeChiffrement
+    );
+
+    await entrepotUtilisateurPostgres.persiste(utilisateur);
+
+    const utilisateurRecu = await entrepotUtilisateurPostgres.lis(
+      utilisateur.identifiant
+    );
+    expect(utilisateurRecu).toStrictEqual<Utilisateur>(utilisateur);
+  });
+
+  describe('Recherche par identifiant et mot de passe', () => {
+    it("L'utilisateur est trouvé", async () => {
+      const utilisateur = unUtilisateur().construis();
+      const serviceDeChiffrement = new FauxServiceDeChiffrement(
+        new Map([
+          [utilisateur.identifiantConnexion, 'aaa'],
+          [utilisateur.motDePasse, 'bbb'],
+          [utilisateur.nomPrenom, 'ccc'],
+        ])
+      );
+      const entrepotUtilisateurPostgres = new EntrepotUtilisateurPostgres(
+        serviceDeChiffrement
+      );
+
+      await entrepotUtilisateurPostgres.persiste(utilisateur);
+
+      const utilisateurRecu =
+        await entrepotUtilisateurPostgres.rechercheParIdentifiantConnexionEtMotDePasse(
+          utilisateur.identifiantConnexion,
+          utilisateur.motDePasse
+        );
+      expect(utilisateurRecu).toStrictEqual<Utilisateur>(utilisateur);
+    });
+
+    it("l'utilisateur n'est pas trouvé", () => {
+      expect(
+        new EntrepotUtilisateurPostgres(
+          new FauxServiceDeChiffrement(new Map())
+        ).rechercheParIdentifiantConnexionEtMotDePasse(
+          'identifiant-inconnu',
+          'mdp'
+        )
+      ).rejects.toThrow(new Error("Le utilisateur demandé n'existe pas."));
+    });
+  });
+
+  describe('Mets à jour un utilisateur', () => {
+    it('Mets à jour la date de signature des CGU', async () => {
+      const serviceDeChiffrement = new ServiceDeChiffrementClair();
+      const entrepotUtilisateurPostgres = new EntrepotUtilisateurPostgres(
+        serviceDeChiffrement
+      );
+      const dateSignature = new Date(Date.parse('2024-02-04T13:25:17+01:00'));
+      FournisseurHorlogeDeTest.initialise(dateSignature);
+      const utilisateur = unUtilisateur().sansCGUSignees().construis();
+      await entrepotUtilisateurPostgres.persiste(utilisateur);
+
+      utilisateur.dateSignatureCGU = FournisseurHorloge.maintenant();
+      await entrepotUtilisateurPostgres.persiste(utilisateur);
+
+      const utilisateurRecu = await entrepotUtilisateurPostgres.lis(
+        utilisateur.identifiant
+      );
+      expect(utilisateurRecu.dateSignatureCGU).toStrictEqual(dateSignature);
     });
   });
 });
