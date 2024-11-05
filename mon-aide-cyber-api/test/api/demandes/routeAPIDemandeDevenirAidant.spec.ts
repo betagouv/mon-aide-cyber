@@ -244,7 +244,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
     it('Retourne une erreur HTTP', async () => {
       const aidant = unAidant().construis();
       const demande = unConstructeurDeDemandeDevenirAidant()
-        .avecUnMail(aidant.identifiantConnexion)
+        .avecUnMail(aidant.email)
         .construis();
       await testeurMAC.entrepots.aidants().persiste(aidant);
       await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);

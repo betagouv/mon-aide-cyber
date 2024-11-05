@@ -10,14 +10,16 @@ import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptate
 import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
 import { BusCommande } from '../../../src/domaine/commande';
 import {
-  StatutDemande,
   DemandeDevenirAidant,
+  StatutDemande,
 } from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import {
   CapteurSagaDemandeAidantCreeEspaceAidant,
   DemandeDevenirAidantEspaceAidantCree,
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
+import { Utilisateur } from '../../../src/authentification/Utilisateur';
+import crypto from 'crypto';
 
 describe('Capteur de saga pour créer un espace Aidant correspondant à une demande', () => {
   let busEvenementDeTest = new BusEvenementDeTest();
@@ -33,6 +35,36 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       new AdaptateurEnvoiMailMemoire(),
       { aidant: unServiceAidant(entrepots.aidants()) }
     );
+  });
+
+  it('Crée un compte utilisateur', async () => {
+    FournisseurHorlogeDeTest.initialise(new Date());
+    const demande = unConstructeurDeDemandeDevenirAidant()
+      .avecUnMail('jean.dupont@email.com')
+      .construis();
+    await entrepots.demandesDevenirAidant().persiste(demande);
+    const identifiantUtilisateur = crypto.randomUUID();
+    adaptateurUUID.genereUUID = () => identifiantUtilisateur;
+
+    await new CapteurSagaDemandeAidantCreeEspaceAidant(
+      entrepots,
+      busCommande,
+      busEvenementDeTest
+    ).execute({
+      idDemande: demande.identifiant,
+      motDePasse: 'toto12345',
+      type: 'SagaDemandeAidantEspaceAidant',
+    });
+
+    const utilisateur: Utilisateur = await entrepots
+      .utilisateurs()
+      .lis(identifiantUtilisateur);
+    expect(utilisateur).toStrictEqual<Utilisateur>({
+      identifiant: identifiantUtilisateur,
+      identifiantConnexion: 'jean.dupont@email.com',
+      nomPrenom: `${demande.prenom} ${demande.nom}`,
+      motDePasse: 'toto12345',
+    });
   });
 
   it('La demande a été traitée', async () => {

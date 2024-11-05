@@ -540,7 +540,7 @@ describe('Entrepot Aidant', () => {
     const aidant = unAidant().construis();
     const serviceDeChiffrement = new FauxServiceDeChiffrement(
       new Map([
-        [aidant.identifiantConnexion, 'aaa'],
+        [aidant.email, 'aaa'],
         [aidant.motDePasse, 'bbb'],
         [aidant.nomPrenom, 'ccc'],
       ])
@@ -676,7 +676,7 @@ describe('Entrepot Aidant', () => {
       const aidant = unAidant().construis();
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
         new Map([
-          [aidant.identifiantConnexion, 'aaa'],
+          [aidant.email, 'aaa'],
           [aidant.motDePasse, 'bbb'],
           [aidant.nomPrenom, 'ccc'],
         ])
@@ -685,7 +685,7 @@ describe('Entrepot Aidant', () => {
 
       const aidantTrouve = await new EntrepotAidantPostgres(
         serviceDeChiffrement
-      ).rechercheParIdentifiantDeConnexion(aidant.identifiantConnexion);
+      ).rechercheParIdentifiantDeConnexion(aidant.email);
 
       expect(aidantTrouve).toStrictEqual<Aidant>(aidant);
     });

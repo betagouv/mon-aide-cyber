@@ -57,10 +57,7 @@ describe('Capteur saga demande solliciter Aide', () => {
       });
 
       expect(
-        adaptateurEnvoiMail.aEteEnvoyeA(
-          aidant.identifiantConnexion,
-          'Bonjour Aidant!'
-        )
+        adaptateurEnvoiMail.aEteEnvoyeA(aidant.email, 'Bonjour Aidant!')
       ).toBe(true);
       expect(adaptateurEnvoiMail.aEteEnvoyePar('INFO')).toBe(true);
     });
@@ -98,7 +95,7 @@ describe('Capteur saga demande solliciter Aide', () => {
 
       expect(
         adaptateurEnvoiMail.aEteEnvoyeA(
-          aidant.identifiantConnexion,
+          aidant.email,
           'Bonjour Aidant! BetaGouv'
         )
       ).toBe(true);

@@ -11,14 +11,14 @@ program
       adaptateurServiceChiffrement()
     ).tous();
     const aidantsTrouves = aidants
-      .filter((aidant) => aidant.identifiantConnexion.endsWith('cci.fr'))
+      .filter((aidant) => aidant.email.endsWith('cci.fr'))
       .map((aidant) => ({
         id: aidant.identifiant,
         idHashe: crypto
           .createHash('sha256')
           .update(aidant.identifiant)
           .digest('hex'),
-        email: aidant.identifiantConnexion,
+        email: aidant.email,
       }));
     console.log(
       `Il y a %s aidant(s) et %s trouvé(s)`,

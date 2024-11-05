@@ -142,7 +142,7 @@ describe('Capteur de commande devenir aidant', () => {
         unServiceAidant(entrepots.aidants())
       ).execute({
         departement: departements[0],
-        mail: aidant.identifiantConnexion,
+        mail: aidant.email,
         nom: 'nom',
         prenom: 'prenom',
         type: 'CommandeDevenirAidant',

@@ -57,7 +57,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
               ? FournisseurHorloge.formateDate(dateSignatureCGU).date
               : '',
             consentementAnnuaire: aidant.consentementAnnuaire,
-            identifiantConnexion: aidant.identifiantConnexion,
+            identifiantConnexion: aidant.email,
             ...constructeurActionsHATEOAS().accedeAuProfil().construis(),
           });
         })

@@ -423,7 +423,7 @@ describe('Initialise la création de l’espace des aidants', () => {
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
       const aidantCSV = unConstructeurAidantCSV()
-        .avecUnEmail(aidant.identifiantConnexion)
+        .avecUnEmail(aidant.email)
         .formationOK()
         .construis();
       const autreAidantCSV = unConstructeurAidantCSV()
@@ -448,7 +448,7 @@ describe('Initialise la création de l’espace des aidants', () => {
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
       const aidantCSV = unConstructeurAidantCSV()
-        .avecUnEmail(aidant.identifiantConnexion)
+        .avecUnEmail(aidant.email)
         .formationOK()
         .construis();
       const autreAidantCSV = unConstructeurAidantCSV()

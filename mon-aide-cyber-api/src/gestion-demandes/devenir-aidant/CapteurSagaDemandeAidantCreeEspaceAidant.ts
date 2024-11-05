@@ -9,6 +9,10 @@ import {
   CommandeCreeEspaceAidant,
   EspaceAidantCree,
 } from '../../espace-aidant/CapteurCommandeCreeEspaceAidant';
+import {
+  CommandeCreeUtilisateur,
+  UtilisateurCree,
+} from '../../authentification/CapteurCommandeCreeUtilisateur';
 
 export type SagaDemandeAidantCreeEspaceAidant = Omit<Saga, 'type'> & {
   type: 'SagaDemandeAidantEspaceAidant';
@@ -31,31 +35,42 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
       .lis(saga.idDemande)
       .then((demande) => {
         return this.busCommande
-          .publie<CommandeCreeEspaceAidant, EspaceAidantCree>({
+          .publie<CommandeCreeUtilisateur, UtilisateurCree>({
+            type: 'CommandeCreeUtilisateur',
             dateSignatureCGU: FournisseurHorloge.maintenant(),
             identifiantConnexion: demande.mail,
-            nomPrenom: `${demande.prenom} ${demande.nom}`,
             motDePasse: saga.motDePasse,
-            type: 'CommandeCreeEspaceAidant',
-            departement: demande.departement,
+            nomPrenom: `${demande.prenom} ${demande.nom}`,
           })
-          .then((compte) => {
-            return this.entrepots
-              .demandesDevenirAidant()
-              .persiste({ ...demande, statut: StatutDemande.TRAITEE })
-              .then(() =>
-                this.busEvenement
-                  .publie<DemandeDevenirAidantEspaceAidantCree>({
-                    type: 'DEMANDE_DEVENIR_AIDANT_ESPACE_AIDANT_CREE',
-                    date: FournisseurHorloge.maintenant(),
-                    identifiant: adaptateurUUID.genereUUID(),
-                    corps: {
-                      idAidant: compte.identifiant,
-                      idDemande: demande.identifiant,
-                    },
-                  })
-                  .then(() => Promise.resolve())
-              );
+          .then((utilisateur) => {
+            return this.busCommande
+              .publie<CommandeCreeEspaceAidant, EspaceAidantCree>({
+                identifiant: utilisateur.identifiant,
+                dateSignatureCGU: FournisseurHorloge.maintenant(),
+                email: utilisateur.email,
+                nomPrenom: utilisateur.nomPrenom,
+                motDePasse: saga.motDePasse,
+                type: 'CommandeCreeEspaceAidant',
+                departement: demande.departement,
+              })
+              .then((compte) => {
+                return this.entrepots
+                  .demandesDevenirAidant()
+                  .persiste({ ...demande, statut: StatutDemande.TRAITEE })
+                  .then(() =>
+                    this.busEvenement
+                      .publie<DemandeDevenirAidantEspaceAidantCree>({
+                        type: 'DEMANDE_DEVENIR_AIDANT_ESPACE_AIDANT_CREE',
+                        date: FournisseurHorloge.maintenant(),
+                        identifiant: adaptateurUUID.genereUUID(),
+                        corps: {
+                          idAidant: compte.identifiant,
+                          idDemande: demande.identifiant,
+                        },
+                      })
+                      .then(() => Promise.resolve())
+                  );
+              });
           });
       });
   }

@@ -46,7 +46,7 @@ type Preferences = {
 };
 
 export type Aidant = Aggregat & {
-  identifiantConnexion: string;
+  email: string;
   nomPrenom: string;
   motDePasse: string;
   dateSignatureCGU?: Date;
