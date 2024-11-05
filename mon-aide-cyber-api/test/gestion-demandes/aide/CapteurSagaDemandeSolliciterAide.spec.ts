@@ -149,6 +149,20 @@ describe('Capteur saga demande solliciter Aide', () => {
           departement: '33',
         },
       });
+      expect(
+        busEvenement.consommateursTestes.get(
+          'AIDE_VIA_SOLLICITATION_AIDANT_CREE'
+        )?.[0].evenementConsomme
+      ).toStrictEqual<DemandeSolliciterAideCree>({
+        identifiant: expect.any(String),
+        type: 'AIDE_VIA_SOLLICITATION_AIDANT_CREE',
+        date: maintenant,
+        corps: {
+          identifiantAide: aideRecue.identifiant,
+          identifiantAidant: aidant.identifiant,
+          departement: '33',
+        },
+      });
     });
   });
 

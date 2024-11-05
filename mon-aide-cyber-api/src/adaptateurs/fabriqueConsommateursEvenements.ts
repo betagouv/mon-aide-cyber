@@ -10,6 +10,7 @@ import {
   demandeDevenirAidantespaceAidantCree,
   preferencesAidantModifiees,
   profilAidantModifie,
+  aideViaSollicitationAidantCree,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
@@ -49,6 +50,10 @@ export const fabriqueConsommateursEvenements = (
     ['REPONSE_AJOUTEE', [reponseAjoutee(entrepotJournalisation)]],
     ['AIDANT_CREE', [consommateurs.aidantCree()]],
     ['AIDE_CREE', [consommateurs.aideCree()]],
+    [
+      'AIDE_VIA_SOLLICITATION_AIDANT_CREE',
+      [aideViaSollicitationAidantCree(entrepotJournalisation)],
+    ],
     [
       'DEMANDE_DEVENIR_AIDANT_CREEE',
       [demandeDevenirAidantCree(entrepotJournalisation)],
