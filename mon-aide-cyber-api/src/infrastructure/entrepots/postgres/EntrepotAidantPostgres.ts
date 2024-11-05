@@ -119,29 +119,6 @@ export class EntrepotAidantPostgres
     return 'aidant';
   }
 
-  rechercheParIdentifiantConnexionEtMotDePasse(
-    identifiantConnexion: string,
-    motDePasse: string
-  ): Promise<Aidant> {
-    return this.knex
-      .from(`${this.nomTable()}`)
-      .where({ type: 'AIDANT' })
-      .then((aidants: AidantDTO[]) =>
-        aidants.find(
-          (a) =>
-            this.chiffrement.dechiffre(a.donnees.identifiantConnexion) ===
-              identifiantConnexion &&
-            this.chiffrement.dechiffre(a.donnees.motDePasse) === motDePasse
-        )
-      )
-      .then((ligne) => {
-        if (!ligne) {
-          return Promise.reject(new AggregatNonTrouve(this.typeAggregat()));
-        }
-        return this.deDTOAEntite(ligne);
-      });
-  }
-
   rechercheParIdentifiantDeConnexion(
     identifiantConnexion: string
   ): Promise<Aidant> {
