@@ -16,6 +16,8 @@ import { EntrepotAnnuaireAidantsPostgres } from './EntrepotAnnuaireAidantsPostgr
 import { EntrepotUtilisateur } from '../../../authentification/Utilisateur';
 import { EntrepotUtilisateurPostgres } from './EntrepotUtilisateurPostgres';
 import { EntrepotAidant } from '../../../espace-aidant/Aidant';
+import { EntrepotProfilAidant } from '../../../espace-aidant/profil/profilAidant';
+import { EntrepotProfilAidantPostgres } from './EntrepotProfilAidantPostgres';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -35,7 +37,8 @@ export class EntrepotsMAC implements Entrepots {
     new EntrepotAnnuaireAidantsPostgres(adaptateurServiceChiffrement());
   private entrepotUtilisateurs: EntrepotUtilisateur =
     new EntrepotUtilisateurPostgres(adaptateurServiceChiffrement());
-
+  private entrepotProfilAidant: EntrepotProfilAidant =
+    new EntrepotProfilAidantPostgres(adaptateurServiceChiffrement());
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
   }
@@ -66,5 +69,9 @@ export class EntrepotsMAC implements Entrepots {
 
   utilisateurs(): EntrepotUtilisateur {
     return this.entrepotUtilisateurs;
+  }
+
+  profilAidant(): EntrepotProfilAidant {
+    return this.entrepotProfilAidant;
   }
 }

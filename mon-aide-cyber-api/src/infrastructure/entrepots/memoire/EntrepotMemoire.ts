@@ -32,6 +32,10 @@ import {
   Utilisateur,
 } from '../../../authentification/Utilisateur';
 import { Aidant, EntrepotAidant } from '../../../espace-aidant/Aidant';
+import {
+  EntrepotProfilAidant,
+  ProfilAidant,
+} from '../../../espace-aidant/profil/profilAidant';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -213,5 +217,30 @@ export class EntrepotUtilisateurMemoire
 
   typeAggregat(): string {
     return 'utilisateur';
+  }
+}
+
+export class EntrepotProfilAidantMemoire implements EntrepotProfilAidant {
+  constructor(
+    private readonly entrepotAidants: EntrepotAidant,
+    private readonly entrepotUtilisateurs: EntrepotUtilisateur
+  ) {}
+
+  async lis(identifiant: string): Promise<ProfilAidant> {
+    try {
+      const aidant = await this.entrepotAidants.lis(identifiant);
+      const utilisateur = await this.entrepotUtilisateurs.lis(identifiant);
+      return Promise.resolve({
+        identifiant: utilisateur.identifiant,
+        email: aidant.email,
+        nomPrenom: utilisateur.nomPrenom,
+        ...(utilisateur.dateSignatureCGU && {
+          dateSignatureCGU: utilisateur.dateSignatureCGU,
+        }),
+        consentementAnnuaire: aidant.consentementAnnuaire,
+      });
+    } catch (erreur) {
+      throw new AggregatNonTrouve('profil Aidant');
+    }
   }
 }

@@ -104,7 +104,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
       expect(reponse.statusCode).toBe(404);
       expect(await reponse.json()).toStrictEqual({
-        message: "Le aidant demandé n'existe pas.",
+        message: "Le profil Aidant demandé n'existe pas.",
       });
     });
   });
