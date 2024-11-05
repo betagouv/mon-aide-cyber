@@ -47,9 +47,7 @@ export class EntrepotAidantPostgres
   protected deDTOAEntite(dto: AidantDTO): Aidant {
     return {
       identifiant: dto.id,
-      identifiantConnexion: this.chiffrement.dechiffre(
-        dto.donnees.identifiantConnexion
-      ),
+      email: this.chiffrement.dechiffre(dto.donnees.identifiantConnexion),
       motDePasse: this.chiffrement.dechiffre(dto.donnees.motDePasse),
       nomPrenom: this.chiffrement.dechiffre(dto.donnees.nomPrenom),
       ...(dto.donnees.dateSignatureCGU && {
@@ -88,9 +86,7 @@ export class EntrepotAidantPostgres
       id: entite.identifiant,
       type: 'AIDANT',
       donnees: {
-        identifiantConnexion: this.chiffrement.chiffre(
-          entite.identifiantConnexion
-        ),
+        identifiantConnexion: this.chiffrement.chiffre(entite.email),
         motDePasse: this.chiffrement.chiffre(entite.motDePasse),
         nomPrenom: this.chiffrement.chiffre(entite.nomPrenom),
         ...(entite.dateSignatureCGU && {

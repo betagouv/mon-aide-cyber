@@ -97,7 +97,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           .persiste(
             unAidant()
               .avecUnNomPrenom('Martin Dupont')
-              .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
+              .avecUnEmail('martin.dupont@email.com')
               .avecUnMotDePasse('mon_Mot-D3p4sse')
               .construis()
           );
@@ -179,7 +179,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           .persiste(
             unAidant()
               .avecUnNomPrenom('Martin Dupont')
-              .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
+              .avecUnEmail('martin.dupont@email.com')
               .avecUnMotDePasse('mon_Mot-D3p4sse')
               .construis()
           );

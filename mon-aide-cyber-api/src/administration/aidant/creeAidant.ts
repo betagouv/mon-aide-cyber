@@ -20,7 +20,7 @@ export const creeAidant = async (
     .catch(async () => {
       const aidant: Aidant = {
         identifiant: crypto.randomUUID(),
-        identifiantConnexion: donneesAidant.identifiantConnexion,
+        email: donneesAidant.identifiantConnexion,
         motDePasse: donneesAidant.motDePasse,
         nomPrenom: donneesAidant.nomPrenom,
         preferences: {

@@ -12,7 +12,7 @@ describe('Service Aidant', () => {
       const mailAidant = 'aidant@mail.tld';
       const aidant: Aidant = unAidant()
         .avecUnNomPrenom('Jean Dujardin')
-        .avecUnIdentifiantDeConnexion(mailAidant)
+        .avecUnEmail(mailAidant)
         .construis();
       const entrepotAidant = new EntrepotAidantMemoire();
       await entrepotAidant.persiste(aidant);
@@ -22,7 +22,7 @@ describe('Service Aidant', () => {
 
       expect(aidantCherche).toStrictEqual<AidantDTO>({
         identifiant: aidant.identifiant,
-        email: aidant.identifiantConnexion,
+        email: aidant.email,
         nomUsage: 'Jean D.',
       });
     });
@@ -54,7 +54,7 @@ describe('Service Aidant', () => {
       expect(aidantRetourne).toStrictEqual<AidantDTO>({
         nomUsage: 'Martin D.',
         identifiant: martin.identifiant,
-        email: martin.identifiantConnexion,
+        email: martin.email,
       });
     });
 

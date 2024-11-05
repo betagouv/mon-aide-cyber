@@ -98,7 +98,7 @@ export class EntrepotAidantMemoire
     identifiantConnexion: string
   ): Promise<Aidant> {
     const aidantTrouve = Array.from(this.entites.values()).find(
-      (aidant) => aidant.identifiantConnexion === identifiantConnexion
+      (aidant) => aidant.email === identifiantConnexion
     );
     if (!aidantTrouve) {
       return Promise.reject(new AggregatNonTrouve('aidant'));
@@ -209,5 +209,9 @@ export class EntrepotUtilisateurMemoire
       throw new AggregatNonTrouve('utilisateur');
     }
     return Promise.resolve(utilisateurTrouve);
+  }
+
+  typeAggregat(): string {
+    return 'utilisateur';
   }
 }

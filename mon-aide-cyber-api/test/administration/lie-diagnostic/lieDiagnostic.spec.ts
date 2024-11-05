@@ -34,7 +34,7 @@ describe('Lie un diagnostic', () => {
       entrepotDiagnostic,
       entrepotAidant,
       {
-        mailAidant: aidant.identifiantConnexion,
+        mailAidant: aidant.email,
         identifiantAidant,
         identifiantDiagnostic,
         estPersiste: false,
@@ -47,7 +47,7 @@ describe('Lie un diagnostic', () => {
       )
     ).toStrictEqual([identifiantDiagnostic]);
     expect(relation).toStrictEqual<Relation>({
-      mailAidant: aidant.identifiantConnexion,
+      mailAidant: aidant.email,
       identifiantDiagnostic,
       identifiantAidant,
       estPersiste: true,
@@ -75,7 +75,7 @@ describe('Lie un diagnostic', () => {
       entrepotDiagnostic,
       entrepotAidant,
       {
-        mailAidant: aidant.identifiantConnexion,
+        mailAidant: aidant.email,
         identifiantAidant: aidant.identifiant,
         identifiantDiagnostic: diagnostic.identifiant,
         estPersiste: false,
@@ -133,7 +133,7 @@ describe('Lie un diagnostic', () => {
         new EntrepotDiagnosticMemoire(),
         entrepotAvecUnAidant,
         {
-          mailAidant: aidant.identifiantConnexion,
+          mailAidant: aidant.email,
           identifiantAidant: aidant.identifiant,
           identifiantDiagnostic: identifiantDiagnosticNonTrouve,
           estPersiste: false,

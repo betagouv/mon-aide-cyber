@@ -11,7 +11,7 @@ interface Constructeur<T> {
 
 class ConstructeurAidant implements Constructeur<Aidant> {
   private identifiant: crypto.UUID = fakerFR.string.uuid() as crypto.UUID;
-  private identifiantConnexion: string = fakerFR.internet.email().toLowerCase();
+  private email: string = fakerFR.internet.email().toLowerCase();
   private nomPrenom: string = fakerFR.person.fullName();
   private motDePasse: string = fakerFR.string.alpha(10);
   private dateSignatureCGU: Date | undefined = FournisseurHorloge.maintenant();
@@ -27,20 +27,13 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
-  avecUnIdentifiantDeConnexion(
-    identifiantConnexion: string
-  ): ConstructeurAidant {
-    this.identifiantConnexion = identifiantConnexion;
+  avecUnEmail(identifiantConnexion: string): ConstructeurAidant {
+    this.email = identifiantConnexion;
     return this;
   }
 
   avecUnMotDePasse(motDePasse: string): ConstructeurAidant {
     this.motDePasse = motDePasse;
-    return this;
-  }
-
-  avecUnIdentifiant(identifiant: crypto.UUID): ConstructeurAidant {
-    this.identifiant = identifiant;
     return this;
   }
 
@@ -75,7 +68,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   construis(): Aidant {
     return {
       identifiant: this.identifiant,
-      identifiantConnexion: this.identifiantConnexion,
+      email: this.email,
       motDePasse: this.motDePasse,
       nomPrenom: this.nomPrenom,
       ...(this.dateSignatureCGU && { dateSignatureCGU: this.dateSignatureCGU }),

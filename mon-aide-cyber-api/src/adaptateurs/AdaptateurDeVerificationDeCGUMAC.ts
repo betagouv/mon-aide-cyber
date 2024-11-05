@@ -16,10 +16,10 @@ export class AdaptateurDeVerificationDeCGUMAC
       reponse: Response,
       suite: NextFunction
     ) => {
-      const aidant = await this.entrepots
-        .aidants()
+      const utilisateur = await this.entrepots
+        .utilisateurs()
         .lis(requete.identifiantUtilisateurCourant!);
-      if (!aidant.dateSignatureCGU) {
+      if (!utilisateur.dateSignatureCGU) {
         reponse
           .status(302)
           .json(constructeurActionsHATEOAS().creerEspaceAidant().construis());

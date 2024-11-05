@@ -10,7 +10,7 @@ class ServiceAidantMAC implements ServiceAidant {
       .rechercheParIdentifiantDeConnexion(mailAidant)
       .then((aidant) => ({
         identifiant: aidant.identifiant,
-        email: aidant.identifiantConnexion,
+        email: aidant.email,
         nomUsage: this.formateLeNom(aidant.nomPrenom),
       }))
       .catch(() => undefined);
@@ -23,7 +23,7 @@ class ServiceAidantMAC implements ServiceAidant {
       .lis(identifiant)
       .then((aidant) => ({
         identifiant: aidant.identifiant,
-        email: aidant.identifiantConnexion,
+        email: aidant.email,
         nomUsage: this.formateLeNom(aidant.nomPrenom),
       }))
       .catch(() => undefined);

@@ -16,6 +16,7 @@ import { CapteurCommandeCreeEspaceAidant } from '../../espace-aidant/CapteurComm
 import { CapteurSagaDemandeAidantCreeEspaceAidant } from '../../gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
 import { CapteurSagaDemandeSolliciterAide } from '../../gestion-demandes/aide/CapteurSagaDemandeSolliciterAide';
 import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
+import { CapteurCommandeCreeUtilisateur } from '../../authentification/CapteurCommandeCreeUtilisateur';
 
 type Services = {
   aidant: ServiceAidant;
@@ -101,6 +102,13 @@ const capteurs: Map<string, Capteur> = new Map([
           fabriqueAnnuaireCOT().annuaireCOT,
           parametres.services.aidant
         ),
+    },
+  ],
+  [
+    'CommandeCreeUtilisateur',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeCreeUtilisateur(parametres.entrepots),
     },
   ],
   [
