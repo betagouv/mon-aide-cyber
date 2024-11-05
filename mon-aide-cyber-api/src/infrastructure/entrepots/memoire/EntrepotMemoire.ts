@@ -94,21 +94,6 @@ export class EntrepotAidantMemoire
   extends EntrepotMemoire<Aidant>
   implements EntrepotAidant
 {
-  async rechercheParIdentifiantConnexionEtMotDePasse(
-    identifiantConnexion: string,
-    motDePasse: string
-  ): Promise<Aidant> {
-    const aidantTrouve = Array.from(this.entites.values()).find(
-      (aidant) =>
-        aidant.identifiantConnexion === identifiantConnexion &&
-        aidant.motDePasse === motDePasse
-    );
-    if (!aidantTrouve) {
-      throw new AggregatNonTrouve('aidant');
-    }
-    return Promise.resolve(aidantTrouve);
-  }
-
   rechercheParIdentifiantDeConnexion(
     identifiantConnexion: string
   ): Promise<Aidant> {

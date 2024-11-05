@@ -56,11 +56,6 @@ export type Aidant = Aggregat & {
 };
 
 export interface EntrepotAidant extends Entrepot<Aidant> {
-  rechercheParIdentifiantConnexionEtMotDePasse(
-    identifiantConnexion: string,
-    motDePasse: string
-  ): Promise<Aidant>;
-
   rechercheParIdentifiantDeConnexion(
     identifiantConnexion: string
   ): Promise<Aidant>;
