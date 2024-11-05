@@ -11,9 +11,9 @@ import {
   EntrepotDiagnosticMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { unDiagnostic } from '../../constructeurs/constructeurDiagnostic';
-import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { AdaptateurRelationsEnErreur } from './AdaptateurRelationsEnErreur';
 import { unTupleAidantInitieDiagnostic } from '../../../src/diagnostic/tuples';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 
 describe('Lie un diagnostic', () => {
   it("créé une nouvelle relation lorsque le diagnostic n'est pas encore lié", async () => {

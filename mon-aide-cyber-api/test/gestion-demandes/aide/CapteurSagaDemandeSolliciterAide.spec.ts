@@ -7,7 +7,6 @@ import {
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
-import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import {
   adaptateurCorpsMessage,
   ProprietesMessageAidant,
@@ -17,6 +16,7 @@ import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvi
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 
 describe('Capteur saga demande solliciter Aide', () => {
   let adaptateurEnvoiMail: AdaptateurEnvoiMailMemoire;

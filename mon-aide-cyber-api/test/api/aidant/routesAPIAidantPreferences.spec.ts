@@ -1,12 +1,17 @@
 import { afterEach, beforeEach, describe, expect } from 'vitest';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
-import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { executeRequete } from '../executeurRequete';
 import { departements } from '../../../src/gestion-demandes/departements';
 import { secteursActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
 import { ReponsePreferencesAidantAPI } from '../../../src/api/aidant/routesAPIAidantPreferences';
 import { typesEntites } from '../../../src/espace-aidant/Aidant';
+
+import {
+  unAidant,
+  unCompteAidantRelieAUnCompteUtilisateur,
+  unUtilisateur,
+} from '../../constructeurs/constructeursAidantUtilisateur';
 
 describe('Le serveur MAC sur les routes /api/aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -24,9 +29,15 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
 
   describe('Quand une requête GET est reçue sur /preferences', () => {
     it('Retourne les préférences de l’Aidant', async () => {
-      const aidant = unAidant().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -60,15 +71,19 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     });
 
     it('Retourne les secteurs d’activité que l’Aidant a conservé', async () => {
-      const aidant = unAidant()
-        .ayantPourSecteursActivite([
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant().ayantPourSecteursActivite([
           { nom: 'Administration' },
           { nom: 'Commerce' },
           { nom: 'Transports' },
-        ])
-        .construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+        ]),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -88,11 +103,19 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       const ain = departements[0];
       const aisne = departements[1];
       const allier = departements[2];
-      const aidant = unAidant()
-        .ayantPourDepartements([ain, aisne, allier])
-        .construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant().ayantPourDepartements([
+          ain,
+          aisne,
+          allier,
+        ]),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -109,8 +132,11 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     });
 
     it('Retourne les types d’entités dans lesquels l’Aidant peut intervenir', async () => {
-      const aidant = unAidant()
-        .ayantPourTypesEntite([
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant().ayantPourTypesEntite([
           {
             nom: 'Organisations publiques',
             libelle:
@@ -120,10 +146,11 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
             nom: 'Associations',
             libelle: 'Associations (ex. association loi 1901, GIP)',
           },
-        ])
-        .construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+        ]),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -169,14 +196,18 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
 
   describe('Quand une requête PATCH est reçue sur /preferences', () => {
     it('vérifie la session de l’Aidant', async () => {
-      const aidant = unAidant()
-        .ayantPourSecteursActivite([
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant().ayantPourSecteursActivite([
           { nom: 'Administration' },
           { nom: 'Commerce' },
-        ])
-        .construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+        ]),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -235,10 +266,14 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
 
     describe('Lors de la phase de validation', () => {
       it("Valide les secteurs d'activité passés dans la requête", async () => {
-        const aidant = unAidant().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidant);
+        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+          constructeurAidant: unAidant(),
+        });
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidant
+          utilisateur
         );
 
         const reponse = await executeRequete(
@@ -260,10 +295,14 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       });
 
       it('Valide les départements passés dans la requête', async () => {
-        const aidant = unAidant().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidant);
+        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+          constructeurAidant: unAidant(),
+        });
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidant
+          utilisateur
         );
 
         const reponse = await executeRequete(
@@ -285,10 +324,14 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       });
 
       it('Valide les types d’entités passés dans la requête', async () => {
-        const aidant = unAidant().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidant);
+        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+          constructeurAidant: unAidant(),
+        });
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidant
+          utilisateur
         );
 
         const reponse = await executeRequete(

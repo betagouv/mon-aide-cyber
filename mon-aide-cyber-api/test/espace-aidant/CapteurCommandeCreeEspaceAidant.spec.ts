@@ -12,8 +12,8 @@ import {
   CapteurCommandeCreeEspaceAidant,
   EspaceAidantCree,
 } from '../../src/espace-aidant/CapteurCommandeCreeEspaceAidant';
-import { unAidant } from './constructeurs/constructeurAidant';
 import crypto from 'crypto';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Capteur de commande de création de compte Aidant', () => {
   it('Crée un compte Aidant', async () => {

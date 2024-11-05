@@ -6,7 +6,6 @@ import {
 } from '../../../utilitaires/nettoyeurBDD';
 import { EntrepotAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAidantPostgres';
 import { ServiceDeChiffrementClair } from '../../securite/ServiceDeChiffrementClair';
-import { unAidant } from '../../../espace-aidant/constructeurs/constructeurAidant';
 import { EntrepotStatistiquesPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesPostgres';
 import { Statistiques } from '../../../../src/statistiques/statistiques';
 import { EntrepotRelationPostgres } from '../../../../src/relation/infrastructure/EntrepotRelationPostgres';
@@ -45,7 +44,6 @@ import {
   departements,
 } from '../../../../src/gestion-demandes/departements';
 import { SecteurActivite } from '../../../../src/espace-aidant/preferences/secteursActivite';
-import { unUtilisateur } from '../../../authentification/constructeurs/constructeurUtilisateur';
 import { EntrepotUtilisateurPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotUtilisateurPostgres';
 import { Utilisateur } from '../../../../src/authentification/Utilisateur';
 import {
@@ -54,6 +52,10 @@ import {
   EntitesOrganisationsPubliques,
   TypesEntites,
 } from '../../../../src/espace-aidant/Aidant';
+import {
+  unAidant,
+  unUtilisateur,
+} from '../../../constructeurs/constructeursAidantUtilisateur';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {

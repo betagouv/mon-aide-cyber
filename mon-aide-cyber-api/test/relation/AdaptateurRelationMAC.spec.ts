@@ -1,10 +1,10 @@
 import { describe, it } from 'vitest';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
-import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Adaptateur De Relation MAC', () => {
   it("retourne l'identifiant du diagnostic initié par l'aidant", async () => {

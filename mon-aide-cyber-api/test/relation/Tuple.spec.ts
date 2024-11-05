@@ -1,8 +1,8 @@
 import { describe, expect } from 'vitest';
-import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
 import { Tuple, unTuple } from '../../src/relation/Tuple';
 import { DefinitionAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Tuple', () => {
   it('construis un tuple de type initiateur entre un aidant et un diagnostic', async () => {

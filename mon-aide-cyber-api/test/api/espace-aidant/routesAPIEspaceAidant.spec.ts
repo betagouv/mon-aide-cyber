@@ -2,10 +2,11 @@ import { afterEach, beforeEach, describe, expect } from 'vitest';
 import { Express } from 'express';
 import testeurIntegration from '../testeurIntegration';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { executeRequete } from '../executeurRequete';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { ReponseHATEOAS } from '../../../src/api/hateoas/hateoas';
+
+import { unUtilisateur } from '../../constructeurs/constructeursAidantUtilisateur';
 
 describe('le serveur MAC sur les routes /api/espace-aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -24,8 +25,10 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-02-04T13:04:25+01:00'))
       );
-      const aidantCreantSonEspace = unAidant().sansEspace().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
+      const aidantCreantSonEspace = unUtilisateur()
+        .sansCGUSignees()
+        .construis();
+      await testeurMAC.entrepots.utilisateurs().persiste(aidantCreantSonEspace);
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
         aidantCreantSonEspace
       );
@@ -43,10 +46,10 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       );
 
       expect(reponse.statusCode).toBe(200);
-      const aidantRetrouve = await testeurMAC.entrepots
-        .aidants()
+      const utilisateurTrouve = await testeurMAC.entrepots
+        .utilisateurs()
         .lis(aidantCreantSonEspace.identifiant);
-      expect(aidantRetrouve.dateSignatureCGU).toStrictEqual(
+      expect(utilisateurTrouve.dateSignatureCGU).toStrictEqual(
         FournisseurHorloge.maintenant()
       );
       expect(
@@ -76,8 +79,12 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
 
     describe('En ce qui concerne le changement du mot de passe', () => {
       it('vérifie la longueur du mot de passe', async () => {
-        const aidantCreantSonEspace = unAidant().sansEspace().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
+        const aidantCreantSonEspace = unUtilisateur()
+          .sansCGUSignees()
+          .construis();
+        await testeurMAC.entrepots
+          .utilisateurs()
+          .persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
           aidantCreantSonEspace
         );
@@ -102,8 +109,12 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       });
 
       it('vérifie que le mot de passe contient au moins une minuscule', async () => {
-        const aidantCreantSonEspace = unAidant().sansEspace().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
+        const aidantCreantSonEspace = unUtilisateur()
+          .sansCGUSignees()
+          .construis();
+        await testeurMAC.entrepots
+          .utilisateurs()
+          .persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
           aidantCreantSonEspace
         );
@@ -128,8 +139,12 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       });
 
       it('vérifie que le mot de passe contient au moins une majuscule', async () => {
-        const aidantCreantSonEspace = unAidant().sansEspace().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
+        const aidantCreantSonEspace = unUtilisateur()
+          .sansCGUSignees()
+          .construis();
+        await testeurMAC.entrepots
+          .utilisateurs()
+          .persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
           aidantCreantSonEspace
         );
@@ -154,8 +169,12 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       });
 
       it('vérifie que le mot de passe contient au moins un chiffre', async () => {
-        const aidantCreantSonEspace = unAidant().sansEspace().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
+        const aidantCreantSonEspace = unUtilisateur()
+          .sansCGUSignees()
+          .construis();
+        await testeurMAC.entrepots
+          .utilisateurs()
+          .persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
           aidantCreantSonEspace
         );
@@ -180,8 +199,12 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       });
 
       it('vérifie que le mot de passe contient au moins un caractère spécial', async () => {
-        const aidantCreantSonEspace = unAidant().sansEspace().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
+        const aidantCreantSonEspace = unUtilisateur()
+          .sansCGUSignees()
+          .construis();
+        await testeurMAC.entrepots
+          .utilisateurs()
+          .persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
           aidantCreantSonEspace
         );
@@ -206,8 +229,12 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       });
 
       it('vérifie que le mot de passe temporaire est bien fourni', async () => {
-        const aidantCreantSonEspace = unAidant().sansEspace().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
+        const aidantCreantSonEspace = unUtilisateur()
+          .sansCGUSignees()
+          .construis();
+        await testeurMAC.entrepots
+          .utilisateurs()
+          .persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
           aidantCreantSonEspace
         );
@@ -232,8 +259,12 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       });
 
       it('vérifie que le mot de passe temporaire est bien fourni et que le nouveau mot de passe est valide', async () => {
-        const aidantCreantSonEspace = unAidant().sansEspace().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
+        const aidantCreantSonEspace = unUtilisateur()
+          .sansCGUSignees()
+          .construis();
+        await testeurMAC.entrepots
+          .utilisateurs()
+          .persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
           aidantCreantSonEspace
         );
@@ -258,8 +289,12 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       });
 
       it('vérifie que le mot de passe temporaire est différent du nouveau mot de passe', async () => {
-        const aidantCreantSonEspace = unAidant().sansEspace().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
+        const aidantCreantSonEspace = unUtilisateur()
+          .sansCGUSignees()
+          .construis();
+        await testeurMAC.entrepots
+          .utilisateurs()
+          .persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
           aidantCreantSonEspace
         );
@@ -284,8 +319,12 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       });
 
       it("vérifie que le mot de passe temporaire est bien celui de l'utilisateur", async () => {
-        const aidantCreantSonEspace = unAidant().sansEspace().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
+        const aidantCreantSonEspace = unUtilisateur()
+          .sansCGUSignees()
+          .construis();
+        await testeurMAC.entrepots
+          .utilisateurs()
+          .persiste(aidantCreantSonEspace);
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
           aidantCreantSonEspace
         );
@@ -313,8 +352,10 @@ describe('le serveur MAC sur les routes /api/espace-aidant', () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-02-04T13:04:25+01:00'))
       );
-      const aidantCreantSonEspace = unAidant().sansEspace().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidantCreantSonEspace);
+      const aidantCreantSonEspace = unUtilisateur()
+        .sansCGUSignees()
+        .construis();
+      await testeurMAC.entrepots.utilisateurs().persiste(aidantCreantSonEspace);
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
         aidantCreantSonEspace
       );

@@ -1,4 +1,3 @@
-import { unAidant as unAidantDuDomaineAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { Constructeur } from '../constructeurs/constructeur';
 import { Aidant } from '../../src/annuaire-aidants/annuaireAidants';
 import {
@@ -6,6 +5,7 @@ import {
   departements,
 } from '../../src/gestion-demandes/departements';
 import { fakerFR } from '@faker-js/faker';
+import { unAidant as unAidantDuDomaineAidant } from '../constructeurs/constructeursAidantUtilisateur';
 
 class ConstructeurAidant implements Constructeur<Aidant> {
   private nomPrenom: string = fakerFR.person.fullName();

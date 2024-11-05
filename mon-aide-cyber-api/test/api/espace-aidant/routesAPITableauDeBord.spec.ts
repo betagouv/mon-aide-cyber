@@ -4,8 +4,12 @@ import { executeRequete } from '../executeurRequete';
 import { Express } from 'express';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { ReponseDiagnostics } from '../../../src/api/espace-aidant/tableau-de-bord/routesAPITableauDeBord';
-import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { unDiagnosticInitiePar } from '../../espace-aidant/tableau-de-bord/constructeurs';
+import {
+  unAidant,
+  unCompteAidantRelieAUnCompteUtilisateur,
+  unUtilisateur,
+} from '../../constructeurs/constructeursAidantUtilisateur';
 
 describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () => {
   describe('quand une requête GET est reçue sur /', () => {
@@ -22,9 +26,15 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
     });
 
     it("retourne une liste vide de diagnostic si l'aidant n'a jamais initié de diagnostic", async () => {
-      const aidant = unAidant().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -55,9 +65,16 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-02-04T13:54:07+01:00'))
       );
-      const aidant = unAidant().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur, aidant } =
+        await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+          constructeurAidant: unAidant(),
+        });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
       const premierDiagnostic = await unDiagnosticInitiePar(
         'Corse-du-Sud',
         'enseignement',

@@ -1,11 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { Express } from 'express';
 import testeurIntegration from '../testeurIntegration';
-import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { executeRequete } from '../executeurRequete';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { Profil } from '../../../src/api/representateurs/profil/Profil';
-import { Aidant } from '../../../src/espace-aidant/Aidant';
+import {
+  unAidant,
+  unCompteAidantRelieAUnCompteUtilisateur,
+  unUtilisateur,
+} from '../../constructeurs/constructeursAidantUtilisateur';
+import { Utilisateur } from '../../../src/authentification/Utilisateur';
 
 describe('le serveur MAC sur les routes /api/profil', () => {
   const testeurMAC = testeurIntegration();
@@ -23,9 +27,16 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
   describe('quand une requête GET est reçue sur /', () => {
     it("retourne les informations le l'Aidant", async () => {
-      const aidant = unAidant().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur, aidant } =
+        await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+          constructeurAidant: unAidant(),
+        });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -117,9 +128,15 @@ describe('le serveur MAC sur les routes /api/profil', () => {
     });
 
     it("Modifie le consentement pour apparaître dans l'annuaire", async () => {
-      const aidant = unAidant().construis();
-      testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -133,15 +150,21 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
       const aidantModifie = await testeurMAC.entrepots
         .aidants()
-        .lis(aidant.identifiant);
+        .lis(utilisateur.identifiant);
       expect(reponse.statusCode).toBe(204);
       expect(aidantModifie.consentementAnnuaire).toBe(true);
     });
 
     it("Modifie le consentement pour ne plus apparaître dans l'annuaire", async () => {
-      const aidant = unAidant().ayantConsentiPourLAnnuaire().construis();
-      testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant().ayantConsentiPourLAnnuaire(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -155,15 +178,21 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
       const aidantModifie = await testeurMAC.entrepots
         .aidants()
-        .lis(aidant.identifiant);
+        .lis(utilisateur.identifiant);
       expect(reponse.statusCode).toBe(204);
       expect(aidantModifie.consentementAnnuaire).toBe(false);
     });
 
     it('Ne modifie pas le consentement si il n’y a pas de changements', async () => {
-      const aidant = unAidant().construis();
-      testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -177,15 +206,21 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
       const aidantModifie = await testeurMAC.entrepots
         .aidants()
-        .lis(aidant.identifiant);
+        .lis(utilisateur.identifiant);
       expect(reponse.statusCode).toBe(204);
       expect(aidantModifie.consentementAnnuaire).toBe(false);
     });
 
     it('Vérifie que les CGU ont été signées', async () => {
-      const aidant = unAidant().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       await executeRequete(
         donneesServeur.app,
@@ -203,9 +238,15 @@ describe('le serveur MAC sur les routes /api/profil', () => {
     });
 
     it('Valide que le corps de la requête correspond au consentement', async () => {
-      const aidant = unAidant().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -227,9 +268,15 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
   describe('Quand une requête POST est reçue sur /modifier-mot-de-passe', () => {
     it('modifie le mot de passe', async () => {
-      const aidant = unAidant().construis();
-      testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const nouveauMotDePasse = 'EgLw5R0ItVRxkl%#>cPd';
       const reponse = await executeRequete(
@@ -238,23 +285,29 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         '/api/profil/modifier-mot-de-passe',
         donneesServeur.portEcoute,
         {
-          ancienMotDePasse: aidant.motDePasse,
+          ancienMotDePasse: utilisateur.motDePasse,
           motDePasse: nouveauMotDePasse,
           confirmationMotDePasse: nouveauMotDePasse,
         }
       );
 
       expect(reponse.statusCode).toBe(204);
-      const aidantRecupere = await testeurMAC.entrepots
+      const utilisateurRecupere = await testeurMAC.entrepots
         .aidants()
-        .lis(aidant.identifiant);
-      expect(aidantRecupere.motDePasse).toBe(nouveauMotDePasse);
+        .lis(utilisateur.identifiant);
+      expect(utilisateurRecupere.motDePasse).toBe(nouveauMotDePasse);
     });
 
     it('vérifie que les CGU ont été signées', async () => {
-      const aidant = unAidant().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
 
       const nouveauMotDePasse = 'EgLw5R0ItVRxkl%#>cPd';
       await executeRequete(
@@ -263,7 +316,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         '/api/profil/modifier-mot-de-passe',
         donneesServeur.portEcoute,
         {
-          ancienMotDePasse: aidant.motDePasse,
+          ancienMotDePasse: utilisateur.motDePasse,
           motDePasse: nouveauMotDePasse,
           confirmationMotDePasse: nouveauMotDePasse,
         }
@@ -275,9 +328,10 @@ describe('le serveur MAC sur les routes /api/profil', () => {
     });
 
     describe('En ce qui concerne la vérification du mot de passe', async () => {
-      const aidant: Aidant = unAidant().construis();
+      const utilisateur: Utilisateur = unUtilisateur().construis();
       beforeEach(
-        async () => await testeurMAC.entrepots.aidants().persiste(aidant)
+        async () =>
+          await testeurMAC.entrepots.utilisateurs().persiste(utilisateur)
       );
 
       it.each([
@@ -285,7 +339,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           'vérifie la longueur du mot de passe',
           {
             corps: {
-              ancienMotDePasse: aidant.motDePasse,
+              ancienMotDePasse: utilisateur.motDePasse,
               motDePasse: 'EgLwVRxkl%#>cPd',
               confirmationMotDePasse: 'EgLwVRxkl%#>cPd',
             },
@@ -300,7 +354,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           'vérifie que le mot de passe contient au moins une minuscule',
           {
             corps: {
-              ancienMotDePasse: aidant.motDePasse,
+              ancienMotDePasse: utilisateur.motDePasse,
               motDePasse: 'EGLW5R0ITVRXKL%#>CPD',
               confirmationMotDePasse: 'EGLW5R0ITVRXKL%#>CPD',
             },
@@ -315,7 +369,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           'vérifie que le mot de passe contient au moins une majuscule',
           {
             corps: {
-              ancienMotDePasse: aidant.motDePasse,
+              ancienMotDePasse: utilisateur.motDePasse,
               motDePasse: 'eglw5r0itvrxkl%#>cpd',
               confirmationMotDePasse: 'eglw5r0itvrxkl%#>cpd',
             },
@@ -330,7 +384,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           'vérifie que le mot de passe contient au moins un chiffre',
           {
             corps: {
-              ancienMotDePasse: aidant.motDePasse,
+              ancienMotDePasse: utilisateur.motDePasse,
               motDePasse: 'EgLwCRDItVRxkl%#>cPd',
               confirmationMotDePasse: 'EgLwCRDItVRxkl%#>cPd',
             },
@@ -345,7 +399,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           'vérifie que le mot de passe contient au moins un caractère spécial',
           {
             corps: {
-              ancienMotDePasse: aidant.motDePasse,
+              ancienMotDePasse: utilisateur.motDePasse,
               motDePasse: 'EgLwCRD0tVRxklAbCcPd',
               confirmationMotDePasse: 'EgLwCRD0tVRxklAbCcPd',
             },
@@ -419,7 +473,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           'vérifie que la confirmation du mot de passe correspond',
           {
             corps: {
-              ancienMotDePasse: aidant.motDePasse,
+              ancienMotDePasse: utilisateur.motDePasse,
               motDePasse: 'EgLwCRD0tVRxkl>AbCcPd',
               confirmationMotDePasse: 'pas-le-meme-mdp',
             },
@@ -431,8 +485,17 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           },
         ],
       ])('%s', async (_, test) => {
+        const { utilisateur: aidantUtilisateur } =
+          await unCompteAidantRelieAUnCompteUtilisateur({
+            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+            entrepotAidant: testeurMAC.entrepots.aidants(),
+            constructeurUtilisateur: unUtilisateur().avecUnMotDePasse(
+              utilisateur.motDePasse
+            ),
+            constructeurAidant: unAidant(),
+          });
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidant
+          aidantUtilisateur
         );
 
         const reponse = await executeRequete(
