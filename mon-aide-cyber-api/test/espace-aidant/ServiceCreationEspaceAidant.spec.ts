@@ -3,21 +3,30 @@ import { ErreurMAC } from '../../src/domaine/erreurMAC';
 import { ErreurCreationEspaceAidant } from '../../src/espace-aidant/Aidant';
 import { ServiceCreationEspaceAidant } from '../../src/espace-aidant/ServiceCreationEspaceAidant';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
+import {
+  unAidant,
+  unCompteAidantRelieAUnCompteUtilisateur,
+  unUtilisateur,
+} from '../constructeurs/constructeursAidantUtilisateur';
 
 describe("Service de création d'espace Aidant", () => {
   it('renvoie une erreur si les CGU ne sont pas signées', async () => {
     const entrepots = new EntrepotsMemoire();
-    const aidant = unAidant().sansEspace().construis();
-    entrepots.aidants().persiste(aidant);
+    const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      entrepotUtilisateur: entrepots.utilisateurs(),
+      entrepotAidant: entrepots.aidants(),
+      constructeurUtilisateur: unUtilisateur().sansCGUSignees(),
+      constructeurAidant: unAidant(),
+    });
+
     const service = new ServiceCreationEspaceAidant(entrepots);
 
     await expect(() =>
       service.cree({
         cguSignees: false,
         motDePasse: 'mdp',
-        identifiant: aidant.identifiant,
+        identifiant: utilisateur.identifiant,
       })
     ).rejects.toThrowError(
       ErreurMAC.cree(
@@ -31,8 +40,13 @@ describe("Service de création d'espace Aidant", () => {
     const dateDeSignature = new Date(Date.parse('2024-01-12T12:34:26+01:00'));
     FournisseurHorlogeDeTest.initialise(dateDeSignature);
     const entrepots = new EntrepotsMemoire();
-    const aidant = unAidant().construis();
-    entrepots.aidants().persiste(aidant);
+    const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      entrepotUtilisateur: entrepots.utilisateurs(),
+      entrepotAidant: entrepots.aidants(),
+      constructeurUtilisateur: unUtilisateur(),
+      constructeurAidant: unAidant(),
+    });
+
     const service = new ServiceCreationEspaceAidant(entrepots);
 
     FournisseurHorlogeDeTest.initialise(
@@ -41,11 +55,12 @@ describe("Service de création d'espace Aidant", () => {
     await service.cree({
       cguSignees: true,
       motDePasse: 'mdp',
-      identifiant: aidant.identifiant,
+      identifiant: utilisateur.identifiant,
     });
 
-    const aidantRecupere = await entrepots.aidants().lis(aidant.identifiant);
-    expect(aidantRecupere.dateSignatureCharte).toStrictEqual(dateDeSignature);
+    const aidantRecupere = await entrepots
+      .utilisateurs()
+      .lis(utilisateur.identifiant);
     expect(aidantRecupere.dateSignatureCGU).toStrictEqual(dateDeSignature);
   });
 });

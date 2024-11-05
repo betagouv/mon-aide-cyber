@@ -3,8 +3,12 @@ import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from './executeurRequete';
 import { ReponseHATEOAS } from '../../src/api/hateoas/hateoas';
-import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { FauxGestionnaireDeJeton } from '../infrastructure/authentification/FauxGestionnaireDeJeton';
+
+import {
+  unAidant,
+  unUtilisateur,
+} from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Route contexte', () => {
   const testeurMAC = testeurIntegration();
@@ -66,16 +70,16 @@ describe('Route contexte', () => {
     let donneesServeur: { portEcoute: number; app: Express };
 
     beforeEach(async () => {
-      const aidant = unAidant().construis();
+      const utilisateur = unUtilisateur().construis();
       testeurMAC.recuperateurDeCookies = () =>
         btoa(
           JSON.stringify({
             token: JSON.stringify({
-              identifiant: aidant.identifiant,
+              identifiant: utilisateur.identifiant,
             }),
           })
         );
-      await testeurMAC.entrepots.aidants().persiste(aidant);
+      await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
       donneesServeur = testeurMAC.initialise();
     });
 
@@ -142,16 +146,18 @@ describe('Route contexte', () => {
     let donneesServeur: { portEcoute: number; app: Express };
 
     beforeEach(async () => {
-      const aidant = unAidant().sansEspace().construis();
+      const utilisateurSansEspace = unUtilisateur()
+        .sansCGUSignees()
+        .construis();
       testeurMAC.recuperateurDeCookies = () =>
         btoa(
           JSON.stringify({
             token: JSON.stringify({
-              identifiant: aidant.identifiant,
+              identifiant: utilisateurSansEspace.identifiant,
             }),
           })
         );
-      await testeurMAC.entrepots.aidants().persiste(aidant);
+      await testeurMAC.entrepots.utilisateurs().persiste(utilisateurSansEspace);
       donneesServeur = testeurMAC.initialise();
     });
     it('Retourne le lien vers la création de l’espace aidant si il s’agit d’une première connexion', async () => {

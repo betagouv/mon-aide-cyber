@@ -6,7 +6,8 @@ import { Response } from 'express';
 import { ReponseHATEOAS } from '../../src/api/hateoas/hateoas';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { AdaptateurDeVerificationDeCGU } from '../../src/adaptateurs/AdaptateurDeVerificationDeCGU';
-import { unUtilisateur } from '../authentification/constructeurs/constructeurUtilisateur';
+
+import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Adaptateur de Vérification de CGU', () => {
   let entrepots: Entrepots;

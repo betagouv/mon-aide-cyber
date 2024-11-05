@@ -3,7 +3,8 @@ import { authentifie } from '../../src/authentification/authentification';
 import { GestionnaireDeJetonJWT } from '../../src/infrastructure/authentification/gestionnaireDeJetonJWT';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { EntrepotUtilisateurMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import { unUtilisateur } from './constructeurs/constructeurUtilisateur';
+
+import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Authentification', () => {
   it('génère un jeton JWT', async () => {

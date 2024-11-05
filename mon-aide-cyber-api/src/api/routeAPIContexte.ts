@@ -24,11 +24,11 @@ export const routeAPIContexte = (configuration: ConfigurationServeur) => {
       const actionsHATEOAS = constructeurActionsHATEOAS();
       if (jwt.identifiant) {
         return entrepots
-          .aidants()
+          .utilisateurs()
           .lis(jwt.identifiant)
-          .then((aidant) =>
+          .then((utilisateur) =>
             reponse.json({
-              ...(aidant.dateSignatureCGU
+              ...(utilisateur.dateSignatureCGU
                 ? {
                     ...actionsHATEOAS.afficherTableauDeBord().construis(),
                   }

@@ -4,6 +4,7 @@ import { RequeteUtilisateur } from './routesAPI';
 import { NextFunction } from 'express-serve-static-core';
 import { constructeurActionsHATEOAS } from './hateoas/hateoas';
 import { ErreurMAC } from '../domaine/erreurMAC';
+
 export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
@@ -19,7 +20,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       suite: NextFunction
     ) => {
       return entrepots
-        .aidants()
+        .utilisateurs()
         .lis(requete.identifiantUtilisateurCourant!)
         .then((aidant) => {
           const actionsHATEOAS = constructeurActionsHATEOAS();

@@ -3,8 +3,8 @@ import { EntrepotAidantMemoire } from '../../src/infrastructure/entrepots/memoir
 import crypto from 'crypto';
 import { Aidant } from '../../src/espace-aidant/Aidant';
 import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
-import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { AidantDTO } from '../../src/espace-aidant/ServiceAidant';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Service Aidant', () => {
   describe('Recherche par mail', () => {

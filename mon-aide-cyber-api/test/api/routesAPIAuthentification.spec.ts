@@ -2,9 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { executeRequete } from './executeurRequete';
 import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
-import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import { ReponseAuthentification } from '../../src/api/routesAPIAuthentification';
-import { unUtilisateur } from '../authentification/constructeurs/constructeurUtilisateur';
+
+import {
+  unAidant,
+  unUtilisateur,
+} from '../constructeurs/constructeursAidantUtilisateur';
 
 describe("Le serveur MAC, sur les routes d'authentification", () => {
   const testeurMAC = testeurIntegration();

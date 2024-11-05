@@ -1,5 +1,4 @@
 import { describe, expect } from 'vitest';
-import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { SecteurActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
 import { Departement } from '../../../src/gestion-demandes/departements';
 import {
@@ -14,6 +13,7 @@ import { EntrepotAidantMemoire } from '../../../src/infrastructure/entrepots/mem
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 
 describe('Service de préférences des Aidants', () => {
   describe('Pour les secteurs d’activité de l’Aidant', () => {

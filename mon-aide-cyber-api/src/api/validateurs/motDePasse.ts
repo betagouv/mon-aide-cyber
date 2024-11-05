@@ -29,7 +29,7 @@ const validateurDeMotDePasse = (
       value === req.body.motDePasse,
     motDePasseUtilisateur: async (value: string, { req }: Meta) => {
       const aidant = await entrepots
-        .aidants()
+        .utilisateurs()
         .lis(req.identifiantUtilisateurCourant);
       if (aidant.motDePasse !== value) {
         throw new Error(messageValidateurs.correspondAuMotDePasseUtilisateur);

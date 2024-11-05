@@ -19,9 +19,9 @@ import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvi
 import { adaptateurCorpsMessage } from '../../../src/gestion-demandes/devenir-aidant/adaptateurCorpsMessage';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
-import { unAidant } from '../../espace-aidant/constructeurs/constructeurAidant';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 
 describe('Capteur de commande devenir aidant', () => {
   const annuaireCot = () => ({

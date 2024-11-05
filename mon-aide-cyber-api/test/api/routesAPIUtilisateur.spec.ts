@@ -1,10 +1,11 @@
 import { afterEach, beforeEach, describe, expect } from 'vitest';
-import { unAidant } from '../espace-aidant/constructeurs/constructeurAidant';
 import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from './executeurRequete';
 import { AdaptateurDeVerificationDeSessionAvecContexteDeTest } from '../adaptateurs/AdaptateurDeVerificationDeSessionAvecContexteDeTest';
 import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/AdaptateurDeVerificationDeSessionDeTest';
+
+import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -23,9 +24,9 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
 
   describe('quand une requête GET est reçue sur /', () => {
     it("retourne l'utilisateur connecté", async () => {
-      const aidant = unAidant().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const utilisateur = unUtilisateur().construis();
+      await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+      adaptateurDeVerificationDeSession.utilisateurConnecte(utilisateur);
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -37,7 +38,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
       expect(reponse.statusCode).toBe(200);
       expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
       expect(await reponse.json()).toStrictEqual({
-        nomPrenom: aidant.nomPrenom,
+        nomPrenom: utilisateur.nomPrenom,
         liens: {
           'lancer-diagnostic': {
             url: '/api/diagnostic',
@@ -60,9 +61,9 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it("retourne l'utilisateur connecté avec le lien de création d'espace Aidant", async () => {
-      const aidant = unAidant().sansEspace().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-      adaptateurDeVerificationDeSession.utilisateurConnecte(aidant);
+      const utilisateur = unUtilisateur().sansCGUSignees().construis();
+      await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+      adaptateurDeVerificationDeSession.utilisateurConnecte(utilisateur);
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -74,7 +75,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
       expect(reponse.statusCode).toBe(200);
       expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
       expect(await reponse.json()).toStrictEqual({
-        nomPrenom: aidant.nomPrenom,
+        nomPrenom: utilisateur.nomPrenom,
         liens: {
           'creer-espace-aidant': {
             url: '/api/espace-aidant/cree',
@@ -96,7 +97,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
       expect(reponse.statusCode).toBe(404);
       expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
       expect(await reponse.json()).toStrictEqual({
-        message: "Le aidant demandé n'existe pas.",
+        message: "Le utilisateur demandé n'existe pas.",
       });
     });
 
