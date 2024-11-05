@@ -158,6 +158,7 @@ export async function unCompteAidantRelieAUnCompteUtilisateur(
   await parametres.entrepotUtilisateur.persiste(utilisateur);
   const aidant = parametres.constructeurAidant
     .avecUnIdentifiant(utilisateur.identifiant)
+    .avecUnNomPrenom(utilisateur.nomPrenom)
     .construis();
   await parametres.entrepotAidant.persiste(aidant);
   return { utilisateur, aidant };

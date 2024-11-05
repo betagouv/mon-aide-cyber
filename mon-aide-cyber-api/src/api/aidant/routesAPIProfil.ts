@@ -47,7 +47,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
       suite: NextFunction
     ) => {
       return entrepots
-        .aidants()
+        .profilAidant()
         .lis(requete.identifiantUtilisateurCourant!)
         .then((aidant) => {
           const dateSignatureCGU = aidant.dateSignatureCGU;
