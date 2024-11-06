@@ -127,14 +127,14 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
         requete
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {
-        const aidant = await entrepots
-          .aidants()
+        const utilisateur = await entrepots
+          .utilisateurs()
           .lis(requete.identifiantUtilisateurCourant!);
         const changementnMotDePasse = requete.body;
-        aidant.motDePasse = changementnMotDePasse.motDePasse;
+        utilisateur.motDePasse = changementnMotDePasse.motDePasse;
         return entrepots
-          .aidants()
-          .persiste(aidant)
+          .utilisateurs()
+          .persiste(utilisateur)
           .then(() => {
             reponse.status(204);
             return reponse.send();
