@@ -42,9 +42,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
     expect(aidants[0]).toStrictEqual<Aidant>({
       identifiant: expect.any(String),
       email: 'jean.dupont@beta.fr',
-      dateSignatureCGU,
       nomPrenom: 'Jean Dupont',
-      motDePasse: 'toto12345',
       preferences: {
         secteursActivite: [],
         departements: [

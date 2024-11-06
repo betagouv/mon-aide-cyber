@@ -5,10 +5,7 @@ import { executeRequete } from './executeurRequete';
 import { ReponseHATEOAS } from '../../src/api/hateoas/hateoas';
 import { FauxGestionnaireDeJeton } from '../infrastructure/authentification/FauxGestionnaireDeJeton';
 
-import {
-  unAidant,
-  unUtilisateur,
-} from '../constructeurs/constructeursAidantUtilisateur';
+import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Route contexte', () => {
   const testeurMAC = testeurIntegration();
@@ -112,10 +109,7 @@ describe('Route contexte', () => {
         testeurMAC.arrete();
       });
 
-      it('Retourne le lien vers le tableau de bord', async () => {
-        const aidant = unAidant().sansEspace().construis();
-        await testeurMAC.entrepots.aidants().persiste(aidant);
-
+      it('Retourne les liens publics', async () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',

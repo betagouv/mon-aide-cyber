@@ -15,6 +15,7 @@ type DonneesUtilisateur = {
 };
 
 type UtilisateurDTO = DTO & {
+  type: 'AIDANT';
   donnees: DonneesUtilisateur;
 };
 export class EntrepotUtilisateurPostgres
@@ -61,6 +62,7 @@ export class EntrepotUtilisateurPostgres
   protected deEntiteADTO(entite: Utilisateur): UtilisateurDTO {
     return {
       id: entite.identifiant,
+      type: 'AIDANT',
       donnees: {
         identifiantConnexion: this.chiffrement.chiffre(
           entite.identifiantConnexion

@@ -4,10 +4,7 @@ import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { ReponseAuthentification } from '../../src/api/routesAPIAuthentification';
 
-import {
-  unAidant,
-  unUtilisateur,
-} from '../constructeurs/constructeursAidantUtilisateur';
+import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe("Le serveur MAC, sur les routes d'authentification", () => {
   const testeurMAC = testeurIntegration();
@@ -21,6 +18,12 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
 
   describe('/api/token/', () => {
     describe('Quand une requête POST est reçue', () => {
+      beforeEach(() => {
+        donneesServeur = testeurMAC.initialise();
+      });
+
+      afterEach(() => testeurMAC.arrete());
+
       it('génère un token', async () => {
         await testeurMAC.entrepots
           .utilisateurs()
@@ -94,17 +97,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         });
       });
 
-      it("l'identifiant de connexion est expurgé", async () => {
-        await testeurMAC.entrepots
-          .aidants()
-          .persiste(
-            unAidant()
-              .avecUnNomPrenom('Martin Dupont')
-              .avecUnEmail('martin.dupont@email.com')
-              .avecUnMotDePasse('mon_Mot-D3p4sse')
-              .construis()
-          );
-
+      it("L'identifiant de connexion est expurgé", async () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
@@ -176,17 +169,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
     });
 
     describe('Quand une requête DELETE est reçue', () => {
-      it('supprime le cookie de session', async () => {
-        await testeurMAC.entrepots
-          .aidants()
-          .persiste(
-            unAidant()
-              .avecUnNomPrenom('Martin Dupont')
-              .avecUnEmail('martin.dupont@email.com')
-              .avecUnMotDePasse('mon_Mot-D3p4sse')
-              .construis()
-          );
-
+      it('Supprime le cookie de session', async () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'DELETE',

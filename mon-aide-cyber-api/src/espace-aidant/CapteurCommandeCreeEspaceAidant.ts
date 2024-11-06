@@ -50,10 +50,8 @@ export class CapteurCommandeCreeEspaceAidant
       .catch((erreur) => {
         if (erreur instanceof AggregatNonTrouve) {
           const aidant: Aidant = {
-            dateSignatureCGU: commande.dateSignatureCGU,
             identifiant: commande.identifiant,
             email: commande.email,
-            motDePasse: commande.motDePasse,
             nomPrenom: commande.nomPrenom,
             preferences: {
               departements: [commande.departement],

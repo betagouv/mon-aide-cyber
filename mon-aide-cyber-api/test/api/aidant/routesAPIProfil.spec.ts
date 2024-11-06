@@ -52,7 +52,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       expect(await reponse.json()).toStrictEqual<Profil>({
         nomPrenom: aidant.nomPrenom,
         dateSignatureCGU: FournisseurHorloge.formateDate(
-          aidant.dateSignatureCGU!
+          utilisateur.dateSignatureCGU!
         ).date,
         consentementAnnuaire: aidant.consentementAnnuaire,
         identifiantConnexion: aidant.email,
@@ -78,10 +78,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       });
     });
 
-    it('ne peut pas accéder au profil si les CGU ne sont pas signés', async () => {
-      const aidant = unAidant().sansEspace().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-
+    it('Vérifie la signature des CGU', async () => {
       await executeRequete(
         donneesServeur.app,
         'GET',

@@ -13,6 +13,7 @@ import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServ
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { Aidant } from '../../../src/espace-aidant/Aidant';
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -234,11 +235,24 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           'se-connecter': { url: '/api/token', methode: 'POST' },
         },
       });
-      const aidants = await testeurMAC.entrepots.aidants().tous();
-      expect(aidants).toHaveLength(1);
-      expect(aidants[0].dateSignatureCGU).toStrictEqual(
+      const utilisateurs = await testeurMAC.entrepots.utilisateurs().tous();
+      expect(utilisateurs).toHaveLength(1);
+      const utilisateur = utilisateurs[0];
+      expect(utilisateur.dateSignatureCGU).toStrictEqual(
         FournisseurHorloge.maintenant()
       );
+      const aidants = await testeurMAC.entrepots.aidants().tous();
+      expect(aidants[0]).toStrictEqual<Aidant>({
+        identifiant: utilisateur.identifiant,
+        email: demande.mail,
+        nomPrenom: utilisateur.nomPrenom,
+        preferences: {
+          secteursActivite: [],
+          departements: [demande.departement],
+          typesEntites: [],
+        },
+        consentementAnnuaire: false,
+      });
     });
 
     it('Retourne une erreur HTTP', async () => {

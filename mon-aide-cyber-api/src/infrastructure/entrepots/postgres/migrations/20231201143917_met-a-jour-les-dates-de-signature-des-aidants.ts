@@ -1,6 +1,13 @@
 import { Knex } from 'knex';
 import crypto from 'crypto';
-import { DonneesUtilisateur } from '../EntrepotAidantPostgres';
+
+type Utilisateur = {
+  identifiantConnexion: string;
+  nomPrenom: string;
+  dateSignatureCGU?: string;
+  dateSignatureCharte?: string;
+  consentementAnnuaire: boolean;
+};
 
 export async function up(knex: Knex): Promise<void | number[]> {
   return knex('utilisateurs').then(
@@ -8,7 +15,7 @@ export async function up(knex: Knex): Promise<void | number[]> {
       lignes: {
         id: crypto.UUID;
         type: 'AIDANT' | 'REFERENT';
-        donnees: DonneesUtilisateur;
+        donnees: Utilisateur;
       }[]
     ) => {
       const misesAJour = lignes

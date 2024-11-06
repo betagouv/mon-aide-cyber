@@ -60,6 +60,7 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       .utilisateurs()
       .lis(identifiantUtilisateur);
     expect(utilisateur).toStrictEqual<Utilisateur>({
+      dateSignatureCGU: FournisseurHorloge.maintenant(),
       identifiant: identifiantUtilisateur,
       identifiantConnexion: 'jean.dupont@email.com',
       nomPrenom: `${demande.prenom} ${demande.nom}`,

@@ -3,6 +3,7 @@ import { CapteurCommande, Commande } from '../domaine/commande';
 import { Entrepots } from '../domaine/Entrepots';
 import { Utilisateur } from './Utilisateur';
 import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
+import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
 export type CommandeCreeUtilisateur = Commande & {
   type: 'CommandeCreeUtilisateur';
@@ -28,6 +29,7 @@ export class CapteurCommandeCreeUtilisateur
       identifiantConnexion: commande.identifiantConnexion,
       nomPrenom: commande.nomPrenom,
       motDePasse: commande.motDePasse,
+      dateSignatureCGU: FournisseurHorloge.maintenant(),
     };
     return this.entrepots
       .utilisateurs()

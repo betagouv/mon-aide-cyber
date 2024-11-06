@@ -6,12 +6,24 @@ import { AggregatNonTrouve } from '../../../domaine/Aggregat';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import { DTO } from './EntrepotPostgres';
-import { DonneesUtilisateur } from './EntrepotAidantPostgres';
 import { Knex, knex } from 'knex';
 import knexfile from './knexfile';
 
+type PreferencesDTO = {
+  secteursActivite: string[];
+  departements: string[];
+  typesEntites: string[];
+};
+
+type DonneesUtilisateur = {
+  dateSignatureCGU?: string;
+  email: string;
+  nomPrenom: string;
+  preferences: PreferencesDTO;
+  consentementAnnuaire: boolean;
+};
+
 type ProfilAidantDTO = DTO & {
-  type: 'AIDANT';
   donnees: DonneesUtilisateur;
 };
 
@@ -25,7 +37,7 @@ export class EntrepotProfilAidantPostgres implements EntrepotProfilAidant {
     this.knex = knex(configuration);
   }
 
-  protected deDTOAEntite(dto: ProfilAidantDTO): ProfilAidant {
+  private deDTOAEntite(dto: ProfilAidantDTO): ProfilAidant {
     return {
       identifiant: dto.id,
       nomPrenom: this.chiffrement.dechiffre(dto.donnees.nomPrenom),
@@ -35,19 +47,22 @@ export class EntrepotProfilAidantPostgres implements EntrepotProfilAidant {
         ),
       }),
       consentementAnnuaire: dto.donnees.consentementAnnuaire,
-      email: this.chiffrement.dechiffre(dto.donnees.identifiantConnexion),
+      email: this.chiffrement.dechiffre(dto.donnees.email),
     };
   }
 
   lis(identifiant: string): Promise<ProfilAidant> {
     return this.knex
-      .from('utilisateurs')
-      .where('id', identifiant)
-      .first()
-      .then((ligne) =>
-        ligne !== undefined
-          ? this.deDTOAEntite(ligne)
-          : Promise.reject(new AggregatNonTrouve('profil Aidant'))
-      );
+      .raw(
+        `SELECT json_build_object('dateSignatureCGU', u.donnees -> 'dateSignatureCGU', 'email', a.donnees ->> 'email', 'nomPrenom', a.donnees ->> 'nomPrenom', 'preferences', a.donnees -> 'preferences', 'consentementAnnuaire', a.donnees -> 'consentementAnnuaire') as donnees
+         FROM utilisateurs u, aidants a
+         WHERE u.id = a.id AND u.id = ?;`,
+        [identifiant]
+      )
+      .then(({ rows }: { rows: ProfilAidantDTO[] }) => {
+        return rows !== undefined && rows.length > 0
+          ? this.deDTOAEntite(rows[0])
+          : Promise.reject(new AggregatNonTrouve('profil Aidant'));
+      });
   }
 }
