@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest';
-import { useMACAPI } from '../../../src/fournisseurs/api/useMACAPI.ts';
+import { macAPI } from '../../../src/fournisseurs/api/useMACAPI';
 
 type Headers = {
   Accept: string;
@@ -50,8 +50,9 @@ class ConstructeurDeReponse {
 describe('Appelle API', () => {
   describe('pour des requêtes GET', () => {
     it("les headers sont positionnés par défaut à 'application/json'", async () => {
-      const macAPI = useMACAPI();
-      const reponse = await macAPI.execute<
+      const api = macAPI(() => null);
+
+      const reponse = await api.execute<
         InformationsEnvoyees,
         InformationsEnvoyees
       >(

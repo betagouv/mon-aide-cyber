@@ -29,7 +29,7 @@ export const ComposantAuthentification = ({
 }: ProprietesComposantAuthentification) => {
   const navigationMAC = useNavigationMAC();
   const contexteNavigation = useContexteNavigation(macAPI);
-  const { setUtilisateur } = useUtilisateur();
+  const { setUtilisateurConnecte } = useUtilisateur();
 
   const [etatAuthentification, envoie] = useReducer(
     reducteurAuthentification,
@@ -80,9 +80,7 @@ export const ComposantAuthentification = ({
                 async (reponse) => await reponse
               )
               .then((reponse) => {
-                setUtilisateur({
-                  nomPrenom: reponse.nomPrenom,
-                });
+                setUtilisateurConnecte({ nomPrenom: reponse.nomPrenom });
                 const moteurDeLiens = new MoteurDeLiens({
                   ...reponse.liens,
                 });
