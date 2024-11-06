@@ -293,7 +293,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
       expect(reponse.statusCode).toBe(204);
       const utilisateurRecupere = await testeurMAC.entrepots
-        .aidants()
+        .utilisateurs()
         .lis(utilisateur.identifiant);
       expect(utilisateurRecupere.motDePasse).toBe(nouveauMotDePasse);
     });
