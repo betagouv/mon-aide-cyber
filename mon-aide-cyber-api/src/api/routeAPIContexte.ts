@@ -21,7 +21,10 @@ export const routeAPIContexte = (configuration: ConfigurationServeur) => {
   routes.get('/', (requete: Request, reponse: Response) => {
     const actionsAidantConnecte = (cookies: string) => {
       const jwt = jwtPayload({ session: cookies }, gestionnaireDeJeton);
-      const actionsHATEOAS = constructeurActionsHATEOAS();
+      const actionsHATEOAS = estInformationContexte(requete.query)
+        ? constructeurActionsHATEOAS().pour(requete.query)
+        : constructeurActionsHATEOAS();
+
       if (jwt.identifiant) {
         return entrepots
           .utilisateurs()

@@ -99,6 +99,29 @@ describe('Route contexte', () => {
       });
     });
 
+    it('Retourne le tableau de bord Aidant si il revient sur la de statistiques publique de MAC', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/contexte?contexte=afficher-statistiques`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
+        liens: {
+          'afficher-tableau-de-bord': {
+            url: '/api/espace-aidant/tableau-de-bord',
+            methode: 'GET',
+          },
+          'afficher-statistiques': {
+            url: '/statistiques',
+            methode: 'GET',
+          },
+        },
+      });
+    });
+
     describe('Lorsqu’une erreur est levée', () => {
       beforeEach(() => {
         testeurMAC.gestionnaireDeJeton = new FauxGestionnaireDeJeton(true);
