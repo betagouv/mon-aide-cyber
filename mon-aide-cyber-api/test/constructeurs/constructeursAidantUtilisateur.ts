@@ -66,10 +66,6 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   private identifiant: crypto.UUID = fakerFR.string.uuid() as crypto.UUID;
   private email: string = fakerFR.internet.email().toLowerCase();
   private nomPrenom: string = fakerFR.person.fullName();
-  private motDePasse: string = fakerFR.string.alpha(10);
-  private dateSignatureCGU: Date | undefined = FournisseurHorloge.maintenant();
-  private dateSignatureCharte: Date | undefined =
-    FournisseurHorloge.maintenant();
   private secteursActivite: SecteurActivite[] = [];
   private departements: Departement[] = [];
   private typesEntites: TypesEntites = [];
@@ -82,17 +78,6 @@ class ConstructeurAidant implements Constructeur<Aidant> {
 
   avecUnEmail(identifiantConnexion: string): ConstructeurAidant {
     this.email = identifiantConnexion;
-    return this;
-  }
-
-  avecUnMotDePasse(motDePasse: string): ConstructeurAidant {
-    this.motDePasse = motDePasse;
-    return this;
-  }
-
-  sansEspace(): ConstructeurAidant {
-    this.dateSignatureCGU = undefined;
-    this.dateSignatureCharte = undefined;
     return this;
   }
 
@@ -127,12 +112,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return {
       identifiant: this.identifiant,
       email: this.email,
-      motDePasse: this.motDePasse,
       nomPrenom: this.nomPrenom,
-      ...(this.dateSignatureCGU && { dateSignatureCGU: this.dateSignatureCGU }),
-      ...(this.dateSignatureCharte && {
-        dateSignatureCharte: this.dateSignatureCharte,
-      }),
       preferences: {
         secteursActivite: this.secteursActivite,
         departements: this.departements,

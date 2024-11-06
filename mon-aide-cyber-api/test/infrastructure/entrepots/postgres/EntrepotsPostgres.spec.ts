@@ -3,6 +3,7 @@ import {
   nettoieLaBaseDeDonneesAidants,
   nettoieLaBaseDeDonneesDiagnostics,
   nettoieLaBaseDeDonneesStatistiques,
+  nettoieLaBaseDeDonneesUtilisateurs,
 } from '../../../utilitaires/nettoyeurBDD';
 import { EntrepotAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAidantPostgres';
 import { ServiceDeChiffrementClair } from '../../securite/ServiceDeChiffrementClair';
@@ -543,7 +544,6 @@ describe('Entrepot Aidant', () => {
     const serviceDeChiffrement = new FauxServiceDeChiffrement(
       new Map([
         [aidant.email, 'aaa'],
-        [aidant.motDePasse, 'bbb'],
         [aidant.nomPrenom, 'ccc'],
       ])
     );
@@ -554,6 +554,20 @@ describe('Entrepot Aidant', () => {
       serviceDeChiffrement
     ).lis(aidant.identifiant);
     expect(aidantRecu).toStrictEqual<Aidant>(aidant);
+  });
+
+  it('Met à jour le consentement pour apparaître dans l’annuaire', async () => {
+    const aidant = unAidant().construis();
+    const serviceDeChiffrement = new ServiceDeChiffrementClair();
+    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+
+    aidant.consentementAnnuaire = true;
+    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+
+    const aidantRecu = await new EntrepotAidantPostgres(
+      serviceDeChiffrement
+    ).lis(aidant.identifiant);
+    expect(aidantRecu.consentementAnnuaire).toBe(true);
   });
 
   describe('Met à jour les préférences', () => {
@@ -639,47 +653,12 @@ describe('Entrepot Aidant', () => {
     });
   });
 
-  describe('Met à jour un aidant', () => {
-    it('Mets à jour les dates de signature des CGU et de la charte', async () => {
-      const dateSignature = new Date(Date.parse('2024-02-04T13:25:17+01:00'));
-      FournisseurHorlogeDeTest.initialise(dateSignature);
-      const aidant = unAidant().sansEspace().construis();
-      const serviceDeChiffrement = new ServiceDeChiffrementClair();
-      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
-
-      aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
-      aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
-      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
-
-      const aidantRecu = await new EntrepotAidantPostgres(
-        serviceDeChiffrement
-      ).lis(aidant.identifiant);
-      expect(aidantRecu.dateSignatureCharte).toStrictEqual(dateSignature);
-      expect(aidantRecu.dateSignatureCGU).toStrictEqual(dateSignature);
-    });
-
-    it('Met à jour le consentement pour apparaître dans l’annuaire', async () => {
-      const aidant = unAidant().construis();
-      const serviceDeChiffrement = new ServiceDeChiffrementClair();
-      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
-
-      aidant.consentementAnnuaire = true;
-      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
-
-      const aidantRecu = await new EntrepotAidantPostgres(
-        serviceDeChiffrement
-      ).lis(aidant.identifiant);
-      expect(aidantRecu.consentementAnnuaire).toBe(true);
-    });
-  });
-
   describe('Recherche par identifiant', () => {
     it("l'aidant est trouvé", async () => {
       const aidant = unAidant().construis();
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
         new Map([
           [aidant.email, 'aaa'],
-          [aidant.motDePasse, 'bbb'],
           [aidant.nomPrenom, 'ccc'],
         ])
       );
@@ -798,7 +777,7 @@ describe('Entrepot Annuaire Aidants Postgres', () => {
 
 describe('Entrepot Utilisateur', () => {
   beforeEach(async () => {
-    await nettoieLaBaseDeDonneesAidants();
+    await nettoieLaBaseDeDonneesUtilisateurs();
   });
 
   it('Persiste un utilisateur', async () => {
@@ -837,12 +816,12 @@ describe('Entrepot Utilisateur', () => {
       );
 
       await entrepotUtilisateurPostgres.persiste(utilisateur);
-
       const utilisateurRecu =
         await entrepotUtilisateurPostgres.rechercheParIdentifiantConnexionEtMotDePasse(
           utilisateur.identifiantConnexion,
           utilisateur.motDePasse
         );
+
       expect(utilisateurRecu).toStrictEqual<Utilisateur>(utilisateur);
     });
 
@@ -858,8 +837,8 @@ describe('Entrepot Utilisateur', () => {
     });
   });
 
-  describe('Mets à jour un utilisateur', () => {
-    it('Mets à jour la date de signature des CGU', async () => {
+  describe('Met à jour un utilisateur', () => {
+    it('Met à jour la date de signature des CGU', async () => {
       const serviceDeChiffrement = new ServiceDeChiffrementClair();
       const entrepotUtilisateurPostgres = new EntrepotUtilisateurPostgres(
         serviceDeChiffrement

@@ -136,10 +136,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
       });
     });
 
-    it('ne peut pas accéder au Tableau De Bord si les CGU ne sont pas signés', async () => {
-      const aidant = unAidant().sansEspace().construis();
-      await testeurMAC.entrepots.aidants().persiste(aidant);
-
+    it('Vérifie la signature des CGU', async () => {
       await executeRequete(
         donneesServeur.app,
         'GET',

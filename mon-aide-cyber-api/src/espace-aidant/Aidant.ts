@@ -1,6 +1,6 @@
 import { Entrepot } from '../domaine/Entrepot';
 import { Aggregat } from '../domaine/Aggregat';
-import { SecteurActivite } from '../espace-aidant/preferences/secteursActivite';
+import { SecteurActivite } from './preferences/secteursActivite';
 import { Departement } from '../gestion-demandes/departements';
 
 export type EntitesOrganisationsPubliques = {
@@ -48,9 +48,6 @@ type Preferences = {
 export type Aidant = Aggregat & {
   email: string;
   nomPrenom: string;
-  motDePasse: string;
-  dateSignatureCGU?: Date;
-  dateSignatureCharte?: Date;
   preferences: Preferences;
   consentementAnnuaire: boolean;
 };

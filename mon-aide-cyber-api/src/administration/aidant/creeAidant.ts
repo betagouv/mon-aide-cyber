@@ -21,7 +21,7 @@ export const creeAidant = async (
       const aidant: Aidant = {
         identifiant: crypto.randomUUID(),
         email: donneesAidant.identifiantConnexion,
-        motDePasse: donneesAidant.motDePasse,
+        // motDePasse: donneesAidant.motDePasse,
         nomPrenom: donneesAidant.nomPrenom,
         preferences: {
           secteursActivite: [],

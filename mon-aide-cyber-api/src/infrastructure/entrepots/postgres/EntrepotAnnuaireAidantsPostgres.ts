@@ -34,9 +34,8 @@ export class EntrepotAnnuaireAidantsPostgres
     let requete = `
         SELECT id as identifiant,
                donnees ->> 'nomPrenom' as "nomPrenom", donnees -> 'preferences' -> 'departements' as "departements"
-        FROM utilisateurs
-        WHERE type = 'AIDANT'
-          AND (donnees ->> 'consentementAnnuaire')::bool is TRUE`;
+        FROM aidants
+          WHERE (donnees ->> 'consentementAnnuaire')::bool is TRUE`;
     const parametres = criteresDeRecherche && {
       departements: '["' + criteresDeRecherche?.departement + '"]',
     };

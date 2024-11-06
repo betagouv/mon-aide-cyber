@@ -7,6 +7,7 @@ class EntrepotsPostgresPourLesTests {
   constructor() {
     this.knex = knex(knexfile);
   }
+
   async nettoieDiagnostics() {
     await this.knex('diagnostics').truncate();
   }
@@ -16,6 +17,10 @@ class EntrepotsPostgresPourLesTests {
   }
 
   async nettoieAidants() {
+    await this.knex('aidants').truncate();
+  }
+
+  async nettoieUtilisateurs() {
     await this.knex('utilisateurs').truncate();
   }
 
@@ -35,6 +40,12 @@ class EntrepotsPostgresPourLesTests {
 export const nettoieLaBaseDeDonneesAidants = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
     await new EntrepotsPostgresPourLesTests().nettoieAidants();
+  }
+};
+
+export const nettoieLaBaseDeDonneesUtilisateurs = async () => {
+  if (process.env.URL_SERVEUR_BASE_DONNEES) {
+    await new EntrepotsPostgresPourLesTests().nettoieUtilisateurs();
   }
 };
 
