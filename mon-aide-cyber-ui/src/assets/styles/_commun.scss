@@ -23,6 +23,10 @@ a {
   color: var(--couleurs-mac-violet-fonce);
 }
 
+.mac-icone {
+  color: var(--couleurs-mac-violet-fonce);
+}
+
 .mac-icone-retour {
   background: $icone-gauche no-repeat left center;
   padding-left: 1rem;
@@ -50,16 +54,19 @@ a {
     background: var(--couleurs-mac-succes);
     color: var(--couleurs-mac-blanc);
   }
+
   &.erreur {
     width: fit-content;
     background: var(--couleurs-mac-erreur-mode-fonce);
     color: var(--couleurs-mac-blanc);
   }
+
   &.attention {
     width: fit-content;
     background: var(--couleurs-mac-jaune-clair);
     color: #8f7118;
   }
+
   &.information {
     width: fit-content;
     background: var(--couleurs-mac-jaune-clair);
