@@ -6,6 +6,8 @@ import { AdaptateurDeVerificationDeSessionAvecContexteDeTest } from '../adaptate
 import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/AdaptateurDeVerificationDeSessionDeTest';
 
 import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
+import { ReponseReinitialisationMotDePasseEnErreur } from '../../src/api/routesAPIUtilisateur';
+import crypto from 'crypto';
 
 describe('le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -130,6 +132,107 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
             },
           },
         });
+      });
+    });
+  });
+
+  describe('Quand une requête PATCH est reçue sur /api/utilisateur/reinitialiser-mot-de-passe', () => {
+    it('Modifie le mot de passe', async () => {
+      const utilisateur = unUtilisateur()
+        .avecUnMotDePasse('original')
+        .construis();
+      await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+      const token = btoa(
+        JSON.stringify({
+          identifiant: utilisateur.identifiant,
+        })
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/utilisateur/reinitialiser-mot-de-passe`,
+        donneesServeur.portEcoute,
+        {
+          motDePasse: 'n0uv3eaU-M0D3passe',
+          confirmationMotDePasse: 'n0uv3eaU-M0D3passe',
+          token,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(204);
+      expect(
+        (await testeurMAC.entrepots.utilisateurs().lis(utilisateur.identifiant))
+          .motDePasse
+      ).toStrictEqual('n0uv3eaU-M0D3passe');
+    });
+
+    describe('Lors de la phase de validation', () => {
+      it('Valide le mot de passe', async () => {
+        const utilisateur = unUtilisateur()
+          .avecUnMotDePasse('original')
+          .construis();
+        await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+        const token = btoa(
+          JSON.stringify({
+            identifiant: utilisateur.identifiant,
+          })
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'PATCH',
+          `/api/utilisateur/reinitialiser-mot-de-passe`,
+          donneesServeur.portEcoute,
+          {
+            motDePasse: 'n0uV3eaU-M0D3passe',
+            confirmationMotDePasse: 'n0uv3eaU-M0D3passe',
+            token,
+          }
+        );
+
+        expect(reponse.statusCode).toBe(422);
+        expect(
+          await reponse.json()
+        ).toStrictEqual<ReponseReinitialisationMotDePasseEnErreur>({
+          liens: {
+            'se-connecter': { url: '/api/token', methode: 'POST' },
+            'demande-devenir-aidant': {
+              methode: 'GET',
+              url: '/api/demandes/devenir-aidant',
+            },
+            'demande-etre-aide': {
+              methode: 'GET',
+              url: '/api/demandes/etre-aide',
+            },
+          },
+          message: 'Les deux mots de passe saisis ne correspondent pas.',
+        });
+      });
+
+      it('Valide l’utilisateur', async () => {
+        const token = btoa(
+          JSON.stringify({
+            identifiant: crypto.randomUUID(),
+          })
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'PATCH',
+          `/api/utilisateur/reinitialiser-mot-de-passe`,
+          donneesServeur.portEcoute,
+          {
+            motDePasse: 'n0uv3eaU-M0D3passe',
+            confirmationMotDePasse: 'n0uv3eaU-M0D3passe',
+            token,
+          }
+        );
+
+        expect(reponse.statusCode).toBe(422);
+        expect((await reponse.json()).message).toStrictEqual(
+          'L’utilisateur n’est pas connu.'
+        );
       });
     });
   });

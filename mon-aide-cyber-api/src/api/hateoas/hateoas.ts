@@ -89,6 +89,15 @@ class ConstructeurActionsDepuisContexte {
         },
       },
     ],
+    [
+      'reinitialiser-mot-de-passe',
+      {
+        'reinitialiser-mot-de-passe': {
+          url: '/api/utilisateur/reinitialiser-mot-de-passe',
+          methode: 'PATCH',
+        },
+      },
+    ],
   ]);
   private readonly actions: Map<string, Options> = new Map();
 
