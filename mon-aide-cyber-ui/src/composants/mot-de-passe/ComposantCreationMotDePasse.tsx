@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useReducer } from 'react';
 import {
+  creationMotDePasseValidee,
   initialiseReducteur,
   MessagesErreurs,
-  creationMotDePasseValidee,
   nouveauMotDePasseConfirme,
   nouveauMotDePasseSaisi,
   reducteurCreationMotDePasse,
   reinitialiseLeReducteur,
 } from './reducteurCreationMotDePasse.tsx';
+import { PasswordInput } from '../atomes/Input/PasswordInput.tsx';
 
 export type CreationMotDePasse = {
   valide: boolean;
@@ -92,9 +93,7 @@ export const ComposantCreationMotDePasse = ({
           <span className="asterisque">*</span>
           <span> Choisissez un nouveau mot de passe</span>
         </label>
-        <input
-          className="fr-input"
-          type="password"
+        <PasswordInput
           role="textbox"
           id="nouveau-mot-de-passe"
           name="nouveau-mot-de-passe"
@@ -114,9 +113,7 @@ export const ComposantCreationMotDePasse = ({
           <span className="asterisque">*</span>
           <span> Confirmez votre nouveau mot de passe</span>
         </label>
-        <input
-          className="fr-input"
-          type="password"
+        <PasswordInput
           role="textbox"
           id="confirmation-mot-de-passe"
           name="confirmation-mot-de-passe"
