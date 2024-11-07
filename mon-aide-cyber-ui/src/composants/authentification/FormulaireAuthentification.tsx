@@ -1,5 +1,5 @@
 import { useNavigationMAC, useUtilisateur } from '../../fournisseurs/hooks.ts';
-import { FormEvent, useCallback, useEffect, useReducer } from 'react';
+import { FormEvent, useCallback, useReducer } from 'react';
 import {
   authentificationInvalidee,
   identifiantSaisi,
@@ -9,11 +9,13 @@ import {
   saisieInvalidee,
 } from './reducteurAuthentification.tsx';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
-import { Lien, ReponseHATEOAS } from '../../domaine/Lien.ts';
+import { Lien } from '../../domaine/Lien.ts';
 import { ReponseAuthentification } from '../../domaine/authentification/Authentification.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { useContexteNavigation } from '../../hooks/useContexteNavigation.ts';
 import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
+import { useRecupereContexteNavigation } from '../../hooks/useRecupereContexteNavigation.ts';
+import { Input } from '../atomes/Input/Input.tsx';
+import { PasswordInput } from '../atomes/Input/PasswordInput.tsx';
 
 export type Identifiants = {
   identifiant: string;
@@ -28,7 +30,8 @@ export const ComposantAuthentification = ({
   macAPI,
 }: ProprietesComposantAuthentification) => {
   const navigationMAC = useNavigationMAC();
-  const contexteNavigation = useContexteNavigation(macAPI);
+  useRecupereContexteNavigation('se-connecter');
+
   const { setUtilisateurConnecte } = useUtilisateur();
 
   const [etatAuthentification, envoie] = useReducer(
@@ -42,15 +45,6 @@ export const ComposantAuthentification = ({
 
   const surSaisieIdentifiant = useCallback((identifiant: string) => {
     envoie(identifiantSaisi(identifiant));
-  }, []);
-
-  useEffect(() => {
-    contexteNavigation
-      .recupereContexteNavigation({ contexte: 'se-connecter' })
-      .then((reponse) =>
-        navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens)
-      )
-      .catch();
   }, []);
 
   const connexion = useCallback(
@@ -124,12 +118,11 @@ export const ComposantAuthentification = ({
                 <label className="fr-label" htmlFor="identifiant-connexion">
                   Votre adresse électronique
                 </label>
-                <input
-                  className="fr-input"
+                <Input
                   type="text"
-                  id={'identifiant-connexion'}
+                  id="identifiant-connexion"
                   name="identifiant-connexion"
-                  autoComplete={'email'}
+                  autoComplete="email"
                   onChange={(e) => surSaisieIdentifiant(e.target.value)}
                 />
                 {erreur?.identifiant?.texteExplicatif}
@@ -142,13 +135,11 @@ export const ComposantAuthentification = ({
                 <label className="fr-label" htmlFor="mot-de-passe">
                   Votre mot de passe
                 </label>
-                <input
-                  className="fr-input"
-                  type="password"
+                <PasswordInput
                   role="textbox"
                   id="mot-de-passe"
                   name="mot-de-passe"
-                  autoComplete={'current-password'}
+                  autoComplete="current-password"
                   onChange={(e) => surSaisieMoteDePasse(e.target.value)}
                 />
                 {erreur?.motDePasse?.texteExplicatif}

@@ -11,6 +11,7 @@ import { ComposantIntercepteur } from '../composants/intercepteurs/ComposantInte
 import { TableauDeBord } from '../composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
 import { FournisseurNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 import { ComposantAuthentification } from '../composants/authentification/FormulaireAuthentification.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const meta = {
   title: 'Connexion',
@@ -41,35 +42,47 @@ const macAPIMemoire = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 export const PageDeConnexion: Story = {
   args: { macAPI: macAPIMemoire },
   decorators: [
     (story) => (
-      <MemoryRouter>
-        <FournisseurNavigationMAC>
-          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-            <Routes>
-              <Route
-                path="/connexion"
-                element={<ComposantAuthentification macAPI={macAPIMemoire} />}
-              />
-              <Route
-                element={
-                  <Suspense>
-                    <RequiertAuthentification />
-                  </Suspense>
-                }
-              >
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <FournisseurNavigationMAC>
+            <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+              <Routes>
                 <Route
-                  path="/tableau-de-bord"
-                  element={<ComposantIntercepteur composant={TableauDeBord} />}
-                ></Route>
-              </Route>
-            </Routes>
-            {story()}
-          </ErrorBoundary>
-        </FournisseurNavigationMAC>
-      </MemoryRouter>
+                  path="/connexion"
+                  element={<ComposantAuthentification macAPI={macAPIMemoire} />}
+                />
+                <Route
+                  element={
+                    <Suspense>
+                      <RequiertAuthentification />
+                    </Suspense>
+                  }
+                >
+                  <Route
+                    path="/tableau-de-bord"
+                    element={
+                      <ComposantIntercepteur composant={TableauDeBord} />
+                    }
+                  ></Route>
+                </Route>
+              </Routes>
+              {story()}
+            </ErrorBoundary>
+          </FournisseurNavigationMAC>
+        </MemoryRouter>
+      </QueryClientProvider>
     ),
   ],
   name: 'Page de connexion',
