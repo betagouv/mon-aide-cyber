@@ -1,4 +1,6 @@
 import { ParametresAPI } from './ConstructeurParametresAPI.ts';
+import { useUtilisateur } from '../hooks.ts';
+import { Utilisateur } from '../../domaine/authentification/Authentification.ts';
 
 export type MACAPIType = {
   execute: <REPONSE, REPONSEAPI, CORPS = void>(
@@ -7,7 +9,9 @@ export type MACAPIType = {
   ) => Promise<REPONSE>;
 };
 
-export const useMACAPI = () => {
+export const macAPI = (
+  setUtilisateurConnecte: (utilisateurConnecte: Utilisateur | null) => void
+) => {
   const execute = async <REPONSE, CORPS = void>(
     parametresAPI: ParametresAPI<CORPS>,
     transcris: (contenu: Promise<any>) => Promise<REPONSE>,
@@ -30,6 +34,11 @@ export const useMACAPI = () => {
     const lien = reponse.headers.get('Link');
     if (lien !== null) {
       return transcris(Promise.resolve(lien));
+    }
+
+    if (reponse.status === 403) {
+      setUtilisateurConnecte(null);
+      return await Promise.reject(await reponse.json());
     }
 
     if (!reponse.ok) {
@@ -61,4 +70,10 @@ export const useMACAPI = () => {
       }
     },
   };
+};
+
+export const useMACAPI = () => {
+  const { setUtilisateurConnecte } = useUtilisateur();
+
+  return macAPI(setUtilisateurConnecte);
 };
