@@ -103,7 +103,6 @@ export const lesContextesUtilisateursExistants = [
       },
     },
   },
-
   {
     contexte: 'Afficher l’annuaire Aidants',
     informationContexte: {
@@ -113,6 +112,18 @@ export const lesContextesUtilisateursExistants = [
       'afficher-annuaire-aidants': {
         url: '/api/annuaire-aidants',
         methode: 'GET',
+      },
+    },
+  },
+  {
+    contexte: 'Réinitialiser son mot de passe',
+    informationContexte: {
+      contexte: 'reinitialiser-mot-de-passe',
+    },
+    liens: {
+      'reinitialiser-mot-de-passe': {
+        url: '/api/utilisateur/reinitialiser-mot-de-passe',
+        methode: 'PATCH',
       },
     },
   },
