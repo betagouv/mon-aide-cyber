@@ -12,14 +12,8 @@ export const PasswordInput = ({
     <>
       <Input type={estAffiche ? 'text' : 'password'} {...proprietesRestantes} />
       <span
+        className="input-password-icon"
         onClick={() => setEstAffiche((prev) => !prev)}
-        style={{
-          cursor: 'pointer',
-          position: 'absolute',
-          bottom: '0.5rem',
-          right: '0',
-          paddingRight: '1rem',
-        }}
       >
         <i
           className={
