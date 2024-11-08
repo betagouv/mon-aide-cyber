@@ -16,7 +16,7 @@ import {
 } from 'express-validator';
 import { EntrepotUtilisateur } from '../authentification/Utilisateur';
 import { ServiceDeChiffrement } from '../securite/ServiceDeChiffrement';
-import { CommandeReinitialisationMotDePasse } from '../authentification/CapteurCommandeReinitialisationMotDePasse';
+import { CommandeReinitialisationMotDePasse } from '../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 
 type CorpsRequeteReinitialiserMotDePasse = core.ParamsDictionary & {
   token: string;
