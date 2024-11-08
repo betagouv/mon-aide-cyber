@@ -666,7 +666,7 @@ describe('Entrepot Aidant', () => {
 
       const aidantTrouve = await new EntrepotAidantPostgres(
         serviceDeChiffrement
-      ).rechercheParIdentifiantDeConnexion(aidant.email);
+      ).rechercheParEmail(aidant.email);
 
       expect(aidantTrouve).toStrictEqual<Aidant>(aidant);
     });
@@ -675,7 +675,7 @@ describe('Entrepot Aidant', () => {
       expect(
         new EntrepotAidantPostgres(
           new FauxServiceDeChiffrement(new Map())
-        ).rechercheParIdentifiantDeConnexion('identifiant-inconnu')
+        ).rechercheParEmail('identifiant-inconnu')
       ).rejects.toThrow(new Error("Le aidant demandé n'existe pas."));
     });
   });

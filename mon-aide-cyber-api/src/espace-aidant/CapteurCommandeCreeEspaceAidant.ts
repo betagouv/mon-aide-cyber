@@ -39,7 +39,7 @@ export class CapteurCommandeCreeEspaceAidant
   async execute(commande: CommandeCreeEspaceAidant): Promise<EspaceAidantCree> {
     return this.entrepots
       .aidants()
-      .rechercheParIdentifiantDeConnexion(commande.email)
+      .rechercheParEmail(commande.email)
       .then(() =>
         Promise.reject(
           new ErreurCreationEspaceAidant(

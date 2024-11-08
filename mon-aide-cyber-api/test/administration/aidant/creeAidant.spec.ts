@@ -22,7 +22,7 @@ describe('Crée un aidant', () => {
       nomPrenom: 'jean Dupont',
     });
 
-    const aidant = await entrepotAidant.rechercheParIdentifiantDeConnexion(
+    const aidant = await entrepotAidant.rechercheParEmail(
       'jean.dupont@beta.fr'
     );
     expect(

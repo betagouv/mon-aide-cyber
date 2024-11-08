@@ -98,11 +98,9 @@ export class EntrepotAidantMemoire
   extends EntrepotMemoire<Aidant>
   implements EntrepotAidant
 {
-  rechercheParIdentifiantDeConnexion(
-    identifiantConnexion: string
-  ): Promise<Aidant> {
+  rechercheParEmail(email: string): Promise<Aidant> {
     const aidantTrouve = Array.from(this.entites.values()).find(
-      (aidant) => aidant.email === identifiantConnexion
+      (aidant) => aidant.email === email
     );
     if (!aidantTrouve) {
       return Promise.reject(new AggregatNonTrouve('aidant'));
