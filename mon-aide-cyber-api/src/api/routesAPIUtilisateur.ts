@@ -17,6 +17,7 @@ import {
 import { EntrepotUtilisateur } from '../authentification/Utilisateur';
 import { ServiceDeChiffrement } from '../securite/ServiceDeChiffrement';
 import { CommandeReinitialisationMotDePasse } from '../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
+import { adaptateurConfigurationLimiteurTraffic } from './adaptateurLimiteurTraffic';
 
 type CorpsRequeteReinitialiserMotDePasse = core.ParamsDictionary & {
   token: string;
@@ -55,6 +56,9 @@ const valitateurUtilisateur = (
 };
 export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
+
+  const limiteurTrafficReinitialisationMotDePasse =
+    adaptateurConfigurationLimiteurTraffic('AUTHENTIFICATION');
 
   const {
     entrepots,
@@ -97,6 +101,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
 
   routes.post(
     '/reinitialisation-mot-de-passe',
+    limiteurTrafficReinitialisationMotDePasse,
     express.json(),
     async (
       requete: Request<CorpsRequeteReinitialisationMotDePasse>,
@@ -114,6 +119,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
 
   routes.patch(
     '/reinitialiser-mot-de-passe',
+    limiteurTrafficReinitialisationMotDePasse,
     express.json(),
     validateursDeCreationDeMotDePasse(),
     valitateurUtilisateur(entrepots.utilisateurs(), serviceDeChiffrement),
