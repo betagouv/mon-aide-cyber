@@ -27,9 +27,23 @@ export class EntrepotUtilisateurPostgres
   }
 
   rechercheParIdentifiantDeConnexion(
-    _identifiantDeConnexion: string
+    identifiantDeConnexion: string
   ): Promise<Utilisateur> {
-    throw new Error('Method not implemented.');
+    return this.knex
+      .from(`${this.nomTable()}`)
+      .then((utilisateurs: UtilisateurDTO[]) =>
+        utilisateurs.find(
+          (a) =>
+            this.chiffrement.dechiffre(a.donnees.identifiantConnexion) ===
+            identifiantDeConnexion
+        )
+      )
+      .then((ligne) => {
+        if (!ligne) {
+          return Promise.reject(new AggregatNonTrouve(this.typeAggregat()));
+        }
+        return this.deDTOAEntite(ligne!);
+      });
   }
   rechercheParIdentifiantConnexionEtMotDePasse(
     identifiantConnexion: string,
