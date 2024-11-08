@@ -118,12 +118,24 @@ export const lesContextesUtilisateursExistants = [
   {
     contexte: 'Réinitialiser son mot de passe',
     informationContexte: {
-      contexte: 'reinitialiser-mot-de-passe',
+      contexte: 'reinitialisation-mot-de-passe:reinitialiser-mot-de-passe',
     },
     liens: {
       'reinitialiser-mot-de-passe': {
         url: '/api/utilisateur/reinitialiser-mot-de-passe',
         methode: 'PATCH',
+      },
+    },
+  },
+  {
+    contexte: 'Réinitialisation mot de passe',
+    informationContexte: {
+      contexte: 'reinitialisation-mot-de-passe:reinitialisation-mot-de-passe',
+    },
+    liens: {
+      'reinitialisation-mot-de-passe': {
+        url: '/api/utilisateur/reinitialisation-mot-de-passe',
+        methode: 'POST',
       },
     },
   },

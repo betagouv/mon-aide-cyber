@@ -14,6 +14,10 @@ export interface EntrepotUtilisateur extends Entrepot<Utilisateur> {
     identifiantConnexion: string,
     motDePasse: string
   ): Promise<Utilisateur>;
+
+  rechercheParIdentifiantDeConnexion(
+    identifiantDeConnexion: string
+  ): Promise<Utilisateur>;
 }
 
 export type UtilisateurAuthentifie = {
