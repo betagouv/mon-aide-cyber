@@ -6,6 +6,7 @@ import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { sommeDeControle } from '../sommeDeControle';
 
 export type CommandeReinitialisationMotDePasse = Commande & {
   type: 'CommandeReinitialisationMotDePasse';
@@ -32,6 +33,7 @@ export class CapteurCommandeReinitialisationMotDePasse
             JSON.stringify({
               identifiant: utilisateur.identifiant,
               date: FournisseurHorloge.maintenant(),
+              sommeDeControle: sommeDeControle(utilisateur.motDePasse),
             }),
             'binary'
           ).toString('base64')
