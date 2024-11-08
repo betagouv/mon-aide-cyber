@@ -814,8 +814,8 @@ describe('Entrepot Utilisateur', () => {
       const entrepotUtilisateurPostgres = new EntrepotUtilisateurPostgres(
         serviceDeChiffrement
       );
-
       await entrepotUtilisateurPostgres.persiste(utilisateur);
+
       const utilisateurRecu =
         await entrepotUtilisateurPostgres.rechercheParIdentifiantConnexionEtMotDePasse(
           utilisateur.identifiantConnexion,
@@ -832,6 +832,41 @@ describe('Entrepot Utilisateur', () => {
         ).rechercheParIdentifiantConnexionEtMotDePasse(
           'identifiant-inconnu',
           'mdp'
+        )
+      ).rejects.toThrow(new Error("Le utilisateur demandé n'existe pas."));
+    });
+  });
+
+  describe('Recherche par identifiant', () => {
+    it('L’utilisateur est trouvé', async () => {
+      const utilisateur = unUtilisateur().construis();
+      const serviceDeChiffrement = new FauxServiceDeChiffrement(
+        new Map([
+          [utilisateur.identifiantConnexion, 'aaa'],
+          [utilisateur.motDePasse, 'bbb'],
+          [utilisateur.nomPrenom, 'ccc'],
+        ])
+      );
+      const entrepotUtilisateurPostgres = new EntrepotUtilisateurPostgres(
+        serviceDeChiffrement
+      );
+      await entrepotUtilisateurPostgres.persiste(utilisateur);
+
+      const utilisateurRecu =
+        await entrepotUtilisateurPostgres.rechercheParIdentifiantDeConnexion(
+          utilisateur.identifiantConnexion
+        );
+
+      expect(utilisateurRecu).toStrictEqual<Utilisateur>(utilisateur);
+    });
+
+    it('L’utilisateur n’est pas trouvé', async () => {
+      const entrepotUtilisateurPostgres = new EntrepotUtilisateurPostgres(
+        new ServiceDeChiffrementClair()
+      );
+      expect(
+        entrepotUtilisateurPostgres.rechercheParIdentifiantDeConnexion(
+          'email-inconnu@mail.com'
         )
       ).rejects.toThrow(new Error("Le utilisateur demandé n'existe pas."));
     });
