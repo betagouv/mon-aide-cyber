@@ -8,6 +8,7 @@ import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServ
 import { adaptateurCorpsMessage } from '../../../src/authentification/reinitialisation-mot-de-passe/adaptateurCorpsMessage';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { sommeDeControle } from '../../../src/authentification/sommeDeControle';
 
 describe('Capteur de commande de réinitialisation du mot de passe', () => {
   beforeEach(() => {
@@ -36,6 +37,7 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
               JSON.stringify({
                 identifiant: utilisateur.identifiant,
                 date: FournisseurHorloge.maintenant(),
+                sommeDeControle: sommeDeControle(utilisateur.motDePasse),
               }),
               'binary'
             ).toString('base64'),

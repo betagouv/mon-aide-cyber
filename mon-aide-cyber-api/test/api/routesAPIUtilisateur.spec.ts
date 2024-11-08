@@ -182,6 +182,10 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         JSON.stringify({
           identifiant: utilisateur.identifiant,
           date: FournisseurHorloge.maintenant(),
+          sommeDeControle: crypto
+            .createHash('sha256')
+            .update(utilisateur.motDePasse)
+            .digest('base64'),
         })
       );
 
