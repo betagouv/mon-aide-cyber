@@ -101,7 +101,7 @@ export class EntrepotUtilisateurPostgres
       identifiantConnexion: this.chiffrement.dechiffre(
         dto.donnees.identifiantConnexion
       ),
-      motDePasse: this.chiffrement.dechiffre(dto.donnees.motDePasse),
+      motDePasse: dto.donnees.motDePasse,
       nomPrenom: this.chiffrement.dechiffre(dto.donnees.nomPrenom),
       ...(dto.donnees.dateSignatureCGU && {
         dateSignatureCGU: FournisseurHorloge.enDate(
