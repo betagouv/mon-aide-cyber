@@ -9,6 +9,8 @@ export default defineProject({
       URL_JOURNALISATION_BASE_DONNEES:
         process.env.URL_JOURNALISATION_BASE_DONNEES ||
         'postgres://postgres@localhost:5434',
+      BASE_DE_DONNEES_MIN_POOL: '2',
+      BASE_DE_DONNEES_MAX_POOL: '50',
     },
     onConsoleLog(log: string): boolean {
       return !log.includes('Une erreur est survenue:');
