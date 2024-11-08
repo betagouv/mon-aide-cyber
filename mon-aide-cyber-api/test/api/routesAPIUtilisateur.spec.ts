@@ -8,6 +8,8 @@ import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/Adaptate
 import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
 import { ReponseReinitialisationMotDePasseEnErreur } from '../../src/api/routesAPIUtilisateur';
 import crypto from 'crypto';
+import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
+import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe('le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -171,6 +173,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
 
   describe('Quand une requête PATCH est reçue sur /api/utilisateur/reinitialiser-mot-de-passe', () => {
     it('Modifie le mot de passe', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
       const utilisateur = unUtilisateur()
         .avecUnMotDePasse('original')
         .construis();
@@ -178,6 +181,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
       const token = btoa(
         JSON.stringify({
           identifiant: utilisateur.identifiant,
+          date: FournisseurHorloge.maintenant(),
         })
       );
 

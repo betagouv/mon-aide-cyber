@@ -1,7 +1,11 @@
 import { EntrepotUtilisateur } from './Utilisateur';
+import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
+import { differenceInMinutes } from 'date-fns';
+import { ErreurMAC } from '../domaine/erreurMAC';
 
 type Token = {
   identifiant: string;
+  date: Date;
 };
 
 type ModificationMotDePasse = {
@@ -10,12 +14,30 @@ type ModificationMotDePasse = {
   token: Token;
 };
 
+export class ErreurReinitialisationMotDePasse extends Error {}
+
+const VINGT_MINUTES = 20;
+
 export class ServiceUtilisateur {
   constructor(private readonly entrepotUtilisateur: EntrepotUtilisateur) {}
 
   modifieMotDePasse(
     modificationMotDePasse: ModificationMotDePasse
   ): Promise<void> {
+    const lapsDeTemps = differenceInMinutes(
+      FournisseurHorloge.maintenant(),
+      modificationMotDePasse.token.date
+    );
+    if (isNaN(lapsDeTemps) || lapsDeTemps > VINGT_MINUTES) {
+      return Promise.reject(
+        ErreurMAC.cree(
+          'Réinitialisation mot de passe',
+          new ErreurReinitialisationMotDePasse(
+            'Le lien de réinitialisation du mot de passe n’est plus valide.'
+          )
+        )
+      );
+    }
     return this.entrepotUtilisateur
       .lis(modificationMotDePasse.token.identifiant)
       .then((utilisateur) => {
