@@ -17,7 +17,7 @@ import { CapteurSagaDemandeAidantCreeEspaceAidant } from '../../gestion-demandes
 import { CapteurSagaDemandeSolliciterAide } from '../../gestion-demandes/aide/CapteurSagaDemandeSolliciterAide';
 import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
 import { CapteurCommandeCreeUtilisateur } from '../../authentification/CapteurCommandeCreeUtilisateur';
-import { CapteurCommandeReinitialisationMotDePasse } from '../../authentification/CapteurCommandeReinitialisationMotDePasse';
+import { CapteurCommandeReinitialisationMotDePasse } from '../../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 
 type Services = {
   aidant: ServiceAidant;
@@ -164,7 +164,8 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurCommandeReinitialisationMotDePasse(
           parametres.entrepots,
           parametres.busEvenements!,
-          parametres.adaptateurEnvoiMail!
+          parametres.adaptateurEnvoiMail!,
+          adaptateurServiceChiffrement()
         ),
     },
   ],
