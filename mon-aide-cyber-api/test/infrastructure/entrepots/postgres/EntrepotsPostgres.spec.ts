@@ -798,7 +798,10 @@ describe('Entrepot Utilisateur', () => {
     const utilisateurRecu = await entrepotUtilisateurPostgres.lis(
       utilisateur.identifiant
     );
-    expect(utilisateurRecu).toStrictEqual<Utilisateur>(utilisateur);
+    expect(utilisateurRecu).toStrictEqual<Utilisateur>({
+      ...utilisateur,
+      motDePasse: 'bbb',
+    });
   });
 
   describe('Recherche par identifiant et mot de passe', () => {
@@ -822,7 +825,10 @@ describe('Entrepot Utilisateur', () => {
           utilisateur.motDePasse
         );
 
-      expect(utilisateurRecu).toStrictEqual<Utilisateur>(utilisateur);
+      expect(utilisateurRecu).toStrictEqual<Utilisateur>({
+        ...utilisateur,
+        motDePasse: 'bbb',
+      });
     });
 
     it("l'utilisateur n'est pas trouvé", () => {
@@ -857,7 +863,10 @@ describe('Entrepot Utilisateur', () => {
           utilisateur.identifiantConnexion
         );
 
-      expect(utilisateurRecu).toStrictEqual<Utilisateur>(utilisateur);
+      expect(utilisateurRecu).toStrictEqual<Utilisateur>({
+        ...utilisateur,
+        motDePasse: 'bbb',
+      });
     });
 
     it('L’utilisateur n’est pas trouvé', async () => {
