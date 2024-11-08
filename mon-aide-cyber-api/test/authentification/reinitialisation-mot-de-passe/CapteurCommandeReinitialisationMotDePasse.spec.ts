@@ -6,12 +6,15 @@ import { unUtilisateur } from '../../constructeurs/constructeursAidantUtilisateu
 import { CapteurCommandeReinitialisationMotDePasse } from '../../../src/authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServiceDeChiffrement';
 import { adaptateurCorpsMessage } from '../../../src/authentification/reinitialisation-mot-de-passe/adaptateurCorpsMessage';
+import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe('Capteur de commande de réinitialisation du mot de passe', () => {
   beforeEach(() => {
     process.env.URL_MAC = 'http://localhost:8081';
   });
   it('Envoie le mail de modification de mot de passe', async () => {
+    FournisseurHorlogeDeTest.initialise(new Date());
     const entrepots = new EntrepotsMemoire();
     const busEvenement = new BusEvenementDeTest();
     const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
@@ -32,6 +35,7 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
             Buffer.from(
               JSON.stringify({
                 identifiant: utilisateur.identifiant,
+                date: FournisseurHorloge.maintenant(),
               }),
               'binary'
             ).toString('base64'),

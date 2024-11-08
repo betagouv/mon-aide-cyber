@@ -5,6 +5,7 @@ import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 
 export type CommandeReinitialisationMotDePasse = Commande & {
   type: 'CommandeReinitialisationMotDePasse';
@@ -28,7 +29,10 @@ export class CapteurCommandeReinitialisationMotDePasse
       .then((utilisateur) => {
         const partieChiffree = this.serviceDeChiffrement.chiffre(
           Buffer.from(
-            JSON.stringify({ identifiant: utilisateur.identifiant }),
+            JSON.stringify({
+              identifiant: utilisateur.identifiant,
+              date: FournisseurHorloge.maintenant(),
+            }),
             'binary'
           ).toString('base64')
         );
