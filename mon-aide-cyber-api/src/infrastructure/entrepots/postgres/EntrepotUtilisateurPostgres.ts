@@ -25,6 +25,12 @@ export class EntrepotUtilisateurPostgres
   constructor(private readonly chiffrement: ServiceDeChiffrement) {
     super();
   }
+
+  rechercheParIdentifiantDeConnexion(
+    _identifiantDeConnexion: string
+  ): Promise<Utilisateur> {
+    throw new Error('Method not implemented.');
+  }
   rechercheParIdentifiantConnexionEtMotDePasse(
     identifiantConnexion: string,
     motDePasse: string

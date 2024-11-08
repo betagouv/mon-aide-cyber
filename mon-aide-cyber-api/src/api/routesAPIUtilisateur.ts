@@ -16,11 +16,16 @@ import {
 } from 'express-validator';
 import { EntrepotUtilisateur } from '../authentification/Utilisateur';
 import { ServiceDeChiffrement } from '../securite/ServiceDeChiffrement';
+import { CommandeReinitialisationMotDePasse } from '../authentification/CapteurCommandeReinitialisationMotDePasse';
 
 type CorpsRequeteReinitialiserMotDePasse = core.ParamsDictionary & {
   token: string;
   motDePasse: string;
   confirmationMotDePasse: string;
+};
+
+type CorpsRequeteReinitialisationMotDePasse = core.ParamsDictionary & {
+  email: string;
 };
 
 export type ReponseReinitialisationMotDePasseEnErreur = ReponseHATEOAS & {
@@ -50,6 +55,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
   const {
     entrepots,
     adaptateurDeVerificationDeSession: session,
+    busCommande,
     serviceDeChiffrement,
   } = configuration;
 
@@ -82,6 +88,23 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
             ErreurMAC.cree("Accède aux informations de l'utilisateur", erreur)
           )
         );
+    }
+  );
+
+  routes.post(
+    '/reinitialisation-mot-de-passe',
+    express.json(),
+    async (
+      requete: Request<CorpsRequeteReinitialisationMotDePasse>,
+      reponse: Response
+    ) => {
+      return busCommande
+        .publie<CommandeReinitialisationMotDePasse, void>({
+          type: 'CommandeReinitialisationMotDePasse',
+          email: requete.body.email,
+        })
+        .then(() => reponse.status(202).send())
+        .catch(() => reponse.status(202).send());
     }
   );
 

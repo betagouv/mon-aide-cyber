@@ -136,6 +136,39 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
     });
   });
 
+  describe('Quand une requête POST est reçue sur /api/utilisateur/reinitialisation-mot-de-passe', () => {
+    it('Retourne une réponse ACCEPTED', async () => {
+      const utilisateur = unUtilisateur().construis();
+      testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/reinitialisation-mot-de-passe`,
+        donneesServeur.portEcoute,
+        {
+          email: utilisateur.identifiantConnexion,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(202);
+    });
+
+    it('Retourne une réponse ACCEPTED même en cas d’erreur', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/reinitialisation-mot-de-passe`,
+        donneesServeur.portEcoute,
+        {
+          email: 'email-inconnu',
+        }
+      );
+
+      expect(reponse.statusCode).toBe(202);
+    });
+  });
+
   describe('Quand une requête PATCH est reçue sur /api/utilisateur/reinitialiser-mot-de-passe', () => {
     it('Modifie le mot de passe', async () => {
       const utilisateur = unUtilisateur()

@@ -212,6 +212,18 @@ export class EntrepotUtilisateurMemoire
     }
     return Promise.resolve(utilisateurTrouve);
   }
+  async rechercheParIdentifiantDeConnexion(
+    identifiantDeConnexion: string
+  ): Promise<Utilisateur> {
+    const utilisateurTrouve = Array.from(this.entites.values()).find(
+      (utilisateur) =>
+        utilisateur.identifiantConnexion === identifiantDeConnexion
+    );
+    if (!utilisateurTrouve) {
+      throw new AggregatNonTrouve('utilisateur');
+    }
+    return Promise.resolve(utilisateurTrouve);
+  }
 
   typeAggregat(): string {
     return 'utilisateur';
