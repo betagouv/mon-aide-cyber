@@ -7,7 +7,7 @@ class ServiceAidantMAC implements ServiceAidant {
 
   async rechercheParMail(mailAidant: string): Promise<AidantDTO | undefined> {
     return this.entrepotAidant
-      .rechercheParIdentifiantDeConnexion(mailAidant)
+      .rechercheParEmail(mailAidant)
       .then((aidant) => ({
         identifiant: aidant.identifiant,
         email: aidant.email,

@@ -91,15 +91,12 @@ export class EntrepotAidantPostgres
     return 'aidant';
   }
 
-  rechercheParIdentifiantDeConnexion(
-    identifiantConnexion: string
-  ): Promise<Aidant> {
+  rechercheParEmail(email: string): Promise<Aidant> {
     return this.knex
       .from(`${this.nomTable()}`)
       .then((aidants: AidantDTO[]) =>
         aidants.find(
-          (a) =>
-            this.chiffrement.dechiffre(a.donnees.email) === identifiantConnexion
+          (a) => this.chiffrement.dechiffre(a.donnees.email) === email
         )
       )
       .then((ligne) => {

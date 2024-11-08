@@ -53,9 +53,7 @@ export type Aidant = Aggregat & {
 };
 
 export interface EntrepotAidant extends Entrepot<Aidant> {
-  rechercheParIdentifiantDeConnexion(
-    identifiantConnexion: string
-  ): Promise<Aidant>;
+  rechercheParEmail(email: string): Promise<Aidant>;
 }
 
 export class ErreurCreationEspaceAidant extends Error {
