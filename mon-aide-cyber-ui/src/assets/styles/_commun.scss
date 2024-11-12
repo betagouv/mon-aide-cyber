@@ -50,25 +50,21 @@ a {
   }
 
   &.succes {
-    width: fit-content;
     background: var(--couleurs-mac-succes);
     color: var(--couleurs-mac-blanc);
   }
 
   &.erreur {
-    width: fit-content;
     background: var(--couleurs-mac-erreur-mode-fonce);
     color: var(--couleurs-mac-blanc);
   }
 
   &.attention {
-    width: fit-content;
     background: var(--couleurs-mac-jaune-clair);
     color: #8f7118;
   }
 
   &.information {
-    width: fit-content;
     background: var(--couleurs-mac-jaune-clair);
   }
 }
@@ -151,6 +147,10 @@ fieldset {
 .mac-sticky {
   position: sticky;
   top: 0;
+}
+
+.w-fit {
+  width: fit-content;
 }
 
 .w-100 {
