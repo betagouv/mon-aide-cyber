@@ -1,12 +1,14 @@
 import { CapteurCommande, Commande } from '../../domaine/commande';
 import { Entrepots } from '../../domaine/Entrepots';
-import { BusEvenement } from '../../domaine/BusEvenement';
+import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { sommeDeControle } from '../sommeDeControle';
+import crypto from 'crypto';
+import { adaptateurUUID } from '../../infrastructure/adaptateurs/adaptateurUUID';
 
 export type CommandeReinitialisationMotDePasse = Commande & {
   type: 'CommandeReinitialisationMotDePasse';
@@ -18,7 +20,7 @@ export class CapteurCommandeReinitialisationMotDePasse
 {
   constructor(
     private readonly entrepots: Entrepots,
-    _busEvenement: BusEvenement,
+    private readonly busEvenement: BusEvenement,
     private readonly adapteurEnvoiMail: AdaptateurEnvoiMail,
     private readonly serviceDeChiffrement: ServiceDeChiffrement
   ) {}
@@ -52,7 +54,48 @@ export class CapteurCommandeReinitialisationMotDePasse
             },
             'INFO'
           )
-          .then(() => Promise.resolve());
+          .then(() => {
+            return this.busEvenement
+              .publie<ReinitialisationMotDePasseDemandee>(
+                this.genereEvenement({
+                  statut: 'SUCCES',
+                  identifiant: utilisateur.identifiant,
+                })
+              )
+              .then(() => Promise.resolve());
+          });
+      })
+      .catch((erreur) => {
+        return this.busEvenement
+          .publie<ReinitialisationMotDePasseDemandee>(
+            this.genereEvenement({ statut: 'ERREUR', email: commande.email })
+          )
+          .then(() => Promise.reject(erreur));
       });
   }
+
+  private genereEvenement(
+    corps: EvenementEnSucces | EvenementEnErreur
+  ): ReinitialisationMotDePasseDemandee {
+    return {
+      corps: { ...corps },
+      date: FournisseurHorloge.maintenant(),
+      identifiant: adaptateurUUID.genereUUID(),
+      type: 'REINITIALISATION_MOT_DE_PASSE_DEMANDEE',
+    };
+  }
 }
+
+type EvenementReinitialisationMotDePasseDemandee = {
+  statut: 'SUCCES' | 'ERREUR';
+};
+
+type EvenementEnSucces = EvenementReinitialisationMotDePasseDemandee & {
+  identifiant: crypto.UUID;
+};
+type EvenementEnErreur = EvenementReinitialisationMotDePasseDemandee & {
+  email: string;
+};
+export type ReinitialisationMotDePasseDemandee = Evenement<
+  EvenementEnSucces | EvenementEnErreur
+>;

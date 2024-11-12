@@ -33,6 +33,8 @@ export const preferencesAidantModifiees = consommateurEvenement();
 
 export const profilAidantModifie = consommateurEvenement();
 
+export const reinitialisationMotDePasseDemandee = consommateurEvenement();
+
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E
 ): Publication => {
