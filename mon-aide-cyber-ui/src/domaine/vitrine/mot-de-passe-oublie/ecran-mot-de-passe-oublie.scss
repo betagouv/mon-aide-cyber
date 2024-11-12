@@ -1,0 +1,52 @@
+@import './../../../assets/styles/points-de-rupture';
+
+.ecran-mot-de-passe-oublie {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 'formulaire';
+
+  @include a-partir-de(md) {
+    grid-template-columns: 55% auto;
+    grid-template-areas: 'formulaire icone';
+  }
+  
+  height: 800px;
+
+
+  .formulaire-colonne-gauche {
+    grid-area: formulaire;
+  }
+
+  .icone-colonne-droite {
+    grid-area: icone;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  .formulaire-mot-de-passe-oublie-layout {
+    padding: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+
+    form.formulaire-mot-de-passe-oublie {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .actions {
+        display: flex;
+        justify-content: flex-start;
+        gap: 1rem;
+      }
+    }
+  }
+}
