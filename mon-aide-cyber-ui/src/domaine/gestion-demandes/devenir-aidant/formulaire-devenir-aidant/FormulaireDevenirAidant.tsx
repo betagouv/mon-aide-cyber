@@ -203,7 +203,7 @@ export const FormulaireDevenirAidant = ({
       ) : (
         <div className="fr-col-md-8 fr-col-sm-12 section">
           <div className="fr-mb-2w">
-            Demande d&apos;inscription à une formation MonAideCyber
+            Demande d&apos;inscription à un atelier Devenir Aidant MonAideCyber
           </div>
           <div className="fr-mt-2w introduction">
             <div>
@@ -212,19 +212,18 @@ export const FormulaireDevenirAidant = ({
               </TypographieH5>
               <p>Pour devenir aidant, il est nécessaire de&nbsp;:</p>
               <ul>
-                <li>participer à une formation animée par l&apos;ANSSI</li>
+                <li>participer à un atelier animé par l&apos;ANSSI</li>
                 <li>
                   prendre connaissance de{' '}
                   <a href="/charte-aidant">la charte de l&apos;aidant</a>, qui
                   rappelle notamment le principe de gratuité du dispositif, et
-                  la signer avant ou après la formation
+                  la signer avant ou après l&apos;atelier
                 </li>
                 <br />
               </ul>
               <p>
                 Veuillez compléter les informations ci-dessous pour être averti
-                de la prochaine session de formation prévue sur votre
-                territoire.
+                de la prochaine session prévue sur votre territoire.
               </p>
             </div>
           </div>

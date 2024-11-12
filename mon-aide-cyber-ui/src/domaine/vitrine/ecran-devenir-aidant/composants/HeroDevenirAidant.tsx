@@ -13,7 +13,7 @@ export const HeroDevenirAidant = () => {
             Vous souhaitez accompagner des entités dans la réalisation d&apos;un
             diagnostic de maturité cyber ? <br />
             Pour cela, rejoignez la communauté des Aidants MonAideCyber !
-            Inscrivez-vous pour être formé par l&apos;ANSSI
+            Inscrivez-vous pour être Aidant cyber.
           </p>
           <div>
             <Link to="#formulaire-formation">
@@ -21,7 +21,7 @@ export const HeroDevenirAidant = () => {
                 type="button"
                 className="bouton-mac bouton-mac-primaire-inverse"
               >
-                Je m&apos;inscris à une formation
+                Je m&apos;inscris
               </button>
             </Link>
           </div>
