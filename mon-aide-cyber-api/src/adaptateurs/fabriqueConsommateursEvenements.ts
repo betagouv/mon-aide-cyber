@@ -11,6 +11,7 @@ import {
   preferencesAidantModifiees,
   profilAidantModifie,
   aideViaSollicitationAidantCree,
+  reinitialisationMotDePasseDemandee,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
@@ -75,5 +76,9 @@ export const fabriqueConsommateursEvenements = (
       [preferencesAidantModifiees(entrepotJournalisation)],
     ],
     ['PROFIL_AIDANT_MODIFIE', [profilAidantModifie(entrepotJournalisation)]],
+    [
+      'REINITIALISATION_MOT_DE_PASSE_DEMANDEE',
+      [reinitialisationMotDePasseDemandee(entrepotJournalisation)],
+    ],
   ]);
 };
