@@ -17,6 +17,7 @@ import { EcranBeneficierDuDispositif } from './domaine/vitrine/ecran-beneficier-
 import { EcranAnnuaire } from './domaine/vitrine/ecran-annuaire/EcranAnnuaire.tsx';
 import { EcranConnexion } from './domaine/connexion/EcranConnexion.tsx';
 import { EcranAidant } from './domaine/vitrine/ecran-annuaire/ecran-aidant/EcranAidant.tsx';
+import { EcranMotDePasseOublie } from './domaine/vitrine/mot-de-passe-oublie/EcranMotDePasseOublie.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -44,6 +45,7 @@ export const RouteurPublic = () => {
         />
         <Route path="mentions-legales" element={<MentionsLegales />} />
         <Route path="connexion" element={<EcranConnexion />} />
+        <Route path="mot-de-passe-oublie" element={<EcranMotDePasseOublie />} />
       </Route>
 
       <Route element={<LayoutCreationEspaceAidant />}>

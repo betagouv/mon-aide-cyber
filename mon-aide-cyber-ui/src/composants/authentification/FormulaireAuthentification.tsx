@@ -16,6 +16,8 @@ import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { useRecupereContexteNavigation } from '../../hooks/useRecupereContexteNavigation.ts';
 import { Input } from '../atomes/Input/Input.tsx';
 import { PasswordInput } from '../atomes/Input/PasswordInput.tsx';
+import Button from '../atomes/Button/Button.tsx';
+import { useNavigate } from 'react-router-dom';
 
 export type Identifiants = {
   identifiant: string;
@@ -31,6 +33,7 @@ export const ComposantAuthentification = ({
 }: ProprietesComposantAuthentification) => {
   const navigationMAC = useNavigationMAC();
   useRecupereContexteNavigation('se-connecter');
+  const navigate = useNavigate();
 
   const { setUtilisateurConnecte } = useUtilisateur();
 
@@ -144,6 +147,12 @@ export const ComposantAuthentification = ({
                 />
                 {erreur?.motDePasse?.texteExplicatif}
               </div>
+              <Button
+                variant="link"
+                onClick={() => navigate('/mot-de-passe-oublie')}
+              >
+                Mot de passe oublié ?
+              </Button>
             </fieldset>
           </div>
           <div className="fr-grid-row fr-grid-row--center">
