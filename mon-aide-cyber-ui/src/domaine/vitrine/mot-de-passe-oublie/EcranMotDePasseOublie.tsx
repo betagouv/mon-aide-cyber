@@ -1,13 +1,17 @@
 import './ecran-mot-de-passe-oublie.scss';
-import { FormulaireMotDePasseOublie } from './formulaire-mot-de-passe-oublie/FormulaireMotDePasseOublie.tsx';
+import { FormulaireMotDePasseOublieConnecte } from './formulaire-mot-de-passe-oublie/FormulaireMotDePasseOublie.tsx';
 import illustrationSecuritePostesSvg from '../../../../public/images/illustration-securite-des-postes.svg';
+import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
 
 export const EcranMotDePasseOublie = () => {
   return (
     <main role="main" className="ecran-mot-de-passe-oublie">
       <div>
-        <div className="fr-container">
-          <FormulaireMotDePasseOublie />
+        <div className="fr-container formulaire-colonne-gauche">
+          <TypographieH3 style={{ textAlign: 'center' }}>
+            Réinitialisation de votre mot de passe
+          </TypographieH3>
+          <FormulaireMotDePasseOublieConnecte />
         </div>
       </div>
       <div className="fond-clair-mac icone-colonne-droite">

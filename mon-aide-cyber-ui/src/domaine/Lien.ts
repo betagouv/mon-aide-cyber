@@ -33,4 +33,5 @@ export type Action =
   | 'restitution-pdf'
   | 'se-connecter'
   | 'se-deconnecter'
-  | 'afficher-statistiques';
+  | 'afficher-statistiques'
+  | 'reinitialisation-mot-de-passe';
