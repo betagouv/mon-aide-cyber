@@ -6,10 +6,14 @@ import { AdaptateurDeVerificationDeSessionAvecContexteDeTest } from '../adaptate
 import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/AdaptateurDeVerificationDeSessionDeTest';
 
 import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
-import { ReponseReinitialisationMotDePasseEnErreur } from '../../src/api/routesAPIUtilisateur';
+import {
+  CorpsReponseReinitialiserMotDePasseEnErreur,
+  ReponseReinitialisationMotDePasseEnErreur,
+} from '../../src/api/routesAPIUtilisateur';
 import crypto from 'crypto';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { add } from 'date-fns';
 
 describe('le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -206,6 +210,61 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         (await testeurMAC.entrepots.utilisateurs().lis(utilisateur.identifiant))
           .motDePasse
       ).toStrictEqual('n0uv3eaU-M0D3passe');
+    });
+
+    it('Retourne une erreur', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const utilisateur = unUtilisateur()
+        .avecUnMotDePasse('original')
+        .construis();
+      await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+      const token = btoa(
+        JSON.stringify({
+          identifiant: utilisateur.identifiant,
+          date: FournisseurHorloge.maintenant(),
+          sommeDeControle: crypto
+            .createHash('sha256')
+            .update(utilisateur.motDePasse)
+            .digest('base64'),
+        })
+      );
+
+      FournisseurHorlogeDeTest.initialise(
+        add(FournisseurHorloge.maintenant(), { minutes: 25 })
+      );
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/utilisateur/reinitialiser-mot-de-passe`,
+        donneesServeur.portEcoute,
+        {
+          motDePasse: 'n0uv3eaU-M0D3passe',
+          confirmationMotDePasse: 'n0uv3eaU-M0D3passe',
+          token,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(419);
+      expect(
+        await reponse.json()
+      ).toStrictEqual<CorpsReponseReinitialiserMotDePasseEnErreur>({
+        message:
+          'Le lien de réinitialisation du mot de passe n’est plus valide.',
+        liens: {
+          'demande-devenir-aidant': {
+            methode: 'GET',
+            url: '/api/demandes/devenir-aidant',
+          },
+          'demande-etre-aide': {
+            methode: 'GET',
+            url: '/api/demandes/etre-aide',
+          },
+          'se-connecter': {
+            methode: 'POST',
+            url: '/api/token',
+          },
+        },
+      });
     });
 
     describe('Lors de la phase de validation', () => {

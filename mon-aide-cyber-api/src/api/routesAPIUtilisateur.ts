@@ -24,6 +24,10 @@ type CorpsRequeteReinitialiserMotDePasse = core.ParamsDictionary & {
   confirmationMotDePasse: string;
 };
 
+export type CorpsReponseReinitialiserMotDePasseEnErreur = ReponseHATEOAS & {
+  message: string;
+};
+
 type CorpsRequeteReinitialisationMotDePasse = core.ParamsDictionary & {
   email: string;
 };
@@ -116,7 +120,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     async (
       requete: Request<CorpsRequeteReinitialiserMotDePasse>,
       reponse: Response,
-      _suite: NextFunction
+      suite: NextFunction
     ) => {
       const resultatsValidation: Result<FieldValidationError> =
         validationResult(requete) as Result<FieldValidationError>;
@@ -138,7 +142,8 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
             serviceDeChiffrement.dechiffre(atob(corpsRequete.token))
           ),
         })
-        .then(() => reponse.status(204).send());
+        .then(() => reponse.status(204).send())
+        .catch((erreur) => suite(erreur));
     }
   );
 

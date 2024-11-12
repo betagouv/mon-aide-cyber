@@ -11,11 +11,13 @@ import { ErreurEnvoiEmail } from '../messagerie/Messagerie';
 import { ErreurModificationPreferences } from '../aidant/routesAPIAidantPreferences';
 import { ErreurModificationProfil } from '../aidant/routesAPIProfil';
 import { ErreurCreationEspaceAidant } from '../../espace-aidant/Aidant';
+import { ErreurReinitialisationMotDePasse } from '../../authentification/ServiceUtilisateur';
 
 const HTTP_MAUVAISE_REQUETE = 400;
 const HTTP_NON_AUTORISE = 401;
 const HTTP_ACCES_REFUSE = 403;
 const HTTP_NON_TROUVE = 404;
+const HTTP_EXPIRE = 419;
 const HTTP_NON_TRAITABLE = 422;
 const HTTP_ERREUR_SERVEUR = 500;
 
@@ -146,6 +148,20 @@ const erreursGerees: Map<
     ) => {
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_NON_TRAITABLE, {
+        message: erreur.message,
+      });
+    },
+  ],
+  [
+    'ErreurReinitialisationMotDePasse',
+    (
+      erreur: ErreurMAC<ErreurReinitialisationMotDePasse>,
+      _requete,
+      _consignateur,
+      reponse
+    ) => {
+      construisReponse(reponse, HTTP_EXPIRE, {
+        ...constructeurActionsHATEOAS().actionsPubliques().construis(),
         message: erreur.message,
       });
     },
