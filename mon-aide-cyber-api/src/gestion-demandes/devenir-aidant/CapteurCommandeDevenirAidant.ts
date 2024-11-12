@@ -107,7 +107,7 @@ export class CapteurCommandeDevenirAidant
   ) {
     await this.adaptateurEnvoiMail.envoie({
       objet:
-        'MonAideCyber - Demande de participation à une session de formation Aidant ANSSI',
+        'MonAideCyber - Demande de participation à un atelier Devenir Aidant',
       destinataire: {
         nom: `${demandeDevenirAidant.nom} ${demandeDevenirAidant.prenom}`,
         email: demandeDevenirAidant.mail,

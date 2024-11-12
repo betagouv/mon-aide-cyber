@@ -182,7 +182,8 @@ export const FormulaireDevenirAidant = ({
             <br />
             Vous allez être mis en relation avec le délégué régional de
             l&apos;ANSSI de votre territoire, qui reviendra vers vous par mail
-            pour vous indiquer la prochaine date de formation prévue.
+            pour vous indiquer la prochaine date prévue de l&apos;atelier
+            Devenir Aidant.
             <br />
             <br />
             Pensez à vérifier dans vos spams ou contactez-nous à&nbsp;
