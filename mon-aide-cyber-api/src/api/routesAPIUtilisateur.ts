@@ -43,9 +43,10 @@ const valitateurUtilisateur = (
 ) => {
   const { body } = new ExpressValidator({
     utilisateurConnu: async (__: any, { req }: Meta) => {
-      const token = JSON.parse(
-        serviceDeChiffrement.dechiffre(atob(req.body.token))
+      const tokenDechiffre = atob(
+        serviceDeChiffrement.dechiffre(req.body.token)
       );
+      const token = JSON.parse(tokenDechiffre);
       return await entrepotUtilisateur.lis(token.identifiant);
     },
   });
@@ -145,7 +146,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
           motDePasse: corpsRequete.motDePasse,
           confirmationMotDePasse: corpsRequete.confirmationMotDePasse,
           token: JSON.parse(
-            serviceDeChiffrement.dechiffre(atob(corpsRequete.token))
+            atob(serviceDeChiffrement.dechiffre(corpsRequete.token))
           ),
         })
         .then(() => reponse.status(204).send())
