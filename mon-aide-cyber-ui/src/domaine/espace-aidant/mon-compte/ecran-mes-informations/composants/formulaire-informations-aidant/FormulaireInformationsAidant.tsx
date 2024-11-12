@@ -28,6 +28,7 @@ export const FormulaireInformationsAidant = ({
     enregistreProfil(() => {
       setMessageEnregistrementProfilAidant(
         <Toast
+          className="w-fit"
           message="Vos informations ont bien été enregistrées"
           type="INFO"
         />
@@ -38,6 +39,7 @@ export const FormulaireInformationsAidant = ({
       () => {
         setMessageEnregistrementProfilAidant(
           <Toast
+            className="w-fit"
             message="Une erreur est survenue lors de l'enregistrement de vos informations"
             type="ERREUR"
           />
