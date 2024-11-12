@@ -22,6 +22,8 @@ export const QuiEstConcerne = () => {
           services de l’État (Police, Gendarmerie,...), des collectivités, des
           associations (Campus Cyber, opérateurs publics de services
           numériques...) des sociétés privées bénévoles et des particuliers.
+          <br />A l&apos;inverse, le dispositif n&apos;est pas adapté aux
+          entreprises mono-salariés et auto-entrepreneurs.
         </p>
       </div>
     </section>
