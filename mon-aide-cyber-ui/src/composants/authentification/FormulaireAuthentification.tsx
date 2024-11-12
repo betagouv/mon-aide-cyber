@@ -149,7 +149,7 @@ export const ComposantAuthentification = ({
               </div>
               <Button
                 variant="link"
-                onClick={() => navigate('/mot-de-passe-oublie')}
+                onClick={() => navigate('/utilisateur/mot-de-passe-oublie')}
               >
                 Mot de passe oublié ?
               </Button>

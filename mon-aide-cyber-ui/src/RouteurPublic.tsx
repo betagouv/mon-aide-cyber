@@ -18,6 +18,7 @@ import { EcranAnnuaire } from './domaine/vitrine/ecran-annuaire/EcranAnnuaire.ts
 import { EcranConnexion } from './domaine/connexion/EcranConnexion.tsx';
 import { EcranAidant } from './domaine/vitrine/ecran-annuaire/ecran-aidant/EcranAidant.tsx';
 import { EcranMotDePasseOublie } from './domaine/vitrine/mot-de-passe-oublie/EcranMotDePasseOublie.tsx';
+import { EcranReinitialiserMotDePasse } from './domaine/vitrine/reinitialiser-mot-de-passe/EcranReinitialiserMotDePasse.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -45,7 +46,14 @@ export const RouteurPublic = () => {
         />
         <Route path="mentions-legales" element={<MentionsLegales />} />
         <Route path="connexion" element={<EcranConnexion />} />
+      </Route>
+
+      <Route path="/utilisateur" element={<LayoutPublic />}>
         <Route path="mot-de-passe-oublie" element={<EcranMotDePasseOublie />} />
+        <Route
+          path="reinitialiser-mot-de-passe"
+          element={<EcranReinitialiserMotDePasse />}
+        />
       </Route>
 
       <Route element={<LayoutCreationEspaceAidant />}>
