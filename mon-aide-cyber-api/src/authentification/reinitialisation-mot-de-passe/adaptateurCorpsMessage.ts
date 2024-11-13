@@ -6,9 +6,8 @@ const genereCorpsReinitialiserMotDePasse = (nomPrenom: string, url: string) => {
     '\n' +
     '<b>Réinitialisation de votre mot de passe</b> \n' +
     '\n' +
-    'Cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe. Si vous n’êtes pas à l’origine de la demande, vous pouvez ignorer cet e-mail.\n' +
-    '\n' +
-    `${url}\n` +
+    `<a href="${url}" target="_blank">Cliquez ici pour réinitialiser votre mot de passe</a>. \n` +
+    'Si vous n’êtes pas à l’origine de la demande, vous pouvez ignorer cet e-mail.\n' +
     '\n' +
     'Toute l’équipe MonAideCyber reste à votre disposition : <a href="mailto:monaidecyber@ssi.gouv.fr">monaidecyber@ssi.gouv.fr</a>' +
     '\n' +
