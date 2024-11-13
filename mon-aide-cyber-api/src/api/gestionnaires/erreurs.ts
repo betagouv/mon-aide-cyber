@@ -163,9 +163,10 @@ const erreursGerees: Map<
     (
       erreur: ErreurMAC<ErreurReinitialisationMotDePasse>,
       _requete,
-      _consignateur,
+      consignateur,
       reponse
     ) => {
+      consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_EXPIRE, {
         ...constructeurActionsHATEOAS().actionsPubliques().construis(),
         message: erreur.message,
