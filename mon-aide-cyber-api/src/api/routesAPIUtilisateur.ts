@@ -55,6 +55,9 @@ const valitateurUtilisateur = (
     .utilisateurConnu()
     .withMessage('L’utilisateur n’est pas connu.');
 };
+
+export class ErreurDemandeReinitialisationMotDePasse extends Error {}
+
 export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
@@ -107,7 +110,8 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     express.json(),
     async (
       requete: Request<CorpsRequeteReinitialisationMotDePasse>,
-      reponse: Response
+      reponse: Response,
+      suite: NextFunction
     ) => {
       return busCommande
         .publie<CommandeReinitialisationMotDePasse, void>({
@@ -115,7 +119,14 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
           email: requete.body.email,
         })
         .then(() => reponse.status(202).send())
-        .catch(() => reponse.status(202).send());
+        .catch((erreur: Error) =>
+          suite(
+            ErreurMAC.cree(
+              'Réinitialisation mot de passe',
+              new ErreurDemandeReinitialisationMotDePasse(erreur.message)
+            )
+          )
+        );
     }
   );
 

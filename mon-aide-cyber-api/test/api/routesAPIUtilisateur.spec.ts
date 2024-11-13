@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from './executeurRequete';
@@ -14,6 +14,7 @@ import crypto from 'crypto';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { add } from 'date-fns';
+import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 
 describe('le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -143,6 +144,18 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
   });
 
   describe('Quand une requête POST est reçue sur /api/utilisateur/reinitialisation-mot-de-passe', () => {
+    beforeEach(() => {
+      testeurMAC.gestionnaireErreurs =
+        new AdaptateurGestionnaireErreursMemoire();
+      donneesServeur = testeurMAC.initialise();
+      adaptateurDeVerificationDeSession =
+        testeurMAC.adaptateurDeVerificationDeSession as AdaptateurDeVerificationDeSessionDeTest;
+    });
+
+    afterEach(() => {
+      testeurMAC.arrete();
+    });
+
     it('Retourne une réponse ACCEPTED', async () => {
       const utilisateur = unUtilisateur().construis();
       testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
@@ -172,6 +185,22 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
       );
 
       expect(reponse.statusCode).toBe(202);
+    });
+
+    it('Consigne l’erreur', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/reinitialisation-mot-de-passe`,
+        donneesServeur.portEcoute,
+        {
+          email: 'email-inconnu',
+        }
+      );
+
+      expect(testeurMAC.gestionnaireErreurs.consignateur().tous()).toHaveLength(
+        1
+      );
     });
   });
 

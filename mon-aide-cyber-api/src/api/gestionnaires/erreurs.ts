@@ -12,7 +12,9 @@ import { ErreurModificationPreferences } from '../aidant/routesAPIAidantPreferen
 import { ErreurModificationProfil } from '../aidant/routesAPIProfil';
 import { ErreurCreationEspaceAidant } from '../../espace-aidant/Aidant';
 import { ErreurReinitialisationMotDePasse } from '../../authentification/ServiceUtilisateur';
+import { ErreurDemandeReinitialisationMotDePasse } from '../routesAPIUtilisateur';
 
+const HTTP_ACCEPTE = 202;
 const HTTP_MAUVAISE_REQUETE = 400;
 const HTTP_NON_AUTORISE = 401;
 const HTTP_ACCES_REFUSE = 403;
@@ -28,10 +30,14 @@ const CORPS_REPONSE_ERREUR_NON_GEREE = {
 const construisReponse = (
   reponse: Response,
   codeHTTP: number,
-  corpsReponse: { message: string }
+  corpsReponse?: { message: string }
 ) => {
   reponse.status(codeHTTP);
-  reponse.json(corpsReponse);
+  if (corpsReponse) {
+    reponse.json(corpsReponse);
+  } else {
+    reponse.send();
+  }
 };
 
 const erreursGerees: Map<
@@ -164,6 +170,18 @@ const erreursGerees: Map<
         ...constructeurActionsHATEOAS().actionsPubliques().construis(),
         message: erreur.message,
       });
+    },
+  ],
+  [
+    'ErreurDemandeReinitialisationMotDePasse',
+    (
+      erreur: ErreurMAC<ErreurDemandeReinitialisationMotDePasse>,
+      _requete,
+      consignateur,
+      reponse
+    ) => {
+      consignateur.consigne(erreur);
+      construisReponse(reponse, HTTP_ACCEPTE);
     },
   ],
 ]);
