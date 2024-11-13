@@ -34,4 +34,5 @@ export type Action =
   | 'se-connecter'
   | 'se-deconnecter'
   | 'afficher-statistiques'
-  | 'reinitialisation-mot-de-passe';
+  | 'reinitialisation-mot-de-passe'
+  | 'reinitialiser-mot-de-passe';

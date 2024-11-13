@@ -6,8 +6,8 @@ import { TypographieH3 } from '../../../composants/communs/typographie/Typograph
 export const EcranMotDePasseOublie = () => {
   return (
     <main role="main" className="ecran-mot-de-passe-oublie">
-      <div>
-        <div className="fr-container formulaire-colonne-gauche">
+      <div className="formulaire-colonne-gauche">
+        <div className="fr-container">
           <TypographieH3 style={{ textAlign: 'center' }}>
             Réinitialisation de votre mot de passe
           </TypographieH3>

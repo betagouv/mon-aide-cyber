@@ -12,7 +12,6 @@
 
   height: 800px;
 
-
   .formulaire-colonne-gauche {
     grid-area: formulaire;
     padding: 3rem 2.5rem;
@@ -52,8 +51,24 @@
 
     .actions {
       display: flex;
-      justify-content: flex-start;
-      gap: 1rem;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+
+      @include a-partir-de(lg) {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1rem;
+      }
+
+      button {
+        width: 100%;
+
+        @include a-partir-de(lg) {
+          width: auto;
+        }
+      }
     }
   }
 }
