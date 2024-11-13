@@ -11,8 +11,7 @@
   }
 
   height: 800px;
-
-
+  
   .formulaire-colonne-gauche {
     grid-area: formulaire;
     padding: 3rem 2.5rem;
@@ -38,22 +37,37 @@
   }
 }
 
-.formulaire-mot-de-passe-oublie-layout {
+.formulaire-reinitialiser-mot-de-passe-layout {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   gap: 1rem;
 
-  form.formulaire-mot-de-passe-oublie {
+  form.formulaire-reinitialiser-mot-de-passe {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 
     .actions {
       display: flex;
-      justify-content: flex-start;
-      gap: 1rem;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+
+      @include a-partir-de(lg) {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      button {
+        width: 100%;
+
+        @include a-partir-de(lg) {
+          width: auto;
+        }
+      }
     }
   }
 }

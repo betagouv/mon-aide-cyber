@@ -90,7 +90,6 @@ export const FormulaireMotDePasseOublie = ({
   );
   const soumetFormulaire = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('soumet le formulaire', e);
     surSoumission(etatFormulaire.email);
   };
 
@@ -126,6 +125,11 @@ export const FormulaireMotDePasseOublie = ({
                   adresseElectroniqueSaisie(e.target.value)
                 )
               }
+              onChange={(e) =>
+                declencheActionFormulaire(
+                  adresseElectroniqueSaisie(e.target.value)
+                )
+              }
             />
             {etatFormulaire.erreurs?.adresseElectronique ? (
               <p className="fr-error-text">
@@ -139,7 +143,11 @@ export const FormulaireMotDePasseOublie = ({
           l’adresse mail indiquée afin de créer un nouveau mot de passe.
         </p>
         <div className="actions">
-          <Button type="button" variant="secondary">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => window.location.replace('/')}
+          >
             Annuler
           </Button>
           <Button
