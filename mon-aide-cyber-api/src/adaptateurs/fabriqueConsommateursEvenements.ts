@@ -12,6 +12,8 @@ import {
   profilAidantModifie,
   aideViaSollicitationAidantCree,
   reinitialisationMotDePasseDemandee,
+  reinitialisationMotDePasseErronee,
+  reinitialisationMotDePasseFaite,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
@@ -79,6 +81,14 @@ export const fabriqueConsommateursEvenements = (
     [
       'REINITIALISATION_MOT_DE_PASSE_DEMANDEE',
       [reinitialisationMotDePasseDemandee(entrepotJournalisation)],
+    ],
+    [
+      'REINITIALISATION_MOT_DE_PASSE_FAITE',
+      [reinitialisationMotDePasseFaite(entrepotJournalisation)],
+    ],
+    [
+      'REINITIALISATION_MOT_DE_PASSE_ERRONEE',
+      [reinitialisationMotDePasseErronee(entrepotJournalisation)],
     ],
   ]);
 };

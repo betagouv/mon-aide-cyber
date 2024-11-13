@@ -65,6 +65,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     entrepots,
     adaptateurDeVerificationDeSession: session,
     busCommande,
+    busEvenement,
     serviceDeChiffrement,
   } = configuration;
 
@@ -141,7 +142,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         });
       }
       const corpsRequete = requete.body;
-      return new ServiceUtilisateur(entrepots.utilisateurs())
+      return new ServiceUtilisateur(entrepots.utilisateurs(), busEvenement)
         .modifieMotDePasse({
           motDePasse: corpsRequete.motDePasse,
           confirmationMotDePasse: corpsRequete.confirmationMotDePasse,

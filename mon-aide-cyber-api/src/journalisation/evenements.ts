@@ -35,6 +35,10 @@ export const profilAidantModifie = consommateurEvenement();
 
 export const reinitialisationMotDePasseDemandee = consommateurEvenement();
 
+export const reinitialisationMotDePasseFaite = consommateurEvenement();
+
+export const reinitialisationMotDePasseErronee = consommateurEvenement();
+
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E
 ): Publication => {
