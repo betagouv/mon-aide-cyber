@@ -1,6 +1,6 @@
 import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
 import illustrationSecuritePostesSvg from '../../../../public/images/illustration-securite-des-postes.svg';
-import { FormulaireReinitialiserMotDePasseConnecte } from './formulaire-reinitialiser-mot-de-passe/FormulaireReinitialiserMotDePasseConnecte.tsx';
+import { CapteurFormulaireReinitialiserMotDePasse } from './formulaire-reinitialiser-mot-de-passe/CapteurFormulaireReinitialiserMotDePasse.tsx';
 import './ecran-reinitialiser-mot-de-passe.scss';
 import { useSearchParams } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ export const EcranReinitialiserMotDePasse = () => {
           <TypographieH3 className="text-center">
             Réinitialisation de votre mot de passe
           </TypographieH3>
-          <FormulaireReinitialiserMotDePasseConnecte
+          <CapteurFormulaireReinitialiserMotDePasse
             token={tokenDeReinitialisation}
           />
         </div>

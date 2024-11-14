@@ -148,6 +148,7 @@ export const ComposantAuthentification = ({
                 {erreur?.motDePasse?.texteExplicatif}
               </div>
               <Button
+                type="button"
                 variant="link"
                 onClick={() => navigate('/utilisateur/mot-de-passe-oublie')}
               >

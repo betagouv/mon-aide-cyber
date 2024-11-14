@@ -13,7 +13,7 @@ export type CorpsReinitialiserMotDePasse = {
   motDePasse: string;
   confirmationMotDePasse: string;
 };
-export const FormulaireReinitialiserMotDePasseConnecte = ({
+export const CapteurFormulaireReinitialiserMotDePasse = ({
   token,
 }: {
   token: string;
@@ -64,7 +64,7 @@ export const FormulaireReinitialiserMotDePasseConnecte = ({
       );
     },
     onSuccess: () => {
-      navigate('/aidant/tableau-de-bord');
+      navigate('/connexion');
     },
   });
 
