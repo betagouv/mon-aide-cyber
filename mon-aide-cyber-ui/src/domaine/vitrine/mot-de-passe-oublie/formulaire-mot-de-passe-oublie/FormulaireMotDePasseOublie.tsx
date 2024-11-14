@@ -1,85 +1,11 @@
 import Button from '../../../../composants/atomes/Button/Button.tsx';
 import { FormEvent, useReducer } from 'react';
-import { useRecupereContexteNavigation } from '../../../../hooks/useRecupereContexteNavigation.ts';
-import { useNavigationMAC } from '../../../../fournisseurs/hooks.ts';
-import { useMutation } from '@tanstack/react-query';
-import { MoteurDeLiens } from '../../../MoteurDeLiens.ts';
-import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
 import {
   adresseElectroniqueSaisie,
   initialiseFormulaireMotDePasseOublie,
   reducteurFormulaireMotDePasseOublie,
 } from './reducteurFormulaireMotDePasseOublie.ts';
-import { Toast } from '../../../../composants/communs/Toasts/Toast.tsx';
-import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useNavigate } from 'react-router-dom';
-
-export type CorpsMotDePasseOublie = {
-  email: string;
-};
-
-export const FormulaireMotDePasseOublieConnecte = () => {
-  const navigationMAC = useNavigationMAC();
-  const macAPI = useMACAPI();
-
-  useRecupereContexteNavigation(
-    'reinitialisation-mot-de-passe:reinitialisation-mot-de-passe'
-  );
-
-  const { mutate, isSuccess, error, isError, isPending, variables } =
-    useMutation({
-      mutationKey: ['reinitialisation-mot-de-passe'],
-      mutationFn: (email: string) => {
-        if (!email) Promise.reject('Aucun email renseigné !');
-
-        const actionSoumettre = new MoteurDeLiens(
-          navigationMAC.etat
-        ).trouveEtRenvoie('reinitialisation-mot-de-passe');
-
-        if (!actionSoumettre)
-          throw new Error(
-            'Une erreur est survenue lors de la demande de réinitialisation de mot de passe'
-          );
-
-        return macAPI.execute<void, void, CorpsMotDePasseOublie>(
-          constructeurParametresAPI<CorpsMotDePasseOublie>()
-            .url(actionSoumettre.url)
-            .methode(actionSoumettre.methode!)
-            .corps({
-              email: email,
-            })
-            .construis(),
-          (corps) => corps
-        );
-      },
-    });
-
-  if (isPending)
-    return (
-      <Toast
-        className="w-100"
-        type="INFO"
-        message="Traitement de votre demande en cours"
-      />
-    );
-
-  if (isError)
-    return <Toast className="w-100" type="ERREUR" message={error.message} />;
-
-  if (isSuccess)
-    return (
-      <div className="mac-callout mac-callout-information">
-        <i className="mac-icone-information" />
-        <div>
-          Si le compte existe, un e-mail de redéfinition de mot de passe sera
-          envoyé à : <b>{variables}</b>. Veuillez vérifier votre boîte de
-          réception.
-        </div>
-      </div>
-    );
-
-  return <FormulaireMotDePasseOublie surSoumission={mutate} />;
-};
 
 export const FormulaireMotDePasseOublie = ({
   surSoumission,
