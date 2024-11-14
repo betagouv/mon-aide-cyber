@@ -22,6 +22,8 @@ import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
 import { CapteurCommandeCreeUtilisateur } from '../../authentification/CapteurCommandeCreeUtilisateur';
 import { CapteurCommandeReinitialisationMotDePasse } from '../../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 
+import { CapteurSagaLanceAutoDiagnostic } from '../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
+
 export type Services = {
   aidant: ServiceAidant;
   referentiels: {
@@ -175,6 +177,17 @@ const capteurs: Map<string, Capteur> = new Map([
           parametres.busEvenements!,
           parametres.adaptateurEnvoiMail!,
           adaptateurServiceChiffrement()
+        ),
+    },
+  ],
+  [
+    'SagaLanceAutoDiagnostic',
+    {
+      capteur: (parametres) =>
+        new CapteurSagaLanceAutoDiagnostic(
+          parametres.entrepots,
+          parametres.services.referentiels.diagnostic,
+          parametres.services.referentiels.mesures
         ),
     },
   ],

@@ -11,6 +11,7 @@ import { routesAPIAidant } from './aidant/routesAPIAidant';
 import * as core from 'express-serve-static-core';
 import { routesAPIProfil } from './aidant/routesAPIProfil';
 import { routesAPIAnnuaireAidants } from './annuaire-aidants/routeAPIAnnuaireAidants';
+import { routesAPIAutoDiagnostic } from './auto-diagnostic/routesAPIAutoDiagnostic';
 
 export interface RequeteUtilisateur<
   CORPS = void,
@@ -25,6 +26,7 @@ const routesAPI = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
   routes.use('/contexte', routeAPIContexte(configuration));
+  routes.use('/auto-diagnostic', routesAPIAutoDiagnostic(configuration));
   routes.use('/diagnostic', routesAPIDiagnostic(configuration));
   routes.use('/token', routesAPIAuthentification(configuration));
   routes.use('/utilisateur', routesAPIUtilisateur(configuration));

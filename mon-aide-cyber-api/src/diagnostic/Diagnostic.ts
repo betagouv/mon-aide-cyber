@@ -1,4 +1,4 @@
-import crypto, { UUID } from 'crypto';
+import { UUID } from 'crypto';
 import { Mesure, Question, Referentiel } from './Referentiel';
 import { Entrepot } from '../domaine/Entrepot';
 import { laValeurEstDefinie, Valeur } from './Indice';
@@ -11,6 +11,7 @@ import { MoteurDesIndicateurs } from './MoteurDesIndicateurs';
 import { CorpsReponse } from './CapteurSagaAjoutReponse';
 import { Aggregat } from '../domaine/Aggregat';
 import { appliqueRegleDeGestion } from './regleDeGestion';
+import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 
 export type Thematique = string;
 
@@ -101,7 +102,7 @@ const initialiseDiagnostic = (
   return {
     dateCreation: FournisseurHorloge.maintenant(),
     dateDerniereModification: FournisseurHorloge.maintenant(),
-    identifiant: crypto.randomUUID(),
+    identifiant: adaptateurUUID.genereUUID(),
     referentiel,
     mesures: mesures,
   };
