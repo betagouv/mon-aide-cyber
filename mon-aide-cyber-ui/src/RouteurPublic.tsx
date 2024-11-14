@@ -45,9 +45,13 @@ export const RouteurPublic = () => {
           element={<ComposantDemandeDevenirAidant />}
         />
         <Route path="mentions-legales" element={<MentionsLegales />} />
-        <Route path="connexion" element={<EcranConnexion />} />
       </Route>
-
+      <Route
+        path="/connexion"
+        element={<LayoutPublic afficheNavigation={false} />}
+      >
+        <Route index element={<EcranConnexion />} />
+      </Route>
       <Route
         path="/utilisateur"
         element={<LayoutPublic afficheNavigation={false} />}

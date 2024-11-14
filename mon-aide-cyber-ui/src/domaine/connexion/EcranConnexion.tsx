@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../MoteurDeLiens.ts';
 import { FormulaireAuthentification } from '../authentification/FormulaireAuthentification.tsx';
+import illustrationSecuritePostesSvg from '../../../public/images/illustration-securite-des-postes.svg';
+import './ecran-connexion.scss';
+import { TypographieH2 } from '../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
 
 export const EcranConnexion = () => {
   const [informationAEteAfficheeUneFois, setInformationAEteAfficheeUneFois] =
@@ -19,7 +22,7 @@ export const EcranConnexion = () => {
   const formulaireConnexion = (
     <>
       <div className="texte-centre">
-        <h2>Connectez-vous</h2>
+        <TypographieH2>Connectez-vous</TypographieH2>
         <p>à votre espace Aidant</p>
       </div>
       <FormulaireAuthentification />
@@ -84,19 +87,37 @@ export const EcranConnexion = () => {
   );
 
   return (
-    <main role="main" className="connectez-vous">
-      <div className="fond-clair-mac">
+    <main role="main" className="ecran-connexion">
+      <div className="formulaire-colonne-gauche">
         <div className="fr-container">
-          <div className="fr-grid-row fr-grid-row--center">
-            <div className="fr-col-md-10 fr-col-sm-12 section">
-              {import.meta.env['VITE_INFORMATION_A_AFFICHER'] === 'true' &&
-              !informationAEteAfficheeUneFois
-                ? information
-                : formulaireConnexion}
-            </div>
-          </div>
+          {import.meta.env['VITE_INFORMATION_A_AFFICHER'] === 'true' &&
+          !informationAEteAfficheeUneFois
+            ? information
+            : formulaireConnexion}
         </div>
+      </div>
+      <div className="fond-clair-mac icone-colonne-droite">
+        <img
+          src={illustrationSecuritePostesSvg}
+          alt="illustration de deux écrans de connexion"
+        />
       </div>
     </main>
   );
+  /*  return (
+      <main role="main" className="connectez-vous">
+        <div className="fond-clair-mac">
+          <div className="fr-container">
+            <div className="fr-grid-row fr-grid-row--center">
+              <div className="fr-col-md-10 fr-col-sm-12 section">
+                {import.meta.env['VITE_INFORMATION_A_AFFICHER'] === 'true' &&
+                !informationAEteAfficheeUneFois
+                  ? information
+                  : formulaireConnexion}
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    );*/
 };
