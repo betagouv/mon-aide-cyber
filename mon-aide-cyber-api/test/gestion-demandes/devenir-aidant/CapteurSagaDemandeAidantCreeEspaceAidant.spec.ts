@@ -17,9 +17,8 @@ import {
   CapteurSagaDemandeAidantCreeEspaceAidant,
   DemandeDevenirAidantEspaceAidantCree,
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
-import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
+import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { Utilisateur } from '../../../src/authentification/Utilisateur';
-import crypto from 'crypto';
 
 describe('Capteur de saga pour créer un espace Aidant correspondant à une demande', () => {
   let busEvenementDeTest = new BusEvenementDeTest();
@@ -33,7 +32,7 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       entrepots,
       busEvenementDeTest,
       new AdaptateurEnvoiMailMemoire(),
-      { aidant: unServiceAidant(entrepots.aidants()) }
+      unConstructeurDeServices(entrepots.aidants())
     );
   });
 

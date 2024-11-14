@@ -17,6 +17,7 @@ import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnv
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 
 describe('Capteur saga demande solliciter Aide', () => {
   let adaptateurEnvoiMail: AdaptateurEnvoiMailMemoire;
@@ -33,7 +34,7 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(entrepots.aidants())
       );
       adaptateurCorpsMessage.notificationAidantSollicitation = () => ({
         genereCorpsMessage: () => 'Bonjour Aidant!',
@@ -75,7 +76,7 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(entrepots.aidants())
       );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
@@ -113,7 +114,7 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepotsMemoire,
         busEvenement,
         adaptateurEnvoieMail,
-        { aidant: unServiceAidant(entrepotsMemoire.aidants()) }
+        unConstructeurDeServices(entrepotsMemoire.aidants())
       );
 
       const aidant = unAidant().construis();
@@ -172,7 +173,7 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(entrepots.aidants())
       );
 
       adaptateurCorpsMessage.recapitulatifMAC = () => ({
@@ -191,7 +192,7 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(entrepots.aidants())
       );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
@@ -228,7 +229,7 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(entrepots.aidants())
       );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
@@ -261,7 +262,7 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(entrepots.aidants())
       );
       adaptateurCorpsMessage.recapitulatifSollicitationAide = () => ({
         genereCorpsMessage: () => 'Bonjour Aidé!',
@@ -276,7 +277,7 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(entrepots.aidants())
       );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
