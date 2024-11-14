@@ -16,6 +16,7 @@ import { aseptise } from '../utilitaires/aseptise';
 import { Indice, Poids, Valeur } from '../../src/diagnostic/Indice';
 import { Association } from './types';
 import { uneAssociation } from './constructeurAssociation';
+import { donneesContexte } from '../../src/diagnostic/referentiel/donneesContexte';
 
 class ConstructeurReferentiel implements Constructeur<Referentiel> {
   thematique: { [clef: string]: QuestionsThematique } = {
@@ -315,6 +316,16 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
 
 export const unReferentiel = (): ConstructeurReferentiel =>
   new ConstructeurReferentiel();
+
+export const unReferentielAvecContexteComplet = (): ConstructeurReferentiel => {
+  const constructeurReferentiel =
+    new ConstructeurReferentiel().sansThematique();
+  constructeurReferentiel.ajouteUneThematique(
+    'contexte',
+    donneesContexte.questions
+  );
+  return constructeurReferentiel;
+};
 
 export const unReferentielSansThematiques = (): ConstructeurReferentiel => {
   const constructeurReferentiel = new ConstructeurReferentiel();

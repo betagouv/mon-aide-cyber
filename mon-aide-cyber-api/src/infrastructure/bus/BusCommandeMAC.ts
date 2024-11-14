@@ -14,13 +14,23 @@ import { CapteurCommandeEnvoiMailCreationCompteAidant } from '../../gestion-dema
 import { adaptateurServiceChiffrement } from '../adaptateurs/adaptateurServiceChiffrement';
 import { CapteurCommandeCreeEspaceAidant } from '../../espace-aidant/CapteurCommandeCreeEspaceAidant';
 import { CapteurSagaDemandeAidantCreeEspaceAidant } from '../../gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
-import { CapteurSagaDemandeSolliciterAide } from '../../gestion-demandes/aide/CapteurSagaDemandeSolliciterAide';
+import {
+  CapteurCommandeInitieDiagnosticAide,
+  CapteurSagaDemandeSolliciterAide,
+} from '../../gestion-demandes/aide/CapteurSagaDemandeSolliciterAide';
+import { Adaptateur } from '../../adaptateurs/Adaptateur';
+import { Referentiel } from '../../diagnostic/Referentiel';
+import { ReferentielDeMesures } from '../../diagnostic/ReferentielDeMesures';
 import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
 import { CapteurCommandeCreeUtilisateur } from '../../authentification/CapteurCommandeCreeUtilisateur';
 import { CapteurCommandeReinitialisationMotDePasse } from '../../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 
-type Services = {
+export type Services = {
   aidant: ServiceAidant;
+  referentiels: {
+    diagnostic: Adaptateur<Referentiel>;
+    mesures: Adaptateur<ReferentielDeMesures>;
+  };
 };
 
 type ParametresCapteur = {
@@ -88,7 +98,9 @@ const capteurs: Map<string, Capteur> = new Map([
       capteur: (parametres) =>
         new CapteurCommandeLanceDiagnostic(
           parametres.entrepots,
-          parametres.busEvenements!
+          parametres.busEvenements!,
+          parametres.services.referentiels.diagnostic,
+          parametres.services.referentiels.mesures
         ),
     },
   ],
@@ -169,6 +181,17 @@ const capteurs: Map<string, Capteur> = new Map([
         ),
     },
   ],
+  [
+    'CommandeInitieDiagnosticAide',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeInitieDiagnosticAide(
+          parametres.entrepots,
+          parametres.services.referentiels.diagnostic,
+          parametres.services.referentiels.mesures
+        ),
+    },
+  ],
 ]);
 
 export class BusCommandeMAC implements BusCommande {
@@ -191,6 +214,10 @@ export class BusCommandeMAC implements BusCommande {
           adaptateurEnvoiMail: this.adaptateurEnvoiMail,
           services: {
             aidant: this.services.aidant,
+            referentiels: {
+              diagnostic: this.services.referentiels.diagnostic,
+              mesures: this.services.referentiels.mesures,
+            },
           },
         })
         .execute(commande);

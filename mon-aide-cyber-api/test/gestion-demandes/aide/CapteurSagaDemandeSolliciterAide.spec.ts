@@ -17,12 +17,87 @@ import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnv
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
+import {
+  unReferentiel,
+  unReferentielAvecContexteComplet,
+} from '../../constructeurs/constructeurReferentiel';
+import { AdaptateurReferentielDeTest } from '../../adaptateurs/AdaptateurReferentielDeTest';
 
 describe('Capteur saga demande solliciter Aide', () => {
   let adaptateurEnvoiMail: AdaptateurEnvoiMailMemoire;
   let entrepots: EntrepotsMemoire;
   let busEvenement: BusEvenementDeTest;
   let busCommande: BusCommandeMAC;
+
+  it('Crée le diagnostic suite à la création de la demande d’Aide', async () => {
+    FournisseurHorlogeDeTest.initialise(new Date());
+    const entrepots = new EntrepotsMemoire();
+    const services = unConstructeurDeServices(
+      entrepots.aidants(),
+      unReferentiel().construis()
+    );
+    const aidant = unAidant().construis();
+    await entrepots.aidants().persiste(aidant);
+    const referentiel = unReferentielAvecContexteComplet().construis();
+    (services.referentiels.diagnostic as AdaptateurReferentielDeTest).ajoute(
+      referentiel
+    );
+
+    await new CapteurSagaDemandeSolliciterAide(
+      new BusCommandeMAC(
+        entrepots,
+        new BusEvenementDeTest(),
+        new AdaptateurEnvoiMailMemoire(),
+        services
+      ),
+      new BusEvenementDeTest(),
+      new AdaptateurEnvoiMailMemoire(),
+      unServiceAidant(entrepots.aidants())
+    ).execute({
+      identifiantAidant: aidant.identifiant,
+      email: 'jean.dupont@mail.com',
+      departement: 'Finistère',
+      type: 'SagaDemandeSolliciterAide',
+    });
+
+    const diagnostic = (await entrepots.diagnostic().tous())[0];
+    expect(diagnostic).not.toBeUndefined();
+  });
+
+  it('Ajoute le département correspondant à la sollicitation dans les informations de contexte du Diagnostic', async () => {
+    const entrepots = new EntrepotsMemoire();
+    const services = unConstructeurDeServices(entrepots.aidants());
+    const referentiel = unReferentielAvecContexteComplet().construis();
+    (services.referentiels.diagnostic as AdaptateurReferentielDeTest).ajoute(
+      referentiel
+    );
+    const aidant = unAidant().construis();
+    await entrepots.aidants().persiste(aidant);
+
+    await new CapteurSagaDemandeSolliciterAide(
+      new BusCommandeMAC(
+        entrepots,
+        new BusEvenementDeTest(),
+        new AdaptateurEnvoiMailMemoire(),
+        services
+      ),
+      new BusEvenementDeTest(),
+      new AdaptateurEnvoiMailMemoire(),
+      unServiceAidant(entrepots.aidants())
+    ).execute({
+      identifiantAidant: aidant.identifiant,
+      email: 'jean.dupont@mail.com',
+      departement: 'Finistère',
+      type: 'SagaDemandeSolliciterAide',
+    });
+
+    const diagnostic = (await entrepots.diagnostic().tous())[0];
+    expect(
+      diagnostic.referentiel['contexte'].questions[3].reponseDonnee
+        .reponseUnique
+    ).toStrictEqual('contexte-departement-tom-siege-social-finistere');
+  });
 
   describe("En ce qui concerne l'Aidant", () => {
     beforeEach(() => {
@@ -33,7 +108,10 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(
+          entrepots.aidants(),
+          unReferentielAvecContexteComplet().construis()
+        )
       );
       adaptateurCorpsMessage.notificationAidantSollicitation = () => ({
         genereCorpsMessage: () => 'Bonjour Aidant!',
@@ -75,7 +153,10 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(
+          entrepots.aidants(),
+          unReferentielAvecContexteComplet().construis()
+        )
       );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
@@ -113,7 +194,10 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepotsMemoire,
         busEvenement,
         adaptateurEnvoieMail,
-        { aidant: unServiceAidant(entrepotsMemoire.aidants()) }
+        unConstructeurDeServices(
+          entrepotsMemoire.aidants(),
+          unReferentielAvecContexteComplet().construis()
+        )
       );
 
       const aidant = unAidant().construis();
@@ -172,7 +256,10 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(
+          entrepots.aidants(),
+          unReferentiel().construis()
+        )
       );
 
       adaptateurCorpsMessage.recapitulatifMAC = () => ({
@@ -191,7 +278,10 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(
+          entrepots.aidants(),
+          unReferentielAvecContexteComplet().construis()
+        )
       );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
@@ -228,7 +318,10 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(
+          entrepots.aidants(),
+          unReferentielAvecContexteComplet().construis()
+        )
       );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
@@ -261,7 +354,10 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(
+          entrepots.aidants(),
+          unReferentiel().construis()
+        )
       );
       adaptateurCorpsMessage.recapitulatifSollicitationAide = () => ({
         genereCorpsMessage: () => 'Bonjour Aidé!',
@@ -276,7 +372,10 @@ describe('Capteur saga demande solliciter Aide', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        { aidant: unServiceAidant(entrepots.aidants()) }
+        unConstructeurDeServices(
+          entrepots.aidants(),
+          unReferentielAvecContexteComplet().construis()
+        )
       );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);

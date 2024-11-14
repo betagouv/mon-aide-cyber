@@ -1,6 +1,6 @@
 import { CapteurCommande, Commande } from '../domaine/commande';
 import { Entrepots } from '../domaine/Entrepots';
-import { BusEvenement, Evenement } from '../domaine/BusEvenement';
+import { BusEvenement } from '../domaine/BusEvenement';
 import { Diagnostic, initialiseDiagnostic } from './Diagnostic';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../domaine/erreurMAC';
@@ -8,19 +8,22 @@ import { Adaptateur } from '../adaptateurs/Adaptateur';
 import { Referentiel } from './Referentiel';
 import crypto from 'crypto';
 import { ReferentielDeMesures } from './ReferentielDeMesures';
+import { DiagnosticLance } from './evenements';
 
 export class CapteurCommandeLanceDiagnostic
   implements CapteurCommande<CommandeLanceDiagnostic, Diagnostic>
 {
   constructor(
     private readonly entrepots: Entrepots,
-    private readonly busEvenement: BusEvenement
+    private readonly busEvenement: BusEvenement,
+    private readonly referentiel: Adaptateur<Referentiel>,
+    private readonly referentielDeMesures: Adaptateur<ReferentielDeMesures>
   ) {}
 
   execute(commande: CommandeLanceDiagnostic): Promise<Diagnostic> {
     return Promise.all([
-      commande.adaptateurReferentiel.lis(),
-      commande.adaptateurReferentielDeMesures.lis(),
+      this.referentiel.lis(),
+      this.referentielDeMesures.lis(),
     ])
       .then(async ([ref, rec]) => {
         const diagnostic = initialiseDiagnostic(ref, rec);
@@ -31,7 +34,10 @@ export class CapteurCommandeLanceDiagnostic
           date: FournisseurHorloge.maintenant(),
           corps: {
             identifiantDiagnostic: diagnostic.identifiant,
-            identifiantAidant: commande.identifiantAidant,
+            origine: {
+              identifiant: commande.identifiantAidant,
+              type: 'AIDANT',
+            },
           },
         });
         return diagnostic;
@@ -44,12 +50,5 @@ export class CapteurCommandeLanceDiagnostic
 
 export type CommandeLanceDiagnostic = Omit<Commande, 'type'> & {
   type: 'CommandeLanceDiagnostic';
-  adaptateurReferentiel: Adaptateur<Referentiel>;
-  adaptateurReferentielDeMesures: Adaptateur<ReferentielDeMesures>;
   identifiantAidant: crypto.UUID;
 };
-
-export type DiagnosticLance = Evenement<{
-  identifiantDiagnostic: crypto.UUID;
-  identifiantAidant: crypto.UUID;
-}>;
