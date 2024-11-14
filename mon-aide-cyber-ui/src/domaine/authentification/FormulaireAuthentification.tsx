@@ -8,15 +8,15 @@ import {
   reducteurAuthentification,
   saisieInvalidee,
 } from './reducteurAuthentification.tsx';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
-import { Lien } from '../../domaine/Lien.ts';
-import { ReponseAuthentification } from '../../domaine/authentification/Authentification.ts';
+import { MoteurDeLiens } from '../MoteurDeLiens.ts';
+import { Lien } from '../Lien.ts';
+import { ReponseAuthentification } from './Authentification.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { useRecupereContexteNavigation } from '../../hooks/useRecupereContexteNavigation.ts';
-import { Input } from '../atomes/Input/Input.tsx';
-import { PasswordInput } from '../atomes/Input/PasswordInput.tsx';
-import Button from '../atomes/Button/Button.tsx';
+import { Input } from '../../composants/atomes/Input/Input.tsx';
+import { PasswordInput } from '../../composants/atomes/Input/PasswordInput.tsx';
+import Button from '../../composants/atomes/Button/Button.tsx';
 import { useNavigate } from 'react-router-dom';
 
 export type Identifiants = {

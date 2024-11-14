@@ -1,4 +1,4 @@
-import { SeConnecter } from '../authentification/SeConnecter.tsx';
+import { SeConnecter } from '../../domaine/authentification/SeConnecter.tsx';
 import { PropsWithChildren, ReactElement } from 'react';
 import { liensNavigation } from './LayoutPublic.tsx';
 import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateur.tsx';
