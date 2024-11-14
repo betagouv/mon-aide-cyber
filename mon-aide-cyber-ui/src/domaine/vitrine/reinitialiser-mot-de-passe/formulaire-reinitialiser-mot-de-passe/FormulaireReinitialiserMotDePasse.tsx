@@ -34,7 +34,7 @@ export const FormulaireReinitialiserMotDePasse = ({
 
   return (
     <div className="formulaire-reinitialiser-mot-de-passe-layout">
-      <p style={{ textAlign: 'center' }}>
+      <p className="text-center">
         Veuillez spécifier un nouveau mot de passe pour accéder à votre compte
         Aidant MonAideCyber
       </p>
@@ -46,7 +46,10 @@ export const FormulaireReinitialiserMotDePasse = ({
           <li>1 majuscule</li>
           <li>1 minuscule</li>
           <li>1 chiffre</li>
-          <li>1 caractère spécial parmi #?!@$%^&*-'+_()[]</li>
+          <li>
+            1 caractère spécial parmi
+            &#35;?!@&#36;&#37;^&amp;*-&apos;+_&#40;&#41;[]
+          </li>
         </ul>
       </p>
       <div className="mac-callout mac-callout-information">

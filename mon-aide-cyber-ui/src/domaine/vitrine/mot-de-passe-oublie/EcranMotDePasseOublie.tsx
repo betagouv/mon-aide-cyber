@@ -8,14 +8,17 @@ export const EcranMotDePasseOublie = () => {
     <main role="main" className="ecran-mot-de-passe-oublie">
       <div className="formulaire-colonne-gauche">
         <div className="fr-container">
-          <TypographieH3 style={{ textAlign: 'center' }}>
+          <TypographieH3 className="text-center">
             Réinitialisation de votre mot de passe
           </TypographieH3>
           <FormulaireMotDePasseOublieConnecte />
         </div>
       </div>
       <div className="fond-clair-mac icone-colonne-droite">
-        <img src={illustrationSecuritePostesSvg} alt="" />
+        <img
+          src={illustrationSecuritePostesSvg}
+          alt="illustration de deux écrans de connexion"
+        />
       </div>
     </main>
   );
