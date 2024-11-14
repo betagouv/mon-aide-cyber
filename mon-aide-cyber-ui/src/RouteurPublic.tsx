@@ -48,7 +48,10 @@ export const RouteurPublic = () => {
         <Route path="connexion" element={<EcranConnexion />} />
       </Route>
 
-      <Route path="/utilisateur" element={<LayoutPublic />}>
+      <Route
+        path="/utilisateur"
+        element={<LayoutPublic afficheNavigation={false} />}
+      >
         <Route path="mot-de-passe-oublie" element={<EcranMotDePasseOublie />} />
         <Route
           path="reinitialiser-mot-de-passe"

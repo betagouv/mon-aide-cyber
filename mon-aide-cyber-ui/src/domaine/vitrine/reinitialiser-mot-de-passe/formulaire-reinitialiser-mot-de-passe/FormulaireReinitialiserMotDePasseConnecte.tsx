@@ -35,7 +35,7 @@ export const FormulaireReinitialiserMotDePasseConnecte = ({
       motDePasse: string;
       confirmationMotDePasse: string;
     }) => {
-      if (!token || token.length === 0 || token === '')
+      if (!token || token.length === 0 || token.trim() === '')
         throw new Error(
           'Une erreur est survenue lors de la demande de réinitialisation de mot de passe'
         );

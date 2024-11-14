@@ -97,10 +97,13 @@ const regenereEtatFormulaire = (
         ...construisErreurChamp(estChampValide),
       },
     }),
-    ...Object.entries(ajouteAuNouvelEtat()).reduce((prev, [clef, valeur]) => {
-      prev[clef] = valeur;
-      return prev;
-    }, {} as ChampNouvelEtat),
+    ...Object.entries(ajouteAuNouvelEtat()).reduce(
+      (precedent, [clef, valeur]) => {
+        precedent[clef] = valeur;
+        return precedent;
+      },
+      {} as ChampNouvelEtat
+    ),
   };
 };
 

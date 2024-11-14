@@ -14,7 +14,7 @@ export const EcranReinitialiserMotDePasse = () => {
     <main role="main" className="ecran-reinitialiser-mot-de-passe">
       <div className="formulaire-colonne-gauche">
         <div className="fr-container">
-          <TypographieH3 style={{ textAlign: 'center' }}>
+          <TypographieH3 className="text-center">
             Réinitialisation de votre mot de passe
           </TypographieH3>
           <FormulaireReinitialiserMotDePasseConnecte

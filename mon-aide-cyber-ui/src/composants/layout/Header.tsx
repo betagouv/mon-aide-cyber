@@ -7,10 +7,15 @@ import { NavigationPublique } from './header/NavigationPublique.tsx';
 
 export type HeaderProprietes = PropsWithChildren<{
   lienMAC: ReactElement;
+  afficheNavigation?: boolean;
   enteteSimple?: boolean;
 }>;
 
-export const Header = ({ lienMAC, enteteSimple }: HeaderProprietes) => {
+export const Header = ({
+  lienMAC,
+  afficheNavigation = true,
+  enteteSimple,
+}: HeaderProprietes) => {
   const { utilisateur } = useUtilisateur();
 
   return (
@@ -35,17 +40,19 @@ export const Header = ({ lienMAC, enteteSimple }: HeaderProprietes) => {
                     alt="ANSSI"
                   />
                 </div>
-                <div className="fr-header__navbar icone-se-connecter-mobile">
-                  <button
-                    className="fr-btn--menu fr-btn"
-                    data-fr-opened="false"
-                    aria-controls="modal-491"
-                    id="button-492"
-                    title="Menu"
-                  >
-                    Menu
-                  </button>
-                </div>
+                {afficheNavigation ? (
+                  <div className="fr-header__navbar icone-se-connecter-mobile">
+                    <button
+                      className="fr-btn--menu fr-btn"
+                      data-fr-opened="false"
+                      aria-controls="modal-491"
+                      id="button-492"
+                      title="Menu"
+                    >
+                      Menu
+                    </button>
+                  </div>
+                ) : null}
               </div>
               <div className="fr-header__service fr-col-md-5">{lienMAC}</div>
             </div>
@@ -63,7 +70,7 @@ export const Header = ({ lienMAC, enteteSimple }: HeaderProprietes) => {
           </div>
         </div>
       </div>
-      {!enteteSimple ? (
+      {!enteteSimple && afficheNavigation ? (
         <div
           className="fr-header__menu fr-modal"
           id="modal-491"

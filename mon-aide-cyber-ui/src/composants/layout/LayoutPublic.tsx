@@ -41,7 +41,11 @@ export const liensNavigation: LienNavigation[] = [
   },
 ];
 
-export const LayoutPublic = () => {
+export const LayoutPublic = ({
+  afficheNavigation = true,
+}: {
+  afficheNavigation?: boolean;
+}) => {
   const location = useLocation();
 
   // scroll to top of page after a page transition.
@@ -51,7 +55,10 @@ export const LayoutPublic = () => {
 
   return (
     <>
-      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
+      <Header
+        lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />}
+        afficheNavigation={afficheNavigation}
+      />
       <Outlet />
       <Footer />
     </>
