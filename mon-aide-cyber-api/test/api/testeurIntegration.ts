@@ -78,7 +78,13 @@ class TesteurIntegrationMAC {
         this.entrepots,
         this.busEvenement,
         this.adaptateurEnvoieMessage,
-        { aidant: unServiceAidant(this.entrepots.aidants()) }
+        {
+          aidant: unServiceAidant(this.entrepots.aidants()),
+          referentiels: {
+            diagnostic: this.adaptateurReferentiel,
+            mesures: this.adaptateurMesures,
+          },
+        }
       ),
       busEvenement: this.busEvenement,
       gestionnaireErreurs: this.gestionnaireErreurs,
