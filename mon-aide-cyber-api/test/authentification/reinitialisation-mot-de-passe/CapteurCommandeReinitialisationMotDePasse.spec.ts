@@ -23,7 +23,7 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
 
   beforeEach(() => {
     FournisseurHorlogeDeTest.initialise(new Date());
-    process.env.URL_MAC = 'http://localhost:8081';
+    process.env.URL_MAC = 'http://localhost:8081/';
     entrepots = new EntrepotsMemoire();
     busEvenement = new BusEvenementDeTest();
     adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();

@@ -48,7 +48,7 @@ export class CapteurCommandeReinitialisationMotDePasse
                 .reinitialiserMotDePasse()
                 .genereCorpsMessage(
                   utilisateur.nomPrenom,
-                  `${adaptateurEnvironnement.mac().urlMAC()}/utilisateur/reinitialiser-mot-de-passe?token=${partieChiffree}`
+                  `${adaptateurEnvironnement.mac().urlMAC()}utilisateur/reinitialiser-mot-de-passe?token=${partieChiffree}`
                 ),
               destinataire: { email: utilisateur.identifiantConnexion },
             },
