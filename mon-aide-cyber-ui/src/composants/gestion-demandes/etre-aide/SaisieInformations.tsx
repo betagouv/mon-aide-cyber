@@ -237,7 +237,7 @@ export const SaisieInformations = (
                 </div>
               </div>
             </div>
-            <div className="fr-grid-row fr-grid-row--right fr-pt-3w">
+            <div className="actions fr-grid-row fr-grid-row--right fr-pt-3w">
               <button
                 type="submit"
                 disabled={!etatSaisieInformations.pretPourEnvoi}

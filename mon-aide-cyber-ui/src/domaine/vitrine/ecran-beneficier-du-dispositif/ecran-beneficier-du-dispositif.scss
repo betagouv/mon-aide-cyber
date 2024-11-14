@@ -196,13 +196,14 @@
       padding-right: 1.5rem;
     }
 
-    button {
-      width: 100%;
+    .actions {
+      button {
+        width: 100%;
 
-      @include a-partir-de(md) {
-        width: fit-content;
+        @include a-partir-de(md) {
+          width: fit-content;
+        }
       }
     }
   }
-
 }
