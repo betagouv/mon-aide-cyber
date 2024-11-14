@@ -5,8 +5,12 @@ import { FormulaireAuthentification } from '../authentification/FormulaireAuthen
 import illustrationSecuritePostesSvg from '../../../public/images/illustration-securite-des-postes.svg';
 import './ecran-connexion.scss';
 import { TypographieH2 } from '../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
+import Button from '../../composants/atomes/Button/Button.tsx';
+import { useNavigate } from 'react-router-dom';
 
 export const EcranConnexion = () => {
+  const navigate = useNavigate();
+
   const [informationAEteAfficheeUneFois, setInformationAEteAfficheeUneFois] =
     useState(false);
 
@@ -26,6 +30,17 @@ export const EcranConnexion = () => {
         <p>à votre espace Aidant</p>
       </div>
       <FormulaireAuthentification />
+      <br />
+      <div className="texte-centre">
+        <p>Vous n’êtes pas encore Aidant MonAideCyber ?</p>
+        <Button
+          type="button"
+          variant="link"
+          onClick={() => navigate('/devenir-aidant')}
+        >
+          S&apos;inscrire
+        </Button>
+      </div>
     </>
   );
 
@@ -104,20 +119,4 @@ export const EcranConnexion = () => {
       </div>
     </main>
   );
-  /*  return (
-      <main role="main" className="connectez-vous">
-        <div className="fond-clair-mac">
-          <div className="fr-container">
-            <div className="fr-grid-row fr-grid-row--center">
-              <div className="fr-col-md-10 fr-col-sm-12 section">
-                {import.meta.env['VITE_INFORMATION_A_AFFICHER'] === 'true' &&
-                !informationAEteAfficheeUneFois
-                  ? information
-                  : formulaireConnexion}
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    );*/
 };
