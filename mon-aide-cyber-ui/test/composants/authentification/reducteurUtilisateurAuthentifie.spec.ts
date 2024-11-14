@@ -3,7 +3,7 @@ import {
   initialiseReducteurUtilisateurAuthentifie,
   reducteurUtilisateurAuthentifie,
   utilisateurCharge,
-} from '../../../src/composants/authentification/reducteurUtilisateurAuthentifie.ts';
+} from '../../../src/domaine/authentification/reducteurUtilisateurAuthentifie.ts';
 
 describe('Réducteur utilisateur authentifié', () => {
   it("charge l'utilisateur", () => {

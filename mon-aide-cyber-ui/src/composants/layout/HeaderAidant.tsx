@@ -1,6 +1,6 @@
 import { HeaderProprietes } from './Header';
 import { useUtilisateur } from '../../fournisseurs/hooks';
-import { SeConnecter } from '../authentification/SeConnecter';
+import { SeConnecter } from '../../domaine/authentification/SeConnecter.tsx';
 import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateur';
 
 export const HeaderAidant = ({ lienMAC }: HeaderProprietes) => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens } from '../MoteurDeLiens.ts';
-import { FormulaireAuthentification } from '../../composants/authentification/FormulaireAuthentification.tsx';
+import { FormulaireAuthentification } from '../authentification/FormulaireAuthentification.tsx';
 
 export const EcranConnexion = () => {
   const [informationAEteAfficheeUneFois, setInformationAEteAfficheeUneFois] =

@@ -6,7 +6,7 @@ import {
   motDePasseSaisi,
   reducteurAuthentification,
   saisieInvalidee,
-} from '../../../src/composants/authentification/reducteurAuthentification';
+} from '../../../src/domaine/authentification/reducteurAuthentification';
 import {
   ChampsErreur,
   TexteExplicatif,

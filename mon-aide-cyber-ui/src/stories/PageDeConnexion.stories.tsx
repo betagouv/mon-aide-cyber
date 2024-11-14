@@ -10,7 +10,7 @@ import { RequiertAuthentification } from '../fournisseurs/RequiertAuthentificati
 import { ComposantIntercepteur } from '../composants/intercepteurs/ComposantIntercepteur.tsx';
 import { TableauDeBord } from '../composants/espace-aidant/tableau-de-bord/TableauDeBord.tsx';
 import { FournisseurNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
-import { ComposantAuthentification } from '../composants/authentification/FormulaireAuthentification.tsx';
+import { ComposantAuthentification } from '../domaine/authentification/FormulaireAuthentification.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const meta = {
