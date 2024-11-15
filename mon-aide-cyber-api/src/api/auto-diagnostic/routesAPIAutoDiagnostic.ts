@@ -4,6 +4,7 @@ import { RequeteUtilisateur } from '../routesAPI';
 import { NextFunction } from 'express-serve-static-core';
 import crypto from 'crypto';
 import { SagaLanceAutoDiagnostic } from '../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
+import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 
 export const routesAPIAutoDiagnostic = (
   configuration: ConfigurationServeur
@@ -19,7 +20,7 @@ export const routesAPIAutoDiagnostic = (
         .publie<
           SagaLanceAutoDiagnostic,
           crypto.UUID
-        >({ type: 'SagaLanceAutoDiagnostic' })
+        >({ type: 'SagaLanceAutoDiagnostic', email: '', dateSignatureCGU: FournisseurHorloge.maintenant() })
         .then((idDiagnostic) =>
           reponse
             .status(201)

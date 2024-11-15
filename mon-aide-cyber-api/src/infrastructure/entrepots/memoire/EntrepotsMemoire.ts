@@ -4,6 +4,7 @@ import {
   EntrepotAidantMemoire,
   EntrepotAideMemoire,
   EntrepotAnnuaireAidantsMemoire,
+  EntrepotDemandeAutoDiagnosticMemoire,
   EntrepotDemandeDevenirAidantMemoire,
   EntrepotDiagnosticMemoire,
   EntrepotProfilAidantMemoire,
@@ -19,6 +20,7 @@ import { EntrepotAnnuaireAidants } from '../../../annuaire-aidants/annuaireAidan
 import { EntrepotUtilisateur } from '../../../authentification/Utilisateur';
 import { EntrepotAidant } from '../../../espace-aidant/Aidant';
 import { EntrepotProfilAidant } from '../../../espace-aidant/profil/profilAidant';
+import { EntrepotDemandeAutoDiagnostic } from '../../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
 
 export class EntrepotsMemoire implements Entrepots {
   private entrepotDiagnostic: EntrepotDiagnostic =
@@ -40,6 +42,8 @@ export class EntrepotsMemoire implements Entrepots {
       this.entrepotAidants,
       this.entrepotUtilisateurs
     );
+  private entrepotDemandesAutoDiagnostic: EntrepotDemandeAutoDiagnostic =
+    new EntrepotDemandeAutoDiagnosticMemoire();
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
   }
@@ -74,5 +78,9 @@ export class EntrepotsMemoire implements Entrepots {
 
   profilAidant(): EntrepotProfilAidant {
     return this.entrepotProfilAidant;
+  }
+
+  demandesAutoDiagnostic() {
+    return this.entrepotDemandesAutoDiagnostic;
   }
 }

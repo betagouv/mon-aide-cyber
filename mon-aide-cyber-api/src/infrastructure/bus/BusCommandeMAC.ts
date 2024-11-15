@@ -22,7 +22,10 @@ import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
 import { CapteurCommandeCreeUtilisateur } from '../../authentification/CapteurCommandeCreeUtilisateur';
 import { CapteurCommandeReinitialisationMotDePasse } from '../../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 
-import { CapteurSagaLanceAutoDiagnostic } from '../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
+import {
+  CapteurCommandeDemandeAutoDiagnostic,
+  CapteurSagaLanceAutoDiagnostic,
+} from '../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -186,9 +189,17 @@ const capteurs: Map<string, Capteur> = new Map([
       capteur: (parametres) =>
         new CapteurSagaLanceAutoDiagnostic(
           parametres.entrepots,
+          parametres.busCommande!,
           parametres.services.referentiels.diagnostic,
           parametres.services.referentiels.mesures
         ),
+    },
+  ],
+  [
+    'CommandeDemandeAutoDiagnostic',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeDemandeAutoDiagnostic(parametres.entrepots),
     },
   ],
 ]);
