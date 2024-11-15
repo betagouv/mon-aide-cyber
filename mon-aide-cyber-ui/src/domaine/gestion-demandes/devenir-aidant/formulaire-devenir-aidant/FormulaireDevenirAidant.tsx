@@ -213,7 +213,10 @@ export const FormulaireDevenirAidant = ({
               </TypographieH5>
               <p>Pour devenir aidant, il est nécessaire de&nbsp;:</p>
               <ul>
-                <li>participer à un atelier animé par l&apos;ANSSI</li>
+                <li>
+                  participer à un atelier devenir Aidant MonAideCyber animé par
+                  l&apos;ANSSI
+                </li>
                 <li>
                   prendre connaissance de{' '}
                   <a href="/charte-aidant">la charte de l&apos;aidant</a>, qui
