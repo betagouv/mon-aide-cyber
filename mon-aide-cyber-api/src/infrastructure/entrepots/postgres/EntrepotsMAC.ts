@@ -19,6 +19,7 @@ import { EntrepotAidant } from '../../../espace-aidant/Aidant';
 import { EntrepotProfilAidant } from '../../../espace-aidant/profil/profilAidant';
 import { EntrepotProfilAidantPostgres } from './EntrepotProfilAidantPostgres';
 import { EntrepotDemandeAutoDiagnostic } from '../../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
+import { EntrepotDemandeAutoDiagnosticPostgres } from './EntrepotDemandeAutoDiagnosticPostgres';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -40,6 +41,8 @@ export class EntrepotsMAC implements Entrepots {
     new EntrepotUtilisateurPostgres(adaptateurServiceChiffrement());
   private entrepotProfilAidant: EntrepotProfilAidant =
     new EntrepotProfilAidantPostgres(adaptateurServiceChiffrement());
+  private entrepotDemandeAutoDiagnostic: EntrepotDemandeAutoDiagnostic =
+    new EntrepotDemandeAutoDiagnosticPostgres();
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
@@ -77,6 +80,6 @@ export class EntrepotsMAC implements Entrepots {
   }
 
   demandesAutoDiagnostic(): EntrepotDemandeAutoDiagnostic {
-    throw new Error('Method not implemented.');
+    return this.entrepotDemandeAutoDiagnostic;
   }
 }

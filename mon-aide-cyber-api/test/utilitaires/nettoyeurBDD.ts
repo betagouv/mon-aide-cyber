@@ -35,47 +35,59 @@ class EntrepotsPostgresPourLesTests {
   async nettoieDemandeDevenirAidant() {
     await this.knex('demandes-devenir-aidant').truncate();
   }
+
+  async nettoieDemandeAutoDiagnostic() {
+    await this.knex('demandes-auto-diagnostic').truncate();
+  }
 }
+
+const entrepotsPostgresPourLesTests = new EntrepotsPostgresPourLesTests();
 
 export const nettoieLaBaseDeDonneesAidants = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
-    await new EntrepotsPostgresPourLesTests().nettoieAidants();
+    await entrepotsPostgresPourLesTests.nettoieAidants();
   }
 };
 
 export const nettoieLaBaseDeDonneesUtilisateurs = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
-    await new EntrepotsPostgresPourLesTests().nettoieUtilisateurs();
+    await entrepotsPostgresPourLesTests.nettoieUtilisateurs();
   }
 };
 
 export const nettoieLaBaseDeDonneesAides = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
-    await new EntrepotsPostgresPourLesTests().nettoieAides();
+    await entrepotsPostgresPourLesTests.nettoieAides();
   }
 };
 
 export const nettoieLaBaseDeDonneesJournal = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
-    await new EntrepotsPostgresPourLesTests().nettoieJournal();
+    await entrepotsPostgresPourLesTests.nettoieJournal();
   }
 };
 
 export const nettoieLaBaseDeDonneesDiagnostics = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
-    await new EntrepotsPostgresPourLesTests().nettoieDiagnostics();
+    await entrepotsPostgresPourLesTests.nettoieDiagnostics();
   }
 };
 
 export const nettoieLaBaseDeDonneesRelations = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
-    await new EntrepotsPostgresPourLesTests().nettoieRelations();
+    await entrepotsPostgresPourLesTests.nettoieRelations();
   }
 };
 
 export const nettoieLaBaseDeDonneesDemandeDevenirAidant = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
-    await new EntrepotsPostgresPourLesTests().nettoieDemandeDevenirAidant();
+    await entrepotsPostgresPourLesTests.nettoieDemandeDevenirAidant();
+  }
+};
+
+export const nettoieLaBaseDeDonneesDemandeAutoDiagnostic = async () => {
+  if (process.env.URL_SERVEUR_BASE_DONNEES) {
+    await entrepotsPostgresPourLesTests.nettoieDemandeAutoDiagnostic();
   }
 };
 
