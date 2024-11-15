@@ -1,7 +1,7 @@
 import { useUtilisateur } from './hooks.ts';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 export const RequiertAuthentification = () => {
-  const { estAuthentifie } = useUtilisateur();
-  return estAuthentifie ? <Outlet /> : <Navigate to="/connexion" />;
+  const { affiche } = useUtilisateur();
+  return affiche(<Outlet />);
 };
