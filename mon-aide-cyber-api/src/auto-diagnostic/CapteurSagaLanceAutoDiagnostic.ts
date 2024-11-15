@@ -32,12 +32,10 @@ export class CapteurCommandeDemandeAutoDiagnostic
   constructor(private readonly entrepots: Entrepots) {}
 
   execute(commande: CommandeDemandeAutoDiagnostic): Promise<void> {
-    return this.entrepots
-      .demandesAutoDiagnostic()
-      .persiste({
-        identifiant: adaptateurUUID.genereUUID(),
-        dateSignatureCGU: commande.dateSignatureCGU,
-      });
+    return this.entrepots.demandesAutoDiagnostic().persiste({
+      identifiant: adaptateurUUID.genereUUID(),
+      dateSignatureCGU: commande.dateSignatureCGU,
+    });
   }
 }
 
