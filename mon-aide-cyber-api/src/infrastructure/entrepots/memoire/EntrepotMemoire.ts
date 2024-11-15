@@ -36,6 +36,10 @@ import {
   EntrepotProfilAidant,
   ProfilAidant,
 } from '../../../espace-aidant/profil/profilAidant';
+import {
+  DemandeAutoDiagnostic,
+  EntrepotDemandeAutoDiagnostic,
+} from '../../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -254,3 +258,7 @@ export class EntrepotProfilAidantMemoire implements EntrepotProfilAidant {
     }
   }
 }
+
+export class EntrepotDemandeAutoDiagnosticMemoire
+  extends EntrepotMemoire<DemandeAutoDiagnostic>
+  implements EntrepotDemandeAutoDiagnostic {}
