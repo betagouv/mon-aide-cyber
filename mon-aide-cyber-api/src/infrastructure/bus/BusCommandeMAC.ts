@@ -190,6 +190,7 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurSagaLanceAutoDiagnostic(
           parametres.entrepots,
           parametres.busCommande!,
+          parametres.busEvenements!,
           parametres.services.referentiels.diagnostic,
           parametres.services.referentiels.mesures
         ),
