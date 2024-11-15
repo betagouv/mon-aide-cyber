@@ -22,13 +22,11 @@ export class EntrepotRelationMemoire
   extends EntrepotMemoire<Tuple>
   implements EntrepotRelation
 {
-  trouveObjetsLiesAUtilisateur(identifiantAidant: string): Promise<Tuple[]> {
+  trouveObjetsLiesAUtilisateur(
+    identifiantUtilisateur: string
+  ): Promise<Tuple[]> {
     const tuples = Array.from(this.entites.values()).filter(
-      (tuple) =>
-        tuple.utilisateur.identifiant === identifiantAidant &&
-        tuple.utilisateur.type === 'aidant' &&
-        tuple.relation === 'initiateur' &&
-        tuple.objet.type === 'diagnostic'
+      (tuple) => tuple.utilisateur.identifiant === identifiantUtilisateur
     );
 
     return Promise.resolve(tuples);

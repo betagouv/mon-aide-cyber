@@ -1,6 +1,7 @@
 import { beforeEach, describe } from 'vitest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import {
+  AutoDiagnosticLance,
   CapteurSagaLanceAutoDiagnostic,
   DemandeAutoDiagnostic,
 } from '../../src/auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
@@ -38,18 +39,19 @@ describe('Capteur pour lancer un Auto-Diagnostic', () => {
       adaptateurEnvoiMail,
       unConstructeurDeServices(entrepots.aidants())
     );
+    const referentiel = unReferentiel().construis();
+    adaptateurReferentiel.ajoute(referentiel);
   });
 
   it('Crée la demande correspondante', async () => {
     FournisseurHorlogeDeTest.initialise(new Date());
     const identifiantDemande = crypto.randomUUID();
     adaptateurUUID.genereUUID = () => identifiantDemande;
-    const referentiel = unReferentiel().construis();
-    adaptateurReferentiel.ajoute(referentiel);
 
     await new CapteurSagaLanceAutoDiagnostic(
       entrepots,
       busCommande,
+      busEvenement,
       adaptateurReferentiel,
       adaptateurMesures
     ).execute({
@@ -63,6 +65,35 @@ describe('Capteur pour lancer un Auto-Diagnostic', () => {
     expect(demandes[0]).toStrictEqual<DemandeAutoDiagnostic>({
       identifiant: identifiantDemande,
       dateSignatureCGU: FournisseurHorloge.maintenant(),
+    });
+  });
+
+  it('Publie l’événement AUTO_DIAGNOSTIC_LANCE', async () => {
+    FournisseurHorlogeDeTest.initialise(new Date());
+
+    await new CapteurSagaLanceAutoDiagnostic(
+      entrepots,
+      busCommande,
+      busEvenement,
+      adaptateurReferentiel,
+      adaptateurMesures
+    ).execute({
+      type: 'SagaLanceAutoDiagnostic',
+      email: 'jean.dupont@email.com',
+      dateSignatureCGU: FournisseurHorloge.maintenant(),
+    });
+
+    expect(
+      busEvenement.consommateursTestes.get('AUTO_DIAGNOSTIC_LANCE')?.[0]
+        .evenementConsomme
+    ).toStrictEqual<AutoDiagnosticLance>({
+      identifiant: expect.any(String),
+      type: 'AUTO_DIAGNOSTIC_LANCE',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        idDiagnostic: expect.any(String),
+        idDemande: expect.any(String),
+      },
     });
   });
 });

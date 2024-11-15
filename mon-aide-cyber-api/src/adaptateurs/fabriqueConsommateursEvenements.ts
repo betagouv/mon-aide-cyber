@@ -14,6 +14,7 @@ import {
   reinitialisationMotDePasseDemandee,
   reinitialisationMotDePasseErronee,
   reinitialisationMotDePasseFaite,
+  autoDiagnosticLance,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
@@ -23,6 +24,7 @@ import { EntrepotEvenementJournal } from '../journalisation/Publication';
 import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../relation/AdaptateurRelationsMAC';
 import { aidantInitieDiagnostic } from '../espace-aidant/tableau-de-bord/consommateursEvenements';
+import { demandeInitieAutoDiagnostic } from '../auto-diagnostic/consommateursEvenements';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -89,6 +91,13 @@ export const fabriqueConsommateursEvenements = (
     [
       'REINITIALISATION_MOT_DE_PASSE_ERRONEE',
       [reinitialisationMotDePasseErronee(entrepotJournalisation)],
+    ],
+    [
+      'AUTO_DIAGNOSTIC_LANCE',
+      [
+        autoDiagnosticLance(entrepotJournalisation),
+        demandeInitieAutoDiagnostic(adaptateurRelations),
+      ],
     ],
   ]);
 };
