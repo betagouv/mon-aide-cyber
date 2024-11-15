@@ -95,7 +95,10 @@ export const SaisieInformations = (
       <div className="fr-mb-2w">Demande pour bénéficier de MonAideCyber</div>
       <div className="fr-mt-2w">
         <div>
-          <h4>Vous souhaitez bénéficier du dispositif MonAideCyber</h4>
+          <h4>
+            Vous souhaitez bénéficier du dispositif MonAideCyber en tant
+            qu’entité publique ou privée
+          </h4>
           <p>
             Veuillez compléter les informations ci-dessous pour formaliser votre
             demande.

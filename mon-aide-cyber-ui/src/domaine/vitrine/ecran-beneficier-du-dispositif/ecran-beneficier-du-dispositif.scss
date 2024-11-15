@@ -191,11 +191,6 @@
     padding-left: 0;
     padding-right: 0;
 
-    @include a-partir-de(md) {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-
     .actions {
       button {
         width: 100%;
