@@ -10,8 +10,8 @@ export const HeroDemandeAide = () => {
         <section>
           <TypographieH1>Faire une demande MonAideCyber</TypographieH1>
           <p>
-            Vous souhaitez bénéficier du dispositif MonAideCyber ? Rien de plus
-            simple !
+            Vous souhaitez bénéficier du dispositif MonAideCyber en tant
+            qu&apos;entité publique ou privée ? Rien de plus simple !
             <br />
             <br />
             Remplissez le formulaire ci-dessous afin d’être mis en relation avec
