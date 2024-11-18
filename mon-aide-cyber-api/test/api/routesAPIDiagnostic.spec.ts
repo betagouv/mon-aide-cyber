@@ -15,7 +15,7 @@ import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateu
 import { uneRestitution } from '../constructeurs/constructeurRestitution';
 import {
   ReponseDiagnostic,
-  ReprensentationRestitution,
+  RepresentationRestitution,
 } from '../../src/api/routesAPIDiagnostic';
 import { Diagnostic } from '../../src/diagnostic/Diagnostic';
 import { LiensHATEOAS } from '../../src/api/hateoas/hateoas';
@@ -355,7 +355,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(reponse.statusCode).toBe(200);
-      expect(await reponse.json()).toStrictEqual<ReprensentationRestitution>({
+      expect(await reponse.json()).toStrictEqual<RepresentationRestitution>({
         liens: {
           'lancer-diagnostic': {
             methode: 'POST',

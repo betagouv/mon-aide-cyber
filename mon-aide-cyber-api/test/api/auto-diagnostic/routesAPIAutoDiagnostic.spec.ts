@@ -11,10 +11,16 @@ import { adaptateurUUID } from '../../../src/infrastructure/adaptateurs/adaptate
 import crypto from 'crypto';
 import { unDiagnostic } from '../../constructeurs/constructeurDiagnostic';
 import { RepresentationDiagnostic } from '../../../src/api/representateurs/types';
-import { ReponseDiagnostic } from '../../../src/api/routesAPIDiagnostic';
+import {
+  ReponseDiagnostic,
+  RepresentationRestitution,
+} from '../../../src/api/routesAPIDiagnostic';
 import { Diagnostic } from '../../../src/diagnostic/Diagnostic';
 import { LiensHATEOAS } from '../../../src/api/hateoas/hateoas';
 import { CorpsReponseCreerAutoDiagnosticEnErreur } from '../../../src/api/auto-diagnostic/routesAPIAutoDiagnostic';
+import { unAdaptateurDeRestitutionHTML } from '../../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
+import { uneRestitution } from '../../constructeurs/constructeurRestitution';
+import { unAdaptateurRestitutionPDF } from '../../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
 
 describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -266,6 +272,170 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(
         testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
       ).toBe(true);
+    });
+  });
+
+  describe('Quand une requête PATCH est reçue sur /{id}', () => {
+    it('On peut donner une réponse à une question', async () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique('Une question ?')
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle('Réponse 1').construis(),
+                  uneReponsePossible().avecLibelle('Réponse 2').construis(),
+                ])
+                .construis()
+            )
+            .construis()
+        )
+        .construis();
+      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/auto-diagnostic/${diagnostic.identifiant}`,
+        donneesServeur.portEcoute,
+        {
+          chemin: 'contexte',
+          identifiant: 'une-question-',
+          reponse: 'reponse-2',
+        }
+      );
+
+      const diagnosticRetourne = await testeurMAC.entrepots
+        .diagnostic()
+        .lis(diagnostic.identifiant);
+      expect(reponse.statusCode).toBe(200);
+      expect(
+        diagnosticRetourne.referentiel.contexte.questions[0].reponseDonnee
+      ).toStrictEqual({
+        reponsesMultiples: [],
+        reponseUnique: 'reponse-2',
+      });
+      expect(await reponse.json()).toStrictEqual(
+        forgeReponseDiagnostic(
+          diagnostic,
+          {
+            'repondre-diagnostic': {
+              url: `/api/auto-diagnostic/${diagnostic.identifiant}`,
+              methode: 'PATCH',
+            },
+          },
+          'reponse-2'
+        )
+      );
+    });
+
+    it('Retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/auto-diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
+        donneesServeur.portEcoute,
+        {
+          chemin: 'contexte',
+          identifiant: 'une-question-',
+          reponse: 'reponse-2',
+        }
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toMatchObject({
+        message: "Le diagnostic demandé n'existe pas.",
+      });
+    });
+  });
+
+  describe('Quand une requête GET est reçue sur /{id}/restitution', () => {
+    it('Retourne la restitution', async () => {
+      const adaptateurDeRestitutionHTML = unAdaptateurDeRestitutionHTML()
+        .avecIndicateurs('indicateurs')
+        .avecMesuresPrioritaires('mesures prioritaires')
+        .avecAutresMesures('autres mesures')
+        .construis();
+      testeurMAC.adaptateursRestitution.html = () =>
+        adaptateurDeRestitutionHTML;
+      const identifiant = crypto.randomUUID();
+      const restitution = uneRestitution()
+        .avecIdentifiant(identifiant)
+        .construis();
+      await testeurMAC.entrepots.restitution().persiste(restitution);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/auto-diagnostic/${identifiant}/restitution`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(await reponse.json()).toStrictEqual<RepresentationRestitution>({
+        liens: {
+          'modifier-diagnostic': {
+            url: `/api/auto-diagnostic/${identifiant}`,
+            methode: 'GET',
+          },
+          'restitution-json': {
+            contentType: 'application/json',
+            methode: 'GET',
+            url: `/api/auto-diagnostic/${identifiant}/restitution`,
+          },
+          'restitution-pdf': {
+            contentType: 'application/pdf',
+            methode: 'GET',
+            url: `/api/auto-diagnostic/${identifiant}/restitution`,
+          },
+        },
+        autresMesures: '',
+        contactsEtLiensUtiles: '',
+        ressources: '',
+        indicateurs: 'indicateurs',
+        informations: JSON.stringify(restitution.informations),
+        mesuresPrioritaires: 'mesures prioritaires',
+      });
+    });
+
+    it('Retourne la restitution au format PDF', async () => {
+      let adaptateurPDFAppele = false;
+      const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
+      adaptateurRestitutionPDF.genereRestitution = () => {
+        adaptateurPDFAppele = true;
+        return Promise.resolve(Buffer.from('PDF Mesures généré'));
+      };
+      testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
+      const restitution = uneRestitution().construis();
+      testeurMAC.entrepots.restitution().persiste(restitution);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/auto-diagnostic/${restitution.identifiant}/restitution`,
+        donneesServeur.portEcoute,
+        undefined,
+        { accept: 'application/pdf' }
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(reponse.headers['content-type']).toBe('application/pdf');
+      expect(adaptateurPDFAppele).toBe(true);
+    });
+
+    it('Retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/auto-diagnostic/${crypto.randomUUID()}/restitution`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toMatchObject({
+        message: "Le restitution demandé n'existe pas.",
+      });
     });
   });
 });
