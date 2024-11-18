@@ -11,6 +11,8 @@ import { fabriqueAnnuaireCOT } from '../../../infrastructure/adaptateurs/fabriqu
 import { mappeurDROMCOM, mappeurRegionsCSV } from './mappeurRegions';
 import { Departement } from '../../../gestion-demandes/departements';
 import { unServiceAidant } from '../../../espace-aidant/ServiceAidantMAC';
+import { adaptateurCorpsMessage } from '../../../gestion-demandes/devenir-aidant/adaptateurCorpsMessage';
+import { adaptateurEnvironnement } from '../../../adaptateurs/adaptateurEnvironnement';
 
 export type StatusImportation =
   | 'email-creation-espace-aidant-envoyé'
@@ -87,6 +89,33 @@ export type AidantCSV = {
   commentaires: string;
   lieuDeFormation: string;
 };
+
+adaptateurCorpsMessage.demandeDevenirAidant = () => ({
+  genereCorpsMessage: (demandeDevenirAidant: DemandeDevenirAidant) => {
+    return (
+      '<html lang="fr">' +
+      '<body>' +
+      `Bonjour ${demandeDevenirAidant.prenom},\n` +
+      '\n' +
+      `<b>Vous avez participé à un atelier Aidant MonAideCyber dans le département ${demandeDevenirAidant.departement.nom}.</b>\n` +
+      '\n' +
+      'Nous sommes en train de procéder à la création de votre espace Aidant.\n' +
+      'Pour cela, nous avons besoin que vous retourniez la charte Aidant signée.\n' +
+      '\n' +
+      'Vous trouverez ci-dessous les liens vers le kit de communication ainsi que la charte :\n' +
+      `\t - <a href="${adaptateurEnvironnement.mac().urlMAC()}/a-propos/kit-de-communication">La plaquette informative</a>\n` +
+      `\t - <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">La charte Aidant</a>\n` +
+      '\n' +
+      'Toute l’équipe reste à votre disposition,\n' +
+      '\n' +
+      'Pour toute remarque ou question, n’hésitez pas à nous contacter sur monaidecyber@ssi.gouv.fr\n' +
+      '\n' +
+      '<b>L’équipe MonAideCyber</b>' +
+      '</body>' +
+      '</html>'
+    );
+  },
+});
 
 const charteSigneeEtFormationFaite = (aidantCSV: AidantCSV) =>
   aidantCSV.formation === 'OK' && aidantCSV.charte === 'OK';
