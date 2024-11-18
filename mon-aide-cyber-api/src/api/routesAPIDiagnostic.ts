@@ -150,7 +150,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
           const reponseHATEOAS = constructeurActionsHATEOAS()
             .demandeLaRestitution(id)
             .construis();
-          const resultat: ReprensentationRestitution = {
+          const resultat: RepresentationRestitution = {
             ...reponseHATEOAS,
             ...(restitution as RestitutionHTML),
           };
@@ -172,7 +172,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   return routes;
 };
 
-export type ReprensentationRestitution = ReponseHATEOAS & {
+export type RepresentationRestitution = ReponseHATEOAS & {
   autresMesures: string;
   contactsEtLiensUtiles: string;
   indicateurs: string;
