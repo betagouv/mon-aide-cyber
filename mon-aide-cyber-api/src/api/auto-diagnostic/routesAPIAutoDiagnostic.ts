@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { ConfigurationServeur } from '../../serveur';
 import { NextFunction } from 'express-serve-static-core';
-import crypto from 'crypto';
+import crypto, { UUID } from 'crypto';
 import { SagaLanceAutoDiagnostic } from '../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { ServiceDiagnostic } from '../../diagnostic/ServiceDiagnostic';
@@ -22,6 +22,11 @@ import {
   definitionEntiteInitieAutoDiagnostic,
   DefinitionEntiteInitieAutoDiagnostic,
 } from '../../auto-diagnostic/consommateursEvenements';
+import {
+  CorpsReponse,
+  SagaAjoutReponse,
+} from '../../diagnostic/CapteurSagaAjoutReponse';
+import { Diagnostic } from '../../diagnostic/Diagnostic';
 
 type CorpsReponseAutoDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 
@@ -108,5 +113,39 @@ export const routesAPIAutoDiagnostic = (
     }
   );
 
+  routes.patch(
+    '/:id',
+    express.json(),
+    (
+      requete: Request<CorpsReponse & { id: UUID }>,
+      reponse: Response,
+      suite: NextFunction
+    ) => {
+      const { id } = requete.params;
+      const corpsReponse = requete.body;
+      const commande: SagaAjoutReponse = {
+        type: 'SagaAjoutReponse',
+        idDiagnostic: id,
+        ...corpsReponse,
+      };
+      busCommande
+        .publie<SagaAjoutReponse, Diagnostic>(commande)
+        .then((diagnostic) => {
+          reponse.json({
+            ...representeLeDiagnosticPourLeClient(
+              diagnostic,
+              configuration.adaptateurTranscripteurDonnees.transcripteur()
+            ),
+            liens: {
+              'repondre-diagnostic': {
+                url: `/api/auto-diagnostic/${diagnostic.identifiant}`,
+                methode: 'PATCH',
+              },
+            },
+          });
+        })
+        .catch((erreur) => suite(erreur));
+    }
+  );
   return routes;
 };

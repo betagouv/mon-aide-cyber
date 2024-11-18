@@ -3,6 +3,7 @@ import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import {
   uneQuestion,
+  uneReponsePossible,
   unReferentiel,
 } from '../../constructeurs/constructeurReferentiel';
 import { executeRequete } from '../executeurRequete';
@@ -174,6 +175,81 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(
         testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
       ).toBe(true);
+    });
+  });
+
+  describe('Quand une requête PATCH est reçue sur /{id}', () => {
+    it('On peut donner une réponse à une question', async () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique('Une question ?')
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle('Réponse 1').construis(),
+                  uneReponsePossible().avecLibelle('Réponse 2').construis(),
+                ])
+                .construis()
+            )
+            .construis()
+        )
+        .construis();
+      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/auto-diagnostic/${diagnostic.identifiant}`,
+        donneesServeur.portEcoute,
+        {
+          chemin: 'contexte',
+          identifiant: 'une-question-',
+          reponse: 'reponse-2',
+        }
+      );
+
+      const diagnosticRetourne = await testeurMAC.entrepots
+        .diagnostic()
+        .lis(diagnostic.identifiant);
+      expect(reponse.statusCode).toBe(200);
+      expect(
+        diagnosticRetourne.referentiel.contexte.questions[0].reponseDonnee
+      ).toStrictEqual({
+        reponsesMultiples: [],
+        reponseUnique: 'reponse-2',
+      });
+      expect(await reponse.json()).toStrictEqual(
+        forgeReponseDiagnostic(
+          diagnostic,
+          {
+            'repondre-diagnostic': {
+              url: `/api/auto-diagnostic/${diagnostic.identifiant}`,
+              methode: 'PATCH',
+            },
+          },
+          'reponse-2'
+        )
+      );
+    });
+
+    it('Retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/auto-diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
+        donneesServeur.portEcoute,
+        {
+          chemin: 'contexte',
+          identifiant: 'une-question-',
+          reponse: 'reponse-2',
+        }
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toMatchObject({
+        message: "Le diagnostic demandé n'existe pas.",
+      });
     });
   });
 });
