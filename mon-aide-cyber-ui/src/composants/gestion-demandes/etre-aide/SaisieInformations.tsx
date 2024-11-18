@@ -39,24 +39,21 @@ export const SaisieInformations = (
     [proprietes.departements]
   );
 
-  const surSoumissionFormulaire = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  const surSoumissionFormulaire = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-      if (proprietes.surValidation.erreur) {
-        return;
-      }
+    if (proprietes.surValidation.erreur) {
+      return;
+    }
 
-      proprietes.surValidation.execute({
-        cguValidees: etatSaisieInformations.cguValidees,
-        departement: etatSaisieInformations.departement.nom,
-        email: etatSaisieInformations.email,
-        raisonSociale: etatSaisieInformations.raisonSociale,
-        relationAidant: etatSaisieInformations.relationAidantSaisie,
-      });
-    },
-    [etatSaisieInformations.pretPourEnvoi]
-  );
+    proprietes.surValidation.execute({
+      cguValidees: etatSaisieInformations.cguValidees,
+      departement: etatSaisieInformations.departement.nom,
+      email: etatSaisieInformations.email,
+      raisonSociale: etatSaisieInformations.raisonSociale,
+      relationAidant: etatSaisieInformations.relationAidantSaisie,
+    });
+  };
 
   const surSaisieAdresseElectronique = useCallback(
     (adresseElectronique: string) => {

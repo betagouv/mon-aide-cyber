@@ -6,6 +6,7 @@ type ErreurSaisieInformations = {
   cguValidees?: PresentationErreur;
   departement?: PresentationErreur;
   adresseElectronique?: PresentationErreur;
+  relationAidantSaisie?: PresentationErreur;
 };
 
 export type EtatSaisieInformations = {
@@ -161,7 +162,18 @@ export const reducteurSaisieInformations = (
 
   switch (action.type) {
     case TypeActionSaisieInformations.RELATION_AIDANT_CLIQUEE: {
-      return { ...etat, relationAidantSaisie: !etat.relationAidantSaisie };
+      return genereNouvelEtat({
+        ajouteAuNouvelEtat: () => ({
+          relationAidantSaisie: !etat.relationAidantSaisie,
+        }),
+        champ: 'relationAidantSaisie',
+        champValide: () => true,
+        construisErreurChamp: (_bool: boolean) => undefined,
+        elementsFormulairesValides: () =>
+          estMailValide(etat.email) &&
+          estDepartementValide(etat.departement) &&
+          etat.cguValidees,
+      });
     }
     case TypeActionSaisieInformations.DEPARTEMENTS_CHARGES: {
       return {
