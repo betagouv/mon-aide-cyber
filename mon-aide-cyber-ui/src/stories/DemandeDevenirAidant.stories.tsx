@@ -5,6 +5,7 @@ import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx
 import { FormulaireDevenirAidant } from '../domaine/gestion-demandes/devenir-aidant/formulaire-devenir-aidant/FormulaireDevenirAidant.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
+import { MemoryRouter } from 'react-router-dom';
 
 const meta = {
   title: 'Demande pour devenir Aidant',
@@ -46,33 +47,26 @@ export const DemandeDevenirAidant: Story = {
   args: { macAPI: macAPIMemoire },
   decorators: [
     (story) => (
-      <ContexteNavigationMAC.Provider
-        value={{
-          etat: {
-            // 'demande-devenir-aidant': {
-            //   url: '/api/demandes/devenir-aidant',
-            //   methode: 'GET',
-            // },
-            // 'envoyer-demande-devenir-aidant': {
-            //   url: '/api/demandes/devenir-aidant',
-            //   methode: 'POST',
-            // },
-          },
-          setEtat: () => {
-            return;
-          },
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          ajouteEtat: () => {},
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          navigue: (_moteurDeLiens, _action, _exclusion) => {},
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          retourAccueil: () => {},
-        }}
-      >
-        <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-          {story()}
-        </ErrorBoundary>
-      </ContexteNavigationMAC.Provider>
+      <MemoryRouter>
+        <ContexteNavigationMAC.Provider
+          value={{
+            etat: {},
+            setEtat: () => {
+              return;
+            },
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            ajouteEtat: () => {},
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            navigue: (_moteurDeLiens, _action, _exclusion) => {},
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            retourAccueil: () => {},
+          }}
+        >
+          <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
+            {story()}
+          </ErrorBoundary>
+        </ContexteNavigationMAC.Provider>
+      </MemoryRouter>
     ),
   ],
   name: 'Formulaire de demande pour devenir Aidant',

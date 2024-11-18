@@ -35,6 +35,7 @@ import { TypographieH5 } from '../../../../composants/communs/typographie/Typogr
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4';
 import { useContexteNavigation } from '../../../../hooks/useContexteNavigation.ts';
 import { MACAPIType } from '../../../../fournisseurs/api/useMACAPI.ts';
+import { useNavigate } from 'react-router-dom';
 
 type ProprietesFormulaireDevenirAidant = {
   macAPI: MACAPIType;
@@ -45,6 +46,8 @@ export const FormulaireDevenirAidant = ({
 }: ProprietesFormulaireDevenirAidant) => {
   const navigationMAC = useNavigationMAC();
   const navigationUtilisateur = useContexteNavigation(macAPI);
+  const navigate = useNavigate();
+
   const [prerequisDemande, setPrerequisDemande] = useState<
     PreRequisDemande | undefined
   >();
@@ -105,7 +108,7 @@ export const FormulaireDevenirAidant = ({
   }, [etatDemande.pretPourEnvoi, navigationMAC.etat]);
 
   useEffect(() => {
-    if (etatDemande.envoiReussi) window.scrollTo({ top: 0 });
+    if (etatDemande.envoiReussi) navigate('#formulaire-formation');
   }, [etatDemande.envoiReussi]);
 
   useEffect(() => {
