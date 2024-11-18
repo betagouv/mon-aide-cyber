@@ -12,7 +12,7 @@ export const LesEngagementsDeLAidant = () => {
           </TypographieH3>
           <ul>
             <li>
-              Aucune démarche commerciale directe, le diagnostic est réalisé
+              Aucune démarche commerciale, le diagnostic est réalisé
               gratuitement
             </li>
             <li>

@@ -21,7 +21,7 @@ export const QuiEstConcerne = () => {
           taille. Elles sont déjà sensibilisées au risque cyber et souhaitent
           s’engager dans une première démarche de renforcement de leur sécurité
           numérique. Le dispositif est à l’inverse inadapté pour les entités
-          jugées “matures” et les particuliers.
+          jugées “matures”, aux entreprises mono-salariés et auto-entrepreneurs.
         </p>
 
         <Link to="#formulaire-demande-aide">
