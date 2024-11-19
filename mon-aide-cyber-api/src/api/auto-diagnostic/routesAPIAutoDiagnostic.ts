@@ -62,7 +62,7 @@ export const routesAPIAutoDiagnostic = (
         .publie<
           SagaLanceAutoDiagnostic,
           crypto.UUID
-        >({ type: 'SagaLanceAutoDiagnostic', email: '', dateSignatureCGU: FournisseurHorloge.maintenant() })
+        >({ type: 'SagaLanceAutoDiagnostic', email: requete.body.email, dateSignatureCGU: FournisseurHorloge.maintenant() })
         .then((idDiagnostic) =>
           reponse
             .status(201)

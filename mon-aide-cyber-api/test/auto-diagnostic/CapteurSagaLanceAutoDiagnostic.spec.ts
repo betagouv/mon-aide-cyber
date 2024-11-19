@@ -93,6 +93,8 @@ describe('Capteur pour lancer un Auto-Diagnostic', () => {
       corps: {
         idDiagnostic: expect.any(String),
         idDemande: expect.any(String),
+        email: 'jean.dupont@email.com',
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
       },
     });
   });

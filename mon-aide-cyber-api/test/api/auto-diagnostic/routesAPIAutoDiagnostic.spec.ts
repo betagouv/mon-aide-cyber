@@ -14,13 +14,24 @@ import { ReponseDiagnostic } from '../../../src/api/routesAPIDiagnostic';
 import { Diagnostic } from '../../../src/diagnostic/Diagnostic';
 import { LiensHATEOAS } from '../../../src/api/hateoas/hateoas';
 import { CorpsReponseCreerAutoDiagnosticEnErreur } from '../../../src/api/auto-diagnostic/routesAPIAutoDiagnostic';
+import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
+import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
+import { EntrepotEvenementJournalMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import { adaptateurCorpsMessage } from '../../../src/auto-diagnostic/consommateursEvenements';
 
 describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { portEcoute: number; app: Express };
 
   beforeEach(() => {
-    testeurMAC.adaptateurDeVerificationDeCGU.reinitialise();
+    testeurMAC.busEvenement = new BusEvenementDeTest(
+      {
+        adaptateurRelations: testeurMAC.adaptateurRelations,
+        adaptateurEnvoiMail: testeurMAC.adaptateurEnvoieMessage,
+        entrepotJournalisation: new EntrepotEvenementJournalMemoire(),
+      },
+      ['AUTO_DIAGNOSTIC_LANCE']
+    );
     donneesServeur = testeurMAC.initialise();
   });
 
@@ -67,6 +78,30 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(reponse.headers['link']).toStrictEqual(
         `/api/auto-diagnostic/${idAutoDiagnostic}`
       );
+    });
+
+    it('Envoie un mail à l’entité concernée', async () => {
+      adaptateurCorpsMessage.autoDiagnostic = () => ({
+        genereCorpsMessage: () => 'Bonjour le monde!',
+      });
+      const idAutoDiagnostic = crypto.randomUUID();
+      adaptateurUUID.genereUUID = () => idAutoDiagnostic;
+      const referentiel = unReferentiel().construis();
+      testeurMAC.adaptateurReferentiel.ajoute(referentiel);
+
+      await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/auto-diagnostic',
+        donneesServeur.portEcoute,
+        { email: 'jean.dupont@mail.com', cguSignees: true }
+      );
+
+      expect(
+        (
+          testeurMAC.adaptateurEnvoieMessage as AdaptateurEnvoiMailMemoire
+        ).aEteEnvoyeA('jean.dupont@mail.com', 'Bonjour le monde!')
+      ).toBe(true);
     });
 
     describe('Lors de la phase de validation', () => {

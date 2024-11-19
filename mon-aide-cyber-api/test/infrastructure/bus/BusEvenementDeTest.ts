@@ -10,6 +10,8 @@ import { AdaptateurRelations } from '../../../src/relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { EntrepotEvenementJournal } from '../../../src/journalisation/Publication';
+import { AdaptateurEnvoiMail } from '../../../src/adaptateurs/AdaptateurEnvoiMail';
+import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 
 class ConsommateurEvenementDeTest implements ConsommateurEvenement {
   public evenementConsomme?: Evenement<unknown> = undefined;
@@ -31,17 +33,20 @@ export class BusEvenementDeTest extends BusEvenementMAC {
     public readonly configuration: {
       adaptateurRelations?: AdaptateurRelations;
       entrepotJournalisation?: EntrepotEvenementJournal;
+      adaptateurEnvoiMail?: AdaptateurEnvoiMail;
     } = {
       adaptateurRelations: new AdaptateurRelationsMAC(
         new EntrepotRelationMemoire()
       ),
       entrepotJournalisation: new EntrepotEvenementJournalMemoire(),
+      adaptateurEnvoiMail: new AdaptateurEnvoiMailMemoire(),
     },
     consomme: TypeEvenement[] = []
   ) {
     const consommateursEvenements = fabriqueConsommateursEvenements(
       configuration.adaptateurRelations,
-      configuration.entrepotJournalisation
+      configuration.entrepotJournalisation,
+      configuration.adaptateurEnvoiMail
     );
     for (const [clef, evenements] of consommateursEvenements.entries()) {
       if (!consomme.includes(clef)) {

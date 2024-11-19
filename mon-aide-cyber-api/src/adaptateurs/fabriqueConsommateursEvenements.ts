@@ -1,20 +1,20 @@
 import {
   aidantCree,
   aideCree,
+  aideViaSollicitationAidantCree,
+  autoDiagnosticLance,
   demandeDevenirAidantCree,
-  mailCreationCompteAidantEnvoye,
-  diagnosticLance,
-  reponseAjoutee,
-  restitutionLancee,
-  mailCreationCompteAidantNonEnvoye,
   demandeDevenirAidantespaceAidantCree,
+  diagnosticLance,
+  mailCreationCompteAidantEnvoye,
+  mailCreationCompteAidantNonEnvoye,
   preferencesAidantModifiees,
   profilAidantModifie,
-  aideViaSollicitationAidantCree,
   reinitialisationMotDePasseDemandee,
   reinitialisationMotDePasseErronee,
   reinitialisationMotDePasseFaite,
-  autoDiagnosticLance,
+  reponseAjoutee,
+  restitutionLancee,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
@@ -24,7 +24,12 @@ import { EntrepotEvenementJournal } from '../journalisation/Publication';
 import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../relation/AdaptateurRelationsMAC';
 import { aidantInitieDiagnostic } from '../espace-aidant/tableau-de-bord/consommateursEvenements';
-import { demandeInitieAutoDiagnostic } from '../auto-diagnostic/consommateursEvenements';
+import {
+  demandeInitieAutoDiagnostic,
+  envoiMailAutoDiagnostic,
+} from '../auto-diagnostic/consommateursEvenements';
+import { fabriqueAdaptateurEnvoiMail } from '../infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
+import { AdaptateurEnvoiMail } from './AdaptateurEnvoiMail';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -35,13 +40,7 @@ const fabriqueEntrepotJournalisation = () => {
 export const fabriqueConsommateursEvenements = (
   adaptateurRelations: AdaptateurRelations = new AdaptateurRelationsMAC(),
   entrepotJournalisation: EntrepotEvenementJournal = fabriqueEntrepotJournalisation(),
-  consommateurs: {
-    aidantCree: () => ConsommateurEvenement;
-    aideCree: () => ConsommateurEvenement;
-  } = {
-    aidantCree: () => aidantCree(entrepotJournalisation),
-    aideCree: () => aideCree(entrepotJournalisation),
-  }
+  adaptateurEnvoiMail: AdaptateurEnvoiMail = fabriqueAdaptateurEnvoiMail()
 ): Map<TypeEvenement, ConsommateurEvenement[]> => {
   return new Map<TypeEvenement, ConsommateurEvenement[]>([
     ['RESTITUTION_LANCEE', [restitutionLancee(entrepotJournalisation)]],
@@ -53,8 +52,8 @@ export const fabriqueConsommateursEvenements = (
       ],
     ],
     ['REPONSE_AJOUTEE', [reponseAjoutee(entrepotJournalisation)]],
-    ['AIDANT_CREE', [consommateurs.aidantCree()]],
-    ['AIDE_CREE', [consommateurs.aideCree()]],
+    ['AIDANT_CREE', [aidantCree(entrepotJournalisation)]],
+    ['AIDE_CREE', [aideCree(entrepotJournalisation)]],
     [
       'AIDE_VIA_SOLLICITATION_AIDANT_CREE',
       [aideViaSollicitationAidantCree(entrepotJournalisation)],
@@ -97,6 +96,7 @@ export const fabriqueConsommateursEvenements = (
       [
         autoDiagnosticLance(entrepotJournalisation),
         demandeInitieAutoDiagnostic(adaptateurRelations),
+        envoiMailAutoDiagnostic(adaptateurEnvoiMail),
       ],
     ],
   ]);

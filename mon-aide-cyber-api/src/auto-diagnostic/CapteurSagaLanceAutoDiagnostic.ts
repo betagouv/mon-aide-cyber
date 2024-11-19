@@ -88,6 +88,8 @@ export class CapteurSagaLanceAutoDiagnostic
                 corps: {
                   idDiagnostic: identifiantDiagnostic,
                   idDemande: identifiantDemande,
+                  email: saga.email,
+                  dateSignatureCGU: saga.dateSignatureCGU,
                 },
                 identifiant: adaptateurUUID.genereUUID(),
               })
@@ -100,4 +102,6 @@ export class CapteurSagaLanceAutoDiagnostic
 export type AutoDiagnosticLance = Evenement<{
   idDiagnostic: crypto.UUID;
   idDemande: crypto.UUID;
+  email: string;
+  dateSignatureCGU: Date;
 }> & { type: 'AUTO_DIAGNOSTIC_LANCE' };
