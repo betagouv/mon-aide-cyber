@@ -8,7 +8,6 @@ import {
 import { constructeurParametresAPI } from '../../../../../../fournisseurs/api/ConstructeurParametresAPI';
 import { MACAPIType } from '../../../../../../fournisseurs/api/useMACAPI';
 import { useNavigationMAC } from '../../../../../../fournisseurs/hooks';
-import { useFeatureFlag } from '../../../../../../hooks/useFeatureFlag';
 import { Lien, ReponseHATEOAS } from '../../../../../Lien';
 import { MoteurDeLiens } from '../../../../../MoteurDeLiens';
 import { Profil } from '../../../../../profil/Profil';
@@ -18,10 +17,6 @@ type CorpsModificationProfil = {
 };
 
 export const useFormulaireInformationsAidant = (macAPI: MACAPIType) => {
-  const { estFonctionaliteActive } = useFeatureFlag(
-    'ESPACE_AIDANT_ECRAN_MES_PREFERENCES'
-  );
-
   const navigationMAC = useNavigationMAC();
   const { showBoundary } = useErrorBoundary();
 
@@ -62,8 +57,6 @@ export const useFormulaireInformationsAidant = (macAPI: MACAPIType) => {
 
   const enregistreProfil = useCallback(
     (enSucces?: () => void, enErreur?: () => void) => {
-      if (!estFonctionaliteActive) return;
-
       new MoteurDeLiens(navigationMAC.etat).trouve(
         'modifier-profil',
         (lien: Lien) => {
