@@ -38,7 +38,7 @@ export const CommentDevenirAidant = () => {
           plateforme et <b>réaliser vos premiers diagnostics</b>.
         </>
       ),
-      illustration: '/images/illustration-mesures.svg',
+      illustration: '/images/illustration-securite-des-acces.svg',
     },
   ];
 
