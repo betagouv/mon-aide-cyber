@@ -1,22 +1,26 @@
-import { Lien } from '../../../domaine/Lien';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { MoteurDeLiens, ROUTE_AIDANT } from '../../../domaine/MoteurDeLiens';
 import { useNavigationMAC } from '../../../fournisseurs/hooks';
 import { rubriqueConsultee } from '../../../domaine/diagnostic/reducteurRestitution';
-import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
 import { UUID } from '../../../types/Types';
 import { useRecupereLaRestitution } from './useRecupereLaRestitution';
-import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useNavigueVersModifierDiagnostic } from '../../../fournisseurs/ContexteNavigationMAC.tsx';
+import { useTelechargerRestitution } from './useTelechargerRestitution.ts';
 
-export const useComposantRestitution = (idDiagnostic: UUID) => {
+export const useComposantRestitution = (
+  idDiagnostic: UUID,
+  estLibreAcces: boolean
+) => {
   const navigationMAC = useNavigationMAC();
-  const macAPI = useMACAPI();
-  const { navigue } = useNavigueVersModifierDiagnostic();
+  // const macAPI = useMACAPI();
+  const { navigue } = useNavigueVersModifierDiagnostic(
+    estLibreAcces ? '/diagnostic' : '/aidant/diagnostic'
+  );
 
   const { etatRestitution, envoie } = useRecupereLaRestitution(idDiagnostic);
 
-  const [boutonDesactive, setBoutonDesactive] = useState<boolean>(false);
+  const { telechargerRestitution, chargeLeFichier: boutonDesactive } =
+    useTelechargerRestitution(idDiagnostic);
 
   useEffect(() => {
     if (etatRestitution.restitution) {
@@ -68,7 +72,7 @@ export const useComposantRestitution = (idDiagnostic: UUID) => {
     navigue(etatRestitution.restitution!.liens['modifier-diagnostic']);
   }, [etatRestitution, navigationMAC]);
 
-  const telechargerRestitution = useCallback(() => {
+  /*const telechargerRestitution = useCallback(() => {
     new MoteurDeLiens(etatRestitution.restitution!.liens).trouve(
       'restitution-pdf',
       (lien: Lien) => {
@@ -93,7 +97,7 @@ export const useComposantRestitution = (idDiagnostic: UUID) => {
       }
     );
     setBoutonDesactive(true);
-  }, [etatRestitution.restitution, idDiagnostic]);
+  }, [etatRestitution.restitution, idDiagnostic]);*/
 
   const navigueVersTableauDeBord = useCallback(() => {
     const liens = etatRestitution.restitution!.liens;

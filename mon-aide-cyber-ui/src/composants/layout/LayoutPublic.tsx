@@ -22,7 +22,7 @@ export const liensNavigation: LienNavigation[] = [
   },
   {
     route: '/devenir-aidant',
-    nom: 'Devenir aidant',
+    nom: 'Devenir Aidant cyber',
   },
   {
     route: '/a-propos',

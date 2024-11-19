@@ -10,9 +10,14 @@ import { FormulaireDemandeEtreAide } from './composants/FormulaireDemandeEtreAid
 import { HeroDemandeAide } from './composants/HeroDemandeAide';
 import { QuiEstConcerne } from './composants/QuiEstConcerne';
 import './ecran-beneficier-du-dispositif.scss';
+import Button from '../../../composants/atomes/Button/Button.tsx';
+import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
+import { useNavigate } from 'react-router-dom';
+import illustrationAutodiag from './../../../../public/images/illustration-autodiag.svg';
 
 export const EcranBeneficierDuDispositif = () => {
   useDefilementFluide();
+  const navigate = useNavigate();
 
   return (
     <main role="main" className="ecran-beneficier-du-dispositif">
@@ -40,6 +45,42 @@ export const EcranBeneficierDuDispositif = () => {
           },
         ]}
       />
+      <section className="fond-clair-mac">
+        <div className="fr-container focus-restitution-layout">
+          <section>
+            <TypographieH3>
+              Accéder à l&apos;outil de diagnostic MonAideCyber
+            </TypographieH3>
+            <p>
+              Réalisez vous-même le diagnostic de votre entité pour évaluer
+              votre niveau en cybersécurité et mettre en place des premières
+              mesures. Le diagnostic comprend une trentaine de questions, elles
+              sont adaptées pour des entités avec un faible niveau de
+              cybersécurité et souhaitant passer à l’action.
+            </p>
+            <p>
+              Le diagnostic :
+              <ul>
+                <li>permet de faire ressortir les lacunes majeures</li>
+                <li>
+                  identifie les mesures prioritaires et les plus impactantes
+                </li>
+                <li>n’est pas exhaustif</li>
+              </ul>
+            </p>
+
+            <Button
+              type="button"
+              onClick={() => navigate('/demande-autodiagnostic')}
+            >
+              J'initie un diagnostic
+            </Button>
+          </section>
+          <section>
+            <img src={illustrationAutodiag} alt="" />
+          </section>
+        </div>
+      </section>
       <section className="participer fr-pt-4w">
         <div className="fr-container conteneur-participer">
           <div className="fr-col-12">

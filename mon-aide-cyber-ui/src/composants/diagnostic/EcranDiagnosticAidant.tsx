@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer } from 'react';
+import { ReactElement, useCallback, useEffect, useReducer } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import {
   Question,
@@ -53,6 +53,8 @@ import { BadgePerimetre } from './BadgePerimetre.tsx';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { Lien } from '../../domaine/Lien.ts';
+import { useRecupereContexteNavigation } from '../../hooks/useRecupereContexteNavigation.ts';
+import Button from '../atomes/Button/Button.tsx';
 
 type ProprietesComposantQuestion = {
   thematique: string;
@@ -245,23 +247,27 @@ const ComposantQuestion = ({
 
 type ProprietesEcranDiagnostic = {
   idDiagnostic: UUID;
+  type?: 'libre-acces';
 };
 
 type ProprietesComposantDiagnostic = {
   idDiagnostic: UUID;
   macAPI: MACAPIType;
+  header: ReactElement;
+  accedeALaRestitution: (titre: string) => void;
 };
 
-export const ComposantDiagnostic = ({
+export const EcranDiagnostic = ({
   idDiagnostic,
   macAPI,
+  accedeALaRestitution,
+  header,
 }: ProprietesComposantDiagnostic) => {
   const [etatReferentiel, envoie] = useReducer(reducteurDiagnostic, {
     diagnostic: undefined,
     thematiqueAffichee: undefined,
   });
   const { showBoundary } = useErrorBoundary();
-  const { affiche, ferme } = useModale();
   const navigationMAC = useNavigationMAC();
 
   useEffect(() => {
@@ -285,7 +291,7 @@ export const ComposantDiagnostic = ({
         }
       }
     );
-  }, [idDiagnostic, envoie, showBoundary, etatReferentiel, navigationMAC]);
+  }, [idDiagnostic, envoie, showBoundary, etatReferentiel, navigationMAC.etat]);
 
   let thematiques: [string, Thematique][] = [];
   if (etatReferentiel.diagnostic?.referentiel !== undefined) {
@@ -298,20 +304,6 @@ export const ComposantDiagnostic = ({
       window.scrollTo({ top: 0 });
     },
     [envoie]
-  );
-
-  const afficheModaleAccederALaRestitution = useCallback(
-    (titre: string) =>
-      affiche({
-        titre,
-        corps: (
-          <AccederALaRestitution
-            surAnnuler={ferme}
-            idDiagnostic={idDiagnostic}
-          />
-        ),
-      }),
-    [affiche, ferme, idDiagnostic]
   );
 
   const navigation = (
@@ -369,12 +361,7 @@ export const ComposantDiagnostic = ({
 
   return (
     <>
-      <HeaderDiagnostic
-        quitter={{
-          accederALaRestitution: () =>
-            afficheModaleAccederALaRestitution('Accéder à la restitution'),
-        }}
-      />
+      {header}
       <main role="main" className="diagnostic fond-clair-mac">
         <div className="fr-grid-row fr-col-12">
           <div className="conteneur-navigation">{navigation}</div>
@@ -504,9 +491,7 @@ export const ComposantDiagnostic = ({
                       }
                       thematiques={thematiques.map(([clef]) => clef)}
                       onClick={() =>
-                        afficheModaleAccederALaRestitution(
-                          'Terminer le diagnostic'
-                        )
+                        accedeALaRestitution('Terminer le diagnostic')
                       }
                     />
                   </div>
@@ -521,10 +506,231 @@ export const ComposantDiagnostic = ({
   );
 };
 
-export const EcranDiagnostic = ({
+export const ActionsHeaderDiagnosticAidant = ({
+  idDiagnostic,
+}: {
+  idDiagnostic: UUID;
+}) => {
+  const { affiche, ferme } = useModale();
+
+  const quitterDiagnostic = () => {
+    affiche({
+      titre: 'Quitter le diagnostic',
+      corps: (
+        <section>
+          <p>
+            Vous vous apprêtez à quitter le diagnostic et à revenir à votre
+            espace Aidant. Votre progression est enregistrée, vous pourrez
+            reprendre et modifier le diagnostic ultérieurement.
+          </p>
+          <div className="fr-pt-4w">
+            <Button
+              type="button"
+              variant="secondary"
+              key="annule-acceder-a-la-restitution"
+              className="fr-mr-2w"
+              onClick={ferme}
+            >
+              Annuler
+            </Button>
+            <Button
+              type="button"
+              key="connexion-aidant"
+              onClick={() => {
+                window.location.replace('/aidant/tableau-de-bord');
+              }}
+            >
+              Quitter le diagnostic
+            </Button>
+          </div>
+        </section>
+      ),
+    });
+  };
+  const afficheModaleAccederALaRestitution = useCallback(
+    (titre: string) =>
+      affiche({
+        titre,
+        corps: (
+          <AccederALaRestitution
+            surAnnuler={ferme}
+            idDiagnostic={idDiagnostic}
+            route="/aidant/diagnostic"
+          />
+        ),
+      }),
+    [affiche, ferme, idDiagnostic]
+  );
+
+  return (
+    <>
+      <Button type="button" variant="secondary" onClick={quitterDiagnostic}>
+        <span>Quitter</span>
+      </Button>
+      <Button
+        title="Accéder à la restitution"
+        onClick={() =>
+          afficheModaleAccederALaRestitution('Accéder à la restitution')
+        }
+      >
+        <span>Accéder à la restitution</span>
+      </Button>
+    </>
+  );
+};
+export const ActionsHeaderDiagnosticLibreAcces = ({
+  idDiagnostic,
+}: {
+  idDiagnostic: UUID;
+}) => {
+  const { affiche, ferme } = useModale();
+
+  const quitterDiagnostic = () => {
+    affiche({
+      titre: 'Quitter le diagnostic',
+      corps: (
+        <section>
+          <p>
+            Vous vous apprêtez à quitter le diagnostic en cours, votre
+            progression sera perdue.
+            <br />
+            <br />
+            Si vous préférez solliciter une aide pour répondre aux questions,
+            vous pouvez{' '}
+            <a href="/beneficier-du-dispositif/etre-aide#formulaire-demande-aide">
+              faire une demande pour un diagnostic accompagné
+            </a>
+            .
+          </p>
+          <div className="fr-pt-4w">
+            <Button
+              type="button"
+              variant="secondary"
+              key="annule-acceder-a-la-restitution"
+              className="fr-mr-2w"
+              onClick={ferme}
+            >
+              Annuler
+            </Button>
+            <Button
+              type="button"
+              key="connexion-aidant"
+              onClick={() => {
+                window.location.replace('/beneficier-du-dispositif/etre-aide');
+              }}
+            >
+              Quitter le diagnostic
+            </Button>
+          </div>
+        </section>
+      ),
+    });
+  };
+
+  const afficheModaleAccederALaRestitution = useCallback(
+    (titre: string) =>
+      affiche({
+        titre,
+        corps: (
+          <AccederALaRestitution
+            surAnnuler={ferme}
+            idDiagnostic={idDiagnostic}
+            route="/diagnostic"
+          />
+        ),
+      }),
+    [affiche, ferme, idDiagnostic]
+  );
+
+  return (
+    <>
+      <Button type="button" variant="secondary" onClick={quitterDiagnostic}>
+        <span>Quitter</span>
+      </Button>
+      <Button
+        title="Accéder à la restitution"
+        onClick={() =>
+          afficheModaleAccederALaRestitution('Quitter le diagnostic')
+        }
+      >
+        <span>Accéder à la restitution</span>
+      </Button>
+    </>
+  );
+};
+
+export const EcranDiagnosticAidant = ({
   idDiagnostic,
 }: ProprietesEcranDiagnostic) => {
+  const { affiche, ferme } = useModale();
+
+  const afficheModaleAccederALaRestitution = useCallback(
+    (titre: string) =>
+      affiche({
+        titre,
+        corps: (
+          <AccederALaRestitution
+            surAnnuler={ferme}
+            idDiagnostic={idDiagnostic}
+            route="/aidant/diagnostic"
+          />
+        ),
+      }),
+    [affiche, ferme, idDiagnostic]
+  );
+
   return (
-    <ComposantDiagnostic idDiagnostic={idDiagnostic} macAPI={useMACAPI()} />
+    <EcranDiagnostic
+      idDiagnostic={idDiagnostic}
+      macAPI={useMACAPI()}
+      header={
+        <HeaderDiagnostic
+          actions={
+            <ActionsHeaderDiagnosticAidant idDiagnostic={idDiagnostic} />
+          }
+        />
+      }
+      accedeALaRestitution={afficheModaleAccederALaRestitution}
+    />
+  );
+};
+
+export const EcranDiagnosticLibreAcces = ({
+  idDiagnostic,
+}: ProprietesEcranDiagnostic) => {
+  const { affiche, ferme } = useModale();
+
+  useRecupereContexteNavigation(
+    `utiliser-outil-diagnostic:afficher:${idDiagnostic}`
+  );
+
+  const afficheModaleAccederALaRestitution = useCallback(
+    (titre: string) =>
+      affiche({
+        titre,
+        corps: (
+          <AccederALaRestitution
+            surAnnuler={ferme}
+            idDiagnostic={idDiagnostic}
+            route="/diagnostic"
+          />
+        ),
+      }),
+    [affiche, ferme, idDiagnostic]
+  );
+
+  return (
+    <EcranDiagnostic
+      idDiagnostic={idDiagnostic}
+      macAPI={useMACAPI()}
+      header={
+        <HeaderDiagnostic
+          actions={
+            <ActionsHeaderDiagnosticLibreAcces idDiagnostic={idDiagnostic} />
+          }
+        />
+      }
+      accedeALaRestitution={afficheModaleAccederALaRestitution}
+    />
   );
 };

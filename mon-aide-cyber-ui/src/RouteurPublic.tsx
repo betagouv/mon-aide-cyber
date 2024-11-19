@@ -20,9 +20,10 @@ import { EcranAidant } from './domaine/vitrine/ecran-annuaire/ecran-aidant/Ecran
 import { EcranMotDePasseOublie } from './domaine/vitrine/mot-de-passe-oublie/EcranMotDePasseOublie.tsx';
 import { EcranReinitialiserMotDePasse } from './domaine/vitrine/reinitialiser-mot-de-passe/EcranReinitialiserMotDePasse.tsx';
 import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
-import { EcranDiagnostic } from './composants/diagnostic/EcranDiagnostic.tsx';
-import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
-import { EcranDemandeAutodiagnostic } from './domaine/gestion-demandes/demande-autodiagnostic/EcranDemandeAutodiagnostic.tsx';
+import { EcranDiagnosticLibreAcces } from './composants/diagnostic/EcranDiagnosticAidant.tsx';
+import { ComposantRestitutionLibreAcces } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
+import { EcranDemandeAutodiagnostic } from './domaine/auto-diagnostic/EcranDemandeAutodiagnostic.tsx';
+import { EcranAutodiagnostic } from './domaine/vitrine/ecran-autodiagnostic/EcranAutodiagnostic.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -49,16 +50,7 @@ export const RouteurPublic = () => {
           element={<ComposantDemandeDevenirAidant />}
         />
         <Route path="mentions-legales" element={<MentionsLegales />} />
-      </Route>
-      <Route path="/diagnostic" element={<LayoutDiagnostic />}>
-        <Route
-          path=":idDiagnostic"
-          element={<ComposantIntercepteur composant={EcranDiagnostic} />}
-        ></Route>
-        <Route
-          path=":idDiagnostic/restitution"
-          element={<ComposantIntercepteur composant={ComposantRestitution} />}
-        ></Route>
+        <Route path="auto-diagnostic" element={<EcranAutodiagnostic />} />
       </Route>
       <Route
         path="/connexion"
@@ -71,6 +63,20 @@ export const RouteurPublic = () => {
         element={<LayoutPublic afficheNavigation={false} />}
       >
         <Route index element={<EcranDemandeAutodiagnostic />} />
+      </Route>
+      <Route path="diagnostic" element={<LayoutDiagnostic />}>
+        <Route
+          path=":idDiagnostic"
+          element={
+            <ComposantIntercepteur composant={EcranDiagnosticLibreAcces} />
+          }
+        ></Route>
+        <Route
+          path=":idDiagnostic/restitution"
+          element={
+            <ComposantIntercepteur composant={ComposantRestitutionLibreAcces} />
+          }
+        ></Route>
       </Route>
       <Route
         path="/utilisateur"

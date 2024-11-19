@@ -14,7 +14,11 @@ import { UUID } from '../types/Types.ts';
 import { ServeurMACMemoire, unLienHATEOAS } from './ServeurMACMemoire.ts';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { decorateurComposantDiagnostic } from './DecorateurComposantDiagnostic.tsx';
-import { ComposantDiagnostic } from '../composants/diagnostic/EcranDiagnostic.tsx';
+import {
+  ActionsHeaderDiagnosticAidant,
+  EcranDiagnostic,
+} from '../composants/diagnostic/EcranDiagnosticAidant.tsx';
+import { HeaderDiagnostic } from '../composants/diagnostic/HeaderDiagnostic.tsx';
 
 const identifiantQuestionAChoixUnique = '6dadad14-8fa0-4be7-a8da-473d538eb6c1';
 const reponseDonneeChoixUnique = uneReponsePossible().construis();
@@ -373,11 +377,11 @@ const macAPIMemoire = {
 
 const meta = {
   title: 'Diagnostic',
-  component: ComposantDiagnostic,
+  component: EcranDiagnostic,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof ComposantDiagnostic>;
+} satisfies Meta<typeof EcranDiagnostic>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -387,6 +391,16 @@ export const SelectionneReponseDiagnostic: Story = {
   args: {
     idDiagnostic: identifiantQuestionAChoixUnique,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantQuestionAChoixUnique}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>
@@ -436,6 +450,16 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
   args: {
     idDiagnostic: identifiantQuestionListeDeroulante,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantQuestionListeDeroulante}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>
@@ -483,6 +507,16 @@ export const AfficheLesThematiques: Story = {
   args: {
     idDiagnostic: identifiantDiagnosticAvecPlusieursThematiques,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantDiagnosticAvecPlusieursThematiques}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>
@@ -549,7 +583,20 @@ export const AfficheLesThematiques: Story = {
 
 export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
   name: 'Sélectionne les réponses pour les questions à tiroir',
-  args: { idDiagnostic: identifiantQuestionATiroir, macAPI: macAPIMemoire },
+  args: {
+    idDiagnostic: identifiantQuestionATiroir,
+    macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantQuestionATiroir}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
+  },
   decorators: [
     (story) => decorateurComposantDiagnostic(story, identifiantQuestionATiroir),
   ],
@@ -667,6 +714,16 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
   args: {
     idDiagnostic: identifiantQuestionAPlusieursTiroirs,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantQuestionAPlusieursTiroirs}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>
@@ -777,6 +834,18 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
     args: {
       idDiagnostic: identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple,
       macAPI: macAPIMemoire,
+      header: (
+        <HeaderDiagnostic
+          actions={
+            <ActionsHeaderDiagnosticAidant
+              idDiagnostic={
+                identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple
+              }
+            />
+          }
+        />
+      ),
+      accedeALaRestitution: () => null,
     },
     decorators: [
       (story) =>
@@ -976,6 +1045,16 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
     args: {
       idDiagnostic: identifiantQuestionATiroirAvecPlusieursChoixUnique,
       macAPI: macAPIMemoire,
+      header: (
+        <HeaderDiagnostic
+          actions={
+            <ActionsHeaderDiagnosticAidant
+              idDiagnostic={identifiantQuestionATiroirAvecPlusieursChoixUnique}
+            />
+          }
+        />
+      ),
+      accedeALaRestitution: () => null,
     },
     decorators: [
       (story) =>
@@ -1142,6 +1221,16 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
     args: {
       idDiagnostic: identifiantQuestionATiroirAvecReponseUnique,
       macAPI: macAPIMemoire,
+      header: (
+        <HeaderDiagnostic
+          actions={
+            <ActionsHeaderDiagnosticAidant
+              idDiagnostic={identifiantQuestionATiroirAvecReponseUnique}
+            />
+          }
+        />
+      ),
+      accedeALaRestitution: () => null,
     },
     decorators: [
       (story) =>
@@ -1235,6 +1324,16 @@ export const SelectionneLaReponsePourUneQuestionAChoixMultiple: Story = {
   args: {
     idDiagnostic: identifiantQuestionAChoixMultiple,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantQuestionAChoixMultiple}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>

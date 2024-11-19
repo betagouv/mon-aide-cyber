@@ -9,6 +9,10 @@ import { EcranCreationEspaceAidant } from './domaine/espace-aidant/creation-espa
 import { EcranDiagnostics } from './domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
 import { EcranMesPreferences } from './domaine/espace-aidant/mon-compte/ecran-mes-preferences/EcranMesPreferences.tsx';
 import { EcranMesInformations } from './domaine/espace-aidant/mon-compte/ecran-mes-informations/EcranMesInformations.tsx';
+import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
+import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
+import { EcranDiagnosticAidant } from './composants/diagnostic/EcranDiagnosticAidant.tsx';
+import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -40,6 +44,20 @@ export const RouteurPrive = () => {
             </Suspense>
           }
         >
+          <Route path="diagnostic" element={<LayoutDiagnostic />}>
+            <Route
+              path=":idDiagnostic"
+              element={
+                <ComposantIntercepteur composant={EcranDiagnosticAidant} />
+              }
+            ></Route>
+            <Route
+              path=":idDiagnostic/restitution"
+              element={
+                <ComposantIntercepteur composant={ComposantRestitution} />
+              }
+            ></Route>
+          </Route>
           <Route element={<LayoutAidant />}>
             {/* @todo remettre cette route quand TDB développé <Route path="/tableau-de-bord" element={<TableauDeBord />}></Route>*/}
             <Route

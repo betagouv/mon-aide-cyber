@@ -32,6 +32,7 @@ export const ChampValidationCGUs = ({
         <div>
           <span className="asterisque">*</span>
           <span>
+            {' '}
             J&apos;accepte les{' '}
             <b>
               <Button type="button" variant="link" onClick={afficheModaleCGU}>

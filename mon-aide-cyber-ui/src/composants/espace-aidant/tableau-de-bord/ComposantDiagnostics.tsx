@@ -15,7 +15,7 @@ export const ComposantDiagnostics = ({
   diagnostics: Diagnostic[];
 }) => {
   const navigationMAC = useNavigationMAC();
-  const { navigue } = useNavigueVersLaRestitution();
+  const { navigue } = useNavigueVersLaRestitution('/aidant/diagnostic');
 
   const afficherDiagnostic = useCallback(
     (idDiagnostic: UUID) => {

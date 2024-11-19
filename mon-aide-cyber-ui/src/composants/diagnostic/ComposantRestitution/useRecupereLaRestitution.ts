@@ -10,8 +10,8 @@ import {
 } from '../../../domaine/diagnostic/reducteurRestitution';
 import { useErrorBoundary } from 'react-error-boundary';
 import { useNavigationMAC } from '../../../fournisseurs/hooks';
-import { ReponseTableauDeBord } from '../../../domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
+import { useQuery } from '@tanstack/react-query';
 
 export const useRecupereLaRestitution = (idDiagnostic: UUID) => {
   const navigationMAC = useNavigationMAC();
@@ -21,60 +21,42 @@ export const useRecupereLaRestitution = (idDiagnostic: UUID) => {
 
   const chargeRestitution = async (lien: Lien) => {
     try {
-      const restitution = await macAPI.execute<Restitution, Restitution>(
+      return await macAPI.execute<Restitution, Restitution>(
         constructeurParametresAPI()
           .url(lien.url)
           .methode(lien.methode!)
           .construis(),
         (reponse) => reponse
       );
-
-      navigationMAC.setEtat(restitution.liens);
-      envoie(restitutionChargee(restitution));
     } catch (error) {
       showBoundary(error);
     }
   };
 
-  useEffect(() => {
-    if (!navigationMAC.etat || Object.keys(navigationMAC.etat).length === 0) {
-      return;
-    }
+  const { data: restitution } = useQuery({
+    queryKey: ['afficher-diagnostic', idDiagnostic],
+    queryFn: () => {
+      const lien = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
+        `afficher-diagnostic-${idDiagnostic}`
+      );
 
-    if (etatRestitution.restitution) {
-      return;
-    }
-
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'afficher-tableau-de-bord',
-      async (lien: Lien) => {
-        try {
-          const tableauDeBord = await macAPI.execute<
-            ReponseTableauDeBord,
-            ReponseTableauDeBord
-          >(
-            constructeurParametresAPI()
-              .url(lien.url)
-              .methode(lien.methode!)
-              .construis(),
-            (reponse) => reponse
-          );
-          new MoteurDeLiens(tableauDeBord.liens).trouve(
-            `afficher-diagnostic-${idDiagnostic}`,
-            async (lien: Lien) => await chargeRestitution(lien),
-            () => {
-              showBoundary({
-                titre: 'Un problème est survenu',
-                message: `Vous n'avez pas accès au diagnostic ${idDiagnostic}`,
-              });
-            }
-          );
-        } catch (erreur) {
-          showBoundary(erreur);
-        }
+      if (!lien) {
+        showBoundary({
+          titre: 'Un problème est survenu',
+          message: `Vous n'avez pas accès au diagnostic ${idDiagnostic}`,
+        });
       }
-    );
-  }, [idDiagnostic, navigationMAC.etat]);
+
+      return chargeRestitution(lien);
+    },
+  });
+
+  useEffect(() => {
+    if (!restitution) return;
+
+    navigationMAC.ajouteEtat(restitution.liens);
+    envoie(restitutionChargee(restitution));
+  }, [restitution]);
 
   return {
     etatRestitution,
