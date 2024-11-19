@@ -139,4 +139,14 @@ export const lesContextesUtilisateursExistants = [
       },
     },
   },
+  {
+    contexte: 'Créer un auto diagnostic',
+    informationContexte: { contexte: 'creer-auto-diagnostic' },
+    liens: {
+      'creer-auto-diagnostic': {
+        methode: 'POST',
+        url: '/api/auto-diagnostic',
+      },
+    },
+  },
 ];

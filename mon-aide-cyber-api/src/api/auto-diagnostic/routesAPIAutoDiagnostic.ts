@@ -6,7 +6,11 @@ import { SagaLanceAutoDiagnostic } from '../../auto-diagnostic/CapteurSagaLanceA
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { ServiceDiagnostic } from '../../diagnostic/ServiceDiagnostic';
 import { representeLeDiagnosticPourLeClient } from '../representateurs/representateurDiagnostic';
-import { ReponseHATEOAS, ReponseHATEOASEnErreur } from '../hateoas/hateoas';
+import {
+  constructeurActionsHATEOAS,
+  ReponseHATEOAS,
+  ReponseHATEOASEnErreur,
+} from '../hateoas/hateoas';
 import { RepresentationDiagnostic } from '../representateurs/types';
 import {
   FieldValidationError,
@@ -49,12 +53,9 @@ export const routesAPIAutoDiagnostic = (
             .array()
             .map((resultatValidation) => resultatValidation.msg)
             .join(', '),
-          liens: {
-            'creer-auto-diagnostic': {
-              methode: 'POST',
-              url: '/api/auto-diagnostic',
-            },
-          },
+          ...constructeurActionsHATEOAS()
+            .pour({ contexte: 'creer-auto-diagnostic' })
+            .construis(),
         });
       }
       return busCommande
