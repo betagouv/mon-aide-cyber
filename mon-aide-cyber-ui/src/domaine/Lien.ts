@@ -26,6 +26,7 @@ export type Action =
   | 'finalise-creation-espace-aidant'
   | 'lancer-diagnostic'
   | 'modifier-diagnostic'
+  | 'modifier-auto-diagnostic'
   | 'modifier-mot-de-passe'
   | 'modifier-preferences'
   | 'modifier-profil'
@@ -35,4 +36,5 @@ export type Action =
   | 'se-deconnecter'
   | 'afficher-statistiques'
   | 'reinitialisation-mot-de-passe'
-  | 'reinitialiser-mot-de-passe';
+  | 'reinitialiser-mot-de-passe'
+  | 'creer-diagnostic';

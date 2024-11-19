@@ -11,7 +11,11 @@ import { UUID } from '../types/Types.ts';
 import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { decorateurComposantDiagnostic } from './DecorateurComposantDiagnostic.tsx';
-import { ComposantDiagnostic } from '../composants/diagnostic/EcranDiagnostic.tsx';
+import {
+  ActionsHeaderDiagnosticAidant,
+  EcranDiagnostic,
+} from '../composants/diagnostic/EcranDiagnosticAidant.tsx';
+import { HeaderDiagnostic } from '../composants/diagnostic/HeaderDiagnostic.tsx';
 
 const identifiantUneQuestion = '6dadad14-8fa0-4be7-a8da-473d538eb6c1';
 const diagnosticAvecUneQuestion = unDiagnostic()
@@ -138,18 +142,31 @@ const macAPIMemoire = {
 };
 const meta = {
   title: 'Diagnostic',
-  component: ComposantDiagnostic,
+  component: EcranDiagnostic,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof ComposantDiagnostic>;
+} satisfies Meta<typeof EcranDiagnostic>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const QuestionDiagnostic: Story = {
   name: 'Affiche une seule question du diagnostic',
-  args: { idDiagnostic: identifiantUneQuestion, macAPI: macAPIMemoire },
+  args: {
+    idDiagnostic: identifiantUneQuestion,
+    macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantUneQuestion}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
+  },
   decorators: [
     (story) => decorateurComposantDiagnostic(story, identifiantUneQuestion),
   ],
@@ -174,7 +191,20 @@ export const QuestionDiagnostic: Story = {
 
 export const AfficheDiagnosticAvecPlusieursQuestions: Story = {
   name: 'Affiche plusieurs questions',
-  args: { idDiagnostic: identifiantPlusieursQuestions, macAPI: macAPIMemoire },
+  args: {
+    idDiagnostic: identifiantPlusieursQuestions,
+    macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantPlusieursQuestions}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
+  },
   decorators: [
     (story) =>
       decorateurComposantDiagnostic(story, identifiantPlusieursQuestions),
@@ -204,6 +234,16 @@ export const AfficheDiagnosticQuestionListeDeroulante: Story = {
   args: {
     idDiagnostic: identifiantQuestionListeDeroulante,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantQuestionListeDeroulante}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>
@@ -233,6 +273,16 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
   args: {
     idDiagnostic: identifiantReponseEntrainantQuestion,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantReponseEntrainantQuestion}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>
@@ -263,6 +313,16 @@ export const AfficheDiagnosticAvecQuestionTiroirAChoixUnique: Story = {
   args: {
     idDiagnostic: identifiantDiagnosticAvecQuestionTiroirAChoixUnique,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantDiagnosticAvecQuestionTiroirAChoixUnique}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>

@@ -5,18 +5,21 @@ import { useNavigueVersLaRestitution } from '../../fournisseurs/ContexteNavigati
 
 export const AccederALaRestitution = ({
   idDiagnostic,
+  route,
   surAnnuler,
 }: {
   idDiagnostic: UUID;
+  route: '/aidant/diagnostic' | '/diagnostic';
   surAnnuler: () => void;
 }) => {
   const navigationMAC = useNavigationMAC();
-  const { navigue } = useNavigueVersLaRestitution();
+  const { navigue } = useNavigueVersLaRestitution(route);
 
   const surQuitterLeDiagnostic = useCallback(() => {
     surAnnuler();
     navigue(idDiagnostic);
-  }, [idDiagnostic, navigationMAC, surAnnuler]);
+  }, [idDiagnostic, navigationMAC.etat, surAnnuler]);
+
   return (
     <>
       <section>

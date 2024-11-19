@@ -57,7 +57,9 @@ export const FournisseurNavigationMAC = ({ children }: PropsWithChildren) => {
   );
 };
 
-export const useNavigueVersLaRestitution = () => {
+export const useNavigueVersLaRestitution = (
+  route: '/aidant/diagnostic' | '/diagnostic'
+) => {
   const navigate = useNavigate();
   const navigationMAC = useNavigationMAC();
   const navigue = (idDiagnostic: UUID) => {
@@ -66,8 +68,8 @@ export const useNavigueVersLaRestitution = () => {
     );
 
     if (peutAfficherDiagnostic) {
-      const route = `/diagnostic/${idDiagnostic}/restitution`;
-      navigate(route);
+      const routeVersDiag = `${route}/${idDiagnostic}/restitution`;
+      navigate(routeVersDiag);
     }
   };
   return {
@@ -75,7 +77,9 @@ export const useNavigueVersLaRestitution = () => {
   };
 };
 
-export const useNavigueVersModifierDiagnostic = () => {
+export const useNavigueVersModifierDiagnostic = (
+  route: '/aidant/diagnostic' | '/diagnostic'
+) => {
   const navigate = useNavigate();
   const navigationMAC = useNavigationMAC();
   const moteurDeLiens = new MoteurDeLiens(navigationMAC.etat);
@@ -93,8 +97,8 @@ export const useNavigueVersModifierDiagnostic = () => {
       });
     }
 
-    const route = `/diagnostic/${idDiagnostic}`;
-    navigate(route);
+    const routeVersDiag = `${route}/${idDiagnostic}`;
+    navigate(routeVersDiag);
   };
   return {
     navigue,

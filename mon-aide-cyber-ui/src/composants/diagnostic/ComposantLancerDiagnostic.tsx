@@ -151,7 +151,7 @@ export const ComposantLancerDiagnostic = ({
   const { showBoundary } = useErrorBoundary();
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
-  const { navigue } = useNavigueVersModifierDiagnostic();
+  const { navigue } = useNavigueVersModifierDiagnostic('/aidant/diagnostic');
 
   const { affiche, ferme } = useModale();
 
@@ -184,8 +184,6 @@ export const ComposantLancerDiagnostic = ({
   }, [navigationMAC.etat, lanceDiagnostic]);
 
   const afficherModale = () => {
-    console.log('affiche modale');
-
     affiche({
       titre: 'Prérequis à la réalisation du diagnostic',
       corps: (
