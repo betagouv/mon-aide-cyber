@@ -1,72 +1,71 @@
 @import './../../../../assets/styles/points-de-rupture';
 
 .ecran-mes-preferences {
+  display: flex;
+  flex-direction: column;
+
+  section {
+    padding: 3rem 7.5rem 3rem 4.25rem;
+  }
+
+  form {
     display: flex;
     flex-direction: column;
-  
-    section {
-      padding: 3rem 7.5rem 3rem 4.25rem;
+    gap: 2rem;
+  }
+
+  .boutons-tout-selectionner-conteneur {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .grille-preferences {
+    display: grid;
+    grid-auto-flow: column;
+    column-gap: 1.5rem;
+    row-gap: .5rem;
+
+    &.deux-colonnes {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(12, 1fr);
     }
 
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
+    &.trois-colonnes {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(38, 1fr);
     }
+  }
 
-    .boutons-tout-selectionner-conteneur {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-
-    .grille-preferences {
-        display: grid;
-        grid-auto-flow: column;
-        column-gap: 1.5rem;
-        row-gap: .5rem;
-
-        &.deux-colonnes {
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(12, 1fr);
-        }
-
-        &.trois-colonnes {
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(38, 1fr);
-            row-gap: 0;
-        }
-    }
-
-    .grille-preferences-types-entites {
-        display: grid;
-        grid-auto-flow: column;
-        row-gap: .5rem;
-        grid-template-columns: repeat(1, 1fr);
-        grid-template-rows: repeat(3, 1fr);
-    }
+  .grille-preferences-types-entites {
+    display: grid;
+    grid-auto-flow: column;
+    row-gap: .5rem;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+  }
 }
 
 .section-preference-formulaire {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .champ-case-a-cocher-conteneur {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 
-    input[type=checkbox] {
-        width: 1.5rem;
-        height: 1.5rem;
-        border-radius: .25rem;
-        background-size: .25rem .25rem, calc(100% - .25rem) 1px, .25rem .25rem, 1px calc(100% - .5rem), .25rem .25rem, calc(100% - .5rem) 1px, .25rem .25rem, 1px calc(100% - .5rem), 1rem !important;
-        background-position: 0 0, .25rem 0, 100% 0, 0 .25rem, 100% 100%, calc(100% - .25rem) 100%, 0 100%, 100% .25rem, center !important;
-        background-repeat: no-repeat;
-        background-image: radial-gradient(at 5px 4px, transparent 4px, var(--couleurs-mac-violet-fonce) 4px, var(--couleurs-mac-violet-fonce) 5px, transparent 6px), linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)), radial-gradient(at calc(100% - 5px) 4px, transparent 4px, var(--couleurs-mac-violet-fonce) 4px, var(--couleurs-mac-violet-fonce) 5px, transparent 6px), linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)), radial-gradient(at calc(100% - 5px) calc(100% - 4px), transparent 4px, var(--couleurs-mac-violet-fonce) 4px, var(--couleurs-mac-violet-fonce) 5px, transparent 6px), linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)), radial-gradient(at 5px calc(100% - 4px), transparent 4px, var(--couleurs-mac-violet-fonce) 4px, var(--couleurs-mac-violet-fonce) 5px, transparent 6px), linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)), var(--data-uri-svg) !important;
-        }
+  input[type=checkbox] {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: .25rem;
+    background-size: .25rem .25rem, calc(100% - .25rem) 1px, .25rem .25rem, 1px calc(100% - .5rem), .25rem .25rem, calc(100% - .5rem) 1px, .25rem .25rem, 1px calc(100% - .5rem), 1rem !important;
+    background-position: 0 0, .25rem 0, 100% 0, 0 .25rem, 100% 100%, calc(100% - .25rem) 100%, 0 100%, 100% .25rem, center !important;
+    background-repeat: no-repeat;
+    background-image: radial-gradient(at 5px 4px, transparent 4px, var(--couleurs-mac-violet-fonce) 4px, var(--couleurs-mac-violet-fonce) 5px, transparent 6px), linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)), radial-gradient(at calc(100% - 5px) 4px, transparent 4px, var(--couleurs-mac-violet-fonce) 4px, var(--couleurs-mac-violet-fonce) 5px, transparent 6px), linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)), radial-gradient(at calc(100% - 5px) calc(100% - 4px), transparent 4px, var(--couleurs-mac-violet-fonce) 4px, var(--couleurs-mac-violet-fonce) 5px, transparent 6px), linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)), radial-gradient(at 5px calc(100% - 4px), transparent 4px, var(--couleurs-mac-violet-fonce) 4px, var(--couleurs-mac-violet-fonce) 5px, transparent 6px), linear-gradient(var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce)), var(--data-uri-svg) !important;
+  }
 }
 
 /*.fr-checkbox-group input[type=checkbox]+label {
@@ -74,11 +73,11 @@
 }*/
 
 .mac-checkbox {
-    
-    .mac-checkbox-box {
-        display: flex;
-        justify-content: center;
-        align-items: center;        
-    }
+
+  .mac-checkbox-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
 }

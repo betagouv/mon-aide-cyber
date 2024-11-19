@@ -22,6 +22,7 @@ import { EcranReinitialiserMotDePasse } from './domaine/vitrine/reinitialiser-mo
 import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { EcranDiagnostic } from './composants/diagnostic/EcranDiagnostic.tsx';
 import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
+import { EcranDemandeAutodiagnostic } from './domaine/gestion-demandes/demande-autodiagnostic/EcranDemandeAutodiagnostic.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -64,6 +65,12 @@ export const RouteurPublic = () => {
         element={<LayoutPublic afficheNavigation={false} />}
       >
         <Route index element={<EcranConnexion />} />
+      </Route>
+      <Route
+        path="/demande-autodiagnostic"
+        element={<LayoutPublic afficheNavigation={false} />}
+      >
+        <Route index element={<EcranDemandeAutodiagnostic />} />
       </Route>
       <Route
         path="/utilisateur"
