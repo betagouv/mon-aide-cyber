@@ -368,10 +368,15 @@ class ConstructeurActionsHATEOAS {
   }
 
   private modifierProfil(): ConstructeurActionsHATEOAS {
-    this.actions.set('modifier-profil', {
-      url: '/api/profil',
-      methode: 'PATCH',
-    });
+    if (
+      process.env.FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL ===
+      'true'
+    ) {
+      this.actions.set('modifier-profil', {
+        url: '/api/profil',
+        methode: 'PATCH',
+      });
+    }
     return this;
   }
 
