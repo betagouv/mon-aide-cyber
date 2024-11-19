@@ -21,7 +21,7 @@ export const demandeInitieAutoDiagnostic = (
     }
   })();
 
-export const unTupleEntiteInitieAutoDiagnostic = (
+const unTupleEntiteInitieAutoDiagnostic = (
   identifiantDemande: crypto.UUID,
   identifiantDiagnostic: crypto.UUID
 ): Tuple =>
@@ -32,13 +32,13 @@ export const unTupleEntiteInitieAutoDiagnostic = (
     .avecObjet(identifiantDiagnostic)
     .construis();
 
-export type DefinitionEntiteInitieAutoDiagnostic = DefinitionTuple & {
+type DefinitionEntiteInitieAutoDiagnostic = DefinitionTuple & {
   relation: 'initiateur';
   typeObjet: 'auto-diagnostic';
   typeUtilisateur: 'entité';
 };
 
-export const definitionEntiteInitieAutoDiagnostic: {
+const definitionEntiteInitieAutoDiagnostic: {
   definition: DefinitionEntiteInitieAutoDiagnostic;
 } = {
   definition: {
