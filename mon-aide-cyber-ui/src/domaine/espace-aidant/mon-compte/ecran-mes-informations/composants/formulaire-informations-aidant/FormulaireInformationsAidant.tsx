@@ -4,8 +4,8 @@ import { useFormulaireInformationsAidant } from './useFormulaireInformationsAida
 import Button from '../../../../../../composants/atomes/Button/Button';
 import { ChampCaseACocher } from '../../../../../../composants/communs/ChampCaseACocher/ChampCaseACocher';
 import { Toast } from '../../../../../../composants/communs/Toasts/Toast';
-import { useFeatureFlag } from '../../../../../../hooks/useFeatureFlag';
 import { MACAPIType } from '../../../../../../fournisseurs/api/useMACAPI.ts';
+import { useMoteurDeLiens } from '../../../../../../hooks/useMoteurDeLiens.ts';
 
 type ProprietesFormulaireInformationsAidant = {
   macAPI: MACAPIType;
@@ -14,9 +14,8 @@ type ProprietesFormulaireInformationsAidant = {
 export const FormulaireInformationsAidant = ({
   macAPI,
 }: ProprietesFormulaireInformationsAidant) => {
-  const { estFonctionaliteActive } = useFeatureFlag(
-    'ESPACE_AIDANT_ECRAN_MES_PREFERENCES'
-  );
+  const { accedeALaRessource } = useMoteurDeLiens('modifier-profil');
+
   const { etatProfil, declencheActionReducteur, enregistreProfil } =
     useFormulaireInformationsAidant(macAPI);
   const [
@@ -109,7 +108,7 @@ export const FormulaireInformationsAidant = ({
         <div className="fr-mt-2w fr-mb-2w">
           Compte Crée le {etatProfil.dateCreationCompte}
         </div>
-        {estFonctionaliteActive ? (
+        {accedeALaRessource ? (
           <>
             <div className="fr-mt-2w fr-mb-2w fr-checkbox-group mac-radio-group">
               <ChampCaseACocher

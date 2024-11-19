@@ -27,6 +27,9 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
   describe('quand une requête GET est reçue sur /', () => {
     it("retourne les informations le l'Aidant", async () => {
+      process.env.FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL =
+        'true';
+
       const { utilisateur, aidant } =
         await unCompteAidantRelieAUnCompteUtilisateur({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
