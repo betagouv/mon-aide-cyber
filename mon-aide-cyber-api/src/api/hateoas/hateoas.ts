@@ -8,6 +8,8 @@ export type ReponseHATEOAS = {
   liens: LiensHATEOAS;
 };
 
+export type ReponseHATEOASEnErreur = ReponseHATEOAS & { message: string };
+
 export type Options = { url: string; methode?: Methode; contentType?: string };
 
 type ContexteSpecifique = {
