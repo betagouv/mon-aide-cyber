@@ -13,6 +13,7 @@ import { RepresentationDiagnostic } from '../../../src/api/representateurs/types
 import { ReponseDiagnostic } from '../../../src/api/routesAPIDiagnostic';
 import { Diagnostic } from '../../../src/diagnostic/Diagnostic';
 import { LiensHATEOAS } from '../../../src/api/hateoas/hateoas';
+import { CorpsReponseCreerAutoDiagnosticEnErreur } from '../../../src/api/auto-diagnostic/routesAPIAutoDiagnostic';
 
 describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -36,7 +37,8 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
         donneesServeur.app,
         'POST',
         '/api/auto-diagnostic',
-        donneesServeur.portEcoute
+        donneesServeur.portEcoute,
+        { email: 'jean.dujardin@email.com', cguSignees: true }
       );
 
       expect(reponse.statusCode).toBe(201);
@@ -55,7 +57,8 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
         donneesServeur.app,
         'POST',
         '/api/auto-diagnostic',
-        donneesServeur.portEcoute
+        donneesServeur.portEcoute,
+        { email: 'jean.dupont@mail.com', cguSignees: true }
       );
 
       expect(
@@ -64,6 +67,54 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(reponse.headers['link']).toStrictEqual(
         `/api/auto-diagnostic/${idAutoDiagnostic}`
       );
+    });
+
+    describe('Lors de la phase de validation', () => {
+      it('Valide la présence de l’email', async () => {
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/auto-diagnostic',
+          donneesServeur.portEcoute,
+          { email: '', cguSignees: true }
+        );
+
+        expect(reponse.statusCode).toBe(422);
+        expect(
+          await reponse.json()
+        ).toStrictEqual<CorpsReponseCreerAutoDiagnosticEnErreur>({
+          message: 'Veuillez renseigner votre e-mail.',
+          liens: {
+            'creer-auto-diagnostic': {
+              url: '/api/auto-diagnostic',
+              methode: 'POST',
+            },
+          },
+        });
+      });
+
+      it('Valide la signature des CGU', async () => {
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/auto-diagnostic',
+          donneesServeur.portEcoute,
+          { email: 'jean.dupont@mail.com' }
+        );
+
+        expect(reponse.statusCode).toBe(422);
+        expect(
+          await reponse.json()
+        ).toStrictEqual<CorpsReponseCreerAutoDiagnosticEnErreur>({
+          message: 'Veuillez signer les CGU.',
+          liens: {
+            'creer-auto-diagnostic': {
+              url: '/api/auto-diagnostic',
+              methode: 'POST',
+            },
+          },
+        });
+      });
     });
   });
 

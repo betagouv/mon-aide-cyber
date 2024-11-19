@@ -6,10 +6,18 @@ import { SagaLanceAutoDiagnostic } from '../../auto-diagnostic/CapteurSagaLanceA
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { ServiceDiagnostic } from '../../diagnostic/ServiceDiagnostic';
 import { representeLeDiagnosticPourLeClient } from '../representateurs/representateurDiagnostic';
-import { ReponseHATEOAS } from '../hateoas/hateoas';
+import { ReponseHATEOAS, ReponseHATEOASEnErreur } from '../hateoas/hateoas';
 import { RepresentationDiagnostic } from '../representateurs/types';
+import {
+  FieldValidationError,
+  Result,
+  body,
+  validationResult,
+} from 'express-validator';
 
 type CorpsReponseAutoDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
+
+export type CorpsReponseCreerAutoDiagnosticEnErreur = ReponseHATEOASEnErreur;
 
 export const routesAPIAutoDiagnostic = (
   configuration: ConfigurationServeur
@@ -20,7 +28,35 @@ export const routesAPIAutoDiagnostic = (
 
   routes.post(
     '/',
-    (requete: Request, reponse: Response, _suite: NextFunction) => {
+    express.json(),
+    body('email')
+      .trim()
+      .isEmail()
+      .withMessage('Veuillez renseigner votre e-mail.'),
+    body('cguSignees')
+      .custom((value: boolean) => value)
+      .withMessage('Veuillez signer les CGU.'),
+    (
+      requete: Request,
+      reponse: Response<CorpsReponseCreerAutoDiagnosticEnErreur>,
+      _suite: NextFunction
+    ) => {
+      const resultatsValidation: Result<FieldValidationError> =
+        validationResult(requete) as Result<FieldValidationError>;
+      if (!resultatsValidation.isEmpty()) {
+        return reponse.status(422).json({
+          message: resultatsValidation
+            .array()
+            .map((resultatValidation) => resultatValidation.msg)
+            .join(', '),
+          liens: {
+            'creer-auto-diagnostic': {
+              methode: 'POST',
+              url: '/api/auto-diagnostic',
+            },
+          },
+        });
+      }
       return busCommande
         .publie<
           SagaLanceAutoDiagnostic,

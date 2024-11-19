@@ -1,7 +1,7 @@
 import { ConfigurationServeur } from '../../serveur';
 import express, { NextFunction, Request, Response, Router } from 'express';
 import crypto from 'crypto';
-import { ReponseHATEOAS } from '../hateoas/hateoas';
+import { ReponseHATEOASEnErreur } from '../hateoas/hateoas';
 import { EntrepotAidant } from '../../espace-aidant/Aidant';
 import {
   ExpressValidator,
@@ -23,9 +23,7 @@ type CorpsRequeteDemandeSolliciterAide = core.ParamsDictionary & {
   aidantSollicite: crypto.UUID;
 };
 
-export type ReponseDemandeSolliciterAideEnErreur = ReponseHATEOAS & {
-  message: string;
-};
+export type ReponseDemandeSolliciterAideEnErreur = ReponseHATEOASEnErreur;
 
 const validateurSollicitation = (entrepotAidant: EntrepotAidant) => {
   const { body } = new ExpressValidator({
