@@ -40,7 +40,7 @@ export const ComposantMenuUtilisateur = ({
           .construis(),
         (reponse) => reponse
       )
-      .then(() => navigationMAC.retourAccueil())
+      .then(() => window.location.replace('/connexion'))
       .catch((erreur) => showBoundary(erreur));
   }, [navigationMAC, resetBoundary, showBoundary]);
 
