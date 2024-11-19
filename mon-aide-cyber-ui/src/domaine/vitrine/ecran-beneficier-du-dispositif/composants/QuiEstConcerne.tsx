@@ -18,10 +18,10 @@ export const QuiEstConcerne = () => {
         </TypographieH4>
         <p>
           Le dispositif s’adresse aux entités privées comme publiques, de toute
-          taille. Elles sont déjà sensibilisées au risque cyber et souhaitent
-          s’engager dans une première démarche de renforcement de leur sécurité
-          numérique. Le dispositif est à l’inverse inadapté pour les entités
-          jugées “matures”, aux entreprises mono-salariés et auto-entrepreneurs.
+          taille. À l’inverse, il n’est pas adapté aux entreprises mono-salariés
+          et aux auto-entrepreneurs, ainsi qu’aux entités jugées d’un bon niveau
+          de maturité cyber (exemple : entité ayant déjà menée des audits de
+          cybersécurité ou disposant des ressources cyber en interne).
         </p>
 
         <Link to="#formulaire-demande-aide">
