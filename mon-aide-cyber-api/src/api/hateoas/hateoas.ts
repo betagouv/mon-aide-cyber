@@ -108,6 +108,15 @@ class ConstructeurActionsDepuisContexte {
         },
       },
     ],
+    [
+      'creer-auto-diagnostic',
+      {
+        'creer-auto-diagnostic': {
+          methode: 'POST',
+          url: '/api/auto-diagnostic',
+        },
+      },
+    ],
   ]);
   private readonly actions: Map<string, Options> = new Map();
 
