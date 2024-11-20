@@ -140,12 +140,36 @@ export const lesContextesUtilisateursExistants = [
     },
   },
   {
-    contexte: 'Créer un auto diagnostic',
-    informationContexte: { contexte: 'creer-auto-diagnostic' },
+    contexte: 'Créer un diagnostic depuis l’outil',
+    informationContexte: { contexte: 'utiliser-outil-diagnostic:creer' },
     liens: {
-      'creer-auto-diagnostic': {
+      'creer-diagnostic': {
         methode: 'POST',
         url: '/api/auto-diagnostic',
+      },
+    },
+  },
+  {
+    contexte: 'Afficher un diagnostic depuis l’outil',
+    informationContexte: {
+      contexte: `utiliser-outil-diagnostic:afficher:d01dd2da-7ddb-475c-8149-46288fc29493`,
+    },
+    liens: {
+      'afficher-diagnostic-d01dd2da-7ddb-475c-8149-46288fc29493': {
+        methode: 'GET',
+        url: '/api/auto-diagnostic/d01dd2da-7ddb-475c-8149-46288fc29493/restitution',
+      },
+    },
+  },
+  {
+    contexte: 'Afficher un autre diagnostic depuis l’outil',
+    informationContexte: {
+      contexte: `utiliser-outil-diagnostic:afficher:d01dd2da-7ddb-475c-8149-46288fc29492`,
+    },
+    liens: {
+      'afficher-diagnostic-d01dd2da-7ddb-475c-8149-46288fc29492': {
+        methode: 'GET',
+        url: '/api/auto-diagnostic/d01dd2da-7ddb-475c-8149-46288fc29492/restitution',
       },
     },
   },

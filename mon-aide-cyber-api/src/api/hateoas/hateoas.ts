@@ -1,6 +1,10 @@
 import crypto from 'crypto';
 import { InformationsContexte } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
 import { UtilisateurAuthentifie } from '../../authentification/Utilisateur';
+import {
+  ContexteSpecifique,
+  contextesUtilisateur,
+} from './contextesUtilisateur';
 
 type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
 export type LiensHATEOAS = Record<string, Options>;
@@ -11,13 +15,6 @@ export type ReponseHATEOAS = {
 export type ReponseHATEOASEnErreur = ReponseHATEOAS & { message: string };
 
 export type Options = { url: string; methode?: Methode; contentType?: string };
-
-type ContexteSpecifique = {
-  [clef: string]: Options;
-};
-type ContexteGeneral = {
-  [clef: string]: ContexteSpecifique | Options;
-};
 
 const estInformationContexte = (
   informationsContexte: InformationsContexte | undefined
@@ -30,103 +27,25 @@ const estOption = (option: Options | ContexteSpecifique): option is Options => {
 };
 
 class ConstructeurActionsDepuisContexte {
-  private readonly contextes: Map<string, ContexteGeneral> = new Map([
-    [
-      'demande-devenir-aidant',
-      {
-        'finalise-creation-espace-aidant': {
-          'finalise-creation-espace-aidant': {
-            url: '/api/demandes/devenir-aidant/creation-espace-aidant',
-            methode: 'POST',
-          },
-        },
-        'demande-devenir-aidant': {
-          'envoyer-demande-devenir-aidant': {
-            url: '/api/demandes/devenir-aidant',
-            methode: 'POST',
-          },
-          'demande-devenir-aidant': {
-            url: '/api/demandes/devenir-aidant',
-            methode: 'GET',
-          },
-        },
-      },
-    ],
-    [
-      'demande-etre-aide',
-      {
-        'demande-etre-aide': {
-          url: '/api/demandes/etre-aide',
-          methode: 'GET',
-        },
-        'demander-aide': {
-          url: '/api/demandes/etre-aide',
-          methode: 'POST',
-        },
-      },
-    ],
-    [
-      'solliciter-aide',
-      {
-        'solliciter-aide': {
-          url: '/api/demandes/solliciter-aide',
-          methode: 'POST',
-        },
-      },
-    ],
-    [
-      'se-connecter',
-      { 'se-connecter': { url: '/api/token', methode: 'POST' } },
-    ],
-    [
-      'afficher-statistiques',
-      { 'afficher-statistiques': { url: '/statistiques', methode: 'GET' } },
-    ],
-    [
-      'afficher-annuaire-aidants',
-      {
-        'afficher-annuaire-aidants': {
-          url: '/api/annuaire-aidants',
-          methode: 'GET',
-        },
-      },
-    ],
-    [
-      'reinitialisation-mot-de-passe',
-      {
-        'reinitialiser-mot-de-passe': {
-          'reinitialiser-mot-de-passe': {
-            url: '/api/utilisateur/reinitialiser-mot-de-passe',
-            methode: 'PATCH',
-          },
-        },
-        'reinitialisation-mot-de-passe': {
-          'reinitialisation-mot-de-passe': {
-            url: '/api/utilisateur/reinitialisation-mot-de-passe',
-            methode: 'POST',
-          },
-        },
-      },
-    ],
-    [
-      'creer-auto-diagnostic',
-      {
-        'creer-auto-diagnostic': {
-          methode: 'POST',
-          url: '/api/auto-diagnostic',
-        },
-      },
-    ],
-  ]);
   private readonly actions: Map<string, Options> = new Map();
 
   constructor(informationsContexte: InformationsContexte) {
     const contextes = informationsContexte.contexte.split(':');
-    const options = this.contextes.get(contextes[0]);
+    const options = contextesUtilisateur[contextes[0]];
     if (options) {
       if (contextes[1]) {
-        Object.entries(options[contextes[1]]).forEach(([clef, opt]) =>
-          this.actions.set(clef, opt)
+        Object.entries(options[contextes[1]]).forEach(
+          ([clef, opt]: [clef: string, opt: Options]) => {
+            let option: Options = { ...opt };
+            if (contextes[2]) {
+              clef = `afficher-diagnostic-${contextes[2]}`;
+              option = {
+                url: opt.url.replace('__ID__', contextes[2]),
+                methode: opt.methode,
+              } as Options;
+            }
+            this.actions.set(clef, option);
+          }
         );
       } else {
         Object.entries(options)
