@@ -1,0 +1,79 @@
+@import './../../assets/styles/points-de-rupture';
+
+.footer-logos {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-areas: "logo1 logo1"
+  "logo2 logo3"
+  "logo4 logo5";
+  gap: 3rem;
+
+  @include a-partir-de(md) {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-areas: "logo1 logo1 logo1 logo2 logo2 logo2"
+    "logo3 logo3 logo4 logo4 logo5 logo5";
+    column-gap: 95px;
+  }
+
+  @include a-partir-de(lg) {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-areas: "logo1 logo1 logo2 logo3 logo4 logo5";
+    column-gap: 95px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo1 {
+    grid-area: logo1;
+  }
+
+  .logo2 {
+    grid-area: logo2;
+  }
+
+  .logo3 {
+    grid-area: logo3;
+  }
+
+  .logo4 {
+    grid-area: logo4;
+  }
+
+  .logo5 {
+    grid-area: logo5;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  a[href] {
+    background-image: unset;
+    background-position: unset;
+    background-repeat: unset;
+    background-size: unset;
+    transition: unset;
+  }
+
+  [target='_blank']:after {
+    background-color: unset;
+  }
+}
