@@ -1,64 +1,61 @@
 import { LiensFooter } from './LiensFooter.tsx';
+import './footer-layout.scss';
 
 export const Footer = () => (
   <footer role="contentinfo" id="footer">
-    <div className="piedpage-mac fr-container">
-      <div className="piedpage-mac-logos fr-grid-row fr-grid-row--middle">
-        <div className="fr-col-md-2 fr-col-sm-12">
-          <a href="https://www.ssi.gouv.fr/" target="_blank" rel="noreferrer">
-            {' '}
-            <img src="/images/logo_anssi.svg" alt="ANSSI" />
-          </a>
-        </div>
-        <div className="fr-col-md-2 fr-col-sm-12">
-          <a
-            href="https://www.gendarmerie.interieur.gouv.fr/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {' '}
-            <img
-              id="logo-gendarmerie-nationale"
-              src="/images/logo_gendarmerie_nationale.svg"
-              alt="Gendarmerie Nationale"
-            />
-          </a>
-        </div>
-        <div className="fr-col-md-2 fr-col-sm-12">
-          <a href="https://www.cnil.fr" target="_blank" rel="noreferrer">
-            {' '}
-            <img src="/images/logo_cnil.svg" alt="CNIL" />
-          </a>
-        </div>
-        <div className="fr-col-md-2 fr-col-sm-12">
-          <a
-            href="https://www.cybermalveillance.gouv.fr/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {' '}
-            <img
-              id="logo-acyma"
-              src="/images/logo_acyma.svg"
-              alt="CyberMalveillance"
-            />
-          </a>
-        </div>
-        <div className="fr-col-md-2 fr-col-sm-12">
-          <a
-            href="https://www.police-nationale.interieur.gouv.fr/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {' '}
-            <img
-              src="/images/logo_police_nationale.svg"
-              alt="Police Nationale"
-            />
-          </a>
-        </div>
+    <section className="fr-container">
+      <div className="footer-logos">
+        <a
+          className="logo logo1"
+          href="https://www.interieur.gouv.fr/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src="/images/logo_comcybermi.svg" alt="Logo de COMCYBER-MI" />
+        </a>
+        <a
+          className="logo logo2"
+          href="https://www.gendarmerie.interieur.gouv.fr/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img
+            src="/images/logo_gendarmerie_nationale.svg"
+            alt="Logo de la Gendarmerie Nationale"
+          />
+        </a>
+        <a
+          className="logo logo3"
+          href="https://www.cnil.fr"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img
+            src="/images/logo_cnil.svg"
+            alt="Logo de la Commission Nationale de l’Informatique et des Libertés"
+          />
+        </a>
+        <a
+          className="logo logo4"
+          href="https://www.cybermalveillance.gouv.fr/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src="/images/logo_acyma.svg" alt="Logo de CyberMalveillance" />
+        </a>
+        <a
+          className="logo logo5"
+          href="https://www.police-nationale.interieur.gouv.fr/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img
+            src="/images/logo_police_nationale.svg"
+            alt="Logo de la Police Nationale"
+          />
+        </a>
       </div>
-    </div>
+    </section>
     <div className="fr-footer">
       <div className="fr-container">
         <div className="fr-footer__body">
@@ -69,6 +66,18 @@ export const Footer = () => (
                 République <br />
                 Française
               </p>
+            </a>
+            <a
+              className="fr-footer__brand-link"
+              href="/"
+              title="Retour à l'accueil du site - MonAideCyber"
+            >
+              <img
+                style={{ width: '120px', marginLeft: '2rem' }}
+                className="fr-responsive-img"
+                src="/images/logo_anssi.svg"
+                alt="ANSSI"
+              />
             </a>
           </div>
           <div className="fr-footer__content">
