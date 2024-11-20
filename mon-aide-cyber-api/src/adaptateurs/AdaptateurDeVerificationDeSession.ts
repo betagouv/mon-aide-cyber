@@ -1,8 +1,9 @@
 import { RequestHandler } from 'express';
 import { Contexte } from '../domaine/erreurMAC';
+import { ContextesUtilisateur } from '../api/hateoas/contextesUtilisateur';
 
 export type InformationsContexte = {
-  contexte: string;
+  contexte: keyof ContextesUtilisateur;
 };
 export interface AdaptateurDeVerificationDeSession {
   verifie(contexte: Contexte): RequestHandler;

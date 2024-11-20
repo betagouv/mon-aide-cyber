@@ -71,7 +71,7 @@ export const routesAPIAutoDiagnostic = (
             .map((resultatValidation) => resultatValidation.msg)
             .join(', '),
           ...constructeurActionsHATEOAS()
-            .pour({ contexte: 'creer-auto-diagnostic' })
+            .pour({ contexte: 'utiliser-outil-diagnostic:creer' })
             .construis(),
         });
       }
@@ -113,6 +113,10 @@ export const routesAPIAutoDiagnostic = (
                 url: `/api/auto-diagnostic/${diagnostic.identifiant}`,
                 methode: 'PATCH',
               },
+              [`afficher-diagnostic-${diagnostic.identifiant}`]: {
+                url: `/api/auto-diagnostic/${diagnostic.identifiant}/restitution`,
+                methode: 'GET',
+              },
             },
           })
         )
@@ -150,6 +154,10 @@ export const routesAPIAutoDiagnostic = (
               'repondre-diagnostic': {
                 url: `/api/auto-diagnostic/${diagnostic.identifiant}`,
                 methode: 'PATCH',
+              },
+              [`afficher-diagnostic-${diagnostic.identifiant}`]: {
+                url: `/api/auto-diagnostic/${diagnostic.identifiant}/restitution`,
+                methode: 'GET',
               },
             },
           });
