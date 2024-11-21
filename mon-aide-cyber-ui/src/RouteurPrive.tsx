@@ -1,14 +1,10 @@
 import { Suspense } from 'react';
 import './assets/styles/index.scss';
 import { Route, Routes } from 'react-router-dom';
-import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
-import { EcranDiagnostic } from './composants/diagnostic/EcranDiagnostic.tsx';
 import { RequiertAuthentification } from './fournisseurs/RequiertAuthentification.tsx';
-import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
 import { LayoutAidant } from './composants/layout/layout-aidant/LayoutAidant.tsx';
-import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { EcranCreationEspaceAidant } from './domaine/espace-aidant/creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { EcranDiagnostics } from './domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
 import { EcranMesPreferences } from './domaine/espace-aidant/mon-compte/ecran-mes-preferences/EcranMesPreferences.tsx';
@@ -44,18 +40,6 @@ export const RouteurPrive = () => {
             </Suspense>
           }
         >
-          <Route element={<LayoutDiagnostic />}>
-            <Route
-              path="diagnostic/:idDiagnostic"
-              element={<ComposantIntercepteur composant={EcranDiagnostic} />}
-            ></Route>
-            <Route
-              path="diagnostic/:idDiagnostic/restitution"
-              element={
-                <ComposantIntercepteur composant={ComposantRestitution} />
-              }
-            ></Route>
-          </Route>
           <Route element={<LayoutAidant />}>
             {/* @todo remettre cette route quand TDB développé <Route path="/tableau-de-bord" element={<TableauDeBord />}></Route>*/}
             <Route

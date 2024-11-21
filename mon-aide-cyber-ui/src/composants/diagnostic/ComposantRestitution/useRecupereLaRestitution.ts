@@ -29,7 +29,7 @@ export const useRecupereLaRestitution = (idDiagnostic: UUID) => {
         (reponse) => reponse
       );
 
-      navigationMAC.setEtat(new MoteurDeLiens(restitution.liens).extrais());
+      navigationMAC.setEtat(restitution.liens);
       envoie(restitutionChargee(restitution));
     } catch (error) {
       showBoundary(error);

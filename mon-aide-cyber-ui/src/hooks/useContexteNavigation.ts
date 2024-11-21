@@ -1,6 +1,4 @@
 import { useCallback } from 'react';
-
-import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
 import { ReponseHATEOAS } from '../domaine/Lien.ts';
 import { useNavigationMAC } from '../fournisseurs/hooks.ts';
 import {
@@ -30,9 +28,7 @@ export const useContexteNavigation = (appelMacAPI?: {
           (json) => json
         )
         .catch((erreur) => {
-          navigationMAC.setEtat(
-            new MoteurDeLiens((erreur as ReponseHATEOAS).liens).extrais()
-          );
+          navigationMAC.setEtat((erreur as ReponseHATEOAS).liens);
         });
     },
     []

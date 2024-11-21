@@ -1,16 +1,18 @@
 import { Lien } from '../../../domaine/Lien';
 import { useCallback, useEffect, useState } from 'react';
-import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens';
+import { MoteurDeLiens, ROUTE_AIDANT } from '../../../domaine/MoteurDeLiens';
 import { useNavigationMAC } from '../../../fournisseurs/hooks';
 import { rubriqueConsultee } from '../../../domaine/diagnostic/reducteurRestitution';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
 import { UUID } from '../../../types/Types';
 import { useRecupereLaRestitution } from './useRecupereLaRestitution';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
+import { useNavigueVersModifierDiagnostic } from '../../../fournisseurs/ContexteNavigationMAC.tsx';
 
 export const useComposantRestitution = (idDiagnostic: UUID) => {
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
+  const { navigue } = useNavigueVersModifierDiagnostic();
 
   const { etatRestitution, envoie } = useRecupereLaRestitution(idDiagnostic);
 
@@ -63,10 +65,7 @@ export const useComposantRestitution = (idDiagnostic: UUID) => {
   }, []);
 
   const modifierLeDiagnostic = useCallback(() => {
-    return navigationMAC.navigue(
-      new MoteurDeLiens(etatRestitution.restitution!.liens),
-      'modifier-diagnostic'
-    );
+    navigue(etatRestitution.restitution!.liens['modifier-diagnostic']);
   }, [etatRestitution, navigationMAC]);
 
   const telechargerRestitution = useCallback(() => {
@@ -99,12 +98,14 @@ export const useComposantRestitution = (idDiagnostic: UUID) => {
   const navigueVersTableauDeBord = useCallback(() => {
     const liens = etatRestitution.restitution!.liens;
     const moteurDeLiens = new MoteurDeLiens(liens);
-    navigationMAC.navigue(moteurDeLiens, 'lancer-diagnostic', [
-      'modifier-diagnostic',
-      'restitution-pdf',
-      'restitution-json',
-    ]);
-  }, [etatRestitution.restitution, navigationMAC]);
+    if (moteurDeLiens.existe('lancer-diagnostic')) {
+      navigationMAC.navigue(`${ROUTE_AIDANT}/tableau-de-bord`, liens, [
+        'modifier-diagnostic',
+        'restitution-pdf',
+        'restitution-json',
+      ]);
+    }
+  }, [etatRestitution.restitution, navigationMAC.etat]);
 
   return {
     etatRestitution,

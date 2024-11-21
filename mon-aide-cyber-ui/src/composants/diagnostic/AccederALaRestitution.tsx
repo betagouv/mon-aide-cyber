@@ -1,7 +1,7 @@
 import { UUID } from '../../types/Types.ts';
 import { useCallback } from 'react';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import { useNavigueVersLaRestitution } from '../../fournisseurs/ContexteNavigationMAC.tsx';
 
 export const AccederALaRestitution = ({
   idDiagnostic,
@@ -11,13 +11,11 @@ export const AccederALaRestitution = ({
   surAnnuler: () => void;
 }) => {
   const navigationMAC = useNavigationMAC();
+  const { navigue } = useNavigueVersLaRestitution();
 
   const surQuitterLeDiagnostic = useCallback(() => {
     surAnnuler();
-    navigationMAC.navigue(
-      new MoteurDeLiens(navigationMAC.etat),
-      `afficher-diagnostic-${idDiagnostic}`
-    );
+    navigue(idDiagnostic);
   }, [idDiagnostic, navigationMAC, surAnnuler]);
   return (
     <>

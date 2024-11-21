@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
-import { MoteurDeLiens } from '../MoteurDeLiens.ts';
+import { MoteurDeLiens, ROUTE_AIDANT } from '../MoteurDeLiens.ts';
 import { FormulaireAuthentification } from '../authentification/FormulaireAuthentification.tsx';
 import illustrationSecuritePostesSvg from '../../../public/images/illustration-securite-des-postes.svg';
 import './ecran-connexion.scss';
@@ -19,7 +19,10 @@ export const EcranConnexion = () => {
   useEffect(() => {
     const moteurDeLiens = new MoteurDeLiens(navigationMAC.etat);
     moteurDeLiens.trouve('creer-espace-aidant', () =>
-      navigationMAC.navigue(moteurDeLiens, 'creer-espace-aidant')
+      navigationMAC.navigue(
+        `${ROUTE_AIDANT}/finalise-creation-espace-aidant`,
+        navigationMAC.etat
+      )
     );
   }, [navigationMAC.etat]);
 

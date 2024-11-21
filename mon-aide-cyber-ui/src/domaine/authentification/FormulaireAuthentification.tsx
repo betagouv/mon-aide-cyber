@@ -8,7 +8,7 @@ import {
   reducteurAuthentification,
   saisieInvalidee,
 } from './reducteurAuthentification.tsx';
-import { MoteurDeLiens } from '../MoteurDeLiens.ts';
+import { MoteurDeLiens, ROUTE_AIDANT } from '../MoteurDeLiens.ts';
 import { Lien } from '../Lien.ts';
 import { ReponseAuthentification } from './Authentification.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
@@ -85,15 +85,14 @@ export const ComposantAuthentification = ({
                 moteurDeLiens.trouve(
                   'afficher-tableau-de-bord',
                   () =>
-                    navigationMAC.navigue(
-                      moteurDeLiens,
-                      'afficher-tableau-de-bord'
-                    ),
+                    navigationMAC.navigue(`${ROUTE_AIDANT}/tableau-de-bord`, {
+                      ...reponse.liens,
+                    }),
                   () =>
                     moteurDeLiens.trouve('creer-espace-aidant', () =>
                       navigationMAC.navigue(
-                        moteurDeLiens,
-                        'creer-espace-aidant'
+                        `${ROUTE_AIDANT}/finalise-creation-espace-aidant`,
+                        { ...reponse.liens }
                       )
                     )
                 );

@@ -1,6 +1,5 @@
 import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
 import { Action, Liens } from '../domaine/Lien.ts';
-import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
 import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { MemoryRouter } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -26,11 +25,7 @@ export const decorateurComposantDiagnostic = (
             methode: 'PATCH',
           },
         },
-        navigue: (
-          _moteurDeLiens: MoteurDeLiens,
-          _action: Action,
-          _exclusion?: Action[]
-        ) => ({}),
+        navigue: (_route: string, _liens: Liens, _exclusion?: Action[]) => ({}),
         retourAccueil: () => null,
       }}
     >
