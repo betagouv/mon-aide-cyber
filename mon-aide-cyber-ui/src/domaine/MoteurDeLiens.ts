@@ -29,14 +29,6 @@ export class MoteurDeLiens {
       Object.entries(actionsStatiques)
         .filter(([clef]) => clef === action)
         .forEach(([, valeur]) => valeur.applique(lien));
-      if (action?.startsWith('afficher-diagnostic-')) {
-        lien.route = `${ROUTE_AIDANT}/diagnostic/${action
-          .split('afficher-diagnostic-')
-          .at(-1)}/restitution`;
-      }
-      if (action === 'modifier-diagnostic') {
-        lien.route = `${ROUTE_AIDANT}/diagnostic/${lien?.url.split('/').at(-1)}`;
-      }
     });
   }
 
@@ -71,17 +63,5 @@ export class MoteurDeLiens {
       .map(([, lien]) => lien)[0];
 
     return lien;
-  }
-
-  extrais(exclusion?: (Action | string)[]): Liens {
-    return Object.entries(this.liens)
-      .filter(([lien]) => !exclusion?.includes(lien))
-      .reduce(
-        (accumulateur, [action, lien]) => ({
-          ...accumulateur,
-          [action]: lien,
-        }),
-        {}
-      );
   }
 }

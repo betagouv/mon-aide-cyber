@@ -108,10 +108,7 @@ export const ComposantCreationEspaceAidant = ({
   }, []);
 
   const jeMeConnecte = useCallback(() => {
-    navigationMAC.navigue(
-      new MoteurDeLiens(navigationMAC.etat),
-      'se-connecter'
-    );
+    navigationMAC.navigue('/connexion', navigationMAC.etat);
   }, [navigationMAC]);
 
   return (

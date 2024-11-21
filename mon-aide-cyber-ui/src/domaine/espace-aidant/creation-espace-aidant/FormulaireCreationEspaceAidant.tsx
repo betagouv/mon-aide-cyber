@@ -8,7 +8,7 @@ import {
   reducteurCreationEspaceAidant,
 } from './reducteurCreationEspaceAidant.tsx';
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
-import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
+import { MoteurDeLiens, ROUTE_AIDANT } from '../../MoteurDeLiens.ts';
 import { Lien, ReponseHATEOAS } from '../../Lien.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { CreationEspaceAidant } from '../EspaceAidant.ts';
@@ -62,8 +62,8 @@ export const ComposantCreationEspaceAidant = ({
             .then((reponse) => {
               envoie(creationEspaceAidantTransmise());
               navigationMAC.navigue(
-                new MoteurDeLiens(reponse.liens),
-                'lancer-diagnostic',
+                `${ROUTE_AIDANT}/tableau-de-bord`,
+                reponse.liens,
                 ['creer-espace-aidant']
               );
             })
@@ -72,8 +72,8 @@ export const ComposantCreationEspaceAidant = ({
       },
       () =>
         navigationMAC.navigue(
-          new MoteurDeLiens(navigationMAC.etat),
-          'lancer-diagnostic'
+          `${ROUTE_AIDANT}/tableau-de-bord`,
+          navigationMAC.etat
         )
     );
   }, [navigationMAC, etatCreationEspaceAidant]);

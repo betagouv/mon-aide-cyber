@@ -19,6 +19,9 @@ import { EcranConnexion } from './domaine/connexion/EcranConnexion.tsx';
 import { EcranAidant } from './domaine/vitrine/ecran-annuaire/ecran-aidant/EcranAidant.tsx';
 import { EcranMotDePasseOublie } from './domaine/vitrine/mot-de-passe-oublie/EcranMotDePasseOublie.tsx';
 import { EcranReinitialiserMotDePasse } from './domaine/vitrine/reinitialiser-mot-de-passe/EcranReinitialiserMotDePasse.tsx';
+import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
+import { EcranDiagnostic } from './composants/diagnostic/EcranDiagnostic.tsx';
+import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -45,6 +48,16 @@ export const RouteurPublic = () => {
           element={<ComposantDemandeDevenirAidant />}
         />
         <Route path="mentions-legales" element={<MentionsLegales />} />
+      </Route>
+      <Route path="/diagnostic" element={<LayoutDiagnostic />}>
+        <Route
+          path=":idDiagnostic"
+          element={<ComposantIntercepteur composant={EcranDiagnostic} />}
+        ></Route>
+        <Route
+          path=":idDiagnostic/restitution"
+          element={<ComposantIntercepteur composant={ComposantRestitution} />}
+        ></Route>
       </Route>
       <Route
         path="/connexion"
