@@ -73,7 +73,7 @@ export const EcranBeneficierDuDispositif = () => {
               type="button"
               onClick={() => navigate('/demande-autodiagnostic')}
             >
-              J'initie un diagnostic
+              J&apos;accède au diagnostic
             </Button>
           </section>
           <section>
