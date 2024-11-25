@@ -21,7 +21,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
   let donneesServeur: { portEcoute: number; app: Express };
 
   beforeEach(() => {
-    testeurMAC.adaptateurDeVerificationDeCGU.reinitialise();
+    testeurMAC.adaptateurDeVerificationDeRelations.reinitialise();
     donneesServeur = testeurMAC.initialise();
   });
 
@@ -164,7 +164,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       });
     });
 
-    it('Vérifie que le diagnostic n’est pas un diagnostic en libre accès', async () => {
+    it('Vérifie que le diagnostic est un diagnostic en libre accès', async () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
@@ -250,6 +250,22 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(await reponse.json()).toMatchObject({
         message: "Le diagnostic demandé n'existe pas.",
       });
+    });
+
+    it('Vérifie que le diagnostic est un diagnostic en libre accès', async () => {
+      const diagnostic = unDiagnostic().construis();
+      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/auto-diagnostic/${diagnostic.identifiant}`,
+        donneesServeur.portEcoute
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
+      ).toBe(true);
     });
   });
 });

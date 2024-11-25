@@ -19,4 +19,8 @@ export class AdaptateurDeVerificationDuTypeDeRelationDeTest
       suite();
     };
   }
+
+  reinitialise() {
+    this.verifieLaRelation = false;
+  }
 }

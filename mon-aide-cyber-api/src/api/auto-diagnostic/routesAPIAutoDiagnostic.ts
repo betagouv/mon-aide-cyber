@@ -27,6 +27,7 @@ import {
   SagaAjoutReponse,
 } from '../../diagnostic/CapteurSagaAjoutReponse';
 import { Diagnostic } from '../../diagnostic/Diagnostic';
+import * as core from 'express-serve-static-core';
 
 type CorpsReponseAutoDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 
@@ -115,9 +116,12 @@ export const routesAPIAutoDiagnostic = (
 
   routes.patch(
     '/:id',
+    relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
+      definitionEntiteInitieAutoDiagnostic.definition
+    ),
     express.json(),
     (
-      requete: Request<CorpsReponse & { id: UUID }>,
+      requete: Request<core.ParamsDictionary & CorpsReponse & { id: UUID }>,
       reponse: Response,
       suite: NextFunction
     ) => {
