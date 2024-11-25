@@ -18,7 +18,7 @@ export const QuiEstConcerne = () => {
           <b>Engagés sur la base du volontariat</b>, avec une appétence pour les
           enjeux de cybersécurité, les Aidants cyber sont formés et outillés par
           l’ANSSI pour mener à bien la démarche d’accompagnement.
-          <b> La communauté des Aidants cyber</b> inclue entre autres des
+          <b> La communauté des Aidants cyber</b> inclut entre autres des
           représentants de services de l’État (Police, Gendarmerie,
           réservistes...), des collectivités, des associations (Campus Cyber,
           OPSN - Opérateurs Publics de Services Numériques...) et des
