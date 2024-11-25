@@ -24,6 +24,7 @@ import { ServiceDeChiffrement } from '../../src/securite/ServiceDeChiffrement';
 import { ServiceDeChiffrementClair } from '../infrastructure/securite/ServiceDeChiffrementClair';
 import { AdaptateurMetabaseMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurMetabaseMemoire';
 import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
+import { AdaptateurDeVerificationDuTypeDeRelationDeTest } from '../adaptateurs/AdaptateurDeVerificationDuTypeDeRelationDeTest';
 
 class TesteurIntegrationMAC {
   private serveurDeTest:
@@ -46,7 +47,8 @@ class TesteurIntegrationMAC {
     public gestionnaireDeJeton = new FauxGestionnaireDeJeton(),
     public adaptateurDeVerificationDeCGU = new AdapatateurDeVerificationDeCGUDeTest(),
     public adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest = new AdaptateurDeVerificationDeSessionDeTest(),
-    public adaptateurDeVerificationDeRelations = new AdaptateurDeVerificationDesAccesDeTest(),
+    public adaptateurDeVerificationDesAcces = new AdaptateurDeVerificationDesAccesDeTest(),
+    public adaptateurDeVerificationDeRelations = new AdaptateurDeVerificationDuTypeDeRelationDeTest(),
     public gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire(),
     public adaptateurEnvoieMessage: AdaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire(),
     public serviceDeChiffrement: ServiceDeChiffrement = new ServiceDeChiffrementClair(),
@@ -92,14 +94,15 @@ class TesteurIntegrationMAC {
       adaptateurDeGestionDeCookies: this.adaptateurDeGestionDeCookies,
       adaptateurDeVerificationDeCGU: this.adaptateurDeVerificationDeCGU,
       adaptateurDeVerificationDeSession: this.adaptateurDeVerificationDeSession,
-      adaptateurDeVerificationDeRelations:
-        this.adaptateurDeVerificationDeRelations,
+      adaptateurDeVerificationDesAcces: this.adaptateurDeVerificationDesAcces,
       adaptateursRestitution: this.adaptateursRestitution,
       avecProtectionCsrf: false,
       adaptateurEnvoiMessage: this.adaptateurEnvoieMessage,
       serviceDeChiffrement: this.serviceDeChiffrement,
       recuperateurDeCookies: this.recuperateurDeCookies,
       adaptateurMetabase: this.adaptateurMetabase,
+      adaptateurDeVerificationDeRelations:
+        this.adaptateurDeVerificationDeRelations,
     });
     const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
     // eslint-disable-next-line @typescript-eslint/no-empty-function

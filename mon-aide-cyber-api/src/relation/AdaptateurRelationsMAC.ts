@@ -28,6 +28,10 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
     utilisateur: Utilisateur,
     objet: Objet
   ): Promise<boolean> {
-    return this.tupleEntrepot?.relationExiste(relation, utilisateur, objet);
+    return this.tupleEntrepot.relationExiste(relation, utilisateur, objet);
+  }
+
+  typeRelationExiste(relation: Relation, objet: Objet) {
+    return this.tupleEntrepot.typeRelationExiste(relation, objet);
   }
 }

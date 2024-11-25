@@ -20,6 +20,7 @@ import { adaptateurServiceChiffrement } from './src/infrastructure/adaptateurs/a
 import { recuperateurDeCookies } from './src/adaptateurs/fabriqueDeCookies';
 import { adaptateurMetabase } from './src/infrastructure/adaptateurs/adaptateurMetabase';
 import { unServiceAidant } from './src/espace-aidant/ServiceAidantMAC';
+import { AdaptateurDeVerificationDeTypeDeRelationMAC } from './src/adaptateurs/AdaptateurDeVerificationDeTypeDeRelationMAC';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
@@ -72,9 +73,11 @@ const serveurMAC = serveur.creeServeur({
   adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(
     gestionnaireDeJeton
   ),
-  adaptateurDeVerificationDeRelations: new AdaptateurDeVerificationDesAccesMAC(
+  adaptateurDeVerificationDesAcces: new AdaptateurDeVerificationDesAccesMAC(
     adaptateurRelations
   ),
+  adaptateurDeVerificationDeRelations:
+    new AdaptateurDeVerificationDeTypeDeRelationMAC(adaptateurRelations),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
   adaptateurEnvoiMessage: adaptateurEnvoiMessage,
   serviceDeChiffrement: adaptateurServiceChiffrement(),
