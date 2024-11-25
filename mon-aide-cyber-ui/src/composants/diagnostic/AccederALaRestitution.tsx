@@ -2,6 +2,7 @@ import { UUID } from '../../types/Types.ts';
 import { useCallback } from 'react';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { useNavigueVersLaRestitution } from '../../fournisseurs/ContexteNavigationMAC.tsx';
+import Button from '../atomes/Button/Button.tsx';
 
 export const AccederALaRestitution = ({
   idDiagnostic,
@@ -29,22 +30,23 @@ export const AccederALaRestitution = ({
           et modifier le diagnostic à votre convenance.
         </div>
         <div className="fr-pt-4w">
-          <button
+          <Button
+            variant="secondary"
             type="button"
+            className="fr-mr-2w"
             key="annule-acceder-a-la-restitution"
-            className="fr-btn bouton-mac bouton-mac-secondaire fr-mr-2w"
             onClick={surAnnuler}
           >
             Annuler
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="primary"
             type="button"
             key="connexion-aidant"
-            className="fr-btn bouton-mac bouton-mac-primaire"
             onClick={surQuitterLeDiagnostic}
           >
             Accéder à la restitution
-          </button>
+          </Button>
         </div>
       </section>
     </>

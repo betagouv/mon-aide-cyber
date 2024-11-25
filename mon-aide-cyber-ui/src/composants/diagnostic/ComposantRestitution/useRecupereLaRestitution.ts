@@ -11,13 +11,25 @@ import {
 import { useErrorBoundary } from 'react-error-boundary';
 import { useNavigationMAC } from '../../../fournisseurs/hooks';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
+import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
 import { useQuery } from '@tanstack/react-query';
+import { useRecupereLiensNavigation } from '../../../hooks/useMoteurDeLiens.ts';
 
-export const useRecupereLaRestitution = (idDiagnostic: UUID) => {
+export const useRecupereLaRestitution = (
+  idDiagnostic: UUID,
+  estAutodiagnostic: boolean
+) => {
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
   const { showBoundary } = useErrorBoundary();
   const [etatRestitution, envoie] = useReducer(reducteurRestitution, {});
+
+  useRecupereContexteNavigation(
+    `utiliser-outil-diagnostic:afficher:${idDiagnostic}`,
+    estAutodiagnostic
+  );
+
+  useRecupereLiensNavigation('afficher-tableau-de-bord', !estAutodiagnostic);
 
   const chargeRestitution = async (lien: Lien) => {
     try {
@@ -34,6 +46,9 @@ export const useRecupereLaRestitution = (idDiagnostic: UUID) => {
   };
 
   const { data: restitution } = useQuery({
+    enabled: new MoteurDeLiens(navigationMAC.etat).existe(
+      `afficher-diagnostic-${idDiagnostic}`
+    ),
     queryKey: ['afficher-diagnostic', idDiagnostic],
     queryFn: () => {
       const lien = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(

@@ -72,33 +72,6 @@ export const useComposantRestitution = (
     navigue(etatRestitution.restitution!.liens['modifier-diagnostic']);
   }, [etatRestitution, navigationMAC]);
 
-  /*const telechargerRestitution = useCallback(() => {
-    new MoteurDeLiens(etatRestitution.restitution!.liens).trouve(
-      'restitution-pdf',
-      (lien: Lien) => {
-        const parametresAPI = constructeurParametresAPI()
-          .url(lien.url)
-          .methode(lien.methode!)
-          .accept(lien.contentType!)
-          .construis();
-        macAPI
-          .execute<void, Blob>(parametresAPI, (blob: Promise<Blob>) => {
-            return blob.then((b) => {
-              const fichier = URL.createObjectURL(b);
-              const lien = document.createElement('a');
-              lien.href = fichier;
-              lien.download = `restitution-${idDiagnostic}.pdf`;
-              lien.click();
-            });
-          })
-          .then(() => {
-            setBoutonDesactive(false);
-          });
-      }
-    );
-    setBoutonDesactive(true);
-  }, [etatRestitution.restitution, idDiagnostic]);*/
-
   const navigueVersTableauDeBord = useCallback(() => {
     const liens = etatRestitution.restitution!.liens;
     const moteurDeLiens = new MoteurDeLiens(liens);
