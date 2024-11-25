@@ -13,6 +13,7 @@ import {
 } from '../hateoas/hateoas';
 import { RepresentationDiagnostic } from '../representateurs/types';
 import {
+  ExpressValidator,
   FieldValidationError,
   Result,
   body,
@@ -26,12 +27,13 @@ import {
   CorpsReponse,
   SagaAjoutReponse,
 } from '../../diagnostic/CapteurSagaAjoutReponse';
-import { Diagnostic } from '../../diagnostic/Diagnostic';
+import { Diagnostic, EntrepotDiagnostic } from '../../diagnostic/Diagnostic';
 import * as core from 'express-serve-static-core';
 import { Restitution } from '../../restitution/Restitution';
 import { RestitutionHTML } from '../../infrastructure/adaptateurs/AdaptateurDeRestitutionHTML';
 import { RepresentationRestitution } from '../routesAPIDiagnostic';
 import { ErreurMAC } from '../../domaine/erreurMAC';
+import { differenceInDays } from 'date-fns';
 
 type CorpsReponseAutoDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 
@@ -39,13 +41,40 @@ export type CorpsReponseCreerAutoDiagnosticEnErreur = ReponseHATEOASEnErreur;
 
 type CorpsRestitution = RepresentationRestitution | Buffer;
 
+const validateurDiagnosticLibreAcces = (
+  entrepotDiagnostic: EntrepotDiagnostic
+) => {
+  const { param } = new ExpressValidator({
+    diagnosticMoinsDe7Jours: async (identifiant: string) => {
+      return entrepotDiagnostic.lis(identifiant).then((diagnostic) => {
+        if (
+          differenceInDays(
+            FournisseurHorloge.maintenant(),
+            diagnostic.dateCreation
+          ) >= 7
+        ) {
+          throw new Error(
+            'Le diagnostic en libre accès a été initié il y a 7 jours ou plus.'
+          );
+        }
+        return true;
+      });
+    },
+  });
+  return param('id')
+    .diagnosticMoinsDe7Jours()
+    .withMessage("Le diagnostic demandé n'a pas été trouvé.");
+};
 export const routesAPIAutoDiagnostic = (
   configuration: ConfigurationServeur
 ) => {
   const routes = express.Router();
 
-  const { busCommande, adaptateurDeVerificationDeRelations: relations } =
-    configuration;
+  const {
+    busCommande,
+    adaptateurDeVerificationDeRelations: relations,
+    entrepots,
+  } = configuration;
 
   routes.post(
     '/',
@@ -89,13 +118,27 @@ export const routesAPIAutoDiagnostic = (
     relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
       definitionEntiteInitieAutoDiagnostic.definition
     ),
+    validateurDiagnosticLibreAcces(entrepots.diagnostic()),
     (
       requete: Request,
-      reponse: Response<CorpsReponseAutoDiagnostic>,
+      reponse: Response<CorpsReponseAutoDiagnostic | ReponseHATEOASEnErreur>,
       suite: NextFunction
     ) => {
+      const resultatsValidation: Result<FieldValidationError> =
+        validationResult(requete) as Result<FieldValidationError>;
+      if (!resultatsValidation.isEmpty()) {
+        return reponse.status(404).json({
+          liens: {
+            'creer-diagnostic': {
+              url: '/api/auto-diagnostic',
+              methode: 'POST',
+            },
+          },
+          message: "Le diagnostic demandé n'existe pas.",
+        });
+      }
       const { id } = requete.params;
-      new ServiceDiagnostic(configuration.entrepots)
+      return new ServiceDiagnostic(configuration.entrepots)
         .diagnostic(id as crypto.UUID)
         .then((diagnostic) =>
           reponse.json({
