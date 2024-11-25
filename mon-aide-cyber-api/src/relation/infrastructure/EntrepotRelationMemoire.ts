@@ -31,7 +31,6 @@ export class EntrepotRelationMemoire
 
     return Promise.resolve(tuples);
   }
-
   typeAggregat(): string {
     return 'relation';
   }
@@ -46,6 +45,15 @@ export class EntrepotRelationMemoire
         const user = isEqual(tuple.utilisateur, utilisateur);
         const obj = isEqual(tuple.objet, objet);
         return user && tuple.relation === relation && obj;
+      }).length > 0
+    );
+  }
+
+  typeRelationExiste(relation: string, objet: Objet): Promise<boolean> {
+    return Promise.resolve(
+      Array.from(this.entites.values()).filter((tuple) => {
+        const obj = isEqual(tuple.objet, objet);
+        return tuple.relation === relation && obj;
       }).length > 0
     );
   }

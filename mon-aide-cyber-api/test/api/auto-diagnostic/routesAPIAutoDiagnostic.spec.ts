@@ -162,6 +162,19 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
         message: "Le diagnostic demandé n'existe pas.",
       });
     });
+
+    it('Vérifie que le diagnostic n’est pas un diagnostic en libre accès', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/auto-diagnostic/${crypto.randomUUID()}`,
+        donneesServeur.portEcoute
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
+      ).toBe(true);
+    });
   });
 });
 

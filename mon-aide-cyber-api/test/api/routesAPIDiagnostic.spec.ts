@@ -122,7 +122,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste()
       ).toBe(true);
     });
   });
@@ -327,7 +327,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste()
       ).toBe(true);
     });
   });
@@ -471,7 +471,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste()
       ).toBe(true);
     });
   });

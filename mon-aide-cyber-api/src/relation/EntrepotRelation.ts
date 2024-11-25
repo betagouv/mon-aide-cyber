@@ -15,4 +15,6 @@ export interface EntrepotRelation extends Entrepot<Tuple> {
     utilisateur: Utilisateur,
     objet: Objet
   ): Promise<boolean>;
+
+  typeRelationExiste(relation: Relation, objet: Objet): Promise<boolean>;
 }

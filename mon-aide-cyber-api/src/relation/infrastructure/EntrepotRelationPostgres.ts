@@ -58,7 +58,6 @@ export class EntrepotRelationPostgres
   protected champsAMettreAJour(_: TupleDTO): Partial<TupleDTO> {
     throw new Error('non implémenté');
   }
-
   protected deDTOAEntite(dto: TupleDTO): Tuple {
     return {
       identifiant: dto.id,
@@ -94,6 +93,10 @@ export class EntrepotRelationPostgres
       .then((lignes: TupleDTO[]) =>
         lignes.map((ligne) => this.deDTOAEntite(ligne))
       );
+  }
+
+  typeRelationExiste(_relation: string, _objet: Objet): Promise<boolean> {
+    throw new Error('Method not implemented.');
   }
 
   relationExiste(

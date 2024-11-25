@@ -27,6 +27,7 @@ import { ServiceDeChiffrement } from './securite/ServiceDeChiffrement';
 import { routesStatistiques } from './api/statistiques/routesStatistiques';
 import { AdaptateurMetabase } from './adaptateurs/AdaptateurMetabase';
 import { adaptateurConfigurationLimiteurTraffic } from './api/adaptateurLimiteurTraffic';
+import { AdaptateurDeVerificationDeTypeDeRelation } from './adaptateurs/AdaptateurDeVerificationDeTypeDeRelation';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -42,7 +43,8 @@ export type ConfigurationServeur = {
   adaptateurDeGestionDeCookies: AdaptateurDeGestionDeCookies;
   adaptateurDeVerificationDeCGU: AdaptateurDeVerificationDeCGU;
   adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
-  adaptateurDeVerificationDeRelations: AdaptateurDeVerificationDesAcces;
+  adaptateurDeVerificationDesAcces: AdaptateurDeVerificationDesAcces;
+  adaptateurDeVerificationDeRelations: AdaptateurDeVerificationDeTypeDeRelation;
   serviceDeChiffrement: ServiceDeChiffrement;
   avecProtectionCsrf: boolean;
   busCommande: BusCommande;

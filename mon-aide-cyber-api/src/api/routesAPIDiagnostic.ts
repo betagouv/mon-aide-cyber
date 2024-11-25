@@ -30,7 +30,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const {
     adaptateurDeVerificationDeSession: session,
     adaptateurDeVerificationDeCGU: cgu,
-    adaptateurDeVerificationDeRelations: relations,
+    adaptateurDeVerificationDesAcces: relations,
     busCommande,
   } = configuration;
 

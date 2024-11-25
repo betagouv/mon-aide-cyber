@@ -18,6 +18,10 @@ import {
   body,
   validationResult,
 } from 'express-validator';
+import {
+  definitionEntiteInitieAutoDiagnostic,
+  DefinitionEntiteInitieAutoDiagnostic,
+} from '../../auto-diagnostic/consommateursEvenements';
 
 type CorpsReponseAutoDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 
@@ -28,7 +32,8 @@ export const routesAPIAutoDiagnostic = (
 ) => {
   const routes = express.Router();
 
-  const { busCommande } = configuration;
+  const { busCommande, adaptateurDeVerificationDeRelations: relations } =
+    configuration;
 
   routes.post(
     '/',
@@ -74,6 +79,9 @@ export const routesAPIAutoDiagnostic = (
 
   routes.get(
     '/:id',
+    relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
+      definitionEntiteInitieAutoDiagnostic.definition
+    ),
     (
       requete: Request,
       reponse: Response<CorpsReponseAutoDiagnostic>,
