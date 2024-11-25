@@ -76,7 +76,10 @@ export const routesAPIAutoDiagnostic = (
     entrepots,
   } = configuration;
 
-  const envoieReponseDiagnosticNonTrouve = (reponse: Response) =>
+  const envoieReponseDiagnosticNonTrouve = (
+    reponse: Response,
+    message = "Le diagnostic demandé n'existe pas."
+  ) =>
     reponse.status(404).json({
       liens: {
         'creer-diagnostic': {
@@ -84,7 +87,7 @@ export const routesAPIAutoDiagnostic = (
           methode: 'POST',
         },
       },
-      message: "Le diagnostic demandé n'existe pas.",
+      message: message,
     });
 
   routes.post(
@@ -218,13 +221,21 @@ export const routesAPIAutoDiagnostic = (
     relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
       definitionEntiteInitieAutoDiagnostic.definition
     ),
+    validateurDiagnosticLibreAcces(entrepots.diagnostic()),
     (
       requete: Request,
-      reponse: Response<CorpsRestitution>,
+      reponse: Response<CorpsRestitution | ReponseHATEOASEnErreur>,
       suite: NextFunction
     ) => {
+      const resultatsValidation: Result<FieldValidationError> =
+        validationResult(requete) as Result<FieldValidationError>;
+      if (!resultatsValidation.isEmpty()) {
+        return envoieReponseDiagnosticNonTrouve(
+          reponse,
+          "La restitution demandée n'existe pas."
+        );
+      }
       const { id } = requete.params;
-
       const genereRestitution = (
         restitution: Restitution
       ): Promise<Buffer | RestitutionHTML> => {
@@ -240,7 +251,9 @@ export const routesAPIAutoDiagnostic = (
 
       const creerReponse = (restitution: Buffer | RestitutionHTML) => {
         if (requete.headers.accept === 'application/pdf') {
-          reponse.contentType('application/pdf').send(restitution as Buffer);
+          return reponse
+            .contentType('application/pdf')
+            .send(restitution as Buffer);
         } else {
           const reponseHATEOAS: ReponseHATEOAS = {
             liens: {
@@ -264,11 +277,11 @@ export const routesAPIAutoDiagnostic = (
             ...reponseHATEOAS,
             ...(restitution as RestitutionHTML),
           };
-          reponse.json(resultat);
+          return reponse.json(resultat);
         }
       };
 
-      configuration.entrepots
+      return configuration.entrepots
         .restitution()
         .lis(id)
         .then((restitution) => genereRestitution(restitution))
