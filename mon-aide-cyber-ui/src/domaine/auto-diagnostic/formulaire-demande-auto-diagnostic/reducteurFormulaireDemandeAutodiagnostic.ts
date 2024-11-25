@@ -2,15 +2,6 @@ import {
   construisErreurSimple,
   ErreurFormulaire,
 } from '../../../composants/alertes/Erreurs.tsx';
-import { estMailValide } from '../../../validateurs/email.ts';
-
-const construisErreurAdresseElectronique = (emailValide: boolean) =>
-  !emailValide
-    ? construisErreurSimple(
-        'adresseElectronique',
-        'Veuillez saisir une adresse électronique valide.'
-      )
-    : undefined;
 
 const construisErreurCGUValidees = (cguValidees: boolean) => {
   return !cguValidees
@@ -19,30 +10,22 @@ const construisErreurCGUValidees = (cguValidees: boolean) => {
 };
 
 type ErreursFormulaireDemandeAutodiagnostic = {
-  adresseElectronique?: ErreurFormulaire;
   cguValidees?: ErreurFormulaire;
 };
 
 export type EtatFormulaireDemandeAutodiagnostic = {
   cguValidees: boolean;
-  email: string;
   pretPourEnvoi: boolean;
   erreurs?: ErreursFormulaireDemandeAutodiagnostic;
 };
 
 enum TypeActionFormulaireDemandeAutodiagnostic {
-  ADRESSE_ELECTRONIQUE_SAISIE = 'ADRESSE_ELECTRONIQUE_SAISIE',
   CGU_CLIQUEES = 'CGU_CLIQUEES',
 }
 
-type ActionFormulaireDemandeAutodiagnostic =
-  | {
-      type: TypeActionFormulaireDemandeAutodiagnostic.ADRESSE_ELECTRONIQUE_SAISIE;
-      adresseElectronique: string;
-    }
-  | {
-      type: TypeActionFormulaireDemandeAutodiagnostic.CGU_CLIQUEES;
-    };
+type ActionFormulaireDemandeAutodiagnostic = {
+  type: TypeActionFormulaireDemandeAutodiagnostic.CGU_CLIQUEES;
+};
 
 const supprimeObjetErreursSiFormulaireValide = (
   etatCourant: EtatFormulaireDemandeAutodiagnostic
@@ -106,18 +89,6 @@ export const reducteurFormulaireDemandeAutodiagnostic = (
   action: ActionFormulaireDemandeAutodiagnostic
 ): EtatFormulaireDemandeAutodiagnostic => {
   switch (action.type) {
-    case TypeActionFormulaireDemandeAutodiagnostic.ADRESSE_ELECTRONIQUE_SAISIE: {
-      const etatCourant = { ...etat };
-
-      return regenereEtatFormulaire(etatCourant, {
-        ajouteAuNouvelEtat: () => ({ email: action.adresseElectronique }),
-        champ: 'adresseElectronique',
-        champValide: () => estMailValide(action.adresseElectronique),
-        construisErreurChamp: (bool: boolean) =>
-          construisErreurAdresseElectronique(bool),
-        elementsFormulairesValides: () => etat.cguValidees,
-      });
-    }
     case TypeActionFormulaireDemandeAutodiagnostic.CGU_CLIQUEES: {
       const etatCourant = { ...etat };
       const cguValidees = !etatCourant.cguValidees;
@@ -127,18 +98,12 @@ export const reducteurFormulaireDemandeAutodiagnostic = (
         champValide: () => cguValidees,
         construisErreurChamp: (bool: boolean) =>
           construisErreurCGUValidees(bool),
-        elementsFormulairesValides: () => estMailValide(etat.email),
+        elementsFormulairesValides: () => true,
       });
     }
   }
 };
 
-export const adresseElectroniqueSaisie = (
-  adresseElectronique: string
-): ActionFormulaireDemandeAutodiagnostic => ({
-  type: TypeActionFormulaireDemandeAutodiagnostic.ADRESSE_ELECTRONIQUE_SAISIE,
-  adresseElectronique,
-});
 export const cguCliquees = (): ActionFormulaireDemandeAutodiagnostic => ({
   type: TypeActionFormulaireDemandeAutodiagnostic.CGU_CLIQUEES,
 });
@@ -146,6 +111,5 @@ export const cguCliquees = (): ActionFormulaireDemandeAutodiagnostic => ({
 export const initialiseFormulaireDemandeAutodiagnostic =
   (): EtatFormulaireDemandeAutodiagnostic => ({
     cguValidees: false,
-    email: '',
     pretPourEnvoi: false,
   });

@@ -3,7 +3,6 @@ import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useMutation } from '@tanstack/react-query';
 import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { CorpsMotDePasseOublie } from '../../vitrine/mot-de-passe-oublie/formulaire-mot-de-passe-oublie/CapteurFormulaireMotDePasseOublie.tsx';
 import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
 import {
   FormulaireDemandeAutodiagnostic,
@@ -13,6 +12,10 @@ import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContext
 import { FormatLien } from '../../../composants/diagnostic/ComposantLancerDiagnostic.tsx';
 import { useNavigueVersModifierDiagnostic } from '../../../fournisseurs/ContexteNavigationMAC.tsx';
 
+export type CorpsDemandeAutodiagnostic = {
+  cguSignees: boolean;
+};
+
 export const CapteurFormulaireDemandeAutodiagnostic = () => {
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
@@ -20,32 +23,34 @@ export const CapteurFormulaireDemandeAutodiagnostic = () => {
 
   useRecupereContexteNavigation('utiliser-outil-diagnostic:creer');
 
-  const { mutate, isSuccess, error, isError, isPending, variables } =
-    useMutation({
-      mutationKey: ['creer-auto-diagnostic'],
-      mutationFn: (formulaire: TypeFormulaireSaisieEmail) => {
-        const actionSoumettre = new MoteurDeLiens(
-          navigationMAC.etat
-        ).trouveEtRenvoie('creer-diagnostic');
+  const { mutate, error, isError, isPending } = useMutation({
+    mutationKey: ['creer-auto-diagnostic'],
+    mutationFn: (formulaire: TypeFormulaireSaisieEmail) => {
+      const actionSoumettre = new MoteurDeLiens(
+        navigationMAC.etat
+      ).trouveEtRenvoie('creer-diagnostic');
 
-        if (!actionSoumettre)
-          throw new Error(
-            `Une erreur est survenue lors de la demande de diagnostic`
-          );
-
-        return macAPI.execute<string, FormatLien, CorpsMotDePasseOublie>(
-          constructeurParametresAPI<CorpsMotDePasseOublie>()
-            .url(actionSoumettre.url)
-            .methode(actionSoumettre.methode!)
-            .corps(formulaire)
-            .construis(),
-          async (lienHeader) => await lienHeader
+      if (!actionSoumettre)
+        throw new Error(
+          `Une erreur est survenue lors de la demande de diagnostic`
         );
-      },
-      onSuccess: (lien) => {
-        navigue({ url: lien, methode: 'GET' });
-      },
-    });
+
+      return macAPI.execute<string, FormatLien, CorpsDemandeAutodiagnostic>(
+        constructeurParametresAPI<CorpsDemandeAutodiagnostic>()
+          .url(actionSoumettre.url)
+          .methode(actionSoumettre.methode!)
+          .corps({
+            cguSignees: formulaire.cguSignees,
+          })
+          .construis(),
+        async (lienHeader) => await lienHeader
+      );
+    },
+    onSuccess: (lien) => {
+      console.log('lien', lien);
+      navigue({ url: lien, methode: 'GET' });
+    },
+  });
 
   if (isPending)
     return (
@@ -58,18 +63,6 @@ export const CapteurFormulaireDemandeAutodiagnostic = () => {
 
   if (isError)
     return <Toast className="w-100" type="ERREUR" message={error.message} />;
-
-  if (isSuccess)
-    return (
-      <div className="mac-callout mac-callout-information">
-        <i className="mac-icone-information" />
-        <div>
-          Votre demande a été prise en compte. Un lien d&apos;accès à votre auto
-          diagnostic va être envoyé à : <b>{variables.email}</b>. Veuillez
-          vérifier votre boîte de réception.
-        </div>
-      </div>
-    );
 
   return <FormulaireDemandeAutodiagnostic surSoumission={mutate} />;
 };
