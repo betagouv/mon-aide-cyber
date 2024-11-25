@@ -370,6 +370,22 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
         message: "Le restitution demandé n'existe pas.",
       });
     });
+
+    it('Vérifie que le diagnostic est un diagnostic en libre accès', async () => {
+      const diagnostic = unDiagnostic().construis();
+      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/auto-diagnostic/${diagnostic.identifiant}/restitution`,
+        donneesServeur.portEcoute
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
+      ).toBe(true);
+    });
   });
 });
 

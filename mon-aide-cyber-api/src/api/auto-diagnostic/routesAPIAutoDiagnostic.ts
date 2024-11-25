@@ -168,6 +168,9 @@ export const routesAPIAutoDiagnostic = (
 
   routes.get(
     '/:id/restitution',
+    relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
+      definitionEntiteInitieAutoDiagnostic.definition
+    ),
     (
       requete: Request,
       reponse: Response<CorpsRestitution>,
