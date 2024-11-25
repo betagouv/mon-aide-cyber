@@ -16,11 +16,17 @@ import {
   RepresentationRestitution,
 } from '../../../src/api/routesAPIDiagnostic';
 import { Diagnostic } from '../../../src/diagnostic/Diagnostic';
-import { LiensHATEOAS } from '../../../src/api/hateoas/hateoas';
+import {
+  LiensHATEOAS,
+  ReponseHATEOASEnErreur,
+} from '../../../src/api/hateoas/hateoas';
 import { CorpsReponseCreerAutoDiagnosticEnErreur } from '../../../src/api/auto-diagnostic/routesAPIAutoDiagnostic';
 import { unAdaptateurDeRestitutionHTML } from '../../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
 import { uneRestitution } from '../../constructeurs/constructeurRestitution';
 import { unAdaptateurRestitutionPDF } from '../../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
+import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { add } from 'date-fns';
 
 describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -145,8 +151,14 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       );
 
       expect(reponse.statusCode).toBe(404);
-      const newVar = await reponse.json();
-      expect(newVar).toStrictEqual({
+      const corps = await reponse.json();
+      expect(corps).toStrictEqual<ReponseHATEOASEnErreur>({
+        liens: {
+          'creer-diagnostic': {
+            url: '/api/auto-diagnostic',
+            methode: 'POST',
+          },
+        },
         message: "Le diagnostic demandé n'existe pas.",
       });
     });
@@ -162,6 +174,33 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(
         testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
       ).toBe(true);
+    });
+
+    it('Vérifie que le diagnostic date de moins de 7 jours', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const diagnostic = unDiagnostic().construis();
+      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      FournisseurHorlogeDeTest.initialise(
+        add(FournisseurHorloge.maintenant(), { days: 7 })
+      );
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/auto-diagnostic/${diagnostic.identifiant}`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
+        liens: {
+          'creer-diagnostic': {
+            url: '/api/auto-diagnostic',
+            methode: 'POST',
+          },
+        },
+        message: "Le diagnostic demandé n'existe pas.",
+      });
     });
   });
 
