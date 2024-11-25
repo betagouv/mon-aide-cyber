@@ -50,7 +50,7 @@ export const ComposantRestitution = ({
                   <div>
                     <Button
                       type="button"
-                      variant="link"
+                      variant="primary"
                       onClick={navigueVersTableauDeBord}
                     >
                       <i className="mac-icone-retour" />

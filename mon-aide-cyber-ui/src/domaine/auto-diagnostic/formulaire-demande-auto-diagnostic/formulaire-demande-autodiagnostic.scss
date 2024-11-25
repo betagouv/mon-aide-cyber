@@ -14,7 +14,11 @@ form.formulaire-demande-autodiagnostic {
     @include a-partir-de(md) {
       display: flex;
       flex-direction: row;
-      justify-content: flex-end;
+      justify-content: center;
+
+      button {
+        width: 60%;
+      }
     }
   }
 }
