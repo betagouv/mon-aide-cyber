@@ -95,10 +95,6 @@ export class EntrepotRelationPostgres
       );
   }
 
-  typeRelationExiste(_relation: string, _objet: Objet): Promise<boolean> {
-    throw new Error('Method not implemented.');
-  }
-
   relationExiste(
     relation: Relation,
     utilisateur: Utilisateur,
@@ -107,6 +103,15 @@ export class EntrepotRelationPostgres
     return this.knex
       .from(this.nomTable())
       .whereRaw("(donnees->'utilisateur') @> :utilisateur", { utilisateur })
+      .andWhereRaw("(donnees->>'relation') = ?", relation)
+      .andWhereRaw("(donnees->'objet') @> :objet", { objet })
+      .select(`${this.nomTable()}.*`)
+      .then((lignes) => lignes.length > 0);
+  }
+
+  typeRelationExiste(relation: Relation, objet: Objet): Promise<boolean> {
+    return this.knex
+      .from(this.nomTable())
       .andWhereRaw("(donnees->>'relation') = ?", relation)
       .andWhereRaw("(donnees->'objet') @> :objet", { objet })
       .select(`${this.nomTable()}.*`)

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { Tuple, unTuple } from '../../src/relation/Tuple';
+import { DefinitionTuple, Tuple, unTuple } from '../../src/relation/Tuple';
 import { nettoieLaBaseDeDonneesRelations } from '../utilitaires/nettoyeurBDD';
 import {
   EntrepotRelationPostgres,
@@ -25,6 +25,12 @@ class EntrepotRelationPostgresTest extends EntrepotRelationPostgres {
       );
   }
 }
+
+type DefinitionTupleTest = DefinitionTuple & {
+  relation: 'ma-relation';
+  typeObjet: 'mon-objet';
+  typeUtilisateur: 'mon-utilisateur';
+};
 
 describe('Entrepot Relation Postgres', () => {
   beforeEach(async () => {
@@ -93,6 +99,28 @@ describe('Entrepot Relation Postgres', () => {
       await new EntrepotRelationPostgres().relationExiste(
         tuple.relation,
         tuple.utilisateur,
+        tuple.objet
+      )
+    ).toBe(true);
+  });
+
+  it('Vérifie qu’un objet dispose d’une relation du type attendue', async () => {
+    const tuple: Tuple = unTuple<DefinitionTupleTest>({
+      definition: {
+        relation: 'ma-relation',
+        typeObjet: 'mon-objet',
+        typeUtilisateur: 'mon-utilisateur',
+      },
+    })
+      .avecObjet(crypto.randomUUID())
+      .avecUtilisateur(crypto.randomUUID())
+      .construis();
+
+    await new EntrepotRelationPostgres().persiste(tuple);
+
+    expect(
+      await new EntrepotRelationPostgres().typeRelationExiste(
+        'ma-relation',
         tuple.objet
       )
     ).toBe(true);
