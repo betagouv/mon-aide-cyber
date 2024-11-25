@@ -327,7 +327,15 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
   });
 
   describe('Quand une requête GET est reçue sur /{id}/restitution', () => {
+    let diagnostic: Diagnostic;
+
+    beforeEach(async () => {
+      diagnostic = unDiagnostic().construis();
+      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+    });
+
     it('Retourne la restitution', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
       const adaptateurDeRestitutionHTML = unAdaptateurDeRestitutionHTML()
         .avecIndicateurs('indicateurs')
         .avecMesuresPrioritaires('mesures prioritaires')
@@ -335,16 +343,15 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
         .construis();
       testeurMAC.adaptateursRestitution.html = () =>
         adaptateurDeRestitutionHTML;
-      const identifiant = crypto.randomUUID();
       const restitution = uneRestitution()
-        .avecIdentifiant(identifiant)
+        .avecIdentifiant(diagnostic.identifiant)
         .construis();
       await testeurMAC.entrepots.restitution().persiste(restitution);
 
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/auto-diagnostic/${identifiant}/restitution`,
+        `/api/auto-diagnostic/${restitution.identifiant}/restitution`,
         donneesServeur.portEcoute
       );
 
@@ -352,18 +359,18 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(await reponse.json()).toStrictEqual<RepresentationRestitution>({
         liens: {
           'modifier-diagnostic': {
-            url: `/api/auto-diagnostic/${identifiant}`,
+            url: `/api/auto-diagnostic/${restitution.identifiant}`,
             methode: 'GET',
           },
           'restitution-json': {
             contentType: 'application/json',
             methode: 'GET',
-            url: `/api/auto-diagnostic/${identifiant}/restitution`,
+            url: `/api/auto-diagnostic/${restitution.identifiant}/restitution`,
           },
           'restitution-pdf': {
             contentType: 'application/pdf',
             methode: 'GET',
-            url: `/api/auto-diagnostic/${identifiant}/restitution`,
+            url: `/api/auto-diagnostic/${restitution.identifiant}/restitution`,
           },
         },
         autresMesures: '',
@@ -383,7 +390,9 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
         return Promise.resolve(Buffer.from('PDF Mesures généré'));
       };
       testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
-      const restitution = uneRestitution().construis();
+      const restitution = uneRestitution()
+        .avecIdentifiant(diagnostic.identifiant)
+        .construis();
       testeurMAC.entrepots.restitution().persiste(restitution);
 
       const reponse = await executeRequete(
@@ -410,7 +419,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
 
       expect(reponse.statusCode).toBe(404);
       expect(await reponse.json()).toMatchObject({
-        message: "Le restitution demandé n'existe pas.",
+        message: "La restitution demandée n'existe pas.",
       });
     });
 
@@ -428,6 +437,33 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(
         testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
       ).toBe(true);
+    });
+
+    it('Vérifie que le diagnostic date de moins de 7 jours', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const diagnostic = unDiagnostic().construis();
+      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      FournisseurHorlogeDeTest.initialise(
+        add(FournisseurHorloge.maintenant(), { days: 7 })
+      );
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/auto-diagnostic/${diagnostic.identifiant}/restitution`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
+        liens: {
+          'creer-diagnostic': {
+            url: '/api/auto-diagnostic',
+            methode: 'POST',
+          },
+        },
+        message: "La restitution demandée n'existe pas.",
+      });
     });
   });
 });
