@@ -50,17 +50,12 @@ export const routesAPIAutoDiagnostic = (
   routes.post(
     '/',
     express.json(),
-    body('email')
-      .trim()
-      .isEmail()
-      .withMessage('Veuillez renseigner votre e-mail.'),
     body('cguSignees')
       .custom((value: boolean) => value)
       .withMessage('Veuillez signer les CGU.'),
     (
       requete: Request,
-      reponse: Response<CorpsReponseCreerAutoDiagnosticEnErreur>,
-      _suite: NextFunction
+      reponse: Response<CorpsReponseCreerAutoDiagnosticEnErreur>
     ) => {
       const resultatsValidation: Result<FieldValidationError> =
         validationResult(requete) as Result<FieldValidationError>;
@@ -79,7 +74,7 @@ export const routesAPIAutoDiagnostic = (
         .publie<
           SagaLanceAutoDiagnostic,
           crypto.UUID
-        >({ type: 'SagaLanceAutoDiagnostic', email: '', dateSignatureCGU: FournisseurHorloge.maintenant() })
+        >({ type: 'SagaLanceAutoDiagnostic', dateSignatureCGU: FournisseurHorloge.maintenant() })
         .then((idDiagnostic) =>
           reponse
             .status(201)
