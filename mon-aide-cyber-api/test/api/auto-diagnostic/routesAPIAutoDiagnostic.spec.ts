@@ -77,29 +77,6 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
     });
 
     describe('Lors de la phase de validation', () => {
-      it('Valide la présence de l’email', async () => {
-        const reponse = await executeRequete(
-          donneesServeur.app,
-          'POST',
-          '/api/auto-diagnostic',
-          donneesServeur.portEcoute,
-          { email: '', cguSignees: true }
-        );
-
-        expect(reponse.statusCode).toBe(422);
-        expect(
-          await reponse.json()
-        ).toStrictEqual<CorpsReponseCreerAutoDiagnosticEnErreur>({
-          message: 'Veuillez renseigner votre e-mail.',
-          liens: {
-            'creer-diagnostic': {
-              url: '/api/auto-diagnostic',
-              methode: 'POST',
-            },
-          },
-        });
-      });
-
       it('Valide la signature des CGU', async () => {
         const reponse = await executeRequete(
           donneesServeur.app,

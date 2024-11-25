@@ -48,7 +48,6 @@ export class CapteurCommandeDemandeAutoDiagnostic
 export type SagaLanceAutoDiagnostic = Saga & {
   type: 'SagaLanceAutoDiagnostic';
   dateSignatureCGU: Date;
-  email: string;
 };
 
 export class CapteurSagaLanceAutoDiagnostic

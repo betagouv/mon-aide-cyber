@@ -56,7 +56,6 @@ describe('Capteur pour lancer un Auto-Diagnostic', () => {
       adaptateurMesures
     ).execute({
       type: 'SagaLanceAutoDiagnostic',
-      email: 'jean.dupont@email.com',
       dateSignatureCGU: FournisseurHorloge.maintenant(),
     });
 
@@ -79,7 +78,6 @@ describe('Capteur pour lancer un Auto-Diagnostic', () => {
       adaptateurMesures
     ).execute({
       type: 'SagaLanceAutoDiagnostic',
-      email: 'jean.dupont@email.com',
       dateSignatureCGU: FournisseurHorloge.maintenant(),
     });
 
