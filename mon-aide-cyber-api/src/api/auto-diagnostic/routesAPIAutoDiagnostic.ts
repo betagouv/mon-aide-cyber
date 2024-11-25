@@ -76,6 +76,17 @@ export const routesAPIAutoDiagnostic = (
     entrepots,
   } = configuration;
 
+  const envoieReponseDiagnosticNonTrouve = (reponse: Response) =>
+    reponse.status(404).json({
+      liens: {
+        'creer-diagnostic': {
+          url: '/api/auto-diagnostic',
+          methode: 'POST',
+        },
+      },
+      message: "Le diagnostic demandé n'existe pas.",
+    });
+
   routes.post(
     '/',
     express.json(),
@@ -127,15 +138,7 @@ export const routesAPIAutoDiagnostic = (
       const resultatsValidation: Result<FieldValidationError> =
         validationResult(requete) as Result<FieldValidationError>;
       if (!resultatsValidation.isEmpty()) {
-        return reponse.status(404).json({
-          liens: {
-            'creer-diagnostic': {
-              url: '/api/auto-diagnostic',
-              methode: 'POST',
-            },
-          },
-          message: "Le diagnostic demandé n'existe pas.",
-        });
+        return envoieReponseDiagnosticNonTrouve(reponse);
       }
       const { id } = requete.params;
       return new ServiceDiagnostic(configuration.entrepots)
@@ -167,12 +170,18 @@ export const routesAPIAutoDiagnostic = (
     relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
       definitionEntiteInitieAutoDiagnostic.definition
     ),
+    validateurDiagnosticLibreAcces(entrepots.diagnostic()),
     express.json(),
     (
       requete: Request<core.ParamsDictionary & CorpsReponse & { id: UUID }>,
       reponse: Response,
       suite: NextFunction
     ) => {
+      const resultatsValidation: Result<FieldValidationError> =
+        validationResult(requete) as Result<FieldValidationError>;
+      if (!resultatsValidation.isEmpty()) {
+        return envoieReponseDiagnosticNonTrouve(reponse);
+      }
       const { id } = requete.params;
       const corpsReponse = requete.body;
       const commande: SagaAjoutReponse = {
@@ -180,7 +189,7 @@ export const routesAPIAutoDiagnostic = (
         idDiagnostic: id,
         ...corpsReponse,
       };
-      busCommande
+      return busCommande
         .publie<SagaAjoutReponse, Diagnostic>(commande)
         .then((diagnostic) => {
           reponse.json({

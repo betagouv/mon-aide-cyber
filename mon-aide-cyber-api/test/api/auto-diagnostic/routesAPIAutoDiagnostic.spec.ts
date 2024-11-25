@@ -297,6 +297,33 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
         testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
       ).toBe(true);
     });
+
+    it('Vérifie que le diagnostic date de moins de 7 jours', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const diagnostic = unDiagnostic().construis();
+      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      FournisseurHorlogeDeTest.initialise(
+        add(FournisseurHorloge.maintenant(), { days: 7 })
+      );
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/auto-diagnostic/${diagnostic.identifiant}`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
+        liens: {
+          'creer-diagnostic': {
+            url: '/api/auto-diagnostic',
+            methode: 'POST',
+          },
+        },
+        message: "Le diagnostic demandé n'existe pas.",
+      });
+    });
   });
 
   describe('Quand une requête GET est reçue sur /{id}/restitution', () => {
