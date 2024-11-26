@@ -12,12 +12,14 @@ export const useComposantRestitution = (
   estLibreAcces: boolean
 ) => {
   const navigationMAC = useNavigationMAC();
-  // const macAPI = useMACAPI();
   const { navigue } = useNavigueVersModifierDiagnostic(
     estLibreAcces ? '/diagnostic' : '/aidant/diagnostic'
   );
 
-  const { etatRestitution, envoie } = useRecupereLaRestitution(idDiagnostic);
+  const { etatRestitution, envoie } = useRecupereLaRestitution(
+    idDiagnostic,
+    estLibreAcces
+  );
 
   const { telechargerRestitution, chargeLeFichier: boutonDesactive } =
     useTelechargerRestitution(idDiagnostic);

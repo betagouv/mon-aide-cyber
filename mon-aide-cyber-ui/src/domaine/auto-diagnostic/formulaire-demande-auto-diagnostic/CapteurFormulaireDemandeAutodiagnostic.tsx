@@ -47,7 +47,6 @@ export const CapteurFormulaireDemandeAutodiagnostic = () => {
       );
     },
     onSuccess: (lien) => {
-      console.log('lien', lien);
       navigue({ url: lien, methode: 'GET' });
     },
   });

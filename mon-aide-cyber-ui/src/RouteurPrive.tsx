@@ -12,7 +12,7 @@ import { EcranMesInformations } from './domaine/espace-aidant/mon-compte/ecran-m
 import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
 import { EcranDiagnosticAidant } from './composants/diagnostic/EcranDiagnosticAidant.tsx';
-import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
+import { ComposantRestitutionAidant } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -54,7 +54,7 @@ export const RouteurPrive = () => {
             <Route
               path=":idDiagnostic/restitution"
               element={
-                <ComposantIntercepteur composant={ComposantRestitution} />
+                <ComposantIntercepteur composant={ComposantRestitutionAidant} />
               }
             ></Route>
           </Route>

@@ -26,7 +26,6 @@ export type Action =
   | 'finalise-creation-espace-aidant'
   | 'lancer-diagnostic'
   | 'modifier-diagnostic'
-  | 'modifier-auto-diagnostic'
   | 'modifier-mot-de-passe'
   | 'modifier-preferences'
   | 'modifier-profil'
