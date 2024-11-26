@@ -23,7 +23,6 @@ import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { EcranDiagnosticLibreAcces } from './composants/diagnostic/EcranDiagnosticAidant.tsx';
 import { ComposantRestitutionLibreAcces } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { EcranDemandeAutodiagnostic } from './domaine/auto-diagnostic/EcranDemandeAutodiagnostic.tsx';
-import { EcranAutodiagnostic } from './domaine/vitrine/ecran-autodiagnostic/EcranAutodiagnostic.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -50,7 +49,6 @@ export const RouteurPublic = () => {
           element={<ComposantDemandeDevenirAidant />}
         />
         <Route path="mentions-legales" element={<MentionsLegales />} />
-        <Route path="auto-diagnostic" element={<EcranAutodiagnostic />} />
       </Route>
       <Route
         path="/connexion"

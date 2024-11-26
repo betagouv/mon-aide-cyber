@@ -16,7 +16,7 @@ export function useMoteurDeLiens(clef: Action) {
   return { accedeALaRessource };
 }
 
-export function useRecupereLiensNavigation(clef: Action, actif: boolean) {
+export const useRecupereLiensNavigation = (clef: Action, actif: boolean) => {
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
 
@@ -44,4 +44,4 @@ export function useRecupereLiensNavigation(clef: Action, actif: boolean) {
   }, [liens]);
 
   return { liens };
-}
+};

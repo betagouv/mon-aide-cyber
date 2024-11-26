@@ -247,7 +247,6 @@ const ComposantQuestion = ({
 
 type ProprietesEcranDiagnostic = {
   idDiagnostic: UUID;
-  type?: 'libre-acces';
 };
 
 type ProprietesComposantDiagnostic = {

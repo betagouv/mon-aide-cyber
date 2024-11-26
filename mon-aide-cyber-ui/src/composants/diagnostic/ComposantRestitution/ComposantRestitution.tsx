@@ -278,6 +278,13 @@ export const ComposantRestitution = ({
   );
 };
 
+export const ComposantRestitutionAidant = ({
+  idDiagnostic,
+}: {
+  idDiagnostic: UUID;
+}) => {
+  return <ComposantRestitution idDiagnostic={idDiagnostic} />;
+};
 export const ComposantRestitutionLibreAcces = ({
   idDiagnostic,
 }: {
