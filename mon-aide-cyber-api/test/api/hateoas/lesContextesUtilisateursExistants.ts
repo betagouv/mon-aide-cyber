@@ -145,7 +145,7 @@ export const lesContextesUtilisateursExistants = [
     liens: {
       'creer-diagnostic': {
         methode: 'POST',
-        url: '/api/auto-diagnostic',
+        url: '/api/diagnostic-libre-acces',
       },
     },
   },
@@ -157,7 +157,7 @@ export const lesContextesUtilisateursExistants = [
     liens: {
       'afficher-diagnostic-d01dd2da-7ddb-475c-8149-46288fc29493': {
         methode: 'GET',
-        url: '/api/auto-diagnostic/d01dd2da-7ddb-475c-8149-46288fc29493/restitution',
+        url: '/api/diagnostic-libre-acces/d01dd2da-7ddb-475c-8149-46288fc29493/restitution',
       },
     },
   },
@@ -169,7 +169,7 @@ export const lesContextesUtilisateursExistants = [
     liens: {
       'afficher-diagnostic-d01dd2da-7ddb-475c-8149-46288fc29492': {
         methode: 'GET',
-        url: '/api/auto-diagnostic/d01dd2da-7ddb-475c-8149-46288fc29492/restitution',
+        url: '/api/diagnostic-libre-acces/d01dd2da-7ddb-475c-8149-46288fc29492/restitution',
       },
     },
   },
