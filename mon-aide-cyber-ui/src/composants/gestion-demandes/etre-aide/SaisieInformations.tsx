@@ -97,6 +97,10 @@ export const SaisieInformations = (
             qu’entité publique ou privée
           </h4>
           <p>
+            <b>NB</b> : notre dispositif n’est pas adapté aux particuliers, aux
+            entreprises mono-salariés et aux auto-entrepreneurs.
+          </p>
+          <p>
             Veuillez compléter les informations ci-dessous pour formaliser votre
             demande.
           </p>
