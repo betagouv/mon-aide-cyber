@@ -71,7 +71,7 @@ export const EcranBeneficierDuDispositif = () => {
 
             <Button
               type="button"
-              onClick={() => navigate('/demande-autodiagnostic')}
+              onClick={() => navigate('/diagnostic-libre-acces')}
             >
               J&apos;accède au diagnostic
             </Button>
