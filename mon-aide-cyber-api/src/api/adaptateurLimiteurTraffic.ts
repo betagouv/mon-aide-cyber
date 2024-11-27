@@ -4,6 +4,7 @@ import rateLimit, { RateLimitRequestHandler } from 'express-rate-limit';
 const CINQ_MINUTES = 5 * 60 * 1000;
 const CENT_APPELS = 100;
 const VINGT_APPELS = 20;
+const DIX_APPELS = 10;
 const CINQ_APPELS = 5;
 
 type Configuration<Limiteur extends { type: string }> = {
@@ -11,7 +12,7 @@ type Configuration<Limiteur extends { type: string }> = {
 };
 
 type TypeLimiteur = {
-  type: 'STANDARD' | 'AUTHENTIFICATION' | 'LIMITE';
+  type: 'STANDARD' | 'AUTHENTIFICATION' | 'LIMITE' | 'TRES-LIMITE';
 };
 
 type Configurations = Configuration<TypeLimiteur>;
@@ -51,6 +52,17 @@ const conf: Configurations = {
       ) || VINGT_APPELS
     );
   },
+  'TRES-LIMITE': (): RateLimitRequestHandler => {
+    return adaptateurLimiteurTraffic(
+      Number(
+        process.env.MAC_LIMITEUR_TRAFFIC_TRES_LIMITE_DUREE_PERIODE_CONNEXIONS_MS
+      ) || CINQ_MINUTES,
+      Number(
+        process.env
+          .MAC_LIMITEUR_TRAFFIC_TRES_LIMITE_DUREE_PERIODE_CON_MAX_PERIODE
+      ) || DIX_APPELS
+    );
+  },
 };
 
 const adaptateurLimiteurTraffic = (
@@ -75,5 +87,5 @@ const adaptateurLimiteurTraffic = (
   });
 
 export const adaptateurConfigurationLimiteurTraffic = (
-  typeConfiguration: 'STANDARD' | 'AUTHENTIFICATION' | 'LIMITE'
+  typeConfiguration: 'STANDARD' | 'AUTHENTIFICATION' | 'LIMITE' | 'TRES-LIMITE'
 ): RateLimitRequestHandler => conf[typeConfiguration]();

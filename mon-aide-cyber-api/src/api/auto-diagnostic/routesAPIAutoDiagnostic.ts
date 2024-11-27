@@ -34,6 +34,7 @@ import { RestitutionHTML } from '../../infrastructure/adaptateurs/AdaptateurDeRe
 import { RepresentationRestitution } from '../routesAPIDiagnostic';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { differenceInDays } from 'date-fns';
+import { adaptateurConfigurationLimiteurTraffic } from '../adaptateurLimiteurTraffic';
 
 type CorpsReponseAutoDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 
@@ -92,6 +93,7 @@ export const routesAPIAutoDiagnostic = (
 
   routes.post(
     '/',
+    adaptateurConfigurationLimiteurTraffic('TRES-LIMITE'),
     express.json(),
     body('cguSignees')
       .custom((value: boolean) => value)
@@ -129,6 +131,7 @@ export const routesAPIAutoDiagnostic = (
 
   routes.get(
     '/:id',
+    adaptateurConfigurationLimiteurTraffic('LIMITE'),
     relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
       definitionEntiteInitieAutoDiagnostic.definition
     ),
@@ -170,6 +173,7 @@ export const routesAPIAutoDiagnostic = (
 
   routes.patch(
     '/:id',
+    adaptateurConfigurationLimiteurTraffic('STANDARD'),
     relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
       definitionEntiteInitieAutoDiagnostic.definition
     ),
@@ -218,6 +222,7 @@ export const routesAPIAutoDiagnostic = (
 
   routes.get(
     '/:id/restitution',
+    adaptateurConfigurationLimiteurTraffic('LIMITE'),
     relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
       definitionEntiteInitieAutoDiagnostic.definition
     ),
