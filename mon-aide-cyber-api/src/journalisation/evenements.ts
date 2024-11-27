@@ -39,7 +39,7 @@ export const reinitialisationMotDePasseFaite = consommateurEvenement();
 
 export const reinitialisationMotDePasseErronee = consommateurEvenement();
 
-export const autoDiagnosticLance = consommateurEvenement();
+export const diagnosticLibreAccesLance = consommateurEvenement();
 
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E

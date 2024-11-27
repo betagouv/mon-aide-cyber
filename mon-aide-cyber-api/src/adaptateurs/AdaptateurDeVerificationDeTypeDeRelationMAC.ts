@@ -26,8 +26,8 @@ export class AdaptateurDeVerificationDeTypeDeRelationMAC
             titre: 'Diagnostic non trouvé.',
             message: 'Désolé, vous ne pouvez pas accéder à ce diagnostic.',
             liens: {
-              'creer-auto-diagnostic': {
-                url: '/api/auto-diagnostic',
+              'creer-diagnostic': {
+                url: '/api/diagnostic-libre-acces',
                 methode: 'POST',
               },
             },

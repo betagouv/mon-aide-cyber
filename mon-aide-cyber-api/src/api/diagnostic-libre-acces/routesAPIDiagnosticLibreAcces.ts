@@ -20,8 +20,8 @@ import {
   validationResult,
 } from 'express-validator';
 import {
-  definitionEntiteInitieAutoDiagnostic,
-  DefinitionEntiteInitieAutoDiagnostic,
+  definitionEntiteInitieDiagnosticLibreAcces,
+  DefinitionEntiteInitieDiagnosticLibreAcces,
 } from '../../diagnostic-libre-acces/consommateursEvenements';
 import {
   CorpsReponse,
@@ -134,8 +134,8 @@ export const routesAPIDiagnosticLibreAcces = (
   routes.get(
     '/:id',
     adaptateurConfigurationLimiteurTraffic('LIMITE'),
-    relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
-      definitionEntiteInitieAutoDiagnostic.definition
+    relations.verifie<DefinitionEntiteInitieDiagnosticLibreAcces>(
+      definitionEntiteInitieDiagnosticLibreAcces.definition
     ),
     validateurDiagnosticLibreAcces(entrepots.diagnostic()),
     (
@@ -178,8 +178,8 @@ export const routesAPIDiagnosticLibreAcces = (
   routes.patch(
     '/:id',
     adaptateurConfigurationLimiteurTraffic('STANDARD'),
-    relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
-      definitionEntiteInitieAutoDiagnostic.definition
+    relations.verifie<DefinitionEntiteInitieDiagnosticLibreAcces>(
+      definitionEntiteInitieDiagnosticLibreAcces.definition
     ),
     validateurDiagnosticLibreAcces(entrepots.diagnostic()),
     express.json(),
@@ -227,8 +227,8 @@ export const routesAPIDiagnosticLibreAcces = (
   routes.get(
     '/:id/restitution',
     adaptateurConfigurationLimiteurTraffic('LIMITE'),
-    relations.verifie<DefinitionEntiteInitieAutoDiagnostic>(
-      definitionEntiteInitieAutoDiagnostic.definition
+    relations.verifie<DefinitionEntiteInitieDiagnosticLibreAcces>(
+      definitionEntiteInitieDiagnosticLibreAcces.definition
     ),
     validateurDiagnosticLibreAcces(entrepots.diagnostic()),
     (

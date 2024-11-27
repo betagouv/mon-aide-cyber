@@ -3,27 +3,30 @@ import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/Entre
 import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import {
-  definitionEntiteInitieAutoDiagnostic,
-  unTupleEntiteInitieAutoDiagnostic,
+  definitionEntiteInitieDiagnosticLibreAcces,
+  unTupleEntiteInitieDiagnosticLibreAcces,
 } from '../../src/diagnostic-libre-acces/consommateursEvenements';
 import { AdaptateurDeVerificationDeTypeDeRelationMAC } from '../../src/adaptateurs/AdaptateurDeVerificationDeTypeDeRelationMAC';
 import { Request, Response } from 'express';
 import { ReponseVerificationRelationEnErreur } from '../../src/adaptateurs/AdaptateurDeVerificationDesAccesMAC';
 
-describe('L’adptateur de relations MAC', () => {
+describe('L’adaptateur de relations MAC', () => {
   it('Accepte l’accès au diagnostic', async () => {
     const entrepotRelation = new EntrepotRelationMemoire();
     let suiteAppelee = false;
     const identifiantEntiteAidee = crypto.randomUUID();
     const diagnostic = crypto.randomUUID();
     entrepotRelation.persiste(
-      unTupleEntiteInitieAutoDiagnostic(identifiantEntiteAidee, diagnostic)
+      unTupleEntiteInitieDiagnosticLibreAcces(
+        identifiantEntiteAidee,
+        diagnostic
+      )
     );
     const adaptateurRelation = new AdaptateurRelationsMAC(entrepotRelation);
 
     await new AdaptateurDeVerificationDeTypeDeRelationMAC(
       adaptateurRelation
-    ).verifie(definitionEntiteInitieAutoDiagnostic.definition)(
+    ).verifie(definitionEntiteInitieDiagnosticLibreAcces.definition)(
       { params: { id: diagnostic } } as unknown as Request,
       {} as Response,
       () => {
@@ -54,7 +57,7 @@ describe('L’adptateur de relations MAC', () => {
 
     await new AdaptateurDeVerificationDeTypeDeRelationMAC(
       adaptateurRelation
-    ).verifie(definitionEntiteInitieAutoDiagnostic.definition)(
+    ).verifie(definitionEntiteInitieDiagnosticLibreAcces.definition)(
       { params: { id: diagnostic } } as unknown as Request,
       reponse,
       () => {
@@ -67,8 +70,8 @@ describe('L’adptateur de relations MAC', () => {
       titre: 'Diagnostic non trouvé.',
       message: 'Désolé, vous ne pouvez pas accéder à ce diagnostic.',
       liens: {
-        'creer-auto-diagnostic': {
-          url: '/api/auto-diagnostic',
+        'creer-diagnostic': {
+          url: '/api/diagnostic-libre-acces',
           methode: 'POST',
         },
       },
