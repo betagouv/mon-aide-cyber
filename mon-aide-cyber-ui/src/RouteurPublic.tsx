@@ -57,7 +57,7 @@ export const RouteurPublic = () => {
         <Route index element={<EcranConnexion />} />
       </Route>
       <Route
-        path="/demande-autodiagnostic"
+        path="/diagnostic-libre-acces"
         element={<LayoutPublic afficheNavigation={false} />}
       >
         <Route index element={<EcranDemandeAutodiagnostic />} />
