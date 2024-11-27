@@ -4,7 +4,7 @@ import { DiagnosticLibreAccesLance } from './CapteurSagaLanceDiagnosticLibreAcce
 import crypto from 'crypto';
 import { DefinitionTuple, Tuple, unTuple } from '../relation/Tuple';
 
-export const demandeInitieAutoDiagnostic = (
+export const demandeInitieDiagnosticLibreAcces = (
   adaptateurRelations: AdaptateurRelations
 ) =>
   new (class implements ConsommateurEvenement {
@@ -12,7 +12,7 @@ export const demandeInitieAutoDiagnostic = (
       evenement: E
     ): Promise<void> {
       const diagnosticLance = evenement as DiagnosticLibreAccesLance;
-      const tuple = unTupleEntiteInitieAutoDiagnostic(
+      const tuple = unTupleEntiteInitieDiagnosticLibreAcces(
         diagnosticLance.corps.idDemande,
         diagnosticLance.corps.idDiagnostic
       );
@@ -21,25 +21,25 @@ export const demandeInitieAutoDiagnostic = (
     }
   })();
 
-export const unTupleEntiteInitieAutoDiagnostic = (
+export const unTupleEntiteInitieDiagnosticLibreAcces = (
   identifiantDemande: crypto.UUID,
   identifiantDiagnostic: crypto.UUID
 ): Tuple =>
-  unTuple<DefinitionEntiteInitieAutoDiagnostic>(
-    definitionEntiteInitieAutoDiagnostic
+  unTuple<DefinitionEntiteInitieDiagnosticLibreAcces>(
+    definitionEntiteInitieDiagnosticLibreAcces
   )
     .avecUtilisateur(identifiantDemande)
     .avecObjet(identifiantDiagnostic)
     .construis();
 
-export type DefinitionEntiteInitieAutoDiagnostic = DefinitionTuple & {
+export type DefinitionEntiteInitieDiagnosticLibreAcces = DefinitionTuple & {
   relation: 'initiateur';
   typeObjet: 'auto-diagnostic';
   typeUtilisateur: 'entité';
 };
 
-export const definitionEntiteInitieAutoDiagnostic: {
-  definition: DefinitionEntiteInitieAutoDiagnostic;
+export const definitionEntiteInitieDiagnosticLibreAcces: {
+  definition: DefinitionEntiteInitieDiagnosticLibreAcces;
 } = {
   definition: {
     relation: 'initiateur',
