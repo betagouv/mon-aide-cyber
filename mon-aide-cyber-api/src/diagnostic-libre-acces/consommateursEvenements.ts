@@ -1,6 +1,6 @@
 import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 import { ConsommateurEvenement, Evenement } from '../domaine/BusEvenement';
-import { AutoDiagnosticLance } from './CapteurSagaLanceAutoDiagnostic';
+import { DiagnosticLibreAccesLance } from './CapteurSagaLanceDiagnosticLibreAcces';
 import crypto from 'crypto';
 import { DefinitionTuple, Tuple, unTuple } from '../relation/Tuple';
 
@@ -8,10 +8,10 @@ export const demandeInitieAutoDiagnostic = (
   adaptateurRelations: AdaptateurRelations
 ) =>
   new (class implements ConsommateurEvenement {
-    async consomme<E extends Evenement<unknown> = AutoDiagnosticLance>(
+    async consomme<E extends Evenement<unknown> = DiagnosticLibreAccesLance>(
       evenement: E
     ): Promise<void> {
-      const diagnosticLance = evenement as AutoDiagnosticLance;
+      const diagnosticLance = evenement as DiagnosticLibreAccesLance;
       const tuple = unTupleEntiteInitieAutoDiagnostic(
         diagnosticLance.corps.idDemande,
         diagnosticLance.corps.idDiagnostic

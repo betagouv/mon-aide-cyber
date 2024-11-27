@@ -23,9 +23,9 @@ import { CapteurCommandeCreeUtilisateur } from '../../authentification/CapteurCo
 import { CapteurCommandeReinitialisationMotDePasse } from '../../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 
 import {
-  CapteurCommandeDemandeAutoDiagnostic,
-  CapteurSagaLanceAutoDiagnostic,
-} from '../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
+  CapteurCommandeDemandeDiagnosticLibreAcces,
+  CapteurSagaLanceDiagnosticLibreAcces,
+} from '../../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -184,10 +184,10 @@ const capteurs: Map<string, Capteur> = new Map([
     },
   ],
   [
-    'SagaLanceAutoDiagnostic',
+    'SagaLanceDiagnosticLibreAcces',
     {
       capteur: (parametres) =>
-        new CapteurSagaLanceAutoDiagnostic(
+        new CapteurSagaLanceDiagnosticLibreAcces(
           parametres.entrepots,
           parametres.busCommande!,
           parametres.busEvenements!,
@@ -197,10 +197,10 @@ const capteurs: Map<string, Capteur> = new Map([
     },
   ],
   [
-    'CommandeDemandeAutoDiagnostic',
+    'CommandeDemandeDiagnosticLibreAcces',
     {
       capteur: (parametres) =>
-        new CapteurCommandeDemandeAutoDiagnostic(parametres.entrepots),
+        new CapteurCommandeDemandeDiagnosticLibreAcces(parametres.entrepots),
     },
   ],
 ]);

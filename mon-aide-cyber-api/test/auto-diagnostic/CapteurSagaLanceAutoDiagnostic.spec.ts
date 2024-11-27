@@ -1,10 +1,10 @@
 import { beforeEach, describe } from 'vitest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import {
-  AutoDiagnosticLance,
-  CapteurSagaLanceAutoDiagnostic,
-  DemandeAutoDiagnostic,
-} from '../../src/auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
+  DiagnosticLibreAccesLance,
+  CapteurSagaLanceDiagnosticLibreAcces,
+  DemandeDiagnosticLibreAcces,
+} from '../../src/diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
 import { Entrepots } from '../../src/domaine/Entrepots';
@@ -48,20 +48,20 @@ describe('Capteur pour lancer un Auto-Diagnostic', () => {
     const identifiantDemande = crypto.randomUUID();
     adaptateurUUID.genereUUID = () => identifiantDemande;
 
-    await new CapteurSagaLanceAutoDiagnostic(
+    await new CapteurSagaLanceDiagnosticLibreAcces(
       entrepots,
       busCommande,
       busEvenement,
       adaptateurReferentiel,
       adaptateurMesures
     ).execute({
-      type: 'SagaLanceAutoDiagnostic',
+      type: 'SagaLanceDiagnosticLibreAcces',
       dateSignatureCGU: FournisseurHorloge.maintenant(),
     });
 
-    const demandes = await entrepots.demandesAutoDiagnostic().tous();
+    const demandes = await entrepots.demandesDiagnosticLibreAcces().tous();
     expect(demandes).toHaveLength(1);
-    expect(demandes[0]).toStrictEqual<DemandeAutoDiagnostic>({
+    expect(demandes[0]).toStrictEqual<DemandeDiagnosticLibreAcces>({
       identifiant: identifiantDemande,
       dateSignatureCGU: FournisseurHorloge.maintenant(),
     });
@@ -70,23 +70,23 @@ describe('Capteur pour lancer un Auto-Diagnostic', () => {
   it('Publie l’événement AUTO_DIAGNOSTIC_LANCE', async () => {
     FournisseurHorlogeDeTest.initialise(new Date());
 
-    await new CapteurSagaLanceAutoDiagnostic(
+    await new CapteurSagaLanceDiagnosticLibreAcces(
       entrepots,
       busCommande,
       busEvenement,
       adaptateurReferentiel,
       adaptateurMesures
     ).execute({
-      type: 'SagaLanceAutoDiagnostic',
+      type: 'SagaLanceDiagnosticLibreAcces',
       dateSignatureCGU: FournisseurHorloge.maintenant(),
     });
 
     expect(
-      busEvenement.consommateursTestes.get('AUTO_DIAGNOSTIC_LANCE')?.[0]
+      busEvenement.consommateursTestes.get('DIAGNOSTIC_LIBRE_ACCES_LANCE')?.[0]
         .evenementConsomme
-    ).toStrictEqual<AutoDiagnosticLance>({
+    ).toStrictEqual<DiagnosticLibreAccesLance>({
       identifiant: expect.any(String),
-      type: 'AUTO_DIAGNOSTIC_LANCE',
+      type: 'DIAGNOSTIC_LIBRE_ACCES_LANCE',
       date: FournisseurHorloge.maintenant(),
       corps: {
         idDiagnostic: expect.any(String),

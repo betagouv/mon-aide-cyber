@@ -4,7 +4,7 @@ import {
   EntrepotAidantMemoire,
   EntrepotAideMemoire,
   EntrepotAnnuaireAidantsMemoire,
-  EntrepotDemandeAutoDiagnosticMemoire,
+  EntrepotDemandeDiagnosticLibreAccesMemoire,
   EntrepotDemandeDevenirAidantMemoire,
   EntrepotDiagnosticMemoire,
   EntrepotProfilAidantMemoire,
@@ -20,7 +20,7 @@ import { EntrepotAnnuaireAidants } from '../../../annuaire-aidants/annuaireAidan
 import { EntrepotUtilisateur } from '../../../authentification/Utilisateur';
 import { EntrepotAidant } from '../../../espace-aidant/Aidant';
 import { EntrepotProfilAidant } from '../../../espace-aidant/profil/profilAidant';
-import { EntrepotDemandeAutoDiagnostic } from '../../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
+import { EntrepotDemandeDiagnosticLibreAcces } from '../../../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
 
 export class EntrepotsMemoire implements Entrepots {
   private entrepotDiagnostic: EntrepotDiagnostic =
@@ -42,8 +42,8 @@ export class EntrepotsMemoire implements Entrepots {
       this.entrepotAidants,
       this.entrepotUtilisateurs
     );
-  private entrepotDemandesAutoDiagnostic: EntrepotDemandeAutoDiagnostic =
-    new EntrepotDemandeAutoDiagnosticMemoire();
+  private entrepotDemandesDiagnosticLibreAcces: EntrepotDemandeDiagnosticLibreAcces =
+    new EntrepotDemandeDiagnosticLibreAccesMemoire();
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
   }
@@ -80,7 +80,7 @@ export class EntrepotsMemoire implements Entrepots {
     return this.entrepotProfilAidant;
   }
 
-  demandesAutoDiagnostic() {
-    return this.entrepotDemandesAutoDiagnostic;
+  demandesDiagnosticLibreAcces() {
+    return this.entrepotDemandesDiagnosticLibreAcces;
   }
 }

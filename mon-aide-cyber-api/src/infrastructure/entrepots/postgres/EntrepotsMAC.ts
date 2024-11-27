@@ -18,8 +18,8 @@ import { EntrepotUtilisateurPostgres } from './EntrepotUtilisateurPostgres';
 import { EntrepotAidant } from '../../../espace-aidant/Aidant';
 import { EntrepotProfilAidant } from '../../../espace-aidant/profil/profilAidant';
 import { EntrepotProfilAidantPostgres } from './EntrepotProfilAidantPostgres';
-import { EntrepotDemandeAutoDiagnostic } from '../../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
-import { EntrepotDemandeAutoDiagnosticPostgres } from './EntrepotDemandeAutoDiagnosticPostgres';
+import { EntrepotDemandeDiagnosticLibreAcces } from '../../../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
+import { EntrepotDemandeDiagnosticLibreAccesPostgres } from './EntrepotDemandeDiagnosticLibreAccesPostgres';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -41,8 +41,8 @@ export class EntrepotsMAC implements Entrepots {
     new EntrepotUtilisateurPostgres(adaptateurServiceChiffrement());
   private entrepotProfilAidant: EntrepotProfilAidant =
     new EntrepotProfilAidantPostgres(adaptateurServiceChiffrement());
-  private entrepotDemandeAutoDiagnostic: EntrepotDemandeAutoDiagnostic =
-    new EntrepotDemandeAutoDiagnosticPostgres();
+  private entrepotDemandeDiagnosticLibreAcces: EntrepotDemandeDiagnosticLibreAcces =
+    new EntrepotDemandeDiagnosticLibreAccesPostgres();
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
@@ -79,7 +79,7 @@ export class EntrepotsMAC implements Entrepots {
     return this.entrepotProfilAidant;
   }
 
-  demandesAutoDiagnostic(): EntrepotDemandeAutoDiagnostic {
-    return this.entrepotDemandeAutoDiagnostic;
+  demandesDiagnosticLibreAcces(): EntrepotDemandeDiagnosticLibreAcces {
+    return this.entrepotDemandeDiagnosticLibreAcces;
   }
 }
