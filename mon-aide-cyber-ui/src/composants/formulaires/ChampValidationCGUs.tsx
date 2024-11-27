@@ -1,8 +1,5 @@
 import { Input } from '../atomes/Input/Input.tsx';
-import { useModale } from '../../fournisseurs/hooks.ts';
-import { useCallback } from 'react';
-import { CorpsCGU } from '../../vues/ComposantCGU.tsx';
-import Button from '../atomes/Button/Button.tsx';
+import { Link } from 'react-router-dom';
 
 export const ChampValidationCGUs = ({
   sontValidees,
@@ -11,14 +8,6 @@ export const ChampValidationCGUs = ({
   sontValidees: boolean;
   surCguCliquees: () => void;
 }) => {
-  const { affiche } = useModale();
-  const afficheModaleCGU = useCallback(() => {
-    affiche({
-      corps: <CorpsCGU />,
-      taille: 'large',
-    });
-  }, [affiche]);
-
   return (
     <div className={`fr-checkbox-group mac-radio-group`}>
       <Input
@@ -34,10 +23,10 @@ export const ChampValidationCGUs = ({
           <span>
             {' '}
             J&apos;accepte les{' '}
-            <b>
-              <Button type="button" variant="link" onClick={afficheModaleCGU}>
+            <b className="violet-fonce">
+              <Link to="/cgu" target="_blank">
                 conditions générales d&apos;utilisation
-              </Button>
+              </Link>
             </b>{' '}
             de MonAideCyber au nom de l&apos;entité que je représente
           </span>
