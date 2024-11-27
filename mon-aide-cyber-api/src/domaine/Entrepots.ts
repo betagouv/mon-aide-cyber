@@ -7,7 +7,7 @@ import { EntrepotAnnuaireAidants } from '../annuaire-aidants/annuaireAidants';
 import { EntrepotUtilisateur } from '../authentification/Utilisateur';
 import { EntrepotAidant } from '../espace-aidant/Aidant';
 import { EntrepotProfilAidant } from '../espace-aidant/profil/profilAidant';
-import { EntrepotDemandeAutoDiagnostic } from '../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
+import { EntrepotDemandeDiagnosticLibreAcces } from '../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
 
 export interface Entrepots {
   diagnostic(): EntrepotDiagnostic;
@@ -28,5 +28,5 @@ export interface Entrepots {
 
   profilAidant(): EntrepotProfilAidant;
 
-  demandesAutoDiagnostic(): EntrepotDemandeAutoDiagnostic;
+  demandesDiagnosticLibreAcces(): EntrepotDemandeDiagnosticLibreAcces;
 }

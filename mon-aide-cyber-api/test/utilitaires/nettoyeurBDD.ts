@@ -85,7 +85,7 @@ export const nettoieLaBaseDeDonneesDemandeDevenirAidant = async () => {
   }
 };
 
-export const nettoieLaBaseDeDonneesDemandeAutoDiagnostic = async () => {
+export const nettoieLaBaseDeDonneesDemandeDiagnosticLibreAcces = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
     await entrepotsPostgresPourLesTests.nettoieDemandeAutoDiagnostic();
   }

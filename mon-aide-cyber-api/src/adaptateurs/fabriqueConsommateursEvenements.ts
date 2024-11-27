@@ -24,7 +24,7 @@ import { EntrepotEvenementJournal } from '../journalisation/Publication';
 import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../relation/AdaptateurRelationsMAC';
 import { aidantInitieDiagnostic } from '../espace-aidant/tableau-de-bord/consommateursEvenements';
-import { demandeInitieAutoDiagnostic } from '../auto-diagnostic/consommateursEvenements';
+import { demandeInitieAutoDiagnostic } from '../diagnostic-libre-acces/consommateursEvenements';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -93,7 +93,7 @@ export const fabriqueConsommateursEvenements = (
       [reinitialisationMotDePasseErronee(entrepotJournalisation)],
     ],
     [
-      'AUTO_DIAGNOSTIC_LANCE',
+      'DIAGNOSTIC_LIBRE_ACCES_LANCE',
       [
         autoDiagnosticLance(entrepotJournalisation),
         demandeInitieAutoDiagnostic(adaptateurRelations),

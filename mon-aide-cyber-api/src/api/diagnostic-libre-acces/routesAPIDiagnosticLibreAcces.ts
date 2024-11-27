@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { ConfigurationServeur } from '../../serveur';
 import { NextFunction } from 'express-serve-static-core';
 import crypto, { UUID } from 'crypto';
-import { SagaLanceAutoDiagnostic } from '../../auto-diagnostic/CapteurSagaLanceAutoDiagnostic';
+import { SagaLanceDiagnosticLibreAcces } from '../../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { ServiceDiagnostic } from '../../diagnostic/ServiceDiagnostic';
 import { representeLeDiagnosticPourLeClient } from '../representateurs/representateurDiagnostic';
@@ -22,7 +22,7 @@ import {
 import {
   definitionEntiteInitieAutoDiagnostic,
   DefinitionEntiteInitieAutoDiagnostic,
-} from '../../auto-diagnostic/consommateursEvenements';
+} from '../../diagnostic-libre-acces/consommateursEvenements';
 import {
   CorpsReponse,
   SagaAjoutReponse,
@@ -119,9 +119,9 @@ export const routesAPIDiagnosticLibreAcces = (
       }
       return busCommande
         .publie<
-          SagaLanceAutoDiagnostic,
+          SagaLanceDiagnosticLibreAcces,
           crypto.UUID
-        >({ type: 'SagaLanceAutoDiagnostic', dateSignatureCGU: FournisseurHorloge.maintenant() })
+        >({ type: 'SagaLanceDiagnosticLibreAcces', dateSignatureCGU: FournisseurHorloge.maintenant() })
         .then((idDiagnostic) =>
           reponse
             .status(201)

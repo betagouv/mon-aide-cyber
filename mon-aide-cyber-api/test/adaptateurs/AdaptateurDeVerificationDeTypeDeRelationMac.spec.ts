@@ -5,7 +5,7 @@ import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMA
 import {
   definitionEntiteInitieAutoDiagnostic,
   unTupleEntiteInitieAutoDiagnostic,
-} from '../../src/auto-diagnostic/consommateursEvenements';
+} from '../../src/diagnostic-libre-acces/consommateursEvenements';
 import { AdaptateurDeVerificationDeTypeDeRelationMAC } from '../../src/adaptateurs/AdaptateurDeVerificationDeTypeDeRelationMAC';
 import { Request, Response } from 'express';
 import { ReponseVerificationRelationEnErreur } from '../../src/adaptateurs/AdaptateurDeVerificationDesAccesMAC';

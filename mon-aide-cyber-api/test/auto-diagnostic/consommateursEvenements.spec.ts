@@ -19,12 +19,12 @@ describe("Les consommateurs d'évènements de l’auto diagnostic", () => {
           adaptateurRelations,
           entrepotJournalisation: new EntrepotEvenementJournalMemoire(),
         },
-        ['AUTO_DIAGNOSTIC_LANCE']
+        ['DIAGNOSTIC_LIBRE_ACCES_LANCE']
       );
 
       await busEvenement.publie({
         identifiant: crypto.randomUUID(),
-        type: 'AUTO_DIAGNOSTIC_LANCE',
+        type: 'DIAGNOSTIC_LIBRE_ACCES_LANCE',
         date: FournisseurHorloge.maintenant(),
         corps: {
           idDiagnostic: identifiantDiagnostic,

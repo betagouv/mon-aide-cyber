@@ -17,26 +17,27 @@ import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
-export type DemandeAutoDiagnostic = Aggregat & {
+export type DemandeDiagnosticLibreAcces = Aggregat & {
   dateSignatureCGU: Date;
 };
 
-export type EntrepotDemandeAutoDiagnostic = Entrepot<DemandeAutoDiagnostic>;
+export type EntrepotDemandeDiagnosticLibreAcces =
+  Entrepot<DemandeDiagnosticLibreAcces>;
 
-type CommandeDemandeAutoDiagnostic = Commande & {
-  type: 'CommandeDemandeAutoDiagnostic';
+type CommandeDemandeDiagnosticLibreAcces = Commande & {
+  type: 'CommandeDemandeDiagnosticLibreAcces';
   dateSignatureCGU: Date;
 };
 
-export class CapteurCommandeDemandeAutoDiagnostic
-  implements CapteurCommande<CommandeDemandeAutoDiagnostic, crypto.UUID>
+export class CapteurCommandeDemandeDiagnosticLibreAcces
+  implements CapteurCommande<CommandeDemandeDiagnosticLibreAcces, crypto.UUID>
 {
   constructor(private readonly entrepots: Entrepots) {}
 
-  execute(commande: CommandeDemandeAutoDiagnostic): Promise<crypto.UUID> {
+  execute(commande: CommandeDemandeDiagnosticLibreAcces): Promise<crypto.UUID> {
     const identifiant: crypto.UUID = adaptateurUUID.genereUUID();
     return this.entrepots
-      .demandesAutoDiagnostic()
+      .demandesDiagnosticLibreAcces()
       .persiste({
         identifiant,
         dateSignatureCGU: commande.dateSignatureCGU,
@@ -45,13 +46,13 @@ export class CapteurCommandeDemandeAutoDiagnostic
   }
 }
 
-export type SagaLanceAutoDiagnostic = Saga & {
-  type: 'SagaLanceAutoDiagnostic';
+export type SagaLanceDiagnosticLibreAcces = Saga & {
+  type: 'SagaLanceDiagnosticLibreAcces';
   dateSignatureCGU: Date;
 };
 
-export class CapteurSagaLanceAutoDiagnostic
-  implements CapteurSaga<SagaLanceAutoDiagnostic, crypto.UUID>
+export class CapteurSagaLanceDiagnosticLibreAcces
+  implements CapteurSaga<SagaLanceDiagnosticLibreAcces, crypto.UUID>
 {
   constructor(
     private readonly entrepots: Entrepots,
@@ -61,10 +62,10 @@ export class CapteurSagaLanceAutoDiagnostic
     private readonly referentielDeMesures: Adaptateur<ReferentielDeMesures>
   ) {}
 
-  execute(saga: SagaLanceAutoDiagnostic): Promise<crypto.UUID> {
+  execute(saga: SagaLanceDiagnosticLibreAcces): Promise<crypto.UUID> {
     return this.busCommande
-      .publie<CommandeDemandeAutoDiagnostic, crypto.UUID>({
-        type: 'CommandeDemandeAutoDiagnostic',
+      .publie<CommandeDemandeDiagnosticLibreAcces, crypto.UUID>({
+        type: 'CommandeDemandeDiagnosticLibreAcces',
         dateSignatureCGU: saga.dateSignatureCGU,
       })
       .then((identifiantDemande) => {
@@ -81,8 +82,8 @@ export class CapteurSagaLanceAutoDiagnostic
           })
           .then((identifiantDiagnostic) => {
             return this.busEvenement
-              .publie<AutoDiagnosticLance>({
-                type: 'AUTO_DIAGNOSTIC_LANCE',
+              .publie<DiagnosticLibreAccesLance>({
+                type: 'DIAGNOSTIC_LIBRE_ACCES_LANCE',
                 date: FournisseurHorloge.maintenant(),
                 corps: {
                   idDiagnostic: identifiantDiagnostic,
@@ -96,7 +97,7 @@ export class CapteurSagaLanceAutoDiagnostic
   }
 }
 
-export type AutoDiagnosticLance = Evenement<{
+export type DiagnosticLibreAccesLance = Evenement<{
   idDiagnostic: crypto.UUID;
   idDemande: crypto.UUID;
-}> & { type: 'AUTO_DIAGNOSTIC_LANCE' };
+}> & { type: 'DIAGNOSTIC_LIBRE_ACCES_LANCE' };
