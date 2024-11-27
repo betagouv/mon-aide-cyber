@@ -36,9 +36,11 @@ import { ErreurMAC } from '../../domaine/erreurMAC';
 import { differenceInDays } from 'date-fns';
 import { adaptateurConfigurationLimiteurTraffic } from '../adaptateurLimiteurTraffic';
 
-type CorpsReponseAutoDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
+type CorpsReponseDiagnosticLibreAcces = ReponseHATEOAS &
+  RepresentationDiagnostic;
 
-export type CorpsReponseCreerAutoDiagnosticEnErreur = ReponseHATEOASEnErreur;
+export type CorpsReponseCreerDiagnosticLibreAccesEnErreur =
+  ReponseHATEOASEnErreur;
 
 type CorpsRestitution = RepresentationRestitution | Buffer;
 
@@ -66,7 +68,7 @@ const validateurDiagnosticLibreAcces = (
     .diagnosticMoinsDe7Jours()
     .withMessage("Le diagnostic demandé n'a pas été trouvé.");
 };
-export const routesAPIAutoDiagnostic = (
+export const routesAPIDiagnosticLibreAcces = (
   configuration: ConfigurationServeur
 ) => {
   const routes = express.Router();
@@ -84,7 +86,7 @@ export const routesAPIAutoDiagnostic = (
     reponse.status(404).json({
       liens: {
         'creer-diagnostic': {
-          url: '/api/auto-diagnostic',
+          url: '/api/diagnostic-libre-acces',
           methode: 'POST',
         },
       },
@@ -100,7 +102,7 @@ export const routesAPIAutoDiagnostic = (
       .withMessage('Veuillez signer les CGU.'),
     (
       requete: Request,
-      reponse: Response<CorpsReponseCreerAutoDiagnosticEnErreur>
+      reponse: Response<CorpsReponseCreerDiagnosticLibreAccesEnErreur>
     ) => {
       const resultatsValidation: Result<FieldValidationError> =
         validationResult(requete) as Result<FieldValidationError>;
@@ -138,7 +140,9 @@ export const routesAPIAutoDiagnostic = (
     validateurDiagnosticLibreAcces(entrepots.diagnostic()),
     (
       requete: Request,
-      reponse: Response<CorpsReponseAutoDiagnostic | ReponseHATEOASEnErreur>,
+      reponse: Response<
+        CorpsReponseDiagnosticLibreAcces | ReponseHATEOASEnErreur
+      >,
       suite: NextFunction
     ) => {
       const resultatsValidation: Result<FieldValidationError> =
@@ -157,11 +161,11 @@ export const routesAPIAutoDiagnostic = (
             ),
             liens: {
               'repondre-diagnostic': {
-                url: `/api/auto-diagnostic/${diagnostic.identifiant}`,
+                url: `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
                 methode: 'PATCH',
               },
               [`afficher-diagnostic-${diagnostic.identifiant}`]: {
-                url: `/api/auto-diagnostic/${diagnostic.identifiant}/restitution`,
+                url: `/api/diagnostic-libre-acces/${diagnostic.identifiant}/restitution`,
                 methode: 'GET',
               },
             },
@@ -206,11 +210,11 @@ export const routesAPIAutoDiagnostic = (
             ),
             liens: {
               'repondre-diagnostic': {
-                url: `/api/auto-diagnostic/${diagnostic.identifiant}`,
+                url: `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
                 methode: 'PATCH',
               },
               [`afficher-diagnostic-${diagnostic.identifiant}`]: {
-                url: `/api/auto-diagnostic/${diagnostic.identifiant}/restitution`,
+                url: `/api/diagnostic-libre-acces/${diagnostic.identifiant}/restitution`,
                 methode: 'GET',
               },
             },
@@ -263,18 +267,18 @@ export const routesAPIAutoDiagnostic = (
           const reponseHATEOAS: ReponseHATEOAS = {
             liens: {
               'modifier-diagnostic': {
-                url: `/api/auto-diagnostic/${id}`,
+                url: `/api/diagnostic-libre-acces/${id}`,
                 methode: 'GET',
               },
               'restitution-json': {
                 contentType: 'application/json',
                 methode: 'GET',
-                url: `/api/auto-diagnostic/${id}/restitution`,
+                url: `/api/diagnostic-libre-acces/${id}/restitution`,
               },
               'restitution-pdf': {
                 contentType: 'application/pdf',
                 methode: 'GET',
-                url: `/api/auto-diagnostic/${id}/restitution`,
+                url: `/api/diagnostic-libre-acces/${id}/restitution`,
               },
             },
           };

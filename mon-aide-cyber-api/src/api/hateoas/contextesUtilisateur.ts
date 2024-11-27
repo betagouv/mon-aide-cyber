@@ -78,13 +78,13 @@ export const contextesUtilisateur: ContextesUtilisateur = {
     creer: {
       'creer-diagnostic': {
         methode: 'POST',
-        url: '/api/auto-diagnostic',
+        url: '/api/diagnostic-libre-acces',
       },
     },
     afficher: {
       'afficher-diagnostic': {
         methode: 'GET',
-        url: '/api/auto-diagnostic/__ID__/restitution',
+        url: '/api/diagnostic-libre-acces/__ID__/restitution',
       },
     },
   },

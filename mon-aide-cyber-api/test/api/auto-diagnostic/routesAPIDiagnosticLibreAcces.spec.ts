@@ -20,7 +20,7 @@ import {
   LiensHATEOAS,
   ReponseHATEOASEnErreur,
 } from '../../../src/api/hateoas/hateoas';
-import { CorpsReponseCreerAutoDiagnosticEnErreur } from '../../../src/api/auto-diagnostic/routesAPIAutoDiagnostic';
+import { CorpsReponseCreerDiagnosticLibreAccesEnErreur } from '../../../src/api/diagnostic-libre-acces/routesAPIDiagnosticLibreAcces';
 import { unAdaptateurDeRestitutionHTML } from '../../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
 import { uneRestitution } from '../../constructeurs/constructeurRestitution';
 import { unAdaptateurRestitutionPDF } from '../../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
@@ -28,7 +28,7 @@ import { FournisseurHorloge } from '../../../src/infrastructure/horloge/Fourniss
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { add } from 'date-fns';
 
-describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
+describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { portEcoute: number; app: Express };
 
@@ -49,18 +49,18 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
-        '/api/auto-diagnostic',
+        '/api/diagnostic-libre-acces',
         donneesServeur.portEcoute,
         { email: 'jean.dujardin@email.com', cguSignees: true }
       );
 
       expect(reponse.statusCode).toBe(201);
       expect(reponse.headers['link']).toMatch(
-        /api\/auto-diagnostic\/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/
+        /api\/diagnostic-libre-acces\/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/
       );
     });
 
-    it('Crée l’auto-diagnostic', async () => {
+    it('Crée le diagnostic en libre accès', async () => {
       const idAutoDiagnostic = crypto.randomUUID();
       adaptateurUUID.genereUUID = () => idAutoDiagnostic;
       const referentiel = unReferentiel().construis();
@@ -69,7 +69,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
-        '/api/auto-diagnostic',
+        '/api/diagnostic-libre-acces',
         donneesServeur.portEcoute,
         { email: 'jean.dupont@mail.com', cguSignees: true }
       );
@@ -78,7 +78,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
         await testeurMAC.entrepots.diagnostic().lis(idAutoDiagnostic)
       ).not.toBeUndefined();
       expect(reponse.headers['link']).toStrictEqual(
-        `/api/auto-diagnostic/${idAutoDiagnostic}`
+        `/api/diagnostic-libre-acces/${idAutoDiagnostic}`
       );
     });
 
@@ -87,7 +87,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
-          '/api/auto-diagnostic',
+          '/api/diagnostic-libre-acces',
           donneesServeur.portEcoute,
           { email: 'jean.dupont@mail.com' }
         );
@@ -95,11 +95,11 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
         expect(reponse.statusCode).toBe(422);
         expect(
           await reponse.json()
-        ).toStrictEqual<CorpsReponseCreerAutoDiagnosticEnErreur>({
+        ).toStrictEqual<CorpsReponseCreerDiagnosticLibreAccesEnErreur>({
           message: 'Veuillez signer les CGU.',
           liens: {
             'creer-diagnostic': {
-              url: '/api/auto-diagnostic',
+              url: '/api/diagnostic-libre-acces',
               methode: 'POST',
             },
           },
@@ -122,7 +122,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/auto-diagnostic/${diagnostic.identifiant}`,
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
         donneesServeur.portEcoute
       );
 
@@ -131,11 +131,11 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(diagnosticRecu).toStrictEqual<ReponseDiagnostic>(
         forgeReponseDiagnostic(diagnostic, {
           'repondre-diagnostic': {
-            url: `/api/auto-diagnostic/${diagnostic.identifiant}`,
+            url: `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
             methode: 'PATCH',
           },
           [`afficher-diagnostic-${diagnostic.identifiant}`]: {
-            url: `/api/auto-diagnostic/${diagnostic.identifiant}/restitution`,
+            url: `/api/diagnostic-libre-acces/${diagnostic.identifiant}/restitution`,
             methode: 'GET',
           },
         })
@@ -146,7 +146,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/auto-diagnostic/id-inexistant`,
+        `/api/diagnostic-libre-acces/id-inexistant`,
         donneesServeur.portEcoute
       );
 
@@ -155,7 +155,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(corps).toStrictEqual<ReponseHATEOASEnErreur>({
         liens: {
           'creer-diagnostic': {
-            url: '/api/auto-diagnostic',
+            url: '/api/diagnostic-libre-acces',
             methode: 'POST',
           },
         },
@@ -167,7 +167,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/auto-diagnostic/${crypto.randomUUID()}`,
+        `/api/diagnostic-libre-acces/${crypto.randomUUID()}`,
         donneesServeur.portEcoute
       );
 
@@ -187,7 +187,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/auto-diagnostic/${diagnostic.identifiant}`,
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
         donneesServeur.portEcoute
       );
 
@@ -195,7 +195,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
         liens: {
           'creer-diagnostic': {
-            url: '/api/auto-diagnostic',
+            url: '/api/diagnostic-libre-acces',
             methode: 'POST',
           },
         },
@@ -226,7 +226,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'PATCH',
-        `/api/auto-diagnostic/${diagnostic.identifiant}`,
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
         donneesServeur.portEcoute,
         {
           chemin: 'contexte',
@@ -250,11 +250,11 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
           diagnostic,
           {
             'repondre-diagnostic': {
-              url: `/api/auto-diagnostic/${diagnostic.identifiant}`,
+              url: `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
               methode: 'PATCH',
             },
             [`afficher-diagnostic-${diagnostic.identifiant}`]: {
-              url: `/api/auto-diagnostic/${diagnostic.identifiant}/restitution`,
+              url: `/api/diagnostic-libre-acces/${diagnostic.identifiant}/restitution`,
               methode: 'GET',
             },
           },
@@ -267,7 +267,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'PATCH',
-        `/api/auto-diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
+        `/api/diagnostic-libre-acces/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
         donneesServeur.portEcoute,
         {
           chemin: 'contexte',
@@ -289,7 +289,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'PATCH',
-        `/api/auto-diagnostic/${diagnostic.identifiant}`,
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
         donneesServeur.portEcoute
       );
 
@@ -309,7 +309,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'PATCH',
-        `/api/auto-diagnostic/${diagnostic.identifiant}`,
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
         donneesServeur.portEcoute
       );
 
@@ -317,7 +317,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
         liens: {
           'creer-diagnostic': {
-            url: '/api/auto-diagnostic',
+            url: '/api/diagnostic-libre-acces',
             methode: 'POST',
           },
         },
@@ -351,7 +351,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/auto-diagnostic/${restitution.identifiant}/restitution`,
+        `/api/diagnostic-libre-acces/${restitution.identifiant}/restitution`,
         donneesServeur.portEcoute
       );
 
@@ -359,18 +359,18 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(await reponse.json()).toStrictEqual<RepresentationRestitution>({
         liens: {
           'modifier-diagnostic': {
-            url: `/api/auto-diagnostic/${restitution.identifiant}`,
+            url: `/api/diagnostic-libre-acces/${restitution.identifiant}`,
             methode: 'GET',
           },
           'restitution-json': {
             contentType: 'application/json',
             methode: 'GET',
-            url: `/api/auto-diagnostic/${restitution.identifiant}/restitution`,
+            url: `/api/diagnostic-libre-acces/${restitution.identifiant}/restitution`,
           },
           'restitution-pdf': {
             contentType: 'application/pdf',
             methode: 'GET',
-            url: `/api/auto-diagnostic/${restitution.identifiant}/restitution`,
+            url: `/api/diagnostic-libre-acces/${restitution.identifiant}/restitution`,
           },
         },
         autresMesures: '',
@@ -398,7 +398,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/auto-diagnostic/${restitution.identifiant}/restitution`,
+        `/api/diagnostic-libre-acces/${restitution.identifiant}/restitution`,
         donneesServeur.portEcoute,
         undefined,
         { accept: 'application/pdf' }
@@ -413,7 +413,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/auto-diagnostic/${crypto.randomUUID()}/restitution`,
+        `/api/diagnostic-libre-acces/${crypto.randomUUID()}/restitution`,
         donneesServeur.portEcoute
       );
 
@@ -430,7 +430,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/auto-diagnostic/${diagnostic.identifiant}/restitution`,
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}/restitution`,
         donneesServeur.portEcoute
       );
 
@@ -450,7 +450,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/auto-diagnostic/${diagnostic.identifiant}/restitution`,
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}/restitution`,
         donneesServeur.portEcoute
       );
 
@@ -458,7 +458,7 @@ describe('Le serveur MAC sur les routes /api/auto-diagnostic', () => {
       expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
         liens: {
           'creer-diagnostic': {
-            url: '/api/auto-diagnostic',
+            url: '/api/diagnostic-libre-acces',
             methode: 'POST',
           },
         },
