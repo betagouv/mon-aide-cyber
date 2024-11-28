@@ -11,12 +11,10 @@ import { ErreurMAC } from '../../src/domaine/erreurMAC';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import {
-  CapteurCommandeLanceDiagnostic,
-  DiagnosticLance,
-} from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
+import { CapteurCommandeLanceDiagnostic } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
 import crypto from 'crypto';
+import { DiagnosticLance } from '../../src/diagnostic/evenements';
 
 describe('Capteur pour lancer un diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -113,7 +111,7 @@ describe('Capteur pour lancer un diagnostic', () => {
       date: maintenant,
       corps: {
         identifiantDiagnostic: diagnostic.identifiant,
-        identifiantAidant,
+        origine: { identifiant: identifiantAidant, type: 'AIDANT' },
       },
     });
   });
