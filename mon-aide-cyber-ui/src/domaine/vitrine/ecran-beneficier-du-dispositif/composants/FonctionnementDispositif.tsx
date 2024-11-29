@@ -42,7 +42,7 @@ export const FonctionnementDispositif = () => {
         <>
           <b>Six mesures prioritaires sont proposées</b> à l’issue du
           diagnostic. Facilement compréhensibles et actionnables, elles doivent
-          pouvoir être mise en œuvre par les équipes de l’entité ou celles du
+          pouvoir être mises en œuvre par les équipes de l’entité ou celles du
           prestataire. Une liste de ressources utiles complète par ailleurs la
           restitution, afin d’<b>orienter la mise en place du plan d’action</b>.
         </>
