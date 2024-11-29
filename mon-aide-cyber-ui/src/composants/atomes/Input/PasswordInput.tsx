@@ -9,7 +9,7 @@ export const PasswordInput = ({
   const [estAffiche, setEstAffiche] = useState(false);
 
   return (
-    <>
+    <div className="input-password-layout">
       <Input type={estAffiche ? 'text' : 'password'} {...proprietesRestantes} />
       <span
         className="input-password-icon"
@@ -23,6 +23,6 @@ export const PasswordInput = ({
           }
         />
       </span>
-    </>
+    </div>
   );
 };

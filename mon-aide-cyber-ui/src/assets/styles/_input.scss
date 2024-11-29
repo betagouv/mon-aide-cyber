@@ -82,10 +82,13 @@ input {
   background-color: var(--couleurs-mac-violet-leger);
 }
 
-.input-password-icon {
-  cursor: pointer;
-  position: absolute;
-  bottom: 0.5rem;
-  right: 0;
-  padding-right: 1rem;
+.input-password-layout {
+  display: flex;
+
+  .input-password-icon {
+    cursor: pointer;
+    position: absolute;
+    right: 1rem;
+    top: 2rem;
+  }
 }
