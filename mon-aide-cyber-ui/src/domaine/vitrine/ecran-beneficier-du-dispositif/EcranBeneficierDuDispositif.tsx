@@ -45,7 +45,7 @@ export const EcranBeneficierDuDispositif = () => {
           },
         ]}
       />
-      <section className="fond-clair-mac">
+      <section className="fond-clair-mac section-diagnostic-libre-acces">
         <div className="fr-container focus-restitution-layout">
           <section>
             <TypographieH3>

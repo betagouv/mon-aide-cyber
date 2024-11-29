@@ -139,6 +139,15 @@
     }
   }
 
+  .section-diagnostic-libre-acces {
+    display: none;
+
+    @include a-partir-de(lg) {
+      display: block;
+    }
+
+  }
+
   .focus-restitution-layout {
     width: 100%;
     padding-left: 1rem;
