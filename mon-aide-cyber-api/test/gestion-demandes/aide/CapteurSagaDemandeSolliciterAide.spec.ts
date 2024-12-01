@@ -8,22 +8,27 @@ import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/
 import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import {
-  adaptateurCorpsMessage,
+  adaptateursCorpsMessage,
   ProprietesMessageAidant,
-  ProprietesMessageRecapitulatif,
-} from '../../../src/gestion-demandes/aide/adaptateurCorpsMessage';
+} from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
+import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
 
 describe('Capteur saga demande solliciter Aide', () => {
   let adaptateurEnvoiMail: AdaptateurEnvoiMailMemoire;
   let entrepots: EntrepotsMemoire;
   let busEvenement: BusEvenementDeTest;
   let busCommande: BusCommandeMAC;
+
+  beforeEach(() => {
+    adaptateursCorpsMessage.sollicitation =
+      unAdaptateurDeCorpsDeMessage().construis().sollicitation;
+  });
 
   describe("En ce qui concerne l'Aidant", () => {
     beforeEach(() => {
@@ -36,9 +41,6 @@ describe('Capteur saga demande solliciter Aide', () => {
         adaptateurEnvoiMail,
         unConstructeurDeServices(entrepots.aidants())
       );
-      adaptateurCorpsMessage.notificationAidantSollicitation = () => ({
-        genereCorpsMessage: () => 'Bonjour Aidant!',
-      });
     });
 
     it("Envoie le mail sollicitant l'aide à l'Aidant indiqué", async () => {
@@ -64,10 +66,12 @@ describe('Capteur saga demande solliciter Aide', () => {
     });
 
     it("Envoie le mail sollicitant l'aide à l'Aidant indiqué avec la raison sociale", async () => {
-      adaptateurCorpsMessage.notificationAidantSollicitation = () => ({
-        genereCorpsMessage: (proprietes: ProprietesMessageAidant) =>
-          `Bonjour Aidant! ${proprietes.raisonSocialeEntite}`,
-      });
+      adaptateursCorpsMessage.sollicitation = unAdaptateurDeCorpsDeMessage()
+        .notificationAidant(
+          (proprietes: ProprietesMessageAidant) =>
+            `Bonjour Aidant! ${proprietes.raisonSocialeEntite}`
+        )
+        .construis().sollicitation;
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       const entrepots = new EntrepotsMemoire();
 
@@ -175,10 +179,6 @@ describe('Capteur saga demande solliciter Aide', () => {
         adaptateurEnvoiMail,
         unConstructeurDeServices(entrepots.aidants())
       );
-
-      adaptateurCorpsMessage.recapitulatifMAC = () => ({
-        genereCorpsMessage: () => 'Bonjour MAC!',
-      });
     });
 
     it('Envoie le mail récapitulatif à MAC', async () => {
@@ -218,10 +218,11 @@ describe('Capteur saga demande solliciter Aide', () => {
     it('Envoie le mail récapitulatif à MAC avec la raison sociale', async () => {
       adaptateurEnvironnement.messagerie = () =>
         adaptateursEnvironnementDeTest.messagerie('mac@mail.com');
-      adaptateurCorpsMessage.recapitulatifMAC = () => ({
-        genereCorpsMessage: (proprietes: ProprietesMessageRecapitulatif) =>
-          `Bonjour MAC! ${proprietes.raisonSociale}`,
-      });
+      adaptateursCorpsMessage.sollicitation = unAdaptateurDeCorpsDeMessage()
+        .recapitulatifMac(
+          (proprietes) => `Bonjour MAC! ${proprietes.raisonSociale}`
+        )
+        .construis().sollicitation;
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       const entrepots = new EntrepotsMemoire();
       const busEvenement = new BusEvenementDeTest();
@@ -264,9 +265,6 @@ describe('Capteur saga demande solliciter Aide', () => {
         adaptateurEnvoiMail,
         unConstructeurDeServices(entrepots.aidants())
       );
-      adaptateurCorpsMessage.recapitulatifSollicitationAide = () => ({
-        genereCorpsMessage: () => 'Bonjour Aidé!',
-      });
     });
 
     it("Envoie le mail récapitulatif de la sollicitation à l'Aidé", async () => {

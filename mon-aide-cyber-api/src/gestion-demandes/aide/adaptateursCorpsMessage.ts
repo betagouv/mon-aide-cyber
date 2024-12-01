@@ -36,7 +36,7 @@ const genereCorpsNotificationAidantSollicitation = (
   );
 };
 
-type ProprietesMessageRecapitulatifSollicitationAide = {
+export type ProprietesMessageRecapitulatifSollicitationAide = {
   nomPrenom: string;
   departement: string;
 };
@@ -74,32 +74,56 @@ export type ProprietesMessageRecapitulatif = {
   departement: string;
 };
 
-const adaptateurCorpsMessage = {
-  notificationAidantSollicitation: () => ({
-    genereCorpsMessage: (proprietesMessage: ProprietesMessageAidant): string =>
-      genereCorpsNotificationAidantSollicitation(proprietesMessage),
-  }),
-  recapitulatifMAC: () => ({
-    genereCorpsMessage: (proprietes: ProprietesMessageRecapitulatif) => {
-      return (
-        '<html lang="fr">' +
-        '<body>' +
-        'Bonjour,\n' +
-        '\n' +
-        `Aujourd’hui, l’entité ${proprietes.raisonSociale ? `(${proprietes.raisonSociale})` : ''} sous l’adresse ${proprietes.mailEntite} a sollicité l’Aidant cyber ${proprietes.aidant} situé dans le département ${proprietes.departement}.\n` +
-        '\n' +
-        "L'équipe MonAideCyber" +
-        '</body>' +
-        '</html>'
-      );
-    },
-  }),
+export type MessagesSollicitation = {
+  notificationAidantSollicitation: () => {
+    genereCorpsMessage: (proprietesMessage: ProprietesMessageAidant) => string;
+  };
+  recapitulatifMAC: () => {
+    genereCorpsMessage: (
+      proprietesMessage: ProprietesMessageRecapitulatif
+    ) => string;
+  };
   recapitulatifSollicitationAide: (
     proprietesMessage: ProprietesMessageRecapitulatifSollicitationAide
-  ) => ({
-    genereCorpsMessage: (): string =>
-      genereRecapitulatifSollicitationAide(proprietesMessage),
+  ) => {
+    genereCorpsMessage: () => string;
+  };
+};
+
+export type AdaptateurCorpsDeMessageAide = {
+  sollicitation: () => MessagesSollicitation;
+};
+
+const adaptateursCorpsMessage = {
+  sollicitation: (): MessagesSollicitation => ({
+    notificationAidantSollicitation: () => ({
+      genereCorpsMessage: (
+        proprietesMessage: ProprietesMessageAidant
+      ): string =>
+        genereCorpsNotificationAidantSollicitation(proprietesMessage),
+    }),
+    recapitulatifMAC: () => ({
+      genereCorpsMessage: (proprietes: ProprietesMessageRecapitulatif) => {
+        return (
+          '<html lang="fr">' +
+          '<body>' +
+          'Bonjour,\n' +
+          '\n' +
+          `Aujourd’hui, l’entité ${proprietes.raisonSociale ? `(${proprietes.raisonSociale})` : ''} sous l’adresse ${proprietes.mailEntite} a sollicité l’Aidant cyber ${proprietes.aidant} situé dans le département ${proprietes.departement}.\n` +
+          '\n' +
+          "L'équipe MonAideCyber" +
+          '</body>' +
+          '</html>'
+        );
+      },
+    }),
+    recapitulatifSollicitationAide: (
+      proprietesMessage: ProprietesMessageRecapitulatifSollicitationAide
+    ) => ({
+      genereCorpsMessage: (): string =>
+        genereRecapitulatifSollicitationAide(proprietesMessage),
+    }),
   }),
 };
 
-export { adaptateurCorpsMessage };
+export { adaptateursCorpsMessage };
