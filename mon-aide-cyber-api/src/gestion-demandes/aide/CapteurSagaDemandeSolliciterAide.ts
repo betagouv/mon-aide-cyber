@@ -2,7 +2,7 @@ import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
 import { CommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import crypto from 'crypto';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
-import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
+import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
@@ -50,7 +50,8 @@ export class CapteurSagaDemandeSolliciterAide
             Promise.all([
               this.adaptateurEnvoiMail.envoie(
                 {
-                  corps: adaptateurCorpsMessage
+                  corps: adaptateursCorpsMessage
+                    .sollicitation()
                     .notificationAidantSollicitation()
                     .genereCorpsMessage({
                       departement: saga.departement,
@@ -67,7 +68,8 @@ export class CapteurSagaDemandeSolliciterAide
                 'INFO'
               ),
               this.adaptateurEnvoiMail.envoie({
-                corps: adaptateurCorpsMessage
+                corps: adaptateursCorpsMessage
+                  .sollicitation()
                   .recapitulatifMAC()
                   .genereCorpsMessage({
                     aidant: aidant!.nomUsage,
@@ -85,7 +87,8 @@ export class CapteurSagaDemandeSolliciterAide
               }),
               this.adaptateurEnvoiMail.envoie(
                 {
-                  corps: adaptateurCorpsMessage
+                  corps: adaptateursCorpsMessage
+                    .sollicitation()
                     .recapitulatifSollicitationAide({
                       departement: saga.departement,
                       nomPrenom: aidant!.nomUsage,
