@@ -5,13 +5,17 @@ import { FournisseurHorloge } from '../../../infrastructure/horloge/FournisseurH
 import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import {
   EntrepotAidantPostgres,
-  ExtractionAidantSansDiagnostic,
-} from './extractionAidantSansDiagnostic';
+  ExtractionAidantSelonNombreDiagnostics,
+} from './extractionAidantSelonNombreDiagnostics';
 import { intlFormat } from 'date-fns';
 
-const command = program.description(
-  "Exporte les Aidants n'ayant effectué aucun diagnostic"
-);
+const command = program
+  .description("Exporte les Aidants en fonction du type d'export souhaité")
+  .option(
+    '-t, --type <type>',
+    "Le type d'export souhaité SANS_DIAGNOSTIC, AU_MOINS_DEUX_DIAGNOSTICS, AU_MOINS_CINQ_DIAGNOSTICS",
+    'SANS_DIAGNOSTIC'
+  );
 
 const formatteLaDate = (date?: Date): string =>
   date
@@ -32,11 +36,12 @@ const formatteLaDate = (date?: Date): string =>
 const versLigneCSV = (aidant: Aidant) =>
   `${aidant.nomPrenom};${aidant.email};${formatteLaDate(aidant.compteCree)};\n`;
 
-command.action(async () => {
+command.action(async (options) => {
+  const typeExport = options.type;
   const rapport: string[] = [];
-  const resultat = await new ExtractionAidantSansDiagnostic(
+  const resultat = await new ExtractionAidantSelonNombreDiagnostics(
     new EntrepotAidantPostgres(adaptateurServiceChiffrement())
-  ).extrais();
+  ).extrais(typeExport);
 
   console.log('Nombre d’Aidants trouvés : %d', resultat.length);
   resultat.forEach((aidant) => {
@@ -44,7 +49,7 @@ command.action(async () => {
   });
 
   fs.writeFileSync(
-    `/tmp/rapport-aidants-sans-diagnostic-${FournisseurHorloge.maintenant().toISOString()}.csv`,
+    `/tmp/rapport-aidants-${typeExport}-${FournisseurHorloge.maintenant().toISOString()}.csv`,
     rapport.join(''),
     {
       encoding: 'utf-8',
