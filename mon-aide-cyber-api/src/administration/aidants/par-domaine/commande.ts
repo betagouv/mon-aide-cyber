@@ -4,14 +4,24 @@ import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateur
 import crypto from 'crypto';
 
 program
-  .description('Récupère les informations des Aidants CCI')
-  .action(async () => {
-    console.log('Recherche des aidants CCI en cours');
+  .description(
+    'Récupère les informations des Aidants par domaine (i.e : nom de domaine dans le mail "mondomaine.fr, CCI par défaut")'
+  )
+  .requiredOption(
+    '-d, --domaine <domaine>',
+    'le nom de domaine du mail sur lequel effectuer la recherche',
+    'cci.fr'
+  )
+  .action(async (options) => {
+    const nomDeDomaine = options.domaine.toLowerCase();
+    console.log(
+      `Recherche des aidants pour le domaine ${nomDeDomaine} en cours`
+    );
     const aidants = await new EntrepotAidantPostgres(
       adaptateurServiceChiffrement()
     ).tous();
     const aidantsTrouves = aidants
-      .filter((aidant) => aidant.email.endsWith('cci.fr'))
+      .filter((aidant) => aidant.email.endsWith(nomDeDomaine))
       .map((aidant) => ({
         id: aidant.identifiant,
         idHashe: crypto
