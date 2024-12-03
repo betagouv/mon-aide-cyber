@@ -8,6 +8,7 @@ import { CommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import crypto from 'crypto';
 import { rechercheParNomDepartement } from '../departements';
+import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
 
 export type SagaDemandeAide = Saga & {
   cguValidees: boolean;
@@ -40,7 +41,10 @@ export class CapteurSagaDemandeAide
       await adaptateurEnvoiMail.envoie({
         objet: "Demande d'aide pour MonAideCyber",
         destinataire: { email: aide.email },
-        corps: construisMailConfirmationDemandeAide(aide, relationAidant),
+        corps: adaptateursCorpsMessage
+          .demande()
+          .confirmationDemandeAide()
+          .genereCorpsMessage(aide, relationAidant),
       });
     };
 
@@ -54,7 +58,10 @@ export class CapteurSagaDemandeAide
         destinataire: {
           email: adaptateurEnvironnement.messagerie().emailMAC(),
         },
-        corps: construisMailRecapitulatifDemandeAide(aide, relationAidant),
+        corps: adaptateursCorpsMessage
+          .demande()
+          .recapitulatifDemandeAide()
+          .genereCorpsMessage(aide, relationAidant),
       });
     };
 
@@ -108,62 +115,3 @@ export class CapteurSagaDemandeAide
     }
   }
 }
-
-const construisMailRecapitulatifDemandeAide = (
-  aide: Aide,
-  relationAidant: boolean
-) => {
-  const formateDate = FournisseurHorloge.formateDate(
-    FournisseurHorloge.maintenant()
-  );
-  const raisonSociale = aide.raisonSociale
-    ? `- Raison sociale: ${aide.raisonSociale}\n`
-    : '';
-  const miseEnRelation = relationAidant
-    ? '- Est déjà en relation avec un Aidant\n'
-    : '';
-  return (
-    'Bonjour,\n' +
-    '\n' +
-    `Une demande d’aide a été faite par ${aide.email}\n` +
-    '\n' +
-    'Ci-dessous, les informations concernant cette demande :\n' +
-    miseEnRelation +
-    `- Date de la demande : ${formateDate.date} à ${formateDate.heure}\n` +
-    `- Département: ${aide.departement}\n` +
-    raisonSociale
-  );
-};
-
-const construisMailConfirmationDemandeAide = (
-  aide: Aide,
-  relationAidant: boolean
-) => {
-  const formateDate = FournisseurHorloge.formateDate(
-    FournisseurHorloge.maintenant()
-  );
-  const raisonSociale = aide.raisonSociale
-    ? `- Raison sociale : ${aide.raisonSociale}\n`
-    : '';
-  const messageIntroduction = relationAidant
-    ? 'Votre demande a bien été prise en compte.\n' +
-      '\n' +
-      'Votre Aidant va vous accompagner dans la suite de votre démarche MonAideCyber.\n' +
-      'Voici les informations que vous avez renseignées :\n'
-    : 'Votre demande pour bénéficier de MonAideCyber a été prise en compte.\n' +
-      'Un Aidant de proximité vous contactera sur l’adresse email que vous nous avez communiquée dans les meilleurs délais.\n' +
-      '\n' +
-      'Voici les informations que vous avez renseignées :\n';
-  return (
-    'Bonjour,\n' +
-    '\n' +
-    messageIntroduction +
-    `- Signature des CGU le ${formateDate.date} à ${formateDate.heure}\n` +
-    `- Département : ${aide.departement}\n` +
-    raisonSociale +
-    '\n' +
-    'Toute l’équipe reste à votre disposition,\n\n' +
-    "L'équipe MonAideCyber\n" +
-    'monaidecyber@ssi.gouv.fr\n'
-  );
-};

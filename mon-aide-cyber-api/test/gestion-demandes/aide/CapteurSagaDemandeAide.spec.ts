@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { unAide } from '../../aide/ConstructeurAide';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
@@ -19,10 +19,17 @@ import {
 import { CapteurCommande } from '../../../src/domaine/commande';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
+import { adaptateursCorpsMessage } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
+import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
+import { Aide } from '../../../src/aide/Aide';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
-  describe("si l'Aidé est connu de MAC", () => {
-    it('interrompt le parcours', async () => {
+  beforeEach(() => {
+    adaptateursCorpsMessage.demande =
+      unAdaptateurDeCorpsDeMessage().construis().demande;
+  });
+  describe("Si l'Aidé est connu de MAC", () => {
+    it('Interrompt le parcours', async () => {
       const aide = unAide().construis();
       const entrepots = new EntrepotsMemoire();
       const busEvenement = new BusEvenementDeTest();
@@ -53,8 +60,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     });
   });
 
-  describe("si l'Aidé n'est pas connu de MAC", () => {
-    it("crée l'Aidé", async () => {
+  describe("Si l'Aidé n'est pas connu de MAC", () => {
+    it("Crée l'Aidé", async () => {
       const entrepotsMemoire = new EntrepotsMemoire();
       const busEvenement = new BusEvenementDeTest();
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
@@ -83,7 +90,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       ).not.toBeUndefined();
     });
 
-    it('envoie un email de confirmation à l’Aidé', async () => {
+    it('Envoie un email de confirmation à l’Aidé', async () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
@@ -114,24 +121,12 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       expect(
         adaptateurEnvoieMail.aEteEnvoyeA(
           'jean-dupont@email.com',
-          'Bonjour,\n' +
-            '\n' +
-            'Votre demande pour bénéficier de MonAideCyber a été prise en compte.\n' +
-            'Un Aidant de proximité vous contactera sur l’adresse email que vous nous avez communiquée dans les meilleurs délais.\n' +
-            '\n' +
-            'Voici les informations que vous avez renseignées :\n' +
-            `- Signature des CGU le 19.03.2024 à 14:45\n` +
-            `- Département : Gironde\n` +
-            '- Raison sociale : BetaGouv\n' +
-            '\n' +
-            'Toute l’équipe reste à votre disposition,\n\n' +
-            "L'équipe MonAideCyber\n" +
-            'monaidecyber@ssi.gouv.fr\n'
+          'Bonjour entité Aidée'
         )
       ).toBe(true);
     });
 
-    it('envoie un email de demande d’aide à MAC', async () => {
+    it('Envoie un email de demande d’aide à MAC', async () => {
       adaptateurEnvironnement.messagerie = () =>
         adaptateursEnvironnementDeTest.messagerie('mac@email.com');
       FournisseurHorlogeDeTest.initialise(
@@ -164,21 +159,20 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       expect(
         adaptateurEnvoieMail.aEteEnvoyeA(
           'mac@email.com',
-          'Bonjour,\n' +
-            '\n' +
-            'Une demande d’aide a été faite par jean-dupont@email.com\n' +
-            '\n' +
-            'Ci-dessous, les informations concernant cette demande :\n' +
-            '- Date de la demande : 19.03.2024 à 14:45\n' +
-            '- Département: Gironde\n' +
-            '- Raison sociale: BetaGouv\n'
+          'Bonjour une entité a fait une demande d’aide'
         )
       ).toBe(true);
     });
 
-    it('envoie un email de demande d’aide à MAC en prenant en compte la relation existante avec un Aidant', async () => {
+    it('Envoie un email de demande d’aide à MAC en prenant en compte la relation existante avec un Aidant', async () => {
       adaptateurEnvironnement.messagerie = () =>
         adaptateursEnvironnementDeTest.messagerie('mac@email.com');
+      adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
+        .recapitulatifDemandeAide(
+          (_aide: Aide, relationAidant: boolean) =>
+            `Bonjour une entité a fait une demande d’aide, relation Aidant : ${relationAidant}`
+        )
+        .construis().demande;
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
@@ -209,15 +203,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       expect(
         adaptateurEnvoieMail.aEteEnvoyeA(
           'mac@email.com',
-          'Bonjour,\n' +
-            '\n' +
-            'Une demande d’aide a été faite par jean-dupont@email.com\n' +
-            '\n' +
-            'Ci-dessous, les informations concernant cette demande :\n' +
-            '- Est déjà en relation avec un Aidant\n' +
-            '- Date de la demande : 19.03.2024 à 14:45\n' +
-            '- Département: Gironde\n' +
-            '- Raison sociale: BetaGouv\n'
+          'Bonjour une entité a fait une demande d’aide, relation Aidant : true'
         )
       ).toBe(true);
     });
@@ -225,6 +211,12 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     it("Envoie un email de confirmation l'Aidé en prenant en compte la relation existante avec un Aidant", async () => {
       adaptateurEnvironnement.messagerie = () =>
         adaptateursEnvironnementDeTest.messagerie();
+      adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
+        .confirmationDemandeAide(
+          (_aide: Aide, relationAidant: boolean) =>
+            `Bonjour entité Aidée, relation Aidant : ${relationAidant}`
+        )
+        .construis().demande;
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
@@ -255,70 +247,12 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       expect(
         adaptateurEnvoieMail.aEteEnvoyeA(
           'jean-dupont@email.com',
-          'Bonjour,\n' +
-            '\n' +
-            'Votre demande a bien été prise en compte.\n' +
-            '\n' +
-            'Votre Aidant va vous accompagner dans la suite de votre démarche MonAideCyber.\n' +
-            'Voici les informations que vous avez renseignées :\n' +
-            `- Signature des CGU le 19.03.2024 à 14:45\n` +
-            `- Département : Gironde\n` +
-            '- Raison sociale : BetaGouv\n' +
-            '\n' +
-            'Toute l’équipe reste à votre disposition,\n\n' +
-            "L'équipe MonAideCyber\n" +
-            'monaidecyber@ssi.gouv.fr\n'
+          'Bonjour entité Aidée, relation Aidant : true'
         )
       ).toBe(true);
     });
 
-    it("envoie un email de confirmation à l’Aidé qui n'a pas saisi de raison sociale", async () => {
-      FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-03-19T14:45:17+01:00'))
-      );
-      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
-      const entrepotsMemoire = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest();
-      const busCommande = new BusCommandeMAC(
-        entrepotsMemoire,
-        busEvenement,
-        adaptateurEnvoieMail,
-        unConstructeurDeServices(entrepotsMemoire.aidants())
-      );
-      const capteur = new CapteurSagaDemandeAide(
-        busCommande,
-        busEvenement,
-        adaptateurEnvoieMail
-      );
-
-      await capteur.execute({
-        type: 'SagaDemandeValidationCGUAide',
-        cguValidees: true,
-        email: 'jean-dupont@email.com',
-        departement: 'Gironde',
-        relationAidant: false,
-      });
-
-      expect(
-        adaptateurEnvoieMail.aEteEnvoyeA(
-          'jean-dupont@email.com',
-          'Bonjour,\n' +
-            '\n' +
-            'Votre demande pour bénéficier de MonAideCyber a été prise en compte.\n' +
-            'Un Aidant de proximité vous contactera sur l’adresse email que vous nous avez communiquée dans les meilleurs délais.\n' +
-            '\n' +
-            'Voici les informations que vous avez renseignées :\n' +
-            `- Signature des CGU le 19.03.2024 à 14:45\n` +
-            `- Département : Gironde\n` +
-            '\n' +
-            'Toute l’équipe reste à votre disposition,\n\n' +
-            "L'équipe MonAideCyber\n" +
-            'monaidecyber@ssi.gouv.fr\n'
-        )
-      ).toBe(true);
-    });
-
-    it("publie l'évènement 'AIDE_CREE'", async () => {
+    it("Publie l'évènement 'AIDE_CREE'", async () => {
       const maintenant = new Date();
       FournisseurHorlogeDeTest.initialise(maintenant);
       const entrepotsMemoire = new EntrepotsMemoire();
