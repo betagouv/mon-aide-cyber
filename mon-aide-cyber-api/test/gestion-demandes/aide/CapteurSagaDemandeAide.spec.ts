@@ -22,12 +22,23 @@ import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnv
 import { adaptateursCorpsMessage } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
 import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
 import { Aide } from '../../../src/aide/Aide';
-import { allier, gironde } from '../../../src/gestion-demandes/departements';
+import {
+  allier,
+  Departement,
+  gironde,
+} from '../../../src/gestion-demandes/departements';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
+  const cotParDefaut = {
+    rechercheEmailParDepartement: (__departement: Departement) =>
+      'cot@email.com',
+  };
+
   beforeEach(() => {
     adaptateursCorpsMessage.demande =
       unAdaptateurDeCorpsDeMessage().construis().demande;
+    adaptateurEnvironnement.messagerie = () =>
+      adaptateursEnvironnementDeTest.messagerie('mac@email.com');
   });
   describe("Si l'Aidé est connu de MAC", () => {
     it('Interrompt le parcours', async () => {
@@ -35,6 +46,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const entrepots = new EntrepotsMemoire();
       const busEvenement = new BusEvenementDeTest();
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+
       const capteur = new CapteurSagaDemandeAide(
         new BusCommandeMAC(
           entrepots,
@@ -43,7 +55,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           unConstructeurDeServices(entrepots.aidants())
         ),
         busEvenement,
-        adaptateurEnvoiMail
+        adaptateurEnvoiMail,
+        () => cotParDefaut
       );
       await entrepots.aides().persiste(aide);
 
@@ -75,7 +88,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const capteur = new CapteurSagaDemandeAide(
         busCommande,
         busEvenement,
-        adaptateurEnvoiMail
+        adaptateurEnvoiMail,
+        () => cotParDefaut
       );
 
       await capteur.execute({
@@ -107,7 +121,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const capteur = new CapteurSagaDemandeAide(
         busCommande,
         busEvenement,
-        adaptateurEnvoieMail
+        adaptateurEnvoieMail,
+        () => cotParDefaut
       );
 
       await capteur.execute({
@@ -127,9 +142,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       ).toBe(true);
     });
 
-    it('Envoie un email de demande d’aide à MAC', async () => {
-      adaptateurEnvironnement.messagerie = () =>
-        adaptateursEnvironnementDeTest.messagerie('mac@email.com');
+    it('Envoie un email de demande d’aide en copie à MAC', async () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
@@ -145,7 +158,48 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const capteur = new CapteurSagaDemandeAide(
         busCommande,
         busEvenement,
-        adaptateurEnvoieMail
+        adaptateurEnvoieMail,
+        () => cotParDefaut
+      );
+
+      await capteur.execute({
+        type: 'SagaDemandeValidationCGUAide',
+        cguValidees: true,
+        email: 'jean-dupont@email.com',
+        departement: gironde,
+        raisonSociale: 'BetaGouv',
+        relationAidant: false,
+      });
+
+      expect(
+        adaptateurEnvoieMail.aEteEnvoyeEnCopieA(
+          'mac@email.com',
+          'Bonjour une entité a fait une demande d’aide'
+        )
+      ).toBe(true);
+    });
+
+    it('Envoie un email de demande d’aide au COT de la région', async () => {
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2024-03-19T14:45:17+01:00'))
+      );
+      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
+      const entrepotsMemoire = new EntrepotsMemoire();
+      const busEvenement = new BusEvenementDeTest();
+      const busCommande = new BusCommandeMAC(
+        entrepotsMemoire,
+        busEvenement,
+        adaptateurEnvoieMail,
+        unConstructeurDeServices(entrepotsMemoire.aidants())
+      );
+      const capteur = new CapteurSagaDemandeAide(
+        busCommande,
+        busEvenement,
+        adaptateurEnvoieMail,
+        () => ({
+          rechercheEmailParDepartement: (__departement) =>
+            'gironde@ssi.gouv.fr',
+        })
       );
 
       await capteur.execute({
@@ -159,15 +213,13 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
 
       expect(
         adaptateurEnvoieMail.aEteEnvoyeA(
-          'mac@email.com',
+          'gironde@ssi.gouv.fr',
           'Bonjour une entité a fait une demande d’aide'
         )
       ).toBe(true);
     });
 
-    it('Envoie un email de demande d’aide à MAC en prenant en compte la relation existante avec un Aidant', async () => {
-      adaptateurEnvironnement.messagerie = () =>
-        adaptateursEnvironnementDeTest.messagerie('mac@email.com');
+    it('Envoie un email de demande d’aide au COT en prenant en compte la relation existante avec un Aidant', async () => {
       adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
         .recapitulatifDemandeAide(
           (_aide: Aide, relationAidant: boolean) =>
@@ -189,7 +241,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const capteur = new CapteurSagaDemandeAide(
         busCommande,
         busEvenement,
-        adaptateurEnvoieMail
+        adaptateurEnvoieMail,
+        () => cotParDefaut
       );
 
       await capteur.execute({
@@ -203,15 +256,19 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
 
       expect(
         adaptateurEnvoieMail.aEteEnvoyeA(
+          'cot@email.com',
+          'Bonjour une entité a fait une demande d’aide, relation Aidant : true'
+        )
+      ).toBe(true);
+      expect(
+        adaptateurEnvoieMail.aEteEnvoyeEnCopieA(
           'mac@email.com',
           'Bonjour une entité a fait une demande d’aide, relation Aidant : true'
         )
       ).toBe(true);
     });
 
-    it("Envoie un email de confirmation l'Aidé en prenant en compte la relation existante avec un Aidant", async () => {
-      adaptateurEnvironnement.messagerie = () =>
-        adaptateursEnvironnementDeTest.messagerie();
+    it("Envoie un email de confirmation à l'Aidé en prenant en compte la relation existante avec un Aidant", async () => {
       adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
         .confirmationDemandeAide(
           (_aide: Aide, relationAidant: boolean) =>
@@ -233,7 +290,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const capteur = new CapteurSagaDemandeAide(
         busCommande,
         busEvenement,
-        adaptateurEnvoieMail
+        adaptateurEnvoieMail,
+        () => cotParDefaut
       );
 
       await capteur.execute({
@@ -269,7 +327,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       await new CapteurSagaDemandeAide(
         busCommande,
         busEvenement,
-        adaptateurEnvoieMail
+        adaptateurEnvoieMail,
+        () => cotParDefaut
       ).execute({
         type: 'SagaDemandeValidationCGUAide',
         cguValidees: true,
@@ -303,7 +362,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         const capteur = new CapteurSagaDemandeAide(
           busCommande,
           busEvenement,
-          adaptateurEnvoieMail
+          adaptateurEnvoieMail,
+          () => cotParDefaut
         );
 
         await expect(() =>

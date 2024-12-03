@@ -2,13 +2,13 @@ import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { Aide } from '../../aide/Aide';
-import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { CommandeRechercheAideParEmail } from '../../aide/CapteurCommandeRechercheAideParEmail';
 import { CommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import crypto from 'crypto';
 import { Departement } from '../departements';
 import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
 export type SagaDemandeAide = Saga & {
   cguValidees: boolean;
@@ -29,7 +29,10 @@ export class CapteurSagaDemandeAide
   constructor(
     private readonly busCommande: BusCommande,
     private readonly busEvenement: BusEvenement,
-    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail
+    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
+    private readonly annuaireCOT: () => {
+      rechercheEmailParDepartement: (departement: Departement) => string;
+    }
   ) {}
 
   async execute(saga: SagaDemandeAide): Promise<void> {
@@ -56,8 +59,11 @@ export class CapteurSagaDemandeAide
       await adaptateurEnvoiMail.envoie({
         objet: "Demande d'aide pour MonAideCyber",
         destinataire: {
-          email: adaptateurEnvironnement.messagerie().emailMAC(),
+          email: this.annuaireCOT().rechercheEmailParDepartement(
+            aide.departement
+          ),
         },
+        copie: adaptateurEnvironnement.messagerie().emailMAC(),
         corps: adaptateursCorpsMessage
           .demande()
           .recapitulatifDemandeAide()
