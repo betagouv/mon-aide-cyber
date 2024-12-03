@@ -1,10 +1,11 @@
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { Aide } from '../../aide/Aide';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { Departement } from '../departements';
 
 export type ProprietesMessageAidant = {
   nomPrenom: string;
-  departement: string;
+  departement: Departement;
   mailEntite: string;
   raisonSocialeEntite?: string;
 };
@@ -17,7 +18,7 @@ const genereCorpsNotificationAidantSollicitation = (
     '<body>' +
     `Bonjour ${proprietesMessage.nomPrenom},\n` +
     '\n' +
-    `Une entité ${proprietesMessage.raisonSocialeEntite ? `(${proprietesMessage.raisonSocialeEntite})` : ''} vous a sollicité sur l’annuaire des Aidants cyber car elle souhaite bénéficier avec vous d’un diagnostic MonAideCyber dans le département <b>${proprietesMessage.departement}</b>.\n` +
+    `Une entité ${proprietesMessage.raisonSocialeEntite ? `(${proprietesMessage.raisonSocialeEntite})` : ''} vous a sollicité sur l’annuaire des Aidants cyber car elle souhaite bénéficier avec vous d’un diagnostic MonAideCyber dans le département <b>${proprietesMessage.departement.nom}</b>.\n` +
     '\n' +
     'Voici ses coordonnées afin de programmer ensemble la réalisation du prochain diagnostic :' +
     '\n' +
@@ -28,7 +29,7 @@ const genereCorpsNotificationAidantSollicitation = (
     'Lors du rendez-vous, vous pourrez créer le diagnostic sur votre espace aidant comme vous le faites actuellement.\n' +
     'Il est conseillé de réaliser le diagnostic en présentiel, la visioconférence est cependant tolérée.\n' +
     '\n' +
-    `En cas d’empêchement de votre part, nous vous remercions d’envoyer un mail à l’adresse <a href="mailto:monaidecyber@ssi.gouv.fr?subject=[MonAideCyber] Indisponibilité réalisation diagnostic dans le département ${proprietesMessage.departement}">monaidecyber@ssi.gouv.fr</a> afin que la demande soit attribuée à un autre Aidant cyber.\n` +
+    `En cas d’empêchement de votre part, nous vous remercions d’envoyer un mail à l’adresse <a href="mailto:monaidecyber@ssi.gouv.fr?subject=[MonAideCyber] Indisponibilité réalisation diagnostic dans le département ${proprietesMessage.departement.nom}">monaidecyber@ssi.gouv.fr</a> afin que la demande soit attribuée à un autre Aidant cyber.\n` +
     '\n' +
     'Toute l’équipe reste à votre disposition,\n' +
     '\n' +
@@ -40,7 +41,7 @@ const genereCorpsNotificationAidantSollicitation = (
 
 export type ProprietesMessageRecapitulatifSollicitationAide = {
   nomPrenom: string;
-  departement: string;
+  departement: Departement;
 };
 
 const genereRecapitulatifSollicitationAide = (
@@ -50,7 +51,7 @@ const genereRecapitulatifSollicitationAide = (
   '<body>' +
   'Bonjour\n' +
   '\n' +
-  `Vous avez sollicité l'Aidant cyber ${proprietesMessage.nomPrenom} référencé sur l’annuaire MonAideCyber pour la réalisation d’un diagnostic dans le département ${proprietesMessage.departement}.\n` +
+  `Vous avez sollicité l'Aidant cyber ${proprietesMessage.nomPrenom} référencé sur l’annuaire MonAideCyber pour la réalisation d’un diagnostic dans le département ${proprietesMessage.departement.nom}.\n` +
   '\n' +
   "Votre demande a bien été affectée à l'Aidant cyber qui prendra contact avec vous prochainement en vue de convenir d’un rendez-vous.\n" +
   '\n' +
@@ -73,7 +74,7 @@ export type ProprietesMessageRecapitulatif = {
   raisonSociale?: string;
   mailEntite: string;
   aidant: string;
-  departement: string;
+  departement: Departement;
 };
 
 export type MessagesSollicitation = {

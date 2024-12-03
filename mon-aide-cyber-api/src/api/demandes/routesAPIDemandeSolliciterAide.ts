@@ -14,6 +14,7 @@ import { validateurDeDepartement } from '../validateurs/departements';
 import { SagaDemandeSolliciterAide } from '../../gestion-demandes/aide/CapteurSagaDemandeSolliciterAide';
 import { adaptateurConfigurationLimiteurTraffic } from '../adaptateurLimiteurTraffic';
 import * as core from 'express-serve-static-core';
+import { rechercheParNomDepartement } from '../../gestion-demandes/departements';
 
 type CorpsRequeteDemandeSolliciterAide = core.ParamsDictionary & {
   cguValidees: boolean;
@@ -87,7 +88,7 @@ export const routesAPIDemandeSolliciterAide = (
       const corps: CorpsRequeteDemandeSolliciterAide = requete.body;
       const saga: SagaDemandeSolliciterAide = {
         email: corps.email,
-        departement: corps.departement,
+        departement: rechercheParNomDepartement(corps.departement),
         identifiantAidant: corps.aidantSollicite,
         ...(corps.raisonSociale && { raisonSociale: corps.raisonSociale }),
         type: 'SagaDemandeSolliciterAide',

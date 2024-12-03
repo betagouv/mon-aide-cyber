@@ -22,6 +22,7 @@ import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnv
 import { adaptateursCorpsMessage } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
 import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
 import { Aide } from '../../../src/aide/Aide';
+import { allier, gironde } from '../../../src/gestion-demandes/departements';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   beforeEach(() => {
@@ -81,7 +82,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         type: 'SagaDemandeValidationCGUAide',
         cguValidees: true,
         email: 'un email',
-        departement: 'Allier',
+        departement: allier,
         relationAidant: false,
       });
 
@@ -113,7 +114,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         type: 'SagaDemandeValidationCGUAide',
         cguValidees: true,
         email: 'jean-dupont@email.com',
-        departement: 'Gironde',
+        departement: gironde,
         raisonSociale: 'BetaGouv',
         relationAidant: false,
       });
@@ -151,7 +152,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         type: 'SagaDemandeValidationCGUAide',
         cguValidees: true,
         email: 'jean-dupont@email.com',
-        departement: 'Gironde',
+        departement: gironde,
         raisonSociale: 'BetaGouv',
         relationAidant: false,
       });
@@ -195,7 +196,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         type: 'SagaDemandeValidationCGUAide',
         cguValidees: true,
         email: 'jean-dupont@email.com',
-        departement: 'Gironde',
+        departement: gironde,
         raisonSociale: 'BetaGouv',
         relationAidant: true,
       });
@@ -239,7 +240,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         type: 'SagaDemandeValidationCGUAide',
         cguValidees: true,
         email: 'jean-dupont@email.com',
-        departement: 'Gironde',
+        departement: gironde,
         raisonSociale: 'BetaGouv',
         relationAidant: true,
       });
@@ -273,7 +274,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         type: 'SagaDemandeValidationCGUAide',
         cguValidees: true,
         email: 'jean-dupont@email.com',
-        departement: 'Gironde',
+        departement: gironde,
         relationAidant: false,
       });
       const aideRecu = (await entrepotsMemoire.aides().tous())[0];
@@ -310,7 +311,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             type: 'SagaDemandeValidationCGUAide',
             cguValidees: true,
             email: 'jean-dupont@email.com',
-            departement: 'Gironde',
+            departement: gironde,
             relationAidant: false,
           })
         ).rejects.toThrowError("Votre demande d'aide n'a pu aboutir");

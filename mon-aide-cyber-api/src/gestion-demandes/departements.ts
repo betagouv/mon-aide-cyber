@@ -643,57 +643,77 @@ export type Departement =
   | CollectiviteDePolynesieFrancaise
   | CollectiviteDeNouvelleCaledonie;
 
+export const gironde: Gironde = {
+  nom: 'Gironde',
+  code: '33',
+  codeRegion: '75',
+};
+export const ain: Ain = {
+  nom: 'Ain',
+  code: '1',
+  codeRegion: '84',
+};
+export const aisne: Aisne = {
+  nom: 'Aisne',
+  code: '2',
+  codeRegion: '32',
+};
+export const allier: Allier = {
+  nom: 'Allier',
+  code: '3',
+  codeRegion: '84',
+};
+export const alpesDeHauteProvence: AlpesDeHauteProvence = {
+  nom: 'Alpes-de-Haute-Provence',
+  code: '4',
+  codeRegion: '93',
+};
+export const hautesAlpes: HautesAlpes = {
+  nom: 'Hautes-Alpes',
+  code: '5',
+  codeRegion: '93',
+};
+export const alpesMaritimes: AlpesMaritimes = {
+  nom: 'Alpes-Maritimes',
+  code: '6',
+  codeRegion: '93',
+};
+export const ardeche: Ardeche = {
+  nom: 'Ardèche',
+  code: '7',
+  codeRegion: '84',
+};
+export const ardennes: Ardennes = {
+  nom: 'Ardennes',
+  code: '8',
+  codeRegion: '44',
+};
+export const ariege: Ariege = {
+  nom: 'Ariège',
+  code: '9',
+  codeRegion: '76',
+};
+export const aube: Aube = {
+  nom: 'Aube',
+  code: '10',
+  codeRegion: '44',
+};
+export const finistere: Finistere = {
+  nom: 'Finistère',
+  code: '29',
+  codeRegion: '53',
+};
 export const departements: Departement[] = [
-  {
-    nom: 'Ain',
-    code: '1',
-    codeRegion: '84',
-  },
-  {
-    nom: 'Aisne',
-    code: '2',
-    codeRegion: '32',
-  },
-  {
-    nom: 'Allier',
-    code: '3',
-    codeRegion: '84',
-  },
-  {
-    nom: 'Alpes-de-Haute-Provence',
-    code: '4',
-    codeRegion: '93',
-  },
-  {
-    nom: 'Hautes-Alpes',
-    code: '5',
-    codeRegion: '93',
-  },
-  {
-    nom: 'Alpes-Maritimes',
-    code: '6',
-    codeRegion: '93',
-  },
-  {
-    nom: 'Ardèche',
-    code: '7',
-    codeRegion: '84',
-  },
-  {
-    nom: 'Ardennes',
-    code: '8',
-    codeRegion: '44',
-  },
-  {
-    nom: 'Ariège',
-    code: '9',
-    codeRegion: '76',
-  },
-  {
-    nom: 'Aube',
-    code: '10',
-    codeRegion: '44',
-  },
+  ain,
+  aisne,
+  allier,
+  alpesDeHauteProvence,
+  hautesAlpes,
+  alpesMaritimes,
+  ardeche,
+  ardennes,
+  ariege,
+  aube,
   {
     nom: 'Aude',
     code: '11',
@@ -789,11 +809,7 @@ export const departements: Departement[] = [
     code: '28',
     codeRegion: '24',
   },
-  {
-    nom: 'Finistère',
-    code: '29',
-    codeRegion: '53',
-  },
+  finistere,
   {
     nom: 'Gard',
     code: '30',
@@ -809,11 +825,7 @@ export const departements: Departement[] = [
     code: '32',
     codeRegion: '76',
   },
-  {
-    nom: 'Gironde',
-    code: '33',
-    codeRegion: '75',
-  },
+  gironde,
   {
     nom: 'Hérault',
     code: '34',

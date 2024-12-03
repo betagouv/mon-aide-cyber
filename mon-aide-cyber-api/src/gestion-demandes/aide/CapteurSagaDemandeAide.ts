@@ -7,13 +7,13 @@ import { CommandeRechercheAideParEmail } from '../../aide/CapteurCommandeRecherc
 import { CommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import crypto from 'crypto';
-import { rechercheParNomDepartement } from '../departements';
+import { Departement } from '../departements';
 import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
 
 export type SagaDemandeAide = Saga & {
   cguValidees: boolean;
   email: string;
-  departement: string;
+  departement: Departement;
   raisonSociale?: string;
   relationAidant: boolean;
 };
@@ -104,7 +104,7 @@ export class CapteurSagaDemandeAide
             date: FournisseurHorloge.maintenant(),
             corps: {
               identifiantAide: aide.identifiant,
-              departement: rechercheParNomDepartement(saga.departement).code,
+              departement: saga.departement.code,
             },
           });
         });
