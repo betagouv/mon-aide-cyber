@@ -1,4 +1,6 @@
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import { Aide } from '../../aide/Aide';
+import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 
 export type ProprietesMessageAidant = {
   nomPrenom: string;
@@ -90,11 +92,78 @@ export type MessagesSollicitation = {
   };
 };
 
-export type AdaptateurCorpsDeMessageAide = {
-  sollicitation: () => MessagesSollicitation;
+export type MessagesDemande = {
+  recapitulatifDemandeAide: () => {
+    genereCorpsMessage: (aide: Aide, relationAidant: boolean) => string;
+  };
+  confirmationDemandeAide: () => {
+    genereCorpsMessage: (aide: Aide, relationAidant: boolean) => string;
+  };
 };
 
-const adaptateursCorpsMessage = {
+export type AdaptateurCorpsDeMessageAide = {
+  sollicitation: () => MessagesSollicitation;
+  demande: () => MessagesDemande;
+};
+
+const genereCorpsConfirmationDemandeAide = (
+  aide: Aide,
+  relationAidant: boolean
+) => {
+  const formateDate = FournisseurHorloge.formateDate(
+    FournisseurHorloge.maintenant()
+  );
+  const raisonSociale = aide.raisonSociale
+    ? `- Raison sociale : ${aide.raisonSociale}\n`
+    : '';
+  const messageIntroduction = relationAidant
+    ? 'Votre demande a bien été prise en compte.\n' +
+      '\n' +
+      'Votre Aidant va vous accompagner dans la suite de votre démarche MonAideCyber.\n' +
+      'Voici les informations que vous avez renseignées :\n'
+    : 'Votre demande pour bénéficier de MonAideCyber a été prise en compte.\n' +
+      'Un Aidant de proximité vous contactera sur l’adresse email que vous nous avez communiquée dans les meilleurs délais.\n' +
+      '\n' +
+      'Voici les informations que vous avez renseignées :\n';
+  return (
+    'Bonjour,\n' +
+    '\n' +
+    messageIntroduction +
+    `- Signature des CGU le ${formateDate.date} à ${formateDate.heure}\n` +
+    `- Département : ${aide.departement}\n` +
+    raisonSociale +
+    '\n' +
+    'Toute l’équipe reste à votre disposition,\n\n' +
+    "L'équipe MonAideCyber\n" +
+    'monaidecyber@ssi.gouv.fr\n'
+  );
+};
+const genereCorpsRecapitulatifDemandeAide = (
+  aide: Aide,
+  relationAidant: boolean
+) => {
+  const formateDate = FournisseurHorloge.formateDate(
+    FournisseurHorloge.maintenant()
+  );
+  const raisonSociale = aide.raisonSociale
+    ? `- Raison sociale: ${aide.raisonSociale}\n`
+    : '';
+  const miseEnRelation = relationAidant
+    ? '- Est déjà en relation avec un Aidant\n'
+    : '';
+  return (
+    'Bonjour,\n' +
+    '\n' +
+    `Une demande d’aide a été faite par ${aide.email}\n` +
+    '\n' +
+    'Ci-dessous, les informations concernant cette demande :\n' +
+    miseEnRelation +
+    `- Date de la demande : ${formateDate.date} à ${formateDate.heure}\n` +
+    `- Département: ${aide.departement}\n` +
+    raisonSociale
+  );
+};
+const adaptateursCorpsMessage: AdaptateurCorpsDeMessageAide = {
   sollicitation: (): MessagesSollicitation => ({
     notificationAidantSollicitation: () => ({
       genereCorpsMessage: (
@@ -122,6 +191,16 @@ const adaptateursCorpsMessage = {
     ) => ({
       genereCorpsMessage: (): string =>
         genereRecapitulatifSollicitationAide(proprietesMessage),
+    }),
+  }),
+  demande: (): MessagesDemande => ({
+    confirmationDemandeAide: () => ({
+      genereCorpsMessage: (aide, relationAidant): string =>
+        genereCorpsConfirmationDemandeAide(aide, relationAidant),
+    }),
+    recapitulatifDemandeAide: () => ({
+      genereCorpsMessage: (aide, relationAidant): string =>
+        genereCorpsRecapitulatifDemandeAide(aide, relationAidant),
     }),
   }),
 };
