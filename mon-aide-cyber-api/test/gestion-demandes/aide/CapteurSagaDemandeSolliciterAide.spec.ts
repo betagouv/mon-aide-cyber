@@ -18,6 +18,7 @@ import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
+import { finistere, gironde } from '../../../src/gestion-demandes/departements';
 
 describe('Capteur saga demande solliciter Aide', () => {
   let adaptateurEnvoiMail: AdaptateurEnvoiMailMemoire;
@@ -55,7 +56,7 @@ describe('Capteur saga demande solliciter Aide', () => {
       ).execute({
         type: 'SagaDemandeSolliciterAide',
         email: 'entite@mail.com',
-        departement: 'Finistère',
+        departement: finistere,
         identifiantAidant: aidant.identifiant,
       });
 
@@ -93,7 +94,7 @@ describe('Capteur saga demande solliciter Aide', () => {
       ).execute({
         type: 'SagaDemandeSolliciterAide',
         email: 'entite@mail.com',
-        departement: 'Finistère',
+        departement: finistere,
         identifiantAidant: aidant.identifiant,
         raisonSociale: 'BetaGouv',
       });
@@ -132,7 +133,7 @@ describe('Capteur saga demande solliciter Aide', () => {
       ).execute({
         type: 'SagaDemandeSolliciterAide',
         email: 'jean-dupont@email.com',
-        departement: 'Gironde',
+        departement: gironde,
         identifiantAidant: aidant.identifiant,
         raisonSociale: 'Test',
       });
@@ -205,7 +206,7 @@ describe('Capteur saga demande solliciter Aide', () => {
       ).execute({
         type: 'SagaDemandeSolliciterAide',
         email: 'entite@mail.com',
-        departement: 'Finistère',
+        departement: finistere,
         identifiantAidant: aidant.identifiant,
       });
 
@@ -243,7 +244,7 @@ describe('Capteur saga demande solliciter Aide', () => {
       ).execute({
         type: 'SagaDemandeSolliciterAide',
         email: 'entite@mail.com',
-        departement: 'Finistère',
+        departement: finistere,
         identifiantAidant: aidant.identifiant,
         raisonSociale: 'BetaGouv',
       });
@@ -288,7 +289,7 @@ describe('Capteur saga demande solliciter Aide', () => {
       ).execute({
         type: 'SagaDemandeSolliciterAide',
         email: 'entite@mail.com',
-        departement: 'Finistère',
+        departement: finistere,
         identifiantAidant: aidant.identifiant,
       });
 

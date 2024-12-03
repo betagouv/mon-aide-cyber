@@ -6,13 +6,13 @@ import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
-import { rechercheParNomDepartement } from '../departements';
+import { Departement } from '../departements';
 import { Aide } from '../../aide/Aide';
 import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
 
 export type SagaDemandeSolliciterAide = Omit<Saga, 'type'> & {
   email: string;
-  departement: string;
+  departement: Departement;
   identifiantAidant: crypto.UUID;
   raisonSociale?: string;
   type: 'SagaDemandeSolliciterAide';
@@ -111,8 +111,7 @@ export class CapteurSagaDemandeSolliciterAide
                 corps: {
                   identifiantAide: aide.identifiant,
                   identifiantAidant: saga.identifiantAidant,
-                  departement: rechercheParNomDepartement(saga.departement)
-                    .code,
+                  departement: saga.departement.code,
                 },
               })
               .then(() => Promise.resolve());

@@ -10,7 +10,10 @@ import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { SagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
-import { nomsEtCodesDesDepartements } from '../../gestion-demandes/departements';
+import {
+  nomsEtCodesDesDepartements,
+  rechercheParNomDepartement,
+} from '../../gestion-demandes/departements';
 
 type CorpsRequeteDemandeAide = {
   cguValidees: boolean;
@@ -68,7 +71,7 @@ export const routesAPIDemandeEtreAide = (
           type: 'SagaDemandeAide',
           cguValidees: corpsRequete.cguValidees,
           email: corpsRequete.email,
-          departement: corpsRequete.departement,
+          departement: rechercheParNomDepartement(corpsRequete.departement),
           ...(corpsRequete.raisonSociale && {
             raisonSociale: corpsRequete.raisonSociale,
           }),

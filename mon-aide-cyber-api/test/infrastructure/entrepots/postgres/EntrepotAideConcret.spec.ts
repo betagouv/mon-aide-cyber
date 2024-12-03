@@ -149,7 +149,6 @@ describe('Entrepot Aidé Concret', () => {
         {
           email: aide.email,
           departement: aide.departement,
-          raisonSociale: aide.departement,
           identifiantMAC: aide.identifiant,
           ...(aide.raisonSociale && { raisonSociale: aide.raisonSociale }),
         },
@@ -192,7 +191,7 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
         ...(this.avecMetaDonnees && {
           METADONNEES: chiffrement(
             aide.identifiantMAC,
-            aide.departement,
+            aide.departement.nom,
             aide.raisonSociale
           ),
         }),
@@ -227,7 +226,7 @@ class DictionnaireDeChiffrementAide implements DictionnaireDeChiffrement<Aide> {
   avec(aide: Aide): DictionnaireDeChiffrement<Aide> {
     const valeurEnClair = JSON.stringify({
       identifiantMAC: aide.identifiant,
-      departement: aide.departement,
+      departement: aide.departement.nom,
       raisonSociale: aide.raisonSociale,
     });
     this._dictionnaire.set(valeurEnClair, fakerFR.string.alpha(10));
