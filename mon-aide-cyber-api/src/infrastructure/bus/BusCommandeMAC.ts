@@ -66,7 +66,8 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurSagaDemandeAide(
           parametres.busCommande!,
           parametres.busEvenements!,
-          parametres.adaptateurEnvoiMail!
+          parametres.adaptateurEnvoiMail!,
+          fabriqueAnnuaireCOT().annuaireCOT
         ),
     },
   ],

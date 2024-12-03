@@ -131,7 +131,7 @@ const genereCorpsConfirmationDemandeAide = (
     '\n' +
     messageIntroduction +
     `- Signature des CGU le ${formateDate.date} à ${formateDate.heure}\n` +
-    `- Département : ${aide.departement}\n` +
+    `- Département : ${aide.departement.nom}\n` +
     raisonSociale +
     '\n' +
     'Toute l’équipe reste à votre disposition,\n\n' +
@@ -160,7 +160,7 @@ const genereCorpsRecapitulatifDemandeAide = (
     'Ci-dessous, les informations concernant cette demande :\n' +
     miseEnRelation +
     `- Date de la demande : ${formateDate.date} à ${formateDate.heure}\n` +
-    `- Département: ${aide.departement}\n` +
+    `- Département: ${aide.departement.nom}\n` +
     raisonSociale
   );
 };
