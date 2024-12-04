@@ -177,7 +177,7 @@ describe('Extraction des Aidants sans diagnostic', () => {
 
     const resultat = await new ExtractionAidantSelonNombreDiagnostics(
       entrepot
-    ).extrais('AU_MOINS_DEUX');
+    ).extrais('AU_MOINS_DEUX_DIAGNOSTICS');
 
     expect(resultat).toStrictEqual<Aidant[]>([
       {
