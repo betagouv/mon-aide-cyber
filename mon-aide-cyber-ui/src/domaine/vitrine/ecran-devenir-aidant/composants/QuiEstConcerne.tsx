@@ -15,14 +15,25 @@ export const QuiEstConcerne = () => {
           <b>Qui est concerné ?</b>
         </TypographieH4>
         <p>
-          <b>Engagés sur la base du volontariat</b>, avec une appétence pour les
-          enjeux de cybersécurité, les Aidants cyber sont formés et outillés par
-          l’ANSSI pour mener à bien la démarche d’accompagnement.
-          <b> La communauté des Aidants cyber</b> inclut entre autres des
-          représentants de services de l’État (Police, Gendarmerie,
-          réservistes...), des collectivités, des associations (Campus Cyber,
-          OPSN - Opérateurs Publics de Services Numériques...) et des
-          volontaires de sociétés privées agissant à but non lucratif.
+          <b>Engagés dans une démarche non commerciale</b> et avec une appétence
+          pour les enjeux de cybersécurité, les Aidants cyber sont formés et
+          outillés par l’ANSSI pour mener à bien la démarche d’accompagnement.{' '}
+          <br />
+          La communauté des Aidants cyber inclut entre autres :
+          <ul>
+            <li>
+              des représentants de services de l’État (Police, Gendarmerie,
+              réservistes...)
+            </li>
+            <li>
+              des agents publics ou salariés d&apos;administrations publiques
+            </li>
+            <li>
+              des salariés ou des adhérents d’entités morales à but non lucratif
+              (associations à but non lucratif, Campus cyber, CSIRT, Clusir,
+              CESIN, etc…)
+            </li>
+          </ul>
         </p>
       </div>
     </section>
