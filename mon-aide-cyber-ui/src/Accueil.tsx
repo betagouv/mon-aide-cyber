@@ -169,8 +169,8 @@ export const Accueil = () => {
                       cybersécurité. Reposant sur un réseau d’experts aidants,
                       MonAideCyber propose une méthode des « petits pas » pour
                       identifier les actions prioritaires, permettant ainsi de
-                      tirer vers le haut l’ensemble des acteurs, quels que soit
-                      leurs moyens et leur niveau de maturité.
+                      tirer vers le haut l’ensemble des acteurs, quels que
+                      soient leurs moyens et leur niveau de maturité.
                     </div>
                     <div className="personne">
                       <div className="illustration"></div>
