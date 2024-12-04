@@ -9,6 +9,20 @@ import {
 } from './extractionAidantSelonNombreDiagnostics';
 import { intlFormat } from 'date-fns';
 
+export type ParametreAidantsSelonNombreDiagnostics =
+  | 'SANS_DIAGNOSTIC'
+  | 'AU_MOINS_DEUX_DIAGNOSTICS'
+  | 'AU_MOINS_CINQ_DIAGNOSTICS';
+
+const estTypeExport = (
+  valeur: any | ParametreAidantsSelonNombreDiagnostics
+): valeur is ParametreAidantsSelonNombreDiagnostics => {
+  return (
+    valeur === 'SANS_DIAGNOSTIC' ||
+    valeur === 'AU_MOINS_DEUX_DIAGNOSTICS' ||
+    valeur === 'AU_MOINS_CINQ_DIAGNOSTICS'
+  );
+};
 const command = program
   .description("Exporte les Aidants en fonction du type d'export souhaité")
   .option(
@@ -38,6 +52,12 @@ const versLigneCSV = (aidant: Aidant) =>
 
 command.action(async (options) => {
   const typeExport = options.type;
+
+  if (!estTypeExport(typeExport)) {
+    console.error(`Le type de la requête est incorrect`);
+    process.exit(1);
+  }
+
   const rapport: string[] = [];
   const resultat = await new ExtractionAidantSelonNombreDiagnostics(
     new EntrepotAidantPostgres(adaptateurServiceChiffrement())

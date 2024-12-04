@@ -4,6 +4,7 @@ import knexfile from '../../../infrastructure/entrepots/postgres/knexfile';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import crypto from 'crypto';
 import { FournisseurHorloge } from '../../../infrastructure/horloge/FournisseurHorloge';
+import { ParametreAidantsSelonNombreDiagnostics } from './commande';
 
 type UtilisateurDTO = {
   id: crypto.UUID;
@@ -97,18 +98,19 @@ export class ExtractionAidantSelonNombreDiagnostics {
   constructor(private readonly entrepotAidantPostgres: EntrepotAidant) {}
 
   extrais(
-    param: 'SANS_DIAGNOSTIC' | 'AU_MOINS_DEUX' | 'AU_MOINS_CINQ'
+    typeExportSouhaite: ParametreAidantsSelonNombreDiagnostics
   ): Promise<Aidant[]> {
-    if (param === 'SANS_DIAGNOSTIC') {
-      return this.entrepotAidantPostgres.rechercheAidantSansDiagnostic();
-    } else if (param === 'AU_MOINS_DEUX') {
-      return this.entrepotAidantPostgres.rechercheAidantAyantAuMoinsNDiagnostics(
-        2
-      );
-    } else {
-      return this.entrepotAidantPostgres.rechercheAidantAyantAuMoinsNDiagnostics(
-        5
-      );
+    switch (typeExportSouhaite) {
+      case 'AU_MOINS_DEUX_DIAGNOSTICS':
+        return this.entrepotAidantPostgres.rechercheAidantAyantAuMoinsNDiagnostics(
+          2
+        );
+      case 'AU_MOINS_CINQ_DIAGNOSTICS':
+        return this.entrepotAidantPostgres.rechercheAidantAyantAuMoinsNDiagnostics(
+          5
+        );
+      case 'SANS_DIAGNOSTIC':
+        return this.entrepotAidantPostgres.rechercheAidantSansDiagnostic();
     }
   }
 }
