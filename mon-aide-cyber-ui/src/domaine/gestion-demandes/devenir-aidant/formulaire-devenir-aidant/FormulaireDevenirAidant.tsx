@@ -217,8 +217,9 @@ export const FormulaireDevenirAidant = ({
               <p>Pour devenir aidant, il est nécessaire de&nbsp;:</p>
               <ul>
                 <li>
-                  représenter un service de l&apos;Etat, une administration ou
-                  une entité morale à but non lucratif
+                  représenter un service de l&apos;Etat, un établissement
+                  public, une association ou toute autre entité morale à but non
+                  lucratif
                 </li>
                 <li>
                   participer à un atelier devenir Aidant MonAideCyber animé par
