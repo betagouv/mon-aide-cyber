@@ -84,7 +84,13 @@ export const Header = ({
             >
               Fermer
             </button>
-            <div className="fr-header__menu-links"></div>
+            <div className="fr-header__menu-links">
+              {utilisateur ? (
+                <ComposantMenuUtilisateur utilisateur={utilisateur} />
+              ) : (
+                <SeConnecter />
+              )}
+            </div>
             <NavigationPublique liensNavigation={liensNavigation} />
           </div>
         </div>
