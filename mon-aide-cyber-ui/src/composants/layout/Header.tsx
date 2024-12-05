@@ -4,6 +4,7 @@ import { liensNavigation } from './LayoutPublic.tsx';
 import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateur.tsx';
 import { useUtilisateur } from '../../fournisseurs/hooks.ts';
 import { NavigationPublique } from './header/NavigationPublique.tsx';
+import { BandeauMaintenance } from '../alertes/BandeauMaintenance.tsx';
 
 export type HeaderProprietes = PropsWithChildren<{
   lienMAC: ReactElement;
@@ -17,6 +18,10 @@ export const Header = ({
   enteteSimple,
 }: HeaderProprietes) => {
   const { utilisateur } = useUtilisateur();
+
+  const maintenanceEstPrevue: string = import.meta.env[
+    'VITE_MAINTENANCE_CRENEAU_PREVU'
+  ];
 
   return (
     <header role="banner" className="fr-header public mac-sticky">
@@ -70,6 +75,11 @@ export const Header = ({
           </div>
         </div>
       </div>
+
+      {maintenanceEstPrevue && (
+        <BandeauMaintenance creneauDeMaintenance={maintenanceEstPrevue} />
+      )}
+
       {!enteteSimple && afficheNavigation ? (
         <div
           className="fr-header__menu fr-modal"
