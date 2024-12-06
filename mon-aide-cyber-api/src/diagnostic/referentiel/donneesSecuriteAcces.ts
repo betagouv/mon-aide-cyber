@@ -5,7 +5,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-outil-gestion-des-comptes',
       libelle:
-        "Un outil de gestion des comptes et des politiques de sécurité centralisé (ex : Active Directory, Samba-AD, Azure AD, scripts d'administration automatisés, etc.) est-il mis en œuvre ?",
+        "Un outil de gestion des comptes et des politiques de sécurité centralisé (ex : Active Directory, Samba-AD, Entra ID, scripts d'administration automatisés, etc.) est-il mis en œuvre ?",
       poids: 0.5,
       reponsesPossibles: [
         {
