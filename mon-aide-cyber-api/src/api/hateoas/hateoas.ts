@@ -74,6 +74,8 @@ class ConstructeurActionsHATEOAS {
   public postAuthentification(
     utilisateurAuthentifie: UtilisateurAuthentifie
   ): ConstructeurActionsHATEOAS {
+    // La création de l’espace Aidant est maintenant obsolète
+    // Pas besoin de la signature
     if (!utilisateurAuthentifie.dateSignatureCGU) {
       return this.creerEspaceAidant();
     }
