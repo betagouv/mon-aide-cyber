@@ -25,6 +25,7 @@ type AidantDTO = {
 
 export interface EntrepotAidant {
   rechercheAidantSansDiagnostic(): Promise<Aidant[]>;
+
   rechercheAidantAyantAuMoinsNDiagnostics(
     nombreDeDiagnostics: number
   ): Promise<Aidant[]>;
@@ -74,13 +75,13 @@ export class EntrepotAidantPostgres implements EntrepotAidant {
       .raw(
         `
           SELECT *
-          FROM aidants
-                JOIN (SELECT count(*) as nb,
-                             donnees -> 'utilisateur' ->> 'identifiant' as aidant_diag
-                              FROM relations
-                              WHERE donnees -> 'utilisateur' ->> 'type' = 'aidant'
-                              GROUP BY donnees -> 'utilisateur' ->> 'identifiant') as diags
-                             ON diags.aidant_diag::uuid = id
+          FROM utilisateurs_mac
+                   JOIN (SELECT count(*) as nb,
+                                donnees -> 'utilisateur' ->> 'identifiant' as aidant_diag
+                         FROM relations
+                         WHERE donnees -> 'utilisateur' ->> 'type' = 'aidant'
+                         GROUP BY donnees -> 'utilisateur' ->> 'identifiant') as diags
+                        ON diags.aidant_diag::uuid = id
           WHERE diags.nb >= ${nombreMinimumDeDiagnostics}`
       )
       .then(({ rows }: { rows: AidantDTO[] }) => {
