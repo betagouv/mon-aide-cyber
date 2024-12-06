@@ -253,7 +253,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         },
         {
           identifiant: 'securite-poste-pare-feu-local-active-oui',
-          libelle: 'Oui, et les flux entrants et sortants sont bloqués',
+          libelle: 'Oui, et les flux entrants et sortants sont filtrés',
           resultat: { indice: { valeur: 3 } },
           ordre: 2,
         },
