@@ -12,6 +12,8 @@ export const authentifie = (
   identifiant: string,
   motDePasse: string
 ): Promise<UtilisateurAuthentifie> => {
+  // La date de signature des CGU est remontée pour fournir l’action créer espace aidant obsolète ou rediriger vers le TDB
+  // Pas besoin de la signature
   return entrepotUtilisateur
     .rechercheParIdentifiantConnexionEtMotDePasse(identifiant, motDePasse)
     .then((utilisateur) => ({

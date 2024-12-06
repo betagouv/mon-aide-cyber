@@ -31,15 +31,17 @@ export const routeAPIContexte = (configuration: ConfigurationServeur) => {
         return entrepots
           .utilisateurs()
           .lis(jwt.identifiant)
-          .then((utilisateur) =>
-            reponse.json({
+          .then((utilisateur) => {
+            // La création de l’espace Aidant est maintenant obsolète
+            // Pas besoin de la signature
+            return reponse.json({
               ...(utilisateur.dateSignatureCGU
                 ? {
                     ...actionsHATEOAS.afficherTableauDeBord().construis(),
                   }
                 : { ...actionsHATEOAS.creerEspaceAidant().construis() }),
-            })
-          );
+            });
+          });
       }
       return reponse.json(
         constructeurActionsHATEOAS().afficherTableauDeBord().construis()
