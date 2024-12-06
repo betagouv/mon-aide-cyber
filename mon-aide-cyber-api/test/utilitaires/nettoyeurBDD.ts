@@ -17,7 +17,7 @@ class EntrepotsPostgresPourLesTests {
   }
 
   async nettoieAidants() {
-    await this.knex('aidants').truncate();
+    await this.knex('utilisateurs_mac').truncate();
   }
 
   async nettoieUtilisateurs() {

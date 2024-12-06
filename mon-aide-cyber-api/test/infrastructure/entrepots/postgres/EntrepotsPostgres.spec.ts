@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import {
   nettoieLaBaseDeDonneesAidants,
   nettoieLaBaseDeDonneesDiagnostics,
+  nettoieLaBaseDeDonneesRelations,
   nettoieLaBaseDeDonneesStatistiques,
   nettoieLaBaseDeDonneesUtilisateurs,
 } from '../../../utilitaires/nettoyeurBDD';
@@ -57,6 +58,10 @@ import {
   unAidant,
   unUtilisateur,
 } from '../../../constructeurs/constructeursAidantUtilisateur';
+import { adaptateurServiceChiffrement } from '../../../../src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
+import { unTupleAidantInitieDiagnostic } from '../../../../src/diagnostic/tuples';
+import { EntrepotAidantPostgres as EntrepotAidantPostgresExtraction } from '../../../../src/administration/aidants/aidants-selon-nombre-diagnostics/extractionAidantSelonNombreDiagnostics';
+import { Aidant as AidantExtraction } from '../../../../src/administration/aidants/aidants-selon-nombre-diagnostics/Types';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {
@@ -678,6 +683,64 @@ describe('Entrepot Aidant', () => {
         ).rechercheParEmail('identifiant-inconnu')
       ).rejects.toThrow(new Error("Le aidant demandé n'existe pas."));
     });
+  });
+});
+
+describe('EntrepotAidantExtraction', () => {
+  beforeEach(async () => {
+    await nettoieLaBaseDeDonneesAidants();
+    await nettoieLaBaseDeDonneesRelations();
+  });
+
+  it('Récupère un Aidant ayant plus de 2 diagnostics', async () => {
+    const entrepotAidant = new EntrepotAidantPostgres(
+      adaptateurServiceChiffrement()
+    );
+    const entrepotRelation = new EntrepotRelationPostgres();
+
+    const aidant = unAidant().construis();
+    await entrepotAidant.persiste(aidant);
+    await entrepotRelation.persiste(
+      unTupleAidantInitieDiagnostic(aidant.identifiant, crypto.randomUUID())
+    );
+    await entrepotRelation.persiste(
+      unTupleAidantInitieDiagnostic(aidant.identifiant, crypto.randomUUID())
+    );
+
+    const entrepotAidantExtraction = new EntrepotAidantPostgresExtraction(
+      adaptateurServiceChiffrement()
+    );
+
+    expect(
+      await entrepotAidantExtraction.rechercheAidantAyantAuMoinsNDiagnostics(2)
+    ).toStrictEqual<AidantExtraction[]>([
+      {
+        identifiant: aidant.identifiant,
+        nomPrenom: aidant.nomPrenom,
+        email: aidant.email,
+      },
+    ]);
+  });
+
+  it("Ne récupère pas d'Aidant", async () => {
+    const entrepotAidant = new EntrepotAidantPostgres(
+      adaptateurServiceChiffrement()
+    );
+    const entrepotRelation = new EntrepotRelationPostgres();
+
+    const aidant = unAidant().construis();
+    await entrepotAidant.persiste(aidant);
+    await entrepotRelation.persiste(
+      unTupleAidantInitieDiagnostic(aidant.identifiant, crypto.randomUUID())
+    );
+
+    const entrepotAidantExtraction = new EntrepotAidantPostgresExtraction(
+      adaptateurServiceChiffrement()
+    );
+
+    expect(
+      await entrepotAidantExtraction.rechercheAidantAyantAuMoinsNDiagnostics(2)
+    ).toStrictEqual<Aidant[]>([]);
   });
 });
 

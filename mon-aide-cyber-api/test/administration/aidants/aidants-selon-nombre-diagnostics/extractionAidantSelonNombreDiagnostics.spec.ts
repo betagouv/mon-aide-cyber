@@ -4,7 +4,6 @@ import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/Fourn
 import { FournisseurHorlogeDeTest } from '../../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import {
   EntrepotAidant,
-  EntrepotAidantPostgres as EntrepotAidantPostgresExtraction,
   ExtractionAidantSelonNombreDiagnostics,
 } from '../../../../src/administration/aidants/aidants-selon-nombre-diagnostics/extractionAidantSelonNombreDiagnostics';
 import { AggregatNonTrouve } from '../../../../src/domaine/Aggregat';
@@ -12,10 +11,6 @@ import crypto from 'crypto';
 import { cloneDeep } from 'lodash';
 import { EntrepotRelationMemoire } from '../../../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { unTupleAidantInitieDiagnostic } from '../../../../src/diagnostic/tuples';
-import { adaptateurServiceChiffrement } from '../../../../src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
-import { EntrepotAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAidantPostgres';
-import { EntrepotRelationPostgres } from '../../../../src/relation/infrastructure/EntrepotRelationPostgres';
-import { unAidant } from '../../../constructeurs/constructeursAidantUtilisateur';
 import {
   nettoieLaBaseDeDonneesAidants,
   nettoieLaBaseDeDonneesRelations,
@@ -65,63 +60,6 @@ export class EntrepotAidantMemoire implements EntrepotAidant {
     return Promise.all(trouves);
   }
 }
-describe('EntrepotAidantExtraction', () => {
-  beforeEach(async () => {
-    await nettoieLaBaseDeDonneesAidants();
-    await nettoieLaBaseDeDonneesRelations();
-  });
-
-  it('Récupère un Aidant ayant plus de 2 diagnostics', async () => {
-    const entrepotAidant = new EntrepotAidantPostgres(
-      adaptateurServiceChiffrement()
-    );
-    const entrepotRelation = new EntrepotRelationPostgres();
-
-    const aidant = unAidant().construis();
-    await entrepotAidant.persiste(aidant);
-    await entrepotRelation.persiste(
-      unTupleAidantInitieDiagnostic(aidant.identifiant, crypto.randomUUID())
-    );
-    await entrepotRelation.persiste(
-      unTupleAidantInitieDiagnostic(aidant.identifiant, crypto.randomUUID())
-    );
-
-    const entrepotAidantExtraction = new EntrepotAidantPostgresExtraction(
-      adaptateurServiceChiffrement()
-    );
-
-    expect(
-      await entrepotAidantExtraction.rechercheAidantAyantAuMoinsNDiagnostics(2)
-    ).toStrictEqual<Aidant[]>([
-      {
-        identifiant: aidant.identifiant,
-        nomPrenom: aidant.nomPrenom,
-        email: aidant.email,
-      },
-    ]);
-  });
-
-  it("Ne récupère pas d'Aidant", async () => {
-    const entrepotAidant = new EntrepotAidantPostgres(
-      adaptateurServiceChiffrement()
-    );
-    const entrepotRelation = new EntrepotRelationPostgres();
-
-    const aidant = unAidant().construis();
-    await entrepotAidant.persiste(aidant);
-    await entrepotRelation.persiste(
-      unTupleAidantInitieDiagnostic(aidant.identifiant, crypto.randomUUID())
-    );
-
-    const entrepotAidantExtraction = new EntrepotAidantPostgresExtraction(
-      adaptateurServiceChiffrement()
-    );
-
-    expect(
-      await entrepotAidantExtraction.rechercheAidantAyantAuMoinsNDiagnostics(2)
-    ).toStrictEqual<Aidant[]>([]);
-  });
-});
 
 describe('Extraction des Aidants sans diagnostic', () => {
   beforeEach(async () => {
