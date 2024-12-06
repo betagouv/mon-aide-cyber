@@ -74,19 +74,13 @@ class ConstructeurActionsHATEOAS {
   public postAuthentification(
     utilisateurAuthentifie: UtilisateurAuthentifie
   ): ConstructeurActionsHATEOAS {
+    // La création de l’espace Aidant est maintenant obsolète
+    // Pas besoin de la signature
     if (!utilisateurAuthentifie.dateSignatureCGU) {
       return this.creerEspaceAidant();
     }
 
     return this.lancerDiagnostic().afficherMesInformations();
-  }
-
-  public creerEspaceAidant(): ConstructeurActionsHATEOAS {
-    this.actions.set('creer-espace-aidant', {
-      url: '/api/espace-aidant/cree',
-      methode: 'POST',
-    });
-    return this;
   }
 
   public demandeLaRestitution(identifiant: string): ConstructeurActionsHATEOAS {
