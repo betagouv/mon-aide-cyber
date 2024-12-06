@@ -1,77 +1,11 @@
 import { ConfigurationServeur } from '../serveur';
-import express, { Response } from 'express';
-import {
-  FieldValidationError,
-  Result,
-  validationResult,
-} from 'express-validator';
-import { RequeteUtilisateur } from './routesAPI';
-import { NextFunction } from 'express-serve-static-core';
-import { ServiceCreationEspaceAidant } from '../espace-aidant/ServiceCreationEspaceAidant';
-import { constructeurActionsHATEOAS } from './hateoas/hateoas';
-import { ErreurMAC } from '../domaine/erreurMAC';
-import {
-  ErreurValidationMotDePasse,
-  validateursDeMotDePasseTemporaire,
-} from './validateurs/motDePasse';
+import express from 'express';
 import { routesAPITableauDeBord } from './espace-aidant/tableau-de-bord/routesAPITableauDeBord';
 
 export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
   routes.use('/tableau-de-bord', routesAPITableauDeBord(configuration));
-
-  const { entrepots, adaptateurDeVerificationDeSession: session } =
-    configuration;
-
-  type CorpsRequeteCreationEspaceAidant = {
-    cguSignees: boolean;
-    motDePasse: string;
-  };
-
-  routes.post(
-    '/cree',
-    express.json(),
-    session.verifie("Crée l'espace Aidant"),
-    validateursDeMotDePasseTemporaire(
-      entrepots,
-      'motDePasse',
-      'motDePasseTemporaire'
-    ),
-    async (
-      requete: RequeteUtilisateur<CorpsRequeteCreationEspaceAidant>,
-      reponse: Response,
-      suite: NextFunction
-    ) => {
-      try {
-        const resultatValidation: Result<FieldValidationError> =
-          validationResult(requete) as Result<FieldValidationError>;
-        if (resultatValidation.isEmpty()) {
-          const creationEspaceAidant = requete.body;
-          await new ServiceCreationEspaceAidant(entrepots).cree({
-            ...creationEspaceAidant,
-            identifiant: requete.identifiantUtilisateurCourant!,
-          });
-          reponse.status(200).json({
-            ...constructeurActionsHATEOAS().creeEspaceAidant().construis(),
-          });
-          return reponse.send();
-        }
-        const erreursValidation = resultatValidation
-          .array()
-          .map((resultat) => resultat.msg)
-          .filter((erreur): erreur is string => !!erreur);
-        return suite(
-          ErreurMAC.cree(
-            "Crée l'espace Aidant",
-            new ErreurValidationMotDePasse(erreursValidation.join('\n'))
-          )
-        );
-      } catch (erreur) {
-        suite(erreur);
-      }
-    }
-  );
 
   return routes;
 };

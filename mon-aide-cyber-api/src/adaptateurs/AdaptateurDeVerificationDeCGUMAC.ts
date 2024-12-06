@@ -16,6 +16,8 @@ export class AdaptateurDeVerificationDeCGUMAC
       reponse: Response,
       suite: NextFunction
     ) => {
+      // CQRS : Ecrire un service capable d’aller chercher l’info
+      // la date de signature CGU est utilisée pour rediriger vers la création de l’espace Aidant devenue obsolète
       const utilisateur = await this.entrepots
         .utilisateurs()
         .lis(requete.identifiantUtilisateurCourant!);
