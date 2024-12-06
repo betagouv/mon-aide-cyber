@@ -34,7 +34,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               identifiant:
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-interconnexions-protegees',
               libelle:
-                "Si Oui : Est-ce que seuls les flux entrants et sortants strictement nécessaires entre Internet et le système d'information (ou autres réseaux externes) sont autorisés ?",
+                "Est-ce que seuls les flux entrants et sortants strictement nécessaires entre Internet et le système d'information (ou autres réseaux externes) sont autorisés ?",
               poids: 2,
               reponsesPossibles: [
                 {
@@ -91,7 +91,7 @@ export const donneesSecuriteInfrastructure: QuestionsThematique = {
               identifiant:
                 'securite-infrastructure-pare-feu-deploye-oui-tiroir-logs-stockes',
               libelle:
-                'Si Oui : les journaux des flux entrants, sortants et bloqués (générés par le pare-feu) sont-ils stockés ?',
+                'Les journaux des flux entrants, sortants et bloqués (générés par le pare-feu) sont-ils stockés ?',
               poids: 2,
               reponsesPossibles: [
                 {
