@@ -1,0 +1,103 @@
+@import './../../assets/styles/points-de-rupture';
+
+.ecran-demande-autodiagnostic-layout {
+  background: none;
+
+  @include a-partir-de(lg) {
+    background: linear-gradient(to right, white 50%, var(--couleurs-mac-violet-tres-clair) 50%);
+  }
+}
+
+.ecran-demande-autodiagnostic {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 'formulaire';
+
+  @include a-partir-de(lg) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 'formulaire icone';
+  }
+
+  @include a-partir-de(xl) {
+    height: 650px;
+  }
+
+
+  .formulaire-colonne-gauche {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+
+    grid-area: formulaire;
+    padding: 1.5rem 2rem;
+
+    .formulaire-colonne-gauche-contenu {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      margin-right: auto;
+
+      width: auto;
+
+      @include a-partir-de(md) {
+        width: 596px;
+      }
+
+      @include a-partir-de(md) {
+        width: auto;
+      }
+
+      @include a-partir-de(xl) {
+        width: 596px;
+      }
+    }
+
+    @include a-partir-de(sm) {
+      padding: 3rem 2rem;
+      gap: 1rem;
+    }
+    @include a-partir-de(md) {
+      padding: 3rem 9rem;
+      gap: 1rem;
+    }
+    @include a-partir-de(lg) {
+      padding: 3rem 2.5rem;
+      gap: 1rem;
+    }
+
+    @include a-partir-de(xl) {
+      padding: 3rem 0;
+    }
+  }
+
+  .icone-colonne-droite {
+    display: none;
+    grid-area: icone;
+
+    margin-left: auto;
+
+    @include a-partir-de(lg) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding-left: 2rem;
+    }
+  }
+
+  img {
+    max-width: 100%;
+
+    @include a-partir-de(md) {
+      max-width: 100%;
+    }
+    @include a-partir-de(lg) {
+      max-width: 100%;
+    }
+    @include a-partir-de(xl) {
+      max-width: 100%;
+    }
+  }
+}

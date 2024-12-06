@@ -1,0 +1,26 @@
+@import './../../../../assets/styles/points-de-rupture';
+
+.carte-aidant {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2.5rem 3rem;
+    background-color: var(--couleurs-mac-blanc);
+    border-radius: .5rem .5rem 0 0;
+    border-bottom: var(--couleurs-mac-violet-fonce) 3px solid;
+
+    @include a-partir-de(md) {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 2rem;
+    }
+
+    button {
+        width: fit-content;
+    }
+
+    img {
+        width: 100%;
+    }
+}

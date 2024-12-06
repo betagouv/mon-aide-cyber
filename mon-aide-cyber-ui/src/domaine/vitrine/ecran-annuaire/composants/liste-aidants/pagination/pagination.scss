@@ -1,0 +1,21 @@
+.fr-pagination {
+  font-size: 1rem !important;
+}
+
+.fr-pagination__link:hover {
+  color: var(--couleurs-mac-violet-moyen);
+  background: none !important;
+}
+
+.fr-pagination__link--lg-label {
+  font-size: 1rem !important;
+}
+
+.fr-pagination__link[aria-current]:not([aria-current=false]) {
+  border-radius: 2rem;
+  background-color: var(--couleurs-mac-violet-fonce);
+}
+
+.liste-aidants .pagination {
+  align-self: center;
+}

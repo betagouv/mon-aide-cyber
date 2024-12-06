@@ -1,7 +1,8 @@
-import { Aidant } from '../../../src/authentification/Aidant';
+import { Aidant } from '../../../src/espace-aidant/Aidant';
 import { unDiagnosticDansLeDepartementAvecSecteurActivite } from '../../constructeurs/constructeurDiagnostic';
 import { EntrepotDiagnostic } from '../../../src/diagnostic/Diagnostic';
 import { AdaptateurRelationsMAC } from '../../../src/relation/AdaptateurRelationsMAC';
+import { unTupleAidantInitieDiagnostic } from '../../../src/diagnostic/tuples';
 
 export const unDiagnosticInitiePar = async (
   departement: string,
@@ -15,9 +16,10 @@ export const unDiagnosticInitiePar = async (
     secteurActivite
   ).construis();
   await diagnosticEntrepot.persiste(diagnosticInitie);
-  await adaptateurRelations.aidantInitieDiagnostic(
+  const tuple = unTupleAidantInitieDiagnostic(
     aidant.identifiant,
     diagnosticInitie.identifiant
   );
+  await adaptateurRelations.creeTuple(tuple);
   return diagnosticInitie;
 };

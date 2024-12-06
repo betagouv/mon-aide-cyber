@@ -6,13 +6,19 @@ import { UUID } from '../../../types/Types.ts';
 import { ComposantIdentifiantDiagnostic } from '../../ComposantIdentifiantDiagnostic.tsx';
 import { useComposantRestitution } from './useComposantRestitution.ts';
 import { HeaderEspaceAidant } from '../../espace-aidant/HeaderEspaceAidant.tsx';
+import Button from '../../atomes/Button/Button.tsx';
+import { useMoteurDeLiens } from '../../../hooks/useMoteurDeLiens.ts';
+import { HeaderRestitution } from './HeaderRestitution.tsx';
+import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
+  type?: 'libre-acces';
 };
 
 export const ComposantRestitution = ({
   idDiagnostic,
+  type,
 }: ProprietesComposantRestitution) => {
   const {
     etatRestitution,
@@ -20,48 +26,69 @@ export const ComposantRestitution = ({
     telechargerRestitution,
     modifierLeDiagnostic,
     boutonDesactive,
-  } = useComposantRestitution(idDiagnostic);
+  } = useComposantRestitution(idDiagnostic, type === 'libre-acces');
+
+  const { accedeALaRessource: peutRetournerAuTableauDeBord } =
+    useMoteurDeLiens('lancer-diagnostic');
 
   return (
     <>
-      <HeaderEspaceAidant />
+      {type === 'libre-acces' ? (
+        <HeaderRestitution
+          idDiagnostic={idDiagnostic}
+          typeDiagnostic="libre-acces"
+        />
+      ) : (
+        <HeaderEspaceAidant />
+      )}
       <main role="main">
-        <div className="mode-fonce fr-pt-md-4w fr-pb-md-8w">
-          <div className="fr-container">
-            <div className="fr-grid-row">
-              <div>
-                <i className="mac-icone-retour" />
-                <a href="#" onClick={navigueVersTableauDeBord}>
-                  Retour à la liste des diagnostics
-                </a>
+        {type !== 'libre-acces' ? (
+          <div className="mode-fonce fr-pt-md-4w fr-pb-md-8w">
+            <div className="fr-container">
+              <div className="fr-grid-row">
+                {peutRetournerAuTableauDeBord ? (
+                  <div>
+                    <Button
+                      type="button"
+                      variant="primary"
+                      onClick={navigueVersTableauDeBord}
+                    >
+                      <i className="mac-icone-retour" />
+                      <span>Retour à la liste des diagnostics</span>
+                    </Button>
+                  </div>
+                ) : null}
               </div>
-            </div>
-            <div className="fr-grid-row fr-pt-md-2w">
-              <div className="identifiant-diagnostic">
-                ID <ComposantIdentifiantDiagnostic identifiant={idDiagnostic} />
+              <div className="fr-grid-row fr-pt-md-2w">
+                <div className="identifiant-diagnostic">
+                  ID{' '}
+                  <ComposantIdentifiantDiagnostic identifiant={idDiagnostic} />
+                </div>
               </div>
-            </div>
-            <div className="fr-grid-row fr-grid-row--right">
-              <div className="fr-pl-2w">
-                <button
-                  className={`fr-btn--icon-left fr-icon-download-line bouton-mac bouton-mac-secondaire-inverse`}
-                  onClick={telechargerRestitution}
-                  disabled={boutonDesactive}
-                >
-                  Télécharger
-                </button>
-              </div>
-              <div className="fr-pl-2w">
-                <button
-                  className={`fr-btn--icon-left fr-icon-pencil-line bouton-mac bouton-mac-primaire-inverse`}
-                  onClick={modifierLeDiagnostic}
-                >
-                  Modifier le diagnostic
-                </button>
+              <div className="fr-grid-row fr-grid-row--right">
+                <div className="fr-pl-2w">
+                  <button
+                    className={`fr-btn--icon-left fr-icon-download-line bouton-mac bouton-mac-secondaire-inverse`}
+                    onClick={() => telechargerRestitution()}
+                    disabled={boutonDesactive}
+                  >
+                    Télécharger
+                  </button>
+                </div>
+                <div className="fr-pl-2w">
+                  <button
+                    className={`fr-btn--icon-left fr-icon-pencil-line bouton-mac bouton-mac-primaire-inverse`}
+                    onClick={modifierLeDiagnostic}
+                  >
+                    Modifier le diagnostic
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="fr-mt-10w"></div>
+        )}
         <div className="fond-clair-mac">
           <div id="restitution" className="fr-container restitution">
             <div className="fr-grid-row">
@@ -248,5 +275,26 @@ export const ComposantRestitution = ({
       </main>
       <Footer />
     </>
+  );
+};
+
+export const ComposantRestitutionAidant = ({
+  idDiagnostic,
+}: {
+  idDiagnostic: UUID;
+}) => {
+  return <ComposantRestitution idDiagnostic={idDiagnostic} />;
+};
+export const ComposantRestitutionLibreAcces = ({
+  idDiagnostic,
+}: {
+  idDiagnostic: UUID;
+}) => {
+  useRecupereContexteNavigation(
+    `utiliser-outil-diagnostic:afficher:${idDiagnostic}`
+  );
+
+  return (
+    <ComposantRestitution idDiagnostic={idDiagnostic} type="libre-acces" />
   );
 };

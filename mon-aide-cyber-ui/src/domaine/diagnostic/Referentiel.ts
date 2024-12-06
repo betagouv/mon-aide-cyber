@@ -1,11 +1,8 @@
-import { ActionReponseDiagnostic } from './Diagnostic.ts';
-
 export type Groupes = {
   numero: number;
   questions: Question[];
 }[];
 export type Thematique = {
-  actions: ActionReponseDiagnostic[];
   description: string;
   libelle: string;
   styles: { navigation: `navigation-${string}` };

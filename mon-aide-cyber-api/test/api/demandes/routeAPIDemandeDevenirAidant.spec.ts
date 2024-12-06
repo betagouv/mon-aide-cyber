@@ -10,9 +10,10 @@ import { unConstructeurDeDemandeDevenirAidant } from '../../gestion-demandes/dev
 import { uneRequeteDemandeDevenirAidant } from './constructeurRequeteDemandeDevenirAidant';
 import crypto from 'crypto';
 import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServiceDeChiffrement';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { Aidant } from '../../../src/espace-aidant/Aidant';
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -76,6 +77,28 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         code: '5',
         codeRegion: '93',
       });
+    });
+
+    it('Réponds OK à la requête lorsque le mail contient des majuscules', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/devenir-aidant',
+        donneesServeur.portEcoute,
+        uneRequeteDemandeDevenirAidant()
+          .avecUnMail('JeaN.DupOnT@mail.com')
+          .dansLeDepartement('Hautes-Alpes')
+          .construis()
+      );
+
+      expect(reponse.statusCode).toStrictEqual(200);
+      expect(
+        (
+          await testeurMAC.entrepots
+            .demandesDevenirAidant()
+            .rechercheDemandeEnCoursParMail('jean.dupont@mail.com')
+        )?.mail
+      ).toStrictEqual('jean.dupont@mail.com');
     });
 
     it("Renvoie une erreur 400 si l'utilisateur a déjà fait une demande préalable", async () => {
@@ -212,17 +235,30 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           'se-connecter': { url: '/api/token', methode: 'POST' },
         },
       });
-      const aidants = await testeurMAC.entrepots.aidants().tous();
-      expect(aidants).toHaveLength(1);
-      expect(aidants[0].dateSignatureCGU).toStrictEqual(
+      const utilisateurs = await testeurMAC.entrepots.utilisateurs().tous();
+      expect(utilisateurs).toHaveLength(1);
+      const utilisateur = utilisateurs[0];
+      expect(utilisateur.dateSignatureCGU).toStrictEqual(
         FournisseurHorloge.maintenant()
       );
+      const aidants = await testeurMAC.entrepots.aidants().tous();
+      expect(aidants[0]).toStrictEqual<Aidant>({
+        identifiant: utilisateur.identifiant,
+        email: demande.mail,
+        nomPrenom: utilisateur.nomPrenom,
+        preferences: {
+          secteursActivite: [],
+          departements: [demande.departement],
+          typesEntites: [],
+        },
+        consentementAnnuaire: false,
+      });
     });
 
     it('Retourne une erreur HTTP', async () => {
       const aidant = unAidant().construis();
       const demande = unConstructeurDeDemandeDevenirAidant()
-        .avecUnMail(aidant.identifiantConnexion)
+        .avecUnMail(aidant.email)
         .construis();
       await testeurMAC.entrepots.aidants().persiste(aidant);
       await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);

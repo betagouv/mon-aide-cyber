@@ -1,23 +1,27 @@
 import { GestionnaireDeJeton } from './GestionnaireDeJeton';
 import { ErreurMAC } from '../domaine/erreurMAC';
 import {
-  AidantAuthentifie,
-  EntrepotAidant,
+  EntrepotUtilisateur,
   ErreurAuthentification,
-} from './Aidant';
+  UtilisateurAuthentifie,
+} from './Utilisateur';
 
 export const authentifie = (
-  entrepotAidant: EntrepotAidant,
+  entrepotUtilisateur: EntrepotUtilisateur,
   gestionnaireDeJeton: GestionnaireDeJeton,
   identifiant: string,
   motDePasse: string
-): Promise<AidantAuthentifie> => {
-  return entrepotAidant
+): Promise<UtilisateurAuthentifie> => {
+  return entrepotUtilisateur
     .rechercheParIdentifiantConnexionEtMotDePasse(identifiant, motDePasse)
-    .then((aidant) => ({
-      ...aidant,
+    .then((utilisateur) => ({
+      identifiant: utilisateur.identifiant,
+      nomPrenom: utilisateur.nomPrenom,
+      ...(utilisateur.dateSignatureCGU && {
+        dateSignatureCGU: utilisateur.dateSignatureCGU,
+      }),
       jeton: gestionnaireDeJeton.genereJeton({
-        identifiant: aidant.identifiant,
+        identifiant: utilisateur.identifiant,
       }),
     }))
     .catch((erreur) => {

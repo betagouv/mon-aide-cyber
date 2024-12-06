@@ -1,5 +1,6 @@
 import { ExpressValidator, Meta } from 'express-validator';
 import { Entrepots } from '../../domaine/Entrepots';
+import { adaptateurServiceChiffrement } from '../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 
 type MessagesErreursValidateurMotDePasse = {
   ancienMotDePasseObligatoire: string;
@@ -29,9 +30,11 @@ const validateurDeMotDePasse = (
       value === req.body.motDePasse,
     motDePasseUtilisateur: async (value: string, { req }: Meta) => {
       const aidant = await entrepots
-        .aidants()
+        .utilisateurs()
         .lis(req.identifiantUtilisateurCourant);
-      if (aidant.motDePasse !== value) {
+      if (
+        adaptateurServiceChiffrement().dechiffre(aidant.motDePasse) !== value
+      ) {
         throw new Error(messageValidateurs.correspondAuMotDePasseUtilisateur);
       }
       return true;

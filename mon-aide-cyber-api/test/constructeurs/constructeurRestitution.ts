@@ -11,7 +11,7 @@ import { add } from 'date-fns';
 
 class ConstructeurRestitution implements Constructeur<Restitution> {
   private identifiant: crypto.UUID = fakerFR.string.uuid() as crypto.UUID;
-  private dateCreation: Date = fakerFR.date.anytime();
+  private dateCreation: Date = FournisseurHorloge.maintenant();
   private mesures: MesurePriorisee[] = [];
   private indicateurs = {};
   private informationsRestitution: InformationsRestitution = {

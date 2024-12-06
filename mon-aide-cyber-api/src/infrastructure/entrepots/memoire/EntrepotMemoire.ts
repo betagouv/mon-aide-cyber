@@ -8,7 +8,6 @@ import {
   EntrepotEvenementJournal,
   Publication,
 } from '../../../journalisation/Publication';
-import { Aidant, EntrepotAidant } from '../../../authentification/Aidant';
 import {
   EntrepotRestitution,
   Restitution,
@@ -23,6 +22,24 @@ import {
   EntrepotStatistiques,
   Statistiques,
 } from '../../../statistiques/statistiques';
+import {
+  Aidant as AnnuaireAidant,
+  EntrepotAnnuaireAidants,
+} from '../../../annuaire-aidants/annuaireAidants';
+import { CriteresDeRecherche } from '../../../annuaire-aidants/ServiceAnnuaireAidants';
+import {
+  EntrepotUtilisateur,
+  Utilisateur,
+} from '../../../authentification/Utilisateur';
+import { Aidant, EntrepotAidant } from '../../../espace-aidant/Aidant';
+import {
+  EntrepotProfilAidant,
+  ProfilAidant,
+} from '../../../espace-aidant/profil/profilAidant';
+import {
+  DemandeDiagnosticLibreAcces,
+  EntrepotDemandeDiagnosticLibreAcces,
+} from '../../../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -85,26 +102,9 @@ export class EntrepotAidantMemoire
   extends EntrepotMemoire<Aidant>
   implements EntrepotAidant
 {
-  async rechercheParIdentifiantConnexionEtMotDePasse(
-    identifiantConnexion: string,
-    motDePasse: string
-  ): Promise<Aidant> {
+  rechercheParEmail(email: string): Promise<Aidant> {
     const aidantTrouve = Array.from(this.entites.values()).find(
-      (aidant) =>
-        aidant.identifiantConnexion === identifiantConnexion &&
-        aidant.motDePasse === motDePasse
-    );
-    if (!aidantTrouve) {
-      throw new AggregatNonTrouve('aidant');
-    }
-    return Promise.resolve(aidantTrouve);
-  }
-
-  rechercheParIdentifiantDeConnexion(
-    identifiantConnexion: string
-  ): Promise<Aidant> {
-    const aidantTrouve = Array.from(this.entites.values()).find(
-      (aidant) => aidant.identifiantConnexion === identifiantConnexion
+      (aidant) => aidant.email === email
     );
     if (!aidantTrouve) {
       return Promise.reject(new AggregatNonTrouve('aidant'));
@@ -175,3 +175,90 @@ export class EntrepotStatistiquesMemoire
     });
   }
 }
+
+export class EntrepotAnnuaireAidantsMemoire
+  extends EntrepotMemoire<AnnuaireAidant>
+  implements EntrepotAnnuaireAidants
+{
+  rechercheParCriteres(
+    criteresDeRecherche?: CriteresDeRecherche
+  ): Promise<AnnuaireAidant[]> {
+    const tousLesAidants = Array.from(this.entites.values());
+
+    if (criteresDeRecherche) {
+      return Promise.resolve(
+        tousLesAidants.filter((a) =>
+          a.departements
+            .map((a) => a.nom as string)
+            .includes(criteresDeRecherche.departement)
+        )
+      );
+    }
+    return Promise.resolve(tousLesAidants);
+  }
+}
+
+export class EntrepotUtilisateurMemoire
+  extends EntrepotMemoire<Utilisateur>
+  implements EntrepotUtilisateur
+{
+  async rechercheParIdentifiantConnexionEtMotDePasse(
+    identifiantConnexion: string,
+    motDePasse: string
+  ): Promise<Utilisateur> {
+    const utilisateurTrouve = Array.from(this.entites.values()).find(
+      (utilisateur) =>
+        utilisateur.identifiantConnexion === identifiantConnexion &&
+        utilisateur.motDePasse === motDePasse
+    );
+    if (!utilisateurTrouve) {
+      throw new AggregatNonTrouve('utilisateur');
+    }
+    return Promise.resolve(utilisateurTrouve);
+  }
+  async rechercheParIdentifiantDeConnexion(
+    identifiantDeConnexion: string
+  ): Promise<Utilisateur> {
+    const utilisateurTrouve = Array.from(this.entites.values()).find(
+      (utilisateur) =>
+        utilisateur.identifiantConnexion === identifiantDeConnexion
+    );
+    if (!utilisateurTrouve) {
+      throw new AggregatNonTrouve('utilisateur');
+    }
+    return Promise.resolve(utilisateurTrouve);
+  }
+
+  typeAggregat(): string {
+    return 'utilisateur';
+  }
+}
+
+export class EntrepotProfilAidantMemoire implements EntrepotProfilAidant {
+  constructor(
+    private readonly entrepotAidants: EntrepotAidant,
+    private readonly entrepotUtilisateurs: EntrepotUtilisateur
+  ) {}
+
+  async lis(identifiant: string): Promise<ProfilAidant> {
+    try {
+      const aidant = await this.entrepotAidants.lis(identifiant);
+      const utilisateur = await this.entrepotUtilisateurs.lis(identifiant);
+      return Promise.resolve({
+        identifiant: utilisateur.identifiant,
+        email: aidant.email,
+        nomPrenom: utilisateur.nomPrenom,
+        ...(utilisateur.dateSignatureCGU && {
+          dateSignatureCGU: utilisateur.dateSignatureCGU,
+        }),
+        consentementAnnuaire: aidant.consentementAnnuaire,
+      });
+    } catch (erreur) {
+      throw new AggregatNonTrouve('profil Aidant');
+    }
+  }
+}
+
+export class EntrepotDemandeDiagnosticLibreAccesMemoire
+  extends EntrepotMemoire<DemandeDiagnosticLibreAcces>
+  implements EntrepotDemandeDiagnosticLibreAcces {}

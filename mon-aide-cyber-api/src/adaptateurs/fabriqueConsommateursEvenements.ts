@@ -9,6 +9,12 @@ import {
   mailCreationCompteAidantNonEnvoye,
   demandeDevenirAidantespaceAidantCree,
   preferencesAidantModifiees,
+  profilAidantModifie,
+  aideViaSollicitationAidantCree,
+  reinitialisationMotDePasseDemandee,
+  reinitialisationMotDePasseErronee,
+  reinitialisationMotDePasseFaite,
+  diagnosticLibreAccesLance,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
@@ -18,6 +24,7 @@ import { EntrepotEvenementJournal } from '../journalisation/Publication';
 import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../relation/AdaptateurRelationsMAC';
 import { aidantInitieDiagnostic } from '../espace-aidant/tableau-de-bord/consommateursEvenements';
+import { demandeInitieDiagnosticLibreAcces } from '../diagnostic-libre-acces/consommateursEvenements';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -49,6 +56,10 @@ export const fabriqueConsommateursEvenements = (
     ['AIDANT_CREE', [consommateurs.aidantCree()]],
     ['AIDE_CREE', [consommateurs.aideCree()]],
     [
+      'AIDE_VIA_SOLLICITATION_AIDANT_CREE',
+      [aideViaSollicitationAidantCree(entrepotJournalisation)],
+    ],
+    [
       'DEMANDE_DEVENIR_AIDANT_CREEE',
       [demandeDevenirAidantCree(entrepotJournalisation)],
     ],
@@ -67,6 +78,26 @@ export const fabriqueConsommateursEvenements = (
     [
       'PREFERENCES_AIDANT_MODIFIEES',
       [preferencesAidantModifiees(entrepotJournalisation)],
+    ],
+    ['PROFIL_AIDANT_MODIFIE', [profilAidantModifie(entrepotJournalisation)]],
+    [
+      'REINITIALISATION_MOT_DE_PASSE_DEMANDEE',
+      [reinitialisationMotDePasseDemandee(entrepotJournalisation)],
+    ],
+    [
+      'REINITIALISATION_MOT_DE_PASSE_FAITE',
+      [reinitialisationMotDePasseFaite(entrepotJournalisation)],
+    ],
+    [
+      'REINITIALISATION_MOT_DE_PASSE_ERRONEE',
+      [reinitialisationMotDePasseErronee(entrepotJournalisation)],
+    ],
+    [
+      'DIAGNOSTIC_LIBRE_ACCES_LANCE',
+      [
+        diagnosticLibreAccesLance(entrepotJournalisation),
+        demandeInitieDiagnosticLibreAcces(adaptateurRelations),
+      ],
     ],
   ]);
 };

@@ -15,7 +15,6 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
     [clef: string]: Thematique;
   } = {
     ['contexte']: {
-      actions: [],
       groupes: [],
       libelle: fakerFR.word.words(4),
       description: fakerFR.lorem.sentence(),
@@ -67,7 +66,6 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
     questions: Question[]
   ): ConstructeurReferentiel {
     this.thematique[theme] = {
-      actions: [],
       description: fakerFR.lorem.sentence(),
       groupes: questions.map((q, index) => ({
         numero: index + 1,

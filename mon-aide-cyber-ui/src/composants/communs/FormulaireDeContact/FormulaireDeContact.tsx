@@ -65,6 +65,7 @@ export const FormulaireDeContact = () => {
         <div className="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
           <div className="fr-col-md-5 fr-col-sm-12 fr-col-offset-1--right">
             <TypographieH2>Contactez-nous !</TypographieH2>
+            <br />
             <p>
               Vous avez des <b>questions</b> sur MonAideCyber ?
               <br />

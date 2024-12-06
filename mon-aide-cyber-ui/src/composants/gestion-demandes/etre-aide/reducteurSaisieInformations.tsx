@@ -6,6 +6,7 @@ type ErreurSaisieInformations = {
   cguValidees?: PresentationErreur;
   departement?: PresentationErreur;
   adresseElectronique?: PresentationErreur;
+  relationAidantSaisie?: PresentationErreur;
 };
 
 export type EtatSaisieInformations = {
@@ -25,7 +26,6 @@ enum TypeActionSaisieInformations {
   DEPARTEMENT_SAISI = 'DEPARTEMENT_SAISI',
   RAISON_SOCIALE_SAISIE = 'RAISON_SOCIALE_SAISIE',
   CGU_VALIDEES = 'CGU_VALIDEES',
-  DEMANDE_TERMINEE = 'DEMANDE_TERMINEE',
   DEPARTEMENTS_CHARGES = 'DEPARTEMENTS_CHARGES',
   RELATION_AIDANT_CLIQUEE = 'RELATION_AIDANT_CLIQUEE',
 }
@@ -52,9 +52,6 @@ type ActionSaisieInformations =
     }
   | {
       type: TypeActionSaisieInformations.RELATION_AIDANT_CLIQUEE;
-    }
-  | {
-      type: TypeActionSaisieInformations.DEMANDE_TERMINEE;
     };
 
 const construisErreurAdresseElectronique = (emailValide: boolean) =>
@@ -81,6 +78,18 @@ const construisErreurCGUValidess = (cguValidees: boolean) => {
         texte: 'Veuillez valider les CGU.',
       })
     : undefined;
+};
+
+type ChampNouvelEtat = { [clef: string]: boolean | string | Departement };
+
+type ParametreGenerationNouvelEtat = {
+  champ: keyof ErreurSaisieInformations;
+  champValide: () => boolean;
+  elementsFormulairesValides: () => boolean;
+  construisErreurChamp: (
+    bool: boolean
+  ) => { [p: string]: PresentationErreur } | undefined;
+  ajouteAuNouvelEtat: () => ChampNouvelEtat;
 };
 
 export const reducteurSaisieInformations = (
@@ -123,9 +132,48 @@ export const reducteurSaisieInformations = (
       : valeurSaisie;
   };
 
+  const genereNouvelEtat = (
+    parametres: ParametreGenerationNouvelEtat
+  ): EtatSaisieInformations => {
+    const etatCourant = { ...etat };
+    const valide = parametres.champValide();
+    if (valide) {
+      delete etatCourant.erreur?.[parametres.champ];
+      videLesErreurs(etatCourant);
+    }
+    return {
+      ...etatCourant,
+      pretPourEnvoi: valide && parametres.elementsFormulairesValides(),
+      ...(!valide && {
+        erreur: {
+          ...etatCourant.erreur,
+          ...parametres.construisErreurChamp(valide),
+        },
+      }),
+      ...Object.entries(parametres.ajouteAuNouvelEtat()).reduce(
+        (etatPrecedent, [clef, valeur]) => {
+          etatPrecedent[clef] = valeur;
+          return etatPrecedent;
+        },
+        {} as ChampNouvelEtat
+      ),
+    };
+  };
+
   switch (action.type) {
     case TypeActionSaisieInformations.RELATION_AIDANT_CLIQUEE: {
-      return { ...etat, relationAidantSaisie: !etat.relationAidantSaisie };
+      return genereNouvelEtat({
+        ajouteAuNouvelEtat: () => ({
+          relationAidantSaisie: !etat.relationAidantSaisie,
+        }),
+        champ: 'relationAidantSaisie',
+        champValide: () => true,
+        construisErreurChamp: (_bool: boolean) => undefined,
+        elementsFormulairesValides: () =>
+          estMailValide(etat.email) &&
+          estDepartementValide(etat.departement) &&
+          etat.cguValidees,
+      });
     }
     case TypeActionSaisieInformations.DEPARTEMENTS_CHARGES: {
       return {
@@ -133,85 +181,47 @@ export const reducteurSaisieInformations = (
         departements: action.departements,
       };
     }
-    case TypeActionSaisieInformations.DEMANDE_TERMINEE: {
-      const emailValide = estMailValide(etat.email);
-      const etatCourant = { ...etat };
-      const departementValide = estDepartementValide(
-        etat.valeurSaisieDepartement
-      );
-      const cguValidees = etat.cguValidees;
-      const pretPourEnvoi = emailValide && departementValide && cguValidees;
-
-      if (pretPourEnvoi) {
-        delete etatCourant.erreur;
-      }
-
-      return {
-        ...etatCourant,
-        pretPourEnvoi,
-        departement: departementValide
-          ? trouveDepartement(etat.valeurSaisieDepartement)
-          : ({} as Departement),
-        ...(!pretPourEnvoi && {
-          erreur: {
-            ...etatCourant.erreur,
-            ...construisErreurAdresseElectronique(emailValide),
-            ...construisErreurDepartement(departementValide),
-            ...construisErreurCGUValidess(cguValidees),
-          },
-        }),
-      };
-    }
     case TypeActionSaisieInformations.CGU_VALIDEES: {
       const cguValidees = !etat.cguValidees;
-      const etatCourant = { ...etat };
-
-      if (cguValidees) {
-        delete etatCourant.erreur?.['cguValidees'];
-        videLesErreurs(etatCourant);
-      }
-
-      return {
-        ...etatCourant,
-        cguValidees: cguValidees,
-        ...(!cguValidees && {
-          erreur: {
-            ...etatCourant.erreur,
-            ...construisErreur('cguValidees', {
-              identifiantTexteExplicatif: 'cguValidees',
-              texte: 'Veuillez valider les CGU.',
-            }),
-          },
-        }),
-      };
+      return genereNouvelEtat({
+        ajouteAuNouvelEtat: () => ({ cguValidees: cguValidees }),
+        champ: 'cguValidees',
+        champValide: () => cguValidees,
+        construisErreurChamp: (bool: boolean) =>
+          construisErreurCGUValidess(bool),
+        elementsFormulairesValides: () =>
+          estMailValide(etat.email) && estDepartementValide(etat.departement),
+      });
     }
     case TypeActionSaisieInformations.ADRESSE_ELECTRONIQUE_SAISIE: {
-      const emailValide = estMailValide(action.adresseElectronique);
-      const etatCourant = { ...etat };
-      if (emailValide) {
-        delete etatCourant.erreur?.['adresseElectronique'];
-        videLesErreurs(etatCourant);
-      }
-      return {
-        ...etatCourant,
-        email: action.adresseElectronique,
-      };
+      return genereNouvelEtat({
+        ajouteAuNouvelEtat: () => ({ email: action.adresseElectronique }),
+        champ: 'adresseElectronique',
+        champValide: () => estMailValide(action.adresseElectronique),
+        construisErreurChamp: (bool: boolean) =>
+          construisErreurAdresseElectronique(bool),
+        elementsFormulairesValides: () =>
+          estDepartementValide(etat.valeurSaisieDepartement) &&
+          etat.cguValidees,
+      });
     }
     case TypeActionSaisieInformations.DEPARTEMENT_SAISI: {
-      const departementValide = estDepartementValide(action.departement);
-      const etatCourant = { ...etat };
-
-      if (departementValide) {
-        delete etatCourant.erreur?.['departement'];
-        videLesErreurs(etatCourant);
-      }
-
-      const departement = trouveDepartement(action.departement);
-      return {
-        ...etatCourant,
-        departement,
-        valeurSaisieDepartement: departement.nom,
-      };
+      return genereNouvelEtat({
+        ajouteAuNouvelEtat: () => {
+          const departement = trouveDepartement(action.departement);
+          return {
+            departement,
+            valeurSaisieDepartement:
+              departement.nom || (action.departement as string),
+          };
+        },
+        champ: 'departement',
+        champValide: () => estDepartementValide(action.departement),
+        construisErreurChamp: (bool: boolean) =>
+          construisErreurDepartement(bool),
+        elementsFormulairesValides: () =>
+          estMailValide(etat.email) && etat.cguValidees,
+      });
     }
     case TypeActionSaisieInformations.RAISON_SOCIALE_SAISIE: {
       return {
@@ -248,9 +258,6 @@ export const raisonSocialeSaisie = (
 });
 export const cguValidees = (): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.CGU_VALIDEES,
-});
-export const demandeTerminee = (): ActionSaisieInformations => ({
-  type: TypeActionSaisieInformations.DEMANDE_TERMINEE,
 });
 export const relationAidantCliquee = (): ActionSaisieInformations => ({
   type: TypeActionSaisieInformations.RELATION_AIDANT_CLIQUEE,

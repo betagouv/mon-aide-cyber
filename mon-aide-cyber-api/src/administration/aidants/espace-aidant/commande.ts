@@ -18,7 +18,7 @@ const command = program
   );
 
 const versLigneCSV = (aidant: TraitementCreationEspaceAidant) =>
-  `${aidant.region};${aidant.nomPrenom};${aidant.formation};${aidant.charte};${aidant.email};${aidant.telephone};${aidant.todo};${aidant.qui};${aidant.compteCree};${aidant.commentaires};${aidant.messageAvecMDP}\n`;
+  `${aidant.region};${aidant.nomPrenom};${aidant.formation};${aidant.charte};${aidant.email};${aidant.telephone};${aidant.todo};${aidant.qui};${aidant.compteCree};${aidant.commentaires};${aidant.lieuDeFormation}\n`;
 
 command.action(async (...args: any[]) => {
   const espacesAidantsCrees = await initialiseCreationEspacesAidants(
@@ -32,18 +32,18 @@ command.action(async (...args: any[]) => {
     const dateMaintenantISO = FournisseurHorloge.maintenant().toISOString();
     rapport.push(`${EN_TETES_FICHIER_CSV.join(';')}\n`);
     const imports: TraitementCreationEspaceAidant[] = [
-      ...espacesAidantsCrees.aidantsImportes,
-      ...espacesAidantsCrees.aidantsExistants,
+      ...espacesAidantsCrees.erreurs,
+      ...espacesAidantsCrees.demandesDevenirAidant,
       ...espacesAidantsCrees.mailsCreationEspaceAidantEnvoyes,
       ...espacesAidantsCrees.mailsCreationEspaceAidantEnAttente,
     ];
     console.log(
-      'Nombre d’Aidants : %d\nNombre d’aidants importés : %d, \nNombre d’aidants déjà existants : %d\nNombre de mail envoyés suite à une demande: %d\nNombre de demandes toujours en cours: %d',
+      'Nombre d’Aidants : %d\nNombre de demandes devenir Aidant créées : %d\nNombre de mail envoyés suite à une demande : %d\nNombre de demandes toujours en cours : %d\nNombre de demandes en erreur : %d',
       imports.length,
-      espacesAidantsCrees.aidantsImportes.length,
-      espacesAidantsCrees.aidantsExistants.length,
+      espacesAidantsCrees.demandesDevenirAidant.length,
       espacesAidantsCrees.mailsCreationEspaceAidantEnvoyes.length,
-      espacesAidantsCrees.mailsCreationEspaceAidantEnAttente.length
+      espacesAidantsCrees.mailsCreationEspaceAidantEnAttente.length,
+      espacesAidantsCrees.erreurs.length
     );
     imports.forEach((aidant) => {
       rapport.push(versLigneCSV(aidant));

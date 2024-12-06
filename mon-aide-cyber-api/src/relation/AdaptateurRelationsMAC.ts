@@ -1,11 +1,4 @@
-import {
-  Objet,
-  Relation,
-  unObjet,
-  unTuple,
-  unUtilisateur,
-  Utilisateur,
-} from './Tuple';
+import { Objet, Relation, Tuple, Utilisateur } from './Tuple';
 import crypto from 'crypto';
 import { AdaptateurRelations } from './AdaptateurRelations';
 import { EntrepotRelation } from './EntrepotRelation';
@@ -13,36 +6,20 @@ import { fabriqueEntrepotRelations } from './infrastructure/fabriqueEntrepotRela
 
 export class AdaptateurRelationsMAC implements AdaptateurRelations {
   private tupleEntrepot: EntrepotRelation;
+
   constructor(tupleEntrepot: EntrepotRelation = fabriqueEntrepotRelations()) {
     this.tupleEntrepot = tupleEntrepot;
   }
 
-  async aidantInitieDiagnostic(
-    identifiantAidant: crypto.UUID,
-    identifiantDiagnostic: crypto.UUID
-  ) {
-    await this.tupleEntrepot.persiste(
-      unTuple()
-        .avecUtilisateur(
-          unUtilisateur()
-            .deTypeAidant()
-            .avecIdentifiant(identifiantAidant)
-            .construis()
-        )
-        .avecRelationInitiateur()
-        .avecObjet(
-          unObjet()
-            .deTypeDiagnostic()
-            .avecIdentifiant(identifiantDiagnostic)
-            .construis()
-        )
-        .construis()
-    );
+  async creeTuple(tuple: Tuple): Promise<void> {
+    await this.tupleEntrepot.persiste(tuple);
   }
 
-  diagnosticsInitiePar(identifiantAidant: crypto.UUID): Promise<string[]> {
+  identifiantsObjetsLiesAUtilisateur(
+    identifiantUtilisateur: crypto.UUID
+  ): Promise<string[]> {
     return this.tupleEntrepot
-      .trouveDiagnosticsInitiePar(identifiantAidant)
+      .trouveObjetsLiesAUtilisateur(identifiantUtilisateur)
       .then((tuples) => tuples.map((tuple) => tuple.objet.identifiant));
   }
 
@@ -51,6 +28,10 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
     utilisateur: Utilisateur,
     objet: Objet
   ): Promise<boolean> {
-    return this.tupleEntrepot?.relationExiste(relation, utilisateur, objet);
+    return this.tupleEntrepot.relationExiste(relation, utilisateur, objet);
+  }
+
+  typeRelationExiste(relation: Relation, objet: Objet) {
+    return this.tupleEntrepot.typeRelationExiste(relation, objet);
   }
 }

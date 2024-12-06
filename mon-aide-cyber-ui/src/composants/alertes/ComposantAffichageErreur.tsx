@@ -2,21 +2,23 @@ import { Header } from '../layout/Header.tsx';
 import { Footer } from '../layout/Footer.tsx';
 import { LienMAC } from '../LienMAC.tsx';
 import { ReactElement, useEffect, useState } from 'react';
-import { Action, Lien, Liens } from '../../domaine/Lien.ts';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import { Action, Liens } from '../../domaine/Lien.ts';
+import { ROUTE_AIDANT } from '../../domaine/MoteurDeLiens.ts';
 import { FallbackProps } from 'react-error-boundary';
 import { useUtilisateur } from '../../fournisseurs/hooks.ts';
+import { Link } from 'react-router-dom';
 
 type ProprietesComposantAffichageErreur = Omit<FallbackProps, 'error'> & {
   error: { message: string; liens?: Liens; titre?: string };
 };
 
-const ActionsDisponibles: Map<Action, (lien: Lien) => ReactElement> = new Map([
+const ActionsDisponibles: Map<Action, () => ReactElement> = new Map([
   [
     'afficher-tableau-de-bord',
-    (lien: Lien) => (
+    () => (
       <>
-        Revenir au <a href={lien.route}>tableau de bord</a>.
+        Revenir au{' '}
+        <Link to={`${ROUTE_AIDANT}/tableau-de-bord`}>tableau de bord</Link>.
       </>
     ),
   ],
@@ -42,11 +44,8 @@ export const ComposantAffichageErreur = ({
         <div className="fr-grid-row fr-grid-row--center">
           <div className="fr-col-md-8 fr-col-sm-12 section">
             <ul>
-              {Object.entries(
-                new MoteurDeLiens(error.liens).extrais() || []
-              ).map(
-                ([nom, lien]) =>
-                  ActionsDisponibles.get(nom as Action)?.(lien) || <></>
+              {Object.entries(error.liens || []).map(
+                ([nom]) => ActionsDisponibles.get(nom as Action)?.() || <></>
               )}
             </ul>
           </div>

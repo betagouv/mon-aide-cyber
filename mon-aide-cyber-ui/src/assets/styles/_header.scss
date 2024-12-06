@@ -1,60 +1,86 @@
 
 header.public {
-    z-index: 2;
+  z-index: 2;
 }
 
 .barre-navigation {
-    background-color: var(--couleurs-mac-blanc);
-    z-index: 100;
+  background-color: var(--couleurs-mac-blanc);
+  z-index: 100;
 
-    border-top: 2px solid var(--couleurs-mac-violet-tres-clair);
+  border-top: 2px solid var(--couleurs-mac-violet-tres-clair);
 
-    .fr-nav__list {
-        ul {
-            padding-inline-start: none;
-            display: flex;
-            flex-direction: column;
-    
-           
-            gap: 2rem;
-            list-style-type: none;
-            margin: 0px;
-    
-            @include a-partir-de(lg) {
-                flex-direction: row;
-            }
-    
-            
-        }
-        
+  .fr-nav__btn {
+    color: var(--couleurs-mac-violet-fonce);
+    font-weight: 700;
+  }
+
+  .fr-nav__btn[aria-expanded=true]:not(:disabled) {
+    color: var(--couleurs-mac-violet-fonce);
+    font-weight: 700;
+  }
+
+  .fr-nav__btn[aria-current]:not([aria-current=false]), .fr-nav__link[aria-current]:not([aria-current=false]) {
+    color: var(--couleurs-mac-violet-fonce);
+    font-weight: 700;
+  }
+
+  .fr-nav__btn[aria-expanded=true]:not(:disabled) {
+    --idle: transparent;
+    --hover: none;
+    --active: none;
+    background-color: none;
+    color: var(--couleurs-mac-noir);
+  }
+
+  .fr-nav__btn[aria-current]:not([aria-current=false]):before, .fr-nav__link[aria-current]:not([aria-current=false]):before {
+    --idle: transparent;
+    --hover: none;
+    --active: none;
+    background-color: none;
+    border-bottom: var(--couleurs-mac-jaune-fonce) 4px solid;
+    color: var(--couleurs-mac-noir);
+  }
+
+  li.fr-nav__item.lien {
+    padding: 0;
+    min-height: unset;
+    position: relative;
+    cursor: pointer;
+
+    > .fr-nav__link {
+      color: var(--couleurs-mac-violet-fonce);
+      font-weight: 700;
     }
 
-    li.fr-nav__item.lien {
-        padding: 0;
-        min-height: unset;
-        
-        >.fr-nav__link {
-            color: var(--couleurs-mac-violet-fonce); 
-        font-weight: 700;
-        }
+    &.actif {
+      border-bottom: var(--couleurs-mac-jaune-fonce) 4px solid;
+      color: var(--couleurs-mac-noir);
 
-            &.actif {
-                border-bottom: var(--couleurs-mac-jaune-fonce) 4px solid;
-                color: var(--couleurs-mac-noir);
+      a {
+        color: var(--couleurs-mac-noir);
+      }
 
-                a {
-                    color: var(--couleurs-mac-noir);
-                }
-                >.fr-nav__link {
-                    color: var(--couleurs-mac-noir);
-                }
-            }
+      > .fr-nav__link {
+        color: var(--couleurs-mac-noir);
+      }
 
-            a {
-                background: none;
-            }
-        
+      button {
+        color: var(--couleurs-mac-noir);
+      }
     }
 
-    
+    a {
+      background: none;
+    }
+
+  }
+
+
+}
+
+
+.header-restitution-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }

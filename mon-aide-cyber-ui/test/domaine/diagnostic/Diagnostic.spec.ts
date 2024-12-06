@@ -7,8 +7,6 @@ import {
   uneQuestionTiroirAChoixUnique,
 } from '../../constructeurs/constructeurQuestions.ts';
 import {
-  actionAMener,
-  ActionReponseDiagnostic,
   Reponse,
   reponseMultipleDonnee,
   reponseTiroirMultipleDonnee,
@@ -18,35 +16,6 @@ import {
 
 describe('Diagnostic', () => {
   describe('Dans le cas de réponses faites', () => {
-    it('Exécute l’action demandée', () => {
-      let actionRecue: ActionReponseDiagnostic | undefined = undefined;
-      const actionExecutee: (action: ActionReponseDiagnostic) => void = (
-        action
-      ) => {
-        actionRecue = action;
-      };
-
-      actionAMener(
-        [
-          {
-            test: {
-              action: 'repondre',
-              ressource: { url: 'url', methode: 'GET' },
-            },
-          },
-        ],
-        'repondre',
-        (action) => actionExecutee(action)
-      );
-
-      expect(actionRecue).toStrictEqual<ActionReponseDiagnostic>({
-        test: {
-          action: 'repondre',
-          ressource: { url: 'url', methode: 'GET' },
-        },
-      });
-    });
-
     describe('dans le cas de question simple', () => {
       it('retourne la réponse à la question', () => {
         const nouvelleReponse = uneReponsePossible().construis();

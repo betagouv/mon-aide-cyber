@@ -5,11 +5,13 @@ import { BusEvenementMAC } from '../../../infrastructure/bus/BusEvenementMAC';
 import { fabriqueConsommateursEvenements } from '../../../adaptateurs/fabriqueConsommateursEvenements';
 import { AdaptateurRelationsMAC } from '../../../relation/AdaptateurRelationsMAC';
 import { fabriqueAdaptateurEnvoiMail } from '../../../infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
-import { unServiceAidant } from '../../../authentification/ServiceAidantMAC';
 import {
   CommandeEnvoiMailCreationCompteAidant,
   DemandeFinalisationDevenirAidantEnvoyee,
 } from '../../../gestion-demandes/devenir-aidant/CapteurCommandeEnvoiMailCreationCompteAidant';
+import { AdaptateurReferentielMAC } from '../../../infrastructure/adaptateurs/AdaptateurReferentielMAC';
+import { AdaptateurMesures } from '../../../infrastructure/adaptateurs/AdaptateurMesures';
+import { unServiceAidant } from '../../../espace-aidant/ServiceAidantMAC';
 
 const command = program
   .description('Envoi un mail de création de compte à l’Aidant')
@@ -25,7 +27,13 @@ command.action(async (...args: any[]) => {
       fabriqueConsommateursEvenements(new AdaptateurRelationsMAC())
     ),
     fabriqueAdaptateurEnvoiMail(),
-    { aidant: unServiceAidant(entrepots.aidants()) }
+    {
+      aidant: unServiceAidant(entrepots.aidants()),
+      referentiels: {
+        diagnostic: new AdaptateurReferentielMAC(),
+        mesures: new AdaptateurMesures(),
+      },
+    }
   );
 
   try {

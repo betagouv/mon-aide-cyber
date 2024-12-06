@@ -10,11 +10,11 @@ import { NextFunction } from 'express-serve-static-core';
 import { ServiceCreationEspaceAidant } from '../espace-aidant/ServiceCreationEspaceAidant';
 import { constructeurActionsHATEOAS } from './hateoas/hateoas';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import { routesAPITableauDeBord } from '../espace-aidant/tableau-de-bord/routesAPITableauDeBord';
 import {
   ErreurValidationMotDePasse,
   validateursDeMotDePasseTemporaire,
 } from './validateurs/motDePasse';
+import { routesAPITableauDeBord } from './espace-aidant/tableau-de-bord/routesAPITableauDeBord';
 
 export const routesAPIEspaceAidant = (configuration: ConfigurationServeur) => {
   const routes = express.Router();

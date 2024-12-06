@@ -161,85 +161,6 @@ export const donneesContexte: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'contexte-region-siege-social',
-      libelle: 'Dans quelle région votre siège social est-il basé ?',
-      poids: 0,
-      reponsesPossibles: [
-        {
-          identifiant: 'contexte-region-siege-social-auvergne-rhone-alpes',
-          libelle: 'Auvergne-Rhône-Alpes',
-          ordre: 1,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-bourgogne-franche-comte',
-          libelle: 'Bourgogne-Franche-Comté',
-          ordre: 2,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-bretagne',
-          libelle: 'Bretagne',
-          ordre: 3,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-centre-val-de-loire',
-          libelle: 'Centre-Val de Loire',
-          ordre: 4,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-corse',
-          libelle: 'Corse',
-          ordre: 5,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-drom-com',
-          libelle: 'DROM-COM',
-          ordre: 6,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-grand-est',
-          libelle: 'Grand Est',
-          ordre: 7,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-hauts-de-france',
-          libelle: 'Hauts-de-France',
-          ordre: 8,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-ile-de-France',
-          libelle: 'Île-de-France',
-          ordre: 9,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-normandie',
-          libelle: 'Normandie',
-          ordre: 10,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-nouvelle-aquitaine',
-          libelle: 'Nouvelle-Aquitaine',
-          ordre: 11,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-occitanie',
-          libelle: 'Occitanie',
-          ordre: 12,
-        },
-        {
-          identifiant: 'contexte-region-siege-social-pays-de-la-loire',
-          libelle: 'Pays de la Loire',
-          ordre: 13,
-        },
-        {
-          identifiant:
-            'contexte-region-siege-social-provence-alpes-cote-d-azur',
-          libelle: "Provence-Alpes-Côte d'Azur",
-          ordre: 14,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
       identifiant: 'contexte-departement-tom-siege-social',
       libelle:
         'Dans quel département, ou DROM-COM, votre siège social est-il basé ?',
@@ -760,35 +681,35 @@ export const donneesContexte: QuestionsThematique = {
         {
           identifiant: 'contexte-departement-tom-siege-social-saintmartin',
           libelle: 'Collectivité de Saint-Martin',
-          ordre: 977,
+          ordre: 978,
         },
         {
           identifiant: 'contexte-departement-tom-siege-social-saintbarthélémy',
           libelle: 'Collectivité de Saint-Barthélémy',
-          ordre: 978,
+          ordre: 977,
         },
         {
           identifiant:
             'contexte-departement-tom-siege-social-saintpierreetmiquelon',
           libelle: 'Collectivité de Saint-Pierre et Miquelon',
-          ordre: 979,
+          ordre: 975,
         },
         {
           identifiant: 'contexte-departement-tom-siege-social-wallisetfutuna',
           libelle: 'Collectivité de Wallis & Futuna',
-          ordre: 980,
+          ordre: 986,
         },
         {
           identifiant:
             'contexte-departement-tom-siege-social-polynésiefrançaise',
           libelle: 'Collectivité de Polynésie Française',
-          ordre: 981,
+          ordre: 987,
         },
         {
           identifiant:
             'contexte-departement-tom-siege-social-nouvellecalédonie',
           libelle: 'Collectivité de Nouvelle-Calédonie',
-          ordre: 982,
+          ordre: 988,
         },
       ],
       type: 'choixUnique',

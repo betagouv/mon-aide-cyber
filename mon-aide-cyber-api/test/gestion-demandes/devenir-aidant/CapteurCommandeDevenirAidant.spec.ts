@@ -19,8 +19,9 @@ import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvi
 import { adaptateurCorpsMessage } from '../../../src/gestion-demandes/devenir-aidant/adaptateurCorpsMessage';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
-import { unServiceAidant } from '../../../src/authentification/ServiceAidantMAC';
+import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
+import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 
 describe('Capteur de commande devenir aidant', () => {
   const annuaireCot = () => ({
@@ -141,7 +142,7 @@ describe('Capteur de commande devenir aidant', () => {
         unServiceAidant(entrepots.aidants())
       ).execute({
         departement: departements[0],
-        mail: aidant.identifiantConnexion,
+        mail: aidant.email,
         nom: 'nom',
         prenom: 'prenom',
         type: 'CommandeDevenirAidant',
@@ -209,11 +210,8 @@ describe('Capteur de commande devenir aidant', () => {
     });
 
     it('Envoie le mail récapitulatif en copie invisible à MonAideCyber', async () => {
-      adaptateurEnvironnement.messagerie = () => ({
-        emailMAC: () => 'mac@email.com',
-        expediteurMAC: () => 'expéditeur',
-        clefAPI: () => 'clef',
-      });
+      adaptateurEnvironnement.messagerie = () =>
+        adaptateursEnvironnementDeTest.messagerie();
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       const entrepots = new EntrepotsMemoire();
 
@@ -240,11 +238,8 @@ describe('Capteur de commande devenir aidant', () => {
     });
 
     it('Remonte une erreur en cas d’échec de l’envoi du mail de mise en relation', async () => {
-      adaptateurEnvironnement.messagerie = () => ({
-        emailMAC: () => 'mac@email.com',
-        expediteurMAC: () => 'expéditeur',
-        clefAPI: () => 'clef',
-      });
+      adaptateurEnvironnement.messagerie = () =>
+        adaptateursEnvironnementDeTest.messagerie();
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       adaptateurEnvoiMail.genereErreur();
       const entrepots = new EntrepotsMemoire();

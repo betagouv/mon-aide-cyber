@@ -16,8 +16,11 @@ import { CommandeLanceDiagnostic } from '../diagnostic/CapteurCommandeLanceDiagn
 import { Diagnostic } from '../diagnostic/Diagnostic';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
 import { RepresentationDiagnostic } from './representateurs/types';
-import { unObjet, unUtilisateur } from '../relation/Tuple';
 import { RestitutionHTML } from '../infrastructure/adaptateurs/AdaptateurDeRestitutionHTML';
+import {
+  DefinitionAidantInitieDiagnostic,
+  definitionAidantInitieDiagnostic,
+} from '../diagnostic/tuples';
 
 export type ReponseDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 
@@ -27,7 +30,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const {
     adaptateurDeVerificationDeSession: session,
     adaptateurDeVerificationDeCGU: cgu,
-    adaptateurDeVerificationDeRelations: relations,
+    adaptateurDeVerificationDesAcces: relations,
     busCommande,
   } = configuration;
 
@@ -38,8 +41,6 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const commande: CommandeLanceDiagnostic = {
         type: 'CommandeLanceDiagnostic',
-        adaptateurReferentiel: configuration.adaptateurReferentiel,
-        adaptateurReferentielDeMesures: configuration.adaptateurMesures,
         identifiantAidant: requete.identifiantUtilisateurCourant!,
       };
       busCommande
@@ -60,10 +61,8 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id',
     session.verifie('Accès diagnostic'),
     cgu.verifie(),
-    relations.verifie(
-      'initiateur',
-      unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic()
+    relations.verifie<DefinitionAidantInitieDiagnostic>(
+      definitionAidantInitieDiagnostic.definition
     ),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
@@ -88,10 +87,8 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id',
     session.verifie('Ajout réponse au diagnostic'),
     cgu.verifie(),
-    relations.verifie(
-      'initiateur',
-      unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic()
+    relations.verifie<DefinitionAidantInitieDiagnostic>(
+      definitionAidantInitieDiagnostic.definition
     ),
     bodyParser.json(),
     (
@@ -127,10 +124,8 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id/restitution',
     session.verifie('Demande la restitution'),
     cgu.verifie(),
-    relations.verifie(
-      'initiateur',
-      unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic()
+    relations.verifie<DefinitionAidantInitieDiagnostic>(
+      definitionAidantInitieDiagnostic.definition
     ),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
@@ -155,7 +150,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
           const reponseHATEOAS = constructeurActionsHATEOAS()
             .demandeLaRestitution(id)
             .construis();
-          const resultat: ReprensentationRestitution = {
+          const resultat: RepresentationRestitution = {
             ...reponseHATEOAS,
             ...(restitution as RestitutionHTML),
           };
@@ -177,7 +172,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   return routes;
 };
 
-export type ReprensentationRestitution = ReponseHATEOAS & {
+export type RepresentationRestitution = ReponseHATEOAS & {
   autresMesures: string;
   contactsEtLiensUtiles: string;
   indicateurs: string;

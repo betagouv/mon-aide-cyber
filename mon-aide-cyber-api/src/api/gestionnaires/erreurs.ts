@@ -6,15 +6,20 @@ import { ErreurMAC } from '../../domaine/erreurMAC';
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 import { ErreurAccesRefuse } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
 import { AggregatNonTrouve } from '../../domaine/Aggregat';
-import { ErreurCreationEspaceAidant } from '../../authentification/Aidant';
 import { ErreurValidationMotDePasse } from '../validateurs/motDePasse';
 import { ErreurEnvoiEmail } from '../messagerie/Messagerie';
 import { ErreurModificationPreferences } from '../aidant/routesAPIAidantPreferences';
+import { ErreurModificationProfil } from '../aidant/routesAPIProfil';
+import { ErreurCreationEspaceAidant } from '../../espace-aidant/Aidant';
+import { ErreurReinitialisationMotDePasse } from '../../authentification/ServiceUtilisateur';
+import { ErreurDemandeReinitialisationMotDePasse } from '../routesAPIUtilisateur';
 
+const HTTP_ACCEPTE = 202;
 const HTTP_MAUVAISE_REQUETE = 400;
 const HTTP_NON_AUTORISE = 401;
 const HTTP_ACCES_REFUSE = 403;
 const HTTP_NON_TROUVE = 404;
+const HTTP_EXPIRE = 419;
 const HTTP_NON_TRAITABLE = 422;
 const HTTP_ERREUR_SERVEUR = 500;
 
@@ -25,10 +30,14 @@ const CORPS_REPONSE_ERREUR_NON_GEREE = {
 const construisReponse = (
   reponse: Response,
   codeHTTP: number,
-  corpsReponse: { message: string }
+  corpsReponse?: { message: string }
 ) => {
   reponse.status(codeHTTP);
-  reponse.json(corpsReponse);
+  if (corpsReponse) {
+    reponse.json(corpsReponse);
+  } else {
+    reponse.send();
+  }
 };
 
 const erreursGerees: Map<
@@ -133,6 +142,47 @@ const erreursGerees: Map<
       construisReponse(reponse, HTTP_NON_TRAITABLE, {
         message: erreur.message,
       });
+    },
+  ],
+  [
+    'ErreurModificationProfil',
+    (
+      erreur: ErreurMAC<ErreurModificationProfil>,
+      _requete,
+      consignateur,
+      reponse
+    ) => {
+      consignateur.consigne(erreur);
+      construisReponse(reponse, HTTP_NON_TRAITABLE, {
+        message: erreur.message,
+      });
+    },
+  ],
+  [
+    'ErreurReinitialisationMotDePasse',
+    (
+      erreur: ErreurMAC<ErreurReinitialisationMotDePasse>,
+      _requete,
+      consignateur,
+      reponse
+    ) => {
+      consignateur.consigne(erreur);
+      construisReponse(reponse, HTTP_EXPIRE, {
+        ...constructeurActionsHATEOAS().actionsPubliques().construis(),
+        message: erreur.message,
+      });
+    },
+  ],
+  [
+    'ErreurDemandeReinitialisationMotDePasse',
+    (
+      erreur: ErreurMAC<ErreurDemandeReinitialisationMotDePasse>,
+      _requete,
+      consignateur,
+      reponse
+    ) => {
+      consignateur.consigne(erreur);
+      construisReponse(reponse, HTTP_ACCEPTE);
     },
   ],
 ]);

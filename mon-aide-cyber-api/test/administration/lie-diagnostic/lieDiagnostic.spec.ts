@@ -11,8 +11,9 @@ import {
   EntrepotDiagnosticMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { unDiagnostic } from '../../constructeurs/constructeurDiagnostic';
-import { unAidant } from '../../authentification/constructeurs/constructeurAidant';
 import { AdaptateurRelationsEnErreur } from './AdaptateurRelationsEnErreur';
+import { unTupleAidantInitieDiagnostic } from '../../../src/diagnostic/tuples';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 
 describe('Lie un diagnostic', () => {
   it("créé une nouvelle relation lorsque le diagnostic n'est pas encore lié", async () => {
@@ -33,7 +34,7 @@ describe('Lie un diagnostic', () => {
       entrepotDiagnostic,
       entrepotAidant,
       {
-        mailAidant: aidant.identifiantConnexion,
+        mailAidant: aidant.email,
         identifiantAidant,
         identifiantDiagnostic,
         estPersiste: false,
@@ -41,10 +42,12 @@ describe('Lie un diagnostic', () => {
     );
 
     expect(
-      await adaptateurRelations.diagnosticsInitiePar(aidant.identifiant)
+      await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+        aidant.identifiant
+      )
     ).toStrictEqual([identifiantDiagnostic]);
     expect(relation).toStrictEqual<Relation>({
-      mailAidant: aidant.identifiantConnexion,
+      mailAidant: aidant.email,
       identifiantDiagnostic,
       identifiantAidant,
       estPersiste: true,
@@ -61,17 +64,18 @@ describe('Lie un diagnostic', () => {
     const aidant = unAidant().construis();
     const entrepotAidant = new EntrepotAidantMemoire();
     await entrepotAidant.persiste(aidant);
-    await adaptateurRelations.aidantInitieDiagnostic(
+    const tuple = unTupleAidantInitieDiagnostic(
       aidant.identifiant,
       diagnostic.identifiant
     );
+    await adaptateurRelations.creeTuple(tuple);
 
     const relation = await lieDiagnostic(
       adaptateurRelations,
       entrepotDiagnostic,
       entrepotAidant,
       {
-        mailAidant: aidant.identifiantConnexion,
+        mailAidant: aidant.email,
         identifiantAidant: aidant.identifiant,
         identifiantDiagnostic: diagnostic.identifiant,
         estPersiste: false,
@@ -79,7 +83,9 @@ describe('Lie un diagnostic', () => {
     );
 
     expect(
-      await adaptateurRelations.diagnosticsInitiePar(aidant.identifiant)
+      await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+        aidant.identifiant
+      )
     ).toStrictEqual([diagnostic.identifiant]);
     expect(relation).toStrictEqual<Relation>({
       ...relation,
@@ -127,7 +133,7 @@ describe('Lie un diagnostic', () => {
         new EntrepotDiagnosticMemoire(),
         entrepotAvecUnAidant,
         {
-          mailAidant: aidant.identifiantConnexion,
+          mailAidant: aidant.email,
           identifiantAidant: aidant.identifiant,
           identifiantDiagnostic: identifiantDiagnosticNonTrouve,
           estPersiste: false,

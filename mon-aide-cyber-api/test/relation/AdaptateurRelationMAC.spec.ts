@@ -1,9 +1,10 @@
 import { describe, it } from 'vitest';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
-import { unAidant } from '../authentification/constructeurs/constructeurAidant';
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
+import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Adaptateur De Relation MAC', () => {
   it("retourne l'identifiant du diagnostic initié par l'aidant", async () => {
@@ -14,13 +15,16 @@ describe('Adaptateur De Relation MAC', () => {
       new EntrepotRelationMemoire()
     );
     const aidant = unAidant().construis();
-    await adaptateurRelationsMAC.aidantInitieDiagnostic(
+    const tuple = unTupleAidantInitieDiagnostic(
       aidant.identifiant,
       diagnostic.identifiant
     );
+    await adaptateurRelationsMAC.creeTuple(tuple);
 
     const identifiantDiagnostics =
-      await adaptateurRelationsMAC.diagnosticsInitiePar(aidant.identifiant);
+      await adaptateurRelationsMAC.identifiantsObjetsLiesAUtilisateur(
+        aidant.identifiant
+      );
 
     expect(identifiantDiagnostics[0]).toStrictEqual(diagnostic.identifiant);
   });
@@ -32,17 +36,21 @@ describe('Adaptateur De Relation MAC', () => {
       new EntrepotRelationMemoire()
     );
     const identifiantAidant = crypto.randomUUID();
-    await adaptateurRelationsMAC.aidantInitieDiagnostic(
+    const tuple1 = unTupleAidantInitieDiagnostic(
       identifiantAidant,
       identifiantDiagnostic1
     );
-    await adaptateurRelationsMAC.aidantInitieDiagnostic(
+    const tuple2 = unTupleAidantInitieDiagnostic(
       identifiantAidant,
       identifiantDiagnostic2
     );
+    await adaptateurRelationsMAC.creeTuple(tuple1);
+    await adaptateurRelationsMAC.creeTuple(tuple2);
 
     const identifiantDiagnostics =
-      await adaptateurRelationsMAC.diagnosticsInitiePar(identifiantAidant);
+      await adaptateurRelationsMAC.identifiantsObjetsLiesAUtilisateur(
+        identifiantAidant
+      );
 
     expect(identifiantDiagnostics).toStrictEqual([
       identifiantDiagnostic1,
@@ -57,19 +65,21 @@ describe('Adaptateur De Relation MAC', () => {
       new EntrepotRelationMemoire()
     );
     const identifiantAidant = crypto.randomUUID();
-    await adaptateurRelationsMAC.aidantInitieDiagnostic(
+    const tuple = unTupleAidantInitieDiagnostic(
       identifiantAidant,
       diagnosticInitie
     );
 
+    await adaptateurRelationsMAC.creeTuple(tuple);
+
     const identifiantAutreAidant = crypto.randomUUID();
-    await adaptateurRelationsMAC.aidantInitieDiagnostic(
-      identifiantAutreAidant,
-      autreDiagnostic
-    );
+    unTupleAidantInitieDiagnostic(identifiantAutreAidant, autreDiagnostic);
+    await adaptateurRelationsMAC.creeTuple(tuple);
 
     const identifiantDiagnostics =
-      await adaptateurRelationsMAC.diagnosticsInitiePar(identifiantAidant);
+      await adaptateurRelationsMAC.identifiantsObjetsLiesAUtilisateur(
+        identifiantAidant
+      );
 
     expect(identifiantDiagnostics).toStrictEqual([diagnosticInitie]);
   });

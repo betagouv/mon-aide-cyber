@@ -2,13 +2,14 @@ import { AdaptateurDeVerificationDeSession } from '../../src/adaptateurs/Adaptat
 import { NextFunction } from 'express-serve-static-core';
 import { RequestHandler, Response } from 'express';
 import { Contexte } from '../../src/domaine/erreurMAC';
-import { Aidant } from '../../src/authentification/Aidant';
 import { RequeteUtilisateur } from '../../src/api/routesAPI';
+import { Utilisateur } from '../../src/authentification/Utilisateur';
 
 export class AdaptateurDeVerificationDeSessionDeTest
   implements AdaptateurDeVerificationDeSession
 {
-  private _utilisateurConnecte?: Aidant | undefined;
+  private _utilisateurConnecte?: Utilisateur | undefined;
+
   constructor(private estPassee = false) {}
 
   verifie(__contexte: Contexte): RequestHandler {
@@ -30,7 +31,7 @@ export class AdaptateurDeVerificationDeSessionDeTest
     return this.estPassee;
   }
 
-  utilisateurConnecte(utilisateur: Aidant) {
+  utilisateurConnecte(utilisateur: Utilisateur) {
     this._utilisateurConnecte = utilisateur;
   }
 

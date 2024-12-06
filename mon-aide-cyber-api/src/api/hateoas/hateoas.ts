@@ -1,6 +1,10 @@
-import { AidantAuthentifie } from '../../authentification/Aidant';
 import crypto from 'crypto';
 import { InformationsContexte } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
+import { UtilisateurAuthentifie } from '../../authentification/Utilisateur';
+import {
+  ContexteSpecifique,
+  contextesUtilisateur,
+} from './contextesUtilisateur';
 
 type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
 export type LiensHATEOAS = Record<string, Options>;
@@ -8,14 +12,9 @@ export type ReponseHATEOAS = {
   liens: LiensHATEOAS;
 };
 
-export type Options = { url: string; methode?: Methode; contentType?: string };
+export type ReponseHATEOASEnErreur = ReponseHATEOAS & { message: string };
 
-type ContexteSpecifique = {
-  [clef: string]: Options;
-};
-type ContexteGeneral = {
-  [clef: string]: ContexteSpecifique | Options;
-};
+export type Options = { url: string; methode?: Methode; contentType?: string };
 
 const estInformationContexte = (
   informationsContexte: InformationsContexte | undefined
@@ -28,59 +27,25 @@ const estOption = (option: Options | ContexteSpecifique): option is Options => {
 };
 
 class ConstructeurActionsDepuisContexte {
-  private readonly contextes: Map<string, ContexteGeneral> = new Map([
-    [
-      'demande-devenir-aidant',
-      {
-        'finalise-creation-espace-aidant': {
-          'finalise-creation-espace-aidant': {
-            url: '/api/demandes/devenir-aidant/creation-espace-aidant',
-            methode: 'POST',
-          },
-        },
-        'demande-devenir-aidant': {
-          'envoyer-demande-devenir-aidant': {
-            url: '/api/demandes/devenir-aidant',
-            methode: 'POST',
-          },
-          'demande-devenir-aidant': {
-            url: '/api/demandes/devenir-aidant',
-            methode: 'GET',
-          },
-        },
-      },
-    ],
-    [
-      'demande-etre-aide',
-      {
-        'demande-etre-aide': {
-          url: '/api/demandes/etre-aide',
-          methode: 'GET',
-        },
-        'demander-aide': {
-          url: '/api/demandes/etre-aide',
-          methode: 'POST',
-        },
-      },
-    ],
-    [
-      'se-connecter',
-      { 'se-connecter': { url: '/api/token', methode: 'POST' } },
-    ],
-    [
-      'afficher-statistiques',
-      { 'afficher-statistiques': { url: '/statistiques', methode: 'GET' } },
-    ],
-  ]);
   private readonly actions: Map<string, Options> = new Map();
 
   constructor(informationsContexte: InformationsContexte) {
     const contextes = informationsContexte.contexte.split(':');
-    const options = this.contextes.get(contextes[0]);
+    const options = contextesUtilisateur[contextes[0]];
     if (options) {
       if (contextes[1]) {
-        Object.entries(options[contextes[1]]).forEach(([clef, opt]) =>
-          this.actions.set(clef, opt)
+        Object.entries(options[contextes[1]]).forEach(
+          ([clef, opt]: [clef: string, opt: Options]) => {
+            let option: Options = { ...opt };
+            if (contextes[2]) {
+              clef = `afficher-diagnostic-${contextes[2]}`;
+              option = {
+                url: opt.url.replace('__ID__', contextes[2]),
+                methode: opt.methode,
+              } as Options;
+            }
+            this.actions.set(clef, option);
+          }
         );
       } else {
         Object.entries(options)
@@ -107,9 +72,9 @@ class ConstructeurActionsHATEOAS {
   }
 
   public postAuthentification(
-    aidantAuthentifie: AidantAuthentifie
+    utilisateurAuthentifie: UtilisateurAuthentifie
   ): ConstructeurActionsHATEOAS {
-    if (!aidantAuthentifie.dateSignatureCGU) {
+    if (!utilisateurAuthentifie.dateSignatureCGU) {
       return this.creerEspaceAidant();
     }
 
@@ -138,7 +103,10 @@ class ConstructeurActionsHATEOAS {
   }
 
   public accedeAuProfil(): ConstructeurActionsHATEOAS {
-    return this.lancerDiagnostic().modifierMotDePasse().seDeconnecter();
+    return this.lancerDiagnostic()
+      .modifierProfil()
+      .modifierMotDePasse()
+      .seDeconnecter();
   }
 
   public demandeAide() {
@@ -166,8 +134,18 @@ class ConstructeurActionsHATEOAS {
     idDiagnostic: crypto.UUID
   ): ConstructeurActionsHATEOAS {
     this.afficherDiagnostic(idDiagnostic);
+    this.repondreDiagnostic(idDiagnostic);
     this.afficherTableauDeBord();
     return this;
+  }
+
+  private repondreDiagnostic(
+    idDiagnostic: `${string}-${string}-${string}-${string}-${string}`
+  ) {
+    this.actions.set('repondre-diagnostic', {
+      url: `/api/diagnostic/${idDiagnostic}`,
+      methode: 'PATCH',
+    });
   }
 
   public actionsAccesDiagnosticNonAutorise(): ConstructeurActionsHATEOAS {
@@ -180,6 +158,7 @@ class ConstructeurActionsHATEOAS {
     identifiantDiagnostic: crypto.UUID
   ): ConstructeurActionsHATEOAS {
     this.afficherDiagnostic(identifiantDiagnostic);
+    this.repondreDiagnostic(identifiantDiagnostic);
     return this;
   }
 
@@ -240,21 +219,6 @@ class ConstructeurActionsHATEOAS {
     this.lancerDiagnostic().afficherMesInformations();
     return this;
   }
-
-  construis = (): ReponseHATEOAS => {
-    return {
-      liens: {
-        ...(this.actions.size > 0 &&
-          Array.from(this.actions).reduce(
-            (accumulateur, [action, lien]) => ({
-              ...accumulateur,
-              [action]: lien,
-            }),
-            {}
-          )),
-      },
-    };
-  };
 
   private lancerDiagnostic(): ConstructeurActionsHATEOAS {
     this.actions.set('lancer-diagnostic', {
@@ -323,13 +287,43 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  private afficherDiagnostic(idDiagnostic: crypto.UUID) {
+  private afficherDiagnostic(
+    idDiagnostic: crypto.UUID
+  ): ConstructeurActionsHATEOAS {
     this.actions.set(`afficher-diagnostic-${idDiagnostic}`, {
       url: `/api/diagnostic/${idDiagnostic}/restitution`,
       methode: 'GET',
     });
     return this;
   }
+
+  private modifierProfil(): ConstructeurActionsHATEOAS {
+    if (
+      process.env.FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL ===
+      'true'
+    ) {
+      this.actions.set('modifier-profil', {
+        url: '/api/profil',
+        methode: 'PATCH',
+      });
+    }
+    return this;
+  }
+
+  construis = (): ReponseHATEOAS => {
+    return {
+      liens: {
+        ...(this.actions.size > 0 &&
+          Array.from(this.actions).reduce(
+            (accumulateur, [action, lien]) => ({
+              ...accumulateur,
+              [action]: lien,
+            }),
+            {}
+          )),
+      },
+    };
+  };
 }
 
 export const constructeurActionsHATEOAS = (): ConstructeurActionsHATEOAS =>

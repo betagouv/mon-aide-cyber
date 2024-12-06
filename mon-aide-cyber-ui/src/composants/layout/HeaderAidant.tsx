@@ -1,10 +1,15 @@
 import { HeaderProprietes } from './Header';
 import { useUtilisateur } from '../../fournisseurs/hooks';
-import { SeConnecter } from '../authentification/SeConnecter';
+import { SeConnecter } from '../../domaine/authentification/SeConnecter.tsx';
 import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateur';
+import { BandeauMaintenance } from '../alertes/BandeauMaintenance.tsx';
 
 export const HeaderAidant = ({ lienMAC }: HeaderProprietes) => {
   const { utilisateur } = useUtilisateur();
+
+  const maintenanceEstPrevue: string = import.meta.env[
+    'VITE_MAINTENANCE_CRENEAU_PREVU'
+  ];
 
   return (
     <header role="banner" className="fr-header public mac-sticky">
@@ -52,6 +57,9 @@ export const HeaderAidant = ({ lienMAC }: HeaderProprietes) => {
           </div>
         </div>
       </div>
+      {maintenanceEstPrevue && (
+        <BandeauMaintenance creneauDeMaintenance={maintenanceEstPrevue} />
+      )}
     </header>
   );
 };

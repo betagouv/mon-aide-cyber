@@ -10,15 +10,29 @@ import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { CapteurSagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
 import { CapteurCommandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 import { fabriqueAnnuaireCOT } from '../adaptateurs/fabriqueAnnuaireCOT';
-
-import { ServiceAidant } from '../../authentification/ServiceAidant';
 import { CapteurCommandeEnvoiMailCreationCompteAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeEnvoiMailCreationCompteAidant';
 import { adaptateurServiceChiffrement } from '../adaptateurs/adaptateurServiceChiffrement';
 import { CapteurCommandeCreeEspaceAidant } from '../../espace-aidant/CapteurCommandeCreeEspaceAidant';
 import { CapteurSagaDemandeAidantCreeEspaceAidant } from '../../gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
+import { CapteurSagaDemandeSolliciterAide } from '../../gestion-demandes/aide/CapteurSagaDemandeSolliciterAide';
+import { Adaptateur } from '../../adaptateurs/Adaptateur';
+import { Referentiel } from '../../diagnostic/Referentiel';
+import { ReferentielDeMesures } from '../../diagnostic/ReferentielDeMesures';
+import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
+import { CapteurCommandeCreeUtilisateur } from '../../authentification/CapteurCommandeCreeUtilisateur';
+import { CapteurCommandeReinitialisationMotDePasse } from '../../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 
-type Services = {
+import {
+  CapteurCommandeDemandeDiagnosticLibreAcces,
+  CapteurSagaLanceDiagnosticLibreAcces,
+} from '../../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
+
+export type Services = {
   aidant: ServiceAidant;
+  referentiels: {
+    diagnostic: Adaptateur<Referentiel>;
+    mesures: Adaptateur<ReferentielDeMesures>;
+  };
 };
 
 type ParametresCapteur = {
@@ -52,7 +66,8 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurSagaDemandeAide(
           parametres.busCommande!,
           parametres.busEvenements!,
-          parametres.adaptateurEnvoiMail!
+          parametres.adaptateurEnvoiMail!,
+          fabriqueAnnuaireCOT().annuaireCOT
         ),
     },
   ],
@@ -86,7 +101,9 @@ const capteurs: Map<string, Capteur> = new Map([
       capteur: (parametres) =>
         new CapteurCommandeLanceDiagnostic(
           parametres.entrepots,
-          parametres.busEvenements!
+          parametres.busEvenements!,
+          parametres.services.referentiels.diagnostic,
+          parametres.services.referentiels.mesures
         ),
     },
   ],
@@ -101,6 +118,13 @@ const capteurs: Map<string, Capteur> = new Map([
           fabriqueAnnuaireCOT().annuaireCOT,
           parametres.services.aidant
         ),
+    },
+  ],
+  [
+    'CommandeCreeUtilisateur',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeCreeUtilisateur(parametres.entrepots),
     },
   ],
   [
@@ -136,6 +160,50 @@ const capteurs: Map<string, Capteur> = new Map([
         ),
     },
   ],
+  [
+    'SagaDemandeSolliciterAide',
+    {
+      capteur: (parametres) =>
+        new CapteurSagaDemandeSolliciterAide(
+          parametres.busCommande!,
+          parametres.busEvenements!,
+          parametres.adaptateurEnvoiMail!,
+          parametres.services.aidant
+        ),
+    },
+  ],
+  [
+    'CommandeReinitialisationMotDePasse',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeReinitialisationMotDePasse(
+          parametres.entrepots,
+          parametres.busEvenements!,
+          parametres.adaptateurEnvoiMail!,
+          adaptateurServiceChiffrement()
+        ),
+    },
+  ],
+  [
+    'SagaLanceDiagnosticLibreAcces',
+    {
+      capteur: (parametres) =>
+        new CapteurSagaLanceDiagnosticLibreAcces(
+          parametres.entrepots,
+          parametres.busCommande!,
+          parametres.busEvenements!,
+          parametres.services.referentiels.diagnostic,
+          parametres.services.referentiels.mesures
+        ),
+    },
+  ],
+  [
+    'CommandeDemandeDiagnosticLibreAcces',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeDemandeDiagnosticLibreAcces(parametres.entrepots),
+    },
+  ],
 ]);
 
 export class BusCommandeMAC implements BusCommande {
@@ -158,6 +226,10 @@ export class BusCommandeMAC implements BusCommande {
           adaptateurEnvoiMail: this.adaptateurEnvoiMail,
           services: {
             aidant: this.services.aidant,
+            referentiels: {
+              diagnostic: this.services.referentiels.diagnostic,
+              mesures: this.services.referentiels.mesures,
+            },
           },
         })
         .execute(commande);

@@ -22,18 +22,15 @@ export class EntrepotRelationMemoire
   extends EntrepotMemoire<Tuple>
   implements EntrepotRelation
 {
-  trouveDiagnosticsInitiePar(identifiantAidant: string): Promise<Tuple[]> {
+  trouveObjetsLiesAUtilisateur(
+    identifiantUtilisateur: string
+  ): Promise<Tuple[]> {
     const tuples = Array.from(this.entites.values()).filter(
-      (tuple) =>
-        tuple.utilisateur.identifiant === identifiantAidant &&
-        tuple.utilisateur.type === 'aidant' &&
-        tuple.relation === 'initiateur' &&
-        tuple.objet.type === 'diagnostic'
+      (tuple) => tuple.utilisateur.identifiant === identifiantUtilisateur
     );
 
     return Promise.resolve(tuples);
   }
-
   typeAggregat(): string {
     return 'relation';
   }
@@ -48,6 +45,15 @@ export class EntrepotRelationMemoire
         const user = isEqual(tuple.utilisateur, utilisateur);
         const obj = isEqual(tuple.objet, objet);
         return user && tuple.relation === relation && obj;
+      }).length > 0
+    );
+  }
+
+  typeRelationExiste(relation: string, objet: Objet): Promise<boolean> {
+    return Promise.resolve(
+      Array.from(this.entites.values()).filter((tuple) => {
+        const obj = isEqual(tuple.objet, objet);
+        return tuple.relation === relation && obj;
       }).length > 0
     );
   }

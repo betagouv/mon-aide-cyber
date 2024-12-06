@@ -26,42 +26,8 @@ import {
   RepresentationReponsePossible,
   RepresentationThematique,
 } from '../../../src/api/representateurs/types';
-import { Diagnostic } from '../../../src/diagnostic/Diagnostic';
 
 describe('Le représentateur de diagnostic', () => {
-  describe('Afin de fournir les actions possibles pour un client', () => {
-    it('fournit l’action ’repondre’ dans la réponse', () => {
-      const diagnostic = unDiagnostic().construis();
-
-      const representationDiagnostic = representeLeDiagnosticPourLeClient(
-        diagnostic,
-        fabriqueTranscripteurVide()
-      );
-
-      expect(
-        representationDiagnostic.referentiel.contexte.actions
-      ).toStrictEqual([
-        {
-          action: 'repondre',
-          chemin: 'contexte',
-          ressource: {
-            url: `/api/diagnostic/${diagnostic.identifiant}`,
-            methode: 'PATCH',
-          },
-        },
-      ]);
-      expect(representationDiagnostic.actions[0]).toStrictEqual({
-        contexte: {
-          action: 'repondre',
-          ressource: {
-            url: `/api/diagnostic/${diagnostic.identifiant}`,
-            methode: 'PATCH',
-          },
-        },
-      });
-    });
-  });
-
   describe('Afin de représenter l’affichage de la saisie pour le client', () => {
     it('présente le format de réponse pour une question', () => {
       const diagnostic = unDiagnostic()
@@ -475,23 +441,12 @@ describe('Le représentateur de diagnostic', () => {
       nomThematique: string,
       question: Question,
       reponsePossible: ReponsePossible,
-      diagnostic: Diagnostic,
       description: string,
       numero = 1
     ) => {
       expect(
         representationDiagnostic.referentiel[nomThematique]
       ).toStrictEqual<RepresentationThematique>({
-        actions: [
-          {
-            action: 'repondre',
-            chemin: nomThematique,
-            ressource: {
-              url: `/api/diagnostic/${diagnostic.identifiant}`,
-              methode: 'PATCH',
-            },
-          },
-        ],
         description,
         libelle: nomThematique,
         styles: {
@@ -552,7 +507,6 @@ describe('Le représentateur de diagnostic', () => {
         'theme 1',
         questionTheme1,
         reponsePossibleQuestionTheme1,
-        diagnostic,
         transcripteur.thematiques['theme 1'].description
       );
       expectThematique(
@@ -560,7 +514,6 @@ describe('Le représentateur de diagnostic', () => {
         'theme 2',
         questionTheme2,
         reponsePossibleQuestionTheme2,
-        diagnostic,
         transcripteur.thematiques['theme 2'].description,
         2
       );

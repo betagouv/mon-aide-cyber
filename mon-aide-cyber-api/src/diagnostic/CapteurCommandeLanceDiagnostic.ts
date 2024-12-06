@@ -14,13 +14,15 @@ export class CapteurCommandeLanceDiagnostic
 {
   constructor(
     private readonly entrepots: Entrepots,
-    private readonly busEvenement: BusEvenement
+    private readonly busEvenement: BusEvenement,
+    private readonly referentiel: Adaptateur<Referentiel>,
+    private readonly referentielDeMesures: Adaptateur<ReferentielDeMesures>
   ) {}
 
   execute(commande: CommandeLanceDiagnostic): Promise<Diagnostic> {
     return Promise.all([
-      commande.adaptateurReferentiel.lis(),
-      commande.adaptateurReferentielDeMesures.lis(),
+      this.referentiel.lis(),
+      this.referentielDeMesures.lis(),
     ])
       .then(async ([ref, rec]) => {
         const diagnostic = initialiseDiagnostic(ref, rec);
@@ -44,8 +46,6 @@ export class CapteurCommandeLanceDiagnostic
 
 export type CommandeLanceDiagnostic = Omit<Commande, 'type'> & {
   type: 'CommandeLanceDiagnostic';
-  adaptateurReferentiel: Adaptateur<Referentiel>;
-  adaptateurReferentielDeMesures: Adaptateur<ReferentielDeMesures>;
   identifiantAidant: crypto.UUID;
 };
 

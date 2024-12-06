@@ -1,5 +1,6 @@
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { CapteurCommandeCreerAide } from '../../src/aide/CapteurCommandeCreerAide';
+import { allier } from '../../src/gestion-demandes/departements';
 
 describe('Capteur de Commande Créer Aidé', () => {
   it('Créer un aidé', async () => {
@@ -8,7 +9,7 @@ describe('Capteur de Commande Créer Aidé', () => {
 
     const aide = await capteur.execute({
       type: 'CommandeCreerAide',
-      departement: 'un département',
+      departement: allier,
       email: 'un email',
     });
 

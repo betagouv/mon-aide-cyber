@@ -12,6 +12,10 @@ import {
   estReponseEnErreur,
 } from '../../adaptateurs/adaptateursRequeteBrevo';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
+import {
+  Departement,
+  rechercheParNomDepartement,
+} from '../../../gestion-demandes/departements';
 
 type DonneesAidesMAC = {
   dateSignatureCGU: string;
@@ -56,7 +60,7 @@ class EntrepotAidePostgres extends EntrepotPostgres<AideMAC, AideMACDTO> {
 export type AideDistant = {
   email: string;
   identifiantMAC: crypto.UUID;
-  departement: string;
+  departement: Departement;
   raisonSociale?: string;
 };
 
@@ -136,7 +140,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
       .ayantPourAttributs({
         metadonnees: chiffrement(
           aide.identifiantMAC,
-          aide.departement,
+          aide.departement.nom,
           aide.raisonSociale
         ),
       })
@@ -182,7 +186,7 @@ export class EntrepotAideConcret implements EntrepotAide {
           return {
             email: dto.email,
             raisonSociale: metadonnees.raisonSociale,
-            departement: metadonnees.departement,
+            departement: rechercheParNomDepartement(metadonnees.departement),
             identifiantMAC: metadonnees.identifiantMAC,
           };
         }

@@ -5,8 +5,10 @@ import { Footer } from './Footer';
 import { useLayoutEffect } from 'react';
 
 export type LienNavigation = {
+  clef?: number;
   route: string;
   nom: string;
+  enfants?: LienNavigation[];
 };
 
 export const liensNavigation: LienNavigation[] = [
@@ -15,19 +17,35 @@ export const liensNavigation: LienNavigation[] = [
     nom: 'Accueil',
   },
   {
-    route: '/demandes/etre-aide',
+    route: '/beneficier-du-dispositif/etre-aide',
     nom: 'Bénéficier du dispositif',
   },
   {
     route: '/devenir-aidant',
-    nom: 'Devenir aidant',
+    nom: 'Devenir Aidant cyber',
   },
   {
-    route: '/a-propos/kit-de-communication',
-    nom: 'Kit de communication',
+    route: '/a-propos',
+    nom: 'À propos',
+    clef: 776,
+    enfants: [
+      {
+        route: '/a-propos/kit-de-communication',
+        nom: 'Kit de communication',
+      },
+      {
+        route: '/a-propos/statistiques',
+        nom: 'Statistiques',
+      },
+    ],
   },
 ];
-export const LayoutPublic = () => {
+
+export const LayoutPublic = ({
+  afficheNavigation = true,
+}: {
+  afficheNavigation?: boolean;
+}) => {
   const location = useLocation();
 
   // scroll to top of page after a page transition.
@@ -37,7 +55,10 @@ export const LayoutPublic = () => {
 
   return (
     <>
-      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
+      <Header
+        lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />}
+        afficheNavigation={afficheNavigation}
+      />
       <Outlet />
       <Footer />
     </>

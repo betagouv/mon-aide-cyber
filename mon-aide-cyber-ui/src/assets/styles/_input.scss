@@ -2,12 +2,14 @@
   background-color: var(--couleurs-mac-violet-pale) !important;
   box-shadow: inset 0 -2px 0 0 var(--couleurs-mac-violet-fonce) !important;
 }
+
 input {
   @include proprietes-input;
 }
 
 .autocomplete {
   display: inline-block;
+  position: relative;
   margin-top: 0.5rem;
 }
 
@@ -37,6 +39,7 @@ input {
   background-color: var(--couleurs-mac-violet-tres-clair) !important;
   box-shadow: inset 0 -2px 0 0 var(--couleurs-mac-violet-fonce) !important;
 }
+
 .autocomplete-labellise-label:focus {
   background-color: var(--couleurs-mac-violet-tres-clair) !important;
   box-shadow: inset 0 -2px 0 0 var(--couleurs-mac-violet-fonce) !important;
@@ -60,7 +63,9 @@ input {
   max-height: 300px;
   border-bottom: 1px solid var(--couleurs-mac-violet-fonce);
 }
+
 .autocomplete-items button {
+  width: 100%;
   padding: 0.4rem;
   cursor: pointer;
   background-color: var(--couleurs-mac-blanc);
@@ -68,9 +73,22 @@ input {
   color: var(--couleurs-mac-violet-fonce);
   text-align: left;
 }
+
 .autocomplete-items button:hover {
   background-color: var(--couleurs-mac-violet-leger);
 }
+
 .autocomplete-items button:focus {
   background-color: var(--couleurs-mac-violet-leger);
+}
+
+.input-password-layout {
+  display: flex;
+
+  .input-password-icon {
+    cursor: pointer;
+    position: absolute;
+    right: 1rem;
+    top: 2rem;
+  }
 }

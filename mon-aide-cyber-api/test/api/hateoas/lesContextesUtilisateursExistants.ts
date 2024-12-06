@@ -103,4 +103,74 @@ export const lesContextesUtilisateursExistants = [
       },
     },
   },
+  {
+    contexte: 'Afficher l’annuaire Aidants',
+    informationContexte: {
+      contexte: 'afficher-annuaire-aidants',
+    },
+    liens: {
+      'afficher-annuaire-aidants': {
+        url: '/api/annuaire-aidants',
+        methode: 'GET',
+      },
+    },
+  },
+  {
+    contexte: 'Réinitialiser son mot de passe',
+    informationContexte: {
+      contexte: 'reinitialisation-mot-de-passe:reinitialiser-mot-de-passe',
+    },
+    liens: {
+      'reinitialiser-mot-de-passe': {
+        url: '/api/utilisateur/reinitialiser-mot-de-passe',
+        methode: 'PATCH',
+      },
+    },
+  },
+  {
+    contexte: 'Réinitialisation mot de passe',
+    informationContexte: {
+      contexte: 'reinitialisation-mot-de-passe:reinitialisation-mot-de-passe',
+    },
+    liens: {
+      'reinitialisation-mot-de-passe': {
+        url: '/api/utilisateur/reinitialisation-mot-de-passe',
+        methode: 'POST',
+      },
+    },
+  },
+  {
+    contexte: 'Créer un diagnostic depuis l’outil',
+    informationContexte: { contexte: 'utiliser-outil-diagnostic:creer' },
+    liens: {
+      'creer-diagnostic': {
+        methode: 'POST',
+        url: '/api/diagnostic-libre-acces',
+      },
+    },
+  },
+  {
+    contexte: 'Afficher un diagnostic depuis l’outil',
+    informationContexte: {
+      contexte: `utiliser-outil-diagnostic:afficher:d01dd2da-7ddb-475c-8149-46288fc29493`,
+    },
+    liens: {
+      'afficher-diagnostic-d01dd2da-7ddb-475c-8149-46288fc29493': {
+        methode: 'GET',
+        url: '/api/diagnostic-libre-acces/d01dd2da-7ddb-475c-8149-46288fc29493/restitution',
+      },
+    },
+  },
+  {
+    contexte: 'Afficher un autre diagnostic depuis l’outil',
+    informationContexte: {
+      contexte: `utiliser-outil-diagnostic:afficher:d01dd2da-7ddb-475c-8149-46288fc29492`,
+    },
+    liens: {
+      'afficher-diagnostic-d01dd2da-7ddb-475c-8149-46288fc29492': {
+        methode: 'GET',
+        url: '/api/diagnostic-libre-acces/d01dd2da-7ddb-475c-8149-46288fc29492/restitution',
+      },
+    },
+  },
 ];

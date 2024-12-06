@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import {
   adresseElectroniqueSaisie,
   cguValidees,
-  demandeTerminee,
   departementSaisi,
   EtatSaisieInformations,
   initialiseEtatSaisieInformations,
@@ -13,6 +12,7 @@ import {
 
 import { Departement } from '../../../../src/domaine/gestion-demandes/departement.ts';
 import { TexteExplicatif } from '../../../../src/composants/alertes/Erreurs.tsx';
+
 describe('Parcours CGU Aidé', () => {
   let etatInitial: EtatSaisieInformations = {} as EtatSaisieInformations;
 
@@ -22,7 +22,7 @@ describe('Parcours CGU Aidé', () => {
 
   describe('Lorsque l’Aidé fait une demande d’aide', () => {
     describe('En ce qui concerne l’adresse électronique', () => {
-      it('La prend en compte', () => {
+      it('La renseigne', () => {
         const etat = reducteurSaisieInformations(
           etatInitial,
           adresseElectroniqueSaisie('jean.dupont@email.com')
@@ -100,10 +100,68 @@ describe('Parcours CGU Aidé', () => {
           valeurSaisieDepartement: '',
         });
       });
+
+      it("valide l'adresse électronique", () => {
+        const etat = reducteurSaisieInformations(
+          {
+            ...etatInitial,
+            cguValidees: true,
+            departement: { nom: 'Finistère', code: '29' },
+            departements: [{ nom: 'Finistère', code: '29' }],
+            valeurSaisieDepartement: 'Finistère',
+          },
+          adresseElectroniqueSaisie('jean.dupont@mail.fr')
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: true,
+          departement: { nom: 'Finistère', code: '29' },
+          email: 'jean.dupont@mail.fr',
+          pretPourEnvoi: true,
+          departements: [{ nom: 'Finistère', code: '29' }],
+          relationAidantSaisie: false,
+          valeurSaisieDepartement: 'Finistère',
+        });
+      });
+
+      it("invalide l'adresse électronique", () => {
+        const etat = reducteurSaisieInformations(
+          {
+            ...etatInitial,
+            email: 'jean.dupont-incorrect',
+            cguValidees: true,
+            departement: { nom: 'Finistère', code: '29' },
+            departements: [{ nom: 'Finistère', code: '29' }],
+            valeurSaisieDepartement: 'Finistère',
+          },
+          adresseElectroniqueSaisie('jean.dupont-incorrect')
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: true,
+          departement: { nom: 'Finistère', code: '29' },
+          email: 'jean.dupont-incorrect',
+          erreur: {
+            adresseElectronique: {
+              texteExplicatif: (
+                <TexteExplicatif
+                  id="adresse-electronique"
+                  texte="Veuillez saisir une adresse électronique valide."
+                />
+              ),
+              className: 'fr-input-group--error',
+            },
+          },
+          pretPourEnvoi: false,
+          departements: [{ nom: 'Finistère', code: '29' }],
+          relationAidantSaisie: false,
+          valeurSaisieDepartement: 'Finistère',
+        });
+      });
     });
 
     describe('En ce qui concerne le département', () => {
-      it('Le prend en compte', () => {
+      it('Le saisi', () => {
         const etat = reducteurSaisieInformations(
           {
             ...etatInitial,
@@ -199,7 +257,6 @@ describe('Parcours CGU Aidé', () => {
             ...etatInitial,
             email: 'jean.dupont@mail.fr',
             cguValidees: true,
-            departement: {} as Departement,
             departements: [
               { nom: 'Creuse', code: '23' },
               { nom: 'Morbihan', code: '56' },
@@ -213,7 +270,78 @@ describe('Parcours CGU Aidé', () => {
           cguValidees: true,
           departement: { nom: 'Gironde', code: '33' },
           email: 'jean.dupont@mail.fr',
+          pretPourEnvoi: true,
+          departements: [
+            { nom: 'Creuse', code: '23' },
+            { nom: 'Morbihan', code: '56' },
+            { nom: 'Gironde', code: '33' },
+          ],
+          relationAidantSaisie: false,
+          valeurSaisieDepartement: 'Gironde',
+        });
+      });
+
+      it("S'assure que le département existe", () => {
+        const etat = reducteurSaisieInformations(
+          {
+            ...etatInitial,
+            email: 'jean.dupont@mail.fr',
+            cguValidees: true,
+            departements: [
+              { nom: 'Creuse', code: '23' },
+              { nom: 'Morbihan', code: '56' },
+            ],
+          },
+          departementSaisi('département inconnu')
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: true,
+          departement: {} as Departement,
+          email: 'jean.dupont@mail.fr',
+          erreur: {
+            departement: {
+              texteExplicatif: (
+                <TexteExplicatif
+                  id="departement"
+                  texte="Veuillez saisir un département valide."
+                />
+              ),
+              className: 'fr-input-group--error',
+            },
+          },
           pretPourEnvoi: false,
+          departements: [
+            { nom: 'Creuse', code: '23' },
+            { nom: 'Morbihan', code: '56' },
+          ],
+          relationAidantSaisie: false,
+          valeurSaisieDepartement: 'département inconnu',
+        });
+      });
+
+      it('Valide la saisie de l’utilisateur si ce dernier donne le numéro de département', () => {
+        const etat = reducteurSaisieInformations(
+          {
+            ...etatInitial,
+            email: 'jean.dupont@mail.fr',
+            cguValidees: true,
+            departement: {} as Departement,
+            departements: [
+              { nom: 'Creuse', code: '23' },
+              { nom: 'Morbihan', code: '56' },
+              { nom: 'Gironde', code: '33' },
+            ],
+            valeurSaisieDepartement: '33',
+          },
+          departementSaisi('33')
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          cguValidees: true,
+          departement: { nom: 'Gironde', code: '33' },
+          email: 'jean.dupont@mail.fr',
+          pretPourEnvoi: true,
           departements: [
             { nom: 'Creuse', code: '23' },
             { nom: 'Morbihan', code: '56' },
@@ -349,6 +477,33 @@ describe('Parcours CGU Aidé', () => {
           valeurSaisieDepartement: '',
         });
       });
+
+      it("Vérifie que le formulaire est OK à l'envoi", () => {
+        const etatFormulaire = {
+          ...etatInitial,
+          departement: { nom: 'Finistère', code: '29' },
+          email: 'jean.dupont@email.com',
+          cguValidees: false,
+          pretPourEnvoi: false,
+          departements: [],
+          relationAidantSaisie: false,
+        };
+
+        const etat = reducteurSaisieInformations(
+          { ...etatFormulaire },
+          cguValidees()
+        );
+
+        expect(etat).toStrictEqual<EtatSaisieInformations>({
+          departement: { nom: 'Finistère', code: '29' },
+          email: 'jean.dupont@email.com',
+          cguValidees: true,
+          pretPourEnvoi: true,
+          departements: [],
+          relationAidantSaisie: false,
+          valeurSaisieDepartement: '',
+        });
+      });
     });
 
     describe("En ce qui concerne la relation avec l'Aidant", () => {
@@ -367,249 +522,6 @@ describe('Parcours CGU Aidé', () => {
           relationAidantSaisie: true,
           valeurSaisieDepartement: '',
         });
-      });
-    });
-  });
-
-  describe('En ce qui concerne la validation des informations', () => {
-    describe("Pour l'adresse électronique", () => {
-      it("valide l'adresse électronique", () => {
-        const etat = reducteurSaisieInformations(
-          {
-            ...etatInitial,
-            email: 'jean.dupont@mail.fr',
-            cguValidees: true,
-            departement: { nom: 'Finistère', code: '29' },
-            departements: [{ nom: 'Finistère', code: '29' }],
-            valeurSaisieDepartement: 'Finistère',
-          },
-          demandeTerminee()
-        );
-
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
-          cguValidees: true,
-          departement: { nom: 'Finistère', code: '29' },
-          email: 'jean.dupont@mail.fr',
-          pretPourEnvoi: true,
-          departements: [{ nom: 'Finistère', code: '29' }],
-          relationAidantSaisie: false,
-          valeurSaisieDepartement: 'Finistère',
-        });
-      });
-
-      it("invalide l'adresse électronique", () => {
-        const etat = reducteurSaisieInformations(
-          {
-            ...etatInitial,
-            email: 'jean.dupont-incorrect',
-            cguValidees: true,
-            departement: { nom: 'Finistère', code: '29' },
-            departements: [{ nom: 'Finistère', code: '29' }],
-            valeurSaisieDepartement: 'Finistère',
-          },
-          demandeTerminee()
-        );
-
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
-          cguValidees: true,
-          departement: { nom: 'Finistère', code: '29' },
-          email: 'jean.dupont-incorrect',
-          erreur: {
-            adresseElectronique: {
-              texteExplicatif: (
-                <TexteExplicatif
-                  id="adresse-electronique"
-                  texte="Veuillez saisir une adresse électronique valide."
-                />
-              ),
-              className: 'fr-input-group--error',
-            },
-          },
-          pretPourEnvoi: false,
-          departements: [{ nom: 'Finistère', code: '29' }],
-          relationAidantSaisie: false,
-          valeurSaisieDepartement: 'Finistère',
-        });
-      });
-    });
-
-    describe('Pour le département', () => {
-      it("S'assure que le département est présent", () => {
-        const etat = reducteurSaisieInformations(
-          {
-            ...etatInitial,
-            email: 'jean.dupont@mail.fr',
-            cguValidees: true,
-            departement: {} as Departement,
-          },
-          demandeTerminee()
-        );
-
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
-          cguValidees: true,
-          departement: {} as Departement,
-          email: 'jean.dupont@mail.fr',
-          erreur: {
-            departement: {
-              texteExplicatif: (
-                <TexteExplicatif
-                  id="departement"
-                  texte="Veuillez saisir un département valide."
-                />
-              ),
-              className: 'fr-input-group--error',
-            },
-          },
-          pretPourEnvoi: false,
-          departements: [],
-          relationAidantSaisie: false,
-          valeurSaisieDepartement: '',
-        });
-      });
-
-      it("S'assure que le département existe", () => {
-        const etat = reducteurSaisieInformations(
-          {
-            ...etatInitial,
-            email: 'jean.dupont@mail.fr',
-            cguValidees: true,
-            departement: 'département inconnu' as unknown as Departement,
-            departements: [
-              { nom: 'Creuse', code: '23' },
-              { nom: 'Morbihan', code: '56' },
-            ],
-            valeurSaisieDepartement: 'département inconnu',
-          },
-          demandeTerminee()
-        );
-
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
-          cguValidees: true,
-          departement: {} as Departement,
-          email: 'jean.dupont@mail.fr',
-          erreur: {
-            departement: {
-              texteExplicatif: (
-                <TexteExplicatif
-                  id="departement"
-                  texte="Veuillez saisir un département valide."
-                />
-              ),
-              className: 'fr-input-group--error',
-            },
-          },
-          pretPourEnvoi: false,
-          departements: [
-            { nom: 'Creuse', code: '23' },
-            { nom: 'Morbihan', code: '56' },
-          ],
-          relationAidantSaisie: false,
-          valeurSaisieDepartement: 'département inconnu',
-        });
-      });
-
-      it('Valide la saisie de l’utilisateur si ce dernier donne le numéro de département', () => {
-        const etat = reducteurSaisieInformations(
-          {
-            ...etatInitial,
-            email: 'jean.dupont@mail.fr',
-            cguValidees: true,
-            departement: {} as Departement,
-            departements: [
-              { nom: 'Creuse', code: '23' },
-              { nom: 'Morbihan', code: '56' },
-              { nom: 'Gironde', code: '33' },
-            ],
-            valeurSaisieDepartement: '33',
-          },
-          demandeTerminee()
-        );
-
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
-          cguValidees: true,
-          departement: { nom: 'Gironde', code: '33' },
-          email: 'jean.dupont@mail.fr',
-          pretPourEnvoi: true,
-          departements: [
-            { nom: 'Creuse', code: '23' },
-            { nom: 'Morbihan', code: '56' },
-            { nom: 'Gironde', code: '33' },
-          ],
-          relationAidantSaisie: false,
-          valeurSaisieDepartement: '33',
-        });
-      });
-    });
-
-    describe('Pour les CGU', () => {
-      it("s'assure que les CGU sont signées", () => {
-        const etat = reducteurSaisieInformations(
-          {
-            ...etatInitial,
-            email: 'jean.dupont@mail.fr',
-            cguValidees: false,
-            departement: { nom: 'Finistère', code: '29' },
-            departements: [{ nom: 'Finistère', code: '29' }],
-            valeurSaisieDepartement: 'Finistère',
-          },
-          demandeTerminee()
-        );
-
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
-          cguValidees: false,
-          departement: { nom: 'Finistère', code: '29' },
-          email: 'jean.dupont@mail.fr',
-          erreur: {
-            cguValidees: {
-              texteExplicatif: (
-                <TexteExplicatif
-                  id="cguValidees"
-                  texte="Veuillez valider les CGU."
-                />
-              ),
-              className: 'fr-input-group--error',
-            },
-          },
-          pretPourEnvoi: false,
-          departements: [{ nom: 'Finistère', code: '29' }],
-          relationAidantSaisie: false,
-          valeurSaisieDepartement: 'Finistère',
-        });
-      });
-    });
-
-    it("vide les erreurs lorsque les informations sont prêtes pour l'envoi", () => {
-      const etat = reducteurSaisieInformations(
-        {
-          ...etatInitial,
-          email: 'jean.dupont@mail.fr',
-          cguValidees: true,
-          erreur: {
-            departement: {
-              texteExplicatif: <>CGU pas validées</>,
-              className: 'fr-input-group--error',
-            },
-            adresseElectronique: {
-              texteExplicatif: <>Une erreur</>,
-              className: 'fr-input-group--error',
-            },
-          },
-          departement: { nom: 'Finistère', code: '29' },
-          departements: [{ nom: 'Finistère', code: '29' }],
-          pretPourEnvoi: false,
-          valeurSaisieDepartement: 'Finistère',
-        },
-        demandeTerminee()
-      );
-
-      expect(etat).toStrictEqual<EtatSaisieInformations>({
-        cguValidees: true,
-        departement: { nom: 'Finistère', code: '29' },
-        email: 'jean.dupont@mail.fr',
-        pretPourEnvoi: true,
-        departements: [{ nom: 'Finistère', code: '29' }],
-        relationAidantSaisie: false,
-        valeurSaisieDepartement: 'Finistère',
       });
     });
   });

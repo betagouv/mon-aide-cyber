@@ -38,11 +38,11 @@ describe('Capteur pour lancer un diagnostic', () => {
 
     const diagnostic = await new CapteurCommandeLanceDiagnostic(
       entrepots,
-      new BusEvenementDeTest()
+      new BusEvenementDeTest(),
+      adaptateurReferentiel,
+      adaptateurMesures
     ).execute({
       type: 'CommandeLanceDiagnostic',
-      adaptateurReferentiel,
-      adaptateurReferentielDeMesures: adaptateurMesures,
       identifiantAidant: crypto.randomUUID(),
     });
 
@@ -71,11 +71,11 @@ describe('Capteur pour lancer un diagnostic', () => {
 
     const diagnostic = await new CapteurCommandeLanceDiagnostic(
       entrepots,
-      new BusEvenementDeTest()
+      new BusEvenementDeTest(),
+      adaptateurReferentiel,
+      adaptateurMesures
     ).execute({
       type: 'CommandeLanceDiagnostic',
-      adaptateurReferentiel,
-      adaptateurReferentielDeMesures: adaptateurMesures,
       identifiantAidant: crypto.randomUUID(),
     });
 
@@ -99,11 +99,11 @@ describe('Capteur pour lancer un diagnostic', () => {
 
     const diagnostic = await new CapteurCommandeLanceDiagnostic(
       entrepots,
-      busEvenement
+      busEvenement,
+      adaptateurReferentiel,
+      adaptateurMesures
     ).execute({
       type: 'CommandeLanceDiagnostic',
-      adaptateurReferentiel,
-      adaptateurReferentielDeMesures: adaptateurMesures,
       identifiantAidant,
     });
 
@@ -122,11 +122,11 @@ describe('Capteur pour lancer un diagnostic', () => {
     await expect(() =>
       new CapteurCommandeLanceDiagnostic(
         entrepots,
-        new BusEvenementDeTest()
+        new BusEvenementDeTest(),
+        adaptateurReferentiel,
+        adaptateurMesures
       ).execute({
         type: 'CommandeLanceDiagnostic',
-        adaptateurReferentiel,
-        adaptateurReferentielDeMesures: adaptateurMesures,
         identifiantAidant: crypto.randomUUID(),
       })
     ).rejects.toStrictEqual(

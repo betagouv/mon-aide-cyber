@@ -28,23 +28,17 @@ import {
   PreRequisDemande,
   ReponseDemandeInitiee,
 } from '../DevenirAidant';
-import {
-  constructeurParametresAPI,
-  ParametresAPI,
-} from '../../../../fournisseurs/api/ConstructeurParametresAPI';
+import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI';
 import { ChampsErreur } from '../../../../composants/alertes/Erreurs';
 import { AutoCompletion } from '../../../../composants/auto-completion/AutoCompletion';
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4';
 import { useContexteNavigation } from '../../../../hooks/useContexteNavigation.ts';
+import { MACAPIType } from '../../../../fournisseurs/api/useMACAPI.ts';
+import { useNavigate } from 'react-router-dom';
 
 type ProprietesFormulaireDevenirAidant = {
-  macAPI: {
-    execute: <REPONSE, REPONSEAPI, CORPS = void>(
-      parametresAPI: ParametresAPI<CORPS>,
-      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
-    ) => Promise<REPONSE>;
-  };
+  macAPI: MACAPIType;
 };
 
 export const FormulaireDevenirAidant = ({
@@ -52,6 +46,8 @@ export const FormulaireDevenirAidant = ({
 }: ProprietesFormulaireDevenirAidant) => {
   const navigationMAC = useNavigationMAC();
   const navigationUtilisateur = useContexteNavigation(macAPI);
+  const navigate = useNavigate();
+
   const [prerequisDemande, setPrerequisDemande] = useState<
     PreRequisDemande | undefined
   >();
@@ -112,7 +108,7 @@ export const FormulaireDevenirAidant = ({
   }, [etatDemande.pretPourEnvoi, navigationMAC.etat]);
 
   useEffect(() => {
-    if (etatDemande.envoiReussi) window.scrollTo({ top: 0 });
+    if (etatDemande.envoiReussi) navigate('#formulaire-formation');
   }, [etatDemande.envoiReussi]);
 
   useEffect(() => {
@@ -189,7 +185,8 @@ export const FormulaireDevenirAidant = ({
             <br />
             Vous allez être mis en relation avec le délégué régional de
             l&apos;ANSSI de votre territoire, qui reviendra vers vous par mail
-            pour vous indiquer la prochaine date de formation prévue.
+            pour vous indiquer la prochaine date prévue de l&apos;atelier
+            Devenir Aidant.
             <br />
             <br />
             Pensez à vérifier dans vos spams ou contactez-nous à&nbsp;
@@ -210,7 +207,7 @@ export const FormulaireDevenirAidant = ({
       ) : (
         <div className="fr-col-md-8 fr-col-sm-12 section">
           <div className="fr-mb-2w">
-            Demande d&apos;inscription à une formation MonAideCyber
+            Demande d&apos;inscription à un atelier Devenir Aidant MonAideCyber
           </div>
           <div className="fr-mt-2w introduction">
             <div>
@@ -219,19 +216,26 @@ export const FormulaireDevenirAidant = ({
               </TypographieH5>
               <p>Pour devenir aidant, il est nécessaire de&nbsp;:</p>
               <ul>
-                <li>participer à une formation animée par l&apos;ANSSI</li>
+                <li>
+                  représenter un service de l&apos;Etat, un établissement
+                  public, une association ou toute autre entité morale à but non
+                  lucratif
+                </li>
+                <li>
+                  participer à un atelier devenir Aidant MonAideCyber animé par
+                  l&apos;ANSSI
+                </li>
                 <li>
                   prendre connaissance de{' '}
                   <a href="/charte-aidant">la charte de l&apos;aidant</a>, qui
                   rappelle notamment le principe de gratuité du dispositif, et
-                  la signer avant ou après la formation
+                  la signer avant ou après l&apos;atelier
                 </li>
                 <br />
               </ul>
               <p>
                 Veuillez compléter les informations ci-dessous pour être averti
-                de la prochaine session de formation prévue sur votre
-                territoire.
+                de la prochaine session prévue sur votre territoire.
               </p>
             </div>
           </div>

@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
+  cocheConsentementAnnuaire,
   EtatProfil,
   profilCharge,
   reducteurProfil,
-} from '../../../src/composants/profil/reducteurProfil.ts';
+} from '../../../src/domaine/espace-aidant/mon-compte/ecran-mes-informations/composants/reducteurProfil.ts';
 
 describe('reducteur profil', () => {
   const profilVide: EtatProfil = {
@@ -11,6 +12,7 @@ describe('reducteur profil', () => {
     email: '',
     nom: '',
     prenom: '',
+    consentementAnnuaire: false,
     enCoursDeChargement: true,
   };
 
@@ -21,6 +23,7 @@ describe('reducteur profil', () => {
         liens: { 'modifier-profil': { url: '' }, suite: { url: '' } },
         nomPrenom: 'Jean Dupont',
         dateSignatureCGU: '03.12.2023',
+        consentementAnnuaire: false,
         identifiantConnexion: 'jean.dupont@email.fr',
       })
     );
@@ -30,6 +33,7 @@ describe('reducteur profil', () => {
       prenom: 'Jean',
       email: 'jean.dupont@email.fr',
       dateCreationCompte: '03.12.2023',
+      consentementAnnuaire: false,
       enCoursDeChargement: false,
     });
   });
@@ -41,6 +45,7 @@ describe('reducteur profil', () => {
         liens: { 'modifier-profil': { url: '' }, suite: { url: '' } },
         nomPrenom: 'Jean Du Jardin',
         dateSignatureCGU: '03.12.2023',
+        consentementAnnuaire: false,
         identifiantConnexion: 'jean.dupont@email.fr',
       })
     );
@@ -50,7 +55,33 @@ describe('reducteur profil', () => {
       prenom: 'Jean',
       email: 'jean.dupont@email.fr',
       dateCreationCompte: '03.12.2023',
+      consentementAnnuaire: false,
       enCoursDeChargement: false,
+    });
+  });
+
+  describe('Modifie les valeurs du formulaire', () => {
+    it("Coche la case de consentement à apparaître sur l'annuaire", () => {
+      const etatProfil = reducteurProfil(
+        {
+          nom: 'Dupont',
+          prenom: 'Jean',
+          email: 'jean.dupont@email.fr',
+          dateCreationCompte: '03.12.2023',
+          consentementAnnuaire: false,
+          enCoursDeChargement: false,
+        },
+        cocheConsentementAnnuaire()
+      );
+
+      expect(etatProfil).toStrictEqual({
+        nom: 'Dupont',
+        prenom: 'Jean',
+        email: 'jean.dupont@email.fr',
+        dateCreationCompte: '03.12.2023',
+        consentementAnnuaire: true,
+        enCoursDeChargement: false,
+      });
     });
   });
 });

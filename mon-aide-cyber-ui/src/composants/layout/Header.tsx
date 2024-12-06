@@ -1,88 +1,27 @@
-import { SeConnecter } from '../authentification/SeConnecter.tsx';
-import { PropsWithChildren, ReactElement, useEffect } from 'react';
+import { SeConnecter } from '../../domaine/authentification/SeConnecter.tsx';
+import { PropsWithChildren, ReactElement } from 'react';
 import { liensNavigation } from './LayoutPublic.tsx';
-import { Link, matchPath, useLocation } from 'react-router-dom';
-import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
-import { ReponseHATEOAS } from '../../domaine/Lien.ts';
-import { useContexteNavigation } from '../../hooks/useContexteNavigation.ts';
+import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateur.tsx';
+import { useUtilisateur } from '../../fournisseurs/hooks.ts';
+import { NavigationPublique } from './header/NavigationPublique.tsx';
+import { BandeauMaintenance } from '../alertes/BandeauMaintenance.tsx';
 
 export type HeaderProprietes = PropsWithChildren<{
   lienMAC: ReactElement;
+  afficheNavigation?: boolean;
   enteteSimple?: boolean;
 }>;
 
-export const Header = ({ lienMAC, enteteSimple }: HeaderProprietes) => {
-  const location = useLocation();
-  const navigationMAC = useNavigationMAC();
-  const contexteNavigation = useContexteNavigation();
+export const Header = ({
+  lienMAC,
+  afficheNavigation = true,
+  enteteSimple,
+}: HeaderProprietes) => {
+  const { utilisateur } = useUtilisateur();
 
-  const estCheminCourant = (cheminATester: string) =>
-    !!matchPath(location.pathname, cheminATester);
-
-  useEffect(() => {
-    contexteNavigation
-      .recupereContexteNavigation({ contexte: '' })
-      .then((reponse) => {
-        const rep = reponse as ReponseHATEOAS;
-        if (rep.liens['afficher-tableau-de-bord']) {
-          navigationMAC.navigue(
-            new MoteurDeLiens(rep.liens),
-            'afficher-tableau-de-bord'
-          );
-        }
-      });
-  }, []);
-
-  const accesRapide = enteteSimple ? (
-    ''
-  ) : (
-    <div className="fr-header__tools">
-      <div className="fr-header__tools-links">
-        <SeConnecter />
-      </div>
-    </div>
-  );
-
-  const navigation = enteteSimple ? (
-    ''
-  ) : (
-    <div
-      className="fr-header__menu fr-modal"
-      id="modal-491"
-      aria-labelledby="button-492"
-    >
-      <div className="fr-container">
-        <button
-          className="fr-btn--close fr-btn bouton-mac bouton-mac-secondaire"
-          aria-controls="modal-491"
-          title="Fermer"
-        >
-          Fermer
-        </button>
-        <div className="fr-header__menu-links"></div>
-        <nav
-          className="barre-navigation"
-          id="navigation-493"
-          role="navigation"
-          aria-label="Menu principal"
-        >
-          <ul className="fr-nav__list">
-            {liensNavigation.map((lien) => (
-              <li
-                className={`fr-nav__item ${estCheminCourant(lien.route) ? 'lien actif' : 'lien'}`}
-                key={lien.nom}
-              >
-                <Link className="fr-nav__link" to={lien.route}>
-                  {lien.nom}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-    </div>
-  );
+  const maintenanceEstPrevue: string = import.meta.env[
+    'VITE_MAINTENANCE_CRENEAU_PREVU'
+  ];
 
   return (
     <header role="banner" className="fr-header public mac-sticky">
@@ -106,25 +45,66 @@ export const Header = ({ lienMAC, enteteSimple }: HeaderProprietes) => {
                     alt="ANSSI"
                   />
                 </div>
-                <div className="fr-header__navbar icone-se-connecter-mobile">
-                  <button
-                    className="fr-btn--menu fr-btn"
-                    data-fr-opened="false"
-                    aria-controls="modal-491"
-                    id="button-492"
-                    title="Menu"
-                  >
-                    Menu
-                  </button>
-                </div>
+                {afficheNavigation ? (
+                  <div className="fr-header__navbar icone-se-connecter-mobile">
+                    <button
+                      className="fr-btn--menu fr-btn"
+                      data-fr-opened="false"
+                      aria-controls="modal-491"
+                      id="button-492"
+                      title="Menu"
+                    >
+                      Menu
+                    </button>
+                  </div>
+                ) : null}
               </div>
               <div className="fr-header__service fr-col-md-5">{lienMAC}</div>
             </div>
-            {accesRapide}
+            {!enteteSimple ? (
+              <div className="fr-header__tools">
+                <div className="fr-header__tools-links">
+                  {utilisateur ? (
+                    <ComposantMenuUtilisateur utilisateur={utilisateur} />
+                  ) : (
+                    <SeConnecter />
+                  )}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
-      {navigation}
+
+      {maintenanceEstPrevue && (
+        <BandeauMaintenance creneauDeMaintenance={maintenanceEstPrevue} />
+      )}
+
+      {!enteteSimple && afficheNavigation ? (
+        <div
+          className="fr-header__menu fr-modal"
+          id="modal-491"
+          aria-labelledby="button-492"
+        >
+          <div className="fr-container">
+            <button
+              className="fr-btn--close fr-btn bouton-mac bouton-mac-secondaire"
+              aria-controls="modal-491"
+              title="Fermer"
+            >
+              Fermer
+            </button>
+            <div className="fr-header__menu-links">
+              {utilisateur ? (
+                <ComposantMenuUtilisateur utilisateur={utilisateur} />
+              ) : (
+                <SeConnecter />
+              )}
+            </div>
+            <NavigationPublique liensNavigation={liensNavigation} />
+          </div>
+        </div>
+      ) : null}
     </header>
   );
 };

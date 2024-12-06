@@ -7,7 +7,7 @@ import {
   EntrepotAideDistant,
 } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAideConcret';
 import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
-import { afterEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { nettoieLaBaseDeDonneesAides } from '../../../utilitaires/nettoyeurBDD';
 import crypto from 'crypto';
 import { Aide } from '../../../../src/aide/Aide';
@@ -19,7 +19,7 @@ import {
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
 
 describe('Entrepot Aidé Concret', () => {
-  afterEach(async () => {
+  beforeEach(async () => {
     await nettoieLaBaseDeDonneesAides();
   });
 
@@ -149,7 +149,6 @@ describe('Entrepot Aidé Concret', () => {
         {
           email: aide.email,
           departement: aide.departement,
-          raisonSociale: aide.departement,
           identifiantMAC: aide.identifiant,
           ...(aide.raisonSociale && { raisonSociale: aide.raisonSociale }),
         },
@@ -192,7 +191,7 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
         ...(this.avecMetaDonnees && {
           METADONNEES: chiffrement(
             aide.identifiantMAC,
-            aide.departement,
+            aide.departement.nom,
             aide.raisonSociale
           ),
         }),
@@ -227,7 +226,7 @@ class DictionnaireDeChiffrementAide implements DictionnaireDeChiffrement<Aide> {
   avec(aide: Aide): DictionnaireDeChiffrement<Aide> {
     const valeurEnClair = JSON.stringify({
       identifiantMAC: aide.identifiant,
-      departement: aide.departement,
+      departement: aide.departement.nom,
       raisonSociale: aide.raisonSociale,
     });
     this._dictionnaire.set(valeurEnClair, fakerFR.string.alpha(10));

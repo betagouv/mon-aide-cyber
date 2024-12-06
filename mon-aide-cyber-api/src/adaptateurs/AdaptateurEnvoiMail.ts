@@ -9,5 +9,7 @@ export type Email = {
 };
 
 export interface AdaptateurEnvoiMail {
-  envoie(email: Email): Promise<void>;
+  envoie(email: Email, expediteur?: Expediteur): Promise<void>;
 }
+
+export type Expediteur = 'MONAIDECYBER' | 'INFO';

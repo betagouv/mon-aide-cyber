@@ -8,7 +8,7 @@ import { lieDiagnostic, Relation } from '../lie-diagnostic/lieDiagnostic';
 import { fabriqueEntrepotRelations } from '../../relation/infrastructure/fabriqueEntrepotRelations';
 import { EntrepotDiagnostic } from '../../diagnostic/Diagnostic';
 import { fabriqueEntrepots } from '../../adaptateurs/fabriqueEntrepots';
-import { EntrepotAidant } from '../../authentification/Aidant';
+import { EntrepotAidant } from '../../espace-aidant/Aidant';
 
 const command = program
   .description('Lie des diagnostics à aidants')

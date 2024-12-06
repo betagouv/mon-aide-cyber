@@ -1,8 +1,8 @@
-import { Aidant, EntrepotAidant } from '../../authentification/Aidant';
 import crypto from 'crypto';
 import { BusEvenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { AidantCree } from '../../espace-aidant/CapteurCommandeCreeEspaceAidant';
+import { Aidant, EntrepotAidant } from '../../espace-aidant/Aidant';
 
 export type DonneesAidant = {
   identifiantConnexion: string;
@@ -15,22 +15,20 @@ export const creeAidant = async (
   donneesAidant: DonneesAidant
 ): Promise<Aidant | null> => {
   return entrepot
-    .rechercheParIdentifiantConnexionEtMotDePasse(
-      donneesAidant.identifiantConnexion,
-      donneesAidant.motDePasse
-    )
+    .rechercheParEmail(donneesAidant.identifiantConnexion)
     .then(() => null)
     .catch(async () => {
       const aidant: Aidant = {
         identifiant: crypto.randomUUID(),
-        identifiantConnexion: donneesAidant.identifiantConnexion,
-        motDePasse: donneesAidant.motDePasse,
+        email: donneesAidant.identifiantConnexion,
+        // motDePasse: donneesAidant.motDePasse,
         nomPrenom: donneesAidant.nomPrenom,
         preferences: {
           secteursActivite: [],
           departements: [],
           typesEntites: [],
         },
+        consentementAnnuaire: false,
       };
       await entrepot.persiste(aidant);
       await busEvenement.publie<AidantCree>({

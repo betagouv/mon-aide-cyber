@@ -36,17 +36,20 @@ export class BusEvenementDeTest extends BusEvenementMAC {
         new EntrepotRelationMemoire()
       ),
       entrepotJournalisation: new EntrepotEvenementJournalMemoire(),
-    }
+    },
+    consomme: TypeEvenement[] = []
   ) {
     const consommateursEvenements = fabriqueConsommateursEvenements(
       configuration.adaptateurRelations,
       configuration.entrepotJournalisation
     );
     for (const [clef, evenements] of consommateursEvenements.entries()) {
-      consommateursEvenements.set(
-        clef,
-        evenements.map(() => new ConsommateurEvenementDeTest())
-      );
+      if (!consomme.includes(clef)) {
+        consommateursEvenements.set(
+          clef,
+          evenements.map(() => new ConsommateurEvenementDeTest())
+        );
+      }
     }
     super(consommateursEvenements);
     this.consommateursTestes = consommateursEvenements;

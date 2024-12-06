@@ -41,6 +41,7 @@ export const FormulaireMesPreferences = () => {
       () => {
         setMessageEnregistrementTypesEntite(
           <Toast
+            className="w-fit"
             message="Vos types d'entité ont bien été enregistrés !"
             type="INFO"
           />
@@ -52,6 +53,7 @@ export const FormulaireMesPreferences = () => {
       () => {
         setMessageEnregistrementTypesEntite(
           <Toast
+            className="w-fit"
             message="Une erreur est survenue lors de l'enregistrement de vos types d'entité"
             type="ERREUR"
           />
@@ -79,6 +81,7 @@ export const FormulaireMesPreferences = () => {
       () => {
         setMessageEnregistrementSecteursActivite(
           <Toast
+            className="w-fit"
             message="Vos secteurs d'activité ont bien été enregistrés !"
             type="INFO"
           />
@@ -90,6 +93,7 @@ export const FormulaireMesPreferences = () => {
       () => {
         setMessageEnregistrementTypesEntite(
           <Toast
+            className="w-fit"
             message="Une erreur est survenue lors de l'enregistrement de vos secteurs d'activité"
             type="ERREUR"
           />
@@ -115,6 +119,7 @@ export const FormulaireMesPreferences = () => {
       () => {
         setMessageEnregistrementSecteursGeographique(
           <Toast
+            className="w-fit"
             message="Vos secteurs géographiques ont bien été enregistrés !"
             type="INFO"
           />
@@ -125,6 +130,7 @@ export const FormulaireMesPreferences = () => {
         () => {
           setMessageEnregistrementTypesEntite(
             <Toast
+              className="w-fit"
               message="Une erreur est survenue lors de l'enregistrement de vos secteurs géographiques"
               type="ERREUR"
             />

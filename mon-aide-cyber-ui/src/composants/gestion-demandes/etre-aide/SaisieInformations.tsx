@@ -2,7 +2,6 @@ import { useCallback, useEffect, useReducer } from 'react';
 import {
   adresseElectroniqueSaisie,
   cguValidees,
-  demandeTerminee,
   departementSaisi,
   departementsCharges,
   initialiseEtatSaisieInformations,
@@ -35,24 +34,26 @@ export const SaisieInformations = (
     initialiseEtatSaisieInformations(proprietes.departements)
   );
 
-  useEffect(() => {
-    if (etatSaisieInformations.pretPourEnvoi) {
-      if (!proprietes.surValidation.erreur) {
-        proprietes.surValidation.execute({
-          cguValidees: etatSaisieInformations.cguValidees,
-          departement: etatSaisieInformations.departement.nom,
-          email: etatSaisieInformations.email,
-          raisonSociale: etatSaisieInformations.raisonSociale,
-          relationAidant: etatSaisieInformations.relationAidantSaisie,
-        });
-      }
-    }
-  }, [etatSaisieInformations, proprietes]);
-
   useEffect(
     () => envoie(departementsCharges(proprietes.departements)),
     [proprietes.departements]
   );
+
+  const surSoumissionFormulaire = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (proprietes.surValidation.erreur) {
+      return;
+    }
+
+    proprietes.surValidation.execute({
+      cguValidees: etatSaisieInformations.cguValidees,
+      departement: etatSaisieInformations.departement.nom,
+      email: etatSaisieInformations.email,
+      raisonSociale: etatSaisieInformations.raisonSociale,
+      relationAidant: etatSaisieInformations.relationAidantSaisie,
+    });
+  };
 
   const surSaisieAdresseElectronique = useCallback(
     (adresseElectronique: string) => {
@@ -88,10 +89,17 @@ export const SaisieInformations = (
   }, []);
   return (
     <>
-      <div className="fr-mb-2w">Votre demande</div>
+      <div className="fr-mb-2w">Demande pour bénéficier de MonAideCyber</div>
       <div className="fr-mt-2w">
         <div>
-          <h4>Vous souhaitez que votre entité bénéficie de MonAideCyber</h4>
+          <h4>
+            Vous souhaitez bénéficier du dispositif MonAideCyber en tant
+            qu’entité publique ou privée
+          </h4>
+          <p>
+            <b>NB</b> : notre dispositif n’est pas adapté aux particuliers, aux
+            entreprises mono-salariés et aux auto-entrepreneurs.
+          </p>
           <p>
             Veuillez compléter les informations ci-dessous pour formaliser votre
             demande.
@@ -101,7 +109,10 @@ export const SaisieInformations = (
           <span className="asterisque">*</span>
           <span> Champ obligatoire</span>
         </div>
-        <form>
+        <form
+          className="formulaire-etre-aide-layout"
+          onSubmit={(e) => surSoumissionFormulaire(e)}
+        >
           <fieldset className="fr-mb-5w">
             <div className="fr-grid-row fr-grid-row--gutters">
               <div className=" fr-col-12">
@@ -122,9 +133,9 @@ export const SaisieInformations = (
                     type="text"
                     id="adresse-electronique"
                     name="adresse-electronique"
-                    onChange={(e) =>
-                      surSaisieAdresseElectronique(e.target.value)
-                    }
+                    onBlur={(e) => {
+                      surSaisieAdresseElectronique(e.target.value);
+                    }}
                   />
                   {
                     etatSaisieInformations.erreur?.adresseElectronique
@@ -230,12 +241,12 @@ export const SaisieInformations = (
                 </div>
               </div>
             </div>
-            <div className="fr-grid-row fr-grid-row--right fr-pt-3w">
+            <div className="actions fr-grid-row fr-grid-row--right fr-pt-3w">
               <button
-                type="button"
+                type="submit"
+                disabled={!etatSaisieInformations.pretPourEnvoi}
                 key="envoyer-demande-aide"
-                className="fr-btn bouton-mac bouton-mac-primaire"
-                onClick={() => envoie(demandeTerminee())}
+                className="bouton-mac bouton-mac-primaire bouton-demande-etre-aide"
               >
                 Terminer
               </button>

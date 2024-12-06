@@ -6,13 +6,14 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 import {
   Aidant,
   ErreurCreationEspaceAidant,
-} from '../../src/authentification/Aidant';
+} from '../../src/espace-aidant/Aidant';
 import {
   AidantCree,
   CapteurCommandeCreeEspaceAidant,
   EspaceAidantCree,
 } from '../../src/espace-aidant/CapteurCommandeCreeEspaceAidant';
-import { unAidant } from '../authentification/constructeurs/constructeurAidant';
+import crypto from 'crypto';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Capteur de commande de création de compte Aidant', () => {
   it('Crée un compte Aidant', async () => {
@@ -23,8 +24,9 @@ describe('Capteur de commande de création de compte Aidant', () => {
       entrepots,
       new BusEvenementDeTest()
     ).execute({
+      identifiant: crypto.randomUUID(),
       dateSignatureCGU,
-      identifiantConnexion: 'jean.dupont@beta.fr',
+      email: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
       motDePasse: 'toto12345',
       type: 'CommandeCreeEspaceAidant',
@@ -39,10 +41,8 @@ describe('Capteur de commande de création de compte Aidant', () => {
     expect(aidants).toHaveLength(1);
     expect(aidants[0]).toStrictEqual<Aidant>({
       identifiant: expect.any(String),
-      identifiantConnexion: 'jean.dupont@beta.fr',
-      dateSignatureCGU,
+      email: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
-      motDePasse: 'toto12345',
       preferences: {
         secteursActivite: [],
         departements: [
@@ -54,6 +54,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
         ],
         typesEntites: [],
       },
+      consentementAnnuaire: false,
     });
     expect(aidantCree).toStrictEqual<EspaceAidantCree>({
       identifiant: expect.any(String),
@@ -72,8 +73,9 @@ describe('Capteur de commande de création de compte Aidant', () => {
       entrepots,
       new BusEvenementDeTest()
     ).execute({
+      identifiant: crypto.randomUUID(),
       dateSignatureCGU,
-      identifiantConnexion: aidant.identifiantConnexion,
+      email: aidant.email,
       nomPrenom: 'Jean Dupont',
       motDePasse: '',
       type: 'CommandeCreeEspaceAidant',
@@ -103,8 +105,9 @@ describe('Capteur de commande de création de compte Aidant', () => {
       entrepots,
       busEvenement
     ).execute({
+      identifiant: crypto.randomUUID(),
       dateSignatureCGU,
-      identifiantConnexion: 'jean.dupont@beta.fr',
+      email: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
       motDePasse: '',
       type: 'CommandeCreeEspaceAidant',

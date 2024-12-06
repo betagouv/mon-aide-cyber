@@ -3,11 +3,17 @@ import {
   AdaptateurDeVerificationDesAccesMAC,
   ReponseVerificationRelationEnErreur,
 } from '../../src/adaptateurs/AdaptateurDeVerificationDesAccesMAC';
-import { unObjet, unTuple, unUtilisateur } from '../../src/relation/Tuple';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { RequeteUtilisateur } from '../../src/api/routesAPI';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
+import {
+  definitionAidantInitieDiagnostic,
+  DefinitionAidantInitieDiagnostic,
+  unTupleAidantInitieDiagnostic,
+} from '../../src/diagnostic/tuples';
+
+type RequeteTest = Request;
 
 describe('Adaptateur de vérification de relations MAC', () => {
   const reponse = {} as Response;
@@ -18,23 +24,14 @@ describe('Adaptateur de vérification de relations MAC', () => {
     const aidant = crypto.randomUUID();
     const diagnostic = crypto.randomUUID();
     entrepotRelation.persiste(
-      unTuple()
-        .avecRelationInitiateur()
-        .avecObjet(
-          unObjet().deTypeDiagnostic().avecIdentifiant(diagnostic).construis()
-        )
-        .avecUtilisateur(
-          unUtilisateur().deTypeAidant().avecIdentifiant(aidant).construis()
-        )
-        .construis()
+      unTupleAidantInitieDiagnostic(aidant, diagnostic)
     );
     const adaptateurRelation = new AdaptateurRelationsMAC(entrepotRelation);
 
-    await new AdaptateurDeVerificationDesAccesMAC(adaptateurRelation).verifie(
-      'initiateur',
-      unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic()
-    )(
+    await new AdaptateurDeVerificationDesAccesMAC(adaptateurRelation).verifie<
+      DefinitionAidantInitieDiagnostic,
+      RequeteTest
+    >(definitionAidantInitieDiagnostic.definition)(
       {
         identifiantUtilisateurCourant: aidant,
         params: { id: diagnostic },
@@ -62,11 +59,10 @@ describe('Adaptateur de vérification de relations MAC', () => {
       new EntrepotRelationMemoire()
     );
 
-    await new AdaptateurDeVerificationDesAccesMAC(adaptateurRelations).verifie(
-      'initiateur',
-      unUtilisateur().deTypeAidant(),
-      unObjet().deTypeDiagnostic()
-    )(
+    await new AdaptateurDeVerificationDesAccesMAC(adaptateurRelations).verifie<
+      DefinitionAidantInitieDiagnostic,
+      RequeteTest
+    >(definitionAidantInitieDiagnostic.definition)(
       {
         identifiantUtilisateurCourant: crypto.randomUUID(),
         params: { id: crypto.randomUUID() },

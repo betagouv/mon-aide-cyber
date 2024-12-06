@@ -1,8 +1,8 @@
 import { Entrepots } from '../domaine/Entrepots';
 import crypto from 'crypto';
 import { ErreurMAC } from '../domaine/erreurMAC';
-import { ErreurCreationEspaceAidant } from '../authentification/Aidant';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
+import { ErreurCreationEspaceAidant } from './Aidant';
 
 type CreationEspaceAidant = {
   cguSignees: boolean;
@@ -25,15 +25,15 @@ export class ServiceCreationEspaceAidant {
         leveErreur('Vous devez signer les CGU.');
       }
     };
-    const aidant = await this.entrepots
-      .aidants()
+    const utilisateur = await this.entrepots
+      .utilisateurs()
       .lis(creationEspaceAidant.identifiant);
-    if (aidant.dateSignatureCGU) {
+    if (utilisateur.dateSignatureCGU) {
       return;
     }
     verifieLesCGU(creationEspaceAidant);
-    aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
-    aidant.motDePasse = creationEspaceAidant.motDePasse;
-    await this.entrepots.aidants().persiste(aidant);
+    utilisateur.dateSignatureCGU = FournisseurHorloge.maintenant();
+    utilisateur.motDePasse = creationEspaceAidant.motDePasse;
+    await this.entrepots.utilisateurs().persiste(utilisateur);
   }
 }

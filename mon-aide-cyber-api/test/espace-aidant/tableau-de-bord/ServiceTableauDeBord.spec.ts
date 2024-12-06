@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import {
   Diagnostic,
   ServiceTableauDeBord,
@@ -10,9 +10,11 @@ import { AdaptateurRelationsTest } from '../../relation/AdaptateurRelationTest';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe('Service Tableau De Bord', () => {
-  FournisseurHorlogeDeTest.initialise(
-    new Date(Date.parse('2024-04-17T18:06:00+02:00'))
-  );
+  beforeEach(() => {
+    FournisseurHorlogeDeTest.initialise(
+      new Date(Date.parse('2024-04-17T18:06:00+02:00'))
+    );
+  });
 
   describe('Liste le diagnostic initié par un aidant', () => {
     it("Avec au moins l'identifiant et la date de création du diagnostic", async () => {

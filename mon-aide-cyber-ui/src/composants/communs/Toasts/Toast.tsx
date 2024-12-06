@@ -1,54 +1,52 @@
+import { HTMLAttributes } from 'react';
+
 export type ProprietesToast = {
   message: string;
   type: 'SUCCES' | 'ERREUR' | 'ATTENTION' | 'INFO';
-};
+} & HTMLAttributes<HTMLDivElement>;
 
-export const Toast = ({ message, type }: ProprietesToast) => {
+export const Toast = ({
+  message,
+  type,
+  ...proprietesRestantes
+}: ProprietesToast) => {
+  const { className } = proprietesRestantes;
+
+  const toastParType = {
+    SUCCES: {
+      className: 'succes',
+      icone: 'fr-icon-success-fill',
+    },
+    ERREUR: {
+      className: 'erreur',
+      icone: 'fr-icon-close-circle-fill',
+    },
+    ATTENTION: {
+      className: 'attention',
+      icone: 'fr-icon-error-warning-fill',
+    },
+    INFO: {
+      className: 'information',
+      icone: 'fr-icon-information-fill',
+    },
+  };
+
   if (!type) return null;
+  const toastAAfficher = toastParType[type];
 
-  switch (type) {
-    case 'SUCCES': {
-      return (
-        <div className="mac-callout succes">
-          <div>
-            <i className="fr-icon-success-fill " aria-hidden="true"></i>
-          </div>
-          <div>{message}</div>
-        </div>
-      );
-    }
-    case 'ERREUR': {
-      return (
-        <div className="mac-callout erreur">
-          <div>
-            <i className="fr-icon-close-circle-fill" aria-hidden="true"></i>
-          </div>
+  const classesAConcatener = [
+    className ? `${className}` : null,
+    'mac-callout',
+    toastAAfficher.className,
+  ];
+  const classNameEntier = classesAConcatener.join(' ');
 
-          <div>{message}</div>
-        </div>
-      );
-    }
-    case 'ATTENTION': {
-      return (
-        <div className="mac-callout attention">
-          <div>
-            <i className="fr-icon-error-warning-fill" aria-hidden="true"></i>
-          </div>
-
-          <div>{message}</div>
-        </div>
-      );
-    }
-    case 'INFO': {
-      return (
-        <div className="mac-callout information">
-          <div>
-            <i className="fr-icon-information-fill " aria-hidden="true"></i>
-          </div>
-
-          <div>{message}</div>
-        </div>
-      );
-    }
-  }
+  return (
+    <div {...proprietesRestantes} className={classNameEntier}>
+      <div>
+        <i className={toastAAfficher.icone} aria-hidden="true"></i>
+      </div>
+      <div>{message}</div>
+    </div>
+  );
 };

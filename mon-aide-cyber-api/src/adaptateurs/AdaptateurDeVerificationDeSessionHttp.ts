@@ -7,7 +7,7 @@ import {
   InformationsContexte,
 } from './AdaptateurDeVerificationDeSession';
 import { Contexte, ErreurMAC } from '../domaine/erreurMAC';
-import { fabriqueDeCookies, MACCookies } from './fabriqueDeCookies';
+import { fabriqueDeCookies, jwtPayload, MACCookies } from './fabriqueDeCookies';
 import { RequeteUtilisateur } from '../api/routesAPI';
 
 export class AdaptateurDeVerificationDeSessionHttp
@@ -35,13 +35,10 @@ export class AdaptateurDeVerificationDeSessionHttp
           requete,
           reponse
         );
-        const sessionDecodee = JSON.parse(
-          Buffer.from(cookies.session, 'base64').toString()
-        );
-        const jwtPayload = this.gestionnaireDeJeton.verifie(
-          sessionDecodee.token
-        );
-        requete.identifiantUtilisateurCourant = jwtPayload.identifiant;
+        requete.identifiantUtilisateurCourant = jwtPayload(
+          cookies,
+          this.gestionnaireDeJeton
+        ).identifiant;
       } catch (e) {
         throw ErreurMAC.cree(
           contexte,

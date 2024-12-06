@@ -1,13 +1,13 @@
 import { ReactElement, useCallback, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { useModale, useNavigationMAC } from '../../fournisseurs/hooks.ts';
-import { FormatLien, LienRoutage } from '../../domaine/LienRoutage.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
 import { Lien } from '../../domaine/Lien.ts';
 import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import Button from '../atomes/Button/Button.tsx';
+import { useNavigueVersModifierDiagnostic } from '../../fournisseurs/ContexteNavigationMAC.tsx';
 
 type ProprietesComposant = {
   surClick: () => void;
@@ -74,7 +74,7 @@ function ValidationCGU(proprietesValidationCGU: {
           <label className="fr-label" htmlFor="radio-validation-cgu-oui">
             <div>
               Le bénéficiaire confirme avoir rempli{' '}
-              <a href="/demandes/etre-aide">
+              <a href="/beneficier-du-dispositif/etre-aide">
                 le formulaire de demande d&apos;aide
               </a>
               .
@@ -91,7 +91,7 @@ function ValidationCGU(proprietesValidationCGU: {
           <label className="fr-label" htmlFor="radio-validation-cgu-non">
             <div>
               Le bénéficiaire n&apos;a pas encore rempli{' '}
-              <a href="/demandes/etre-aide">
+              <a href="/beneficier-du-dispositif/etre-aide">
                 le formulaire de demande d&apos;aide
               </a>
               .
@@ -104,11 +104,16 @@ function ValidationCGU(proprietesValidationCGU: {
               <br />
               L&apos;utilisation du diagnostic nécessite l&apos;acceptation des
               CGU par le bénéficiaire. Veuillez l&apos;orienter vers{' '}
-              <a href="/demandes/etre-aide">le lien du formulaire</a> afin
-              qu&apos;il puisse accepter les CGU avant de démarrer le diagnostic
+              <a href="/beneficier-du-dispositif/etre-aide">
+                le lien du formulaire
+              </a>{' '}
+              afin qu&apos;il puisse accepter les CGU avant de démarrer le
+              diagnostic
               <br />
-              <a href={`${import.meta.env['VITE_URL_MAC']}/demandes/etre-aide`}>
-                {`${import.meta.env['VITE_URL_MAC']}/demandes/etre-aide`}
+              <a
+                href={`${import.meta.env['VITE_URL_MAC']}/beneficier-du-dispositif/etre-aide`}
+              >
+                {`${import.meta.env['VITE_URL_MAC']}/beneficier-du-dispositif/etre-aide`}
               </a>
             </div>
           </label>
@@ -139,35 +144,32 @@ function ValidationCGU(proprietesValidationCGU: {
   );
 }
 
+export type FormatLien = `/api/${string}`;
 export const ComposantLancerDiagnostic = ({
   composant,
 }: ProprietesComposantLancerDiagnostic) => {
   const { showBoundary } = useErrorBoundary();
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
+  const { navigue } = useNavigueVersModifierDiagnostic('/aidant/diagnostic');
+
   const { affiche, ferme } = useModale();
 
   const lanceDiagnostic = useCallback(
     (lien: Lien) => {
       macAPI
-        .execute<LienRoutage, FormatLien>(
+        .execute<string, FormatLien>(
           constructeurParametresAPI()
             .url(lien.url)
             .methode(lien.methode!)
             .construis(),
-          async (json) => new LienRoutage(await json)
+          async (lienDansHeader) => await lienDansHeader
         )
         .then((lien) => {
-          return navigationMAC.navigue(
-            new MoteurDeLiens({
-              'modifier-diagnostic': {
-                url: lien.url(),
-                route: lien.route(),
-                methode: 'GET',
-              },
-            }),
-            'modifier-diagnostic'
-          );
+          return navigue({
+            url: lien,
+            methode: 'GET',
+          });
         })
         .catch((erreur) => showBoundary(erreur));
     },
@@ -182,8 +184,6 @@ export const ComposantLancerDiagnostic = ({
   }, [navigationMAC.etat, lanceDiagnostic]);
 
   const afficherModale = () => {
-    console.log('affiche modale');
-
     affiche({
       titre: 'Prérequis à la réalisation du diagnostic',
       corps: (

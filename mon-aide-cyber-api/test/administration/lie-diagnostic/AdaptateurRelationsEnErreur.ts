@@ -1,13 +1,21 @@
 import { AdaptateurRelations } from '../../../src/relation/AdaptateurRelations';
 import crypto from 'crypto';
-import { Objet, Relation, Utilisateur } from '../../../src/relation/Tuple';
+import {
+  Objet,
+  Relation,
+  Tuple,
+  Utilisateur,
+} from '../../../src/relation/Tuple';
 
 export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
+  creeTuple(_tuple: Tuple): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   aidantInitieDiagnostic(_: crypto.UUID, __: crypto.UUID): Promise<void> {
     throw new Error('Erreur attendue');
   }
 
-  diagnosticsInitiePar(_: crypto.UUID): Promise<string[]> {
+  identifiantsObjetsLiesAUtilisateur(_: crypto.UUID): Promise<string[]> {
     return Promise.resolve([]);
   }
 

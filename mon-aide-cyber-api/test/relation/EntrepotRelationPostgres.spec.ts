@@ -1,16 +1,16 @@
-import { describe, expect, it } from 'vitest';
-import {
-  Tuple,
-  unObjet,
-  unTuple,
-  unUtilisateur,
-} from '../../src/relation/Tuple';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { DefinitionTuple, Tuple, unTuple } from '../../src/relation/Tuple';
 import { nettoieLaBaseDeDonneesRelations } from '../utilitaires/nettoyeurBDD';
 import {
   EntrepotRelationPostgres,
   TupleDTO,
 } from '../../src/relation/infrastructure/EntrepotRelationPostgres';
 import { AggregatNonTrouve } from '../../src/relation/Aggregat';
+import {
+  definitionAidantInitieDiagnostic,
+  DefinitionAidantInitieDiagnostic,
+} from '../../src/diagnostic/tuples';
+import crypto from 'crypto';
 
 class EntrepotRelationPostgresTest extends EntrepotRelationPostgres {
   lis(identifiant: string): Promise<Tuple> {
@@ -26,26 +26,23 @@ class EntrepotRelationPostgresTest extends EntrepotRelationPostgres {
   }
 }
 
+type DefinitionTupleTest = DefinitionTuple & {
+  relation: 'ma-relation';
+  typeObjet: 'mon-objet';
+  typeUtilisateur: 'mon-utilisateur';
+};
+
 describe('Entrepot Relation Postgres', () => {
-  afterEach(async () => {
+  beforeEach(async () => {
     await nettoieLaBaseDeDonneesRelations();
   });
 
   it('persiste une relation', async () => {
-    const tuple = unTuple()
-      .avecRelationInitiateur()
-      .avecUtilisateur(
-        unUtilisateur()
-          .avecIdentifiant(crypto.randomUUID())
-          .deTypeAidant()
-          .construis()
-      )
-      .avecObjet(
-        unObjet()
-          .avecIdentifiant(crypto.randomUUID())
-          .deTypeDiagnostic()
-          .construis()
-      )
+    const tuple = unTuple<DefinitionAidantInitieDiagnostic>(
+      definitionAidantInitieDiagnostic
+    )
+      .avecUtilisateur(crypto.randomUUID())
+      .avecObjet(crypto.randomUUID())
       .construis();
 
     await new EntrepotRelationPostgres().persiste(tuple);
@@ -58,71 +55,43 @@ describe('Entrepot Relation Postgres', () => {
   });
 
   it('Trouve les diagnostics initiés par', async () => {
-    const utilisateur = unUtilisateur()
-      .avecIdentifiant(crypto.randomUUID())
-      .deTypeAidant()
+    const identifiantUtilisateur = crypto.randomUUID();
+    const premierTuple = unTuple<DefinitionAidantInitieDiagnostic>(
+      definitionAidantInitieDiagnostic
+    )
+      .avecUtilisateur(identifiantUtilisateur)
+      .avecObjet(crypto.randomUUID())
       .construis();
-    const premierTuple = unTuple()
-      .avecRelationInitiateur()
-      .avecUtilisateur(utilisateur)
-      .avecObjet(
-        unObjet()
-          .avecIdentifiant(crypto.randomUUID())
-          .deTypeDiagnostic()
-          .construis()
-      )
+    const deuxiemeTuple = unTuple<DefinitionAidantInitieDiagnostic>(
+      definitionAidantInitieDiagnostic
+    )
+      .avecUtilisateur(identifiantUtilisateur)
+      .avecObjet(crypto.randomUUID())
       .construis();
-    const deuxiemeTuple = unTuple()
-      .avecRelationInitiateur()
-      .avecUtilisateur(utilisateur)
-      .avecObjet(
-        unObjet()
-          .avecIdentifiant(crypto.randomUUID())
-          .deTypeDiagnostic()
-          .construis()
-      )
-      .construis();
-    const troisiemeTuple = unTuple()
-      .avecRelationInitiateur()
-      .avecUtilisateur(
-        unUtilisateur()
-          .avecIdentifiant(crypto.randomUUID())
-          .deTypeAidant()
-          .construis()
-      )
-      .avecObjet(
-        unObjet()
-          .avecIdentifiant(crypto.randomUUID())
-          .deTypeDiagnostic()
-          .construis()
-      )
+    const troisiemeTuple = unTuple<DefinitionAidantInitieDiagnostic>(
+      definitionAidantInitieDiagnostic
+    )
+      .avecUtilisateur(crypto.randomUUID())
+      .avecObjet(crypto.randomUUID())
       .construis();
     await new EntrepotRelationPostgres().persiste(premierTuple);
     await new EntrepotRelationPostgres().persiste(deuxiemeTuple);
     await new EntrepotRelationPostgres().persiste(troisiemeTuple);
 
     const tuplesRecus =
-      await new EntrepotRelationPostgresTest().trouveDiagnosticsInitiePar(
-        utilisateur.identifiant
+      await new EntrepotRelationPostgresTest().trouveObjetsLiesAUtilisateur(
+        identifiantUtilisateur
       );
 
     expect(tuplesRecus).toStrictEqual<Tuple[]>([premierTuple, deuxiemeTuple]);
   });
 
-  it('Vérifie l’existance d’une relation', async () => {
-    const utilisateur = unUtilisateur()
-      .avecIdentifiant(crypto.randomUUID())
-      .deTypeAidant()
-      .construis();
-    const tuple = unTuple()
-      .avecRelationInitiateur()
-      .avecUtilisateur(utilisateur)
-      .avecObjet(
-        unObjet()
-          .avecIdentifiant(crypto.randomUUID())
-          .deTypeDiagnostic()
-          .construis()
-      )
+  it('Vérifie l’existence d’une relation', async () => {
+    const tuple = unTuple<DefinitionAidantInitieDiagnostic>(
+      definitionAidantInitieDiagnostic
+    )
+      .avecUtilisateur(crypto.randomUUID())
+      .avecObjet(crypto.randomUUID())
       .construis();
     await new EntrepotRelationPostgres().persiste(tuple);
 
@@ -130,6 +99,28 @@ describe('Entrepot Relation Postgres', () => {
       await new EntrepotRelationPostgres().relationExiste(
         tuple.relation,
         tuple.utilisateur,
+        tuple.objet
+      )
+    ).toBe(true);
+  });
+
+  it('Vérifie qu’un objet dispose d’une relation du type attendue', async () => {
+    const tuple: Tuple = unTuple<DefinitionTupleTest>({
+      definition: {
+        relation: 'ma-relation',
+        typeObjet: 'mon-objet',
+        typeUtilisateur: 'mon-utilisateur',
+      },
+    })
+      .avecObjet(crypto.randomUUID())
+      .avecUtilisateur(crypto.randomUUID())
+      .construis();
+
+    await new EntrepotRelationPostgres().persiste(tuple);
+
+    expect(
+      await new EntrepotRelationPostgres().typeRelationExiste(
+        'ma-relation',
         tuple.objet
       )
     ).toBe(true);

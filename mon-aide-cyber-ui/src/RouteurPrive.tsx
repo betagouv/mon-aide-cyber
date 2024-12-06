@@ -1,18 +1,18 @@
 import { Suspense } from 'react';
 import './assets/styles/index.scss';
 import { Route, Routes } from 'react-router-dom';
-import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
-import { EcranDiagnostic } from './composants/diagnostic/EcranDiagnostic.tsx';
 import { RequiertAuthentification } from './fournisseurs/RequiertAuthentification.tsx';
-import { ComposantRestitution } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
-import { ProfilAidant } from './composants/profil/ProfilAidant.tsx';
 import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
 import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
-import { LayoutAidant } from './composants/layout/LayoutAidant.tsx';
-import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
+import { LayoutAidant } from './composants/layout/layout-aidant/LayoutAidant.tsx';
 import { EcranCreationEspaceAidant } from './domaine/espace-aidant/creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { EcranDiagnostics } from './domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
 import { EcranMesPreferences } from './domaine/espace-aidant/mon-compte/ecran-mes-preferences/EcranMesPreferences.tsx';
+import { EcranMesInformations } from './domaine/espace-aidant/mon-compte/ecran-mes-informations/EcranMesInformations.tsx';
+import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
+import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
+import { EcranDiagnosticAidant } from './composants/diagnostic/EcranDiagnosticAidant.tsx';
+import { ComposantRestitutionAidant } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -44,15 +44,17 @@ export const RouteurPrive = () => {
             </Suspense>
           }
         >
-          <Route element={<LayoutDiagnostic />}>
+          <Route path="diagnostic" element={<LayoutDiagnostic />}>
             <Route
-              path="diagnostic/:idDiagnostic"
-              element={<ComposantIntercepteur composant={EcranDiagnostic} />}
+              path=":idDiagnostic"
+              element={
+                <ComposantIntercepteur composant={EcranDiagnosticAidant} />
+              }
             ></Route>
             <Route
-              path="diagnostic/:idDiagnostic/restitution"
+              path=":idDiagnostic/restitution"
               element={
-                <ComposantIntercepteur composant={ComposantRestitution} />
+                <ComposantIntercepteur composant={ComposantRestitutionAidant} />
               }
             ></Route>
           </Route>
@@ -64,7 +66,10 @@ export const RouteurPrive = () => {
             ></Route>
             <Route path="diagnostics" element={<EcranDiagnostics />}></Route>
 
-            <Route path="mes-informations" element={<ProfilAidant />}></Route>
+            <Route
+              path="mes-informations"
+              element={<EcranMesInformations />}
+            ></Route>
             <Route
               path="mes-preferences"
               element={<EcranMesPreferences />}

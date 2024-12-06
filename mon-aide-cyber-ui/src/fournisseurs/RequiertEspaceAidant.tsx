@@ -1,6 +1,6 @@
 import { useNavigationMAC } from './hooks.ts';
 import { ReactElement, useEffect, useState } from 'react';
-import { MoteurDeLiens } from '../domaine/MoteurDeLiens.ts';
+import { MoteurDeLiens, ROUTE_AIDANT } from '../domaine/MoteurDeLiens.ts';
 import { Outlet } from 'react-router-dom';
 
 export const RequiertEspaceAidant = () => {
@@ -12,8 +12,8 @@ export const RequiertEspaceAidant = () => {
       'creer-espace-aidant',
       () =>
         navigationMAC.navigue(
-          new MoteurDeLiens(navigationMAC.etat),
-          'creer-espace-aidant'
+          `${ROUTE_AIDANT}/finalise-creation-espace-aidant`,
+          navigationMAC.etat
         ),
       () => setRedirection(<Outlet />)
     );

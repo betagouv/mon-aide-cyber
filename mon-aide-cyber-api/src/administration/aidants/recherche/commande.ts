@@ -14,7 +14,7 @@ program
       .map((aidant) => ({
         id: aidant.identifiant,
         nomPrenom: aidant.nomPrenom,
-        email: aidant.identifiantConnexion,
+        email: aidant.email,
       }))
       .filter((aidant) =>
         options.nom

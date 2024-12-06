@@ -15,7 +15,7 @@ import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateu
 import { uneRestitution } from '../constructeurs/constructeurRestitution';
 import {
   ReponseDiagnostic,
-  ReprensentationRestitution,
+  RepresentationRestitution,
 } from '../../src/api/routesAPIDiagnostic';
 import { Diagnostic } from '../../src/diagnostic/Diagnostic';
 import { LiensHATEOAS } from '../../src/api/hateoas/hateoas';
@@ -59,6 +59,10 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
           [`afficher-diagnostic-${diagnostic.identifiant}`]: {
             url: `/api/diagnostic/${diagnostic.identifiant}/restitution`,
             methode: 'GET',
+          },
+          'repondre-diagnostic': {
+            url: `/api/diagnostic/${diagnostic.identifiant}`,
+            methode: 'PATCH',
           },
           'afficher-tableau-de-bord': {
             url: '/api/espace-aidant/tableau-de-bord',
@@ -118,7 +122,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste()
       ).toBe(true);
     });
   });
@@ -259,6 +263,10 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
               url: `/api/diagnostic/${diagnostic.identifiant}/restitution`,
               methode: 'GET',
             },
+            'repondre-diagnostic': {
+              url: `/api/diagnostic/${diagnostic.identifiant}`,
+              methode: 'PATCH',
+            },
           },
           'reponse-2'
         )
@@ -319,7 +327,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste()
       ).toBe(true);
     });
   });
@@ -347,7 +355,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(reponse.statusCode).toBe(200);
-      expect(await reponse.json()).toStrictEqual<ReprensentationRestitution>({
+      expect(await reponse.json()).toStrictEqual<RepresentationRestitution>({
         liens: {
           'lancer-diagnostic': {
             methode: 'POST',
@@ -463,7 +471,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeRelations.verifieRelationExiste()
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste()
       ).toBe(true);
     });
   });
@@ -484,30 +492,9 @@ const forgeReponseDiagnostic = (
   reponseDonnee?: string
 ): ReponseDiagnostic => {
   return {
-    actions: [
-      {
-        contexte: {
-          action: 'repondre',
-          ressource: {
-            methode: 'PATCH',
-            url: `/api/diagnostic/${diagnostic.identifiant}`,
-          },
-        },
-      },
-    ],
     identifiant: diagnostic.identifiant,
     referentiel: {
       contexte: {
-        actions: [
-          {
-            action: 'repondre',
-            chemin: 'contexte',
-            ressource: {
-              methode: 'PATCH',
-              url: `/api/diagnostic/${diagnostic.identifiant}`,
-            },
-          },
-        ],
         description: 'Description du contexte',
         libelle: 'Contexte',
         styles: {

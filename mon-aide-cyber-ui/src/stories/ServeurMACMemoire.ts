@@ -1,5 +1,4 @@
 import {
-  ActionReponseDiagnostic,
   Diagnostic,
   Reponse,
   ReponseQuestionATiroir,
@@ -9,10 +8,15 @@ import { UUID } from '../types/Types.ts';
 
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { RepresentationDiagnostic } from '../fournisseurs/api/APIDiagnostic.ts';
+import { Constructeur } from '../../test/constructeurs/Constructeur.ts';
+
+export type LienHATEOAS = {
+  [clef: string]: { url: string; methode: 'PATCH' | 'POST' | 'GET' };
+};
 
 export class ServeurMACMemoire {
   private reponseEnvoyee = false;
-  private actionRepondre: ActionReponseDiagnostic | undefined;
+  private lienHATEOAS: LienHATEOAS | undefined;
   private reponseDonnee: Reponse | undefined;
 
   constructor(private readonly diagnostics: Diagnostic[] = []) {}
@@ -31,11 +35,8 @@ export class ServeurMACMemoire {
     );
   }
 
-  verifieEnvoiReponse(
-    actionRepondre: ActionReponseDiagnostic,
-    reponseDonnee: Reponse
-  ) {
-    expect(this.actionRepondre).toStrictEqual(actionRepondre);
+  verifieEnvoiReponse(lienHATEOAS: LienHATEOAS, reponseDonnee: Reponse) {
+    expect(this.lienHATEOAS).toStrictEqual(lienHATEOAS);
     expect(this.reponseDonnee).toStrictEqual(reponseDonnee);
   }
 
@@ -50,10 +51,10 @@ export class ServeurMACMemoire {
       reponse: string | string[] | ReponseQuestionATiroir | null;
     }>
   ) {
-    this.actionRepondre = {
-      [parametresAPI.corps!.chemin]: {
-        action: 'repondre',
-        ressource: { url: parametresAPI.url, methode: parametresAPI.methode },
+    this.lienHATEOAS = {
+      'repondre-diagnostic': {
+        url: parametresAPI.url,
+        methode: 'PATCH',
       },
     };
     this.reponseDonnee = {
@@ -118,3 +119,24 @@ export class ServeurMACMemoire {
     }
   }
 }
+
+class ConstructeurLienHATEOAS implements Constructeur<LienHATEOAS> {
+  private clef = '';
+  private url = '';
+  private methode: 'PATCH' | 'POST' | 'GET' = 'GET';
+
+  construis(): LienHATEOAS {
+    return {
+      [this.clef]: { url: this.url, methode: this.methode },
+    };
+  }
+
+  repondreDiagnostic(identifiantDiagnostic: UUID): ConstructeurLienHATEOAS {
+    this.clef = 'repondre-diagnostic';
+    this.url = `/diagnostic/${identifiantDiagnostic}`;
+    this.methode = 'PATCH';
+    return this;
+  }
+}
+
+export const unLienHATEOAS = () => new ConstructeurLienHATEOAS();

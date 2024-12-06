@@ -3,15 +3,15 @@ import { Entrepots } from '../domaine/Entrepots';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import crypto from 'crypto';
-import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 import { AggregatNonTrouve } from '../domaine/Aggregat';
-import { Aidant, ErreurCreationEspaceAidant } from '../authentification/Aidant';
 import { Departement } from '../gestion-demandes/departements';
+import { Aidant, ErreurCreationEspaceAidant } from './Aidant';
 
 export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
   type: 'CommandeCreeEspaceAidant';
   dateSignatureCGU: Date;
-  identifiantConnexion: string;
+  identifiant: crypto.UUID;
+  email: string;
   motDePasse: string;
   nomPrenom: string;
   departement: Departement;
@@ -39,7 +39,7 @@ export class CapteurCommandeCreeEspaceAidant
   async execute(commande: CommandeCreeEspaceAidant): Promise<EspaceAidantCree> {
     return this.entrepots
       .aidants()
-      .rechercheParIdentifiantDeConnexion(commande.identifiantConnexion)
+      .rechercheParEmail(commande.email)
       .then(() =>
         Promise.reject(
           new ErreurCreationEspaceAidant(
@@ -50,16 +50,15 @@ export class CapteurCommandeCreeEspaceAidant
       .catch((erreur) => {
         if (erreur instanceof AggregatNonTrouve) {
           const aidant: Aidant = {
-            dateSignatureCGU: commande.dateSignatureCGU,
-            identifiant: adaptateurUUID.genereUUID(),
-            identifiantConnexion: commande.identifiantConnexion,
-            motDePasse: commande.motDePasse,
+            identifiant: commande.identifiant,
+            email: commande.email,
             nomPrenom: commande.nomPrenom,
             preferences: {
               departements: [commande.departement],
               secteursActivite: [],
               typesEntites: [],
             },
+            consentementAnnuaire: false,
           };
           return this.entrepots
             .aidants()
@@ -77,7 +76,7 @@ export class CapteurCommandeCreeEspaceAidant
                 })
                 .then(() => ({
                   identifiant: aidant.identifiant,
-                  email: aidant.identifiantConnexion,
+                  email: aidant.email,
                   nomPrenom: aidant.nomPrenom,
                 }));
             });

@@ -1,32 +1,23 @@
 import { describe, expect } from 'vitest';
-import { unAidant } from '../authentification/constructeurs/constructeurAidant';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
-import {
-  Tuple,
-  unObjet,
-  unTuple,
-  unUtilisateur,
-} from '../../src/relation/Tuple';
+import { Tuple, unTuple } from '../../src/relation/Tuple';
+import { DefinitionAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Tuple', () => {
   it('construis un tuple de type initiateur entre un aidant et un diagnostic', async () => {
     const diagnostic = unDiagnostic().construis();
     const aidant = unAidant().construis();
 
-    const tuple = unTuple()
-      .avecUtilisateur(
-        unUtilisateur()
-          .deTypeAidant()
-          .avecIdentifiant(aidant.identifiant)
-          .construis()
-      )
-      .avecRelationInitiateur()
-      .avecObjet(
-        unObjet()
-          .deTypeDiagnostic()
-          .avecIdentifiant(diagnostic.identifiant)
-          .construis()
-      )
+    const tuple = unTuple<DefinitionAidantInitieDiagnostic>({
+      definition: {
+        relation: 'initiateur',
+        typeObjet: 'diagnostic',
+        typeUtilisateur: 'aidant',
+      },
+    })
+      .avecUtilisateur(aidant.identifiant)
+      .avecObjet(diagnostic.identifiant)
       .construis();
 
     expect(tuple).toStrictEqual<Tuple>({

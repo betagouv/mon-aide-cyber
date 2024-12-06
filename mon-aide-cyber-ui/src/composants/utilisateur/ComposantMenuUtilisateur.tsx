@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useErrorBoundary } from 'react-error-boundary';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import { MoteurDeLiens, ROUTE_AIDANT } from '../../domaine/MoteurDeLiens.ts';
 import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 
 type ProprietesMenuUtilisateur = {
@@ -24,10 +24,12 @@ export const ComposantMenuUtilisateur = ({
 
   const afficherProfil = useCallback(() => {
     resetBoundary();
-    navigationMAC.navigue(
-      new MoteurDeLiens(navigationMAC.etat),
-      'afficher-profil'
-    );
+    if (new MoteurDeLiens(navigationMAC.etat).existe('afficher-profil')) {
+      navigationMAC.navigue(
+        `${ROUTE_AIDANT}/mes-informations`,
+        navigationMAC.etat
+      );
+    }
   }, [navigationMAC, resetBoundary]);
 
   const deconnecter = useCallback(() => {
@@ -40,7 +42,7 @@ export const ComposantMenuUtilisateur = ({
           .construis(),
         (reponse) => reponse
       )
-      .then(() => navigationMAC.retourAccueil())
+      .then(() => window.location.replace('/connexion'))
       .catch((erreur) => showBoundary(erreur));
   }, [navigationMAC, resetBoundary, showBoundary]);
 

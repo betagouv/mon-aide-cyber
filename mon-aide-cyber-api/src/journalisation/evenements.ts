@@ -19,6 +19,8 @@ export const aidantCree = consommateurEvenement();
 
 export const aideCree = consommateurEvenement();
 
+export const aideViaSollicitationAidantCree = consommateurEvenement();
+
 export const demandeDevenirAidantCree = consommateurEvenement();
 
 export const mailCreationCompteAidantEnvoye = consommateurEvenement();
@@ -28,6 +30,16 @@ export const mailCreationCompteAidantNonEnvoye = consommateurEvenement();
 export const demandeDevenirAidantespaceAidantCree = consommateurEvenement();
 
 export const preferencesAidantModifiees = consommateurEvenement();
+
+export const profilAidantModifie = consommateurEvenement();
+
+export const reinitialisationMotDePasseDemandee = consommateurEvenement();
+
+export const reinitialisationMotDePasseFaite = consommateurEvenement();
+
+export const reinitialisationMotDePasseErronee = consommateurEvenement();
+
+export const diagnosticLibreAccesLance = consommateurEvenement();
 
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E

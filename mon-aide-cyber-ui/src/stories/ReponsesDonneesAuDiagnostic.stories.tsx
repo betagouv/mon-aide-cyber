@@ -9,20 +9,20 @@ import {
 } from '../../test/constructeurs/constructeurQuestions.ts';
 import { uneReponsePossible } from '../../test/constructeurs/constructeurReponsePossible.ts';
 import { unReferentiel } from '../../test/constructeurs/constructeurReferentiel.ts';
-import { uneAction } from '../../test/constructeurs/constructeurActionDiagnostic.ts';
 import { ReponseQuestionATiroir } from '../domaine/diagnostic/Diagnostic.ts';
 import { UUID } from '../types/Types.ts';
-import { ServeurMACMemoire } from './ServeurMACMemoire.ts';
+import { ServeurMACMemoire, unLienHATEOAS } from './ServeurMACMemoire.ts';
 import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { decorateurComposantDiagnostic } from './DecorateurComposantDiagnostic.tsx';
-import { ComposantDiagnostic } from '../composants/diagnostic/EcranDiagnostic.tsx';
-
-const actionRepondre = uneAction().contexte();
+import {
+  ActionsHeaderDiagnosticAidant,
+  EcranDiagnostic,
+} from '../composants/diagnostic/EcranDiagnosticAidant.tsx';
+import { HeaderDiagnostic } from '../composants/diagnostic/HeaderDiagnostic.tsx';
 
 const identifiantQuestionAChoixUnique = '6dadad14-8fa0-4be7-a8da-473d538eb6c1';
 const reponseDonneeChoixUnique = uneReponsePossible().construis();
 const diagnosticAvecUneQuestionAChoixUnique = unDiagnostic()
-  .ajouteAction(actionRepondre)
   .avecIdentifiant(identifiantQuestionAChoixUnique)
   .avecUnReferentiel(
     unReferentiel()
@@ -47,7 +47,6 @@ const reponseSelectionnee = uneReponsePossible()
   .avecLibelle('Réponse B')
   .construis();
 const diagnosticAvecQuestionSousFormeDeListeDeroulante = unDiagnostic()
-  .ajouteAction(actionRepondre)
   .avecIdentifiant(identifiantQuestionListeDeroulante)
   .avecUnReferentiel(
     unReferentiel()
@@ -98,7 +97,6 @@ const reponseAvecQuestionAChoixMultiple = uneReponsePossible()
   );
 const diagnosticAvecQuestionATiroir = unDiagnostic()
   .avecIdentifiant(identifiantQuestionATiroir)
-  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
       .avecUneQuestion(
@@ -132,7 +130,6 @@ const questionAChoixUnique = uneQuestionAChoixUnique()
   ]);
 const diagnosticAvecQuestionATiroirAvecChoixUniqueEtChoixMultiple =
   unDiagnostic()
-    .ajouteAction(actionRepondre)
     .avecIdentifiant(identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple)
     .avecUnReferentiel(
       unReferentiel()
@@ -206,7 +203,6 @@ const secondeReponseAChoixUniqueATiroir = uneReponsePossible()
 const diagnosticAvecUneQuestionAvecPlusieursQuestionsATiroirAChoixUnique =
   unDiagnostic()
     .avecIdentifiant(identifiantQuestionATiroirAvecPlusieursChoixUnique)
-    .ajouteAction(actionRepondre)
     .avecUnReferentiel(
       unReferentiel()
         .avecUneQuestion(
@@ -236,7 +232,6 @@ const identifiantQuestionAPlusieursTiroirs =
   '7e37b7fa-1ed6-434d-ba5b-d473928c08c2';
 const diagnosticAvecQuestionsAPlusieursTiroirs = unDiagnostic()
   .avecIdentifiant(identifiantQuestionAPlusieursTiroirs)
-  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
       .avecUneQuestion(
@@ -278,7 +273,6 @@ const identifiantQuestionATiroirAvecReponseUnique =
   'd01c0e69-7abd-46cf-a109-a38f8b1b26e0';
 const diagnosticAvecQuestionsATiroirsAvecReponseUnique = unDiagnostic()
   .avecIdentifiant(identifiantQuestionATiroirAvecReponseUnique)
-  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
       .avecUneQuestion(
@@ -317,7 +311,6 @@ const identifiantQuestionAChoixMultiple =
   '4196086c-d370-4406-a757-347d964a4e74';
 const diagnosticAveUneQuestionAChoixMultiple = unDiagnostic()
   .avecIdentifiant(identifiantQuestionAChoixMultiple)
-  .ajouteAction(actionRepondre)
   .avecUnReferentiel(
     unReferentiel()
       .avecUneQuestion(
@@ -384,11 +377,11 @@ const macAPIMemoire = {
 
 const meta = {
   title: 'Diagnostic',
-  component: ComposantDiagnostic,
+  component: EcranDiagnostic,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof ComposantDiagnostic>;
+} satisfies Meta<typeof EcranDiagnostic>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -398,6 +391,16 @@ export const SelectionneReponseDiagnostic: Story = {
   args: {
     idDiagnostic: identifiantQuestionAChoixUnique,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantQuestionAChoixUnique}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>
@@ -430,8 +433,8 @@ export const SelectionneReponseDiagnostic: Story = {
         canvas.getByRole('radio', { name: /entreprise privée/i })
       ).toBeChecked();
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
-        actionRepondre
-          .avecIdDiagnostic(identifiantQuestionAChoixUnique)
+        unLienHATEOAS()
+          .repondreDiagnostic(identifiantQuestionAChoixUnique)
           .construis(),
         {
           reponseDonnee: 'entreprise-privee',
@@ -447,6 +450,16 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
   args: {
     idDiagnostic: identifiantQuestionListeDeroulante,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantQuestionListeDeroulante}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>
@@ -477,8 +490,8 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
         expect(canvas.getByRole('textbox')).toHaveValue('Réponse C')
       );
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
-        actionRepondre
-          .avecIdDiagnostic(identifiantQuestionListeDeroulante)
+        unLienHATEOAS()
+          .repondreDiagnostic(identifiantQuestionListeDeroulante)
           .construis(),
         {
           reponseDonnee: 'reponse-c',
@@ -494,6 +507,16 @@ export const AfficheLesThematiques: Story = {
   args: {
     idDiagnostic: identifiantDiagnosticAvecPlusieursThematiques,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantDiagnosticAvecPlusieursThematiques}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>
@@ -560,7 +583,20 @@ export const AfficheLesThematiques: Story = {
 
 export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
   name: 'Sélectionne les réponses pour les questions à tiroir',
-  args: { idDiagnostic: identifiantQuestionATiroir, macAPI: macAPIMemoire },
+  args: {
+    idDiagnostic: identifiantQuestionATiroir,
+    macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantQuestionATiroir}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
+  },
   decorators: [
     (story) => decorateurComposantDiagnostic(story, identifiantQuestionATiroir),
   ],
@@ -613,7 +649,9 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
         )
       ).not.toBeChecked();
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
-        actionRepondre.avecIdDiagnostic(identifiantQuestionATiroir).construis(),
+        unLienHATEOAS()
+          .repondreDiagnostic(identifiantQuestionATiroir)
+          .construis(),
         {
           reponseDonnee: {
             reponse: 'plusieurs-choix',
@@ -658,8 +696,8 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
           )
         ).not.toBeChecked();
         entrepotDiagnosticMemoire.verifieEnvoiReponse(
-          actionRepondre
-            .avecIdDiagnostic(identifiantQuestionATiroir)
+          unLienHATEOAS()
+            .repondreDiagnostic(identifiantQuestionATiroir)
             .construis(),
           {
             reponseDonnee: 'un-seul-choix',
@@ -676,6 +714,16 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
   args: {
     idDiagnostic: identifiantQuestionAPlusieursTiroirs,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantQuestionAPlusieursTiroirs}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>
@@ -756,8 +804,8 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
         )
       ).toBeChecked();
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
-        actionRepondre
-          .avecIdDiagnostic(identifiantQuestionAPlusieursTiroirs)
+        unLienHATEOAS()
+          .repondreDiagnostic(identifiantQuestionAPlusieursTiroirs)
           .construis(),
         {
           reponseDonnee: {
@@ -786,6 +834,18 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
     args: {
       idDiagnostic: identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple,
       macAPI: macAPIMemoire,
+      header: (
+        <HeaderDiagnostic
+          actions={
+            <ActionsHeaderDiagnosticAidant
+              idDiagnostic={
+                identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple
+              }
+            />
+          }
+        />
+      ),
+      accedeALaRestitution: () => null,
     },
     decorators: [
       (story) =>
@@ -880,8 +940,8 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
           )
         ).not.toBeChecked();
         entrepotDiagnosticMemoire.verifieEnvoiReponse(
-          actionRepondre
-            .avecIdDiagnostic(
+          unLienHATEOAS()
+            .repondreDiagnostic(
               identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple
             )
             .construis(),
@@ -964,8 +1024,8 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
             )
           ).not.toBeChecked();
           entrepotDiagnosticMemoire.verifieEnvoiReponse(
-            actionRepondre
-              .avecIdDiagnostic(
+            unLienHATEOAS()
+              .repondreDiagnostic(
                 identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple
               )
               .construis(),
@@ -985,6 +1045,16 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
     args: {
       idDiagnostic: identifiantQuestionATiroirAvecPlusieursChoixUnique,
       macAPI: macAPIMemoire,
+      header: (
+        <HeaderDiagnostic
+          actions={
+            <ActionsHeaderDiagnosticAidant
+              idDiagnostic={identifiantQuestionATiroirAvecPlusieursChoixUnique}
+            />
+          }
+        />
+      ),
+      accedeALaRestitution: () => null,
     },
     decorators: [
       (story) =>
@@ -1036,8 +1106,8 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
           )
         ).toBeChecked();
         entrepotDiagnosticMemoire.verifieEnvoiReponse(
-          actionRepondre
-            .avecIdDiagnostic(
+          unLienHATEOAS()
+            .repondreDiagnostic(
               identifiantQuestionATiroirAvecPlusieursChoixUnique
             )
             .construis(),
@@ -1118,8 +1188,8 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
             )
           ).toBeChecked();
           entrepotDiagnosticMemoire.verifieEnvoiReponse(
-            actionRepondre
-              .avecIdDiagnostic(
+            unLienHATEOAS()
+              .repondreDiagnostic(
                 identifiantQuestionATiroirAvecPlusieursChoixUnique
               )
               .construis(),
@@ -1151,6 +1221,16 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
     args: {
       idDiagnostic: identifiantQuestionATiroirAvecReponseUnique,
       macAPI: macAPIMemoire,
+      header: (
+        <HeaderDiagnostic
+          actions={
+            <ActionsHeaderDiagnosticAidant
+              idDiagnostic={identifiantQuestionATiroirAvecReponseUnique}
+            />
+          }
+        />
+      ),
+      accedeALaRestitution: () => null,
     },
     decorators: [
       (story) =>
@@ -1219,8 +1299,8 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
           )
         ).toBeChecked();
         entrepotDiagnosticMemoire.verifieEnvoiReponse(
-          actionRepondre
-            .avecIdDiagnostic(identifiantQuestionATiroirAvecReponseUnique)
+          unLienHATEOAS()
+            .repondreDiagnostic(identifiantQuestionATiroirAvecReponseUnique)
             .construis(),
           {
             reponseDonnee: {
@@ -1244,6 +1324,16 @@ export const SelectionneLaReponsePourUneQuestionAChoixMultiple: Story = {
   args: {
     idDiagnostic: identifiantQuestionAChoixMultiple,
     macAPI: macAPIMemoire,
+    header: (
+      <HeaderDiagnostic
+        actions={
+          <ActionsHeaderDiagnosticAidant
+            idDiagnostic={identifiantQuestionAChoixMultiple}
+          />
+        }
+      />
+    ),
+    accedeALaRestitution: () => null,
   },
   decorators: [
     (story) =>
@@ -1317,8 +1407,8 @@ export const SelectionneLaReponsePourUneQuestionAChoixMultiple: Story = {
         )
       ).not.toBeChecked();
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
-        actionRepondre
-          .avecIdDiagnostic(identifiantQuestionAChoixMultiple)
+        unLienHATEOAS()
+          .repondreDiagnostic(identifiantQuestionAChoixMultiple)
           .construis(),
         {
           reponseDonnee: ['reponse-1', 'reponse-3'],

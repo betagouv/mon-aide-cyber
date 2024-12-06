@@ -7,14 +7,14 @@ import { TypographieH2 } from '../../../../composants/communs/typographie/Typogr
 export const CommentDevenirAidant = () => {
   const etapesMarelle: EtapeMarelle[] = [
     {
-      titre: 'Être formé à la démarche',
+      titre: 'Découvrir la démarche',
       description: (
         <>
-          <b>Participez à une formation</b> MonAideCyber organisée par votre
-          délégation régionale de l&apos;ANSSI en remplissant le formulaire
-          d&apos;inscription. <br />
-          Des formations sont régulièrement organisée sur tout le territoire.
-          Elle durent trois heures et sont animées en présentiel.
+          <b>Participez à un atelier Devenir Aidant MonAideCyber</b> organisé
+          par votre délégation régionale de l&apos;ANSSI en remplissant le
+          formulaire d&apos;inscription. <br />
+          Des ateliers sont régulièrement organisés sur tout le territoire. Ils
+          durent trois heures et sont animés en présentiel.
         </>
       ),
       illustration: '/images/illustration-echange.svg',
@@ -25,7 +25,7 @@ export const CommentDevenirAidant = () => {
         <>
           Prenez connaissance de <b>la charte de l&apos;Aidant</b> et
           remettez-la signée à la délégation ou à l&apos;équipe MonAideCyber
-          avant, pendant ou après la formation.
+          avant, pendant ou après l&apos;atelier.
         </>
       ),
       illustration: '/images/illustration-mesures.svg',
@@ -34,12 +34,11 @@ export const CommentDevenirAidant = () => {
       titre: 'Accéder à la plateforme',
       description: (
         <>
-          Prenez connaissance de <b>la charte de l&apos;Aidant</b> et
-          remettez-la signée à la délégation ou à l&apos;équipe MonAideCyber
-          avant, pendant ou après la formation.
+          Une fois votre compte activé, vous pouvez dès lors accéder à la
+          plateforme et <b>réaliser vos premiers diagnostics</b>.
         </>
       ),
-      illustration: '/images/illustration-mesures.svg',
+      illustration: '/images/illustration-securite-des-acces.svg',
     },
   ];
 
