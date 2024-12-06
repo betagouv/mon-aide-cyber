@@ -84,7 +84,7 @@ export class EntrepotAidantPostgres
   }
 
   protected nomTable(): string {
-    return 'aidants';
+    return 'utilisateurs_mac';
   }
 
   typeAggregat(): string {
