@@ -26,7 +26,10 @@ export const transcripteurReaction: Thematique = {
       questions: [
         {
           identifiant: 'reaction-sauvegardes-donnees-realisees',
-          'info-bulles': ['reaction/jeu-sauvegarde-isole.pug'],
+          'info-bulles': [
+            'reaction/jeu-sauvegarde-isole.pug',
+            'reaction/sauvegarde-ressources-hebergees-cloud.pug',
+          ],
         },
       ],
     },
