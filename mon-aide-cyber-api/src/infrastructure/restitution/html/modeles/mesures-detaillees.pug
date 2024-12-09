@@ -1,0 +1,15 @@
+each mesure, index in mesures
+    details
+        summary
+            | !{index + 1} . !{mesure.titre}
+        div
+            div(class="section-mesure")
+                div
+                    b Pourquoi ?
+                div(class='fr-pt-md-2w fr-pb-md-3w')
+                    | !{include(mesure.pourquoi)}
+            div(class="section-mesure")
+                div
+                    b Comment mettre en œuvre cette mesure ?
+                div(class='fr-pt-md-2w fr-pb-md-3w')
+                    | !{include(mesure.comment)}
