@@ -88,6 +88,15 @@ h4 {
     padding-left: 1.5rem;
 }
 
+h5.mesures-prioritaires-detail {
+    font-size: 16px !important;
+    line-height: 16px !important;
+}
+
+h6.titre-mesure {
+    padding-left: 12mm;
+}
+
 #indicateurs {
     page-break-after: always;
 }
@@ -374,8 +383,18 @@ h4 {
 }
 
 .logo-anssi-leger {
-    content: var(--logo-anssi-leger);
+    width: 100px;
+    height: 100px;
+    position: relative;
     max-width: 16rem;
+}
+
+.logo-anssi-leger::before {
+    content: var(--logo-anssi-leger);
+    display: block;
+    width: 100%; /* Matches container */
+    height: 100%; /* Matches container */
+    background-size: contain; /* Ensures scaling fits */
 }
 
 /* stylelint-enable */

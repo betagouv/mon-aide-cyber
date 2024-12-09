@@ -1,5 +1,11 @@
 h4 6 mesures prioritaires pour passer à l'action
 each mesure, index in mesures
+    h6(class="titre-mesure") !{index + 1} . !{mesure.titre}
+br
+
+h4 Détail des mesures
+
+each mesure, index in mesures
     details
         summary
             | !{index + 1} . !{mesure.titre}
