@@ -181,11 +181,16 @@ describe('Service Tableau De Bord', () => {
       const identifiantAidant = crypto.randomUUID();
       const identifiantDiagnosticInitie1 = crypto.randomUUID();
       const identifiantDiagnosticInitie2 = crypto.randomUUID();
+      const identifiantDiagnosticInitie3 = crypto.randomUUID();
 
       const relations = new Map<string, string[]>([
         [
           identifiantAidant,
-          [identifiantDiagnosticInitie1, identifiantDiagnosticInitie2],
+          [
+            identifiantDiagnosticInitie1,
+            identifiantDiagnosticInitie2,
+            identifiantDiagnosticInitie3,
+          ],
         ],
       ]);
 
@@ -217,11 +222,30 @@ describe('Service Tableau De Bord', () => {
                 )
                 .construis(),
             ],
+            [
+              identifiantDiagnosticInitie3,
+              unContexte()
+                .avecDateCreation(
+                  new Date(Date.parse('2024-03-16T14:32:00+01:00'))
+                )
+                .enRegion('Bretagne')
+                .avecLeDepartement('Finistère')
+                .avecSecteurActivite(
+                  'Arts, spectacles et activités récréatives'
+                )
+                .construis(),
+            ],
           ])
         )
       ).diagnosticsInitiesPar(identifiantAidant);
 
       expect(diagnosticTableauDeBord).toStrictEqual<Diagnostic[]>([
+        {
+          dateCreation: '16.03.2024',
+          identifiant: identifiantDiagnosticInitie3,
+          secteurActivite: 'Arts, spectacles et activités récréatives',
+          secteurGeographique: 'Finistère',
+        },
         {
           dateCreation: '17.02.2024',
           identifiant: identifiantDiagnosticInitie2,

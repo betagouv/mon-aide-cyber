@@ -2,6 +2,7 @@ import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
 import crypto, { UUID } from 'crypto';
 import { ServiceDiagnostic } from '../../diagnostic/ServiceDiagnostic';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { isAfter } from 'date-fns';
 
 export type Diagnostic = {
   dateCreation: string;
@@ -28,7 +29,11 @@ export class ServiceTableauDeBord {
       .contextes(identifiantDiagnosticsLie as UUID[])
       .then((diagnostics) => {
         const resultat: Diagnostic[] = [];
-        for (const [id, contexte] of Object.entries(diagnostics)) {
+        const tousLesDiagnostics = Object.entries(diagnostics);
+        tousLesDiagnostics.sort(([, contexte1], [, contexte2]) =>
+          isAfter(contexte1.dateCreation, contexte2.dateCreation) ? -1 : 1
+        );
+        for (const [id, contexte] of tousLesDiagnostics) {
           resultat.push({
             dateCreation: FournisseurHorloge.formateDate(contexte.dateCreation)
               .date,
@@ -37,9 +42,7 @@ export class ServiceTableauDeBord {
             secteurGeographique: contexte.departement || 'non renseigné',
           } as Diagnostic);
         }
-        resultat.sort((contexte1, contexte2) =>
-          contexte1.dateCreation > contexte2.dateCreation ? -1 : 1
-        );
+        console.log('RES', resultat);
         return resultat;
       });
   }
