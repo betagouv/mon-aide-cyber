@@ -21,6 +21,7 @@ import { recuperateurDeCookies } from './src/adaptateurs/fabriqueDeCookies';
 import { adaptateurMetabase } from './src/infrastructure/adaptateurs/adaptateurMetabase';
 import { unServiceAidant } from './src/espace-aidant/ServiceAidantMAC';
 import { AdaptateurDeVerificationDeTypeDeRelationMAC } from './src/adaptateurs/AdaptateurDeVerificationDeTypeDeRelationMAC';
+import { adaptateurEnvironnement } from './src/adaptateurs/adaptateurEnvironnement';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
@@ -83,7 +84,7 @@ const serveurMAC = serveur.creeServeur({
   serviceDeChiffrement: adaptateurServiceChiffrement(),
   recuperateurDeCookies: recuperateurDeCookies,
   adaptateurMetabase: adaptateurMetabase(),
-  estEnMaintenance: false,
+  estEnMaintenance: adaptateurEnvironnement.modeMaintenance().estActif(),
 });
 
 const port = process.env.PORT || 8081;
