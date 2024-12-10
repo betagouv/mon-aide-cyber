@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens, ROUTE_AIDANT } from '../MoteurDeLiens.ts';
 import { FormulaireAuthentification } from '../authentification/FormulaireAuthentification.tsx';
@@ -26,8 +26,27 @@ export const EcranConnexion = () => {
     );
   }, [navigationMAC.etat]);
 
+  const franceConnect = useCallback(() => {
+    window.location.href = '/pro-connect/connexion';
+  }, []);
   const formulaireConnexion = (
     <>
+      <div className="fr-connect-group">
+        <button className="fr-connect" onClick={franceConnect}>
+          <span className="fr-connect__login">S’identifier avec</span>{' '}
+          <span className="fr-connect__brand">FranceConnect</span>
+        </button>
+        <p>
+          <a
+            href="https://franceconnect.gouv.fr/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Qu’est-ce que FranceConnect ? - nouvelle fenêtre"
+          >
+            Qu’est-ce que FranceConnect ?
+          </a>
+        </p>
+      </div>
       <div className="texte-centre">
         <TypographieH2>Connectez-vous</TypographieH2>
         <p>à votre espace Aidant</p>

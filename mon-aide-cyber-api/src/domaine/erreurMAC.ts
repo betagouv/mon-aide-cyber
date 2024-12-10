@@ -6,6 +6,7 @@ export type Contexte =
   | 'Accède aux préférences de l’Aidant'
   | 'Accès diagnostic'
   | 'Ajout réponse au diagnostic'
+  | 'Authentification ProConnect'
   | "Crée l'espace Aidant"
   | "Demande d'aide"
   | "Demande d'Authentification"

@@ -28,6 +28,9 @@ import { routesStatistiques } from './api/statistiques/routesStatistiques';
 import { AdaptateurMetabase } from './adaptateurs/AdaptateurMetabase';
 import { adaptateurConfigurationLimiteurTraffic } from './api/adaptateurLimiteurTraffic';
 import { AdaptateurDeVerificationDeTypeDeRelation } from './adaptateurs/AdaptateurDeVerificationDeTypeDeRelation';
+import { AdaptateurProConnect } from './adaptateurs/pro-connect/adaptateurProConnect';
+import { routesProConnect } from './api/pro-connect/routeProConnect';
+import { ParametresCookies } from './adaptateurs/fabriqueDeCookies';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -45,6 +48,7 @@ export type ConfigurationServeur = {
   adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
   adaptateurDeVerificationDesAcces: AdaptateurDeVerificationDesAcces;
   adaptateurDeVerificationDeRelations: AdaptateurDeVerificationDeTypeDeRelation;
+  adaptateurProConnect: AdaptateurProConnect;
   serviceDeChiffrement: ServiceDeChiffrement;
   avecProtectionCsrf: boolean;
   busCommande: BusCommande;
@@ -54,7 +58,8 @@ export type ConfigurationServeur = {
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
   recuperateurDeCookies: (
     requete: Request,
-    reponse: Response
+    reponse: Response,
+    parametres?: ParametresCookies
   ) => string | undefined;
   adaptateurMetabase: AdaptateurMetabase;
 };
@@ -95,6 +100,7 @@ const creeApp = (config: ConfigurationServeur) => {
   );
   app.use('/api', routesAPI(config));
 
+  app.use('/pro-connect', routesProConnect(config));
   app.use('/contact', routeContact(config));
   app.use('/statistiques', routesStatistiques(config));
 
