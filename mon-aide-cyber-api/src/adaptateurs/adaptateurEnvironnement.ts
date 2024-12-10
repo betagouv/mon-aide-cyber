@@ -14,9 +14,14 @@ const mac = () => ({
   urlMAC: () => process.env.URL_MAC || '',
 });
 
+const modeMaintenance = () => ({
+  estActif: () => process.env.MAINTENANCE_EST_ACTIVE === 'true',
+});
+
 const adaptateurEnvironnement = {
   messagerie,
   mac,
+  modeMaintenance,
 };
 
 export { sentry, adaptateurEnvironnement };
