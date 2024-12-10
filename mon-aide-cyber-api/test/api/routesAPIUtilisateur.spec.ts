@@ -15,6 +15,7 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { add } from 'date-fns';
 import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
+import { liensPublicsAttendus } from './hateoas/liensAttendus';
 
 describe('le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -279,20 +280,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
       ).toStrictEqual<CorpsReponseReinitialiserMotDePasseEnErreur>({
         message:
           'Le lien de réinitialisation du mot de passe n’est plus valide.',
-        liens: {
-          'demande-devenir-aidant': {
-            methode: 'GET',
-            url: '/api/demandes/devenir-aidant',
-          },
-          'demande-etre-aide': {
-            methode: 'GET',
-            url: '/api/demandes/etre-aide',
-          },
-          'se-connecter': {
-            methode: 'POST',
-            url: '/api/token',
-          },
-        },
+        ...liensPublicsAttendus,
       });
     });
 
@@ -324,17 +312,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         expect(
           await reponse.json()
         ).toStrictEqual<ReponseReinitialisationMotDePasseEnErreur>({
-          liens: {
-            'se-connecter': { url: '/api/token', methode: 'POST' },
-            'demande-devenir-aidant': {
-              methode: 'GET',
-              url: '/api/demandes/devenir-aidant',
-            },
-            'demande-etre-aide': {
-              methode: 'GET',
-              url: '/api/demandes/etre-aide',
-            },
-          },
+          ...liensPublicsAttendus,
           message: 'Les deux mots de passe saisis ne correspondent pas.',
         });
       });

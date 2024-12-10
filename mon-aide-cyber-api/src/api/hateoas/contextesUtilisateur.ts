@@ -50,7 +50,13 @@ export const contextesUtilisateur: ContextesUtilisateur = {
       methode: 'POST',
     },
   },
-  'se-connecter': { 'se-connecter': { url: '/api/token', methode: 'POST' } },
+  'se-connecter': {
+    'se-connecter': { url: '/api/token', methode: 'POST' },
+    'se-connecter-avec-pro-connect': {
+      url: '/pro-connect/connexion',
+      methode: 'GET',
+    },
+  },
   'afficher-statistiques': {
     'afficher-statistiques': { url: '/statistiques', methode: 'GET' },
   },

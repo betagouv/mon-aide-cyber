@@ -32,6 +32,7 @@ export type Action =
   | 'restitution-json'
   | 'restitution-pdf'
   | 'se-connecter'
+  | 'se-connecter-avec-pro-connect'
   | 'se-deconnecter'
   | 'afficher-statistiques'
   | 'reinitialisation-mot-de-passe'

@@ -25,6 +25,8 @@ import { ServiceDeChiffrementClair } from '../infrastructure/securite/ServiceDeC
 import { AdaptateurMetabaseMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurMetabaseMemoire';
 import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
 import { AdaptateurDeVerificationDuTypeDeRelationDeTest } from '../adaptateurs/AdaptateurDeVerificationDuTypeDeRelationDeTest';
+import { AdaptateurProConnect } from '../../src/adaptateurs/pro-connect/adaptateurProConnect';
+import { AdaptateurProConnectDeTest } from '../adaptateurs/pro-connect/AdaptateurProConnectDeTest';
 
 class TesteurIntegrationMAC {
   private serveurDeTest:
@@ -63,6 +65,7 @@ class TesteurIntegrationMAC {
       },
     },
     public adaptateurMetabase: AdaptateurMetabaseMemoire = new AdaptateurMetabaseMemoire(),
+    public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest(),
     public recuperateurDeCookies: (
       requete: Request,
       reponse: Response
@@ -103,6 +106,7 @@ class TesteurIntegrationMAC {
       adaptateurMetabase: this.adaptateurMetabase,
       adaptateurDeVerificationDeRelations:
         this.adaptateurDeVerificationDeRelations,
+      adaptateurProConnect: this.adaptateurProConnect,
       estEnMaintenance: false,
     });
     const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
