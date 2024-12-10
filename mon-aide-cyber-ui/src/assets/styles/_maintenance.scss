@@ -1,4 +1,13 @@
 .bandeau-maintenance {
-  background: #FECA51;
+  background: var(--couleurs-mac-jaune-clair);
   padding: 10px 0;
+
+  .bandeau-maintenance-contenu {
+    display: flex;
+    justify-content: space-between;
+    
+    span {
+      cursor: pointer;
+    }
+  }
 }
