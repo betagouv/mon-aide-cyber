@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Cookies from 'cookies';
+import Cookies, { Option } from 'cookies';
 import { Contexte, ErreurMAC } from '../domaine/erreurMAC';
 import {
   ErreurAccesRefuse,
@@ -12,13 +12,33 @@ import {
 
 export type MACCookies = { session: string };
 
+export type ParametresCookies = {
+  clef?: {
+    keys: string[];
+  };
+  nom: string;
+  signed?: boolean;
+};
+
 export const recuperateurDeCookies = (
   requete: Request,
-  reponse: Response
-): string | undefined =>
-  new Cookies(requete, reponse, {
-    keys: [process.env.SECRET_COOKIE || ''],
-  }).get('session', { signed: true });
+  reponse: Response,
+  parametres: ParametresCookies = {
+    clef: {
+      keys: [process.env.SECRET_COOKIE || ''],
+    },
+    nom: 'session',
+    signed: true,
+  }
+): string | undefined => {
+  const options: Option | undefined = parametres.clef
+    ? { keys: parametres.clef.keys }
+    : undefined;
+  return new Cookies(requete, reponse, options).get(
+    parametres.nom,
+    parametres.signed ? { signed: true } : undefined
+  );
+};
 
 export const fabriqueDeCookies = (
   contexte: Contexte,

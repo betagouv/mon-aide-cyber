@@ -67,11 +67,16 @@ export type Jeton = {
   idToken?: string | undefined;
   accessToken?: string | undefined;
 };
-const recupereJeton = async (requete: Request): Promise<Jeton> => {
+const recupereJeton = async (
+  requete: Request,
+  toto: { nonce: string; state: string }
+): Promise<Jeton> => {
   const client = await recupereConfiguration();
   const params = client.callbackParams(requete);
+  console.log('TOTO', toto);
 
-  const { nonce, state } = requete.cookies.AgentConnectInfo;
+  const { nonce, state } = toto;
+
   const token = await client.callback(
     configurationOidc.urlRedirectionApresAuthentification(),
     params,
@@ -110,7 +115,10 @@ export type AdaptateurProConnect = {
   recupereInformationsUtilisateur: (
     accessToken: string
   ) => Promise<InformationsUtilisateur>;
-  recupereJeton: (requete: Request) => Promise<Jeton>;
+  recupereJeton: (
+    requete: Request,
+    cookie: { state: string; nonce: string }
+  ) => Promise<Jeton>;
 };
 
 export const adaptateurProConnect: AdaptateurProConnect = {
