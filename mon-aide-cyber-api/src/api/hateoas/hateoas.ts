@@ -268,6 +268,10 @@ class ConstructeurActionsHATEOAS {
 
   private seConnecter(): ConstructeurActionsHATEOAS {
     this.actions.set('se-connecter', { url: '/api/token', methode: 'POST' });
+    this.actions.set('se-connecter-avec-pro-connect', {
+      url: '/pro-connect/connexion',
+      methode: 'GET',
+    });
     return this;
   }
 

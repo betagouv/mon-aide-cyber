@@ -21,6 +21,7 @@ import { recuperateurDeCookies } from './src/adaptateurs/fabriqueDeCookies';
 import { adaptateurMetabase } from './src/infrastructure/adaptateurs/adaptateurMetabase';
 import { unServiceAidant } from './src/espace-aidant/ServiceAidantMAC';
 import { AdaptateurDeVerificationDeTypeDeRelationMAC } from './src/adaptateurs/AdaptateurDeVerificationDeTypeDeRelationMAC';
+import { adaptateurProConnect } from './src/adaptateurs/pro-connect/adaptateurProConnect';
 import { adaptateurEnvironnement } from './src/adaptateurs/adaptateurEnvironnement';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
@@ -84,6 +85,7 @@ const serveurMAC = serveur.creeServeur({
   serviceDeChiffrement: adaptateurServiceChiffrement(),
   recuperateurDeCookies: recuperateurDeCookies,
   adaptateurMetabase: adaptateurMetabase(),
+  adaptateurProConnect: adaptateurProConnect,
   estEnMaintenance: adaptateurEnvironnement.modeMaintenance().estActif(),
 });
 

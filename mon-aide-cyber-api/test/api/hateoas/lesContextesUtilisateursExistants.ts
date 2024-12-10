@@ -1,39 +1,15 @@
+import { liensPublicsAttendus } from './liensAttendus';
+
 export const lesContextesUtilisateursExistants = [
   {
     contexte: 'Pas de contexte - Informations undefined',
     informationContexte: { contexte: undefined },
-    liens: {
-      'demande-devenir-aidant': {
-        methode: 'GET',
-        url: '/api/demandes/devenir-aidant',
-      },
-      'demande-etre-aide': {
-        methode: 'GET',
-        url: '/api/demandes/etre-aide',
-      },
-      'se-connecter': {
-        methode: 'POST',
-        url: '/api/token',
-      },
-    },
+    ...liensPublicsAttendus,
   },
   {
     contexte: 'Pas de contexte - Informations vides',
     informationContexte: {},
-    liens: {
-      'demande-devenir-aidant': {
-        methode: 'GET',
-        url: '/api/demandes/devenir-aidant',
-      },
-      'demande-etre-aide': {
-        methode: 'GET',
-        url: '/api/demandes/etre-aide',
-      },
-      'se-connecter': {
-        methode: 'POST',
-        url: '/api/token',
-      },
-    },
+    ...liensPublicsAttendus,
   },
   {
     contexte: 'Demande devenir Aidant - Effectuer la demande',
@@ -88,6 +64,10 @@ export const lesContextesUtilisateursExistants = [
       'se-connecter': {
         url: '/api/token',
         methode: 'POST',
+      },
+      'se-connecter-avec-pro-connect': {
+        url: '/pro-connect/connexion',
+        methode: 'GET',
       },
     },
   },

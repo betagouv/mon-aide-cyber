@@ -233,6 +233,10 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       expect(await reponse.json()).toStrictEqual({
         liens: {
           'se-connecter': { url: '/api/token', methode: 'POST' },
+          'se-connecter-avec-pro-connect': {
+            methode: 'GET',
+            url: '/pro-connect/connexion',
+          },
         },
       });
       const utilisateurs = await testeurMAC.entrepots.utilisateurs().tous();

@@ -6,6 +6,7 @@ import { ReponseHATEOAS } from '../../src/api/hateoas/hateoas';
 import { FauxGestionnaireDeJeton } from '../infrastructure/authentification/FauxGestionnaireDeJeton';
 
 import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
+import { liensPublicsAttendus } from './hateoas/liensAttendus';
 
 describe('Route contexte', () => {
   const testeurMAC = testeurIntegration();
@@ -29,17 +30,7 @@ describe('Route contexte', () => {
 
     expect(reponse.statusCode).toBe(200);
     expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
-      liens: {
-        'demande-devenir-aidant': {
-          url: '/api/demandes/devenir-aidant',
-          methode: 'GET',
-        },
-        'demande-etre-aide': {
-          url: '/api/demandes/etre-aide',
-          methode: 'GET',
-        },
-        'se-connecter': { url: '/api/token', methode: 'POST' },
-      },
+      ...liensPublicsAttendus,
     });
   });
 
@@ -142,17 +133,7 @@ describe('Route contexte', () => {
 
         expect(reponse.statusCode).toBe(200);
         expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
-          liens: {
-            'demande-devenir-aidant': {
-              url: '/api/demandes/devenir-aidant',
-              methode: 'GET',
-            },
-            'demande-etre-aide': {
-              url: '/api/demandes/etre-aide',
-              methode: 'GET',
-            },
-            'se-connecter': { url: '/api/token', methode: 'POST' },
-          },
+          ...liensPublicsAttendus,
         });
       });
     });

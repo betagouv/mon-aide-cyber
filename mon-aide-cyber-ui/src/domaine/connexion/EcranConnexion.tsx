@@ -26,8 +26,31 @@ export const EcranConnexion = () => {
     );
   }, [navigationMAC.etat]);
 
+  const lien = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
+    'se-connecter-avec-pro-connect'
+  );
+
   const formulaireConnexion = (
     <>
+      {lien ? (
+        <div className="fr-connect-group">
+          <a className="fr-connect" href={lien.url}>
+            <span className="fr-connect__login">S’identifier avec</span>{' '}
+            <span className="fr-connect__brand">ProConnect</span>
+          </a>
+          <p>
+            <a
+              href="https://proconnect.gouv.fr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Qu’est-ce que ProConnect ? - nouvelle fenêtre"
+            >
+              Qu’est-ce que ProConnect ?
+            </a>
+          </p>
+        </div>
+      ) : null}
+
       <div className="texte-centre">
         <TypographieH2>Connectez-vous</TypographieH2>
         <p>à votre espace Aidant</p>

@@ -10,6 +10,7 @@ import { ErreurValidationMotDePasse } from '../../../src/api/validateurs/motDePa
 import { ErreurModificationProfil } from '../../../src/api/aidant/routesAPIProfil';
 import { ErreurAuthentification } from '../../../src/authentification/Utilisateur';
 import { ErreurCreationEspaceAidant } from '../../../src/espace-aidant/Aidant';
+import { liensPublicsAttendus } from '../hateoas/liensAttendus';
 
 describe("Gestionnaire d'erreur", () => {
   let codeRecu = 0;
@@ -117,17 +118,7 @@ describe("Gestionnaire d'erreur", () => {
       expect(codeRecu).toBe(403);
       expect(corpsRecu).toStrictEqual({
         message: "L'accès à la ressource est interdit.",
-        liens: {
-          'se-connecter': { url: '/api/token', methode: 'POST' },
-          'demande-devenir-aidant': {
-            url: '/api/demandes/devenir-aidant',
-            methode: 'GET',
-          },
-          'demande-etre-aide': {
-            url: '/api/demandes/etre-aide',
-            methode: 'GET',
-          },
-        },
+        ...liensPublicsAttendus,
       });
     });
 
