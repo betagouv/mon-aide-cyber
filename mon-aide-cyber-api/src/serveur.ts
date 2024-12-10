@@ -57,10 +57,12 @@ export type ConfigurationServeur = {
     reponse: Response
   ) => string | undefined;
   adaptateurMetabase: AdaptateurMetabase;
+  estEnMaintenance: boolean;
 };
 
 const creeApp = (config: ConfigurationServeur) => {
   const app = express();
+
   config.gestionnaireErreurs.initialise(app);
   app.set('trust proxy', 1);
   app.use(
@@ -81,6 +83,13 @@ const creeApp = (config: ConfigurationServeur) => {
 
   const limiteurTrafficUI = adaptateurConfigurationLimiteurTraffic('STANDARD');
   app.use(limiteurTrafficUI);
+
+  if (config.estEnMaintenance) {
+    app.use((_: Request, reponse: Response) =>
+      reponse.sendFile(path.join(__dirname, './maintenance/maintenance.html'))
+    );
+  }
+
   app.use((_: Request, reponse: Response, suite: NextFunction) => {
     reponse.setHeader('Content-Security-Policy', process.env.MAC_CSP || '*');
     reponse.setHeader(
