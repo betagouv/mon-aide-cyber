@@ -10,6 +10,8 @@ import { ErreurValidationMotDePasse } from '../../../src/api/validateurs/motDePa
 import { ErreurModificationProfil } from '../../../src/api/aidant/routesAPIProfil';
 import { ErreurAuthentification } from '../../../src/authentification/Utilisateur';
 import { ErreurCreationEspaceAidant } from '../../../src/espace-aidant/Aidant';
+import { ErreurProConnectApresAuthentification } from '../../../src/api/pro-connect/routeProConnect';
+import { ReponseHATEOASEnErreur } from '../../../src/api/hateoas/hateoas';
 import { liensPublicsAttendus } from '../hateoas/liensAttendus';
 
 describe("Gestionnaire d'erreur", () => {
@@ -21,10 +23,15 @@ describe("Gestionnaire d'erreur", () => {
   const fausseReponse: Response = {
     status(code: number) {
       codeRecu = code;
+      this.statusCode = codeRecu;
     },
     json(corps: any) {
-      corpsRecu = corps;
+      if (corps) {
+        corpsRecu = corps;
+      }
+      return corpsRecu;
     },
+    statusCode: codeRecu,
   } as Response;
   const fausseSuite: NextFunction = (erreur: any) => {
     erreurRecue = erreur;
@@ -229,6 +236,29 @@ describe("Gestionnaire d'erreur", () => {
       expect(consignateurErreurs.tous()).toHaveLength(1);
       expect(fausseRequete.body).toStrictEqual({
         consentementAnnuaire: true,
+      });
+    });
+  });
+
+  describe('Dans le cadre de la connexion ProConnect', () => {
+    it('Consigne l’erreur', () => {
+      const consignateur = new ConsignateurErreursMemoire();
+
+      gestionnaireErreurGeneralisee(consignateur)(
+        ErreurMAC.cree(
+          'Authentification ProConnect',
+          new ErreurProConnectApresAuthentification(new Error('Erreur'))
+        ),
+        fausseRequete,
+        fausseReponse,
+        fausseSuite
+      );
+
+      expect(consignateur.tous()).toHaveLength(1);
+      expect(fausseReponse.statusCode).toStrictEqual(401);
+      expect(fausseReponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
+        message: 'Erreur d’authentification',
+        liens: {},
       });
     });
   });

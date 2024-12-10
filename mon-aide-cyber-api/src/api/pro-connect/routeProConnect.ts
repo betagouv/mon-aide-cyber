@@ -1,10 +1,23 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { ConfigurationServeur } from '../../serveur';
+import { ReponseHATEOASEnErreur } from '../hateoas/hateoas';
+import { ErreurMAC } from '../../domaine/erreurMAC';
+
+export class ErreurProConnectApresAuthentification extends Error {
+  constructor(e: Error) {
+    super(e.message);
+  }
+}
 
 export const routesProConnect = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
-  const { adaptateurProConnect } = configuration;
+  const {
+    adaptateurProConnect,
+    entrepots,
+    gestionnaireDeJeton,
+    recuperateurDeCookies,
+  } = configuration;
 
   routes.get(
     '/connexion',
@@ -31,62 +44,61 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
     }
   );
 
-  // routes.get('/apres-authentification', async (requete, reponse) => {
-  //   if (!requete.cookies.AgentConnectInfo) {
-  //     reponse.status(401).send("Erreur d'authentification");
-  //     return;
-  //   }
-  //   try {
-  //     const { idToken, accessToken } =
-  //       await adaptateurOidc.recupereJeton(requete);
-  //     const { urlRedirection } = requete.cookies.AgentConnectInfo;
-  //
-  //     reponse.clearCookie('AgentConnectInfo');
-  //
-  //     const { nom, prenom, email, siret } =
-  //       await adaptateurOidc.recupereInformationsUtilisateur(accessToken);
-  //     const infosUtilisateur = { nom, prenom, email, siret };
-  //     const utilisateurExistant =
-  //       await depotDonnees.utilisateurAvecEmail(email);
-  //
-  //     if (!utilisateurExistant) {
-  //       const token = adaptateurJWT.signeDonnees(infosUtilisateur);
-  //       reponse.redirect(`/creation-compte?token=${token}`);
-  //       return;
-  //     }
-  //
-  //     requete.session.AgentConnectIdToken = idToken;
-  //     requete.session.token = utilisateurExistant.genereToken(
-  //       SourceAuthentification.AGENT_CONNECT
-  //     );
-  //     if (!utilisateurExistant.aLesInformationsAgentConnect()) {
-  //       await depotDonnees.metsAJourUtilisateur(utilisateurExistant.id, {
-  //         nom,
-  //         prenom,
-  //         entite: { siret },
-  //       });
-  //     }
-  //     await depotDonnees.enregistreNouvelleConnexionUtilisateur(
-  //       utilisateurExistant.id,
-  //       SourceAuthentification.AGENT_CONNECT
-  //     );
-  //
-  //     const tokenDonneesInvite = utilisateurExistant.estUnInvite()
-  //       ? adaptateurJWT.signeDonnees({ ...infosUtilisateur, invite: true })
-  //       : undefined;
-  //
-  //     reponse.render('apresAuthentification', {
-  //       ...(urlRedirection && {
-  //         urlRedirection:
-  //           adaptateurEnvironnement.mss().urlBase() + urlRedirection,
-  //       }),
-  //       tokenDonneesInvite,
-  //     });
-  //   } catch (e) {
-  //     fabriqueAdaptateurGestionErreur().logueErreur(e);
-  //     reponse.status(401).send("Erreur d'authentification");
-  //   }
-  // });
+  routes.get(
+    '/apres-authentification',
+    async (
+      requete: Request,
+      reponse: Response<ReponseHATEOASEnErreur>,
+      suite: NextFunction
+    ) => {
+      const cookie = recuperateurDeCookies(requete, reponse, {
+        nom: 'ProConnectInfo',
+      });
+      if (!cookie) {
+        return reponse
+          .status(401)
+          .json({ message: 'Erreur d’authentification', liens: {} });
+      }
+      try {
+        const { idToken, accessToken } =
+          await adaptateurProConnect.recupereJeton(
+            requete,
+            JSON.parse(decodeURIComponent(cookie).substring(2))
+          );
+
+        reponse.clearCookie('ProConnectInfo');
+
+        const { email } =
+          await adaptateurProConnect.recupereInformationsUtilisateur(
+            accessToken!
+          );
+        return entrepots
+          .aidants()
+          .rechercheParEmail(email!)
+          .then((aidant) => {
+            requete.session!.ProConnectIdToken = idToken;
+            const jeton = gestionnaireDeJeton.genereJeton({
+              identifiant: aidant.identifiant,
+            });
+            requete.session!.token = jeton;
+            return reponse.redirect('/aidant/tableau-de-bord');
+          })
+          .catch(() =>
+            reponse.status(401).json({
+              message: 'Vous n’avez pas de compte enregistré sur MonAideCyber',
+              liens: {},
+            })
+          );
+      } catch (e: unknown | Error) {
+        return suite(
+          ErreurMAC.cree(
+            'Authentification ProConnect',
+            new ErreurProConnectApresAuthentification(e as Error)
+          )
+        );
+      }
+    }
+  );
   //
   // routes.get('/apres-deconnexion', async (requete, reponse) => {
   //   const { state } = requete.cookies.AgentConnectInfo;

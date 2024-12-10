@@ -13,6 +13,7 @@ import { ErreurModificationProfil } from '../aidant/routesAPIProfil';
 import { ErreurCreationEspaceAidant } from '../../espace-aidant/Aidant';
 import { ErreurReinitialisationMotDePasse } from '../../authentification/ServiceUtilisateur';
 import { ErreurDemandeReinitialisationMotDePasse } from '../routesAPIUtilisateur';
+import { ErreurProConnectApresAuthentification } from '../pro-connect/routeProConnect';
 
 const HTTP_ACCEPTE = 202;
 const HTTP_MAUVAISE_REQUETE = 400;
@@ -30,7 +31,7 @@ const CORPS_REPONSE_ERREUR_NON_GEREE = {
 const construisReponse = (
   reponse: Response,
   codeHTTP: number,
-  corpsReponse?: { message: string }
+  corpsReponse?: { message: string; [clef: string]: unknown }
 ) => {
   reponse.status(codeHTTP);
   if (corpsReponse) {
@@ -183,6 +184,21 @@ const erreursGerees: Map<
     ) => {
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_ACCEPTE);
+    },
+  ],
+  [
+    'ErreurProConnectApresAuthentification',
+    (
+      erreur: ErreurMAC<ErreurProConnectApresAuthentification>,
+      _requete,
+      consignateur,
+      reponse
+    ) => {
+      consignateur.consigne(erreur);
+      construisReponse(reponse, HTTP_NON_AUTORISE, {
+        message: 'Erreur d’authentification',
+        liens: {},
+      });
     },
   ],
 ]);
