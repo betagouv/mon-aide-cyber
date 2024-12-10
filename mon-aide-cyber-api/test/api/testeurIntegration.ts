@@ -103,6 +103,7 @@ class TesteurIntegrationMAC {
       adaptateurMetabase: this.adaptateurMetabase,
       adaptateurDeVerificationDeRelations:
         this.adaptateurDeVerificationDeRelations,
+      estEnMaintenance: false,
     });
     const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
     // eslint-disable-next-line @typescript-eslint/no-empty-function

@@ -83,6 +83,7 @@ const serveurMAC = serveur.creeServeur({
   serviceDeChiffrement: adaptateurServiceChiffrement(),
   recuperateurDeCookies: recuperateurDeCookies,
   adaptateurMetabase: adaptateurMetabase(),
+  estEnMaintenance: false,
 });
 
 const port = process.env.PORT || 8081;
