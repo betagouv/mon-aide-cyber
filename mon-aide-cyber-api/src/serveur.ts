@@ -30,6 +30,7 @@ import { adaptateurConfigurationLimiteurTraffic } from './api/adaptateurLimiteur
 import { AdaptateurDeVerificationDeTypeDeRelation } from './adaptateurs/AdaptateurDeVerificationDeTypeDeRelation';
 import { AdaptateurProConnect } from './adaptateurs/pro-connect/adaptateurProConnect';
 import { routesProConnect } from './api/pro-connect/routeProConnect';
+import { ParametresCookies } from './adaptateurs/fabriqueDeCookies';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -57,7 +58,8 @@ export type ConfigurationServeur = {
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
   recuperateurDeCookies: (
     requete: Request,
-    reponse: Response
+    reponse: Response,
+    parametres?: ParametresCookies
   ) => string | undefined;
   adaptateurMetabase: AdaptateurMetabase;
   estEnMaintenance: boolean;
