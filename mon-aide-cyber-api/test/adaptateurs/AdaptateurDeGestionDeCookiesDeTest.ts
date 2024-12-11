@@ -1,12 +1,16 @@
 import { AdaptateurDeGestionDeCookies } from '../../src/adaptateurs/AdaptateurDeGestionDeCookies';
-import { Request, Response } from 'express';
+import { RequestHandler, Request, Response } from 'express';
+import { NextFunction } from 'express-serve-static-core';
 
 export class AdaptateurDeGestionDeCookiesDeTest
   implements AdaptateurDeGestionDeCookies
 {
   aSupprime = false;
 
-  supprime(_requete: Request, _response: Response): void {
-    this.aSupprime = true;
+  supprime(): RequestHandler {
+    return (_requete: Request, _reponse: Response, suite: NextFunction) => {
+      this.aSupprime = true;
+      suite();
+    };
   }
 }

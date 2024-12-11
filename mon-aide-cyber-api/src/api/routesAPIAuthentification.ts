@@ -56,8 +56,8 @@ export const routesAPIAuthentification = (
 
   routes.delete(
     '/',
-    (requete: RequeteUtilisateur, reponse: Response, _suite: NextFunction) => {
-      configuration.adaptateurDeGestionDeCookies.supprime(requete, reponse);
+    configuration.adaptateurDeGestionDeCookies.supprime(),
+    (_requete: RequeteUtilisateur, reponse: Response, _suite: NextFunction) => {
       reponse.status(200);
       return reponse.send();
     }

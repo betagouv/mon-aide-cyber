@@ -49,6 +49,17 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         'j%3A%7B%22state%22%3A%22etat%22%2C%22nonce%22%3A%22coucou%22%7D'
       );
     });
+
+    it('Le cookie de l’utilisateur est supprimé', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/pro-connect/connexion',
+        donneesServeur.portEcoute
+      );
+
+      expect(testeurMAC.adaptateurDeGestionDeCookies.aSupprime).toBe(true);
+    });
   });
 
   describe('Lorsqu’une requête GET est reçue sur /pro-connect/apres-authentification', () => {

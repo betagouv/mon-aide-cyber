@@ -17,11 +17,12 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
     entrepots,
     gestionnaireDeJeton,
     recuperateurDeCookies,
+    adaptateurDeGestionDeCookies,
   } = configuration;
 
   routes.get(
     '/connexion',
-    // adaptateurDeGestionDeCookies.supprime,
+    adaptateurDeGestionDeCookies.supprime(),
     async (_requete: Request, reponse: Response, suite: NextFunction) => {
       try {
         const { url, state, nonce } =
