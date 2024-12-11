@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import { ConfigurationServeur } from '../../serveur';
 import { ReponseHATEOASEnErreur } from '../hateoas/hateoas';
 import { ErreurMAC } from '../../domaine/erreurMAC';
+import { unServiceAidant } from '../../espace-aidant/ServiceAidantMAC';
 
 export class ErreurProConnectApresAuthentification extends Error {
   constructor(e: Error) {
@@ -73,23 +74,22 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
           await adaptateurProConnect.recupereInformationsUtilisateur(
             accessToken!
           );
-        return entrepots
-          .aidants()
-          .rechercheParEmail(email!)
+        return unServiceAidant(entrepots.aidants())
+          .rechercheParMail(email!)
           .then((aidant) => {
-            requete.session!.ProConnectIdToken = idToken;
-            const jeton = gestionnaireDeJeton.genereJeton({
-              identifiant: aidant.identifiant,
-            });
-            requete.session!.token = jeton;
-            return reponse.redirect('/aidant/tableau-de-bord');
-          })
-          .catch(() =>
-            reponse.status(401).json({
+            if (aidant) {
+              requete.session!.ProConnectIdToken = idToken;
+              const jeton = gestionnaireDeJeton.genereJeton({
+                identifiant: aidant.identifiant,
+              });
+              requete.session!.token = jeton;
+              return reponse.redirect('/aidant/tableau-de-bord');
+            }
+            return reponse.status(401).json({
               message: 'Vous n’avez pas de compte enregistré sur MonAideCyber',
               liens: {},
-            })
-          );
+            });
+          });
       } catch (e: unknown | Error) {
         return suite(
           ErreurMAC.cree(
