@@ -11,6 +11,7 @@ export default defineProject({
         'postgres://postgres@localhost:5434',
       BASE_DE_DONNEES_MIN_POOL: '2',
       BASE_DE_DONNEES_MAX_POOL: '50',
+      PRO_CONNECT_ACTIF: 'true',
     },
     onConsoleLog(log: string): boolean {
       return !log.includes('Une erreur est survenue:');
