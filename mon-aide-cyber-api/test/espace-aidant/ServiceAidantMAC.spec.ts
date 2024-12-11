@@ -1,10 +1,16 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { EntrepotAidantMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import crypto from 'crypto';
 import { Aidant } from '../../src/espace-aidant/Aidant';
 import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
 import { AidantDTO } from '../../src/espace-aidant/ServiceAidant';
 import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
+import {
+  nettoieLaBaseDeDonneesAidants,
+  nettoieLaBaseDeDonneesRelations,
+} from '../utilitaires/nettoyeurBDD';
+import { DonneesAidant } from '../../src/administration/aidant/creeAidant';
+import { fakerFR } from '@faker-js/faker';
 
 describe('Service Aidant', () => {
   describe('Recherche par mail', () => {
@@ -66,6 +72,34 @@ describe('Service Aidant', () => {
       ).parIdentifiant(crypto.randomUUID());
 
       expect(aidantCherche).toStrictEqual(undefined);
+    });
+  });
+
+  describe('Création des Aidants via ProConnect', () => {
+    beforeEach(() => {
+      nettoieLaBaseDeDonneesAidants();
+      nettoieLaBaseDeDonneesRelations();
+    });
+
+    it('Créé un Aidant via ProConnect', async () => {
+      const entrepotAidant = new EntrepotAidantMemoire();
+      const serviceAidant = unServiceAidant(entrepotAidant);
+
+      const donneesAidant: DonneesAidant = {
+        identifiantConnexion: fakerFR.internet.email(),
+        motDePasse: fakerFR.string.alphanumeric({ length: 32 }),
+        nomPrenom: fakerFR.person.fullName(),
+      };
+
+      await serviceAidant.creeAidant(donneesAidant);
+
+      const aidantTrouve = await serviceAidant.rechercheParMail(
+        donneesAidant.identifiantConnexion
+      );
+
+      expect(aidantTrouve?.email).toStrictEqual(
+        donneesAidant.identifiantConnexion
+      );
     });
   });
 });
