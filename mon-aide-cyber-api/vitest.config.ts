@@ -12,6 +12,7 @@ export default defineProject({
       BASE_DE_DONNEES_MIN_POOL: '2',
       BASE_DE_DONNEES_MAX_POOL: '50',
       PRO_CONNECT_ACTIF: 'true',
+      SIRET_GENDARMERIE: 'GENDARMERIE',
     },
     onConsoleLog(log: string): boolean {
       return !log.includes('Une erreur est survenue:');

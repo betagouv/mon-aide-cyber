@@ -35,11 +35,15 @@ const modeMaintenance = () => ({
   estActif: () => process.env.MAINTENANCE_EST_ACTIVE === 'true',
 });
 
+const siretsEntreprise = () => ({
+  gendarmerie: () => process.env.SIRET_GENDARMERIE,
+});
 const adaptateurEnvironnement = {
   messagerie,
   mac,
   proConnect,
   modeMaintenance,
+  siretsEntreprise,
 };
 
 export { sentry, adaptateurEnvironnement };

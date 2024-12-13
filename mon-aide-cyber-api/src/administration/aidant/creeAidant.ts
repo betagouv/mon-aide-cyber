@@ -35,7 +35,7 @@ export const creeAidant = async (
         date: FournisseurHorloge.maintenant(),
         identifiant: aidant.identifiant,
         type: 'AIDANT_CREE',
-        corps: { identifiant: aidant.identifiant },
+        corps: { identifiant: aidant.identifiant, typeAidant: 'Aidant' },
       });
       return aidant;
     });

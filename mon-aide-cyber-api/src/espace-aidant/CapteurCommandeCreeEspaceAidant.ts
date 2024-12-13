@@ -5,7 +5,12 @@ import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge
 import crypto from 'crypto';
 import { AggregatNonTrouve } from '../domaine/Aggregat';
 import { Departement } from '../gestion-demandes/departements';
-import { Aidant, ErreurCreationEspaceAidant } from './Aidant';
+import {
+  Aidant,
+  ErreurCreationEspaceAidant,
+  estSiretGendarmerie,
+  Siret,
+} from './Aidant';
 
 export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
   type: 'CommandeCreeEspaceAidant';
@@ -15,6 +20,7 @@ export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
   motDePasse: string;
   nomPrenom: string;
   departement: Departement;
+  siret?: Siret;
 };
 
 export type EspaceAidantCree = {
@@ -26,6 +32,7 @@ export type EspaceAidantCree = {
 export type AidantCree = Evenement<{
   identifiant: crypto.UUID;
   departement?: string;
+  typeAidant: 'Gendarme' | 'Aidant';
 }>;
 
 export class CapteurCommandeCreeEspaceAidant
@@ -59,6 +66,7 @@ export class CapteurCommandeCreeEspaceAidant
               typesEntites: [],
             },
             consentementAnnuaire: false,
+            ...(commande.siret && { siret: commande.siret }),
           };
           return this.entrepots
             .aidants()
@@ -69,6 +77,9 @@ export class CapteurCommandeCreeEspaceAidant
                   corps: {
                     identifiant: aidant.identifiant,
                     departement: commande.departement.code,
+                    typeAidant: estSiretGendarmerie(aidant.siret)
+                      ? 'Gendarme'
+                      : 'Aidant',
                   },
                   date: FournisseurHorloge.maintenant(),
                   identifiant: aidant.identifiant,
