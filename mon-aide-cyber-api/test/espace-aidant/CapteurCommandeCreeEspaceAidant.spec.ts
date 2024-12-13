@@ -122,7 +122,47 @@ describe('Capteur de commande de création de compte Aidant', () => {
       identifiant: aidantCree.identifiant,
       type: 'AIDANT_CREE',
       date: FournisseurHorloge.maintenant(),
-      corps: { identifiant: aidantCree.identifiant, departement: '971' },
+      corps: {
+        identifiant: aidantCree.identifiant,
+        departement: '971',
+        typeAidant: 'Aidant',
+      },
+    });
+  });
+
+  it('Publie l’événement "AIDANT_CREE" pour un Gendarme', async () => {
+    FournisseurHorlogeDeTest.initialise(new Date());
+    const entrepots = new EntrepotsMemoire();
+    const dateSignatureCGU = new Date(Date.parse('2024-08-30T14:38:25'));
+    const busEvenement = new BusEvenementDeTest();
+
+    const aidantCree = await new CapteurCommandeCreeEspaceAidant(
+      entrepots,
+      busEvenement
+    ).execute({
+      identifiant: crypto.randomUUID(),
+      dateSignatureCGU,
+      email: 'jean.dupont@beta.fr',
+      nomPrenom: 'Jean Dupont',
+      motDePasse: '',
+      type: 'CommandeCreeEspaceAidant',
+      departement: {
+        nom: 'Guadeloupe',
+        code: '971',
+        codeRegion: '01',
+      },
+      siret: 'GENDARMERIE',
+    });
+
+    expect(busEvenement.evenementRecu).toStrictEqual<AidantCree>({
+      identifiant: aidantCree.identifiant,
+      type: 'AIDANT_CREE',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        identifiant: aidantCree.identifiant,
+        departement: '971',
+        typeAidant: 'Gendarme',
+      },
     });
   });
 });

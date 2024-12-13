@@ -1,3 +1,4 @@
+import { describe, beforeEach, expect, it } from 'vitest';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from '../executeurRequete';
@@ -5,6 +6,8 @@ import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 import { desInformationsUtilisateur } from '../../constructeurs/constructeurProConnectInformationsUtilisateur';
 import { fakerFR } from '@faker-js/faker';
 import { ReponseHATEOASEnErreur } from '../../../src/api/hateoas/hateoas';
+import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
+import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 
 const enObjet = <T extends { [clef: string]: string }>(cookie: string): T =>
   cookie.split('; ').reduce((acc: T, v: string) => {
@@ -68,15 +71,13 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       await testeurMAC.entrepots.aidants().persiste(aidant);
       testeurMAC.recuperateurDeCookies = () =>
         'j%3A%7B%22state%22%3A%22etat%22%2C%22nonce%22%3A%22coucou%22%7D';
-      testeurMAC.adaptateurProConnect.recupereJeton = () =>
-        Promise.resolve({
-          idToken: fakerFR.string.alpha(10),
-          accessToken: fakerFR.string.alpha(10),
-        });
-      testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur = () =>
-        Promise.resolve(
-          desInformationsUtilisateur().pourUnAidant(aidant).construis()
-        );
+      testeurMAC.adaptateurProConnect.recupereJeton = async () => ({
+        idToken: fakerFR.string.alpha(10),
+        accessToken: fakerFR.string.alpha(10),
+      });
+      testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+        async () =>
+          desInformationsUtilisateur().pourUnAidant(aidant).construis();
       testeurMAC.gestionnaireDeJeton.genereJeton = () => 'abc';
       donneesServeur = testeurMAC.initialise();
     });
@@ -154,6 +155,69 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
         message: 'Erreur d’authentification',
         liens: {},
+      });
+    });
+
+    describe("Dans le cas d'un gendarme", () => {
+      it("Si l'utilisateur n'est pas connu, on crée un espace Aidant", async () => {
+        adaptateurEnvironnement.siretsEntreprise = () => ({
+          gendarmerie: () => '12345',
+        });
+        const aidant = unAidant()
+          .avecUnEmail('jean.pierre@yomail.com')
+          .construis();
+        testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+          async () =>
+            desInformationsUtilisateur()
+              .pourUnAidant(aidant)
+              .avecUnSiret('12345')
+              .construis();
+
+        await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/pro-connect/apres-authentification',
+          donneesServeur.portEcoute
+        );
+
+        const aidantTrouve = await unServiceAidant(
+          testeurMAC.entrepots.aidants()
+        ).rechercheParMail(aidant.email);
+        expect(aidantTrouve).toBeDefined();
+        expect(aidantTrouve!.siret).toStrictEqual('12345');
+      });
+
+      it("À l'issue de la création de l'espace Aidant, l'utilisateur est redirigé vers le tableau de bord", async () => {
+        adaptateurEnvironnement.siretsEntreprise = () => ({
+          gendarmerie: () => '12345',
+        });
+        const aidant = unAidant()
+          .avecUnEmail('jean.dujardin@mail.com')
+          .construis();
+        testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+          async () =>
+            desInformationsUtilisateur()
+              .pourUnAidant(aidant)
+              .avecUnSiret('12345')
+              .construis();
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/pro-connect/apres-authentification',
+          donneesServeur.portEcoute
+        );
+
+        expect(reponse.statusCode).toStrictEqual(302);
+        expect(reponse.headers['location']).toStrictEqual(
+          '/aidant/tableau-de-bord'
+        );
+        const objet = enObjet<{ session: string; [clef: string]: string }>(
+          (reponse.headers['set-cookie'] as string[])[1]
+        );
+        expect(
+          JSON.parse(Buffer.from(objet.session, 'base64').toString()).token
+        ).toStrictEqual('abc');
       });
     });
   });

@@ -2,6 +2,7 @@ import { Entrepot } from '../domaine/Entrepot';
 import { Aggregat } from '../domaine/Aggregat';
 import { SecteurActivite } from './preferences/secteursActivite';
 import { Departement } from '../gestion-demandes/departements';
+import { adaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement';
 
 export type EntitesOrganisationsPubliques = {
   nom: 'Organisations publiques';
@@ -50,6 +51,7 @@ export type Aidant = Aggregat & {
   nomPrenom: string;
   preferences: Preferences;
   consentementAnnuaire: boolean;
+  siret?: Siret;
 };
 
 export interface EntrepotAidant extends Entrepot<Aidant> {
@@ -61,3 +63,7 @@ export class ErreurCreationEspaceAidant extends Error {
     super(message);
   }
 }
+
+export type Siret = string;
+export const estSiretGendarmerie = (siret: string | undefined) =>
+  siret === adaptateurEnvironnement.siretsEntreprise().gendarmerie();

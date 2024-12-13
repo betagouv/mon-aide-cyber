@@ -19,6 +19,11 @@ class ConstructeurProConnectInformationsUtilisateur
     return this;
   }
 
+  avecUnSiret(siret: string): ConstructeurProConnectInformationsUtilisateur {
+    this.siret = siret;
+    return this;
+  }
+
   construis(): InformationsUtilisateur {
     return {
       prenom: this.prenom,
