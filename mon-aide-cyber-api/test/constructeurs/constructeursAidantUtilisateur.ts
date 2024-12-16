@@ -70,6 +70,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   private departements: Departement[] = [];
   private typesEntites: TypesEntites = [];
   private consentementAnnuaire = false;
+  private siret: string | undefined = undefined;
 
   avecUnNomPrenom(nomPrenom: string): ConstructeurAidant {
     this.nomPrenom = nomPrenom;
@@ -108,6 +109,11 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  avecUnSiret(siret: string): ConstructeurAidant {
+    this.siret = siret;
+    return this;
+  }
+
   construis(): Aidant {
     return {
       identifiant: this.identifiant,
@@ -118,6 +124,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
         departements: this.departements,
         typesEntites: this.typesEntites,
       },
+      ...(this.siret && { siret: this.siret }),
       consentementAnnuaire: this.consentementAnnuaire,
     };
   }

@@ -53,7 +53,7 @@ export class CapteurCommandeLanceRestitution
   }
 }
 
-type RestitutionLancee = Evenement<{
+export type RestitutionLancee = Evenement<{
   identifiantDiagnostic: crypto.UUID;
   indicateurs?: { [thematique: string]: { moyennePonderee: number } };
   mesures?: MesurePriorisee[];

@@ -1,20 +1,20 @@
 import {
   aidantCree,
   aideCree,
+  aideViaSollicitationAidantCree,
   demandeDevenirAidantCree,
-  mailCreationCompteAidantEnvoye,
-  diagnosticLance,
-  reponseAjoutee,
-  restitutionLancee,
-  mailCreationCompteAidantNonEnvoye,
   demandeDevenirAidantespaceAidantCree,
+  diagnosticLance,
+  diagnosticLibreAccesLance,
+  mailCreationCompteAidantEnvoye,
+  mailCreationCompteAidantNonEnvoye,
   preferencesAidantModifiees,
   profilAidantModifie,
-  aideViaSollicitationAidantCree,
   reinitialisationMotDePasseDemandee,
   reinitialisationMotDePasseErronee,
   reinitialisationMotDePasseFaite,
-  diagnosticLibreAccesLance,
+  reponseAjoutee,
+  restitutionLancee,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
@@ -25,6 +25,8 @@ import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../relation/AdaptateurRelationsMAC';
 import { aidantInitieDiagnostic } from '../espace-aidant/tableau-de-bord/consommateursEvenements';
 import { demandeInitieDiagnosticLibreAcces } from '../diagnostic-libre-acces/consommateursEvenements';
+import { unServiceAidant } from '../espace-aidant/ServiceAidantMAC';
+import { fabriqueEntrepots } from './fabriqueEntrepots';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -48,7 +50,10 @@ export const fabriqueConsommateursEvenements = (
     [
       'DIAGNOSTIC_LANCE',
       [
-        diagnosticLance(entrepotJournalisation),
+        diagnosticLance(
+          entrepotJournalisation,
+          unServiceAidant(fabriqueEntrepots().aidants())
+        ),
         aidantInitieDiagnostic(adaptateurRelations),
       ],
     ],

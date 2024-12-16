@@ -1,6 +1,9 @@
 import { ConsommateurEvenement, Evenement } from '../domaine/BusEvenement';
 import crypto from 'crypto';
 import { EntrepotEvenementJournal, Publication } from './Publication';
+import { DiagnosticLance } from '../diagnostic/CapteurCommandeLanceDiagnostic';
+import { ServiceAidant } from '../espace-aidant/ServiceAidant';
+import { estSiretGendarmerie } from '../espace-aidant/Aidant';
 
 const consommateurEvenement = () => (entrepot: EntrepotEvenementJournal) =>
   new (class implements ConsommateurEvenement {
@@ -11,7 +14,29 @@ const consommateurEvenement = () => (entrepot: EntrepotEvenementJournal) =>
 
 export const restitutionLancee = consommateurEvenement();
 
-export const diagnosticLance = consommateurEvenement();
+const consommateurDiagnosticLance =
+  () => (entrepot: EntrepotEvenementJournal, serviceAidant: ServiceAidant) =>
+    new (class implements ConsommateurEvenement {
+      consomme<E extends Evenement<unknown>>(evenement: E): Promise<void> {
+        const { corps } = evenement as DiagnosticLance;
+        return serviceAidant
+          .parIdentifiant(corps.identifiantAidant)
+          .then((aidant) => {
+            return entrepot.persiste(
+              genereEvenement({
+                ...evenement,
+                corps: {
+                  ...corps,
+                  profil: estSiretGendarmerie(aidant?.siret)
+                    ? 'Gendarme'
+                    : 'Aidant',
+                },
+              })
+            );
+          });
+      }
+    })();
+export const diagnosticLance = consommateurDiagnosticLance();
 
 export const reponseAjoutee = consommateurEvenement();
 
