@@ -26,6 +26,7 @@ class ServiceAidantMAC implements ServiceAidant {
         identifiant: aidant.identifiant,
         email: aidant.email,
         nomUsage: this.formateLeNom(aidant.nomPrenom),
+        ...(aidant.siret && { siret: aidant.siret }),
       }))
       .catch(() => undefined);
   }
