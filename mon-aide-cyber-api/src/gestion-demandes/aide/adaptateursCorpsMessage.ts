@@ -179,7 +179,7 @@ const adaptateursCorpsMessage: AdaptateurCorpsDeMessageAide = {
           '<body>' +
           'Bonjour,\n' +
           '\n' +
-          `Aujourd’hui, l’entité ${proprietes.raisonSociale ? `(${proprietes.raisonSociale})` : ''} sous l’adresse ${proprietes.mailEntite} a sollicité l’Aidant cyber ${proprietes.aidant} situé dans le département ${proprietes.departement}.\n` +
+          `Aujourd’hui, l’entité ${proprietes.raisonSociale ? `(${proprietes.raisonSociale})` : ''} sous l’adresse ${proprietes.mailEntite} a sollicité l’Aidant cyber ${proprietes.aidant} situé dans le département ${proprietes.departement.nom}.\n` +
           '\n' +
           "L'équipe MonAideCyber" +
           '</body>' +
