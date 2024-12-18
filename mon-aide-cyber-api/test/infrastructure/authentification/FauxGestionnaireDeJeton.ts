@@ -17,7 +17,11 @@ export class FauxGestionnaireDeJeton implements GestionnaireDeJeton {
     }
     this.token = jeton;
     const payload = JSON.parse(jeton) as JwtPayload;
-    return { ...payload, identifiant: payload.identifiant };
+    return {
+      ...payload,
+      identifiant: payload.identifiant,
+      estProconnect: false,
+    };
   }
 
   genereJeton(__: DonneesJetonMAC): Jeton {

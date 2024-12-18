@@ -12,7 +12,11 @@ export class GestionnaireDeJetonJWT implements GestionnaireDeJeton {
 
   verifie(jeton: string): JwtMACPayload {
     const payload: JwtPayload = jwt.verify(jeton, this.clef) as JwtPayload;
-    return { ...payload, identifiant: payload.identifiant };
+    return {
+      ...payload,
+      identifiant: payload.identifiant,
+      estProconnect: false,
+    };
   }
 
   genereJeton(donnee: DonneesJetonMAC): Jeton {

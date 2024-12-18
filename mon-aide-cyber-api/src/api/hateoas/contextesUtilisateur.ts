@@ -96,6 +96,54 @@ export const contextesUtilisateur: ContextesUtilisateur = {
       },
     },
   },
+  aidant: {
+    'acceder-au-profil': {
+      'lancer-diagnostic': {
+        url: '/api/diagnostic',
+        methode: 'POST',
+      },
+      'afficher-tableau-de-bord': {
+        url: '/api/espace-aidant/tableau-de-bord',
+        methode: 'GET',
+      },
+      ...(process.env
+        .FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL === 'true' && {
+        'modifier-profil': {
+          url: '/api/profil',
+          methode: 'PATCH',
+        },
+      }),
+      'modifier-mot-de-passe': {
+        url: '/api/profil/modifier-mot-de-passe',
+        methode: 'POST',
+      },
+      'se-deconnecter': {
+        url: '/api/token',
+        methode: 'DELETE',
+      },
+    },
+    'proconnect-acceder-au-profil': {
+      'lancer-diagnostic': {
+        url: '/api/diagnostic',
+        methode: 'POST',
+      },
+      'afficher-tableau-de-bord': {
+        url: '/api/espace-aidant/tableau-de-bord',
+        methode: 'GET',
+      },
+      ...(process.env
+        .FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL === 'true' && {
+        'modifier-profil': {
+          url: '/api/profil',
+          methode: 'PATCH',
+        },
+      }),
+      'se-deconnecter': {
+        url: '/api/token',
+        methode: 'DELETE',
+      },
+    },
+  },
 };
 export type ContexteSpecifique = {
   [clef: string]: Options;

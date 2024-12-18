@@ -13,6 +13,7 @@ export default defineProject({
       BASE_DE_DONNEES_MAX_POOL: '50',
       PRO_CONNECT_ACTIF: 'true',
       SIRET_GENDARMERIE: 'GENDARMERIE',
+      FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL: 'true',
     },
     onConsoleLog(log: string): boolean {
       return !log.includes('Une erreur est survenue:');
