@@ -17,6 +17,7 @@ import {
   validateurDeNouveauMotDePasse,
 } from '../validateurs/motDePasse';
 import { ServiceProfilAidant } from '../../espace-aidant/profil/ServiceProfilAidant';
+import { jwtPayload } from '../../adaptateurs/fabriqueDeCookies';
 
 type CorpsRequeteChangementMotDerPasse = {
   ancienMotDePasse: string;
@@ -35,6 +36,8 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     adaptateurDeVerificationDeSession: session,
     adaptateurDeVerificationDeCGU: cgu,
     busEvenement,
+    recuperateurDeCookies,
+    gestionnaireDeJeton,
   } = configuration;
 
   routes.get(
@@ -51,6 +54,15 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
         .lis(requete.identifiantUtilisateurCourant!)
         .then((aidant) => {
           const dateSignatureCGU = aidant.dateSignatureCGU;
+          const jwt = jwtPayload(
+            { session: recuperateurDeCookies(requete, reponse)! },
+            gestionnaireDeJeton
+          );
+
+          const contexte = jwt.estProconnect
+            ? 'aidant:proconnect-acceder-au-profil'
+            : 'aidant:acceder-au-profil';
+
           return reponse.status(200).json({
             nomPrenom: aidant.nomPrenom,
             dateSignatureCGU: dateSignatureCGU
@@ -58,7 +70,9 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
               : '',
             consentementAnnuaire: aidant.consentementAnnuaire,
             identifiantConnexion: aidant.email,
-            ...constructeurActionsHATEOAS().accedeAuProfil().construis(),
+            ...constructeurActionsHATEOAS()
+              .pour({ contexte: contexte })
+              .construis(),
           });
         })
         .catch((erreur) => suite(ErreurMAC.cree('Accède au profil', erreur)));

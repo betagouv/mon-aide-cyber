@@ -9,6 +9,7 @@ export type DonneesJetonMAC = {
 
 export type JwtMACPayload = JwtPayload & {
   identifiant: crypto.UUID;
+  estProconnect: boolean;
 };
 
 export interface GestionnaireDeJeton {

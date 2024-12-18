@@ -2,7 +2,6 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { Express } from 'express';
 import testeurIntegration from '../testeurIntegration';
 import { executeRequete } from '../executeurRequete';
-import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { Profil } from '../../../src/api/representateurs/profil/Profil';
 import {
   unAidant,
@@ -10,6 +9,7 @@ import {
   unUtilisateur,
 } from '../../constructeurs/constructeursAidantUtilisateur';
 import { Utilisateur } from '../../../src/authentification/Utilisateur';
+import { Aidant } from '../../../src/espace-aidant/Aidant';
 
 describe('le serveur MAC sur les routes /api/profil', () => {
   const testeurMAC = testeurIntegration();
@@ -26,72 +26,91 @@ describe('le serveur MAC sur les routes /api/profil', () => {
   });
 
   describe('quand une requête GET est reçue sur /', () => {
-    it("retourne les informations le l'Aidant", async () => {
-      process.env.FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL =
-        'true';
+    describe("Lorsque l'utilisateur existe", async () => {
+      let aidantConnecte: Aidant;
 
-      const { utilisateur, aidant } =
-        await unCompteAidantRelieAUnCompteUtilisateur({
-          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-          entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
-          constructeurAidant: unAidant(),
+      beforeEach(async () => {
+        const { utilisateur, aidant } =
+          await unCompteAidantRelieAUnCompteUtilisateur({
+            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+            entrepotAidant: testeurMAC.entrepots.aidants(),
+            constructeurUtilisateur: unUtilisateur(),
+            constructeurAidant: unAidant(),
+          });
+        aidantConnecte = aidant;
+
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          utilisateur
+        );
+
+        await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+        testeurMAC.gestionnaireDeJeton.verifie = () => ({
+          identifiant: utilisateur.identifiant,
+          estProconnect: false,
         });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
-      );
 
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/profil/`,
-        donneesServeur.portEcoute
-      );
-
-      expect(reponse.statusCode).toBe(200);
-      expect(
-        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
-      ).toBe(true);
-      expect(await reponse.json()).toStrictEqual<Profil>({
-        nomPrenom: aidant.nomPrenom,
-        dateSignatureCGU: FournisseurHorloge.formateDate(
-          utilisateur.dateSignatureCGU!
-        ).date,
-        consentementAnnuaire: aidant.consentementAnnuaire,
-        identifiantConnexion: aidant.email,
-        liens: {
-          'lancer-diagnostic': {
-            url: '/api/diagnostic',
-            methode: 'POST',
-          },
-          'afficher-tableau-de-bord': {
-            methode: 'GET',
-            url: '/api/espace-aidant/tableau-de-bord',
-          },
-          'se-deconnecter': { url: '/api/token', methode: 'DELETE' },
-          'modifier-mot-de-passe': {
-            url: '/api/profil/modifier-mot-de-passe',
-            methode: 'POST',
-          },
-          'modifier-profil': {
-            url: '/api/profil',
-            methode: 'PATCH',
-          },
-        },
+        testeurMAC.recuperateurDeCookies = () =>
+          btoa(
+            JSON.stringify({
+              token: JSON.stringify({
+                identifiant: utilisateur.identifiant,
+              }),
+            })
+          );
+        donneesServeur = testeurMAC.initialise();
       });
-    });
 
-    it('Vérifie la signature des CGU', async () => {
-      await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/profil/`,
-        donneesServeur.portEcoute
-      );
+      it("retourne les informations le l'Aidant", async () => {
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          `/api/profil/`,
+          donneesServeur.portEcoute
+        );
 
-      expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
-        true
-      );
+        expect(reponse.statusCode).toBe(200);
+        expect(
+          testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
+        ).toBe(true);
+        expect(await reponse.json()).toStrictEqual<Profil>({
+          nomPrenom: aidantConnecte.nomPrenom,
+          dateSignatureCGU: expect.any(String),
+          consentementAnnuaire: aidantConnecte.consentementAnnuaire,
+          identifiantConnexion: aidantConnecte.email,
+          liens: {
+            'lancer-diagnostic': {
+              url: '/api/diagnostic',
+              methode: 'POST',
+            },
+            'afficher-tableau-de-bord': {
+              methode: 'GET',
+              url: '/api/espace-aidant/tableau-de-bord',
+            },
+            'se-deconnecter': { url: '/api/token', methode: 'DELETE' },
+            'modifier-mot-de-passe': {
+              url: '/api/profil/modifier-mot-de-passe',
+              methode: 'POST',
+            },
+            'modifier-profil': {
+              url: '/api/profil',
+              methode: 'PATCH',
+            },
+          },
+        });
+      });
+
+      it('Vérifie la signature des CGU', async () => {
+        await executeRequete(
+          donneesServeur.app,
+          'GET',
+          `/api/profil/`,
+          donneesServeur.portEcoute
+        );
+
+        expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
+          true
+        );
+      });
     });
 
     it("ne peut pas accéder au profil si l'aidant n'existe pas", async () => {
@@ -105,6 +124,75 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       expect(reponse.statusCode).toBe(404);
       expect(await reponse.json()).toStrictEqual({
         message: "Le profil Aidant demandé n'existe pas.",
+      });
+    });
+  });
+
+  describe('Dans le cadre de la connexion proconnect', () => {
+    const testeurMAC = testeurIntegration();
+    let donneesServeur: { portEcoute: number; app: Express };
+    let aidantConnecte: Aidant;
+
+    beforeEach(async () => {
+      const { utilisateur, aidant } =
+        await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+          constructeurAidant: unAidant(),
+        });
+      aidantConnecte = aidant;
+
+      await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
+
+      testeurMAC.gestionnaireDeJeton.verifie = () => ({
+        identifiant: utilisateur.identifiant,
+        estProconnect: true,
+      });
+
+      testeurMAC.recuperateurDeCookies = () =>
+        btoa(
+          JSON.stringify({
+            token: JSON.stringify({
+              identifiant: utilisateur.identifiant,
+            }),
+          })
+        );
+      donneesServeur = testeurMAC.initialise();
+    });
+
+    it("S'assure qu'un utilisateur connecté avec Proconnect ne peut pas modifier son mot de passe", async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/profil/`,
+        donneesServeur.portEcoute
+      );
+
+      expect(await reponse.json()).toStrictEqual<Profil>({
+        nomPrenom: aidantConnecte.nomPrenom,
+        dateSignatureCGU: expect.any(String),
+        consentementAnnuaire: aidantConnecte.consentementAnnuaire,
+        identifiantConnexion: aidantConnecte.email,
+        liens: {
+          'lancer-diagnostic': {
+            url: '/api/diagnostic',
+            methode: 'POST',
+          },
+          'afficher-tableau-de-bord': {
+            methode: 'GET',
+            url: '/api/espace-aidant/tableau-de-bord',
+          },
+          'se-deconnecter': { url: '/api/token', methode: 'DELETE' },
+          'modifier-profil': {
+            url: '/api/profil',
+            methode: 'PATCH',
+          },
+        },
       });
     });
   });

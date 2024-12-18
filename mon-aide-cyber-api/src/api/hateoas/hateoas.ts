@@ -101,14 +101,6 @@ class ConstructeurActionsHATEOAS {
     this.lancerDiagnostic().afficherMesInformations();
     return this;
   }
-
-  public accedeAuProfil(): ConstructeurActionsHATEOAS {
-    return this.lancerDiagnostic()
-      .modifierProfil()
-      .modifierMotDePasse()
-      .seDeconnecter();
-  }
-
   public demandeAide() {
     this.actions.set('demander-aide', {
       url: '/api/demandes/etre-aide',
@@ -277,14 +269,6 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  private modifierMotDePasse(): ConstructeurActionsHATEOAS {
-    this.actions.set('modifier-mot-de-passe', {
-      url: '/api/profil/modifier-mot-de-passe',
-      methode: 'POST',
-    });
-    return this;
-  }
-
   private seDeconnecter(): ConstructeurActionsHATEOAS {
     this.actions.set('se-deconnecter', {
       url: '/api/token',
@@ -300,19 +284,6 @@ class ConstructeurActionsHATEOAS {
       url: `/api/diagnostic/${idDiagnostic}/restitution`,
       methode: 'GET',
     });
-    return this;
-  }
-
-  private modifierProfil(): ConstructeurActionsHATEOAS {
-    if (
-      process.env.FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL ===
-      'true'
-    ) {
-      this.actions.set('modifier-profil', {
-        url: '/api/profil',
-        methode: 'PATCH',
-      });
-    }
     return this;
   }
 

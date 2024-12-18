@@ -66,5 +66,6 @@ export const jwtPayload = (
   const sessionDecodee = JSON.parse(
     Buffer.from(cookies.session, 'base64').toString()
   );
+
   return gestionnaireDeJeton.verifie(sessionDecodee.token);
 };
