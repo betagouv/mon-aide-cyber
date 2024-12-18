@@ -195,10 +195,10 @@ const erreursGerees: Map<
       reponse
     ) => {
       consignateur.consigne(erreur);
-      construisReponse(reponse, HTTP_NON_AUTORISE, {
-        message: 'Erreur d’authentification',
-        liens: {},
-      });
+
+      reponse.redirect(
+        '/connexion?erreurConnexion=Un problème est survenu lors de la connexion à ProConnect !'
+      );
     },
   ],
 ]);

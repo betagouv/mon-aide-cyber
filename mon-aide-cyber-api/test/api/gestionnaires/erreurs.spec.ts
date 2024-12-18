@@ -11,7 +11,6 @@ import { ErreurModificationProfil } from '../../../src/api/aidant/routesAPIProfi
 import { ErreurAuthentification } from '../../../src/authentification/Utilisateur';
 import { ErreurCreationEspaceAidant } from '../../../src/espace-aidant/Aidant';
 import { ErreurProConnectApresAuthentification } from '../../../src/api/pro-connect/routeProConnect';
-import { ReponseHATEOASEnErreur } from '../../../src/api/hateoas/hateoas';
 import { liensPublicsAttendus } from '../hateoas/liensAttendus';
 
 describe("Gestionnaire d'erreur", () => {
@@ -32,6 +31,9 @@ describe("Gestionnaire d'erreur", () => {
       return corpsRecu;
     },
     statusCode: codeRecu,
+    redirect(__url: string) {
+      this.statusCode = 302;
+    },
   } as Response;
   const fausseSuite: NextFunction = (erreur: any) => {
     erreurRecue = erreur;
@@ -255,11 +257,7 @@ describe("Gestionnaire d'erreur", () => {
       );
 
       expect(consignateur.tous()).toHaveLength(1);
-      expect(fausseReponse.statusCode).toStrictEqual(401);
-      expect(fausseReponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
-        message: 'Erreur d’authentification',
-        liens: {},
-      });
+      expect(fausseReponse.statusCode).toStrictEqual(302);
     });
   });
 

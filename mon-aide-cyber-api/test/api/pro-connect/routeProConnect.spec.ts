@@ -1,4 +1,4 @@
-import { describe, beforeEach, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from '../executeurRequete';
@@ -102,7 +102,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       ).toStrictEqual('abc');
     });
 
-    it('Si l’utilisateur n’est pas connu, on envoie un message disant qu’il n’a pas de compte', async () => {
+    it('Si l’utilisateur n’est pas connu, on le redirige vers la mire de connexion', async () => {
       testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur = () =>
         Promise.resolve(desInformationsUtilisateur().construis());
 
@@ -113,11 +113,12 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         donneesServeur.portEcoute
       );
 
-      expect(reponse.statusCode).toStrictEqual(401);
-      expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
-        message: 'Vous n’avez pas de compte enregistré sur MonAideCyber',
-        liens: {},
-      });
+      expect(reponse.statusCode).toStrictEqual(302);
+      expect(reponse.headers['location']).toStrictEqual(
+        encodeURI(
+          '/connexion?erreurConnexion=Vous n’avez pas de compte enregistré sur MonAideCyber'
+        )
+      );
     });
 
     it('Si la présence du cookie ProConnectInfo n’est pas validée, on envoie un message d’erreur d’authentification', async () => {
@@ -138,7 +139,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       });
     });
 
-    it('Si une erreur est rencontrée lors de l’échange avec ProConnect, on envoie un message d’erreur d’authentification', async () => {
+    it('Si une erreur est rencontrée lors de l’échange avec ProConnect, on redirige vers la mire de connexion', async () => {
       testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur = () => {
         throw new Error('Erreur avec ProConnect');
       };
@@ -151,11 +152,12 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         donneesServeur.portEcoute
       );
 
-      expect(reponse.statusCode).toStrictEqual(401);
-      expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
-        message: 'Erreur d’authentification',
-        liens: {},
-      });
+      expect(reponse.statusCode).toStrictEqual(302);
+      expect(reponse.headers['location']).toStrictEqual(
+        encodeURI(
+          '/connexion?erreurConnexion=Un problème est survenu lors de la connexion à ProConnect !'
+        )
+      );
     });
 
     describe("Dans le cas d'un gendarme", () => {
