@@ -126,10 +126,10 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
           });
           return redirige(idToken, compte.identifiant);
         }
-        return reponse.status(401).json({
-          message: 'Vous n’avez pas de compte enregistré sur MonAideCyber',
-          liens: {},
-        });
+
+        return reponse.redirect(
+          '/connexion?erreurConnexion=Vous n’avez pas de compte enregistré sur MonAideCyber'
+        );
       } catch (e: unknown | Error) {
         return suite(
           ErreurMAC.cree(

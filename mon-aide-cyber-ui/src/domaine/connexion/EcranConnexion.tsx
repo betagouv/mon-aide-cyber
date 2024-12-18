@@ -6,10 +6,13 @@ import illustrationSecuritePostesSvg from '../../../public/images/illustration-s
 import './ecran-connexion.scss';
 import { TypographieH2 } from '../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
 import Button from '../../composants/atomes/Button/Button.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Toast } from '../../composants/communs/Toasts/Toast.tsx';
 
 export const EcranConnexion = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const erreursRetourPostLogin = searchParams?.get('erreurConnexion');
 
   const [informationAEteAfficheeUneFois, setInformationAEteAfficheeUneFois] =
     useState(false);
@@ -48,6 +51,12 @@ export const EcranConnexion = () => {
               Qu’est-ce que ProConnect ?
             </a>
           </p>
+        </div>
+      ) : null}
+
+      {erreursRetourPostLogin ? (
+        <div>
+          <Toast message={erreursRetourPostLogin} type="ERREUR" />
         </div>
       ) : null}
 
