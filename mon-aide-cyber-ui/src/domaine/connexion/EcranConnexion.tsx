@@ -1,83 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
-import { MoteurDeLiens, ROUTE_AIDANT } from '../MoteurDeLiens.ts';
-import { FormulaireAuthentification } from '../authentification/FormulaireAuthentification.tsx';
+import { useState } from 'react';
 import illustrationSecuritePostesSvg from '../../../public/images/illustration-securite-des-postes.svg';
 import './ecran-connexion.scss';
-import { TypographieH2 } from '../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
-import Button from '../../composants/atomes/Button/Button.tsx';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Toast } from '../../composants/communs/Toasts/Toast.tsx';
+import { FormulaireConnexion } from './composants/FormulaireConnexion.tsx';
 
 export const EcranConnexion = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const erreursRetourPostLogin = searchParams?.get('erreurConnexion');
-
   const [informationAEteAfficheeUneFois, setInformationAEteAfficheeUneFois] =
     useState(false);
-
-  const navigationMAC = useNavigationMAC();
-
-  useEffect(() => {
-    const moteurDeLiens = new MoteurDeLiens(navigationMAC.etat);
-    moteurDeLiens.trouve('creer-espace-aidant', () =>
-      navigationMAC.navigue(
-        `${ROUTE_AIDANT}/finalise-creation-espace-aidant`,
-        navigationMAC.etat
-      )
-    );
-  }, [navigationMAC.etat]);
-
-  const lien = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
-    'se-connecter-avec-pro-connect'
-  );
-
-  const formulaireConnexion = (
-    <>
-      {lien ? (
-        <div className="fr-connect-group">
-          <a className="fr-connect" href={lien.url}>
-            <span className="fr-connect__login">S’identifier avec</span>{' '}
-            <span className="fr-connect__brand">ProConnect</span>
-          </a>
-          <p>
-            <a
-              href="https://proconnect.gouv.fr/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Qu’est-ce que ProConnect ? - nouvelle fenêtre"
-            >
-              Qu’est-ce que ProConnect ?
-            </a>
-          </p>
-        </div>
-      ) : null}
-
-      {erreursRetourPostLogin ? (
-        <div>
-          <Toast message={erreursRetourPostLogin} type="ERREUR" />
-        </div>
-      ) : null}
-
-      <div className="texte-centre">
-        <TypographieH2>Connectez-vous</TypographieH2>
-        <p>à votre espace Aidant</p>
-      </div>
-      <FormulaireAuthentification />
-      <br />
-      <div className="texte-centre">
-        <p>Vous n’êtes pas encore Aidant MonAideCyber ?</p>
-        <Button
-          type="button"
-          variant="link"
-          onClick={() => navigate('/devenir-aidant')}
-        >
-          S&apos;inscrire
-        </Button>
-      </div>
-    </>
-  );
 
   const information = (
     <>
@@ -141,9 +69,11 @@ export const EcranConnexion = () => {
       <div className="formulaire-colonne-gauche">
         <div className="fr-container">
           {import.meta.env['VITE_INFORMATION_A_AFFICHER'] === 'true' &&
-          !informationAEteAfficheeUneFois
-            ? information
-            : formulaireConnexion}
+          !informationAEteAfficheeUneFois ? (
+            information
+          ) : (
+            <FormulaireConnexion />
+          )}
         </div>
       </div>
       <div className="fond-clair-mac icone-colonne-droite">
