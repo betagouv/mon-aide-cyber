@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import { InformationsContexte } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
-import { UtilisateurAuthentifie } from '../../authentification/Utilisateur';
 import {
   ContexteSpecifique,
   contextesUtilisateur,
@@ -71,15 +70,7 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  public postAuthentification(
-    utilisateurAuthentifie: UtilisateurAuthentifie
-  ): ConstructeurActionsHATEOAS {
-    // La création de l’espace Aidant est maintenant obsolète
-    // Pas besoin de la signature
-    if (!utilisateurAuthentifie.dateSignatureCGU) {
-      return this.creerEspaceAidant();
-    }
-
+  public postAuthentification(): ConstructeurActionsHATEOAS {
     return this.lancerDiagnostic().afficherMesInformations();
   }
 

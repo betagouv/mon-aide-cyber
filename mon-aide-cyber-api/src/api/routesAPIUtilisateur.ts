@@ -85,16 +85,8 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         .lis(requete.identifiantUtilisateurCourant!)
         .then((aidant) => {
           const actionsHATEOAS = constructeurActionsHATEOAS();
-          // La création de l’espace Aidant est maintenant obsolète
-          // Pas besoin de la signature
           reponse.status(200).json({
-            ...(aidant.dateSignatureCGU
-              ? {
-                  ...actionsHATEOAS
-                    .accedeAuxInformationsUtilisateur()
-                    .construis(),
-                }
-              : { ...actionsHATEOAS.creerEspaceAidant().construis() }),
+            ...actionsHATEOAS.accedeAuxInformationsUtilisateur().construis(),
             nomPrenom: aidant.nomPrenom,
           });
         })

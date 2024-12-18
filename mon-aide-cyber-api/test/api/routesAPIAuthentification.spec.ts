@@ -129,43 +129,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           },
         });
       });
-
-      describe("dans le cas où un utilisateur n'a pas encore d'espace aidant", () => {
-        it("renvoie un lien pour créer l'espace Aidant", async () => {
-          await testeurMAC.entrepots
-            .utilisateurs()
-            .persiste(
-              unUtilisateur()
-                .avecUnNomPrenom('Jean Dupont')
-                .avecUnIdentifiantDeConnexion('jean.dupont@email.com')
-                .avecUnMotDePasse('mon_Mot-D3p4sse')
-                .sansCGUSignees()
-                .construis()
-            );
-
-          const reponse = await executeRequete(
-            donneesServeur.app,
-            'POST',
-            '/api/token',
-            donneesServeur.portEcoute,
-            {
-              identifiant: 'jean.dupont@email.com',
-              motDePasse: 'mon_Mot-D3p4sse',
-            }
-          );
-
-          expect(reponse.statusCode).toBe(201);
-          expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
-            nomPrenom: 'Jean Dupont',
-            liens: {
-              'creer-espace-aidant': {
-                url: '/api/espace-aidant/cree',
-                methode: 'POST',
-              },
-            },
-          });
-        });
-      });
     });
 
     describe('Quand une requête DELETE est reçue', () => {
