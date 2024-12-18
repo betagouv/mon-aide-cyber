@@ -45,9 +45,7 @@ export const routesAPIAuthentification = (
           requete.session!.token = utilisateurAuthentifie.jeton;
           reponse.status(201).json({
             nomPrenom: utilisateurAuthentifie.nomPrenom,
-            ...constructeurActionsHATEOAS()
-              .postAuthentification(utilisateurAuthentifie)
-              .construis(),
+            ...constructeurActionsHATEOAS().postAuthentification().construis(),
           });
         })
         .catch((erreur) => suite(erreur));

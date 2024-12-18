@@ -70,31 +70,6 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
       });
     });
 
-    it("retourne l'utilisateur connecté avec le lien de création d'espace Aidant", async () => {
-      const utilisateur = unUtilisateur().sansCGUSignees().construis();
-      await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
-      adaptateurDeVerificationDeSession.utilisateurConnecte(utilisateur);
-
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/utilisateur/`,
-        donneesServeur.portEcoute
-      );
-
-      expect(reponse.statusCode).toBe(200);
-      expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
-      expect(await reponse.json()).toStrictEqual({
-        nomPrenom: utilisateur.nomPrenom,
-        liens: {
-          'creer-espace-aidant': {
-            url: '/api/espace-aidant/cree',
-            methode: 'POST',
-          },
-        },
-      });
-    });
-
     it("retourne une erreur HTTP 404 si l'utilisateur n'est pas connu", async () => {
       adaptateurDeVerificationDeSession.reinitialise();
       const reponse = await executeRequete(
