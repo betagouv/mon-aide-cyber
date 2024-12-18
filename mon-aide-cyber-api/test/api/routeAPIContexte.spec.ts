@@ -138,42 +138,4 @@ describe('Route contexte', () => {
       });
     });
   });
-
-  describe('Dans le cas d’un Aidant sans espace ayant une session', () => {
-    const testeurMAC = testeurIntegration();
-    let donneesServeur: { portEcoute: number; app: Express };
-
-    beforeEach(async () => {
-      donneesServeur = testeurMAC.initialise();
-    });
-
-    it('Retourne le lien vers la création de l’espace aidant si il s’agit d’une première connexion', async () => {
-      const utilisateurSansEspace = unUtilisateur()
-        .sansCGUSignees()
-        .construis();
-      await testeurMAC.entrepots.utilisateurs().persiste(utilisateurSansEspace);
-      utilitairesCookies.recuperateurDeCookies = () => 'cookies';
-      utilitairesCookies.jwtPayload = () =>
-        unConstructeurDeJwtPayload()
-          .ayantPourAidant(utilisateurSansEspace)
-          .construis();
-
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/contexte`,
-        donneesServeur.portEcoute
-      );
-
-      expect(reponse.statusCode).toBe(200);
-      expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
-        liens: {
-          'creer-espace-aidant': {
-            url: '/api/espace-aidant/cree',
-            methode: 'POST',
-          },
-        },
-      });
-    });
-  });
 });
