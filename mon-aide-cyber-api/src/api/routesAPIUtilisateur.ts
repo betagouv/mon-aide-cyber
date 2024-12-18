@@ -86,13 +86,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         .then((aidant) => {
           const actionsHATEOAS = constructeurActionsHATEOAS();
           reponse.status(200).json({
-            ...(aidant.dateSignatureCGU
-              ? {
-                  ...actionsHATEOAS
-                    .accedeAuxInformationsUtilisateur()
-                    .construis(),
-                }
-              : { ...actionsHATEOAS.creerEspaceAidant().construis() }),
+            ...actionsHATEOAS.accedeAuxInformationsUtilisateur().construis(),
             nomPrenom: aidant.nomPrenom,
           });
         })
