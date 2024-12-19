@@ -30,6 +30,10 @@ export const FormulaireConnexion = () => {
 
   return (
     <>
+      <div className="texte-centre">
+        <TypographieH2>Connectez-vous</TypographieH2>
+      </div>
+      <br />
       {lien ? (
         <div className="fr-connect-group texte-centre">
           <a className="fr-connect" href={lien.url}>
@@ -56,9 +60,9 @@ export const FormulaireConnexion = () => {
       ) : null}
 
       <div className="texte-centre">
-        <TypographieH2>Connectez-vous</TypographieH2>
-        <p>à votre espace Aidant</p>
+        <hr className="separation-agent-connect" />
       </div>
+
       <FormulaireAuthentification />
       <br />
       <div className="texte-centre">
