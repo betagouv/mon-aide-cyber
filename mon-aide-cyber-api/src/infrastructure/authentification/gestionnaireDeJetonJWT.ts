@@ -10,12 +10,12 @@ import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
 export class GestionnaireDeJetonJWT implements GestionnaireDeJeton {
   constructor(private readonly clef: string) {}
 
-  verifie(jeton: string): JwtMACPayload {
+  verifie(jeton: string, jetonProconnect?: string): JwtMACPayload {
     const payload: JwtPayload = jwt.verify(jeton, this.clef) as JwtPayload;
     return {
       ...payload,
       identifiant: payload.identifiant,
-      estProconnect: false,
+      estProconnect: !!jetonProconnect,
     };
   }
 
