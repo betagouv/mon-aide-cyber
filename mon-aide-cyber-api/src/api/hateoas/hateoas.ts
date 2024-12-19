@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import { InformationsContexte } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
-import { UtilisateurAuthentifie } from '../../authentification/Utilisateur';
 import {
   ContexteSpecifique,
   contextesUtilisateur,
@@ -71,13 +70,7 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  public postAuthentification(
-    utilisateurAuthentifie: UtilisateurAuthentifie
-  ): ConstructeurActionsHATEOAS {
-    if (!utilisateurAuthentifie.dateSignatureCGU) {
-      return this.creerEspaceAidant();
-    }
-
+  public postAuthentification(): ConstructeurActionsHATEOAS {
     return this.lancerDiagnostic().afficherMesInformations();
   }
 

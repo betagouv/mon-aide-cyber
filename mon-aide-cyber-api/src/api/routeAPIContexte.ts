@@ -29,13 +29,9 @@ export const routeAPIContexte = (configuration: ConfigurationServeur) => {
         return entrepots
           .utilisateurs()
           .lis(jwt.identifiant)
-          .then((utilisateur) =>
+          .then(() =>
             reponse.json({
-              ...(utilisateur.dateSignatureCGU
-                ? {
-                    ...actionsHATEOAS.afficherTableauDeBord().construis(),
-                  }
-                : { ...actionsHATEOAS.creerEspaceAidant().construis() }),
+              ...actionsHATEOAS.afficherTableauDeBord().construis(),
             })
           );
       }
