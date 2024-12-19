@@ -67,5 +67,6 @@ export const jwtPayload = (
     Buffer.from(cookies.session, 'base64').toString()
   );
 
-  return gestionnaireDeJeton.verifie(sessionDecodee.token);
+  const jetonProconnect = sessionDecodee.ProConnectIdToken;
+  return gestionnaireDeJeton.verifie(sessionDecodee.token, jetonProconnect);
 };

@@ -13,7 +13,7 @@ export type JwtMACPayload = JwtPayload & {
 };
 
 export interface GestionnaireDeJeton {
-  verifie(jeton: string): JwtMACPayload;
+  verifie(jeton: string, jetonProconnect?: string): JwtMACPayload;
 
   genereJeton(donnee: DonneesJetonMAC): Jeton;
 }

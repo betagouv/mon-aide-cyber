@@ -8,6 +8,7 @@ import {
 import { constructeurParametresAPI } from '../../../../../../fournisseurs/api/ConstructeurParametresAPI';
 import { Lien } from '../../../../../Lien';
 import { MACAPIType } from '../../../../../../fournisseurs/api/useMACAPI.ts';
+import Button from '../../../../../../composants/atomes/Button/Button.tsx';
 
 type CorpsModificationMotDePasse = {
   ancienMotDePasse: string;
@@ -18,10 +19,12 @@ type CorpsModificationMotDePasse = {
 type ProprietesFormulaireModificationMotDePasse = {
   lienModificationMotDePasse: Lien;
   macAPI: MACAPIType;
+  inactif?: boolean;
 };
 export const FormulaireModificationMotDePasse = ({
   lienModificationMotDePasse,
   macAPI,
+  inactif,
 }: ProprietesFormulaireModificationMotDePasse) => {
   const [
     modificationMotDePasseTransmise,
@@ -75,6 +78,8 @@ export const FormulaireModificationMotDePasse = ({
     setModificationMotDePasseATransmettre(true);
   }, []);
 
+  if (inactif) return null;
+
   return (
     <form onSubmit={modifieLeMotDePasse}>
       <fieldset className="fr-fieldset">
@@ -99,13 +104,13 @@ export const FormulaireModificationMotDePasse = ({
             })}
           />
           <div className="fr-grid-row fr-grid-row--right fr-mt-3w">
-            <button
+            <Button
+              disabled={inactif}
               type="submit"
               key="modification-mot-de-passe"
-              className="fr-btn bouton-mac bouton-mac-primaire"
             >
               Modifier le mot de passe
-            </button>
+            </Button>
           </div>
         </div>
         <div className="fr-mt-2w">{retourModificationMotDePasse}</div>

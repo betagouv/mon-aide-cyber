@@ -5,9 +5,11 @@ import { useNavigationMAC } from '../../../../fournisseurs/hooks';
 import { ROUTE_AIDANT } from '../../../MoteurDeLiens';
 import { FormulaireInformationsAidant } from './composants/formulaire-informations-aidant/FormulaireInformationsAidant';
 import { FormulaireModificationMotDePasse } from './composants/formulaire-modification-mot-de-passe/FormulaireModificationMotDePasse';
+import { useMoteurDeLiens } from '../../../../hooks/useMoteurDeLiens.ts';
 
 export const EcranMesInformations = () => {
   const navigationMAC = useNavigationMAC();
+  const { accedeALaRessource } = useMoteurDeLiens('modifier-mot-de-passe');
 
   const afficherTableauDeBord = useCallback(() => {
     navigationMAC.navigue(
@@ -33,15 +35,21 @@ export const EcranMesInformations = () => {
               </button>
             </div>
             <FormulaireInformationsAidant macAPI={useMACAPI()} />
-            <hr />
-            <div>
-              <h4>Modifier son mot de passe</h4>
-            </div>
+            {accedeALaRessource ? (
+              <>
+                <hr />
+                <div>
+                  <h4>Modifier son mot de passe</h4>
+                </div>
+              </>
+            ) : null}
+
             <FormulaireModificationMotDePasse
               lienModificationMotDePasse={
                 navigationMAC.etat['modifier-mot-de-passe']
               }
               macAPI={useMACAPI()}
+              inactif={!accedeALaRessource}
             />
           </div>
         </div>
