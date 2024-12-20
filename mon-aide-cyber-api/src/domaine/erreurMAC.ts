@@ -19,7 +19,8 @@ export type Contexte =
   | 'Modifie le profil Aidant'
   | 'Modifie les préférences de l’Aidant'
   | "Recherche d'un Aidé"
-  | 'Réinitialisation mot de passe';
+  | 'Réinitialisation mot de passe'
+  | 'Valide les CGU';
 
 export class ErreurMAC<T extends Error> extends Error {
   private constructor(

@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import { EntrepotAidant } from './Aidant';
 import { AidantDTO, ServiceAidant } from './ServiceAidant';
+import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
 class ServiceAidantMAC implements ServiceAidant {
   constructor(private readonly entrepotAidant: EntrepotAidant) {}
@@ -29,6 +30,13 @@ class ServiceAidantMAC implements ServiceAidant {
         ...(aidant.siret && { siret: aidant.siret }),
       }))
       .catch(() => undefined);
+  }
+
+  valideLesCGU(identifiantAidant: crypto.UUID): Promise<void> {
+    return this.entrepotAidant.lis(identifiantAidant).then(async (aidant) => {
+      aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
+      return await this.entrepotAidant.persiste(aidant);
+    });
   }
 
   private formateLeNom(nomPrenom: string): string {
