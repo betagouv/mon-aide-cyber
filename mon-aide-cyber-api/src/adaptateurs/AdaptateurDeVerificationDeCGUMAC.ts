@@ -1,9 +1,13 @@
 import { RequestHandler, Response } from 'express';
-import { AdaptateurDeVerificationDeCGU } from './AdaptateurDeVerificationDeCGU';
+import {
+  AdaptateurDeVerificationDeCGU,
+  UtilisateurNonTrouve,
+} from './AdaptateurDeVerificationDeCGU';
 import { Entrepots } from '../domaine/Entrepots';
 import { RequeteUtilisateur } from '../api/routesAPI';
 import { NextFunction } from 'express-serve-static-core';
 import { constructeurActionsHATEOAS } from '../api/hateoas/hateoas';
+import { unServiceAidant } from '../espace-aidant/ServiceAidantMAC';
 
 export class AdaptateurDeVerificationDeCGUMAC
   implements AdaptateurDeVerificationDeCGU
@@ -16,15 +20,20 @@ export class AdaptateurDeVerificationDeCGUMAC
       reponse: Response,
       suite: NextFunction
     ) => {
-      // CQRS : Ecrire un service capable d’aller chercher l’info
-      // la date de signature CGU est utilisée pour rediriger vers la création de l’espace Aidant devenue obsolète
-      const utilisateur = await this.entrepots
-        .utilisateurs()
-        .lis(requete.identifiantUtilisateurCourant!);
-      if (!utilisateur.dateSignatureCGU) {
+      const aidant = await unServiceAidant(
+        this.entrepots.aidants()
+      ).parIdentifiant(requete.identifiantUtilisateurCourant!);
+      if (!aidant) {
+        throw new UtilisateurNonTrouve();
+      }
+      if (!aidant.dateSignatureCGU) {
         reponse
           .status(302)
-          .json(constructeurActionsHATEOAS().creerEspaceAidant().construis());
+          .json(
+            constructeurActionsHATEOAS()
+              .pour({ contexte: 'valider-signature-cgu' })
+              .construis()
+          );
       } else {
         suite();
       }

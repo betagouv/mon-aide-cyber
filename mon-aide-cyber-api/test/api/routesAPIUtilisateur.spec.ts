@@ -22,7 +22,7 @@ import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/a
 import { liensPublicsAttendus } from './hateoas/liensAttendus';
 import { ReponseHATEOASEnErreur } from '../../src/api/hateoas/hateoas';
 
-describe('le serveur MAC sur les routes /api/utilisateur', () => {
+describe('Le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { portEcoute: number; app: Express };
   let adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
@@ -37,11 +37,15 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
     testeurMAC.arrete();
   });
 
-  describe('quand une requête GET est reçue sur /', () => {
+  describe('Quand une requête GET est reçue sur /', () => {
     beforeEach(() => adaptateurDeVerificationDeSession.reinitialise());
-    it("retourne l'utilisateur connecté", async () => {
-      const utilisateur = unUtilisateur().construis();
-      await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+    it("Retourne l'utilisateur connecté", async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
       adaptateurDeVerificationDeSession.utilisateurConnecte(utilisateur);
 
       const reponse = await executeRequete(
@@ -71,6 +75,35 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
           'afficher-preferences': {
             url: '/api/aidant/preferences',
             methode: 'GET',
+          },
+        },
+      });
+    });
+
+    it('Retourne l’action valider signature CGU si l’utilisateur ne les a pas signées', async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      adaptateurDeVerificationDeSession.utilisateurConnecte(utilisateur);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/utilisateur/`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
+      expect(await reponse.json()).toStrictEqual({
+        nomPrenom: utilisateur.nomPrenom,
+        liens: {
+          'valider-signature-cgu': {
+            methode: 'POST',
+            url: '/api/utilisateur/valider-signature-cgu',
           },
         },
       });

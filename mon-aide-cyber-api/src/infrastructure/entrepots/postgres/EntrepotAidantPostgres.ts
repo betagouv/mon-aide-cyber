@@ -9,6 +9,7 @@ import {
   EntrepotAidant,
   typesEntites,
 } from '../../../espace-aidant/Aidant';
+import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 
 type PreferencesDTO = {
   secteursActivite: string[];
@@ -21,6 +22,7 @@ type DonneesAidant = {
   nomPrenom: string;
   preferences: PreferencesDTO;
   consentementAnnuaire: boolean;
+  dateSignatureCGU?: string;
 };
 
 type AidantDTO = DTO & {
@@ -62,6 +64,11 @@ export class EntrepotAidantPostgres
         ),
       },
       consentementAnnuaire: dto.donnees.consentementAnnuaire,
+      ...(dto.donnees.dateSignatureCGU && {
+        dateSignatureCGU: FournisseurHorloge.enDate(
+          dto.donnees.dateSignatureCGU
+        ),
+      }),
     };
   }
 
@@ -79,6 +86,9 @@ export class EntrepotAidantPostgres
           typesEntites: entite.preferences.typesEntites.map((t) => t.nom),
         },
         consentementAnnuaire: entite.consentementAnnuaire,
+        ...(entite.dateSignatureCGU && {
+          dateSignatureCGU: entite.dateSignatureCGU.toISOString(),
+        }),
       },
     };
   }
