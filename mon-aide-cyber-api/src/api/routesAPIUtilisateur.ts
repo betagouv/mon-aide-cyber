@@ -3,7 +3,11 @@ import express, { Request, Response } from 'express';
 import { RequeteUtilisateur } from './routesAPI';
 import * as core from 'express-serve-static-core';
 import { NextFunction } from 'express-serve-static-core';
-import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
+import {
+  constructeurActionsHATEOAS,
+  ReponseHATEOAS,
+  ReponseHATEOASEnErreur,
+} from './hateoas/hateoas';
 import { ErreurMAC } from '../domaine/erreurMAC';
 import { ServiceUtilisateur } from '../authentification/ServiceUtilisateur';
 import { validateursDeCreationDeMotDePasse } from './validateurs/motDePasse';
@@ -12,12 +16,14 @@ import {
   FieldValidationError,
   Meta,
   Result,
+  body,
   validationResult,
 } from 'express-validator';
 import { EntrepotUtilisateur } from '../authentification/Utilisateur';
 import { ServiceDeChiffrement } from '../securite/ServiceDeChiffrement';
 import { CommandeReinitialisationMotDePasse } from '../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 import { adaptateurConfigurationLimiteurTraffic } from './adaptateurLimiteurTraffic';
+import { unServiceAidant } from '../espace-aidant/ServiceAidantMAC';
 
 type CorpsRequeteReinitialiserMotDePasse = core.ParamsDictionary & {
   token: string;
@@ -157,6 +163,42 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         })
         .then(() => reponse.status(204).send())
         .catch((erreur) => suite(erreur));
+    }
+  );
+
+  routes.post(
+    '/valider-signature-cgu',
+    session.verifie('Valide les CGU'),
+    express.json(),
+    body('cguValidees')
+      .custom((value: boolean) => value)
+      .withMessage('Veuillez valider les CGU'),
+    async (
+      requete: RequeteUtilisateur,
+      reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>
+    ) => {
+      const resultatsValidation: Result<FieldValidationError> =
+        validationResult(requete) as Result<FieldValidationError>;
+      if (!resultatsValidation.isEmpty()) {
+        return reponse.status(422).json({
+          message: resultatsValidation
+            .array()
+            .map((resultatValidation) => resultatValidation.msg)
+            .join(', '),
+          ...constructeurActionsHATEOAS()
+            .pour({ contexte: 'valider-signature-cgu' })
+            .construis(),
+        });
+      }
+      return unServiceAidant(entrepots.aidants())
+        .valideLesCGU(requete.identifiantUtilisateurCourant!)
+        .then(() =>
+          reponse.status(200).json({
+            ...constructeurActionsHATEOAS()
+              .pour({ contexte: 'aidant:acceder-au-profil' })
+              .construis(),
+          })
+        );
     }
   );
 
