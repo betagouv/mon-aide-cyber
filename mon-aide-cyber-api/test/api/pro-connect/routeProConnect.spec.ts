@@ -8,6 +8,7 @@ import { fakerFR } from '@faker-js/faker';
 import { ReponseHATEOASEnErreur } from '../../../src/api/hateoas/hateoas';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
+import { utilitairesCookies } from '../../../src/adaptateurs/utilitairesDeCookies';
 
 const enObjet = <T extends { [clef: string]: string }>(cookie: string): T =>
   cookie.split('; ').reduce((acc: T, v: string) => {
@@ -69,7 +70,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
     beforeEach(async () => {
       const aidant = unAidant().construis();
       await testeurMAC.entrepots.aidants().persiste(aidant);
-      testeurMAC.recuperateurDeCookies = () =>
+      utilitairesCookies.recuperateurDeCookies = () =>
         'j%3A%7B%22state%22%3A%22etat%22%2C%22nonce%22%3A%22coucou%22%7D';
       testeurMAC.adaptateurProConnect.recupereJeton = async () => ({
         idToken: fakerFR.string.alpha(10),
@@ -122,7 +123,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
     });
 
     it('Si la présence du cookie ProConnectInfo n’est pas validée, on envoie un message d’erreur d’authentification', async () => {
-      testeurMAC.recuperateurDeCookies = () => undefined;
+      utilitairesCookies.recuperateurDeCookies = () => undefined;
       donneesServeur = testeurMAC.initialise();
 
       const reponse = await executeRequete(

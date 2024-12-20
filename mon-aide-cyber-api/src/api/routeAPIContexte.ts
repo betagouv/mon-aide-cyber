@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { ParsedQs } from 'qs';
 import { constructeurActionsHATEOAS } from './hateoas/hateoas';
 import { ConfigurationServeur } from '../serveur';
-import { jwtPayload } from '../adaptateurs/fabriqueDeCookies';
+import { utilitairesCookies } from '../adaptateurs/utilitairesDeCookies';
 
 export type InformationsContexte = {
   contexte: string;
@@ -10,8 +10,7 @@ export type InformationsContexte = {
 
 export const routeAPIContexte = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
-  const { recuperateurDeCookies, entrepots, gestionnaireDeJeton } =
-    configuration;
+  const { entrepots, gestionnaireDeJeton } = configuration;
 
   const estInformationContexte = (
     informationsContexte: InformationsContexte | ParsedQs
@@ -20,7 +19,10 @@ export const routeAPIContexte = (configuration: ConfigurationServeur) => {
 
   routes.get('/', (requete: Request, reponse: Response) => {
     const actionsAidantConnecte = (cookies: string) => {
-      const jwt = jwtPayload({ session: cookies }, gestionnaireDeJeton);
+      const jwt = utilitairesCookies.jwtPayload(
+        { session: cookies },
+        gestionnaireDeJeton
+      );
       const actionsHATEOAS = estInformationContexte(requete.query)
         ? constructeurActionsHATEOAS().pour(requete.query)
         : constructeurActionsHATEOAS();
@@ -29,13 +31,9 @@ export const routeAPIContexte = (configuration: ConfigurationServeur) => {
         return entrepots
           .utilisateurs()
           .lis(jwt.identifiant)
-          .then((utilisateur) =>
+          .then(() =>
             reponse.json({
-              ...(utilisateur.dateSignatureCGU
-                ? {
-                    ...actionsHATEOAS.afficherTableauDeBord().construis(),
-                  }
-                : { ...actionsHATEOAS.creerEspaceAidant().construis() }),
+              ...actionsHATEOAS.afficherTableauDeBord().construis(),
             })
           );
       }
@@ -44,7 +42,7 @@ export const routeAPIContexte = (configuration: ConfigurationServeur) => {
       );
     };
 
-    const cookies = recuperateurDeCookies(requete, reponse);
+    const cookies = utilitairesCookies.recuperateurDeCookies(requete, reponse);
     if (cookies) {
       try {
         return actionsAidantConnecte(cookies);

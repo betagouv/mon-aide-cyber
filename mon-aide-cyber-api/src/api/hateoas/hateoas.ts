@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import { InformationsContexte } from '../../adaptateurs/AdaptateurDeVerificationDeSession';
-import { UtilisateurAuthentifie } from '../../authentification/Utilisateur';
 import {
   ContexteSpecifique,
   contextesUtilisateur,
@@ -71,22 +70,8 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  public postAuthentification(
-    utilisateurAuthentifie: UtilisateurAuthentifie
-  ): ConstructeurActionsHATEOAS {
-    if (!utilisateurAuthentifie.dateSignatureCGU) {
-      return this.creerEspaceAidant();
-    }
-
+  public postAuthentification(): ConstructeurActionsHATEOAS {
     return this.lancerDiagnostic().afficherMesInformations();
-  }
-
-  public creerEspaceAidant(): ConstructeurActionsHATEOAS {
-    this.actions.set('creer-espace-aidant', {
-      url: '/api/espace-aidant/cree',
-      methode: 'POST',
-    });
-    return this;
   }
 
   public demandeLaRestitution(identifiant: string): ConstructeurActionsHATEOAS {

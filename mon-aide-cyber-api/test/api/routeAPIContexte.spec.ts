@@ -7,6 +7,8 @@ import { FauxGestionnaireDeJeton } from '../infrastructure/authentification/Faux
 
 import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
 import { liensPublicsAttendus } from './hateoas/liensAttendus';
+import { utilitairesCookies } from '../../src/adaptateurs/utilitairesDeCookies';
+import { unConstructeurDeJwtPayload } from '../constructeurs/constructeurJwtPayload';
 
 describe('Route contexte', () => {
   const testeurMAC = testeurIntegration();
@@ -58,20 +60,16 @@ describe('Route contexte', () => {
     let donneesServeur: { portEcoute: number; app: Express };
 
     beforeEach(async () => {
-      const utilisateur = unUtilisateur().construis();
-      testeurMAC.recuperateurDeCookies = () =>
-        btoa(
-          JSON.stringify({
-            token: JSON.stringify({
-              identifiant: utilisateur.identifiant,
-            }),
-          })
-        );
-      await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
       donneesServeur = testeurMAC.initialise();
     });
 
     it('Retourne le tableau de bord Aidant si il revient sur la page d’accueil de MAC', async () => {
+      const utilisateur = unUtilisateur().construis();
+      await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+      utilitairesCookies.jwtPayload = () =>
+        unConstructeurDeJwtPayload().ayantPourAidant(utilisateur).construis();
+      utilitairesCookies.recuperateurDeCookies = () => 'cookies';
+
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
@@ -90,7 +88,7 @@ describe('Route contexte', () => {
       });
     });
 
-    it('Retourne le tableau de bord Aidant si il revient sur la de statistiques publique de MAC', async () => {
+    it('Retourne le tableau de bord Aidant si il revient sur la page de statistiques publique de MAC', async () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
@@ -124,6 +122,8 @@ describe('Route contexte', () => {
       });
 
       it('Retourne les liens publics', async () => {
+        utilitairesCookies.recuperateurDeCookies = () => undefined;
+
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
@@ -135,45 +135,6 @@ describe('Route contexte', () => {
         expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
           ...liensPublicsAttendus,
         });
-      });
-    });
-  });
-
-  describe('Dans le cas d’un Aidant sans espace ayant une session', () => {
-    const testeurMAC = testeurIntegration();
-    let donneesServeur: { portEcoute: number; app: Express };
-
-    beforeEach(async () => {
-      const utilisateurSansEspace = unUtilisateur()
-        .sansCGUSignees()
-        .construis();
-      testeurMAC.recuperateurDeCookies = () =>
-        btoa(
-          JSON.stringify({
-            token: JSON.stringify({
-              identifiant: utilisateurSansEspace.identifiant,
-            }),
-          })
-        );
-      await testeurMAC.entrepots.utilisateurs().persiste(utilisateurSansEspace);
-      donneesServeur = testeurMAC.initialise();
-    });
-    it('Retourne le lien vers la création de l’espace aidant si il s’agit d’une première connexion', async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/contexte`,
-        donneesServeur.portEcoute
-      );
-
-      expect(reponse.statusCode).toBe(200);
-      expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
-        liens: {
-          'creer-espace-aidant': {
-            url: '/api/espace-aidant/cree',
-            methode: 'POST',
-          },
-        },
       });
     });
   });

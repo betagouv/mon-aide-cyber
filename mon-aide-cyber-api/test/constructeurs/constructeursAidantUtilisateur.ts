@@ -71,6 +71,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   private typesEntites: TypesEntites = [];
   private consentementAnnuaire = false;
   private siret: string | undefined = undefined;
+  private dateSignatureCGU: Date | undefined = fakerFR.date.anytime();
 
   avecUnNomPrenom(nomPrenom: string): ConstructeurAidant {
     this.nomPrenom = nomPrenom;
@@ -114,6 +115,11 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  sansCGUSignees(): ConstructeurAidant {
+    this.dateSignatureCGU = undefined;
+    return this;
+  }
+
   construis(): Aidant {
     return {
       identifiant: this.identifiant,
@@ -126,6 +132,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
       },
       ...(this.siret && { siret: this.siret }),
       consentementAnnuaire: this.consentementAnnuaire,
+      ...(this.dateSignatureCGU && { dateSignatureCGU: this.dateSignatureCGU }),
     };
   }
 }

@@ -5,7 +5,7 @@ import { NextFunction } from 'express-serve-static-core';
 import { Request, Response } from 'express';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
 import { ErreurAccesRefuse } from '../../src/adaptateurs/AdaptateurDeVerificationDeSession';
-import { MACCookies } from '../../src/adaptateurs/fabriqueDeCookies';
+import { MACCookies } from '../../src/adaptateurs/utilitairesDeCookies';
 import { RequeteUtilisateur } from '../../src/api/routesAPI';
 
 describe('Adaptateur de vérification de session', () => {
