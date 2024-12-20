@@ -10,6 +10,7 @@ type ClefContexte =
   | 'afficher-annuaire-aidants'
   | 'reinitialisation-mot-de-passe'
   | 'utiliser-outil-diagnostic'
+  | 'valider-signature-cgu'
   | string;
 
 export type ContextesUtilisateur = {
@@ -143,6 +144,12 @@ export const contextesUtilisateur: ContextesUtilisateur = {
         url: '/api/token',
         methode: 'DELETE',
       },
+    },
+  },
+  'valider-signature-cgu': {
+    'valider-signature-cgu': {
+      methode: 'POST',
+      url: '/api/utilisateur/valider-signature-cgu',
     },
   },
 };

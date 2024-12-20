@@ -8,6 +8,7 @@ import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
 import { RequeteUtilisateur } from './routesAPI';
 import { adaptateurConfigurationLimiteurTraffic } from './adaptateurLimiteurTraffic';
 import { UtilisateurAuthentifie } from '../authentification/Utilisateur';
+import { unServiceAidant } from '../espace-aidant/ServiceAidantMAC';
 
 export type CorpsRequeteAuthentification = {
   identifiant: string;
@@ -22,6 +23,11 @@ export const routesAPIAuthentification = (
 
   const limiteurTrafficAuthentification =
     adaptateurConfigurationLimiteurTraffic('AUTHENTIFICATION');
+  const {
+    entrepots,
+    gestionnaireDeJeton,
+    adaptateurDeGestionDeCookies: gestionnaireDeCookies,
+  } = configuration;
 
   routes.post(
     '/',
@@ -36,17 +42,29 @@ export const routesAPIAuthentification = (
       const { identifiant, motDePasse }: CorpsRequeteAuthentification =
         requete.body;
       authentifie(
-        configuration.entrepots.utilisateurs(),
-        configuration.gestionnaireDeJeton,
+        entrepots.utilisateurs(),
+        gestionnaireDeJeton,
         identifiant,
         motDePasse
       )
         .then((utilisateurAuthentifie: UtilisateurAuthentifie) => {
-          requete.session!.token = utilisateurAuthentifie.jeton;
-          reponse.status(201).json({
-            nomPrenom: utilisateurAuthentifie.nomPrenom,
-            ...constructeurActionsHATEOAS().postAuthentification().construis(),
-          });
+          let reponseHATEOAS = constructeurActionsHATEOAS()
+            .postAuthentification()
+            .construis();
+          return unServiceAidant(entrepots.aidants())
+            .parIdentifiant(utilisateurAuthentifie.identifiant)
+            .then((aidant) => {
+              if (!aidant?.dateSignatureCGU) {
+                reponseHATEOAS = constructeurActionsHATEOAS()
+                  .pour({ contexte: 'valider-signature-cgu' })
+                  .construis();
+              }
+              requete.session!.token = utilisateurAuthentifie.jeton;
+              return reponse.status(201).json({
+                nomPrenom: utilisateurAuthentifie.nomPrenom,
+                ...reponseHATEOAS,
+              });
+            });
         })
         .catch((erreur) => suite(erreur));
     }
@@ -54,7 +72,7 @@ export const routesAPIAuthentification = (
 
   routes.delete(
     '/',
-    configuration.adaptateurDeGestionDeCookies.supprime(),
+    gestionnaireDeCookies.supprime(),
     (_requete: RequeteUtilisateur, reponse: Response, _suite: NextFunction) => {
       reponse.status(200);
       return reponse.send();

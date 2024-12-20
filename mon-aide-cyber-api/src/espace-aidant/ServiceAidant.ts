@@ -6,6 +6,7 @@ export type AidantDTO = {
   email: string;
   nomUsage: string;
   siret?: Siret;
+  dateSignatureCGU?: Date;
 };
 
 export interface ServiceAidant {

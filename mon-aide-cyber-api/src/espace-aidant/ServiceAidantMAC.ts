@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { EntrepotAidant } from './Aidant';
+import { Aidant, EntrepotAidant } from './Aidant';
 import { AidantDTO, ServiceAidant } from './ServiceAidant';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
@@ -9,12 +9,7 @@ class ServiceAidantMAC implements ServiceAidant {
   async rechercheParMail(mailAidant: string): Promise<AidantDTO | undefined> {
     return this.entrepotAidant
       .rechercheParEmail(mailAidant)
-      .then((aidant) => ({
-        identifiant: aidant.identifiant,
-        email: aidant.email,
-        nomUsage: this.formateLeNom(aidant.nomPrenom),
-        ...(aidant.siret && { siret: aidant.siret }),
-      }))
+      .then((aidant) => this.mappeAidant(aidant))
       .catch(() => undefined);
   }
 
@@ -23,12 +18,7 @@ class ServiceAidantMAC implements ServiceAidant {
   ): Promise<AidantDTO | undefined> {
     return this.entrepotAidant
       .lis(identifiant)
-      .then((aidant) => ({
-        identifiant: aidant.identifiant,
-        email: aidant.email,
-        nomUsage: this.formateLeNom(aidant.nomPrenom),
-        ...(aidant.siret && { siret: aidant.siret }),
-      }))
+      .then((aidant) => this.mappeAidant(aidant))
       .catch(() => undefined);
   }
 
@@ -42,6 +32,18 @@ class ServiceAidantMAC implements ServiceAidant {
   private formateLeNom(nomPrenom: string): string {
     const [prenom, nom] = nomPrenom.split(' ');
     return `${prenom} ${nom ? `${nom[0]}.` : ''}`.trim();
+  }
+
+  private mappeAidant(aidant: Aidant) {
+    return {
+      identifiant: aidant.identifiant,
+      email: aidant.email,
+      nomUsage: this.formateLeNom(aidant.nomPrenom),
+      ...(aidant.siret && { siret: aidant.siret }),
+      ...(aidant.dateSignatureCGU && {
+        dateSignatureCGU: aidant.dateSignatureCGU,
+      }),
+    };
   }
 }
 

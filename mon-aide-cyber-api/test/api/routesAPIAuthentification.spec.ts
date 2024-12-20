@@ -4,7 +4,11 @@ import testeurIntegration from './testeurIntegration';
 import { Express } from 'express';
 import { ReponseAuthentification } from '../../src/api/routesAPIAuthentification';
 
-import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
+import {
+  unAidant,
+  unCompteAidantRelieAUnCompteUtilisateur,
+  unUtilisateur,
+} from '../constructeurs/constructeursAidantUtilisateur';
 
 describe("Le serveur MAC, sur les routes d'authentification", () => {
   const testeurMAC = testeurIntegration();
@@ -24,16 +28,17 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
 
       afterEach(() => testeurMAC.arrete());
 
-      it('génère un token', async () => {
-        await testeurMAC.entrepots
-          .utilisateurs()
-          .persiste(
-            unUtilisateur()
-              .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
-              .avecUnMotDePasse('mon_Mot-D3p4sse')
-              .avecUnNomPrenom('Martin Dupont')
-              .construis()
-          );
+      it('Génère un token', async () => {
+        const constructeurUtilisateur = unUtilisateur()
+          .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
+          .avecUnMotDePasse('mon_Mot-D3p4sse')
+          .avecUnNomPrenom('Martin Dupont');
+        await unCompteAidantRelieAUnCompteUtilisateur({
+          constructeurAidant: unAidant(),
+          constructeurUtilisateur,
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        });
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -79,7 +84,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         expect(cookieRecu[4]).toStrictEqual('httponly');
       });
 
-      it("retourne une erreur http 401 quand l'utilisateur n'est pas trouvé", async () => {
+      it("Retourne une erreur http 401 quand l'utilisateur n'est pas trouvé", async () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
@@ -125,6 +130,41 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             'afficher-preferences': {
               url: '/api/aidant/preferences',
               methode: 'GET',
+            },
+          },
+        });
+      });
+
+      it('Demande la signature des CGU si elles n’ont pas été signées', async () => {
+        const constructeurUtilisateur = unUtilisateur()
+          .avecUnIdentifiantDeConnexion('jean.dujardin@email.com')
+          .avecUnMotDePasse('mon_Mot-D3p4sse')
+          .avecUnNomPrenom('Jean Dujardin');
+        await unCompteAidantRelieAUnCompteUtilisateur({
+          constructeurAidant: unAidant().sansCGUSignees(),
+          constructeurUtilisateur,
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        });
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/token',
+          donneesServeur.portEcoute,
+          {
+            identifiant: 'jean.dujardin@email.com',
+            motDePasse: 'mon_Mot-D3p4sse',
+          }
+        );
+
+        expect(reponse.statusCode).toBe(201);
+        expect(await reponse.json()).toStrictEqual({
+          nomPrenom: 'Jean Dujardin',
+          liens: {
+            'valider-signature-cgu': {
+              methode: 'POST',
+              url: '/api/utilisateur/valider-signature-cgu',
             },
           },
         });

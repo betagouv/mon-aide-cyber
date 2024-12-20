@@ -12,11 +12,11 @@ import { ErreurMAC } from '../domaine/erreurMAC';
 import { ServiceUtilisateur } from '../authentification/ServiceUtilisateur';
 import { validateursDeCreationDeMotDePasse } from './validateurs/motDePasse';
 import {
+  body,
   ExpressValidator,
   FieldValidationError,
   Meta,
   Result,
-  body,
   validationResult,
 } from 'express-validator';
 import { EntrepotUtilisateur } from '../authentification/Utilisateur';
@@ -89,13 +89,24 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       return entrepots
         .utilisateurs()
         .lis(requete.identifiantUtilisateurCourant!)
-        .then((aidant) => {
-          const actionsHATEOAS = constructeurActionsHATEOAS();
-          reponse.status(200).json({
-            ...actionsHATEOAS.accedeAuxInformationsUtilisateur().construis(),
-            nomPrenom: aidant.nomPrenom,
-          });
-        })
+        .then((utilisateur) =>
+          unServiceAidant(entrepots.aidants())
+            .parIdentifiant(utilisateur.identifiant)
+            .then((aidant) => {
+              let actions = constructeurActionsHATEOAS()
+                .accedeAuxInformationsUtilisateur()
+                .construis();
+              if (!aidant?.dateSignatureCGU) {
+                actions = constructeurActionsHATEOAS()
+                  .pour({ contexte: 'valider-signature-cgu' })
+                  .construis();
+              }
+              return reponse.status(200).json({
+                ...actions,
+                nomPrenom: utilisateur.nomPrenom,
+              });
+            })
+        )
         .catch((erreur) =>
           suite(
             ErreurMAC.cree("Accède aux informations de l'utilisateur", erreur)

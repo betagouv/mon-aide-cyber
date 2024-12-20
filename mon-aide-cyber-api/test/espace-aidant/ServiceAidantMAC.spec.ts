@@ -24,6 +24,7 @@ describe('Service Aidant', () => {
         identifiant: aidant.identifiant,
         email: aidant.email,
         nomUsage: 'Jean D.',
+        dateSignatureCGU: aidant.dateSignatureCGU!,
       });
     });
 
@@ -55,6 +56,7 @@ describe('Service Aidant', () => {
         nomUsage: 'Martin D.',
         identifiant: martin.identifiant,
         email: martin.email,
+        dateSignatureCGU: martin.dateSignatureCGU!,
       });
     });
 
