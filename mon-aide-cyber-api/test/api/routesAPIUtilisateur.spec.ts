@@ -5,7 +5,11 @@ import { executeRequete } from './executeurRequete';
 import { AdaptateurDeVerificationDeSessionAvecContexteDeTest } from '../adaptateurs/AdaptateurDeVerificationDeSessionAvecContexteDeTest';
 import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/AdaptateurDeVerificationDeSessionDeTest';
 
-import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
+import {
+  unAidant,
+  unCompteAidantRelieAUnCompteUtilisateur,
+  unUtilisateur,
+} from '../constructeurs/constructeursAidantUtilisateur';
 import {
   CorpsReponseReinitialiserMotDePasseEnErreur,
   ReponseReinitialisationMotDePasseEnErreur,
@@ -16,6 +20,7 @@ import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurH
 import { add } from 'date-fns';
 import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 import { liensPublicsAttendus } from './hateoas/liensAttendus';
+import { ReponseHATEOASEnErreur } from '../../src/api/hateoas/hateoas';
 
 describe('le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -33,6 +38,7 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
   });
 
   describe('quand une requête GET est reçue sur /', () => {
+    beforeEach(() => adaptateurDeVerificationDeSession.reinitialise());
     it("retourne l'utilisateur connecté", async () => {
       const utilisateur = unUtilisateur().construis();
       await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
@@ -315,6 +321,132 @@ describe('le serveur MAC sur les routes /api/utilisateur', () => {
         expect((await reponse.json()).message).toStrictEqual(
           'L’utilisateur n’est pas connu.'
         );
+      });
+    });
+  });
+
+  describe("Lorsqu'une requête POST est reçue sur /utilisateur/valider-signature-cgu", () => {
+    const testeurMAC = testeurIntegration();
+    let donneesServeur: { portEcoute: number; app: Express };
+    beforeEach(() => {
+      testeurMAC.adaptateurDeVerificationDeSession =
+        new AdaptateurDeVerificationDeSessionDeTest();
+      donneesServeur = testeurMAC.initialise();
+    });
+
+    afterEach(() => {
+      testeurMAC.arrete();
+    });
+
+    it('Ajoute la date de signature des CGU', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-signature-cgu`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      const aidantModifie = await testeurMAC.entrepots
+        .aidants()
+        .lis(utilisateur.identifiant);
+      expect(aidantModifie.dateSignatureCGU).toStrictEqual(
+        FournisseurHorloge.maintenant()
+      );
+    });
+
+    it("Accepte la requête et renvoie les actions possibles pour l'Aidant", async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-signature-cgu`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+        }
+      );
+
+      expect(await reponse.json()).toStrictEqual({
+        liens: {
+          'afficher-tableau-de-bord': {
+            methode: 'GET',
+            url: '/api/espace-aidant/tableau-de-bord',
+          },
+          'lancer-diagnostic': {
+            methode: 'POST',
+            url: '/api/diagnostic',
+          },
+          'modifier-mot-de-passe': {
+            methode: 'POST',
+            url: '/api/profil/modifier-mot-de-passe',
+          },
+          'modifier-profil': {
+            methode: 'PATCH',
+            url: '/api/profil',
+          },
+          'se-deconnecter': {
+            methode: 'DELETE',
+            url: '/api/token',
+          },
+        },
+      });
+    });
+
+    it('Vérifie la présence de la date de signature des CGU', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-signature-cgu`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: false,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
+        message: 'Veuillez valider les CGU',
+        liens: {
+          'valider-signature-cgu': {
+            url: '/api/utilisateur/valider-signature-cgu',
+            methode: 'POST',
+          },
+        },
       });
     });
   });

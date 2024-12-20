@@ -1,6 +1,7 @@
 import { Options } from './hateoas';
 
 type ClefContexte =
+  | 'aidant'
   | 'demande-devenir-aidant'
   | 'demande-etre-aide'
   | 'solliciter-aide'
