@@ -17,7 +17,7 @@ import {
   validateurDeNouveauMotDePasse,
 } from '../validateurs/motDePasse';
 import { ServiceProfilAidant } from '../../espace-aidant/profil/ServiceProfilAidant';
-import { jwtPayload } from '../../adaptateurs/fabriqueDeCookies';
+import { utilitairesCookies } from '../../adaptateurs/utilitairesDeCookies';
 
 type CorpsRequeteChangementMotDerPasse = {
   ancienMotDePasse: string;
@@ -36,7 +36,6 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     adaptateurDeVerificationDeSession: session,
     adaptateurDeVerificationDeCGU: cgu,
     busEvenement,
-    recuperateurDeCookies,
     gestionnaireDeJeton,
   } = configuration;
 
@@ -54,8 +53,13 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
         .lis(requete.identifiantUtilisateurCourant!)
         .then((aidant) => {
           const dateSignatureCGU = aidant.dateSignatureCGU;
-          const jwt = jwtPayload(
-            { session: recuperateurDeCookies(requete, reponse)! },
+          const jwt = utilitairesCookies.jwtPayload(
+            {
+              session: utilitairesCookies.recuperateurDeCookies(
+                requete,
+                reponse
+              )!,
+            },
             gestionnaireDeJeton
           );
 

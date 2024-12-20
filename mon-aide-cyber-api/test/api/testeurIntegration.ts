@@ -2,7 +2,7 @@ import serveur from '../../src/serveur';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { AdaptateurTranscripteurDeTest } from '../adaptateurs/adaptateurTranscripteur';
 import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
-import { Express, Request, Response } from 'express';
+import { Express } from 'express';
 import { fakerFR } from '@faker-js/faker';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
@@ -65,11 +65,7 @@ class TesteurIntegrationMAC {
       },
     },
     public adaptateurMetabase: AdaptateurMetabaseMemoire = new AdaptateurMetabaseMemoire(),
-    public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest(),
-    public recuperateurDeCookies: (
-      requete: Request,
-      reponse: Response
-    ) => string | undefined = () => undefined
+    public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest()
   ) {}
 
   initialise() {
@@ -102,7 +98,6 @@ class TesteurIntegrationMAC {
       avecProtectionCsrf: false,
       adaptateurEnvoiMessage: this.adaptateurEnvoieMessage,
       serviceDeChiffrement: this.serviceDeChiffrement,
-      recuperateurDeCookies: this.recuperateurDeCookies,
       adaptateurMetabase: this.adaptateurMetabase,
       adaptateurDeVerificationDeRelations:
         this.adaptateurDeVerificationDeRelations,

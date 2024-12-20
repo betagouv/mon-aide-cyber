@@ -17,7 +17,6 @@ import { AdaptateurRelationsMAC } from './src/relation/AdaptateurRelationsMAC';
 import { AdaptateurDeVerificationDesAccesMAC } from './src/adaptateurs/AdaptateurDeVerificationDesAccesMAC';
 import { AdaptateurDeRestitutionHTML } from './src/infrastructure/adaptateurs/AdaptateurDeRestitutionHTML';
 import { adaptateurServiceChiffrement } from './src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
-import { recuperateurDeCookies } from './src/adaptateurs/fabriqueDeCookies';
 import { adaptateurMetabase } from './src/infrastructure/adaptateurs/adaptateurMetabase';
 import { unServiceAidant } from './src/espace-aidant/ServiceAidantMAC';
 import { AdaptateurDeVerificationDeTypeDeRelationMAC } from './src/adaptateurs/AdaptateurDeVerificationDeTypeDeRelationMAC';
@@ -83,7 +82,6 @@ const serveurMAC = serveur.creeServeur({
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
   adaptateurEnvoiMessage: adaptateurEnvoiMessage,
   serviceDeChiffrement: adaptateurServiceChiffrement(),
-  recuperateurDeCookies: recuperateurDeCookies,
   adaptateurMetabase: adaptateurMetabase(),
   adaptateurProConnect: adaptateurProConnect,
   estEnMaintenance: adaptateurEnvironnement.modeMaintenance().estActif(),

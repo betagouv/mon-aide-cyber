@@ -7,7 +7,7 @@ import {
   InformationsContexte,
 } from './AdaptateurDeVerificationDeSession';
 import { Contexte, ErreurMAC } from '../domaine/erreurMAC';
-import { fabriqueDeCookies, jwtPayload, MACCookies } from './fabriqueDeCookies';
+import { MACCookies, utilitairesCookies } from './utilitairesDeCookies';
 import { RequeteUtilisateur } from '../api/routesAPI';
 
 export class AdaptateurDeVerificationDeSessionHttp
@@ -22,7 +22,7 @@ export class AdaptateurDeVerificationDeSessionHttp
       requete: Request,
       reponse: Response
     ) => MACCookies = (contexte, requete, reponse) =>
-      fabriqueDeCookies(contexte, requete, reponse)
+      utilitairesCookies.fabriqueDeCookies(contexte, requete, reponse)
   ): RequestHandler {
     return (
       requete: RequeteUtilisateur,
@@ -35,7 +35,7 @@ export class AdaptateurDeVerificationDeSessionHttp
           requete,
           reponse
         );
-        requete.identifiantUtilisateurCourant = jwtPayload(
+        requete.identifiantUtilisateurCourant = utilitairesCookies.jwtPayload(
           cookies,
           this.gestionnaireDeJeton
         ).identifiant;

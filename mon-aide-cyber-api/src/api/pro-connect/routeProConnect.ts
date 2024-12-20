@@ -11,6 +11,7 @@ import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorl
 import { adaptateurUUID } from '../../infrastructure/adaptateurs/adaptateurUUID';
 import crypto from 'crypto';
 import { estSiretGendarmerie } from '../../espace-aidant/Aidant';
+import { utilitairesCookies } from '../../adaptateurs/utilitairesDeCookies';
 
 export class ErreurProConnectApresAuthentification extends Error {
   constructor(e: Error) {
@@ -26,7 +27,6 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
     entrepots,
     busCommande,
     gestionnaireDeJeton,
-    recuperateurDeCookies,
     adaptateurDeGestionDeCookies,
   } = configuration;
 
@@ -62,9 +62,13 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
       reponse: Response<ReponseHATEOASEnErreur>,
       suite: NextFunction
     ) => {
-      const cookie = recuperateurDeCookies(requete, reponse, {
-        nom: 'ProConnectInfo',
-      });
+      const cookie = utilitairesCookies.recuperateurDeCookies(
+        requete,
+        reponse,
+        {
+          nom: 'ProConnectInfo',
+        }
+      );
       if (!cookie) {
         return reponse
           .status(401)
