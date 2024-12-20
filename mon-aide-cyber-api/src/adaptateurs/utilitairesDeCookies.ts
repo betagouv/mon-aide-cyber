@@ -20,7 +20,7 @@ export type ParametresCookies = {
   signed?: boolean;
 };
 
-export const recuperateurDeCookies = (
+const recuperateurDeCookies = (
   requete: Request,
   reponse: Response,
   parametres: ParametresCookies = {
@@ -40,7 +40,7 @@ export const recuperateurDeCookies = (
   );
 };
 
-export const fabriqueDeCookies = (
+const utilitairesDeCookies = (
   contexte: Contexte,
   requete: Request,
   reponse: Response
@@ -59,7 +59,8 @@ export const fabriqueDeCookies = (
     session: cookies,
   };
 };
-export const jwtPayload = (
+
+const jwtPayload = (
   cookies: MACCookies,
   gestionnaireDeJeton: GestionnaireDeJeton
 ): JwtMACPayload => {
@@ -69,4 +70,27 @@ export const jwtPayload = (
 
   const jetonProconnect = sessionDecodee.ProConnectIdToken;
   return gestionnaireDeJeton.verifie(sessionDecodee.token, jetonProconnect);
+};
+
+type UtilitairesCookies = {
+  jwtPayload: (
+    cookies: MACCookies,
+    gestionnaireDeJeton: GestionnaireDeJeton
+  ) => JwtMACPayload;
+  fabriqueDeCookies: (
+    contexte: Contexte,
+    requete: Request,
+    reponse: Response
+  ) => MACCookies;
+  recuperateurDeCookies: (
+    requete: Request,
+    reponse: Response,
+    parametres?: ParametresCookies
+  ) => string | undefined;
+};
+
+export const utilitairesCookies: UtilitairesCookies = {
+  jwtPayload,
+  fabriqueDeCookies: utilitairesDeCookies,
+  recuperateurDeCookies,
 };

@@ -10,6 +10,8 @@ import {
 } from '../../constructeurs/constructeursAidantUtilisateur';
 import { Utilisateur } from '../../../src/authentification/Utilisateur';
 import { Aidant } from '../../../src/espace-aidant/Aidant';
+import { utilitairesCookies } from '../../../src/adaptateurs/utilitairesDeCookies';
+import { unConstructeurDeJwtPayload } from '../../constructeurs/constructeurJwtPayload';
 
 describe('le serveur MAC sur les routes /api/profil', () => {
   const testeurMAC = testeurIntegration();
@@ -38,29 +40,17 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             constructeurAidant: unAidant(),
           });
         aidantConnecte = aidant;
-
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
           utilisateur
         );
-
         await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
-        testeurMAC.gestionnaireDeJeton.verifie = () => ({
-          identifiant: utilisateur.identifiant,
-          estProconnect: false,
-        });
-
-        testeurMAC.recuperateurDeCookies = () =>
-          btoa(
-            JSON.stringify({
-              token: JSON.stringify({
-                identifiant: utilisateur.identifiant,
-              }),
-            })
-          );
         donneesServeur = testeurMAC.initialise();
       });
 
       it("retourne les informations le l'Aidant", async () => {
+        utilitairesCookies.jwtPayload = () =>
+          unConstructeurDeJwtPayload().construis();
+
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
@@ -142,30 +132,18 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           constructeurAidant: unAidant(),
         });
       aidantConnecte = aidant;
-
       await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
-
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
         utilisateur
       );
 
-      testeurMAC.gestionnaireDeJeton.verifie = () => ({
-        identifiant: utilisateur.identifiant,
-        estProconnect: true,
-      });
-
-      testeurMAC.recuperateurDeCookies = () =>
-        btoa(
-          JSON.stringify({
-            token: JSON.stringify({
-              identifiant: utilisateur.identifiant,
-            }),
-          })
-        );
       donneesServeur = testeurMAC.initialise();
     });
 
     it("S'assure qu'un utilisateur connecté avec Proconnect ne peut pas modifier son mot de passe", async () => {
+      utilitairesCookies.jwtPayload = () =>
+        unConstructeurDeJwtPayload().proConnect().construis();
+
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
