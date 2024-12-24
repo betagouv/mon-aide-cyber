@@ -2,10 +2,9 @@ import { Suspense } from 'react';
 import './assets/styles/index.scss';
 import { Route, Routes } from 'react-router-dom';
 import { RequiertAuthentification } from './fournisseurs/RequiertAuthentification.tsx';
-import { RequiertAidantSansEspace } from './fournisseurs/RequiertAidantSansEspace.tsx';
-import { RequiertEspaceAidant } from './fournisseurs/RequiertEspaceAidant.tsx';
+import { NecessiteValidationCGU } from './fournisseurs/NecessiteValidationCGU.tsx';
+import { RequiertValidationCGU } from './fournisseurs/RequiertValidationCGU.tsx';
 import { LayoutAidant } from './composants/layout/layout-aidant/LayoutAidant.tsx';
-import { EcranCreationEspaceAidant } from './domaine/espace-aidant/creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { EcranDiagnostics } from './domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
 import { EcranMesPreferences } from './domaine/espace-aidant/mon-compte/ecran-mes-preferences/EcranMesPreferences.tsx';
 import { EcranMesInformations } from './domaine/espace-aidant/mon-compte/ecran-mes-informations/EcranMesInformations.tsx';
@@ -13,6 +12,7 @@ import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
 import { EcranDiagnosticAidant } from './composants/diagnostic/EcranDiagnosticAidant.tsx';
 import { ComposantRestitutionAidant } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
+import { EcranValidationSignatureCGU } from './domaine/validation-cgu/EcranValidationSignatureCGU.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -28,19 +28,19 @@ export const RouteurPrive = () => {
         <Route
           element={
             <Suspense>
-              <RequiertAidantSansEspace />
+              <NecessiteValidationCGU />
             </Suspense>
           }
         >
           <Route
-            path="finalise-creation-espace-aidant"
-            element={<EcranCreationEspaceAidant />}
+            path="valide-signature-cgu"
+            element={<EcranValidationSignatureCGU />}
           ></Route>
         </Route>
         <Route
           element={
             <Suspense>
-              <RequiertEspaceAidant />
+              <RequiertValidationCGU />
             </Suspense>
           }
         >

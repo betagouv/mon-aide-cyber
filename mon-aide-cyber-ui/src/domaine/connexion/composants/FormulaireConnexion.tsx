@@ -16,9 +16,9 @@ export const FormulaireConnexion = () => {
 
   useEffect(() => {
     const moteurDeLiens = new MoteurDeLiens(navigationMAC.etat);
-    moteurDeLiens.trouve('creer-espace-aidant', () =>
+    moteurDeLiens.trouve('valider-signature-cgu', () =>
       navigationMAC.navigue(
-        `${ROUTE_AIDANT}/finalise-creation-espace-aidant`,
+        `${ROUTE_AIDANT}/valide-signature-cgu`,
         navigationMAC.etat
       )
     );

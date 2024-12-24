@@ -3,14 +3,14 @@ import { ReactElement, useEffect, useState } from 'react';
 import { MoteurDeLiens, ROUTE_AIDANT } from '../domaine/MoteurDeLiens.ts';
 import { Outlet } from 'react-router-dom';
 
-export const RequiertAidantSansEspace = () => {
+export const NecessiteValidationCGU = () => {
   const navigationMAC = useNavigationMAC();
   const [redirection, setRedirection] = useState<ReactElement>(<></>);
 
   useEffect(() => {
     const moteurDeLiens = new MoteurDeLiens(navigationMAC.etat);
     moteurDeLiens.trouve(
-      'creer-espace-aidant',
+      'valider-signature-cgu',
       () => setRedirection(<Outlet />),
       () =>
         moteurDeLiens.trouve('lancer-diagnostic', () =>

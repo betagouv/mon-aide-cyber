@@ -16,9 +16,8 @@ const actionsStatiques: ActionsStatiques = {
   'lancer-diagnostic': {
     applique: (lien) => (lien.route = `${ROUTE_AIDANT}/tableau-de-bord`),
   },
-  'creer-espace-aidant': {
-    applique: (lien) =>
-      (lien.route = `${ROUTE_AIDANT}/finalise-creation-espace-aidant`),
+  'valider-signature-cgu': {
+    applique: (lien) => (lien.route = `${ROUTE_AIDANT}/valide-signature-cgu`),
   },
   'se-connecter': { applique: (lien) => (lien.route = '/connexion') },
 };

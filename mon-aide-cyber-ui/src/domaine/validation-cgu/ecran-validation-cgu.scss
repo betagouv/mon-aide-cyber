@@ -1,0 +1,66 @@
+@import '../../assets/styles/points-de-rupture';
+
+.ecran-validation-cgu {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 'formulaire';
+
+  @include a-partir-de(md) {
+    grid-template-columns: 55% auto;
+    grid-template-areas: 'formulaire icone';
+  }
+
+  @include a-partir-de(xl) {
+    grid-template-columns: 20% 30% 30% 20%;
+    grid-template-areas: 'gauche formulaire icone droite';
+  }
+
+  height: 800px;
+
+  .formulaire-colonne-gauche {
+    grid-area: formulaire;
+    padding: 3rem 2.5rem;
+
+    @include a-partir-de(md) {
+      padding: 5rem 4rem;
+    }
+
+    @include a-partir-de(lg) {
+      padding: 5rem 6rem;
+    }
+
+    @include a-partir-de(xl) {
+      padding: 5rem 13rem;
+    }
+
+    form {
+      padding-top: 2.5rem;
+    }
+
+    .mac-radio-group {
+     padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+
+    button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .icone-colonne-droite {
+    display: none;
+    //grid-area: icone / icone / icone / droite;
+    grid-area: icone;
+
+    @include a-partir-de(md) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  img {
+    max-width: 100%;
+  }
+}
