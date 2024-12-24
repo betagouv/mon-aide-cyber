@@ -49,7 +49,6 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
                 dateSignatureCGU: FournisseurHorloge.maintenant(),
                 email: utilisateur.email,
                 nomPrenom: utilisateur.nomPrenom,
-                motDePasse: saga.motDePasse,
                 type: 'CommandeCreeEspaceAidant',
                 departement: demande.departement,
               })

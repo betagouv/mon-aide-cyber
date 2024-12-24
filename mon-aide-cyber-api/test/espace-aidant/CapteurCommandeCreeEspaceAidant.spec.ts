@@ -28,7 +28,6 @@ describe('Capteur de commande de création de compte Aidant', () => {
       dateSignatureCGU,
       email: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
-      motDePasse: 'toto12345',
       type: 'CommandeCreeEspaceAidant',
       departement: {
         nom: 'Alpes-de-Haute-Provence',
@@ -77,7 +76,6 @@ describe('Capteur de commande de création de compte Aidant', () => {
       dateSignatureCGU,
       email: aidant.email,
       nomPrenom: 'Jean Dupont',
-      motDePasse: '',
       type: 'CommandeCreeEspaceAidant',
       departement: {
         nom: 'Ariège',
@@ -109,7 +107,6 @@ describe('Capteur de commande de création de compte Aidant', () => {
       dateSignatureCGU,
       email: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
-      motDePasse: '',
       type: 'CommandeCreeEspaceAidant',
       departement: {
         nom: 'Guadeloupe',
@@ -144,7 +141,6 @@ describe('Capteur de commande de création de compte Aidant', () => {
       dateSignatureCGU,
       email: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
-      motDePasse: '',
       type: 'CommandeCreeEspaceAidant',
       departement: {
         nom: 'Guadeloupe',
