@@ -153,7 +153,7 @@ export const donneesReaction: QuestionsThematique = {
               identifiant:
                 'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement',
               libelle:
-                'Si "Oui" : La restauration de toutes les sauvegardes est-elle testée régulièrement ?',
+                'Si "Oui" : La restauration des sauvegardes de toutes vos données critiques est-elle testée régulièrement ?',
               poids: 3,
               reponsesPossibles: [
                 {
@@ -263,7 +263,7 @@ export const donneesReaction: QuestionsThematique = {
               identifiant:
                 'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement',
               libelle:
-                'La restauration de toutes les sauvegardes est-elle testée régulièrement ?',
+                'La restauration des sauvegardes de toutes vos données critiques est-elle testée régulièrement ?',
               poids: 3,
               reponsesPossibles: [
                 {
