@@ -17,7 +17,6 @@ export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
   dateSignatureCGU: Date;
   identifiant: crypto.UUID;
   email: string;
-  motDePasse: string;
   nomPrenom: string;
   departement: Departement;
   siret?: Siret;
