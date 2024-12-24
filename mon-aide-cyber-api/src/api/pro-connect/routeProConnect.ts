@@ -77,14 +77,15 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
 
       const redirige = (
         idToken: string | undefined,
-        identifiant: crypto.UUID
+        identifiant: crypto.UUID,
+        urlDeRedirection: string
       ) => {
         requete.session!.ProConnectIdToken = idToken;
         const jeton = gestionnaireDeJeton.genereJeton({
           identifiant: identifiant,
         });
         requete.session!.token = jeton;
-        return reponse.redirect('/aidant/tableau-de-bord');
+        return reponse.redirect(urlDeRedirection);
       };
 
       try {
@@ -108,7 +109,13 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
         ).rechercheParMail(email!);
 
         if (aidant) {
-          return redirige(idToken, aidant.identifiant);
+          return redirige(
+            idToken,
+            aidant.identifiant,
+            !aidant.dateSignatureCGU
+              ? '/aidant/valide-signature-cgu'
+              : '/aidant/tableau-de-bord'
+          );
         }
         if (estGendarme) {
           const compte = await busCommande.publie<
@@ -128,7 +135,11 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
             },
             ...(siret && { siret: siret }),
           });
-          return redirige(idToken, compte.identifiant);
+          return redirige(
+            idToken,
+            compte.identifiant,
+            '/aidant/valide-signature-cgu'
+          );
         }
 
         return reponse.redirect(

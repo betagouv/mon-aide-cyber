@@ -161,6 +161,38 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       );
     });
 
+    describe('Dans le cas d’un Aidant n’ayant pas validé les CGU', () => {
+      beforeEach(async () => {
+        const aidant = unAidant().sansCGUSignees().construis();
+        await testeurMAC.entrepots.aidants().persiste(aidant);
+        utilitairesCookies.recuperateurDeCookies = () =>
+          'j%3A%7B%22state%22%3A%22etat%22%2C%22nonce%22%3A%22coucou%22%7D';
+        testeurMAC.adaptateurProConnect.recupereJeton = async () => ({
+          idToken: fakerFR.string.alpha(10),
+          accessToken: fakerFR.string.alpha(10),
+        });
+        testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+          async () =>
+            desInformationsUtilisateur().pourUnAidant(aidant).construis();
+        testeurMAC.gestionnaireDeJeton.genereJeton = () => 'abc';
+        donneesServeur = testeurMAC.initialise();
+      });
+
+      it('L’Aidant est redirigé vers la validation des CGU si elles ne sont pas signées', async () => {
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/pro-connect/apres-authentification',
+          donneesServeur.portEcoute
+        );
+
+        expect(reponse.statusCode).toStrictEqual(302);
+        expect(reponse.headers['location']).toStrictEqual(
+          '/aidant/valide-signature-cgu'
+        );
+      });
+    });
+
     describe("Dans le cas d'un gendarme", () => {
       it("Si l'utilisateur n'est pas connu, on crée un espace Aidant", async () => {
         adaptateurEnvironnement.siretsEntreprise = () => ({
@@ -190,7 +222,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         expect(aidantTrouve!.siret).toStrictEqual('12345');
       });
 
-      it("À l'issue de la création de l'espace Aidant, l'utilisateur est redirigé vers le tableau de bord", async () => {
+      it("À l'issue de la création de l'espace Aidant, l'utilisateur est redirigé vers la validation des CGU", async () => {
         adaptateurEnvironnement.siretsEntreprise = () => ({
           gendarmerie: () => '12345',
         });
@@ -213,7 +245,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
 
         expect(reponse.statusCode).toStrictEqual(302);
         expect(reponse.headers['location']).toStrictEqual(
-          '/aidant/tableau-de-bord'
+          '/aidant/valide-signature-cgu'
         );
         const objet = enObjet<{ session: string; [clef: string]: string }>(
           (reponse.headers['set-cookie'] as string[])[1]
