@@ -126,7 +126,6 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
             dateSignatureCGU: FournisseurHorloge.maintenant(),
             email: email!,
             nomPrenom: `${prenom} ${nom}`,
-            motDePasse: '',
             type: 'CommandeCreeEspaceAidant',
             departement: {
               nom: 'Gironde',
