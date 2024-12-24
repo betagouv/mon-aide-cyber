@@ -121,7 +121,7 @@ export const donneesContexte: QuestionsThematique = {
         },
         {
           identifiant: 'contexte-secteur-activite-santé',
-          libelle: 'Santé et action sociale',
+          libelle: 'Santé',
           ordre: 16,
         },
         {
@@ -131,8 +131,8 @@ export const donneesContexte: QuestionsThematique = {
         },
         {
           identifiant:
-            'contexte-secteur-activite-sante-humaine-et-action-sociale',
-          libelle: 'Santé humaine et action sociale',
+            'contexte-secteur-activite-médico-sociale',
+          libelle: 'Médico-sociale',
           ordre: 18,
         },
         {
@@ -789,9 +789,14 @@ export const donneesContexte: QuestionsThematique = {
     {
       identifiant: 'contexte-activites-recherche-et-developpement',
       libelle:
-        'Estimez-vous que votre entité puisse faire l’objet d’une attaque ciblée ?',
+        'Estimez-vous que votre entité, du fait de ses activités, puisse faire l’objet d’espionnage industriel ou de vol de données ciblé ?',
       poids: 0,
       reponsesPossibles: [
+        {
+          identifiant: 'contexte-activites-recherche-et-developpement-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 0,
+        },
         {
           identifiant: 'contexte-activites-recherche-et-developpement-non',
           libelle: 'Non',
