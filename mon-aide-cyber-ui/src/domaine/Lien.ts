@@ -17,7 +17,7 @@ export type Action =
   | 'afficher-profil'
   | 'afficher-tableau-de-bord'
   | 'afficher-annuaire-aidants'
-  | 'creer-espace-aidant'
+  | 'valider-signature-cgu'
   | 'demander-aide'
   | 'solliciter-aide'
   | 'demande-devenir-aidant'

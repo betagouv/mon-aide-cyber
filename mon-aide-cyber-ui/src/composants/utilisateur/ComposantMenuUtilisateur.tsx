@@ -30,6 +30,12 @@ export const ComposantMenuUtilisateur = ({
         navigationMAC.etat
       );
     }
+    if (new MoteurDeLiens(navigationMAC.etat).existe('valider-signature-cgu')) {
+      navigationMAC.navigue(
+        `${ROUTE_AIDANT}/valide-signature-cgu`,
+        navigationMAC.etat
+      );
+    }
   }, [navigationMAC, resetBoundary]);
 
   const deconnecter = useCallback(() => {

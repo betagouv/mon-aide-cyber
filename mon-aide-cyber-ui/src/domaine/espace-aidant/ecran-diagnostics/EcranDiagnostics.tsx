@@ -11,6 +11,7 @@ import {
 } from '../../../composants/diagnostic/ComposantLancerDiagnostic.tsx';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
+import { useErrorBoundary } from 'react-error-boundary';
 
 export type Diagnostic = {
   dateCreation: string;
@@ -25,6 +26,7 @@ export const EcranDiagnostics = () => {
   const [enCoursDeChargement, setEnCoursDeChargement] = useState(true);
   const [diagnostics, setDiagnostics] = useState<Diagnostic[]>([]);
   const navigationMAC = useNavigationMAC();
+  const { showBoundary } = useErrorBoundary();
   const macAPI = useMACAPI();
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export const EcranDiagnostics = () => {
               setDiagnostics(tableauDeBord.diagnostics);
             })
             .catch((erreur: ReponseHATEOAS) => {
-              console.log(erreur);
+              showBoundary(erreur);
             });
         }
       }

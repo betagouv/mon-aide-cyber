@@ -3,9 +3,9 @@ import { Footer } from '../layout/Footer.tsx';
 import { LienMAC } from '../LienMAC.tsx';
 import { ReactElement, useEffect, useState } from 'react';
 import { Action, Liens } from '../../domaine/Lien.ts';
-import { ROUTE_AIDANT } from '../../domaine/MoteurDeLiens.ts';
-import { FallbackProps } from 'react-error-boundary';
-import { useUtilisateur } from '../../fournisseurs/hooks.ts';
+import { MoteurDeLiens, ROUTE_AIDANT } from '../../domaine/MoteurDeLiens.ts';
+import { FallbackProps, useErrorBoundary } from 'react-error-boundary';
+import { useNavigationMAC, useUtilisateur } from '../../fournisseurs/hooks.ts';
 import { Link } from 'react-router-dom';
 
 type ProprietesComposantAffichageErreur = Omit<FallbackProps, 'error'> & {
@@ -30,6 +30,8 @@ export const ComposantAffichageErreur = ({
   const [titreLien, setTitreLien] = useState('Accueil - MonAideCyber');
   const [route, setRoute] = useState('/');
   const { utilisateur } = useUtilisateur();
+  const { resetBoundary } = useErrorBoundary();
+  const navigationMAC = useNavigationMAC();
 
   useEffect(() => {
     if (utilisateur) {
@@ -37,6 +39,16 @@ export const ComposantAffichageErreur = ({
       setRoute('/aidant/tableau-de-bord');
     }
   }, [utilisateur]);
+
+  useEffect(() => {
+    if (
+      error.liens &&
+      new MoteurDeLiens(error.liens).existe('valider-signature-cgu')
+    ) {
+      resetBoundary();
+      navigationMAC.navigue('/aidant/valide-signature-cgu', error.liens);
+    }
+  }, [navigationMAC]);
 
   const actions = error.liens ? (
     <div className="fond-clair-mac">
