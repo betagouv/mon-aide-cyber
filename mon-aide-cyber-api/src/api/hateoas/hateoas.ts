@@ -13,7 +13,12 @@ export type ReponseHATEOAS = {
 
 export type ReponseHATEOASEnErreur = ReponseHATEOAS & { message: string };
 
-export type Options = { url: string; methode?: Methode; contentType?: string };
+export type Options = {
+  url: string;
+  methode?: Methode;
+  contentType?: string;
+  typeAppel?: 'API' | 'DIRECT';
+};
 
 const estInformationContexte = (
   informationsContexte: InformationsContexte | undefined
@@ -82,10 +87,6 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  public creeEspaceAidant(): ConstructeurActionsHATEOAS {
-    this.lancerDiagnostic().afficherMesInformations();
-    return this;
-  }
   public demandeAide() {
     this.actions.set('demander-aide', {
       url: '/api/demandes/etre-aide',
@@ -94,17 +95,13 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  public accedeAuTableauDeBord(
+  public afficherLesDiagnostics(
     idDiagnostics: string[]
   ): ConstructeurActionsHATEOAS {
-    this.actions.set('lancer-diagnostic', {
-      url: '/api/diagnostic',
-      methode: 'POST',
-    });
     idDiagnostics.forEach((idDiagnostic) =>
       this.afficherDiagnostic(idDiagnostic as crypto.UUID)
     );
-    return this.afficherMesInformations().seDeconnecter();
+    return this;
   }
 
   public accesDiagnostic(
@@ -189,11 +186,6 @@ class ConstructeurActionsHATEOAS {
       url: '/api/aidant/preferences',
       methode: 'PATCH',
     });
-    return this;
-  }
-
-  public accedeAuxInformationsUtilisateur(): ConstructeurActionsHATEOAS {
-    this.lancerDiagnostic().afficherMesInformations();
     return this;
   }
 

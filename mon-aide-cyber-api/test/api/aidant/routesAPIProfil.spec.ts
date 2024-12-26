@@ -76,7 +76,11 @@ describe('le serveur MAC sur les routes /api/profil', () => {
               methode: 'GET',
               url: '/api/espace-aidant/tableau-de-bord',
             },
-            'se-deconnecter': { url: '/api/token', methode: 'DELETE' },
+            'se-deconnecter': {
+              url: '/api/token',
+              methode: 'DELETE',
+              typeAppel: 'API',
+            },
             'modifier-mot-de-passe': {
               url: '/api/profil/modifier-mot-de-passe',
               methode: 'POST',
@@ -165,7 +169,11 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             methode: 'GET',
             url: '/api/espace-aidant/tableau-de-bord',
           },
-          'se-deconnecter': { url: '/api/token', methode: 'DELETE' },
+          'se-deconnecter': {
+            url: '/pro-connect/deconnexion',
+            methode: 'GET',
+            typeAppel: 'DIRECT',
+          },
           'modifier-profil': {
             url: '/api/profil',
             methode: 'PATCH',
