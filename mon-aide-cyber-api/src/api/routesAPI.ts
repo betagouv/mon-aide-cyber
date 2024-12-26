@@ -18,6 +18,7 @@ export interface RequeteUtilisateur<
   PARAMS extends core.ParamsDictionary = core.ParamsDictionary,
 > extends Request {
   identifiantUtilisateurCourant?: crypto.UUID;
+  estProConnect?: boolean;
   body: CORPS;
   params: PARAMS;
 }

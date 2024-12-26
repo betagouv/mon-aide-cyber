@@ -98,7 +98,9 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
                   contexte: 'aidant:acceder-aux-informations-utilisateur',
                 })
                 .pour({
-                  contexte: 'se-deconnecter',
+                  contexte: requete.estProConnect
+                    ? 'se-deconnecter-avec-pro-connect'
+                    : 'se-deconnecter',
                 })
                 .construis();
               if (!aidant?.dateSignatureCGU) {
@@ -212,7 +214,9 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
           reponse.status(200).json({
             ...constructeurActionsHATEOAS()
               .pour({
-                contexte: 'aidant:acceder-au-profil',
+                contexte: requete.estProConnect
+                  ? 'aidant:pro-connect-acceder-au-profil'
+                  : 'aidant:acceder-au-profil',
               })
               .construis(),
           })

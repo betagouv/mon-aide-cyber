@@ -72,6 +72,13 @@ const jwtPayload = (
   return gestionnaireDeJeton.verifie(sessionDecodee.token, jetonProconnect);
 };
 
+const reinitialiseLaSession = (requete: Request, reponse: Response): void => {
+  const cookies = new Cookies(requete, reponse, {
+    keys: [process.env.SECRET_COOKIE || ''],
+  });
+  cookies.set('session');
+};
+
 type UtilitairesCookies = {
   jwtPayload: (
     cookies: MACCookies,
@@ -87,10 +94,12 @@ type UtilitairesCookies = {
     reponse: Response,
     parametres?: ParametresCookies
   ) => string | undefined;
+  reinitialiseLaSession(requete: Request, reponse: Response): void;
 };
 
 export const utilitairesCookies: UtilitairesCookies = {
   jwtPayload,
   fabriqueDeCookies: utilitairesDeCookies,
   recuperateurDeCookies,
+  reinitialiseLaSession,
 };

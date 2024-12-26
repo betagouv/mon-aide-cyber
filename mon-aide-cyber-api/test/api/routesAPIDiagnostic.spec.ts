@@ -19,6 +19,11 @@ import {
 } from '../../src/api/routesAPIDiagnostic';
 import { Diagnostic } from '../../src/diagnostic/Diagnostic';
 import { LiensHATEOAS } from '../../src/api/hateoas/hateoas';
+import {
+  unAidant,
+  unCompteAidantRelieAUnCompteUtilisateur,
+  unUtilisateur,
+} from '../constructeurs/constructeursAidantUtilisateur';
 
 describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -387,6 +392,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
             url: '/api/aidant/preferences',
             methode: 'GET',
           },
+          'se-deconnecter': {
+            url: '/api/token',
+            methode: 'DELETE',
+            typeAppel: 'API',
+          },
         },
         autresMesures: '',
         contactsEtLiensUtiles: '',
@@ -394,6 +404,38 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         indicateurs: 'indicateurs',
         informations: JSON.stringify(restitution.informations),
         mesuresPrioritaires: 'mesures prioritaires',
+      });
+    });
+
+    it('Retourne l’action de déconnexion propre a ProConnect', async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
+        utilisateur
+      );
+      testeurMAC.adaptateursRestitution.html = () =>
+        unAdaptateurDeRestitutionHTML().construis();
+      const identifiant = crypto.randomUUID();
+      const restitution = uneRestitution()
+        .avecIdentifiant(identifiant)
+        .construis();
+      await testeurMAC.entrepots.restitution().persiste(restitution);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/${identifiant}/restitution`,
+        donneesServeur.portEcoute
+      );
+
+      expect((await reponse.json()).liens['se-deconnecter']).toStrictEqual({
+        url: '/pro-connect/deconnexion',
+        methode: 'GET',
+        typeAppel: 'DIRECT',
       });
     });
 

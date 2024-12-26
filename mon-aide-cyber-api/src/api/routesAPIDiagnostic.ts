@@ -149,6 +149,11 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         } else {
           const reponseHATEOAS = constructeurActionsHATEOAS()
             .demandeLaRestitution(id)
+            .pour({
+              contexte: requete.estProConnect
+                ? 'se-deconnecter-avec-pro-connect'
+                : 'se-deconnecter',
+            })
             .construis();
           const resultat: RepresentationRestitution = {
             ...reponseHATEOAS,
