@@ -64,7 +64,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
           );
 
           const contexte = jwt.estProconnect
-            ? 'aidant:proconnect-acceder-au-profil'
+            ? 'aidant:pro-connect-acceder-au-profil'
             : 'aidant:acceder-au-profil';
 
           return reponse.status(200).json({
@@ -74,9 +74,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
               : '',
             consentementAnnuaire: aidant.consentementAnnuaire,
             identifiantConnexion: aidant.email,
-            ...constructeurActionsHATEOAS()
-              .pour({ contexte: contexte })
-              .construis(),
+            ...constructeurActionsHATEOAS().pour({ contexte }).construis(),
           });
         })
         .catch((erreur) => suite(ErreurMAC.cree('Accède au profil', erreur)));

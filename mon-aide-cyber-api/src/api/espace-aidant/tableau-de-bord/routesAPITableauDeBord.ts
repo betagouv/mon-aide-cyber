@@ -40,7 +40,11 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
       return reponse.status(200).json({
         diagnostics,
         ...constructeurActionsHATEOAS()
-          .accedeAuTableauDeBord(diagnostics.map((d) => d.identifiant))
+          .pour({
+            contexte: 'aidant:acceder-au-tableau-de-bord',
+          })
+          .pour({ contexte: 'se-deconnecter' })
+          .afficherLesDiagnostics(diagnostics.map((d) => d.identifiant))
           .construis(),
       });
     }

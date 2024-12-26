@@ -94,7 +94,12 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
             .parIdentifiant(utilisateur.identifiant)
             .then((aidant) => {
               let actions = constructeurActionsHATEOAS()
-                .accedeAuxInformationsUtilisateur()
+                .pour({
+                  contexte: 'aidant:acceder-aux-informations-utilisateur',
+                })
+                .pour({
+                  contexte: 'se-deconnecter',
+                })
                 .construis();
               if (!aidant?.dateSignatureCGU) {
                 actions = constructeurActionsHATEOAS()
@@ -206,7 +211,9 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         .then(() =>
           reponse.status(200).json({
             ...constructeurActionsHATEOAS()
-              .pour({ contexte: 'aidant:acceder-au-profil' })
+              .pour({
+                contexte: 'aidant:acceder-au-profil',
+              })
               .construis(),
           })
         );

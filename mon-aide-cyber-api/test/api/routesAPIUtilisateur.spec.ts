@@ -76,6 +76,11 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
             url: '/api/aidant/preferences',
             methode: 'GET',
           },
+          'se-deconnecter': {
+            url: '/api/token',
+            methode: 'DELETE',
+            typeAppel: 'API',
+          },
         },
       });
     });
@@ -444,6 +449,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           'se-deconnecter': {
             methode: 'DELETE',
             url: '/api/token',
+            typeAppel: 'API',
           },
         },
       });

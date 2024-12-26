@@ -56,7 +56,11 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
             url: '/api/aidant/preferences',
             methode: 'GET',
           },
-          'se-deconnecter': { url: '/api/token', methode: 'DELETE' },
+          'se-deconnecter': {
+            url: '/api/token',
+            methode: 'DELETE',
+            typeAppel: 'API',
+          },
         },
       });
     });
@@ -131,7 +135,11 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
             url: '/api/aidant/preferences',
             methode: 'GET',
           },
-          'se-deconnecter': { url: '/api/token', methode: 'DELETE' },
+          'se-deconnecter': {
+            url: '/api/token',
+            methode: 'DELETE',
+            typeAppel: 'API',
+          },
         },
       });
     });

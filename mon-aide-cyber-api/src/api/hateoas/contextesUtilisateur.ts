@@ -1,11 +1,41 @@
 import { Options } from './hateoas';
+import {
+  demandeDevenirAidant,
+  finaliseCreationEspaceAidant,
+} from './devenirAidant';
+import { demandeAide, demandeEtreAide } from './etreAide';
+import { solliciterAide } from './solliciterAide';
+import {
+  seConnecter,
+  seConnecterAveProConnect,
+  seDeconnecter,
+  seDeconnecterDeProConnect,
+} from './connexion';
+import { afficherStatistiques } from './afficherStatistiques';
+import { afficherAnnuaireAidants } from './annuaireAidants';
+import {
+  reinitialisationMotDePasse,
+  reinitialiserMotDePasse,
+} from './reinitialisationMotDePasse';
+import { afficherDiagnostic, creerDiagnostic } from './diagnosticLibreAcces';
+import {
+  afficherPreferences,
+  afficherProfil,
+  afficherTableauDeBord,
+  lancerDiagnostic,
+  modifierMotDePasse,
+  modifierProfil,
+} from './aidant';
 
 type ClefContexte =
   | 'aidant'
+  | 'acceder-au-profil'
   | 'demande-devenir-aidant'
   | 'demande-etre-aide'
   | 'solliciter-aide'
   | 'se-connecter'
+  | 'se-deconnecter'
+  | 'se-deconnecter-avec-pro-connect'
   | 'afficher-statistiques'
   | 'afficher-annuaire-aidants'
   | 'reinitialisation-mot-de-passe'
@@ -19,131 +49,64 @@ export type ContextesUtilisateur = {
 
 export const contextesUtilisateur: ContextesUtilisateur = {
   'demande-devenir-aidant': {
-    'finalise-creation-espace-aidant': {
-      'finalise-creation-espace-aidant': {
-        url: '/api/demandes/devenir-aidant/creation-espace-aidant',
-        methode: 'POST',
-      },
-    },
-    'demande-devenir-aidant': {
-      'envoyer-demande-devenir-aidant': {
-        url: '/api/demandes/devenir-aidant',
-        methode: 'POST',
-      },
-      'demande-devenir-aidant': {
-        url: '/api/demandes/devenir-aidant',
-        methode: 'GET',
-      },
-    },
+    ...finaliseCreationEspaceAidant,
+    ...demandeDevenirAidant,
   },
   'demande-etre-aide': {
-    'demande-etre-aide': {
-      url: '/api/demandes/etre-aide',
-      methode: 'GET',
-    },
-    'demander-aide': {
-      url: '/api/demandes/etre-aide',
-      methode: 'POST',
-    },
+    ...demandeEtreAide,
+    ...demandeAide,
   },
   'solliciter-aide': {
-    'solliciter-aide': {
-      url: '/api/demandes/solliciter-aide',
-      methode: 'POST',
-    },
+    ...solliciterAide,
   },
   'se-connecter': {
-    'se-connecter': { url: '/api/token', methode: 'POST' },
-    ...(process.env.PRO_CONNECT_ACTIF === 'true' && {
-      'se-connecter-avec-pro-connect': {
-        url: '/pro-connect/connexion',
-        methode: 'GET',
-      },
-    }),
+    ...seConnecter,
+    ...(process.env.PRO_CONNECT_ACTIF === 'true' && seConnecterAveProConnect),
   },
+  'se-deconnecter': { ...seDeconnecter },
+  'se-deconnecter-avec-pro-connect': { ...seDeconnecterDeProConnect },
   'afficher-statistiques': {
-    'afficher-statistiques': { url: '/statistiques', methode: 'GET' },
+    ...afficherStatistiques,
   },
   'afficher-annuaire-aidants': {
-    'afficher-annuaire-aidants': {
-      url: '/api/annuaire-aidants',
-      methode: 'GET',
-    },
+    ...afficherAnnuaireAidants,
   },
   'reinitialisation-mot-de-passe': {
-    'reinitialiser-mot-de-passe': {
-      'reinitialiser-mot-de-passe': {
-        url: '/api/utilisateur/reinitialiser-mot-de-passe',
-        methode: 'PATCH',
-      },
-    },
-    'reinitialisation-mot-de-passe': {
-      'reinitialisation-mot-de-passe': {
-        url: '/api/utilisateur/reinitialisation-mot-de-passe',
-        methode: 'POST',
-      },
-    },
+    ...reinitialiserMotDePasse,
+    ...reinitialisationMotDePasse,
   },
   'utiliser-outil-diagnostic': {
-    creer: {
-      'creer-diagnostic': {
-        methode: 'POST',
-        url: '/api/diagnostic-libre-acces',
-      },
-    },
-    afficher: {
-      'afficher-diagnostic': {
-        methode: 'GET',
-        url: '/api/diagnostic-libre-acces/__ID__/restitution',
-      },
-    },
+    ...creerDiagnostic,
+    ...afficherDiagnostic,
   },
   aidant: {
     'acceder-au-profil': {
-      'lancer-diagnostic': {
-        url: '/api/diagnostic',
-        methode: 'POST',
-      },
-      'afficher-tableau-de-bord': {
-        url: '/api/espace-aidant/tableau-de-bord',
-        methode: 'GET',
-      },
+      ...lancerDiagnostic,
+      ...afficherTableauDeBord,
       ...(process.env
-        .FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL === 'true' && {
-        'modifier-profil': {
-          url: '/api/profil',
-          methode: 'PATCH',
-        },
-      }),
-      'modifier-mot-de-passe': {
-        url: '/api/profil/modifier-mot-de-passe',
-        methode: 'POST',
-      },
-      'se-deconnecter': {
-        url: '/api/token',
-        methode: 'DELETE',
-      },
+        .FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL === 'true' &&
+        modifierProfil),
+      ...modifierMotDePasse,
+      ...seDeconnecter,
     },
-    'proconnect-acceder-au-profil': {
-      'lancer-diagnostic': {
-        url: '/api/diagnostic',
-        methode: 'POST',
-      },
-      'afficher-tableau-de-bord': {
-        url: '/api/espace-aidant/tableau-de-bord',
-        methode: 'GET',
-      },
+    'pro-connect-acceder-au-profil': {
+      ...lancerDiagnostic,
+      ...afficherTableauDeBord,
       ...(process.env
-        .FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL === 'true' && {
-        'modifier-profil': {
-          url: '/api/profil',
-          methode: 'PATCH',
-        },
-      }),
-      'se-deconnecter': {
-        url: '/api/token',
-        methode: 'DELETE',
-      },
+        .FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL === 'true' &&
+        modifierProfil),
+      ...seDeconnecterDeProConnect,
+    },
+    'acceder-aux-informations-utilisateur': {
+      ...lancerDiagnostic,
+      ...afficherTableauDeBord,
+      ...afficherProfil,
+      ...afficherPreferences,
+    },
+    'acceder-au-tableau-de-bord': {
+      ...lancerDiagnostic,
+      ...afficherProfil,
+      ...afficherPreferences,
     },
   },
   'valider-signature-cgu': {
@@ -154,7 +117,7 @@ export const contextesUtilisateur: ContextesUtilisateur = {
   },
 };
 export type ContexteSpecifique = {
-  [clef: string]: Options;
+  [clef: string]: ContexteSpecifique | Options;
 };
 export type ContexteGeneral = {
   [clef: string]: ContexteSpecifique | Options;
