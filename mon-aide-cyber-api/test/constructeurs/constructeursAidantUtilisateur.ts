@@ -71,7 +71,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   private typesEntites: TypesEntites = [];
   private consentementAnnuaire = false;
   private siret: string | undefined = undefined;
-  private dateSignatureCGU: Date | undefined = fakerFR.date.anytime();
+  private dateSignatureCGU: Date | undefined = FournisseurHorloge.maintenant();
 
   avecUnNomPrenom(nomPrenom: string): ConstructeurAidant {
     this.nomPrenom = nomPrenom;
