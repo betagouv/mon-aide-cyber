@@ -43,7 +43,11 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
           .pour({
             contexte: 'aidant:acceder-au-tableau-de-bord',
           })
-          .pour({ contexte: 'se-deconnecter' })
+          .pour({
+            contexte: requete.estProConnect
+              ? 'se-deconnecter-avec-pro-connect'
+              : 'se-deconnecter',
+          })
           .afficherLesDiagnostics(diagnostics.map((d) => d.identifiant))
           .construis(),
       });

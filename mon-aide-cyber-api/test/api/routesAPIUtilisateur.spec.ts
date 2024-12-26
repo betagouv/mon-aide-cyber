@@ -85,6 +85,31 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       });
     });
 
+    it('Retourne l’information si l’utilisateur s’est connecté via ProConnect', async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      adaptateurDeVerificationDeSession.utilisateurProConnect(utilisateur);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/utilisateur/`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
+      expect((await reponse.json()).liens['se-deconnecter']).toStrictEqual({
+        url: '/pro-connect/deconnexion',
+        methode: 'GET',
+        typeAppel: 'DIRECT',
+      });
+    });
+
     it('Retourne l’action valider signature CGU si l’utilisateur ne les a pas signées', async () => {
       const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
@@ -452,6 +477,34 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
             typeAppel: 'API',
           },
         },
+      });
+    });
+
+    it("Accepte la requête et renvoie les actions possibles pour l'Aidant connecté via ProConnect", async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
+        utilisateur
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-signature-cgu`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+        }
+      );
+
+      expect((await reponse.json()).liens['se-deconnecter']).toStrictEqual({
+        methode: 'GET',
+        url: '/pro-connect/deconnexion',
+        typeAppel: 'DIRECT',
       });
     });
 

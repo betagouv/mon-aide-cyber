@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMACAPI } from '../fournisseurs/api/useMACAPI.ts';
 import { constructeurParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 
-export function useMoteurDeLiens(clef: Action) {
+export const useMoteurDeLiens = (clef: Action) => {
   const { etat } = useNavigationMAC();
 
   const accedeALaRessource = useMemo(() => {
@@ -14,7 +14,7 @@ export function useMoteurDeLiens(clef: Action) {
   }, [clef, etat]);
 
   return { accedeALaRessource };
-}
+};
 
 export const useRecupereLiensNavigation = (clef: Action, actif: boolean) => {
   const navigationMAC = useNavigationMAC();

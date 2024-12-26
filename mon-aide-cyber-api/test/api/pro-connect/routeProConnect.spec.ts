@@ -256,4 +256,122 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       });
     });
   });
+
+  describe('Lorsqu’une requête GET est reçue sur /pro-connect/apres-deconnexion', () => {
+    it('Nettoie le cookie et redirige vers la route /connexion', async () => {
+      let sessionSupprimeeAppelee = false;
+      utilitairesCookies.reinitialiseLaSession = () => {
+        sessionSupprimeeAppelee = true;
+      };
+      utilitairesCookies.recuperateurDeCookies = () =>
+        'j%3A%7B%22state%22%3A%22etat%22%2C%22nonce%22%3A%22coucou%22%7D';
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/pro-connect/apres-deconnexion?state=etat',
+        donneesServeur.portEcoute
+      );
+
+      const objet = enObjet<{ ProConnectInfo: string; [clef: string]: string }>(
+        reponse.headers['set-cookie'] as string
+      );
+      expect(objet.ProConnectInfo).toBeUndefined();
+      expect(sessionSupprimeeAppelee).toBe(true);
+      expect(reponse.headers['location']).toStrictEqual('/connexion');
+    });
+
+    it('Vérifie l’état fourni par la requête avec la valeur conservée dans la session', async () => {
+      utilitairesCookies.recuperateurDeCookies = () =>
+        'j%3A%7B%22state%22%3A%22etat1%22%2C%22nonce%22%3A%22coucou%22%7D';
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/pro-connect/apres-deconnexion?state=etat2',
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(401);
+    });
+
+    it('Retourne une 401 si il n’y a pas de cookie', async () => {
+      utilitairesCookies.recuperateurDeCookies = () => undefined;
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/pro-connect/apres-deconnexion?state=etat2',
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(401);
+    });
+  });
+
+  describe('Lorsqu’une requête GET est reçue sur /pro-connect/deconnexion', () => {
+    it('Génère une demande de déconnexion', async () => {
+      let demandeDeconnexionAppelee = false;
+      utilitairesCookies.fabriqueDeCookies = () => ({ session: 'session' });
+      utilitairesCookies.recuperateurDeCookies = () => 'cookie';
+      utilitairesCookies.jwtPayload = () => ({
+        identifiant: crypto.randomUUID(),
+        estProconnect: true,
+      });
+      testeurMAC.adaptateurProConnect.genereDemandeDeconnexion = () => {
+        demandeDeconnexionAppelee = true;
+        return Promise.resolve({
+          url: new URL('http://localhost/pro-connect/apres-deconnexion'),
+          state: 'state',
+        });
+      };
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/pro-connect/deconnexion',
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(302);
+      expect(demandeDeconnexionAppelee).toBe(true);
+      expect(reponse.headers['location']).toStrictEqual(
+        'http://localhost/pro-connect/apres-deconnexion'
+      );
+    });
+
+    it('Une erreur 401 est renvoyée si l’utilisateur n’est pas connecté', async () => {
+      utilitairesCookies.fabriqueDeCookies = () => {
+        throw new Error('Ne doit pas passer');
+      };
+      utilitairesCookies.recuperateurDeCookies = () => undefined;
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/pro-connect/deconnexion',
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(401);
+    });
+
+    it('Une erreur 401 est renvoyée si l’utilisateur n’est pas connecté via ProConnect', async () => {
+      utilitairesCookies.fabriqueDeCookies = () => ({ session: 'session' });
+      utilitairesCookies.recuperateurDeCookies = () => 'cookie';
+      utilitairesCookies.jwtPayload = () => ({
+        identifiant: crypto.randomUUID(),
+        estProconnect: false,
+      });
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/pro-connect/deconnexion',
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(401);
+    });
+  });
 });

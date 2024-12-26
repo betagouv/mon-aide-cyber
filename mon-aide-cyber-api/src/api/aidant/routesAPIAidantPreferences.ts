@@ -122,7 +122,14 @@ export const routesAPIAidantPreferences = (
               })),
               typesEntites,
             },
-            ...constructeurActionsHATEOAS().modifierPreferences().construis(),
+            ...constructeurActionsHATEOAS()
+              .pour({ contexte: 'aidant:modifier-preferences' })
+              .pour({
+                contexte: requete.estProConnect
+                  ? 'se-deconnecter-avec-pro-connect'
+                  : 'se-deconnecter',
+              })
+              .construis(),
           });
         })
         .catch((erreur) => {

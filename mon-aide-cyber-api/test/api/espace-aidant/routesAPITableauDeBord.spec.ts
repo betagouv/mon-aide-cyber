@@ -65,6 +65,33 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
       });
     });
 
+    it('Retourne l’action se déconnecter propre à ProConnect', async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
+        utilisateur
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/espace-aidant/tableau-de-bord`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      const corpsReponse: ReponseDiagnostics = await reponse.json();
+      expect(corpsReponse.liens['se-deconnecter']).toStrictEqual({
+        url: '/pro-connect/deconnexion',
+        methode: 'GET',
+        typeAppel: 'DIRECT',
+      });
+    });
+
     it("retourne les diagnostics initiés par l'Aidant", async () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-02-04T13:54:07+01:00'))

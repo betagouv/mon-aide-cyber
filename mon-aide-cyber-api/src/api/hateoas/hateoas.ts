@@ -80,10 +80,9 @@ class ConstructeurActionsHATEOAS {
   }
 
   public demandeLaRestitution(identifiant: string): ConstructeurActionsHATEOAS {
-    this.lancerDiagnostic()
+    this.pour({ contexte: 'aidant:acceder-aux-informations-utilisateur' })
       .restituerDiagnostic(identifiant)
-      .modifierDiagnostic(identifiant)
-      .afficherMesInformations();
+      .modifierDiagnostic(identifiant);
     return this;
   }
 
@@ -178,14 +177,6 @@ class ConstructeurActionsHATEOAS {
     } else {
       this.actionsPubliques();
     }
-    return this;
-  }
-
-  public modifierPreferences(): ConstructeurActionsHATEOAS {
-    this.actions.set('modifier-preferences', {
-      url: '/api/aidant/preferences',
-      methode: 'PATCH',
-    });
     return this;
   }
 

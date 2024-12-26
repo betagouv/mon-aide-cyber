@@ -35,10 +35,12 @@ export class AdaptateurDeVerificationDeSessionHttp
           requete,
           reponse
         );
-        requete.identifiantUtilisateurCourant = utilitairesCookies.jwtPayload(
+        const jwtPayload = utilitairesCookies.jwtPayload(
           cookies,
           this.gestionnaireDeJeton
-        ).identifiant;
+        );
+        requete.identifiantUtilisateurCourant = jwtPayload.identifiant;
+        requete.estProConnect = jwtPayload.estProconnect;
       } catch (e) {
         throw ErreurMAC.cree(
           contexte,

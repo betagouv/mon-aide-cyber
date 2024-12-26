@@ -66,7 +66,37 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
             url: '/api/aidant/preferences',
             methode: 'PATCH',
           },
+          'se-deconnecter': {
+            url: '/api/token',
+            methode: 'DELETE',
+            typeAppel: 'API',
+          },
         },
+      });
+    });
+
+    it('Retourne l’action de déconnexion de l’Aidant propre à ProConnect', async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+        constructeurAidant: unAidant(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
+        utilisateur
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/aidant/preferences`,
+        donneesServeur.portEcoute
+      );
+
+      expect((await reponse.json()).liens['se-deconnecter']).toStrictEqual({
+        url: '/pro-connect/deconnexion',
+        methode: 'GET',
+        typeAppel: 'DIRECT',
       });
     });
 

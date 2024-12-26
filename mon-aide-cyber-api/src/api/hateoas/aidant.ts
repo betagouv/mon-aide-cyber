@@ -36,3 +36,10 @@ export const modifierMotDePasse: ContexteSpecifique = {
     methode: 'POST',
   },
 };
+
+export const modifierPreferences: ContexteSpecifique = {
+  'modifier-preferences': {
+    url: '/api/aidant/preferences',
+    methode: 'PATCH',
+  },
+};

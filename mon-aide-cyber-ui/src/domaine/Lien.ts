@@ -5,6 +5,7 @@ export type Lien = {
   methode?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   contentType?: string;
   route?: string;
+  typeAppel?: 'API' | 'DIRECT';
 };
 export type Liens = Record<Action | string, Lien>;
 export type ReponseHATEOAS = {

@@ -11,7 +11,10 @@ import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorl
 import { adaptateurUUID } from '../../infrastructure/adaptateurs/adaptateurUUID';
 import crypto from 'crypto';
 import { estSiretGendarmerie } from '../../espace-aidant/Aidant';
-import { utilitairesCookies } from '../../adaptateurs/utilitairesDeCookies';
+import {
+  MACCookies,
+  utilitairesCookies,
+} from '../../adaptateurs/utilitairesDeCookies';
 
 export class ErreurProConnectApresAuthentification extends Error {
   constructor(e: Error) {
@@ -55,6 +58,9 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
     }
   );
 
+  const extraisCookieProConnect = (cookie: string) =>
+    JSON.parse(decodeURIComponent(cookie).substring(2));
+
   routes.get(
     '/apres-authentification',
     async (
@@ -92,7 +98,7 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
         const { idToken, accessToken } =
           await adaptateurProConnect.recupereJeton(
             requete,
-            JSON.parse(decodeURIComponent(cookie).substring(2))
+            extraisCookieProConnect(cookie)
           );
 
         reponse.clearCookie('ProConnectInfo');
@@ -155,16 +161,67 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
       }
     }
   );
-  //
-  // routes.get('/apres-deconnexion', async (requete, reponse) => {
-  //   const { state } = requete.cookies.AgentConnectInfo;
-  //   if (state !== requete.query.state) {
-  //     reponse.sendStatus(401);
-  //     return;
-  //   }
-  //   reponse.clearCookie('AgentConnectInfo');
-  //   reponse.redirect('/connexion');
-  // });
+
+  routes.get('/deconnexion', async (requete: Request, reponse: Response) => {
+    const valeurCookie = utilitairesCookies.recuperateurDeCookies(
+      requete,
+      reponse
+    );
+    if (!valeurCookie) {
+      return reponse.status(401).send();
+    }
+    const cookies: MACCookies = utilitairesCookies.fabriqueDeCookies(
+      'Demande de déconnexion',
+      requete,
+      reponse
+    );
+    const jwtPayload = utilitairesCookies.jwtPayload(
+      cookies,
+      gestionnaireDeJeton
+    );
+    if (!jwtPayload.estProconnect) {
+      return reponse.status(401).send();
+    }
+    const { url, state } = await adaptateurProConnect.genereDemandeDeconnexion(
+      requete.session!.ProConnectIdToken
+    );
+
+    reponse.cookie(
+      'ProConnectInfo',
+      { state },
+      {
+        maxAge: 30_000,
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      }
+    );
+
+    return reponse.redirect(url.toString());
+  });
+
+  routes.get(
+    '/apres-deconnexion',
+    async (requete: Request, reponse: Response) => {
+      const cookie = utilitairesCookies.recuperateurDeCookies(
+        requete,
+        reponse,
+        {
+          nom: 'ProConnectInfo',
+        }
+      );
+      if (!cookie) {
+        return reponse.sendStatus(401);
+      }
+      const { state } = extraisCookieProConnect(cookie);
+      if (state !== requete.query.state) {
+        return reponse.sendStatus(401);
+      }
+      utilitairesCookies.reinitialiseLaSession(requete, reponse);
+      reponse.clearCookie('AgentConnectInfo');
+      return reponse.redirect('/connexion');
+    }
+  );
 
   return routes;
 };

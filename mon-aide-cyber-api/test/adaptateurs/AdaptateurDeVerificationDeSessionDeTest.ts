@@ -9,6 +9,7 @@ export class AdaptateurDeVerificationDeSessionDeTest
   implements AdaptateurDeVerificationDeSession
 {
   private _utilisateurConnecte?: Utilisateur | undefined;
+  private _estProConnect?: boolean | undefined;
 
   constructor(private estPassee = false) {}
 
@@ -23,6 +24,9 @@ export class AdaptateurDeVerificationDeSessionDeTest
         _requete.identifiantUtilisateurCourant =
           this._utilisateurConnecte.identifiant;
       }
+      if (this._estProConnect) {
+        _requete.estProConnect = this._estProConnect;
+      }
       suite();
     };
   }
@@ -35,8 +39,14 @@ export class AdaptateurDeVerificationDeSessionDeTest
     this._utilisateurConnecte = utilisateur;
   }
 
+  utilisateurProConnect(utilisateur: Utilisateur) {
+    this.utilisateurConnecte(utilisateur);
+    this._estProConnect = true;
+  }
+
   reinitialise() {
     this._utilisateurConnecte = undefined;
     this.estPassee = false;
+    this._estProConnect = undefined;
   }
 }

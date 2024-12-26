@@ -24,12 +24,14 @@ import {
   afficherTableauDeBord,
   lancerDiagnostic,
   modifierMotDePasse,
+  modifierPreferences,
   modifierProfil,
 } from './aidant';
 
 type ClefContexte =
   | 'aidant'
-  | 'acceder-au-profil'
+  | 'aidant:acceder-au-profil'
+  | 'aidant:acceder-aux-informations-utilisateur'
   | 'demande-devenir-aidant'
   | 'demande-etre-aide'
   | 'solliciter-aide'
@@ -107,6 +109,9 @@ export const contextesUtilisateur: ContextesUtilisateur = {
       ...lancerDiagnostic,
       ...afficherProfil,
       ...afficherPreferences,
+    },
+    'modifier-preferences': {
+      ...modifierPreferences,
     },
   },
   'valider-signature-cgu': {
