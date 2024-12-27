@@ -23,6 +23,7 @@ type DonneesAidant = {
   preferences: PreferencesDTO;
   consentementAnnuaire: boolean;
   dateSignatureCGU?: string;
+  siret?: string;
 };
 
 type AidantDTO = DTO & {
@@ -69,6 +70,7 @@ export class EntrepotAidantPostgres
           dto.donnees.dateSignatureCGU
         ),
       }),
+      ...(dto.donnees.siret && { siret: dto.donnees.siret }),
     };
   }
 
@@ -89,6 +91,7 @@ export class EntrepotAidantPostgres
         ...(entite.dateSignatureCGU && {
           dateSignatureCGU: entite.dateSignatureCGU.toISOString(),
         }),
+        ...(entite.siret && { siret: entite.siret }),
       },
     };
   }
