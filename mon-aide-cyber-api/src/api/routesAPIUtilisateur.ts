@@ -64,6 +64,12 @@ const valitateurUtilisateur = (
 
 export class ErreurDemandeReinitialisationMotDePasse extends Error {}
 
+export class ErreurUtilisateurNonTrouve extends Error {
+  constructor() {
+    super('Utilisateur non trouvé.');
+  }
+}
+
 export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
@@ -86,39 +92,37 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       reponse: Response,
       suite: NextFunction
     ) => {
-      return entrepots
-        .utilisateurs()
-        .lis(requete.identifiantUtilisateurCourant!)
-        .then((utilisateur) =>
-          unServiceAidant(entrepots.aidants())
-            .parIdentifiant(utilisateur.identifiant)
-            .then((aidant) => {
-              let actions = constructeurActionsHATEOAS()
-                .pour({
-                  contexte: 'aidant:acceder-aux-informations-utilisateur',
-                })
-                .pour({
-                  contexte: requete.estProConnect
-                    ? 'se-deconnecter-avec-pro-connect'
-                    : 'se-deconnecter',
-                })
-                .construis();
-              if (!aidant?.dateSignatureCGU) {
-                actions = constructeurActionsHATEOAS()
-                  .pour({ contexte: 'valider-signature-cgu' })
-                  .construis();
-              }
-              return reponse.status(200).json({
-                ...actions,
-                nomPrenom: utilisateur.nomPrenom,
-              });
+      return unServiceAidant(entrepots.aidants())
+        .parIdentifiant(requete.identifiantUtilisateurCourant!)
+        .then((aidant) => {
+          if (!aidant) {
+            return suite(
+              ErreurMAC.cree(
+                "Accède aux informations de l'utilisateur",
+                new ErreurUtilisateurNonTrouve()
+              )
+            );
+          }
+          let actions = constructeurActionsHATEOAS()
+            .pour({
+              contexte: 'aidant:acceder-aux-informations-utilisateur',
             })
-        )
-        .catch((erreur) =>
-          suite(
-            ErreurMAC.cree("Accède aux informations de l'utilisateur", erreur)
-          )
-        );
+            .pour({
+              contexte: requete.estProConnect
+                ? 'se-deconnecter-avec-pro-connect'
+                : 'se-deconnecter',
+            })
+            .construis();
+          if (!aidant.dateSignatureCGU) {
+            actions = constructeurActionsHATEOAS()
+              .pour({ contexte: 'valider-signature-cgu' })
+              .construis();
+          }
+          return reponse.status(200).json({
+            ...actions,
+            nomPrenom: aidant.nomComplet,
+          });
+        });
     }
   );
 

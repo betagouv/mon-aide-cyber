@@ -25,6 +25,7 @@ describe('Service Aidant', () => {
         email: aidant.email,
         nomUsage: 'Jean D.',
         dateSignatureCGU: aidant.dateSignatureCGU!,
+        nomComplet: 'Jean Dujardin',
       });
     });
 
@@ -57,6 +58,7 @@ describe('Service Aidant', () => {
         identifiant: martin.identifiant,
         email: martin.email,
         dateSignatureCGU: martin.dateSignatureCGU!,
+        nomComplet: 'Martin Dupont',
       });
     });
 

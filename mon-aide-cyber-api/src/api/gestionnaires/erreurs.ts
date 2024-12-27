@@ -12,7 +12,10 @@ import { ErreurModificationPreferences } from '../aidant/routesAPIAidantPreferen
 import { ErreurModificationProfil } from '../aidant/routesAPIProfil';
 import { ErreurCreationEspaceAidant } from '../../espace-aidant/Aidant';
 import { ErreurReinitialisationMotDePasse } from '../../authentification/ServiceUtilisateur';
-import { ErreurDemandeReinitialisationMotDePasse } from '../routesAPIUtilisateur';
+import {
+  ErreurDemandeReinitialisationMotDePasse,
+  ErreurUtilisateurNonTrouve,
+} from '../routesAPIUtilisateur';
 import { ErreurProConnectApresAuthentification } from '../pro-connect/routeProConnect';
 
 const HTTP_ACCEPTE = 202;
@@ -199,6 +202,17 @@ const erreursGerees: Map<
       reponse.redirect(
         '/connexion?erreurConnexion=Un problème est survenu lors de la connexion à ProConnect !'
       );
+    },
+  ],
+  [
+    'ErreurUtilisateurNonTrouve',
+    (
+      erreur: ErreurMAC<ErreurUtilisateurNonTrouve>,
+      _requete,
+      _consignateur,
+      reponse
+    ) => {
+      construisReponse(reponse, HTTP_NON_TROUVE, { message: erreur.message });
     },
   ],
 ]);

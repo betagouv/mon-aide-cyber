@@ -5,6 +5,7 @@ export type AidantDTO = {
   identifiant: crypto.UUID;
   email: string;
   nomUsage: string;
+  nomComplet: string;
   siret?: Siret;
   dateSignatureCGU?: Date;
 };

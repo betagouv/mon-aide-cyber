@@ -151,7 +151,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       expect(reponse.statusCode).toBe(404);
       expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
       expect(await reponse.json()).toStrictEqual({
-        message: "Le utilisateur demandé n'existe pas.",
+        message: 'Utilisateur non trouvé.',
       });
     });
 
