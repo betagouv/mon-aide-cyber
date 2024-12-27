@@ -144,7 +144,9 @@ export const routesAPIDemandesDevenirAidant = (
         })
         .then(() =>
           reponse.status(201).json({
-            ...constructeurActionsHATEOAS().actionsCreationCompte().construis(),
+            ...constructeurActionsHATEOAS()
+              .pour({ contexte: 'se-connecter' })
+              .construis(),
           })
         )
         .catch((erreur) =>

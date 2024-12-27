@@ -6,8 +6,16 @@ export const liensPublicsAttendus: ReponseHATEOAS = {
       methode: 'GET',
       url: '/api/demandes/devenir-aidant',
     },
+    'envoyer-demande-devenir-aidant': {
+      methode: 'POST',
+      url: '/api/demandes/devenir-aidant',
+    },
     'demande-etre-aide': {
       methode: 'GET',
+      url: '/api/demandes/etre-aide',
+    },
+    'demander-aide': {
+      methode: 'POST',
       url: '/api/demandes/etre-aide',
     },
     'se-connecter': {

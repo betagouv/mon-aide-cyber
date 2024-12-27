@@ -1,4 +1,5 @@
 import { ContexteSpecifique } from './contextesUtilisateur';
+import { Options } from './hateoas';
 
 export const lancerDiagnostic: ContexteSpecifique = {
   'lancer-diagnostic': {
@@ -6,7 +7,9 @@ export const lancerDiagnostic: ContexteSpecifique = {
     methode: 'POST',
   },
 };
-export const afficherTableauDeBord: ContexteSpecifique = {
+export const afficherTableauDeBord: ContexteSpecifique & {
+  'afficher-tableau-de-bord': Options;
+} = {
   'afficher-tableau-de-bord': {
     url: '/api/espace-aidant/tableau-de-bord',
     methode: 'GET',
