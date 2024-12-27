@@ -90,8 +90,13 @@ describe('Adaptateur de vérification de relations MAC', () => {
           url: '/api/espace-aidant/tableau-de-bord',
           methode: 'GET',
         },
+        'lancer-diagnostic': {
+          methode: 'POST',
+          url: '/api/diagnostic',
+        },
         'se-deconnecter': {
           methode: 'DELETE',
+          typeAppel: 'API',
           url: '/api/token',
         },
       },

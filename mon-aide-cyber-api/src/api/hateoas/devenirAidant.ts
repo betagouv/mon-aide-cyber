@@ -1,4 +1,5 @@
 import { ContexteSpecifique } from './contextesUtilisateur';
+import { Options } from './hateoas';
 
 export const finaliseCreationEspaceAidant: ContexteSpecifique = {
   'finalise-creation-espace-aidant': {
@@ -8,7 +9,12 @@ export const finaliseCreationEspaceAidant: ContexteSpecifique = {
     },
   },
 };
-export const demandeDevenirAidant: ContexteSpecifique = {
+export const demandeDevenirAidant: ContexteSpecifique & {
+  'demande-devenir-aidant': {
+    'envoyer-demande-devenir-aidant': Options;
+    'demande-devenir-aidant': Options;
+  };
+} = {
   'demande-devenir-aidant': {
     'envoyer-demande-devenir-aidant': {
       url: '/api/demandes/devenir-aidant',

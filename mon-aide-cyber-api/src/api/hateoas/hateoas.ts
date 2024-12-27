@@ -4,6 +4,9 @@ import {
   ContexteSpecifique,
   contextesUtilisateur,
 } from './contextesUtilisateur';
+import { demandeAide } from './etreAide';
+import { afficherTableauDeBord } from './aidant';
+import { demandeDevenirAidant } from './devenirAidant';
 
 type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
 export type LiensHATEOAS = Record<string, Options>;
@@ -68,15 +71,11 @@ class ConstructeurActionsHATEOAS {
   private readonly actions: Map<string, Options> = new Map();
 
   public afficherTableauDeBord(): ConstructeurActionsHATEOAS {
-    this.actions.set('afficher-tableau-de-bord', {
-      url: '/api/espace-aidant/tableau-de-bord',
-      methode: 'GET',
-    });
+    this.actions.set(
+      'afficher-tableau-de-bord',
+      afficherTableauDeBord['afficher-tableau-de-bord']
+    );
     return this;
-  }
-
-  public postAuthentification(): ConstructeurActionsHATEOAS {
-    return this.lancerDiagnostic().afficherMesInformations();
   }
 
   public demandeLaRestitution(identifiant: string): ConstructeurActionsHATEOAS {
@@ -87,10 +86,7 @@ class ConstructeurActionsHATEOAS {
   }
 
   public demandeAide() {
-    this.actions.set('demander-aide', {
-      url: '/api/demandes/etre-aide',
-      methode: 'POST',
-    });
+    this.actions.set('demander-aide', demandeAide['demander-aide']);
     return this;
   }
 
@@ -121,12 +117,6 @@ class ConstructeurActionsHATEOAS {
     });
   }
 
-  public actionsAccesDiagnosticNonAutorise(): ConstructeurActionsHATEOAS {
-    return this.afficherTableauDeBord()
-      .afficherMesInformations()
-      .seDeconnecter();
-  }
-
   public ajoutReponseAuDiagnostic(
     identifiantDiagnostic: crypto.UUID
   ): ConstructeurActionsHATEOAS {
@@ -136,29 +126,21 @@ class ConstructeurActionsHATEOAS {
   }
 
   public actionsPubliques(): ConstructeurActionsHATEOAS {
-    this.actions.set('demande-devenir-aidant', {
-      url: '/api/demandes/devenir-aidant',
-      methode: 'GET',
-    });
-
-    this.actions.set('demande-etre-aide', {
-      url: '/api/demandes/etre-aide',
-      methode: 'GET',
-    });
-
-    return this.seConnecter();
-  }
-
-  public demandeDevenirAidant(): ConstructeurActionsHATEOAS {
-    this.actions.set('envoyer-demande-devenir-aidant', {
-      url: '/api/demandes/devenir-aidant',
-      methode: 'POST',
-    });
+    this.pour({
+      contexte: 'demande-devenir-aidant:demande-devenir-aidant',
+    })
+      .pour({ contexte: 'demande-etre-aide' })
+      .pour({ contexte: 'se-connecter' });
     return this;
   }
 
-  public actionsCreationCompte(): ConstructeurActionsHATEOAS {
-    this.seConnecter();
+  public demandeDevenirAidant(): ConstructeurActionsHATEOAS {
+    this.actions.set(
+      'envoyer-demande-devenir-aidant',
+      demandeDevenirAidant['demande-devenir-aidant'][
+        'envoyer-demande-devenir-aidant'
+      ]
+    );
     return this;
   }
 
@@ -177,28 +159,6 @@ class ConstructeurActionsHATEOAS {
     } else {
       this.actionsPubliques();
     }
-    return this;
-  }
-
-  private lancerDiagnostic(): ConstructeurActionsHATEOAS {
-    this.actions.set('lancer-diagnostic', {
-      url: '/api/diagnostic',
-      methode: 'POST',
-    });
-    this.afficherTableauDeBord();
-    return this;
-  }
-
-  private afficherMesInformations(): ConstructeurActionsHATEOAS {
-    this.actions.set('afficher-profil', {
-      url: '/api/profil',
-      methode: 'GET',
-    });
-    this.actions.set('afficher-preferences', {
-      url: '/api/aidant/preferences',
-      methode: 'GET',
-    });
-
     return this;
   }
 
@@ -222,25 +182,6 @@ class ConstructeurActionsHATEOAS {
     this.actions.set('modifier-diagnostic', {
       url: `/api/diagnostic/${idDiagnostic}`,
       methode: 'GET',
-    });
-    return this;
-  }
-
-  private seConnecter(): ConstructeurActionsHATEOAS {
-    this.actions.set('se-connecter', { url: '/api/token', methode: 'POST' });
-    if (process.env.PRO_CONNECT_ACTIF === 'true') {
-      this.actions.set('se-connecter-avec-pro-connect', {
-        url: '/pro-connect/connexion',
-        methode: 'GET',
-      });
-    }
-    return this;
-  }
-
-  private seDeconnecter(): ConstructeurActionsHATEOAS {
-    this.actions.set('se-deconnecter', {
-      url: '/api/token',
-      methode: 'DELETE',
     });
     return this;
   }

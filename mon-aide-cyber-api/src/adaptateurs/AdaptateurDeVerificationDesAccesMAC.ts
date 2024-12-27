@@ -41,7 +41,8 @@ export class AdaptateurDeVerificationDesAccesMAC
           titre: 'Accès non autorisé',
           message: 'Désolé, vous ne pouvez pas accéder à ce diagnostic.',
           ...constructeurActionsHATEOAS()
-            .actionsAccesDiagnosticNonAutorise()
+            .pour({ contexte: 'aidant:acceder-aux-informations-utilisateur' })
+            .pour({ contexte: 'se-deconnecter' })
             .construis(),
         });
       } else {
