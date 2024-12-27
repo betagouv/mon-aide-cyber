@@ -54,9 +54,9 @@ export class EntrepotProfilAidantPostgres implements EntrepotProfilAidant {
   lis(identifiant: string): Promise<ProfilAidant> {
     return this.knex
       .raw(
-        `SELECT u.id as id, json_build_object('dateSignatureCGU', a.donnees -> 'dateSignatureCGU', 'email', a.donnees ->> 'email', 'nomPrenom', a.donnees ->> 'nomPrenom', 'preferences', a.donnees -> 'preferences', 'consentementAnnuaire', a.donnees -> 'consentementAnnuaire') as donnees
-         FROM utilisateurs u, utilisateurs_mac a
-         WHERE u.id = a.id AND u.id = ?;`,
+        `SELECT a.id as id, json_build_object('dateSignatureCGU', a.donnees -> 'dateSignatureCGU', 'email', a.donnees ->> 'email', 'nomPrenom', a.donnees ->> 'nomPrenom', 'preferences', a.donnees -> 'preferences', 'consentementAnnuaire', a.donnees -> 'consentementAnnuaire') as donnees
+         FROM  utilisateurs_mac a
+         WHERE a.id = ?;`,
         [identifiant]
       )
       .then(({ rows }: { rows: ProfilAidantDTO[] }) => {

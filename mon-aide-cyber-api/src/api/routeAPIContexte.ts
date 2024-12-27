@@ -10,7 +10,7 @@ export type InformationsContexte = {
 
 export const routeAPIContexte = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
-  const { entrepots, gestionnaireDeJeton } = configuration;
+  const { gestionnaireDeJeton } = configuration;
 
   const estInformationContexte = (
     informationsContexte: InformationsContexte | ParsedQs
@@ -19,27 +19,14 @@ export const routeAPIContexte = (configuration: ConfigurationServeur) => {
 
   routes.get('/', (requete: Request, reponse: Response) => {
     const actionsAidantConnecte = (cookies: string) => {
-      const jwt = utilitairesCookies.jwtPayload(
-        { session: cookies },
-        gestionnaireDeJeton
-      );
+      utilitairesCookies.jwtPayload({ session: cookies }, gestionnaireDeJeton);
       const actionsHATEOAS = estInformationContexte(requete.query)
         ? constructeurActionsHATEOAS().pour(requete.query)
         : constructeurActionsHATEOAS();
 
-      if (jwt.identifiant) {
-        return entrepots
-          .utilisateurs()
-          .lis(jwt.identifiant)
-          .then(() =>
-            reponse.json({
-              ...actionsHATEOAS.afficherTableauDeBord().construis(),
-            })
-          );
-      }
-      return reponse.json(
-        constructeurActionsHATEOAS().afficherTableauDeBord().construis()
-      );
+      return reponse.json({
+        ...actionsHATEOAS.afficherTableauDeBord().construis(),
+      });
     };
 
     const cookies = utilitairesCookies.recuperateurDeCookies(requete, reponse);

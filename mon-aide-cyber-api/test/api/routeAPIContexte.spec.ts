@@ -122,7 +122,10 @@ describe('Route contexte', () => {
       });
 
       it('Retourne les liens publics', async () => {
-        utilitairesCookies.recuperateurDeCookies = () => undefined;
+        utilitairesCookies.recuperateurDeCookies = () => 'cookie';
+        utilitairesCookies.jwtPayload = () => {
+          throw new Error('Erreur survenue');
+        };
 
         const reponse = await executeRequete(
           donneesServeur.app,

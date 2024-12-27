@@ -34,11 +34,12 @@ class ServiceAidantMAC implements ServiceAidant {
     return `${prenom} ${nom ? `${nom[0]}.` : ''}`.trim();
   }
 
-  private mappeAidant(aidant: Aidant) {
+  private mappeAidant(aidant: Aidant): AidantDTO {
     return {
       identifiant: aidant.identifiant,
       email: aidant.email,
       nomUsage: this.formateLeNom(aidant.nomPrenom),
+      nomComplet: aidant.nomPrenom,
       ...(aidant.siret && { siret: aidant.siret }),
       ...(aidant.dateSignatureCGU && {
         dateSignatureCGU: aidant.dateSignatureCGU,
