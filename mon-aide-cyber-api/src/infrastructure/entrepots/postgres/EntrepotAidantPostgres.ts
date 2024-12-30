@@ -1,4 +1,4 @@
-import { DTO, EntrepotPostgres } from './EntrepotPostgres';
+import { DTO, EntrepotPostgres, Predicat } from './EntrepotPostgres';
 
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
@@ -27,6 +27,7 @@ type DonneesAidant = {
 };
 
 type AidantDTO = DTO & {
+  type: 'AIDANT';
   donnees: DonneesAidant;
 };
 
@@ -77,6 +78,7 @@ export class EntrepotAidantPostgres
   protected deEntiteADTO(entite: Aidant): AidantDTO {
     return {
       id: entite.identifiant,
+      type: 'AIDANT',
       donnees: {
         email: this.chiffrement.chiffre(entite.email),
         nomPrenom: this.chiffrement.chiffre(entite.nomPrenom),
@@ -100,6 +102,10 @@ export class EntrepotAidantPostgres
     return 'utilisateurs_mac';
   }
 
+  protected predicat(): Predicat | undefined {
+    return { colonne: 'type', valeur: 'AIDANT' };
+  }
+
   typeAggregat(): string {
     return 'aidant';
   }
@@ -107,6 +113,7 @@ export class EntrepotAidantPostgres
   rechercheParEmail(email: string): Promise<Aidant> {
     return this.knex
       .from(`${this.nomTable()}`)
+      .where('type', 'AIDANT')
       .then((aidants: AidantDTO[]) =>
         aidants.find(
           (a) => this.chiffrement.dechiffre(a.donnees.email) === email

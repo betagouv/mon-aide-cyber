@@ -64,6 +64,9 @@ import { EntrepotAidantPostgres as EntrepotAidantPostgresExtraction } from '../.
 import { Aidant as AidantExtraction } from '../../../../src/administration/aidants/aidants-selon-nombre-diagnostics/Types';
 import { ProfilAidant } from '../../../../src/espace-aidant/profil/profilAidant';
 import { EntrepotProfilAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotProfilAidantPostgres';
+import knexfile from './../../../../src/infrastructure/entrepots/postgres/knexfile';
+import knex from 'knex';
+import { AggregatNonTrouve } from '../../../../src/domaine/Aggregat';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {
@@ -677,8 +680,8 @@ describe('Entrepot Aidant', () => {
     });
   });
 
-  describe('Recherche par identifiant', () => {
-    it("l'aidant est trouvé", async () => {
+  describe('Recherche par email', () => {
+    it("L'aidant est trouvé", async () => {
       const aidant = unAidant().construis();
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
         new Map([
@@ -695,12 +698,70 @@ describe('Entrepot Aidant', () => {
       expect(aidantTrouve).toStrictEqual<Aidant>(aidant);
     });
 
-    it("l'aidant n'est pas trouvé", () => {
+    it("Retourne un erreur s'il ne s'agit pas d'un Aidant", async () => {
+      await knex(knexfile)
+        .insert({
+          id: crypto.randomUUID(),
+          type: 'UTILISATEUR_INSCRIT',
+          donnees: { email: 'jean.dupont@utilisateur-inscrit.com' },
+        })
+        .into('utilisateurs_mac');
+
+      const aidantTrouve = new EntrepotAidantPostgres(
+        new ServiceDeChiffrementClair()
+      ).rechercheParEmail('jean.dupont@utilisateur-inscrit.com');
+
+      expect(aidantTrouve).rejects.toStrictEqual(
+        new AggregatNonTrouve('aidant')
+      );
+    });
+
+    it("L'aidant n'est pas trouvé", () => {
       expect(
         new EntrepotAidantPostgres(
           new FauxServiceDeChiffrement(new Map())
         ).rechercheParEmail('identifiant-inconnu')
       ).rejects.toThrow(new Error("Le aidant demandé n'existe pas."));
+    });
+  });
+
+  describe('Pour le type Aidant', () => {
+    it('Retourne une erreur s’il ne s’agit pas d’un Aidant', async () => {
+      const id = crypto.randomUUID();
+      await knex(knexfile)
+        .insert({
+          id,
+          type: 'UTILISATEUR_INSCRIT',
+          donnees: { email: 'jean.dupont@utilisateur-inscrit.com' },
+        })
+        .into('utilisateurs_mac');
+
+      const aidantTrouve = new EntrepotAidantPostgres(
+        new ServiceDeChiffrementClair()
+      ).lis(id);
+
+      expect(aidantTrouve).rejects.toStrictEqual(
+        new AggregatNonTrouve('aidant')
+      );
+    });
+
+    it('Retourne uniquement les Aidants', async () => {
+      const aidant = unAidant().construis();
+      const serviceDeChiffrement = new ServiceDeChiffrementClair();
+      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+      await knex(knexfile)
+        .insert({
+          id: crypto.randomUUID(),
+          type: 'UTILISATEUR_INSCRIT',
+          donnees: { email: 'jean.dupont@utilisateur-inscrit.com' },
+        })
+        .into('utilisateurs_mac');
+
+      const aidants = await new EntrepotAidantPostgres(
+        serviceDeChiffrement
+      ).tous();
+
+      expect(aidants).toStrictEqual<Aidant[]>([aidant]);
     });
   });
 });
