@@ -6,6 +6,11 @@ import crypto from 'crypto';
 
 export type DTO = { id: crypto.UUID };
 
+export type Predicat = {
+  colonne: string;
+  valeur: string;
+};
+
 export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
   implements Entrepot<T>
 {
@@ -16,9 +21,12 @@ export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
   }
 
   lis(identifiant: string): Promise<T> {
-    return this.knex
-      .from(this.nomTable())
-      .where('id', identifiant)
+    const requete = this.knex.from(this.nomTable()).where('id', identifiant);
+    const predicat = this.predicat();
+    if (predicat) {
+      requete.andWhere(predicat.colonne, predicat.valeur);
+    }
+    return requete
       .first()
       .then((ligne: D) =>
         ligne !== undefined
@@ -43,8 +51,12 @@ export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
   }
 
   async tous(): Promise<T[]> {
-    const lignes = await this.knex.from(this.nomTable());
-    return lignes.map((ligne) => this.deDTOAEntite(ligne));
+    const requete = this.knex.from(this.nomTable());
+    const predicat = this.predicat();
+    if (predicat) {
+      requete.andWhere(predicat.colonne, predicat.valeur);
+    }
+    return (await requete).map((ligne) => this.deDTOAEntite(ligne));
   }
 
   typeAggregat(): string {
@@ -58,4 +70,8 @@ export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
   protected abstract deEntiteADTO(entite: T): D;
 
   protected abstract deDTOAEntite(dto: D): T;
+
+  protected predicat(): Predicat | undefined {
+    return undefined;
+  }
 }
