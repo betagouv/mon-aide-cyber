@@ -26,14 +26,20 @@ export const MentionsLegales = () => {
             </p>
             <h3>Hébergement</h3>
             <p>
-              L&apos;hébergement du site est assuré par 3DS OUTSCALE SecNumCloud
-              et SCALINGO, 15 avenue du Rhin, 67100 Strasbourg, société par
-              actions simplifiée, immatriculée au RCS de Strasbourg sous le
-              numéro 808 665 483.
+              L’hébergement du site est assuré par Clever Cloud SAS, société par
+              actions simplifiée, immatriculée au RCS de Nantes sous le numéro
+              RCS Nantes B 524 172 699.
+              <br />
+              Le siège social de l’hébergeur est situé au 4 rue Voltaire, 44000
+              Nantes, France.
             </p>
             <p>
               Toute correspondance à leur attention doit être adressée à
-              l&apos;adresse suivante : support@scalingo.com.
+              l’adresse suivante :
+              <br />
+              support@clever-cloud.com.
+              <br />
+              Téléphone : 02 85 52 07 69.
             </p>
           </div>
         </div>
