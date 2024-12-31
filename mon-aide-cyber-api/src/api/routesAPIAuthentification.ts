@@ -50,6 +50,7 @@ export const routesAPIAuthentification = (
         .then((utilisateurAuthentifie: UtilisateurAuthentifie) => {
           let reponseHATEOAS = constructeurActionsHATEOAS()
             .pour({ contexte: 'aidant:acceder-aux-informations-utilisateur' })
+            .pour({ contexte: 'se-deconnecter' })
             .construis();
           return unServiceAidant(entrepots.aidants())
             .parIdentifiant(utilisateurAuthentifie.identifiant)
