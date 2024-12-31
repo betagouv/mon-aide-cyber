@@ -71,6 +71,11 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               url: '/api/aidant/preferences',
               methode: 'GET',
             },
+            'se-deconnecter': {
+              methode: 'DELETE',
+              typeAppel: 'API',
+              url: '/api/token',
+            },
           },
         });
         const cookieRecu = (
@@ -130,6 +135,11 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             'afficher-preferences': {
               url: '/api/aidant/preferences',
               methode: 'GET',
+            },
+            'se-deconnecter': {
+              methode: 'DELETE',
+              typeAppel: 'API',
+              url: '/api/token',
             },
           },
         });
