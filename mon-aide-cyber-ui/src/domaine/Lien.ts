@@ -30,6 +30,7 @@ export type Action =
   | 'modifier-mot-de-passe'
   | 'modifier-preferences'
   | 'modifier-profil'
+  | 'rechercher-entreprise'
   | 'restitution-json'
   | 'restitution-pdf'
   | 'se-connecter'
