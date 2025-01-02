@@ -12,6 +12,7 @@ import { ErreurAuthentification } from '../../../src/authentification/Utilisateu
 import { ErreurCreationEspaceAidant } from '../../../src/espace-aidant/Aidant';
 import { ErreurProConnectApresAuthentification } from '../../../src/api/pro-connect/routeProConnect';
 import { liensPublicsAttendus } from '../hateoas/liensAttendus';
+import { ErreurRequeteHTTP } from '../../../src/api/recherche-entreprise/routesAPIRechercheEntreprise';
 
 describe("Gestionnaire d'erreur", () => {
   let codeRecu = 0;
@@ -297,6 +298,28 @@ describe("Gestionnaire d'erreur", () => {
       'mots-De-Passe': '<MOT_DE_PASSE_OBFUSQUE/>',
       'mots-de-passe': '<MOT_DE_PASSE_OBFUSQUE/>',
       'mots-De-Passe-': '<MOT_DE_PASSE_OBFUSQUE/>',
+    });
+  });
+
+  describe('Dans le cadre d’une requête HTTP vers un service tiers', () => {
+    it('Consigne l’erreur', () => {
+      const consignateurErreurs = new ConsignateurErreursMemoire();
+
+      gestionnaireErreurGeneralisee(consignateurErreurs)(
+        ErreurMAC.cree(
+          'Exécution requête HTTP',
+          new ErreurRequeteHTTP(
+            { codeErreur: 429, corps: { erreur: 'Une erreur' } },
+            'Un appel'
+          )
+        ),
+        fausseRequete,
+        fausseReponse,
+        fausseSuite
+      );
+
+      expect(consignateurErreurs.tous()).toHaveLength(1);
+      expect(fausseReponse.statusCode).toStrictEqual(400);
     });
   });
 });

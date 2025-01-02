@@ -38,12 +38,18 @@ const modeMaintenance = () => ({
 const siretsEntreprise = () => ({
   gendarmerie: () => process.env.SIRET_GENDARMERIE,
 });
+
+const apiRechercheEntreprise = () => ({
+  url: () => process.env.URL_API_RECHERCHE_ENTREPRISE || '',
+});
+
 const adaptateurEnvironnement = {
   messagerie,
   mac,
   proConnect,
   modeMaintenance,
   siretsEntreprise,
+  apiRechercheEntreprise,
 };
 
 export { sentry, adaptateurEnvironnement };

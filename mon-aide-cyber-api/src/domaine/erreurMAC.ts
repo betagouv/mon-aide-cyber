@@ -15,6 +15,7 @@ export type Contexte =
   | 'Demande devenir Aidant - crée espace Aidant'
   | 'Demande la restitution'
   | 'Envoi un message de contact'
+  | 'Exécution requête HTTP'
   | 'Lance le diagnostic'
   | 'Modifie le mot de passe'
   | 'Modifie le profil Aidant'
