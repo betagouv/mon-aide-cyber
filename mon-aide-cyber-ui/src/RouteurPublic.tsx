@@ -22,7 +22,7 @@ import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { EcranDiagnosticLibreAcces } from './composants/diagnostic/EcranDiagnosticAidant.tsx';
 import { ComposantRestitutionLibreAcces } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { EcranDemandeAutodiagnostic } from './domaine/auto-diagnostic/EcranDemandeAutodiagnostic.tsx';
-import { CapteurFormulaireDevenirAidant } from './domaine/gestion-demandes/devenir-aidant/formulaire-devenir-aidant/CapteurFormulaireDevenirAidant.tsx';
+import { EcranDemandeDevenirAidant } from './domaine/gestion-demandes/parcours-aidant/EcranDemandeDevenirAidant.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -44,11 +44,13 @@ export const RouteurPublic = () => {
           <Route path="kit-de-communication" element={<KitDeCommunication />} />
         </Route>
         <Route path="devenir-aidant" element={<EcranDevenirAidant />} />
-        <Route
-          path="demandes/devenir-aidant"
-          element={<CapteurFormulaireDevenirAidant />}
-        />
         <Route path="mentions-legales" element={<MentionsLegales />} />
+      </Route>
+      <Route
+        path="/demandes/devenir-aidant"
+        element={<LayoutPublic afficheNavigation={false} enteteSimple={true} />}
+      >
+        <Route index element={<EcranDemandeDevenirAidant />} />
       </Route>
       <Route
         path="/connexion"

@@ -43,8 +43,10 @@ export const liensNavigation: LienNavigation[] = [
 
 export const LayoutPublic = ({
   afficheNavigation = true,
+  enteteSimple = false,
 }: {
   afficheNavigation?: boolean;
+  enteteSimple?: boolean;
 }) => {
   const location = useLocation();
 
@@ -58,6 +60,7 @@ export const LayoutPublic = ({
       <Header
         lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />}
         afficheNavigation={afficheNavigation}
+        enteteSimple={enteteSimple}
       />
       <Outlet />
       <Footer />
