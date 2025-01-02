@@ -12,6 +12,7 @@ import * as core from 'express-serve-static-core';
 import { routesAPIProfil } from './aidant/routesAPIProfil';
 import { routesAPIAnnuaireAidants } from './annuaire-aidants/routeAPIAnnuaireAidants';
 import { routesAPIDiagnosticLibreAcces } from './diagnostic-libre-acces/routesAPIDiagnosticLibreAcces';
+import { routesAPIRechercheEntreprise } from './recherche-entreprise/routesAPIRechercheEntreprise';
 
 export interface RequeteUtilisateur<
   CORPS = void,
@@ -39,6 +40,10 @@ const routesAPI = (configuration: ConfigurationServeur) => {
   routes.use('/profil', routesAPIProfil(configuration));
   routes.use('/demandes', routesAPIDemandes(configuration));
   routes.use('/annuaire-aidants', routesAPIAnnuaireAidants(configuration));
+  routes.use(
+    '/recherche-entreprise',
+    routesAPIRechercheEntreprise(configuration)
+  );
 
   return routes;
 };
