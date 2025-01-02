@@ -1,0 +1,114 @@
+@import '../../../assets/styles/points-de-rupture';
+
+.ecran-demande-devenir-aidant {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 'entete' 'formulaire-gauche' 'formulaire-droite' 'validation';
+  grid-row-gap: 1.5rem;
+  grid-column-gap: 1.5rem;
+  justify-content: center;
+
+  @include a-partir-de(md) {
+    grid-template-columns: 55% auto;
+    grid-template-areas:  'entete entete'
+                          'formulaire-gauche formulaire-droite'
+                          'validation validation';
+    grid-template-rows: 20% auto auto;
+  }
+
+  @include a-partir-de(xl) {
+    grid-template-columns: 15% 35% 35% 15%;
+    grid-template-areas:  'gauche entete entete droite'
+                          'gauche formulaire-gauche formulaire-droite droite'
+                          'gauche validation validation droite';
+  }
+
+  .choix-utilisation {
+    grid-area: entete;
+    padding-top: 2.5rem;
+
+    span {
+      padding-top: 1.5rem;
+    }
+  }
+
+  .checklist {
+    .item {
+      display: flex;
+      gap: 1rem 0.5rem;
+
+      .vert {
+        color: var(--couleurs-mac-vert);
+      }
+
+      .rouge {
+        color: var(--couleurs-mac-rouge);
+      }
+    }
+  }
+
+  label {
+    cursor: pointer;
+  }
+
+  .formulaire-colonne-gauche {
+    grid-area: formulaire-gauche;
+    border-radius: 0.5rem;
+    border: 1px solid var(--couleurs-mac-gris-leger);
+    background: var(--couleurs-mac-blanc);
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 2rem 2rem 3rem;
+
+    .mac-radio-group {
+      padding-top: 0 !important;
+      padding-bottom: 1rem !important;
+    }
+
+    &:has(input[type="radio"]:checked) {
+      border: 2px solid var(--couleurs-mac-violet-fonce);
+    }
+
+    @include a-partir-de(md) {
+      display: flex;
+    }
+
+    .mac-radio-group {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+
+  }
+
+  .formulaire-colonne-droite {
+    grid-area: formulaire-droite;
+    padding: 2rem 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--couleurs-mac-gris-leger);
+    background: var(--couleurs-mac-blanc);
+    flex-direction: column;
+    gap: 0.5rem;
+
+    @include a-partir-de(md) {
+      display: flex;
+    }
+
+    &:has(input[type="radio"]:checked) {
+      border: 2px solid var(--couleurs-mac-violet-fonce);
+    }
+  }
+
+  .validation {
+    grid-area: validation;
+    padding-bottom: 6rem;
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  img {
+    max-width: 100%;
+    padding-bottom: 1rem;
+  }
+}

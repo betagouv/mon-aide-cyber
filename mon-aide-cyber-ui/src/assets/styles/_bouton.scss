@@ -118,33 +118,33 @@ $border-radius: 0.5rem;
 
 .bouton-mac-primaire {
   @include primaire(
-    white,
-    var(--couleurs-mac-violet-fonce),
-    var(--couleurs-mac-violet-moyen)
+                  white,
+                  var(--couleurs-mac-violet-fonce),
+                  var(--couleurs-mac-violet-moyen)
   );
 
   &.dark {
-      @include primaire(
-        var(--couleurs-mac-violet-fonce),
-        var(--couleurs-mac-blanc),
-        var(--couleurs-mac-violet-leger)
-      );
+    @include primaire(
+                    var(--couleurs-mac-violet-fonce),
+                    var(--couleurs-mac-blanc),
+                    var(--couleurs-mac-violet-leger)
+    );
   }
 }
 
 .bouton-mac-primaire-inverse {
   @include primaire(
-    var(--couleurs-mac-violet-fonce),
-    var(--couleurs-mac-blanc),
-    var(--couleurs-mac-violet-leger)
+                  var(--couleurs-mac-violet-fonce),
+                  var(--couleurs-mac-blanc),
+                  var(--couleurs-mac-violet-leger)
   );
 }
 
 .bouton-mac-primaire-jaune {
   @include primaire(
-    black,
-    var(--couleurs-mac-jaune-fonce),
-    var(--couleurs-mac-jaune-moyen)
+                  black,
+                  var(--couleurs-mac-jaune-fonce),
+                  var(--couleurs-mac-jaune-moyen)
   );
 }
 
@@ -155,32 +155,34 @@ $border-radius: 0.5rem;
 
 .bouton-mac-secondaire-inverse {
   @include secondaire(
-    var(--couleurs-mac-blanc),
-    var(--couleurs-mac-blanc),
-    var(--couleurs-mac-violet-fonce),
-    $couleur-fond-survol: var(--couleurs-mac-violet-moyen)
+                  var(--couleurs-mac-blanc),
+                  var(--couleurs-mac-blanc),
+                  var(--couleurs-mac-violet-fonce),
+          $couleur-fond-survol: var(--couleurs-mac-violet-moyen)
   );
   @include box-shadow(transparent, transparent);
 }
 
 .bouton-mac-lien {
-    color: var(--couleurs-mac-violet-fonce);
-    transition: background-size 0s;
-    padding: 0;
-    
-    &:not(:disabled):hover {
-      background: none;
-      text-decoration: underline;
-    }
-    &:not(:disabled):active {
-        background: none;
-        text-decoration: underline;      
-    }
+  color: var(--couleurs-mac-violet-fonce);
+  transition: background-size 0s;
+  padding: 0;
+
+  &:not(:disabled):hover {
+    background: none;
+    text-decoration: underline;
+  }
+
+  &:not(:disabled):active {
+    background: none;
+    text-decoration: underline;
+  }
 }
+
 .bouton-mac-texte {
   color: var(--couleurs-mac-violet-fonce);
-  background-repeat: no-repeat,no-repeat;
-  background-size: var(--underline-hover-width) calc(var(--underline-thickness)*2),var(--underline-idle-width) var(--underline-thickness);
+  background-repeat: no-repeat, no-repeat;
+  background-size: var(--underline-hover-width) calc(var(--underline-thickness) * 2), var(--underline-idle-width) var(--underline-thickness);
   transition: background-size 0s
 }
 
@@ -191,78 +193,109 @@ $border-radius: 0.5rem;
 
 .mac-radio-group input[type='radio'] + label {
   background-image: radial-gradient(
-    transparent 8px 45%,
-    var(--couleurs-mac-violet-fonce) 10px 55%,
-    transparent 11px
+                  transparent 8px 45%,
+                  var(--couleurs-mac-violet-fonce) 10px 55%,
+                  transparent 11px
   ) !important;
 }
 
 .mac-radio-group input[type='radio']:checked + label {
   background-image: radial-gradient(
-      transparent 8px 45%,
-      var(--couleurs-mac-violet-fonce) 10px 55%,
-      transparent 11px
-    ),
-    radial-gradient(
-      var(--couleurs-mac-violet-fonce) 5px 30%,
-      transparent 6px 70%
-    ) !important;
+                  transparent 8px 45%,
+                  var(--couleurs-mac-violet-fonce) 10px 55%,
+                  transparent 11px
+  ),
+  radial-gradient(
+                  var(--couleurs-mac-violet-fonce) 5px 30%,
+                  transparent 6px 70%
+  ) !important;
 }
 
 .mac-radio-group input[type='checkbox'] + label::before {
   background-size: 0.25rem 0.25rem, calc(100% - 0.25rem) 1px, 0.25rem 0.25rem,
-    1px calc(100% - 0.5rem), 0.25rem 0.25rem, calc(100% - 0.5rem) 1px,
-    0.25rem 0.25rem, 1px calc(100% - 0.5rem), 1rem !important;
+  1px calc(100% - 0.5rem), 0.25rem 0.25rem, calc(100% - 0.5rem) 1px,
+  0.25rem 0.25rem, 1px calc(100% - 0.5rem), 1rem !important;
   background-position: 0 0, 0.25rem 0, 100% 0, 0 0.25rem, 100% 100%,
-    calc(100% - 0.25rem) 100%, 0 100%, 100% 0.25rem, center !important;
+  calc(100% - 0.25rem) 100%, 0 100%, 100% 0.25rem, center !important;
   background-repeat: no-repeat;
   background-image: radial-gradient(
-      at 5px 4px,
-      transparent 4px,
-      var(--couleurs-mac-violet-fonce) 4px,
-      var(--couleurs-mac-violet-fonce) 5px,
-      transparent 6px
-    ),
-    linear-gradient(
-      var(--couleurs-mac-violet-fonce),
-      var(--couleurs-mac-violet-fonce)
-    ),
-    radial-gradient(
-      at calc(100% - 5px) 4px,
-      transparent 4px,
-      var(--couleurs-mac-violet-fonce) 4px,
-      var(--couleurs-mac-violet-fonce) 5px,
-      transparent 6px
-    ),
-    linear-gradient(
-      var(--couleurs-mac-violet-fonce),
-      var(--couleurs-mac-violet-fonce)
-    ),
-    radial-gradient(
-      at calc(100% - 5px) calc(100% - 4px),
-      transparent 4px,
-      var(--couleurs-mac-violet-fonce) 4px,
-      var(--couleurs-mac-violet-fonce) 5px,
-      transparent 6px
-    ),
-    linear-gradient(
-      var(--couleurs-mac-violet-fonce),
-      var(--couleurs-mac-violet-fonce)
-    ),
-    radial-gradient(
-      at 5px calc(100% - 4px),
-      transparent 4px,
-      var(--couleurs-mac-violet-fonce) 4px,
-      var(--couleurs-mac-violet-fonce) 5px,
-      transparent 6px
-    ),
-    linear-gradient(
-      var(--couleurs-mac-violet-fonce),
-      var(--couleurs-mac-violet-fonce)
-    ),
-    var(--data-uri-svg) !important;
+                  at 5px 4px,
+                  transparent 4px,
+                  var(--couleurs-mac-violet-fonce) 4px,
+                  var(--couleurs-mac-violet-fonce) 5px,
+                  transparent 6px
+  ),
+  linear-gradient(
+                  var(--couleurs-mac-violet-fonce),
+                  var(--couleurs-mac-violet-fonce)
+  ),
+  radial-gradient(
+                  at calc(100% - 5px) 4px,
+                  transparent 4px,
+                  var(--couleurs-mac-violet-fonce) 4px,
+                  var(--couleurs-mac-violet-fonce) 5px,
+                  transparent 6px
+  ),
+  linear-gradient(
+                  var(--couleurs-mac-violet-fonce),
+                  var(--couleurs-mac-violet-fonce)
+  ),
+  radial-gradient(
+                  at calc(100% - 5px) calc(100% - 4px),
+                  transparent 4px,
+                  var(--couleurs-mac-violet-fonce) 4px,
+                  var(--couleurs-mac-violet-fonce) 5px,
+                  transparent 6px
+  ),
+  linear-gradient(
+                  var(--couleurs-mac-violet-fonce),
+                  var(--couleurs-mac-violet-fonce)
+  ),
+  radial-gradient(
+                  at 5px calc(100% - 4px),
+                  transparent 4px,
+                  var(--couleurs-mac-violet-fonce) 4px,
+                  var(--couleurs-mac-violet-fonce) 5px,
+                  transparent 6px
+  ),
+  linear-gradient(
+                  var(--couleurs-mac-violet-fonce),
+                  var(--couleurs-mac-violet-fonce)
+  ),
+  var(--data-uri-svg) !important;
 }
 
 .mac-radio-group input[type='checkbox']:checked + label::before {
   background-color: var(--couleurs-mac-violet-fonce) !important;
+}
+
+input[type="radio"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--couleurs-mac-blanc) !important;
+  margin: 0;
+  appearance: none;
+  color: var(--couleurs-mac-violet-fonce);
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid var(--couleurs-mac-violet-fonce) !important;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  transform: translateY(-0.075em);
+  box-shadow: none !important;
+}
+
+input[type="radio"]::before {
+  content: "";
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1.2em 1.2em var(--couleurs-mac-violet-fonce) !important;
+}
+
+input[type="radio"]:checked::before {
+  transform: scale(1);
 }
