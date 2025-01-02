@@ -1,8 +1,17 @@
 import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
 import illustrationInteretGeneral from '../../../../public/images/illustration-interet-general.svg';
 import illustrationCadreProfessionnel from '../../../../public/images/illustration-cadre-professionnel.svg';
+import { useState } from 'react';
 
-export const ChoixUtilisation = () => {
+export type Utilisation = 'InteretGeneral' | 'ActiviteProfessionnelle';
+
+export const ChoixUtilisation = ({
+  surClick,
+}: {
+  surClick: (choix: Utilisation) => void;
+}) => {
+  const [choix, setChoix] = useState<Utilisation | undefined>(undefined);
+
   return (
     <>
       <div className="choix-utilisation text-center">
@@ -13,7 +22,11 @@ export const ChoixUtilisation = () => {
       </div>
       <label className="formulaire-colonne-gauche">
         <div>
-          <input name="choix-utilisation-service" type="radio" />
+          <input
+            name="choix-utilisation-service"
+            type="radio"
+            onChange={() => setChoix('InteretGeneral')}
+          />
         </div>
         <img
           src={illustrationInteretGeneral}
@@ -59,7 +72,11 @@ export const ChoixUtilisation = () => {
         </div>
       </label>
       <label className="formulaire-colonne-droite">
-        <input name="choix-utilisation-service" type="radio" />
+        <input
+          name="choix-utilisation-service"
+          type="radio"
+          onChange={() => setChoix('ActiviteProfessionnelle')}
+        />
         <img
           src={illustrationCadreProfessionnel}
           alt="Illustration d’une personne travaillant dans le cadre professionnel."
@@ -103,7 +120,16 @@ export const ChoixUtilisation = () => {
         </div>
       </label>
       <div className="validation">
-        <button type="button" className="fr-btn bouton-mac bouton-mac-primaire">
+        <button
+          disabled={!choix}
+          type="button"
+          className="fr-btn bouton-mac bouton-mac-primaire"
+          onClick={() => {
+            if (choix) {
+              surClick(choix);
+            }
+          }}
+        >
           Je valide ma sélection
         </button>
       </div>
