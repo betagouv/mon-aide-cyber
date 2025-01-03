@@ -17,6 +17,7 @@ import {
   ErreurUtilisateurNonTrouve,
 } from '../routesAPIUtilisateur';
 import { ErreurProConnectApresAuthentification } from '../pro-connect/routeProConnect';
+import { ErreurRequeteHTTP } from '../recherche-entreprise/routesAPIRechercheEntreprise';
 
 const HTTP_ACCEPTE = 202;
 const HTTP_MAUVAISE_REQUETE = 400;
@@ -198,7 +199,6 @@ const erreursGerees: Map<
       reponse
     ) => {
       consignateur.consigne(erreur);
-
       reponse.redirect(
         '/connexion?erreurConnexion=Un problème est survenu lors de la connexion à ProConnect !'
       );
@@ -213,6 +213,21 @@ const erreursGerees: Map<
       reponse
     ) => {
       construisReponse(reponse, HTTP_NON_TROUVE, { message: erreur.message });
+    },
+  ],
+  [
+    'ErreurRequeteHTTP',
+    (erreur: ErreurMAC<ErreurRequeteHTTP>, _requete, consignateur, reponse) => {
+      console.error({
+        message: 'Erreur lors de l’appel HTTP',
+        contexte: erreur.erreurOriginelle.contexte,
+        codeErreur: erreur.erreurOriginelle.codeErreur,
+        messageOriginal: erreur.erreurOriginelle.message,
+      });
+      consignateur.consigne(erreur);
+      construisReponse(reponse, HTTP_MAUVAISE_REQUETE, {
+        message: erreur.message,
+      });
     },
   ],
 ]);

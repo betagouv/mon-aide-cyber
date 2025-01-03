@@ -30,6 +30,7 @@ import { adaptateurConfigurationLimiteurTraffic } from './api/adaptateurLimiteur
 import { AdaptateurDeVerificationDeTypeDeRelation } from './adaptateurs/AdaptateurDeVerificationDeTypeDeRelation';
 import { AdaptateurProConnect } from './adaptateurs/pro-connect/adaptateurProConnect';
 import { routesProConnect } from './api/pro-connect/routeProConnect';
+import { AdaptateurDeRequeteHTTP } from './infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -56,6 +57,7 @@ export type ConfigurationServeur = {
   gestionnaireDeJeton: GestionnaireDeJeton;
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
   adaptateurMetabase: AdaptateurMetabase;
+  adaptateurDeRequeteHTTP: AdaptateurDeRequeteHTTP;
   estEnMaintenance: boolean;
 };
 
