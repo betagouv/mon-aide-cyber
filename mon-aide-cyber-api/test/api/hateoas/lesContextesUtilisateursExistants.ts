@@ -25,6 +25,10 @@ export const lesContextesUtilisateursExistants = [
         url: '/api/demandes/devenir-aidant',
         methode: 'POST',
       },
+      'rechercher-entreprise': {
+        url: '/api/recherche-entreprise',
+        methode: 'GET',
+      },
     },
   },
   {
