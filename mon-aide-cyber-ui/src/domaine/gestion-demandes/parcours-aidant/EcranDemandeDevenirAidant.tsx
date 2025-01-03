@@ -15,6 +15,8 @@ import { ReponseHATEOAS } from '../../Lien.ts';
 import { useContexteNavigation } from '../../../hooks/useContexteNavigation.ts';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
+import { SignatureCGU } from './SignatureCGU.tsx';
+import { SignatureCharteAidant } from './SignatureCharteAidant.tsx';
 
 export const EcranDemandeDevenirAidant = () => {
   const [etatEtapeCourante, envoie] = useReducer(
@@ -51,8 +53,6 @@ export const EcranDemandeDevenirAidant = () => {
     []
   );
 
-  console.log('ETAT', etatEtapeCourante);
-
   const etapes: Map<Etape, React.ReactElement> = new Map([
     [
       'choixUtilisation',
@@ -70,6 +70,15 @@ export const EcranDemandeDevenirAidant = () => {
         precedent={() => envoie(retourEtapePrecedente())}
       />,
     ],
+    [
+      'signatureCharteAidant',
+      <SignatureCharteAidant
+        key="signatureCharteAidant"
+        signeCharteAidant={() => null}
+        precedent={() => envoie(retourEtapePrecedente())}
+      />,
+    ],
+    ['signatureCGUs', <SignatureCGU key="signatureCGUs" />],
   ]);
 
   return (
