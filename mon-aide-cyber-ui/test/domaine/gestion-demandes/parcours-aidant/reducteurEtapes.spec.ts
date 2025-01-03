@@ -130,4 +130,18 @@ describe('Reducteur d’étapes pour le parcours Aidant', () => {
       });
     });
   });
+
+  describe('Signature de la charte Aidant', () => {
+    it('Revenir sur la sélection du type Aidant', () => {
+      const etat = reducteurEtapes(
+        { etapeCourante: 'signatureCharteAidant', demande: undefined },
+        retourEtapePrecedente()
+      );
+
+      expect(etat).toStrictEqual({
+        etapeCourante: 'choixTypeAidant',
+        demande: undefined,
+      });
+    });
+  });
 });
