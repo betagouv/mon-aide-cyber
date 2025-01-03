@@ -68,6 +68,23 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
       );
     });
 
+    it('Prends en compte les paramètres de requêtes optionnels', async () => {
+      testeurMAC.adaptateurDeRequeteHTTP.reponse({
+        results: [{ siege: { siret: '1234567890' }, nom_complet: 'Beta-Gouv' }],
+      });
+
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/api/recherche-entreprise?nom=beta&est_association=true',
+        donneesServeur.portEcoute
+      );
+
+      expect(testeurMAC.adaptateurDeRequeteHTTP.requeteAttendue).toStrictEqual(
+        '/search?q=beta&est_association=true&per_page=25&limite_matching_etablissements=1'
+      );
+    });
+
     it('Retourne une erreur si la requête a échoué', async () => {
       testeurMAC.adaptateurDeRequeteHTTP.reponse(
         {
