@@ -2,7 +2,7 @@ import { Accueil } from './Accueil.tsx';
 import './assets/styles/index.scss';
 import { Route, Routes } from 'react-router-dom';
 import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
-import { CharteAidant } from './vues/CharteAidant.tsx';
+import { EcranCharteAidant } from './vues/EcranCharteAidant.tsx';
 import { ComposantCGU } from './vues/ComposantCGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
 import { KitDeCommunication } from './composants/a-propos/KitDeCommunication.tsx';
@@ -31,7 +31,7 @@ export const RouteurPublic = () => {
         <Route index element={<Accueil />} />
         <Route path="accessibilite" element={<EcranAccessibilite />} />
         <Route path="cgu" element={<ComposantCGU />} />
-        <Route path="charte-aidant" element={<CharteAidant />} />
+        <Route path="charte-aidant" element={<EcranCharteAidant />} />
         <Route path="beneficier-du-dispositif">
           <Route path="annuaire">
             <Route index element={<EcranAnnuaire />} />
