@@ -7,12 +7,14 @@ import { ReponseRequeteHTTPEnErreur } from '../../infrastructure/adaptateurs/ada
 type Entreprise = {
   siret: string;
   nom: string;
+  departement: string;
+  commune: string;
 };
 export type ReponseRechercheEntreprise = Entreprise[];
 
 type APIEntreprise = {
   nom_complet: string;
-  siege: { siret: string };
+  siege: { siret: string; departement: string; libelle_commune: string };
 };
 type ReponseAPIRechercheEntreprise = {
   results: APIEntreprise[];
@@ -63,6 +65,8 @@ export const routesAPIRechercheEntreprise = (
             reponseAPI.results.map((res) => ({
               nom: res.nom_complet,
               siret: res.siege.siret,
+              commune: res.siege.libelle_commune,
+              departement: res.siege.departement,
             }))
           )
         )

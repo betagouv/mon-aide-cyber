@@ -15,7 +15,16 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
   describe('Lorsqu’une requête GET est reçue sur /api/recherche-entreprise', () => {
     it('Retourne la liste des entreprises correspondant à la requête', async () => {
       testeurMAC.adaptateurDeRequeteHTTP.reponse({
-        results: [{ siege: { siret: '1234567890' }, nom_complet: 'Beta-Gouv' }],
+        results: [
+          {
+            siege: {
+              siret: '1234567890',
+              libelle_commune: 'Bordeaux',
+              departement: '33',
+            },
+            nom_complet: 'Beta-Gouv',
+          },
+        ],
       });
 
       const reponse = await executeRequete(
@@ -30,6 +39,8 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
         {
           siret: '1234567890',
           nom: 'Beta-Gouv',
+          departement: '33',
+          commune: 'Bordeaux',
         },
       ]);
     });

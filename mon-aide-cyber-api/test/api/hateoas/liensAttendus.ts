@@ -10,6 +10,10 @@ export const liensPublicsAttendus: ReponseHATEOAS = {
       methode: 'POST',
       url: '/api/demandes/devenir-aidant',
     },
+    'rechercher-entreprise': {
+      url: '/api/recherche-entreprise',
+      methode: 'GET',
+    },
     'demande-etre-aide': {
       methode: 'GET',
       url: '/api/demandes/etre-aide',
