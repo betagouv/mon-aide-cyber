@@ -27,6 +27,7 @@ import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
 import { AdaptateurDeVerificationDuTypeDeRelationDeTest } from '../adaptateurs/AdaptateurDeVerificationDuTypeDeRelationDeTest';
 import { AdaptateurProConnect } from '../../src/adaptateurs/pro-connect/adaptateurProConnect';
 import { AdaptateurProConnectDeTest } from '../adaptateurs/pro-connect/AdaptateurProConnectDeTest';
+import { AdaptateurDeRequeteHTTPMemoire } from '../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
 
 class TesteurIntegrationMAC {
   private serveurDeTest:
@@ -65,7 +66,8 @@ class TesteurIntegrationMAC {
       },
     },
     public adaptateurMetabase: AdaptateurMetabaseMemoire = new AdaptateurMetabaseMemoire(),
-    public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest()
+    public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest(),
+    public adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire()
   ) {}
 
   initialise() {
@@ -102,6 +104,7 @@ class TesteurIntegrationMAC {
       adaptateurDeVerificationDeRelations:
         this.adaptateurDeVerificationDeRelations,
       adaptateurProConnect: this.adaptateurProConnect,
+      adaptateurDeRequeteHTTP: this.adaptateurDeRequeteHTTP,
       estEnMaintenance: false,
     });
     const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });

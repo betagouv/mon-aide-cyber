@@ -13,6 +13,7 @@ export const demandeDevenirAidant: ContexteSpecifique & {
   'demande-devenir-aidant': {
     'envoyer-demande-devenir-aidant': Options;
     'demande-devenir-aidant': Options;
+    'rechercher-entreprise': Options;
   };
 } = {
   'demande-devenir-aidant': {
@@ -22,6 +23,10 @@ export const demandeDevenirAidant: ContexteSpecifique & {
     },
     'demande-devenir-aidant': {
       url: '/api/demandes/devenir-aidant',
+      methode: 'GET',
+    },
+    'rechercher-entreprise': {
+      url: '/api/recherche-entreprise',
       methode: 'GET',
     },
   },

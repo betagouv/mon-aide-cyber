@@ -42,20 +42,15 @@ export const AutoCompletion = <T extends object | string>(
       proprietes.clefsFiltrage
     )
   );
-  const [suggestionsEnCoursDeChargement, setSuggestionsEnCoursDeChargement] =
-    useState(true);
   const [iconeFlecheBas, setIconeFlecheBas] = useState(true);
 
   useEffect(() => {
-    if (suggestionsEnCoursDeChargement) {
-      envoie(
-        suggestionsInitialesChargees({
-          suggestionsInitiales: proprietes.suggestionsInitiales,
-        })
-      );
-      setSuggestionsEnCoursDeChargement(false);
-    }
-  }, [proprietes, suggestionsEnCoursDeChargement]);
+    envoie(
+      suggestionsInitialesChargees({
+        suggestionsInitiales: proprietes.suggestionsInitiales,
+      })
+    );
+  }, [proprietes.suggestionsInitiales]);
 
   const clickEnDehors = useCallback((e: MouseEvent) => {
     if (

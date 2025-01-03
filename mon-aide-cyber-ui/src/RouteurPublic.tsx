@@ -2,10 +2,9 @@ import { Accueil } from './Accueil.tsx';
 import './assets/styles/index.scss';
 import { Route, Routes } from 'react-router-dom';
 import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
-import { CharteAidant } from './vues/CharteAidant.tsx';
+import { EcranCharteAidant } from './vues/EcranCharteAidant.tsx';
 import { ComposantCGU } from './vues/ComposantCGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
-import { ComposantDemandeDevenirAidant } from './composants/gestion-demandes/devenir-aidant/ComposantDemandeDevenirAidant.tsx';
 import { KitDeCommunication } from './composants/a-propos/KitDeCommunication.tsx';
 import { LayoutPublic } from './composants/layout/LayoutPublic.tsx';
 import { EcranCreationEspaceAidant as ComposantDemandeAidantCreationEspaceAidant } from './domaine/espace-aidant/demande-aidant-creation-espace-aidant/EcranCreationEspaceAidant.tsx';
@@ -23,6 +22,7 @@ import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { EcranDiagnosticLibreAcces } from './composants/diagnostic/EcranDiagnosticAidant.tsx';
 import { ComposantRestitutionLibreAcces } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { EcranDemandeAutodiagnostic } from './domaine/auto-diagnostic/EcranDemandeAutodiagnostic.tsx';
+import { EcranDemandeDevenirAidant } from './domaine/gestion-demandes/parcours-aidant/EcranDemandeDevenirAidant.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -31,7 +31,7 @@ export const RouteurPublic = () => {
         <Route index element={<Accueil />} />
         <Route path="accessibilite" element={<EcranAccessibilite />} />
         <Route path="cgu" element={<ComposantCGU />} />
-        <Route path="charte-aidant" element={<CharteAidant />} />
+        <Route path="charte-aidant" element={<EcranCharteAidant />} />
         <Route path="beneficier-du-dispositif">
           <Route path="annuaire">
             <Route index element={<EcranAnnuaire />} />
@@ -44,11 +44,13 @@ export const RouteurPublic = () => {
           <Route path="kit-de-communication" element={<KitDeCommunication />} />
         </Route>
         <Route path="devenir-aidant" element={<EcranDevenirAidant />} />
-        <Route
-          path="demandes/devenir-aidant"
-          element={<ComposantDemandeDevenirAidant />}
-        />
         <Route path="mentions-legales" element={<MentionsLegales />} />
+      </Route>
+      <Route
+        path="/demandes/devenir-aidant"
+        element={<LayoutPublic afficheNavigation={false} enteteSimple={true} />}
+      >
+        <Route index element={<EcranDemandeDevenirAidant />} />
       </Route>
       <Route
         path="/connexion"
