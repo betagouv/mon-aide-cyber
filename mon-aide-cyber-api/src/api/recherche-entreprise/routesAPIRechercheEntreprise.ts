@@ -54,9 +54,19 @@ export const routesAPIRechercheEntreprise = (
       suite: NextFunction
     ) => {
       const nomEntreprise: string = requete.query.nom as string;
+      const parametresRecherche = Object.entries(requete.query).reduce(
+        (precedent, courant) => {
+          const parametres = courant as [string, string];
+          if (parametres[0] !== 'nom') {
+            precedent += `&${parametres[0]}=${parametres[1]}`;
+          }
+          return precedent;
+        },
+        ''
+      );
       return adaptateurDeRequeteHTTP
         .execute<ReponseAPIRechercheEntreprise>({
-          url: `${adaptateurEnvironnement.apiRechercheEntreprise().url()}/search?q=${encodeURIComponent(nomEntreprise)}&per_page=25&limite_matching_etablissements=1`,
+          url: `${adaptateurEnvironnement.apiRechercheEntreprise().url()}/search?q=${encodeURIComponent(nomEntreprise)}${parametresRecherche}&per_page=25&limite_matching_etablissements=1`,
           headers: { Accept: 'application/json' },
           methode: 'GET',
         })
