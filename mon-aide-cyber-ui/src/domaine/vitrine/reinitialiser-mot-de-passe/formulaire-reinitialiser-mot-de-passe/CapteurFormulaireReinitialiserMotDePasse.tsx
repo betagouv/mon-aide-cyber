@@ -26,7 +26,7 @@ export const CapteurFormulaireReinitialiserMotDePasse = ({
     'reinitialisation-mot-de-passe:reinitialiser-mot-de-passe'
   );
 
-  const { mutate, isError } = useMutation({
+  const { mutate, error, isError } = useMutation({
     mutationKey: ['changer-mot-de-passe'],
     mutationFn: ({
       motDePasse,
@@ -39,7 +39,6 @@ export const CapteurFormulaireReinitialiserMotDePasse = ({
         throw new Error(
           'Une erreur est survenue lors de la demande de réinitialisation de mot de passe'
         );
-      if (!motDePasse) Promise.reject('Aucun mot de passe renseigné !');
 
       const actionSoumettre = new MoteurDeLiens(
         navigationMAC.etat
@@ -68,13 +67,9 @@ export const CapteurFormulaireReinitialiserMotDePasse = ({
     },
   });
 
-  if (isError)
-    return (
-      <Toast
-        message="Une erreur est survenue lors de votre modification de mot de passe. Veuillez réessayer ultérieurement."
-        type="ERREUR"
-      />
-    );
-
-  return <FormulaireReinitialiserMotDePasse surSoumission={mutate} />;
+  return (
+    <FormulaireReinitialiserMotDePasse surSoumission={mutate}>
+      {isError ? <Toast message={error.message} type="ERREUR" /> : null}
+    </FormulaireReinitialiserMotDePasse>
+  );
 };
