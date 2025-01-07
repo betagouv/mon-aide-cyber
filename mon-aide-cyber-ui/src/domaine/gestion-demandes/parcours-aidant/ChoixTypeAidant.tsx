@@ -1,6 +1,5 @@
 import illustrationInteretGeneral from '../../../../public/images/illustration-interet-general.svg';
-import { Input } from '../../../composants/atomes/Input/Input.tsx';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useQuery } from '@tanstack/react-query';
 import { AutoCompletion } from '../../../composants/auto-completion/AutoCompletion.tsx';
@@ -52,22 +51,25 @@ type EntrepriseAPI = {
   departement: string;
 };
 
-type TypeEntreprise = 'servicePublic';
+type TypeEntreprise = 'servicePublic' | 'representantEtat' | 'association';
+
 const RechercheEntreprise = (props: {
   surChoixEntite: (entreprise: Entreprise) => void;
   type: TypeEntreprise;
-  entrepriseSelectionnee: Entreprise | undefined;
+  entrepriseSelectionnee: Entreprise | undefined | null;
 }) => {
   const macAPI = useMACAPI();
-  const [saisie, setSaisie] = useState<string>('');
   const navigationMAC = useNavigationMAC();
+  const [saisie, setSaisie] = useState<string | undefined>(undefined);
 
   const criteresRecherche: Map<TypeEntreprise, string> = new Map([
     ['servicePublic', '&est_service_public=true'],
+    ['representantEtat', '&est_service_public=true'],
+    ['association', '&est_association=true'],
   ]);
 
   const { data: entrepriseTrouvees } = useQuery({
-    enabled: saisie.length > 2,
+    enabled: !!saisie && saisie.length > 2,
     queryKey: ['recherche-entreprise', saisie],
     queryFn: () => {
       const rechercheEntreprise = new MoteurDeLiens(
@@ -121,7 +123,7 @@ const RechercheEntreprise = (props: {
           props.entrepriseSelectionnee
             ? props.entrepriseSelectionnee
             : ({
-                nom: saisie,
+                nom: saisie || '',
               } as Entreprise)
         }
         suggestionsInitiales={entrepriseTrouvees ? entrepriseTrouvees : []}
@@ -149,7 +151,16 @@ export const ChoixTypeAidant = ({
   const [choix, setChoix] = useState<TypeAidant | undefined>(
     typeAidant?.typeAidant
   );
-  const [entreprise, setEntreprise] = useState<Entreprise | undefined>();
+  const [entreprise, setEntreprise] = useState<Entreprise | undefined | null>(
+    typeAidant?.entreprise
+  );
+
+  useEffect(() => {
+    setEntreprise(null);
+  }, [choix]);
+
+  const peutValiderEtape =
+    (!!choix && !!entreprise) || choix === 'FuturAdherent';
 
   return (
     <div className="fr-container fr-grid-row fr-grid-row--center zone-choix-type-aidant">
@@ -169,8 +180,9 @@ export const ChoixTypeAidant = ({
               coche={choix === 'RepresentantEtat' || false}
               contenuZoneDepliee={
                 <RechercheEntreprise
+                  key={`RepresentantEtat-${entreprise?.nom}`}
                   type="servicePublic"
-                  entrepriseSelectionnee={typeAidant?.entreprise}
+                  entrepriseSelectionnee={entreprise}
                   surChoixEntite={(entite: Entreprise) => setEntreprise(entite)}
                 />
               }
@@ -182,10 +194,12 @@ export const ChoixTypeAidant = ({
               surChoix={() => setChoix('AgentPublic')}
               coche={choix === 'AgentPublic'}
               contenuZoneDepliee={
-                <>
-                  <p>Veuillez indiquer le nom de votre structure/employeur</p>
-                  <Input type="text" />
-                </>
+                <RechercheEntreprise
+                  key={`AgentPublic-${entreprise?.nom}`}
+                  type="representantEtat"
+                  entrepriseSelectionnee={entreprise}
+                  surChoixEntite={(entite: Entreprise) => setEntreprise(entite)}
+                />
               }
             />
             <SelecteurTypeAidant
@@ -195,10 +209,12 @@ export const ChoixTypeAidant = ({
               surChoix={() => setChoix('Association')}
               coche={choix === 'Association'}
               contenuZoneDepliee={
-                <>
-                  <p>Veuillez indiquer le nom de votre structure/employeur</p>
-                  <Input type="text" />
-                </>
+                <RechercheEntreprise
+                  key={`Association-${entreprise?.nom}`}
+                  type="association"
+                  entrepriseSelectionnee={entreprise}
+                  surChoixEntite={(entite: Entreprise) => setEntreprise(entite)}
+                />
               }
             />
             <hr className="separation-formulaire" />
@@ -229,7 +245,7 @@ export const ChoixTypeAidant = ({
               Précédent
             </Button>
             <Button
-              disabled={!entreprise || !choix}
+              disabled={!peutValiderEtape}
               variant="primary"
               type="button"
               className="fr-btn bouton-mac bouton-mac-primaire"
