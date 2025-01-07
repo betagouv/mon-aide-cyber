@@ -1,4 +1,4 @@
-import { FormEvent, useReducer } from 'react';
+import { FormEvent, PropsWithChildren, useReducer } from 'react';
 import {
   confirmationMotDePasseSaisi,
   initialiseFormulaireReinitialiserMotDePasse,
@@ -8,9 +8,7 @@ import {
 import Button from '../../../../composants/atomes/Button/Button.tsx';
 import { PasswordInput } from '../../../../composants/atomes/Input/PasswordInput.tsx';
 
-export const FormulaireReinitialiserMotDePasse = ({
-  surSoumission,
-}: {
+type ProprietesFormulaireReinitialiserMotDePasse = PropsWithChildren<{
   surSoumission: ({
     motDePasse,
     confirmationMotDePasse,
@@ -18,7 +16,12 @@ export const FormulaireReinitialiserMotDePasse = ({
     motDePasse: string;
     confirmationMotDePasse: string;
   }) => void;
-}) => {
+}>;
+
+export const FormulaireReinitialiserMotDePasse = ({
+  children,
+  surSoumission,
+}: ProprietesFormulaireReinitialiserMotDePasse) => {
   const [etatFormulaire, declencheActionFormulaire] = useReducer(
     reducteurFormulaireReinitialiserMotDePasse,
     initialiseFormulaireReinitialiserMotDePasse()
@@ -124,6 +127,9 @@ export const FormulaireReinitialiserMotDePasse = ({
           >
             Valider
           </Button>
+        </div>
+        <div className="actions">
+          <div>{children}</div>
         </div>
       </form>
     </div>
