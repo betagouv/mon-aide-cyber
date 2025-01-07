@@ -872,6 +872,68 @@ describe('EntrepotAidantExtraction', () => {
     );
   });
 
+  it('Récupère les Aidants avec leur nombre de diagnostics', async () => {
+    const entrepotAidant = new EntrepotAidantPostgres(
+      adaptateurServiceChiffrement()
+    );
+    const entrepotRelation = new EntrepotRelationPostgres();
+    const premierAidant = unAidant().construis();
+    const secondAidant = unAidant().construis();
+    const troisiemeAidant = unAidant().construis();
+    await entrepotAidant.persiste(premierAidant);
+    await entrepotAidant.persiste(secondAidant);
+    await entrepotAidant.persiste(troisiemeAidant);
+    await entrepotRelation.persiste(
+      unTupleAidantInitieDiagnostic(
+        premierAidant.identifiant,
+        crypto.randomUUID()
+      )
+    );
+    await entrepotRelation.persiste(
+      unTupleAidantInitieDiagnostic(
+        premierAidant.identifiant,
+        crypto.randomUUID()
+      )
+    );
+    await entrepotRelation.persiste(
+      unTupleAidantInitieDiagnostic(
+        secondAidant.identifiant,
+        crypto.randomUUID()
+      )
+    );
+
+    const entrepotAidantExtraction = new EntrepotAidantPostgresExtraction(
+      adaptateurServiceChiffrement()
+    );
+
+    assert.sameDeepMembers(
+      await entrepotAidantExtraction.rechercheAidantAvecNombreDeDiagnostics(),
+      [
+        {
+          identifiant: premierAidant.identifiant,
+          nomPrenom: premierAidant.nomPrenom,
+          email: premierAidant.email,
+          nombreDiagnostics: 2,
+          compteCree: premierAidant.dateSignatureCGU!,
+        },
+        {
+          identifiant: secondAidant.identifiant,
+          nomPrenom: secondAidant.nomPrenom,
+          email: secondAidant.email,
+          nombreDiagnostics: 1,
+          compteCree: secondAidant.dateSignatureCGU!,
+        },
+        {
+          identifiant: troisiemeAidant.identifiant,
+          nomPrenom: troisiemeAidant.nomPrenom,
+          email: troisiemeAidant.email,
+          nombreDiagnostics: 0,
+          compteCree: troisiemeAidant.dateSignatureCGU!,
+        },
+      ]
+    );
+  });
+
   it("Ne récupère pas d'Aidant", async () => {
     const entrepotAidant = new EntrepotAidantPostgres(
       adaptateurServiceChiffrement()

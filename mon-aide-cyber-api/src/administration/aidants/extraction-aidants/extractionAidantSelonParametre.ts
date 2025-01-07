@@ -13,6 +13,7 @@ type AidantDTO = {
     email: string;
     dateSignatureCGU?: string;
   };
+  nb: string;
 };
 
 export interface EntrepotAidant {
@@ -25,6 +26,8 @@ export interface EntrepotAidant {
   rechercheAidantAyantExactementNDiagnostics(
     nombreDeDiagnostics: number
   ): Promise<Aidant[]>;
+
+  rechercheAidantAvecNombreDeDiagnostics(): Promise<Aidant[]>;
 }
 
 export class EntrepotAidantPostgres implements EntrepotAidant {
@@ -35,6 +38,10 @@ export class EntrepotAidantPostgres implements EntrepotAidant {
     configuration: Knex.Config = knexfile
   ) {
     this.knex = knex(configuration);
+  }
+
+  rechercheAidantAvecNombreDeDiagnostics(): Promise<Aidant[]> {
+    return this.rechercheAidantParCritere(() => `1 = 1`, true);
   }
 
   rechercheAidantAyantExactementNDiagnostics(
@@ -79,14 +86,15 @@ export class EntrepotAidantPostgres implements EntrepotAidant {
   }
 
   private async rechercheAidantParCritere(
-    critere: () => string
+    critere: () => string,
+    afficherNombreDiagnostics = false
   ): Promise<Aidant[]> {
     return await this.knex
       .raw(
         `
             SELECT *
             FROM utilisateurs_mac
-                     JOIN (SELECT count(*)                                   as nb,
+                     LEFT JOIN (SELECT count(*)                                   as nb,
                                   donnees -> 'utilisateur' ->> 'identifiant' as aidant_diag
                            FROM relations
                            WHERE donnees -> 'utilisateur' ->> 'type' = 'aidant'
@@ -104,6 +112,9 @@ export class EntrepotAidantPostgres implements EntrepotAidant {
             aidant.donnees.nomPrenom
           ),
           email: this.serviceDeChiffrement.dechiffre(aidant.donnees.email),
+          ...(afficherNombreDiagnostics && {
+            nombreDiagnostics: parseInt(aidant.nb) || 0,
+          }),
           ...(aidant.donnees.dateSignatureCGU && {
             compteCree: FournisseurHorloge.enDate(
               aidant.donnees.dateSignatureCGU
@@ -143,6 +154,11 @@ export class ExtractionAidantSelonParametre {
       [
         'SANS_DIAGNOSTIC',
         () => this.entrepotAidantPostgres.rechercheAidantSansDiagnostic(),
+      ],
+      [
+        'NOMBRE_DIAGNOSTICS',
+        () =>
+          this.entrepotAidantPostgres.rechercheAidantAvecNombreDeDiagnostics(),
       ],
     ]);
   }
