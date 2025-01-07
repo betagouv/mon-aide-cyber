@@ -13,7 +13,8 @@ export type ParametreExtraction =
   | 'SANS_DIAGNOSTIC'
   | 'EXACTEMENT_UN_DIAGNOSTIC'
   | 'AU_MOINS_DEUX_DIAGNOSTICS'
-  | 'AU_MOINS_CINQ_DIAGNOSTICS';
+  | 'AU_MOINS_CINQ_DIAGNOSTICS'
+  | 'NOMBRE_DIAGNOSTICS';
 
 const estTypeExport = (
   valeur: any | ParametreExtraction
@@ -22,14 +23,15 @@ const estTypeExport = (
     valeur === 'SANS_DIAGNOSTIC' ||
     valeur === 'EXACTEMENT_UN_DIAGNOSTIC' ||
     valeur === 'AU_MOINS_DEUX_DIAGNOSTICS' ||
-    valeur === 'AU_MOINS_CINQ_DIAGNOSTICS'
+    valeur === 'AU_MOINS_CINQ_DIAGNOSTICS' ||
+    valeur === 'NOMBRE_DIAGNOSTICS'
   );
 };
 const command = program
   .description("Exporte les Aidants en fonction du type d'export souhaité")
   .option(
     '-t, --type <type>',
-    "Le type d'export souhaité SANS_DIAGNOSTIC, EXACTEMENT_UN_DIAGNOSTIC, AU_MOINS_DEUX_DIAGNOSTICS, AU_MOINS_CINQ_DIAGNOSTICS",
+    "Le type d'export souhaité SANS_DIAGNOSTIC, EXACTEMENT_UN_DIAGNOSTIC, AU_MOINS_DEUX_DIAGNOSTICS, AU_MOINS_CINQ_DIAGNOSTICS, NOMBRE_DIAGNOSTICS",
     'SANS_DIAGNOSTIC'
   );
 
@@ -49,8 +51,11 @@ const formatteLaDate = (date?: Date): string =>
       )
     : 'Jamais connecté';
 
-const versLigneCSV = (aidant: Aidant) =>
-  `${aidant.nomPrenom};${aidant.email};${formatteLaDate(aidant.compteCree)};\n`;
+const versLigneCSV = (aidant: Aidant, typeExport: ParametreExtraction) => {
+  if (typeExport === 'NOMBRE_DIAGNOSTICS')
+    return `${aidant.nomPrenom};${aidant.email};${formatteLaDate(aidant.compteCree)};${aidant.nombreDiagnostics};\n`;
+  return `${aidant.nomPrenom};${aidant.email};${formatteLaDate(aidant.compteCree)};\n`;
+};
 
 command.action(async (options) => {
   const typeExport = options.type;
@@ -67,7 +72,7 @@ command.action(async (options) => {
 
   console.log('Nombre d’Aidants trouvés : %d', resultat.length);
   resultat.forEach((aidant) => {
-    rapport.push(versLigneCSV(aidant));
+    rapport.push(versLigneCSV(aidant, typeExport));
   });
 
   fs.writeFileSync(

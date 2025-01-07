@@ -4,4 +4,5 @@ export type Aidant = {
   email: string;
   nomPrenom: string;
   compteCree?: Date;
+  nombreDiagnostics?: number;
 } & Aggregat;

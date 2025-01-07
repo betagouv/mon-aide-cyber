@@ -34,7 +34,7 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
 
   it.each<Test>([
     {
-      test: '0 diagnostic',
+      test: 'ayant fait 0 diagnostic',
       parametre: 'SANS_DIAGNOSTIC',
       aidants: [
         unAidant(entrepotAidant, entrepotRelation).ayantFaitNDiagnostics(1),
@@ -53,7 +53,7 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
       ],
     },
     {
-      test: 'exactement 1 diagnostic',
+      test: 'ayant fait exactement 1 diagnostic',
       parametre: 'EXACTEMENT_UN_DIAGNOSTIC',
       aidants: [
         unAidant(entrepotAidant, entrepotRelation)
@@ -84,7 +84,7 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
       ],
     },
     {
-      test: '2 diagnostics',
+      test: 'ayant fait 2 diagnostics ou plus',
       parametre: 'AU_MOINS_DEUX_DIAGNOSTICS',
       aidants: [
         unAidant(entrepotAidant, entrepotRelation).ayantFaitNDiagnostics(1),
@@ -104,7 +104,7 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
       ],
     },
     {
-      test: '5 diagnostics',
+      test: 'ayant fait 5 diagnostics ou plus',
       parametre: 'AU_MOINS_CINQ_DIAGNOSTICS',
       aidants: [
         unAidant(entrepotAidant, entrepotRelation).ayantFaitNDiagnostics(4),
@@ -123,7 +123,62 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
         },
       ],
     },
-  ])('Extrais un aidant ayant fait $test', async (test) => {
+    {
+      test: 'avec le nombre de diagnostics correpondant',
+      parametre: 'NOMBRE_DIAGNOSTICS',
+      aidants: [
+        unAidant(entrepotAidant, entrepotRelation)
+          .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48061')
+          .avecUnNomPrenom('Jeanne DUPONT')
+          .avecUnEmail('jeanne.dupont@yomail.com'),
+        unAidant(entrepotAidant, entrepotRelation)
+          .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48062')
+          .ayantFaitNDiagnostics(3)
+          .avecUnNomPrenom('Jean DUPONT')
+          .avecUnEmail('jean.dupont@yomail.com'),
+        unAidant(entrepotAidant, entrepotRelation)
+          .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48063')
+          .ayantFaitNDiagnostics(5)
+          .avecUnNomPrenom('Jean DUJARDIN')
+          .avecUnEmail('jean.dujardin@yomail.com'),
+        unAidant(entrepotAidant, entrepotRelation)
+          .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48064')
+          .ayantFaitNDiagnostics(8)
+          .avecUnNomPrenom('Jean MARTIN')
+          .avecUnEmail('jean.martin@yomail.com'),
+      ],
+      aidantsAttendus: [
+        {
+          identifiant: '6da9ed47-d95f-4c23-93fb-616c8dd48061',
+          nomPrenom: 'Jeanne DUPONT',
+          email: 'jeanne.dupont@yomail.com',
+          compteCree: FournisseurHorloge.maintenant(),
+          nombreDiagnostics: 0,
+        },
+        {
+          identifiant: '6da9ed47-d95f-4c23-93fb-616c8dd48062',
+          nomPrenom: 'Jean DUPONT',
+          email: 'jean.dupont@yomail.com',
+          compteCree: FournisseurHorloge.maintenant(),
+          nombreDiagnostics: 3,
+        },
+        {
+          identifiant: '6da9ed47-d95f-4c23-93fb-616c8dd48063',
+          nomPrenom: 'Jean DUJARDIN',
+          email: 'jean.dujardin@yomail.com',
+          compteCree: FournisseurHorloge.maintenant(),
+          nombreDiagnostics: 5,
+        },
+        {
+          identifiant: '6da9ed47-d95f-4c23-93fb-616c8dd48064',
+          nomPrenom: 'Jean MARTIN',
+          email: 'jean.martin@yomail.com',
+          compteCree: FournisseurHorloge.maintenant(),
+          nombreDiagnostics: 8,
+        },
+      ],
+    },
+  ])('Extrais les Aidants', async (test) => {
     await Promise.all(test.aidants.map((aidant) => aidant.construis()));
     const resultat = await new ExtractionAidantSelonParametre(
       entrepotAidant
@@ -159,6 +214,18 @@ export class EntrepotAidantMemoire implements EntrepotAidant {
 
   async rechercheAidantSansDiagnostic(): Promise<Aidant[]> {
     return this.rechercheParCritere((relation) => relation.length === 0);
+  }
+
+  rechercheAidantAvecNombreDeDiagnostics(): Promise<Aidant[]> {
+    return Promise.all(
+      Array.from(this.entites.values()).map(async (aidant) => {
+        const relation =
+          await this.entrepotRelationMemoire.trouveObjetsLiesAUtilisateur(
+            aidant.identifiant
+          );
+        return { ...aidant, nombreDiagnostics: relation.length };
+      })
+    );
   }
 
   rechercheAidantAyantExactementNDiagnostics(
