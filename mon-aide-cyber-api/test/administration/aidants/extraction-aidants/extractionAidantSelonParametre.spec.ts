@@ -1,15 +1,15 @@
 import { assert, beforeEach, it } from 'vitest';
-import { Aidant } from '../../../../src/administration/aidants/aidants-selon-nombre-diagnostics/Types';
+import { Aidant } from '../../../../src/administration/aidants/extraction-aidants/Types';
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
 import {
   EntrepotAidant,
-  ExtractionAidantSelonNombreDiagnostics,
-} from '../../../../src/administration/aidants/aidants-selon-nombre-diagnostics/extractionAidantSelonNombreDiagnostics';
+  ExtractionAidantSelonParametre,
+} from '../../../../src/administration/aidants/extraction-aidants/extractionAidantSelonParametre';
 import { AggregatNonTrouve } from '../../../../src/domaine/Aggregat';
 import crypto from 'crypto';
 import { cloneDeep } from 'lodash';
 import { EntrepotRelationMemoire } from '../../../../src/relation/infrastructure/EntrepotRelationMemoire';
-import { ParametreAidantsSelonNombreDiagnostics } from '../../../../src/administration/aidants/aidants-selon-nombre-diagnostics/commande';
+import { ParametreExtraction } from '../../../../src/administration/aidants/extraction-aidants/commande';
 import { ConstructeurAidant, unAidant } from './constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { Tuple } from '../../../../src/relation/Tuple';
@@ -27,7 +27,7 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
 
   type Test = {
     test: string;
-    parametre: ParametreAidantsSelonNombreDiagnostics;
+    parametre: ParametreExtraction;
     aidants: ConstructeurAidant[];
     aidantsAttendus: Aidant[];
   };
@@ -125,7 +125,7 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
     },
   ])('Extrais un aidant ayant fait $test', async (test) => {
     await Promise.all(test.aidants.map((aidant) => aidant.construis()));
-    const resultat = await new ExtractionAidantSelonNombreDiagnostics(
+    const resultat = await new ExtractionAidantSelonParametre(
       entrepotAidant
     ).extrais(test.parametre);
 

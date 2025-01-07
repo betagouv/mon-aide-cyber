@@ -4,7 +4,7 @@ import knexfile from '../../../infrastructure/entrepots/postgres/knexfile';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import crypto from 'crypto';
 import { FournisseurHorloge } from '../../../infrastructure/horloge/FournisseurHorloge';
-import { ParametreAidantsSelonNombreDiagnostics } from './commande';
+import { ParametreExtraction } from './commande';
 
 type AidantDTO = {
   id: crypto.UUID;
@@ -114,11 +114,8 @@ export class EntrepotAidantPostgres implements EntrepotAidant {
   }
 }
 
-export class ExtractionAidantSelonNombreDiagnostics {
-  private readonly exports: Map<
-    ParametreAidantsSelonNombreDiagnostics,
-    () => Promise<Aidant[]>
-  >;
+export class ExtractionAidantSelonParametre {
+  private readonly exports: Map<ParametreExtraction, () => Promise<Aidant[]>>;
 
   constructor(private readonly entrepotAidantPostgres: EntrepotAidant) {
     this.exports = new Map([
@@ -150,9 +147,7 @@ export class ExtractionAidantSelonNombreDiagnostics {
     ]);
   }
 
-  extrais(
-    typeExportSouhaite: ParametreAidantsSelonNombreDiagnostics
-  ): Promise<Aidant[]> {
+  extrais(typeExportSouhaite: ParametreExtraction): Promise<Aidant[]> {
     return this.exports.get(typeExportSouhaite)?.() || Promise.resolve([]);
   }
 }

@@ -5,19 +5,19 @@ import { FournisseurHorloge } from '../../../infrastructure/horloge/FournisseurH
 import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import {
   EntrepotAidantPostgres,
-  ExtractionAidantSelonNombreDiagnostics,
-} from './extractionAidantSelonNombreDiagnostics';
+  ExtractionAidantSelonParametre,
+} from './extractionAidantSelonParametre';
 import { intlFormat } from 'date-fns';
 
-export type ParametreAidantsSelonNombreDiagnostics =
+export type ParametreExtraction =
   | 'SANS_DIAGNOSTIC'
   | 'EXACTEMENT_UN_DIAGNOSTIC'
   | 'AU_MOINS_DEUX_DIAGNOSTICS'
   | 'AU_MOINS_CINQ_DIAGNOSTICS';
 
 const estTypeExport = (
-  valeur: any | ParametreAidantsSelonNombreDiagnostics
-): valeur is ParametreAidantsSelonNombreDiagnostics => {
+  valeur: any | ParametreExtraction
+): valeur is ParametreExtraction => {
   return (
     valeur === 'SANS_DIAGNOSTIC' ||
     valeur === 'EXACTEMENT_UN_DIAGNOSTIC' ||
@@ -61,7 +61,7 @@ command.action(async (options) => {
   }
 
   const rapport: string[] = [];
-  const resultat = await new ExtractionAidantSelonNombreDiagnostics(
+  const resultat = await new ExtractionAidantSelonParametre(
     new EntrepotAidantPostgres(adaptateurServiceChiffrement())
   ).extrais(typeExport);
 
