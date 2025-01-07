@@ -22,7 +22,7 @@ type DemandeDevenirAidant = {
   type: TypeAidantEtSonEntreprise;
 };
 
-type EtatEtapesDemande = {
+export type EtatEtapesDemande = {
   etapeCourante: Etape;
   erreur?: Error;
   demande: DemandeDevenirAidant | undefined;

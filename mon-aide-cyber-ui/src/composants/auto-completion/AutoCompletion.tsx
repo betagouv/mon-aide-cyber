@@ -10,12 +10,12 @@ import {
   basculeAffichageValeurs,
   focusEnCours,
   initialiseEtatAutoCompletion,
-  suggestionChoisie,
   reducteurAutoCompletion,
-  toucheClavierAppuyee,
+  suggestionChoisie,
   suggestionsInitialesChargees,
-  valeurSaisie,
   surClickEnDehors,
+  toucheClavierAppuyee,
+  valeurSaisie,
 } from './reducteurAutoCompletion.ts';
 
 type ProprietesAutoCompletion<T extends object | string> = {
