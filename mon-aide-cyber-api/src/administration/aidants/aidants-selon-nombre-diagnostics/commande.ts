@@ -11,6 +11,7 @@ import { intlFormat } from 'date-fns';
 
 export type ParametreAidantsSelonNombreDiagnostics =
   | 'SANS_DIAGNOSTIC'
+  | 'EXACTEMENT_UN_DIAGNOSTIC'
   | 'AU_MOINS_DEUX_DIAGNOSTICS'
   | 'AU_MOINS_CINQ_DIAGNOSTICS';
 
@@ -19,6 +20,7 @@ const estTypeExport = (
 ): valeur is ParametreAidantsSelonNombreDiagnostics => {
   return (
     valeur === 'SANS_DIAGNOSTIC' ||
+    valeur === 'EXACTEMENT_UN_DIAGNOSTIC' ||
     valeur === 'AU_MOINS_DEUX_DIAGNOSTICS' ||
     valeur === 'AU_MOINS_CINQ_DIAGNOSTICS'
   );
@@ -27,7 +29,7 @@ const command = program
   .description("Exporte les Aidants en fonction du type d'export souhaité")
   .option(
     '-t, --type <type>',
-    "Le type d'export souhaité SANS_DIAGNOSTIC, AU_MOINS_DEUX_DIAGNOSTICS, AU_MOINS_CINQ_DIAGNOSTICS",
+    "Le type d'export souhaité SANS_DIAGNOSTIC, EXACTEMENT_UN_DIAGNOSTIC, AU_MOINS_DEUX_DIAGNOSTICS, AU_MOINS_CINQ_DIAGNOSTICS",
     'SANS_DIAGNOSTIC'
   );
 
