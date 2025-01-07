@@ -12,7 +12,7 @@
     "administration:rapport-demandes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/demandes-en-cours/commande.ts",
     "administration:recherche-demandes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/recherche/commande.ts",
     "administration:recherche-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/recherche/commande.ts",
-    "administration:aidants-selon-nombre-diagnostics": "ts-node --transpile-only --require dotenv/config src/administration/aidants/aidants-selon-nombre-diagnostics/commande.ts",
+    "administration:extraction-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/extraction-aidants/commande.ts",
     "administration:recupere-aidants-par-domaine": "ts-node --transpile-only --require dotenv/config src/administration/aidants/par-domaine/commande.ts",
     "administration:chiffrement": "ts-node --transpile-only --require dotenv/config src/administration/chiffrement/commande.ts",
     "administration:lie-diagnostics": "ts-node --transpile-only --require dotenv/config src/administration/lie-diagnostics/commande.ts",

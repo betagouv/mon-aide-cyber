@@ -60,8 +60,8 @@ import {
 } from '../../../constructeurs/constructeursAidantUtilisateur';
 import { adaptateurServiceChiffrement } from '../../../../src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import { unTupleAidantInitieDiagnostic } from '../../../../src/diagnostic/tuples';
-import { EntrepotAidantPostgres as EntrepotAidantPostgresExtraction } from '../../../../src/administration/aidants/aidants-selon-nombre-diagnostics/extractionAidantSelonNombreDiagnostics';
-import { Aidant as AidantExtraction } from '../../../../src/administration/aidants/aidants-selon-nombre-diagnostics/Types';
+import { EntrepotAidantPostgres as EntrepotAidantPostgresExtraction } from '../../../../src/administration/aidants/extraction-aidants/extractionAidantSelonParametre';
+import { Aidant as AidantExtraction } from '../../../../src/administration/aidants/extraction-aidants/Types';
 import { ProfilAidant } from '../../../../src/espace-aidant/profil/profilAidant';
 import { EntrepotProfilAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotProfilAidantPostgres';
 import knexfile from './../../../../src/infrastructure/entrepots/postgres/knexfile';
