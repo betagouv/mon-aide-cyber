@@ -12,6 +12,11 @@ import { constructeurParametresAPI } from '../../../../fournisseurs/api/Construc
 import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
 import { useNavigate } from 'react-router-dom';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
+import { TypeAidant } from '../../parcours-aidant/reducteurEtapes.ts';
+import { Entreprise } from '../../parcours-aidant/ChoixTypeAidant.tsx';
+import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
+import Button from '../../../../composants/atomes/Button/Button.tsx';
+import { useState } from 'react';
 
 export type CorpsMutationDemandeDevenirAidant = {
   nom: string;
@@ -19,12 +24,16 @@ export type CorpsMutationDemandeDevenirAidant = {
   mail: string;
   departement: string;
   cguValidees: boolean;
+  typeAidant?: TypeAidant;
+  entreprise?: Entreprise;
 };
 
 export const CapteurFormulaireDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
   const navigate = useNavigate();
+
+  const [estValide, setEstValide] = useState(false);
 
   useRecupereContexteNavigation(
     'demande-devenir-aidant:demande-devenir-aidant'
@@ -113,10 +122,57 @@ export const CapteurFormulaireDevenirAidant = () => {
   }
 
   return (
-    <FormulaireDevenirAidant
-      referentielDepartements={referentielDepartements}
-      surSoumission={mutate}
-    >
+    <FormulaireDevenirAidant>
+      <FormulaireDevenirAidant.AvantPropos>
+        <div className="fr-mb-2w">
+          Demande d&apos;inscription à un atelier Devenir Aidant MonAideCyber
+        </div>
+        <div className="fr-mt-2w introduction">
+          <div>
+            <TypographieH5>
+              Vous souhaitez devenir Aidant MonAideCyber
+            </TypographieH5>
+            <p>Pour devenir aidant, il est nécessaire de&nbsp;:</p>
+            <ul>
+              <li>
+                représenter un service de l&apos;Etat, un établissement public,
+                une association ou toute autre entité morale à but non lucratif
+              </li>
+              <li>
+                participer à un atelier devenir Aidant MonAideCyber animé par
+                l&apos;ANSSI
+              </li>
+              <li>
+                prendre connaissance de{' '}
+                <a href="/charte-aidant">la charte de l&apos;aidant</a>, qui
+                rappelle notamment le principe de gratuité du dispositif, et la
+                signer avant ou après l&apos;atelier
+              </li>
+              <br />
+            </ul>
+            <p>
+              Veuillez compléter les informations ci-dessous pour être averti de
+              la prochaine session prévue sur votre territoire.
+            </p>
+          </div>
+        </div>
+      </FormulaireDevenirAidant.AvantPropos>
+      <FormulaireDevenirAidant.Formulaire
+        referentielDepartements={referentielDepartements}
+        surSoumission={mutate}
+        devientValide={(estFormulaireValide) =>
+          setEstValide(estFormulaireValide)
+        }
+      >
+        <Button
+          type="submit"
+          key="envoyer-demande-devenir-aidant"
+          className="fr-btn bouton-mac bouton-mac-primaire"
+          disabled={!estValide}
+        >
+          Envoyer
+        </Button>
+      </FormulaireDevenirAidant.Formulaire>
       {isError ? <Toast message={error.message} type="ERREUR" /> : null}
     </FormulaireDevenirAidant>
   );

@@ -2,14 +2,16 @@ import { describe, expect } from 'vitest';
 import {
   choixTypeAidantFait,
   choixUtilisationFaite,
+  EtatEtapesDemande,
   initialiseReducteur,
   reducteurEtapes,
   retourEtapePrecedente,
+  signeCharteAidant,
   TypeAidant,
   TypeAidantEtSonEntreprise,
 } from '../../../../src/domaine/gestion-demandes/parcours-aidant/reducteurEtapes';
-import { Constructeur } from '../../../constructeurs/Constructeur.ts';
 import { fakerFR } from '@faker-js/faker';
+import { Constructeur } from '../../../constructeurs/Constructeur';
 
 class ConstructeurChoixTypeAidant
   implements Constructeur<TypeAidantEtSonEntreprise>
@@ -132,6 +134,18 @@ describe('Reducteur d’étapes pour le parcours Aidant', () => {
   });
 
   describe('Signature de la charte Aidant', () => {
+    it("Passe à l'étape suivante", () => {
+      const etat = reducteurEtapes(
+        { etapeCourante: 'signatureCharteAidant', demande: undefined },
+        signeCharteAidant()
+      );
+
+      expect(etat).toStrictEqual<EtatEtapesDemande>({
+        etapeCourante: 'formulaireDevenirAidant',
+        demande: undefined,
+      });
+    });
+
     it('Revenir sur la sélection du type Aidant', () => {
       const etat = reducteurEtapes(
         { etapeCourante: 'signatureCharteAidant', demande: undefined },
