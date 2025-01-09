@@ -4,11 +4,11 @@ import { FormulaireDevenirAidant } from '../domaine/gestion-demandes/devenir-aid
 
 const meta = {
   title: 'Demande pour devenir Aidant',
-  component: FormulaireDevenirAidant,
+  component: FormulaireDevenirAidant.Formulaire,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof FormulaireDevenirAidant>;
+} satisfies Meta<typeof FormulaireDevenirAidant.Formulaire>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -17,6 +17,7 @@ export const DemandeDevenirAidant: Story = {
   args: {
     referentielDepartements: [{ nom: 'Gironde', code: '33' }],
     surSoumission: () => null,
+    devientValide: () => null,
   },
   name: 'Formulaire de demande pour devenir Aidant',
   play: async ({ canvasElement, step }) => {

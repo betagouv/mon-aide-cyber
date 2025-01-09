@@ -16,7 +16,8 @@ export type Etape =
   | 'choixUtilisation'
   | 'choixTypeAidant'
   | 'signatureCharteAidant'
-  | 'signatureCGUs';
+  | 'signatureCGUs'
+  | 'formulaireDevenirAidant';
 
 type DemandeDevenirAidant = {
   type: TypeAidantEtSonEntreprise;
@@ -31,6 +32,7 @@ export type EtatEtapesDemande = {
 enum TypeActionEtapesDemande {
   CHOIX_UTILISATION_FAITE = 'CHOIX_UTILISATION_FAITE',
   CHOIX_TYPE_AIDANT_FAIT = 'CHOIX_TYPE_AIDANT_FAIT',
+  CHARTE_AIDANT_SIGNEE = 'CHARTE_AIDANT_SIGNEE',
   RETOUR_ETAPE_PRECEDENTE = 'RETOUR_ETAPE_PRECEDENTE',
 }
 
@@ -44,12 +46,16 @@ type ActionEtapesDemande =
       typeAidantEtSonEntreprise: TypeAidantEtSonEntreprise;
     }
   | {
+      type: TypeActionEtapesDemande.CHARTE_AIDANT_SIGNEE;
+    }
+  | {
       type: TypeActionEtapesDemande.RETOUR_ETAPE_PRECEDENTE;
     };
 
 const etapesPrecedente: Map<Etape, Etape> = new Map<Etape, Etape>([
   ['choixTypeAidant', 'choixUtilisation'],
   ['signatureCharteAidant', 'choixTypeAidant'],
+  ['formulaireDevenirAidant', 'signatureCharteAidant'],
 ]);
 
 export const reducteurEtapes = (
@@ -82,6 +88,11 @@ export const reducteurEtapes = (
           },
         },
       };
+    case TypeActionEtapesDemande.CHARTE_AIDANT_SIGNEE:
+      return {
+        ...etat,
+        etapeCourante: 'formulaireDevenirAidant',
+      };
   }
 };
 
@@ -97,6 +108,10 @@ export const choixTypeAidantFait = (
 ): ActionEtapesDemande => ({
   type: TypeActionEtapesDemande.CHOIX_TYPE_AIDANT_FAIT,
   typeAidantEtSonEntreprise,
+});
+
+export const signeCharteAidant = (): ActionEtapesDemande => ({
+  type: TypeActionEtapesDemande.CHARTE_AIDANT_SIGNEE,
 });
 
 export const retourEtapePrecedente = (): ActionEtapesDemande => ({

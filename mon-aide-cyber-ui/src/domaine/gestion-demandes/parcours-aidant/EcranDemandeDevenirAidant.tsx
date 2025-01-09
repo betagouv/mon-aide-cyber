@@ -1,5 +1,5 @@
 import './ecran-demande-devenir-aidant.scss';
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useReducer, useState } from 'react';
 import {
   choixTypeAidantFait,
   choixUtilisationFaite,
@@ -7,35 +7,93 @@ import {
   initialiseReducteur,
   reducteurEtapes,
   retourEtapePrecedente,
+  signeCharteAidant,
   TypeAidantEtSonEntreprise,
 } from './reducteurEtapes.ts';
 import { ChoixUtilisation, Utilisation } from './ChoixUtilisation.tsx';
 import { ChoixTypeAidant } from './ChoixTypeAidant.tsx';
-import { ReponseHATEOAS } from '../../Lien.ts';
-import { useContexteNavigation } from '../../../hooks/useContexteNavigation.ts';
-import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
-import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { SignatureCGU } from './SignatureCGU.tsx';
 import { SignatureCharteAidant } from './SignatureCharteAidant.tsx';
+import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
+import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  CorpsDemandeDevenirAidant,
+  ReponseDemandeInitiee,
+} from '../devenir-aidant/DevenirAidant.ts';
+import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
+import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
+import { FormulaireDevenirAidant } from '../devenir-aidant/formulaire-devenir-aidant/FormulaireDevenirAidant.tsx';
+import { CorpsMutationDemandeDevenirAidant } from '../devenir-aidant/formulaire-devenir-aidant/CapteurFormulaireDevenirAidant.tsx';
+import { TypographieH5 } from '../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
+import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
+import Button from '../../../composants/atomes/Button/Button.tsx';
 
 export const EcranDemandeDevenirAidant = () => {
+  const navigationMAC = useNavigationMAC();
+  const macAPI = useMACAPI();
+
   const [etatEtapeCourante, envoie] = useReducer(
     reducteurEtapes,
     initialiseReducteur()
   );
-  const navigationMAC = useNavigationMAC();
-  const navigationUtilisateur = useContexteNavigation(useMACAPI());
 
-  useEffect(() => {
-    navigationUtilisateur
-      .recupereContexteNavigation({
-        contexte: 'demande-devenir-aidant:demande-devenir-aidant',
-      })
-      .then((reponse) =>
-        navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens)
-      )
-      .catch();
-  }, []);
+  const [estValide, setEstValide] = useState(false);
+
+  useRecupereContexteNavigation(
+    'demande-devenir-aidant:demande-devenir-aidant'
+  );
+
+  const action = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
+    'demande-devenir-aidant'
+  );
+
+  const { data } = useQuery({
+    enabled: !!action,
+    queryKey: ['recuperer-departements'],
+    queryFn: () => {
+      return macAPI.execute<ReponseDemandeInitiee, ReponseDemandeInitiee>(
+        constructeurParametresAPI()
+          .url(action.url)
+          .methode(action.methode!)
+          .construis(),
+        (corps) => corps
+      );
+    },
+  });
+
+  const referentielDepartements = data?.departements;
+
+  const {
+    mutate,
+    error: erreur,
+    isError: mutationEnErreur,
+  } = useMutation({
+    mutationKey: ['demander-a-devenir-aidant'],
+    mutationFn: (corpsMutation: CorpsMutationDemandeDevenirAidant) => {
+      const actionSoumettre = new MoteurDeLiens(
+        navigationMAC.etat
+      ).trouveEtRenvoie('envoyer-demande-devenir-aidant');
+
+      if (!actionSoumettre)
+        throw new Error(
+          'Une erreur est survenue lors de la demande devenir aidant'
+        );
+
+      return macAPI.execute<void, void, CorpsDemandeDevenirAidant>(
+        constructeurParametresAPI<CorpsDemandeDevenirAidant>()
+          .url(actionSoumettre.url)
+          .methode(actionSoumettre.methode!)
+          .corps(corpsMutation)
+          .construis(),
+        (corps) => corps
+      );
+    },
+    onSuccess: () => {
+      // navigate('#formulaire-formation');
+    },
+  });
 
   const surClickChoixUtilisation = useCallback((choix: Utilisation) => {
     envoie(choixUtilisationFaite(choix));
@@ -74,11 +132,75 @@ export const EcranDemandeDevenirAidant = () => {
       'signatureCharteAidant',
       <SignatureCharteAidant
         key="signatureCharteAidant"
-        signeCharteAidant={() => null}
+        signeCharteAidant={() => envoie(signeCharteAidant())}
         precedent={() => envoie(retourEtapePrecedente())}
       />,
     ],
     ['signatureCGUs', <SignatureCGU key="signatureCGUs" />],
+    [
+      'formulaireDevenirAidant',
+      <div
+        key="formulaireDevenirAidant"
+        className="fr-container fr-grid-row fr-grid-row--center zone-formulaire-devenir-aidant"
+      >
+        <FormulaireDevenirAidant>
+          <FormulaireDevenirAidant.AvantPropos>
+            <div className="fr-mt-2w introduction">
+              <div>
+                <TypographieH5>
+                  Vous souhaitez oeuvrer exclusivement pour l&apos;intérêt
+                  général
+                </TypographieH5>
+                <p>
+                  Veuillez compléter les informations ci-dessous pour être
+                  informé des prochains ateliers Devenir Aidant MonAideCyber
+                  dans votre territoire
+                </p>
+                <p>
+                  Les informations que vous fournissez via ce formulaire sont
+                  strictement confidentielles et respectent nos conditions
+                  générales d’utilisation.
+                </p>
+              </div>
+            </div>
+          </FormulaireDevenirAidant.AvantPropos>
+          <FormulaireDevenirAidant.Formulaire
+            referentielDepartements={referentielDepartements}
+            surSoumission={(formulaire) =>
+              mutate({
+                ...formulaire,
+                typeAidant: etatEtapeCourante.demande?.type.typeAidant,
+                entreprise: etatEtapeCourante.demande?.type.entreprise,
+              })
+            }
+            devientValide={(estFormulaireValide) => {
+              setEstValide(estFormulaireValide);
+            }}
+          >
+            <Button
+              type="submit"
+              key="envoyer-demande-devenir-aidant"
+              className="fr-btn bouton-mac bouton-mac-primaire"
+              onClick={() => envoie(retourEtapePrecedente())}
+            >
+              Précédent
+            </Button>
+            <Button
+              type="submit"
+              key="envoyer-demande-devenir-aidant"
+              className="fr-btn bouton-mac bouton-mac-primaire"
+              disabled={!estValide}
+            >
+              Envoyer
+            </Button>
+          </FormulaireDevenirAidant.Formulaire>
+
+          {mutationEnErreur ? (
+            <Toast message={erreur.message} type="ERREUR" />
+          ) : null}
+        </FormulaireDevenirAidant>
+      </div>,
+    ],
   ]);
 
   return (

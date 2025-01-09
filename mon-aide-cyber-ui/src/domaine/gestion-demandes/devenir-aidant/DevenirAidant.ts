@@ -1,5 +1,7 @@
 import { ReponseHATEOAS } from '../../Lien.ts';
 import { Departement } from '../departement.ts';
+import { TypeAidant } from '../parcours-aidant/reducteurEtapes.ts';
+import { Entreprise } from '../parcours-aidant/ChoixTypeAidant.tsx';
 
 export type ReponseDemandeInitiee = ReponseHATEOAS & PreRequisDemande;
 export type PreRequisDemande = {
@@ -11,4 +13,6 @@ export type CorpsDemandeDevenirAidant = {
   mail: string;
   departement: string;
   cguValidees: boolean;
+  typeAidant?: TypeAidant;
+  entreprise?: Entreprise;
 };
