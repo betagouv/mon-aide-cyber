@@ -21,6 +21,7 @@ export type Etape =
 
 type DemandeDevenirAidant = {
   type: TypeAidantEtSonEntite;
+  signatureCharte?: boolean;
 };
 
 export type EtatEtapesDemande = {
@@ -64,6 +65,7 @@ export const reducteurEtapes = (
 ): EtatEtapesDemande => {
   switch (action.type) {
     case TypeActionEtapesDemande.RETOUR_ETAPE_PRECEDENTE:
+      delete etat.demande?.signatureCharte;
       return {
         ...etat,
         etapeCourante: etapesPrecedente.get(etat.etapeCourante)!,
@@ -91,6 +93,12 @@ export const reducteurEtapes = (
     case TypeActionEtapesDemande.CHARTE_AIDANT_SIGNEE:
       return {
         ...etat,
+        ...(etat.demande && {
+          demande: {
+            ...etat.demande,
+            signatureCharte: true,
+          },
+        }),
         etapeCourante: 'formulaireDevenirAidant',
       };
   }

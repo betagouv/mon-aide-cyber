@@ -22,13 +22,13 @@ import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   CorpsDemandeDevenirAidant,
+  entiteEnFonctionDuTypeAidant,
   ReponseDemandeInitiee,
 } from '../devenir-aidant/DevenirAidant.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { FormulaireDevenirAidant } from '../devenir-aidant/formulaire-devenir-aidant/FormulaireDevenirAidant.tsx';
-import { CorpsMutationDemandeDevenirAidant } from '../devenir-aidant/formulaire-devenir-aidant/CapteurFormulaireDevenirAidant.tsx';
 import { TypographieH5 } from '../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
 import Button from '../../../composants/atomes/Button/Button.tsx';
@@ -74,7 +74,7 @@ export const EcranDemandeDevenirAidant = () => {
     isError: mutationEnErreur,
   } = useMutation({
     mutationKey: ['demander-a-devenir-aidant'],
-    mutationFn: (corpsMutation: CorpsMutationDemandeDevenirAidant) => {
+    mutationFn: (corpsMutation: CorpsDemandeDevenirAidant) => {
       const actionSoumettre = new MoteurDeLiens(
         navigationMAC.etat
       ).trouveEtRenvoie('envoyer-demande-devenir-aidant');
@@ -84,6 +84,8 @@ export const EcranDemandeDevenirAidant = () => {
           'Une erreur est survenue lors de la demande devenir aidant'
         );
 
+      console.log({ corpsMutation });
+      return Promise.resolve();
       return macAPI.execute<void, void, CorpsDemandeDevenirAidant>(
         constructeurParametresAPI<CorpsDemandeDevenirAidant>()
           .url(actionSoumettre.url)
@@ -100,6 +102,7 @@ export const EcranDemandeDevenirAidant = () => {
 
   const surClickChoixUtilisation = useCallback((choix: Utilisation) => {
     envoie(choixUtilisationFaite(choix));
+    window.scrollTo({ top: 0 });
   }, []);
 
   const surClickChoixTypeAidant = useCallback(
@@ -110,9 +113,20 @@ export const EcranDemandeDevenirAidant = () => {
           entite,
         })
       );
+      window.scrollTo({ top: 0 });
     },
     []
   );
+
+  const surSignatureCharteAidant = useCallback(() => {
+    envoie(signeCharteAidant());
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  const surClickEtapePrecedente = useCallback(() => {
+    envoie(retourEtapePrecedente());
+    window.scrollTo({ top: 0 });
+  }, []);
 
   const etapes: Map<Etape, React.ReactElement> = new Map([
     [
@@ -128,15 +142,15 @@ export const EcranDemandeDevenirAidant = () => {
         key="choixTypeAidant"
         typeAidant={etatEtapeCourante.demande?.type}
         surClick={surClickChoixTypeAidant}
-        precedent={() => envoie(retourEtapePrecedente())}
+        precedent={surClickEtapePrecedente}
       />,
     ],
     [
       'signatureCharteAidant',
       <SignatureCharteAidant
         key="signatureCharteAidant"
-        signeCharteAidant={() => envoie(signeCharteAidant())}
-        precedent={() => envoie(retourEtapePrecedente())}
+        signeCharteAidant={surSignatureCharteAidant}
+        precedent={surClickEtapePrecedente}
       />,
     ],
     ['signatureCGUs', <SignatureCGU key="signatureCGUs" />],
@@ -169,33 +183,48 @@ export const EcranDemandeDevenirAidant = () => {
           </FormulaireDevenirAidant.AvantPropos>
           <FormulaireDevenirAidant.Formulaire
             referentielDepartements={referentielDepartements}
-            surSoumission={(formulaire) =>
+            surSoumission={(formulaire) => {
+              const { typeAidant, entite: entiteDuFormulaire } =
+                etatEtapeCourante.demande!.type;
+
+              const entiteCorrespondante =
+                entiteEnFonctionDuTypeAidant.get(typeAidant);
+
               mutate({
                 ...formulaire,
-                typeAidant: etatEtapeCourante.demande?.type.typeAidant,
-                entite: etatEtapeCourante.demande?.type.entite,
-              })
-            }
+                signatureCharte: etatEtapeCourante.demande!.signatureCharte,
+                ...(entiteCorrespondante && {
+                  entite: entiteCorrespondante(
+                    entiteDuFormulaire?.nom,
+                    entiteDuFormulaire?.siret
+                  ),
+                }),
+              });
+            }}
             devientValide={(estFormulaireValide) => {
               setEstValide(estFormulaireValide);
             }}
           >
-            <Button
-              type="submit"
-              key="envoyer-demande-devenir-aidant"
-              className="fr-btn bouton-mac bouton-mac-primaire"
-              onClick={() => envoie(retourEtapePrecedente())}
-            >
-              Précédent
-            </Button>
-            <Button
-              type="submit"
-              key="envoyer-demande-devenir-aidant"
-              className="fr-btn bouton-mac bouton-mac-primaire"
-              disabled={!estValide}
-            >
-              Envoyer
-            </Button>
+            <div className="actions">
+              <Button
+                type="submit"
+                variant="secondary"
+                key="envoyer-demande-devenir-aidant"
+                onClick={surClickEtapePrecedente}
+              >
+                <i className="fr-icon-arrow-left-line"></i>
+                <span>Précédent</span>
+              </Button>
+              <Button
+                type="submit"
+                key="envoyer-demande-devenir-aidant"
+                className="fr-btn bouton-mac bouton-mac-primaire"
+                disabled={!estValide}
+              >
+                Envoyer
+                <span className="fr-icon-check-line" aria-hidden="true"></span>
+              </Button>
+            </div>
           </FormulaireDevenirAidant.Formulaire>
 
           {mutationEnErreur ? (
