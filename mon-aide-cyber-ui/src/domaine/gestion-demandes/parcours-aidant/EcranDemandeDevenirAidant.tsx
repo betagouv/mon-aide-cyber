@@ -8,10 +8,13 @@ import {
   reducteurEtapes,
   retourEtapePrecedente,
   signeCharteAidant,
-  TypeAidantEtSonEntreprise,
+  TypeAidantEtSonEntite,
 } from './reducteurEtapes.ts';
-import { ChoixUtilisation, Utilisation } from './ChoixUtilisation.tsx';
-import { ChoixTypeAidant } from './ChoixTypeAidant.tsx';
+import {
+  ChoixUtilisation,
+  Utilisation,
+} from './choix-utilisation/ChoixUtilisation.tsx';
+import { ChoixTypeAidant } from './choix-type-aidant/ChoixTypeAidant.tsx';
 import { SignatureCGU } from './SignatureCGU.tsx';
 import { SignatureCharteAidant } from './SignatureCharteAidant.tsx';
 import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
@@ -100,11 +103,11 @@ export const EcranDemandeDevenirAidant = () => {
   }, []);
 
   const surClickChoixTypeAidant = useCallback(
-    ({ typeAidant, entreprise }: TypeAidantEtSonEntreprise) => {
+    ({ typeAidant, entite }: TypeAidantEtSonEntite) => {
       envoie(
         choixTypeAidantFait({
           typeAidant,
-          entreprise,
+          entite,
         })
       );
     },
@@ -170,7 +173,7 @@ export const EcranDemandeDevenirAidant = () => {
               mutate({
                 ...formulaire,
                 typeAidant: etatEtapeCourante.demande?.type.typeAidant,
-                entreprise: etatEtapeCourante.demande?.type.entreprise,
+                entite: etatEtapeCourante.demande?.type.entite,
               })
             }
             devientValide={(estFormulaireValide) => {
