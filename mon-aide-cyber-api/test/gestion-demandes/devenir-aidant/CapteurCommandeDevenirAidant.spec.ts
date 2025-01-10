@@ -11,6 +11,7 @@ import {
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 import { unConstructeurDeDemandeDevenirAidant } from './constructeurDeDemandeDevenirAidant';
 import {
+  ardennes,
   Departement,
   departements,
 } from '../../../src/gestion-demandes/departements';
@@ -23,7 +24,7 @@ import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnv
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 
-describe('Capteur de commande devenir aidant', () => {
+describe('Capteur de commande demande devenir aidant', () => {
   const annuaireCot = () => ({
     rechercheEmailParDepartement: (__departement: Departement) =>
       'cot@email.com',
@@ -259,6 +260,135 @@ describe('Capteur de commande devenir aidant', () => {
           type: 'CommandeDevenirAidant',
         })
       ).rejects.toThrowError('Le mail de mise en relation n’a pu être remis.');
+    });
+  });
+
+  describe('Dans le cadre de la mise en place des profils Aidants / Utilisateurs inscrits à partir du 31/01/2025', () => {
+    beforeEach(() => {
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-01-31T14:00'))
+      );
+    });
+
+    it('Crée la demande', async () => {
+      const entrepots = new EntrepotsMemoire();
+
+      const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
+        entrepots,
+        new BusEvenementDeTest(),
+        new AdaptateurEnvoiMailMemoire(),
+        annuaireCot,
+        unServiceAidant(entrepots.aidants())
+      ).execute({
+        departement: ardennes,
+        mail: 'email',
+        nom: 'nom',
+        prenom: 'prenom',
+        entite: {
+          nom: 'Beta-Gouv',
+          siret: '1234567890',
+          type: 'ServicePublic',
+        },
+        type: 'CommandeDevenirAidant',
+      });
+
+      expect(demandeDevenirAidant).toStrictEqual<DemandeDevenirAidant>({
+        departement: ardennes,
+        mail: 'email',
+        nom: 'nom',
+        prenom: 'prenom',
+        identifiant: expect.any(String),
+        date: FournisseurHorloge.maintenant(),
+        statut: StatutDemande.EN_COURS,
+        entite: {
+          nom: 'Beta-Gouv',
+          siret: '1234567890',
+          type: 'ServicePublic',
+        },
+      });
+    });
+
+    it('Met à jour une demande existante', async () => {
+      const entrepots = new EntrepotsMemoire();
+      await entrepots
+        .demandesDevenirAidant()
+        .persiste(
+          unConstructeurDeDemandeDevenirAidant()
+            .avecUnMail('email-existant@mail.com')
+            .construis()
+        );
+
+      const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
+        entrepots,
+        new BusEvenementDeTest(),
+        new AdaptateurEnvoiMailMemoire(),
+        annuaireCot,
+        unServiceAidant(entrepots.aidants())
+      ).execute({
+        departement: ardennes,
+        mail: 'email-existant@mail.com',
+        nom: 'nom',
+        prenom: 'prenom',
+        entite: {
+          nom: 'Beta-Gouv',
+          siret: '1234567890',
+          type: 'ServicePublic',
+        },
+        type: 'CommandeDevenirAidant',
+      });
+
+      expect(demandeDevenirAidant).toStrictEqual<DemandeDevenirAidant>({
+        departement: ardennes,
+        mail: 'email-existant@mail.com',
+        nom: 'nom',
+        prenom: 'prenom',
+        identifiant: expect.any(String),
+        date: FournisseurHorloge.maintenant(),
+        statut: StatutDemande.EN_COURS,
+        entite: {
+          nom: 'Beta-Gouv',
+          siret: '1234567890',
+          type: 'ServicePublic',
+        },
+      });
+    });
+
+    it('Publie l’événement DemandeDevenirAidantCréée', async () => {
+      const busEvenementDeTest = new BusEvenementDeTest();
+      const entrepots = new EntrepotsMemoire();
+
+      const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
+        entrepots,
+        busEvenementDeTest,
+        new AdaptateurEnvoiMailMemoire(),
+        annuaireCot,
+        unServiceAidant(entrepots.aidants())
+      ).execute({
+        departement: departements[1],
+        mail: 'email',
+        nom: 'nom',
+        prenom: 'prenom',
+        type: 'CommandeDevenirAidant',
+        entite: {
+          nom: 'Beta-Gouv',
+          siret: '1234567890',
+          type: 'ServicePublic',
+        },
+      });
+
+      expect(
+        busEvenementDeTest.evenementRecu
+      ).toStrictEqual<DemandeDevenirAidantCreee>({
+        identifiant: demandeDevenirAidant.identifiant,
+        type: 'DEMANDE_DEVENIR_AIDANT_CREEE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          date: FournisseurHorloge.maintenant(),
+          identifiantDemande: demandeDevenirAidant.identifiant,
+          departement: demandeDevenirAidant.departement.nom,
+          type: 'ServicePublic',
+        },
+      });
     });
   });
 });

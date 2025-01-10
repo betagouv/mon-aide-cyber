@@ -1,5 +1,10 @@
 import { CapteurCommande, Commande } from '../../domaine/commande';
-import { DemandeDevenirAidant, StatutDemande } from './DemandeDevenirAidant';
+import {
+  DemandeDevenirAidant,
+  EntiteDemande,
+  StatutDemande,
+  TypeEntite,
+} from './DemandeDevenirAidant';
 import { Entrepots } from '../../domaine/Entrepots';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { ErreurMAC } from '../../domaine/erreurMAC';
@@ -11,6 +16,7 @@ import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import crypto from 'crypto';
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
 import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
+import { isBefore } from 'date-fns';
 
 export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   type: 'CommandeDevenirAidant';
@@ -18,6 +24,7 @@ export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   mail: string;
   prenom: string;
   nom: string;
+  entite?: EntiteDemande;
 };
 
 class ErreurDemandeDevenirAidant extends Error {
@@ -72,6 +79,7 @@ export class CapteurCommandeDevenirAidant
       nom: commande.nom,
       prenom: commande.prenom,
       statut: StatutDemande.EN_COURS,
+      ...(commande.entite && { entite: commande.entite }),
     };
 
     return this.entrepots
@@ -95,7 +103,14 @@ export class CapteurCommandeDevenirAidant
   }
 
   private async demandeExiste(mail: string): Promise<boolean> {
-    return await this.entrepots.demandesDevenirAidant().demandeExiste(mail);
+    return (
+      isBefore(
+        FournisseurHorloge.maintenant(),
+        FournisseurHorloge.enDate(
+          adaptateurEnvironnement.nouveauParcoursDevenirAidant()
+        )
+      ) && (await this.entrepots.demandesDevenirAidant().demandeExiste(mail))
+    );
   }
 
   private async aidantExiste(mailDemandeur: string) {
@@ -133,6 +148,9 @@ export class CapteurCommandeDevenirAidant
         date: demandeDevenirAidant.date,
         departement: demandeDevenirAidant.departement.nom,
         identifiantDemande: demandeDevenirAidant.identifiant,
+        ...(demandeDevenirAidant.entite && {
+          type: demandeDevenirAidant.entite.type,
+        }),
       },
     });
   }
@@ -142,4 +160,5 @@ export type DemandeDevenirAidantCreee = Evenement<{
   date: Date;
   departement: string;
   identifiantDemande: crypto.UUID;
+  type?: TypeEntite;
 }>;
