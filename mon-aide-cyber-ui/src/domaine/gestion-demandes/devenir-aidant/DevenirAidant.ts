@@ -1,7 +1,7 @@
 import { ReponseHATEOAS } from '../../Lien.ts';
 import { Departement } from '../departement.ts';
 import { TypeAidant } from '../parcours-aidant/reducteurEtapes.ts';
-import { Entreprise } from '../parcours-aidant/ChoixTypeAidant.tsx';
+import { Entreprise } from '../parcours-aidant/choix-type-aidant/ChoixTypeAidant.tsx';
 
 export type ReponseDemandeInitiee = ReponseHATEOAS & PreRequisDemande;
 export type PreRequisDemande = {

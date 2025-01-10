@@ -8,13 +8,13 @@ import {
   retourEtapePrecedente,
   signeCharteAidant,
   TypeAidant,
-  TypeAidantEtSonEntreprise,
+  TypeAidantEtSonEntite,
 } from '../../../../src/domaine/gestion-demandes/parcours-aidant/reducteurEtapes';
 import { fakerFR } from '@faker-js/faker';
 import { Constructeur } from '../../../constructeurs/Constructeur';
 
 class ConstructeurChoixTypeAidant
-  implements Constructeur<TypeAidantEtSonEntreprise>
+  implements Constructeur<TypeAidantEtSonEntite>
 {
   private typeAidant: TypeAidant = 'AgentPublic';
   private siret = '1234567890';
@@ -40,7 +40,7 @@ class ConstructeurChoixTypeAidant
     return this;
   }
 
-  construis(): TypeAidantEtSonEntreprise {
+  construis(): TypeAidantEtSonEntite {
     return {
       typeAidant: this.typeAidant,
       entreprise: {

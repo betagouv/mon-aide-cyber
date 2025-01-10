@@ -1,5 +1,5 @@
-import { Utilisation } from './ChoixUtilisation.tsx';
-import { Entreprise } from './ChoixTypeAidant.tsx';
+import { Utilisation } from './choix-utilisation/ChoixUtilisation.tsx';
+import { Entreprise } from './Entreprise';
 
 export type TypeAidant =
   | 'RepresentantEtat'
@@ -7,9 +7,9 @@ export type TypeAidant =
   | 'Association'
   | 'FuturAdherent';
 
-export type TypeAidantEtSonEntreprise = {
+export type TypeAidantEtSonEntite = {
   typeAidant: TypeAidant;
-  entreprise?: Entreprise;
+  entite?: Entreprise;
 };
 
 export type Etape =
@@ -20,7 +20,7 @@ export type Etape =
   | 'formulaireDevenirAidant';
 
 type DemandeDevenirAidant = {
-  type: TypeAidantEtSonEntreprise;
+  type: TypeAidantEtSonEntite;
 };
 
 export type EtatEtapesDemande = {
@@ -43,7 +43,7 @@ type ActionEtapesDemande =
     }
   | {
       type: TypeActionEtapesDemande.CHOIX_TYPE_AIDANT_FAIT;
-      typeAidantEtSonEntreprise: TypeAidantEtSonEntreprise;
+      typeAidantEtSonEntite: TypeAidantEtSonEntite;
     }
   | {
       type: TypeActionEtapesDemande.CHARTE_AIDANT_SIGNEE;
@@ -83,8 +83,8 @@ export const reducteurEtapes = (
         demande: {
           ...etat.demande,
           type: {
-            typeAidant: action.typeAidantEtSonEntreprise.typeAidant,
-            entreprise: action.typeAidantEtSonEntreprise.entreprise,
+            typeAidant: action.typeAidantEtSonEntite.typeAidant,
+            entite: action.typeAidantEtSonEntite.entite,
           },
         },
       };
@@ -104,10 +104,10 @@ export const choixUtilisationFaite = (
 });
 
 export const choixTypeAidantFait = (
-  typeAidantEtSonEntreprise: TypeAidantEtSonEntreprise
+  typeAidantEtSonEntite: TypeAidantEtSonEntite
 ): ActionEtapesDemande => ({
   type: TypeActionEtapesDemande.CHOIX_TYPE_AIDANT_FAIT,
-  typeAidantEtSonEntreprise,
+  typeAidantEtSonEntite,
 });
 
 export const signeCharteAidant = (): ActionEtapesDemande => ({

@@ -1,7 +1,8 @@
-import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
-import illustrationInteretGeneral from '../../../../public/images/illustration-interet-general.svg';
-import illustrationCadreProfessionnel from '../../../../public/images/illustration-cadre-professionnel.svg';
+import { TypographieH3 } from '../../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
+import illustrationInteretGeneral from '../../../../../public/images/illustration-interet-general.svg';
+import illustrationCadreProfessionnel from '../../../../../public/images/illustration-cadre-professionnel.svg';
 import { useState } from 'react';
+import { Choix } from './choix/Choix.tsx';
 
 export type Utilisation = 'InteretGeneral' | 'ActiviteProfessionnelle';
 
@@ -20,14 +21,11 @@ export const ChoixUtilisation = ({
         </TypographieH3>
         <span>Quelle utilisation du service envisagez-vous ?</span>
       </div>
-      <label className="formulaire-colonne-gauche">
-        <div>
-          <input
-            name="choix-utilisation-service"
-            type="radio"
-            onChange={() => setChoix('InteretGeneral')}
-          />
-        </div>
+      <Choix
+        className="formulaire-colonne-gauche"
+        name="choix-utilisation-service"
+        surSelection={() => setChoix('InteretGeneral')}
+      >
         <img
           src={illustrationInteretGeneral}
           alt="Illustration d’une personne oeuvrant pour l’intérêt général."
@@ -70,13 +68,12 @@ export const ChoixUtilisation = ({
             </div>
           </div>
         </div>
-      </label>
-      <label className="formulaire-colonne-droite">
-        <input
-          name="choix-utilisation-service"
-          type="radio"
-          onChange={() => setChoix('ActiviteProfessionnelle')}
-        />
+      </Choix>
+      <Choix
+        className="formulaire-colonne-droite"
+        name="choix-utilisation-service"
+        surSelection={() => setChoix('ActiviteProfessionnelle')}
+      >
         <img
           src={illustrationCadreProfessionnel}
           alt="Illustration d’une personne travaillant dans le cadre professionnel."
@@ -118,7 +115,8 @@ export const ChoixUtilisation = ({
             </div>
           </div>
         </div>
-      </label>
+      </Choix>
+
       <div className="validation">
         <button
           disabled={!choix}

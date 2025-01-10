@@ -13,10 +13,10 @@ import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
 import { useNavigate } from 'react-router-dom';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
 import { TypeAidant } from '../../parcours-aidant/reducteurEtapes.ts';
-import { Entreprise } from '../../parcours-aidant/ChoixTypeAidant.tsx';
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 import Button from '../../../../composants/atomes/Button/Button.tsx';
 import { useState } from 'react';
+import { Entreprise } from '../../parcours-aidant/Entreprise';
 
 export type CorpsMutationDemandeDevenirAidant = {
   nom: string;
@@ -25,7 +25,7 @@ export type CorpsMutationDemandeDevenirAidant = {
   departement: string;
   cguValidees: boolean;
   typeAidant?: TypeAidant;
-  entreprise?: Entreprise;
+  entite?: Entreprise;
 };
 
 export const CapteurFormulaireDevenirAidant = () => {
