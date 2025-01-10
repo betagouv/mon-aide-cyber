@@ -48,7 +48,7 @@ export const routesAPIAnnuaireAidants = (
     validateurDeDepartement({
       nomChamp: 'departement',
       emplacement: 'PARAMETRE_REQUETE',
-      presence: 'OPTIONELLE',
+      presence: 'OPTIONNELLE',
     }),
     async (
       requete: Request,
