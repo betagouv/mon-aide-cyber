@@ -14,6 +14,7 @@ export type DemandeDevenirAidant = Aggregat & {
   mail: string;
   departement: Departement;
   statut: StatutDemande;
+  entite?: EntiteDemande;
 };
 export interface EntrepotDemandeDevenirAidant
   extends Entrepot<DemandeDevenirAidant> {
@@ -23,3 +24,11 @@ export interface EntrepotDemandeDevenirAidant
     mail: string
   ): Promise<DemandeDevenirAidant | undefined>;
 }
+
+export type TypeEntite = 'ServicePublic' | 'ServiceEtat' | 'Association';
+
+export type EntiteDemande = {
+  type: TypeEntite;
+  nom: string;
+  siret: string;
+};
