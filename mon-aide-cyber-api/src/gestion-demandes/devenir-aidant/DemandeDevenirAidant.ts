@@ -29,6 +29,6 @@ export type TypeEntite = 'ServicePublic' | 'ServiceEtat' | 'Association';
 
 export type EntiteDemande = {
   type: TypeEntite;
-  nom: string;
-  siret: string;
+  nom?: string;
+  siret?: string;
 };
