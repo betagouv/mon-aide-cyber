@@ -23,6 +23,7 @@ type DonneesAidant = {
   preferences: PreferencesDTO;
   consentementAnnuaire: boolean;
   dateSignatureCGU?: string;
+  dateSignatureCharte?: string;
   siret?: string;
 };
 
@@ -72,6 +73,11 @@ export class EntrepotAidantPostgres
         ),
       }),
       ...(dto.donnees.siret && { siret: dto.donnees.siret }),
+      ...(dto.donnees.dateSignatureCharte && {
+        dateSignatureCharte: FournisseurHorloge.enDate(
+          dto.donnees.dateSignatureCharte
+        ),
+      }),
     };
   }
 
@@ -94,6 +100,9 @@ export class EntrepotAidantPostgres
           dateSignatureCGU: entite.dateSignatureCGU.toISOString(),
         }),
         ...(entite.siret && { siret: entite.siret }),
+        ...(entite.dateSignatureCharte && {
+          dateSignatureCharte: entite.dateSignatureCharte.toISOString(),
+        }),
       },
     };
   }

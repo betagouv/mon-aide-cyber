@@ -257,6 +257,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           typesEntites: [],
         },
         consentementAnnuaire: false,
+        dateSignatureCharte: demande.date,
       });
     });
 

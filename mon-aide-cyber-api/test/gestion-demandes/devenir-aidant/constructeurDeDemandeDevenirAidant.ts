@@ -1,6 +1,7 @@
 import { Constructeur } from '../../constructeurs/constructeur';
 import {
   DemandeDevenirAidant,
+  EntiteDemande,
   StatutDemande,
 } from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { fakerFR } from '@faker-js/faker';
@@ -13,6 +14,7 @@ class ConstructeurDemandeDevenirAidant
 {
   private email: string = fakerFR.internet.email();
   private statut: StatutDemande = StatutDemande.EN_COURS;
+  private entite: EntiteDemande | undefined = undefined;
 
   avecUnMail(email: string): ConstructeurDemandeDevenirAidant {
     this.email = email;
@@ -21,6 +23,17 @@ class ConstructeurDemandeDevenirAidant
 
   traitee(): ConstructeurDemandeDevenirAidant {
     this.statut = StatutDemande.TRAITEE;
+    return this;
+  }
+
+  avecUneEntite(
+    type: 'ServicePublic' | 'ServiceEtat' | 'Association'
+  ): ConstructeurDemandeDevenirAidant {
+    this.entite = {
+      nom: fakerFR.company.name(),
+      siret: fakerFR.string.alpha(10),
+      type: type,
+    };
     return this;
   }
 
@@ -36,6 +49,7 @@ class ConstructeurDemandeDevenirAidant
       nom: fakerFR.person.lastName(),
       prenom: fakerFR.person.firstName(),
       statut: this.statut,
+      ...(this.entite && { entite: this.entite }),
     };
   }
 }

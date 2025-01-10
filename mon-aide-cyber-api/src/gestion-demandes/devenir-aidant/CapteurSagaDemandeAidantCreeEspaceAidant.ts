@@ -51,6 +51,7 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
                 nomPrenom: utilisateur.nomPrenom,
                 type: 'CommandeCreeEspaceAidant',
                 departement: demande.departement,
+                dateSignatureCharte: demande.date,
               })
               .then((compte) => {
                 return this.entrepots

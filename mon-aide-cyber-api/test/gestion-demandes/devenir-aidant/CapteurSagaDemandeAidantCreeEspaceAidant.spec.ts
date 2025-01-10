@@ -67,6 +67,29 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
     });
   });
 
+  it('Prend en compte la date de signature de la charte depuis la demande', async () => {
+    const dateDemande = new Date(Date.parse('2025-01-02T14:32'));
+    FournisseurHorlogeDeTest.initialise(dateDemande);
+    const demande = unConstructeurDeDemandeDevenirAidant()
+      .avecUnMail('jean.dupont@email.com')
+      .construis();
+    await entrepots.demandesDevenirAidant().persiste(demande);
+
+    FournisseurHorlogeDeTest.initialise(new Date());
+    await new CapteurSagaDemandeAidantCreeEspaceAidant(
+      entrepots,
+      busCommande,
+      busEvenementDeTest
+    ).execute({
+      idDemande: demande.identifiant,
+      motDePasse: 'toto12345',
+      type: 'SagaDemandeAidantEspaceAidant',
+    });
+
+    const aidant = (await entrepots.aidants().tous())[0];
+    expect(aidant.dateSignatureCharte).toStrictEqual(dateDemande);
+  });
+
   it('La demande a été traitée', async () => {
     FournisseurHorlogeDeTest.initialise(new Date());
     const demande = unConstructeurDeDemandeDevenirAidant().construis();
