@@ -12,21 +12,9 @@ import { constructeurParametresAPI } from '../../../../fournisseurs/api/Construc
 import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
 import { useNavigate } from 'react-router-dom';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
-import { TypeAidant } from '../../parcours-aidant/reducteurEtapes.ts';
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 import Button from '../../../../composants/atomes/Button/Button.tsx';
 import { useState } from 'react';
-import { Entreprise } from '../../parcours-aidant/Entreprise';
-
-export type CorpsMutationDemandeDevenirAidant = {
-  nom: string;
-  prenom: string;
-  mail: string;
-  departement: string;
-  cguValidees: boolean;
-  typeAidant?: TypeAidant;
-  entite?: Entreprise;
-};
 
 export const CapteurFormulaireDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
@@ -61,7 +49,7 @@ export const CapteurFormulaireDevenirAidant = () => {
 
   const { mutate, error, isError, isSuccess, isPending } = useMutation({
     mutationKey: ['demander-a-devenir-aidant'],
-    mutationFn: (corpsMutation: CorpsMutationDemandeDevenirAidant) => {
+    mutationFn: (corpsMutation: CorpsDemandeDevenirAidant) => {
       const actionSoumettre = new MoteurDeLiens(
         navigationMAC.etat
       ).trouveEtRenvoie('envoyer-demande-devenir-aidant');

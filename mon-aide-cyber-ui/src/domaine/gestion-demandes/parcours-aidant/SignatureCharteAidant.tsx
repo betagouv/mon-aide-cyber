@@ -70,7 +70,8 @@ export const SignatureCharteAidant = ({
               precedent();
             }}
           >
-            Précédent
+            <i className="fr-icon-arrow-left-line"></i>
+            <span>Précédent</span>
           </Button>
           <Button
             disabled={!charteSignee}
@@ -80,7 +81,8 @@ export const SignatureCharteAidant = ({
               signeCharteAidant();
             }}
           >
-            Suivant
+            <span>Suivant</span>
+            <i className="fr-icon-arrow-right-line"></i>
           </Button>
         </div>
       </div>

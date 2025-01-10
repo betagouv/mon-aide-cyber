@@ -7,6 +7,7 @@
   grid-row-gap: 1.5rem;
   grid-column-gap: 1.5rem;
   justify-content: center;
+  padding: 0 1rem 0 1rem;
 
   @include a-partir-de(md) {
     grid-template-columns: 55% auto;
@@ -198,6 +199,11 @@
       background: #fff;
       padding: 0 8px;
     }
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
   }
 }
 

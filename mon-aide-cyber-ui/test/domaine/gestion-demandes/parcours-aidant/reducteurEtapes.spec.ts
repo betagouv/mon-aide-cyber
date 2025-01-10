@@ -43,7 +43,7 @@ class ConstructeurChoixTypeAidant
   construis(): TypeAidantEtSonEntite {
     return {
       typeAidant: this.typeAidant,
-      entreprise: {
+      entite: {
         siret: this.siret,
         commune: this.commune,
         nom: this.nomEntreprise,
@@ -136,13 +136,25 @@ describe('Reducteur d’étapes pour le parcours Aidant', () => {
   describe('Signature de la charte Aidant', () => {
     it("Passe à l'étape suivante", () => {
       const etat = reducteurEtapes(
-        { etapeCourante: 'signatureCharteAidant', demande: undefined },
+        {
+          etapeCourante: 'signatureCharteAidant',
+          demande: {
+            type: {
+              typeAidant: 'FuturAdherent',
+            },
+          },
+        },
         signeCharteAidant()
       );
 
       expect(etat).toStrictEqual<EtatEtapesDemande>({
         etapeCourante: 'formulaireDevenirAidant',
-        demande: undefined,
+        demande: {
+          type: {
+            typeAidant: 'FuturAdherent',
+          },
+          signatureCharte: true,
+        },
       });
     });
 

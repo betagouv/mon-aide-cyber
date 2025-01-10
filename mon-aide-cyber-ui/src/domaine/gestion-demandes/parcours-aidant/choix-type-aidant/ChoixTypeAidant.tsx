@@ -5,6 +5,7 @@ import { TypeAidant, TypeAidantEtSonEntite } from '../reducteurEtapes.ts';
 import { Entreprise } from '../Entreprise';
 import { SelecteurTypeAidant } from './SelecteurTypeAidant.tsx';
 import { RechercheEntreprise } from './RechercheEntreprise.tsx';
+import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 
 export const ChoixTypeAidant = ({
   surClick,
@@ -32,13 +33,19 @@ export const ChoixTypeAidant = ({
     <div className="fr-container fr-grid-row fr-grid-row--center zone-choix-type-aidant">
       <div className="fr-col-md-8 fr-col-sm-12 section">
         <div>
-          <p>Vous souhaitez œuvrer exclusivement pour l’intérêt général</p>
-          <img
-            className="text-center"
-            src={illustrationInteretGeneral}
-            alt="Illustration d’une personne oeuvrant pour l’intérêt général."
-          />
-          <p>Vous êtes :</p>
+          <TypographieH5>
+            Vous souhaitez oeuvrer exclusivement pour l&apos;intérêt général
+          </TypographieH5>
+          <div className="text-center">
+            <img
+              style={{ width: '342px' }}
+              src={illustrationInteretGeneral}
+              alt="Illustration d’une personne oeuvrant pour l’intérêt général."
+            />
+          </div>
+          <p>
+            <b>Vous êtes :</b>
+          </p>
           <div className="liste-choix-type-aidants">
             <SelecteurTypeAidant
               libelle="Un représentant des services de l’État"
@@ -108,7 +115,8 @@ export const ChoixTypeAidant = ({
                 precedent();
               }}
             >
-              Précédent
+              <i className="fr-icon-arrow-left-line"></i>
+              <span>Précédent</span>
             </Button>
             <Button
               disabled={!peutValiderEtape}
@@ -121,7 +129,8 @@ export const ChoixTypeAidant = ({
                 }
               }}
             >
-              Je valide ma sélection
+              <span>Je valide ma sélection</span>
+              <i className="fr-icon-arrow-right-line"></i>
             </Button>
           </div>
         </div>

@@ -1,8 +1,9 @@
 import { TypographieH3 } from '../../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
 import illustrationInteretGeneral from '../../../../../public/images/illustration-interet-general.svg';
 import illustrationCadreProfessionnel from '../../../../../public/images/illustration-cadre-professionnel.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Choix } from './choix/Choix.tsx';
+import useDefilementFluide from '../../../../hooks/useDefilementFluide.ts';
 
 export type Utilisation = 'InteretGeneral' | 'ActiviteProfessionnelle';
 
@@ -11,7 +12,15 @@ export const ChoixUtilisation = ({
 }: {
   surClick: (choix: Utilisation) => void;
 }) => {
+  useDefilementFluide();
   const [choix, setChoix] = useState<Utilisation | undefined>(undefined);
+
+  useEffect(() => {
+    if (!choix) return;
+    document
+      .getElementById('etape-suivante-bouton')
+      ?.scrollIntoView({ behavior: 'smooth' });
+  }, [choix]);
 
   return (
     <>
@@ -119,6 +128,7 @@ export const ChoixUtilisation = ({
 
       <div className="validation">
         <button
+          id="etape-suivante-bouton"
           disabled={!choix}
           type="button"
           className="fr-btn bouton-mac bouton-mac-primaire"
