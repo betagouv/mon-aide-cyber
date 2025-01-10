@@ -19,15 +19,18 @@ import { Entrepots } from '../../domaine/Entrepots';
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 import { SagaDemandeAidantCreeEspaceAidant } from '../../gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
 import { ErreurMAC } from '../../domaine/erreurMAC';
+import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { isAfter } from 'date-fns';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
 export const validateurDemande = (
   entrepots: Entrepots,
   serviceDeChiffrement: ServiceDeChiffrement
 ) => {
   const { body } = new ExpressValidator({
-    verifieCoherenceDeLaDemande: async (value: string) => {
+    verifieCoherenceDeLaDemande: async (valeur: string) => {
       const tokenConverti: { demande: string; mail: string } = JSON.parse(
-        atob(serviceDeChiffrement.dechiffre(value))
+        atob(serviceDeChiffrement.dechiffre(valeur))
       );
 
       await entrepots.demandesDevenirAidant().lis(tokenConverti.demande);
@@ -50,6 +53,45 @@ export const validateurDemande = (
       .verifieCoherenceDeLaDemande()
       .withMessage('Aucune demande ne correspond.'),
   ];
+};
+
+const validateurNouveauParcoursDemandeDevenirAidant = () => {
+  const dateNouveauParcoursDemandeDevenirAidant =
+    adaptateurEnvironnement.nouveauParcoursDevenirAidant();
+  if (dateNouveauParcoursDemandeDevenirAidant) {
+    if (
+      isAfter(
+        FournisseurHorloge.maintenant(),
+        FournisseurHorloge.enDate(dateNouveauParcoursDemandeDevenirAidant)
+      )
+    ) {
+      const { body } = new ExpressValidator({
+        typeEntite: async (valeur: string) => {
+          if (valeur !== ('ServicePublic' && 'ServiceEtat' && 'Association')) {
+            throw new Error(
+              'Veuillez fournir l’une des valeurs suivantes pour le type d’entité ’ServicePublic’, ’ServiceEtat’, ’Association’'
+            );
+          }
+          return true;
+        },
+      });
+      return [
+        body('signatureCharte')
+          .custom((value: boolean) => value)
+          .withMessage('Veuillez signer la Charte Aidant.'),
+        body('entite.nom')
+          .optional()
+          .notEmpty()
+          .withMessage('Veuillez renseigner un nom pour votre entité'),
+        body('entite.siret')
+          .optional()
+          .notEmpty()
+          .withMessage('Veuillez renseigner un SIRET pour votre entité'),
+        body('entite.type').optional().typeEntite(),
+      ];
+    }
+  }
+  return [];
 };
 
 export const routesAPIDemandesDevenirAidant = (
@@ -82,6 +124,7 @@ export const routesAPIDemandesDevenirAidant = (
     body('cguValidees')
       .custom((value: boolean) => value)
       .withMessage('Veuillez valider les CGU'),
+    validateurNouveauParcoursDemandeDevenirAidant(),
     async (requete: Request, reponse: Response, suite: NextFunction) => {
       try {
         const resultatsValidation: Result<FieldValidationError> =

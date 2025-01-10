@@ -14,6 +14,7 @@ import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/Fournisse
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
 import { Aidant } from '../../../src/espace-aidant/Aidant';
+import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -148,7 +149,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         expect(reponse.statusCode).toStrictEqual(422);
       });
 
-      it("Précise l'erreur dans un message, si une erreur est rencontré", async () => {
+      it("Précise l'erreur dans un message, si une erreur est rencontrée", async () => {
         const corpsDeRequeteAvecMailInvalide = uneRequeteDemandeDevenirAidant()
           .avecUnMail('mail-invalide')
           .construis();
@@ -453,6 +454,79 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           });
           expect(fauxServiceDeChiffrement.aEteAppele()).toBe(true);
         });
+      });
+    });
+  });
+
+  describe('Dans le cadre de la mise en place des profils Aidants / Utilisateurs inscrits à partir du 31/01/2025', () => {
+    const testeurMAC = testeurIntegration();
+    let donneesServeur: { portEcoute: number; app: Express };
+
+    beforeEach(() => {
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-01-31T08:30:00'))
+      );
+      donneesServeur = testeurMAC.initialise();
+      adaptateurEnvironnement.nouveauParcoursDevenirAidant = () =>
+        '2025-01-31T00:00:00';
+    });
+
+    afterEach(() => testeurMAC.arrete());
+
+    describe('Quand une requête POST est reçue /api/demandes/devenir-aidant', () => {
+      it('Retourne le code 422 si la charte n’est pas signée', async () => {
+        const corpsDeRequete = uneRequeteDemandeDevenirAidant()
+          .sansCharteAidant()
+          .construis();
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant',
+          donneesServeur.portEcoute,
+          corpsDeRequete
+        );
+
+        expect(JSON.parse(reponse.body).message).toStrictEqual(
+          'Veuillez signer la Charte Aidant.'
+        );
+        expect(reponse.statusCode).toStrictEqual(422);
+      });
+
+      it('Retourne le code 422 si les informations de l’entité fournie sont incorrectes', async () => {
+        const corpsDeRequete = uneRequeteDemandeDevenirAidant()
+          .dansUneEntite('', '', '')
+          .ayantSigneLaCharte()
+          .construis();
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant',
+          donneesServeur.portEcoute,
+          corpsDeRequete
+        );
+
+        expect(JSON.parse(reponse.body).message).toStrictEqual(
+          'Veuillez renseigner un nom pour votre entité, Veuillez renseigner un SIRET pour votre entité, Veuillez fournir l’une des valeurs suivantes pour le type d’entité ’ServicePublic’, ’ServiceEtat’, ’Association’'
+        );
+        expect(reponse.statusCode).toStrictEqual(422);
+      });
+
+      it('Retourne OK si le futur Aidant n’adhère pas encore à une association', async () => {
+        const corpsDeRequete = uneRequeteDemandeDevenirAidant()
+          .enAttenteAdhesionAssociation()
+          .construis();
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant',
+          donneesServeur.portEcoute,
+          corpsDeRequete
+        );
+
+        expect(reponse.statusCode).toStrictEqual(200);
       });
     });
   });

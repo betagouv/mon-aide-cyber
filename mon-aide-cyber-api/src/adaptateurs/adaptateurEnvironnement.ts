@@ -43,6 +43,10 @@ const apiRechercheEntreprise = () => ({
   url: () => process.env.URL_API_RECHERCHE_ENTREPRISE || '',
 });
 
+const nouveauParcoursDevenirAidant = () =>
+  process.env.DATE_NOUVEAU_PARCOURS_DEMANDE_DEVENIR_AIDANT ||
+  '2025-01-31T00:00:00';
+
 const adaptateurEnvironnement = {
   messagerie,
   mac,
@@ -50,6 +54,7 @@ const adaptateurEnvironnement = {
   modeMaintenance,
   siretsEntreprise,
   apiRechercheEntreprise,
+  nouveauParcoursDevenirAidant,
 };
 
 export { sentry, adaptateurEnvironnement };
