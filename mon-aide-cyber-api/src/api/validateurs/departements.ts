@@ -4,7 +4,7 @@ import { departements } from '../../gestion-demandes/departements';
 type CriteresDeValidation = {
   emplacement: 'CORPS' | 'PARAMETRE_REQUETE';
   nomChamp: string;
-  presence: 'OPTIONELLE' | 'OBLIGATOIRE';
+  presence: 'OPTIONNELLE' | 'OBLIGATOIRE';
 };
 
 export const validateurDeDepartement = (
@@ -24,7 +24,7 @@ export const validateurDeDepartement = (
       ? body(criteres.nomChamp)
       : query(criteres.nomChamp);
 
-  if (criteres.presence === 'OPTIONELLE') {
+  if (criteres.presence === 'OPTIONNELLE') {
     chaineDeValidation = chaineDeValidation.optional();
   }
 
