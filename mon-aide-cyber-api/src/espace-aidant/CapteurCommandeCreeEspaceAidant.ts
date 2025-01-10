@@ -20,6 +20,7 @@ export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
   nomPrenom: string;
   departement: Departement;
   siret?: Siret;
+  dateSignatureCharte?: Date;
 };
 
 export type EspaceAidantCree = {
@@ -66,6 +67,9 @@ export class CapteurCommandeCreeEspaceAidant
             },
             consentementAnnuaire: false,
             ...(commande.siret && { siret: commande.siret }),
+            ...(commande.dateSignatureCharte && {
+              dateSignatureCharte: commande.dateSignatureCharte,
+            }),
           };
           return this.entrepots
             .aidants()

@@ -72,6 +72,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   private consentementAnnuaire = false;
   private siret: string | undefined = undefined;
   private dateSignatureCGU: Date | undefined = FournisseurHorloge.maintenant();
+  private dateSignatureCharte: Date = FournisseurHorloge.maintenant();
 
   avecUnNomPrenom(nomPrenom: string): ConstructeurAidant {
     this.nomPrenom = nomPrenom;
@@ -120,6 +121,11 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  avecUneDateDeSignatureDeCharte(date: Date): ConstructeurAidant {
+    this.dateSignatureCharte = date;
+    return this;
+  }
+
   construis(): Aidant {
     return {
       identifiant: this.identifiant,
@@ -133,6 +139,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
       ...(this.siret && { siret: this.siret }),
       consentementAnnuaire: this.consentementAnnuaire,
       ...(this.dateSignatureCGU && { dateSignatureCGU: this.dateSignatureCGU }),
+      dateSignatureCharte: this.dateSignatureCharte,
     };
   }
 }

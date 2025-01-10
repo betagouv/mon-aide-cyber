@@ -583,6 +583,26 @@ describe('Entrepot Aidant', () => {
     expect(aidantRecu).toStrictEqual<Aidant>(aidant);
   });
 
+  it('Persiste un aidant avec la date de la signature de la charte', async () => {
+    const dateSignatureCharte = new Date();
+    const aidant = unAidant()
+      .avecUneDateDeSignatureDeCharte(dateSignatureCharte)
+      .construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [aidant.email, 'aaa'],
+        [aidant.nomPrenom, 'ccc'],
+      ])
+    );
+
+    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+
+    const aidantRecu = await new EntrepotAidantPostgres(
+      serviceDeChiffrement
+    ).lis(aidant.identifiant);
+    expect(aidantRecu.dateSignatureCharte).toStrictEqual(dateSignatureCharte);
+  });
+
   it('Met à jour le consentement pour apparaître dans l’annuaire', async () => {
     const aidant = unAidant().construis();
     const serviceDeChiffrement = new ServiceDeChiffrementClair();
