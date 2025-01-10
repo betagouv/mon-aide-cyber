@@ -308,6 +308,40 @@ describe('Capteur de commande demande devenir aidant', () => {
       });
     });
 
+    it('Crée la demande pour un futur Aidant en attente d’adhésion à une association', async () => {
+      const entrepots = new EntrepotsMemoire();
+
+      const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
+        entrepots,
+        new BusEvenementDeTest(),
+        new AdaptateurEnvoiMailMemoire(),
+        annuaireCot,
+        unServiceAidant(entrepots.aidants())
+      ).execute({
+        departement: ardennes,
+        mail: 'email',
+        nom: 'nom',
+        prenom: 'prenom',
+        entite: {
+          type: 'Association',
+        },
+        type: 'CommandeDevenirAidant',
+      });
+
+      expect(demandeDevenirAidant).toStrictEqual<DemandeDevenirAidant>({
+        departement: ardennes,
+        mail: 'email',
+        nom: 'nom',
+        prenom: 'prenom',
+        identifiant: expect.any(String),
+        date: FournisseurHorloge.maintenant(),
+        statut: StatutDemande.EN_COURS,
+        entite: {
+          type: 'Association',
+        },
+      });
+    });
+
     it('Met à jour une demande existante', async () => {
       const entrepots = new EntrepotsMemoire();
       await entrepots
