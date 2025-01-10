@@ -8,6 +8,8 @@ type RequeteDemandeDevenirAidant = {
   mail: string;
   departement: string;
   cguValidees: boolean;
+  signatureCharte?: boolean;
+  entite?: { type: string; nom?: string; siret?: string };
 };
 
 class ConstructeurRequeteDemandeDevenirAidant
@@ -20,6 +22,9 @@ class ConstructeurRequeteDemandeDevenirAidant
   private departement: string =
     departements[fakerFR.number.int({ min: 0, max: departements.length - 1 })]
       .nom;
+  private signatureCharte: boolean | undefined = undefined;
+  private entite: { type: string; nom?: string; siret?: string } | undefined =
+    undefined;
 
   dansLeDepartement(
     departement: string
@@ -38,6 +43,35 @@ class ConstructeurRequeteDemandeDevenirAidant
     return this;
   }
 
+  sansCharteAidant(): ConstructeurRequeteDemandeDevenirAidant {
+    this.signatureCharte = false;
+    return this;
+  }
+
+  dansUneEntite = (
+    nom: string,
+    siret: string,
+    type: string
+  ): ConstructeurRequeteDemandeDevenirAidant => {
+    this.entite = {
+      nom,
+      siret,
+      type,
+    };
+    return this;
+  };
+
+  ayantSigneLaCharte(): ConstructeurRequeteDemandeDevenirAidant {
+    this.signatureCharte = true;
+    return this;
+  }
+
+  enAttenteAdhesionAssociation(): ConstructeurRequeteDemandeDevenirAidant {
+    this.signatureCharte = true;
+    this.entite = { type: 'Association' };
+    return this;
+  }
+
   construis(): RequeteDemandeDevenirAidant {
     return {
       cguValidees: this.cguValidees,
@@ -45,6 +79,10 @@ class ConstructeurRequeteDemandeDevenirAidant
       mail: this.mail,
       nom: this.nom,
       prenom: this.prenom,
+      ...(this.signatureCharte !== undefined && {
+        signatureCharte: this.signatureCharte,
+      }),
+      ...(this.entite !== undefined && { entite: this.entite }),
     };
   }
 }
