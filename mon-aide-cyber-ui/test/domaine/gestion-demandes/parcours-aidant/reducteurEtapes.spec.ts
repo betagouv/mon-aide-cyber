@@ -2,6 +2,7 @@ import { describe, expect } from 'vitest';
 import {
   choixTypeAidantFait,
   choixUtilisationFaite,
+  demandeDevenirAidantCreee,
   EtatEtapesDemande,
   initialiseReducteur,
   reducteurEtapes,
@@ -167,6 +168,33 @@ describe('Reducteur d’étapes pour le parcours Aidant', () => {
       expect(etat).toStrictEqual({
         etapeCourante: 'choixTypeAidant',
         demande: undefined,
+      });
+    });
+  });
+
+  describe('Demande devenir Aidant créée', () => {
+    it("Passe à l'étape suivante", () => {
+      const etat = reducteurEtapes(
+        {
+          etapeCourante: 'formulaireDevenirAidant',
+          demande: {
+            type: {
+              typeAidant: 'FuturAdherent',
+            },
+            signatureCharte: true,
+          },
+        },
+        demandeDevenirAidantCreee()
+      );
+
+      expect(etat).toStrictEqual<EtatEtapesDemande>({
+        etapeCourante: 'confirmationDemandeDevenirAidantPriseEnCompte',
+        demande: {
+          type: {
+            typeAidant: 'FuturAdherent',
+          },
+          signatureCharte: true,
+        },
       });
     });
   });

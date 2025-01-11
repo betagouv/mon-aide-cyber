@@ -6,6 +6,7 @@ import { Entreprise } from '../Entreprise';
 import { SelecteurTypeAidant } from './SelecteurTypeAidant.tsx';
 import { RechercheEntreprise } from './RechercheEntreprise.tsx';
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
+import { LienMailtoMAC } from '../../../../composants/atomes/LienMailtoMAC.tsx';
 
 export const ChoixTypeAidant = ({
   surClick,
@@ -96,13 +97,13 @@ export const ChoixTypeAidant = ({
               surChoix={() => setChoix('FuturAdherent')}
               coche={choix === 'FuturAdherent'}
               contenuZoneDepliee={
-                <>
+                <p>
                   Vous pouvez consulter une liste d’associations dont font
                   partie certains de nos Aidants cyber : <br />
                   monaide.cyber.gouv.fr/associations-partenaires. <br />
                   Vous pouvez aussi proposer un partenariat en contactant
-                  l’équipe via monaidecyber@ssi.gouv.fr
-                </>
+                  l’équipe via <LienMailtoMAC />
+                </p>
               }
             />
           </div>

@@ -1,3 +1,5 @@
+import { LienMailtoMAC } from '../../atomes/LienMailtoMAC.tsx';
+
 type ProprietesConfirmation = {
   onClick: () => void;
 };
@@ -17,13 +19,7 @@ export const Confirmation = (proprietes: ProprietesConfirmation) => {
           </p>
           <p>
             Pensez à vérifier dans vos spams ou contactez-nous à{' '}
-            <a
-              href="mailto:monaidecyber@ssi.gouv.fr"
-              target="_blank"
-              rel="noreferrer"
-            >
-              monaidecyber@ssi.gouv.fr
-            </a>
+            <LienMailtoMAC />
           </p>
         </div>
         <button

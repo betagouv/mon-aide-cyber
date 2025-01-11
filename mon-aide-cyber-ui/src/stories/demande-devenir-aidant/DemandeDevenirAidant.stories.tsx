@@ -1,23 +1,21 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within } from '@storybook/test';
-import { FormulaireDevenirAidant } from '../domaine/gestion-demandes/devenir-aidant/formulaire-devenir-aidant/FormulaireDevenirAidant.tsx';
+import { DemandeDevenirAidant } from './DemandeDevenirAidant.tsx';
 
 const meta = {
   title: 'Demande pour devenir Aidant',
-  component: FormulaireDevenirAidant.Formulaire,
+  component: DemandeDevenirAidant,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof FormulaireDevenirAidant.Formulaire>;
+} satisfies Meta<typeof DemandeDevenirAidant>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const DemandeDevenirAidant: Story = {
+export const DemandeDevenirAidantStory: Story = {
   args: {
     referentielDepartements: [{ nom: 'Gironde', code: '33' }],
-    surSoumission: () => null,
-    devientValide: () => null,
   },
   name: 'Formulaire de demande pour devenir Aidant',
   play: async ({ canvasElement, step }) => {
@@ -81,8 +79,6 @@ export const DemandeDevenirAidant: Story = {
       });
       await userEvent.clear(champDeSaisie);
       await userEvent.type(champDeSaisie, 'ais');
-
-      // await userEvent.click(canvas.getByRole('button', { name: '2 - Aisne' }));
 
       await expect(
         canvas.queryByText('Veuillez sélectionner un département dans la liste')
