@@ -3,6 +3,7 @@ import React, { useCallback, useReducer, useState } from 'react';
 import {
   choixTypeAidantFait,
   choixUtilisationFaite,
+  demandeDevenirAidantCreee,
   Etape,
   initialiseReducteur,
   reducteurEtapes,
@@ -32,6 +33,8 @@ import { FormulaireDevenirAidant } from '../devenir-aidant/formulaire-devenir-ai
 import { TypographieH5 } from '../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
 import Button from '../../../composants/atomes/Button/Button.tsx';
+import { TypographieH4 } from '../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
+import { LienMailtoMAC } from '../../../composants/atomes/LienMailtoMAC.tsx';
 
 export const EcranDemandeDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
@@ -84,8 +87,6 @@ export const EcranDemandeDevenirAidant = () => {
           'Une erreur est survenue lors de la demande devenir aidant'
         );
 
-      console.log({ corpsMutation });
-      return Promise.resolve();
       return macAPI.execute<void, void, CorpsDemandeDevenirAidant>(
         constructeurParametresAPI<CorpsDemandeDevenirAidant>()
           .url(actionSoumettre.url)
@@ -96,7 +97,8 @@ export const EcranDemandeDevenirAidant = () => {
       );
     },
     onSuccess: () => {
-      // navigate('#formulaire-formation');
+      envoie(demandeDevenirAidantCreee());
+      window.scrollTo({ top: 0 });
     },
   });
 
@@ -231,6 +233,37 @@ export const EcranDemandeDevenirAidant = () => {
             <Toast message={erreur.message} type="ERREUR" />
           ) : null}
         </FormulaireDevenirAidant>
+      </div>,
+    ],
+    [
+      'confirmationDemandeDevenirAidantPriseEnCompte',
+      <div
+        id="confirmationDemandeDevenirAidantPriseEnCompte"
+        className="fr-container fr-grid-row fr-grid-row--center zone-confirmation-formulaire-devenir-aidant"
+      >
+        <div className="fr-col-md-8 fr-col-sm-12 section confirmation">
+          <TypographieH4>
+            Votre demande a bien été prise en compte !
+          </TypographieH4>
+          <p>
+            Celle-ci sera traitée dans les meilleurs délais.
+            <br />
+            <br />
+            Celle-ci sera traitée dans les meilleurs délais. Vous allez être mis
+            en relation avec la délégation régionale de l’ANSSI de votre
+            territoire, qui reviendra vers vous par mail pour vous indiquer les
+            prochaines dates des ateliers Devenir Aidant MonAideCyber.
+            <br />
+            <br />
+            Pensez à vérifier dans vos spams ou contactez-nous à&nbsp;
+            <LienMailtoMAC />
+          </p>
+          <a href="/">
+            <Button type="button" variant="primary">
+              Retour à la page d&apos;accueil
+            </Button>
+          </a>
+        </div>
       </div>,
     ],
   ]);

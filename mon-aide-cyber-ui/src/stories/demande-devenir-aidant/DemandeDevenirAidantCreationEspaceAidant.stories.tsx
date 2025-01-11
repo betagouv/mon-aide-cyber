@@ -1,8 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { ParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { ContexteNavigationMAC } from '../fournisseurs/ContexteNavigationMAC.tsx';
+import { ParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { ContexteNavigationMAC } from '../../fournisseurs/ContexteNavigationMAC.tsx';
 import { expect, userEvent, within } from '@storybook/test';
-import { ComposantCreationEspaceAidant } from '../domaine/espace-aidant/demande-aidant-creation-espace-aidant/FormulaireCreationEspaceAidant.tsx';
+import { ComposantCreationEspaceAidant } from '../../domaine/espace-aidant/demande-aidant-creation-espace-aidant/FormulaireCreationEspaceAidant.tsx';
 
 const meta = {
   title: "Création de l'espace Aidant suite à une demande devenir Aidant",

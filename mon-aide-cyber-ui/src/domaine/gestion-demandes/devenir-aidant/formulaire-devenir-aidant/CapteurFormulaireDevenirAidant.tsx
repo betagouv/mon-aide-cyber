@@ -15,6 +15,7 @@ import { TypographieH4 } from '../../../../composants/communs/typographie/Typogr
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 import Button from '../../../../composants/atomes/Button/Button.tsx';
 import { useState } from 'react';
+import { LienMailtoMAC } from '../../../../composants/atomes/LienMailtoMAC.tsx';
 
 export const CapteurFormulaireDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
@@ -91,18 +92,12 @@ export const CapteurFormulaireDevenirAidant = () => {
             <br />
             <br />
             Pensez à vérifier dans vos spams ou contactez-nous à&nbsp;
-            <a
-              href="mailto:monaidecyber@ssi.gouv.fr"
-              target="_blank"
-              rel="noreferrer"
-            >
-              monaidecyber@ssi.gouv.fr
-            </a>
+            <LienMailtoMAC />
           </p>
           <a href="/">
-            <button className="fr-btn bouton-mac bouton-mac-primaire">
+            <Button type="button" variant="primary">
               Retour à la page d&apos;accueil
-            </button>
+            </Button>
           </a>
         </div>
       </div>
