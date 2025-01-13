@@ -52,6 +52,7 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
                 type: 'CommandeCreeEspaceAidant',
                 departement: demande.departement,
                 dateSignatureCharte: demande.date,
+                ...(demande.entite && { entite: { ...demande.entite } }),
               })
               .then((compte) => {
                 return this.entrepots

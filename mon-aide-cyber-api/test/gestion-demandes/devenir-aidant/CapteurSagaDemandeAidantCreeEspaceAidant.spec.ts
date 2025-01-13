@@ -19,6 +19,7 @@ import {
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { Utilisateur } from '../../../src/authentification/Utilisateur';
+import { EntiteAidant } from '../../../src/espace-aidant/Aidant';
 
 describe('Capteur de saga pour créer un espace Aidant correspondant à une demande', () => {
   let busEvenementDeTest = new BusEvenementDeTest();
@@ -146,6 +147,42 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
         idDemande: demande.identifiant,
         idAidant: 'c00ba882-579e-4cea-9a83-3dfefe1081f4',
       },
+    });
+  });
+
+  describe('Dans le cadre de la mise en place des profils Aidants / Utilisateurs inscrits à partir du 31/01/2025', () => {
+    it("Prends en compte les informations de l'entité", async () => {
+      const dateDemande = new Date(Date.parse('2025-01-02T14:32'));
+      FournisseurHorlogeDeTest.initialise(dateDemande);
+      const demande = unConstructeurDeDemandeDevenirAidant()
+        .avecUnMail('jean.dupont@email.com')
+        .avecUneEntite('Association')
+        .construis();
+      await entrepots.demandesDevenirAidant().persiste(demande);
+
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-01-31T11:15'))
+      );
+      await new CapteurSagaDemandeAidantCreeEspaceAidant(
+        entrepots,
+        busCommande,
+        busEvenementDeTest
+      ).execute({
+        idDemande: demande.identifiant,
+        motDePasse: 'toto12345',
+        type: 'SagaDemandeAidantEspaceAidant',
+      });
+
+      expect(
+        (await entrepots.demandesDevenirAidant().lis(demande.identifiant))
+          .statut
+      ).toStrictEqual(StatutDemande.TRAITEE);
+      const aidant = (await entrepots.aidants().tous())[0];
+      expect(aidant.entite).toStrictEqual<EntiteAidant>({
+        nom: demande.entite!.nom!,
+        siret: demande.entite!.siret!,
+        type: demande.entite!.type,
+      });
     });
   });
 });
