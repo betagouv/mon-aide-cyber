@@ -4,7 +4,7 @@ import { Entrepots } from '../../domaine/Entrepots';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { adaptateurUUID } from '../../infrastructure/adaptateurs/adaptateurUUID';
-import { StatutDemande } from './DemandeDevenirAidant';
+import { DemandeDevenirAidant, StatutDemande } from './DemandeDevenirAidant';
 import {
   CommandeCreeEspaceAidant,
   EspaceAidantCree,
@@ -13,6 +13,7 @@ import {
   CommandeCreeUtilisateur,
   UtilisateurCree,
 } from '../../authentification/CapteurCommandeCreeUtilisateur';
+import { ErreurCreationEspaceAidant } from '../../espace-aidant/Aidant';
 
 export type SagaDemandeAidantCreeEspaceAidant = Omit<Saga, 'type'> & {
   type: 'SagaDemandeAidantEspaceAidant';
@@ -52,7 +53,7 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
                 type: 'CommandeCreeEspaceAidant',
                 departement: demande.departement,
                 dateSignatureCharte: demande.date,
-                ...(demande.entite && { entite: { ...demande.entite } }),
+                ...this.entiteAidant(demande),
               })
               .then((compte) => {
                 return this.entrepots
@@ -74,6 +75,21 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
               });
           });
       });
+  }
+
+  private entiteAidant(demande: DemandeDevenirAidant) {
+    if (
+      demande.entite &&
+      (!demande.entite.nom || demande.entite.nom.trim() === '') &&
+      (!demande.entite.siret || demande.entite.siret.trim() === '')
+    ) {
+      throw new ErreurCreationEspaceAidant(
+        "Les informations de l'entité de l'Aidant doivent être fournies"
+      );
+    }
+    return {
+      ...(demande.entite && { entite: { ...demande.entite } }),
+    };
   }
 }
 

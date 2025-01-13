@@ -184,5 +184,26 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
         type: demande.entite!.type,
       });
     });
+
+    it("Remonte une erreur si toutes les informations de l'entité de l'Aidant ne sont pas fournies", async () => {
+      const demande = unConstructeurDeDemandeDevenirAidant()
+        .pourUneDemandeEnAttenteAdhesion()
+        .construis();
+      await entrepots.demandesDevenirAidant().persiste(demande);
+
+      const execution = new CapteurSagaDemandeAidantCreeEspaceAidant(
+        entrepots,
+        busCommande,
+        busEvenementDeTest
+      ).execute({
+        idDemande: demande.identifiant,
+        motDePasse: 'toto12345',
+        type: 'SagaDemandeAidantEspaceAidant',
+      });
+
+      expect(execution).rejects.toThrowError(
+        "Les informations de l'entité de l'Aidant doivent être fournies"
+      );
+    });
   });
 });
