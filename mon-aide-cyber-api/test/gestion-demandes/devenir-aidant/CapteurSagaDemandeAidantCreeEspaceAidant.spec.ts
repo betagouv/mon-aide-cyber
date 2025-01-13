@@ -20,6 +20,7 @@ import {
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { Utilisateur } from '../../../src/authentification/Utilisateur';
 import { EntiteAidant } from '../../../src/espace-aidant/Aidant';
+import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 
 describe('Capteur de saga pour créer un espace Aidant correspondant à une demande', () => {
   let busEvenementDeTest = new BusEvenementDeTest();
@@ -204,6 +205,31 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       expect(execution).rejects.toThrowError(
         "Les informations de l'entité de l'Aidant doivent être fournies"
       );
+    });
+
+    it("Ne crée pas d'utilisateur à partir du 31/01/2025", async () => {
+      adaptateurEnvironnement.nouveauParcoursDevenirAidant = () =>
+        '2025-01-31T00:00';
+      const demande = unConstructeurDeDemandeDevenirAidant()
+        .avecUnMail('jean.dupont@email.com')
+        .avecUneEntite('Association')
+        .construis();
+      await entrepots.demandesDevenirAidant().persiste(demande);
+
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-01-31T11:15'))
+      );
+      await new CapteurSagaDemandeAidantCreeEspaceAidant(
+        entrepots,
+        busCommande,
+        busEvenementDeTest
+      ).execute({
+        idDemande: demande.identifiant,
+        motDePasse: 'toto12345',
+        type: 'SagaDemandeAidantEspaceAidant',
+      });
+
+      expect(await entrepots.utilisateurs().tous()).toHaveLength(0);
     });
   });
 });
