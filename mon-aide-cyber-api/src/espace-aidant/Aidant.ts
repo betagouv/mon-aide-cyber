@@ -46,6 +46,13 @@ type Preferences = {
   typesEntites: TypesEntites;
 };
 
+export type TypeEntite = 'ServicePublic' | 'ServiceEtat' | 'Association';
+
+export type EntiteAidant = {
+  nom?: string;
+  siret?: string;
+  type: TypeEntite;
+};
 export type Aidant = Aggregat & {
   email: string;
   nomPrenom: string;
@@ -54,6 +61,7 @@ export type Aidant = Aggregat & {
   siret?: Siret;
   dateSignatureCGU?: Date;
   dateSignatureCharte?: Date;
+  entite?: EntiteAidant;
 };
 
 export interface EntrepotAidant extends Entrepot<Aidant> {

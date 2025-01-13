@@ -12,6 +12,14 @@ import {
   Siret,
 } from './Aidant';
 
+export type TypeEntite = 'ServicePublic' | 'ServiceEtat' | 'Association';
+
+type Entite = {
+  nom?: string;
+  siret?: string;
+  type: TypeEntite;
+};
+
 export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
   type: 'CommandeCreeEspaceAidant';
   dateSignatureCGU: Date;
@@ -21,6 +29,7 @@ export type CommandeCreeEspaceAidant = Omit<Commande, 'type'> & {
   departement: Departement;
   siret?: Siret;
   dateSignatureCharte?: Date;
+  entite?: Entite;
 };
 
 export type EspaceAidantCree = {
@@ -70,6 +79,7 @@ export class CapteurCommandeCreeEspaceAidant
             ...(commande.dateSignatureCharte && {
               dateSignatureCharte: commande.dateSignatureCharte,
             }),
+            ...(commande.entite && { entite: { ...commande.entite } }),
           };
           return this.entrepots
             .aidants()
