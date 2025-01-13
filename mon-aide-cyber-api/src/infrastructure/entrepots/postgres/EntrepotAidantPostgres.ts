@@ -6,7 +6,9 @@ import { departements } from '../../../gestion-demandes/departements';
 import { secteursActivite } from '../../../espace-aidant/preferences/secteursActivite';
 import {
   Aidant,
+  EntiteAidant,
   EntrepotAidant,
+  TypeEntite,
   typesEntites,
 } from '../../../espace-aidant/Aidant';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
@@ -17,6 +19,12 @@ type PreferencesDTO = {
   typesEntites: string[];
 };
 
+type EntiteDTO = {
+  nom: string;
+  siret: string;
+  type: string;
+};
+
 type DonneesAidant = {
   email: string;
   nomPrenom: string;
@@ -25,6 +33,7 @@ type DonneesAidant = {
   dateSignatureCGU?: string;
   dateSignatureCharte?: string;
   siret?: string;
+  entite?: EntiteDTO;
 };
 
 type AidantDTO = DTO & {
@@ -78,6 +87,9 @@ export class EntrepotAidantPostgres
           dto.donnees.dateSignatureCharte
         ),
       }),
+      ...(dto.donnees.entite && {
+        entite: this.entiteAidantEnEntite(dto.donnees.entite),
+      }),
     };
   }
 
@@ -103,7 +115,24 @@ export class EntrepotAidantPostgres
         ...(entite.dateSignatureCharte && {
           dateSignatureCharte: entite.dateSignatureCharte.toISOString(),
         }),
+        ...(entite.entite && { entite: this.entiteAidantEnDTO(entite.entite) }),
       },
+    };
+  }
+
+  private entiteAidantEnDTO(entite: EntiteAidant): EntiteDTO {
+    return {
+      nom: this.chiffrement.chiffre(entite.nom!),
+      siret: this.chiffrement.chiffre(entite.siret!),
+      type: this.chiffrement.chiffre(entite.type),
+    };
+  }
+
+  private entiteAidantEnEntite(entite: EntiteDTO): EntiteAidant {
+    return {
+      nom: this.chiffrement.dechiffre(entite.nom),
+      siret: this.chiffrement.dechiffre(entite.siret),
+      type: this.chiffrement.dechiffre(entite.type) as TypeEntite,
     };
   }
 

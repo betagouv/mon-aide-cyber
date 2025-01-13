@@ -79,7 +79,13 @@ export class CapteurCommandeCreeEspaceAidant
             ...(commande.dateSignatureCharte && {
               dateSignatureCharte: commande.dateSignatureCharte,
             }),
-            ...(commande.entite && { entite: { ...commande.entite } }),
+            ...(commande.entite && {
+              entite: {
+                nom: commande.entite.nom!,
+                siret: commande.entite.siret!,
+                type: commande.entite.type,
+              },
+            }),
           };
           return this.entrepots
             .aidants()

@@ -6,7 +6,9 @@ import crypto from 'crypto';
 import { fakerFR } from '@faker-js/faker';
 import {
   Aidant,
+  EntiteAidant,
   EntrepotAidant,
+  TypeEntite,
   TypesEntites,
 } from '../../src/espace-aidant/Aidant';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
@@ -73,6 +75,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   private siret: string | undefined = undefined;
   private dateSignatureCGU: Date | undefined = FournisseurHorloge.maintenant();
   private dateSignatureCharte: Date = FournisseurHorloge.maintenant();
+  private entite: EntiteAidant | undefined = undefined;
 
   avecUnNomPrenom(nomPrenom: string): ConstructeurAidant {
     this.nomPrenom = nomPrenom;
@@ -126,6 +129,15 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  faisantPartieDeEntite(type: TypeEntite): ConstructeurAidant {
+    this.entite = {
+      nom: fakerFR.company.name(),
+      siret: fakerFR.string.alpha(10),
+      type,
+    };
+    return this;
+  }
+
   construis(): Aidant {
     return {
       identifiant: this.identifiant,
@@ -140,6 +152,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
       consentementAnnuaire: this.consentementAnnuaire,
       ...(this.dateSignatureCGU && { dateSignatureCGU: this.dateSignatureCGU }),
       dateSignatureCharte: this.dateSignatureCharte,
+      ...(this.entite && { entite: this.entite }),
     };
   }
 }

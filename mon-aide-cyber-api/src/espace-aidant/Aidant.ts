@@ -49,8 +49,8 @@ type Preferences = {
 export type TypeEntite = 'ServicePublic' | 'ServiceEtat' | 'Association';
 
 export type EntiteAidant = {
-  nom?: string;
-  siret?: string;
+  nom: string;
+  siret: string;
   type: TypeEntite;
 };
 export type Aidant = Aggregat & {
