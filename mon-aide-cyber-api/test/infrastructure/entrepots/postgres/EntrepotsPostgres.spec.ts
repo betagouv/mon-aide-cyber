@@ -50,6 +50,7 @@ import { EntrepotUtilisateurPostgres } from '../../../../src/infrastructure/entr
 import { Utilisateur } from '../../../../src/authentification/Utilisateur';
 import {
   Aidant,
+  EntiteAidant,
   EntitesAssociations,
   EntitesOrganisationsPubliques,
   TypesEntites,
@@ -545,20 +546,21 @@ describe('Entrepots Postgres', () => {
 });
 
 describe('Entrepot Aidant', () => {
+  const serviceDeChiffrement: FauxServiceDeChiffrement =
+    new FauxServiceDeChiffrement(new Map());
+  let entrepot = new EntrepotAidantPostgres(serviceDeChiffrement);
+
   beforeEach(async () => {
     await nettoieLaBaseDeDonneesAidants();
+    serviceDeChiffrement.nettoie();
   });
 
   it('Persiste un aidant', async () => {
     const aidant = unAidant().construis();
-    const serviceDeChiffrement = new FauxServiceDeChiffrement(
-      new Map([
-        [aidant.email, 'aaa'],
-        [aidant.nomPrenom, 'ccc'],
-      ])
-    );
+    serviceDeChiffrement.ajoute(aidant.email, 'aaa');
+    serviceDeChiffrement.ajoute(aidant.nomPrenom, 'ccc');
 
-    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+    await entrepot.persiste(aidant);
 
     const aidantRecu = await new EntrepotAidantPostgres(
       serviceDeChiffrement
@@ -568,14 +570,10 @@ describe('Entrepot Aidant', () => {
 
   it('Persiste un aidant avec son Siret', async () => {
     const aidant = unAidant().avecUnSiret('1234567890').construis();
-    const serviceDeChiffrement = new FauxServiceDeChiffrement(
-      new Map([
-        [aidant.email, 'aaa'],
-        [aidant.nomPrenom, 'ccc'],
-      ])
-    );
+    serviceDeChiffrement.ajoute(aidant.email, 'aaa');
+    serviceDeChiffrement.ajoute(aidant.nomPrenom, 'ccc');
 
-    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+    await entrepot.persiste(aidant);
 
     const aidantRecu = await new EntrepotAidantPostgres(
       serviceDeChiffrement
@@ -588,14 +586,9 @@ describe('Entrepot Aidant', () => {
     const aidant = unAidant()
       .avecUneDateDeSignatureDeCharte(dateSignatureCharte)
       .construis();
-    const serviceDeChiffrement = new FauxServiceDeChiffrement(
-      new Map([
-        [aidant.email, 'aaa'],
-        [aidant.nomPrenom, 'ccc'],
-      ])
-    );
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(new Map());
 
-    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+    await entrepot.persiste(aidant);
 
     const aidantRecu = await new EntrepotAidantPostgres(
       serviceDeChiffrement
@@ -603,13 +596,31 @@ describe('Entrepot Aidant', () => {
     expect(aidantRecu.dateSignatureCharte).toStrictEqual(dateSignatureCharte);
   });
 
+  it("Persiste un Aidant avec l'entité", async () => {
+    const aidant = unAidant().faisantPartieDeEntite('Association').construis();
+    serviceDeChiffrement.ajoute(aidant.entite!.nom!, 'aaaa');
+    serviceDeChiffrement.ajoute(aidant.entite!.siret!, 'bbbb');
+    serviceDeChiffrement.ajoute(aidant.entite!.type!, 'cccc');
+
+    await entrepot.persiste(aidant);
+
+    const aidantRecu = await new EntrepotAidantPostgres(
+      serviceDeChiffrement
+    ).lis(aidant.identifiant);
+    expect(aidantRecu.entite).toStrictEqual<EntiteAidant>({
+      nom: aidant.entite!.nom!,
+      siret: aidant.entite!.siret!,
+      type: 'Association',
+    });
+  });
+
   it('Met à jour le consentement pour apparaître dans l’annuaire', async () => {
     const aidant = unAidant().construis();
     const serviceDeChiffrement = new ServiceDeChiffrementClair();
-    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+    await entrepot.persiste(aidant);
 
     aidant.consentementAnnuaire = true;
-    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+    await entrepot.persiste(aidant);
 
     const aidantRecu = await new EntrepotAidantPostgres(
       serviceDeChiffrement
@@ -633,7 +644,7 @@ describe('Entrepot Aidant', () => {
         .construis();
       const serviceDeChiffrement = new ServiceDeChiffrementClair();
 
-      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+      await entrepot.persiste(aidant);
 
       const aidantRecu = await new EntrepotAidantPostgres(
         serviceDeChiffrement
@@ -665,7 +676,7 @@ describe('Entrepot Aidant', () => {
         .construis();
       const serviceDeChiffrement = new ServiceDeChiffrementClair();
 
-      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+      await entrepot.persiste(aidant);
 
       const aidantRecu = await new EntrepotAidantPostgres(
         serviceDeChiffrement
@@ -689,7 +700,7 @@ describe('Entrepot Aidant', () => {
         .construis();
       const serviceDeChiffrement = new ServiceDeChiffrementClair();
 
-      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+      await entrepot.persiste(aidant);
 
       const aidantRecu = await new EntrepotAidantPostgres(
         serviceDeChiffrement
@@ -703,13 +714,10 @@ describe('Entrepot Aidant', () => {
   describe('Recherche par email', () => {
     it("L'aidant est trouvé", async () => {
       const aidant = unAidant().construis();
-      const serviceDeChiffrement = new FauxServiceDeChiffrement(
-        new Map([
-          [aidant.email, 'aaa'],
-          [aidant.nomPrenom, 'ccc'],
-        ])
-      );
-      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+      serviceDeChiffrement.ajoute(aidant.email, 'aaa');
+      serviceDeChiffrement.ajoute(aidant.nomPrenom, 'ccc');
+
+      await entrepot.persiste(aidant);
 
       const aidantTrouve = await new EntrepotAidantPostgres(
         serviceDeChiffrement
@@ -768,7 +776,9 @@ describe('Entrepot Aidant', () => {
     it('Retourne uniquement les Aidants', async () => {
       const aidant = unAidant().construis();
       const serviceDeChiffrement = new ServiceDeChiffrementClair();
-      await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+      entrepot = new EntrepotAidantPostgres(serviceDeChiffrement);
+
+      await entrepot.persiste(aidant);
       await knex(knexfile)
         .insert({
           id: crypto.randomUUID(),

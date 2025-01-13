@@ -2,7 +2,7 @@ import { ServiceDeChiffrement } from '../../../src/securite/ServiceDeChiffrement
 
 export class FauxServiceDeChiffrement implements ServiceDeChiffrement {
   private _aEteAppele = false;
-  constructor(private readonly tableDeChiffrement: Map<string, string>) {}
+  constructor(private tableDeChiffrement: Map<string, string>) {}
 
   chiffre(chaine: string): string {
     return this.tableDeChiffrement.get(chaine) || '';
@@ -25,5 +25,9 @@ export class FauxServiceDeChiffrement implements ServiceDeChiffrement {
 
   aEteAppele(): boolean {
     return this._aEteAppele;
+  }
+
+  nettoie() {
+    this.tableDeChiffrement = new Map();
   }
 }
