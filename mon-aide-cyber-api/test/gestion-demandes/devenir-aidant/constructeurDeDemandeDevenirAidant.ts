@@ -37,6 +37,13 @@ class ConstructeurDemandeDevenirAidant
     return this;
   }
 
+  pourUneDemandeEnAttenteAdhesion(): ConstructeurDemandeDevenirAidant {
+    this.entite = {
+      type: 'Association',
+    };
+    return this;
+  }
+
   construis(): DemandeDevenirAidant {
     return {
       date: FournisseurHorloge.maintenant(),
