@@ -537,9 +537,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           .avecUneEntite('ServicePublic')
           .construis();
         await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
-        FournisseurHorlogeDeTest.initialise(
-          new Date(Date.parse('2024-08-08T13:22:31'))
-        );
         const token = btoa(
           JSON.stringify({ demande: demande.identifiant, mail: demande.mail })
         );
@@ -563,9 +560,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           .avecUneEntite('ServicePublic')
           .construis();
         await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
-        FournisseurHorlogeDeTest.initialise(
-          new Date(Date.parse('2024-08-08T13:22:31'))
-        );
         const token = btoa(
           JSON.stringify({ demande: demande.identifiant, mail: demande.mail })
         );
