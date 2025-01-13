@@ -94,6 +94,21 @@ const validateurNouveauParcoursDemandeDevenirAidant = () => {
   return [];
 };
 
+const validateurMotDePasse = () => {
+  const dateNouveauParcoursDemandeDevenirAidant =
+    adaptateurEnvironnement.nouveauParcoursDevenirAidant();
+  if (
+    dateNouveauParcoursDemandeDevenirAidant &&
+    isAfter(
+      FournisseurHorloge.maintenant(),
+      FournisseurHorloge.enDate(dateNouveauParcoursDemandeDevenirAidant)
+    )
+  ) {
+    return [];
+  }
+  return validateursDeCreationDeMotDePasse();
+};
+
 export const routesAPIDemandesDevenirAidant = (
   configuration: ConfigurationServeur
 ) => {
@@ -161,7 +176,7 @@ export const routesAPIDemandesDevenirAidant = (
     body('cguSignees')
       .custom((value: boolean) => value)
       .withMessage('Veuillez signer les CGU.'),
-    validateursDeCreationDeMotDePasse(),
+    validateurMotDePasse(),
     validateurDemande(entrepots, serviceDeChiffrement),
     async (requete: Request, reponse: Response, suite: NextFunction) => {
       const resultatsValidation: Result<FieldValidationError> =

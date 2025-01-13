@@ -530,5 +530,78 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         expect(reponse.statusCode).toStrictEqual(200);
       });
     });
+
+    describe('Quand une requête POST est reçue /api/demandes/creation-espace-aidant', () => {
+      it('Le mot de passe devient optionnel', async () => {
+        const demande = unConstructeurDeDemandeDevenirAidant()
+          .avecUneEntite('ServicePublic')
+          .construis();
+        await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
+        FournisseurHorlogeDeTest.initialise(
+          new Date(Date.parse('2024-08-08T13:22:31'))
+        );
+        const token = btoa(
+          JSON.stringify({ demande: demande.identifiant, mail: demande.mail })
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant/creation-espace-aidant',
+          donneesServeur.portEcoute,
+          {
+            token,
+            cguSignees: true,
+          }
+        );
+
+        expect(reponse.statusCode).toStrictEqual(201);
+      });
+
+      it("Crée l'espace de l'Aidant", async () => {
+        const demande = unConstructeurDeDemandeDevenirAidant()
+          .avecUneEntite('ServicePublic')
+          .construis();
+        await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
+        FournisseurHorlogeDeTest.initialise(
+          new Date(Date.parse('2024-08-08T13:22:31'))
+        );
+        const token = btoa(
+          JSON.stringify({ demande: demande.identifiant, mail: demande.mail })
+        );
+
+        await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant/creation-espace-aidant',
+          donneesServeur.portEcoute,
+          {
+            token,
+            cguSignees: true,
+          }
+        );
+
+        const aidantRecu = await testeurMAC.entrepots
+          .aidants()
+          .rechercheParEmail(demande.mail);
+        expect(aidantRecu).toStrictEqual<Aidant>({
+          identifiant: expect.any(String),
+          email: demande.mail,
+          nomPrenom: `${demande.prenom} ${demande.nom}`,
+          preferences: {
+            secteursActivite: [],
+            departements: [demande.departement],
+            typesEntites: [],
+          },
+          consentementAnnuaire: false,
+          dateSignatureCharte: demande.date,
+          entite: {
+            nom: demande.entite!.nom!,
+            siret: demande.entite!.siret!,
+            type: 'ServicePublic',
+          },
+        });
+      });
+    });
   });
 });
