@@ -67,7 +67,9 @@ const validateurNouveauParcoursDemandeDevenirAidant = () => {
     ) {
       const { body } = new ExpressValidator({
         typeEntite: async (valeur: string) => {
-          if (valeur !== ('ServicePublic' && 'ServiceEtat' && 'Association')) {
+          if (
+            !['ServicePublic', 'ServiceEtat', 'Association'].includes(valeur)
+          ) {
             throw new Error(
               'Veuillez fournir l’une des valeurs suivantes pour le type d’entité ’ServicePublic’, ’ServiceEtat’, ’Association’'
             );
@@ -141,6 +143,16 @@ export const routesAPIDemandesDevenirAidant = (
       .withMessage('Veuillez valider les CGU'),
     validateurNouveauParcoursDemandeDevenirAidant(),
     async (requete: Request, reponse: Response, suite: NextFunction) => {
+      const genereEntite = () => ({
+        entite: {
+          type: requete.body.entite.type,
+          ...(requete.body.entite.nom && { nom: requete.body.entite.nom }),
+          ...(requete.body.entite.siret && {
+            siret: requete.body.entite.siret,
+          }),
+        },
+      });
+
       try {
         const resultatsValidation: Result<FieldValidationError> =
           validationResult(requete) as Result<FieldValidationError>;
@@ -159,6 +171,7 @@ export const routesAPIDemandesDevenirAidant = (
           mail: requete.body.mail.toLowerCase(),
           nom: requete.body.nom,
           prenom: requete.body.prenom,
+          ...(requete.body.entite && genereEntite()),
         };
 
         await configuration.busCommande.publie(commande);

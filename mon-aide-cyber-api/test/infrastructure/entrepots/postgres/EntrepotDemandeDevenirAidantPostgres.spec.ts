@@ -4,6 +4,7 @@ import { unConstructeurDeDemandeDevenirAidant } from '../../../gestion-demandes/
 import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
 import {
   DemandeDevenirAidant,
+  EntiteDemande,
   StatutDemande,
 } from '../../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import {
@@ -42,6 +43,37 @@ describe('Entrepot Demande Devenir Aidant', () => {
     expect(demandeDevenirAidantRecu).toStrictEqual<DemandeDevenirAidant>(
       demandeDevenirAidant
     );
+  });
+
+  it("Persiste l'entité de l'Aidant dans la demande", async () => {
+    const demandeDevenirAidant = unConstructeurDeDemandeDevenirAidant()
+      .avecUneEntite('Association')
+      .construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [demandeDevenirAidant.nom, 'aaa'],
+        [demandeDevenirAidant.prenom, 'bbb'],
+        [demandeDevenirAidant.mail, 'ccc'],
+        [demandeDevenirAidant.departement.nom, 'ddd'],
+        [demandeDevenirAidant.entite!.nom!, 'eee'],
+        [demandeDevenirAidant.entite!.siret!, 'ffff'],
+        [demandeDevenirAidant.entite!.type, 'ggggg'],
+      ])
+    );
+
+    await new EntrepotDemandeDevenirAidantPostgres(
+      serviceDeChiffrement
+    ).persiste(demandeDevenirAidant);
+
+    const demandeDevenirAidantRecu =
+      await new EntrepotDemandeDevenirAidantPostgres(serviceDeChiffrement).lis(
+        demandeDevenirAidant.identifiant
+      );
+    expect(demandeDevenirAidantRecu.entite).toStrictEqual<EntiteDemande>({
+      nom: demandeDevenirAidant.entite!.nom!,
+      siret: demandeDevenirAidant.entite!.siret!,
+      type: demandeDevenirAidant.entite!.type,
+    });
   });
 
   it("Lève une erreur lorsque le département persisté n'est pas trouvé", async () => {

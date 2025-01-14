@@ -479,6 +479,27 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
     afterEach(() => testeurMAC.arrete());
 
     describe('Quand une requête POST est reçue /api/demandes/devenir-aidant', () => {
+      it('Crée la demande', async () => {
+        const corpsDeRequete = uneRequeteDemandeDevenirAidant()
+          .ayantSigneLaCharte()
+          .dansUneEntite('Beta-Gouv', '1234567890', 'ServicePublic')
+          .construis();
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant',
+          donneesServeur.portEcoute,
+          corpsDeRequete
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        const demandes = await testeurMAC.entrepots
+          .demandesDevenirAidant()
+          .tous();
+        expect(demandes[0].entite).toStrictEqual(corpsDeRequete.entite);
+      });
+
       it('Retourne le code 422 si la charte n’est pas signée', async () => {
         const corpsDeRequete = uneRequeteDemandeDevenirAidant()
           .sansCharteAidant()
@@ -532,6 +553,12 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         );
 
         expect(reponse.statusCode).toStrictEqual(200);
+        const demandes = await testeurMAC.entrepots
+          .demandesDevenirAidant()
+          .tous();
+        expect(demandes[0].entite).toStrictEqual({
+          type: corpsDeRequete.entite?.type,
+        });
       });
     });
 

@@ -8,12 +8,18 @@ import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import { DTO, EntrepotPostgres } from './EntrepotPostgres';
 
+type EntiteDTO = {
+  nom?: string;
+  siret?: string;
+  type: 'ServicePublic' | 'ServiceEtat' | 'Association';
+};
 export type DonneesDemandeDevenirAidant = {
   date: string;
   nom: string;
   prenom: string;
   mail: string;
   nomDepartement: string;
+  entite?: EntiteDTO;
 };
 
 export type DemandeDevenirAidantDTO = DTO & {
@@ -45,6 +51,7 @@ export class EntrepotDemandeDevenirAidantPostgres
       )
     );
   }
+
   protected nomTable(): string {
     return 'demandes-devenir-aidant';
   }
@@ -66,6 +73,7 @@ export class EntrepotDemandeDevenirAidantPostgres
         prenom: this.chiffrement.chiffre(entite.prenom),
         mail: this.chiffrement.chiffre(entite.mail),
         nomDepartement: this.chiffrement.chiffre(entite.departement.nom),
+        ...(entite.entite && { entite: { ...entite.entite } }),
       },
       statut: entite.statut,
     };
@@ -90,6 +98,13 @@ export class EntrepotDemandeDevenirAidantPostgres
       mail: this.chiffrement.dechiffre(dto.donnees.mail),
       departement: departementDechiffre,
       statut: dto.statut,
+      ...(dto.donnees.entite && {
+        entite: {
+          type: dto.donnees.entite.type,
+          ...(dto.donnees.entite.nom && { nom: dto.donnees.entite.nom }),
+          ...(dto.donnees.entite.siret && { siret: dto.donnees.entite.siret }),
+        },
+      }),
     };
   }
 }
