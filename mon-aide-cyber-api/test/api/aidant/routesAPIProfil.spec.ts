@@ -32,6 +32,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       let aidantConnecte: Aidant;
 
       beforeEach(async () => {
+        donneesServeur = testeurMAC.initialise();
         const { utilisateur, aidant } =
           await unCompteAidantRelieAUnCompteUtilisateur({
             entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
@@ -44,7 +45,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           utilisateur
         );
         await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
-        donneesServeur = testeurMAC.initialise();
       });
 
       it("retourne les informations le l'Aidant", async () => {
@@ -128,6 +128,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
     let aidantConnecte: Aidant;
 
     beforeEach(async () => {
+      donneesServeur = testeurMAC.initialise();
       const { utilisateur, aidant } =
         await unCompteAidantRelieAUnCompteUtilisateur({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
@@ -140,8 +141,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
         utilisateur
       );
-
-      donneesServeur = testeurMAC.initialise();
     });
 
     it("S'assure qu'un utilisateur connecté avec Proconnect ne peut pas modifier son mot de passe", async () => {
