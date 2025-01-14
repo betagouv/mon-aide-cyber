@@ -127,6 +127,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
     });
 
     describe('Valide les paramètres de la requête', () => {
+      const testeurMAC = testeurIntegration();
       let donneesServeur: { portEcoute: number; app: Express };
 
       beforeEach(() => {
@@ -147,6 +148,9 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         );
 
         expect(reponse.statusCode).toStrictEqual(422);
+        expect(
+          await testeurMAC.entrepots.demandesDevenirAidant().tous()
+        ).toHaveLength(0);
       });
 
       it("Précise l'erreur dans un message, si une erreur est rencontrée", async () => {

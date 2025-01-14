@@ -145,7 +145,7 @@ export const routesAPIDemandesDevenirAidant = (
         const resultatsValidation: Result<FieldValidationError> =
           validationResult(requete) as Result<FieldValidationError>;
         if (!resultatsValidation.isEmpty()) {
-          reponse.status(422).json({
+          return reponse.status(422).json({
             message: resultatsValidation
               .array()
               .map((resultatValidation) => resultatValidation.msg)
@@ -162,8 +162,7 @@ export const routesAPIDemandesDevenirAidant = (
         };
 
         await configuration.busCommande.publie(commande);
-        reponse.status(200);
-        return reponse.send();
+        return reponse.status(200).send();
       } catch (error) {
         return suite(error);
       }
