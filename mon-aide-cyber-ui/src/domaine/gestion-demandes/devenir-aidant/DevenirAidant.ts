@@ -7,11 +7,6 @@ export type PreRequisDemande = {
   departements: Departement[];
 };
 
-export enum TypeServiceEntite {
-  SERVICE_PUBLIC = 'ServicePublic',
-  SERVICE_ETAT = 'ServiceEtat',
-  ASSOCIATION = 'Association',
-}
 export type Entite = {
   type: 'ServicePublic' | 'ServiceEtat' | 'Association';
   nom?: string;
@@ -35,7 +30,7 @@ export const entiteEnFonctionDuTypeAidant = new Map<
   [
     'RepresentantEtat',
     (nom, siret) => ({
-      type: TypeServiceEntite.SERVICE_ETAT,
+      type: 'ServiceEtat',
       nom,
       siret,
     }),
@@ -43,7 +38,7 @@ export const entiteEnFonctionDuTypeAidant = new Map<
   [
     'AgentPublic',
     (nom, siret) => ({
-      type: TypeServiceEntite.SERVICE_PUBLIC,
+      type: 'ServicePublic',
       nom,
       siret,
     }),
@@ -51,7 +46,7 @@ export const entiteEnFonctionDuTypeAidant = new Map<
   [
     'Association',
     (nom, siret) => ({
-      type: TypeServiceEntite.ASSOCIATION,
+      type: 'Association',
       nom,
       siret,
     }),
@@ -59,7 +54,7 @@ export const entiteEnFonctionDuTypeAidant = new Map<
   [
     'FuturAdherent',
     () => ({
-      type: TypeServiceEntite.ASSOCIATION,
+      type: 'Association',
     }),
   ],
 ]);

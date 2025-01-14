@@ -149,8 +149,8 @@ export const CapteurFormulaireDevenirAidant = () => {
       >
         <Button
           type="submit"
+          variant="primary"
           key="envoyer-demande-devenir-aidant"
-          className="fr-btn bouton-mac bouton-mac-primaire"
           disabled={!estValide}
         >
           Envoyer
