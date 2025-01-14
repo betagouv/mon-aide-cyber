@@ -352,7 +352,7 @@ describe('Capteur de commande demande devenir aidant', () => {
             .construis()
         );
 
-      const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
+      await new CapteurCommandeDevenirAidant(
         entrepots,
         new BusEvenementDeTest(),
         new AdaptateurEnvoiMailMemoire(),
@@ -371,7 +371,9 @@ describe('Capteur de commande demande devenir aidant', () => {
         type: 'CommandeDevenirAidant',
       });
 
-      expect(demandeDevenirAidant).toStrictEqual<DemandeDevenirAidant>({
+      const demandes = await entrepots.demandesDevenirAidant().tous();
+      expect(demandes).toHaveLength(1);
+      expect(demandes[0]).toStrictEqual<DemandeDevenirAidant>({
         departement: ardennes,
         mail: 'email-existant@mail.com',
         nom: 'nom',

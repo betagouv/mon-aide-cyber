@@ -71,10 +71,16 @@ export class CapteurCommandeDevenirAidant
       );
     }
 
+    const demandeEnCours = await this.entrepots
+      .demandesDevenirAidant()
+      .rechercheDemandeEnCoursParMail(commande.mail);
+
     const demandeDevenirAidant: DemandeDevenirAidant = {
       date: FournisseurHorloge.maintenant(),
       departement: commande.departement,
-      identifiant: crypto.randomUUID(),
+      identifiant: demandeEnCours
+        ? demandeEnCours.identifiant
+        : crypto.randomUUID(),
       mail: mailDemandeur,
       nom: commande.nom,
       prenom: commande.prenom,
