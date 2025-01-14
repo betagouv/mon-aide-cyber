@@ -18,6 +18,7 @@ import {
   saisieNom,
   saisiPrenom,
 } from './reducteurDevenirAidant.ts';
+import { Input } from '../../../../composants/atomes/Input/Input.tsx';
 
 type ProprietesFormulaireDevenirAidant = PropsWithChildren<{
   referentielDepartements?: Departement[];
@@ -172,12 +173,11 @@ const FormulaireDevenirAidantFormulaire = ({
                 <span className="asterisque">*</span>
                 <span> Votre adresse électronique :</span>
               </label>
-              <input
-                className="fr-input"
+              <Input
                 type="text"
                 id="mail"
                 name="mail"
-                placeholder="Exemple : martin@mail.com"
+                placeholder="Exemple : jean.dupont@mail.com"
                 onChange={(e) => surSaisieMail(e.target.value)}
               />
               {etatDemande.erreurs?.mail ? (

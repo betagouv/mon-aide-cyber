@@ -141,9 +141,7 @@ const regenereEtatFormulaire = (
 export const reducteurDevenirAidant = (etat: EtatDemande, action: Action) => {
   switch (action.type) {
     case TypeAction.PRENOM_SAISI: {
-      const etatCourant = { ...etat };
-
-      return regenereEtatFormulaire(etatCourant, {
+      return regenereEtatFormulaire(etat, {
         ajouteAuNouvelEtat: () => ({ prenom: action.saisie }),
         champ: 'prenom',
         champValide: () => estPrenomValide(action.saisie),
@@ -151,9 +149,7 @@ export const reducteurDevenirAidant = (etat: EtatDemande, action: Action) => {
       });
     }
     case TypeAction.NOM_SAISI: {
-      const etatCourant = { ...etat };
-
-      return regenereEtatFormulaire(etatCourant, {
+      return regenereEtatFormulaire(etat, {
         ajouteAuNouvelEtat: () => ({ nom: action.saisie }),
         champ: 'nom',
         champValide: () => estNomValide(action.saisie),
@@ -161,9 +157,7 @@ export const reducteurDevenirAidant = (etat: EtatDemande, action: Action) => {
       });
     }
     case TypeAction.MAIL_SAISI: {
-      const etatCourant = { ...etat };
-
-      return regenereEtatFormulaire(etatCourant, {
+      return regenereEtatFormulaire(etat, {
         ajouteAuNouvelEtat: () => ({ mail: action.saisie }),
         champ: 'mail',
         champValide: () => !!action.saisie.trim(),
@@ -171,9 +165,7 @@ export const reducteurDevenirAidant = (etat: EtatDemande, action: Action) => {
       });
     }
     case TypeAction.DEPARTEMENT_SAISI: {
-      const etatCourant = { ...etat };
-
-      return regenereEtatFormulaire(etatCourant, {
+      return regenereEtatFormulaire(etat, {
         ajouteAuNouvelEtat: () => ({ departement: action.saisie }),
         champ: 'departement',
         champValide: () => estDepartement(action.saisie),
@@ -182,10 +174,8 @@ export const reducteurDevenirAidant = (etat: EtatDemande, action: Action) => {
       });
     }
     case TypeAction.CGU_CLIQUEES: {
-      const etatCourant = { ...etat };
-      const cguValidees = !etatCourant.cguValidees;
-
-      return regenereEtatFormulaire(etatCourant, {
+      const cguValidees = !etat.cguValidees;
+      return regenereEtatFormulaire(etat, {
         ajouteAuNouvelEtat: () => ({ cguValidees: cguValidees }),
         champ: 'cguValidees',
         champValide: () => cguValidees,
