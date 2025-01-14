@@ -71,6 +71,7 @@ class TesteurIntegrationMAC {
   ) {}
 
   initialise() {
+    this.entrepots = new EntrepotsMemoire();
     this.serveurDeTest = serveur.creeServeur({
       adaptateurRelations: this.adaptateurRelations,
       adaptateurReferentiel: this.adaptateurReferentiel,

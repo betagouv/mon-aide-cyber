@@ -108,6 +108,17 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
       });
 
       it("L'identifiant de connexion est expurgé", async () => {
+        const constructeurUtilisateur = unUtilisateur()
+          .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
+          .avecUnMotDePasse('mon_Mot-D3p4sse')
+          .avecUnNomPrenom('Martin Dupont');
+        await unCompteAidantRelieAUnCompteUtilisateur({
+          constructeurAidant: unAidant(),
+          constructeurUtilisateur,
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        });
+
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',

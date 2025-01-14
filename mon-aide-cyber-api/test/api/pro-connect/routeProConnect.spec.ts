@@ -69,6 +69,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
   describe('Lorsqu’une requête GET est reçue sur /pro-connect/apres-authentification', () => {
     beforeEach(async () => {
       const aidant = unAidant().construis();
+      donneesServeur = testeurMAC.initialise();
       await testeurMAC.entrepots.aidants().persiste(aidant);
       utilitairesCookies.recuperateurDeCookies = () =>
         'j%3A%7B%22state%22%3A%22etat%22%2C%22nonce%22%3A%22coucou%22%7D';
@@ -80,7 +81,6 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         async () =>
           desInformationsUtilisateur().pourUnAidant(aidant).construis();
       testeurMAC.gestionnaireDeJeton.genereJeton = () => 'abc';
-      donneesServeur = testeurMAC.initialise();
     });
 
     it('L’Aidant est redirigé vers le tableau de bord', async () => {
@@ -164,6 +164,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
     describe('Dans le cas d’un Aidant n’ayant pas validé les CGU', () => {
       beforeEach(async () => {
         const aidant = unAidant().sansCGUSignees().construis();
+        donneesServeur = testeurMAC.initialise();
         await testeurMAC.entrepots.aidants().persiste(aidant);
         utilitairesCookies.recuperateurDeCookies = () =>
           'j%3A%7B%22state%22%3A%22etat%22%2C%22nonce%22%3A%22coucou%22%7D';
@@ -175,7 +176,6 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
           async () =>
             desInformationsUtilisateur().pourUnAidant(aidant).construis();
         testeurMAC.gestionnaireDeJeton.genereJeton = () => 'abc';
-        donneesServeur = testeurMAC.initialise();
       });
 
       it('L’Aidant est redirigé vers la validation des CGU si elles ne sont pas signées', async () => {
