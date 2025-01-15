@@ -428,48 +428,93 @@ describe('Capteur de commande demande devenir aidant', () => {
       });
     });
 
-    it('Publie l’événement DemandeDevenirAidantModifiée', async () => {
-      const busEvenementDeTest = new BusEvenementDeTest();
-      const entrepots = new EntrepotsMemoire();
-      await entrepots
-        .demandesDevenirAidant()
-        .persiste(
-          unConstructeurDeDemandeDevenirAidant()
-            .avecUnMail('email-existant@mail.com')
-            .construis()
-        );
-
-      const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
-        entrepots,
-        busEvenementDeTest,
-        new AdaptateurEnvoiMailMemoire(),
-        annuaireCot,
-        unServiceAidant(entrepots.aidants())
-      ).execute({
-        departement: departements[1],
-        mail: 'email-existant@mail.com',
-        nom: 'nom',
-        prenom: 'prenom',
-        type: 'CommandeDevenirAidant',
-        entite: {
-          nom: 'Beta-Gouv',
-          siret: '1234567890',
-          type: 'ServicePublic',
-        },
+    describe("Dans le cas de mise à jour d'une demande existante", () => {
+      adaptateurCorpsMessage.miseAJourDemandeDevenirAidant = () => ({
+        genereCorpsMessage: () =>
+          'Bonjour le monde! Ta demande a été mise à jour',
       });
 
-      expect(
-        busEvenementDeTest.evenementRecu
-      ).toStrictEqual<DemandeDevenirAidantModifiee>({
-        identifiant: demandeDevenirAidant.identifiant,
-        type: 'DEMANDE_DEVENIR_AIDANT_MODIFIEE',
-        date: FournisseurHorloge.maintenant(),
-        corps: {
+      it("Envoie le mail récapitulatif à l'Aidant", async () => {
+        const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+        const entrepots = new EntrepotsMemoire();
+        await entrepots
+          .demandesDevenirAidant()
+          .persiste(
+            unConstructeurDeDemandeDevenirAidant()
+              .avecUnMail('email-existant@mail.com')
+              .construis()
+          );
+
+        await new CapteurCommandeDevenirAidant(
+          entrepots,
+          new BusEvenementDeTest(),
+          adaptateurEnvoiMail,
+          annuaireCot,
+          unServiceAidant(entrepots.aidants())
+        ).execute({
+          departement: departements[1],
+          mail: 'email-existant@mail.com',
+          nom: 'nom',
+          prenom: 'prenom',
+          type: 'CommandeDevenirAidant',
+          entite: {
+            nom: 'Beta-Gouv',
+            siret: '1234567890',
+            type: 'ServicePublic',
+          },
+        });
+
+        expect(
+          adaptateurEnvoiMail.aEteEnvoyeA(
+            'email-existant@mail.com',
+            'Bonjour le monde! Ta demande a été mise à jour'
+          )
+        ).toBe(true);
+      });
+
+      it('Publie l’événement DemandeDevenirAidantModifiée', async () => {
+        const busEvenementDeTest = new BusEvenementDeTest();
+        const entrepots = new EntrepotsMemoire();
+        await entrepots
+          .demandesDevenirAidant()
+          .persiste(
+            unConstructeurDeDemandeDevenirAidant()
+              .avecUnMail('email-existant@mail.com')
+              .construis()
+          );
+
+        const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
+          entrepots,
+          busEvenementDeTest,
+          new AdaptateurEnvoiMailMemoire(),
+          annuaireCot,
+          unServiceAidant(entrepots.aidants())
+        ).execute({
+          departement: departements[1],
+          mail: 'email-existant@mail.com',
+          nom: 'nom',
+          prenom: 'prenom',
+          type: 'CommandeDevenirAidant',
+          entite: {
+            nom: 'Beta-Gouv',
+            siret: '1234567890',
+            type: 'ServicePublic',
+          },
+        });
+
+        expect(
+          busEvenementDeTest.evenementRecu
+        ).toStrictEqual<DemandeDevenirAidantModifiee>({
+          identifiant: demandeDevenirAidant.identifiant,
+          type: 'DEMANDE_DEVENIR_AIDANT_MODIFIEE',
           date: FournisseurHorloge.maintenant(),
-          identifiantDemande: demandeDevenirAidant.identifiant,
-          departement: demandeDevenirAidant.departement.nom,
-          type: 'ServicePublic',
-        },
+          corps: {
+            date: FournisseurHorloge.maintenant(),
+            identifiantDemande: demandeDevenirAidant.identifiant,
+            departement: demandeDevenirAidant.departement.nom,
+            type: 'ServicePublic',
+          },
+        });
       });
     });
 
