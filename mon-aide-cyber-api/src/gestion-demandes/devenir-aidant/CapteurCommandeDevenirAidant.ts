@@ -92,7 +92,7 @@ export class CapteurCommandeDevenirAidant
       .demandesDevenirAidant()
       .persiste(demandeDevenirAidant)
       .then(async () => {
-        await this.publieLaDemandeCree(demandeDevenirAidant);
+        await this.publieLaDemande(demandeDevenirAidant, !!demandeEnCours);
         return this.envoieLeMailDeMiseEnRelation(demandeDevenirAidant)
           .then(() => demandeDevenirAidant)
           .catch(() =>
@@ -143,11 +143,14 @@ export class CapteurCommandeDevenirAidant
     });
   }
 
-  private async publieLaDemandeCree(
-    demandeDevenirAidant: DemandeDevenirAidant
+  private async publieLaDemande(
+    demandeDevenirAidant: DemandeDevenirAidant,
+    demandeEncours: boolean
   ) {
     await this.busEvenement.publie<DemandeDevenirAidantCreee>({
-      type: 'DEMANDE_DEVENIR_AIDANT_CREEE',
+      type: demandeEncours
+        ? 'DEMANDE_DEVENIR_AIDANT_MODIFIEE'
+        : 'DEMANDE_DEVENIR_AIDANT_CREEE',
       identifiant: demandeDevenirAidant.identifiant,
       date: FournisseurHorloge.maintenant(),
       corps: {
@@ -168,3 +171,5 @@ export type DemandeDevenirAidantCreee = Evenement<{
   identifiantDemande: crypto.UUID;
   type?: TypeEntite;
 }>;
+
+export type DemandeDevenirAidantModifiee = DemandeDevenirAidantCreee;

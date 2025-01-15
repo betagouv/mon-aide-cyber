@@ -8,6 +8,7 @@ import {
 import {
   CapteurCommandeDevenirAidant,
   DemandeDevenirAidantCreee,
+  DemandeDevenirAidantModifiee,
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 import { unConstructeurDeDemandeDevenirAidant } from './constructeurDeDemandeDevenirAidant';
 import {
@@ -417,6 +418,98 @@ describe('Capteur de commande demande devenir aidant', () => {
       ).toStrictEqual<DemandeDevenirAidantCreee>({
         identifiant: demandeDevenirAidant.identifiant,
         type: 'DEMANDE_DEVENIR_AIDANT_CREEE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          date: FournisseurHorloge.maintenant(),
+          identifiantDemande: demandeDevenirAidant.identifiant,
+          departement: demandeDevenirAidant.departement.nom,
+          type: 'ServicePublic',
+        },
+      });
+    });
+
+    it('Publie l’événement DemandeDevenirAidantModifiée', async () => {
+      const busEvenementDeTest = new BusEvenementDeTest();
+      const entrepots = new EntrepotsMemoire();
+      await entrepots
+        .demandesDevenirAidant()
+        .persiste(
+          unConstructeurDeDemandeDevenirAidant()
+            .avecUnMail('email-existant@mail.com')
+            .construis()
+        );
+
+      const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
+        entrepots,
+        busEvenementDeTest,
+        new AdaptateurEnvoiMailMemoire(),
+        annuaireCot,
+        unServiceAidant(entrepots.aidants())
+      ).execute({
+        departement: departements[1],
+        mail: 'email-existant@mail.com',
+        nom: 'nom',
+        prenom: 'prenom',
+        type: 'CommandeDevenirAidant',
+        entite: {
+          nom: 'Beta-Gouv',
+          siret: '1234567890',
+          type: 'ServicePublic',
+        },
+      });
+
+      expect(
+        busEvenementDeTest.evenementRecu
+      ).toStrictEqual<DemandeDevenirAidantModifiee>({
+        identifiant: demandeDevenirAidant.identifiant,
+        type: 'DEMANDE_DEVENIR_AIDANT_MODIFIEE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          date: FournisseurHorloge.maintenant(),
+          identifiantDemande: demandeDevenirAidant.identifiant,
+          departement: demandeDevenirAidant.departement.nom,
+          type: 'ServicePublic',
+        },
+      });
+    });
+
+    it('L’événement DemandeDevenirAidantModifiée est consommé', async () => {
+      const busEvenementDeTest = new BusEvenementDeTest();
+      const entrepots = new EntrepotsMemoire();
+      await entrepots
+        .demandesDevenirAidant()
+        .persiste(
+          unConstructeurDeDemandeDevenirAidant()
+            .avecUnMail('email-existant@mail.com')
+            .construis()
+        );
+
+      const demandeDevenirAidant = await new CapteurCommandeDevenirAidant(
+        entrepots,
+        busEvenementDeTest,
+        new AdaptateurEnvoiMailMemoire(),
+        annuaireCot,
+        unServiceAidant(entrepots.aidants())
+      ).execute({
+        departement: departements[1],
+        mail: 'email-existant@mail.com',
+        nom: 'nom',
+        prenom: 'prenom',
+        type: 'CommandeDevenirAidant',
+        entite: {
+          nom: 'Beta-Gouv',
+          siret: '1234567890',
+          type: 'ServicePublic',
+        },
+      });
+
+      expect(
+        busEvenementDeTest.consommateursTestes.get(
+          'DEMANDE_DEVENIR_AIDANT_MODIFIEE'
+        )?.[0].evenementConsomme
+      ).toStrictEqual<DemandeDevenirAidantModifiee>({
+        identifiant: demandeDevenirAidant.identifiant,
+        type: 'DEMANDE_DEVENIR_AIDANT_MODIFIEE',
         date: FournisseurHorloge.maintenant(),
         corps: {
           date: FournisseurHorloge.maintenant(),

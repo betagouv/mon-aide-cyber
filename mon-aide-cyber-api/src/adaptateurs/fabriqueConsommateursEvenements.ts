@@ -4,6 +4,7 @@ import {
   aideViaSollicitationAidantCree,
   demandeDevenirAidantCree,
   demandeDevenirAidantespaceAidantCree,
+  demandeDevenirAidantModifiee,
   diagnosticLance,
   diagnosticLibreAccesLance,
   mailCreationCompteAidantEnvoye,
@@ -67,6 +68,10 @@ export const fabriqueConsommateursEvenements = (
     [
       'DEMANDE_DEVENIR_AIDANT_CREEE',
       [demandeDevenirAidantCree(entrepotJournalisation)],
+    ],
+    [
+      'DEMANDE_DEVENIR_AIDANT_MODIFIEE',
+      [demandeDevenirAidantModifiee(entrepotJournalisation)],
     ],
     [
       'MAIL_CREATION_COMPTE_AIDANT_ENVOYE',
