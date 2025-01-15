@@ -1,7 +1,7 @@
 import { Entreprise } from '../Entreprise';
 import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
 import { useNavigationMAC } from '../../../../fournisseurs/hooks.ts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { MoteurDeLiens } from '../../../MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI.ts';
@@ -24,6 +24,19 @@ export const RechercheEntreprise = (props: {
   const macAPI = useMACAPI();
   const navigationMAC = useNavigationMAC();
   const [saisie, setSaisie] = useState<string | undefined>(undefined);
+  const [saisieDebounced, setSaisieDebounced] = useState<string | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSaisieDebounced(saisie);
+    }, 400);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [saisie]);
 
   const criteresRecherche: Map<TypeEntreprise, string> = new Map([
     ['servicePublic', '&est_service_public=true'],
@@ -32,13 +45,13 @@ export const RechercheEntreprise = (props: {
   ]);
 
   const { data: entrepriseTrouvees } = useQuery({
-    enabled: !!saisie && saisie.length > 2,
-    queryKey: ['recherche-entreprise', saisie],
+    enabled: !!saisieDebounced && saisieDebounced.length > 2,
+    queryKey: ['recherche-entreprise', saisieDebounced],
     queryFn: () => {
       const rechercheEntreprise = new MoteurDeLiens(
         navigationMAC.etat
       ).trouveEtRenvoie('rechercher-entreprise');
-      const url = `${rechercheEntreprise.url}?nom=${saisie}${criteresRecherche.get(props.type)}`;
+      const url = `${rechercheEntreprise.url}?nom=${saisieDebounced}${criteresRecherche.get(props.type)}`;
       return macAPI.execute<Entreprise[], EntrepriseAPI[]>(
         constructeurParametresAPI()
           .url(url)
