@@ -73,7 +73,7 @@ export class CapteurCommandeDevenirAidant
 
     const demandeEnCours = await this.entrepots
       .demandesDevenirAidant()
-      .rechercheDemandeEnCoursParMail(commande.mail);
+      .rechercheDemandeEnCoursParMail(mailDemandeur);
 
     const demandeDevenirAidant: DemandeDevenirAidant = {
       date: FournisseurHorloge.maintenant(),
@@ -93,7 +93,10 @@ export class CapteurCommandeDevenirAidant
       .persiste(demandeDevenirAidant)
       .then(async () => {
         await this.publieLaDemande(demandeDevenirAidant, !!demandeEnCours);
-        return this.envoieLeMailDeMiseEnRelation(demandeDevenirAidant)
+        return this.envoieLeMailDeMiseEnRelation(
+          demandeDevenirAidant,
+          !!demandeEnCours
+        )
           .then(() => demandeDevenirAidant)
           .catch(() =>
             Promise.reject(
@@ -124,18 +127,29 @@ export class CapteurCommandeDevenirAidant
   }
 
   private async envoieLeMailDeMiseEnRelation(
-    demandeDevenirAidant: DemandeDevenirAidant
+    demandeDevenirAidant: DemandeDevenirAidant,
+    miseAJourDemande: boolean
   ) {
+    let objet =
+      'MonAideCyber - Demande de participation à un atelier Devenir Aidant';
+    let generateurCorpsMessage: () => {
+      genereCorpsMessage: (
+        demandeDevenirAidant: DemandeDevenirAidant
+      ) => string;
+    } = adaptateurCorpsMessage.demandeDevenirAidant;
+    if (miseAJourDemande) {
+      objet =
+        'MonAideCyber - Mise à jour pour une demande de participation à un atelier';
+      generateurCorpsMessage =
+        adaptateurCorpsMessage.miseAJourDemandeDevenirAidant;
+    }
     await this.adaptateurEnvoiMail.envoie({
-      objet:
-        'MonAideCyber - Demande de participation à un atelier Devenir Aidant',
+      objet: objet,
       destinataire: {
         nom: `${demandeDevenirAidant.nom} ${demandeDevenirAidant.prenom}`,
         email: demandeDevenirAidant.mail,
       },
-      corps: adaptateurCorpsMessage
-        .demandeDevenirAidant()
-        .genereCorpsMessage(demandeDevenirAidant),
+      corps: generateurCorpsMessage().genereCorpsMessage(demandeDevenirAidant),
       copie: this.annuaireCOT().rechercheEmailParDepartement(
         demandeDevenirAidant.departement
       ),
