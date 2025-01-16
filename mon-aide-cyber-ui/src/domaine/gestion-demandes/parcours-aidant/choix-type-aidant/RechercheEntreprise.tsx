@@ -78,7 +78,7 @@ export const RechercheEntreprise = (props: {
 
   return (
     <>
-      <p>Veuillez indiquer le nom de votre structure/employeur</p>
+      <p>Veuillez indiquer le nom de votre structure :</p>
       <AutoCompletion<Entreprise>
         nom="entreprise"
         mappeur={(entreprise) => {

@@ -244,7 +244,7 @@ const FormulaireDevenirAidantFormulaire = ({
                         conditions générales d&apos;utilisation
                       </a>
                     </b>{' '}
-                    de MonAideCyber au nom de l&apos;entité que je représente
+                    de MonAideCyber
                   </span>
                 </div>
               </label>

@@ -70,7 +70,6 @@ export const SignatureCharteAidant = ({
               precedent();
             }}
           >
-            <i className="fr-icon-arrow-left-line"></i>
             <span>Précédent</span>
           </Button>
           <Button
@@ -82,7 +81,6 @@ export const SignatureCharteAidant = ({
             }}
           >
             <span>Suivant</span>
-            <i className="fr-icon-arrow-right-line"></i>
           </Button>
         </div>
       </div>

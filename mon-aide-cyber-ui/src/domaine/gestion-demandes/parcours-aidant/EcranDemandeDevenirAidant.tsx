@@ -214,17 +214,14 @@ export const EcranDemandeDevenirAidant = () => {
                 key="envoyer-demande-devenir-aidant"
                 onClick={surClickEtapePrecedente}
               >
-                <i className="fr-icon-arrow-left-line"></i>
                 <span>Précédent</span>
               </Button>
               <Button
                 type="submit"
                 key="envoyer-demande-devenir-aidant"
-                className="fr-btn bouton-mac bouton-mac-primaire"
                 disabled={!estValide}
               >
                 Envoyer
-                <span className="fr-icon-check-line" aria-hidden="true"></span>
               </Button>
             </div>
           </FormulaireDevenirAidant.Formulaire>

@@ -3,14 +3,17 @@
 .ecran-demande-devenir-aidant {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-areas: 'entete' 'formulaire-gauche' 'formulaire-droite' 'validation';
-  grid-row-gap: 1.5rem;
+  grid-template-areas: 'entete'
+    'formulaire-gauche'
+    'formulaire-droite'
+    'validation';
+  grid-row-gap: 2rem;
   grid-column-gap: 1.5rem;
   justify-content: center;
   padding: 0 1rem 0 1rem;
 
   @include a-partir-de(md) {
-    grid-template-columns: 55% auto;
+    grid-template-columns: 1fr 1fr;
     grid-template-areas:  'entete entete'
                           'formulaire-gauche formulaire-droite'
                           'validation validation';
@@ -28,38 +31,31 @@
     grid-area: entete;
     padding-top: 2.5rem;
 
-    span {
-      padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    h3 {
+      margin: 0;
     }
-  }
-
-  .checklist {
-    .item {
-      display: flex;
-      gap: 1rem 0.5rem;
-
-      .vert {
-        color: var(--couleurs-mac-vert);
-      }
-
-      .rouge {
-        color: var(--couleurs-mac-rouge);
-      }
-    }
-  }
-
-  label {
-    cursor: pointer;
   }
 
   .formulaire-colonne-gauche {
     grid-area: formulaire-gauche;
+  }
+  .formulaire-colonne-droite {
+    grid-area: formulaire-droite;
+  }
+
+  .carte-choix-utilisation {
+    height: 100%;
     border-radius: 0.5rem;
     border: 1px solid var(--couleurs-mac-gris-leger);
     background: var(--couleurs-mac-blanc);
+    display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 2rem 2rem 3rem;
+    gap: 1rem;
+    padding: 2rem 2rem 2.5rem 2rem;
 
     .mac-radio-group {
       padding-top: 0 !important;
@@ -78,25 +74,41 @@
       padding-top: 1.5rem;
       padding-bottom: 1.5rem;
     }
+    .mac-callout {
+      padding: 1rem;
 
+      i {
+        color: var(--couleurs-mac-violet-fonce);
+        width: auto;
+      }
+
+      div > p {
+        margin: 0;
+      }
+    }
   }
 
-  .formulaire-colonne-droite {
-    grid-area: formulaire-droite;
-    padding: 2rem 2rem;
-    border-radius: 0.5rem;
-    border: 1px solid var(--couleurs-mac-gris-leger);
-    background: var(--couleurs-mac-blanc);
+  .checklist {
+    display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: .5rem;
 
-    @include a-partir-de(md) {
+    .item {
       display: flex;
-    }
+      gap: 1rem 0.5rem;
 
-    &:has(input[type="radio"]:checked) {
-      border: 2px solid var(--couleurs-mac-violet-fonce);
+      .vert {
+        color: var(--couleurs-mac-vert);
+      }
+
+      .rouge {
+        color: var(--couleurs-mac-rouge);
+      }
     }
+  }
+
+  label {
+    cursor: pointer;
   }
 
   .validation {
@@ -116,7 +128,8 @@
   }
 
   img {
-    max-width: 100%;
+    width: 427px;
+    height: 212px;
     padding-bottom: 1rem;
   }
 
@@ -189,7 +202,7 @@
     border-top: none;
     margin: 32px 0;
     position: relative;
-    z-index: 1;
+    z-index: 0;
     overflow: visible;
     width: 100%;
 
@@ -198,7 +211,7 @@
       display: block;
       position: absolute;
       left: 50%;
-      z-index: 2;
+      z-index: 0;
       transform: translate(-50%, -50%);
       background: #fff;
       padding: 0 8px;

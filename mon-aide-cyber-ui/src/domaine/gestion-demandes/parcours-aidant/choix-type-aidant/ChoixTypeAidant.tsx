@@ -35,7 +35,8 @@ export const ChoixTypeAidant = ({
       <div className="fr-col-md-8 fr-col-sm-12 section">
         <div>
           <TypographieH5>
-            Vous souhaitez oeuvrer exclusivement pour l&apos;intérêt général
+            Vous souhaitez utiliser l’outil de diagnostic de l’ANSSI et être
+            référencé Aidant cyber.
           </TypographieH5>
           <div className="text-center">
             <img
@@ -93,16 +94,16 @@ export const ChoixTypeAidant = ({
             />
             <hr className="separation-formulaire" />
             <SelecteurTypeAidant
-              libelle="Pas encore adhérent d’une association mais prêt à devenir membre d’une organisation à but non lucratif"
+              libelle="Pas encore adhérent d’une association mais prêt à le devenir."
               surChoix={() => setChoix('FuturAdherent')}
               coche={choix === 'FuturAdherent'}
               contenuZoneDepliee={
                 <p>
-                  Vous pouvez consulter une liste d’associations dont font
-                  partie certains de nos Aidants cyber : <br />
-                  monaide.cyber.gouv.fr/associations-partenaires. <br />
-                  Vous pouvez aussi proposer un partenariat en contactant
-                  l’équipe via <LienMailtoMAC />
+                  Contactez l’équipe MonAideCyber pour déterminer quels relais
+                  associatifs vous correspondent.
+                  <br />
+                  Vous pouvez aussi proposer un partenariat. <br />
+                  Envoyez un mail à : <LienMailtoMAC />
                 </p>
               }
             />
@@ -116,7 +117,6 @@ export const ChoixTypeAidant = ({
                 precedent();
               }}
             >
-              <i className="fr-icon-arrow-left-line"></i>
               <span>Précédent</span>
             </Button>
             <Button
@@ -130,8 +130,7 @@ export const ChoixTypeAidant = ({
                 }
               }}
             >
-              <span>Je valide ma sélection</span>
-              <i className="fr-icon-arrow-right-line"></i>
+              <span>Suivant</span>
             </Button>
           </div>
         </div>
