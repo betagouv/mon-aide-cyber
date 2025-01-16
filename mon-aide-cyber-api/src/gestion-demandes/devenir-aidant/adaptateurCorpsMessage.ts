@@ -96,6 +96,42 @@ const genereCorpsMiseAJourDemandeDevenirAidant = (
   );
 };
 
+const genereCorpsDemandeDevenirAidantEnAttenteAdhésion = (
+  demandeDevenirAidant: DemandeDevenirAidant
+) => {
+  return (
+    '<html lang="fr">' +
+    '<body>' +
+    `Bonjour ${demandeDevenirAidant.prenom},\n` +
+    '\n' +
+    `<b>Vous êtes actuellement en attente d’un atelier “Devenir Aidant MonAideCyber” sur le territoire ${demandeDevenirAidant.departement.nom}.</b>\n` +
+    '\n' +
+    'Nous avons bien reçu votre souhait d’adhérer à une association à but non lucratif et d’utiliser le dispositif en étant référencé Aidant cyber.\n' +
+    '\n' +
+    '<ul>' +
+    '<li>Si vous êtes membre d’une association non politique ou cultuelle, faites nous parvenir à l’adresse monaidecyber@ssi.gouv.fr les informations suivantes' +
+    '<ul>' +
+    '<li>le nom</li>' +
+    '<li>le département</li>' +
+    '<li>l’adresse postale</li>' +
+    '</ul>' +
+    '\t Nous nous occuperons de mettre à jour votre demande de participation à un prochain atelier.\n' +
+    '</li>' +
+    `<li>Si vous avez besoin d’aide pour choisir l’association qui vous correspond le mieux, contacter notre <a href="mailto:${adaptateurEnvironnement.messagerie().emailMAC()}">support</a></li>` +
+    `</ul>` +
+    '\n' +
+    '<b>En attendant, familiarisez-vous avec l’outil de diagnostic MonAideCyber</b>\n' +
+    `<ul>` +
+    `<li>En vous <a href="${adaptateurEnvironnement.mac().urlMAC()}/connexion">connectant via ProConnect</a> pour commencer à réaliser vos premiers diagnostics</li>` +
+    `<li>En utilisant le <a href="${adaptateurEnvironnement.mac().urlMAC()}/diagnostic-libre-acces">diagnostic</a> librement sur notre site</li>` +
+    '</ul>' +
+    '\n' +
+    '<b>L’équipe MonAideCyber</b>' +
+    '</body>' +
+    '</html>'
+  );
+};
+
 const adaptateurCorpsMessage = {
   finaliseDemandeDevenirAidant: () => ({
     genereCorpsMessage: (nomPrenom: string, url: string) =>
@@ -108,6 +144,10 @@ const adaptateurCorpsMessage = {
   miseAJourDemandeDevenirAidant: () => ({
     genereCorpsMessage: (demandeDevenirAidant: DemandeDevenirAidant) =>
       genereCorpsMiseAJourDemandeDevenirAidant(demandeDevenirAidant),
+  }),
+  demandeDevenirAidantEnAttenteAdhésion: () => ({
+    genereCorpsMessage: (demandeDevenirAidant: DemandeDevenirAidant) =>
+      genereCorpsDemandeDevenirAidantEnAttenteAdhésion(demandeDevenirAidant),
   }),
 };
 

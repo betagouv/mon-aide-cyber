@@ -33,6 +33,13 @@ class ErreurDemandeDevenirAidant extends Error {
   }
 }
 
+const futurAidantEnAttenteAdhesionAssociation = (
+  demandeDevenirAidant: DemandeDevenirAidant
+) =>
+  demandeDevenirAidant.entite?.type === 'Association' &&
+  !demandeDevenirAidant.entite.nom &&
+  !demandeDevenirAidant.entite.siret;
+
 export class CapteurCommandeDevenirAidant
   implements CapteurCommande<CommandeDevenirAidant, DemandeDevenirAidant>
 {
@@ -130,19 +137,30 @@ export class CapteurCommandeDevenirAidant
     demandeDevenirAidant: DemandeDevenirAidant,
     miseAJourDemande: boolean
   ) {
-    let objet =
-      'MonAideCyber - Demande de participation à un atelier Devenir Aidant';
-    let generateurCorpsMessage: () => {
-      genereCorpsMessage: (
-        demandeDevenirAidant: DemandeDevenirAidant
-      ) => string;
-    } = adaptateurCorpsMessage.demandeDevenirAidant;
-    if (miseAJourDemande) {
-      objet =
-        'MonAideCyber - Mise à jour pour une demande de participation à un atelier';
-      generateurCorpsMessage =
-        adaptateurCorpsMessage.miseAJourDemandeDevenirAidant;
-    }
+    const genereObjetEtCorpsDuMessage = () => {
+      let objet =
+        'MonAideCyber - Demande de participation à un atelier Devenir Aidant';
+      let generateurCorpsMessage: () => {
+        genereCorpsMessage: (
+          demandeDevenirAidant: DemandeDevenirAidant
+        ) => string;
+      } = adaptateurCorpsMessage.demandeDevenirAidant;
+      if (miseAJourDemande) {
+        objet =
+          'MonAideCyber - Mise à jour pour une demande de participation à un atelier';
+        generateurCorpsMessage =
+          adaptateurCorpsMessage.miseAJourDemandeDevenirAidant;
+      }
+      if (futurAidantEnAttenteAdhesionAssociation(demandeDevenirAidant)) {
+        objet =
+          'MonAideCyber - Votre demande d’adhérer à une association pour participer à un atelier';
+        generateurCorpsMessage =
+          adaptateurCorpsMessage.demandeDevenirAidantEnAttenteAdhésion;
+      }
+      return { objet, generateurCorpsMessage };
+    };
+
+    const { objet, generateurCorpsMessage } = genereObjetEtCorpsDuMessage();
     await this.adaptateurEnvoiMail.envoie({
       objet: objet,
       destinataire: {
