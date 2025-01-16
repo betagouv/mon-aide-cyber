@@ -42,6 +42,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
       identifiant: expect.any(String),
       email: 'jean.dupont@beta.fr',
       nomPrenom: 'Jean Dupont',
+      dateSignatureCGU,
       preferences: {
         secteursActivite: [],
         departements: [

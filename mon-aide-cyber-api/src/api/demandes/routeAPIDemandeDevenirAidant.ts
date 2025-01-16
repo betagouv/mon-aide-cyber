@@ -22,6 +22,7 @@ import { ErreurMAC } from '../../domaine/erreurMAC';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { isAfter } from 'date-fns';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import { estDateNouveauParcoursDemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/nouveauParcours';
 
 export const validateurDemande = (
   entrepots: Entrepots,
@@ -97,18 +98,21 @@ const validateurNouveauParcoursDemandeDevenirAidant = () => {
 };
 
 const validateurMotDePasse = () => {
-  const dateNouveauParcoursDemandeDevenirAidant =
-    adaptateurEnvironnement.nouveauParcoursDevenirAidant();
-  if (
-    dateNouveauParcoursDemandeDevenirAidant &&
-    isAfter(
-      FournisseurHorloge.maintenant(),
-      FournisseurHorloge.enDate(dateNouveauParcoursDemandeDevenirAidant)
-    )
-  ) {
+  if (estDateNouveauParcoursDemandeDevenirAidant()) {
     return [];
   }
   return validateursDeCreationDeMotDePasse();
+};
+
+const valideCGU = () => {
+  if (estDateNouveauParcoursDemandeDevenirAidant()) {
+    return [];
+  }
+  return [
+    body('cguSignees')
+      .custom((value: boolean) => value)
+      .withMessage('Veuillez signer les CGU.'),
+  ];
 };
 
 export const routesAPIDemandesDevenirAidant = (
@@ -185,9 +189,7 @@ export const routesAPIDemandesDevenirAidant = (
   routes.post(
     '/creation-espace-aidant',
     express.json(),
-    body('cguSignees')
-      .custom((value: boolean) => value)
-      .withMessage('Veuillez signer les CGU.'),
+    valideCGU(),
     validateurMotDePasse(),
     validateurDemande(entrepots, serviceDeChiffrement),
     async (requete: Request, reponse: Response, suite: NextFunction) => {

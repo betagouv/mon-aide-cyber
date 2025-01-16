@@ -76,6 +76,7 @@ export class CapteurCommandeCreeEspaceAidant
             },
             consentementAnnuaire: false,
             ...(commande.siret && { siret: commande.siret }),
+            dateSignatureCGU: commande.dateSignatureCGU,
             ...(commande.dateSignatureCharte && {
               dateSignatureCharte: commande.dateSignatureCharte,
             }),

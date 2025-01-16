@@ -253,6 +253,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       const aidants = await testeurMAC.entrepots.aidants().tous();
       expect(aidants[0]).toStrictEqual<Aidant>({
         identifiant: utilisateur.identifiant,
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
         email: demande.mail,
         nomPrenom: utilisateur.nomPrenom,
         preferences: {
@@ -620,12 +621,35 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           },
           consentementAnnuaire: false,
           dateSignatureCharte: demande.date,
+          dateSignatureCGU: demande.date,
           entite: {
             nom: demande.entite!.nom!,
             siret: demande.entite!.siret!,
             type: 'ServicePublic',
           },
         });
+      });
+
+      it('Les CGU deviennent optionnelles', async () => {
+        const demande = unConstructeurDeDemandeDevenirAidant()
+          .avecUneEntite('ServicePublic')
+          .construis();
+        await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
+        const token = btoa(
+          JSON.stringify({ demande: demande.identifiant, mail: demande.mail })
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant/creation-espace-aidant',
+          donneesServeur.portEcoute,
+          {
+            token,
+          }
+        );
+
+        expect(reponse.statusCode).toStrictEqual(201);
       });
     });
   });
