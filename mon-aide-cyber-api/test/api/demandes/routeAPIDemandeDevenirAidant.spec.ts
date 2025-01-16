@@ -540,7 +540,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         expect(reponse.statusCode).toStrictEqual(422);
       });
 
-      it('Retourne OK si le futur Aidant n’adhère pas encore à une association', async () => {
+      it("Retourne OK si le futur Aidant est en attente d'adhésion à une association", async () => {
         const corpsDeRequete = uneRequeteDemandeDevenirAidant()
           .enAttenteAdhesionAssociation()
           .construis();
