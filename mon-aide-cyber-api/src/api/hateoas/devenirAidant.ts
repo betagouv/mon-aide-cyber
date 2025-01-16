@@ -1,12 +1,31 @@
 import { ContexteSpecifique } from './contextesUtilisateur';
 import { Options } from './hateoas';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import { isBefore } from 'date-fns';
+import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+
+const estNouveauParcoursDevenirAidantActif = isBefore(
+  FournisseurHorloge.enDate(
+    adaptateurEnvironnement.nouveauParcoursDevenirAidant()
+  ),
+  FournisseurHorloge.maintenant()
+);
 
 export const finaliseCreationEspaceAidant: ContexteSpecifique = {
   'finalise-creation-espace-aidant': {
-    'finalise-creation-espace-aidant': {
-      url: '/api/demandes/devenir-aidant/creation-espace-aidant',
-      methode: 'POST',
-    },
+    ...(estNouveauParcoursDevenirAidantActif
+      ? {
+          'finalise-creation-nouvel-espace-aidant': {
+            url: '/api/demandes/devenir-aidant/creation-espace-aidant',
+            methode: 'POST',
+          },
+        }
+      : {
+          'finalise-creation-espace-aidant': {
+            url: '/api/demandes/devenir-aidant/creation-espace-aidant',
+            methode: 'POST',
+          },
+        }),
   },
 };
 export const demandeDevenirAidant: ContexteSpecifique & {

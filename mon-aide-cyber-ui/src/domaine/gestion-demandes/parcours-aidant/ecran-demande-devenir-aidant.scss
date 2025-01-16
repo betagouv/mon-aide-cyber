@@ -10,7 +10,7 @@
   padding: 0 1rem 0 1rem;
 
   @include a-partir-de(md) {
-    grid-template-columns: 55% auto;
+    grid-template-columns: 50% auto;
     grid-template-areas:  'entete entete'
                           'formulaire-gauche formulaire-droite'
                           'validation validation';
