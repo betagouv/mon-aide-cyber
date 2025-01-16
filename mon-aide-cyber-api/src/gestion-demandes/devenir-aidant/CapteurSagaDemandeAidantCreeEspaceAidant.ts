@@ -14,13 +14,15 @@ import {
   UtilisateurCree,
 } from '../../authentification/CapteurCommandeCreeUtilisateur';
 import { ErreurCreationEspaceAidant } from '../../espace-aidant/Aidant';
-import { isBefore } from 'date-fns';
-import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import {
+  estAvantDateNouveauParcours,
+  estDateNouveauParcoursDemandeDevenirAidant,
+} from './nouveauParcours';
 
 export type SagaDemandeAidantCreeEspaceAidant = Omit<Saga, 'type'> & {
   type: 'SagaDemandeAidantEspaceAidant';
   idDemande: crypto.UUID;
-  motDePasse: string;
+  motDePasse?: string;
 };
 
 export class CapteurSagaDemandeAidantCreeEspaceAidant
@@ -39,14 +41,7 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
       .then(async (demande) => {
         const nomPrenom = `${demande.prenom} ${demande.nom}`;
         let identifiant = crypto.randomUUID();
-        if (
-          isBefore(
-            FournisseurHorloge.maintenant(),
-            FournisseurHorloge.enDate(
-              adaptateurEnvironnement.nouveauParcoursDevenirAidant()
-            )
-          )
-        ) {
+        if (estAvantDateNouveauParcours()) {
           const utilisateurCree = await this.busCommande.publie<
             CommandeCreeUtilisateur,
             UtilisateurCree
@@ -54,7 +49,7 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
             type: 'CommandeCreeUtilisateur',
             dateSignatureCGU: FournisseurHorloge.maintenant(),
             identifiantConnexion: demande.mail,
-            motDePasse: saga.motDePasse,
+            motDePasse: saga.motDePasse!,
             nomPrenom: nomPrenom,
           });
           identifiant = utilisateurCree.identifiant;
@@ -62,7 +57,9 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
         return this.busCommande
           .publie<CommandeCreeEspaceAidant, EspaceAidantCree>({
             identifiant,
-            dateSignatureCGU: FournisseurHorloge.maintenant(),
+            dateSignatureCGU: estDateNouveauParcoursDemandeDevenirAidant()
+              ? demande.date
+              : FournisseurHorloge.maintenant(),
             email: demande.mail,
             nomPrenom: nomPrenom,
             type: 'CommandeCreeEspaceAidant',

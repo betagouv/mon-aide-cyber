@@ -46,7 +46,10 @@ class ConstructeurDemandeDevenirAidant
 
   construis(): DemandeDevenirAidant {
     return {
-      date: FournisseurHorloge.maintenant(),
+      date: fakerFR.date.recent({
+        days: 7,
+        refDate: FournisseurHorloge.maintenant(),
+      }),
       departement:
         departements[
           fakerFR.number.int({ min: 0, max: departements.length - 1 })

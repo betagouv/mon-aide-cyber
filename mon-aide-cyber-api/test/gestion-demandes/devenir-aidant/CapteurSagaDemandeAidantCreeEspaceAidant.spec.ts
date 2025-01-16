@@ -70,8 +70,6 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
   });
 
   it('Prend en compte la date de signature de la charte depuis la demande', async () => {
-    const dateDemande = new Date(Date.parse('2025-01-02T14:32'));
-    FournisseurHorlogeDeTest.initialise(dateDemande);
     const demande = unConstructeurDeDemandeDevenirAidant()
       .avecUnMail('jean.dupont@email.com')
       .construis();
@@ -89,7 +87,7 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
     });
 
     const aidant = (await entrepots.aidants().tous())[0];
-    expect(aidant.dateSignatureCharte).toStrictEqual(dateDemande);
+    expect(aidant.dateSignatureCharte).toStrictEqual(demande.date);
   });
 
   it('La demande a été traitée', async () => {
@@ -151,10 +149,36 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
     });
   });
 
+  it('Prend en compte la date de signature des CGU à la date effective de la finalisation', async () => {
+    FournisseurHorlogeDeTest.initialise(
+      new Date(Date.parse('2024-01-31T10:00:00'))
+    );
+    const demande = unConstructeurDeDemandeDevenirAidant()
+      .avecUnMail('jean.dupont@email.com')
+      .construis();
+    await entrepots.demandesDevenirAidant().persiste(demande);
+
+    FournisseurHorlogeDeTest.initialise(
+      new Date(Date.parse('2024-03-29T10:00:00'))
+    );
+    await new CapteurSagaDemandeAidantCreeEspaceAidant(
+      entrepots,
+      busCommande,
+      busEvenementDeTest
+    ).execute({
+      idDemande: demande.identifiant,
+      motDePasse: 'Toto123',
+      type: 'SagaDemandeAidantEspaceAidant',
+    });
+
+    const aidant = (await entrepots.aidants().tous())[0];
+    expect(aidant.dateSignatureCGU).toStrictEqual(
+      FournisseurHorloge.maintenant()
+    );
+  });
+
   describe('Dans le cadre de la mise en place des profils Aidants / Utilisateurs inscrits à partir du 31/01/2025', () => {
     it("Prends en compte les informations de l'entité", async () => {
-      const dateDemande = new Date(Date.parse('2025-01-02T14:32'));
-      FournisseurHorlogeDeTest.initialise(dateDemande);
       const demande = unConstructeurDeDemandeDevenirAidant()
         .avecUnMail('jean.dupont@email.com')
         .avecUneEntite('Association')
@@ -230,6 +254,29 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       });
 
       expect(await entrepots.utilisateurs().tous()).toHaveLength(0);
+    });
+
+    it('Prend en compte la date de signature des CGU à la date de la demande', async () => {
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-01-31T10:00:00'))
+      );
+      const demande = unConstructeurDeDemandeDevenirAidant()
+        .avecUnMail('jean.dupont@email.com')
+        .avecUneEntite('ServiceEtat')
+        .construis();
+      await entrepots.demandesDevenirAidant().persiste(demande);
+
+      await new CapteurSagaDemandeAidantCreeEspaceAidant(
+        entrepots,
+        busCommande,
+        busEvenementDeTest
+      ).execute({
+        idDemande: demande.identifiant,
+        type: 'SagaDemandeAidantEspaceAidant',
+      });
+
+      const aidant = (await entrepots.aidants().tous())[0];
+      expect(aidant.dateSignatureCGU).toStrictEqual(demande.date);
     });
   });
 });
