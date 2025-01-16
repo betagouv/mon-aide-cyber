@@ -1,46 +1,28 @@
 import { FormEvent, useCallback, useEffect, useReducer, useState } from 'react';
 import {
   cguCliquees,
-  creationEspaceAidantInvalidee,
-  creationEspaceAidantTransmise,
   creationEspaceAidantValidee,
   initialiseReducteur,
   reducteurCreationEspaceAidant,
 } from './reducteurCreationEspaceAidant.tsx';
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
-import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
-import { Lien, ReponseHATEOAS } from '../../Lien.ts';
-import {
-  constructeurParametresAPI,
-  ParametresAPI,
-} from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ComposantCreationMotDePasse } from '../../../composants/mot-de-passe/ComposantCreationMotDePasse.tsx';
-import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
-import { useContexteNavigation } from '../../../hooks/useContexteNavigation.ts';
 
-type CreationEspaceAidant = {
+export type CorpsFormulaireCreationEspaceAidant = {
   cguSignees: boolean;
   motDePasse: string;
   confirmationMotDePasse: string;
-  token: string;
 };
+
 type ProprietesFormulaireCreationEspaceAidant = {
-  token: string;
+  surSoumission: (formulaire: CorpsFormulaireCreationEspaceAidant) => void;
 };
 
 type ProprietesComposantCreationEspaceAidant =
-  ProprietesFormulaireCreationEspaceAidant & {
-    macAPI: {
-      execute: <REPONSE, REPONSEAPI, CORPS = void>(
-        parametresAPI: ParametresAPI<CORPS>,
-        transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
-      ) => Promise<REPONSE>;
-    };
-  };
+  ProprietesFormulaireCreationEspaceAidant;
 
 export const ComposantCreationEspaceAidant = ({
-  macAPI,
-  token,
+  surSoumission,
 }: ProprietesComposantCreationEspaceAidant) => {
   const [etatCreationEspaceAidant, envoie] = useReducer(
     reducteurCreationEspaceAidant,
@@ -48,7 +30,6 @@ export const ComposantCreationEspaceAidant = ({
   );
   const [boutonValiderClique, setBoutonValiderClique] = useState(false);
   const navigationMAC = useNavigationMAC();
-  const contexteNavigation = useContexteNavigation(macAPI);
 
   const creeEspaceAidant = useCallback(async (e: FormEvent) => {
     e.preventDefault();
@@ -56,52 +37,18 @@ export const ComposantCreationEspaceAidant = ({
   }, []);
 
   useEffect(() => {
-    contexteNavigation
-      .recupereContexteNavigation({
-        contexte: 'demande-devenir-aidant:finalise-creation-espace-aidant',
-      })
-      .then((reponse) =>
-        navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens)
-      )
-      .catch();
-  }, []);
-
-  useEffect(() => {
     if (
       etatCreationEspaceAidant.saisieValide() &&
       etatCreationEspaceAidant.creationEspaceAidantATransmettre
     ) {
-      new MoteurDeLiens(navigationMAC.etat).trouve(
-        'finalise-creation-espace-aidant',
-        (lien: Lien) => {
-          const parametresAPI =
-            constructeurParametresAPI<CreationEspaceAidant>()
-              .url(lien.url)
-              .methode(lien.methode!)
-              .corps({
-                cguSignees: etatCreationEspaceAidant.cguSignees,
-                motDePasse:
-                  etatCreationEspaceAidant.motDePasse!.nouveauMotDePasse,
-                confirmationMotDePasse:
-                  etatCreationEspaceAidant.motDePasse!
-                    .confirmationNouveauMotDePasse,
-                token,
-              })
-              .construis();
-          macAPI
-            .execute<ReponseHATEOAS, ReponseHATEOAS, CreationEspaceAidant>(
-              parametresAPI,
-              async (json) => await json
-            )
-            .then((reponse) => {
-              envoie(creationEspaceAidantTransmise());
-              navigationMAC.ajouteEtat(reponse.liens);
-            })
-            .catch((erreur) => envoie(creationEspaceAidantInvalidee(erreur)));
-        }
-      );
+      surSoumission({
+        cguSignees: etatCreationEspaceAidant.cguSignees,
+        motDePasse: etatCreationEspaceAidant.motDePasse!.nouveauMotDePasse,
+        confirmationMotDePasse:
+          etatCreationEspaceAidant.motDePasse!.confirmationNouveauMotDePasse,
+      });
     }
-  }, [navigationMAC, etatCreationEspaceAidant, token]);
+  }, [navigationMAC.etat, etatCreationEspaceAidant]);
 
   const surCGUSignees = useCallback(() => {
     envoie(cguCliquees());
@@ -194,7 +141,13 @@ export const ComposantCreationEspaceAidant = ({
   );
 };
 export const FormulaireCreationEspaceAidant = ({
-  token,
+  // token,
+  surSoumission,
 }: ProprietesFormulaireCreationEspaceAidant) => {
-  return <ComposantCreationEspaceAidant token={token} macAPI={useMACAPI()} />;
+  return (
+    <ComposantCreationEspaceAidant
+      surSoumission={surSoumission}
+      // token={token}
+    />
+  );
 };

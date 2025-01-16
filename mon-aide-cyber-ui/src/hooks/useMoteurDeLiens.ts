@@ -13,7 +13,11 @@ export const useMoteurDeLiens = (clef: Action) => {
     return new MoteurDeLiens(etat).existe(clef);
   }, [clef, etat]);
 
-  return { accedeALaRessource };
+  const ressource = useMemo(() => {
+    return new MoteurDeLiens(etat).trouveEtRenvoie(clef);
+  }, [clef, etat]);
+
+  return { accedeALaRessource, ressource };
 };
 
 export const useRecupereLiensNavigation = (clef: Action, actif: boolean) => {
