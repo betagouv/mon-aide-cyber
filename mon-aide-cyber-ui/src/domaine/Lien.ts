@@ -25,6 +25,7 @@ export type Action =
   | 'demande-etre-aide'
   | 'envoyer-demande-devenir-aidant'
   | 'finalise-creation-espace-aidant'
+  | 'finalise-creation-nouvel-espace-aidant'
   | 'lancer-diagnostic'
   | 'modifier-diagnostic'
   | 'modifier-mot-de-passe'
