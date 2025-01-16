@@ -1,9 +1,10 @@
 import { TypographieH3 } from '../../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
-import illustrationInteretGeneral from '../../../../../public/images/illustration-interet-general.svg';
-import illustrationCadreProfessionnel from '../../../../../public/images/illustration-cadre-professionnel.svg';
+import illustrationInteretGeneralMAC from '../../../../../public/images/illustration-interet-general-mac.svg';
+import illustrationCadreProfessionnelMAC from '../../../../../public/images/illustration-cadre-professionnel-mac.svg';
 import { useEffect, useState } from 'react';
 import { Choix } from './choix/Choix.tsx';
 import useDefilementFluide from '../../../../hooks/useDefilementFluide.ts';
+import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 
 export type Utilisation = 'InteretGeneral' | 'ActiviteProfessionnelle';
 
@@ -26,105 +27,99 @@ export const ChoixUtilisation = ({
     <>
       <div className="choix-utilisation text-center">
         <TypographieH3 className="violet-fonce">
-          Le dispositif MonAideCyber évolue !
+          Quelle utilisation du service envisagez-vous ?
         </TypographieH3>
-        <span>Quelle utilisation du service envisagez-vous ?</span>
+        <span>Sélectionnez l&apos;usage qui vous correspond.</span>
       </div>
-      <Choix
-        className="formulaire-colonne-gauche"
-        name="choix-utilisation-service"
-        surSelection={() => setChoix('InteretGeneral')}
-      >
-        <img
-          src={illustrationInteretGeneral}
-          alt="Illustration d’une personne oeuvrant pour l’intérêt général."
-        />
-        <div>
-          <b>Œuvrer exclusivement pour l’intérêt général </b>
-        </div>
-        <div className="checklist">
-          <div className="item">
-            <div className="vert">
-              <i className="fr-icon-check-line"></i>
-            </div>
-            <div>Je m’engage avec MonAideCyber de manière non-lucrative</div>
+
+      <div className="formulaire-colonne-gauche">
+        <Choix
+          className="carte-choix-utilisation "
+          name="choix-utilisation-service"
+          surSelection={() => setChoix('ActiviteProfessionnelle')}
+        >
+          <div className="texte-centre">
+            <img
+              src={illustrationCadreProfessionnelMAC}
+              alt="Illustration d’une personne travaillant dans le cadre professionnel."
+            />
           </div>
-          <div className="item">
-            <div className="vert">
-              <i className="fr-icon-check-line"></i>
+          <div>
+            <TypographieH5>
+              Je souhaite utiliser librement l’outil de diagnostic de l’ANSSI
+            </TypographieH5>
+          </div>
+          <div className="checklist">
+            <div className="item">
+              <div className="vert">
+                <i className="fr-icon-check-line"></i>
+              </div>
+              <div>
+                Je peux m’appuyer sur MonAideCyber à des fins lucratives
+              </div>
             </div>
+            <div className="item">
+              <div className="rouge">
+                <i className="fr-icon-close-line"></i>
+              </div>
+              <div>Je ne suis pas référencé en tant qu’”Aidant cyber”</div>
+            </div>
+          </div>
+          <div className="mac-callout mac-callout-information">
+            <i className="fr-icon-user-fill" />
+            <div>Accessible à tous</div>
+          </div>
+        </Choix>
+      </div>
+      <div className="formulaire-colonne-droite">
+        <Choix
+          className="carte-choix-utilisation formulaire-colonne-droite"
+          name="choix-utilisation-service"
+          surSelection={() => setChoix('InteretGeneral')}
+        >
+          <div className="texte-centre">
+            <img
+              src={illustrationInteretGeneralMAC}
+              alt="Illustration d’une personne oeuvrant pour l’intérêt général."
+            />
+          </div>
+          <div>
+            <TypographieH5>
+              Je souhaite utiliser l’outil de diagnostic de l’ANSSI et être
+              référencé Aidant cyber
+            </TypographieH5>
+          </div>
+          <div className="checklist">
+            <div className="item">
+              <div className="vert">
+                <i className="fr-icon-check-line"></i>
+              </div>
+              <div>Je suis référencé Aidant cyber</div>
+            </div>
+            <div className="item">
+              <div className="rouge">
+                <i className="fr-icon-close-line"></i>
+              </div>
+              <div>
+                Je ne peux pas utiliser MonAideCyber à des fins lucratives
+              </div>
+            </div>
+          </div>
+          <div className="mac-callout mac-callout-information">
+            <i className="fr-icon-user-fill" />
             <div>
-              Je peux réaliser des diagnostics cybersécurité de premier niveau
-              en appliquant une méthodologie de l’ANSSI
+              <p>Accessible :</p>
+              <ul>
+                <li>aux agents publics</li>
+                <li>
+                  aux salariés ou adhérents d'un relais associatif ou qui
+                  souhaitent le devenir
+                </li>
+              </ul>
             </div>
           </div>
-          <div className="item">
-            <div className="vert">
-              <i className="fr-icon-check-line"></i>
-            </div>
-            <div>
-              Je peux être référencé “Aidant cyber” et mis en relation avec des
-              entités qui sollicitent une aide via le dispositif
-            </div>
-          </div>
-          <div className="item">
-            <div className="rouge">
-              <i className="fr-icon-close-line"></i>
-            </div>
-            <div>
-              Je ne peux pas proposer de prestations commerciales pendant et à
-              l’issue d’un diagnostic
-            </div>
-          </div>
-        </div>
-      </Choix>
-      <Choix
-        className="formulaire-colonne-droite"
-        name="choix-utilisation-service"
-        surSelection={() => setChoix('ActiviteProfessionnelle')}
-      >
-        <img
-          src={illustrationCadreProfessionnel}
-          alt="Illustration d’une personne travaillant dans le cadre professionnel."
-        />
-        <div>
-          <b>
-            Utiliser le dispositif dans le cadre de mon activité professionnelle
-          </b>
-        </div>
-        <div className="checklist">
-          <div className="item">
-            <div className="vert">
-              <i className="fr-icon-check-line"></i>
-            </div>
-            <div>Je m’engage avec MonAideCyber de manière non-lucrative</div>
-          </div>
-          <div className="item">
-            <div className="vert">
-              <i className="fr-icon-check-line"></i>
-            </div>
-            <div>
-              Je peux réaliser des diagnostics cybersécurité de premier niveau
-              en appliquant une méthodologie de l’ANSSI
-            </div>
-          </div>
-          <div className="item">
-            <div className="rouge">
-              <i className="fr-icon-close-line"></i>
-            </div>
-            <div>Je ne suis pas référencé en tant qu’”Aidant cyber”</div>
-          </div>
-          <div className="item">
-            <div className="vert">
-              <i className="fr-icon-check-line"></i>
-            </div>
-            <div>
-              Je peux proposer des prestations commerciales pendant et à l’issue
-              d’un diagnostic
-            </div>
-          </div>
-        </div>
-      </Choix>
+        </Choix>
+      </div>
 
       <div className="validation">
         <button
