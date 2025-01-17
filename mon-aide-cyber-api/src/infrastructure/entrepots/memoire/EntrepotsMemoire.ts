@@ -11,6 +11,7 @@ import {
   EntrepotRestitutionMemoire,
   EntrepotStatistiquesMemoire,
   EntrepotUtilisateurMemoire,
+  EntrepotUtilisateurMACMemoire,
 } from './EntrepotMemoire';
 import { EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
 import { EntrepotRestitution } from '../../../restitution/Restitution';
@@ -21,6 +22,7 @@ import { EntrepotUtilisateur } from '../../../authentification/Utilisateur';
 import { EntrepotAidant } from '../../../espace-aidant/Aidant';
 import { EntrepotProfilAidant } from '../../../espace-aidant/profil/profilAidant';
 import { EntrepotDemandeDiagnosticLibreAcces } from '../../../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
+import { EntrepotUtilisateursMAC } from '../../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export class EntrepotsMemoire implements Entrepots {
   private entrepotDiagnostic: EntrepotDiagnostic =
@@ -44,6 +46,9 @@ export class EntrepotsMemoire implements Entrepots {
     );
   private entrepotDemandesDiagnosticLibreAcces: EntrepotDemandeDiagnosticLibreAcces =
     new EntrepotDemandeDiagnosticLibreAccesMemoire();
+  private entrepotUtilisateursMAC: EntrepotUtilisateursMAC =
+    new EntrepotUtilisateurMACMemoire(this.entrepotAidants);
+
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
   }
@@ -82,5 +87,9 @@ export class EntrepotsMemoire implements Entrepots {
 
   demandesDiagnosticLibreAcces() {
     return this.entrepotDemandesDiagnosticLibreAcces;
+  }
+
+  utilisateursMAC(): EntrepotUtilisateursMAC {
+    return this.entrepotUtilisateursMAC;
   }
 }

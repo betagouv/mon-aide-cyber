@@ -10,13 +10,14 @@ import {
 import {
   EntrepotAidantMemoire,
   EntrepotEvenementJournalMemoire,
+  EntrepotUtilisateurMACMemoire,
 } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import crypto from 'crypto';
 import { RestitutionLancee } from '../../src/diagnostic/CapteurCommandeLanceRestitution';
 import { Publication } from '../../src/journalisation/Publication';
 import { DiagnosticLance } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
-import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
 import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
+import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 describe('Évènements', () => {
   beforeEach(() => {
@@ -49,72 +50,78 @@ describe('Évènements', () => {
   });
 
   describe('Diagnostic lancé', () => {
-    it("lorsque l'évènement est consommé, il est persisté", async () => {
-      const entrepot = new EntrepotEvenementJournalMemoire();
-      const entrepotAidant = new EntrepotAidantMemoire();
-      const aidant = unAidant().construis();
-      await entrepotAidant.persiste(aidant);
-      const identifiant = crypto.randomUUID();
+    describe("Dans le cas d'un Aidant", () => {
+      it("lorsque l'évènement est consommé, il est persisté", async () => {
+        const entrepot = new EntrepotEvenementJournalMemoire();
+        const entrepotAidant = new EntrepotAidantMemoire();
+        const aidant = unAidant().construis();
+        await entrepotAidant.persiste(aidant);
+        const identifiant = crypto.randomUUID();
 
-      await diagnosticLance(
-        entrepot,
-        unServiceAidant(entrepotAidant)
-      ).consomme<DiagnosticLance>({
-        identifiant: identifiant,
-        type: 'DIAGNOSTIC_LANCE',
-        date: FournisseurHorloge.maintenant(),
-        corps: {
-          identifiantDiagnostic: identifiant,
-          identifiantAidant: aidant.identifiant,
-        },
+        await diagnosticLance(
+          entrepot,
+          uneRechercheUtilisateursMAC(
+            new EntrepotUtilisateurMACMemoire(entrepotAidant)
+          )
+        ).consomme<DiagnosticLance>({
+          identifiant: identifiant,
+          type: 'DIAGNOSTIC_LANCE',
+          date: FournisseurHorloge.maintenant(),
+          corps: {
+            identifiantDiagnostic: identifiant,
+            identifiantUtilisateur: aidant.identifiant,
+          },
+        });
+
+        expect(await entrepot.tous()).toStrictEqual<Publication[]>([
+          {
+            identifiant: expect.any(String),
+            date: FournisseurHorloge.maintenant(),
+            type: 'DIAGNOSTIC_LANCE',
+            donnees: {
+              identifiantDiagnostic: identifiant,
+              identifiantUtilisateur: aidant.identifiant,
+              profil: 'Aidant',
+            },
+          },
+        ]);
       });
 
-      expect(await entrepot.tous()).toStrictEqual<Publication[]>([
-        {
-          identifiant: expect.any(String),
-          date: FournisseurHorloge.maintenant(),
+      it("Lorsque l'évènement est publié suite à un diagnostic Gendarme, l'information Gendarme est persistée", async () => {
+        const entrepot = new EntrepotEvenementJournalMemoire();
+        const entrepotAidant = new EntrepotAidantMemoire();
+        const aidant = unAidant().avecUnSiret('GENDARMERIE').construis();
+        await entrepotAidant.persiste(aidant);
+        const identifiant = crypto.randomUUID();
+
+        await diagnosticLance(
+          entrepot,
+          uneRechercheUtilisateursMAC(
+            new EntrepotUtilisateurMACMemoire(entrepotAidant)
+          )
+        ).consomme<DiagnosticLance>({
+          identifiant: identifiant,
           type: 'DIAGNOSTIC_LANCE',
-          donnees: {
+          date: FournisseurHorloge.maintenant(),
+          corps: {
             identifiantDiagnostic: identifiant,
-            identifiantAidant: aidant.identifiant,
-            profil: 'Aidant',
+            identifiantUtilisateur: aidant.identifiant,
           },
-        },
-      ]);
-    });
+        });
 
-    it("Lorsque l'évènement est publié suite à un diagnostic Gendarme, l'information Gendarme est persistée", async () => {
-      const entrepot = new EntrepotEvenementJournalMemoire();
-      const entrepotAidant = new EntrepotAidantMemoire();
-      const aidant = unAidant().avecUnSiret('GENDARMERIE').construis();
-      await entrepotAidant.persiste(aidant);
-      const identifiant = crypto.randomUUID();
-
-      await diagnosticLance(
-        entrepot,
-        unServiceAidant(entrepotAidant)
-      ).consomme<DiagnosticLance>({
-        identifiant: identifiant,
-        type: 'DIAGNOSTIC_LANCE',
-        date: FournisseurHorloge.maintenant(),
-        corps: {
-          identifiantDiagnostic: identifiant,
-          identifiantAidant: aidant.identifiant,
-        },
+        expect(await entrepot.tous()).toStrictEqual<Publication[]>([
+          {
+            identifiant: expect.any(String),
+            date: FournisseurHorloge.maintenant(),
+            type: 'DIAGNOSTIC_LANCE',
+            donnees: {
+              identifiantDiagnostic: identifiant,
+              identifiantUtilisateur: aidant.identifiant,
+              profil: 'Gendarme',
+            },
+          },
+        ]);
       });
-
-      expect(await entrepot.tous()).toStrictEqual<Publication[]>([
-        {
-          identifiant: expect.any(String),
-          date: FournisseurHorloge.maintenant(),
-          type: 'DIAGNOSTIC_LANCE',
-          donnees: {
-            identifiantDiagnostic: identifiant,
-            identifiantAidant: aidant.identifiant,
-            profil: 'Gendarme',
-          },
-        },
-      ]);
     });
   });
 

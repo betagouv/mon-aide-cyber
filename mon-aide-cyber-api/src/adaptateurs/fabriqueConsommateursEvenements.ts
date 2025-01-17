@@ -26,8 +26,8 @@ import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../relation/AdaptateurRelationsMAC';
 import { aidantInitieDiagnostic } from '../espace-aidant/tableau-de-bord/consommateursEvenements';
 import { demandeInitieDiagnosticLibreAcces } from '../diagnostic-libre-acces/consommateursEvenements';
-import { unServiceAidant } from '../espace-aidant/ServiceAidantMAC';
 import { fabriqueEntrepots } from './fabriqueEntrepots';
+import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -53,7 +53,7 @@ export const fabriqueConsommateursEvenements = (
       [
         diagnosticLance(
           entrepotJournalisation,
-          unServiceAidant(fabriqueEntrepots().aidants())
+          uneRechercheUtilisateursMAC(fabriqueEntrepots().utilisateursMAC())
         ),
         aidantInitieDiagnostic(adaptateurRelations),
       ],

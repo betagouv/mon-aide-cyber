@@ -20,7 +20,7 @@ describe("Les consommateurs d'évènements du tableau de bord", () => {
       ).consomme<DiagnosticLance>({
         corps: {
           identifiantDiagnostic,
-          identifiantAidant,
+          identifiantUtilisateur: identifiantAidant,
         },
         identifiant: crypto.randomUUID(),
         type: 'DIAGNOSTIC_LANCE',
