@@ -1,6 +1,7 @@
 import { FormEvent, useCallback, useEffect, useReducer, useState } from 'react';
 import {
   cguCliquees,
+  creationEspaceAidantTransmise,
   creationEspaceAidantValidee,
   initialiseReducteur,
   reducteurCreationEspaceAidant,
@@ -15,6 +16,7 @@ export type CorpsFormulaireCreationEspaceAidant = {
 };
 
 type ProprietesFormulaireCreationEspaceAidant = {
+  soumissionReussie?: boolean;
   surSoumission: (formulaire: CorpsFormulaireCreationEspaceAidant) => void;
 };
 
@@ -23,6 +25,7 @@ type ProprietesComposantCreationEspaceAidant =
 
 export const ComposantCreationEspaceAidant = ({
   surSoumission,
+  soumissionReussie,
 }: ProprietesComposantCreationEspaceAidant) => {
   const [etatCreationEspaceAidant, envoie] = useReducer(
     reducteurCreationEspaceAidant,
@@ -35,6 +38,12 @@ export const ComposantCreationEspaceAidant = ({
     e.preventDefault();
     setBoutonValiderClique(true);
   }, []);
+
+  useEffect(() => {
+    if (soumissionReussie) {
+      envoie(creationEspaceAidantTransmise());
+    }
+  }, [soumissionReussie]);
 
   useEffect(() => {
     if (
@@ -141,13 +150,13 @@ export const ComposantCreationEspaceAidant = ({
   );
 };
 export const FormulaireCreationEspaceAidant = ({
-  // token,
   surSoumission,
+  soumissionReussie,
 }: ProprietesFormulaireCreationEspaceAidant) => {
   return (
     <ComposantCreationEspaceAidant
       surSoumission={surSoumission}
-      // token={token}
+      soumissionReussie={soumissionReussie}
     />
   );
 };

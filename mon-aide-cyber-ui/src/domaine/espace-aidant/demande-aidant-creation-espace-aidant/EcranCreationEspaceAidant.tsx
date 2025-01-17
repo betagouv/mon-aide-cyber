@@ -7,11 +7,14 @@ import { useMoteurDeLiens } from '../../../hooks/useMoteurDeLiens.ts';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
 import './ecran-creation-espace-aidant.scss';
 import Button from '../../../composants/atomes/Button/Button.tsx';
-import { useNavigate } from 'react-router-dom';
 import illustrationDeuxPersonnesSvg from '../../../../public/images/illustration-deux-personnes.svg';
 import { useMutation } from '@tanstack/react-query';
 import { ReponseHATEOAS } from '../../Lien.ts';
-import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import {
+  constructeurParametresAPI,
+  ParametresAPI,
+} from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { useNavigate } from 'react-router-dom';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 
 export type CorpsCreationEspaceAidant = {
@@ -21,13 +24,26 @@ export type CorpsCreationEspaceAidant = {
   token: string;
 };
 
-type EcranCreationEspaceAidant = {
+type ProprietesEcranCreationEspaceAidant = {
   token: string;
+  macAPI: {
+    execute: <REPONSE, REPONSEAPI, CORPS = void>(
+      parametresAPI: ParametresAPI<CORPS>,
+      transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
+    ) => Promise<REPONSE>;
+  };
 };
+
+export const CapteurEcranCreationEspaceAidant = ({
+  token,
+}: {
+  token: string;
+}) => <EcranCreationEspaceAidant token={token} macAPI={useMACAPI()} />;
+
 export const EcranCreationEspaceAidant = ({
   token,
-}: EcranCreationEspaceAidant) => {
-  const macAPI = useMACAPI();
+  macAPI,
+}: ProprietesEcranCreationEspaceAidant) => {
   const navigate = useNavigate();
 
   useRecupereContexteNavigation(
@@ -41,7 +57,7 @@ export const EcranCreationEspaceAidant = ({
     'finalise-creation-nouvel-espace-aidant'
   );
 
-  const { mutate } = useMutation({
+  const { mutate, isSuccess } = useMutation({
     mutationKey: ['finaliser-creation-espace-aidant'],
     mutationFn: (parametresMutation: CorpsCreationEspaceAidant) => {
       if (!parametresMutation.token) {
@@ -77,7 +93,8 @@ export const EcranCreationEspaceAidant = ({
       >(parametresAPI, async (json) => await json);
     },
     onSuccess: () => {
-      navigate('/connexion');
+      if (lienFinalisationNouvelEspaceAidant.accedeALaRessource)
+        navigate('/connexion');
     },
   });
 
@@ -141,6 +158,7 @@ export const EcranCreationEspaceAidant = ({
               <div className="fr-col-8">
                 <FormulaireCreationEspaceAidant
                   surSoumission={soumetFormulaire}
+                  soumissionReussie={isSuccess}
                 />
               </div>
             </div>

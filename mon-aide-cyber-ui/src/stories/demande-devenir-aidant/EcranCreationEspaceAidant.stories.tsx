@@ -2,15 +2,17 @@ import { Meta, StoryObj } from '@storybook/react';
 import { ParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ContexteNavigationMAC } from '../../fournisseurs/ContexteNavigationMAC.tsx';
 import { expect, userEvent, within } from '@storybook/test';
-import { ComposantCreationEspaceAidant } from '../../domaine/espace-aidant/demande-aidant-creation-espace-aidant/FormulaireCreationEspaceAidant.tsx';
+import { EcranCreationEspaceAidant } from '../../domaine/espace-aidant/demande-aidant-creation-espace-aidant/EcranCreationEspaceAidant.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MemoryRouter } from 'react-router-dom';
 
 const meta = {
   title: "Création de l'espace Aidant suite à une demande devenir Aidant",
-  component: ComposantCreationEspaceAidant,
+  component: EcranCreationEspaceAidant,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof ComposantCreationEspaceAidant>;
+} satisfies Meta<typeof EcranCreationEspaceAidant>;
 
 let valeursSaisies = {};
 const macAPIMemoire = {
@@ -30,26 +32,38 @@ const macAPIMemoire = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 export const CreationEspaceAidant: Story = {
   args: { token: 'aaaa', macAPI: macAPIMemoire },
   decorators: [
     (story) => (
-      <ContexteNavigationMAC.Provider
-        value={{
-          etat: { 'finalise-creation-espace-aidant': { url: '' } },
-          setEtat: () => {
-            return;
-          },
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          ajouteEtat: () => {},
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          navigue: (_moteurDeLiens, _action, _exclusion) => {},
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          retourAccueil: () => {},
-        }}
-      >
-        {story()}
-      </ContexteNavigationMAC.Provider>
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <ContexteNavigationMAC.Provider
+            value={{
+              etat: { 'finalise-creation-espace-aidant': { url: '' } },
+              setEtat: () => {
+                return;
+              },
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              ajouteEtat: () => {},
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              navigue: (_moteurDeLiens, _action, _exclusion) => {},
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              retourAccueil: () => {},
+            }}
+          >
+            {story()}
+          </ContexteNavigationMAC.Provider>
+        </MemoryRouter>
+      </QueryClientProvider>
     ),
   ],
   name: "Crée l'espace de l'aidant correspondant à la demande devenir Aidant",
