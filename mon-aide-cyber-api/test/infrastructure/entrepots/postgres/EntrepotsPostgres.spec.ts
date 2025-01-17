@@ -68,6 +68,8 @@ import { EntrepotProfilAidantPostgres } from '../../../../src/infrastructure/ent
 import knexfile from './../../../../src/infrastructure/entrepots/postgres/knexfile';
 import knex from 'knex';
 import { AggregatNonTrouve } from '../../../../src/domaine/Aggregat';
+import { UtilisateurMAC } from '../../../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { EntrepotUtilisateurMACPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotUtilisateurMACPostgres';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {
@@ -1238,5 +1240,52 @@ describe('Entrepot profil aidant', () => {
       email: aidant.email,
       dateSignatureCGU: FournisseurHorloge.maintenant(),
     });
+  });
+});
+
+describe('Entrepot Utilisateurs MAC', () => {
+  beforeEach(async () => {
+    nettoieLaBaseDeDonneesAidants();
+  });
+  it('Retourne un utilisateur au profil Aidant', async () => {
+    const aidant = unAidant().construis();
+    await new EntrepotAidantPostgres(new ServiceDeChiffrementClair()).persiste(
+      aidant
+    );
+
+    const utilisateurMAC =
+      await new EntrepotUtilisateurMACPostgres().rechercheParIdentifiant(
+        aidant.identifiant
+      );
+
+    expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
+      identifiant: aidant.identifiant,
+      profil: 'Aidant',
+    });
+  });
+
+  it('Retourne un utilisateur au profil Gendarme', async () => {
+    const aidant = unAidant().avecUnSiret('GENDARMERIE').construis();
+    await new EntrepotAidantPostgres(new ServiceDeChiffrementClair()).persiste(
+      aidant
+    );
+
+    const utilisateurMAC =
+      await new EntrepotUtilisateurMACPostgres().rechercheParIdentifiant(
+        aidant.identifiant
+      );
+
+    expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
+      identifiant: aidant.identifiant,
+      profil: 'Gendarme',
+    });
+  });
+
+  it("Renvoie une erreur AggregatNonTrouvé si l'utilisateur n'existe pas", async () => {
+    expect(
+      new EntrepotUtilisateurMACPostgres().rechercheParIdentifiant(
+        crypto.randomUUID()
+      )
+    ).rejects.toThrowError(new AggregatNonTrouve('utilisateur MAC'));
   });
 });
