@@ -2,8 +2,7 @@ import { ConsommateurEvenement, Evenement } from '../domaine/BusEvenement';
 import crypto from 'crypto';
 import { EntrepotEvenementJournal, Publication } from './Publication';
 import { DiagnosticLance } from '../diagnostic/CapteurCommandeLanceDiagnostic';
-import { ServiceAidant } from '../espace-aidant/ServiceAidant';
-import { estSiretGendarmerie } from '../espace-aidant/Aidant';
+import { RechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 const consommateurEvenement = () => (entrepot: EntrepotEvenementJournal) =>
   new (class implements ConsommateurEvenement {
@@ -15,21 +14,23 @@ const consommateurEvenement = () => (entrepot: EntrepotEvenementJournal) =>
 export const restitutionLancee = consommateurEvenement();
 
 const consommateurDiagnosticLance =
-  () => (entrepot: EntrepotEvenementJournal, serviceAidant: ServiceAidant) =>
+  () =>
+  (
+    entrepot: EntrepotEvenementJournal,
+    rechercheUtilisateursMAC: RechercheUtilisateursMAC
+  ) =>
     new (class implements ConsommateurEvenement {
       consomme<E extends Evenement<unknown>>(evenement: E): Promise<void> {
         const { corps } = evenement as DiagnosticLance;
-        return serviceAidant
-          .parIdentifiant(corps.identifiantAidant)
-          .then((aidant) => {
+        return rechercheUtilisateursMAC
+          .rechercheParIdentifiant(corps.identifiantUtilisateur)
+          .then((utilisateur) => {
             return entrepot.persiste(
               genereEvenement({
                 ...evenement,
                 corps: {
                   ...corps,
-                  profil: estSiretGendarmerie(aidant?.siret)
-                    ? 'Gendarme'
-                    : 'Aidant',
+                  profil: utilisateur.profil,
                 },
               })
             );

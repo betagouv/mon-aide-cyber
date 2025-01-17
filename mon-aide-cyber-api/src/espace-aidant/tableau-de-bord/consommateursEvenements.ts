@@ -12,7 +12,7 @@ export const aidantInitieDiagnostic = (
     ): Promise<void> {
       const diagnosticLance = evenement as DiagnosticLance;
       const tuple = unTupleAidantInitieDiagnostic(
-        diagnosticLance.corps.identifiantAidant,
+        diagnosticLance.corps.identifiantUtilisateur,
         diagnosticLance.corps.identifiantDiagnostic
       );
 

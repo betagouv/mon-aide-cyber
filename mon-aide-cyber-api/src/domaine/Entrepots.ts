@@ -8,6 +8,7 @@ import { EntrepotUtilisateur } from '../authentification/Utilisateur';
 import { EntrepotAidant } from '../espace-aidant/Aidant';
 import { EntrepotProfilAidant } from '../espace-aidant/profil/profilAidant';
 import { EntrepotDemandeDiagnosticLibreAcces } from '../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
+import { EntrepotUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export interface Entrepots {
   diagnostic(): EntrepotDiagnostic;
@@ -29,4 +30,6 @@ export interface Entrepots {
   profilAidant(): EntrepotProfilAidant;
 
   demandesDiagnosticLibreAcces(): EntrepotDemandeDiagnosticLibreAcces;
+
+  utilisateursMAC(): EntrepotUtilisateursMAC;
 }

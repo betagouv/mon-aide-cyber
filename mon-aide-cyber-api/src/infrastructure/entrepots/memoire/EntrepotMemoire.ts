@@ -31,7 +31,11 @@ import {
   EntrepotUtilisateur,
   Utilisateur,
 } from '../../../authentification/Utilisateur';
-import { Aidant, EntrepotAidant } from '../../../espace-aidant/Aidant';
+import {
+  Aidant,
+  EntrepotAidant,
+  estSiretGendarmerie,
+} from '../../../espace-aidant/Aidant';
 import {
   EntrepotProfilAidant,
   ProfilAidant,
@@ -40,6 +44,11 @@ import {
   DemandeDiagnosticLibreAcces,
   EntrepotDemandeDiagnosticLibreAcces,
 } from '../../../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
+import {
+  EntrepotUtilisateursMAC,
+  UtilisateurMAC,
+} from '../../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { unServiceAidant } from '../../../espace-aidant/ServiceAidantMAC';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -216,6 +225,7 @@ export class EntrepotUtilisateurMemoire
     }
     return Promise.resolve(utilisateurTrouve);
   }
+
   async rechercheParIdentifiantDeConnexion(
     identifiantDeConnexion: string
   ): Promise<Utilisateur> {
@@ -262,3 +272,42 @@ export class EntrepotProfilAidantMemoire implements EntrepotProfilAidant {
 export class EntrepotDemandeDiagnosticLibreAccesMemoire
   extends EntrepotMemoire<DemandeDiagnosticLibreAcces>
   implements EntrepotDemandeDiagnosticLibreAcces {}
+
+export class EntrepotUtilisateurMACMemoire
+  extends EntrepotMemoire<UtilisateurMAC>
+  implements EntrepotUtilisateursMAC
+{
+  constructor(private readonly entrepotAidant: EntrepotAidant) {
+    super();
+  }
+
+  rechercheParIdentifiant(identifiant: crypto.UUID): Promise<UtilisateurMAC> {
+    return unServiceAidant(this.entrepotAidant)
+      .parIdentifiant(identifiant)
+      .then((aidant) => {
+        if (aidant) {
+          return {
+            identifiant: aidant.identifiant,
+            profil: estSiretGendarmerie(aidant?.siret) ? 'Gendarme' : 'Aidant',
+          };
+        }
+        return Promise.reject('Utilisateur MAC non trouvé');
+      });
+  }
+
+  lis(_identifiant: string): Promise<UtilisateurMAC> {
+    throw new Error('Method not implemented.');
+  }
+
+  persiste(_entite: UtilisateurMAC): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  tous(): Promise<UtilisateurMAC[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  typeAggregat(): string {
+    throw new Error('Method not implemented.');
+  }
+}

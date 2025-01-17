@@ -33,7 +33,7 @@ export class CapteurCommandeLanceDiagnostic
           date: FournisseurHorloge.maintenant(),
           corps: {
             identifiantDiagnostic: diagnostic.identifiant,
-            identifiantAidant: commande.identifiantAidant,
+            identifiantUtilisateur: commande.identifiantAidant,
           },
         });
         return diagnostic;
@@ -51,5 +51,5 @@ export type CommandeLanceDiagnostic = Omit<Commande, 'type'> & {
 
 export type DiagnosticLance = Evenement<{
   identifiantDiagnostic: crypto.UUID;
-  identifiantAidant: crypto.UUID;
+  identifiantUtilisateur: crypto.UUID;
 }>;

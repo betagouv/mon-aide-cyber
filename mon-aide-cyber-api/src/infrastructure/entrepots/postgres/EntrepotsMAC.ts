@@ -20,6 +20,8 @@ import { EntrepotProfilAidant } from '../../../espace-aidant/profil/profilAidant
 import { EntrepotProfilAidantPostgres } from './EntrepotProfilAidantPostgres';
 import { EntrepotDemandeDiagnosticLibreAcces } from '../../../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
 import { EntrepotDemandeDiagnosticLibreAccesPostgres } from './EntrepotDemandeDiagnosticLibreAccesPostgres';
+import { EntrepotUtilisateursMAC } from '../../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { EntrepotUtilisateurMACMemoire } from '../memoire/EntrepotMemoire';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -43,6 +45,8 @@ export class EntrepotsMAC implements Entrepots {
     new EntrepotProfilAidantPostgres(adaptateurServiceChiffrement());
   private entrepotDemandeDiagnosticLibreAcces: EntrepotDemandeDiagnosticLibreAcces =
     new EntrepotDemandeDiagnosticLibreAccesPostgres();
+  private entrepotUtilisateursMAC: EntrepotUtilisateursMAC =
+    new EntrepotUtilisateurMACMemoire(this.entrepotAidant);
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
@@ -81,5 +85,9 @@ export class EntrepotsMAC implements Entrepots {
 
   demandesDiagnosticLibreAcces(): EntrepotDemandeDiagnosticLibreAcces {
     return this.entrepotDemandeDiagnosticLibreAcces;
+  }
+
+  utilisateursMAC(): EntrepotUtilisateursMAC {
+    return this.entrepotUtilisateursMAC;
   }
 }

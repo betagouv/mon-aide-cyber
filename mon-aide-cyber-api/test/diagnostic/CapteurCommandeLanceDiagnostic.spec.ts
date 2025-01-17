@@ -113,7 +113,7 @@ describe('Capteur pour lancer un diagnostic', () => {
       date: maintenant,
       corps: {
         identifiantDiagnostic: diagnostic.identifiant,
-        identifiantAidant,
+        identifiantUtilisateur: identifiantAidant,
       },
     });
   });
