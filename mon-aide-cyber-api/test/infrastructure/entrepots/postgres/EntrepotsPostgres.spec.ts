@@ -5,6 +5,7 @@ import {
   nettoieLaBaseDeDonneesRelations,
   nettoieLaBaseDeDonneesStatistiques,
   nettoieLaBaseDeDonneesUtilisateurs,
+  nettoieLaBaseDeDonneesUtilisateursInscrits,
 } from '../../../utilitaires/nettoyeurBDD';
 import { EntrepotAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAidantPostgres';
 import { ServiceDeChiffrementClair } from '../../securite/ServiceDeChiffrementClair';
@@ -70,6 +71,12 @@ import knex from 'knex';
 import { AggregatNonTrouve } from '../../../../src/domaine/Aggregat';
 import { UtilisateurMAC } from '../../../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { EntrepotUtilisateurMACPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotUtilisateurMACPostgres';
+import { EntrepotUtilisateurInscritPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotUtilisateurInscritPostgres';
+import { unUtilisateurInscrit } from '../../../constructeurs/constructeurUtilisateurInscrit';
+import {
+  EntiteUtilisateurInscrit,
+  UtilisateurInscrit,
+} from '../../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {
@@ -1287,5 +1294,105 @@ describe('Entrepot Utilisateurs MAC', () => {
         crypto.randomUUID()
       )
     ).rejects.toThrowError(new AggregatNonTrouve('utilisateur MAC'));
+  });
+});
+
+describe('Entrepot Utilisateur Inscrit', () => {
+  const serviceDeChiffrement: FauxServiceDeChiffrement =
+    new FauxServiceDeChiffrement(new Map());
+  let entrepot = new EntrepotUtilisateurInscritPostgres(serviceDeChiffrement);
+
+  beforeEach(async () => {
+    await nettoieLaBaseDeDonneesUtilisateursInscrits();
+    serviceDeChiffrement.nettoie();
+  });
+
+  it('Persiste un utilisateur inscrit', async () => {
+    const utilisateurInscrit = unUtilisateurInscrit().construis();
+    serviceDeChiffrement.ajoute(utilisateurInscrit.email, 'aaa');
+    serviceDeChiffrement.ajoute(utilisateurInscrit.nomPrenom, 'ccc');
+
+    await entrepot.persiste(utilisateurInscrit);
+
+    const utilisateurInscritRecu = await new EntrepotUtilisateurInscritPostgres(
+      serviceDeChiffrement
+    ).lis(utilisateurInscrit.identifiant);
+    expect(utilisateurInscritRecu).toStrictEqual<UtilisateurInscrit>(
+      utilisateurInscrit
+    );
+  });
+
+  it('Persiste un utilisateur inscrit avec son Siret', async () => {
+    const aidant = unUtilisateurInscrit().avecLeSiret('1234567891').construis();
+    serviceDeChiffrement.ajoute(aidant.entite.siret!, 'cccc');
+
+    await entrepot.persiste(aidant);
+
+    const utilisateurInscritRecu = await new EntrepotUtilisateurInscritPostgres(
+      serviceDeChiffrement
+    ).lis(aidant.identifiant);
+    expect(
+      utilisateurInscritRecu.entite
+    ).toStrictEqual<EntiteUtilisateurInscrit>({
+      siret: aidant.entite.siret!,
+    });
+  });
+
+  it('Persiste un utilisateur inscrit avec la date de signature des CGU', async () => {
+    const dateSignatureCGU = new Date();
+    const aidant = unUtilisateurInscrit()
+      .avecUneDateDeSignatureDeCGU(dateSignatureCGU)
+      .construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(new Map());
+
+    await entrepot.persiste(aidant);
+
+    const utilisateurInscritRecu = await new EntrepotUtilisateurInscritPostgres(
+      serviceDeChiffrement
+    ).lis(aidant.identifiant);
+    expect(utilisateurInscritRecu.dateSignatureCGU).toStrictEqual(
+      dateSignatureCGU
+    );
+  });
+
+  describe('Pour le type Utilisateur inscrit', () => {
+    it('Retourne une erreur s’il ne s’agit pas d’un Utilisateur inscrit', async () => {
+      const id = crypto.randomUUID();
+      await knex(knexfile)
+        .insert({
+          id,
+          type: 'AIDANT',
+          donnees: { email: 'jean.dupont@aidant.com' },
+        })
+        .into('utilisateurs_mac');
+
+      const utilisateurInscritTrouve = new EntrepotUtilisateurInscritPostgres(
+        new ServiceDeChiffrementClair()
+      ).lis(id);
+
+      expect(utilisateurInscritTrouve).rejects.toStrictEqual(
+        new AggregatNonTrouve('utilisateur inscrit')
+      );
+    });
+
+    it('Retourne uniquement les utilisateurs inscrits', async () => {
+      const utilisateurInscrit = unUtilisateurInscrit().construis();
+      const serviceDeChiffrement = new ServiceDeChiffrementClair();
+      entrepot = new EntrepotUtilisateurInscritPostgres(serviceDeChiffrement);
+
+      await entrepot.persiste(utilisateurInscrit);
+      await knex(knexfile)
+        .insert({
+          id: crypto.randomUUID(),
+          type: 'AIDANT',
+          donnees: { email: 'jean.dupont@aidant.com' },
+        })
+        .into('utilisateurs_mac');
+
+      const aidants = await new EntrepotUtilisateurInscritPostgres(
+        serviceDeChiffrement
+      ).tous();
+      expect(aidants).toStrictEqual<UtilisateurInscrit[]>([utilisateurInscrit]);
+    });
   });
 });
