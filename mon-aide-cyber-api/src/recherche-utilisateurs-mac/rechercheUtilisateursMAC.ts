@@ -2,9 +2,10 @@ import crypto from 'crypto';
 import { Aggregat } from '../domaine/Aggregat';
 import { Entrepot } from '../domaine/Entrepot';
 
-export type ProfilAidant = 'Aidant' | 'UtilisateurInscrit' | 'Gendarme';
+export type ProfilUtilisateurMAC = 'Aidant' | 'UtilisateurInscrit' | 'Gendarme';
+
 export type UtilisateurMAC = Aggregat & {
-  profil: ProfilAidant;
+  profil: ProfilUtilisateurMAC;
 };
 
 export type UtilisateurMACDTO = UtilisateurMAC;

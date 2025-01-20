@@ -28,6 +28,7 @@ import { aidantInitieDiagnostic } from '../espace-aidant/tableau-de-bord/consomm
 import { demandeInitieDiagnosticLibreAcces } from '../diagnostic-libre-acces/consommateursEvenements';
 import { fabriqueEntrepots } from './fabriqueEntrepots';
 import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { utilisateurInscritInitieDiagnostic } from '../espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -56,6 +57,10 @@ export const fabriqueConsommateursEvenements = (
           uneRechercheUtilisateursMAC(fabriqueEntrepots().utilisateursMAC())
         ),
         aidantInitieDiagnostic(
+          adaptateurRelations,
+          uneRechercheUtilisateursMAC(fabriqueEntrepots().utilisateursMAC())
+        ),
+        utilisateurInscritInitieDiagnostic(
           adaptateurRelations,
           uneRechercheUtilisateursMAC(fabriqueEntrepots().utilisateursMAC())
         ),

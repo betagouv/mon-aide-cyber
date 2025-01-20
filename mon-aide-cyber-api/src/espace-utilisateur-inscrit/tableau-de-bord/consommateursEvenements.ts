@@ -1,18 +1,14 @@
 import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
+import { RechercheUtilisateursMAC } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { ConsommateurEvenement, Evenement } from '../../domaine/BusEvenement';
 import { DiagnosticLance } from '../../diagnostic/CapteurCommandeLanceDiagnostic';
-import { unTupleAidantInitieDiagnostic } from '../../diagnostic/tuples';
-import {
-  ProfilUtilisateurMAC,
-  RechercheUtilisateursMAC,
-} from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { unTupleUtilisateurInscritInitieDiagnostic } from '../../diagnostic/tuples';
 
-const profilsUtilisateurs: ProfilUtilisateurMAC[] = ['Aidant', 'Gendarme'];
-export const aidantInitieDiagnostic = (
+export const utilisateurInscritInitieDiagnostic = (
   adaptateurRelations: AdaptateurRelations,
   rechercheUtilisateursMAC: RechercheUtilisateursMAC
-) =>
-  new (class implements ConsommateurEvenement {
+): ConsommateurEvenement => {
+  return new (class implements ConsommateurEvenement {
     async consomme<E extends Evenement<unknown> = DiagnosticLance>(
       evenement: E
     ): Promise<void> {
@@ -20,8 +16,8 @@ export const aidantInitieDiagnostic = (
       return rechercheUtilisateursMAC
         .rechercheParIdentifiant(diagnosticLance.corps.identifiantUtilisateur)
         .then((utilisateur) => {
-          if (utilisateur && profilsUtilisateurs.includes(utilisateur.profil)) {
-            const tuple = unTupleAidantInitieDiagnostic(
+          if (utilisateur && utilisateur.profil === 'UtilisateurInscrit') {
+            const tuple = unTupleUtilisateurInscritInitieDiagnostic(
               diagnosticLance.corps.identifiantUtilisateur,
               diagnosticLance.corps.identifiantDiagnostic
             );
@@ -31,3 +27,4 @@ export const aidantInitieDiagnostic = (
         });
     }
   })();
+};

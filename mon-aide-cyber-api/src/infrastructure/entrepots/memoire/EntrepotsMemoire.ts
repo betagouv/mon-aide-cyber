@@ -12,6 +12,7 @@ import {
   EntrepotStatistiquesMemoire,
   EntrepotUtilisateurMemoire,
   EntrepotUtilisateurMACMemoire,
+  EntrepotUtilisateurInscritMemoire,
 } from './EntrepotMemoire';
 import { EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
 import { EntrepotRestitution } from '../../../restitution/Restitution';
@@ -47,7 +48,10 @@ export class EntrepotsMemoire implements Entrepots {
   private entrepotDemandesDiagnosticLibreAcces: EntrepotDemandeDiagnosticLibreAcces =
     new EntrepotDemandeDiagnosticLibreAccesMemoire();
   private entrepotUtilisateursMAC: EntrepotUtilisateursMAC =
-    new EntrepotUtilisateurMACMemoire(this.entrepotAidants);
+    new EntrepotUtilisateurMACMemoire({
+      aidant: this.entrepotAidants,
+      utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+    });
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
