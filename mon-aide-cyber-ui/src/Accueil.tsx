@@ -2,6 +2,19 @@ import { FormulaireDeContact } from './composants/communs/FormulaireDeContact/Fo
 import { ActionsPiedDePage } from './composants/communs/ActionsPiedDePage.tsx';
 
 export const Accueil = () => {
+  // const [motDGClique, setMotDGClique] = useState<boolean>(true);
+  // const [motGeneralClique, setMotGeneralClique] = useState<boolean>(false);
+  //
+  // const surCliqueMotDG = useCallback(() => {
+  //   setMotGeneralClique(false);
+  //   setMotDGClique(true);
+  // }, []);
+  //
+  // const surCliqueMotGeneral = useCallback(() => {
+  //   setMotDGClique(false);
+  //   setMotGeneralClique(true);
+  // }, []);
+
   return (
     <main role="main">
       <div className="mode-fonce accueil">
