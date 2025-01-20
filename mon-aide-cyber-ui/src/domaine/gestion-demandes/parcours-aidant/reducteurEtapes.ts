@@ -23,6 +23,7 @@ export type Etape =
 type DemandeDevenirAidant = {
   type: TypeAidantEtSonEntite;
   signatureCharte?: boolean;
+  CGUValidees?: boolean;
 };
 
 export type EtatEtapesDemande = {
@@ -35,6 +36,7 @@ enum TypeActionEtapesDemande {
   CHOIX_UTILISATION_FAITE = 'CHOIX_UTILISATION_FAITE',
   CHOIX_TYPE_AIDANT_FAIT = 'CHOIX_TYPE_AIDANT_FAIT',
   CHARTE_AIDANT_SIGNEE = 'CHARTE_AIDANT_SIGNEE',
+  CGU_VALIDEES = 'CGU_VALIDEES',
   DEMANDE_DEVENIR_AIDANT_CREEE = 'DEMANDE_DEVENIR_AIDANT_CREEE',
   RETOUR_ETAPE_PRECEDENTE = 'RETOUR_ETAPE_PRECEDENTE',
 }
@@ -51,6 +53,7 @@ type ActionEtapesDemande =
   | {
       type: TypeActionEtapesDemande.CHARTE_AIDANT_SIGNEE;
     }
+  | { type: TypeActionEtapesDemande.CGU_VALIDEES }
   | { type: TypeActionEtapesDemande.DEMANDE_DEVENIR_AIDANT_CREEE }
   | {
       type: TypeActionEtapesDemande.RETOUR_ETAPE_PRECEDENTE;
@@ -104,6 +107,17 @@ export const reducteurEtapes = (
         }),
         etapeCourante: 'formulaireDevenirAidant',
       };
+    case TypeActionEtapesDemande.CGU_VALIDEES:
+      return {
+        ...etat,
+        ...(etat.demande && {
+          demande: {
+            ...etat.demande,
+            CGUValidees: true,
+          },
+        }),
+        etapeCourante: 'formulaireDevenirAidant',
+      };
     case TypeActionEtapesDemande.DEMANDE_DEVENIR_AIDANT_CREEE:
       return {
         ...etat,
@@ -128,6 +142,10 @@ export const choixTypeAidantFait = (
 
 export const signeCharteAidant = (): ActionEtapesDemande => ({
   type: TypeActionEtapesDemande.CHARTE_AIDANT_SIGNEE,
+});
+
+export const valideCGU = (): ActionEtapesDemande => ({
+  type: TypeActionEtapesDemande.CGU_VALIDEES,
 });
 
 export const demandeDevenirAidantCreee = (): ActionEtapesDemande => ({
