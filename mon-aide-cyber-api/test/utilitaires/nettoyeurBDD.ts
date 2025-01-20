@@ -16,7 +16,7 @@ class EntrepotsPostgresPourLesTests {
     await this.knex('journal_mac.evenements').truncate();
   }
 
-  async nettoieAidants() {
+  async nettoieUtilisateursMAC() {
     await this.knex('utilisateurs_mac').truncate();
   }
 
@@ -45,7 +45,13 @@ const entrepotsPostgresPourLesTests = new EntrepotsPostgresPourLesTests();
 
 export const nettoieLaBaseDeDonneesAidants = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
-    await entrepotsPostgresPourLesTests.nettoieAidants();
+    await entrepotsPostgresPourLesTests.nettoieUtilisateursMAC();
+  }
+};
+
+export const nettoieLaBaseDeDonneesUtilisateursInscrits = async () => {
+  if (process.env.URL_SERVEUR_BASE_DONNEES) {
+    await entrepotsPostgresPourLesTests.nettoieUtilisateursMAC();
   }
 };
 
@@ -94,7 +100,7 @@ export const nettoieLaBaseDeDonneesDemandeDiagnosticLibreAcces = async () => {
 export const nettoieLaBaseDeDonneesStatistiques = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
     await new EntrepotsPostgresPourLesTests().nettoieRelations();
-    await new EntrepotsPostgresPourLesTests().nettoieAidants();
+    await new EntrepotsPostgresPourLesTests().nettoieUtilisateursMAC();
     await new EntrepotsPostgresPourLesTests().nettoieDiagnostics();
   }
 };

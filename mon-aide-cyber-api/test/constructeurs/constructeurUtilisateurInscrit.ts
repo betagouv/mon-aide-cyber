@@ -15,6 +15,18 @@ class ConstructeurUtilisateurInscrit
   private identifiant: crypto.UUID = crypto.randomUUID();
   private nomPrenom: string = fakerFR.person.fullName();
 
+  avecLeSiret(siret: string): ConstructeurUtilisateurInscrit {
+    this.entite = { siret };
+    return this;
+  }
+
+  avecUneDateDeSignatureDeCGU(
+    dateSignatureCGU: Date
+  ): ConstructeurUtilisateurInscrit {
+    this.dateSignatureCGU = dateSignatureCGU;
+    return this;
+  }
+
   construis(): UtilisateurInscrit {
     return {
       dateSignatureCGU: this.dateSignatureCGU,
