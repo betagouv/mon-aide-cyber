@@ -36,9 +36,15 @@ export class EntrepotUtilisateurMACPostgres
   }
 
   protected deDTOAEntite(dto: UtilisateurMACDTO): UtilisateurMAC {
+    const profil =
+      dto.type === 'UTILISATEUR_INSCRIT'
+        ? 'UtilisateurInscrit'
+        : estSiretGendarmerie(dto.siret)
+          ? 'Gendarme'
+          : 'Aidant';
     return {
       identifiant: dto.id,
-      profil: estSiretGendarmerie(dto.siret) ? 'Gendarme' : 'Aidant',
+      profil,
     };
   }
   protected champsAMettreAJour(

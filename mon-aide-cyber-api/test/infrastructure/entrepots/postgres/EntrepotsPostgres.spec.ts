@@ -1288,6 +1288,23 @@ describe('Entrepot Utilisateurs MAC', () => {
     });
   });
 
+  it('Retourne un utilisateur au profil Utilisateur Inscrit', async () => {
+    const utilisateurInscrit = unUtilisateurInscrit().construis();
+    await new EntrepotUtilisateurInscritPostgres(
+      new ServiceDeChiffrementClair()
+    ).persiste(utilisateurInscrit);
+
+    const utilisateurMAC =
+      await new EntrepotUtilisateurMACPostgres().rechercheParIdentifiant(
+        utilisateurInscrit.identifiant
+      );
+
+    expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
+      identifiant: utilisateurInscrit.identifiant,
+      profil: 'UtilisateurInscrit',
+    });
+  });
+
   it("Renvoie une erreur AggregatNonTrouvé si l'utilisateur n'existe pas", async () => {
     expect(
       new EntrepotUtilisateurMACPostgres().rechercheParIdentifiant(
