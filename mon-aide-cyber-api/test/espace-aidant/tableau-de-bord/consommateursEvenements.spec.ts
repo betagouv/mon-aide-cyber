@@ -5,22 +5,33 @@ import { aidantInitieDiagnostic } from '../../../src/espace-aidant/tableau-de-bo
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { DiagnosticLance } from '../../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import crypto from 'crypto';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { uneRechercheUtilisateursMAC } from '../../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import {
+  EntrepotAidantMemoire,
+  EntrepotUtilisateurMACMemoire,
+} from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import { EntrepotAidant } from '../../../src/espace-aidant/Aidant';
 
 describe("Les consommateurs d'évènements du tableau de bord", () => {
   describe("Lorsque l'évènement 'DIAGNOSTIC_LANCE' est consommé", () => {
     it("Créé une relation entre l'aidant et le diagnostic", async () => {
-      const adaptateurRelations = new AdaptateurRelationsMAC(
-        new EntrepotRelationMemoire()
-      );
-      const identifiantAidant = crypto.randomUUID();
+      const entrepotRelation = new EntrepotRelationMemoire();
+      const adaptateurRelations = new AdaptateurRelationsMAC(entrepotRelation);
+      const aidant = unAidant().construis();
+      const entrepotAidant: EntrepotAidant = new EntrepotAidantMemoire();
+      await entrepotAidant.persiste(aidant);
       const identifiantDiagnostic = crypto.randomUUID();
 
       await aidantInitieDiagnostic(
-        adaptateurRelations
+        adaptateurRelations,
+        uneRechercheUtilisateursMAC(
+          new EntrepotUtilisateurMACMemoire(entrepotAidant)
+        )
       ).consomme<DiagnosticLance>({
         corps: {
           identifiantDiagnostic,
-          identifiantUtilisateur: identifiantAidant,
+          identifiantUtilisateur: aidant.identifiant,
         },
         identifiant: crypto.randomUUID(),
         type: 'DIAGNOSTIC_LANCE',
@@ -29,7 +40,66 @@ describe("Les consommateurs d'évènements du tableau de bord", () => {
 
       expect(
         await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
-          identifiantAidant
+          aidant.identifiant
+        )
+      ).toStrictEqual([identifiantDiagnostic]);
+    });
+
+    it("Ne créé pas la relation s'il ne s'agit pas d'un Aidant", async () => {
+      const entrepotRelation = new EntrepotRelationMemoire();
+      const adaptateurRelations = new AdaptateurRelationsMAC(entrepotRelation);
+      const entrepotAidant = new EntrepotAidantMemoire();
+      const identifiantDiagnostic = crypto.randomUUID();
+      const identifiantUtilisateur = crypto.randomUUID();
+
+      await aidantInitieDiagnostic(
+        adaptateurRelations,
+        uneRechercheUtilisateursMAC(
+          new EntrepotUtilisateurMACMemoire(entrepotAidant)
+        )
+      ).consomme<DiagnosticLance>({
+        corps: {
+          identifiantDiagnostic,
+          identifiantUtilisateur,
+        },
+        identifiant: crypto.randomUUID(),
+        type: 'DIAGNOSTIC_LANCE',
+        date: FournisseurHorloge.maintenant(),
+      });
+
+      expect(
+        await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+          identifiantUtilisateur
+        )
+      ).toStrictEqual([]);
+    });
+
+    it("Créé une relation entre l'aidant et le diagnostic si il s’agit d’un Gendarme", async () => {
+      const entrepotRelation = new EntrepotRelationMemoire();
+      const adaptateurRelations = new AdaptateurRelationsMAC(entrepotRelation);
+      const aidant = unAidant().avecUnProfilGendarme().construis();
+      const entrepotAidant: EntrepotAidant = new EntrepotAidantMemoire();
+      await entrepotAidant.persiste(aidant);
+      const identifiantDiagnostic = crypto.randomUUID();
+
+      await aidantInitieDiagnostic(
+        adaptateurRelations,
+        uneRechercheUtilisateursMAC(
+          new EntrepotUtilisateurMACMemoire(entrepotAidant)
+        )
+      ).consomme<DiagnosticLance>({
+        corps: {
+          identifiantDiagnostic,
+          identifiantUtilisateur: aidant.identifiant,
+        },
+        identifiant: crypto.randomUUID(),
+        type: 'DIAGNOSTIC_LANCE',
+        date: FournisseurHorloge.maintenant(),
+      });
+
+      expect(
+        await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+          aidant.identifiant
         )
       ).toStrictEqual([identifiantDiagnostic]);
     });

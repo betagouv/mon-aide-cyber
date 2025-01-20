@@ -30,7 +30,7 @@ const consommateurDiagnosticLance =
                 ...evenement,
                 corps: {
                   ...corps,
-                  profil: utilisateur.profil,
+                  profil: utilisateur?.profil,
                 },
               })
             );

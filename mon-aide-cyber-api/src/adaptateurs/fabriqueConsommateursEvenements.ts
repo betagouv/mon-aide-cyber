@@ -55,7 +55,10 @@ export const fabriqueConsommateursEvenements = (
           entrepotJournalisation,
           uneRechercheUtilisateursMAC(fabriqueEntrepots().utilisateursMAC())
         ),
-        aidantInitieDiagnostic(adaptateurRelations),
+        aidantInitieDiagnostic(
+          adaptateurRelations,
+          uneRechercheUtilisateursMAC(fabriqueEntrepots().utilisateursMAC())
+        ),
       ],
     ],
     ['REPONSE_AJOUTEE', [reponseAjoutee(entrepotJournalisation)]],
