@@ -1,7 +1,6 @@
 import { describe, it } from 'vitest';
 import { AdaptateurRelationsMAC } from '../../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/EntrepotRelationMemoire';
-import { aidantInitieDiagnostic } from '../../../src/espace-aidant/tableau-de-bord/consommateursEvenements';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { DiagnosticLance } from '../../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import crypto from 'crypto';
@@ -12,31 +11,33 @@ import {
   EntrepotUtilisateurInscritMemoire,
   EntrepotUtilisateurMACMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import { EntrepotAidant } from '../../../src/espace-aidant/Aidant';
+import { utilisateurInscritInitieDiagnostic } from '../../../src/espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
+import { unUtilisateurInscrit } from '../../constructeurs/constructeurUtilisateurInscrit';
+import { EntrepotUtilisateurInscrit } from '../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 
-describe("Les consommateurs d'évènements du tableau de bord", () => {
-  const entrepotUtilisateurInscrit = new EntrepotUtilisateurInscritMemoire();
+describe("Les consommateurs d'évènements du tableau de bord d’un utilisateur inscrit", () => {
   describe("Lorsque l'évènement 'DIAGNOSTIC_LANCE' est consommé", () => {
-    it("Créé une relation entre l'aidant et le diagnostic", async () => {
+    it("Créé une relation entre l'utilisateur inscrit et le diagnostic", async () => {
       const entrepotRelation = new EntrepotRelationMemoire();
       const adaptateurRelations = new AdaptateurRelationsMAC(entrepotRelation);
-      const aidant = unAidant().construis();
-      const entrepotAidant: EntrepotAidant = new EntrepotAidantMemoire();
-      await entrepotAidant.persiste(aidant);
+      const utilisateurInscrit = unUtilisateurInscrit().construis();
+      const entrepotUtilisateurInscrit: EntrepotUtilisateurInscrit =
+        new EntrepotUtilisateurInscritMemoire();
+      await entrepotUtilisateurInscrit.persiste(utilisateurInscrit);
       const identifiantDiagnostic = crypto.randomUUID();
 
-      await aidantInitieDiagnostic(
+      await utilisateurInscritInitieDiagnostic(
         adaptateurRelations,
         uneRechercheUtilisateursMAC(
           new EntrepotUtilisateurMACMemoire({
-            aidant: entrepotAidant,
+            aidant: new EntrepotAidantMemoire(),
             utilisateurInscrit: entrepotUtilisateurInscrit,
           })
         )
       ).consomme<DiagnosticLance>({
         corps: {
           identifiantDiagnostic,
-          identifiantUtilisateur: aidant.identifiant,
+          identifiantUtilisateur: utilisateurInscrit.identifiant,
         },
         identifiant: crypto.randomUUID(),
         type: 'DIAGNOSTIC_LANCE',
@@ -45,24 +46,26 @@ describe("Les consommateurs d'évènements du tableau de bord", () => {
 
       expect(
         await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
-          aidant.identifiant
+          utilisateurInscrit.identifiant
         )
       ).toStrictEqual([identifiantDiagnostic]);
     });
 
-    it("Ne créé pas la relation s'il ne s'agit pas d'un Aidant", async () => {
+    it("Ne créé pas la relation s'il ne s'agit pas d'un Utilisateur Inscrit", async () => {
       const entrepotRelation = new EntrepotRelationMemoire();
       const adaptateurRelations = new AdaptateurRelationsMAC(entrepotRelation);
+      const aidant = unAidant().construis();
       const entrepotAidant = new EntrepotAidantMemoire();
+      entrepotAidant.persiste(aidant);
       const identifiantDiagnostic = crypto.randomUUID();
-      const identifiantUtilisateur = crypto.randomUUID();
+      const identifiantUtilisateur = aidant.identifiant;
 
-      await aidantInitieDiagnostic(
+      await utilisateurInscritInitieDiagnostic(
         adaptateurRelations,
         uneRechercheUtilisateursMAC(
           new EntrepotUtilisateurMACMemoire({
             aidant: entrepotAidant,
-            utilisateurInscrit: entrepotUtilisateurInscrit,
+            utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
           })
         )
       ).consomme<DiagnosticLance>({
@@ -80,39 +83,6 @@ describe("Les consommateurs d'évènements du tableau de bord", () => {
           identifiantUtilisateur
         )
       ).toStrictEqual([]);
-    });
-
-    it("Créé une relation entre l'aidant et le diagnostic si il s’agit d’un Gendarme", async () => {
-      const entrepotRelation = new EntrepotRelationMemoire();
-      const adaptateurRelations = new AdaptateurRelationsMAC(entrepotRelation);
-      const aidant = unAidant().avecUnProfilGendarme().construis();
-      const entrepotAidant: EntrepotAidant = new EntrepotAidantMemoire();
-      await entrepotAidant.persiste(aidant);
-      const identifiantDiagnostic = crypto.randomUUID();
-
-      await aidantInitieDiagnostic(
-        adaptateurRelations,
-        uneRechercheUtilisateursMAC(
-          new EntrepotUtilisateurMACMemoire({
-            aidant: entrepotAidant,
-            utilisateurInscrit: entrepotUtilisateurInscrit,
-          })
-        )
-      ).consomme<DiagnosticLance>({
-        corps: {
-          identifiantDiagnostic,
-          identifiantUtilisateur: aidant.identifiant,
-        },
-        identifiant: crypto.randomUUID(),
-        type: 'DIAGNOSTIC_LANCE',
-        date: FournisseurHorloge.maintenant(),
-      });
-
-      expect(
-        await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
-          aidant.identifiant
-        )
-      ).toStrictEqual([identifiantDiagnostic]);
     });
   });
 });

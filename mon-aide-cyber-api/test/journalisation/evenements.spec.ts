@@ -10,6 +10,7 @@ import {
 import {
   EntrepotAidantMemoire,
   EntrepotEvenementJournalMemoire,
+  EntrepotUtilisateurInscritMemoire,
   EntrepotUtilisateurMACMemoire,
 } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import crypto from 'crypto';
@@ -51,6 +52,7 @@ describe('Évènements', () => {
 
   describe('Diagnostic lancé', () => {
     describe("Dans le cas d'un Aidant", () => {
+      const entrepoUtilisateurInscrit = new EntrepotUtilisateurInscritMemoire();
       it("lorsque l'évènement est consommé, il est persisté", async () => {
         const entrepot = new EntrepotEvenementJournalMemoire();
         const entrepotAidant = new EntrepotAidantMemoire();
@@ -61,7 +63,10 @@ describe('Évènements', () => {
         await diagnosticLance(
           entrepot,
           uneRechercheUtilisateursMAC(
-            new EntrepotUtilisateurMACMemoire(entrepotAidant)
+            new EntrepotUtilisateurMACMemoire({
+              aidant: entrepotAidant,
+              utilisateurInscrit: entrepoUtilisateurInscrit,
+            })
           )
         ).consomme<DiagnosticLance>({
           identifiant: identifiant,
@@ -97,7 +102,10 @@ describe('Évènements', () => {
         await diagnosticLance(
           entrepot,
           uneRechercheUtilisateursMAC(
-            new EntrepotUtilisateurMACMemoire(entrepotAidant)
+            new EntrepotUtilisateurMACMemoire({
+              aidant: entrepotAidant,
+              utilisateurInscrit: entrepoUtilisateurInscrit,
+            })
           )
         ).consomme<DiagnosticLance>({
           identifiant: identifiant,

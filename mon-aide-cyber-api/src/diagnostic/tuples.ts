@@ -25,3 +25,30 @@ export const definitionAidantInitieDiagnostic: {
     typeUtilisateur: 'aidant',
   },
 };
+
+export const unTupleUtilisateurInscritInitieDiagnostic = (
+  identifiantAidant: crypto.UUID,
+  identifiantDiagnostic: crypto.UUID
+): Tuple =>
+  unTuple<DefinitionUtilisateurInscritInitieDiagnostic>(
+    definitionUtilisateurInscritInitieDiagnostic
+  )
+    .avecUtilisateur(identifiantAidant)
+    .avecObjet(identifiantDiagnostic)
+    .construis();
+
+export type DefinitionUtilisateurInscritInitieDiagnostic = DefinitionTuple & {
+  relation: 'initiateur';
+  typeObjet: 'diagnostic';
+  typeUtilisateur: 'utilisateurInscrit';
+};
+
+export const definitionUtilisateurInscritInitieDiagnostic: {
+  definition: DefinitionUtilisateurInscritInitieDiagnostic;
+} = {
+  definition: {
+    relation: 'initiateur',
+    typeObjet: 'diagnostic',
+    typeUtilisateur: 'utilisateurInscrit',
+  },
+};

@@ -49,6 +49,10 @@ import {
   UtilisateurMAC,
 } from '../../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { unServiceAidant } from '../../../espace-aidant/ServiceAidantMAC';
+import {
+  EntrepotUtilisateurInscrit,
+  UtilisateurInscrit,
+} from '../../../espace-utilisateur-inscrit/UtilisateurInscrit';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -277,22 +281,37 @@ export class EntrepotUtilisateurMACMemoire
   extends EntrepotMemoire<UtilisateurMAC>
   implements EntrepotUtilisateursMAC
 {
-  constructor(private readonly entrepotAidant: EntrepotAidant) {
+  constructor(
+    private readonly entrepots: {
+      aidant: EntrepotAidant;
+      utilisateurInscrit: EntrepotUtilisateurInscrit;
+    }
+  ) {
     super();
   }
 
-  rechercheParIdentifiant(identifiant: crypto.UUID): Promise<UtilisateurMAC> {
-    return unServiceAidant(this.entrepotAidant)
-      .parIdentifiant(identifiant)
-      .then((aidant) => {
-        if (aidant) {
-          return {
-            identifiant: aidant.identifiant,
-            profil: estSiretGendarmerie(aidant?.siret) ? 'Gendarme' : 'Aidant',
-          };
-        }
-        return Promise.reject('Utilisateur MAC non trouvé');
-      });
+  async rechercheParIdentifiant(
+    identifiant: crypto.UUID
+  ): Promise<UtilisateurMAC> {
+    const aidant = await unServiceAidant(this.entrepots.aidant).parIdentifiant(
+      identifiant
+    );
+    if (aidant) {
+      return {
+        identifiant: aidant.identifiant,
+        profil: estSiretGendarmerie(aidant?.siret) ? 'Gendarme' : 'Aidant',
+      };
+    }
+    try {
+      const utilisateurInscrit =
+        await this.entrepots.utilisateurInscrit.lis(identifiant);
+      return {
+        identifiant: utilisateurInscrit.identifiant,
+        profil: 'UtilisateurInscrit',
+      };
+    } catch (_erreur) {
+      return Promise.reject('Utilisateur MAC non trouvé');
+    }
   }
 
   lis(_identifiant: string): Promise<UtilisateurMAC> {
@@ -311,3 +330,7 @@ export class EntrepotUtilisateurMACMemoire
     throw new Error('Method not implemented.');
   }
 }
+
+export class EntrepotUtilisateurInscritMemoire
+  extends EntrepotMemoire<UtilisateurInscrit>
+  implements EntrepotUtilisateurInscrit {}
