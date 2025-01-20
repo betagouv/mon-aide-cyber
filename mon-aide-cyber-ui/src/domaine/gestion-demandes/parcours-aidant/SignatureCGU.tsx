@@ -1,59 +1,68 @@
-import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
-import { Input } from '../../../composants/atomes/Input/Input.tsx';
 import { useState } from 'react';
-import illustrationCadreProfessionnel from '../../../../public/images/illustration-cadre-professionnel.svg';
+import Button from '../../../composants/atomes/Button/Button.tsx';
+import { TypographieH5 } from '../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
+import illustrationCadreProfessionnelMAC from '../../../../public/images/illustration-cadre-professionnel-mac.svg';
+import { ChampValidationCGUs } from '../../../composants/formulaires/ChampValidationCGUs.tsx';
+import { URL_CRISP_MAC } from '../../../infrastructure/donnees/LiensExternes.ts';
 
-export const SignatureCGU = () => {
+export const SignatureCGU = ({
+  valideCGUs,
+  precedent,
+}: {
+  valideCGUs: () => void;
+  precedent: () => void;
+}) => {
   const [cguSignees, setCguSignees] = useState(false);
 
   return (
-    <div className="fr-container fr-grid-row fr-grid-row--center zone-signature-cgu">
-      <div className="fr-col-12 section">
+    <div className="fr-container fr-grid-row fr-grid-row--center">
+      <div className="fr-col-md-8 fr-col-sm-12 section">
         <div>
-          <TypographieH3>
-            Vous souhaitez utiliser le dispositif dans le cadre de votre
-            activité professionnelle
-          </TypographieH3>
-          <img
-            src={illustrationCadreProfessionnel}
-            alt="Illustration d’une personne travaillant dans le cadre professionnel."
-          />
-          <p>Vous êtes :</p>
-          <ul>
-            <li>
-              Un professionnel, un prestataire ou un salarié d’une entreprise
-              privée ou d’une organisation à fins de prospection ou
-              d’accompagnement payant,
-            </li>
-            <li>Un assureur, une banque,</li>
-            <li>
-              Un étudiant, un retraité ou un particulier, hors adhérent d’une
-              entité morale à but non lucratif
-            </li>
-          </ul>
+          <TypographieH5>
+            Vous souhaitez utiliser librement l’outil de diagnostic de l’ANSSI.
+          </TypographieH5>
+          <div className="texte-centre">
+            <img
+              src={illustrationCadreProfessionnelMAC}
+              alt="Illustration d’une personne travaillant dans le cadre professionnel."
+            />
+          </div>
           <p>
-            À tout moment, il vous est possible de nous indiquer que vous
-            préférez œuvrer pour l’intérêt général et être référencé Aidant
-            cyber. Pour cela, contacter l’équipe via :{' '}
-            <a href="mailto:monaidecyber@ssi.gouv.fr">
-              monaidecyber@ssi.gouv.fr
-            </a>
-            <br />
-            Pour accéder à votre tableau de bord, veuillez accepter les
-            nouvelles conditions d’utilisation du service.
+            Nous sommes ravis de vous compter parmi nos utilisateurs ! <br />
+            Vous pouvez dès à présent accéder à la plateforme MonAideCyber et
+            réaliser librement des diagnostics. <br />
+            Nous vous invitons à consulter{' '}
+            <a href={URL_CRISP_MAC} target="_blank" rel="noreferrer">
+              notre FAQ
+            </a>{' '}
+            pour plus d&apos;informations.
           </p>
         </div>
-        <div className="fr-checkbox-group mac-radio-group">
-          <Input
-            type="checkbox"
-            id="charte-aidant"
-            name="charte-aidant"
-            onChange={() => setCguSignees((prev) => !prev)}
-            checked={cguSignees}
-          />
-          <label className="fr-label" htmlFor="charte-aidant">
-            J'accepte les conditions générales d'utilisation de MonAideCyber
-          </label>
+        <ChampValidationCGUs
+          sontValidees={cguSignees}
+          surCguCliquees={() => setCguSignees((prev) => !prev)}
+        />
+        <br />
+        <div className="validation alignee-droite">
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={() => {
+              precedent();
+            }}
+          >
+            <span>Précédent</span>
+          </Button>
+          <Button
+            disabled={!cguSignees}
+            variant="primary"
+            type="button"
+            onClick={() => {
+              valideCGUs();
+            }}
+          >
+            <span>Suivant</span>
+          </Button>
         </div>
       </div>
     </div>

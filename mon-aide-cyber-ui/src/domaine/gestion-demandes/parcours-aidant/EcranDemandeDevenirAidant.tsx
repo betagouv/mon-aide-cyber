@@ -10,6 +10,7 @@ import {
   retourEtapePrecedente,
   signeCharteAidant,
   TypeAidantEtSonEntite,
+  valideCGU,
 } from './reducteurEtapes.ts';
 import {
   ChoixUtilisation,
@@ -125,6 +126,11 @@ export const EcranDemandeDevenirAidant = () => {
     window.scrollTo({ top: 0 });
   }, []);
 
+  const surValidationCGU = useCallback(() => {
+    envoie(valideCGU());
+    window.scrollTo({ top: 0 });
+  }, []);
+
   const surClickEtapePrecedente = useCallback(() => {
     envoie(retourEtapePrecedente());
     window.scrollTo({ top: 0 });
@@ -155,7 +161,18 @@ export const EcranDemandeDevenirAidant = () => {
         precedent={surClickEtapePrecedente}
       />,
     ],
-    ['signatureCGUs', <SignatureCGU key="signatureCGUs" />],
+    [
+      'signatureCGUs',
+      <div
+        key="signatureCGUs"
+        className="fr-container fr-grid-row fr-grid-row--center zone-signature-cgu"
+      >
+        <SignatureCGU
+          valideCGUs={surValidationCGU}
+          precedent={surClickEtapePrecedente}
+        />
+      </div>,
+    ],
     [
       'formulaireDevenirAidant',
       <div
