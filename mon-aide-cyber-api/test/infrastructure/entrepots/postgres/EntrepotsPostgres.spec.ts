@@ -1265,7 +1265,7 @@ describe('Entrepot Utilisateurs MAC', () => {
   });
 
   it('Retourne un utilisateur au profil Gendarme', async () => {
-    const aidant = unAidant().avecUnSiret('GENDARMERIE').construis();
+    const aidant = unAidant().avecUnProfilGendarme().construis();
     await new EntrepotAidantPostgres(new ServiceDeChiffrementClair()).persiste(
       aidant
     );

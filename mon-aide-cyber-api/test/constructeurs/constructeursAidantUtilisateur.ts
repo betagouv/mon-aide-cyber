@@ -138,6 +138,11 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  avecUnProfilGendarme(): ConstructeurAidant {
+    this.siret = 'GENDARMERIE';
+    return this;
+  }
+
   construis(): Aidant {
     return {
       identifiant: this.identifiant,

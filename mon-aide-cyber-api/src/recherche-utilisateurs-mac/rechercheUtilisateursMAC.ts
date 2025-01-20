@@ -2,14 +2,17 @@ import crypto from 'crypto';
 import { Aggregat } from '../domaine/Aggregat';
 import { Entrepot } from '../domaine/Entrepot';
 
+export type ProfilAidant = 'Aidant' | 'UtilisateurInscrit' | 'Gendarme';
 export type UtilisateurMAC = Aggregat & {
-  profil: 'Aidant' | 'UtilisateurInscrit' | 'Gendarme';
+  profil: ProfilAidant;
 };
 
 export type UtilisateurMACDTO = UtilisateurMAC;
 
 export interface RechercheUtilisateursMAC {
-  rechercheParIdentifiant(identifiant: crypto.UUID): Promise<UtilisateurMAC>;
+  rechercheParIdentifiant(
+    identifiant: crypto.UUID
+  ): Promise<UtilisateurMAC | undefined>;
 }
 
 export interface EntrepotUtilisateursMAC extends Entrepot<UtilisateurMAC> {
@@ -21,12 +24,20 @@ export const uneRechercheUtilisateursMAC = (
 ): RechercheUtilisateursMAC => ({
   rechercheParIdentifiant(
     identifiant: crypto.UUID
-  ): Promise<UtilisateurMACDTO> {
+  ): Promise<UtilisateurMACDTO | undefined> {
     return entrepot
       .rechercheParIdentifiant(identifiant)
       .then((utilisateur) => ({
         identifiant: utilisateur.identifiant,
         profil: utilisateur.profil,
-      }));
+      }))
+      .catch((erreur) => {
+        console.error(
+          'Erreur lors de la recherche de l’utilisateur portant l’id %s. %s',
+          identifiant,
+          erreur.message
+        );
+        return undefined;
+      });
   },
 });

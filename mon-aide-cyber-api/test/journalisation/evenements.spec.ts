@@ -90,7 +90,7 @@ describe('Évènements', () => {
       it("Lorsque l'évènement est publié suite à un diagnostic Gendarme, l'information Gendarme est persistée", async () => {
         const entrepot = new EntrepotEvenementJournalMemoire();
         const entrepotAidant = new EntrepotAidantMemoire();
-        const aidant = unAidant().avecUnSiret('GENDARMERIE').construis();
+        const aidant = unAidant().avecUnProfilGendarme().construis();
         await entrepotAidant.persiste(aidant);
         const identifiant = crypto.randomUUID();
 
