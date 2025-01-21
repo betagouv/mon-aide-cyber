@@ -20,6 +20,8 @@ import { RestitutionHTML } from '../infrastructure/adaptateurs/AdaptateurDeResti
 import {
   DefinitionAidantInitieDiagnostic,
   definitionAidantInitieDiagnostic,
+  definitionUtilisateurInscritInitieDiagnostic,
+  DefinitionUtilisateurInscritInitieDiagnostic,
 } from '../diagnostic/tuples';
 import { AdaptateurDeVerificationDesAcces } from '../adaptateurs/AdaptateurDeVerificationDesAcces';
 import { Entrepots } from '../domaine/Entrepots';
@@ -38,7 +40,12 @@ const verifieRelations = (
   ) => {
     uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
       .rechercheParIdentifiant(requete.identifiantUtilisateurCourant!)
-      .then((_utilisateur) => {
+      .then((utilisateur) => {
+        if (utilisateur?.profil === 'UtilisateurInscrit') {
+          return relations.verifie<DefinitionUtilisateurInscritInitieDiagnostic>(
+            definitionUtilisateurInscritInitieDiagnostic.definition
+          )(requete, reponse, suite);
+        }
         return relations.verifie<DefinitionAidantInitieDiagnostic>(
           definitionAidantInitieDiagnostic.definition
         )(requete, reponse, suite);

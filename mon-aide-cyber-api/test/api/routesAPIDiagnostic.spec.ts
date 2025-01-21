@@ -24,7 +24,10 @@ import {
   unCompteAidantRelieAUnCompteUtilisateur,
   unUtilisateur,
 } from '../constructeurs/constructeursAidantUtilisateur';
-import { relieUnAidantAUnDiagnostic } from '../constructeurs/relationsUtilisateursMACDiagnostic';
+import {
+  relieUnAidantAUnDiagnostic,
+  relieUnUtilisateurInscritAUnDiagnostic,
+} from '../constructeurs/relationsUtilisateursMACDiagnostic';
 
 describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -148,6 +151,30 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
           relation: 'initiateur',
           typeObjet: 'diagnostic',
           typeUtilisateur: 'aidant',
+        })
+      ).toBe(true);
+    });
+
+    it('Vérifie que l’Utilisateur Inscrit peut accéder au diagnostic', async () => {
+      const { identifiantDiagnostic, identifiantUtilisateur } =
+        await relieUnUtilisateurInscritAUnDiagnostic(
+          testeurMAC.entrepots,
+          testeurMAC.adaptateurRelations
+        );
+      connecteUtilisateur(identifiantUtilisateur);
+
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/${identifiantDiagnostic}`,
+        donneesServeur.portEcoute
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste({
+          relation: 'initiateur',
+          typeObjet: 'diagnostic',
+          typeUtilisateur: 'utilisateurInscrit',
         })
       ).toBe(true);
     });
@@ -360,6 +387,30 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         })
       ).toBe(true);
     });
+
+    it('Vérifie que l’Utilisateur Inscrit peut répondre au diagnostic', async () => {
+      const { identifiantDiagnostic, identifiantUtilisateur } =
+        await relieUnUtilisateurInscritAUnDiagnostic(
+          testeurMAC.entrepots,
+          testeurMAC.adaptateurRelations
+        );
+      connecteUtilisateur(identifiantUtilisateur);
+
+      await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/diagnostic/${identifiantDiagnostic}`,
+        donneesServeur.portEcoute
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste({
+          relation: 'initiateur',
+          typeObjet: 'diagnostic',
+          typeUtilisateur: 'utilisateurInscrit',
+        })
+      ).toBe(true);
+    });
   });
 
   describe('Quand une requête GET est reçue sur /{id}/restitution', () => {
@@ -542,6 +593,30 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
           relation: 'initiateur',
           typeObjet: 'diagnostic',
           typeUtilisateur: 'aidant',
+        })
+      ).toBe(true);
+    });
+
+    it('Vérifie que l’Utilisateur Inscrit peut accéder à la restitution', async () => {
+      const { identifiantDiagnostic, identifiantUtilisateur } =
+        await relieUnUtilisateurInscritAUnDiagnostic(
+          testeurMAC.entrepots,
+          testeurMAC.adaptateurRelations
+        );
+      connecteUtilisateur(identifiantUtilisateur);
+
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/${identifiantDiagnostic}/restitution`,
+        donneesServeur.portEcoute
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste({
+          relation: 'initiateur',
+          typeObjet: 'diagnostic',
+          typeUtilisateur: 'utilisateurInscrit',
         })
       ).toBe(true);
     });

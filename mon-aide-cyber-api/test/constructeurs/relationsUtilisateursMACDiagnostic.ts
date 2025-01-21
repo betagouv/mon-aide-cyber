@@ -7,6 +7,8 @@ import { aidantInitieDiagnostic } from '../../src/espace-aidant/tableau-de-bord/
 import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { fakerFR } from '@faker-js/faker';
 import { DiagnosticLance } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
+import { unUtilisateurInscrit } from './constructeurUtilisateurInscrit';
+import { utilisateurInscritInitieDiagnostic } from '../../src/espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
 
 type IdentifiantsRelation = {
   identifiantUtilisateur: crypto.UUID;
@@ -34,6 +36,32 @@ export const relieUnAidantAUnDiagnostic = async (
   });
   return {
     identifiantUtilisateur: aidant.identifiant,
+    identifiantDiagnostic: diagnostic.identifiant,
+  };
+};
+
+export const relieUnUtilisateurInscritAUnDiagnostic = async (
+  entrepots: Entrepots,
+  adaptateurRelations: AdaptateurRelations
+): Promise<IdentifiantsRelation> => {
+  const utilisateurInscrit = unUtilisateurInscrit().construis();
+  const diagnostic = unDiagnostic().construis();
+  await entrepots.utilisateursInscrits().persiste(utilisateurInscrit);
+  await entrepots.diagnostic().persiste(diagnostic);
+  await utilisateurInscritInitieDiagnostic(
+    adaptateurRelations,
+    uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
+  ).consomme<DiagnosticLance>({
+    identifiant: utilisateurInscrit.identifiant,
+    type: 'DIAGNOSTIC_LIBRE_ACCES_LANCE',
+    date: fakerFR.date.anytime(),
+    corps: {
+      identifiantDiagnostic: diagnostic.identifiant,
+      identifiantUtilisateur: utilisateurInscrit.identifiant,
+    },
+  });
+  return {
+    identifiantUtilisateur: utilisateurInscrit.identifiant,
     identifiantDiagnostic: diagnostic.identifiant,
   };
 };
