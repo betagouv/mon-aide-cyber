@@ -27,10 +27,11 @@ describe('Service Tableau De Bord', () => {
         ),
         new ServiceDiagnosticTest(
           new Map([[identifiantDiagnostic, unContexte().construis()]])
-        )
-      ).diagnosticsInitiesPar(identifiantAidant);
+        ),
+        true
+      ).pour(identifiantAidant);
 
-      expect(diagnosticTableauDeBord[0]).toStrictEqual<Diagnostic>({
+      expect(diagnosticTableauDeBord.diagnostics[0]).toStrictEqual<Diagnostic>({
         identifiant: identifiantDiagnostic,
         dateCreation: '17.04.2024',
         secteurActivite: 'non renseigné',
@@ -54,10 +55,11 @@ describe('Service Tableau De Bord', () => {
               unContexte().avecDateCreation(date).construis(),
             ],
           ])
-        )
-      ).diagnosticsInitiesPar(identifiantAidant);
+        ),
+        true
+      ).pour(identifiantAidant);
 
-      expect(diagnosticTableauDeBord[0]).toStrictEqual<Diagnostic>({
+      expect(diagnosticTableauDeBord.diagnostics[0]).toStrictEqual<Diagnostic>({
         dateCreation: '28.04.2024',
         identifiant: identifiantDiagnostic,
         secteurActivite: 'non renseigné',
@@ -82,10 +84,13 @@ describe('Service Tableau De Bord', () => {
                 unContexte().avecLeDepartement(departement).construis(),
               ],
             ])
-          )
-        ).diagnosticsInitiesPar(identifiantAidant);
+          ),
+          true
+        ).pour(identifiantAidant);
 
-        expect(diagnosticTableauDeBord[0]).toStrictEqual<Diagnostic>({
+        expect(
+          diagnosticTableauDeBord.diagnostics[0]
+        ).toStrictEqual<Diagnostic>({
           dateCreation: '17.04.2024',
           identifiant: identifiantDiagnostic,
           secteurActivite: 'non renseigné',
@@ -111,10 +116,11 @@ describe('Service Tableau De Bord', () => {
               unContexte().avecSecteurActivite(secteurActivite).construis(),
             ],
           ])
-        )
-      ).diagnosticsInitiesPar(identifiantAidant);
+        ),
+        true
+      ).pour(identifiantAidant);
 
-      expect(diagnosticTableauDeBord[0]).toStrictEqual<Diagnostic>({
+      expect(diagnosticTableauDeBord.diagnostics[0]).toStrictEqual<Diagnostic>({
         dateCreation: '17.04.2024',
         identifiant: identifiantDiagnostic,
         secteurActivite: secteurActivite,
@@ -158,10 +164,11 @@ describe('Service Tableau De Bord', () => {
                 .construis(),
             ],
           ])
-        )
-      ).diagnosticsInitiesPar(identifiantAidant);
+        ),
+        true
+      ).pour(identifiantAidant);
 
-      expect(diagnosticTableauDeBord).toStrictEqual<Diagnostic[]>([
+      expect(diagnosticTableauDeBord.diagnostics).toStrictEqual<Diagnostic[]>([
         {
           dateCreation: '17.04.2024',
           identifiant: identifiantDiagnosticInitie1,
@@ -236,10 +243,11 @@ describe('Service Tableau De Bord', () => {
                 .construis(),
             ],
           ])
-        )
-      ).diagnosticsInitiesPar(identifiantAidant);
+        ),
+        true
+      ).pour(identifiantAidant);
 
-      expect(diagnosticTableauDeBord).toStrictEqual<Diagnostic[]>([
+      expect(diagnosticTableauDeBord.diagnostics).toStrictEqual<Diagnostic[]>([
         {
           dateCreation: '16.03.2024',
           identifiant: identifiantDiagnosticInitie3,
