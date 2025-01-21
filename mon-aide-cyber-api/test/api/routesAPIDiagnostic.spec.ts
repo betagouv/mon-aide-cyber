@@ -83,7 +83,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
             methode: 'PATCH',
           },
           'afficher-tableau-de-bord': {
-            url: '/api/espace-aidant/tableau-de-bord',
+            url: '/api/mon-espace/tableau-de-bord',
             methode: 'GET',
           },
         })
@@ -444,7 +444,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
           },
           'afficher-tableau-de-bord': {
             methode: 'GET',
-            url: '/api/espace-aidant/tableau-de-bord',
+            url: '/api/mon-espace/tableau-de-bord',
           },
           'modifier-diagnostic': {
             url: `/api/diagnostic/${identifiant}`,

@@ -74,7 +74,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             },
             'afficher-tableau-de-bord': {
               methode: 'GET',
-              url: '/api/espace-aidant/tableau-de-bord',
+              url: '/api/mon-espace/tableau-de-bord',
             },
             'se-deconnecter': {
               url: '/api/token',
@@ -166,7 +166,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           },
           'afficher-tableau-de-bord': {
             methode: 'GET',
-            url: '/api/espace-aidant/tableau-de-bord',
+            url: '/api/mon-espace/tableau-de-bord',
           },
           'se-deconnecter': {
             url: '/pro-connect/deconnexion',

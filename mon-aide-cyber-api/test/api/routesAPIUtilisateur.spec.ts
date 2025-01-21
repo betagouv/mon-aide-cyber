@@ -66,7 +66,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           },
           'afficher-tableau-de-bord': {
             methode: 'GET',
-            url: '/api/espace-aidant/tableau-de-bord',
+            url: '/api/mon-espace/tableau-de-bord',
           },
           'afficher-profil': {
             url: '/api/profil',
@@ -457,7 +457,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         liens: {
           'afficher-tableau-de-bord': {
             methode: 'GET',
-            url: '/api/espace-aidant/tableau-de-bord',
+            url: '/api/mon-espace/tableau-de-bord',
           },
           'lancer-diagnostic': {
             methode: 'POST',

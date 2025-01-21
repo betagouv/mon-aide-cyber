@@ -81,7 +81,7 @@ describe('Route contexte', () => {
       expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
         liens: {
           'afficher-tableau-de-bord': {
-            url: '/api/espace-aidant/tableau-de-bord',
+            url: '/api/mon-espace/tableau-de-bord',
             methode: 'GET',
           },
         },
@@ -100,7 +100,7 @@ describe('Route contexte', () => {
       expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
         liens: {
           'afficher-tableau-de-bord': {
-            url: '/api/espace-aidant/tableau-de-bord',
+            url: '/api/mon-espace/tableau-de-bord',
             methode: 'GET',
           },
           'afficher-statistiques': {

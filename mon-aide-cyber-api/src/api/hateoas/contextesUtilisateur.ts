@@ -18,15 +18,14 @@ import {
   reinitialiserMotDePasse,
 } from './reinitialisationMotDePasse';
 import { afficherDiagnostic, creerDiagnostic } from './diagnosticLibreAcces';
+import { afficherPreferences, modifierPreferences } from './aidant';
 import {
-  afficherPreferences,
   afficherProfil,
   afficherTableauDeBord,
-  lancerDiagnostic,
   modifierMotDePasse,
-  modifierPreferences,
   modifierProfil,
-} from './aidant';
+} from './mon-espace';
+import { lancerDiagnostic } from './diagnostic';
 
 type ClefContexte =
   | 'aidant'

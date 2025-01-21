@@ -87,7 +87,7 @@ describe('Adaptateur de vérification de relations MAC', () => {
           url: '/api/aidant/preferences',
         },
         'afficher-tableau-de-bord': {
-          url: '/api/espace-aidant/tableau-de-bord',
+          url: '/api/mon-espace/tableau-de-bord',
           methode: 'GET',
         },
         'lancer-diagnostic': {

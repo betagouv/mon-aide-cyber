@@ -3,13 +3,13 @@ import testeurIntegration from '../../api/testeurIntegration';
 import { executeRequete } from '../executeurRequete';
 import { Express } from 'express';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { ReponseDiagnostics } from '../../../src/api/espace-aidant/tableau-de-bord/routesAPITableauDeBord';
 import { unDiagnosticInitiePar } from '../../espace-aidant/tableau-de-bord/constructeurs';
 import {
   unAidant,
   unCompteAidantRelieAUnCompteUtilisateur,
   unUtilisateur,
 } from '../../constructeurs/constructeursAidantUtilisateur';
+import { ReponseDiagnostics } from '../../../src/api/tableau-de-bord/routesAPITableauDeBord';
 
 describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () => {
   describe('quand une requête GET est reçue sur /', () => {
@@ -39,7 +39,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/espace-aidant/tableau-de-bord`,
+        `/api/mon-espace/tableau-de-bord`,
         donneesServeur.portEcoute
       );
 
@@ -79,7 +79,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/espace-aidant/tableau-de-bord`,
+        `/api/mon-espace/tableau-de-bord`,
         donneesServeur.portEcoute
       );
 
@@ -124,7 +124,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/espace-aidant/tableau-de-bord`,
+        `/api/mon-espace/tableau-de-bord`,
         donneesServeur.portEcoute
       );
 
@@ -175,7 +175,7 @@ describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () 
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/espace-aidant/tableau-de-bord`,
+        `/api/mon-espace/tableau-de-bord`,
         donneesServeur.portEcoute
       );
 
