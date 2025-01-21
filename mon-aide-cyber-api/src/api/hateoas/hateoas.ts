@@ -5,8 +5,8 @@ import {
   contextesUtilisateur,
 } from './contextesUtilisateur';
 import { demandeAide } from './etreAide';
-import { afficherTableauDeBord } from './aidant';
 import { demandeDevenirAidant } from './devenirAidant';
+import { afficherTableauDeBord } from './mon-espace';
 
 type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
 export type LiensHATEOAS = Record<string, Options>;

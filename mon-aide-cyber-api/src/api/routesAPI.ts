@@ -4,7 +4,7 @@ import { ConfigurationServeur } from '../serveur';
 import { routesAPIAuthentification } from './routesAPIAuthentification';
 import crypto from 'crypto';
 import { routesAPIUtilisateur } from './routesAPIUtilisateur';
-import { routesAPIEspaceAidant } from './routesAPIEspaceAidant';
+import { routesAPIMonEspace } from './routesAPIMonEspace';
 import { routesAPIDemandes } from './demandes/routesAPIDemandes';
 import { routeAPIContexte } from './routeAPIContexte';
 import { routesAPIAidant } from './aidant/routesAPIAidant';
@@ -36,7 +36,7 @@ const routesAPI = (configuration: ConfigurationServeur) => {
   routes.use('/token', routesAPIAuthentification(configuration));
   routes.use('/utilisateur', routesAPIUtilisateur(configuration));
   routes.use('/aidant', routesAPIAidant(configuration));
-  routes.use('/espace-aidant', routesAPIEspaceAidant(configuration));
+  routes.use('/mon-espace', routesAPIMonEspace(configuration));
   routes.use('/profil', routesAPIProfil(configuration));
   routes.use('/demandes', routesAPIDemandes(configuration));
   routes.use('/annuaire-aidants', routesAPIAnnuaireAidants(configuration));

@@ -61,7 +61,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             },
             'afficher-tableau-de-bord': {
               methode: 'GET',
-              url: '/api/espace-aidant/tableau-de-bord',
+              url: '/api/mon-espace/tableau-de-bord',
             },
             'afficher-profil': {
               url: '/api/profil',
@@ -137,7 +137,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             'lancer-diagnostic': { url: '/api/diagnostic', methode: 'POST' },
             'afficher-tableau-de-bord': {
               methode: 'GET',
-              url: '/api/espace-aidant/tableau-de-bord',
+              url: '/api/mon-espace/tableau-de-bord',
             },
             'afficher-profil': {
               url: '/api/profil',
