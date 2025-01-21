@@ -99,8 +99,8 @@ export const nettoieLaBaseDeDonneesDemandeDiagnosticLibreAcces = async () => {
 
 export const nettoieLaBaseDeDonneesStatistiques = async () => {
   if (process.env.URL_SERVEUR_BASE_DONNEES) {
-    await new EntrepotsPostgresPourLesTests().nettoieRelations();
-    await new EntrepotsPostgresPourLesTests().nettoieUtilisateursMAC();
-    await new EntrepotsPostgresPourLesTests().nettoieDiagnostics();
+    await entrepotsPostgresPourLesTests.nettoieRelations();
+    await entrepotsPostgresPourLesTests.nettoieUtilisateursMAC();
+    await entrepotsPostgresPourLesTests.nettoieDiagnostics();
   }
 };
