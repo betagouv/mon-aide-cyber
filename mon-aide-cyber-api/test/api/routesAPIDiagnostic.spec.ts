@@ -24,6 +24,7 @@ import {
   unCompteAidantRelieAUnCompteUtilisateur,
   unUtilisateur,
 } from '../constructeurs/constructeursAidantUtilisateur';
+import { relieUnAidantAUnDiagnostic } from '../constructeurs/relationsUtilisateursMACDiagnostic';
 
 describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -38,6 +39,15 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   afterEach(() => {
     testeurMAC.arrete();
   });
+
+  const connecteUtilisateur = (identifiantAidant: crypto.UUID) => {
+    testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect({
+      identifiantConnexion: 'jean.dupont',
+      motDePasse: 'mdp',
+      nomPrenom: 'Jean Dupont',
+      identifiant: identifiantAidant,
+    });
+  };
 
   describe('Quand une requête GET est reçue sur /{id}', () => {
     it('Retourne le référentiel du diagnostic', async () => {
@@ -119,15 +129,26 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
     });
 
     it('Vérifie que l’Aidant peut accéder au diagnostic', async () => {
+      const { identifiantDiagnostic, identifiantUtilisateur } =
+        await relieUnAidantAUnDiagnostic(
+          testeurMAC.entrepots,
+          testeurMAC.adaptateurRelations
+        );
+      connecteUtilisateur(identifiantUtilisateur);
+
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
+        `/api/diagnostic/${identifiantDiagnostic}`,
         donneesServeur.portEcoute
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste()
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste({
+          relation: 'initiateur',
+          typeObjet: 'diagnostic',
+          typeUtilisateur: 'aidant',
+        })
       ).toBe(true);
     });
   });
@@ -332,7 +353,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste()
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste({
+          relation: 'initiateur',
+          typeObjet: 'diagnostic',
+          typeUtilisateur: 'aidant',
+        })
       ).toBe(true);
     });
   });
@@ -513,7 +538,11 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(
-        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste()
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste({
+          relation: 'initiateur',
+          typeObjet: 'diagnostic',
+          typeUtilisateur: 'aidant',
+        })
       ).toBe(true);
     });
   });
