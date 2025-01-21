@@ -1,5 +1,5 @@
 import { ConfigurationServeur } from '../serveur';
-import express, { Response } from 'express';
+import express, { RequestHandler, Response } from 'express';
 import crypto, { UUID } from 'crypto';
 import { ServiceDiagnostic } from '../diagnostic/ServiceDiagnostic';
 import { representeLeDiagnosticPourLeClient } from './representateurs/representateurDiagnostic';
@@ -21,8 +21,30 @@ import {
   DefinitionAidantInitieDiagnostic,
   definitionAidantInitieDiagnostic,
 } from '../diagnostic/tuples';
+import { AdaptateurDeVerificationDesAcces } from '../adaptateurs/AdaptateurDeVerificationDesAcces';
+import { Entrepots } from '../domaine/Entrepots';
+import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export type ReponseDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
+
+const verifieRelations = (
+  relations: AdaptateurDeVerificationDesAcces,
+  entrepots: Entrepots
+): RequestHandler => {
+  return async (
+    requete: RequeteUtilisateur,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
+    uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
+      .rechercheParIdentifiant(requete.identifiantUtilisateurCourant!)
+      .then((_utilisateur) => {
+        return relations.verifie<DefinitionAidantInitieDiagnostic>(
+          definitionAidantInitieDiagnostic.definition
+        )(requete, reponse, suite);
+      });
+  };
+};
 
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
@@ -32,6 +54,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     adaptateurDeVerificationDeCGU: cgu,
     adaptateurDeVerificationDesAcces: relations,
     busCommande,
+    entrepots,
   } = configuration;
 
   routes.post(
@@ -61,9 +84,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id',
     session.verifie('Accès diagnostic'),
     cgu.verifie(),
-    relations.verifie<DefinitionAidantInitieDiagnostic>(
-      definitionAidantInitieDiagnostic.definition
-    ),
+    verifieRelations(relations, entrepots),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
       new ServiceDiagnostic(configuration.entrepots)
@@ -87,9 +108,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id',
     session.verifie('Ajout réponse au diagnostic'),
     cgu.verifie(),
-    relations.verifie<DefinitionAidantInitieDiagnostic>(
-      definitionAidantInitieDiagnostic.definition
-    ),
+    verifieRelations(relations, entrepots),
     bodyParser.json(),
     (
       requete: RequeteUtilisateur<CorpsReponse, { id: UUID }>,
@@ -124,9 +143,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/:id/restitution',
     session.verifie('Demande la restitution'),
     cgu.verifie(),
-    relations.verifie<DefinitionAidantInitieDiagnostic>(
-      definitionAidantInitieDiagnostic.definition
-    ),
+    verifieRelations(relations, entrepots),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
 
