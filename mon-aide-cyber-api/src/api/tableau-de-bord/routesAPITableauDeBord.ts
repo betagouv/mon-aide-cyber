@@ -1,6 +1,6 @@
 import express, { Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
-import { constructeurActionsHATEOAS, ReponseHATEOAS } from '../hateoas/hateoas';
+import { ReponseHATEOAS } from '../hateoas/hateoas';
 import {
   Diagnostic,
   ServiceTableauDeBord,
@@ -29,24 +29,15 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
       reponse: Response,
       __suite: NextFunction
     ) => {
-      const diagnostics = await new ServiceTableauDeBord(
+      const tableauDeBord = await new ServiceTableauDeBord(
         configuration.adaptateurRelations,
-        new ServiceDiagnostic(configuration.entrepots)
-      ).diagnosticsInitiesPar(requete.identifiantUtilisateurCourant!);
+        new ServiceDiagnostic(configuration.entrepots),
+        !!requete.estProConnect
+      ).pour(requete.identifiantUtilisateurCourant!);
 
       return reponse.status(200).json({
-        diagnostics,
-        ...constructeurActionsHATEOAS()
-          .pour({
-            contexte: 'aidant:acceder-au-tableau-de-bord',
-          })
-          .pour({
-            contexte: requete.estProConnect
-              ? 'se-deconnecter-avec-pro-connect'
-              : 'se-deconnecter',
-          })
-          .afficherLesDiagnostics(diagnostics.map((d) => d.identifiant))
-          .construis(),
+        diagnostics: tableauDeBord.diagnostics,
+        ...tableauDeBord.liens,
       });
     }
   );

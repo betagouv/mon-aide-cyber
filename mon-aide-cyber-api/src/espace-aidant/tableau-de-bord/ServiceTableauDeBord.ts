@@ -3,6 +3,10 @@ import crypto, { UUID } from 'crypto';
 import { ServiceDiagnostic } from '../../diagnostic/ServiceDiagnostic';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { isAfter } from 'date-fns';
+import {
+  constructeurActionsHATEOAS,
+  ReponseHATEOAS,
+} from '../../api/hateoas/hateoas';
 
 export type Diagnostic = {
   dateCreation: string;
@@ -11,20 +15,48 @@ export type Diagnostic = {
   secteurGeographique: string | 'non renseigné';
 };
 
+type TableauDeBord = {
+  diagnostics: Diagnostic[];
+  liens: ReponseHATEOAS;
+};
+
 export class ServiceTableauDeBord {
   constructor(
     private readonly adaptateurRelation: AdaptateurRelations,
-    private readonly serviceDiagnostic: ServiceDiagnostic
+    private readonly serviceDiagnostic: ServiceDiagnostic,
+    private readonly estProConnect: boolean
   ) {}
 
-  async diagnosticsInitiesPar(
-    identifiantAidant: crypto.UUID
-  ): Promise<Diagnostic[]> {
+  async pour(identifiantUtilisateur: crypto.UUID): Promise<TableauDeBord> {
     const identifiantDiagnosticsLie =
       await this.adaptateurRelation.identifiantsObjetsLiesAUtilisateur(
-        identifiantAidant
+        identifiantUtilisateur
       );
 
+    const liensPourAidant = (diagnostics: Diagnostic[]): ReponseHATEOAS => {
+      return constructeurActionsHATEOAS()
+        .pour({
+          contexte: 'aidant:acceder-au-tableau-de-bord',
+        })
+        .pour({
+          contexte: this.estProConnect
+            ? 'se-deconnecter-avec-pro-connect'
+            : 'se-deconnecter',
+        })
+        .afficherLesDiagnostics(diagnostics.map((d) => d.identifiant))
+        .construis();
+    };
+
+    return this.recupereLesDiagnostics(identifiantDiagnosticsLie).then(
+      (diagnostics) => {
+        return { diagnostics, liens: liensPourAidant(diagnostics) };
+      }
+    );
+  }
+
+  private recupereLesDiagnostics(
+    identifiantDiagnosticsLie: string[]
+  ): Promise<Diagnostic[]> {
     return this.serviceDiagnostic
       .contextes(identifiantDiagnosticsLie as UUID[])
       .then((diagnostics) => {
