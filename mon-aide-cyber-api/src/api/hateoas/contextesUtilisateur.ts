@@ -48,10 +48,9 @@ type ClefContexte =
 export type ContextesUtilisateur = {
   [clef in ClefContexte]: ContexteGeneral;
 };
-
-export const contextesUtilisateur: ContextesUtilisateur = {
+export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
   'demande-devenir-aidant': {
-    ...finaliseCreationEspaceAidant,
+    ...finaliseCreationEspaceAidant(),
     ...demandeDevenirAidant,
   },
   'demande-etre-aide': {
@@ -120,7 +119,7 @@ export const contextesUtilisateur: ContextesUtilisateur = {
       url: '/api/utilisateur/valider-signature-cgu',
     },
   },
-};
+});
 export type ContexteSpecifique = {
   [clef: string]: ContexteSpecifique | Options;
 };

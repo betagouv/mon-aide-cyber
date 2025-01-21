@@ -158,3 +158,25 @@ export const lesContextesUtilisateursExistants = [
     },
   },
 ];
+
+const contextes = lesContextesUtilisateursExistants.filter(
+  (x) =>
+    x.informationContexte.contexte !==
+    'demande-devenir-aidant:finalise-creation-espace-aidant'
+);
+
+export const lesContextesUtilisateursNouveauParcoursExistants = [
+  ...contextes,
+  {
+    contexte: 'Demande devenir Aidant - Création de l’espace Aidant',
+    informationContexte: {
+      contexte: 'demande-devenir-aidant:finalise-creation-espace-aidant',
+    },
+    liens: {
+      'finalise-creation-nouvel-espace-aidant': {
+        url: '/api/demandes/devenir-aidant/creation-espace-aidant',
+        methode: 'POST',
+      },
+    },
+  },
+];
