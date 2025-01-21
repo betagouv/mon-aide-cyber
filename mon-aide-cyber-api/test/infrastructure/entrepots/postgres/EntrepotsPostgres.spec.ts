@@ -77,9 +77,16 @@ import {
   EntiteUtilisateurInscrit,
   UtilisateurInscrit,
 } from '../../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
+import { ServiceDeChiffrement } from '../../../../src/securite/ServiceDeChiffrement';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {
+    const entrepotAidant = new EntrepotAidantPostgres(
+      new ServiceDeChiffrementClair()
+    );
+    const entrepotDiagnosticPostgres = new EntrepotDiagnosticPostgres();
+    const entrepotRelationPostgres = new EntrepotRelationPostgres();
+
     beforeEach(async () => await nettoieLaBaseDeDonneesStatistiques());
 
     const unTupleDiagnostic = (identifiant: UUID): Tuple => ({
@@ -95,39 +102,26 @@ describe('Entrepots Postgres', () => {
       const troisiemeDiagnosticEnGironde = unDiagnosticEnGironde().construis();
       const unDiagnosticSansDepartement = unDiagnostic().construis();
       const quatriemeDiagnosticEnGironde = unDiagnosticEnGironde().construis();
-      const entrepotAidant = new EntrepotAidantPostgres(
-        new ServiceDeChiffrementClair()
-      );
       await entrepotAidant.persiste(unAidant().construis());
       await entrepotAidant.persiste(unAidant().construis());
-      await new EntrepotDiagnosticPostgres().persiste(
-        premierDiagnosticEnGironde
-      );
-      await new EntrepotDiagnosticPostgres().persiste(
-        deuxiemeDiagnosticEnGironde
-      );
-      await new EntrepotDiagnosticPostgres().persiste(
-        troisiemeDiagnosticEnGironde
-      );
-      await new EntrepotDiagnosticPostgres().persiste(
-        quatriemeDiagnosticEnGironde
-      );
-      await new EntrepotDiagnosticPostgres().persiste(
-        unDiagnosticSansDepartement
-      );
-      await new EntrepotRelationPostgres().persiste(
+      await entrepotDiagnosticPostgres.persiste(premierDiagnosticEnGironde);
+      await entrepotDiagnosticPostgres.persiste(deuxiemeDiagnosticEnGironde);
+      await entrepotDiagnosticPostgres.persiste(troisiemeDiagnosticEnGironde);
+      await entrepotDiagnosticPostgres.persiste(quatriemeDiagnosticEnGironde);
+      await entrepotDiagnosticPostgres.persiste(unDiagnosticSansDepartement);
+      await entrepotRelationPostgres.persiste(
         unTupleDiagnostic(premierDiagnosticEnGironde.identifiant)
       );
-      await new EntrepotRelationPostgres().persiste(
+      await entrepotRelationPostgres.persiste(
         unTupleDiagnostic(deuxiemeDiagnosticEnGironde.identifiant)
       );
-      await new EntrepotRelationPostgres().persiste(
+      await entrepotRelationPostgres.persiste(
         unTupleDiagnostic(troisiemeDiagnosticEnGironde.identifiant)
       );
-      await new EntrepotRelationPostgres().persiste(
+      await entrepotRelationPostgres.persiste(
         unTupleDiagnostic(quatriemeDiagnosticEnGironde.identifiant)
       );
-      await new EntrepotRelationPostgres().persiste(
+      await entrepotRelationPostgres.persiste(
         unTupleDiagnostic(unDiagnosticSansDepartement.identifiant)
       );
 
@@ -142,18 +136,19 @@ describe('Entrepots Postgres', () => {
   });
 
   describe('Entrepot Diagnostic Postgres', () => {
+    const entrepotDiagnosticPostgres = new EntrepotDiagnosticPostgres();
+
     beforeEach(async () => {
       await nettoieLaBaseDeDonneesDiagnostics();
     });
+
     it('persiste un diagnostic', async () => {
       const diagnostic = unDiagnostic().construis();
 
-      await new EntrepotDiagnosticPostgres().persiste(diagnostic);
+      await entrepotDiagnosticPostgres.persiste(diagnostic);
 
-      const entrepotDiagnosticPostgresLecture =
-        new EntrepotDiagnosticPostgres();
       expect(
-        await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant)
+        await entrepotDiagnosticPostgres.lis(diagnostic.identifiant)
       ).toStrictEqual(diagnostic);
     });
 
@@ -178,12 +173,10 @@ describe('Entrepots Postgres', () => {
         ])
         .construis();
 
-      await new EntrepotDiagnosticPostgres().persiste(diagnostic);
+      await entrepotDiagnosticPostgres.persiste(diagnostic);
 
-      const entrepotDiagnosticPostgresLecture =
-        new EntrepotDiagnosticPostgres();
       expect(
-        await entrepotDiagnosticPostgresLecture.lis(diagnostic.identifiant)
+        await entrepotDiagnosticPostgres.lis(diagnostic.identifiant)
       ).toStrictEqual(diagnostic);
     });
 
@@ -191,13 +184,11 @@ describe('Entrepots Postgres', () => {
       const diagnostic1 = unDiagnostic().construis();
       const diagnostic2 = unDiagnostic().construis();
 
-      await new EntrepotDiagnosticPostgres().persiste(diagnostic1);
-      await new EntrepotDiagnosticPostgres().persiste(diagnostic2);
+      await entrepotDiagnosticPostgres.persiste(diagnostic1);
+      await entrepotDiagnosticPostgres.persiste(diagnostic2);
 
-      const entrepotDiagnosticPostgresLecture =
-        new EntrepotDiagnosticPostgres();
       expect(
-        await entrepotDiagnosticPostgresLecture.tousLesDiagnosticsAyantPourIdentifiant(
+        await entrepotDiagnosticPostgres.tousLesDiagnosticsAyantPourIdentifiant(
           [diagnostic1.identifiant, diagnostic2.identifiant]
         )
       ).toStrictEqual([diagnostic1, diagnostic2]);
@@ -205,17 +196,17 @@ describe('Entrepots Postgres', () => {
   });
 
   describe('Entrepôt Restitution Postgres', () => {
-    beforeEach(() => FournisseurHorlogeDeTest.initialise(new Date()));
+    const entrepotDiagnostic = new EntrepotDiagnosticPostgres();
+    const entrepotRestitution = new EntrepotRestitutionPostgres();
 
+    beforeEach(() => FournisseurHorlogeDeTest.initialise(new Date()));
     beforeEach(async () => {
       await nettoieLaBaseDeDonneesDiagnostics();
     });
-
     it('retourne une restitution sans indicateurs', async () => {
       const diagnostic = unDiagnostic().construis();
-      await new EntrepotDiagnosticPostgres().persiste(diagnostic);
+      await entrepotDiagnostic.persiste(diagnostic);
 
-      const entrepotRestitution = new EntrepotRestitutionPostgres();
       expect(
         await entrepotRestitution.lis(diagnostic.identifiant)
       ).toStrictEqual<Restitution>({
@@ -235,7 +226,6 @@ describe('Entrepots Postgres', () => {
     });
 
     it("remonte une erreur si la restitution n'existe pas", async () => {
-      const entrepotRestitution = new EntrepotRestitutionPostgres();
       const identifiant = crypto.randomUUID();
 
       await expect(entrepotRestitution.lis(identifiant)).rejects.toThrowError(
@@ -247,9 +237,8 @@ describe('Entrepots Postgres', () => {
       it('avec la zone géographique', async () => {
         const diagnostic = unDiagnosticEnGironde().construis();
         genereLaRestitution(diagnostic);
-        await new EntrepotDiagnosticPostgres().persiste(diagnostic);
+        await entrepotDiagnostic.persiste(diagnostic);
 
-        const entrepotRestitution = new EntrepotRestitutionPostgres();
         expect(
           await entrepotRestitution.lis(diagnostic.identifiant)
         ).toStrictEqual<Restitution>({
@@ -272,9 +261,8 @@ describe('Entrepots Postgres', () => {
         const diagnostic =
           unDiagnosticAvecSecteurActivite('Construction').construis();
         genereLaRestitution(diagnostic);
-        await new EntrepotDiagnosticPostgres().persiste(diagnostic);
+        await entrepotDiagnostic.persiste(diagnostic);
 
-        const entrepotRestitution = new EntrepotRestitutionPostgres();
         expect(
           await entrepotRestitution.lis(diagnostic.identifiant)
         ).toStrictEqual<Restitution>({
@@ -299,9 +287,8 @@ describe('Entrepots Postgres', () => {
         const diagnostic =
           unDiagnosticCompletEnGirondeAvecDesReponsesDonnees().construis();
         genereLaRestitution(diagnostic);
-        await new EntrepotDiagnosticPostgres().persiste(diagnostic);
+        await entrepotDiagnostic.persiste(diagnostic);
 
-        const entrepotRestitution = new EntrepotRestitutionPostgres();
         expect(
           await entrepotRestitution.lis(diagnostic.identifiant)
         ).toStrictEqual<Restitution>({
@@ -638,6 +625,10 @@ describe('Entrepot Aidant', () => {
   });
 
   describe('Met à jour les préférences', () => {
+    const serviceDeChiffrement: ServiceDeChiffrement =
+      new ServiceDeChiffrementClair();
+    const entrepot = new EntrepotAidantPostgres(serviceDeChiffrement);
+
     it('Persiste les types d’entités de l’Aidant', async () => {
       const organisationsPubliques: EntitesOrganisationsPubliques = {
         nom: 'Organisations publiques',
@@ -651,13 +642,10 @@ describe('Entrepot Aidant', () => {
       const aidant = unAidant()
         .ayantPourTypesEntite([organisationsPubliques, associations])
         .construis();
-      const serviceDeChiffrement = new ServiceDeChiffrementClair();
 
       await entrepot.persiste(aidant);
 
-      const aidantRecu = await new EntrepotAidantPostgres(
-        serviceDeChiffrement
-      ).lis(aidant.identifiant);
+      const aidantRecu = await entrepot.lis(aidant.identifiant);
       expect(aidantRecu.preferences.typesEntites).toStrictEqual<TypesEntites>([
         organisationsPubliques,
         associations,
@@ -683,13 +671,10 @@ describe('Entrepot Aidant', () => {
       const aidant = unAidant()
         .ayantPourDepartements([finistere, gironde, gard])
         .construis();
-      const serviceDeChiffrement = new ServiceDeChiffrementClair();
 
       await entrepot.persiste(aidant);
 
-      const aidantRecu = await new EntrepotAidantPostgres(
-        serviceDeChiffrement
-      ).lis(aidant.identifiant);
+      const aidantRecu = await entrepot.lis(aidant.identifiant);
       expect(aidantRecu.preferences.departements).toStrictEqual<Departement[]>([
         finistere,
         gard,
@@ -707,13 +692,10 @@ describe('Entrepot Aidant', () => {
       const aidant = unAidant()
         .ayantPourSecteursActivite([administration, industrie])
         .construis();
-      const serviceDeChiffrement = new ServiceDeChiffrementClair();
 
       await entrepot.persiste(aidant);
 
-      const aidantRecu = await new EntrepotAidantPostgres(
-        serviceDeChiffrement
-      ).lis(aidant.identifiant);
+      const aidantRecu = await entrepot.lis(aidant.identifiant);
       expect(aidantRecu.preferences.secteursActivite).toStrictEqual<
         SecteurActivite[]
       >([administration, industrie]);
@@ -806,16 +788,16 @@ describe('Entrepot Aidant', () => {
 });
 
 describe('EntrepotAidantExtraction', () => {
+  const entrepotAidant = new EntrepotAidantPostgres(
+    adaptateurServiceChiffrement()
+  );
+
   beforeEach(async () => {
     await nettoieLaBaseDeDonneesAidants();
     await nettoieLaBaseDeDonneesRelations();
   });
-
+  const entrepotRelation = new EntrepotRelationPostgres();
   it('Récupère un Aidant ayant plus de 2 diagnostics', async () => {
-    const entrepotAidant = new EntrepotAidantPostgres(
-      adaptateurServiceChiffrement()
-    );
-    const entrepotRelation = new EntrepotRelationPostgres();
     const aidant = unAidant().construis();
     await entrepotAidant.persiste(aidant);
     await entrepotRelation.persiste(
@@ -842,9 +824,6 @@ describe('EntrepotAidantExtraction', () => {
   });
 
   it('Récupère un Aidant sans diagnostic', async () => {
-    const entrepotAidant = new EntrepotAidantPostgres(
-      adaptateurServiceChiffrement()
-    );
     const aidant = unAidant().construis();
     await entrepotAidant.persiste(aidant);
 
@@ -865,10 +844,6 @@ describe('EntrepotAidantExtraction', () => {
   });
 
   it('Récupère les Aidants ayant fait exactement 1 diagnostic', async () => {
-    const entrepotAidant = new EntrepotAidantPostgres(
-      adaptateurServiceChiffrement()
-    );
-    const entrepotRelation = new EntrepotRelationPostgres();
     const premierAidant = unAidant().construis();
     const secondAidant = unAidant().construis();
     await entrepotAidant.persiste(premierAidant);
@@ -912,10 +887,6 @@ describe('EntrepotAidantExtraction', () => {
   });
 
   it('Récupère les Aidants avec leur nombre de diagnostics', async () => {
-    const entrepotAidant = new EntrepotAidantPostgres(
-      adaptateurServiceChiffrement()
-    );
-    const entrepotRelation = new EntrepotRelationPostgres();
     const premierAidant = unAidant().construis();
     const secondAidant = unAidant().construis();
     const troisiemeAidant = unAidant().construis();
@@ -974,11 +945,6 @@ describe('EntrepotAidantExtraction', () => {
   });
 
   it("Ne récupère pas d'Aidant", async () => {
-    const entrepotAidant = new EntrepotAidantPostgres(
-      adaptateurServiceChiffrement()
-    );
-    const entrepotRelation = new EntrepotRelationPostgres();
-
     const aidant = unAidant().construis();
     await entrepotAidant.persiste(aidant);
     await entrepotRelation.persiste(
