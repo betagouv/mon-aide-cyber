@@ -22,12 +22,16 @@ import { EntrepotDemandeDiagnosticLibreAcces } from '../../../diagnostic-libre-a
 import { EntrepotDemandeDiagnosticLibreAccesPostgres } from './EntrepotDemandeDiagnosticLibreAccesPostgres';
 import { EntrepotUtilisateursMAC } from '../../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { EntrepotUtilisateurMACPostgres } from './EntrepotUtilisateurMACPostgres';
+import { EntrepotUtilisateurInscrit } from '../../../espace-utilisateur-inscrit/UtilisateurInscrit';
+import { EntrepotUtilisateurInscritPostgres } from './EntrepotUtilisateurInscritPostgres';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
   private readonly entrepotAidant: EntrepotAidant = new EntrepotAidantPostgres(
     adaptateurServiceChiffrement()
   );
+  private entrepotUtilisateursInscrits: EntrepotUtilisateurInscrit =
+    new EntrepotUtilisateurInscritPostgres(adaptateurServiceChiffrement());
   private entrepotRestitution: EntrepotRestitution =
     new EntrepotRestitutionPostgres();
   private readonly entrepotAide: EntrepotAide = new EntrepotAideConcret(
@@ -51,10 +55,10 @@ export class EntrepotsMAC implements Entrepots {
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
   }
+
   aidants(): EntrepotAidant {
     return this.entrepotAidant;
   }
-
   restitution(): EntrepotRestitution {
     return this.entrepotRestitution;
   }
@@ -89,5 +93,9 @@ export class EntrepotsMAC implements Entrepots {
 
   utilisateursMAC(): EntrepotUtilisateursMAC {
     return this.entrepotUtilisateursMAC;
+  }
+
+  utilisateursInscrits(): EntrepotUtilisateurInscrit {
+    return this.entrepotUtilisateursInscrits;
   }
 }
