@@ -38,7 +38,7 @@ class ConstructeurActionsDepuisContexte {
 
   constructor(informationsContexte: InformationsContexte) {
     const contextes = informationsContexte.contexte.split(':');
-    const options = contextesUtilisateur[contextes[0]];
+    const options = contextesUtilisateur()[contextes[0]];
     if (options) {
       if (contextes[1]) {
         Object.entries(options[contextes[1]]).forEach(
