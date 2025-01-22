@@ -5,8 +5,6 @@ import {
   useEffect,
   useReducer,
 } from 'react';
-import { useModale } from '../../../../fournisseurs/hooks';
-import { CorpsCGU } from '../../../../vues/ComposantCGU';
 import { Departement, estDepartement } from '../../departement';
 import { AutoCompletion } from '../../../../composants/auto-completion/AutoCompletion';
 import {
@@ -19,6 +17,7 @@ import {
   saisiPrenom,
 } from './reducteurDevenirAidant.ts';
 import { Input } from '../../../../composants/atomes/Input/Input.tsx';
+import { ChampValidationCGUs } from '../../../../composants/formulaires/ChampValidationCGUs.tsx';
 
 type ProprietesFormulaireDevenirAidant = PropsWithChildren<{
   referentielDepartements?: Departement[];
@@ -81,19 +80,6 @@ const FormulaireDevenirAidantFormulaire = ({
   useEffect(() => {
     devientValide(etatDemande.pretPourEnvoi);
   }, [etatDemande.pretPourEnvoi]);
-
-  const { affiche } = useModale();
-
-  const afficheModaleCGU = useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement>) => {
-      event.preventDefault();
-      affiche({
-        corps: <CorpsCGU />,
-        taille: 'large',
-      });
-    },
-    [affiche]
-  );
 
   const surSaisiePrenom = useCallback((saisie: string) => {
     envoie(saisiPrenom(saisie));
@@ -223,37 +209,16 @@ const FormulaireDevenirAidantFormulaire = ({
             </div>
           </div>
           <div className="fr-col-12 champs">
-            <div
-              className={`fr-checkbox-group mac-radio-group ${etatDemande.erreurs?.cguValidees ? 'fr-input-group--error' : ''}`}
-            >
-              <input
-                type="checkbox"
-                id="cgu-demande-devenir-aidant"
-                name="cgu-demande-devenir-aidant"
-                onChange={surCGUValidees}
-                checked={etatDemande.cguValidees}
-              />
-              <label className="fr-label" htmlFor="cgu-demande-devenir-aidant">
-                <div>
-                  <span className="asterisque">*</span>
-                  <span>
-                    {' '}
-                    J&apos;accepte les{' '}
-                    <b>
-                      <a href="#" onClick={afficheModaleCGU}>
-                        conditions générales d&apos;utilisation
-                      </a>
-                    </b>{' '}
-                    de MonAideCyber
-                  </span>
-                </div>
-              </label>
-              {etatDemande.erreurs?.cguValidees ? (
-                <p className="fr-error-text">
-                  {etatDemande.erreurs?.cguValidees}
-                </p>
-              ) : null}
-            </div>
+            <ChampValidationCGUs
+              sontValidees={etatDemande.cguValidees}
+              surCguCliquees={surCGUValidees}
+              erreur={etatDemande.erreurs?.cguValidees}
+            />
+            {etatDemande.erreurs?.cguValidees ? (
+              <p className="fr-error-text">
+                {etatDemande.erreurs?.cguValidees}
+              </p>
+            ) : null}
           </div>
         </div>
         <div className="fr-grid-row fr-grid-row--right fr-pt-3w">
