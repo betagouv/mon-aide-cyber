@@ -6,7 +6,7 @@ import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/Ent
 import { UUID } from 'crypto';
 import { unContexteVide } from './ConstructeurContexte';
 
-export class ServiceDiagnosticTest extends ServiceDiagnostic {
+export class ServiceDiagnosticDeTest extends ServiceDiagnostic {
   constructor(private readonly diagnostics = new Map<string, Contexte>()) {
     super(new EntrepotsMemoire());
   }

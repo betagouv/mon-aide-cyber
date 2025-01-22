@@ -4,10 +4,11 @@ import {
   ServiceTableauDeBord,
 } from '../../../src/espace-aidant/tableau-de-bord/ServiceTableauDeBord';
 import crypto from 'crypto';
-import { ServiceDiagnosticTest } from '../../diagnostic/ServiceDiagnosticTest';
+import { ServiceDiagnosticDeTest } from '../../diagnostic/ServiceDiagnosticDeTest';
 import { unContexte } from '../../diagnostic/ConstructeurContexte';
 import { AdaptateurRelationsTest } from '../../relation/AdaptateurRelationTest';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { uneListeDeDiagnosticsPourTableauDeBordReliesAUnUtilisateur } from '../../diagnostic/constructeurDeDiagnosticsPourTableauDeBord';
 
 describe('Service Tableau De Bord', () => {
   beforeEach(() => {
@@ -15,21 +16,20 @@ describe('Service Tableau De Bord', () => {
       new Date(Date.parse('2024-04-17T18:06:00+02:00'))
     );
   });
-
-  describe('Liste le diagnostic initié par un aidant', () => {
+  describe('Liste les diagnostics initiés par un utilisateur', () => {
     it("Avec au moins l'identifiant et la date de création du diagnostic", async () => {
-      const identifiantAidant = crypto.randomUUID();
+      const identifiantUtilisateur = crypto.randomUUID();
       const identifiantDiagnostic = crypto.randomUUID();
 
       const diagnosticTableauDeBord = await new ServiceTableauDeBord(
         new AdaptateurRelationsTest(
-          new Map([[identifiantAidant, [identifiantDiagnostic]]])
+          new Map([[identifiantUtilisateur, [identifiantDiagnostic]]])
         ),
-        new ServiceDiagnosticTest(
+        new ServiceDiagnosticDeTest(
           new Map([[identifiantDiagnostic, unContexte().construis()]])
         ),
         true
-      ).pour(identifiantAidant);
+      ).pour(identifiantUtilisateur);
 
       expect(diagnosticTableauDeBord.diagnostics[0]).toStrictEqual<Diagnostic>({
         identifiant: identifiantDiagnostic,
@@ -41,14 +41,14 @@ describe('Service Tableau De Bord', () => {
 
     it('Avec la date de création au format dd.mm.yyyy', async () => {
       const date = new Date(Date.parse('2024-04-28T18:06:00+02:00'));
-      const identifiantAidant = crypto.randomUUID();
+      const identifiantUtilisateur = crypto.randomUUID();
       const identifiantDiagnostic = crypto.randomUUID();
 
       const diagnosticTableauDeBord = await new ServiceTableauDeBord(
         new AdaptateurRelationsTest(
-          new Map([[identifiantAidant, [identifiantDiagnostic]]])
+          new Map([[identifiantUtilisateur, [identifiantDiagnostic]]])
         ),
-        new ServiceDiagnosticTest(
+        new ServiceDiagnosticDeTest(
           new Map([
             [
               identifiantDiagnostic,
@@ -57,7 +57,7 @@ describe('Service Tableau De Bord', () => {
           ])
         ),
         true
-      ).pour(identifiantAidant);
+      ).pour(identifiantUtilisateur);
 
       expect(diagnosticTableauDeBord.diagnostics[0]).toStrictEqual<Diagnostic>({
         dateCreation: '28.04.2024',
@@ -70,14 +70,14 @@ describe('Service Tableau De Bord', () => {
     describe('Pour la zone géographique', () => {
       it('Comprends le département si seulement celui-ci est renseigné', async () => {
         const departement = 'Corse-du-Sud';
-        const identifiantAidant = crypto.randomUUID();
+        const identifiantUtilisateur = crypto.randomUUID();
         const identifiantDiagnostic = crypto.randomUUID();
 
         const diagnosticTableauDeBord = await new ServiceTableauDeBord(
           new AdaptateurRelationsTest(
-            new Map([[identifiantAidant, [identifiantDiagnostic]]])
+            new Map([[identifiantUtilisateur, [identifiantDiagnostic]]])
           ),
-          new ServiceDiagnosticTest(
+          new ServiceDiagnosticDeTest(
             new Map([
               [
                 identifiantDiagnostic,
@@ -86,7 +86,7 @@ describe('Service Tableau De Bord', () => {
             ])
           ),
           true
-        ).pour(identifiantAidant);
+        ).pour(identifiantUtilisateur);
 
         expect(
           diagnosticTableauDeBord.diagnostics[0]
@@ -102,14 +102,14 @@ describe('Service Tableau De Bord', () => {
     it("Avec le secteur d'activité si celui-ci est renseigné", async () => {
       const secteurActivite =
         'Activités de services administratifs et de soutien';
-      const identifiantAidant = crypto.randomUUID();
+      const identifiantUtilisateur = crypto.randomUUID();
       const identifiantDiagnostic = crypto.randomUUID();
 
       const diagnosticTableauDeBord = await new ServiceTableauDeBord(
         new AdaptateurRelationsTest(
-          new Map([[identifiantAidant, [identifiantDiagnostic]]])
+          new Map([[identifiantUtilisateur, [identifiantDiagnostic]]])
         ),
-        new ServiceDiagnosticTest(
+        new ServiceDiagnosticDeTest(
           new Map([
             [
               identifiantDiagnostic,
@@ -118,7 +118,7 @@ describe('Service Tableau De Bord', () => {
           ])
         ),
         true
-      ).pour(identifiantAidant);
+      ).pour(identifiantUtilisateur);
 
       expect(diagnosticTableauDeBord.diagnostics[0]).toStrictEqual<Diagnostic>({
         dateCreation: '17.04.2024',
@@ -129,21 +129,20 @@ describe('Service Tableau De Bord', () => {
     });
 
     it('Liste seulement les diagnostics initiés par un aidant', async () => {
-      const identifiantAidant = crypto.randomUUID();
+      const identifiantUtilisateur = crypto.randomUUID();
       const identifiantDiagnosticInitie1 = crypto.randomUUID();
       const identifiantDiagnosticInitie2 = crypto.randomUUID();
-
       const relations = new Map<string, string[]>([
         [
-          identifiantAidant,
+          identifiantUtilisateur,
           [identifiantDiagnosticInitie1, identifiantDiagnosticInitie2],
         ],
-        ['identifiant-d-un-autre-aidant', [crypto.randomUUID()]],
+        ['identifiant-d-un-autre-utilisateur', [crypto.randomUUID()]],
       ]);
 
       const diagnosticTableauDeBord = await new ServiceTableauDeBord(
         new AdaptateurRelationsTest(relations),
-        new ServiceDiagnosticTest(
+        new ServiceDiagnosticDeTest(
           new Map([
             [
               identifiantDiagnosticInitie1,
@@ -166,7 +165,7 @@ describe('Service Tableau De Bord', () => {
           ])
         ),
         true
-      ).pour(identifiantAidant);
+      ).pour(identifiantUtilisateur);
 
       expect(diagnosticTableauDeBord.diagnostics).toStrictEqual<Diagnostic[]>([
         {
@@ -185,86 +184,40 @@ describe('Service Tableau De Bord', () => {
     });
 
     it('Liste les diagnostics par ordre chronologique du plus récent au plus ancien', async () => {
-      const identifiantAidant = crypto.randomUUID();
-      const identifiantDiagnosticInitie1 = crypto.randomUUID();
-      const identifiantDiagnosticInitie2 = crypto.randomUUID();
-      const identifiantDiagnosticInitie3 = crypto.randomUUID();
-
-      const relations = new Map<string, string[]>([
-        [
-          identifiantAidant,
-          [
-            identifiantDiagnosticInitie1,
-            identifiantDiagnosticInitie2,
-            identifiantDiagnosticInitie3,
-          ],
-        ],
-      ]);
+      const diagnosticRelies =
+        uneListeDeDiagnosticsPourTableauDeBordReliesAUnUtilisateur([
+          '2024-02-04T14:30:00+01:00',
+          '2024-02-17T14:32:00+01:00',
+          '2024-03-16T14:32:00+01:00',
+        ]);
 
       const diagnosticTableauDeBord = await new ServiceTableauDeBord(
-        new AdaptateurRelationsTest(relations),
-        new ServiceDiagnosticTest(
-          new Map([
-            [
-              identifiantDiagnosticInitie1,
-              unContexte()
-                .avecDateCreation(
-                  new Date(Date.parse('2024-02-04T14:30:00+01:00'))
-                )
-                .enRegion('Corse')
-                .avecLeDepartement('Corse-du-Sud')
-                .avecSecteurActivite('enseignement')
-                .construis(),
-            ],
-            [
-              identifiantDiagnosticInitie2,
-              unContexte()
-                .avecDateCreation(
-                  new Date(Date.parse('2024-02-17T14:32:00+01:00'))
-                )
-                .enRegion('Bretagne')
-                .avecLeDepartement('Finistère')
-                .avecSecteurActivite(
-                  'Arts, spectacles et activités récréatives'
-                )
-                .construis(),
-            ],
-            [
-              identifiantDiagnosticInitie3,
-              unContexte()
-                .avecDateCreation(
-                  new Date(Date.parse('2024-03-16T14:32:00+01:00'))
-                )
-                .enRegion('Bretagne')
-                .avecLeDepartement('Finistère')
-                .avecSecteurActivite(
-                  'Arts, spectacles et activités récréatives'
-                )
-                .construis(),
-            ],
-          ])
-        ),
+        new AdaptateurRelationsTest(diagnosticRelies.relations),
+        diagnosticRelies.serviceDiagnostic,
         true
-      ).pour(identifiantAidant);
+      ).pour(diagnosticRelies.identifiantUtilisateur);
 
+      const premierDiagnosicCree = diagnosticRelies.diagnosticsCrees[0];
+      const deuxiemeDiagnosicCree = diagnosticRelies.diagnosticsCrees[1];
+      const troisiemeDiagnosicCree = diagnosticRelies.diagnosticsCrees[2];
       expect(diagnosticTableauDeBord.diagnostics).toStrictEqual<Diagnostic[]>([
         {
           dateCreation: '16.03.2024',
-          identifiant: identifiantDiagnosticInitie3,
-          secteurActivite: 'Arts, spectacles et activités récréatives',
-          secteurGeographique: 'Finistère',
+          identifiant: troisiemeDiagnosicCree.identifiant,
+          secteurActivite: troisiemeDiagnosicCree.contexte.secteurActivite!,
+          secteurGeographique: troisiemeDiagnosicCree.contexte.departement!,
         },
         {
           dateCreation: '17.02.2024',
-          identifiant: identifiantDiagnosticInitie2,
-          secteurActivite: 'Arts, spectacles et activités récréatives',
-          secteurGeographique: 'Finistère',
+          identifiant: deuxiemeDiagnosicCree.identifiant,
+          secteurActivite: deuxiemeDiagnosicCree.contexte.secteurActivite!,
+          secteurGeographique: deuxiemeDiagnosicCree.contexte.departement!,
         },
         {
           dateCreation: '04.02.2024',
-          identifiant: identifiantDiagnosticInitie1,
-          secteurActivite: 'enseignement',
-          secteurGeographique: 'Corse-du-Sud',
+          identifiant: premierDiagnosicCree.identifiant,
+          secteurActivite: premierDiagnosicCree.contexte.secteurActivite!,
+          secteurGeographique: premierDiagnosicCree.contexte.departement!,
         },
       ]);
     });
