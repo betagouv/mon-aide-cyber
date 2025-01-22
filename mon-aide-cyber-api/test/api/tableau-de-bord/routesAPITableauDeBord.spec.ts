@@ -11,7 +11,7 @@ import {
 } from '../../constructeurs/constructeursAidantUtilisateur';
 import { ReponseDiagnostics } from '../../../src/api/tableau-de-bord/routesAPITableauDeBord';
 
-describe('le serveur MAC sur les routes /api/espace-aidant/tableau-de-bord', () => {
+describe('le serveur MAC sur les routes /api/mon-espace/tableau-de-bord', () => {
   describe('quand une requête GET est reçue sur /', () => {
     const testeurMAC = testeurIntegration();
     let donneesServeur: { portEcoute: number; app: Express };

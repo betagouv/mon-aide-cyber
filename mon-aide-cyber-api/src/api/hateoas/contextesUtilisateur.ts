@@ -112,6 +112,12 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
       ...modifierPreferences,
     },
   },
+  'utilisateur-inscrit': {
+    'acceder-au-tableau-de-bord': {
+      ...lancerDiagnostic,
+      ...afficherProfil,
+    },
+  },
   'valider-signature-cgu': {
     'valider-signature-cgu': {
       methode: 'POST',
