@@ -8,6 +8,7 @@ import {
 import { ConfigurationServeur } from '../../serveur';
 import { RequeteUtilisateur } from '../routesAPI';
 import { ServiceDiagnostic } from '../../diagnostic/ServiceDiagnostic';
+import { uneRechercheUtilisateursMAC } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export type ReponseDiagnostics = ReponseHATEOAS & {
   diagnostics: Diagnostic[];
@@ -18,6 +19,7 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
   const {
     adaptateurDeVerificationDeSession: session,
     adaptateurDeVerificationDeCGU: cgu,
+    entrepots,
   } = configuration;
 
   routes.get(
@@ -32,7 +34,7 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
       const tableauDeBord = await new ServiceTableauDeBord(
         configuration.adaptateurRelations,
         new ServiceDiagnostic(configuration.entrepots),
-        null,
+        uneRechercheUtilisateursMAC(entrepots.utilisateursMAC()),
         !!requete.estProConnect
       ).pour(requete.identifiantUtilisateurCourant!);
 
