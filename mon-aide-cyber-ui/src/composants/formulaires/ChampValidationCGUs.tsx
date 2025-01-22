@@ -4,12 +4,16 @@ import { Link } from 'react-router-dom';
 export const ChampValidationCGUs = ({
   sontValidees,
   surCguCliquees,
+  erreur,
 }: {
   sontValidees: boolean;
+  erreur?: any;
   surCguCliquees: () => void;
 }) => {
   return (
-    <div className={`fr-checkbox-group mac-radio-group`}>
+    <div
+      className={`fr-checkbox-group mac-radio-group ${erreur ? 'fr-input-group--error' : ''}`}
+    >
       <Input
         type="checkbox"
         id="cgu-aide"
