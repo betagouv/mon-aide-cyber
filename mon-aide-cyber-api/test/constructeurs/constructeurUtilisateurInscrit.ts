@@ -27,6 +27,11 @@ class ConstructeurUtilisateurInscrit
     return this;
   }
 
+  avecUnIdentifiant(identifiant: crypto.UUID): ConstructeurUtilisateurInscrit {
+    this.identifiant = identifiant;
+    return this;
+  }
+
   construis(): UtilisateurInscrit {
     return {
       dateSignatureCGU: this.dateSignatureCGU,

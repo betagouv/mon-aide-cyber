@@ -288,6 +288,52 @@ describe('Service Tableau De Bord', () => {
         },
       });
     });
+
+    it('Retourne les liens vers les diagnostics auxquels on peut accéder', async () => {
+      const diagnosticRelies =
+        uneListeDeDiagnosticsPourTableauDeBordReliesAUnUtilisateur([
+          '2024-02-04T14:30:00+01:00',
+          '2024-02-17T14:32:00+01:00',
+        ]);
+      const aidant = unAidant()
+        .avecUnIdentifiant(diagnosticRelies.identifiantUtilisateur)
+        .construis();
+      const entrepotAidant: EntrepotAidant = new EntrepotAidantMemoire();
+      await entrepotAidant.persiste(aidant);
+
+      const diagnosticTableauDeBord = await new ServiceTableauDeBord(
+        new AdaptateurRelationsTest(diagnosticRelies.relations),
+        diagnosticRelies.serviceDiagnostic,
+        uneRechercheUtilisateursMAC(
+          new EntrepotUtilisateurMACMemoire({
+            aidant: entrepotAidant,
+            utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+          })
+        ),
+        true
+      ).pour(diagnosticRelies.identifiantUtilisateur);
+
+      const premierDiagnosicCree =
+        diagnosticRelies.diagnosticsCrees[0].identifiant;
+      const deuxiemeDiagnosicCree =
+        diagnosticRelies.diagnosticsCrees[1].identifiant;
+      expect(
+        diagnosticTableauDeBord.liens.liens[
+          `afficher-diagnostic-${premierDiagnosicCree}`
+        ]
+      ).toStrictEqual({
+        methode: 'GET',
+        url: `/api/diagnostic/${premierDiagnosicCree}/restitution`,
+      });
+      expect(
+        diagnosticTableauDeBord.liens.liens[
+          `afficher-diagnostic-${deuxiemeDiagnosicCree}`
+        ]
+      ).toStrictEqual({
+        methode: 'GET',
+        url: `/api/diagnostic/${deuxiemeDiagnosicCree}/restitution`,
+      });
+    });
   });
 
   describe('Dans le cas d’un Utilisateur Inscrit', () => {
@@ -325,6 +371,53 @@ describe('Service Tableau De Bord', () => {
             url: '/pro-connect/deconnexion',
           },
         },
+      });
+    });
+
+    it('Retourne les liens vers les diagnostics auxquels on peut accéder', async () => {
+      const diagnosticRelies =
+        uneListeDeDiagnosticsPourTableauDeBordReliesAUnUtilisateur([
+          '2024-02-04T14:30:00+01:00',
+          '2024-02-17T14:32:00+01:00',
+        ]);
+      const utilisateurInscrit = unUtilisateurInscrit()
+        .avecUnIdentifiant(diagnosticRelies.identifiantUtilisateur)
+        .construis();
+      const entrepotUtilisateurInscrit: EntrepotUtilisateurInscrit =
+        new EntrepotUtilisateurInscritMemoire();
+      await entrepotUtilisateurInscrit.persiste(utilisateurInscrit);
+
+      const diagnosticTableauDeBord = await new ServiceTableauDeBord(
+        new AdaptateurRelationsTest(diagnosticRelies.relations),
+        diagnosticRelies.serviceDiagnostic,
+        uneRechercheUtilisateursMAC(
+          new EntrepotUtilisateurMACMemoire({
+            aidant: new EntrepotAidantMemoire(),
+            utilisateurInscrit: entrepotUtilisateurInscrit,
+          })
+        ),
+        true
+      ).pour(diagnosticRelies.identifiantUtilisateur);
+
+      const premierDiagnosicCree =
+        diagnosticRelies.diagnosticsCrees[0].identifiant;
+      const deuxiemeDiagnosicCree =
+        diagnosticRelies.diagnosticsCrees[1].identifiant;
+      expect(
+        diagnosticTableauDeBord.liens.liens[
+          `afficher-diagnostic-${premierDiagnosicCree}`
+        ]
+      ).toStrictEqual({
+        methode: 'GET',
+        url: `/api/diagnostic/${premierDiagnosicCree}/restitution`,
+      });
+      expect(
+        diagnosticTableauDeBord.liens.liens[
+          `afficher-diagnostic-${deuxiemeDiagnosicCree}`
+        ]
+      ).toStrictEqual({
+        methode: 'GET',
+        url: `/api/diagnostic/${deuxiemeDiagnosicCree}/restitution`,
       });
     });
   });

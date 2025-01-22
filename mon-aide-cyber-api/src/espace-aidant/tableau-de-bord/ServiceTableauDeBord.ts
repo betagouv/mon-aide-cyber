@@ -50,23 +50,15 @@ export class ServiceTableauDeBord {
         await this.rechercheUtilisateurMAC.rechercheParIdentifiant(
           identifiantUtilisateur
         );
+      let constructeurHATEOAS = constructeurActionsHATEOAS().pour({
+        contexte: 'utilisateur-inscrit:acceder-au-tableau-de-bord',
+      });
       if (utilisateur && this.profilsAidants.includes(utilisateur?.profil)) {
-        return constructeurActionsHATEOAS()
-          .pour({
-            contexte: 'aidant:acceder-au-tableau-de-bord',
-          })
-          .pour({
-            contexte: this.estProConnect
-              ? 'se-deconnecter-avec-pro-connect'
-              : 'se-deconnecter',
-          })
-          .afficherLesDiagnostics(diagnostics.map((d) => d.identifiant))
-          .construis();
+        constructeurHATEOAS = constructeurActionsHATEOAS().pour({
+          contexte: 'aidant:acceder-au-tableau-de-bord',
+        });
       }
-      return constructeurActionsHATEOAS()
-        .pour({
-          contexte: 'utilisateur-inscrit:acceder-au-tableau-de-bord',
-        })
+      return constructeurHATEOAS
         .pour({
           contexte: this.estProConnect
             ? 'se-deconnecter-avec-pro-connect'
