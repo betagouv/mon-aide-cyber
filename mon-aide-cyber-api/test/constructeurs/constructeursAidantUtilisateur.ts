@@ -170,9 +170,9 @@ type Parametres = {
   constructeurUtilisateur: ConstructeurUtilisateur;
 };
 
-export async function unCompteAidantRelieAUnCompteUtilisateur(
+export const unCompteAidantRelieAUnCompteUtilisateur = async (
   parametres: Parametres
-) {
+): Promise<{ utilisateur: Utilisateur; aidant: Aidant }> => {
   const utilisateur = parametres.constructeurUtilisateur.construis();
   await parametres.entrepotUtilisateur.persiste(utilisateur);
   const aidant = parametres.constructeurAidant
@@ -181,4 +181,4 @@ export async function unCompteAidantRelieAUnCompteUtilisateur(
     .construis();
   await parametres.entrepotAidant.persiste(aidant);
   return { utilisateur, aidant };
-}
+};

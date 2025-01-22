@@ -32,6 +32,7 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
       const tableauDeBord = await new ServiceTableauDeBord(
         configuration.adaptateurRelations,
         new ServiceDiagnostic(configuration.entrepots),
+        null,
         !!requete.estProConnect
       ).pour(requete.identifiantUtilisateurCourant!);
 

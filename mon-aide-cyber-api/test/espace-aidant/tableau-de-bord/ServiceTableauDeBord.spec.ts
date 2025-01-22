@@ -9,6 +9,17 @@ import { unContexte } from '../../diagnostic/ConstructeurContexte';
 import { AdaptateurRelationsTest } from '../../relation/AdaptateurRelationTest';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { uneListeDeDiagnosticsPourTableauDeBordReliesAUnUtilisateur } from '../../diagnostic/constructeurDeDiagnosticsPourTableauDeBord';
+import { uneRechercheUtilisateursMAC } from '../../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import {
+  EntrepotAidantMemoire,
+  EntrepotUtilisateurInscritMemoire,
+  EntrepotUtilisateurMACMemoire,
+} from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { EntrepotAidant } from '../../../src/espace-aidant/Aidant';
+import { ReponseHATEOAS } from '../../../src/api/hateoas/hateoas';
+import { unUtilisateurInscrit } from '../../constructeurs/constructeurUtilisateurInscrit';
+import { EntrepotUtilisateurInscrit } from '../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 
 describe('Service Tableau De Bord', () => {
   beforeEach(() => {
@@ -16,7 +27,15 @@ describe('Service Tableau De Bord', () => {
       new Date(Date.parse('2024-04-17T18:06:00+02:00'))
     );
   });
+
   describe('Liste les diagnostics initiés par un utilisateur', () => {
+    const rechercheUtilisateurMAC = uneRechercheUtilisateursMAC(
+      new EntrepotUtilisateurMACMemoire({
+        aidant: new EntrepotAidantMemoire(),
+        utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+      })
+    );
+
     it("Avec au moins l'identifiant et la date de création du diagnostic", async () => {
       const identifiantUtilisateur = crypto.randomUUID();
       const identifiantDiagnostic = crypto.randomUUID();
@@ -28,6 +47,7 @@ describe('Service Tableau De Bord', () => {
         new ServiceDiagnosticDeTest(
           new Map([[identifiantDiagnostic, unContexte().construis()]])
         ),
+        rechercheUtilisateurMAC,
         true
       ).pour(identifiantUtilisateur);
 
@@ -56,6 +76,7 @@ describe('Service Tableau De Bord', () => {
             ],
           ])
         ),
+        rechercheUtilisateurMAC,
         true
       ).pour(identifiantUtilisateur);
 
@@ -85,6 +106,7 @@ describe('Service Tableau De Bord', () => {
               ],
             ])
           ),
+          rechercheUtilisateurMAC,
           true
         ).pour(identifiantUtilisateur);
 
@@ -117,6 +139,7 @@ describe('Service Tableau De Bord', () => {
             ],
           ])
         ),
+        rechercheUtilisateurMAC,
         true
       ).pour(identifiantUtilisateur);
 
@@ -164,6 +187,7 @@ describe('Service Tableau De Bord', () => {
             ],
           ])
         ),
+        rechercheUtilisateurMAC,
         true
       ).pour(identifiantUtilisateur);
 
@@ -194,6 +218,7 @@ describe('Service Tableau De Bord', () => {
       const diagnosticTableauDeBord = await new ServiceTableauDeBord(
         new AdaptateurRelationsTest(diagnosticRelies.relations),
         diagnosticRelies.serviceDiagnostic,
+        rechercheUtilisateurMAC,
         true
       ).pour(diagnosticRelies.identifiantUtilisateur);
 
@@ -220,6 +245,87 @@ describe('Service Tableau De Bord', () => {
           secteurGeographique: premierDiagnosicCree.contexte.departement!,
         },
       ]);
+    });
+  });
+
+  describe('Dans le cas d’un Aidant', () => {
+    it('Retourne les actions HATEOAS spécifiques', async () => {
+      const aidant = unAidant().construis();
+      const entrepotAidant: EntrepotAidant = new EntrepotAidantMemoire();
+      await entrepotAidant.persiste(aidant);
+
+      const diagnosticTableauDeBord = await new ServiceTableauDeBord(
+        new AdaptateurRelationsTest(new Map()),
+        new ServiceDiagnosticDeTest(),
+        uneRechercheUtilisateursMAC(
+          new EntrepotUtilisateurMACMemoire({
+            aidant: entrepotAidant,
+            utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+          })
+        ),
+        true
+      ).pour(aidant.identifiant);
+
+      expect(diagnosticTableauDeBord.liens).toStrictEqual<ReponseHATEOAS>({
+        liens: {
+          'afficher-preferences': {
+            methode: 'GET',
+            url: '/api/aidant/preferences',
+          },
+          'afficher-profil': {
+            methode: 'GET',
+            url: '/api/profil',
+          },
+          'lancer-diagnostic': {
+            methode: 'POST',
+            url: '/api/diagnostic',
+          },
+          'se-deconnecter': {
+            methode: 'GET',
+            typeAppel: 'DIRECT',
+            url: '/pro-connect/deconnexion',
+          },
+        },
+      });
+    });
+  });
+
+  describe('Dans le cas d’un Utilisateur Inscrit', () => {
+    it('Retourne les actions HATEOAS spécifiques', async () => {
+      const utilisateurInscrit = unUtilisateurInscrit().construis();
+      const entrepotUtilisateurInscrit: EntrepotUtilisateurInscrit =
+        new EntrepotUtilisateurInscritMemoire();
+      await entrepotUtilisateurInscrit.persiste(utilisateurInscrit);
+
+      const diagnosticTableauDeBord = await new ServiceTableauDeBord(
+        new AdaptateurRelationsTest(new Map()),
+        new ServiceDiagnosticDeTest(),
+        uneRechercheUtilisateursMAC(
+          new EntrepotUtilisateurMACMemoire({
+            aidant: new EntrepotAidantMemoire(),
+            utilisateurInscrit: entrepotUtilisateurInscrit,
+          })
+        ),
+        true
+      ).pour(utilisateurInscrit.identifiant);
+
+      expect(diagnosticTableauDeBord.liens).toStrictEqual<ReponseHATEOAS>({
+        liens: {
+          'afficher-profil': {
+            methode: 'GET',
+            url: '/api/profil',
+          },
+          'lancer-diagnostic': {
+            methode: 'POST',
+            url: '/api/diagnostic',
+          },
+          'se-deconnecter': {
+            methode: 'GET',
+            typeAppel: 'DIRECT',
+            url: '/pro-connect/deconnexion',
+          },
+        },
+      });
     });
   });
 });

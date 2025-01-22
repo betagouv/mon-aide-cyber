@@ -7,6 +7,10 @@ import {
   constructeurActionsHATEOAS,
   ReponseHATEOAS,
 } from '../../api/hateoas/hateoas';
+import {
+  ProfilUtilisateurMAC,
+  RechercheUtilisateursMAC,
+} from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export type Diagnostic = {
   dateCreation: string;
@@ -21,9 +25,15 @@ type TableauDeBord = {
 };
 
 export class ServiceTableauDeBord {
+  private readonly profilsAidants: ProfilUtilisateurMAC[] = [
+    'Aidant',
+    'Gendarme',
+  ];
+
   constructor(
     private readonly adaptateurRelation: AdaptateurRelations,
     private readonly serviceDiagnostic: ServiceDiagnostic,
+    private readonly rechercheUtilisateurMAC: RechercheUtilisateursMAC,
     private readonly estProConnect: boolean
   ) {}
 
@@ -33,10 +43,29 @@ export class ServiceTableauDeBord {
         identifiantUtilisateur
       );
 
-    const liensPourAidant = (diagnostics: Diagnostic[]): ReponseHATEOAS => {
+    const liensPourUtilisateur = async (
+      diagnostics: Diagnostic[]
+    ): Promise<ReponseHATEOAS> => {
+      const utilisateur =
+        await this.rechercheUtilisateurMAC.rechercheParIdentifiant(
+          identifiantUtilisateur
+        );
+      if (utilisateur && this.profilsAidants.includes(utilisateur?.profil)) {
+        return constructeurActionsHATEOAS()
+          .pour({
+            contexte: 'aidant:acceder-au-tableau-de-bord',
+          })
+          .pour({
+            contexte: this.estProConnect
+              ? 'se-deconnecter-avec-pro-connect'
+              : 'se-deconnecter',
+          })
+          .afficherLesDiagnostics(diagnostics.map((d) => d.identifiant))
+          .construis();
+      }
       return constructeurActionsHATEOAS()
         .pour({
-          contexte: 'aidant:acceder-au-tableau-de-bord',
+          contexte: 'utilisateur-inscrit:acceder-au-tableau-de-bord',
         })
         .pour({
           contexte: this.estProConnect
@@ -49,7 +78,10 @@ export class ServiceTableauDeBord {
 
     return this.recupereLesDiagnostics(identifiantDiagnosticsLie).then(
       (diagnostics) => {
-        return { diagnostics, liens: liensPourAidant(diagnostics) };
+        return liensPourUtilisateur(diagnostics).then((liens) => ({
+          diagnostics,
+          liens,
+        }));
       }
     );
   }
