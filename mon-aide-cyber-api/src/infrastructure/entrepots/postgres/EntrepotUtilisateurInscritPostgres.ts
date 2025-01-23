@@ -13,7 +13,7 @@ export type EntiteUtilisateurInscritDTO = {
 type DonneesUtilisateurInscrit = {
   email: string;
   nomPrenom: string;
-  dateSignatureCGU: string;
+  dateSignatureCGU?: string;
   entite: EntiteUtilisateurInscritDTO;
 };
 
@@ -35,7 +35,9 @@ export class EntrepotUtilisateurInscritPostgres
       donnees: {
         email: this.chiffrement.chiffre(entite.email),
         nomPrenom: this.chiffrement.chiffre(entite.nomPrenom),
-        dateSignatureCGU: entite.dateSignatureCGU.toISOString(),
+        ...(entite.dateSignatureCGU && {
+          dateSignatureCGU: entite.dateSignatureCGU?.toISOString(),
+        }),
         entite: {
           ...(entite.entite.siret && { siret: entite.entite.siret }),
         },
@@ -47,7 +49,11 @@ export class EntrepotUtilisateurInscritPostgres
 
   protected deDTOAEntite(dto: UtilisateurInscritDTO): UtilisateurInscrit {
     return {
-      dateSignatureCGU: FournisseurHorloge.enDate(dto.donnees.dateSignatureCGU),
+      ...(dto.donnees.dateSignatureCGU && {
+        dateSignatureCGU: FournisseurHorloge.enDate(
+          dto.donnees.dateSignatureCGU
+        ),
+      }),
       email: this.chiffrement.dechiffre(dto.donnees.email),
       entite: {
         ...(dto.donnees.entite.siret && { siret: dto.donnees.entite.siret }),

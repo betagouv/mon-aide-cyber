@@ -1217,66 +1217,84 @@ describe('Entrepot profil aidant', () => {
 });
 
 describe('Entrepot Utilisateurs MAC', () => {
+  const entrepotAidantPostgres = new EntrepotAidantPostgres(
+    new ServiceDeChiffrementClair()
+  );
+  const entrepotUtilisateurInscritPostgres =
+    new EntrepotUtilisateurInscritPostgres(new ServiceDeChiffrementClair());
+  const entrepotUtilisateurMACPostgres = new EntrepotUtilisateurMACPostgres();
+
   beforeEach(async () => {
     nettoieLaBaseDeDonneesAidants();
   });
   it('Retourne un utilisateur au profil Aidant', async () => {
     const aidant = unAidant().construis();
-    await new EntrepotAidantPostgres(new ServiceDeChiffrementClair()).persiste(
-      aidant
-    );
+    await entrepotAidantPostgres.persiste(aidant);
 
     const utilisateurMAC =
-      await new EntrepotUtilisateurMACPostgres().rechercheParIdentifiant(
+      await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
         aidant.identifiant
       );
 
     expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
       identifiant: aidant.identifiant,
       profil: 'Aidant',
+      dateValidationCGU: aidant.dateSignatureCGU!,
     });
   });
 
   it('Retourne un utilisateur au profil Gendarme', async () => {
     const aidant = unAidant().avecUnProfilGendarme().construis();
-    await new EntrepotAidantPostgres(new ServiceDeChiffrementClair()).persiste(
-      aidant
-    );
+    await entrepotAidantPostgres.persiste(aidant);
 
     const utilisateurMAC =
-      await new EntrepotUtilisateurMACPostgres().rechercheParIdentifiant(
+      await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
         aidant.identifiant
       );
 
     expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
       identifiant: aidant.identifiant,
       profil: 'Gendarme',
+      dateValidationCGU: aidant.dateSignatureCGU!,
     });
   });
-
   it('Retourne un utilisateur au profil Utilisateur Inscrit', async () => {
     const utilisateurInscrit = unUtilisateurInscrit().construis();
-    await new EntrepotUtilisateurInscritPostgres(
-      new ServiceDeChiffrementClair()
-    ).persiste(utilisateurInscrit);
+    await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
 
     const utilisateurMAC =
-      await new EntrepotUtilisateurMACPostgres().rechercheParIdentifiant(
+      await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
         utilisateurInscrit.identifiant
       );
 
     expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
       identifiant: utilisateurInscrit.identifiant,
       profil: 'UtilisateurInscrit',
+      dateValidationCGU: utilisateurInscrit.dateSignatureCGU!,
     });
   });
 
   it("Renvoie une erreur AggregatNonTrouvé si l'utilisateur n'existe pas", async () => {
     expect(
-      new EntrepotUtilisateurMACPostgres().rechercheParIdentifiant(
+      entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
         crypto.randomUUID()
       )
     ).rejects.toThrowError(new AggregatNonTrouve('utilisateur MAC'));
+  });
+
+  it('Renvoie la date de validation des CGU', async () => {
+    const dateValidationCGU = new Date(Date.parse('2025-02-04T14:37:22'));
+    const utilisateurInscrit = unUtilisateurInscrit()
+      .avecUneDateDeSignatureDeCGU(dateValidationCGU)
+      .construis();
+    await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
+
+    const utilisateurMAC =
+      await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
+        utilisateurInscrit.identifiant
+      );
+
+    expect(utilisateurMAC.dateValidationCGU).toStrictEqual(dateValidationCGU);
   });
 });
 

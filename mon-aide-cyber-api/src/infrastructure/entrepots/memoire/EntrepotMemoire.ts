@@ -300,6 +300,9 @@ export class EntrepotUtilisateurMACMemoire
       return {
         identifiant: aidant.identifiant,
         profil: estSiretGendarmerie(aidant?.siret) ? 'Gendarme' : 'Aidant',
+        ...(aidant.dateSignatureCGU && {
+          dateValidationCGU: aidant.dateSignatureCGU,
+        }),
       };
     }
     try {
@@ -308,6 +311,9 @@ export class EntrepotUtilisateurMACMemoire
       return {
         identifiant: utilisateurInscrit.identifiant,
         profil: 'UtilisateurInscrit',
+        ...(utilisateurInscrit.dateSignatureCGU && {
+          dateValidationCGU: utilisateurInscrit.dateSignatureCGU,
+        }),
       };
     } catch (_erreur) {
       return Promise.reject('Utilisateur MAC non trouvé');

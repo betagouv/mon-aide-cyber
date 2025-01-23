@@ -6,6 +6,7 @@ export type ProfilUtilisateurMAC = 'Aidant' | 'UtilisateurInscrit' | 'Gendarme';
 
 export type UtilisateurMAC = Aggregat & {
   profil: ProfilUtilisateurMAC;
+  dateValidationCGU?: Date;
 };
 
 export type UtilisateurMACDTO = UtilisateurMAC;
@@ -31,6 +32,9 @@ export const uneRechercheUtilisateursMAC = (
       .then((utilisateur) => ({
         identifiant: utilisateur.identifiant,
         profil: utilisateur.profil,
+        ...(utilisateur.dateValidationCGU && {
+          dateValidationCGU: utilisateur.dateValidationCGU,
+        }),
       }))
       .catch((erreur) => {
         console.error(
