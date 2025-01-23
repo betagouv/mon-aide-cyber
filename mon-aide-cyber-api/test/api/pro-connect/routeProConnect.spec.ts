@@ -9,6 +9,7 @@ import { ReponseHATEOASEnErreur } from '../../../src/api/hateoas/hateoas';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { utilitairesCookies } from '../../../src/adaptateurs/utilitairesDeCookies';
+import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 const enObjet = <T extends { [clef: string]: string }>(cookie: string): T =>
   cookie.split('; ').reduce((acc: T, v: string) => {
@@ -189,6 +190,44 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         expect(reponse.statusCode).toStrictEqual(302);
         expect(reponse.headers['location']).toStrictEqual(
           '/aidant/valide-signature-cgu'
+        );
+      });
+    });
+
+    describe('Dans le cas d’un Aidant ayant validé les CGU avant le 31/01/205', () => {
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-02-02T12:34:34'))
+      );
+
+      beforeEach(async () => {
+        const aidant = unAidant()
+          .cguValideesLe(new Date(Date.parse('2025-01-14T14:32:00')))
+          .construis();
+        donneesServeur = testeurMAC.initialise();
+        await testeurMAC.entrepots.aidants().persiste(aidant);
+        utilitairesCookies.recuperateurDeCookies = () =>
+          'j%3A%7B%22state%22%3A%22etat%22%2C%22nonce%22%3A%22coucou%22%7D';
+        testeurMAC.adaptateurProConnect.recupereJeton = async () => ({
+          idToken: fakerFR.string.alpha(10),
+          accessToken: fakerFR.string.alpha(10),
+        });
+        testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+          async () =>
+            desInformationsUtilisateur().pourUnAidant(aidant).construis();
+        testeurMAC.gestionnaireDeJeton.genereJeton = () => 'abc';
+      });
+
+      it('Redirige vers /mon-espace/mon-utilisation-du-service', async () => {
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/pro-connect/apres-authentification',
+          donneesServeur.portEcoute
+        );
+
+        expect(reponse.statusCode).toStrictEqual(302);
+        expect(reponse.headers['location']).toStrictEqual(
+          '/mon-espace/mon-utilisation-du-service'
         );
       });
     });
