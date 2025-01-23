@@ -44,12 +44,9 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   });
 
   const connecteUtilisateur = (identifiantAidant: crypto.UUID) => {
-    testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect({
-      identifiantConnexion: 'jean.dupont',
-      motDePasse: 'mdp',
-      nomPrenom: 'Jean Dupont',
-      identifiant: identifiantAidant,
-    });
+    testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
+      identifiantAidant
+    );
   };
 
   describe('Quand une requête GET est reçue sur /{id}', () => {
@@ -491,7 +488,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         constructeurUtilisateur: unUtilisateur(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
-        utilisateur
+        utilisateur.identifiant
       );
       testeurMAC.adaptateursRestitution.html = () =>
         unAdaptateurDeRestitutionHTML().construis();

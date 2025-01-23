@@ -36,7 +36,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         constructeurAidant: unAidant(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -83,7 +83,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         constructeurAidant: unAidant(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -112,7 +112,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         ]),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -144,7 +144,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         ]),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -179,7 +179,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         ]),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -236,7 +236,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         ]),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -303,7 +303,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
           constructeurAidant: unAidant(),
         });
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur
+          utilisateur.identifiant
         );
 
         const reponse = await executeRequete(
@@ -332,7 +332,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
           constructeurAidant: unAidant(),
         });
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur
+          utilisateur.identifiant
         );
 
         const reponse = await executeRequete(
@@ -361,7 +361,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
           constructeurAidant: unAidant(),
         });
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur
+          utilisateur.identifiant
         );
 
         const reponse = await executeRequete(

@@ -24,6 +24,7 @@ import { ServiceDeChiffrement } from '../securite/ServiceDeChiffrement';
 import { CommandeReinitialisationMotDePasse } from '../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 import { adaptateurConfigurationLimiteurTraffic } from './adaptateurLimiteurTraffic';
 import { unServiceAidant } from '../espace-aidant/ServiceAidantMAC';
+import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 type CorpsRequeteReinitialiserMotDePasse = core.ParamsDictionary & {
   token: string;
@@ -92,10 +93,10 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       reponse: Response,
       suite: NextFunction
     ) => {
-      return unServiceAidant(entrepots.aidants())
-        .parIdentifiant(requete.identifiantUtilisateurCourant!)
-        .then((aidant) => {
-          if (!aidant) {
+      return uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
+        .rechercheParIdentifiant(requete.identifiantUtilisateurCourant!)
+        .then((utilisateur) => {
+          if (!utilisateur) {
             return suite(
               ErreurMAC.cree(
                 "Accède aux informations de l'utilisateur",
@@ -105,7 +106,10 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
           }
           let actions = constructeurActionsHATEOAS()
             .pour({
-              contexte: 'aidant:acceder-aux-informations-utilisateur',
+              contexte:
+                utilisateur.profil === 'UtilisateurInscrit'
+                  ? 'utilisateur-inscrit:acceder-aux-informations-utilisateur'
+                  : 'aidant:acceder-aux-informations-utilisateur',
             })
             .pour({
               contexte: requete.estProConnect
@@ -113,14 +117,15 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
                 : 'se-deconnecter',
             })
             .construis();
-          if (!aidant.dateSignatureCGU) {
+
+          if (!utilisateur.dateValidationCGU) {
             actions = constructeurActionsHATEOAS()
               .pour({ contexte: 'valider-signature-cgu' })
               .construis();
           }
           return reponse.status(200).json({
             ...actions,
-            nomPrenom: aidant.nomComplet,
+            nomPrenom: utilisateur.nomComplet,
           });
         });
     }
