@@ -15,7 +15,7 @@ import { ChoixTypeAidant } from './choix-type-aidant/ChoixTypeAidant.tsx';
 import { SignatureCGU } from './SignatureCGU.tsx';
 import { SignatureCharteAidant } from './SignatureCharteAidant.tsx';
 import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
-import { MoteurDeLiens, ROUTE_AIDANT } from '../../MoteurDeLiens.ts';
+import { MoteurDeLiens, ROUTE_MON_ESPACE } from '../../MoteurDeLiens.ts';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   CorpsDemandeDevenirAidant,
@@ -129,7 +129,7 @@ export const EcranMettreAJourDemandeDevenirAidant = () => {
   }, []);
 
   const retourAuChoixUtilisation = () => {
-    navigate(`${ROUTE_AIDANT}/tableau-de-bord`);
+    navigate(`${ROUTE_MON_ESPACE}/tableau-de-bord`);
   };
   const surClickEtapePrecedente = useCallback(() => {
     envoie(retourEtapePrecedente());

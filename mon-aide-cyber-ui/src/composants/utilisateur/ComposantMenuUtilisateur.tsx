@@ -6,6 +6,7 @@ import { useErrorBoundary } from 'react-error-boundary';
 import {
   MoteurDeLiens,
   ROUTE_MON_ESPACE,
+  ROUTE_MON_ESPACE_VALIDER_CGU,
 } from '../../domaine/MoteurDeLiens.ts';
 import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { Lien } from '../../domaine/Lien.ts';
@@ -45,7 +46,7 @@ export const ComposantMenuUtilisateur = ({
     }
     if (new MoteurDeLiens(navigationMAC.etat).existe('valider-signature-cgu')) {
       navigationMAC.navigue(
-        `${ROUTE_MON_ESPACE}/valide-signature-cgu`,
+        `${ROUTE_MON_ESPACE_VALIDER_CGU}`,
         navigationMAC.etat
       );
     }

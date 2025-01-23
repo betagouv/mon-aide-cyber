@@ -3,7 +3,10 @@ import {
   Utilisation,
 } from '../../../gestion-demandes/parcours-aidant/choix-utilisation/ChoixUtilisation.tsx';
 import { useNavigate } from 'react-router-dom';
-import { ROUTE_AIDANT } from '../../../MoteurDeLiens.ts';
+import {
+  ROUTE_MON_ESPACE_VALIDER_CGU,
+  ROUTE_MON_ESPACE_VALIDER_PROFIL,
+} from '../../../MoteurDeLiens.ts';
 import { useNavigationMAC } from '../../../../fournisseurs/hooks.ts';
 
 export const MonEspaceUtilisationDuService = () => {
@@ -14,11 +17,11 @@ export const MonEspaceUtilisationDuService = () => {
     switch (choix) {
       case 'InteretGeneral': {
         window.scrollTo({ top: 0 });
-        return navigate(`/aidant/devenir-aidant/mise-a-jour`);
+        return navigate(`${ROUTE_MON_ESPACE_VALIDER_PROFIL}`);
       }
       case 'ActiviteProfessionnelle': {
         return navigationMAC.navigue(
-          `${ROUTE_AIDANT}/valide-signature-cgu`,
+          `${ROUTE_MON_ESPACE_VALIDER_CGU}`,
           navigationMAC.etat
         );
       }

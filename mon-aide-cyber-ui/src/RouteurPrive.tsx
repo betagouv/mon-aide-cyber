@@ -36,7 +36,7 @@ export const RouteurPrive = () => {
         </Route>
         <Route element={<LayoutAidant afficheSideBar={false} />}>
           <Route
-            path="devenir-aidant/mise-a-jour"
+            path="valider-mon-profil"
             element={<EcranMettreAJourDemandeDevenirAidant />}
           />
         </Route>

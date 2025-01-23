@@ -3,9 +3,11 @@ import { Footer } from '../layout/Footer.tsx';
 import { LienMAC } from '../LienMAC.tsx';
 import { ReactElement, useEffect, useState } from 'react';
 import { Action, Liens } from '../../domaine/Lien.ts';
+
 import {
   MoteurDeLiens,
   ROUTE_MON_ESPACE,
+  ROUTE_MON_ESPACE_VALIDER_CGU,
 } from '../../domaine/MoteurDeLiens.ts';
 import { FallbackProps, useErrorBoundary } from 'react-error-boundary';
 import { useNavigationMAC, useUtilisateur } from '../../fournisseurs/hooks.ts';
@@ -49,10 +51,7 @@ export const ComposantAffichageErreur = ({
       new MoteurDeLiens(error.liens).existe('valider-signature-cgu')
     ) {
       resetBoundary();
-      navigationMAC.navigue(
-        `${ROUTE_MON_ESPACE}/valide-signature-cgu`,
-        error.liens
-      );
+      navigationMAC.navigue(ROUTE_MON_ESPACE_VALIDER_CGU, error.liens);
     }
   }, [navigationMAC]);
 
