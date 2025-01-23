@@ -8,7 +8,7 @@ export type EntiteUtilisateurInscrit = {
 export type UtilisateurInscrit = Aggregat & {
   email: string;
   nomPrenom: string;
-  dateSignatureCGU: Date;
+  dateSignatureCGU?: Date;
   entite: EntiteUtilisateurInscrit;
 };
 

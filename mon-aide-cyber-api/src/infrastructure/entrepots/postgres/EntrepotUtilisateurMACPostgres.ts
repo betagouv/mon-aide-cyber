@@ -6,10 +6,12 @@ import {
 import crypto from 'crypto';
 import { estSiretGendarmerie } from '../../../espace-aidant/Aidant';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
+import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 
 type UtilisateurMACDTO = DTO & {
   type: 'AIDANT' | 'UTILISATEUR_INSCRIT';
   siret?: string;
+  date_validation_cgu?: string;
 };
 
 export class EntrepotUtilisateurMACPostgres
@@ -20,7 +22,7 @@ export class EntrepotUtilisateurMACPostgres
     return this.knex
       .raw(
         `
-        SELECT id, type, donnees ->> 'siret' as siret FROM utilisateurs_mac WHERE id = ?
+        SELECT id, type, donnees ->> 'siret' as siret, donnees ->> 'dateSignatureCGU' as date_validation_cgu FROM utilisateurs_mac WHERE id = ?
       `,
         [identifiant]
       )
@@ -45,6 +47,9 @@ export class EntrepotUtilisateurMACPostgres
     return {
       identifiant: dto.id,
       profil,
+      ...(dto.date_validation_cgu && {
+        dateValidationCGU: FournisseurHorloge.enDate(dto.date_validation_cgu),
+      }),
     };
   }
   protected champsAMettreAJour(
