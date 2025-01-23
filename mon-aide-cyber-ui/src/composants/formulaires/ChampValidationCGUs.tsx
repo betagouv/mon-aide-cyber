@@ -1,5 +1,4 @@
 import { Input } from '../atomes/Input/Input.tsx';
-import { Link } from 'react-router-dom';
 
 export const ChampValidationCGUs = ({
   sontValidees,
@@ -28,9 +27,9 @@ export const ChampValidationCGUs = ({
             {' '}
             J&apos;accepte les{' '}
             <b className="violet-fonce">
-              <Link to="/cgu" target="_blank">
+              <a href="/cgu" target="_blank">
                 conditions générales d&apos;utilisation
-              </Link>
+              </a>
             </b>{' '}
             de MonAideCyber
           </span>
