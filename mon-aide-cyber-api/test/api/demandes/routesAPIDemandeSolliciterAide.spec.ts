@@ -7,7 +7,7 @@ import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/Fournisse
 import crypto from 'crypto';
 import { ReponseDemandeSolliciterAideEnErreur } from '../../../src/api/demandes/routesAPIDemandeSolliciterAide';
 import { adaptateurUUID } from '../../../src/infrastructure/adaptateurs/adaptateurUUID';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de l’Aidé pour un Aidant donné', () => {
   const testeurMAC = testeurIntegration();

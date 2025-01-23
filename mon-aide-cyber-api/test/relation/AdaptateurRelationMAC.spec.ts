@@ -4,7 +4,7 @@ import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMA
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
-import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Adaptateur De Relation MAC', () => {
   it("retourne l'identifiant du diagnostic initié par l'aidant", async () => {

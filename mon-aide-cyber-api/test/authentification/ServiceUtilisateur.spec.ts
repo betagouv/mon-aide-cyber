@@ -11,7 +11,7 @@ import { EntrepotUtilisateurMemoire } from '../../src/infrastructure/entrepots/m
 import crypto from 'crypto';
 import { add } from 'date-fns';
 import { ErreurMAC } from '../../src/domaine/erreurMAC';
-import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
+import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { sommeDeControle } from '../../src/authentification/sommeDeControle';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 

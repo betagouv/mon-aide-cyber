@@ -7,7 +7,7 @@ import { EntrepotAidantMemoire } from '../../../src/infrastructure/entrepots/mem
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Service Aidant', () => {
   it('Publie l’événement PROFIL_AIDANT_MODIFIE', async () => {

@@ -5,7 +5,7 @@ import {
   departements,
 } from '../../src/gestion-demandes/departements';
 import { fakerFR } from '@faker-js/faker';
-import { unAidant as unAidantDuDomaineAidant } from '../constructeurs/constructeursAidantUtilisateur';
+import { unAidant as unAidantDuDomaineAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 class ConstructeurAidant implements Constructeur<Aidant> {
   private nomPrenom: string = fakerFR.person.fullName();

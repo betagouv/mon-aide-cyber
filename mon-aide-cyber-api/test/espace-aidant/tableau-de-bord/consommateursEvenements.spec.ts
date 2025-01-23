@@ -5,7 +5,7 @@ import { aidantInitieDiagnostic } from '../../../src/espace-aidant/tableau-de-bo
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { DiagnosticLance } from '../../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import crypto from 'crypto';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { uneRechercheUtilisateursMAC } from '../../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import {
   EntrepotAidantMemoire,

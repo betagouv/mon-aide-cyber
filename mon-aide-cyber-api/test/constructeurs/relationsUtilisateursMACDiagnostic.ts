@@ -1,13 +1,15 @@
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
 import crypto from 'crypto';
-import { unAidant } from './constructeursAidantUtilisateur';
+import {
+  unAidant,
+  unUtilisateurInscrit,
+} from './constructeursAidantUtilisateurInscritUtilisateur';
 import { unDiagnostic } from './constructeurDiagnostic';
 import { aidantInitieDiagnostic } from '../../src/espace-aidant/tableau-de-bord/consommateursEvenements';
 import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { fakerFR } from '@faker-js/faker';
 import { DiagnosticLance } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
-import { unUtilisateurInscrit } from './constructeurUtilisateurInscrit';
 import { utilisateurInscritInitieDiagnostic } from '../../src/espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
 
 type IdentifiantsRelation = {

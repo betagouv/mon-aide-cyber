@@ -23,7 +23,7 @@ import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest'
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Capteur de commande demande devenir aidant', () => {
   const annuaireCot = () => ({

@@ -5,8 +5,10 @@ import {
   EntrepotUtilisateurInscritMemoire,
   EntrepotUtilisateurMACMemoire,
 } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
-import { unUtilisateurInscrit } from '../constructeurs/constructeurUtilisateurInscrit';
+import {
+  unAidant,
+  unUtilisateurInscrit,
+} from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('La recherche utilisateur MAC', () => {
   describe('Dans le cas de l’Aidant', () => {

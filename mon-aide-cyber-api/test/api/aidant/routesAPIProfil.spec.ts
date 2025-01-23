@@ -7,7 +7,7 @@ import {
   unAidant,
   unCompteAidantRelieAUnCompteUtilisateur,
   unUtilisateur,
-} from '../../constructeurs/constructeursAidantUtilisateur';
+} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { Utilisateur } from '../../../src/authentification/Utilisateur';
 import { Aidant } from '../../../src/espace-aidant/Aidant';
 import { utilitairesCookies } from '../../../src/adaptateurs/utilitairesDeCookies';

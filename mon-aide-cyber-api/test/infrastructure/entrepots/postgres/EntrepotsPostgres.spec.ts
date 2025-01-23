@@ -59,7 +59,8 @@ import {
 import {
   unAidant,
   unUtilisateur,
-} from '../../../constructeurs/constructeursAidantUtilisateur';
+  unUtilisateurInscrit,
+} from '../../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { adaptateurServiceChiffrement } from '../../../../src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import { unTupleAidantInitieDiagnostic } from '../../../../src/diagnostic/tuples';
 import { EntrepotAidantPostgres as EntrepotAidantPostgresExtraction } from '../../../../src/administration/aidants/extraction-aidants/extractionAidantSelonParametre';
@@ -72,7 +73,6 @@ import { AggregatNonTrouve } from '../../../../src/domaine/Aggregat';
 import { UtilisateurMAC } from '../../../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { EntrepotUtilisateurMACPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotUtilisateurMACPostgres';
 import { EntrepotUtilisateurInscritPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotUtilisateurInscritPostgres';
-import { unUtilisateurInscrit } from '../../../constructeurs/constructeurUtilisateurInscrit';
 import {
   EntiteUtilisateurInscrit,
   UtilisateurInscrit,

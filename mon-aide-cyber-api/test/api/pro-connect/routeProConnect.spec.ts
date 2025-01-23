@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from '../executeurRequete';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { desInformationsUtilisateur } from '../../constructeurs/constructeurProConnectInformationsUtilisateur';
 import { fakerFR } from '@faker-js/faker';
 import { ReponseHATEOASEnErreur } from '../../../src/api/hateoas/hateoas';

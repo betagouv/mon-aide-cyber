@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import { Aidant } from '../../src/espace-aidant/Aidant';
 import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
 import { AidantDTO } from '../../src/espace-aidant/ServiceAidant';
-import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Service Aidant', () => {
   describe('Recherche par mail', () => {

@@ -8,7 +8,7 @@ import {
   unAidant,
   unCompteAidantRelieAUnCompteUtilisateur,
   unUtilisateur,
-} from '../../constructeurs/constructeursAidantUtilisateur';
+} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { ReponseDiagnostics } from '../../../src/api/tableau-de-bord/routesAPITableauDeBord';
 
 describe('le serveur MAC sur les routes /api/mon-espace/tableau-de-bord', () => {

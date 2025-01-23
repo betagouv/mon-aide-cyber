@@ -5,7 +5,7 @@ import { executeRequete } from './executeurRequete';
 import { ReponseHATEOAS } from '../../src/api/hateoas/hateoas';
 import { FauxGestionnaireDeJeton } from '../infrastructure/authentification/FauxGestionnaireDeJeton';
 
-import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
+import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { liensPublicsAttendus } from './hateoas/liensAttendus';
 import { utilitairesCookies } from '../../src/adaptateurs/utilitairesDeCookies';
 import { unConstructeurDeJwtPayload } from '../constructeurs/constructeurJwtPayload';

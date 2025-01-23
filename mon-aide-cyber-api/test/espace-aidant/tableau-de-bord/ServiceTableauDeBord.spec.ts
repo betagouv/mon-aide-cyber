@@ -15,10 +15,12 @@ import {
   EntrepotUtilisateurInscritMemoire,
   EntrepotUtilisateurMACMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import {
+  unAidant,
+  unUtilisateurInscrit,
+} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { EntrepotAidant } from '../../../src/espace-aidant/Aidant';
 import { ReponseHATEOAS } from '../../../src/api/hateoas/hateoas';
-import { unUtilisateurInscrit } from '../../constructeurs/constructeurUtilisateurInscrit';
 import { EntrepotUtilisateurInscrit } from '../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 
 describe('Service Tableau De Bord', () => {
