@@ -8,7 +8,7 @@ import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
 import { RequeteUtilisateur } from './routesAPI';
 import { adaptateurConfigurationLimiteurTraffic } from './adaptateurLimiteurTraffic';
 import { UtilisateurAuthentifie } from '../authentification/Utilisateur';
-import { unServiceAidant } from '../espace-aidant/ServiceAidantMAC';
+import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export type CorpsRequeteAuthentification = {
   identifiant: string;
@@ -52,10 +52,10 @@ export const routesAPIAuthentification = (
             .pour({ contexte: 'aidant:acceder-aux-informations-utilisateur' })
             .pour({ contexte: 'se-deconnecter' })
             .construis();
-          return unServiceAidant(entrepots.aidants())
-            .parIdentifiant(utilisateurAuthentifie.identifiant)
-            .then((aidant) => {
-              if (!aidant?.dateSignatureCGU) {
+          return uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
+            .rechercheParIdentifiant(utilisateurAuthentifie.identifiant)
+            .then((utilisateur) => {
+              if (!utilisateur?.dateValidationCGU) {
                 reponseHATEOAS = constructeurActionsHATEOAS()
                   .pour({ contexte: 'valider-signature-cgu' })
                   .construis();
