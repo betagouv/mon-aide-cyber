@@ -94,7 +94,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
 
       expect(reponse.statusCode).toStrictEqual(302);
       expect(reponse.headers['location']).toStrictEqual(
-        '/aidant/tableau-de-bord'
+        '/mon-espace/tableau-de-bord'
       );
       const objet = enObjet<{ session: string; [clef: string]: string }>(
         (reponse.headers['set-cookie'] as string[])[1]
@@ -189,7 +189,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
 
         expect(reponse.statusCode).toStrictEqual(302);
         expect(reponse.headers['location']).toStrictEqual(
-          '/aidant/valide-signature-cgu'
+          '/mon-espace/valide-signature-cgu'
         );
       });
     });
@@ -284,7 +284,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
 
         expect(reponse.statusCode).toStrictEqual(302);
         expect(reponse.headers['location']).toStrictEqual(
-          '/aidant/valide-signature-cgu'
+          '/mon-espace/valide-signature-cgu'
         );
         const objet = enObjet<{ session: string; [clef: string]: string }>(
           (reponse.headers['set-cookie'] as string[])[1]

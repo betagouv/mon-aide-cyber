@@ -120,9 +120,9 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
         ).rechercheParMail(email!);
 
         if (aidant) {
-          let redirection = '/aidant/tableau-de-bord';
+          let redirection = '/mon-espace/tableau-de-bord';
           if (!aidant.dateSignatureCGU) {
-            redirection = '/aidant/valide-signature-cgu';
+            redirection = '/mon-espace/valide-signature-cgu';
           }
           if (
             aidant.dateSignatureCGU &&
@@ -153,7 +153,7 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
           return redirige(
             idToken,
             compte.identifiant,
-            '/aidant/valide-signature-cgu'
+            '/mon-espace/valide-signature-cgu'
           );
         }
 
