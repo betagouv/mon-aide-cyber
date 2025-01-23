@@ -1,7 +1,6 @@
-@import '../../../assets/styles/points-de-rupture';
+@import '../../../../assets/styles/points-de-rupture';
 
-.ecran-demande-devenir-aidant {
-  width: 100%;
+.utilisation-du-service {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-areas: 'entete'
@@ -18,7 +17,7 @@
     grid-template-areas:  'entete entete'
                           'formulaire-gauche formulaire-droite'
                           'validation validation';
-      grid-template-rows: auto;
+    grid-template-rows: auto;
   }
 
   @include a-partir-de(xl) {
@@ -129,7 +128,7 @@
   }
 
   img {
-    width: 100%;
+    width: 427px;
     height: 212px;
     padding-bottom: 1rem;
   }
@@ -224,4 +223,3 @@
     gap: 1rem;
   }
 }
-

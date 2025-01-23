@@ -15,7 +15,7 @@ import { ChoixTypeAidant } from './choix-type-aidant/ChoixTypeAidant.tsx';
 import { SignatureCGU } from './SignatureCGU.tsx';
 import { SignatureCharteAidant } from './SignatureCharteAidant.tsx';
 import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
-import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
+import { MoteurDeLiens, ROUTE_AIDANT } from '../../MoteurDeLiens.ts';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   CorpsDemandeDevenirAidant,
@@ -31,9 +31,11 @@ import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
 import Button from '../../../composants/atomes/Button/Button.tsx';
 import { TypographieH4 } from '../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
 import { LienMailtoMAC } from '../../../composants/atomes/LienMailtoMAC.tsx';
+import { useNavigate } from 'react-router-dom';
 
-export const EcranDemandeDevenirAidant = () => {
+export const EcranMettreAJourDemandeDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
+  const navigate = useNavigate();
   const macAPI = useMACAPI();
 
   const [etatEtapeCourante, envoie] = useReducer(reducteurEtapes, {
@@ -127,9 +129,8 @@ export const EcranDemandeDevenirAidant = () => {
   }, []);
 
   const retourAuChoixUtilisation = () => {
-    window.history.back();
+    navigate(`${ROUTE_AIDANT}/tableau-de-bord`);
   };
-
   const surClickEtapePrecedente = useCallback(() => {
     envoie(retourEtapePrecedente());
     window.scrollTo({ top: 0 });
