@@ -4,20 +4,21 @@ type ActionsStatiques = {
   [clef: string]: { applique: (lien: Lien) => string };
 };
 
-export const ROUTE_AIDANT = '/aidant';
+export const ROUTE_MON_ESPACE = '/mon-espace';
 
 const actionsStatiques: ActionsStatiques = {
   'afficher-profil': {
-    applique: (lien) => (lien.route = `${ROUTE_AIDANT}/mes-informations`),
+    applique: (lien) => (lien.route = `${ROUTE_MON_ESPACE}/mes-informations`),
   },
   'afficher-tableau-de-bord': {
-    applique: (lien) => (lien.route = `${ROUTE_AIDANT}/tableau-de-bord`),
+    applique: (lien) => (lien.route = `${ROUTE_MON_ESPACE}/tableau-de-bord`),
   },
   'lancer-diagnostic': {
-    applique: (lien) => (lien.route = `${ROUTE_AIDANT}/tableau-de-bord`),
+    applique: (lien) => (lien.route = `${ROUTE_MON_ESPACE}/tableau-de-bord`),
   },
   'valider-signature-cgu': {
-    applique: (lien) => (lien.route = `${ROUTE_AIDANT}/valide-signature-cgu`),
+    applique: (lien) =>
+      (lien.route = `${ROUTE_MON_ESPACE}/valide-signature-cgu`),
   },
   'se-connecter': { applique: (lien) => (lien.route = '/connexion') },
 };

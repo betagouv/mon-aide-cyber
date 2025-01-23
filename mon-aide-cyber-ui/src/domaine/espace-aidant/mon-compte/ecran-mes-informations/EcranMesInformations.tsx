@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { TypographieH2 } from '../../../../composants/communs/typographie/TypographieH2/TypographieH2';
 import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI';
 import { useNavigationMAC } from '../../../../fournisseurs/hooks';
-import { ROUTE_AIDANT } from '../../../MoteurDeLiens';
+import { ROUTE_MON_ESPACE } from '../../../MoteurDeLiens';
 import { FormulaireInformationsAidant } from './composants/formulaire-informations-aidant/FormulaireInformationsAidant';
 import { FormulaireModificationMotDePasse } from './composants/formulaire-modification-mot-de-passe/FormulaireModificationMotDePasse';
 import { useMoteurDeLiens } from '../../../../hooks/useMoteurDeLiens.ts';
@@ -13,7 +13,7 @@ export const EcranMesInformations = () => {
 
   const afficherTableauDeBord = useCallback(() => {
     navigationMAC.navigue(
-      `${ROUTE_AIDANT}/tableau-de-bord`,
+      `${ROUTE_MON_ESPACE}/tableau-de-bord`,
       navigationMAC.etat
     );
   }, [navigationMAC]);

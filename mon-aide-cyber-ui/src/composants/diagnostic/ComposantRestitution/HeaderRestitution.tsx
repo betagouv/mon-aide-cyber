@@ -4,6 +4,7 @@ import { useTelechargerRestitution } from './useTelechargerRestitution.ts';
 import { useCallback } from 'react';
 import Button from '../../atomes/Button/Button.tsx';
 import { UUID } from '../../../types/Types.ts';
+import { ROUTE_MON_ESPACE } from '../../../domaine/MoteurDeLiens.ts';
 
 export const HeaderRestitution = ({
   idDiagnostic,
@@ -15,7 +16,9 @@ export const HeaderRestitution = ({
   const { affiche, ferme } = useModale();
 
   const { navigue } = useNavigueVersModifierDiagnostic(
-    typeDiagnostic === 'libre-acces' ? '/diagnostic' : '/aidant/diagnostic'
+    typeDiagnostic === 'libre-acces'
+      ? '/diagnostic'
+      : `${ROUTE_MON_ESPACE}/diagnostic`
   );
   const navigationMAC = useNavigationMAC();
 
@@ -62,7 +65,9 @@ export const HeaderRestitution = ({
                     '/beneficier-du-dispositif/etre-aide'
                   );
                 } else {
-                  window.location.replace('/aidant/tableau-de-bord');
+                  window.location.replace(
+                    `${ROUTE_MON_ESPACE}/tableau-de-bord`
+                  );
                 }
               }}
             >

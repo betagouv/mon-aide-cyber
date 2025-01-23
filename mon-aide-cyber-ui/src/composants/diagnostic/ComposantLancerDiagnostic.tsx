@@ -3,7 +3,10 @@ import { useErrorBoundary } from 'react-error-boundary';
 import { useModale, useNavigationMAC } from '../../fournisseurs/hooks.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import {
+  MoteurDeLiens,
+  ROUTE_MON_ESPACE,
+} from '../../domaine/MoteurDeLiens.ts';
 import { Lien } from '../../domaine/Lien.ts';
 import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import Button from '../atomes/Button/Button.tsx';
@@ -151,7 +154,9 @@ export const ComposantLancerDiagnostic = ({
   const { showBoundary } = useErrorBoundary();
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
-  const { navigue } = useNavigueVersModifierDiagnostic('/aidant/diagnostic');
+  const { navigue } = useNavigueVersModifierDiagnostic(
+    `${ROUTE_MON_ESPACE}/diagnostic`
+  );
 
   const { affiche, ferme } = useModale();
 

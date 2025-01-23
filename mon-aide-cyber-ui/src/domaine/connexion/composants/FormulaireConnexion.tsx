@@ -3,7 +3,7 @@ import { TypographieH2 } from '../../../composants/communs/typographie/Typograph
 import { FormulaireAuthentification } from '../../authentification/FormulaireAuthentification.tsx';
 import Button from '../../../composants/atomes/Button/Button.tsx';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { MoteurDeLiens, ROUTE_AIDANT } from '../../MoteurDeLiens.ts';
+import { MoteurDeLiens, ROUTE_MON_ESPACE } from '../../MoteurDeLiens.ts';
 import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { useEffect } from 'react';
 
@@ -18,7 +18,7 @@ export const FormulaireConnexion = () => {
     const moteurDeLiens = new MoteurDeLiens(navigationMAC.etat);
     moteurDeLiens.trouve('valider-signature-cgu', () =>
       navigationMAC.navigue(
-        `${ROUTE_AIDANT}/valide-signature-cgu`,
+        `${ROUTE_MON_ESPACE}/valide-signature-cgu`,
         navigationMAC.etat
       )
     );

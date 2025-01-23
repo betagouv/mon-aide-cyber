@@ -8,6 +8,7 @@ import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { UUID } from '../../../types/Types.ts';
 import { Diagnostic } from '../../../domaine/espace-aidant/ecran-diagnostics/EcranDiagnostics.tsx';
 import { useNavigueVersLaRestitution } from '../../../fournisseurs/ContexteNavigationMAC.tsx';
+import { ROUTE_MON_ESPACE } from '../../../domaine/MoteurDeLiens.ts';
 
 export const ComposantDiagnostics = ({
   diagnostics,
@@ -15,7 +16,9 @@ export const ComposantDiagnostics = ({
   diagnostics: Diagnostic[];
 }) => {
   const navigationMAC = useNavigationMAC();
-  const { navigue } = useNavigueVersLaRestitution('/aidant/diagnostic');
+  const { navigue } = useNavigueVersLaRestitution(
+    `${ROUTE_MON_ESPACE}/diagnostic`
+  );
 
   const afficherDiagnostic = useCallback(
     (idDiagnostic: UUID) => {

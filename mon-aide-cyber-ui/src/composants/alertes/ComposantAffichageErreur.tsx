@@ -3,7 +3,10 @@ import { Footer } from '../layout/Footer.tsx';
 import { LienMAC } from '../LienMAC.tsx';
 import { ReactElement, useEffect, useState } from 'react';
 import { Action, Liens } from '../../domaine/Lien.ts';
-import { MoteurDeLiens, ROUTE_AIDANT } from '../../domaine/MoteurDeLiens.ts';
+import {
+  MoteurDeLiens,
+  ROUTE_MON_ESPACE,
+} from '../../domaine/MoteurDeLiens.ts';
 import { FallbackProps, useErrorBoundary } from 'react-error-boundary';
 import { useNavigationMAC, useUtilisateur } from '../../fournisseurs/hooks.ts';
 import { Link } from 'react-router-dom';
@@ -18,7 +21,7 @@ const ActionsDisponibles: Map<Action, () => ReactElement> = new Map([
     () => (
       <>
         Revenir au{' '}
-        <Link to={`${ROUTE_AIDANT}/tableau-de-bord`}>tableau de bord</Link>.
+        <Link to={`${ROUTE_MON_ESPACE}/tableau-de-bord`}>tableau de bord</Link>.
       </>
     ),
   ],
@@ -36,7 +39,7 @@ export const ComposantAffichageErreur = ({
   useEffect(() => {
     if (utilisateur) {
       setTitreLien('Espace Aidant - MonAideCyber');
-      setRoute('/aidant/tableau-de-bord');
+      setRoute(`${ROUTE_MON_ESPACE}/tableau-de-bord`);
     }
   }, [utilisateur]);
 
@@ -46,7 +49,10 @@ export const ComposantAffichageErreur = ({
       new MoteurDeLiens(error.liens).existe('valider-signature-cgu')
     ) {
       resetBoundary();
-      navigationMAC.navigue('/aidant/valide-signature-cgu', error.liens);
+      navigationMAC.navigue(
+        `${ROUTE_MON_ESPACE}/valide-signature-cgu`,
+        error.liens
+      );
     }
   }, [navigationMAC]);
 

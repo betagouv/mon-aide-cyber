@@ -58,7 +58,7 @@ export const FournisseurNavigationMAC = ({ children }: PropsWithChildren) => {
 };
 
 export const useNavigueVersLaRestitution = (
-  route: '/aidant/diagnostic' | '/diagnostic'
+  route: '/mon-espace/diagnostic' | '/diagnostic'
 ) => {
   const navigate = useNavigate();
   const navigationMAC = useNavigationMAC();
@@ -78,7 +78,7 @@ export const useNavigueVersLaRestitution = (
 };
 
 export const useNavigueVersModifierDiagnostic = (
-  route: '/aidant/diagnostic' | '/diagnostic'
+  route: '/mon-espace/diagnostic' | '/diagnostic'
 ) => {
   const navigate = useNavigate();
   const navigationMAC = useNavigationMAC();
