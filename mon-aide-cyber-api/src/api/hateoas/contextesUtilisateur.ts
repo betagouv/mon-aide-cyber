@@ -117,6 +117,11 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
       ...lancerDiagnostic,
       ...afficherProfil,
     },
+    'acceder-aux-informations-utilisateur': {
+      ...lancerDiagnostic,
+      ...afficherTableauDeBord,
+      ...afficherProfil,
+    },
   },
   'valider-signature-cgu': {
     'valider-signature-cgu': {

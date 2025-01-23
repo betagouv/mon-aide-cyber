@@ -7,7 +7,7 @@ import { ReponseHATEOAS } from '../../src/api/hateoas/hateoas';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { AdaptateurDeVerificationDeCGU } from '../../src/adaptateurs/AdaptateurDeVerificationDeCGU';
 
-import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import crypto from 'crypto';
 
 describe('Adaptateur de Vérification de CGU', () => {

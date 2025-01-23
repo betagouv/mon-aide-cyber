@@ -4,7 +4,7 @@ import { GestionnaireDeJetonJWT } from '../../src/infrastructure/authentificatio
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { EntrepotUtilisateurMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 
-import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateur';
+import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Authentification', () => {
   it('génère un jeton JWT', async () => {

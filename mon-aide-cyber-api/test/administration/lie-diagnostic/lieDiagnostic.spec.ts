@@ -13,7 +13,7 @@ import {
 import { unDiagnostic } from '../../constructeurs/constructeurDiagnostic';
 import { AdaptateurRelationsEnErreur } from './AdaptateurRelationsEnErreur';
 import { unTupleAidantInitieDiagnostic } from '../../../src/diagnostic/tuples';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Lie un diagnostic', () => {
   it("créé une nouvelle relation lorsque le diagnostic n'est pas encore lié", async () => {

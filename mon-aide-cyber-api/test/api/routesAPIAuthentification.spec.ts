@@ -7,8 +7,10 @@ import { ReponseAuthentification } from '../../src/api/routesAPIAuthentification
 import {
   unAidant,
   unCompteAidantRelieAUnCompteUtilisateur,
+  unCompteUtilisateurInscritRelieAUnCompteUtilisateur,
   unUtilisateur,
-} from '../constructeurs/constructeursAidantUtilisateur';
+  unUtilisateurInscrit,
+} from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe("Le serveur MAC, sur les routes d'authentification", () => {
   const testeurMAC = testeurIntegration();
@@ -28,65 +30,118 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
 
       afterEach(() => testeurMAC.arrete());
 
-      it('Génère un token', async () => {
-        const constructeurUtilisateur = unUtilisateur()
-          .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
-          .avecUnMotDePasse('mon_Mot-D3p4sse')
-          .avecUnNomPrenom('Martin Dupont');
-        await unCompteAidantRelieAUnCompteUtilisateur({
-          constructeurAidant: unAidant(),
-          constructeurUtilisateur,
-          entrepotAidant: testeurMAC.entrepots.aidants(),
-          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-        });
+      describe('Dans le cas d’un Aidant', () => {
+        it('Génère un token', async () => {
+          const constructeurUtilisateur = unUtilisateur()
+            .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
+            .avecUnMotDePasse('mon_Mot-D3p4sse')
+            .avecUnNomPrenom('Martin Dupont');
+          await unCompteAidantRelieAUnCompteUtilisateur({
+            constructeurAidant: unAidant(),
+            constructeurUtilisateur,
+            entrepotAidant: testeurMAC.entrepots.aidants(),
+            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          });
 
-        const reponse = await executeRequete(
-          donneesServeur.app,
-          'POST',
-          '/api/token',
-          donneesServeur.portEcoute,
-          {
-            identifiant: 'martin.dupont@email.com',
-            motDePasse: 'mon_Mot-D3p4sse',
-          }
-        );
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/token',
+            donneesServeur.portEcoute,
+            {
+              identifiant: 'martin.dupont@email.com',
+              motDePasse: 'mon_Mot-D3p4sse',
+            }
+          );
 
-        expect(reponse.statusCode).toBe(201);
-        expect(await reponse.json()).toStrictEqual({
-          nomPrenom: 'Martin Dupont',
-          liens: {
-            'lancer-diagnostic': {
-              url: '/api/diagnostic',
-              methode: 'POST',
+          expect(reponse.statusCode).toBe(201);
+          expect(await reponse.json()).toStrictEqual({
+            nomPrenom: 'Martin Dupont',
+            liens: {
+              'lancer-diagnostic': {
+                url: '/api/diagnostic',
+                methode: 'POST',
+              },
+              'afficher-tableau-de-bord': {
+                methode: 'GET',
+                url: '/api/mon-espace/tableau-de-bord',
+              },
+              'afficher-profil': {
+                url: '/api/profil',
+                methode: 'GET',
+              },
+              'afficher-preferences': {
+                url: '/api/aidant/preferences',
+                methode: 'GET',
+              },
+              'se-deconnecter': {
+                methode: 'DELETE',
+                typeAppel: 'API',
+                url: '/api/token',
+              },
             },
-            'afficher-tableau-de-bord': {
-              methode: 'GET',
-              url: '/api/mon-espace/tableau-de-bord',
-            },
-            'afficher-profil': {
-              url: '/api/profil',
-              methode: 'GET',
-            },
-            'afficher-preferences': {
-              url: '/api/aidant/preferences',
-              methode: 'GET',
-            },
-            'se-deconnecter': {
-              methode: 'DELETE',
-              typeAppel: 'API',
-              url: '/api/token',
-            },
-          },
+          });
+          const cookieRecu = (
+            reponse.headers['set-cookie']! as string[]
+          )[0].split('; ');
+          expect(cookieRecu[0]).toStrictEqual(
+            'session=eyJ0b2tlbiI6InVuLWpldG9uIn0='
+          );
+          expect(cookieRecu[1]).toStrictEqual('path=/');
+          expect(cookieRecu[3]).toStrictEqual('samesite=strict');
+          expect(cookieRecu[4]).toStrictEqual('httponly');
         });
-        const cookieRecu = (
-          reponse.headers['set-cookie']! as string[]
-        )[0].split('; ');
-        expect(cookieRecu[0]).toStrictEqual(
-          'session=eyJ0b2tlbiI6InVuLWpldG9uIn0='
-        );
-        expect(cookieRecu[1]).toStrictEqual('path=/');
-        expect(cookieRecu[3]).toStrictEqual('samesite=strict');
-        expect(cookieRecu[4]).toStrictEqual('httponly');
+      });
+
+      describe('Dans le cas d’un Utilisateur Inscrit', () => {
+        it('Génère un token', async () => {
+          const constructeurUtilisateur = unUtilisateur()
+            .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
+            .avecUnMotDePasse('mon_Mot-D3p4sse')
+            .avecUnNomPrenom('Martin Dupont');
+          await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
+            constructeurUtilisateurInscrit: unUtilisateurInscrit(),
+            constructeurUtilisateur,
+            entrepotUtilisateurInscrit:
+              testeurMAC.entrepots.utilisateursInscrits(),
+            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          });
+
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/token',
+            donneesServeur.portEcoute,
+            {
+              identifiant: 'martin.dupont@email.com',
+              motDePasse: 'mon_Mot-D3p4sse',
+            }
+          );
+
+          expect(reponse.statusCode).toBe(201);
+          expect(await reponse.json()).toStrictEqual({
+            nomPrenom: 'Martin Dupont',
+            liens: {
+              'lancer-diagnostic': {
+                url: '/api/diagnostic',
+                methode: 'POST',
+              },
+              'afficher-tableau-de-bord': {
+                methode: 'GET',
+                url: '/api/mon-espace/tableau-de-bord',
+              },
+              'afficher-profil': {
+                url: '/api/profil',
+                methode: 'GET',
+              },
+              'se-deconnecter': {
+                methode: 'DELETE',
+                typeAppel: 'API',
+                url: '/api/token',
+              },
+            },
+          });
+        });
       });
 
       it("Retourne une erreur http 401 quand l'utilisateur n'est pas trouvé", async () => {

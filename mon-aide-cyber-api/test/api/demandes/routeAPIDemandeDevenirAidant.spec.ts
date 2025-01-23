@@ -12,7 +12,7 @@ import crypto from 'crypto';
 import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServiceDeChiffrement';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { Aidant } from '../../../src/espace-aidant/Aidant';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 

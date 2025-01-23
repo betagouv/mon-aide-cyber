@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
-import { unUtilisateur } from '../../constructeurs/constructeursAidantUtilisateur';
+import { unUtilisateur } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import {
   CapteurCommandeReinitialisationMotDePasse,
   ReinitialisationMotDePasseDemandee,

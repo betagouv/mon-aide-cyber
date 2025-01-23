@@ -4,7 +4,10 @@ import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/En
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { DiagnosticLance } from '../../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import crypto from 'crypto';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import {
+  unAidant,
+  unUtilisateurInscrit,
+} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { uneRechercheUtilisateursMAC } from '../../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import {
   EntrepotAidantMemoire,
@@ -12,7 +15,6 @@ import {
   EntrepotUtilisateurMACMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { utilisateurInscritInitieDiagnostic } from '../../../src/espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
-import { unUtilisateurInscrit } from '../../constructeurs/constructeurUtilisateurInscrit';
 import { EntrepotUtilisateurInscrit } from '../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 
 describe("Les consommateurs d'évènements du tableau de bord d’un utilisateur inscrit", () => {

@@ -11,7 +11,7 @@ import {
   unAidant,
   unCompteAidantRelieAUnCompteUtilisateur,
   unUtilisateur,
-} from '../../constructeurs/constructeursAidantUtilisateur';
+} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Le serveur MAC sur les routes /api/aidant', () => {
   const testeurMAC = testeurIntegration();

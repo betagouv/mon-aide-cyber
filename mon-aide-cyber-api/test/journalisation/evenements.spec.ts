@@ -17,7 +17,7 @@ import crypto from 'crypto';
 import { RestitutionLancee } from '../../src/diagnostic/CapteurCommandeLanceRestitution';
 import { Publication } from '../../src/journalisation/Publication';
 import { DiagnosticLance } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
-import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 describe('Évènements', () => {

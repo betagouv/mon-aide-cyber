@@ -13,7 +13,7 @@ import { EntrepotAidantMemoire } from '../../../src/infrastructure/entrepots/mem
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Service de préférences des Aidants', () => {
   describe('Pour les secteurs d’activité de l’Aidant', () => {

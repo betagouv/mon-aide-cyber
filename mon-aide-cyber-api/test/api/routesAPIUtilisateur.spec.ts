@@ -9,7 +9,7 @@ import {
   unAidant,
   unCompteAidantRelieAUnCompteUtilisateur,
   unUtilisateur,
-} from '../constructeurs/constructeursAidantUtilisateur';
+} from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import {
   CorpsReponseReinitialiserMotDePasseEnErreur,
   ReponseReinitialisationMotDePasseEnErreur,

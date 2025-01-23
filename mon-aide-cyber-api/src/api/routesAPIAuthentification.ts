@@ -48,13 +48,24 @@ export const routesAPIAuthentification = (
         motDePasse
       )
         .then((utilisateurAuthentifie: UtilisateurAuthentifie) => {
-          let reponseHATEOAS = constructeurActionsHATEOAS()
-            .pour({ contexte: 'aidant:acceder-aux-informations-utilisateur' })
-            .pour({ contexte: 'se-deconnecter' })
-            .construis();
           return uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
             .rechercheParIdentifiant(utilisateurAuthentifie.identifiant)
             .then((utilisateur) => {
+              let reponseHATEOAS = constructeurActionsHATEOAS()
+                .pour({
+                  contexte: 'aidant:acceder-aux-informations-utilisateur',
+                })
+                .pour({ contexte: 'se-deconnecter' })
+                .construis();
+              if (utilisateur?.profil === 'UtilisateurInscrit') {
+                reponseHATEOAS = constructeurActionsHATEOAS()
+                  .pour({
+                    contexte:
+                      'utilisateur-inscrit:acceder-aux-informations-utilisateur',
+                  })
+                  .pour({ contexte: 'se-deconnecter' })
+                  .construis();
+              }
               if (!utilisateur?.dateValidationCGU) {
                 reponseHATEOAS = constructeurActionsHATEOAS()
                   .pour({ contexte: 'valider-signature-cgu' })

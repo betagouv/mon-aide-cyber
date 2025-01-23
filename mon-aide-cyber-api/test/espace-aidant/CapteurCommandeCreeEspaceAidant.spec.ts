@@ -13,7 +13,7 @@ import {
   EspaceAidantCree,
 } from '../../src/espace-aidant/CapteurCommandeCreeEspaceAidant';
 import crypto from 'crypto';
-import { unAidant } from '../constructeurs/constructeursAidantUtilisateur';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Capteur de commande de création de compte Aidant', () => {
   it('Crée un compte Aidant', async () => {

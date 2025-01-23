@@ -15,6 +15,11 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 import { SecteurActivite } from '../../src/espace-aidant/preferences/secteursActivite';
 import { Departement } from '../../src/gestion-demandes/departements';
 import { Constructeur } from './constructeur';
+import {
+  EntiteUtilisateurInscrit,
+  EntrepotUtilisateurInscrit,
+  UtilisateurInscrit,
+} from '../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 
 class ConstructeurUtilisateur implements Constructeur<Utilisateur> {
   private identifiant: crypto.UUID = fakerFR.string.uuid() as crypto.UUID;
@@ -167,8 +172,46 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   }
 }
 
+class ConstructeurUtilisateurInscrit
+  implements Constructeur<UtilisateurInscrit>
+{
+  private dateSignatureCGU: Date = fakerFR.date.anytime();
+  private email: string = fakerFR.internet.email();
+  private entite: EntiteUtilisateurInscrit = {};
+  private identifiant: crypto.UUID = crypto.randomUUID();
+  private nomPrenom: string = fakerFR.person.fullName();
+
+  avecLeSiret(siret: string): ConstructeurUtilisateurInscrit {
+    this.entite = { siret };
+    return this;
+  }
+
+  avecUneDateDeSignatureDeCGU(
+    dateSignatureCGU: Date
+  ): ConstructeurUtilisateurInscrit {
+    this.dateSignatureCGU = dateSignatureCGU;
+    return this;
+  }
+
+  avecUnIdentifiant(identifiant: crypto.UUID): ConstructeurUtilisateurInscrit {
+    this.identifiant = identifiant;
+    return this;
+  }
+
+  construis(): UtilisateurInscrit {
+    return {
+      dateSignatureCGU: this.dateSignatureCGU,
+      email: this.email,
+      entite: this.entite,
+      identifiant: this.identifiant,
+      nomPrenom: this.nomPrenom,
+    };
+  }
+}
+
 export const unAidant = (): ConstructeurAidant => new ConstructeurAidant();
-type Parametres = {
+
+type ParametresLiaisonAidant = {
   entrepotUtilisateur: EntrepotUtilisateur;
   constructeurAidant: ConstructeurAidant;
   entrepotAidant: EntrepotAidant;
@@ -176,7 +219,7 @@ type Parametres = {
 };
 
 export const unCompteAidantRelieAUnCompteUtilisateur = async (
-  parametres: Parametres
+  parametres: ParametresLiaisonAidant
 ): Promise<{ utilisateur: Utilisateur; aidant: Aidant }> => {
   const utilisateur = parametres.constructeurUtilisateur.construis();
   await parametres.entrepotUtilisateur.persiste(utilisateur);
@@ -187,3 +230,26 @@ export const unCompteAidantRelieAUnCompteUtilisateur = async (
   await parametres.entrepotAidant.persiste(aidant);
   return { utilisateur, aidant };
 };
+type ParametresLiaisonUtilisateurInscrit = {
+  constructeurUtilisateurInscrit: ConstructeurUtilisateurInscrit;
+  constructeurUtilisateur: ConstructeurUtilisateur;
+  entrepotUtilisateurInscrit: EntrepotUtilisateurInscrit;
+  entrepotUtilisateur: EntrepotUtilisateur;
+};
+
+export const unCompteUtilisateurInscritRelieAUnCompteUtilisateur = async (
+  parametres: ParametresLiaisonUtilisateurInscrit
+): Promise<{
+  utilisateur: Utilisateur;
+  utilisateurInscrit: UtilisateurInscrit;
+}> => {
+  const utilisateur = parametres.constructeurUtilisateur.construis();
+  await parametres.entrepotUtilisateur.persiste(utilisateur);
+  const utilisateurInscrit = parametres.constructeurUtilisateurInscrit
+    .avecUnIdentifiant(utilisateur.identifiant)
+    .construis();
+  await parametres.entrepotUtilisateurInscrit.persiste(utilisateurInscrit);
+  return { utilisateur, utilisateurInscrit };
+};
+
+export const unUtilisateurInscrit = () => new ConstructeurUtilisateurInscrit();
