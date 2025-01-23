@@ -7,7 +7,17 @@ export const RequiertValidationCGU = () => {
   const navigationMAC = useNavigationMAC();
   const [redirection, setRedirection] = useState<ReactElement>(<></>);
 
+  const post31Janvier = true;
+  const doitRevaliderProfil = true;
+
   useEffect(() => {
+    if (post31Janvier && doitRevaliderProfil) {
+      return navigationMAC.navigue(
+        `${ROUTE_AIDANT}/mon-utilisation-du-service`,
+        navigationMAC.etat
+      );
+    }
+
     new MoteurDeLiens(navigationMAC.etat).trouve(
       'valider-signature-cgu',
       () =>
@@ -17,7 +27,7 @@ export const RequiertValidationCGU = () => {
         ),
       () => setRedirection(<Outlet />)
     );
-  }, [navigationMAC]);
+  }, [navigationMAC.etat]);
 
   return redirection;
 };

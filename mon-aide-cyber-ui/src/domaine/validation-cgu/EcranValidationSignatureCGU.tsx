@@ -1,14 +1,16 @@
 import { FormulaireValidationSignatureCGU } from './FormulaireValidationSignatureCGU.tsx';
 import illustrationValidationCGU from '../../../public/images/illustration-mesures.svg';
 import './ecran-validation-cgu.scss';
-import { Header } from '../../composants/layout/Header.tsx';
 import { LienMAC } from '../../composants/LienMAC.tsx';
 import { Footer } from '../../composants/layout/Footer.tsx';
+import { HeaderAidant } from '../../composants/layout/HeaderAidant.tsx';
 
 export const EcranValidationSignatureCGU = () => {
   return (
     <>
-      <Header lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />} />
+      <HeaderAidant
+        lienMAC={<LienMAC titre="Accueil - MonAideCyber" route="/" />}
+      />
       <main role="main" className="ecran-validation-cgu">
         <div className="formulaire-colonne-gauche">
           <div className="fr-container">

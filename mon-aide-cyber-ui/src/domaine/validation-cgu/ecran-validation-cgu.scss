@@ -6,14 +6,14 @@
   grid-template-areas: 'formulaire';
 
   @include a-partir-de(md) {
-    grid-template-columns: 55% auto;
+    grid-template-columns: 50% auto;
     grid-template-areas: 'formulaire icone';
   }
 
-  @include a-partir-de(xl) {
+/*  @include a-partir-de(xl) {
     grid-template-columns: 20% 30% 30% 20%;
     grid-template-areas: 'gauche formulaire icone droite';
-  }
+  }*/
 
   height: 800px;
 

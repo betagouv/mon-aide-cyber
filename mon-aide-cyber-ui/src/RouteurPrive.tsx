@@ -14,6 +14,8 @@ import { EcranDiagnosticAidant } from './composants/diagnostic/EcranDiagnosticAi
 import { ComposantRestitutionAidant } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { EcranValidationSignatureCGU } from './domaine/validation-cgu/EcranValidationSignatureCGU.tsx';
 import { ROUTE_MON_ESPACE } from './domaine/MoteurDeLiens.ts';
+import { EcranMettreAJourDemandeDevenirAidant } from './domaine/gestion-demandes/parcours-aidant/EcranMettreAJourDemandeDevenirAidant.tsx';
+import { EcranMonEspaceUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/EcranMonEspaceUtilisationDuService.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -26,6 +28,19 @@ export const RouteurPrive = () => {
           </Suspense>
         }
       >
+        <Route element={<LayoutAidant afficheSideBar={false} />}>
+          <Route
+            path="mon-utilisation-du-service"
+            element={<EcranMonEspaceUtilisationDuService />}
+          />
+        </Route>
+        <Route element={<LayoutAidant afficheSideBar={false} />}>
+          <Route
+            path="devenir-aidant/mise-a-jour"
+            element={<EcranMettreAJourDemandeDevenirAidant />}
+          />
+        </Route>
+
         <Route
           element={
             <Suspense>

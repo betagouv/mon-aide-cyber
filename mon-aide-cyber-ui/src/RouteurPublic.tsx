@@ -23,6 +23,7 @@ import { EcranDiagnosticLibreAcces } from './composants/diagnostic/EcranDiagnost
 import { ComposantRestitutionLibreAcces } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { EcranDemandeAutodiagnostic } from './domaine/auto-diagnostic/EcranDemandeAutodiagnostic.tsx';
 import { EcranDemandeDevenirAidant } from './domaine/gestion-demandes/parcours-aidant/EcranDemandeDevenirAidant.tsx';
+import { EcranUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/EcranUtilisationDuService.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -45,6 +46,10 @@ export const RouteurPublic = () => {
         </Route>
         <Route path="devenir-aidant" element={<EcranDevenirAidant />} />
         <Route path="mentions-legales" element={<MentionsLegales />} />
+        <Route
+          path="mon-utilisation-du-service"
+          element={<EcranUtilisationDuService />}
+        />
       </Route>
       <Route
         path="/demandes/devenir-aidant"
@@ -52,6 +57,7 @@ export const RouteurPublic = () => {
       >
         <Route index element={<EcranDemandeDevenirAidant />} />
       </Route>
+
       <Route
         path="/connexion"
         element={<LayoutPublic afficheNavigation={false} />}

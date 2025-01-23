@@ -1,4 +1,3 @@
-import illustrationInteretGeneral from '../../../../../public/images/illustration-interet-general.svg';
 import { useEffect, useState } from 'react';
 import Button from '../../../../composants/atomes/Button/Button.tsx';
 import { TypeAidant, TypeAidantEtSonEntite } from '../reducteurEtapes.ts';
@@ -7,6 +6,7 @@ import { SelecteurTypeAidant } from './SelecteurTypeAidant.tsx';
 import { RechercheEntreprise } from './RechercheEntreprise.tsx';
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 import { LienMailtoMAC } from '../../../../composants/atomes/LienMailtoMAC.tsx';
+import illustrationInteretGeneralMAC from '../../../../../public/images/illustration-interet-general-mac.svg';
 
 export const ChoixTypeAidant = ({
   surClick,
@@ -38,10 +38,9 @@ export const ChoixTypeAidant = ({
             Vous souhaitez utiliser l’outil de diagnostic de l’ANSSI et être
             référencé Aidant cyber.
           </TypographieH5>
-          <div className="text-center">
+          <div className="texte-centre">
             <img
-              style={{ width: '342px' }}
-              src={illustrationInteretGeneral}
+              src={illustrationInteretGeneralMAC}
               alt="Illustration d’une personne oeuvrant pour l’intérêt général."
             />
           </div>
