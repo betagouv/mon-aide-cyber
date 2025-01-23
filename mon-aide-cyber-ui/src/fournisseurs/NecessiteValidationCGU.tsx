@@ -1,6 +1,6 @@
 import { useNavigationMAC } from './hooks.ts';
 import { ReactElement, useEffect, useState } from 'react';
-import { MoteurDeLiens, ROUTE_AIDANT } from '../domaine/MoteurDeLiens.ts';
+import { MoteurDeLiens, ROUTE_MON_ESPACE } from '../domaine/MoteurDeLiens.ts';
 import { Outlet } from 'react-router-dom';
 
 export const NecessiteValidationCGU = () => {
@@ -15,7 +15,7 @@ export const NecessiteValidationCGU = () => {
       () =>
         moteurDeLiens.trouve('lancer-diagnostic', () =>
           navigationMAC.navigue(
-            `${ROUTE_AIDANT}/tableau-de-bord`,
+            `${ROUTE_MON_ESPACE}/tableau-de-bord`,
             navigationMAC.etat
           )
         )

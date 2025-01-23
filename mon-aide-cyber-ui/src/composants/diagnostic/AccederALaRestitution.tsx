@@ -10,7 +10,7 @@ export const AccederALaRestitution = ({
   surAnnuler,
 }: {
   idDiagnostic: UUID;
-  route: '/aidant/diagnostic' | '/diagnostic';
+  route: '/mon-espace/diagnostic' | '/diagnostic';
   surAnnuler: () => void;
 }) => {
   const navigationMAC = useNavigationMAC();

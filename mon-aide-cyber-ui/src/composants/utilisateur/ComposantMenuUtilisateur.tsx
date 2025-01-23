@@ -3,7 +3,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useErrorBoundary } from 'react-error-boundary';
-import { MoteurDeLiens, ROUTE_AIDANT } from '../../domaine/MoteurDeLiens.ts';
+import {
+  MoteurDeLiens,
+  ROUTE_MON_ESPACE,
+} from '../../domaine/MoteurDeLiens.ts';
 import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { Lien } from '../../domaine/Lien.ts';
 
@@ -36,13 +39,13 @@ export const ComposantMenuUtilisateur = ({
     resetBoundary();
     if (new MoteurDeLiens(navigationMAC.etat).existe('afficher-profil')) {
       navigationMAC.navigue(
-        `${ROUTE_AIDANT}/mes-informations`,
+        `${ROUTE_MON_ESPACE}/mes-informations`,
         navigationMAC.etat
       );
     }
     if (new MoteurDeLiens(navigationMAC.etat).existe('valider-signature-cgu')) {
       navigationMAC.navigue(
-        `${ROUTE_AIDANT}/valide-signature-cgu`,
+        `${ROUTE_MON_ESPACE}/valide-signature-cgu`,
         navigationMAC.etat
       );
     }

@@ -50,7 +50,10 @@ import {
 } from './ConteneurReponsePossible.tsx';
 import { TerminerDiagnostic } from './TerminerDiagnostic.tsx';
 import { BadgePerimetre } from './BadgePerimetre.tsx';
-import { MoteurDeLiens } from '../../domaine/MoteurDeLiens.ts';
+import {
+  MoteurDeLiens,
+  ROUTE_MON_ESPACE,
+} from '../../domaine/MoteurDeLiens.ts';
 import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { Lien } from '../../domaine/Lien.ts';
 import { useRecupereContexteNavigation } from '../../hooks/useRecupereContexteNavigation.ts';
@@ -536,7 +539,7 @@ export const ActionsHeaderDiagnosticAidant = ({
               type="button"
               key="connexion-aidant"
               onClick={() => {
-                window.location.replace('/aidant/tableau-de-bord');
+                window.location.replace(`${ROUTE_MON_ESPACE}/tableau-de-bord`);
               }}
             >
               Quitter le diagnostic
@@ -554,7 +557,7 @@ export const ActionsHeaderDiagnosticAidant = ({
           <AccederALaRestitution
             surAnnuler={ferme}
             idDiagnostic={idDiagnostic}
-            route="/aidant/diagnostic"
+            route={`${ROUTE_MON_ESPACE}/diagnostic`}
           />
         ),
       }),
@@ -671,7 +674,7 @@ export const EcranDiagnosticAidant = ({
           <AccederALaRestitution
             surAnnuler={ferme}
             idDiagnostic={idDiagnostic}
-            route="/aidant/diagnostic"
+            route={`${ROUTE_MON_ESPACE}/diagnostic`}
           />
         ),
       }),

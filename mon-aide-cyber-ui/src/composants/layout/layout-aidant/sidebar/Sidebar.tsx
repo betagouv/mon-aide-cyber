@@ -1,4 +1,4 @@
-import { ROUTE_AIDANT } from '../../../../domaine/MoteurDeLiens';
+import { ROUTE_MON_ESPACE } from '../../../../domaine/MoteurDeLiens';
 import { useFeatureFlag } from '../../../../hooks/useFeatureFlag';
 import { useMoteurDeLiens } from '../../../../hooks/useMoteurDeLiens';
 import { TypographieH6 } from '../../../communs/typographie/TypographieH6/TypographieH6';
@@ -29,7 +29,7 @@ export const Sidebar = () => {
                 ? [
                     {
                       nom: 'Mes diagnostics',
-                      route: `${ROUTE_AIDANT}/tableau-de-bord`,
+                      route: `${ROUTE_MON_ESPACE}/tableau-de-bord`,
                       actif: true,
                       enfants: [
                         /* {
@@ -59,19 +59,19 @@ export const Sidebar = () => {
             elements={[
               {
                 nom: 'Mon compte',
-                route: `${ROUTE_AIDANT}/mes-informations`,
+                route: `${ROUTE_MON_ESPACE}/mes-informations`,
                 actif: true,
                 enfants: [
                   ...(estFonctionaliteActive
                     ? [
                         {
                           nom: 'Mes informations',
-                          route: `${ROUTE_AIDANT}/mes-informations`,
+                          route: `${ROUTE_MON_ESPACE}/mes-informations`,
                           actif: true,
                         },
                         {
                           nom: 'Mes préférences',
-                          route: `${ROUTE_AIDANT}/mes-preferences`,
+                          route: `${ROUTE_MON_ESPACE}/mes-preferences`,
                           actif: true,
                         },
                       ]

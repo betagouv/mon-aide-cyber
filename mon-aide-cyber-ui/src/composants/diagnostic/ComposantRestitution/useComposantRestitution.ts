@@ -1,5 +1,8 @@
 import { useCallback, useEffect } from 'react';
-import { MoteurDeLiens, ROUTE_AIDANT } from '../../../domaine/MoteurDeLiens';
+import {
+  MoteurDeLiens,
+  ROUTE_MON_ESPACE,
+} from '../../../domaine/MoteurDeLiens';
 import { useNavigationMAC } from '../../../fournisseurs/hooks';
 import { rubriqueConsultee } from '../../../domaine/diagnostic/reducteurRestitution';
 import { UUID } from '../../../types/Types';
@@ -13,7 +16,7 @@ export const useComposantRestitution = (
 ) => {
   const navigationMAC = useNavigationMAC();
   const { navigue } = useNavigueVersModifierDiagnostic(
-    estLibreAcces ? '/diagnostic' : '/aidant/diagnostic'
+    estLibreAcces ? '/diagnostic' : `${ROUTE_MON_ESPACE}/diagnostic`
   );
 
   const { etatRestitution, envoie } = useRecupereLaRestitution(
@@ -78,7 +81,7 @@ export const useComposantRestitution = (
     const liens = etatRestitution.restitution!.liens;
     const moteurDeLiens = new MoteurDeLiens(liens);
     if (moteurDeLiens.existe('lancer-diagnostic')) {
-      navigationMAC.navigue(`${ROUTE_AIDANT}/tableau-de-bord`, liens, [
+      navigationMAC.navigue(`${ROUTE_MON_ESPACE}/tableau-de-bord`, liens, [
         'modifier-diagnostic',
         'restitution-pdf',
         'restitution-json',

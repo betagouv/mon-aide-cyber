@@ -8,7 +8,7 @@ import {
   reducteurAuthentification,
   saisieInvalidee,
 } from './reducteurAuthentification.tsx';
-import { MoteurDeLiens, ROUTE_AIDANT } from '../MoteurDeLiens.ts';
+import { MoteurDeLiens, ROUTE_MON_ESPACE } from '../MoteurDeLiens.ts';
 import { Lien } from '../Lien.ts';
 import { ReponseAuthentification } from './Authentification.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
@@ -85,13 +85,16 @@ export const ComposantAuthentification = ({
                 moteurDeLiens.trouve(
                   'afficher-tableau-de-bord',
                   () =>
-                    navigationMAC.navigue(`${ROUTE_AIDANT}/tableau-de-bord`, {
-                      ...reponse.liens,
-                    }),
+                    navigationMAC.navigue(
+                      `${ROUTE_MON_ESPACE}/tableau-de-bord`,
+                      {
+                        ...reponse.liens,
+                      }
+                    ),
                   () =>
                     moteurDeLiens.trouve('valider-signature-cgu', () =>
                       navigationMAC.navigue(
-                        `${ROUTE_AIDANT}/valide-signature-cgu`,
+                        `${ROUTE_MON_ESPACE}/valide-signature-cgu`,
                         { ...reponse.liens }
                       )
                     )

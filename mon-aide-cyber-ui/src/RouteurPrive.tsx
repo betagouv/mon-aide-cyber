@@ -13,12 +13,13 @@ import { ComposantIntercepteur } from './composants/intercepteurs/ComposantInter
 import { EcranDiagnosticAidant } from './composants/diagnostic/EcranDiagnosticAidant.tsx';
 import { ComposantRestitutionAidant } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { EcranValidationSignatureCGU } from './domaine/validation-cgu/EcranValidationSignatureCGU.tsx';
+import { ROUTE_MON_ESPACE } from './domaine/MoteurDeLiens.ts';
 
 export const RouteurPrive = () => {
   return (
     <Routes>
       <Route
-        path="/aidant"
+        path={ROUTE_MON_ESPACE}
         element={
           <Suspense>
             <RequiertAuthentification />

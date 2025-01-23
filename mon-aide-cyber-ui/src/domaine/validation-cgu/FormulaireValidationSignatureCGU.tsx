@@ -7,7 +7,7 @@ import {
 } from './reducteurValidationCGU.tsx';
 import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
-import { MoteurDeLiens, ROUTE_AIDANT } from '../MoteurDeLiens.ts';
+import { MoteurDeLiens, ROUTE_MON_ESPACE } from '../MoteurDeLiens.ts';
 import { Lien, ReponseHATEOAS } from '../Lien.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ValidationSignatureCGU } from '../espace-aidant/EspaceAidant.ts';
@@ -48,7 +48,7 @@ export const ComposantValidationSignatureCGU = ({
               )
               .then((reponse) => {
                 navigationMAC.navigue(
-                  `${ROUTE_AIDANT}/tableau-de-bord`,
+                  `${ROUTE_MON_ESPACE}/tableau-de-bord`,
                   reponse.liens,
                   ['valider-signature-cgu']
                 );
@@ -58,7 +58,7 @@ export const ComposantValidationSignatureCGU = ({
         },
         () =>
           navigationMAC.navigue(
-            `${ROUTE_AIDANT}/tableau-de-bord`,
+            `${ROUTE_MON_ESPACE}/tableau-de-bord`,
             navigationMAC.etat
           )
       );
