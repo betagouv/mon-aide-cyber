@@ -15,6 +15,11 @@ import {
   MACCookies,
   utilitairesCookies,
 } from '../../adaptateurs/utilitairesDeCookies';
+import {
+  dateNouveauParcoursAidant,
+  estDateNouveauParcoursDemandeDevenirAidant,
+} from '../../gestion-demandes/devenir-aidant/nouveauParcours';
+import { isAfter } from 'date-fns';
 
 export class ErreurProConnectApresAuthentification extends Error {
   constructor(e: Error) {
@@ -115,13 +120,18 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
         ).rechercheParMail(email!);
 
         if (aidant) {
-          return redirige(
-            idToken,
-            aidant.identifiant,
-            !aidant.dateSignatureCGU
-              ? '/aidant/valide-signature-cgu'
-              : '/aidant/tableau-de-bord'
-          );
+          let redirection = '/aidant/tableau-de-bord';
+          if (!aidant.dateSignatureCGU) {
+            redirection = '/aidant/valide-signature-cgu';
+          }
+          if (
+            aidant.dateSignatureCGU &&
+            isAfter(dateNouveauParcoursAidant(), aidant.dateSignatureCGU) &&
+            estDateNouveauParcoursDemandeDevenirAidant()
+          ) {
+            redirection = '/mon-espace/mon-utilisation-du-service';
+          }
+          return redirige(idToken, aidant.identifiant, redirection);
         }
         if (estGendarme) {
           const compte = await busCommande.publie<

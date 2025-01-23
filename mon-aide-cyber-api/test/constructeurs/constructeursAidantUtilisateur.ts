@@ -124,6 +124,11 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  cguValideesLe(date: Date): ConstructeurAidant {
+    this.dateSignatureCGU = date;
+    return this;
+  }
+
   avecUneDateDeSignatureDeCharte(date: Date): ConstructeurAidant {
     this.dateSignatureCharte = date;
     return this;
