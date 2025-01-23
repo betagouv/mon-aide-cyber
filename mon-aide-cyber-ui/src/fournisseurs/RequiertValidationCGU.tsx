@@ -1,6 +1,10 @@
 import { useNavigationMAC } from './hooks.ts';
 import { ReactElement, useEffect, useState } from 'react';
-import { MoteurDeLiens, ROUTE_MON_ESPACE } from '../domaine/MoteurDeLiens.ts';
+import {
+  MoteurDeLiens,
+  ROUTE_MON_ESPACE_MON_UTILSATION_DU_SERVICE,
+  ROUTE_MON_ESPACE_VALIDER_CGU,
+} from '../domaine/MoteurDeLiens.ts';
 import { Outlet } from 'react-router-dom';
 
 export const RequiertValidationCGU = () => {
@@ -13,7 +17,7 @@ export const RequiertValidationCGU = () => {
   useEffect(() => {
     if (post31Janvier && doitRevaliderProfil) {
       return navigationMAC.navigue(
-        `${ROUTE_AIDANT}/mon-utilisation-du-service`,
+        `${ROUTE_MON_ESPACE_MON_UTILSATION_DU_SERVICE}`,
         navigationMAC.etat
       );
     }
@@ -22,7 +26,7 @@ export const RequiertValidationCGU = () => {
       'valider-signature-cgu',
       () =>
         navigationMAC.navigue(
-          `${ROUTE_MON_ESPACE}/valide-signature-cgu`,
+          `${ROUTE_MON_ESPACE_VALIDER_CGU}`,
           navigationMAC.etat
         ),
       () => setRedirection(<Outlet />)

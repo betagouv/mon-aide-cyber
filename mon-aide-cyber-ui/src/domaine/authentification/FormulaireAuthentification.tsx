@@ -8,7 +8,11 @@ import {
   reducteurAuthentification,
   saisieInvalidee,
 } from './reducteurAuthentification.tsx';
-import { MoteurDeLiens, ROUTE_MON_ESPACE } from '../MoteurDeLiens.ts';
+import {
+  MoteurDeLiens,
+  ROUTE_MON_ESPACE,
+  ROUTE_MON_ESPACE_VALIDER_CGU,
+} from '../MoteurDeLiens.ts';
 import { Lien } from '../Lien.ts';
 import { ReponseAuthentification } from './Authentification.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
@@ -93,10 +97,9 @@ export const ComposantAuthentification = ({
                     ),
                   () =>
                     moteurDeLiens.trouve('valider-signature-cgu', () =>
-                      navigationMAC.navigue(
-                        `${ROUTE_MON_ESPACE}/valide-signature-cgu`,
-                        { ...reponse.liens }
-                      )
+                      navigationMAC.navigue(`${ROUTE_MON_ESPACE_VALIDER_CGU}`, {
+                        ...reponse.liens,
+                      })
                     )
                 );
               })
