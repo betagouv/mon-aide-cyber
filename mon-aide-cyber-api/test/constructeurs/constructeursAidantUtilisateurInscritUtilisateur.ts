@@ -20,6 +20,7 @@ import {
   EntrepotUtilisateurInscrit,
   UtilisateurInscrit,
 } from '../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
+import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/AdaptateurDeVerificationDeSessionDeTest';
 
 class ConstructeurUtilisateur implements Constructeur<Utilisateur> {
   private identifiant: crypto.UUID = fakerFR.string.uuid() as crypto.UUID;
@@ -237,6 +238,8 @@ type ParametresLiaisonUtilisateurInscrit = {
   entrepotUtilisateur: EntrepotUtilisateur;
 };
 
+export const unUtilisateurInscrit = () => new ConstructeurUtilisateurInscrit();
+
 export const unCompteUtilisateurInscritRelieAUnCompteUtilisateur = async (
   parametres: ParametresLiaisonUtilisateurInscrit
 ): Promise<{
@@ -251,5 +254,18 @@ export const unCompteUtilisateurInscritRelieAUnCompteUtilisateur = async (
   await parametres.entrepotUtilisateurInscrit.persiste(utilisateurInscrit);
   return { utilisateur, utilisateurInscrit };
 };
-
-export const unUtilisateurInscrit = () => new ConstructeurUtilisateurInscrit();
+type ParametreUtilisateurInscritProConnect = {
+  entrepotUtilisateurInscrit: EntrepotUtilisateurInscrit;
+  constructeurUtilisateur: ConstructeurUtilisateurInscrit;
+  adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
+};
+export const unCompteUtilisateurInscritConnecteViaProConnect = async (
+  parametres: ParametreUtilisateurInscritProConnect
+): Promise<UtilisateurInscrit> => {
+  const utilisateur = parametres.constructeurUtilisateur.construis();
+  await parametres.entrepotUtilisateurInscrit.persiste(utilisateur);
+  parametres.adaptateurDeVerificationDeSession.utilisateurProConnect(
+    utilisateur.identifiant
+  );
+  return utilisateur;
+};

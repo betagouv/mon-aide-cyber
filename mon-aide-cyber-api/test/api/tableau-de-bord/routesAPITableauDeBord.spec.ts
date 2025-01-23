@@ -33,7 +33,7 @@ describe('le serveur MAC sur les routes /api/mon-espace/tableau-de-bord', () => 
         constructeurAidant: unAidant(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -73,7 +73,7 @@ describe('le serveur MAC sur les routes /api/mon-espace/tableau-de-bord', () => 
         constructeurAidant: unAidant(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -104,7 +104,7 @@ describe('le serveur MAC sur les routes /api/mon-espace/tableau-de-bord', () => 
           constructeurAidant: unAidant(),
         });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
       const premierDiagnostic = await unDiagnosticInitiePar(
         'Corse-du-Sud',

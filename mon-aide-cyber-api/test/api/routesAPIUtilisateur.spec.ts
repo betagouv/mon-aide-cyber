@@ -21,6 +21,10 @@ import { add } from 'date-fns';
 import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 import { liensPublicsAttendus } from './hateoas/liensAttendus';
 import { ReponseHATEOASEnErreur } from '../../src/api/hateoas/hateoas';
+import {
+  unCompteUtilisateurInscritConnecteViaProConnect,
+  unUtilisateurInscrit,
+} from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -39,49 +43,98 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
   describe('Quand une requête GET est reçue sur /', () => {
     beforeEach(() => adaptateurDeVerificationDeSession.reinitialise());
-    it("Retourne l'utilisateur connecté", async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
-        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-        constructeurAidant: unAidant(),
-        entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+
+    describe('Dans le cas d’un Aidant', () => {
+      it("Retourne l'utilisateur connecté", async () => {
+        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurAidant: unAidant(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+        });
+        adaptateurDeVerificationDeSession.utilisateurConnecte(
+          utilisateur.identifiant
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          `/api/utilisateur/`,
+          donneesServeur.portEcoute
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
+        expect(await reponse.json()).toStrictEqual({
+          nomPrenom: utilisateur.nomPrenom,
+          liens: {
+            'lancer-diagnostic': {
+              url: '/api/diagnostic',
+              methode: 'POST',
+            },
+            'afficher-tableau-de-bord': {
+              methode: 'GET',
+              url: '/api/mon-espace/tableau-de-bord',
+            },
+            'afficher-profil': {
+              url: '/api/profil',
+              methode: 'GET',
+            },
+            'afficher-preferences': {
+              url: '/api/aidant/preferences',
+              methode: 'GET',
+            },
+            'se-deconnecter': {
+              url: '/api/token',
+              methode: 'DELETE',
+              typeAppel: 'API',
+            },
+          },
+        });
       });
-      adaptateurDeVerificationDeSession.utilisateurConnecte(utilisateur);
+    });
 
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        `/api/utilisateur/`,
-        donneesServeur.portEcoute
-      );
+    describe('Dans le cas d’un Utilisateur Inscrit', () => {
+      it("Retourne l'utilisateur connecté via ProConnect", async () => {
+        const utilisateur =
+          await unCompteUtilisateurInscritConnecteViaProConnect({
+            entrepotUtilisateurInscrit:
+              testeurMAC.entrepots.utilisateursInscrits(),
+            constructeurUtilisateur: unUtilisateurInscrit(),
+            adaptateurDeVerificationDeSession,
+          });
 
-      expect(reponse.statusCode).toBe(200);
-      expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
-      expect(await reponse.json()).toStrictEqual({
-        nomPrenom: utilisateur.nomPrenom,
-        liens: {
-          'lancer-diagnostic': {
-            url: '/api/diagnostic',
-            methode: 'POST',
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          `/api/utilisateur/`,
+          donneesServeur.portEcoute
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
+        expect(await reponse.json()).toStrictEqual({
+          nomPrenom: utilisateur.nomPrenom,
+          liens: {
+            'lancer-diagnostic': {
+              url: '/api/diagnostic',
+              methode: 'POST',
+            },
+            'afficher-tableau-de-bord': {
+              methode: 'GET',
+              url: '/api/mon-espace/tableau-de-bord',
+            },
+            'afficher-profil': {
+              url: '/api/profil',
+              methode: 'GET',
+            },
+            'se-deconnecter': {
+              url: '/pro-connect/deconnexion',
+              methode: 'GET',
+              typeAppel: 'DIRECT',
+            },
           },
-          'afficher-tableau-de-bord': {
-            methode: 'GET',
-            url: '/api/mon-espace/tableau-de-bord',
-          },
-          'afficher-profil': {
-            url: '/api/profil',
-            methode: 'GET',
-          },
-          'afficher-preferences': {
-            url: '/api/aidant/preferences',
-            methode: 'GET',
-          },
-          'se-deconnecter': {
-            url: '/api/token',
-            methode: 'DELETE',
-            typeAppel: 'API',
-          },
-        },
+        });
       });
     });
 
@@ -92,7 +145,9 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         entrepotAidant: testeurMAC.entrepots.aidants(),
         constructeurUtilisateur: unUtilisateur(),
       });
-      adaptateurDeVerificationDeSession.utilisateurProConnect(utilisateur);
+      adaptateurDeVerificationDeSession.utilisateurProConnect(
+        utilisateur.identifiant
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -117,7 +172,9 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         entrepotAidant: testeurMAC.entrepots.aidants(),
         constructeurUtilisateur: unUtilisateur(),
       });
-      adaptateurDeVerificationDeSession.utilisateurConnecte(utilisateur);
+      adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur.identifiant
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -410,7 +467,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         constructeurUtilisateur: unUtilisateur(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -440,7 +497,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         constructeurUtilisateur: unUtilisateur(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -488,7 +545,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         constructeurUtilisateur: unUtilisateur(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -517,7 +574,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         constructeurUtilisateur: unUtilisateur(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(

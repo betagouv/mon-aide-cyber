@@ -3,12 +3,12 @@ import { NextFunction } from 'express-serve-static-core';
 import { RequestHandler, Response } from 'express';
 import { Contexte } from '../../src/domaine/erreurMAC';
 import { RequeteUtilisateur } from '../../src/api/routesAPI';
-import { Utilisateur } from '../../src/authentification/Utilisateur';
+import crypto from 'crypto';
 
 export class AdaptateurDeVerificationDeSessionDeTest
   implements AdaptateurDeVerificationDeSession
 {
-  private _utilisateurConnecte?: Utilisateur | undefined;
+  private _utilisateurConnecte?: crypto.UUID | undefined;
   private _estProConnect?: boolean | undefined;
 
   constructor(private estPassee = false) {}
@@ -21,8 +21,7 @@ export class AdaptateurDeVerificationDeSessionDeTest
     ) => {
       this.estPassee = true;
       if (this._utilisateurConnecte) {
-        _requete.identifiantUtilisateurCourant =
-          this._utilisateurConnecte.identifiant;
+        _requete.identifiantUtilisateurCourant = this._utilisateurConnecte;
       }
       if (this._estProConnect) {
         _requete.estProConnect = this._estProConnect;
@@ -35,12 +34,12 @@ export class AdaptateurDeVerificationDeSessionDeTest
     return this.estPassee;
   }
 
-  utilisateurConnecte(utilisateur: Utilisateur) {
-    this._utilisateurConnecte = utilisateur;
+  utilisateurConnecte(identifiantUtilisateurConnecte: crypto.UUID) {
+    this._utilisateurConnecte = identifiantUtilisateurConnecte;
   }
 
-  utilisateurProConnect(utilisateur: Utilisateur) {
-    this.utilisateurConnecte(utilisateur);
+  utilisateurProConnect(identifiantUtilisateurConnecte: crypto.UUID) {
+    this.utilisateurConnecte(identifiantUtilisateurConnecte);
     this._estProConnect = true;
   }
 

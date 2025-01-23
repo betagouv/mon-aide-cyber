@@ -42,7 +42,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           });
         aidantConnecte = aidant;
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur
+          utilisateur.identifiant
         );
         await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
       });
@@ -139,7 +139,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       aidantConnecte = aidant;
       await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
     });
 
@@ -208,7 +208,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         constructeurAidant: unAidant(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -236,7 +236,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         constructeurAidant: unAidant().ayantConsentiPourLAnnuaire(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -264,7 +264,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         constructeurAidant: unAidant(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -292,7 +292,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         constructeurAidant: unAidant(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       await executeRequete(
@@ -318,7 +318,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         constructeurAidant: unAidant(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const reponse = await executeRequete(
@@ -348,7 +348,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         constructeurAidant: unAidant(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const nouveauMotDePasse = 'EgLw5R0ItVRxkl%#>cPd';
@@ -379,7 +379,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         constructeurAidant: unAidant(),
       });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur
+        utilisateur.identifiant
       );
 
       const nouveauMotDePasse = 'EgLw5R0ItVRxkl%#>cPd';
@@ -568,7 +568,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
             constructeurAidant: unAidant(),
           });
         testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          aidantUtilisateur
+          aidantUtilisateur.identifiant
         );
 
         const reponse = await executeRequete(
