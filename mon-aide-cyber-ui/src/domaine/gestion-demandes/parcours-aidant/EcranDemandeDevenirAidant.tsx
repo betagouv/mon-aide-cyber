@@ -176,8 +176,8 @@ export const EcranDemandeDevenirAidant = () => {
             <div className="fr-mt-2w introduction">
               <div>
                 <TypographieH5>
-                  Vous souhaitez oeuvrer exclusivement pour l&apos;intérêt
-                  général
+                  Vous souhaitez utiliser l’outil de diagnostic de l’ANSSI et
+                  être référencé Aidant cyber.
                 </TypographieH5>
                 <p>
                   Veuillez compléter les informations ci-dessous pour être
