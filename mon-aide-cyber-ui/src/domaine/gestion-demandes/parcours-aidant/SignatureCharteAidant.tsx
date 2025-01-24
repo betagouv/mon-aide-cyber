@@ -40,7 +40,8 @@ export const SignatureCharteAidant = ({
     <div className="fr-container fr-grid-row fr-grid-row--center zone-signature-charte-aidant">
       <div className="fr-col-12 section">
         <TypographieH3>
-          Vous souhaitez œuvrer exclusivement pour l’intérêt général
+          Vous souhaitez utiliser l’outil de diagnostic de l’ANSSI et être
+          référencé Aidant cyber.
         </TypographieH3>
         <p>
           Veuillez consulter et accepter la Charte de l’Aidant MonAideCyber.
