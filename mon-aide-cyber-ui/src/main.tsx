@@ -11,6 +11,7 @@ import { RouteurPrive } from './RouteurPrive.tsx';
 import { RouteurPublic } from './RouteurPublic.tsx';
 import { FournisseurUtilisateur } from './fournisseurs/ContexteUtilisateur.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { VisualiseurDeNavigationHATEOAS } from './domaine/hateoas/VisualiseurDeNavigationHATEOAS.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,6 +20,9 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+const afficheLeDebugHATEOAS =
+  import.meta.env['VITE_VISUALISEUR_HATEOAS'] === 'true';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -31,6 +35,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 <PortailModale>
                   <RouteurPublic />
                   <RouteurPrive />
+                  {afficheLeDebugHATEOAS ? (
+                    <VisualiseurDeNavigationHATEOAS />
+                  ) : null}
                 </PortailModale>
               </ErrorBoundary>
             </FournisseurUtilisateur>
