@@ -28,11 +28,7 @@ import {
   uneRechercheUtilisateursMAC,
   UtilisateurMACDTO,
 } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
-import {
-  dateNouveauParcoursAidant,
-  estDateNouveauParcoursDemandeDevenirAidant,
-} from '../gestion-demandes/devenir-aidant/nouveauParcours';
-import { isAfter } from 'date-fns';
+import { estDateNouveauParcoursDemandeDevenirAidant } from '../gestion-demandes/devenir-aidant/nouveauParcours';
 
 type CorpsRequeteReinitialiserMotDePasse = core.ParamsDictionary & {
   token: string;
@@ -135,9 +131,8 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
             );
           }
           if (
-            utilisateur.dateValidationCGU &&
-            estDateNouveauParcoursDemandeDevenirAidant() &&
-            isAfter(dateNouveauParcoursAidant(), utilisateur.dateValidationCGU)
+            utilisateur.doitValiderLesCGU &&
+            estDateNouveauParcoursDemandeDevenirAidant()
           ) {
             return reponseOK(
               constructeurActionsHATEOAS()

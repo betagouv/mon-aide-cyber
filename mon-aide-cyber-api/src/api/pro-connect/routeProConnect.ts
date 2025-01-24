@@ -15,11 +15,9 @@ import {
   MACCookies,
   utilitairesCookies,
 } from '../../adaptateurs/utilitairesDeCookies';
-import {
-  dateNouveauParcoursAidant,
-  estDateNouveauParcoursDemandeDevenirAidant,
-} from '../../gestion-demandes/devenir-aidant/nouveauParcours';
+import { estDateNouveauParcoursDemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/nouveauParcours';
 import { isAfter } from 'date-fns';
+import { dateValiditeCGU } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export class ErreurProConnectApresAuthentification extends Error {
   constructor(e: Error) {
@@ -126,7 +124,7 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
           }
           if (
             aidant.dateSignatureCGU &&
-            isAfter(dateNouveauParcoursAidant(), aidant.dateSignatureCGU) &&
+            isAfter(dateValiditeCGU(), aidant.dateSignatureCGU) &&
             estDateNouveauParcoursDemandeDevenirAidant()
           ) {
             redirection = '/mon-espace/mon-utilisation-du-service';

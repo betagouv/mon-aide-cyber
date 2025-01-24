@@ -1,6 +1,9 @@
 import crypto from 'crypto';
 import { Aggregat } from '../domaine/Aggregat';
 import { Entrepot } from '../domaine/Entrepot';
+import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
+import { adaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement';
+import { isAfter } from 'date-fns';
 
 export type ProfilUtilisateurMAC = 'Aidant' | 'UtilisateurInscrit' | 'Gendarme';
 
@@ -16,6 +19,7 @@ export type UtilisateurMACDTO = {
   dateValidationCGU?: Date;
   nomUsage: string;
   nomComplet: string;
+  doitValiderLesCGU: boolean;
 };
 
 export interface RechercheUtilisateursMAC {
@@ -49,6 +53,10 @@ export const uneRechercheUtilisateursMAC = (
         ...(utilisateur.dateValidationCGU && {
           dateValidationCGU: utilisateur.dateValidationCGU,
         }),
+        doitValiderLesCGU:
+          !!utilisateur.dateValidationCGU &&
+          isAfter(dateValiditeCGU(), utilisateur.dateValidationCGU) &&
+          isAfter(FournisseurHorloge.maintenant(), dateValiditeCGU()),
       }))
       .catch((erreur) => {
         console.error(
@@ -60,3 +68,8 @@ export const uneRechercheUtilisateursMAC = (
       });
   },
 });
+
+export const dateValiditeCGU = () =>
+  FournisseurHorloge.enDate(
+    adaptateurEnvironnement.nouveauParcoursDevenirAidant()
+  );
