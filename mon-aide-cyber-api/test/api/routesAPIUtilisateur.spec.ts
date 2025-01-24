@@ -8,7 +8,9 @@ import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/Adaptate
 import {
   unAidant,
   unCompteAidantRelieAUnCompteUtilisateur,
+  unCompteUtilisateurInscritConnecteViaProConnect,
   unUtilisateur,
+  unUtilisateurInscrit,
 } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import {
   CorpsReponseReinitialiserMotDePasseEnErreur,
@@ -21,10 +23,6 @@ import { add } from 'date-fns';
 import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 import { liensPublicsAttendus } from './hateoas/liensAttendus';
 import { ReponseHATEOASEnErreur } from '../../src/api/hateoas/hateoas';
-import {
-  unCompteUtilisateurInscritConnecteViaProConnect,
-  unUtilisateurInscrit,
-} from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -214,6 +212,9 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
     describe('Lorsque l’on fournit des informations de contexte', () => {
       beforeEach(() => {
+        FournisseurHorlogeDeTest.initialise(
+          new Date(Date.parse('2024-12-12T13:45:32'))
+        );
         testeurMAC.adaptateurDeVerificationDeSession =
           new AdaptateurDeVerificationDeSessionAvecContexteDeTest();
         donneesServeur = testeurMAC.initialise();
@@ -239,6 +240,99 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
               url: '/api/demandes/devenir-aidant/creation-espace-aidant',
               methode: 'POST',
             },
+          },
+        });
+      });
+    });
+
+    describe('Dans le cas du nouveau parcours devenir Aidant', () => {
+      const testeurMAC = testeurIntegration();
+      let donneesServeur: { portEcoute: number; app: Express };
+      let adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
+
+      beforeEach(() => {
+        FournisseurHorlogeDeTest.initialise(
+          new Date(Date.parse('2025-02-04T15:47:43'))
+        );
+        donneesServeur = testeurMAC.initialise();
+        adaptateurDeVerificationDeSession =
+          testeurMAC.adaptateurDeVerificationDeSession as AdaptateurDeVerificationDeSessionDeTest;
+      });
+
+      afterEach(() => {
+        testeurMAC.arrete();
+      });
+
+      it('Retourne les actions pour valider les profils Aidant et Utilisateur Inscrit', async () => {
+        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurAidant: unAidant().cguValideesLe(
+            new Date(Date.parse('2024-12-13T10:24:31'))
+          ),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+        });
+        adaptateurDeVerificationDeSession.utilisateurConnecte(
+          utilisateur.identifiant
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          `/api/utilisateur/`,
+          donneesServeur.portEcoute
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        expect((await reponse.json()).liens).toStrictEqual({
+          'valider-profil-utilisateur-inscrit': {
+            methode: 'POST',
+            url: '/api/toto',
+          },
+          'valider-profil-aidant': {
+            methode: 'POST',
+            url: '/api/tata',
+          },
+          'se-deconnecter': {
+            url: '/api/token',
+            methode: 'DELETE',
+            typeAppel: 'API',
+          },
+        });
+      });
+
+      it('Retourne les actions pour valider les profils Aidant et Utilisateur Inscrit connecté via ProConnect', async () => {
+        await unCompteUtilisateurInscritConnecteViaProConnect({
+          entrepotUtilisateurInscrit:
+            testeurMAC.entrepots.utilisateursInscrits(),
+          constructeurUtilisateur:
+            unUtilisateurInscrit().avecUneDateDeSignatureDeCGU(
+              new Date(Date.parse('2024-12-13T10:24:31'))
+            ),
+          adaptateurDeVerificationDeSession,
+        });
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          `/api/utilisateur/`,
+          donneesServeur.portEcoute
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        expect((await reponse.json()).liens).toStrictEqual({
+          'valider-profil-utilisateur-inscrit': {
+            methode: 'POST',
+            url: '/api/toto',
+          },
+          'valider-profil-aidant': {
+            methode: 'POST',
+            url: '/api/tata',
+          },
+          'se-deconnecter': {
+            url: '/pro-connect/deconnexion',
+            methode: 'GET',
+            typeAppel: 'DIRECT',
           },
         });
       });
