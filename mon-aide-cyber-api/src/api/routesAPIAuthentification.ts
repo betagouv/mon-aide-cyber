@@ -69,6 +69,7 @@ export const routesAPIAuthentification = (
               if (!utilisateur?.dateValidationCGU) {
                 reponseHATEOAS = constructeurActionsHATEOAS()
                   .pour({ contexte: 'valider-signature-cgu' })
+                  .pour({ contexte: 'se-deconnecter' })
                   .construis();
               }
               requete.session!.token = utilisateurAuthentifie.jeton;

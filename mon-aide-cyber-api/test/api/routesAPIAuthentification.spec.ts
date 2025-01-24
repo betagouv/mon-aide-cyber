@@ -242,6 +242,11 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               methode: 'POST',
               url: '/api/utilisateur/valider-signature-cgu',
             },
+            'se-deconnecter': {
+              methode: 'DELETE',
+              typeAppel: 'API',
+              url: '/api/token',
+            },
           },
         });
       });
