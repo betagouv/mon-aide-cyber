@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import {
+  uneRechercheUtilisateursMAC,
+  UtilisateurMACDTO,
+} from '../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import {
   EntrepotAidantMemoire,
   EntrepotUtilisateurInscritMemoire,
@@ -112,5 +115,62 @@ describe('La recherche utilisateur MAC', () => {
       expect(utilisateur).toBeDefined();
       expect(utilisateur?.dateValidationCGU).toStrictEqual(dateValidationCGU);
     });
+  });
+
+  it('Recherche un utilisateur de type Aidant par mail', async () => {
+    const aidant = unAidant().avecUnNomPrenom('Jean Dupont').construis();
+    const entrepotAidant = new EntrepotAidantMemoire();
+    await entrepotAidant.persiste(aidant);
+
+    const utilisateur = await uneRechercheUtilisateursMAC(
+      new EntrepotUtilisateurMACMemoire({
+        aidant: entrepotAidant,
+        utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+      })
+    ).rechercheParMail(aidant.email);
+
+    expect(utilisateur).toStrictEqual<UtilisateurMACDTO>({
+      identifiant: aidant.identifiant,
+      profil: 'Aidant',
+      nomUsage: 'Jean D.',
+      nomComplet: 'Jean Dupont',
+      dateValidationCGU: aidant.dateSignatureCGU!,
+      doitValiderLesCGU: false,
+    });
+  });
+
+  it('Recherche un utilisateur de type Utilisateur Inscrit par mail', async () => {
+    const utilisateurInscrit = unUtilisateurInscrit()
+      .avecUnNomPrenom('Jean Dujardin')
+      .construis();
+    const entrepotutilisateurInscrit = new EntrepotUtilisateurInscritMemoire();
+    await entrepotutilisateurInscrit.persiste(utilisateurInscrit);
+
+    const utilisateur = await uneRechercheUtilisateursMAC(
+      new EntrepotUtilisateurMACMemoire({
+        aidant: new EntrepotAidantMemoire(),
+        utilisateurInscrit: entrepotutilisateurInscrit,
+      })
+    ).rechercheParMail(utilisateurInscrit.email);
+
+    expect(utilisateur).toStrictEqual<UtilisateurMACDTO>({
+      identifiant: utilisateurInscrit.identifiant,
+      profil: 'UtilisateurInscrit',
+      nomUsage: 'Jean D.',
+      nomComplet: 'Jean Dujardin',
+      dateValidationCGU: utilisateurInscrit.dateSignatureCGU!,
+      doitValiderLesCGU: false,
+    });
+  });
+
+  it('Ne lance pas d’erreur si l’utilisateurn’est pas connu', async () => {
+    const utilisateur = await uneRechercheUtilisateursMAC(
+      new EntrepotUtilisateurMACMemoire({
+        aidant: new EntrepotAidantMemoire(),
+        utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+      })
+    ).rechercheParMail('email@inconnu.com');
+
+    expect(utilisateur).toBeUndefined();
   });
 });

@@ -19,6 +19,9 @@ export class EntrepotUtilisateurMACPostgres
   extends EntrepotPostgres<UtilisateurMAC, UtilisateurMACDTO>
   implements EntrepotUtilisateursMAC
 {
+  rechercheParMail(_email: string): Promise<UtilisateurMAC> {
+    throw new Error('Method not implemented.');
+  }
   rechercheParIdentifiant(identifiant: crypto.UUID): Promise<UtilisateurMAC> {
     return this.knex
       .raw(
