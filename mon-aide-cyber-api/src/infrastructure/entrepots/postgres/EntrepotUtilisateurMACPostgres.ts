@@ -12,6 +12,7 @@ type UtilisateurMACDTO = DTO & {
   type: 'AIDANT' | 'UTILISATEUR_INSCRIT';
   siret?: string;
   date_validation_cgu?: string;
+  nom_prenom: string;
 };
 
 export class EntrepotUtilisateurMACPostgres
@@ -22,7 +23,7 @@ export class EntrepotUtilisateurMACPostgres
     return this.knex
       .raw(
         `
-        SELECT id, type, donnees ->> 'siret' as siret, donnees ->> 'dateSignatureCGU' as date_validation_cgu FROM utilisateurs_mac WHERE id = ?
+        SELECT id, type, donnees ->> 'siret' as siret, donnees ->> 'dateSignatureCGU' as date_validation_cgu, donnees ->> 'nomPrenom' as nom_prenom FROM utilisateurs_mac WHERE id = ?
       `,
         [identifiant]
       )
@@ -47,6 +48,7 @@ export class EntrepotUtilisateurMACPostgres
     return {
       identifiant: dto.id,
       profil,
+      nomPrenom: dto.nom_prenom,
       ...(dto.date_validation_cgu && {
         dateValidationCGU: FournisseurHorloge.enDate(dto.date_validation_cgu),
       }),

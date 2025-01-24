@@ -30,6 +30,22 @@ describe('La recherche utilisateur MAC', () => {
     });
   });
 
+  it('Retourne le nom de l’utilisateur tel qu’il doit être affiché', async () => {
+    const aidant = unAidant().avecUnNomPrenom('Jean Dupont').construis();
+    const entrepotAidant = new EntrepotAidantMemoire();
+    await entrepotAidant.persiste(aidant);
+
+    const utilisateur = await uneRechercheUtilisateursMAC(
+      new EntrepotUtilisateurMACMemoire({
+        aidant: entrepotAidant,
+        utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+      })
+    ).rechercheParIdentifiant(aidant.identifiant);
+
+    expect(utilisateur?.nomUsage).toStrictEqual('Jean D.');
+    expect(utilisateur?.nomComplet).toStrictEqual('Jean Dupont');
+  });
+
   describe('Dans le cas de l’Utilisateur Inscrit', () => {
     it('Retourne la date de validation des CGU', async () => {
       const dateValidationCGU = new Date(Date.parse('2024-12-22T13:41:24'));
