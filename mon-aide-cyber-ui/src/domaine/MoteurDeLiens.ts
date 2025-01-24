@@ -8,6 +8,7 @@ export const ROUTE_MON_ESPACE = '/mon-espace';
 export const ROUTE_MON_ESPACE_VALIDER_CGU = `${ROUTE_MON_ESPACE}/valide-signature-cgu`;
 export const ROUTE_MON_ESPACE_MON_UTILSATION_DU_SERVICE = `${ROUTE_MON_ESPACE}/mon-utilisation-du-service`;
 export const ROUTE_MON_ESPACE_VALIDER_PROFIL = `${ROUTE_MON_ESPACE}/valider-mon-profil`;
+export const ROUTE_MON_ESPACE_VALIDER_PROFIL_UTILISATEUR_INSCRIT = `${ROUTE_MON_ESPACE}/valider-mon-profil-utilisateur`;
 
 const actionsStatiques: ActionsStatiques = {
   'afficher-profil': {

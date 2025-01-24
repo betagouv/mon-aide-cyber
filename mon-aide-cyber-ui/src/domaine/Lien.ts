@@ -40,4 +40,6 @@ export type Action =
   | 'afficher-statistiques'
   | 'reinitialisation-mot-de-passe'
   | 'reinitialiser-mot-de-passe'
-  | 'creer-diagnostic';
+  | 'creer-diagnostic'
+  | 'valider-profil-aidant'
+  | 'valider-profil-utilisateur-inscrit';

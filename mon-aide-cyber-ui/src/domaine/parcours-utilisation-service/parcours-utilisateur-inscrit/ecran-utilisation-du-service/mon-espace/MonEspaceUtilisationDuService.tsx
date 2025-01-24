@@ -1,13 +1,13 @@
 import {
   ChoixUtilisation,
   Utilisation,
-} from '../../../gestion-demandes/parcours-aidant/choix-utilisation/ChoixUtilisation.tsx';
+} from '../../../../gestion-demandes/parcours-aidant/choix-utilisation/ChoixUtilisation.tsx';
 import { useNavigate } from 'react-router-dom';
 import {
-  ROUTE_MON_ESPACE_VALIDER_CGU,
   ROUTE_MON_ESPACE_VALIDER_PROFIL,
-} from '../../../MoteurDeLiens.ts';
-import { useNavigationMAC } from '../../../../fournisseurs/hooks.ts';
+  ROUTE_MON_ESPACE_VALIDER_PROFIL_UTILISATEUR_INSCRIT,
+} from '../../../../MoteurDeLiens.ts';
+import { useNavigationMAC } from '../../../../../fournisseurs/hooks.ts';
 
 export const MonEspaceUtilisationDuService = () => {
   const navigationMAC = useNavigationMAC();
@@ -21,7 +21,7 @@ export const MonEspaceUtilisationDuService = () => {
       }
       case 'ActiviteProfessionnelle': {
         return navigationMAC.navigue(
-          `${ROUTE_MON_ESPACE_VALIDER_CGU}`,
+          `${ROUTE_MON_ESPACE_VALIDER_PROFIL_UTILISATEUR_INSCRIT}`,
           navigationMAC.etat
         );
       }

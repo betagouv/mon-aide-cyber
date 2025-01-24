@@ -1,0 +1,14 @@
+@import '../../../../assets/styles/points-de-rupture';
+
+.validation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.alignee-droite {
+    grid-area: droite;
+    display: flex;
+    gap: 1rem;
+    justify-content: end;
+  }
+}

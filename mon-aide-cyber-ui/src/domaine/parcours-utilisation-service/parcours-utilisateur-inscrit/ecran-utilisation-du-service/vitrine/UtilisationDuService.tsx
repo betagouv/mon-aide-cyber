@@ -1,7 +1,7 @@
 import {
   ChoixUtilisation,
   Utilisation,
-} from '../../../gestion-demandes/parcours-aidant/choix-utilisation/ChoixUtilisation.tsx';
+} from '../../../../gestion-demandes/parcours-aidant/choix-utilisation/ChoixUtilisation.tsx';
 import { useNavigate } from 'react-router-dom';
 
 export const UtilisationDuService = () => {

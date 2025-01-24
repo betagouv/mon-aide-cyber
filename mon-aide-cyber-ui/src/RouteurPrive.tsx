@@ -15,7 +15,8 @@ import { ComposantRestitutionAidant } from './composants/diagnostic/ComposantRes
 import { EcranValidationSignatureCGU } from './domaine/validation-cgu/EcranValidationSignatureCGU.tsx';
 import { ROUTE_MON_ESPACE } from './domaine/MoteurDeLiens.ts';
 import { EcranValiderMonProfil } from './domaine/gestion-demandes/parcours-aidant/EcranValiderMonProfil.tsx';
-import { EcranMonEspaceUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/EcranMonEspaceUtilisationDuService.tsx';
+import { EcranMonEspaceUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/mon-espace/EcranMonEspaceUtilisationDuService.tsx';
+import { EcranValiderProfilUtilisateurInscrit } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/EcranValiderProfilUtilisateurInscrit.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -51,7 +52,13 @@ export const RouteurPrive = () => {
           <Route
             path="valide-signature-cgu"
             element={<EcranValidationSignatureCGU />}
-          ></Route>
+          />
+          <Route element={<LayoutAidant afficheSideBar={false} />}>
+            <Route
+              path="valider-mon-profil-utilisateur"
+              element={<EcranValiderProfilUtilisateurInscrit />}
+            />
+          </Route>
         </Route>
         <Route
           element={
