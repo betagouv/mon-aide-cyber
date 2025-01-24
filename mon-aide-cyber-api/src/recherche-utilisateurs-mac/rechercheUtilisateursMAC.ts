@@ -45,9 +45,10 @@ const mappeUtilisateur = (utilisateur: UtilisateurMAC) => ({
     dateValidationCGU: utilisateur.dateValidationCGU,
   }),
   doitValiderLesCGU:
-    !!utilisateur.dateValidationCGU &&
-    isAfter(dateValiditeCGU(), utilisateur.dateValidationCGU) &&
-    isAfter(FournisseurHorloge.maintenant(), dateValiditeCGU()),
+    (!!utilisateur.dateValidationCGU &&
+      isAfter(dateValiditeCGU(), utilisateur.dateValidationCGU) &&
+      isAfter(FournisseurHorloge.maintenant(), dateValiditeCGU())) ||
+    !utilisateur.dateValidationCGU,
 });
 
 const formateLeNom = (nomPrenom: string): string => {

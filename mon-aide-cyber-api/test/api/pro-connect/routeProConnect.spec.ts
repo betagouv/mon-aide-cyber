@@ -2,7 +2,10 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from '../executeurRequete';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import {
+  unAidant,
+  unUtilisateurInscrit,
+} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { desInformationsUtilisateur } from '../../constructeurs/constructeurProConnectInformationsUtilisateur';
 import { fakerFR } from '@faker-js/faker';
 import { ReponseHATEOASEnErreur } from '../../../src/api/hateoas/hateoas';
@@ -164,6 +167,9 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
 
     describe('Dans le cas d’un Aidant n’ayant pas validé les CGU', () => {
       beforeEach(async () => {
+        FournisseurHorlogeDeTest.initialise(
+          new Date(Date.parse('2024-11-21T12:32:12'))
+        );
         const aidant = unAidant().sansCGUSignees().construis();
         donneesServeur = testeurMAC.initialise();
         await testeurMAC.entrepots.aidants().persiste(aidant);
@@ -200,6 +206,9 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       );
 
       beforeEach(async () => {
+        FournisseurHorlogeDeTest.initialise(
+          new Date(Date.parse('2025-02-04T14:45:23'))
+        );
         const aidant = unAidant()
           .cguValideesLe(new Date(Date.parse('2025-01-14T14:32:00')))
           .construis();
@@ -292,6 +301,60 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         expect(
           JSON.parse(Buffer.from(objet.session, 'base64').toString()).token
         ).toStrictEqual('abc');
+      });
+    });
+
+    describe('Dans le cas d’un Utilisateur Inscrit', () => {
+      it('Lorsque l’utilisateur est connu', async () => {
+        const utilisateurInscrit = unUtilisateurInscrit()
+          .avecUneDateDeSignatureDeCGU(
+            new Date(Date.parse('2025-02-04T14:23:51'))
+          )
+          .construis();
+        await testeurMAC.entrepots
+          .utilisateursInscrits()
+          .persiste(utilisateurInscrit);
+        testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+          async () =>
+            desInformationsUtilisateur()
+              .pourUnUtilisateurInscrit(utilisateurInscrit)
+              .construis();
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/pro-connect/apres-authentification',
+          donneesServeur.portEcoute
+        );
+
+        expect(reponse.headers['location']).toStrictEqual(
+          '/mon-espace/tableau-de-bord'
+        );
+      });
+
+      it('Lorsque l’utilisateur n’a pas encore validé les CGU', async () => {
+        const utilisateurInscrit = unUtilisateurInscrit()
+          .sansValidationDeCGU()
+          .construis();
+        await testeurMAC.entrepots
+          .utilisateursInscrits()
+          .persiste(utilisateurInscrit);
+        testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+          async () =>
+            desInformationsUtilisateur()
+              .pourUnUtilisateurInscrit(utilisateurInscrit)
+              .construis();
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/pro-connect/apres-authentification',
+          donneesServeur.portEcoute
+        );
+
+        expect(reponse.headers['location']).toStrictEqual(
+          '/mon-espace/valide-signature-cgu'
+        );
       });
     });
   });
