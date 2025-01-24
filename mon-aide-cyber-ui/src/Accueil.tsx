@@ -222,7 +222,8 @@ export const Accueil = () => {
                       </div>
                       <div className="nom">Général Husson</div>
                       <div>
-                        Commandant de la Gendarmerie dans le cyberespace
+                        Commandement du ministère de l’Intérieur dans le
+                        cyberespace (COMCYBER-MI)
                       </div>
                     </div>
                   </div>
