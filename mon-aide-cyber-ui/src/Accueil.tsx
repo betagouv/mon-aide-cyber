@@ -1,19 +1,23 @@
 import { FormulaireDeContact } from './composants/communs/FormulaireDeContact/FormulaireDeContact.tsx';
 import { ActionsPiedDePage } from './composants/communs/ActionsPiedDePage.tsx';
+import { useCallback, useState } from 'react';
 
 export const Accueil = () => {
-  // const [motDGClique, setMotDGClique] = useState<boolean>(true);
-  // const [motGeneralClique, setMotGeneralClique] = useState<boolean>(false);
-  //
-  // const surCliqueMotDG = useCallback(() => {
-  //   setMotGeneralClique(false);
-  //   setMotDGClique(true);
-  // }, []);
-  //
-  // const surCliqueMotGeneral = useCallback(() => {
-  //   setMotDGClique(false);
-  //   setMotGeneralClique(true);
-  // }, []);
+  const [motDGClique, setMotDGClique] = useState<boolean>(true);
+  const [motGeneralClique, setMotGeneralClique] = useState<boolean>(false);
+  const couleurSlide: 'mode-fonce' | 'mode-clair' = motGeneralClique
+    ? 'mode-clair'
+    : 'mode-fonce';
+
+  const surCliqueMotDG = useCallback(() => {
+    setMotGeneralClique(false);
+    setMotDGClique(true);
+  }, []);
+
+  const surCliqueMotGeneral = useCallback(() => {
+    setMotDGClique(false);
+    setMotGeneralClique(true);
+  }, []);
 
   return (
     <main role="main">
@@ -164,7 +168,7 @@ export const Accueil = () => {
             </div>
           </div>
         </div>
-        <div className="mode-fonce">
+        <div className={couleurSlide}>
           <div className="fr-container">
             <img
               id="guillemets"
@@ -196,54 +200,54 @@ export const Accueil = () => {
                     </div>
                   </div>
                 </div>
-                {/*<div className="fr-col-6"></div>*/}
-                {/*<div id="slide-general" className="fr-container">*/}
-                {/*  <div className="fr-grid-row les-mots-de">*/}
-                {/*    <div className="titre">Le mot du Général</div>*/}
-                {/*    <div className="contenu">*/}
-                {/*      Lorem ipsum dolor sit amet, consectetur adipiscing elit.*/}
-                {/*      Nulla eget condimentum orci, faucibus viverra ipsum.*/}
-                {/*      Aliquam sed lorem turpis. Nunc facilisis leo nec metus*/}
-                {/*      rutrum, eget scelerisque dolor mollis. Curabitur at*/}
-                {/*      tortor non neque hendrerit egestas et vel massa. Integer*/}
-                {/*      ac lectus vitae lacus mollis varius at at quam. Proin*/}
-                {/*      sagittis libero ex. Nunc iaculis non dui vel.*/}
-                {/*    </div>*/}
-                {/*    <div className="personne">*/}
-                {/*      <div className="illustration">*/}
-                {/*        <img*/}
-                {/*          src="/images/illustration-general-gendarmerie.png"*/}
-                {/*          alt="Commandant de la Gendarmerie dans le cyberespace"*/}
-                {/*        />*/}
-                {/*      </div>*/}
-                {/*      <div className="nom">Général Husson</div>*/}
-                {/*      <div>*/}
-                {/*        Commandant de la Gendarmerie dans le cyberespace*/}
-                {/*      </div>*/}
-                {/*    </div>*/}
-                {/*  </div>*/}
-                {/*</div>*/}
+                <div className="fr-col-6"></div>
+                <div id="slide-general" className="fr-container">
+                  <div className="fr-grid-row les-mots-de">
+                    <div className="titre">Le mot du Général</div>
+                    <div className="contenu">
+                      L’accompagnement des différentes entités dans leur vie
+                      numérique constitue un dénominateur commun de tous les
+                      acteurs engagés dans la lutte contre les cybermenaces,
+                      dont le commandement du ministère de l’Intérieur dans le
+                      cyberespace (COMCYBER-MI). MonAideCyber permettra sans
+                      aucun doute à ces mêmes entités d’améliorer leur niveau de
+                      maturité cyber, et in fine leur cyberprotection.
+                    </div>
+                    <div className="personne">
+                      <div className="illustration">
+                        <img
+                          src="/images/illustration-general-gendarmerie.png"
+                          alt="Commandant de la Gendarmerie dans le cyberespace"
+                        />
+                      </div>
+                      <div className="nom">Général Husson</div>
+                      <div>
+                        Commandant de la Gendarmerie dans le cyberespace
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              {/*<div className="lien-slider fr-grid-row fr-grid-row--center">*/}
-              {/*  <div>*/}
-              {/*    <a*/}
-              {/*      href="#slide-dg"*/}
-              {/*      onClick={surCliqueMotDG}*/}
-              {/*      className={motDGClique ? 'slider-active' : ''}*/}
-              {/*    >*/}
-              {/*      &nbsp;*/}
-              {/*    </a>*/}
-              {/*  </div>*/}
-              {/*  <div>*/}
-              {/*    <a*/}
-              {/*      href="#slide-general"*/}
-              {/*      onClick={surCliqueMotGeneral}*/}
-              {/*      className={motGeneralClique ? 'slider-active' : ''}*/}
-              {/*    >*/}
-              {/*      &nbsp;*/}
-              {/*    </a>*/}
-              {/*  </div>*/}
-              {/*</div>*/}
+              <div className="lien-slider fr-grid-row fr-grid-row--center">
+                <div>
+                  <a
+                    href="#slide-dg"
+                    onClick={surCliqueMotDG}
+                    className={motDGClique ? 'slider-active' : ''}
+                  >
+                    &nbsp;
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="#slide-general"
+                    onClick={surCliqueMotGeneral}
+                    className={motGeneralClique ? 'slider-active' : ''}
+                  >
+                    &nbsp;
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
