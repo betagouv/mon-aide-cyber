@@ -14,10 +14,5 @@ export const estDateNouveauParcoursDemandeDevenirAidant = () => {
   );
 };
 
-export const dateNouveauParcoursAidant = () =>
-  FournisseurHorloge.enDate(
-    adaptateurEnvironnement.nouveauParcoursDevenirAidant()
-  );
-
 export const estAvantDateNouveauParcours = () =>
   !estDateNouveauParcoursDemandeDevenirAidant();
