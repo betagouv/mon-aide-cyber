@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from 'express';
 import { ConfigurationServeur } from '../../serveur';
 import { ReponseHATEOASEnErreur } from '../hateoas/hateoas';
 import { ErreurMAC } from '../../domaine/erreurMAC';
-import { unServiceAidant } from '../../espace-aidant/ServiceAidantMAC';
 import {
   CommandeCreeEspaceAidant,
   EspaceAidantCree,
@@ -16,8 +15,7 @@ import {
   utilitairesCookies,
 } from '../../adaptateurs/utilitairesDeCookies';
 import { estDateNouveauParcoursDemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/nouveauParcours';
-import { isAfter } from 'date-fns';
-import { dateValiditeCGU } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { uneRechercheUtilisateursMAC } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export class ErreurProConnectApresAuthentification extends Error {
   constructor(e: Error) {
@@ -113,23 +111,23 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
 
         const estGendarme = estSiretGendarmerie(siret);
 
-        const aidant = await unServiceAidant(
-          entrepots.aidants()
+        const utilisateur = await uneRechercheUtilisateursMAC(
+          entrepots.utilisateursMAC()
         ).rechercheParMail(email!);
 
-        if (aidant) {
+        if (utilisateur) {
           let redirection = '/mon-espace/tableau-de-bord';
-          if (!aidant.dateSignatureCGU) {
+          if (utilisateur.doitValiderLesCGU) {
             redirection = '/mon-espace/valide-signature-cgu';
           }
           if (
-            aidant.dateSignatureCGU &&
-            isAfter(dateValiditeCGU(), aidant.dateSignatureCGU) &&
+            utilisateur.profil !== 'UtilisateurInscrit' &&
+            utilisateur.doitValiderLesCGU &&
             estDateNouveauParcoursDemandeDevenirAidant()
           ) {
             redirection = '/mon-espace/mon-utilisation-du-service';
           }
-          return redirige(idToken, aidant.identifiant, redirection);
+          return redirige(idToken, utilisateur.identifiant, redirection);
         }
         if (estGendarme) {
           const compte = await busCommande.publie<

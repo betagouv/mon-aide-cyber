@@ -176,7 +176,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
 class ConstructeurUtilisateurInscrit
   implements Constructeur<UtilisateurInscrit>
 {
-  private dateSignatureCGU: Date = fakerFR.date.anytime();
+  private dateSignatureCGU: Date | undefined = fakerFR.date.anytime();
   private email: string = fakerFR.internet.email();
   private entite: EntiteUtilisateurInscrit = {};
   private identifiant: crypto.UUID = crypto.randomUUID();
@@ -204,9 +204,14 @@ class ConstructeurUtilisateurInscrit
     return this;
   }
 
+  sansValidationDeCGU(): ConstructeurUtilisateurInscrit {
+    this.dateSignatureCGU = undefined;
+    return this;
+  }
+
   construis(): UtilisateurInscrit {
     return {
-      dateSignatureCGU: this.dateSignatureCGU,
+      ...(this.dateSignatureCGU && { dateSignatureCGU: this.dateSignatureCGU }),
       email: this.email,
       entite: this.entite,
       identifiant: this.identifiant,

@@ -2,6 +2,7 @@ import { Constructeur } from './constructeur';
 import { InformationsUtilisateur } from '../../src/adaptateurs/pro-connect/adaptateurProConnect';
 import { Aidant } from '../../src/espace-aidant/Aidant';
 import { fakerFR } from '@faker-js/faker';
+import { UtilisateurInscrit } from '../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 
 class ConstructeurProConnectInformationsUtilisateur
   implements Constructeur<InformationsUtilisateur>
@@ -12,15 +13,19 @@ class ConstructeurProConnectInformationsUtilisateur
   private siret: string = fakerFR.string.numeric(10);
 
   pourUnAidant(aidant: Aidant): ConstructeurProConnectInformationsUtilisateur {
-    const [prenom, nom] = aidant.nomPrenom.split(' ');
-    this.prenom = prenom;
-    this.nom = nom;
-    this.email = aidant.email;
+    this.extraisInformationsUtilisateurs(aidant);
     return this;
   }
 
   avecUnSiret(siret: string): ConstructeurProConnectInformationsUtilisateur {
     this.siret = siret;
+    return this;
+  }
+
+  pourUnUtilisateurInscrit(
+    utilisateurInscrit: UtilisateurInscrit
+  ): ConstructeurProConnectInformationsUtilisateur {
+    this.extraisInformationsUtilisateurs(utilisateurInscrit);
     return this;
   }
 
@@ -31,6 +36,15 @@ class ConstructeurProConnectInformationsUtilisateur
       email: this.email,
       siret: this.siret,
     };
+  }
+
+  private extraisInformationsUtilisateurs(
+    utilisateur: UtilisateurInscrit | Aidant
+  ) {
+    const [prenom, nom] = utilisateur.nomPrenom.split(' ');
+    this.prenom = prenom;
+    this.nom = nom;
+    this.email = utilisateur.email;
   }
 }
 
