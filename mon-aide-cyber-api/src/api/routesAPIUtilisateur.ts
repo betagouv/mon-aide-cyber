@@ -126,6 +126,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
             return reponseOK(
               constructeurActionsHATEOAS()
                 .pour({ contexte: 'valider-signature-cgu' })
+                .pour(deconnexionUtilisateur)
                 .construis(),
               utilisateur
             );

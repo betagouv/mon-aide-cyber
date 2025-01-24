@@ -190,6 +190,11 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
             methode: 'POST',
             url: '/api/utilisateur/valider-signature-cgu',
           },
+          'se-deconnecter': {
+            url: '/api/token',
+            methode: 'DELETE',
+            typeAppel: 'API',
+          },
         },
       });
     });
