@@ -53,6 +53,7 @@ import {
   EntrepotUtilisateurInscrit,
   UtilisateurInscrit,
 } from '../../../espace-utilisateur-inscrit/UtilisateurInscrit';
+import { AidantDTO } from '../../../espace-aidant/ServiceAidant';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -290,6 +291,23 @@ export class EntrepotUtilisateurMACMemoire
     super();
   }
 
+  async rechercheParMail(email: string): Promise<UtilisateurMAC> {
+    const aidant = await unServiceAidant(
+      this.entrepots.aidant
+    ).rechercheParMail(email);
+    if (aidant) {
+      return this.mappeAidant(aidant);
+    }
+    try {
+      const utilisateurInscrit = await this.entrepots.utilisateurInscrit.tous();
+      return this.mappeUtilisateurInscrit(
+        utilisateurInscrit.filter((u) => u.email === email)[0]
+      );
+    } catch (_erreur) {
+      return Promise.reject('Utilisateur MAC non trouvé');
+    }
+  }
+
   async rechercheParIdentifiant(
     identifiant: crypto.UUID
   ): Promise<UtilisateurMAC> {
@@ -297,29 +315,39 @@ export class EntrepotUtilisateurMACMemoire
       identifiant
     );
     if (aidant) {
-      return {
-        identifiant: aidant.identifiant,
-        profil: estSiretGendarmerie(aidant?.siret) ? 'Gendarme' : 'Aidant',
-        nomPrenom: aidant.nomComplet,
-        ...(aidant.dateSignatureCGU && {
-          dateValidationCGU: aidant.dateSignatureCGU,
-        }),
-      };
+      return this.mappeAidant(aidant);
     }
     try {
       const utilisateurInscrit =
         await this.entrepots.utilisateurInscrit.lis(identifiant);
-      return {
-        identifiant: utilisateurInscrit.identifiant,
-        profil: 'UtilisateurInscrit',
-        nomPrenom: utilisateurInscrit.nomPrenom,
-        ...(utilisateurInscrit.dateSignatureCGU && {
-          dateValidationCGU: utilisateurInscrit.dateSignatureCGU,
-        }),
-      };
+      return this.mappeUtilisateurInscrit(utilisateurInscrit);
     } catch (_erreur) {
       return Promise.reject('Utilisateur MAC non trouvé');
     }
+  }
+
+  private mappeUtilisateurInscrit(
+    utilisateurInscrit: UtilisateurInscrit
+  ): UtilisateurMAC {
+    return {
+      identifiant: utilisateurInscrit.identifiant,
+      profil: 'UtilisateurInscrit',
+      nomPrenom: utilisateurInscrit.nomPrenom,
+      ...(utilisateurInscrit.dateSignatureCGU && {
+        dateValidationCGU: utilisateurInscrit.dateSignatureCGU,
+      }),
+    };
+  }
+
+  private mappeAidant(aidant: AidantDTO): UtilisateurMAC {
+    return {
+      identifiant: aidant.identifiant,
+      profil: estSiretGendarmerie(aidant?.siret) ? 'Gendarme' : 'Aidant',
+      nomPrenom: aidant.nomComplet,
+      ...(aidant.dateSignatureCGU && {
+        dateValidationCGU: aidant.dateSignatureCGU,
+      }),
+    };
   }
 
   lis(_identifiant: string): Promise<UtilisateurMAC> {

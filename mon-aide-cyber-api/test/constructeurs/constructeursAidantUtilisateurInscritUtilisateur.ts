@@ -199,6 +199,11 @@ class ConstructeurUtilisateurInscrit
     return this;
   }
 
+  avecUnNomPrenom(nomPrenom: string): ConstructeurUtilisateurInscrit {
+    this.nomPrenom = nomPrenom;
+    return this;
+  }
+
   construis(): UtilisateurInscrit {
     return {
       dateSignatureCGU: this.dateSignatureCGU,
