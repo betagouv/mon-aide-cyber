@@ -14,7 +14,7 @@ import { EcranDiagnosticAidant } from './composants/diagnostic/EcranDiagnosticAi
 import { ComposantRestitutionAidant } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { EcranValidationSignatureCGU } from './domaine/validation-cgu/EcranValidationSignatureCGU.tsx';
 import { ROUTE_MON_ESPACE } from './domaine/MoteurDeLiens.ts';
-import { EcranMettreAJourDemandeDevenirAidant } from './domaine/gestion-demandes/parcours-aidant/EcranMettreAJourDemandeDevenirAidant.tsx';
+import { EcranValiderMonProfil } from './domaine/gestion-demandes/parcours-aidant/EcranValiderMonProfil.tsx';
 import { EcranMonEspaceUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/EcranMonEspaceUtilisationDuService.tsx';
 
 export const RouteurPrive = () => {
@@ -37,7 +37,7 @@ export const RouteurPrive = () => {
         <Route element={<LayoutAidant afficheSideBar={false} />}>
           <Route
             path="valider-mon-profil"
-            element={<EcranMettreAJourDemandeDevenirAidant />}
+            element={<EcranValiderMonProfil />}
           />
         </Route>
 
