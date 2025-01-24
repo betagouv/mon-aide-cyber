@@ -1227,77 +1227,149 @@ describe('Entrepot Utilisateurs MAC', () => {
   beforeEach(async () => {
     nettoieLaBaseDeDonneesAidants();
   });
-  it('Retourne un utilisateur au profil Aidant', async () => {
-    const aidant = unAidant().construis();
-    await entrepotAidantPostgres.persiste(aidant);
 
-    const utilisateurMAC =
-      await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
-        aidant.identifiant
-      );
+  describe('Recherche par identifiant', () => {
+    it('Retourne un utilisateur au profil Aidant', async () => {
+      const aidant = unAidant().construis();
+      await entrepotAidantPostgres.persiste(aidant);
 
-    expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
-      identifiant: aidant.identifiant,
-      profil: 'Aidant',
-      nomPrenom: aidant.nomPrenom,
-      dateValidationCGU: aidant.dateSignatureCGU!,
+      const utilisateurMAC =
+        await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
+          aidant.identifiant
+        );
+
+      expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
+        identifiant: aidant.identifiant,
+        profil: 'Aidant',
+        nomPrenom: aidant.nomPrenom,
+        dateValidationCGU: aidant.dateSignatureCGU!,
+      });
+    });
+
+    it('Retourne un utilisateur au profil Gendarme', async () => {
+      const aidant = unAidant().avecUnProfilGendarme().construis();
+      await entrepotAidantPostgres.persiste(aidant);
+
+      const utilisateurMAC =
+        await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
+          aidant.identifiant
+        );
+
+      expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
+        identifiant: aidant.identifiant,
+        profil: 'Gendarme',
+        nomPrenom: aidant.nomPrenom,
+        dateValidationCGU: aidant.dateSignatureCGU!,
+      });
+    });
+    it('Retourne un utilisateur au profil Utilisateur Inscrit', async () => {
+      const utilisateurInscrit = unUtilisateurInscrit().construis();
+      await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
+
+      const utilisateurMAC =
+        await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
+          utilisateurInscrit.identifiant
+        );
+
+      expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
+        identifiant: utilisateurInscrit.identifiant,
+        profil: 'UtilisateurInscrit',
+        nomPrenom: utilisateurInscrit.nomPrenom,
+        dateValidationCGU: utilisateurInscrit.dateSignatureCGU!,
+      });
+    });
+
+    it("Renvoie une erreur AggregatNonTrouvé si l'utilisateur n'existe pas", async () => {
+      expect(
+        entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
+          crypto.randomUUID()
+        )
+      ).rejects.toThrowError(new AggregatNonTrouve('utilisateur MAC'));
+    });
+
+    it('Renvoie la date de validation des CGU', async () => {
+      const dateValidationCGU = new Date(Date.parse('2025-02-04T14:37:22'));
+      const utilisateurInscrit = unUtilisateurInscrit()
+        .avecUneDateDeSignatureDeCGU(dateValidationCGU)
+        .construis();
+      await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
+
+      const utilisateurMAC =
+        await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
+          utilisateurInscrit.identifiant
+        );
+
+      expect(utilisateurMAC.dateValidationCGU).toStrictEqual(dateValidationCGU);
     });
   });
 
-  it('Retourne un utilisateur au profil Gendarme', async () => {
-    const aidant = unAidant().avecUnProfilGendarme().construis();
-    await entrepotAidantPostgres.persiste(aidant);
+  describe('Recherche par mail', () => {
+    it('Retourne un utilisateur au profil Aidant', async () => {
+      const aidant = unAidant().construis();
+      await entrepotAidantPostgres.persiste(aidant);
 
-    const utilisateurMAC =
-      await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
-        aidant.identifiant
-      );
+      const utilisateurMAC =
+        await entrepotUtilisateurMACPostgres.rechercheParMail(aidant.email);
 
-    expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
-      identifiant: aidant.identifiant,
-      profil: 'Gendarme',
-      nomPrenom: aidant.nomPrenom,
-      dateValidationCGU: aidant.dateSignatureCGU!,
+      expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
+        identifiant: aidant.identifiant,
+        profil: 'Aidant',
+        nomPrenom: aidant.nomPrenom,
+        dateValidationCGU: aidant.dateSignatureCGU!,
+      });
     });
-  });
-  it('Retourne un utilisateur au profil Utilisateur Inscrit', async () => {
-    const utilisateurInscrit = unUtilisateurInscrit().construis();
-    await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
 
-    const utilisateurMAC =
-      await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
-        utilisateurInscrit.identifiant
-      );
+    it('Retourne un utilisateur au profil Gendarme', async () => {
+      const aidant = unAidant().avecUnProfilGendarme().construis();
+      await entrepotAidantPostgres.persiste(aidant);
 
-    expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
-      identifiant: utilisateurInscrit.identifiant,
-      profil: 'UtilisateurInscrit',
-      nomPrenom: utilisateurInscrit.nomPrenom,
-      dateValidationCGU: utilisateurInscrit.dateSignatureCGU!,
+      const utilisateurMAC =
+        await entrepotUtilisateurMACPostgres.rechercheParMail(aidant.email);
+
+      expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
+        identifiant: aidant.identifiant,
+        profil: 'Gendarme',
+        nomPrenom: aidant.nomPrenom,
+        dateValidationCGU: aidant.dateSignatureCGU!,
+      });
     });
-  });
+    it('Retourne un utilisateur au profil Utilisateur Inscrit', async () => {
+      const utilisateurInscrit = unUtilisateurInscrit().construis();
+      await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
 
-  it("Renvoie une erreur AggregatNonTrouvé si l'utilisateur n'existe pas", async () => {
-    expect(
-      entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
-        crypto.randomUUID()
-      )
-    ).rejects.toThrowError(new AggregatNonTrouve('utilisateur MAC'));
-  });
+      const utilisateurMAC =
+        await entrepotUtilisateurMACPostgres.rechercheParMail(
+          utilisateurInscrit.email
+        );
 
-  it('Renvoie la date de validation des CGU', async () => {
-    const dateValidationCGU = new Date(Date.parse('2025-02-04T14:37:22'));
-    const utilisateurInscrit = unUtilisateurInscrit()
-      .avecUneDateDeSignatureDeCGU(dateValidationCGU)
-      .construis();
-    await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
+      expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
+        identifiant: utilisateurInscrit.identifiant,
+        profil: 'UtilisateurInscrit',
+        nomPrenom: utilisateurInscrit.nomPrenom,
+        dateValidationCGU: utilisateurInscrit.dateSignatureCGU!,
+      });
+    });
 
-    const utilisateurMAC =
-      await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
-        utilisateurInscrit.identifiant
-      );
+    it("Renvoie une erreur AggregatNonTrouvé si l'utilisateur n'existe pas", async () => {
+      expect(
+        entrepotUtilisateurMACPostgres.rechercheParMail(crypto.randomUUID())
+      ).rejects.toThrowError(new AggregatNonTrouve('utilisateur MAC'));
+    });
 
-    expect(utilisateurMAC.dateValidationCGU).toStrictEqual(dateValidationCGU);
+    it('Renvoie la date de validation des CGU', async () => {
+      const dateValidationCGU = new Date(Date.parse('2025-02-04T14:37:22'));
+      const utilisateurInscrit = unUtilisateurInscrit()
+        .avecUneDateDeSignatureDeCGU(dateValidationCGU)
+        .construis();
+      await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
+
+      const utilisateurMAC =
+        await entrepotUtilisateurMACPostgres.rechercheParMail(
+          utilisateurInscrit.email
+        );
+
+      expect(utilisateurMAC.dateValidationCGU).toStrictEqual(dateValidationCGU);
+    });
   });
 });
 
