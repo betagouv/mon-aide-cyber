@@ -1239,6 +1239,7 @@ describe('Entrepot Utilisateurs MAC', () => {
     expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
       identifiant: aidant.identifiant,
       profil: 'Aidant',
+      nomPrenom: aidant.nomPrenom,
       dateValidationCGU: aidant.dateSignatureCGU!,
     });
   });
@@ -1255,6 +1256,7 @@ describe('Entrepot Utilisateurs MAC', () => {
     expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
       identifiant: aidant.identifiant,
       profil: 'Gendarme',
+      nomPrenom: aidant.nomPrenom,
       dateValidationCGU: aidant.dateSignatureCGU!,
     });
   });
@@ -1270,6 +1272,7 @@ describe('Entrepot Utilisateurs MAC', () => {
     expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
       identifiant: utilisateurInscrit.identifiant,
       profil: 'UtilisateurInscrit',
+      nomPrenom: utilisateurInscrit.nomPrenom,
       dateValidationCGU: utilisateurInscrit.dateSignatureCGU!,
     });
   });

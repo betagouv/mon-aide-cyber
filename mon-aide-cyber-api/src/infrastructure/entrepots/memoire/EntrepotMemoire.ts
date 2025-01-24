@@ -300,6 +300,7 @@ export class EntrepotUtilisateurMACMemoire
       return {
         identifiant: aidant.identifiant,
         profil: estSiretGendarmerie(aidant?.siret) ? 'Gendarme' : 'Aidant',
+        nomPrenom: aidant.nomComplet,
         ...(aidant.dateSignatureCGU && {
           dateValidationCGU: aidant.dateSignatureCGU,
         }),
@@ -311,6 +312,7 @@ export class EntrepotUtilisateurMACMemoire
       return {
         identifiant: utilisateurInscrit.identifiant,
         profil: 'UtilisateurInscrit',
+        nomPrenom: utilisateurInscrit.nomPrenom,
         ...(utilisateurInscrit.dateSignatureCGU && {
           dateValidationCGU: utilisateurInscrit.dateSignatureCGU,
         }),

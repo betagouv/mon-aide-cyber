@@ -7,14 +7,21 @@ export type ProfilUtilisateurMAC = 'Aidant' | 'UtilisateurInscrit' | 'Gendarme';
 export type UtilisateurMAC = Aggregat & {
   profil: ProfilUtilisateurMAC;
   dateValidationCGU?: Date;
+  nomPrenom: string;
 };
 
-export type UtilisateurMACDTO = UtilisateurMAC;
+export type UtilisateurMACDTO = {
+  identifiant: crypto.UUID;
+  profil: ProfilUtilisateurMAC;
+  dateValidationCGU?: Date;
+  nomUsage: string;
+  nomComplet: string;
+};
 
 export interface RechercheUtilisateursMAC {
   rechercheParIdentifiant(
     identifiant: crypto.UUID
-  ): Promise<UtilisateurMAC | undefined>;
+  ): Promise<UtilisateurMACDTO | undefined>;
 }
 
 export interface EntrepotUtilisateursMAC extends Entrepot<UtilisateurMAC> {
@@ -27,11 +34,18 @@ export const uneRechercheUtilisateursMAC = (
   rechercheParIdentifiant(
     identifiant: crypto.UUID
   ): Promise<UtilisateurMACDTO | undefined> {
+    const formateLeNom = (nomPrenom: string): string => {
+      const [prenom, nom] = nomPrenom.split(' ');
+      return `${prenom} ${nom ? `${nom[0]}.` : ''}`.trim();
+    };
+
     return entrepot
       .rechercheParIdentifiant(identifiant)
       .then((utilisateur) => ({
         identifiant: utilisateur.identifiant,
         profil: utilisateur.profil,
+        nomUsage: formateLeNom(utilisateur.nomPrenom),
+        nomComplet: utilisateur.nomPrenom,
         ...(utilisateur.dateValidationCGU && {
           dateValidationCGU: utilisateur.dateValidationCGU,
         }),
