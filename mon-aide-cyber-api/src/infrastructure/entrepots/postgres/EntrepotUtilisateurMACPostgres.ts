@@ -15,20 +15,28 @@ type UtilisateurMACDTO = DTO & {
   nom_prenom: string;
 };
 
+type Parametre<T> = T;
+
 export class EntrepotUtilisateurMACPostgres
   extends EntrepotPostgres<UtilisateurMAC, UtilisateurMACDTO>
   implements EntrepotUtilisateursMAC
 {
-  rechercheParMail(_email: string): Promise<UtilisateurMAC> {
-    throw new Error('Method not implemented.');
+  rechercheParMail(email: string): Promise<UtilisateurMAC> {
+    const critere = `WHERE donnees ->> 'email' = ?`;
+    return this.rechercheParCritere(critere, email);
   }
+
   rechercheParIdentifiant(identifiant: crypto.UUID): Promise<UtilisateurMAC> {
+    return this.rechercheParCritere(`WHERE id = ?`, identifiant);
+  }
+
+  private rechercheParCritere<T>(critere: string, parametre: Parametre<T>) {
     return this.knex
       .raw(
         `
-        SELECT id, type, donnees ->> 'siret' as siret, donnees ->> 'dateSignatureCGU' as date_validation_cgu, donnees ->> 'nomPrenom' as nom_prenom FROM utilisateurs_mac WHERE id = ?
+        SELECT id, type, donnees ->> 'siret' as siret, donnees ->> 'dateSignatureCGU' as date_validation_cgu, donnees ->> 'nomPrenom' as nom_prenom FROM utilisateurs_mac ${critere}
       `,
-        [identifiant]
+        [parametre]
       )
       .then(({ rows }: { rows: UtilisateurMACDTO[] }) => {
         return rows[0];
