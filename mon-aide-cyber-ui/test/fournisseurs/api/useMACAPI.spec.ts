@@ -50,7 +50,7 @@ class ConstructeurDeReponse {
 describe('Appelle API', () => {
   describe('pour des requêtes GET', () => {
     it("les headers sont positionnés par défaut à 'application/json'", async () => {
-      const api = macAPI(() => null);
+      const api = macAPI();
 
       const reponse = await api.execute<
         InformationsEnvoyees,
