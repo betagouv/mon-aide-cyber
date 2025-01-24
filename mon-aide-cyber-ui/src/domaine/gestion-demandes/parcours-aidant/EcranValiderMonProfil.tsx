@@ -33,7 +33,7 @@ import { TypographieH4 } from '../../../composants/communs/typographie/Typograph
 import { LienMailtoMAC } from '../../../composants/atomes/LienMailtoMAC.tsx';
 import { useNavigate } from 'react-router-dom';
 
-export const EcranMettreAJourDemandeDevenirAidant = () => {
+export const EcranValiderMonProfil = () => {
   const navigationMAC = useNavigationMAC();
   const navigate = useNavigate();
   const macAPI = useMACAPI();
@@ -99,11 +99,6 @@ export const EcranMettreAJourDemandeDevenirAidant = () => {
       window.scrollTo({ top: 0 });
     },
   });
-
-  /*  const surClickChoixUtilisation = useCallback((choix: Utilisation) => {
-    envoie(choixUtilisationFaite(choix));
-    window.scrollTo({ top: 0 });
-  }, []);*/
 
   const surClickChoixTypeAidant = useCallback(
     ({ typeAidant, entite }: TypeAidantEtSonEntite) => {
