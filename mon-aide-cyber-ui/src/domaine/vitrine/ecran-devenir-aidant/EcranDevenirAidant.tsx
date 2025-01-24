@@ -8,7 +8,7 @@ import { LesEngagementsDeLAidant } from './composants/LesEngagementsDeLAidant';
 import { QuiEstConcerne } from './composants/QuiEstConcerne';
 import { Temoignages } from './composants/Temoignages';
 import './ecran-devenir-aidant.scss';
-import { UtilisationDuService } from '../../parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/UtilisationDuService.tsx';
+import { UtilisationDuService } from '../../parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/vitrine/UtilisationDuService.tsx';
 
 export const EcranDevenirAidant = () => {
   useDefilementFluide();

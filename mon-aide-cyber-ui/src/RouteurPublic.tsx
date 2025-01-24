@@ -23,7 +23,7 @@ import { EcranDiagnosticLibreAcces } from './composants/diagnostic/EcranDiagnost
 import { ComposantRestitutionLibreAcces } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { EcranDemandeAutodiagnostic } from './domaine/auto-diagnostic/EcranDemandeAutodiagnostic.tsx';
 import { EcranDemandeDevenirAidant } from './domaine/gestion-demandes/parcours-aidant/EcranDemandeDevenirAidant.tsx';
-import { EcranUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/EcranUtilisationDuService.tsx';
+import { EcranUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/vitrine/EcranUtilisationDuService.tsx';
 
 export const RouteurPublic = () => {
   return (
