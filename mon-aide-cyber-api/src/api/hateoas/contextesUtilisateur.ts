@@ -41,6 +41,7 @@ type ClefContexte =
   | 'afficher-annuaire-aidants'
   | 'reinitialisation-mot-de-passe'
   | 'utiliser-outil-diagnostic'
+  | 'valider-profil'
   | 'valider-signature-cgu'
   | string;
 
@@ -127,6 +128,16 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
     'valider-signature-cgu': {
       methode: 'POST',
       url: '/api/utilisateur/valider-signature-cgu',
+    },
+  },
+  'valider-profil': {
+    'valider-profil-utilisateur-inscrit': {
+      methode: 'POST',
+      url: '/api/toto',
+    },
+    'valider-profil-aidant': {
+      methode: 'POST',
+      url: '/api/tata',
     },
   },
 });

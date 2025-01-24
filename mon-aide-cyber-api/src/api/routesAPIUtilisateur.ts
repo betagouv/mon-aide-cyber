@@ -24,7 +24,15 @@ import { ServiceDeChiffrement } from '../securite/ServiceDeChiffrement';
 import { CommandeReinitialisationMotDePasse } from '../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 import { adaptateurConfigurationLimiteurTraffic } from './adaptateurLimiteurTraffic';
 import { unServiceAidant } from '../espace-aidant/ServiceAidantMAC';
-import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import {
+  uneRechercheUtilisateursMAC,
+  UtilisateurMACDTO,
+} from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import {
+  dateNouveauParcoursAidant,
+  estDateNouveauParcoursDemandeDevenirAidant,
+} from '../gestion-demandes/devenir-aidant/nouveauParcours';
+import { isAfter } from 'date-fns';
 
 type CorpsRequeteReinitialiserMotDePasse = core.ParamsDictionary & {
   token: string;
@@ -93,6 +101,15 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       reponse: Response,
       suite: NextFunction
     ) => {
+      const reponseOK = (
+        actions: ReponseHATEOAS,
+        utilisateur: UtilisateurMACDTO
+      ) =>
+        reponse.status(200).json({
+          ...actions,
+          nomPrenom: utilisateur.nomComplet,
+        });
+
       return uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
         .rechercheParIdentifiant(requete.identifiantUtilisateurCourant!)
         .then((utilisateur) => {
@@ -104,29 +121,44 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
               )
             );
           }
-          let actions = constructeurActionsHATEOAS()
-            .pour({
-              contexte:
-                utilisateur.profil === 'UtilisateurInscrit'
-                  ? 'utilisateur-inscrit:acceder-aux-informations-utilisateur'
-                  : 'aidant:acceder-aux-informations-utilisateur',
-            })
-            .pour({
-              contexte: requete.estProConnect
-                ? 'se-deconnecter-avec-pro-connect'
-                : 'se-deconnecter',
-            })
-            .construis();
-
+          const deconnexionUtilisateur = {
+            contexte: requete.estProConnect
+              ? 'se-deconnecter-avec-pro-connect'
+              : 'se-deconnecter',
+          };
           if (!utilisateur.dateValidationCGU) {
-            actions = constructeurActionsHATEOAS()
-              .pour({ contexte: 'valider-signature-cgu' })
-              .construis();
+            return reponseOK(
+              constructeurActionsHATEOAS()
+                .pour({ contexte: 'valider-signature-cgu' })
+                .construis(),
+              utilisateur
+            );
           }
-          return reponse.status(200).json({
-            ...actions,
-            nomPrenom: utilisateur.nomComplet,
-          });
+          if (
+            utilisateur.dateValidationCGU &&
+            estDateNouveauParcoursDemandeDevenirAidant() &&
+            isAfter(dateNouveauParcoursAidant(), utilisateur.dateValidationCGU)
+          ) {
+            return reponseOK(
+              constructeurActionsHATEOAS()
+                .pour({ contexte: 'valider-profil' })
+                .pour(deconnexionUtilisateur)
+                .construis(),
+              utilisateur
+            );
+          }
+          return reponseOK(
+            constructeurActionsHATEOAS()
+              .pour({
+                contexte:
+                  utilisateur.profil === 'UtilisateurInscrit'
+                    ? 'utilisateur-inscrit:acceder-aux-informations-utilisateur'
+                    : 'aidant:acceder-aux-informations-utilisateur',
+              })
+              .pour(deconnexionUtilisateur)
+              .construis(),
+            utilisateur
+          );
         });
     }
   );
