@@ -107,25 +107,6 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       ).toStrictEqual('abc');
     });
 
-    it('Si l’utilisateur n’est pas connu, on le redirige vers la mire de connexion', async () => {
-      testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur = () =>
-        Promise.resolve(desInformationsUtilisateur().construis());
-
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        '/pro-connect/apres-authentification',
-        donneesServeur.portEcoute
-      );
-
-      expect(reponse.statusCode).toStrictEqual(302);
-      expect(reponse.headers['location']).toStrictEqual(
-        encodeURI(
-          '/connexion?erreurConnexion=Vous n’avez pas de compte enregistré sur MonAideCyber'
-        )
-      );
-    });
-
     it('Si la présence du cookie ProConnectInfo n’est pas validée, on envoie un message d’erreur d’authentification', async () => {
       utilitairesCookies.recuperateurDeCookies = () => undefined;
       donneesServeur = testeurMAC.initialise();
@@ -355,6 +336,27 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         expect(reponse.headers['location']).toStrictEqual(
           '/mon-espace/valide-signature-cgu'
         );
+      });
+
+      describe('Qui se connecte pour la première fois', () => {
+        it('Crée un compte', async () => {
+          testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+            async () => desInformationsUtilisateur().construis();
+
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'GET',
+            '/pro-connect/apres-authentification',
+            donneesServeur.portEcoute
+          );
+
+          expect(reponse.headers['location']).toStrictEqual(
+            '/mon-espace/valide-signature-cgu'
+          );
+          expect(
+            await testeurMAC.entrepots.utilisateursInscrits().tous()
+          ).toHaveLength(1);
+        });
       });
     });
   });
