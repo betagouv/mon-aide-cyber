@@ -12,6 +12,15 @@ import {
   DefinitionAidantInitieDiagnostic,
   unTupleAidantInitieDiagnostic,
 } from '../../src/diagnostic/tuples';
+import {
+  unAidant,
+  unUtilisateurInscrit,
+} from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import {
+  EntrepotAidantMemoire,
+  EntrepotUtilisateurInscritMemoire,
+  EntrepotUtilisateurMACMemoire,
+} from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 
 type RequeteTest = Request;
 
@@ -19,21 +28,28 @@ describe('Adaptateur de vérification de relations MAC', () => {
   const reponse = {} as Response;
 
   it('L’Aidant est l’initiateur du diagnostic et peut y accéder', async () => {
+    const aidant = unAidant().construis();
+    const entrepotAidant = new EntrepotAidantMemoire();
+    await entrepotAidant.persiste(aidant);
     const entrepotRelation = new EntrepotRelationMemoire();
     let suiteAppelee = false;
-    const aidant = crypto.randomUUID();
     const diagnostic = crypto.randomUUID();
     entrepotRelation.persiste(
-      unTupleAidantInitieDiagnostic(aidant, diagnostic)
+      unTupleAidantInitieDiagnostic(aidant.identifiant, diagnostic)
     );
     const adaptateurRelation = new AdaptateurRelationsMAC(entrepotRelation);
 
-    await new AdaptateurDeVerificationDesAccesMAC(adaptateurRelation).verifie<
-      DefinitionAidantInitieDiagnostic,
-      RequeteTest
-    >(definitionAidantInitieDiagnostic.definition)(
+    await new AdaptateurDeVerificationDesAccesMAC(
+      adaptateurRelation,
+      new EntrepotUtilisateurMACMemoire({
+        aidant: entrepotAidant,
+        utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+      })
+    ).verifie<DefinitionAidantInitieDiagnostic, RequeteTest>(
+      definitionAidantInitieDiagnostic.definition
+    )(
       {
-        identifiantUtilisateurCourant: aidant,
+        identifiantUtilisateurCourant: aidant.identifiant,
         params: { id: diagnostic },
       } as unknown as RequeteUtilisateur,
       reponse,
@@ -46,6 +62,13 @@ describe('Adaptateur de vérification de relations MAC', () => {
   });
 
   it('L’Aidant n’est pas l’initiateur du diagnostic et ne peut y accéder', async () => {
+    const aidant = unAidant().construis();
+    const entrepotAidant = new EntrepotAidantMemoire();
+    await entrepotAidant.persiste(aidant);
+    const entrepotUtilisateurMAC = new EntrepotUtilisateurMACMemoire({
+      aidant: entrepotAidant,
+      utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+    });
     let suiteAppelee = false;
     let codeRecu = 0;
     let jsonRecu = {};
@@ -59,12 +82,14 @@ describe('Adaptateur de vérification de relations MAC', () => {
       new EntrepotRelationMemoire()
     );
 
-    await new AdaptateurDeVerificationDesAccesMAC(adaptateurRelations).verifie<
-      DefinitionAidantInitieDiagnostic,
-      RequeteTest
-    >(definitionAidantInitieDiagnostic.definition)(
+    await new AdaptateurDeVerificationDesAccesMAC(
+      adaptateurRelations,
+      entrepotUtilisateurMAC
+    ).verifie<DefinitionAidantInitieDiagnostic, RequeteTest>(
+      definitionAidantInitieDiagnostic.definition
+    )(
       {
-        identifiantUtilisateurCourant: crypto.randomUUID(),
+        identifiantUtilisateurCourant: aidant.identifiant,
         params: { id: crypto.randomUUID() },
       } as unknown as RequeteUtilisateur,
       reponse,
@@ -85,6 +110,69 @@ describe('Adaptateur de vérification de relations MAC', () => {
         'afficher-preferences': {
           methode: 'GET',
           url: '/api/aidant/preferences',
+        },
+        'afficher-tableau-de-bord': {
+          url: '/api/mon-espace/tableau-de-bord',
+          methode: 'GET',
+        },
+        'lancer-diagnostic': {
+          methode: 'POST',
+          url: '/api/diagnostic',
+        },
+        'se-deconnecter': {
+          methode: 'DELETE',
+          typeAppel: 'API',
+          url: '/api/token',
+        },
+      },
+    });
+    expect(suiteAppelee).toBe(false);
+  });
+
+  it('L’Utilisateur Inscrit n’est pas l’initiateur du diagnostic et ne peut y accéder', async () => {
+    const utilisateurInscrit = unUtilisateurInscrit().construis();
+    const entrepotUtilisateurInscrit = new EntrepotUtilisateurInscritMemoire();
+    await entrepotUtilisateurInscrit.persiste(utilisateurInscrit);
+    let suiteAppelee = false;
+    let codeRecu = 0;
+    let jsonRecu = {};
+    const reponse = {
+      status: (code) => {
+        codeRecu = code;
+        return { json: (corps) => (jsonRecu = corps) };
+      },
+    } as Response;
+    const adaptateurRelations = new AdaptateurRelationsMAC(
+      new EntrepotRelationMemoire()
+    );
+
+    await new AdaptateurDeVerificationDesAccesMAC(
+      adaptateurRelations,
+      new EntrepotUtilisateurMACMemoire({
+        aidant: new EntrepotAidantMemoire(),
+        utilisateurInscrit: entrepotUtilisateurInscrit,
+      })
+    ).verifie<DefinitionAidantInitieDiagnostic, RequeteTest>(
+      definitionAidantInitieDiagnostic.definition
+    )(
+      {
+        identifiantUtilisateurCourant: utilisateurInscrit.identifiant,
+        params: { id: crypto.randomUUID() },
+      } as unknown as RequeteUtilisateur,
+      reponse,
+      () => {
+        suiteAppelee = true;
+      }
+    );
+
+    expect(codeRecu).toBe(403);
+    expect(jsonRecu).toStrictEqual<ReponseVerificationRelationEnErreur>({
+      titre: 'Accès non autorisé',
+      message: 'Désolé, vous ne pouvez pas accéder à ce diagnostic.',
+      liens: {
+        'afficher-profil': {
+          methode: 'GET',
+          url: '/api/profil',
         },
         'afficher-tableau-de-bord': {
           url: '/api/mon-espace/tableau-de-bord',
