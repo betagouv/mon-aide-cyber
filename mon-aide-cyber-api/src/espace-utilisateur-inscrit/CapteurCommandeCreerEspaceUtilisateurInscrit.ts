@@ -1,8 +1,9 @@
 import { CapteurCommande, Commande } from '../domaine/commande';
 import crypto from 'crypto';
 import { Entrepots } from '../domaine/Entrepots';
-import { BusEvenement } from '../domaine/BusEvenement';
+import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { AdaptateurEnvoiMail } from '../adaptateurs/AdaptateurEnvoiMail';
+import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
 export type CommandeCreerEspaceUtilisateurInscrit = Omit<Commande, 'type'> & {
   identifiant: crypto.UUID;
@@ -27,7 +28,7 @@ export class CapteurCommandeCreerEspaceUtilisateurInscrit
 {
   constructor(
     private readonly entrepots: Entrepots,
-    _busEvenement: BusEvenement,
+    private readonly busEvenement: BusEvenement,
     _adaptateurEnvoiDeMail: AdaptateurEnvoiMail
   ) {}
 
@@ -44,11 +45,26 @@ export class CapteurCommandeCreerEspaceUtilisateurInscrit
       .utilisateursInscrits()
       .persiste(utilisateur)
       .then(() => {
-        return {
-          email: utilisateur.email,
-          nomPrenom: utilisateur.nomPrenom,
-          identifiant: utilisateur.identifiant,
-        };
+        return this.busEvenement
+          .publie<UtilisateurInscritCree>({
+            corps: {
+              identifiant: utilisateur.identifiant,
+              typeUtilisateur: 'UtilisateurInscrit',
+            },
+            identifiant: utilisateur.identifiant,
+            type: 'UTILISATEUR_INSCRIT_CREE',
+            date: FournisseurHorloge.maintenant(),
+          })
+          .then(() => ({
+            email: utilisateur.email,
+            nomPrenom: utilisateur.nomPrenom,
+            identifiant: utilisateur.identifiant,
+          }));
       });
   }
 }
+
+export type UtilisateurInscritCree = Evenement<{
+  identifiant: crypto.UUID;
+  typeUtilisateur: 'UtilisateurInscrit';
+}>;
