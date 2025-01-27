@@ -26,6 +26,7 @@ import {
   CapteurCommandeDemandeDiagnosticLibreAcces,
   CapteurSagaLanceDiagnosticLibreAcces,
 } from '../../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
+import { CapteurCommandeCreerEspaceUtilisateurInscrit } from '../../espace-utilisateur-inscrit/CapteurCommandeCreerEspaceUtilisateurInscrit';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -134,6 +135,17 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurCommandeCreeEspaceAidant(
           parametres.entrepots,
           parametres.busEvenements!
+        ),
+    },
+  ],
+  [
+    'CommandeCreerEspaceUtilisateurInscrit',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeCreerEspaceUtilisateurInscrit(
+          parametres.entrepots,
+          parametres.busEvenements!,
+          parametres.adaptateurEnvoiMail!
         ),
     },
   ],

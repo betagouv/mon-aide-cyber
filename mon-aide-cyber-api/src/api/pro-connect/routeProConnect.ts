@@ -16,6 +16,10 @@ import {
 } from '../../adaptateurs/utilitairesDeCookies';
 import { estDateNouveauParcoursDemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/nouveauParcours';
 import { uneRechercheUtilisateursMAC } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import {
+  CommandeCreerEspaceUtilisateurInscrit,
+  EspaceUtilisateurInscritCree,
+} from '../../espace-utilisateur-inscrit/CapteurCommandeCreerEspaceUtilisateurInscrit';
 
 export class ErreurProConnectApresAuthentification extends Error {
   constructor(e: Error) {
@@ -152,9 +156,20 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
             '/mon-espace/valide-signature-cgu'
           );
         }
-
-        return reponse.redirect(
-          '/connexion?erreurConnexion=Vous n’avez pas de compte enregistré sur MonAideCyber'
+        const espaceUtilisateurInscritCree = await busCommande.publie<
+          CommandeCreerEspaceUtilisateurInscrit,
+          EspaceUtilisateurInscritCree
+        >({
+          identifiant: adaptateurUUID.genereUUID(),
+          email: email!,
+          nomPrenom: `${prenom} ${nom}`,
+          type: 'CommandeCreerEspaceUtilisateurInscrit',
+          ...(siret && { siret: siret }),
+        });
+        return redirige(
+          idToken,
+          espaceUtilisateurInscritCree.identifiant,
+          '/mon-espace/valide-signature-cgu'
         );
       } catch (e: unknown | Error) {
         return suite(
