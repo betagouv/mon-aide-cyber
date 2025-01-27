@@ -3,11 +3,10 @@ import { ConsommateurEvenement, Evenement } from '../../domaine/BusEvenement';
 import { DiagnosticLance } from '../../diagnostic/CapteurCommandeLanceDiagnostic';
 import { unTupleAidantInitieDiagnostic } from '../../diagnostic/tuples';
 import {
-  ProfilUtilisateurMAC,
+  PROFILS_AIDANT,
   RechercheUtilisateursMAC,
 } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
-const profilsUtilisateurs: ProfilUtilisateurMAC[] = ['Aidant', 'Gendarme'];
 export const aidantInitieDiagnostic = (
   adaptateurRelations: AdaptateurRelations,
   rechercheUtilisateursMAC: RechercheUtilisateursMAC
@@ -20,7 +19,7 @@ export const aidantInitieDiagnostic = (
       return rechercheUtilisateursMAC
         .rechercheParIdentifiant(diagnosticLance.corps.identifiantUtilisateur)
         .then((utilisateur) => {
-          if (utilisateur && profilsUtilisateurs.includes(utilisateur.profil)) {
+          if (utilisateur && PROFILS_AIDANT.includes(utilisateur.profil)) {
             const tuple = unTupleAidantInitieDiagnostic(
               diagnosticLance.corps.identifiantUtilisateur,
               diagnosticLance.corps.identifiantDiagnostic

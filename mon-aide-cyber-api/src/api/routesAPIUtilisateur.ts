@@ -25,6 +25,7 @@ import { CommandeReinitialisationMotDePasse } from '../authentification/reinitia
 import { adaptateurConfigurationLimiteurTraffic } from './adaptateurLimiteurTraffic';
 import { unServiceAidant } from '../espace-aidant/ServiceAidantMAC';
 import {
+  PROFILS_AIDANT,
   uneRechercheUtilisateursMAC,
   UtilisateurMACDTO,
 } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
@@ -245,19 +246,26 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
             .construis(),
         });
       }
-      return unServiceAidant(entrepots.aidants())
-        .valideLesCGU(requete.identifiantUtilisateurCourant!)
-        .then(() =>
-          reponse.status(200).json({
-            ...constructeurActionsHATEOAS()
-              .pour({
-                contexte: requete.estProConnect
-                  ? 'aidant:pro-connect-acceder-au-profil'
-                  : 'aidant:acceder-au-profil',
-              })
-              .construis(),
-          })
-        );
+      const identifiantUtilisateur = requete.identifiantUtilisateurCourant!;
+      return uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
+        .rechercheParIdentifiant(identifiantUtilisateur)
+        .then((utilisateur) => {
+          if (PROFILS_AIDANT.includes(utilisateur!.profil)) {
+            unServiceAidant(entrepots.aidants())
+              .valideLesCGU(identifiantUtilisateur)
+              .then(() =>
+                reponse.status(200).json({
+                  ...constructeurActionsHATEOAS()
+                    .pour({
+                      contexte: requete.estProConnect
+                        ? 'aidant:pro-connect-acceder-au-profil'
+                        : 'aidant:acceder-au-profil',
+                    })
+                    .construis(),
+                })
+              );
+          }
+        });
     }
   );
 

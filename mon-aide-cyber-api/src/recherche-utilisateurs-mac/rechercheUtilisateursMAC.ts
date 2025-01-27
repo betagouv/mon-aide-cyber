@@ -95,3 +95,4 @@ export const dateValiditeCGU = () =>
   FournisseurHorloge.enDate(
     adaptateurEnvironnement.nouveauParcoursDevenirAidant()
   );
+export const PROFILS_AIDANT: ProfilUtilisateurMAC[] = ['Aidant', 'Gendarme'];
