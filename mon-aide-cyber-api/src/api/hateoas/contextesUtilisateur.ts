@@ -148,7 +148,7 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
     },
     'valider-profil-aidant': {
       methode: 'POST',
-      url: '/api/tata',
+      url: '/api/utilisateur/valider-profil-aidant',
     },
   },
 });

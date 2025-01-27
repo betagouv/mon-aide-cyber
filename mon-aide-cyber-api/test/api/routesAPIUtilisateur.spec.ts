@@ -297,7 +297,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           },
           'valider-profil-aidant': {
             methode: 'POST',
-            url: '/api/tata',
+            url: '/api/utilisateur/valider-profil-aidant',
           },
           'se-deconnecter': {
             url: '/api/token',
@@ -333,7 +333,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           },
           'valider-profil-aidant': {
             methode: 'POST',
-            url: '/api/tata',
+            url: '/api/utilisateur/valider-profil-aidant',
           },
           'se-deconnecter': {
             url: '/pro-connect/deconnexion',
