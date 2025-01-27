@@ -4,6 +4,7 @@ import { Entrepots } from '../domaine/Entrepots';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { AdaptateurEnvoiMail } from '../adaptateurs/AdaptateurEnvoiMail';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
+import { adaptateurCorpsMessage } from './tableau-de-bord/adaptateurCorpsMessage';
 
 export type CommandeCreerEspaceUtilisateurInscrit = Omit<Commande, 'type'> & {
   identifiant: crypto.UUID;
@@ -29,7 +30,7 @@ export class CapteurCommandeCreerEspaceUtilisateurInscrit
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,
-    _adaptateurEnvoiDeMail: AdaptateurEnvoiMail
+    private readonly adaptateurEnvoiDeMail: AdaptateurEnvoiMail
   ) {}
 
   execute(
@@ -45,21 +46,32 @@ export class CapteurCommandeCreerEspaceUtilisateurInscrit
       .utilisateursInscrits()
       .persiste(utilisateur)
       .then(() => {
-        return this.busEvenement
-          .publie<UtilisateurInscritCree>({
-            corps: {
-              identifiant: utilisateur.identifiant,
-              typeUtilisateur: 'UtilisateurInscrit',
-            },
-            identifiant: utilisateur.identifiant,
-            type: 'UTILISATEUR_INSCRIT_CREE',
-            date: FournisseurHorloge.maintenant(),
+        return this.adaptateurEnvoiDeMail
+          .envoie({
+            destinataire: { email: commande.email },
+            corps: adaptateurCorpsMessage
+              .confirmationUtilisateurInscritCree()
+              .genereCorpsMessage(commande.nomPrenom),
+            objet:
+              'MonAideCyber - Votre inscription au dispositif est confirmée',
           })
-          .then(() => ({
-            email: utilisateur.email,
-            nomPrenom: utilisateur.nomPrenom,
-            identifiant: utilisateur.identifiant,
-          }));
+          .then(() =>
+            this.busEvenement
+              .publie<UtilisateurInscritCree>({
+                corps: {
+                  identifiant: utilisateur.identifiant,
+                  typeUtilisateur: 'UtilisateurInscrit',
+                },
+                identifiant: utilisateur.identifiant,
+                type: 'UTILISATEUR_INSCRIT_CREE',
+                date: FournisseurHorloge.maintenant(),
+              })
+              .then(() => ({
+                email: utilisateur.email,
+                nomPrenom: utilisateur.nomPrenom,
+                identifiant: utilisateur.identifiant,
+              }))
+          );
       });
   }
 }

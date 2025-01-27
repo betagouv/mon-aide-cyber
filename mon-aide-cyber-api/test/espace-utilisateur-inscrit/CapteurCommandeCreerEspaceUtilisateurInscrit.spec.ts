@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import {
   CapteurCommandeCreerEspaceUtilisateurInscrit,
   EspaceUtilisateurInscritCree,
@@ -9,8 +9,15 @@ import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/Ent
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
+import { adaptateurCorpsMessage } from '../../src/espace-utilisateur-inscrit/tableau-de-bord/adaptateurCorpsMessage';
+import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe('Capteur de commande de création d’un Utilisateur Inscrit', () => {
+  beforeEach(() =>
+    FournisseurHorlogeDeTest.initialise(
+      new Date(Date.parse('2023-12-21T13:43:21'))
+    )
+  );
   it('Crée un Utilisateur Inscrit', async () => {
     const entrepotsMemoire = new EntrepotsMemoire();
 
@@ -106,6 +113,7 @@ describe('Capteur de commande de création d’un Utilisateur Inscrit', () => {
         nomPrenom: 'Jean Dupont',
         type: 'CommandeCreerEspaceUtilisateurInscrit',
       });
+
     expect(
       busEvenement.consommateursTestes.get('UTILISATEUR_INSCRIT_CREE')?.[0]
         .evenementConsomme
@@ -118,5 +126,30 @@ describe('Capteur de commande de création d’un Utilisateur Inscrit', () => {
       },
       identifiant: utilisateurCree.identifiant,
     });
+  });
+
+  it('Envoie le mail de confirmation', async () => {
+    adaptateurCorpsMessage.confirmationUtilisateurInscritCree = () => ({
+      genereCorpsMessage: () => 'Bonjour le monde!',
+    });
+    const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+
+    await new CapteurCommandeCreerEspaceUtilisateurInscrit(
+      new EntrepotsMemoire(),
+      new BusEvenementDeTest(),
+      adaptateurEnvoiMail
+    ).execute({
+      identifiant: crypto.randomUUID(),
+      email: 'jean.dupont@utilisateur-inscrit.com',
+      nomPrenom: 'Jean Dupont',
+      type: 'CommandeCreerEspaceUtilisateurInscrit',
+    });
+
+    expect(
+      adaptateurEnvoiMail.aEteEnvoyeA(
+        'jean.dupont@utilisateur-inscrit.com',
+        'Bonjour le monde!'
+      )
+    ).toBe(true);
   });
 });
