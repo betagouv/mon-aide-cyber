@@ -9,7 +9,7 @@ export type UtilisateurInscrit = Aggregat & {
   email: string;
   nomPrenom: string;
   dateSignatureCGU?: Date;
-  entite: EntiteUtilisateurInscrit;
+  entite?: EntiteUtilisateurInscrit;
 };
 
 export type EntrepotUtilisateurInscrit = Entrepot<UtilisateurInscrit>;
