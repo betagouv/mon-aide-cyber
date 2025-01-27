@@ -14,7 +14,7 @@ type DonneesUtilisateurInscrit = {
   email: string;
   nomPrenom: string;
   dateSignatureCGU?: string;
-  entite: EntiteUtilisateurInscritDTO;
+  entite?: EntiteUtilisateurInscritDTO;
 };
 
 type UtilisateurInscritDTO = DTO & {
@@ -38,9 +38,11 @@ export class EntrepotUtilisateurInscritPostgres
         ...(entite.dateSignatureCGU && {
           dateSignatureCGU: entite.dateSignatureCGU?.toISOString(),
         }),
-        entite: {
-          ...(entite.entite.siret && { siret: entite.entite.siret }),
-        },
+        ...(entite.entite && {
+          entite: {
+            ...(entite.entite.siret && { siret: entite.entite.siret }),
+          },
+        }),
       },
       id: entite.identifiant,
       type: 'UTILISATEUR_INSCRIT',
@@ -55,9 +57,11 @@ export class EntrepotUtilisateurInscritPostgres
         ),
       }),
       email: this.chiffrement.dechiffre(dto.donnees.email),
-      entite: {
-        ...(dto.donnees.entite.siret && { siret: dto.donnees.entite.siret }),
-      },
+      ...(dto.donnees.entite && {
+        entite: {
+          ...(dto.donnees.entite.siret && { siret: dto.donnees.entite.siret }),
+        },
+      }),
       identifiant: dto.id,
       nomPrenom: this.chiffrement.dechiffre(dto.donnees.nomPrenom),
     };

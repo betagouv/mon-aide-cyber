@@ -178,12 +178,17 @@ class ConstructeurUtilisateurInscrit
 {
   private dateSignatureCGU: Date | undefined = fakerFR.date.anytime();
   private email: string = fakerFR.internet.email();
-  private entite: EntiteUtilisateurInscrit = {};
+  private entite: EntiteUtilisateurInscrit | undefined = {};
   private identifiant: crypto.UUID = crypto.randomUUID();
   private nomPrenom: string = fakerFR.person.fullName();
 
   avecLeSiret(siret: string): ConstructeurUtilisateurInscrit {
     this.entite = { siret };
+    return this;
+  }
+
+  sansEntite(): ConstructeurUtilisateurInscrit {
+    this.entite = undefined;
     return this;
   }
 
@@ -213,7 +218,7 @@ class ConstructeurUtilisateurInscrit
     return {
       ...(this.dateSignatureCGU && { dateSignatureCGU: this.dateSignatureCGU }),
       email: this.email,
-      entite: this.entite,
+      ...(this.entite && { entite: this.entite }),
       identifiant: this.identifiant,
       nomPrenom: this.nomPrenom,
     };

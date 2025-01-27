@@ -1398,9 +1398,24 @@ describe('Entrepot Utilisateur Inscrit', () => {
     );
   });
 
+  it('Persiste un utilisateur sans entité', async () => {
+    const utilisateurInscrit = unUtilisateurInscrit().sansEntite().construis();
+    serviceDeChiffrement.ajoute(utilisateurInscrit.email, 'aaa');
+    serviceDeChiffrement.ajoute(utilisateurInscrit.nomPrenom, 'ccc');
+
+    await entrepot.persiste(utilisateurInscrit);
+
+    const utilisateurInscritRecu = await new EntrepotUtilisateurInscritPostgres(
+      serviceDeChiffrement
+    ).lis(utilisateurInscrit.identifiant);
+    expect(utilisateurInscritRecu).toStrictEqual<UtilisateurInscrit>(
+      utilisateurInscrit
+    );
+  });
+
   it('Persiste un utilisateur inscrit avec son Siret', async () => {
     const aidant = unUtilisateurInscrit().avecLeSiret('1234567891').construis();
-    serviceDeChiffrement.ajoute(aidant.entite.siret!, 'cccc');
+    serviceDeChiffrement.ajoute(aidant.entite!.siret!, 'cccc');
 
     await entrepot.persiste(aidant);
 
@@ -1410,7 +1425,7 @@ describe('Entrepot Utilisateur Inscrit', () => {
     expect(
       utilisateurInscritRecu.entite
     ).toStrictEqual<EntiteUtilisateurInscrit>({
-      siret: aidant.entite.siret!,
+      siret: aidant.entite!.siret!,
     });
   });
 
