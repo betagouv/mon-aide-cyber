@@ -7,7 +7,10 @@ import { ReponseHATEOAS } from '../../src/api/hateoas/hateoas';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { AdaptateurDeVerificationDeCGU } from '../../src/adaptateurs/AdaptateurDeVerificationDeCGU';
 
-import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import {
+  unAidant,
+  unUtilisateurInscrit,
+} from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import crypto from 'crypto';
 
 describe('Adaptateur de Vérification de CGU', () => {
@@ -36,6 +39,43 @@ describe('Adaptateur de Vérification de CGU', () => {
     await adaptateurDeVerificationDeCGU.verifie()(
       {
         identifiantUtilisateurCourant: aidant.identifiant,
+      } as RequeteUtilisateur,
+      reponse,
+      () => {
+        suiteAppelee = true;
+      }
+    );
+
+    expect(codeRecu).toBe(302);
+    expect(jsonRecu).toStrictEqual<ReponseHATEOAS>({
+      liens: {
+        'valider-signature-cgu': {
+          url: '/api/utilisateur/valider-signature-cgu',
+          methode: 'POST',
+        },
+      },
+    });
+    expect(suiteAppelee).toBe(false);
+  });
+
+  it('Vérifie que les CGU ont bien été validées ar un Utilisateur Inscrit', async () => {
+    const utilisateurInscrit = unUtilisateurInscrit()
+      .sansValidationDeCGU()
+      .construis();
+    await entrepots.utilisateursInscrits().persiste(utilisateurInscrit);
+    let codeRecu = 0;
+    let jsonRecu = {};
+    let suiteAppelee = false;
+    const reponse = {
+      status: (code) => {
+        codeRecu = code;
+        return { json: (corps) => (jsonRecu = corps) };
+      },
+    } as Response;
+
+    await adaptateurDeVerificationDeCGU.verifie()(
+      {
+        identifiantUtilisateurCourant: utilisateurInscrit.identifiant,
       } as RequeteUtilisateur,
       reponse,
       () => {
