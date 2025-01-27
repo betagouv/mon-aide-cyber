@@ -123,6 +123,17 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
       ...afficherTableauDeBord,
       ...afficherProfil,
     },
+    'acceder-au-profil': {
+      ...lancerDiagnostic,
+      ...afficherTableauDeBord,
+      ...modifierMotDePasse,
+      ...seDeconnecter,
+    },
+    'pro-connect-acceder-au-profil': {
+      ...lancerDiagnostic,
+      ...afficherTableauDeBord,
+      ...seDeconnecterDeProConnect,
+    },
   },
   'valider-signature-cgu': {
     'valider-signature-cgu': {

@@ -30,6 +30,7 @@ import {
   UtilisateurMACDTO,
 } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { estDateNouveauParcoursDemandeDevenirAidant } from '../gestion-demandes/devenir-aidant/nouveauParcours';
+import { unServiceUtilisateurInscrit } from '../espace-utilisateur-inscrit/ServiceUtilisateurInscritMAC';
 
 type CorpsRequeteReinitialiserMotDePasse = core.ParamsDictionary & {
   token: string;
@@ -250,8 +251,11 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       return uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
         .rechercheParIdentifiant(identifiantUtilisateur)
         .then((utilisateur) => {
-          if (PROFILS_AIDANT.includes(utilisateur!.profil)) {
-            unServiceAidant(entrepots.aidants())
+          if (!utilisateur) {
+            return reponse.status(404).send();
+          }
+          if (PROFILS_AIDANT.includes(utilisateur.profil)) {
+            return unServiceAidant(entrepots.aidants())
               .valideLesCGU(identifiantUtilisateur)
               .then(() =>
                 reponse.status(200).json({
@@ -265,6 +269,19 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
                 })
               );
           }
+          return unServiceUtilisateurInscrit(entrepots.utilisateursInscrits())
+            .valideLesCGU(identifiantUtilisateur)
+            .then(() =>
+              reponse.status(200).json({
+                ...constructeurActionsHATEOAS()
+                  .pour({
+                    contexte: requete.estProConnect
+                      ? 'utilisateur-inscrit:pro-connect-acceder-au-profil'
+                      : 'utilisateur-inscrit:acceder-au-profil',
+                  })
+                  .construis(),
+              })
+            );
         });
     }
   );

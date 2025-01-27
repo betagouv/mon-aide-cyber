@@ -9,6 +9,7 @@ import {
   unAidant,
   unCompteAidantRelieAUnCompteUtilisateur,
   unCompteUtilisateurInscritConnecteViaProConnect,
+  unCompteUtilisateurInscritRelieAUnCompteUtilisateur,
   unUtilisateur,
   unUtilisateurInscrit,
 } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
@@ -557,16 +558,9 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       testeurMAC.arrete();
     });
 
-    it('Ajoute la date de signature des CGU', async () => {
-      FournisseurHorlogeDeTest.initialise(new Date());
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
-        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-        constructeurAidant: unAidant().sansCGUSignees(),
-        entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
-      });
+    it('Retourne une 404 si l’utilisateur n’existe pas', async () => {
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
+        crypto.randomUUID()
       );
 
       const reponse = await executeRequete(
@@ -579,122 +573,258 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         }
       );
 
-      expect(reponse.statusCode).toBe(200);
-      const aidantModifie = await testeurMAC.entrepots
-        .aidants()
-        .lis(utilisateur.identifiant);
-      expect(aidantModifie.dateSignatureCGU).toStrictEqual(
-        FournisseurHorloge.maintenant()
-      );
+      expect(reponse.statusCode).toBe(404);
     });
 
-    it("Accepte la requête et renvoie les actions possibles pour l'Aidant", async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
-        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-        constructeurAidant: unAidant().sansCGUSignees(),
-        entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+    describe('Dans le cas d’un Aidant', () => {
+      it('Ajoute la date de signature des CGU', async () => {
+        FournisseurHorlogeDeTest.initialise(new Date());
+        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurAidant: unAidant().sansCGUSignees(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+        });
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          utilisateur.identifiant
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/utilisateur/valider-signature-cgu`,
+          donneesServeur.portEcoute,
+          {
+            cguValidees: true,
+          }
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        const aidantModifie = await testeurMAC.entrepots
+          .aidants()
+          .lis(utilisateur.identifiant);
+        expect(aidantModifie.dateSignatureCGU).toStrictEqual(
+          FournisseurHorloge.maintenant()
+        );
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        `/api/utilisateur/valider-signature-cgu`,
-        donneesServeur.portEcoute,
-        {
-          cguValidees: true,
-        }
-      );
+      it("Accepte la requête et renvoie les actions possibles pour l'Aidant", async () => {
+        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurAidant: unAidant().sansCGUSignees(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+        });
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          utilisateur.identifiant
+        );
 
-      expect(await reponse.json()).toStrictEqual({
-        liens: {
-          'afficher-tableau-de-bord': {
-            methode: 'GET',
-            url: '/api/mon-espace/tableau-de-bord',
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/utilisateur/valider-signature-cgu`,
+          donneesServeur.portEcoute,
+          {
+            cguValidees: true,
+          }
+        );
+
+        expect(await reponse.json()).toStrictEqual({
+          liens: {
+            'afficher-tableau-de-bord': {
+              methode: 'GET',
+              url: '/api/mon-espace/tableau-de-bord',
+            },
+            'lancer-diagnostic': {
+              methode: 'POST',
+              url: '/api/diagnostic',
+            },
+            'modifier-mot-de-passe': {
+              methode: 'POST',
+              url: '/api/profil/modifier-mot-de-passe',
+            },
+            'modifier-profil': {
+              methode: 'PATCH',
+              url: '/api/profil',
+            },
+            'se-deconnecter': {
+              methode: 'DELETE',
+              url: '/api/token',
+              typeAppel: 'API',
+            },
           },
-          'lancer-diagnostic': {
-            methode: 'POST',
-            url: '/api/diagnostic',
+        });
+      });
+
+      it("Accepte la requête et renvoie les actions possibles pour l'Aidant connecté via ProConnect", async () => {
+        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurAidant: unAidant().sansCGUSignees(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+        });
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
+          utilisateur.identifiant
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/utilisateur/valider-signature-cgu`,
+          donneesServeur.portEcoute,
+          {
+            cguValidees: true,
+          }
+        );
+
+        expect((await reponse.json()).liens['se-deconnecter']).toStrictEqual({
+          methode: 'GET',
+          url: '/pro-connect/deconnexion',
+          typeAppel: 'DIRECT',
+        });
+      });
+
+      it('Vérifie la présence de la date de signature des CGU', async () => {
+        FournisseurHorlogeDeTest.initialise(new Date());
+        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurAidant: unAidant().sansCGUSignees(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+        });
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          utilisateur.identifiant
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/utilisateur/valider-signature-cgu`,
+          donneesServeur.portEcoute,
+          {
+            cguValidees: false,
+          }
+        );
+
+        expect(reponse.statusCode).toBe(422);
+        expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
+          message: 'Veuillez valider les CGU',
+          liens: {
+            'valider-signature-cgu': {
+              url: '/api/utilisateur/valider-signature-cgu',
+              methode: 'POST',
+            },
           },
-          'modifier-mot-de-passe': {
-            methode: 'POST',
-            url: '/api/profil/modifier-mot-de-passe',
-          },
-          'modifier-profil': {
-            methode: 'PATCH',
-            url: '/api/profil',
-          },
-          'se-deconnecter': {
-            methode: 'DELETE',
-            url: '/api/token',
-            typeAppel: 'API',
-          },
-        },
+        });
       });
     });
 
-    it("Accepte la requête et renvoie les actions possibles pour l'Aidant connecté via ProConnect", async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
-        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-        constructeurAidant: unAidant().sansCGUSignees(),
-        entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+    describe('Dans le cas d’un Utilisateur Inscrit', () => {
+      it('Ajoute la date de signature des CGU', async () => {
+        FournisseurHorlogeDeTest.initialise(new Date());
+        const { utilisateur } =
+          await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
+            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+            constructeurUtilisateurInscrit:
+              unUtilisateurInscrit().sansValidationDeCGU(),
+            entrepotUtilisateurInscrit:
+              testeurMAC.entrepots.utilisateursInscrits(),
+            constructeurUtilisateur: unUtilisateur(),
+          });
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          utilisateur.identifiant
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/utilisateur/valider-signature-cgu`,
+          donneesServeur.portEcoute,
+          {
+            cguValidees: true,
+          }
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        const utilisateurInscritModifie = await testeurMAC.entrepots
+          .utilisateursInscrits()
+          .lis(utilisateur.identifiant);
+        expect(utilisateurInscritModifie.dateSignatureCGU).toStrictEqual(
+          FournisseurHorloge.maintenant()
+        );
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
-        utilisateur.identifiant
-      );
 
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        `/api/utilisateur/valider-signature-cgu`,
-        donneesServeur.portEcoute,
-        {
-          cguValidees: true,
-        }
-      );
+      it("Accepte la requête et renvoie les actions possibles pour l'Utilisateur Inscrit", async () => {
+        const { utilisateur } =
+          await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
+            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+            constructeurUtilisateurInscrit:
+              unUtilisateurInscrit().sansValidationDeCGU(),
+            entrepotUtilisateurInscrit:
+              testeurMAC.entrepots.utilisateursInscrits(),
+            constructeurUtilisateur: unUtilisateur(),
+          });
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          utilisateur.identifiant
+        );
 
-      expect((await reponse.json()).liens['se-deconnecter']).toStrictEqual({
-        methode: 'GET',
-        url: '/pro-connect/deconnexion',
-        typeAppel: 'DIRECT',
-      });
-    });
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/utilisateur/valider-signature-cgu`,
+          donneesServeur.portEcoute,
+          {
+            cguValidees: true,
+          }
+        );
 
-    it('Vérifie la présence de la date de signature des CGU', async () => {
-      FournisseurHorlogeDeTest.initialise(new Date());
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
-        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-        constructeurAidant: unAidant().sansCGUSignees(),
-        entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
-      });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
-
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        `/api/utilisateur/valider-signature-cgu`,
-        donneesServeur.portEcoute,
-        {
-          cguValidees: false,
-        }
-      );
-
-      expect(reponse.statusCode).toBe(422);
-      expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
-        message: 'Veuillez valider les CGU',
-        liens: {
-          'valider-signature-cgu': {
-            url: '/api/utilisateur/valider-signature-cgu',
-            methode: 'POST',
+        expect(await reponse.json()).toStrictEqual({
+          liens: {
+            'afficher-tableau-de-bord': {
+              methode: 'GET',
+              url: '/api/mon-espace/tableau-de-bord',
+            },
+            'lancer-diagnostic': {
+              methode: 'POST',
+              url: '/api/diagnostic',
+            },
+            'modifier-mot-de-passe': {
+              methode: 'POST',
+              url: '/api/profil/modifier-mot-de-passe',
+            },
+            'se-deconnecter': {
+              methode: 'DELETE',
+              url: '/api/token',
+              typeAppel: 'API',
+            },
           },
-        },
+        });
+      });
+
+      it("Accepte la requête et renvoie les actions possibles pour l'Utilisateur Inscrit connecté via ProConnect", async () => {
+        await unCompteUtilisateurInscritConnecteViaProConnect({
+          entrepotUtilisateurInscrit:
+            testeurMAC.entrepots.utilisateursInscrits(),
+          constructeurUtilisateur: unUtilisateurInscrit().sansValidationDeCGU(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
+        });
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/utilisateur/valider-signature-cgu`,
+          donneesServeur.portEcoute,
+          {
+            cguValidees: true,
+          }
+        );
+
+        expect((await reponse.json()).liens['se-deconnecter']).toStrictEqual({
+          methode: 'GET',
+          url: '/pro-connect/deconnexion',
+          typeAppel: 'DIRECT',
+        });
       });
     });
   });
