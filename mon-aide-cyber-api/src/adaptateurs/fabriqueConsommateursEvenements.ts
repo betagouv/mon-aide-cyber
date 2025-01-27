@@ -16,6 +16,7 @@ import {
   reinitialisationMotDePasseFaite,
   reponseAjoutee,
   restitutionLancee,
+  utilisateurInscritCree,
 } from '../journalisation/evenements';
 import { EntrepotJournalisationPostgres } from '../infrastructure/entrepots/postgres/EntrepotJournalisationPostgres';
 import configurationJournalisation from '../infrastructure/entrepots/postgres/configurationJournalisation';
@@ -116,6 +117,10 @@ export const fabriqueConsommateursEvenements = (
         diagnosticLibreAccesLance(entrepotJournalisation),
         demandeInitieDiagnosticLibreAcces(adaptateurRelations),
       ],
+    ],
+    [
+      'UTILISATEUR_INSCRIT_CREE',
+      [utilisateurInscritCree(entrepotJournalisation)],
     ],
   ]);
 };

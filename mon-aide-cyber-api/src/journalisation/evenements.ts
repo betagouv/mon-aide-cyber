@@ -68,6 +68,8 @@ export const reinitialisationMotDePasseErronee = consommateurEvenement();
 
 export const diagnosticLibreAccesLance = consommateurEvenement();
 
+export const utilisateurInscritCree = consommateurEvenement();
+
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E
 ): Publication => {
