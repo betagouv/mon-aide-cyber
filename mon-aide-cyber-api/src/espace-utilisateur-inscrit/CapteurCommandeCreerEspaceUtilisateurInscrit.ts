@@ -3,7 +3,6 @@ import crypto from 'crypto';
 import { Entrepots } from '../domaine/Entrepots';
 import { BusEvenement } from '../domaine/BusEvenement';
 import { AdaptateurEnvoiMail } from '../adaptateurs/AdaptateurEnvoiMail';
-import { unUtilisateurInscrit } from '../../test/constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 export type CommandeCreerEspaceUtilisateurInscrit = Omit<Commande, 'type'> & {
   identifiant: crypto.UUID;
@@ -33,9 +32,14 @@ export class CapteurCommandeCreerEspaceUtilisateurInscrit
   ) {}
 
   execute(
-    _commande: CommandeCreerEspaceUtilisateurInscrit
+    commande: CommandeCreerEspaceUtilisateurInscrit
   ): Promise<EspaceUtilisateurInscritCree> {
-    const utilisateur = unUtilisateurInscrit().construis();
+    const utilisateur = {
+      identifiant: commande.identifiant,
+      email: commande.email,
+      nomPrenom: commande.nomPrenom,
+      ...(commande.siret && { entite: { siret: commande.siret } }),
+    };
     return this.entrepots
       .utilisateursInscrits()
       .persiste(utilisateur)
