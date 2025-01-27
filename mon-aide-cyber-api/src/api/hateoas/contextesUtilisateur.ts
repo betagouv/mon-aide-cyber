@@ -52,7 +52,7 @@ export type ContextesUtilisateur = {
 export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
   'demande-devenir-aidant': {
     ...finaliseCreationEspaceAidant(),
-    ...demandeDevenirAidant,
+    ...demandeDevenirAidant(),
   },
   'demande-etre-aide': {
     ...demandeEtreAide,
