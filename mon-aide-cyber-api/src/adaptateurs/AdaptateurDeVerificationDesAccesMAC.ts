@@ -8,6 +8,11 @@ import {
   ReponseHATEOAS,
 } from '../api/hateoas/hateoas';
 import { AdaptateurRelations } from '../relation/AdaptateurRelations';
+import {
+  EntrepotUtilisateursMAC,
+  PROFILS_AIDANT,
+  uneRechercheUtilisateursMAC,
+} from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export type ReponseVerificationRelationEnErreur = ReponseHATEOAS & {
   titre: string;
@@ -17,7 +22,10 @@ export type ReponseVerificationRelationEnErreur = ReponseHATEOAS & {
 export class AdaptateurDeVerificationDesAccesMAC
   implements AdaptateurDeVerificationDesAcces
 {
-  constructor(private readonly adaptateurRelation: AdaptateurRelations) {}
+  constructor(
+    private readonly adaptateurRelation: AdaptateurRelations,
+    private readonly entrepotUtilisateurMAC: EntrepotUtilisateursMAC
+  ) {}
 
   verifie<DEFINITION extends DefinitionTuple, T>(
     definition: DEFINITION
@@ -37,13 +45,32 @@ export class AdaptateurDeVerificationDesAccesMAC
         { identifiant: id, type: definition.typeObjet }
       );
       if (!relationExiste) {
+        let reponseHATEOAS = {
+          ...constructeurActionsHATEOAS()
+            .pour({ contexte: 'se-deconnecter' })
+            .pour({
+              contexte:
+                'utilisateur-inscrit:acceder-aux-informations-utilisateur',
+            })
+            .construis(),
+        };
+        const utilisateur = await uneRechercheUtilisateursMAC(
+          this.entrepotUtilisateurMAC
+        ).rechercheParIdentifiant(requete.identifiantUtilisateurCourant!);
+        if (utilisateur && PROFILS_AIDANT.includes(utilisateur.profil)) {
+          reponseHATEOAS = {
+            ...constructeurActionsHATEOAS()
+              .pour({
+                contexte: 'aidant:acceder-aux-informations-utilisateur',
+              })
+              .pour({ contexte: 'se-deconnecter' })
+              .construis(),
+          };
+        }
         reponse.status(403).json({
           titre: 'Accès non autorisé',
           message: 'Désolé, vous ne pouvez pas accéder à ce diagnostic.',
-          ...constructeurActionsHATEOAS()
-            .pour({ contexte: 'aidant:acceder-aux-informations-utilisateur' })
-            .pour({ contexte: 'se-deconnecter' })
-            .construis(),
+          ...reponseHATEOAS,
         });
       } else {
         suite();

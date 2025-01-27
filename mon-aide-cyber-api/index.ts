@@ -76,7 +76,8 @@ const serveurMAC = serveur.creeServeur({
     gestionnaireDeJeton
   ),
   adaptateurDeVerificationDesAcces: new AdaptateurDeVerificationDesAccesMAC(
-    adaptateurRelations
+    adaptateurRelations,
+    entrepots.utilisateursMAC()
   ),
   adaptateurDeVerificationDeRelations:
     new AdaptateurDeVerificationDeTypeDeRelationMAC(adaptateurRelations),
