@@ -11,36 +11,6 @@ export type LienNavigation = {
   enfants?: LienNavigation[];
 };
 
-export const liensNavigation: LienNavigation[] = [
-  {
-    route: '/',
-    nom: 'Accueil',
-  },
-  {
-    route: '/beneficier-du-dispositif/etre-aide',
-    nom: 'Bénéficier du dispositif',
-  },
-  {
-    route: '/devenir-aidant',
-    nom: 'Devenir Aidant cyber',
-  },
-  {
-    route: '/a-propos',
-    nom: 'À propos',
-    clef: 776,
-    enfants: [
-      {
-        route: '/a-propos/kit-de-communication',
-        nom: 'Kit de communication',
-      },
-      {
-        route: '/a-propos/statistiques',
-        nom: 'Statistiques',
-      },
-    ],
-  },
-];
-
 export const LayoutPublic = ({
   afficheNavigation = true,
   enteteSimple = false,

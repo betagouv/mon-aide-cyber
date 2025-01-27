@@ -24,6 +24,7 @@ import { ComposantRestitutionLibreAcces } from './composants/diagnostic/Composan
 import { EcranDemandeAutodiagnostic } from './domaine/auto-diagnostic/EcranDemandeAutodiagnostic.tsx';
 import { EcranDemandeDevenirAidant } from './domaine/gestion-demandes/parcours-aidant/EcranDemandeDevenirAidant.tsx';
 import { EcranUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/vitrine/EcranUtilisationDuService.tsx';
+import { EcranRealiserDesDiagnosticsANSSI } from './domaine/vitrine/ecran-realiser-des-diagnostics-anssi/EcranRealiserDesDiagnosticsANSSI.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -45,6 +46,10 @@ export const RouteurPublic = () => {
           <Route path="kit-de-communication" element={<KitDeCommunication />} />
         </Route>
         <Route path="devenir-aidant" element={<EcranDevenirAidant />} />
+        <Route
+          path="realiser-des-diagnostics-anssi"
+          element={<EcranRealiserDesDiagnosticsANSSI />}
+        />
         <Route path="mentions-legales" element={<MentionsLegales />} />
         <Route
           path="mon-utilisation-du-service"
