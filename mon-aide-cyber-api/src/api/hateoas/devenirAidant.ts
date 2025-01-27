@@ -21,22 +21,32 @@ export const finaliseCreationEspaceAidant: () => ContexteSpecifique = () => ({
   },
 });
 
-export const demandeDevenirAidant: ContexteSpecifique & {
+export const demandeDevenirAidant: () => ContexteSpecifique & {
   'demande-devenir-aidant': {
     'envoyer-demande-devenir-aidant': Options;
-    'demande-devenir-aidant': Options;
+    'demande-devenir-aidant'?: Options;
+    'nouvelle-demande-devenir-aidant'?: Options;
     'rechercher-entreprise': Options;
   };
-} = {
+} = () => ({
   'demande-devenir-aidant': {
+    ...(estDateNouveauParcoursDemandeDevenirAidant()
+      ? {
+          'nouvelle-demande-devenir-aidant': {
+            url: '/api/demandes/devenir-aidant',
+            methode: 'GET',
+          },
+        }
+      : {
+          'demande-devenir-aidant': {
+            url: '/api/demandes/devenir-aidant',
+            methode: 'GET',
+          },
+        }),
     'envoyer-demande-devenir-aidant': {
       url: '/api/demandes/devenir-aidant',
       methode: 'POST',
     },
-    'demande-devenir-aidant': {
-      url: '/api/demandes/devenir-aidant',
-      methode: 'GET',
-    },
     ...rechercheEntreprise,
   },
-};
+});
