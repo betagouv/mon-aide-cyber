@@ -7,7 +7,7 @@ import { Entrepots } from '../domaine/Entrepots';
 import { RequeteUtilisateur } from '../api/routesAPI';
 import { NextFunction } from 'express-serve-static-core';
 import { constructeurActionsHATEOAS } from '../api/hateoas/hateoas';
-import { unServiceAidant } from '../espace-aidant/ServiceAidantMAC';
+import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export class AdaptateurDeVerificationDeCGUMAC
   implements AdaptateurDeVerificationDeCGU
@@ -20,13 +20,13 @@ export class AdaptateurDeVerificationDeCGUMAC
       reponse: Response,
       suite: NextFunction
     ) => {
-      const aidant = await unServiceAidant(
-        this.entrepots.aidants()
-      ).parIdentifiant(requete.identifiantUtilisateurCourant!);
+      const aidant = await uneRechercheUtilisateursMAC(
+        this.entrepots.utilisateursMAC()
+      ).rechercheParIdentifiant(requete.identifiantUtilisateurCourant!);
       if (!aidant) {
         throw new UtilisateurNonTrouve();
       }
-      if (!aidant.dateSignatureCGU) {
+      if (aidant.doitValiderLesCGU) {
         reponse
           .status(302)
           .json(
