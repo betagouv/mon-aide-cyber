@@ -1,10 +1,11 @@
 import { SeConnecter } from '../../domaine/authentification/SeConnecter.tsx';
 import { PropsWithChildren, ReactElement } from 'react';
-import { liensNavigation } from './LayoutPublic.tsx';
+import { LienNavigation } from './LayoutPublic.tsx';
 import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateur.tsx';
 import { useUtilisateur } from '../../fournisseurs/hooks.ts';
 import { NavigationPublique } from './header/NavigationPublique.tsx';
 import { BandeauMaintenance } from '../alertes/BandeauMaintenance.tsx';
+import { useMoteurDeLiens } from '../../hooks/useMoteurDeLiens.ts';
 
 export type HeaderProprietes = PropsWithChildren<{
   lienMAC: ReactElement;
@@ -18,6 +19,44 @@ export const Header = ({
   enteteSimple,
 }: HeaderProprietes) => {
   const { utilisateur } = useUtilisateur();
+  const { accedeALaRessource: estNouvelleLandingPost31Janvier } =
+    useMoteurDeLiens('nouvelle-demande-devenir-aidant');
+  const liensNavigation: LienNavigation[] = [
+    {
+      route: '/',
+      nom: 'Accueil',
+    },
+    {
+      route: '/beneficier-du-dispositif/etre-aide',
+      nom: 'Bénéficier du dispositif',
+    },
+    {
+      ...(estNouvelleLandingPost31Janvier
+        ? {
+            route: '/realiser-des-diagnostics-anssi',
+            nom: 'Réaliser des diagnostics ANSSI',
+          }
+        : {
+            route: '/devenir-aidant',
+            nom: 'Devenir Aidant cyber',
+          }),
+    },
+    {
+      route: '/a-propos',
+      nom: 'À propos',
+      clef: 776,
+      enfants: [
+        {
+          route: '/a-propos/kit-de-communication',
+          nom: 'Kit de communication',
+        },
+        {
+          route: '/a-propos/statistiques',
+          nom: 'Statistiques',
+        },
+      ],
+    },
+  ];
 
   const maintenanceEstPrevue: string = import.meta.env[
     'VITE_MAINTENANCE_CRENEAU_PREVU'
