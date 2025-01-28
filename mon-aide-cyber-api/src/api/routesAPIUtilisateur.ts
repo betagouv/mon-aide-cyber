@@ -69,6 +69,27 @@ const valitateurUtilisateur = (
     .withMessage('L’utilisateur n’est pas connu.');
 };
 
+const validateurEntite = () => {
+  const { body } = new ExpressValidator({
+    entite: async (__: any, { req }: Meta) => {
+      const entite: CorpsEntite = req.body.entite;
+      if (
+        ['ServicePublic', 'ServiceEtat', 'Association'].includes(entite.type) &&
+        entite.nom.trim().length > 0 &&
+        entite.siret.trim().length > 0
+      ) {
+        return true;
+      }
+      throw new Error('L’entité fournie n’est pas cohérente');
+    },
+  });
+  return body('entite')
+    .entite()
+    .withMessage(
+      'Veuillez fournir une entité valide, nom, siret et type (parmi ServicePublic, ServiceEtat ou Association)'
+    );
+};
+
 export class ErreurDemandeReinitialisationMotDePasse extends Error {}
 
 export class ErreurUtilisateurNonTrouve extends Error {
@@ -293,6 +314,10 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     body('cguValidees')
       .custom((value: boolean) => value)
       .withMessage('Veuillez valider les CGU'),
+    body('signatureCharte')
+      .custom((value: boolean) => value)
+      .withMessage('Veuillez valider la Charte de l’Aidant'),
+    validateurEntite(),
     async (
       requete: RequeteUtilisateur<CorpsValiderProfilAidant>,
       reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>
@@ -327,12 +352,13 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
   return routes;
 };
 
+type CorpsEntite = {
+  nom: string;
+  siret: string;
+  type: 'ServicePublic' | 'ServiceEtat' | 'Association';
+};
 type CorpsValiderProfilAidant = {
   cguValidees: boolean;
   signatureCharte: boolean;
-  entite: {
-    nom: string;
-    siret: string;
-    type: 'ServicePublic' | 'ServiceEtat' | 'Association';
-  };
+  entite: CorpsEntite;
 };
