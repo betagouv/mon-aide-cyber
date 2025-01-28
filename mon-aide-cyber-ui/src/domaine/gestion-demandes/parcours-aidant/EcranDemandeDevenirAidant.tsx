@@ -31,10 +31,13 @@ import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
 import Button from '../../../composants/atomes/Button/Button.tsx';
 import { TypographieH4 } from '../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
 import { LienMailtoMAC } from '../../../composants/atomes/LienMailtoMAC.tsx';
+import { useNavigate } from 'react-router-dom';
+import illustrationSuivi from '../../../../public/images/illustration-suivi.svg';
 
 export const EcranDemandeDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
+  const navigate = useNavigate();
 
   const [etatEtapeCourante, envoie] = useReducer(reducteurEtapes, {
     ...initialiseReducteur(),
@@ -239,31 +242,39 @@ export const EcranDemandeDevenirAidant = () => {
     [
       'confirmationDemandeDevenirAidantPriseEnCompte',
       <div
+        key="confirmationDemandeDevenirAidantPriseEnCompte"
         id="confirmationDemandeDevenirAidantPriseEnCompte"
         className="fr-container fr-grid-row fr-grid-row--center zone-confirmation-formulaire-devenir-aidant"
       >
         <div className="fr-col-md-8 fr-col-sm-12 section confirmation">
+          <img
+            src={illustrationSuivi}
+            alt="illustration de suivi MonAideCyber"
+          />
           <TypographieH4>
             Votre demande a bien été prise en compte !
           </TypographieH4>
           <p>
-            Celle-ci sera traitée dans les meilleurs délais.
-            <br />
-            <br />
-            Celle-ci sera traitée dans les meilleurs délais. Vous allez être mis
-            en relation avec la délégation régionale de l’ANSSI de votre
-            territoire, qui reviendra vers vous par mail pour vous indiquer les
-            prochaines dates des ateliers Devenir Aidant MonAideCyber.
-            <br />
-            <br />
-            Pensez à vérifier dans vos spams ou contactez-nous à&nbsp;
-            <LienMailtoMAC />
+            Celle-ci sera traitée dans les meilleurs délais. Pensez à vérifier
+            dans vos spams ou contactez-nous à <LienMailtoMAC />
           </p>
-          <a href="/">
-            <Button type="button" variant="primary">
-              Retour à la page d&apos;accueil
-            </Button>
-          </a>
+        </div>
+        <div className="fr-col-md-8 fr-col-sm-12 section confirmation">
+          <TypographieH4>
+            Réalisez des diagnostics dès maintenant !
+          </TypographieH4>
+          <p>
+            Connectez-vous via ProConnect dès à présent. Vous pourrez vous
+            familiariser avec l’outil et réaliser des premiers diagnostics si
+            vous le souhaitez.
+          </p>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={() => navigate('/connexion')}
+          >
+            Je me connecte
+          </Button>
         </div>
       </div>,
     ],

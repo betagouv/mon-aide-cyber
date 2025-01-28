@@ -52,7 +52,7 @@ export const EcranValiderProfilUtilisateurInscrit = () => {
   }, []);
 
   const retourAuChoixUtilisation = () => {
-    navigate(`${ROUTE_MON_ESPACE}/tableau-de-bord`);
+    navigate(`${ROUTE_MON_ESPACE}/mon-utilisation-du-service`);
   };
   return (
     <div className="fond-clair-mac w-100">
