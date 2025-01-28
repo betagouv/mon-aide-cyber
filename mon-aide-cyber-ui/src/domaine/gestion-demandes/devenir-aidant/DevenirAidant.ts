@@ -23,6 +23,12 @@ export type CorpsDemandeDevenirAidant = {
   entite?: Entite;
 };
 
+export type CorpsValidationProfilAidant = {
+  cguValidees: boolean;
+  signatureCharte?: boolean;
+  entite?: Entite;
+};
+
 export const entiteEnFonctionDuTypeAidant = new Map<
   TypeAidant,
   (nom?: string, siret?: string) => Entite
