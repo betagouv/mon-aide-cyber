@@ -1,39 +1,20 @@
-import { CharteAidant } from '../../../vues/CharteAidant.tsx';
 import { useEffect, useState } from 'react';
-import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
-import { Input } from '../../../composants/atomes/Input/Input.tsx';
-import Button from '../../../composants/atomes/Button/Button.tsx';
+import { TypographieH3 } from '../../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
+import { CharteAidant } from '../../../../vues/CharteAidant.tsx';
+import { Input } from '../../../../composants/atomes/Input/Input.tsx';
+import Button from '../../../../composants/atomes/Button/Button.tsx';
+import { ChampValidationCGUs } from '../../../../composants/formulaires/ChampValidationCGUs.tsx';
+import { activeValidationCharteAidant } from '../SignatureCharteAidant.tsx';
 
-export const activeValidationCharteAidant = () => {
-  const observateurDIntersection = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      const checkboxSignatureCharte = document.getElementById(`charte-aidant`);
-      if (!checkboxSignatureCharte) {
-        return;
-      }
-
-      if (entry.isIntersecting) {
-        checkboxSignatureCharte.removeAttribute('disabled');
-      }
-    });
-  });
-
-  const boutonRetourHautDePage = document.getElementById(
-    'telechargement-charte'
-  );
-  observateurDIntersection.observe(boutonRetourHautDePage!);
-
-  return () => observateurDIntersection.unobserve(boutonRetourHautDePage!);
-};
-
-export const SignatureCharteAidant = ({
+export const ValidationCharteEtCGU = ({
   precedent,
-  signeCharteAidant,
+  surValidation,
 }: {
   precedent: () => void;
-  signeCharteAidant: () => void;
+  surValidation: () => void;
 }) => {
-  const [charteSignee, setCharteSignee] = useState(false);
+  const [cguValidees, setCguValidees] = useState(false);
+  const [charteValidee, setCharteValidee] = useState(false);
   useEffect(() => activeValidationCharteAidant(), []);
 
   return (
@@ -56,14 +37,18 @@ export const SignatureCharteAidant = ({
             type="checkbox"
             id="charte-aidant"
             name="charte-aidant"
-            onChange={() => setCharteSignee((prev) => !prev)}
-            checked={charteSignee}
+            onChange={() => setCharteValidee((prev) => !prev)}
+            checked={charteValidee}
           />
           <label className="fr-label" htmlFor="charte-aidant">
             En cochant la case, je m’engage sur l’honneur à respecter la charte
             de l’Aidant MonAideCyber
           </label>
         </div>
+        <ChampValidationCGUs
+          sontValidees={cguValidees}
+          surCguCliquees={() => setCguValidees((prev) => !prev)}
+        />
         <div className="validation alignee-droite">
           <Button
             variant="secondary"
@@ -75,11 +60,11 @@ export const SignatureCharteAidant = ({
             <span>Précédent</span>
           </Button>
           <Button
-            disabled={!charteSignee}
+            disabled={!charteValidee || !cguValidees}
             variant="primary"
             type="button"
             onClick={() => {
-              signeCharteAidant();
+              surValidation();
             }}
           >
             <span>Suivant</span>
