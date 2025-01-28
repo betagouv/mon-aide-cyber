@@ -78,6 +78,7 @@ export const StoryFormulaireModificationMotDePasse: Story = {
           navigue: (_moteurDeLiens, _action, _exclusion) => {},
           // eslint-disable-next-line @typescript-eslint/no-empty-function
           retourAccueil: () => {},
+          retireAction: () => {},
         }}
       >
         <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>

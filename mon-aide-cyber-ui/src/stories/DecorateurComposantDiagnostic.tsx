@@ -41,6 +41,7 @@ export const decorateurComposantDiagnostic = (
             _exclusion?: Action[]
           ) => ({}),
           retourAccueil: () => null,
+          retireAction: () => null,
         }}
       >
         <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>

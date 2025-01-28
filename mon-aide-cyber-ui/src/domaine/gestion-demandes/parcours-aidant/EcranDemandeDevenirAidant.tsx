@@ -98,11 +98,6 @@ export const EcranDemandeDevenirAidant = () => {
     },
   });
 
-  /*  const surClickChoixUtilisation = useCallback((choix: Utilisation) => {
-    envoie(choixUtilisationFaite(choix));
-    window.scrollTo({ top: 0 });
-  }, []);*/
-
   const surClickChoixTypeAidant = useCallback(
     ({ typeAidant, entite }: TypeAidantEtSonEntite) => {
       envoie(
