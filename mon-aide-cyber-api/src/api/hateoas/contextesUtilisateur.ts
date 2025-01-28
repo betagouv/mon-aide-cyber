@@ -26,6 +26,7 @@ import {
   modifierProfil,
 } from './mon-espace';
 import { lancerDiagnostic } from './diagnostic';
+import { rechercheEntreprise } from './rechercheEntreprise';
 
 type ClefContexte =
   | 'aidant'
@@ -150,6 +151,7 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
       methode: 'POST',
       url: '/api/utilisateur/valider-profil-aidant',
     },
+    ...rechercheEntreprise,
   },
 });
 export type ContexteSpecifique = {
