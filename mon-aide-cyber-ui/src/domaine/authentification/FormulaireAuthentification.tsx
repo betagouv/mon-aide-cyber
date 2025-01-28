@@ -86,6 +86,24 @@ export const ComposantAuthentification = ({
                   ...reponse.liens,
                 });
 
+                const actionValiderProfilAidant = moteurDeLiens.trouveEtRenvoie(
+                  'valider-profil-aidant'
+                );
+                const actionValiderProfilUtilisateurInscrit =
+                  moteurDeLiens.trouveEtRenvoie(
+                    'valider-profil-utilisateur-inscrit'
+                  );
+
+                if (
+                  actionValiderProfilAidant ||
+                  actionValiderProfilUtilisateurInscrit
+                ) {
+                  return navigationMAC.navigue(
+                    `${ROUTE_MON_ESPACE}/mon-utilisation-du-service`,
+                    reponse.liens
+                  );
+                }
+
                 moteurDeLiens.trouve(
                   'afficher-tableau-de-bord',
                   () =>
