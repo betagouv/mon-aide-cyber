@@ -23,7 +23,7 @@ export const EcranValiderProfilUtilisateurInscrit = () => {
     mutationFn: (corpsMutation: CorpsValiderProfilUtilisateurInscrit) => {
       const actionSoumettre = new MoteurDeLiens(
         navigationMAC.etat
-      ).trouveEtRenvoie('valider-signature-cgu');
+      ).trouveEtRenvoie('valider-profil-utilisateur-inscrit');
 
       if (!actionSoumettre)
         throw new Error(
