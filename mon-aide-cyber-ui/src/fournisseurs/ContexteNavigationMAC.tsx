@@ -11,6 +11,7 @@ type ContexteNavigationMACType = {
   setEtat: (liens: Liens) => void;
   navigue: (route: string, liens: Liens, exclusion?: Action[]) => void;
   retourAccueil: () => void;
+  retireAction: (action: Action) => void;
 };
 export const ContexteNavigationMAC = createContext<ContexteNavigationMACType>({
   etat: [],
@@ -42,6 +43,12 @@ export const FournisseurNavigationMAC = ({ children }: PropsWithChildren) => {
     setEtat((prev) => ({ ...prev, ...liens }));
   };
 
+  const retireAction = (action: Action) => {
+    const nouvelEtat = etat;
+    delete nouvelEtat[action];
+    setEtat(nouvelEtat);
+  };
+
   return (
     <ContexteNavigationMAC.Provider
       value={{
@@ -50,6 +57,7 @@ export const FournisseurNavigationMAC = ({ children }: PropsWithChildren) => {
         setEtat,
         navigue,
         retourAccueil,
+        retireAction,
       }}
     >
       {children}
