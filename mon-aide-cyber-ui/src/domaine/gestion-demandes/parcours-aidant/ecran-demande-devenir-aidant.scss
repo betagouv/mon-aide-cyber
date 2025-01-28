@@ -197,6 +197,15 @@
 
   .zone-confirmation-formulaire-devenir-aidant {
     grid-area: entete;
+
+    margin-top: 3rem;
+
+    display: flex;
+    gap: 1.5rem;
+
+    .section {
+      margin: 0;
+    }
   }
 
   .separation-formulaire {

@@ -50,7 +50,7 @@ export const EcranValiderMonProfil = () => {
   );
 
   const action = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
-    'demande-devenir-aidant'
+    'valider-profil-aidant'
   );
 
   const { data } = useQuery({
@@ -74,11 +74,11 @@ export const EcranValiderMonProfil = () => {
     error: erreur,
     isError: mutationEnErreur,
   } = useMutation({
-    mutationKey: ['demander-a-devenir-aidant'],
+    mutationKey: ['valider-profil-aidant'],
     mutationFn: (corpsMutation: CorpsDemandeDevenirAidant) => {
       const actionSoumettre = new MoteurDeLiens(
         navigationMAC.etat
-      ).trouveEtRenvoie('envoyer-demande-devenir-aidant');
+      ).trouveEtRenvoie('valider-profil-aidant');
 
       if (!actionSoumettre)
         throw new Error(
@@ -124,7 +124,7 @@ export const EcranValiderMonProfil = () => {
   }, []);
 
   const retourAuChoixUtilisation = () => {
-    navigate(`${ROUTE_MON_ESPACE}/tableau-de-bord`);
+    navigate(`${ROUTE_MON_ESPACE}/mon-utilisation-du-service`);
   };
   const surClickEtapePrecedente = useCallback(() => {
     envoie(retourEtapePrecedente());
@@ -193,7 +193,6 @@ export const EcranValiderMonProfil = () => {
             surSoumission={(formulaire) => {
               const { typeAidant, entite: entiteDuFormulaire } =
                 etatEtapeCourante.demande!.type;
-
               const entiteCorrespondante =
                 entiteEnFonctionDuTypeAidant.get(typeAidant);
 
