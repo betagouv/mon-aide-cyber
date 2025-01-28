@@ -1001,5 +1001,73 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         },
       });
     });
+
+    it('Vérifie la présence de la signature de la charte Aidant', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur.identifiant
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-aidant`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+          signatureCharte: false,
+          entite: {
+            nom: 'Beta-Gouv',
+            siret: '1234567890',
+            type: 'ServicePublic',
+          },
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect((await reponse.json()).message).toStrictEqual(
+        'Veuillez valider la Charte de l’Aidant'
+      );
+    });
+
+    it('Vérifie la validité de l’entité', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur.identifiant
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-aidant`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+          signatureCharte: true,
+          entite: {
+            nom: '',
+            siret: '',
+            type: '',
+          },
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect((await reponse.json()).message).toStrictEqual(
+        'Veuillez fournir une entité valide, nom, siret et type (parmi ServicePublic, ServiceEtat ou Association)'
+      );
+    });
   });
 });
