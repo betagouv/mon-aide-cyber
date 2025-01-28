@@ -10,10 +10,23 @@ export type AidantDTO = {
   dateSignatureCGU?: Date;
 };
 
+export type InformationsProfil = {
+  entite: {
+    nom: string;
+    siret: string;
+    type: 'ServicePublic' | 'ServiceEtat' | 'Association';
+  };
+};
+
 export interface ServiceAidant {
   rechercheParMail(mailAidant: string): Promise<AidantDTO | undefined>;
 
   parIdentifiant(identifiant: crypto.UUID): Promise<AidantDTO | undefined>;
 
   valideLesCGU(identifiantAidant: crypto.UUID): Promise<void>;
+
+  valideProfilAidant(
+    identifiantAidant: crypto.UUID,
+    informationsProfil: InformationsProfil
+  ): Promise<void>;
 }

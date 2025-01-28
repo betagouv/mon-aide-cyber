@@ -286,5 +286,53 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     }
   );
 
+  routes.post(
+    '/valider-profil-aidant',
+    session.verifie('Valide le profil Aidant'),
+    express.json(),
+    body('cguValidees')
+      .custom((value: boolean) => value)
+      .withMessage('Veuillez valider les CGU'),
+    async (
+      requete: RequeteUtilisateur<CorpsValiderProfilAidant>,
+      reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>
+    ) => {
+      const resultatsValidation: Result<FieldValidationError> =
+        validationResult(requete) as Result<FieldValidationError>;
+      if (!resultatsValidation.isEmpty()) {
+        return reponse.status(422).json({
+          message: resultatsValidation
+            .array()
+            .map((resultatValidation) => resultatValidation.msg)
+            .join(', '),
+          ...constructeurActionsHATEOAS()
+            .pour({ contexte: 'valider-profil' })
+            .construis(),
+        });
+      }
+      return unServiceAidant(entrepots.aidants())
+        .valideProfilAidant(requete.identifiantUtilisateurCourant!, {
+          ...requete.body,
+        })
+        .then(() =>
+          reponse.status(200).json({
+            ...constructeurActionsHATEOAS()
+              .pour({ contexte: 'aidant:acceder-au-profil' })
+              .construis(),
+          })
+        );
+    }
+  );
+
   return routes;
+};
+
+type CorpsValiderProfilAidant = {
+  cguValidees: boolean;
+  signatureCharte: boolean;
+  entite: {
+    nom: string;
+    siret: string;
+    type: 'ServicePublic' | 'ServiceEtat' | 'Association';
+  };
 };

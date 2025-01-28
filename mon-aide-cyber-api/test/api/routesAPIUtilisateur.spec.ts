@@ -23,7 +23,11 @@ import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurH
 import { add } from 'date-fns';
 import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 import { liensPublicsAttendus } from './hateoas/liensAttendus';
-import { ReponseHATEOASEnErreur } from '../../src/api/hateoas/hateoas';
+import {
+  ReponseHATEOAS,
+  ReponseHATEOASEnErreur,
+} from '../../src/api/hateoas/hateoas';
+import { Aidant } from '../../src/espace-aidant/Aidant';
 
 describe('Le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -825,6 +829,176 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           url: '/pro-connect/deconnexion',
           typeAppel: 'DIRECT',
         });
+      });
+    });
+  });
+
+  describe('Quand une requête POST est reçue sur /api/utilisateur/valider-profil-aidant', () => {
+    const testeurMAC = testeurIntegration();
+    let donneesServeur: { portEcoute: number; app: Express };
+
+    beforeEach(() => {
+      donneesServeur = testeurMAC.initialise();
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-01-31T14:32:34'))
+      );
+    });
+
+    afterEach(() => {
+      testeurMAC.arrete();
+    });
+
+    it('Accepte la requête et retourne les actions possibles', async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().cguValideesLe(
+          new Date(Date.parse('2024-04-12T12:34:54'))
+        ),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur.identifiant
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-aidant`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+          signatureCharte: true,
+          entite: {
+            nom: 'Beta-Gouv',
+            siret: '1234567890',
+            type: 'ServicePublic',
+          },
+          departement: 'Gironde',
+        }
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
+        liens: {
+          'afficher-tableau-de-bord': {
+            methode: 'GET',
+            url: '/api/mon-espace/tableau-de-bord',
+          },
+          'lancer-diagnostic': {
+            methode: 'POST',
+            url: '/api/diagnostic',
+          },
+          'modifier-mot-de-passe': {
+            methode: 'POST',
+            url: '/api/profil/modifier-mot-de-passe',
+          },
+          'modifier-profil': {
+            methode: 'PATCH',
+            url: '/api/profil',
+          },
+          'se-deconnecter': {
+            methode: 'DELETE',
+            url: '/api/token',
+            typeAppel: 'API',
+          },
+        },
+      });
+    });
+
+    it('Met à jour l’Aidant', async () => {
+      const { utilisateur, aidant } =
+        await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurAidant: unAidant().cguValideesLe(
+            new Date(Date.parse('2024-04-12T12:34:54'))
+          ),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+        });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur.identifiant
+      );
+
+      await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-aidant`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+          signatureCharte: true,
+          entite: {
+            nom: 'Beta-Gouv',
+            siret: '1234567890',
+            type: 'ServicePublic',
+          },
+        }
+      );
+
+      expect(
+        await testeurMAC.entrepots.aidants().lis(aidant.identifiant)
+      ).toStrictEqual<Aidant>({
+        identifiant: expect.any(String),
+        email: aidant.email,
+        nomPrenom: aidant.nomPrenom,
+        preferences: {
+          secteursActivite: [],
+          departements: [],
+          typesEntites: [],
+        },
+        consentementAnnuaire: false,
+        entite: {
+          type: 'ServicePublic',
+          nom: 'Beta-Gouv',
+          siret: '1234567890',
+        },
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        dateSignatureCharte: FournisseurHorloge.maintenant(),
+      });
+    });
+
+    it('Vérifie la présence des CGU validées', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur.identifiant
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-aidant`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: false,
+          signatureCharte: true,
+          entite: {
+            nom: 'Beta-Gouv',
+            siret: '1234567890',
+            type: 'ServicePublic',
+          },
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
+        message: 'Veuillez valider les CGU',
+        liens: {
+          'valider-profil-aidant': {
+            url: '/api/utilisateur/valider-profil-aidant',
+            methode: 'POST',
+          },
+          'valider-profil-utilisateur-inscrit': {
+            methode: 'POST',
+            url: '/api/toto',
+          },
+        },
       });
     });
   });
