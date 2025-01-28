@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { Aidant, EntrepotAidant } from './Aidant';
-import { AidantDTO, ServiceAidant } from './ServiceAidant';
+import { AidantDTO, InformationsProfil, ServiceAidant } from './ServiceAidant';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
 class ServiceAidantMAC implements ServiceAidant {
@@ -25,6 +25,18 @@ class ServiceAidantMAC implements ServiceAidant {
   valideLesCGU(identifiantAidant: crypto.UUID): Promise<void> {
     return this.entrepotAidant.lis(identifiantAidant).then(async (aidant) => {
       aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
+      return await this.entrepotAidant.persiste(aidant);
+    });
+  }
+
+  valideProfilAidant(
+    identifiantAidant: crypto.UUID,
+    informationsProfil: InformationsProfil
+  ): Promise<void> {
+    return this.entrepotAidant.lis(identifiantAidant).then(async (aidant) => {
+      aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
+      aidant.dateSignatureCharte = FournisseurHorloge.maintenant();
+      aidant.entite = informationsProfil.entite;
       return await this.entrepotAidant.persiste(aidant);
     });
   }
