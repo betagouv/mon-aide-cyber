@@ -295,6 +295,10 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
         expect(reponse.statusCode).toBe(200);
         expect((await reponse.json()).liens).toStrictEqual({
+          'rechercher-entreprise': {
+            methode: 'GET',
+            url: '/api/recherche-entreprise',
+          },
           'valider-profil-utilisateur-inscrit': {
             methode: 'POST',
             url: '/api/toto',
@@ -331,6 +335,10 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
         expect(reponse.statusCode).toBe(200);
         expect((await reponse.json()).liens).toStrictEqual({
+          'rechercher-entreprise': {
+            methode: 'GET',
+            url: '/api/recherche-entreprise',
+          },
           'valider-profil-utilisateur-inscrit': {
             methode: 'POST',
             url: '/api/toto',
@@ -990,6 +998,10 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
         message: 'Veuillez valider les CGU',
         liens: {
+          'rechercher-entreprise': {
+            methode: 'GET',
+            url: '/api/recherche-entreprise',
+          },
           'valider-profil-aidant': {
             url: '/api/utilisateur/valider-profil-aidant',
             methode: 'POST',
