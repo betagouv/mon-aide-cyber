@@ -320,7 +320,8 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     validateurEntite(),
     async (
       requete: RequeteUtilisateur<CorpsValiderProfilAidant>,
-      reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>
+      reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>,
+      suite: NextFunction
     ) => {
       const resultatsValidation: Result<FieldValidationError> =
         validationResult(requete) as Result<FieldValidationError>;
@@ -345,6 +346,9 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
               .pour({ contexte: 'aidant:acceder-au-profil' })
               .construis(),
           })
+        )
+        .catch((erreur) =>
+          suite(ErreurMAC.cree('Valide le profil Aidant', erreur))
         );
     }
   );

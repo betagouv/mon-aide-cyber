@@ -1069,5 +1069,29 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         'Veuillez fournir une entité valide, nom, siret et type (parmi ServicePublic, ServiceEtat ou Association)'
       );
     });
+
+    it('Retourne une 404 si l’utilisateur n’est pas connu', async () => {
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        crypto.randomUUID()
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-aidant`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+          signatureCharte: true,
+          entite: {
+            nom: 'Beta-Gouv',
+            siret: '1234567890',
+            type: 'ServicePublic',
+          },
+        }
+      );
+
+      expect(reponse.statusCode).toBe(404);
+    });
   });
 });
