@@ -28,6 +28,7 @@ import {
   ReponseHATEOASEnErreur,
 } from '../../src/api/hateoas/hateoas';
 import { Aidant } from '../../src/espace-aidant/Aidant';
+import { UtilisateurInscrit } from '../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 
 describe('Le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
@@ -1100,6 +1101,169 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
             siret: '1234567890',
             type: 'ServicePublic',
           },
+        }
+      );
+
+      expect(reponse.statusCode).toBe(404);
+    });
+  });
+
+  describe('Quand une requête POST est reçue sur /api/utilisateur/valider-profil-utilisateur-inscrit', () => {
+    const testeurMAC = testeurIntegration();
+    let donneesServeur: { portEcoute: number; app: Express };
+
+    beforeEach(() => {
+      donneesServeur = testeurMAC.initialise();
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-01-31T14:32:34'))
+      );
+    });
+
+    afterEach(() => {
+      testeurMAC.arrete();
+    });
+
+    it('Accepte la requête et retourne les actions possibles', async () => {
+      const { utilisateur } =
+        await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
+          entrepotUtilisateurInscrit:
+            testeurMAC.entrepots.utilisateursInscrits(),
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurUtilisateurInscrit:
+            unUtilisateurInscrit().sansValidationDeCGU(),
+          constructeurUtilisateur: unUtilisateur().sansCGUSignees(),
+        });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur.identifiant
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-utilisateur-inscrit`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
+        liens: {
+          'afficher-tableau-de-bord': {
+            methode: 'GET',
+            url: '/api/mon-espace/tableau-de-bord',
+          },
+          'lancer-diagnostic': {
+            methode: 'POST',
+            url: '/api/diagnostic',
+          },
+          'modifier-mot-de-passe': {
+            methode: 'POST',
+            url: '/api/profil/modifier-mot-de-passe',
+          },
+          'se-deconnecter': {
+            methode: 'DELETE',
+            url: '/api/token',
+            typeAppel: 'API',
+          },
+        },
+      });
+    });
+
+    it('Met à jour l’Utilisateur Inscrit', async () => {
+      const { utilisateur, utilisateurInscrit } =
+        await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
+          entrepotUtilisateurInscrit:
+            testeurMAC.entrepots.utilisateursInscrits(),
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurUtilisateurInscrit: unUtilisateurInscrit(),
+          constructeurUtilisateur: unUtilisateur(),
+        });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur.identifiant
+      );
+
+      await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-utilisateur-inscrit`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
+        }
+      );
+
+      expect(
+        await testeurMAC.entrepots
+          .utilisateursInscrits()
+          .lis(utilisateur.identifiant)
+      ).toStrictEqual<UtilisateurInscrit>({
+        identifiant: expect.any(String),
+        email: utilisateurInscrit.email,
+        nomPrenom: utilisateurInscrit.nomPrenom,
+        entite: {},
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+      });
+    });
+
+    it('Vérifie la présence des CGU validées', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const { utilisateur } =
+        await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
+          entrepotUtilisateurInscrit:
+            testeurMAC.entrepots.utilisateursInscrits(),
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurUtilisateurInscrit:
+            unUtilisateurInscrit().sansValidationDeCGU(),
+          constructeurUtilisateur: unUtilisateur(),
+        });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur.identifiant
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-utilisateur-inscrit`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: false,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(422);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
+        message: 'Veuillez valider les CGU',
+        liens: {
+          'rechercher-entreprise': {
+            methode: 'GET',
+            url: '/api/recherche-entreprise',
+          },
+          'valider-profil-aidant': {
+            url: '/api/utilisateur/valider-profil-aidant',
+            methode: 'POST',
+          },
+          'valider-profil-utilisateur-inscrit': {
+            methode: 'POST',
+            url: '/api/toto',
+          },
+        },
+      });
+    });
+
+    it('Retourne une 404 si l’utilisateur n’est pas connu', async () => {
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        crypto.randomUUID()
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-utilisateur-inscrit`,
+        donneesServeur.portEcoute,
+        {
+          cguValidees: true,
         }
       );
 

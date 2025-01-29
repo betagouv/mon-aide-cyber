@@ -19,6 +19,17 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
         );
       });
   }
+
+  valideProfil(identifiantUtilisateurInscrit: crypto.UUID): Promise<void> {
+    return this.entrepotUtilisateurInscrit
+      .lis(identifiantUtilisateurInscrit)
+      .then(async (utilisateurInscrit) => {
+        utilisateurInscrit.dateSignatureCGU = FournisseurHorloge.maintenant();
+        return await this.entrepotUtilisateurInscrit.persiste(
+          utilisateurInscrit
+        );
+      });
+  }
 }
 
 export const unServiceUtilisateurInscrit = (

@@ -145,7 +145,7 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
   'valider-profil': {
     'valider-profil-utilisateur-inscrit': {
       methode: 'POST',
-      url: '/api/toto',
+      url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
     },
     'valider-profil-aidant': {
       methode: 'POST',
