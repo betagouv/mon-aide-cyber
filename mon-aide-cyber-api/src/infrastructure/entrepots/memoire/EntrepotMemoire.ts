@@ -369,4 +369,9 @@ export class EntrepotUtilisateurMACMemoire
 
 export class EntrepotUtilisateurInscritMemoire
   extends EntrepotMemoire<UtilisateurInscrit>
-  implements EntrepotUtilisateurInscrit {}
+  implements EntrepotUtilisateurInscrit
+{
+  typeAggregat(): string {
+    return 'utilisateur_inscrit';
+  }
+}
