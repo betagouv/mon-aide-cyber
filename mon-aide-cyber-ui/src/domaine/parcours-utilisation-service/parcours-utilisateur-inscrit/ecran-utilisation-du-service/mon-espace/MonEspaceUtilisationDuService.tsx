@@ -4,6 +4,8 @@ import {
 } from '../../../../gestion-demandes/parcours-aidant/choix-utilisation/ChoixUtilisation.tsx';
 import { useNavigate } from 'react-router-dom';
 import {
+  MoteurDeLiens,
+  ROUTE_MON_ESPACE,
   ROUTE_MON_ESPACE_VALIDER_PROFIL,
   ROUTE_MON_ESPACE_VALIDER_PROFIL_UTILISATEUR_INSCRIT,
 } from '../../../../MoteurDeLiens.ts';
@@ -14,10 +16,18 @@ export const MonEspaceUtilisationDuService = () => {
   const navigate = useNavigate();
 
   const surClicChoixUtilisation = (choix: Utilisation) => {
+    const peutDemandeDevenirAidant = new MoteurDeLiens(
+      navigationMAC.etat
+    ).existe('demande-devenir-aidant');
+
     switch (choix) {
       case 'InteretGeneral': {
         window.scrollTo({ top: 0 });
-        return navigate(`${ROUTE_MON_ESPACE_VALIDER_PROFIL}`);
+        if (!peutDemandeDevenirAidant) {
+          return navigate(`${ROUTE_MON_ESPACE_VALIDER_PROFIL}`);
+        } else {
+          return navigate(`${ROUTE_MON_ESPACE}/devenir-aidant`);
+        }
       }
       case 'ActiviteProfessionnelle': {
         return navigationMAC.navigue(
