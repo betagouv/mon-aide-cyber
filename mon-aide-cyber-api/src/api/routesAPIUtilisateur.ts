@@ -302,7 +302,10 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
                 })
               );
           }
-          return unServiceUtilisateurInscrit(entrepots.utilisateursInscrits())
+          return unServiceUtilisateurInscrit(
+            entrepots.utilisateursInscrits(),
+            unServiceAidant(entrepots.aidants())
+          )
             .valideLesCGU(identifiantUtilisateur)
             .then(() =>
               reponse.status(200).json({
@@ -390,7 +393,11 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
             .construis(),
         });
       }
-      return unServiceUtilisateurInscrit(entrepots.utilisateursInscrits())
+
+      return unServiceUtilisateurInscrit(
+        entrepots.utilisateursInscrits(),
+        unServiceAidant(entrepots.aidants())
+      )
         .valideProfil(requete.identifiantUtilisateurCourant!)
         .then(() =>
           reponse.status(200).json({
