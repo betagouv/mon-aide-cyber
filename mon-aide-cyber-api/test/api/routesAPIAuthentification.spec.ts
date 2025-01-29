@@ -129,7 +129,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             liens: {
               'valider-profil-utilisateur-inscrit': {
                 methode: 'POST',
-                url: '/api/toto',
+                url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
               },
               'rechercher-entreprise': {
                 methode: 'GET',

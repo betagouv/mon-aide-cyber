@@ -424,7 +424,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           },
           'valider-profil-utilisateur-inscrit': {
             methode: 'POST',
-            url: '/api/toto',
+            url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
           },
           'valider-profil-aidant': {
             methode: 'POST',
@@ -464,7 +464,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           },
           'valider-profil-utilisateur-inscrit': {
             methode: 'POST',
-            url: '/api/toto',
+            url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
           },
           'valider-profil-aidant': {
             methode: 'POST',
@@ -1131,7 +1131,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           },
           'valider-profil-utilisateur-inscrit': {
             methode: 'POST',
-            url: '/api/toto',
+            url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
           },
         },
       });
@@ -1246,15 +1246,12 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it('Accepte la requête et retourne les actions possibles', async () => {
-      const { utilisateur } =
-        await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
-          entrepotUtilisateurInscrit:
-            testeurMAC.entrepots.utilisateursInscrits(),
-          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-          constructeurUtilisateurInscrit:
-            unUtilisateurInscrit().sansValidationDeCGU(),
-          constructeurUtilisateur: unUtilisateur().sansCGUSignees(),
-        });
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        constructeurUtilisateur: unUtilisateur().sansCGUSignees(),
+      });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
         utilisateur.identifiant
       );
@@ -1293,15 +1290,15 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       });
     });
 
-    it('Met à jour l’Utilisateur Inscrit', async () => {
-      const { utilisateur, utilisateurInscrit } =
-        await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
-          entrepotUtilisateurInscrit:
-            testeurMAC.entrepots.utilisateursInscrits(),
-          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-          constructeurUtilisateurInscrit: unUtilisateurInscrit(),
-          constructeurUtilisateur: unUtilisateur(),
-        });
+    it('Transforme un Aidant en Utilisateur Inscrit', async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().cguValideesLe(
+          new Date(Date.parse('2024-04-12T12:34:54'))
+        ),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
         utilisateur.identifiant
       );
@@ -1316,15 +1313,14 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         }
       );
 
-      expect(
-        await testeurMAC.entrepots
-          .utilisateursInscrits()
-          .lis(utilisateur.identifiant)
-      ).toStrictEqual<UtilisateurInscrit>({
+      const utilisateurInscrit = await testeurMAC.entrepots
+        .utilisateursInscrits()
+        .lis(utilisateur.identifiant);
+
+      expect(utilisateurInscrit).toStrictEqual<UtilisateurInscrit>({
         identifiant: expect.any(String),
         email: utilisateurInscrit.email,
         nomPrenom: utilisateurInscrit.nomPrenom,
-        entite: {},
         dateSignatureCGU: FournisseurHorloge.maintenant(),
       });
     });
@@ -1368,7 +1364,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           },
           'valider-profil-utilisateur-inscrit': {
             methode: 'POST',
-            url: '/api/toto',
+            url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
           },
         },
       });
