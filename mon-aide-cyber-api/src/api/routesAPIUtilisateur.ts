@@ -146,6 +146,18 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
               : 'se-deconnecter',
           };
           if (!utilisateur.dateValidationCGU) {
+            if (utilisateur.profil === 'UtilisateurInscrit') {
+              return reponseOK(
+                constructeurActionsHATEOAS()
+                  .pour({ contexte: 'valider-signature-cgu' })
+                  .pour({
+                    contexte: 'demande-devenir-aidant:demande-devenir-aidant',
+                  })
+                  .pour(deconnexionUtilisateur)
+                  .construis(),
+                utilisateur
+              );
+            }
             return reponseOK(
               constructeurActionsHATEOAS()
                 .pour({ contexte: 'valider-signature-cgu' })
