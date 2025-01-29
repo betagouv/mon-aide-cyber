@@ -365,6 +365,48 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     }
   );
 
+  routes.post(
+    '/valider-profil-utilisateur-inscrit',
+    session.verifie('Valide le profil Utilisateur Inscrit'),
+    express.json(),
+    body('cguValidees')
+      .custom((value: boolean) => value)
+      .withMessage('Veuillez valider les CGU'),
+    async (
+      requete: RequeteUtilisateur<CorpsValiderProfilUtilisateurInscrit>,
+      reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>,
+      suite: NextFunction
+    ) => {
+      const resultatsValidation: Result<FieldValidationError> =
+        validationResult(requete) as Result<FieldValidationError>;
+      if (!resultatsValidation.isEmpty()) {
+        return reponse.status(422).json({
+          message: resultatsValidation
+            .array()
+            .map((resultatValidation) => resultatValidation.msg)
+            .join(', '),
+          ...constructeurActionsHATEOAS()
+            .pour({ contexte: 'valider-profil' })
+            .construis(),
+        });
+      }
+      return unServiceUtilisateurInscrit(entrepots.utilisateursInscrits())
+        .valideProfil(requete.identifiantUtilisateurCourant!)
+        .then(() =>
+          reponse.status(200).json({
+            ...constructeurActionsHATEOAS()
+              .pour({
+                contexte: 'utilisateur-inscrit:acceder-au-profil',
+              })
+              .construis(),
+          })
+        )
+        .catch((erreur) =>
+          suite(ErreurMAC.cree('Valide le profil Utilisateur Inscrit', erreur))
+        );
+    }
+  );
+
   return routes;
 };
 
@@ -377,4 +419,8 @@ type CorpsValiderProfilAidant = {
   cguValidees: boolean;
   signatureCharte: boolean;
   entite: CorpsEntite;
+};
+
+type CorpsValiderProfilUtilisateurInscrit = {
+  cguValidees: boolean;
 };

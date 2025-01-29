@@ -17,4 +17,5 @@ export type EntrepotUtilisateurInscrit = Entrepot<UtilisateurInscrit>;
 
 export interface ServiceUtilisateurInscrit {
   valideLesCGU(identifiantUtilisateur: crypto.UUID): Promise<void>;
+  valideProfil(identifiantUtilisateurInscrit: crypto.UUID): Promise<void>;
 }
