@@ -204,6 +204,128 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       });
     });
 
+    it('Retourne l’action valider signature CGU si l’utilisateur proconnect ne les a pas signées', async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      adaptateurDeVerificationDeSession.utilisateurProConnect(
+        utilisateur.identifiant
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/utilisateur/`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
+      expect(await reponse.json()).toStrictEqual({
+        nomPrenom: utilisateur.nomPrenom,
+        liens: {
+          'valider-signature-cgu': {
+            methode: 'POST',
+            url: '/api/utilisateur/valider-signature-cgu',
+          },
+          'se-deconnecter': {
+            methode: 'GET',
+            typeAppel: 'DIRECT',
+            url: '/pro-connect/deconnexion',
+          },
+        },
+      });
+    });
+
+    it('Retourne l’action valider signature CGU si l’utilisateur proconnect ne les a pas signées', async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur(),
+      });
+      adaptateurDeVerificationDeSession.utilisateurProConnect(
+        utilisateur.identifiant
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/utilisateur/`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
+      expect(await reponse.json()).toStrictEqual({
+        nomPrenom: utilisateur.nomPrenom,
+        liens: {
+          'valider-signature-cgu': {
+            methode: 'POST',
+            url: '/api/utilisateur/valider-signature-cgu',
+          },
+          'se-deconnecter': {
+            methode: 'GET',
+            typeAppel: 'DIRECT',
+            url: '/pro-connect/deconnexion',
+          },
+        },
+      });
+    });
+
+    it('Retourne l’action valider signature CGU si l’utilisateur INSCRIT proconnect ne les a pas signées', async () => {
+      const utilisateur = await unCompteUtilisateurInscritConnecteViaProConnect(
+        {
+          entrepotUtilisateurInscrit:
+            testeurMAC.entrepots.utilisateursInscrits(),
+          constructeurUtilisateur: unUtilisateurInscrit().sansValidationDeCGU(),
+          adaptateurDeVerificationDeSession,
+        }
+      );
+      adaptateurDeVerificationDeSession.utilisateurProConnect(
+        utilisateur.identifiant
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/utilisateur/`,
+        donneesServeur.portEcoute
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
+      expect(await reponse.json()).toStrictEqual({
+        nomPrenom: utilisateur.nomPrenom,
+        liens: {
+          'valider-signature-cgu': {
+            methode: 'POST',
+            url: '/api/utilisateur/valider-signature-cgu',
+          },
+          'se-deconnecter': {
+            methode: 'GET',
+            typeAppel: 'DIRECT',
+            url: '/pro-connect/deconnexion',
+          },
+          'envoyer-demande-devenir-aidant': {
+            url: '/api/demandes/devenir-aidant',
+            methode: 'POST',
+          },
+          'demande-devenir-aidant': {
+            url: '/api/demandes/devenir-aidant',
+            methode: 'GET',
+          },
+          'rechercher-entreprise': {
+            methode: 'GET',
+            url: '/api/recherche-entreprise',
+          },
+        },
+      });
+    });
+
     it("retourne une erreur HTTP 404 si l'utilisateur n'est pas connu", async () => {
       adaptateurDeVerificationDeSession.reinitialise();
       const reponse = await executeRequete(
