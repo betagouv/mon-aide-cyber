@@ -64,7 +64,7 @@ export class EntrepotUtilisateurMACPostgres
     return {
       identifiant: dto.id,
       profil,
-      email: dto.email,
+      email: this.serviceDeChiffrement.dechiffre(dto.email),
       nomPrenom: this.serviceDeChiffrement.dechiffre(dto.nom_prenom),
       ...(dto.date_validation_cgu && {
         dateValidationCGU: FournisseurHorloge.enDate(dto.date_validation_cgu),
