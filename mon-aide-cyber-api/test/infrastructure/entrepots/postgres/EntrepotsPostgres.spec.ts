@@ -1244,7 +1244,7 @@ describe('Entrepot Utilisateurs MAC', () => {
       expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
         identifiant: aidant.identifiant,
         profil: 'Aidant',
-        email: '',
+        email: aidant.email,
         nomPrenom: aidant.nomPrenom,
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
@@ -1263,7 +1263,7 @@ describe('Entrepot Utilisateurs MAC', () => {
       expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
         identifiant: aidant.identifiant,
         profil: 'Gendarme',
-        email: '',
+        email: aidant.email,
         nomPrenom: aidant.nomPrenom,
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
@@ -1282,7 +1282,7 @@ describe('Entrepot Utilisateurs MAC', () => {
         identifiant: utilisateurInscrit.identifiant,
         profil: 'UtilisateurInscrit',
         nomPrenom: utilisateurInscrit.nomPrenom,
-        email: '',
+        email: utilisateurInscrit.email,
         dateValidationCGU: utilisateurInscrit.dateSignatureCGU!,
       });
     });
@@ -1323,7 +1323,7 @@ describe('Entrepot Utilisateurs MAC', () => {
         identifiant: aidant.identifiant,
         profil: 'Aidant',
         nomPrenom: aidant.nomPrenom,
-        email: '',
+        email: aidant.email,
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
       expect(serviceDeChiffrementClair.dechiffreAEteAppele()).toBe(true);
@@ -1340,7 +1340,7 @@ describe('Entrepot Utilisateurs MAC', () => {
         identifiant: aidant.identifiant,
         profil: 'Gendarme',
         nomPrenom: aidant.nomPrenom,
-        email: '',
+        email: aidant.email,
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
     });
@@ -1357,7 +1357,7 @@ describe('Entrepot Utilisateurs MAC', () => {
         identifiant: utilisateurInscrit.identifiant,
         profil: 'UtilisateurInscrit',
         nomPrenom: utilisateurInscrit.nomPrenom,
-        email: '',
+        email: utilisateurInscrit.email,
         dateValidationCGU: utilisateurInscrit.dateSignatureCGU!,
       });
     });
