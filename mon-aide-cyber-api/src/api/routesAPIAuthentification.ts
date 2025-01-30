@@ -9,6 +9,7 @@ import { RequeteUtilisateur } from './routesAPI';
 import { adaptateurConfigurationLimiteurTraffic } from './adaptateurLimiteurTraffic';
 import { UtilisateurAuthentifie } from '../authentification/Utilisateur';
 import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { estDateNouveauParcoursDemandeDevenirAidant } from '../gestion-demandes/devenir-aidant/nouveauParcours';
 
 export type CorpsRequeteAuthentification = {
   identifiant: string;
@@ -63,6 +64,15 @@ export const routesAPIAuthentification = (
                     contexte:
                       'utilisateur-inscrit:acceder-aux-informations-utilisateur',
                   })
+                  .pour({ contexte: 'se-deconnecter' })
+                  .construis();
+              }
+              if (
+                utilisateur?.doitValiderLesCGU &&
+                estDateNouveauParcoursDemandeDevenirAidant()
+              ) {
+                reponseHATEOAS = constructeurActionsHATEOAS()
+                  .pour({ contexte: 'valider-profil' })
                   .pour({ contexte: 'se-deconnecter' })
                   .construis();
               }
