@@ -11,6 +11,7 @@ import {
   unUtilisateur,
   unUtilisateurInscrit,
 } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe("Le serveur MAC, sur les routes d'authentification", () => {
   const testeurMAC = testeurIntegration();
@@ -31,6 +32,12 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
       afterEach(() => testeurMAC.arrete());
 
       describe('Dans le cas d’un Aidant', () => {
+        beforeEach(() => {
+          FournisseurHorlogeDeTest.initialise(
+            new Date(Date.parse('2025-01-31T10:00:00'))
+          );
+        });
+
         it('Génère un token', async () => {
           const constructeurUtilisateur = unUtilisateur()
             .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
@@ -91,6 +98,55 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           expect(cookieRecu[3]).toStrictEqual('samesite=strict');
           expect(cookieRecu[4]).toStrictEqual('httponly');
         });
+        it('Redirige vers /mon-espace/mon-utilisation-du-service', async () => {
+          const constructeurUtilisateur = unUtilisateur()
+            .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
+            .avecUnMotDePasse('mon_Mot-D3p4sse')
+            .avecUnNomPrenom('Martin Dupont');
+          await unCompteAidantRelieAUnCompteUtilisateur({
+            constructeurAidant: unAidant().cguValideesLe(
+              new Date(Date.parse('2024-12-12T20:00:00'))
+            ),
+            constructeurUtilisateur,
+            entrepotAidant: testeurMAC.entrepots.aidants(),
+            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          });
+
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/token',
+            donneesServeur.portEcoute,
+            {
+              identifiant: 'martin.dupont@email.com',
+              motDePasse: 'mon_Mot-D3p4sse',
+            }
+          );
+
+          expect(reponse.statusCode).toStrictEqual(201);
+          expect(await reponse.json()).toStrictEqual({
+            nomPrenom: 'Martin Dupont',
+            liens: {
+              'valider-profil-utilisateur-inscrit': {
+                methode: 'POST',
+                url: '/api/toto',
+              },
+              'rechercher-entreprise': {
+                methode: 'GET',
+                url: '/api/recherche-entreprise',
+              },
+              'valider-profil-aidant': {
+                methode: 'POST',
+                url: '/api/utilisateur/valider-profil-aidant',
+              },
+              'se-deconnecter': {
+                methode: 'DELETE',
+                typeAppel: 'API',
+                url: '/api/token',
+              },
+            },
+          });
+        });
       });
 
       describe('Dans le cas d’un Utilisateur Inscrit', () => {
@@ -100,7 +156,10 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             .avecUnMotDePasse('mon_Mot-D3p4sse')
             .avecUnNomPrenom('Martin Dupont');
           await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
-            constructeurUtilisateurInscrit: unUtilisateurInscrit(),
+            constructeurUtilisateurInscrit:
+              unUtilisateurInscrit().avecUneDateDeSignatureDeCGU(
+                new Date(Date.parse('2025-03-03T00:00:00'))
+              ),
             constructeurUtilisateur,
             entrepotUtilisateurInscrit:
               testeurMAC.entrepots.utilisateursInscrits(),
