@@ -12,6 +12,8 @@ export const Sidebar = () => {
   const { accedeALaRessource: peutAfficherTableauDeBord } = useMoteurDeLiens(
     'afficher-tableau-de-bord'
   );
+  const { accedeALaRessource: peutAfficherLesPreferencesAidant } =
+    useMoteurDeLiens('afficher-preferences');
 
   const { estFonctionaliteActive } = useFeatureFlag(
     'ESPACE_AIDANT_ECRAN_MES_PREFERENCES'
@@ -69,11 +71,15 @@ export const Sidebar = () => {
                           route: `${ROUTE_MON_ESPACE}/mes-informations`,
                           actif: true,
                         },
-                        {
-                          nom: 'Mes préférences',
-                          route: `${ROUTE_MON_ESPACE}/mes-preferences`,
-                          actif: true,
-                        },
+                        ...(peutAfficherLesPreferencesAidant
+                          ? [
+                              {
+                                nom: 'Mes préférences',
+                                route: `${ROUTE_MON_ESPACE}/mes-preferences`,
+                                actif: true,
+                              },
+                            ]
+                          : []),
                       ]
                     : []),
                 ],
