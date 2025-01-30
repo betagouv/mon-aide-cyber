@@ -1,5 +1,5 @@
 import { Utilisateur } from '../../domaine/authentification/Authentification.ts';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useErrorBoundary } from 'react-error-boundary';
@@ -9,7 +9,7 @@ import {
   ROUTE_MON_ESPACE_VALIDER_CGU,
 } from '../../domaine/MoteurDeLiens.ts';
 import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
-import { Lien } from '../../domaine/Lien.ts';
+import { useMoteurDeLiens } from '../../hooks/useMoteurDeLiens.ts';
 
 type ProprietesMenuUtilisateur = {
   utilisateur: Utilisateur;
@@ -20,15 +20,8 @@ export const ComposantMenuUtilisateur = ({
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
   const { showBoundary, resetBoundary } = useErrorBoundary();
-  const [lienDeconnexion, setLienDeconnexion] = useState<Lien | undefined>();
 
-  useEffect(() => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'se-deconnecter',
-      (lien) => setLienDeconnexion(lien),
-      () => setLienDeconnexion(undefined)
-    );
-  }, [navigationMAC]);
+  const { accedeALaRessource, ressource } = useMoteurDeLiens('se-deconnecter');
 
   let nomUtilisateur = utilisateur.nomPrenom;
   if (utilisateur.nomPrenom.includes(' ')) {
@@ -54,23 +47,23 @@ export const ComposantMenuUtilisateur = ({
 
   const deconnecter = useCallback(() => {
     resetBoundary();
-    if (lienDeconnexion) {
-      macAPI
-        .execute<void, void>(
-          constructeurParametresAPI()
-            .url(lienDeconnexion.url)
-            .methode(lienDeconnexion.methode!)
-            .construis(),
-          (reponse) => reponse
-        )
-        .then(() => window.location.replace('/connexion'))
-        .catch((erreur) => showBoundary(erreur));
-    }
-  }, [navigationMAC, resetBoundary, showBoundary]);
+    if (!accedeALaRessource) return;
+
+    macAPI
+      .execute<void, void>(
+        constructeurParametresAPI()
+          .url(ressource.url)
+          .methode(ressource.methode!)
+          .construis(),
+        (reponse) => reponse
+      )
+      .then(() => window.location.replace('/connexion'))
+      .catch((erreur) => showBoundary(erreur));
+  }, [navigationMAC.etat, resetBoundary, showBoundary]);
 
   const boutonSeDeconnecter =
-    lienDeconnexion && lienDeconnexion.typeAppel === 'DIRECT' ? (
-      <a className="element" href={lienDeconnexion.url}>
+    ressource && ressource.typeAppel === 'DIRECT' ? (
+      <a className="element" href={ressource.url}>
         <span className="fr-icon-logout-box-r-line" aria-hidden="true"></span>
         <div>Se déconnecter</div>
       </a>
