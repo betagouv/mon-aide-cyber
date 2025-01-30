@@ -1,7 +1,6 @@
 import './ecran-realiser-des-diagnostics-anssi.scss';
 import useDefilementFluide from '../../../hooks/useDefilementFluide.ts';
 import { useNavigate } from 'react-router-dom';
-import { ChoixUtilisation } from '../../gestion-demandes/parcours-aidant/choix-utilisation/ChoixUtilisation.tsx';
 import { FormulaireDeContact } from '../../../composants/communs/FormulaireDeContact/FormulaireDeContact.tsx';
 import { ActionsPiedDePage } from '../../../composants/communs/ActionsPiedDePage.tsx';
 import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
@@ -11,6 +10,7 @@ import illustrationAutodiag from '../../../../public/images/illustration-autodia
 import { HeroRealiserDesDiagnosticsAnssi } from './composants/HeroRealiserDesDiagnosticsANSSI.tsx';
 import { OeuvrerPourInteretGeneral } from './composants/OeuvrerPourInteretGeneral.tsx';
 import { PrerequisAidantCyber } from './composants/PrerequisAidantCyber.tsx';
+import { UtilisationDuService } from '../../parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/vitrine/UtilisationDuService.tsx';
 
 export const EcranRealiserDesDiagnosticsANSSI = () => {
   useDefilementFluide();
@@ -21,7 +21,7 @@ export const EcranRealiserDesDiagnosticsANSSI = () => {
       <HeroRealiserDesDiagnosticsAnssi />
       <OeuvrerPourInteretGeneral />
       <section id="formulaire-formation" className="fond-clair-mac">
-        <ChoixUtilisation surClick={() => console.log('test')} />
+        <UtilisationDuService />
       </section>
       <PrerequisAidantCyber />
       <section className="fond-clair-mac section-diagnostic-libre-acces">
