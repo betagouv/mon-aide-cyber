@@ -110,6 +110,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     busCommande,
     busEvenement,
     serviceDeChiffrement,
+    adaptateurRelations,
   } = configuration;
 
   routes.get(
@@ -398,7 +399,10 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         entrepots.utilisateursInscrits(),
         unServiceAidant(entrepots.aidants())
       )
-        .valideProfil(requete.identifiantUtilisateurCourant!)
+        .valideProfil(
+          requete.identifiantUtilisateurCourant!,
+          adaptateurRelations
+        )
         .then(() =>
           reponse.status(200).json({
             ...constructeurActionsHATEOAS()

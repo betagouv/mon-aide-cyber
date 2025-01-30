@@ -6,6 +6,8 @@ import {
 import crypto from 'crypto';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { ServiceAidant } from '../espace-aidant/ServiceAidant';
+import { AdaptateurRelations } from '../relation/AdaptateurRelations';
+import { unTupleUtilisateurInscritInitieDiagnostic } from '../diagnostic/tuples';
 
 export class ErreurAidantNonTrouve extends Error {
   constructor() {
@@ -18,6 +20,7 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
     private readonly entrepotUtilisateurInscrit: EntrepotUtilisateurInscrit,
     private readonly serviceAidant: ServiceAidant
   ) {}
+
   valideLesCGU(identifiantUtilisateur: crypto.UUID): Promise<void> {
     return this.entrepotUtilisateurInscrit
       .lis(identifiantUtilisateur)
@@ -29,9 +32,12 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
       });
   }
 
-  valideProfil(identifiantAidant: crypto.UUID): Promise<void> {
+  valideProfil(
+    identifiantUtilisateurInscrit: crypto.UUID,
+    adaptateurDeRelations: AdaptateurRelations
+  ): Promise<void> {
     return this.serviceAidant
-      .parIdentifiant(identifiantAidant)
+      .parIdentifiant(identifiantUtilisateurInscrit)
       .then((aidant) => {
         if (!aidant) {
           throw new ErreurAidantNonTrouve();
@@ -42,7 +48,26 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
           nomPrenom: aidant.nomComplet,
           dateSignatureCGU: FournisseurHorloge.maintenant(),
         };
-        this.entrepotUtilisateurInscrit.persiste(utilisateur);
+        return this.entrepotUtilisateurInscrit
+          .persiste(utilisateur)
+          .then(() => {
+            return adaptateurDeRelations
+              .identifiantsObjetsLiesAUtilisateur(utilisateur.identifiant)
+              .then((identifiants) => {
+                const tuples = identifiants.reduce((precedent, courant) => {
+                  precedent.push(
+                    adaptateurDeRelations.creeTuple(
+                      unTupleUtilisateurInscritInitieDiagnostic(
+                        utilisateur.identifiant,
+                        courant as crypto.UUID
+                      )
+                    )
+                  );
+                  return precedent;
+                }, [] as Promise<void>[]);
+                return Promise.all(tuples).then(() => Promise.resolve());
+              });
+          });
       });
   }
 }

@@ -9,14 +9,18 @@ import { UtilisateurInscrit } from '../../src/espace-utilisateur-inscrit/Utilisa
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { unServiceUtilisateurInscrit } from '../../src/espace-utilisateur-inscrit/ServiceUtilisateurInscritMAC';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
+import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
+import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
 
 describe('ServiceUtilisateurInscrit', () => {
+  const dateValidationCGU = new Date(Date.parse('2024-12-22T13:41:24'));
+
   beforeEach(() => {
     FournisseurHorlogeDeTest.initialise(new Date());
   });
 
   it('Transforme un Aidant en Utilisateur Inscrit', async () => {
-    const dateValidationCGU = new Date(Date.parse('2024-12-22T13:41:24'));
     const aidant = unAidant().cguValideesLe(dateValidationCGU).construis();
     const entrepotAidant = new EntrepotAidantMemoire();
     const entrepotUtilisateurInscrit = new EntrepotUtilisateurInscritMemoire();
@@ -25,7 +29,7 @@ describe('ServiceUtilisateurInscrit', () => {
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
       unServiceAidant(entrepotAidant)
-    ).valideProfil(aidant.identifiant);
+    ).valideProfil(aidant.identifiant, new AdaptateurRelationsMAC());
 
     const utilisateurInscrit = await entrepotUtilisateurInscrit.lis(
       aidant.identifiant
@@ -37,5 +41,34 @@ describe('ServiceUtilisateurInscrit', () => {
       nomPrenom: aidant.nomPrenom,
       dateSignatureCGU: FournisseurHorloge.maintenant(),
     });
+  });
+
+  it('Crée les relations vers les diagnosctics existants', async () => {
+    const aidant = unAidant().cguValideesLe(dateValidationCGU).construis();
+    const entrepotAidant = new EntrepotAidantMemoire();
+    const entrepotUtilisateurInscrit = new EntrepotUtilisateurInscritMemoire();
+    await entrepotAidant.persiste(aidant);
+    const entrepotRelation = new EntrepotRelationMemoire();
+    const adaptateurRelations = new AdaptateurRelationsMAC(entrepotRelation);
+    const identifiantDiagnostic = crypto.randomUUID();
+    await adaptateurRelations.creeTuple(
+      unTupleAidantInitieDiagnostic(aidant.identifiant, identifiantDiagnostic)
+    );
+
+    await unServiceUtilisateurInscrit(
+      entrepotUtilisateurInscrit,
+      unServiceAidant(entrepotAidant)
+    ).valideProfil(aidant.identifiant, adaptateurRelations);
+
+    expect(
+      await adaptateurRelations.relationExiste(
+        'initiateur',
+        { type: 'utilisateurInscrit', identifiant: aidant.identifiant },
+        {
+          type: 'diagnostic',
+          identifiant: identifiantDiagnostic,
+        }
+      )
+    ).toBe(true);
   });
 });
