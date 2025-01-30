@@ -50,7 +50,7 @@ export class EntrepotsMAC implements Entrepots {
   private entrepotDemandeDiagnosticLibreAcces: EntrepotDemandeDiagnosticLibreAcces =
     new EntrepotDemandeDiagnosticLibreAccesPostgres();
   private entrepotUtilisateursMAC: EntrepotUtilisateursMAC =
-    new EntrepotUtilisateurMACPostgres();
+    new EntrepotUtilisateurMACPostgres(adaptateurServiceChiffrement());
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;

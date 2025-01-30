@@ -1217,12 +1217,15 @@ describe('Entrepot profil aidant', () => {
 });
 
 describe('Entrepot Utilisateurs MAC', () => {
+  const serviceDeChiffrementClair = new ServiceDeChiffrementClair();
   const entrepotAidantPostgres = new EntrepotAidantPostgres(
     new ServiceDeChiffrementClair()
   );
   const entrepotUtilisateurInscritPostgres =
     new EntrepotUtilisateurInscritPostgres(new ServiceDeChiffrementClair());
-  const entrepotUtilisateurMACPostgres = new EntrepotUtilisateurMACPostgres();
+  const entrepotUtilisateurMACPostgres = new EntrepotUtilisateurMACPostgres(
+    serviceDeChiffrementClair
+  );
 
   beforeEach(async () => {
     nettoieLaBaseDeDonneesAidants();
@@ -1244,6 +1247,7 @@ describe('Entrepot Utilisateurs MAC', () => {
         nomPrenom: aidant.nomPrenom,
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
+      expect(serviceDeChiffrementClair.dechiffreAEteAppele()).toBe(true);
     });
 
     it('Retourne un utilisateur au profil Gendarme', async () => {
@@ -1262,6 +1266,7 @@ describe('Entrepot Utilisateurs MAC', () => {
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
     });
+
     it('Retourne un utilisateur au profil Utilisateur Inscrit', async () => {
       const utilisateurInscrit = unUtilisateurInscrit().construis();
       await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
@@ -1317,6 +1322,7 @@ describe('Entrepot Utilisateurs MAC', () => {
         nomPrenom: aidant.nomPrenom,
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
+      expect(serviceDeChiffrementClair.dechiffreAEteAppele()).toBe(true);
     });
 
     it('Retourne un utilisateur au profil Gendarme', async () => {
