@@ -169,7 +169,7 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
         return redirige(
           idToken,
           espaceUtilisateurInscritCree.identifiant,
-          '/mon-espace/mon-utilisation-du-service'
+          '/mon-espace/valide-signature-cgu'
         );
       } catch (e: unknown | Error) {
         return suite(
