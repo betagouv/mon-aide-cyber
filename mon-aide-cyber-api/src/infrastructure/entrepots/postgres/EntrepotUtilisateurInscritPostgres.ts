@@ -70,7 +70,7 @@ export class EntrepotUtilisateurInscritPostgres
   protected champsAMettreAJour(
     entiteDTO: UtilisateurInscritDTO
   ): Partial<UtilisateurInscritDTO> {
-    return { donnees: entiteDTO.donnees };
+    return { donnees: entiteDTO.donnees, type: entiteDTO.type };
   }
 
   protected nomTable(): string {
