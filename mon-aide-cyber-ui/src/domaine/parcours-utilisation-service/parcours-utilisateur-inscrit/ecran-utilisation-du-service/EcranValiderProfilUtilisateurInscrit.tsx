@@ -7,6 +7,7 @@ import { constructeurParametresAPI } from '../../../../fournisseurs/api/Construc
 import { useNavigationMAC } from '../../../../fournisseurs/hooks.ts';
 import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
 import './valider-profil-utilisateur-inscrit.scss';
+import { ReponseHATEOAS } from '../../../Lien.ts';
 
 export type CorpsValiderProfilUtilisateurInscrit = {
   cguValidees: boolean;
@@ -30,7 +31,11 @@ export const EcranValiderProfilUtilisateurInscrit = () => {
           'Une erreur est survenue lors de la demande devenir aidant'
         );
 
-      return macAPI.execute<void, void, CorpsValiderProfilUtilisateurInscrit>(
+      return macAPI.execute<
+        ReponseHATEOAS,
+        ReponseHATEOAS,
+        CorpsValiderProfilUtilisateurInscrit
+      >(
         constructeurParametresAPI<CorpsValiderProfilUtilisateurInscrit>()
           .url(actionSoumettre.url)
           .methode(actionSoumettre.methode!)
@@ -39,11 +44,13 @@ export const EcranValiderProfilUtilisateurInscrit = () => {
         (corps) => corps
       );
     },
-    onSuccess: () => {
+    onSuccess: (reponse) => {
       window.scrollTo({ top: 0 });
       queryClient.invalidateQueries({ queryKey: ['recupere-utilisateur'] });
-      navigationMAC.retireAction('valider-signature-cgu');
-      navigate(ROUTE_MON_ESPACE + '/tableau-de-bord');
+      navigationMAC.navigue(
+        ROUTE_MON_ESPACE + '/tableau-de-bord',
+        reponse.liens
+      );
     },
   });
 
