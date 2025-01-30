@@ -33,6 +33,7 @@ import { TypographieH4 } from '../../../composants/communs/typographie/Typograph
 import { LienMailtoMAC } from '../../../composants/atomes/LienMailtoMAC.tsx';
 import { useNavigate } from 'react-router-dom';
 import illustrationSuivi from '../../../../public/images/illustration-suivi.svg';
+import { useMoteurDeLiens } from '../../../hooks/useMoteurDeLiens.ts';
 
 export const EcranDemandeDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
@@ -50,14 +51,23 @@ export const EcranDemandeDevenirAidant = () => {
     'demande-devenir-aidant:demande-devenir-aidant'
   );
 
-  const action = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
-    'demande-devenir-aidant'
-  );
+  const {
+    accedeALaRessource: peutDemandeDevenirAidant,
+    ressource: actionDemandeDevenirAidant,
+  } = useMoteurDeLiens('demande-devenir-aidant');
+  const {
+    accedeALaRessource: peutNouvelleDemandeDevenirAidant,
+    ressource: actionNouvelleDemandeDevenirAidant,
+  } = useMoteurDeLiens('nouvelle-demande-devenir-aidant');
 
   const { data } = useQuery({
-    enabled: !!action,
+    enabled: peutDemandeDevenirAidant || peutNouvelleDemandeDevenirAidant,
     queryKey: ['recuperer-departements'],
     queryFn: () => {
+      const action = peutNouvelleDemandeDevenirAidant
+        ? actionNouvelleDemandeDevenirAidant
+        : actionDemandeDevenirAidant;
+
       return macAPI.execute<ReponseDemandeInitiee, ReponseDemandeInitiee>(
         constructeurParametresAPI()
           .url(action.url)
