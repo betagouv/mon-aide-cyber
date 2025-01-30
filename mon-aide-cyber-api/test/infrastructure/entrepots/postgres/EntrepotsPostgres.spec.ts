@@ -1244,6 +1244,7 @@ describe('Entrepot Utilisateurs MAC', () => {
       expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
         identifiant: aidant.identifiant,
         profil: 'Aidant',
+        email: '',
         nomPrenom: aidant.nomPrenom,
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
@@ -1262,6 +1263,7 @@ describe('Entrepot Utilisateurs MAC', () => {
       expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
         identifiant: aidant.identifiant,
         profil: 'Gendarme',
+        email: '',
         nomPrenom: aidant.nomPrenom,
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
@@ -1280,6 +1282,7 @@ describe('Entrepot Utilisateurs MAC', () => {
         identifiant: utilisateurInscrit.identifiant,
         profil: 'UtilisateurInscrit',
         nomPrenom: utilisateurInscrit.nomPrenom,
+        email: '',
         dateValidationCGU: utilisateurInscrit.dateSignatureCGU!,
       });
     });
@@ -1320,6 +1323,7 @@ describe('Entrepot Utilisateurs MAC', () => {
         identifiant: aidant.identifiant,
         profil: 'Aidant',
         nomPrenom: aidant.nomPrenom,
+        email: '',
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
       expect(serviceDeChiffrementClair.dechiffreAEteAppele()).toBe(true);
@@ -1336,6 +1340,7 @@ describe('Entrepot Utilisateurs MAC', () => {
         identifiant: aidant.identifiant,
         profil: 'Gendarme',
         nomPrenom: aidant.nomPrenom,
+        email: '',
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
     });
@@ -1352,6 +1357,7 @@ describe('Entrepot Utilisateurs MAC', () => {
         identifiant: utilisateurInscrit.identifiant,
         profil: 'UtilisateurInscrit',
         nomPrenom: utilisateurInscrit.nomPrenom,
+        email: '',
         dateValidationCGU: utilisateurInscrit.dateSignatureCGU!,
       });
     });
