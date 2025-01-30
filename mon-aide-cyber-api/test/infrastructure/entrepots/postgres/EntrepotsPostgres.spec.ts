@@ -1383,6 +1383,38 @@ describe('Entrepot Utilisateurs MAC', () => {
       expect(utilisateurMAC.dateValidationCGU).toStrictEqual(dateValidationCGU);
     });
   });
+
+  describe('Déchiffre', () => {
+    it('Retourne un utilisateur au profil Aidant', async () => {
+      const aidant = unAidant().construis();
+      const fauxServiceChiffrement = new FauxServiceDeChiffrement(
+        new Map([
+          [aidant.nomPrenom, 'bbb'],
+          [aidant.email, 'ccc'],
+        ])
+      );
+      const entrepotAidantPostgres = new EntrepotAidantPostgres(
+        fauxServiceChiffrement
+      );
+      const entrepotUtilisateurMACPostgres = new EntrepotUtilisateurMACPostgres(
+        fauxServiceChiffrement
+      );
+      await entrepotAidantPostgres.persiste(aidant);
+
+      const utilisateurMAC =
+        await entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
+          aidant.identifiant
+        );
+
+      expect(utilisateurMAC).toStrictEqual<UtilisateurMAC>({
+        identifiant: aidant.identifiant,
+        profil: 'Aidant',
+        nomPrenom: aidant.nomPrenom,
+        email: aidant.email,
+        dateValidationCGU: aidant.dateSignatureCGU!,
+      });
+    });
+  });
 });
 
 describe('Entrepot Utilisateur Inscrit', () => {
