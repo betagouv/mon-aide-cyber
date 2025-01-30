@@ -351,7 +351,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
           );
 
           expect(reponse.headers['location']).toStrictEqual(
-            '/mon-espace/valide-signature-cgu'
+            '/mon-espace/mon-utilisation-du-service'
           );
           expect(
             await testeurMAC.entrepots.utilisateursInscrits().tous()
