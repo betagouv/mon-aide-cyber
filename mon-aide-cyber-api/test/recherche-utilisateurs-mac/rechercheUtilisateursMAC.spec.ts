@@ -51,6 +51,23 @@ describe('La recherche utilisateur MAC', () => {
     expect(utilisateur?.nomComplet).toStrictEqual('Jean Dupont');
   });
 
+  it("Retourne l'email de l'utilisateur", async () => {
+    const aidant = unAidant()
+      .avecUnEmail('jean.dujardin@email.com')
+      .construis();
+    const entrepotAidant = new EntrepotAidantMemoire();
+    await entrepotAidant.persiste(aidant);
+
+    const utilisateur = await uneRechercheUtilisateursMAC(
+      new EntrepotUtilisateurMACMemoire({
+        aidant: entrepotAidant,
+        utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+      })
+    ).rechercheParIdentifiant(aidant.identifiant);
+
+    expect(utilisateur!.email).toStrictEqual('jean.dujardin@email.com');
+  });
+
   it('L’Utilisateur doit valider les CGU', async () => {
     FournisseurHorlogeDeTest.initialise(
       new Date(Date.parse('2025-03-20T14:05:00'))
@@ -134,6 +151,7 @@ describe('La recherche utilisateur MAC', () => {
       profil: 'Aidant',
       nomUsage: 'Jean D.',
       nomComplet: 'Jean Dupont',
+      email: aidant.email,
       dateValidationCGU: aidant.dateSignatureCGU!,
       doitValiderLesCGU: false,
     });
@@ -158,6 +176,7 @@ describe('La recherche utilisateur MAC', () => {
       profil: 'UtilisateurInscrit',
       nomUsage: 'Jean D.',
       nomComplet: 'Jean Dujardin',
+      email: utilisateurInscrit.email,
       dateValidationCGU: utilisateurInscrit.dateSignatureCGU!,
       doitValiderLesCGU: false,
     });

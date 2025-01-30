@@ -333,6 +333,7 @@ export class EntrepotUtilisateurMACMemoire
       identifiant: utilisateurInscrit.identifiant,
       profil: 'UtilisateurInscrit',
       nomPrenom: utilisateurInscrit.nomPrenom,
+      email: utilisateurInscrit.email,
       ...(utilisateurInscrit.dateSignatureCGU && {
         dateValidationCGU: utilisateurInscrit.dateSignatureCGU,
       }),
@@ -344,6 +345,7 @@ export class EntrepotUtilisateurMACMemoire
       identifiant: aidant.identifiant,
       profil: estSiretGendarmerie(aidant?.siret) ? 'Gendarme' : 'Aidant',
       nomPrenom: aidant.nomComplet,
+      email: aidant.email,
       ...(aidant.dateSignatureCGU && {
         dateValidationCGU: aidant.dateSignatureCGU,
       }),

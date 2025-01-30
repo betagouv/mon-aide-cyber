@@ -11,9 +11,11 @@ export type UtilisateurMAC = Aggregat & {
   profil: ProfilUtilisateurMAC;
   dateValidationCGU?: Date;
   nomPrenom: string;
+  email: string;
 };
 
 export type UtilisateurMACDTO = {
+  email: string;
   identifiant: crypto.UUID;
   profil: ProfilUtilisateurMAC;
   dateValidationCGU?: Date;
@@ -36,7 +38,7 @@ export interface EntrepotUtilisateursMAC extends Entrepot<UtilisateurMAC> {
   rechercheParMail(email: string): Promise<UtilisateurMAC>;
 }
 
-const mappeUtilisateur = (utilisateur: UtilisateurMAC) => ({
+const mappeUtilisateur = (utilisateur: UtilisateurMAC): UtilisateurMACDTO => ({
   identifiant: utilisateur.identifiant,
   profil: utilisateur.profil,
   nomUsage: formateLeNom(utilisateur.nomPrenom),
@@ -44,6 +46,7 @@ const mappeUtilisateur = (utilisateur: UtilisateurMAC) => ({
   ...(utilisateur.dateValidationCGU && {
     dateValidationCGU: utilisateur.dateValidationCGU,
   }),
+  email: utilisateur.email,
   doitValiderLesCGU:
     (!!utilisateur.dateValidationCGU &&
       isAfter(dateValiditeCGU(), utilisateur.dateValidationCGU) &&
