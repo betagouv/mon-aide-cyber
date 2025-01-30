@@ -1458,6 +1458,25 @@ describe('Entrepot Utilisateur Inscrit', () => {
     );
   });
 
+  it('Passe un Aidant en utilisateur inscrit', async () => {
+    const aidant = unAidant().construis();
+    await new EntrepotAidantPostgres(serviceDeChiffrement).persiste(aidant);
+    const utilisateurInscrit = unUtilisateurInscrit()
+      .avecUnIdentifiant(aidant.identifiant)
+      .construis();
+    serviceDeChiffrement.ajoute(utilisateurInscrit.email, 'aaa');
+    serviceDeChiffrement.ajoute(utilisateurInscrit.nomPrenom, 'ccc');
+
+    await entrepot.persiste(utilisateurInscrit);
+
+    const utilisateurInscritRecu = await new EntrepotUtilisateurInscritPostgres(
+      serviceDeChiffrement
+    ).lis(utilisateurInscrit.identifiant);
+    expect(utilisateurInscritRecu).toStrictEqual<UtilisateurInscrit>(
+      utilisateurInscrit
+    );
+  });
+
   describe('Pour le type Utilisateur inscrit', () => {
     it('Retourne une erreur s’il ne s’agit pas d’un Utilisateur inscrit', async () => {
       const id = crypto.randomUUID();
