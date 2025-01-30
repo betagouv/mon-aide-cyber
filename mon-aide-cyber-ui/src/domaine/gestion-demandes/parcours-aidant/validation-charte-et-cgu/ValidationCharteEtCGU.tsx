@@ -45,6 +45,7 @@ export const ValidationCharteEtCGU = ({
             de l’Aidant MonAideCyber
           </label>
         </div>
+        <br />
         <ChampValidationCGUs
           sontValidees={cguValidees}
           surCguCliquees={() => setCguValidees((prev) => !prev)}
