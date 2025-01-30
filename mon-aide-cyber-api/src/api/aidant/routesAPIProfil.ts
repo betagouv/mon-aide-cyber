@@ -17,7 +17,11 @@ import {
   validateurDeNouveauMotDePasse,
 } from '../validateurs/motDePasse';
 import { ServiceProfilAidant } from '../../espace-aidant/profil/ServiceProfilAidant';
-import { utilitairesCookies } from '../../adaptateurs/utilitairesDeCookies';
+import {
+  PROFILS_AIDANT,
+  uneRechercheUtilisateursMAC,
+} from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { ErreurUtilisateurNonTrouve } from '../routesAPIUtilisateur';
 
 type CorpsRequeteChangementMotDerPasse = {
   ancienMotDePasse: string;
@@ -36,7 +40,6 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     adaptateurDeVerificationDeSession: session,
     adaptateurDeVerificationDeCGU: cgu,
     busEvenement,
-    gestionnaireDeJeton,
   } = configuration;
 
   routes.get(
@@ -48,36 +51,61 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
       reponse: Response,
       suite: NextFunction
     ) => {
-      return entrepots
-        .profilAidant()
-        .lis(requete.identifiantUtilisateurCourant!)
-        .then((aidant) => {
-          const dateSignatureCGU = aidant.dateSignatureCGU;
-          const jwt = utilitairesCookies.jwtPayload(
-            {
-              session: utilitairesCookies.recuperateurDeCookies(
-                requete,
-                reponse
-              )!,
-            },
-            gestionnaireDeJeton
-          );
+      return uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
+        .rechercheParIdentifiant(requete.identifiantUtilisateurCourant!)
+        .then((utilisateur) => {
+          if (!utilisateur) {
+            return suite(
+              ErreurMAC.cree(
+                'Accède au profil',
+                new ErreurUtilisateurNonTrouve()
+              )
+            );
+          }
+          const estProConnect = requete.estProConnect;
+          if (PROFILS_AIDANT.includes(utilisateur.profil)) {
+            return entrepots
+              .profilAidant()
+              .lis(requete.identifiantUtilisateurCourant!)
+              .then((aidant) => {
+                const dateSignatureCGU = aidant.dateSignatureCGU;
 
-          const contexte = jwt.estProconnect
-            ? 'aidant:pro-connect-acceder-au-profil'
-            : 'aidant:acceder-au-profil';
+                const contexte = estProConnect
+                  ? 'aidant:pro-connect-acceder-au-profil'
+                  : 'aidant:acceder-au-profil';
 
+                return reponse.status(200).json({
+                  nomPrenom: aidant.nomPrenom,
+                  dateSignatureCGU: dateSignatureCGU
+                    ? FournisseurHorloge.formateDate(dateSignatureCGU).date
+                    : '',
+                  consentementAnnuaire: aidant.consentementAnnuaire,
+                  identifiantConnexion: aidant.email,
+                  ...constructeurActionsHATEOAS()
+                    .pour({ contexte })
+                    .construis(),
+                });
+              })
+              .catch((erreur) =>
+                suite(ErreurMAC.cree('Accède au profil', erreur))
+              );
+          }
           return reponse.status(200).json({
-            nomPrenom: aidant.nomPrenom,
-            dateSignatureCGU: dateSignatureCGU
-              ? FournisseurHorloge.formateDate(dateSignatureCGU).date
+            nomPrenom: utilisateur!.nomComplet,
+            dateSignatureCGU: utilisateur!.dateValidationCGU
+              ? FournisseurHorloge.formateDate(utilisateur!.dateValidationCGU)
+                  .date
               : '',
-            consentementAnnuaire: aidant.consentementAnnuaire,
-            identifiantConnexion: aidant.email,
-            ...constructeurActionsHATEOAS().pour({ contexte }).construis(),
+            identifiantConnexion: utilisateur?.email,
+            ...constructeurActionsHATEOAS()
+              .pour({
+                contexte: estProConnect
+                  ? 'utilisateur-inscrit:pro-connect-acceder-au-profil'
+                  : 'utilisateur-inscrit:acceder-au-profil',
+              })
+              .construis(),
           });
-        })
-        .catch((erreur) => suite(ErreurMAC.cree('Accède au profil', erreur)));
+        });
     }
   );
 
