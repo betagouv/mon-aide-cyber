@@ -2,7 +2,6 @@ import { Constructeur } from './constructeur';
 import { JwtMACPayload } from '../../src/authentification/GestionnaireDeJeton';
 import { JwtPayload } from 'jsonwebtoken';
 import crypto from 'crypto';
-import { Utilisateur } from '../../src/authentification/Utilisateur';
 
 class ConstructeurJwtPayload implements Constructeur<JwtPayload> {
   private estProConnect = false;
@@ -13,8 +12,8 @@ class ConstructeurJwtPayload implements Constructeur<JwtPayload> {
     return this;
   }
 
-  ayantPourAidant(utilisateur: Utilisateur): ConstructeurJwtPayload {
-    this.identifiant = utilisateur.identifiant;
+  ayantPourAidant(identifiant: crypto.UUID): ConstructeurJwtPayload {
+    this.identifiant = identifiant;
     return this;
   }
 

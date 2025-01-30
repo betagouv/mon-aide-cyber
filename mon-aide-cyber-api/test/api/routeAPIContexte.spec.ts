@@ -67,7 +67,9 @@ describe('Route contexte', () => {
       const utilisateur = unUtilisateur().construis();
       await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
       utilitairesCookies.jwtPayload = () =>
-        unConstructeurDeJwtPayload().ayantPourAidant(utilisateur).construis();
+        unConstructeurDeJwtPayload()
+          .ayantPourAidant(utilisateur.identifiant)
+          .construis();
       utilitairesCookies.recuperateurDeCookies = () => 'cookies';
 
       const reponse = await executeRequete(

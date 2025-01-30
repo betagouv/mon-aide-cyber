@@ -6,12 +6,13 @@ import { Profil } from '../../../src/api/representateurs/profil/Profil';
 import {
   unAidant,
   unCompteAidantRelieAUnCompteUtilisateur,
+  unCompteUtilisateurInscritConnecteViaProConnect,
+  unCompteUtilisateurInscritRelieAUnCompteUtilisateur,
   unUtilisateur,
+  unUtilisateurInscrit,
 } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { Utilisateur } from '../../../src/authentification/Utilisateur';
 import { Aidant } from '../../../src/espace-aidant/Aidant';
-import { utilitairesCookies } from '../../../src/adaptateurs/utilitairesDeCookies';
-import { unConstructeurDeJwtPayload } from '../../constructeurs/constructeurJwtPayload';
 
 describe('le serveur MAC sur les routes /api/profil', () => {
   const testeurMAC = testeurIntegration();
@@ -48,9 +49,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       });
 
       it("retourne les informations le l'Aidant", async () => {
-        utilitairesCookies.jwtPayload = () =>
-          unConstructeurDeJwtPayload().construis();
-
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
@@ -107,6 +105,101 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       });
     });
 
+    describe("Dans le cas d'un Utilisateur Inscrit", () => {
+      const testeurMAC = testeurIntegration();
+      let donneesServeur: { portEcoute: number; app: Express };
+      beforeEach(async () => {
+        donneesServeur = testeurMAC.initialise();
+        testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
+      });
+      afterEach(() => testeurMAC.arrete());
+
+      it('Ne peut modifier le profil', async () => {
+        const utilisateur =
+          await unCompteUtilisateurInscritConnecteViaProConnect({
+            entrepotUtilisateurInscrit:
+              testeurMAC.entrepots.utilisateursInscrits(),
+            constructeurUtilisateur: unUtilisateurInscrit(),
+            adaptateurDeVerificationDeSession:
+              testeurMAC.adaptateurDeVerificationDeSession,
+          });
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          `/api/profil/`,
+          donneesServeur.portEcoute
+        );
+
+        expect(await reponse.json()).toStrictEqual<Profil>({
+          nomPrenom: utilisateur.nomPrenom,
+          dateSignatureCGU: expect.any(String),
+          identifiantConnexion: utilisateur.email,
+          liens: {
+            'lancer-diagnostic': {
+              url: '/api/diagnostic',
+              methode: 'POST',
+            },
+            'afficher-tableau-de-bord': {
+              methode: 'GET',
+              url: '/api/mon-espace/tableau-de-bord',
+            },
+            'se-deconnecter': {
+              methode: 'GET',
+              typeAppel: 'DIRECT',
+              url: '/pro-connect/deconnexion',
+            },
+          },
+        });
+      });
+
+      it('Peut modifier le mot de passe', async () => {
+        const { utilisateur, utilisateurInscrit } =
+          await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
+            entrepotUtilisateurInscrit:
+              testeurMAC.entrepots.utilisateursInscrits(),
+            constructeurUtilisateur: unUtilisateur(),
+            constructeurUtilisateurInscrit: unUtilisateurInscrit(),
+            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          });
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          utilisateur.identifiant
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          `/api/profil/`,
+          donneesServeur.portEcoute
+        );
+
+        expect(await reponse.json()).toStrictEqual<Profil>({
+          nomPrenom: utilisateurInscrit.nomPrenom,
+          dateSignatureCGU: expect.any(String),
+          identifiantConnexion: utilisateurInscrit.email,
+          liens: {
+            'lancer-diagnostic': {
+              url: '/api/diagnostic',
+              methode: 'POST',
+            },
+            'afficher-tableau-de-bord': {
+              methode: 'GET',
+              url: '/api/mon-espace/tableau-de-bord',
+            },
+            'modifier-mot-de-passe': {
+              url: '/api/profil/modifier-mot-de-passe',
+              methode: 'POST',
+            },
+            'se-deconnecter': {
+              url: '/api/token',
+              methode: 'DELETE',
+              typeAppel: 'API',
+            },
+          },
+        });
+      });
+    });
+
     it("ne peut pas accéder au profil si l'aidant n'existe pas", async () => {
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -117,7 +210,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
       expect(reponse.statusCode).toBe(404);
       expect(await reponse.json()).toStrictEqual({
-        message: "Le profil Aidant demandé n'existe pas.",
+        message: 'Utilisateur non trouvé.',
       });
     });
   });
@@ -138,15 +231,12 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         });
       aidantConnecte = aidant;
       await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
         utilisateur.identifiant
       );
     });
 
     it("S'assure qu'un utilisateur connecté avec Proconnect ne peut pas modifier son mot de passe", async () => {
-      utilitairesCookies.jwtPayload = () =>
-        unConstructeurDeJwtPayload().proConnect().construis();
-
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
