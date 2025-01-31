@@ -1312,8 +1312,28 @@ describe('Entrepot Utilisateurs MAC', () => {
   });
 
   describe('Recherche par mail', () => {
+    const email = 'jean.dupont@email.com';
+    const nomPrenom = 'Jean Dupont';
+    const fauxServiceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [email, 'ccc'],
+        [nomPrenom, 'ddd'],
+      ])
+    );
+    const entrepotUtilisateurMACPostgres = new EntrepotUtilisateurMACPostgres(
+      fauxServiceDeChiffrement
+    );
+    const entrepotAidantPostgres = new EntrepotAidantPostgres(
+      fauxServiceDeChiffrement
+    );
+    const entrepotUtilisateurInscritPostgres =
+      new EntrepotUtilisateurInscritPostgres(fauxServiceDeChiffrement);
+
     it('Retourne un utilisateur au profil Aidant', async () => {
-      const aidant = unAidant().construis();
+      const aidant = unAidant()
+        .avecUnEmail(email)
+        .avecUnNomPrenom(nomPrenom)
+        .construis();
       await entrepotAidantPostgres.persiste(aidant);
 
       const utilisateurMAC =
@@ -1326,11 +1346,14 @@ describe('Entrepot Utilisateurs MAC', () => {
         email: aidant.email,
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
-      expect(serviceDeChiffrementClair.dechiffreAEteAppele()).toBe(true);
     });
 
     it('Retourne un utilisateur au profil Gendarme', async () => {
-      const aidant = unAidant().avecUnProfilGendarme().construis();
+      const aidant = unAidant()
+        .avecUnEmail(email)
+        .avecUnNomPrenom(nomPrenom)
+        .avecUnProfilGendarme()
+        .construis();
       await entrepotAidantPostgres.persiste(aidant);
 
       const utilisateurMAC =
@@ -1344,8 +1367,12 @@ describe('Entrepot Utilisateurs MAC', () => {
         dateValidationCGU: aidant.dateSignatureCGU!,
       });
     });
+
     it('Retourne un utilisateur au profil Utilisateur Inscrit', async () => {
-      const utilisateurInscrit = unUtilisateurInscrit().construis();
+      const utilisateurInscrit = unUtilisateurInscrit()
+        .avecUnEmail(email)
+        .avecUnNomPrenom(nomPrenom)
+        .construis();
       await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
 
       const utilisateurMAC =
@@ -1364,7 +1391,9 @@ describe('Entrepot Utilisateurs MAC', () => {
 
     it("Renvoie une erreur AggregatNonTrouvé si l'utilisateur n'existe pas", async () => {
       expect(
-        entrepotUtilisateurMACPostgres.rechercheParMail(crypto.randomUUID())
+        entrepotUtilisateurMACPostgres.rechercheParMail(
+          'utilisateur-inconnu@email.com'
+        )
       ).rejects.toThrowError(new AggregatNonTrouve('utilisateur MAC'));
     });
 
@@ -1372,6 +1401,8 @@ describe('Entrepot Utilisateurs MAC', () => {
       const dateValidationCGU = new Date(Date.parse('2025-02-04T14:37:22'));
       const utilisateurInscrit = unUtilisateurInscrit()
         .avecUneDateDeSignatureDeCGU(dateValidationCGU)
+        .avecUnEmail(email)
+        .avecUnNomPrenom(nomPrenom)
         .construis();
       await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
 

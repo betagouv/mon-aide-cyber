@@ -23,12 +23,44 @@ export class EntrepotUtilisateurMACPostgres
   extends EntrepotPostgres<UtilisateurMAC, UtilisateurMACDTO>
   implements EntrepotUtilisateursMAC
 {
+  private readonly REQUETE_UTILISATEUR_MAC = `
+      SELECT id,
+             type,
+             donnees ->> 'siret' as siret,
+             donnees ->> 'dateSignatureCGU' as date_validation_cgu,
+             donnees ->> 'nomPrenom' as nom_prenom,
+             donnees ->> 'email' as email
+      FROM utilisateurs_mac
+  `;
+
   constructor(private readonly serviceDeChiffrement: ServiceDeChiffrement) {
     super();
   }
+
   rechercheParMail(email: string): Promise<UtilisateurMAC> {
-    const critere = `WHERE donnees ->> 'email' = ?`;
-    return this.rechercheParCritere(critere, email);
+    return this.tous().then((utilisateurs) => {
+      const utilisateursTrouves = utilisateurs.filter(
+        (utilisateur) => utilisateur.email === email
+      );
+      if (utilisateursTrouves.length > 0) {
+        return utilisateursTrouves[0];
+      }
+      throw new AggregatNonTrouve('utilisateur MAC');
+    });
+  }
+
+  async tous(): Promise<UtilisateurMAC[]> {
+    return this.knex
+      .raw(this.REQUETE_UTILISATEUR_MAC)
+      .then(({ rows }: { rows: UtilisateurMACDTO[] }) => {
+        return rows;
+      })
+      .then((dtos) => {
+        if (!dtos) {
+          throw new AggregatNonTrouve('utilisateur MAC');
+        }
+        return dtos.map((dto) => this.deDTOAEntite(dto));
+      });
   }
 
   rechercheParIdentifiant(identifiant: crypto.UUID): Promise<UtilisateurMAC> {
@@ -39,8 +71,8 @@ export class EntrepotUtilisateurMACPostgres
     return this.knex
       .raw(
         `
-        SELECT id, type, donnees ->> 'siret' as siret, donnees ->> 'dateSignatureCGU' as date_validation_cgu, donnees ->> 'nomPrenom' as nom_prenom, donnees ->> 'email' as email FROM utilisateurs_mac ${critere}
-      `,
+            ${this.REQUETE_UTILISATEUR_MAC} ${critere}
+        `,
         [parametre]
       )
       .then(({ rows }: { rows: UtilisateurMACDTO[] }) => {
@@ -71,14 +103,17 @@ export class EntrepotUtilisateurMACPostgres
       }),
     };
   }
+
   protected champsAMettreAJour(
     _entiteDTO: UtilisateurMACDTO
   ): Partial<UtilisateurMACDTO> {
     throw new Error('Method not implemented.');
   }
+
   protected nomTable(): string {
-    throw new Error('Method not implemented.');
+    return 'utilisateurs_mac';
   }
+
   protected deEntiteADTO(_entite: UtilisateurMAC): UtilisateurMACDTO {
     throw new Error('Method not implemented.');
   }
