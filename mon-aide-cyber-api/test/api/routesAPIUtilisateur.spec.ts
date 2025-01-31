@@ -693,6 +693,20 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       );
 
       expect(reponse.statusCode).toBe(404);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
+        liens: {
+          'se-deconnecter': {
+            methode: 'DELETE',
+            url: '/api/token',
+            typeAppel: 'API',
+          },
+          'valider-signature-cgu': {
+            methode: 'POST',
+            url: '/api/utilisateur/valider-signature-cgu',
+          },
+        },
+        message: 'Erreur lors de la validation des CGU.',
+      });
     });
 
     describe('Dans le cas d’un Aidant', () => {

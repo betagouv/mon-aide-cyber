@@ -15,11 +15,13 @@ import { ErreurReinitialisationMotDePasse } from '../../authentification/Service
 import {
   ErreurDemandeReinitialisationMotDePasse,
   ErreurUtilisateurNonTrouve,
+  ErreurValidationCGU,
 } from '../routesAPIUtilisateur';
 import { ErreurProConnectApresAuthentification } from '../pro-connect/routeProConnect';
 import { ErreurRequeteHTTP } from '../recherche-entreprise/routesAPIRechercheEntreprise';
 
 import { ErreurAidantNonTrouve } from '../../espace-utilisateur-inscrit/ServiceUtilisateurInscritMAC';
+import { RequeteUtilisateur } from '../routesAPI';
 
 const HTTP_ACCEPTE = 202;
 const HTTP_MAUVAISE_REQUETE = 400;
@@ -240,6 +242,28 @@ const erreursGerees: Map<
       consignateur.consigne(erreur);
       construisReponse(reponse, HTTP_MAUVAISE_REQUETE, {
         message: erreur.message,
+      });
+    },
+  ],
+  [
+    'ErreurValidationCGU',
+    (
+      erreur: ErreurMAC<ErreurValidationCGU>,
+      requete: RequeteUtilisateur,
+      consignateur,
+      reponse
+    ) => {
+      consignateur.consigne(
+        new Error(
+          `${erreur.message} - ID utilisateur ${requete.identifiantUtilisateurCourant}`
+        )
+      );
+      construisReponse(reponse, HTTP_NON_TROUVE, {
+        message: erreur.message,
+        ...constructeurActionsHATEOAS()
+          .pour({ contexte: 'valider-signature-cgu' })
+          .pour({ contexte: 'se-deconnecter' })
+          .construis(),
       });
     },
   ],

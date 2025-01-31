@@ -98,6 +98,12 @@ export class ErreurUtilisateurNonTrouve extends Error {
   }
 }
 
+export class ErreurValidationCGU extends Error {
+  constructor() {
+    super('Erreur lors de la validation des CGU.');
+  }
+}
+
 export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
@@ -266,7 +272,8 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       .withMessage('Veuillez valider les CGU'),
     async (
       requete: RequeteUtilisateur,
-      reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>
+      reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>,
+      suite: NextFunction
     ) => {
       const resultatsValidation: Result<FieldValidationError> =
         validationResult(requete) as Result<FieldValidationError>;
@@ -286,7 +293,9 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         .rechercheParIdentifiant(identifiantUtilisateur)
         .then((utilisateur) => {
           if (!utilisateur) {
-            return reponse.status(404).send();
+            return suite(
+              ErreurMAC.cree('Valide les CGU', new ErreurValidationCGU())
+            );
           }
           if (PROFILS_AIDANT.includes(utilisateur.profil)) {
             return unServiceAidant(entrepots.aidants())

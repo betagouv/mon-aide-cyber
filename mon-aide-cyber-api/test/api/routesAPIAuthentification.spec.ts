@@ -97,6 +97,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           expect(cookieRecu[3]).toStrictEqual('samesite=strict');
           expect(cookieRecu[4]).toStrictEqual('httponly');
         });
+
         it('Redirige vers /mon-espace/mon-utilisation-du-service', async () => {
           const constructeurUtilisateur = unUtilisateur()
             .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
@@ -294,6 +295,55 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             'valider-signature-cgu': {
               methode: 'POST',
               url: '/api/utilisateur/valider-signature-cgu',
+            },
+            'se-deconnecter': {
+              methode: 'DELETE',
+              typeAppel: 'API',
+              url: '/api/token',
+            },
+          },
+        });
+      });
+
+      it('Demande la validation du profil si les CGU sont antérieures à la date du nouveau parcours', async () => {
+        const constructeurUtilisateur = unUtilisateur()
+          .avecUnIdentifiantDeConnexion('jean.dujardin@email.com')
+          .avecUnMotDePasse('mon_Mot-D3p4sse')
+          .avecUnNomPrenom('Jean Dujardin');
+        await unCompteAidantRelieAUnCompteUtilisateur({
+          constructeurAidant: unAidant().cguValideesLe(
+            new Date(Date.parse('2024-12-24T14:32:12'))
+          ),
+          constructeurUtilisateur,
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        });
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/token',
+          {
+            identifiant: 'jean.dujardin@email.com',
+            motDePasse: 'mon_Mot-D3p4sse',
+          }
+        );
+
+        expect(reponse.statusCode).toBe(201);
+        expect(await reponse.json()).toStrictEqual({
+          nomPrenom: 'Jean Dujardin',
+          liens: {
+            'valider-profil-utilisateur-inscrit': {
+              methode: 'POST',
+              url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
+            },
+            'rechercher-entreprise': {
+              methode: 'GET',
+              url: '/api/recherche-entreprise',
+            },
+            'valider-profil-aidant': {
+              methode: 'POST',
+              url: '/api/utilisateur/valider-profil-aidant',
             },
             'se-deconnecter': {
               methode: 'DELETE',
