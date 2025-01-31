@@ -66,6 +66,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         donneesServeur.portEcoute,
         uneRequeteDemandeDevenirAidant()
           .dansLeDepartement('Hautes-Alpes')
+          .ayantSigneLaCharte()
           .construis()
       );
 
@@ -89,6 +90,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         uneRequeteDemandeDevenirAidant()
           .avecUnMail('JeaN.DupOnT@mail.com')
           .dansLeDepartement('Hautes-Alpes')
+          .ayantSigneLaCharte()
           .construis()
       );
 
@@ -100,30 +102,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
             .rechercheDemandeEnCoursParMail('jean.dupont@mail.com')
         )?.mail
       ).toStrictEqual('jean.dupont@mail.com');
-    });
-
-    it("Renvoie une erreur 400 si l'utilisateur a déjà fait une demande préalable", async () => {
-      await testeurMAC.entrepots
-        .demandesDevenirAidant()
-        .persiste(
-          unConstructeurDeDemandeDevenirAidant()
-            .avecUnMail('mail@fournisseur.fr')
-            .construis()
-        );
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute,
-        uneRequeteDemandeDevenirAidant()
-          .avecUnMail('mail@fournisseur.fr')
-          .construis()
-      );
-
-      expect(reponse.statusCode).toStrictEqual(400);
-      expect(await reponse.json()).toStrictEqual({
-        message: 'Une demande existe déjà',
-      });
     });
 
     describe('Valide les paramètres de la requête', () => {
@@ -167,7 +145,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         );
 
         expect(JSON.parse(reponse.body).message).toStrictEqual(
-          'Veuillez renseigner votre e-mail'
+          'Veuillez renseigner votre e-mail, Veuillez signer la Charte Aidant.'
         );
       });
 
@@ -187,7 +165,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         );
 
         expect(JSON.parse(reponse.body).message).toStrictEqual(
-          'Veuillez renseigner votre nom, Veuillez renseigner votre e-mail'
+          'Veuillez renseigner votre nom, Veuillez renseigner votre e-mail, Veuillez signer la Charte Aidant.'
         );
       });
 

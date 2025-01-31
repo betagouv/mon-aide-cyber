@@ -30,19 +30,10 @@ export const demandeDevenirAidant: () => ContexteSpecifique & {
   };
 } = () => ({
   'demande-devenir-aidant': {
-    ...(estDateNouveauParcoursDemandeDevenirAidant()
-      ? {
-          'nouvelle-demande-devenir-aidant': {
-            url: '/api/demandes/devenir-aidant',
-            methode: 'GET',
-          },
-        }
-      : {
-          'demande-devenir-aidant': {
-            url: '/api/demandes/devenir-aidant',
-            methode: 'GET',
-          },
-        }),
+    'nouvelle-demande-devenir-aidant': {
+      url: '/api/demandes/devenir-aidant',
+      methode: 'GET',
+    },
     'envoyer-demande-devenir-aidant': {
       url: '/api/demandes/devenir-aidant',
       methode: 'POST',

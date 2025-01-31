@@ -40,7 +40,7 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
       .lis(saga.idDemande)
       .then(async (demande) => {
         const nomPrenom = `${demande.prenom} ${demande.nom}`;
-        let identifiant = crypto.randomUUID();
+        let identifiant = adaptateurUUID.genereUUID();
         if (estAvantDateNouveauParcours()) {
           const utilisateurCree = await this.busCommande.publie<
             CommandeCreeUtilisateur,
