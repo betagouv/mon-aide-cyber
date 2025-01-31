@@ -88,8 +88,8 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
-  avecUnEmail(identifiantConnexion: string): ConstructeurAidant {
-    this.email = identifiantConnexion;
+  avecUnEmail(email: string): ConstructeurAidant {
+    this.email = email;
     return this;
   }
 
@@ -211,6 +211,11 @@ class ConstructeurUtilisateurInscrit
 
   sansValidationDeCGU(): ConstructeurUtilisateurInscrit {
     this.dateSignatureCGU = undefined;
+    return this;
+  }
+
+  avecUnEmail(email: string): ConstructeurUtilisateurInscrit {
+    this.email = email;
     return this;
   }
 
