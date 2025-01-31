@@ -125,6 +125,7 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
             redirection = '/mon-espace/valide-signature-cgu';
           }
           if (
+            !estGendarme &&
             utilisateur.profil !== 'UtilisateurInscrit' &&
             utilisateur.doitValiderLesCGU &&
             estDateNouveauParcoursDemandeDevenirAidant()
