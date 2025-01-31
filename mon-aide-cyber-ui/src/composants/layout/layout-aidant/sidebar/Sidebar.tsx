@@ -22,7 +22,7 @@ export const Sidebar = () => {
   return (
     <aside className="barre-navigation-laterale mode-fonce">
       <div className="barre-navigation-laterale-sticky">
-        <TypographieH6>Mon espace Aidant</TypographieH6>
+        <TypographieH6>Mon espace</TypographieH6>
         <Separateur />
         <section>
           <MenuNavigation

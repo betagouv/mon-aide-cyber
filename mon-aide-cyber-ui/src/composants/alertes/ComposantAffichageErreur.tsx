@@ -40,7 +40,7 @@ export const ComposantAffichageErreur = ({
 
   useEffect(() => {
     if (utilisateur) {
-      setTitreLien('Espace Aidant - MonAideCyber');
+      setTitreLien('Mon espace - MonAideCyber');
       setRoute(`${ROUTE_MON_ESPACE}/tableau-de-bord`);
     }
   }, [utilisateur]);

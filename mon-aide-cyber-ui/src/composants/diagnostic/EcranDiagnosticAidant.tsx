@@ -522,8 +522,8 @@ export const ActionsHeaderDiagnosticAidant = ({
         <section>
           <p>
             Vous vous apprêtez à quitter le diagnostic et à revenir à votre
-            espace Aidant. Votre progression est enregistrée, vous pourrez
-            reprendre et modifier le diagnostic ultérieurement.
+            espace. Votre progression est enregistrée, vous pourrez reprendre et
+            modifier le diagnostic ultérieurement.
           </p>
           <div className="fr-pt-4w">
             <Button
