@@ -12,6 +12,7 @@ import {
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useErrorBoundary } from 'react-error-boundary';
+import { TypographieH5 } from '../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 
 export type Diagnostic = {
   dateCreation: string;
@@ -78,24 +79,24 @@ export const EcranDiagnostics = () => {
             />
           </div>
           <div className="w-100">
-            {/*
-            <div className=" tuile-tdb">
-              <TypographieH5>
-                Créer un diagnostic de test <i>(à venir)</i>
-              </TypographieH5>
+            <div className="tuile-tdb">
+              <TypographieH5>Réaliser un diagnostic test</TypographieH5>
               <p>
-                Vous souhaitez vous entraîner ? Créez un diagnostic de test, qui
-                ne sera pas comptabilisé.
+                Vous souhaitez vous entraîner ?
+                <br />
+                Créez un diagnostic de test, qui ne sera pas comptabilisé dans
+                vos diagnostics.
               </p>
               <button
                 type="button"
-                disabled={true}
                 className="bouton-mac bouton-mac-primaire"
+                onClick={() =>
+                  window.location.replace('/diagnostic-libre-acces')
+                }
               >
                 Créer un diagnostic de test
               </button>
             </div>
-            */}
           </div>
         </div>
       </section>
