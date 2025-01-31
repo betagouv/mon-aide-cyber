@@ -6,7 +6,7 @@ export const HeaderEspaceAidant = () => (
   <HeaderAidant
     lienMAC={
       <LienMAC
-        titre="Espace Aidant - MonAideCyber"
+        titre="Mon espace - MonAideCyber"
         route={`${ROUTE_MON_ESPACE}/tableau-de-bord`}
       />
     }

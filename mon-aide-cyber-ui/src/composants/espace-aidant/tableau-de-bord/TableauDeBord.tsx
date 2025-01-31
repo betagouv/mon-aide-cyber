@@ -12,7 +12,7 @@ export const TableauDeBord = () => {
           }}
         >
           <TypographieH2>Bonjour Martin !</TypographieH2>
-          <p>Bienvenue sur votre espace Aidant MonAideCyber</p>
+          <p>Bienvenue sur votre espace MonAideCyber</p>
           <div className="grille-premieres-tuiles">
             <div>
               <img
