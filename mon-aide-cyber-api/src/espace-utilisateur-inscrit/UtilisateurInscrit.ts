@@ -2,6 +2,7 @@ import { Aggregat } from '../domaine/Aggregat';
 import { Entrepot } from '../domaine/Entrepot';
 import crypto from 'crypto';
 import { AdaptateurRelations } from '../relation/AdaptateurRelations';
+import { BusEvenement } from '../domaine/BusEvenement';
 
 export type EntiteUtilisateurInscrit = {
   siret?: string;
@@ -21,6 +22,7 @@ export interface ServiceUtilisateurInscrit {
 
   valideProfil(
     identifiantUtilisateurInscrit: crypto.UUID,
-    adaptateurDeRelations: AdaptateurRelations
+    adaptateurDeRelations: AdaptateurRelations,
+    busEvenement: BusEvenement
   ): Promise<void>;
 }

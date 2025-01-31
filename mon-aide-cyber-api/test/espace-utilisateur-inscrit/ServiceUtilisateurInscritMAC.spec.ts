@@ -7,11 +7,15 @@ import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
 import { expect } from 'vitest';
 import { UtilisateurInscrit } from '../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
-import { unServiceUtilisateurInscrit } from '../../src/espace-utilisateur-inscrit/ServiceUtilisateurInscritMAC';
+import {
+  AidantMigreEnUtilisateurInscrit,
+  unServiceUtilisateurInscrit,
+} from '../../src/espace-utilisateur-inscrit/ServiceUtilisateurInscritMAC';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
+import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 
 describe('ServiceUtilisateurInscrit', () => {
   const dateValidationCGU = new Date(Date.parse('2024-12-22T13:41:24'));
@@ -29,7 +33,11 @@ describe('ServiceUtilisateurInscrit', () => {
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
       unServiceAidant(entrepotAidant)
-    ).valideProfil(aidant.identifiant, new AdaptateurRelationsMAC());
+    ).valideProfil(
+      aidant.identifiant,
+      new AdaptateurRelationsMAC(),
+      new BusEvenementDeTest()
+    );
 
     const utilisateurInscrit = await entrepotUtilisateurInscrit.lis(
       aidant.identifiant
@@ -58,7 +66,11 @@ describe('ServiceUtilisateurInscrit', () => {
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
       unServiceAidant(entrepotAidant)
-    ).valideProfil(aidant.identifiant, adaptateurRelations);
+    ).valideProfil(
+      aidant.identifiant,
+      adaptateurRelations,
+      new BusEvenementDeTest()
+    );
 
     expect(
       await adaptateurRelations.relationExiste(
@@ -70,5 +82,43 @@ describe('ServiceUtilisateurInscrit', () => {
         }
       )
     ).toBe(true);
+  });
+
+  it("Publie l'événement AIDANT_MIGRE_EN_UTILISATEUR_INSCRIT", async () => {
+    const aidant = unAidant().cguValideesLe(dateValidationCGU).construis();
+    const entrepotAidant = new EntrepotAidantMemoire();
+    const entrepotUtilisateurInscrit = new EntrepotUtilisateurInscritMemoire();
+    await entrepotAidant.persiste(aidant);
+    const busEvenement = new BusEvenementDeTest();
+
+    await unServiceUtilisateurInscrit(
+      entrepotUtilisateurInscrit,
+      unServiceAidant(entrepotAidant)
+    ).valideProfil(
+      aidant.identifiant,
+      new AdaptateurRelationsMAC(),
+      busEvenement
+    );
+
+    expect(
+      busEvenement.evenementRecu
+    ).toStrictEqual<AidantMigreEnUtilisateurInscrit>({
+      identifiant: expect.any(String),
+      type: 'AIDANT_MIGRE_EN_UTILISATEUR_INSCRIT',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        identifiantUtilisateur: aidant.identifiant,
+      },
+    });
+    expect(
+      busEvenement.consommateursTestes.get(
+        'AIDANT_MIGRE_EN_UTILISATEUR_INSCRIT'
+      )?.[0].evenementConsomme
+    ).toStrictEqual<AidantMigreEnUtilisateurInscrit>({
+      type: 'AIDANT_MIGRE_EN_UTILISATEUR_INSCRIT',
+      date: FournisseurHorloge.maintenant(),
+      corps: { identifiantUtilisateur: aidant.identifiant },
+      identifiant: expect.any(String),
+    });
   });
 });

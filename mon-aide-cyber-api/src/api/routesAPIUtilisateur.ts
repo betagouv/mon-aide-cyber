@@ -401,7 +401,8 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       )
         .valideProfil(
           requete.identifiantUtilisateurCourant!,
-          adaptateurRelations
+          adaptateurRelations,
+          busEvenement
         )
         .then(() =>
           reponse.status(200).json({

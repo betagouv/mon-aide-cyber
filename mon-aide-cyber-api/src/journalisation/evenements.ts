@@ -70,6 +70,8 @@ export const diagnosticLibreAccesLance = consommateurEvenement();
 
 export const utilisateurInscritCree = consommateurEvenement();
 
+export const aidantMigreEnUtilisateurInscrit = consommateurEvenement();
+
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E
 ): Publication => {
