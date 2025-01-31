@@ -150,7 +150,7 @@ describe("Gestionnaire d'erreur", () => {
       expect(corpsRecu).toStrictEqual({
         message: "L'accès à la ressource est interdit.",
         liens: {
-          'finalise-creation-espace-aidant': {
+          'finalise-creation-nouvel-espace-aidant': {
             url: '/api/demandes/devenir-aidant/creation-espace-aidant',
             methode: 'POST',
           },

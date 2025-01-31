@@ -39,7 +39,9 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
   });
 
   it('Crée un compte utilisateur', async () => {
-    FournisseurHorlogeDeTest.initialise(new Date());
+    FournisseurHorlogeDeTest.initialise(
+      new Date(Date.parse('2024-11-01T22:34:26'))
+    );
     const demande = unConstructeurDeDemandeDevenirAidant()
       .avecUnMail('jean.dupont@email.com')
       .construis();

@@ -104,7 +104,10 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           await unCompteUtilisateurInscritConnecteViaProConnect({
             entrepotUtilisateurInscrit:
               testeurMAC.entrepots.utilisateursInscrits(),
-            constructeurUtilisateur: unUtilisateurInscrit(),
+            constructeurUtilisateur:
+              unUtilisateurInscrit().avecUneDateDeSignatureDeCGU(
+                new Date(Date.parse('2025-02-02T12:32:24'))
+              ),
             adaptateurDeVerificationDeSession,
           });
 
@@ -277,7 +280,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       });
     });
 
-    it('Retourne l’action valider signature CGU si l’utilisateur INSCRIT proconnect ne les a pas signées', async () => {
+    it('Retourne l’action valider signature CGU si l’utilisateur Inscrit proconnect ne les a pas signées', async () => {
       const utilisateur = await unCompteUtilisateurInscritConnecteViaProConnect(
         {
           entrepotUtilisateurInscrit:
@@ -315,7 +318,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
             url: '/api/demandes/devenir-aidant',
             methode: 'POST',
           },
-          'demande-devenir-aidant': {
+          'nouvelle-demande-devenir-aidant': {
             url: '/api/demandes/devenir-aidant',
             methode: 'GET',
           },
