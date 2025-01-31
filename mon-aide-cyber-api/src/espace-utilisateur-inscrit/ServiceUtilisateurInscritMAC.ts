@@ -8,6 +8,8 @@ import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge
 import { ServiceAidant } from '../espace-aidant/ServiceAidant';
 import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 import { unTupleUtilisateurInscritInitieDiagnostic } from '../diagnostic/tuples';
+import { BusEvenement, Evenement } from '../domaine/BusEvenement';
+import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 
 export class ErreurAidantNonTrouve extends Error {
   constructor() {
@@ -34,7 +36,8 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
 
   valideProfil(
     identifiantUtilisateurInscrit: crypto.UUID,
-    adaptateurDeRelations: AdaptateurRelations
+    adaptateurDeRelations: AdaptateurRelations,
+    busEvenement: BusEvenement
   ): Promise<void> {
     return this.serviceAidant
       .parIdentifiant(identifiantUtilisateurInscrit)
@@ -66,11 +69,25 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
                   return precedent;
                 }, [] as Promise<void>[]);
                 return Promise.all(tuples).then(() => Promise.resolve());
-              });
+              })
+              .then(() =>
+                busEvenement.publie<AidantMigreEnUtilisateurInscrit>({
+                  identifiant: adaptateurUUID.genereUUID(),
+                  type: 'AIDANT_MIGRE_EN_UTILISATEUR_INSCRIT',
+                  date: FournisseurHorloge.maintenant(),
+                  corps: {
+                    identifiantUtilisateur: aidant.identifiant,
+                  },
+                })
+              );
           });
       });
   }
 }
+
+export type AidantMigreEnUtilisateurInscrit = Evenement<{
+  identifiantUtilisateur: crypto.UUID;
+}>;
 
 export const unServiceUtilisateurInscrit = (
   entrepotUtilisateurInscrit: EntrepotUtilisateurInscrit,

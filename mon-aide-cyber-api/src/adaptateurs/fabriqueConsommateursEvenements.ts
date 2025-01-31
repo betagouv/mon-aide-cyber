@@ -1,5 +1,6 @@
 import {
   aidantCree,
+  aidantMigreEnUtilisateurInscrit,
   aideCree,
   aideViaSollicitationAidantCree,
   demandeDevenirAidantCree,
@@ -121,6 +122,10 @@ export const fabriqueConsommateursEvenements = (
     [
       'UTILISATEUR_INSCRIT_CREE',
       [utilisateurInscritCree(entrepotJournalisation)],
+    ],
+    [
+      'AIDANT_MIGRE_EN_UTILISATEUR_INSCRIT',
+      [aidantMigreEnUtilisateurInscrit(entrepotJournalisation)],
     ],
   ]);
 };
