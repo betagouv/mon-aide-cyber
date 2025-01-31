@@ -185,7 +185,7 @@ export const CreationEspaceAidant: Story = {
       });
 
       await expect(
-        canvas.getByText(/votre espace Aidant est disponible !/i)
+        await canvas.findByText(/votre espace Aidant est disponible !/i)
       ).toBeInTheDocument();
     });
   },
