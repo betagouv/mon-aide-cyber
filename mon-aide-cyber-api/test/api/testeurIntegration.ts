@@ -3,7 +3,6 @@ import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentie
 import { AdaptateurTranscripteurDeTest } from '../adaptateurs/adaptateurTranscripteur';
 import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
 import { Express } from 'express';
-import { fakerFR } from '@faker-js/faker';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
@@ -28,6 +27,8 @@ import { AdaptateurDeVerificationDuTypeDeRelationDeTest } from '../adaptateurs/A
 import { AdaptateurProConnect } from '../../src/adaptateurs/pro-connect/adaptateurProConnect';
 import { AdaptateurProConnectDeTest } from '../adaptateurs/pro-connect/AdaptateurProConnectDeTest';
 import { AdaptateurDeRequeteHTTPMemoire } from '../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
+
+const PORT_DISPONIBLE = 0;
 
 class TesteurIntegrationMAC {
   private serveurDeTest:
@@ -108,7 +109,7 @@ class TesteurIntegrationMAC {
       adaptateurDeRequeteHTTP: this.adaptateurDeRequeteHTTP,
       estEnMaintenance: false,
     });
-    const portEcoute = fakerFR.number.int({ min: 10000, max: 20000 });
+    const portEcoute = PORT_DISPONIBLE;
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.serveurDeTest.ecoute(portEcoute, () => {});
     return { portEcoute: portEcoute, app: this.serveurDeTest.app };

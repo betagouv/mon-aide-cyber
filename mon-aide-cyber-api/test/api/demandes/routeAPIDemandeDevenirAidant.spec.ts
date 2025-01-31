@@ -18,7 +18,7 @@ import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvi
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
@@ -31,8 +31,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute
+        '/api/demandes/devenir-aidant'
       );
 
       expect(await reponse.json()).toStrictEqual({
@@ -51,7 +50,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
   });
 
   describe('Quand une requête POST est reçue /api/demandes/devenir-aidant', () => {
-    let donneesServeur: { portEcoute: number; app: Express };
+    let donneesServeur: { app: Express };
 
     beforeEach(() => {
       donneesServeur = testeurMAC.initialise();
@@ -63,7 +62,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         donneesServeur.app,
         'POST',
         '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute,
         uneRequeteDemandeDevenirAidant()
           .dansLeDepartement('Hautes-Alpes')
           .ayantSigneLaCharte()
@@ -86,7 +84,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         donneesServeur.app,
         'POST',
         '/api/demandes/devenir-aidant',
-        donneesServeur.portEcoute,
         uneRequeteDemandeDevenirAidant()
           .avecUnMail('JeaN.DupOnT@mail.com')
           .dansLeDepartement('Hautes-Alpes')
@@ -106,7 +103,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
 
     describe('Valide les paramètres de la requête', () => {
       const testeurMAC = testeurIntegration();
-      let donneesServeur: { portEcoute: number; app: Express };
+      let donneesServeur: { app: Express };
 
       beforeEach(() => {
         donneesServeur = testeurMAC.initialise();
@@ -121,7 +118,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant',
-          donneesServeur.portEcoute,
           corpsDeRequeteInvalide
         );
 
@@ -140,7 +136,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant',
-          donneesServeur.portEcoute,
           corpsDeRequeteAvecMailInvalide
         );
 
@@ -160,7 +155,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant',
-          donneesServeur.portEcoute,
           corpsDeRequeteAvecMailEtNomInvalides
         );
 
@@ -174,7 +168,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant',
-          donneesServeur.portEcoute,
           {
             nom: 'nom',
             prenom: 'prenom',
@@ -203,7 +196,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         donneesServeur.app,
         'POST',
         '/api/demandes/devenir-aidant/creation-espace-aidant',
-        donneesServeur.portEcoute,
         {
           motDePasse: 'mon_Mot-D3p4ssee',
           confirmationMotDePasse: 'mon_Mot-D3p4ssee',
@@ -259,7 +251,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         donneesServeur.app,
         'POST',
         '/api/demandes/devenir-aidant/creation-espace-aidant',
-        donneesServeur.portEcoute,
         {
           motDePasse: 'mon_Mot-D3p4ssee',
           confirmationMotDePasse: 'mon_Mot-D3p4ssee',
@@ -286,7 +277,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant/creation-espace-aidant',
-          donneesServeur.portEcoute,
           {
             motDePasse: 'mon_Mot-D3p4sse',
             confirmationMotDePasse: 'mon_Mot-D3p4sseeeeeee',
@@ -313,7 +303,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant/creation-espace-aidant',
-          donneesServeur.portEcoute,
           {
             motDePasse: 'mon_Mot-D3p4ssee',
             confirmationMotDePasse: 'mon_Mot-D3p4ssee',
@@ -353,7 +342,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
             donneesServeur.app,
             'POST',
             '/api/demandes/devenir-aidant/creation-espace-aidant',
-            donneesServeur.portEcoute,
             {
               motDePasse: 'mon_Mot-D3p4ssee',
               confirmationMotDePasse: 'mon_Mot-D3p4ssee',
@@ -388,7 +376,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
             donneesServeur.app,
             'POST',
             '/api/demandes/devenir-aidant/creation-espace-aidant',
-            donneesServeur.portEcoute,
             {
               motDePasse: 'mon_Mot-D3p4ssee',
               confirmationMotDePasse: 'mon_Mot-D3p4ssee',
@@ -423,7 +410,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
             donneesServeur.app,
             'POST',
             '/api/demandes/devenir-aidant/creation-espace-aidant',
-            donneesServeur.portEcoute,
             {
               motDePasse: 'mon_Mot-D3p4ssee',
               confirmationMotDePasse: 'mon_Mot-D3p4ssee',
@@ -444,7 +430,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
 
   describe('Dans le cadre de la mise en place des profils Aidants / Utilisateurs inscrits à partir du 31/01/2025', () => {
     const testeurMAC = testeurIntegration();
-    let donneesServeur: { portEcoute: number; app: Express };
+    let donneesServeur: { app: Express };
 
     beforeEach(() => {
       FournisseurHorlogeDeTest.initialise(
@@ -468,7 +454,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant',
-          donneesServeur.portEcoute,
           corpsDeRequete
         );
 
@@ -488,7 +473,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant',
-          donneesServeur.portEcoute,
           corpsDeRequete
         );
 
@@ -508,7 +492,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant',
-          donneesServeur.portEcoute,
           corpsDeRequete
         );
 
@@ -527,7 +510,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant',
-          donneesServeur.portEcoute,
           corpsDeRequete
         );
 
@@ -555,7 +537,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant/creation-espace-aidant',
-          donneesServeur.portEcoute,
           {
             token,
             cguSignees: true,
@@ -578,7 +559,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant/creation-espace-aidant',
-          donneesServeur.portEcoute,
           {
             token,
             cguSignees: true,
@@ -621,7 +601,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           donneesServeur.app,
           'POST',
           '/api/demandes/devenir-aidant/creation-espace-aidant',
-          donneesServeur.portEcoute,
           {
             token,
           }

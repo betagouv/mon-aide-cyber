@@ -40,7 +40,7 @@ const unConstructeurDeStatistiques = () => new ConstructeurDeStatistiques();
 
 describe('Le serveur MAC sur les routes /statistiques', () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     testeurMAC.entrepots = new EntrepotsMemoire();
@@ -64,8 +64,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/statistiques`,
-        donneesServeur.portEcoute
+        `/statistiques`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -87,8 +86,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/statistiques`,
-        donneesServeur.portEcoute
+        `/statistiques`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -108,8 +106,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/statistiques`,
-        donneesServeur.portEcoute
+        `/statistiques`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -131,8 +128,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/statistiques`,
-        donneesServeur.portEcoute
+        `/statistiques`
       );
 
       const corprDeReponse: ReponseStatistiques = await reponse.json();

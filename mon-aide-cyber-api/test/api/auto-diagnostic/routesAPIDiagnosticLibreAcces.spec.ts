@@ -30,7 +30,7 @@ import { add } from 'date-fns';
 
 describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     testeurMAC.adaptateurDeVerificationDeRelations.reinitialise();
@@ -50,8 +50,10 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
         donneesServeur.app,
         'POST',
         '/api/diagnostic-libre-acces',
-        donneesServeur.portEcoute,
-        { email: 'jean.dujardin@email.com', cguSignees: true }
+        {
+          email: 'jean.dujardin@email.com',
+          cguSignees: true,
+        }
       );
 
       expect(reponse.statusCode).toBe(201);
@@ -70,8 +72,10 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
         donneesServeur.app,
         'POST',
         '/api/diagnostic-libre-acces',
-        donneesServeur.portEcoute,
-        { email: 'jean.dupont@mail.com', cguSignees: true }
+        {
+          email: 'jean.dupont@mail.com',
+          cguSignees: true,
+        }
       );
 
       expect(
@@ -88,7 +92,6 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
           donneesServeur.app,
           'POST',
           '/api/diagnostic-libre-acces',
-          donneesServeur.portEcoute,
           { email: 'jean.dupont@mail.com' }
         );
 
@@ -122,8 +125,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
-        donneesServeur.portEcoute
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -146,8 +148,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic-libre-acces/id-inexistant`,
-        donneesServeur.portEcoute
+        `/api/diagnostic-libre-acces/id-inexistant`
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -167,8 +168,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic-libre-acces/${crypto.randomUUID()}`,
-        donneesServeur.portEcoute
+        `/api/diagnostic-libre-acces/${crypto.randomUUID()}`
       );
 
       expect(
@@ -187,8 +187,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
-        donneesServeur.portEcoute
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -227,7 +226,6 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
         donneesServeur.app,
         'PATCH',
         `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
-        donneesServeur.portEcoute,
         {
           chemin: 'contexte',
           identifiant: 'une-question-',
@@ -268,7 +266,6 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
         donneesServeur.app,
         'PATCH',
         `/api/diagnostic-libre-acces/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute,
         {
           chemin: 'contexte',
           identifiant: 'une-question-',
@@ -289,8 +286,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
       await executeRequete(
         donneesServeur.app,
         'PATCH',
-        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
-        donneesServeur.portEcoute
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`
       );
 
       expect(
@@ -309,8 +305,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'PATCH',
-        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
-        donneesServeur.portEcoute
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -351,8 +346,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic-libre-acces/${restitution.identifiant}/restitution`,
-        donneesServeur.portEcoute
+        `/api/diagnostic-libre-acces/${restitution.identifiant}/restitution`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -399,7 +393,6 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic-libre-acces/${restitution.identifiant}/restitution`,
-        donneesServeur.portEcoute,
         undefined,
         { accept: 'application/pdf' }
       );
@@ -413,8 +406,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic-libre-acces/${crypto.randomUUID()}/restitution`,
-        donneesServeur.portEcoute
+        `/api/diagnostic-libre-acces/${crypto.randomUUID()}/restitution`
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -430,8 +422,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic-libre-acces/${diagnostic.identifiant}/restitution`,
-        donneesServeur.portEcoute
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}/restitution`
       );
 
       expect(
@@ -450,8 +441,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic-libre-acces/${diagnostic.identifiant}/restitution`,
-        donneesServeur.portEcoute
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}/restitution`
       );
 
       expect(reponse.statusCode).toBe(404);

@@ -15,7 +15,7 @@ import {
 
 describe('Le serveur MAC sur les routes /api/aidant', () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
@@ -42,8 +42,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/aidant/preferences`,
-        donneesServeur.portEcoute
+        `/api/aidant/preferences`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -89,8 +88,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/aidant/preferences`,
-        donneesServeur.portEcoute
+        `/api/aidant/preferences`
       );
 
       expect((await reponse.json()).liens['se-deconnecter']).toStrictEqual({
@@ -118,8 +116,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/aidant/preferences`,
-        donneesServeur.portEcoute
+        `/api/aidant/preferences`
       );
 
       const reponsePreferences =
@@ -150,8 +147,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/aidant/preferences`,
-        donneesServeur.portEcoute
+        `/api/aidant/preferences`
       );
 
       const reponsePreferences =
@@ -185,8 +181,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/aidant/preferences`,
-        donneesServeur.portEcoute
+        `/api/aidant/preferences`
       );
 
       const reponsePreferences =
@@ -200,8 +195,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/aidant/preferences`,
-        donneesServeur.portEcoute
+        `/api/aidant/preferences`
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
@@ -213,8 +207,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/aidant/preferences`,
-        donneesServeur.portEcoute
+        `/api/aidant/preferences`
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -243,7 +236,6 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         donneesServeur.app,
         'PATCH',
         `/api/aidant/preferences`,
-        donneesServeur.portEcoute,
         {
           preferencesAidant: {
             secteursActivite: ['Administration', 'Transports'],
@@ -262,7 +254,6 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         donneesServeur.app,
         'PATCH',
         `/api/aidant/preferences`,
-        donneesServeur.portEcoute,
         {
           preferencesAidant: {
             typesEntites: ['Organisations publiques', 'Associations'],
@@ -280,7 +271,6 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
         donneesServeur.app,
         'PATCH',
         `/api/aidant/preferences`,
-        donneesServeur.portEcoute,
         {
           preferencesAidant: {
             typesEntites: ['Organisations publiques', 'Associations'],
@@ -310,7 +300,6 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
           donneesServeur.app,
           'PATCH',
           `/api/aidant/preferences`,
-          donneesServeur.portEcoute,
           {
             preferencesAidant: {
               secteursActivite: ['Inconnu', 'Inexistant'],
@@ -339,7 +328,6 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
           donneesServeur.app,
           'PATCH',
           `/api/aidant/preferences`,
-          donneesServeur.portEcoute,
           {
             preferencesAidant: {
               departements: ['Inconnu', 'Inexistant'],
@@ -368,7 +356,6 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
           donneesServeur.app,
           'PATCH',
           `/api/aidant/preferences`,
-          donneesServeur.portEcoute,
           {
             preferencesAidant: {
               typesEntites: ['Inconnu', 'Inexistant'],

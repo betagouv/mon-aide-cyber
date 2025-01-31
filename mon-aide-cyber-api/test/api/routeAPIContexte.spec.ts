@@ -12,7 +12,7 @@ import { unConstructeurDeJwtPayload } from '../constructeurs/constructeurJwtPayl
 
 describe('Route contexte', () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
@@ -26,8 +26,7 @@ describe('Route contexte', () => {
     const reponse = await executeRequete(
       donneesServeur.app,
       'GET',
-      `/api/contexte`,
-      donneesServeur.portEcoute
+      `/api/contexte`
     );
 
     expect(reponse.statusCode).toBe(200);
@@ -40,8 +39,7 @@ describe('Route contexte', () => {
     const reponse = await executeRequete(
       donneesServeur.app,
       'GET',
-      `/api/contexte?contexte=demande-devenir-aidant:finalise-creation-espace-aidant`,
-      donneesServeur.portEcoute
+      `/api/contexte?contexte=demande-devenir-aidant:finalise-creation-espace-aidant`
     );
 
     expect(reponse.statusCode).toBe(200);
@@ -57,7 +55,7 @@ describe('Route contexte', () => {
 
   describe('Dans le cas d’un Aidant avec espace ayant une session', () => {
     const testeurMAC = testeurIntegration();
-    let donneesServeur: { portEcoute: number; app: Express };
+    let donneesServeur: { app: Express };
 
     beforeEach(async () => {
       donneesServeur = testeurMAC.initialise();
@@ -75,8 +73,7 @@ describe('Route contexte', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/contexte`,
-        donneesServeur.portEcoute
+        `/api/contexte`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -94,8 +91,7 @@ describe('Route contexte', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/contexte?contexte=afficher-statistiques`,
-        donneesServeur.portEcoute
+        `/api/contexte?contexte=afficher-statistiques`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -132,8 +128,7 @@ describe('Route contexte', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          `/api/contexte`,
-          donneesServeur.portEcoute
+          `/api/contexte`
         );
 
         expect(reponse.statusCode).toBe(200);

@@ -8,7 +8,7 @@ import { departements } from '../../../src/gestion-demandes/departements';
 
 describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
@@ -26,7 +26,6 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           donneesServeur.app,
           'POST',
           '/api/demandes/etre-aide',
-          donneesServeur.portEcoute,
           {
             cguValidees: true,
             email: 'jean.dupont@aide.com',
@@ -46,14 +45,12 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
 
       it('Renvoie une erreur si la demande n’a pu aller au bout', async () => {
         const testeurMAC = testeurIntegration();
-        const donneesServeur: { portEcoute: number; app: Express } =
-          testeurMAC.initialise();
+        const donneesServeur: { app: Express } = testeurMAC.initialise();
         testeurMAC.adaptateurEnvoieMessage.envoie = () => Promise.reject();
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
           '/api/demandes/etre-aide',
-          donneesServeur.portEcoute,
           {
             cguValidees: true,
             email: 'jean.dupont@aide.com',
@@ -70,7 +67,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
 
       describe("En ce qui concerne les informations envoyées par l'Aidé", () => {
         const testeurMAC = testeurIntegration();
-        let donneesServeur: { portEcoute: number; app: Express };
+        let donneesServeur: { app: Express };
 
         beforeEach(() => {
           donneesServeur = testeurMAC.initialise();
@@ -82,7 +79,6 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             donneesServeur.app,
             'POST',
             '/api/demandes/etre-aide',
-            donneesServeur.portEcoute,
             {
               cguValidees: false,
               email: 'jean.dupont@aide.com',
@@ -108,7 +104,6 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             donneesServeur.app,
             'POST',
             '/api/demandes/etre-aide',
-            donneesServeur.portEcoute,
             {
               cguValidees: true,
               email: 'ceci-n-est-pas-un-email',
@@ -134,7 +129,6 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             donneesServeur.app,
             'POST',
             '/api/demandes/etre-aide',
-            donneesServeur.portEcoute,
             {
               cguValidees: true,
               email: 'jean.dupont@aide.com',
@@ -164,7 +158,6 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             donneesServeur.app,
             'POST',
             '/api/demandes/etre-aide',
-            donneesServeur.portEcoute,
             {
               cguValidees: true,
               email: 'jean.dupont@aide.com',
@@ -185,7 +178,6 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             donneesServeur.app,
             'POST',
             '/api/demandes/etre-aide',
-            donneesServeur.portEcoute,
             {
               cguValidees: true,
               email: 'jean.dupont@aide.com',
@@ -214,8 +206,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/api/demandes/etre-aide',
-          donneesServeur.portEcoute
+          '/api/demandes/etre-aide'
         );
 
         expect(reponse.statusCode).toBe(200);
@@ -231,8 +222,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/api/demandes/etre-aide',
-          donneesServeur.portEcoute
+          '/api/demandes/etre-aide'
         );
 
         expect((await reponse.json()).departements).toStrictEqual(

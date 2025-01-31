@@ -11,7 +11,7 @@ import { departements } from '../../../src/gestion-demandes/departements';
 
 describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   let testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     testeurMAC = testeurIntegration();
@@ -29,8 +29,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
     const reponse = await executeRequete(
       donneesServeur.app,
       'GET',
-      `/api/annuaire-aidants?departement=${aidant.departements[0].nom}`,
-      donneesServeur.portEcoute
+      `/api/annuaire-aidants?departement=${aidant.departements[0].nom}`
     );
 
     expect(reponse.statusCode).toBe(200);
@@ -45,8 +44,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
     const reponse = await executeRequete(
       donneesServeur.app,
       'GET',
-      '/api/annuaire-aidants',
-      donneesServeur.portEcoute
+      '/api/annuaire-aidants'
     );
 
     expect(reponse.statusCode).toBe(200);
@@ -75,8 +73,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
     const reponse = await executeRequete(
       donneesServeur.app,
       'GET',
-      '/api/annuaire-aidants?departement=Corrèze',
-      donneesServeur.portEcoute
+      '/api/annuaire-aidants?departement=Corrèze'
     );
 
     expect(reponse.statusCode).toBe(200);
@@ -98,8 +95,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/api/annuaire-aidants?departement=Gironde',
-          donneesServeur.portEcoute
+          '/api/annuaire-aidants?departement=Gironde'
         );
 
         expect(reponse.statusCode).toBe(200);
@@ -121,8 +117,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/api/annuaire-aidants?departement=Gironde',
-          donneesServeur.portEcoute
+          '/api/annuaire-aidants?departement=Gironde'
         );
 
         expect(reponse.statusCode).toBe(200);
@@ -154,8 +149,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/api/annuaire-aidants?departement=Collectivit%C3%A9%20de%20Wallis%20%26%20Futuna',
-          donneesServeur.portEcoute
+          '/api/annuaire-aidants?departement=Collectivit%C3%A9%20de%20Wallis%20%26%20Futuna'
         );
 
         expect(reponse.statusCode).toBe(200);
@@ -180,8 +174,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/api/annuaire-aidants?departement=Mauvais-département',
-          donneesServeur.portEcoute
+          '/api/annuaire-aidants?departement=Mauvais-département'
         );
 
         expect(reponse.statusCode).toBe(400);

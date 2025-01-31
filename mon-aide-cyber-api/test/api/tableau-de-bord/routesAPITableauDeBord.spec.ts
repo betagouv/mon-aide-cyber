@@ -14,7 +14,7 @@ import { ReponseDiagnostics } from '../../../src/api/tableau-de-bord/routesAPITa
 describe('le serveur MAC sur les routes /api/mon-espace/tableau-de-bord', () => {
   describe('quand une requête GET est reçue sur /', () => {
     const testeurMAC = testeurIntegration();
-    let donneesServeur: { portEcoute: number; app: Express };
+    let donneesServeur: { app: Express };
 
     beforeEach(() => {
       donneesServeur = testeurMAC.initialise();
@@ -39,8 +39,7 @@ describe('le serveur MAC sur les routes /api/mon-espace/tableau-de-bord', () => 
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/mon-espace/tableau-de-bord`,
-        donneesServeur.portEcoute
+        `/api/mon-espace/tableau-de-bord`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -79,8 +78,7 @@ describe('le serveur MAC sur les routes /api/mon-espace/tableau-de-bord', () => 
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/mon-espace/tableau-de-bord`,
-        donneesServeur.portEcoute
+        `/api/mon-espace/tableau-de-bord`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -124,8 +122,7 @@ describe('le serveur MAC sur les routes /api/mon-espace/tableau-de-bord', () => 
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/mon-espace/tableau-de-bord`,
-        donneesServeur.portEcoute
+        `/api/mon-espace/tableau-de-bord`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -175,8 +172,7 @@ describe('le serveur MAC sur les routes /api/mon-espace/tableau-de-bord', () => 
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/mon-espace/tableau-de-bord`,
-        donneesServeur.portEcoute
+        `/api/mon-espace/tableau-de-bord`
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(

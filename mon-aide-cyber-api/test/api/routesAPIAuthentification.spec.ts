@@ -15,7 +15,7 @@ import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurH
 
 describe("Le serveur MAC, sur les routes d'authentification", () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
@@ -54,7 +54,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             donneesServeur.app,
             'POST',
             '/api/token',
-            donneesServeur.portEcoute,
             {
               identifiant: 'martin.dupont@email.com',
               motDePasse: 'mon_Mot-D3p4sse',
@@ -116,7 +115,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             donneesServeur.app,
             'POST',
             '/api/token',
-            donneesServeur.portEcoute,
             {
               identifiant: 'martin.dupont@email.com',
               motDePasse: 'mon_Mot-D3p4sse',
@@ -170,7 +168,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             donneesServeur.app,
             'POST',
             '/api/token',
-            donneesServeur.portEcoute,
             {
               identifiant: 'martin.dupont@email.com',
               motDePasse: 'mon_Mot-D3p4sse',
@@ -208,7 +205,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           donneesServeur.app,
           'POST',
           '/api/token',
-          donneesServeur.portEcoute,
           {
             identifiant: 'existe@pas.fr',
             motDePasse: 'mon_Mot-D3p4sse',
@@ -237,7 +233,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           donneesServeur.app,
           'POST',
           '/api/token',
-          donneesServeur.portEcoute,
           {
             identifiant: 'MARTIN.DUPONT@EMAIL.COM',
             motDePasse: 'mon_Mot-D3p4sse',
@@ -286,7 +281,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           donneesServeur.app,
           'POST',
           '/api/token',
-          donneesServeur.portEcoute,
           {
             identifiant: 'jean.dujardin@email.com',
             motDePasse: 'mon_Mot-D3p4sse',
@@ -317,7 +311,6 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           donneesServeur.app,
           'DELETE',
           '/api/token',
-          donneesServeur.portEcoute,
           undefined,
           { 'set-cookie': [] }
         );

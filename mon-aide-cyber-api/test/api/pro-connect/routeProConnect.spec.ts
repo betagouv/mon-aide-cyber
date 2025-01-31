@@ -22,7 +22,7 @@ const enObjet = <T extends { [clef: string]: string }>(cookie: string): T =>
 
 describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
@@ -45,8 +45,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/pro-connect/connexion',
-        donneesServeur.portEcoute
+        '/pro-connect/connexion'
       );
 
       expect(reponse.statusCode).toStrictEqual(302);
@@ -59,12 +58,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
     });
 
     it('Le cookie de l’utilisateur est supprimé', async () => {
-      await executeRequete(
-        donneesServeur.app,
-        'GET',
-        '/pro-connect/connexion',
-        donneesServeur.portEcoute
-      );
+      await executeRequete(donneesServeur.app, 'GET', '/pro-connect/connexion');
 
       expect(testeurMAC.adaptateurDeGestionDeCookies.aSupprime).toBe(true);
     });
@@ -91,8 +85,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/pro-connect/apres-authentification',
-        donneesServeur.portEcoute
+        '/pro-connect/apres-authentification'
       );
 
       expect(reponse.statusCode).toStrictEqual(302);
@@ -114,8 +107,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/pro-connect/apres-authentification',
-        donneesServeur.portEcoute
+        '/pro-connect/apres-authentification'
       );
 
       expect(reponse.statusCode).toStrictEqual(401);
@@ -134,8 +126,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/pro-connect/apres-authentification',
-        donneesServeur.portEcoute
+        '/pro-connect/apres-authentification'
       );
 
       expect(reponse.statusCode).toStrictEqual(302);
@@ -170,8 +161,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/pro-connect/apres-authentification',
-          donneesServeur.portEcoute
+          '/pro-connect/apres-authentification'
         );
 
         expect(reponse.statusCode).toStrictEqual(302);
@@ -211,8 +201,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/pro-connect/apres-authentification',
-          donneesServeur.portEcoute
+          '/pro-connect/apres-authentification'
         );
 
         expect(reponse.statusCode).toStrictEqual(302);
@@ -240,8 +229,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         await executeRequete(
           donneesServeur.app,
           'GET',
-          '/pro-connect/apres-authentification',
-          donneesServeur.portEcoute
+          '/pro-connect/apres-authentification'
         );
 
         const aidantTrouve = await unServiceAidant(
@@ -268,8 +256,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/pro-connect/apres-authentification',
-          donneesServeur.portEcoute
+          '/pro-connect/apres-authentification'
         );
 
         expect(reponse.statusCode).toStrictEqual(302);
@@ -304,8 +291,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/pro-connect/apres-authentification',
-          donneesServeur.portEcoute
+          '/pro-connect/apres-authentification'
         );
 
         expect(reponse.headers['location']).toStrictEqual(
@@ -329,8 +315,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          '/pro-connect/apres-authentification',
-          donneesServeur.portEcoute
+          '/pro-connect/apres-authentification'
         );
 
         expect(reponse.headers['location']).toStrictEqual(
@@ -346,8 +331,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
           const reponse = await executeRequete(
             donneesServeur.app,
             'GET',
-            '/pro-connect/apres-authentification',
-            donneesServeur.portEcoute
+            '/pro-connect/apres-authentification'
           );
 
           expect(reponse.headers['location']).toStrictEqual(
@@ -373,8 +357,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/pro-connect/apres-deconnexion?state=etat',
-        donneesServeur.portEcoute
+        '/pro-connect/apres-deconnexion?state=etat'
       );
 
       const objet = enObjet<{ ProConnectInfo: string; [clef: string]: string }>(
@@ -392,8 +375,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/pro-connect/apres-deconnexion?state=etat2',
-        donneesServeur.portEcoute
+        '/pro-connect/apres-deconnexion?state=etat2'
       );
 
       expect(reponse.statusCode).toBe(401);
@@ -405,8 +387,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/pro-connect/apres-deconnexion?state=etat2',
-        donneesServeur.portEcoute
+        '/pro-connect/apres-deconnexion?state=etat2'
       );
 
       expect(reponse.statusCode).toBe(401);
@@ -433,8 +414,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/pro-connect/deconnexion',
-        donneesServeur.portEcoute
+        '/pro-connect/deconnexion'
       );
 
       expect(reponse.statusCode).toBe(302);
@@ -453,8 +433,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/pro-connect/deconnexion',
-        donneesServeur.portEcoute
+        '/pro-connect/deconnexion'
       );
 
       expect(reponse.statusCode).toBe(401);
@@ -471,8 +450,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/pro-connect/deconnexion',
-        donneesServeur.portEcoute
+        '/pro-connect/deconnexion'
       );
 
       expect(reponse.statusCode).toBe(401);

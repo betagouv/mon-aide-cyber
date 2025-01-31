@@ -31,7 +31,7 @@ import {
 
 describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
@@ -63,8 +63,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/${diagnostic.identifiant}`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/${diagnostic.identifiant}`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -91,8 +90,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/id-inexistant`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/id-inexistant`
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -106,8 +104,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`
       );
 
       expect(
@@ -119,8 +116,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
@@ -139,8 +135,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/${identifiantDiagnostic}`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/${identifiantDiagnostic}`
       );
 
       expect(
@@ -163,8 +158,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/${identifiantDiagnostic}`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/${identifiantDiagnostic}`
       );
 
       expect(
@@ -185,8 +179,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
-        '/api/diagnostic',
-        donneesServeur.portEcoute
+        '/api/diagnostic'
       );
 
       expect(reponse.statusCode).toBe(201);
@@ -203,16 +196,14 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       const reponseCreation = await executeRequete(
         donneesServeur.app,
         'POST',
-        '/api/diagnostic',
-        donneesServeur.portEcoute
+        '/api/diagnostic'
       );
       const lien = reponseCreation.headers['link'] as string;
 
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `${lien}`,
-        donneesServeur.portEcoute
+        `${lien}`
       );
 
       const diagnosticRetourne = await reponse.json();
@@ -227,8 +218,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
-        '/api/diagnostic',
-        donneesServeur.portEcoute
+        '/api/diagnostic'
       );
 
       expect(reponse.statusCode).toBe(500);
@@ -238,12 +228,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
     });
 
     it('La route est protégée', async () => {
-      await executeRequete(
-        donneesServeur.app,
-        'POST',
-        `/api/diagnostic/`,
-        donneesServeur.portEcoute
-      );
+      await executeRequete(donneesServeur.app, 'POST', `/api/diagnostic/`);
 
       expect(
         testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
@@ -251,12 +236,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
     });
 
     it('Vérifie que les CGU et la charte ont été signées', async () => {
-      await executeRequete(
-        donneesServeur.app,
-        'POST',
-        `/api/diagnostic/`,
-        donneesServeur.portEcoute
-      );
+      await executeRequete(donneesServeur.app, 'POST', `/api/diagnostic/`);
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
         true
@@ -287,7 +267,6 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'PATCH',
         `/api/diagnostic/${diagnostic.identifiant}`,
-        donneesServeur.portEcoute,
         {
           chemin: 'contexte',
           identifiant: 'une-question-',
@@ -328,7 +307,6 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'PATCH',
         `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute,
         {
           chemin: 'contexte',
           identifiant: 'une-question-',
@@ -346,8 +324,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'PATCH',
-        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`
       );
 
       expect(
@@ -359,8 +336,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'PATCH',
-        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
@@ -372,8 +348,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'PATCH',
-        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`
       );
 
       expect(
@@ -396,8 +371,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'PATCH',
-        `/api/diagnostic/${identifiantDiagnostic}`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/${identifiantDiagnostic}`
       );
 
       expect(
@@ -428,8 +402,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/${identifiant}/restitution`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/${identifiant}/restitution`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -501,8 +474,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/${identifiant}/restitution`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/${identifiant}/restitution`
       );
 
       expect((await reponse.json()).liens['se-deconnecter']).toStrictEqual({
@@ -527,7 +499,6 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         donneesServeur.app,
         'GET',
         `/api/diagnostic/${restitution.identifiant}/restitution`,
-        donneesServeur.portEcoute,
         undefined,
         { accept: 'application/pdf' }
       );
@@ -541,8 +512,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/${crypto.randomUUID()}/restitution`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/${crypto.randomUUID()}/restitution`
       );
 
       expect(
@@ -554,8 +524,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/${crypto.randomUUID()}/restitution`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/${crypto.randomUUID()}/restitution`
       );
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
@@ -567,8 +536,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/${crypto.randomUUID()}/restitution`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/${crypto.randomUUID()}/restitution`
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -581,8 +549,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47/restitution`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47/restitution`
       );
 
       expect(
@@ -605,8 +572,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/diagnostic/${identifiantDiagnostic}/restitution`,
-        donneesServeur.portEcoute
+        `/api/diagnostic/${identifiantDiagnostic}/restitution`
       );
 
       expect(

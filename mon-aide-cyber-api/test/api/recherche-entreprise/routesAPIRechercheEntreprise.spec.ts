@@ -6,7 +6,7 @@ import { ReponseRechercheEntreprise } from '../../../src/api/recherche-entrepris
 
 describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
@@ -30,8 +30,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/api/recherche-entreprise?nom=beta',
-        donneesServeur.portEcoute
+        '/api/recherche-entreprise?nom=beta'
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -59,8 +58,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        '/api/recherche-entreprise?nom=agence%20nationale%20de%20s%C3%A9curit%C3%A9%20des%20syst%C3%A8mes%20d%E2%80%99information',
-        donneesServeur.portEcoute
+        '/api/recherche-entreprise?nom=agence%20nationale%20de%20s%C3%A9curit%C3%A9%20des%20syst%C3%A8mes%20d%E2%80%99information'
       );
 
       expect(testeurMAC.adaptateurDeRequeteHTTP.requeteAttendue).toStrictEqual(
@@ -76,8 +74,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
       await executeRequete(
         donneesServeur.app,
         'GET',
-        '/api/recherche-entreprise?nom=beta&est_association=true',
-        donneesServeur.portEcoute
+        '/api/recherche-entreprise?nom=beta&est_association=true'
       );
 
       expect(testeurMAC.adaptateurDeRequeteHTTP.requeteAttendue).toStrictEqual(
@@ -96,8 +93,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        '/api/recherche-entreprise?nom=agence%20nationale%20de%20s%C3%A9curit%C3%A9%20des%20syst%C3%A8mes%20d%E2%80%99information',
-        donneesServeur.portEcoute
+        '/api/recherche-entreprise?nom=agence%20nationale%20de%20s%C3%A9curit%C3%A9%20des%20syst%C3%A8mes%20d%E2%80%99information'
       );
 
       expect(reponse.statusCode).toBe(400);

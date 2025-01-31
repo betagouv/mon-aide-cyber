@@ -16,7 +16,7 @@ import { Aidant } from '../../../src/espace-aidant/Aidant';
 
 describe('le serveur MAC sur les routes /api/profil', () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
@@ -52,8 +52,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          `/api/profil/`,
-          donneesServeur.portEcoute
+          `/api/profil/`
         );
 
         expect(reponse.statusCode).toBe(200);
@@ -92,12 +91,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       });
 
       it('Vérifie la signature des CGU', async () => {
-        await executeRequete(
-          donneesServeur.app,
-          'GET',
-          `/api/profil/`,
-          donneesServeur.portEcoute
-        );
+        await executeRequete(donneesServeur.app, 'GET', `/api/profil/`);
 
         expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
           true
@@ -107,7 +101,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
     describe("Dans le cas d'un Utilisateur Inscrit", () => {
       const testeurMAC = testeurIntegration();
-      let donneesServeur: { portEcoute: number; app: Express };
+      let donneesServeur: { app: Express };
       beforeEach(async () => {
         donneesServeur = testeurMAC.initialise();
         testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
@@ -127,8 +121,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          `/api/profil/`,
-          donneesServeur.portEcoute
+          `/api/profil/`
         );
 
         expect(await reponse.json()).toStrictEqual<Profil>({
@@ -169,8 +162,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          `/api/profil/`,
-          donneesServeur.portEcoute
+          `/api/profil/`
         );
 
         expect(await reponse.json()).toStrictEqual<Profil>({
@@ -204,8 +196,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/profil/`,
-        donneesServeur.portEcoute
+        `/api/profil/`
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -217,7 +208,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
   describe('Dans le cadre de la connexion proconnect', () => {
     const testeurMAC = testeurIntegration();
-    let donneesServeur: { portEcoute: number; app: Express };
+    let donneesServeur: { app: Express };
     let aidantConnecte: Aidant;
 
     beforeEach(async () => {
@@ -240,8 +231,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/profil/`,
-        donneesServeur.portEcoute
+        `/api/profil/`
       );
 
       expect(await reponse.json()).toStrictEqual<Profil>({
@@ -278,7 +268,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         donneesServeur.app,
         'PATCH',
         `/api/profil`,
-        donneesServeur.portEcoute,
         {
           consentementAnnuaire: true,
         }
@@ -305,7 +294,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         donneesServeur.app,
         'PATCH',
         '/api/profil',
-        donneesServeur.portEcoute,
         {
           consentementAnnuaire: true,
         }
@@ -333,7 +321,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         donneesServeur.app,
         'PATCH',
         '/api/profil',
-        donneesServeur.portEcoute,
         {
           consentementAnnuaire: false,
         }
@@ -361,7 +348,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         donneesServeur.app,
         'PATCH',
         '/api/profil',
-        donneesServeur.portEcoute,
         {
           consentementAnnuaire: false,
         }
@@ -385,15 +371,9 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         utilisateur.identifiant
       );
 
-      await executeRequete(
-        donneesServeur.app,
-        'PATCH',
-        '/api/profil',
-        donneesServeur.portEcoute,
-        {
-          consentementAnnuaire: true,
-        }
-      );
+      await executeRequete(donneesServeur.app, 'PATCH', '/api/profil', {
+        consentementAnnuaire: true,
+      });
 
       expect(testeurMAC.adaptateurDeVerificationDeCGU.verifiePassage()).toBe(
         true
@@ -415,7 +395,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         donneesServeur.app,
         'PATCH',
         '/api/profil',
-        donneesServeur.portEcoute,
         {
           consentemetAnnaire: 'true',
         }
@@ -446,7 +425,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         donneesServeur.app,
         'POST',
         '/api/profil/modifier-mot-de-passe',
-        donneesServeur.portEcoute,
         {
           ancienMotDePasse: utilisateur.motDePasse,
           motDePasse: nouveauMotDePasse,
@@ -477,7 +455,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         donneesServeur.app,
         'POST',
         '/api/profil/modifier-mot-de-passe',
-        donneesServeur.portEcoute,
         {
           ancienMotDePasse: utilisateur.motDePasse,
           motDePasse: nouveauMotDePasse,
@@ -665,7 +642,6 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           donneesServeur.app,
           'POST',
           '/api/profil/modifier-mot-de-passe',
-          donneesServeur.portEcoute,
           {
             ...test.corps,
           }

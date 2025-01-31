@@ -32,7 +32,7 @@ import { UtilisateurInscrit } from '../../src/espace-utilisateur-inscrit/Utilisa
 
 describe('Le serveur MAC sur les routes /api/utilisateur', () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
   let adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
 
   beforeEach(() => {
@@ -63,8 +63,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          `/api/utilisateur/`,
-          donneesServeur.portEcoute
+          `/api/utilisateur/`
         );
 
         expect(reponse.statusCode).toBe(200);
@@ -114,8 +113,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          `/api/utilisateur/`,
-          donneesServeur.portEcoute
+          `/api/utilisateur/`
         );
 
         expect(reponse.statusCode).toBe(200);
@@ -159,8 +157,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/utilisateur/`,
-        donneesServeur.portEcoute
+        `/api/utilisateur/`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -186,8 +183,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/utilisateur/`,
-        donneesServeur.portEcoute
+        `/api/utilisateur/`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -222,8 +218,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/utilisateur/`,
-        donneesServeur.portEcoute
+        `/api/utilisateur/`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -258,8 +253,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/utilisateur/`,
-        donneesServeur.portEcoute
+        `/api/utilisateur/`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -296,8 +290,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/utilisateur/`,
-        donneesServeur.portEcoute
+        `/api/utilisateur/`
       );
 
       expect(reponse.statusCode).toBe(200);
@@ -335,8 +328,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/api/utilisateur/`,
-        donneesServeur.portEcoute
+        `/api/utilisateur/`
       );
 
       expect(reponse.statusCode).toBe(404);
@@ -364,8 +356,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          `/api/utilisateur?contexte=demande-devenir-aidant:finalise-creation-espace-aidant`,
-          donneesServeur.portEcoute
+          `/api/utilisateur?contexte=demande-devenir-aidant:finalise-creation-espace-aidant`
         );
 
         expect(reponse.statusCode).toBe(403);
@@ -383,7 +374,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
     describe('Dans le cas du nouveau parcours devenir Aidant', () => {
       const testeurMAC = testeurIntegration();
-      let donneesServeur: { portEcoute: number; app: Express };
+      let donneesServeur: { app: Express };
       let adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
 
       beforeEach(() => {
@@ -415,8 +406,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          `/api/utilisateur/`,
-          donneesServeur.portEcoute
+          `/api/utilisateur/`
         );
 
         expect(reponse.statusCode).toBe(200);
@@ -455,8 +445,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
-          `/api/utilisateur/`,
-          donneesServeur.portEcoute
+          `/api/utilisateur/`
         );
 
         expect(reponse.statusCode).toBe(200);
@@ -504,7 +493,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/reinitialisation-mot-de-passe`,
-        donneesServeur.portEcoute,
         {
           email: utilisateur.identifiantConnexion,
         }
@@ -518,7 +506,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/reinitialisation-mot-de-passe`,
-        donneesServeur.portEcoute,
         {
           email: 'email-inconnu',
         }
@@ -532,7 +519,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/reinitialisation-mot-de-passe`,
-        donneesServeur.portEcoute,
         {
           email: 'email-inconnu',
         }
@@ -566,7 +552,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'PATCH',
         `/api/utilisateur/reinitialiser-mot-de-passe`,
-        donneesServeur.portEcoute,
         {
           motDePasse: 'n0uv3eaU-M0D3passe',
           confirmationMotDePasse: 'n0uv3eaU-M0D3passe',
@@ -605,7 +590,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'PATCH',
         `/api/utilisateur/reinitialiser-mot-de-passe`,
-        donneesServeur.portEcoute,
         {
           motDePasse: 'n0uv3eaU-M0D3passe',
           confirmationMotDePasse: 'n0uv3eaU-M0D3passe',
@@ -639,7 +623,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           donneesServeur.app,
           'PATCH',
           `/api/utilisateur/reinitialiser-mot-de-passe`,
-          donneesServeur.portEcoute,
           {
             motDePasse: 'n0uV3eaU-M0D3passe',
             confirmationMotDePasse: 'n0uv3eaU-M0D3passe',
@@ -667,7 +650,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           donneesServeur.app,
           'PATCH',
           `/api/utilisateur/reinitialiser-mot-de-passe`,
-          donneesServeur.portEcoute,
           {
             motDePasse: 'n0uv3eaU-M0D3passe',
             confirmationMotDePasse: 'n0uv3eaU-M0D3passe',
@@ -685,7 +667,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
   describe("Lorsqu'une requête POST est reçue sur /utilisateur/valider-signature-cgu", () => {
     const testeurMAC = testeurIntegration();
-    let donneesServeur: { portEcoute: number; app: Express };
+    let donneesServeur: { app: Express };
     beforeEach(() => {
       testeurMAC.adaptateurDeVerificationDeSession =
         new AdaptateurDeVerificationDeSessionDeTest();
@@ -705,7 +687,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-signature-cgu`,
-        donneesServeur.portEcoute,
         {
           cguValidees: true,
         }
@@ -731,7 +712,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           donneesServeur.app,
           'POST',
           `/api/utilisateur/valider-signature-cgu`,
-          donneesServeur.portEcoute,
           {
             cguValidees: true,
           }
@@ -761,7 +741,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           donneesServeur.app,
           'POST',
           `/api/utilisateur/valider-signature-cgu`,
-          donneesServeur.portEcoute,
           {
             cguValidees: true,
           }
@@ -809,7 +788,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           donneesServeur.app,
           'POST',
           `/api/utilisateur/valider-signature-cgu`,
-          donneesServeur.portEcoute,
           {
             cguValidees: true,
           }
@@ -838,7 +816,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           donneesServeur.app,
           'POST',
           `/api/utilisateur/valider-signature-cgu`,
-          donneesServeur.portEcoute,
           {
             cguValidees: false,
           }
@@ -877,7 +854,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           donneesServeur.app,
           'POST',
           `/api/utilisateur/valider-signature-cgu`,
-          donneesServeur.portEcoute,
           {
             cguValidees: true,
           }
@@ -910,7 +886,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           donneesServeur.app,
           'POST',
           `/api/utilisateur/valider-signature-cgu`,
-          donneesServeur.portEcoute,
           {
             cguValidees: true,
           }
@@ -952,7 +927,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           donneesServeur.app,
           'POST',
           `/api/utilisateur/valider-signature-cgu`,
-          donneesServeur.portEcoute,
           {
             cguValidees: true,
           }
@@ -969,7 +943,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
   describe('Quand une requête POST est reçue sur /api/utilisateur/valider-profil-aidant', () => {
     const testeurMAC = testeurIntegration();
-    let donneesServeur: { portEcoute: number; app: Express };
+    let donneesServeur: { app: Express };
 
     beforeEach(() => {
       donneesServeur = testeurMAC.initialise();
@@ -999,7 +973,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-profil-aidant`,
-        donneesServeur.portEcoute,
         {
           cguValidees: true,
           signatureCharte: true,
@@ -1058,7 +1031,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-profil-aidant`,
-        donneesServeur.portEcoute,
         {
           cguValidees: true,
           signatureCharte: true,
@@ -1108,7 +1080,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-profil-aidant`,
-        donneesServeur.portEcoute,
         {
           cguValidees: false,
           signatureCharte: true,
@@ -1156,7 +1127,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-profil-aidant`,
-        donneesServeur.portEcoute,
         {
           cguValidees: true,
           signatureCharte: false,
@@ -1190,7 +1160,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-profil-aidant`,
-        donneesServeur.portEcoute,
         {
           cguValidees: true,
           signatureCharte: true,
@@ -1217,7 +1186,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-profil-aidant`,
-        donneesServeur.portEcoute,
         {
           cguValidees: true,
           signatureCharte: true,
@@ -1235,7 +1203,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
   describe('Quand une requête POST est reçue sur /api/utilisateur/valider-profil-utilisateur-inscrit', () => {
     const testeurMAC = testeurIntegration();
-    let donneesServeur: { portEcoute: number; app: Express };
+    let donneesServeur: { app: Express };
 
     beforeEach(() => {
       donneesServeur = testeurMAC.initialise();
@@ -1263,7 +1231,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-profil-utilisateur-inscrit`,
-        donneesServeur.portEcoute,
         {
           cguValidees: true,
         }
@@ -1310,7 +1277,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-profil-utilisateur-inscrit`,
-        donneesServeur.portEcoute,
         {
           cguValidees: true,
         }
@@ -1347,7 +1313,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-profil-utilisateur-inscrit`,
-        donneesServeur.portEcoute,
         {
           cguValidees: false,
         }
@@ -1382,7 +1347,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-profil-utilisateur-inscrit`,
-        donneesServeur.portEcoute,
         {
           cguValidees: true,
         }
