@@ -5,7 +5,7 @@ import { executeRequete } from './api/executeurRequete';
 
 describe("Consignateur de gestion d'erreurr", () => {
   const testeurMAC = testeurIntegration();
-  let donneesServeur: { portEcoute: number; app: Express };
+  let donneesServeur: { app: Express };
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
@@ -21,7 +21,6 @@ describe("Consignateur de gestion d'erreurr", () => {
         donneesServeur.app,
         'PATCH',
         `/api/diagnostic/ed89a4fa-6db5-48d9-a4e2-1b424acd3b47`,
-        donneesServeur.portEcoute,
         {
           chemin: 'contexte',
           identifiant: 'une-question-',

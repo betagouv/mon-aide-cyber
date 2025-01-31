@@ -7,7 +7,6 @@ export const executeRequete = (
   app: Express,
   verbe: 'DELETE' | 'GET' | 'POST' | 'PATCH',
   chemin: string,
-  port: number,
   corps: object | undefined = undefined,
   headers: IncomingHttpHeaders | undefined = undefined
 ): Promise<Response> => {
@@ -17,7 +16,6 @@ export const executeRequete = (
     method: verbe,
     url: {
       pathname: pathAndQuery[0],
-      port,
       ...(pathAndQuery[1] !== undefined && {
         query: qs.parse(pathAndQuery[1]) as { [key: string]: string },
       }),
