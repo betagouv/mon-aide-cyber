@@ -10,20 +10,15 @@ program
     const aidants = await new EntrepotUtilisateurMACPostgres(
       adaptateurServiceChiffrement()
     ).tous();
-    const aidantsTrouves = aidants
-      .map((aidant) => ({
-        id: aidant.identifiant,
-        nomPrenom: aidant.nomPrenom,
-        email: aidant.email,
-      }))
-      .filter((aidant) =>
-        options.nom
-          ? aidant.nomPrenom
-              .toLowerCase()
-              .trim()
-              .includes(options.nom.toLowerCase().trim())
-          : true
-      );
+
+    const aidantsTrouves = aidants.filter((aidant) =>
+      options.nom
+        ? aidant.nomPrenom
+            .toLowerCase()
+            .trim()
+            .includes(options.nom.toLowerCase().trim())
+        : true
+    );
     console.log(
       `Il y a %s aidant(s) et %s trouvé(s)`,
       aidants.length,
