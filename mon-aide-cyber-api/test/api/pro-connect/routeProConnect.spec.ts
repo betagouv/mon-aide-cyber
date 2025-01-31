@@ -212,10 +212,10 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
     });
 
     describe("Dans le cas d'un gendarme", () => {
+      adaptateurEnvironnement.siretsEntreprise = () => ({
+        gendarmerie: () => '12345',
+      });
       it("Si l'utilisateur n'est pas connu, on crée un espace Aidant", async () => {
-        adaptateurEnvironnement.siretsEntreprise = () => ({
-          gendarmerie: () => '12345',
-        });
         const aidant = unAidant()
           .avecUnEmail('jean.pierre@yomail.com')
           .construis();
@@ -240,9 +240,6 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       });
 
       it("À l'issue de la création de l'espace Aidant, l'utilisateur est redirigé vers la validation des CGU", async () => {
-        adaptateurEnvironnement.siretsEntreprise = () => ({
-          gendarmerie: () => '12345',
-        });
         const aidant = unAidant()
           .avecUnEmail('jean.dujardin@mail.com')
           .construis();
@@ -269,6 +266,31 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         expect(
           JSON.parse(Buffer.from(objet.session, 'base64').toString()).token
         ).toStrictEqual('abc');
+      });
+
+      it("Redirige vers la validation des CGU dans le cas d'anciens Gendarmes", async () => {
+        const aidant = unAidant()
+          .avecUnEmail('jean.pierre@yomail.com')
+          .cguValideesLe(new Date(Date.parse('2024-10-09T13:43:12')))
+          .construis();
+        await testeurMAC.entrepots.aidants().persiste(aidant);
+        testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+          async () =>
+            desInformationsUtilisateur()
+              .pourUnAidant(aidant)
+              .avecUnSiret('12345')
+              .construis();
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/pro-connect/apres-authentification'
+        );
+
+        expect(reponse.statusCode).toStrictEqual(302);
+        expect(reponse.headers['location']).toStrictEqual(
+          '/mon-espace/valide-signature-cgu'
+        );
       });
     });
 
