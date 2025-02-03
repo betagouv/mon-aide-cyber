@@ -82,7 +82,7 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
       );
       if (!cookie) {
         return reponse.redirect(
-          "/connexion?erreurConnexion=Un problème est survenu lors de l'obtention des vos données de connexion ProConnect ! Veuillez réessayer."
+          "/connexion?erreurConnexion=Un problème est survenu lors de l'obtention de vos données de connexion ProConnect ! Veuillez réessayer."
         );
       }
 
