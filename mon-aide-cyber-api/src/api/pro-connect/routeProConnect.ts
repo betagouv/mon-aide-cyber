@@ -81,9 +81,9 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
         }
       );
       if (!cookie) {
-        return reponse
-          .status(401)
-          .json({ message: 'Erreur d’authentification', liens: {} });
+        return reponse.redirect(
+          "/connexion?erreurConnexion=Un problème est survenu lors de l'obtention des vos données de connexion ProConnect ! Veuillez réessayer."
+        );
       }
 
       const redirige = (
