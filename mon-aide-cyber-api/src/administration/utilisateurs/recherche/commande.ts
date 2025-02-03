@@ -54,11 +54,22 @@ class EntrepotCompteUtilisateur extends EntrepotPostgres<
   }
 
   protected deDTOAEntite(dto: CompteUtilisateurDTO): CompteUtilisateur {
-    return {
-      identifiant: dto.id,
-      email: this.serviceChiffrement.dechiffre(dto.mail),
-      nomPrenom: this.serviceChiffrement.dechiffre(dto.nom_prenom),
-    };
+    try {
+      const email = this.serviceChiffrement.dechiffre(dto.mail);
+      const nomPrenom = this.serviceChiffrement.dechiffre(dto.nom_prenom);
+      return {
+        identifiant: dto.id,
+        email,
+        nomPrenom,
+      };
+    } catch (erreur) {
+      console.log('DTO', dto, erreur);
+      return {
+        identifiant: dto.id,
+        email: 'inconnu',
+        nomPrenom: 'inconnu',
+      };
+    }
   }
 }
 
