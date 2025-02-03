@@ -112,7 +112,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       expect(reponse.statusCode).toStrictEqual(302);
       expect(reponse.headers['location']).toStrictEqual(
         encodeURI(
-          "/connexion?erreurConnexion=Un problème est survenu lors de l'obtention des vos données de connexion ProConnect ! Veuillez réessayer."
+          "/connexion?erreurConnexion=Un problème est survenu lors de l'obtention de vos données de connexion ProConnect ! Veuillez réessayer."
         )
       );
     });
