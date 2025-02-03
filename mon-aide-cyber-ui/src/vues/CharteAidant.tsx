@@ -346,11 +346,6 @@ const ContenuCharteAidant = () => (
       non-respect des prérequis, pour être Aidant cyber entraînera la
       suppression de mes accès au service MonAideCyber.
     </p>
-    <p dir="auto"></p>
-    <p dir="auto">Fait à</p>
-    <p dir="auto">Le</p>
-    <p dir="auto">Signature</p>
-    <p dir="auto">Précédée de la mention "Lu et approuvé"</p>
   </div>
 );
 
