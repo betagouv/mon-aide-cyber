@@ -8,7 +8,6 @@ import {
 } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { desInformationsUtilisateur } from '../../constructeurs/constructeurProConnectInformationsUtilisateur';
 import { fakerFR } from '@faker-js/faker';
-import { ReponseHATEOASEnErreur } from '../../../src/api/hateoas/hateoas';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { utilitairesCookies } from '../../../src/adaptateurs/utilitairesDeCookies';
@@ -110,11 +109,12 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         '/pro-connect/apres-authentification'
       );
 
-      expect(reponse.statusCode).toStrictEqual(401);
-      expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
-        message: 'Erreur d’authentification',
-        liens: {},
-      });
+      expect(reponse.statusCode).toStrictEqual(302);
+      expect(reponse.headers['location']).toStrictEqual(
+        encodeURI(
+          "/connexion?erreurConnexion=Un problème est survenu lors de l'obtention des vos données de connexion ProConnect ! Veuillez réessayer."
+        )
+      );
     });
 
     it('Si une erreur est rencontrée lors de l’échange avec ProConnect, on redirige vers la mire de connexion', async () => {
