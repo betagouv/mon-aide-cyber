@@ -14,7 +14,7 @@ type CompteUtilisateur = Aggregat & {
 
 type CompteUtilisateurDTO = DTO & {
   nom_prenom: string;
-  mail: string;
+  email: string;
 };
 
 class EntrepotCompteUtilisateur extends EntrepotPostgres<
@@ -55,7 +55,7 @@ class EntrepotCompteUtilisateur extends EntrepotPostgres<
 
   protected deDTOAEntite(dto: CompteUtilisateurDTO): CompteUtilisateur {
     try {
-      const email = this.serviceChiffrement.dechiffre(dto.mail);
+      const email = this.serviceChiffrement.dechiffre(dto.email);
       const nomPrenom = this.serviceChiffrement.dechiffre(dto.nom_prenom);
       return {
         identifiant: dto.id,
