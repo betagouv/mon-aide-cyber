@@ -2,7 +2,7 @@ import serveur from '../../src/serveur';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { AdaptateurTranscripteurDeTest } from '../adaptateurs/adaptateurTranscripteur';
 import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
-import { Express } from 'express';
+import { Express, NextFunction, Request, Response } from 'express';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
@@ -108,6 +108,11 @@ class TesteurIntegrationMAC {
       adaptateurProConnect: this.adaptateurProConnect,
       adaptateurDeRequeteHTTP: this.adaptateurDeRequeteHTTP,
       estEnMaintenance: false,
+      redirigeVersUrlBase: (
+        _requete: Request,
+        _reponse: Response,
+        suite: NextFunction
+      ) => suite(),
     });
     const portEcoute = PORT_DISPONIBLE;
     // eslint-disable-next-line @typescript-eslint/no-empty-function
