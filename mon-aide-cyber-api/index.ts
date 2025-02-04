@@ -23,6 +23,7 @@ import { AdaptateurDeVerificationDeTypeDeRelationMAC } from './src/adaptateurs/A
 import { adaptateurProConnect } from './src/adaptateurs/pro-connect/adaptateurProConnect';
 import { adaptateurEnvironnement } from './src/adaptateurs/adaptateurEnvironnement';
 import { AdaptateurDeRequeteHTTP } from './src/infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
+import { redirigeVersUrlBase } from './src/infrastructure/middlewares/middlewares';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
@@ -88,6 +89,7 @@ const serveurMAC = serveur.creeServeur({
   adaptateurProConnect: adaptateurProConnect,
   estEnMaintenance: adaptateurEnvironnement.modeMaintenance().estActif(),
   adaptateurDeRequeteHTTP: new AdaptateurDeRequeteHTTP(),
+  redirigeVersUrlBase: redirigeVersUrlBase,
 });
 
 const port = process.env.PORT || 8081;

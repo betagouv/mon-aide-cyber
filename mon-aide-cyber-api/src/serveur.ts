@@ -1,5 +1,5 @@
 import * as path from 'path';
-import express, { Request, Response } from 'express';
+import express, { Request, RequestHandler, Response } from 'express';
 import * as http from 'http';
 import routesAPI from './api/routesAPI';
 import { AdaptateurTranscripteur } from './adaptateurs/AdaptateurTranscripteur';
@@ -37,6 +37,7 @@ const ENDPOINTS_SANS_CSRF = ['/api/token'];
 const COOKIE_DUREE_SESSION = 180 * 60 * 1000;
 
 export type ConfigurationServeur = {
+  redirigeVersUrlBase: RequestHandler;
   adaptateurRelations: AdaptateurRelations;
   adaptateurEnvoiMessage: AdaptateurEnvoiMail;
   adaptateurReferentiel: Adaptateur<Referentiel>;
@@ -81,6 +82,8 @@ const creeApp = (config: ConfigurationServeur) => {
     app.use(csrf({ blocklist: ENDPOINTS_SANS_CSRF }));
 
   app.use(config.gestionnaireErreurs.controleurRequete());
+
+  app.use(config.redirigeVersUrlBase);
 
   const limiteurTrafficUI = adaptateurConfigurationLimiteurTraffic('STANDARD');
   app.use(limiteurTrafficUI);
