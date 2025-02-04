@@ -26,7 +26,7 @@ export const MonEspaceUtilisationDuService = () => {
         if (!peutDemandeDevenirAidant) {
           return navigate(`${ROUTE_MON_ESPACE_VALIDER_PROFIL}`);
         } else {
-          return navigate(`${ROUTE_MON_ESPACE}/devenir-aidant`);
+          return navigate(`${ROUTE_MON_ESPACE}/demande-devenir-aidant`);
         }
       }
       case 'ActiviteProfessionnelle': {
