@@ -5,7 +5,6 @@ import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateu
 import { useUtilisateur } from '../../fournisseurs/hooks.ts';
 import { NavigationPublique } from './header/NavigationPublique.tsx';
 import { BandeauMaintenance } from '../alertes/BandeauMaintenance.tsx';
-import { useMoteurDeLiens } from '../../hooks/useMoteurDeLiens.ts';
 
 export type HeaderProprietes = PropsWithChildren<{
   lienMAC: ReactElement;
@@ -19,8 +18,7 @@ export const Header = ({
   enteteSimple,
 }: HeaderProprietes) => {
   const { utilisateur } = useUtilisateur();
-  const { accedeALaRessource: estNouvelleLandingPost31Janvier } =
-    useMoteurDeLiens('nouvelle-demande-devenir-aidant');
+
   const liensNavigation: LienNavigation[] = [
     {
       route: '/',
@@ -31,15 +29,8 @@ export const Header = ({
       nom: 'Bénéficier du dispositif',
     },
     {
-      ...(estNouvelleLandingPost31Janvier
-        ? {
-            route: '/realiser-des-diagnostics-anssi',
-            nom: 'Réaliser des diagnostics ANSSI',
-          }
-        : {
-            route: '/devenir-aidant',
-            nom: 'Devenir Aidant cyber',
-          }),
+      route: '/realiser-des-diagnostics-anssi',
+      nom: 'Réaliser des diagnostics ANSSI',
     },
     {
       route: '/a-propos',
