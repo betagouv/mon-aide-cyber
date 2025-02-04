@@ -98,6 +98,10 @@ const genereCorpsMiseAJourDemandeDevenirAidant = (
   demandeDevenirAidant: DemandeDevenirAidant
 ) => {
   const dateDemande = FournisseurHorloge.formateDate(demandeDevenirAidant.date);
+  let appartenanceEntite = '';
+  if (demandeDevenirAidant.entite?.nom) {
+    appartenanceEntite = `<li>Vous appartenez ou adhérez à l’entité ${demandeDevenirAidant.entite?.nom}</li>`;
+  }
   return (
     '<html lang="fr">' +
     '<body>' +
@@ -109,21 +113,25 @@ const genereCorpsMiseAJourDemandeDevenirAidant = (
     '<ul>' +
     '<li>Vous souhaitez utiliser le dispositif MonAideCyber pour être Aidant cyber et être référencé</li>' +
     `<li>Vous avez accepté les nouvelles conditions générales d’utilisation et la charte en ligne le ${dateDemande.date} à ${dateDemande.heure}</li>` +
-    `<li>Vous appartenez ou adhérez à l'entité ${demandeDevenirAidant.entite?.nom}</li>` +
+    `${appartenanceEntite}` +
     '</ul>' +
     '\n' +
-    'Les prochains ateliers “Devenir Aidant MonAideCyber” vont bientôt reprendre. \n' +
-    'Votre délégation régionale ANSSI, en copie de ce mail, va vérifier les dates des prochains ateliers prévus.\n' +
-    'Vous serez recontacté dans les plus brefs délais, sur le mail que vous nous avez communiqué, avec une ou plusieurs dates disponibles.' +
+    'Des ateliers "Devenir Aidant MonAideCyber" ont lieu régulièrement. Votre délégation territoriale ANSSI, en copie de ce ' +
+    'mail, vous informera sur le mail que vous nous avez communiqué des prochaines dates prévues d’ateliers.\n' +
+    '\n' +
+    'Merci de nous informer dès que possible en cas d’indisponibilité à une date d’atelier proposée.\n' +
+    '\n' +
+    '\n' +
+    '<b>Utiliser dès maintenant l’outil de diagnostic en vous connecter avec ProConnect</b>' +
+    '\n' +
+    `<a href="${adaptateurEnvironnement.mac().urlMAC()}/connexion">J’initie un diagnostic</a>` +
     '\n' +
     '\n' +
     '\n' +
     '<b>Comment bien préparer mon atelier Devenir Aidant ?</b>\n' +
     '<ul>' +
-    `<li>En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/a-propos/kit-de-communication">la plaquette informative</a></li>` +
-    `<li>Relire <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">la charte de l'Aidant</a> qui rappelle les principes et les engagements des Aidants Cyber</li>` +
-    '<li>Noter qu’aucun autre pré-requis n’est demandé pour participer à cet atelier</li>' +
-    `<li>Vous pouvez commencer à vous familiariser dès à présent à l’outil de diagnostic soit en vous <a href="${adaptateurEnvironnement.mac().urlMAC()}/connexion">connectant via ProConnect</a>, soit en utilisant le <a href="${adaptateurEnvironnement.mac().urlMAC()}/diagnostic-libre-acces">diagnostic</a> librement sur notre site</li>` +
+    `<li>En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/a-propos/kit-de-communication">la plaquette d’information</a></li>` +
+    `<li>Relire <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">la charte de l'Aidant</a> rappelant les principes et les engagements des Aidants Cyber</li>` +
     '</ul>' +
     'Toute l’équipe reste à votre disposition,\n' +
     '\n' +
