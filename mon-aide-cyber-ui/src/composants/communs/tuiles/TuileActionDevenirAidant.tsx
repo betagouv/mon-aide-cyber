@@ -16,7 +16,7 @@ function TuileActionDevenirAidant() {
           un <b>bénévole</b> ou un <b>passionné</b> de Cyber et vous souhaitez{' '}
           <b className="violet-fonce">devenir Aidant</b> ?
         </p>
-        <a href="/devenir-aidant#formulaire-formation">
+        <a href="/realiser-des-diagnostics-anssi#formulaire-formation">
           <button
             type="button"
             className="fr-btn bouton-mac bouton-mac-primaire"

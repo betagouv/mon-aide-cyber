@@ -75,7 +75,7 @@ export const FormulaireConnexion = () => {
         <Button
           type="button"
           variant="link"
-          onClick={() => navigate('/devenir-aidant')}
+          onClick={() => navigate('/realiser-des-diagnostics-anssi')}
         >
           S&apos;inscrire
         </Button>

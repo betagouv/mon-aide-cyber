@@ -9,7 +9,6 @@ import { KitDeCommunication } from './composants/a-propos/KitDeCommunication.tsx
 import { LayoutPublic } from './composants/layout/LayoutPublic.tsx';
 import { CapteurEcranCreationEspaceAidant } from './domaine/espace-aidant/demande-aidant-creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { LayoutCreationEspaceAidant } from './composants/layout/LayoutCreationEspaceAidant.tsx';
-import { EcranDevenirAidant } from './domaine/vitrine/ecran-devenir-aidant/EcranDevenirAidant.tsx';
 import { EcranAccessibilite } from './vues/EcranAccessibilite.tsx';
 import { EcranStatistiques } from './domaine/vitrine/ecran-statistiques/EcranStatistiques.tsx';
 import { EcranBeneficierDuDispositif } from './domaine/vitrine/ecran-beneficier-du-dispositif/EcranBeneficierDuDispositif.tsx';
@@ -45,7 +44,6 @@ export const RouteurPublic = () => {
           <Route path="statistiques" element={<EcranStatistiques />} />
           <Route path="kit-de-communication" element={<KitDeCommunication />} />
         </Route>
-        <Route path="devenir-aidant" element={<EcranDevenirAidant />} />
         <Route
           path="realiser-des-diagnostics-anssi"
           element={<EcranRealiserDesDiagnosticsANSSI />}
