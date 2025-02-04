@@ -1,4 +1,4 @@
-import { beforeEach, describe } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import {
   DiagnosticLibreAccesLance,

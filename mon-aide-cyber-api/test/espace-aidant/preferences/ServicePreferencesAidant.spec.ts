@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { SecteurActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
 import { Departement } from '../../../src/gestion-demandes/departements';
 import {

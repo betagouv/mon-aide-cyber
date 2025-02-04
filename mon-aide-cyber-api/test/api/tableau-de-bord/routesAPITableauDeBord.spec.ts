@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import testeurIntegration from '../../api/testeurIntegration';
 import { executeRequete } from '../executeurRequete';
 import { Express } from 'express';

@@ -1,4 +1,4 @@
-import { beforeEach, describe } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { nettoieLaBaseDeDonneesDemandeDiagnosticLibreAcces } from '../../../utilitaires/nettoyeurBDD';
 import { EntrepotDemandeDiagnosticLibreAccesPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotDemandeDiagnosticLibreAccesPostgres';
 import { DemandeDiagnosticLibreAcces } from '../../../../src/diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';

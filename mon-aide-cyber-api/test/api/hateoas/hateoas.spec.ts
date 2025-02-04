@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { lesContextesUtilisateursNouveauParcoursExistants } from './lesContextesUtilisateursExistants';
 import { constructeurActionsHATEOAS } from '../../../src/api/hateoas/hateoas';
 import { InformationsContexte } from '../../../src/adaptateurs/AdaptateurDeVerificationDeSession';

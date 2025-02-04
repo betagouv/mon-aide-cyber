@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';

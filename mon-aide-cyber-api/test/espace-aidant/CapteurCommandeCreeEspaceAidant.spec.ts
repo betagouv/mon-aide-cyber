@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
