@@ -53,12 +53,23 @@ export const ChoixTypeAidant = ({
               surChoix={() => setChoix('RepresentantEtat')}
               coche={choix === 'RepresentantEtat' || false}
               contenuZoneDepliee={
-                <RechercheEntreprise
-                  key={`RepresentantEtat-${entite?.nom}`}
-                  type="servicePublic"
-                  entrepriseSelectionnee={entite}
-                  surChoixEntite={setEntite}
-                />
+                <>
+                  <RechercheEntreprise
+                    key={`RepresentantEtat-${entite?.nom}`}
+                    type="servicePublic"
+                    entrepriseSelectionnee={entite}
+                    surChoixEntite={setEntite}
+                  />
+                  <br />
+                  <div className="mac-callout mac-callout-information">
+                    <i className="mac-icone-information" />
+                    <div>
+                      Si vous ne trouvez pas votre organisme, essayez avec les
+                      n° SIRET/SIREN, ou bien contactez l’équipe :{' '}
+                      <LienMailtoMAC />
+                    </div>
+                  </div>
+                </>
               }
             />
             <SelecteurTypeAidant
@@ -68,12 +79,23 @@ export const ChoixTypeAidant = ({
               surChoix={() => setChoix('AgentPublic')}
               coche={choix === 'AgentPublic'}
               contenuZoneDepliee={
-                <RechercheEntreprise
-                  key={`AgentPublic-${entite?.nom}`}
-                  type="representantEtat"
-                  entrepriseSelectionnee={entite}
-                  surChoixEntite={setEntite}
-                />
+                <>
+                  <RechercheEntreprise
+                    key={`AgentPublic-${entite?.nom}`}
+                    type="representantEtat"
+                    entrepriseSelectionnee={entite}
+                    surChoixEntite={setEntite}
+                  />
+                  <br />
+                  <div className="mac-callout mac-callout-information">
+                    <i className="mac-icone-information" />
+                    <div>
+                      Si vous ne trouvez pas votre organisme, essayez avec les
+                      n° SIRET/SIREN, ou bien contactez l’équipe :{' '}
+                      <LienMailtoMAC />
+                    </div>
+                  </div>
+                </>
               }
             />
             <SelecteurTypeAidant
@@ -83,12 +105,23 @@ export const ChoixTypeAidant = ({
               surChoix={() => setChoix('Association')}
               coche={choix === 'Association'}
               contenuZoneDepliee={
-                <RechercheEntreprise
-                  key={`Association-${entite?.nom}`}
-                  type="association"
-                  entrepriseSelectionnee={entite}
-                  surChoixEntite={setEntite}
-                />
+                <>
+                  <RechercheEntreprise
+                    key={`Association-${entite?.nom}`}
+                    type="association"
+                    entrepriseSelectionnee={entite}
+                    surChoixEntite={setEntite}
+                  />
+                  <br />
+                  <div className="mac-callout mac-callout-information">
+                    <i className="mac-icone-information" />
+                    <div>
+                      Si vous ne trouvez pas votre organisme, essayez avec les
+                      n° SIRET/SIREN, ou bien contactez l’équipe :{' '}
+                      <LienMailtoMAC />
+                    </div>
+                  </div>
+                </>
               }
             />
             <hr className="separation-formulaire" />
