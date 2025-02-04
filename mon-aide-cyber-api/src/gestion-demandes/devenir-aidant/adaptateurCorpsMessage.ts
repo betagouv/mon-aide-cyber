@@ -22,20 +22,19 @@ const genereCorpsDemandeDevenirAidant = (
       `territoire ${demandeDevenirAidant.departement.nom} a été envoyée.</b>\n` +
       `${appartenanceEntite}` +
       '\n' +
-      'Votre délégation régionale ANSSI, en copie de ce mail, vous recontactera ' +
-      'dans les plus brefs délais, sur le mail que vous nous avez communiqué, avec ' +
-      'une ou plusieurs dates disponibles.\n' +
+      'Des ateliers "Devenir Aidant MonAideCyber" ont lieu régulièrement. Votre délégation territoriale ANSSI, en copie de cet échange, ' +
+      "vous informera sur l’adresse mail que vous nous avez communiquée des prochaines dates prévues d'ateliers.\n" +
+      '\n' +
+      '<b>Utiliser dès maintenant l’outil de diagnostic en vous connectant avec ProConnect</b>\n' +
+      '\n' +
+      `<a href="${adaptateurEnvironnement.mac().urlMAC()}/connexion">J’initie un diagnostic</a>` +
       '\n' +
       '<b>Comment bien préparer l’atelier Devenir Aidant MonAideCyber ?</b>\n' +
       '\n' +
       '<ul>' +
-      `<li>En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/a-propos/kit-de-communication">la plaquette informative</a></li>` +
+      `<li>En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/a-propos/kit-de-communication">la plaquette d’information</a></li>` +
       `<li>Relire la <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">charte de l’Aidant</a> ` +
-      `qui rappelle les principes et les engagements des Aidants Cyber</li>` +
-      '<li>Noter qu’aucun autre pré-requis n’est demandé pour participer à cet atelier</li>' +
-      `<li>Vous pouvez commencer à vous familiariser avec l’outil de diagnostic ` +
-      `soit en utilisant le <a href="${adaptateurEnvironnement.mac().urlMAC()}/diagnostic-libre-acces">diagnostic</a> ` +
-      `librement sur notre site, soit en vous <a href="${adaptateurEnvironnement.mac().urlMAC()}/connexion">connectant via ProConnect</a></li>` +
+      `rappelant les principes et les engagements des Aidants Cyber</li>` +
       '</ul>' +
       '\n' +
       'Toute l’équipe reste à votre disposition,\n' +
