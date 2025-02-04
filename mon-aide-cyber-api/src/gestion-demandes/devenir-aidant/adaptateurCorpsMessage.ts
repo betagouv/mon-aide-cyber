@@ -7,6 +7,12 @@ const genereCorpsDemandeDevenirAidant = (
   demandeDevenirAidant: DemandeDevenirAidant
 ) => {
   if (estDateNouveauParcoursDemandeDevenirAidant()) {
+    let appartenanceEntite = '';
+    if (demandeDevenirAidant.entite?.nom) {
+      appartenanceEntite =
+        '\n' +
+        `Vous avez déclaré appartenir ou adhérer à l'organisation ${demandeDevenirAidant.entite?.nom} \n`;
+    }
     return (
       '<html lang="fr">' +
       '<body>' +
@@ -14,6 +20,7 @@ const genereCorpsDemandeDevenirAidant = (
       '\n' +
       `<b>Votre demande pour participer à un atelier Aidant MonAideCyber sur le ` +
       `territoire ${demandeDevenirAidant.departement.nom} a été envoyée.</b>\n` +
+      `${appartenanceEntite}` +
       '\n' +
       'Votre délégation régionale ANSSI, en copie de ce mail, vous recontactera ' +
       'dans les plus brefs délais, sur le mail que vous nous avez communiqué, avec ' +
@@ -103,6 +110,7 @@ const genereCorpsMiseAJourDemandeDevenirAidant = (
     '<ul>' +
     '<li>Vous souhaitez utiliser le dispositif MonAideCyber pour être Aidant cyber et être référencé</li>' +
     `<li>Vous avez accepté les nouvelles conditions générales d’utilisation et la charte en ligne le ${dateDemande.date} à ${dateDemande.heure}</li>` +
+    `<li>Vous appartenez ou adhérez à l'entité ${demandeDevenirAidant.entite?.nom}</li>` +
     '</ul>' +
     '\n' +
     'Les prochains ateliers “Devenir Aidant MonAideCyber” vont bientôt reprendre. \n' +
