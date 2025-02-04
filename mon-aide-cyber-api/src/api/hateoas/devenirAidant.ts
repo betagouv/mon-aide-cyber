@@ -41,3 +41,18 @@ export const demandeDevenirAidant: () => ContexteSpecifique & {
     ...rechercheEntreprise,
   },
 });
+
+export const nouvelleDemandeDevenirAidant: () => ContexteSpecifique & {
+  'nouvelle-demande-devenir-aidant': Options;
+  'envoyer-demande-devenir-aidant': Options;
+} = () => ({
+  'nouvelle-demande-devenir-aidant': {
+    url: '/api/demandes/devenir-aidant',
+    methode: 'GET',
+  },
+  'envoyer-demande-devenir-aidant': {
+    url: '/api/demandes/devenir-aidant',
+    methode: 'POST',
+  },
+  ...rechercheEntreprise,
+});
