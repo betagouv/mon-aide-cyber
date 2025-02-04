@@ -15,11 +15,10 @@ import {
 } from '../../../gestion-demandes/parcours-aidant/reducteurEtapes.ts';
 import { useRecupereContexteNavigation } from '../../../../hooks/useRecupereContexteNavigation.ts';
 import { MoteurDeLiens, ROUTE_MON_ESPACE } from '../../../MoteurDeLiens.ts';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import {
   CorpsDemandeDevenirAidant,
   entiteEnFonctionDuTypeAidant,
-  ReponseDemandeInitiee,
 } from '../../../gestion-demandes/devenir-aidant/DevenirAidant.ts';
 import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ChoixTypeAidant } from '../../../gestion-demandes/parcours-aidant/choix-type-aidant/ChoixTypeAidant.tsx';
@@ -32,6 +31,7 @@ import { Toast } from '../../../../composants/communs/Toasts/Toast.tsx';
 import illustrationSuivi from '../../../../../public/images/illustration-suivi.svg';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
 import { LienMailtoMAC } from '../../../../composants/atomes/LienMailtoMAC.tsx';
+import { useRecupereDepartements } from '../../../../hooks/useRecupereDepartements.ts';
 
 export const EcranMonEspaceDemandeDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
@@ -48,25 +48,7 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
   useRecupereContexteNavigation(
     'demande-devenir-aidant:demande-devenir-aidant'
   );
-  const action = new MoteurDeLiens(navigationMAC.etat).trouveEtRenvoie(
-    'demande-devenir-aidant'
-  );
-
-  const { data } = useQuery({
-    enabled: !!action,
-    queryKey: ['recuperer-departements'],
-    queryFn: () => {
-      return macAPI.execute<ReponseDemandeInitiee, ReponseDemandeInitiee>(
-        constructeurParametresAPI()
-          .url(action.url)
-          .methode(action.methode!)
-          .construis(),
-        (corps) => corps
-      );
-    },
-  });
-
-  const referentielDepartements = data?.departements;
+  const referentielDepartements = useRecupereDepartements();
 
   const {
     mutate,

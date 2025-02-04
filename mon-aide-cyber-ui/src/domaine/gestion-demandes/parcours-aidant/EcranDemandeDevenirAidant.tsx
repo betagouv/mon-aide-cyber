@@ -16,11 +16,10 @@ import { SignatureCGU } from './SignatureCGU.tsx';
 import { SignatureCharteAidant } from './SignatureCharteAidant.tsx';
 import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
 import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import {
   CorpsDemandeDevenirAidant,
   entiteEnFonctionDuTypeAidant,
-  ReponseDemandeInitiee,
 } from '../devenir-aidant/DevenirAidant.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
@@ -33,7 +32,7 @@ import { TypographieH4 } from '../../../composants/communs/typographie/Typograph
 import { LienMailtoMAC } from '../../../composants/atomes/LienMailtoMAC.tsx';
 import { useNavigate } from 'react-router-dom';
 import illustrationSuivi from '../../../../public/images/illustration-suivi.svg';
-import { useMoteurDeLiens } from '../../../hooks/useMoteurDeLiens.ts';
+import { useRecupereDepartements } from '../../../hooks/useRecupereDepartements.ts';
 
 export const EcranDemandeDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
@@ -50,35 +49,7 @@ export const EcranDemandeDevenirAidant = () => {
   useRecupereContexteNavigation(
     'demande-devenir-aidant:demande-devenir-aidant'
   );
-
-  const {
-    accedeALaRessource: peutDemandeDevenirAidant,
-    ressource: actionDemandeDevenirAidant,
-  } = useMoteurDeLiens('demande-devenir-aidant');
-  const {
-    accedeALaRessource: peutNouvelleDemandeDevenirAidant,
-    ressource: actionNouvelleDemandeDevenirAidant,
-  } = useMoteurDeLiens('nouvelle-demande-devenir-aidant');
-
-  const { data } = useQuery({
-    enabled: peutDemandeDevenirAidant || peutNouvelleDemandeDevenirAidant,
-    queryKey: ['recuperer-departements'],
-    queryFn: () => {
-      const action = peutNouvelleDemandeDevenirAidant
-        ? actionNouvelleDemandeDevenirAidant
-        : actionDemandeDevenirAidant;
-
-      return macAPI.execute<ReponseDemandeInitiee, ReponseDemandeInitiee>(
-        constructeurParametresAPI()
-          .url(action.url)
-          .methode(action.methode!)
-          .construis(),
-        (corps) => corps
-      );
-    },
-  });
-
-  const referentielDepartements = data?.departements;
+  const referentielDepartements = useRecupereDepartements();
 
   const {
     mutate,
