@@ -155,8 +155,11 @@
 
       .selecteur-type-aidant-saisie-entite {
         display: none;
-        border-left: 4px solid var(--couleurs-mac-violet-fonce);
         padding: 0 1rem;
+
+        &:first-child {
+          border-left: 4px solid var(--couleurs-mac-violet-fonce);
+        }
       }
 
       &:has(input[type="radio"]:checked) {
@@ -164,6 +167,10 @@
         .selecteur-type-aidant-saisie-entite {
           display: flex;
           flex-direction: column;
+
+          &:first-child {
+            border-left: 4px solid var(--couleurs-mac-violet-fonce);
+          }
         }
       }
     }

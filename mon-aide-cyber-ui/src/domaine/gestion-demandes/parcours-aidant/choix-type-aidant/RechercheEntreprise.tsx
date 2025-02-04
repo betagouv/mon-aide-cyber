@@ -77,7 +77,7 @@ export const RechercheEntreprise = (props: {
   };
 
   return (
-    <>
+    <div className="selecteur-type-aidant-saisie-entite">
       <p>Veuillez indiquer le nom de votre structure :</p>
       <AutoCompletion<Entreprise>
         nom="entreprise"
@@ -104,6 +104,6 @@ export const RechercheEntreprise = (props: {
         }
         suggestionsInitiales={entrepriseTrouvees ? entrepriseTrouvees : []}
       />
-    </>
+    </div>
   );
 };
