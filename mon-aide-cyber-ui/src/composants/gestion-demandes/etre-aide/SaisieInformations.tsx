@@ -236,7 +236,11 @@ export const SaisieInformations = (
                     checked={etatSaisieInformations.relationAidantSaisie}
                   />
                   <label className="fr-label" htmlFor="relation-aidant">
-                    <span>Je suis déjà en relation avec un Aidant</span>
+                    <span>
+                      Je suis déjà accompagné pour réaliser mon diagnostic, je
+                      n’ai pas besoin d’être mis en relation avec un Aidant
+                      cyber
+                    </span>
                   </label>
                 </div>
               </div>
