@@ -5,7 +5,7 @@ import {
   initialiseFormulairePreferences,
   reducteurPreferences,
 } from './../../../../../../src/domaine/espace-aidant/mon-compte/ecran-mes-preferences/composants/reducteurPreferences';
-import { describe, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe("Formulaire de changement des préférences de l'aidant", () => {
   const etatInitial = initialiseFormulairePreferences();

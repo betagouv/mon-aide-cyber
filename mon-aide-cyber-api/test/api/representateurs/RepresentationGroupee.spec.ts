@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { unTranscripteur } from './transcripteursDeTest';
 import { RepresentationGroupee } from '../../../src/api/representateurs/RepresentationGroupee';
 import { uneQuestionDiagnostic } from '../../constructeurs/constructeurDiagnostic';

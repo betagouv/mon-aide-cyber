@@ -1,10 +1,10 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import {
   EntrepotAidantMemoire,
   EntrepotUtilisateurInscritMemoire,
 } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
-import { expect } from 'vitest';
 import { UtilisateurInscrit } from '../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import {

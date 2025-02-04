@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { AdaptateurRelationsMAC } from '../../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/EntrepotRelationMemoire';
 import crypto from 'crypto';

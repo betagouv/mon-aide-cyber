@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { unDiagnostic } from '../constructeurs/constructeurDiagnostic';
 import { Tuple, unTuple } from '../../src/relation/Tuple';
 import { DefinitionAidantInitieDiagnostic } from '../../src/diagnostic/tuples';

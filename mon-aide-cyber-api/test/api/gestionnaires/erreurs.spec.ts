@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { gestionnaireErreurGeneralisee } from '../../../src/api/gestionnaires/erreurs';
 import { ConsignateurErreursMemoire } from '../../../src/infrastructure/adaptateurs/ConsignateurErreursMemoire';
 import { Request, Response } from 'express';

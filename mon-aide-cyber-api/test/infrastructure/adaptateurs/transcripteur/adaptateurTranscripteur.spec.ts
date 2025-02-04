@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { referentiel } from '../../../../src/diagnostic/donneesReferentiel';
 import { adaptateurTranscripteur } from '../../../../src/infrastructure/adaptateurs/transcripteur/adaptateurTranscripteur';
 

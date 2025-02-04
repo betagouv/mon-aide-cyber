@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { CapteurCommandeCreerAide } from '../../src/aide/CapteurCommandeCreerAide';
 import { allier } from '../../src/gestion-demandes/departements';

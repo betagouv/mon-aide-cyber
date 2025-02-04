@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { adaptateurTranscripteur } from '../../src/infrastructure/adaptateurs/transcripteur/adaptateurTranscripteur';
 import fs from 'fs';
 

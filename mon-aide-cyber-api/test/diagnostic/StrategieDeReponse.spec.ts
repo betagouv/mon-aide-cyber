@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { uneReponsePossible } from '../constructeurs/constructeurReferentiel';
 import { uneQuestionDiagnostic } from '../constructeurs/constructeurDiagnostic';
 import { StrategieDeReponse } from '../../src/diagnostic/StrategieDeReponse';
