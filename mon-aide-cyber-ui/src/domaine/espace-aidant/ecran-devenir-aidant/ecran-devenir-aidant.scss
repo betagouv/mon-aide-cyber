@@ -1,0 +1,44 @@
+@import '../../../assets/styles/points-de-rupture';
+
+.ecran-devenir-aidant {
+  display: flex;
+  flex-direction: column;
+
+  section.entete {
+    background-color: var(--couleurs-mac-violet-tres-clair);
+
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2rem;
+
+    @include a-partir-de(lg) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 2rem;
+    }
+
+    @include a-partir-de(xl) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 8.375rem;
+    }
+  }
+
+  section {
+    padding: 3rem 7.5rem 3rem 4.25rem;
+
+    /*&.mes-diagnostics-cta {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+
+      .cartes {
+        display: flex;
+        gap: 3.5rem;
+      }
+    }*/
+  }
+}

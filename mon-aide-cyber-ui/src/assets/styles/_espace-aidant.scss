@@ -50,6 +50,17 @@ aside.barre-navigation-laterale {
     position: sticky;
     top: 7.5rem;
   }
+
+  .encart-cta-mon-espace-devenir-aidant {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0 0 0;
+
+    button {
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
 }
 
 .separateur {
