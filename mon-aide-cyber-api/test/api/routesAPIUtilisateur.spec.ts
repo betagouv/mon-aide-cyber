@@ -138,6 +138,18 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
               methode: 'GET',
               typeAppel: 'DIRECT',
             },
+            'nouvelle-demande-devenir-aidant': {
+              url: '/api/demandes/devenir-aidant',
+              methode: 'GET',
+            },
+            'envoyer-demande-devenir-aidant': {
+              url: '/api/demandes/devenir-aidant',
+              methode: 'POST',
+            },
+            'rechercher-entreprise': {
+              url: '/api/recherche-entreprise',
+              methode: 'GET',
+            },
           },
         });
       });

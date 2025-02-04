@@ -2,6 +2,7 @@ import { Options } from './hateoas';
 import {
   demandeDevenirAidant,
   finaliseCreationEspaceAidant,
+  nouvelleDemandeDevenirAidant,
 } from './devenirAidant';
 import { demandeAide, demandeEtreAide } from './etreAide';
 import { solliciterAide } from './solliciterAide';
@@ -123,6 +124,7 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
       ...lancerDiagnostic,
       ...afficherTableauDeBord,
       ...afficherProfil,
+      ...nouvelleDemandeDevenirAidant(),
     },
     'acceder-au-profil': {
       ...lancerDiagnostic,
