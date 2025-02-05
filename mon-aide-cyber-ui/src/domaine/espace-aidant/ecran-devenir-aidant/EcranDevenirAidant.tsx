@@ -34,22 +34,30 @@ export const EcranDevenirAidant = () => {
           <div className="fr-col-md-8 fr-col-sm-12">
             <TypographieH4>Comment devenir Aidant cyber ?</TypographieH4>
             <p>
-              Si vous n’êtes pas n’étant pas un représentants de l’État, il est
-              nécessaire d’être adhérent à une association pour devenir Aidant
-              cyber. Vous êtes déjà membre d’une association ou vous en
-              connaissez une ? Vous souhaitez recevoir une liste des
-              associations reconnues par MonAideCyber ? Contactez l’équipe à
-              l’adresse suivante : <LienMailtoMAC /> pour que nous puissions
-              prendre en compte votre demande.
+              Si vous n’êtes pas un représentants de l’État, il est nécessaire
+              d’être adhérent à une association pour devenir Aidant cyber. Vous
+              êtes déjà membre d’une association ou vous en connaissez une ?
+              Vous souhaitez recevoir une liste des associations reconnues par
+              MonAideCyber ? Contactez l’équipe à l’adresse suivante :{' '}
+              <LienMailtoMAC /> pour que nous puissions prendre en compte votre
+              demande.
             </p>
             <p>
               Afin de finaliser votre référencement en tant qu’Aidant cyber,
-              vous devrez : Participer à un atelier Devenir Aidant MonAideCyber,
-              animé par l’ANSSI. D’une durée d’environ 3h, ces ateliers sont
-              organisés régulièrement dans tous les territoires. Prendre
-              connaissance de la{' '}
-              <Link to="/charte-aidant">Charte de l’Aidant cyber</Link> et
-              l’accepter.
+              vous devrez
+              <ul>
+                <li>
+                  Participer à un atelier Devenir Aidant MonAideCyber. Animé par
+                  l’ANSSI et d&apos;une durée d’environ trois heures, ces
+                  ateliers sont organisés régulièrement dans tous les
+                  territoires.
+                </li>
+                <li>
+                  Prendre connaissance de la{' '}
+                  <Link to="/charte-aidant">Charte de l’Aidant cyber</Link> et
+                  l’accepter.
+                </li>
+              </ul>
             </p>
             <Button
               type="button"
@@ -76,7 +84,6 @@ export const EcranDevenirAidant = () => {
           </div>
         </div>
         <br />
-        <br />
         <div className="fr-grid-row">
           <div className="fr-col-md-8 fr-col-sm-12">
             <TypographieH4>Qui sont les Aidants cyber ?</TypographieH4>
@@ -100,7 +107,6 @@ export const EcranDevenirAidant = () => {
             </ul>
           </div>
         </div>
-        <br />
         <br />
         <div className="fr-grid-row">
           <div className="fr-col-md-8 fr-col-sm-12">
