@@ -12,8 +12,8 @@ export type AidantDTO = {
 
 export type InformationsProfil = {
   entite: {
-    nom: string;
-    siret: string;
+    nom?: string;
+    siret?: string;
     type: 'ServicePublic' | 'ServiceEtat' | 'Association';
   };
 };
