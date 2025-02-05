@@ -1170,7 +1170,47 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       );
     });
 
-    it('Vérifie la validité de l’entité', async () => {
+    it.each([
+      ['Beta-Gouv', '1234567890', 'ServicePublic', 200],
+      [undefined, undefined, 'ServicePublic', 422],
+      ['Beta-Gouv', '1234567890', 'ServiceEtat', 200],
+      [undefined, undefined, 'ServiceEtat', 422],
+      ['Beta-Gouv', '1234567890', 'Association', 200],
+      [undefined, undefined, 'Association', 200],
+    ])(
+      "S'assure de la validité de l'entité [Pour %s - %s en %s] fournie (",
+      async (nomEntite, siretEntite, typeEntite, codeHttpRetour) => {
+        FournisseurHorlogeDeTest.initialise(new Date());
+        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurAidant: unAidant().sansCGUSignees(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurUtilisateur: unUtilisateur(),
+        });
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          utilisateur.identifiant
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/utilisateur/valider-profil-aidant`,
+          {
+            cguValidees: true,
+            signatureCharte: true,
+            entite: {
+              nom: nomEntite,
+              siret: siretEntite,
+              type: typeEntite,
+            },
+          }
+        );
+
+        expect(reponse.statusCode).toBe(codeHttpRetour);
+      }
+    );
+
+    it("Vérifie la cohérence du message d'erreur", async () => {
       FournisseurHorlogeDeTest.initialise(new Date());
       const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),

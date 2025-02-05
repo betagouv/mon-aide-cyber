@@ -74,10 +74,12 @@ const validateurEntite = () => {
     entite: async (__: any, { req }: Meta) => {
       const entite: CorpsEntite = req.body.entite;
       if (
-        ['ServicePublic', 'ServiceEtat', 'Association'].includes(entite.type) &&
+        ['ServicePublic', 'ServiceEtat'].includes(entite.type) &&
         entite.nom.trim().length > 0 &&
         entite.siret.trim().length > 0
       ) {
+        return true;
+      } else if (['Association'].includes(entite.type)) {
         return true;
       }
       throw new Error('L’entité fournie n’est pas cohérente');
