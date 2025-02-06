@@ -2,7 +2,6 @@ import { Options } from './hateoas';
 import {
   demandeDevenirAidant,
   finaliseCreationEspaceAidant,
-  nouvelleDemandeDevenirAidant,
 } from './devenirAidant';
 import { demandeAide, demandeEtreAide } from './etreAide';
 import { solliciterAide } from './solliciterAide';
@@ -53,7 +52,7 @@ export type ContextesUtilisateur = {
 export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
   'demande-devenir-aidant': {
     ...finaliseCreationEspaceAidant(),
-    ...demandeDevenirAidant(),
+    ...demandeDevenirAidant,
   },
   'demande-etre-aide': {
     ...demandeEtreAide,
@@ -124,7 +123,7 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
       ...lancerDiagnostic,
       ...afficherTableauDeBord,
       ...afficherProfil,
-      ...nouvelleDemandeDevenirAidant(),
+      ...demandeDevenirAidant['demande-devenir-aidant'],
     },
     'acceder-au-profil': {
       ...lancerDiagnostic,

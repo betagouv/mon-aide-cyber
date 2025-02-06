@@ -191,7 +191,7 @@ export const lesContextesUtilisateursNouveauParcoursExistants: ContextesUtilisat
           methode: 'POST',
           url: '/api/demandes/devenir-aidant',
         },
-        'nouvelle-demande-devenir-aidant': {
+        'demande-devenir-aidant': {
           url: '/api/demandes/devenir-aidant',
           methode: 'GET',
         },

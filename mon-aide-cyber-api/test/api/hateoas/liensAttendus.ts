@@ -2,7 +2,7 @@ import { ReponseHATEOAS } from '../../../src/api/hateoas/hateoas';
 
 export const liensPublicsAttendus: ReponseHATEOAS = {
   liens: {
-    'nouvelle-demande-devenir-aidant': {
+    'demande-devenir-aidant': {
       methode: 'GET',
       url: '/api/demandes/devenir-aidant',
     },
@@ -35,7 +35,7 @@ export const liensPublicsAttendus: ReponseHATEOAS = {
 
 export const liensPublicsAttendusNouveauParcours: ReponseHATEOAS = {
   liens: {
-    'nouvelle-demande-devenir-aidant': {
+    'demande-devenir-aidant': {
       methode: 'GET',
       url: '/api/demandes/devenir-aidant',
     },

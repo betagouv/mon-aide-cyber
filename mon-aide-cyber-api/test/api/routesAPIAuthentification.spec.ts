@@ -196,7 +196,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
                 typeAppel: 'API',
                 url: '/api/token',
               },
-              'nouvelle-demande-devenir-aidant': {
+              'demande-devenir-aidant': {
                 url: '/api/demandes/devenir-aidant',
                 methode: 'GET',
               },

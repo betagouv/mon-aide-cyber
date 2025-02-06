@@ -138,7 +138,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
               methode: 'GET',
               typeAppel: 'DIRECT',
             },
-            'nouvelle-demande-devenir-aidant': {
+            'demande-devenir-aidant': {
               url: '/api/demandes/devenir-aidant',
               methode: 'GET',
             },
@@ -323,7 +323,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
             url: '/api/demandes/devenir-aidant',
             methode: 'POST',
           },
-          'nouvelle-demande-devenir-aidant': {
+          'demande-devenir-aidant': {
             url: '/api/demandes/devenir-aidant',
             methode: 'GET',
           },

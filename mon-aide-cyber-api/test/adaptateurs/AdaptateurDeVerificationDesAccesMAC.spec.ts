@@ -187,7 +187,7 @@ describe('Adaptateur de vérification de relations MAC', () => {
           typeAppel: 'API',
           url: '/api/token',
         },
-        'nouvelle-demande-devenir-aidant': {
+        'demande-devenir-aidant': {
           url: '/api/demandes/devenir-aidant',
           methode: 'GET',
         },
