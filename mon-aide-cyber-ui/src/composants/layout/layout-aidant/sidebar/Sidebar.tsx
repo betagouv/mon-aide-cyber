@@ -20,8 +20,6 @@ export const Sidebar = () => {
   const { accedeALaRessource: peutDemanderADevenirAidant } = useMoteurDeLiens(
     'demande-devenir-aidant'
   );
-  const { accedeALaRessource: peutDemanderNouvelleDemandeDevenirAidant } =
-    useMoteurDeLiens('nouvelle-demande-devenir-aidant');
 
   const { estFonctionaliteActive } = useFeatureFlag(
     'ESPACE_AIDANT_ECRAN_MES_PREFERENCES'
@@ -95,8 +93,7 @@ export const Sidebar = () => {
             ]}
           />
         </section>
-        {peutDemanderADevenirAidant ||
-        peutDemanderNouvelleDemandeDevenirAidant ? (
+        {peutDemanderADevenirAidant ? (
           <section className="encart-cta-mon-espace-devenir-aidant">
             <Button
               variant="secondary"
