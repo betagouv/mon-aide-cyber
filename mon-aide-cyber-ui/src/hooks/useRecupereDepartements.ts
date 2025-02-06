@@ -12,29 +12,19 @@ export function useRecupereDepartements() {
     ressource: actionDemandeDevenirAidant,
   } = useMoteurDeLiens('demande-devenir-aidant');
 
-  const {
-    accedeALaRessource: peutNouvelleDemandeDevenirAidant,
-    ressource: actionNouvelleDemandeDevenirAidant,
-  } = useMoteurDeLiens('nouvelle-demande-devenir-aidant');
-
   const { data } = useQuery({
-    enabled: peutDemandeDevenirAidant || peutNouvelleDemandeDevenirAidant,
+    enabled: peutDemandeDevenirAidant,
     queryKey: ['recuperer-departements'],
     queryFn: () => {
-      const action = peutNouvelleDemandeDevenirAidant
-        ? actionNouvelleDemandeDevenirAidant
-        : actionDemandeDevenirAidant;
-
       return macAPI.execute<ReponseDemandeInitiee, ReponseDemandeInitiee>(
         constructeurParametresAPI()
-          .url(action.url)
-          .methode(action.methode!)
+          .url(actionDemandeDevenirAidant.url)
+          .methode(actionDemandeDevenirAidant.methode!)
           .construis(),
         (corps) => corps
       );
     },
   });
 
-  const referentielDepartements = data?.departements;
-  return referentielDepartements;
+  return data?.departements;
 }
