@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { Siret } from './Aidant';
+import { AdaptateurEnvoiMail } from '../adaptateurs/AdaptateurEnvoiMail';
 
 export type AidantDTO = {
   identifiant: crypto.UUID;
@@ -27,6 +28,7 @@ export interface ServiceAidant {
 
   valideProfilAidant(
     identifiantAidant: crypto.UUID,
-    informationsProfil: InformationsProfil
+    informationsProfil: InformationsProfil,
+    adaptateurEnvoiMail: AdaptateurEnvoiMail
   ): Promise<void>;
 }
