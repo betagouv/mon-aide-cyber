@@ -137,7 +137,7 @@ class ConstructeurActionsHATEOAS {
   public demandeDevenirAidant(): ConstructeurActionsHATEOAS {
     this.actions.set(
       'envoyer-demande-devenir-aidant',
-      demandeDevenirAidant()['demande-devenir-aidant'][
+      demandeDevenirAidant['demande-devenir-aidant'][
         'envoyer-demande-devenir-aidant'
       ]
     );
