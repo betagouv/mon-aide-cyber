@@ -118,6 +118,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     busCommande,
     busEvenement,
     serviceDeChiffrement,
+    adaptateurEnvoiMessage,
     adaptateurRelations,
   } = configuration;
 
@@ -364,9 +365,13 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         });
       }
       return unServiceAidant(entrepots.aidants())
-        .valideProfilAidant(requete.identifiantUtilisateurCourant!, {
-          ...requete.body,
-        })
+        .valideProfilAidant(
+          requete.identifiantUtilisateurCourant!,
+          {
+            ...requete.body,
+          },
+          adaptateurEnvoiMessage
+        )
         .then(() =>
           reponse.status(200).json({
             ...constructeurActionsHATEOAS()
