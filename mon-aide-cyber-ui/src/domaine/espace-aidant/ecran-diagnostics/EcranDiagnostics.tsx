@@ -13,6 +13,7 @@ import { TypographieH2 } from '../../../composants/communs/typographie/Typograph
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { TypographieH5 } from '../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
+import { Link } from 'react-router-dom';
 
 export type Diagnostic = {
   dateCreation: string;
@@ -87,15 +88,9 @@ export const EcranDiagnostics = () => {
                 Créez un diagnostic de test, qui ne sera pas comptabilisé dans
                 vos diagnostics.
               </p>
-              <button
-                type="button"
-                className="bouton-mac bouton-mac-primaire"
-                onClick={() =>
-                  window.location.replace('/diagnostic-libre-acces')
-                }
-              >
+              <Link to="/diagnostic-libre-acces" target="_blank">
                 Créer un diagnostic de test
-              </button>
+              </Link>
             </div>
           </div>
         </div>
