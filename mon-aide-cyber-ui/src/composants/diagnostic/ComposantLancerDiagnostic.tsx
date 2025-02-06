@@ -38,6 +38,7 @@ export const ComposantLienCreerDiagnostic = ({
 }: ProprietesComposant): ReactElement<HTMLAnchorElement> => {
   return (
     <Button
+      type="button"
       className="bouton-mac-icone-conteneur"
       variant="primary"
       onClick={surClick}
