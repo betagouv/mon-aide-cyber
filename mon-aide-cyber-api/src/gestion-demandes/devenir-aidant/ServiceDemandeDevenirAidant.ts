@@ -1,14 +1,14 @@
-import { Departement } from '../departements';
 import {
   EntrepotDemandeDevenirAidant,
   StatutDemande,
 } from './DemandeDevenirAidant';
+import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 
 type DemandeDevenirAidant = {
   nom: string;
   prenom: string;
-  dateDemande: Date;
-  departement: Departement;
+  dateDemande: string;
+  departement: string;
 };
 export type DemandesDevenirAidant = DemandeDevenirAidant[];
 
@@ -26,8 +26,8 @@ class ServiceDemandesDevenirAidantMAC implements ServiceDemandesDevenirAidant {
         .map((demande) => ({
           nom: demande.nom,
           prenom: demande.prenom,
-          dateDemande: demande.date,
-          departement: demande.departement,
+          dateDemande: FournisseurHorloge.formateDate(demande.date).date,
+          departement: demande.departement.nom,
         }))
     );
   }
