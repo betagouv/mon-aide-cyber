@@ -1,7 +1,3 @@
-{
-  "jobs": [
-    {
-      "command": "35 14 * * 2 npm run -w mon-aide-cyber-api tache:rapport-cot-hebdomadaire"
-    }
-  ]
-}
+[
+  "45 14 * * 2 npm run -w mon-aide-cyber-api tache:rapport-cot-hebdomadaire"
+]
