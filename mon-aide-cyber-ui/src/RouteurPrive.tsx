@@ -19,6 +19,7 @@ import { EcranMonEspaceUtilisationDuService } from './domaine/parcours-utilisati
 import { EcranValiderProfilUtilisateurInscrit } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/EcranValiderProfilUtilisateurInscrit.tsx';
 import { EcranMonEspaceDemandeDevenirAidant } from './domaine/parcours-utilisation-service/parcours-mon-espace-demande-devenir-aidant/ecran-mon-espace-demande-devenir-aidant/EcranMonEspaceDemandeDevenirAidant.tsx';
 import { EcranDevenirAidant } from './domaine/espace-aidant/ecran-devenir-aidant/EcranDevenirAidant.tsx';
+import { EcranKitDeCommunicationAidant } from './domaine/espace-aidant/ressources/ecran-kit-de-communication-aidant/EcranKitDeCommunicationAidant.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -103,6 +104,12 @@ export const RouteurPrive = () => {
               path="mes-preferences"
               element={<EcranMesPreferences />}
             ></Route>
+            <Route path="ressources">
+              <Route
+                path="kit-aidant-cyber"
+                element={<EcranKitDeCommunicationAidant />}
+              ></Route>
+            </Route>
           </Route>
         </Route>
       </Route>
