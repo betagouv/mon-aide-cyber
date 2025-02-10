@@ -57,6 +57,9 @@ class RapportExcel implements Rapport<string> {
 type Resultat = 'OK' | 'KO';
 
 const main = async (): Promise<Resultat> => {
+  console.time(
+    `Début tâche extraction COT à ${FournisseurHorloge.maintenant().toISOString()}`
+  );
   const entrepots = fabriqueEntrepots();
   const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
   const annuaireCOT = fabriqueAnnuaireCOT();
@@ -79,12 +82,16 @@ const main = async (): Promise<Resultat> => {
         .map((cot) => ({ email: cot })),
       pieceJointe: { contenu: rapport, nom: `${date}_Rapport_COT.xlsx` },
     })
-    .then(() => 'OK' as Resultat)
+    .then(() => {
+      console.timeEnd('Extraction faite en :');
+      return 'OK' as Resultat;
+    })
     .catch((erreur) => {
       console.error(
         'Une erreur a eu lieu pendant l’envoi planifié du rapport COT',
         erreur
       );
+      console.timeEnd('Extraction échouée en :');
       return 'KO';
     });
 };

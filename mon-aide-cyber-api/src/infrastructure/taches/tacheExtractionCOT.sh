@@ -11,5 +11,7 @@ if [[ "$INSTANCE_NUMBER" != "0" ]]; then
   exit 0
 fi
 
+echo "LANCE l'extraction dans ${APP_HOME}"
+
 cd "${APP_HOME}" || exit
 npm run -w mon-aide-cyber-api tache:rapport-cot-hebdomadaire
