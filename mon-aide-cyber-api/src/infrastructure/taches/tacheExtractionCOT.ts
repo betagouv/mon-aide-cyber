@@ -11,6 +11,7 @@ import { fabriqueAdaptateurEnvoiMail } from '../adaptateurs/fabriqueAdaptateurEn
 import { fabriqueAnnuaireCOT } from '../adaptateurs/fabriqueAnnuaireCOT';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
 import * as Sentry from '@sentry/node';
+import { formatDistance } from 'date-fns';
 
 class RapportExcel implements Rapport<string> {
   private readonly workbookWriter: stream.xlsx.WorkbookWriter;
@@ -57,9 +58,8 @@ class RapportExcel implements Rapport<string> {
 type Resultat = 'OK' | 'KO';
 
 const main = async (): Promise<Resultat> => {
-  console.time(
-    `Début tâche extraction COT à ${FournisseurHorloge.maintenant().toISOString()}`
-  );
+  const debutExtraction = FournisseurHorloge.maintenant();
+  console.log(`Début tâche extraction COT à ${debutExtraction.toISOString()}`);
   const entrepots = fabriqueEntrepots();
   const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
   const annuaireCOT = fabriqueAnnuaireCOT();
@@ -83,7 +83,10 @@ const main = async (): Promise<Resultat> => {
       pieceJointe: { contenu: rapport, nom: `${date}_Rapport_COT.xlsx` },
     })
     .then(() => {
-      console.timeEnd('Extraction faite en :');
+      console.log(
+        'Extraction faite en : %s',
+        formatDistance(FournisseurHorloge.maintenant(), debutExtraction)
+      );
       return 'OK' as Resultat;
     })
     .catch((erreur) => {
@@ -91,7 +94,10 @@ const main = async (): Promise<Resultat> => {
         'Une erreur a eu lieu pendant l’envoi planifié du rapport COT',
         erreur
       );
-      console.timeEnd('Extraction échouée en :');
+      console.log(
+        'Extraction échouée en : %s',
+        formatDistance(FournisseurHorloge.maintenant(), debutExtraction)
+      );
       return 'KO';
     });
 };
