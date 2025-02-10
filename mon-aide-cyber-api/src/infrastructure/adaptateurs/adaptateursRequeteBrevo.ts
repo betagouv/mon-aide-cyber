@@ -61,6 +61,8 @@ export type EnvoiMailBrevo = {
 };
 
 export type EmailBrevo = { name?: string; email: string };
+export type PieceJointeBrevo = { content: string; name: string };
+
 export type CreationContactBrevo = {
   email: string;
   attributes: Record<string, string>;

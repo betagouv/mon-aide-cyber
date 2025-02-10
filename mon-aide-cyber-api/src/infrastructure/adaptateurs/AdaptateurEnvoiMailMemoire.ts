@@ -1,5 +1,6 @@
 import {
   AdaptateurEnvoiMail,
+  Destinataire,
   Email,
   Expediteur,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
@@ -36,7 +37,8 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
 
   aEteEnvoyeA(email: string, message: string): boolean {
     const messageTrouve = this.messages.find(
-      (m) => m.destinataire.email === email && m.corps === message
+      (m) =>
+        (m.destinataire as Destinataire).email === email && m.corps === message
     );
     return messageTrouve !== undefined || false;
   }

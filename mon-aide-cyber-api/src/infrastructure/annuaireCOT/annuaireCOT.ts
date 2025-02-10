@@ -80,3 +80,6 @@ export const emailCOTDeLaRegion = (departement: Departement): string =>
   annuaireCOT.filter((cot) =>
     cot.codesRegions.includes(departement.codeRegion)
   )[0].mail;
+
+export const emailsDeTousLesCOT = (): string[] =>
+  annuaireCOT.map((cot) => cot.mail);

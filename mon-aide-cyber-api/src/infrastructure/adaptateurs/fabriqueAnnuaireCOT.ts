@@ -1,19 +1,31 @@
 import { Departement } from '../../gestion-demandes/departements';
-import { emailCOTDeLaRegion } from '../annuaireCOT/annuaireCOT';
+import {
+  emailCOTDeLaRegion,
+  emailsDeTousLesCOT,
+} from '../annuaireCOT/annuaireCOT';
 
-export const fabriqueAnnuaireCOT = () => {
+type AnnuaireCOT = {
+  annuaireCOT: () => {
+    rechercheEmailParDepartement: (departement: Departement) => string;
+    tous(): string[];
+  };
+};
+
+export const fabriqueAnnuaireCOT = (): AnnuaireCOT => {
   if (process.env.ANNUAIRE_COT === 'ANNUAIRE_PRODUCTION') {
     return {
       annuaireCOT: () => ({
-        rechercheEmailParDepartement: (departement: Departement) =>
+        rechercheEmailParDepartement: (departement: Departement): string =>
           emailCOTDeLaRegion(departement),
+        tous: (): string[] => emailsDeTousLesCOT(),
       }),
     };
   } else {
     return {
       annuaireCOT: () => ({
-        rechercheEmailParDepartement: (__departement: Departement) =>
+        rechercheEmailParDepartement: (__departement: Departement): string =>
           'cot@email.com',
+        tous: (): string[] => ['cot@email.com'],
       }),
     };
   }
