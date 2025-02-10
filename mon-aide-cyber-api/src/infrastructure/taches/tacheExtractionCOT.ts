@@ -10,6 +10,7 @@ import { isArray } from 'lodash';
 import { fabriqueAdaptateurEnvoiMail } from '../adaptateurs/fabriqueAdaptateurEnvoiMail';
 import { fabriqueAnnuaireCOT } from '../adaptateurs/fabriqueAnnuaireCOT';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
+import * as Sentry from '@sentry/node';
 
 class RapportExcel implements Rapport<string> {
   private readonly workbookWriter: stream.xlsx.WorkbookWriter;
@@ -53,7 +54,9 @@ class RapportExcel implements Rapport<string> {
   }
 }
 
-const main = async (): Promise<void> => {
+type Resultat = 'OK' | 'KO';
+
+const main = async (): Promise<Resultat> => {
   const entrepots = fabriqueEntrepots();
   const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
   const annuaireCOT = fabriqueAnnuaireCOT();
@@ -64,18 +67,35 @@ const main = async (): Promise<void> => {
   const date = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant()
   ).date;
-  adaptateurEnvoiMessage.envoie({
-    corps:
-      'Vous trouverez ci-joint le dernier rapport concernant les demandes pour devenir Aidant en attente.',
-    objet: `Rapport MonAideCyber du ${date}`,
-    destinataire: annuaireCOT
-      .annuaireCOT()
-      .tous()
-      .map((cot) => ({ email: cot })),
-    pieceJointe: { contenu: rapport, nom: `${date}_Rapport_COT.xlsx` },
-  });
+
+  return adaptateurEnvoiMessage
+    .envoie({
+      corps:
+        'Vous trouverez ci-joint le dernier rapport concernant les demandes pour devenir Aidant en attente.',
+      objet: `Rapport MonAideCyber du ${date}`,
+      destinataire: annuaireCOT
+        .annuaireCOT()
+        .tous()
+        .map((cot) => ({ email: cot })),
+      pieceJointe: { contenu: rapport, nom: `${date}_Rapport_COT.xlsx` },
+    })
+    .then(() => 'OK' as Resultat)
+    .catch((erreur) => {
+      console.error(
+        'Une erreur a eu lieu pendant l’envoi planifié du rapport COT',
+        erreur
+      );
+      return 'KO';
+    });
 };
 
-main().then(() => {
-  console.log('FAIT');
+main().then((resultat) => {
+  Sentry.captureCheckIn({
+    checkInId: Sentry.captureCheckIn({
+      monitorSlug: 'envoi-rapport-cot',
+      status: 'in_progress',
+    }),
+    monitorSlug: 'envoi-rapport-cot',
+    status: resultat === 'OK' ? 'ok' : 'error',
+  });
 });
