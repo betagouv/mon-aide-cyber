@@ -23,17 +23,14 @@ export const EcranKitDeCommunicationAidant = () => {
         </div>
         <div>
           <img
+            className="entete-icone"
             src={illustrationKitDeCom}
-            style={{ width: '70%' }}
             alt="Illustration MonAideCyber tornade"
           />
         </div>
       </section>
       <section className="contenu">
-        <div
-          className=" fr-grid-row"
-          style={{ flexDirection: 'column', gap: '2rem' }}
-        >
+        <div className=" fr-grid-row">
           <ContenuDuKit />
           <PublicationSurLesReseaux />
           <ModelesDeMails />
