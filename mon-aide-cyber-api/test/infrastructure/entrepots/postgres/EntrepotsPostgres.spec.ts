@@ -610,6 +610,20 @@ describe('Entrepot Aidant', () => {
     });
   });
 
+  it("Persiste un Aidant sans entité mais en sachant qu'il souhaite être en association", async () => {
+    const aidant = unAidant().faisantPartieDeEntite('Association').construis();
+    serviceDeChiffrement.ajoute(aidant.entite!.type!, 'cccc');
+
+    await entrepot.persiste(aidant);
+
+    const aidantRecu = await new EntrepotAidantPostgres(
+      serviceDeChiffrement
+    ).lis(aidant.identifiant);
+    expect(aidantRecu.entite).toStrictEqual<EntiteAidant>({
+      type: 'Association',
+    });
+  });
+
   it('Met à jour le consentement pour apparaître dans l’annuaire', async () => {
     const aidant = unAidant().construis();
     const serviceDeChiffrement = new ServiceDeChiffrementClair();

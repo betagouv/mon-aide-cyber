@@ -20,8 +20,8 @@ type PreferencesDTO = {
 };
 
 type EntiteDTO = {
-  nom: string;
-  siret: string;
+  nom?: string;
+  siret?: string;
   type: string;
 };
 
@@ -122,16 +122,18 @@ export class EntrepotAidantPostgres
 
   private entiteAidantEnDTO(entite: EntiteAidant): EntiteDTO {
     return {
-      nom: this.chiffrement.chiffre(entite.nom!),
-      siret: this.chiffrement.chiffre(entite.siret!),
+      ...(!!entite.nom && { nom: this.chiffrement.chiffre(entite.nom) }),
+      ...(!!entite.siret && { siret: this.chiffrement.chiffre(entite.siret) }),
       type: this.chiffrement.chiffre(entite.type),
     };
   }
 
   private entiteAidantEnEntite(entite: EntiteDTO): EntiteAidant {
     return {
-      nom: this.chiffrement.dechiffre(entite.nom),
-      siret: this.chiffrement.dechiffre(entite.siret),
+      ...(!!entite.nom && { nom: this.chiffrement.dechiffre(entite.nom) }),
+      ...(!!entite.siret && {
+        siret: this.chiffrement.dechiffre(entite.siret),
+      }),
       type: this.chiffrement.dechiffre(entite.type) as TypeEntite,
     };
   }
