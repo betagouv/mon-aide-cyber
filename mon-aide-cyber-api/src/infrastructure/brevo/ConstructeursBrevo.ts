@@ -1,11 +1,13 @@
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import {
+  PieceJointeBrevo,
   CreationContactBrevo,
   EmailBrevo,
   EnvoiMailBrevo,
   RechercheContactBrevo,
   RequeteBrevo,
 } from '../adaptateurs/adaptateursRequeteBrevo';
+import { PieceJointe } from '../../adaptateurs/AdaptateurEnvoiMail';
 
 abstract class ConstructeurBrevo<T> {
   constructor(private readonly methode: 'POST' | 'GET') {}
@@ -35,6 +37,7 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevo> {
   private contenu = '';
   private copie?: EmailBrevo[] = [];
   private copieInvisible?: EmailBrevo[] = [];
+  private pieceJointe: PieceJointeBrevo[] = [];
 
   constructor() {
     super('POST');
@@ -79,6 +82,16 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevo> {
     return this;
   }
 
+  ayantEnPieceJointe(pieceJointe?: PieceJointe): ConstructeurBrevoEnvoiMail {
+    if (pieceJointe) {
+      this.pieceJointe.push({
+        content: pieceJointe.contenu,
+        name: pieceJointe.nom,
+      });
+    }
+    return this;
+  }
+
   protected construisCorps() {
     return {
       sender: this.expediteur,
@@ -88,6 +101,7 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevo> {
       ...(this.copie && this.copie.length > 0 && { cc: this.copie }),
       ...(this.copieInvisible &&
         this.copieInvisible.length > 0 && { bcc: this.copieInvisible }),
+      ...(this.pieceJointe.length > 0 && { attachment: this.pieceJointe }),
     };
   }
 }

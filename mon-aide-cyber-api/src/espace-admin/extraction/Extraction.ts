@@ -4,7 +4,7 @@ import {
   unServiceDemandesDevenirAidant,
 } from '../../gestion-demandes/devenir-aidant/ServiceDemandeDevenirAidant';
 
-type RepresentationRapport<T> = {
+export type RepresentationRapport<T> = {
   entete: string | string[];
   intitule: string;
   valeur: T;

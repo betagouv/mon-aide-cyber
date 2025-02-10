@@ -10,6 +10,7 @@ import {
 } from './adaptateursRequeteBrevo';
 import { unConstructeurEnvoiDeMail } from '../brevo/ConstructeursBrevo';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import { isArray } from 'lodash';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   envoie(
@@ -23,13 +24,19 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
           ? adaptateurEnvironnement.messagerie().expediteurMAC()
           : adaptateurEnvironnement.messagerie().expediteurInfoMAC()
       )
-      .ayantPourDestinataires([
-        [message.destinataire.email, message.destinataire.nom],
-      ])
+      .ayantPourDestinataires(
+        isArray(message.destinataire)
+          ? message.destinataire.map((destinataire) => [
+              destinataire.email,
+              destinataire.nom,
+            ])
+          : [[message.destinataire.email, message.destinataire.nom]]
+      )
       .ayantEnCopie(message.copie)
       .ayantEnCopieInvisible(message.copieInvisible)
       .ayantPourSujet(message.objet)
       .ayantPourContenu(message.corps)
+      .ayantEnPieceJointe(message.pieceJointe)
       .construis();
     return adaptateursRequeteBrevo()
       .envoiMail()
