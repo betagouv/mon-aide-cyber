@@ -62,6 +62,19 @@ export const Sidebar = () => {
             ]}
           />
         </section>
+        {!peutDemanderADevenirAidant ? (
+          <section>
+            <MenuNavigation
+              elements={[
+                {
+                  nom: 'Kit des Aidants cyber',
+                  route: `${ROUTE_MON_ESPACE}/ressources/kit-aidant-cyber`,
+                  actif: true,
+                },
+              ]}
+            />
+          </section>
+        ) : null}
         <section>
           <MenuNavigation
             elements={[
@@ -93,6 +106,7 @@ export const Sidebar = () => {
             ]}
           />
         </section>
+
         {peutDemanderADevenirAidant ? (
           <section className="encart-cta-mon-espace-devenir-aidant">
             <Button
