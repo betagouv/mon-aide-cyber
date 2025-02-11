@@ -14,6 +14,7 @@ export type ButtonProps = PropsWithChildren<
   variant?: ButtonVariants;
   theme?: Theme;
   icon?: string;
+  iconPos?: 'left' | 'right';
 };
 
 function Button({
@@ -21,6 +22,7 @@ function Button({
   variant = 'default',
   theme = 'light',
   icon,
+  iconPos,
   ...restProps
 }: ButtonProps) {
   const { className, title } = restProps;
@@ -42,8 +44,9 @@ function Button({
 
   return (
     <button {...restProps} className={classNames}>
+      {icon && iconPos === 'left' ? <i className={`fr-icon ${icon}`} /> : null}
       {children ? children : title}
-      {icon ? <i className={`fr-icon ${icon}`} /> : null}
+      {icon && iconPos !== 'left' ? <i className={`fr-icon ${icon}`} /> : null}
     </button>
   );
 }
