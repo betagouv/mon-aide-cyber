@@ -53,7 +53,7 @@ export const PublicationSurLesReseaux = () => {
             <br />
             <br />
             Je vous propose de nous rencontrer pour réaliser ensemble
-            grauitement un <b>diagnostic cyber de premier niveau.</b> N‘hésitez
+            gratuitement un <b>diagnostic cyber de premier niveau.</b> N‘hésitez
             pas à me contacter pour toute demande de renseignement.
             <br />
             <br />
