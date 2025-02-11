@@ -46,6 +46,9 @@ class ExtractionMAC implements Extraction {
   async extrais<T>(rapport: Rapport<T>): Promise<T> {
     await unServiceDemandesDevenirAidant(this.parametres.entrepotDemandes)
       .demandesEnCours()
+      .then((demandes) =>
+        demandes.filter((d) => !!d.entiteMorale || !!d.enAttenteAdhesion)
+      )
       .then((demandes) => {
         rapport.ajoute<DemandesDevenirAidant, RepresentationDemande>({
           entetes: [

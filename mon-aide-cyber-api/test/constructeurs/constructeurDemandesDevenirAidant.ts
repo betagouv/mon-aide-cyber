@@ -20,7 +20,7 @@ class ConstructeurDemandeDevenirAidant
   private nom: string = fakerFR.person.lastName();
   private prenom: string = fakerFR.person.firstName();
   private statut: StatutDemande = StatutDemande.EN_COURS;
-  private entite?: EntiteDemande = undefined;
+  private entite?: EntiteDemande | undefined = undefined;
 
   traitee(): ConstructeurDemandeDevenirAidant {
     this.statut = StatutDemande.TRAITEE;
@@ -40,6 +40,11 @@ class ConstructeurDemandeDevenirAidant
     this.entite = {
       type: 'Association',
     };
+    return this;
+  }
+
+  avantArbitrage(): ConstructeurDemandeDevenirAidant {
+    this.entite = undefined;
     return this;
   }
 
