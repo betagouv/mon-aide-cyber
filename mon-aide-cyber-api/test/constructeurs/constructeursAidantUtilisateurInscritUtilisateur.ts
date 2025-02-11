@@ -77,6 +77,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   private secteursActivite: SecteurActivite[] = [];
   private departements: Departement[] = [];
   private typesEntites: TypesEntites = [];
+  private nomAffichageAnnuaire: string = this.nomPrenom;
   private consentementAnnuaire = false;
   private siret: string | undefined = undefined;
   private dateSignatureCGU: Date | undefined = FournisseurHorloge.maintenant();
@@ -163,6 +164,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
         secteursActivite: this.secteursActivite,
         departements: this.departements,
         typesEntites: this.typesEntites,
+        nomAffichageAnnuaire: this.nomAffichageAnnuaire,
       },
       ...(this.siret && { siret: this.siret }),
       consentementAnnuaire: this.consentementAnnuaire,

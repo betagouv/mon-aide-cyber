@@ -44,6 +44,7 @@ type Preferences = {
   secteursActivite: SecteurActivite[];
   departements: Departement[];
   typesEntites: TypesEntites;
+  nomAffichageAnnuaire: string;
 };
 
 export type TypeEntite = 'ServicePublic' | 'ServiceEtat' | 'Association';
@@ -77,3 +78,24 @@ export class ErreurCreationEspaceAidant extends Error {
 export type Siret = string;
 export const estSiretGendarmerie = (siret: string | undefined) =>
   siret === adaptateurEnvironnement.siretsEntreprise().gendarmerie();
+
+export type TypeAffichageAnnuaire = 'PRENOM_NOM' | 'PRENOM_N' | 'P_NOM';
+
+export const formatteLeNomPrenomSelonRegleAffichage = (
+  nomPrenom: string,
+  regleAffichage: TypeAffichageAnnuaire
+) => {
+  switch (regleAffichage) {
+    case 'PRENOM_N': {
+      const [prenom, nom] = nomPrenom.split(' ');
+      return `${prenom} ${nom.at(0)}.`;
+    }
+    case 'P_NOM': {
+      const [prenom, nom] = nomPrenom.split(' ');
+      return `${prenom.at(0)}. ${nom}`;
+    }
+    case 'PRENOM_NOM': {
+      return nomPrenom;
+    }
+  }
+};

@@ -53,6 +53,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
           },
         ],
         typesEntites: [],
+        nomAffichageAnnuaire: 'Jean D.',
       },
       consentementAnnuaire: false,
     });

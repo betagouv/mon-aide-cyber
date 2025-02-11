@@ -1078,6 +1078,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           secteursActivite: [],
           departements: [],
           typesEntites: [],
+          nomAffichageAnnuaire: aidant.preferences.nomAffichageAnnuaire,
         },
         consentementAnnuaire: false,
         entite: {
