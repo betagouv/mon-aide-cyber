@@ -31,18 +31,19 @@ class RapportExcel implements Rapport<string> {
 
   ajoute<
     REPRESENTATION_VALEUR,
-    REPRESENTATION_RAPPORT extends RepresentationRapport<REPRESENTATION_VALEUR>,
+    REPRESENTATION_RAPPORT extends RepresentationRapport<
+      REPRESENTATION_VALEUR,
+      any
+    >,
   >(representation: REPRESENTATION_RAPPORT): void {
     const sheet = this.workbookWriter.addWorksheet(representation.intitule);
     if (isArray(representation.valeur)) {
-      sheet.columns = Object.keys(representation.valeur[0]).map(
-        (entete, index) => ({
-          header: representation.entete[index],
-          key: entete,
-        })
-      );
-      representation.valeur.forEach((demande, index) => {
-        sheet.addRow({ id: index, ...demande }).commit();
+      sheet.columns = representation.entetes.map((entete) => ({
+        header: entete.entete,
+        key: entete.clef as string,
+      }));
+      representation.valeur.forEach((ligne, index) => {
+        sheet.addRow({ id: index, ...ligne }).commit();
       });
     }
     sheet.commit();
