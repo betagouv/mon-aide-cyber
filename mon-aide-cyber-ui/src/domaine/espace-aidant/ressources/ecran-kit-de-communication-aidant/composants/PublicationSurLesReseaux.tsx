@@ -27,7 +27,10 @@ export const PublicationSurLesReseaux = () => {
           </Cadre>
         </div>
         <br />
-        <a href="/fichiers/MAC_kit-aidant_modeles-de-mails.pdf" target="_blank">
+        <a
+          href="/fichiers/MonAideCyber_visuels_publications_linkedin.zip"
+          target="_blank"
+        >
           Télécharger tous les visuels
         </a>
       </div>
@@ -59,7 +62,7 @@ export const PublicationSurLesReseaux = () => {
         </Cadre>
         <br />
         <a
-          href="/fichiers/MAC_kit-aidant_publications-linkedin.pdf"
+          href="/fichiers/MonAideCyber_kit-aidant_publications-linkedin.pdf"
           target="_blank"
         >
           Téléchargez tous les modèles de posts

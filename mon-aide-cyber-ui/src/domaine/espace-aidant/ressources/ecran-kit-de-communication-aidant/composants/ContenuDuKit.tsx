@@ -26,7 +26,7 @@ export const ContenuDuKit = () => {
         </ul>
       </p>
       <a
-        href="/fichiers/MonAideCyber_kit_de_communication_Aidants.zip"
+        href="/fichiers/MonAideCyber_kit_des_Aidants_cyber.zip"
         target="_blank"
       >
         Télécharger le kit des Aidants cyber
