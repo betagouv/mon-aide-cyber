@@ -14,6 +14,7 @@ import {
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 
 type PreferencesDTO = {
+  nomAffichageAnnuaire: string;
   secteursActivite: string[];
   departements: string[];
   typesEntites: string[];
@@ -74,6 +75,9 @@ export class EntrepotAidantPostgres
             dto.donnees.preferences.typesEntites.filter((d) => d === t.nom)
               .length > 0
         ),
+        nomAffichageAnnuaire: this.chiffrement.dechiffre(
+          dto.donnees.preferences.nomAffichageAnnuaire
+        ),
       },
       consentementAnnuaire: dto.donnees.consentementAnnuaire,
       ...(dto.donnees.dateSignatureCGU && {
@@ -106,6 +110,9 @@ export class EntrepotAidantPostgres
           ),
           departements: entite.preferences.departements.map((d) => d.nom),
           typesEntites: entite.preferences.typesEntites.map((t) => t.nom),
+          nomAffichageAnnuaire: this.chiffrement.chiffre(
+            entite.preferences.nomAffichageAnnuaire
+          ),
         },
         consentementAnnuaire: entite.consentementAnnuaire,
         ...(entite.dateSignatureCGU && {

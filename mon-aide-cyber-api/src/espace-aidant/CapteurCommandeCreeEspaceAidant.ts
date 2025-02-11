@@ -9,6 +9,7 @@ import {
   Aidant,
   ErreurCreationEspaceAidant,
   estSiretGendarmerie,
+  formatteLeNomPrenomSelonRegleAffichage,
   Siret,
 } from './Aidant';
 
@@ -73,6 +74,10 @@ export class CapteurCommandeCreeEspaceAidant
               departements: [commande.departement],
               secteursActivite: [],
               typesEntites: [],
+              nomAffichageAnnuaire: formatteLeNomPrenomSelonRegleAffichage(
+                commande.nomPrenom,
+                'PRENOM_N'
+              ),
             },
             consentementAnnuaire: false,
             ...(commande.siret && { siret: commande.siret }),

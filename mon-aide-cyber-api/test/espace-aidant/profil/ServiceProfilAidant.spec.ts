@@ -8,6 +8,8 @@ import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest'
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import crypto from 'crypto';
+import { TypeAffichageAnnuaire } from '../../../src/espace-aidant/Aidant';
 
 describe('Service Aidant', () => {
   it('Publie l’événement PROFIL_AIDANT_MODIFIE', async () => {
@@ -48,4 +50,52 @@ describe('Service Aidant', () => {
       identifiant: aidant.identifiant,
     });
   });
+
+  it.each<{
+    prenomNom: string;
+    typeAffichage: TypeAffichageAnnuaire;
+    formatAttendu: string;
+  }>([
+    {
+      prenomNom: 'Jean Dupont',
+      typeAffichage: 'PRENOM_N',
+      formatAttendu: 'Jean D.',
+    },
+    {
+      prenomNom: 'Jean Dupont',
+      typeAffichage: 'PRENOM_NOM',
+      formatAttendu: 'Jean Dupont',
+    },
+    {
+      prenomNom: 'Jean Dupont',
+      typeAffichage: 'P_NOM',
+      formatAttendu: 'J. Dupont',
+    },
+  ])(
+    'Enregistre le nom d‘affichage pour l‘annuaire de l‘Aidant $formatAttendu',
+    async ({ prenomNom, typeAffichage, formatAttendu }) => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const busEvenement = new BusEvenementDeTest();
+      const entrepotAidant = new EntrepotAidantMemoire();
+      const uuid = crypto.randomUUID();
+      const aidant = unAidant()
+        .avecUnIdentifiant(uuid)
+        .avecUnNomPrenom(prenomNom)
+        .construis();
+      await entrepotAidant.persiste(aidant);
+
+      await new ServiceProfilAidant(entrepotAidant, busEvenement).modifie(
+        aidant.identifiant,
+        {
+          consentementAnnuaire: true,
+          typeAffichageChoisi: typeAffichage,
+        }
+      );
+
+      const aidantPersite = await entrepotAidant.lis(uuid);
+      expect(aidantPersite.preferences.nomAffichageAnnuaire).toStrictEqual(
+        formatAttendu
+      );
+    }
+  );
 });

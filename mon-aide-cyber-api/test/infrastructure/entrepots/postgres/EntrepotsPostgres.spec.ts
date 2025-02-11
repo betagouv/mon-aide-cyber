@@ -555,6 +555,7 @@ describe('Entrepot Aidant', () => {
     const aidant = unAidant().construis();
     serviceDeChiffrement.ajoute(aidant.email, 'aaa');
     serviceDeChiffrement.ajoute(aidant.nomPrenom, 'ccc');
+    serviceDeChiffrement.ajoute(aidant.preferences.nomAffichageAnnuaire, 'ddd');
 
     await entrepot.persiste(aidant);
 
