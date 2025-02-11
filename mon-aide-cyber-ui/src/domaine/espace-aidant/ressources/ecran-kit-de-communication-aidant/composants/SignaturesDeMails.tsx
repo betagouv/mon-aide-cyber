@@ -23,7 +23,7 @@ export const SignaturesDeMails = () => {
         />
       </Cadre>
       <br />
-      <a href="/fichiers/mac_signature_mail.zip" target="_blank">
+      <a href="/fichiers/MonAideCyber_signature_mail.zip" target="_blank">
         Télécharger tous les visuels
       </a>
     </div>

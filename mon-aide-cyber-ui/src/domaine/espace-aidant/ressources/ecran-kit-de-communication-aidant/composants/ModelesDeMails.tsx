@@ -11,8 +11,9 @@ export const ModelesDeMails = () => {
         Exemple de mail :
       </p>
       <Cadre className="kit-aidant-cadre-exemple-texte">
-        Bonjour [Madame/Monsieur,] Je vous contacte suite à la demande d’aide
-        que vous avez faite auprès du dispositif MonAideCyber. <br />
+        Bonjour [Madame/Monsieur,] <br /> <br />
+        Je vous contacte suite à la demande d’aide que vous avez faite auprès du
+        dispositif MonAideCyber. <br />
         <br />
         En tant qu’Aidant cyber de votre territoire, je serai ravi de vous
         accompagner dans votre démarche de sécurisation cyber. Je vous propose
@@ -37,7 +38,10 @@ export const ModelesDeMails = () => {
         [Votre signature]
       </Cadre>
       <br />
-      <a href="/fichiers/MAC_kit-aidant_modeles-de-mails.pdf" target="_blank">
+      <a
+        href="/fichiers/MonAideCyber_kit-aidant_modeles-de-mails.pdf"
+        target="_blank"
+      >
         Télécharger tous les modèles de mail
       </a>
     </div>
