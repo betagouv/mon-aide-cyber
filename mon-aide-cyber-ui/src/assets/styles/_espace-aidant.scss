@@ -99,3 +99,26 @@ aside.barre-navigation-laterale {
   font-size: 12px;
   color: var(--couleurs-mac-gris-clair);
 }
+
+.barre-progression {
+  display: flex;
+  gap: .5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+.barre-progression-fond {
+  width: 100%;
+  border-radius: 3rem;
+  background-color: var(--couleurs-mac-gris-leger);
+  height: 24px;
+
+  .barre-progression-avancee {
+    border-radius: 3rem;
+    background-color: var(--couleurs-mac-violet-fonce);
+    width: 10%;
+    height: 24px;
+  }
+}
+}

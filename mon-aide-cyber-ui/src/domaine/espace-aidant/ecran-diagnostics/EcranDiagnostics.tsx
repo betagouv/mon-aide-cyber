@@ -14,6 +14,7 @@ import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useErrorBoundary } from 'react-error-boundary';
 import { TypographieH5 } from '../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 import { Link } from 'react-router-dom';
+import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
 
 export type Diagnostic = {
   dateCreation: string;
@@ -96,6 +97,15 @@ export const EcranDiagnostics = () => {
         </div>
       </section>
       <section>
+        <div className="barre-progression">
+          <TypographieH3>Mission sur Mars</TypographieH3>
+          <div className="barre-progression-fond">
+            <div className="barre-progression-avancee"></div>
+          </div>
+          <TypographieH5>
+            200/2000 diagnostics réalisés par la communauté
+          </TypographieH5>
+        </div>
         <ComposantDiagnostics diagnostics={diagnostics} />
       </section>
     </article>
