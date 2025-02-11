@@ -18,3 +18,21 @@ export const ChampCaseACocher = ({
     </div>
   );
 };
+
+export const ChampRadio = ({
+  element,
+  label,
+  ...proprietesRestantes
+}: {
+  element: ElementDynamique;
+  label: string;
+} & React.InputHTMLAttributes<HTMLInputElement>) => {
+  return (
+    <div className="champ-case-a-cocher-conteneur">
+      <label htmlFor={element.code}>
+        <input {...proprietesRestantes} id={element.code} type="radio" />{' '}
+        <span>{label}</span>
+      </label>
+    </div>
+  );
+};

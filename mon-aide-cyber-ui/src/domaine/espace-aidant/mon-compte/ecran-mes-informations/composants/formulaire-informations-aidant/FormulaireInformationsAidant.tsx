@@ -1,11 +1,16 @@
 import { ReactElement, useState } from 'react';
-import { cocheConsentementAnnuaire } from '../reducteurProfil';
+import {
+  cocheConsentementAnnuaire,
+  cocheTypeAffichageAnnuaire,
+  TypeAffichage,
+} from '../reducteurProfil';
 import { useFormulaireInformationsAidant } from './useFormulaireInformationsAidant';
 import Button from '../../../../../../composants/atomes/Button/Button';
 import { ChampCaseACocher } from '../../../../../../composants/communs/ChampCaseACocher/ChampCaseACocher';
 import { Toast } from '../../../../../../composants/communs/Toasts/Toast';
 import { MACAPIType } from '../../../../../../fournisseurs/api/useMACAPI.ts';
 import { useMoteurDeLiens } from '../../../../../../hooks/useMoteurDeLiens.ts';
+import { FormatAffichageAnnuaire } from './FormatAffichageAnnuaire.tsx';
 
 type ProprietesFormulaireInformationsAidant = {
   macAPI: MACAPIType;
@@ -18,6 +23,7 @@ export const FormulaireInformationsAidant = ({
 
   const { etatProfil, declencheActionReducteur, enregistreProfil } =
     useFormulaireInformationsAidant(macAPI);
+
   const [
     messageEnregistrementProfilAidant,
     setMessageEnregistrementProfilAidant,
@@ -124,6 +130,18 @@ export const FormulaireInformationsAidant = ({
                 }
               />
             </div>
+            {etatProfil.consentementAnnuaire ? (
+              <FormatAffichageAnnuaire
+                valeurParDefaut={
+                  etatProfil?.affichagesAnnuaire?.find((x) => x.actif)?.type
+                }
+                surChangement={(typeAffichage: TypeAffichage) =>
+                  declencheActionReducteur(
+                    cocheTypeAffichageAnnuaire(typeAffichage)
+                  )
+                }
+              />
+            ) : null}
             {messageEnregistrementProfilAidant}
             <Button
               className="fr-mt-2w"

@@ -11,9 +11,11 @@ import { useNavigationMAC } from '../../../../../../fournisseurs/hooks';
 import { Lien, ReponseHATEOAS } from '../../../../../Lien';
 import { MoteurDeLiens } from '../../../../../MoteurDeLiens';
 import { Profil } from '../../../../../profil/Profil';
+import { TypeAffichageAnnuaire } from 'mon-aide-cyber-api/src/espace-aidant/Aidant.ts';
 
 type CorpsModificationProfil = {
   consentementAnnuaire: boolean;
+  typeAffichage: TypeAffichageAnnuaire;
 };
 
 export const useFormulaireInformationsAidant = (macAPI: MACAPIType) => {
@@ -66,6 +68,9 @@ export const useFormulaireInformationsAidant = (macAPI: MACAPIType) => {
               .methode(lien.methode!)
               .corps({
                 consentementAnnuaire: etatProfil.consentementAnnuaire,
+                typeAffichage: etatProfil.affichagesAnnuaire!.find(
+                  (x) => x.actif
+                )!.type,
               })
               .construis();
           macAPI

@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   cocheConsentementAnnuaire,
+  cocheTypeAffichageAnnuaire,
   EtatProfil,
   profilCharge,
   reducteurProfil,
 } from '../../../src/domaine/espace-aidant/mon-compte/ecran-mes-informations/composants/reducteurProfil.ts';
+import { TypeAffichageAnnuaire } from 'mon-aide-cyber-api/src/espace-aidant/Aidant';
 
 describe('reducteur profil', () => {
   const profilVide: EtatProfil = {
@@ -25,15 +27,49 @@ describe('reducteur profil', () => {
         dateSignatureCGU: '03.12.2023',
         consentementAnnuaire: false,
         identifiantConnexion: 'jean.dupont@email.fr',
+        affichagesAnnuaire: [
+          {
+            type: TypeAffichageAnnuaire.PRENOM_N,
+            valeur: 'Jean D.',
+            actif: true,
+          },
+          {
+            type: TypeAffichageAnnuaire.PRENOM_NOM,
+            valeur: 'Jean Dupont',
+            actif: false,
+          },
+          {
+            type: TypeAffichageAnnuaire.P_NOM,
+            valeur: 'J. Dupont',
+            actif: false,
+          },
+        ],
       })
     );
 
-    expect(etatProfil).toStrictEqual({
+    expect(etatProfil).toStrictEqual<EtatProfil>({
       nom: 'Dupont',
       prenom: 'Jean',
       email: 'jean.dupont@email.fr',
       dateCreationCompte: '03.12.2023',
       consentementAnnuaire: false,
+      affichagesAnnuaire: [
+        {
+          type: TypeAffichageAnnuaire.PRENOM_N,
+          valeur: 'Jean D.',
+          actif: true,
+        },
+        {
+          type: TypeAffichageAnnuaire.PRENOM_NOM,
+          valeur: 'Jean Dupont',
+          actif: false,
+        },
+        {
+          type: TypeAffichageAnnuaire.P_NOM,
+          valeur: 'J. Dupont',
+          actif: false,
+        },
+      ],
       enCoursDeChargement: false,
     });
   });
@@ -46,6 +82,23 @@ describe('reducteur profil', () => {
         nomPrenom: 'Jean Du Jardin',
         dateSignatureCGU: '03.12.2023',
         consentementAnnuaire: false,
+        affichagesAnnuaire: [
+          {
+            type: TypeAffichageAnnuaire.PRENOM_N,
+            valeur: 'Jean D.',
+            actif: true,
+          },
+          {
+            type: TypeAffichageAnnuaire.PRENOM_NOM,
+            valeur: 'Jean Du Jardin',
+            actif: false,
+          },
+          {
+            type: TypeAffichageAnnuaire.P_NOM,
+            valeur: 'J. Du Jardin',
+            actif: false,
+          },
+        ],
         identifiantConnexion: 'jean.dupont@email.fr',
       })
     );
@@ -56,6 +109,23 @@ describe('reducteur profil', () => {
       email: 'jean.dupont@email.fr',
       dateCreationCompte: '03.12.2023',
       consentementAnnuaire: false,
+      affichagesAnnuaire: [
+        {
+          type: TypeAffichageAnnuaire.PRENOM_N,
+          valeur: 'Jean D.',
+          actif: true,
+        },
+        {
+          type: TypeAffichageAnnuaire.PRENOM_NOM,
+          valeur: 'Jean Du Jardin',
+          actif: false,
+        },
+        {
+          type: TypeAffichageAnnuaire.P_NOM,
+          valeur: 'J. Du Jardin',
+          actif: false,
+        },
+      ],
       enCoursDeChargement: false,
     });
   });
@@ -81,6 +151,62 @@ describe('reducteur profil', () => {
         dateCreationCompte: '03.12.2023',
         consentementAnnuaire: true,
         enCoursDeChargement: false,
+      });
+    });
+    it("Sélectionne un format d'affichage du nom dans l'annuaire", () => {
+      const etatProfil = reducteurProfil(
+        {
+          nom: 'Dupont',
+          prenom: 'Jean',
+          email: 'jean.dupont@email.fr',
+          dateCreationCompte: '03.12.2023',
+          consentementAnnuaire: true,
+          enCoursDeChargement: false,
+          affichagesAnnuaire: [
+            {
+              type: TypeAffichageAnnuaire.PRENOM_N,
+              valeur: 'Jean D.',
+              actif: false,
+            },
+            {
+              type: TypeAffichageAnnuaire.PRENOM_NOM,
+              valeur: 'Jean Dupont',
+              actif: true,
+            },
+            {
+              type: TypeAffichageAnnuaire.P_NOM,
+              valeur: 'J. Dupont',
+              actif: false,
+            },
+          ],
+        },
+        cocheTypeAffichageAnnuaire(TypeAffichageAnnuaire.PRENOM_N)
+      );
+
+      expect(etatProfil).toStrictEqual({
+        nom: 'Dupont',
+        prenom: 'Jean',
+        email: 'jean.dupont@email.fr',
+        dateCreationCompte: '03.12.2023',
+        consentementAnnuaire: true,
+        enCoursDeChargement: false,
+        affichagesAnnuaire: [
+          {
+            type: TypeAffichageAnnuaire.PRENOM_N,
+            valeur: 'Jean D.',
+            actif: true,
+          },
+          {
+            type: TypeAffichageAnnuaire.PRENOM_NOM,
+            valeur: 'Jean Dupont',
+            actif: false,
+          },
+          {
+            type: TypeAffichageAnnuaire.P_NOM,
+            valeur: 'J. Dupont',
+            actif: false,
+          },
+        ],
       });
     });
   });
