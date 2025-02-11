@@ -9,6 +9,7 @@ type DemandeDevenirAidant = {
   prenom: string;
   dateDemande: string;
   departement: string;
+  entiteMorale?: string;
 };
 export type DemandesDevenirAidant = DemandeDevenirAidant[];
 
@@ -28,6 +29,7 @@ class ServiceDemandesDevenirAidantMAC implements ServiceDemandesDevenirAidant {
           prenom: demande.prenom,
           dateDemande: FournisseurHorloge.formateDate(demande.date).date,
           departement: demande.departement.nom,
+          ...(demande.entite?.nom && { entiteMorale: demande.entite.nom }),
         }))
     );
   }

@@ -8,6 +8,7 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 import { Departement, gironde } from '../../src/gestion-demandes/departements';
 import crypto from 'crypto';
 import { fakerFR } from '@faker-js/faker';
+import { TypeEntite } from '../../src/espace-aidant/Aidant';
 
 class ConstructeurDemandeDevenirAidant
   implements Constructeur<DemandeDevenirAidant>
@@ -23,6 +24,15 @@ class ConstructeurDemandeDevenirAidant
 
   traitee(): ConstructeurDemandeDevenirAidant {
     this.statut = StatutDemande.TRAITEE;
+    return this;
+  }
+
+  avecEntiteMorale(type: TypeEntite): ConstructeurDemandeDevenirAidant {
+    this.entite = {
+      type,
+      nom: fakerFR.company.name(),
+      siret: fakerFR.string.alpha(10),
+    };
     return this;
   }
 
