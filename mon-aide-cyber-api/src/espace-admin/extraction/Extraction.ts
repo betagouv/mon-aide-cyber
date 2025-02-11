@@ -44,8 +44,19 @@ class ExtractionMAC implements Extraction {
   constructor(private readonly parametres: Parametres) {}
 
   async extrais<T>(rapport: Rapport<T>): Promise<T> {
-    await unServiceDemandesDevenirAidant(this.parametres.entrepotDemandes)
-      .demandesEnCours()
+    const demandesEnCours = unServiceDemandesDevenirAidant(
+      this.parametres.entrepotDemandes
+    ).demandesEnCours();
+    await this.ajouteLesDemandesDevenirAidant(demandesEnCours, rapport);
+    await this.ajouteLesDemandesAvantArbitrage(demandesEnCours, rapport);
+    return rapport.genere();
+  }
+
+  private async ajouteLesDemandesDevenirAidant<T>(
+    demandesEnCours: Promise<DemandesDevenirAidant>,
+    rapport: Rapport<T>
+  ) {
+    await demandesEnCours
       .then((demandes) =>
         demandes.filter((d) => !!d.entiteMorale || !!d.enAttenteAdhesion)
       )
@@ -66,7 +77,28 @@ class ExtractionMAC implements Extraction {
           valeur: demandes,
         });
       });
-    return rapport.genere();
+  }
+
+  private async ajouteLesDemandesAvantArbitrage<T>(
+    demandesEnCours: Promise<DemandesDevenirAidant>,
+    rapport: Rapport<T>
+  ) {
+    await demandesEnCours
+      .then((demandes) =>
+        demandes.filter((d) => !d.entiteMorale && !d.enAttenteAdhesion)
+      )
+      .then((demandes) => {
+        rapport.ajoute<DemandesDevenirAidant, RepresentationDemande>({
+          entetes: [
+            { entete: 'Nom', clef: 'nom' },
+            { entete: 'Prénom', clef: 'prenom' },
+            { entete: 'Date de la demande', clef: 'dateDemande' },
+            { entete: 'Département', clef: 'departement' },
+          ],
+          intitule: 'Demandes avant arbitrage',
+          valeur: demandes,
+        });
+      });
   }
 }
 

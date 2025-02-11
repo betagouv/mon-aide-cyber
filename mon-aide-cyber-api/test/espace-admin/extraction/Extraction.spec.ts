@@ -16,8 +16,8 @@ import {
 class RapportJSON implements Rapport<RepresentationJSON> {
   private readonly representations: Map<string, DemandesDevenirAidant> =
     new Map();
-  public entete: any[] = [];
-  public intitule = '';
+  public entetes: Map<string, any[]> = new Map();
+  public intitule: Map<string, string> = new Map();
 
   ajoute<
     REPRESENTATION_VALEUR,
@@ -26,9 +26,9 @@ class RapportJSON implements Rapport<RepresentationJSON> {
       any
     >,
   >(representation: REPRESENTATION_RAPPORT): void {
-    this.entete = representation.entetes;
-    this.intitule = representation.intitule;
     const key = representation.intitule.toLowerCase().replace(/ /g, '-');
+    this.entetes.set(key, representation.entetes);
+    this.intitule.set(key, representation.intitule);
     this.representations.set(
       key,
       representation.valeur as DemandesDevenirAidant
@@ -36,10 +36,17 @@ class RapportJSON implements Rapport<RepresentationJSON> {
   }
 
   genere(): Promise<RepresentationJSON> {
+    const demandesDevenirAidant = this.representations.get(
+      'demandes-devenir-aidant'
+    ) as DemandesDevenirAidant;
+    const demandesAvantArbitrage = this.representations.get(
+      'demandes-avant-arbitrage'
+    ) as DemandesDevenirAidant;
     return Promise.resolve({
-      'demandes-devenir-aidant': this.representations.get(
-        'demandes-devenir-aidant'
-      ) as DemandesDevenirAidant,
+      'demandes-devenir-aidant': demandesDevenirAidant,
+      ...(demandesAvantArbitrage.length > 0 && {
+        'demandes-avant-arbitrage': demandesAvantArbitrage,
+      }),
     });
   }
 }
@@ -89,17 +96,17 @@ describe('Extraction', () => {
         entrepotDemandes: entrepotDemande,
       }).extrais<RepresentationJSON>(new RapportJSON());
 
-      expect(rapport).toStrictEqual<{ [clef: string]: DemandesDevenirAidant }>({
-        'demandes-devenir-aidant': [
-          {
-            nom: demande.nom,
-            prenom: demande.prenom,
-            dateDemande: FournisseurHorloge.formateDate(demande.date).date,
-            departement: demande.departement.nom,
-            entiteMorale: demande.entite!.nom!,
-          },
-        ],
-      });
+      expect(
+        rapport['demandes-devenir-aidant']
+      ).toStrictEqual<DemandesDevenirAidant>([
+        {
+          nom: demande.nom,
+          prenom: demande.prenom,
+          dateDemande: FournisseurHorloge.formateDate(demande.date).date,
+          departement: demande.departement.nom,
+          entiteMorale: demande.entite!.nom!,
+        },
+      ]);
     });
 
     it('Le rapport contient entête et intitulé', async () => {
@@ -112,7 +119,9 @@ describe('Extraction', () => {
         entrepotDemandes: entrepotDemande,
       }).extrais<RepresentationJSON>(rapportJSON);
 
-      expect(rapportJSON.entete).toStrictEqual<Entete<DemandeDevenirAidant>[]>([
+      expect(rapportJSON.entetes.get('demandes-devenir-aidant')).toStrictEqual<
+        Entete<DemandeDevenirAidant>[]
+      >([
         { entete: 'Nom', clef: 'nom' },
         { entete: 'Prénom', clef: 'prenom' },
         { entete: 'Date de la demande', clef: 'dateDemande' },
@@ -123,7 +132,9 @@ describe('Extraction', () => {
           clef: 'enAttenteAdhesion',
         },
       ]);
-      expect(rapportJSON.intitule).toStrictEqual('Demandes devenir Aidant');
+      expect(rapportJSON.intitule.get('demandes-devenir-aidant')).toStrictEqual(
+        'Demandes devenir Aidant'
+      );
     });
 
     it('Fournit l’entité morale de la demande', async () => {
@@ -154,6 +165,67 @@ describe('Extraction', () => {
       expect(
         rapport['demandes-devenir-aidant'][0].enAttenteAdhesion
       ).toStrictEqual('Oui');
+    });
+  });
+
+  describe('Pour les demandes devenir Aidant en cours avant arbitrage', () => {
+    it('Extrait les demandes', async () => {
+      const demande = uneDemandeDevenirAidant()
+        .avecEntiteMorale('ServiceEtat')
+        .construis();
+      const demandeAvantArbitrage = uneDemandeDevenirAidant()
+        .avantArbitrage()
+        .construis();
+      const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
+      await entrepotDemande.persiste(demande);
+      await entrepotDemande.persiste(demandeAvantArbitrage);
+
+      const rapport = await uneExtraction({
+        entrepotDemandes: entrepotDemande,
+      }).extrais<RepresentationJSON>(new RapportJSON());
+
+      expect(rapport).toStrictEqual<{ [clef: string]: DemandesDevenirAidant }>({
+        'demandes-devenir-aidant': [
+          {
+            nom: demande.nom,
+            prenom: demande.prenom,
+            dateDemande: FournisseurHorloge.formateDate(demande.date).date,
+            departement: demande.departement.nom,
+            entiteMorale: demande.entite!.nom!,
+          },
+        ],
+        'demandes-avant-arbitrage': [
+          {
+            nom: demandeAvantArbitrage.nom,
+            prenom: demandeAvantArbitrage.prenom,
+            dateDemande: FournisseurHorloge.formateDate(demande.date).date,
+            departement: demande.departement.nom,
+          },
+        ],
+      });
+    });
+
+    it('Le rapport contient entête et intitulé', async () => {
+      const demande = uneDemandeDevenirAidant().avantArbitrage().construis();
+      const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
+      await entrepotDemande.persiste(demande);
+
+      const rapportJSON = new RapportJSON();
+      await uneExtraction({
+        entrepotDemandes: entrepotDemande,
+      }).extrais<RepresentationJSON>(rapportJSON);
+
+      expect(rapportJSON.entetes.get('demandes-avant-arbitrage')).toStrictEqual<
+        Entete<DemandeDevenirAidant>[]
+      >([
+        { entete: 'Nom', clef: 'nom' },
+        { entete: 'Prénom', clef: 'prenom' },
+        { entete: 'Date de la demande', clef: 'dateDemande' },
+        { entete: 'Département', clef: 'departement' },
+      ]);
+      expect(
+        rapportJSON.intitule.get('demandes-avant-arbitrage')
+      ).toStrictEqual('Demandes avant arbitrage');
     });
   });
 });
