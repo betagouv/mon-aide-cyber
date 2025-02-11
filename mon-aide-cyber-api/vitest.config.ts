@@ -15,9 +15,7 @@ export default defineProject({
       SIRET_GENDARMERIE: 'GENDARMERIE',
       FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL: 'true',
     },
-    onConsoleLog(log: string): boolean {
-      return !log.includes('Une erreur est survenue:');
-    },
+    printConsoleTrace: false,
     environment: 'node',
     globals: true,
   },
