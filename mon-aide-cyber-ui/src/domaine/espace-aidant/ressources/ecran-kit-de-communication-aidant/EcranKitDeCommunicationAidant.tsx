@@ -5,6 +5,7 @@ import { ContenuDuKit } from './composants/ContenuDuKit.tsx';
 import { PublicationSurLesReseaux } from './composants/PublicationSurLesReseaux.tsx';
 import { ModelesDeMails } from './composants/ModelesDeMails.tsx';
 import { SignaturesDeMails } from './composants/SignaturesDeMails.tsx';
+import Button from '../../../../composants/atomes/Button/Button.tsx';
 
 export const EcranKitDeCommunicationAidant = () => {
   return (
@@ -20,6 +21,20 @@ export const EcranKitDeCommunicationAidant = () => {
             qu‘Aidant cyber auprès de votre écosystème. Il vous offre des
             ressources toutes prêtes pour gagner en visibilité.
           </p>
+          <Button
+            type="button"
+            variant="primary"
+            icon="fr-icon-download-line"
+            iconPos="right"
+            onClick={() => {
+              window.open(
+                '/fichiers/MonAideCyber_kit_des_Aidants_cyber.zip',
+                '_blank'
+              );
+            }}
+          >
+            Télécharger le kit des Aidants cyber
+          </Button>
         </div>
         <div>
           <img
