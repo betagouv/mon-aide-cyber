@@ -102,13 +102,16 @@ const main = async (): Promise<Resultat> => {
     });
 };
 
-main().then((resultat) => {
-  Sentry.captureCheckIn({
-    checkInId: Sentry.captureCheckIn({
+main()
+  .then((resultat) => {
+    Sentry.captureCheckIn({
+      checkInId: Sentry.captureCheckIn({
+        monitorSlug: 'envoi-rapport-cot',
+        status: 'in_progress',
+      }),
       monitorSlug: 'envoi-rapport-cot',
-      status: 'in_progress',
-    }),
-    monitorSlug: 'envoi-rapport-cot',
-    status: resultat === 'OK' ? 'ok' : 'error',
-  });
-});
+      status: resultat === 'OK' ? 'ok' : 'error',
+    });
+    process.exit(0);
+  })
+  .catch((erreur) => console.error('Une erreur s’est produite', erreur));
