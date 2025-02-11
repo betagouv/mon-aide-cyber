@@ -11,31 +11,47 @@ export const ModelesDeMails = () => {
         Exemple de mail :
       </p>
       <Cadre className="kit-aidant-cadre-exemple-texte">
-        Bonjour [Madame/Monsieur,] <br /> <br />
-        Je vous contacte suite à la demande d’aide que vous avez faite auprès du
-        dispositif MonAideCyber. <br />
-        <br />
-        En tant qu’Aidant cyber de votre territoire, je serai ravi de vous
-        accompagner dans votre démarche de sécurisation cyber. Je vous propose
-        de réaliser ensemble un diagnostic cyber de 1er niveau. Ce diagnostic
-        gratuit prend la forme d’un échange qui s’appuie sur un questionnaire
-        réalisé par l’ANSSI.
-        <br />À la suite de ce diagnostic, une liste de 6 mesures prioritaires
-        et accessibles vous est proposée. Nous pouvons prévoir un créneau
-        d’environ 1h30 pour réaliser ce diagnostic, idéalement en présentiel. En
-        ce sens, pouvez-vous m’indiquer par retour de mail plusieurs créneaux de
-        disponibilité ainsi que l’adresse de vos locaux ? <br />
-        <br />
-        Afin de réaliser votre diagnostic dans les meilleures conditions, je
-        vous conseille de convier à cet échange votre responsable informatique
-        et/ou votre prestataire informatique, ainsi qu’un membre de la
-        direction. Cet accompagnement est encadré par une charte que j’ai signée
-        et que vous pouvez consulter en ligne vi a ce lien :
-        https://www.monaidecyber.ssi.gouv.fr/charte-aidant <br />
-        <br />
-        Merci par avance pour votre retour et bonne journée, <br />
-        <br />
-        [Votre signature]
+        <p>
+          Bonjour [Madame/Monsieur,] <br /> <br />
+          Je vous contacte suite à la demande d’aide que vous avez faite auprès
+          du dispositif <b>MonAideCyber</b>.
+          <br />
+          <br />
+          En tant qu’Aidant cyber de votre territoire, je serai ravi de vous
+          accompagner dans votre démarche de sécurisation cyber. Je vous propose
+          de <b>réaliser ensemble un diagnostic cyber</b> de 1er niveau. Ce
+          diagnostic <b>gratuit</b> prend la forme d’un échange qui s’appuie sur
+          un questionnaire réalisé par l’ANSSI.
+          <br />À la suite de ce diagnostic,{' '}
+          <b>une liste de 6 mesures prioritaires et accessibles</b> vous est
+          proposée. Nous pouvons prévoir un créneau d’environ <b>1h30</b> pour
+          réaliser ce diagnostic, idéalement en présentiel. En ce sens,
+          pouvez-vous m’indiquer par retour de mail plusieurs créneaux de
+          disponibilité ainsi que l’adresse de vos locaux ? <br />
+          <br />
+          <b>
+            Afin de réaliser votre diagnostic dans les meilleures conditions, je
+            vous conseille de convier à cet échange votre responsable
+            informatique et/ou votre prestataire informatique, ainsi qu’un
+            membre de la direction.
+          </b>{' '}
+          <br />
+          <br />
+          Cet accompagnement est encadré par une charte que j’ai signée et que
+          vous pouvez consulter en ligne via ce lien :{' '}
+          <a
+            rel="noreferrer"
+            href="https://monaide.cyber.gouv.fr/charte-aidant"
+            target="_blank"
+          >
+            https://monaide.cyber.gouv.fr/charte-aidant
+          </a>{' '}
+          <br />
+          <br />
+          Merci par avance pour votre retour et bonne journée, <br />
+          <br />
+          [Votre signature]
+        </p>
       </Cadre>
       <br />
       <a
