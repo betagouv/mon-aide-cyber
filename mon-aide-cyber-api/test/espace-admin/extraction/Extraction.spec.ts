@@ -2,24 +2,31 @@ import { describe, expect, it } from 'vitest';
 import { uneDemandeDevenirAidant } from '../../constructeurs/constructeurDemandesDevenirAidant';
 import { EntrepotDemandeDevenirAidantMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import {
+  Entete,
   Rapport,
   RepresentationRapport,
   uneExtraction,
 } from '../../../src/espace-admin/extraction/Extraction';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
-import { DemandesDevenirAidant } from '../../../src/gestion-demandes/devenir-aidant/ServiceDemandeDevenirAidant';
+import {
+  DemandeDevenirAidant,
+  DemandesDevenirAidant,
+} from '../../../src/gestion-demandes/devenir-aidant/ServiceDemandeDevenirAidant';
 
 class RapportJSON implements Rapport<RepresentationJSON> {
   private readonly representations: Map<string, DemandesDevenirAidant> =
     new Map();
-  public entete: string[] = [];
+  public entete: any[] = [];
   public intitule = '';
 
   ajoute<
     REPRESENTATION_VALEUR,
-    REPRESENTATION_RAPPORT extends RepresentationRapport<REPRESENTATION_VALEUR>,
+    REPRESENTATION_RAPPORT extends RepresentationRapport<
+      REPRESENTATION_VALEUR,
+      any
+    >,
   >(representation: REPRESENTATION_RAPPORT): void {
-    this.entete = representation.entete as string[];
+    this.entete = representation.entetes;
     this.intitule = representation.intitule;
     const key = representation.intitule.toLowerCase().replace(/ /g, '-');
     this.representations.set(
@@ -73,12 +80,16 @@ describe('Extraction', () => {
       entrepotDemandes: entrepotDemande,
     }).extrais<RepresentationJSON>(rapportJSON);
 
-    expect(rapportJSON.entete).toStrictEqual([
-      'Nom',
-      'Prénom',
-      'Date de la demande',
-      'Département',
-      'Entité Morale',
+    expect(rapportJSON.entete).toStrictEqual<Entete<DemandeDevenirAidant>[]>([
+      { entete: 'Nom', clef: 'nom' },
+      { entete: 'Prénom', clef: 'prenom' },
+      { entete: 'Date de la demande', clef: 'dateDemande' },
+      { entete: 'Département', clef: 'departement' },
+      { entete: 'Entité Morale', clef: 'entiteMorale' },
+      {
+        entete: 'En attente d’adhésion à une Association',
+        clef: 'enAttenteAdhesion',
+      },
     ]);
     expect(rapportJSON.intitule).toStrictEqual('Demandes devenir Aidant');
   });
@@ -97,5 +108,19 @@ describe('Extraction', () => {
     expect(rapport['demandes-devenir-aidant'][0].entiteMorale).toStrictEqual(
       demande.entite?.nom
     );
+  });
+
+  it('Fournit l’information si le futur Aidant est en attente d’adhésion à une association', async () => {
+    const demande = uneDemandeDevenirAidant().enAttenteAdhesion().construis();
+    const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
+    await entrepotDemande.persiste(demande);
+
+    const rapport = await uneExtraction({
+      entrepotDemandes: entrepotDemande,
+    }).extrais<RepresentationJSON>(new RapportJSON());
+
+    expect(
+      rapport['demandes-devenir-aidant'][0].enAttenteAdhesion
+    ).toStrictEqual('Oui');
   });
 });

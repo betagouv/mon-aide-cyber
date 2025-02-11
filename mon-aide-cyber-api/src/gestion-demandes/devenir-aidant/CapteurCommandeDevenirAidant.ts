@@ -2,6 +2,7 @@ import { CapteurCommande, Commande } from '../../domaine/commande';
 import {
   DemandeDevenirAidant,
   EntiteDemande,
+  futurAidantEnAttenteAdhesionAssociation,
   StatutDemande,
   TypeEntite,
 } from './DemandeDevenirAidant';
@@ -32,13 +33,6 @@ class ErreurDemandeDevenirAidant extends Error {
     super(message);
   }
 }
-
-const futurAidantEnAttenteAdhesionAssociation = (
-  demandeDevenirAidant: DemandeDevenirAidant
-) =>
-  demandeDevenirAidant.entite?.type === 'Association' &&
-  !demandeDevenirAidant.entite.nom &&
-  !demandeDevenirAidant.entite.siret;
 
 export class CapteurCommandeDevenirAidant
   implements CapteurCommande<CommandeDevenirAidant, DemandeDevenirAidant>

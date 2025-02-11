@@ -36,6 +36,13 @@ class ConstructeurDemandeDevenirAidant
     return this;
   }
 
+  enAttenteAdhesion(): ConstructeurDemandeDevenirAidant {
+    this.entite = {
+      type: 'Association',
+    };
+    return this;
+  }
+
   construis(): DemandeDevenirAidant {
     return {
       date: this.date,

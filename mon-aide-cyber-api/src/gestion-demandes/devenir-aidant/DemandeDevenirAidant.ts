@@ -32,3 +32,9 @@ export type EntiteDemande = {
   nom?: string;
   siret?: string;
 };
+export const futurAidantEnAttenteAdhesionAssociation = (
+  demandeDevenirAidant: DemandeDevenirAidant
+) =>
+  demandeDevenirAidant.entite?.type === 'Association' &&
+  !demandeDevenirAidant.entite.nom &&
+  !demandeDevenirAidant.entite.siret;
