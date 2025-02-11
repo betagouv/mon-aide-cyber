@@ -40,7 +40,13 @@ class ExtractionMAC implements Extraction {
       .demandesEnCours()
       .then((demandes) => {
         rapport.ajoute<DemandesDevenirAidant, RepresentationDemande>({
-          entete: ['Nom', 'Prénom', 'Date de la demande', 'Département'],
+          entete: [
+            'Nom',
+            'Prénom',
+            'Date de la demande',
+            'Département',
+            'Entité Morale',
+          ],
           intitule: 'Demandes devenir Aidant',
           valeur: demandes,
         });
