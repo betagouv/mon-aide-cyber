@@ -1,4 +1,5 @@
 name: 'Tests MAC UI'
+permissions: {}
 on: push
 jobs:
   test:
