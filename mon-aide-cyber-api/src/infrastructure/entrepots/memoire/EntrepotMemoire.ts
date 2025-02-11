@@ -12,7 +12,6 @@ import {
   EntrepotRestitution,
   Restitution,
 } from '../../../restitution/Restitution';
-import { Aide, EntrepotAide } from '../../../aide/Aide';
 import {
   DemandeDevenirAidant,
   EntrepotDemandeDevenirAidant,
@@ -54,6 +53,10 @@ import {
   UtilisateurInscrit,
 } from '../../../espace-utilisateur-inscrit/UtilisateurInscrit';
 import { AidantDTO } from '../../../espace-aidant/ServiceAidant';
+import {
+  DemandeAide,
+  EntrepotDemandeAide,
+} from '../../../gestion-demandes/aide/DemandeAide';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -132,10 +135,10 @@ export class EntrepotAidantMemoire
 }
 
 export class EntrepotAideMemoire
-  extends EntrepotMemoire<Aide>
-  implements EntrepotAide
+  extends EntrepotMemoire<DemandeAide>
+  implements EntrepotDemandeAide
 {
-  rechercheParEmail(email: string): Promise<Aide | undefined> {
+  rechercheParEmail(email: string): Promise<DemandeAide | undefined> {
     const aides = Array.from(this.entites.values()).filter(
       (aide) => aide.email === email
     );

@@ -5,7 +5,6 @@ import { EntrepotAidantPostgres } from './EntrepotAidantPostgres';
 import { adaptateurServiceChiffrement } from '../../adaptateurs/adaptateurServiceChiffrement';
 import { EntrepotRestitution } from '../../../restitution/Restitution';
 import { EntrepotRestitutionPostgres } from './EntrepotRestitutionPostgres';
-import { EntrepotAide } from '../../../aide/Aide';
 import { EntrepotAideConcret } from './EntrepotAideConcret';
 import { EntrepotDemandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { EntrepotDemandeDevenirAidantPostgres } from './EntrepotDemandeDevenirAidantPostgres';
@@ -24,6 +23,7 @@ import { EntrepotUtilisateursMAC } from '../../../recherche-utilisateurs-mac/rec
 import { EntrepotUtilisateurMACPostgres } from './EntrepotUtilisateurMACPostgres';
 import { EntrepotUtilisateurInscrit } from '../../../espace-utilisateur-inscrit/UtilisateurInscrit';
 import { EntrepotUtilisateurInscritPostgres } from './EntrepotUtilisateurInscritPostgres';
+import { EntrepotDemandeAide } from '../../../gestion-demandes/aide/DemandeAide';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -34,7 +34,7 @@ export class EntrepotsMAC implements Entrepots {
     new EntrepotUtilisateurInscritPostgres(adaptateurServiceChiffrement());
   private entrepotRestitution: EntrepotRestitution =
     new EntrepotRestitutionPostgres();
-  private readonly entrepotAide: EntrepotAide = new EntrepotAideConcret(
+  private readonly entrepotAide: EntrepotDemandeAide = new EntrepotAideConcret(
     adaptateurServiceChiffrement()
   );
   private entrepotDemandeDevenirAidant: EntrepotDemandeDevenirAidant =
@@ -63,7 +63,7 @@ export class EntrepotsMAC implements Entrepots {
     return this.entrepotRestitution;
   }
 
-  aides(): EntrepotAide {
+  demandesAides(): EntrepotDemandeAide {
     return this.entrepotAide;
   }
 

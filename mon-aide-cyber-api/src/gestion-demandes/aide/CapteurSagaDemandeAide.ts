@@ -1,14 +1,14 @@
 import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
-import { Aide } from '../../aide/Aide';
-import { CommandeRechercheAideParEmail } from '../../aide/CapteurCommandeRechercheAideParEmail';
-import { CommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import crypto from 'crypto';
 import { Departement } from '../departements';
 import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import { DemandeAide } from './DemandeAide';
+import { CommandeRechercheAideParEmail } from './CapteurCommandeRechercheDemandeAideParEmail';
+import { CommandeCreerDemandeAide } from './CapteurCommandeCreerDemandeAide';
 
 export type SagaDemandeAide = Saga & {
   cguValidees: boolean;
@@ -38,7 +38,7 @@ export class CapteurSagaDemandeAide
   async execute(saga: SagaDemandeAide): Promise<void> {
     const envoieConfirmationDemandeAide = async (
       adaptateurEnvoiMail: AdaptateurEnvoiMail,
-      aide: Aide,
+      aide: DemandeAide,
       relationAidant: boolean
     ) => {
       await adaptateurEnvoiMail.envoie({
@@ -53,7 +53,7 @@ export class CapteurSagaDemandeAide
 
     const envoieRecapitulatifDemandeAide = async (
       adaptateurEnvoiMail: AdaptateurEnvoiMail,
-      aide: Aide,
+      aide: DemandeAide,
       relationAidant: boolean
     ) => {
       await adaptateurEnvoiMail.envoie({
@@ -83,16 +83,16 @@ export class CapteurSagaDemandeAide
         return Promise.resolve();
       }
 
-      const commandeCreerAide: CommandeCreerAide = {
-        type: 'CommandeCreerAide',
+      const commandeCreerAide: CommandeCreerDemandeAide = {
+        type: 'CommandeCreerDemandeAide',
         departement: saga.departement,
         email: saga.email,
         ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
       };
 
       await this.busCommande
-        .publie<CommandeCreerAide, Aide>(commandeCreerAide)
-        .then(async (aide: Aide) => {
+        .publie<CommandeCreerDemandeAide, DemandeAide>(commandeCreerAide)
+        .then(async (aide: DemandeAide) => {
           await envoieConfirmationDemandeAide(
             this.adaptateurEnvoiMail,
             aide,

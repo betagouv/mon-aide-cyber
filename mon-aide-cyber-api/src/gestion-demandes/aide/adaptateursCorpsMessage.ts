@@ -1,7 +1,7 @@
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
-import { Aide } from '../../aide/Aide';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { Departement } from '../departements';
+import { DemandeAide } from './DemandeAide';
 
 export type ProprietesMessageAidant = {
   nomPrenom: string;
@@ -95,10 +95,10 @@ export type MessagesSollicitation = {
 
 export type MessagesDemande = {
   recapitulatifDemandeAide: () => {
-    genereCorpsMessage: (aide: Aide, relationAidant: boolean) => string;
+    genereCorpsMessage: (aide: DemandeAide, relationAidant: boolean) => string;
   };
   confirmationDemandeAide: () => {
-    genereCorpsMessage: (aide: Aide, relationAidant: boolean) => string;
+    genereCorpsMessage: (aide: DemandeAide, relationAidant: boolean) => string;
   };
 };
 
@@ -108,7 +108,7 @@ export type AdaptateurCorpsDeMessageAide = {
 };
 
 const genereCorpsConfirmationDemandeAide = (
-  aide: Aide,
+  aide: DemandeAide,
   relationAidant: boolean
 ) => {
   const formateDate = FournisseurHorloge.formateDate(
@@ -140,7 +140,7 @@ const genereCorpsConfirmationDemandeAide = (
   );
 };
 const genereCorpsRecapitulatifDemandeAide = (
-  aide: Aide,
+  aide: DemandeAide,
   relationAidant: boolean
 ) => {
   const formateDate = FournisseurHorloge.formateDate(

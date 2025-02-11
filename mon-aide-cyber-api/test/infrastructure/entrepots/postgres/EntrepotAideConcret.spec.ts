@@ -1,4 +1,3 @@
-import { unAide } from '../../../aide/ConstructeurAide';
 import {
   AideDistant,
   AideDistantBrevoDTO,
@@ -10,13 +9,14 @@ import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffremen
 import { beforeEach, describe, expect, it } from 'vitest';
 import { nettoieLaBaseDeDonneesAides } from '../../../utilitaires/nettoyeurBDD';
 import crypto from 'crypto';
-import { Aide } from '../../../../src/aide/Aide';
 import { fakerFR } from '@faker-js/faker';
 import {
   Dictionnaire,
   DictionnaireDeChiffrement,
 } from '../../../constructeurs/DictionnaireDeChiffrement';
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
+import { DemandeAide } from '../../../../src/gestion-demandes/aide/DemandeAide';
+import { uneDemandeAide } from '../../../gestion-demandes/aide/ConstructeurDemandeAide';
 
 describe('Entrepot Aidé Concret', () => {
   beforeEach(async () => {
@@ -25,7 +25,7 @@ describe('Entrepot Aidé Concret', () => {
 
   describe('Lorsque l’on persiste', () => {
     it('MAC génère un identifiant et conserve la date de signature', async () => {
-      const aide = unAide().construis();
+      const aide = uneDemandeAide().construis();
       const fauxServiceDeChiffrement = new FauxServiceDeChiffrement(
         new DictionnaireDeChiffrementAide().avec(aide).construis()
       );
@@ -46,7 +46,7 @@ describe('Entrepot Aidé Concret', () => {
     });
 
     it('MAC contacte Brevo pour créer le contact correspondant en chiffrant les parties sensibles', async () => {
-      const aide = unAide().construis();
+      const aide = uneDemandeAide().construis();
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
         new DictionnaireDeChiffrementAide().avec(aide).construis()
       );
@@ -67,12 +67,12 @@ describe('Entrepot Aidé Concret', () => {
 
   describe('Lorsque l’on recherche par email', () => {
     it('Récupère l’Aidé ciblé', async () => {
-      const premierAide = unAide()
+      const premierAide = uneDemandeAide()
         .avecUneDateDeSignatureDesCGU(
           FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00')
         )
         .construis();
-      const secondAide = unAide()
+      const secondAide = uneDemandeAide()
         .avecUneDateDeSignatureDesCGU(
           FournisseurHorloge.enDate('2024-03-09T04:04:34+01:00')
         )
@@ -112,7 +112,7 @@ describe('Entrepot Aidé Concret', () => {
     });
 
     it('Une erreur est remontée si le contact Brevo existe mais que l’on arrive pas à récupérer les informations de l’Aidé', async () => {
-      const aide = unAide()
+      const aide = uneDemandeAide()
         .avecUneDateDeSignatureDesCGU(
           FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00')
         )
@@ -136,7 +136,7 @@ describe('Entrepot Aidé Concret', () => {
     });
 
     it('Une erreur est remontée si le contact Brevo retourné ne correspond pas à un Aidé', async () => {
-      const aide = unAide()
+      const aide = uneDemandeAide()
         .avecUneDateDeSignatureDesCGU(
           FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00')
         )
@@ -221,9 +221,11 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
     return this;
   }
 }
-class DictionnaireDeChiffrementAide implements DictionnaireDeChiffrement<Aide> {
+class DictionnaireDeChiffrementAide
+  implements DictionnaireDeChiffrement<DemandeAide>
+{
   private _dictionnaire: Dictionnaire = new Map();
-  avec(aide: Aide): DictionnaireDeChiffrement<Aide> {
+  avec(aide: DemandeAide): DictionnaireDeChiffrement<DemandeAide> {
     const valeurEnClair = JSON.stringify({
       identifiantMAC: aide.identifiant,
       departement: aide.departement.nom,
