@@ -6,7 +6,7 @@ export const ModelesDeMails = () => {
     <div className="fr-col-12">
       <TypographieH4>Modèles de mails</TypographieH4>
       <p>
-        Personalisez les mails d‘invitation à la réalistion de diagnostics
+        Personalisez les mails d‘invitation à la réalisation de diagnostics
         MonAideCyber. <br />
         Exemple de mail :
       </p>
