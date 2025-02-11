@@ -47,3 +47,12 @@ export const Icon: Story = {
     icon: 'fr-icon-arrow-right-line',
   },
 };
+
+export const IconLeft: Story = {
+  args: {
+    variant: 'primary',
+    title: 'Avec une icone à gauche',
+    iconPos: 'left',
+    icon: 'fr-icon-arrow-right-line',
+  },
+};
