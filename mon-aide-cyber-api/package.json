@@ -55,7 +55,7 @@
     "@types/pug": "^2.0.6",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
-    "@vitest/coverage-v8": "^1.6.1",
+    "@vitest/coverage-v8": "^3.0.5",
     "eslint": "^8.43.0",
     "light-my-request": "^5.11.0",
     "lodash.clonedeep": "^4.5.0",
