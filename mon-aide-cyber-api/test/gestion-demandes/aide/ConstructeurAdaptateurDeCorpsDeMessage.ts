@@ -7,7 +7,7 @@ import {
   ProprietesMessageRecapitulatif,
   ProprietesMessageRecapitulatifSollicitationAide,
 } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
-import { Aide } from '../../../src/aide/Aide';
+import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
 
 class ConstructeurAdaptateurDeCorpsDeMessage
   implements Constructeur<AdaptateurCorpsDeMessageAide>
@@ -18,14 +18,14 @@ class ConstructeurAdaptateurDeCorpsDeMessage
     proprietes: ProprietesMessageRecapitulatif
   ) => string = (_proprietes) => 'Bonjour MAC!';
   private _recapitulatifDemandeAide: (
-    _aide: Aide,
+    _aide: DemandeAide,
     _relationAidant: boolean
-  ) => string = (_aide: Aide, _relationAidant: boolean) =>
+  ) => string = (_aide: DemandeAide, _relationAidant: boolean) =>
     'Bonjour une entité a fait une demande d’aide';
   private _confirmationDemandeAide: (
-    _aide: Aide,
+    _aide: DemandeAide,
     relationAidant: boolean
-  ) => string = (_aide: Aide, _relationAidant: boolean) =>
+  ) => string = (_aide: DemandeAide, _relationAidant: boolean) =>
     'Bonjour entité Aidée';
 
   notificationAidant(
@@ -43,14 +43,14 @@ class ConstructeurAdaptateurDeCorpsDeMessage
   }
 
   recapitulatifDemandeAide(
-    recapitulatif: (_aide: Aide, relationAidant: boolean) => string
+    recapitulatif: (_aide: DemandeAide, relationAidant: boolean) => string
   ): ConstructeurAdaptateurDeCorpsDeMessage {
     this._recapitulatifDemandeAide = recapitulatif;
     return this;
   }
 
   confirmationDemandeAide(
-    confirmation: (_aide: Aide, relationAidant: boolean) => string
+    confirmation: (_aide: DemandeAide, relationAidant: boolean) => string
   ): ConstructeurAdaptateurDeCorpsDeMessage {
     this._confirmationDemandeAide = confirmation;
     return this;

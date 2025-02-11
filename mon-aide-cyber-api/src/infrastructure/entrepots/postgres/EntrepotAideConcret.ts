@@ -1,5 +1,4 @@
 import { DTO, EntrepotPostgres } from './EntrepotPostgres';
-import { Aide, EntrepotAide } from '../../../aide/Aide';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import crypto from 'crypto';
@@ -16,6 +15,10 @@ import {
   Departement,
   rechercheParNomDepartement,
 } from '../../../gestion-demandes/departements';
+import {
+  DemandeAide,
+  EntrepotDemandeAide,
+} from '../../../gestion-demandes/aide/DemandeAide';
 
 type DonneesAidesMAC = {
   dateSignatureCGU: string;
@@ -25,7 +28,7 @@ type AideMACDTO = DTO & {
   donnees: DonneesAidesMAC;
 };
 
-type AideMAC = Omit<Aide, 'email' | 'raisonSociale' | 'departement'>;
+type AideMAC = Omit<DemandeAide, 'email' | 'raisonSociale' | 'departement'>;
 
 class EntrepotAidePostgres extends EntrepotPostgres<AideMAC, AideMACDTO> {
   protected champsAMettreAJour(aideDTO: AideMACDTO): Partial<AideMACDTO> {
@@ -166,14 +169,14 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
   }
 }
 
-export class EntrepotAideConcret implements EntrepotAide {
+export class EntrepotAideConcret implements EntrepotDemandeAide {
   constructor(
     private readonly serviceChiffrement: ServiceDeChiffrement,
     private readonly entreprotAideBrevo: EntrepotAideDistant = new EntrepotAideBrevo(),
     private readonly entrepotAidePostgres = new EntrepotAidePostgres()
   ) {}
 
-  async rechercheParEmail(email: string): Promise<Aide | undefined> {
+  async rechercheParEmail(email: string): Promise<DemandeAide | undefined> {
     try {
       const aideBrevo = await this.entreprotAideBrevo.rechercheParEmail(
         email,
@@ -231,11 +234,11 @@ export class EntrepotAideConcret implements EntrepotAide {
     }
   }
 
-  async lis(_identifiant: string): Promise<Aide> {
+  async lis(_identifiant: string): Promise<DemandeAide> {
     throw new Error('Method non implémentée.');
   }
 
-  async persiste(aide: Aide): Promise<void> {
+  async persiste(aide: DemandeAide): Promise<void> {
     await this.entrepotAidePostgres.persiste(aide);
     await this.entreprotAideBrevo.persiste(
       {
@@ -253,7 +256,7 @@ export class EntrepotAideConcret implements EntrepotAide {
     return Promise.resolve();
   }
 
-  tous(): Promise<Aide[]> {
+  tous(): Promise<DemandeAide[]> {
     throw new Error('Method not implemented.');
   }
 

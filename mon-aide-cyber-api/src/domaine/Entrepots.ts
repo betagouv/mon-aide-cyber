@@ -1,6 +1,5 @@
 import { EntrepotDiagnostic } from '../diagnostic/Diagnostic';
 import { EntrepotRestitution } from '../restitution/Restitution';
-import { EntrepotAide } from '../aide/Aide';
 import { EntrepotDemandeDevenirAidant } from '../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { EntrepotStatistiques } from '../statistiques/statistiques';
 import { EntrepotAnnuaireAidants } from '../annuaire-aidants/annuaireAidants';
@@ -10,6 +9,7 @@ import { EntrepotProfilAidant } from '../espace-aidant/profil/profilAidant';
 import { EntrepotDemandeDiagnosticLibreAcces } from '../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
 import { EntrepotUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { EntrepotUtilisateurInscrit } from '../espace-utilisateur-inscrit/UtilisateurInscrit';
+import { EntrepotDemandeAide } from '../gestion-demandes/aide/DemandeAide';
 
 export interface Entrepots {
   diagnostic(): EntrepotDiagnostic;
@@ -18,7 +18,7 @@ export interface Entrepots {
 
   restitution(): EntrepotRestitution;
 
-  aides(): EntrepotAide;
+  demandesAides(): EntrepotDemandeAide;
 
   demandesDevenirAidant(): EntrepotDemandeDevenirAidant;
 

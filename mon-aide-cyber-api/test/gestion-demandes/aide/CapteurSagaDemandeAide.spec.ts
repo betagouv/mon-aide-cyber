@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { unAide } from '../../aide/ConstructeurAide';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
@@ -11,22 +10,23 @@ import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
-import { CapteurCommandeRechercheAideParEmail } from '../../../src/aide/CapteurCommandeRechercheAideParEmail';
-import {
-  CapteurCommandeCreerAide,
-  CommandeCreerAide,
-} from '../../../src/aide/CapteurCommandeCreerAide';
 import { CapteurCommande } from '../../../src/domaine/commande';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { adaptateursCorpsMessage } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
 import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
-import { Aide } from '../../../src/aide/Aide';
 import {
   allier,
   Departement,
   gironde,
 } from '../../../src/gestion-demandes/departements';
+import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
+import { CapteurCommandeRechercheDemandeAideParEmail } from '../../../src/gestion-demandes/aide/CapteurCommandeRechercheDemandeAideParEmail';
+import {
+  CapteurCommandeCreerDemandeAide,
+  CommandeCreerDemandeAide,
+} from '../../../src/gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
+import { uneDemandeAide } from './ConstructeurDemandeAide';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   const cotParDefaut = {
@@ -42,7 +42,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
   });
   describe("Si l'Aidé est connu de MAC", () => {
     it('Interrompt le parcours', async () => {
-      const aide = unAide().construis();
+      const aide = uneDemandeAide().construis();
       const entrepots = new EntrepotsMemoire();
       const busEvenement = new BusEvenementDeTest();
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
@@ -58,7 +58,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         adaptateurEnvoiMail,
         () => cotParDefaut
       );
-      await entrepots.aides().persiste(aide);
+      await entrepots.demandesAides().persiste(aide);
 
       await capteur.execute({
         type: 'SagaDemandeValidationCGUAide',
@@ -69,8 +69,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         relationAidant: false,
       });
 
-      expect(await entrepots.aides().tous()).toHaveLength(1);
-      expect(await entrepots.aides().lis(aide.identifiant)).toStrictEqual(aide);
+      expect(await entrepots.demandesAides().tous()).toHaveLength(1);
+      expect(
+        await entrepots.demandesAides().lis(aide.identifiant)
+      ).toStrictEqual(aide);
     });
   });
 
@@ -101,7 +103,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       });
 
       expect(
-        await entrepotsMemoire.aides().rechercheParEmail('un email')
+        await entrepotsMemoire.demandesAides().rechercheParEmail('un email')
       ).not.toBeUndefined();
     });
 
@@ -222,7 +224,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     it('Envoie un email de demande d’aide au COT en prenant en compte la relation existante avec un Aidant', async () => {
       adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
         .recapitulatifDemandeAide(
-          (_aide: Aide, relationAidant: boolean) =>
+          (_aide: DemandeAide, relationAidant: boolean) =>
             `Bonjour une entité a fait une demande d’aide, relation Aidant : ${relationAidant}`
         )
         .construis().demande;
@@ -271,7 +273,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     it("Envoie un email de confirmation à l'Aidé en prenant en compte la relation existante avec un Aidant", async () => {
       adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
         .confirmationDemandeAide(
-          (_aide: Aide, relationAidant: boolean) =>
+          (_aide: DemandeAide, relationAidant: boolean) =>
             `Bonjour entité Aidée, relation Aidant : ${relationAidant}`
         )
         .construis().demande;
@@ -317,10 +319,11 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const entrepotsMemoire = new EntrepotsMemoire();
       const busEvenement = new BusEvenementDeTest();
       const busCommande = new BusCommandeTest({
-        CommandeRechercheAideParEmail: new CapteurCommandeRechercheAideParEmail(
+        CommandeRechercheAideParEmail:
+          new CapteurCommandeRechercheDemandeAideParEmail(entrepotsMemoire),
+        CommandeCreerDemandeAide: new CapteurCommandeCreerDemandeAide(
           entrepotsMemoire
         ),
-        CommandeCreerAide: new CapteurCommandeCreerAide(entrepotsMemoire),
       });
       const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
 
@@ -336,7 +339,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         departement: gironde,
         relationAidant: false,
       });
-      const aideRecu = (await entrepotsMemoire.aides().tous())[0];
+      const aideRecu = (await entrepotsMemoire.demandesAides().tous())[0];
 
       expect(busEvenement.evenementRecu).toStrictEqual<DemandeAideCree>({
         identifiant: expect.any(String),
@@ -356,7 +359,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         const busEvenement = new BusEvenementDeTest();
         const busCommande = new BusCommandeTest({
           CommandeRechercheAideParEmail:
-            new CapteurCommandeRechercheAideParEmail(entrepotsMemoire),
+            new CapteurCommandeRechercheDemandeAideParEmail(entrepotsMemoire),
           CommandeCreerAide: new CapteurCommandeCreerAideQuiEchoue(),
         });
         const capteur = new CapteurSagaDemandeAide(
@@ -383,9 +386,9 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
 });
 
 class CapteurCommandeCreerAideQuiEchoue
-  implements CapteurCommande<CommandeCreerAide, any>
+  implements CapteurCommande<CommandeCreerDemandeAide, any>
 {
-  execute(_commande: CommandeCreerAide): Promise<any> {
+  execute(_commande: CommandeCreerDemandeAide): Promise<any> {
     throw new Error('une erreur est survenue');
   }
 }

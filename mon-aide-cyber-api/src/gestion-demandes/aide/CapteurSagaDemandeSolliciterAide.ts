@@ -1,5 +1,4 @@
 import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
-import { CommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import crypto from 'crypto';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
@@ -7,8 +6,9 @@ import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironneme
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { Departement } from '../departements';
-import { Aide } from '../../aide/Aide';
 import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
+import { CommandeCreerDemandeAide } from './CapteurCommandeCreerDemandeAide';
+import { DemandeAide } from './DemandeAide';
 
 export type SagaDemandeSolliciterAide = Omit<Saga, 'type'> & {
   email: string;
@@ -35,15 +35,15 @@ export class CapteurSagaDemandeSolliciterAide
   ) {}
 
   execute(saga: SagaDemandeSolliciterAide): Promise<void> {
-    const commande: CommandeCreerAide = {
-      type: 'CommandeCreerAide',
+    const commande: CommandeCreerDemandeAide = {
+      type: 'CommandeCreerDemandeAide',
       departement: saga.departement,
       email: saga.email,
       ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
     };
     return this.busCommande
-      .publie<CommandeCreerAide, Aide>(commande)
-      .then((aide: Aide) =>
+      .publie<CommandeCreerDemandeAide, DemandeAide>(commande)
+      .then((aide: DemandeAide) =>
         this.serviceAidant
           .parIdentifiant(saga.identifiantAidant)
           .then((aidant) =>

@@ -36,7 +36,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         );
 
         expect(reponse.statusCode).toBe(202);
-        const aides = await testeurMAC.entrepots.aides().tous();
+        const aides = await testeurMAC.entrepots.demandesAides().tous();
         expect(aides).toHaveLength(1);
         expect(aides[0].dateSignatureCGU).toStrictEqual(
           FournisseurHorloge.maintenant()
@@ -166,7 +166,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           );
 
           expect(reponse.statusCode).toBe(202);
-          const aides = await testeurMAC.entrepots.aides().tous();
+          const aides = await testeurMAC.entrepots.demandesAides().tous();
           expect(aides).toHaveLength(1);
           expect(aides[0].dateSignatureCGU).toStrictEqual(
             FournisseurHorloge.maintenant()

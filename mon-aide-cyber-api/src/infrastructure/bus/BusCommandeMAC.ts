@@ -4,8 +4,6 @@ import { BusEvenement } from '../../domaine/BusEvenement';
 import { CapteurSagaAjoutReponse } from '../../diagnostic/CapteurSagaAjoutReponse';
 import { CapteurCommandeLanceRestitution } from '../../diagnostic/CapteurCommandeLanceRestitution';
 import { CapteurCommandeLanceDiagnostic } from '../../diagnostic/CapteurCommandeLanceDiagnostic';
-import { CapteurCommandeRechercheAideParEmail } from '../../aide/CapteurCommandeRechercheAideParEmail';
-import { CapteurCommandeCreerAide } from '../../aide/CapteurCommandeCreerAide';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { CapteurSagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
 import { CapteurCommandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
@@ -27,6 +25,8 @@ import {
   CapteurSagaLanceDiagnosticLibreAcces,
 } from '../../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
 import { CapteurCommandeCreerEspaceUtilisateurInscrit } from '../../espace-utilisateur-inscrit/CapteurCommandeCreerEspaceUtilisateurInscrit';
+import { CapteurCommandeRechercheDemandeAideParEmail } from '../../gestion-demandes/aide/CapteurCommandeRechercheDemandeAideParEmail';
+import { CapteurCommandeCreerDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -76,14 +76,14 @@ const capteurs: Map<string, Capteur> = new Map([
     'CommandeRechercheAideParEmail',
     {
       capteur: (parametres) =>
-        new CapteurCommandeRechercheAideParEmail(parametres.entrepots),
+        new CapteurCommandeRechercheDemandeAideParEmail(parametres.entrepots),
     },
   ],
   [
-    'CommandeCreerAide',
+    'CommandeCreerDemandeAide',
     {
       capteur: (parametres) =>
-        new CapteurCommandeCreerAide(parametres.entrepots),
+        new CapteurCommandeCreerDemandeAide(parametres.entrepots),
     },
   ],
   [

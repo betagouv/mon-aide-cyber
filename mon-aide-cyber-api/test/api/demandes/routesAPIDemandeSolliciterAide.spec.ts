@@ -46,7 +46,7 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
       );
 
       expect(reponse.statusCode).toBe(202);
-      const aides = await testeurMAC.entrepots.aides().tous();
+      const aides = await testeurMAC.entrepots.demandesAides().tous();
       expect(aides).toHaveLength(1);
       expect(aides[0].dateSignatureCGU).toStrictEqual(
         FournisseurHorloge.maintenant()
@@ -226,9 +226,9 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
       );
 
       expect(reponse.statusCode).toBe(202);
-      expect((await testeurMAC.entrepots.aides().lis(uuid)).raisonSociale).toBe(
-        'Beta-gouv'
-      );
+      expect(
+        (await testeurMAC.entrepots.demandesAides().lis(uuid)).raisonSociale
+      ).toBe('Beta-gouv');
     });
 
     it("Valide le mail de l'Aidé", async () => {

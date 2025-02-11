@@ -138,7 +138,7 @@ describe('Capteur saga demande solliciter Aide', () => {
         raisonSociale: 'Test',
       });
 
-      const aideRecue = (await entrepotsMemoire.aides().tous())[0];
+      const aideRecue = (await entrepotsMemoire.demandesAides().tous())[0];
 
       expect(
         busEvenement.evenementRecu
