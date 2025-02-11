@@ -49,78 +49,111 @@ type RepresentationJSON = {
 };
 
 describe('Extraction', () => {
-  it('Extrait les demandes en cours', async () => {
-    const demande = uneDemandeDevenirAidant().construis();
-    const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
-    await entrepotDemande.persiste(demande);
+  describe('Pour les demandes devenir Aidant en cours', () => {
+    it('Extrait les demandes', async () => {
+      const demande = uneDemandeDevenirAidant()
+        .avecEntiteMorale('ServiceEtat')
+        .construis();
+      const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
+      await entrepotDemande.persiste(demande);
 
-    const rapport = await uneExtraction({
-      entrepotDemandes: entrepotDemande,
-    }).extrais<RepresentationJSON>(new RapportJSON());
+      const rapport = await uneExtraction({
+        entrepotDemandes: entrepotDemande,
+      }).extrais<RepresentationJSON>(new RapportJSON());
 
-    expect(rapport).toStrictEqual({
-      'demandes-devenir-aidant': [
-        {
-          nom: demande.nom,
-          prenom: demande.prenom,
-          dateDemande: FournisseurHorloge.formateDate(demande.date).date,
-          departement: demande.departement.nom,
-        },
-      ],
+      expect(rapport).toStrictEqual<{ [clef: string]: DemandesDevenirAidant }>({
+        'demandes-devenir-aidant': [
+          {
+            nom: demande.nom,
+            prenom: demande.prenom,
+            dateDemande: FournisseurHorloge.formateDate(demande.date).date,
+            departement: demande.departement.nom,
+            entiteMorale: demande.entite!.nom!,
+          },
+        ],
+      });
     });
-  });
 
-  it('Le rapport contient entête et intitulé', async () => {
-    const demande = uneDemandeDevenirAidant().construis();
-    const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
-    await entrepotDemande.persiste(demande);
+    it('Contient uniquement les nouvelles demandes suite à l’arbitrage', async () => {
+      const demande = uneDemandeDevenirAidant()
+        .avecEntiteMorale('ServicePublic')
+        .construis();
+      const demandeAvantArbitrage = uneDemandeDevenirAidant()
+        .avantArbitrage()
+        .construis();
+      const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
+      await entrepotDemande.persiste(demande);
+      await entrepotDemande.persiste(demandeAvantArbitrage);
 
-    const rapportJSON = new RapportJSON();
-    await uneExtraction({
-      entrepotDemandes: entrepotDemande,
-    }).extrais<RepresentationJSON>(rapportJSON);
+      const rapport = await uneExtraction({
+        entrepotDemandes: entrepotDemande,
+      }).extrais<RepresentationJSON>(new RapportJSON());
 
-    expect(rapportJSON.entete).toStrictEqual<Entete<DemandeDevenirAidant>[]>([
-      { entete: 'Nom', clef: 'nom' },
-      { entete: 'Prénom', clef: 'prenom' },
-      { entete: 'Date de la demande', clef: 'dateDemande' },
-      { entete: 'Département', clef: 'departement' },
-      { entete: 'Entité Morale', clef: 'entiteMorale' },
-      {
-        entete: 'En attente d’adhésion à une Association',
-        clef: 'enAttenteAdhesion',
-      },
-    ]);
-    expect(rapportJSON.intitule).toStrictEqual('Demandes devenir Aidant');
-  });
+      expect(rapport).toStrictEqual<{ [clef: string]: DemandesDevenirAidant }>({
+        'demandes-devenir-aidant': [
+          {
+            nom: demande.nom,
+            prenom: demande.prenom,
+            dateDemande: FournisseurHorloge.formateDate(demande.date).date,
+            departement: demande.departement.nom,
+            entiteMorale: demande.entite!.nom!,
+          },
+        ],
+      });
+    });
 
-  it('Fournit l’entité morale de la demande', async () => {
-    const demande = uneDemandeDevenirAidant()
-      .avecEntiteMorale('ServicePublic')
-      .construis();
-    const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
-    await entrepotDemande.persiste(demande);
+    it('Le rapport contient entête et intitulé', async () => {
+      const demande = uneDemandeDevenirAidant().construis();
+      const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
+      await entrepotDemande.persiste(demande);
 
-    const rapport = await uneExtraction({
-      entrepotDemandes: entrepotDemande,
-    }).extrais<RepresentationJSON>(new RapportJSON());
+      const rapportJSON = new RapportJSON();
+      await uneExtraction({
+        entrepotDemandes: entrepotDemande,
+      }).extrais<RepresentationJSON>(rapportJSON);
 
-    expect(rapport['demandes-devenir-aidant'][0].entiteMorale).toStrictEqual(
-      demande.entite?.nom
-    );
-  });
+      expect(rapportJSON.entete).toStrictEqual<Entete<DemandeDevenirAidant>[]>([
+        { entete: 'Nom', clef: 'nom' },
+        { entete: 'Prénom', clef: 'prenom' },
+        { entete: 'Date de la demande', clef: 'dateDemande' },
+        { entete: 'Département', clef: 'departement' },
+        { entete: 'Entité Morale', clef: 'entiteMorale' },
+        {
+          entete: 'En attente d’adhésion à une Association',
+          clef: 'enAttenteAdhesion',
+        },
+      ]);
+      expect(rapportJSON.intitule).toStrictEqual('Demandes devenir Aidant');
+    });
 
-  it('Fournit l’information si le futur Aidant est en attente d’adhésion à une association', async () => {
-    const demande = uneDemandeDevenirAidant().enAttenteAdhesion().construis();
-    const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
-    await entrepotDemande.persiste(demande);
+    it('Fournit l’entité morale de la demande', async () => {
+      const demande = uneDemandeDevenirAidant()
+        .avecEntiteMorale('ServicePublic')
+        .construis();
+      const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
+      await entrepotDemande.persiste(demande);
 
-    const rapport = await uneExtraction({
-      entrepotDemandes: entrepotDemande,
-    }).extrais<RepresentationJSON>(new RapportJSON());
+      const rapport = await uneExtraction({
+        entrepotDemandes: entrepotDemande,
+      }).extrais<RepresentationJSON>(new RapportJSON());
 
-    expect(
-      rapport['demandes-devenir-aidant'][0].enAttenteAdhesion
-    ).toStrictEqual('Oui');
+      expect(rapport['demandes-devenir-aidant'][0].entiteMorale).toStrictEqual(
+        demande.entite?.nom
+      );
+    });
+
+    it('Fournit l’information si le futur Aidant est en attente d’adhésion à une association', async () => {
+      const demande = uneDemandeDevenirAidant().enAttenteAdhesion().construis();
+      const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
+      await entrepotDemande.persiste(demande);
+
+      const rapport = await uneExtraction({
+        entrepotDemandes: entrepotDemande,
+      }).extrais<RepresentationJSON>(new RapportJSON());
+
+      expect(
+        rapport['demandes-devenir-aidant'][0].enAttenteAdhesion
+      ).toStrictEqual('Oui');
+    });
   });
 });
