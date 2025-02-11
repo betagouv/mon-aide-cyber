@@ -13,12 +13,14 @@ export type ButtonProps = PropsWithChildren<
 > & {
   variant?: ButtonVariants;
   theme?: Theme;
+  icon?: string;
 };
 
 function Button({
   children,
   variant = 'default',
   theme = 'light',
+  icon,
   ...restProps
 }: ButtonProps) {
   const { className, title } = restProps;
@@ -32,6 +34,7 @@ function Button({
 
   const classNames = [
     'bouton-mac',
+    'bouton-mac-icone-conteneur',
     buttonVariants.get(variant),
     className,
     theme,
@@ -40,6 +43,7 @@ function Button({
   return (
     <button {...restProps} className={classNames}>
       {children ? children : title}
+      {icon ? <i className={`fr-icon ${icon}`} /> : null}
     </button>
   );
 }
