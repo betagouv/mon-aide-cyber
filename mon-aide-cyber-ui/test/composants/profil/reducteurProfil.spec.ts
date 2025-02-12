@@ -15,7 +15,6 @@ describe('reducteur profil', () => {
     nom: '',
     prenom: '',
     consentementAnnuaire: false,
-    consentementAChange: false,
     enCoursDeChargement: true,
   };
 
@@ -54,7 +53,6 @@ describe('reducteur profil', () => {
       email: 'jean.dupont@email.fr',
       dateCreationCompte: '03.12.2023',
       consentementAnnuaire: false,
-      consentementAChange: false,
       affichagesAnnuaire: [
         {
           type: TypeAffichageAnnuaire.PRENOM_N,
@@ -111,7 +109,6 @@ describe('reducteur profil', () => {
       email: 'jean.dupont@email.fr',
       dateCreationCompte: '03.12.2023',
       consentementAnnuaire: false,
-      consentementAChange: false,
       affichagesAnnuaire: [
         {
           type: TypeAffichageAnnuaire.PRENOM_N,
@@ -142,7 +139,6 @@ describe('reducteur profil', () => {
           email: 'jean.dupont@email.fr',
           dateCreationCompte: '03.12.2023',
           consentementAnnuaire: false,
-          consentementAChange: false,
           enCoursDeChargement: false,
         },
         cocheConsentementAnnuaire()
@@ -154,7 +150,6 @@ describe('reducteur profil', () => {
         email: 'jean.dupont@email.fr',
         dateCreationCompte: '03.12.2023',
         consentementAnnuaire: true,
-        consentementAChange: true,
         enCoursDeChargement: false,
       });
     });
@@ -167,7 +162,6 @@ describe('reducteur profil', () => {
           email: 'jean.dupont@email.fr',
           dateCreationCompte: '03.12.2023',
           consentementAnnuaire: true,
-          consentementAChange: false,
           enCoursDeChargement: false,
           affichagesAnnuaire: [
             {
@@ -196,7 +190,6 @@ describe('reducteur profil', () => {
         email: 'jean.dupont@email.fr',
         dateCreationCompte: '03.12.2023',
         consentementAnnuaire: true,
-        consentementAChange: false,
         enCoursDeChargement: false,
         affichagesAnnuaire: [
           {
@@ -226,7 +219,6 @@ describe('reducteur profil', () => {
           email: 'jean.dupont@email.fr',
           dateCreationCompte: '03.12.2023',
           consentementAnnuaire: true,
-          consentementAChange: false,
           enCoursDeChargement: false,
         },
         cocheConsentementAnnuaire()
@@ -238,7 +230,6 @@ describe('reducteur profil', () => {
         email: 'jean.dupont@email.fr',
         dateCreationCompte: '03.12.2023',
         consentementAnnuaire: false,
-        consentementAChange: true,
         enCoursDeChargement: false,
       });
     });

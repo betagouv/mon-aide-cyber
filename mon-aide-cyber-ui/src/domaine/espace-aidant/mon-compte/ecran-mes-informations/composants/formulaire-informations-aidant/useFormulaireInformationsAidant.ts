@@ -28,7 +28,6 @@ export const useFormulaireInformationsAidant = (macAPI: MACAPIType) => {
     email: '',
     dateCreationCompte: '',
     consentementAnnuaire: false,
-    consentementAChange: false,
     enCoursDeChargement: true,
   });
 
@@ -64,7 +63,7 @@ export const useFormulaireInformationsAidant = (macAPI: MACAPIType) => {
         'modifier-profil',
         (lien: Lien) => {
           const affichageAEnvoyer = etatProfil.affichagesAnnuaire!.find(
-            (x) => x.actif
+            (affichageAnnuaire) => affichageAnnuaire.actif
           )!.type;
 
           const corps: CorpsModificationProfil = {

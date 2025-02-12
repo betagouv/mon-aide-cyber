@@ -28,7 +28,7 @@ export const ChampRadio = ({
   label: string;
 } & React.InputHTMLAttributes<HTMLInputElement>) => {
   return (
-    <div className="champ-case-a-cocher-conteneur">
+    <div className="champ-radio-conteneur">
       <label htmlFor={element.code}>
         <input {...proprietesRestantes} id={element.code} type="radio" />{' '}
         <span>{label}</span>
