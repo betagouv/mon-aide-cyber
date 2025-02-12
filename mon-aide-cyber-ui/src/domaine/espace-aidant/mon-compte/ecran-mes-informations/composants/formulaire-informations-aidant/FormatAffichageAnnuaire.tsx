@@ -1,27 +1,18 @@
 import { ChampRadio } from '../../../../../../composants/communs/ChampCaseACocher/ChampCaseACocher.tsx';
 import { TypeAffichage } from '../reducteurProfil.ts';
+import { TypeAffichageAnnuaire } from 'mon-aide-cyber-api/src/espace-aidant/Aidant.ts';
 
 export const FormatAffichageAnnuaire = ({
-  valeurParDefaut,
+  affichagesAnnuaire,
   surChangement,
 }: {
-  valeurParDefaut: TypeAffichage | undefined;
+  affichagesAnnuaire: {
+    type: TypeAffichageAnnuaire;
+    valeur: string;
+    actif?: boolean;
+  }[];
   surChangement: (typeAffichage: TypeAffichage) => void;
 }) => {
-  const affichagesALister: { type: TypeAffichage; valeur: string }[] = [
-    {
-      type: 'PRENOM_NOM',
-      valeur: 'Martin Véron',
-    },
-    {
-      type: 'PRENOM_N',
-      valeur: 'Martin V.',
-    },
-    {
-      type: 'P_NOM',
-      valeur: 'M. Véron',
-    },
-  ];
   return (
     <div>
       <p>Sous quelle forme souhaitez-vous apparaître sur l‘annuaire ?</p>
@@ -29,10 +20,11 @@ export const FormatAffichageAnnuaire = ({
         className="fr-mt-2w fr-mb-2w fr-checkbox-group mac-radio-group"
         style={{ borderLeft: '4px #5D2A9D solid', paddingLeft: '1rem' }}
       >
-        {affichagesALister.map((affichage) => (
+        {affichagesAnnuaire.map((affichage) => (
           <ChampRadio
-            element={{ code: affichage.type, nom: affichage.type }}
-            checked={affichage.type === valeurParDefaut}
+            key={affichage.type}
+            element={{ code: affichage.type, nom: affichage.valeur }}
+            checked={affichage.actif}
             label={affichage.valeur}
             onChange={() => surChangement(affichage.type)}
           />

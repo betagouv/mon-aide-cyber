@@ -15,6 +15,7 @@ describe('reducteur profil', () => {
     nom: '',
     prenom: '',
     consentementAnnuaire: false,
+    consentementAChange: false,
     enCoursDeChargement: true,
   };
 
@@ -53,6 +54,7 @@ describe('reducteur profil', () => {
       email: 'jean.dupont@email.fr',
       dateCreationCompte: '03.12.2023',
       consentementAnnuaire: false,
+      consentementAChange: false,
       affichagesAnnuaire: [
         {
           type: TypeAffichageAnnuaire.PRENOM_N,
@@ -103,12 +105,13 @@ describe('reducteur profil', () => {
       })
     );
 
-    expect(etatProfil).toStrictEqual({
+    expect(etatProfil).toStrictEqual<EtatProfil>({
       nom: 'Du Jardin',
       prenom: 'Jean',
       email: 'jean.dupont@email.fr',
       dateCreationCompte: '03.12.2023',
       consentementAnnuaire: false,
+      consentementAChange: false,
       affichagesAnnuaire: [
         {
           type: TypeAffichageAnnuaire.PRENOM_N,
@@ -139,20 +142,23 @@ describe('reducteur profil', () => {
           email: 'jean.dupont@email.fr',
           dateCreationCompte: '03.12.2023',
           consentementAnnuaire: false,
+          consentementAChange: false,
           enCoursDeChargement: false,
         },
         cocheConsentementAnnuaire()
       );
 
-      expect(etatProfil).toStrictEqual({
+      expect(etatProfil).toStrictEqual<EtatProfil>({
         nom: 'Dupont',
         prenom: 'Jean',
         email: 'jean.dupont@email.fr',
         dateCreationCompte: '03.12.2023',
         consentementAnnuaire: true,
+        consentementAChange: true,
         enCoursDeChargement: false,
       });
     });
+
     it("Sélectionne un format d'affichage du nom dans l'annuaire", () => {
       const etatProfil = reducteurProfil(
         {
@@ -161,6 +167,7 @@ describe('reducteur profil', () => {
           email: 'jean.dupont@email.fr',
           dateCreationCompte: '03.12.2023',
           consentementAnnuaire: true,
+          consentementAChange: false,
           enCoursDeChargement: false,
           affichagesAnnuaire: [
             {
@@ -183,12 +190,13 @@ describe('reducteur profil', () => {
         cocheTypeAffichageAnnuaire(TypeAffichageAnnuaire.PRENOM_N)
       );
 
-      expect(etatProfil).toStrictEqual({
+      expect(etatProfil).toStrictEqual<EtatProfil>({
         nom: 'Dupont',
         prenom: 'Jean',
         email: 'jean.dupont@email.fr',
         dateCreationCompte: '03.12.2023',
         consentementAnnuaire: true,
+        consentementAChange: false,
         enCoursDeChargement: false,
         affichagesAnnuaire: [
           {
@@ -207,6 +215,31 @@ describe('reducteur profil', () => {
             actif: false,
           },
         ],
+      });
+    });
+
+    it('S‘assure que le consentement a été modifié', () => {
+      const etatProfil = reducteurProfil(
+        {
+          nom: 'Dupont',
+          prenom: 'Jean',
+          email: 'jean.dupont@email.fr',
+          dateCreationCompte: '03.12.2023',
+          consentementAnnuaire: true,
+          consentementAChange: false,
+          enCoursDeChargement: false,
+        },
+        cocheConsentementAnnuaire()
+      );
+
+      expect(etatProfil).toStrictEqual<EtatProfil>({
+        nom: 'Dupont',
+        prenom: 'Jean',
+        email: 'jean.dupont@email.fr',
+        dateCreationCompte: '03.12.2023',
+        consentementAnnuaire: false,
+        consentementAChange: true,
+        enCoursDeChargement: false,
       });
     });
   });
