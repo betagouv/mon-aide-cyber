@@ -406,6 +406,35 @@ describe('le serveur MAC sur les routes /api/profil', () => {
           "Une erreur est survenue, vos modifications n'ont pas été prises en compte. Veuillez recharger la page et vérifier vos informations.",
       });
     });
+
+    it("Modifie le nom d'affichage à montrer dans l'annuaire", async () => {
+      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurUtilisateur: unUtilisateur().avecUnNomPrenom('Jean Dupont'),
+        constructeurAidant: unAidant().avecUnNomPrenom('Jean Dupont'),
+      });
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        utilisateur.identifiant
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        '/api/profil',
+        {
+          consentementAnnuaire: true,
+          typeAffichage: 'PRENOM_N',
+        }
+      );
+
+      const aidantModifie = await testeurMAC.entrepots
+        .aidants()
+        .lis(utilisateur.identifiant);
+      expect(reponse.statusCode).toBe(204);
+      expect(aidantModifie.consentementAnnuaire).toBe(true);
+      expect(aidantModifie.preferences.nomAffichageAnnuaire).toBe('Jean D.');
+    });
   });
 
   describe('Quand une requête POST est reçue sur /modifier-mot-de-passe', () => {

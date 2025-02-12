@@ -86,6 +86,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
 
   avecUnNomPrenom(nomPrenom: string): ConstructeurAidant {
     this.nomPrenom = nomPrenom;
+    this.nomAffichageAnnuaire = nomPrenom;
     return this;
   }
 
