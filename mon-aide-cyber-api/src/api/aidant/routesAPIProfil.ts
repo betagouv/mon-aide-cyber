@@ -22,7 +22,10 @@ import {
   uneRechercheUtilisateursMAC,
 } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { ErreurUtilisateurNonTrouve } from '../routesAPIUtilisateur';
-import { TypeAffichageAnnuaire } from '../../espace-aidant/Aidant';
+import {
+  formatteLeNomPrenomSelonRegleAffichage,
+  TypeAffichageAnnuaire,
+} from '../../espace-aidant/Aidant';
 
 type CorpsRequeteChangementMotDerPasse = {
   ancienMotDePasse: string;
@@ -83,6 +86,20 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
                     : '',
                   consentementAnnuaire: aidant.consentementAnnuaire,
                   identifiantConnexion: aidant.email,
+                  affichagesAnnuaire: Object.values(TypeAffichageAnnuaire).map(
+                    (typeAffichageAnnuaire) => ({
+                      actif:
+                        formatteLeNomPrenomSelonRegleAffichage(
+                          aidant.nomPrenom,
+                          typeAffichageAnnuaire
+                        ) === aidant.nomAffichageAnnuaire,
+                      type: typeAffichageAnnuaire,
+                      valeur: formatteLeNomPrenomSelonRegleAffichage(
+                        aidant.nomPrenom,
+                        typeAffichageAnnuaire
+                      ),
+                    })
+                  ),
                   ...constructeurActionsHATEOAS()
                     .pour({ contexte })
                     .construis(),

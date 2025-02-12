@@ -79,22 +79,26 @@ export type Siret = string;
 export const estSiretGendarmerie = (siret: string | undefined) =>
   siret === adaptateurEnvironnement.siretsEntreprise().gendarmerie();
 
-export type TypeAffichageAnnuaire = 'PRENOM_NOM' | 'PRENOM_N' | 'P_NOM';
+export enum TypeAffichageAnnuaire {
+  PRENOM_NOM = 'PRENOM_NOM',
+  PRENOM_N = 'PRENOM_N',
+  P_NOM = 'P_NOM',
+}
 
 export const formatteLeNomPrenomSelonRegleAffichage = (
   nomPrenom: string,
   regleAffichage: TypeAffichageAnnuaire
 ) => {
   switch (regleAffichage) {
-    case 'PRENOM_N': {
+    case TypeAffichageAnnuaire.PRENOM_N: {
       const [prenom, nom] = nomPrenom.split(' ');
       return `${prenom} ${nom.at(0)}.`;
     }
-    case 'P_NOM': {
+    case TypeAffichageAnnuaire.P_NOM: {
       const [prenom, nom] = nomPrenom.split(' ');
       return `${prenom.at(0)}. ${nom}`;
     }
-    case 'PRENOM_NOM': {
+    case TypeAffichageAnnuaire.PRENOM_NOM: {
       return nomPrenom;
     }
   }

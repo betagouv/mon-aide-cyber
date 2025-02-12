@@ -11,6 +11,7 @@ import {
   estSiretGendarmerie,
   formatteLeNomPrenomSelonRegleAffichage,
   Siret,
+  TypeAffichageAnnuaire,
 } from './Aidant';
 
 export type TypeEntite = 'ServicePublic' | 'ServiceEtat' | 'Association';
@@ -76,7 +77,7 @@ export class CapteurCommandeCreeEspaceAidant
               typesEntites: [],
               nomAffichageAnnuaire: formatteLeNomPrenomSelonRegleAffichage(
                 commande.nomPrenom,
-                'PRENOM_N'
+                TypeAffichageAnnuaire.PRENOM_N
               ),
             },
             consentementAnnuaire: false,

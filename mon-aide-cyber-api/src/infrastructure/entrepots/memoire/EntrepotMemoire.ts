@@ -270,6 +270,7 @@ export class EntrepotProfilAidantMemoire implements EntrepotProfilAidant {
           dateSignatureCGU: utilisateur.dateSignatureCGU,
         }),
         consentementAnnuaire: aidant.consentementAnnuaire,
+        nomAffichageAnnuaire: aidant.preferences.nomAffichageAnnuaire,
       });
     } catch (erreur) {
       throw new AggregatNonTrouve('profil Aidant');

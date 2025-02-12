@@ -58,17 +58,17 @@ describe('Service Aidant', () => {
   }>([
     {
       prenomNom: 'Jean Dupont',
-      typeAffichage: 'PRENOM_N',
+      typeAffichage: TypeAffichageAnnuaire.PRENOM_N,
       formatAttendu: 'Jean D.',
     },
     {
       prenomNom: 'Jean Dupont',
-      typeAffichage: 'PRENOM_NOM',
+      typeAffichage: TypeAffichageAnnuaire.PRENOM_NOM,
       formatAttendu: 'Jean Dupont',
     },
     {
       prenomNom: 'Jean Dupont',
-      typeAffichage: 'P_NOM',
+      typeAffichage: TypeAffichageAnnuaire.P_NOM,
       formatAttendu: 'J. Dupont',
     },
   ])(
