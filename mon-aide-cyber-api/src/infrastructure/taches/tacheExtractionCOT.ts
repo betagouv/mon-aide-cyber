@@ -12,6 +12,11 @@ import { fabriqueAnnuaireCOT } from '../adaptateurs/fabriqueAnnuaireCOT';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
 import * as Sentry from '@sentry/node';
 import { formatDistance } from 'date-fns';
+import { program } from 'commander';
+import {
+  alpesDeHauteProvence,
+  gironde,
+} from '../../gestion-demandes/departements';
 
 class RapportExcel implements Rapport<string> {
   private readonly workbookWriter: stream.xlsx.WorkbookWriter;
@@ -58,7 +63,7 @@ class RapportExcel implements Rapport<string> {
 
 type Resultat = 'OK' | 'KO';
 
-const main = async (): Promise<Resultat> => {
+const extrais = async (test = false): Promise<Resultat> => {
   const debutExtraction = FournisseurHorloge.maintenant();
   console.log(`Début tâche extraction COT à ${debutExtraction.toISOString()}`);
   const entrepots = fabriqueEntrepots();
@@ -72,15 +77,25 @@ const main = async (): Promise<Resultat> => {
     FournisseurHorloge.maintenant()
   ).date;
 
+  const emailsCot: string[] = [];
+  if (test) {
+    emailsCot.push(
+      annuaireCOT.annuaireCOT().rechercheEmailParDepartement(gironde)
+    );
+    emailsCot.push(
+      annuaireCOT
+        .annuaireCOT()
+        .rechercheEmailParDepartement(alpesDeHauteProvence)
+    );
+  } else {
+    emailsCot.push(...annuaireCOT.annuaireCOT().tous());
+  }
   return adaptateurEnvoiMessage
     .envoie({
       corps:
         'Vous trouverez ci-joint le dernier rapport concernant les demandes pour devenir Aidant en attente.',
       objet: `Rapport MonAideCyber du ${date}`,
-      destinataire: annuaireCOT
-        .annuaireCOT()
-        .tous()
-        .map((cot) => ({ email: cot })),
+      destinataire: emailsCot.map((cot) => ({ email: cot })),
       pieceJointe: { contenu: rapport, nom: `${date}_Rapport_COT.xlsx` },
     })
     .then(() => {
@@ -103,16 +118,30 @@ const main = async (): Promise<Resultat> => {
     });
 };
 
-main()
-  .then((resultat) => {
-    Sentry.captureCheckIn({
-      checkInId: Sentry.captureCheckIn({
+const commande = program
+  .description('Exécute la âche d’extraction planifiée pour les COT')
+  .option(
+    '-t, --test',
+    'Envoie un test pour les régions Nouvelle-Aquitaine et Provences-Alpes-Côte d’Azure'
+  );
+
+commande.action(async (options) => {
+  await extrais(options.test)
+    .then((resultat) => {
+      Sentry.captureCheckIn({
+        checkInId: Sentry.captureCheckIn({
+          monitorSlug: 'envoi-rapport-cot',
+          status: 'in_progress',
+        }),
         monitorSlug: 'envoi-rapport-cot',
-        status: 'in_progress',
-      }),
-      monitorSlug: 'envoi-rapport-cot',
-      status: resultat === 'OK' ? 'ok' : 'error',
+        status: resultat === 'OK' ? 'ok' : 'error',
+      });
+      process.exit(0);
+    })
+    .catch((erreur) => {
+      console.error('Une erreur s’est produite', erreur);
+      process.exit(1);
     });
-    process.exit(0);
-  })
-  .catch((erreur) => console.error('Une erreur s’est produite', erreur));
+});
+
+program.parse();
