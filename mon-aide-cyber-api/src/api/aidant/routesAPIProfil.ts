@@ -22,6 +22,7 @@ import {
   uneRechercheUtilisateursMAC,
 } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { ErreurUtilisateurNonTrouve } from '../routesAPIUtilisateur';
+import { TypeAffichageAnnuaire } from '../../espace-aidant/Aidant';
 
 type CorpsRequeteChangementMotDerPasse = {
   ancienMotDePasse: string;
@@ -31,6 +32,7 @@ type CorpsRequeteChangementMotDerPasse = {
 
 type CorpsRequeteModifieProfilAidant = {
   consentementAnnuaire: boolean;
+  typeAffichage: TypeAffichageAnnuaire;
 };
 
 export const routesAPIProfil = (configuration: ConfigurationServeur) => {
@@ -131,6 +133,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
         return new ServiceProfilAidant(entrepots.aidants(), busEvenement)
           .modifie(requete.identifiantUtilisateurCourant!, {
             consentementAnnuaire: requete.body.consentementAnnuaire,
+            typeAffichageChoisi: requete.body.typeAffichage,
           })
           .then(() => reponse.status(204).send())
           .catch((erreur) =>
