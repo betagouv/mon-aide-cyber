@@ -8,6 +8,7 @@ export type EtatProfil = {
   prenom: string;
   email: string;
   consentementAnnuaire: boolean;
+  consentementAChange: boolean;
   dateCreationCompte: string;
   enCoursDeChargement: boolean;
   affichagesAnnuaire?: {
@@ -65,9 +66,11 @@ export const reducteurProfil = (
       return {
         ...etat,
         consentementAnnuaire: !etat.consentementAnnuaire,
+        consentementAChange: true,
       };
     }
     case TypeActionProfil.COCHE_TYPE_AFFICHAGE_ANNUAIRE: {
+      console.log('super', etat);
       if (!etat.affichagesAnnuaire) return { ...etat };
 
       const affichagesAnnuaireAChanger = etat.affichagesAnnuaire;

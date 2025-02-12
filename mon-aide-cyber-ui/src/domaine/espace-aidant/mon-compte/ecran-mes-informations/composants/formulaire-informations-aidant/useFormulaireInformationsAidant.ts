@@ -15,7 +15,7 @@ import { TypeAffichageAnnuaire } from 'mon-aide-cyber-api/src/espace-aidant/Aida
 
 type CorpsModificationProfil = {
   consentementAnnuaire: boolean;
-  typeAffichage: TypeAffichageAnnuaire;
+  typeAffichage?: TypeAffichageAnnuaire;
 };
 
 export const useFormulaireInformationsAidant = (macAPI: MACAPIType) => {
@@ -28,6 +28,7 @@ export const useFormulaireInformationsAidant = (macAPI: MACAPIType) => {
     email: '',
     dateCreationCompte: '',
     consentementAnnuaire: false,
+    consentementAChange: false,
     enCoursDeChargement: true,
   });
 
@@ -62,16 +63,20 @@ export const useFormulaireInformationsAidant = (macAPI: MACAPIType) => {
       new MoteurDeLiens(navigationMAC.etat).trouve(
         'modifier-profil',
         (lien: Lien) => {
+          const affichageAEnvoyer = etatProfil.affichagesAnnuaire!.find(
+            (x) => x.actif
+          )!.type;
+
+          const corps: CorpsModificationProfil = {
+            consentementAnnuaire: etatProfil.consentementAnnuaire,
+            typeAffichage: affichageAEnvoyer,
+          };
+
           const parametresAPI =
             constructeurParametresAPI<CorpsModificationProfil>()
               .url(lien.url)
               .methode(lien.methode!)
-              .corps({
-                consentementAnnuaire: etatProfil.consentementAnnuaire,
-                typeAffichage: etatProfil.affichagesAnnuaire!.find(
-                  (x) => x.actif
-                )!.type,
-              })
+              .corps(corps)
               .construis();
           macAPI
             .execute<void, void, CorpsModificationProfil>(parametresAPI, () =>

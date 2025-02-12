@@ -130,11 +130,10 @@ export const FormulaireInformationsAidant = ({
                 }
               />
             </div>
-            {etatProfil.consentementAnnuaire ? (
+            {etatProfil.consentementAnnuaire &&
+            etatProfil.affichagesAnnuaire ? (
               <FormatAffichageAnnuaire
-                valeurParDefaut={
-                  etatProfil?.affichagesAnnuaire?.find((x) => x.actif)?.type
-                }
+                affichagesAnnuaire={etatProfil.affichagesAnnuaire}
                 surChangement={(typeAffichage: TypeAffichage) =>
                   declencheActionReducteur(
                     cocheTypeAffichageAnnuaire(typeAffichage)
