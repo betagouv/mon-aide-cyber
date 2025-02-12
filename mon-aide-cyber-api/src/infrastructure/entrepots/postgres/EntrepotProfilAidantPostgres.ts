@@ -13,6 +13,7 @@ type PreferencesDTO = {
   secteursActivite: string[];
   departements: string[];
   typesEntites: string[];
+  nomAffichageAnnuaire: string;
 };
 
 type DonneesUtilisateur = {
@@ -48,6 +49,9 @@ export class EntrepotProfilAidantPostgres implements EntrepotProfilAidant {
       }),
       consentementAnnuaire: dto.donnees.consentementAnnuaire,
       email: this.chiffrement.dechiffre(dto.donnees.email),
+      nomAffichageAnnuaire: this.chiffrement.dechiffre(
+        dto.donnees.preferences.nomAffichageAnnuaire
+      ),
     };
   }
 

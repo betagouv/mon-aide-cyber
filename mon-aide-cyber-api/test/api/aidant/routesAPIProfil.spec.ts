@@ -12,7 +12,10 @@ import {
   unUtilisateurInscrit,
 } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { Utilisateur } from '../../../src/authentification/Utilisateur';
-import { Aidant } from '../../../src/espace-aidant/Aidant';
+import {
+  Aidant,
+  TypeAffichageAnnuaire,
+} from '../../../src/espace-aidant/Aidant';
 
 describe('le serveur MAC sur les routes /api/profil', () => {
   const testeurMAC = testeurIntegration();
@@ -48,7 +51,7 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
       });
 
-      it("retourne les informations le l'Aidant", async () => {
+      it("Retourne les informations le l'Aidant", async () => {
         const reponse = await executeRequete(
           donneesServeur.app,
           'GET',
@@ -59,35 +62,83 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         expect(
           testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
         ).toBe(true);
-        expect(await reponse.json()).toStrictEqual<Profil>({
-          nomPrenom: aidantConnecte.nomPrenom,
-          dateSignatureCGU: expect.any(String),
-          consentementAnnuaire: aidantConnecte.consentementAnnuaire,
-          identifiantConnexion: aidantConnecte.email,
-          liens: {
-            'lancer-diagnostic': {
-              url: '/api/diagnostic',
-              methode: 'POST',
-            },
-            'afficher-tableau-de-bord': {
-              methode: 'GET',
-              url: '/api/mon-espace/tableau-de-bord',
-            },
-            'se-deconnecter': {
-              url: '/api/token',
-              methode: 'DELETE',
-              typeAppel: 'API',
-            },
-            'modifier-mot-de-passe': {
-              url: '/api/profil/modifier-mot-de-passe',
-              methode: 'POST',
-            },
-            'modifier-profil': {
-              url: '/api/profil',
-              methode: 'PATCH',
-            },
+
+        const profilAidant = await reponse.json();
+        expect(profilAidant.nomPrenom).toStrictEqual(aidantConnecte.nomPrenom);
+        expect(profilAidant.dateSignatureCGU).toStrictEqual(expect.any(String));
+        expect(profilAidant.consentementAnnuaire).toStrictEqual(
+          aidantConnecte.consentementAnnuaire
+        );
+        expect(profilAidant.identifiantConnexion).toStrictEqual(
+          aidantConnecte.email
+        );
+        expect(profilAidant.liens).toStrictEqual({
+          'lancer-diagnostic': {
+            url: '/api/diagnostic',
+            methode: 'POST',
+          },
+          'afficher-tableau-de-bord': {
+            methode: 'GET',
+            url: '/api/mon-espace/tableau-de-bord',
+          },
+          'se-deconnecter': {
+            url: '/api/token',
+            methode: 'DELETE',
+            typeAppel: 'API',
+          },
+          'modifier-mot-de-passe': {
+            url: '/api/profil/modifier-mot-de-passe',
+            methode: 'POST',
+          },
+          'modifier-profil': {
+            url: '/api/profil',
+            methode: 'PATCH',
           },
         });
+      });
+
+      it("Retourne les possibilités de nom d'affichage de l'Aidant", async () => {
+        const { utilisateur, aidant } =
+          await unCompteAidantRelieAUnCompteUtilisateur({
+            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+            entrepotAidant: testeurMAC.entrepots.aidants(),
+            constructeurUtilisateur:
+              unUtilisateur().avecUnNomPrenom('Jean Dupont'),
+            constructeurAidant: unAidant(),
+          });
+        aidantConnecte = aidant;
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          utilisateur.identifiant
+        );
+        await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          `/api/profil/`
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        expect(
+          testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
+        ).toBe(true);
+        expect((await reponse.json()).affichagesAnnuaire).toStrictEqual([
+          {
+            type: TypeAffichageAnnuaire.PRENOM_NOM,
+            valeur: 'Jean Dupont',
+            actif: true,
+          },
+          {
+            type: TypeAffichageAnnuaire.PRENOM_N,
+            valeur: 'Jean D.',
+            actif: false,
+          },
+          {
+            type: TypeAffichageAnnuaire.P_NOM,
+            valeur: 'J. Dupont',
+            actif: false,
+          },
+        ]);
       });
 
       it('Vérifie la signature des CGU', async () => {
@@ -234,29 +285,32 @@ describe('le serveur MAC sur les routes /api/profil', () => {
         `/api/profil/`
       );
 
-      expect(await reponse.json()).toStrictEqual<Profil>({
-        nomPrenom: aidantConnecte.nomPrenom,
-        dateSignatureCGU: expect.any(String),
-        consentementAnnuaire: aidantConnecte.consentementAnnuaire,
-        identifiantConnexion: aidantConnecte.email,
-        liens: {
-          'lancer-diagnostic': {
-            url: '/api/diagnostic',
-            methode: 'POST',
-          },
-          'afficher-tableau-de-bord': {
-            methode: 'GET',
-            url: '/api/mon-espace/tableau-de-bord',
-          },
-          'se-deconnecter': {
-            url: '/pro-connect/deconnexion',
-            methode: 'GET',
-            typeAppel: 'DIRECT',
-          },
-          'modifier-profil': {
-            url: '/api/profil',
-            methode: 'PATCH',
-          },
+      const profilAidant = await reponse.json();
+      expect(profilAidant.nomPrenom).toStrictEqual(aidantConnecte.nomPrenom);
+      expect(profilAidant.dateSignatureCGU).toStrictEqual(expect.any(String));
+      expect(profilAidant.consentementAnnuaire).toStrictEqual(
+        aidantConnecte.consentementAnnuaire
+      );
+      expect(profilAidant.identifiantConnexion).toStrictEqual(
+        aidantConnecte.email
+      );
+      expect(profilAidant.liens).toStrictEqual({
+        'lancer-diagnostic': {
+          url: '/api/diagnostic',
+          methode: 'POST',
+        },
+        'afficher-tableau-de-bord': {
+          methode: 'GET',
+          url: '/api/mon-espace/tableau-de-bord',
+        },
+        'se-deconnecter': {
+          url: '/pro-connect/deconnexion',
+          methode: 'GET',
+          typeAppel: 'DIRECT',
+        },
+        'modifier-profil': {
+          url: '/api/profil',
+          methode: 'PATCH',
         },
       });
     });

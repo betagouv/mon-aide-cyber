@@ -1227,6 +1227,7 @@ describe('Entrepot profil aidant', () => {
       consentementAnnuaire: false,
       email: aidant.email,
       dateSignatureCGU: FournisseurHorloge.maintenant(),
+      nomAffichageAnnuaire: aidant.preferences.nomAffichageAnnuaire,
     });
   });
 });

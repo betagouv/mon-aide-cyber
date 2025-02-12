@@ -9,6 +9,7 @@ export type ProfilAidant = {
   nomPrenom: string;
   dateSignatureCGU?: Date;
   consentementAnnuaire: boolean;
+  nomAffichageAnnuaire: string;
   email: string;
 };
 
