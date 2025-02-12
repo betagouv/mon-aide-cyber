@@ -1,0 +1,19 @@
+
+.formats-affichage-annuaire {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-left: 4px var(--couleurs-mac-violet-fonce) solid;
+  padding-left: 1rem;
+  margin-left: 2rem;
+
+  p {
+    margin: 0;
+  }
+
+  .liste {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

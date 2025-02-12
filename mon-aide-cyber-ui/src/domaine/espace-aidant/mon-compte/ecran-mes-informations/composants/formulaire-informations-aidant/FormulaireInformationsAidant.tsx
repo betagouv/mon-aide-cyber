@@ -118,10 +118,10 @@ export const FormulaireInformationsAidant = ({
           <>
             <div className="fr-mt-2w fr-mb-2w fr-checkbox-group mac-radio-group">
               <ChampCaseACocher
-                label="Je souhaite que mon nom apparaisse sur l’annuaire des aidants"
+                label="Je souhaite que mon nom apparaisse sur l’annuaire des Aidant cyber"
                 element={{
                   code: 'consentement-annuaire',
-                  nom: 'Je souhaite que mon nom apparaisse sur l’annuaire des aidants',
+                  nom: 'Je souhaite que mon nom apparaisse sur l’annuaire des Aidants cyber',
                 }}
                 checked={etatProfil.consentementAnnuaire}
                 aria-checked={etatProfil.consentementAnnuaire}

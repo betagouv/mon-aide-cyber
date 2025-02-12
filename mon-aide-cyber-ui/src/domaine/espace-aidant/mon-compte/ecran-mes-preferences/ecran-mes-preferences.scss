@@ -68,16 +68,17 @@
   }
 }
 
-/*.fr-checkbox-group input[type=checkbox]+label {
-    margin-left: 0;
-}*/
+.champ-radio-conteneur {
+  > label {
+    display: flex;
+    gap: 1rem;
+  }
+}
 
 .mac-checkbox {
-
   .mac-checkbox-box {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-
 }

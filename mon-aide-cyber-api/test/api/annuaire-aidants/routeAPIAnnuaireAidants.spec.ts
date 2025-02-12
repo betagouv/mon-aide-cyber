@@ -23,7 +23,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   });
 
   it('Retourne un Aidant', async () => {
-    const aidant = unAidant().avecNomPrenom('Jean DUPONT').construis();
+    const aidant = unAidant().avecNomPrenom('Jean Dupont').construis();
     await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
 
     const reponse = await executeRequete(
