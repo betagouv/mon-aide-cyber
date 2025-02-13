@@ -6,6 +6,7 @@ import {
 } from '../../gestion-demandes/devenir-aidant/ServiceDemandeDevenirAidant';
 import { EntrepotDemandeAideLecture } from '../../gestion-demandes/aide/DemandeAide';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import { EntrepotStatistiquesAidant } from '../../statistiques/aidant/StastistiquesAidant';
 
 export type Entete<T> = { entete: string; clef: keyof T };
 
@@ -47,6 +48,19 @@ type RepresentationDemandeAide = RepresentationRapport<
   DemandeAide
 >;
 
+export type StatistiquesAidant = {
+  email: string;
+  nomPrenom: string;
+  nombreDiagnostics: number;
+  departements: string;
+  entiteMorale: string;
+};
+export type ListeDesAidants = StatistiquesAidant[];
+type RepresentationStatistiquesAidant = RepresentationRapport<
+  ListeDesAidants,
+  StatistiquesAidant
+>;
+
 class ExtractionMAC implements Extraction {
   constructor(private readonly parametres: Parametres) {}
 
@@ -58,6 +72,10 @@ class ExtractionMAC implements Extraction {
     await this.ajouteLesDemandesAvantArbitrage(demandesEnCours, rapport);
     await this.ajouteLesDemandesAide(
       this.parametres.entrepotDemandesAide,
+      rapport
+    );
+    await this.ajouteLaListeDesAidants(
+      this.parametres.entrepotStatistiquesAidant,
       rapport
     );
     return rapport.genere();
@@ -127,11 +145,42 @@ class ExtractionMAC implements Extraction {
       })
     );
   }
+
+  private async ajouteLaListeDesAidants<T>(
+    entrepotStatistiquesAidant: EntrepotStatistiquesAidant,
+    rapport: Rapport<T>
+  ) {
+    await entrepotStatistiquesAidant
+      .rechercheAidantAvecNombreDeDiagnostics()
+      .then((statistiques) =>
+        rapport.ajoute<ListeDesAidants, RepresentationStatistiquesAidant>({
+          entetes: [
+            { entete: 'Nom Prénom', clef: 'nomPrenom' },
+            { entete: 'Département', clef: 'departements' },
+            { entete: 'Mail', clef: 'email' },
+            { entete: 'Entité Morale', clef: 'entiteMorale' },
+            {
+              entete: 'Nombre de diagnostics effectués',
+              clef: 'nombreDiagnostics',
+            },
+          ],
+          intitule: 'Liste des Aidants',
+          valeur: statistiques.map((stat) => ({
+            email: stat.email,
+            nomPrenom: stat.nomPrenom,
+            nombreDiagnostics: stat.nombreDiagnostics || 0,
+            entiteMorale: stat.entite,
+            departements: stat.departements.map((d) => d.nom).join(','),
+          })),
+        })
+      );
+  }
 }
 
 type Parametres = {
   entrepotDemandes: EntrepotDemandeDevenirAidant;
   entrepotDemandesAide: EntrepotDemandeAideLecture;
+  entrepotStatistiquesAidant: EntrepotStatistiquesAidant;
 };
 
 export const uneExtraction = (parametres: Parametres) =>

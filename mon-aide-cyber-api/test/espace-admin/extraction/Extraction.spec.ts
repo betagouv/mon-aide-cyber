@@ -3,13 +3,16 @@ import { uneDemandeDevenirAidant } from '../../constructeurs/constructeurDemande
 import {
   EntrepotDemandeAideLectureMemoire,
   EntrepotDemandeDevenirAidantMemoire,
+  EntrepotStatistiquesAidantMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import {
   DemandeAide,
   DemandesAide,
   Entete,
+  ListeDesAidants,
   Rapport,
   RepresentationRapport,
+  StatistiquesAidant,
   uneExtraction,
 } from '../../../src/espace-admin/extraction/Extraction';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
@@ -18,11 +21,13 @@ import {
   DemandesDevenirAidant,
 } from '../../../src/gestion-demandes/devenir-aidant/ServiceDemandeDevenirAidant';
 import { uneDemandeAide } from '../../gestion-demandes/aide/ConstructeurDemandeAide';
+import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/EntrepotRelationMemoire';
+import { uneStatistiqueAidant } from '../../constructeurs/constructeurStatistiqueAidant';
 
 class RapportJSON implements Rapport<RepresentationJSON> {
   private readonly representations: Map<
     string,
-    DemandesDevenirAidant | DemandesAide
+    DemandesDevenirAidant | DemandesAide | ListeDesAidants
   > = new Map();
   public entetes: Map<string, any[]> = new Map();
   public intitule: Map<string, string> = new Map();
@@ -53,6 +58,9 @@ class RapportJSON implements Rapport<RepresentationJSON> {
     const demandesAide = this.representations.get(
       'demandes-aide'
     ) as DemandesAide;
+    const listeDesAidants = this.representations.get(
+      'liste-des-aidants'
+    ) as ListeDesAidants;
     return Promise.resolve({
       'demandes-devenir-aidant': demandesDevenirAidant,
       ...(demandesAvantArbitrage.length > 0 && {
@@ -60,6 +68,8 @@ class RapportJSON implements Rapport<RepresentationJSON> {
       }),
       ...(demandesAide &&
         demandesAide.length > 0 && { 'demandes-aide': demandesAide }),
+      ...(listeDesAidants &&
+        listeDesAidants.length > 0 && { 'liste-des-aidants': listeDesAidants }),
     });
   }
 }
@@ -68,6 +78,7 @@ type RepresentationJSON = {
   'demandes-devenir-aidant': DemandesDevenirAidant;
   'demandes-avant-arbitrage'?: DemandesDevenirAidant;
   'demandes-aide'?: DemandesAide;
+  'liste-des-aidants'?: ListeDesAidants;
 };
 
 describe('Extraction', () => {
@@ -82,6 +93,9 @@ describe('Extraction', () => {
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
         entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(rapport).toStrictEqual<{ [clef: string]: DemandesDevenirAidant }>({
@@ -111,6 +125,9 @@ describe('Extraction', () => {
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
         entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(
@@ -135,6 +152,9 @@ describe('Extraction', () => {
       await uneExtraction({
         entrepotDemandes: entrepotDemande,
         entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(rapportJSON.entetes.get('demandes-devenir-aidant')).toStrictEqual<
@@ -165,6 +185,9 @@ describe('Extraction', () => {
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
         entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(rapport['demandes-devenir-aidant'][0].entiteMorale).toStrictEqual(
@@ -180,6 +203,9 @@ describe('Extraction', () => {
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
         entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(
@@ -203,6 +229,9 @@ describe('Extraction', () => {
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
         entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(rapport).toStrictEqual<{ [clef: string]: DemandesDevenirAidant }>({
@@ -235,6 +264,9 @@ describe('Extraction', () => {
       await uneExtraction({
         entrepotDemandes: entrepotDemande,
         entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(rapportJSON.entetes.get('demandes-avant-arbitrage')).toStrictEqual<
@@ -260,6 +292,9 @@ describe('Extraction', () => {
       const rapport = await uneExtraction({
         entrepotDemandes: new EntrepotDemandeDevenirAidantMemoire(),
         entrepotDemandesAide: entrepotAide,
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(rapport).toStrictEqual<{
@@ -285,6 +320,9 @@ describe('Extraction', () => {
       await uneExtraction({
         entrepotDemandes: new EntrepotDemandeDevenirAidantMemoire(),
         entrepotDemandesAide: entrepotAide,
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(rapportJSON.entetes.get('demandes-aide')).toStrictEqual<
@@ -292,6 +330,75 @@ describe('Extraction', () => {
       >([{ entete: 'Date de la demande', clef: 'dateDemande' }]);
       expect(rapportJSON.intitule.get('demandes-aide')).toStrictEqual(
         'Demandes Aide'
+      );
+    });
+  });
+
+  describe('Pour les Aidants', () => {
+    it('Extrais les Aidants', async () => {
+      const entrepotAidant = new EntrepotStatistiquesAidantMemoire(
+        new EntrepotRelationMemoire()
+      );
+      const aidant = await uneStatistiqueAidant(
+        entrepotAidant,
+        new EntrepotRelationMemoire()
+      ).construis();
+
+      const rapportJSON = new RapportJSON();
+      const rapport = await uneExtraction({
+        entrepotDemandes: new EntrepotDemandeDevenirAidantMemoire(),
+        entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
+        entrepotStatistiquesAidant: entrepotAidant,
+      }).extrais<RepresentationJSON>(rapportJSON);
+
+      expect(rapport).toStrictEqual<{
+        [clef: string]: DemandesDevenirAidant | DemandesAide | ListeDesAidants;
+      }>({
+        'demandes-devenir-aidant': [],
+        'liste-des-aidants': [
+          {
+            nomPrenom: aidant.nomPrenom,
+            email: aidant.email,
+            departements: aidant.departements.map((d) => d.nom).join(','),
+            entiteMorale: aidant.entite,
+            nombreDiagnostics: 0,
+          },
+        ],
+      });
+    });
+
+    it('Le rapport contient entête et intitulé', async () => {
+      const entrepotAidant = new EntrepotStatistiquesAidantMemoire(
+        new EntrepotRelationMemoire()
+      );
+      await uneStatistiqueAidant(
+        entrepotAidant,
+        new EntrepotRelationMemoire()
+      ).construis();
+
+      const rapportJSON = new RapportJSON();
+      await uneExtraction({
+        entrepotDemandes: new EntrepotDemandeDevenirAidantMemoire(),
+        entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
+      }).extrais<RepresentationJSON>(rapportJSON);
+
+      expect(rapportJSON.entetes.get('liste-des-aidants')).toStrictEqual<
+        Entete<StatistiquesAidant>[]
+      >([
+        { entete: 'Nom Prénom', clef: 'nomPrenom' },
+        { entete: 'Département', clef: 'departements' },
+        { entete: 'Mail', clef: 'email' },
+        { entete: 'Entité Morale', clef: 'entiteMorale' },
+        {
+          entete: 'Nombre de diagnostics effectués',
+          clef: 'nombreDiagnostics',
+        },
+      ]);
+      expect(rapportJSON.intitule.get('liste-des-aidants')).toStrictEqual(
+        'Liste des Aidants'
       );
     });
   });

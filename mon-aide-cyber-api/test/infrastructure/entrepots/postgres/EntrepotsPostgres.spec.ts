@@ -43,8 +43,10 @@ import { EntrepotAnnuaireAidantsPostgres } from '../../../../src/infrastructure/
 import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
 import { Aidant as AnnuaireAidant } from '../../../../src/annuaire-aidants/annuaireAidants';
 import {
+  allier,
   Departement,
   departements,
+  gironde,
 } from '../../../../src/gestion-demandes/departements';
 import { SecteurActivite } from '../../../../src/espace-aidant/preferences/secteursActivite';
 import { EntrepotUtilisateurPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotUtilisateurPostgres';
@@ -77,7 +79,7 @@ import {
 } from '../../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 import { ServiceDeChiffrement } from '../../../../src/securite/ServiceDeChiffrement';
 import { EntrepotStatistiquesAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesAidantPostgres';
-import { Aidant as AidantExtraction } from '../../../../src/statistiques/aidant/StastistiquesAidant';
+import { StatistiquesAidant as AidantExtraction } from '../../../../src/statistiques/aidant/StastistiquesAidant';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {
@@ -802,16 +804,19 @@ describe('Entrepot Aidant', () => {
   });
 });
 
-describe('EntrepotAidantExtraction', () => {
+describe('EntrepotStatistiquesAidant', () => {
   const entrepotAidant = new EntrepotAidantPostgres(
     adaptateurServiceChiffrement()
   );
+  const entrepotUtilisateurInscritPostgres =
+    new EntrepotUtilisateurInscritPostgres(adaptateurServiceChiffrement());
 
   beforeEach(async () => {
     await nettoieLaBaseDeDonneesAidants();
     await nettoieLaBaseDeDonneesRelations();
   });
   const entrepotRelation = new EntrepotRelationPostgres();
+
   it('Récupère un Aidant ayant plus de 2 diagnostics', async () => {
     const aidant = unAidant().construis();
     await entrepotAidant.persiste(aidant);
@@ -834,6 +839,8 @@ describe('EntrepotAidantExtraction', () => {
         nomPrenom: aidant.nomPrenom,
         email: aidant.email,
         compteCree: aidant.dateSignatureCGU!,
+        departements: aidant.preferences.departements,
+        entite: '',
       },
     ]);
   });
@@ -854,6 +861,83 @@ describe('EntrepotAidantExtraction', () => {
         nomPrenom: aidant.nomPrenom,
         email: aidant.email,
         compteCree: aidant.dateSignatureCGU!,
+        departements: aidant.preferences.departements,
+        entite: '',
+      },
+    ]);
+  });
+
+  it('Récupère uniquement les Aidants sans diagnostic', async () => {
+    const utilisateurInscrit = unUtilisateurInscrit().construis();
+    await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
+    const aidant = unAidant().construis();
+    await entrepotAidant.persiste(aidant);
+
+    const entrepotAidantExtraction = new EntrepotStatistiquesAidantPostgres(
+      adaptateurServiceChiffrement()
+    );
+
+    expect(
+      await entrepotAidantExtraction.rechercheAidantSansDiagnostic()
+    ).toStrictEqual<AidantExtraction[]>([
+      {
+        identifiant: aidant.identifiant,
+        nomPrenom: aidant.nomPrenom,
+        email: aidant.email,
+        compteCree: aidant.dateSignatureCGU!,
+        departements: aidant.preferences.departements,
+        entite: '',
+      },
+    ]);
+  });
+
+  it('Récupère un Aidant sans diagnostic avec son entité et ses départements', async () => {
+    const aidant = unAidant()
+      .faisantPartieDeEntite('ServicePublic')
+      .ayantPourDepartements([gironde, allier])
+      .construis();
+    await entrepotAidant.persiste(aidant);
+
+    const entrepotAidantExtraction = new EntrepotStatistiquesAidantPostgres(
+      adaptateurServiceChiffrement()
+    );
+
+    expect(
+      await entrepotAidantExtraction.rechercheAidantSansDiagnostic()
+    ).toStrictEqual<AidantExtraction[]>([
+      {
+        identifiant: aidant.identifiant,
+        nomPrenom: aidant.nomPrenom,
+        email: aidant.email,
+        compteCree: aidant.dateSignatureCGU!,
+        departements: aidant.preferences.departements,
+        entite: aidant.entite!.nom!,
+      },
+    ]);
+  });
+
+  it('Récupère un Aidant avec ses diagnostic, son entité et ses départements', async () => {
+    const aidant = unAidant()
+      .faisantPartieDeEntite('ServicePublic')
+      .ayantPourDepartements([gironde, allier])
+      .construis();
+    await entrepotAidant.persiste(aidant);
+
+    const entrepotAidantExtraction = new EntrepotStatistiquesAidantPostgres(
+      adaptateurServiceChiffrement()
+    );
+
+    expect(
+      await entrepotAidantExtraction.rechercheAidantAvecNombreDeDiagnostics()
+    ).toStrictEqual<AidantExtraction[]>([
+      {
+        identifiant: aidant.identifiant,
+        nomPrenom: aidant.nomPrenom,
+        email: aidant.email,
+        compteCree: aidant.dateSignatureCGU!,
+        departements: aidant.preferences.departements,
+        entite: aidant.entite!.nom!,
+        nombreDiagnostics: 0,
       },
     ]);
   });
@@ -890,12 +974,16 @@ describe('EntrepotAidantExtraction', () => {
           nomPrenom: premierAidant.nomPrenom,
           email: premierAidant.email,
           compteCree: premierAidant.dateSignatureCGU!,
+          departements: premierAidant.preferences.departements,
+          entite: '',
         },
         {
           identifiant: secondAidant.identifiant,
           nomPrenom: secondAidant.nomPrenom,
           email: secondAidant.email,
           compteCree: secondAidant.dateSignatureCGU!,
+          departements: premierAidant.preferences.departements,
+          entite: '',
         },
       ]
     );
@@ -940,6 +1028,8 @@ describe('EntrepotAidantExtraction', () => {
           email: premierAidant.email,
           nombreDiagnostics: 2,
           compteCree: premierAidant.dateSignatureCGU!,
+          departements: premierAidant.preferences.departements,
+          entite: '',
         },
         {
           identifiant: secondAidant.identifiant,
@@ -947,6 +1037,8 @@ describe('EntrepotAidantExtraction', () => {
           email: secondAidant.email,
           nombreDiagnostics: 1,
           compteCree: secondAidant.dateSignatureCGU!,
+          departements: premierAidant.preferences.departements,
+          entite: '',
         },
         {
           identifiant: troisiemeAidant.identifiant,
@@ -954,6 +1046,40 @@ describe('EntrepotAidantExtraction', () => {
           email: troisiemeAidant.email,
           nombreDiagnostics: 0,
           compteCree: troisiemeAidant.dateSignatureCGU!,
+          departements: premierAidant.preferences.departements,
+          entite: '',
+        },
+      ]
+    );
+  });
+
+  it('Récupère uniquement les Aidants avec leur nombre de diagnostics', async () => {
+    const premierAidant = unAidant().construis();
+    const utilisateurInscrit = unUtilisateurInscrit().construis();
+    await entrepotUtilisateurInscritPostgres.persiste(utilisateurInscrit);
+    await entrepotAidant.persiste(premierAidant);
+    await entrepotRelation.persiste(
+      unTupleAidantInitieDiagnostic(
+        premierAidant.identifiant,
+        crypto.randomUUID()
+      )
+    );
+
+    const entrepotAidantExtraction = new EntrepotStatistiquesAidantPostgres(
+      adaptateurServiceChiffrement()
+    );
+
+    assert.sameDeepMembers(
+      await entrepotAidantExtraction.rechercheAidantAvecNombreDeDiagnostics(),
+      [
+        {
+          identifiant: premierAidant.identifiant,
+          nomPrenom: premierAidant.nomPrenom,
+          email: premierAidant.email,
+          nombreDiagnostics: 1,
+          compteCree: premierAidant.dateSignatureCGU!,
+          departements: premierAidant.preferences.departements,
+          entite: '',
         },
       ]
     );

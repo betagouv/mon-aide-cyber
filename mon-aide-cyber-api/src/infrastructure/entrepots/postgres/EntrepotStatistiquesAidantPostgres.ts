@@ -4,9 +4,18 @@ import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import crypto from 'crypto';
 import { Knex, knex } from 'knex';
 import {
-  Aidant,
+  StatistiquesAidant,
   EntrepotStatistiquesAidant,
 } from '../../../statistiques/aidant/StastistiquesAidant';
+import { rechercheParNomDepartement } from '../../../gestion-demandes/departements';
+
+type PreferencesDTO = {
+  departements: string[];
+};
+
+type EntiteDTO = {
+  nom?: string;
+};
 
 type AidantDTO = {
   id: crypto.UUID;
@@ -14,6 +23,8 @@ type AidantDTO = {
     nomPrenom: string;
     email: string;
     dateSignatureCGU?: string;
+    preferences: PreferencesDTO;
+    entite?: EntiteDTO;
   };
   nb: string;
 };
@@ -30,19 +41,19 @@ export class EntrepotStatistiquesAidantPostgres
     this.knex = knex(configuration);
   }
 
-  rechercheAidantAvecNombreDeDiagnostics(): Promise<Aidant[]> {
+  rechercheAidantAvecNombreDeDiagnostics(): Promise<StatistiquesAidant[]> {
     return this.rechercheAidantParCritere(() => `1 = 1`, true);
   }
 
   rechercheAidantAyantExactementNDiagnostics(
     nombreDeDiagnostics: number
-  ): Promise<Aidant[]> {
+  ): Promise<StatistiquesAidant[]> {
     return this.rechercheAidantParCritere(
       () => `diags.nb = ${nombreDeDiagnostics}`
     );
   }
 
-  async rechercheAidantSansDiagnostic(): Promise<Aidant[]> {
+  async rechercheAidantSansDiagnostic(): Promise<StatistiquesAidant[]> {
     const aidantsTrouves = await this.knex
       .raw(
         `
@@ -52,7 +63,7 @@ export class EntrepotStatistiquesAidantPostgres
                                 FROM relations
                                 WHERE donnees -> 'utilisateur' ->> 'type' = 'aidant') as diags
                                ON diags.aidant_diag::uuid = id
-            WHERE diags.aidant_diag IS NULL`
+            WHERE type = 'AIDANT' AND diags.aidant_diag IS NULL`
       )
       .then(({ rows }: { rows: AidantDTO[] }) => {
         return rows;
@@ -64,12 +75,16 @@ export class EntrepotStatistiquesAidantPostgres
       ...(aidant.donnees.dateSignatureCGU && {
         compteCree: FournisseurHorloge.enDate(aidant.donnees.dateSignatureCGU),
       }),
+      entite: aidant.donnees.entite?.nom || '',
+      departements: aidant.donnees.preferences.departements.map((d) =>
+        rechercheParNomDepartement(d)
+      ),
     }));
   }
 
   async rechercheAidantAyantAuMoinsNDiagnostics(
     nombreMinimumDeDiagnostics: number
-  ): Promise<Aidant[]> {
+  ): Promise<StatistiquesAidant[]> {
     const critere: () => string = () =>
       `diags.nb >= ${nombreMinimumDeDiagnostics}`;
     return this.rechercheAidantParCritere(critere);
@@ -78,7 +93,7 @@ export class EntrepotStatistiquesAidantPostgres
   private async rechercheAidantParCritere(
     critere: () => string,
     afficherNombreDiagnostics = false
-  ): Promise<Aidant[]> {
+  ): Promise<StatistiquesAidant[]> {
     return await this.knex
       .raw(
         `
@@ -90,7 +105,7 @@ export class EntrepotStatistiquesAidantPostgres
                                 WHERE donnees -> 'utilisateur' ->> 'type' = 'aidant'
                                 GROUP BY donnees -> 'utilisateur' ->> 'identifiant') as diags
                                ON diags.aidant_diag::uuid = id
-            WHERE ${critere()}`
+            WHERE type = 'AIDANT' AND ${critere()}`
       )
       .then(({ rows }: { rows: AidantDTO[] }) => {
         return rows;
@@ -110,6 +125,10 @@ export class EntrepotStatistiquesAidantPostgres
               aidant.donnees.dateSignatureCGU
             ),
           }),
+          entite: aidant.donnees.entite?.nom || '',
+          departements: aidant.donnees.preferences.departements.map((d) =>
+            rechercheParNomDepartement(d)
+          ),
         }))
       );
   }

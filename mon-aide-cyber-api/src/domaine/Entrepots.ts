@@ -13,6 +13,7 @@ import {
   EntrepotDemandeAide,
   EntrepotDemandeAideLecture,
 } from '../gestion-demandes/aide/DemandeAide';
+import { EntrepotStatistiquesAidant } from '../statistiques/aidant/StastistiquesAidant';
 
 export interface Entrepots {
   diagnostic(): EntrepotDiagnostic;
@@ -40,4 +41,6 @@ export interface Entrepots {
   utilisateursInscrits(): EntrepotUtilisateurInscrit;
 
   demandesAideLecture(): EntrepotDemandeAideLecture;
+
+  statistiquesAidant(): EntrepotStatistiquesAidant;
 }
