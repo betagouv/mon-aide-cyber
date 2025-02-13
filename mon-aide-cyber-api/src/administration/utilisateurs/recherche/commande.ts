@@ -2,7 +2,7 @@ import { program } from 'commander';
 import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import {
   DTO,
-  EntrepotPostgres,
+  EntrepotEcriturePostgres,
 } from '../../../infrastructure/entrepots/postgres/EntrepotPostgres';
 import { Aggregat } from '../../../domaine/Aggregat';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
@@ -17,7 +17,7 @@ type CompteUtilisateurDTO = DTO & {
   email: string;
 };
 
-class EntrepotCompteUtilisateur extends EntrepotPostgres<
+class EntrepotCompteUtilisateur extends EntrepotEcriturePostgres<
   CompteUtilisateur,
   CompteUtilisateurDTO
 > {

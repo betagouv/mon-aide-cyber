@@ -1,4 +1,4 @@
-import { DTO, EntrepotPostgres } from './EntrepotPostgres';
+import { DTO, EntrepotEcriturePostgres } from './EntrepotPostgres';
 import {
   DemandeDiagnosticLibreAcces,
   EntrepotDemandeDiagnosticLibreAcces,
@@ -10,7 +10,7 @@ type DemandeDiagnosticLibreAccesDTO = DTO & {
 };
 
 export class EntrepotDemandeDiagnosticLibreAccesPostgres
-  extends EntrepotPostgres<
+  extends EntrepotEcriturePostgres<
     DemandeDiagnosticLibreAcces,
     DemandeDiagnosticLibreAccesDTO
   >

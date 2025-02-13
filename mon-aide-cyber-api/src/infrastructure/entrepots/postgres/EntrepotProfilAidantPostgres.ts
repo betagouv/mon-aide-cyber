@@ -38,7 +38,22 @@ export class EntrepotProfilAidantPostgres implements EntrepotProfilAidant {
     this.knex = knex(configuration);
   }
 
-  private deDTOAEntite(dto: ProfilAidantDTO): ProfilAidant {
+  lis(identifiant: string): Promise<ProfilAidant> {
+    return this.knex
+      .raw(
+        `SELECT a.id as id, json_build_object('dateSignatureCGU', a.donnees -> 'dateSignatureCGU', 'email', a.donnees ->> 'email', 'nomPrenom', a.donnees ->> 'nomPrenom', 'preferences', a.donnees -> 'preferences', 'consentementAnnuaire', a.donnees -> 'consentementAnnuaire') as donnees
+         FROM  utilisateurs_mac a
+         WHERE a.id = ?;`,
+        [identifiant]
+      )
+      .then(({ rows }: { rows: ProfilAidantDTO[] }) => {
+        return rows !== undefined && rows.length > 0
+          ? this.deDTOAEntite(rows[0])
+          : Promise.reject(new AggregatNonTrouve('profil Aidant'));
+      });
+  }
+
+  protected deDTOAEntite(dto: ProfilAidantDTO): ProfilAidant {
     return {
       identifiant: dto.id,
       nomPrenom: this.chiffrement.dechiffre(dto.donnees.nomPrenom),
@@ -55,18 +70,10 @@ export class EntrepotProfilAidantPostgres implements EntrepotProfilAidant {
     };
   }
 
-  lis(identifiant: string): Promise<ProfilAidant> {
-    return this.knex
-      .raw(
-        `SELECT a.id as id, json_build_object('dateSignatureCGU', a.donnees -> 'dateSignatureCGU', 'email', a.donnees ->> 'email', 'nomPrenom', a.donnees ->> 'nomPrenom', 'preferences', a.donnees -> 'preferences', 'consentementAnnuaire', a.donnees -> 'consentementAnnuaire') as donnees
-         FROM  utilisateurs_mac a
-         WHERE a.id = ?;`,
-        [identifiant]
-      )
-      .then(({ rows }: { rows: ProfilAidantDTO[] }) => {
-        return rows !== undefined && rows.length > 0
-          ? this.deDTOAEntite(rows[0])
-          : Promise.reject(new AggregatNonTrouve('profil Aidant'));
-      });
+  tous(): Promise<ProfilAidant[]> {
+    throw new Error('Method not implemented.');
+  }
+  typeAggregat(): string {
+    throw new Error('Method not implemented.');
   }
 }

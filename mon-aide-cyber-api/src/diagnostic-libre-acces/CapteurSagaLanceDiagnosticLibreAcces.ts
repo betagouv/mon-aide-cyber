@@ -11,7 +11,7 @@ import { Adaptateur } from '../adaptateurs/Adaptateur';
 import { Referentiel } from '../diagnostic/Referentiel';
 import { ReferentielDeMesures } from '../diagnostic/ReferentielDeMesures';
 import { initialiseDiagnostic } from '../diagnostic/Diagnostic';
-import { Entrepot } from '../domaine/Entrepot';
+import { EntrepotEcriture } from '../domaine/Entrepot';
 import { Aggregat } from '../domaine/Aggregat';
 import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
@@ -22,7 +22,7 @@ export type DemandeDiagnosticLibreAcces = Aggregat & {
 };
 
 export type EntrepotDemandeDiagnosticLibreAcces =
-  Entrepot<DemandeDiagnosticLibreAcces>;
+  EntrepotEcriture<DemandeDiagnosticLibreAcces>;
 
 type CommandeDemandeDiagnosticLibreAcces = Commande & {
   type: 'CommandeDemandeDiagnosticLibreAcces';

@@ -1,6 +1,6 @@
 import { UUID } from 'crypto';
 import { Mesure, Question, Referentiel } from './Referentiel';
-import { Entrepot } from '../domaine/Entrepot';
+import { EntrepotEcriture } from '../domaine/Entrepot';
 import { laValeurEstDefinie, Valeur } from './Indice';
 import { NiveauMesure, ReferentielDeMesures } from './ReferentielDeMesures';
 import { StrategieDeReponse } from './StrategieDeReponse';
@@ -70,7 +70,7 @@ type Diagnostic = Aggregat & {
   mesures: ReferentielDeMesures;
 };
 
-interface EntrepotDiagnostic extends Entrepot<Diagnostic> {
+interface EntrepotDiagnostic extends EntrepotEcriture<Diagnostic> {
   tousLesDiagnosticsAyantPourIdentifiant(
     identifiantDiagnosticsLie: UUID[]
   ): Promise<Diagnostic[]>;

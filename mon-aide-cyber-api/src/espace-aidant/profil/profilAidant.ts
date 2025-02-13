@@ -1,8 +1,6 @@
 import crypto from 'crypto';
 
-interface EntrepotLecture<T> {
-  lis(identifiant: string): Promise<T>;
-}
+import { EntrepotLecture } from '../../domaine/Entrepot';
 
 export type ProfilAidant = {
   identifiant: crypto.UUID;

@@ -1,4 +1,4 @@
-import { Entrepot } from '../domaine/Entrepot';
+import { EntrepotEcriture } from '../domaine/Entrepot';
 import { Aggregat } from '../domaine/Aggregat';
 import { AdaptateurMetabase } from '../adaptateurs/AdaptateurMetabase';
 
@@ -12,7 +12,7 @@ export type RepresentationStatistiques = Omit<Statistiques, 'identifiant'> & {
 };
 
 export type EntrepotStatistiques = Omit<
-  Entrepot<Statistiques>,
+  EntrepotEcriture<Statistiques>,
   'lis' | 'typeAggregat' | 'persiste' | 'tous'
 > & {
   lis: () => Promise<Statistiques>;

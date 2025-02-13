@@ -6,7 +6,7 @@ import {
 } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
-import { DTO, EntrepotPostgres } from './EntrepotPostgres';
+import { DTO, EntrepotEcriturePostgres } from './EntrepotPostgres';
 
 type EntiteDTO = {
   nom?: string;
@@ -28,7 +28,10 @@ export type DemandeDevenirAidantDTO = DTO & {
 };
 
 export class EntrepotDemandeDevenirAidantPostgres
-  extends EntrepotPostgres<DemandeDevenirAidant, DemandeDevenirAidantDTO>
+  extends EntrepotEcriturePostgres<
+    DemandeDevenirAidant,
+    DemandeDevenirAidantDTO
+  >
   implements EntrepotDemandeDevenirAidant
 {
   constructor(private readonly chiffrement: ServiceDeChiffrement) {

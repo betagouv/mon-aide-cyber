@@ -1,4 +1,4 @@
-import { DTO, EntrepotPostgres } from './EntrepotPostgres';
+import { DTO, EntrepotEcriturePostgres } from './EntrepotPostgres';
 import {
   EntrepotEvenementJournal,
   Publication,
@@ -17,7 +17,7 @@ const UUID_REGEX = new RegExp(
 );
 
 export class EntrepotJournalisationPostgres
-  extends EntrepotPostgres<Publication, PublicationDTO>
+  extends EntrepotEcriturePostgres<Publication, PublicationDTO>
   implements EntrepotEvenementJournal
 {
   protected deEntiteADTO(entite: Publication): PublicationDTO {

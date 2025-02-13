@@ -1,4 +1,4 @@
-import { DTO, EntrepotPostgres } from './EntrepotPostgres';
+import { DTO, EntrepotEcriturePostgres } from './EntrepotPostgres';
 import {
   EntrepotUtilisateursMAC,
   UtilisateurMAC,
@@ -20,7 +20,7 @@ type UtilisateurMACDTO = DTO & {
 type Parametre<T> = T;
 
 export class EntrepotUtilisateurMACPostgres
-  extends EntrepotPostgres<UtilisateurMAC, UtilisateurMACDTO>
+  extends EntrepotEcriturePostgres<UtilisateurMAC, UtilisateurMACDTO>
   implements EntrepotUtilisateursMAC
 {
   private readonly REQUETE_UTILISATEUR_MAC = `
