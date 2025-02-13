@@ -1,13 +1,11 @@
 import { program } from 'commander';
 import * as fs from 'fs';
-import { Aidant } from './Types';
 import { FournisseurHorloge } from '../../../infrastructure/horloge/FournisseurHorloge';
 import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
-import {
-  EntrepotAidantPostgres,
-  ExtractionAidantSelonParametre,
-} from './extractionAidantSelonParametre';
+import { ExtractionAidantSelonParametre } from './extractionAidantSelonParametre';
 import { intlFormat } from 'date-fns';
+import { EntrepotStatistiquesAidantPostgres } from '../../../infrastructure/entrepots/postgres/EntrepotStatistiquesAidantPostgres';
+import { Aidant } from '../../../statistiques/aidant/StastistiquesAidant';
 
 export type ParametreExtraction =
   | 'SANS_DIAGNOSTIC'
@@ -67,7 +65,7 @@ command.action(async (options) => {
 
   const rapport: string[] = [];
   const resultat = await new ExtractionAidantSelonParametre(
-    new EntrepotAidantPostgres(adaptateurServiceChiffrement())
+    new EntrepotStatistiquesAidantPostgres(adaptateurServiceChiffrement())
   ).extrais(typeExport);
 
   console.log('Nombre d’Aidants trouvés : %d', resultat.length);

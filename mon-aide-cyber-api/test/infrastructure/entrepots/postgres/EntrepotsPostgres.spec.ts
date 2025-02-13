@@ -63,8 +63,6 @@ import {
 } from '../../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { adaptateurServiceChiffrement } from '../../../../src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import { unTupleAidantInitieDiagnostic } from '../../../../src/diagnostic/tuples';
-import { EntrepotAidantPostgres as EntrepotAidantPostgresExtraction } from '../../../../src/administration/aidants/extraction-aidants/extractionAidantSelonParametre';
-import { Aidant as AidantExtraction } from '../../../../src/administration/aidants/extraction-aidants/Types';
 import { ProfilAidant } from '../../../../src/espace-aidant/profil/profilAidant';
 import { EntrepotProfilAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotProfilAidantPostgres';
 import knexfile from './../../../../src/infrastructure/entrepots/postgres/knexfile';
@@ -78,6 +76,8 @@ import {
   UtilisateurInscrit,
 } from '../../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 import { ServiceDeChiffrement } from '../../../../src/securite/ServiceDeChiffrement';
+import { EntrepotStatistiquesAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesAidantPostgres';
+import { Aidant as AidantExtraction } from '../../../../src/statistiques/aidant/StastistiquesAidant';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {
@@ -822,7 +822,7 @@ describe('EntrepotAidantExtraction', () => {
       unTupleAidantInitieDiagnostic(aidant.identifiant, crypto.randomUUID())
     );
 
-    const entrepotAidantExtraction = new EntrepotAidantPostgresExtraction(
+    const entrepotAidantExtraction = new EntrepotStatistiquesAidantPostgres(
       adaptateurServiceChiffrement()
     );
 
@@ -842,7 +842,7 @@ describe('EntrepotAidantExtraction', () => {
     const aidant = unAidant().construis();
     await entrepotAidant.persiste(aidant);
 
-    const entrepotAidantExtraction = new EntrepotAidantPostgresExtraction(
+    const entrepotAidantExtraction = new EntrepotStatistiquesAidantPostgres(
       adaptateurServiceChiffrement()
     );
 
@@ -876,7 +876,7 @@ describe('EntrepotAidantExtraction', () => {
       )
     );
 
-    const entrepotAidantExtraction = new EntrepotAidantPostgresExtraction(
+    const entrepotAidantExtraction = new EntrepotStatistiquesAidantPostgres(
       adaptateurServiceChiffrement()
     );
 
@@ -927,7 +927,7 @@ describe('EntrepotAidantExtraction', () => {
       )
     );
 
-    const entrepotAidantExtraction = new EntrepotAidantPostgresExtraction(
+    const entrepotAidantExtraction = new EntrepotStatistiquesAidantPostgres(
       adaptateurServiceChiffrement()
     );
 
@@ -966,7 +966,7 @@ describe('EntrepotAidantExtraction', () => {
       unTupleAidantInitieDiagnostic(aidant.identifiant, crypto.randomUUID())
     );
 
-    const entrepotAidantExtraction = new EntrepotAidantPostgresExtraction(
+    const entrepotAidantExtraction = new EntrepotStatistiquesAidantPostgres(
       adaptateurServiceChiffrement()
     );
 

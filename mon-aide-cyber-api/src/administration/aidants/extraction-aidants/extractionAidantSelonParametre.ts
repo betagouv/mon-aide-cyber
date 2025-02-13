@@ -1,134 +1,16 @@
-import { Aidant } from './Types';
-import { Knex, knex } from 'knex';
-import knexfile from '../../../infrastructure/entrepots/postgres/knexfile';
-import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
-import crypto from 'crypto';
-import { FournisseurHorloge } from '../../../infrastructure/horloge/FournisseurHorloge';
 import { ParametreExtraction } from './commande';
 
-type AidantDTO = {
-  id: crypto.UUID;
-  donnees: {
-    nomPrenom: string;
-    email: string;
-    dateSignatureCGU?: string;
-  };
-  nb: string;
-};
-
-export interface EntrepotAidant {
-  rechercheAidantSansDiagnostic(): Promise<Aidant[]>;
-
-  rechercheAidantAyantAuMoinsNDiagnostics(
-    nombreDeDiagnostics: number
-  ): Promise<Aidant[]>;
-
-  rechercheAidantAyantExactementNDiagnostics(
-    nombreDeDiagnostics: number
-  ): Promise<Aidant[]>;
-
-  rechercheAidantAvecNombreDeDiagnostics(): Promise<Aidant[]>;
-}
-
-export class EntrepotAidantPostgres implements EntrepotAidant {
-  protected readonly knex: Knex;
-
-  constructor(
-    private readonly serviceDeChiffrement: ServiceDeChiffrement,
-    configuration: Knex.Config = knexfile
-  ) {
-    this.knex = knex(configuration);
-  }
-
-  rechercheAidantAvecNombreDeDiagnostics(): Promise<Aidant[]> {
-    return this.rechercheAidantParCritere(() => `1 = 1`, true);
-  }
-
-  rechercheAidantAyantExactementNDiagnostics(
-    nombreDeDiagnostics: number
-  ): Promise<Aidant[]> {
-    return this.rechercheAidantParCritere(
-      () => `diags.nb = ${nombreDeDiagnostics}`
-    );
-  }
-
-  async rechercheAidantSansDiagnostic(): Promise<Aidant[]> {
-    const aidantsTrouves = await this.knex
-      .raw(
-        `
-            SELECT *
-            FROM utilisateurs_mac
-                     LEFT JOIN (SELECT donnees -> 'utilisateur' ->> 'identifiant' as aidant_diag
-                                FROM relations
-                                WHERE donnees -> 'utilisateur' ->> 'type' = 'aidant') as diags
-                               ON diags.aidant_diag::uuid = id
-            WHERE diags.aidant_diag IS NULL`
-      )
-      .then(({ rows }: { rows: AidantDTO[] }) => {
-        return rows;
-      });
-    return aidantsTrouves.map((aidant) => ({
-      identifiant: aidant.id,
-      nomPrenom: this.serviceDeChiffrement.dechiffre(aidant.donnees.nomPrenom),
-      email: this.serviceDeChiffrement.dechiffre(aidant.donnees.email),
-      ...(aidant.donnees.dateSignatureCGU && {
-        compteCree: FournisseurHorloge.enDate(aidant.donnees.dateSignatureCGU),
-      }),
-    }));
-  }
-
-  async rechercheAidantAyantAuMoinsNDiagnostics(
-    nombreMinimumDeDiagnostics: number
-  ): Promise<Aidant[]> {
-    const critere: () => string = () =>
-      `diags.nb >= ${nombreMinimumDeDiagnostics}`;
-    return this.rechercheAidantParCritere(critere);
-  }
-
-  private async rechercheAidantParCritere(
-    critere: () => string,
-    afficherNombreDiagnostics = false
-  ): Promise<Aidant[]> {
-    return await this.knex
-      .raw(
-        `
-            SELECT *
-            FROM utilisateurs_mac
-                     LEFT JOIN (SELECT count(*)                                   as nb,
-                                  donnees -> 'utilisateur' ->> 'identifiant' as aidant_diag
-                           FROM relations
-                           WHERE donnees -> 'utilisateur' ->> 'type' = 'aidant'
-                           GROUP BY donnees -> 'utilisateur' ->> 'identifiant') as diags
-                          ON diags.aidant_diag::uuid = id
-            WHERE ${critere()}`
-      )
-      .then(({ rows }: { rows: AidantDTO[] }) => {
-        return rows;
-      })
-      .then((dtos) =>
-        dtos.map((aidant) => ({
-          identifiant: aidant.id,
-          nomPrenom: this.serviceDeChiffrement.dechiffre(
-            aidant.donnees.nomPrenom
-          ),
-          email: this.serviceDeChiffrement.dechiffre(aidant.donnees.email),
-          ...(afficherNombreDiagnostics && {
-            nombreDiagnostics: parseInt(aidant.nb) || 0,
-          }),
-          ...(aidant.donnees.dateSignatureCGU && {
-            compteCree: FournisseurHorloge.enDate(
-              aidant.donnees.dateSignatureCGU
-            ),
-          }),
-        }))
-      );
-  }
-}
+import {
+  Aidant,
+  EntrepotStatistiquesAidant,
+} from '../../../statistiques/aidant/StastistiquesAidant';
 
 export class ExtractionAidantSelonParametre {
   private readonly exports: Map<ParametreExtraction, () => Promise<Aidant[]>>;
 
-  constructor(private readonly entrepotAidantPostgres: EntrepotAidant) {
+  constructor(
+    private readonly entrepotAidantPostgres: EntrepotStatistiquesAidant
+  ) {
     this.exports = new Map([
       [
         'EXACTEMENT_UN_DIAGNOSTIC',

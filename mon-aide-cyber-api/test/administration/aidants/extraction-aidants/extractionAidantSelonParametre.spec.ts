@@ -1,10 +1,6 @@
 import { assert, beforeEach, describe, it } from 'vitest';
-import { Aidant } from '../../../../src/administration/aidants/extraction-aidants/Types';
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
-import {
-  EntrepotAidant,
-  ExtractionAidantSelonParametre,
-} from '../../../../src/administration/aidants/extraction-aidants/extractionAidantSelonParametre';
+import { ExtractionAidantSelonParametre } from '../../../../src/administration/aidants/extraction-aidants/extractionAidantSelonParametre';
 import { AggregatNonTrouve } from '../../../../src/domaine/Aggregat';
 import crypto from 'crypto';
 import { cloneDeep } from 'lodash';
@@ -13,6 +9,11 @@ import { ParametreExtraction } from '../../../../src/administration/aidants/extr
 import { ConstructeurAidant, unAidant } from './constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { Tuple } from '../../../../src/relation/Tuple';
+
+import {
+  Aidant,
+  EntrepotStatistiquesAidant,
+} from '../../../../src/statistiques/aidant/StastistiquesAidant';
 
 describe('Extraction des Aidants suivant le nombre de diagnostics effectués', () => {
   const entrepotRelation = new EntrepotRelationMemoire();
@@ -188,7 +189,7 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
   });
 });
 
-export class EntrepotAidantMemoire implements EntrepotAidant {
+export class EntrepotAidantMemoire implements EntrepotStatistiquesAidant {
   protected entites: Map<crypto.UUID, Aidant> = new Map();
 
   constructor(
