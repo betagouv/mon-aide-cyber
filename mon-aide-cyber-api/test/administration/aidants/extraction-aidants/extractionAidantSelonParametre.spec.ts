@@ -1,23 +1,24 @@
 import { assert, beforeEach, describe, it } from 'vitest';
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
-import { ExtractionAidantSelonParametre } from '../../../../src/administration/aidants/extraction-aidants/extractionAidantSelonParametre';
-import { AggregatNonTrouve } from '../../../../src/domaine/Aggregat';
-import crypto from 'crypto';
-import { cloneDeep } from 'lodash';
+import {
+  ExtractionAidantSelonParametre,
+  StatistiquesAidantDTO,
+} from '../../../../src/administration/aidants/extraction-aidants/extractionAidantSelonParametre';
 import { EntrepotRelationMemoire } from '../../../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { ParametreExtraction } from '../../../../src/administration/aidants/extraction-aidants/commande';
-import { ConstructeurAidant, unAidant } from './constructeurAidant';
 import { FournisseurHorlogeDeTest } from '../../../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { Tuple } from '../../../../src/relation/Tuple';
 
+import { EntrepotStatistiquesAidantMemoire } from '../../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import {
-  Aidant,
-  EntrepotStatistiquesAidant,
-} from '../../../../src/statistiques/aidant/StastistiquesAidant';
+  ConstructeurStatistiqueAidant,
+  uneStatistiqueAidant,
+} from '../../../constructeurs/constructeurStatistiqueAidant';
 
 describe('Extraction des Aidants suivant le nombre de diagnostics effectués', () => {
   const entrepotRelation = new EntrepotRelationMemoire();
-  const entrepotAidant = new EntrepotAidantMemoire(entrepotRelation);
+  const entrepotAidant = new EntrepotStatistiquesAidantMemoire(
+    entrepotRelation
+  );
   FournisseurHorlogeDeTest.initialise(
     new Date(Date.parse('2024-12-12T13:22:33'))
   );
@@ -29,8 +30,8 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
   type Test = {
     test: string;
     parametre: ParametreExtraction;
-    aidants: ConstructeurAidant[];
-    aidantsAttendus: Aidant[];
+    aidants: ConstructeurStatistiqueAidant[];
+    aidantsAttendus: StatistiquesAidantDTO[];
   };
 
   it.each<Test>([
@@ -38,8 +39,11 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
       test: 'ayant fait 0 diagnostic',
       parametre: 'SANS_DIAGNOSTIC',
       aidants: [
-        unAidant(entrepotAidant, entrepotRelation).ayantFaitNDiagnostics(1),
-        unAidant(entrepotAidant, entrepotRelation)
+        uneStatistiqueAidant(
+          entrepotAidant,
+          entrepotRelation
+        ).ayantFaitNDiagnostics(1),
+        uneStatistiqueAidant(entrepotAidant, entrepotRelation)
           .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48053')
           .avecUnNomPrenom('Jean DUPONT')
           .avecUnEmail('jean.dupont@yomail.com'),
@@ -57,13 +61,16 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
       test: 'ayant fait exactement 1 diagnostic',
       parametre: 'EXACTEMENT_UN_DIAGNOSTIC',
       aidants: [
-        unAidant(entrepotAidant, entrepotRelation)
+        uneStatistiqueAidant(entrepotAidant, entrepotRelation)
           .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48052')
           .avecUnNomPrenom('Jean Dujardin')
           .avecUnEmail('jean.dujardin@yomail.com')
           .ayantFaitNDiagnostics(1),
-        unAidant(entrepotAidant, entrepotRelation).ayantFaitNDiagnostics(2),
-        unAidant(entrepotAidant, entrepotRelation)
+        uneStatistiqueAidant(
+          entrepotAidant,
+          entrepotRelation
+        ).ayantFaitNDiagnostics(2),
+        uneStatistiqueAidant(entrepotAidant, entrepotRelation)
           .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48053')
           .ayantFaitNDiagnostics(1)
           .avecUnNomPrenom('Jean DUPONT')
@@ -88,8 +95,11 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
       test: 'ayant fait 2 diagnostics ou plus',
       parametre: 'AU_MOINS_DEUX_DIAGNOSTICS',
       aidants: [
-        unAidant(entrepotAidant, entrepotRelation).ayantFaitNDiagnostics(1),
-        unAidant(entrepotAidant, entrepotRelation)
+        uneStatistiqueAidant(
+          entrepotAidant,
+          entrepotRelation
+        ).ayantFaitNDiagnostics(1),
+        uneStatistiqueAidant(entrepotAidant, entrepotRelation)
           .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48053')
           .ayantFaitNDiagnostics(2)
           .avecUnNomPrenom('Jean DUPONT')
@@ -108,8 +118,11 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
       test: 'ayant fait 5 diagnostics ou plus',
       parametre: 'AU_MOINS_CINQ_DIAGNOSTICS',
       aidants: [
-        unAidant(entrepotAidant, entrepotRelation).ayantFaitNDiagnostics(4),
-        unAidant(entrepotAidant, entrepotRelation)
+        uneStatistiqueAidant(
+          entrepotAidant,
+          entrepotRelation
+        ).ayantFaitNDiagnostics(4),
+        uneStatistiqueAidant(entrepotAidant, entrepotRelation)
           .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48053')
           .ayantFaitNDiagnostics(5)
           .avecUnNomPrenom('Jean DUJARDIN')
@@ -128,21 +141,21 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
       test: 'avec le nombre de diagnostics correpondant',
       parametre: 'NOMBRE_DIAGNOSTICS',
       aidants: [
-        unAidant(entrepotAidant, entrepotRelation)
+        uneStatistiqueAidant(entrepotAidant, entrepotRelation)
           .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48061')
           .avecUnNomPrenom('Jeanne DUPONT')
           .avecUnEmail('jeanne.dupont@yomail.com'),
-        unAidant(entrepotAidant, entrepotRelation)
+        uneStatistiqueAidant(entrepotAidant, entrepotRelation)
           .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48062')
           .ayantFaitNDiagnostics(3)
           .avecUnNomPrenom('Jean DUPONT')
           .avecUnEmail('jean.dupont@yomail.com'),
-        unAidant(entrepotAidant, entrepotRelation)
+        uneStatistiqueAidant(entrepotAidant, entrepotRelation)
           .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48063')
           .ayantFaitNDiagnostics(5)
           .avecUnNomPrenom('Jean DUJARDIN')
           .avecUnEmail('jean.dujardin@yomail.com'),
-        unAidant(entrepotAidant, entrepotRelation)
+        uneStatistiqueAidant(entrepotAidant, entrepotRelation)
           .avecUnId('6da9ed47-d95f-4c23-93fb-616c8dd48064')
           .ayantFaitNDiagnostics(8)
           .avecUnNomPrenom('Jean MARTIN')
@@ -179,7 +192,7 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
         },
       ],
     },
-  ])('Extrais les Aidants', async (test) => {
+  ])('Extrais les Aidants $test', async (test) => {
     await Promise.all(test.aidants.map((aidant) => aidant.construis()));
     const resultat = await new ExtractionAidantSelonParametre(
       entrepotAidant
@@ -188,76 +201,3 @@ describe('Extraction des Aidants suivant le nombre de diagnostics effectués', (
     assert.sameDeepMembers(resultat, test.aidantsAttendus);
   });
 });
-
-export class EntrepotAidantMemoire implements EntrepotStatistiquesAidant {
-  protected entites: Map<crypto.UUID, Aidant> = new Map();
-
-  constructor(
-    private readonly entrepotRelationMemoire: EntrepotRelationMemoire
-  ) {}
-
-  async lis(identifiant: string): Promise<Aidant> {
-    const entiteTrouvee = this.entites.get(identifiant as crypto.UUID);
-    if (entiteTrouvee) {
-      return Promise.resolve(cloneDeep(entiteTrouvee));
-    }
-    throw new AggregatNonTrouve('aidant');
-  }
-
-  async persiste(entite: Aidant) {
-    const entiteClonee = cloneDeep(entite);
-    this.entites.set(entite.identifiant, entiteClonee);
-  }
-
-  tous(): Promise<Aidant[]> {
-    return Promise.resolve(Array.from(this.entites.values()));
-  }
-
-  async rechercheAidantSansDiagnostic(): Promise<Aidant[]> {
-    return this.rechercheParCritere((relation) => relation.length === 0);
-  }
-
-  rechercheAidantAvecNombreDeDiagnostics(): Promise<Aidant[]> {
-    return Promise.all(
-      Array.from(this.entites.values()).map(async (aidant) => {
-        const relation =
-          await this.entrepotRelationMemoire.trouveObjetsLiesAUtilisateur(
-            aidant.identifiant
-          );
-        return { ...aidant, nombreDiagnostics: relation.length };
-      })
-    );
-  }
-
-  rechercheAidantAyantExactementNDiagnostics(
-    nombreDeDiagnstics: number
-  ): Promise<Aidant[]> {
-    return this.rechercheParCritere(
-      (relation) => relation.length === nombreDeDiagnstics
-    );
-  }
-
-  rechercheAidantAyantAuMoinsNDiagnostics(
-    nombreDeDiagnostics: number
-  ): Promise<Aidant[]> {
-    return this.rechercheParCritere(
-      (relation) => relation.length >= nombreDeDiagnostics
-    );
-  }
-
-  private rechercheParCritere(critere: (relation: Tuple[]) => boolean) {
-    return Promise.all(
-      Array.from(this.entites.values()).map(async (aidant) => {
-        const relation =
-          await this.entrepotRelationMemoire.trouveObjetsLiesAUtilisateur(
-            aidant.identifiant
-          );
-        return critere(relation) ? aidant : undefined;
-      })
-    ).then((aidants) => aidants.filter((a): a is Aidant => !!a));
-  }
-
-  reinitialise() {
-    this.entites = new Map();
-  }
-}

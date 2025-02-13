@@ -4,16 +4,17 @@ import {
   EntrepotAidantMemoire,
   EntrepotAideMemoire,
   EntrepotAnnuaireAidantsMemoire,
-  EntrepotDemandeDiagnosticLibreAccesMemoire,
+  EntrepotDemandeAideLectureMemoire,
   EntrepotDemandeDevenirAidantMemoire,
+  EntrepotDemandeDiagnosticLibreAccesMemoire,
   EntrepotDiagnosticMemoire,
   EntrepotProfilAidantMemoire,
   EntrepotRestitutionMemoire,
+  EntrepotStatistiquesAidantMemoire,
   EntrepotStatistiquesMemoire,
-  EntrepotUtilisateurMemoire,
-  EntrepotUtilisateurMACMemoire,
   EntrepotUtilisateurInscritMemoire,
-  EntrepotDemandeAideLectureMemoire,
+  EntrepotUtilisateurMACMemoire,
+  EntrepotUtilisateurMemoire,
 } from './EntrepotMemoire';
 import { EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
 import { EntrepotRestitution } from '../../../restitution/Restitution';
@@ -29,6 +30,8 @@ import {
   EntrepotDemandeAide,
   EntrepotDemandeAideLecture,
 } from '../../../gestion-demandes/aide/DemandeAide';
+import { EntrepotStatistiquesAidant } from '../../../statistiques/aidant/StastistiquesAidant';
+import { EntrepotRelationMemoire } from '../../../relation/infrastructure/EntrepotRelationMemoire';
 
 export class EntrepotsMemoire implements Entrepots {
   private entrepotDiagnostic: EntrepotDiagnostic =
@@ -61,6 +64,8 @@ export class EntrepotsMemoire implements Entrepots {
     });
   private entrepotDemandesAideLecture: EntrepotDemandeAideLecture =
     new EntrepotDemandeAideLectureMemoire();
+  private entrepotStatistiquesAidant: EntrepotStatistiquesAidant =
+    new EntrepotStatistiquesAidantMemoire(new EntrepotRelationMemoire());
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
@@ -112,5 +117,9 @@ export class EntrepotsMemoire implements Entrepots {
 
   demandesAideLecture(): EntrepotDemandeAideLecture {
     return this.entrepotDemandesAideLecture;
+  }
+
+  statistiquesAidant(): EntrepotStatistiquesAidant {
+    return this.entrepotStatistiquesAidant;
   }
 }

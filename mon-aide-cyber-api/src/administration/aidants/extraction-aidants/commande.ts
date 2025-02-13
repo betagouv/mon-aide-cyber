@@ -2,10 +2,12 @@ import { program } from 'commander';
 import * as fs from 'fs';
 import { FournisseurHorloge } from '../../../infrastructure/horloge/FournisseurHorloge';
 import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
-import { ExtractionAidantSelonParametre } from './extractionAidantSelonParametre';
+import {
+  ExtractionAidantSelonParametre,
+  StatistiquesAidantDTO,
+} from './extractionAidantSelonParametre';
 import { intlFormat } from 'date-fns';
 import { EntrepotStatistiquesAidantPostgres } from '../../../infrastructure/entrepots/postgres/EntrepotStatistiquesAidantPostgres';
-import { Aidant } from '../../../statistiques/aidant/StastistiquesAidant';
 
 export type ParametreExtraction =
   | 'SANS_DIAGNOSTIC'
@@ -49,7 +51,10 @@ const formatteLaDate = (date?: Date): string =>
       )
     : 'Jamais connecté';
 
-const versLigneCSV = (aidant: Aidant, typeExport: ParametreExtraction) => {
+const versLigneCSV = (
+  aidant: StatistiquesAidantDTO,
+  typeExport: ParametreExtraction
+) => {
   if (typeExport === 'NOMBRE_DIAGNOSTICS')
     return `${aidant.nomPrenom};${aidant.email};${formatteLaDate(aidant.compteCree)};${aidant.nombreDiagnostics};\n`;
   return `${aidant.nomPrenom};${aidant.email};${formatteLaDate(aidant.compteCree)};\n`;

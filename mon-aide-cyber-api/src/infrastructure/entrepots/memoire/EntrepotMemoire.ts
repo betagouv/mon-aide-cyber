@@ -59,6 +59,12 @@ import {
   EntrepotDemandeAide,
   EntrepotDemandeAideLecture,
 } from '../../../gestion-demandes/aide/DemandeAide';
+import {
+  EntrepotStatistiquesAidant,
+  StatistiquesAidant,
+} from '../../../statistiques/aidant/StastistiquesAidant';
+import { EntrepotRelationMemoire } from '../../../relation/infrastructure/EntrepotRelationMemoire';
+import { Tuple } from '../../../relation/Tuple';
 
 export class EntrepotMemoire<T extends Aggregat>
   implements EntrepotEcriture<T>
@@ -392,5 +398,80 @@ export class EntrepotUtilisateurInscritMemoire
 {
   typeAggregat(): string {
     return 'utilisateur_inscrit';
+  }
+}
+
+export class EntrepotStatistiquesAidantMemoire
+  implements EntrepotStatistiquesAidant
+{
+  protected entites: Map<crypto.UUID, StatistiquesAidant> = new Map();
+
+  constructor(
+    private readonly entrepotRelationMemoire: EntrepotRelationMemoire
+  ) {}
+
+  async lis(identifiant: string): Promise<StatistiquesAidant> {
+    const entiteTrouvee = this.entites.get(identifiant as crypto.UUID);
+    if (entiteTrouvee) {
+      return Promise.resolve(cloneDeep(entiteTrouvee));
+    }
+    throw new AggregatNonTrouve('aidant');
+  }
+
+  async persiste(entite: StatistiquesAidant) {
+    const entiteClonee = cloneDeep(entite);
+    this.entites.set(entite.identifiant, entiteClonee);
+  }
+
+  tous(): Promise<StatistiquesAidant[]> {
+    return Promise.resolve(Array.from(this.entites.values()));
+  }
+
+  async rechercheAidantSansDiagnostic(): Promise<StatistiquesAidant[]> {
+    return this.rechercheParCritere((relation) => relation.length === 0);
+  }
+
+  rechercheAidantAvecNombreDeDiagnostics(): Promise<StatistiquesAidant[]> {
+    return Promise.all(
+      Array.from(this.entites.values()).map(async (aidant) => {
+        const relation =
+          await this.entrepotRelationMemoire.trouveObjetsLiesAUtilisateur(
+            aidant.identifiant
+          );
+        return { ...aidant, nombreDiagnostics: relation.length };
+      })
+    );
+  }
+
+  rechercheAidantAyantExactementNDiagnostics(
+    nombreDeDiagnstics: number
+  ): Promise<StatistiquesAidant[]> {
+    return this.rechercheParCritere(
+      (relation) => relation.length === nombreDeDiagnstics
+    );
+  }
+
+  rechercheAidantAyantAuMoinsNDiagnostics(
+    nombreDeDiagnostics: number
+  ): Promise<StatistiquesAidant[]> {
+    return this.rechercheParCritere(
+      (relation) => relation.length >= nombreDeDiagnostics
+    );
+  }
+
+  private rechercheParCritere(critere: (relation: Tuple[]) => boolean) {
+    return Promise.all(
+      Array.from(this.entites.values()).map(async (aidant) => {
+        const relation =
+          await this.entrepotRelationMemoire.trouveObjetsLiesAUtilisateur(
+            aidant.identifiant
+          );
+        return critere(relation) ? aidant : undefined;
+      })
+    ).then((aidants) => aidants.filter((a): a is StatistiquesAidant => !!a));
+  }
+
+  reinitialise() {
+    this.entites = new Map();
   }
 }
