@@ -71,6 +71,7 @@ const extrais = async (test = false): Promise<Resultat> => {
   const annuaireCOT = fabriqueAnnuaireCOT();
   const rapport = await uneExtraction({
     entrepotDemandes: entrepots.demandesDevenirAidant(),
+    entrepotDemandesAide: entrepots.demandesAideLecture(),
   }).extrais<string>(new RapportExcel());
 
   const date = FournisseurHorloge.formateDate(

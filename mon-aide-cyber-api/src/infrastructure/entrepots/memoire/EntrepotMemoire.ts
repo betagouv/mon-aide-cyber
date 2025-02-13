@@ -55,7 +55,9 @@ import {
 import { AidantDTO } from '../../../espace-aidant/ServiceAidant';
 import {
   DemandeAide,
+  DemandeAideSimple,
   EntrepotDemandeAide,
+  EntrepotDemandeAideLecture,
 } from '../../../gestion-demandes/aide/DemandeAide';
 
 export class EntrepotMemoire<T extends Aggregat>
@@ -150,6 +152,10 @@ export class EntrepotAideMemoire
       : Promise.resolve(undefined);
   }
 }
+
+export class EntrepotDemandeAideLectureMemoire
+  extends EntrepotMemoire<DemandeAideSimple>
+  implements EntrepotDemandeAideLecture {}
 
 export class EntrepotDemandeDevenirAidantMemoire
   extends EntrepotMemoire<DemandeDevenirAidant>

@@ -23,7 +23,10 @@ import { EntrepotUtilisateursMAC } from '../../../recherche-utilisateurs-mac/rec
 import { EntrepotUtilisateurMACPostgres } from './EntrepotUtilisateurMACPostgres';
 import { EntrepotUtilisateurInscrit } from '../../../espace-utilisateur-inscrit/UtilisateurInscrit';
 import { EntrepotUtilisateurInscritPostgres } from './EntrepotUtilisateurInscritPostgres';
-import { EntrepotDemandeAide } from '../../../gestion-demandes/aide/DemandeAide';
+import {
+  EntrepotDemandeAide,
+  EntrepotDemandeAideLecture,
+} from '../../../gestion-demandes/aide/DemandeAide';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -59,10 +62,10 @@ export class EntrepotsMAC implements Entrepots {
   aidants(): EntrepotAidant {
     return this.entrepotAidant;
   }
+
   restitution(): EntrepotRestitution {
     return this.entrepotRestitution;
   }
-
   demandesAides(): EntrepotDemandeAide {
     return this.entrepotAide;
   }
@@ -97,5 +100,9 @@ export class EntrepotsMAC implements Entrepots {
 
   utilisateursInscrits(): EntrepotUtilisateurInscrit {
     return this.entrepotUtilisateursInscrits;
+  }
+
+  demandesAideLecture(): EntrepotDemandeAideLecture {
+    throw new Error('Method not implemented.');
   }
 }

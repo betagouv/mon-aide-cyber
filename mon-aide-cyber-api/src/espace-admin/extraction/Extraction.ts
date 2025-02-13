@@ -4,6 +4,8 @@ import {
   DemandesDevenirAidant,
   unServiceDemandesDevenirAidant,
 } from '../../gestion-demandes/devenir-aidant/ServiceDemandeDevenirAidant';
+import { EntrepotDemandeAideLecture } from '../../gestion-demandes/aide/DemandeAide';
+import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 
 export type Entete<T> = { entete: string; clef: keyof T };
 
@@ -36,9 +38,14 @@ export type RepresentationDemande = RepresentationRapport<
   DemandeDevenirAidant
 >;
 
-type Parametres = {
-  entrepotDemandes: EntrepotDemandeDevenirAidant;
+export type DemandeAide = {
+  dateDemande: string;
 };
+export type DemandesAide = DemandeAide[];
+type RepresentationDemandeAide = RepresentationRapport<
+  DemandesAide,
+  DemandeAide
+>;
 
 class ExtractionMAC implements Extraction {
   constructor(private readonly parametres: Parametres) {}
@@ -49,6 +56,10 @@ class ExtractionMAC implements Extraction {
     ).demandesEnCours();
     await this.ajouteLesDemandesDevenirAidant(demandesEnCours, rapport);
     await this.ajouteLesDemandesAvantArbitrage(demandesEnCours, rapport);
+    await this.ajouteLesDemandesAide(
+      this.parametres.entrepotDemandesAide,
+      rapport
+    );
     return rapport.genere();
   }
 
@@ -100,7 +111,28 @@ class ExtractionMAC implements Extraction {
         });
       });
   }
+
+  private async ajouteLesDemandesAide<T>(
+    entrepotDemandesAide: EntrepotDemandeAideLecture,
+    rapport: Rapport<T>
+  ) {
+    await entrepotDemandesAide.tous().then((demandes) =>
+      rapport.ajoute<DemandesAide, RepresentationDemandeAide>({
+        entetes: [{ entete: 'Date de la demande', clef: 'dateDemande' }],
+        intitule: 'Demandes Aide',
+        valeur: demandes.map((demande) => ({
+          dateDemande: FournisseurHorloge.formateDate(demande.dateSignatureCGU)
+            .date,
+        })),
+      })
+    );
+  }
 }
+
+type Parametres = {
+  entrepotDemandes: EntrepotDemandeDevenirAidant;
+  entrepotDemandesAide: EntrepotDemandeAideLecture;
+};
 
 export const uneExtraction = (parametres: Parametres) =>
   new ExtractionMAC(parametres);

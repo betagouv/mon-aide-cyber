@@ -9,7 +9,10 @@ import { EntrepotProfilAidant } from '../espace-aidant/profil/profilAidant';
 import { EntrepotDemandeDiagnosticLibreAcces } from '../diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
 import { EntrepotUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { EntrepotUtilisateurInscrit } from '../espace-utilisateur-inscrit/UtilisateurInscrit';
-import { EntrepotDemandeAide } from '../gestion-demandes/aide/DemandeAide';
+import {
+  EntrepotDemandeAide,
+  EntrepotDemandeAideLecture,
+} from '../gestion-demandes/aide/DemandeAide';
 
 export interface Entrepots {
   diagnostic(): EntrepotDiagnostic;
@@ -35,4 +38,6 @@ export interface Entrepots {
   utilisateursMAC(): EntrepotUtilisateursMAC;
 
   utilisateursInscrits(): EntrepotUtilisateurInscrit;
+
+  demandesAideLecture(): EntrepotDemandeAideLecture;
 }
