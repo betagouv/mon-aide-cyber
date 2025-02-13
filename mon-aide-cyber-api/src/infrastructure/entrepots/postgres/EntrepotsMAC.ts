@@ -27,6 +27,7 @@ import {
   EntrepotDemandeAide,
   EntrepotDemandeAideLecture,
 } from '../../../gestion-demandes/aide/DemandeAide';
+import { EntrepotDemandeAideLecturePostgres } from './EntrepotDemandeAideLecturePostgres';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -54,6 +55,8 @@ export class EntrepotsMAC implements Entrepots {
     new EntrepotDemandeDiagnosticLibreAccesPostgres();
   private entrepotUtilisateursMAC: EntrepotUtilisateursMAC =
     new EntrepotUtilisateurMACPostgres(adaptateurServiceChiffrement());
+  private entrepotDemandeAideLecture: EntrepotDemandeAideLecture =
+    new EntrepotDemandeAideLecturePostgres();
 
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
@@ -103,6 +106,6 @@ export class EntrepotsMAC implements Entrepots {
   }
 
   demandesAideLecture(): EntrepotDemandeAideLecture {
-    throw new Error('Method not implemented.');
+    return this.entrepotDemandeAideLecture;
   }
 }

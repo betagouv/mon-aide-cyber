@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-
 import { EntrepotLecture } from '../../domaine/Entrepot';
 
 export type ProfilAidant = {
