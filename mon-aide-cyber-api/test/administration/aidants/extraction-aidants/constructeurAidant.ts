@@ -1,11 +1,11 @@
 import { Constructeur } from '../../../constructeurs/constructeur';
-import { Aidant } from '../../../../src/administration/aidants/extraction-aidants/Types';
 import { EntrepotRelation } from '../../../../src/relation/EntrepotRelation';
 import { fakerFR } from '@faker-js/faker';
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
 import { unTupleAidantInitieDiagnostic } from '../../../../src/diagnostic/tuples';
 import crypto, { UUID } from 'crypto';
 import { EntrepotAidantMemoire } from './extractionAidantSelonParametre.spec';
+import { Aidant } from '../../../../src/statistiques/aidant/StastistiquesAidant';
 
 export class ConstructeurAidant implements Constructeur<Promise<Aidant>> {
   private nombreDeDiagnostics = 0;
