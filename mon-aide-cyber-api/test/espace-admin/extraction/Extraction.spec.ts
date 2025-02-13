@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { uneDemandeDevenirAidant } from '../../constructeurs/constructeurDemandesDevenirAidant';
-import { EntrepotDemandeDevenirAidantMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import {
+  EntrepotDemandeAideLectureMemoire,
+  EntrepotDemandeDevenirAidantMemoire,
+} from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import {
+  DemandeAide,
+  DemandesAide,
   Entete,
   Rapport,
   RepresentationRapport,
@@ -12,10 +17,13 @@ import {
   DemandeDevenirAidant,
   DemandesDevenirAidant,
 } from '../../../src/gestion-demandes/devenir-aidant/ServiceDemandeDevenirAidant';
+import { uneDemandeAide } from '../../gestion-demandes/aide/ConstructeurDemandeAide';
 
 class RapportJSON implements Rapport<RepresentationJSON> {
-  private readonly representations: Map<string, DemandesDevenirAidant> =
-    new Map();
+  private readonly representations: Map<
+    string,
+    DemandesDevenirAidant | DemandesAide
+  > = new Map();
   public entetes: Map<string, any[]> = new Map();
   public intitule: Map<string, string> = new Map();
 
@@ -42,17 +50,24 @@ class RapportJSON implements Rapport<RepresentationJSON> {
     const demandesAvantArbitrage = this.representations.get(
       'demandes-avant-arbitrage'
     ) as DemandesDevenirAidant;
+    const demandesAide = this.representations.get(
+      'demandes-aide'
+    ) as DemandesAide;
     return Promise.resolve({
       'demandes-devenir-aidant': demandesDevenirAidant,
       ...(demandesAvantArbitrage.length > 0 && {
         'demandes-avant-arbitrage': demandesAvantArbitrage,
       }),
+      ...(demandesAide &&
+        demandesAide.length > 0 && { 'demandes-aide': demandesAide }),
     });
   }
 }
 
 type RepresentationJSON = {
   'demandes-devenir-aidant': DemandesDevenirAidant;
+  'demandes-avant-arbitrage'?: DemandesDevenirAidant;
+  'demandes-aide'?: DemandesAide;
 };
 
 describe('Extraction', () => {
@@ -66,6 +81,7 @@ describe('Extraction', () => {
 
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
+        entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(rapport).toStrictEqual<{ [clef: string]: DemandesDevenirAidant }>({
@@ -94,6 +110,7 @@ describe('Extraction', () => {
 
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
+        entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(
@@ -117,6 +134,7 @@ describe('Extraction', () => {
       const rapportJSON = new RapportJSON();
       await uneExtraction({
         entrepotDemandes: entrepotDemande,
+        entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(rapportJSON.entetes.get('demandes-devenir-aidant')).toStrictEqual<
@@ -146,6 +164,7 @@ describe('Extraction', () => {
 
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
+        entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(rapport['demandes-devenir-aidant'][0].entiteMorale).toStrictEqual(
@@ -160,6 +179,7 @@ describe('Extraction', () => {
 
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
+        entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(
@@ -182,6 +202,7 @@ describe('Extraction', () => {
 
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
+        entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(rapport).toStrictEqual<{ [clef: string]: DemandesDevenirAidant }>({
@@ -213,6 +234,7 @@ describe('Extraction', () => {
       const rapportJSON = new RapportJSON();
       await uneExtraction({
         entrepotDemandes: entrepotDemande,
+        entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(rapportJSON.entetes.get('demandes-avant-arbitrage')).toStrictEqual<
@@ -226,6 +248,51 @@ describe('Extraction', () => {
       expect(
         rapportJSON.intitule.get('demandes-avant-arbitrage')
       ).toStrictEqual('Demandes avant arbitrage');
+    });
+  });
+
+  describe('Pour les demandes d’Aide', () => {
+    it('Extrait les demandes', async () => {
+      const demandeAide = uneDemandeAide().construis();
+      const entrepotAide = new EntrepotDemandeAideLectureMemoire();
+      await entrepotAide.persiste(demandeAide);
+
+      const rapport = await uneExtraction({
+        entrepotDemandes: new EntrepotDemandeDevenirAidantMemoire(),
+        entrepotDemandesAide: entrepotAide,
+      }).extrais<RepresentationJSON>(new RapportJSON());
+
+      expect(rapport).toStrictEqual<{
+        [clef: string]: DemandesDevenirAidant | DemandesAide;
+      }>({
+        'demandes-devenir-aidant': [],
+        'demandes-aide': [
+          {
+            dateDemande: FournisseurHorloge.formateDate(
+              demandeAide.dateSignatureCGU
+            ).date,
+          },
+        ],
+      });
+    });
+
+    it('Le rapport contient entête et intitulé', async () => {
+      const demandeAide = uneDemandeAide().construis();
+      const entrepotAide = new EntrepotDemandeAideLectureMemoire();
+      await entrepotAide.persiste(demandeAide);
+
+      const rapportJSON = new RapportJSON();
+      await uneExtraction({
+        entrepotDemandes: new EntrepotDemandeDevenirAidantMemoire(),
+        entrepotDemandesAide: entrepotAide,
+      }).extrais<RepresentationJSON>(rapportJSON);
+
+      expect(rapportJSON.entetes.get('demandes-aide')).toStrictEqual<
+        Entete<DemandeAide>[]
+      >([{ entete: 'Date de la demande', clef: 'dateDemande' }]);
+      expect(rapportJSON.intitule.get('demandes-aide')).toStrictEqual(
+        'Demandes Aide'
+      );
     });
   });
 });
