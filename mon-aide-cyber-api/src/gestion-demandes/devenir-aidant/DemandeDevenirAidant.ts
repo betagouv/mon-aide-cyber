@@ -1,5 +1,5 @@
 import { Aggregat } from '../../domaine/Aggregat';
-import { Entrepot } from '../../domaine/Entrepot';
+import { EntrepotEcriture } from '../../domaine/Entrepot';
 import { Departement } from '../departements';
 
 export enum StatutDemande {
@@ -17,7 +17,7 @@ export type DemandeDevenirAidant = Aggregat & {
   entite?: EntiteDemande;
 };
 export interface EntrepotDemandeDevenirAidant
-  extends Entrepot<DemandeDevenirAidant> {
+  extends EntrepotEcriture<DemandeDevenirAidant> {
   demandeExiste(mail: string): Promise<boolean>;
 
   rechercheDemandeEnCoursParMail(

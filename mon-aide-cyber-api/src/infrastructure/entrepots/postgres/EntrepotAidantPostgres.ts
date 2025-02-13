@@ -1,4 +1,4 @@
-import { DTO, EntrepotPostgres, Predicat } from './EntrepotPostgres';
+import { DTO, EntrepotEcriturePostgres, Predicat } from './EntrepotPostgres';
 
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
@@ -43,7 +43,7 @@ type AidantDTO = DTO & {
 };
 
 export class EntrepotAidantPostgres
-  extends EntrepotPostgres<Aidant, AidantDTO>
+  extends EntrepotEcriturePostgres<Aidant, AidantDTO>
   implements EntrepotAidant
 {
   constructor(private readonly chiffrement: ServiceDeChiffrement) {

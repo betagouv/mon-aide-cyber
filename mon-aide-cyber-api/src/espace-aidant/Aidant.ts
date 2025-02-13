@@ -1,4 +1,4 @@
-import { Entrepot } from '../domaine/Entrepot';
+import { EntrepotEcriture } from '../domaine/Entrepot';
 import { Aggregat } from '../domaine/Aggregat';
 import { SecteurActivite } from './preferences/secteursActivite';
 import { Departement } from '../gestion-demandes/departements';
@@ -65,7 +65,7 @@ export type Aidant = Aggregat & {
   entite?: EntiteAidant;
 };
 
-export interface EntrepotAidant extends Entrepot<Aidant> {
+export interface EntrepotAidant extends EntrepotEcriture<Aidant> {
   rechercheParEmail(email: string): Promise<Aidant>;
 }
 

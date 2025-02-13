@@ -1,11 +1,14 @@
 import { Aggregat } from './Aggregat';
 
-export interface Entrepot<T extends Aggregat> {
+export interface EntrepotLecture<T> {
   lis(identifiant: string): Promise<T>;
-
-  persiste(entite: T): Promise<void>;
 
   tous(): Promise<T[]>;
 
   typeAggregat(): string;
+}
+
+export interface EntrepotEcriture<T extends Aggregat>
+  extends EntrepotLecture<T> {
+  persiste(entite: T): Promise<void>;
 }

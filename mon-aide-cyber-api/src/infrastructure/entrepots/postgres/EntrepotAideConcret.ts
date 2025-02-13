@@ -1,4 +1,4 @@
-import { DTO, EntrepotPostgres } from './EntrepotPostgres';
+import { DTO, EntrepotEcriturePostgres } from './EntrepotPostgres';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import crypto from 'crypto';
@@ -30,7 +30,10 @@ type AideMACDTO = DTO & {
 
 type AideMAC = Omit<DemandeAide, 'email' | 'raisonSociale' | 'departement'>;
 
-class EntrepotAidePostgres extends EntrepotPostgres<AideMAC, AideMACDTO> {
+class EntrepotAidePostgres extends EntrepotEcriturePostgres<
+  AideMAC,
+  AideMACDTO
+> {
   protected champsAMettreAJour(aideDTO: AideMACDTO): Partial<AideMACDTO> {
     return { donnees: aideDTO.donnees };
   }

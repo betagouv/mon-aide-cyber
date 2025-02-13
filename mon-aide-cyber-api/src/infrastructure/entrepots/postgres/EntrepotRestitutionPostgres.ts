@@ -1,4 +1,4 @@
-import { DTO, EntrepotPostgres } from './EntrepotPostgres';
+import { DTO, EntrepotEcriturePostgres } from './EntrepotPostgres';
 import { Restitution } from '../../../restitution/Restitution';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
 import {
@@ -9,7 +9,7 @@ import {
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import { Valeur } from '../../../diagnostic/Indice';
 
-class EntrepotRestitutionPostgres extends EntrepotPostgres<
+class EntrepotRestitutionPostgres extends EntrepotEcriturePostgres<
   Restitution,
   RestitutionDTO
 > {

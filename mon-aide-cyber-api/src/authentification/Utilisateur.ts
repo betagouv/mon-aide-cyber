@@ -1,5 +1,5 @@
 import { Aggregat } from '../domaine/Aggregat';
-import { Entrepot } from '../domaine/Entrepot';
+import { EntrepotEcriture } from '../domaine/Entrepot';
 import crypto from 'crypto';
 
 export type Utilisateur = Aggregat & {
@@ -9,7 +9,7 @@ export type Utilisateur = Aggregat & {
   motDePasse: string;
 };
 
-export interface EntrepotUtilisateur extends Entrepot<Utilisateur> {
+export interface EntrepotUtilisateur extends EntrepotEcriture<Utilisateur> {
   rechercheParIdentifiantConnexionEtMotDePasse(
     identifiantConnexion: string,
     motDePasse: string

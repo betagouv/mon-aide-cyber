@@ -1,5 +1,5 @@
 import { Aggregat } from '../domaine/Aggregat';
-import { Entrepot } from '../domaine/Entrepot';
+import { EntrepotEcriture } from '../domaine/Entrepot';
 import crypto from 'crypto';
 import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 import { BusEvenement } from '../domaine/BusEvenement';
@@ -15,7 +15,7 @@ export type UtilisateurInscrit = Aggregat & {
   entite?: EntiteUtilisateurInscrit;
 };
 
-export type EntrepotUtilisateurInscrit = Entrepot<UtilisateurInscrit>;
+export type EntrepotUtilisateurInscrit = EntrepotEcriture<UtilisateurInscrit>;
 
 export interface ServiceUtilisateurInscrit {
   valideLesCGU(identifiantUtilisateur: crypto.UUID): Promise<void>;

@@ -1,4 +1,4 @@
-import { DTO, EntrepotPostgres } from './EntrepotPostgres';
+import { DTO, EntrepotEcriturePostgres } from './EntrepotPostgres';
 import {
   EntrepotUtilisateur,
   Utilisateur,
@@ -18,7 +18,7 @@ type UtilisateurDTO = DTO & {
   donnees: DonneesUtilisateur;
 };
 export class EntrepotUtilisateurPostgres
-  extends EntrepotPostgres<Utilisateur, UtilisateurDTO>
+  extends EntrepotEcriturePostgres<Utilisateur, UtilisateurDTO>
   implements EntrepotUtilisateur
 {
   constructor(private readonly chiffrement: ServiceDeChiffrement) {

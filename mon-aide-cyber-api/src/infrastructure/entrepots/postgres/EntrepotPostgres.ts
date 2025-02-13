@@ -1,5 +1,5 @@
 import { Aggregat, AggregatNonTrouve } from '../../../domaine/Aggregat';
-import { Entrepot } from '../../../domaine/Entrepot';
+import { EntrepotEcriture, EntrepotLecture } from '../../../domaine/Entrepot';
 import { knex, Knex } from 'knex';
 import knexfile from './knexfile';
 import crypto from 'crypto';
@@ -11,8 +11,8 @@ export type Predicat = {
   valeur: string;
 };
 
-export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
-  implements Entrepot<T>
+export abstract class EntrepotLecturePostgres<T extends Aggregat, D extends DTO>
+  implements EntrepotLecture<T>
 {
   protected readonly knex: Knex;
 
@@ -35,6 +35,35 @@ export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
       );
   }
 
+  async tous(): Promise<T[]> {
+    const requete = this.knex.from(this.nomTable());
+    const predicat = this.predicat();
+    if (predicat) {
+      requete.andWhere(predicat.colonne, predicat.valeur);
+    }
+    return (await requete).map((ligne) => this.deDTOAEntite(ligne));
+  }
+
+  typeAggregat(): string {
+    throw new Error('Non implémenté');
+  }
+
+  protected abstract nomTable(): string;
+
+  protected abstract deDTOAEntite(dto: D): T;
+
+  protected predicat(): Predicat | undefined {
+    return undefined;
+  }
+}
+
+export abstract class EntrepotEcriturePostgres<
+    T extends Aggregat,
+    D extends DTO,
+  >
+  extends EntrepotLecturePostgres<T, D>
+  implements EntrepotEcriture<T>
+{
   async persiste(entite: T): Promise<void> {
     const entiteDTO = this.deEntiteADTO(entite);
     const entiteExistante = await this.knex
@@ -50,28 +79,7 @@ export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
     }
   }
 
-  async tous(): Promise<T[]> {
-    const requete = this.knex.from(this.nomTable());
-    const predicat = this.predicat();
-    if (predicat) {
-      requete.andWhere(predicat.colonne, predicat.valeur);
-    }
-    return (await requete).map((ligne) => this.deDTOAEntite(ligne));
-  }
-
-  typeAggregat(): string {
-    throw new Error('Non implémenté');
-  }
-
   protected abstract champsAMettreAJour(entiteDTO: D): Partial<D>;
 
-  protected abstract nomTable(): string;
-
   protected abstract deEntiteADTO(entite: T): D;
-
-  protected abstract deDTOAEntite(dto: D): T;
-
-  protected predicat(): Predicat | undefined {
-    return undefined;
-  }
 }

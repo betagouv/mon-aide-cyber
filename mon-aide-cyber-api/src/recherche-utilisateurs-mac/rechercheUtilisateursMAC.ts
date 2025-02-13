@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { Aggregat } from '../domaine/Aggregat';
-import { Entrepot } from '../domaine/Entrepot';
+import { EntrepotEcriture } from '../domaine/Entrepot';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { adaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement';
 import { isAfter } from 'date-fns';
@@ -32,7 +32,8 @@ export interface RechercheUtilisateursMAC {
   rechercheParMail(email: string): Promise<UtilisateurMACDTO | undefined>;
 }
 
-export interface EntrepotUtilisateursMAC extends Entrepot<UtilisateurMAC> {
+export interface EntrepotUtilisateursMAC
+  extends EntrepotEcriture<UtilisateurMAC> {
   rechercheParIdentifiant(identifiant: crypto.UUID): Promise<UtilisateurMAC>;
 
   rechercheParMail(email: string): Promise<UtilisateurMAC>;

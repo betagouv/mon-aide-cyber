@@ -1,5 +1,5 @@
 import { Aggregat, AggregatNonTrouve } from '../../../domaine/Aggregat';
-import { Entrepot } from '../../../domaine/Entrepot';
+import { EntrepotEcriture } from '../../../domaine/Entrepot';
 import { Diagnostic, EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
 import { cloneDeep } from 'lodash';
 import crypto, { UUID } from 'crypto';
@@ -58,7 +58,9 @@ import {
   EntrepotDemandeAide,
 } from '../../../gestion-demandes/aide/DemandeAide';
 
-export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
+export class EntrepotMemoire<T extends Aggregat>
+  implements EntrepotEcriture<T>
+{
   protected entites: Map<crypto.UUID, T> = new Map();
 
   async lis(identifiant: string): Promise<T> {
@@ -252,11 +254,16 @@ export class EntrepotUtilisateurMemoire
   }
 }
 
-export class EntrepotProfilAidantMemoire implements EntrepotProfilAidant {
+export class EntrepotProfilAidantMemoire
+  extends EntrepotMemoire<ProfilAidant>
+  implements EntrepotProfilAidant
+{
   constructor(
     private readonly entrepotAidants: EntrepotAidant,
     private readonly entrepotUtilisateurs: EntrepotUtilisateur
-  ) {}
+  ) {
+    super();
+  }
 
   async lis(identifiant: string): Promise<ProfilAidant> {
     try {

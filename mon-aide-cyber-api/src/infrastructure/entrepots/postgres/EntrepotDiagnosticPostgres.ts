@@ -7,7 +7,7 @@ import {
   ReponsesMultiples,
   Thematique,
 } from '../../../diagnostic/Diagnostic';
-import { DTO, EntrepotPostgres } from './EntrepotPostgres';
+import { DTO, EntrepotEcriturePostgres } from './EntrepotPostgres';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import { UUID } from 'crypto';
 
@@ -15,7 +15,7 @@ export type DiagnosticDTO = DTO & {
   donnees: object;
 };
 export class EntrepotDiagnosticPostgres
-  extends EntrepotPostgres<Diagnostic, DiagnosticDTO>
+  extends EntrepotEcriturePostgres<Diagnostic, DiagnosticDTO>
   implements EntrepotDiagnostic
 {
   typeAggregat(): string {
