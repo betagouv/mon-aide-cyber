@@ -89,14 +89,14 @@ export const formatteLeNomPrenomSelonRegleAffichage = (
   nomPrenom: string,
   regleAffichage: TypeAffichageAnnuaire
 ) => {
+  const [prenom, nom] = nomPrenom.split(' ');
+
   switch (regleAffichage) {
     case TypeAffichageAnnuaire.PRENOM_N: {
-      const [prenom, nom] = nomPrenom.split(' ');
-      return `${prenom} ${nom.at(0)}.`;
+      return !nom ? prenom : `${prenom} ${nom.at(0)}.`;
     }
     case TypeAffichageAnnuaire.P_NOM: {
-      const [prenom, nom] = nomPrenom.split(' ');
-      return `${prenom.at(0)}. ${nom}`;
+      return !nom ? `${prenom.at(0)}.` : `${prenom.at(0)}. ${nom}`;
     }
     case TypeAffichageAnnuaire.PRENOM_NOM: {
       return nomPrenom;
