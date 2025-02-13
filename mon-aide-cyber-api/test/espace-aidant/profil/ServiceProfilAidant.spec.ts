@@ -71,6 +71,16 @@ describe('Service Aidant', () => {
       typeAffichage: TypeAffichageAnnuaire.P_NOM,
       formatAttendu: 'J. Dupont',
     },
+    {
+      prenomNom: 'Jean',
+      typeAffichage: TypeAffichageAnnuaire.PRENOM_N,
+      formatAttendu: 'Jean',
+    },
+    {
+      prenomNom: 'Jean',
+      typeAffichage: TypeAffichageAnnuaire.P_NOM,
+      formatAttendu: 'J.',
+    },
   ])(
     'Enregistre le nom d‘affichage pour l‘annuaire de l‘Aidant $formatAttendu',
     async ({ prenomNom, typeAffichage, formatAttendu }) => {
