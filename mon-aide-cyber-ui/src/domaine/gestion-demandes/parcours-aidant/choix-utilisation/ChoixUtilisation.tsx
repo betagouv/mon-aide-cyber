@@ -25,7 +25,7 @@ export const ChoixUtilisation = ({
 
   return (
     <>
-      <div className="choix-utilisation text-center">
+      <div className="choix-utilisation texte-centre">
         <TypographieH3 className="violet-fonce">
           Quelle utilisation du service envisagez-vous ?
         </TypographieH3>
@@ -38,12 +38,11 @@ export const ChoixUtilisation = ({
           name="choix-utilisation-service"
           surSelection={() => setChoix('ActiviteProfessionnelle')}
         >
-          <div className="texte-centre">
-            <img
-              src={illustrationCadreProfessionnelMAC}
-              alt="Illustration d’une personne travaillant dans le cadre professionnel."
-            />
-          </div>
+          <img
+            src={illustrationCadreProfessionnelMAC}
+            alt="Illustration d’une personne travaillant dans le cadre professionnel."
+          />
+
           <div>
             <TypographieH5>
               Je souhaite utiliser librement l’outil de diagnostic de l’ANSSI
@@ -77,12 +76,10 @@ export const ChoixUtilisation = ({
           name="choix-utilisation-service"
           surSelection={() => setChoix('InteretGeneral')}
         >
-          <div className="texte-centre">
-            <img
-              src={illustrationInteretGeneralMAC}
-              alt="Illustration d’une personne oeuvrant pour l’intérêt général."
-            />
-          </div>
+          <img
+            src={illustrationInteretGeneralMAC}
+            alt="Illustration d’une personne oeuvrant pour l’intérêt général."
+          />
           <div>
             <TypographieH5>
               Je souhaite utiliser l’outil de diagnostic de l’ANSSI et être

@@ -128,9 +128,23 @@
   }
 
   img {
-    width: 427px;
-    height: 212px;
-    padding-bottom: 1rem;
+    width: 100%;
+    height: 100%;
+    align-self: center;
+
+    @include a-partir-de(sm) {
+      width: 60%;
+    }
+
+    @include a-partir-de(md) {
+      width: 100%;
+      height: auto;
+    }
+
+    @include a-partir-de(lg) {
+      width: 427px;
+      padding-bottom: 1rem;
+    }
   }
 
   .zone-choix-type-aidant {
