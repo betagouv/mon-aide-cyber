@@ -49,44 +49,47 @@ export const routesAPIAuthentification = (
         motDePasse
       )
         .then((utilisateurAuthentifie: UtilisateurAuthentifie) => {
+          const reponseAuthentification = (reponseHATEOAS: ReponseHATEOAS) => {
+            requete.session!.token = utilisateurAuthentifie.jeton;
+            return reponse.status(201).json({
+              nomPrenom: utilisateurAuthentifie.nomPrenom,
+              ...reponseHATEOAS,
+            });
+          };
+
           return uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
             .rechercheParIdentifiant(utilisateurAuthentifie.identifiant)
             .then((utilisateur) => {
-              let reponseHATEOAS = constructeurActionsHATEOAS()
-                .pour({
-                  contexte: 'aidant:acceder-aux-informations-utilisateur',
-                })
-                .pour({ contexte: 'se-deconnecter' })
-                .construis();
               if (utilisateur?.profil === 'UtilisateurInscrit') {
-                reponseHATEOAS = constructeurActionsHATEOAS()
-                  .pour({
-                    contexte:
-                      'utilisateur-inscrit:acceder-aux-informations-utilisateur',
-                  })
-                  .pour({ contexte: 'se-deconnecter' })
-                  .construis();
+                return reponseAuthentification(
+                  constructeurActionsHATEOAS()
+                    .pour({
+                      contexte:
+                        'utilisateur-inscrit:acceder-aux-informations-utilisateur',
+                    })
+                    .pour({ contexte: 'se-deconnecter' })
+                    .construis()
+                );
               }
               if (
                 utilisateur?.doitValiderLesCGU &&
                 estDateNouveauParcoursDemandeDevenirAidant()
               ) {
-                reponseHATEOAS = constructeurActionsHATEOAS()
-                  .pour({ contexte: 'valider-profil' })
-                  .pour({ contexte: 'se-deconnecter' })
-                  .construis();
+                return reponseAuthentification(
+                  constructeurActionsHATEOAS()
+                    .pour({ contexte: 'valider-profil' })
+                    .pour({ contexte: 'se-deconnecter' })
+                    .construis()
+                );
               }
-              if (!utilisateur?.dateValidationCGU) {
-                reponseHATEOAS = constructeurActionsHATEOAS()
-                  .pour({ contexte: 'valider-signature-cgu' })
+              return reponseAuthentification(
+                constructeurActionsHATEOAS()
+                  .pour({
+                    contexte: 'aidant:acceder-aux-informations-utilisateur',
+                  })
                   .pour({ contexte: 'se-deconnecter' })
-                  .construis();
-              }
-              requete.session!.token = utilisateurAuthentifie.jeton;
-              return reponse.status(201).json({
-                nomPrenom: utilisateurAuthentifie.nomPrenom,
-                ...reponseHATEOAS,
-              });
+                  .construis()
+              );
             });
         })
         .catch((erreur) => suite(erreur));

@@ -181,7 +181,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       });
     });
 
-    it('Retourne l’action valider signature CGU si l’utilisateur ne les a pas signées', async () => {
+    it('Retourne l’action valider profil si l’utilisateur ne les a pas signées', async () => {
       const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         constructeurAidant: unAidant().sansCGUSignees(),
@@ -203,9 +203,17 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       expect(await reponse.json()).toStrictEqual({
         nomPrenom: utilisateur.nomPrenom,
         liens: {
-          'valider-signature-cgu': {
+          'rechercher-entreprise': {
+            methode: 'GET',
+            url: '/api/recherche-entreprise',
+          },
+          'valider-profil-utilisateur-inscrit': {
             methode: 'POST',
-            url: '/api/utilisateur/valider-signature-cgu',
+            url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
+          },
+          'valider-profil-aidant': {
+            methode: 'POST',
+            url: '/api/utilisateur/valider-profil-aidant',
           },
           'se-deconnecter': {
             url: '/api/token',
@@ -216,7 +224,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       });
     });
 
-    it('Retourne l’action valider signature CGU si l’utilisateur proconnect ne les a pas signées', async () => {
+    it('Retourne l’action valider profil si l’utilisateur proconnect ne les a pas signées', async () => {
       const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         constructeurAidant: unAidant().sansCGUSignees(),
@@ -238,9 +246,17 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       expect(await reponse.json()).toStrictEqual({
         nomPrenom: utilisateur.nomPrenom,
         liens: {
-          'valider-signature-cgu': {
+          'rechercher-entreprise': {
+            methode: 'GET',
+            url: '/api/recherche-entreprise',
+          },
+          'valider-profil-utilisateur-inscrit': {
             methode: 'POST',
-            url: '/api/utilisateur/valider-signature-cgu',
+            url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
+          },
+          'valider-profil-aidant': {
+            methode: 'POST',
+            url: '/api/utilisateur/valider-profil-aidant',
           },
           'se-deconnecter': {
             methode: 'GET',
@@ -251,10 +267,10 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       });
     });
 
-    it('Retourne l’action valider signature CGU si l’utilisateur proconnect ne les a pas signées', async () => {
+    it('Retourne l’action valider signature CGU si l’utilisateur, un Gendarme connecté via proconnect, ne les a pas signées', async () => {
       const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-        constructeurAidant: unAidant().sansCGUSignees(),
+        constructeurAidant: unAidant().sansCGUSignees().avecUnProfilGendarme(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
         constructeurUtilisateur: unUtilisateur(),
       });
