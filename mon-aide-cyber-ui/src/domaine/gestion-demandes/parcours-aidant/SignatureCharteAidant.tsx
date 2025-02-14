@@ -46,6 +46,11 @@ export const SignatureCharteAidant = ({
         <p>
           Veuillez consulter et accepter la Charte de l’Aidant MonAideCyber.
         </p>
+        <div className="champs-obligatoire">
+          <span className="asterisque">*</span>
+          <span> Champ obligatoire</span>
+        </div>
+        <br />
         <div className="zone-charte-defilable">
           <CharteAidant />
         </div>
@@ -60,10 +65,14 @@ export const SignatureCharteAidant = ({
             checked={charteSignee}
           />
           <label className="fr-label" htmlFor="charte-aidant">
-            En cochant la case, je m’engage sur l’honneur à respecter la charte
-            de l’Aidant MonAideCyber
+            <p className="m-0">
+              <span className="asterisque">*</span>
+              En cochant la case, je m’engage sur l’honneur à respecter la
+              charte de l’Aidant MonAideCyber
+            </p>
           </label>
         </div>
+        <br />
         <div className="validation alignee-droite">
           <Button
             variant="secondary"

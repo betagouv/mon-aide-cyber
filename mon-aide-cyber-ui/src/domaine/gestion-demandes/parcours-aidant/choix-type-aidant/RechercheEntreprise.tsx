@@ -20,6 +20,7 @@ export const RechercheEntreprise = (props: {
   surChoixEntite: (entreprise: Entreprise) => void;
   type: TypeEntreprise;
   entrepriseSelectionnee: Entreprise | undefined | null;
+  obligatoire?: boolean;
 }) => {
   const macAPI = useMACAPI();
   const navigationMAC = useNavigationMAC();
@@ -77,8 +78,15 @@ export const RechercheEntreprise = (props: {
   };
 
   return (
-    <div className="selecteur-type-aidant-saisie-entite">
-      <p>Veuillez indiquer le nom de votre structure :</p>
+    <div>
+      <p className="m-0 fr-text--sm">
+        {props.obligatoire ? (
+          <>
+            <span className="asterisque">*</span>{' '}
+          </>
+        ) : null}
+        Veuillez indiquer le nom de votre structure :
+      </p>
       <AutoCompletion<Entreprise>
         nom="entreprise"
         mappeur={(entreprise) => {

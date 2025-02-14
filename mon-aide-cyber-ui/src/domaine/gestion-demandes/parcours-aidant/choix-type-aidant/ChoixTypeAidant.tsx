@@ -47,29 +47,36 @@ export const ChoixTypeAidant = ({
           <p>
             <b>Vous êtes :</b>
           </p>
+          <div className="champs-obligatoire">
+            <span className="asterisque">*</span>
+            <span> Champ obligatoire</span>
+          </div>
+          <br />
           <div className="liste-choix-type-aidants">
             <SelecteurTypeAidant
               libelle="Un représentant des services de l’État"
               surChoix={() => setChoix('RepresentantEtat')}
               coche={choix === 'RepresentantEtat' || false}
               contenuZoneDepliee={
-                <>
-                  <RechercheEntreprise
-                    key={`RepresentantEtat-${entite?.nom}`}
-                    type="servicePublic"
-                    entrepriseSelectionnee={entite}
-                    surChoixEntite={setEntite}
-                  />
-                  <br />
+                <div className="zone-choix-entite">
+                  <div className="selecteur-type-aidant-saisie-entite">
+                    <RechercheEntreprise
+                      key={`RepresentantEtat-${entite?.nom}`}
+                      type="servicePublic"
+                      entrepriseSelectionnee={entite}
+                      surChoixEntite={setEntite}
+                      obligatoire={true}
+                    />
+                  </div>
                   <div className="mac-callout mac-callout-information">
                     <i className="mac-icone-information" />
-                    <div>
+                    <p className="fr-text--sm m-0">
                       Si vous ne trouvez pas votre organisme, essayez avec les
                       n° SIRET/SIREN, ou bien contactez l’équipe :{' '}
                       <LienMailtoMAC />
-                    </div>
+                    </p>
                   </div>
-                </>
+                </div>
               }
             />
             <SelecteurTypeAidant
@@ -79,23 +86,25 @@ export const ChoixTypeAidant = ({
               surChoix={() => setChoix('AgentPublic')}
               coche={choix === 'AgentPublic'}
               contenuZoneDepliee={
-                <>
-                  <RechercheEntreprise
-                    key={`AgentPublic-${entite?.nom}`}
-                    type="representantEtat"
-                    entrepriseSelectionnee={entite}
-                    surChoixEntite={setEntite}
-                  />
-                  <br />
+                <div className="zone-choix-entite">
+                  <div className="selecteur-type-aidant-saisie-entite">
+                    <RechercheEntreprise
+                      key={`AgentPublic-${entite?.nom}`}
+                      type="representantEtat"
+                      entrepriseSelectionnee={entite}
+                      surChoixEntite={setEntite}
+                      obligatoire={true}
+                    />
+                  </div>
                   <div className="mac-callout mac-callout-information">
                     <i className="mac-icone-information" />
-                    <div>
+                    <p className="fr-text--sm m-0">
                       Si vous ne trouvez pas votre organisme, essayez avec les
                       n° SIRET/SIREN, ou bien contactez l’équipe :{' '}
                       <LienMailtoMAC />
-                    </div>
+                    </p>
                   </div>
-                </>
+                </div>
               }
             />
             <SelecteurTypeAidant
@@ -105,23 +114,26 @@ export const ChoixTypeAidant = ({
               surChoix={() => setChoix('Association')}
               coche={choix === 'Association'}
               contenuZoneDepliee={
-                <>
-                  <RechercheEntreprise
-                    key={`Association-${entite?.nom}`}
-                    type="association"
-                    entrepriseSelectionnee={entite}
-                    surChoixEntite={setEntite}
-                  />
-                  <br />
+                <div className="zone-choix-entite">
+                  <div className="selecteur-type-aidant-saisie-entite">
+                    <RechercheEntreprise
+                      key={`Association-${entite?.nom}`}
+                      type="association"
+                      entrepriseSelectionnee={entite}
+                      surChoixEntite={setEntite}
+                      obligatoire={true}
+                    />
+                  </div>
+
                   <div className="mac-callout mac-callout-information">
                     <i className="mac-icone-information" />
-                    <div>
+                    <p className="fr-text--sm m-0">
                       Si vous ne trouvez pas votre organisme, essayez avec les
                       n° SIRET/SIREN, ou bien contactez l’équipe :{' '}
                       <LienMailtoMAC />
-                    </div>
+                    </p>
                   </div>
-                </>
+                </div>
               }
             />
             <hr className="separation-formulaire" />
@@ -130,13 +142,17 @@ export const ChoixTypeAidant = ({
               surChoix={() => setChoix('FuturAdherent')}
               coche={choix === 'FuturAdherent'}
               contenuZoneDepliee={
-                <p>
-                  Contactez l’équipe MonAideCyber pour déterminer quels relais
-                  associatifs vous correspondent.
-                  <br />
-                  Vous pouvez aussi proposer un partenariat. <br />
-                  Envoyez un mail à : <LienMailtoMAC />
-                </p>
+                <div className="zone-choix-entite">
+                  <div className="selecteur-type-aidant-saisie-entite">
+                    <p className="fr-text--sm m-0">
+                      Contactez l’équipe MonAideCyber pour déterminer quels
+                      relais associatifs vous correspondent.
+                      <br />
+                      Vous pouvez aussi proposer un partenariat. <br />
+                      Envoyez un mail à : <LienMailtoMAC />
+                    </p>
+                  </div>
+                </div>
               }
             />
           </div>

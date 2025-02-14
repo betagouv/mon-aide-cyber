@@ -249,13 +249,15 @@ export const EcranDemandeDevenirAidant = () => {
             familiariser avec l’outil et réaliser des premiers diagnostics si
             vous le souhaitez.
           </p>
-          <Button
-            type="button"
-            variant="primary"
-            onClick={() => navigate('/connexion')}
-          >
-            Je me connecte
-          </Button>
+          <div className="cta-redirection">
+            <Button
+              type="button"
+              variant="primary"
+              onClick={() => navigate('/connexion')}
+            >
+              Je me connecte
+            </Button>
+          </div>
         </div>
       </div>,
     ],

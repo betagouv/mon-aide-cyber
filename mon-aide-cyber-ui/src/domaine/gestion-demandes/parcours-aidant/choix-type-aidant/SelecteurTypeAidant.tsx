@@ -24,13 +24,9 @@ export const SelecteurTypeAidant = ({
             checked={coche}
           />
         </div>
-        <p>{libelle}</p>
+        <p className="m-0">{libelle}</p>
       </div>
-      {contenuZoneDepliee ? (
-        <div className="selecteur-type-aidant-saisie-entite">
-          {contenuZoneDepliee}
-        </div>
-      ) : null}
+      {contenuZoneDepliee}
     </label>
   );
 };
