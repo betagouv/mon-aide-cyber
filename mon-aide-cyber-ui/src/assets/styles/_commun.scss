@@ -44,9 +44,14 @@ a {
   align-self: stretch;
   border-radius: 0.5rem;
 
+
   i {
-    width: 3rem;
-    height: 2rem;
+    display: none;
+    @include a-partir-de(md) {
+      display: block;
+      width: 3rem;
+      height: 2rem;
+    }
   }
 
   &.succes {
@@ -126,6 +131,11 @@ fieldset {
 
 .confirmation {
   text-align: center;
+
+  .cta-redirection {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .flex {
@@ -159,4 +169,8 @@ fieldset {
 
 .w-100 {
   width: 100%;
+}
+
+.m-0 {
+  margin: 0;
 }

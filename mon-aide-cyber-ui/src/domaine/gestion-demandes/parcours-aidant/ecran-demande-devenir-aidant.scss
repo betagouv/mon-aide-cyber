@@ -114,8 +114,6 @@
 
   .validation {
     grid-area: validation;
-    padding-bottom: 6rem;
-    margin-bottom: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -137,6 +135,10 @@
   .zone-choix-type-aidant {
     grid-area: entete;
 
+    > .section {
+      margin: 2.5rem 0;
+    }
+
     .liste-choix-type-aidants {
       display: flex;
       flex-direction: column;
@@ -144,31 +146,61 @@
     }
 
     label.selecteur-type-aidant {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+
       padding: 1rem 1rem;
       border-radius: .5rem;
       border: 1px solid var(--couleurs-mac-gris-leger);
 
       .zone-radiobutton {
         display: flex;
+        flex-direction: column;
         gap: 1rem;
+
+        @include a-partir-de(md) {
+          flex-direction: row;
+          gap: 1rem;
+        }
       }
 
       .selecteur-type-aidant-saisie-entite {
-        display: none;
-        padding: 0 1rem;
+        padding: 0 0 0 1rem;
+        margin: 0;
+        border: none;
 
-        &:first-child {
+        @include a-partir-de(md) {
+          padding: 0 1rem;
           border-left: 4px solid var(--couleurs-mac-violet-fonce);
         }
       }
 
+      .zone-choix-entite {
+        display: none;
+      }
+
       &:has(input[type="radio"]:checked) {
         border: 2px solid var(--couleurs-mac-violet-fonce);
+
+        .zone-choix-entite {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
         .selecteur-type-aidant-saisie-entite {
           display: flex;
           flex-direction: column;
 
-          &:first-child {
+          padding: 0;
+          margin: 0;
+          border: none;
+
+          @include a-partir-de(md) {
+            padding-left: 1rem;
+            padding-bottom: .250rem;
+            margin-left: 1rem;
             border-left: 4px solid var(--couleurs-mac-violet-fonce);
           }
         }
@@ -180,6 +212,10 @@
 
   .zone-signature-charte-aidant {
     grid-area: entete;
+
+    > .section {
+      margin: 2.5rem 0;
+    }
 
     .zone-charte-defilable {
       border: 1px solid var(--couleurs-mac-gris-leger);
