@@ -168,13 +168,15 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
                 utilisateur
               );
             }
-            return reponseOK(
-              constructeurActionsHATEOAS()
-                .pour({ contexte: 'valider-signature-cgu' })
-                .pour(deconnexionUtilisateur)
-                .construis(),
-              utilisateur
-            );
+            if (utilisateur.profil === 'Gendarme') {
+              return reponseOK(
+                constructeurActionsHATEOAS()
+                  .pour({ contexte: 'valider-signature-cgu' })
+                  .pour(deconnexionUtilisateur)
+                  .construis(),
+                utilisateur
+              );
+            }
           }
           if (
             utilisateur.doitValiderLesCGU &&

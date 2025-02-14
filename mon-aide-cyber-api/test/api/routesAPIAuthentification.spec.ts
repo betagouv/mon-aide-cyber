@@ -12,6 +12,7 @@ import {
   unUtilisateurInscrit,
 } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { Response } from 'light-my-request';
 
 describe("Le serveur MAC, sur les routes d'authentification", () => {
   const testeurMAC = testeurIntegration();
@@ -30,6 +31,18 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
       });
 
       afterEach(() => testeurMAC.arrete());
+
+      const expectCookie = (reponse: Response) => {
+        const cookieRecu = (
+          reponse.headers['set-cookie']! as string[]
+        )[0].split('; ');
+        expect(cookieRecu[0]).toStrictEqual(
+          'session=eyJ0b2tlbiI6InVuLWpldG9uIn0='
+        );
+        expect(cookieRecu[1]).toStrictEqual('path=/');
+        expect(cookieRecu[3]).toStrictEqual('samesite=strict');
+        expect(cookieRecu[4]).toStrictEqual('httponly');
+      };
 
       describe('Dans le cas d’un Aidant', () => {
         beforeEach(() => {
@@ -87,15 +100,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               },
             },
           });
-          const cookieRecu = (
-            reponse.headers['set-cookie']! as string[]
-          )[0].split('; ');
-          expect(cookieRecu[0]).toStrictEqual(
-            'session=eyJ0b2tlbiI6InVuLWpldG9uIn0='
-          );
-          expect(cookieRecu[1]).toStrictEqual('path=/');
-          expect(cookieRecu[3]).toStrictEqual('samesite=strict');
-          expect(cookieRecu[4]).toStrictEqual('httponly');
+          expectCookie(reponse);
         });
 
         it('Redirige vers /mon-espace/mon-utilisation-du-service', async () => {
@@ -145,6 +150,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               },
             },
           });
+          expectCookie(reponse);
         });
       });
 
@@ -210,6 +216,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
               },
             },
           });
+          expectCookie(reponse);
         });
       });
 
@@ -278,7 +285,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         });
       });
 
-      it('Demande la signature des CGU si elles n’ont pas été signées', async () => {
+      it('Demande la validation du profil si il s’agit d’un Aidant sans date de validation des CGU', async () => {
         const constructeurUtilisateur = unUtilisateur()
           .avecUnIdentifiantDeConnexion('jean.dujardin@email.com')
           .avecUnMotDePasse('mon_Mot-D3p4sse')
@@ -304,9 +311,17 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         expect(await reponse.json()).toStrictEqual({
           nomPrenom: 'Jean Dujardin',
           liens: {
-            'valider-signature-cgu': {
+            'valider-profil-utilisateur-inscrit': {
               methode: 'POST',
-              url: '/api/utilisateur/valider-signature-cgu',
+              url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
+            },
+            'rechercher-entreprise': {
+              methode: 'GET',
+              url: '/api/recherche-entreprise',
+            },
+            'valider-profil-aidant': {
+              methode: 'POST',
+              url: '/api/utilisateur/valider-profil-aidant',
             },
             'se-deconnecter': {
               methode: 'DELETE',
@@ -315,6 +330,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             },
           },
         });
+        expectCookie(reponse);
       });
 
       it('Demande la validation du profil si les CGU sont antérieures à la date du nouveau parcours', async () => {
@@ -364,6 +380,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             },
           },
         });
+        expectCookie(reponse);
       });
     });
 
