@@ -1,4 +1,4 @@
-import { EntrepotEcriture } from '../domaine/Entrepot';
+import { EntrepotLecture } from '../domaine/Entrepot';
 import { UUID } from 'crypto';
 import { Departement } from '../gestion-demandes/departements';
 import { CriteresDeRecherche } from './ServiceAnnuaireAidants';
@@ -9,7 +9,7 @@ export type Aidant = {
   departements: Departement[];
 };
 
-export interface EntrepotAnnuaireAidants extends EntrepotEcriture<Aidant> {
+export interface EntrepotAnnuaireAidants extends EntrepotLecture<Aidant> {
   rechercheParCriteres(
     criteresDeRecherche?: CriteresDeRecherche
   ): Promise<Aidant[]>;

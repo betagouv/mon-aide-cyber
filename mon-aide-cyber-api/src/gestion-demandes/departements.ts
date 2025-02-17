@@ -703,6 +703,11 @@ export const finistere: Finistere = {
   code: '29',
   codeRegion: '53',
 };
+export const correze: Correze = {
+  nom: 'Corrèze',
+  code: '19',
+  codeRegion: '75',
+};
 export const departements: Departement[] = [
   ain,
   aisne,
@@ -754,11 +759,7 @@ export const departements: Departement[] = [
     code: '18',
     codeRegion: '24',
   },
-  {
-    nom: 'Corrèze',
-    code: '19',
-    codeRegion: '75',
-  },
+  correze,
   {
     nom: 'Corse-du-Sud',
     code: '2A',
