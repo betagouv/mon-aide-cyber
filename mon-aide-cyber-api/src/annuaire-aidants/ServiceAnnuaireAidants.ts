@@ -18,11 +18,6 @@ const tableauAleatoire = (aidants: Aidant[]) => {
 export class ServiceAnnuaireAidants {
   constructor(private readonly entrepotAidant: EntrepotAnnuaireAidants) {}
 
-  private formateLeNom(nomPrenom: string): string {
-    const [prenom, nom] = nomPrenom.split(' ');
-    return `${prenom} ${nom ? `${nom[0]}.` : ''}`.trim();
-  }
-
   recherche(
     criteresDeRecherche: CriteresDeRecherche | undefined,
     melange: (aidants: Aidant[]) => Aidant[] = tableauAleatoire
@@ -37,7 +32,7 @@ export class ServiceAnnuaireAidants {
         return melange(
           aidants.map((aidant) => ({
             ...aidant,
-            nomPrenom: this.formateLeNom(aidant.nomPrenom),
+            nomPrenom: aidant.nomPrenom,
           }))
         );
       });

@@ -56,6 +56,7 @@ import {
   EntiteAidant,
   EntitesAssociations,
   EntitesOrganisationsPubliques,
+  TypeAffichageAnnuaire,
   TypesEntites,
 } from '../../../../src/espace-aidant/Aidant';
 import {
@@ -1111,7 +1112,7 @@ describe('Entrepot Annuaire Aidants Postgres', () => {
       .ayantConsentiPourLAnnuaire()
       .construis();
     const secondAidantAvecConsentement = unAidant()
-      .ayantConsentiPourLAnnuaire()
+      .ayantConsentiPourLAnnuaire(TypeAffichageAnnuaire.PRENOM_N)
       .construis();
     const entrepotAidant = new EntrepotAidantPostgres(
       new ServiceDeChiffrementClair()
@@ -1133,7 +1134,8 @@ describe('Entrepot Annuaire Aidants Postgres', () => {
       },
       {
         identifiant: secondAidantAvecConsentement.identifiant,
-        nomPrenom: secondAidantAvecConsentement.nomPrenom,
+        nomPrenom:
+          secondAidantAvecConsentement.preferences.nomAffichageAnnuaire,
         departements: secondAidantAvecConsentement.preferences.departements,
       },
     ]);

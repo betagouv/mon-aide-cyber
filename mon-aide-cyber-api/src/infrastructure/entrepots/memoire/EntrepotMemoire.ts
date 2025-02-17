@@ -228,7 +228,7 @@ export class EntrepotAnnuaireAidantsMemoire
               .includes(criteresDeRecherche.departement)
           )
           .map((aidant) => ({
-            nomPrenom: aidant.nomPrenom,
+            nomPrenom: aidant.preferences.nomAffichageAnnuaire,
             identifiant: aidant.identifiant,
             departements: aidant.preferences.departements,
           }))
@@ -236,7 +236,7 @@ export class EntrepotAnnuaireAidantsMemoire
     }
     return Promise.resolve(
       tousLesAidants.map((aidant) => ({
-        nomPrenom: aidant.nomPrenom,
+        nomPrenom: aidant.preferences.nomAffichageAnnuaire,
         identifiant: aidant.identifiant,
         departements: aidant.preferences.departements,
       }))
