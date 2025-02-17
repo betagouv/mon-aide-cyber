@@ -6,8 +6,12 @@ import {
   ReponseAPIAnnuaireAidants,
   ReponseAPIAnnuaireAidantsSucces,
 } from '../../../src/api/annuaire-aidants/routeAPIAnnuaireAidants';
-import { unAidant } from '../../annuaire-aidants/constructeurAidant';
-import { departements } from '../../../src/gestion-demandes/departements';
+import {
+  correze,
+  departements,
+  gironde,
+} from '../../../src/gestion-demandes/departements';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   let testeurMAC = testeurIntegration();
@@ -23,13 +27,16 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   });
 
   it('Retourne un Aidant', async () => {
-    const aidant = unAidant().avecNomPrenom('Jean Dupont').construis();
-    await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
+    const aidant = unAidant()
+      .avecUnNomPrenom('Jean Dupont')
+      .ayantPourDepartements([gironde])
+      .construis();
+    await testeurMAC.entrepots.aidants().persiste(aidant);
 
     const reponse = await executeRequete(
       donneesServeur.app,
       'GET',
-      `/api/annuaire-aidants?departement=${aidant.departements[0].nom}`
+      `/api/annuaire-aidants?departement=${aidant.preferences.departements[0].nom}`
     );
 
     expect(reponse.statusCode).toBe(200);
@@ -65,10 +72,12 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   });
 
   it('Retourne le nombre d’Aidants', async () => {
-    const aidant = unAidant().enGironde().enCorreze().construis();
-    const autreAidant = unAidant().enCorreze().construis();
-    await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
-    await testeurMAC.entrepots.annuaireAidants().persiste(autreAidant);
+    const aidant = unAidant()
+      .ayantPourDepartements([gironde, correze])
+      .construis();
+    const autreAidant = unAidant().ayantPourDepartements([correze]).construis();
+    await testeurMAC.entrepots.aidants().persiste(aidant);
+    await testeurMAC.entrepots.aidants().persiste(autreAidant);
 
     const reponse = await executeRequete(
       donneesServeur.app,
@@ -85,12 +94,14 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
     describe('Par département', () => {
       it('Retourne un Aidant dans le département désiré', async () => {
         const aidant = unAidant()
-          .avecNomPrenom('Jean DUPONT')
-          .enGironde()
+          .avecUnNomPrenom('Jean DUPONT')
+          .ayantPourDepartements([gironde])
           .construis();
-        const autreAidant = unAidant().enCorreze().construis();
-        await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
-        await testeurMAC.entrepots.annuaireAidants().persiste(autreAidant);
+        const autreAidant = unAidant()
+          .ayantPourDepartements([correze])
+          .construis();
+        await testeurMAC.entrepots.aidants().persiste(aidant);
+        await testeurMAC.entrepots.aidants().persiste(autreAidant);
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -109,10 +120,12 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
       });
 
       it('Retourne les liens HATEOAS dans le corps de la réponse', async () => {
-        const aidant = unAidant().enGironde().construis();
-        const autreAidant = unAidant().enCorreze().construis();
-        await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
-        await testeurMAC.entrepots.annuaireAidants().persiste(autreAidant);
+        const aidant = unAidant().ayantPourDepartements([gironde]).construis();
+        const autreAidant = unAidant()
+          .ayantPourDepartements([correze])
+          .construis();
+        await testeurMAC.entrepots.aidants().persiste(aidant);
+        await testeurMAC.entrepots.aidants().persiste(autreAidant);
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -140,11 +153,13 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
 
       it('Encode le département dans les liens HATEOAS de la réponse', async () => {
         const aidant = unAidant()
-          .dansLeDepartement(departements[102])
+          .ayantPourDepartements([departements[102]])
           .construis();
-        const autreAidant = unAidant().enCorreze().construis();
-        await testeurMAC.entrepots.annuaireAidants().persiste(aidant);
-        await testeurMAC.entrepots.annuaireAidants().persiste(autreAidant);
+        const autreAidant = unAidant()
+          .ayantPourDepartements([correze])
+          .construis();
+        await testeurMAC.entrepots.aidants().persiste(aidant);
+        await testeurMAC.entrepots.aidants().persiste(autreAidant);
 
         const reponse = await executeRequete(
           donneesServeur.app,

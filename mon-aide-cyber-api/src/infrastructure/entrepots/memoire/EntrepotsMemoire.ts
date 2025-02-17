@@ -47,7 +47,7 @@ export class EntrepotsMemoire implements Entrepots {
   private entrepotStatistiques: EntrepotStatistiques =
     new EntrepotStatistiquesMemoire();
   private entrepotAnnuaireAidants: EntrepotAnnuaireAidants =
-    new EntrepotAnnuaireAidantsMemoire();
+    new EntrepotAnnuaireAidantsMemoire(this.entrepotAidants);
   private entrepotUtilisateurs: EntrepotUtilisateur =
     new EntrepotUtilisateurMemoire();
   private entrepotProfilAidant: EntrepotProfilAidant =

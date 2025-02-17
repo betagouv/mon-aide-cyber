@@ -211,21 +211,36 @@ export class EntrepotAnnuaireAidantsMemoire
   extends EntrepotMemoire<AnnuaireAidant>
   implements EntrepotAnnuaireAidants
 {
-  rechercheParCriteres(
+  constructor(private readonly entrepotAidant: EntrepotAidant) {
+    super();
+  }
+  async rechercheParCriteres(
     criteresDeRecherche?: CriteresDeRecherche
   ): Promise<AnnuaireAidant[]> {
-    const tousLesAidants = Array.from(this.entites.values());
+    const tousLesAidants = Array.from(await this.entrepotAidant.tous());
 
     if (criteresDeRecherche) {
       return Promise.resolve(
-        tousLesAidants.filter((a) =>
-          a.departements
-            .map((a) => a.nom as string)
-            .includes(criteresDeRecherche.departement)
-        )
+        tousLesAidants
+          .filter((a) =>
+            a.preferences.departements
+              .map((a) => a.nom as string)
+              .includes(criteresDeRecherche.departement)
+          )
+          .map((aidant) => ({
+            nomPrenom: aidant.nomPrenom,
+            identifiant: aidant.identifiant,
+            departements: aidant.preferences.departements,
+          }))
       );
     }
-    return Promise.resolve(tousLesAidants);
+    return Promise.resolve(
+      tousLesAidants.map((aidant) => ({
+        nomPrenom: aidant.nomPrenom,
+        identifiant: aidant.identifiant,
+        departements: aidant.preferences.departements,
+      }))
+    );
   }
 }
 

@@ -1,14 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { Aidant } from '../../src/annuaire-aidants/annuaireAidants';
-import { unAidant } from './constructeurAidant';
-import { EntrepotAnnuaireAidantsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import {
+  EntrepotAidantMemoire,
+  EntrepotAnnuaireAidantsMemoire,
+} from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { ServiceAnnuaireAidants } from '../../src/annuaire-aidants/ServiceAnnuaireAidants';
+import { EntrepotAidant } from '../../src/espace-aidant/Aidant';
+import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import { gironde } from '../../src/gestion-demandes/departements';
 
 describe('Service d’annuaire des Aidants', () => {
   it("Ne retourne pas d'Aidants si le département n'est pas fourni", async () => {
-    const entrepot = new EntrepotAnnuaireAidantsMemoire();
-    await entrepot.persiste(unAidant().construis());
-    await entrepot.persiste(unAidant().construis());
+    const entrepotAidant = new EntrepotAidantMemoire();
+    const entrepot = new EntrepotAnnuaireAidantsMemoire(entrepotAidant);
+    await entrepotAidant.persiste(unAidant().construis());
+    await entrepotAidant.persiste(unAidant().construis());
 
     const aidants = await new ServiceAnnuaireAidants(entrepot).recherche(
       undefined
@@ -18,11 +24,18 @@ describe('Service d’annuaire des Aidants', () => {
   });
 
   it('Formate le nom des Aidants', async () => {
-    const jean = unAidant().avecNomPrenom('Jean').enGironde().construis();
-    const martin = unAidant().avecNomPrenom('Martin N').enGironde().construis();
-    const entrepot = new EntrepotAnnuaireAidantsMemoire();
-    await entrepot.persiste(jean);
-    await entrepot.persiste(martin);
+    const jean = unAidant()
+      .avecUnNomPrenom('Jean')
+      .ayantPourDepartements([gironde])
+      .construis();
+    const martin = unAidant()
+      .avecUnNomPrenom('Martin N')
+      .ayantPourDepartements([gironde])
+      .construis();
+    const entrepotAidant = new EntrepotAidantMemoire();
+    const entrepot = new EntrepotAnnuaireAidantsMemoire(entrepotAidant);
+    await entrepotAidant.persiste(jean);
+    await entrepotAidant.persiste(martin);
 
     const aidants = await new ServiceAnnuaireAidants(entrepot).recherche(
       {
@@ -58,8 +71,9 @@ describe('Service d’annuaire des Aidants', () => {
   });
 
   it("Retourne aléatoirement la liste d'Aidants", async () => {
-    const entrepot = new EntrepotAnnuaireAidantsMemoire();
-    await persistePlusieursAidants(entrepot);
+    const entrepotAidant = new EntrepotAidantMemoire();
+    const entrepot = new EntrepotAnnuaireAidantsMemoire(entrepotAidant);
+    await persistePlusieursAidants(entrepotAidant);
 
     const premiereRecherche = await new ServiceAnnuaireAidants(
       entrepot
@@ -75,11 +89,11 @@ describe('Service d’annuaire des Aidants', () => {
     expect(premiereRecherche).not.toStrictEqual(secondeRecherche);
   });
 
-  const persistePlusieursAidants = async (
-    entrepot: EntrepotAnnuaireAidantsMemoire
-  ) => {
+  const persistePlusieursAidants = async (entrepot: EntrepotAidant) => {
     for (let i = 0; i < 10; i++) {
-      await entrepot.persiste(unAidant().enGironde().construis());
+      await entrepot.persiste(
+        unAidant().ayantPourDepartements([gironde]).construis()
+      );
     }
   };
 });
