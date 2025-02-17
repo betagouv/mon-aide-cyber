@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { Aidant } from '../../src/annuaire-aidants/annuaireAidants';
 import {
   EntrepotAidantMemoire,
   EntrepotAnnuaireAidantsMemoire,
@@ -21,53 +20,6 @@ describe('Service d’annuaire des Aidants', () => {
     );
 
     expect(aidants).toBeUndefined();
-  });
-
-  it('Formate le nom des Aidants', async () => {
-    const jean = unAidant()
-      .avecUnNomPrenom('Jean')
-      .ayantPourDepartements([gironde])
-      .construis();
-    const martin = unAidant()
-      .avecUnNomPrenom('Martin N')
-      .ayantPourDepartements([gironde])
-      .construis();
-    const entrepotAidant = new EntrepotAidantMemoire();
-    const entrepot = new EntrepotAnnuaireAidantsMemoire(entrepotAidant);
-    await entrepotAidant.persiste(jean);
-    await entrepotAidant.persiste(martin);
-
-    const aidants = await new ServiceAnnuaireAidants(entrepot).recherche(
-      {
-        departement: 'Gironde',
-      },
-      (aidants) => aidants
-    );
-
-    expect(aidants).toStrictEqual<Aidant[]>([
-      {
-        identifiant: expect.any(String),
-        nomPrenom: 'Jean',
-        departements: [
-          {
-            code: '33',
-            codeRegion: '75',
-            nom: 'Gironde',
-          },
-        ],
-      },
-      {
-        identifiant: expect.any(String),
-        nomPrenom: 'Martin N.',
-        departements: [
-          {
-            code: '33',
-            codeRegion: '75',
-            nom: 'Gironde',
-          },
-        ],
-      },
-    ]);
   });
 
   it("Retourne aléatoirement la liste d'Aidants", async () => {

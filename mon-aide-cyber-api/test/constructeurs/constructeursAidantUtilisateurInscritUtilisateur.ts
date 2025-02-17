@@ -8,6 +8,8 @@ import {
   Aidant,
   EntiteAidant,
   EntrepotAidant,
+  formatteLeNomPrenomSelonRegleAffichage,
+  TypeAffichageAnnuaire,
   TypeEntite,
   TypesEntites,
 } from '../../src/espace-aidant/Aidant';
@@ -112,8 +114,14 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
-  ayantConsentiPourLAnnuaire(): ConstructeurAidant {
+  ayantConsentiPourLAnnuaire(
+    typeAffichageAnnuaire: TypeAffichageAnnuaire = TypeAffichageAnnuaire.PRENOM_NOM
+  ): ConstructeurAidant {
     this.consentementAnnuaire = true;
+    this.nomAffichageAnnuaire = formatteLeNomPrenomSelonRegleAffichage(
+      this.nomPrenom,
+      typeAffichageAnnuaire
+    );
     return this;
   }
 

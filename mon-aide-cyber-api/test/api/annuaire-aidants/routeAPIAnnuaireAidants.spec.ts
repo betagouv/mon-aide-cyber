@@ -12,6 +12,7 @@ import {
   gironde,
 } from '../../../src/gestion-demandes/departements';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import { TypeAffichageAnnuaire } from '../../../src/espace-aidant/Aidant';
 
 describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   let testeurMAC = testeurIntegration();
@@ -29,6 +30,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   it('Retourne un Aidant', async () => {
     const aidant = unAidant()
       .avecUnNomPrenom('Jean Dupont')
+      .ayantConsentiPourLAnnuaire(TypeAffichageAnnuaire.PRENOM_N)
       .ayantPourDepartements([gironde])
       .construis();
     await testeurMAC.entrepots.aidants().persiste(aidant);
@@ -96,6 +98,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
         const aidant = unAidant()
           .avecUnNomPrenom('Jean DUPONT')
           .ayantPourDepartements([gironde])
+          .ayantConsentiPourLAnnuaire(TypeAffichageAnnuaire.PRENOM_N)
           .construis();
         const autreAidant = unAidant()
           .ayantPourDepartements([correze])

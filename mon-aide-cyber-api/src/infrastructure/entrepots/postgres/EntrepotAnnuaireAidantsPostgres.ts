@@ -33,7 +33,7 @@ export class EntrepotAnnuaireAidantsPostgres
   ): Promise<Aidant[]> {
     let requete = `
         SELECT id as identifiant,
-               donnees ->> 'nomPrenom' as "nomPrenom", donnees -> 'preferences' -> 'departements' as "departements"
+               donnees -> 'preferences' -> 'nomAffichageAnnuaire' as "nomPrenom", donnees -> 'preferences' -> 'departements' as "departements"
         FROM utilisateurs_mac
           WHERE (donnees ->> 'consentementAnnuaire')::bool is TRUE`;
     const parametres = criteresDeRecherche && {
