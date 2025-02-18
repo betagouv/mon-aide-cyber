@@ -22,6 +22,7 @@ import { ErreurRequeteHTTP } from '../recherche-entreprise/routesAPIRechercheEnt
 
 import { ErreurAidantNonTrouve } from '../../espace-utilisateur-inscrit/ServiceUtilisateurInscritMAC';
 import { RequeteUtilisateur } from '../routesAPI';
+import { ErreurLectureReferentielAssociations } from '../associations/routesAssociations';
 
 const HTTP_ACCEPTE = 202;
 const HTTP_MAUVAISE_REQUETE = 400;
@@ -264,6 +265,19 @@ const erreursGerees: Map<
           .pour({ contexte: 'valider-signature-cgu' })
           .pour({ contexte: 'se-deconnecter' })
           .construis(),
+      });
+    },
+  ],
+  [
+    'ErreurLectureReferentielAssociations',
+    (
+      erreur: ErreurMAC<ErreurLectureReferentielAssociations>,
+      _requete: Request,
+      _consignateur,
+      reponse
+    ) => {
+      construisReponse(reponse, HTTP_NON_TROUVE, {
+        message: erreur.message,
       });
     },
   ],
