@@ -31,6 +31,7 @@ import { AdaptateurDeVerificationDeTypeDeRelation } from './adaptateurs/Adaptate
 import { AdaptateurProConnect } from './adaptateurs/pro-connect/adaptateurProConnect';
 import { routesProConnect } from './api/pro-connect/routeProConnect';
 import { AdaptateurDeRequeteHTTP } from './infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
+import { routesAssociations } from './api/associations/routesAssociations';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -107,6 +108,7 @@ const creeApp = (config: ConfigurationServeur) => {
     express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist'))
   );
   app.use('/api', routesAPI(config));
+  app.use('/associations', routesAssociations(config));
 
   app.use('/pro-connect', routesProConnect(config));
   app.use('/contact', routeContact(config));
