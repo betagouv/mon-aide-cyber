@@ -68,17 +68,30 @@ class ExtractionMAC implements Extraction {
     const demandesEnCours = unServiceDemandesDevenirAidant(
       this.parametres.entrepotDemandes
     ).demandesEnCours();
-    await this.ajouteLesDemandesDevenirAidant(demandesEnCours, rapport);
-    await this.ajouteLesDemandesAvantArbitrage(demandesEnCours, rapport);
-    await this.ajouteLesDemandesAide(
+    const demandesDevenirAidant = this.ajouteLesDemandesDevenirAidant(
+      demandesEnCours,
+      rapport
+    );
+    const demandesAvantArbitrage = this.ajouteLesDemandesAvantArbitrage(
+      demandesEnCours,
+      rapport
+    );
+    const demandesAide = this.ajouteLesDemandesAide(
       this.parametres.entrepotDemandesAide,
       rapport
     );
-    await this.ajouteLaListeDesAidants(
+    const listeDesAidants = this.ajouteLaListeDesAidants(
       this.parametres.entrepotStatistiquesAidant,
       rapport
     );
-    return rapport.genere();
+    return Promise.all([
+      demandesDevenirAidant,
+      demandesAvantArbitrage,
+      demandesAide,
+      listeDesAidants,
+    ])
+      .then(() => rapport.genere())
+      .catch((erreur) => Promise.reject(erreur));
   }
 
   private async ajouteLesDemandesDevenirAidant<T>(

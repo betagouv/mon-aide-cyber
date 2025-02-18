@@ -69,53 +69,58 @@ const extrais = async (test = false): Promise<Resultat> => {
   const entrepots = fabriqueEntrepots();
   const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
   const annuaireCOT = fabriqueAnnuaireCOT();
-  const rapport = await uneExtraction({
+
+  return uneExtraction({
     entrepotDemandes: entrepots.demandesDevenirAidant(),
     entrepotDemandesAide: entrepots.demandesAideLecture(),
     entrepotStatistiquesAidant: entrepots.statistiquesAidant(),
-  }).extrais<string>(new RapportExcel());
+  })
+    .extrais<string>(new RapportExcel())
+    .then(async (rapport) => {
+      const date = FournisseurHorloge.formateDate(
+        FournisseurHorloge.maintenant()
+      ).date;
 
-  const date = FournisseurHorloge.formateDate(
-    FournisseurHorloge.maintenant()
-  ).date;
-
-  const emailsCot: string[] = [];
-  if (test) {
-    emailsCot.push(
-      annuaireCOT.annuaireCOT().rechercheEmailParDepartement(gironde)
-    );
-    emailsCot.push(
-      annuaireCOT
-        .annuaireCOT()
-        .rechercheEmailParDepartement(alpesDeHauteProvence)
-    );
-  } else {
-    emailsCot.push(...annuaireCOT.annuaireCOT().tous());
-  }
-  return adaptateurEnvoiMessage
-    .envoie({
-      corps:
-        'Vous trouverez ci-joint le dernier rapport concernant les demandes pour devenir Aidant en attente.',
-      objet: `Rapport MonAideCyber du ${date}`,
-      destinataire: emailsCot.map((cot) => ({ email: cot })),
-      pieceJointe: { contenu: rapport, nom: `${date}_Rapport_COT.xlsx` },
-    })
-    .then(() => {
-      console.log(
-        'Extraction faite en : %s',
-        formatDistance(FournisseurHorloge.maintenant(), debutExtraction)
-      );
-      return 'OK' as Resultat;
+      const emailsCot: string[] = [];
+      if (test) {
+        emailsCot.push(
+          annuaireCOT.annuaireCOT().rechercheEmailParDepartement(gironde)
+        );
+        emailsCot.push(
+          annuaireCOT
+            .annuaireCOT()
+            .rechercheEmailParDepartement(alpesDeHauteProvence)
+        );
+      } else {
+        emailsCot.push(...annuaireCOT.annuaireCOT().tous());
+      }
+      try {
+        await adaptateurEnvoiMessage.envoie({
+          corps:
+            'Vous trouverez ci-joint le dernier rapport concernant les demandes pour devenir Aidant en attente.',
+          objet: `Rapport MonAideCyber du ${date}`,
+          destinataire: emailsCot.map((cot) => ({ email: cot })),
+          pieceJointe: { contenu: rapport, nom: `${date}_Rapport_COT.xlsx` },
+        });
+        console.log(
+          'Extraction faite en : %s',
+          formatDistance(FournisseurHorloge.maintenant(), debutExtraction)
+        );
+        return 'OK' as Resultat;
+      } catch (erreur) {
+        console.error(
+          'Une erreur a eu lieu pendant l’envoi planifié du rapport COT',
+          erreur
+        );
+        console.log(
+          'Extraction échouée en : %s',
+          formatDistance(FournisseurHorloge.maintenant(), debutExtraction)
+        );
+        return 'KO';
+      }
     })
     .catch((erreur) => {
-      console.error(
-        'Une erreur a eu lieu pendant l’envoi planifié du rapport COT',
-        erreur
-      );
-      console.log(
-        'Extraction échouée en : %s',
-        formatDistance(FournisseurHorloge.maintenant(), debutExtraction)
-      );
+      console.log('Extraction échouée : %s', erreur);
       return 'KO';
     });
 };
