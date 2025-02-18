@@ -107,6 +107,7 @@ class ExtractionMAC implements Extraction {
           entetes: [
             { entete: 'Nom', clef: 'nom' },
             { entete: 'Prénom', clef: 'prenom' },
+            { entete: 'Email', clef: 'email' },
             { entete: 'Date de la demande', clef: 'dateDemande' },
             { entete: 'Département', clef: 'departement' },
             { entete: 'Entité Morale', clef: 'entiteMorale' },
@@ -134,6 +135,7 @@ class ExtractionMAC implements Extraction {
           entetes: [
             { entete: 'Nom', clef: 'nom' },
             { entete: 'Prénom', clef: 'prenom' },
+            { entete: 'Email', clef: 'email' },
             { entete: 'Date de la demande', clef: 'dateDemande' },
             { entete: 'Département', clef: 'departement' },
           ],

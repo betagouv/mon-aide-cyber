@@ -103,6 +103,7 @@ describe('Extraction', () => {
           {
             nom: demande.nom,
             prenom: demande.prenom,
+            email: demande.mail,
             dateDemande: FournisseurHorloge.formateDate(demande.date).date,
             departement: demande.departement.nom,
             entiteMorale: demande.entite!.nom!,
@@ -136,6 +137,7 @@ describe('Extraction', () => {
         {
           nom: demande.nom,
           prenom: demande.prenom,
+          email: demande.mail,
           dateDemande: FournisseurHorloge.formateDate(demande.date).date,
           departement: demande.departement.nom,
           entiteMorale: demande.entite!.nom!,
@@ -162,6 +164,7 @@ describe('Extraction', () => {
       >([
         { entete: 'Nom', clef: 'nom' },
         { entete: 'Prénom', clef: 'prenom' },
+        { entete: 'Email', clef: 'email' },
         { entete: 'Date de la demande', clef: 'dateDemande' },
         { entete: 'Département', clef: 'departement' },
         { entete: 'Entité Morale', clef: 'entiteMorale' },
@@ -239,6 +242,7 @@ describe('Extraction', () => {
           {
             nom: demande.nom,
             prenom: demande.prenom,
+            email: demande.mail,
             dateDemande: FournisseurHorloge.formateDate(demande.date).date,
             departement: demande.departement.nom,
             entiteMorale: demande.entite!.nom!,
@@ -248,6 +252,7 @@ describe('Extraction', () => {
           {
             nom: demandeAvantArbitrage.nom,
             prenom: demandeAvantArbitrage.prenom,
+            email: demandeAvantArbitrage.mail,
             dateDemande: FournisseurHorloge.formateDate(demande.date).date,
             departement: demande.departement.nom,
           },
@@ -274,6 +279,7 @@ describe('Extraction', () => {
       >([
         { entete: 'Nom', clef: 'nom' },
         { entete: 'Prénom', clef: 'prenom' },
+        { entete: 'Email', clef: 'email' },
         { entete: 'Date de la demande', clef: 'dateDemande' },
         { entete: 'Département', clef: 'departement' },
       ]);
