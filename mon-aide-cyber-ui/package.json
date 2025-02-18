@@ -15,7 +15,8 @@
     "test": "tsc -p test/tsconfig.test.json && vitest run --config vitest.config.ts --reporter verbose",
     "test:coverage": "vitest --config vitest.config.ts run --coverage",
     "test:watch": "vitest --config vitest.config.ts --ui --reporter verbose",
-    "test:storybook": "test-storybook"
+    "test:storybook": "test-storybook",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "@gouvfr/dsfr": "^1.11.0",
