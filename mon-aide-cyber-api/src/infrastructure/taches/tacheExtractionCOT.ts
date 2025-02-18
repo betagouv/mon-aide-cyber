@@ -17,6 +17,7 @@ import {
   alpesDeHauteProvence,
   gironde,
 } from '../../gestion-demandes/departements';
+import { sentry } from '../../adaptateurs/adaptateurEnvironnement';
 
 class RapportExcel implements Rapport<string> {
   private readonly workbookWriter: stream.xlsx.WorkbookWriter;
@@ -132,23 +133,37 @@ const commande = program
     'Envoie un test pour les régions Nouvelle-Aquitaine et Provences-Alpes-Côte d’Azure'
   );
 
+const SLUG_ENVOI_RAPPORT_COT = 'envoi-rapport-cot';
+
 commande.action(async (options) => {
+  Sentry.init({
+    dsn: sentry().dsn() || '',
+    environment: sentry().environnement() || '',
+    debug: true,
+  });
+
+  const checkInId = Sentry.captureCheckIn({
+    monitorSlug: SLUG_ENVOI_RAPPORT_COT,
+    status: 'in_progress',
+  });
   await extrais(options.test)
     .then((resultat) => {
+      const status = resultat === 'OK' ? 'ok' : 'error';
       Sentry.captureCheckIn({
-        checkInId: Sentry.captureCheckIn({
-          monitorSlug: 'envoi-rapport-cot',
-          status: 'in_progress',
-        }),
-        monitorSlug: 'envoi-rapport-cot',
-        status: resultat === 'OK' ? 'ok' : 'error',
+        checkInId,
+        monitorSlug: SLUG_ENVOI_RAPPORT_COT,
+        status,
       });
-      process.exit(0);
     })
     .catch((erreur) => {
       console.error('Une erreur s’est produite', erreur);
-      process.exit(1);
+      Sentry.captureCheckIn({
+        checkInId,
+        monitorSlug: SLUG_ENVOI_RAPPORT_COT,
+        status: 'error',
+      });
     });
+  setInterval(() => process.exit(), 500);
 });
 
 program.parse();
