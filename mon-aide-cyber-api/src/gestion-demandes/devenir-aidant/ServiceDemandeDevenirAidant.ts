@@ -9,6 +9,7 @@ type EnAttenteAdhesion = 'Oui' | 'Non';
 export type DemandeDevenirAidant = {
   nom: string;
   prenom: string;
+  email: string;
   dateDemande: string;
   departement: string;
   entiteMorale?: string;
@@ -33,6 +34,7 @@ class ServiceDemandesDevenirAidantMAC implements ServiceDemandesDevenirAidant {
           return {
             nom: demande.nom,
             prenom: demande.prenom,
+            email: demande.mail,
             dateDemande: FournisseurHorloge.formateDate(demande.date).date,
             departement: demande.departement.nom,
             ...(demande.entite?.nom && { entiteMorale: demande.entite.nom }),

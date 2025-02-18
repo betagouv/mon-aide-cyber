@@ -21,6 +21,7 @@ describe('Service demande devenir Aidant', () => {
       {
         nom: premiereDemande.nom,
         prenom: premiereDemande.prenom,
+        email: premiereDemande.mail,
         dateDemande: FournisseurHorloge.formateDate(premiereDemande.date).date,
         departement: premiereDemande.departement.nom,
       },
