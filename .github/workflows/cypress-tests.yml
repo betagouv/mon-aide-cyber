@@ -1,0 +1,26 @@
+name: Cypress Tests
+on: push
+jobs:
+  cypress-run:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+      - name: Installe les dépendances
+        run: npm ci
+      - name: 'Joue les tests E2E Cypress'
+        uses: cypress-io/github-action@v6
+        with:
+            build: npx cypress info
+            start: npm run -w mon-aide-cyber-api start
+            wait-on: "http://localhost:8081"
+            wait-on-timeout: 120
+            browser: chrome
+            record: true
+            parallel: true
+            group: "UI - Chrome"
+            #spec: ./mon-aide-cyber-ui/test/cypress/e2e/*
+            config-file: ./mon-aide-cyber-ui/cypress.config.ts
