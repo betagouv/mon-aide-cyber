@@ -75,7 +75,9 @@ export class EntrepotStatistiquesAidantPostgres
       ...(aidant.donnees.dateSignatureCGU && {
         compteCree: FournisseurHorloge.enDate(aidant.donnees.dateSignatureCGU),
       }),
-      entite: aidant.donnees.entite?.nom || '',
+      entite: aidant.donnees.entite?.nom
+        ? this.serviceDeChiffrement.dechiffre(aidant.donnees.entite.nom)
+        : '',
       departements: aidant.donnees.preferences.departements.map((d) =>
         rechercheParNomDepartement(d)
       ),
@@ -125,7 +127,9 @@ export class EntrepotStatistiquesAidantPostgres
               aidant.donnees.dateSignatureCGU
             ),
           }),
-          entite: aidant.donnees.entite?.nom || '',
+          entite: aidant.donnees.entite?.nom
+            ? this.serviceDeChiffrement.dechiffre(aidant.donnees.entite.nom)
+            : '',
           departements: aidant.donnees.preferences.departements.map((d) =>
             rechercheParNomDepartement(d)
           ),

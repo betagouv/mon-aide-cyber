@@ -897,10 +897,18 @@ describe('EntrepotStatistiquesAidant', () => {
       .faisantPartieDeEntite('ServicePublic')
       .ayantPourDepartements([gironde, allier])
       .construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [aidant.nomPrenom, 'abcd'],
+        [aidant.email, 'efgh'],
+        [aidant.entite!.nom!, 'ijkl'],
+      ])
+    );
+    const entrepotAidant = new EntrepotAidantPostgres(serviceDeChiffrement);
     await entrepotAidant.persiste(aidant);
 
     const entrepotAidantExtraction = new EntrepotStatistiquesAidantPostgres(
-      adaptateurServiceChiffrement()
+      serviceDeChiffrement
     );
 
     expect(
@@ -922,10 +930,18 @@ describe('EntrepotStatistiquesAidant', () => {
       .faisantPartieDeEntite('ServicePublic')
       .ayantPourDepartements([gironde, allier])
       .construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [aidant.nomPrenom, 'mnop'],
+        [aidant.email, 'qrst'],
+        [aidant.entite!.nom!, 'uvwx'],
+      ])
+    );
+    const entrepotAidant = new EntrepotAidantPostgres(serviceDeChiffrement);
     await entrepotAidant.persiste(aidant);
 
     const entrepotAidantExtraction = new EntrepotStatistiquesAidantPostgres(
-      adaptateurServiceChiffrement()
+      serviceDeChiffrement
     );
 
     expect(
