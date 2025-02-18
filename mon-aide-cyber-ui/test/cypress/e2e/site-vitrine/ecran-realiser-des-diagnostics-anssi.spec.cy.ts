@@ -1,3 +1,6 @@
+import { describe, it } from 'vitest';
+import * as cy from 'cypress';
+
 describe('Ecran réaliser des diagnostics ANSSI', () => {
   it("doit s'afficher", () => {
     cy.visit('/realiser-des-diagnostics-anssi');

@@ -1,4 +1,5 @@
 name: Cypress Tests
+permissions: {}
 on: push
 jobs:
   cypress-run:
