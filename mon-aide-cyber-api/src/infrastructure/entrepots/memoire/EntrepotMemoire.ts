@@ -65,6 +65,10 @@ import {
 } from '../../../statistiques/aidant/StastistiquesAidant';
 import { EntrepotRelationMemoire } from '../../../relation/infrastructure/EntrepotRelationMemoire';
 import { Tuple } from '../../../relation/Tuple';
+import {
+  EntrepotStatistiquesUtilisateurInscrit,
+  StatistiquesUtilisateurInscrit,
+} from '../../../statistiques/utilisateur-inscrit/StatistiquesUtilisateurInscrit';
 
 export class EntrepotMemoire<T extends Aggregat>
   implements EntrepotEcriture<T>
@@ -488,5 +492,28 @@ export class EntrepotStatistiquesAidantMemoire
 
   reinitialise() {
     this.entites = new Map();
+  }
+}
+
+export class EntrepotStatistiquesUtilisateursInscritsMemoire
+  extends EntrepotMemoire<StatistiquesUtilisateurInscrit>
+  implements EntrepotStatistiquesUtilisateurInscrit
+{
+  constructor(private readonly entrepotRelation: EntrepotRelationMemoire) {
+    super();
+  }
+
+  rechercheUtilisateursInscritsAvecNombreDeDiagnostics(): Promise<
+    StatistiquesUtilisateurInscrit[]
+  > {
+    return Promise.all(
+      Array.from(this.entites.values()).map(async (aidant) => {
+        const relation =
+          await this.entrepotRelation.trouveObjetsLiesAUtilisateur(
+            aidant.identifiant
+          );
+        return { ...aidant, nombreDiagnostics: relation.length };
+      })
+    );
   }
 }

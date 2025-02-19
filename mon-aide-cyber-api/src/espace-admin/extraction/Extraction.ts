@@ -7,6 +7,7 @@ import {
 import { EntrepotDemandeAideLecture } from '../../gestion-demandes/aide/DemandeAide';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { EntrepotStatistiquesAidant } from '../../statistiques/aidant/StastistiquesAidant';
+import { EntrepotStatistiquesUtilisateurInscrit } from '../../statistiques/utilisateur-inscrit/StatistiquesUtilisateurInscrit';
 
 export type Entete<T> = { entete: string; clef: keyof T };
 
@@ -61,6 +62,18 @@ type RepresentationStatistiquesAidant = RepresentationRapport<
   StatistiquesAidant
 >;
 
+type RepresentationStatistiquesUtilisateurInscrit = RepresentationRapport<
+  ListeDesUtilisateursInscrits,
+  StatistiquesUtilisateurInscrit
+>;
+
+export type StatistiquesUtilisateurInscrit = {
+  nomPrenom: string;
+  email: string;
+  nombreDiagnostics: number;
+};
+export type ListeDesUtilisateursInscrits = StatistiquesUtilisateurInscrit[];
+
 class ExtractionMAC implements Extraction {
   constructor(private readonly parametres: Parametres) {}
 
@@ -76,19 +89,16 @@ class ExtractionMAC implements Extraction {
       demandesEnCours,
       rapport
     );
-    const demandesAide = this.ajouteLesDemandesAide(
-      this.parametres.entrepotDemandesAide,
-      rapport
-    );
-    const listeDesAidants = this.ajouteLaListeDesAidants(
-      this.parametres.entrepotStatistiquesAidant,
-      rapport
-    );
+    const demandesAide = this.ajouteLesDemandesAide(rapport);
+    const listeDesAidants = this.ajouteLaListeDesAidants(rapport);
+    const listeDesUtilisateursInscrits =
+      this.ajouteLaListeDesUtilisateursInscrits(rapport);
     return Promise.all([
       demandesDevenirAidant,
       demandesAvantArbitrage,
       demandesAide,
       listeDesAidants,
+      listeDesUtilisateursInscrits,
     ])
       .then(() => rapport.genere())
       .catch((erreur) => Promise.reject(erreur));
@@ -145,11 +155,8 @@ class ExtractionMAC implements Extraction {
       });
   }
 
-  private async ajouteLesDemandesAide<T>(
-    entrepotDemandesAide: EntrepotDemandeAideLecture,
-    rapport: Rapport<T>
-  ) {
-    await entrepotDemandesAide.tous().then((demandes) =>
+  private async ajouteLesDemandesAide<T>(rapport: Rapport<T>) {
+    await this.parametres.entrepotDemandesAide.tous().then((demandes) =>
       rapport.ajoute<DemandesAide, RepresentationDemandeAide>({
         entetes: [{ entete: 'Date de la demande', clef: 'dateDemande' }],
         intitule: 'Demandes Aide',
@@ -161,11 +168,8 @@ class ExtractionMAC implements Extraction {
     );
   }
 
-  private async ajouteLaListeDesAidants<T>(
-    entrepotStatistiquesAidant: EntrepotStatistiquesAidant,
-    rapport: Rapport<T>
-  ) {
-    await entrepotStatistiquesAidant
+  private async ajouteLaListeDesAidants<T>(rapport: Rapport<T>) {
+    await this.parametres.entrepotStatistiquesAidant
       .rechercheAidantAvecNombreDeDiagnostics()
       .then((statistiques) =>
         rapport.ajoute<ListeDesAidants, RepresentationStatistiquesAidant>({
@@ -190,12 +194,39 @@ class ExtractionMAC implements Extraction {
         })
       );
   }
+
+  private async ajouteLaListeDesUtilisateursInscrits<T>(rapport: Rapport<T>) {
+    await this.parametres.entrepotStatistiquesUtilisateurInscrit
+      .rechercheUtilisateursInscritsAvecNombreDeDiagnostics()
+      .then((statistiques) =>
+        rapport.ajoute<
+          ListeDesUtilisateursInscrits,
+          RepresentationStatistiquesUtilisateurInscrit
+        >({
+          entetes: [
+            { entete: 'Nom Prénom', clef: 'nomPrenom' },
+            { entete: 'Mail', clef: 'email' },
+            {
+              entete: 'Nombre de diagnostics effectués',
+              clef: 'nombreDiagnostics',
+            },
+          ],
+          intitule: 'Liste des Utilisateurs Inscrits',
+          valeur: statistiques.map((stat) => ({
+            nomPrenom: stat.nomPrenom,
+            email: stat.email,
+            nombreDiagnostics: stat.nombreDiagnostics,
+          })),
+        })
+      );
+  }
 }
 
 type Parametres = {
   entrepotDemandes: EntrepotDemandeDevenirAidant;
   entrepotDemandesAide: EntrepotDemandeAideLecture;
   entrepotStatistiquesAidant: EntrepotStatistiquesAidant;
+  entrepotStatistiquesUtilisateurInscrit: EntrepotStatistiquesUtilisateurInscrit;
 };
 
 export const uneExtraction = (parametres: Parametres) =>

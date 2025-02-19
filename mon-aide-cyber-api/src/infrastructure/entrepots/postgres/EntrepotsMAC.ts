@@ -30,6 +30,8 @@ import {
 import { EntrepotDemandeAideLecturePostgres } from './EntrepotDemandeAideLecturePostgres';
 import { EntrepotStatistiquesAidant } from '../../../statistiques/aidant/StastistiquesAidant';
 import { EntrepotStatistiquesAidantPostgres } from './EntrepotStatistiquesAidantPostgres';
+import { EntrepotStatistiquesUtilisateurInscrit } from '../../../statistiques/utilisateur-inscrit/StatistiquesUtilisateurInscrit';
+import { EntrepotStatistiquesUtilisateursInscritsPostgres } from './EntrepotStatistiquesUtilisateursInscritsPostgres';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -61,7 +63,10 @@ export class EntrepotsMAC implements Entrepots {
     new EntrepotDemandeAideLecturePostgres();
   private entrepotStatistiquesAidant: EntrepotStatistiquesAidant =
     new EntrepotStatistiquesAidantPostgres(adaptateurServiceChiffrement());
-
+  private entrepotStatistiquesUtilisateurInscrit: EntrepotStatistiquesUtilisateurInscrit =
+    new EntrepotStatistiquesUtilisateursInscritsPostgres(
+      adaptateurServiceChiffrement()
+    );
   diagnostic(): EntrepotDiagnostic {
     return this.entrepotDiagnostic;
   }
@@ -77,10 +82,10 @@ export class EntrepotsMAC implements Entrepots {
   demandesAides(): EntrepotDemandeAide {
     return this.entrepotAide;
   }
+
   demandesDevenirAidant(): EntrepotDemandeDevenirAidant {
     return this.entrepotDemandeDevenirAidant;
   }
-
   statistiques(): EntrepotStatistiques {
     return this.entrepotStatistiques;
   }
@@ -115,5 +120,9 @@ export class EntrepotsMAC implements Entrepots {
 
   statistiquesAidant(): EntrepotStatistiquesAidant {
     return this.entrepotStatistiquesAidant;
+  }
+
+  statistiquesUtilisateurInscrit(): EntrepotStatistiquesUtilisateurInscrit {
+    return this.entrepotStatistiquesUtilisateurInscrit;
   }
 }
