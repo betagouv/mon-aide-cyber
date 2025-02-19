@@ -1,8 +1,145 @@
-- nom: 'Asso nationale'
-  urlSite: 'http://...'
-- nom: 'Mon asso'
-  urlSite: 'http://...'
-- nom: 'Mon asso'
-  urlSite: 'http://...'
-- nom: 'Mon asso2'
-  urlSite: 'http://...'
+national:
+  - nom: 'AFCDP (l’Association Française des Correspondants à la protection des Données à caractère Personnel)'
+    urlSite: 'https://afcdp.net/'
+  - nom: 'Agence du programme spatial européen (EUSPA)'
+    urlSite: 'https://www.euspa.europa.eu/'
+  - nom: 'CEFCYS (Cercle des Femmes de la Cyber Sécurité)'
+    urlSite: 'https://cefcys.fr/'
+  - nom: 'CESIN (Club des Experts de la Sécurité de l’Information et du Numérique)'
+    urlSite: 'https://cesin.fr/'
+  - nom: 'Club EBIOS'
+    urlSite: 'https://club-ebios.org/site/'
+  - nom: 'Le Clusif'
+    urlSite: 'https://clusif.fr/'
+  - nom: 'Nothing 2 Hide'
+    urlSite: 'https://nothing2hide.org/fr/'
+  - nom: 'Rsync Association'
+    urlSite: 'https://www.rsync.link/'
+  - nom: 'Women in Cybersecurity (Wycis)'
+    urlSite: 'https://www.wicys.org/wicys-france-affiliate/'
+regional:
+  auvergneRhoneAlpes:
+    nom: 'Auvergne-Rhône-Alpes'
+    associations:
+      - nom: 'ADIRA'
+        urlSite: 'https://www.adira.com/'
+      - nom: 'Clusir Auvergne Rhône Alpes'
+        urlSite: 'https://www.clusir-ara.fr/page/1857959-accueil'
+      - nom: 'Digital League'
+        urlSite: 'https://digital-league.org/'
+      - nom: 'Minalogic'
+        urlSite: 'https://www.minalogic.com/'
+  bourgogneFranceComte:
+    nom: 'Bourgogne-Franche-Comté'
+    associations:
+  bretagne:
+    nom: 'Bretagne'
+    associations:
+      - nom: 'Campus Bretagne cyberAlliance'
+        urlSite: 'https://www.cyberalliance.bzh/'
+      - nom: 'Clusir Bretagne'
+        urlSite: 'https://www.clusir.bzh/fr/'
+      - nom: 'GACYB Bretagne'
+        urlSite: 'https://www.gacyb.bzh/'
+  centreValDeLoire:
+    nom: 'Centre-Val de Loire'
+    associations:
+      - nom: 'ADIRC'
+        urlSite: 'https://www.adirc.fr/page- 2721038accueil'
+      - nom: 'CybeRéponse'
+        urlSite: 'https://www.cybereponse.fr/'
+      - nom: 'Digital Loire Valley'
+        urlSite: 'https://digital.loirevalley.co/'
+      - nom: 'Loire et Cher Tech'
+        urlSite: 'https://www.loiretchertech.fr/'
+  corse:
+    nom: 'Corse'
+    associations:
+  grandEst:
+    nom: 'Grand Est'
+    associations:
+  hautsDeFrance:
+    nom: 'Hauts de France'
+    associations:
+  ileDeFrance:
+    nom: 'Île de France'
+    associations:
+      - nom: 'APRN (Association pour la Prévention des Risques Numériques)'
+        urlSite: 'https://www.prevention-numerique.fr/'
+  normandie:
+    nom: 'Normandie'
+    associations:
+  nouvelleAquitaine:
+    nom: 'Nouvelle Aquitaine'
+    associations:
+      - nom: 'Aliénor Cybersécurité'
+        urlSite: 'https://www.linkedin.com/company/alienor-cybersecurite-association/'
+      - nom: 'Campus régional de cybersécurité de Nouvelle-Aquitaine'
+        urlSite: 'https://www.campuscyber-na.fr/'
+      - nom: 'Collectif Rochefort Numérique'
+        urlSite: 'https://www.rochefort-numerique.fr/'
+      - nom: 'SPN'
+        urlSite: 'https://www.spn.asso.fr/'
+  occitanie:
+    nom: 'Occitanie'
+    associations:
+      - nom: 'La Mélée'
+        urlSite: 'https://www.lamelee.com/'
+  paysDeLaLoire:
+    nom: 'Pays de la Loire'
+    associations:
+      - nom: 'Assistic'
+        urlSite: 'https://assistic.fr/'
+      - nom: 'ADN Ouest'
+        urlSite: 'https://www.adnouest.org/'
+      - nom: 'Proxinnov'
+        urlSite: 'https://www.proxinnov.com/'
+  provenceAlpesCotesDAzur:
+    nom: 'Provence-Alpes-Côte d’Azur'
+    associations:
+      - nom: 'Campus régional de cybersécurité Sophia Antipolis'
+        urlSite: 'https://univ-cotedazur.fr/'
+      - nom: 'Campus régional de cybersécurité Toulon'
+        urlSite: 'https://www.univ-tln.fr/'
+      - nom: 'Clusir Sud Paca'
+        urlSite: 'https://clusir-sud.fr/'
+      - nom: 'Telecom Valley'
+        urlSite: 'https://www.telecom-valley.fr/'
+dromCom:
+  guadeloupe:
+    nom: 'Guadeloupe'
+    associations:
+      - nom: 'Nautik NBT'
+        urlSite: 'https://www.nautik-nbt.gp/'
+  martinique:
+    nom: 'Martinique'
+    associations:
+  guyane:
+    nom: 'Guyane'
+    associations:
+  laReunion:
+    nom: 'La réunion'
+    associations:
+      - nom: 'Clusir Réunion Océan Indien '
+        urlSite: 'https://clusir-roi.org/'
+  mayotte:
+    nom: 'Mayotte'
+    associations:
+  saintPierreEtMiquelon:
+    nom: 'Collectivité de Saint-Pierre et Miquelon'
+    associations:
+  saintBarthelemy:
+    nom: 'Collectivité de Saint-Barthélémy'
+    associations:
+  saintMartin:
+    nom: 'Collectivité de Saint-Martin'
+    associations:
+  wallisFutuna:
+    nom: 'Collectivité de Wallis & Futuna'
+    associations:
+  polynesieFrancaise:
+    nom: 'Collectivité de Polynésie Française'
+    associations:
+  nouvelleCaledonie:
+    nom: 'Collectivité de Nouvelle-Calédonie'
+    associations:

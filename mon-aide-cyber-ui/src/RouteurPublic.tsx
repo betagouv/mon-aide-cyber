@@ -24,6 +24,7 @@ import { EcranDemandeAutodiagnostic } from './domaine/auto-diagnostic/EcranDeman
 import { EcranDemandeDevenirAidant } from './domaine/gestion-demandes/parcours-aidant/EcranDemandeDevenirAidant.tsx';
 import { EcranUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/vitrine/EcranUtilisationDuService.tsx';
 import { EcranRealiserDesDiagnosticsANSSI } from './domaine/vitrine/ecran-realiser-des-diagnostics-anssi/EcranRealiserDesDiagnosticsANSSI.tsx';
+import { EcranRelaisAssociatifs } from './domaine/vitrine/ecran-relais-associatifs/EcranRelaisAssociatifs.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -33,6 +34,7 @@ export const RouteurPublic = () => {
         <Route path="accessibilite" element={<EcranAccessibilite />} />
         <Route path="cgu" element={<ComposantCGU />} />
         <Route path="charte-aidant" element={<EcranCharteAidant />} />
+        <Route path="relais-associatifs" element={<EcranRelaisAssociatifs />} />
         <Route path="beneficier-du-dispositif">
           <Route path="annuaire">
             <Route index element={<EcranAnnuaire />} />

@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { ReponseHATEOAS } from '../domaine/Lien';
+import { Action, ReponseHATEOAS } from '../domaine/Lien';
 import { useMACAPI } from '../fournisseurs/api/useMACAPI';
 import { useContexteNavigation } from './useContexteNavigation';
 import { useNavigationMAC } from '../fournisseurs/hooks';
 import { useQuery } from '@tanstack/react-query';
 
-export const useRecupereContexteNavigation = (contexte: string) => {
+export const useRecupereContexteNavigation = (contexte: Action | string) => {
   const macAPI = useMACAPI();
   const navigationMAC = useNavigationMAC();
   const navigationUtilisateur = useContexteNavigation(macAPI);
