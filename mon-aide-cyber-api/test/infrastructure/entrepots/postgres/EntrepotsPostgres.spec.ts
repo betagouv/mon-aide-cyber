@@ -65,7 +65,10 @@ import {
   unUtilisateurInscrit,
 } from '../../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { adaptateurServiceChiffrement } from '../../../../src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
-import { unTupleAidantInitieDiagnostic } from '../../../../src/diagnostic/tuples';
+import {
+  unTupleAidantInitieDiagnostic,
+  unTupleUtilisateurInscritInitieDiagnostic,
+} from '../../../../src/diagnostic/tuples';
 import { ProfilAidant } from '../../../../src/espace-aidant/profil/profilAidant';
 import { EntrepotProfilAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotProfilAidantPostgres';
 import knexfile from './../../../../src/infrastructure/entrepots/postgres/knexfile';
@@ -81,6 +84,7 @@ import {
 import { ServiceDeChiffrement } from '../../../../src/securite/ServiceDeChiffrement';
 import { EntrepotStatistiquesAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesAidantPostgres';
 import { StatistiquesAidant as AidantExtraction } from '../../../../src/statistiques/aidant/StastistiquesAidant';
+import { EntrepotStatistiquesUtilisateursInscritsPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesUtilisateursInscritsPostgres';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {
@@ -1739,5 +1743,83 @@ describe('Entrepot Utilisateur Inscrit', () => {
       ).tous();
       expect(aidants).toStrictEqual<UtilisateurInscrit[]>([utilisateurInscrit]);
     });
+  });
+});
+
+describe('EntrepoStatistiquesUtilisateurInscrit', () => {
+  beforeEach(async () => {
+    await nettoieLaBaseDeDonneesAidants();
+    await nettoieLaBaseDeDonneesRelations();
+  });
+  const entrepotRelation = new EntrepotRelationPostgres();
+
+  it('Récupère les Aidants avec leur nombre de diagnostics', async () => {
+    const premierUtilisateur = unUtilisateurInscrit().construis();
+    const secondUtilisateur = unUtilisateurInscrit().construis();
+    const troisiemeUtilisateur = unUtilisateurInscrit().construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [premierUtilisateur.nomPrenom, 'abcd'],
+        [premierUtilisateur.email, 'efgh'],
+        [secondUtilisateur.nomPrenom, 'ijkl'],
+        [secondUtilisateur.email, 'mnop'],
+        [troisiemeUtilisateur.nomPrenom, 'qrst'],
+        [troisiemeUtilisateur.email, 'uvwx'],
+      ])
+    );
+    const entrepotAidant = new EntrepotAidantPostgres(serviceDeChiffrement);
+    const entrepotUtilisateurInscritPostgres =
+      new EntrepotUtilisateurInscritPostgres(serviceDeChiffrement);
+    await entrepotUtilisateurInscritPostgres.persiste(premierUtilisateur);
+    await entrepotUtilisateurInscritPostgres.persiste(secondUtilisateur);
+    await entrepotUtilisateurInscritPostgres.persiste(troisiemeUtilisateur);
+    await entrepotRelation.persiste(
+      unTupleUtilisateurInscritInitieDiagnostic(
+        premierUtilisateur.identifiant,
+        crypto.randomUUID()
+      )
+    );
+    await entrepotRelation.persiste(
+      unTupleUtilisateurInscritInitieDiagnostic(
+        premierUtilisateur.identifiant,
+        crypto.randomUUID()
+      )
+    );
+    await entrepotRelation.persiste(
+      unTupleUtilisateurInscritInitieDiagnostic(
+        secondUtilisateur.identifiant,
+        crypto.randomUUID()
+      )
+    );
+    await entrepotAidant.persiste(unAidant().construis());
+
+    const entrepotStatistiquesUtilisateurInscrit =
+      new EntrepotStatistiquesUtilisateursInscritsPostgres(
+        serviceDeChiffrement
+      );
+
+    assert.sameDeepMembers(
+      await entrepotStatistiquesUtilisateurInscrit.rechercheUtilisateursInscritsAvecNombreDeDiagnostics(),
+      [
+        {
+          identifiant: premierUtilisateur.identifiant,
+          nomPrenom: premierUtilisateur.nomPrenom,
+          email: premierUtilisateur.email,
+          nombreDiagnostics: 2,
+        },
+        {
+          identifiant: secondUtilisateur.identifiant,
+          nomPrenom: secondUtilisateur.nomPrenom,
+          email: secondUtilisateur.email,
+          nombreDiagnostics: 1,
+        },
+        {
+          identifiant: troisiemeUtilisateur.identifiant,
+          nomPrenom: troisiemeUtilisateur.nomPrenom,
+          email: troisiemeUtilisateur.email,
+          nombreDiagnostics: 0,
+        },
+      ]
+    );
   });
 });
