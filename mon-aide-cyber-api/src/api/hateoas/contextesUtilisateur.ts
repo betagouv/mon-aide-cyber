@@ -27,6 +27,7 @@ import {
 } from './mon-espace';
 import { lancerDiagnostic } from './diagnostic';
 import { rechercheEntreprise } from './rechercheEntreprise';
+import { afficherAssociations } from './afficherAssociations';
 
 type ClefContexte =
   | 'aidant'
@@ -69,6 +70,9 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
   'se-deconnecter-avec-pro-connect': { ...seDeconnecterDeProConnect },
   'afficher-statistiques': {
     ...afficherStatistiques,
+  },
+  'afficher-associations': {
+    ...afficherAssociations,
   },
   'afficher-annuaire-aidants': {
     ...afficherAnnuaireAidants,
