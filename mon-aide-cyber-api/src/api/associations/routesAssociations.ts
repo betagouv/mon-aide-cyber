@@ -5,9 +5,24 @@ import { adaptateurAssociations } from '../../adaptateurs/adaptateurAssociations
 import path from 'node:path';
 import { ReponseHATEOASEnErreur } from '../hateoas/hateoas';
 
-export type Association = {
+type Association = {
   nom: string;
-  siteUrl: string;
+  urlSite: string;
+};
+
+type RegionEtSesAssociations = {
+  nom: string;
+  associations: Association[];
+};
+
+type AssociationsParRegion = {
+  [nom: string]: RegionEtSesAssociations;
+};
+
+export type ReferentielAssociations = {
+  national?: Association[];
+  regional?: AssociationsParRegion;
+  dromCom?: AssociationsParRegion;
 };
 
 export class ErreurLectureReferentielAssociations extends Error {
@@ -23,7 +38,7 @@ export const routesAssociations = (__configuration: ConfigurationServeur) => {
     '/',
     async (
       __requete: Request,
-      reponse: Response<Association[] | ReponseHATEOASEnErreur>,
+      reponse: Response<ReferentielAssociations | ReponseHATEOASEnErreur>,
       suite: NextFunction
     ) => {
       try {
