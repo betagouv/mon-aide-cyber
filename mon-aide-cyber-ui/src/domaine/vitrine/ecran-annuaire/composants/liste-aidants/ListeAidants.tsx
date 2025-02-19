@@ -76,8 +76,8 @@ export const CartesAidant = ({
     <div>
       <p>
         Il y a actuellement <b>{nombreAidants}</b> Aidant
-        {afficheUnPlurielSiMultiplesResultats(aidants)} ayant souhaité
-        apparaître publiquement dans l&apos;annuaire de MonAideCyber.
+        {afficheUnPlurielSiMultiplesResultats(aidants)} cyber disponible
+        {afficheUnPlurielSiMultiplesResultats(aidants)} sur votre territoire.
       </p>
       <div className="cartes-aidants">
         {aidants?.map((aidant) => (
