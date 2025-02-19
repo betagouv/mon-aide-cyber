@@ -9,8 +9,9 @@ export const HeroAnnuaire = () => {
         <section>
           <TypographieH1>Annuaire des Aidants</TypographieH1>
           <p>
-            Consultez l’annuaire des aidants MonAideCyber, formés et outillés
-            par l’ANSSI pour réaliser des diagnostics sur tout le territoire.
+            Consultez l’annuaire des Aidants MonAideCyber, référencés et
+            outillés par l’ANSSI pour réaliser des diagnostics sur tout le
+            territoire.
           </p>
         </section>
         <section>

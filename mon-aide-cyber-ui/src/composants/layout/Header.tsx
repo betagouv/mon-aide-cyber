@@ -27,6 +27,17 @@ export const Header = ({
     {
       route: '/beneficier-du-dispositif/etre-aide',
       nom: 'Bénéficier du dispositif',
+      clef: 770,
+      enfants: [
+        {
+          route: '/beneficier-du-dispositif/etre-aide',
+          nom: 'Faire une demande',
+        },
+        {
+          route: '/beneficier-du-dispositif/annuaire',
+          nom: 'Annuaire des aidants cyber',
+        },
+      ],
     },
     {
       route: '/realiser-des-diagnostics-anssi',
