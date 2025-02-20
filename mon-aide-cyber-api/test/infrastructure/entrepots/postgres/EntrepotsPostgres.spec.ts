@@ -91,6 +91,9 @@ describe('Entrepots Postgres', () => {
     const entrepotAidant = new EntrepotAidantPostgres(
       new ServiceDeChiffrementClair()
     );
+    const entrepotUtilisateurInscrit = new EntrepotUtilisateurInscritPostgres(
+      new ServiceDeChiffrementClair()
+    );
     const entrepotDiagnosticPostgres = new EntrepotDiagnosticPostgres();
     const entrepotRelationPostgres = new EntrepotRelationPostgres();
 
@@ -111,6 +114,9 @@ describe('Entrepots Postgres', () => {
       const quatriemeDiagnosticEnGironde = unDiagnosticEnGironde().construis();
       await entrepotAidant.persiste(unAidant().construis());
       await entrepotAidant.persiste(unAidant().construis());
+      await entrepotUtilisateurInscrit.persiste(
+        unUtilisateurInscrit().construis()
+      );
       await entrepotDiagnosticPostgres.persiste(premierDiagnosticEnGironde);
       await entrepotDiagnosticPostgres.persiste(deuxiemeDiagnosticEnGironde);
       await entrepotDiagnosticPostgres.persiste(troisiemeDiagnosticEnGironde);
