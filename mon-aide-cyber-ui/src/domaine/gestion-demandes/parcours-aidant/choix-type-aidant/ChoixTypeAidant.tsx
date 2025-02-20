@@ -145,8 +145,12 @@ export const ChoixTypeAidant = ({
                 <div className="zone-choix-entite">
                   <div className="selecteur-type-aidant-saisie-entite">
                     <p className="fr-text--sm m-0">
-                      Contactez l’équipe MonAideCyber pour déterminer quels
-                      relais associatifs vous correspondent.
+                      Retrouvez la liste des relais associatifs recensés sur la
+                      page :{' '}
+                      <a href="/relais-associatifs" target="_blank">
+                        {import.meta.env['VITE_URL_MAC']}
+                        /relais-associatifs
+                      </a>
                       <br />
                       Vous pouvez aussi proposer un partenariat. <br />
                       Envoyez un mail à : <LienMailtoMAC />
