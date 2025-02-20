@@ -67,11 +67,14 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
   }
 
   private entiteAidant(demande: DemandeDevenirAidant) {
-    if (
+    const entiteNonValide =
       demande.entite &&
-      (!demande.entite.nom || demande.entite.nom.trim() === '') &&
-      (!demande.entite.siret || demande.entite.siret.trim() === '')
-    ) {
+      demande.entite.type !== 'Association' &&
+      (!demande.entite.nom ||
+        !demande.entite.siret ||
+        demande.entite.nom.trim() === '' ||
+        demande.entite.siret.trim() === '');
+    if (!demande.entite || entiteNonValide) {
       throw new ErreurCreationEspaceAidant(
         "Les informations de l'entité de l'Aidant doivent être fournies"
       );

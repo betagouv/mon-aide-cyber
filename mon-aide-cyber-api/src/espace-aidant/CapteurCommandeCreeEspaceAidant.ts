@@ -88,8 +88,8 @@ export class CapteurCommandeCreeEspaceAidant
             }),
             ...(commande.entite && {
               entite: {
-                nom: commande.entite.nom!,
-                siret: commande.entite.siret!,
+                ...(commande.entite.nom && { nom: commande.entite.nom }),
+                ...(commande.entite.siret && { siret: commande.entite.siret }),
                 type: commande.entite.type,
               },
             }),

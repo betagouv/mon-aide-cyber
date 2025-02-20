@@ -183,7 +183,9 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
 
   describe('Quand une requête POST est reçue sur /api/demandes/devenir-aidant/creation-espace-aidant', async () => {
     it('Crée l’espace de l’Aidant', async () => {
-      const demande = unConstructeurDeDemandeDevenirAidant().construis();
+      const demande = unConstructeurDeDemandeDevenirAidant()
+        .avecUneEntite('Association')
+        .construis();
       await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-08-08T13:22:31'))
@@ -224,6 +226,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           typesEntites: [],
           nomAffichageAnnuaire: aidants[0].preferences.nomAffichageAnnuaire,
         },
+        entite: demande.entite!,
         consentementAnnuaire: false,
         dateSignatureCharte: demande.date,
       });
@@ -233,6 +236,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       const aidant = unAidant().construis();
       const demande = unConstructeurDeDemandeDevenirAidant()
         .avecUnMail(aidant.email)
+        .avecUneEntite('Association')
         .construis();
       await testeurMAC.entrepots.aidants().persiste(aidant);
       await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
