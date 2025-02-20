@@ -38,6 +38,7 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
 
   it('Prend en compte la date de signature de la charte depuis la demande', async () => {
     const demande = unConstructeurDeDemandeDevenirAidant()
+      .avecUneEntite('ServicePublic')
       .avecUnMail('jean.dupont@email.com')
       .construis();
     await entrepots.demandesDevenirAidant().persiste(demande);
@@ -58,7 +59,9 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
 
   it('La demande a été traitée', async () => {
     FournisseurHorlogeDeTest.initialise(new Date());
-    const demande = unConstructeurDeDemandeDevenirAidant().construis();
+    const demande = unConstructeurDeDemandeDevenirAidant()
+      .avecUneEntite('Association')
+      .construis();
     await entrepots.demandesDevenirAidant().persiste(demande);
 
     await new CapteurSagaDemandeAidantCreeEspaceAidant(
@@ -79,13 +82,16 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       prenom: demande.prenom,
       mail: demande.mail,
       departement: demande.departement,
+      entite: demande.entite!,
       statut: StatutDemande.TRAITEE,
     });
   });
 
   it("Publie l'événement DEMANDE_DEVENIR_AIDANT_FINALISEE", async () => {
     FournisseurHorlogeDeTest.initialise(new Date());
-    const demande = unConstructeurDeDemandeDevenirAidant().construis();
+    const demande = unConstructeurDeDemandeDevenirAidant()
+      .avecUneEntite('ServiceEtat')
+      .construis();
     await entrepots.demandesDevenirAidant().persiste(demande);
     adaptateurUUID.genereUUID = () => 'c00ba882-579e-4cea-9a83-3dfefe1081f4';
 
@@ -119,6 +125,7 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
     );
     const demande = unConstructeurDeDemandeDevenirAidant()
       .avecUnMail('jean.dupont@email.com')
+      .avecUneEntite('Association')
       .construis();
     await entrepots.demandesDevenirAidant().persiste(demande);
 
@@ -173,9 +180,7 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
     });
 
     it("Remonte une erreur si toutes les informations de l'entité de l'Aidant ne sont pas fournies", async () => {
-      const demande = unConstructeurDeDemandeDevenirAidant()
-        .pourUneDemandeEnAttenteAdhesion()
-        .construis();
+      const demande = unConstructeurDeDemandeDevenirAidant().construis();
       await entrepots.demandesDevenirAidant().persiste(demande);
 
       const execution = new CapteurSagaDemandeAidantCreeEspaceAidant(
@@ -187,9 +192,98 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
         type: 'SagaDemandeAidantEspaceAidant',
       });
 
-      expect(execution).rejects.toThrowError(
+      await expect(execution).rejects.toThrowError(
         "Les informations de l'entité de l'Aidant doivent être fournies"
       );
+    });
+
+    it('Accepte la création d’un espace pour une demande en attente d’adhésion', async () => {
+      const demande = unConstructeurDeDemandeDevenirAidant()
+        .pourUneDemandeEnAttenteAdhesion()
+        .construis();
+      await entrepots.demandesDevenirAidant().persiste(demande);
+
+      await new CapteurSagaDemandeAidantCreeEspaceAidant(
+        entrepots,
+        busCommande,
+        busEvenementDeTest
+      ).execute({
+        idDemande: demande.identifiant,
+        type: 'SagaDemandeAidantEspaceAidant',
+      });
+
+      expect(
+        (await entrepots.demandesDevenirAidant().lis(demande.identifiant))
+          .statut
+      ).toStrictEqual(StatutDemande.TRAITEE);
+      const aidant = (await entrepots.aidants().tous())[0];
+      expect(aidant.entite).toStrictEqual<EntiteAidant>({
+        type: demande.entite!.type,
+      });
+    });
+
+    describe('Vérifie la validité de l’entité', () => {
+      it('N’accepte pas la création d’un espace Aidant pour une demande dont l’entité n’est pas une Association et pour laquelle il manque le nom et le siret', async () => {
+        const demande = unConstructeurDeDemandeDevenirAidant().construis();
+        await entrepots
+          .demandesDevenirAidant()
+          .persiste({ ...demande, entite: { type: 'ServicePublic' } });
+
+        const execution = new CapteurSagaDemandeAidantCreeEspaceAidant(
+          entrepots,
+          busCommande,
+          busEvenementDeTest
+        ).execute({
+          idDemande: demande.identifiant,
+          type: 'SagaDemandeAidantEspaceAidant',
+        });
+
+        await expect(execution).rejects.toThrowError(
+          "Les informations de l'entité de l'Aidant doivent être fournies"
+        );
+      });
+
+      it('N’accepte pas la création d’un espace Aidant pour une demande dont l’entité n’est pas une Association et pour laquelle le nom est vide', async () => {
+        const demande = unConstructeurDeDemandeDevenirAidant().construis();
+        await entrepots.demandesDevenirAidant().persiste({
+          ...demande,
+          entite: { type: 'ServicePublic', nom: '  ', siret: '0123456789' },
+        });
+
+        const execution = new CapteurSagaDemandeAidantCreeEspaceAidant(
+          entrepots,
+          busCommande,
+          busEvenementDeTest
+        ).execute({
+          idDemande: demande.identifiant,
+          type: 'SagaDemandeAidantEspaceAidant',
+        });
+
+        await expect(execution).rejects.toThrowError(
+          "Les informations de l'entité de l'Aidant doivent être fournies"
+        );
+      });
+
+      it('N’accepte pas la création d’un espace Aidant pour une demande dont l’entité n’est pas une Association et pour laquelle le siret est vide', async () => {
+        const demande = unConstructeurDeDemandeDevenirAidant().construis();
+        await entrepots.demandesDevenirAidant().persiste({
+          ...demande,
+          entite: { type: 'ServicePublic', siret: '  ', nom: 'BetaGouv' },
+        });
+
+        const execution = new CapteurSagaDemandeAidantCreeEspaceAidant(
+          entrepots,
+          busCommande,
+          busEvenementDeTest
+        ).execute({
+          idDemande: demande.identifiant,
+          type: 'SagaDemandeAidantEspaceAidant',
+        });
+
+        await expect(execution).rejects.toThrowError(
+          "Les informations de l'entité de l'Aidant doivent être fournies"
+        );
+      });
     });
 
     it('Prend en compte la date de signature des CGU à la date de la demande', async () => {
