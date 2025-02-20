@@ -207,7 +207,7 @@ export const lesContextesUtilisateursNouveauParcoursExistants: ContextesUtilisat
         contexte: 'demande-devenir-aidant:finalise-creation-espace-aidant',
       },
       liens: {
-        'finalise-creation-nouvel-espace-aidant': {
+        'finalise-creation-espace-aidant': {
           url: '/api/demandes/devenir-aidant/creation-espace-aidant',
           methode: 'POST',
         },

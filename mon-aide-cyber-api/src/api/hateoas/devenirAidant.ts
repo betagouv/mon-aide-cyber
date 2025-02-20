@@ -1,23 +1,13 @@
 import { ContexteSpecifique } from './contextesUtilisateur';
 import { Options } from './hateoas';
-import { estDateNouveauParcoursDemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/nouveauParcours';
 import { rechercheEntreprise } from './rechercheEntreprise';
 
 export const finaliseCreationEspaceAidant: () => ContexteSpecifique = () => ({
   'finalise-creation-espace-aidant': {
-    ...(estDateNouveauParcoursDemandeDevenirAidant()
-      ? {
-          'finalise-creation-nouvel-espace-aidant': {
-            url: '/api/demandes/devenir-aidant/creation-espace-aidant',
-            methode: 'POST',
-          },
-        }
-      : {
-          'finalise-creation-espace-aidant': {
-            url: '/api/demandes/devenir-aidant/creation-espace-aidant',
-            methode: 'POST',
-          },
-        }),
+    'finalise-creation-espace-aidant': {
+      url: '/api/demandes/devenir-aidant/creation-espace-aidant',
+      methode: 'POST',
+    },
   },
 });
 
