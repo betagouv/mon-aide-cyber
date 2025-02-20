@@ -51,7 +51,7 @@ export const EcranCreationEspaceAidant = ({
   );
 
   const lienFinalisationEspaceAidant = useMoteurDeLiens(
-    'finalise-creation-nouvel-espace-aidant'
+    'finalise-creation-espace-aidant'
   );
 
   const { mutate, isSuccess } = useMutation({

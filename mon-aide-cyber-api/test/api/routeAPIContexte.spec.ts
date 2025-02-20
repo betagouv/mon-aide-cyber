@@ -45,7 +45,7 @@ describe('Route contexte', () => {
     expect(reponse.statusCode).toBe(200);
     expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
       liens: {
-        'finalise-creation-nouvel-espace-aidant': {
+        'finalise-creation-espace-aidant': {
           url: '/api/demandes/devenir-aidant/creation-espace-aidant',
           methode: 'POST',
         },
