@@ -50,10 +50,7 @@ export const EcranCreationEspaceAidant = ({
     'demande-devenir-aidant:finalise-creation-espace-aidant'
   );
 
-  const lienFinalisationEspaceAidantClassique = useMoteurDeLiens(
-    'finalise-creation-espace-aidant'
-  );
-  const lienFinalisationNouvelEspaceAidant = useMoteurDeLiens(
+  const lienFinalisationEspaceAidant = useMoteurDeLiens(
     'finalise-creation-nouvel-espace-aidant'
   );
 
@@ -63,27 +60,13 @@ export const EcranCreationEspaceAidant = ({
       if (!parametresMutation.token) {
         throw new Error('Une erreur est survenue');
       }
-      const lienAUtiliser =
-        lienFinalisationNouvelEspaceAidant.ressource ||
-        lienFinalisationEspaceAidantClassique.ressource;
-
-      const corps = {
-        ...(lienFinalisationNouvelEspaceAidant.accedeALaRessource
-          ? {
-              token: token,
-            }
-          : {
-              cguSignees: parametresMutation.cguSignees,
-              motDePasse: parametresMutation.motDePasse!,
-              confirmationMotDePasse: parametresMutation.confirmationMotDePasse,
-              token,
-            }),
-      };
       const parametresAPI =
         constructeurParametresAPI<CorpsCreationEspaceAidant>()
-          .url(lienAUtiliser.url)
-          .methode(lienAUtiliser.methode!)
-          .corps(corps)
+          .url(lienFinalisationEspaceAidant.ressource.url)
+          .methode(lienFinalisationEspaceAidant.ressource.methode!)
+          .corps({
+            token: token,
+          })
           .construis();
 
       return macAPI.execute<
@@ -93,7 +76,7 @@ export const EcranCreationEspaceAidant = ({
       >(parametresAPI, async (json) => await json);
     },
     onSuccess: () => {
-      if (lienFinalisationNouvelEspaceAidant.accedeALaRessource)
+      if (lienFinalisationEspaceAidant.accedeALaRessource)
         navigate('/connexion');
     },
   });
@@ -105,7 +88,7 @@ export const EcranCreationEspaceAidant = ({
     });
   };
 
-  if (lienFinalisationNouvelEspaceAidant.accedeALaRessource) {
+  if (lienFinalisationEspaceAidant.accedeALaRessource) {
     return (
       <main role="main" className="ecran-creation-espace-aidant">
         <div className="colonne-gauche">
