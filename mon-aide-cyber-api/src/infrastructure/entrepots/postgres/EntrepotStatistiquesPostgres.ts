@@ -17,6 +17,7 @@ export class EntrepotStatistiquesPostgres implements EntrepotStatistiques {
   async lis(): Promise<Statistiques> {
     const nombreAidants: Count = await this.knex
       .from('utilisateurs_mac')
+      .where('type', 'AIDANT')
       .count({ count: '*' })
       .first();
     const nombreDiagnostics: Count = await this.knex
