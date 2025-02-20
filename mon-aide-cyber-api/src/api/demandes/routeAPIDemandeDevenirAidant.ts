@@ -212,7 +212,6 @@ export const routesAPIDemandesDevenirAidant = (
         .publie<SagaDemandeAidantCreeEspaceAidant, void>({
           type: 'SagaDemandeAidantEspaceAidant',
           idDemande: demande,
-          motDePasse: requete.body.motDePasse,
         })
         .then(() =>
           reponse.status(201).json({

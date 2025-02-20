@@ -197,8 +197,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         'POST',
         '/api/demandes/devenir-aidant/creation-espace-aidant',
         {
-          motDePasse: 'mon_Mot-D3p4ssee',
-          confirmationMotDePasse: 'mon_Mot-D3p4ssee',
           token,
           cguSignees: true,
         }
@@ -214,18 +212,12 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           },
         },
       });
-      const utilisateurs = await testeurMAC.entrepots.utilisateurs().tous();
-      expect(utilisateurs).toHaveLength(1);
-      const utilisateur = utilisateurs[0];
-      expect(utilisateur.dateSignatureCGU).toStrictEqual(
-        FournisseurHorloge.maintenant()
-      );
       const aidants = await testeurMAC.entrepots.aidants().tous();
       expect(aidants[0]).toStrictEqual<Aidant>({
-        identifiant: utilisateur.identifiant,
+        identifiant: expect.any(String),
         dateSignatureCGU: FournisseurHorloge.maintenant(),
         email: demande.mail,
-        nomPrenom: utilisateur.nomPrenom,
+        nomPrenom: `${demande.prenom} ${demande.nom}`,
         preferences: {
           secteursActivite: [],
           departements: [demande.departement],
