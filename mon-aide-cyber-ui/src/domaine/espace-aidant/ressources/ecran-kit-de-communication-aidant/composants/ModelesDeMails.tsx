@@ -19,7 +19,7 @@ export const ModelesDeMails = () => {
           <br />
           En tant qu’Aidant cyber de votre territoire, je serai ravi de vous
           accompagner dans votre démarche de sécurisation cyber. Je vous propose
-          de <b>réaliser ensemble un diagnostic cyber</b> de 1er niveau. Ce
+          de <b>réaliser ensemble un diagnostic cyber de premier niveau</b>. Ce
           diagnostic <b>gratuit</b> prend la forme d’un échange qui s’appuie sur
           un questionnaire réalisé par l’ANSSI.
           <br />À la suite de ce diagnostic,{' '}

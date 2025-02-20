@@ -11,7 +11,7 @@ export const HeroDevenirAidant = () => {
           <TypographieH1>Devenir Aidant</TypographieH1>
           <p>
             Vous souhaitez accompagner des entités dans la réalisation d&apos;un
-            diagnostic de maturité cyber ? <br />
+            diagnostic cyber de premier niveau ? <br />
             Pour cela, rejoignez la communauté des Aidants MonAideCyber !
             Inscrivez-vous pour être Aidant cyber.
           </p>
