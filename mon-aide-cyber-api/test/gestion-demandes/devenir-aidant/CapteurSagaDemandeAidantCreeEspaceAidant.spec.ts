@@ -18,9 +18,7 @@ import {
   DemandeDevenirAidantEspaceAidantCree,
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
-import { Utilisateur } from '../../../src/authentification/Utilisateur';
 import { EntiteAidant } from '../../../src/espace-aidant/Aidant';
-import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 
 describe('Capteur de saga pour créer un espace Aidant correspondant à une demande', () => {
   let busEvenementDeTest = new BusEvenementDeTest();
@@ -38,39 +36,6 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
     );
   });
 
-  it('Crée un compte utilisateur', async () => {
-    FournisseurHorlogeDeTest.initialise(
-      new Date(Date.parse('2024-11-01T22:34:26'))
-    );
-    const demande = unConstructeurDeDemandeDevenirAidant()
-      .avecUnMail('jean.dupont@email.com')
-      .construis();
-    await entrepots.demandesDevenirAidant().persiste(demande);
-    const identifiantUtilisateur = crypto.randomUUID();
-    adaptateurUUID.genereUUID = () => identifiantUtilisateur;
-
-    await new CapteurSagaDemandeAidantCreeEspaceAidant(
-      entrepots,
-      busCommande,
-      busEvenementDeTest
-    ).execute({
-      idDemande: demande.identifiant,
-      motDePasse: 'toto12345',
-      type: 'SagaDemandeAidantEspaceAidant',
-    });
-
-    const utilisateur: Utilisateur = await entrepots
-      .utilisateurs()
-      .lis(identifiantUtilisateur);
-    expect(utilisateur).toStrictEqual<Utilisateur>({
-      dateSignatureCGU: FournisseurHorloge.maintenant(),
-      identifiant: identifiantUtilisateur,
-      identifiantConnexion: 'jean.dupont@email.com',
-      nomPrenom: `${demande.prenom} ${demande.nom}`,
-      motDePasse: 'toto12345',
-    });
-  });
-
   it('Prend en compte la date de signature de la charte depuis la demande', async () => {
     const demande = unConstructeurDeDemandeDevenirAidant()
       .avecUnMail('jean.dupont@email.com')
@@ -84,7 +49,6 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       busEvenementDeTest
     ).execute({
       idDemande: demande.identifiant,
-      motDePasse: 'toto12345',
       type: 'SagaDemandeAidantEspaceAidant',
     });
 
@@ -103,7 +67,6 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       busEvenementDeTest
     ).execute({
       idDemande: demande.identifiant,
-      motDePasse: 'un-mot-de-passe',
       type: 'SagaDemandeAidantEspaceAidant',
     });
 
@@ -132,7 +95,6 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       busEvenementDeTest
     ).execute({
       idDemande: demande.identifiant,
-      motDePasse: 'un-mot-de-passe',
       type: 'SagaDemandeAidantEspaceAidant',
     });
 
@@ -169,7 +131,6 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       busEvenementDeTest
     ).execute({
       idDemande: demande.identifiant,
-      motDePasse: 'Toto123',
       type: 'SagaDemandeAidantEspaceAidant',
     });
 
@@ -196,7 +157,6 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
         busEvenementDeTest
       ).execute({
         idDemande: demande.identifiant,
-        motDePasse: 'toto12345',
         type: 'SagaDemandeAidantEspaceAidant',
       });
 
@@ -224,38 +184,12 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
         busEvenementDeTest
       ).execute({
         idDemande: demande.identifiant,
-        motDePasse: 'toto12345',
         type: 'SagaDemandeAidantEspaceAidant',
       });
 
       expect(execution).rejects.toThrowError(
         "Les informations de l'entité de l'Aidant doivent être fournies"
       );
-    });
-
-    it("Ne crée pas d'utilisateur à partir du 31/01/2025", async () => {
-      adaptateurEnvironnement.nouveauParcoursDevenirAidant = () =>
-        '2025-01-31T00:00';
-      const demande = unConstructeurDeDemandeDevenirAidant()
-        .avecUnMail('jean.dupont@email.com')
-        .avecUneEntite('Association')
-        .construis();
-      await entrepots.demandesDevenirAidant().persiste(demande);
-
-      FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2025-01-31T11:15'))
-      );
-      await new CapteurSagaDemandeAidantCreeEspaceAidant(
-        entrepots,
-        busCommande,
-        busEvenementDeTest
-      ).execute({
-        idDemande: demande.identifiant,
-        motDePasse: 'toto12345',
-        type: 'SagaDemandeAidantEspaceAidant',
-      });
-
-      expect(await entrepots.utilisateurs().tous()).toHaveLength(0);
     });
 
     it('Prend en compte la date de signature des CGU à la date de la demande', async () => {

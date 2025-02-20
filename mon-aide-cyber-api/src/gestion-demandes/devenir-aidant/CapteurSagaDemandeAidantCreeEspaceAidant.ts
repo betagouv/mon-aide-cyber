@@ -9,20 +9,12 @@ import {
   CommandeCreeEspaceAidant,
   EspaceAidantCree,
 } from '../../espace-aidant/CapteurCommandeCreeEspaceAidant';
-import {
-  CommandeCreeUtilisateur,
-  UtilisateurCree,
-} from '../../authentification/CapteurCommandeCreeUtilisateur';
 import { ErreurCreationEspaceAidant } from '../../espace-aidant/Aidant';
-import {
-  estAvantDateNouveauParcours,
-  estDateNouveauParcoursDemandeDevenirAidant,
-} from './nouveauParcours';
+import { estDateNouveauParcoursDemandeDevenirAidant } from './nouveauParcours';
 
 export type SagaDemandeAidantCreeEspaceAidant = Omit<Saga, 'type'> & {
   type: 'SagaDemandeAidantEspaceAidant';
   idDemande: crypto.UUID;
-  motDePasse?: string;
 };
 
 export class CapteurSagaDemandeAidantCreeEspaceAidant
@@ -40,23 +32,9 @@ export class CapteurSagaDemandeAidantCreeEspaceAidant
       .lis(saga.idDemande)
       .then(async (demande) => {
         const nomPrenom = `${demande.prenom} ${demande.nom}`;
-        let identifiant = adaptateurUUID.genereUUID();
-        if (estAvantDateNouveauParcours()) {
-          const utilisateurCree = await this.busCommande.publie<
-            CommandeCreeUtilisateur,
-            UtilisateurCree
-          >({
-            type: 'CommandeCreeUtilisateur',
-            dateSignatureCGU: FournisseurHorloge.maintenant(),
-            identifiantConnexion: demande.mail,
-            motDePasse: saga.motDePasse!,
-            nomPrenom: nomPrenom,
-          });
-          identifiant = utilisateurCree.identifiant;
-        }
         return this.busCommande
           .publie<CommandeCreeEspaceAidant, EspaceAidantCree>({
-            identifiant,
+            identifiant: adaptateurUUID.genereUUID(),
             dateSignatureCGU: estDateNouveauParcoursDemandeDevenirAidant()
               ? demande.date
               : FournisseurHorloge.maintenant(),
