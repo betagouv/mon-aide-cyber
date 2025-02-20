@@ -35,7 +35,7 @@ export const Header = ({
         },
         {
           route: '/beneficier-du-dispositif/annuaire',
-          nom: 'Annuaire des aidants cyber',
+          nom: 'Annuaire des Aidants cyber',
         },
       ],
     },
