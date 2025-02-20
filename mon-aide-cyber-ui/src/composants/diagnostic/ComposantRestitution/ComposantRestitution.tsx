@@ -135,7 +135,7 @@ export const ComposantRestitution = ({
                               'aria-current': 'page',
                             })}
                           >
-                            Indicateurs de maturité
+                            Indicateurs MonAideCyber
                           </a>
                         </li>
                         <li

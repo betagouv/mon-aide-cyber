@@ -14,7 +14,7 @@ export const FonctionnementDispositif = () => {
           générales d&apos;utilisation, vous êtes{' '}
           <b>mis en lien avec un Aidant</b> de proximité, qui vous accompagne
           (sur une durée d&apos;environ une heure et trente minutes) pour
-          réaliser un <b>diagnostic de maturité cyber de premier niveau</b>. À
+          réaliser un <b>diagnostic cyber de premier niveau</b>. À
           cette occasion, il est fortement recommandé d’associer le responsable
           informatique et/ou le prestataire cyber, ainsi qu’un décideur.
         </>

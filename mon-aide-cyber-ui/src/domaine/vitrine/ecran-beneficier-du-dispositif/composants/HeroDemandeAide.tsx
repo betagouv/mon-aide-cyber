@@ -15,7 +15,7 @@ export const HeroDemandeAide = () => {
             <br />
             <br />
             Remplissez le formulaire ci-dessous afin d’être mis en relation avec
-            un Aidant de proximité et réaliser un diagnostic de maturité cyber.
+            un Aidant cyber de proximité et réaliser un diagnostic cyber de premier niveau.
           </p>
           <div>
             <Link to="#formulaire-demande-aide">
