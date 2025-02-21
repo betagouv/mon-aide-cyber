@@ -22,7 +22,8 @@ export class GestionnaireDeJetonJWT implements GestionnaireDeJeton {
   genereJeton(donnee: DonneesJetonMAC): Jeton {
     return jwt.sign(
       { ...donnee, iat: FournisseurHorloge.maintenant().getTime() },
-      this.clef
+      this.clef,
+      { expiresIn: '3h' }
     );
   }
 }
