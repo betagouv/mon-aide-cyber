@@ -74,6 +74,9 @@ describe('Entrepot Demande Devenir Aidant', () => {
       siret: demandeDevenirAidant.entite!.siret!,
       type: demandeDevenirAidant.entite!.type,
     });
+    expect(serviceDeChiffrement.aEteAppeleAvec('eee')).toBe(true);
+    expect(serviceDeChiffrement.aEteAppeleAvec('ffff')).toBe(true);
+    expect(serviceDeChiffrement.aEteAppeleAvec('ggggg')).toBe(true);
   });
 
   it("Lève une erreur lorsque le département persisté n'est pas trouvé", async () => {
