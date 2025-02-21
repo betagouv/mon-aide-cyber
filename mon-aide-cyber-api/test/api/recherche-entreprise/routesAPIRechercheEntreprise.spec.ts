@@ -101,5 +101,73 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
         message: 'Une erreur s’est produite',
       });
     });
+
+    it('Retourne la liste des entreprises et des associations non référencées correspondant à la requête', async () => {
+      testeurMAC.adaptateurDeRequeteHTTP.reponse({
+        results: [
+          {
+            siege: {
+              siret: '1234567890',
+              libelle_commune: 'Bordeaux',
+              departement: '33',
+            },
+            nom_complet: 'Réserviste',
+          },
+        ],
+      });
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/api/recherche-entreprise?nom=reserviste&est_association=true'
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(await reponse.json()).toStrictEqual<ReponseRechercheEntreprise>([
+        {
+          siret: '1234567890',
+          nom: 'Réserviste',
+          departement: '33',
+          commune: 'Bordeaux',
+        },
+        {
+          nom: 'Réserviste de la Gendarmerie',
+          siret: '00000000000000',
+          departement: '75',
+          commune: 'Paris',
+        },
+      ]);
+    });
+
+    it('Ne Retourne pas la liste des associations non référencées si la recherche n’est pas lancée pour les associations', async () => {
+      testeurMAC.adaptateurDeRequeteHTTP.reponse({
+        results: [
+          {
+            siege: {
+              siret: '1234567890',
+              libelle_commune: 'Bordeaux',
+              departement: '33',
+            },
+            nom_complet: 'Réserviste',
+          },
+        ],
+      });
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/api/recherche-entreprise?nom=reserviste&est_service_public=true'
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(await reponse.json()).toStrictEqual<ReponseRechercheEntreprise>([
+        {
+          siret: '1234567890',
+          nom: 'Réserviste',
+          departement: '33',
+          commune: 'Bordeaux',
+        },
+      ]);
+    });
   });
 });

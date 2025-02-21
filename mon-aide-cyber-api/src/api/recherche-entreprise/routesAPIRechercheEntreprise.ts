@@ -3,6 +3,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { ReponseRequeteHTTPEnErreur } from '../../infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
+import { associationsNonReferencees } from '../../../test/api/recherche-entreprise/associationsNonReferencees';
 
 type Entreprise = {
   siret: string;
@@ -70,16 +71,39 @@ export const routesAPIRechercheEntreprise = (
           headers: { Accept: 'application/json' },
           methode: 'GET',
         })
-        .then(async (reponseAPI) =>
-          reponse.status(200).json(
-            reponseAPI.results.map((res) => ({
-              nom: res.nom_complet,
-              siret: res.siege.siret,
-              commune: res.siege.libelle_commune,
-              departement: res.siege.departement,
-            }))
-          )
-        )
+        .then(async (reponseAPI) => {
+          const entreprises = reponseAPI.results.map((res) => ({
+            nom: res.nom_complet,
+            siret: res.siege.siret,
+            commune: res.siege.libelle_commune,
+            departement: res.siege.departement,
+          }));
+          const associationsTrouvees: Entreprise[] =
+            parametresRecherche.includes('est_association=true')
+              ? associationsNonReferencees
+                  .filter((asso) =>
+                    asso.nom
+                      .toLowerCase()
+                      .normalize('NFD')
+                      .replace(/\p{Diacritic}/gu, '')
+                      .includes(
+                        nomEntreprise
+                          .toLowerCase()
+                          .normalize('NFD')
+                          .replace(/\p{Diacritic}/gu, '')
+                      )
+                  )
+                  .map((asso) => ({
+                    nom: asso.nom,
+                    siret: asso.siret,
+                    commune: asso.commune,
+                    departement: asso.departement,
+                  }))
+              : [];
+          return reponse
+            .status(200)
+            .json([...entreprises, ...associationsTrouvees]);
+        })
         .catch((erreur) => {
           return suite(
             ErreurMAC.cree(
