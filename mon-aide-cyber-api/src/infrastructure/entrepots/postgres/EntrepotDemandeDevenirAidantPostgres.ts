@@ -3,6 +3,7 @@ import {
   DemandeDevenirAidant,
   EntrepotDemandeDevenirAidant,
   StatutDemande,
+  TypeEntite,
 } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
@@ -11,7 +12,7 @@ import { DTO, EntrepotEcriturePostgres } from './EntrepotPostgres';
 type EntiteDTO = {
   nom?: string;
   siret?: string;
-  type: 'ServicePublic' | 'ServiceEtat' | 'Association';
+  type: string;
 };
 export type DonneesDemandeDevenirAidant = {
   date: string;
@@ -76,7 +77,17 @@ export class EntrepotDemandeDevenirAidantPostgres
         prenom: this.chiffrement.chiffre(entite.prenom),
         mail: this.chiffrement.chiffre(entite.mail),
         nomDepartement: this.chiffrement.chiffre(entite.departement.nom),
-        ...(entite.entite && { entite: { ...entite.entite } }),
+        ...(entite.entite && {
+          entite: {
+            type: this.chiffrement.chiffre(entite.entite.type),
+            ...(entite.entite.nom && {
+              nom: this.chiffrement.chiffre(entite.entite.nom),
+            }),
+            ...(entite.entite.siret && {
+              siret: this.chiffrement.chiffre(entite.entite.siret),
+            }),
+          },
+        }),
       },
       statut: entite.statut,
     };
@@ -103,9 +114,15 @@ export class EntrepotDemandeDevenirAidantPostgres
       statut: dto.statut,
       ...(dto.donnees.entite && {
         entite: {
-          type: dto.donnees.entite.type,
-          ...(dto.donnees.entite.nom && { nom: dto.donnees.entite.nom }),
-          ...(dto.donnees.entite.siret && { siret: dto.donnees.entite.siret }),
+          type: this.chiffrement.dechiffre(
+            dto.donnees.entite.type
+          ) as TypeEntite,
+          ...(dto.donnees.entite.nom && {
+            nom: this.chiffrement.dechiffre(dto.donnees.entite.nom),
+          }),
+          ...(dto.donnees.entite.siret && {
+            siret: this.chiffrement.dechiffre(dto.donnees.entite.siret),
+          }),
         },
       }),
     };
