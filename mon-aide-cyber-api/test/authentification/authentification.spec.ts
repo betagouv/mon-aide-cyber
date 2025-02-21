@@ -27,7 +27,7 @@ describe('Authentification', () => {
       'motDePasse'
     );
     expect(utilisateurAuthentifie.jeton).toStrictEqual(
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWFudCI6Ijk4ZmI0NWY1LWRiNzQtNDBkMi04YWI4LTBjNzc0ZTM5ZGYzNiIsImlhdCI6MTY3NTUwMTIwMDAwMH0.XaNT7-A3lUv4NgZEbpD6gc-Nrv0fE19RN554t3IUjTM'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWFudCI6Ijk4ZmI0NWY1LWRiNzQtNDBkMi04YWI4LTBjNzc0ZTM5ZGYzNiIsImlhdCI6MTY3NTUwMTIwMDAwMCwiZXhwIjoxNjc1NTAxMjEwODAwfQ.JIEWOOa0UFid9NUihbdAIeAhDgXfh8WPXK7JxHcsKNc'
     );
   });
 });
