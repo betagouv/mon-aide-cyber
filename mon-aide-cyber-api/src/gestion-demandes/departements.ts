@@ -708,6 +708,41 @@ export const correze: Correze = {
   code: '19',
   codeRegion: '75',
 };
+export const paris: Paris = {
+  nom: 'Paris',
+  code: '75',
+  codeRegion: '11',
+};
+export const polynesieFrancaise: CollectiviteDePolynesieFrancaise = {
+  nom: 'Collectivité de Polynésie Française',
+  code: '987',
+  codeRegion: '987',
+};
+export const vendee: Vendee = {
+  nom: 'Vendée',
+  code: '85',
+  codeRegion: '52',
+};
+export const maineEtLoire: MaineEtLoire = {
+  nom: 'Maine-et-Loire',
+  code: '49',
+  codeRegion: '52',
+};
+export const mayenne: Mayenne = {
+  nom: 'Mayenne',
+  code: '53',
+  codeRegion: '52',
+};
+export const nouvelleCaledonie: CollectiviteDeNouvelleCaledonie = {
+  nom: 'Collectivité de Nouvelle-Calédonie',
+  code: '988',
+  codeRegion: '988',
+};
+export const loiret: Loiret = {
+  nom: 'Loiret',
+  code: '45',
+  codeRegion: '24',
+};
 export const departements: Departement[] = [
   ain,
   aisne,
@@ -882,11 +917,7 @@ export const departements: Departement[] = [
     code: '44',
     codeRegion: '52',
   },
-  {
-    nom: 'Loiret',
-    code: '45',
-    codeRegion: '24',
-  },
+  loiret,
   {
     nom: 'Lot',
     code: '46',
@@ -902,11 +933,7 @@ export const departements: Departement[] = [
     code: '48',
     codeRegion: '76',
   },
-  {
-    nom: 'Maine-et-Loire',
-    code: '49',
-    codeRegion: '52',
-  },
+  maineEtLoire,
   {
     nom: 'Manche',
     code: '50',
@@ -922,11 +949,7 @@ export const departements: Departement[] = [
     code: '52',
     codeRegion: '44',
   },
-  {
-    nom: 'Mayenne',
-    code: '53',
-    codeRegion: '52',
-  },
+  mayenne,
   {
     nom: 'Meurthe-et-Moselle',
     code: '54',
@@ -1032,11 +1055,7 @@ export const departements: Departement[] = [
     code: '74',
     codeRegion: '84',
   },
-  {
-    nom: 'Paris',
-    code: '75',
-    codeRegion: '11',
-  },
+  paris,
   {
     nom: 'Seine-Maritime',
     code: '76',
@@ -1082,11 +1101,7 @@ export const departements: Departement[] = [
     code: '84',
     codeRegion: '93',
   },
-  {
-    nom: 'Vendée',
-    code: '85',
-    codeRegion: '52',
-  },
+  vendee,
   {
     nom: 'Vienne',
     code: '86',
@@ -1182,16 +1197,8 @@ export const departements: Departement[] = [
     code: '986',
     codeRegion: '986',
   },
-  {
-    nom: 'Collectivité de Polynésie Française',
-    code: '987',
-    codeRegion: '987',
-  },
-  {
-    nom: 'Collectivité de Nouvelle-Calédonie',
-    code: '988',
-    codeRegion: '988',
-  },
+  polynesieFrancaise,
+  nouvelleCaledonie,
 ];
 export const nomsEtCodesDesDepartements = () =>
   departements.map(({ nom, code }) => ({
