@@ -8,6 +8,8 @@ import { EntrepotDemandeAideLecture } from '../../gestion-demandes/aide/DemandeA
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { EntrepotStatistiquesAidant } from '../../statistiques/aidant/StastistiquesAidant';
 import { EntrepotStatistiquesUtilisateurInscrit } from '../../statistiques/utilisateur-inscrit/StatistiquesUtilisateurInscrit';
+import { EntrepotUtilisateur } from '../../authentification/Utilisateur';
+import { StatistiquesUtilisateurInscrit as UtilisateurInscrit } from '../../statistiques/utilisateur-inscrit/StatistiquesUtilisateurInscrit';
 
 export type Entete<T> = { entete: string; clef: keyof T };
 
@@ -74,6 +76,9 @@ export type StatistiquesUtilisateurInscrit = {
 };
 export type ListeDesUtilisateursInscrits = StatistiquesUtilisateurInscrit[];
 
+export type ListeDesAidantsDevenusUtilisateursInscrits =
+  StatistiquesUtilisateurInscrit[];
+
 class ExtractionMAC implements Extraction {
   constructor(private readonly parametres: Parametres) {}
 
@@ -91,14 +96,25 @@ class ExtractionMAC implements Extraction {
     );
     const demandesAide = this.ajouteLesDemandesAide(rapport);
     const listeDesAidants = this.ajouteLaListeDesAidants(rapport);
+    const statistiquesUtilisateursInscrits =
+      await this.parametres.entrepotStatistiquesUtilisateurInscrit.rechercheUtilisateursInscritsAvecNombreDeDiagnostics();
     const listeDesUtilisateursInscrits =
-      this.ajouteLaListeDesUtilisateursInscrits(rapport);
+      this.ajouteLaListeDesUtilisateursInscrits(
+        rapport,
+        statistiquesUtilisateursInscrits
+      );
+    const listeDesAidantsDevenusUtilisateursInscrits =
+      this.ajouteLaListeDesAidantsDevenusUtilisateursInscrits(
+        rapport,
+        statistiquesUtilisateursInscrits
+      );
     return Promise.all([
       demandesDevenirAidant,
       demandesAvantArbitrage,
       demandesAide,
       listeDesAidants,
       listeDesUtilisateursInscrits,
+      listeDesAidantsDevenusUtilisateursInscrits,
     ])
       .then(() => rapport.genere())
       .catch((erreur) => Promise.reject(erreur));
@@ -195,30 +211,60 @@ class ExtractionMAC implements Extraction {
       );
   }
 
-  private async ajouteLaListeDesUtilisateursInscrits<T>(rapport: Rapport<T>) {
-    await this.parametres.entrepotStatistiquesUtilisateurInscrit
-      .rechercheUtilisateursInscritsAvecNombreDeDiagnostics()
-      .then((statistiques) =>
-        rapport.ajoute<
-          ListeDesUtilisateursInscrits,
-          RepresentationStatistiquesUtilisateurInscrit
-        >({
-          entetes: [
-            { entete: 'Nom Prénom', clef: 'nomPrenom' },
-            { entete: 'Mail', clef: 'email' },
-            {
-              entete: 'Nombre de diagnostics effectués',
-              clef: 'nombreDiagnostics',
-            },
-          ],
-          intitule: 'Liste des Utilisateurs Inscrits',
-          valeur: statistiques.map((stat) => ({
-            nomPrenom: stat.nomPrenom,
-            email: stat.email,
-            nombreDiagnostics: stat.nombreDiagnostics,
-          })),
-        })
-      );
+  private async ajouteLaListeDesUtilisateursInscrits<T>(
+    rapport: Rapport<T>,
+    statistiquesUtilisateursInscrits: UtilisateurInscrit[]
+  ) {
+    rapport.ajoute<
+      ListeDesUtilisateursInscrits,
+      RepresentationStatistiquesUtilisateurInscrit
+    >({
+      entetes: [
+        { entete: 'Nom Prénom', clef: 'nomPrenom' },
+        { entete: 'Mail', clef: 'email' },
+        {
+          entete: 'Nombre de diagnostics effectués',
+          clef: 'nombreDiagnostics',
+        },
+      ],
+      intitule: 'Liste des Utilisateurs Inscrits',
+      valeur: statistiquesUtilisateursInscrits.map((stat) => ({
+        nomPrenom: stat.nomPrenom,
+        email: stat.email,
+        nombreDiagnostics: stat.nombreDiagnostics,
+      })),
+    });
+  }
+
+  private async ajouteLaListeDesAidantsDevenusUtilisateursInscrits<T>(
+    rapport: Rapport<T>,
+    statistiquesUtilisateursInscrits: UtilisateurInscrit[]
+  ) {
+    const tous = await this.parametres.entrepotUtilisateur.tous();
+    const utilisateurs = statistiquesUtilisateursInscrits.filter(
+      (stat) =>
+        tous.filter((u) => u.identifiant === stat.identifiant).length > 0
+    );
+    rapport.ajoute<
+      ListeDesUtilisateursInscrits,
+      RepresentationStatistiquesUtilisateurInscrit
+    >({
+      entetes: [
+        { entete: 'Nom Prénom', clef: 'nomPrenom' },
+        { entete: 'Mail', clef: 'email' },
+        {
+          entete: 'Nombre de diagnostics effectués',
+          clef: 'nombreDiagnostics',
+        },
+      ],
+      intitule:
+        'Liste des Aidants ayant fait le choix d’utiliser mac à des fins commerciales',
+      valeur: utilisateurs.map((stat) => ({
+        nomPrenom: stat.nomPrenom,
+        email: stat.email,
+        nombreDiagnostics: stat.nombreDiagnostics,
+      })),
+    });
   }
 }
 
@@ -227,6 +273,7 @@ type Parametres = {
   entrepotDemandesAide: EntrepotDemandeAideLecture;
   entrepotStatistiquesAidant: EntrepotStatistiquesAidant;
   entrepotStatistiquesUtilisateurInscrit: EntrepotStatistiquesUtilisateurInscrit;
+  entrepotUtilisateur: EntrepotUtilisateur;
 };
 
 export const uneExtraction = (parametres: Parametres) =>

@@ -49,7 +49,7 @@ class ConstructeurStatistiqueUtilisateurInscrit
 export const uneStatistiqueUtilisateurInscrit = (
   entrepotUtilisateurInscrit: EntrepotUtilisateurInscrit,
   entrepotRelation: EntrepotRelation
-) =>
+): ConstructeurStatistiqueUtilisateurInscrit =>
   new ConstructeurStatistiqueUtilisateurInscrit(
     entrepotUtilisateurInscrit,
     entrepotRelation

@@ -77,6 +77,7 @@ const extrais = async (test = false): Promise<Resultat> => {
     entrepotStatistiquesAidant: entrepots.statistiquesAidant(),
     entrepotStatistiquesUtilisateurInscrit:
       entrepots.statistiquesUtilisateurInscrit(),
+    entrepotUtilisateur: entrepots.utilisateurs(),
   })
     .extrais<string>(new RapportExcel())
     .then(async (rapport) => {
