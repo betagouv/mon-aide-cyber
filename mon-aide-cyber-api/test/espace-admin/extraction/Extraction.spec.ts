@@ -5,12 +5,14 @@ import {
   EntrepotDemandeDevenirAidantMemoire,
   EntrepotStatistiquesAidantMemoire,
   EntrepotStatistiquesUtilisateursInscritsMemoire,
+  EntrepotUtilisateurMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import {
   DemandeAide,
   DemandesAide,
   Entete,
   ListeDesAidants,
+  ListeDesAidantsDevenusUtilisateursInscrits,
   ListeDesUtilisateursInscrits,
   Rapport,
   RepresentationRapport,
@@ -27,6 +29,7 @@ import { uneDemandeAide } from '../../gestion-demandes/aide/ConstructeurDemandeA
 import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { uneStatistiqueAidant } from '../../constructeurs/constructeurStatistiqueAidant';
 import { uneStatistiqueUtilisateurInscrit } from '../../constructeurs/constructeurStatistiquesUtilisateurInscrit';
+import { unUtilisateur } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 class RapportJSON implements Rapport<RepresentationJSON> {
   private readonly representations: Map<
@@ -43,7 +46,12 @@ class RapportJSON implements Rapport<RepresentationJSON> {
       any
     >,
   >(representation: REPRESENTATION_RAPPORT): void {
-    const key = representation.intitule.toLowerCase().replace(/ /g, '-');
+    const key = representation.intitule
+      .toLowerCase()
+      .replace(/ /g, '-')
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .replace('’', '-');
     this.entetes.set(key, representation.entetes);
     this.intitule.set(key, representation.intitule);
     this.representations.set(
@@ -68,6 +76,9 @@ class RapportJSON implements Rapport<RepresentationJSON> {
     const listeDesUtilisateursInscrits = this.representations.get(
       'liste-des-utilisateurs-inscrits'
     ) as ListeDesUtilisateursInscrits;
+    const listeDesAidantsDevenusUtilisateursInscrits = this.representations.get(
+      'liste-des-aidants-ayant-fait-le-choix-d-utiliser-mac-a-des-fins-commerciales'
+    ) as ListeDesAidantsDevenusUtilisateursInscrits;
     return Promise.resolve({
       'demandes-devenir-aidant': demandesDevenirAidant,
       ...(demandesAvantArbitrage.length > 0 && {
@@ -80,6 +91,11 @@ class RapportJSON implements Rapport<RepresentationJSON> {
       ...(listeDesUtilisateursInscrits &&
         listeDesUtilisateursInscrits.length > 0 && {
           'liste-des-utilisateurs-inscrits': listeDesUtilisateursInscrits,
+        }),
+      ...(listeDesAidantsDevenusUtilisateursInscrits &&
+        listeDesAidantsDevenusUtilisateursInscrits.length > 0 && {
+          'liste-des-aidants-ayant-fait-le-choix-d-utiliser-mac-a-des-fins-commerciales':
+            listeDesAidantsDevenusUtilisateursInscrits,
         }),
     });
   }
@@ -112,6 +128,7 @@ describe('Extraction', () => {
           new EntrepotStatistiquesUtilisateursInscritsMemoire(
             new EntrepotRelationMemoire()
           ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(rapport).toStrictEqual<{ [clef: string]: DemandesDevenirAidant }>({
@@ -149,6 +166,7 @@ describe('Extraction', () => {
           new EntrepotStatistiquesUtilisateursInscritsMemoire(
             new EntrepotRelationMemoire()
           ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(
@@ -181,6 +199,7 @@ describe('Extraction', () => {
           new EntrepotStatistiquesUtilisateursInscritsMemoire(
             new EntrepotRelationMemoire()
           ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(rapportJSON.entetes.get('demandes-devenir-aidant')).toStrictEqual<
@@ -219,6 +238,7 @@ describe('Extraction', () => {
           new EntrepotStatistiquesUtilisateursInscritsMemoire(
             new EntrepotRelationMemoire()
           ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(rapport['demandes-devenir-aidant'][0].entiteMorale).toStrictEqual(
@@ -241,6 +261,7 @@ describe('Extraction', () => {
           new EntrepotStatistiquesUtilisateursInscritsMemoire(
             new EntrepotRelationMemoire()
           ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(
@@ -271,6 +292,7 @@ describe('Extraction', () => {
           new EntrepotStatistiquesUtilisateursInscritsMemoire(
             new EntrepotRelationMemoire()
           ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(rapport).toStrictEqual<{ [clef: string]: DemandesDevenirAidant }>({
@@ -312,6 +334,7 @@ describe('Extraction', () => {
           new EntrepotStatistiquesUtilisateursInscritsMemoire(
             new EntrepotRelationMemoire()
           ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(rapportJSON.entetes.get('demandes-avant-arbitrage')).toStrictEqual<
@@ -345,6 +368,7 @@ describe('Extraction', () => {
           new EntrepotStatistiquesUtilisateursInscritsMemoire(
             new EntrepotRelationMemoire()
           ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(new RapportJSON());
 
       expect(rapport).toStrictEqual<{
@@ -377,6 +401,7 @@ describe('Extraction', () => {
           new EntrepotStatistiquesUtilisateursInscritsMemoire(
             new EntrepotRelationMemoire()
           ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(rapportJSON.entetes.get('demandes-aide')).toStrictEqual<
@@ -406,6 +431,7 @@ describe('Extraction', () => {
         entrepotStatistiquesAidant: entrepotAidant,
         entrepotStatistiquesUtilisateurInscrit:
           new EntrepotStatistiquesUtilisateursInscritsMemoire(entrepotRelation),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(rapport).toStrictEqual<{
@@ -437,6 +463,7 @@ describe('Extraction', () => {
           new EntrepotStatistiquesUtilisateursInscritsMemoire(
             new EntrepotRelationMemoire()
           ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(rapportJSON.entetes.get('liste-des-aidants')).toStrictEqual<
@@ -462,12 +489,13 @@ describe('Extraction', () => {
       const entrepotRelation = new EntrepotRelationMemoire();
       const entrepotUtilisateurInscrit =
         new EntrepotStatistiquesUtilisateursInscritsMemoire(entrepotRelation);
-      const aidant = await uneStatistiqueUtilisateurInscrit(
-        entrepotUtilisateurInscrit,
-        entrepotRelation
-      )
-        .ayantFaitNDiagnostics(2)
-        .construis();
+      const statistiqueUtilisateurInscrit =
+        await uneStatistiqueUtilisateurInscrit(
+          entrepotUtilisateurInscrit,
+          entrepotRelation
+        )
+          .ayantFaitNDiagnostics(2)
+          .construis();
 
       const rapportJSON = new RapportJSON();
       const rapport = await uneExtraction({
@@ -477,6 +505,7 @@ describe('Extraction', () => {
           new EntrepotRelationMemoire()
         ),
         entrepotStatistiquesUtilisateurInscrit: entrepotUtilisateurInscrit,
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(rapport).toStrictEqual<{
@@ -489,8 +518,8 @@ describe('Extraction', () => {
         'demandes-devenir-aidant': [],
         'liste-des-utilisateurs-inscrits': [
           {
-            nomPrenom: aidant.nomPrenom,
-            email: aidant.email,
+            nomPrenom: statistiqueUtilisateurInscrit.nomPrenom,
+            email: statistiqueUtilisateurInscrit.email,
             nombreDiagnostics: 2,
           },
         ],
@@ -510,6 +539,7 @@ describe('Extraction', () => {
           new EntrepotStatistiquesUtilisateursInscritsMemoire(
             new EntrepotRelationMemoire()
           ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
       }).extrais<RepresentationJSON>(rapportJSON);
 
       expect(
@@ -522,8 +552,102 @@ describe('Extraction', () => {
           clef: 'nombreDiagnostics',
         },
       ]);
-      expect(rapportJSON.intitule.get('liste-des-aidants')).toStrictEqual(
-        'Liste des Aidants'
+      expect(
+        rapportJSON.intitule.get('liste-des-utilisateurs-inscrits')
+      ).toStrictEqual('Liste des Utilisateurs Inscrits');
+    });
+  });
+
+  describe('Pour les Aidants ayant choisi d’être utilisateurs inscrits', () => {
+    it('Extrais les Aidants ayant fait le choix d’être utilisateurs inscrits', async () => {
+      const entrepotRelation = new EntrepotRelationMemoire();
+      const entrepotUtilisateurInscrit =
+        new EntrepotStatistiquesUtilisateursInscritsMemoire(entrepotRelation);
+      const statistiquesUtilisateurInscrit =
+        await uneStatistiqueUtilisateurInscrit(
+          entrepotUtilisateurInscrit,
+          entrepotRelation
+        )
+          .ayantFaitNDiagnostics(2)
+          .construis();
+      const entrepotUtilisateur = new EntrepotUtilisateurMemoire();
+      const compteUtilisateurMAC = unUtilisateur()
+        .avecUnIdentifiant(statistiquesUtilisateurInscrit.identifiant)
+        .construis();
+      await entrepotUtilisateur.persiste(compteUtilisateurMAC);
+
+      const rapportJSON = new RapportJSON();
+      const rapport = await uneExtraction({
+        entrepotDemandes: new EntrepotDemandeDevenirAidantMemoire(),
+        entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
+        entrepotStatistiquesUtilisateurInscrit: entrepotUtilisateurInscrit,
+        entrepotUtilisateur,
+      }).extrais<RepresentationJSON>(rapportJSON);
+
+      expect(rapport).toStrictEqual<{
+        [clef: string]:
+          | DemandesDevenirAidant
+          | DemandesAide
+          | ListeDesAidants
+          | ListeDesUtilisateursInscrits
+          | ListeDesAidantsDevenusUtilisateursInscrits;
+      }>({
+        'demandes-devenir-aidant': [],
+        'liste-des-utilisateurs-inscrits': [
+          {
+            nomPrenom: statistiquesUtilisateurInscrit.nomPrenom,
+            email: statistiquesUtilisateurInscrit.email,
+            nombreDiagnostics: 2,
+          },
+        ],
+        'liste-des-aidants-ayant-fait-le-choix-d-utiliser-mac-a-des-fins-commerciales':
+          [
+            {
+              nomPrenom: statistiquesUtilisateurInscrit.nomPrenom,
+              email: statistiquesUtilisateurInscrit.email,
+              nombreDiagnostics: 2,
+            },
+          ],
+      });
+    });
+
+    it('Le rapport contient entête et intitulé', async () => {
+      const rapportJSON = new RapportJSON();
+
+      await uneExtraction({
+        entrepotDemandes: new EntrepotDemandeDevenirAidantMemoire(),
+        entrepotDemandesAide: new EntrepotDemandeAideLectureMemoire(),
+        entrepotStatistiquesAidant: new EntrepotStatistiquesAidantMemoire(
+          new EntrepotRelationMemoire()
+        ),
+        entrepotStatistiquesUtilisateurInscrit:
+          new EntrepotStatistiquesUtilisateursInscritsMemoire(
+            new EntrepotRelationMemoire()
+          ),
+        entrepotUtilisateur: new EntrepotUtilisateurMemoire(),
+      }).extrais<RepresentationJSON>(rapportJSON);
+
+      expect(
+        rapportJSON.entetes.get(
+          'liste-des-aidants-ayant-fait-le-choix-d-utiliser-mac-a-des-fins-commerciales'
+        )
+      ).toStrictEqual<Entete<StatistiquesUtilisateurInscrit>[]>([
+        { entete: 'Nom Prénom', clef: 'nomPrenom' },
+        { entete: 'Mail', clef: 'email' },
+        {
+          entete: 'Nombre de diagnostics effectués',
+          clef: 'nombreDiagnostics',
+        },
+      ]);
+      expect(
+        rapportJSON.intitule.get(
+          'liste-des-aidants-ayant-fait-le-choix-d-utiliser-mac-a-des-fins-commerciales'
+        )
+      ).toStrictEqual(
+        'Liste des Aidants ayant fait le choix d’utiliser mac à des fins commerciales'
       );
     });
   });
