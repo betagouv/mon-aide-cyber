@@ -3,7 +3,8 @@ import express, { NextFunction, Request, Response } from 'express';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { ReponseRequeteHTTPEnErreur } from '../../infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
-import { associationsNonReferencees } from '../../../test/api/recherche-entreprise/associationsNonReferencees';
+
+import { associationsNonReferencees } from './associationsNonReferencees';
 
 type Entreprise = {
   siret: string;
