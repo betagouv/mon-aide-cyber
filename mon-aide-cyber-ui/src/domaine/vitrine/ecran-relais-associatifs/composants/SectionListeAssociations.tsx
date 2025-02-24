@@ -2,8 +2,8 @@ import {
   Association,
   AssociationsParRegion,
 } from '../EcranRelaisAssociatifs.tsx';
-import { TypographieH6 } from '../../../../composants/communs/typographie/TypographieH6/TypographieH6.tsx';
-import { TypographieH2 } from '../../../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
+import { TypographieH3 } from '../../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
+import { Accordion } from '../../../../composants/atomes/Accordion/Accordion.tsx';
 
 const AssociationsParRegion = (props: { associations: Association[] }) => {
   return (
@@ -37,23 +37,29 @@ export const SectionListeAssociationsParRegion = (props: {
   if (!props.associationsParRegion) return null;
 
   return (
-    <div className="section" id={props.code}>
-      <TypographieH2>{recupereTitreParType(props.code)}</TypographieH2>
-      <br />
-      {Object.entries(props.associationsParRegion).map(([clef, valeur]) => (
-        <div key={clef}>
-          <TypographieH6>{valeur.nom}</TypographieH6>
-          {valeur.associations && valeur.associations.length > 0 ? (
-            <AssociationsParRegion associations={valeur.associations} />
-          ) : (
-            <span>
-              Nous n'avons pas de relais associatifs dans cette région pour le
-              moment. Nous mettons à jour nos informations régulièrement,
-              n'hésitez pas à revenir sur cette page.
-            </span>
-          )}
-        </div>
-      ))}
-    </div>
+    <section className="section" id={props.code}>
+      <TypographieH3>{recupereTitreParType(props.code)}</TypographieH3>
+      <div className="fr-accordions-group">
+        {Object.entries(props.associationsParRegion).map(
+          ([clef, valeur], index) => (
+            <Accordion
+              key={valeur.nom}
+              title={`${valeur.nom} (${valeur?.associations ? valeur.associations?.length : '0'})`}
+              id={`accordion-${clef}-${index}`}
+            >
+              {valeur.associations && valeur.associations.length > 0 ? (
+                <AssociationsParRegion associations={valeur.associations} />
+              ) : (
+                <span>
+                  Nous n‘avons pas de relais associatifs dans cette région pour
+                  le moment. Nous mettons à jour nos informations régulièrement,
+                  n‘hésitez pas à revenir sur cette page.
+                </span>
+              )}
+            </Accordion>
+          )
+        )}
+      </div>
+    </section>
   );
 };
