@@ -142,6 +142,10 @@
           text-wrap: nowrap;
         }
 
+        @include a-partir-de(lg) {
+          padding-right: 1rem;
+        }
+
         &:active {
           background: none;
         }

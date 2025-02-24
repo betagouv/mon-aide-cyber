@@ -132,7 +132,7 @@ export const EcranRelaisAssociatifs = () => {
               </>
             </Sidemenu>
             <div className="fr-col-12 fr-col-lg-9 rubriques-relais">
-              <div className="section" id="proposerRelais">
+              <section className="section" id="proposerRelais">
                 <TypographieH2>Proposer un relais associatif</TypographieH2>
                 <div className="fr-mt-2w information-message">
                   <IconeInformation />
@@ -146,8 +146,8 @@ export const EcranRelaisAssociatifs = () => {
                     <LienMailtoMAC />
                   </p>
                 </div>
-              </div>
-              <div className="section" id="national">
+              </section>
+              <section className="section" id="national">
                 <TypographieH2>
                   Relais associatifs à portée nationale
                 </TypographieH2>
@@ -166,7 +166,7 @@ export const EcranRelaisAssociatifs = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </section>
               {data?.regional ? (
                 <SectionListeAssociationsParRegion
                   code="regional"
