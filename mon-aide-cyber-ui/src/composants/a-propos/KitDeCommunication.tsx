@@ -6,6 +6,7 @@ import Cadre from './Cadre.tsx';
 import IconeInformation from '../communs/IconeInformation.tsx';
 import { FormulaireDeContact } from '../communs/FormulaireDeContact/FormulaireDeContact.tsx';
 import { ActionsPiedDePage } from '../communs/ActionsPiedDePage.tsx';
+import { useTitreDePage } from '../../hooks/useTitreDePage.ts';
 
 export type AncreHtml = {
   id: ANCRES_POSSIBLES;
@@ -118,6 +119,8 @@ const activeSectionsObservesDansMenu = () => {
 
 export const KitDeCommunication = () => {
   useDefilementFluide();
+  useTitreDePage('Kit de Communication');
+
   useEffect(() => activeSectionsObservesDansMenu(), []);
 
   return (

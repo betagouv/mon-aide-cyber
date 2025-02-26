@@ -3,8 +3,11 @@ import illustrationSecuritePostesSvg from '../../../../public/images/illustratio
 import { CapteurFormulaireReinitialiserMotDePasse } from './formulaire-reinitialiser-mot-de-passe/CapteurFormulaireReinitialiserMotDePasse.tsx';
 import './ecran-reinitialiser-mot-de-passe.scss';
 import { useSearchParams } from 'react-router-dom';
+import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export const EcranReinitialiserMotDePasse = () => {
+  useTitreDePage('Réinitialiser mot de passe');
+
   const [params] = useSearchParams();
   const parametresUrl = new URLSearchParams(params);
 

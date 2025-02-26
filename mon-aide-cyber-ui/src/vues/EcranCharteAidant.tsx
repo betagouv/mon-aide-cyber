@@ -1,6 +1,9 @@
 import { CharteAidant } from './CharteAidant.tsx';
+import { useTitreDePage } from '../hooks/useTitreDePage.ts';
 
 export const EcranCharteAidant = () => {
+  useTitreDePage("Charte de l'Aidant");
+
   return (
     <main role="main">
       <div className="fr-container mac-contenu-charte">

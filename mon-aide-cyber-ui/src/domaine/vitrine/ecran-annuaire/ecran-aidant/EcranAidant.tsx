@@ -2,10 +2,12 @@ import { useSearchParams } from 'react-router-dom';
 import { SolliciterAidant } from './SolliciterAidant';
 import { AidantAnnuaire } from '../AidantAnnuaire.ts';
 import { UUID } from '../../../../types/Types.ts';
+import { useTitreDePage } from '../../../../hooks/useTitreDePage.ts';
 
 export const EcranAidant = () => {
   const [params] = useSearchParams();
   const parametresUrl = new URLSearchParams(params);
+  useTitreDePage('Solliciter un Aidant');
 
   const nomPrenomAidant = parametresUrl.get('nomPrenom')!;
   const identifiantAidant = parametresUrl.get('aidant')!;

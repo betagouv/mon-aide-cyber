@@ -1,4 +1,8 @@
+import { useTitreDePage } from '../hooks/useTitreDePage.ts';
+
 export const EcranAccessibilite = () => {
+  useTitreDePage('Accessibilité');
+
   return (
     <main role="main">
       <div className="fr-container">

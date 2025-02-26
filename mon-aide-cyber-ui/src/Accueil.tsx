@@ -1,6 +1,7 @@
 import { FormulaireDeContact } from './composants/communs/FormulaireDeContact/FormulaireDeContact.tsx';
 import { ActionsPiedDePage } from './composants/communs/ActionsPiedDePage.tsx';
 import { useCallback, useState } from 'react';
+import { useTitreDePage } from './hooks/useTitreDePage.ts';
 
 export const Accueil = () => {
   const [motDGClique, setMotDGClique] = useState<boolean>(true);
@@ -8,6 +9,8 @@ export const Accueil = () => {
   const couleurSlide: 'mode-fonce' | 'mode-clair' = motGeneralClique
     ? 'mode-clair'
     : 'mode-fonce';
+
+  useTitreDePage('Accueil');
 
   const surCliqueMotDG = useCallback(() => {
     setMotGeneralClique(false);

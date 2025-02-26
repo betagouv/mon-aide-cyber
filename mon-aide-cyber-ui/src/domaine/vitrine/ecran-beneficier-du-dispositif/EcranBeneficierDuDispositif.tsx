@@ -14,9 +14,12 @@ import Button from '../../../composants/atomes/Button/Button.tsx';
 import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
 import { useNavigate } from 'react-router-dom';
 import illustrationAutodiag from './../../../../public/images/illustration-autodiag.svg';
+import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export const EcranBeneficierDuDispositif = () => {
   useDefilementFluide();
+  useTitreDePage('Bénéficier du dispositif');
+
   const navigate = useNavigate();
 
   return (
