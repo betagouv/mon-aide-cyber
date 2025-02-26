@@ -1,4 +1,8 @@
+import { useTitreDePage } from '../hooks/useTitreDePage.ts';
+
 export const MentionsLegales = () => {
+  useTitreDePage('Mentions légales');
+
   return (
     <main role="main">
       <div className="fr-container">

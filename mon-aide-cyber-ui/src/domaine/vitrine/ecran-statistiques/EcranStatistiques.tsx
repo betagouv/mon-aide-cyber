@@ -12,6 +12,7 @@ import { useContexteNavigation } from '../../../hooks/useContexteNavigation';
 import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3';
 import TuileActionDemandeAide from '../../../composants/communs/tuiles/TuileActionDemandeAide';
 import TuileActionKitDeCommunication from '../../../composants/communs/tuiles/TuileActionKitDeCommunication';
+import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export type Statistiques = {
   nombreDiagnostics: number;
@@ -22,6 +23,8 @@ export type Statistiques = {
 export type ReponseStatistiques = Statistiques;
 
 export const EcranStatistiques = () => {
+  useTitreDePage('Statistiques');
+
   const macAPI = useMACAPI();
   const navigationMAC = useNavigationMAC();
   const { recupereContexteNavigation } = useContexteNavigation();

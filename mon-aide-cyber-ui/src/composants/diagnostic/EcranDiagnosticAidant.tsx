@@ -58,6 +58,7 @@ import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { Lien } from '../../domaine/Lien.ts';
 import { useRecupereContexteNavigation } from '../../hooks/useRecupereContexteNavigation.ts';
 import Button from '../atomes/Button/Button.tsx';
+import { useTitreDePage } from '../../hooks/useTitreDePage.ts';
 
 type ProprietesComposantQuestion = {
   thematique: string;
@@ -700,6 +701,8 @@ export const EcranDiagnosticAidant = ({
 export const EcranDiagnosticLibreAcces = ({
   idDiagnostic,
 }: ProprietesEcranDiagnostic) => {
+  useTitreDePage('Diagnostic');
+
   const { affiche, ferme } = useModale();
 
   useRecupereContexteNavigation(

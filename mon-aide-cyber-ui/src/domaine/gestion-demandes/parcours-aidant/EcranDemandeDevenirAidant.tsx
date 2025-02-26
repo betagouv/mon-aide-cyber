@@ -33,8 +33,11 @@ import { LienMailtoMAC } from '../../../composants/atomes/LienMailtoMAC.tsx';
 import { useNavigate } from 'react-router-dom';
 import illustrationSuivi from '../../../../public/images/illustration-suivi.svg';
 import { useRecupereDepartements } from '../../../hooks/useRecupereDepartements.ts';
+import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export const EcranDemandeDevenirAidant = () => {
+  useTitreDePage('Devenir Aidant cyber');
+
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
   const navigate = useNavigate();

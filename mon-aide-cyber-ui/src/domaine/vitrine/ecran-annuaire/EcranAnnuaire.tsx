@@ -6,8 +6,11 @@ import { HeroAnnuaire } from './composants/HeroAnnuaire';
 import './ecran-annuaire.scss';
 import { ListeAidants } from './composants/liste-aidants';
 import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation';
+import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export const EcranAnnuaire = () => {
+  useTitreDePage('Annuaire des Aidants');
+
   useRecupereContexteNavigation('afficher-annuaire-aidants');
 
   return (

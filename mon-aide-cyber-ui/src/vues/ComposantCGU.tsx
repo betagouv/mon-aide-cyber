@@ -1,3 +1,5 @@
+import { useTitreDePage } from '../hooks/useTitreDePage.ts';
+
 const ContenuCGU = () => (
   <div id="content" className="ProseMirror">
     <p dir="auto">Le portail MonAideCyber a pour objet :</p>
@@ -1249,6 +1251,8 @@ export const CorpsCGU = () => {
 };
 
 export const ComposantCGU = () => {
+  useTitreDePage('CGU');
+
   return (
     <main role="main">
       <div className="fr-container">

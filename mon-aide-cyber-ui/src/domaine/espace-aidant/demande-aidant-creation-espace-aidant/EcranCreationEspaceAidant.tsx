@@ -16,6 +16,7 @@ import {
 } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useNavigate } from 'react-router-dom';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
+import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export type CorpsCreationEspaceAidant = {
   cguSignees?: boolean;
@@ -44,6 +45,8 @@ export const EcranCreationEspaceAidant = ({
   token,
   macAPI,
 }: ProprietesEcranCreationEspaceAidant) => {
+  useTitreDePage('Créer mon espace Aidant');
+
   const navigate = useNavigate();
 
   useRecupereContexteNavigation(

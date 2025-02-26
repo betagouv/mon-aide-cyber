@@ -11,8 +11,11 @@ import { HeroRealiserDesDiagnosticsAnssi } from './composants/HeroRealiserDesDia
 import { OeuvrerPourInteretGeneral } from './composants/OeuvrerPourInteretGeneral.tsx';
 import { PrerequisAidantCyber } from './composants/PrerequisAidantCyber.tsx';
 import { UtilisationDuService } from '../../parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/vitrine/UtilisationDuService.tsx';
+import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export const EcranRealiserDesDiagnosticsANSSI = () => {
+  useTitreDePage('Réaliser des diagnostics ANSSI');
+
   useDefilementFluide();
   const navigate = useNavigate();
 

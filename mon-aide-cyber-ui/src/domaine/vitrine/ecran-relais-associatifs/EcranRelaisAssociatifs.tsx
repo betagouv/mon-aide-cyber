@@ -15,6 +15,7 @@ import useDefilementFluide from '../../../hooks/useDefilementFluide.ts';
 import { useEffect } from 'react';
 import IconeInformation from '../../../composants/communs/IconeInformation.tsx';
 import { LienMailtoMAC } from '../../../composants/atomes/LienMailtoMAC.tsx';
+import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export type Association = {
   nom: string;
@@ -82,6 +83,7 @@ export const EcranRelaisAssociatifs = () => {
     'afficher-associations'
   );
   const action = useMoteurDeLiens('afficher-associations');
+  useTitreDePage('Relais Associatifs');
 
   useDefilementFluide();
 

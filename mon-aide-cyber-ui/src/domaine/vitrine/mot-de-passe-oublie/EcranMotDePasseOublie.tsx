@@ -2,8 +2,11 @@ import './ecran-mot-de-passe-oublie.scss';
 import illustrationSecuritePostesSvg from '../../../../public/images/illustration-securite-des-postes.svg';
 import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
 import { CapteurFormulaireMotDePasseOublie } from './formulaire-mot-de-passe-oublie/CapteurFormulaireMotDePasseOublie.tsx';
+import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export const EcranMotDePasseOublie = () => {
+  useTitreDePage('Mot de passe oublié');
+
   return (
     <main role="main" className="ecran-mot-de-passe-oublie">
       <div className="formulaire-colonne-gauche">

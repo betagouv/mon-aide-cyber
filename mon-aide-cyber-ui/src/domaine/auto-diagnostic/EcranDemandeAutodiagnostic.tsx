@@ -3,8 +3,11 @@ import './ecran-demande-autodiagnostic.scss';
 import illustrationAutodiag from '../../../public/images/illustration-autodiag.svg';
 import { TypographieH3 } from '../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
 import { Link } from 'react-router-dom';
+import { useTitreDePage } from '../../hooks/useTitreDePage.ts';
 
 export const EcranDemandeAutodiagnostic = () => {
+  useTitreDePage('Diagnostic libre accès');
+
   return (
     <main role="main" className="ecran-demande-autodiagnostic-layout">
       <div className="fr-container ecran-demande-autodiagnostic">
