@@ -193,6 +193,18 @@ describe('le serveur MAC sur les routes /api/profil', () => {
               typeAppel: 'DIRECT',
               url: '/pro-connect/deconnexion',
             },
+            'demande-devenir-aidant': {
+              methode: 'GET',
+              url: '/api/demandes/devenir-aidant',
+            },
+            'envoyer-demande-devenir-aidant': {
+              methode: 'POST',
+              url: '/api/demandes/devenir-aidant',
+            },
+            'rechercher-entreprise': {
+              methode: 'GET',
+              url: '/api/recherche-entreprise',
+            },
           },
         });
       });
@@ -237,6 +249,18 @@ describe('le serveur MAC sur les routes /api/profil', () => {
               url: '/api/token',
               methode: 'DELETE',
               typeAppel: 'API',
+            },
+            'demande-devenir-aidant': {
+              methode: 'GET',
+              url: '/api/demandes/devenir-aidant',
+            },
+            'envoyer-demande-devenir-aidant': {
+              methode: 'POST',
+              url: '/api/demandes/devenir-aidant',
+            },
+            'rechercher-entreprise': {
+              methode: 'GET',
+              url: '/api/recherche-entreprise',
             },
           },
         });
