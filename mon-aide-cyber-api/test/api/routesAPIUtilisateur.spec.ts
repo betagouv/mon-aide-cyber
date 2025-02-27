@@ -952,6 +952,18 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
               url: '/api/token',
               typeAppel: 'API',
             },
+            'demande-devenir-aidant': {
+              methode: 'GET',
+              url: '/api/demandes/devenir-aidant',
+            },
+            'envoyer-demande-devenir-aidant': {
+              methode: 'POST',
+              url: '/api/demandes/devenir-aidant',
+            },
+            'rechercher-entreprise': {
+              methode: 'GET',
+              url: '/api/recherche-entreprise',
+            },
           },
         });
       });
@@ -1338,6 +1350,18 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
             methode: 'DELETE',
             url: '/api/token',
             typeAppel: 'API',
+          },
+          'demande-devenir-aidant': {
+            methode: 'GET',
+            url: '/api/demandes/devenir-aidant',
+          },
+          'envoyer-demande-devenir-aidant': {
+            methode: 'POST',
+            url: '/api/demandes/devenir-aidant',
+          },
+          'rechercher-entreprise': {
+            methode: 'GET',
+            url: '/api/recherche-entreprise',
           },
         },
       });

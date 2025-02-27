@@ -134,11 +134,13 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
       ...afficherTableauDeBord,
       ...modifierMotDePasse,
       ...seDeconnecter,
+      ...demandeDevenirAidant['demande-devenir-aidant'],
     },
     'pro-connect-acceder-au-profil': {
       ...lancerDiagnostic,
       ...afficherTableauDeBord,
       ...seDeconnecterDeProConnect,
+      ...demandeDevenirAidant['demande-devenir-aidant'],
     },
   },
   'valider-signature-cgu': {
