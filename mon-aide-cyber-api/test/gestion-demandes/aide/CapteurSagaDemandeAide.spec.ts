@@ -27,6 +27,7 @@ import {
   CommandeCreerDemandeAide,
 } from '../../../src/gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
 import { uneDemandeAide } from './ConstructeurDemandeAide';
+import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   const cotParDefaut = {
@@ -41,12 +42,17 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       adaptateursEnvironnementDeTest.messagerie('mac@email.com');
   });
   describe("Si l'Aidé est connu de MAC", () => {
-    it('Interrompt le parcours', async () => {
-      const aide = uneDemandeAide().construis();
+    it('Mets à jour la demande d’aide', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const aide = uneDemandeAide()
+        .avecUneDateDeSignatureDesCGU(
+          new Date(Date.parse('2025-01-31T14:42:00'))
+        )
+        .construis();
       const entrepots = new EntrepotsMemoire();
       const busEvenement = new BusEvenementDeTest();
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-
+      await entrepots.demandesAides().persiste(aide);
       const capteur = new CapteurSagaDemandeAide(
         new BusCommandeMAC(
           entrepots,
@@ -58,21 +64,26 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         adaptateurEnvoiMail,
         () => cotParDefaut
       );
-      await entrepots.demandesAides().persiste(aide);
 
       await capteur.execute({
         type: 'SagaDemandeValidationCGUAide',
         cguValidees: true,
         email: aide.email,
         departement: aide.departement,
-        raisonSociale: aide.raisonSociale!,
-        relationAidant: false,
+        raisonSociale: 'beta-gouv',
+        relationAidant: true,
       });
 
       expect(await entrepots.demandesAides().tous()).toHaveLength(1);
       expect(
         await entrepots.demandesAides().lis(aide.identifiant)
-      ).toStrictEqual(aide);
+      ).toStrictEqual<DemandeAide>({
+        email: aide.email,
+        departement: aide.departement,
+        identifiant: aide.identifiant,
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        raisonSociale: 'beta-gouv',
+      });
     });
   });
 

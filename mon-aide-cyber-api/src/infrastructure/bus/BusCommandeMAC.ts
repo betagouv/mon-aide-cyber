@@ -27,6 +27,7 @@ import {
 import { CapteurCommandeCreerEspaceUtilisateurInscrit } from '../../espace-utilisateur-inscrit/CapteurCommandeCreerEspaceUtilisateurInscrit';
 import { CapteurCommandeRechercheDemandeAideParEmail } from '../../gestion-demandes/aide/CapteurCommandeRechercheDemandeAideParEmail';
 import { CapteurCommandeCreerDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
+import { CapteurCommandeMettreAJourDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeMettreAJourDemandeAide';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -214,6 +215,15 @@ const capteurs: Map<string, Capteur> = new Map([
     {
       capteur: (parametres) =>
         new CapteurCommandeDemandeDiagnosticLibreAcces(parametres.entrepots),
+    },
+  ],
+  [
+    'CommandeMettreAJourDemandeAide',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeMettreAJourDemandeAide(
+          parametres.entrepots.demandesAides()
+        ),
     },
   ],
 ]);

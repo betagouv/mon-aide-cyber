@@ -9,6 +9,7 @@ import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironneme
 import { DemandeAide } from './DemandeAide';
 import { CommandeRechercheAideParEmail } from './CapteurCommandeRechercheDemandeAideParEmail';
 import { CommandeCreerDemandeAide } from './CapteurCommandeCreerDemandeAide';
+import { CommandeMettreAJourDemandeAide } from './CapteurCommandeMettreAJourDemandeAide';
 
 export type SagaDemandeAide = Saga & {
   cguValidees: boolean;
@@ -77,10 +78,23 @@ export class CapteurSagaDemandeAide
         email: saga.email,
       };
 
-      const aide = await this.busCommande.publie(commandeRechercheAideParEmail);
+      const aide = await this.busCommande.publie<
+        CommandeRechercheAideParEmail,
+        DemandeAide
+      >(commandeRechercheAideParEmail);
 
       if (aide) {
-        return Promise.resolve();
+        const commandeMettreAJourAide: CommandeMettreAJourDemandeAide = {
+          type: 'CommandeMettreAJourDemandeAide',
+          identifiant: aide.identifiant,
+          departement: saga.departement,
+          email: saga.email,
+          ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
+          relationAidant: saga.relationAidant,
+        };
+        return this.busCommande.publie<CommandeMettreAJourDemandeAide, void>(
+          commandeMettreAJourAide
+        );
       }
 
       const commandeCreerAide: CommandeCreerDemandeAide = {
