@@ -1,6 +1,6 @@
 import { Aggregat } from '../../domaine/Aggregat';
 import { Departement } from '../departements';
-import { EntrepotEcriture, EntrepotLecture } from '../../domaine/Entrepot';
+import { EntrepotLecture } from '../../domaine/Entrepot';
 
 export type DemandeAide = Aggregat & {
   dateSignatureCGU: Date;
@@ -8,8 +8,9 @@ export type DemandeAide = Aggregat & {
   raisonSociale?: string;
   departement: Departement;
 };
-export interface EntrepotDemandeAide extends EntrepotEcriture<DemandeAide> {
+export interface EntrepotDemandeAide {
   rechercheParEmail(email: string): Promise<DemandeAide | undefined>;
+  persiste(entite: DemandeAide, miseAjour?: boolean): Promise<void>;
 }
 
 export type DemandeAideSimple = Aggregat & {

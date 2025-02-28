@@ -5,6 +5,7 @@ import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/Fournisse
 import { executeRequete } from '../executeurRequete';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { departements } from '../../../src/gestion-demandes/departements';
+import { EntrepotAideMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 
 describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
   const testeurMAC = testeurIntegration();
@@ -36,7 +37,9 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         );
 
         expect(reponse.statusCode).toBe(202);
-        const aides = await testeurMAC.entrepots.demandesAides().tous();
+        const aides = await (
+          testeurMAC.entrepots.demandesAides() as EntrepotAideMemoire
+        ).tous();
         expect(aides).toHaveLength(1);
         expect(aides[0].dateSignatureCGU).toStrictEqual(
           FournisseurHorloge.maintenant()
@@ -166,7 +169,9 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           );
 
           expect(reponse.statusCode).toBe(202);
-          const aides = await testeurMAC.entrepots.demandesAides().tous();
+          const aides = await (
+            testeurMAC.entrepots.demandesAides() as EntrepotAideMemoire
+          ).tous();
           expect(aides).toHaveLength(1);
           expect(aides[0].dateSignatureCGU).toStrictEqual(
             FournisseurHorloge.maintenant()

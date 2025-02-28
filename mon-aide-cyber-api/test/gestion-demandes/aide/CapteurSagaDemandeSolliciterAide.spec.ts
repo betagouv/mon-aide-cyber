@@ -19,6 +19,7 @@ import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInsc
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
 import { finistere, gironde } from '../../../src/gestion-demandes/departements';
+import { EntrepotAideMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 
 describe('Capteur saga demande solliciter Aide', () => {
   let adaptateurEnvoiMail: AdaptateurEnvoiMailMemoire;
@@ -138,7 +139,9 @@ describe('Capteur saga demande solliciter Aide', () => {
         raisonSociale: 'Test',
       });
 
-      const aideRecue = (await entrepotsMemoire.demandesAides().tous())[0];
+      const aideRecue = (
+        await (entrepotsMemoire.demandesAides() as EntrepotAideMemoire).tous()
+      )[0];
 
       expect(
         busEvenement.evenementRecu

@@ -155,7 +155,8 @@ describe('Entrepot Aidé Concret', () => {
         (identifiantMAC, departement, raisonSociale) =>
           tableDeChiffrement.get(
             JSON.stringify({ identifiantMAC, departement, raisonSociale })
-          )!
+          )!,
+        false
       );
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
         tableDeChiffrement
@@ -175,29 +176,31 @@ describe('Entrepot Aidé Concret', () => {
 class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
   protected entites: Map<string, AideDistantBrevoDTO> = new Map();
   private avecMetaDonnees = true;
+
   async persiste(
-    aide: AideDistant,
+    entite: AideDistant,
     chiffrement: (
       identifiantMAC: crypto.UUID,
       departement: string,
       raisonSociale?: string
-    ) => string
-  ) {
+    ) => string,
+    __miseAjour?: boolean
+  ): Promise<void> {
     const contactBrevo: Omit<AideDistantBrevoDTO, 'attributes'> & {
       attributes: { METADONNEES?: string };
     } = {
-      email: aide.email,
+      email: entite.email,
       attributes: {
         ...(this.avecMetaDonnees && {
           METADONNEES: chiffrement(
-            aide.identifiantMAC,
-            aide.departement.nom,
-            aide.raisonSociale
+            entite.identifiantMAC,
+            entite.departement.nom,
+            entite.raisonSociale
           ),
         }),
       },
     };
-    this.entites.set(aide.email, contactBrevo as AideDistantBrevoDTO);
+    this.entites.set(entite.email, contactBrevo as AideDistantBrevoDTO);
   }
 
   rechercheParEmail(
@@ -221,10 +224,12 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
     return this;
   }
 }
+
 class DictionnaireDeChiffrementAide
   implements DictionnaireDeChiffrement<DemandeAide>
 {
   private _dictionnaire: Dictionnaire = new Map();
+
   avec(aide: DemandeAide): DictionnaireDeChiffrement<DemandeAide> {
     const valeurEnClair = JSON.stringify({
       identifiantMAC: aide.identifiant,
@@ -234,6 +239,7 @@ class DictionnaireDeChiffrementAide
     this._dictionnaire.set(valeurEnClair, fakerFR.string.alpha(10));
     return this;
   }
+
   construis(): Dictionnaire {
     return this._dictionnaire;
   }
