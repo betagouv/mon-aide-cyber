@@ -10,14 +10,16 @@ import {
 import { PieceJointe } from '../../adaptateurs/AdaptateurEnvoiMail';
 
 abstract class ConstructeurBrevo<T> {
-  constructor(private readonly methode: 'POST' | 'GET') {}
+  constructor(private readonly methode: 'POST' | 'PUT' | 'GET') {}
 
   protected abstract construisCorps(): T;
 
   construis(): RequeteBrevo<T> {
     return {
       methode: this.methode,
-      ...(this.methode === 'POST' && { corps: this.construisCorps() }),
+      ...((this.methode === 'POST' || this.methode === 'PUT') && {
+        corps: this.construisCorps(),
+      }),
       headers: {
         'Content-Type': 'application/json',
         accept: 'application/json',
@@ -110,8 +112,8 @@ class ConstructeurBrevoCreationContact extends ConstructeurBrevo<CreationContact
   private email: Email = '';
   private attributs: Record<string, string> = {} as Record<string, string>;
 
-  constructor() {
-    super('POST');
+  constructor(methode: 'POST' | 'PUT' | 'GET' = 'POST') {
+    super(methode);
   }
 
   ayantPourEmail(email: Email): ConstructeurBrevoCreationContact {
@@ -131,6 +133,12 @@ class ConstructeurBrevoCreationContact extends ConstructeurBrevo<CreationContact
   }
 }
 
+class ConstructeurBrevoMiseAJourContact extends ConstructeurBrevoCreationContact {
+  constructor() {
+    super('PUT');
+  }
+}
+
 class ConstructeurBrevoRechercheContact extends ConstructeurBrevo<RechercheContactBrevo> {
   constructor() {
     super('GET');
@@ -145,6 +153,9 @@ export const unConstructeurEnvoiDeMail = () => new ConstructeurBrevoEnvoiMail();
 
 export const unConstructeurCreationDeContact = () =>
   new ConstructeurBrevoCreationContact();
+
+export const unConstructeurMiseAJourDeContact = () =>
+  new ConstructeurBrevoMiseAJourContact();
 
 export const unConstructeurRechercheDeContact = () =>
   new ConstructeurBrevoRechercheContact();

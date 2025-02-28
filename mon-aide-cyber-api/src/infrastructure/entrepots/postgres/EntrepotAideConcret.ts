@@ -4,6 +4,7 @@ import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import crypto from 'crypto';
 import {
   unConstructeurCreationDeContact,
+  unConstructeurMiseAJourDeContact,
   unConstructeurRechercheDeContact,
 } from '../../brevo/ConstructeursBrevo';
 import {
@@ -89,7 +90,8 @@ export interface EntrepotAideDistant {
       identifiantMAC: crypto.UUID,
       departement: string,
       raisonSociale?: string
-    ) => string
+    ) => string,
+    miseAjour?: boolean
   ): Promise<void>;
 
   rechercheParEmail(
@@ -133,21 +135,53 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
         });
       });
   }
+
   persiste(
-    aide: AideDistant,
+    entite: AideDistant,
     chiffrement: (
       identifiantMAC: crypto.UUID,
       departement: string,
       raisonSociale?: string
-    ) => string
+    ) => string,
+    miseAjour = false
   ): Promise<void> {
+    if (miseAjour) {
+      const requete = unConstructeurMiseAJourDeContact()
+        .ayantPourEmail(entite.email)
+        .ayantPourAttributs({
+          metadonnees: chiffrement(
+            entite.identifiantMAC,
+            entite.departement.nom,
+            entite.raisonSociale
+          ),
+        })
+        .construis();
+      return adaptateursRequeteBrevo()
+        .miseAjourContact(entite.email)
+        .execute(requete)
+        .then(async (reponse) => {
+          if (estReponseEnErreur(reponse)) {
+            const corpsReponse = await reponse.json();
+            console.error(
+              'ERREUR BREVO',
+              JSON.stringify({
+                contexte: 'Mise à jour du contact',
+                details: corpsReponse.code,
+                message: corpsReponse.message,
+              })
+            );
+            return Promise.reject(corpsReponse.message);
+          }
+          return Promise.resolve();
+        });
+    }
     const requete = unConstructeurCreationDeContact()
-      .ayantPourEmail(aide.email)
+      .ayantPourEmail(entite.email)
       .ayantPourAttributs({
         metadonnees: chiffrement(
-          aide.identifiantMAC,
-          aide.departement.nom,
-          aide.raisonSociale
+          entite.identifiantMAC,
+          entite.departement.nom,
+          entite.raisonSociale
         ),
       })
       .construis();
@@ -241,7 +275,7 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
     throw new Error('Method non implémentée.');
   }
 
-  async persiste(aide: DemandeAide): Promise<void> {
+  async persiste(aide: DemandeAide, miseAJour = false): Promise<void> {
     await this.entrepotAidePostgres.persiste(aide);
     await this.entreprotAideBrevo.persiste(
       {
@@ -253,7 +287,8 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
       (identifiantMAC, departement, raisonSociale) =>
         this.serviceChiffrement.chiffre(
           JSON.stringify({ identifiantMAC, departement, raisonSociale })
-        )
+        ),
+      miseAJour
     );
 
     return Promise.resolve();

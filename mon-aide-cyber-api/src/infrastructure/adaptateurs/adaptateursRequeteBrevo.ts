@@ -46,7 +46,7 @@ interface AdaptateurRequeteBrevo<REQUETE, REPONSE extends Response> {
 }
 
 export type RequeteBrevo<T = void> = {
-  methode: 'GET' | 'POST';
+  methode: 'GET' | 'POST' | 'PUT';
   headers: Record<string, string>;
   corps?: T;
 };
@@ -84,6 +84,17 @@ export class AdaptateursRequeteBrevo {
     return this.adaptateur('https://api.brevo.com/v3/contacts');
   }
 
+  miseAjourContact(
+    email: string
+  ): AdaptateurRequeteBrevo<
+    RequeteBrevo<CreationContactBrevo>,
+    Response | ReponseBrevoEnErreur
+  > {
+    return this.adaptateur(
+      `https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`
+    );
+  }
+
   rechercheContact(
     email: string
   ): AdaptateurRequeteBrevo<
@@ -102,7 +113,7 @@ export class AdaptateursRequeteBrevo {
           return (await fetch(url, {
             method: requete.methode,
             headers: requete.headers,
-            ...(requete.methode === 'POST' && {
+            ...((requete.methode === 'POST' || requete.methode === 'PUT') && {
               body: JSON.stringify(requete.corps),
             }),
           })) as unknown as R;

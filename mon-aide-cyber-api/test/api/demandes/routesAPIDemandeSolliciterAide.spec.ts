@@ -8,6 +8,7 @@ import crypto from 'crypto';
 import { ReponseDemandeSolliciterAideEnErreur } from '../../../src/api/demandes/routesAPIDemandeSolliciterAide';
 import { adaptateurUUID } from '../../../src/infrastructure/adaptateurs/adaptateurUUID';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import { EntrepotAideMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 
 describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de l’Aidé pour un Aidant donné', () => {
   const testeurMAC = testeurIntegration();
@@ -46,7 +47,9 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
       );
 
       expect(reponse.statusCode).toBe(202);
-      const aides = await testeurMAC.entrepots.demandesAides().tous();
+      const aides = await (
+        testeurMAC.entrepots.demandesAides() as EntrepotAideMemoire
+      ).tous();
       expect(aides).toHaveLength(1);
       expect(aides[0].dateSignatureCGU).toStrictEqual(
         FournisseurHorloge.maintenant()
@@ -227,7 +230,11 @@ describe('Le serveur MAC, sur les routes de sollicitation d’aide de la part de
 
       expect(reponse.statusCode).toBe(202);
       expect(
-        (await testeurMAC.entrepots.demandesAides().lis(uuid)).raisonSociale
+        (
+          await (
+            testeurMAC.entrepots.demandesAides() as EntrepotAideMemoire
+          ).lis(uuid)
+        ).raisonSociale
       ).toBe('Beta-gouv');
     });
 

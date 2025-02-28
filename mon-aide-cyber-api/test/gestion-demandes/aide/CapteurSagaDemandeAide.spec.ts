@@ -28,6 +28,7 @@ import {
 } from '../../../src/gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
 import { uneDemandeAide } from './ConstructeurDemandeAide';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { EntrepotAideMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   const cotParDefaut = {
@@ -74,9 +75,11 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         relationAidant: true,
       });
 
-      expect(await entrepots.demandesAides().tous()).toHaveLength(1);
+      const entrepotDemandeAide =
+        entrepots.demandesAides() as EntrepotAideMemoire;
+      expect(await entrepotDemandeAide.tous()).toHaveLength(1);
       expect(
-        await entrepots.demandesAides().lis(aide.identifiant)
+        await entrepotDemandeAide.lis(aide.identifiant)
       ).toStrictEqual<DemandeAide>({
         email: aide.email,
         departement: aide.departement,
@@ -350,7 +353,9 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         departement: gironde,
         relationAidant: false,
       });
-      const aideRecu = (await entrepotsMemoire.demandesAides().tous())[0];
+      const aideRecu = (
+        await (entrepotsMemoire.demandesAides() as EntrepotAideMemoire).tous()
+      )[0];
 
       expect(busEvenement.evenementRecu).toStrictEqual<DemandeAideCree>({
         identifiant: expect.any(String),
