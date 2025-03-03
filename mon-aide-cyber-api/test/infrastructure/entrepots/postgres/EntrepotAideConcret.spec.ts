@@ -15,7 +15,10 @@ import {
   DictionnaireDeChiffrement,
 } from '../../../constructeurs/DictionnaireDeChiffrement';
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
-import { DemandeAide } from '../../../../src/gestion-demandes/aide/DemandeAide';
+import {
+  DemandeAide,
+  RechercheDemandeAide,
+} from '../../../../src/gestion-demandes/aide/DemandeAide';
 import { uneDemandeAide } from '../../../gestion-demandes/aide/ConstructeurDemandeAide';
 
 describe('Entrepot Aidé Concret', () => {
@@ -40,9 +43,16 @@ describe('Entrepot Aidé Concret', () => {
         fauxServiceDeChiffrement,
         entrepotAideBrevoMemoire
       ).rechercheParEmail(aide.email);
-      expect(aideRecu).not.toBeUndefined();
-      expect(aideRecu!.identifiant).toStrictEqual(aide.identifiant);
-      expect(aideRecu!.dateSignatureCGU).toStrictEqual(aide.dateSignatureCGU);
+      expect(aideRecu).toStrictEqual<RechercheDemandeAide>({
+        etat: 'COMPLET',
+        demandeAide: {
+          identifiant: aide.identifiant,
+          dateSignatureCGU: aide.dateSignatureCGU,
+          email: aide.email,
+          departement: aide.departement,
+          raisonSociale: aide.raisonSociale!,
+        },
+      });
     });
 
     it('MAC contacte Brevo pour créer le contact correspondant en chiffrant les parties sensibles', async () => {
@@ -61,7 +71,10 @@ describe('Entrepot Aidé Concret', () => {
         serviceDeChiffrement,
         entrepotAideBrevoMemoire
       ).rechercheParEmail(aide.email);
-      expect(aideRecu).toStrictEqual(aide);
+      expect(aideRecu).toStrictEqual<RechercheDemandeAide>({
+        demandeAide: aide,
+        etat: 'COMPLET',
+      });
     });
   });
 
@@ -98,20 +111,25 @@ describe('Entrepot Aidé Concret', () => {
         entrepotAideBrevoMemoire
       ).rechercheParEmail(secondAide.email);
 
-      expect(aideRecherche).toStrictEqual(secondAide);
+      expect(aideRecherche).toStrictEqual<RechercheDemandeAide>({
+        demandeAide: secondAide,
+        etat: 'COMPLET',
+      });
     });
 
-    it('L’Aidé n’est pas trouvé', async () => {
+    it('L’Aidé n’est pas trouvé chez Brevo', async () => {
       const entrepotAideBrevoMemoire = new EntrepotAideBrevoMemoire();
       const aideRecherche = await new EntrepotAideConcret(
         new FauxServiceDeChiffrement(new Map()),
         entrepotAideBrevoMemoire
       ).rechercheParEmail('email@inconnu.com');
 
-      expect(aideRecherche).toBeUndefined();
+      expect(aideRecherche).toStrictEqual<RechercheDemandeAide>({
+        etat: 'INEXISTANT',
+      });
     });
 
-    it('Une erreur est remontée si le contact Brevo existe mais que l’on arrive pas à récupérer les informations de l’Aidé', async () => {
+    it('L‘Aidé recherché est incomplet si le contact Brevo existe mais que l’on arrive pas à récupérer ses métadonnées', async () => {
       const aide = uneDemandeAide()
         .avecUneDateDeSignatureDesCGU(
           FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00')
@@ -128,14 +146,16 @@ describe('Entrepot Aidé Concret', () => {
       );
       await entrepotAideConcret.persiste(aide);
 
-      await expect(() =>
-        entrepotAideConcret.rechercheParEmail(aide.email)
-      ).rejects.toThrowError(
-        "Impossible de récupérer les informations de l'Aidé."
+      const rechercheMail = await entrepotAideConcret.rechercheParEmail(
+        aide.email
       );
+
+      expect(rechercheMail).toStrictEqual<RechercheDemandeAide>({
+        etat: 'INCOMPLET',
+      });
     });
 
-    it('Une erreur est remontée si le contact Brevo retourné ne correspond pas à un Aidé', async () => {
+    it('L‘Aidé recherché est inexistant si le contact Brevo retourné ne correspond pas à un Aidé', async () => {
       const aide = uneDemandeAide()
         .avecUneDateDeSignatureDesCGU(
           FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00')
@@ -161,14 +181,15 @@ describe('Entrepot Aidé Concret', () => {
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
         tableDeChiffrement
       );
-      const entrepotAideConcret = new EntrepotAideConcret(
+
+      const aideRecherche = await new EntrepotAideConcret(
         serviceDeChiffrement,
         entrepotAideBrevoMemoire
-      );
+      ).rechercheParEmail(aide.email);
 
-      await expect(() =>
-        entrepotAideConcret.rechercheParEmail(aide.email)
-      ).rejects.toThrowError("L'Aidé demandé n'existe pas.");
+      expect(aideRecherche).toStrictEqual<RechercheDemandeAide>({
+        etat: 'INEXISTANT',
+      });
     });
   });
 });

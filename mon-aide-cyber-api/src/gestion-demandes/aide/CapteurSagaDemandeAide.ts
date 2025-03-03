@@ -6,7 +6,7 @@ import crypto from 'crypto';
 import { Departement } from '../departements';
 import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
-import { DemandeAide } from './DemandeAide';
+import { DemandeAide, RechercheDemandeAide } from './DemandeAide';
 import { CommandeRechercheAideParEmail } from './CapteurCommandeRechercheDemandeAideParEmail';
 import { CommandeCreerDemandeAide } from './CapteurCommandeCreerDemandeAide';
 import { CommandeMettreAJourDemandeAide } from './CapteurCommandeMettreAJourDemandeAide';
@@ -80,13 +80,13 @@ export class CapteurSagaDemandeAide
 
       const aide = await this.busCommande.publie<
         CommandeRechercheAideParEmail,
-        DemandeAide
+        RechercheDemandeAide
       >(commandeRechercheAideParEmail);
 
-      if (aide) {
+      if (aide.etat === 'COMPLET') {
         const commandeMettreAJourAide: CommandeMettreAJourDemandeAide = {
           type: 'CommandeMettreAJourDemandeAide',
-          identifiant: aide.identifiant,
+          identifiant: aide.demandeAide!.identifiant,
           departement: saga.departement,
           email: saga.email,
           ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),

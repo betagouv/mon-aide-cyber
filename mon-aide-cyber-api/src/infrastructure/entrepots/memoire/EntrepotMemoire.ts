@@ -58,6 +58,7 @@ import {
   DemandeAideSimple,
   EntrepotDemandeAide,
   EntrepotDemandeAideLecture,
+  RechercheDemandeAide,
 } from '../../../gestion-demandes/aide/DemandeAide';
 import {
   EntrepotStatistiquesAidant,
@@ -152,14 +153,14 @@ export class EntrepotAideMemoire
   extends EntrepotMemoire<DemandeAide>
   implements EntrepotDemandeAide
 {
-  rechercheParEmail(email: string): Promise<DemandeAide | undefined> {
+  async rechercheParEmail(email: string): Promise<RechercheDemandeAide> {
     const aides = Array.from(this.entites.values()).filter(
       (aide) => aide.email === email
     );
 
     return aides.length > 0
-      ? Promise.resolve(aides[0])
-      : Promise.resolve(undefined);
+      ? { demandeAide: aides[0], etat: 'COMPLET' }
+      : { etat: 'INEXISTANT' };
   }
 }
 
