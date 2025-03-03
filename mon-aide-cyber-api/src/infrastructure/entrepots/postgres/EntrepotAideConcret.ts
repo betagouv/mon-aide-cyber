@@ -11,7 +11,6 @@ import {
   adaptateursRequeteBrevo,
   estReponseEnErreur,
 } from '../../adaptateurs/adaptateursRequeteBrevo';
-import { AggregatNonTrouve } from '../../../domaine/Aggregat';
 import {
   Departement,
   rechercheParNomDepartement,
@@ -209,71 +208,48 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
   ) {}
 
   async rechercheParEmail(email: string): Promise<RechercheDemandeAide> {
+    let aideBrevo: AideDistantDTO | undefined;
     try {
-      const aideBrevo = await this.entreprotAideBrevo.rechercheParEmail(email);
+      aideBrevo = await this.entreprotAideBrevo.rechercheParEmail(email);
+    } catch (erreur) {
+      throw new Error("Impossible de récupérer les informations de l'Aidé.", {
+        cause: erreur,
+      });
+    }
 
-      if (aideBrevo === undefined) {
-        return { etat: 'INEXISTANT' };
-      }
+    if (aideBrevo === undefined) return { etat: 'INEXISTANT' };
 
-      if (!aideBrevo.metaDonnees) {
-        return {
-          etat: 'INCOMPLET',
-        };
-      }
+    if (!aideBrevo.metaDonnees) return { etat: 'INCOMPLET' };
 
-      const metadonnees: {
-        identifiantMAC: crypto.UUID;
-        departement: string;
-        raisonSociale: string;
-      } = JSON.parse(this.serviceChiffrement.dechiffre(aideBrevo.metaDonnees));
+    const metadonnees: {
+      identifiantMAC: crypto.UUID;
+      departement: string;
+      raisonSociale: string;
+    } = JSON.parse(this.serviceChiffrement.dechiffre(aideBrevo.metaDonnees));
 
-      const aide: AideDistant = {
-        email: aideBrevo.email,
-        raisonSociale: metadonnees.raisonSociale,
-        departement: rechercheParNomDepartement(metadonnees.departement),
-        identifiantMAC: metadonnees.identifiantMAC,
-      };
+    const aide: AideDistant = {
+      email: aideBrevo.email,
+      raisonSociale: metadonnees.raisonSociale,
+      departement: rechercheParNomDepartement(metadonnees.departement),
+      identifiantMAC: metadonnees.identifiantMAC,
+    };
 
-      const aideMAC = await this.entrepotAidePostgres.lis(aide.identifiantMAC);
+    try {
+      const aideMAC: AideMAC = await this.entrepotAidePostgres.lis(
+        aide.identifiantMAC
+      );
 
       return {
         demandeAide: {
           ...aideMAC,
           departement: aide.departement,
-          ...(aide.raisonSociale && {
-            raisonSociale: aide.raisonSociale,
-          }),
+          ...(aide.raisonSociale && { raisonSociale: aide.raisonSociale }),
           email: aide.email,
         },
         etat: 'COMPLET',
       };
     } catch (erreur) {
-      if (erreur instanceof AggregatNonTrouve) {
-        // INEXISTANT
-        console.error(
-          "L'Aidé demandé n'existe pas.",
-          JSON.stringify({
-            contexte: 'Recherche par Email',
-            aide: email,
-            erreur,
-          })
-        );
-        return {
-          etat: 'INEXISTANT',
-        };
-      }
-      //  Erreur d'adptateur => une erreur BREVO
-      console.error(
-        "ERREUR LORS DE LA RÉCUPÉRATION DES INFORMATIONS DE L'AIDÉ",
-        JSON.stringify({
-          contexte: 'Recherche par Email',
-          erreur,
-        })
-      );
-      return Promise.reject(
-        "Impossible de récupérer les informations de l'Aidé."
-      );
+      return { etat: 'INEXISTANT' };
     }
   }
 
