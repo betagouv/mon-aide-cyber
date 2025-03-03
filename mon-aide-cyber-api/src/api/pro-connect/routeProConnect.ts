@@ -23,7 +23,7 @@ import {
 
 export class ErreurProConnectApresAuthentification extends Error {
   constructor(e: Error) {
-    super(e.message);
+    super(e.message, { cause: e });
   }
 }
 
