@@ -203,20 +203,15 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
     this.entites.set(entite.email, contactBrevo as AideDistantBrevoDTO);
   }
 
-  rechercheParEmail(
-    email: string,
-    mappeur: (dto: AideDistantDTO) => AideDistant
-  ): Promise<AideDistant | undefined> {
+  async rechercheParEmail(email: string): Promise<AideDistantDTO | undefined> {
     const aideDistantDTO = this.entites.get(email);
     if (aideDistantDTO === undefined) {
-      return Promise.resolve(undefined);
+      return undefined;
     }
-    return Promise.resolve(
-      mappeur({
-        email: aideDistantDTO.email,
-        metaDonnees: aideDistantDTO.attributes.METADONNEES,
-      })
-    );
+    return {
+      email: aideDistantDTO.email,
+      metaDonnees: aideDistantDTO.attributes.METADONNEES,
+    };
   }
 
   sansMetadonnees(): EntrepotAideBrevoMemoire {
