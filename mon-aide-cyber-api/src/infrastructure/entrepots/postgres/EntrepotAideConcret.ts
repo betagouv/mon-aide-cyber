@@ -94,17 +94,11 @@ export interface EntrepotAideDistant {
     miseAjour?: boolean
   ): Promise<void>;
 
-  rechercheParEmail(
-    email: string,
-    mappeur: (dto: AideDistantDTO) => AideDistant
-  ): Promise<AideDistant | undefined>;
+  rechercheParEmail(email: string): Promise<AideDistantDTO | undefined>;
 }
 
 class EntrepotAideBrevo implements EntrepotAideDistant {
-  rechercheParEmail(
-    email: string,
-    mappeur: (dto: AideDistantDTO) => AideDistant
-  ): Promise<AideDistant | undefined> {
+  rechercheParEmail(email: string): Promise<AideDistantDTO | undefined> {
     return adaptateursRequeteBrevo()
       .rechercheContact(email)
       .execute(unConstructeurRechercheDeContact().construis())
@@ -120,7 +114,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
             })
           );
           if (reponse.status === 404) {
-            return Promise.resolve(undefined);
+            return undefined;
           }
           return Promise.reject(corpsReponse.message);
         }
@@ -129,10 +123,10 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
           email: corpsReponse.email,
           attributes: { METADONNEES: corpsReponse.attributes.METADONNEES },
         };
-        return mappeur({
+        return {
           email: aideBrevo.email,
           metaDonnees: aideBrevo.attributes.METADONNEES,
-        });
+        };
       });
   }
 
@@ -215,39 +209,40 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
 
   async rechercheParEmail(email: string): Promise<DemandeAide | undefined> {
     try {
-      const aideBrevo = await this.entreprotAideBrevo.rechercheParEmail(
-        email,
-        (dto) => {
-          const metadonnees: {
-            identifiantMAC: crypto.UUID;
-            departement: string;
-            raisonSociale: string;
-          } = JSON.parse(this.serviceChiffrement.dechiffre(dto.metaDonnees));
-          return {
-            email: dto.email,
-            raisonSociale: metadonnees.raisonSociale,
-            departement: rechercheParNomDepartement(metadonnees.departement),
-            identifiantMAC: metadonnees.identifiantMAC,
-          };
-        }
-      );
+      const aideBrevo = await this.entreprotAideBrevo.rechercheParEmail(email);
+
       if (aideBrevo === undefined) {
+        // INEXISTANT
         return Promise.resolve(undefined);
       }
-      const aideMAC = await this.entrepotAidePostgres.lis(
-        aideBrevo.identifiantMAC
-      );
+
+      const metadonnees: {
+        identifiantMAC: crypto.UUID;
+        departement: string;
+        raisonSociale: string;
+      } = JSON.parse(this.serviceChiffrement.dechiffre(aideBrevo.metaDonnees));
+
+      const aide: AideDistant = {
+        email: aideBrevo.email,
+        raisonSociale: metadonnees.raisonSociale,
+        departement: rechercheParNomDepartement(metadonnees.departement),
+        identifiantMAC: metadonnees.identifiantMAC,
+      };
+      // IF aideDistant.metadonnees === undefined => INCOMPLET
+
+      const aideMAC = await this.entrepotAidePostgres.lis(aide.identifiantMAC);
 
       return {
         ...aideMAC,
-        departement: aideBrevo.departement,
-        ...(aideBrevo.raisonSociale && {
-          raisonSociale: aideBrevo.raisonSociale,
+        departement: aide.departement,
+        ...(aide.raisonSociale && {
+          raisonSociale: aide.raisonSociale,
         }),
-        email: aideBrevo.email,
+        email: aide.email,
       };
     } catch (erreur) {
       if (erreur instanceof AggregatNonTrouve) {
+        // INEXISTANT
         console.error(
           "L'Aidé demandé n'existe pas.",
           JSON.stringify({
@@ -258,6 +253,7 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
         );
         return Promise.reject("L'Aidé demandé n'existe pas.");
       }
+      //  Erreur d'adptateur => une erreur BREVO
       console.error(
         "ERREUR LORS DE LA RÉCUPÉRATION DES INFORMATIONS DE L'AIDÉ",
         JSON.stringify({
@@ -269,10 +265,6 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
         "Impossible de récupérer les informations de l'Aidé."
       );
     }
-  }
-
-  async lis(_identifiant: string): Promise<DemandeAide> {
-    throw new Error('Method non implémentée.');
   }
 
   async persiste(aide: DemandeAide, miseAJour = false): Promise<void> {
@@ -292,13 +284,5 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
     );
 
     return Promise.resolve();
-  }
-
-  tous(): Promise<DemandeAide[]> {
-    throw new Error('Method not implemented.');
-  }
-
-  typeAggregat(): string {
-    throw new Error('Method not implemented.');
   }
 }
