@@ -19,6 +19,7 @@ import {
 import {
   DemandeAide,
   EntrepotDemandeAide,
+  RechercheDemandeAide,
 } from '../../../gestion-demandes/aide/DemandeAide';
 
 type DonneesAidesMAC = {
@@ -207,13 +208,18 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
     private readonly entrepotAidePostgres = new EntrepotAidePostgres()
   ) {}
 
-  async rechercheParEmail(email: string): Promise<DemandeAide | undefined> {
+  async rechercheParEmail(email: string): Promise<RechercheDemandeAide> {
     try {
       const aideBrevo = await this.entreprotAideBrevo.rechercheParEmail(email);
 
       if (aideBrevo === undefined) {
-        // INEXISTANT
-        return Promise.resolve(undefined);
+        return { etat: 'INEXISTANT' };
+      }
+
+      if (!aideBrevo.metaDonnees) {
+        return {
+          etat: 'INCOMPLET',
+        };
       }
 
       const metadonnees: {
@@ -228,17 +234,19 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
         departement: rechercheParNomDepartement(metadonnees.departement),
         identifiantMAC: metadonnees.identifiantMAC,
       };
-      // IF aideDistant.metadonnees === undefined => INCOMPLET
 
       const aideMAC = await this.entrepotAidePostgres.lis(aide.identifiantMAC);
 
       return {
-        ...aideMAC,
-        departement: aide.departement,
-        ...(aide.raisonSociale && {
-          raisonSociale: aide.raisonSociale,
-        }),
-        email: aide.email,
+        demandeAide: {
+          ...aideMAC,
+          departement: aide.departement,
+          ...(aide.raisonSociale && {
+            raisonSociale: aide.raisonSociale,
+          }),
+          email: aide.email,
+        },
+        etat: 'COMPLET',
       };
     } catch (erreur) {
       if (erreur instanceof AggregatNonTrouve) {
@@ -251,7 +259,9 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
             erreur,
           })
         );
-        return Promise.reject("L'Aidé demandé n'existe pas.");
+        return {
+          etat: 'INEXISTANT',
+        };
       }
       //  Erreur d'adptateur => une erreur BREVO
       console.error(

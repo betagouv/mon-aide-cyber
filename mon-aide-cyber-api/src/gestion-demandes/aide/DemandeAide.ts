@@ -8,8 +8,13 @@ export type DemandeAide = Aggregat & {
   raisonSociale?: string;
   departement: Departement;
 };
+
+export type RechercheDemandeAide = {
+  demandeAide?: DemandeAide;
+  etat: 'COMPLET' | 'INCOMPLET' | 'INEXISTANT';
+};
 export interface EntrepotDemandeAide {
-  rechercheParEmail(email: string): Promise<DemandeAide | undefined>;
+  rechercheParEmail(email: string): Promise<RechercheDemandeAide>;
   persiste(entite: DemandeAide, miseAjour?: boolean): Promise<void>;
 }
 
