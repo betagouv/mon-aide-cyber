@@ -32,7 +32,7 @@ export class ErreurMAC<T extends Error> extends Error {
     public readonly contexte: string,
     public readonly erreurOriginelle: T
   ) {
-    super(erreurOriginelle.message);
+    super(erreurOriginelle.message, { cause: erreurOriginelle });
   }
 
   public static cree<T extends Error>(contexte: Contexte, erreur: T) {
