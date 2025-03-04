@@ -129,8 +129,6 @@ export class CapteurSagaDemandeAide
             },
           });
         });
-
-      return Promise.resolve();
     } catch (erreur) {
       return Promise.reject("Votre demande d'aide n'a pu aboutir");
     }
