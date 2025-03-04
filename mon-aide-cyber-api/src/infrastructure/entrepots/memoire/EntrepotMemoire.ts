@@ -153,13 +153,24 @@ export class EntrepotAideMemoire
   extends EntrepotMemoire<DemandeAide>
   implements EntrepotDemandeAide
 {
+  async persiste(demandeAide: DemandeAide): Promise<void> {
+    const demandesExistantes = Array.from(this.entites.entries())
+      .filter(([, valeur]) => valeur.email === demandeAide.email)
+      .map(([clef]) => clef);
+    demandesExistantes.forEach((clef) => this.entites.delete(clef));
+    super.persiste(demandeAide);
+  }
+
   async rechercheParEmail(email: string): Promise<RechercheDemandeAide> {
     const aides = Array.from(this.entites.values()).filter(
       (aide) => aide.email === email
     );
 
     return aides.length > 0
-      ? { demandeAide: aides[0], etat: 'COMPLET' }
+      ? {
+          demandeAide: aides[0],
+          etat: !aides[0].identifiant ? 'INCOMPLET' : 'COMPLET',
+        }
       : { etat: 'INEXISTANT' };
   }
 }
