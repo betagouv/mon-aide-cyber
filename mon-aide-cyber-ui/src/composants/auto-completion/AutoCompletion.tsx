@@ -128,6 +128,7 @@ export const AutoCompletion = <T extends object | string>(
     <div className="autocomplete fr-col-12" ref={referenceConteneur}>
       <div className="autocomplete-labellise">
         <input
+          autoComplete="off"
           className="fr-input"
           ref={referenceChampSaisie}
           placeholder={proprietes.placeholder}
