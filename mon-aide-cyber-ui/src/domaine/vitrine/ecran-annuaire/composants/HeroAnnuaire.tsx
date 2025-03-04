@@ -7,7 +7,7 @@ export const HeroAnnuaire = () => {
     <HeroBloc>
       <div id="corps" className="hero-layout">
         <section>
-          <TypographieH1>Annuaire des Aidants</TypographieH1>
+          <TypographieH1>Annuaire des Aidants cyber</TypographieH1>
           <p>
             Consultez l’annuaire des Aidants MonAideCyber, référencés et
             outillés par l’ANSSI pour réaliser des diagnostics sur tout le

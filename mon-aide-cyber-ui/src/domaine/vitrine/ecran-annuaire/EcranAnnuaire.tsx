@@ -9,7 +9,7 @@ import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContext
 import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export const EcranAnnuaire = () => {
-  useTitreDePage('Annuaire des Aidants');
+  useTitreDePage('Annuaire des Aidants cyber');
 
   useRecupereContexteNavigation('afficher-annuaire-aidants');
 
