@@ -20,7 +20,10 @@ import {
   Departement,
   gironde,
 } from '../../../src/gestion-demandes/departements';
-import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
+import {
+  DemandeAide,
+  RechercheDemandeAide,
+} from '../../../src/gestion-demandes/aide/DemandeAide';
 import { CapteurCommandeRechercheDemandeAideParEmail } from '../../../src/gestion-demandes/aide/CapteurCommandeRechercheDemandeAideParEmail';
 import {
   CapteurCommandeCreerDemandeAide,
@@ -396,6 +399,49 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         ).rejects.toThrowError("Votre demande d'aide n'a pu aboutir");
         expect(adaptateurEnvoieMail.mailEnvoye()).toBe(false);
         expect(busEvenement.evenementRecu).toBeUndefined();
+      });
+    });
+  });
+
+  describe('Lorsque la demande d’Aide est incomplète', () => {
+    it('Crée une nouvelle demande qui sera complète et met à jour l’Aidé', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const entrepots = new EntrepotsMemoire();
+      const demandeIncomplete = uneDemandeAide().incomplete().construis();
+      await entrepots.demandesAides().persiste(demandeIncomplete);
+      const capteur = new CapteurSagaDemandeAide(
+        new BusCommandeMAC(
+          entrepots,
+          new BusEvenementDeTest(),
+          new AdaptateurEnvoiMailMemoire(),
+          unConstructeurDeServices(entrepots.aidants())
+        ),
+        new BusEvenementDeTest(),
+        new AdaptateurEnvoiMailMemoire(),
+        () => cotParDefaut
+      );
+
+      await capteur.execute({
+        type: 'PeuImporte',
+        cguValidees: true,
+        email: demandeIncomplete.email,
+        departement: gironde,
+        raisonSociale: 'beta-gouv',
+        relationAidant: true,
+      });
+
+      const demandeAideRecue = await entrepots
+        .demandesAides()
+        .rechercheParEmail(demandeIncomplete.email);
+      expect(demandeAideRecue).toStrictEqual<RechercheDemandeAide>({
+        demandeAide: {
+          identifiant: expect.any(String),
+          email: demandeIncomplete.email,
+          dateSignatureCGU: FournisseurHorloge.maintenant(),
+          raisonSociale: 'beta-gouv',
+          departement: gironde,
+        },
+        etat: 'COMPLET',
       });
     });
   });

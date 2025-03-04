@@ -102,6 +102,7 @@ export class CapteurSagaDemandeAide
         departement: saga.departement,
         email: saga.email,
         ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
+        ...(aide.etat === 'INCOMPLET' && { etat: 'INCOMPLET' }),
       };
 
       await this.busCommande

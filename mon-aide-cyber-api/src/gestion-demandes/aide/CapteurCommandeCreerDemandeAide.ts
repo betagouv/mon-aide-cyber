@@ -10,6 +10,7 @@ export type CommandeCreerDemandeAide = Omit<Commande, 'type'> & {
   departement: Departement;
   email: string;
   raisonSociale?: string;
+  etat?: 'INCOMPLET';
 };
 
 export class CapteurCommandeCreerDemandeAide
@@ -26,7 +27,9 @@ export class CapteurCommandeCreerDemandeAide
       ...(commande.raisonSociale && { raisonSociale: commande.raisonSociale }),
     };
 
-    await this.entrepots.demandesAides().persiste(aide);
+    await this.entrepots
+      .demandesAides()
+      .persiste(aide, commande.etat === 'INCOMPLET');
 
     return Promise.resolve(aide);
   }
