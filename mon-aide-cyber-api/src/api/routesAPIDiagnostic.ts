@@ -26,6 +26,7 @@ import {
 import { AdaptateurDeVerificationDesAcces } from '../adaptateurs/AdaptateurDeVerificationDesAcces';
 import { Entrepots } from '../domaine/Entrepots';
 import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { body } from 'express-validator';
 
 export type ReponseDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 
@@ -73,6 +74,9 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/',
     bodyParser.json(),
     session.verifie('Lance le diagnostic'),
+    body('emailEntiteAidee')
+      .isEmail()
+      .withMessage('Veuillez renseigner une adresse email valide.'),
     cgu.verifie(),
     demandeAide.verifie(),
     (

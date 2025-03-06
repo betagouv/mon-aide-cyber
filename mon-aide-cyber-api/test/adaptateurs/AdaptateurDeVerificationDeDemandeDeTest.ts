@@ -7,24 +7,24 @@ import { AdaptateurDeVerificationDeDemande } from '../../src/adaptateurs/Adaptat
 export class AdaptateurDeVerificationDeDemandeDeTest
   implements AdaptateurDeVerificationDeDemande
 {
-  private verificationFaite = false;
+  private emailEntiteAidee = '';
 
   verifie(): RequestHandler {
     return (
-      _requete: RequeteUtilisateur<CorpsRequeteLanceDiagnostic>,
+      requete: RequeteUtilisateur<CorpsRequeteLanceDiagnostic>,
       _reponse: Response,
       suite: NextFunction
     ) => {
-      this.verificationFaite = true;
+      this.emailEntiteAidee = requete.body.emailEntiteAidee;
       suite();
     };
   }
 
-  verifiePassage(): boolean {
-    return this.verificationFaite;
+  verifiePassage(emailEntiteAidee: string): boolean {
+    return this.emailEntiteAidee === emailEntiteAidee;
   }
 
   reinitialise() {
-    this.verificationFaite = false;
+    this.emailEntiteAidee = '';
   }
 }
