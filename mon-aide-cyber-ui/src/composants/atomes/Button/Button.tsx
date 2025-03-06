@@ -36,14 +36,17 @@ function Button({
 
   const classNames = [
     'bouton-mac',
-    'bouton-mac-icone-conteneur',
     buttonVariants.get(variant),
     className,
     theme,
-  ].join(' ');
+  ];
+
+  if (icon) {
+    classNames.push('bouton-mac-icone-conteneur');
+  }
 
   return (
-    <button {...restProps} className={classNames}>
+    <button {...restProps} className={classNames.join(' ')}>
       {icon && iconPos === 'left' ? <i className={`fr-icon ${icon}`} /> : null}
       {children ? children : title}
       {icon && iconPos !== 'left' ? <i className={`fr-icon ${icon}`} /> : null}
