@@ -1,28 +1,25 @@
 national:
   - nom: 'AFCDP (l’Association Française des Correspondants à la protection des Données à caractère Personnel)'
     urlSite: 'https://afcdp.net/'
-  - nom: 'Agence du programme spatial européen (EUSPA)'
-    urlSite: 'https://www.euspa.europa.eu/'
-  - nom: 'CEFCYS (Cercle des Femmes de la Cyber Sécurité)'
-    urlSite: 'https://cefcys.fr/'
   - nom: 'CESIN (Club des Experts de la Sécurité de l’Information et du Numérique)'
     urlSite: 'https://cesin.fr/'
-  - nom: 'Club EBIOS'
-    urlSite: 'https://club-ebios.org/site/'
-  - nom: 'Le Clusif'
+  - nom: 'Clusif'
     urlSite: 'https://clusif.fr/'
+  - nom: 'Hexatrust'
+    urlSite: 'https://www.hexatrust.com/'
   - nom: 'Nothing 2 Hide'
     urlSite: 'https://nothing2hide.org/fr/'
   - nom: 'Rsync Association'
     urlSite: 'https://www.rsync.link/'
-  - nom: 'Women in Cybersecurity (Wycis)'
-    urlSite: 'https://www.wicys.org/wicys-france-affiliate/'
+
 regional:
   auvergneRhoneAlpes:
     nom: 'Auvergne-Rhône-Alpes'
     associations:
       - nom: 'ADIRA'
         urlSite: 'https://www.adira.com/'
+      - nom: 'Assistic'
+        urlSite: 'https://assistic.fr/'
       - nom: 'Clusir Auvergne Rhône Alpes'
         urlSite: 'https://www.clusir-ara.fr/page/1857959-accueil'
       - nom: 'Digital League'
@@ -58,9 +55,13 @@ regional:
   grandEst:
     nom: 'Grand Est'
     associations:
+      -nom: 'Atelier Cyber du Grand Est'
+      -urlSite: 'https://www.linkedin.com/company/atelier-cyber-du-grand-est/'
   hautsDeFrance:
     nom: 'Hauts de France'
     associations:
+      - nom: '1fo1000 nuages'
+      - urlSite: 'https://www.1fo100nuages.fr/'
   ileDeFrance:
     nom: 'Île de France'
     associations:
@@ -69,13 +70,19 @@ regional:
   normandie:
     nom: 'Normandie'
     associations:
+      - nom: 'Clusir Normandie'
+        urlSite: 'https://www.clusir-normandie.fr/page/1331751-accueil' 
   nouvelleAquitaine:
     nom: 'Nouvelle Aquitaine'
     associations:
       - nom: 'Aliénor Cybersécurité'
         urlSite: 'https://www.linkedin.com/company/alienor-cybersecurite-association/'
+      - nom: 'Aquinum'
+        urlSite: 'https://www.aquinum.fr/'
       - nom: 'Campus régional de cybersécurité de Nouvelle-Aquitaine'
         urlSite: 'https://www.campuscyber-na.fr/'
+      - nom: 'Centre de Ressources Cyber Lot et Garonne'
+        urlSite: 'https://www.campusnumerique47.fr/'
       - nom: 'Collectif Rochefort Numérique'
         urlSite: 'https://www.rochefort-numerique.fr/'
       - nom: 'SPN'
@@ -118,7 +125,7 @@ dromCom:
     nom: 'Guyane'
     associations:
   laReunion:
-    nom: 'La réunion'
+    nom: 'La Réunion'
     associations:
       - nom: 'Clusir Réunion Océan Indien '
         urlSite: 'https://clusir-roi.org/'
