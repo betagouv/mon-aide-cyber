@@ -12,7 +12,6 @@ import Button from '../atomes/Button/Button.tsx';
 import { useNavigueVersModifierDiagnostic } from '../../fournisseurs/ContexteNavigationMAC.tsx';
 import { Input } from '../atomes/Input/Input.tsx';
 import './lancer-diagnostic.scss';
-import { ChampsErreur } from '../alertes/Erreurs.tsx';
 
 type ProprietesComposant = {
   surClick: () => void;
@@ -52,15 +51,27 @@ export const ComposantLienCreerDiagnostic = ({
 };
 const RealiserUnDiagnostic = (proprietesRealiserUnDiagnostic: {
   surFermeture: () => void;
-  surValidation: (emailEntiteAidee: string) => void;
-  erreur: ReactElement | undefined;
+  surValidation: (emailEntiteAidee: string) => Promise<void | Error>;
 }) => {
   const [emailEntiteAidee, setEmailEntiteAidee] = useState('');
-
+  const [erreurAfficher, setErreurAfficher] = useState<
+    ReactElement | undefined
+  >(undefined);
   const surSaisieEmailEntiteAidee = useCallback(
     (email: string) => setEmailEntiteAidee(email),
     []
   );
+
+  const lanceDiagnostic = () =>
+    emailEntiteAidee.trim().length > 0 &&
+    proprietesRealiserUnDiagnostic
+      .surValidation(emailEntiteAidee)
+      .then(() => {
+        proprietesRealiserUnDiagnostic.surFermeture();
+      })
+      .catch((erreur: Error) => {
+        setErreurAfficher(<p className="fr-error-text">{erreur.message}</p>);
+      });
 
   return (
     <>
@@ -74,7 +85,9 @@ const RealiserUnDiagnostic = (proprietesRealiserUnDiagnostic: {
               Si l’entité bénéficiaire a complété le formulaire de demande
               d’aide, veuillez indiquer l’adresse email utilisée ci-dessous.
             </div>
-            <div className="fr-input-group">
+            <div
+              className={`fr-input-group ${erreurAfficher ? 'fr-input-group--error' : ''}`}
+            >
               <label
                 className="fr-label fr-pt-2w"
                 htmlFor="saisie-email-entite-aidee"
@@ -88,7 +101,7 @@ const RealiserUnDiagnostic = (proprietesRealiserUnDiagnostic: {
                 name="saisie-email-entite-aidee"
                 onChange={(e) => surSaisieEmailEntiteAidee(e.target.value)}
               />
-              {proprietesRealiserUnDiagnostic.erreur}
+              {erreurAfficher}
             </div>
           </fieldset>
           <div className="texte-centre fr-pt-2w">
@@ -130,10 +143,7 @@ const RealiserUnDiagnostic = (proprietesRealiserUnDiagnostic: {
             disabled={!(emailEntiteAidee.trim().length > 0)}
             type="button"
             key="validation-cgu-entite"
-            onClick={() =>
-              emailEntiteAidee.trim().length > 0 &&
-              proprietesRealiserUnDiagnostic.surValidation(emailEntiteAidee)
-            }
+            onClick={() => lanceDiagnostic()}
           >
             Commencer le diagnostic
           </Button>
@@ -155,37 +165,33 @@ export const ComposantLancerDiagnostic = ({
   const { navigue } = useNavigueVersModifierDiagnostic(
     `${ROUTE_MON_ESPACE}/diagnostic`
   );
-  const [erreur, setErreur] = useState<ReactElement | undefined>(undefined);
 
   const { affiche, ferme } = useModale();
 
-  const lanceDiagnostic = useCallback(
-    (lien: Lien, emailEntiteAidee: string) => {
-      macAPI
-        .execute<string, FormatLien, CorpsLancerDiagnostic>(
-          constructeurParametresAPI<CorpsLancerDiagnostic>()
-            .corps({ emailEntiteAidee })
-            .url(lien.url)
-            .methode(lien.methode!)
-            .construis(),
-          async (lienDansHeader) => await lienDansHeader
-        )
-        .then((lien) => {
+  const lanceDiagnostic = (lien: Lien, emailEntiteAidee: string) => {
+    return macAPI.execute<string, FormatLien, CorpsLancerDiagnostic>(
+      constructeurParametresAPI<CorpsLancerDiagnostic>()
+        .corps({ emailEntiteAidee })
+        .url(lien.url)
+        .methode(lien.methode!)
+        .construis(),
+      async (lienDansHeader) => await lienDansHeader
+    );
+  };
+
+  const lancerDiagnostic = useCallback(
+    async (emailEntiteAidee: string) => {
+      const lienLancerDiagnostic = new MoteurDeLiens(
+        navigationMAC.etat
+      ).trouveEtRenvoie('lancer-diagnostic');
+
+      return lanceDiagnostic(lienLancerDiagnostic, emailEntiteAidee).then(
+        (lien) => {
           return navigue({
             url: lien,
             methode: 'GET',
           });
-        })
-        .catch((erreur) => setErreur(<ChampsErreur erreur={erreur} />));
-    },
-    [navigationMAC]
-  );
-
-  const lancerDiagnostic = useCallback(
-    async (emailEntiteAidee: string) => {
-      new MoteurDeLiens(navigationMAC.etat).trouve(
-        'lancer-diagnostic',
-        (lien: Lien) => lanceDiagnostic(lien, emailEntiteAidee)
+        }
       );
     },
     [navigationMAC.etat, lanceDiagnostic]
@@ -198,10 +204,8 @@ export const ComposantLancerDiagnostic = ({
         <RealiserUnDiagnostic
           surFermeture={ferme}
           surValidation={async (emailEntiteAidee) => {
-            ferme();
-            await lancerDiagnostic(emailEntiteAidee);
+            return lancerDiagnostic(emailEntiteAidee);
           }}
-          erreur={erreur}
         />
       ),
       taille: 'moyenne',
