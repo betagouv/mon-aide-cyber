@@ -28,6 +28,9 @@ import {
   relieUnAidantAUnDiagnostic,
   relieUnUtilisateurInscritAUnDiagnostic,
 } from '../constructeurs/relationsUtilisateursMACDiagnostic';
+import { AdaptateurDeVerificationDeDemandeMAC } from '../../src/adaptateurs/AdaptateurDeVerificationDeDemandeMAC';
+import { EntrepotAideMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import { AdaptateurDeVerificationDeDemandeDeTest } from '../adaptateurs/AdaptateurDeVerificationDeDemandeDeTest';
 
 describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -249,8 +252,43 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       });
 
       expect(
-        testeurMAC.adaptateurDeVerificationDeDemande.verifiePassage()
+        (
+          testeurMAC.adaptateurDeVerificationDeDemande as AdaptateurDeVerificationDeDemandeDeTest
+        ).verifiePassage('jean.dupont@yopmail.com')
       ).toBe(true);
+    });
+
+    describe('Afin de valider le mail de l‘entité', () => {
+      const testeurMAC = testeurIntegration();
+      let donneesServeur: { app: Express };
+      const entrepotAide = new EntrepotAideMemoire();
+
+      beforeEach(() => {
+        testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
+        testeurMAC.adaptateurDeVerificationDeDemande =
+          new AdaptateurDeVerificationDeDemandeMAC(entrepotAide);
+        donneesServeur = testeurMAC.initialise();
+      });
+
+      afterEach(() => {
+        testeurMAC.arrete();
+      });
+
+      it("Vérifie que l'email fourni est au bon format", async () => {
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/diagnostic/`,
+          {
+            emailEntiteAidee: 'mauvaisformat',
+          }
+        );
+
+        expect(reponse.statusCode).toBe(400);
+        expect(await reponse.json()).toStrictEqual({
+          message: 'Veuillez renseigner une adresse email valide.',
+        });
+      });
     });
   });
 
