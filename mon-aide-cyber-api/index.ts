@@ -24,6 +24,7 @@ import { adaptateurProConnect } from './src/adaptateurs/pro-connect/adaptateurPr
 import { adaptateurEnvironnement } from './src/adaptateurs/adaptateurEnvironnement';
 import { AdaptateurDeRequeteHTTP } from './src/infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
 import { redirigeVersUrlBase } from './src/infrastructure/middlewares/middlewares';
+import { AdaptateurDeVerificationDeDemandeMAC } from './src/adaptateurs/AdaptateurDeVerificationDeDemandeMAC';
 import { AdaptateurAseptisationMAC } from './src/adaptateurs/AdaptateurAseptisationMAC';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
@@ -75,6 +76,7 @@ const serveurMAC = serveur.creeServeur({
   adaptateurDeVerificationDeCGU: new AdaptateurDeVerificationDeCGUMAC(
     entrepots
   ),
+  adaptateurDeVerificationDeDemande: new AdaptateurDeVerificationDeDemandeMAC(),
   adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(
     gestionnaireDeJeton
   ),

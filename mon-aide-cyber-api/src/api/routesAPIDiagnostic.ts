@@ -53,12 +53,17 @@ const verifieRelations = (
   };
 };
 
+export type CorpsRequeteLanceDiagnostic = {
+  emailEntiteAidee: string;
+};
+
 export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
 
   const {
     adaptateurDeVerificationDeSession: session,
     adaptateurDeVerificationDeCGU: cgu,
+    adaptateurDeVerificationDeDemande: demandeAide,
     adaptateurDeVerificationDesAcces: relations,
     busCommande,
     entrepots,
@@ -68,7 +73,12 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/',
     session.verifie('Lance le diagnostic'),
     cgu.verifie(),
-    (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
+    demandeAide.verifie(),
+    (
+      requete: RequeteUtilisateur<CorpsRequeteLanceDiagnostic>,
+      reponse: Response,
+      suite: NextFunction
+    ) => {
       const commande: CommandeLanceDiagnostic = {
         type: 'CommandeLanceDiagnostic',
         identifiantAidant: requete.identifiantUtilisateurCourant!,

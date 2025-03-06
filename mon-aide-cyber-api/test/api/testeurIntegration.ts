@@ -27,6 +27,7 @@ import { AdaptateurDeVerificationDuTypeDeRelationDeTest } from '../adaptateurs/A
 import { AdaptateurProConnect } from '../../src/adaptateurs/pro-connect/adaptateurProConnect';
 import { AdaptateurProConnectDeTest } from '../adaptateurs/pro-connect/AdaptateurProConnectDeTest';
 import { AdaptateurDeRequeteHTTPMemoire } from '../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
+import { AdaptateurDeVerificationDeDemandeDeTest } from '../adaptateurs/AdaptateurDeVerificationDeDemandeDeTest';
 import { AdaptateurAseptisationDeTest } from '../adaptateurs/AdaptateurAseptisationDeTest';
 
 const PORT_DISPONIBLE = 0;
@@ -51,6 +52,7 @@ class TesteurIntegrationMAC {
     public busEvenement = new BusEvenementDeTest(),
     public gestionnaireDeJeton = new FauxGestionnaireDeJeton(),
     public adaptateurDeVerificationDeCGU = new AdapatateurDeVerificationDeCGUDeTest(),
+    public adaptateurDeVerificationDeDemande = new AdaptateurDeVerificationDeDemandeDeTest(),
     public adaptateuraseptisation = new AdaptateurAseptisationDeTest(),
     public adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest = new AdaptateurDeVerificationDeSessionDeTest(),
     public adaptateurDeVerificationDesAcces = new AdaptateurDeVerificationDesAccesDeTest(),
@@ -99,6 +101,7 @@ class TesteurIntegrationMAC {
       adaptateurDeGestionDeCookies: this.adaptateurDeGestionDeCookies,
       adaptateurAseptisation: this.adaptateuraseptisation,
       adaptateurDeVerificationDeCGU: this.adaptateurDeVerificationDeCGU,
+      adaptateurDeVerificationDeDemande: this.adaptateurDeVerificationDeDemande,
       adaptateurDeVerificationDeSession: this.adaptateurDeVerificationDeSession,
       adaptateurDeVerificationDesAcces: this.adaptateurDeVerificationDesAcces,
       adaptateursRestitution: this.adaptateursRestitution,
