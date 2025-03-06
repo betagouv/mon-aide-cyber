@@ -71,6 +71,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
 
   routes.post(
     '/',
+    bodyParser.json(),
     session.verifie('Lance le diagnostic'),
     cgu.verifie(),
     demandeAide.verifie(),
