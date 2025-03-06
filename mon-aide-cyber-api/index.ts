@@ -76,7 +76,9 @@ const serveurMAC = serveur.creeServeur({
   adaptateurDeVerificationDeCGU: new AdaptateurDeVerificationDeCGUMAC(
     entrepots
   ),
-  adaptateurDeVerificationDeDemande: new AdaptateurDeVerificationDeDemandeMAC(),
+  adaptateurDeVerificationDeDemande: new AdaptateurDeVerificationDeDemandeMAC(
+    entrepots.demandesAides()
+  ),
   adaptateurDeVerificationDeSession: new AdaptateurDeVerificationDeSessionHttp(
     gestionnaireDeJeton
   ),
