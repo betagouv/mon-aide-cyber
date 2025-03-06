@@ -242,6 +242,16 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         true
       );
     });
+
+    it('Vérifie que l‘email de l‘entité correspond à une demande', async () => {
+      await executeRequete(donneesServeur.app, 'POST', `/api/diagnostic/`, {
+        emailEntiteAidee: 'jean.dupont@yopmail.com',
+      });
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDeDemande.verifiePassage()
+      ).toBe(true);
+    });
   });
 
   describe('Quand une requête PATCH est reçue sur /{id}', () => {

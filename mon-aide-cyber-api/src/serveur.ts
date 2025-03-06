@@ -32,6 +32,7 @@ import { AdaptateurProConnect } from './adaptateurs/pro-connect/adaptateurProCon
 import { routesProConnect } from './api/pro-connect/routeProConnect';
 import { AdaptateurDeRequeteHTTP } from './infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
 import { routesAssociations } from './api/associations/routesAssociations';
+import { AdaptateurDeVerificationDeDemande } from './adaptateurs/AdaptateurDeVerificationDeDemande';
 import { AdaptateurAseptisation } from './adaptateurs/AdaptateurAseptisation';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
@@ -49,6 +50,7 @@ export type ConfigurationServeur = {
   adaptateurDeGestionDeCookies: AdaptateurDeGestionDeCookies;
   adaptateurAseptisation: AdaptateurAseptisation;
   adaptateurDeVerificationDeCGU: AdaptateurDeVerificationDeCGU;
+  adaptateurDeVerificationDeDemande: AdaptateurDeVerificationDeDemande;
   adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
   adaptateurDeVerificationDesAcces: AdaptateurDeVerificationDesAcces;
   adaptateurDeVerificationDeRelations: AdaptateurDeVerificationDeTypeDeRelation;
