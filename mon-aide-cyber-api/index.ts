@@ -24,6 +24,7 @@ import { adaptateurProConnect } from './src/adaptateurs/pro-connect/adaptateurPr
 import { adaptateurEnvironnement } from './src/adaptateurs/adaptateurEnvironnement';
 import { AdaptateurDeRequeteHTTP } from './src/infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
 import { redirigeVersUrlBase } from './src/infrastructure/middlewares/middlewares';
+import { AdaptateurAseptisationMAC } from './src/adaptateurs/AdaptateurAseptisationMAC';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
@@ -70,6 +71,7 @@ const serveurMAC = serveur.creeServeur({
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),
   gestionnaireDeJeton: gestionnaireDeJeton,
   adaptateurDeGestionDeCookies: new AdaptateurDeGestionDeCookiesMAC(),
+  adaptateurAseptisation: new AdaptateurAseptisationMAC(),
   adaptateurDeVerificationDeCGU: new AdaptateurDeVerificationDeCGUMAC(
     entrepots
   ),
