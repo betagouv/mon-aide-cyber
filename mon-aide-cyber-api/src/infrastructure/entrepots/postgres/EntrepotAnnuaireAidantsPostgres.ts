@@ -38,9 +38,15 @@ export class EntrepotAnnuaireAidantsPostgres
           WHERE (donnees ->> 'consentementAnnuaire')::bool is TRUE`;
     const parametres = criteresDeRecherche && {
       departements: '["' + criteresDeRecherche?.departement + '"]',
+      ...(criteresDeRecherche.typeEntite && {
+        typesEntites: '["' + criteresDeRecherche?.typeEntite + '"]',
+      }),
     };
     requete = criteresDeRecherche?.departement
       ? `${requete} AND donnees -> 'preferences' -> 'departements' @> :departements`
+      : requete;
+    requete = criteresDeRecherche?.typeEntite
+      ? `${requete} AND donnees -> 'preferences' -> 'typesEntites' @> :typesEntites`
       : requete;
 
     return await this.knex

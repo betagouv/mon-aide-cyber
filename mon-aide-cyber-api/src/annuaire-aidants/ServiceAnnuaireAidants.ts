@@ -2,6 +2,7 @@ import { Aidant, EntrepotAnnuaireAidants } from './annuaireAidants';
 
 export type CriteresDeRecherche = {
   departement: string;
+  typeEntite?: string;
 };
 
 const tableauAleatoire = (aidants: Aidant[]) => {
