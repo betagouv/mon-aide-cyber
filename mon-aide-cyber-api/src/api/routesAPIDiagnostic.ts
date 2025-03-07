@@ -66,6 +66,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     adaptateurDeVerificationDeCGU: cgu,
     adaptateurDeVerificationDeDemande: demandeAide,
     adaptateurDeVerificationDesAcces: relations,
+    adaptateurAseptisation: aseptisation,
     busCommande,
     entrepots,
   } = configuration;
@@ -74,6 +75,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     '/',
     bodyParser.json(),
     session.verifie('Lance le diagnostic'),
+    aseptisation.aseptise('emailEntiteAidee'),
     body('emailEntiteAidee')
       .isEmail()
       .withMessage('Veuillez renseigner une adresse email valide.'),

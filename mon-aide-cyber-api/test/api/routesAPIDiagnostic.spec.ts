@@ -289,6 +289,16 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
           message: 'Veuillez renseigner une adresse email valide.',
         });
       });
+
+      it("Vérifie que l'email est bien aseptisé", async () => {
+        await executeRequete(donneesServeur.app, 'POST', `/api/diagnostic/`, {
+          emailEntiteAidee: '  jean.dupont@yopmail.com   ',
+        });
+
+        expect(
+          testeurMAC.adaptateurAseptisation.ontEteAseptises('emailEntiteAidee')
+        ).toBe(true);
+      });
     });
   });
 

@@ -12,8 +12,9 @@ export class AdaptateurAseptisationDeTest implements AdaptateurAseptisation {
   }
 
   ontEteAseptises(...champsAAseptiser: string[]): boolean {
-    return champsAAseptiser.every((champ) =>
-      this.champsAseptises.includes(champ)
+    return (
+      this.champsAseptises.length > 0 &&
+      champsAAseptiser.every((champ) => this.champsAseptises.includes(champ))
     );
   }
 }
