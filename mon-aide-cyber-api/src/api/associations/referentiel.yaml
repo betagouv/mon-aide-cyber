@@ -55,13 +55,13 @@ regional:
   grandEst:
     nom: 'Grand Est'
     associations:
-      -nom: 'Atelier Cyber du Grand Est'
-      -urlSite: 'https://www.linkedin.com/company/atelier-cyber-du-grand-est/'
+      - nom: 'Atelier Cyber du Grand Est'
+        urlSite: 'https://www.linkedin.com/company/atelier-cyber-du-grand-est/'
   hautsDeFrance:
     nom: 'Hauts de France'
     associations:
       - nom: '1fo1000 nuages'
-      - urlSite: 'https://www.1fo100nuages.fr/'
+        urlSite: 'https://www.1fo100nuages.fr/'
   ileDeFrance:
     nom: 'Île de France'
     associations:
