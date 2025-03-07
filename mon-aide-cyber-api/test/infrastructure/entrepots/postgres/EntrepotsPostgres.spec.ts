@@ -57,6 +57,7 @@ import {
   EntitesAssociations,
   EntitesOrganisationsPubliques,
   TypeAffichageAnnuaire,
+  typesEntites,
   TypesEntites,
 } from '../../../../src/espace-aidant/Aidant';
 import {
@@ -1220,6 +1221,43 @@ describe('Entrepot Annuaire Aidants Postgres', () => {
           },
         ]);
       });
+    });
+
+    describe('Par nature de l‘entité', () => {
+      it.each(typesEntites)(
+        'Retourne les Aidants pouvant intervenir pour une $nom',
+        async (typeEntite) => {
+          const premierAidantAvecConsentement = unAidant()
+            .ayantConsentiPourLAnnuaire()
+            .ayantPourDepartements([gironde])
+            .ayantPourTypesEntite([typeEntite])
+            .construis();
+          const secondAidantAvecConsentement = unAidant()
+            .ayantConsentiPourLAnnuaire()
+            .ayantPourDepartements([gironde])
+            .construis();
+          const entrepotAidant = new EntrepotAidantPostgres(
+            new ServiceDeChiffrementClair()
+          );
+          await entrepotAidant.persiste(premierAidantAvecConsentement);
+          await entrepotAidant.persiste(secondAidantAvecConsentement);
+
+          const tousLesAidants = await new EntrepotAnnuaireAidantsPostgres(
+            new ServiceDeChiffrementClair()
+          ).rechercheParCriteres({
+            departement: gironde.nom,
+            typeEntite: typeEntite.nom,
+          });
+
+          expect(tousLesAidants).toStrictEqual<AnnuaireAidant[]>([
+            {
+              identifiant: premierAidantAvecConsentement.identifiant,
+              nomPrenom: premierAidantAvecConsentement.nomPrenom,
+              departements: [gironde],
+            },
+          ]);
+        }
+      );
     });
   });
 });
