@@ -238,11 +238,19 @@ export class EntrepotAnnuaireAidantsMemoire
     if (criteresDeRecherche) {
       return Promise.resolve(
         tousLesAidants
-          .filter((a) =>
-            a.preferences.departements
+          .filter((a) => {
+            const estDansLeDepartement = a.preferences.departements
               .map((a) => a.nom as string)
-              .includes(criteresDeRecherche.departement)
-          )
+              .includes(criteresDeRecherche.departement);
+
+            let aTypeEntite = true;
+            if (criteresDeRecherche.typeEntite) {
+              aTypeEntite = a.preferences.typesEntites
+                .map((e) => e.nom as string)
+                .includes(criteresDeRecherche.typeEntite);
+            }
+            return estDansLeDepartement && aTypeEntite;
+          })
           .map((aidant) => ({
             nomPrenom: aidant.preferences.nomAffichageAnnuaire,
             identifiant: aidant.identifiant,

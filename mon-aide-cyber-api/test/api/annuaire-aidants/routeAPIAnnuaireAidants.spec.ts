@@ -12,7 +12,10 @@ import {
   gironde,
 } from '../../../src/gestion-demandes/departements';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
-import { TypeAffichageAnnuaire } from '../../../src/espace-aidant/Aidant';
+import {
+  TypeAffichageAnnuaire,
+  typesEntites,
+} from '../../../src/espace-aidant/Aidant';
 
 describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
   let testeurMAC = testeurIntegration();
@@ -205,6 +208,37 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
             },
           },
         });
+      });
+    });
+
+    describe("Par type d'entité", () => {
+      it("Retourne les Aidants ayant choisi un type d'entité", async () => {
+        const organisationsPubliques = typesEntites[0];
+
+        const aidant = unAidant()
+          .avecUnNomPrenom('Jean DUPONT')
+          .ayantPourDepartements([gironde])
+          .ayantPourTypesEntite([organisationsPubliques])
+          .ayantConsentiPourLAnnuaire(TypeAffichageAnnuaire.PRENOM_N)
+          .construis();
+        const autreAidant = unAidant()
+          .ayantPourDepartements([gironde])
+          .ayantConsentiPourLAnnuaire(TypeAffichageAnnuaire.PRENOM_N)
+          .construis();
+        await testeurMAC.entrepots.aidants().persiste(aidant);
+        await testeurMAC.entrepots.aidants().persiste(autreAidant);
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'GET',
+          `/api/annuaire-aidants?departement=${encodeURIComponent('Gironde')}&typeEntite=${encodeURIComponent('Organisations publiques')}`
+        );
+
+        const reponseJson: ReponseAPIAnnuaireAidantsSucces =
+          await reponse.json();
+        expect(reponseJson.aidants).toStrictEqual([
+          { identifiant: aidant.identifiant, nomPrenom: 'Jean D.' },
+        ]);
       });
     });
   });

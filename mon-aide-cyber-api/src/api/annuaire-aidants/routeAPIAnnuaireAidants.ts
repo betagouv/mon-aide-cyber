@@ -58,7 +58,11 @@ export const routesAPIAnnuaireAidants = (
       const estCriteresDeRecherche = (
         criteresDeRecherche: CriteresDeRecherche | ParsedQs
       ): criteresDeRecherche is CriteresDeRecherche => {
-        return criteresDeRecherche && !!criteresDeRecherche.departement;
+        return (
+          (criteresDeRecherche && !!criteresDeRecherche.departement) ||
+          (!!criteresDeRecherche.departement &&
+            !!criteresDeRecherche.typeEntite)
+        );
       };
 
       const resultatsValidation: Result<FieldValidationError> =
