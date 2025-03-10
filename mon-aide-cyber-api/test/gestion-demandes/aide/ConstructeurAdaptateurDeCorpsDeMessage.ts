@@ -19,14 +19,18 @@ class ConstructeurAdaptateurDeCorpsDeMessage
   ) => string = (_proprietes) => 'Bonjour MAC!';
   private _recapitulatifDemandeAide: (
     _aide: DemandeAide,
-    _relationAidant: boolean
-  ) => string = (_aide: DemandeAide, _relationAidant: boolean) =>
-    'Bonjour une entité a fait une demande d’aide';
+    _relationUtilisateur: string | undefined
+  ) => string = (
+    _aide: DemandeAide,
+    _relationUtilisateur: string | undefined
+  ) => 'Bonjour une entité a fait une demande d’aide';
   private _confirmationDemandeAide: (
     _aide: DemandeAide,
-    relationAidant: boolean
-  ) => string = (_aide: DemandeAide, _relationAidant: boolean) =>
-    'Bonjour entité Aidée';
+    relationUtilisateur: string | undefined
+  ) => string = (
+    _aide: DemandeAide,
+    _relationUtilisateur: string | undefined
+  ) => 'Bonjour entité Aidée';
 
   notificationAidant(
     notification: (proprietes: ProprietesMessageAidant) => string
@@ -43,14 +47,20 @@ class ConstructeurAdaptateurDeCorpsDeMessage
   }
 
   recapitulatifDemandeAide(
-    recapitulatif: (_aide: DemandeAide, relationAidant: boolean) => string
+    recapitulatif: (
+      _aide: DemandeAide,
+      relationUtilisateur: string | undefined
+    ) => string
   ): ConstructeurAdaptateurDeCorpsDeMessage {
     this._recapitulatifDemandeAide = recapitulatif;
     return this;
   }
 
   confirmationDemandeAide(
-    confirmation: (_aide: DemandeAide, relationAidant: boolean) => string
+    confirmation: (
+      _aide: DemandeAide,
+      relationUtilisateur: string | undefined
+    ) => string
   ): ConstructeurAdaptateurDeCorpsDeMessage {
     this._confirmationDemandeAide = confirmation;
     return this;
@@ -76,12 +86,12 @@ class ConstructeurAdaptateurDeCorpsDeMessage
       }),
       demande: (): MessagesDemande => ({
         recapitulatifDemandeAide: () => ({
-          genereCorpsMessage: (aide, relationAidant) =>
-            this._recapitulatifDemandeAide(aide, relationAidant),
+          genereCorpsMessage: (aide, relationUtilisateur) =>
+            this._recapitulatifDemandeAide(aide, relationUtilisateur),
         }),
         confirmationDemandeAide: () => ({
-          genereCorpsMessage: (aide, relationAidant) =>
-            this._confirmationDemandeAide(aide, relationAidant),
+          genereCorpsMessage: (aide, relationUtilisateur) =>
+            this._confirmationDemandeAide(aide, relationUtilisateur),
         }),
       }),
     };

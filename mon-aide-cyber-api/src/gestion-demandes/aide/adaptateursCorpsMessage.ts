@@ -95,10 +95,16 @@ export type MessagesSollicitation = {
 
 export type MessagesDemande = {
   recapitulatifDemandeAide: () => {
-    genereCorpsMessage: (aide: DemandeAide, relationAidant: boolean) => string;
+    genereCorpsMessage: (
+      aide: DemandeAide,
+      relationUtilisateur: string | undefined
+    ) => string;
   };
   confirmationDemandeAide: () => {
-    genereCorpsMessage: (aide: DemandeAide, relationAidant: boolean) => string;
+    genereCorpsMessage: (
+      aide: DemandeAide,
+      relationUtilisateur: string | undefined
+    ) => string;
   };
 };
 
@@ -109,7 +115,7 @@ export type AdaptateurCorpsDeMessageAide = {
 
 const genereCorpsConfirmationDemandeAide = (
   aide: DemandeAide,
-  relationAidant: boolean
+  relationUtilisateur: string | undefined
 ) => {
   const formateDate = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant()
@@ -117,7 +123,7 @@ const genereCorpsConfirmationDemandeAide = (
   const raisonSociale = aide.raisonSociale
     ? `- Raison sociale : ${aide.raisonSociale}\n`
     : '';
-  const messageIntroduction = relationAidant
+  const messageIntroduction = relationUtilisateur
     ? 'Votre demande a bien été prise en compte.\n' +
       '\n' +
       'Votre Aidant va vous accompagner dans la suite de votre démarche MonAideCyber.\n' +
@@ -141,7 +147,7 @@ const genereCorpsConfirmationDemandeAide = (
 };
 const genereCorpsRecapitulatifDemandeAide = (
   aide: DemandeAide,
-  relationAidant: boolean
+  relationUtilisateur: string | undefined
 ) => {
   const formateDate = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant()
@@ -149,7 +155,7 @@ const genereCorpsRecapitulatifDemandeAide = (
   const raisonSociale = aide.raisonSociale
     ? `- Raison sociale: ${aide.raisonSociale}\n`
     : '';
-  const miseEnRelation = relationAidant
+  const miseEnRelation = relationUtilisateur
     ? '- Est déjà en relation avec un Aidant\n'
     : '';
   return (
@@ -196,12 +202,12 @@ const adaptateursCorpsMessage: AdaptateurCorpsDeMessageAide = {
   }),
   demande: (): MessagesDemande => ({
     confirmationDemandeAide: () => ({
-      genereCorpsMessage: (aide, relationAidant): string =>
-        genereCorpsConfirmationDemandeAide(aide, relationAidant),
+      genereCorpsMessage: (aide, relationUtilisateur): string =>
+        genereCorpsConfirmationDemandeAide(aide, relationUtilisateur),
     }),
     recapitulatifDemandeAide: () => ({
-      genereCorpsMessage: (aide, relationAidant): string =>
-        genereCorpsRecapitulatifDemandeAide(aide, relationAidant),
+      genereCorpsMessage: (aide, relationUtilisateur): string =>
+        genereCorpsRecapitulatifDemandeAide(aide, relationUtilisateur),
     }),
   }),
 };

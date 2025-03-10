@@ -21,7 +21,7 @@ type CorpsRequeteDemandeAide = {
   email: string;
   departement: string;
   raisonSociale?: string;
-  relationAidant: boolean;
+  relationUtilisateur?: string;
 };
 
 class ErreurDemandeAide extends Error {
@@ -62,6 +62,12 @@ export const routesAPIDemandeEtreAide = (
       .withMessage(
         "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide"
       ),
+    body('relationUtilisateur')
+      .optional()
+      .isEmail()
+      .withMessage(
+        "Veuillez renseigner un email valide pour l'utilisateur avec qui vous êtes en relation."
+      ),
     async (
       requete: RequetePublique<CorpsRequeteDemandeAide>,
       reponse: Response,
@@ -80,7 +86,9 @@ export const routesAPIDemandeEtreAide = (
           ...(corpsRequete.raisonSociale && {
             raisonSociale: corpsRequete.raisonSociale,
           }),
-          relationAidant: corpsRequete.relationAidant,
+          ...(corpsRequete.relationUtilisateur && {
+            relationUtilisateur: corpsRequete.relationUtilisateur,
+          }),
         };
         return configuration.busCommande
           .publie(saga)

@@ -9,7 +9,6 @@ export type CommandeMettreAJourDemandeAide = Commande & {
   departement: Departement;
   email: string;
   raisonSociale?: string;
-  relationAidant: boolean;
 };
 
 export class CapteurCommandeMettreAJourDemandeAide
