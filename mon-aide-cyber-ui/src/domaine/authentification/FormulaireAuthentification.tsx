@@ -81,10 +81,11 @@ export const ComposantAuthentification = ({
                 async (reponse) => await reponse
               )
               .then((reponse) => {
-                setUtilisateurConnecte({ nomPrenom: reponse.nomPrenom });
-                const moteurDeLiens = new MoteurDeLiens({
-                  ...reponse.liens,
+                setUtilisateurConnecte({
+                  nomPrenom: reponse.nomPrenom,
+                  email: reponse.email,
                 });
+                const moteurDeLiens = new MoteurDeLiens({ ...reponse.liens });
 
                 const actionValiderProfilAidant = moteurDeLiens.trouveEtRenvoie(
                   'valider-profil-aidant'
@@ -109,9 +110,7 @@ export const ComposantAuthentification = ({
                   () =>
                     navigationMAC.navigue(
                       `${ROUTE_MON_ESPACE}/tableau-de-bord`,
-                      {
-                        ...reponse.liens,
-                      }
+                      { ...reponse.liens }
                     ),
                   () =>
                     moteurDeLiens.trouve('valider-signature-cgu', () =>
