@@ -52,7 +52,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       it("Retourne l'utilisateur connecté", async () => {
         const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-          constructeurAidant: unAidant(),
+          constructeurAidant: unAidant().avecUnEmail('jean.aidant@societe.fr'),
           entrepotAidant: testeurMAC.entrepots.aidants(),
           constructeurUtilisateur: unUtilisateur().avecUnIdentifiantDeConnexion(
             'jean.aidant@societe.fr'
