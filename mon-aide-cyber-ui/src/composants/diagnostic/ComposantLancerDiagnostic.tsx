@@ -1,5 +1,9 @@
 import { ReactElement, useCallback, useState } from 'react';
-import { useModale, useNavigationMAC } from '../../fournisseurs/hooks.ts';
+import {
+  useModale,
+  useNavigationMAC,
+  useUtilisateur,
+} from '../../fournisseurs/hooks.ts';
 
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import {
@@ -12,6 +16,7 @@ import Button from '../atomes/Button/Button.tsx';
 import { useNavigueVersModifierDiagnostic } from '../../fournisseurs/ContexteNavigationMAC.tsx';
 import { Input } from '../atomes/Input/Input.tsx';
 import './lancer-diagnostic.scss';
+import { partageEmail } from '../../domaine/gestion-demandes/etre-aide/EtreAide.ts';
 
 type ProprietesComposant = {
   surClick: () => void;
@@ -73,7 +78,9 @@ const RealiserUnDiagnostic = (proprietesRealiserUnDiagnostic: {
         setErreurAfficher(<p className="fr-error-text">{erreur.message}</p>);
       });
 
-  const lienDemandeAide = `${import.meta.env['VITE_URL_MAC']}/beneficier-du-dispositif/etre-aide#formulaire-demande-aide`;
+  const { utilisateur } = useUtilisateur();
+  const email = partageEmail().encode(utilisateur!.email);
+  const lienDemandeAide = `${import.meta.env['VITE_URL_MAC']}/beneficier-du-dispositif/etre-aide?${email}#formulaire-demande-aide`;
 
   return (
     <>
@@ -115,16 +122,6 @@ const RealiserUnDiagnostic = (proprietesRealiserUnDiagnostic: {
                 Vous initiez un diagnostic à une entité qui n’a pas fait de
                 demande en ligne
               </b>
-              <br />
-              L&apos;utilisation du diagnostic nécessite l&apos;acceptation des
-              CGU par le bénéficiaire. Veuillez l&apos;orienter vers{' '}
-              <a href="/beneficier-du-dispositif/etre-aide">
-                le lien du formulaire
-              </a>{' '}
-              afin qu&apos;il puisse accepter les CGU avant de démarrer le
-              diagnostic
-              <br />
-              <a href={lienDemandeAide}>{lienDemandeAide}</a>
             </div>
             <div className="fr-pt-2w">
               Si l’entité bénéficiaire n’a pas fait de demande en ligne,
@@ -134,10 +131,7 @@ const RealiserUnDiagnostic = (proprietesRealiserUnDiagnostic: {
             </div>
             <div className="fr-pt-2w">
               Le lien à communiquer :
-              <br />-
-              <a
-                href={`${import.meta.env['VITE_URL_MAC']}/beneficier-du-dispositif/etre-aide#formulaire-demande-aide`}
-              >{`${import.meta.env['VITE_URL_MAC']}/beneficier-du-dispositif/etre-aide#formulaire-demande-aide`}</a>
+              <br />-<a href={lienDemandeAide}>{lienDemandeAide}</a>
             </div>
           </div>
         </div>

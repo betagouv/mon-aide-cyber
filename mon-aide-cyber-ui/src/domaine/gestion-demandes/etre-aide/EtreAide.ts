@@ -21,3 +21,22 @@ export type CorpsDemandeSolliciterAidant = {
 export type ReponseDemandeEtreAide = ReponseHATEOAS & {
   departements: Departement[];
 };
+
+export const partageEmail = () => ({
+  encode: (email: string) => {
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa#unicode_strings
+    const enBinaire = Array.from(new TextEncoder().encode(email), (byte) =>
+      String.fromCodePoint(byte)
+    ).join('');
+    const base64 = btoa(enBinaire);
+    return `utilisateur=${encodeURIComponent(base64)}`;
+  },
+
+  decode: (queryString: URLSearchParams) => {
+    const utilisateur = queryString.get('utilisateur');
+
+    if (!utilisateur) return '';
+
+    return atob(decodeURIComponent(utilisateur));
+  },
+});
