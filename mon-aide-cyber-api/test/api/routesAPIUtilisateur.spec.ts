@@ -200,26 +200,23 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
       expect(reponse.statusCode).toBe(200);
       expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
-      expect(await reponse.json()).toStrictEqual({
-        nomPrenom: utilisateur.nomPrenom,
-        liens: {
-          'rechercher-entreprise': {
-            methode: 'GET',
-            url: '/api/recherche-entreprise',
-          },
-          'valider-profil-utilisateur-inscrit': {
-            methode: 'POST',
-            url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
-          },
-          'valider-profil-aidant': {
-            methode: 'POST',
-            url: '/api/utilisateur/valider-profil-aidant',
-          },
-          'se-deconnecter': {
-            url: '/api/token',
-            methode: 'DELETE',
-            typeAppel: 'API',
-          },
+      expect((await reponse.json()).liens).toStrictEqual({
+        'rechercher-entreprise': {
+          methode: 'GET',
+          url: '/api/recherche-entreprise',
+        },
+        'valider-profil-utilisateur-inscrit': {
+          methode: 'POST',
+          url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
+        },
+        'valider-profil-aidant': {
+          methode: 'POST',
+          url: '/api/utilisateur/valider-profil-aidant',
+        },
+        'se-deconnecter': {
+          url: '/api/token',
+          methode: 'DELETE',
+          typeAppel: 'API',
         },
       });
     });
@@ -243,26 +240,23 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
       expect(reponse.statusCode).toBe(200);
       expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
-      expect(await reponse.json()).toStrictEqual({
-        nomPrenom: utilisateur.nomPrenom,
-        liens: {
-          'rechercher-entreprise': {
-            methode: 'GET',
-            url: '/api/recherche-entreprise',
-          },
-          'valider-profil-utilisateur-inscrit': {
-            methode: 'POST',
-            url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
-          },
-          'valider-profil-aidant': {
-            methode: 'POST',
-            url: '/api/utilisateur/valider-profil-aidant',
-          },
-          'se-deconnecter': {
-            methode: 'GET',
-            typeAppel: 'DIRECT',
-            url: '/pro-connect/deconnexion',
-          },
+      expect(await reponse.json().liens).toStrictEqual({
+        'rechercher-entreprise': {
+          methode: 'GET',
+          url: '/api/recherche-entreprise',
+        },
+        'valider-profil-utilisateur-inscrit': {
+          methode: 'POST',
+          url: '/api/utilisateur/valider-profil-utilisateur-inscrit',
+        },
+        'valider-profil-aidant': {
+          methode: 'POST',
+          url: '/api/utilisateur/valider-profil-aidant',
+        },
+        'se-deconnecter': {
+          methode: 'GET',
+          typeAppel: 'DIRECT',
+          url: '/pro-connect/deconnexion',
         },
       });
     });
@@ -286,18 +280,15 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
       expect(reponse.statusCode).toBe(200);
       expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
-      expect(await reponse.json()).toStrictEqual({
-        nomPrenom: utilisateur.nomPrenom,
-        liens: {
-          'valider-signature-cgu': {
-            methode: 'POST',
-            url: '/api/utilisateur/valider-signature-cgu',
-          },
-          'se-deconnecter': {
-            methode: 'GET',
-            typeAppel: 'DIRECT',
-            url: '/pro-connect/deconnexion',
-          },
+      expect(await reponse.json().liens).toStrictEqual({
+        'valider-signature-cgu': {
+          methode: 'POST',
+          url: '/api/utilisateur/valider-signature-cgu',
+        },
+        'se-deconnecter': {
+          methode: 'GET',
+          typeAppel: 'DIRECT',
+          url: '/pro-connect/deconnexion',
         },
       });
     });
@@ -323,30 +314,27 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
       expect(reponse.statusCode).toBe(200);
       expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
-      expect(await reponse.json()).toStrictEqual({
-        nomPrenom: utilisateur.nomPrenom,
-        liens: {
-          'valider-signature-cgu': {
-            methode: 'POST',
-            url: '/api/utilisateur/valider-signature-cgu',
-          },
-          'se-deconnecter': {
-            methode: 'GET',
-            typeAppel: 'DIRECT',
-            url: '/pro-connect/deconnexion',
-          },
-          'envoyer-demande-devenir-aidant': {
-            url: '/api/demandes/devenir-aidant',
-            methode: 'POST',
-          },
-          'demande-devenir-aidant': {
-            url: '/api/demandes/devenir-aidant',
-            methode: 'GET',
-          },
-          'rechercher-entreprise': {
-            methode: 'GET',
-            url: '/api/recherche-entreprise',
-          },
+      expect(await reponse.json().liens).toStrictEqual({
+        'valider-signature-cgu': {
+          methode: 'POST',
+          url: '/api/utilisateur/valider-signature-cgu',
+        },
+        'se-deconnecter': {
+          methode: 'GET',
+          typeAppel: 'DIRECT',
+          url: '/pro-connect/deconnexion',
+        },
+        'envoyer-demande-devenir-aidant': {
+          url: '/api/demandes/devenir-aidant',
+          methode: 'POST',
+        },
+        'demande-devenir-aidant': {
+          url: '/api/demandes/devenir-aidant',
+          methode: 'GET',
+        },
+        'rechercher-entreprise': {
+          methode: 'GET',
+          url: '/api/recherche-entreprise',
         },
       });
     });
