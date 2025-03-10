@@ -16,7 +16,7 @@ export type SagaDemandeAide = Saga & {
   email: string;
   departement: Departement;
   raisonSociale?: string;
-  relationAidant: boolean;
+  relationUtilisateur?: string;
 };
 
 export type DemandeAideCree = Evenement<{
@@ -40,7 +40,7 @@ export class CapteurSagaDemandeAide
     const envoieConfirmationDemandeAide = async (
       adaptateurEnvoiMail: AdaptateurEnvoiMail,
       aide: DemandeAide,
-      relationAidant: boolean
+      relationUtilisateur: string | undefined
     ) => {
       await adaptateurEnvoiMail.envoie({
         objet: "Demande d'aide pour MonAideCyber",
@@ -48,14 +48,14 @@ export class CapteurSagaDemandeAide
         corps: adaptateursCorpsMessage
           .demande()
           .confirmationDemandeAide()
-          .genereCorpsMessage(aide, relationAidant),
+          .genereCorpsMessage(aide, relationUtilisateur),
       });
     };
 
     const envoieRecapitulatifDemandeAide = async (
       adaptateurEnvoiMail: AdaptateurEnvoiMail,
       aide: DemandeAide,
-      relationAidant: boolean
+      relationUtilisateur: string | undefined
     ) => {
       await adaptateurEnvoiMail.envoie({
         objet: "Demande d'aide pour MonAideCyber",
@@ -68,7 +68,7 @@ export class CapteurSagaDemandeAide
         corps: adaptateursCorpsMessage
           .demande()
           .recapitulatifDemandeAide()
-          .genereCorpsMessage(aide, relationAidant),
+          .genereCorpsMessage(aide, relationUtilisateur),
       });
     };
 
@@ -90,7 +90,6 @@ export class CapteurSagaDemandeAide
           departement: saga.departement,
           email: saga.email,
           ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
-          relationAidant: saga.relationAidant,
         };
         return this.busCommande.publie<CommandeMettreAJourDemandeAide, void>(
           commandeMettreAJourAide
@@ -111,12 +110,12 @@ export class CapteurSagaDemandeAide
           await envoieConfirmationDemandeAide(
             this.adaptateurEnvoiMail,
             aide,
-            saga.relationAidant
+            saga.relationUtilisateur
           );
           await envoieRecapitulatifDemandeAide(
             this.adaptateurEnvoiMail,
             aide,
-            saga.relationAidant
+            saga.relationUtilisateur
           );
 
           await this.busEvenement.publie<DemandeAideCree>({

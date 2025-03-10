@@ -32,7 +32,6 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             email: 'jean.dupont@aide.com',
             departement: 'Corse-du-Sud',
             raisonSociale: 'beta-gouv',
-            relationAidant: true,
           }
         );
 
@@ -195,6 +194,32 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           expect(await reponse.json()).toStrictEqual({
             message:
               "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide",
+            liens: {
+              'demander-aide': {
+                url: '/api/demandes/etre-aide',
+                methode: 'POST',
+              },
+            },
+          });
+        });
+
+        it('La relation avec un utilisateur, lorsque fournie doit être un email', async () => {
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/demandes/etre-aide',
+            {
+              cguValidees: true,
+              email: 'jean.dupont@aide.com',
+              departement: 'Bas-Rhin',
+              relationUtilisateur: 'mauvaisformat',
+            }
+          );
+
+          expect(reponse.statusCode).toBe(422);
+          expect(await reponse.json()).toStrictEqual({
+            message:
+              "Veuillez renseigner un email valide pour l'utilisateur avec qui vous êtes en relation.",
             liens: {
               'demander-aide': {
                 url: '/api/demandes/etre-aide',
