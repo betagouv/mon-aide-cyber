@@ -5,6 +5,8 @@ national:
     urlSite: 'https://cesin.fr/'
   - nom: 'Clusif'
     urlSite: 'https://clusif.fr/'
+  - nom: 'ECTI'
+    urlSite: 'https://www.ecti.org/'
   - nom: 'Hexatrust'
     urlSite: 'https://www.hexatrust.com/'
   - nom: 'Nothing 2 Hide'
@@ -49,6 +51,8 @@ regional:
         urlSite: 'https://digital.loirevalley.co/'
       - nom: 'Loire et Cher Tech'
         urlSite: 'https://www.loiretchertech.fr/'
+      - nom: 'Security Mindset'
+        urlSite: 'https://association.security-mindset.fr'
   corse:
     nom: 'Corse'
     associations:
@@ -62,6 +66,8 @@ regional:
     associations:
       - nom: '1fo1000 nuages'
         urlSite: 'https://www.1fo100nuages.fr/'
+      - nom: Entreprendre Ensemble Dunkerque
+        urlSite: 'https://www.eedk.fr/'
   ileDeFrance:
     nom: 'Île de France'
     associations:
@@ -85,6 +91,8 @@ regional:
         urlSite: 'https://www.campusnumerique47.fr/'
       - nom: 'Collectif Rochefort Numérique'
         urlSite: 'https://www.rochefort-numerique.fr/'
+      - nom: 'Digital Valley'
+        urlSite: 'https://digital-valley.fr/'
       - nom: 'SPN'
         urlSite: 'https://www.spn.asso.fr/'
   occitanie:
@@ -99,6 +107,8 @@ regional:
         urlSite: 'https://assistic.fr/'
       - nom: 'ADN Ouest'
         urlSite: 'https://www.adnouest.org/'
+      - nom: 'Fédération EDEN'
+        urlSite: 'https://www.federation-eben.com'
       - nom: 'Proxinnov'
         urlSite: 'https://www.proxinnov.com/'
   provenceAlpesCotesDAzur:
@@ -129,6 +139,8 @@ dromCom:
     associations:
       - nom: 'Clusir Réunion Océan Indien '
         urlSite: 'https://clusir-roi.org/'
+      - nom: 'Réunion THD'
+        urlSite: 'https://reunionthd.re/'
   mayotte:
     nom: 'Mayotte'
     associations:
