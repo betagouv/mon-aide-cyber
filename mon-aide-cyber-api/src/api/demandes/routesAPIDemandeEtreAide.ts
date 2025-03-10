@@ -14,6 +14,7 @@ import {
   nomsEtCodesDesDepartements,
   rechercheParNomDepartement,
 } from '../../gestion-demandes/departements';
+import { RequetePublique } from '../routesAPI';
 
 type CorpsRequeteDemandeAide = {
   cguValidees: boolean;
@@ -61,12 +62,16 @@ export const routesAPIDemandeEtreAide = (
       .withMessage(
         "Veuillez renseigner la raison sociale de l'entité pour laquelle vous sollicitez une aide"
       ),
-    async (requete: Request, reponse: Response, suite: NextFunction) => {
+    async (
+      requete: RequetePublique<CorpsRequeteDemandeAide>,
+      reponse: Response,
+      suite: NextFunction
+    ) => {
       const resultatValidation: Result<FieldValidationError> = validationResult(
         requete
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {
-        const corpsRequete: CorpsRequeteDemandeAide = requete.body;
+        const corpsRequete = requete.body;
         const saga: SagaDemandeAide = {
           type: 'SagaDemandeAide',
           cguValidees: corpsRequete.cguValidees,
