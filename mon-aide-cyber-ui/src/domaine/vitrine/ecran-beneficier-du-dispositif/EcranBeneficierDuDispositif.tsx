@@ -6,7 +6,6 @@ import useDefilementFluide from '../../../hooks/useDefilementFluide';
 import { Temoignages } from '../ecran-devenir-aidant/composants/Temoignages';
 import { FocusRestitution } from './composants/FocusRestitution';
 import { FonctionnementDispositif } from './composants/FonctionnementDispositif';
-import { FormulaireDemandeEtreAide } from './composants/FormulaireDemandeEtreAide/FormulaireDemandeEtreAide';
 import { HeroDemandeAide } from './composants/HeroDemandeAide';
 import { QuiEstConcerne } from './composants/QuiEstConcerne';
 import './ecran-beneficier-du-dispositif.scss';
@@ -15,6 +14,7 @@ import { TypographieH3 } from '../../../composants/communs/typographie/Typograph
 import { useNavigate } from 'react-router-dom';
 import illustrationAutodiag from './../../../../public/images/illustration-autodiag.svg';
 import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
+import { CapteurFormulaireDemandeEtreAide } from './composants/CapteurFormulaireDemandeEtreAide.tsx';
 
 export const EcranBeneficierDuDispositif = () => {
   useDefilementFluide();
@@ -30,7 +30,7 @@ export const EcranBeneficierDuDispositif = () => {
       <FocusRestitution />
       <section id="formulaire-demande-aide" className="fond-clair-mac">
         <div className="fr-container">
-          <FormulaireDemandeEtreAide />
+          <CapteurFormulaireDemandeEtreAide />
         </div>
       </section>
       <Temoignages

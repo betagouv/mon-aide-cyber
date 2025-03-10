@@ -1,13 +1,14 @@
 import { ReponseHATEOAS } from '../../Lien.ts';
 import { Departement } from '../departement.ts';
 import { UUID } from '../../../types/Types.ts';
+import { Email } from '../../../composants/gestion-demandes/etre-aide/reducteurFormulaireDemandeEtreAide.tsx';
 
 export type CorpsDemandeEtreAide = {
   cguValidees: boolean;
   email: string;
   departement: string;
   raisonSociale?: string;
-  relationAidant: boolean;
+  relationUtilisateur?: Email;
 };
 
 export type CorpsDemandeSolliciterAidant = {

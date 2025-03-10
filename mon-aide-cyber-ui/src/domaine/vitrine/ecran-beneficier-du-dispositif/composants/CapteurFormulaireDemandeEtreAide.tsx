@@ -5,27 +5,27 @@ import {
   useReducer,
   useState,
 } from 'react';
-import { Confirmation } from '../../../../../composants/gestion-demandes/etre-aide/Confirmation';
-import { SaisieInformations } from '../../../../../composants/gestion-demandes/etre-aide/SaisieInformations';
+import { useRecupereContexteNavigation } from '../../../../hooks/useRecupereContexteNavigation.ts';
+import { useNavigationMAC } from '../../../../fournisseurs/hooks.ts';
+import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
+import { MoteurDeLiens } from '../../../MoteurDeLiens.ts';
+import {
+  CorpsDemandeEtreAide,
+  ReponseDemandeEtreAide,
+} from '../../../gestion-demandes/etre-aide/EtreAide.ts';
+import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { Lien } from '../../../Lien.ts';
 import {
   confirmation,
   reducteurDemandeEtreAide,
   saisieInformationsEnErreur,
-} from '../../../../../composants/gestion-demandes/etre-aide/reducteurDemandeEtreAide';
-import { Lien } from '../../../../Lien';
-import { Departement } from '../../../../gestion-demandes/departement';
-import { useNavigationMAC } from '../../../../../fournisseurs/hooks';
-import { useMACAPI } from '../../../../../fournisseurs/api/useMACAPI';
-import { MoteurDeLiens } from '../../../../MoteurDeLiens';
-import {
-  CorpsDemandeEtreAide,
-  ReponseDemandeEtreAide,
-} from '../../../../gestion-demandes/etre-aide/EtreAide';
-import { constructeurParametresAPI } from '../../../../../fournisseurs/api/ConstructeurParametresAPI';
-import { ChampsErreur } from '../../../../../composants/alertes/Erreurs';
-import { useRecupereContexteNavigation } from '../../../../../hooks/useRecupereContexteNavigation.ts';
+} from '../../../../composants/gestion-demandes/etre-aide/reducteurDemandeEtreAide.ts';
+import { ChampsErreur } from '../../../../composants/alertes/Erreurs.tsx';
+import { FormulaireDemandeEtreAide } from '../../../../composants/gestion-demandes/etre-aide/FormulaireDemandeEtreAide.tsx';
+import { Confirmation } from '../../../../composants/gestion-demandes/etre-aide/Confirmation.tsx';
+import { Departement } from '../../../gestion-demandes/departement.ts';
 
-export const FormulaireDemandeEtreAide = () => {
+export const CapteurFormulaireDemandeEtreAide = () => {
   useRecupereContexteNavigation('demande-etre-aide');
 
   const [etat, envoie] = useReducer(reducteurDemandeEtreAide, {
@@ -73,7 +73,7 @@ export const FormulaireDemandeEtreAide = () => {
   }, [demandeEtreAideEnCoursDeChargement, navigationMAC.etat]);
 
   const terminer = useCallback(
-    (saisieInformations: CorpsDemandeEtreAide) => {
+    (saisieFormulaireDemandeEtreAide: CorpsDemandeEtreAide) => {
       new MoteurDeLiens(navigationMAC.etat).trouve(
         'demander-aide',
         (lien: Lien) => {
@@ -83,12 +83,14 @@ export const FormulaireDemandeEtreAide = () => {
                 url: lien.url,
                 methode: lien.methode!,
                 corps: {
-                  cguValidees: saisieInformations.cguValidees,
-                  departement: saisieInformations.departement,
-                  email: saisieInformations.email,
-                  relationAidant: saisieInformations.relationAidant,
-                  ...(saisieInformations.raisonSociale && {
-                    raisonSociale: saisieInformations.raisonSociale,
+                  cguValidees: saisieFormulaireDemandeEtreAide.cguValidees,
+                  departement: saisieFormulaireDemandeEtreAide.departement,
+                  email: saisieFormulaireDemandeEtreAide.email,
+                  relationUtilisateur:
+                    saisieFormulaireDemandeEtreAide.relationUtilisateur,
+                  ...(saisieFormulaireDemandeEtreAide.raisonSociale && {
+                    raisonSociale:
+                      saisieFormulaireDemandeEtreAide.raisonSociale,
                   }),
                 },
               },
@@ -118,7 +120,7 @@ export const FormulaireDemandeEtreAide = () => {
     <div className="fr-grid-row fr-grid-row--center">
       <div className="fr-col-md-8 fr-col-sm-12 section">
         {etat.etapeCourante === 'saisieInformations' && (
-          <SaisieInformations
+          <FormulaireDemandeEtreAide
             departements={referentielDepartements || []}
             surValidation={{
               erreur: etat.erreur,

@@ -3,44 +3,46 @@ import {
   adresseElectroniqueSaisie,
   cguValidees,
   departementSaisi,
-  EtatSaisieInformations,
-  initialiseEtatSaisieInformations,
+  emailUtilisateurSaisi,
+  EtatFormulaireDemandeEtreAide,
+  initialiseEtatFormulaireDemandeEtreAide,
   raisonSocialeSaisie,
-  reducteurSaisieInformations,
-  relationAidantCliquee,
-} from '../../../../src/composants/gestion-demandes/etre-aide/reducteurSaisieInformations.tsx';
+  reducteurFormulaireDemandeEtreAide,
+  relationUtilisateurCliquee,
+} from '../../../../src/composants/gestion-demandes/etre-aide/reducteurFormulaireDemandeEtreAide.tsx';
 
 import { Departement } from '../../../../src/domaine/gestion-demandes/departement.ts';
 import { TexteExplicatif } from '../../../../src/composants/alertes/Erreurs.tsx';
 
 describe('Parcours CGU Aidé', () => {
-  let etatInitial: EtatSaisieInformations = {} as EtatSaisieInformations;
+  let etatInitial: EtatFormulaireDemandeEtreAide =
+    {} as EtatFormulaireDemandeEtreAide;
 
   beforeEach(() => {
-    etatInitial = initialiseEtatSaisieInformations([]);
+    etatInitial = initialiseEtatFormulaireDemandeEtreAide([]);
   });
 
   describe('Lorsque l’Aidé fait une demande d’aide', () => {
     describe('En ce qui concerne l’adresse électronique', () => {
       it('La renseigne', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           etatInitial,
           adresseElectroniqueSaisie('jean.dupont@email.com')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: false,
           departement: {} as Departement,
           email: 'jean.dupont@email.com',
           pretPourEnvoi: false,
           departements: [],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: '',
         });
       });
 
       it('Supprime l’erreur liée à l’adresse électronique lorsque l’utilisateur la corrige', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             email: 'email-incorrect',
@@ -58,7 +60,7 @@ describe('Parcours CGU Aidé', () => {
           adresseElectroniqueSaisie('jean.dupont@email.com')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: false,
           departement: {} as Departement,
           email: 'jean.dupont@email.com',
@@ -70,13 +72,13 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: '',
         });
       });
 
       it('Vide les erreurs', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             email: 'email-incorrect',
@@ -90,19 +92,19 @@ describe('Parcours CGU Aidé', () => {
           adresseElectroniqueSaisie('jean.dupont@email.com')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: false,
           departement: {} as Departement,
           email: 'jean.dupont@email.com',
           pretPourEnvoi: false,
           departements: [],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: '',
         });
       });
 
       it("valide l'adresse électronique", () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             cguValidees: true,
@@ -113,19 +115,19 @@ describe('Parcours CGU Aidé', () => {
           adresseElectroniqueSaisie('jean.dupont@mail.fr')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: true,
           departement: { nom: 'Finistère', code: '29' },
           email: 'jean.dupont@mail.fr',
           pretPourEnvoi: true,
           departements: [{ nom: 'Finistère', code: '29' }],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: 'Finistère',
         });
       });
 
       it("invalide l'adresse électronique", () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             email: 'jean.dupont-incorrect',
@@ -137,7 +139,7 @@ describe('Parcours CGU Aidé', () => {
           adresseElectroniqueSaisie('jean.dupont-incorrect')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: true,
           departement: { nom: 'Finistère', code: '29' },
           email: 'jean.dupont-incorrect',
@@ -154,7 +156,7 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [{ nom: 'Finistère', code: '29' }],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: 'Finistère',
         });
       });
@@ -162,7 +164,7 @@ describe('Parcours CGU Aidé', () => {
 
     describe('En ce qui concerne le département', () => {
       it('Le saisi', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             departements: [
@@ -173,7 +175,7 @@ describe('Parcours CGU Aidé', () => {
           departementSaisi('Finistère')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: false,
           departement: { nom: 'Finistère', code: '29' },
           email: '',
@@ -182,13 +184,13 @@ describe('Parcours CGU Aidé', () => {
             { nom: 'Finistère', code: '29' },
             { nom: 'Gironde', code: '33' },
           ],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: 'Finistère',
         });
       });
 
       it('Supprime l’erreur liée au département lorsque l’utilisateur le corrige', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             departement: {} as Departement,
@@ -207,7 +209,7 @@ describe('Parcours CGU Aidé', () => {
           departementSaisi('Finistère')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: false,
           departement: { nom: 'Finistère', code: '29' },
           email: '',
@@ -219,13 +221,13 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [{ nom: 'Finistère', code: '29' }],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: 'Finistère',
         });
       });
 
       it('Vide les erreurs', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             email: '',
@@ -240,19 +242,19 @@ describe('Parcours CGU Aidé', () => {
           departementSaisi('Finistère')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: false,
           departement: { nom: 'Finistère', code: '29' },
           email: '',
           pretPourEnvoi: false,
           departements: [{ nom: 'Finistère', code: '29' }],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: 'Finistère',
         });
       });
 
       it('Accepte la saisie de l’utilisateur si ce dernier donne le nom du département en minuscule', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             email: 'jean.dupont@mail.fr',
@@ -266,7 +268,7 @@ describe('Parcours CGU Aidé', () => {
           departementSaisi('girOnde')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: true,
           departement: { nom: 'Gironde', code: '33' },
           email: 'jean.dupont@mail.fr',
@@ -276,13 +278,13 @@ describe('Parcours CGU Aidé', () => {
             { nom: 'Morbihan', code: '56' },
             { nom: 'Gironde', code: '33' },
           ],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: 'Gironde',
         });
       });
 
       it("S'assure que le département existe", () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             email: 'jean.dupont@mail.fr',
@@ -295,7 +297,7 @@ describe('Parcours CGU Aidé', () => {
           departementSaisi('département inconnu')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: true,
           departement: {} as Departement,
           email: 'jean.dupont@mail.fr',
@@ -315,13 +317,13 @@ describe('Parcours CGU Aidé', () => {
             { nom: 'Creuse', code: '23' },
             { nom: 'Morbihan', code: '56' },
           ],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: 'département inconnu',
         });
       });
 
       it('Valide la saisie de l’utilisateur si ce dernier donne le numéro de département', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             email: 'jean.dupont@mail.fr',
@@ -337,7 +339,7 @@ describe('Parcours CGU Aidé', () => {
           departementSaisi('33')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: true,
           departement: { nom: 'Gironde', code: '33' },
           email: 'jean.dupont@mail.fr',
@@ -347,7 +349,7 @@ describe('Parcours CGU Aidé', () => {
             { nom: 'Morbihan', code: '56' },
             { nom: 'Gironde', code: '33' },
           ],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: 'Gironde',
         });
       });
@@ -355,19 +357,19 @@ describe('Parcours CGU Aidé', () => {
 
     describe('En ce qui concerne la raison sociale', () => {
       it('La prend en compte', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           etatInitial,
           raisonSocialeSaisie('beta.gouv')
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: false,
           departement: {} as Departement,
           email: '',
           raisonSociale: 'beta.gouv',
           pretPourEnvoi: false,
           departements: [],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: '',
         });
       });
@@ -375,26 +377,29 @@ describe('Parcours CGU Aidé', () => {
 
     describe('En ce qui concerne les CGU', () => {
       it('Les prend en compte', () => {
-        const etat = reducteurSaisieInformations(etatInitial, cguValidees());
+        const etat = reducteurFormulaireDemandeEtreAide(
+          etatInitial,
+          cguValidees()
+        );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: true,
           departement: {} as Departement,
           email: '',
           pretPourEnvoi: false,
           departements: [],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: '',
         });
       });
 
       it('invalide les CGU précédemment validées', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           { ...etatInitial, cguValidees: true },
           cguValidees()
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: false,
           departement: {} as Departement,
           email: '',
@@ -411,13 +416,13 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: '',
         });
       });
 
       it('Supprime l’erreur liée à la validation des CGU lorsque l’utilisateur le corrige', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             departement: {} as Departement,
@@ -435,7 +440,7 @@ describe('Parcours CGU Aidé', () => {
           cguValidees()
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: true,
           departement: {} as Departement,
           email: '',
@@ -447,13 +452,13 @@ describe('Parcours CGU Aidé', () => {
           },
           pretPourEnvoi: false,
           departements: [],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: '',
         });
       });
 
       it('Vide les erreurs', () => {
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           {
             ...etatInitial,
             email: '',
@@ -467,13 +472,13 @@ describe('Parcours CGU Aidé', () => {
           cguValidees()
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: true,
           departement: {} as Departement,
           email: '',
           pretPourEnvoi: false,
           departements: [],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: '',
         });
       });
@@ -486,40 +491,133 @@ describe('Parcours CGU Aidé', () => {
           cguValidees: false,
           pretPourEnvoi: false,
           departements: [],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
         };
 
-        const etat = reducteurSaisieInformations(
+        const etat = reducteurFormulaireDemandeEtreAide(
           { ...etatFormulaire },
           cguValidees()
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           departement: { nom: 'Finistère', code: '29' },
           email: 'jean.dupont@email.com',
           cguValidees: true,
           pretPourEnvoi: true,
           departements: [],
-          relationAidantSaisie: false,
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: '',
         });
       });
     });
 
-    describe("En ce qui concerne la relation avec l'Aidant", () => {
-      it('La prend en compte', () => {
-        const etat = reducteurSaisieInformations(
+    describe("En ce qui concerne la relation avec l'utilisateur (Aidant / Utilisateur inscrit)", () => {
+      it('La demande est en relation avec un utilisateur', () => {
+        const etat = reducteurFormulaireDemandeEtreAide(
           etatInitial,
-          relationAidantCliquee()
+          relationUtilisateurCliquee(true)
         );
 
-        expect(etat).toStrictEqual<EtatSaisieInformations>({
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
           cguValidees: false,
           departement: {} as Departement,
           email: '',
           pretPourEnvoi: false,
           departements: [],
-          relationAidantSaisie: true,
+          relationUtilisateurSaisie: '',
+          valeurSaisieDepartement: '',
+        });
+      });
+
+      it('Fournit le mail de l’utilisateur', () => {
+        const etat = reducteurFormulaireDemandeEtreAide(
+          { ...etatInitial },
+          emailUtilisateurSaisi('jean.dupont@email.com')
+        );
+
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
+          cguValidees: false,
+          departement: {} as Departement,
+          email: '',
+          pretPourEnvoi: false,
+          departements: [],
+          relationUtilisateurSaisie: 'jean.dupont@email.com',
+          valeurSaisieDepartement: '',
+        });
+      });
+
+      it('La demande n’est pas en relation avec un utilisateur', () => {
+        const etat = reducteurFormulaireDemandeEtreAide(
+          etatInitial,
+          relationUtilisateurCliquee(false)
+        );
+
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
+          cguValidees: false,
+          departement: {} as Departement,
+          email: '',
+          pretPourEnvoi: false,
+          departements: [],
+          relationUtilisateurSaisie: 'Non',
+          valeurSaisieDepartement: '',
+        });
+      });
+
+      it('Valide le mail de l’utilisateur fourni', () => {
+        const etat = reducteurFormulaireDemandeEtreAide(
+          {
+            ...etatInitial,
+            cguValidees: true,
+            departement: { nom: 'Gironde', code: '33' },
+            email: 'jean.dujardin@beta-gouv.com',
+          },
+          emailUtilisateurSaisi('un-mauvais-mail')
+        );
+
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
+          cguValidees: true,
+          departement: { nom: 'Gironde', code: '33' },
+          email: 'jean.dujardin@beta-gouv.com',
+          erreur: {
+            relationUtilisateurSaisie: {
+              texteExplicatif: (
+                <TexteExplicatif
+                  id="relation-utilisateur-saisie"
+                  texte="Veuillez saisir un Email valide."
+                />
+              ),
+              className: 'fr-input-group--error',
+            },
+          },
+          pretPourEnvoi: false,
+          departements: [],
+          relationUtilisateurSaisie: '',
+          valeurSaisieDepartement: '',
+        });
+      });
+
+      it('Vide les erreurs', () => {
+        const etat = reducteurFormulaireDemandeEtreAide(
+          {
+            ...etatInitial,
+            email: '',
+            erreur: {
+              relationUtilisateurSaisie: {
+                texteExplicatif: <>CGU pas validées</>,
+                className: 'fr-input-group--error',
+              },
+            },
+          },
+          emailUtilisateurSaisi('jean.dupont@email.com')
+        );
+
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
+          cguValidees: false,
+          departement: {} as Departement,
+          email: '',
+          pretPourEnvoi: false,
+          departements: [],
+          relationUtilisateurSaisie: 'jean.dupont@email.com',
           valeurSaisieDepartement: '',
         });
       });
