@@ -1,14 +1,21 @@
-import { useCallback, useEffect, useReducer } from 'react';
+import {
+  HTMLAttributes,
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useReducer,
+} from 'react';
 import {
   adresseElectroniqueSaisie,
   cguValidees,
   departementSaisi,
   departementsCharges,
-  initialiseEtatSaisieInformations,
+  emailUtilisateurSaisi,
+  initialiseEtatFormulaireDemandeEtreAide,
   raisonSocialeSaisie,
-  reducteurSaisieInformations,
-  relationAidantCliquee,
-} from './reducteurSaisieInformations.tsx';
+  reducteurFormulaireDemandeEtreAide,
+  relationUtilisateurCliquee,
+} from './reducteurFormulaireDemandeEtreAide.tsx';
 import {
   Departement,
   estDepartement,
@@ -17,6 +24,8 @@ import { useModale } from '../../../fournisseurs/hooks.ts';
 import { CorpsCGU } from '../../../vues/ComposantCGU.tsx';
 import { AutoCompletion } from '../../auto-completion/AutoCompletion.tsx';
 import { CorpsDemandeEtreAide } from '../../../domaine/gestion-demandes/etre-aide/EtreAide.ts';
+import { Input } from '../../atomes/Input/Input.tsx';
+import './demande-aide.scss';
 
 type ProprietesSaisiesInformations = {
   departements: Departement[];
@@ -26,12 +35,46 @@ type ProprietesSaisiesInformations = {
   };
 };
 
-export const SaisieInformations = (
+type ProprietesChampSaisieEmailUtilisateur = PropsWithChildren<
+  HTMLAttributes<HTMLDivElement> & {
+    surSaisieEmailUtilisateur: (email: string) => void;
+  }
+>;
+const ChampSaisieEmailUtilisateur = ({
+  children,
+  ...proprietesChampSaisieEmailUtilisateur
+}: ProprietesChampSaisieEmailUtilisateur) => {
+  const { className, surSaisieEmailUtilisateur } =
+    proprietesChampSaisieEmailUtilisateur;
+
+  return (
+    <div
+      className={`section-encadree fr-input-group ${className ? className : ''}`}
+    >
+      <label>
+        <span className="asterisque">*</span>
+        <span>
+          {' '}
+          Veuillez indiquer l’adresse électronique de la personne qui vous
+          accompagne :
+        </span>
+      </label>
+      <Input
+        type="email"
+        placeholder="Exemple : jean.dupont@email.com"
+        onBlur={(e) => surSaisieEmailUtilisateur(e.target.value)}
+      />
+      {children}
+    </div>
+  );
+};
+
+export const FormulaireDemandeEtreAide = (
   proprietes: ProprietesSaisiesInformations
 ) => {
-  const [etatSaisieInformations, envoie] = useReducer(
-    reducteurSaisieInformations,
-    initialiseEtatSaisieInformations(proprietes.departements)
+  const [etatFormulaireDemandeEtreAide, envoie] = useReducer(
+    reducteurFormulaireDemandeEtreAide,
+    initialiseEtatFormulaireDemandeEtreAide(proprietes.departements)
   );
 
   useEffect(
@@ -47,11 +90,16 @@ export const SaisieInformations = (
     }
 
     proprietes.surValidation.execute({
-      cguValidees: etatSaisieInformations.cguValidees,
-      departement: etatSaisieInformations.departement.nom,
-      email: etatSaisieInformations.email,
-      raisonSociale: etatSaisieInformations.raisonSociale,
-      relationAidant: etatSaisieInformations.relationAidantSaisie,
+      cguValidees: etatFormulaireDemandeEtreAide.cguValidees,
+      departement: etatFormulaireDemandeEtreAide.departement.nom,
+      email: etatFormulaireDemandeEtreAide.email,
+      raisonSociale: etatFormulaireDemandeEtreAide.raisonSociale,
+      ...(etatFormulaireDemandeEtreAide.relationUtilisateurSaisie !==
+        undefined &&
+        etatFormulaireDemandeEtreAide.relationUtilisateurSaisie !== 'Non' && {
+          relationUtilisateur:
+            etatFormulaireDemandeEtreAide.relationUtilisateurSaisie,
+        }),
     });
   };
 
@@ -84,9 +132,19 @@ export const SaisieInformations = (
     },
     [affiche]
   );
-  const surRelationAidant = useCallback(() => {
-    envoie(relationAidantCliquee());
+
+  const surRelationUtilisateurOui = useCallback(() => {
+    envoie(relationUtilisateurCliquee(true));
   }, []);
+
+  const surRelationUtilisateurNon = useCallback(() => {
+    envoie(relationUtilisateurCliquee(false));
+  }, []);
+
+  const surSaisieEmailUtilisateur = useCallback((email: string) => {
+    envoie(emailUtilisateurSaisi(email));
+  }, []);
+
   return (
     <>
       <div className="fr-mb-2w">Demande pour bénéficier de MonAideCyber</div>
@@ -118,8 +176,8 @@ export const SaisieInformations = (
               <div className=" fr-col-12">
                 <div
                   className={`fr-input-group ${
-                    etatSaisieInformations.erreur
-                      ? etatSaisieInformations.erreur.adresseElectronique
+                    etatFormulaireDemandeEtreAide.erreur
+                      ? etatFormulaireDemandeEtreAide.erreur.adresseElectronique
                           ?.className
                       : ''
                   }`}
@@ -138,7 +196,7 @@ export const SaisieInformations = (
                     }}
                   />
                   {
-                    etatSaisieInformations.erreur?.adresseElectronique
+                    etatFormulaireDemandeEtreAide.erreur?.adresseElectronique
                       ?.texteExplicatif
                   }
                 </div>
@@ -146,8 +204,9 @@ export const SaisieInformations = (
               <div className=" fr-col-12">
                 <div
                   className={`fr-input-group ${
-                    etatSaisieInformations.erreur
-                      ? etatSaisieInformations.erreur.departement?.className
+                    etatFormulaireDemandeEtreAide.erreur
+                      ? etatFormulaireDemandeEtreAide.erreur.departement
+                          ?.className
                       : ''
                   }`}
                 >
@@ -157,8 +216,10 @@ export const SaisieInformations = (
                   </label>
                   <AutoCompletion<Departement>
                     nom="departement"
-                    valeurSaisie={etatSaisieInformations.departement}
-                    suggestionsInitiales={etatSaisieInformations.departements}
+                    valeurSaisie={etatFormulaireDemandeEtreAide.departement}
+                    suggestionsInitiales={
+                      etatFormulaireDemandeEtreAide.departements
+                    }
                     mappeur={(departement) => {
                       return estDepartement(departement)
                         ? `${departement.code} - ${departement.nom}`
@@ -174,7 +235,10 @@ export const SaisieInformations = (
                     }}
                     clefsFiltrage={['code', 'nom']}
                   />
-                  {etatSaisieInformations.erreur?.departement?.texteExplicatif}
+                  {
+                    etatFormulaireDemandeEtreAide.erreur?.departement
+                      ?.texteExplicatif
+                  }
                 </div>
               </div>
               <div className=" fr-col-12">
@@ -193,10 +257,73 @@ export const SaisieInformations = (
                 </div>
               </div>
               <div className="fr-col-12">
+                <div className="choix-utilisateur">
+                  <p className="m-0">
+                    <span className="asterisque">*</span>
+                    <span>
+                      {' '}
+                      Êtes-vous déjà en relation avec une personne prête à vous
+                      accompagner pour le diagnostic MonAideCyber ?
+                    </span>
+                  </p>
+                  <div className="fr-radio-group mac-radio-group">
+                    <Input
+                      type="radio"
+                      name="relation-utilisateur"
+                      id="relation-utilisateur-non"
+                      value="Non"
+                      onClick={surRelationUtilisateurNon}
+                    />
+                    <label
+                      className="fr-label"
+                      htmlFor="relation-utilisateur-non"
+                    >
+                      <span>Non</span>
+                    </label>
+                  </div>
+                  <div className="fr-radio-group mac-radio-group">
+                    <Input
+                      type="radio"
+                      name="relation-utilisateur"
+                      id="relation-utilisateur-oui"
+                      value="Oui"
+                      onClick={surRelationUtilisateurOui}
+                    />
+                    <label
+                      className="fr-label"
+                      htmlFor="relation-utilisateur-oui"
+                    >
+                      <span>Oui</span>
+                    </label>
+                    {etatFormulaireDemandeEtreAide.relationUtilisateurSaisie !==
+                      undefined &&
+                    etatFormulaireDemandeEtreAide.relationUtilisateurSaisie !==
+                      'Non' ? (
+                      <ChampSaisieEmailUtilisateur
+                        className={
+                          etatFormulaireDemandeEtreAide.erreur
+                            ?.relationUtilisateurSaisie?.className ||
+                          'bordure-gauche'
+                        }
+                        surSaisieEmailUtilisateur={surSaisieEmailUtilisateur}
+                      >
+                        {
+                          etatFormulaireDemandeEtreAide.erreur
+                            ?.relationUtilisateurSaisie?.texteExplicatif
+                        }
+                      </ChampSaisieEmailUtilisateur>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="fr-col-12">
                 <div
                   className={`fr-checkbox-group mac-radio-group ${
-                    etatSaisieInformations.erreur
-                      ? etatSaisieInformations.erreur.cguValidees?.className
+                    etatFormulaireDemandeEtreAide.erreur
+                      ? etatFormulaireDemandeEtreAide.erreur.cguValidees
+                          ?.className
                       : ''
                   }`}
                 >
@@ -205,7 +332,7 @@ export const SaisieInformations = (
                     id="cgu-aide"
                     name="cgu-aide"
                     onClick={surCGUValidees}
-                    checked={etatSaisieInformations.cguValidees}
+                    checked={etatFormulaireDemandeEtreAide.cguValidees}
                   />
                   <label className="fr-label" htmlFor="cgu-aide">
                     <div>
@@ -223,32 +350,17 @@ export const SaisieInformations = (
                       </span>
                     </div>
                   </label>
-                  {etatSaisieInformations.erreur?.cguValidees?.texteExplicatif}
-                </div>
-              </div>
-              <div className="fr-col-12">
-                <div className="fr-checkbox-group mac-radio-group">
-                  <input
-                    type="checkbox"
-                    id="relation-aidant"
-                    name="relation-aidant"
-                    onClick={surRelationAidant}
-                    checked={etatSaisieInformations.relationAidantSaisie}
-                  />
-                  <label className="fr-label" htmlFor="relation-aidant">
-                    <span>
-                      Je suis déjà accompagné pour réaliser mon diagnostic, je
-                      n’ai pas besoin d’être mis en relation avec un Aidant
-                      cyber
-                    </span>
-                  </label>
+                  {
+                    etatFormulaireDemandeEtreAide.erreur?.cguValidees
+                      ?.texteExplicatif
+                  }
                 </div>
               </div>
             </div>
             <div className="actions fr-grid-row fr-grid-row--right fr-pt-3w">
               <button
                 type="submit"
-                disabled={!etatSaisieInformations.pretPourEnvoi}
+                disabled={!etatFormulaireDemandeEtreAide.pretPourEnvoi}
                 key="envoyer-demande-aide"
                 className="bouton-mac bouton-mac-primaire bouton-demande-etre-aide"
               >
