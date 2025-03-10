@@ -258,6 +258,7 @@ export const unCompteAidantRelieAUnCompteUtilisateur = async (
   const aidant = parametres.constructeurAidant
     .avecUnIdentifiant(utilisateur.identifiant)
     .avecUnNomPrenom(utilisateur.nomPrenom)
+    .avecUnEmail(utilisateur.identifiantConnexion)
     .construis();
   await parametres.entrepotAidant.persiste(aidant);
   return { utilisateur, aidant };
@@ -281,6 +282,7 @@ export const unCompteUtilisateurInscritRelieAUnCompteUtilisateur = async (
   await parametres.entrepotUtilisateur.persiste(utilisateur);
   const utilisateurInscrit = parametres.constructeurUtilisateurInscrit
     .avecUnIdentifiant(utilisateur.identifiant)
+    .avecUnEmail(utilisateur.identifiantConnexion)
     .construis();
   await parametres.entrepotUtilisateurInscrit.persiste(utilisateurInscrit);
   return { utilisateur, utilisateurInscrit };

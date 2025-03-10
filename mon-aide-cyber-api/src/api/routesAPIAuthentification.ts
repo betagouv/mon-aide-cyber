@@ -8,14 +8,20 @@ import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
 import { RequeteUtilisateur } from './routesAPI';
 import { adaptateurConfigurationLimiteurTraffic } from './adaptateurLimiteurTraffic';
 import { UtilisateurAuthentifie } from '../authentification/Utilisateur';
-import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import {
+  uneRechercheUtilisateursMAC,
+  UtilisateurMACDTO,
+} from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { estDateNouveauParcoursDemandeDevenirAidant } from '../gestion-demandes/devenir-aidant/nouveauParcours';
 
 export type CorpsRequeteAuthentification = {
   identifiant: string;
   motDePasse: string;
 };
-export type ReponseAuthentification = ReponseHATEOAS & { nomPrenom: string };
+export type ReponseAuthentification = ReponseHATEOAS & {
+  nomPrenom: string;
+  email: string;
+};
 
 export const routesAPIAuthentification = (
   configuration: ConfigurationServeur
@@ -49,10 +55,14 @@ export const routesAPIAuthentification = (
         motDePasse
       )
         .then((utilisateurAuthentifie: UtilisateurAuthentifie) => {
-          const reponseAuthentification = (reponseHATEOAS: ReponseHATEOAS) => {
+          const reponseAuthentification = (
+            utilisateur: UtilisateurMACDTO,
+            reponseHATEOAS: ReponseHATEOAS
+          ) => {
             requete.session!.token = utilisateurAuthentifie.jeton;
             return reponse.status(201).json({
               nomPrenom: utilisateurAuthentifie.nomPrenom,
+              email: utilisateur.email,
               ...reponseHATEOAS,
             });
           };
@@ -62,6 +72,7 @@ export const routesAPIAuthentification = (
             .then((utilisateur) => {
               if (utilisateur?.profil === 'UtilisateurInscrit') {
                 return reponseAuthentification(
+                  utilisateur,
                   constructeurActionsHATEOAS()
                     .pour({
                       contexte:
@@ -76,6 +87,7 @@ export const routesAPIAuthentification = (
                 estDateNouveauParcoursDemandeDevenirAidant()
               ) {
                 return reponseAuthentification(
+                  utilisateur,
                   constructeurActionsHATEOAS()
                     .pour({ contexte: 'valider-profil' })
                     .pour({ contexte: 'se-deconnecter' })
@@ -83,6 +95,7 @@ export const routesAPIAuthentification = (
                 );
               }
               return reponseAuthentification(
+                utilisateur!,
                 constructeurActionsHATEOAS()
                   .pour({
                     contexte: 'aidant:acceder-aux-informations-utilisateur',
