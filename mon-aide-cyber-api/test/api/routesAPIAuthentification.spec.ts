@@ -76,6 +76,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           expect(reponse.statusCode).toBe(201);
           expect(await reponse.json()).toStrictEqual({
             nomPrenom: 'Martin Dupont',
+            email: 'martin.dupont@email.com',
             liens: {
               'lancer-diagnostic': {
                 url: '/api/diagnostic',
@@ -130,6 +131,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           expect(reponse.statusCode).toStrictEqual(201);
           expect(await reponse.json()).toStrictEqual({
             nomPrenom: 'Martin Dupont',
+            email: 'martin.dupont@email.com',
             liens: {
               'valider-profil-utilisateur-inscrit': {
                 methode: 'POST',
@@ -184,6 +186,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
           expect(reponse.statusCode).toBe(201);
           expect(await reponse.json()).toStrictEqual({
             nomPrenom: 'Martin Dupont',
+            email: 'martin.dupont@email.com',
             liens: {
               'lancer-diagnostic': {
                 url: '/api/diagnostic',
@@ -262,6 +265,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         expect(reponse.statusCode).toBe(201);
         expect(await reponse.json()).toStrictEqual<ReponseAuthentification>({
           nomPrenom: 'Martin Dupont',
+          email: 'martin.dupont@email.com',
           liens: {
             'lancer-diagnostic': { url: '/api/diagnostic', methode: 'POST' },
             'afficher-tableau-de-bord': {
@@ -310,6 +314,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         expect(reponse.statusCode).toBe(201);
         expect(await reponse.json()).toStrictEqual({
           nomPrenom: 'Jean Dujardin',
+          email: 'jean.dujardin@email.com',
           liens: {
             'valider-profil-utilisateur-inscrit': {
               methode: 'POST',
@@ -360,6 +365,7 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         expect(reponse.statusCode).toBe(201);
         expect(await reponse.json()).toStrictEqual({
           nomPrenom: 'Jean Dujardin',
+          email: 'jean.dujardin@email.com',
           liens: {
             'valider-profil-utilisateur-inscrit': {
               methode: 'POST',

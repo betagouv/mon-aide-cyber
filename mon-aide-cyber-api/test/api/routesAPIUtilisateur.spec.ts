@@ -54,7 +54,9 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
           constructeurAidant: unAidant(),
           entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
+          constructeurUtilisateur: unUtilisateur().avecUnIdentifiantDeConnexion(
+            'jean.aidant@societe.fr'
+          ),
         });
         adaptateurDeVerificationDeSession.utilisateurConnecte(
           utilisateur.identifiant
@@ -70,6 +72,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
         expect(await reponse.json()).toStrictEqual({
           nomPrenom: utilisateur.nomPrenom,
+          email: 'jean.aidant@societe.fr',
           liens: {
             'lancer-diagnostic': {
               url: '/api/diagnostic',
@@ -103,8 +106,9 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           await unCompteUtilisateurInscritConnecteViaProConnect({
             entrepotUtilisateurInscrit:
               testeurMAC.entrepots.utilisateursInscrits(),
-            constructeurUtilisateur:
-              unUtilisateurInscrit().avecUneDateDeSignatureDeCGU(
+            constructeurUtilisateur: unUtilisateurInscrit()
+              .avecUnEmail('jean.inscrit@societe.fr')
+              .avecUneDateDeSignatureDeCGU(
                 new Date(Date.parse('2025-02-02T12:32:24'))
               ),
             adaptateurDeVerificationDeSession,
@@ -120,6 +124,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
         expect(await reponse.json()).toStrictEqual({
           nomPrenom: utilisateur.nomPrenom,
+          email: 'jean.inscrit@societe.fr',
           liens: {
             'lancer-diagnostic': {
               url: '/api/diagnostic',

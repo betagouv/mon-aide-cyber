@@ -137,6 +137,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         reponse.status(200).json({
           ...actions,
           nomPrenom: utilisateur.nomComplet,
+          email: utilisateur.email,
         });
 
       return uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
