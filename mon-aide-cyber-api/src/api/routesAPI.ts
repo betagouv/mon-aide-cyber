@@ -24,6 +24,14 @@ export interface RequeteUtilisateur<
   params: PARAMS;
 }
 
+export interface RequetePublique<
+  CORPS = void,
+  PARAMS extends core.ParamsDictionary = core.ParamsDictionary,
+> extends Request {
+  body: CORPS;
+  params: PARAMS;
+}
+
 const routesAPI = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
