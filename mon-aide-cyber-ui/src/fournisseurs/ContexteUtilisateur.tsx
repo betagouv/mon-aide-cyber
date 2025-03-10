@@ -77,7 +77,10 @@ export const FournisseurUtilisateur = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (ressourceUtilisateur) {
-      setUtilisateurConnecte({ nomPrenom: ressourceUtilisateur.nomPrenom });
+      setUtilisateurConnecte({
+        nomPrenom: ressourceUtilisateur.nomPrenom,
+        email: ressourceUtilisateur.email,
+      });
       setChargeUtilisateur(false);
       navigationMAC.ajouteEtat(ressourceUtilisateur.liens);
     } else if (erreur) {

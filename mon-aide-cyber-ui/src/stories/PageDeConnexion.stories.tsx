@@ -33,6 +33,7 @@ const macAPIMemoire = {
     }
     const reponseAuthentification: ReponseAuthentification = {
       nomPrenom: 'Jean Dupont',
+      email: 'jean.dupont@societe.fr',
       liens: {},
     };
     return Promise.resolve(reponseAuthentification as T);
