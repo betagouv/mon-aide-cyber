@@ -21,6 +21,7 @@ export type EtatFormulaireDemandeEtreAide = {
   pretPourEnvoi: boolean;
   departements: Departement[];
   relationUtilisateurSaisie: undefined | 'Non' | Email;
+  relationUtilisateurFournie?: true;
   valeurSaisieDepartement: string;
 };
 
@@ -32,6 +33,7 @@ enum TypeActionFormulaireDemandeEtreAide {
   DEPARTEMENTS_CHARGES = 'DEPARTEMENTS_CHARGES',
   RELATION_AIDANT_CLIQUEE = 'RELATION_AIDANT_CLIQUEE',
   EMAIL_UTILISATEUR_SAISI = 'EMAIL_UTILISATEUR_SAISI',
+  EMAIL_UTILISATEUR_FOURNI = 'EMAIL_UTILISATEUR_FOURNI',
 }
 
 type ActionFormulaireDemandeEtreAide =
@@ -60,6 +62,10 @@ type ActionFormulaireDemandeEtreAide =
     }
   | {
       type: TypeActionFormulaireDemandeEtreAide.EMAIL_UTILISATEUR_SAISI;
+      email: string;
+    }
+  | {
+      type: TypeActionFormulaireDemandeEtreAide.EMAIL_UTILISATEUR_FOURNI;
       email: string;
     };
 
@@ -180,24 +186,34 @@ export const reducteurFormulaireDemandeEtreAide = (
     };
   };
 
+  const genereEtatAvecEmailUtilisateur = (
+    email: string,
+    emailUtilisateurFourni = false
+  ): EtatFormulaireDemandeEtreAide => {
+    const emailUtilisateur = email.trim().toLowerCase();
+    return genereNouvelEtat({
+      ajouteAuNouvelEtat: () => ({
+        relationUtilisateurSaisie: estMailValide(emailUtilisateur)
+          ? emailUtilisateur
+          : '',
+        ...(emailUtilisateurFourni && { relationUtilisateurFournie: true }),
+      }),
+      champ: 'relationUtilisateurSaisie',
+      champValide: () => estMailValide(emailUtilisateur),
+      construisErreurChamp: (bool: boolean) =>
+        construisErreurRelationUtilisateurSaisie(bool),
+      elementsFormulairesValides: () =>
+        estMailValide(etat.email) &&
+        estDepartementValide(etat.departement) &&
+        etat.cguValidees,
+    });
+  };
+
   switch (action.type) {
+    case TypeActionFormulaireDemandeEtreAide.EMAIL_UTILISATEUR_FOURNI:
+      return genereEtatAvecEmailUtilisateur(action.email, true);
     case TypeActionFormulaireDemandeEtreAide.EMAIL_UTILISATEUR_SAISI: {
-      const emailUtilisateur = action.email.trim().toLowerCase();
-      return genereNouvelEtat({
-        ajouteAuNouvelEtat: () => ({
-          relationUtilisateurSaisie: estMailValide(emailUtilisateur)
-            ? emailUtilisateur
-            : '',
-        }),
-        champ: 'relationUtilisateurSaisie',
-        champValide: () => estMailValide(emailUtilisateur),
-        construisErreurChamp: (bool: boolean) =>
-          construisErreurRelationUtilisateurSaisie(bool),
-        elementsFormulairesValides: () =>
-          estMailValide(etat.email) &&
-          estDepartementValide(etat.departement) &&
-          etat.cguValidees,
-      });
+      return genereEtatAvecEmailUtilisateur(action.email);
     }
     case TypeActionFormulaireDemandeEtreAide.RELATION_AIDANT_CLIQUEE: {
       return genereNouvelEtat({
@@ -308,6 +324,12 @@ export const emailUtilisateurSaisi = (
 ): ActionFormulaireDemandeEtreAide => ({
   email,
   type: TypeActionFormulaireDemandeEtreAide.EMAIL_UTILISATEUR_SAISI,
+});
+export const emailUtilisateurFourni = (
+  email: string
+): ActionFormulaireDemandeEtreAide => ({
+  email,
+  type: TypeActionFormulaireDemandeEtreAide.EMAIL_UTILISATEUR_FOURNI,
 });
 export const initialiseEtatFormulaireDemandeEtreAide = (
   departements: Departement[]

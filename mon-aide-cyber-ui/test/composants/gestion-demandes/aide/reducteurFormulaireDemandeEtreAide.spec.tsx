@@ -3,6 +3,7 @@ import {
   adresseElectroniqueSaisie,
   cguValidees,
   departementSaisi,
+  emailUtilisateurFourni,
   emailUtilisateurSaisi,
   EtatFormulaireDemandeEtreAide,
   initialiseEtatFormulaireDemandeEtreAide,
@@ -529,7 +530,7 @@ describe('Parcours CGU Aidé', () => {
         });
       });
 
-      it('Fournit le mail de l’utilisateur', () => {
+      it('Saisit le mail de l’utilisateur', () => {
         const etat = reducteurFormulaireDemandeEtreAide(
           { ...etatInitial },
           emailUtilisateurSaisi('jean.dupont@email.com')
@@ -618,6 +619,24 @@ describe('Parcours CGU Aidé', () => {
           pretPourEnvoi: false,
           departements: [],
           relationUtilisateurSaisie: 'jean.dupont@email.com',
+          valeurSaisieDepartement: '',
+        });
+      });
+
+      it('Fournit le mail de l’utilisateur', () => {
+        const etat = reducteurFormulaireDemandeEtreAide(
+          { ...etatInitial },
+          emailUtilisateurFourni('jean.dupont@email.com')
+        );
+
+        expect(etat).toStrictEqual<EtatFormulaireDemandeEtreAide>({
+          cguValidees: false,
+          departement: {} as Departement,
+          email: '',
+          pretPourEnvoi: false,
+          departements: [],
+          relationUtilisateurSaisie: 'jean.dupont@email.com',
+          relationUtilisateurFournie: true,
           valeurSaisieDepartement: '',
         });
       });
