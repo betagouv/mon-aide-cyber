@@ -4,12 +4,14 @@ import {
   useCallback,
   useEffect,
   useReducer,
+  useState,
 } from 'react';
 import {
   adresseElectroniqueSaisie,
   cguValidees,
   departementSaisi,
   departementsCharges,
+  emailUtilisateurFourni,
   emailUtilisateurSaisi,
   initialiseEtatFormulaireDemandeEtreAide,
   raisonSocialeSaisie,
@@ -23,9 +25,13 @@ import {
 import { useModale } from '../../../fournisseurs/hooks.ts';
 import { CorpsCGU } from '../../../vues/ComposantCGU.tsx';
 import { AutoCompletion } from '../../auto-completion/AutoCompletion.tsx';
-import { CorpsDemandeEtreAide } from '../../../domaine/gestion-demandes/etre-aide/EtreAide.ts';
+import {
+  CorpsDemandeEtreAide,
+  partageEmail,
+} from '../../../domaine/gestion-demandes/etre-aide/EtreAide.ts';
 import { Input } from '../../atomes/Input/Input.tsx';
 import './demande-aide.scss';
+import { useSearchParams } from 'react-router-dom';
 
 type ProprietesSaisiesInformations = {
   departements: Departement[];
@@ -38,13 +44,15 @@ type ProprietesSaisiesInformations = {
 type ProprietesChampSaisieEmailUtilisateur = PropsWithChildren<
   HTMLAttributes<HTMLDivElement> & {
     surSaisieEmailUtilisateur: (email: string) => void;
+    valeur: string | undefined;
+    disabled: boolean | undefined;
   }
 >;
 const ChampSaisieEmailUtilisateur = ({
   children,
   ...proprietesChampSaisieEmailUtilisateur
 }: ProprietesChampSaisieEmailUtilisateur) => {
-  const { className, surSaisieEmailUtilisateur } =
+  const { className, disabled, surSaisieEmailUtilisateur } =
     proprietesChampSaisieEmailUtilisateur;
 
   return (
@@ -61,7 +69,9 @@ const ChampSaisieEmailUtilisateur = ({
       </label>
       <Input
         type="email"
+        disabled={disabled}
         placeholder="Exemple : jean.dupont@email.com"
+        value={proprietesChampSaisieEmailUtilisateur.valeur}
         onBlur={(e) => surSaisieEmailUtilisateur(e.target.value)}
       />
       {children}
@@ -76,11 +86,21 @@ export const FormulaireDemandeEtreAide = (
     reducteurFormulaireDemandeEtreAide,
     initialiseEtatFormulaireDemandeEtreAide(proprietes.departements)
   );
+  const [searchParams] = useSearchParams();
+  const parametreMailUtilisateur = partageEmail().decode(searchParams);
+  const [relationUtilisateurOuiClique, setRelationUtilisateurOuiClique] =
+    useState(false);
 
   useEffect(
     () => envoie(departementsCharges(proprietes.departements)),
     [proprietes.departements]
   );
+
+  useEffect(() => {
+    if (parametreMailUtilisateur) {
+      envoie(emailUtilisateurFourni(parametreMailUtilisateur));
+    }
+  }, [parametreMailUtilisateur]);
 
   const surSoumissionFormulaire = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -134,6 +154,7 @@ export const FormulaireDemandeEtreAide = (
   );
 
   const surRelationUtilisateurOui = useCallback(() => {
+    setRelationUtilisateurOuiClique(true);
     envoie(relationUtilisateurCliquee(true));
   }, []);
 
@@ -269,6 +290,9 @@ export const FormulaireDemandeEtreAide = (
                   <div className="fr-radio-group mac-radio-group">
                     <Input
                       type="radio"
+                      disabled={
+                        etatFormulaireDemandeEtreAide.relationUtilisateurFournie
+                      }
                       name="relation-utilisateur"
                       id="relation-utilisateur-non"
                       value="Non"
@@ -284,10 +308,17 @@ export const FormulaireDemandeEtreAide = (
                   <div className="fr-radio-group mac-radio-group">
                     <Input
                       type="radio"
+                      disabled={
+                        etatFormulaireDemandeEtreAide.relationUtilisateurFournie
+                      }
                       name="relation-utilisateur"
                       id="relation-utilisateur-oui"
                       value="Oui"
                       onClick={surRelationUtilisateurOui}
+                      checked={
+                        !!etatFormulaireDemandeEtreAide.relationUtilisateurFournie ||
+                        relationUtilisateurOuiClique
+                      }
                     />
                     <label
                       className="fr-label"
@@ -304,6 +335,13 @@ export const FormulaireDemandeEtreAide = (
                           etatFormulaireDemandeEtreAide.erreur
                             ?.relationUtilisateurSaisie?.className ||
                           'bordure-gauche'
+                        }
+                        disabled={
+                          etatFormulaireDemandeEtreAide.relationUtilisateurFournie
+                        }
+                        valeur={
+                          etatFormulaireDemandeEtreAide.relationUtilisateurFournie &&
+                          etatFormulaireDemandeEtreAide.relationUtilisateurSaisie
                         }
                         surSaisieEmailUtilisateur={surSaisieEmailUtilisateur}
                       >
