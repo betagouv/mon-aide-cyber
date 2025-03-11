@@ -89,6 +89,8 @@ regional:
         urlSite: 'https://www.campuscyber-na.fr/'
       - nom: 'Centre de Ressources Cyber Lot et Garonne'
         urlSite: 'https://www.campusnumerique47.fr/'
+      - nom: 'Cluster Pays Basque Digital
+        urlSite: 'https://www.pays-basque-digital.fr/'
       - nom: 'Collectif Rochefort Numérique'
         urlSite: 'https://www.rochefort-numerique.fr/'
       - nom: 'Digital Valley'
