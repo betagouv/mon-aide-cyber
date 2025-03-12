@@ -272,7 +272,5 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
         ),
       miseAJour
     );
-
-    return Promise.resolve();
   }
 }
