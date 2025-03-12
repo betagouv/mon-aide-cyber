@@ -71,7 +71,7 @@ export const useEcranRelaisAssociatifs = () => {
     },
   });
 
-  useEffect(() => activeSectionsObservesDansMenu(), []);
+  useEffect(() => activeSectionsObservesDansMenu(), [referentiel]);
 
   return { referentiel, enCoursDeChargement };
 };
