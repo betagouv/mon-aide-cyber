@@ -55,70 +55,59 @@ export class CapteurCommandeCreeEspaceAidant
   ) {}
 
   async execute(commande: CommandeCreeEspaceAidant): Promise<EspaceAidantCree> {
-    return this.entrepots
-      .aidants()
-      .rechercheParEmail(commande.email)
-      .then(() =>
-        Promise.reject(
-          new ErreurCreationEspaceAidant(
-            'Un compte Aidant avec cette adresse email existe déjà.'
-          )
-        )
-      )
-      .catch((erreur) => {
-        if (erreur instanceof AggregatNonTrouve) {
-          const aidant: Aidant = {
-            identifiant: commande.identifiant,
-            email: commande.email,
-            nomPrenom: commande.nomPrenom,
-            preferences: {
-              departements: [commande.departement],
-              secteursActivite: [],
-              typesEntites: [],
-              nomAffichageAnnuaire: formatteLeNomPrenomSelonRegleAffichage(
-                commande.nomPrenom,
-                TypeAffichageAnnuaire.PRENOM_N
-              ),
-            },
-            consentementAnnuaire: false,
-            ...(commande.siret && { siret: commande.siret }),
-            dateSignatureCGU: commande.dateSignatureCGU,
-            ...(commande.dateSignatureCharte && {
-              dateSignatureCharte: commande.dateSignatureCharte,
-            }),
-            ...(commande.entite && {
-              entite: {
-                ...(commande.entite.nom && { nom: commande.entite.nom }),
-                ...(commande.entite.siret && { siret: commande.entite.siret }),
-                type: commande.entite.type,
-              },
-            }),
-          };
-          return this.entrepots
-            .aidants()
-            .persiste(aidant)
-            .then(() => {
-              return this.busEvenement
-                .publie<AidantCree>({
-                  corps: {
-                    identifiant: aidant.identifiant,
-                    departement: commande.departement.code,
-                    typeAidant: estSiretGendarmerie(aidant.siret)
-                      ? 'Gendarme'
-                      : 'Aidant',
-                  },
-                  date: FournisseurHorloge.maintenant(),
-                  identifiant: aidant.identifiant,
-                  type: 'AIDANT_CREE',
-                })
-                .then(() => ({
-                  identifiant: aidant.identifiant,
-                  email: aidant.email,
-                  nomPrenom: aidant.nomPrenom,
-                }));
-            });
-        }
-        return Promise.reject(erreur);
+    try {
+      await this.entrepots.aidants().rechercheParEmail(commande.email);
+      throw new ErreurCreationEspaceAidant(
+        'Un compte Aidant avec cette adresse email existe déjà.'
+      );
+    } catch (erreur) {
+      if (!(erreur instanceof AggregatNonTrouve)) throw erreur;
+
+      const aidant: Aidant = {
+        identifiant: commande.identifiant,
+        email: commande.email,
+        nomPrenom: commande.nomPrenom,
+        preferences: {
+          departements: [commande.departement],
+          secteursActivite: [],
+          typesEntites: [],
+          nomAffichageAnnuaire: formatteLeNomPrenomSelonRegleAffichage(
+            commande.nomPrenom,
+            TypeAffichageAnnuaire.PRENOM_N
+          ),
+        },
+        consentementAnnuaire: false,
+        ...(commande.siret && { siret: commande.siret }),
+        dateSignatureCGU: commande.dateSignatureCGU,
+        ...(commande.dateSignatureCharte && {
+          dateSignatureCharte: commande.dateSignatureCharte,
+        }),
+        ...(commande.entite && {
+          entite: {
+            ...(commande.entite.nom && { nom: commande.entite.nom }),
+            ...(commande.entite.siret && { siret: commande.entite.siret }),
+            type: commande.entite.type,
+          },
+        }),
+      };
+
+      await this.entrepots.aidants().persiste(aidant);
+      await this.busEvenement.publie<AidantCree>({
+        corps: {
+          identifiant: aidant.identifiant,
+          departement: commande.departement.code,
+          typeAidant: estSiretGendarmerie(aidant.siret) ? 'Gendarme' : 'Aidant',
+        },
+        date: FournisseurHorloge.maintenant(),
+        identifiant: aidant.identifiant,
+        type: 'AIDANT_CREE',
       });
+
+      return {
+        identifiant: aidant.identifiant,
+        email: aidant.email,
+        nomPrenom: aidant.nomPrenom,
+      };
+    }
   }
 }
