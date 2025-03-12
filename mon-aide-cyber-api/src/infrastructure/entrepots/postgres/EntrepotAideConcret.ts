@@ -99,36 +99,36 @@ export interface EntrepotAideDistant {
 }
 
 class EntrepotAideBrevo implements EntrepotAideDistant {
-  rechercheParEmail(email: string): Promise<AideDistantDTO | undefined> {
-    return adaptateursRequeteBrevo()
+  async rechercheParEmail(email: string): Promise<AideDistantDTO | undefined> {
+    const reponse = await adaptateursRequeteBrevo()
       .rechercheContact(email)
-      .execute(unConstructeurRechercheDeContact().construis())
-      .then(async (reponse) => {
-        if (estReponseEnErreur(reponse)) {
-          const corpsReponse = await reponse.json();
-          console.error(
-            'ERREUR BREVO',
-            JSON.stringify({
-              contexte: 'Recherche contact',
-              details: corpsReponse.code,
-              message: corpsReponse.message,
-            })
-          );
-          if (reponse.status === 404) {
-            return undefined;
-          }
-          return Promise.reject(corpsReponse.message);
-        }
-        const corpsReponse = await reponse.json();
-        const aideBrevo: AideDistantBrevoDTO = {
-          email: corpsReponse.email,
-          attributes: { METADONNEES: corpsReponse.attributes.METADONNEES },
-        };
-        return {
-          email: aideBrevo.email,
-          metaDonnees: aideBrevo.attributes.METADONNEES,
-        };
-      });
+      .execute(unConstructeurRechercheDeContact().construis());
+
+    if (estReponseEnErreur(reponse)) {
+      const corpsReponse = await reponse.json();
+      console.error(
+        'ERREUR BREVO',
+        JSON.stringify({
+          contexte: 'Recherche contact',
+          details: corpsReponse.code,
+          message: corpsReponse.message,
+        })
+      );
+      if (reponse.status === 404) {
+        return undefined;
+      }
+      throw corpsReponse.message;
+    }
+
+    const corpsReponse = await reponse.json();
+    const aideBrevo: AideDistantBrevoDTO = {
+      email: corpsReponse.email,
+      attributes: { METADONNEES: corpsReponse.attributes.METADONNEES },
+    };
+    return {
+      email: aideBrevo.email,
+      metaDonnees: aideBrevo.attributes.METADONNEES,
+    };
   }
 
   persiste(
