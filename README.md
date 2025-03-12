@@ -43,6 +43,17 @@ Les tests sont lancés manuellement et nécessitent une première installation d
 - `npm run test` lance les tests de l'`api` et du `front`
 - `npm run test:watch` lance les tests à chaque modification de fichier de l'`api` et du `front`
 
+### Pour les tests de base de données :
+Afin que les tests effectués sur la couche de persistance s'exécutent bien, il est nécessaire de lancer un conteneur de base de données dédiée aux tests.
+
+Il existe un `mon-aide-cyber-api/test/docker-compose.yml` pour créer le conteneur.
+
+```shell
+ cd mon-aide-cyber-api/test/ & docker-compose up
+```
+
+> IMPORTANT : un conteneur node va se lancer afin d'exécuter les migrations knex, vérifiez bien que ce dernier a terminé son travail avant d'utiliser la base de donnée de tests.
+
 ## Activations de fonctionnalités
 
 ### mon-aide-cyber-ui
