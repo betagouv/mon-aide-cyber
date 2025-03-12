@@ -20,6 +20,7 @@ import {
   EntrepotDemandeAide,
   RechercheDemandeAide,
 } from '../../../gestion-demandes/aide/DemandeAide';
+import { EntrepotEcriture, EntrepotLecture } from '../../../domaine/Entrepot';
 
 type DonneesAidesMAC = {
   dateSignatureCGU: string;
@@ -169,7 +170,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
           return Promise.resolve();
         });
     }
-    const requete = unConstructeurCreationDeContact()
+    const laCreation = unConstructeurCreationDeContact()
       .ayantPourEmail(entite.email)
       .ayantPourAttributs({
         metadonnees: chiffrement(
@@ -181,7 +182,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
       .construis();
     return adaptateursRequeteBrevo()
       .creationContact()
-      .execute(requete)
+      .execute(laCreation)
       .then(async (reponse) => {
         if (estReponseEnErreur(reponse)) {
           const corpsReponse = await reponse.json();
@@ -204,7 +205,8 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
   constructor(
     private readonly serviceChiffrement: ServiceDeChiffrement,
     private readonly entreprotAideBrevo: EntrepotAideDistant = new EntrepotAideBrevo(),
-    private readonly entrepotAidePostgres = new EntrepotAidePostgres()
+    private readonly entrepotAidePostgres: EntrepotLecture<AideMAC> &
+      EntrepotEcriture<AideMAC> = new EntrepotAidePostgres()
   ) {}
 
   async rechercheParEmail(email: string): Promise<RechercheDemandeAide> {
