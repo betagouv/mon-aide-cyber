@@ -13,6 +13,7 @@ import {
   Siret,
   TypeAffichageAnnuaire,
 } from './Aidant';
+import { RepertoireDeContacts } from '../contacts/RepertoireDeContacts';
 
 export type TypeEntite = 'ServicePublic' | 'ServiceEtat' | 'Association';
 
@@ -51,7 +52,8 @@ export class CapteurCommandeCreeEspaceAidant
 {
   constructor(
     private readonly entrepots: Entrepots,
-    private readonly busEvenement: BusEvenement
+    private readonly busEvenement: BusEvenement,
+    private readonly repertoireDeContacts: RepertoireDeContacts
   ) {}
 
   async execute(commande: CommandeCreeEspaceAidant): Promise<EspaceAidantCree> {
@@ -92,6 +94,8 @@ export class CapteurCommandeCreeEspaceAidant
       };
 
       await this.entrepots.aidants().persiste(aidant);
+      await this.repertoireDeContacts.creeAidant(aidant);
+
       await this.busEvenement.publie<AidantCree>({
         corps: {
           identifiant: aidant.identifiant,

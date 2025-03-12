@@ -14,6 +14,15 @@ import {
 } from '../../src/espace-aidant/CapteurCommandeCreeEspaceAidant';
 import crypto from 'crypto';
 import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import { RepertoireDeContacts } from '../../src/contacts/RepertoireDeContacts';
+
+class RepertoireDeContactsMemoire implements RepertoireDeContacts {
+  public aidants: string[] = [];
+
+  async creeAidant(aidant: Aidant): Promise<void> {
+    this.aidants.push(aidant.email);
+  }
+}
 
 describe('Capteur de commande de création de compte Aidant', () => {
   it('Crée un compte Aidant', async () => {
@@ -22,7 +31,8 @@ describe('Capteur de commande de création de compte Aidant', () => {
 
     const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
-      new BusEvenementDeTest()
+      new BusEvenementDeTest(),
+      new RepertoireDeContactsMemoire()
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
@@ -64,6 +74,32 @@ describe('Capteur de commande de création de compte Aidant', () => {
     });
   });
 
+  it('Ajoute un contact de profil AIDANT au répertoire de contacts (BREVO)', async () => {
+    const entrepots = new EntrepotsMemoire();
+    const dateSignatureCGU = new Date(Date.parse('2024-08-30T14:38:25'));
+
+    const repertoireDeContacts = new RepertoireDeContactsMemoire();
+
+    await new CapteurCommandeCreeEspaceAidant(
+      entrepots,
+      new BusEvenementDeTest(),
+      repertoireDeContacts
+    ).execute({
+      identifiant: crypto.randomUUID(),
+      dateSignatureCGU,
+      email: 'jean.dupont@beta.fr',
+      nomPrenom: 'Jean Dupont',
+      type: 'CommandeCreeEspaceAidant',
+      departement: {
+        nom: 'Alpes-de-Haute-Provence',
+        code: '4',
+        codeRegion: '93',
+      },
+    });
+
+    expect(repertoireDeContacts.aidants).toContainEqual('jean.dupont@beta.fr');
+  });
+
   it('Ne crée pas l’Aidant si un compte existe déjà avec le même email', async () => {
     const entrepots = new EntrepotsMemoire();
     const dateSignatureCGU = new Date(Date.parse('2024-08-30T14:38:25'));
@@ -72,7 +108,8 @@ describe('Capteur de commande de création de compte Aidant', () => {
 
     const compteAidantCree = new CapteurCommandeCreeEspaceAidant(
       entrepots,
-      new BusEvenementDeTest()
+      new BusEvenementDeTest(),
+      new RepertoireDeContactsMemoire()
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
@@ -103,7 +140,8 @@ describe('Capteur de commande de création de compte Aidant', () => {
 
     const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
-      busEvenement
+      busEvenement,
+      new RepertoireDeContactsMemoire()
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
@@ -137,7 +175,8 @@ describe('Capteur de commande de création de compte Aidant', () => {
 
     const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
-      busEvenement
+      busEvenement,
+      new RepertoireDeContactsMemoire()
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
