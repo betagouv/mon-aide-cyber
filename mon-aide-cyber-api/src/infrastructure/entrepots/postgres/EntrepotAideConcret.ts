@@ -149,6 +149,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
             entite.departement.nom,
             entite.raisonSociale
           ),
+          MAC_PROFIL: 'AIDE',
         })
         .construis();
       return adaptateursRequeteBrevo()
@@ -178,6 +179,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
           entite.departement.nom,
           entite.raisonSociale
         ),
+        MAC_PROFIL: 'AIDE',
       })
       .construis();
     return adaptateursRequeteBrevo()
