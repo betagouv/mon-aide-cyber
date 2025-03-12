@@ -12,7 +12,7 @@ export const HeroRelaisAssociatifs = () => {
             MonAideCyber collabore avec des associations locales présentes sur
             l‘ensemble du territoire. Les membres de ces associations peuvent
             effectuer des diagnostics, et les utilisateurs du dispositif ont la
-            possibilité de les contacter pour y adhérer et devenir AidantcCyber.
+            possibilité de les contacter pour y adhérer et devenir Aidant cyber.
           </p>
         </section>
         <section>
