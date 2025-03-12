@@ -19,7 +19,6 @@ import { ReferentielDeMesures } from '../../diagnostic/ReferentielDeMesures';
 import { ServiceAidant } from '../../espace-aidant/ServiceAidant';
 import { CapteurCommandeCreeUtilisateur } from '../../authentification/CapteurCommandeCreeUtilisateur';
 import { CapteurCommandeReinitialisationMotDePasse } from '../../authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
-
 import {
   CapteurCommandeDemandeDiagnosticLibreAcces,
   CapteurSagaLanceDiagnosticLibreAcces,
@@ -28,7 +27,7 @@ import { CapteurCommandeCreerEspaceUtilisateurInscrit } from '../../espace-utili
 import { CapteurCommandeRechercheDemandeAideParEmail } from '../../gestion-demandes/aide/CapteurCommandeRechercheDemandeAideParEmail';
 import { CapteurCommandeCreerDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
 import { CapteurCommandeMettreAJourDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeMettreAJourDemandeAide';
-import { RepertoireDeContactsVide } from '../../adaptateurs/AdaptateurRepertoireDeContactsVide';
+import { AdaptateurRepertoireDeContactsBrevo } from '../../adaptateurs/AdaptateurRepertoireDeContactsBrevo';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -137,7 +136,7 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurCommandeCreeEspaceAidant(
           parametres.entrepots,
           parametres.busEvenements!,
-          new RepertoireDeContactsVide()
+          new AdaptateurRepertoireDeContactsBrevo()
         ),
     },
   ],
