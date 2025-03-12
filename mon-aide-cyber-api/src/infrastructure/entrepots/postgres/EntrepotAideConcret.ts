@@ -131,7 +131,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
     };
   }
 
-  persiste(
+  async persiste(
     entite: AideDistant,
     chiffrement: (
       identifiantMAC: crypto.UUID,
@@ -152,25 +152,26 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
           MAC_PROFIL: 'AIDE',
         })
         .construis();
-      return adaptateursRequeteBrevo()
+
+      const reponse = await adaptateursRequeteBrevo()
         .miseAjourContact(entite.email)
-        .execute(requete)
-        .then(async (reponse) => {
-          if (estReponseEnErreur(reponse)) {
-            const corpsReponse = await reponse.json();
-            console.error(
-              'ERREUR BREVO',
-              JSON.stringify({
-                contexte: 'Mise à jour du contact',
-                details: corpsReponse.code,
-                message: corpsReponse.message,
-              })
-            );
-            return Promise.reject(corpsReponse.message);
-          }
-          return Promise.resolve();
-        });
+        .execute(requete);
+
+      if (estReponseEnErreur(reponse)) {
+        const corpsReponse = await reponse.json();
+        console.error(
+          'ERREUR BREVO',
+          JSON.stringify({
+            contexte: 'Mise à jour du contact',
+            details: corpsReponse.code,
+            message: corpsReponse.message,
+          })
+        );
+        throw corpsReponse.message;
+      }
+      return;
     }
+
     const laCreation = unConstructeurCreationDeContact()
       .ayantPourEmail(entite.email)
       .ayantPourAttributs({
@@ -182,24 +183,23 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
         MAC_PROFIL: 'AIDE',
       })
       .construis();
-    return adaptateursRequeteBrevo()
+
+    const reponse = await adaptateursRequeteBrevo()
       .creationContact()
-      .execute(laCreation)
-      .then(async (reponse) => {
-        if (estReponseEnErreur(reponse)) {
-          const corpsReponse = await reponse.json();
-          console.error(
-            'ERREUR BREVO',
-            JSON.stringify({
-              contexte: 'Création contact',
-              details: corpsReponse.code,
-              message: corpsReponse.message,
-            })
-          );
-          return Promise.reject(corpsReponse.message);
-        }
-        return Promise.resolve();
-      });
+      .execute(laCreation);
+
+    if (estReponseEnErreur(reponse)) {
+      const corpsReponse = await reponse.json();
+      console.error(
+        'ERREUR BREVO',
+        JSON.stringify({
+          contexte: 'Création contact',
+          details: corpsReponse.code,
+          message: corpsReponse.message,
+        })
+      );
+      throw corpsReponse.message;
+    }
   }
 }
 
