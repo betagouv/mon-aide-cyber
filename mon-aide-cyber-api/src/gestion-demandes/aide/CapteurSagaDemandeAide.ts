@@ -110,16 +110,21 @@ export class CapteurSagaDemandeAide
         ...(aide.etat === 'INCOMPLET' && { etat: 'INCOMPLET' }),
       };
 
+      let utilisateurMAC: UtilisateurMACDTO | undefined = undefined;
+      if (saga.relationUtilisateur) {
+        utilisateurMAC = await uneRechercheUtilisateursMAC(
+          this.entrepotUtilisateurMAC
+        ).rechercheParMail(saga.relationUtilisateur);
+        if (!utilisateurMAC) {
+          return Promise.reject(
+            'L’Aidant n’est pas référencé dans MonAideCyber'
+          );
+        }
+      }
+
       await this.busCommande
         .publie<CommandeCreerDemandeAide, DemandeAide>(commandeCreerAide)
         .then(async (aide: DemandeAide) => {
-          let utilisateurMAC: UtilisateurMACDTO | undefined = undefined;
-          if (saga.relationUtilisateur) {
-            utilisateurMAC = await uneRechercheUtilisateursMAC(
-              this.entrepotUtilisateurMAC
-            ).rechercheParMail(saga.relationUtilisateur);
-          }
-
           if (
             !utilisateurMAC ||
             utilisateurMAC.profil !== 'UtilisateurInscrit'
