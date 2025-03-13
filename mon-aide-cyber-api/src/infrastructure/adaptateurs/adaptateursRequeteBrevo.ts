@@ -46,7 +46,7 @@ interface AdaptateurRequeteBrevo<REQUETE, REPONSE extends Response> {
 }
 
 export type RequeteBrevo<T = void> = {
-  methode: 'GET' | 'POST' | 'PUT';
+  methode: 'GET' | 'POST';
   headers: Record<string, string>;
   corps?: T;
 };
@@ -103,7 +103,7 @@ export class AdaptateursRequeteBrevo {
           return (await fetch(url, {
             method: requete.methode,
             headers: requete.headers,
-            ...((requete.methode === 'POST' || requete.methode === 'PUT') && {
+            ...(requete.methode === 'POST' && {
               body: JSON.stringify(requete.corps),
             }),
           })) as unknown as R;
