@@ -64,20 +64,18 @@ export const EcranDiagnostics = () => {
 
         <div className="cartes">
           <div className="w-100">
-            <p>
-              Retrouvez ici l’ensemble des diagnostics que vous avez menés.
-              <br />
-              <br />
-              Pour créer un nouveau diagnostic, cliquez sur le bouton
-              ci-dessous.
-              <br />
-              N&apos;oubliez pas de faire valider les Conditions Générales
-              d&apos;Utilisation à l&apos;entité souhaitant bénéficier du
-              service
-            </p>
-            <ComposantLancerDiagnostic
-              composant={ComposantLienCreerDiagnostic}
-            />
+            <div className="tuile-tdb sans-fond">
+              <p>
+                Retrouvez ici l’ensemble des diagnostics que vous avez menés.
+                <br />
+                <br />
+                Pour créer un nouveau diagnostic, cliquez sur le bouton
+                ci-dessous.
+              </p>
+              <ComposantLancerDiagnostic
+                composant={ComposantLienCreerDiagnostic}
+              />
+            </div>
           </div>
           <div className="w-100">
             <div className="tuile-tdb">
