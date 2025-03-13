@@ -764,12 +764,12 @@ describe('Entrepot Aidant', () => {
       );
     });
 
-    it("L'aidant n'est pas trouvé", () => {
-      expect(
+    it("L'aidant n'est pas trouvé", async () => {
+      await expect(() =>
         new EntrepotAidantPostgres(
           new FauxServiceDeChiffrement(new Map())
         ).rechercheParEmail('identifiant-inconnu')
-      ).rejects.toThrow(new Error("Le aidant demandé n'existe pas."));
+      ).rejects.toThrowError("Le aidant demandé n'existe pas.");
     });
   });
 
@@ -1318,15 +1318,15 @@ describe('Entrepot Utilisateur', () => {
       });
     });
 
-    it("l'utilisateur n'est pas trouvé", () => {
-      expect(
+    it("l'utilisateur n'est pas trouvé", async () => {
+      await expect(() =>
         new EntrepotUtilisateurPostgres(
           new FauxServiceDeChiffrement(new Map())
         ).rechercheParIdentifiantConnexionEtMotDePasse(
           'identifiant-inconnu',
           'mdp'
         )
-      ).rejects.toThrow(new Error("Le utilisateur demandé n'existe pas."));
+      ).rejects.toThrowError("Le utilisateur demandé n'existe pas.");
     });
   });
 
@@ -1360,11 +1360,11 @@ describe('Entrepot Utilisateur', () => {
       const entrepotUtilisateurPostgres = new EntrepotUtilisateurPostgres(
         new ServiceDeChiffrementClair()
       );
-      expect(
+      await expect(() =>
         entrepotUtilisateurPostgres.rechercheParIdentifiantDeConnexion(
           'email-inconnu@mail.com'
         )
-      ).rejects.toThrow(new Error("Le utilisateur demandé n'existe pas."));
+      ).rejects.toThrowError("Le utilisateur demandé n'existe pas.");
     });
   });
 
