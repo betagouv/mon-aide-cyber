@@ -66,6 +66,7 @@ export type PieceJointeBrevo = { content: string; name: string };
 export type CreationContactBrevo = {
   email: string;
   attributes: Record<string, string>;
+  updateEnabled: true;
 };
 export type RechercheContactBrevo = string;
 
@@ -82,17 +83,6 @@ export class AdaptateursRequeteBrevo {
     ReponseCreationContact | ReponseBrevoEnErreur
   > {
     return this.adaptateur('https://api.brevo.com/v3/contacts');
-  }
-
-  miseAjourContact(
-    email: string
-  ): AdaptateurRequeteBrevo<
-    RequeteBrevo<CreationContactBrevo>,
-    Response | ReponseBrevoEnErreur
-  > {
-    return this.adaptateur(
-      `https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`
-    );
   }
 
   rechercheContact(

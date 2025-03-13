@@ -27,9 +27,7 @@ export class CapteurCommandeCreerDemandeAide
       ...(commande.raisonSociale && { raisonSociale: commande.raisonSociale }),
     };
 
-    await this.entrepots
-      .demandesAides()
-      .persiste(aide, commande.etat === 'INCOMPLET');
+    await this.entrepots.demandesAides().persiste(aide);
 
     return Promise.resolve(aide);
   }

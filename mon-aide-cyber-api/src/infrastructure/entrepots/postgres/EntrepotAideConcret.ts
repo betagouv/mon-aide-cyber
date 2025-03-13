@@ -4,7 +4,6 @@ import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import crypto from 'crypto';
 import {
   unConstructeurCreationDeContact,
-  unConstructeurMiseAJourDeContact,
   unConstructeurRechercheDeContact,
 } from '../../brevo/ConstructeursBrevo';
 import {
@@ -91,8 +90,7 @@ export interface EntrepotAideDistant {
       identifiantMAC: crypto.UUID,
       departement: string,
       raisonSociale?: string
-    ) => string,
-    miseAjour?: boolean
+    ) => string
   ): Promise<void>;
 
   rechercheParEmail(email: string): Promise<AideDistantDTO | undefined>;
@@ -137,41 +135,8 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
       identifiantMAC: crypto.UUID,
       departement: string,
       raisonSociale?: string
-    ) => string,
-    miseAjour = false
+    ) => string
   ): Promise<void> {
-    if (miseAjour) {
-      const requete = unConstructeurMiseAJourDeContact()
-        .ayantPourEmail(entite.email)
-        .ayantPourAttributs({
-          metadonnees: chiffrement(
-            entite.identifiantMAC,
-            entite.departement.nom,
-            entite.raisonSociale
-          ),
-          MAC_PROFIL: 'AIDE',
-        })
-        .construis();
-
-      const reponse = await adaptateursRequeteBrevo()
-        .miseAjourContact(entite.email)
-        .execute(requete);
-
-      if (estReponseEnErreur(reponse)) {
-        const corpsReponse = await reponse.json();
-        console.error(
-          'ERREUR BREVO',
-          JSON.stringify({
-            contexte: 'Mise à jour du contact',
-            details: corpsReponse.code,
-            message: corpsReponse.message,
-          })
-        );
-        throw corpsReponse.message;
-      }
-      return;
-    }
-
     const laCreation = unConstructeurCreationDeContact()
       .ayantPourEmail(entite.email)
       .ayantPourAttributs({
@@ -257,7 +222,7 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
     }
   }
 
-  async persiste(aide: DemandeAide, miseAJour = false): Promise<void> {
+  async persiste(aide: DemandeAide): Promise<void> {
     await this.entrepotAidePostgres.persiste(aide);
     await this.entreprotAideBrevo.persiste(
       {
@@ -269,8 +234,7 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
       (identifiantMAC, departement, raisonSociale) =>
         this.serviceChiffrement.chiffre(
           JSON.stringify({ identifiantMAC, departement, raisonSociale })
-        ),
-      miseAJour
+        )
     );
   }
 }

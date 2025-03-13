@@ -15,7 +15,7 @@ export type RechercheDemandeAide = {
 };
 export interface EntrepotDemandeAide {
   rechercheParEmail(email: string): Promise<RechercheDemandeAide>;
-  persiste(entite: DemandeAide, miseAjour?: boolean): Promise<void>;
+  persiste(entite: DemandeAide): Promise<void>;
 }
 
 export type DemandeAideSimple = Aggregat & {

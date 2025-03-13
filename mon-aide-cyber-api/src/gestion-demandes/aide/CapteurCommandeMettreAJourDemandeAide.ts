@@ -17,17 +17,12 @@ export class CapteurCommandeMettreAJourDemandeAide
   constructor(private readonly entrepotDemandeAide: EntrepotDemandeAide) {}
 
   execute(commande: CommandeMettreAJourDemandeAide): Promise<void> {
-    return this.entrepotDemandeAide.persiste(
-      {
-        identifiant: commande.identifiant,
-        email: commande.email,
-        departement: commande.departement,
-        ...(commande.raisonSociale && {
-          raisonSociale: commande.raisonSociale,
-        }),
-        dateSignatureCGU: FournisseurHorloge.maintenant(),
-      },
-      true
-    );
+    return this.entrepotDemandeAide.persiste({
+      identifiant: commande.identifiant,
+      email: commande.email,
+      departement: commande.departement,
+      ...(commande.raisonSociale && { raisonSociale: commande.raisonSociale }),
+      dateSignatureCGU: FournisseurHorloge.maintenant(),
+    });
   }
 }

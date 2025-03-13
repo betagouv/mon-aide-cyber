@@ -175,8 +175,7 @@ describe('Entrepot Aidé Concret', () => {
         (identifiantMAC, departement, raisonSociale) =>
           tableDeChiffrement.get(
             JSON.stringify({ identifiantMAC, departement, raisonSociale })
-          )!,
-        false
+          )!
       );
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
         tableDeChiffrement
@@ -204,8 +203,7 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
       identifiantMAC: crypto.UUID,
       departement: string,
       raisonSociale?: string
-    ) => string,
-    __miseAjour?: boolean
+    ) => string
   ): Promise<void> {
     const contactBrevo: Omit<AideDistantBrevoDTO, 'attributes'> & {
       attributes: { METADONNEES?: string };

@@ -129,13 +129,11 @@ class ConstructeurBrevoCreationContact extends ConstructeurBrevo<CreationContact
   }
 
   protected construisCorps(): CreationContactBrevo {
-    return { email: this.email, attributes: this.attributs };
-  }
-}
-
-class ConstructeurBrevoMiseAJourContact extends ConstructeurBrevoCreationContact {
-  constructor() {
-    super('PUT');
+    return {
+      email: this.email,
+      attributes: this.attributs,
+      updateEnabled: true,
+    };
   }
 }
 
@@ -153,9 +151,6 @@ export const unConstructeurEnvoiDeMail = () => new ConstructeurBrevoEnvoiMail();
 
 export const unConstructeurCreationDeContact = () =>
   new ConstructeurBrevoCreationContact();
-
-export const unConstructeurMiseAJourDeContact = () =>
-  new ConstructeurBrevoMiseAJourContact();
 
 export const unConstructeurRechercheDeContact = () =>
   new ConstructeurBrevoRechercheContact();
