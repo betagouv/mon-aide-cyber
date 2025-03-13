@@ -92,10 +92,7 @@ export const routesAPIDemandeEtreAide = (
         };
         return configuration.busCommande
           .publie(saga)
-          .then(() => {
-            reponse.status(202);
-            return reponse.send();
-          })
+          .then(() => reponse.status(202).send())
           .catch((erreur) =>
             suite(
               ErreurMAC.cree("Demande d'aide", new ErreurDemandeAide(erreur))
@@ -107,8 +104,7 @@ export const routesAPIDemandeEtreAide = (
         .map((resultat) => resultat.msg)
         .filter((erreur): erreur is string => !!erreur)
         .join(', ');
-      reponse.status(422);
-      return reponse.json({
+      return reponse.status(422).json({
         message: erreursValidation,
         ...constructeurActionsHATEOAS().demandeAide().construis(),
       });

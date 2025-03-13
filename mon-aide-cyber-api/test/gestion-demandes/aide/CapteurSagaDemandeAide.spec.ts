@@ -31,7 +31,11 @@ import {
 } from '../../../src/gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
 import { uneDemandeAide } from './ConstructeurDemandeAide';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
-import { EntrepotAideMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import {
+  EntrepotAideMemoire,
+  EntrepotUtilisateurMACMemoire,
+} from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import { unUtilisateurInscrit } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
   const cotParDefaut = {
@@ -66,6 +70,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         ),
         busEvenement,
         adaptateurEnvoiMail,
+        new EntrepotUtilisateurMACMemoire({
+          aidant: entrepots.aidants(),
+          utilisateurInscrit: entrepots.utilisateursInscrits(),
+        }),
         () => cotParDefaut
       );
 
@@ -107,6 +115,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         busCommande,
         busEvenement,
         adaptateurEnvoiMail,
+        new EntrepotUtilisateurMACMemoire({
+          aidant: entrepotsMemoire.aidants(),
+          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
+        }),
         () => cotParDefaut
       );
 
@@ -139,6 +151,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         busCommande,
         busEvenement,
         adaptateurEnvoieMail,
+        new EntrepotUtilisateurMACMemoire({
+          aidant: entrepotsMemoire.aidants(),
+          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
+        }),
         () => cotParDefaut
       );
 
@@ -175,6 +191,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         busCommande,
         busEvenement,
         adaptateurEnvoieMail,
+        new EntrepotUtilisateurMACMemoire({
+          aidant: entrepotsMemoire.aidants(),
+          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
+        }),
         () => cotParDefaut
       );
 
@@ -211,6 +231,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         busCommande,
         busEvenement,
         adaptateurEnvoieMail,
+        new EntrepotUtilisateurMACMemoire({
+          aidant: entrepotsMemoire.aidants(),
+          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
+        }),
         () => ({
           rechercheEmailParDepartement: (__departement) =>
             'gironde@ssi.gouv.fr',
@@ -256,6 +280,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         busCommande,
         busEvenement,
         adaptateurEnvoieMail,
+        new EntrepotUtilisateurMACMemoire({
+          aidant: entrepotsMemoire.aidants(),
+          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
+        }),
         () => cotParDefaut
       );
 
@@ -305,6 +333,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         busCommande,
         busEvenement,
         adaptateurEnvoieMail,
+        new EntrepotUtilisateurMACMemoire({
+          aidant: entrepotsMemoire.aidants(),
+          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
+        }),
         () => cotParDefaut
       );
 
@@ -343,6 +375,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         busCommande,
         busEvenement,
         adaptateurEnvoieMail,
+        new EntrepotUtilisateurMACMemoire({
+          aidant: entrepotsMemoire.aidants(),
+          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
+        }),
         () => cotParDefaut
       ).execute({
         type: 'SagaDemandeValidationCGUAide',
@@ -379,6 +415,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           busCommande,
           busEvenement,
           adaptateurEnvoieMail,
+          new EntrepotUtilisateurMACMemoire({
+            aidant: entrepotsMemoire.aidants(),
+            utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
+          }),
           () => cotParDefaut
         );
 
@@ -411,6 +451,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         ),
         new BusEvenementDeTest(),
         new AdaptateurEnvoiMailMemoire(),
+        new EntrepotUtilisateurMACMemoire({
+          aidant: entrepots.aidants(),
+          utilisateurInscrit: entrepots.utilisateursInscrits(),
+        }),
         () => cotParDefaut
       );
 
@@ -434,6 +478,54 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           departement: gironde,
         },
         etat: 'COMPLET',
+      });
+    });
+  });
+
+  describe('Lorsque un email utilisateur est fourni', () => {
+    describe('Dans le cas d’un Utilisateur inscrit', () => {
+      it("N’envoie pas de email au COT lorsqu'un Utilisateur Inscrit est donné en paramètre", async () => {
+        const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
+        const entrepotsMemoire = new EntrepotsMemoire();
+        const busEvenement = new BusEvenementDeTest();
+        const busCommande = new BusCommandeMAC(
+          entrepotsMemoire,
+          busEvenement,
+          adaptateurEnvoieMail,
+          unConstructeurDeServices(entrepotsMemoire.aidants())
+        );
+        await entrepotsMemoire
+          .utilisateursInscrits()
+          .persiste(
+            unUtilisateurInscrit()
+              .avecUnEmail('jean.dupont@email.com')
+              .construis()
+          );
+        const capteur = new CapteurSagaDemandeAide(
+          busCommande,
+          busEvenement,
+          adaptateurEnvoieMail,
+          new EntrepotUtilisateurMACMemoire({
+            aidant: entrepotsMemoire.aidants(),
+            utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
+          }),
+          () => cotParDefaut
+        );
+
+        await capteur.execute({
+          type: 'SagaDemandeAide',
+          cguValidees: true,
+          email: 'user@example.com',
+          departement: gironde,
+          relationUtilisateur: 'jean.dupont@email.com',
+        });
+
+        expect(
+          adaptateurEnvoieMail.aEteEnvoyeA(
+            'cot@email.com',
+            'Bonjour une entité a fait une demande d’aide'
+          )
+        ).toBe(false);
       });
     });
   });

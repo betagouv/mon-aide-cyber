@@ -69,6 +69,7 @@ const capteurs: Map<string, Capteur> = new Map([
           parametres.busCommande!,
           parametres.busEvenements!,
           parametres.adaptateurEnvoiMail!,
+          parametres.entrepots.utilisateursMAC(),
           fabriqueAnnuaireCOT().annuaireCOT
         ),
     },

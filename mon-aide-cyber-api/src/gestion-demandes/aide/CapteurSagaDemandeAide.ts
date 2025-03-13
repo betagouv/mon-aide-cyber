@@ -10,6 +10,11 @@ import { DemandeAide, RechercheDemandeAide } from './DemandeAide';
 import { CommandeRechercheAideParEmail } from './CapteurCommandeRechercheDemandeAideParEmail';
 import { CommandeCreerDemandeAide } from './CapteurCommandeCreerDemandeAide';
 import { CommandeMettreAJourDemandeAide } from './CapteurCommandeMettreAJourDemandeAide';
+import {
+  EntrepotUtilisateursMAC,
+  uneRechercheUtilisateursMAC,
+  UtilisateurMACDTO,
+} from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export type SagaDemandeAide = Saga & {
   cguValidees: boolean;
@@ -31,6 +36,7 @@ export class CapteurSagaDemandeAide
     private readonly busCommande: BusCommande,
     private readonly busEvenement: BusEvenement,
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
+    private readonly entrepotUtilisateurMAC: EntrepotUtilisateursMAC,
     private readonly annuaireCOT: () => {
       rechercheEmailParDepartement: (departement: Departement) => string;
     }
@@ -107,12 +113,25 @@ export class CapteurSagaDemandeAide
       await this.busCommande
         .publie<CommandeCreerDemandeAide, DemandeAide>(commandeCreerAide)
         .then(async (aide: DemandeAide) => {
+          let utilisateurMAC: UtilisateurMACDTO | undefined = undefined;
+          if (saga.relationUtilisateur) {
+            utilisateurMAC = await uneRechercheUtilisateursMAC(
+              this.entrepotUtilisateurMAC
+            ).rechercheParMail(saga.relationUtilisateur);
+          }
+
+          if (
+            !utilisateurMAC ||
+            utilisateurMAC.profil !== 'UtilisateurInscrit'
+          ) {
+            await envoieRecapitulatifDemandeAide(
+              this.adaptateurEnvoiMail,
+              aide,
+              saga.relationUtilisateur
+            );
+          }
+
           await envoieConfirmationDemandeAide(
-            this.adaptateurEnvoiMail,
-            aide,
-            saga.relationUtilisateur
-          );
-          await envoieRecapitulatifDemandeAide(
             this.adaptateurEnvoiMail,
             aide,
             saga.relationUtilisateur
