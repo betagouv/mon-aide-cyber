@@ -40,7 +40,7 @@ describe('Adaptateurs requete Brevo', () => {
     );
 
   describe('Création de contact', () => {
-    it('Exécute une création de contact', async () => {
+    it("Exécute une création de contact en indiquant qu'une mise à jour est possible", async () => {
       const adaptateur = new AdaptateursRequeteBrevoDeTest();
 
       await adaptateur
@@ -57,10 +57,9 @@ describe('Adaptateurs requete Brevo', () => {
       >({
         methode: 'POST',
         corps: {
-          attributes: {
-            donnees: 'donnees',
-          },
+          attributes: { donnees: 'donnees' },
           email: 'jean.dupont@mail.com',
+          updateEnabled: true,
         },
         headers: {
           'Content-Type': 'application/json',
