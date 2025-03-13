@@ -144,11 +144,7 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
             email: email!,
             nomPrenom: `${prenom} ${nom}`,
             type: 'CommandeCreeEspaceAidant',
-            departement: {
-              nom: 'Gironde',
-              code: '33',
-              codeRegion: '75',
-            },
+            departement: { nom: 'Gironde', code: '33', codeRegion: '75' },
             ...(siret && { siret: siret }),
           });
           return redirige(
