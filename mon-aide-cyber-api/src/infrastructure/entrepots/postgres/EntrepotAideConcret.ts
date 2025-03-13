@@ -19,7 +19,8 @@ import {
   EntrepotDemandeAide,
   RechercheDemandeAide,
 } from '../../../gestion-demandes/aide/DemandeAide';
-import { EntrepotEcriture, EntrepotLecture } from '../../../domaine/Entrepot';
+import { EntrepotEcriture } from '../../../domaine/Entrepot';
+import { RepertoireDeContacts } from '../../../contacts/RepertoireDeContacts';
 
 type DonneesAidesMAC = {
   dateSignatureCGU: string;
@@ -145,7 +146,6 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
           entite.departement.nom,
           entite.raisonSociale
         ),
-        MAC_PROFIL: 'AIDE',
       })
       .construis();
 
@@ -171,9 +171,9 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
 export class EntrepotAideConcret implements EntrepotDemandeAide {
   constructor(
     private readonly serviceChiffrement: ServiceDeChiffrement,
+    private readonly repertoireDeContacts: RepertoireDeContacts,
     private readonly entreprotAideBrevo: EntrepotAideDistant = new EntrepotAideBrevo(),
-    private readonly entrepotAidePostgres: EntrepotLecture<AideMAC> &
-      EntrepotEcriture<AideMAC> = new EntrepotAidePostgres()
+    private readonly entrepotAidePostgres: EntrepotEcriture<AideMAC> = new EntrepotAidePostgres()
   ) {}
 
   async rechercheParEmail(email: string): Promise<RechercheDemandeAide> {
@@ -224,6 +224,7 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
 
   async persiste(aide: DemandeAide): Promise<void> {
     await this.entrepotAidePostgres.persiste(aide);
+
     await this.entreprotAideBrevo.persiste(
       {
         email: aide.email,
@@ -236,5 +237,7 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
           JSON.stringify({ identifiantMAC, departement, raisonSociale })
         )
     );
+
+    await this.repertoireDeContacts.creeAide(aide);
   }
 }

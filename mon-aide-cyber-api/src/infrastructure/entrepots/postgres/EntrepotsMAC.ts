@@ -32,6 +32,7 @@ import { EntrepotStatistiquesAidant } from '../../../statistiques/aidant/Stastis
 import { EntrepotStatistiquesAidantPostgres } from './EntrepotStatistiquesAidantPostgres';
 import { EntrepotStatistiquesUtilisateurInscrit } from '../../../statistiques/utilisateur-inscrit/StatistiquesUtilisateurInscrit';
 import { EntrepotStatistiquesUtilisateursInscritsPostgres } from './EntrepotStatistiquesUtilisateursInscritsPostgres';
+import { AdaptateurRepertoireDeContactsBrevo } from '../../../adaptateurs/AdaptateurRepertoireDeContactsBrevo';
 
 export class EntrepotsMAC implements Entrepots {
   private readonly entrepotDiagnostic = new EntrepotDiagnosticPostgres();
@@ -43,7 +44,8 @@ export class EntrepotsMAC implements Entrepots {
   private entrepotRestitution: EntrepotRestitution =
     new EntrepotRestitutionPostgres();
   private readonly entrepotAide: EntrepotDemandeAide = new EntrepotAideConcret(
-    adaptateurServiceChiffrement()
+    adaptateurServiceChiffrement(),
+    new AdaptateurRepertoireDeContactsBrevo()
   );
   private entrepotDemandeDevenirAidant: EntrepotDemandeDevenirAidant =
     new EntrepotDemandeDevenirAidantPostgres(adaptateurServiceChiffrement());
