@@ -33,7 +33,7 @@ export class CapteurCommandeCreerEspaceUtilisateurInscrit
     private readonly adaptateurEnvoiDeMail: AdaptateurEnvoiMail
   ) {}
 
-  execute(
+  async execute(
     commande: CommandeCreerEspaceUtilisateurInscrit
   ): Promise<EspaceUtilisateurInscritCree> {
     const utilisateur = {
@@ -42,37 +42,32 @@ export class CapteurCommandeCreerEspaceUtilisateurInscrit
       nomPrenom: commande.nomPrenom,
       ...(commande.siret && { entite: { siret: commande.siret } }),
     };
-    return this.entrepots
-      .utilisateursInscrits()
-      .persiste(utilisateur)
-      .then(() => {
-        return this.adaptateurEnvoiDeMail
-          .envoie({
-            destinataire: { email: commande.email },
-            corps: adaptateurCorpsMessage
-              .confirmationUtilisateurInscritCree()
-              .genereCorpsMessage(commande.nomPrenom),
-            objet:
-              'MonAideCyber - Votre inscription au dispositif est confirmée',
-          })
-          .then(() =>
-            this.busEvenement
-              .publie<UtilisateurInscritCree>({
-                corps: {
-                  identifiant: utilisateur.identifiant,
-                  typeUtilisateur: 'UtilisateurInscrit',
-                },
-                identifiant: utilisateur.identifiant,
-                type: 'UTILISATEUR_INSCRIT_CREE',
-                date: FournisseurHorloge.maintenant(),
-              })
-              .then(() => ({
-                email: utilisateur.email,
-                nomPrenom: utilisateur.nomPrenom,
-                identifiant: utilisateur.identifiant,
-              }))
-          );
-      });
+
+    await this.entrepots.utilisateursInscrits().persiste(utilisateur);
+
+    await this.adaptateurEnvoiDeMail.envoie({
+      destinataire: { email: commande.email },
+      corps: adaptateurCorpsMessage
+        .confirmationUtilisateurInscritCree()
+        .genereCorpsMessage(commande.nomPrenom),
+      objet: 'MonAideCyber - Votre inscription au dispositif est confirmée',
+    });
+
+    await this.busEvenement.publie<UtilisateurInscritCree>({
+      corps: {
+        identifiant: utilisateur.identifiant,
+        typeUtilisateur: 'UtilisateurInscrit',
+      },
+      identifiant: utilisateur.identifiant,
+      type: 'UTILISATEUR_INSCRIT_CREE',
+      date: FournisseurHorloge.maintenant(),
+    });
+
+    return {
+      email: utilisateur.email,
+      nomPrenom: utilisateur.nomPrenom,
+      identifiant: utilisateur.identifiant,
+    };
   }
 }
 
