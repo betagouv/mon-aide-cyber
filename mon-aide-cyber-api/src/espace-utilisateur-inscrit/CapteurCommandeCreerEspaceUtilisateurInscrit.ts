@@ -5,6 +5,7 @@ import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { AdaptateurEnvoiMail } from '../adaptateurs/AdaptateurEnvoiMail';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 import { adaptateurCorpsMessage } from './tableau-de-bord/adaptateurCorpsMessage';
+import { RepertoireDeContacts } from '../contacts/RepertoireDeContacts';
 
 export type CommandeCreerEspaceUtilisateurInscrit = Omit<Commande, 'type'> & {
   identifiant: crypto.UUID;
@@ -30,7 +31,8 @@ export class CapteurCommandeCreerEspaceUtilisateurInscrit
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,
-    private readonly adaptateurEnvoiDeMail: AdaptateurEnvoiMail
+    private readonly adaptateurEnvoiDeMail: AdaptateurEnvoiMail,
+    private readonly repertoireDeContacts: RepertoireDeContacts
   ) {}
 
   async execute(
@@ -44,6 +46,8 @@ export class CapteurCommandeCreerEspaceUtilisateurInscrit
     };
 
     await this.entrepots.utilisateursInscrits().persiste(utilisateur);
+
+    await this.repertoireDeContacts.creeUtilisateurInscrit(utilisateur);
 
     await this.adaptateurEnvoiDeMail.envoie({
       destinataire: { email: commande.email },

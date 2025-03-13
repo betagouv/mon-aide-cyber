@@ -147,7 +147,8 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurCommandeCreerEspaceUtilisateurInscrit(
           parametres.entrepots,
           parametres.busEvenements!,
-          parametres.adaptateurEnvoiMail!
+          parametres.adaptateurEnvoiMail!,
+          new AdaptateurRepertoireDeContactsBrevo()
         ),
     },
   ],
