@@ -14,15 +14,7 @@ import {
 } from '../../src/espace-aidant/CapteurCommandeCreeEspaceAidant';
 import crypto from 'crypto';
 import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
-import { RepertoireDeContacts } from '../../src/contacts/RepertoireDeContacts';
-
-class RepertoireDeContactsMemoire implements RepertoireDeContacts {
-  public aidants: string[] = [];
-
-  async creeAidant(aidant: Aidant): Promise<void> {
-    this.aidants.push(aidant.email);
-  }
-}
+import { RepertoireDeContactsMemoire } from '../adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 describe('Capteur de commande de création de compte Aidant', () => {
   it('Crée un compte Aidant', async () => {

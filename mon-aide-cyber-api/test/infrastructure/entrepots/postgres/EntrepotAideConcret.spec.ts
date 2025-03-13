@@ -20,6 +20,7 @@ import {
   RechercheDemandeAide,
 } from '../../../../src/gestion-demandes/aide/DemandeAide';
 import { uneDemandeAide } from '../../../gestion-demandes/aide/ConstructeurDemandeAide';
+import { RepertoireDeContactsMemoire } from '../../../adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 describe('Entrepot Aidé Concret', () => {
   beforeEach(async () => {
@@ -36,11 +37,14 @@ describe('Entrepot Aidé Concret', () => {
 
       await new EntrepotAideConcret(
         fauxServiceDeChiffrement,
+        new RepertoireDeContactsMemoire(),
         entrepotAideBrevoMemoire
       ).persiste(aide);
 
       const aideRecu = await new EntrepotAideConcret(
         fauxServiceDeChiffrement,
+        new RepertoireDeContactsMemoire(),
+
         entrepotAideBrevoMemoire
       ).rechercheParEmail(aide.email);
       expect(aideRecu).toStrictEqual<RechercheDemandeAide>({
@@ -64,17 +68,38 @@ describe('Entrepot Aidé Concret', () => {
 
       await new EntrepotAideConcret(
         serviceDeChiffrement,
+        new RepertoireDeContactsMemoire(),
+
         entrepotAideBrevoMemoire
       ).persiste(aide);
 
       const aideRecu = await new EntrepotAideConcret(
         serviceDeChiffrement,
+        new RepertoireDeContactsMemoire(),
+
         entrepotAideBrevoMemoire
       ).rechercheParEmail(aide.email);
       expect(aideRecu).toStrictEqual<RechercheDemandeAide>({
         demandeAide: aide,
         etat: 'COMPLET',
       });
+    });
+
+    it('MAC rajoute un contact « AIDÉ » dans le répertoire (BREVO)', async () => {
+      const repertoire = new RepertoireDeContactsMemoire();
+      const aide = uneDemandeAide().construis();
+      const serviceDeChiffrement = new FauxServiceDeChiffrement(
+        new DictionnaireDeChiffrementAide().avec(aide).construis()
+      );
+      const entrepotAideBrevoMemoire = new EntrepotAideBrevoMemoire();
+
+      await new EntrepotAideConcret(
+        serviceDeChiffrement,
+        repertoire,
+        entrepotAideBrevoMemoire
+      ).persiste(aide);
+
+      expect(repertoire.aides).toContainEqual(aide.email);
     });
   });
 
@@ -99,15 +124,21 @@ describe('Entrepot Aidé Concret', () => {
       const entrepotAideBrevoMemoire = new EntrepotAideBrevoMemoire();
       await new EntrepotAideConcret(
         serviceDeChiffrement,
+        new RepertoireDeContactsMemoire(),
+
         entrepotAideBrevoMemoire
       ).persiste(premierAide);
       await new EntrepotAideConcret(
         serviceDeChiffrement,
+        new RepertoireDeContactsMemoire(),
+
         entrepotAideBrevoMemoire
       ).persiste(secondAide);
 
       const aideRecherche = await new EntrepotAideConcret(
         serviceDeChiffrement,
+        new RepertoireDeContactsMemoire(),
+
         entrepotAideBrevoMemoire
       ).rechercheParEmail(secondAide.email);
 
@@ -121,6 +152,8 @@ describe('Entrepot Aidé Concret', () => {
       const entrepotAideBrevoMemoire = new EntrepotAideBrevoMemoire();
       const aideRecherche = await new EntrepotAideConcret(
         new FauxServiceDeChiffrement(new Map()),
+        new RepertoireDeContactsMemoire(),
+
         entrepotAideBrevoMemoire
       ).rechercheParEmail('email@inconnu.com');
 
@@ -142,6 +175,8 @@ describe('Entrepot Aidé Concret', () => {
       );
       const entrepotAideConcret = new EntrepotAideConcret(
         serviceDeChiffrement,
+        new RepertoireDeContactsMemoire(),
+
         entrepotAideBrevoMemoire
       );
       await entrepotAideConcret.persiste(aide);
@@ -183,6 +218,7 @@ describe('Entrepot Aidé Concret', () => {
 
       const aideRecherche = await new EntrepotAideConcret(
         serviceDeChiffrement,
+        new RepertoireDeContactsMemoire(),
         entrepotAideBrevoMemoire
       ).rechercheParEmail(aide.email);
 
