@@ -34,54 +34,51 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
       });
   }
 
-  valideProfil(
+  async valideProfil(
     identifiantUtilisateurInscrit: crypto.UUID,
     adaptateurDeRelations: AdaptateurRelations,
     busEvenement: BusEvenement
   ): Promise<void> {
-    return this.serviceAidant
-      .parIdentifiant(identifiantUtilisateurInscrit)
-      .then((aidant) => {
-        if (!aidant) {
-          throw new ErreurAidantNonTrouve();
-        }
-        const utilisateur: UtilisateurInscrit = {
-          identifiant: aidant.identifiant,
-          email: aidant.email,
-          nomPrenom: aidant.nomComplet,
-          dateSignatureCGU: FournisseurHorloge.maintenant(),
-        };
-        return this.entrepotUtilisateurInscrit
-          .persiste(utilisateur)
-          .then(() => {
-            return adaptateurDeRelations
-              .identifiantsObjetsLiesAUtilisateur(utilisateur.identifiant)
-              .then((identifiants) => {
-                const tuples = identifiants.reduce((precedent, courant) => {
-                  precedent.push(
-                    adaptateurDeRelations.creeTuple(
-                      unTupleUtilisateurInscritInitieDiagnostic(
-                        utilisateur.identifiant,
-                        courant as crypto.UUID
-                      )
-                    )
-                  );
-                  return precedent;
-                }, [] as Promise<void>[]);
-                return Promise.all(tuples).then(() => Promise.resolve());
-              })
-              .then(() =>
-                busEvenement.publie<AidantMigreEnUtilisateurInscrit>({
-                  identifiant: adaptateurUUID.genereUUID(),
-                  type: 'AIDANT_MIGRE_EN_UTILISATEUR_INSCRIT',
-                  date: FournisseurHorloge.maintenant(),
-                  corps: {
-                    identifiantUtilisateur: aidant.identifiant,
-                  },
-                })
-              );
-          });
-      });
+    const aidant = await this.serviceAidant.parIdentifiant(
+      identifiantUtilisateurInscrit
+    );
+    if (!aidant) {
+      throw new ErreurAidantNonTrouve();
+    }
+
+    const utilisateur: UtilisateurInscrit = {
+      identifiant: aidant.identifiant,
+      email: aidant.email,
+      nomPrenom: aidant.nomComplet,
+      dateSignatureCGU: FournisseurHorloge.maintenant(),
+    };
+    await this.entrepotUtilisateurInscrit.persiste(utilisateur);
+
+    const identifiants =
+      await adaptateurDeRelations.identifiantsObjetsLiesAUtilisateur(
+        utilisateur.identifiant
+      );
+    const tuples = identifiants.reduce((precedent, courant) => {
+      precedent.push(
+        adaptateurDeRelations.creeTuple(
+          unTupleUtilisateurInscritInitieDiagnostic(
+            utilisateur.identifiant,
+            courant as crypto.UUID
+          )
+        )
+      );
+      return precedent;
+    }, [] as Promise<void>[]);
+    await Promise.all(tuples);
+
+    await busEvenement.publie<AidantMigreEnUtilisateurInscrit>({
+      identifiant: adaptateurUUID.genereUUID(),
+      type: 'AIDANT_MIGRE_EN_UTILISATEUR_INSCRIT',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        identifiantUtilisateur: aidant.identifiant,
+      },
+    });
   }
 }
 
