@@ -17,36 +17,28 @@ export class AdaptateurRepertoireDeContactsBrevo
     this.brevo = adaptateursRequeteBrevo();
   }
 
-  async creeAidant(aidant: Aidant): Promise<void> {
+  private async creeContact(email: string, profil: { MAC_PROFIL: string }) {
     await this.brevo
       .creationContact()
       .execute(
         unConstructeurCreationDeContact()
-          .ayantPourEmail(aidant.email)
-          .ayantPourAttributs({ MAC_PROFIL: 'AIDANT' })
+          .ayantPourEmail(email)
+          .ayantPourAttributs(profil)
           .construis()
       );
+  }
+
+  async creeAidant(aidant: Aidant): Promise<void> {
+    await this.creeContact(aidant.email, { MAC_PROFIL: 'AIDANT' });
   }
 
   async creeAide(aide: DemandeAide): Promise<void> {
-    await this.brevo
-      .creationContact()
-      .execute(
-        unConstructeurCreationDeContact()
-          .ayantPourEmail(aide.email)
-          .ayantPourAttributs({ MAC_PROFIL: 'AIDE' })
-          .construis()
-      );
+    await this.creeContact(aide.email, { MAC_PROFIL: 'AIDE' });
   }
 
   async creeUtilisateurInscrit(utilisateur: UtilisateurInscrit): Promise<void> {
-    await this.brevo
-      .creationContact()
-      .execute(
-        unConstructeurCreationDeContact()
-          .ayantPourEmail(utilisateur.email)
-          .ayantPourAttributs({ MAC_PROFIL: 'UTILISATEUR_INSCRIT' })
-          .construis()
-      );
+    await this.creeContact(utilisateur.email, {
+      MAC_PROFIL: 'UTILISATEUR_INSCRIT',
+    });
   }
 }

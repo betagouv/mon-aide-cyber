@@ -1,23 +1,23 @@
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import {
-  PieceJointeBrevo,
   CreationContactBrevo,
   EmailBrevo,
   EnvoiMailBrevo,
+  PieceJointeBrevo,
   RechercheContactBrevo,
   RequeteBrevo,
 } from '../adaptateurs/adaptateursRequeteBrevo';
 import { PieceJointe } from '../../adaptateurs/AdaptateurEnvoiMail';
 
 abstract class ConstructeurBrevo<T> {
-  constructor(private readonly methode: 'POST' | 'PUT' | 'GET') {}
+  constructor(private readonly methode: 'POST' | 'GET') {}
 
   protected abstract construisCorps(): T;
 
   construis(): RequeteBrevo<T> {
     return {
       methode: this.methode,
-      ...((this.methode === 'POST' || this.methode === 'PUT') && {
+      ...(this.methode === 'POST' && {
         corps: this.construisCorps(),
       }),
       headers: {
@@ -112,7 +112,7 @@ class ConstructeurBrevoCreationContact extends ConstructeurBrevo<CreationContact
   private email: Email = '';
   private attributs: Record<string, string> = {} as Record<string, string>;
 
-  constructor(methode: 'POST' | 'PUT' | 'GET' = 'POST') {
+  constructor(methode: 'POST' | 'GET' = 'POST') {
     super(methode);
   }
 
