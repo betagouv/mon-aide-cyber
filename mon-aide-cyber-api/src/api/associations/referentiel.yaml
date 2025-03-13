@@ -116,10 +116,6 @@ regional:
   provenceAlpesCotesDAzur:
     nom: 'Provence-Alpes-Côte d’Azur'
     associations:
-      - nom: 'Campus régional de cybersécurité Sophia Antipolis'
-        urlSite: 'https://univ-cotedazur.fr/'
-      - nom: 'Campus régional de cybersécurité Toulon'
-        urlSite: 'https://www.univ-tln.fr/'
       - nom: 'Clusir Sud Paca'
         urlSite: 'https://clusir-sud.fr/'
       - nom: 'Telecom Valley'
