@@ -10,6 +10,7 @@ import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 import { unTupleUtilisateurInscritInitieDiagnostic } from '../diagnostic/tuples';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
+import { RepertoireDeContacts } from '../contacts/RepertoireDeContacts';
 
 export class ErreurAidantNonTrouve extends Error {
   constructor() {
@@ -20,7 +21,8 @@ export class ErreurAidantNonTrouve extends Error {
 class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
   constructor(
     private readonly entrepotUtilisateurInscrit: EntrepotUtilisateurInscrit,
-    private readonly serviceAidant: ServiceAidant
+    private readonly serviceAidant: ServiceAidant,
+    private readonly repertoire: RepertoireDeContacts
   ) {}
 
   valideLesCGU(identifiantUtilisateur: crypto.UUID): Promise<void> {
@@ -71,6 +73,8 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
     }, [] as Promise<void>[]);
     await Promise.all(tuples);
 
+    await this.repertoire.creeUtilisateurInscrit(utilisateur);
+
     await busEvenement.publie<AidantMigreEnUtilisateurInscrit>({
       identifiant: adaptateurUUID.genereUUID(),
       type: 'AIDANT_MIGRE_EN_UTILISATEUR_INSCRIT',
@@ -88,6 +92,11 @@ export type AidantMigreEnUtilisateurInscrit = Evenement<{
 
 export const unServiceUtilisateurInscrit = (
   entrepotUtilisateurInscrit: EntrepotUtilisateurInscrit,
-  serviceAidant: ServiceAidant
+  serviceAidant: ServiceAidant,
+  repertoire: RepertoireDeContacts
 ): ServiceUtilisateurInscrit =>
-  new ServiceUtilisateurInscritMAC(entrepotUtilisateurInscrit, serviceAidant);
+  new ServiceUtilisateurInscritMAC(
+    entrepotUtilisateurInscrit,
+    serviceAidant,
+    repertoire
+  );

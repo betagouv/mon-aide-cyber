@@ -34,6 +34,7 @@ import { AdaptateurDeRequeteHTTP } from './infrastructure/adaptateurs/adaptateur
 import { routesAssociations } from './api/associations/routesAssociations';
 import { AdaptateurDeVerificationDeDemande } from './adaptateurs/AdaptateurDeVerificationDeDemande';
 import { AdaptateurAseptisation } from './adaptateurs/AdaptateurAseptisation';
+import { RepertoireDeContacts } from './contacts/RepertoireDeContacts';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -54,6 +55,7 @@ export type ConfigurationServeur = {
   adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSession;
   adaptateurDeVerificationDesAcces: AdaptateurDeVerificationDesAcces;
   adaptateurDeVerificationDeRelations: AdaptateurDeVerificationDeTypeDeRelation;
+  repertoireDeContacts: RepertoireDeContacts;
   adaptateurProConnect: AdaptateurProConnect;
   serviceDeChiffrement: ServiceDeChiffrement;
   avecProtectionCsrf: boolean;

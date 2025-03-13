@@ -30,6 +30,7 @@ import { AdaptateurDeRequeteHTTPMemoire } from '../adaptateurs/AdaptateurDeReque
 import { AdaptateurDeVerificationDeDemandeDeTest } from '../adaptateurs/AdaptateurDeVerificationDeDemandeDeTest';
 import { AdaptateurDeVerificationDeDemande } from '../../src/adaptateurs/AdaptateurDeVerificationDeDemande';
 import { AdaptateurAseptisationDeTest } from '../adaptateurs/AdaptateurAseptisationDeTest';
+import { RepertoireDeContactsMemoire } from '../adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 const PORT_DISPONIBLE = 0;
 
@@ -58,6 +59,7 @@ class TesteurIntegrationMAC {
     public adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest = new AdaptateurDeVerificationDeSessionDeTest(),
     public adaptateurDeVerificationDesAcces = new AdaptateurDeVerificationDesAccesDeTest(),
     public adaptateurDeVerificationDeRelations = new AdaptateurDeVerificationDuTypeDeRelationDeTest(),
+    public repertoireDeContacts = new RepertoireDeContactsMemoire(),
     public gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire(),
     public adaptateurEnvoieMessage: AdaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire(),
     public serviceDeChiffrement: ServiceDeChiffrement = new ServiceDeChiffrementClair(),
@@ -112,6 +114,7 @@ class TesteurIntegrationMAC {
       adaptateurMetabase: this.adaptateurMetabase,
       adaptateurDeVerificationDeRelations:
         this.adaptateurDeVerificationDeRelations,
+      repertoireDeContacts: this.repertoireDeContacts,
       adaptateurProConnect: this.adaptateurProConnect,
       adaptateurDeRequeteHTTP: this.adaptateurDeRequeteHTTP,
       estEnMaintenance: false,

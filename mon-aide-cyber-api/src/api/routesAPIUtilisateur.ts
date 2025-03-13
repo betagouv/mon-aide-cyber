@@ -120,6 +120,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     serviceDeChiffrement,
     adaptateurEnvoiMessage,
     adaptateurRelations,
+    repertoireDeContacts,
   } = configuration;
 
   routes.get(
@@ -320,7 +321,8 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
           }
           return unServiceUtilisateurInscrit(
             entrepots.utilisateursInscrits(),
-            unServiceAidant(entrepots.aidants())
+            unServiceAidant(entrepots.aidants()),
+            repertoireDeContacts
           )
             .valideLesCGU(identifiantUtilisateur)
             .then(() =>
@@ -416,7 +418,8 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
 
       return unServiceUtilisateurInscrit(
         entrepots.utilisateursInscrits(),
-        unServiceAidant(entrepots.aidants())
+        unServiceAidant(entrepots.aidants()),
+        repertoireDeContacts
       )
         .valideProfil(
           requete.identifiantUtilisateurCourant!,
