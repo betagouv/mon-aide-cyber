@@ -10,7 +10,7 @@ import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
-import { CapteurCommande } from '../../../src/domaine/commande';
+import { BusCommande, CapteurCommande } from '../../../src/domaine/commande';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { adaptateursCorpsMessage } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
@@ -25,24 +25,62 @@ import {
   RechercheDemandeAide,
 } from '../../../src/gestion-demandes/aide/DemandeAide';
 import { CapteurCommandeRechercheDemandeAideParEmail } from '../../../src/gestion-demandes/aide/CapteurCommandeRechercheDemandeAideParEmail';
-import {
-  CapteurCommandeCreerDemandeAide,
-  CommandeCreerDemandeAide,
-} from '../../../src/gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
+import { CommandeCreerDemandeAide } from '../../../src/gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
 import { uneDemandeAide } from './ConstructeurDemandeAide';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import {
   EntrepotAideMemoire,
   EntrepotUtilisateurMACMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import { unUtilisateurInscrit } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import {
+  unAidant,
+  unUtilisateurInscrit,
+} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import { Entrepots } from '../../../src/domaine/Entrepots';
+import { BusEvenement } from '../../../src/domaine/BusEvenement';
+import { AdaptateurEnvoiMail } from '../../../src/adaptateurs/AdaptateurEnvoiMail';
+
+const cotParDefaut = {
+  rechercheEmailParDepartement: (__departement: Departement) => 'cot@email.com',
+};
+
+const fabriqueCapteur = ({
+  entrepots,
+  busEvenement,
+  adaptateurEnvoiMail,
+  annuaireCOT,
+  busCommande,
+}: {
+  entrepots?: Entrepots;
+  busEvenement?: BusEvenement;
+  adaptateurEnvoiMail?: AdaptateurEnvoiMail;
+  annuaireCOT?: {
+    rechercheEmailParDepartement: (departement: Departement) => string;
+  };
+  busCommande?: BusCommande;
+}): CapteurSagaDemandeAide => {
+  const lesEntrepots = entrepots ?? new EntrepotsMemoire();
+  const leBusEvenement = busEvenement ?? new BusEvenementDeTest();
+  const envoiMail = adaptateurEnvoiMail ?? new AdaptateurEnvoiMailMemoire();
+  return new CapteurSagaDemandeAide(
+    busCommande ??
+      new BusCommandeMAC(
+        lesEntrepots,
+        leBusEvenement,
+        envoiMail,
+        unConstructeurDeServices(lesEntrepots.aidants())
+      ),
+    leBusEvenement,
+    envoiMail,
+    new EntrepotUtilisateurMACMemoire({
+      aidant: lesEntrepots.aidants(),
+      utilisateurInscrit: lesEntrepots.utilisateursInscrits(),
+    }),
+    () => annuaireCOT ?? cotParDefaut
+  );
+};
 
 describe('Capteur saga demande de validation de CGU Aidé', () => {
-  const cotParDefaut = {
-    rechercheEmailParDepartement: (__departement: Departement) =>
-      'cot@email.com',
-  };
-
   beforeEach(() => {
     adaptateursCorpsMessage.demande =
       unAdaptateurDeCorpsDeMessage().construis().demande;
@@ -58,24 +96,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         )
         .construis();
       const entrepots = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest();
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       await entrepots.demandesAides().persiste(aide);
-      const capteur = new CapteurSagaDemandeAide(
-        new BusCommandeMAC(
-          entrepots,
-          busEvenement,
-          adaptateurEnvoiMail,
-          unConstructeurDeServices(entrepots.aidants())
-        ),
-        busEvenement,
-        adaptateurEnvoiMail,
-        new EntrepotUtilisateurMACMemoire({
-          aidant: entrepots.aidants(),
-          utilisateurInscrit: entrepots.utilisateursInscrits(),
-        }),
-        () => cotParDefaut
-      );
+      const capteur = fabriqueCapteur({ entrepots });
 
       await capteur.execute({
         type: 'SagaDemandeValidationCGUAide',
@@ -102,25 +124,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
 
   describe("Si l'Aidé n'est pas connu de MAC", () => {
     it("Crée l'Aidé", async () => {
-      const entrepotsMemoire = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest();
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      const busCommande = new BusCommandeMAC(
-        entrepotsMemoire,
-        busEvenement,
-        adaptateurEnvoiMail,
-        unConstructeurDeServices(entrepotsMemoire.aidants())
-      );
-      const capteur = new CapteurSagaDemandeAide(
-        busCommande,
-        busEvenement,
-        adaptateurEnvoiMail,
-        new EntrepotUtilisateurMACMemoire({
-          aidant: entrepotsMemoire.aidants(),
-          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
-        }),
-        () => cotParDefaut
-      );
+      const entrepots = new EntrepotsMemoire();
+      const capteur = fabriqueCapteur({ entrepots });
 
       await capteur.execute({
         type: 'SagaDemandeValidationCGUAide',
@@ -130,7 +135,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       });
 
       expect(
-        await entrepotsMemoire.demandesAides().rechercheParEmail('un email')
+        await entrepots.demandesAides().rechercheParEmail('un email')
       ).not.toBeUndefined();
     });
 
@@ -138,25 +143,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
-      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
-      const entrepotsMemoire = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest();
-      const busCommande = new BusCommandeMAC(
-        entrepotsMemoire,
-        busEvenement,
-        adaptateurEnvoieMail,
-        unConstructeurDeServices(entrepotsMemoire.aidants())
-      );
-      const capteur = new CapteurSagaDemandeAide(
-        busCommande,
-        busEvenement,
-        adaptateurEnvoieMail,
-        new EntrepotUtilisateurMACMemoire({
-          aidant: entrepotsMemoire.aidants(),
-          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
-        }),
-        () => cotParDefaut
-      );
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      const capteur = fabriqueCapteur({
+        adaptateurEnvoiMail,
+      });
 
       await capteur.execute({
         type: 'SagaDemandeValidationCGUAide',
@@ -167,7 +157,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       });
 
       expect(
-        adaptateurEnvoieMail.aEteEnvoyeA(
+        adaptateurEnvoiMail.aEteEnvoyeA(
           'jean-dupont@email.com',
           'Bonjour entité Aidée'
         )
@@ -178,25 +168,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
-      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
-      const entrepotsMemoire = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest();
-      const busCommande = new BusCommandeMAC(
-        entrepotsMemoire,
-        busEvenement,
-        adaptateurEnvoieMail,
-        unConstructeurDeServices(entrepotsMemoire.aidants())
-      );
-      const capteur = new CapteurSagaDemandeAide(
-        busCommande,
-        busEvenement,
-        adaptateurEnvoieMail,
-        new EntrepotUtilisateurMACMemoire({
-          aidant: entrepotsMemoire.aidants(),
-          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
-        }),
-        () => cotParDefaut
-      );
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      const capteur = fabriqueCapteur({ adaptateurEnvoiMail });
 
       await capteur.execute({
         type: 'SagaDemandeValidationCGUAide',
@@ -207,7 +180,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       });
 
       expect(
-        adaptateurEnvoieMail.aEteEnvoyeEnCopieA(
+        adaptateurEnvoiMail.aEteEnvoyeEnCopieA(
           'mac@email.com',
           'Bonjour une entité a fait une demande d’aide'
         )
@@ -218,28 +191,12 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
-      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
-      const entrepotsMemoire = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest();
-      const busCommande = new BusCommandeMAC(
-        entrepotsMemoire,
-        busEvenement,
-        adaptateurEnvoieMail,
-        unConstructeurDeServices(entrepotsMemoire.aidants())
-      );
-      const capteur = new CapteurSagaDemandeAide(
-        busCommande,
-        busEvenement,
-        adaptateurEnvoieMail,
-        new EntrepotUtilisateurMACMemoire({
-          aidant: entrepotsMemoire.aidants(),
-          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
-        }),
-        () => ({
-          rechercheEmailParDepartement: (__departement) =>
-            'gironde@ssi.gouv.fr',
-        })
-      );
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      const annuaireCOT = {
+        rechercheEmailParDepartement: (__departement: Departement) =>
+          'gironde@ssi.gouv.fr',
+      };
+      const capteur = fabriqueCapteur({ annuaireCOT, adaptateurEnvoiMail });
 
       await capteur.execute({
         type: 'SagaDemandeValidationCGUAide',
@@ -250,7 +207,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       });
 
       expect(
-        adaptateurEnvoieMail.aEteEnvoyeA(
+        adaptateurEnvoiMail.aEteEnvoyeA(
           'gironde@ssi.gouv.fr',
           'Bonjour une entité a fait une demande d’aide'
         )
@@ -267,25 +224,14 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
-      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
-      const entrepotsMemoire = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest();
-      const busCommande = new BusCommandeMAC(
-        entrepotsMemoire,
-        busEvenement,
-        adaptateurEnvoieMail,
-        unConstructeurDeServices(entrepotsMemoire.aidants())
-      );
-      const capteur = new CapteurSagaDemandeAide(
-        busCommande,
-        busEvenement,
-        adaptateurEnvoieMail,
-        new EntrepotUtilisateurMACMemoire({
-          aidant: entrepotsMemoire.aidants(),
-          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
-        }),
-        () => cotParDefaut
-      );
+      const entrepots = new EntrepotsMemoire();
+      await entrepots
+        .aidants()
+        .persiste(
+          unAidant().avecUnEmail('jean.dujardin@email.com').construis()
+        );
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      const capteur = fabriqueCapteur({ adaptateurEnvoiMail, entrepots });
 
       await capteur.execute({
         type: 'SagaDemandeValidationCGUAide',
@@ -297,13 +243,13 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       });
 
       expect(
-        adaptateurEnvoieMail.aEteEnvoyeA(
+        adaptateurEnvoiMail.aEteEnvoyeA(
           'cot@email.com',
           `Bonjour une entité a fait une demande d’aide, relation Aidant : jean.dujardin@email.com`
         )
       ).toBe(true);
       expect(
-        adaptateurEnvoieMail.aEteEnvoyeEnCopieA(
+        adaptateurEnvoiMail.aEteEnvoyeEnCopieA(
           'mac@email.com',
           'Bonjour une entité a fait une demande d’aide, relation Aidant : jean.dujardin@email.com'
         )
@@ -320,25 +266,14 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
-      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
-      const entrepotsMemoire = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest();
-      const busCommande = new BusCommandeMAC(
-        entrepotsMemoire,
-        busEvenement,
-        adaptateurEnvoieMail,
-        unConstructeurDeServices(entrepotsMemoire.aidants())
-      );
-      const capteur = new CapteurSagaDemandeAide(
-        busCommande,
-        busEvenement,
-        adaptateurEnvoieMail,
-        new EntrepotUtilisateurMACMemoire({
-          aidant: entrepotsMemoire.aidants(),
-          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
-        }),
-        () => cotParDefaut
-      );
+      const entrepots = new EntrepotsMemoire();
+      await entrepots
+        .aidants()
+        .persiste(
+          unAidant().avecUnEmail('jean.dujardin@email.com').construis()
+        );
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      const capteur = fabriqueCapteur({ adaptateurEnvoiMail, entrepots });
 
       await capteur.execute({
         type: 'SagaDemandeValidationCGUAide',
@@ -350,7 +285,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       });
 
       expect(
-        adaptateurEnvoieMail.aEteEnvoyeA(
+        adaptateurEnvoiMail.aEteEnvoyeA(
           'jean-dupont@email.com',
           'Bonjour entité Aidée, relation Aidant : jean.dujardin@email.com'
         )
@@ -360,36 +295,19 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     it("Publie l'évènement 'AIDE_CREE'", async () => {
       const maintenant = new Date();
       FournisseurHorlogeDeTest.initialise(maintenant);
-      const entrepotsMemoire = new EntrepotsMemoire();
+      const entrepots = new EntrepotsMemoire();
       const busEvenement = new BusEvenementDeTest();
-      const busCommande = new BusCommandeTest({
-        CommandeRechercheAideParEmail:
-          new CapteurCommandeRechercheDemandeAideParEmail(entrepotsMemoire),
-        CommandeCreerDemandeAide: new CapteurCommandeCreerDemandeAide(
-          entrepotsMemoire
-        ),
-      });
-      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
 
-      await new CapteurSagaDemandeAide(
-        busCommande,
-        busEvenement,
-        adaptateurEnvoieMail,
-        new EntrepotUtilisateurMACMemoire({
-          aidant: entrepotsMemoire.aidants(),
-          utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
-        }),
-        () => cotParDefaut
-      ).execute({
+      await fabriqueCapteur({ entrepots, busEvenement }).execute({
         type: 'SagaDemandeValidationCGUAide',
         cguValidees: true,
         email: 'jean-dupont@email.com',
         departement: gironde,
       });
-      const aideRecu = (
-        await (entrepotsMemoire.demandesAides() as EntrepotAideMemoire).tous()
-      )[0];
 
+      const aideRecu = (
+        await (entrepots.demandesAides() as EntrepotAideMemoire).tous()
+      )[0];
       expect(busEvenement.evenementRecu).toStrictEqual<DemandeAideCree>({
         identifiant: expect.any(String),
         type: 'AIDE_CREE',
@@ -411,16 +329,11 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             new CapteurCommandeRechercheDemandeAideParEmail(entrepotsMemoire),
           CommandeCreerAide: new CapteurCommandeCreerAideQuiEchoue(),
         });
-        const capteur = new CapteurSagaDemandeAide(
-          busCommande,
+        const capteur = fabriqueCapteur({
+          adaptateurEnvoiMail: adaptateurEnvoieMail,
           busEvenement,
-          adaptateurEnvoieMail,
-          new EntrepotUtilisateurMACMemoire({
-            aidant: entrepotsMemoire.aidants(),
-            utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
-          }),
-          () => cotParDefaut
-        );
+          busCommande,
+        });
 
         await expect(() =>
           capteur.execute({
@@ -442,21 +355,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const entrepots = new EntrepotsMemoire();
       const demandeIncomplete = uneDemandeAide().incomplete().construis();
       await entrepots.demandesAides().persiste(demandeIncomplete);
-      const capteur = new CapteurSagaDemandeAide(
-        new BusCommandeMAC(
-          entrepots,
-          new BusEvenementDeTest(),
-          new AdaptateurEnvoiMailMemoire(),
-          unConstructeurDeServices(entrepots.aidants())
-        ),
-        new BusEvenementDeTest(),
-        new AdaptateurEnvoiMailMemoire(),
-        new EntrepotUtilisateurMACMemoire({
-          aidant: entrepots.aidants(),
-          utilisateurInscrit: entrepots.utilisateursInscrits(),
-        }),
-        () => cotParDefaut
-      );
+      const capteur = fabriqueCapteur({ entrepots });
 
       await capteur.execute({
         type: 'PeuImporte',
@@ -485,32 +384,19 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
   describe('Lorsque un email utilisateur est fourni', () => {
     describe('Dans le cas d’un Utilisateur inscrit', () => {
       it("N’envoie pas de email au COT lorsqu'un Utilisateur Inscrit est donné en paramètre", async () => {
-        const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
-        const entrepotsMemoire = new EntrepotsMemoire();
-        const busEvenement = new BusEvenementDeTest();
-        const busCommande = new BusCommandeMAC(
-          entrepotsMemoire,
-          busEvenement,
-          adaptateurEnvoieMail,
-          unConstructeurDeServices(entrepotsMemoire.aidants())
-        );
-        await entrepotsMemoire
+        const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+        const entrepots = new EntrepotsMemoire();
+        await entrepots
           .utilisateursInscrits()
           .persiste(
             unUtilisateurInscrit()
               .avecUnEmail('jean.dupont@email.com')
               .construis()
           );
-        const capteur = new CapteurSagaDemandeAide(
-          busCommande,
-          busEvenement,
-          adaptateurEnvoieMail,
-          new EntrepotUtilisateurMACMemoire({
-            aidant: entrepotsMemoire.aidants(),
-            utilisateurInscrit: entrepotsMemoire.utilisateursInscrits(),
-          }),
-          () => cotParDefaut
-        );
+        const capteur = fabriqueCapteur({
+          adaptateurEnvoiMail,
+          entrepots,
+        });
 
         await capteur.execute({
           type: 'SagaDemandeAide',
@@ -521,12 +407,28 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         });
 
         expect(
-          adaptateurEnvoieMail.aEteEnvoyeA(
+          adaptateurEnvoiMail.aEteEnvoyeA(
             'cot@email.com',
             'Bonjour une entité a fait une demande d’aide'
           )
         ).toBe(false);
       });
+    });
+
+    it('Si l’utilisateur n’est pas connu, on remonte une erreur', async () => {
+      const capteur = fabriqueCapteur({});
+
+      const promesse = capteur.execute({
+        type: 'SagaDemandeAide',
+        cguValidees: true,
+        email: 'user@example.com',
+        departement: gironde,
+        relationUtilisateur: 'jean.dupont@email.com',
+      });
+
+      await expect(() => promesse).rejects.toThrowError(
+        'L’Aidant n’est pas référencé dans MonAideCyber'
+      );
     });
   });
 });
