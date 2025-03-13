@@ -26,6 +26,7 @@ import { AdaptateurDeRequeteHTTP } from './src/infrastructure/adaptateurs/adapta
 import { redirigeVersUrlBase } from './src/infrastructure/middlewares/middlewares';
 import { AdaptateurDeVerificationDeDemandeMAC } from './src/adaptateurs/AdaptateurDeVerificationDeDemandeMAC';
 import { AdaptateurAseptisationMAC } from './src/adaptateurs/AdaptateurAseptisationMAC';
+import { AdaptateurRepertoireDeContactsBrevo } from './src/adaptateurs/AdaptateurRepertoireDeContactsBrevo';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
@@ -88,6 +89,7 @@ const serveurMAC = serveur.creeServeur({
   ),
   adaptateurDeVerificationDeRelations:
     new AdaptateurDeVerificationDeTypeDeRelationMAC(adaptateurRelations),
+  repertoireDeContacts: new AdaptateurRepertoireDeContactsBrevo(),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
   adaptateurEnvoiMessage: adaptateurEnvoiMessage,
   serviceDeChiffrement: adaptateurServiceChiffrement(),

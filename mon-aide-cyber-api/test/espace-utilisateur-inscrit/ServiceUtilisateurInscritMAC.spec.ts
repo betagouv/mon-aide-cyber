@@ -16,6 +16,7 @@ import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/Entre
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
+import { RepertoireDeContactsMemoire } from '../adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 describe('ServiceUtilisateurInscrit', () => {
   const dateValidationCGU = new Date(Date.parse('2024-12-22T13:41:24'));
@@ -32,7 +33,8 @@ describe('ServiceUtilisateurInscrit', () => {
 
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
-      unServiceAidant(entrepotAidant)
+      unServiceAidant(entrepotAidant),
+      new RepertoireDeContactsMemoire()
     ).valideProfil(
       aidant.identifiant,
       new AdaptateurRelationsMAC(),
@@ -51,6 +53,31 @@ describe('ServiceUtilisateurInscrit', () => {
     });
   });
 
+  it("Ajoute l'utilisateur inscrit dans le répertoire de contact (BREVO)", async () => {
+    const repertoire = new RepertoireDeContactsMemoire();
+    const aidant = unAidant()
+      .cguValideesLe(dateValidationCGU)
+      .avecUnEmail('jean.dupont@utilisateur-inscrit.com')
+      .construis();
+    const entrepotAidant = new EntrepotAidantMemoire();
+    const entrepotUtilisateurInscrit = new EntrepotUtilisateurInscritMemoire();
+    await entrepotAidant.persiste(aidant);
+
+    await unServiceUtilisateurInscrit(
+      entrepotUtilisateurInscrit,
+      unServiceAidant(entrepotAidant),
+      repertoire
+    ).valideProfil(
+      aidant.identifiant,
+      new AdaptateurRelationsMAC(),
+      new BusEvenementDeTest()
+    );
+
+    expect(repertoire.utilisateursInscrits).toContainEqual(
+      'jean.dupont@utilisateur-inscrit.com'
+    );
+  });
+
   it('Crée les relations vers les diagnosctics existants', async () => {
     const aidant = unAidant().cguValideesLe(dateValidationCGU).construis();
     const entrepotAidant = new EntrepotAidantMemoire();
@@ -65,7 +92,8 @@ describe('ServiceUtilisateurInscrit', () => {
 
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
-      unServiceAidant(entrepotAidant)
+      unServiceAidant(entrepotAidant),
+      new RepertoireDeContactsMemoire()
     ).valideProfil(
       aidant.identifiant,
       adaptateurRelations,
@@ -93,7 +121,8 @@ describe('ServiceUtilisateurInscrit', () => {
 
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
-      unServiceAidant(entrepotAidant)
+      unServiceAidant(entrepotAidant),
+      new RepertoireDeContactsMemoire()
     ).valideProfil(
       aidant.identifiant,
       new AdaptateurRelationsMAC(),
