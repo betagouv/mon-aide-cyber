@@ -105,10 +105,6 @@ export const FormulaireDemandeEtreAide = (
   const surSoumissionFormulaire = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (proprietes.surValidation.erreur) {
-      return;
-    }
-
     proprietes.surValidation.execute({
       cguValidees: etatFormulaireDemandeEtreAide.cguValidees,
       departement: etatFormulaireDemandeEtreAide.departement.nom,
