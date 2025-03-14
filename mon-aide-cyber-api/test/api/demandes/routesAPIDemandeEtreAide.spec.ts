@@ -67,6 +67,30 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         });
       });
 
+      it('Renvoie une erreur si l‘utilisateur MAC à mettre en relation n‘existe pas', async () => {
+        const testeurMAC = testeurIntegration();
+        const donneesServeur: { app: Express } = testeurMAC.initialise();
+        testeurMAC.adaptateurEnvoieMessage.envoie = () => Promise.reject();
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/etre-aide',
+          {
+            cguValidees: true,
+            email: 'jean.dupont@aide.com',
+            departement: 'Corse du sud',
+            raisonSociale: 'beta-gouv',
+            relationUtilisateur: 'utilisateurinconnu@yopmail.com',
+          }
+        );
+
+        expect(reponse.statusCode).toBe(400);
+        expect(await reponse.json()).toStrictEqual({
+          message: 'L’Aidant n’est pas référencé dans MonAideCyber',
+        });
+      });
+
       describe("En ce qui concerne les informations envoyées par l'Aidé", () => {
         const testeurMAC = testeurIntegration();
         let donneesServeur: { app: Express };

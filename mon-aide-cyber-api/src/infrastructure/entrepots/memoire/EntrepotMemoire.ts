@@ -153,6 +153,8 @@ export class EntrepotAideMemoire
   extends EntrepotMemoire<DemandeAide>
   implements EntrepotDemandeAide
 {
+  public rechercheParMailFaite = false;
+
   async persiste(demandeAide: DemandeAide): Promise<void> {
     const demandesExistantes = Array.from(this.entites.entries())
       .filter(([, valeur]) => valeur.email === demandeAide.email)
@@ -162,6 +164,7 @@ export class EntrepotAideMemoire
   }
 
   async rechercheParEmail(email: string): Promise<RechercheDemandeAide> {
+    this.rechercheParMailFaite = true;
     const aides = Array.from(this.entites.values()).filter(
       (aide) => aide.email === email
     );

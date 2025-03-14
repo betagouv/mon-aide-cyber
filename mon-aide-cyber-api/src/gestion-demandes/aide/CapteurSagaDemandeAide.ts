@@ -16,6 +16,12 @@ import {
   UtilisateurMACDTO,
 } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
+export class ErreurUtilisateurMACInconnu extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
 export type SagaDemandeAide = Saga & {
   cguValidees: boolean;
   email: string;
@@ -79,11 +85,24 @@ export class CapteurSagaDemandeAide
     };
 
     try {
+      let utilisateurMAC: UtilisateurMACDTO | undefined = undefined;
+      if (saga.relationUtilisateur) {
+        utilisateurMAC = await uneRechercheUtilisateursMAC(
+          this.entrepotUtilisateurMAC
+        ).rechercheParMail(saga.relationUtilisateur);
+        if (!utilisateurMAC) {
+          return Promise.reject(
+            new ErreurUtilisateurMACInconnu(
+              'L’Aidant n’est pas référencé dans MonAideCyber'
+            )
+          );
+        }
+      }
+
       const commandeRechercheAideParEmail: CommandeRechercheAideParEmail = {
         type: 'CommandeRechercheAideParEmail',
         email: saga.email,
       };
-
       const aide = await this.busCommande.publie<
         CommandeRechercheAideParEmail,
         RechercheDemandeAide
@@ -109,18 +128,6 @@ export class CapteurSagaDemandeAide
         ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
         ...(aide.etat === 'INCOMPLET' && { etat: 'INCOMPLET' }),
       };
-
-      let utilisateurMAC: UtilisateurMACDTO | undefined = undefined;
-      if (saga.relationUtilisateur) {
-        utilisateurMAC = await uneRechercheUtilisateursMAC(
-          this.entrepotUtilisateurMAC
-        ).rechercheParMail(saga.relationUtilisateur);
-        if (!utilisateurMAC) {
-          return Promise.reject(
-            'L’Aidant n’est pas référencé dans MonAideCyber'
-          );
-        }
-      }
 
       await this.busCommande
         .publie<CommandeCreerDemandeAide, DemandeAide>(commandeCreerAide)
