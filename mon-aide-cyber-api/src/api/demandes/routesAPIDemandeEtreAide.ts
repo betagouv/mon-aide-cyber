@@ -9,7 +9,10 @@ import {
 import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../domaine/erreurMAC';
-import { SagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
+import {
+  ErreurUtilisateurMACInconnu,
+  SagaDemandeAide,
+} from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
 import {
   nomsEtCodesDesDepartements,
   rechercheParNomDepartement,
@@ -93,11 +96,17 @@ export const routesAPIDemandeEtreAide = (
         return configuration.busCommande
           .publie(saga)
           .then(() => reponse.status(202).send())
-          .catch((erreur) =>
+          .catch((erreur: string | ErreurUtilisateurMACInconnu) => {
+            if (erreur instanceof ErreurUtilisateurMACInconnu) {
+              suite(ErreurMAC.cree("Demande d'aide", erreur));
+            }
             suite(
-              ErreurMAC.cree("Demande d'aide", new ErreurDemandeAide(erreur))
-            )
-          );
+              ErreurMAC.cree(
+                "Demande d'aide",
+                new ErreurDemandeAide(erreur as string)
+              )
+            );
+          });
       }
       const erreursValidation = resultatValidation
         .array()

@@ -120,6 +120,31 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         raisonSociale: 'beta-gouv',
       });
     });
+
+    it('Si l’utilisateur MAC en relation avec l‘Aidé n’est pas connu, on remonte une erreur', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const aide = uneDemandeAide()
+        .avecUneDateDeSignatureDesCGU(
+          new Date(Date.parse('2025-01-31T14:42:00'))
+        )
+        .construis();
+      const entrepots = new EntrepotsMemoire();
+      await entrepots.demandesAides().persiste(aide);
+      const capteur = fabriqueCapteur({ entrepots });
+
+      const promesse = capteur.execute({
+        type: 'SagaDemandeValidationCGUAide',
+        cguValidees: true,
+        email: aide.email,
+        departement: aide.departement,
+        raisonSociale: 'beta-gouv',
+        relationUtilisateur: 'aidanticonnu@yopmail.com',
+      });
+
+      await expect(() => promesse).rejects.toThrowError(
+        'L’Aidant n’est pas référencé dans MonAideCyber'
+      );
+    });
   });
 
   describe("Si l'Aidé n'est pas connu de MAC", () => {
@@ -416,7 +441,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     });
 
     it('Si l’utilisateur n’est pas connu, on remonte une erreur', async () => {
-      const capteur = fabriqueCapteur({});
+      const entrepots = new EntrepotsMemoire();
+      const capteur = fabriqueCapteur({ entrepots });
 
       const promesse = capteur.execute({
         type: 'SagaDemandeAide',
@@ -426,6 +452,9 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         relationUtilisateur: 'jean.dupont@email.com',
       });
 
+      expect(
+        (entrepots.demandesAides() as EntrepotAideMemoire).rechercheParMailFaite
+      ).toBe(false);
       await expect(() => promesse).rejects.toThrowError(
         'L’Aidant n’est pas référencé dans MonAideCyber'
       );

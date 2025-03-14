@@ -134,6 +134,14 @@ const erreursGerees: Map<
     },
   ],
   [
+    'ErreurUtilisateurMACInconnu',
+    (erreur, _, _consignateur, reponse) => {
+      construisReponse(reponse, HTTP_MAUVAISE_REQUETE, {
+        message: erreur.message,
+      });
+    },
+  ],
+  [
     'ErreurDemandeDevenirAidant',
     (erreur, _, _consignateur, reponse) => {
       construisReponse(reponse, HTTP_MAUVAISE_REQUETE, {
