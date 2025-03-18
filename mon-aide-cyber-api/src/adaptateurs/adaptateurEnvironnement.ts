@@ -47,6 +47,10 @@ const nouveauParcoursDevenirAidant = () =>
   process.env.DATE_NOUVEAU_PARCOURS_DEMANDE_DEVENIR_AIDANT ||
   '2025-01-31T00:00:00';
 
+const parametresDeHash = () => ({
+  sel: () => process.env.HASH_SEL || '',
+});
+
 const adaptateurEnvironnement = {
   messagerie,
   mac,
@@ -55,6 +59,7 @@ const adaptateurEnvironnement = {
   siretsEntreprise,
   apiRechercheEntreprise,
   nouveauParcoursDevenirAidant,
+  parametresDeHash,
 };
 
 export { sentry, adaptateurEnvironnement };
