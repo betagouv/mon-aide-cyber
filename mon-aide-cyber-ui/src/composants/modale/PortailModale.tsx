@@ -18,6 +18,9 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
   );
   const [modaleOuverte, setModaleOuverte] = useState<boolean>(false);
   const ref = useRef<HTMLDialogElement | null>(null);
+  const [dialog, setDialog] = useState<React.ReactElement>(
+    <dialog aria-labelledby="titre-modale" id="modale" className="fr-modal" />
+  );
 
   const fermeModale = useCallback(() => {
     setModaleOuverte(false);
@@ -72,6 +75,18 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
     }
   }, [fermeModale, modaleOuverte]);
 
+  useEffect(() => {
+    setDialog(
+      <dialog
+        aria-labelledby="titre-modale"
+        id="modale"
+        className={`fr-modal ${modaleOuverte ? 'fr-modal--opened' : ''}`}
+        aria-modal={modaleOuverte}
+        open={modaleOuverte}
+      />
+    );
+  }, [modaleOuverte]);
+
   return (
     <ContexteModale.Provider
       value={{
@@ -83,13 +98,7 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
       }}
     >
       {children}
-      <dialog
-        aria-labelledby="titre-modale"
-        id="modale"
-        className={`fr-modal ${modaleOuverte ? 'fr-modal--opened' : ''}`}
-        aria-modal={modaleOuverte}
-        open={modaleOuverte}
-      />
+      {dialog}
       {elementModale
         ? createPortal(
             <Modale
