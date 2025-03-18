@@ -1,4 +1,7 @@
-import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
+import {
+  AdaptateurRelations,
+  Email,
+} from '../../src/relation/AdaptateurRelations';
 import crypto from 'crypto';
 import { Objet, Relation, Tuple, Utilisateur } from '../../src/relation/Tuple';
 
@@ -17,6 +20,10 @@ export class AdaptateurRelationsTest implements AdaptateurRelations {
     identifiantAidant: crypto.UUID
   ): Promise<string[]> {
     return Promise.resolve(this.relations.get(identifiantAidant) || []);
+  }
+
+  diagnosticsDeLAide(_email: Email): Promise<string[]> {
+    return Promise.resolve([]);
   }
 
   relationExiste(

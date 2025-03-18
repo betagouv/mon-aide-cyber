@@ -1,4 +1,7 @@
-import { AdaptateurRelations } from '../../../src/relation/AdaptateurRelations';
+import {
+  AdaptateurRelations,
+  Email,
+} from '../../../src/relation/AdaptateurRelations';
 import crypto from 'crypto';
 import {
   Objet,
@@ -14,8 +17,11 @@ export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
   aidantInitieDiagnostic(_: crypto.UUID, __: crypto.UUID): Promise<void> {
     throw new Error('Erreur attendue');
   }
-
   diagnosticsFaitsParUtilisateurMAC(_: crypto.UUID): Promise<string[]> {
+    return Promise.resolve([]);
+  }
+
+  diagnosticsDeLAide(_email: Email): Promise<string[]> {
     return Promise.resolve([]);
   }
 

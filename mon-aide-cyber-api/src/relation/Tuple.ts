@@ -79,7 +79,7 @@ class ConstructeurTuple<DEFINITION_TUPLE extends DefinitionTuple>
   private objet = {} as Objet;
 
   avecUtilisateur(
-    identifiant: crypto.UUID
+    identifiant: crypto.UUID | string
   ): ConstructeurTuple<DEFINITION_TUPLE> {
     this.utilisateur = new ConstructeurUtilisateur()
       .deType(this.dsl.definition.typeUtilisateur)

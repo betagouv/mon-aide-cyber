@@ -1,6 +1,6 @@
 import { Objet, Relation, Tuple, Utilisateur } from './Tuple';
 import crypto from 'crypto';
-import { AdaptateurRelations } from './AdaptateurRelations';
+import { AdaptateurRelations, Email } from './AdaptateurRelations';
 import { EntrepotRelation } from './EntrepotRelation';
 import { fabriqueEntrepotRelations } from './infrastructure/fabriqueEntrepotRelations';
 
@@ -20,6 +20,12 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
   ): Promise<string[]> {
     return this.tupleEntrepot
       .trouveObjetsLiesAUtilisateur(identifiantUtilisateur)
+      .then((tuples) => tuples.map((tuple) => tuple.objet.identifiant));
+  }
+
+  diagnosticsDeLAide(email: Email): Promise<string[]> {
+    return this.tupleEntrepot
+      .trouveObjetsLiesAUtilisateur(email)
       .then((tuples) => tuples.map((tuple) => tuple.objet.identifiant));
   }
 

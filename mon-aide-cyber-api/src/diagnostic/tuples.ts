@@ -52,3 +52,30 @@ export const definitionUtilisateurInscritInitieDiagnostic: {
     typeUtilisateur: 'utilisateurInscrit',
   },
 };
+
+type DefinitionEntiteAideeBeneficieDiagnostic = DefinitionTuple & {
+  relation: 'destinataire';
+  typeObjet: 'diagnostic';
+  typeUtilisateur: 'entiteAidee';
+};
+
+export const definitionEntiteAideeBeneficieDiagnostic: {
+  definition: DefinitionEntiteAideeBeneficieDiagnostic;
+} = {
+  definition: {
+    relation: 'destinataire',
+    typeObjet: 'diagnostic',
+    typeUtilisateur: 'entiteAidee',
+  },
+};
+
+export const unTupleEntiteAideeBeneficieDiagnostic = (
+  identifiantDiagnostic: crypto.UUID,
+  identifiantEntite: string
+): Tuple =>
+  unTuple<DefinitionEntiteAideeBeneficieDiagnostic>(
+    definitionEntiteAideeBeneficieDiagnostic
+  )
+    .avecUtilisateur(identifiantEntite)
+    .avecObjet(identifiantDiagnostic)
+    .construis();
