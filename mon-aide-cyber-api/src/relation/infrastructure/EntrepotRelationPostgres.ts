@@ -85,10 +85,7 @@ export class EntrepotRelationPostgres
   trouveObjetsLiesAUtilisateur(identifiant: string): Promise<Tuple[]> {
     return this.knex
       .from(this.nomTable())
-      .whereRaw(
-        "(donnees->'utilisateur'->>'identifiant')::uuid = ?",
-        identifiant
-      )
+      .whereRaw("(donnees->'utilisateur'->>'identifiant') = ?", identifiant)
       .select(`${this.nomTable()}.*`)
       .then((lignes: TupleDTO[]) =>
         lignes.map((ligne) => this.deDTOAEntite(ligne))

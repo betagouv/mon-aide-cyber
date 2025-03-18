@@ -44,6 +44,7 @@ describe('Capteur pour lancer un diagnostic', () => {
     ).execute({
       type: 'CommandeLanceDiagnostic',
       identifiantAidant: crypto.randomUUID(),
+      emailEntite: 'betagouv@beta.gouv.fr',
     });
 
     const diagnosticRetourne = await entrepots
@@ -77,6 +78,7 @@ describe('Capteur pour lancer un diagnostic', () => {
     ).execute({
       type: 'CommandeLanceDiagnostic',
       identifiantAidant: crypto.randomUUID(),
+      emailEntite: 'betagouv@beta.gouv.fr',
     });
 
     const diagnosticRetourne = await entrepots
@@ -105,6 +107,7 @@ describe('Capteur pour lancer un diagnostic', () => {
     ).execute({
       type: 'CommandeLanceDiagnostic',
       identifiantAidant,
+      emailEntite: 'betagouv@beta.gouv.fr',
     });
 
     expect(busEvenement.evenementRecu).toStrictEqual<DiagnosticLance>({
@@ -114,6 +117,7 @@ describe('Capteur pour lancer un diagnostic', () => {
       corps: {
         identifiantDiagnostic: diagnostic.identifiant,
         identifiantUtilisateur: identifiantAidant,
+        emailEntite: 'betagouv@beta.gouv.fr',
       },
     });
   });
@@ -128,6 +132,7 @@ describe('Capteur pour lancer un diagnostic', () => {
       ).execute({
         type: 'CommandeLanceDiagnostic',
         identifiantAidant: crypto.randomUUID(),
+        emailEntite: 'un-email@email.com',
       })
     ).rejects.toStrictEqual(
       ErreurMAC.cree('Lance le diagnostic', new Error('Referentiel non connu'))

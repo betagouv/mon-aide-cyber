@@ -89,6 +89,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       const commande: CommandeLanceDiagnostic = {
         type: 'CommandeLanceDiagnostic',
         identifiantAidant: requete.identifiantUtilisateurCourant!,
+        emailEntite: requete.body.emailEntiteAidee,
       };
       busCommande
         .publie<CommandeLanceDiagnostic, Diagnostic>(commande)
