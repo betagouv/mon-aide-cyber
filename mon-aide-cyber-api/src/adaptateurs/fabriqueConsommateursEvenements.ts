@@ -31,6 +31,8 @@ import { demandeInitieDiagnosticLibreAcces } from '../diagnostic-libre-acces/con
 import { fabriqueEntrepots } from './fabriqueEntrepots';
 import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { utilisateurInscritInitieDiagnostic } from '../espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
+import { entiteAideeBeneficieDiagnostic } from '../diagnostic/consommateursEvenements';
+import { adaptateurServiceDeHashage } from '../infrastructure/adaptateurs/adaptateurServiceDeHashage';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -65,6 +67,10 @@ export const fabriqueConsommateursEvenements = (
         utilisateurInscritInitieDiagnostic(
           adaptateurRelations,
           uneRechercheUtilisateursMAC(fabriqueEntrepots().utilisateursMAC())
+        ),
+        entiteAideeBeneficieDiagnostic(
+          adaptateurRelations,
+          adaptateurServiceDeHashage()
         ),
       ],
     ],
