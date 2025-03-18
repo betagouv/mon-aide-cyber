@@ -19,6 +19,7 @@ import { Publication } from '../../src/journalisation/Publication';
 import { DiagnosticLance } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { fakerFR } from '@faker-js/faker';
 
 describe('Évènements', () => {
   beforeEach(() => {
@@ -75,6 +76,7 @@ describe('Évènements', () => {
           corps: {
             identifiantDiagnostic: identifiant,
             identifiantUtilisateur: aidant.identifiant,
+            emailEntite: fakerFR.internet.email(),
           },
         });
 
@@ -114,6 +116,7 @@ describe('Évènements', () => {
           corps: {
             identifiantDiagnostic: identifiant,
             identifiantUtilisateur: aidant.identifiant,
+            emailEntite: fakerFR.internet.email(),
           },
         });
 

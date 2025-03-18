@@ -13,6 +13,7 @@ import {
   EntrepotUtilisateurMACMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { EntrepotAidant } from '../../../src/espace-aidant/Aidant';
+import { fakerFR } from '@faker-js/faker';
 
 describe("Les consommateurs d'évènements du tableau de bord", () => {
   const entrepotUtilisateurInscrit = new EntrepotUtilisateurInscritMemoire();
@@ -37,6 +38,7 @@ describe("Les consommateurs d'évènements du tableau de bord", () => {
         corps: {
           identifiantDiagnostic,
           identifiantUtilisateur: aidant.identifiant,
+          emailEntite: fakerFR.internet.email(),
         },
         identifiant: crypto.randomUUID(),
         type: 'DIAGNOSTIC_LANCE',
@@ -69,6 +71,7 @@ describe("Les consommateurs d'évènements du tableau de bord", () => {
         corps: {
           identifiantDiagnostic,
           identifiantUtilisateur,
+          emailEntite: fakerFR.internet.email(),
         },
         identifiant: crypto.randomUUID(),
         type: 'DIAGNOSTIC_LANCE',
@@ -102,6 +105,7 @@ describe("Les consommateurs d'évènements du tableau de bord", () => {
         corps: {
           identifiantDiagnostic,
           identifiantUtilisateur: aidant.identifiant,
+          emailEntite: fakerFR.internet.email(),
         },
         identifiant: crypto.randomUUID(),
         type: 'DIAGNOSTIC_LANCE',

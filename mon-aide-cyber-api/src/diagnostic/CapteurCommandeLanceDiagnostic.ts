@@ -34,6 +34,7 @@ export class CapteurCommandeLanceDiagnostic
           corps: {
             identifiantDiagnostic: diagnostic.identifiant,
             identifiantUtilisateur: commande.identifiantAidant,
+            emailEntite: commande.emailEntite,
           },
         });
         return diagnostic;
@@ -47,9 +48,11 @@ export class CapteurCommandeLanceDiagnostic
 export type CommandeLanceDiagnostic = Omit<Commande, 'type'> & {
   type: 'CommandeLanceDiagnostic';
   identifiantAidant: crypto.UUID;
+  emailEntite: string;
 };
 
 export type DiagnosticLance = Evenement<{
   identifiantDiagnostic: crypto.UUID;
   identifiantUtilisateur: crypto.UUID;
+  emailEntite: string;
 }>;

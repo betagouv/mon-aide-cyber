@@ -25,11 +25,12 @@ const consommateurDiagnosticLance =
         return rechercheUtilisateursMAC
           .rechercheParIdentifiant(corps.identifiantUtilisateur)
           .then((utilisateur) => {
+            const { emailEntite, ...reste } = corps;
             return entrepot.persiste(
               genereEvenement({
                 ...evenement,
                 corps: {
-                  ...corps,
+                  ...reste,
                   profil: utilisateur?.profil,
                 },
               })

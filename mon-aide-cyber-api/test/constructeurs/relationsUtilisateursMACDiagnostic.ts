@@ -34,6 +34,7 @@ export const relieUnAidantAUnDiagnostic = async (
     corps: {
       identifiantDiagnostic: diagnostic.identifiant,
       identifiantUtilisateur: aidant.identifiant,
+      emailEntite: fakerFR.internet.email(),
     },
   });
   return {
@@ -60,6 +61,7 @@ export const relieUnUtilisateurInscritAUnDiagnostic = async (
     corps: {
       identifiantDiagnostic: diagnostic.identifiant,
       identifiantUtilisateur: utilisateurInscrit.identifiant,
+      emailEntite: fakerFR.internet.email(),
     },
   });
   return {

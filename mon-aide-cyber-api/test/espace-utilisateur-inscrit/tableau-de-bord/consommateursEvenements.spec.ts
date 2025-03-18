@@ -16,6 +16,7 @@ import {
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { utilisateurInscritInitieDiagnostic } from '../../../src/espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
 import { EntrepotUtilisateurInscrit } from '../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
+import { fakerFR } from '@faker-js/faker';
 
 describe("Les consommateurs d'évènements du tableau de bord d’un utilisateur inscrit", () => {
   describe("Lorsque l'évènement 'DIAGNOSTIC_LANCE' est consommé", () => {
@@ -40,6 +41,7 @@ describe("Les consommateurs d'évènements du tableau de bord d’un utilisateur
         corps: {
           identifiantDiagnostic,
           identifiantUtilisateur: utilisateurInscrit.identifiant,
+          emailEntite: fakerFR.internet.email(),
         },
         identifiant: crypto.randomUUID(),
         type: 'DIAGNOSTIC_LANCE',
@@ -74,6 +76,7 @@ describe("Les consommateurs d'évènements du tableau de bord d’un utilisateur
         corps: {
           identifiantDiagnostic,
           identifiantUtilisateur,
+          emailEntite: fakerFR.internet.email(),
         },
         identifiant: crypto.randomUUID(),
         type: 'DIAGNOSTIC_LANCE',
