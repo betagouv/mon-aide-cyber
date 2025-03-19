@@ -11,7 +11,7 @@ import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { adaptateurCorpsMessage } from '../../src/espace-utilisateur-inscrit/tableau-de-bord/adaptateurCorpsMessage';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { RepertoireDeContactsMemoire } from '../adaptateurs/AdaptateurRepertoireDeContactsMemoire';
+import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 import { Entrepots } from '../../src/domaine/Entrepots';
 import { BusEvenement } from '../../src/domaine/BusEvenement';
 import { AdaptateurEnvoiMail } from '../../src/adaptateurs/AdaptateurEnvoiMail';
@@ -32,7 +32,7 @@ const fabriqueCapteur = ({
     entrepots ?? new EntrepotsMemoire(),
     bus ?? new BusEvenementDeTest(),
     envoiMail ?? new AdaptateurEnvoiMailMemoire(),
-    repertoire ?? new RepertoireDeContactsMemoire()
+    repertoire ?? new AdaptateurRepertoireDeContactsMemoire()
   );
 
 describe('Capteur de commande de création d’un Utilisateur Inscrit', () => {
@@ -91,7 +91,7 @@ describe('Capteur de commande de création d’un Utilisateur Inscrit', () => {
   });
 
   it("Ajoute l'utilisateur inscrit dans le répertoire de contact (BREVO)", async () => {
-    const repertoire = new RepertoireDeContactsMemoire();
+    const repertoire = new AdaptateurRepertoireDeContactsMemoire();
 
     await fabriqueCapteur({ repertoire }).execute({
       identifiant: crypto.randomUUID(),

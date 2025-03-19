@@ -1,7 +1,7 @@
 import { ServiceDeHashage } from '../../securite/ServiceDeHashage';
 import { ServiceDeHashageMac } from '../securite/ServiceDeHashageMac';
 
-class ServiceDeHashageClair implements ServiceDeHashage {
+export class ServiceDeHashageClair implements ServiceDeHashage {
   hashe(chaine: string): string {
     return chaine;
   }
