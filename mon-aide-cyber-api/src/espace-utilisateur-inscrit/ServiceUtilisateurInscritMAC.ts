@@ -73,7 +73,7 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
     }, [] as Promise<void>[]);
     await Promise.all(tuples);
 
-    await this.repertoire.creeUtilisateurInscrit(utilisateur);
+    await this.repertoire.creeUtilisateurInscrit(utilisateur.email);
 
     await busEvenement.publie<AidantMigreEnUtilisateurInscrit>({
       identifiant: adaptateurUUID.genereUUID(),

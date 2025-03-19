@@ -94,7 +94,7 @@ export class CapteurCommandeCreeEspaceAidant
       };
 
       await this.entrepots.aidants().persiste(aidant);
-      await this.repertoireDeContacts.creeAidant(aidant);
+      await this.repertoireDeContacts.creeAidant(aidant.email);
 
       await this.busEvenement.publie<AidantCree>({
         corps: {
