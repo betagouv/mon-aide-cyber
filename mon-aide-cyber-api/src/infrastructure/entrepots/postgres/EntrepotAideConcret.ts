@@ -238,6 +238,6 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
         )
     );
 
-    await this.repertoireDeContacts.creeAide(aide);
+    await this.repertoireDeContacts.creeAide(aide.email);
   }
 }

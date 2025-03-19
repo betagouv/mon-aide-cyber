@@ -47,7 +47,7 @@ export class CapteurCommandeCreerEspaceUtilisateurInscrit
 
     await this.entrepots.utilisateursInscrits().persiste(utilisateur);
 
-    await this.repertoireDeContacts.creeUtilisateurInscrit(utilisateur);
+    await this.repertoireDeContacts.creeUtilisateurInscrit(utilisateur.email);
 
     await this.adaptateurEnvoiDeMail.envoie({
       destinataire: { email: commande.email },
