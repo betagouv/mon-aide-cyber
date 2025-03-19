@@ -1,6 +1,7 @@
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import {
   CreationContactBrevo,
+  CreationEvenement,
   EmailBrevo,
   EnvoiMailBrevo,
   PieceJointeBrevo,
@@ -147,6 +148,34 @@ class ConstructeurBrevoRechercheContact extends ConstructeurBrevo<RechercheConta
   }
 }
 
+class ConstructeurBrevoCreationEvenement extends ConstructeurBrevo<CreationEvenement> {
+  private email: Email = '';
+  private type = 'DIAGNOSTIC_DEMARRE' as const;
+
+  constructor() {
+    super('POST');
+  }
+
+  ayantPourMail(email: string): ConstructeurBrevoCreationEvenement {
+    this.email = email;
+    return this;
+  }
+
+  ayantPourType(
+    type: 'DIAGNOSTIC_DEMARRE'
+  ): ConstructeurBrevoCreationEvenement {
+    this.type = type;
+    return this;
+  }
+
+  protected construisCorps(): CreationEvenement {
+    return {
+      identifiers: { email_id: this.email },
+      event_name: this.type,
+    };
+  }
+}
+
 export const unConstructeurEnvoiDeMail = () => new ConstructeurBrevoEnvoiMail();
 
 export const unConstructeurCreationDeContact = () =>
@@ -154,3 +183,6 @@ export const unConstructeurCreationDeContact = () =>
 
 export const unConstructeurRechercheDeContact = () =>
   new ConstructeurBrevoRechercheContact();
+
+export const unConstructeurEvenement = () =>
+  new ConstructeurBrevoCreationEvenement();

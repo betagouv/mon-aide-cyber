@@ -6,7 +6,10 @@ import {
   AdaptateursRequeteBrevo,
   adaptateursRequeteBrevo,
 } from './adaptateursRequeteBrevo';
-import { unConstructeurCreationDeContact } from '../brevo/ConstructeursBrevo';
+import {
+  unConstructeurCreationDeContact,
+  unConstructeurEvenement,
+} from '../brevo/ConstructeursBrevo';
 
 export class AdaptateurRepertoireDeContactsBrevo
   implements RepertoireDeContacts
@@ -43,7 +46,14 @@ export class AdaptateurRepertoireDeContactsBrevo
     await this.creeContact(email, 'UTILISATEUR_INSCRIT');
   }
 
-  emetsEvenement(_evenement: Evenement): Promise<void> {
-    throw new Error('Method not implemented.');
+  async emetsEvenement(evenement: Evenement): Promise<void> {
+    await this.brevo
+      .creationEvenement()
+      .execute(
+        unConstructeurEvenement()
+          .ayantPourMail(evenement.email)
+          .ayantPourType(evenement.type)
+          .construis()
+      );
   }
 }
