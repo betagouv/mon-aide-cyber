@@ -70,6 +70,15 @@ export type CreationContactBrevo = {
 };
 export type RechercheContactBrevo = string;
 
+export type CreationEvenement = {
+  identifiers: {
+    email_id: string;
+  };
+  event_name: string;
+};
+
+export type ReponseCreationEvenement = ReponseBrevo;
+
 export class AdaptateursRequeteBrevo {
   envoiMail(): AdaptateurRequeteBrevo<
     RequeteBrevo<EnvoiMailBrevo>,
@@ -92,6 +101,13 @@ export class AdaptateursRequeteBrevo {
     ReponseRechercheContact | ReponseBrevoEnErreur
   > {
     return this.adaptateur(`https://api.brevo.com/v3/contacts/${email}`);
+  }
+
+  creationEvenement(): AdaptateurRequeteBrevo<
+    RequeteBrevo<CreationEvenement>,
+    ReponseCreationEvenement
+  > {
+    return this.adaptateur('https://api.brevo.com/v3/events');
   }
 
   protected adaptateur<T, R extends ReponseBrevo | ReponseBrevoEnErreur>(
