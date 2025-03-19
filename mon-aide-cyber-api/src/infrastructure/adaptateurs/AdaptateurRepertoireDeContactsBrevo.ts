@@ -1,9 +1,12 @@
-import { RepertoireDeContacts } from '../contacts/RepertoireDeContacts';
+import {
+  Evenement,
+  RepertoireDeContacts,
+} from '../../contacts/RepertoireDeContacts';
 import {
   AdaptateursRequeteBrevo,
   adaptateursRequeteBrevo,
-} from '../infrastructure/adaptateurs/adaptateursRequeteBrevo';
-import { unConstructeurCreationDeContact } from '../infrastructure/brevo/ConstructeursBrevo';
+} from './adaptateursRequeteBrevo';
+import { unConstructeurCreationDeContact } from '../brevo/ConstructeursBrevo';
 
 export class AdaptateurRepertoireDeContactsBrevo
   implements RepertoireDeContacts
@@ -38,5 +41,9 @@ export class AdaptateurRepertoireDeContactsBrevo
 
   async creeUtilisateurInscrit(email: string): Promise<void> {
     await this.creeContact(email, 'UTILISATEUR_INSCRIT');
+  }
+
+  emetsEvenement(_evenement: Evenement): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 }

@@ -27,7 +27,7 @@ import { CapteurCommandeCreerEspaceUtilisateurInscrit } from '../../espace-utili
 import { CapteurCommandeRechercheDemandeAideParEmail } from '../../gestion-demandes/aide/CapteurCommandeRechercheDemandeAideParEmail';
 import { CapteurCommandeCreerDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
 import { CapteurCommandeMettreAJourDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeMettreAJourDemandeAide';
-import { AdaptateurRepertoireDeContactsBrevo } from '../../adaptateurs/AdaptateurRepertoireDeContactsBrevo';
+import { adaptateurRepertoireDeContacts } from '../../adaptateurs/adaptateurRepertoireDeContacts';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -137,7 +137,7 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurCommandeCreeEspaceAidant(
           parametres.entrepots,
           parametres.busEvenements!,
-          new AdaptateurRepertoireDeContactsBrevo()
+          adaptateurRepertoireDeContacts()
         ),
     },
   ],
@@ -149,7 +149,7 @@ const capteurs: Map<string, Capteur> = new Map([
           parametres.entrepots,
           parametres.busEvenements!,
           parametres.adaptateurEnvoiMail!,
-          new AdaptateurRepertoireDeContactsBrevo()
+          adaptateurRepertoireDeContacts()
         ),
     },
   ],

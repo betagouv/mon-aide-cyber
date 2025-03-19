@@ -16,7 +16,7 @@ import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/Entre
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
-import { RepertoireDeContactsMemoire } from '../adaptateurs/AdaptateurRepertoireDeContactsMemoire';
+import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 describe('ServiceUtilisateurInscrit', () => {
   const dateValidationCGU = new Date(Date.parse('2024-12-22T13:41:24'));
@@ -34,7 +34,7 @@ describe('ServiceUtilisateurInscrit', () => {
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
       unServiceAidant(entrepotAidant),
-      new RepertoireDeContactsMemoire()
+      new AdaptateurRepertoireDeContactsMemoire()
     ).valideProfil(
       aidant.identifiant,
       new AdaptateurRelationsMAC(),
@@ -54,7 +54,7 @@ describe('ServiceUtilisateurInscrit', () => {
   });
 
   it("Ajoute l'utilisateur inscrit dans le répertoire de contact (BREVO)", async () => {
-    const repertoire = new RepertoireDeContactsMemoire();
+    const repertoire = new AdaptateurRepertoireDeContactsMemoire();
     const aidant = unAidant()
       .cguValideesLe(dateValidationCGU)
       .avecUnEmail('jean.dupont@utilisateur-inscrit.com')
@@ -93,7 +93,7 @@ describe('ServiceUtilisateurInscrit', () => {
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
       unServiceAidant(entrepotAidant),
-      new RepertoireDeContactsMemoire()
+      new AdaptateurRepertoireDeContactsMemoire()
     ).valideProfil(
       aidant.identifiant,
       adaptateurRelations,
@@ -122,7 +122,7 @@ describe('ServiceUtilisateurInscrit', () => {
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
       unServiceAidant(entrepotAidant),
-      new RepertoireDeContactsMemoire()
+      new AdaptateurRepertoireDeContactsMemoire()
     ).valideProfil(
       aidant.identifiant,
       new AdaptateurRelationsMAC(),

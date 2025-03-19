@@ -33,6 +33,7 @@ import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/reche
 import { utilisateurInscritInitieDiagnostic } from '../espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
 import { entiteAideeBeneficieDiagnostic } from '../diagnostic/consommateursEvenements';
 import { adaptateurServiceDeHashage } from '../infrastructure/adaptateurs/adaptateurServiceDeHashage';
+import { adaptateurRepertoireDeContacts } from './adaptateurRepertoireDeContacts';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -70,7 +71,8 @@ export const fabriqueConsommateursEvenements = (
         ),
         entiteAideeBeneficieDiagnostic(
           adaptateurRelations,
-          adaptateurServiceDeHashage()
+          adaptateurServiceDeHashage(),
+          adaptateurRepertoireDeContacts()
         ),
       ],
     ],

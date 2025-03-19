@@ -14,7 +14,7 @@ import {
 } from '../../src/espace-aidant/CapteurCommandeCreeEspaceAidant';
 import crypto from 'crypto';
 import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
-import { RepertoireDeContactsMemoire } from '../adaptateurs/AdaptateurRepertoireDeContactsMemoire';
+import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 describe('Capteur de commande de création de compte Aidant', () => {
   it('Crée un compte Aidant', async () => {
@@ -24,7 +24,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
       new BusEvenementDeTest(),
-      new RepertoireDeContactsMemoire()
+      new AdaptateurRepertoireDeContactsMemoire()
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
@@ -70,7 +70,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const entrepots = new EntrepotsMemoire();
     const dateSignatureCGU = new Date(Date.parse('2024-08-30T14:38:25'));
 
-    const repertoireDeContacts = new RepertoireDeContactsMemoire();
+    const repertoireDeContacts = new AdaptateurRepertoireDeContactsMemoire();
 
     await new CapteurCommandeCreeEspaceAidant(
       entrepots,
@@ -101,7 +101,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const compteAidantCree = new CapteurCommandeCreeEspaceAidant(
       entrepots,
       new BusEvenementDeTest(),
-      new RepertoireDeContactsMemoire()
+      new AdaptateurRepertoireDeContactsMemoire()
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
@@ -133,7 +133,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
       busEvenement,
-      new RepertoireDeContactsMemoire()
+      new AdaptateurRepertoireDeContactsMemoire()
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
@@ -168,7 +168,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
       busEvenement,
-      new RepertoireDeContactsMemoire()
+      new AdaptateurRepertoireDeContactsMemoire()
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
