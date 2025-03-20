@@ -22,7 +22,7 @@ describe('Adaptateur De Relation MAC', () => {
     await adaptateurRelationsMAC.creeTuple(tuple);
 
     const identifiantDiagnostics =
-      await adaptateurRelationsMAC.identifiantsObjetsLiesAUtilisateur(
+      await adaptateurRelationsMAC.diagnosticsFaitsParUtilisateurMAC(
         aidant.identifiant
       );
 
@@ -48,7 +48,7 @@ describe('Adaptateur De Relation MAC', () => {
     await adaptateurRelationsMAC.creeTuple(tuple2);
 
     const identifiantDiagnostics =
-      await adaptateurRelationsMAC.identifiantsObjetsLiesAUtilisateur(
+      await adaptateurRelationsMAC.diagnosticsFaitsParUtilisateurMAC(
         identifiantAidant
       );
 
@@ -77,7 +77,7 @@ describe('Adaptateur De Relation MAC', () => {
     await adaptateurRelationsMAC.creeTuple(tuple);
 
     const identifiantDiagnostics =
-      await adaptateurRelationsMAC.identifiantsObjetsLiesAUtilisateur(
+      await adaptateurRelationsMAC.diagnosticsFaitsParUtilisateurMAC(
         identifiantAidant
       );
 

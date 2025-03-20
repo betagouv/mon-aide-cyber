@@ -57,7 +57,7 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
     await this.entrepotUtilisateurInscrit.persiste(utilisateur);
 
     const identifiants =
-      await adaptateurDeRelations.identifiantsObjetsLiesAUtilisateur(
+      await adaptateurDeRelations.diagnosticsFaitsParUtilisateurMAC(
         utilisateur.identifiant
       );
     const tuples = identifiants.reduce((precedent, courant) => {

@@ -15,7 +15,7 @@ export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
     throw new Error('Erreur attendue');
   }
 
-  identifiantsObjetsLiesAUtilisateur(_: crypto.UUID): Promise<string[]> {
+  diagnosticsFaitsParUtilisateurMAC(_: crypto.UUID): Promise<string[]> {
     return Promise.resolve([]);
   }
 

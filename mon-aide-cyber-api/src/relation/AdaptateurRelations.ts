@@ -8,7 +8,7 @@ export type Diagnostic = {
 export interface AdaptateurRelations {
   creeTuple(tuple: Tuple): Promise<void>;
 
-  identifiantsObjetsLiesAUtilisateur(
+  diagnosticsFaitsParUtilisateurMAC(
     identifiantAidant: crypto.UUID
   ): Promise<string[]>;
 

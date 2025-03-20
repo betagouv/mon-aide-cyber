@@ -33,7 +33,7 @@ describe("Les consommateurs d'évènements de l’auto diagnostic", () => {
       });
 
       expect(
-        await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+        await adaptateurRelations.diagnosticsFaitsParUtilisateurMAC(
           identifiantDemande
         )
       ).toStrictEqual([identifiantDiagnostic]);

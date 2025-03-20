@@ -40,7 +40,7 @@ export const lieDiagnostic = async (
   }
 
   const identifiantDiagnosticInitieTrouve = (
-    await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+    await adaptateurRelations.diagnosticsFaitsParUtilisateurMAC(
       identifiantAidant
     )
   ).find((diagnosticInitie) => diagnosticInitie === identifiantDiagnostic);

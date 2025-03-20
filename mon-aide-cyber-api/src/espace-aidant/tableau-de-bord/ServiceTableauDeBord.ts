@@ -39,7 +39,7 @@ export class ServiceTableauDeBord {
 
   async pour(identifiantUtilisateur: crypto.UUID): Promise<TableauDeBord> {
     const identifiantDiagnosticsLie =
-      await this.adaptateurRelation.identifiantsObjetsLiesAUtilisateur(
+      await this.adaptateurRelation.diagnosticsFaitsParUtilisateurMAC(
         identifiantUtilisateur
       );
 
