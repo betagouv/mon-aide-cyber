@@ -15,7 +15,7 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
     await this.tupleEntrepot.persiste(tuple);
   }
 
-  identifiantsObjetsLiesAUtilisateur(
+  diagnosticsFaitsParUtilisateurMAC(
     identifiantUtilisateur: crypto.UUID
   ): Promise<string[]> {
     return this.tupleEntrepot

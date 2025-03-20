@@ -42,7 +42,7 @@ describe('Lie un diagnostic', () => {
     );
 
     expect(
-      await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+      await adaptateurRelations.diagnosticsFaitsParUtilisateurMAC(
         aidant.identifiant
       )
     ).toStrictEqual([identifiantDiagnostic]);
@@ -83,7 +83,7 @@ describe('Lie un diagnostic', () => {
     );
 
     expect(
-      await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+      await adaptateurRelations.diagnosticsFaitsParUtilisateurMAC(
         aidant.identifiant
       )
     ).toStrictEqual([diagnostic.identifiant]);

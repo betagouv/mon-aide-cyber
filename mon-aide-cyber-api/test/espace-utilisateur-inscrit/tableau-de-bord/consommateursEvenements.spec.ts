@@ -47,7 +47,7 @@ describe("Les consommateurs d'évènements du tableau de bord d’un utilisateur
       });
 
       expect(
-        await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+        await adaptateurRelations.diagnosticsFaitsParUtilisateurMAC(
           utilisateurInscrit.identifiant
         )
       ).toStrictEqual([identifiantDiagnostic]);
@@ -81,7 +81,7 @@ describe("Les consommateurs d'évènements du tableau de bord d’un utilisateur
       });
 
       expect(
-        await adaptateurRelations.identifiantsObjetsLiesAUtilisateur(
+        await adaptateurRelations.diagnosticsFaitsParUtilisateurMAC(
           identifiantUtilisateur
         )
       ).toStrictEqual([]);

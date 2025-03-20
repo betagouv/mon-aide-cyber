@@ -13,7 +13,7 @@ export class AdaptateurRelationsTest implements AdaptateurRelations {
     return Promise.resolve();
   }
 
-  identifiantsObjetsLiesAUtilisateur(
+  diagnosticsFaitsParUtilisateurMAC(
     identifiantAidant: crypto.UUID
   ): Promise<string[]> {
     return Promise.resolve(this.relations.get(identifiantAidant) || []);
