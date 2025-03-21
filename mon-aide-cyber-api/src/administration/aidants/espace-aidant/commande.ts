@@ -1,14 +1,15 @@
 import { program } from 'commander';
-import {
-  EN_TETES_FICHIER_CSV,
-  initialiseCreationEspacesAidants,
-  TraitementCreationEspaceAidant,
-} from './initialiseCreationEspacesAidants';
 import * as fs from 'fs';
 import { BusEvenementMAC } from '../../../infrastructure/bus/BusEvenementMAC';
 import { fabriqueConsommateursEvenements } from '../../../adaptateurs/fabriqueConsommateursEvenements';
 import { FournisseurHorloge } from '../../../infrastructure/horloge/FournisseurHorloge';
 import { fabriqueEntrepots } from '../../../adaptateurs/fabriqueEntrepots';
+import {
+  Aidant,
+  DemandeEnErreur,
+  DemandeIncomplete,
+  validationCompteAidant,
+} from './validationCompteAidant';
 
 const command = program
   .description('Importe des aidants')
@@ -17,33 +18,44 @@ const command = program
     'le chemin du fichier contenant les aidants à importer (au format csv, séparation avec ";")'
   );
 
+const estDemandeIncomplete = (
+  traitement: TraitementCreationEspaceAidant
+): traitement is DemandeIncomplete =>
+  !!(traitement as DemandeIncomplete).identificationDemande;
+
+const estDemandeEnErreur = (
+  traitement: TraitementCreationEspaceAidant
+): traitement is DemandeEnErreur => !!(traitement as DemandeEnErreur).erreur;
+
 const versLigneCSV = (aidant: TraitementCreationEspaceAidant) =>
-  `${aidant.region};${aidant.nomPrenom};${aidant.formation};${aidant.charte};${aidant.email};${aidant.telephone};${aidant.todo};${aidant.qui};${aidant.compteCree};${aidant.commentaires};${aidant.lieuDeFormation}\n`;
+  `${aidant.nom};${aidant.email};${estDemandeIncomplete(aidant) ? aidant.identificationDemande : ''};${estDemandeEnErreur(aidant) ? aidant.erreur : ''}\n`;
+
+type TraitementCreationEspaceAidant =
+  | Aidant
+  | DemandeIncomplete
+  | DemandeEnErreur;
 
 command.action(async (...args: any[]) => {
-  const espacesAidantsCrees = await initialiseCreationEspacesAidants(
+  const resultat = await validationCompteAidant(
     fabriqueEntrepots(),
     new BusEvenementMAC(fabriqueConsommateursEvenements()),
     fs.readFileSync(args[0], { encoding: 'utf-8' })
   );
 
-  if (espacesAidantsCrees) {
-    const rapport: string[] = [];
+  if (resultat) {
+    const rapport: string[] = ['Nom;Email;Identifiant demande;Erreur'];
     const dateMaintenantISO = FournisseurHorloge.maintenant().toISOString();
-    rapport.push(`${EN_TETES_FICHIER_CSV.join(';')}\n`);
     const imports: TraitementCreationEspaceAidant[] = [
-      ...espacesAidantsCrees.erreurs,
-      ...espacesAidantsCrees.demandesDevenirAidant,
-      ...espacesAidantsCrees.mailsCreationEspaceAidantEnvoyes,
-      ...espacesAidantsCrees.mailsCreationEspaceAidantEnAttente,
+      ...resultat.demandesEnErreur,
+      ...resultat.demandesIncomplete,
+      ...resultat.envoisMailCreationEspaceAidant,
     ];
     console.log(
-      'Nombre d’Aidants : %d\nNombre de demandes devenir Aidant créées : %d\nNombre de mail envoyés suite à une demande : %d\nNombre de demandes toujours en cours : %d\nNombre de demandes en erreur : %d',
+      'Nombre d’Aidants : %d\nNombre de mail envoyés suite à une demande : %d\nNombre de demandes toujours en cours : %d\nNombre de demandes en erreur : %d',
       imports.length,
-      espacesAidantsCrees.demandesDevenirAidant.length,
-      espacesAidantsCrees.mailsCreationEspaceAidantEnvoyes.length,
-      espacesAidantsCrees.mailsCreationEspaceAidantEnAttente.length,
-      espacesAidantsCrees.erreurs.length
+      resultat.envoisMailCreationEspaceAidant.length,
+      resultat.demandesIncomplete.length,
+      resultat.demandesEnErreur.length
     );
     imports.forEach((aidant) => {
       rapport.push(versLigneCSV(aidant));

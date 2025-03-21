@@ -60,6 +60,17 @@ class ConstructeurDemandeDevenirAidant
       ...(this.entite && { entite: this.entite }),
     };
   }
+
+  pour(nom: string, prenom: string): ConstructeurDemandeDevenirAidant {
+    this.nom = nom;
+    this.prenom = prenom;
+    return this;
+  }
+
+  ayantPourMail(email: string): ConstructeurDemandeDevenirAidant {
+    this.mail = email;
+    return this;
+  }
 }
 
 export const uneDemandeDevenirAidant = () =>
