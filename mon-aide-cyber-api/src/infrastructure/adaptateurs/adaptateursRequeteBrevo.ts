@@ -32,7 +32,7 @@ type CorpsReponseCreationContact = { id: string };
 type ReponseCreationContact = Omit<ReponseBrevo, 'json'> & {
   json: () => Promise<CorpsReponseCreationContact>;
 };
-type CorpsReponseRechercheContact = {
+export type CorpsReponseRechercheContact = {
   email: string;
   id: string;
   attributes: any;
@@ -79,6 +79,15 @@ export type CreationEvenement = {
 
 export type ReponseCreationEvenement = ReponseBrevo;
 
+export class ErreurRequeBrevo extends Error {
+  constructor(
+    public readonly corps: object,
+    public readonly status: number
+  ) {
+    super(JSON.stringify(corps));
+  }
+}
+
 export class AdaptateursRequeteBrevo {
   envoiMail(): AdaptateurRequeteBrevo<
     RequeteBrevo<EnvoiMailBrevo>,
@@ -115,17 +124,28 @@ export class AdaptateursRequeteBrevo {
   ) {
     return new (class implements AdaptateurRequeteBrevo<RequeteBrevo<T>, R> {
       async execute(requete: RequeteBrevo<T>): Promise<R> {
-        try {
-          return (await fetch(url, {
-            method: requete.methode,
-            headers: requete.headers,
-            ...(requete.methode === 'POST' && {
-              body: JSON.stringify(requete.corps),
-            }),
-          })) as unknown as R;
-        } catch (erreur) {
-          return await Promise.reject(erreur);
+        console.log('INITIE APPEL BREVO', url);
+        const reponse = (await fetch(url, {
+          method: requete.methode,
+          headers: requete.headers,
+          ...(requete.methode === 'POST' && {
+            body: JSON.stringify(requete.corps),
+          }),
+        })) as unknown as R;
+        if (estReponseEnErreur(reponse)) {
+          const corps = await reponse.json();
+          console.error(
+            'ERREUR BREVO',
+            JSON.stringify({
+              contexte: 'Appel Brevo',
+              details: corps.code,
+              message: corps.message,
+            })
+          );
+          throw new ErreurRequeBrevo(corps, reponse.status);
         }
+        console.log('FIN APPEL BREVO : OK', url);
+        return reponse;
       }
     })();
   }
@@ -133,7 +153,7 @@ export class AdaptateursRequeteBrevo {
 
 export const adaptateursRequeteBrevo = () => new AdaptateursRequeteBrevo();
 
-export const estReponseEnErreur = (
+const estReponseEnErreur = (
   reponse: ReponseBrevo | ReponseBrevoEnErreur
 ): reponse is ReponseBrevoEnErreur => {
   return !reponse.ok;

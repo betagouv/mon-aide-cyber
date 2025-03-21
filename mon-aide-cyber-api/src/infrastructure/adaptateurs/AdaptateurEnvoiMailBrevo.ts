@@ -6,14 +6,14 @@ import {
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
 import {
   adaptateursRequeteBrevo,
-  estReponseEnErreur,
+  ErreurRequeBrevo,
 } from './adaptateursRequeteBrevo';
 import { unConstructeurEnvoiDeMail } from '../brevo/ConstructeursBrevo';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { isArray } from 'lodash';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
-  envoie(
+  async envoie(
     message: Email,
     expediteur: Expediteur = 'MONAIDECYBER'
   ): Promise<void> {
@@ -38,24 +38,13 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
       .ayantPourContenu(message.corps)
       .ayantEnPieceJointe(message.pieceJointe)
       .construis();
-    return adaptateursRequeteBrevo()
+    await adaptateursRequeteBrevo()
       .envoiMail()
       .execute(envoiDeMail)
-      .then(async (reponse) => {
-        if (estReponseEnErreur(reponse)) {
-          const corpsReponse = await reponse.json();
-          console.error(
-            'ERREUR BREVO',
-            JSON.stringify({
-              contexte: 'Envoi mail',
-              code: corpsReponse.code,
-              message: corpsReponse.message,
-            })
-          );
-          throw new ErreurEnvoiEmail(
-            "Une erreur est survenue lors de l'envoi du message."
-          );
-        }
+      .catch(async (reponse: unknown | ErreurRequeBrevo) => {
+        throw new ErreurEnvoiEmail(
+          JSON.stringify((reponse as ErreurRequeBrevo).corps)
+        );
       });
   }
 }

@@ -8,7 +8,8 @@ import {
 } from '../../brevo/ConstructeursBrevo';
 import {
   adaptateursRequeteBrevo,
-  estReponseEnErreur,
+  CorpsReponseRechercheContact,
+  ErreurRequeBrevo,
 } from '../../adaptateurs/adaptateursRequeteBrevo';
 import {
   Departement,
@@ -99,35 +100,27 @@ export interface EntrepotAideDistant {
 
 class EntrepotAideBrevo implements EntrepotAideDistant {
   async rechercheParEmail(email: string): Promise<AideDistantDTO | undefined> {
-    const reponse = await adaptateursRequeteBrevo()
-      .rechercheContact(email)
-      .execute(unConstructeurRechercheDeContact().construis());
+    try {
+      const reponse = await adaptateursRequeteBrevo()
+        .rechercheContact(email)
+        .execute(unConstructeurRechercheDeContact().construis());
 
-    if (estReponseEnErreur(reponse)) {
-      const corpsReponse = await reponse.json();
-      console.error(
-        'ERREUR BREVO',
-        JSON.stringify({
-          contexte: 'Recherche contact',
-          details: corpsReponse.code,
-          message: corpsReponse.message,
-        })
-      );
-      if (reponse.status === 404) {
+      const corpsReponse: CorpsReponseRechercheContact =
+        (await reponse.json()) as CorpsReponseRechercheContact;
+      const aideBrevo: AideDistantBrevoDTO = {
+        email: corpsReponse.email,
+        attributes: { METADONNEES: corpsReponse.attributes.METADONNEES },
+      };
+      return {
+        email: aideBrevo.email,
+        metaDonnees: aideBrevo.attributes.METADONNEES,
+      };
+    } catch (erreur: unknown | ErreurRequeBrevo) {
+      if (erreur instanceof ErreurRequeBrevo && erreur.status === 404) {
         return undefined;
       }
-      throw corpsReponse.message;
+      throw erreur;
     }
-
-    const corpsReponse = await reponse.json();
-    const aideBrevo: AideDistantBrevoDTO = {
-      email: corpsReponse.email,
-      attributes: { METADONNEES: corpsReponse.attributes.METADONNEES },
-    };
-    return {
-      email: aideBrevo.email,
-      metaDonnees: aideBrevo.attributes.METADONNEES,
-    };
   }
 
   async persiste(
@@ -149,22 +142,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
       })
       .construis();
 
-    const reponse = await adaptateursRequeteBrevo()
-      .creationContact()
-      .execute(laCreation);
-
-    if (estReponseEnErreur(reponse)) {
-      const corpsReponse = await reponse.json();
-      console.error(
-        'ERREUR BREVO',
-        JSON.stringify({
-          contexte: 'Création contact',
-          details: corpsReponse.code,
-          message: corpsReponse.message,
-        })
-      );
-      throw corpsReponse.message;
-    }
+    await adaptateursRequeteBrevo().creationContact().execute(laCreation);
   }
 }
 
