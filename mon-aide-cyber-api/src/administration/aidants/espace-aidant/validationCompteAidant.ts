@@ -10,15 +10,20 @@ export type AidantCSV = {
   email: string;
 };
 
-type Aidant = AidantCSV;
+export type Aidant = AidantCSV;
 
-type DemandeIncomplete = Aidant & {
+export type DemandeIncomplete = Aidant & {
   identificationDemande: crypto.UUID;
+};
+
+export type DemandeEnErreur = Aidant & {
+  erreur: string;
 };
 
 export type ResultatValidationCompteAidant = {
   envoisMailCreationEspaceAidant: Aidant[];
   demandesIncomplete: DemandeIncomplete[];
+  demandesEnErreur: DemandeEnErreur[];
 };
 
 export const EN_TETES_FICHIER_CSV = ['Nom', 'mail'];
@@ -57,37 +62,50 @@ export const validationCompteAidant = (
   };
   const envoisMailCreationEspaceAidant: Aidant[] = [];
   const demandesIncomplete: DemandeIncomplete[] = [];
+  const demandesEnErreur: DemandeEnErreur[] = [];
 
   return Promise.all(
     recupereListeAidants(contenuFichier).map(async (aidantCourant) => {
       const aidant = transcris(aidantCourant.split(';'));
 
       if (aidant) {
-        const demandeEnCours = await entrepots
-          .demandesDevenirAidant()
-          .rechercheDemandeEnCoursParMail(aidant.email);
-        if (demandeEnCours && demandeEnCours.entite) {
-          await new CapteurCommandeEnvoiMailCreationCompteAidant(
-            entrepots,
-            busEvenement,
-            fabriqueAdaptateurEnvoiMail(),
-            adaptateurServiceChiffrement()
-          ).execute({
-            type: 'CommandeEnvoiMailCreationCompteAidant',
-            mail: demandeEnCours.mail,
-          });
-          envoisMailCreationEspaceAidant.push({
+        try {
+          const demandeEnCours = await entrepots
+            .demandesDevenirAidant()
+            .rechercheDemandeEnCoursParMail(aidant.email);
+          if (demandeEnCours && demandeEnCours.entite) {
+            await new CapteurCommandeEnvoiMailCreationCompteAidant(
+              entrepots,
+              busEvenement,
+              fabriqueAdaptateurEnvoiMail(),
+              adaptateurServiceChiffrement()
+            ).execute({
+              type: 'CommandeEnvoiMailCreationCompteAidant',
+              mail: demandeEnCours.mail,
+            });
+            envoisMailCreationEspaceAidant.push({
+              nom: aidant.nom,
+              email: aidant.email,
+            });
+          } else if (demandeEnCours) {
+            demandesIncomplete.push({
+              nom: aidant.nom,
+              email: aidant.email,
+              identificationDemande: demandeEnCours.identifiant,
+            });
+          }
+        } catch (erreur: unknown | Error) {
+          demandesEnErreur.push({
             nom: aidant.nom,
             email: aidant.email,
-          });
-        } else if (demandeEnCours) {
-          demandesIncomplete.push({
-            nom: aidant.nom,
-            email: aidant.email,
-            identificationDemande: demandeEnCours.identifiant,
+            erreur: (erreur as Error).message,
           });
         }
       }
     })
-  ).then(() => ({ envoisMailCreationEspaceAidant, demandesIncomplete }));
+  ).then(() => ({
+    envoisMailCreationEspaceAidant,
+    demandesIncomplete,
+    demandesEnErreur,
+  }));
 };
