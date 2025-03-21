@@ -381,7 +381,7 @@ describe('Initialise la création de l’espace des aidants', () => {
     expect(aidantsImportes.mailsCreationEspaceAidantEnAttente).toHaveLength(2);
   });
 
-  describe('', () => {
+  describe('En cas d’erreur', () => {
     const importAidantEnErreur = (
       aidantCSV: AidantCSV
     ): TraitementCreationEspaceAidant => {

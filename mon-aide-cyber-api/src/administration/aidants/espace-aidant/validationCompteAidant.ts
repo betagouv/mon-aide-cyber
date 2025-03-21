@@ -1,0 +1,80 @@
+import { CapteurCommandeEnvoiMailCreationCompteAidant } from '../../../gestion-demandes/devenir-aidant/CapteurCommandeEnvoiMailCreationCompteAidant';
+import { fabriqueAdaptateurEnvoiMail } from '../../../infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
+import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
+import { Entrepots } from '../../../domaine/Entrepots';
+import { BusEvenement } from '../../../domaine/BusEvenement';
+
+export type AidantCSV = {
+  nom: string;
+  email: string;
+};
+
+type Aidant = AidantCSV;
+
+export type ResultatValidationCompteAidant = {
+  envoiMailCreationEspaceAidant: Aidant[];
+};
+
+export const EN_TETES_FICHIER_CSV = ['Nom', 'mail'];
+
+const recupereListeAidants = (aidants: string) => {
+  const tableauAidants = aidants.split('\n');
+  const entetes = tableauAidants[0].split(';');
+
+  const entetesPresentes = EN_TETES_FICHIER_CSV.every(
+    (valeur, index) => valeur === entetes[index]
+  );
+  if (!entetesPresentes || entetes.length < 2) {
+    throw new Error(
+      `Le fichier doit contenir les colones suivantes '${EN_TETES_FICHIER_CSV.join(';')}'.`
+    );
+  }
+
+  if (tableauAidants[tableauAidants.length - 1].trim() === '') {
+    return tableauAidants.slice(1, -1);
+  }
+
+  return tableauAidants.slice(1);
+};
+
+export const validationCompteAidant = (
+  entrepots: Entrepots,
+  busEvenement: BusEvenement,
+  contenuFichier: string
+): Promise<ResultatValidationCompteAidant> => {
+  const transcris = (aidant: string[]): AidantCSV | undefined => {
+    const identifiant = aidant[1];
+    return {
+      email: identifiant.toLowerCase().trim(),
+      nom: aidant[0].trim(),
+    };
+  };
+  const envoiMailCreationEspaceAidant: Aidant[] = [];
+
+  return Promise.all(
+    recupereListeAidants(contenuFichier).map(async (aidantCourant) => {
+      const aidant = transcris(aidantCourant.split(';'));
+
+      if (aidant) {
+        const demandeEnCours = await entrepots
+          .demandesDevenirAidant()
+          .rechercheDemandeEnCoursParMail(aidant.email);
+        if (demandeEnCours) {
+          await new CapteurCommandeEnvoiMailCreationCompteAidant(
+            entrepots,
+            busEvenement,
+            fabriqueAdaptateurEnvoiMail(),
+            adaptateurServiceChiffrement()
+          ).execute({
+            type: 'CommandeEnvoiMailCreationCompteAidant',
+            mail: demandeEnCours.mail,
+          });
+          envoiMailCreationEspaceAidant.push({
+            nom: aidant.nom,
+            email: aidant.email,
+          });
+        }
+      }
+    })
+  ).then(() => ({ envoiMailCreationEspaceAidant }));
+};
