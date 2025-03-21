@@ -13,7 +13,10 @@ import {
   EspaceAidantCree,
 } from '../../src/espace-aidant/CapteurCommandeCreeEspaceAidant';
 import crypto from 'crypto';
-import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import {
+  unAidant,
+  unUtilisateurInscrit,
+} from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 describe('Capteur de commande de création de compte Aidant', () => {
@@ -96,7 +99,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const entrepots = new EntrepotsMemoire();
     const dateSignatureCGU = new Date(Date.parse('2024-08-30T14:38:25'));
     const aidant = unAidant().construis();
-    entrepots.aidants().persiste(aidant);
+    await entrepots.aidants().persiste(aidant);
 
     const compteAidantCree = new CapteurCommandeCreeEspaceAidant(
       entrepots,
@@ -192,6 +195,58 @@ describe('Capteur de commande de création de compte Aidant', () => {
         departement: '971',
         typeAidant: 'Gendarme',
       },
+    });
+  });
+
+  describe('Dans le cadre du passage d’un Utilisateur Inscrit à Aidant', () => {
+    it('Promeut l’Utilisateur Inscrit en Aidant', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const entrepots = new EntrepotsMemoire();
+      const utilisateurInscrit = unUtilisateurInscrit()
+        .avecUnNomPrenom('Jean Dupont')
+        .avecUnEmail('jean.dupont@email.com')
+        .construis();
+      await entrepots.utilisateursInscrits().persiste(utilisateurInscrit);
+
+      await new CapteurCommandeCreeEspaceAidant(
+        entrepots,
+        new BusEvenementDeTest(),
+        new AdaptateurRepertoireDeContactsMemoire()
+      ).execute({
+        identifiant: crypto.randomUUID(),
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        email: 'jean.dupont@email.com',
+        nomPrenom: 'Jean Dupont',
+        type: 'CommandeCreeEspaceAidant',
+        departement: {
+          nom: 'Alpes-de-Haute-Provence',
+          code: '4',
+          codeRegion: '93',
+        },
+      });
+
+      const aidantRecu = await entrepots
+        .aidants()
+        .lis(utilisateurInscrit.identifiant);
+      expect(aidantRecu).toStrictEqual<Aidant>({
+        identifiant: expect.any(String),
+        email: 'jean.dupont@email.com',
+        nomPrenom: 'Jean Dupont',
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        preferences: {
+          secteursActivite: [],
+          departements: [
+            {
+              nom: 'Alpes-de-Haute-Provence',
+              code: '4',
+              codeRegion: '93',
+            },
+          ],
+          typesEntites: [],
+          nomAffichageAnnuaire: 'Jean D.',
+        },
+        consentementAnnuaire: false,
+      });
     });
   });
 });

@@ -565,7 +565,7 @@ describe('Entrepot Aidant', () => {
     serviceDeChiffrement.nettoie();
   });
 
-  it('Persiste un aidant', async () => {
+  it('Persiste un Aidant', async () => {
     const aidant = unAidant().construis();
     serviceDeChiffrement.ajoute(aidant.email, 'aaa');
     serviceDeChiffrement.ajoute(aidant.nomPrenom, 'ccc');
@@ -637,6 +637,33 @@ describe('Entrepot Aidant', () => {
     expect(aidantRecu.entite).toStrictEqual<EntiteAidant>({
       type: 'Association',
     });
+  });
+
+  it('Persiste un Aidant préalablement Utilisateur Inscrit', async () => {
+    const entrepot = new EntrepotAidantPostgres(
+      new ServiceDeChiffrementClair()
+    );
+    const utilisateurInscrit = unUtilisateurInscrit()
+      .avecUnEmail('jean.dujardin@mail.com')
+      .construis();
+    await new EntrepotUtilisateurInscritPostgres(
+      new ServiceDeChiffrementClair()
+    ).persiste(utilisateurInscrit);
+    const aidant = unAidant()
+      .avecUnEmail('jean.dujardin@mail.com')
+      .avecUnIdentifiant(utilisateurInscrit.identifiant)
+      .construis();
+
+    await entrepot.persiste(aidant);
+
+    expect(
+      await entrepot.lis(utilisateurInscrit.identifiant)
+    ).toStrictEqual<Aidant>(aidant);
+    await expect(() =>
+      new EntrepotUtilisateurInscritPostgres(
+        new ServiceDeChiffrementClair()
+      ).lis(utilisateurInscrit.identifiant)
+    ).rejects.toThrowError("Le utilisateur inscrit demandé n'existe pas.");
   });
 
   it('Met à jour le consentement pour apparaître dans l’annuaire', async () => {
