@@ -39,8 +39,39 @@ describe('Validation des comptes Aidants', () => {
     const resultat = await validationCompteAidant(entrepots, busEvenement, csv);
 
     expect(resultat).toStrictEqual<ResultatValidationCompteAidant>({
-      envoiMailCreationEspaceAidant: [
+      envoisMailCreationEspaceAidant: [
         { nom: 'Jean Dupont', email: 'jean.dupont@email.com' },
+      ],
+      demandesIncomplete: [],
+    });
+  });
+
+  it('N’envoie pas le mail de création de l’espace Aidant si la demande est incomplète', async () => {
+    const demande = uneDemandeDevenirAidant()
+      .avantArbitrage()
+      .pour('Jean', 'Dupont')
+      .ayantPourMail('jean.dupont@email.com')
+      .construis();
+    await entrepots.demandesDevenirAidant().persiste(demande);
+    const csv = unConstructeurFichierAidantCSV()
+      .avecLesAidants([
+        unConstructeurAidantCSV()
+          .avecLeNom('Jean Dupont')
+          .avecUnEmail('jean.dupont@email.com')
+          .construis(),
+      ])
+      .construis();
+
+    const resultat = await validationCompteAidant(entrepots, busEvenement, csv);
+
+    expect(resultat).toStrictEqual<ResultatValidationCompteAidant>({
+      envoisMailCreationEspaceAidant: [],
+      demandesIncomplete: [
+        {
+          nom: 'Jean Dupont',
+          email: 'jean.dupont@email.com',
+          identificationDemande: demande.identifiant,
+        },
       ],
     });
   });
