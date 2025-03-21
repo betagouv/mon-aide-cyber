@@ -51,7 +51,7 @@ export class EntrepotAidantPostgres
   }
 
   protected champsAMettreAJour(aidantDTO: AidantDTO): Partial<AidantDTO> {
-    return { donnees: aidantDTO.donnees };
+    return { donnees: aidantDTO.donnees, type: aidantDTO.type };
   }
 
   protected deDTOAEntite(dto: AidantDTO): Aidant {

@@ -14,6 +14,7 @@ import {
   TypeAffichageAnnuaire,
 } from './Aidant';
 import { RepertoireDeContacts } from '../contacts/RepertoireDeContacts';
+import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export type TypeEntite = 'ServicePublic' | 'ServiceEtat' | 'Association';
 
@@ -64,9 +65,17 @@ export class CapteurCommandeCreeEspaceAidant
       );
     } catch (erreur) {
       if (!(erreur instanceof AggregatNonTrouve)) throw erreur;
+      let identifiant: crypto.UUID = commande.identifiant;
+
+      const utilisateurMAC = await uneRechercheUtilisateursMAC(
+        this.entrepots.utilisateursMAC()
+      ).rechercheParMail(commande.email);
+      if (utilisateurMAC && utilisateurMAC.profil === 'UtilisateurInscrit') {
+        identifiant = utilisateurMAC.identifiant;
+      }
 
       const aidant: Aidant = {
-        identifiant: commande.identifiant,
+        identifiant,
         email: commande.email,
         nomPrenom: commande.nomPrenom,
         preferences: {
