@@ -26,7 +26,7 @@ export type ResultatValidationCompteAidant = {
   demandesEnErreur: DemandeEnErreur[];
 };
 
-export const EN_TETES_FICHIER_CSV = ['Nom', 'mail'];
+const EN_TETES_FICHIER_CSV = ['Nom', 'mail'];
 
 const recupereListeAidants = (aidants: string) => {
   const tableauAidants = aidants.split('\n');
