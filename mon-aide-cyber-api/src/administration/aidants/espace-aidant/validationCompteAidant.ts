@@ -2,6 +2,7 @@ import { CapteurCommandeEnvoiMailCreationCompteAidant } from '../../../gestion-d
 import { fabriqueAdaptateurEnvoiMail } from '../../../infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
 import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import { Entrepots } from '../../../domaine/Entrepots';
+import crypto from 'crypto';
 import { BusEvenement } from '../../../domaine/BusEvenement';
 
 export type AidantCSV = {
@@ -11,8 +12,13 @@ export type AidantCSV = {
 
 type Aidant = AidantCSV;
 
+type DemandeIncomplete = Aidant & {
+  identificationDemande: crypto.UUID;
+};
+
 export type ResultatValidationCompteAidant = {
-  envoiMailCreationEspaceAidant: Aidant[];
+  envoisMailCreationEspaceAidant: Aidant[];
+  demandesIncomplete: DemandeIncomplete[];
 };
 
 export const EN_TETES_FICHIER_CSV = ['Nom', 'mail'];
@@ -49,7 +55,8 @@ export const validationCompteAidant = (
       nom: aidant[0].trim(),
     };
   };
-  const envoiMailCreationEspaceAidant: Aidant[] = [];
+  const envoisMailCreationEspaceAidant: Aidant[] = [];
+  const demandesIncomplete: DemandeIncomplete[] = [];
 
   return Promise.all(
     recupereListeAidants(contenuFichier).map(async (aidantCourant) => {
@@ -59,7 +66,7 @@ export const validationCompteAidant = (
         const demandeEnCours = await entrepots
           .demandesDevenirAidant()
           .rechercheDemandeEnCoursParMail(aidant.email);
-        if (demandeEnCours) {
+        if (demandeEnCours && demandeEnCours.entite) {
           await new CapteurCommandeEnvoiMailCreationCompteAidant(
             entrepots,
             busEvenement,
@@ -69,12 +76,18 @@ export const validationCompteAidant = (
             type: 'CommandeEnvoiMailCreationCompteAidant',
             mail: demandeEnCours.mail,
           });
-          envoiMailCreationEspaceAidant.push({
+          envoisMailCreationEspaceAidant.push({
             nom: aidant.nom,
             email: aidant.email,
+          });
+        } else if (demandeEnCours) {
+          demandesIncomplete.push({
+            nom: aidant.nom,
+            email: aidant.email,
+            identificationDemande: demandeEnCours.identifiant,
           });
         }
       }
     })
-  ).then(() => ({ envoiMailCreationEspaceAidant }));
+  ).then(() => ({ envoisMailCreationEspaceAidant, demandesIncomplete }));
 };
