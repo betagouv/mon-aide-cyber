@@ -37,4 +37,10 @@ export class AdaptateurRelationsTest implements AdaptateurRelations {
         ?.filter((d) => d === objet.identifiant)
     );
   }
+
+  retireLesRelations(
+    _relations: { relation: string; utilisateur: Utilisateur; objet: Objet }[]
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 }

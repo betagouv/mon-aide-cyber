@@ -21,4 +21,18 @@ export interface AdaptateurRelations {
     utilisateur: Utilisateur,
     objet: Objet
   ): Promise<boolean>;
+
+  relationExiste(
+    relation: Relation,
+    utilisateur: Utilisateur,
+    objet: Objet
+  ): Promise<boolean>;
+
+  retireLesRelations(
+    relations: {
+      relation: Relation;
+      utilisateur: Utilisateur;
+      objet: Objet;
+    }[]
+  ): Promise<void>;
 }

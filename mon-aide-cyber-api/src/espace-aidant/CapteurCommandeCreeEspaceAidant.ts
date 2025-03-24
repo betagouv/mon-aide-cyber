@@ -145,5 +145,15 @@ export class CapteurCommandeCreeEspaceAidant
       }
     );
     await Promise.all(relationsCrees);
+    await this.adaptateurRelations.retireLesRelations(
+      relationsAssociees.map((relationAssociee) => ({
+        relation: 'initiateur',
+        utilisateur: {
+          type: 'utilisateurInscrit',
+          identifiant: identifiantUtilisateur,
+        },
+        objet: { type: 'diagnostic', identifiant: relationAssociee },
+      }))
+    );
   }
 }
