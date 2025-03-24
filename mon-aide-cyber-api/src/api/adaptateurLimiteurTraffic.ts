@@ -1,6 +1,5 @@
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import rateLimit, { RateLimitRequestHandler } from 'express-rate-limit';
-import { extraisIp } from './extraisIPs';
 
 const CINQ_MINUTES = 5 * 60 * 1000;
 const CENT_APPELS = 100;
@@ -76,8 +75,6 @@ const adaptateurLimiteurTraffic = (
     message:
       "Vous avez atteint le nombre maximal d'appel à MonAideCyber. Veuillez réessayer ultérieurement.",
     standardHeaders: true,
-    keyGenerator: (requete: Request, __: Response) =>
-      extraisIp(requete.headers).client as string,
     legacyHeaders: false,
     skip: (requete: Request, __) =>
       ['/assets/', '/fontes/', '/images/'].some((req) =>

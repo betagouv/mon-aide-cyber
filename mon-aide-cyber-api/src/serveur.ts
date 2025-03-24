@@ -35,6 +35,7 @@ import { routesAssociations } from './api/associations/routesAssociations';
 import { AdaptateurDeVerificationDeDemande } from './adaptateurs/AdaptateurDeVerificationDeDemande';
 import { AdaptateurAseptisation } from './adaptateurs/AdaptateurAseptisation';
 import { RepertoireDeContacts } from './contacts/RepertoireDeContacts';
+import { adaptateurEnvironnement } from './adaptateurs/adaptateurEnvironnement';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -73,7 +74,7 @@ const creeApp = (config: ConfigurationServeur) => {
   const app = express();
 
   config.gestionnaireErreurs.initialise(app);
-  app.set('trust proxy', 1);
+  app.set('trust proxy', adaptateurEnvironnement.reseauTrustProxy());
   app.use(
     CookieSession({
       sameSite: true,
