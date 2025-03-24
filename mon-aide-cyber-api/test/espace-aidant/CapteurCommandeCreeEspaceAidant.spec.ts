@@ -313,6 +313,49 @@ describe('Capteur de commande de création de compte Aidant', () => {
       ).toBe(true);
     });
 
+    it("Rattache les diagnostics de l'utilisateur inscrit sans doublon", async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const entrepots = new EntrepotsMemoire();
+      const adaptateurRelations = new AdaptateurRelationsMAC(
+        new EntrepotRelationMemoire()
+      );
+      const utilisateurInscrit = unUtilisateurInscrit()
+        .avecUnNomPrenom('Jean Dupont')
+        .avecUnEmail('jean.dupont@email.com')
+        .construis();
+      await entrepots.utilisateursInscrits().persiste(utilisateurInscrit);
+      const identifiantDiagnostic = crypto.randomUUID();
+      const relation = unTupleUtilisateurInscritInitieDiagnostic(
+        utilisateurInscrit.identifiant,
+        identifiantDiagnostic
+      );
+      await adaptateurRelations.creeTuple(relation);
+
+      await new CapteurCommandeCreeEspaceAidant(
+        entrepots,
+        new BusEvenementDeTest(),
+        new AdaptateurRepertoireDeContactsMemoire(),
+        adaptateurRelations
+      ).execute({
+        identifiant: crypto.randomUUID(),
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        email: 'jean.dupont@email.com',
+        nomPrenom: 'Jean Dupont',
+        type: 'CommandeCreeEspaceAidant',
+        departement: {
+          nom: 'Alpes-de-Haute-Provence',
+          code: '4',
+          codeRegion: '93',
+        },
+      });
+
+      expect(
+        await adaptateurRelations.diagnosticsFaitsParUtilisateurMAC(
+          utilisateurInscrit.identifiant
+        )
+      ).toStrictEqual([identifiantDiagnostic]);
+    });
+
     it("Ne rattache pas les diagnostics de l'utilisateur inscrit si l’Aidant n’a pu être promu", async () => {
       FournisseurHorlogeDeTest.initialise(new Date());
       const entrepots = new EntrepotsMemoire();

@@ -1,6 +1,6 @@
 import { Objet, Relation, Tuple, Utilisateur } from '../Tuple';
 
-import { Entrepot, EntrepotRelation } from '../EntrepotRelation';
+import { Entrepot, EntrepotRelation, Relations } from '../EntrepotRelation';
 import crypto from 'crypto';
 import { Aggregat } from '../Aggregat';
 import { cloneDeep, isEqual } from 'lodash';
@@ -22,6 +22,28 @@ export class EntrepotRelationMemoire
   extends EntrepotMemoire<Tuple>
   implements EntrepotRelation
 {
+  supprimeLesRelations(relations: Relations): Promise<void> {
+    const relationsASupprimer = Array.from(this.entites.values()).filter(
+      (tuple) => {
+        return (
+          relations.filter(
+            (r) =>
+              r.relation === tuple.relation &&
+              r.objet.identifiant === tuple.objet.identifiant &&
+              r.objet.type === tuple.objet.type &&
+              r.utilisateur.identifiant === tuple.utilisateur.identifiant &&
+              r.utilisateur.type === tuple.utilisateur.type
+          ).length > 0
+        );
+      }
+    );
+
+    relationsASupprimer.forEach((r) => {
+      this.entites.delete(r.identifiant);
+    });
+
+    return Promise.resolve();
+  }
   trouveObjetsLiesAUtilisateur(
     identifiantUtilisateur: string
   ): Promise<Tuple[]> {

@@ -1,5 +1,5 @@
 import { Objet, Relation, Tuple, Utilisateur } from '../Tuple';
-import { Entrepot, EntrepotRelation } from '../EntrepotRelation';
+import { Entrepot, EntrepotRelation, Relations } from '../EntrepotRelation';
 import crypto from 'crypto';
 import { knex, Knex } from 'knex';
 import { Aggregat } from '../Aggregat';
@@ -66,7 +66,6 @@ export class EntrepotRelationPostgres
       utilisateur: dto.donnees.utilisateur,
     };
   }
-
   protected deEntiteADTO(entite: Tuple): TupleDTO {
     return {
       id: entite.identifiant,
@@ -113,5 +112,9 @@ export class EntrepotRelationPostgres
       .andWhereRaw("(donnees->'objet') @> :objet", { objet })
       .select(`${this.nomTable()}.*`)
       .then((lignes) => lignes.length > 0);
+  }
+
+  supprimeLesRelations(_relations: Relations): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 }

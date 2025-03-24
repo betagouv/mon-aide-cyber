@@ -20,7 +20,6 @@ export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
   diagnosticsFaitsParUtilisateurMAC(_: crypto.UUID): Promise<string[]> {
     return Promise.resolve([]);
   }
-
   diagnosticsDeLAide(_email: Email): Promise<string[]> {
     return Promise.resolve([]);
   }
@@ -31,5 +30,11 @@ export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
     _objet: Objet
   ): Promise<boolean> {
     return Promise.resolve(false);
+  }
+
+  retireLesRelations(
+    _relations: { relation: string; utilisateur: Utilisateur; objet: Objet }[]
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 }

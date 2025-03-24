@@ -37,6 +37,12 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
     return this.tupleEntrepot.relationExiste(relation, utilisateur, objet);
   }
 
+  retireLesRelations(
+    relations: { relation: string; utilisateur: Utilisateur; objet: Objet }[]
+  ): Promise<void> {
+    return this.tupleEntrepot.supprimeLesRelations(relations);
+  }
+
   typeRelationExiste(relation: Relation, objet: Objet) {
     return this.tupleEntrepot.typeRelationExiste(relation, objet);
   }

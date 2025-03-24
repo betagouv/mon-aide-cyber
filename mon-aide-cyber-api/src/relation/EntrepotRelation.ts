@@ -7,6 +7,12 @@ export interface Entrepot<T extends Aggregat> {
   typeAggregat(): string;
 }
 
+export type Relations = {
+  relation: string;
+  utilisateur: Utilisateur;
+  objet: Objet;
+}[];
+
 export interface EntrepotRelation extends Entrepot<Tuple> {
   trouveObjetsLiesAUtilisateur(identifiantAidant: string): Promise<Tuple[]>;
 
@@ -17,4 +23,6 @@ export interface EntrepotRelation extends Entrepot<Tuple> {
   ): Promise<boolean>;
 
   typeRelationExiste(relation: Relation, objet: Objet): Promise<boolean>;
+
+  supprimeLesRelations(relations: Relations): Promise<void>;
 }
