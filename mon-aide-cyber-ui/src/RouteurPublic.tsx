@@ -32,6 +32,10 @@ export const RouteurPublic = () => {
       <Route path="/" element={<LayoutPublic />}>
         <Route index element={<Accueil />} />
         <Route path="accessibilite" element={<EcranAccessibilite />} />
+        <Route
+          path="statistiques-utilisation"
+          element={<EcranStatistiques />}
+        />
         <Route path="cgu" element={<ComposantCGU />} />
         <Route path="charte-aidant" element={<EcranCharteAidant />} />
         <Route path="relais-associatifs" element={<EcranRelaisAssociatifs />} />
@@ -43,7 +47,6 @@ export const RouteurPublic = () => {
           <Route path="etre-aide" element={<EcranBeneficierDuDispositif />} />
         </Route>
         <Route path="a-propos">
-          <Route path="statistiques" element={<EcranStatistiques />} />
           <Route path="kit-de-communication" element={<KitDeCommunication />} />
         </Route>
         <Route

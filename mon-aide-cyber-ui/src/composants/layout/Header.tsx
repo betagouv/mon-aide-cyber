@@ -53,10 +53,6 @@ export const Header = ({
           route: '/a-propos/kit-de-communication',
           nom: 'Kit de communication',
         },
-        {
-          route: '/a-propos/statistiques',
-          nom: 'Statistiques',
-        },
       ],
     },
   ];
