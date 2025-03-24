@@ -27,13 +27,13 @@ export const definitionAidantInitieDiagnostic: {
 };
 
 export const unTupleUtilisateurInscritInitieDiagnostic = (
-  identifiantAidant: crypto.UUID,
+  identifiantUtilisateurInscrit: crypto.UUID,
   identifiantDiagnostic: crypto.UUID
 ): Tuple =>
   unTuple<DefinitionUtilisateurInscritInitieDiagnostic>(
     definitionUtilisateurInscritInitieDiagnostic
   )
-    .avecUtilisateur(identifiantAidant)
+    .avecUtilisateur(identifiantUtilisateurInscrit)
     .avecObjet(identifiantDiagnostic)
     .construis();
 

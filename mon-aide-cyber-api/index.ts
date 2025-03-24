@@ -67,7 +67,8 @@ const serveurMAC = serveur.creeServeur({
         diagnostic: new AdaptateurReferentielMAC(),
         mesures: new AdaptateurMesures(),
       },
-    }
+    },
+    adaptateurRelations
   ),
   busEvenement: busEvenementMAC,
   gestionnaireErreurs: fabriqueGestionnaireErreurs(),

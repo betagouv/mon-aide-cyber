@@ -96,7 +96,8 @@ class TesteurIntegrationMAC {
             diagnostic: this.adaptateurReferentiel,
             mesures: this.adaptateurMesures,
           },
-        }
+        },
+        this.adaptateurRelations
       ),
       busEvenement: this.busEvenement,
       gestionnaireErreurs: this.gestionnaireErreurs,
