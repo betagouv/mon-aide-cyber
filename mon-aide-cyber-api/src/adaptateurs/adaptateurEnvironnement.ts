@@ -51,6 +51,19 @@ const parametresDeHash = () => ({
   sel: () => process.env.HASH_SEL || '',
 });
 
+const reseauTrustProxy = (): number | string => {
+  const trustProxyEnChaine = process.env.RESEAU_TRUST_PROXY || '0';
+  const trustProxyEnNombre = Number(trustProxyEnChaine);
+  if (isNaN(trustProxyEnNombre)) {
+    console.warn(
+      `Attention ! RESEAU_TRUST_PROXY positionné à ${trustProxyEnChaine}`
+    );
+    return trustProxyEnChaine;
+  } else {
+    return trustProxyEnNombre;
+  }
+};
+
 const adaptateurEnvironnement = {
   messagerie,
   mac,
@@ -60,6 +73,7 @@ const adaptateurEnvironnement = {
   apiRechercheEntreprise,
   nouveauParcoursDevenirAidant,
   parametresDeHash,
+  reseauTrustProxy,
 };
 
 export { sentry, adaptateurEnvironnement };
