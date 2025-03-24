@@ -15,6 +15,8 @@ import {
 } from './Aidant';
 import { RepertoireDeContacts } from '../contacts/RepertoireDeContacts';
 import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { unTupleAidantInitieDiagnostic } from '../diagnostic/tuples';
+import { AdaptateurRelations } from '../relation/AdaptateurRelations';
 
 export type TypeEntite = 'ServicePublic' | 'ServiceEtat' | 'Association';
 
@@ -54,7 +56,8 @@ export class CapteurCommandeCreeEspaceAidant
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,
-    private readonly repertoireDeContacts: RepertoireDeContacts
+    private readonly repertoireDeContacts: RepertoireDeContacts,
+    private readonly adaptateurRelations: AdaptateurRelations
   ) {}
 
   async execute(commande: CommandeCreeEspaceAidant): Promise<EspaceAidantCree> {
@@ -103,6 +106,7 @@ export class CapteurCommandeCreeEspaceAidant
       };
 
       await this.entrepots.aidants().persiste(aidant);
+      await this.promeutUtilisateurInscritEnAidant(identifiant);
       await this.repertoireDeContacts.creeAidant(aidant.email);
 
       await this.busEvenement.publie<AidantCree>({
@@ -122,5 +126,24 @@ export class CapteurCommandeCreeEspaceAidant
         nomPrenom: aidant.nomPrenom,
       };
     }
+  }
+
+  private async promeutUtilisateurInscritEnAidant(
+    identifiantUtilisateur: crypto.UUID
+  ): Promise<void> {
+    const relationsAssociees =
+      await this.adaptateurRelations.diagnosticsFaitsParUtilisateurMAC(
+        identifiantUtilisateur
+      );
+    const relationsCrees = relationsAssociees.map(
+      async (identifiantDiagnostic) => {
+        const relationAuDiagnostic = unTupleAidantInitieDiagnostic(
+          identifiantUtilisateur,
+          identifiantDiagnostic as crypto.UUID
+        );
+        await this.adaptateurRelations.creeTuple(relationAuDiagnostic);
+      }
+    );
+    await Promise.all(relationsCrees);
   }
 }

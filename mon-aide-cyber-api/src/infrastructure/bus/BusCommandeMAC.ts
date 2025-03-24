@@ -28,6 +28,8 @@ import { CapteurCommandeRechercheDemandeAideParEmail } from '../../gestion-deman
 import { CapteurCommandeCreerDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
 import { CapteurCommandeMettreAJourDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeMettreAJourDemandeAide';
 import { adaptateurRepertoireDeContacts } from '../../adaptateurs/adaptateurRepertoireDeContacts';
+import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
+import { AdaptateurRelationsMAC } from '../../relation/AdaptateurRelationsMAC';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -43,6 +45,7 @@ type ParametresCapteur = {
   busEvenements?: BusEvenement;
   adaptateurEnvoiMail?: AdaptateurEnvoiMail;
   services: Services;
+  adaptateurRelations: AdaptateurRelations;
 };
 
 type Capteur = {
@@ -137,7 +140,8 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurCommandeCreeEspaceAidant(
           parametres.entrepots,
           parametres.busEvenements!,
-          adaptateurRepertoireDeContacts()
+          adaptateurRepertoireDeContacts(),
+          parametres.adaptateurRelations
         ),
     },
   ],
@@ -236,7 +240,8 @@ export class BusCommandeMAC implements BusCommande {
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
-    private readonly services: Services
+    private readonly services: Services,
+    private readonly adaptateurRelations: AdaptateurRelations = new AdaptateurRelationsMAC()
   ) {}
 
   publie<C extends Commande, R>(commande: C): Promise<R> {
@@ -256,6 +261,7 @@ export class BusCommandeMAC implements BusCommande {
               mesures: this.services.referentiels.mesures,
             },
           },
+          adaptateurRelations: this.adaptateurRelations,
         })
         .execute(commande);
     }

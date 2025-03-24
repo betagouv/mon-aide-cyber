@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, assert } from 'vitest';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
@@ -18,6 +18,16 @@ import {
   unUtilisateurInscrit,
 } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
+import { unTupleUtilisateurInscritInitieDiagnostic } from '../../src/diagnostic/tuples';
+import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
+import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
+import { EntrepotAidantMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+
+class EntrepotAidantEnErreur extends EntrepotAidantMemoire {
+  async persiste(_entite: Aidant): Promise<void> {
+    return Promise.reject('Erreur lors de la persistance de l’Aidant');
+  }
+}
 
 describe('Capteur de commande de création de compte Aidant', () => {
   it('Crée un compte Aidant', async () => {
@@ -27,7 +37,8 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
       new BusEvenementDeTest(),
-      new AdaptateurRepertoireDeContactsMemoire()
+      new AdaptateurRepertoireDeContactsMemoire(),
+      new AdaptateurRelationsMAC(new EntrepotRelationMemoire())
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
@@ -78,7 +89,8 @@ describe('Capteur de commande de création de compte Aidant', () => {
     await new CapteurCommandeCreeEspaceAidant(
       entrepots,
       new BusEvenementDeTest(),
-      repertoireDeContacts
+      repertoireDeContacts,
+      new AdaptateurRelationsMAC(new EntrepotRelationMemoire())
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
@@ -104,7 +116,8 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const compteAidantCree = new CapteurCommandeCreeEspaceAidant(
       entrepots,
       new BusEvenementDeTest(),
-      new AdaptateurRepertoireDeContactsMemoire()
+      new AdaptateurRepertoireDeContactsMemoire(),
+      new AdaptateurRelationsMAC(new EntrepotRelationMemoire())
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
@@ -136,7 +149,8 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
       busEvenement,
-      new AdaptateurRepertoireDeContactsMemoire()
+      new AdaptateurRepertoireDeContactsMemoire(),
+      new AdaptateurRelationsMAC(new EntrepotRelationMemoire())
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
@@ -171,7 +185,8 @@ describe('Capteur de commande de création de compte Aidant', () => {
     const aidantCree = await new CapteurCommandeCreeEspaceAidant(
       entrepots,
       busEvenement,
-      new AdaptateurRepertoireDeContactsMemoire()
+      new AdaptateurRepertoireDeContactsMemoire(),
+      new AdaptateurRelationsMAC(new EntrepotRelationMemoire())
     ).execute({
       identifiant: crypto.randomUUID(),
       dateSignatureCGU,
@@ -211,7 +226,8 @@ describe('Capteur de commande de création de compte Aidant', () => {
       await new CapteurCommandeCreeEspaceAidant(
         entrepots,
         new BusEvenementDeTest(),
-        new AdaptateurRepertoireDeContactsMemoire()
+        new AdaptateurRepertoireDeContactsMemoire(),
+        new AdaptateurRelationsMAC(new EntrepotRelationMemoire())
       ).execute({
         identifiant: crypto.randomUUID(),
         dateSignatureCGU: FournisseurHorloge.maintenant(),
@@ -247,6 +263,107 @@ describe('Capteur de commande de création de compte Aidant', () => {
         },
         consentementAnnuaire: false,
       });
+    });
+
+    it("Rattache les diagnostics de l'utilisateur inscrit", async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const entrepots = new EntrepotsMemoire();
+      const adaptateurRelations = new AdaptateurRelationsMAC(
+        new EntrepotRelationMemoire()
+      );
+      const utilisateurInscrit = unUtilisateurInscrit()
+        .avecUnNomPrenom('Jean Dupont')
+        .avecUnEmail('jean.dupont@email.com')
+        .construis();
+      await entrepots.utilisateursInscrits().persiste(utilisateurInscrit);
+      const identifiantDiagnostic = crypto.randomUUID();
+      const relation = unTupleUtilisateurInscritInitieDiagnostic(
+        utilisateurInscrit.identifiant,
+        identifiantDiagnostic
+      );
+      await adaptateurRelations.creeTuple(relation);
+
+      await new CapteurCommandeCreeEspaceAidant(
+        entrepots,
+        new BusEvenementDeTest(),
+        new AdaptateurRepertoireDeContactsMemoire(),
+        adaptateurRelations
+      ).execute({
+        identifiant: crypto.randomUUID(),
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        email: 'jean.dupont@email.com',
+        nomPrenom: 'Jean Dupont',
+        type: 'CommandeCreeEspaceAidant',
+        departement: {
+          nom: 'Alpes-de-Haute-Provence',
+          code: '4',
+          codeRegion: '93',
+        },
+      });
+
+      expect(
+        await adaptateurRelations.relationExiste(
+          'initiateur',
+          {
+            type: 'aidant',
+            identifiant: utilisateurInscrit.identifiant,
+          },
+          { type: 'diagnostic', identifiant: identifiantDiagnostic }
+        )
+      ).toBe(true);
+    });
+
+    it("Ne rattache pas les diagnostics de l'utilisateur inscrit si l’Aidant n’a pu être promu", async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const entrepots = new EntrepotsMemoire();
+      entrepots.aidants = () => new EntrepotAidantEnErreur();
+      const adaptateurRelations = new AdaptateurRelationsMAC(
+        new EntrepotRelationMemoire()
+      );
+      const utilisateurInscrit = unUtilisateurInscrit()
+        .avecUnNomPrenom('Jean Dupont')
+        .avecUnEmail('jean.dupont@email.com')
+        .construis();
+      await entrepots.utilisateursInscrits().persiste(utilisateurInscrit);
+      const identifiantDiagnostic = crypto.randomUUID();
+      const relation = unTupleUtilisateurInscritInitieDiagnostic(
+        utilisateurInscrit.identifiant,
+        identifiantDiagnostic
+      );
+      await adaptateurRelations.creeTuple(relation);
+      try {
+        await new CapteurCommandeCreeEspaceAidant(
+          entrepots,
+          new BusEvenementDeTest(),
+          new AdaptateurRepertoireDeContactsMemoire(),
+          adaptateurRelations
+        ).execute({
+          identifiant: crypto.randomUUID(),
+          dateSignatureCGU: FournisseurHorloge.maintenant(),
+          email: 'jean.dupont@email.com',
+          nomPrenom: 'Jean Dupont',
+          type: 'CommandeCreeEspaceAidant',
+          departement: {
+            nom: 'Alpes-de-Haute-Provence',
+            code: '4',
+            codeRegion: '93',
+          },
+        });
+        assert.fail(
+          'Ce test est sensé échouer car on simule une erreur lors de la persistance de l’Aidant'
+        );
+      } catch (_) {
+        expect(
+          await adaptateurRelations.relationExiste(
+            'initiateur',
+            {
+              type: 'aidant',
+              identifiant: utilisateurInscrit.identifiant,
+            },
+            { type: 'diagnostic', identifiant: identifiantDiagnostic }
+          )
+        ).toBe(false);
+      }
     });
   });
 });

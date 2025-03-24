@@ -28,23 +28,20 @@ describe('Capteur saga demande solliciter Aide', () => {
   let busCommande: BusCommandeMAC;
 
   beforeEach(() => {
+    adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+    entrepots = new EntrepotsMemoire();
+    busEvenement = new BusEvenementDeTest();
+    busCommande = new BusCommandeMAC(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      unConstructeurDeServices(entrepots.aidants())
+    );
     adaptateursCorpsMessage.sollicitation =
       unAdaptateurDeCorpsDeMessage().construis().sollicitation;
   });
 
   describe("En ce qui concerne l'Aidant", () => {
-    beforeEach(() => {
-      adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      entrepots = new EntrepotsMemoire();
-      busEvenement = new BusEvenementDeTest();
-      busCommande = new BusCommandeMAC(
-        entrepots,
-        busEvenement,
-        adaptateurEnvoiMail,
-        unConstructeurDeServices(entrepots.aidants())
-      );
-    });
-
     it("Envoie le mail sollicitant l'aide à l'Aidant indiqué", async () => {
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
@@ -74,16 +71,6 @@ describe('Capteur saga demande solliciter Aide', () => {
             `Bonjour Aidant! ${proprietes.raisonSocialeEntite}`
         )
         .construis().sollicitation;
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      const entrepots = new EntrepotsMemoire();
-
-      const busEvenement = new BusEvenementDeTest();
-      const busCommande = new BusCommandeMAC(
-        entrepots,
-        busEvenement,
-        adaptateurEnvoiMail,
-        unConstructeurDeServices(entrepots.aidants())
-      );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
 
@@ -112,25 +99,14 @@ describe('Capteur saga demande solliciter Aide', () => {
     it("publie l'événément 'AIDE_VIA_SOLLICITATION_AIDANT_CREE'", async () => {
       const maintenant = new Date();
       FournisseurHorlogeDeTest.initialise(maintenant);
-      const entrepotsMemoire = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest();
-      const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
-
-      const busCommande = new BusCommandeMAC(
-        entrepotsMemoire,
-        busEvenement,
-        adaptateurEnvoieMail,
-        unConstructeurDeServices(entrepotsMemoire.aidants())
-      );
-
       const aidant = unAidant().construis();
-      await entrepotsMemoire.aidants().persiste(aidant);
+      await entrepots.aidants().persiste(aidant);
 
       await new CapteurSagaDemandeSolliciterAide(
         busCommande,
         busEvenement,
-        adaptateurEnvoieMail,
-        unServiceAidant(entrepotsMemoire.aidants())
+        adaptateurEnvoiMail,
+        unServiceAidant(entrepots.aidants())
       ).execute({
         type: 'SagaDemandeSolliciterAide',
         email: 'jean-dupont@email.com',
@@ -140,7 +116,7 @@ describe('Capteur saga demande solliciter Aide', () => {
       });
 
       const aideRecue = (
-        await (entrepotsMemoire.demandesAides() as EntrepotAideMemoire).tous()
+        await (entrepots.demandesAides() as EntrepotAideMemoire).tous()
       )[0];
 
       expect(
@@ -173,31 +149,9 @@ describe('Capteur saga demande solliciter Aide', () => {
   });
 
   describe('En ce qui concerne MAC', () => {
-    beforeEach(() => {
-      adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      entrepots = new EntrepotsMemoire();
-      busEvenement = new BusEvenementDeTest();
-      busCommande = new BusCommandeMAC(
-        entrepots,
-        busEvenement,
-        adaptateurEnvoiMail,
-        unConstructeurDeServices(entrepots.aidants())
-      );
-    });
-
     it('Envoie le mail récapitulatif à MAC', async () => {
       adaptateurEnvironnement.messagerie = () =>
         adaptateursEnvironnementDeTest.messagerie('mac@mail.com');
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      const entrepots = new EntrepotsMemoire();
-
-      const busEvenement = new BusEvenementDeTest();
-      const busCommande = new BusCommandeMAC(
-        entrepots,
-        busEvenement,
-        adaptateurEnvoiMail,
-        unConstructeurDeServices(entrepots.aidants())
-      );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
 
@@ -227,15 +181,6 @@ describe('Capteur saga demande solliciter Aide', () => {
           (proprietes) => `Bonjour MAC! ${proprietes.raisonSociale}`
         )
         .construis().sollicitation;
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      const entrepots = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest();
-      const busCommande = new BusCommandeMAC(
-        entrepots,
-        busEvenement,
-        adaptateurEnvoiMail,
-        unConstructeurDeServices(entrepots.aidants())
-      );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
 
@@ -259,28 +204,7 @@ describe('Capteur saga demande solliciter Aide', () => {
   });
 
   describe("En ce qui concerne l'Aidé", () => {
-    beforeEach(() => {
-      adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      entrepots = new EntrepotsMemoire();
-      busEvenement = new BusEvenementDeTest();
-      busCommande = new BusCommandeMAC(
-        entrepots,
-        busEvenement,
-        adaptateurEnvoiMail,
-        unConstructeurDeServices(entrepots.aidants())
-      );
-    });
-
     it("Envoie le mail récapitulatif de la sollicitation à l'Aidé", async () => {
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      const entrepots = new EntrepotsMemoire();
-      const busEvenement = new BusEvenementDeTest();
-      const busCommande = new BusCommandeMAC(
-        entrepots,
-        busEvenement,
-        adaptateurEnvoiMail,
-        unConstructeurDeServices(entrepots.aidants())
-      );
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
 
