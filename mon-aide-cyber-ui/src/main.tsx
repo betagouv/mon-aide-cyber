@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './assets/styles/index.scss';
+import '@lab-anssi/ui-kit/dist/webcomponents';
 import { BrowserRouter } from 'react-router-dom';
 import { ComposantAffichageErreur } from './composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
