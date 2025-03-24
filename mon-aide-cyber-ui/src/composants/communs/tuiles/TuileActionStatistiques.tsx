@@ -14,7 +14,7 @@ function TuileActionStatistiques() {
           projets sont <b>ouvertes à tous</b> ! Le projet est accompagné par le
           Laboratoire d’innovation de l’ANSSI et la DINUM.
         </p>
-        <a href="/a-propos/statistiques">
+        <a href="/statistiques-utilisation">
           <button
             type="button"
             className="fr-btn bouton-mac bouton-mac-primaire"
