@@ -5,6 +5,7 @@ import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateu
 import { useUtilisateur } from '../../fournisseurs/hooks.ts';
 import { NavigationPublique } from './header/NavigationPublique.tsx';
 import { BandeauMaintenance } from '../alertes/BandeauMaintenance.tsx';
+import { BandeauDePromotionMSC } from '../alertes/BandeauDePromotionMSC.tsx';
 
 export type HeaderProprietes = PropsWithChildren<{
   lienMAC: ReactElement;
@@ -120,6 +121,8 @@ export const Header = ({
       {maintenanceEstPrevue && (
         <BandeauMaintenance creneauDeMaintenance={maintenanceEstPrevue} />
       )}
+
+      <BandeauDePromotionMSC />
 
       {!enteteSimple && afficheNavigation ? (
         <div

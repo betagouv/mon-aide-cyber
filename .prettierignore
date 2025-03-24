@@ -1,5 +1,6 @@
 mon-aide-cyber-ui/dist/
 mon-aide-cyber-ui/public/dsfr/
+mon-aide-cyber-ui/public/lab-anssi-ui-kit/
 **/*.html
 **/*.scss
 **/*.css
