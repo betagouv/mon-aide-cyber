@@ -108,13 +108,23 @@ export class EntrepotRelationPostgres
   typeRelationExiste(relation: Relation, objet: Objet): Promise<boolean> {
     return this.knex
       .from(this.nomTable())
-      .andWhereRaw("(donnees->>'relation') = ?", relation)
+      .whereRaw("(donnees->>'relation') = ?", relation)
       .andWhereRaw("(donnees->'objet') @> :objet", { objet })
       .select(`${this.nomTable()}.*`)
       .then((lignes) => lignes.length > 0);
   }
 
-  supprimeLesRelations(_relations: Relations): Promise<void> {
-    throw new Error('Method not implemented.');
+  async supprimeLesRelations(relations: Relations): Promise<void> {
+    const suppressionRelations = relations.map((relation) => {
+      return this.knex
+        .from(this.nomTable())
+        .whereRaw("(donnees->>'relation') = ?", relation.relation)
+        .andWhereRaw("(donnees->'objet') @> :objet", { objet: relation.objet })
+        .andWhereRaw("(donnees->'utilisateur') @> :utilisateur", {
+          utilisateur: relation.utilisateur,
+        })
+        .delete();
+    });
+    await Promise.all(suppressionRelations);
   }
 }

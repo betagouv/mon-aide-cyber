@@ -32,6 +32,12 @@ type DefinitionTupleTest = DefinitionTuple & {
   typeUtilisateur: 'mon-utilisateur';
 };
 
+type DefinitionAutreTupleTest = DefinitionTuple & {
+  relation: 'autre-relation';
+  typeObjet: 'mon-objet';
+  typeUtilisateur: 'mon-utilisateur';
+};
+
 describe('Entrepot Relation Postgres', () => {
   beforeEach(async () => {
     await nettoieLaBaseDeDonneesRelations();
@@ -124,5 +130,77 @@ describe('Entrepot Relation Postgres', () => {
         tuple.objet
       )
     ).toBe(true);
+  });
+
+  it('Supprime les relations', async () => {
+    const identifiantUtilisateur = crypto.randomUUID();
+    const identifiantObjet1 = crypto.randomUUID();
+    const tuple1: Tuple = unTuple<DefinitionTupleTest>({
+      definition: {
+        relation: 'ma-relation',
+        typeObjet: 'mon-objet',
+        typeUtilisateur: 'mon-utilisateur',
+      },
+    })
+      .avecObjet(identifiantObjet1)
+      .avecUtilisateur(identifiantUtilisateur)
+      .construis();
+    const identifiantObjet2 = crypto.randomUUID();
+    const tuple2: Tuple = unTuple<DefinitionTupleTest>({
+      definition: {
+        relation: 'ma-relation',
+        typeObjet: 'mon-objet',
+        typeUtilisateur: 'mon-utilisateur',
+      },
+    })
+      .avecObjet(identifiantObjet2)
+      .avecUtilisateur(identifiantUtilisateur)
+      .construis();
+    const tuple3: Tuple = unTuple<DefinitionAutreTupleTest>({
+      definition: {
+        relation: 'autre-relation',
+        typeObjet: 'mon-objet',
+        typeUtilisateur: 'mon-utilisateur',
+      },
+    })
+      .avecObjet(crypto.randomUUID())
+      .avecUtilisateur(identifiantUtilisateur)
+      .construis();
+
+    const entrepotRelation = new EntrepotRelationPostgres();
+    await entrepotRelation.persiste(tuple1);
+    await entrepotRelation.persiste(tuple2);
+    await entrepotRelation.persiste(tuple3);
+
+    await entrepotRelation.supprimeLesRelations([
+      {
+        relation: 'ma-relation',
+        utilisateur: {
+          type: 'mon-utilisateur',
+          identifiant: identifiantUtilisateur,
+        },
+        objet: {
+          type: 'mon-objet',
+          identifiant: identifiantObjet1,
+        },
+      },
+      {
+        relation: 'ma-relation',
+        utilisateur: {
+          type: 'mon-utilisateur',
+          identifiant: identifiantUtilisateur,
+        },
+        objet: {
+          type: 'mon-objet',
+          identifiant: identifiantObjet2,
+        },
+      },
+    ]);
+
+    expect(
+      await entrepotRelation.trouveObjetsLiesAUtilisateur(
+        identifiantUtilisateur
+      )
+    ).toStrictEqual([tuple3]);
   });
 });
