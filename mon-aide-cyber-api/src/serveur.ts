@@ -35,6 +35,7 @@ import { routesAssociations } from './api/associations/routesAssociations';
 import { AdaptateurDeVerificationDeDemande } from './adaptateurs/AdaptateurDeVerificationDeDemande';
 import { AdaptateurAseptisation } from './adaptateurs/AdaptateurAseptisation';
 import { RepertoireDeContacts } from './contacts/RepertoireDeContacts';
+import { positionneLesCsp } from './infrastructure/securite/Http';
 import { adaptateurEnvironnement } from './adaptateurs/adaptateurEnvironnement';
 import { filtreIp } from './infrastructure/securite/Reseau';
 
@@ -108,7 +109,7 @@ const creeApp = (config: ConfigurationServeur) => {
   }
 
   app.use((_: Request, reponse: Response, suite: NextFunction) => {
-    reponse.setHeader('Content-Security-Policy', process.env.MAC_CSP || '*');
+    positionneLesCsp(reponse, adaptateurEnvironnement.http().csp());
     reponse.setHeader(
       'Strict-Transport-Security',
       'max-age=63072000; includeSubDomains; preload'

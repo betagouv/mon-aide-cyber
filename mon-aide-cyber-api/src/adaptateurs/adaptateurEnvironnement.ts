@@ -51,6 +51,10 @@ const parametresDeHash = () => ({
   sel: () => process.env.HASH_SEL || '',
 });
 
+const http = () => ({
+  csp: (): string => process.env.MAC_CSP || '',
+});
+
 const trustProxy = (): number | string => {
   const trustProxyEnChaine = process.env.RESEAU_TRUST_PROXY || '0';
   const trustProxyEnNombre = Number(trustProxyEnChaine);
@@ -76,6 +80,7 @@ const adaptateurEnvironnement = {
   apiRechercheEntreprise,
   nouveauParcoursDevenirAidant,
   parametresDeHash,
+  http,
   reseauTrustProxy: trustProxy,
   ipAutorisees,
 };
