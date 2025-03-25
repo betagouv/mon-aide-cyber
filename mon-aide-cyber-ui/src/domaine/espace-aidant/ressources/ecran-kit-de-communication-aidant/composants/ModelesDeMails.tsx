@@ -1,5 +1,5 @@
 import { TypographieH4 } from '../../../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
-import Cadre from '../../../../../composants/a-propos/Cadre.tsx';
+import Cadre from '../../../../../composants/promouvoir/Cadre.tsx';
 
 export const ModelesDeMails = () => {
   return (

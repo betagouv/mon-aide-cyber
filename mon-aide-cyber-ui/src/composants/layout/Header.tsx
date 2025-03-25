@@ -45,15 +45,9 @@ export const Header = ({
       nom: 'Réaliser des diagnostics ANSSI',
     },
     {
-      route: '/a-propos',
-      nom: 'À propos',
+      route: '/kit-de-communication',
+      nom: 'Promouvoir MonAideCyber',
       clef: 776,
-      enfants: [
-        {
-          route: '/a-propos/kit-de-communication',
-          nom: 'Kit de communication',
-        },
-      ],
     },
   ];
 
