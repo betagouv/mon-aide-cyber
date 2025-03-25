@@ -23,6 +23,7 @@ import { ErreurRequeteHTTP } from '../recherche-entreprise/routesAPIRechercheEnt
 import { ErreurAidantNonTrouve } from '../../espace-utilisateur-inscrit/ServiceUtilisateurInscritMAC';
 import { RequeteUtilisateur } from '../routesAPI';
 import { ErreurLectureReferentielAssociations } from '../associations/routesAssociations';
+import { IpDeniedError } from 'express-ipfilter';
 
 const HTTP_ACCEPTE = 202;
 const HTTP_MAUVAISE_REQUETE = 400;
@@ -330,6 +331,9 @@ export const gestionnaireErreurGeneralisee = (
           construisReponseErreurServeur();
           suite(erreur);
         }
+      } else if (erreur instanceof IpDeniedError) {
+        reponse.status(401);
+        reponse.end();
       } else {
         construisReponseErreurServeur();
         suite(erreur);
