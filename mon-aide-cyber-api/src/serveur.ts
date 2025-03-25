@@ -1,4 +1,5 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import express, { Request, RequestHandler, Response } from 'express';
 import * as http from 'http';
 import routesAPI from './api/routesAPI';
@@ -117,21 +118,30 @@ const creeApp = (config: ConfigurationServeur) => {
     reponse.setHeader('X-Content-Type-Options', 'nosniff');
     suite();
   });
+
+  const indexBrutCache = lisLeFichierIndex();
+  const indexAvecLeNonce = (reponse: Response) => {
+    const indexAvecNonce = indexBrutCache.replace(
+      '%%NONCE%%',
+      reponse.locals['nonce']
+    );
+
+    reponse.setHeader('Content-Type', 'text/html').send(indexAvecNonce);
+  };
+
+  app.get('/', (_: Request, reponse: Response) => indexAvecLeNonce(reponse));
+
   app.use(
     express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist'))
   );
+
   app.use('/api', routesAPI(config));
   app.use('/associations', routesAssociations(config));
-
   app.use('/pro-connect', routesProConnect(config));
   app.use('/contact', routeContact(config));
   app.use('/statistiques', routesStatistiques(config));
 
-  app.get('*', (_: Request, reponse: Response) =>
-    reponse.sendFile(
-      path.join(__dirname, './../../mon-aide-cyber-ui/dist/index.html')
-    )
-  );
+  app.get('*', (_: Request, reponse: Response) => indexAvecLeNonce(reponse));
 
   app.use(
     gestionnaireErreurGeneralisee(config.gestionnaireErreurs.consignateur())
@@ -139,6 +149,14 @@ const creeApp = (config: ConfigurationServeur) => {
   app.use(config.gestionnaireErreurs.controleurErreurs());
 
   return app;
+};
+
+const lisLeFichierIndex = () => {
+  const cheminIndex = path.join(
+    __dirname,
+    './../../mon-aide-cyber-ui/dist/index.html'
+  );
+  return fs.readFileSync(cheminIndex, 'utf8');
 };
 
 const creeServeur = (config: ConfigurationServeur) => {
