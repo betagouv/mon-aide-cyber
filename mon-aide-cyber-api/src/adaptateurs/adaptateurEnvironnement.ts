@@ -51,7 +51,7 @@ const parametresDeHash = () => ({
   sel: () => process.env.HASH_SEL || '',
 });
 
-const reseauTrustProxy = (): number | string => {
+const trustProxy = (): number | string => {
   const trustProxyEnChaine = process.env.RESEAU_TRUST_PROXY || '0';
   const trustProxyEnNombre = Number(trustProxyEnChaine);
   if (isNaN(trustProxyEnNombre)) {
@@ -64,6 +64,9 @@ const reseauTrustProxy = (): number | string => {
   }
 };
 
+const ipAutorisees = (): false | string[] =>
+  process.env.RESEAU_ADRESSES_IP_AUTORISEES?.split(',') ?? false;
+
 const adaptateurEnvironnement = {
   messagerie,
   mac,
@@ -73,7 +76,8 @@ const adaptateurEnvironnement = {
   apiRechercheEntreprise,
   nouveauParcoursDevenirAidant,
   parametresDeHash,
-  reseauTrustProxy,
+  reseauTrustProxy: trustProxy,
+  ipAutorisees,
 };
 
 export { sentry, adaptateurEnvironnement };

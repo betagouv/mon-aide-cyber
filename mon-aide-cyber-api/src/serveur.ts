@@ -36,6 +36,7 @@ import { AdaptateurDeVerificationDeDemande } from './adaptateurs/AdaptateurDeVer
 import { AdaptateurAseptisation } from './adaptateurs/AdaptateurAseptisation';
 import { RepertoireDeContacts } from './contacts/RepertoireDeContacts';
 import { adaptateurEnvironnement } from './adaptateurs/adaptateurEnvironnement';
+import { filtreIp } from './infrastructure/securite/Reseau';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -75,6 +76,10 @@ const creeApp = (config: ConfigurationServeur) => {
 
   config.gestionnaireErreurs.initialise(app);
   app.set('trust proxy', adaptateurEnvironnement.reseauTrustProxy());
+
+  const ipAutorisees = adaptateurEnvironnement.ipAutorisees();
+  if (ipAutorisees) app.use(filtreIp(ipAutorisees));
+
   app.use(
     CookieSession({
       sameSite: true,
