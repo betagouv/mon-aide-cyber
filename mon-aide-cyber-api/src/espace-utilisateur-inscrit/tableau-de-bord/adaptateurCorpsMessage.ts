@@ -14,7 +14,7 @@ const genereCorpsConfirmation = (nomPrenom: string): string =>
   'Quelques idées pour vous aider à trouver des entités à diagnostiquer :\n' +
   '<ol>' +
   '<li>Annoncez la nouvelle aux membres de votre réseau professionnel et proposez-leur ' +
-  `la réalisation d’un diagnostic. Notre <a href="${adaptateurEnvironnement.mac().urlMAC()}/a-propos/kit-de-communication">kit de communication</a> est disponible sur ` +
+  `la réalisation d’un diagnostic. Notre <a href="${adaptateurEnvironnement.mac().urlMAC()}/kit-de-communication">kit de communication</a> est disponible sur ` +
   'notre site pour vous aider.</li>' +
   `<li>Rapprochez-vous de l’équipe <a href="mailto:${adaptateurEnvironnement.messagerie().emailMAC()}">MonAideCyber</a> si vous avez des opportunités ou ` +
   'des idées pour promouvoir le dispositif auprès de votre écosystème local ' +

@@ -5,7 +5,7 @@ import { ComposantIntercepteur } from './composants/intercepteurs/ComposantInter
 import { EcranCharteAidant } from './vues/EcranCharteAidant.tsx';
 import { ComposantCGU } from './vues/ComposantCGU.tsx';
 import { MentionsLegales } from './vues/MentionsLegales.tsx';
-import { KitDeCommunication } from './composants/a-propos/KitDeCommunication.tsx';
+import { KitDeCommunication } from './composants/promouvoir/KitDeCommunication.tsx';
 import { LayoutPublic } from './composants/layout/LayoutPublic.tsx';
 import { CapteurEcranCreationEspaceAidant } from './domaine/espace-aidant/demande-aidant-creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { LayoutCreationEspaceAidant } from './composants/layout/LayoutCreationEspaceAidant.tsx';
@@ -46,9 +46,7 @@ export const RouteurPublic = () => {
           </Route>
           <Route path="etre-aide" element={<EcranBeneficierDuDispositif />} />
         </Route>
-        <Route path="a-propos">
-          <Route path="kit-de-communication" element={<KitDeCommunication />} />
-        </Route>
+        <Route path="kit-de-communication" element={<KitDeCommunication />} />
         <Route
           path="realiser-des-diagnostics-anssi"
           element={<EcranRealiserDesDiagnosticsANSSI />}
