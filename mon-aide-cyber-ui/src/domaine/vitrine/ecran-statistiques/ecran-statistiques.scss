@@ -10,8 +10,6 @@
 
     .hero-layout {
         width: 100%;
-        padding-left: 1rem;
-        padding-right: 1rem;
 
         display: flex;
         flex-direction: column-reverse;
@@ -23,19 +21,19 @@
         @include a-partir-de(md) {
             flex-direction: row;
             padding-top: 2.5rem;
-            padding-bottom: 1rem;
+            padding-bottom: 2.5rem;
         }
 
         @include a-partir-de(lg) {
             flex-direction: row;
             padding-top: 2.5rem;
-            padding-bottom: 1rem;
+            padding-bottom: 2.5rem;
         }
 
         @include a-partir-de(xl) {
             flex-direction: row;
             padding-top: 2.5rem;
-            padding-bottom: 0;
+            padding-bottom: 2.5rem;
         }
         
         section {
