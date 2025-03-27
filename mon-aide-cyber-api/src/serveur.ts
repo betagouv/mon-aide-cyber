@@ -119,17 +119,9 @@ const creeApp = (config: ConfigurationServeur) => {
     suite();
   });
 
-  const indexBrutCache = lisLeFichierIndex();
-  const indexAvecLeNonce = (reponse: Response) => {
-    const indexAvecNonce = indexBrutCache.replace(
-      '%%NONCE%%',
-      reponse.locals['nonce']
-    );
-
-    reponse.setHeader('Content-Type', 'text/html').send(indexAvecNonce);
-  };
-
-  app.get('/', (_: Request, reponse: Response) => indexAvecLeNonce(reponse));
+  app.get('/', (_: Request, reponse: Response) =>
+    envoieIndexAvecNonce(reponse)
+  );
 
   app.use(
     express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist'))
@@ -141,7 +133,9 @@ const creeApp = (config: ConfigurationServeur) => {
   app.use('/contact', routeContact(config));
   app.use('/statistiques', routesStatistiques(config));
 
-  app.get('*', (_: Request, reponse: Response) => indexAvecLeNonce(reponse));
+  app.get('*', (_: Request, reponse: Response) =>
+    envoieIndexAvecNonce(reponse)
+  );
 
   app.use(
     gestionnaireErreurGeneralisee(config.gestionnaireErreurs.consignateur())
@@ -157,6 +151,15 @@ const lisLeFichierIndex = () => {
     './../../mon-aide-cyber-ui/dist/index.html'
   );
   return fs.readFileSync(cheminIndex, 'utf8');
+};
+
+const envoieIndexAvecNonce = (reponse: Response) => {
+  const indexAvecLeNonce = lisLeFichierIndex().replace(
+    '%%NONCE%%',
+    reponse.locals['nonce']
+  );
+
+  reponse.setHeader('Content-Type', 'text/html').send(indexAvecLeNonce);
 };
 
 const creeServeur = (config: ConfigurationServeur) => {
