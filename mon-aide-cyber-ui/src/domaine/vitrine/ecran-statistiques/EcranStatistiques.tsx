@@ -70,9 +70,9 @@ export const EcranStatistiques = () => {
   return (
     <main role="main" className="ecran-statistiques">
       <HeroStatistiques />
-      <section className="fond-clair-mac" style={{ padding: '2.5rem 0' }}>
+      <section className="contenu-page-statique fond-clair-mac">
         <div
-          className="fr-container"
+          className="contenu-section"
           style={{ display: 'flex', flexDirection: 'column', gap: '5rem' }}
         >
           {!enCoursDeChargement ? (
