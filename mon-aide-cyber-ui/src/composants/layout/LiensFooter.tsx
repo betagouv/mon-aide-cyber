@@ -28,6 +28,11 @@ export const LiensFooter = () => (
       </a>
     </li>
     <li className="fr-footer__bottom-item">
+      <a className="fr-footer__bottom-link" href="/securite">
+        Sécurité
+      </a>
+    </li>
+    <li className="fr-footer__bottom-item">
       <a
         className="fr-footer__bottom-link"
         href={URL_CRISP_MAC}
