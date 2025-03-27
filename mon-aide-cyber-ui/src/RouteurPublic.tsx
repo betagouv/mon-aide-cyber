@@ -25,6 +25,7 @@ import { EcranDemandeDevenirAidant } from './domaine/gestion-demandes/parcours-a
 import { EcranUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/vitrine/EcranUtilisationDuService.tsx';
 import { EcranRealiserDesDiagnosticsANSSI } from './domaine/vitrine/ecran-realiser-des-diagnostics-anssi/EcranRealiserDesDiagnosticsANSSI.tsx';
 import { EcranRelaisAssociatifs } from './domaine/vitrine/ecran-relais-associatifs/EcranRelaisAssociatifs.tsx';
+import { EcranSecurite } from './domaine/vitrine/ecran-securite/EcranSecurite.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -37,6 +38,7 @@ export const RouteurPublic = () => {
           element={<EcranStatistiques />}
         />
         <Route path="cgu" element={<ComposantCGU />} />
+        <Route path="securite" element={<EcranSecurite />} />
         <Route path="charte-aidant" element={<EcranCharteAidant />} />
         <Route path="relais-associatifs" element={<EcranRelaisAssociatifs />} />
         <Route path="beneficier-du-dispositif">

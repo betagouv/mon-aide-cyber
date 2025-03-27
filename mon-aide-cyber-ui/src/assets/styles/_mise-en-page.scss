@@ -1,1 +1,41 @@
+@import './points-de-rupture.scss';
 $marge-exterieure: 16em;
+
+
+.contenu-page-statique {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .contenu-section {
+    @include a-partir-de(lg) {
+      max-width: 996px;
+    }
+
+    img.encart-homologation {
+      width: 100%;
+
+      &.encart-tablette, &.encart-desktop {
+        display: none;
+      }
+
+      @include a-partir-de(sm) {
+        &.encart-tablette {
+          display: block;
+        }
+        &.encart-mobile {
+          display: none;
+        }
+      }
+      @include a-partir-de(lg) {
+        &.encart-desktop {
+          display: block;
+        }
+        &.encart-tablette, &.encart-mobile {
+          display: none;
+        }
+      }
+    }
+  }
+}
