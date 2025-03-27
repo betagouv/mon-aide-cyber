@@ -38,6 +38,20 @@
     >
     </script>
 
+    <script type="text/javascript">
+      const insertMetaTag = () => {
+        const contenuMeta = "%VITE_GOOGLE_SEARCH_CONSOLE_VERIFICATION%"
+        if(contenuMeta) {
+          const tagMeta = document.createElement("meta");
+          tagMeta.name = "google-site-verification";
+          tagMeta.content = contenuMeta;
+
+          document.head.appendChild(tagMeta);
+        }
+      };
+      window.onload = insertMetaTag;
+    </script>
+
     <title>MonAideCyber</title>
   </head>
   <body id="root">
