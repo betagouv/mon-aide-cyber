@@ -41,7 +41,7 @@
     <script type="text/javascript">
       const insertMetaTag = () => {
         const contenuMeta = "%VITE_GOOGLE_SEARCH_CONSOLE_VERIFICATION%"
-        if(contenuMeta) {
+        if(contenuMeta !== "false") {
           const tagMeta = document.createElement("meta");
           tagMeta.name = "google-site-verification";
           tagMeta.content = contenuMeta;
