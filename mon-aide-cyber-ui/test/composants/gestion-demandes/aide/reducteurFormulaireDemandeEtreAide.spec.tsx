@@ -559,7 +559,7 @@ describe('Parcours CGU Aidé', () => {
           email: '',
           pretPourEnvoi: false,
           departements: [],
-          relationUtilisateurSaisie: 'Non',
+          relationUtilisateurSaisie: undefined,
           valeurSaisieDepartement: '',
         });
       });
