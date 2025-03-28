@@ -20,7 +20,7 @@ export type EtatFormulaireDemandeEtreAide = {
   raisonSociale?: string;
   pretPourEnvoi: boolean;
   departements: Departement[];
-  relationUtilisateurSaisie: undefined | 'Non' | Email;
+  relationUtilisateurSaisie: undefined | Email;
   relationUtilisateurFournie?: true;
   valeurSaisieDepartement: string;
 };
@@ -106,7 +106,9 @@ const construisErreurRelationUtilisateurSaisie = (
     : undefined;
 };
 
-type ChampNouvelEtat = { [clef: string]: boolean | string | Departement };
+type ChampNouvelEtat = {
+  [clef: string]: boolean | string | undefined | Departement;
+};
 
 type ParametreGenerationNouvelEtat = {
   champ: keyof ErreurFormulaireDemandeEtreAide;
@@ -218,7 +220,7 @@ export const reducteurFormulaireDemandeEtreAide = (
     case TypeActionFormulaireDemandeEtreAide.RELATION_AIDANT_CLIQUEE: {
       return genereNouvelEtat({
         ajouteAuNouvelEtat: () => ({
-          relationUtilisateurSaisie: !action.estEnRelation ? 'Non' : '',
+          relationUtilisateurSaisie: !action.estEnRelation ? undefined : '',
         }),
         champ: 'relationUtilisateurSaisie',
         champValide: () => true,
