@@ -4,7 +4,6 @@ import {
   useCallback,
   useEffect,
   useReducer,
-  useState,
 } from 'react';
 import {
   adresseElectroniqueSaisie,
@@ -82,14 +81,12 @@ const ChampSaisieEmailUtilisateur = ({
 export const FormulaireDemandeEtreAide = (
   proprietes: ProprietesSaisiesInformations
 ) => {
-  const [etatFormulaireDemandeEtreAide, envoie] = useReducer(
+  const [etatFormulaire, envoie] = useReducer(
     reducteurFormulaireDemandeEtreAide,
     initialiseEtatFormulaireDemandeEtreAide(proprietes.departements)
   );
   const [searchParams] = useSearchParams();
   const parametreMailUtilisateur = partageEmail().decode(searchParams);
-  const [relationUtilisateurOuiClique, setRelationUtilisateurOuiClique] =
-    useState(false);
 
   useEffect(
     () => envoie(departementsCharges(proprietes.departements)),
@@ -106,16 +103,13 @@ export const FormulaireDemandeEtreAide = (
     e.preventDefault();
 
     proprietes.surValidation.execute({
-      cguValidees: etatFormulaireDemandeEtreAide.cguValidees,
-      departement: etatFormulaireDemandeEtreAide.departement.nom,
-      email: etatFormulaireDemandeEtreAide.email,
-      raisonSociale: etatFormulaireDemandeEtreAide.raisonSociale,
-      ...(etatFormulaireDemandeEtreAide.relationUtilisateurSaisie !==
-        undefined &&
-        etatFormulaireDemandeEtreAide.relationUtilisateurSaisie !== 'Non' && {
-          relationUtilisateur:
-            etatFormulaireDemandeEtreAide.relationUtilisateurSaisie,
-        }),
+      cguValidees: etatFormulaire.cguValidees,
+      departement: etatFormulaire.departement.nom,
+      email: etatFormulaire.email,
+      raisonSociale: etatFormulaire.raisonSociale,
+      ...(etatFormulaire.relationUtilisateurSaisie !== undefined && {
+        relationUtilisateur: etatFormulaire.relationUtilisateurSaisie,
+      }),
     });
   };
 
@@ -150,7 +144,6 @@ export const FormulaireDemandeEtreAide = (
   );
 
   const surRelationUtilisateurOui = useCallback(() => {
-    setRelationUtilisateurOuiClique(true);
     envoie(relationUtilisateurCliquee(true));
   }, []);
 
@@ -193,9 +186,8 @@ export const FormulaireDemandeEtreAide = (
               <div className=" fr-col-12">
                 <div
                   className={`fr-input-group ${
-                    etatFormulaireDemandeEtreAide.erreur
-                      ? etatFormulaireDemandeEtreAide.erreur.adresseElectronique
-                          ?.className
+                    etatFormulaire.erreur
+                      ? etatFormulaire.erreur.adresseElectronique?.className
                       : ''
                   }`}
                 >
@@ -212,18 +204,14 @@ export const FormulaireDemandeEtreAide = (
                       surSaisieAdresseElectronique(e.target.value);
                     }}
                   />
-                  {
-                    etatFormulaireDemandeEtreAide.erreur?.adresseElectronique
-                      ?.texteExplicatif
-                  }
+                  {etatFormulaire.erreur?.adresseElectronique?.texteExplicatif}
                 </div>
               </div>
               <div className=" fr-col-12">
                 <div
                   className={`fr-input-group ${
-                    etatFormulaireDemandeEtreAide.erreur
-                      ? etatFormulaireDemandeEtreAide.erreur.departement
-                          ?.className
+                    etatFormulaire.erreur
+                      ? etatFormulaire.erreur.departement?.className
                       : ''
                   }`}
                 >
@@ -233,10 +221,8 @@ export const FormulaireDemandeEtreAide = (
                   </label>
                   <AutoCompletion<Departement>
                     nom="departement"
-                    valeurSaisie={etatFormulaireDemandeEtreAide.departement}
-                    suggestionsInitiales={
-                      etatFormulaireDemandeEtreAide.departements
-                    }
+                    valeurSaisie={etatFormulaire.departement}
+                    suggestionsInitiales={etatFormulaire.departements}
                     mappeur={(departement) => {
                       return estDepartement(departement)
                         ? `${departement.code} - ${departement.nom}`
@@ -252,10 +238,7 @@ export const FormulaireDemandeEtreAide = (
                     }}
                     clefsFiltrage={['code', 'nom']}
                   />
-                  {
-                    etatFormulaireDemandeEtreAide.erreur?.departement
-                      ?.texteExplicatif
-                  }
+                  {etatFormulaire.erreur?.departement?.texteExplicatif}
                 </div>
               </div>
               <div className=" fr-col-12">
@@ -286,13 +269,16 @@ export const FormulaireDemandeEtreAide = (
                   <div className="fr-radio-group mac-radio-group">
                     <Input
                       type="radio"
-                      disabled={
-                        etatFormulaireDemandeEtreAide.relationUtilisateurFournie
-                      }
+                      disabled={etatFormulaire.relationUtilisateurFournie}
                       name="relation-utilisateur"
                       id="relation-utilisateur-non"
                       value="Non"
                       onClick={surRelationUtilisateurNon}
+                      checked={
+                        etatFormulaire.relationUtilisateurSaisie ===
+                          undefined ||
+                        etatFormulaire.relationUtilisateurSaisie === 'Non'
+                      }
                     />
                     <label
                       className="fr-label"
@@ -304,16 +290,13 @@ export const FormulaireDemandeEtreAide = (
                   <div className="fr-radio-group mac-radio-group">
                     <Input
                       type="radio"
-                      disabled={
-                        etatFormulaireDemandeEtreAide.relationUtilisateurFournie
-                      }
+                      disabled={etatFormulaire.relationUtilisateurFournie}
                       name="relation-utilisateur"
                       id="relation-utilisateur-oui"
                       value="Oui"
                       onClick={surRelationUtilisateurOui}
                       checked={
-                        !!etatFormulaireDemandeEtreAide.relationUtilisateurFournie ||
-                        relationUtilisateurOuiClique
+                        etatFormulaire.relationUtilisateurSaisie !== undefined
                       }
                     />
                     <label
@@ -322,42 +305,33 @@ export const FormulaireDemandeEtreAide = (
                     >
                       <span>Oui</span>
                     </label>
-                    {etatFormulaireDemandeEtreAide.relationUtilisateurSaisie !==
-                      undefined &&
-                    etatFormulaireDemandeEtreAide.relationUtilisateurSaisie !==
-                      'Non' ? (
+                    {etatFormulaire.relationUtilisateurSaisie !== undefined ? (
                       <ChampSaisieEmailUtilisateur
                         className={
-                          etatFormulaireDemandeEtreAide.erreur
-                            ?.relationUtilisateurSaisie?.className ||
-                          'bordure-gauche'
+                          etatFormulaire.erreur?.relationUtilisateurSaisie
+                            ?.className || 'bordure-gauche'
                         }
-                        disabled={
-                          etatFormulaireDemandeEtreAide.relationUtilisateurFournie
-                        }
+                        disabled={etatFormulaire.relationUtilisateurFournie}
                         valeur={
-                          etatFormulaireDemandeEtreAide.relationUtilisateurFournie &&
-                          etatFormulaireDemandeEtreAide.relationUtilisateurSaisie
+                          etatFormulaire.relationUtilisateurFournie &&
+                          etatFormulaire.relationUtilisateurSaisie
                         }
                         surSaisieEmailUtilisateur={surSaisieEmailUtilisateur}
                       >
                         {
-                          etatFormulaireDemandeEtreAide.erreur
-                            ?.relationUtilisateurSaisie?.texteExplicatif
+                          etatFormulaire.erreur?.relationUtilisateurSaisie
+                            ?.texteExplicatif
                         }
                       </ChampSaisieEmailUtilisateur>
-                    ) : (
-                      <></>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </div>
               <div className="fr-col-12">
                 <div
                   className={`fr-checkbox-group mac-radio-group ${
-                    etatFormulaireDemandeEtreAide.erreur
-                      ? etatFormulaireDemandeEtreAide.erreur.cguValidees
-                          ?.className
+                    etatFormulaire.erreur
+                      ? etatFormulaire.erreur.cguValidees?.className
                       : ''
                   }`}
                 >
@@ -366,7 +340,7 @@ export const FormulaireDemandeEtreAide = (
                     id="cgu-aide"
                     name="cgu-aide"
                     onClick={surCGUValidees}
-                    checked={etatFormulaireDemandeEtreAide.cguValidees}
+                    checked={etatFormulaire.cguValidees}
                   />
                   <label className="fr-label" htmlFor="cgu-aide">
                     <div>
@@ -384,17 +358,14 @@ export const FormulaireDemandeEtreAide = (
                       </span>
                     </div>
                   </label>
-                  {
-                    etatFormulaireDemandeEtreAide.erreur?.cguValidees
-                      ?.texteExplicatif
-                  }
+                  {etatFormulaire.erreur?.cguValidees?.texteExplicatif}
                 </div>
               </div>
             </div>
             <div className="actions fr-grid-row fr-grid-row--right fr-pt-3w">
               <button
                 type="submit"
-                disabled={!etatFormulaireDemandeEtreAide.pretPourEnvoi}
+                disabled={!etatFormulaire.pretPourEnvoi}
                 key="envoyer-demande-aide"
                 className="bouton-mac bouton-mac-primaire bouton-demande-etre-aide"
               >
