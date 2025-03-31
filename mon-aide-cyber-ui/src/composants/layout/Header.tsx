@@ -79,7 +79,7 @@ export const Header = ({
                 </div>
                 {afficheNavigation ? (
                   <div className="fr-header__navbar icone-se-connecter-mobile">
-                    <lab-anssi-bouton-suite-cyber-navigation></lab-anssi-bouton-suite-cyber-navigation>
+                    <lab-anssi-bouton-suite-cyber-navigation sourceUtm="MonAideCyber"></lab-anssi-bouton-suite-cyber-navigation>
                     <button
                       className="fr-btn--menu fr-btn"
                       data-fr-opened="false"
@@ -97,7 +97,7 @@ export const Header = ({
             {!enteteSimple ? (
               <div className="fr-header__tools">
                 <div className="fr-header__tools-links">
-                  <lab-anssi-bouton-suite-cyber-navigation></lab-anssi-bouton-suite-cyber-navigation>
+                  <lab-anssi-bouton-suite-cyber-navigation sourceUtm="MonAideCyber"></lab-anssi-bouton-suite-cyber-navigation>
                   <div className="flex justify-center items-center">
                     {utilisateur ? (
                       <ComposantMenuUtilisateur utilisateur={utilisateur} />
