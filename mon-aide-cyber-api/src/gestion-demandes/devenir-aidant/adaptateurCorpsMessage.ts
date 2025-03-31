@@ -39,7 +39,7 @@ const genereCorpsDemandeDevenirAidant = (
       '\n' +
       'Toute l’équipe reste à votre disposition,\n' +
       '\n' +
-      'Pour toute remarque ou question, n’hésitez pas à nous contacter sur monaidecyber@ssi.gouv.fr\n' +
+      'Pour toute remarque ou question, n’hésitez pas à nous contacter sur contact@monaidecyber.beta.gouv.fr\n' +
       '\n' +
       '<b>L’équipe MonAideCyber</b>' +
       '</body>' +
@@ -65,7 +65,7 @@ const genereCorpsDemandeDevenirAidant = (
     '\n' +
     'Toute l’équipe reste à votre disposition,\n' +
     '\n' +
-    'Pour toute remarque ou question, n’hésitez pas à nous contacter sur monaidecyber@ssi.gouv.fr\n' +
+    'Pour toute remarque ou question, n’hésitez pas à nous contacter sur contact@monaidecyber.beta.gouv.fr\n' +
     '\n' +
     '<b>L’équipe MonAideCyber</b>' +
     '</body>' +
@@ -88,7 +88,7 @@ const genereCorpsFinalisationDemandeDevenirAidant = (
     '\n' +
     'Toute l’équipe reste à votre disposition,\n' +
     '\n' +
-    'Pour toute remarque ou question, n’hésitez pas à nous contacter sur monaidecyber@ssi.gouv.fr\n' +
+    'Pour toute remarque ou question, n’hésitez pas à nous contacter sur contact@monaidecyber.beta.gouv.fr\n' +
     '\n' +
     "<b>L'équipe MonAideCyber</b>"
   );
@@ -135,7 +135,7 @@ const genereCorpsMiseAJourDemandeDevenirAidant = (
     '</ul>' +
     'Toute l’équipe reste à votre disposition,\n' +
     '\n' +
-    'Pour toute remarque ou question, n’hésitez pas à nous contacter sur monaidecyber@ssi.gouv.fr\n' +
+    'Pour toute remarque ou question, n’hésitez pas à nous contacter sur contact@monaidecyber.beta.gouv.fr\n' +
     '\n' +
     '<b>L’équipe MonAideCyber</b>' +
     '\n' +
@@ -159,7 +159,7 @@ const genereCorpsDemandeDevenirAidantEnAttenteAdhésion = (
     'Nous avons bien reçu votre souhait d’adhérer à une association à but non lucratif et d’utiliser le dispositif en étant référencé Aidant cyber.\n' +
     '\n' +
     '<ul>' +
-    '<li>Si vous êtes membre d’une association non politique ou cultuelle, faites nous parvenir à l’adresse monaidecyber@ssi.gouv.fr les informations suivantes' +
+    '<li>Si vous êtes membre d’une association non politique ou cultuelle, faites nous parvenir à l’adresse contact@monaidecyber.beta.gouv.fr les informations suivantes' +
     '<ul>' +
     '<li>le nom</li>' +
     '<li>le département</li>' +

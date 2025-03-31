@@ -171,14 +171,14 @@ const ContenuCGU = () => (
     <p dir="auto">
       L’accès, l’utilisation et le recours aux Services du Site sont
       conditionnés par le respect de la part de l’Utilisateur inscrit, de
-      l’Entité et de l'Entité Aidée des présentes CGU. Pour bénéficier des
+      l’Entité et de l’Entité Aidée des présentes CGU. Pour bénéficier des
       Services du Site, l’Utilisateur inscrit, l’Entité et l’Entité Aidée
       doivent avoir expressément accepté les présentes CGU en cochant la case
       correspondante aux CGU après consultation du lien y renvoyant. Les CGU
-      sont acceptées sans restriction ni réserve. En cas de désaccord avec l'un
+      sont acceptées sans restriction ni réserve. En cas de désaccord avec l’un
       des termes de ces CGU, y compris après une mise à jour de ces dernières,
       l’Utilisateur inscrit, l’Entité ou l’Entité Aidée est libre de cesser
-      d'utiliser à tout moment les Services du Site. L’Utilisateur inscrit
+      d’utiliser à tout moment les Services du Site. L’Utilisateur inscrit
       accepte les CGU avant de fournir un premier Diagnostic à une Entité Aidée.
     </p>
     <h3 dir="auto">
@@ -188,10 +188,10 @@ const ContenuCGU = () => (
       </span>
     </h3>
     <p dir="auto">
-      L'ANSSI est libre de modifier, à tout moment, les CGU, afin notamment de
+      L’ANSSI est libre de modifier, à tout moment, les CGU, afin notamment de
       prendre en compte toute évolution législative, réglementaire,
       jurisprudentielle et technique. La version qui prévaut est celle qui est
-      accessible en ligne à l'adresse suivante :{' '}
+      accessible en ligne à l’adresse suivante :{' '}
       <a
         href="https://www.monaide.cyber.gouv.fr/cgu"
         className="use-hover-preview"
@@ -205,8 +205,8 @@ const ContenuCGU = () => (
       L’Utilisateur inscrit, l’Entité et l’Entité Aidée seront informés en cas
       de modification des CGU. En cas d’opposition aux modifications apportées,
       l’Utilisateur inscrit, l’Entité ou l’Entité Aidée est libre de cesser
-      d'utiliser les Services du Site. Toute utilisation du Site ou des Services
-      du Site après la publication d'un avis indiquant une évolution des CGU
+      d’utiliser les Services du Site. Toute utilisation du Site ou des Services
+      du Site après la publication d’un avis indiquant une évolution des CGU
       vaut acceptation des CGU mises à jour.{' '}
     </p>
     <p dir="auto"></p>
@@ -218,7 +218,7 @@ const ContenuCGU = () => (
       L’Utilisateur inscrit, l’Entité et l’Entité Aidée acceptent que toute
       information ou décision générée électroniquement sur le Site soient
       admissibles devant les tribunaux et fassent preuve des données et des
-      faits qu'elles contiennent (ex : date de validation des CGU).
+      faits qu’elles contiennent (ex : date de validation des CGU).
     </p>
     <p dir="auto">La preuve contraire peut être rapportée. </p>
     <p dir="auto"></p>
@@ -234,7 +234,7 @@ const ContenuCGU = () => (
       désinscrire des mails reçus par le Site, l’Utilisateur inscrit et l’Entité
       aidée sont conscients que des notifications importantes sont susceptibles
       de ne pas leur parvenir. Par conséquent, l’Utilisateur inscrit et l’Entité
-      Aidée s'engagent à tenir à jour leurs coordonnées.
+      Aidée s’engagent à tenir à jour leurs coordonnées.
     </p>
     <p dir="auto"></p>
     <h2 dir="auto">
@@ -263,10 +263,10 @@ const ContenuCGU = () => (
       Le responsable des traitements des données à caractère personnel que
       l’utilisateur non Aidant cyber, l’Aidant cyber ou la personne de l’Entité
       Aidée validant les CGU transmettent pour l’accès et l’utilisation du Site
-      est l'ANSSI (51 boulevard de la Tour-Maubourg, 75700 Paris 07 SP).
+      est l’ANSSI (51 boulevard de la Tour-Maubourg, 75700 Paris 07 SP).
     </p>
     <p dir="auto">
-      L'ANSSI, en tant que responsable de traitement, s'engage à ce que la
+      L’ANSSI, en tant que responsable de traitement, s’engage à ce que la
       collecte et le traitement des données à caractère personnel de
       l’utilisateur non Aidant cyber, de l’Aidant cyber ou de la personne de
       l’Entité Aidée validant les CGU soit effectués de manière licite, loyale
@@ -275,11 +275,11 @@ const ContenuCGU = () => (
       modifiée (« LIL »).
     </p>
     <p dir="auto">
-      Cette collecte d'informations se limite au strict nécessaire, conformément
+      Cette collecte d’informations se limite au strict nécessaire, conformément
       au principe de minimisation des données. Les définitions fournies à
-      l'article 4 du RGPD sont applicables aux présentes. En cas de mise à jour,
-      l'ANSSI n'abaissera pas le niveau de confidentialité de manière
-      substantielle sans l'information préalable de l’utilisateur non Aidant
+      l’article 4 du RGPD sont applicables aux présentes. En cas de mise à jour,
+      l’ANSSI n’abaissera pas le niveau de confidentialité de manière
+      substantielle sans l’information préalable de l’utilisateur non Aidant
       cyber, de l’Aidant cyber ou de la personne de l’Entité Aidée validant les
       CGU.
     </p>
@@ -287,24 +287,24 @@ const ContenuCGU = () => (
       <strong>2. Fondement juridique des traitements</strong>
     </p>
     <p dir="auto">
-      Le fondement juridique des trois traitements est à l'article 6.1. e) du
+      Le fondement juridique des trois traitements est à l’article 6.1. e) du
       RGPD, étant nécessaires à l’exécution des missions d’intérêt public dont
       l’ANSSI est investie au titre de l’article 3 du décret n° 2009-834 du 7
-      juillet 2009 portant création d'un service à compétence nationale dénommé
-      « Agence nationale de la sécurité des systèmes d'information ».
+      juillet 2009 portant création d’un service à compétence nationale dénommé
+      « Agence nationale de la sécurité des systèmes d’information ».
     </p>
     <p dir="auto">
       <strong>3. Sécurité des données à caractère personnel</strong>
     </p>
     <p dir="auto">
-      L'ANSSI met en œuvre toutes les mesures techniques et organisationnelles
-      afin d'assurer la sécurité et la conformité des traitements de données à
+      L’ANSSI met en œuvre toutes les mesures techniques et organisationnelles
+      afin d’assurer la sécurité et la conformité des traitements de données à
       caractère personnel, ainsi que la confidentialité de ces données.
     </p>
     <p dir="auto">
-      À ce titre, l'ANSSI prend toutes les précautions utiles sur le Site au
+      À ce titre, l’ANSSI prend toutes les précautions utiles sur le Site au
       regard de la nature des données et des risques présentés par le Site, afin
-      de préserver la sécurité des données et, notamment, d'empêcher qu'elles
+      de préserver la sécurité des données et, notamment, d’empêcher qu’elles
       soient déformées, endommagées, ou que des tiers non autorisés y aient
       accès.
     </p>
@@ -321,14 +321,14 @@ const ContenuCGU = () => (
     <ul>
       <li>
         <p dir="auto">
-          droit d'accès (article 15 du RGPD), de rectification, de mise à jour
+          droit d’accès (article 15 du RGPD), de rectification, de mise à jour
           et de complétude de ses données (article 16 du RGPD) ;
         </p>
       </li>
       <li>
         <p dir="auto">
-          droit d'effacement de ses données dans les conditions prévues à
-          l'article 17 du RGPD. L'exercice du droit d'effacement des données
+          droit d’effacement de ses données dans les conditions prévues à
+          l’article 17 du RGPD. L’exercice du droit d’effacement des données
           entraînera la suppression de son compte.{' '}
         </p>
       </li>
@@ -341,26 +341,26 @@ const ContenuCGU = () => (
     </ul>
     <p dir="auto">
       L’utilisateur non Aidant cyber, l’Aidant cyber ou la personne de l’Entité
-      Aidée validant les CGU peut exercer ses droits en contactant l'ANSSI :
+      Aidée validant les CGU peut exercer ses droits en contactant l’ANSSI :
     </p>
     <ul>
       <li>
         <p dir="auto">
-          par courriel à l'adresse suivante :{' '}
+          par courriel à l’adresse suivante :{' '}
           <a
-            href="mailto:monaidecyber@ssi.gouv.fr"
+            href="mailto:contact@monaidecyber.beta.gouv.fr"
             className="use-hover-preview"
             rel="noopener noreferrer nofollow"
           >
-            monaidecyber@ssi.gouv.fr
+            contact@monaidecyber.beta.gouv.fr
           </a>
         </p>
       </li>
       <li>
-        <p dir="auto">par courrier postal à l'adresse suivante :</p>
+        <p dir="auto">par courrier postal à l’adresse suivante :</p>
         <p dir="auto">
-          Agence nationale de la sécurité des systèmes d'information
-          <br />À l'attention de contact RGPD MonAideCyber
+          Agence nationale de la sécurité des systèmes d’information
+          <br />À l’attention de contact RGPD MonAideCyber
           <br />
           51 boulevard de la Tour-Maubourg
           <br />
@@ -372,16 +372,16 @@ const ContenuCGU = () => (
       Dans ce cas, l’utilisateur non Aidant cyber, l’Aidant cyber ou la personne
       de l’Entité Aidée validant les CGU doit préciser quelles sont les données
       concernées par sa demande et justifier de son identité (fournir une copie
-      d'une pièce d'identité). Par ailleurs, dès que l'ANSSI a connaissance du
-      décès d'un utilisateur non Aidant cyber, d’un Aidant cyber ou de la
-      personne de l’Entité Aidée validant les CGU, elle s'engage à détruire ses
-      données, sauf si leur conservation s'avère nécessaire afin de répondre à
+      d’une pièce d’identité). Par ailleurs, dès que l’ANSSI a connaissance du
+      décès d’un utilisateur non Aidant cyber, d’un Aidant cyber ou de la
+      personne de l’Entité Aidée validant les CGU, elle s’engage à détruire ses
+      données, sauf si leur conservation s’avère nécessaire afin de répondre à
       une obligation légale.
     </p>
     <p dir="auto">
       Si l’utilisateur non Aidant cyber, l’Aidant cyber ou la personne de
-      l’Entité Aidée validant les CGU estime après avoir contacté l'ANSSI que
-      les droits sur ses données n'ont pas été respectés, il peut introduire une
+      l’Entité Aidée validant les CGU estime après avoir contacté l’ANSSI que
+      les droits sur ses données n’ont pas été respectés, il peut introduire une
       réclamation auprès de la CNIL.
     </p>
     <p dir="auto">
@@ -390,8 +390,8 @@ const ContenuCGU = () => (
         className="use-hover-preview"
         rel="noopener noreferrer nofollow"
       >
-        Voir le site de la CNIL pour plus d'informations sur les droits de
-        l'Utilisateur inscrit.
+        Voir le site de la CNIL pour plus d’informations sur les droits de
+        l’Utilisateur inscrit.
       </a>
     </p>
     <p dir="auto"></p>
@@ -437,7 +437,7 @@ const ContenuCGU = () => (
     </p>
     <p dir="auto">
       Les destinataires des données à caractère personnel de l’utilisateur non
-      Aidant cyber sont le personnel de l'ANSSI impliqué dans l'administration
+      Aidant cyber sont le personnel de l’ANSSI impliqué dans l’administration
       et la gestion du Site.
     </p>
     <p dir="auto"></p>
@@ -447,7 +447,7 @@ const ContenuCGU = () => (
       </strong>
     </p>
     <p dir="auto">
-      L'ANSSI s'engage à (i) ce que le sous-traitant présente des garanties
+      L’ANSSI s’engage à (i) ce que le sous-traitant présente des garanties
       contractuelles suffisantes et appropriées pour respecter les droits de
       l’utilisateur non Aidant cyber, afin que le traitement réponde aux
       exigences du RGPD et (ii) à respecter les dispositions du RGPD applicables
@@ -455,8 +455,8 @@ const ContenuCGU = () => (
     </p>
     <p dir="auto">
       Par exception, les données à caractère personnel de l’utilisateur non
-      Aidant cyber pourront être divulguées en application d'une loi, d'un
-      règlement ou en vertu d'une décision d'une autorité réglementaire ou
+      Aidant cyber pourront être divulguées en application d’une loi, d’un
+      règlement ou en vertu d’une décision d’une autorité réglementaire ou
       judiciaire compétente.
     </p>
     <p dir="auto"></p>
@@ -575,7 +575,7 @@ const ContenuCGU = () => (
     <p dir="auto">
       Destinataires des données collectées :<br />
       Les destinataires des données à caractère personnel de l’Aidant cyber sont
-      le personnel de l'ANSSI impliqué dans l'administration et la gestion du
+      le personnel de l’ANSSI impliqué dans l’administration et la gestion du
       Site.
     </p>
     <p dir="auto"></p>
@@ -585,7 +585,7 @@ const ContenuCGU = () => (
       </strong>
     </p>
     <p dir="auto">
-      L'ANSSI s'engage à (i) ce que le sous-traitant présente des garanties
+      L’ANSSI s’engage à (i) ce que le sous-traitant présente des garanties
       contractuelles suffisantes et appropriées pour respecter les droits de
       l’Aidant cyber, afin que le traitement réponde aux exigences du RGPD et
       (ii) à respecter les dispositions du RGPD applicables aux transferts des
@@ -593,8 +593,8 @@ const ContenuCGU = () => (
     </p>
     <p dir="auto">
       Par exception, les données à caractère personnel de l’Aidant cyber
-      pourront être divulguées en application d'une loi, d'un règlement ou en
-      vertu d'une décision d'une autorité réglementaire ou judiciaire
+      pourront être divulguées en application d’une loi, d’un règlement ou en
+      vertu d’une décision d’une autorité réglementaire ou judiciaire
       compétente.
     </p>
     <p dir="auto"></p>
@@ -684,8 +684,8 @@ const ContenuCGU = () => (
     </p>
     <p dir="auto">
       Les destinataires des données à caractère personnel de la personne
-      engageant l’Entité Aidée sont le personnel de l'ANSSI impliqué dans
-      l'administration et la gestion du Site.
+      engageant l’Entité Aidée sont le personnel de l’ANSSI impliqué dans
+      l’administration et la gestion du Site.
     </p>
     <p dir="auto">
       <strong>4. Sous-traitant et transfert des données collectées</strong>
@@ -702,7 +702,7 @@ const ContenuCGU = () => (
       .
     </p>
     <p dir="auto">
-      L'ANSSI s'engage à (i) ce que le sous-traitant présente des garanties
+      L’ANSSI s’engage à (i) ce que le sous-traitant présente des garanties
       contractuelles suffisantes et appropriées pour respecter les droits de la
       personne engageant l’Entité Aidée, afin que le traitement réponde aux
       exigences du RGPD et (ii) à respecter les dispositions du RGPD applicables
@@ -710,8 +710,8 @@ const ContenuCGU = () => (
     </p>
     <p dir="auto">
       Par exception, les données à caractère personnel de la personne engageant
-      l’Entité Aidée pourront être divulguées en application d'une loi, d'un
-      règlement ou en vertu d'une décision d'une autorité réglementaire ou
+      l’Entité Aidée pourront être divulguées en application d’une loi, d’un
+      règlement ou en vertu d’une décision d’une autorité réglementaire ou
       judiciaire compétente.
     </p>
     <p dir="auto"></p>
@@ -729,27 +729,27 @@ const ContenuCGU = () => (
       <strong>Protection des contenus :</strong> sauf mention expresse
       contraire, tous les contenus protégeables par le droit de la propriété
       intellectuelle ne peuvent être reproduits ou réutilisés sans
-      l'autorisation expresse de l'ANSSI.
+      l’autorisation expresse de l’ANSSI.
     </p>
     <p dir="auto">
-      <strong>Demande d'autorisation :</strong> les demandes d'autorisation de
-      reproduction d'un contenu doivent au préalable être adressées à l'ANSSI,
-      en écrivant à l'adresse suivante :{' '}
+      <strong>Demande d’autorisation :</strong> les demandes d’autorisation de
+      reproduction d’un contenu doivent au préalable être adressées à l’ANSSI,
+      en écrivant à l’adresse suivante :{' '}
       <a
-        href="mailto:monaidecyber@ssi.gouv.fr"
+        href="mailto:contact@monaidecyber.beta.gouv.fr"
         className="use-hover-preview"
         rel="noopener noreferrer nofollow"
       >
-        monaidecyber@ssi.gouv.fr
+        contact@monaidecyber.beta.gouv.fr
       </a>
     </p>
     <p dir="auto">
       La demande devra préciser le contenu visé ainsi que le contexte
-      d'utilisation prévu (supports concernés, période, destinataires, etc.).
+      d’utilisation prévu (supports concernés, période, destinataires, etc.).
     </p>
     <p dir="auto">
       Aucune stipulation des CGU ne peut être interprétée comme une cession de
-      droits de propriété intellectuelle, que ce soit tacitement ou d'une autre
+      droits de propriété intellectuelle, que ce soit tacitement ou d’une autre
       façon.
     </p>
     <p dir="auto"></p>
@@ -769,14 +769,14 @@ const ContenuCGU = () => (
       Le Site met en place les moyens nécessaires à son bon fonctionnement et en
       particulier au maintien de la continuité et de la qualité du service. Les
       Services du Site sont fournis à l’Utilisateur inscrit, à l’Entité et à
-      l’Entité Aidée « en l'état » et sont accessibles sans garantie absolue de
-      disponibilité et de régularité. L'ANSSI s'efforcera de rendre le Site
-      accessible 24 heures sur 24, 7 jours sur 7. Toutefois, l'ANSSI ne pourra
-      en aucun cas être tenue pour responsable en raison d'une interruption du
+      l’Entité Aidée « en l’état » et sont accessibles sans garantie absolue de
+      disponibilité et de régularité. L’ANSSI s’efforcera de rendre le Site
+      accessible 24 heures sur 24, 7 jours sur 7. Toutefois, l’ANSSI ne pourra
+      en aucun cas être tenue pour responsable en raison d’une interruption du
       service quelle que soit la durée ou la fréquence de cette interruption et
-      quelle qu'en soit la cause, notamment en raison d'une maintenance
-      nécessaire au fonctionnement, de pannes éventuelles, d'aléas techniques
-      liés à la nature du réseau Internet, d'actes de malveillance ou de toute
+      quelle qu’en soit la cause, notamment en raison d’une maintenance
+      nécessaire au fonctionnement, de pannes éventuelles, d’aléas techniques
+      liés à la nature du réseau Internet, d’actes de malveillance ou de toute
       atteinte portée au fonctionnement du Site.
     </p>
     <p dir="auto"></p>
@@ -787,12 +787,12 @@ const ContenuCGU = () => (
       </span>
     </h3>
     <p dir="auto">
-      L'ANSSI ne peut être tenue responsable des perturbations du réseau
-      Internet entraînant un dysfonctionnement ou une impossibilité d'accéder au
+      L’ANSSI ne peut être tenue responsable des perturbations du réseau
+      Internet entraînant un dysfonctionnement ou une impossibilité d’accéder au
       Site.
     </p>
     <p dir="auto">
-      L'ANSSI ne peut également pas être tenue responsable de l'installation et
+      L’ANSSI ne peut également pas être tenue responsable de l’installation et
       du fonctionnement des terminaux utilisés par l’Utilisateur inscrit,
       l’Entité et l’Entité Aidée pour accéder aux services disponibles sur le
       Site.
@@ -804,11 +804,11 @@ const ContenuCGU = () => (
       utilisées par l’Utilisateur inscrit, l’Entité et l’Entité Aidée.
     </p>
     <p dir="auto">
-      L'ANSSI ne saurait en aucun cas être tenue de réparer d'éventuels dommages
+      L’ANSSI ne saurait en aucun cas être tenue de réparer d’éventuels dommages
       indirects subis par l’Utilisateur inscrit, l’Entité et l’Entité Aidée à
-      l'occasion de l'utilisation du Site. Les dommages indirects sont ceux qui
+      l’occasion de l’utilisation du Site. Les dommages indirects sont ceux qui
       ne résultent pas exclusivement et directement de la défaillance du Site.
-      En outre, la responsabilité de l'ANSSI ne peut pas être recherchée pour
+      En outre, la responsabilité de l’ANSSI ne peut pas être recherchée pour
       des actes réalisés par l’Utilisateur inscrit, l’Entité ou l’Entité Aidée
       ou un tiers utilisant le Site.
     </p>
@@ -822,16 +822,16 @@ const ContenuCGU = () => (
     <p dir="auto">
       Le Site peut intégrer des liens hypertextes renvoyant vers des sites
       internet édités par des tiers (ci-après les « Sites Tiers ») sur lesquels
-      l'ANSSI n'exerce aucune sorte de contrôle. L'ANSSI n'assume aucune
+      l’ANSSI n’exerce aucune sorte de contrôle. L’ANSSI n’assume aucune
       responsabilité quant au contenu des Sites Tiers ou au contenu vers lequel
       les Sites Tiers peuvent renvoyer.
     </p>
     <p dir="auto">
       La présence de liens hypertextes vers des Sites Tiers ne saurait signifier
-      que l'ANSSI approuve de quelque façon que ce soit les contenus des Sites
-      Tiers. L'ANSSI n'est responsable d'aucune modification ou mise à jour
-      concernant les Sites Tiers. L'ANSSI n'est pas responsable de la
-      transmission d'informations à partir des Sites Tiers, ni du mauvais
+      que l’ANSSI approuve de quelque façon que ce soit les contenus des Sites
+      Tiers. L’ANSSI n’est responsable d’aucune modification ou mise à jour
+      concernant les Sites Tiers. L’ANSSI n’est pas responsable de la
+      transmission d’informations à partir des Sites Tiers, ni du mauvais
       fonctionnement de ceux-ci.
     </p>
     <p dir="auto"></p>
@@ -842,16 +842,16 @@ const ContenuCGU = () => (
       </span>
     </h3>
     <p dir="auto">
-      Les liens hypertextes renvoyant vers la page d'accueil du Site ou l'une de
+      Les liens hypertextes renvoyant vers la page d’accueil du Site ou l’une de
       ses rubriques sont autorisés.
     </p>
     <p dir="auto">
-      Les pages du Site ne doivent pas être imbriquées à l'intérieur des pages
-      d'un autre site (framing).
+      Les pages du Site ne doivent pas être imbriquées à l’intérieur des pages
+      d’un autre site (framing).
     </p>
     <p dir="auto">
-      En toute hypothèse, l'établissement d'un lien vers le Site ne constitue
-      pas une approbation par l'ANSSI du contenu du site établissant ce lien.
+      En toute hypothèse, l’établissement d’un lien vers le Site ne constitue
+      pas une approbation par l’ANSSI du contenu du site établissant ce lien.
     </p>
     <p dir="auto"></p>
     <h2 dir="auto">
@@ -860,12 +860,12 @@ const ContenuCGU = () => (
     </h2>
     <p dir="auto">
       Dans le cas où certaines stipulations des CGU seraient inapplicables pour
-      quelque raison que ce soit, y compris en raison d'une loi ou d'une
+      quelque raison que ce soit, y compris en raison d’une loi ou d’une
       réglementation applicable, l’Utilisateur inscrit, l’Entité et l’Entité
       Aidée resteront liés par les autres stipulations des CGU. Le fait pour
-      l'ANSSI, l’Utilisateur inscrit, l’Entité ou l’Entité Aidée de ne pas se
-      prévaloir d'une ou plusieurs stipulations des CGU ne pourra en aucun cas
-      impliquer la renonciation par ceux-ci à s'en prévaloir ultérieurement.
+      l’ANSSI, l’Utilisateur inscrit, l’Entité ou l’Entité Aidée de ne pas se
+      prévaloir d’une ou plusieurs stipulations des CGU ne pourra en aucun cas
+      impliquer la renonciation par ceux-ci à s’en prévaloir ultérieurement.
     </p>
     <h2 dir="auto">
       <span contentEditable="false" className="heading-actions "></span>
@@ -875,12 +875,12 @@ const ContenuCGU = () => (
     </h2>
     <p dir="auto">
       Les CGU sont régies par le droit français. Toute difficulté relative à la
-      validité, l'application ou l'interprétation des CGU seront soumises, à
-      défaut d'accord amiable, à la compétence du Tribunal Administratif de
+      validité, l’application ou l’interprétation des CGU seront soumises, à
+      défaut d’accord amiable, à la compétence du Tribunal Administratif de
       Paris, auquel les parties attribuent compétence territoriale, quel que
-      soit le lieu d'exécution du Site ou le domicile du défendeur. Cette
-      attribution de compétence s'applique également en cas de procédure en
-      référé, de pluralité de défendeurs ou d'appel en garantie.
+      soit le lieu d’exécution du Site ou le domicile du défendeur. Cette
+      attribution de compétence s’applique également en cas de procédure en
+      référé, de pluralité de défendeurs ou d’appel en garantie.
     </p>
     <h2 dir="auto">
       <span contentEditable="false" className="heading-actions "></span>
@@ -888,10 +888,10 @@ const ContenuCGU = () => (
     </h2>
     <p dir="auto">
       Pour toute question ou réclamation concernant le Site ou les CGU,
-      l’Utilisateur inscrit, l’Entité ou l’Entité Aidée peut contacter l'ANSSI
+      l’Utilisateur inscrit, l’Entité ou l’Entité Aidée peut contacter l’ANSSI
       aux coordonnées indiquées dans les Mentions légales. Pour toute question
       ou réclamation relative aux cookies et données à caractère personnel,
-      l’Utilisateur inscrit ou l’Entité aidée peut contacter l'ANSSI aux
+      l’Utilisateur inscrit ou l’Entité aidée peut contacter l’ANSSI aux
       coordonnées indiquées au paragraphe 1.4 du I.E.1 des CGU.
     </p>
     <p dir="auto"></p>
@@ -947,7 +947,7 @@ const ContenuCGU = () => (
     </h1>
     <p dir="auto">
       Dans le cadre de l’utilisation du Site, l’Entité, l’Entité Aidée et les
-      Utilisateurs inscrits s'engagent à :
+      Utilisateurs inscrits s’engagent à :
     </p>
     <ul>
       <li>
@@ -988,8 +988,8 @@ const ContenuCGU = () => (
       </span>
     </h2>
     <p dir="auto">
-      Dans le cadre de l'utilisation de l’outil de suivi des diagnostics,
-      l'Utilisateur inscrit s'engage à&nbsp;:{' '}
+      Dans le cadre de l’utilisation de l’outil de suivi des diagnostics,
+      l’Utilisateur inscrit s’engage à&nbsp;:{' '}
     </p>
     <ul>
       <li>
@@ -1023,14 +1023,14 @@ const ContenuCGU = () => (
             className="use-hover-preview"
             rel="noopener noreferrer nofollow"
           >
-            monaidecyber@ssi.gouv.fr
+            contact@monaidecyber.beta.gouv.fr
           </a>
         </p>
         <p dir="auto"></p>
       </li>
     </ul>
     <p dir="auto">
-      En cas de manquement à une ou plusieurs de ces obligations, l'ANSSI se
+      En cas de manquement à une ou plusieurs de ces obligations, l’ANSSI se
       réserve le droit de suspendre ou supprimer ses accès au Site.
     </p>
     <p dir="auto"></p>
@@ -1112,7 +1112,7 @@ const ContenuCGU = () => (
       <span className="heading-content">C. Obligations de l’Aidant cyber</span>
     </h2>
     <p dir="auto">
-      Dans le cadre de l'utilisation du Site, l'Aidant cyber s'engage à :
+      Dans le cadre de l’utilisation du Site, l’Aidant cyber s’engage à :
     </p>
     <ul>
       <li>
@@ -1157,18 +1157,18 @@ const ContenuCGU = () => (
           remonter toute problématique et/ou écart de conduite de l’Entité aidée
           constaté via le mail suivant :{' '}
           <a
-            href="mailto:monaidecyber@ssi.gouv.fr"
+            href="mailto:contact@monaidecyber.beta.gouv.fr"
             className="use-hover-preview"
             rel="noopener noreferrer nofollow"
           >
-            monaidecyber@ssi.gouv.fr
+            contact@monaidecyber.beta.gouv.fr
           </a>
           .
         </p>
       </li>
     </ul>
     <p dir="auto">
-      En cas de manquement à une ou plusieurs de ces obligations, l'ANSSI se
+      En cas de manquement à une ou plusieurs de ces obligations, l’ANSSI se
       réserve le droit de déréférencer l’Aidant cyber, suspendre ou supprimer
       ses accès au Site.
     </p>
@@ -1180,7 +1180,7 @@ const ContenuCGU = () => (
       </span>
     </h2>
     <p dir="auto">
-      Dans le cadre du recours aux Services du Site, l'Entité Aidée s'engage à :
+      Dans le cadre du recours aux Services du Site, l’Entité Aidée s’engage à :
     </p>
     <ul>
       <li>
@@ -1200,11 +1200,11 @@ const ContenuCGU = () => (
         <p dir="auto">
           remonter toute problématique de l’Aidant cyber via le mail suivant :{' '}
           <a
-            href="mailto:monaidecyber@ssi.gouv.fr"
+            href="mailto:contact@monaidecyber.beta.gouv.fr"
             className="use-hover-preview"
             rel="noopener noreferrer nofollow"
           >
-            monaidecyber@ssi.gouv.fr
+            contact@monaidecyber.beta.gouv.fr
           </a>
           .
         </p>

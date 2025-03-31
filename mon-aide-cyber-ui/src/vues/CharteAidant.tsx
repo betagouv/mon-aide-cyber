@@ -109,7 +109,7 @@ const ContenuCharteAidant = () => (
     </ul>
     <p dir="auto"></p>
     <p dir="auto">
-      <strong>Rappel des droits de l'Entité Aidée</strong>
+      <strong>Rappel des droits de l’Entité Aidée</strong>
     </p>
     <p dir="auto">
       En amont de chaque accompagnement via MonAideCyber, je m’engage à rappeler
@@ -138,7 +138,7 @@ const ContenuCharteAidant = () => (
             className="use-hover-preview"
             rel="noopener noreferrer nofollow"
           >
-            monaidecyber@ssi.gouv.fr
+            contact@monaidecyber.beta.gouv.fr
           </a>
           ,
         </p>
@@ -163,7 +163,7 @@ const ContenuCharteAidant = () => (
     <p dir="auto"></p>
     <p dir="auto">
       <strong>
-        Communication de la charte de l'Aidant cyber auprès des Entités Aidées
+        Communication de la charte de l’Aidant cyber auprès des Entités Aidées
       </strong>
     </p>
     <p dir="auto">
@@ -267,7 +267,8 @@ const ContenuCharteAidant = () => (
       obligations professionnelles liées à mon activité principale. Cette
       compatibilité est appréciée au cas par cas. À cette fin, si j’estime me
       trouver dans une situation de conflit d’intérêts, je saisis immédiatement
-      l’équipe MonAideCyber via le mail suivant : monaidecyber@ssi.gouv.fr&nbsp;
+      l’équipe MonAideCyber via le mail suivant :
+      contact@monaidecyber.beta.gouv.fr&nbsp;
     </p>
     <p dir="auto"></p>
     <p dir="auto">
@@ -296,10 +297,11 @@ const ContenuCharteAidant = () => (
       <strong>Remontées auprès de l’équipe MonAideCyber</strong>
     </p>
     <p dir="auto">
-      Je rends compte auprès de monaidecyber@ssi.gouv.fr, par oral ou par écrit,
-      de toute difficulté rencontrée que ce soit durant l’accompagnement d’une
-      Entité Aidée, lors d’interactions avec la communauté MonAideCyber ou dans
-      la simple utilisation du service MonAideCyber.
+      Je rends compte auprès de contact@monaidecyber.beta.gouv.fr, par oral ou
+      par écrit, de toute difficulté rencontrée que ce soit durant
+      l’accompagnement d’une Entité Aidée, lors d’interactions avec la
+      communauté MonAideCyber ou dans la simple utilisation du service
+      MonAideCyber.
     </p>
     <p dir="auto"></p>
     <p dir="auto">

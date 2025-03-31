@@ -40,7 +40,7 @@ const genereCorpsConfirmation = (nomPrenom: string): string =>
   `<li>Accepter la <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">Charte de l’Aidant MonAideCyber</a></li>` +
   '</ul>' +
   '\n' +
-  `Contactez l’équipe à l’adresse mail <a href="mailto:${adaptateurEnvironnement.messagerie().emailMAC()}">monaidecyber@ssi.gouv.fr</a> si vous souhaitez ` +
+  `Contactez l’équipe à l’adresse mail <a href="mailto:${adaptateurEnvironnement.messagerie().emailMAC()}">contact@monaidecyber.beta.gouv.fr</a> si vous souhaitez ` +
   'proposer une association dont vous êtes actuellement membre ou que vous connaissez, ' +
   'ou bien recevoir une liste d’associations déjà identifiées par l’équipe.\n' +
   '\n' +
@@ -48,7 +48,7 @@ const genereCorpsConfirmation = (nomPrenom: string): string =>
   '\n' +
   'Toute l’équipe reste à votre disposition,\n' +
   '\n' +
-  'Pour toute remarque ou question, n’hésitez pas à nous contacter sur monaidecyber@ssi.gouv.fr\n' +
+  'Pour toute remarque ou question, n’hésitez pas à nous contacter sur contact@monaidecyber.beta.gouv.fr\n' +
   '\n' +
   "<b>L'équipe MonAideCyber</b>" +
   '</body>' +
