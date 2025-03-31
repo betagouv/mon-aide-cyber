@@ -29,7 +29,7 @@ const genereCorpsNotificationAidantSollicitation = (
     'Lors du rendez-vous, vous pourrez créer le diagnostic sur votre espace aidant comme vous le faites actuellement.\n' +
     'Il est conseillé de réaliser le diagnostic en présentiel, la visioconférence est cependant tolérée.\n' +
     '\n' +
-    `En cas d’empêchement de votre part, nous vous remercions d’envoyer un mail à l’adresse <a href="mailto:monaidecyber@ssi.gouv.fr?subject=[MonAideCyber] Indisponibilité réalisation diagnostic dans le département ${proprietesMessage.departement.nom}">monaidecyber@ssi.gouv.fr</a> afin que la demande soit attribuée à un autre Aidant cyber.\n` +
+    `En cas d’empêchement de votre part, nous vous remercions d’envoyer un mail à l’adresse <a href="mailto:contact@monaidecyber.beta.gouv.fr?subject=[MonAideCyber] Indisponibilité réalisation diagnostic dans le département ${proprietesMessage.departement.nom}">contact@monaidecyber.beta.gouv.fr</a> afin que la demande soit attribuée à un autre Aidant cyber.\n` +
     '\n' +
     'Toute l’équipe reste à votre disposition,\n' +
     '\n' +
@@ -142,7 +142,7 @@ const genereCorpsConfirmationDemandeAide = (
     '\n' +
     'Toute l’équipe reste à votre disposition,\n\n' +
     "L'équipe MonAideCyber\n" +
-    'monaidecyber@ssi.gouv.fr\n'
+    'contact@monaidecyber.beta.gouv.fr\n'
   );
 };
 const genereCorpsRecapitulatifDemandeAide = (

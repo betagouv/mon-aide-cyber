@@ -343,8 +343,8 @@ export const KitDeCommunication = () => {
                         <li>
                           N&apos;hésitez pas à nous contacter pour toute
                           question sur{' '}
-                          <a href="mailto:monaidecyber@ssi.gouv.fr">
-                            monaidecyber@ssi.gouv.fr
+                          <a href="mailto:contact@monaidecyber.beta.gouv.fr">
+                            contact@monaidecyber.beta.gouv.fr
                           </a>
                         </li>
                       </ul>
