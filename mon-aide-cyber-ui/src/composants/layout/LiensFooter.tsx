@@ -1,5 +1,3 @@
-import { URL_CRISP_MAC } from '../../infrastructure/donnees/LiensExternes.ts';
-
 export const LiensFooter = () => (
   <ul className="fr-footer__bottom-list">
     <li className="fr-footer__bottom-item">
@@ -30,16 +28,6 @@ export const LiensFooter = () => (
     <li className="fr-footer__bottom-item">
       <a className="fr-footer__bottom-link" href="/securite">
         Sécurité
-      </a>
-    </li>
-    <li className="fr-footer__bottom-item">
-      <a
-        className="fr-footer__bottom-link"
-        href={URL_CRISP_MAC}
-        target="_blank"
-        rel="noreferrer"
-      >
-        FAQ
       </a>
     </li>
   </ul>
