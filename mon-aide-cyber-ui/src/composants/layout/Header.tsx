@@ -3,9 +3,9 @@ import { PropsWithChildren, ReactElement } from 'react';
 import { LienNavigation } from './LayoutPublic.tsx';
 import { ComposantMenuUtilisateur } from '../utilisateur/ComposantMenuUtilisateur.tsx';
 import { useUtilisateur } from '../../fournisseurs/hooks.ts';
-import { NavigationPublique } from './header/NavigationPublique.tsx';
 import { BandeauMaintenance } from '../alertes/BandeauMaintenance.tsx';
 import { BandeauDePromotionMSC } from '../alertes/BandeauDePromotionMSC.tsx';
+import { NavigationPublique } from './header/NavigationPublique.tsx';
 
 export type HeaderProprietes = PropsWithChildren<{
   lienMAC: ReactElement;
@@ -79,6 +79,7 @@ export const Header = ({
                 </div>
                 {afficheNavigation ? (
                   <div className="fr-header__navbar icone-se-connecter-mobile">
+                    <lab-anssi-bouton-suite-cyber-navigation></lab-anssi-bouton-suite-cyber-navigation>
                     <button
                       className="fr-btn--menu fr-btn"
                       data-fr-opened="false"
@@ -96,11 +97,14 @@ export const Header = ({
             {!enteteSimple ? (
               <div className="fr-header__tools">
                 <div className="fr-header__tools-links">
-                  {utilisateur ? (
-                    <ComposantMenuUtilisateur utilisateur={utilisateur} />
-                  ) : (
-                    <SeConnecter />
-                  )}
+                  <lab-anssi-bouton-suite-cyber-navigation></lab-anssi-bouton-suite-cyber-navigation>
+                  <div className="flex justify-center items-center">
+                    {utilisateur ? (
+                      <ComposantMenuUtilisateur utilisateur={utilisateur} />
+                    ) : (
+                      <SeConnecter />
+                    )}
+                  </div>
                 </div>
               </div>
             ) : null}

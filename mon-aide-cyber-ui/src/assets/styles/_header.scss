@@ -1,6 +1,13 @@
+.fr-header__brand {
+  overflow: unset;
+}
 
 header.public {
   z-index: 2;
+}
+
+.entete-lien-se-connecter {
+  font-size: 14px;
 }
 
 .barre-navigation {
