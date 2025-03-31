@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { FormulaireDeContact } from '../../../composants/communs/FormulaireDeContact/FormulaireDeContact';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2';
 import { HeroStatistiques } from './composants/HeroStatistiques';
 import './ecran-statistiques.scss';
@@ -121,7 +120,7 @@ export const EcranStatistiques = () => {
         </div>
       </section>
       <section className="fond-clair-mac fr-pt-4w participer">
-        <div className="fr-container conteneur-participer">
+        <div className="fr-container conteneur-participer fr-pb-8w">
           <div className="fr-col-12">
             <TypographieH2>Vous souhaitez participer ?</TypographieH2>
           </div>
@@ -135,7 +134,6 @@ export const EcranStatistiques = () => {
           </div>
         </div>
       </section>
-      <FormulaireDeContact />
     </main>
   );
 };

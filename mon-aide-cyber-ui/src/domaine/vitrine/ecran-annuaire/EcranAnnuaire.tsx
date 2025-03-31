@@ -1,4 +1,3 @@
-import { FormulaireDeContact } from '../../../composants/communs/FormulaireDeContact/FormulaireDeContact';
 import TuileActionDemandeAide from '../../../composants/communs/tuiles/TuileActionDemandeAide';
 import TuileActionKitDeCommunication from '../../../composants/communs/tuiles/TuileActionKitDeCommunication';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2';
@@ -22,7 +21,7 @@ export const EcranAnnuaire = () => {
         </div>
       </section>
       <section className="fond-clair-mac fr-pt-4w participer">
-        <div className="fr-container conteneur-participer">
+        <div className="fr-container conteneur-participer fr-pb-8w">
           <div className="fr-col-12">
             <TypographieH2>Pour aller plus loin</TypographieH2>
           </div>
@@ -36,7 +35,6 @@ export const EcranAnnuaire = () => {
           </div>
         </div>
       </section>
-      <FormulaireDeContact />
     </main>
   );
 };

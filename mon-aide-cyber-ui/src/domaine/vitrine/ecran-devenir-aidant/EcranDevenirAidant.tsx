@@ -1,5 +1,4 @@
 import { ActionsPiedDePage } from '../../../composants/communs/ActionsPiedDePage';
-import { FormulaireDeContact } from '../../../composants/communs/FormulaireDeContact/FormulaireDeContact';
 import useDefilementFluide from '../../../hooks/useDefilementFluide';
 import { verbatims } from '../../../infrastructure/donnees/Verbatims';
 import { CommentDevenirAidant } from './composants/CommentDevenirAidant';
@@ -25,7 +24,6 @@ export const EcranDevenirAidant = () => {
       </section>
       <Temoignages verbatims={verbatims} />
       <ActionsPiedDePage className="fond-clair-mac fr-pt-4w" />
-      <FormulaireDeContact />
     </main>
   );
 };

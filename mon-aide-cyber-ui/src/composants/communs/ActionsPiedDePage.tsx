@@ -11,12 +11,12 @@ export const ActionsPiedDePage = ({
 
   const nomsDeClasseEntier = [
     className ? `${className}` : null,
-    'participer',
+    'participer fond-clair-mac',
   ].join(' ');
 
   return (
     <section {...proprietesRestantes} className={nomsDeClasseEntier}>
-      <div className="fr-container conteneur-participer">
+      <div className="fr-container conteneur-participer fr-pb-8w fr-pt-4w">
         <div className="fr-col-12">
           <TypographieH2>Vous souhaitez participer ?</TypographieH2>
         </div>

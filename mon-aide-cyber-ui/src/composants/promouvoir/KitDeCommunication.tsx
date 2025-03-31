@@ -4,7 +4,6 @@ import useDefilementFluide from '../../hooks/useDefilementFluide.ts';
 import Sidemenu from '../communs/Sidemenu/Sidemenu.tsx';
 import Cadre from './Cadre.tsx';
 import IconeInformation from '../communs/IconeInformation.tsx';
-import { FormulaireDeContact } from '../communs/FormulaireDeContact/FormulaireDeContact.tsx';
 import { ActionsPiedDePage } from '../communs/ActionsPiedDePage.tsx';
 import { useTitreDePage } from '../../hooks/useTitreDePage.ts';
 
@@ -357,7 +356,6 @@ export const KitDeCommunication = () => {
         </div>
       </article>
       <ActionsPiedDePage className="fond-clair-mac fr-pt-4w" />
-      <FormulaireDeContact />
     </>
   );
 };
