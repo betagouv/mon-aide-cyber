@@ -1,0 +1,9 @@
+:root {
+  --centre-aide-background-entete: var(--couleurs-mac-violet-fonce);
+  --centre-aide-background-bouton: var(--centre-aide-background-entete);
+  --centre-aide-font-color-bouton: white;
+  --centre-aide-border-lien-secondaire: var(--centre-aide-background-entete);
+  --centre-aide-font-color-lien-secondaire: var(--centre-aide-background-entete);
+  --centre-aide-background-hover-lien: var(--couleurs-mac-securiteacces);
+  --centre-aide-background-hover-declencheur: var(--centre-aide-background-hover-lien);
+}

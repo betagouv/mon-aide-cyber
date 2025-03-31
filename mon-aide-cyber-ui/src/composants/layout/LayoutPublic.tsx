@@ -34,6 +34,19 @@ export const LayoutPublic = ({
       />
       <Outlet />
       <Footer />
+      <lab-anssi-centre-aide
+        nomService="MonAideCyber"
+        liens={JSON.stringify([
+          {
+            texte: '💬 Nous contacter par chat',
+            href: 'https://aide.monaide.cyber.gouv.fr/fr/',
+          },
+          {
+            texte: '🙌 Consulter la F.A.Q',
+            href: 'https://aide.monaide.cyber.gouv.fr/fr/',
+          },
+        ])}
+      ></lab-anssi-centre-aide>
     </>
   );
 };
