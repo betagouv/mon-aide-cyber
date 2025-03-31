@@ -1,4 +1,3 @@
-import { FormulaireDeContact } from '../../../composants/communs/FormulaireDeContact/FormulaireDeContact';
 import TuileActionDevenirAidant from '../../../composants/communs/tuiles/TuileActionDevenirAidant';
 import TuileActionStatistiques from '../../../composants/communs/tuiles/TuileActionStatistiques';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2';
@@ -85,7 +84,7 @@ export const EcranBeneficierDuDispositif = () => {
         </div>
       </section>
       <section className="participer fr-pt-4w">
-        <div className="fr-container conteneur-participer">
+        <div className="fr-container conteneur-participer fr-pb-4w">
           <div className="fr-col-12">
             <TypographieH2>Pour aller plus loin</TypographieH2>
           </div>
@@ -99,7 +98,6 @@ export const EcranBeneficierDuDispositif = () => {
           </div>
         </div>
       </section>
-      <FormulaireDeContact />
     </main>
   );
 };

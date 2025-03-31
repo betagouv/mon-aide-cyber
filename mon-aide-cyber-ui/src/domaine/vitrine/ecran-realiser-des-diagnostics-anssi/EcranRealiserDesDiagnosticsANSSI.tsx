@@ -1,7 +1,6 @@
 import './ecran-realiser-des-diagnostics-anssi.scss';
 import useDefilementFluide from '../../../hooks/useDefilementFluide.ts';
 import { useNavigate } from 'react-router-dom';
-import { FormulaireDeContact } from '../../../composants/communs/FormulaireDeContact/FormulaireDeContact.tsx';
 import { ActionsPiedDePage } from '../../../composants/communs/ActionsPiedDePage.tsx';
 import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
 import { Temoignages } from '../ecran-devenir-aidant/composants/Temoignages.tsx';
@@ -81,7 +80,6 @@ export const EcranRealiserDesDiagnosticsANSSI = () => {
         ]}
       />
       <ActionsPiedDePage className="fond-clair-mac fr-pt-4w" />
-      <FormulaireDeContact />
     </main>
   );
 };
