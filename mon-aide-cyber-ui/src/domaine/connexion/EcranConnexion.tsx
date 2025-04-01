@@ -24,14 +24,12 @@ export const EcranConnexion = () => {
         </p>
         <p>
           Nous vous invitons dès à présent à vous rendre sur le site :{' '}
-          <a href="https://monaidecyber.ssi.gouv.fr">
-            monaidecyber.ssi.gouv.fr
-          </a>
+          <a href="https://monaide.cyber.gouv.fr">monaide.cyber.gouv.fr</a>
         </p>
         <p>
           Si vous ne retrouvez pas sur votre tableau de bord les IDs des
-          diagnostics effectués, contactez-nous à l’adresse monaidecyber [at]
-          ssi.gouv.fr
+          diagnostics effectués, contactez-nous à l’adresse contact [at]
+          monaidecyber.beta.gouv.fr
         </p>
         <p>
           Toutefois, si vous souhaitez continuer à effectuer des diagnostics sur
