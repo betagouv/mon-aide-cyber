@@ -9,31 +9,21 @@ export const EcranAccessibilite = () => {
         <div className="fr-grid-row fr-grid-row--center">
           <div className="fr-col-8 fr-pt-6w">
             <h1>Déclaration d’accessibilité</h1>
+            <p>Établie le 30 septembre 2024.</p>
             <p>
-              Établie le
-              <span>30 septembre 2024</span>.
+              Notre organisation s’engage à rendre son service accessible,
+              conformément à l’article 47 de la loi n° 2005-102 du 11 février
+              2005.
             </p>
             <p>
-              <span>Notre organisation</span>
-              s’engage à rendre son service accessible, conformément à l’article
-              47 de la loi n° 2005-102 du 11 février 2005.
-            </p>
-            <p>
-              Cette déclaration d’accessibilité s’applique à
-              <strong>Mon Aide Cyber</strong>
-              <span>
-                (<span>https://monaidecyber.ssi.gouv.fr/</span>)
-              </span>
+              Cette déclaration d’accessibilité s’applique à{' '}
+              <strong>Mon Aide Cyber</strong> ( https://monaide.cyber.gouv.fr/)
               .
             </p>
             <h2>État de conformité</h2>
             <p>
-              <strong>Mon Aide Cyber</strong>
-              est
-              <strong>
-                <span data-printfilter="lowercase">non conforme</span>
-              </strong>
-              avec le
+              <strong>Mon Aide Cyber</strong> est <strong>non conforme</strong>{' '}
+              avec le{' '}
               <abbr title="Référentiel général d’amélioration de l’accessibilité">
                 RGAA
               </abbr>
@@ -54,13 +44,13 @@ export const EcranAccessibilite = () => {
             <p>Vous pouvez&nbsp;:</p>
             <ul>
               <li>
-                Écrire un message au
+                Écrire un message au{' '}
                 <a href="https://formulaire.defenseurdesdroits.fr/">
                   Défenseur des droits
                 </a>
               </li>
               <li>
-                Contacter
+                Contacter{' '}
                 <a href="https://www.defenseurdesdroits.fr/saisir/delegues">
                   le délégué du Défenseur des droits dans votre région
                 </a>

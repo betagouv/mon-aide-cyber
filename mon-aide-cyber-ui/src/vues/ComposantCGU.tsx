@@ -36,11 +36,11 @@ const ContenuCGU = () => (
     <p dir="auto">
       Les informations légales du Site sont accessibles à l’adresse{' '}
       <a
-        href="https://www.monaidecyber.ssi.gouv.fr/cgu"
+        href="https://monaide.cyber.gouv.fr/cgu"
         className="use-hover-preview"
         rel="noopener noreferrer nofollow"
       >
-        https://www.monaidecyber.ssi.gouv.fr/cgu
+        https://monaide.cyber.gouv.fr/cgu
       </a>{' '}
       depuis la page d’accueil du Site.{' '}
     </p>
