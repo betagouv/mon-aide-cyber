@@ -80,7 +80,7 @@ export class CapteurSagaDemandeSolliciterAide
                     }),
                   }),
                 destinataire: {
-                  email: adaptateurEnvironnement.messagerie().emailMAC(),
+                  email: adaptateurEnvironnement.messagerie().copieMAC(),
                 },
                 objet:
                   'MonAideCyber - Une entité a sollicité un Aidant depuis l’annuaire des Aidants cyber',

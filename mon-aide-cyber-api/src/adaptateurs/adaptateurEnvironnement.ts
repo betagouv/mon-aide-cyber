@@ -6,6 +6,7 @@ const sentry = () => ({
 const messagerie = () => ({
   clefAPI: () => process.env.BREVO_CLEF_API || '',
   emailMAC: () => process.env.EMAIL_CONTACT_MAC_DESTINATAIRE || '',
+  copieMAC: () => process.env.EMAIL_CONTACT_MAC_COPIE || '',
   expediteurMAC: () => process.env.EMAIL_CONTACT_MAC_EXPEDITEUR || '',
   expediteurInfoMAC: () => process.env.EMAIL_INFO_MAC_EXPEDITEUR || '',
 });

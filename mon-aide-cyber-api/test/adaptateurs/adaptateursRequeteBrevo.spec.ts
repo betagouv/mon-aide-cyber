@@ -33,11 +33,11 @@ class AdaptateursRequeteBrevoDeTest extends AdaptateursRequeteBrevo {
 
 describe('Adaptateurs requete Brevo', () => {
   adaptateurEnvironnement.messagerie = () =>
-    adaptateursEnvironnementDeTest.messagerie(
-      'email',
-      'expéditeur',
-      'une clef'
-    );
+    adaptateursEnvironnementDeTest.messagerie({
+      copieMac: 'email',
+      expediteurMAC: 'expéditeur',
+      clefAPI: 'une clef',
+    });
 
   describe('Création de contact', () => {
     it("Exécute une création de contact en indiquant qu'une mise à jour est possible", async () => {

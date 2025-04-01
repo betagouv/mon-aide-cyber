@@ -85,7 +85,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     adaptateursCorpsMessage.demande =
       unAdaptateurDeCorpsDeMessage().construis().demande;
     adaptateurEnvironnement.messagerie = () =>
-      adaptateursEnvironnementDeTest.messagerie('mac@email.com');
+      adaptateursEnvironnementDeTest.messagerie({
+        emailMac: 'mac@email.com',
+        copieMac: 'copie-mac@email.com',
+      });
   });
   describe("Si l'Aidé est connu de MAC", () => {
     it('Mets à jour la demande d’aide', async () => {
@@ -206,7 +209,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
 
       expect(
         adaptateurEnvoiMail.aEteEnvoyeEnCopieA(
-          'mac@email.com',
+          'copie-mac@email.com',
           'Bonjour une entité a fait une demande d’aide'
         )
       ).toBe(true);
@@ -275,7 +278,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       ).toBe(true);
       expect(
         adaptateurEnvoiMail.aEteEnvoyeEnCopieA(
-          'mac@email.com',
+          'copie-mac@email.com',
           'Bonjour une entité a fait une demande d’aide, relation Aidant : jean.dujardin@email.com'
         )
       ).toBe(true);
