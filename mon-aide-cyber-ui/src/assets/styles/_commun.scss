@@ -150,6 +150,10 @@ fieldset {
   justify-content: center;
 }
 
+.justify-end {
+  justify-content: end;
+}
+
 .items-center {
   align-items: center;
 }
@@ -173,4 +177,25 @@ fieldset {
 
 .m-0 {
   margin: 0;
+}
+
+.visible-desktop {
+  display: none;
+  @include a-partir-de(lg) {
+    display: unset;
+  }
+}
+
+.boutons-sans-fond {
+  .fr-btn {
+    background-color: transparent !important;
+    color: var(--text-action-high-blue-france);
+  }
+}
+
+.fr-btn {
+  gap: 0.5rem;
+}
+.fr-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
 }
