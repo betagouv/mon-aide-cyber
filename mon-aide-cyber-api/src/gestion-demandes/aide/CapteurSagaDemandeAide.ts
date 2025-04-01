@@ -76,7 +76,7 @@ export class CapteurSagaDemandeAide
             aide.departement
           ),
         },
-        copie: adaptateurEnvironnement.messagerie().emailMAC(),
+        copie: adaptateurEnvironnement.messagerie().copieMAC(),
         corps: adaptateursCorpsMessage
           .demande()
           .recapitulatifDemandeAide()

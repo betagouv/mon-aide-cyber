@@ -151,7 +151,10 @@ describe('Capteur saga demande solliciter Aide', () => {
   describe('En ce qui concerne MAC', () => {
     it('Envoie le mail récapitulatif à MAC', async () => {
       adaptateurEnvironnement.messagerie = () =>
-        adaptateursEnvironnementDeTest.messagerie('mac@mail.com');
+        adaptateursEnvironnementDeTest.messagerie({
+          emailMac: 'mac@mail.com',
+          copieMac: 'copie-mac@mail.com',
+        });
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
 
@@ -168,14 +171,17 @@ describe('Capteur saga demande solliciter Aide', () => {
       });
 
       expect(
-        adaptateurEnvoiMail.aEteEnvoyeA('mac@mail.com', 'Bonjour MAC!')
+        adaptateurEnvoiMail.aEteEnvoyeA('copie-mac@mail.com', 'Bonjour MAC!')
       ).toBe(true);
       expect(adaptateurEnvoiMail.aEteEnvoyePar('MONAIDECYBER')).toBe(true);
     });
 
     it('Envoie le mail récapitulatif à MAC avec la raison sociale', async () => {
       adaptateurEnvironnement.messagerie = () =>
-        adaptateursEnvironnementDeTest.messagerie('mac@mail.com');
+        adaptateursEnvironnementDeTest.messagerie({
+          emailMac: 'mac@mail.com',
+          copieMac: 'copie-mac@mail.com',
+        });
       adaptateursCorpsMessage.sollicitation = unAdaptateurDeCorpsDeMessage()
         .recapitulatifMac(
           (proprietes) => `Bonjour MAC! ${proprietes.raisonSociale}`
@@ -198,7 +204,10 @@ describe('Capteur saga demande solliciter Aide', () => {
       });
 
       expect(
-        adaptateurEnvoiMail.aEteEnvoyeA('mac@mail.com', 'Bonjour MAC! BetaGouv')
+        adaptateurEnvoiMail.aEteEnvoyeA(
+          'copie-mac@mail.com',
+          'Bonjour MAC! BetaGouv'
+        )
       ).toBe(true);
     });
   });
