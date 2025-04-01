@@ -95,10 +95,10 @@ export const Header = ({
               <div className="fr-header__service fr-col-md-5">{lienMAC}</div>
             </div>
             {!enteteSimple ? (
-              <div className="fr-header__tools">
-                <div className="fr-header__tools-links">
-                  <lab-anssi-bouton-suite-cyber-navigation sourceUtm="MonAideCyber"></lab-anssi-bouton-suite-cyber-navigation>
+              <div className="fr-header__tools boutons-sans-fond visible-desktop">
+                <div className="flex justify-end items-center">
                   <div className="flex justify-center items-center">
+                    <lab-anssi-bouton-suite-cyber-navigation sourceUtm="MonAideCyber"></lab-anssi-bouton-suite-cyber-navigation>
                     {utilisateur ? (
                       <ComposantMenuUtilisateur utilisateur={utilisateur} />
                     ) : (

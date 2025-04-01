@@ -63,19 +63,19 @@ export const ComposantMenuUtilisateur = ({
 
   const boutonSeDeconnecter =
     ressource && ressource.typeAppel === 'DIRECT' ? (
-      <a className="element" href={ressource.url}>
+      <a className="fr-btn entete-lien-se-connecter" href={ressource.url}>
         <span className="fr-icon-logout-box-r-line" aria-hidden="true"></span>
         <div>Se déconnecter</div>
       </a>
     ) : (
-      <div className="element" onClick={deconnecter}>
+      <div className="fr-btn entete-lien-se-connecter" onClick={deconnecter}>
         <span className="fr-icon-logout-box-r-line" aria-hidden="true"></span>
         <div>Se déconnecter</div>
       </div>
     );
   return (
-    <div className="menu-utilisateur">
-      <div className="element" onClick={afficherProfil}>
+    <div className="fr-ml-1w">
+      <div className="fr-btn entete-lien-se-connecter" onClick={afficherProfil}>
         <span className="fr-icon-user-line" aria-hidden="true"></span>
         <span>{nomUtilisateur}</span>
       </div>
