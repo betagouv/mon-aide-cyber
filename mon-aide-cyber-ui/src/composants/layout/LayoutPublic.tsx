@@ -39,7 +39,7 @@ export const LayoutPublic = ({
         liens={JSON.stringify([
           {
             texte: '💬 Nous contacter par chat',
-            href: 'https://aide.monaide.cyber.gouv.fr/fr/',
+            href: 'https://aide.monaide.cyber.gouv.fr/fr/?chat=ouvert',
           },
           {
             texte: '🙌 Consulter la F.A.Q',
