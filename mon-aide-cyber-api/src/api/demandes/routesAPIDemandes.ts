@@ -1,7 +1,7 @@
 import { ConfigurationServeur } from '../../serveur';
 import { routesAPIDemandesDevenirAidant } from './routeAPIDemandeDevenirAidant';
 import { routesAPIDemandeEtreAide } from './routesAPIDemandeEtreAide';
-import express, { Router } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { routesAPIDemandeSolliciterAide } from './routesAPIDemandeSolliciterAide';
 
 export const routesAPIDemandes = (configuration: ConfigurationServeur) => {
@@ -9,6 +9,15 @@ export const routesAPIDemandes = (configuration: ConfigurationServeur) => {
 
   routes.use('/devenir-aidant', routesAPIDemandesDevenirAidant(configuration));
   routes.use('/etre-aide', routesAPIDemandeEtreAide(configuration));
+  routes.post(
+    '/dummy-etre-aide',
+    express.json(),
+    async (requete: Request, reponse: Response) => {
+      reponse
+        .status(201)
+        .json({ reponse: `Email reçu : ${requete.body.email}` });
+    }
+  );
   routes.use('/solliciter-aide', routesAPIDemandeSolliciterAide(configuration));
 
   return routes;
