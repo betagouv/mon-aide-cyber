@@ -129,8 +129,12 @@ const generePdfs = async (
     const resultat = navigateur.newPage().then((page) => {
       return page
         .setContent(contenuFinal.corps)
-        .then(() =>
-          page.pdf(formatPdfA4(contenuFinal.entete, contenuFinal.piedPage))
+        .then(async () =>
+          Buffer.from(
+            await page.pdf(
+              formatPdfA4(contenuFinal.entete, contenuFinal.piedPage)
+            )
+          )
         )
         .catch((erreur) => {
           console.log(erreur);
