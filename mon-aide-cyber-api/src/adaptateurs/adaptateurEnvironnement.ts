@@ -1,6 +1,7 @@
 const sentry = () => ({
   dsn: () => process.env.SENTRY_DSN,
   environnement: () => process.env.SENTRY_ENVIRONNEMENT,
+  tracesSampleRate: () => Number(process.env.SENTRY_TRACES_SAMPLE_RATE) || 0,
 });
 
 const messagerie = () => ({
