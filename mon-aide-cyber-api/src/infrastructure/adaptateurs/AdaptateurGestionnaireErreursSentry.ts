@@ -22,7 +22,7 @@ export class AdaptateurGestionnaireErreursSentry
         new Sentry.Integrations.Postgres(),
         ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
       ],
-      tracesSampleRate: 1.0,
+      tracesSampleRate: sentry().tracesSampleRate(),
     });
 
     applicationExpress.use(Sentry.Handlers.requestHandler());
