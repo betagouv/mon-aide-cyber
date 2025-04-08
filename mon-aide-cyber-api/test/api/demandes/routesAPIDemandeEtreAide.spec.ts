@@ -4,7 +4,10 @@ import testeurIntegration from '../testeurIntegration';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { executeRequete } from '../executeurRequete';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
-import { departements } from '../../../src/gestion-demandes/departements';
+import {
+  departements,
+  finistere,
+} from '../../../src/gestion-demandes/departements';
 import { EntrepotAideMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 
 describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
@@ -43,6 +46,27 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         expect(aides[0].dateSignatureCGU).toStrictEqual(
           FournisseurHorloge.maintenant()
         );
+      });
+
+      it('Valide la demande si le code du département est fourni', async () => {
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/etre-aide',
+          {
+            departement: '29',
+            cguValidees: true,
+            email: 'jean.dupont@aide.com',
+            raisonSociale: 'beta-gouv',
+          }
+        );
+
+        expect(reponse.statusCode).toBe(202);
+        const aides = await (
+          testeurMAC.entrepots.demandesAides() as EntrepotAideMemoire
+        ).tous();
+        expect(aides).toHaveLength(1);
+        expect(aides[0].departement).toStrictEqual(finistere);
       });
 
       it('Renvoie une erreur si la demande n’a pu aller au bout', async () => {

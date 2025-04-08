@@ -1210,3 +1210,12 @@ export const rechercheParNomDepartement = (
 ): Departement => {
   return departements.filter((dep) => dep.nom === departement)[0];
 };
+
+export const rechercheParNomOuCodeDepartement = (
+  nomOuCodeDepartement: string
+): Departement => {
+  return departements.filter(
+    (dep) =>
+      dep.nom === nomOuCodeDepartement || dep.code === nomOuCodeDepartement
+  )[0];
+};

@@ -16,7 +16,7 @@ import {
 import {
   departements,
   nomsEtCodesDesDepartements,
-  rechercheParNomDepartement,
+  rechercheParNomOuCodeDepartement,
 } from '../../gestion-demandes/departements';
 import { RequetePublique } from '../routesAPI';
 
@@ -60,7 +60,10 @@ export const routesAPIDemandeEtreAide = (
         "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide"
       ),
     body('departement')
-      .isIn(departements.map((d) => d.nom))
+      .isIn([
+        ...departements.map((d) => d.nom),
+        ...departements.map((d) => d.code),
+      ])
       .withMessage('Département inconnu'),
     body('raisonSociale')
       .optional()
@@ -85,7 +88,7 @@ export const routesAPIDemandeEtreAide = (
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {
         const corpsRequete = requete.body;
-        const departement = rechercheParNomDepartement(
+        const departement = rechercheParNomOuCodeDepartement(
           corpsRequete.departement
         );
         const saga: SagaDemandeAide = {
