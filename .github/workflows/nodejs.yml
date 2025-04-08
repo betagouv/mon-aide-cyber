@@ -13,9 +13,6 @@ env:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]
 
     services:
       postgres:
@@ -28,10 +25,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Installe Node.js ${{ matrix.node-version }}
+      - name: Installe Node.js 20
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
       - run: npm ci
       - run: npm run build --workspaces
       - run: npm run ci:initialise -w mon-aide-cyber-api
