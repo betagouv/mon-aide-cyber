@@ -14,6 +14,7 @@ import {
   SagaDemandeAide,
 } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
 import {
+  departements,
   nomsEtCodesDesDepartements,
   rechercheParNomDepartement,
 } from '../../gestion-demandes/departements';
@@ -58,6 +59,9 @@ export const routesAPIDemandeEtreAide = (
       .withMessage(
         "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide"
       ),
+    body('departement')
+      .isIn(departements.map((d) => d.nom))
+      .withMessage('Département inconnu'),
     body('raisonSociale')
       .optional()
       .trim()
@@ -81,11 +85,14 @@ export const routesAPIDemandeEtreAide = (
       ) as Result<FieldValidationError>;
       if (resultatValidation.isEmpty()) {
         const corpsRequete = requete.body;
+        const departement = rechercheParNomDepartement(
+          corpsRequete.departement
+        );
         const saga: SagaDemandeAide = {
           type: 'SagaDemandeAide',
           cguValidees: corpsRequete.cguValidees,
           email: corpsRequete.email,
-          departement: rechercheParNomDepartement(corpsRequete.departement),
+          departement,
           ...(corpsRequete.raisonSociale && {
             raisonSociale: corpsRequete.raisonSociale,
           }),

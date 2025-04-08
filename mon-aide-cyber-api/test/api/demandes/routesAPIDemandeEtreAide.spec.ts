@@ -48,7 +48,11 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
       it('Renvoie une erreur si la demande n’a pu aller au bout', async () => {
         const testeurMAC = testeurIntegration();
         const donneesServeur: { app: Express } = testeurMAC.initialise();
-        testeurMAC.adaptateurEnvoieMessage.envoie = () => Promise.reject();
+        testeurMAC.adaptateurEnvoieMessage.envoie = async () => {
+          throw new Error(
+            'Erreur car on simule une erreur d’envoie de message.'
+          );
+        };
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
@@ -56,7 +60,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           {
             cguValidees: true,
             email: 'jean.dupont@aide.com',
-            departement: 'Corse du sud',
+            departement: 'Corse-du-Sud',
             raisonSociale: 'beta-gouv',
           }
         );
@@ -70,7 +74,6 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
       it('Renvoie une erreur si l‘utilisateur MAC à mettre en relation n‘existe pas', async () => {
         const testeurMAC = testeurIntegration();
         const donneesServeur: { app: Express } = testeurMAC.initialise();
-        testeurMAC.adaptateurEnvoieMessage.envoie = () => Promise.reject();
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -79,7 +82,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           {
             cguValidees: true,
             email: 'jean.dupont@aide.com',
-            departement: 'Corse du sud',
+            departement: 'Corse-du-Sud',
             raisonSociale: 'beta-gouv',
             relationUtilisateur: 'utilisateurinconnu@yopmail.com',
           }
@@ -164,16 +167,26 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           );
 
           expect(reponse.statusCode).toBe(422);
-          expect(await reponse.json()).toStrictEqual({
-            message:
-              "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide",
-            liens: {
-              'demander-aide': {
-                url: '/api/demandes/etre-aide',
-                methode: 'POST',
-              },
-            },
-          });
+          expect(await reponse.json().message).toBe(
+            "Veuillez renseigner le département de l'entité pour laquelle vous sollicitez une aide, Département inconnu"
+          );
+        });
+
+        it('Rejette la demande si le département n’est pas connu', async () => {
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/demandes/etre-aide',
+            {
+              departement: 'departement-inconnu',
+              cguValidees: true,
+              email: 'jean.dupont@aide.com',
+              raisonSociale: 'beta-gouv',
+            }
+          );
+
+          expect(reponse.statusCode).toBe(422);
+          expect(await reponse.json().message).toBe('Département inconnu');
         });
 
         it('La raison sociale est optionnelle', async () => {
