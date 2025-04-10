@@ -65,7 +65,9 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
 
   describe('Lorsqu’une requête GET est reçue sur /pro-connect/apres-authentification', () => {
     beforeEach(async () => {
-      const aidant = unAidant().construis();
+      const aidant = unAidant()
+        .avecUnEmail('jean.dupont@aidant.fr')
+        .construis();
       donneesServeur = testeurMAC.initialise();
       await testeurMAC.entrepots.aidants().persiste(aidant);
       utilitairesCookies.recuperateurDeCookies = () =>
@@ -97,6 +99,27 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
       expect(
         JSON.parse(Buffer.from(objet.session, 'base64').toString()).token
       ).toStrictEqual('abc');
+    });
+
+    it("L'email renvoyé par ProConnect est traité en minuscules, permettant de ne pas créer de nouveau compte pour un email existant", async () => {
+      const casseDifferente = 'Jean.Dupont@aidant.fr';
+
+      testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+        async () =>
+          desInformationsUtilisateur()
+            .pourUnAidant(unAidant().avecUnEmail(casseDifferente).construis())
+            .construis();
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/pro-connect/apres-authentification'
+      );
+
+      expect(reponse.statusCode).toStrictEqual(302);
+      expect(reponse.headers['location']).toStrictEqual(
+        '/mon-espace/tableau-de-bord'
+      );
     });
 
     it('Si la présence du cookie ProConnectInfo n’est pas validée, on envoie un message d’erreur d’authentification', async () => {
