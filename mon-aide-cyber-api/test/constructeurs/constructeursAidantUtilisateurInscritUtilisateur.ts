@@ -188,7 +188,7 @@ class ConstructeurUtilisateurInscrit
   implements Constructeur<UtilisateurInscrit>
 {
   private dateSignatureCGU: Date | undefined = fakerFR.date.anytime();
-  private email: string = fakerFR.internet.email();
+  private email: string = fakerFR.internet.email().toLowerCase();
   private entite: EntiteUtilisateurInscrit | undefined = {};
   private identifiant: crypto.UUID = crypto.randomUUID();
   private nomPrenom: string = fakerFR.person.fullName();

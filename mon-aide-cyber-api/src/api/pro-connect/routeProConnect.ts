@@ -117,7 +117,7 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
 
         const utilisateur = await uneRechercheUtilisateursMAC(
           entrepots.utilisateursMAC()
-        ).rechercheParMail(email!);
+        ).rechercheParMail(email!.toLowerCase());
 
         if (utilisateur) {
           let redirection = '/mon-espace/tableau-de-bord';
