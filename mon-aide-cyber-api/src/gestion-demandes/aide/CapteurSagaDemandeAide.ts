@@ -93,7 +93,7 @@ export class CapteurSagaDemandeAide
         if (!utilisateurMAC) {
           return Promise.reject(
             new ErreurUtilisateurMACInconnu(
-              'L’Aidant n’est pas référencé dans MonAideCyber'
+              'L’adresse email de l’Aidant ou du prestataire n’est pas référencée. Veuillez entrer une adresse valide et réessayer.'
             )
           );
         }

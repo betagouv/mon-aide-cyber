@@ -114,7 +114,8 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
 
         expect(reponse.statusCode).toBe(400);
         expect(await reponse.json()).toStrictEqual({
-          message: 'L’Aidant n’est pas référencé dans MonAideCyber',
+          message:
+            'L’adresse email de l’Aidant ou du prestataire n’est pas référencée. Veuillez entrer une adresse valide et réessayer.',
         });
       });
 
