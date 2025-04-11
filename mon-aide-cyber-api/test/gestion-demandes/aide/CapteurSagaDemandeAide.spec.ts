@@ -287,8 +287,11 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     it("Envoie un email de confirmation à l'Aidé en prenant en compte la relation existante avec un Aidant", async () => {
       adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
         .confirmationDemandeAide(
-          (_aide: DemandeAide, relationUtilisateur: string | undefined) =>
-            `Bonjour entité Aidée, relation Aidant : ${relationUtilisateur}`
+          (
+            relationUtilisateur: string | undefined,
+            _raisonSociale: string | undefined,
+            _nomDepartement: string
+          ) => `Bonjour entité Aidée, relation Aidant : ${relationUtilisateur}`
         )
         .construis().demande;
       FournisseurHorlogeDeTest.initialise(

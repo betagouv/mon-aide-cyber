@@ -14,6 +14,13 @@ export type PieceJointe = { contenu: string; nom: string };
 
 export interface AdaptateurEnvoiMail {
   envoie(email: Email, expediteur?: Expediteur): Promise<void>;
+
+  envoieConfirmationDemandeAide(
+    email: string,
+    raisonSociale: string | undefined,
+    nomDepartement: string,
+    relationUtilisateur: string | undefined
+  ): any;
 }
 
 export type Expediteur = 'MONAIDECYBER' | 'INFO';

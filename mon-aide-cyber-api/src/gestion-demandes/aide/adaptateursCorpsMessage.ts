@@ -102,8 +102,9 @@ export type MessagesDemande = {
   };
   confirmationDemandeAide: () => {
     genereCorpsMessage: (
-      aide: DemandeAide,
-      relationUtilisateur: string | undefined
+      relationUtilisateur: string | undefined,
+      raisonSociale: string | undefined,
+      nomDepartement: string
     ) => string;
   };
 };
@@ -114,14 +115,15 @@ export type AdaptateurCorpsDeMessageAide = {
 };
 
 const genereCorpsConfirmationDemandeAide = (
-  aide: DemandeAide,
-  relationUtilisateur: string | undefined
+  relationUtilisateur: string | undefined,
+  raisonSociale: string | undefined,
+  nomDepartement: string
 ) => {
   const formateDate = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant()
   );
-  const raisonSociale = aide.raisonSociale
-    ? `- Raison sociale : ${aide.raisonSociale}\n`
+  const texteRaisonSociale = raisonSociale
+    ? `- Raison sociale : ${raisonSociale}\n`
     : '';
   const messageIntroduction = relationUtilisateur
     ? 'Votre demande a bien été prise en compte.\n' +
@@ -137,8 +139,8 @@ const genereCorpsConfirmationDemandeAide = (
     '\n' +
     messageIntroduction +
     `- Signature des CGU le ${formateDate.date} à ${formateDate.heure}\n` +
-    `- Département : ${aide.departement.nom}\n` +
-    raisonSociale +
+    `- Département : ${nomDepartement}\n` +
+    texteRaisonSociale +
     '\n' +
     'Toute l’équipe reste à votre disposition,\n\n' +
     "L'équipe MonAideCyber\n" +
@@ -202,8 +204,16 @@ const adaptateursCorpsMessage: AdaptateurCorpsDeMessageAide = {
   }),
   demande: (): MessagesDemande => ({
     confirmationDemandeAide: () => ({
-      genereCorpsMessage: (aide, relationUtilisateur): string =>
-        genereCorpsConfirmationDemandeAide(aide, relationUtilisateur),
+      genereCorpsMessage: (
+        relationUtilisateur: string | undefined,
+        raisonSociale: string | undefined,
+        nomDepartement: string
+      ): string =>
+        genereCorpsConfirmationDemandeAide(
+          relationUtilisateur,
+          raisonSociale,
+          nomDepartement
+        ),
     }),
     recapitulatifDemandeAide: () => ({
       genereCorpsMessage: (aide, relationUtilisateur): string =>
