@@ -4,6 +4,7 @@ import {
   Email,
   Expediteur,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
+import { adaptateursCorpsMessage } from '../../gestion-demandes/aide/adaptateursCorpsMessage';
 
 export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private messages: Email[] = [];
@@ -22,6 +23,23 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     return Promise.resolve();
   }
 
+  envoieConfirmationDemandeAide(
+    email: string,
+    raisonSociale: string | undefined,
+    nomDepartement: string,
+    relationUtilisateur: string | undefined
+  ) {
+    if (this._genereErreur) {
+      return Promise.reject('Erreur');
+    }
+    const message = adaptateursCorpsMessage
+      .demande()
+      .confirmationDemandeAide()
+      .genereCorpsMessage(relationUtilisateur, raisonSociale, nomDepartement);
+    this.messages.push({ corps: message, objet: '', destinataire: { email } });
+    return Promise.resolve();
+  }
+
   aEteEnvoye(email: string, message: string, nom?: string): boolean {
     const messageTrouve = this.messages.find(
       (m) =>
@@ -31,6 +49,7 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     );
     return (nom !== undefined && messageTrouve !== undefined) || false;
   }
+
   aEteEnvoyePar(expediteur: Expediteur): boolean {
     return this.expediteurs.includes(expediteur);
   }
