@@ -3,13 +3,14 @@ import {
   Destinataire,
   Email,
   Expediteur,
+  UtilisateurMACEnRelation,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
-import { adaptateursCorpsMessage } from '../../gestion-demandes/aide/adaptateursCorpsMessage';
 
 export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private messages: Email[] = [];
   private _genereErreur = false;
   private expediteurs: Expediteur[] = ['MONAIDECYBER'];
+  private destinataires: string[] = [];
 
   envoie(
     message: Email,
@@ -25,18 +26,15 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
 
   envoieConfirmationDemandeAide(
     email: string,
-    raisonSociale: string | undefined,
-    nomDepartement: string,
-    relationUtilisateur: string | undefined
-  ) {
+    utilisateurMACEnRelation: UtilisateurMACEnRelation | undefined
+  ): Promise<void> {
     if (this._genereErreur) {
       return Promise.reject('Erreur');
     }
-    const message = adaptateursCorpsMessage
-      .demande()
-      .confirmationDemandeAide()
-      .genereCorpsMessage(relationUtilisateur, raisonSociale, nomDepartement);
-    this.messages.push({ corps: message, objet: '', destinataire: { email } });
+    this.destinataires.push(email);
+    if (utilisateurMACEnRelation) {
+      this.destinataires.push(utilisateurMACEnRelation.email);
+    }
     return Promise.resolve();
   }
 
@@ -86,5 +84,15 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
 
   mailNonEnvoye(): boolean {
     return !this.mailEnvoye();
+  }
+
+  confirmationDemandeAideAEteEnvoyeeA(
+    emailEntiteeAidee: string,
+    emailAidant?: string
+  ): boolean {
+    return (
+      this.destinataires.includes(emailEntiteeAidee) &&
+      (emailAidant === undefined || this.destinataires.includes(emailAidant))
+    );
   }
 }

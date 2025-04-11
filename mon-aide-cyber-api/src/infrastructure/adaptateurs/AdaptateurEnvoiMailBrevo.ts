@@ -3,49 +3,50 @@ import {
   Destinataire,
   Email,
   Expediteur,
+  UtilisateurMACEnRelation,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
 import {
   adaptateursRequeteBrevo,
   ErreurRequeBrevo,
 } from './adaptateursRequeteBrevo';
-import { unConstructeurEnvoiDeMail } from '../brevo/ConstructeursBrevo';
+import {
+  unConstructeurEnvoiDeMail,
+  unConstructeurEnvoiDeMailAvecTemplate,
+} from '../brevo/ConstructeursBrevo';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { isArray } from 'lodash';
-import { adaptateursCorpsMessage } from '../../gestion-demandes/aide/adaptateursCorpsMessage';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   async envoieConfirmationDemandeAide(
     email: string,
-    raisonSociale: string | undefined,
-    nomDepartement: string,
-    relationUtilisateur: string | undefined
+    utilisateurMACEnRelation: UtilisateurMACEnRelation | undefined
   ): Promise<void> {
-    const emailTransac: Email = {
-      objet: "Demande d'aide pour MonAideCyber",
-      destinataire: { email: email },
-      corps: adaptateursCorpsMessage
-        .demande()
-        .confirmationDemandeAide()
-        .genereCorpsMessage(relationUtilisateur, raisonSociale, nomDepartement),
-    };
-    const destinataire: Destinataire =
-      emailTransac.destinataire as Destinataire;
-    const emailBrevo = unConstructeurEnvoiDeMail()
-      .ayantPourExpediteur(
-        'MonAideCyber',
-        adaptateurEnvironnement.messagerie().expediteurMAC()
+    const destinataire: Destinataire = { email };
+    let constructeurEmailBrevo = unConstructeurEnvoiDeMailAvecTemplate()
+      .ayantPourTemplate(
+        utilisateurMACEnRelation
+          ? adaptateurEnvironnement
+              .brevo()
+              .templateConfirmationAideEnRelationAvecUnUtilisateurMAC()
+          : adaptateurEnvironnement.brevo().templateConfirmationAide()
       )
-      .ayantPourDestinataires([[destinataire.email, destinataire.nom]])
-      .ayantPourSujet(emailTransac.objet)
-      .ayantPourContenu(emailTransac.corps)
-      .construis();
+      .ayantPourDestinataires([[destinataire.email, destinataire.nom]]);
+    if (utilisateurMACEnRelation) {
+      constructeurEmailBrevo = constructeurEmailBrevo
+        .ayantPourDestinatairesEnCopie([
+          [utilisateurMACEnRelation.email, utilisateurMACEnRelation.nomPrenom],
+        ])
+        .ayantPourParametres({ prenom: utilisateurMACEnRelation.nomPrenom });
+    }
+    const emailBrevo = constructeurEmailBrevo.construis();
     await adaptateursRequeteBrevo()
       .envoiMail()
       .execute(emailBrevo)
       .catch(async (reponse: unknown | ErreurRequeBrevo) => {
         throw new ErreurEnvoiEmail(
-          JSON.stringify((reponse as ErreurRequeBrevo).corps)
+          JSON.stringify((reponse as ErreurRequeBrevo).corps),
+          { cause: reponse as ErreurRequeBrevo }
         );
       });
   }
@@ -80,7 +81,8 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
       .execute(envoiDeMail)
       .catch(async (reponse: unknown | ErreurRequeBrevo) => {
         throw new ErreurEnvoiEmail(
-          JSON.stringify((reponse as ErreurRequeBrevo).corps)
+          JSON.stringify((reponse as ErreurRequeBrevo).corps),
+          { cause: reponse as ErreurRequeBrevo }
         );
       });
   }

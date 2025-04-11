@@ -3,7 +3,8 @@ import {
   CreationContactBrevo,
   CreationEvenement,
   EmailBrevo,
-  EnvoiMailBrevo,
+  EnvoiMailBrevoTexteBrut,
+  EnvoiMailBrevoAvecTemplate,
   PieceJointeBrevo,
   RechercheContactBrevo,
   RequeteBrevo,
@@ -33,7 +34,7 @@ abstract class ConstructeurBrevo<T> {
 type Email = string;
 type Nom = string;
 
-class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevo> {
+class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevoTexteBrut> {
   private expediteur: EmailBrevo = {} as EmailBrevo;
   private destinataires: EmailBrevo[] = [];
   private sujet = '';
@@ -109,6 +110,64 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevo> {
   }
 }
 
+type Parametres = Record<string, string>;
+
+class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<EnvoiMailBrevoAvecTemplate> {
+  private identifiantTemplate = 0;
+  private destinataires: EmailBrevo[] = [];
+  private destinatairesEnCopie: EmailBrevo[] = [];
+  private parametres: Parametres | undefined = undefined;
+
+  constructor() {
+    super('POST');
+  }
+
+  ayantPourTemplate = (
+    identifiantTemplate: number
+  ): ConstructeurBrevoEnvoiMailAvecTemplate => {
+    this.identifiantTemplate = identifiantTemplate;
+    return this;
+  };
+
+  ayantPourDestinataires(
+    destinataires: [Email, Nom | undefined][]
+  ): ConstructeurBrevoEnvoiMailAvecTemplate {
+    this.destinataires = destinataires.map(([email, nom]) => ({
+      email,
+      ...(nom && { name: nom }),
+    }));
+    return this;
+  }
+
+  ayantPourDestinatairesEnCopie(
+    destinatairesEnCopie: [Email, Nom | undefined][]
+  ): ConstructeurBrevoEnvoiMailAvecTemplate {
+    this.destinatairesEnCopie = destinatairesEnCopie.map(([email, nom]) => ({
+      email,
+      ...(nom && { name: nom }),
+    }));
+    return this;
+  }
+
+  ayantPourParametres(
+    parametres: Parametres
+  ): ConstructeurBrevoEnvoiMailAvecTemplate {
+    this.parametres = parametres;
+    return this;
+  }
+
+  protected construisCorps(): EnvoiMailBrevoAvecTemplate {
+    return {
+      templateId: this.identifiantTemplate,
+      to: this.destinataires,
+      ...(this.destinatairesEnCopie.length > 0 && {
+        cc: this.destinatairesEnCopie,
+      }),
+      ...(this.parametres && { params: this.parametres }),
+    };
+  }
+}
+
 class ConstructeurBrevoCreationContact extends ConstructeurBrevo<CreationContactBrevo> {
   private email: Email = '';
   private attributs: Record<string, string> = {} as Record<string, string>;
@@ -177,6 +236,9 @@ class ConstructeurBrevoCreationEvenement extends ConstructeurBrevo<CreationEvene
 }
 
 export const unConstructeurEnvoiDeMail = () => new ConstructeurBrevoEnvoiMail();
+
+export const unConstructeurEnvoiDeMailAvecTemplate = () =>
+  new ConstructeurBrevoEnvoiMailAvecTemplate();
 
 export const unConstructeurCreationDeContact = () =>
   new ConstructeurBrevoCreationContact();

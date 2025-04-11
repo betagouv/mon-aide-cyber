@@ -185,9 +185,8 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       });
 
       expect(
-        adaptateurEnvoiMail.aEteEnvoyeA(
-          'jean-dupont@email.com',
-          'Bonjour entité Aidée'
+        adaptateurEnvoiMail.confirmationDemandeAideAEteEnvoyeeA(
+          'jean-dupont@email.com'
         )
       ).toBe(true);
     });
@@ -285,15 +284,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     });
 
     it("Envoie un email de confirmation à l'Aidé en prenant en compte la relation existante avec un Aidant", async () => {
-      adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
-        .confirmationDemandeAide(
-          (
-            relationUtilisateur: string | undefined,
-            _raisonSociale: string | undefined,
-            _nomDepartement: string
-          ) => `Bonjour entité Aidée, relation Aidant : ${relationUtilisateur}`
-        )
-        .construis().demande;
       FournisseurHorlogeDeTest.initialise(
         new Date(Date.parse('2024-03-19T14:45:17+01:00'))
       );
@@ -316,9 +306,9 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       });
 
       expect(
-        adaptateurEnvoiMail.aEteEnvoyeA(
+        adaptateurEnvoiMail.confirmationDemandeAideAEteEnvoyeeA(
           'jean-dupont@email.com',
-          'Bonjour entité Aidée, relation Aidant : jean.dujardin@email.com'
+          'jean.dujardin@email.com'
         )
       ).toBe(true);
     });

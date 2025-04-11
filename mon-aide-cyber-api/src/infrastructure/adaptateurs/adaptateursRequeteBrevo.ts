@@ -50,17 +50,28 @@ export type RequeteBrevo<T = void> = {
   headers: Record<string, string>;
   corps?: T;
 };
-export type EnvoiMailBrevo = {
+
+export type DestinataireBrevo = { email: string; name?: string };
+
+export type EnvoiMailBrevoTexteBrut = {
   sender: {
     name?: string;
     email: string;
   };
   subject: string;
-  to: { email: string; name?: string }[];
+  to: DestinataireBrevo[];
   textContent: string;
 };
 
+export type EnvoiMailBrevoAvecTemplate = {
+  templateId: number;
+  to: DestinataireBrevo[];
+  cc?: DestinataireBrevo[];
+  params?: Record<string, string>;
+};
+
 export type EmailBrevo = { name?: string; email: string };
+
 export type PieceJointeBrevo = { content: string; name: string };
 
 export type CreationContactBrevo = {
@@ -68,6 +79,7 @@ export type CreationContactBrevo = {
   attributes: Record<string, string>;
   updateEnabled: true;
 };
+
 export type RechercheContactBrevo = string;
 
 export type CreationEvenement = {
@@ -90,7 +102,7 @@ export class ErreurRequeBrevo extends Error {
 
 export class AdaptateursRequeteBrevo {
   envoiMail(): AdaptateurRequeteBrevo<
-    RequeteBrevo<EnvoiMailBrevo>,
+    RequeteBrevo<EnvoiMailBrevoTexteBrut | EnvoiMailBrevoAvecTemplate>,
     ReponseEnvoiMail | ReponseBrevoEnErreur
   > {
     return this.adaptateur('https://api.brevo.com/v3/smtp/email');
@@ -152,7 +164,6 @@ export class AdaptateursRequeteBrevo {
 }
 
 export const adaptateursRequeteBrevo = () => new AdaptateursRequeteBrevo();
-
 const estReponseEnErreur = (
   reponse: ReponseBrevo | ReponseBrevoEnErreur
 ): reponse is ReponseBrevoEnErreur => {
