@@ -52,13 +52,16 @@ export class CapteurSagaDemandeAide
     const envoieConfirmationDemandeAide = async (
       adaptateurEnvoiMail: AdaptateurEnvoiMail,
       aide: DemandeAide,
-      relationUtilisateur: string | undefined
+      relationUtilisateur: UtilisateurMACDTO | undefined
     ) => {
       await adaptateurEnvoiMail.envoieConfirmationDemandeAide(
         aide.email,
-        aide.raisonSociale,
-        aide.departement.nom,
         relationUtilisateur
+          ? {
+              nomPrenom: relationUtilisateur.nomUsage,
+              email: relationUtilisateur.email,
+            }
+          : undefined
       );
     };
 
@@ -137,14 +140,14 @@ export class CapteurSagaDemandeAide
             await envoieRecapitulatifDemandeAide(
               this.adaptateurEnvoiMail,
               aide,
-              saga.relationUtilisateur
+              utilisateurMAC?.email
             );
           }
 
           await envoieConfirmationDemandeAide(
             this.adaptateurEnvoiMail,
             aide,
-            saga.relationUtilisateur
+            utilisateurMAC
           );
 
           await this.busEvenement.publie<DemandeAideCree>({

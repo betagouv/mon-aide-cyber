@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   AdaptateursRequeteBrevo,
   CreationContactBrevo,
-  EnvoiMailBrevo,
+  EnvoiMailBrevoTexteBrut,
   RechercheContactBrevo,
   RequeteBrevo,
 } from '../../src/infrastructure/adaptateurs/adaptateursRequeteBrevo';
@@ -105,7 +105,7 @@ describe('Adaptateurs requete Brevo', () => {
       );
 
       expect(adaptateur.requeteAttendue).toStrictEqual<
-        RequeteBrevo<EnvoiMailBrevo> & { url: string }
+        RequeteBrevo<EnvoiMailBrevoTexteBrut> & { url: string }
       >({
         methode: 'POST',
         corps: {

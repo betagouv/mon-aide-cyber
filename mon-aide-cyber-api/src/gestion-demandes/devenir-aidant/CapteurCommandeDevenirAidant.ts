@@ -99,12 +99,13 @@ export class CapteurCommandeDevenirAidant
           !!demandeEnCours
         )
           .then(() => demandeDevenirAidant)
-          .catch(() =>
+          .catch((e) =>
             Promise.reject(
               ErreurMAC.cree(
                 'Demande devenir Aidant',
                 new ErreurEnvoiEmail(
-                  'Le mail de mise en relation n’a pu être remis.'
+                  'Le mail de mise en relation n’a pu être remis.',
+                  { cause: e }
                 )
               )
             )

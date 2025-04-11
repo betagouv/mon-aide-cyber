@@ -100,13 +100,6 @@ export type MessagesDemande = {
       relationUtilisateur: string | undefined
     ) => string;
   };
-  confirmationDemandeAide: () => {
-    genereCorpsMessage: (
-      relationUtilisateur: string | undefined,
-      raisonSociale: string | undefined,
-      nomDepartement: string
-    ) => string;
-  };
 };
 
 export type AdaptateurCorpsDeMessageAide = {
@@ -114,39 +107,6 @@ export type AdaptateurCorpsDeMessageAide = {
   demande: () => MessagesDemande;
 };
 
-const genereCorpsConfirmationDemandeAide = (
-  relationUtilisateur: string | undefined,
-  raisonSociale: string | undefined,
-  nomDepartement: string
-) => {
-  const formateDate = FournisseurHorloge.formateDate(
-    FournisseurHorloge.maintenant()
-  );
-  const texteRaisonSociale = raisonSociale
-    ? `- Raison sociale : ${raisonSociale}\n`
-    : '';
-  const messageIntroduction = relationUtilisateur
-    ? 'Votre demande a bien été prise en compte.\n' +
-      '\n' +
-      'Votre Aidant va vous accompagner dans la suite de votre démarche MonAideCyber.\n' +
-      'Voici les informations que vous avez renseignées :\n'
-    : 'Votre demande pour bénéficier de MonAideCyber a été prise en compte.\n' +
-      'Un Aidant de proximité vous contactera sur l’adresse email que vous nous avez communiquée dans les meilleurs délais.\n' +
-      '\n' +
-      'Voici les informations que vous avez renseignées :\n';
-  return (
-    'Bonjour,\n' +
-    '\n' +
-    messageIntroduction +
-    `- Signature des CGU le ${formateDate.date} à ${formateDate.heure}\n` +
-    `- Département : ${nomDepartement}\n` +
-    texteRaisonSociale +
-    '\n' +
-    'Toute l’équipe reste à votre disposition,\n\n' +
-    "L'équipe MonAideCyber\n" +
-    'contact@monaidecyber.beta.gouv.fr\n'
-  );
-};
 const genereCorpsRecapitulatifDemandeAide = (
   aide: DemandeAide,
   relationUtilisateur: string | undefined
@@ -203,18 +163,6 @@ const adaptateursCorpsMessage: AdaptateurCorpsDeMessageAide = {
     }),
   }),
   demande: (): MessagesDemande => ({
-    confirmationDemandeAide: () => ({
-      genereCorpsMessage: (
-        relationUtilisateur: string | undefined,
-        raisonSociale: string | undefined,
-        nomDepartement: string
-      ): string =>
-        genereCorpsConfirmationDemandeAide(
-          relationUtilisateur,
-          raisonSociale,
-          nomDepartement
-        ),
-    }),
     recapitulatifDemandeAide: () => ({
       genereCorpsMessage: (aide, relationUtilisateur): string =>
         genereCorpsRecapitulatifDemandeAide(aide, relationUtilisateur),
