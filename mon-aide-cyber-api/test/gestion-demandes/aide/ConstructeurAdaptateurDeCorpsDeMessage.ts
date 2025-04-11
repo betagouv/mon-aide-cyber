@@ -25,16 +25,6 @@ class ConstructeurAdaptateurDeCorpsDeMessage
     _relationUtilisateur: string | undefined
   ) => 'Bonjour une entité a fait une demande d’aide';
 
-  private _confirmationDemandeAide: (
-    relationUtilisateur: string | undefined,
-    raisonSociale: string | undefined,
-    nomDepartement: string
-  ) => string = (
-    _relationUtilisateur: string | undefined,
-    _raisonSociale: string | undefined,
-    _nomDepartement: string
-  ) => 'Bonjour entité Aidée';
-
   notificationAidant(
     notification: (proprietes: ProprietesMessageAidant) => string
   ): ConstructeurAdaptateurDeCorpsDeMessage {
@@ -56,17 +46,6 @@ class ConstructeurAdaptateurDeCorpsDeMessage
     ) => string
   ): ConstructeurAdaptateurDeCorpsDeMessage {
     this._recapitulatifDemandeAide = recapitulatif;
-    return this;
-  }
-
-  confirmationDemandeAide(
-    confirmation: (
-      relationUtilisateur: string | undefined,
-      raisonSociale: string | undefined,
-      nomDepartement: string
-    ) => string
-  ): ConstructeurAdaptateurDeCorpsDeMessage {
-    this._confirmationDemandeAide = confirmation;
     return this;
   }
 
@@ -92,18 +71,6 @@ class ConstructeurAdaptateurDeCorpsDeMessage
         recapitulatifDemandeAide: () => ({
           genereCorpsMessage: (aide, relationUtilisateur) =>
             this._recapitulatifDemandeAide(aide, relationUtilisateur),
-        }),
-        confirmationDemandeAide: () => ({
-          genereCorpsMessage: (
-            relationUtilisateur: string | undefined,
-            raisonSociale: string | undefined,
-            nomDepartement: string
-          ) =>
-            this._confirmationDemandeAide(
-              relationUtilisateur,
-              raisonSociale,
-              nomDepartement
-            ),
         }),
       }),
     };

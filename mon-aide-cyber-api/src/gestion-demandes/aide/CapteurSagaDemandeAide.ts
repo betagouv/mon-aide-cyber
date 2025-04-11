@@ -56,8 +56,6 @@ export class CapteurSagaDemandeAide
     ) => {
       await adaptateurEnvoiMail.envoieConfirmationDemandeAide(
         aide.email,
-        aide.raisonSociale,
-        aide.departement.nom,
         relationUtilisateur
       );
     };

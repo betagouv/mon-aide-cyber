@@ -16,10 +16,8 @@ export interface AdaptateurEnvoiMail {
   envoie(email: Email, expediteur?: Expediteur): Promise<void>;
 
   envoieConfirmationDemandeAide(
-    email: string,
-    raisonSociale: string | undefined,
-    nomDepartement: string,
-    relationUtilisateur: string | undefined
+    emailEntiteAidee: string,
+    emailAidant: string | undefined
   ): any;
 }
 
