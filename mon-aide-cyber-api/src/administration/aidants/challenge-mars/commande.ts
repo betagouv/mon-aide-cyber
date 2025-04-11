@@ -48,7 +48,7 @@ class EntrepotDiagnostic extends EntrepotLecturePostgres<
                 BETWEEN '2025-03-01':: timestamp with time zone AND '2025-04-01':: timestamp with time zone
                 AND jsonb_array_length(donnees -> 'restitution' -> 'mesures' -> 'mesuresPrioritaires') = 6) as diags_mars
             WHERE (diags_mars.id)::text = donnees -> 'objet' ->> 'identifiant'
-              AND donnees -> 'utilisateur' ->> 'type' = 'aidant'
+              AND (donnees -> 'utilisateur' ->> 'type' = 'aidant' OR donnees -> 'utilisateur' ->> 'type' = 'utilisateurInscrit')
         `
       )
       .then(({ rows }: { rows: DiagnosticDTO[] }) => {
