@@ -145,7 +145,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       });
 
       await expect(() => promesse).rejects.toThrowError(
-        'L’Aidant n’est pas référencé dans MonAideCyber'
+        'L’adresse email de l’Aidant ou du prestataire n’est pas référencée. Veuillez entrer une adresse valide et réessayer.'
       );
     });
   });
@@ -459,7 +459,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         (entrepots.demandesAides() as EntrepotAideMemoire).rechercheParMailFaite
       ).toBe(false);
       await expect(() => promesse).rejects.toThrowError(
-        'L’Aidant n’est pas référencé dans MonAideCyber'
+        'L’adresse email de l’Aidant ou du prestataire n’est pas référencée. Veuillez entrer une adresse valide et réessayer.'
       );
     });
   });
