@@ -24,13 +24,6 @@ class ConstructeurAdaptateurDeCorpsDeMessage
     _aide: DemandeAide,
     _relationUtilisateur: string | undefined
   ) => 'Bonjour une entité a fait une demande d’aide';
-  private _confirmationDemandeAide: (
-    _aide: DemandeAide,
-    relationUtilisateur: string | undefined
-  ) => string = (
-    _aide: DemandeAide,
-    _relationUtilisateur: string | undefined
-  ) => 'Bonjour entité Aidée';
 
   notificationAidant(
     notification: (proprietes: ProprietesMessageAidant) => string
@@ -56,16 +49,6 @@ class ConstructeurAdaptateurDeCorpsDeMessage
     return this;
   }
 
-  confirmationDemandeAide(
-    confirmation: (
-      _aide: DemandeAide,
-      relationUtilisateur: string | undefined
-    ) => string
-  ): ConstructeurAdaptateurDeCorpsDeMessage {
-    this._confirmationDemandeAide = confirmation;
-    return this;
-  }
-
   construis(): AdaptateurCorpsDeMessageAide {
     return {
       sollicitation: (): MessagesSollicitation => ({
@@ -88,10 +71,6 @@ class ConstructeurAdaptateurDeCorpsDeMessage
         recapitulatifDemandeAide: () => ({
           genereCorpsMessage: (aide, relationUtilisateur) =>
             this._recapitulatifDemandeAide(aide, relationUtilisateur),
-        }),
-        confirmationDemandeAide: () => ({
-          genereCorpsMessage: (aide, relationUtilisateur) =>
-            this._confirmationDemandeAide(aide, relationUtilisateur),
         }),
       }),
     };

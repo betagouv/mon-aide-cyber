@@ -12,6 +12,15 @@ const messagerie = () => ({
   expediteurInfoMAC: () => process.env.EMAIL_INFO_MAC_EXPEDITEUR || '',
 });
 
+const brevo = () => ({
+  templateConfirmationAide: () =>
+    Number(process.env.BREVO_TEMPLATE_CONFIRMATION_AIDE) || 0,
+  templateConfirmationAideEnRelationAvecUnAidant: () =>
+    Number(
+      process.env.BREVO_TEMPLATE_CONFIRMATION_AIDE_EN_RELATION_AVEC_UN_AIDANT
+    ) || 0,
+});
+
 const mac = () => ({
   urlMAC: () => process.env.URL_MAC || '',
 });
@@ -85,6 +94,7 @@ const adaptateurEnvironnement = {
   http,
   reseauTrustProxy: trustProxy,
   ipAutorisees,
+  brevo,
 };
 
 export { sentry, adaptateurEnvironnement };

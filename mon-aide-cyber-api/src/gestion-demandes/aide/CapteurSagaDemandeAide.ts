@@ -54,14 +54,10 @@ export class CapteurSagaDemandeAide
       aide: DemandeAide,
       relationUtilisateur: string | undefined
     ) => {
-      await adaptateurEnvoiMail.envoie({
-        objet: "Demande d'aide pour MonAideCyber",
-        destinataire: { email: aide.email },
-        corps: adaptateursCorpsMessage
-          .demande()
-          .confirmationDemandeAide()
-          .genereCorpsMessage(aide, relationUtilisateur),
-      });
+      await adaptateurEnvoiMail.envoieConfirmationDemandeAide(
+        aide.email,
+        relationUtilisateur
+      );
     };
 
     const envoieRecapitulatifDemandeAide = async (

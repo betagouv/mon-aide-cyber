@@ -9,6 +9,7 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private messages: Email[] = [];
   private _genereErreur = false;
   private expediteurs: Expediteur[] = ['MONAIDECYBER'];
+  private destinataires: string[] = [];
 
   envoie(
     message: Email,
@@ -22,6 +23,20 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     return Promise.resolve();
   }
 
+  envoieConfirmationDemandeAide(
+    email: string,
+    emailAidant?: string
+  ): Promise<void> {
+    if (this._genereErreur) {
+      return Promise.reject('Erreur');
+    }
+    this.destinataires.push(email);
+    if (emailAidant) {
+      this.destinataires.push(emailAidant);
+    }
+    return Promise.resolve();
+  }
+
   aEteEnvoye(email: string, message: string, nom?: string): boolean {
     const messageTrouve = this.messages.find(
       (m) =>
@@ -31,6 +46,7 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     );
     return (nom !== undefined && messageTrouve !== undefined) || false;
   }
+
   aEteEnvoyePar(expediteur: Expediteur): boolean {
     return this.expediteurs.includes(expediteur);
   }
@@ -67,5 +83,15 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
 
   mailNonEnvoye(): boolean {
     return !this.mailEnvoye();
+  }
+
+  confirmationDemandeAideAEteEnvoyeeA(
+    emailEntiteeAidee: string,
+    emailAidant?: string
+  ): boolean {
+    return (
+      this.destinataires.includes(emailEntiteeAidee) &&
+      (emailAidant === undefined || this.destinataires.includes(emailAidant))
+    );
   }
 }

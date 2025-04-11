@@ -1,5 +1,6 @@
 import {
   AdaptateurEnvoiMail,
+  Destinataire,
   Email,
   Expediteur,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
@@ -8,11 +9,45 @@ import {
   adaptateursRequeteBrevo,
   ErreurRequeBrevo,
 } from './adaptateursRequeteBrevo';
-import { unConstructeurEnvoiDeMail } from '../brevo/ConstructeursBrevo';
+import {
+  unConstructeurEnvoiDeMail,
+  unConstructeurEnvoiDeMailAvecTemplate,
+} from '../brevo/ConstructeursBrevo';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { isArray } from 'lodash';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
+  async envoieConfirmationDemandeAide(
+    email: string,
+    emailAidant: string | undefined
+  ): Promise<void> {
+    const destinataire: Destinataire = { email };
+    let constructeurEmailBrevo = unConstructeurEnvoiDeMailAvecTemplate()
+      .ayantPourTemplate(
+        emailAidant
+          ? adaptateurEnvironnement
+              .brevo()
+              .templateConfirmationAideEnRelationAvecUnAidant()
+          : adaptateurEnvironnement.brevo().templateConfirmationAide()
+      )
+      .ayantPourDestinataires([[destinataire.email, destinataire.nom]]);
+    if (emailAidant) {
+      constructeurEmailBrevo =
+        constructeurEmailBrevo.ayantPourDestinatairesEnCopie([
+          [emailAidant, undefined],
+        ]);
+    }
+    const emailBrevo = constructeurEmailBrevo.construis();
+    await adaptateursRequeteBrevo()
+      .envoiMail()
+      .execute(emailBrevo)
+      .catch(async (reponse: unknown | ErreurRequeBrevo) => {
+        throw new ErreurEnvoiEmail(
+          JSON.stringify((reponse as ErreurRequeBrevo).corps)
+        );
+      });
+  }
+
   async envoie(
     message: Email,
     expediteur: Expediteur = 'MONAIDECYBER'
