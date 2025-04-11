@@ -64,7 +64,7 @@ regional:
   hautsDeFrance:
     nom: 'Hauts de France'
     associations:
-      - nom: '1fo1000 nuages'
+      - nom: '1fo100 nuages'
         urlSite: 'https://www.1fo100nuages.fr/'
       - nom: Entreprendre Ensemble Dunkerque
         urlSite: 'https://www.eedk.fr/'
@@ -73,6 +73,8 @@ regional:
     associations:
       - nom: 'APRN (Association pour la Prévention des Risques Numériques)'
         urlSite: 'https://www.prevention-numerique.fr/'
+      - nom: 'Compagnie Régionale des Commissaires aux Comptes de Paris'
+        urlSite: 'https://www.crcc-paris.fr/'
   normandie:
     nom: 'Normandie'
     associations:
