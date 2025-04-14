@@ -40,15 +40,14 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
         .ayantPourParametres({ prenom: utilisateurMACEnRelation.nomPrenom });
     }
     const emailBrevo = constructeurEmailBrevo.construis();
-    await adaptateursRequeteBrevo()
-      .envoiMail()
-      .execute(emailBrevo)
-      .catch(async (reponse: unknown | ErreurRequeBrevo) => {
-        throw new ErreurEnvoiEmail(
-          JSON.stringify((reponse as ErreurRequeBrevo).corps),
-          { cause: reponse as ErreurRequeBrevo }
-        );
-      });
+    try {
+      await adaptateursRequeteBrevo().envoiMail().execute(emailBrevo);
+    } catch (reponse: unknown | ErreurRequeBrevo) {
+      throw new ErreurEnvoiEmail(
+        JSON.stringify((reponse as ErreurRequeBrevo).corps),
+        { cause: reponse as ErreurRequeBrevo }
+      );
+    }
   }
 
   async envoie(
