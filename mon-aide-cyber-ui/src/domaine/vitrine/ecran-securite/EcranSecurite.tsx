@@ -17,22 +17,6 @@ export const EcranSecurite = () => {
       </HeroBloc>
       <section className="contenu-page-statique">
         <div className="contenu-section">
-          <p>
-            L‘ANSSI soumet MonAideCyber à un rythme d‘homologation soutenu (tous
-            les 6 mois) dans le cadre d‘une démarche de renforcement continue de
-            la sécurité du service numérique.
-          </p>
-          <p>
-            MonAideCyber est hébergé chez{' '}
-            <a
-              href="https://www.clever-cloud.com/fr/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Clever Cloud
-            </a>{' '}
-            prenant appui sur Cloud Temple qualifié SecNumCloud.
-          </p>
           <img
             className="encart-homologation encart-desktop"
             src={homologationDesktop}
@@ -48,6 +32,7 @@ export const EcranSecurite = () => {
             src={homologationMobile}
             alt="Preuve de l'homologation de MonAideCyber sur MonServiceSecurise"
           />
+          <lab-anssi-resume-pssi nomService="MonAideCyber"></lab-anssi-resume-pssi>
         </div>
       </section>
     </main>
