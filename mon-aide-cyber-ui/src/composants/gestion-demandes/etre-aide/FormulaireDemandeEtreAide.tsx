@@ -86,7 +86,7 @@ export const FormulaireDemandeEtreAide = (
     initialiseEtatFormulaireDemandeEtreAide(proprietes.departements)
   );
   const [searchParams] = useSearchParams();
-  const parametreMailUtilisateur = partageEmail().decode(searchParams);
+  const parametreMailUtilisateur = partageEmail().decodePourMAC(searchParams);
 
   useEffect(
     () => envoie(departementsCharges(proprietes.departements)),
