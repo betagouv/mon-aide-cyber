@@ -141,7 +141,9 @@ const RealiserUnDiagnostic = (proprietesRealiserUnDiagnostic: {
             <div className="fr-pt-2w">
               Le lien à communiquer :
               <br />
-              <a href={lienDemandeAide}>{lienDemandeAide}</a>
+              <a href={lienDemandeAide} target="_blank" rel="noreferrer">
+                {lienDemandeAide}
+              </a>
             </div>
           </div>
         </div>
