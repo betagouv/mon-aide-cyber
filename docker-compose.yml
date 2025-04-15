@@ -6,8 +6,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-ui
-    ports:
-      - 3000:3000
     volumes:
       - ./mon-aide-cyber-ui:/usr/src/app/mon-aide-cyber-ui
     networks:
