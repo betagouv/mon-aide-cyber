@@ -119,6 +119,29 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         });
       });
 
+      it('Renvoie une erreur si l‘Aidant, ciblé par son identifiant, à mettre en relation n‘existe pas', async () => {
+        const testeurMAC = testeurIntegration();
+        const donneesServeur: { app: Express } = testeurMAC.initialise();
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/etre-aide',
+          {
+            cguValidees: true,
+            email: 'jean.dupont@aide.com',
+            departement: 'Corse-du-Sud',
+            raisonSociale: 'beta-gouv',
+            identifiantAidant: 'af9620ef-3495-493f-b5f2-28d5719f992f',
+          }
+        );
+
+        expect(reponse.statusCode).toBe(400);
+        expect(await reponse.json()).toStrictEqual({
+          message: 'L’Aidant fourni n’est pas référencé.',
+        });
+      });
+
       describe("En ce qui concerne les informations envoyées par l'Aidé", () => {
         const testeurMAC = testeurIntegration();
         let donneesServeur: { app: Express };
@@ -282,6 +305,31 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
           expect(await reponse.json()).toStrictEqual({
             message:
               "Veuillez renseigner un email valide pour l'utilisateur avec qui vous êtes en relation.",
+            liens: {
+              'demander-aide': {
+                url: '/api/demandes/etre-aide',
+                methode: 'POST',
+              },
+            },
+          });
+        });
+
+        it('L’identifiant Aidant, optionnel, est un UUID', async () => {
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/demandes/etre-aide',
+            {
+              cguValidees: true,
+              email: 'jean.dupont@aide.com',
+              departement: 'Bas-Rhin',
+              identifiantAidant: 'mauvaisformat',
+            }
+          );
+
+          expect(reponse.statusCode).toBe(422);
+          expect(await reponse.json()).toStrictEqual({
+            message: 'Veuillez renseigner un identifiant Aidant valide.',
             liens: {
               'demander-aide': {
                 url: '/api/demandes/etre-aide',
