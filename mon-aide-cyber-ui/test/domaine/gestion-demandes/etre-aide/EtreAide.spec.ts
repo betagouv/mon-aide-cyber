@@ -21,6 +21,16 @@ describe('EtreAide', () => {
       );
     });
 
+    it('encode en base64 et « URI component » le nom de l’Aidant et ajoute son identifiant que l’on passe pour MSC', () => {
+      const apresEncodage = partageEmail().encodeIdentifiantPourMSC(
+        'Jean D.',
+        '1d07eb19-9317-47d8-acbb-5f47044f29b5'
+      );
+      expect(apresEncodage).toBe(
+        'nom-usage=SmVhbiBELg%3D%3D&identifiant-utilisateur-mac=1d07eb19-9317-47d8-acbb-5f47044f29b5'
+      );
+    });
+
     it('décode un email encodé, peu importe où il est dans la query string', () => {
       const apresDecodage = partageEmail().decodePourMAC(
         new URLSearchParams(

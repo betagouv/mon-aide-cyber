@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { AidantAnnuaire } from '../../AidantAnnuaire.ts';
 import { useListeAidants } from './useListeAidants.ts';
 import { Pagination } from './pagination/Pagination.tsx';
+import { partageEmail } from '../../../../gestion-demandes/etre-aide/EtreAide.ts';
 
 const afficheUnPlurielSiMultiplesResultats = (tableau: unknown[]) => {
   return tableau && tableau.length > 1 ? 's' : '';
@@ -72,6 +73,39 @@ export const CartesAidant = ({
     );
   }
 
+  const boutonDemandeAide = (aidant: AidantAnnuaire) => {
+    const urlMesServicesCyber = import.meta.env['VITE_URL_MSC'];
+    if (urlMesServicesCyber) {
+      const email = partageEmail().encodeIdentifiantPourMSC(
+        aidant.nomPrenom,
+        aidant.identifiant
+      );
+      const urlDemandeAideMSC = `${urlMesServicesCyber}/cyberdepart?${email}`;
+      return (
+        <a
+          className="bouton-mac-lien"
+          href={urlDemandeAideMSC}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Solliciter une aide
+        </a>
+      );
+    }
+    const boutonDemandeAide = (
+      <Button
+        type="button"
+        variant="link"
+        style={{ display: 'flex', gap: '.5rem' }}
+        onClick={() => solliciteAidant(aidant)}
+      >
+        <span>Solliciter une aide</span>
+        <i className="fr-icon-arrow-right-line"></i>
+      </Button>
+    );
+    return boutonDemandeAide;
+  };
+
   return (
     <div>
       <p>
@@ -80,23 +114,17 @@ export const CartesAidant = ({
         {afficheUnPlurielSiMultiplesResultats(aidants)} sur votre territoire.
       </p>
       <div className="cartes-aidants">
-        {aidants?.map((aidant) => (
-          <CarteAidant key={aidant.identifiant}>
-            <i className="fr-icon-user-line"></i>
-            <span>
-              <b>{aidant.nomPrenom}</b>
-            </span>
-            <Button
-              type="button"
-              variant="link"
-              style={{ display: 'flex', gap: '.5rem' }}
-              onClick={() => solliciteAidant(aidant)}
-            >
-              <span>Solliciter une aide</span>
-              <i className="fr-icon-arrow-right-line"></i>
-            </Button>
-          </CarteAidant>
-        ))}
+        {aidants?.map((aidant) => {
+          return (
+            <CarteAidant key={aidant.identifiant}>
+              <i className="fr-icon-user-line"></i>
+              <span>
+                <b>{aidant.nomPrenom}</b>
+              </span>
+              {boutonDemandeAide(aidant)}
+            </CarteAidant>
+          );
+        })}
       </div>
     </div>
   );

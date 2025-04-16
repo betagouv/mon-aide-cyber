@@ -36,6 +36,8 @@ export const partageEmail = () => {
   return {
     encodePourMAC: (email: string) => encode(email, 'utilisateur'),
     encodePourMSC: (email: string) => encode(email, 'utilisateur-mac'),
+    encodeIdentifiantPourMSC: (nomPrenom: string, identifiant: UUID) =>
+      `${encode(nomPrenom, 'nom-usage')}&identifiant-utilisateur-mac=${identifiant}`,
     decodePourMAC: (queryString: URLSearchParams) => {
       const utilisateur = queryString.get('utilisateur');
 
