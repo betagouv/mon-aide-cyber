@@ -19,6 +19,7 @@ import {
   rechercheParNomOuCodeDepartement,
 } from '../../gestion-demandes/departements';
 import { RequetePublique } from '../routesAPI';
+import crypto from 'crypto';
 
 type CorpsRequeteDemandeAide = {
   cguValidees: boolean;
@@ -26,6 +27,7 @@ type CorpsRequeteDemandeAide = {
   departement: string;
   raisonSociale?: string;
   relationUtilisateur?: string;
+  identifiantAidant?: crypto.UUID;
 };
 
 class ErreurDemandeAide extends Error {
@@ -78,6 +80,10 @@ export const routesAPIDemandeEtreAide = (
       .withMessage(
         "Veuillez renseigner un email valide pour l'utilisateur avec qui vous êtes en relation."
       ),
+    body('identifiantAidant')
+      .optional()
+      .isUUID()
+      .withMessage('Veuillez renseigner un identifiant Aidant valide.'),
     async (
       requete: RequetePublique<CorpsRequeteDemandeAide>,
       reponse: Response,
@@ -101,6 +107,9 @@ export const routesAPIDemandeEtreAide = (
           }),
           ...(corpsRequete.relationUtilisateur && {
             relationUtilisateur: corpsRequete.relationUtilisateur,
+          }),
+          ...(corpsRequete.identifiantAidant && {
+            identifiantAidant: corpsRequete.identifiantAidant,
           }),
         };
         return configuration.busCommande

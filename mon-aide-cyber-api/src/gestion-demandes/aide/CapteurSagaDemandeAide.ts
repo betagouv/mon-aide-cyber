@@ -28,6 +28,7 @@ export type SagaDemandeAide = Saga & {
   departement: Departement;
   raisonSociale?: string;
   relationUtilisateur?: string;
+  identifiantAidant?: crypto.UUID;
 };
 
 export type DemandeAideCree = Evenement<{
@@ -85,21 +86,33 @@ export class CapteurSagaDemandeAide
       });
     };
 
-    try {
+    const rechercheUtilisateurMAC = async () => {
       let utilisateurMAC: UtilisateurMACDTO | undefined = undefined;
       if (saga.relationUtilisateur) {
         utilisateurMAC = await uneRechercheUtilisateursMAC(
           this.entrepotUtilisateurMAC
         ).rechercheParMail(saga.relationUtilisateur);
         if (!utilisateurMAC) {
-          return Promise.reject(
-            new ErreurUtilisateurMACInconnu(
-              'L’adresse email de l’Aidant ou du prestataire n’est pas référencée. Veuillez entrer une adresse valide et réessayer.'
-            )
+          throw new ErreurUtilisateurMACInconnu(
+            'L’adresse email de l’Aidant ou du prestataire n’est pas référencée. Veuillez entrer une adresse valide et réessayer.'
           );
         }
       }
+      if (saga.identifiantAidant) {
+        utilisateurMAC = await uneRechercheUtilisateursMAC(
+          this.entrepotUtilisateurMAC
+        ).rechercheParIdentifiant(saga.identifiantAidant);
+        if (!utilisateurMAC) {
+          throw new ErreurUtilisateurMACInconnu(
+            'L’Aidant fourni n’est pas référencé.'
+          );
+        }
+      }
+      return utilisateurMAC;
+    };
 
+    const utilisateurMAC = await rechercheUtilisateurMAC();
+    try {
       const commandeRechercheAideParEmail: CommandeRechercheAideParEmail = {
         type: 'CommandeRechercheAideParEmail',
         email: saga.email,
