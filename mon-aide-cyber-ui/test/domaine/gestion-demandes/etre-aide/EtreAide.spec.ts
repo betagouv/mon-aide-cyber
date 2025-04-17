@@ -17,7 +17,7 @@ describe('EtreAide', () => {
         'utilisateur@societe.fr'
       );
       expect(apresEncodage).toBe(
-        'utilisateur-mac=dXRpbGlzYXRldXJAc29jaWV0ZS5mcg%3D%3D'
+        'email-utilisateur-mac=dXRpbGlzYXRldXJAc29jaWV0ZS5mcg%3D%3D'
       );
     });
 
