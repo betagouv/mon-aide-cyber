@@ -84,7 +84,7 @@ const RealiserUnDiagnostic = (proprietesRealiserUnDiagnostic: {
     const urlMesServicesCyber = import.meta.env['VITE_URL_MSC'];
     if (urlMesServicesCyber) {
       const email = partageEmail().encodePourMSC(utilisateur!.email);
-      return `${urlMesServicesCyber}/cyberdepart?${email}#formulaire-demande-aide`;
+      return `${urlMesServicesCyber}/cyberdepart?${email}`;
     }
     const email = partageEmail().encodePourMAC(utilisateur!.email);
     return `${import.meta.env['VITE_URL_MAC']}/beneficier-du-dispositif/etre-aide?${email}#formulaire-demande-aide`;
