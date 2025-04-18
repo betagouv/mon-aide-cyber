@@ -5,6 +5,7 @@ import { useCallback } from 'react';
 import Button from '../../atomes/Button/Button.tsx';
 import { UUID } from '../../../types/Types.ts';
 import { ROUTE_MON_ESPACE } from '../../../domaine/MoteurDeLiens.ts';
+import { liensMesServicesCyber } from '../../../infrastructure/mes-services-cyber/liens.ts';
 
 export const HeaderRestitution = ({
   idDiagnostic,
@@ -41,7 +42,11 @@ export const HeaderRestitution = ({
             <br />
             Si vous préférez solliciter une aide pour répondre aux questions,
             vous pouvez{' '}
-            <a href="/beneficier-du-dispositif/etre-aide">
+            <a
+              href={liensMesServicesCyber().cyberDepart}
+              target="_blank"
+              rel="noreferrer"
+            >
               faire une demande pour un diagnostic accompagné
             </a>
             .
