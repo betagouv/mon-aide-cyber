@@ -59,6 +59,7 @@ import { Lien } from '../../domaine/Lien.ts';
 import { useRecupereContexteNavigation } from '../../hooks/useRecupereContexteNavigation.ts';
 import Button from '../atomes/Button/Button.tsx';
 import { useTitreDePage } from '../../hooks/useTitreDePage.ts';
+import { liensMesServicesCyber } from '../../infrastructure/mes-services-cyber/liens.ts';
 
 type ProprietesComposantQuestion = {
   thematique: string;
@@ -600,7 +601,11 @@ export const ActionsHeaderDiagnosticLibreAcces = ({
             <br />
             Si vous préférez solliciter une aide pour répondre aux questions,
             vous pouvez{' '}
-            <a href="/beneficier-du-dispositif/etre-aide#formulaire-demande-aide">
+            <a
+              href={liensMesServicesCyber().cyberDepart}
+              target="_blank"
+              rel="noreferrer"
+            >
               faire une demande pour un diagnostic accompagné
             </a>
             .
