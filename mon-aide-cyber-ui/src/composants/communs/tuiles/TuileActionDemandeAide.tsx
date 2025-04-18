@@ -1,4 +1,5 @@
 import { TypographieH4 } from '../typographie/TypographieH4/TypographieH4';
+import { BoutonDemandeAide } from '../../atomes/Lien/BoutonDemandeAide.tsx';
 
 function TuileActionDemandeAide() {
   return (
@@ -16,14 +17,7 @@ function TuileActionDemandeAide() {
           d’une <b>association</b>, ou d’une <b>entreprise</b> (TPE, PME,
           ETI...) et vous souhaitez <b className="violet-fonce">être aidé</b> ?
         </p>
-        <a href="/beneficier-du-dispositif/etre-aide">
-          <button
-            type="button"
-            className="fr-btn bouton-mac bouton-mac-primaire"
-          >
-            Je fais une demande d&apos;aide
-          </button>
-        </a>
+        <BoutonDemandeAide titre={'Je fais une demande d’aide'} />
       </div>
     </div>
   );
