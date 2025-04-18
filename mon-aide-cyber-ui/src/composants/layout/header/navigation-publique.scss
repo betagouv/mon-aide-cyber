@@ -1,4 +1,11 @@
+@import './../../../assets/styles/points-de-rupture';
+
 .diagnostic-mes-services-cyber {
   justify-content: center;
   margin-left: auto;
+  display: none;
+
+  @include a-partir-de(lg) {
+    display: flex;
+  }
 }
