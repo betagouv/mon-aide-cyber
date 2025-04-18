@@ -2,7 +2,7 @@ import { CarteAidant } from '../CarteAidant';
 import { TypographieH6 } from '../../../../../composants/communs/typographie/TypographieH6/TypographieH6';
 import illustrationFAQFemme from '../../../../../../public/images/illustration-faq-femme.svg';
 import Button from '../../../../../composants/atomes/Button/Button';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AutoCompletion } from '../../../../../composants/auto-completion/AutoCompletion';
 import {
   Departement,
@@ -13,6 +13,7 @@ import { AidantAnnuaire } from '../../AidantAnnuaire.ts';
 import { useListeAidants } from './useListeAidants.ts';
 import { Pagination } from './pagination/Pagination.tsx';
 import { partageEmail } from '../../../../gestion-demandes/etre-aide/EtreAide.ts';
+import { BoutonDemandeAide } from '../../../../../composants/atomes/Lien/BoutonDemandeAide.tsx';
 
 const afficheUnPlurielSiMultiplesResultats = (tableau: unknown[]) => {
   return tableau && tableau.length > 1 ? 's' : '';
@@ -66,9 +67,7 @@ export const CartesAidant = ({
           votre, <br /> ou bien effectuer une demande en ligne, à laquelle un
           aidant répondra !
         </p>
-        <Link to="/beneficier-du-dispositif/etre-aide#formulaire-demande-aide">
-          <Button type="button">Je fais une demande</Button>
-        </Link>
+        <BoutonDemandeAide titre={'Je fais une demande'} />
       </div>
     );
   }
