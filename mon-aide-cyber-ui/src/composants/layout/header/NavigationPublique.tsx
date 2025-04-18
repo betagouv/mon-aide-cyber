@@ -1,5 +1,6 @@
 import { LienNavigation } from '../LayoutPublic.tsx';
 import { Link, matchPath, useLocation } from 'react-router-dom';
+import './navigation-publique.scss';
 import { useCallback } from 'react';
 
 const LienNavigationPubliqueMajeur = ({ lien }: { lien: LienNavigation }) => {
@@ -77,6 +78,12 @@ export const NavigationPublique = ({
             </li>
           );
         })}
+        <li className="diagnostic-mes-services-cyber fr-nav__item lien">
+          <lab-anssi-mes-services-cyber-lien-diagnostic-cyber
+            lien={`${import.meta.env['VITE_URL_MSC']}/cyberdepart`}
+            versExterne={true}
+          ></lab-anssi-mes-services-cyber-lien-diagnostic-cyber>
+        </li>
       </ul>
     </nav>
   );
