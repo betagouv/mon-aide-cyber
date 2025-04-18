@@ -25,7 +25,7 @@ export class EntrepotStatistiquesPostgres implements EntrepotStatistiques {
         `SELECT COUNT(avec_departements)
          FROM (SELECT id, jsonb_path_query(donnees -> 'referentiel' -> 'contexte', '$.questions[*]\\?(@.identifiant == "contexte-departement-tom-siege-social").reponseDonnee\\?(@.reponseUnique != null)')
                FROM diagnostics d) AS avec_departements
-         WHERE avec_departements.id::text IN (SELECT donnees -> 'objet' ->> 'identifiant' FROM relations as id);
+         WHERE avec_departements.id::text IN (SELECT donnees -> 'objet' ->> 'identifiant' FROM relations as id WHERE donnees -> 'objet' ->> 'type' = 'diagnostic');
         `
       )
       .then(({ rows }: { rows: Count[] }) => {

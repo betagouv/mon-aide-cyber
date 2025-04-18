@@ -86,6 +86,7 @@ import { ServiceDeChiffrement } from '../../../../src/securite/ServiceDeChiffrem
 import { EntrepotStatistiquesAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesAidantPostgres';
 import { StatistiquesAidant as AidantExtraction } from '../../../../src/statistiques/aidant/StastistiquesAidant';
 import { EntrepotStatistiquesUtilisateursInscritsPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesUtilisateursInscritsPostgres';
+import { unTupleEntiteInitieDiagnosticLibreAcces } from '../../../../src/diagnostic-libre-acces/consommateursEvenements';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Statistiques Postgres', () => {
@@ -144,6 +145,40 @@ describe('Entrepots Postgres', () => {
       expect(statistiques).toStrictEqual<Statistiques>({
         identifiant: expect.any(String),
         nombreDiagnostics: 4,
+        nombreAidants: 2,
+      });
+    });
+
+    it('Retourne les statistiques en ignorant les diagnostics en libre accès', async () => {
+      const premierDiagnosticEnGironde = unDiagnosticEnGironde().construis();
+      const deuxiemeDiagnosticEnGironde = unDiagnosticEnGironde().construis();
+      const troisiemeDiagnosticEnGironde = unDiagnosticEnGironde().construis();
+      await entrepotAidant.persiste(unAidant().construis());
+      await entrepotAidant.persiste(unAidant().construis());
+      await entrepotUtilisateurInscrit.persiste(
+        unUtilisateurInscrit().construis()
+      );
+      await entrepotDiagnosticPostgres.persiste(premierDiagnosticEnGironde);
+      await entrepotDiagnosticPostgres.persiste(deuxiemeDiagnosticEnGironde);
+      await entrepotDiagnosticPostgres.persiste(troisiemeDiagnosticEnGironde);
+      await entrepotRelationPostgres.persiste(
+        unTupleDiagnostic(premierDiagnosticEnGironde.identifiant)
+      );
+      await entrepotRelationPostgres.persiste(
+        unTupleDiagnostic(deuxiemeDiagnosticEnGironde.identifiant)
+      );
+      await entrepotRelationPostgres.persiste(
+        unTupleEntiteInitieDiagnosticLibreAcces(
+          crypto.randomUUID(),
+          troisiemeDiagnosticEnGironde.identifiant
+        )
+      );
+
+      const statistiques = await new EntrepotStatistiquesPostgres().lis();
+
+      expect(statistiques).toStrictEqual<Statistiques>({
+        identifiant: expect.any(String),
+        nombreDiagnostics: 2,
         nombreAidants: 2,
       });
     });
