@@ -4,6 +4,7 @@ import illustrationAutodiag from '../../../public/images/illustration-autodiag.s
 import { TypographieH3 } from '../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
 import { Link } from 'react-router-dom';
 import { useTitreDePage } from '../../hooks/useTitreDePage.ts';
+import { liensMesServicesCyber } from '../../infrastructure/mes-services-cyber/liens.ts';
 
 export const EcranDemandeAutodiagnostic = () => {
   useTitreDePage('Diagnostic libre accès');
@@ -27,7 +28,11 @@ export const EcranDemandeAutodiagnostic = () => {
               <p>
                 Vous préférez faire un diagnostic accompagné ?
                 <br />
-                <Link to="/beneficier-du-dispositif/etre-aide#formulaire-demande-aide">
+                <Link
+                  to={liensMesServicesCyber().cyberDepart}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Faire une demande en ligne
                 </Link>
               </p>
