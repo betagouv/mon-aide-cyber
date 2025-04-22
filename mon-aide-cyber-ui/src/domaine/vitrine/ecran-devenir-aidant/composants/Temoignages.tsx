@@ -14,9 +14,14 @@ export const Temoignage = ({
   return <div {...proprietesRestantes}>{children}</div>;
 };
 
-export const Temoignages = ({ verbatims }: { verbatims: Verbatim[] }) => {
+export const Temoignages = ({
+  verbatims,
+  ...proprietes
+}: PropsWithChildren<
+  React.HTMLAttributes<HTMLElement> & { verbatims: Verbatim[] }
+>) => {
   const mobileQuery = window.matchMedia('(max-width: 767px)');
-
+  const { className } = proprietes;
   const [nombreElementsParPage, setNombreElementsParPage] = useState(2);
 
   mobileQuery.onchange = (e) => {
@@ -51,7 +56,7 @@ export const Temoignages = ({ verbatims }: { verbatims: Verbatim[] }) => {
   if (!verbatims || verbatims.length === 0) return null;
 
   return (
-    <section className="w-100">
+    <section className={`${className} w-100`}>
       <div className="fr-container temoignages-layout">
         <TypographieH5>Témoignages de nos Aidants</TypographieH5>
         <div className="temoignages-liste">
