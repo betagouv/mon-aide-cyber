@@ -13,7 +13,6 @@ import { TypographieH3 } from '../../../composants/communs/typographie/Typograph
 import { useNavigate } from 'react-router-dom';
 import illustrationAutodiag from './../../../../public/images/illustration-autodiag.svg';
 import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
-import { CapteurFormulaireDemandeEtreAide } from './composants/CapteurFormulaireDemandeEtreAide.tsx';
 
 export const EcranBeneficierDuDispositif = () => {
   useDefilementFluide();
@@ -27,12 +26,8 @@ export const EcranBeneficierDuDispositif = () => {
       <QuiEstConcerne />
       <FonctionnementDispositif />
       <FocusRestitution />
-      <section id="formulaire-demande-aide" className="fond-clair-mac">
-        <div className="fr-container">
-          <CapteurFormulaireDemandeEtreAide />
-        </div>
-      </section>
       <Temoignages
+        className="fond-clair-mac"
         verbatims={[
           {
             id: 1,
@@ -47,7 +42,7 @@ export const EcranBeneficierDuDispositif = () => {
           },
         ]}
       />
-      <section className="fond-clair-mac section-diagnostic-libre-acces">
+      <section className="section-diagnostic-libre-acces">
         <div className="fr-container focus-restitution-layout">
           <section>
             <TypographieH3>
@@ -83,7 +78,7 @@ export const EcranBeneficierDuDispositif = () => {
           </section>
         </div>
       </section>
-      <section className="participer fr-pt-4w">
+      <section className="participer fr-pt-4w fond-clair-mac">
         <div className="fr-container conteneur-participer fr-pb-4w">
           <div className="fr-col-12">
             <TypographieH2>Pour aller plus loin</TypographieH2>

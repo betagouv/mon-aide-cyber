@@ -1,16 +1,6 @@
-import { ReponseHATEOAS } from '../../Lien.ts';
-import { Departement } from '../departement.ts';
 import { UUID } from '../../../types/Types.ts';
-import { Email } from '../../../composants/gestion-demandes/etre-aide/reducteurFormulaireDemandeEtreAide.tsx';
 
-export type CorpsDemandeEtreAide = {
-  cguValidees: boolean;
-  email: string;
-  departement: string;
-  raisonSociale?: string;
-  relationUtilisateur?: Email;
-};
-
+export type Email = string;
 export type CorpsDemandeSolliciterAidant = {
   cguValidees: boolean;
   email: string;
@@ -18,11 +8,6 @@ export type CorpsDemandeSolliciterAidant = {
   raisonSociale?: string;
   aidantSollicite: UUID;
 };
-
-export type ReponseDemandeEtreAide = ReponseHATEOAS & {
-  departements: Departement[];
-};
-
 export const partageEmail = () => {
   const encode = (email: string, clefQueryString: string) => {
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa#unicode_strings
