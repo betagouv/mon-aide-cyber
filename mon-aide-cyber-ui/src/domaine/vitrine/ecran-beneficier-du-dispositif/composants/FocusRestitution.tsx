@@ -1,7 +1,6 @@
 import { TypographieH3 } from '../../../../composants/communs/typographie/TypographieH3/TypographieH3';
-import { Link } from 'react-router-dom';
-import Button from '../../../../composants/atomes/Button/Button';
 import restitutionRadarSvg from '/images/illustration-indicateurs-maturite.svg';
+import { BoutonDemandeAide } from '../../../../composants/atomes/Lien/BoutonDemandeAide.tsx';
 
 export const FocusRestitution = () => {
   return (
@@ -21,9 +20,7 @@ export const FocusRestitution = () => {
             <li>De ressources complémentaires adaptées à vos besoins</li>
           </ul>
           <div>
-            <Link to="#formulaire-demande-aide">
-              <Button>Je fais une demande</Button>
-            </Link>
+            <BoutonDemandeAide titre="Je fais une demande" />
           </div>
         </section>
         <section>

@@ -4,4 +4,9 @@
     background-image: none;
     color: var(--couleurs-mac-blanc);
   }
+  &.bouton-mac-primaire-inverse {
+    a {
+      color: var(--couleurs-mac-violet-fonce);
+    }
+  }
 }

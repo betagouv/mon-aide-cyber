@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom';
-import Button from '../../../../composants/atomes/Button/Button';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4';
 import illustrationQuiEstConcerne from '/images/illustration-qui-est-concerne-etre-aide.svg';
+import { BoutonDemandeAide } from '../../../../composants/atomes/Lien/BoutonDemandeAide.tsx';
 
 export const QuiEstConcerne = () => {
   return (
@@ -29,9 +28,7 @@ export const QuiEstConcerne = () => {
           ressources cyber en interne).
         </p>
 
-        <Link to="#formulaire-demande-aide">
-          <Button>Je fais une demande</Button>
-        </Link>
+        <BoutonDemandeAide titre="Je fais une demande" />
       </div>
     </section>
   );

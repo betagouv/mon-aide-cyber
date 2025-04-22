@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
 import HeroBloc from '../../../../composants/communs/HeroBloc';
 import { TypographieH1 } from '../../../../composants/communs/typographie/TypographieH1/TypographieH1';
 import dialogueSvg from '../../../../../public/images/illustration-echange.svg';
+import { BoutonDemandeAide } from '../../../../composants/atomes/Lien/BoutonDemandeAide.tsx';
 
 export const HeroDemandeAide = () => {
   return (
@@ -19,14 +19,10 @@ export const HeroDemandeAide = () => {
             premier niveau.
           </p>
           <div>
-            <Link to="#formulaire-demande-aide">
-              <button
-                type="button"
-                className="bouton-mac bouton-mac-primaire-inverse"
-              >
-                Je fais une demande
-              </button>
-            </Link>
+            <BoutonDemandeAide
+              titre="Je fais une demande"
+              className="bouton-mac-primaire-inverse"
+            />
           </div>
         </section>
         <section>
