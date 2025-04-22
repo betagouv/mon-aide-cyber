@@ -9,3 +9,9 @@
     display: flex;
   }
 }
+
+.diagnostic-mes-services-cyber-mobile {
+  @include a-partir-de(lg) {
+    display: none;
+  }
+}
