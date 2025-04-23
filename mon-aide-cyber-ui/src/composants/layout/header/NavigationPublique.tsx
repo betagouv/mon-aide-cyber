@@ -2,6 +2,7 @@ import { LienNavigation } from '../LayoutPublic.tsx';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 import './navigation-publique.scss';
 import { useCallback } from 'react';
+import { liensMesServicesCyber } from '../../../infrastructure/mes-services-cyber/liens.ts';
 
 const LienNavigationPubliqueMajeur = ({ lien }: { lien: LienNavigation }) => {
   const location = useLocation();
@@ -55,8 +56,6 @@ export const NavigationPublique = ({
   const estCheminCourant = (cheminATester: string) =>
     !!matchPath(location.pathname, cheminATester);
 
-  const mesServicesCyber = `${import.meta.env['VITE_URL_MSC']}/cyberdepart`;
-
   return (
     <nav
       className="fr-nav barre-navigation"
@@ -84,13 +83,17 @@ export const NavigationPublique = ({
           className="fr-nav__item lien diagnostic-mes-services-cyber-mobile"
           key="mes-services-cyber-mobile"
         >
-          <Link className="fr-nav__link" to={mesServicesCyber} target="_blank">
+          <Link
+            className="fr-nav__link"
+            to={liensMesServicesCyber().cyberDepart}
+            target="_blank"
+          >
             Votre diagnostic cyber gratuit
           </Link>
         </li>
         <li className="diagnostic-mes-services-cyber fr-nav__item lien">
           <lab-anssi-mes-services-cyber-lien-diagnostic-cyber
-            lien={mesServicesCyber}
+            lien={liensMesServicesCyber().cyberDepart}
             versExterne={true}
           ></lab-anssi-mes-services-cyber-lien-diagnostic-cyber>
         </li>
