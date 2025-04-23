@@ -46,8 +46,6 @@ export const aidantCree = consommateurEvenement();
 
 export const aideCree = consommateurEvenement();
 
-export const aideViaSollicitationAidantCree = consommateurEvenement();
-
 export const demandeDevenirAidantCree = consommateurEvenement();
 export const demandeDevenirAidantModifiee = consommateurEvenement();
 

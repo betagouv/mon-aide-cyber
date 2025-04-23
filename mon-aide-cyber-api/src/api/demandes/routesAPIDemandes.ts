@@ -2,7 +2,6 @@ import { ConfigurationServeur } from '../../serveur';
 import { routesAPIDemandesDevenirAidant } from './routeAPIDemandeDevenirAidant';
 import { routesAPIDemandeEtreAide } from './routesAPIDemandeEtreAide';
 import express, { Request, Response, Router } from 'express';
-import { routesAPIDemandeSolliciterAide } from './routesAPIDemandeSolliciterAide';
 
 export const routesAPIDemandes = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
@@ -18,7 +17,6 @@ export const routesAPIDemandes = (configuration: ConfigurationServeur) => {
         .json({ reponse: `Email reçu : ${requete.body.email}` });
     }
   );
-  routes.use('/solliciter-aide', routesAPIDemandeSolliciterAide(configuration));
 
   return routes;
 };
