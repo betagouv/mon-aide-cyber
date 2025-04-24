@@ -2,7 +2,6 @@ import { CarteAidant } from '../CarteAidant';
 import { TypographieH6 } from '../../../../../composants/communs/typographie/TypographieH6/TypographieH6';
 import illustrationFAQFemme from '../../../../../../public/images/illustration-faq-femme.svg';
 import Button from '../../../../../composants/atomes/Button/Button';
-import { useNavigate } from 'react-router-dom';
 import { AutoCompletion } from '../../../../../composants/auto-completion/AutoCompletion';
 import {
   Departement,
@@ -14,6 +13,7 @@ import { useListeAidants } from './useListeAidants.ts';
 import { Pagination } from './pagination/Pagination.tsx';
 import { partageEmail } from '../../../../gestion-demandes/etre-aide/EtreAide.ts';
 import { BoutonDemandeAide } from '../../../../../composants/atomes/Lien/BoutonDemandeAide.tsx';
+import { liensMesServicesCyber } from '../../../../../infrastructure/mes-services-cyber/liens.ts';
 
 const afficheUnPlurielSiMultiplesResultats = (tableau: unknown[]) => {
   return tableau && tableau.length > 1 ? 's' : '';
@@ -25,7 +25,6 @@ export type CartesAidant = {
   enCoursDeChargement: boolean;
   enErreur: boolean;
   relanceLaRecherche: () => void;
-  solliciteAidant: (aidant: AidantAnnuaire) => void;
 };
 
 export const CartesAidant = ({
@@ -34,7 +33,6 @@ export const CartesAidant = ({
   enCoursDeChargement,
   enErreur,
   relanceLaRecherche,
-  solliciteAidant,
 }: CartesAidant) => {
   if (enCoursDeChargement) {
     return (
@@ -73,36 +71,20 @@ export const CartesAidant = ({
   }
 
   const boutonDemandeAide = (aidant: AidantAnnuaire) => {
-    const urlMesServicesCyber = import.meta.env['VITE_URL_MSC'];
-    if (urlMesServicesCyber) {
-      const email = partageEmail().encodeIdentifiantPourMSC(
-        aidant.nomPrenom,
-        aidant.identifiant
-      );
-      const urlDemandeAideMSC = `${urlMesServicesCyber}/cyberdepart?${email}`;
-      return (
-        <a
-          className="bouton-mac-lien"
-          href={urlDemandeAideMSC}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Solliciter une aide
-        </a>
-      );
-    }
-    const boutonDemandeAide = (
-      <Button
-        type="button"
-        variant="link"
-        style={{ display: 'flex', gap: '.5rem' }}
-        onClick={() => solliciteAidant(aidant)}
-      >
-        <span>Solliciter une aide</span>
-        <i className="fr-icon-arrow-right-line"></i>
-      </Button>
+    const email = partageEmail().encodeIdentifiantPourMSC(
+      aidant.nomPrenom,
+      aidant.identifiant
     );
-    return boutonDemandeAide;
+    return (
+      <a
+        className="bouton-mac-lien"
+        href={`${liensMesServicesCyber().cyberDepartBrut}?${email}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        Solliciter une aide
+      </a>
+    );
   };
 
   return (
@@ -135,7 +117,6 @@ type ProprietesListeAidantsPaginee = {
   enCoursDeChargement: boolean;
   enErreur: boolean;
   relanceLaRecherche: () => void;
-  solliciteAidant: (aidant: AidantAnnuaire) => void;
 };
 const ListeAidantsPaginee = (proprietes: ProprietesListeAidantsPaginee) => {
   const [aidantsCourant, setAidantsCourant] = useState<
@@ -165,7 +146,6 @@ const ListeAidantsPaginee = (proprietes: ProprietesListeAidantsPaginee) => {
         enCoursDeChargement={proprietes.enCoursDeChargement}
         enErreur={proprietes.enErreur}
         relanceLaRecherche={proprietes.relanceLaRecherche}
-        solliciteAidant={proprietes.solliciteAidant}
       />
       <Pagination elements={proprietes.aidants} surClick={setAidantsCourant} />
     </div>
@@ -183,18 +163,6 @@ export const ListeAidants = () => {
     departementARechercher,
     selectionneDepartement,
   } = useListeAidants();
-  const navigate = useNavigate();
-
-  const ouvreFormulaireEtreAide = (
-    aidant: AidantAnnuaire,
-    departement?: Departement
-  ) => {
-    if (!departement) return;
-
-    navigate(
-      `/beneficier-du-dispositif/annuaire/solliciter?aidant=${aidant.identifiant}&nomPrenom=${aidant.nomPrenom}&dpt=${departement.nom}`
-    );
-  };
 
   return (
     <div className="layout-annuaire">
@@ -233,9 +201,6 @@ export const ListeAidants = () => {
         enCoursDeChargement={enCoursDeChargement}
         enErreur={enErreur}
         relanceLaRecherche={relanceLaRecherche}
-        solliciteAidant={(aidant) =>
-          ouvreFormulaireEtreAide(aidant, departementARechercher)
-        }
       />
     </div>
   );
