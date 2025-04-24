@@ -85,7 +85,7 @@ export const NavigationPublique = ({
         >
           <Link
             className="fr-nav__link"
-            to={liensMesServicesCyber().cyberDepart}
+            to={liensMesServicesCyber().cyberDepartAvecTracking}
             target="_blank"
           >
             Votre diagnostic cyber gratuit
@@ -93,7 +93,7 @@ export const NavigationPublique = ({
         </li>
         <li className="diagnostic-mes-services-cyber fr-nav__item lien">
           <lab-anssi-mes-services-cyber-lien-diagnostic-cyber
-            lien={liensMesServicesCyber().cyberDepart}
+            lien={liensMesServicesCyber().cyberDepartAvecTracking}
             versExterne={true}
           ></lab-anssi-mes-services-cyber-lien-diagnostic-cyber>
         </li>
