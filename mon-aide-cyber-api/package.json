@@ -6,6 +6,7 @@
     "build": "knex migrate:latest --knexfile src/infrastructure/entrepots/postgres/knexfile.ts --migrations-directory migrations",
     "start": "ts-node --transpile-only --require dotenv/config index.ts",
     "dev": "knex migrate:latest --knexfile src/infrastructure/entrepots/postgres/knexfile.ts --migrations-directory migrations && nodemon --require dotenv/config index.ts",
+    "administration:rattrapage-journalisation-excel-demo": "ts-node --transpile-only --require dotenv/config src/administration/journal/rattrapage/commande.ts",
     "administration:initialise-creation-espaces-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/espace-aidant/commande.ts",
     "administration:envoi-mail-creation-compte-aidant": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/creation-compte/commande.ts",
     "administration:rapport-demandes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/demandes-en-cours/commande.ts",
