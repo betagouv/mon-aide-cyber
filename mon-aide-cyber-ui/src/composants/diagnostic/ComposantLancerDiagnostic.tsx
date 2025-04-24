@@ -17,6 +17,7 @@ import { useNavigueVersModifierDiagnostic } from '../../fournisseurs/ContexteNav
 import { Input } from '../atomes/Input/Input.tsx';
 import './lancer-diagnostic.scss';
 import { partageEmail } from '../../domaine/gestion-demandes/etre-aide/EtreAide.ts';
+import { liensMesServicesCyber } from '../../infrastructure/mes-services-cyber/liens.ts';
 
 type ProprietesComposant = {
   surClick: () => void;
@@ -81,9 +82,8 @@ const RealiserUnDiagnostic = (proprietesRealiserUnDiagnostic: {
   const { utilisateur } = useUtilisateur();
 
   const forgeLienDemandeAide = () => {
-    const urlMesServicesCyber = import.meta.env['VITE_URL_MSC'];
     const email = partageEmail().encodePourMSC(utilisateur!.email);
-    return `${urlMesServicesCyber}/cyberdepart?${email}`;
+    return `${liensMesServicesCyber().cyberDepartBrut}?${email}`;
   };
 
   const lienDemandeAide = forgeLienDemandeAide();
