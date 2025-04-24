@@ -29,7 +29,7 @@ export const EcranDemandeAutodiagnostic = () => {
                 Vous préférez faire un diagnostic accompagné ?
                 <br />
                 <Link
-                  to={liensMesServicesCyber().cyberDepart}
+                  to={liensMesServicesCyber().cyberDepartAvecTracking}
                   target="_blank"
                   rel="noreferrer"
                 >

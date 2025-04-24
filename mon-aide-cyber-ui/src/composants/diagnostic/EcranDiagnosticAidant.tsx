@@ -602,7 +602,7 @@ export const ActionsHeaderDiagnosticLibreAcces = ({
             Si vous préférez solliciter une aide pour répondre aux questions,
             vous pouvez{' '}
             <a
-              href={liensMesServicesCyber().cyberDepart}
+              href={liensMesServicesCyber().cyberDepartAvecTracking}
               target="_blank"
               rel="noreferrer"
             >
