@@ -1,6 +1,5 @@
 import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
-import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import crypto from 'crypto';
 import { Departement } from '../departements';
@@ -13,7 +12,7 @@ import {
   uneRechercheUtilisateursMAC,
   UtilisateurMACDTO,
 } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
-import { fabriqueMiseEnRelation } from './miseEnRelation';
+import { FabriqueMiseEnRelation } from './miseEnRelation';
 
 export class ErreurUtilisateurMACInconnu extends Error {
   constructor(message: string) {
@@ -69,11 +68,8 @@ export class CapteurSagaDemandeAide
   constructor(
     private readonly busCommande: BusCommande,
     private readonly busEvenement: BusEvenement,
-    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
     private readonly entrepotUtilisateurMAC: EntrepotUtilisateursMAC,
-    private readonly annuaireCOT: () => {
-      rechercheEmailParDepartement: (departement: Departement) => string;
-    }
+    private readonly fabriqueMiseEnRelation: FabriqueMiseEnRelation
   ) {}
 
   async execute(saga: SagaDemandeAide): Promise<void> {
@@ -115,11 +111,7 @@ export class CapteurSagaDemandeAide
       await this.busCommande
         .publie<CommandeCreerDemandeAide, DemandeAide>(commandeCreerAide)
         .then(async (aide: DemandeAide) => {
-          const miseEnRelation = fabriqueMiseEnRelation(
-            this.adaptateurEnvoiMail,
-            this.annuaireCOT(),
-            utilisateurMAC
-          );
+          const miseEnRelation = this.fabriqueMiseEnRelation.fabrique(utilisateurMAC);
           await miseEnRelation.execute(aide);
 
           await this.busEvenement.publie<DemandeAideCree>({

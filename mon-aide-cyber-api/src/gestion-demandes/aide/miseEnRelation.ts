@@ -49,30 +49,52 @@ export interface MiseEnRelation {
   execute(demandeAide: DemandeAide): Promise<void>;
 }
 
+export interface FabriqueMiseEnRelation {
+  fabrique: (
+    utilisateurMac: UtilisateurMACDTO | undefined
+  ) => MiseEnRelation;
+}
+
+class FabriqueDeMiseEnRelation implements FabriqueMiseEnRelation {
+  constructor(
+    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
+    private readonly annuaireCOT: {
+      rechercheEmailParDepartement: (departement: Departement) => string;
+    }
+  ) {}
+
+  fabrique(
+    utilisateurMac: UtilisateurMACDTO | undefined
+  ): MiseEnRelation {
+    if (
+      utilisateurMac &&
+      (utilisateurMac?.profil === 'Aidant' ||
+        utilisateurMac?.profil === 'Gendarme')
+    ) {
+      return new MiseEnRelationDirecteAidant(
+        this.adaptateurEnvoiMail,
+        this.annuaireCOT,
+        utilisateurMac
+      );
+    }
+    if (utilisateurMac && utilisateurMac.profil === 'UtilisateurInscrit') {
+      return new MiseEnRelationDirecteUtilisateurInscrit(
+        this.adaptateurEnvoiMail,
+        utilisateurMac
+      );
+    }
+
+    return new MiseEnRelationParCritere(
+      this.adaptateurEnvoiMail,
+      this.annuaireCOT
+    );
+  }
+}
+
 export const fabriqueMiseEnRelation = (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
   annuaireCOT: {
     rechercheEmailParDepartement: (departement: Departement) => string;
-  },
-  utilisateurMac: UtilisateurMACDTO | undefined
-): MiseEnRelation => {
-  if (
-    utilisateurMac &&
-    (utilisateurMac?.profil === 'Aidant' ||
-      utilisateurMac?.profil === 'Gendarme')
-  ) {
-    return new MiseEnRelationDirecteAidant(
-      adaptateurEnvoiMail,
-      annuaireCOT,
-      utilisateurMac
-    );
   }
-  if (utilisateurMac && utilisateurMac.profil === 'UtilisateurInscrit') {
-    return new MiseEnRelationDirecteUtilisateurInscrit(
-      adaptateurEnvoiMail,
-      utilisateurMac
-    );
-  }
-
-  return new MiseEnRelationParCritere(adaptateurEnvoiMail, annuaireCOT);
-};
+): FabriqueMiseEnRelation =>
+  new FabriqueDeMiseEnRelation(adaptateurEnvoiMail, annuaireCOT);

@@ -29,6 +29,7 @@ import { CapteurCommandeMettreAJourDemandeAide } from '../../gestion-demandes/ai
 import { adaptateurRepertoireDeContacts } from '../../adaptateurs/adaptateurRepertoireDeContacts';
 import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../../relation/AdaptateurRelationsMAC';
+import { fabriqueMiseEnRelation } from '../../gestion-demandes/aide/miseEnRelation';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -70,9 +71,11 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurSagaDemandeAide(
           parametres.busCommande!,
           parametres.busEvenements!,
-          parametres.adaptateurEnvoiMail!,
           parametres.entrepots.utilisateursMAC(),
-          fabriqueAnnuaireCOT().annuaireCOT
+          fabriqueMiseEnRelation(
+            parametres.adaptateurEnvoiMail!,
+            fabriqueAnnuaireCOT().annuaireCOT()
+          )
         ),
     },
   ],
