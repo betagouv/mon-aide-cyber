@@ -4,17 +4,16 @@ import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import crypto from 'crypto';
 import { Departement } from '../departements';
-import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
-import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { DemandeAide, RechercheDemandeAide } from './DemandeAide';
 import { CommandeRechercheAideParEmail } from './CapteurCommandeRechercheDemandeAideParEmail';
 import { CommandeCreerDemandeAide } from './CapteurCommandeCreerDemandeAide';
 import { CommandeMettreAJourDemandeAide } from './CapteurCommandeMettreAJourDemandeAide';
+import { EntrepotUtilisateursMAC } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import {
-  EntrepotUtilisateursMAC,
-  uneRechercheUtilisateursMAC,
-  UtilisateurMACDTO,
-} from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+  envoieConfirmationDemandeAide,
+  envoieRecapitulatifDemandeAide,
+  rechercheUtilisateurMAC,
+} from './miseEnRelation';
 
 export class ErreurUtilisateurMACInconnu extends Error {
   constructor(message: string) {
@@ -50,68 +49,10 @@ export class CapteurSagaDemandeAide
   ) {}
 
   async execute(saga: SagaDemandeAide): Promise<void> {
-    const envoieConfirmationDemandeAide = async (
-      adaptateurEnvoiMail: AdaptateurEnvoiMail,
-      aide: DemandeAide,
-      relationUtilisateur: UtilisateurMACDTO | undefined
-    ) => {
-      await adaptateurEnvoiMail.envoieConfirmationDemandeAide(
-        aide.email,
-        relationUtilisateur
-          ? {
-              nomPrenom: relationUtilisateur.nomUsage,
-              email: relationUtilisateur.email,
-            }
-          : undefined
-      );
-    };
-
-    const envoieRecapitulatifDemandeAide = async (
-      adaptateurEnvoiMail: AdaptateurEnvoiMail,
-      aide: DemandeAide,
-      relationUtilisateur: string | undefined
-    ) => {
-      await adaptateurEnvoiMail.envoie({
-        objet: "Demande d'aide pour MonAideCyber",
-        destinataire: {
-          email: this.annuaireCOT().rechercheEmailParDepartement(
-            aide.departement
-          ),
-        },
-        copie: adaptateurEnvironnement.messagerie().copieMAC(),
-        corps: adaptateursCorpsMessage
-          .demande()
-          .recapitulatifDemandeAide()
-          .genereCorpsMessage(aide, relationUtilisateur),
-      });
-    };
-
-    const rechercheUtilisateurMAC = async () => {
-      let utilisateurMAC: UtilisateurMACDTO | undefined = undefined;
-      if (saga.relationUtilisateur) {
-        utilisateurMAC = await uneRechercheUtilisateursMAC(
-          this.entrepotUtilisateurMAC
-        ).rechercheParMail(saga.relationUtilisateur);
-        if (!utilisateurMAC) {
-          throw new ErreurUtilisateurMACInconnu(
-            'L’adresse email de l’Aidant ou du prestataire n’est pas référencée. Veuillez entrer une adresse valide et réessayer.'
-          );
-        }
-      }
-      if (saga.identifiantAidant) {
-        utilisateurMAC = await uneRechercheUtilisateursMAC(
-          this.entrepotUtilisateurMAC
-        ).rechercheParIdentifiant(saga.identifiantAidant);
-        if (!utilisateurMAC) {
-          throw new ErreurUtilisateurMACInconnu(
-            'L’Aidant fourni n’est pas référencé.'
-          );
-        }
-      }
-      return utilisateurMAC;
-    };
-
-    const utilisateurMAC = await rechercheUtilisateurMAC();
+    const utilisateurMAC = await rechercheUtilisateurMAC(
+      saga,
+      this.entrepotUtilisateurMAC
+    );
     try {
       const commandeRechercheAideParEmail: CommandeRechercheAideParEmail = {
         type: 'CommandeRechercheAideParEmail',
@@ -153,7 +94,8 @@ export class CapteurSagaDemandeAide
             await envoieRecapitulatifDemandeAide(
               this.adaptateurEnvoiMail,
               aide,
-              utilisateurMAC?.email
+              utilisateurMAC?.email,
+              this.annuaireCOT()
             );
           }
 
