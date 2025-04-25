@@ -1,17 +1,12 @@
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { DemandeAide } from './DemandeAide';
-import {
-  EntrepotUtilisateursMAC,
-  uneRechercheUtilisateursMAC,
-  UtilisateurMACDTO,
-} from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { UtilisateurMACDTO } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { Departement } from '../departements';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
-import {
-  ErreurUtilisateurMACInconnu,
-  SagaDemandeAide,
-} from './CapteurSagaDemandeAide';
+import { MiseEnRelationDirecteAidant } from './MiseEnRelationDirecteAidant';
+import { MiseEnRelationParCritere } from './MiseEnRelationParCritere';
+import { MiseEnRelationDirecteUtilisateurInscrit } from './MiseEnRelationDirecteUtilisateurInscrit';
 
 export const envoieConfirmationDemandeAide = async (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
@@ -50,30 +45,34 @@ export const envoieRecapitulatifDemandeAide = async (
   });
 };
 
-export const rechercheUtilisateurMAC = async (
-  saga: SagaDemandeAide,
-  entrepotUtilisateurMAC: EntrepotUtilisateursMAC
-) => {
-  let utilisateurMAC: UtilisateurMACDTO | undefined = undefined;
-  if (saga.relationUtilisateur) {
-    utilisateurMAC = await uneRechercheUtilisateursMAC(
-      entrepotUtilisateurMAC
-    ).rechercheParMail(saga.relationUtilisateur);
-    if (!utilisateurMAC) {
-      throw new ErreurUtilisateurMACInconnu(
-        'L’adresse email de l’Aidant ou du prestataire n’est pas référencée. Veuillez entrer une adresse valide et réessayer.'
-      );
-    }
+export interface MiseEnRelation {
+  execute(demandeAide: DemandeAide): Promise<void>;
+}
+
+export const fabriqueMiseEnRelation = (
+  adaptateurEnvoiMail: AdaptateurEnvoiMail,
+  annuaireCOT: {
+    rechercheEmailParDepartement: (departement: Departement) => string;
+  },
+  utilisateurMac: UtilisateurMACDTO | undefined
+): MiseEnRelation => {
+  if (
+    utilisateurMac &&
+    (utilisateurMac?.profil === 'Aidant' ||
+      utilisateurMac?.profil === 'Gendarme')
+  ) {
+    return new MiseEnRelationDirecteAidant(
+      adaptateurEnvoiMail,
+      annuaireCOT,
+      utilisateurMac
+    );
   }
-  if (saga.identifiantAidant) {
-    utilisateurMAC = await uneRechercheUtilisateursMAC(
-      entrepotUtilisateurMAC
-    ).rechercheParIdentifiant(saga.identifiantAidant);
-    if (!utilisateurMAC) {
-      throw new ErreurUtilisateurMACInconnu(
-        'L’Aidant fourni n’est pas référencé.'
-      );
-    }
+  if (utilisateurMac && utilisateurMac.profil === 'UtilisateurInscrit') {
+    return new MiseEnRelationDirecteUtilisateurInscrit(
+      adaptateurEnvoiMail,
+      utilisateurMac
+    );
   }
-  return utilisateurMAC;
+
+  return new MiseEnRelationParCritere(adaptateurEnvoiMail, annuaireCOT);
 };
