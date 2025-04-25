@@ -15,11 +15,7 @@ import { unConstructeurDeServices } from '../../constructeurs/constructeurServic
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { adaptateursCorpsMessage } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
 import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
-import {
-  allier,
-  Departement,
-  gironde,
-} from '../../../src/gestion-demandes/departements';
+import { allier, gironde } from '../../../src/gestion-demandes/departements';
 import {
   DemandeAide,
   RechercheDemandeAide,
@@ -32,36 +28,28 @@ import {
   EntrepotAideMemoire,
   EntrepotUtilisateurMACMemoire,
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import {
-  unAidant,
-  unUtilisateurInscrit,
-} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { Entrepots } from '../../../src/domaine/Entrepots';
 import { BusEvenement } from '../../../src/domaine/BusEvenement';
-import { AdaptateurEnvoiMail } from '../../../src/adaptateurs/AdaptateurEnvoiMail';
+import { MiseEnRelation } from '../../../src/gestion-demandes/aide/miseEnRelation';
 
-const cotParDefaut = {
-  rechercheEmailParDepartement: (__departement: Departement) => 'cot@email.com',
-};
+class MiseEnRelationDeTest implements MiseEnRelation {
+  async execute(_demandeAide: DemandeAide): Promise<void> {
+    return;
+  }
+}
 
 const fabriqueCapteur = ({
   entrepots,
   busEvenement,
-  adaptateurEnvoiMail,
-  annuaireCOT,
   busCommande,
 }: {
   entrepots?: Entrepots;
   busEvenement?: BusEvenement;
-  adaptateurEnvoiMail?: AdaptateurEnvoiMail;
-  annuaireCOT?: {
-    rechercheEmailParDepartement: (departement: Departement) => string;
-  };
   busCommande?: BusCommande;
 }): CapteurSagaDemandeAide => {
   const lesEntrepots = entrepots ?? new EntrepotsMemoire();
   const leBusEvenement = busEvenement ?? new BusEvenementDeTest();
-  const envoiMail = adaptateurEnvoiMail ?? new AdaptateurEnvoiMailMemoire();
+  const envoiMail = new AdaptateurEnvoiMailMemoire();
   return new CapteurSagaDemandeAide(
     busCommande ??
       new BusCommandeMAC(
@@ -71,12 +59,13 @@ const fabriqueCapteur = ({
         unConstructeurDeServices(lesEntrepots.aidants())
       ),
     leBusEvenement,
-    envoiMail,
     new EntrepotUtilisateurMACMemoire({
       aidant: lesEntrepots.aidants(),
       utilisateurInscrit: lesEntrepots.utilisateursInscrits(),
     }),
-    () => annuaireCOT ?? cotParDefaut
+    {
+      fabrique: () => new MiseEnRelationDeTest(),
+    }
   );
 };
 
@@ -90,6 +79,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         copieMac: 'copie-mac@email.com',
       });
   });
+
   describe("Si l'Aidé est connu de MAC", () => {
     it('Mets à jour la demande d’aide', async () => {
       FournisseurHorlogeDeTest.initialise(new Date());
@@ -167,152 +157,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       ).not.toBeUndefined();
     });
 
-    it('Envoie un email de confirmation à l’Aidé', async () => {
-      FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-03-19T14:45:17+01:00'))
-      );
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      const capteur = fabriqueCapteur({
-        adaptateurEnvoiMail,
-      });
-
-      await capteur.execute({
-        type: 'SagaDemandeValidationCGUAide',
-        cguValidees: true,
-        email: 'jean-dupont@email.com',
-        departement: gironde,
-        raisonSociale: 'BetaGouv',
-      });
-
-      expect(
-        adaptateurEnvoiMail.confirmationDemandeAideAEteEnvoyeeA(
-          'jean-dupont@email.com'
-        )
-      ).toBe(true);
-    });
-
-    it('Envoie un email de demande d’aide en copie à MAC', async () => {
-      FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-03-19T14:45:17+01:00'))
-      );
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      const capteur = fabriqueCapteur({ adaptateurEnvoiMail });
-
-      await capteur.execute({
-        type: 'SagaDemandeValidationCGUAide',
-        cguValidees: true,
-        email: 'jean-dupont@email.com',
-        departement: gironde,
-        raisonSociale: 'BetaGouv',
-      });
-
-      expect(
-        adaptateurEnvoiMail.aEteEnvoyeEnCopieA(
-          'copie-mac@email.com',
-          'Bonjour une entité a fait une demande d’aide'
-        )
-      ).toBe(true);
-    });
-
-    it('Envoie un email de demande d’aide au COT de la région', async () => {
-      FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-03-19T14:45:17+01:00'))
-      );
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      const annuaireCOT = {
-        rechercheEmailParDepartement: (__departement: Departement) =>
-          'gironde@ssi.gouv.fr',
-      };
-      const capteur = fabriqueCapteur({ annuaireCOT, adaptateurEnvoiMail });
-
-      await capteur.execute({
-        type: 'SagaDemandeValidationCGUAide',
-        cguValidees: true,
-        email: 'jean-dupont@email.com',
-        departement: gironde,
-        raisonSociale: 'BetaGouv',
-      });
-
-      expect(
-        adaptateurEnvoiMail.aEteEnvoyeA(
-          'gironde@ssi.gouv.fr',
-          'Bonjour une entité a fait une demande d’aide'
-        )
-      ).toBe(true);
-    });
-
-    it('Envoie un email de demande d’aide au COT en prenant en compte la relation existante avec un Aidant', async () => {
-      adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
-        .recapitulatifDemandeAide(
-          (_aide: DemandeAide, relationUtilisateur: string | undefined) =>
-            `Bonjour une entité a fait une demande d’aide, relation Aidant : ${relationUtilisateur}`
-        )
-        .construis().demande;
-      FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-03-19T14:45:17+01:00'))
-      );
-      const entrepots = new EntrepotsMemoire();
-      await entrepots
-        .aidants()
-        .persiste(
-          unAidant().avecUnEmail('jean.dujardin@email.com').construis()
-        );
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      const capteur = fabriqueCapteur({ adaptateurEnvoiMail, entrepots });
-
-      await capteur.execute({
-        type: 'SagaDemandeValidationCGUAide',
-        cguValidees: true,
-        email: 'jean-dupont@email.com',
-        departement: gironde,
-        raisonSociale: 'BetaGouv',
-        relationUtilisateur: 'jean.dujardin@email.com',
-      });
-
-      expect(
-        adaptateurEnvoiMail.aEteEnvoyeA(
-          'cot@email.com',
-          `Bonjour une entité a fait une demande d’aide, relation Aidant : jean.dujardin@email.com`
-        )
-      ).toBe(true);
-      expect(
-        adaptateurEnvoiMail.aEteEnvoyeEnCopieA(
-          'copie-mac@email.com',
-          'Bonjour une entité a fait une demande d’aide, relation Aidant : jean.dujardin@email.com'
-        )
-      ).toBe(true);
-    });
-
-    it("Envoie un email de confirmation à l'Aidé en prenant en compte la relation existante avec un Aidant", async () => {
-      FournisseurHorlogeDeTest.initialise(
-        new Date(Date.parse('2024-03-19T14:45:17+01:00'))
-      );
-      const entrepots = new EntrepotsMemoire();
-      await entrepots
-        .aidants()
-        .persiste(
-          unAidant().avecUnEmail('jean.dujardin@email.com').construis()
-        );
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      const capteur = fabriqueCapteur({ adaptateurEnvoiMail, entrepots });
-
-      await capteur.execute({
-        type: 'SagaDemandeValidationCGUAide',
-        cguValidees: true,
-        email: 'jean-dupont@email.com',
-        departement: gironde,
-        raisonSociale: 'BetaGouv',
-        relationUtilisateur: 'jean.dujardin@email.com',
-      });
-
-      expect(
-        adaptateurEnvoiMail.confirmationDemandeAideAEteEnvoyeeA(
-          'jean-dupont@email.com',
-          'jean.dujardin@email.com'
-        )
-      ).toBe(true);
-    });
-
     it("Publie l'évènement 'AIDE_CREE'", async () => {
       const maintenant = new Date();
       FournisseurHorlogeDeTest.initialise(maintenant);
@@ -351,7 +195,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           CommandeCreerAide: new CapteurCommandeCreerAideQuiEchoue(),
         });
         const capteur = fabriqueCapteur({
-          adaptateurEnvoiMail: adaptateurEnvoieMail,
           busEvenement,
           busCommande,
         });
@@ -403,39 +246,6 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
   });
 
   describe('Lorsque un email utilisateur est fourni', () => {
-    describe('Dans le cas d’un Utilisateur inscrit', () => {
-      it("N’envoie pas de email au COT lorsqu'un Utilisateur Inscrit est donné en paramètre", async () => {
-        const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-        const entrepots = new EntrepotsMemoire();
-        await entrepots
-          .utilisateursInscrits()
-          .persiste(
-            unUtilisateurInscrit()
-              .avecUnEmail('jean.dupont@email.com')
-              .construis()
-          );
-        const capteur = fabriqueCapteur({
-          adaptateurEnvoiMail,
-          entrepots,
-        });
-
-        await capteur.execute({
-          type: 'SagaDemandeAide',
-          cguValidees: true,
-          email: 'user@example.com',
-          departement: gironde,
-          relationUtilisateur: 'jean.dupont@email.com',
-        });
-
-        expect(
-          adaptateurEnvoiMail.aEteEnvoyeA(
-            'cot@email.com',
-            'Bonjour une entité a fait une demande d’aide'
-          )
-        ).toBe(false);
-      });
-    });
-
     it('Si l’utilisateur n’est pas connu, on remonte une erreur', async () => {
       const entrepots = new EntrepotsMemoire();
       const capteur = fabriqueCapteur({ entrepots });
