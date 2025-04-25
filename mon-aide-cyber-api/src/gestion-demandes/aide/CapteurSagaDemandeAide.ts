@@ -8,12 +8,12 @@ import { DemandeAide, RechercheDemandeAide } from './DemandeAide';
 import { CommandeRechercheAideParEmail } from './CapteurCommandeRechercheDemandeAideParEmail';
 import { CommandeCreerDemandeAide } from './CapteurCommandeCreerDemandeAide';
 import { CommandeMettreAJourDemandeAide } from './CapteurCommandeMettreAJourDemandeAide';
-import { EntrepotUtilisateursMAC } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import {
-  envoieConfirmationDemandeAide,
-  envoieRecapitulatifDemandeAide,
-  rechercheUtilisateurMAC,
-} from './miseEnRelation';
+  EntrepotUtilisateursMAC,
+  uneRechercheUtilisateursMAC,
+  UtilisateurMACDTO,
+} from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { fabriqueMiseEnRelation } from './miseEnRelation';
 
 export class ErreurUtilisateurMACInconnu extends Error {
   constructor(message: string) {
@@ -34,6 +34,34 @@ export type DemandeAideCree = Evenement<{
   identifiantAide: crypto.UUID;
   departement: string;
 }>;
+
+const rechercheUtilisateurMAC = async (
+  saga: SagaDemandeAide,
+  entrepotUtilisateurMAC: EntrepotUtilisateursMAC
+) => {
+  let utilisateurMAC: UtilisateurMACDTO | undefined = undefined;
+  if (saga.relationUtilisateur) {
+    utilisateurMAC = await uneRechercheUtilisateursMAC(
+      entrepotUtilisateurMAC
+    ).rechercheParMail(saga.relationUtilisateur);
+    if (!utilisateurMAC) {
+      throw new ErreurUtilisateurMACInconnu(
+        'L’adresse email de l’Aidant ou du prestataire n’est pas référencée. Veuillez entrer une adresse valide et réessayer.'
+      );
+    }
+  }
+  if (saga.identifiantAidant) {
+    utilisateurMAC = await uneRechercheUtilisateursMAC(
+      entrepotUtilisateurMAC
+    ).rechercheParIdentifiant(saga.identifiantAidant);
+    if (!utilisateurMAC) {
+      throw new ErreurUtilisateurMACInconnu(
+        'L’Aidant fourni n’est pas référencé.'
+      );
+    }
+  }
+  return utilisateurMAC;
+};
 
 export class CapteurSagaDemandeAide
   implements CapteurSaga<SagaDemandeAide, void>
@@ -87,23 +115,12 @@ export class CapteurSagaDemandeAide
       await this.busCommande
         .publie<CommandeCreerDemandeAide, DemandeAide>(commandeCreerAide)
         .then(async (aide: DemandeAide) => {
-          if (
-            !utilisateurMAC ||
-            utilisateurMAC.profil !== 'UtilisateurInscrit'
-          ) {
-            await envoieRecapitulatifDemandeAide(
-              this.adaptateurEnvoiMail,
-              aide,
-              utilisateurMAC?.email,
-              this.annuaireCOT()
-            );
-          }
-
-          await envoieConfirmationDemandeAide(
+          const miseEnRelation = fabriqueMiseEnRelation(
             this.adaptateurEnvoiMail,
-            aide,
+            this.annuaireCOT(),
             utilisateurMAC
           );
+          await miseEnRelation.execute(aide);
 
           await this.busEvenement.publie<DemandeAideCree>({
             identifiant: aide.identifiant,
