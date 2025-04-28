@@ -47,7 +47,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
       type: 'CommandeCreeEspaceAidant',
       departement: {
         nom: 'Alpes-de-Haute-Provence',
-        code: '4',
+        code: '04',
         codeRegion: '93',
       },
     });
@@ -64,7 +64,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
         departements: [
           {
             nom: 'Alpes-de-Haute-Provence',
-            code: '4',
+            code: '04',
             codeRegion: '93',
           },
         ],
@@ -99,7 +99,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
       type: 'CommandeCreeEspaceAidant',
       departement: {
         nom: 'Alpes-de-Haute-Provence',
-        code: '4',
+        code: '04',
         codeRegion: '93',
       },
     });
@@ -126,7 +126,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
       type: 'CommandeCreeEspaceAidant',
       departement: {
         nom: 'Ariège',
-        code: '9',
+        code: '09',
         codeRegion: '76',
       },
     });
@@ -236,7 +236,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
         type: 'CommandeCreeEspaceAidant',
         departement: {
           nom: 'Alpes-de-Haute-Provence',
-          code: '4',
+          code: '04',
           codeRegion: '93',
         },
       });
@@ -254,7 +254,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
           departements: [
             {
               nom: 'Alpes-de-Haute-Provence',
-              code: '4',
+              code: '04',
               codeRegion: '93',
             },
           ],
@@ -296,7 +296,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
         type: 'CommandeCreeEspaceAidant',
         departement: {
           nom: 'Alpes-de-Haute-Provence',
-          code: '4',
+          code: '04',
           codeRegion: '93',
         },
       });
@@ -344,7 +344,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
         type: 'CommandeCreeEspaceAidant',
         departement: {
           nom: 'Alpes-de-Haute-Provence',
-          code: '4',
+          code: '04',
           codeRegion: '93',
         },
       });
@@ -388,7 +388,7 @@ describe('Capteur de commande de création de compte Aidant', () => {
           type: 'CommandeCreeEspaceAidant',
           departement: {
             nom: 'Alpes-de-Haute-Provence',
-            code: '4',
+            code: '04',
             codeRegion: '93',
           },
         });

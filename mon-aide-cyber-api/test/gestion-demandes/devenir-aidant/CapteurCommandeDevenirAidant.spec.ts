@@ -52,7 +52,7 @@ describe('Capteur de commande demande devenir aidant', () => {
     });
 
     expect(demandeDevenirAidant).toStrictEqual<DemandeDevenirAidant>({
-      departement: { nom: 'Aisne', code: '2', codeRegion: '32' },
+      departement: { nom: 'Aisne', code: '02', codeRegion: '32' },
       mail: 'email',
       nom: 'nom',
       prenom: 'prenom',
