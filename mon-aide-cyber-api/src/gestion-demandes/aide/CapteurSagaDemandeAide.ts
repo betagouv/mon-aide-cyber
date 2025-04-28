@@ -111,7 +111,8 @@ export class CapteurSagaDemandeAide
       await this.busCommande
         .publie<CommandeCreerDemandeAide, DemandeAide>(commandeCreerAide)
         .then(async (aide: DemandeAide) => {
-          const miseEnRelation = this.fabriqueMiseEnRelation.fabrique(utilisateurMAC);
+          const miseEnRelation =
+            this.fabriqueMiseEnRelation.fabrique(utilisateurMAC);
           await miseEnRelation.execute(aide);
 
           await this.busEvenement.publie<DemandeAideCree>({

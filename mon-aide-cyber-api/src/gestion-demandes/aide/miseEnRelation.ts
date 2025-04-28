@@ -50,12 +50,10 @@ export interface MiseEnRelation {
 }
 
 export interface FabriqueMiseEnRelation {
-  fabrique: (
-    utilisateurMac: UtilisateurMACDTO | undefined
-  ) => MiseEnRelation;
+  fabrique: (utilisateurMac: UtilisateurMACDTO | undefined) => MiseEnRelation;
 }
 
-class FabriqueDeMiseEnRelation implements FabriqueMiseEnRelation {
+export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
   constructor(
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
     private readonly annuaireCOT: {
@@ -63,9 +61,7 @@ class FabriqueDeMiseEnRelation implements FabriqueMiseEnRelation {
     }
   ) {}
 
-  fabrique(
-    utilisateurMac: UtilisateurMACDTO | undefined
-  ): MiseEnRelation {
+  fabrique(utilisateurMac: UtilisateurMACDTO | undefined): MiseEnRelation {
     if (
       utilisateurMac &&
       (utilisateurMac?.profil === 'Aidant' ||
@@ -97,4 +93,4 @@ export const fabriqueMiseEnRelation = (
     rechercheEmailParDepartement: (departement: Departement) => string;
   }
 ): FabriqueMiseEnRelation =>
-  new FabriqueDeMiseEnRelation(adaptateurEnvoiMail, annuaireCOT);
+  new FabriqueMiseEnRelationConcrete(adaptateurEnvoiMail, annuaireCOT);

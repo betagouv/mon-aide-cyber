@@ -15,7 +15,11 @@ import { unConstructeurDeServices } from '../../constructeurs/constructeurServic
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { adaptateursCorpsMessage } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
 import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
-import { allier, gironde } from '../../../src/gestion-demandes/departements';
+import {
+  allier,
+  Departement,
+  gironde,
+} from '../../../src/gestion-demandes/departements';
 import {
   DemandeAide,
   RechercheDemandeAide,
@@ -30,7 +34,25 @@ import {
 } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { Entrepots } from '../../../src/domaine/Entrepots';
 import { BusEvenement } from '../../../src/domaine/BusEvenement';
-import { MiseEnRelation } from '../../../src/gestion-demandes/aide/miseEnRelation';
+import {
+  FabriqueMiseEnRelation,
+  FabriqueMiseEnRelationConcrete,
+  MiseEnRelation,
+} from '../../../src/gestion-demandes/aide/miseEnRelation';
+import { UtilisateurMACDTO } from '../../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import {
+  unAidant,
+  unUtilisateurInscrit,
+} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import { MiseEnRelationDirecteAidant } from '../../../src/gestion-demandes/aide/MiseEnRelationDirecteAidant';
+import { MiseEnRelationDirecteUtilisateurInscrit } from '../../../src/gestion-demandes/aide/MiseEnRelationDirecteUtilisateurInscrit';
+import { MiseEnRelationParCritere } from '../../../src/gestion-demandes/aide/MiseEnRelationParCritere';
+
+class FabriqueDeMiseEnRelationDeTest implements FabriqueMiseEnRelation {
+  fabrique(_utilisateurMac: UtilisateurMACDTO | undefined): MiseEnRelation {
+    return new MiseEnRelationDeTest();
+  }
+}
 
 class MiseEnRelationDeTest implements MiseEnRelation {
   async execute(_demandeAide: DemandeAide): Promise<void> {
@@ -42,14 +64,18 @@ const fabriqueCapteur = ({
   entrepots,
   busEvenement,
   busCommande,
+  fabriqueMiseEnRelation,
 }: {
   entrepots?: Entrepots;
   busEvenement?: BusEvenement;
   busCommande?: BusCommande;
+  fabriqueMiseEnRelation?: FabriqueMiseEnRelation;
 }): CapteurSagaDemandeAide => {
   const lesEntrepots = entrepots ?? new EntrepotsMemoire();
   const leBusEvenement = busEvenement ?? new BusEvenementDeTest();
   const envoiMail = new AdaptateurEnvoiMailMemoire();
+  const laFabriqueDeMiseEnRelation =
+    fabriqueMiseEnRelation ?? new FabriqueDeMiseEnRelationDeTest();
   return new CapteurSagaDemandeAide(
     busCommande ??
       new BusCommandeMAC(
@@ -63,9 +89,7 @@ const fabriqueCapteur = ({
       aidant: lesEntrepots.aidants(),
       utilisateurInscrit: lesEntrepots.utilisateursInscrits(),
     }),
-    {
-      fabrique: () => new MiseEnRelationDeTest(),
-    }
+    laFabriqueDeMiseEnRelation
   );
 };
 
@@ -185,8 +209,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     });
 
     describe('Lorsque la validation des CGU a échoué', () => {
-      it("N'envoie pas d'Email de confirmation à l'Aidé", async () => {
-        const adaptateurEnvoieMail = new AdaptateurEnvoiMailMemoire();
+      it("La mise en relation n'est pas exécutée", async () => {
         const entrepotsMemoire = new EntrepotsMemoire();
         const busEvenement = new BusEvenementDeTest();
         const busCommande = new BusCommandeTest({
@@ -194,9 +217,19 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             new CapteurCommandeRechercheDemandeAideParEmail(entrepotsMemoire),
           CommandeCreerAide: new CapteurCommandeCreerAideQuiEchoue(),
         });
+        const fabriqueDeMiseEnRelationDeTest =
+          new FabriqueDeMiseEnRelationDeTest();
+        let miseEnRelationAEteExecutee = false;
+        fabriqueDeMiseEnRelationDeTest.fabrique = () => ({
+          execute: async () => {
+            miseEnRelationAEteExecutee = true;
+          },
+        });
+
         const capteur = fabriqueCapteur({
           busEvenement,
           busCommande,
+          fabriqueMiseEnRelation: fabriqueDeMiseEnRelationDeTest,
         });
 
         await expect(() =>
@@ -207,7 +240,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             departement: gironde,
           })
         ).rejects.toThrowError("Votre demande d'aide n'a pu aboutir");
-        expect(adaptateurEnvoieMail.mailEnvoye()).toBe(false);
+        expect(miseEnRelationAEteExecutee).toBe(false);
         expect(busEvenement.evenementRecu).toBeUndefined();
       });
     });
@@ -245,28 +278,131 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     });
   });
 
-  describe('Lorsque un email utilisateur est fourni', () => {
-    it('Si l’utilisateur n’est pas connu, on remonte une erreur', async () => {
-      const entrepots = new EntrepotsMemoire();
-      const capteur = fabriqueCapteur({ entrepots });
+  describe('Mise en relation directe', () => {
+    describe('Lorsque un email utilisateur est fourni', () => {
+      it('Si l’utilisateur n’est pas connu, on remonte une erreur', async () => {
+        const entrepots = new EntrepotsMemoire();
+        const capteur = fabriqueCapteur({ entrepots });
 
-      const promesse = capteur.execute({
-        type: 'SagaDemandeAide',
-        cguValidees: true,
-        email: 'user@example.com',
-        departement: gironde,
-        relationUtilisateur: 'jean.dupont@email.com',
+        const promesse = capteur.execute({
+          type: 'SagaDemandeAide',
+          cguValidees: true,
+          email: 'user@example.com',
+          departement: gironde,
+          relationUtilisateur: 'jean.dupont@email.com',
+        });
+
+        expect(
+          (entrepots.demandesAides() as EntrepotAideMemoire)
+            .rechercheParMailFaite
+        ).toBe(false);
+        await expect(() => promesse).rejects.toThrowError(
+          'L’adresse email de l’Aidant ou du prestataire n’est pas référencée. Veuillez entrer une adresse valide et réessayer.'
+        );
       });
+    });
 
-      expect(
-        (entrepots.demandesAides() as EntrepotAideMemoire).rechercheParMailFaite
-      ).toBe(false);
-      await expect(() => promesse).rejects.toThrowError(
-        'L’adresse email de l’Aidant ou du prestataire n’est pas référencée. Veuillez entrer une adresse valide et réessayer.'
-      );
+    describe('Avec un Aidant', () => {
+      it('Exécute la mise en relation', async () => {
+        const entrepots = new EntrepotsMemoire();
+        const fabriqueDeMiseEnRelationEcoutee =
+          new FabriqueDeMiseEnRelationEcoutee();
+        const capteur = fabriqueCapteur({
+          entrepots,
+          fabriqueMiseEnRelation: fabriqueDeMiseEnRelationEcoutee,
+        });
+        const aidant = unAidant().construis();
+        await entrepots.aidants().persiste(aidant);
+
+        await capteur.execute({
+          type: 'SagaDemandeAide',
+          cguValidees: true,
+          email: 'user@example.com',
+          departement: gironde,
+          relationUtilisateur: aidant.email,
+        });
+
+        expect(
+          fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
+        ).not.toBeUndefined();
+        expect(
+          fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
+        ).toBeInstanceOf(MiseEnRelationDirecteAidant);
+      });
+    });
+
+    describe('Avec un Utilisateur Inscrit', () => {
+      it('Exécute la mise en relation', async () => {
+        const entrepots = new EntrepotsMemoire();
+        const fabriqueDeMiseEnRelationEcoutee =
+          new FabriqueDeMiseEnRelationEcoutee();
+        const capteur = fabriqueCapteur({
+          entrepots,
+          fabriqueMiseEnRelation: fabriqueDeMiseEnRelationEcoutee,
+        });
+        const utilisateurInscrit = unUtilisateurInscrit().construis();
+        await entrepots.utilisateursInscrits().persiste(utilisateurInscrit);
+
+        await capteur.execute({
+          type: 'SagaDemandeAide',
+          cguValidees: true,
+          email: 'user@example.com',
+          departement: gironde,
+          relationUtilisateur: utilisateurInscrit.email,
+        });
+
+        expect(
+          fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
+        ).not.toBeUndefined();
+        expect(
+          fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
+        ).toBeInstanceOf(MiseEnRelationDirecteUtilisateurInscrit);
+      });
+    });
+
+    describe('Par critère', () => {
+      it('Exécute la mise en relation', async () => {
+        const entrepots = new EntrepotsMemoire();
+        const fabriqueDeMiseEnRelationEcoutee =
+          new FabriqueDeMiseEnRelationEcoutee();
+        const capteur = fabriqueCapteur({
+          entrepots,
+          fabriqueMiseEnRelation: fabriqueDeMiseEnRelationEcoutee,
+        });
+
+        await capteur.execute({
+          type: 'SagaDemandeAide',
+          cguValidees: true,
+          email: 'user@example.com',
+          departement: gironde,
+        });
+
+        expect(
+          fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
+        ).not.toBeUndefined();
+        expect(
+          fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
+        ).toBeInstanceOf(MiseEnRelationParCritere);
+      });
     });
   });
 });
+
+class FabriqueDeMiseEnRelationEcoutee extends FabriqueMiseEnRelationConcrete {
+  public miseEnRelationPromise: MiseEnRelation | undefined = undefined;
+
+  constructor() {
+    super(new AdaptateurEnvoiMailMemoire(), {
+      rechercheEmailParDepartement: (__departement: Departement) =>
+        'cot@email.com',
+    });
+  }
+
+  fabrique(utilisateurMac: UtilisateurMACDTO | undefined): MiseEnRelation {
+    this.miseEnRelationPromise = super.fabrique(utilisateurMac);
+    return this.miseEnRelationPromise;
+  }
+}
 
 class CapteurCommandeCreerAideQuiEchoue
   implements CapteurCommande<CommandeCreerDemandeAide, any>
