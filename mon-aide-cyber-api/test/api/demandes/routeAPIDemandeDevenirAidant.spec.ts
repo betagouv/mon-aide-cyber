@@ -74,7 +74,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           .departement
       ).toStrictEqual<Departement>({
         nom: 'Hautes-Alpes',
-        code: '5',
+        code: '05',
         codeRegion: '93',
       });
     });

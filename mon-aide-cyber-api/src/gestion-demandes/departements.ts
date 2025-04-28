@@ -1,47 +1,47 @@
 type Ain = {
   nom: 'Ain';
-  code: '1';
+  code: '01';
   codeRegion: '84';
 };
 
 type Aisne = {
   nom: 'Aisne';
-  code: '2';
+  code: '02';
   codeRegion: '32';
 };
 type Allier = {
   nom: 'Allier';
-  code: '3';
+  code: '03';
   codeRegion: '84';
 };
 type AlpesDeHauteProvence = {
   nom: 'Alpes-de-Haute-Provence';
-  code: '4';
+  code: '04';
   codeRegion: '93';
 };
 type HautesAlpes = {
   nom: 'Hautes-Alpes';
-  code: '5';
+  code: '05';
   codeRegion: '93';
 };
 type AlpesMaritimes = {
   nom: 'Alpes-Maritimes';
-  code: '6';
+  code: '06';
   codeRegion: '93';
 };
 type Ardeche = {
   nom: 'Ardèche';
-  code: '7';
+  code: '07';
   codeRegion: '84';
 };
 type Ardennes = {
   nom: 'Ardennes';
-  code: '8';
+  code: '08';
   codeRegion: '44';
 };
 type Ariege = {
   nom: 'Ariège';
-  code: '9';
+  code: '09';
   codeRegion: '76';
 };
 type Aube = {
@@ -650,47 +650,47 @@ export const gironde: Gironde = {
 };
 export const ain: Ain = {
   nom: 'Ain',
-  code: '1',
+  code: '01',
   codeRegion: '84',
 };
 export const aisne: Aisne = {
   nom: 'Aisne',
-  code: '2',
+  code: '02',
   codeRegion: '32',
 };
 export const allier: Allier = {
   nom: 'Allier',
-  code: '3',
+  code: '03',
   codeRegion: '84',
 };
 export const alpesDeHauteProvence: AlpesDeHauteProvence = {
   nom: 'Alpes-de-Haute-Provence',
-  code: '4',
+  code: '04',
   codeRegion: '93',
 };
 export const hautesAlpes: HautesAlpes = {
   nom: 'Hautes-Alpes',
-  code: '5',
+  code: '05',
   codeRegion: '93',
 };
 export const alpesMaritimes: AlpesMaritimes = {
   nom: 'Alpes-Maritimes',
-  code: '6',
+  code: '06',
   codeRegion: '93',
 };
 export const ardeche: Ardeche = {
   nom: 'Ardèche',
-  code: '7',
+  code: '07',
   codeRegion: '84',
 };
 export const ardennes: Ardennes = {
   nom: 'Ardennes',
-  code: '8',
+  code: '08',
   codeRegion: '44',
 };
 export const ariege: Ariege = {
   nom: 'Ariège',
-  code: '9',
+  code: '09',
   codeRegion: '76',
 };
 export const aube: Aube = {
