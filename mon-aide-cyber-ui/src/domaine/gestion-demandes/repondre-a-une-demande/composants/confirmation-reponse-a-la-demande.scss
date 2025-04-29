@@ -1,0 +1,70 @@
+@import '../../../../assets/styles/points-de-rupture';
+
+.ecran-reponse-a-la-demande {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 'formulaire';
+
+  @include a-partir-de(md) {
+    grid-template-columns: 55% auto;
+    grid-template-areas: 'formulaire icone';
+    height: 500px;
+  }
+
+  @include a-partir-de(md) {
+    grid-template-columns: 55% auto;
+    grid-template-areas: 'formulaire icone';
+    height: 600px;
+  }
+
+  @include a-partir-de(lg) {
+    grid-template-columns: 55% auto;
+    grid-template-areas: 'formulaire icone';
+    height: 700px;
+  }
+
+  .formulaire-colonne-gauche {
+    grid-area: formulaire;
+    padding: 3rem 2.5rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .titre-merci {
+      justify-self: center;
+    }
+
+    .cta-bas-de-section {
+      display: flex;
+      justify-content: center;
+    }
+
+    @include a-partir-de(md) {
+      padding: 5rem 4rem;
+    }
+
+    @include a-partir-de(lg) {
+      padding: 5rem 6rem;
+    }
+
+    @include a-partir-de(xl) {
+      padding: 5rem 13rem;
+    }
+  }
+
+  .icone-colonne-droite {
+    display: none;
+    grid-area: icone;
+
+    @include a-partir-de(md) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  img {
+    max-width: 100%;
+  }
+}
