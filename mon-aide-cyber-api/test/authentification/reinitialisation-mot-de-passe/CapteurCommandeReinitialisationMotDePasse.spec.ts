@@ -114,32 +114,27 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
 
   it('Publie l’événement REINITIALISATION_MOT_DE_PASSE_DEMANDEE même en cas d’erreur', async () => {
     const uuid = crypto.randomUUID();
-    try {
-      adaptateurUUID.genereUUID = () => uuid;
-      await new CapteurCommandeReinitialisationMotDePasse(
-        entrepots,
-        busEvenement,
-        adaptateurEnvoiMail,
-        new ServiceDeChiffrementClair()
-      ).execute({
-        type: 'CommandeReinitialisationMotDePasse',
-        email: 'jean.dupont@email.com',
-      });
-      expect.fail('Une erreur devrait être renvoyée');
-    } catch (erreur: unknown | Error) {
-      expect((erreur as Error).message).toStrictEqual(
-        "Le utilisateur demandé n'existe pas."
-      );
-      expect(
-        busEvenement.consommateursTestes.get(
-          'REINITIALISATION_MOT_DE_PASSE_DEMANDEE'
-        )?.[0].evenementConsomme
-      ).toStrictEqual<ReinitialisationMotDePasseDemandee>({
-        type: 'REINITIALISATION_MOT_DE_PASSE_DEMANDEE',
-        date: FournisseurHorloge.maintenant(),
-        corps: { statut: 'ERREUR', email: 'jean.dupont@email.com' },
-        identifiant: uuid,
-      });
-    }
+    adaptateurUUID.genereUUID = () => uuid;
+
+    await new CapteurCommandeReinitialisationMotDePasse(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      new ServiceDeChiffrementClair()
+    ).execute({
+      type: 'CommandeReinitialisationMotDePasse',
+      email: 'jean.dupont@email.com',
+    });
+
+    expect(
+      busEvenement.consommateursTestes.get(
+        'REINITIALISATION_MOT_DE_PASSE_DEMANDEE'
+      )?.[0].evenementConsomme
+    ).toStrictEqual<ReinitialisationMotDePasseDemandee>({
+      type: 'REINITIALISATION_MOT_DE_PASSE_DEMANDEE',
+      date: FournisseurHorloge.maintenant(),
+      corps: { statut: 'ERREUR', email: 'jean.dupont@email.com' },
+      identifiant: uuid,
+    });
   });
 });
