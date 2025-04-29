@@ -9,14 +9,29 @@ export type EntitesOrganisationsPubliques = {
   libelle: 'Organisations publiques (ex. collectivité, administration, etc.)';
 };
 
+export const entitesPubliques: EntitesOrganisationsPubliques = {
+  nom: 'Organisations publiques',
+  libelle: 'Organisations publiques (ex. collectivité, administration, etc.)',
+};
+
 export type EntitesEntreprisesPrivees = {
   nom: 'Entreprises privées';
   libelle: 'Entreprises privées (ex. TPE, PME, ETI)';
 };
 
+export const entitesPrivees: EntitesEntreprisesPrivees = {
+  nom: 'Entreprises privées',
+  libelle: 'Entreprises privées (ex. TPE, PME, ETI)',
+};
+
 export type EntitesAssociations = {
   nom: 'Associations';
   libelle: 'Associations (ex. association loi 1901, GIP)';
+};
+
+export const associations: EntitesAssociations = {
+  nom: 'Associations',
+  libelle: 'Associations (ex. association loi 1901, GIP)',
 };
 
 export const typesEntites: TypesEntites = [

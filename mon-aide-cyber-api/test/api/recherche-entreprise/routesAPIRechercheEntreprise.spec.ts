@@ -22,6 +22,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
               libelle_commune: 'Bordeaux',
               departement: '33',
             },
+            complements: { est_association: true },
             nom_complet: 'Beta-Gouv',
           },
         ],
@@ -49,6 +50,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
         results: [
           {
             siege: { siret: '1234567890' },
+            complements: { est_association: true },
             nom_complet:
               'agence nationale de sécurité des systèmes d’information',
           },
@@ -68,7 +70,13 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
 
     it('Prends en compte les paramètres de requêtes optionnels', async () => {
       testeurMAC.adaptateurDeRequeteHTTP.reponse({
-        results: [{ siege: { siret: '1234567890' }, nom_complet: 'Beta-Gouv' }],
+        results: [
+          {
+            siege: { siret: '1234567890' },
+            complements: { est_association: true },
+            nom_complet: 'Beta-Gouv',
+          },
+        ],
       });
 
       await executeRequete(
@@ -111,6 +119,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
               libelle_commune: 'Bordeaux',
               departement: '33',
             },
+            complements: { est_association: true },
             nom_complet: 'Réserviste',
           },
         ],
@@ -148,6 +157,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
               libelle_commune: 'Bordeaux',
               departement: '33',
             },
+            complements: { est_association: true },
             nom_complet: 'Réserviste',
           },
         ],
