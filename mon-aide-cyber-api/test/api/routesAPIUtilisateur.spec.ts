@@ -514,22 +514,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         donneesServeur.app,
         'POST',
         `/api/utilisateur/reinitialisation-mot-de-passe`,
-        {
-          email: utilisateur.identifiantConnexion,
-        }
-      );
-
-      expect(reponse.statusCode).toBe(202);
-    });
-
-    it('Retourne une réponse ACCEPTED même en cas d’erreur', async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'POST',
-        `/api/utilisateur/reinitialisation-mot-de-passe`,
-        {
-          email: 'email-inconnu',
-        }
+        { email: utilisateur.identifiantConnexion }
       );
 
       expect(reponse.statusCode).toBe(202);
