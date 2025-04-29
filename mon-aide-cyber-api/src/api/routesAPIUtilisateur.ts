@@ -214,23 +214,14 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     express.json(),
     async (
       requete: Request<CorpsRequeteReinitialisationMotDePasse>,
-      reponse: Response,
-      suite: NextFunction
+      reponse: Response
     ) => {
       return busCommande
         .publie<CommandeReinitialisationMotDePasse, void>({
           type: 'CommandeReinitialisationMotDePasse',
           email: requete.body.email,
         })
-        .then(() => reponse.status(202).send())
-        .catch((erreur: Error) =>
-          suite(
-            ErreurMAC.cree(
-              'Réinitialisation mot de passe',
-              new ErreurDemandeReinitialisationMotDePasse(erreur.message)
-            )
-          )
-        );
+        .then(() => reponse.status(202).send());
     }
   );
 
