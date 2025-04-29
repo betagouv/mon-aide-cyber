@@ -46,7 +46,7 @@ import {
 } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { MiseEnRelationDirecteAidant } from '../../../src/gestion-demandes/aide/MiseEnRelationDirecteAidant';
 import { MiseEnRelationDirecteUtilisateurInscrit } from '../../../src/gestion-demandes/aide/MiseEnRelationDirecteUtilisateurInscrit';
-import { MiseEnRelationParCritere } from '../../../src/gestion-demandes/aide/MiseEnRelationParCritere';
+import { MiseEnRelationParCriteres } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
 
 class FabriqueDeMiseEnRelationDeTest implements FabriqueMiseEnRelation {
   fabrique(_utilisateurMac: UtilisateurMACDTO | undefined): MiseEnRelation {
@@ -382,7 +382,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         ).not.toBeUndefined();
         expect(
           fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
-        ).toBeInstanceOf(MiseEnRelationParCritere);
+        ).toBeInstanceOf(MiseEnRelationParCriteres);
       });
     });
   });
