@@ -26,6 +26,7 @@ import { EcranUtilisationDuService } from './domaine/parcours-utilisation-servic
 import { EcranRealiserDesDiagnosticsANSSI } from './domaine/vitrine/ecran-realiser-des-diagnostics-anssi/EcranRealiserDesDiagnosticsANSSI.tsx';
 import { EcranRelaisAssociatifs } from './domaine/vitrine/ecran-relais-associatifs/EcranRelaisAssociatifs.tsx';
 import { EcranSecurite } from './domaine/vitrine/ecran-securite/EcranSecurite.tsx';
+import { EcranRepondreAUneDemande } from './domaine/gestion-demandes/repondre-a-une-demande/EcranRepondreAUneDemande.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -64,6 +65,18 @@ export const RouteurPublic = () => {
         element={<LayoutPublic afficheNavigation={false} enteteSimple={true} />}
       >
         <Route index element={<EcranDemandeDevenirAidant />} />
+      </Route>
+
+      <Route
+        path="repondre-a-une-demande"
+        element={<LayoutPublic afficheNavigation={false} enteteSimple={true} />}
+      >
+        <Route
+          index
+          element={
+            <ComposantIntercepteur composant={EcranRepondreAUneDemande} />
+          }
+        />
       </Route>
 
       <Route
