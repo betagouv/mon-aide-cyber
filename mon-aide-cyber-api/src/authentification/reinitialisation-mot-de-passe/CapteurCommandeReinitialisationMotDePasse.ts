@@ -25,53 +25,49 @@ export class CapteurCommandeReinitialisationMotDePasse
     private readonly serviceDeChiffrement: ServiceDeChiffrement
   ) {}
 
-  execute(commande: CommandeReinitialisationMotDePasse): Promise<void> {
-    return this.entrepots
-      .utilisateurs()
-      .rechercheParIdentifiantDeConnexion(commande.email)
-      .then((utilisateur) => {
-        const partieChiffree = this.serviceDeChiffrement.chiffre(
-          Buffer.from(
-            JSON.stringify({
-              identifiant: utilisateur.identifiant,
-              date: FournisseurHorloge.maintenant(),
-              sommeDeControle: sommeDeControle(utilisateur.motDePasse),
-            }),
-            'binary'
-          ).toString('base64')
-        );
-        return this.adapteurEnvoiMail
-          .envoie(
-            {
-              objet: '[MonAideCyber] Réinitialisation de votre mot de passe',
-              corps: adaptateurCorpsMessage
-                .reinitialiserMotDePasse()
-                .genereCorpsMessage(
-                  utilisateur.nomPrenom,
-                  `${adaptateurEnvironnement.mac().urlMAC()}/utilisateur/reinitialiser-mot-de-passe?token=${partieChiffree}`
-                ),
-              destinataire: { email: utilisateur.identifiantConnexion },
-            },
-            'INFO'
-          )
-          .then(() => {
-            return this.busEvenement
-              .publie<ReinitialisationMotDePasseDemandee>(
-                this.genereEvenement({
-                  statut: 'SUCCES',
-                  identifiant: utilisateur.identifiant,
-                })
-              )
-              .then(() => Promise.resolve());
-          });
-      })
-      .catch((erreur) => {
-        return this.busEvenement
-          .publie<ReinitialisationMotDePasseDemandee>(
-            this.genereEvenement({ statut: 'ERREUR', email: commande.email })
-          )
-          .then(() => Promise.reject(erreur));
-      });
+  async execute(commande: CommandeReinitialisationMotDePasse): Promise<void> {
+    try {
+      const utilisateur = await this.entrepots
+        .utilisateurs()
+        .rechercheParIdentifiantDeConnexion(commande.email);
+
+      const partieChiffree = this.serviceDeChiffrement.chiffre(
+        Buffer.from(
+          JSON.stringify({
+            identifiant: utilisateur.identifiant,
+            date: FournisseurHorloge.maintenant(),
+            sommeDeControle: sommeDeControle(utilisateur.motDePasse),
+          }),
+          'binary'
+        ).toString('base64')
+      );
+
+      await this.adapteurEnvoiMail.envoie(
+        {
+          objet: '[MonAideCyber] Réinitialisation de votre mot de passe',
+          corps: adaptateurCorpsMessage
+            .reinitialiserMotDePasse()
+            .genereCorpsMessage(
+              utilisateur.nomPrenom,
+              `${adaptateurEnvironnement.mac().urlMAC()}/utilisateur/reinitialiser-mot-de-passe?token=${partieChiffree}`
+            ),
+          destinataire: { email: utilisateur.identifiantConnexion },
+        },
+        'INFO'
+      );
+
+      await this.busEvenement.publie<ReinitialisationMotDePasseDemandee>(
+        this.genereEvenement({
+          statut: 'SUCCES',
+          identifiant: utilisateur.identifiant,
+        })
+      );
+    } catch (erreur) {
+      await this.busEvenement.publie<ReinitialisationMotDePasseDemandee>(
+        this.genereEvenement({ statut: 'ERREUR', email: commande.email })
+      );
+      throw erreur;
+    }
   }
 
   private genereEvenement(
