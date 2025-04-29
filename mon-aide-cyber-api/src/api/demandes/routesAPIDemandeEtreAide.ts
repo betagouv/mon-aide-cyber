@@ -55,6 +55,9 @@ export const routesAPIDemandeEtreAide = (
       .custom((value: boolean) => value)
       .withMessage('Veuillez signer les CGU'),
     body('email').isEmail().withMessage('Veuillez renseigner votre Email'),
+    body('siret')
+      .matches(/^\d{14}$/)
+      .withMessage('Veuillez renseigner un SIRET valide.'),
     body('departement')
       .trim()
       .notEmpty()
