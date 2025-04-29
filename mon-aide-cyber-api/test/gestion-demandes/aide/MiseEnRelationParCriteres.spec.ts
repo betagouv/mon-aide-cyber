@@ -1,6 +1,6 @@
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
-import { MiseEnRelationParCritere } from '../../../src/gestion-demandes/aide/MiseEnRelationParCritere';
+import { MiseEnRelationParCriteres } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
 import {
   Departement,
   gironde,
@@ -32,7 +32,7 @@ describe('Mise en relation par critères', () => {
       new Date(Date.parse('2024-03-19T14:45:17+01:00'))
     );
     const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-    const miseEnRelation = new MiseEnRelationParCritere(
+    const miseEnRelation = new MiseEnRelationParCriteres(
       adaptateurEnvoiMail,
       cotParDefaut
     );
@@ -62,7 +62,7 @@ describe('Mise en relation par critères', () => {
       rechercheEmailParDepartement: (__departement: Departement) =>
         'gironde@ssi.gouv.fr',
     };
-    const miseEnRelation = new MiseEnRelationParCritere(
+    const miseEnRelation = new MiseEnRelationParCriteres(
       adaptateurEnvoiMail,
       annuaireCOT
     );

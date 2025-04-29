@@ -7,7 +7,7 @@ import {
   MiseEnRelation,
 } from './miseEnRelation';
 
-export class MiseEnRelationParCritere implements MiseEnRelation {
+export class MiseEnRelationParCriteres implements MiseEnRelation {
   constructor(
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
     private readonly annuaireCOT: {

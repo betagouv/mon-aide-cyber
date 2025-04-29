@@ -5,7 +5,7 @@ import { Departement } from '../departements';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
 import { MiseEnRelationDirecteAidant } from './MiseEnRelationDirecteAidant';
-import { MiseEnRelationParCritere } from './MiseEnRelationParCritere';
+import { MiseEnRelationParCriteres } from './MiseEnRelationParCriteres';
 import { MiseEnRelationDirecteUtilisateurInscrit } from './MiseEnRelationDirecteUtilisateurInscrit';
 
 export const envoieConfirmationDemandeAide = async (
@@ -80,7 +80,7 @@ export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
       );
     }
 
-    return new MiseEnRelationParCritere(
+    return new MiseEnRelationParCriteres(
       this.adaptateurEnvoiMail,
       this.annuaireCOT
     );
