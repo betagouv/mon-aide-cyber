@@ -145,7 +145,7 @@ export const KitDeCommunication = () => {
               <img
                 src="/images/illustration-tornade.svg"
                 className="w-100"
-                alt="scène d'un aidant et d'un aidé faisant un diagnostic"
+                alt="scène d'un aidant cyber et d'un aidé faisant un diagnostic"
               />
             </div>
           </div>

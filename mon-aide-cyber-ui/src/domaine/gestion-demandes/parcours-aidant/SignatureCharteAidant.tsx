@@ -43,9 +43,7 @@ export const SignatureCharteAidant = ({
           Vous souhaitez utiliser l’outil de diagnostic de l’ANSSI et être
           référencé Aidant cyber.
         </TypographieH3>
-        <p>
-          Veuillez consulter et accepter la Charte de l’Aidant MonAideCyber.
-        </p>
+        <p>Veuillez consulter et accepter la Charte de l’Aidant cyber.</p>
         <div className="champs-obligatoire">
           <span className="asterisque">*</span>
           <span> Champ obligatoire</span>
@@ -68,7 +66,7 @@ export const SignatureCharteAidant = ({
             <p className="m-0">
               <span className="asterisque">*</span>
               En cochant la case, je m’engage sur l’honneur à respecter la
-              charte de l’Aidant MonAideCyber
+              charte de l’Aidant cyber
             </p>
           </label>
         </div>

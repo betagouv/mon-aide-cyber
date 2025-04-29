@@ -39,7 +39,7 @@ export const FormulaireReinitialiserMotDePasse = ({
     <div className="formulaire-reinitialiser-mot-de-passe-layout">
       <p className="text-center">
         Veuillez spécifier un nouveau mot de passe pour accéder à votre compte
-        Aidant MonAideCyber
+        Aidant cyber
       </p>
       <p>
         Le mot de passe doit comporter <b>16 caractères minimum</b>, dont au

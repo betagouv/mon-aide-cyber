@@ -71,7 +71,7 @@ export const ComposantCreationEspaceAidant = ({
     <>
       {etatCreationEspaceAidant.demandeTransmise ? (
         <div className="section confirmation">
-          <h4>Votre espace Aidant est disponible !</h4>
+          <h4>Votre espace Aidant cyber est disponible !</h4>
           <p>Cliquez sur le bouton ci-dessous pour y accéder.</p>
           <button
             className="fr-btn bouton-mac bouton-mac-primaire"
@@ -86,7 +86,7 @@ export const ComposantCreationEspaceAidant = ({
             <div>
               <div>
                 <label className="fr-label">
-                  <h5>Première connexion à votre espace Aidant</h5>
+                  <h5>Première connexion à votre espace Aidant cyber</h5>
                 </label>
               </div>
               <div className="bienvenue">
@@ -94,8 +94,8 @@ export const ComposantCreationEspaceAidant = ({
                   Bienvenue dans la communauté !
                   <br />
                   <br />
-                  Pour finaliser la création de votre espace Aidant, vous devez
-                  définir un nouveau mot de passe.
+                  Pour finaliser la création de votre espace Aidant cyber, vous
+                  devez définir un nouveau mot de passe.
                 </p>
               </div>
             </div>

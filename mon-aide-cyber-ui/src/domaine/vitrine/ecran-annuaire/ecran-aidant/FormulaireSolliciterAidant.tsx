@@ -76,8 +76,8 @@ export const FormulaireSolliciterAidant = ({
               <div className="fr-input-group">
                 <label className="fr-label" htmlFor="departement">
                   <span>
-                    Vous avez souhaité être accompagné par l&apos;Aidant suivant
-                    :
+                    Vous avez souhaité être accompagné par l&apos;Aidant cyber
+                    suivant :
                   </span>
                 </label>
 

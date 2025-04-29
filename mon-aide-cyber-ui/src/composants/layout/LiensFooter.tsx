@@ -12,7 +12,7 @@ export const LiensFooter = () => (
     </li>
     <li className="fr-footer__bottom-item">
       <a className="fr-footer__bottom-link" href="/charte-aidant">
-        La charte de l&apos;aidant
+        La charte de l&apos;aidant cyber
       </a>
     </li>
     <li className="fr-footer__bottom-item">

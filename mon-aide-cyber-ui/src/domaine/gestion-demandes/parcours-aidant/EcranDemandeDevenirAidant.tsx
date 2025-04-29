@@ -163,8 +163,8 @@ export const EcranDemandeDevenirAidant = () => {
                 </TypographieH5>
                 <p>
                   Veuillez compléter les informations ci-dessous pour être
-                  informé des prochains ateliers Devenir Aidant MonAideCyber
-                  dans votre territoire
+                  informé des prochains ateliers Devenir Aidant cyber dans votre
+                  territoire
                 </p>
                 <p>
                   Les informations que vous fournissez via ce formulaire sont

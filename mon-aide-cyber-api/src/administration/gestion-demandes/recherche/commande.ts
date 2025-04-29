@@ -5,7 +5,7 @@ import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateur
 import { DemandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 
 const command = program
-  .description('Obtenir le détail de la demande pour un Aidant donné')
+  .description('Obtenir le détail de la demande pour un Aidant cyber donné')
   .option('-n, --nom <nom>', 'Le nom ou prénom de l’Aidant')
   .option('-m, --mail <mail>', "Tout ou partie de l'email recherché");
 

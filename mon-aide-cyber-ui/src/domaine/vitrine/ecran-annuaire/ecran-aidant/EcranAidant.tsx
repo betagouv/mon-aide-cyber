@@ -7,7 +7,7 @@ import { useTitreDePage } from '../../../../hooks/useTitreDePage.ts';
 export const EcranAidant = () => {
   const [params] = useSearchParams();
   const parametresUrl = new URLSearchParams(params);
-  useTitreDePage('Solliciter un Aidant');
+  useTitreDePage('Solliciter un Aidant cyber');
 
   const nomPrenomAidant = parametresUrl.get('nomPrenom')!;
   const identifiantAidant = parametresUrl.get('aidant')!;

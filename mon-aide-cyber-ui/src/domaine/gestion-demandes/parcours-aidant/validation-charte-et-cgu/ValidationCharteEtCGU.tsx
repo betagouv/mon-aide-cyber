@@ -24,9 +24,7 @@ export const ValidationCharteEtCGU = ({
           Vous souhaitez utiliser l’outil de diagnostic de l’ANSSI et être
           référencé Aidant cyber.
         </TypographieH3>
-        <p>
-          Veuillez consulter et accepter la Charte de l’Aidant MonAideCyber.
-        </p>
+        <p>Veuillez consulter et accepter la Charte de l’Aidant cyber.</p>
         <div className="zone-charte-defilable">
           <CharteAidant />
         </div>
@@ -42,7 +40,7 @@ export const ValidationCharteEtCGU = ({
           />
           <label className="fr-label" htmlFor="charte-aidant">
             En cochant la case, je m’engage sur l’honneur à respecter la charte
-            de l’Aidant MonAideCyber
+            de l’Aidant cyber
           </label>
         </div>
         <br />

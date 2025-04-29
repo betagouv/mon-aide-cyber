@@ -7,9 +7,7 @@ export const LesEngagementsDeLAidant = () => {
     <div>
       <div className="fr-container engagements-aidant-layout">
         <section>
-          <TypographieH3>
-            Les engagements de l&apos;Aidant MonAideCyber
-          </TypographieH3>
+          <TypographieH3>Les engagements de l&apos;Aidant cyber</TypographieH3>
           <ul>
             <li>
               Aucune démarche commerciale, le diagnostic est réalisé
@@ -32,7 +30,7 @@ export const LesEngagementsDeLAidant = () => {
         <section>
           <img
             src={duoAidants}
-            alt="Scène d'un aidant et d'un aidé faisant un diagnostic"
+            alt="Scène d'un aidant cyber et d'un aidé faisant un diagnostic"
           />
         </section>
       </div>

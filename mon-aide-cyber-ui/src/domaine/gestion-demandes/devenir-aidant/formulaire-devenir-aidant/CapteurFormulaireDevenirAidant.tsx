@@ -88,7 +88,7 @@ export const CapteurFormulaireDevenirAidant = () => {
             Vous allez être mis en relation avec le délégué régional de
             l&apos;ANSSI de votre territoire, qui reviendra vers vous par mail
             pour vous indiquer la prochaine date prévue de l&apos;atelier
-            Devenir Aidant.
+            Devenir Aidant cyber.
             <br />
             <br />
             Pensez à vérifier dans vos spams ou contactez-nous à&nbsp;
@@ -108,28 +108,26 @@ export const CapteurFormulaireDevenirAidant = () => {
     <FormulaireDevenirAidant>
       <FormulaireDevenirAidant.AvantPropos>
         <div className="fr-mb-2w">
-          Demande d&apos;inscription à un atelier Devenir Aidant MonAideCyber
+          Demande d&apos;inscription à un atelier Devenir Aidant cyber
         </div>
         <div className="fr-mt-2w introduction">
           <div>
-            <TypographieH5>
-              Vous souhaitez devenir Aidant MonAideCyber
-            </TypographieH5>
-            <p>Pour devenir aidant, il est nécessaire de&nbsp;:</p>
+            <TypographieH5>Vous souhaitez devenir Aidant cyber</TypographieH5>
+            <p>Pour devenir aidant cyber, il est nécessaire de&nbsp;:</p>
             <ul>
               <li>
                 représenter un service de l&apos;Etat, un établissement public,
                 une association ou toute autre entité morale à but non lucratif
               </li>
               <li>
-                participer à un atelier devenir Aidant MonAideCyber animé par
+                participer à un atelier devenir Aidant cyber animé par
                 l&apos;ANSSI
               </li>
               <li>
                 prendre connaissance de{' '}
-                <a href="/charte-aidant">la charte de l&apos;aidant</a>, qui
-                rappelle notamment le principe de gratuité du dispositif, et la
-                signer avant ou après l&apos;atelier
+                <a href="/charte-aidant">la charte de l&apos;aidant cyber</a>,
+                qui rappelle notamment le principe de gratuité du dispositif, et
+                la signer avant ou après l&apos;atelier
               </li>
               <br />
             </ul>

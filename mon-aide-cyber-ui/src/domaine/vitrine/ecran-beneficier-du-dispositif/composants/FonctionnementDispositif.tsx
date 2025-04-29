@@ -7,14 +7,14 @@ import { TypographieH2 } from '../../../../composants/communs/typographie/Typogr
 export const FonctionnementDispositif = () => {
   const etapesMarelle: EtapeMarelle[] = [
     {
-      titre: 'La mise en relation avec un Aidant',
+      titre: 'La mise en relation avec un Aidant cyber',
       description: (
         <>
           À la suite de votre demande et de la validation des conditions
           générales d&apos;utilisation, vous êtes{' '}
-          <b>mis en lien avec un Aidant</b> de proximité, qui vous accompagne
-          (sur une durée d&apos;environ une heure et trente minutes) pour
-          réaliser un <b>diagnostic cyber de premier niveau</b>. À cette
+          <b>mis en lien avec un Aidant cyber</b> de proximité, qui vous
+          accompagne (sur une durée d&apos;environ une heure et trente minutes)
+          pour réaliser un <b>diagnostic cyber de premier niveau</b>. À cette
           occasion, il est fortement recommandé d’associer le responsable
           informatique et/ou le prestataire cyber, ainsi qu’un décideur.
         </>
@@ -54,8 +54,8 @@ export const FonctionnementDispositif = () => {
       description: (
         <>
           Quelques mois après la réalisation du diagnostic,{' '}
-          <b>un point d’étape est proposé</b> par l’Aidant, afin de suivre vos
-          avancées et apporter des conseils additionnels.
+          <b>un point d’étape est proposé</b> par l’Aidant cyber, afin de suivre
+          vos avancées et apporter des conseils additionnels.
         </>
       ),
       illustration: '/images/illustration-suivi.svg',

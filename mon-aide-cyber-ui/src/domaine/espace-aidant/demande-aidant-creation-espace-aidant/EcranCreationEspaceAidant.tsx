@@ -45,7 +45,7 @@ export const EcranCreationEspaceAidant = ({
   token,
   macAPI,
 }: ProprietesEcranCreationEspaceAidant) => {
-  useTitreDePage('Créer mon espace Aidant');
+  useTitreDePage('Créer mon espace Aidant cyber');
 
   const navigate = useNavigate();
 

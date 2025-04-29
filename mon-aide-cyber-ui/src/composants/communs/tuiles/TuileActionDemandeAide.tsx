@@ -7,7 +7,7 @@ function TuileActionDemandeAide() {
       <div className="illustration">
         <img
           src="/images/illustration-homepage-aides.svg"
-          alt="Trois personnes souhaitant devenir Aidant MonAideCyber"
+          alt="Trois personnes souhaitant devenir Aidant Cyber"
         />
       </div>
       <div className="corps">

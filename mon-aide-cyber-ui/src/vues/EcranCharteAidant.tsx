@@ -2,7 +2,7 @@ import { CharteAidant } from './CharteAidant.tsx';
 import { useTitreDePage } from '../hooks/useTitreDePage.ts';
 
 export const EcranCharteAidant = () => {
-  useTitreDePage("Charte de l'Aidant");
+  useTitreDePage("Charte de l'Aidant cyber");
 
   return (
     <main role="main">

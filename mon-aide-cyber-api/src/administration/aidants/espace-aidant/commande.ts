@@ -12,10 +12,10 @@ import {
 } from './validationCompteAidant';
 
 const command = program
-  .description('Importe des aidants')
+  .description('Importe des aidants cyber')
   .argument(
     '<cheminFichier>',
-    'le chemin du fichier contenant les aidants à importer (au format csv, séparation avec ";")'
+    'le chemin du fichier contenant les aidants cyber à importer (au format csv, séparation avec ";")'
   );
 
 const estDemandeIncomplete = (
@@ -51,7 +51,7 @@ command.action(async (...args: any[]) => {
       ...resultat.envoisMailCreationEspaceAidant,
     ];
     console.log(
-      'Nombre d’Aidants : %d\nNombre de mail envoyés suite à une demande : %d\nNombre de demandes toujours en cours : %d\nNombre de demandes en erreur : %d',
+      'Nombre d’Aidants cyber : %d\nNombre de mail envoyés suite à une demande : %d\nNombre de demandes toujours en cours : %d\nNombre de demandes en erreur : %d',
       imports.length,
       resultat.envoisMailCreationEspaceAidant.length,
       resultat.demandesIncomplete.length,

@@ -36,8 +36,8 @@ const genereCorpsConfirmation = (nomPrenom: string): string =>
   'd’un service de l’État, d’une administration, d’une réserve citoyenne ou d’une ' +
   'entité morale à but non lucratif</li>' +
   '<li>Être dans une démarche non lucrative tout au long du dispositif</li>' +
-  '<li>Participer à un atelier Devenir Aidant MonAideCyber dispensé par l’ANSSI</li>' +
-  `<li>Accepter la <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">Charte de l’Aidant MonAideCyber</a></li>` +
+  '<li>Participer à un atelier Devenir Aidant cyber dispensé par l’ANSSI</li>' +
+  `<li>Accepter la <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">Charte de l’Aidant cyber</a></li>` +
   '</ul>' +
   '\n' +
   `Contactez l’équipe à l’adresse mail <a href="mailto:${adaptateurEnvironnement.messagerie().emailMAC()}">contact@monaidecyber.beta.gouv.fr</a> si vous souhaitez ` +
