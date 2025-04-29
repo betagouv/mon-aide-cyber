@@ -27,7 +27,8 @@ export class ErreurRequeteHTTP extends Error {
   }
 }
 
-export type ReponseRechercheEntreprise = Entreprise[];
+type RechercheEntreprise = Omit<Entreprise, 'typeEntite'>;
+export type ReponseRechercheEntreprise = RechercheEntreprise[];
 
 export const routesAPIRechercheEntreprise = (
   configuration: ConfigurationServeur
@@ -55,9 +56,14 @@ export const routesAPIRechercheEntreprise = (
           },
           ''
         );
-        const entreprises = await adaptateurRechercheEntreprise(
-          adaptateurDeRequeteHTTP
-        ).rechercheEntreprise(nomEntreprise, parametresRecherche);
+        const entreprises: ReponseRechercheEntreprise = (
+          await adaptateurRechercheEntreprise(
+            adaptateurDeRequeteHTTP
+          ).rechercheEntreprise(nomEntreprise, parametresRecherche)
+        ).map((entreprise) => {
+          const { typeEntite, ...rechercheEntreprise } = entreprise;
+          return rechercheEntreprise;
+        });
         return reponse.status(200).json(entreprises);
       } catch (erreur: unknown | ReponseRequeteHTTPEnErreur) {
         return suite(
