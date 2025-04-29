@@ -216,12 +216,12 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       requete: Request<CorpsRequeteReinitialisationMotDePasse>,
       reponse: Response
     ) => {
-      return busCommande
-        .publie<CommandeReinitialisationMotDePasse, void>({
-          type: 'CommandeReinitialisationMotDePasse',
-          email: requete.body.email,
-        })
-        .then(() => reponse.status(202).send());
+      await busCommande.publie<CommandeReinitialisationMotDePasse, void>({
+        type: 'CommandeReinitialisationMotDePasse',
+        email: requete.body.email,
+      });
+
+      reponse.status(202).send();
     }
   );
 
