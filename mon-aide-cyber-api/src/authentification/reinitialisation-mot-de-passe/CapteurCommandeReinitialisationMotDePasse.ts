@@ -66,7 +66,6 @@ export class CapteurCommandeReinitialisationMotDePasse
       await this.busEvenement.publie<ReinitialisationMotDePasseDemandee>(
         this.genereEvenement({ statut: 'ERREUR', email: commande.email })
       );
-      throw erreur;
     }
   }
 

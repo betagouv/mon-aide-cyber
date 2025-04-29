@@ -534,21 +534,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
       expect(reponse.statusCode).toBe(202);
     });
-
-    it('Consigne l’erreur', async () => {
-      await executeRequete(
-        donneesServeur.app,
-        'POST',
-        `/api/utilisateur/reinitialisation-mot-de-passe`,
-        {
-          email: 'email-inconnu',
-        }
-      );
-
-      expect(testeurMAC.gestionnaireErreurs.consignateur().tous()).toHaveLength(
-        1
-      );
-    });
   });
 
   describe('Quand une requête PATCH est reçue sur /api/utilisateur/reinitialiser-mot-de-passe', () => {
