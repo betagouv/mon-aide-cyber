@@ -45,6 +45,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             email: 'jean.dupont@aide.com',
             departement: 'Corse-du-Sud',
             raisonSociale: 'beta-gouv',
+            siret: '12345678901234',
           }
         );
 
@@ -68,6 +69,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             cguValidees: true,
             email: 'jean.dupont@aide.com',
             raisonSociale: 'beta-gouv',
+            siret: '12345678901234',
           }
         );
 
@@ -101,6 +103,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               cguValidees: true,
               email: 'jean.dupont@aide.com',
               raisonSociale: 'beta-gouv',
+              siret: '12345678901234',
             }
           );
 
@@ -130,6 +133,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             email: 'jean.dupont@aide.com',
             departement: 'Corse-du-Sud',
             raisonSociale: 'beta-gouv',
+            siret: '12345678901234',
           }
         );
 
@@ -153,6 +157,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             departement: 'Corse-du-Sud',
             raisonSociale: 'beta-gouv',
             relationUtilisateur: 'utilisateurinconnu@yopmail.com',
+            siret: '12345678901234',
           }
         );
 
@@ -177,6 +182,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             departement: 'Corse-du-Sud',
             raisonSociale: 'beta-gouv',
             identifiantAidant: 'af9620ef-3495-493f-b5f2-28d5719f992f',
+            siret: '12345678901234',
           }
         );
 
@@ -205,6 +211,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               email: 'jean.dupont@aide.com',
               departement: 'Paris',
               raisonSociale: 'beta-gouv',
+              siret: '12345678901234',
             }
           );
 
@@ -230,6 +237,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               email: 'ceci-n-est-pas-un-email',
               departement: 'Gironde',
               raisonSociale: 'beta-gouv',
+              siret: '12345678901234',
             }
           );
 
@@ -255,6 +263,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               email: 'jean.dupont@aide.com',
               departement: '   ',
               raisonSociale: 'beta-gouv',
+              siret: '12345678901234',
             }
           );
 
@@ -274,6 +283,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               cguValidees: true,
               email: 'jean.dupont@aide.com',
               raisonSociale: 'beta-gouv',
+              siret: '12345678901234',
             }
           );
 
@@ -293,6 +303,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               cguValidees: true,
               email: 'jean.dupont@aide.com',
               departement: 'Finistère',
+              siret: '12345678901234',
             }
           );
 
@@ -316,6 +327,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               email: 'jean.dupont@aide.com',
               departement: 'Bas-Rhin',
               raisonSociale: '    ',
+              siret: '12345678901234',
             }
           );
 
@@ -342,6 +354,7 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               email: 'jean.dupont@aide.com',
               departement: 'Bas-Rhin',
               relationUtilisateur: 'mauvaisformat',
+              siret: '12345678901234',
             }
           );
 
@@ -368,12 +381,38 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
               email: 'jean.dupont@aide.com',
               departement: 'Bas-Rhin',
               identifiantAidant: 'mauvaisformat',
+              siret: '12345678901234',
             }
           );
 
           expect(reponse.statusCode).toBe(422);
           expect(await reponse.json()).toStrictEqual({
             message: 'Veuillez renseigner un identifiant Aidant valide.',
+            liens: {
+              'demander-aide': {
+                url: '/api/demandes/etre-aide',
+                methode: 'POST',
+              },
+            },
+          });
+        });
+
+        it('Vérifie la présence du SIRET', async () => {
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/demandes/etre-aide',
+            {
+              cguValidees: true,
+              email: 'jean.dupont@aide.com',
+              departement: 'Bas-Rhin',
+              siret: '',
+            }
+          );
+
+          expect(reponse.statusCode).toBe(422);
+          expect(await reponse.json()).toStrictEqual({
+            message: 'Veuillez renseigner un SIRET valide.',
             liens: {
               'demander-aide': {
                 url: '/api/demandes/etre-aide',
