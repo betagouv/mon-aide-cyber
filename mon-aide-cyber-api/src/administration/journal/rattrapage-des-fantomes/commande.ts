@@ -7,7 +7,7 @@ import { EntrepotJournalisationPostgres } from '../../../infrastructure/entrepot
 import configurationJournalisation from '../../../infrastructure/entrepots/postgres/configurationJournalisation';
 
 const command = program.description(
-  'Exécute le rattrapage des événements de création des aidants fantômes'
+  'Exécute le rattrapage des événements de création des aidants cyber fantômes'
 );
 
 const entrepotJournalisation = new EntrepotJournalisationPostgres(

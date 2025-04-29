@@ -30,14 +30,14 @@ export const Accueil = () => {
               <h1 className="fr-mb-5w">MonAideCyber</h1>
               <p>
                 Passez à l’action et menons ensemble votre première démarche de
-                cybersécurité grâce à notre communauté d’Aidants présente sur
-                tout le territoire !
+                cybersécurité grâce à notre communauté d’Aidants cyber présente
+                sur tout le territoire !
               </p>
             </div>
             <div id="illustration" className="fr-col-md-6 fr-col-sm-12">
               <img
                 src="/images/illustration-dialogue-mac.svg"
-                alt="scène d'un aidant et d'un aidé faisant un diagnostic"
+                alt="scène d'un aidant cyber et d'un aidé faisant un diagnostic"
               />
             </div>
           </div>
@@ -86,8 +86,8 @@ export const Accueil = () => {
                   </div>
                   <div>
                     <p>
-                      MonAideCyber s’appuie sur une communauté d’Aidants de
-                      confiance
+                      MonAideCyber s’appuie sur une communauté d’Aidants cyber
+                      de confiance
                     </p>
                   </div>
                 </div>
@@ -126,9 +126,9 @@ export const Accueil = () => {
                 <h3>Une initiative de l’ANSSI</h3>
                 <p>
                   Un <b>programme d’accompagnement</b> et de formation gratuit à
-                  destination d’une <b>communauté d’Aidants</b> leur permettant
-                  de guider leur <b>écosystème</b> pour mettre en œuvre une{' '}
-                  <b>démarche de cybersécurité.</b>
+                  destination d’une <b>communauté d’Aidants cyber</b> leur
+                  permettant de guider leur <b>écosystème</b> pour mettre en
+                  œuvre une <b>démarche de cybersécurité.</b>
                 </p>
               </div>
             </div>
@@ -185,10 +185,10 @@ export const Accueil = () => {
                     <div className="contenu">
                       MonAideCyber est un service d’accompagnement, simple et
                       adapté aux entités souhaitant améliorer leur niveau de
-                      cybersécurité. Reposant sur un réseau d’experts aidants,
-                      MonAideCyber propose une méthode des « petits pas » pour
-                      identifier les actions prioritaires, permettant ainsi de
-                      tirer vers le haut l’ensemble des acteurs, quels que
+                      cybersécurité. Reposant sur un réseau d’experts aidants
+                      cyber, MonAideCyber propose une méthode des « petits pas »
+                      pour identifier les actions prioritaires, permettant ainsi
+                      de tirer vers le haut l’ensemble des acteurs, quels que
                       soient leurs moyens et leur niveau de maturité.
                     </div>
                     <div className="personne">
@@ -263,7 +263,7 @@ export const Accueil = () => {
                 <img
                   className="taille-maximale tres-petite-marge-basse"
                   src="/images/illustration-echange.svg"
-                  alt="Un Aidé faisant un diagnostic avec un Aidant"
+                  alt="Un Aidé faisant un diagnostic avec un Aidant cyber"
                 />
                 <div className="numero-etape visible-uniquement-desktop tres-petite-marge-basse numero-1">
                   <span>1</span>
@@ -276,7 +276,7 @@ export const Accueil = () => {
                     Réalisation{' '}
                     <b>
                       d’un diagnostic cyber de premier niveau établi par des
-                      Aidants
+                      Aidants cyber
                     </b>{' '}
                     auprès de leurs bénéficiaires. La plateforme contient
                     également un ensemble de <b>ressources et de dispositifs</b>{' '}
@@ -342,7 +342,7 @@ export const Accueil = () => {
                 <img
                   className="taille-maximale tres-petite-marge-basse"
                   src="/images/illustration-suivi.svg"
-                  alt="Un Aidé accompagné par son Aidant"
+                  alt="Un Aidé accompagné par son Aidant cyber"
                 />
                 <div className="numero-etape visible-uniquement-desktop tres-petite-marge-basse numero-4">
                   <span>4</span>

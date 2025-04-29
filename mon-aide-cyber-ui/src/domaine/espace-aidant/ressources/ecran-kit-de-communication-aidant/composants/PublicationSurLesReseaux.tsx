@@ -41,7 +41,7 @@ export const PublicationSurLesReseaux = () => {
           <p>
             Cher réseau, <br />
             Je suis ravi de vous annoncer que je viens de devenir{' '}
-            <b>Aidant MonAideCyber en [VOTRE TERRITOIRE]</b> ! <br />
+            <b>Aidant cyber en [VOTRE TERRITOIRE]</b> ! <br />
             <br />
             Dans un monde de plus en plus connecté, la cybersécurité est plus
             cruciale que jamais pour nous protéger de la cybercriminalité de

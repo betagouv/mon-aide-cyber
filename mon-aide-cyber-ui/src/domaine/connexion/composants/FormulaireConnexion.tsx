@@ -71,7 +71,7 @@ export const FormulaireConnexion = () => {
       <FormulaireAuthentification />
       <br />
       <div className="texte-centre">
-        <p>Vous n’êtes pas encore Aidant MonAideCyber ?</p>
+        <p>Vous n’êtes pas encore Aidant cyber ?</p>
         <Button
           type="button"
           variant="link"

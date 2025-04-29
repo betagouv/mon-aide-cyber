@@ -15,7 +15,7 @@ export const Confirmation = (proprietes: ProprietesConfirmation) => {
             Celle-ci sera traitée dans les meilleurs délais.
             <br />
             Vous recevrez un email de validation lorsque votre demande sera
-            affectée à un Aidant.
+            affectée à un Aidant cyber.
           </p>
           <p>
             Pensez à vérifier dans vos spams ou contactez-nous à{' '}

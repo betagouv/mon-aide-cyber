@@ -18,7 +18,7 @@ const genereCorpsDemandeDevenirAidant = (
       '<body>' +
       `Bonjour ${demandeDevenirAidant.prenom},\n` +
       '\n' +
-      `<b>Votre demande pour participer à un atelier Aidant MonAideCyber sur le ` +
+      `<b>Votre demande pour participer à un atelier Aidant cyber sur le ` +
       `territoire ${demandeDevenirAidant.departement.nom} a été envoyée.</b>\n` +
       `${appartenanceEntite}` +
       '\n' +
@@ -29,7 +29,7 @@ const genereCorpsDemandeDevenirAidant = (
       '\n' +
       `<a href="${adaptateurEnvironnement.mac().urlMAC()}/connexion">J’initie un diagnostic</a>` +
       '\n' +
-      '<b>Comment bien préparer l’atelier Devenir Aidant MonAideCyber ?</b>\n' +
+      '<b>Comment bien préparer l’atelier Devenir Aidant cyber ?</b>\n' +
       '\n' +
       '<ul>' +
       `<li>En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/kit-de-communication">la plaquette d’information</a></li>` +
@@ -51,13 +51,13 @@ const genereCorpsDemandeDevenirAidant = (
     '<body>' +
     `Bonjour ${demandeDevenirAidant.prenom},\n` +
     '\n' +
-    `<b>Votre demande pour participer à un atelier Aidant MonAideCyber sur le territoire ${demandeDevenirAidant.departement.nom} a été envoyée.</b>\n` +
+    `<b>Votre demande pour participer à un atelier Aidant Cyber sur le territoire ${demandeDevenirAidant.departement.nom} a été envoyée.</b>\n` +
     '\n' +
     'Votre délégation régionale ANSSI, en copie de ce mail, vérifie les dates des prochains ateliers prévus.\n' +
     '\n' +
     'Elle vous recontactera dans les plus brefs délais, sur le mail que vous nous avez communiqué, avec une ou plusieurs dates disponibles.\n' +
     '\n' +
-    '<b>Comment bien préparer mon atelier Devenir Aidant ?</b>\n' +
+    '<b>Comment bien préparer mon atelier Devenir Aidant cyber ?</b>\n' +
     '\n' +
     `\t - En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/kit-de-communication">la plaquette informative</a>\n` +
     `\t - Consulter <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">la charte Aidant</a> qui rappelle le principe de gratuité du dispositif à signer avant, pendant ou après l'atelier\n` +
@@ -80,7 +80,7 @@ const genereCorpsFinalisationDemandeDevenirAidant = (
   return (
     `Bonjour ${nomPrenom} \n` +
     '\n' +
-    'Vous êtes invité à vous créer un espace Aidant sur MonAideCyber en suivant ce lien sécurisé : \n' +
+    'Vous êtes invité à vous créer un espace Aidant cyber en suivant ce lien sécurisé : \n' +
     '\n' +
     `<a href="${url}" target="_blank">${url}</a> \n` +
     '\n' +
@@ -107,7 +107,7 @@ const genereCorpsMiseAJourDemandeDevenirAidant = (
     '<body>' +
     `Bonjour ${demandeDevenirAidant.prenom},\n` +
     '\n' +
-    `<b>Votre demande pour participer à un atelier Devenir Aidant MonAideCyber sur le territoire ${demandeDevenirAidant.departement.nom} a été mise à jour.</b>\n` +
+    `<b>Votre demande pour participer à un atelier Devenir Aidant cyber sur le territoire ${demandeDevenirAidant.departement.nom} a été mise à jour.</b>\n` +
     '\n' +
     'Vous nous avez fourni plusieurs informations : \n' +
     '<ul>' +
@@ -116,7 +116,7 @@ const genereCorpsMiseAJourDemandeDevenirAidant = (
     `${appartenanceEntite}` +
     '</ul>' +
     '\n' +
-    'Des ateliers "Devenir Aidant MonAideCyber" ont lieu régulièrement. Votre délégation territoriale ANSSI, en copie de ce ' +
+    'Des ateliers "Devenir Aidant cyber" ont lieu régulièrement. Votre délégation territoriale ANSSI, en copie de ce ' +
     'mail, vous informera sur le mail que vous nous avez communiqué des prochaines dates prévues d’ateliers.\n' +
     '\n' +
     'Merci de nous informer dès que possible en cas d’indisponibilité à une date d’atelier proposée.\n' +
@@ -128,7 +128,7 @@ const genereCorpsMiseAJourDemandeDevenirAidant = (
     '\n' +
     '\n' +
     '\n' +
-    '<b>Comment bien préparer mon atelier Devenir Aidant ?</b>\n' +
+    '<b>Comment bien préparer mon atelier Devenir Aidant cyber ?</b>\n' +
     '<ul>' +
     `<li>En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/kit-de-communication">la plaquette d’information</a></li>` +
     `<li>Relire <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">la charte de l'Aidant</a> rappelant les principes et les engagements des Aidants Cyber</li>` +
@@ -154,7 +154,7 @@ const genereCorpsDemandeDevenirAidantEnAttenteAdhésion = (
     '<body>' +
     `Bonjour ${demandeDevenirAidant.prenom},\n` +
     '\n' +
-    `<b>Vous êtes actuellement en attente d’un atelier “Devenir Aidant MonAideCyber” sur le territoire ${demandeDevenirAidant.departement.nom}.</b>\n` +
+    `<b>Vous êtes actuellement en attente d’un atelier “Devenir Aidant cyber” sur le territoire ${demandeDevenirAidant.departement.nom}.</b>\n` +
     '\n' +
     'Nous avons bien reçu votre souhait d’adhérer à une association à but non lucratif et d’utiliser le dispositif en étant référencé Aidant cyber.\n' +
     '\n' +

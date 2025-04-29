@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 const verbatimsATester: Verbatim[] = [
   {
     id: 1,
-    auteur: 'Un Aidant de la Réunion (974)',
+    auteur: 'Un Aidant cyber de la Réunion (974)',
     commentaire:
       "Encore merci pour cet outil qui, une fois la communauté d'aidants réunionnaise structurée et formée, nous aidera grandement dans le passage à l'échelle.",
   },

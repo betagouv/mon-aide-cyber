@@ -5,10 +5,7 @@ export const OeuvrerPourInteretGeneral = () => {
   return (
     <section className="qui-est-concerne-layout fr-container">
       <div className="flex justify-center">
-        <img
-          src={illustrationQuiEstConcerne}
-          alt="Deux futurs Aidants MonAideCyber"
-        />
+        <img src={illustrationQuiEstConcerne} alt="Deux futurs Aidants cyber" />
       </div>
       <div>
         <TypographieH4>

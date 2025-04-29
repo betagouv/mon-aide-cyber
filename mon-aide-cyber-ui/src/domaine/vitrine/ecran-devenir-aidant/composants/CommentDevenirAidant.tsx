@@ -10,9 +10,9 @@ export const CommentDevenirAidant = () => {
       titre: 'Découvrir la démarche',
       description: (
         <>
-          <b>Participez à un atelier Devenir Aidant MonAideCyber</b> organisé
-          par votre délégation régionale de l&apos;ANSSI en remplissant le
-          formulaire d&apos;inscription. <br />
+          <b>Participez à un atelier Devenir Aidant cyber</b> organisé par votre
+          délégation régionale de l&apos;ANSSI en remplissant le formulaire
+          d&apos;inscription. <br />
           Des ateliers sont régulièrement organisés sur tout le territoire. Ils
           durent trois heures et sont animés en présentiel.
         </>
@@ -20,10 +20,10 @@ export const CommentDevenirAidant = () => {
       illustration: '/images/illustration-echange.svg',
     },
     {
-      titre: "Valider la charte de l'Aidant",
+      titre: "Valider la charte de l'Aidant cyber",
       description: (
         <>
-          Prenez connaissance de <b>la charte de l&apos;Aidant</b> et
+          Prenez connaissance de <b>la charte de l&apos;Aidant cyber</b> et
           remettez-la signée à la délégation ou à l&apos;équipe MonAideCyber
           avant, pendant ou après l&apos;atelier.
         </>
@@ -45,7 +45,7 @@ export const CommentDevenirAidant = () => {
   return (
     <section className="fond-clair-mac comment-devenir-aidant-layout">
       <div className="fr-container">
-        <TypographieH2>Comment devenir Aidant MonAideCyber ?</TypographieH2>
+        <TypographieH2>Comment devenir Aidant cyber ?</TypographieH2>
         <Marelle etapes={etapesMarelle} />
       </div>
     </section>

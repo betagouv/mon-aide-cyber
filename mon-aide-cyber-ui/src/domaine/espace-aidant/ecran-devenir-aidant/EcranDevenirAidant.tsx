@@ -47,7 +47,7 @@ export const EcranDevenirAidant = () => {
               vous devrez
               <ul>
                 <li>
-                  Participer à un atelier Devenir Aidant MonAideCyber. Animé par
+                  Participer à un atelier Devenir Aidant cyber. Animé par
                   l’ANSSI et d&apos;une durée d’environ trois heures, ces
                   ateliers sont organisés régulièrement dans tous les
                   territoires.

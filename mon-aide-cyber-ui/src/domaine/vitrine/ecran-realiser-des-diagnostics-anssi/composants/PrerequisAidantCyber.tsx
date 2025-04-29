@@ -22,11 +22,10 @@ export const PrerequisAidantCyber = () => {
               Être dans une démarche non lucrative tout au long du dispositif
             </li>
             <li>
-              Participer à un atelier Devenir Aidant MonAideCyber dispensé par
-              l’ANSSI
+              Participer à un atelier Devenir Aidant cyber dispensé par l’ANSSI
             </li>
             <li>
-              Accepter la <u>Charte de l’Aidant MonAideCyber</u>
+              Accepter la <u>Charte de l’Aidant cyber</u>
             </li>
           </ul>
           <p>
@@ -45,7 +44,7 @@ export const PrerequisAidantCyber = () => {
         <section>
           <img
             src={duoAidants}
-            alt="Scène d'un aidant et d'un aidé faisant un diagnostic"
+            alt="Scène d'un aidant cyber et d'un aidé faisant un diagnostic"
           />
         </section>
       </div>

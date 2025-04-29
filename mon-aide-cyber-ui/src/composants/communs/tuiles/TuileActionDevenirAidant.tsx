@@ -6,22 +6,22 @@ function TuileActionDevenirAidant() {
       <div className="illustration">
         <img
           src="/images/illustration-devenir-aidant.svg"
-          alt="Deux personnes souhaitant devenir Aidant MonAideCyber"
+          alt="Deux personnes souhaitant devenir Aidant Cyber"
         />
       </div>
       <div className="corps">
-        <TypographieH4>Devenir Aidant</TypographieH4>
+        <TypographieH4>Devenir Aidant cyber</TypographieH4>
         <p>
           Vous êtes un <b>agent du service public</b>, un <b>professionnel</b>,
           un <b>bénévole</b> ou un <b>passionné</b> de Cyber et vous souhaitez{' '}
-          <b className="violet-fonce">devenir Aidant</b> ?
+          <b className="violet-fonce">devenir Aidant cyber</b> ?
         </p>
         <a href="/realiser-des-diagnostics-anssi#formulaire-formation">
           <button
             type="button"
             className="fr-btn bouton-mac bouton-mac-primaire"
           >
-            Je veux être Aidant
+            Je veux être Aidant cyber
           </button>
         </a>
       </div>

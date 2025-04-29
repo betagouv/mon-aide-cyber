@@ -8,7 +8,7 @@ export const HeroDevenirAidant = () => {
     <HeroBloc>
       <div id="corps" className="fr-container hero-layout">
         <section>
-          <TypographieH1>Devenir Aidant</TypographieH1>
+          <TypographieH1>Devenir Aidant cyber</TypographieH1>
           <p>
             Vous souhaitez accompagner des entités dans la réalisation d&apos;un
             diagnostic cyber de premier niveau ? <br />

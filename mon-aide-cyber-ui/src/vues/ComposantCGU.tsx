@@ -153,9 +153,9 @@ const ContenuCGU = () => (
     <p dir="auto">
       L’Utilisateur inscrit déclarant vouloir œuvrer pour l’intérêt général,
       donc référencé comme Aidant cyber, s’engage pour cela à participer à un
-      atelier «&nbsp;devenir Aidant MonAideCyber&nbsp;» animé par l’ANSSI,
-      prendre connaissance de la charte de l’Aidant cyber et la signer avant ou
-      après l’atelier.
+      atelier «&nbsp;devenir Aidant cyber&nbsp;» animé par l’ANSSI, prendre
+      connaissance de la charte de l’Aidant cyber et la signer avant ou après
+      l’atelier.
     </p>
     <p dir="auto"></p>
     <h2 dir="auto">
@@ -1065,8 +1065,8 @@ const ContenuCGU = () => (
       </li>
       <li>
         <p dir="auto">
-          Participer à un atelier «&nbsp;Devenir Aidant MonAideCyber&nbsp;»
-          dispensé par l’ANSSI&nbsp;;
+          Participer à un atelier «&nbsp;Devenir Aidant cyber&nbsp;» dispensé
+          par l’ANSSI&nbsp;;
         </p>
       </li>
       <li>

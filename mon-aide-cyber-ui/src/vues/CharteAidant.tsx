@@ -18,8 +18,8 @@ const ContenuCharteAidant = () => (
       </li>
       <li>
         <p dir="auto">
-          Participer à un atelier «&nbsp;Devenir Aidant MonAideCyber&nbsp;»
-          dispensé par l’ANSSI&nbsp;;
+          Participer à un atelier «&nbsp;Devenir Aidant cyber&nbsp;» dispensé
+          par l’ANSSI&nbsp;;
         </p>
       </li>
       <li>
@@ -358,14 +358,14 @@ export const CharteAidant = () => {
       download
       href="/fichiers/Charte_MonAideCyber.pdf"
     >
-      Télécharger la charte de l&apos;aidant
+      Télécharger la charte de l&apos;aidant cyber
       <span className="fr-link__detail">PDF – 88.07 ko</span>
     </a>
   );
 
   return (
     <div className="fr-col-12" id="top">
-      <h3>La Charte de l’Aidant</h3>
+      <h3>La Charte de l’Aidant cyber</h3>
       <hr />
       {telechargementCharte}
       <section>

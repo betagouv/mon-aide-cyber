@@ -73,7 +73,7 @@ command.action(async (options) => {
     new EntrepotStatistiquesAidantPostgres(adaptateurServiceChiffrement())
   ).extrais(typeExport);
 
-  console.log('Nombre d’Aidants trouvés : %d', resultat.length);
+  console.log('Nombre d’Aidants cyber trouvés : %d', resultat.length);
   resultat.forEach((aidant) => {
     rapport.push(versLigneCSV(aidant, typeExport));
   });

@@ -5,7 +5,7 @@ import crypto from 'crypto';
 
 program
   .description(
-    'Récupère les informations des Aidants par domaine (i.e : nom de domaine dans le mail "mondomaine.fr, CCI par défaut")'
+    'Récupère les informations des Aidants cyber par domaine (i.e : nom de domaine dans le mail "mondomaine.fr, CCI par défaut")'
   )
   .requiredOption(
     '-d, --domaine <domaine>',
@@ -15,7 +15,7 @@ program
   .action(async (options) => {
     const nomDeDomaine = options.domaine.toLowerCase();
     console.log(
-      `Recherche des aidants pour le domaine ${nomDeDomaine} en cours`
+      `Recherche des aidants cyber pour le domaine ${nomDeDomaine} en cours`
     );
     const aidants = await new EntrepotAidantPostgres(
       adaptateurServiceChiffrement()
