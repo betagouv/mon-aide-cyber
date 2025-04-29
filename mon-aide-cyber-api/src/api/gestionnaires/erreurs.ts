@@ -13,7 +13,6 @@ import { ErreurModificationProfil } from '../aidant/routesAPIProfil';
 import { ErreurCreationEspaceAidant } from '../../espace-aidant/Aidant';
 import { ErreurReinitialisationMotDePasse } from '../../authentification/ServiceUtilisateur';
 import {
-  ErreurDemandeReinitialisationMotDePasse,
   ErreurUtilisateurNonTrouve,
   ErreurValidationCGU,
 } from '../routesAPIUtilisateur';
@@ -25,7 +24,6 @@ import { RequeteUtilisateur } from '../routesAPI';
 import { ErreurLectureReferentielAssociations } from '../associations/routesAssociations';
 import { IpDeniedError } from 'express-ipfilter';
 
-const HTTP_ACCEPTE = 202;
 const HTTP_MAUVAISE_REQUETE = 400;
 const HTTP_NON_AUTORISE = 401;
 const HTTP_ACCES_REFUSE = 403;
@@ -190,18 +188,6 @@ const erreursGerees: Map<
         ...constructeurActionsHATEOAS().actionsPubliques().construis(),
         message: erreur.message,
       });
-    },
-  ],
-  [
-    'ErreurDemandeReinitialisationMotDePasse',
-    (
-      erreur: ErreurMAC<ErreurDemandeReinitialisationMotDePasse>,
-      _requete,
-      consignateur,
-      reponse
-    ) => {
-      consignateur.consigne(erreur);
-      construisReponse(reponse, HTTP_ACCEPTE);
     },
   ],
   [

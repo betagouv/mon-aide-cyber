@@ -92,8 +92,6 @@ const validateurEntite = () => {
     );
 };
 
-export class ErreurDemandeReinitialisationMotDePasse extends Error {}
-
 export class ErreurUtilisateurNonTrouve extends Error {
   constructor() {
     super('Utilisateur non trouvé.');
