@@ -45,8 +45,13 @@ export const envoieRecapitulatifDemandeAide = async (
   });
 };
 
+export type DonneesMiseEnRelation = {
+  demandeAide: DemandeAide;
+  siret: string;
+};
+
 export interface MiseEnRelation {
-  execute(demandeAide: DemandeAide): Promise<void>;
+  execute(donneesMiseEnRelation: DonneesMiseEnRelation): Promise<void>;
 }
 
 export interface FabriqueMiseEnRelation {

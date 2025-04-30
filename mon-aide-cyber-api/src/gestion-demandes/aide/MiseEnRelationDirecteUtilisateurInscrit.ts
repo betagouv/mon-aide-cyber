@@ -1,7 +1,7 @@
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { UtilisateurMACDTO } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
-import { DemandeAide } from './DemandeAide';
 import {
+  DonneesMiseEnRelation,
   envoieConfirmationDemandeAide,
   MiseEnRelation,
 } from './miseEnRelation';
@@ -12,10 +12,10 @@ export class MiseEnRelationDirecteUtilisateurInscrit implements MiseEnRelation {
     private readonly utilisateurInscrit: UtilisateurMACDTO
   ) {}
 
-  async execute(demandeAide: DemandeAide): Promise<void> {
+  async execute(donneesMiseEnRelation: DonneesMiseEnRelation): Promise<void> {
     await envoieConfirmationDemandeAide(
       this.adaptateurEnvoiMail,
-      demandeAide,
+      donneesMiseEnRelation.demandeAide,
       this.utilisateurInscrit
     );
   }

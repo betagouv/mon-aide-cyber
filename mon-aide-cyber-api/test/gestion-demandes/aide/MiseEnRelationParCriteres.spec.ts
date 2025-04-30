@@ -38,11 +38,14 @@ describe('Mise en relation par critères', () => {
     );
 
     await miseEnRelation.execute({
-      identifiant: crypto.randomUUID(),
-      dateSignatureCGU: FournisseurHorloge.maintenant(),
-      email: 'jean-dupont@email.com',
-      departement: gironde,
-      raisonSociale: 'BetaGouv',
+      demandeAide: {
+        identifiant: crypto.randomUUID(),
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        email: 'jean-dupont@email.com',
+        departement: gironde,
+        raisonSociale: 'BetaGouv',
+      },
+      siret: '12345',
     });
 
     expect(
@@ -68,11 +71,14 @@ describe('Mise en relation par critères', () => {
     );
 
     await miseEnRelation.execute({
-      identifiant: crypto.randomUUID(),
-      dateSignatureCGU: FournisseurHorloge.maintenant(),
-      email: 'jean-dupont@email.com',
-      departement: gironde,
-      raisonSociale: 'BetaGouv',
+      demandeAide: {
+        identifiant: crypto.randomUUID(),
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        email: 'jean-dupont@email.com',
+        departement: gironde,
+        raisonSociale: 'BetaGouv',
+      },
+      siret: '12345',
     });
 
     expect(

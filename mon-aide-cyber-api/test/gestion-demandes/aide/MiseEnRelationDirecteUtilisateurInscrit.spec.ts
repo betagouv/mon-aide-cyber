@@ -24,10 +24,13 @@ describe('Mise en relation directe avec un Utilisateur Inscrit', () => {
     );
 
     await miseEnRelation.execute({
-      email: 'user@example.com',
-      departement: gironde,
-      identifiant: crypto.randomUUID(),
-      dateSignatureCGU: FournisseurHorloge.maintenant(),
+      demandeAide: {
+        email: 'user@example.com',
+        departement: gironde,
+        identifiant: crypto.randomUUID(),
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+      },
+      siret: '12345',
     });
 
     expect(

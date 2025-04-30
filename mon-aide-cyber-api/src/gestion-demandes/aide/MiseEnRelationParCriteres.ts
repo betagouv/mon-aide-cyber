@@ -1,7 +1,7 @@
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { Departement } from '../departements';
-import { DemandeAide } from './DemandeAide';
 import {
+  DonneesMiseEnRelation,
   envoieConfirmationDemandeAide,
   envoieRecapitulatifDemandeAide,
   MiseEnRelation,
@@ -15,16 +15,16 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
     }
   ) {}
 
-  async execute(demandeAide: DemandeAide): Promise<void> {
+  async execute(donneesMiseEnRelation: DonneesMiseEnRelation): Promise<void> {
     await envoieRecapitulatifDemandeAide(
       this.adaptateurEnvoiMail,
-      demandeAide,
+      donneesMiseEnRelation.demandeAide,
       undefined,
       this.annuaireCOT
     );
     await envoieConfirmationDemandeAide(
       this.adaptateurEnvoiMail,
-      demandeAide,
+      donneesMiseEnRelation.demandeAide,
       undefined
     );
   }
