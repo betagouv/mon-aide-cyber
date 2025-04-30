@@ -45,11 +45,14 @@ describe('Mise en relation directe avec un Aidant', () => {
     );
 
     await miseEnRelation.execute({
-      identifiant: crypto.randomUUID(),
-      dateSignatureCGU: FournisseurHorloge.maintenant(),
-      departement: gironde,
-      raisonSociale: '',
-      email: 'jean-dupont@email.com',
+      demandeAide: {
+        identifiant: crypto.randomUUID(),
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        departement: gironde,
+        raisonSociale: '',
+        email: 'jean-dupont@email.com',
+      },
+      siret: '123456',
     });
 
     expect(
@@ -80,11 +83,14 @@ describe('Mise en relation directe avec un Aidant', () => {
     );
 
     await miseEnRelation.execute({
-      identifiant: crypto.randomUUID(),
-      dateSignatureCGU: FournisseurHorloge.maintenant(),
-      departement: gironde,
-      raisonSociale: '',
-      email: 'jean-dupont@email.com',
+      demandeAide: {
+        identifiant: crypto.randomUUID(),
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        departement: gironde,
+        raisonSociale: '',
+        email: 'jean-dupont@email.com',
+      },
+      siret: '12345',
     });
 
     expect(
@@ -121,11 +127,14 @@ describe('Mise en relation directe avec un Aidant', () => {
     );
 
     await miseEnRelation.execute({
-      identifiant: crypto.randomUUID(),
-      dateSignatureCGU: FournisseurHorloge.maintenant(),
-      email: 'jean-dupont@email.com',
-      departement: gironde,
-      raisonSociale: 'BetaGouv',
+      demandeAide: {
+        identifiant: crypto.randomUUID(),
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        email: 'jean-dupont@email.com',
+        departement: gironde,
+        raisonSociale: 'BetaGouv',
+      },
+      siret: '123456',
     });
 
     expect(

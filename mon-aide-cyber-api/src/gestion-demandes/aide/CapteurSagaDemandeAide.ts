@@ -113,7 +113,10 @@ export class CapteurSagaDemandeAide
         .then(async (aide: DemandeAide) => {
           const miseEnRelation =
             this.fabriqueMiseEnRelation.fabrique(utilisateurMAC);
-          await miseEnRelation.execute(aide);
+          await miseEnRelation.execute({
+            demandeAide: aide,
+            siret: '12345',
+          });
 
           await this.busEvenement.publie<DemandeAideCree>({
             identifiant: aide.identifiant,

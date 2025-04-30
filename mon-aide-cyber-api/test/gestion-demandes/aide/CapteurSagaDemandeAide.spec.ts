@@ -35,6 +35,7 @@ import {
 import { Entrepots } from '../../../src/domaine/Entrepots';
 import { BusEvenement } from '../../../src/domaine/BusEvenement';
 import {
+  DonneesMiseEnRelation,
   FabriqueMiseEnRelation,
   FabriqueMiseEnRelationConcrete,
   MiseEnRelation,
@@ -55,7 +56,7 @@ class FabriqueDeMiseEnRelationDeTest implements FabriqueMiseEnRelation {
 }
 
 class MiseEnRelationDeTest implements MiseEnRelation {
-  async execute(_demandeAide: DemandeAide): Promise<void> {
+  async execute(_donneesMiseEnRelation: DonneesMiseEnRelation): Promise<void> {
     return;
   }
 }
