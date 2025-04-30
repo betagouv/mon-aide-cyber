@@ -27,7 +27,7 @@ export class ErreurRequeteHTTP extends Error {
   }
 }
 
-type RechercheEntreprise = Omit<Entreprise, 'typeEntite'>;
+type RechercheEntreprise = Omit<Entreprise, 'typeEntite' | 'secteursActivite'>;
 export type ReponseRechercheEntreprise = RechercheEntreprise[];
 
 export const routesAPIRechercheEntreprise = (
@@ -61,7 +61,8 @@ export const routesAPIRechercheEntreprise = (
             adaptateurDeRequeteHTTP
           ).rechercheEntreprise(nomEntreprise, parametresRecherche)
         ).map((entreprise) => {
-          const { typeEntite, ...rechercheEntreprise } = entreprise;
+          const { typeEntite, secteursActivite, ...rechercheEntreprise } =
+            entreprise;
           return rechercheEntreprise;
         });
         return reponse.status(200).json(entreprises);

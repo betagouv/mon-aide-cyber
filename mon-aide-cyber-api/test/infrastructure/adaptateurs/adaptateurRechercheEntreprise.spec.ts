@@ -14,6 +14,7 @@ import {
   entitesPubliques,
   TypesEntites,
 } from '../../../src/espace-aidant/Aidant';
+import { SecteurActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
 
 type ParametresTest<T> = {
   nomOuSIRETEntreprise: string;
@@ -24,6 +25,7 @@ type ParametresTest<T> = {
       libelle_commune: string;
       departement: '75';
     };
+    section_activite_principale?: string;
     complements: { est_service_public?: boolean; est_association?: boolean };
   };
   parametresRecherche?: string;
@@ -97,6 +99,76 @@ describe('L’adaptateur de recherche Entreprise', () => {
       expect(
         entreprises.map((entreprise) => entreprise.typeEntite)
       ).toStrictEqual<TypesEntites>([reponseAttendue]);
+    }
+  );
+
+  it.each<ParametresTest<SecteurActivite[]>>([
+    {
+      nomOuSIRETEntreprise: '01234567891234',
+      reponseRetournee: {
+        nom_complet: 'Beta-gouv',
+        siege: {
+          siret: '01234567891234',
+          libelle_commune: 'PARIS',
+          departement: '75',
+        },
+        section_activite_principale: 'O',
+        complements: { est_service_public: true },
+      },
+      reponseAttendue: [{ nom: 'Administration' }, { nom: 'Tertiaire' }],
+    },
+    {
+      nomOuSIRETEntreprise: '01234567891234',
+      reponseRetournee: {
+        nom_complet: 'Asso-beta',
+        siege: {
+          siret: '01234567891234',
+          libelle_commune: 'PARIS',
+          departement: '75',
+        },
+        complements: { est_association: true },
+        section_activite_principale: 'J',
+      },
+      reponseAttendue: [
+        { nom: 'Information et communication' },
+        { nom: 'Tertiaire' },
+      ],
+    },
+    {
+      nomOuSIRETEntreprise: '12345678912345',
+      reponseRetournee: {
+        nom_complet: 'Entreprise Privée',
+        siege: {
+          siret: '12345678912345',
+          libelle_commune: 'PARIS',
+          departement: '75',
+        },
+        complements: { est_association: false },
+        section_activite_principale: 'L',
+      },
+      reponseAttendue: [
+        { nom: 'Activités immobilières' },
+        { nom: 'Tertiaire' },
+      ],
+    },
+    {
+      nomOuSIRETEntreprise: 'reserviste',
+      parametresRecherche: 'est_association=true',
+      reponseAttendue: [],
+    },
+  ])(
+    'Retourne le secteur d’activité $reponseAttendue',
+    async ({ reponseAttendue, ...reste }) => {
+      const entreprises = await adaptateurRechercheEntreprise(
+        unAdaptateurDeRequete().retournant(reste.reponseRetournee).construis()
+      ).rechercheEntreprise(
+        reste.nomOuSIRETEntreprise,
+        reste.parametresRecherche || ''
+      );
+
+      expect(
+        entreprises.flatMap((entreprise) => entreprise.secteursActivite)
+      ).toStrictEqual<SecteurActivite[]>(reponseAttendue);
     }
   );
 });
