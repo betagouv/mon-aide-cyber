@@ -9,6 +9,11 @@ import {
   entitesPrivees,
   entitesPubliques,
 } from '../../espace-aidant/Aidant';
+import { SecteurActivite } from '../../espace-aidant/preferences/secteursActivite';
+import {
+  equivalenceSecteursActivite,
+  LettreSecteur,
+} from '../../api/recherche-entreprise/equivalenceSecteursActivite';
 
 export type Entreprise = {
   siret: string;
@@ -19,11 +24,13 @@ export type Entreprise = {
     | EntitesAssociations
     | EntitesEntreprisesPrivees
     | EntitesOrganisationsPubliques;
+  secteursActivite: SecteurActivite[];
 };
 type APIEntreprise = {
   nom_complet: string;
   siege: { siret: string; departement: string; libelle_commune: string };
   complements: { est_association: boolean; est_service_public: boolean };
+  section_activite_principale: LettreSecteur;
 };
 type ReponseAPIRechercheEntreprise = {
   results: APIEntreprise[];
@@ -58,12 +65,17 @@ class AdaptateurRechercheEntreprise {
         typeEntite = entitesPubliques;
       }
 
+      const secteursActivite = equivalenceSecteursActivite
+        .filter((eq) => eq.lettreSecteur === res.section_activite_principale)
+        .flatMap((eq) => eq.secteursMAC);
+
       return {
         nom: res.nom_complet,
         siret: res.siege.siret,
         commune: res.siege.libelle_commune,
         departement: res.siege.departement,
-        typeEntite
+        typeEntite,
+        secteursActivite,
       };
     });
     const associationsTrouvees: Entreprise[] = parametresRecherche.includes(
@@ -88,6 +100,7 @@ class AdaptateurRechercheEntreprise {
             commune: asso.commune,
             departement: asso.departement,
             typeEntite: associations,
+            secteursActivite: [],
           }))
       : [];
     return [...entreprises, ...associationsTrouvees];
