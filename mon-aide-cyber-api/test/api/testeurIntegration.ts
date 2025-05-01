@@ -31,6 +31,7 @@ import { AdaptateurDeVerificationDeDemandeDeTest } from '../adaptateurs/Adaptate
 import { AdaptateurDeVerificationDeDemande } from '../../src/adaptateurs/AdaptateurDeVerificationDeDemande';
 import { AdaptateurAseptisationDeTest } from '../adaptateurs/AdaptateurAseptisationDeTest';
 import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
+import { adaptateurRechercheEntreprise } from '../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 
 const PORT_DISPONIBLE = 0;
 
@@ -75,7 +76,9 @@ class TesteurIntegrationMAC {
     },
     public adaptateurMetabase: AdaptateurMetabaseMemoire = new AdaptateurMetabaseMemoire(),
     public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest(),
-    public adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire()
+    public adaptateurDeRechercheEntreprise = adaptateurRechercheEntreprise(
+      new AdaptateurDeRequeteHTTPMemoire()
+    )
   ) {}
 
   initialise() {
@@ -97,6 +100,7 @@ class TesteurIntegrationMAC {
             mesures: this.adaptateurMesures,
           },
         },
+        this.adaptateurDeRechercheEntreprise,
         this.adaptateurRelations
       ),
       busEvenement: this.busEvenement,
@@ -117,7 +121,7 @@ class TesteurIntegrationMAC {
         this.adaptateurDeVerificationDeRelations,
       repertoireDeContacts: this.repertoireDeContacts,
       adaptateurProConnect: this.adaptateurProConnect,
-      adaptateurDeRequeteHTTP: this.adaptateurDeRequeteHTTP,
+      adaptateurRechercheEntreprise: this.adaptateurDeRechercheEntreprise,
       estEnMaintenance: false,
       redirigeVersUrlBase: (
         _requete: Request,

@@ -13,6 +13,7 @@ import {
   UtilisateurMACDTO,
 } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { FabriqueMiseEnRelation } from './miseEnRelation';
+import { AdaptateurRechercheEntreprise } from '../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 
 export class ErreurUtilisateurMACInconnu extends Error {
   constructor(message: string) {
@@ -27,6 +28,7 @@ export type SagaDemandeAide = Saga & {
   raisonSociale?: string;
   relationUtilisateur?: string;
   identifiantAidant?: crypto.UUID;
+  siret: string;
 };
 
 export type DemandeAideCree = Evenement<{
@@ -69,7 +71,8 @@ export class CapteurSagaDemandeAide
     private readonly busCommande: BusCommande,
     private readonly busEvenement: BusEvenement,
     private readonly entrepotUtilisateurMAC: EntrepotUtilisateursMAC,
-    private readonly fabriqueMiseEnRelation: FabriqueMiseEnRelation
+    private readonly fabriqueMiseEnRelation: FabriqueMiseEnRelation,
+    private readonly adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise
   ) {}
 
   async execute(saga: SagaDemandeAide): Promise<void> {
@@ -111,11 +114,18 @@ export class CapteurSagaDemandeAide
       await this.busCommande
         .publie<CommandeCreerDemandeAide, DemandeAide>(commandeCreerAide)
         .then(async (aide: DemandeAide) => {
+          const entreprise =
+            await this.adaptateurRechercheEntreprise.rechercheEntreprise(
+              saga.siret,
+              ''
+            );
           const miseEnRelation =
             this.fabriqueMiseEnRelation.fabrique(utilisateurMAC);
           await miseEnRelation.execute({
             demandeAide: aide,
             siret: '12345',
+            secteursActivite: entreprise[0].secteursActivite,
+            typeEntite: entreprise[0].typeEntite,
           });
 
           await this.busEvenement.publie<DemandeAideCree>({

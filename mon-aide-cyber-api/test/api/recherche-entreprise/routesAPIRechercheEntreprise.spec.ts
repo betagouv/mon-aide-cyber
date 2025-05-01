@@ -3,18 +3,25 @@ import { executeRequete } from '../executeurRequete';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import { ReponseRechercheEntreprise } from '../../../src/api/recherche-entreprise/routesAPIRechercheEntreprise';
+import { adaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
 
 describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { app: Express };
+  const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
+  adaptateurDeRequeteHTTP;
 
   beforeEach(() => {
+    testeurMAC.adaptateurDeRechercheEntreprise = adaptateurRechercheEntreprise(
+      adaptateurDeRequeteHTTP
+    );
     donneesServeur = testeurMAC.initialise();
   });
 
   describe('Lorsqu’une requête GET est reçue sur /api/recherche-entreprise', () => {
     it('Retourne la liste des entreprises correspondant à la requête', async () => {
-      testeurMAC.adaptateurDeRequeteHTTP.reponse({
+      adaptateurDeRequeteHTTP.reponse({
         results: [
           {
             siege: {
@@ -46,7 +53,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
     });
 
     it('La requête est conforme', async () => {
-      testeurMAC.adaptateurDeRequeteHTTP.reponse({
+      adaptateurDeRequeteHTTP.reponse({
         results: [
           {
             siege: { siret: '1234567890' },
@@ -63,13 +70,13 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
         '/api/recherche-entreprise?nom=agence%20nationale%20de%20s%C3%A9curit%C3%A9%20des%20syst%C3%A8mes%20d%E2%80%99information'
       );
 
-      expect(testeurMAC.adaptateurDeRequeteHTTP.requeteAttendue).toStrictEqual(
+      expect(adaptateurDeRequeteHTTP.requeteAttendue).toStrictEqual(
         '/search?q=agence%20nationale%20de%20s%C3%A9curit%C3%A9%20des%20syst%C3%A8mes%20d%E2%80%99information&per_page=25&limite_matching_etablissements=1'
       );
     });
 
     it('Prends en compte les paramètres de requêtes optionnels', async () => {
-      testeurMAC.adaptateurDeRequeteHTTP.reponse({
+      adaptateurDeRequeteHTTP.reponse({
         results: [
           {
             siege: { siret: '1234567890' },
@@ -85,13 +92,13 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
         '/api/recherche-entreprise?nom=beta&est_association=true'
       );
 
-      expect(testeurMAC.adaptateurDeRequeteHTTP.requeteAttendue).toStrictEqual(
+      expect(adaptateurDeRequeteHTTP.requeteAttendue).toStrictEqual(
         '/search?q=beta&est_association=true&per_page=25&limite_matching_etablissements=1'
       );
     });
 
     it('Retourne une erreur si la requête a échoué', async () => {
-      testeurMAC.adaptateurDeRequeteHTTP.reponse(
+      adaptateurDeRequeteHTTP.reponse(
         {
           erreur: 'Une erreur s’est produite',
         },
@@ -111,7 +118,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
     });
 
     it('Retourne la liste des entreprises et des associations non référencées correspondant à la requête', async () => {
-      testeurMAC.adaptateurDeRequeteHTTP.reponse({
+      adaptateurDeRequeteHTTP.reponse({
         results: [
           {
             siege: {
@@ -149,7 +156,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
     });
 
     it('Ne Retourne pas la liste des associations non référencées si la recherche n’est pas lancée pour les associations', async () => {
-      testeurMAC.adaptateurDeRequeteHTTP.reponse({
+      adaptateurDeRequeteHTTP.reponse({
         results: [
           {
             siege: {

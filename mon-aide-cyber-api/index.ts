@@ -27,6 +27,7 @@ import { redirigeVersUrlBase } from './src/infrastructure/middlewares/middleware
 import { AdaptateurDeVerificationDeDemandeMAC } from './src/adaptateurs/AdaptateurDeVerificationDeDemandeMAC';
 import { AdaptateurAseptisationMAC } from './src/adaptateurs/AdaptateurAseptisationMAC';
 import { adaptateurRepertoireDeContacts } from './src/adaptateurs/adaptateurRepertoireDeContacts';
+import { adaptateurRechercheEntreprise } from './src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
@@ -46,6 +47,10 @@ const busEvenementMAC = new BusEvenementMAC(
   fabriqueConsommateursEvenements(adaptateurRelations)
 );
 const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
+
+const unAdaptateurRechercheEntreprise = adaptateurRechercheEntreprise(
+  new AdaptateurDeRequeteHTTP()
+);
 
 const serveurMAC = serveur.creeServeur({
   adaptateurRelations: adaptateurRelations,
@@ -68,6 +73,7 @@ const serveurMAC = serveur.creeServeur({
         mesures: new AdaptateurMesures(),
       },
     },
+    unAdaptateurRechercheEntreprise,
     adaptateurRelations
   ),
   busEvenement: busEvenementMAC,
@@ -97,7 +103,7 @@ const serveurMAC = serveur.creeServeur({
   adaptateurMetabase: adaptateurMetabase(),
   adaptateurProConnect: adaptateurProConnect,
   estEnMaintenance: adaptateurEnvironnement.modeMaintenance().estActif(),
-  adaptateurDeRequeteHTTP: new AdaptateurDeRequeteHTTP(),
+  adaptateurRechercheEntreprise: unAdaptateurRechercheEntreprise,
   redirigeVersUrlBase: redirigeVersUrlBase,
 });
 

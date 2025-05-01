@@ -2,10 +2,7 @@ import { ConfigurationServeur } from '../../serveur';
 import express, { NextFunction, Request, Response } from 'express';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { ReponseRequeteHTTPEnErreur } from '../../infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
-import {
-  adaptateurRechercheEntreprise,
-  Entreprise,
-} from '../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { Entreprise } from '../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 
 type ReponseEnErreur = {
   message: string;
@@ -35,7 +32,7 @@ export const routesAPIRechercheEntreprise = (
 ) => {
   const routes = express.Router();
 
-  const { adaptateurDeRequeteHTTP } = configuration;
+  const { adaptateurRechercheEntreprise } = configuration;
 
   routes.get(
     '/',
@@ -57,9 +54,10 @@ export const routesAPIRechercheEntreprise = (
           ''
         );
         const entreprises: ReponseRechercheEntreprise = (
-          await adaptateurRechercheEntreprise(
-            adaptateurDeRequeteHTTP
-          ).rechercheEntreprise(nomEntreprise, parametresRecherche)
+          await adaptateurRechercheEntreprise.rechercheEntreprise(
+            nomEntreprise,
+            parametresRecherche
+          )
         ).map((entreprise) => {
           const { typeEntite, secteursActivite, ...rechercheEntreprise } =
             entreprise;

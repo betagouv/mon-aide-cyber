@@ -36,7 +36,16 @@ type ReponseAPIRechercheEntreprise = {
   results: APIEntreprise[];
 };
 
-class AdaptateurRechercheEntreprise {
+export interface AdaptateurRechercheEntreprise {
+  rechercheEntreprise(
+    nomOuSiretEntreprise: string,
+    parametresRecherche: string
+  ): Promise<Entreprise[]>;
+}
+
+class AdaptateurRechercheEntrepriseHTTP
+  implements AdaptateurRechercheEntreprise
+{
   constructor(
     private readonly adaptateurDeRequeteHTTP: AdaptateurDeRequeteHTTP
   ) {}
@@ -110,5 +119,5 @@ class AdaptateurRechercheEntreprise {
 export const adaptateurRechercheEntreprise = (
   adaptateurDeRequeteHTTP: AdaptateurDeRequeteHTTP
 ): AdaptateurRechercheEntreprise => {
-  return new AdaptateurRechercheEntreprise(adaptateurDeRequeteHTTP);
+  return new AdaptateurRechercheEntrepriseHTTP(adaptateurDeRequeteHTTP);
 };

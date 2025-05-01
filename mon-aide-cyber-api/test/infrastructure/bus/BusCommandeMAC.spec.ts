@@ -4,6 +4,8 @@ import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/
 import { BusEvenementDeTest } from './BusEvenementDeTest';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
+import { adaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
 
 describe('Bus de commande MAC', () => {
   it("Retourne une erreur si le capteur n'est pas trouvé", async () => {
@@ -13,7 +15,8 @@ describe('Bus de commande MAC', () => {
         entrepots,
         new BusEvenementDeTest(),
         new AdaptateurEnvoiMailMemoire(),
-        unConstructeurDeServices(entrepots.aidants())
+        unConstructeurDeServices(entrepots.aidants()),
+        adaptateurRechercheEntreprise(new AdaptateurDeRequeteHTTPMemoire())
       ).publie({ type: 'CommandeInexistante' })
     ).toThrowError("Impossible d'exécuter la demande 'CommandeInexistante'");
   });

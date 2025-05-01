@@ -48,15 +48,28 @@ import {
 import { MiseEnRelationDirecteAidant } from '../../../src/gestion-demandes/aide/MiseEnRelationDirecteAidant';
 import { MiseEnRelationDirecteUtilisateurInscrit } from '../../../src/gestion-demandes/aide/MiseEnRelationDirecteUtilisateurInscrit';
 import { MiseEnRelationParCriteres } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
+import { entitesPubliques } from '../../../src/espace-aidant/Aidant';
+import { SecteurActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
+import {
+  AdaptateurRechercheEntreprise,
+  adaptateurRechercheEntreprise,
+} from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
+import { ReponseAPIRechercheEntreprise } from '../../api/recherche-entreprise/api';
 
 class FabriqueDeMiseEnRelationDeTest implements FabriqueMiseEnRelation {
+  public readonly miseEnRelationDeTest = new MiseEnRelationDeTest();
+
   fabrique(_utilisateurMac: UtilisateurMACDTO | undefined): MiseEnRelation {
-    return new MiseEnRelationDeTest();
+    return this.miseEnRelationDeTest;
   }
 }
 
 class MiseEnRelationDeTest implements MiseEnRelation {
-  async execute(_donneesMiseEnRelation: DonneesMiseEnRelation): Promise<void> {
+  public donneesMiseEnRelation: DonneesMiseEnRelation | undefined = undefined;
+
+  async execute(donneesMiseEnRelation: DonneesMiseEnRelation): Promise<void> {
+    this.donneesMiseEnRelation = donneesMiseEnRelation;
     return;
   }
 }
@@ -66,31 +79,52 @@ const fabriqueCapteur = ({
   busEvenement,
   busCommande,
   fabriqueMiseEnRelation,
+  rechercheEntreprise,
 }: {
   entrepots?: Entrepots;
   busEvenement?: BusEvenement;
   busCommande?: BusCommande;
   fabriqueMiseEnRelation?: FabriqueMiseEnRelation;
+  rechercheEntreprise?: AdaptateurRechercheEntreprise;
 }): CapteurSagaDemandeAide => {
   const lesEntrepots = entrepots ?? new EntrepotsMemoire();
   const leBusEvenement = busEvenement ?? new BusEvenementDeTest();
   const envoiMail = new AdaptateurEnvoiMailMemoire();
   const laFabriqueDeMiseEnRelation =
     fabriqueMiseEnRelation ?? new FabriqueDeMiseEnRelationDeTest();
+  const adaptateurDeRequeteHTTPMemoire = new AdaptateurDeRequeteHTTPMemoire();
+  adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>({
+    results: [
+      {
+        nom_complet: 'Mairie BORDEAUX',
+        siege: {
+          siret: '122345',
+          departement: gironde.code,
+          libelle_commune: 'Bordeaux',
+        },
+        complements: { est_association: false, est_service_public: true },
+        section_activite_principale: 'O',
+      },
+    ],
+  });
+
   return new CapteurSagaDemandeAide(
     busCommande ??
       new BusCommandeMAC(
         lesEntrepots,
         leBusEvenement,
         envoiMail,
-        unConstructeurDeServices(lesEntrepots.aidants())
+        unConstructeurDeServices(lesEntrepots.aidants()),
+        adaptateurRechercheEntreprise(adaptateurDeRequeteHTTPMemoire)
       ),
     leBusEvenement,
     new EntrepotUtilisateurMACMemoire({
       aidant: lesEntrepots.aidants(),
       utilisateurInscrit: lesEntrepots.utilisateursInscrits(),
     }),
-    laFabriqueDeMiseEnRelation
+    laFabriqueDeMiseEnRelation,
+    rechercheEntreprise ??
+      adaptateurRechercheEntreprise(adaptateurDeRequeteHTTPMemoire)
   );
 };
 
@@ -123,6 +157,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         email: aide.email,
         departement: aide.departement,
         raisonSociale: 'beta-gouv',
+        siret: '12345',
       });
 
       const entrepotDemandeAide =
@@ -157,6 +192,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         departement: aide.departement,
         raisonSociale: 'beta-gouv',
         relationUtilisateur: 'aidanticonnu@yopmail.com',
+        siret: '12345',
       });
 
       await expect(() => promesse).rejects.toThrowError(
@@ -175,6 +211,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         cguValidees: true,
         email: 'un email',
         departement: allier,
+        siret: '12345',
       });
 
       expect(
@@ -193,6 +230,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         cguValidees: true,
         email: 'jean-dupont@email.com',
         departement: gironde,
+        siret: '12345',
       });
 
       const aideRecu = (
@@ -239,6 +277,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             cguValidees: true,
             email: 'jean-dupont@email.com',
             departement: gironde,
+            siret: '12345',
           })
         ).rejects.toThrowError("Votre demande d'aide n'a pu aboutir");
         expect(miseEnRelationAEteExecutee).toBe(false);
@@ -261,6 +300,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         email: demandeIncomplete.email,
         departement: gironde,
         raisonSociale: 'beta-gouv',
+        siret: '12345',
       });
 
       const demandeAideRecue = await entrepots
@@ -291,6 +331,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           email: 'user@example.com',
           departement: gironde,
           relationUtilisateur: 'jean.dupont@email.com',
+          siret: '12345',
         });
 
         expect(
@@ -321,6 +362,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           email: 'user@example.com',
           departement: gironde,
           relationUtilisateur: aidant.email,
+          siret: '12345',
         });
 
         expect(
@@ -350,6 +392,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           email: 'user@example.com',
           departement: gironde,
           relationUtilisateur: utilisateurInscrit.email,
+          siret: '12345',
         });
 
         expect(
@@ -360,31 +403,122 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         ).toBeInstanceOf(MiseEnRelationDirecteUtilisateurInscrit);
       });
     });
+  });
 
-    describe('Par critère', () => {
-      it('Exécute la mise en relation', async () => {
-        const entrepots = new EntrepotsMemoire();
-        const fabriqueDeMiseEnRelationEcoutee =
-          new FabriqueDeMiseEnRelationEcoutee();
-        const capteur = fabriqueCapteur({
-          entrepots,
-          fabriqueMiseEnRelation: fabriqueDeMiseEnRelationEcoutee,
-        });
-
-        await capteur.execute({
-          type: 'SagaDemandeAide',
-          cguValidees: true,
-          email: 'user@example.com',
-          departement: gironde,
-        });
-
-        expect(
-          fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
-        ).not.toBeUndefined();
-        expect(
-          fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
-        ).toBeInstanceOf(MiseEnRelationParCriteres);
+  describe('Mise en relation par critères', () => {
+    it('Exécute la mise en relation', async () => {
+      const entrepots = new EntrepotsMemoire();
+      const fabriqueDeMiseEnRelationEcoutee =
+        new FabriqueDeMiseEnRelationEcoutee();
+      const capteur = fabriqueCapteur({
+        entrepots,
+        fabriqueMiseEnRelation: fabriqueDeMiseEnRelationEcoutee,
       });
+
+      await capteur.execute({
+        type: 'SagaDemandeAide',
+        cguValidees: true,
+        email: 'user@example.com',
+        departement: gironde,
+        siret: '12345',
+      });
+
+      expect(
+        fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
+      ).not.toBeUndefined();
+      expect(
+        fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
+      ).toBeInstanceOf(MiseEnRelationParCriteres);
+    });
+
+    it("Exécute la mise en relation avec le type d'entreprise et les secteurs d'activité", async () => {
+      const entrepots = new EntrepotsMemoire();
+      const fabriqueDeMiseEnRelationDeTest =
+        new FabriqueDeMiseEnRelationDeTest();
+      const adaptateurDeRequeteHTTPMemoire =
+        new AdaptateurDeRequeteHTTPMemoire();
+      adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>({
+        results: [
+          {
+            nom_complet: 'Mairie BORDEAUX',
+            siege: {
+              siret: '122345',
+              departement: gironde.code,
+              libelle_commune: 'Bordeaux',
+            },
+            complements: { est_association: false, est_service_public: true },
+            section_activite_principale: 'O',
+          },
+        ],
+      });
+      const capteur = fabriqueCapteur({
+        entrepots,
+        rechercheEntreprise: adaptateurRechercheEntreprise(
+          adaptateurDeRequeteHTTPMemoire
+        ),
+        fabriqueMiseEnRelation: fabriqueDeMiseEnRelationDeTest,
+      });
+
+      await capteur.execute({
+        type: 'SagaDemandeAide',
+        cguValidees: true,
+        email: 'user@example.com',
+        departement: gironde,
+        siret: '12345',
+      });
+
+      expect(
+        fabriqueDeMiseEnRelationDeTest.miseEnRelationDeTest
+          .donneesMiseEnRelation!.typeEntite
+      ).toStrictEqual(entitesPubliques);
+      expect(
+        fabriqueDeMiseEnRelationDeTest.miseEnRelationDeTest
+          .donneesMiseEnRelation!.secteursActivite
+      ).toStrictEqual<SecteurActivite[]>([
+        { nom: 'Administration' },
+        { nom: 'Tertiaire' },
+      ]);
+    });
+
+    it('Exécute la mise en relation pour le siret 12345', async () => {
+      const entrepots = new EntrepotsMemoire();
+      const fabriqueDeMiseEnRelationDeTest =
+        new FabriqueDeMiseEnRelationDeTest();
+      const adaptateurDeRequeteHTTPMemoire =
+        new AdaptateurDeRequeteHTTPMemoire();
+      adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>({
+        results: [
+          {
+            nom_complet: 'Mairie BORDEAUX',
+            siege: {
+              siret: '122345',
+              departement: gironde.code,
+              libelle_commune: 'Bordeaux',
+            },
+            complements: { est_association: false, est_service_public: true },
+            section_activite_principale: 'O',
+          },
+        ],
+      });
+      const capteur = fabriqueCapteur({
+        entrepots,
+        rechercheEntreprise: adaptateurRechercheEntreprise(
+          adaptateurDeRequeteHTTPMemoire
+        ),
+        fabriqueMiseEnRelation: fabriqueDeMiseEnRelationDeTest,
+      });
+
+      await capteur.execute({
+        type: 'SagaDemandeAide',
+        cguValidees: true,
+        email: 'user@example.com',
+        departement: gironde,
+        siret: '12345',
+      });
+
+      expect(adaptateurDeRequeteHTTPMemoire.requeteAttendue).toBe(
+        '/search?q=12345&per_page=25&limite_matching_etablissements=1'
+      );
     });
   });
 });
