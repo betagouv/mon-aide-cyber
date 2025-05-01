@@ -12,6 +12,8 @@ import {
 import { AdaptateurReferentielMAC } from '../../../infrastructure/adaptateurs/AdaptateurReferentielMAC';
 import { AdaptateurMesures } from '../../../infrastructure/adaptateurs/AdaptateurMesures';
 import { unServiceAidant } from '../../../espace-aidant/ServiceAidantMAC';
+import { adaptateurRechercheEntreprise } from '../../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { AdaptateurDeRequeteHTTP } from '../../../infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
 
 const command = program
   .description('Envoi un mail de création de compte à l’Aidant')
@@ -33,7 +35,8 @@ command.action(async (...args: any[]) => {
         diagnostic: new AdaptateurReferentielMAC(),
         mesures: new AdaptateurMesures(),
       },
-    }
+    },
+    adaptateurRechercheEntreprise(new AdaptateurDeRequeteHTTP())
   );
 
   try {

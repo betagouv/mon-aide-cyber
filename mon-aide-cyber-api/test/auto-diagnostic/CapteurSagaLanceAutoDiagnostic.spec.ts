@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import {
-  DiagnosticLibreAccesLance,
   CapteurSagaLanceDiagnosticLibreAcces,
   DemandeDiagnosticLibreAcces,
+  DiagnosticLibreAccesLance,
 } from '../../src/diagnostic-libre-acces/CapteurSagaLanceDiagnosticLibreAcces';
 import { AdaptateurReferentielDeTest } from '../adaptateurs/AdaptateurReferentielDeTest';
 import { AdaptateurMesuresTest } from '../adaptateurs/AdaptateurMesuresTest';
@@ -18,6 +18,8 @@ import { adaptateurUUID } from '../../src/infrastructure/adaptateurs/adaptateurU
 import crypto from 'crypto';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { adaptateurRechercheEntreprise } from '../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { AdaptateurDeRequeteHTTPMemoire } from '../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
 
 describe('Capteur pour lancer un Auto-Diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -37,7 +39,8 @@ describe('Capteur pour lancer un Auto-Diagnostic', () => {
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
-      unConstructeurDeServices(entrepots.aidants())
+      unConstructeurDeServices(entrepots.aidants()),
+      adaptateurRechercheEntreprise(new AdaptateurDeRequeteHTTPMemoire())
     );
     const referentiel = unReferentiel().construis();
     adaptateurReferentiel.ajoute(referentiel);

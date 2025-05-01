@@ -30,6 +30,7 @@ import { adaptateurRepertoireDeContacts } from '../../adaptateurs/adaptateurRepe
 import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../../relation/AdaptateurRelationsMAC';
 import { fabriqueMiseEnRelation } from '../../gestion-demandes/aide/miseEnRelation';
+import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -45,6 +46,7 @@ type ParametresCapteur = {
   busEvenements?: BusEvenement;
   adaptateurEnvoiMail?: AdaptateurEnvoiMail;
   services: Services;
+  adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise;
   adaptateurRelations: AdaptateurRelations;
 };
 
@@ -75,7 +77,8 @@ const capteurs: Map<string, Capteur> = new Map([
           fabriqueMiseEnRelation(
             parametres.adaptateurEnvoiMail!,
             fabriqueAnnuaireCOT().annuaireCOT()
-          )
+          ),
+          parametres.adaptateurRechercheEntreprise
         ),
     },
   ],
@@ -231,6 +234,7 @@ export class BusCommandeMAC implements BusCommande {
     private readonly busEvenement: BusEvenement,
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
     private readonly services: Services,
+    private readonly adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise,
     private readonly adaptateurRelations: AdaptateurRelations = new AdaptateurRelationsMAC()
   ) {}
 
@@ -251,6 +255,7 @@ export class BusCommandeMAC implements BusCommande {
               mesures: this.services.referentiels.mesures,
             },
           },
+          adaptateurRechercheEntreprise: this.adaptateurRechercheEntreprise,
           adaptateurRelations: this.adaptateurRelations,
         })
         .execute(commande);

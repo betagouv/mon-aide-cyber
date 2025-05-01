@@ -19,12 +19,36 @@ import {
   hautesAlpes,
 } from '../../../src/gestion-demandes/departements';
 import { EntrepotAideMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import { ReponseAPIRechercheEntreprise } from '../recherche-entreprise/api';
+import { adaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
 
 describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { app: Express };
+  const reponseAPIRechercheEntreprise: ReponseAPIRechercheEntreprise = {
+    results: [
+      {
+        complements: { est_association: false, est_service_public: true },
+        nom_complet: 'BORDEAUX',
+        siege: {
+          departement: '33',
+          siret: '000000000',
+          libelle_commune: 'BORDEAUX',
+        },
+        section_activite_principale: 'O',
+      },
+    ],
+  };
 
   beforeEach(() => {
+    const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
+    adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>(
+      reponseAPIRechercheEntreprise
+    );
+    testeurMAC.adaptateurDeRechercheEntreprise = adaptateurRechercheEntreprise(
+      adaptateurDeRequeteHTTP
+    );
     donneesServeur = testeurMAC.initialise();
   });
 
@@ -197,6 +221,12 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         let donneesServeur: { app: Express };
 
         beforeEach(() => {
+          const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
+          adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>(
+            reponseAPIRechercheEntreprise
+          );
+          testeurMAC.adaptateurDeRechercheEntreprise =
+            adaptateurRechercheEntreprise(adaptateurDeRequeteHTTP);
           donneesServeur = testeurMAC.initialise();
         });
 

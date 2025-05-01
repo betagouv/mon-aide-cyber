@@ -31,7 +31,6 @@ import { adaptateurConfigurationLimiteurTraffic } from './api/adaptateurLimiteur
 import { AdaptateurDeVerificationDeTypeDeRelation } from './adaptateurs/AdaptateurDeVerificationDeTypeDeRelation';
 import { AdaptateurProConnect } from './adaptateurs/pro-connect/adaptateurProConnect';
 import { routesProConnect } from './api/pro-connect/routeProConnect';
-import { AdaptateurDeRequeteHTTP } from './infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
 import { routesAssociations } from './api/associations/routesAssociations';
 import { AdaptateurDeVerificationDeDemande } from './adaptateurs/AdaptateurDeVerificationDeDemande';
 import { AdaptateurAseptisation } from './adaptateurs/AdaptateurAseptisation';
@@ -39,6 +38,7 @@ import { RepertoireDeContacts } from './contacts/RepertoireDeContacts';
 import { positionneLesCsp } from './infrastructure/securite/Http';
 import { adaptateurEnvironnement } from './adaptateurs/adaptateurEnvironnement';
 import { filtreIp } from './infrastructure/securite/Reseau';
+import { AdaptateurRechercheEntreprise } from './infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -69,7 +69,7 @@ export type ConfigurationServeur = {
   gestionnaireDeJeton: GestionnaireDeJeton;
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
   adaptateurMetabase: AdaptateurMetabase;
-  adaptateurDeRequeteHTTP: AdaptateurDeRequeteHTTP;
+  adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise;
   estEnMaintenance: boolean;
 };
 

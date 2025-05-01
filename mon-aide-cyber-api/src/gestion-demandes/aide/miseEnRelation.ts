@@ -7,6 +7,12 @@ import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
 import { MiseEnRelationDirecteAidant } from './MiseEnRelationDirecteAidant';
 import { MiseEnRelationParCriteres } from './MiseEnRelationParCriteres';
 import { MiseEnRelationDirecteUtilisateurInscrit } from './MiseEnRelationDirecteUtilisateurInscrit';
+import { SecteurActivite } from '../../espace-aidant/preferences/secteursActivite';
+import {
+  EntitesAssociations,
+  EntitesEntreprisesPrivees,
+  EntitesOrganisationsPubliques,
+} from '../../espace-aidant/Aidant';
 
 export const envoieConfirmationDemandeAide = async (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
@@ -48,6 +54,11 @@ export const envoieRecapitulatifDemandeAide = async (
 export type DonneesMiseEnRelation = {
   demandeAide: DemandeAide;
   siret: string;
+  typeEntite?:
+    | EntitesOrganisationsPubliques
+    | EntitesEntreprisesPrivees
+    | EntitesAssociations;
+  secteursActivite?: SecteurActivite[];
 };
 
 export interface MiseEnRelation {

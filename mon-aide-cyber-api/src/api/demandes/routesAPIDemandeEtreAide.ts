@@ -28,6 +28,7 @@ type CorpsRequeteDemandeAide = {
   raisonSociale?: string;
   relationUtilisateur?: string;
   identifiantAidant?: crypto.UUID;
+  siret: string;
 };
 
 class ErreurDemandeAide extends Error {
@@ -114,6 +115,7 @@ export const routesAPIDemandeEtreAide = (
           ...(corpsRequete.identifiantAidant && {
             identifiantAidant: corpsRequete.identifiantAidant,
           }),
+          siret: corpsRequete.siret,
         };
         return configuration.busCommande
           .publie(saga)
