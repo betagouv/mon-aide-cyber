@@ -521,6 +521,33 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       );
     });
   });
+
+  it("Retourne une erreur si l'entreprise n'est pas trouvée", async () => {
+    const entrepots = new EntrepotsMemoire();
+    const fabriqueDeMiseEnRelationEcoutee =
+      new FabriqueDeMiseEnRelationEcoutee();
+    const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
+    adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>({
+      results: [],
+    });
+    const capteur = fabriqueCapteur({
+      entrepots,
+      rechercheEntreprise: adaptateurRechercheEntreprise(
+        adaptateurDeRequeteHTTP
+      ),
+      fabriqueMiseEnRelation: fabriqueDeMiseEnRelationEcoutee,
+    });
+
+    await expect(
+      capteur.execute({
+        type: 'SagaDemandeAide',
+        cguValidees: true,
+        email: 'user@example.com',
+        departement: gironde,
+        siret: '12345',
+      })
+    ).rejects.toThrowError('Aucune entreprise ne correspond au SIRET');
+  });
 });
 
 class FabriqueDeMiseEnRelationEcoutee extends FabriqueMiseEnRelationConcrete {

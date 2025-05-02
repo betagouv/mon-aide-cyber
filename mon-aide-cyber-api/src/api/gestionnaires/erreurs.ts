@@ -141,6 +141,14 @@ const erreursGerees: Map<
     },
   ],
   [
+    'ErreurDemandeAideEntrepriseInconnue',
+    (erreur, _, _consignateur, reponse) => {
+      construisReponse(reponse, HTTP_MAUVAISE_REQUETE, {
+        message: erreur.message,
+      });
+    },
+  ],
+  [
     'ErreurDemandeDevenirAidant',
     (erreur, _, _consignateur, reponse) => {
       construisReponse(reponse, HTTP_MAUVAISE_REQUETE, {
