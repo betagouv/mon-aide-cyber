@@ -6,7 +6,10 @@ import {
   Departement,
   departements,
 } from '../../../gestion-demandes/departements';
-import { secteursActivite } from '../../../espace-aidant/preferences/secteursActivite';
+import {
+  SecteurActivite,
+  secteursActivite,
+} from '../../../espace-aidant/preferences/secteursActivite';
 import {
   Aidant,
   EntiteAidant,
@@ -55,14 +58,23 @@ export class EntrepotAidantPostgres
 
   async rechercheParPreferences(criteres: {
     departement: Departement;
+    secteursActivite: SecteurActivite[];
   }): Promise<Aidant[]> {
     const requete = `
         SELECT id,
-               donnees
-        FROM utilisateurs_mac
-          WHERE donnees -> 'preferences' -> 'departements' @> :departement`;
+               donnees,
+               secteurs_activite
+        FROM utilisateurs_mac,
+                 jsonb_array_elements_text(donnees -> 'preferences' -> 'secteursActivite') as secteurs_activite
+        WHERE donnees -> 'preferences' -> 'departements' @> :departement
+            AND secteurs_activite IN (SELECT jsonb_array_elements_text(:secteursActivite)) `;
+
+    const secteurs = criteres.secteursActivite
+      .map((s) => '"' + s.nom + '"')
+      .join(',');
     const parametres = {
       departement: '["' + criteres.departement.nom + '"]',
+      secteursActivite: '[' + secteurs + ']',
     };
 
     return await this.knex
