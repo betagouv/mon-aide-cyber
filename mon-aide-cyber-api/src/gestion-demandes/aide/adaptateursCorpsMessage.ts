@@ -18,7 +18,7 @@ export type AdaptateurCorpsDeMessageAide = {
 
 const genereCorpsRecapitulatifDemandeAide = (
   aide: DemandeAide,
-  _aidants: Aidant[],
+  aidants: Aidant[],
   relationUtilisateur: string | undefined
 ) => {
   const formateDate = FournisseurHorloge.formateDate(
@@ -30,6 +30,9 @@ const genereCorpsRecapitulatifDemandeAide = (
   const miseEnRelation = relationUtilisateur
     ? '- Est déjà en relation avec un Aidant\n'
     : '';
+  const aidantsQuiMatchent = aidants.map(
+    (a) => `- ${a.nomPrenom} (${a.email})\n`
+  );
   return (
     'Bonjour,\n' +
     '\n' +
@@ -39,7 +42,10 @@ const genereCorpsRecapitulatifDemandeAide = (
     miseEnRelation +
     `- Date de la demande : ${formateDate.date} à ${formateDate.heure}\n` +
     `- Département: ${aide.departement.nom}\n` +
-    raisonSociale
+    raisonSociale +
+    '\n' +
+    `Les Aidants disponibles : \n` +
+    aidantsQuiMatchent
   );
 };
 const adaptateursCorpsMessage: AdaptateurCorpsDeMessageAide = {
