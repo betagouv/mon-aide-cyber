@@ -141,7 +141,7 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
           >({
             identifiant: adaptateurUUID.genereUUID(),
             dateSignatureCGU: FournisseurHorloge.maintenant(),
-            email: email!,
+            email: email!.toLowerCase(),
             nomPrenom: `${prenom} ${nom}`,
             type: 'CommandeCreeEspaceAidant',
             departement: { nom: 'Gironde', code: '33', codeRegion: '75' },
