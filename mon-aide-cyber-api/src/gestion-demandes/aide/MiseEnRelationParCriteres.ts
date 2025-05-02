@@ -21,6 +21,7 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
     const aidants = await this.entrepots.aidants().rechercheParPreferences({
       departement: donneesMiseEnRelation.demandeAide.departement,
       secteursActivite: donneesMiseEnRelation.secteursActivite,
+      typeEntite: donneesMiseEnRelation.typeEntite,
     });
     await envoieRecapitulatifDemandeAide(
       this.adaptateurEnvoiMail,

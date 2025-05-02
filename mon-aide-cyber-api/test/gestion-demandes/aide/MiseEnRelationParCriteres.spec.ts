@@ -6,7 +6,6 @@ import {
   Departement,
   gironde,
 } from '../../../src/gestion-demandes/departements';
-import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
@@ -15,6 +14,12 @@ import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeM
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { DonneesMiseEnRelation } from '../../../src/gestion-demandes/aide/miseEnRelation';
+import {
+  associations,
+  entitesPrivees,
+  entitesPubliques,
+} from '../../../src/espace-aidant/Aidant';
+import { uneDemandeAide } from './ConstructeurDemandeAide';
 
 const cotParDefaut = {
   rechercheEmailParDepartement: (__departement: Departement) => 'cot@email.com',
@@ -43,14 +48,9 @@ describe('Mise en relation par critères', () => {
     );
 
     await miseEnRelation.execute({
-      demandeAide: {
-        identifiant: crypto.randomUUID(),
-        dateSignatureCGU: FournisseurHorloge.maintenant(),
-        email: 'jean-dupont@email.com',
-        departement: gironde,
-        raisonSociale: 'BetaGouv',
-      },
+      demandeAide: uneDemandeAide().construis(),
       secteursActivite: [{ nom: 'Administration' }],
+      typeEntite: entitesPubliques,
       siret: '12345',
     });
 
@@ -78,14 +78,9 @@ describe('Mise en relation par critères', () => {
     );
 
     await miseEnRelation.execute({
-      demandeAide: {
-        identifiant: crypto.randomUUID(),
-        dateSignatureCGU: FournisseurHorloge.maintenant(),
-        email: 'jean-dupont@email.com',
-        departement: gironde,
-        raisonSociale: 'BetaGouv',
-      },
+      demandeAide: uneDemandeAide().construis(),
       secteursActivite: [{ nom: 'Administration' }],
+      typeEntite: entitesPrivees,
       siret: '12345',
     });
 
@@ -103,25 +98,23 @@ describe('Mise en relation par critères', () => {
       const unAidantEnGironde = unAidant()
         .avecUnNomPrenom('Jean DUPONT')
         .avecUnEmail('jean.dupont@email.com')
-        .ayantPourSecteursActivite([{ nom: 'Administration' }])
         .ayantPourDepartements([gironde])
+        .ayantPourSecteursActivite([{ nom: 'Administration' }])
+        .ayantPourTypesEntite([entitesPubliques])
         .construis();
       const unAidantSansDepartement = unAidant()
         .avecUnNomPrenom('Jean DUBOIS')
         .avecUnEmail('jean.dubois@email.com')
         .ayantPourDepartements([allier])
+        .ayantPourSecteursActivite([{ nom: 'Administration' }])
+        .ayantPourTypesEntite([entitesPubliques])
         .construis();
       await entrepots.aidants().persiste(unAidantEnGironde);
       await entrepots.aidants().persiste(unAidantSansDepartement);
       const donneesMiseEnRelation: DonneesMiseEnRelation = {
-        demandeAide: {
-          identifiant: crypto.randomUUID(),
-          dateSignatureCGU: FournisseurHorloge.maintenant(),
-          email: 'jean-dujardin@email.com',
-          departement: gironde,
-          raisonSociale: 'BetaGouv',
-        },
+        demandeAide: uneDemandeAide().dansLeDepartement(gironde).construis(),
         secteursActivite: [{ nom: 'Administration' }],
+        typeEntite: entitesPubliques,
         siret: '12345',
       };
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
@@ -162,26 +155,23 @@ describe('Mise en relation par critères', () => {
           { nom: 'Administration' },
           { nom: 'Agroalimentaire' },
         ])
+        .ayantPourTypesEntite([entitesPubliques])
         .construis();
       const unAidantDansLesTransports = unAidant()
         .avecUnNomPrenom('Jean DUBOIS')
         .avecUnEmail('jean.dubois@email.com')
         .ayantPourDepartements([gironde])
         .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
         .construis();
       await entrepotAidant.persiste(
         unAidantDansLAdministrationEtLAgroalimentaire
       );
       await entrepotAidant.persiste(unAidantDansLesTransports);
       const donneesMiseEnRelation: DonneesMiseEnRelation = {
-        demandeAide: {
-          identifiant: crypto.randomUUID(),
-          dateSignatureCGU: FournisseurHorloge.maintenant(),
-          email: 'jean-dujardin@email.com',
-          departement: gironde,
-          raisonSociale: 'BetaGouv',
-        },
+        demandeAide: uneDemandeAide().dansLeDepartement(gironde).construis(),
         secteursActivite: [{ nom: 'Transports' }],
+        typeEntite: entitesPubliques,
         siret: '12345',
       };
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
@@ -207,6 +197,62 @@ describe('Mise en relation par critères', () => {
         adaptateurEnvoiMail.aEteEnvoyeA(
           'gironde@ssi.gouv.fr',
           'Jean DUBOIS (jean.dubois@email.com)'
+        )
+      ).toBe(true);
+    });
+
+    it("Pour le type d'entité de l'entité Aidée", async () => {
+      const entrepots = new EntrepotsMemoire();
+      const entrepotAidant = entrepots.aidants();
+      const unAidantPourLesAssociationsEtEntitesPrivees = unAidant()
+        .avecUnNomPrenom('Jean DUBOIS')
+        .avecUnEmail('jean.dubois@email.com')
+        .ayantPourDepartements([gironde])
+        .ayantPourSecteursActivite([{ nom: 'Administration' }])
+        .ayantPourTypesEntite([associations, entitesPrivees])
+        .construis();
+      const unAidantPourLesAssociationsEtEntitesPubliques = unAidant()
+        .avecUnNomPrenom('Jean DUPONT')
+        .avecUnEmail('jean.dupont@email.com')
+        .ayantPourDepartements([gironde])
+        .ayantPourSecteursActivite([{ nom: 'Administration' }])
+        .ayantPourTypesEntite([associations, entitesPubliques])
+        .construis();
+      await entrepotAidant.persiste(
+        unAidantPourLesAssociationsEtEntitesPrivees
+      );
+      await entrepotAidant.persiste(
+        unAidantPourLesAssociationsEtEntitesPubliques
+      );
+      const donneesMiseEnRelation: DonneesMiseEnRelation = {
+        demandeAide: uneDemandeAide().dansLeDepartement(gironde).construis(),
+        secteursActivite: [{ nom: 'Administration' }],
+        typeEntite: entitesPubliques,
+        siret: '12345',
+      };
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
+        .recapitulatifDemandeAide(
+          (_aide, aidants, _relationUtilisateur) =>
+            `${aidants[0].nomPrenom} (${aidants[0].email})`
+        )
+        .construis().demande;
+      const annuaireCOT = {
+        rechercheEmailParDepartement: (__departement: Departement) =>
+          'gironde@ssi.gouv.fr',
+      };
+
+      const miseEnRelation = new MiseEnRelationParCriteres(
+        adaptateurEnvoiMail,
+        annuaireCOT,
+        entrepots
+      );
+      await miseEnRelation.execute(donneesMiseEnRelation);
+
+      expect(
+        adaptateurEnvoiMail.aEteEnvoyeA(
+          'gironde@ssi.gouv.fr',
+          'Jean DUPONT (jean.dupont@email.com)'
         )
       ).toBe(true);
     });

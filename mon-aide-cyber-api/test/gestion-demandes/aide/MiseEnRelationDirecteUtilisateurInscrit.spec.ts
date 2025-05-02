@@ -7,6 +7,7 @@ import { gironde } from '../../../src/gestion-demandes/departements';
 import crypto from 'crypto';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { MiseEnRelationDirecteUtilisateurInscrit } from '../../../src/gestion-demandes/aide/MiseEnRelationDirecteUtilisateurInscrit';
+import { entitesPubliques } from '../../../src/espace-aidant/Aidant';
 
 describe('Mise en relation directe avec un Utilisateur Inscrit', () => {
   it('N’envoie pas de email au COT', async () => {
@@ -31,6 +32,7 @@ describe('Mise en relation directe avec un Utilisateur Inscrit', () => {
         dateSignatureCGU: FournisseurHorloge.maintenant(),
       },
       secteursActivite: [{ nom: 'Administration' }],
+      typeEntite: entitesPubliques,
       siret: '12345',
     });
 
