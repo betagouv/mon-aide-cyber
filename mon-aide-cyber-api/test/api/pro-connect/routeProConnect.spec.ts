@@ -262,6 +262,29 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         expect(aidantTrouve!.siret).toStrictEqual('12345');
       });
 
+      it("Si l'utilisateur n'est pas connu, on crée un espace Aidant avec le mail en minuscule", async () => {
+        const aidant = unAidant()
+          .avecUnEmail('Jean.Pierre@yomail.com')
+          .construis();
+        testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+          async () =>
+            desInformationsUtilisateur()
+              .pourUnAidant(aidant)
+              .avecUnSiret('12345')
+              .construis();
+
+        await executeRequete(
+          donneesServeur.app,
+          'GET',
+          '/pro-connect/apres-authentification'
+        );
+
+        const aidantTrouve = await unServiceAidant(
+          testeurMAC.entrepots.aidants()
+        ).rechercheParMail('jean.pierre@yomail.com');
+        expect(aidantTrouve).toBeDefined();
+      });
+
       it("À l'issue de la création de l'espace Aidant, l'utilisateur est redirigé vers la validation des CGU", async () => {
         const aidant = unAidant()
           .avecUnEmail('jean.dujardin@mail.com')
