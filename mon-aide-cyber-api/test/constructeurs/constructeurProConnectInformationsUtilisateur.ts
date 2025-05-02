@@ -29,6 +29,11 @@ class ConstructeurProConnectInformationsUtilisateur
     return this;
   }
 
+  avecLeMail(email: string): ConstructeurProConnectInformationsUtilisateur {
+    this.email = email;
+    return this;
+  }
+
   construis(): InformationsUtilisateur {
     return {
       prenom: this.prenom,

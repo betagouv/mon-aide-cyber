@@ -158,7 +158,7 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
           EspaceUtilisateurInscritCree
         >({
           identifiant: adaptateurUUID.genereUUID(),
-          email: email!,
+          email: email!.toLowerCase(),
           nomPrenom: `${prenom} ${nom}`,
           type: 'CommandeCreerEspaceUtilisateurInscrit',
           ...(siret && { siret: siret }),
