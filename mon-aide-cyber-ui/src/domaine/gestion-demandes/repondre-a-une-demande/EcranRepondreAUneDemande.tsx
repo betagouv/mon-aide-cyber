@@ -3,6 +3,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { Departement } from '../departement.ts';
 import { RepondreALaDemande } from './composants/RepondreALaDemande.tsx';
 import { ConfirmationReponseALaDemande } from './composants/ConfirmationReponseALaDemande.tsx';
+import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
+import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 
 export type DemandeAide = {
   dateCreation: string;
@@ -27,7 +29,7 @@ type ProprietesEcransAvecToken = {
 export const EcranRepondreAUneDemande = ({
   token,
 }: ProprietesEcransAvecToken) => {
-  console.log('le token', token);
+  const macAPI = useMACAPI();
 
   const { data: demandeAide } = useQuery({
     enabled: !!token,
@@ -37,8 +39,17 @@ export const EcranRepondreAUneDemande = ({
 
   const { mutate, isSuccess } = useMutation({
     mutationKey: ['repondre-a-une-demande'],
-    mutationFn: (__token: string) => {
-      return Promise.resolve();
+    mutationFn: async (token: string) => {
+      return await macAPI.execute<any, any, { token: string }>(
+        constructeurParametresAPI<{ token: string }>()
+          .url('/api/aidant/repondre-a-une-demande')
+          .methode('POST')
+          .corps({
+            token,
+          })
+          .construis(),
+        (reponse) => reponse
+      );
     },
   });
 
