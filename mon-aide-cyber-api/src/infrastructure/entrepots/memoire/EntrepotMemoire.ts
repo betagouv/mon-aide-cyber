@@ -71,6 +71,7 @@ import {
   StatistiquesUtilisateurInscrit,
 } from '../../../statistiques/utilisateur-inscrit/StatistiquesUtilisateurInscrit';
 import { Departement } from '../../../gestion-demandes/departements';
+import { SecteurActivite } from '../../../espace-aidant/preferences/secteursActivite';
 
 export class EntrepotMemoire<T extends Aggregat>
   implements EntrepotEcriture<T>
@@ -137,14 +138,20 @@ export class EntrepotAidantMemoire
 {
   rechercheParPreferences(criteres: {
     departement: Departement;
+    secteursActivite: SecteurActivite[];
   }): Promise<Aidant[]> {
-    const aidantsTrouve = Array.from(this.entites.values()).filter((aidant) =>
-      aidant.preferences.departements.some(
+    const aidantsTrouve = Array.from(this.entites.values()).filter((aidant) => {
+      const departementMatche = aidant.preferences.departements.some(
         (d) => d.code === criteres.departement.code
-      )
-    );
+      );
+      const secteursActiviteMatchent = aidant.preferences.secteursActivite.some(
+        (s) => criteres.secteursActivite.map((s) => s.nom).includes(s.nom)
+      );
+      return departementMatche && secteursActiviteMatchent;
+    });
     return Promise.resolve(aidantsTrouve);
   }
+
   rechercheParEmail(email: string): Promise<Aidant> {
     const aidantTrouve = Array.from(this.entites.values()).find(
       (aidant) => aidant.email === email

@@ -50,6 +50,7 @@ describe('Mise en relation par critères', () => {
         departement: gironde,
         raisonSociale: 'BetaGouv',
       },
+      secteursActivite: [{ nom: 'Administration' }],
       siret: '12345',
     });
 
@@ -84,6 +85,7 @@ describe('Mise en relation par critères', () => {
         departement: gironde,
         raisonSociale: 'BetaGouv',
       },
+      secteursActivite: [{ nom: 'Administration' }],
       siret: '12345',
     });
 
@@ -95,55 +97,118 @@ describe('Mise en relation par critères', () => {
     ).toBe(true);
   });
 
-  it("Les Aidants du département de la demande d'aide matchent", async () => {
-    const entrepots = new EntrepotsMemoire();
-    const entrepotAidant = entrepots.aidants();
-    const unAidantEnGironde = unAidant()
-      .avecUnNomPrenom('Jean DUPONT')
-      .avecUnEmail('jean.dupont@email.com')
-      .ayantPourDepartements([gironde])
-      .construis();
-    const unAidantSansDepartement = unAidant()
-      .avecUnNomPrenom('Jean DUBOIS')
-      .avecUnEmail('jean.dubois@email.com')
-      .ayantPourDepartements([allier])
-      .construis();
-    await entrepotAidant.persiste(unAidantEnGironde);
-    await entrepotAidant.persiste(unAidantSansDepartement);
-    const donneesMiseEnRelation: DonneesMiseEnRelation = {
-      demandeAide: {
-        identifiant: crypto.randomUUID(),
-        dateSignatureCGU: FournisseurHorloge.maintenant(),
-        email: 'jean-dujardin@email.com',
-        departement: gironde,
-        raisonSociale: 'BetaGouv',
-      },
-      siret: '12345',
-    };
-    const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-    adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
-      .recapitulatifDemandeAide(
-        (_aide, aidants, _relationUtilisateur) =>
-          `${aidants[0].nomPrenom} (${aidants[0].email})`
-      )
-      .construis().demande;
-    const annuaireCOT = {
-      rechercheEmailParDepartement: (__departement: Departement) =>
-        'gironde@ssi.gouv.fr',
-    };
+  describe('Matching des Aidants', () => {
+    it("Pour le département de l'entité Aidée", async () => {
+      const entrepots = new EntrepotsMemoire();
+      const unAidantEnGironde = unAidant()
+        .avecUnNomPrenom('Jean DUPONT')
+        .avecUnEmail('jean.dupont@email.com')
+        .ayantPourSecteursActivite([{ nom: 'Administration' }])
+        .ayantPourDepartements([gironde])
+        .construis();
+      const unAidantSansDepartement = unAidant()
+        .avecUnNomPrenom('Jean DUBOIS')
+        .avecUnEmail('jean.dubois@email.com')
+        .ayantPourDepartements([allier])
+        .construis();
+      await entrepots.aidants().persiste(unAidantEnGironde);
+      await entrepots.aidants().persiste(unAidantSansDepartement);
+      const donneesMiseEnRelation: DonneesMiseEnRelation = {
+        demandeAide: {
+          identifiant: crypto.randomUUID(),
+          dateSignatureCGU: FournisseurHorloge.maintenant(),
+          email: 'jean-dujardin@email.com',
+          departement: gironde,
+          raisonSociale: 'BetaGouv',
+        },
+        secteursActivite: [{ nom: 'Administration' }],
+        siret: '12345',
+      };
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
+        .recapitulatifDemandeAide(
+          (_aide, aidants, _relationUtilisateur) =>
+            `${aidants[0].nomPrenom} (${aidants[0].email})`
+        )
+        .construis().demande;
+      const annuaireCOT = {
+        rechercheEmailParDepartement: (__departement: Departement) =>
+          'gironde@ssi.gouv.fr',
+      };
 
-    const miseEnRelation = new MiseEnRelationParCriteres(
-      adaptateurEnvoiMail,
-      annuaireCOT,
-      entrepots
-    );
-    await miseEnRelation.execute(donneesMiseEnRelation);
+      const miseEnRelation = new MiseEnRelationParCriteres(
+        adaptateurEnvoiMail,
+        annuaireCOT,
+        entrepots
+      );
+      await miseEnRelation.execute(donneesMiseEnRelation);
 
-    expect(
-      adaptateurEnvoiMail.aEteEnvoyeA(
-        'gironde@ssi.gouv.fr',
-        'Jean DUPONT (jean.dupont@email.com)'
-      )
-    ).toBe(true);
+      expect(
+        adaptateurEnvoiMail.aEteEnvoyeA(
+          'gironde@ssi.gouv.fr',
+          'Jean DUPONT (jean.dupont@email.com)'
+        )
+      ).toBe(true);
+    });
+
+    it("Pour le secteur d'activité de l'entité Aidée", async () => {
+      const entrepots = new EntrepotsMemoire();
+      const entrepotAidant = entrepots.aidants();
+      const unAidantDansLAdministrationEtLAgroalimentaire = unAidant()
+        .avecUnNomPrenom('Jean DUPONT')
+        .avecUnEmail('jean.dupont@email.com')
+        .ayantPourDepartements([gironde])
+        .ayantPourSecteursActivite([
+          { nom: 'Administration' },
+          { nom: 'Agroalimentaire' },
+        ])
+        .construis();
+      const unAidantDansLesTransports = unAidant()
+        .avecUnNomPrenom('Jean DUBOIS')
+        .avecUnEmail('jean.dubois@email.com')
+        .ayantPourDepartements([gironde])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .construis();
+      await entrepotAidant.persiste(
+        unAidantDansLAdministrationEtLAgroalimentaire
+      );
+      await entrepotAidant.persiste(unAidantDansLesTransports);
+      const donneesMiseEnRelation: DonneesMiseEnRelation = {
+        demandeAide: {
+          identifiant: crypto.randomUUID(),
+          dateSignatureCGU: FournisseurHorloge.maintenant(),
+          email: 'jean-dujardin@email.com',
+          departement: gironde,
+          raisonSociale: 'BetaGouv',
+        },
+        secteursActivite: [{ nom: 'Transports' }],
+        siret: '12345',
+      };
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
+        .recapitulatifDemandeAide(
+          (_aide, aidants, _relationUtilisateur) =>
+            `${aidants[0].nomPrenom} (${aidants[0].email})`
+        )
+        .construis().demande;
+      const annuaireCOT = {
+        rechercheEmailParDepartement: (__departement: Departement) =>
+          'gironde@ssi.gouv.fr',
+      };
+
+      const miseEnRelation = new MiseEnRelationParCriteres(
+        adaptateurEnvoiMail,
+        annuaireCOT,
+        entrepots
+      );
+      await miseEnRelation.execute(donneesMiseEnRelation);
+
+      expect(
+        adaptateurEnvoiMail.aEteEnvoyeA(
+          'gironde@ssi.gouv.fr',
+          'Jean DUBOIS (jean.dubois@email.com)'
+        )
+      ).toBe(true);
+    });
   });
 });

@@ -85,6 +85,7 @@ export interface EntrepotAidant extends EntrepotEcriture<Aidant> {
 
   rechercheParPreferences(criteres: {
     departement: Departement;
+    secteursActivite: SecteurActivite[];
   }): Promise<Aidant[]>;
 }
 
