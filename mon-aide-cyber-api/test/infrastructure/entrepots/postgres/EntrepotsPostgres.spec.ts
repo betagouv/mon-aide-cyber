@@ -841,6 +841,30 @@ describe('Entrepot Aidant', () => {
       expect(aidants).toStrictEqual<Aidant[]>([aidant]);
     });
   });
+
+  describe('Recherche par critères', () => {
+    it('par département', async () => {
+      const departement = gironde;
+      const premierAidantEnGironde = unAidant()
+        .ayantPourDepartements([gironde])
+        .construis();
+      const secondAidantEnAllier = unAidant()
+        .ayantPourDepartements([allier])
+        .construis();
+      const entrepotAidant = new EntrepotAidantPostgres(
+        new ServiceDeChiffrementClair()
+      );
+      await entrepotAidant.persiste(premierAidantEnGironde);
+      await entrepotAidant.persiste(secondAidantEnAllier);
+
+      const aidantsTrouvesEnGironde =
+        await entrepotAidant.rechercheParPreferences({ departement });
+
+      expect(aidantsTrouvesEnGironde).toStrictEqual<Aidant[]>([
+        premierAidantEnGironde,
+      ]);
+    });
+  });
 });
 
 describe('EntrepotStatistiquesAidant', () => {
