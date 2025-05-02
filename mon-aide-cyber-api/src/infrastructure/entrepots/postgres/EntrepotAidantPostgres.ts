@@ -13,6 +13,9 @@ import {
 import {
   Aidant,
   EntiteAidant,
+  EntitesAssociations,
+  EntitesEntreprisesPrivees,
+  EntitesOrganisationsPubliques,
   EntrepotAidant,
   TypeEntite,
   typesEntites,
@@ -59,6 +62,10 @@ export class EntrepotAidantPostgres
   async rechercheParPreferences(criteres: {
     departement: Departement;
     secteursActivite: SecteurActivite[];
+    typeEntite:
+      | EntitesOrganisationsPubliques
+      | EntitesEntreprisesPrivees
+      | EntitesAssociations;
   }): Promise<Aidant[]> {
     const requete = `
         SELECT id,
@@ -67,7 +74,8 @@ export class EntrepotAidantPostgres
         FROM utilisateurs_mac,
                  jsonb_array_elements_text(donnees -> 'preferences' -> 'secteursActivite') as secteurs_activite
         WHERE donnees -> 'preferences' -> 'departements' @> :departement
-            AND secteurs_activite IN (SELECT jsonb_array_elements_text(:secteursActivite)) `;
+            AND secteurs_activite IN (SELECT jsonb_array_elements_text(:secteursActivite))
+            AND donnees -> 'preferences' -> 'typesEntites' @> :typeEntite`;
 
     const secteurs = criteres.secteursActivite
       .map((s) => '"' + s.nom + '"')
@@ -75,6 +83,7 @@ export class EntrepotAidantPostgres
     const parametres = {
       departement: '["' + criteres.departement.nom + '"]',
       secteursActivite: '[' + secteurs + ']',
+      typeEntite: '["' + criteres.typeEntite.nom + '"]',
     };
 
     return await this.knex
