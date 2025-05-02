@@ -32,6 +32,9 @@ import {
 } from '../../../authentification/Utilisateur';
 import {
   Aidant,
+  EntitesAssociations,
+  EntitesEntreprisesPrivees,
+  EntitesOrganisationsPubliques,
   EntrepotAidant,
   estSiretGendarmerie,
 } from '../../../espace-aidant/Aidant';
@@ -139,6 +142,10 @@ export class EntrepotAidantMemoire
   rechercheParPreferences(criteres: {
     departement: Departement;
     secteursActivite: SecteurActivite[];
+    typeEntite:
+      | EntitesOrganisationsPubliques
+      | EntitesEntreprisesPrivees
+      | EntitesAssociations;
   }): Promise<Aidant[]> {
     const aidantsTrouve = Array.from(this.entites.values()).filter((aidant) => {
       const departementMatche = aidant.preferences.departements.some(
@@ -147,7 +154,10 @@ export class EntrepotAidantMemoire
       const secteursActiviteMatchent = aidant.preferences.secteursActivite.some(
         (s) => criteres.secteursActivite.map((s) => s.nom).includes(s.nom)
       );
-      return departementMatche && secteursActiviteMatchent;
+      const typeEntiteMatche = aidant.preferences.typesEntites.some(
+        (t) => t.nom === criteres.typeEntite.nom
+      );
+      return departementMatche && secteursActiviteMatchent && typeEntiteMatche;
     });
     return Promise.resolve(aidantsTrouve);
   }

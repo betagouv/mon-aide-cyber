@@ -57,7 +57,7 @@ export const envoieRecapitulatifDemandeAide = async (
 export type DonneesMiseEnRelation = {
   demandeAide: DemandeAide;
   siret: string;
-  typeEntite?:
+  typeEntite:
     | EntitesOrganisationsPubliques
     | EntitesEntreprisesPrivees
     | EntitesAssociations;

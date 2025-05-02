@@ -15,7 +15,7 @@ import { unUtilisateurMAC } from '../../constructeurs/constructeurUtilisateurMac
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
-import { Aidant } from '../../../src/espace-aidant/Aidant';
+import { Aidant, entitesPubliques } from '../../../src/espace-aidant/Aidant';
 
 const cotParDefaut = {
   rechercheEmailParDepartement: (__departement: Departement) => 'cot@email.com',
@@ -54,6 +54,7 @@ describe('Mise en relation directe avec un Aidant', () => {
         email: 'jean-dupont@email.com',
       },
       secteursActivite: [{ nom: 'Administration' }],
+      typeEntite: entitesPubliques,
       siret: '123456',
     });
 
@@ -93,6 +94,7 @@ describe('Mise en relation directe avec un Aidant', () => {
         email: 'jean-dupont@email.com',
       },
       secteursActivite: [{ nom: 'Administration' }],
+      typeEntite: entitesPubliques,
       siret: '12345',
     });
 
@@ -142,6 +144,7 @@ describe('Mise en relation directe avec un Aidant', () => {
         raisonSociale: 'BetaGouv',
       },
       secteursActivite: [{ nom: 'Administration' }],
+      typeEntite: entitesPubliques,
       siret: '123456',
     });
 

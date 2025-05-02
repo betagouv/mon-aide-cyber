@@ -34,6 +34,11 @@ class ConstructeurDemandeAide implements Constructeur<DemandeAide> {
     return this;
   }
 
+  dansLeDepartement(departement: Departement): ConstructeurDemandeAide {
+    this.departement = departement;
+    return this;
+  }
+
   incomplete(): ConstructeurDemandeAide {
     this.demandeIncomplete = true;
     return this;
@@ -41,11 +46,6 @@ class ConstructeurDemandeAide implements Constructeur<DemandeAide> {
 
   avecUnEmail(email: string): ConstructeurDemandeAide {
     this.email = email;
-    return this;
-  }
-
-  dansLeDepartement(departement: Departement): ConstructeurDemandeAide {
-    this.departement = departement;
     return this;
   }
 }
