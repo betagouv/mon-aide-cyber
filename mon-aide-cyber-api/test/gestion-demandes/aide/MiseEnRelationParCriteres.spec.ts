@@ -2,6 +2,7 @@ import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/Fournisse
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import { MiseEnRelationParCriteres } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
 import {
+  allier,
   Departement,
   gironde,
 } from '../../../src/gestion-demandes/departements';
@@ -11,6 +12,9 @@ import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvi
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { adaptateursCorpsMessage } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
 import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
+import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import { DonneesMiseEnRelation } from '../../../src/gestion-demandes/aide/miseEnRelation';
 
 const cotParDefaut = {
   rechercheEmailParDepartement: (__departement: Departement) => 'cot@email.com',
@@ -34,7 +38,8 @@ describe('Mise en relation par critères', () => {
     const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
     const miseEnRelation = new MiseEnRelationParCriteres(
       adaptateurEnvoiMail,
-      cotParDefaut
+      cotParDefaut,
+      new EntrepotsMemoire()
     );
 
     await miseEnRelation.execute({
@@ -67,7 +72,8 @@ describe('Mise en relation par critères', () => {
     };
     const miseEnRelation = new MiseEnRelationParCriteres(
       adaptateurEnvoiMail,
-      annuaireCOT
+      annuaireCOT,
+      new EntrepotsMemoire()
     );
 
     await miseEnRelation.execute({
@@ -85,6 +91,58 @@ describe('Mise en relation par critères', () => {
       adaptateurEnvoiMail.aEteEnvoyeA(
         'gironde@ssi.gouv.fr',
         'Bonjour une entité a fait une demande d’aide'
+      )
+    ).toBe(true);
+  });
+
+  it("Les Aidants du département de la demande d'aide matchent", async () => {
+    const entrepots = new EntrepotsMemoire();
+    const entrepotAidant = entrepots.aidants();
+    const unAidantEnGironde = unAidant()
+      .avecUnNomPrenom('Jean DUPONT')
+      .avecUnEmail('jean.dupont@email.com')
+      .ayantPourDepartements([gironde])
+      .construis();
+    const unAidantSansDepartement = unAidant()
+      .avecUnNomPrenom('Jean DUBOIS')
+      .avecUnEmail('jean.dubois@email.com')
+      .ayantPourDepartements([allier])
+      .construis();
+    await entrepotAidant.persiste(unAidantEnGironde);
+    await entrepotAidant.persiste(unAidantSansDepartement);
+    const donneesMiseEnRelation: DonneesMiseEnRelation = {
+      demandeAide: {
+        identifiant: crypto.randomUUID(),
+        dateSignatureCGU: FournisseurHorloge.maintenant(),
+        email: 'jean-dujardin@email.com',
+        departement: gironde,
+        raisonSociale: 'BetaGouv',
+      },
+      siret: '12345',
+    };
+    const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+    adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
+      .recapitulatifDemandeAide(
+        (_aide, aidants, _relationUtilisateur) =>
+          `${aidants[0].nomPrenom} (${aidants[0].email})`
+      )
+      .construis().demande;
+    const annuaireCOT = {
+      rechercheEmailParDepartement: (__departement: Departement) =>
+        'gironde@ssi.gouv.fr',
+    };
+
+    const miseEnRelation = new MiseEnRelationParCriteres(
+      adaptateurEnvoiMail,
+      annuaireCOT,
+      entrepots
+    );
+    await miseEnRelation.execute(donneesMiseEnRelation);
+
+    expect(
+      adaptateurEnvoiMail.aEteEnvoyeA(
+        'gironde@ssi.gouv.fr',
+        'Jean DUPONT (jean.dupont@email.com)'
       )
     ).toBe(true);
   });

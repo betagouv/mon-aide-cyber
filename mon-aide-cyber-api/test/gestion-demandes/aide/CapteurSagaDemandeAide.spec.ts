@@ -554,10 +554,14 @@ class FabriqueDeMiseEnRelationEcoutee extends FabriqueMiseEnRelationConcrete {
   public miseEnRelationPromise: MiseEnRelation | undefined = undefined;
 
   constructor() {
-    super(new AdaptateurEnvoiMailMemoire(), {
-      rechercheEmailParDepartement: (__departement: Departement) =>
-        'cot@email.com',
-    });
+    super(
+      new AdaptateurEnvoiMailMemoire(),
+      {
+        rechercheEmailParDepartement: (__departement: Departement) =>
+          'cot@email.com',
+      },
+      new EntrepotsMemoire()
+    );
   }
 
   fabrique(utilisateurMac: UtilisateurMACDTO | undefined): MiseEnRelation {

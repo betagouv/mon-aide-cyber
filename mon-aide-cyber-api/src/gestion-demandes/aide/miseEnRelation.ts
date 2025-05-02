@@ -9,10 +9,12 @@ import { MiseEnRelationParCriteres } from './MiseEnRelationParCriteres';
 import { MiseEnRelationDirecteUtilisateurInscrit } from './MiseEnRelationDirecteUtilisateurInscrit';
 import { SecteurActivite } from '../../espace-aidant/preferences/secteursActivite';
 import {
+  Aidant,
   EntitesAssociations,
   EntitesEntreprisesPrivees,
   EntitesOrganisationsPubliques,
 } from '../../espace-aidant/Aidant';
+import { Entrepots } from '../../domaine/Entrepots';
 
 export const envoieConfirmationDemandeAide = async (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
@@ -33,6 +35,7 @@ export const envoieConfirmationDemandeAide = async (
 export const envoieRecapitulatifDemandeAide = async (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
   aide: DemandeAide,
+  aidants: Aidant[],
   relationUtilisateur: string | undefined,
   annuaireCOT: {
     rechercheEmailParDepartement: (departement: Departement) => string;
@@ -47,7 +50,7 @@ export const envoieRecapitulatifDemandeAide = async (
     corps: adaptateursCorpsMessage
       .demande()
       .recapitulatifDemandeAide()
-      .genereCorpsMessage(aide, relationUtilisateur),
+      .genereCorpsMessage(aide, aidants, relationUtilisateur),
   });
 };
 
@@ -74,7 +77,8 @@ export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
     private readonly annuaireCOT: {
       rechercheEmailParDepartement: (departement: Departement) => string;
-    }
+    },
+    private readonly entrepots: Entrepots
   ) {}
 
   fabrique(utilisateurMac: UtilisateurMACDTO | undefined): MiseEnRelation {
@@ -98,7 +102,8 @@ export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
 
     return new MiseEnRelationParCriteres(
       this.adaptateurEnvoiMail,
-      this.annuaireCOT
+      this.annuaireCOT,
+      this.entrepots
     );
   }
 }
@@ -107,6 +112,11 @@ export const fabriqueMiseEnRelation = (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
   annuaireCOT: {
     rechercheEmailParDepartement: (departement: Departement) => string;
-  }
+  },
+  entrepots: Entrepots
 ): FabriqueMiseEnRelation =>
-  new FabriqueMiseEnRelationConcrete(adaptateurEnvoiMail, annuaireCOT);
+  new FabriqueMiseEnRelationConcrete(
+    adaptateurEnvoiMail,
+    annuaireCOT,
+    entrepots
+  );
