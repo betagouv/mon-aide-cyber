@@ -82,6 +82,10 @@ export type Aidant = Aggregat & {
 
 export interface EntrepotAidant extends EntrepotEcriture<Aidant> {
   rechercheParEmail(email: string): Promise<Aidant>;
+
+  rechercheParPreferences(criteres: {
+    departement: Departement;
+  }): Promise<Aidant[]>;
 }
 
 export class ErreurCreationEspaceAidant extends Error {

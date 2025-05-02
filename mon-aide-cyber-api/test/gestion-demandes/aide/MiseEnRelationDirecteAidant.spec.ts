@@ -15,6 +15,7 @@ import { unUtilisateurMAC } from '../../constructeurs/constructeurUtilisateurMac
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
+import { Aidant } from '../../../src/espace-aidant/Aidant';
 
 const cotParDefaut = {
   rechercheEmailParDepartement: (__departement: Departement) => 'cot@email.com',
@@ -104,7 +105,11 @@ describe('Mise en relation directe avec un Aidant', () => {
   it('Envoie un email de demande d’aide au COT en prenant en compte la relation existante avec un Aidant', async () => {
     adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
       .recapitulatifDemandeAide(
-        (_aide: DemandeAide, relationUtilisateur: string | undefined) =>
+        (
+          _aide: DemandeAide,
+          _aidants: Aidant[],
+          relationUtilisateur: string | undefined
+        ) =>
           `Bonjour une entité a fait une demande d’aide, relation Aidant : ${relationUtilisateur}`
       )
       .construis().demande;

@@ -2,7 +2,10 @@ import { DTO, EntrepotEcriturePostgres, Predicat } from './EntrepotPostgres';
 
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
-import { departements } from '../../../gestion-demandes/departements';
+import {
+  Departement,
+  departements,
+} from '../../../gestion-demandes/departements';
 import { secteursActivite } from '../../../espace-aidant/preferences/secteursActivite';
 import {
   Aidant,
@@ -48,6 +51,12 @@ export class EntrepotAidantPostgres
 {
   constructor(private readonly chiffrement: ServiceDeChiffrement) {
     super();
+  }
+
+  rechercheParPreferences(_criteres: {
+    departement: Departement;
+  }): Promise<Aidant[]> {
+    throw new Error('Method not implemented.');
   }
 
   protected champsAMettreAJour(aidantDTO: AidantDTO): Partial<AidantDTO> {

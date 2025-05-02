@@ -21,6 +21,7 @@ export class MiseEnRelationDirecteAidant implements MiseEnRelation {
     await envoieRecapitulatifDemandeAide(
       this.adaptateurEnvoiMail,
       donneesMiseEnRelation.demandeAide,
+      [],
       this.aidant.email,
       this.annuaireCOT
     );

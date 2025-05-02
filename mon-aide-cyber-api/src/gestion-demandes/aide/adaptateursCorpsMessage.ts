@@ -1,10 +1,12 @@
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { DemandeAide } from './DemandeAide';
+import { Aidant } from '../../espace-aidant/Aidant';
 
 export type MessagesDemande = {
   recapitulatifDemandeAide: () => {
     genereCorpsMessage: (
       aide: DemandeAide,
+      aidants: Aidant[],
       relationUtilisateur: string | undefined
     ) => string;
   };
@@ -16,6 +18,7 @@ export type AdaptateurCorpsDeMessageAide = {
 
 const genereCorpsRecapitulatifDemandeAide = (
   aide: DemandeAide,
+  _aidants: Aidant[],
   relationUtilisateur: string | undefined
 ) => {
   const formateDate = FournisseurHorloge.formateDate(
@@ -42,8 +45,8 @@ const genereCorpsRecapitulatifDemandeAide = (
 const adaptateursCorpsMessage: AdaptateurCorpsDeMessageAide = {
   demande: (): MessagesDemande => ({
     recapitulatifDemandeAide: () => ({
-      genereCorpsMessage: (aide, relationUtilisateur): string =>
-        genereCorpsRecapitulatifDemandeAide(aide, relationUtilisateur),
+      genereCorpsMessage: (aide, aidants, relationUtilisateur): string =>
+        genereCorpsRecapitulatifDemandeAide(aide, aidants, relationUtilisateur),
     }),
   }),
 };
