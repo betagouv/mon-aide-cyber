@@ -386,6 +386,27 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
             await testeurMAC.entrepots.utilisateursInscrits().tous()
           ).toHaveLength(1);
         });
+
+        it('Crée un compte en mettant le mail en minuscule', async () => {
+          testeurMAC.adaptateurProConnect.recupereInformationsUtilisateur =
+            async () =>
+              desInformationsUtilisateur()
+                .avecLeMail('Jean.DuponT@email.com')
+                .construis();
+
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'GET',
+            '/pro-connect/apres-authentification'
+          );
+
+          expect(reponse.headers['location']).toStrictEqual(
+            '/mon-espace/valide-signature-cgu'
+          );
+          expect(
+            (await testeurMAC.entrepots.utilisateursInscrits().tous())[0].email
+          ).toBe('jean.dupont@email.com');
+        });
       });
     });
   });
