@@ -847,6 +847,7 @@ describe('Entrepot Aidant', () => {
       const departement = gironde;
       const premierAidantEnGironde = unAidant()
         .ayantPourDepartements([gironde])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
         .construis();
       const secondAidantEnAllier = unAidant()
         .ayantPourDepartements([allier])
@@ -858,10 +859,42 @@ describe('Entrepot Aidant', () => {
       await entrepotAidant.persiste(secondAidantEnAllier);
 
       const aidantsTrouvesEnGironde =
-        await entrepotAidant.rechercheParPreferences({ departement });
+        await entrepotAidant.rechercheParPreferences({
+          departement,
+          secteursActivite: [{ nom: 'Transports' }],
+        });
 
       expect(aidantsTrouvesEnGironde).toStrictEqual<Aidant[]>([
         premierAidantEnGironde,
+      ]);
+    });
+
+    it("par secteur d'activité", async () => {
+      const premierAidantDansLadministration = unAidant()
+        .ayantPourDepartements([gironde])
+        .ayantPourSecteursActivite([{ nom: 'Administration' }])
+        .construis();
+      const secondAidantLesTransports = unAidant()
+        .ayantPourDepartements([gironde])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .construis();
+      const entrepotAidant = new EntrepotAidantPostgres(
+        new ServiceDeChiffrementClair()
+      );
+      await entrepotAidant.persiste(premierAidantDansLadministration);
+      await entrepotAidant.persiste(secondAidantLesTransports);
+
+      const aidantsTrouvesDansLadministration =
+        await entrepotAidant.rechercheParPreferences({
+          departement: gironde,
+          secteursActivite: [
+            { nom: 'Administration' },
+            { nom: 'Agriculture, sylviculture' },
+          ],
+        });
+
+      expect(aidantsTrouvesDansLadministration).toStrictEqual<Aidant[]>([
+        premierAidantDansLadministration,
       ]);
     });
   });
