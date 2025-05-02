@@ -53,10 +53,23 @@ export class EntrepotAidantPostgres
     super();
   }
 
-  rechercheParPreferences(_criteres: {
+  async rechercheParPreferences(criteres: {
     departement: Departement;
   }): Promise<Aidant[]> {
-    throw new Error('Method not implemented.');
+    const requete = `
+        SELECT id,
+               donnees
+        FROM utilisateurs_mac
+          WHERE donnees -> 'preferences' -> 'departements' @> :departement`;
+    const parametres = {
+      departement: '["' + criteres.departement.nom + '"]',
+    };
+
+    return await this.knex
+      .raw(requete, parametres)
+      .then(({ rows }: { rows: AidantDTO[] }) =>
+        rows.map((r) => this.deDTOAEntite(r))
+      );
   }
 
   protected champsAMettreAJour(aidantDTO: AidantDTO): Partial<AidantDTO> {
