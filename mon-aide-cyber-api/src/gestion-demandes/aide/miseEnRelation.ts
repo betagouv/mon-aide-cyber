@@ -61,7 +61,7 @@ export type DonneesMiseEnRelation = {
     | EntitesOrganisationsPubliques
     | EntitesEntreprisesPrivees
     | EntitesAssociations;
-  secteursActivite?: SecteurActivite[];
+  secteursActivite: SecteurActivite[];
 };
 
 export interface MiseEnRelation {

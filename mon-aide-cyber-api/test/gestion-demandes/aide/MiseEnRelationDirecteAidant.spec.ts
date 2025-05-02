@@ -53,6 +53,7 @@ describe('Mise en relation directe avec un Aidant', () => {
         raisonSociale: '',
         email: 'jean-dupont@email.com',
       },
+      secteursActivite: [{ nom: 'Administration' }],
       siret: '123456',
     });
 
@@ -91,6 +92,7 @@ describe('Mise en relation directe avec un Aidant', () => {
         raisonSociale: '',
         email: 'jean-dupont@email.com',
       },
+      secteursActivite: [{ nom: 'Administration' }],
       siret: '12345',
     });
 
@@ -139,6 +141,7 @@ describe('Mise en relation directe avec un Aidant', () => {
         departement: gironde,
         raisonSociale: 'BetaGouv',
       },
+      secteursActivite: [{ nom: 'Administration' }],
       siret: '123456',
     });
 

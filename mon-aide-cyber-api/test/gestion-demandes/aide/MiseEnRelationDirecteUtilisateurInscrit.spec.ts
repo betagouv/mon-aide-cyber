@@ -30,6 +30,7 @@ describe('Mise en relation directe avec un Utilisateur Inscrit', () => {
         identifiant: crypto.randomUUID(),
         dateSignatureCGU: FournisseurHorloge.maintenant(),
       },
+      secteursActivite: [{ nom: 'Administration' }],
       siret: '12345',
     });
 

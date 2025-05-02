@@ -20,6 +20,7 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
   async execute(donneesMiseEnRelation: DonneesMiseEnRelation): Promise<void> {
     const aidants = await this.entrepots.aidants().rechercheParPreferences({
       departement: donneesMiseEnRelation.demandeAide.departement,
+      secteursActivite: donneesMiseEnRelation.secteursActivite,
     });
     await envoieRecapitulatifDemandeAide(
       this.adaptateurEnvoiMail,
