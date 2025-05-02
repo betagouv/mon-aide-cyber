@@ -21,6 +21,12 @@ export class ErreurUtilisateurMACInconnu extends Error {
   }
 }
 
+export class ErreurDemandeAideEntrepriseInconnue extends Error {
+  constructor() {
+    super('Aucune entreprise ne correspond au SIRET');
+  }
+}
+
 export type SagaDemandeAide = Saga & {
   cguValidees: boolean;
   email: string;
@@ -80,6 +86,22 @@ export class CapteurSagaDemandeAide
       saga,
       this.entrepotUtilisateurMAC
     );
+
+    const rechercheEntreprise = async () => {
+      const entreprise =
+        await this.adaptateurRechercheEntreprise.rechercheEntreprise(
+          saga.siret,
+          ''
+        );
+
+      if (entreprise.length === 0) {
+        throw new ErreurDemandeAideEntrepriseInconnue();
+      }
+      return entreprise;
+    };
+
+    const entreprise = await rechercheEntreprise();
+
     try {
       const commandeRechercheAideParEmail: CommandeRechercheAideParEmail = {
         type: 'CommandeRechercheAideParEmail',
@@ -114,11 +136,6 @@ export class CapteurSagaDemandeAide
       await this.busCommande
         .publie<CommandeCreerDemandeAide, DemandeAide>(commandeCreerAide)
         .then(async (aide: DemandeAide) => {
-          const entreprise =
-            await this.adaptateurRechercheEntreprise.rechercheEntreprise(
-              saga.siret,
-              ''
-            );
           const miseEnRelation =
             this.fabriqueMiseEnRelation.fabrique(utilisateurMAC);
           await miseEnRelation.execute({

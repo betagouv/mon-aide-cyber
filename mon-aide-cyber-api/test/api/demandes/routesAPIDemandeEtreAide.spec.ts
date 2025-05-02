@@ -16,12 +16,14 @@ import {
   Departement,
   departements,
   finistere,
+  gironde,
   hautesAlpes,
 } from '../../../src/gestion-demandes/departements';
 import { EntrepotAideMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { ReponseAPIRechercheEntreprise } from '../recherche-entreprise/api';
 import { adaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
+import { associations } from '../../../src/espace-aidant/Aidant';
 
 describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
   const testeurMAC = testeurIntegration();
@@ -143,11 +145,23 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
       it('Renvoie une erreur si la demande n’a pu aller au bout', async () => {
         const testeurMAC = testeurIntegration();
         const donneesServeur: { app: Express } = testeurMAC.initialise();
+        testeurMAC.adaptateurDeRechercheEntreprise.rechercheEntreprise = () =>
+          Promise.resolve([
+            {
+              siret: '12345678901234',
+              departement: gironde.code,
+              secteursActivite: [],
+              nom: 'entreprise-factice',
+              commune: 'BORDEAUX',
+              typeEntite: associations,
+            },
+          ]);
         testeurMAC.adaptateurEnvoieMessage.envoie = async () => {
           throw new Error(
             'Erreur car on simule une erreur d’envoie de message.'
           );
         };
+
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
@@ -213,6 +227,31 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         expect(reponse.statusCode).toBe(400);
         expect(await reponse.json()).toStrictEqual({
           message: 'L’Aidant fourni n’est pas référencé.',
+        });
+      });
+
+      it('Renvoie une erreur si l‘entité ne correspond pas au SIRET fourni', async () => {
+        const testeurMAC = testeurIntegration();
+        testeurMAC.adaptateurDeRechercheEntreprise.rechercheEntreprise = () =>
+          Promise.resolve([]);
+        const donneesServeur: { app: Express } = testeurMAC.initialise();
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/etre-aide',
+          {
+            cguValidees: true,
+            email: 'jean.dupont@aide.com',
+            departement: 'Corse-du-Sud',
+            raisonSociale: 'beta-gouv',
+            siret: '12345678901234',
+          }
+        );
+
+        expect(reponse.statusCode).toBe(400);
+        expect(await reponse.json()).toStrictEqual({
+          message: 'Aucune entreprise ne correspond au SIRET',
         });
       });
 
