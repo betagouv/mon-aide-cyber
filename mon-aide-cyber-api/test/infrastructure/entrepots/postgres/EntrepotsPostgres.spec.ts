@@ -53,9 +53,12 @@ import { EntrepotUtilisateurPostgres } from '../../../../src/infrastructure/entr
 import { Utilisateur } from '../../../../src/authentification/Utilisateur';
 import {
   Aidant,
+  associations,
   EntiteAidant,
   EntitesAssociations,
   EntitesOrganisationsPubliques,
+  entitesPrivees,
+  entitesPubliques,
   TypeAffichageAnnuaire,
   typesEntites,
   TypesEntites,
@@ -848,6 +851,7 @@ describe('Entrepot Aidant', () => {
       const premierAidantEnGironde = unAidant()
         .ayantPourDepartements([gironde])
         .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([associations])
         .construis();
       const secondAidantEnAllier = unAidant()
         .ayantPourDepartements([allier])
@@ -862,6 +866,7 @@ describe('Entrepot Aidant', () => {
         await entrepotAidant.rechercheParPreferences({
           departement,
           secteursActivite: [{ nom: 'Transports' }],
+          typeEntite: associations,
         });
 
       expect(aidantsTrouvesEnGironde).toStrictEqual<Aidant[]>([
@@ -873,10 +878,12 @@ describe('Entrepot Aidant', () => {
       const premierAidantDansLadministration = unAidant()
         .ayantPourDepartements([gironde])
         .ayantPourSecteursActivite([{ nom: 'Administration' }])
+        .ayantPourTypesEntite([associations])
         .construis();
       const secondAidantLesTransports = unAidant()
         .ayantPourDepartements([gironde])
         .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([associations])
         .construis();
       const entrepotAidant = new EntrepotAidantPostgres(
         new ServiceDeChiffrementClair()
@@ -891,10 +898,40 @@ describe('Entrepot Aidant', () => {
             { nom: 'Administration' },
             { nom: 'Agriculture, sylviculture' },
           ],
+          typeEntite: associations,
         });
 
       expect(aidantsTrouvesDansLadministration).toStrictEqual<Aidant[]>([
         premierAidantDansLadministration,
+      ]);
+    });
+
+    it("par type d'entité", async () => {
+      const premierAidantPourLesEntitesPubliques = unAidant()
+        .ayantPourDepartements([gironde])
+        .ayantPourSecteursActivite([{ nom: 'Administration' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .construis();
+      const secondAidantPourLesEntitesPrivees = unAidant()
+        .ayantPourDepartements([gironde])
+        .ayantPourSecteursActivite([{ nom: 'Administration' }])
+        .ayantPourTypesEntite([entitesPrivees])
+        .construis();
+      const entrepotAidant = new EntrepotAidantPostgres(
+        new ServiceDeChiffrementClair()
+      );
+      await entrepotAidant.persiste(premierAidantPourLesEntitesPubliques);
+      await entrepotAidant.persiste(secondAidantPourLesEntitesPrivees);
+
+      const aidantsTrouvesDansLadministration =
+        await entrepotAidant.rechercheParPreferences({
+          departement: gironde,
+          secteursActivite: [{ nom: 'Administration' }],
+          typeEntite: entitesPubliques,
+        });
+
+      expect(aidantsTrouvesDansLadministration).toStrictEqual<Aidant[]>([
+        premierAidantPourLesEntitesPubliques,
       ]);
     });
   });
