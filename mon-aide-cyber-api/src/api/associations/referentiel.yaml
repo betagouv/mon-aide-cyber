@@ -1,7 +1,7 @@
 national:
   - nom: 'AFCDP (l’Association Française des Correspondants à la protection des Données à caractère Personnel)'
     urlSite: 'https://afcdp.net/'
-  - nom: 'CESIN (Club des Experts de la Sécurité de l’Information et du Numérique)'
+  - nom: 'CESIN (Club des Experts de la Sécurité de l’Information et du Numérique) - à l‘exclusion des entreprises commerciales'
     urlSite: 'https://cesin.fr/'
   - nom: 'Clusif'
     urlSite: 'https://clusif.fr/'
