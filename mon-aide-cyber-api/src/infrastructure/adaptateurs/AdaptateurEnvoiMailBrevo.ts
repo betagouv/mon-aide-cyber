@@ -9,7 +9,9 @@ import {
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
 import {
   adaptateursRequeteBrevo,
+  EnvoiMailBrevoAvecTemplate,
   ErreurRequeBrevo,
+  RequeteBrevo,
 } from './adaptateursRequeteBrevo';
 import {
   unConstructeurEnvoiDeMail,
@@ -41,20 +43,39 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
         .ayantPourParametres({ prenom: utilisateurMACEnRelation.nomPrenom });
     }
     const emailBrevo = constructeurEmailBrevo.construis();
+    await this.envoieMailAvecTemplate(emailBrevo);
+  }
+
+  async envoieConfirmationDemandeAideAttribuee(
+    confirmation: ConfirmationDemandeAideAttribuee
+  ): Promise<void> {
+    const destinataire: Destinataire = {
+      email: confirmation.emailAidant,
+    };
+    const constructeurEmailBrevo = unConstructeurEnvoiDeMailAvecTemplate()
+      .ayantPourTemplate(
+        adaptateurEnvironnement.brevo().templateAidantDemandeAideAttribuee()
+      )
+      .ayantPourDestinataires([[destinataire.email, destinataire.nom]])
+      .ayantPourParametres({
+        nomPrenom: confirmation.nomPrenomAidant,
+        mail: confirmation.emailEntite,
+        departement: confirmation.departement.nom,
+      });
+    await this.envoieMailAvecTemplate(constructeurEmailBrevo.construis());
+  }
+
+  private async envoieMailAvecTemplate<T extends EnvoiMailBrevoAvecTemplate>(
+    requeteBrevo: RequeteBrevo<T>
+  ) {
     try {
-      await adaptateursRequeteBrevo().envoiMail().execute(emailBrevo);
+      await adaptateursRequeteBrevo().envoiMail().execute(requeteBrevo);
     } catch (reponse: unknown | ErreurRequeBrevo) {
       throw new ErreurEnvoiEmail(
         JSON.stringify((reponse as ErreurRequeBrevo).corps),
         { cause: reponse as ErreurRequeBrevo }
       );
     }
-  }
-
-  envoieConfirmationDemandeAideAttribuee(
-    _confirmation: ConfirmationDemandeAideAttribuee
-  ): Promise<void> {
-    throw new Error('Method not implemented.');
   }
 
   async envoie(
