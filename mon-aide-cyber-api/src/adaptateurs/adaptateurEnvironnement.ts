@@ -20,6 +20,8 @@ const brevo = () => ({
       process.env
         .BREVO_TEMPLATE_CONFIRMATION_AIDE_EN_RELATION_AVEC_UN_UTILISATEUR_MAC
     ) || 0,
+  templateAidantDemandeAideAttribuee: () =>
+    Number(process.env.BREVO_TEMPLATE_AIDANT_DEMANDE_AIDE_ATTRIBUEE) || 0,
 });
 
 const mac = () => ({
