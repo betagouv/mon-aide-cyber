@@ -31,6 +31,7 @@ import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
 import { AdaptateurRelationsMAC } from '../../relation/AdaptateurRelationsMAC';
 import { fabriqueMiseEnRelation } from '../../gestion-demandes/aide/miseEnRelation';
 import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise';
+import { CapteurCommandeAttribueDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeAttribueDemandeAide';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -224,6 +225,13 @@ const capteurs: Map<string, Capteur> = new Map([
         new CapteurCommandeMettreAJourDemandeAide(
           parametres.entrepots.demandesAides()
         ),
+    },
+  ],
+  [
+    'CommandeAttribueDemandeAide',
+    {
+      capteur: (parametres) =>
+        new CapteurCommandeAttribueDemandeAide(parametres.adaptateurEnvoiMail!),
     },
   ],
 ]);

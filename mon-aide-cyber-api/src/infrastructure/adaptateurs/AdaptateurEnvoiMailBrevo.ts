@@ -1,5 +1,6 @@
 import {
   AdaptateurEnvoiMail,
+  ConfirmationDemandeAideAttribuee,
   Destinataire,
   Email,
   Expediteur,
@@ -48,6 +49,12 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
         { cause: reponse as ErreurRequeBrevo }
       );
     }
+  }
+
+  envoieConfirmationDemandeAideAttribuee(
+    _confirmation: ConfirmationDemandeAideAttribuee
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 
   async envoie(
