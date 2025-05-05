@@ -1,16 +1,20 @@
 import {
   AdaptateurEnvoiMail,
+  ConfirmationDemandeAideAttribuee,
   Destinataire,
   Email,
   Expediteur,
   UtilisateurMACEnRelation,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
+import { Departement } from '../../gestion-demandes/departements';
 
 export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private messages: Email[] = [];
   private _genereErreur = false;
   private expediteurs: Expediteur[] = ['MONAIDECYBER'];
   private destinataires: string[] = [];
+  private confirmation: ConfirmationDemandeAideAttribuee | undefined =
+    undefined;
 
   envoie(
     message: Email,
@@ -35,6 +39,14 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     if (utilisateurMACEnRelation) {
       this.destinataires.push(utilisateurMACEnRelation.email);
     }
+    return Promise.resolve();
+  }
+
+  envoieConfirmationDemandeAideAttribuee(
+    confirmation: ConfirmationDemandeAideAttribuee
+  ): Promise<void> {
+    this.confirmation = confirmation;
+    this.destinataires.push(confirmation.emailAidant);
     return Promise.resolve();
   }
 
@@ -93,6 +105,23 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     return (
       this.destinataires.includes(emailEntiteeAidee) &&
       (emailAidant === undefined || this.destinataires.includes(emailAidant))
+    );
+  }
+
+  demandeAideAttribueeEnvoyee(confirmation: {
+    nomPrenomAidant: string;
+    departement: Departement;
+    emailEntite: string;
+    emailAidant: string;
+  }): boolean {
+    const confirmationCorrespond =
+      this.confirmation !== undefined &&
+      this.confirmation.departement === confirmation.departement &&
+      this.confirmation.emailEntite === confirmation.emailEntite &&
+      this.confirmation.nomPrenomAidant === confirmation.nomPrenomAidant;
+    return (
+      this.destinataires.includes(confirmation.emailAidant) &&
+      confirmationCorrespond
     );
   }
 }
