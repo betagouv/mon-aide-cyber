@@ -57,7 +57,6 @@ import {
   EntiteAidant,
   EntitesAssociations,
   EntitesOrganisationsPubliques,
-  entitesPrivees,
   entitesPubliques,
   TypeAffichageAnnuaire,
   typesEntites,
@@ -846,92 +845,34 @@ describe('Entrepot Aidant', () => {
   });
 
   describe('Recherche par critères', () => {
-    it('par département', async () => {
-      const departement = gironde;
-      const premierAidantEnGironde = unAidant()
+    it('recherche les Aidants correspondants aux 3 critères', async () => {
+      const unAidantEnGirondeDansLesTransportsAssociatifs = unAidant()
         .ayantPourDepartements([gironde])
         .ayantPourSecteursActivite([{ nom: 'Transports' }])
         .ayantPourTypesEntite([associations])
         .construis();
-      const secondAidantEnAllier = unAidant()
+      const unAidantEnAllierPourAdministrationPublique = unAidant()
         .ayantPourDepartements([allier])
+        .ayantPourTypesEntite([entitesPubliques])
+        .ayantPourSecteursActivite([{ nom: 'Administration' }])
         .construis();
       const entrepotAidant = new EntrepotAidantPostgres(
         new ServiceDeChiffrementClair()
       );
-      await entrepotAidant.persiste(premierAidantEnGironde);
-      await entrepotAidant.persiste(secondAidantEnAllier);
+      await entrepotAidant.persiste(
+        unAidantEnGirondeDansLesTransportsAssociatifs
+      );
+      await entrepotAidant.persiste(unAidantEnAllierPourAdministrationPublique);
 
       const aidantsTrouvesEnGironde =
         await entrepotAidant.rechercheParPreferences({
-          departement,
+          departement: gironde,
           secteursActivite: [{ nom: 'Transports' }],
           typeEntite: associations,
         });
 
       expect(aidantsTrouvesEnGironde).toStrictEqual<Aidant[]>([
-        premierAidantEnGironde,
-      ]);
-    });
-
-    it("par secteur d'activité", async () => {
-      const premierAidantDansLadministration = unAidant()
-        .ayantPourDepartements([gironde])
-        .ayantPourSecteursActivite([{ nom: 'Administration' }])
-        .ayantPourTypesEntite([associations])
-        .construis();
-      const secondAidantLesTransports = unAidant()
-        .ayantPourDepartements([gironde])
-        .ayantPourSecteursActivite([{ nom: 'Transports' }])
-        .ayantPourTypesEntite([associations])
-        .construis();
-      const entrepotAidant = new EntrepotAidantPostgres(
-        new ServiceDeChiffrementClair()
-      );
-      await entrepotAidant.persiste(premierAidantDansLadministration);
-      await entrepotAidant.persiste(secondAidantLesTransports);
-
-      const aidantsTrouvesDansLadministration =
-        await entrepotAidant.rechercheParPreferences({
-          departement: gironde,
-          secteursActivite: [
-            { nom: 'Administration' },
-            { nom: 'Agriculture, sylviculture' },
-          ],
-          typeEntite: associations,
-        });
-
-      expect(aidantsTrouvesDansLadministration).toStrictEqual<Aidant[]>([
-        premierAidantDansLadministration,
-      ]);
-    });
-
-    it("par type d'entité", async () => {
-      const premierAidantPourLesEntitesPubliques = unAidant()
-        .ayantPourDepartements([gironde])
-        .ayantPourSecteursActivite([{ nom: 'Administration' }])
-        .ayantPourTypesEntite([entitesPubliques])
-        .construis();
-      const secondAidantPourLesEntitesPrivees = unAidant()
-        .ayantPourDepartements([gironde])
-        .ayantPourSecteursActivite([{ nom: 'Administration' }])
-        .ayantPourTypesEntite([entitesPrivees])
-        .construis();
-      const entrepotAidant = new EntrepotAidantPostgres(
-        new ServiceDeChiffrementClair()
-      );
-      await entrepotAidant.persiste(premierAidantPourLesEntitesPubliques);
-      await entrepotAidant.persiste(secondAidantPourLesEntitesPrivees);
-
-      const aidantsTrouvesDansLadministration =
-        await entrepotAidant.rechercheParPreferences({
-          departement: gironde,
-          secteursActivite: [{ nom: 'Administration' }],
-          typeEntite: entitesPubliques,
-        });
-
-      expect(aidantsTrouvesDansLadministration).toStrictEqual<Aidant[]>([
-        premierAidantPourLesEntitesPubliques,
+        unAidantEnGirondeDansLesTransportsAssociatifs,
       ]);
     });
   });

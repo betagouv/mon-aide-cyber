@@ -75,15 +75,13 @@ export class EntrepotAidantPostgres
                  jsonb_array_elements_text(donnees -> 'preferences' -> 'secteursActivite') as secteurs_activite
         WHERE donnees -> 'preferences' -> 'departements' @> :departement
             AND secteurs_activite IN (SELECT jsonb_array_elements_text(:secteursActivite))
-            AND donnees -> 'preferences' -> 'typesEntites' @> :typeEntite`;
+            AND donnees -> 'preferences' -> 'typesEntites' @> :typeEntite
+            AND type = 'AIDANT'`;
 
-    const secteurs = criteres.secteursActivite
-      .map((s) => '"' + s.nom + '"')
-      .join(',');
     const parametres = {
-      departement: '["' + criteres.departement.nom + '"]',
-      secteursActivite: '[' + secteurs + ']',
-      typeEntite: '["' + criteres.typeEntite.nom + '"]',
+      departement: `["${criteres.departement.nom}"]`,
+      secteursActivite: `[${criteres.secteursActivite.map((s) => `"${s.nom}"`).join(',')}]`,
+      typeEntite: `["${criteres.typeEntite.nom}"]`,
     };
 
     return await this.knex
