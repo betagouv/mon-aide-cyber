@@ -7,6 +7,7 @@ import { fakerFR } from '@faker-js/faker';
 import {
   Aidant,
   EntiteAidant,
+  entitesPubliques,
   EntrepotAidant,
   formatteLeNomPrenomSelonRegleAffichage,
   TypeAffichageAnnuaire,
@@ -15,7 +16,7 @@ import {
 } from '../../src/espace-aidant/Aidant';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { SecteurActivite } from '../../src/espace-aidant/preferences/secteursActivite';
-import { Departement } from '../../src/gestion-demandes/departements';
+import { Departement, gironde } from '../../src/gestion-demandes/departements';
 import { Constructeur } from './constructeur';
 import {
   EntiteUtilisateurInscrit,
@@ -242,6 +243,63 @@ class ConstructeurUtilisateurInscrit
 }
 
 export const unAidant = (): ConstructeurAidant => new ConstructeurAidant();
+
+class ConstructeurAidants implements Constructeur<Aidant[]> {
+  private nombreAidants: number = fakerFR.number.int({ min: 1, max: 10 });
+  private departement: Departement | undefined = undefined;
+  private typeEntite: TypesEntites = [];
+  private secteursActivites: SecteurActivite[] = [];
+
+  construis(): Aidant[] {
+    const aidants: Aidant[] = [];
+    for (let i = 0; i < this.nombreAidants; i++) {
+      let constructeurAidant = unAidant();
+
+      if (this.departement) {
+        constructeurAidant = constructeurAidant.ayantPourDepartements([
+          this.departement,
+        ]);
+      }
+      if (this.typeEntite) {
+        constructeurAidant = constructeurAidant.ayantPourTypesEntite(
+          this.typeEntite
+        );
+      }
+      if (this.secteursActivites.length > 0) {
+        constructeurAidant = constructeurAidant.ayantPourSecteursActivite(
+          this.secteursActivites
+        );
+      }
+
+      aidants.push(constructeurAidant.construis());
+    }
+    return aidants;
+  }
+
+  auNombreDe(nombreAidants: number): ConstructeurAidants {
+    this.nombreAidants = nombreAidants;
+    return this;
+  }
+
+  enGironde(): ConstructeurAidants {
+    this.departement = gironde;
+    return this;
+  }
+
+  dansLeServicePublic(): ConstructeurAidants {
+    this.typeEntite?.push(entitesPubliques);
+    return this;
+  }
+
+  pourLesSecteursActivite(
+    secteursActivites: SecteurActivite[]
+  ): ConstructeurAidants {
+    this.secteursActivites = secteursActivites;
+    return this;
+  }
+}
+
+export const desAidants = (): ConstructeurAidants => new ConstructeurAidants();
 
 type ParametresLiaisonAidant = {
   entrepotUtilisateur: EntrepotUtilisateur;
