@@ -82,7 +82,7 @@ export const Accueil = () => {
                 </div>
                 <div className="corps">
                   <div>
-                    <h4>1 Communauté d&apos;Aidants</h4>
+                    <h4>1 Communauté d&apos;Aidants cyber</h4>
                   </div>
                   <div>
                     <p>
