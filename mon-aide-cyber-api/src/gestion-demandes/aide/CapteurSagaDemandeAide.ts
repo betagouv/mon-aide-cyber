@@ -12,7 +12,13 @@ import {
   uneRechercheUtilisateursMAC,
   UtilisateurMACDTO,
 } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
-import { FabriqueMiseEnRelation } from './miseEnRelation';
+import {
+  DirecteAidant,
+  DirecteUtilisateurInscrit,
+  FabriqueMiseEnRelation,
+  ParCriteres,
+  ResultatMiseEnRelation,
+} from './miseEnRelation';
 import { AdaptateurRechercheEntreprise } from '../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 
 export class ErreurUtilisateurMACInconnu extends Error {
@@ -37,9 +43,14 @@ export type SagaDemandeAide = Saga & {
   siret: string;
 };
 
-export type DemandeAideCree = Evenement<{
+export type DemandeAideCree<
+  T extends ResultatMiseEnRelation<
+    ParCriteres | DirecteAidant | DirecteUtilisateurInscrit
+  >,
+> = Evenement<{
   identifiantAide: crypto.UUID;
   departement: string;
+  miseEnRelation: T;
 }>;
 
 const rechercheUtilisateurMAC = async (
@@ -138,20 +149,21 @@ export class CapteurSagaDemandeAide
         .then(async (aide: DemandeAide) => {
           const miseEnRelation =
             this.fabriqueMiseEnRelation.fabrique(utilisateurMAC);
-          await miseEnRelation.execute({
+          const resultat = await miseEnRelation.execute({
             demandeAide: aide,
             siret: '12345',
             secteursActivite: entreprise[0].secteursActivite,
             typeEntite: entreprise[0].typeEntite,
           });
 
-          await this.busEvenement.publie<DemandeAideCree>({
+          await this.busEvenement.publie<DemandeAideCree<typeof resultat>>({
             identifiant: aide.identifiant,
             type: 'AIDE_CREE',
             date: FournisseurHorloge.maintenant(),
             corps: {
               identifiantAide: aide.identifiant,
               departement: saga.departement.code,
+              miseEnRelation: resultat,
             },
           });
         });

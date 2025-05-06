@@ -35,13 +35,18 @@ import {
 import { Entrepots } from '../../../src/domaine/Entrepots';
 import { BusEvenement } from '../../../src/domaine/BusEvenement';
 import {
+  DirecteAidant,
+  DirecteUtilisateurInscrit,
   DonneesMiseEnRelation,
   FabriqueMiseEnRelation,
   FabriqueMiseEnRelationConcrete,
   MiseEnRelation,
+  ParCriteres,
+  ResultatMiseEnRelation,
 } from '../../../src/gestion-demandes/aide/miseEnRelation';
 import { UtilisateurMACDTO } from '../../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import {
+  desAidants,
   unAidant,
   unUtilisateurInscrit,
 } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
@@ -68,11 +73,37 @@ class FabriqueDeMiseEnRelationDeTest implements FabriqueMiseEnRelation {
 class MiseEnRelationDeTest implements MiseEnRelation {
   public donneesMiseEnRelation: DonneesMiseEnRelation | undefined = undefined;
 
-  async execute(donneesMiseEnRelation: DonneesMiseEnRelation): Promise<void> {
+  async execute(
+    donneesMiseEnRelation: DonneesMiseEnRelation
+  ): Promise<ResultatMiseEnRelation<ParCriteres>> {
     this.donneesMiseEnRelation = donneesMiseEnRelation;
-    return;
+    return {
+      type: 'PAR_CRITERES',
+      resultat: {
+        nombreAidants: 0,
+        typeEntite: '',
+        secteursActivite: [],
+        departement: '',
+      },
+    };
   }
 }
+
+const uneReponseAPIRechercheEntrepriseMairieBordeaux: ReponseAPIRechercheEntreprise =
+  {
+    results: [
+      {
+        nom_complet: 'Mairie BORDEAUX',
+        siege: {
+          siret: '122345',
+          departement: gironde.code,
+          libelle_commune: 'Bordeaux',
+        },
+        complements: { est_association: false, est_service_public: true },
+        section_activite_principale: 'O',
+      },
+    ],
+  };
 
 const fabriqueCapteur = ({
   entrepots,
@@ -93,20 +124,9 @@ const fabriqueCapteur = ({
   const laFabriqueDeMiseEnRelation =
     fabriqueMiseEnRelation ?? new FabriqueDeMiseEnRelationDeTest();
   const adaptateurDeRequeteHTTPMemoire = new AdaptateurDeRequeteHTTPMemoire();
-  adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>({
-    results: [
-      {
-        nom_complet: 'Mairie BORDEAUX',
-        siege: {
-          siret: '122345',
-          departement: gironde.code,
-          libelle_commune: 'Bordeaux',
-        },
-        complements: { est_association: false, est_service_public: true },
-        section_activite_principale: 'O',
-      },
-    ],
-  });
+  adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>(
+    uneReponseAPIRechercheEntrepriseMairieBordeaux
+  );
 
   return new CapteurSagaDemandeAide(
     busCommande ??
@@ -236,13 +256,24 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const aideRecu = (
         await (entrepots.demandesAides() as EntrepotAideMemoire).tous()
       )[0];
-      expect(busEvenement.evenementRecu).toStrictEqual<DemandeAideCree>({
+      expect(busEvenement.evenementRecu).toStrictEqual<
+        DemandeAideCree<ResultatMiseEnRelation<ParCriteres>>
+      >({
         identifiant: expect.any(String),
         type: 'AIDE_CREE',
         date: maintenant,
         corps: {
           identifiantAide: aideRecu.identifiant,
           departement: '33',
+          miseEnRelation: {
+            type: 'PAR_CRITERES',
+            resultat: {
+              nombreAidants: 0,
+              typeEntite: '',
+              secteursActivite: [],
+              departement: '',
+            },
+          },
         },
       });
     });
@@ -260,8 +291,9 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           new FabriqueDeMiseEnRelationDeTest();
         let miseEnRelationAEteExecutee = false;
         fabriqueDeMiseEnRelationDeTest.fabrique = () => ({
-          execute: async () => {
+          execute: async (): Promise<ResultatMiseEnRelation<any>> => {
             miseEnRelationAEteExecutee = true;
+            return Promise.resolve({ type: 'PAR_CRITERES', resultat: {} });
           },
         });
 
@@ -372,6 +404,58 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
         ).toBeInstanceOf(MiseEnRelationDirecteAidant);
       });
+
+      it("Publie l'évènement 'AIDE_CREE' pour une mise en relation directe avec un Aidant", async () => {
+        const maintenant = new Date();
+        FournisseurHorlogeDeTest.initialise(maintenant);
+        const entrepots = new EntrepotsMemoire();
+        const busEvenement = new BusEvenementDeTest();
+        const aidant = unAidant()
+          .ayantPourDepartements([gironde])
+          .ayantPourTypesEntite([entitesPubliques])
+          .ayantPourSecteursActivite([{ nom: 'Administration' }])
+          .construis();
+        await entrepots.aidants().persiste(aidant);
+
+        await fabriqueCapteur({
+          entrepots,
+          busEvenement,
+          fabriqueMiseEnRelation: new FabriqueDeMiseEnRelationEcoutee(
+            entrepots
+          ),
+        }).execute({
+          type: 'SagaDemandeValidationCGUAide',
+          relationUtilisateur: aidant.email,
+          cguValidees: true,
+          email: 'jean-dupont@email.com',
+          departement: gironde,
+          siret: '12345',
+        });
+
+        const aideRecu = (
+          await (entrepots.demandesAides() as EntrepotAideMemoire).tous()
+        )[0];
+        expect(busEvenement.evenementRecu).toStrictEqual<
+          DemandeAideCree<ResultatMiseEnRelation<DirecteAidant>>
+        >({
+          identifiant: expect.any(String),
+          type: 'AIDE_CREE',
+          date: maintenant,
+          corps: {
+            identifiantAide: aideRecu.identifiant,
+            departement: '33',
+            miseEnRelation: {
+              type: 'DIRECTE_AIDANT',
+              resultat: {
+                idAidant: aidant.identifiant,
+                typeEntite: entitesPubliques.nom,
+                secteursActivite: ['Administration', 'Tertiaire'],
+                departement: '33',
+              },
+            },
+          },
+        });
+      });
     });
 
     describe('Avec un Utilisateur Inscrit', () => {
@@ -401,6 +485,54 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         expect(
           fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
         ).toBeInstanceOf(MiseEnRelationDirecteUtilisateurInscrit);
+      });
+
+      it("Publie l'évènement 'AIDE_CREE' pour une mise en relation directe avec un Utilisateur Inscrit", async () => {
+        const maintenant = new Date();
+        FournisseurHorlogeDeTest.initialise(maintenant);
+        const entrepots = new EntrepotsMemoire();
+        const busEvenement = new BusEvenementDeTest();
+        const utilisateurInscrit = unUtilisateurInscrit().construis();
+        await entrepots.utilisateursInscrits().persiste(utilisateurInscrit);
+
+        await fabriqueCapteur({
+          entrepots,
+          busEvenement,
+          fabriqueMiseEnRelation: new FabriqueDeMiseEnRelationEcoutee(
+            entrepots
+          ),
+        }).execute({
+          type: 'SagaDemandeValidationCGUAide',
+          relationUtilisateur: utilisateurInscrit.email,
+          cguValidees: true,
+          email: 'jean-dupont@email.com',
+          departement: gironde,
+          siret: '12345',
+        });
+
+        const aideRecu = (
+          await (entrepots.demandesAides() as EntrepotAideMemoire).tous()
+        )[0];
+        expect(busEvenement.evenementRecu).toStrictEqual<
+          DemandeAideCree<ResultatMiseEnRelation<DirecteUtilisateurInscrit>>
+        >({
+          identifiant: expect.any(String),
+          type: 'AIDE_CREE',
+          date: maintenant,
+          corps: {
+            identifiantAide: aideRecu.identifiant,
+            departement: '33',
+            miseEnRelation: {
+              type: 'DIRECTE_UTILISATEUR_INSCRIT',
+              resultat: {
+                idUtilisateurInscrit: utilisateurInscrit.identifiant,
+                typeEntite: entitesPubliques.nom,
+                secteursActivite: ['Administration', 'Tertiaire'],
+                departement: '33',
+              },
+            },
+          },
+        });
       });
     });
   });
@@ -437,20 +569,9 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         new FabriqueDeMiseEnRelationDeTest();
       const adaptateurDeRequeteHTTPMemoire =
         new AdaptateurDeRequeteHTTPMemoire();
-      adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>({
-        results: [
-          {
-            nom_complet: 'Mairie BORDEAUX',
-            siege: {
-              siret: '122345',
-              departement: gironde.code,
-              libelle_commune: 'Bordeaux',
-            },
-            complements: { est_association: false, est_service_public: true },
-            section_activite_principale: 'O',
-          },
-        ],
-      });
+      adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>(
+        uneReponseAPIRechercheEntrepriseMairieBordeaux
+      );
       const capteur = fabriqueCapteur({
         entrepots,
         rechercheEntreprise: adaptateurRechercheEntreprise(
@@ -486,20 +607,9 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         new FabriqueDeMiseEnRelationDeTest();
       const adaptateurDeRequeteHTTPMemoire =
         new AdaptateurDeRequeteHTTPMemoire();
-      adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>({
-        results: [
-          {
-            nom_complet: 'Mairie BORDEAUX',
-            siege: {
-              siret: '122345',
-              departement: gironde.code,
-              libelle_commune: 'Bordeaux',
-            },
-            complements: { est_association: false, est_service_public: true },
-            section_activite_principale: 'O',
-          },
-        ],
-      });
+      adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>(
+        uneReponseAPIRechercheEntrepriseMairieBordeaux
+      );
       const capteur = fabriqueCapteur({
         entrepots,
         rechercheEntreprise: adaptateurRechercheEntreprise(
@@ -519,6 +629,58 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       expect(adaptateurDeRequeteHTTPMemoire.requeteAttendue).toBe(
         '/search?q=12345&per_page=25&limite_matching_etablissements=1'
       );
+    });
+
+    it("Publie l'évènement 'AIDE_CREE' avec le matching des Aidants", async () => {
+      const maintenant = new Date();
+      FournisseurHorlogeDeTest.initialise(maintenant);
+      const entrepots = new EntrepotsMemoire();
+      const busEvenement = new BusEvenementDeTest();
+      const lesAidants = desAidants()
+        .auNombreDe(3)
+        .enGironde()
+        .dansLeServicePublic()
+        .pourLesSecteursActivite([{ nom: 'Administration' }])
+        .construis();
+      for await (const aidant of lesAidants) {
+        await entrepots.aidants().persiste(aidant);
+      }
+
+      await fabriqueCapteur({
+        entrepots,
+        busEvenement,
+        fabriqueMiseEnRelation: new FabriqueDeMiseEnRelationEcoutee(entrepots),
+      }).execute({
+        type: 'SagaDemandeValidationCGUAide',
+        cguValidees: true,
+        email: 'jean-dupont@email.com',
+        departement: gironde,
+        siret: '12345',
+      });
+
+      const aideRecu = (
+        await (entrepots.demandesAides() as EntrepotAideMemoire).tous()
+      )[0];
+      expect(busEvenement.evenementRecu).toStrictEqual<
+        DemandeAideCree<ResultatMiseEnRelation<ParCriteres>>
+      >({
+        identifiant: expect.any(String),
+        type: 'AIDE_CREE',
+        date: maintenant,
+        corps: {
+          identifiantAide: aideRecu.identifiant,
+          departement: '33',
+          miseEnRelation: {
+            type: 'PAR_CRITERES',
+            resultat: {
+              nombreAidants: 3,
+              typeEntite: 'Organisations publiques',
+              secteursActivite: ['Administration', 'Tertiaire'],
+              departement: '33',
+            },
+          },
+        },
+      });
     });
   });
 
@@ -553,14 +715,14 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
 class FabriqueDeMiseEnRelationEcoutee extends FabriqueMiseEnRelationConcrete {
   public miseEnRelationPromise: MiseEnRelation | undefined = undefined;
 
-  constructor() {
+  constructor(entrepots: Entrepots = new EntrepotsMemoire()) {
     super(
       new AdaptateurEnvoiMailMemoire(),
       {
         rechercheEmailParDepartement: (__departement: Departement) =>
           'cot@email.com',
       },
-      new EntrepotsMemoire()
+      entrepots
     );
   }
 

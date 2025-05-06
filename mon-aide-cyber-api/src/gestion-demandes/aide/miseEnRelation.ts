@@ -15,6 +15,7 @@ import {
   EntitesOrganisationsPubliques,
 } from '../../espace-aidant/Aidant';
 import { Entrepots } from '../../domaine/Entrepots';
+import crypto from 'crypto';
 
 export const envoieConfirmationDemandeAide = async (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
@@ -64,8 +65,39 @@ export type DonneesMiseEnRelation = {
   secteursActivite: SecteurActivite[];
 };
 
+type DonneesEntite = {
+  typeEntite: string;
+  secteursActivite: string[];
+  departement: string;
+};
+
+export type ParCriteres = DonneesEntite & {
+  nombreAidants: number;
+};
+
+export type DirecteAidant = DonneesEntite & {
+  idAidant: crypto.UUID;
+};
+
+export type DirecteUtilisateurInscrit = DonneesEntite & {
+  idUtilisateurInscrit: crypto.UUID;
+};
+
+export type ResultatMiseEnRelation<
+  T extends ParCriteres | DirecteAidant | DirecteUtilisateurInscrit,
+> = {
+  type: 'DIRECTE_UTILISATEUR_INSCRIT' | 'DIRECTE_AIDANT' | 'PAR_CRITERES';
+  resultat: T;
+};
+
 export interface MiseEnRelation {
-  execute(donneesMiseEnRelation: DonneesMiseEnRelation): Promise<void>;
+  execute(
+    donneesMiseEnRelation: DonneesMiseEnRelation
+  ): Promise<
+    ResultatMiseEnRelation<
+      ParCriteres | DirecteAidant | DirecteUtilisateurInscrit
+    >
+  >;
 }
 
 export interface FabriqueMiseEnRelation {
@@ -107,7 +139,6 @@ export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
     );
   }
 }
-
 export const fabriqueMiseEnRelation = (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
   annuaireCOT: {

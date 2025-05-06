@@ -2,10 +2,12 @@ import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { Departement } from '../departements';
 import { UtilisateurMACDTO } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import {
+  DirecteAidant,
   DonneesMiseEnRelation,
   envoieConfirmationDemandeAide,
   envoieRecapitulatifDemandeAide,
   MiseEnRelation,
+  ResultatMiseEnRelation,
 } from './miseEnRelation';
 
 export class MiseEnRelationDirecteAidant implements MiseEnRelation {
@@ -17,7 +19,9 @@ export class MiseEnRelationDirecteAidant implements MiseEnRelation {
     private readonly aidant: UtilisateurMACDTO
   ) {}
 
-  async execute(donneesMiseEnRelation: DonneesMiseEnRelation): Promise<void> {
+  async execute(
+    donneesMiseEnRelation: DonneesMiseEnRelation
+  ): Promise<ResultatMiseEnRelation<DirecteAidant>> {
     await envoieRecapitulatifDemandeAide(
       this.adaptateurEnvoiMail,
       donneesMiseEnRelation.demandeAide,
@@ -30,5 +34,16 @@ export class MiseEnRelationDirecteAidant implements MiseEnRelation {
       donneesMiseEnRelation.demandeAide,
       this.aidant
     );
+    return {
+      type: 'DIRECTE_AIDANT',
+      resultat: {
+        idAidant: this.aidant.identifiant,
+        typeEntite: donneesMiseEnRelation.typeEntite.nom,
+        secteursActivite: donneesMiseEnRelation.secteursActivite.map(
+          (s) => s.nom
+        ),
+        departement: donneesMiseEnRelation.demandeAide.departement.code,
+      },
+    };
   }
 }

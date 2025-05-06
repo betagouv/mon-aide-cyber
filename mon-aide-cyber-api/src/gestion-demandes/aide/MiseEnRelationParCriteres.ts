@@ -5,6 +5,8 @@ import {
   envoieConfirmationDemandeAide,
   envoieRecapitulatifDemandeAide,
   MiseEnRelation,
+  ParCriteres,
+  ResultatMiseEnRelation,
 } from './miseEnRelation';
 import { Entrepots } from '../../domaine/Entrepots';
 
@@ -17,7 +19,9 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
     private readonly entrepots: Entrepots
   ) {}
 
-  async execute(donneesMiseEnRelation: DonneesMiseEnRelation): Promise<void> {
+  async execute(
+    donneesMiseEnRelation: DonneesMiseEnRelation
+  ): Promise<ResultatMiseEnRelation<ParCriteres>> {
     const aidants = await this.entrepots.aidants().rechercheParPreferences({
       departement: donneesMiseEnRelation.demandeAide.departement,
       secteursActivite: donneesMiseEnRelation.secteursActivite,
@@ -35,5 +39,16 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
       donneesMiseEnRelation.demandeAide,
       undefined
     );
+    return {
+      type: 'PAR_CRITERES',
+      resultat: {
+        nombreAidants: aidants.length,
+        typeEntite: donneesMiseEnRelation.typeEntite.nom,
+        secteursActivite: donneesMiseEnRelation.secteursActivite.map(
+          (s) => s.nom
+        ),
+        departement: donneesMiseEnRelation.demandeAide.departement.code,
+      },
+    };
   }
 }
