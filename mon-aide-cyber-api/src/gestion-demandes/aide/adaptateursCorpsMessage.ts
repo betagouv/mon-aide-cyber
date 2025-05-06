@@ -45,7 +45,7 @@ const genereCorpsRecapitulatifDemandeAide = (
     raisonSociale +
     '\n' +
     `Les Aidants disponibles : \n` +
-    aidantsQuiMatchent
+    (aidantsQuiMatchent.length > 0 ? aidantsQuiMatchent : 'Aucun')
   );
 };
 const adaptateursCorpsMessage: AdaptateurCorpsDeMessageAide = {
