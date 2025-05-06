@@ -139,7 +139,7 @@ export class EntrepotAidantMemoire
   extends EntrepotMemoire<Aidant>
   implements EntrepotAidant
 {
-  rechercheParPreferences(criteres: {
+  async rechercheParPreferences(criteres: {
     departement: Departement;
     secteursActivite: SecteurActivite[];
     typeEntite:
@@ -159,17 +159,17 @@ export class EntrepotAidantMemoire
       );
       return departementMatche && secteursActiviteMatchent && typeEntiteMatche;
     });
-    return Promise.resolve(aidantsTrouve);
+    return aidantsTrouve;
   }
 
-  rechercheParEmail(email: string): Promise<Aidant> {
+  async rechercheParEmail(email: string): Promise<Aidant> {
     const aidantTrouve = Array.from(this.entites.values()).find(
       (aidant) => aidant.email === email
     );
     if (!aidantTrouve) {
-      return Promise.reject(new AggregatNonTrouve('aidant'));
+      throw new AggregatNonTrouve('aidant');
     }
-    return Promise.resolve(aidantTrouve);
+    return aidantTrouve;
   }
 
   typeAggregat(): string {
