@@ -16,21 +16,48 @@ const UUID_REGEX = new RegExp(
   'i'
 );
 
+const estUnObjet = (objet: object): objet is object => {
+  return typeof objet === 'object' && !Array.isArray(objet);
+};
+
 export class EntrepotJournalisationPostgres
   extends EntrepotEcriturePostgres<Publication, PublicationDTO>
   implements EntrepotEvenementJournal
 {
   protected deEntiteADTO(entite: Publication): PublicationDTO {
-    return {
-      donnees: Object.entries(entite.donnees).reduce(
-        (prev, [clef, donnee]) => ({
+    const genereLesHashe = (donnee: object): object => {
+      return Object.entries(donnee).reduce((precedent: any, [clef, valeur]) => {
+        if (estUnObjet(valeur)) {
+          precedent[clef] = genereLesHashe(valeur);
+        } else {
+          precedent[clef] = UUID_REGEX.test(valeur)
+            ? crypto.createHash('sha256').update(valeur).digest('hex')
+            : valeur;
+        }
+        return precedent;
+      }, {});
+    };
+
+    const donnees = Object.entries(entite.donnees).reduce(
+      (prev, [clef, donnee]) => {
+        let objet = undefined;
+        if (estUnObjet(donnee)) {
+          objet = genereLesHashe(donnee);
+        }
+        const resultat = UUID_REGEX.test(donnee)
+          ? crypto.createHash('sha256').update(donnee).digest('hex')
+          : objet
+            ? objet
+            : donnee;
+        return {
           ...prev,
-          [clef]: UUID_REGEX.test(donnee)
-            ? crypto.createHash('sha256').update(donnee).digest('hex')
-            : donnee,
-        }),
-        {}
-      ),
+          [clef]: resultat,
+        };
+      },
+      {}
+    );
+    return {
+      donnees: donnees,
       type: entite.type,
       date: entite.date.toISOString(),
       id: entite.identifiant,
