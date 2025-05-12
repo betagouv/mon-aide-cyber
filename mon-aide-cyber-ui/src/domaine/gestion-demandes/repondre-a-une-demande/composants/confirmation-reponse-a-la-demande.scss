@@ -51,6 +51,10 @@
     @include a-partir-de(xl) {
       padding: 5rem 13rem;
     }
+
+    p {
+      text-align: center;
+    }
   }
 
   .icone-colonne-droite {

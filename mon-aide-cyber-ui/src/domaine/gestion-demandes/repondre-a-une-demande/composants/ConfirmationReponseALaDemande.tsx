@@ -13,9 +13,10 @@ export const ConfirmationReponseALaDemande = () => {
         <div className="fr-container">
           <TypographieH1 className="titre-merci">Merci !</TypographieH1>
           <p>
-            Vous êtes le premier Aidant cyber à répondre à cette demande. Vous
-            allez recevoir un email avec les coordonnées de l’entité afin de
-            réaliser son diagnostic.
+            Vous êtes le premier Aidant cyber à répondre à cette demande.
+            <br />
+            Vous allez recevoir un email avec les coordonnées de l’entité afin
+            de réaliser son diagnostic.
           </p>
           <div className="cta-bas-de-section">
             <Button
