@@ -30,9 +30,7 @@ const genereCorpsRecapitulatifDemandeAide = (
   const miseEnRelation = relationUtilisateur
     ? '- Est déjà en relation avec un Aidant\n'
     : '';
-  const aidantsQuiMatchent = aidants.map(
-    (a) => `- ${a.nomPrenom} (${a.email})\n`
-  );
+  const aidantsQuiMatchent = aidants.map((a) => `- ${a.email}\n`);
   return (
     'Bonjour,\n' +
     '\n' +
