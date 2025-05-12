@@ -67,21 +67,26 @@ export class EntrepotAidantPostgres
       | EntitesEntreprisesPrivees
       | EntitesAssociations;
   }): Promise<Aidant[]> {
-    const requete = `
-        SELECT id,
-               donnees,
-               secteurs_activite
-        FROM utilisateurs_mac,
-                 jsonb_array_elements_text(donnees -> 'preferences' -> 'secteursActivite') as secteurs_activite
-        WHERE donnees -> 'preferences' -> 'departements' @> :departement
-            AND secteurs_activite IN (SELECT jsonb_array_elements_text(:secteursActivite))
-            AND donnees -> 'preferences' -> 'typesEntites' @> :typeEntite
-            AND type = 'AIDANT'`;
+    const departement = `["${criteres.departement.nom}"]`;
+    const secteursActivite = `[${criteres.secteursActivite.map((s) => `"${s.nom}"`).join(',')}]`;
+    const typeEntite = `["${criteres.typeEntite.nom}"]`;
 
+    const requete = `SELECT id, donnees
+                     FROM utilisateurs_mac u
+                     WHERE u.donnees -> 'preferences' -> 'departements' @> :departement
+    AND u.donnees -> 'preferences' -> 'typesEntites' @> :typeEntite
+    AND EXISTS (
+      SELECT 1
+      FROM jsonb_array_elements_text(u.donnees -> 'preferences' -> 'secteursActivite') AS secteur(nom)
+      WHERE secteur.nom IN (
+        SELECT jsonb_array_elements_text(:secteursActivite::jsonb)
+      )
+    )
+    AND type = 'AIDANT';`;
     const parametres = {
-      departement: `["${criteres.departement.nom}"]`,
-      secteursActivite: `[${criteres.secteursActivite.map((s) => `"${s.nom}"`).join(',')}]`,
-      typeEntite: `["${criteres.typeEntite.nom}"]`,
+      departement: departement,
+      secteursActivite: secteursActivite,
+      typeEntite: typeEntite,
     };
 
     return await this.knex
