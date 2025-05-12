@@ -5,6 +5,7 @@ import { RepondreALaDemande } from './composants/RepondreALaDemande.tsx';
 import { ConfirmationReponseALaDemande } from './composants/ConfirmationReponseALaDemande.tsx';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { DemandeDejaPourvue } from './composants/DemandeDejaPourvue.tsx';
 
 export type DemandeAide = {
   dateCreation: string;
@@ -37,7 +38,7 @@ export const EcranRepondreAUneDemande = ({
     queryFn: () => recupereDemandeAide(),
   });
 
-  const { mutate, isSuccess } = useMutation({
+  const { mutate, isSuccess, isError } = useMutation({
     mutationKey: ['repondre-a-une-demande'],
     mutationFn: async (token: string) => {
       return await macAPI.execute<any, any, { token: string }>(
@@ -61,6 +62,14 @@ export const EcranRepondreAUneDemande = ({
     return (
       <main role="main" className="ecran-repondre-a-une-demande">
         <ConfirmationReponseALaDemande />
+      </main>
+    );
+  }
+
+  if (isError) {
+    return (
+      <main role="main" className="ecran-repondre-a-une-demande">
+        <DemandeDejaPourvue />
       </main>
     );
   }
