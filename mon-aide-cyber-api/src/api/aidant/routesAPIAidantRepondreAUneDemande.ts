@@ -1,7 +1,14 @@
 import { ConfigurationServeur } from '../../serveur';
-import express from 'express';
-import { CommandeAttribueDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeAttribueDemandeAide';
+import express, { Request, Response } from 'express';
+import {
+  CommandeAttribueDemandeAide,
+  DemandeAideDejaPourvue,
+} from '../../gestion-demandes/aide/CapteurCommandeAttribueDemandeAide';
+import * as core from 'express-serve-static-core';
 
+type CorpsRequeteRepondreAUneDemande = core.ParamsDictionary & {
+  token: string;
+};
 export const routesAPIAidantRepondreAUneDemande = (
   configuration: ConfigurationServeur
 ) => {
@@ -9,15 +16,31 @@ export const routesAPIAidantRepondreAUneDemande = (
 
   const { busCommande } = configuration;
 
-  routes.post('/', async (_requete, reponse, _suite) => {
-    const commandeAttribueDemandeAide: CommandeAttribueDemandeAide = {
-      type: 'CommandeAttribueDemandeAide',
-    };
+  routes.post(
+    '/',
+    express.json(),
+    async (
+      requete: Request<CorpsRequeteRepondreAUneDemande>,
+      reponse: Response
+    ) => {
+      try {
+        const { demande, aidant } = JSON.parse(atob(requete.body.token));
+        const commandeAttribueDemandeAide: CommandeAttribueDemandeAide = {
+          type: 'CommandeAttribueDemandeAide',
+          identifiantDemande: demande,
+          identifiantAidant: aidant,
+        };
 
-    await busCommande.publie(commandeAttribueDemandeAide);
+        await busCommande.publie(commandeAttribueDemandeAide);
 
-    return reponse.status(202).send();
-  });
+        return reponse.status(202).send();
+      } catch (erreur: unknown | Error | DemandeAideDejaPourvue) {
+        return reponse
+          .status(400)
+          .json({ message: (erreur as DemandeAideDejaPourvue).message });
+      }
+    }
+  );
 
   return routes;
 };

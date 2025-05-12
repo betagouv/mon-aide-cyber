@@ -6,6 +6,16 @@ import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInsc
 import { executeRequete } from '../executeurRequete';
 import { uneDemandeAide } from '../../gestion-demandes/aide/ConstructeurDemandeAide';
 import { gironde } from '../../../src/gestion-demandes/departements';
+import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
+import { Aidant } from '../../../src/espace-aidant/Aidant';
+
+const genereToken = (demandeAide: DemandeAide, aidant: Aidant) =>
+  btoa(
+    JSON.stringify({
+      demande: demandeAide.identifiant,
+      aidant: aidant.identifiant,
+    })
+  );
 
 describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
   const testeurMAC = testeurIntegration();
@@ -22,19 +32,23 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
       .avecUnEmail('jean.dupont@email.com')
       .avecUnNomPrenom('Jean DUPONT')
       .construis();
-    const demandeAide = uneDemandeAide()
-      .avecUnEmail('entite-aidee@email.com')
-      .dansLeDepartement(gironde)
-      .construis();
+    const demandeAide: DemandeAide = {
+      ...uneDemandeAide()
+        .avecUnEmail('entite-aidee@email.com')
+        .dansLeDepartement(gironde)
+        .construis(),
+      identifiant: 'ae904fd1-b430-4a1b-a78c-e8b2e65d2d12',
+    };
     await testeurMAC.entrepots.aidants().persiste(aidant);
     await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
+    const token = genereToken(demandeAide, aidant);
 
     const reponse = await executeRequete(
       donneesServeur.app,
       'POST',
       `/api/aidant/repondre-a-une-demande`,
       {
-        token: `${demandeAide.identifiant}:${aidant.identifiant}`,
+        token,
       }
     );
 
@@ -49,5 +63,33 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
         departement: gironde,
       })
     ).toBe(true);
+  });
+
+  it('Retourne une erreur 400 si la demande ne peut être pourvue (l’identifiant de la demande commence par b)', async () => {
+    const aidant = unAidant()
+      .avecUnEmail('jean.dupont@email.com')
+      .avecUnNomPrenom('Jean DUPONT')
+      .construis();
+    const demandeAide: DemandeAide = {
+      ...uneDemandeAide()
+        .avecUnEmail('entite-aidee@email.com')
+        .dansLeDepartement(gironde)
+        .construis(),
+      identifiant: 'be904fd1-b430-4a1b-a78c-e8b2e65d2d12',
+    };
+    await testeurMAC.entrepots.aidants().persiste(aidant);
+    await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
+    const token = genereToken(demandeAide, aidant);
+
+    const reponse = await executeRequete(
+      donneesServeur.app,
+      'POST',
+      `/api/aidant/repondre-a-une-demande`,
+      {
+        token,
+      }
+    );
+
+    expect(reponse.statusCode).toBe(400);
   });
 });

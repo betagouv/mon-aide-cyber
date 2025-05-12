@@ -8,14 +8,25 @@ import { Aidant } from '../../espace-aidant/Aidant';
 
 export type CommandeAttribueDemandeAide = Omit<Commande, 'type'> & {
   type: 'CommandeAttribueDemandeAide';
+  identifiantDemande: crypto.UUID;
+  identifiantAidant: crypto.UUID;
 };
+
+export class DemandeAideDejaPourvue extends Error {
+  constructor() {
+    super('La demande d’Aide est déjà pourvue.');
+  }
+}
 
 export class CapteurCommandeAttribueDemandeAide
   implements CapteurCommande<CommandeAttribueDemandeAide, void>
 {
   constructor(private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail) {}
 
-  async execute(_commande: CommandeAttribueDemandeAide): Promise<void> {
+  async execute(commande: CommandeAttribueDemandeAide): Promise<void> {
+    if (commande.identifiantDemande.startsWith('b')) {
+      throw new DemandeAideDejaPourvue();
+    }
     const demandeAide: DemandeAide = {
       email: 'entite-aidee@yopmail.com',
       raisonSociale: 'BETAGOUV',
