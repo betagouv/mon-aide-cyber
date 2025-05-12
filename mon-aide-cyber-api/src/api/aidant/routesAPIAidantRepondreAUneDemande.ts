@@ -5,10 +5,12 @@ import {
   DemandeAideDejaPourvue,
 } from '../../gestion-demandes/aide/CapteurCommandeAttribueDemandeAide';
 import * as core from 'express-serve-static-core';
+import { tokenAttributionDemandeAide } from './tokenAttributionDemandeAide';
 
 type CorpsRequeteRepondreAUneDemande = core.ParamsDictionary & {
   token: string;
 };
+
 export const routesAPIAidantRepondreAUneDemande = (
   configuration: ConfigurationServeur
 ) => {
@@ -24,7 +26,9 @@ export const routesAPIAidantRepondreAUneDemande = (
       reponse: Response
     ) => {
       try {
-        const { demande, aidant } = JSON.parse(atob(requete.body.token));
+        const { demande, aidant } = tokenAttributionDemandeAide().dechiffre(
+          requete.body.token
+        );
         const commandeAttribueDemandeAide: CommandeAttribueDemandeAide = {
           type: 'CommandeAttribueDemandeAide',
           identifiantDemande: demande,
