@@ -875,6 +875,40 @@ describe('Entrepot Aidant', () => {
         unAidantEnGirondeDansLesTransportsAssociatifs,
       ]);
     });
+
+    it('recherche les Aidants de manière disctincte', async () => {
+      const unAidantEnGirondeDansLesTransportsAssociatifs = unAidant()
+        .ayantPourDepartements([gironde])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([associations])
+        .construis();
+      const unAidantEnAllierPourAdministrationPublique = unAidant()
+        .ayantPourDepartements([allier])
+        .ayantPourTypesEntite([entitesPubliques])
+        .ayantPourSecteursActivite([
+          { nom: 'Administration' },
+          { nom: 'Tertiaire' },
+        ])
+        .construis();
+      const entrepotAidant = new EntrepotAidantPostgres(
+        new ServiceDeChiffrementClair()
+      );
+      await entrepotAidant.persiste(
+        unAidantEnGirondeDansLesTransportsAssociatifs
+      );
+      await entrepotAidant.persiste(unAidantEnAllierPourAdministrationPublique);
+
+      const aidantsTrouvesEnGironde =
+        await entrepotAidant.rechercheParPreferences({
+          departement: allier,
+          secteursActivite: [{ nom: 'Administration' }, { nom: 'Tertiaire' }],
+          typeEntite: entitesPubliques,
+        });
+
+      expect(aidantsTrouvesEnGironde).toStrictEqual<Aidant[]>([
+        unAidantEnAllierPourAdministrationPublique,
+      ]);
+    });
   });
 });
 
