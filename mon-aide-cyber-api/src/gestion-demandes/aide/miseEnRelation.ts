@@ -33,6 +33,28 @@ export const envoieConfirmationDemandeAide = async (
   );
 };
 
+export const envoieAuCOTAucunAidantPourLaDemandeAide = async (
+  adaptateurEnvoiMail: AdaptateurEnvoiMail,
+  donneesMiseEnRelation: DonneesMiseEnRelation,
+  annuaireCOT: {
+    rechercheEmailParDepartement: (departement: Departement) => string;
+  }
+) => {
+  await adaptateurEnvoiMail.envoie({
+    objet: "Demande d'aide pour MonAideCyber",
+    destinataire: {
+      email: annuaireCOT.rechercheEmailParDepartement(
+        donneesMiseEnRelation.demandeAide.departement
+      ),
+    },
+    copie: adaptateurEnvironnement.messagerie().copieMAC(),
+    corps: adaptateursCorpsMessage
+      .demande()
+      .aucunAidantPourLaDemandeAide()
+      .genereCorpsMessage(donneesMiseEnRelation),
+  });
+};
+
 export const envoieRecapitulatifDemandeAide = async (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
   aide: DemandeAide,
@@ -43,7 +65,7 @@ export const envoieRecapitulatifDemandeAide = async (
   }
 ) => {
   await adaptateurEnvoiMail.envoie({
-    objet: "Demande d'aide pour MonAideCyber",
+    objet: "Assignation d’un Aidant pour une demande d'aide pour MonAideCyber",
     destinataire: {
       email: annuaireCOT.rechercheEmailParDepartement(aide.departement),
     },
