@@ -2,6 +2,7 @@ import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { Departement } from '../departements';
 import {
   DonneesMiseEnRelation,
+  envoieAuCOTAucunAidantPourLaDemandeAide,
   envoieConfirmationDemandeAide,
   envoieRecapitulatifDemandeAide,
   MiseEnRelation,
@@ -27,13 +28,22 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
       secteursActivite: donneesMiseEnRelation.secteursActivite,
       typeEntite: donneesMiseEnRelation.typeEntite,
     });
-    await envoieRecapitulatifDemandeAide(
-      this.adaptateurEnvoiMail,
-      donneesMiseEnRelation.demandeAide,
-      aidants,
-      undefined,
-      this.annuaireCOT
-    );
+    const aucunAidantMatche = aidants.length === 0;
+    if (aucunAidantMatche) {
+      await envoieAuCOTAucunAidantPourLaDemandeAide(
+        this.adaptateurEnvoiMail,
+        donneesMiseEnRelation,
+        this.annuaireCOT
+      );
+    } else {
+      await envoieRecapitulatifDemandeAide(
+        this.adaptateurEnvoiMail,
+        donneesMiseEnRelation.demandeAide,
+        aidants,
+        undefined,
+        this.annuaireCOT
+      );
+    }
     await envoieConfirmationDemandeAide(
       this.adaptateurEnvoiMail,
       donneesMiseEnRelation.demandeAide,

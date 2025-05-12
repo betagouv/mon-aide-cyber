@@ -91,7 +91,7 @@ describe('Mise en relation par critères', () => {
   });
 
   describe('Matching des Aidants', () => {
-    it("Pour le département de l'entité Aidée", async () => {
+    it("Pour les critères correspondants à l'entité Aidée", async () => {
       const entrepots = new EntrepotsMemoire();
       const unAidantEnGirondeEtTransportsPourDuPrive = unAidant()
         .avecUnNomPrenom('Jean DUPONT')
@@ -143,6 +143,41 @@ describe('Mise en relation par critères', () => {
         adaptateurEnvoiMail.aEteEnvoyeA(
           'gironde@ssi.gouv.fr',
           'Aidant trouvé par le matching : Jean DUPONT (jean.dupont@email.com)'
+        )
+      ).toBe(true);
+    });
+
+    it('Envoie un mail au COT en cas de matching infructueux', async () => {
+      const entrepots = new EntrepotsMemoire();
+      const aidant = unAidant().construis();
+      await entrepots.aidants().persiste(aidant);
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
+        .aucunAidantPourLaDemandeAide((donneesMiseEnRelation) => {
+          return `Aucun Aidant! ${donneesMiseEnRelation.siret}`;
+        })
+        .construis().demande;
+      const annuaireCOT = {
+        rechercheEmailParDepartement: (__departement: Departement) =>
+          'gironde@ssi.gouv.fr',
+      };
+      const miseEnRelation = new MiseEnRelationParCriteres(
+        adaptateurEnvoiMail,
+        annuaireCOT,
+        entrepots
+      );
+
+      await miseEnRelation.execute({
+        demandeAide: uneDemandeAide().dansLeDepartement(gironde).construis(),
+        secteursActivite: [{ nom: 'Transports' }],
+        typeEntite: entitesPrivees,
+        siret: '12345',
+      });
+
+      expect(
+        adaptateurEnvoiMail.aEteEnvoyeA(
+          'gironde@ssi.gouv.fr',
+          'Aucun Aidant! 12345'
         )
       ).toBe(true);
     });
