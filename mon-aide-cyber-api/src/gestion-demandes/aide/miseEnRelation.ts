@@ -55,11 +55,34 @@ export const envoieAuCOTAucunAidantPourLaDemandeAide = async (
   });
 };
 
+export const envoieAuCotRecapitulatifDemandeAideDirecteAidant = async (
+  adaptateurEnvoiMail: AdaptateurEnvoiMail,
+  donneesMiseEnRelation: DonneesMiseEnRelation,
+  relationUtilisateur: string,
+  annuaireCOT: {
+    rechercheEmailParDepartement: (departement: Departement) => string;
+  }
+) => {
+  await adaptateurEnvoiMail.envoie({
+    objet:
+      "Demande d'aide pour MonAideCyber en relation directe avec un Aidant",
+    destinataire: {
+      email: annuaireCOT.rechercheEmailParDepartement(
+        donneesMiseEnRelation.demandeAide.departement
+      ),
+    },
+    copie: adaptateurEnvironnement.messagerie().copieMAC(),
+    corps: adaptateursCorpsMessage
+      .demande()
+      .recapitulatifDemandeAideDirecteAidant()
+      .genereCorpsMessage(donneesMiseEnRelation, relationUtilisateur),
+  });
+};
+
 export const envoieRecapitulatifDemandeAide = async (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
   aide: DemandeAide,
   aidants: Aidant[],
-  relationUtilisateur: string | undefined,
   annuaireCOT: {
     rechercheEmailParDepartement: (departement: Departement) => string;
   }
@@ -73,7 +96,7 @@ export const envoieRecapitulatifDemandeAide = async (
     corps: adaptateursCorpsMessage
       .demande()
       .recapitulatifDemandeAide()
-      .genereCorpsMessage(aide, aidants, relationUtilisateur),
+      .genereCorpsMessage(aide, aidants),
   });
 };
 

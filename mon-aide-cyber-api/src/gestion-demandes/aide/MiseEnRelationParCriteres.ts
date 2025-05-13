@@ -40,7 +40,6 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
         this.adaptateurEnvoiMail,
         donneesMiseEnRelation.demandeAide,
         aidants,
-        undefined,
         this.annuaireCOT
       );
     }

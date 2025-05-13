@@ -12,25 +12,24 @@ class ConstructeurAdaptateurDeCorpsDeMessage
 {
   private _recapitulatifDemandeAide: (
     _aide: DemandeAide,
-    _aidants: Aidant[],
-    _relationUtilisateur: string | undefined
-  ) => string = (
-    _aide: DemandeAide,
-    _aidants: Aidant[],
-    _relationUtilisateur: string | undefined
-  ) => 'Bonjour une entité a fait une demande d’aide';
+    _aidants: Aidant[]
+  ) => string = (_aide: DemandeAide, _aidants: Aidant[]) =>
+    'Bonjour une entité a fait une demande d’aide';
 
   private _aucunAidantPourLaDemandeAide: (
     _donneesMiseEnRelation: DonneesMiseEnRelation
   ) => string = (_donneesMiseEnRelation: DonneesMiseEnRelation) =>
     'Bonjour une entité a fait une demande d’aide';
 
+  private _recapitulatifDemandeAideDirecteAidant(
+    _donneesMiseEnRelation: DonneesMiseEnRelation,
+    _relationUtilisateur: string
+  ) {
+    return 'Bonjour une entité a fait une demande d’Aide directe Aidant.';
+  }
+
   recapitulatifDemandeAide(
-    recapitulatif: (
-      _aide: DemandeAide,
-      aidants: Aidant[],
-      relationUtilisateur: string | undefined
-    ) => string
+    recapitulatif: (_aide: DemandeAide, aidants: Aidant[]) => string
   ): ConstructeurAdaptateurDeCorpsDeMessage {
     this._recapitulatifDemandeAide = recapitulatif;
     return this;
@@ -43,16 +42,33 @@ class ConstructeurAdaptateurDeCorpsDeMessage
     return this;
   }
 
+  recapitulatifDemandeAideDirecteAidant(
+    recapitulatif: (
+      _donneesMiseEnRelation: DonneesMiseEnRelation,
+      relationUtilisateur: string
+    ) => string
+  ): ConstructeurAdaptateurDeCorpsDeMessage {
+    this._recapitulatifDemandeAideDirecteAidant = recapitulatif;
+    return this;
+  }
+
   construis(): AdaptateurCorpsDeMessageAide {
     return {
       demande: (): MessagesDemande => ({
         recapitulatifDemandeAide: () => ({
-          genereCorpsMessage: (aide, aidants, relationUtilisateur) =>
-            this._recapitulatifDemandeAide(aide, aidants, relationUtilisateur),
+          genereCorpsMessage: (aide, aidants) =>
+            this._recapitulatifDemandeAide(aide, aidants),
         }),
         aucunAidantPourLaDemandeAide: () => ({
           genereCorpsMessage: (aide) =>
             this._aucunAidantPourLaDemandeAide(aide),
+        }),
+        recapitulatifDemandeAideDirecteAidant: () => ({
+          genereCorpsMessage: (donneesMiseEnRelation, relationUtilisateur) =>
+            this._recapitulatifDemandeAideDirecteAidant(
+              donneesMiseEnRelation,
+              relationUtilisateur
+            ),
         }),
       }),
     };
