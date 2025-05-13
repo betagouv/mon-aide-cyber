@@ -101,7 +101,7 @@ describe('Mise en relation par critères', () => {
   });
 
   describe('Matching des Aidants', () => {
-    it("Pour les critères correspondants à l'entité Aidée", async () => {
+    it('Indique dans le mail envoyé au COT, la liste des aidants qui ont matchés', async () => {
       const entrepots = new EntrepotsMemoire();
       const unAidantEnGirondeEtTransportsPourDuPrive = unAidant()
         .avecUnNomPrenom('Jean DUPONT')
@@ -214,7 +214,7 @@ describe('Mise en relation par critères', () => {
       });
     });
 
-    it('Envoie un mail direct seulement aux Aidants mentionnés dans la variable d’environnement', async () => {
+    it('[FEATURE FLAG] Envoie un mail direct seulement aux Aidants mentionnés dans la variable d’environnement', async () => {
       const entrepots = new EntrepotsMemoire();
       const premierAidant = unAidant()
         .ayantPourDepartements([finistere])
