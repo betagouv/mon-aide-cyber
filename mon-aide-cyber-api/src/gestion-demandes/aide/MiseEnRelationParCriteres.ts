@@ -14,6 +14,8 @@ import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironneme
 import { Aidant } from '../../espace-aidant/Aidant';
 import crypto from 'crypto';
 import { DemandeAide } from './DemandeAide';
+import { adaptateurServiceChiffrement } from '../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
+import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 
 export type AidantMisEnRelation = {
   email: string;
@@ -25,21 +27,25 @@ type TonkenAttributionDemandeAide = {
   demande: crypto.UUID;
   aidant: crypto.UUID;
 };
-export const tokenAttributionDemandeAide = (): {
+export const tokenAttributionDemandeAide = (
+  serviceDeChiffrement: ServiceDeChiffrement = adaptateurServiceChiffrement()
+): {
   dechiffre: (token: string) => TonkenAttributionDemandeAide;
   chiffre: (demandeAide: DemandeAide, identifiantAidant: crypto.UUID) => string;
 } => {
   return {
     chiffre(demandeAide: DemandeAide, identifiantAidant: crypto.UUID): string {
       return btoa(
-        JSON.stringify({
-          demande: demandeAide.identifiant,
-          aidant: identifiantAidant,
-        })
+        serviceDeChiffrement.chiffre(
+          JSON.stringify({
+            demande: demandeAide.identifiant,
+            aidant: identifiantAidant,
+          })
+        )
       );
     },
     dechiffre(token: string): TonkenAttributionDemandeAide {
-      return JSON.parse(atob(token));
+      return JSON.parse(serviceDeChiffrement.dechiffre(atob(token)));
     },
   };
 };

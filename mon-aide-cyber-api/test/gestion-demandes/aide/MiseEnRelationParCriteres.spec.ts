@@ -25,6 +25,8 @@ import {
 import { uneDemandeAide } from './ConstructeurDemandeAide';
 import { DonneesMiseEnRelation } from '../../../src/gestion-demandes/aide/miseEnRelation';
 import crypto from 'crypto';
+import { ServiceDeChiffrementChacha20 } from '../../../src/infrastructure/securite/ServiceDeChiffrementChacha20';
+import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
 
 const cotParDefaut = {
   rechercheEmailParDepartement: (__departement: Departement) => 'cot@email.com',
@@ -284,6 +286,35 @@ describe('Mise en relation par critères', () => {
           'Aucun Aidant! 12345'
         )
       ).toBe(true);
+    });
+
+    it('Chiffre et déchiffre le token de mise en relation', async () => {
+      const serviceDeChiffrement = new ServiceDeChiffrementChacha20(
+        Buffer.from('ivlongueur12'),
+        Buffer.from('assoc-longueur16'),
+        'ma-clef-secrete-de-longueur-0032'
+      );
+      const demandeAide: DemandeAide = {
+        ...uneDemandeAide().construis(),
+        identifiant: '44553107-cdfa-40c1-8155-db5639def867',
+      };
+      const identifiantAidant = '7571dfe9-31e7-4e6f-80de-fafa3f323b1d';
+
+      const valeurChiffree = tokenAttributionDemandeAide(
+        serviceDeChiffrement
+      ).chiffre(demandeAide, identifiantAidant);
+
+      expect(valeurChiffree).toBe(
+        'Njk3NjZjNmY2ZTY3NzU2NTc1NzIzMTMyNjE3MzczNmY2MzJkNmM2ZjZlNjc3NTY1NzU3MjMxMzZmNWY0ZDBhZTc4YzNhOTEwMGMxN2E0NjdkZWU5YWRjZGIyY2RjMGExMWY1ZDY2MGI1Y2I1NDY2MTc4YmY0NTA1YzBkZDM5OGY0MmUwMTU5NjZiNjlkMzliM2NhNjczMDg2OGI2YThmYWU5ZjlhZDEwYTQ1ZjQ5MGRjZDU0NGVlYmZiMzA2MGY5NTJjZDkxOWZhMTg0MjQwZmVlODc5YTkyY2ZkMDQzMGE0MTVlYzc1MGU4YWY3NzBhN2QwMzc3MTZhNDg5Nzg3ODIzNzFiZjEzMmJlZDgxZDZlMGI0YzkwMjQzZTA='
+      );
+      expect(
+        tokenAttributionDemandeAide(serviceDeChiffrement).dechiffre(
+          valeurChiffree
+        )
+      ).toStrictEqual({
+        demande: '44553107-cdfa-40c1-8155-db5639def867',
+        aidant: '7571dfe9-31e7-4e6f-80de-fafa3f323b1d',
+      });
     });
   });
 });
