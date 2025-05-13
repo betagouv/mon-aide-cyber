@@ -85,6 +85,10 @@ const trustProxy = (): number | string => {
 const ipAutorisees = (): false | string[] =>
   process.env.RESEAU_ADRESSES_IP_AUTORISEES?.split(',') ?? false;
 
+const miseEnRelation = (): { aidants: string } => ({
+  aidants: process.env.AIDANTS_DE_TEST_POUR_LA_MISE_EN_RELATION || '',
+});
+
 const adaptateurEnvironnement = {
   messagerie,
   mac,
@@ -98,6 +102,7 @@ const adaptateurEnvironnement = {
   reseauTrustProxy: trustProxy,
   ipAutorisees,
   brevo,
+  miseEnRelation,
 };
 
 export { sentry, adaptateurEnvironnement };

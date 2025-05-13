@@ -19,6 +19,8 @@ import {
 } from '../brevo/ConstructeursBrevo';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { isArray } from 'lodash';
+import { DonneesMiseEnRelation } from '../../gestion-demandes/aide/miseEnRelation';
+import { AidantMisEnRelation } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   async envoieConfirmationDemandeAide(
@@ -63,6 +65,13 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
         departement: confirmation.departement.nom,
       });
     await this.envoieMailAvecTemplate(constructeurEmailBrevo.construis());
+  }
+
+  envoieMiseEnRelation(
+    _donneesMiseEnRelation: DonneesMiseEnRelation,
+    _aidant: AidantMisEnRelation
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 
   private async envoieMailAvecTemplate<T extends EnvoiMailBrevoAvecTemplate>(

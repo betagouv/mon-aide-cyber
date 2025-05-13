@@ -6,6 +6,8 @@ import {
   Expediteur,
   UtilisateurMACEnRelation,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
+import { DonneesMiseEnRelation } from '../../gestion-demandes/aide/miseEnRelation';
+import { AidantMisEnRelation } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 import { Departement } from '../../gestion-demandes/departements';
 
 export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
@@ -47,6 +49,14 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   ): Promise<void> {
     this.confirmation = confirmation;
     this.destinataires.push(confirmation.emailAidant);
+    return Promise.resolve();
+  }
+
+  envoieMiseEnRelation(
+    _donneesMiseEnRelation: DonneesMiseEnRelation,
+    aidant: AidantMisEnRelation
+  ): Promise<void> {
+    this.destinataires.push(aidant.email);
     return Promise.resolve();
   }
 

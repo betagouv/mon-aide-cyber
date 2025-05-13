@@ -1,9 +1,13 @@
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
-import { MiseEnRelationParCriteres } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
+import {
+  AidantMisEnRelation,
+  MiseEnRelationParCriteres,
+} from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
 import {
   allier,
   Departement,
+  finistere,
   gironde,
 } from '../../../src/gestion-demandes/departements';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -18,6 +22,9 @@ import {
   entitesPubliques,
 } from '../../../src/espace-aidant/Aidant';
 import { uneDemandeAide } from './ConstructeurDemandeAide';
+import { tokenAttributionDemandeAide } from '../../../src/api/aidant/tokenAttributionDemandeAide';
+import { DonneesMiseEnRelation } from '../../../src/gestion-demandes/aide/miseEnRelation';
+import crypto from 'crypto';
 
 const cotParDefaut = {
   rechercheEmailParDepartement: (__departement: Departement) => 'cot@email.com',
@@ -148,6 +155,100 @@ describe('Mise en relation par critères', () => {
           'Aidant trouvé par le matching : Jean DUPONT (jean.dupont@email.com)'
         )
       ).toBe(true);
+    });
+
+    it('Génère un lien unique par Aidant pour postuler à la demande', async () => {
+      const entrepots = new EntrepotsMemoire();
+      const premierAidant = unAidant()
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .construis();
+      await entrepots.aidants().persiste(premierAidant);
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      const aidantsContactes: AidantMisEnRelation[] = [];
+      adaptateurEnvoiMail.envoieMiseEnRelation = async (
+        _donneesMiseEnRelation,
+        aidant
+      ) => {
+        aidantsContactes.push(aidant);
+      };
+      adaptateurEnvironnement.miseEnRelation = () => ({
+        aidants: `jean.dupont@email.com,jean.dujardin@email.com`,
+      });
+      const miseEnRelation = new MiseEnRelationParCriteres(
+        adaptateurEnvoiMail,
+        cotParDefaut,
+        entrepots
+      );
+
+      await miseEnRelation.execute({
+        demandeAide: uneDemandeAide().dansLeDepartement(finistere).construis(),
+        secteursActivite: [{ nom: 'Transports' }],
+        typeEntite: entitesPubliques,
+        siret: '12345',
+      });
+
+      expect(aidantsContactes).toHaveLength(2);
+      const premierAidantMisEnRelation = aidantsContactes[0];
+      expect(
+        tokenAttributionDemandeAide().dechiffre(
+          premierAidantMisEnRelation.lienPourPostuler.substring(
+            premierAidantMisEnRelation.lienPourPostuler.indexOf('=') + 1
+          )
+        )
+      ).toStrictEqual<{ demande: crypto.UUID; aidant: crypto.UUID }>({
+        demande: expect.any(String),
+        aidant: expect.any(String),
+      });
+      const deuxiemeAidantMisEnRelation = aidantsContactes[0];
+      expect(
+        tokenAttributionDemandeAide().dechiffre(
+          deuxiemeAidantMisEnRelation.lienPourPostuler.substring(
+            deuxiemeAidantMisEnRelation.lienPourPostuler.indexOf('=') + 1
+          )
+        )
+      ).toStrictEqual<{ demande: crypto.UUID; aidant: crypto.UUID }>({
+        demande: expect.any(String),
+        aidant: expect.any(String),
+      });
+    });
+
+    it('Envoie un mail direct seulement aux Aidants mentionnés dans la variable d’environnement', async () => {
+      const entrepots = new EntrepotsMemoire();
+      const premierAidant = unAidant()
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .construis();
+      adaptateurEnvironnement.miseEnRelation = () => ({
+        aidants: `aidant-hardcode@beta.gouv.fr`,
+      });
+      const aidantsContactes: AidantMisEnRelation[] = [];
+      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+      adaptateurEnvoiMail.envoieMiseEnRelation = async (
+        _donneesMiseEnRelation,
+        aidant
+      ) => {
+        aidantsContactes.push(aidant);
+      };
+      await entrepots.aidants().persiste(premierAidant);
+      const miseEnRelation = new MiseEnRelationParCriteres(
+        adaptateurEnvoiMail,
+        cotParDefaut,
+        entrepots
+      );
+
+      const donneesMiseEnRelation: DonneesMiseEnRelation = {
+        demandeAide: uneDemandeAide().dansLeDepartement(finistere).construis(),
+        secteursActivite: [{ nom: 'Transports' }],
+        typeEntite: entitesPubliques,
+        siret: '12345',
+      };
+      await miseEnRelation.execute(donneesMiseEnRelation);
+
+      expect(aidantsContactes).toHaveLength(1);
+      expect(aidantsContactes[0].email).toBe('aidant-hardcode@beta.gouv.fr');
     });
 
     it('Envoie un mail au COT en cas de matching infructueux', async () => {
