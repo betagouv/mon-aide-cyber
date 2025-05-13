@@ -1,4 +1,6 @@
 import { Departement } from '../gestion-demandes/departements';
+import { DonneesMiseEnRelation } from '../gestion-demandes/aide/miseEnRelation';
+import { AidantMisEnRelation } from '../gestion-demandes/aide/MiseEnRelationParCriteres';
 
 export type AdresseEmail = string;
 
@@ -32,6 +34,11 @@ export interface AdaptateurEnvoiMail {
 
   envoieConfirmationDemandeAideAttribuee(
     confirmation: ConfirmationDemandeAideAttribuee
+  ): Promise<void>;
+
+  envoieMiseEnRelation(
+    donneesMiseEnRelation: DonneesMiseEnRelation,
+    aidant: AidantMisEnRelation
   ): Promise<void>;
 }
 

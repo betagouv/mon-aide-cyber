@@ -10,6 +10,17 @@ import {
   ResultatMiseEnRelation,
 } from './miseEnRelation';
 import { Entrepots } from '../../domaine/Entrepots';
+import { tokenAttributionDemandeAide } from '../../api/aidant/tokenAttributionDemandeAide';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import { Aidant } from '../../espace-aidant/Aidant';
+import crypto from 'crypto';
+
+export type MatchingAidant = AidantMisEnRelation[];
+
+export type AidantMisEnRelation = {
+  email: string;
+  lienPourPostuler: string;
+};
 
 export class MiseEnRelationParCriteres implements MiseEnRelation {
   constructor(
@@ -36,12 +47,7 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
         this.annuaireCOT
       );
     } else {
-      await envoieRecapitulatifDemandeAide(
-        this.adaptateurEnvoiMail,
-        donneesMiseEnRelation.demandeAide,
-        aidants,
-        this.annuaireCOT
-      );
+      await this.informeAidantsDeLaDemandeAide(aidants, donneesMiseEnRelation);
     }
     await envoieConfirmationDemandeAide(
       this.adaptateurEnvoiMail,
@@ -59,5 +65,33 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
         departement: donneesMiseEnRelation.demandeAide.departement.code,
       },
     };
+  }
+
+  private async informeAidantsDeLaDemandeAide(
+    aidants: Aidant[],
+    donneesMiseEnRelation: DonneesMiseEnRelation
+  ) {
+    await envoieRecapitulatifDemandeAide(
+      this.adaptateurEnvoiMail,
+      donneesMiseEnRelation.demandeAide,
+      aidants,
+      this.annuaireCOT
+    );
+    const lesAidantsDeTest = adaptateurEnvironnement
+      .miseEnRelation()
+      .aidants.split(',');
+    const matchingAidants: MatchingAidant = lesAidantsDeTest.map((a) => ({
+      email: a,
+      nomPrenom: 'Un prénom',
+      lienPourPostuler: `${adaptateurEnvironnement.mac().urlMAC()}/repondre-a-une-demande?token=${tokenAttributionDemandeAide().chiffre(
+        donneesMiseEnRelation.demandeAide,
+        crypto.randomUUID()
+      )}`,
+    }));
+
+    const envoisEmails = matchingAidants.map((a) =>
+      this.adaptateurEnvoiMail.envoieMiseEnRelation(donneesMiseEnRelation, a)
+    );
+    await Promise.all(envoisEmails);
   }
 }
