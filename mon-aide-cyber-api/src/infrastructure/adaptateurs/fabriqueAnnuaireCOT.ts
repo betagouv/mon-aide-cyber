@@ -24,8 +24,8 @@ export const fabriqueAnnuaireCOT = (): AnnuaireCOT => {
     return {
       annuaireCOT: () => ({
         rechercheEmailParDepartement: (__departement: Departement): string =>
-          'cot@email.com',
-        tous: (): string[] => ['cot@email.com'],
+          'cot-mac@yopmail.com',
+        tous: (): string[] => ['cot-mac@yopmail.com'],
       }),
     };
   }

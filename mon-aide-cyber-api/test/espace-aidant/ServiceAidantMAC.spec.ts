@@ -135,7 +135,7 @@ describe('Service Aidant', () => {
 
       expect(
         adaptateurEnvoiMail.aEteEnvoyeEnCopieA(
-          'cot@email.com',
+          'cot-mac@yopmail.com',
           'Bonjour le monde!'
         )
       ).toBe(true);
