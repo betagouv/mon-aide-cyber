@@ -151,7 +151,7 @@ export class CapteurSagaDemandeAide
             this.fabriqueMiseEnRelation.fabrique(utilisateurMAC);
           const resultat = await miseEnRelation.execute({
             demandeAide: aide,
-            siret: '12345',
+            siret: entreprise[0].siret,
             secteursActivite: entreprise[0].secteursActivite,
             typeEntite: entreprise[0].typeEntite,
           });
