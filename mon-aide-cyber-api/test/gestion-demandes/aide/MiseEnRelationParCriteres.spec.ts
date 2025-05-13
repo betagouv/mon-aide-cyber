@@ -115,7 +115,7 @@ describe('Mise en relation par critères', () => {
         .persiste(unAidantDansAllierEtAdministrationPublique);
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
-        .recapitulatifDemandeAide((_aide, aidants, _relationUtilisateur) => {
+        .recapitulatifDemandeAide((_aide, aidants) => {
           if (aidants.length === 0) {
             throw new Error('Ce test devrait trouver 1 Aidant.');
           }

@@ -5,15 +5,17 @@ import { DonneesMiseEnRelation } from './miseEnRelation';
 
 export type MessagesDemande = {
   recapitulatifDemandeAide: () => {
-    genereCorpsMessage: (
-      aide: DemandeAide,
-      aidants: Aidant[],
-      relationUtilisateur: string | undefined
-    ) => string;
+    genereCorpsMessage: (aide: DemandeAide, aidants: Aidant[]) => string;
   };
   aucunAidantPourLaDemandeAide: () => {
     genereCorpsMessage: (
       donneesMiseEnRelation: DonneesMiseEnRelation
+    ) => string;
+  };
+  recapitulatifDemandeAideDirecteAidant: () => {
+    genereCorpsMessage: (
+      donneesMiseEnRelation: DonneesMiseEnRelation,
+      relationUtilisateur: string
     ) => string;
   };
 };
@@ -24,17 +26,13 @@ export type AdaptateurCorpsDeMessageAide = {
 
 const genereCorpsRecapitulatifDemandeAide = (
   aide: DemandeAide,
-  aidants: Aidant[],
-  relationUtilisateur: string | undefined
+  aidants: Aidant[]
 ) => {
   const formateDate = FournisseurHorloge.formateDate(
     FournisseurHorloge.maintenant()
   );
   const raisonSociale = aide.raisonSociale
     ? `- Raison sociale: ${aide.raisonSociale}\n`
-    : '';
-  const miseEnRelation = relationUtilisateur
-    ? '- Est déjà en relation avec un Aidant\n'
     : '';
   const aidantsQuiMatchent = aidants.map((a) => `- ${a.email}\n`);
   return (
@@ -43,7 +41,6 @@ const genereCorpsRecapitulatifDemandeAide = (
     `Une demande d’aide a été faite par ${aide.email}\n` +
     '\n' +
     'Ci-dessous, les informations concernant cette demande :\n' +
-    miseEnRelation +
     `- Date de la demande : ${formateDate.date} à ${formateDate.heure}\n` +
     `- Département: ${aide.departement.nom}\n` +
     raisonSociale +
@@ -52,6 +49,34 @@ const genereCorpsRecapitulatifDemandeAide = (
     (aidantsQuiMatchent.length > 0 ? aidantsQuiMatchent : 'Aucun')
   );
 };
+
+const genereCorpsRecapitulatifDemandeAideDirecteAidant = (
+  donneesMiseEnRelation: DonneesMiseEnRelation,
+  relationUtilisateur: string
+) => {
+  const aide = donneesMiseEnRelation.demandeAide;
+  const formateDate = FournisseurHorloge.formateDate(
+    FournisseurHorloge.maintenant()
+  );
+  const raisonSociale = aide.raisonSociale
+    ? `- Raison sociale: ${aide.raisonSociale}\n`
+    : '';
+  return (
+    'Bonjour,\n' +
+    '\n' +
+    `Une demande d’aide a été faite par ${aide.email}\n` +
+    '\n' +
+    'Ci-dessous, les informations concernant cette demande :\n' +
+    `- Est déjà en relation avec un Aidant : ${relationUtilisateur}\n` +
+    `- Date de la demande : ${formateDate.date} à ${formateDate.heure}\n` +
+    `- Département: ${aide.departement.nom}\n` +
+    `- SIRET : ${donneesMiseEnRelation.siret}\n` +
+    `- Type entité : ${donneesMiseEnRelation.typeEntite.nom}\n` +
+    `- Secteurs d’activité : ${donneesMiseEnRelation.secteursActivite.map((s) => s.nom).join(', ')}\n` +
+    raisonSociale
+  );
+};
+
 const genereCorpsAucunAidantPourLaDemandeAide = (
   donneesMiseEnRelation: DonneesMiseEnRelation
 ) => {
@@ -80,12 +105,22 @@ const genereCorpsAucunAidantPourLaDemandeAide = (
 const adaptateursCorpsMessage: AdaptateurCorpsDeMessageAide = {
   demande: (): MessagesDemande => ({
     recapitulatifDemandeAide: () => ({
-      genereCorpsMessage: (aide, aidants, relationUtilisateur): string =>
-        genereCorpsRecapitulatifDemandeAide(aide, aidants, relationUtilisateur),
+      genereCorpsMessage: (aide, aidants): string =>
+        genereCorpsRecapitulatifDemandeAide(aide, aidants),
     }),
     aucunAidantPourLaDemandeAide: () => ({
       genereCorpsMessage: (aide): string =>
         genereCorpsAucunAidantPourLaDemandeAide(aide),
+    }),
+    recapitulatifDemandeAideDirecteAidant: () => ({
+      genereCorpsMessage: (
+        donneesMiseEnRelation,
+        relationUtilisateur
+      ): string =>
+        genereCorpsRecapitulatifDemandeAideDirecteAidant(
+          donneesMiseEnRelation,
+          relationUtilisateur
+        ),
     }),
   }),
 };

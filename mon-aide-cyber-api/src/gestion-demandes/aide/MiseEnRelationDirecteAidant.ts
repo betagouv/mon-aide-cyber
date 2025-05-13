@@ -4,8 +4,8 @@ import { UtilisateurMACDTO } from '../../recherche-utilisateurs-mac/rechercheUti
 import {
   DirecteAidant,
   DonneesMiseEnRelation,
+  envoieAuCotRecapitulatifDemandeAideDirecteAidant,
   envoieConfirmationDemandeAide,
-  envoieRecapitulatifDemandeAide,
   MiseEnRelation,
   ResultatMiseEnRelation,
 } from './miseEnRelation';
@@ -22,10 +22,9 @@ export class MiseEnRelationDirecteAidant implements MiseEnRelation {
   async execute(
     donneesMiseEnRelation: DonneesMiseEnRelation
   ): Promise<ResultatMiseEnRelation<DirecteAidant>> {
-    await envoieRecapitulatifDemandeAide(
+    await envoieAuCotRecapitulatifDemandeAideDirecteAidant(
       this.adaptateurEnvoiMail,
-      donneesMiseEnRelation.demandeAide,
-      [],
+      donneesMiseEnRelation,
       this.aidant.email,
       this.annuaireCOT
     );
