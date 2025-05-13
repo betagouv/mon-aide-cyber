@@ -10,7 +10,6 @@ import {
   ResultatMiseEnRelation,
 } from './miseEnRelation';
 import { Entrepots } from '../../domaine/Entrepots';
-import { tokenAttributionDemandeAide } from '../../api/aidant/tokenAttributionDemandeAide';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { Aidant } from '../../espace-aidant/Aidant';
 import crypto from 'crypto';
@@ -20,6 +19,29 @@ export type AidantMisEnRelation = {
   email: string;
   nomPrenom: string;
   lienPourPostuler: string;
+};
+
+type TonkenAttributionDemandeAide = {
+  demande: crypto.UUID;
+  aidant: crypto.UUID;
+};
+export const tokenAttributionDemandeAide = (): {
+  dechiffre: (token: string) => TonkenAttributionDemandeAide;
+  chiffre: (demandeAide: DemandeAide, identifiantAidant: crypto.UUID) => string;
+} => {
+  return {
+    chiffre(demandeAide: DemandeAide, identifiantAidant: crypto.UUID): string {
+      return btoa(
+        JSON.stringify({
+          demande: demandeAide.identifiant,
+          aidant: identifiantAidant,
+        })
+      );
+    },
+    dechiffre(token: string): TonkenAttributionDemandeAide {
+      return JSON.parse(atob(token));
+    },
+  };
 };
 
 export class MiseEnRelationParCriteres implements MiseEnRelation {

@@ -7,7 +7,8 @@ import { executeRequete } from '../executeurRequete';
 import { uneDemandeAide } from '../../gestion-demandes/aide/ConstructeurDemandeAide';
 import { gironde } from '../../../src/gestion-demandes/departements';
 import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
-import { tokenAttributionDemandeAide } from '../../../src/api/aidant/tokenAttributionDemandeAide';
+
+import { tokenAttributionDemandeAide } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
 
 describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
   const testeurMAC = testeurIntegration();
