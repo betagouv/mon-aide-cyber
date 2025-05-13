@@ -78,9 +78,10 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
       aidants,
       this.annuaireCOT
     );
-    const lesAidantsDeTest = adaptateurEnvironnement
-      .miseEnRelation()
-      .aidants.split(',');
+
+    const lesAidantsDeTest =
+      adaptateurEnvironnement.miseEnRelation().aidantsDeTest;
+
     const matchingAidants: MatchingAidant = lesAidantsDeTest.map((a) => ({
       email: a,
       nomPrenom: 'Un prénom',
