@@ -67,11 +67,27 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     await this.envoieMailAvecTemplate(constructeurEmailBrevo.construis());
   }
 
-  envoieMiseEnRelation(
-    _donneesMiseEnRelation: DonneesMiseEnRelation,
-    _aidant: AidantMisEnRelation
+  async envoieMiseEnRelation(
+    donneesMiseEnRelation: DonneesMiseEnRelation,
+    aidant: AidantMisEnRelation
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    const destinataire: Destinataire = { email: aidant.email };
+    const emailBrevo = unConstructeurEnvoiDeMailAvecTemplate()
+      .ayantPourTemplate(
+        adaptateurEnvironnement.brevo().templateMiseEnRelation()
+      )
+      .ayantPourDestinataires([[destinataire.email, destinataire.nom]])
+      .ayantPourParametres({
+        nomPrenom: aidant.nomPrenom,
+        departement: donneesMiseEnRelation.demandeAide.departement.nom,
+        typeEntite: donneesMiseEnRelation.typeEntite.nom,
+        secteursActivite: donneesMiseEnRelation.secteursActivite
+          .map((s) => s.nom)
+          .join(','),
+        lienPourPostuler: aidant.lienPourPostuler,
+      })
+      .construis();
+    await this.envoieMailAvecTemplate(emailBrevo);
   }
 
   private async envoieMailAvecTemplate<T extends EnvoiMailBrevoAvecTemplate>(
