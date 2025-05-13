@@ -19,6 +19,7 @@ export type MatchingAidant = AidantMisEnRelation[];
 
 export type AidantMisEnRelation = {
   email: string;
+  nomPrenom: string;
   lienPourPostuler: string;
 };
 
