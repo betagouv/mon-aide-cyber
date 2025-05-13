@@ -174,7 +174,7 @@ describe('Mise en relation par critères', () => {
         aidantsContactes.push(aidant);
       };
       adaptateurEnvironnement.miseEnRelation = () => ({
-        aidants: `jean.dupont@email.com,jean.dujardin@email.com`,
+        aidantsDeTest: ['jean.dupont@email.com', 'jean.dujardin@email.com'],
       });
       const miseEnRelation = new MiseEnRelationParCriteres(
         adaptateurEnvoiMail,
@@ -222,7 +222,7 @@ describe('Mise en relation par critères', () => {
         .ayantPourTypesEntite([entitesPubliques])
         .construis();
       adaptateurEnvironnement.miseEnRelation = () => ({
-        aidants: `aidant-hardcode@beta.gouv.fr`,
+        aidantsDeTest: ['aidant-hardcode@beta.gouv.fr'],
       });
       const aidantsContactes: AidantMisEnRelation[] = [];
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
