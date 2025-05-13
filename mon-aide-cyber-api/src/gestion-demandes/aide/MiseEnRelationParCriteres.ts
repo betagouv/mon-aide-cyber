@@ -14,8 +14,7 @@ import { tokenAttributionDemandeAide } from '../../api/aidant/tokenAttributionDe
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { Aidant } from '../../espace-aidant/Aidant';
 import crypto from 'crypto';
-
-export type MatchingAidant = AidantMisEnRelation[];
+import { DemandeAide } from './DemandeAide';
 
 export type AidantMisEnRelation = {
   email: string;
@@ -79,21 +78,30 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
       this.annuaireCOT
     );
 
-    const lesAidantsDeTest =
-      adaptateurEnvironnement.miseEnRelation().aidantsDeTest;
-
-    const matchingAidants: MatchingAidant = lesAidantsDeTest.map((a) => ({
-      email: a,
-      nomPrenom: 'Un prénom',
-      lienPourPostuler: `${adaptateurEnvironnement.mac().urlMAC()}/repondre-a-une-demande?token=${tokenAttributionDemandeAide().chiffre(
-        donneesMiseEnRelation.demandeAide,
-        crypto.randomUUID()
-      )}`,
-    }));
-
+    const matchingAidants = this.aidantsPourPostuler(
+      donneesMiseEnRelation.demandeAide,
+      adaptateurEnvironnement.miseEnRelation().aidantsDeTest
+    );
     const envoisEmails = matchingAidants.map((a) =>
       this.adaptateurEnvoiMail.envoieMiseEnRelation(donneesMiseEnRelation, a)
     );
     await Promise.all(envoisEmails);
   }
+
+  private aidantsPourPostuler = (
+    demandeAide: DemandeAide,
+    emailsDesAidants: string[]
+  ): AidantMisEnRelation[] => {
+    const urlMAC = adaptateurEnvironnement.mac().urlMAC();
+    const { chiffre } = tokenAttributionDemandeAide();
+
+    return emailsDesAidants.map((email) => ({
+      email,
+      nomPrenom: 'Un prénom',
+      lienPourPostuler: `${urlMAC}/repondre-a-une-demande?token=${chiffre(
+        demandeAide,
+        crypto.randomUUID()
+      )}`,
+    }));
+  };
 }
