@@ -32,6 +32,9 @@ describe('Mise en relation par critères', () => {
         emailMac: 'mac@email.com',
         copieMac: 'copie-mac@email.com',
       });
+    adaptateurEnvironnement.mac = () => ({
+      urlMAC: () => 'http://domaine:1234',
+    });
   });
 
   it('Envoie un email de demande d’aide en copie à MAC', async () => {

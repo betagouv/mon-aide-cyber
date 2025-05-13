@@ -1,26 +1,23 @@
 import crypto from 'crypto';
-import { Aidant } from '../../espace-aidant/Aidant';
 import { DemandeAide } from '../../gestion-demandes/aide/DemandeAide';
 
-type TonkenAttributionDemandeAide = {
+type TokenAttributionDemandeAide = {
   demande: crypto.UUID;
   aidant: crypto.UUID;
 };
 export const tokenAttributionDemandeAide = (): {
-  dechiffre: (token: string) => TonkenAttributionDemandeAide;
-  chiffre: (demandeAide: DemandeAide, aidant: Aidant) => string;
-} => {
-  return {
-    chiffre(demandeAide: DemandeAide, aidant: Aidant): string {
-      return btoa(
-        JSON.stringify({
-          demande: demandeAide.identifiant,
-          aidant: aidant.identifiant,
-        })
-      );
-    },
-    dechiffre(token: string): TonkenAttributionDemandeAide {
-      return JSON.parse(atob(token));
-    },
-  };
-};
+  dechiffre: (token: string) => TokenAttributionDemandeAide;
+  chiffre: (demandeAide: DemandeAide, identifiantAidant: crypto.UUID) => string;
+} => ({
+  chiffre(demandeAide: DemandeAide, identifiantAidant: crypto.UUID): string {
+    return btoa(
+      JSON.stringify({
+        demande: demandeAide.identifiant,
+        aidant: identifiantAidant,
+      })
+    );
+  },
+  dechiffre(token: string): TokenAttributionDemandeAide {
+    return JSON.parse(atob(token));
+  },
+});

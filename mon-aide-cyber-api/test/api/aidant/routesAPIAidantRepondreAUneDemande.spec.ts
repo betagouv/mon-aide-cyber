@@ -33,7 +33,10 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
     };
     await testeurMAC.entrepots.aidants().persiste(aidant);
     await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
-    const token = tokenAttributionDemandeAide().chiffre(demandeAide, aidant);
+    const token = tokenAttributionDemandeAide().chiffre(
+      demandeAide,
+      aidant.identifiant
+    );
 
     const reponse = await executeRequete(
       donneesServeur.app,
@@ -71,7 +74,10 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
     };
     await testeurMAC.entrepots.aidants().persiste(aidant);
     await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
-    const token = tokenAttributionDemandeAide().chiffre(demandeAide, aidant);
+    const token = tokenAttributionDemandeAide().chiffre(
+      demandeAide,
+      aidant.identifiant
+    );
 
     const reponse = await executeRequete(
       donneesServeur.app,
