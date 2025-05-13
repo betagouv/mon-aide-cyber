@@ -5,7 +5,8 @@ import {
   DemandeAideDejaPourvue,
 } from '../../gestion-demandes/aide/CapteurCommandeAttribueDemandeAide';
 import * as core from 'express-serve-static-core';
-import { tokenAttributionDemandeAide } from './tokenAttributionDemandeAide';
+
+import { tokenAttributionDemandeAide } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 
 type CorpsRequeteRepondreAUneDemande = core.ParamsDictionary & {
   token: string;

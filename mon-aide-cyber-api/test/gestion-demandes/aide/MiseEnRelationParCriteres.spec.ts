@@ -3,6 +3,7 @@ import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptate
 import {
   AidantMisEnRelation,
   MiseEnRelationParCriteres,
+  tokenAttributionDemandeAide,
 } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
 import {
   allier,
@@ -22,7 +23,6 @@ import {
   entitesPubliques,
 } from '../../../src/espace-aidant/Aidant';
 import { uneDemandeAide } from './ConstructeurDemandeAide';
-import { tokenAttributionDemandeAide } from '../../../src/api/aidant/tokenAttributionDemandeAide';
 import { DonneesMiseEnRelation } from '../../../src/gestion-demandes/aide/miseEnRelation';
 import crypto from 'crypto';
 
