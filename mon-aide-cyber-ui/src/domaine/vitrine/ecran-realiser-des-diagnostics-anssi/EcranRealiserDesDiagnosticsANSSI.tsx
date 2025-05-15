@@ -3,7 +3,6 @@ import useDefilementFluide from '../../../hooks/useDefilementFluide.ts';
 import { useNavigate } from 'react-router-dom';
 import { ActionsPiedDePage } from '../../../composants/communs/ActionsPiedDePage.tsx';
 import { TypographieH3 } from '../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
-import { Temoignages } from '../ecran-devenir-aidant/composants/Temoignages.tsx';
 import Button from '../../../composants/atomes/Button/Button.tsx';
 import illustrationAutodiag from '../../../../public/images/illustration-autodiag.svg';
 import { HeroRealiserDesDiagnosticsAnssi } from './composants/HeroRealiserDesDiagnosticsANSSI.tsx';
@@ -11,6 +10,7 @@ import { OeuvrerPourInteretGeneral } from './composants/OeuvrerPourInteretGenera
 import { PrerequisAidantCyber } from './composants/PrerequisAidantCyber.tsx';
 import { UtilisationDuService } from '../../parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/vitrine/UtilisationDuService.tsx';
 import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
+import { Temoignages } from '../temoignages/Temoignages.tsx';
 
 export const EcranRealiserDesDiagnosticsANSSI = () => {
   useTitreDePage('Réaliser des diagnostics ANSSI');

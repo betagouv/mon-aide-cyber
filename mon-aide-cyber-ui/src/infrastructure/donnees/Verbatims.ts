@@ -1,4 +1,4 @@
-import { Verbatim } from '../../domaine/vitrine/ecran-devenir-aidant/composants/Temoignages';
+import { Verbatim } from '../../domaine/vitrine/temoignages/Temoignages.tsx';
 
 export const verbatims: Verbatim[] = [
   {

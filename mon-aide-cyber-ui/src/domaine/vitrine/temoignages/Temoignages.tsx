@@ -1,5 +1,5 @@
 import { PropsWithChildren, useState } from 'react';
-import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5';
+import { TypographieH5 } from '../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 
 export type Verbatim = {
   id: number;

@@ -2,7 +2,6 @@ import TuileActionDevenirAidant from '../../../composants/communs/tuiles/TuileAc
 import TuileActionStatistiques from '../../../composants/communs/tuiles/TuileActionStatistiques';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2';
 import useDefilementFluide from '../../../hooks/useDefilementFluide';
-import { Temoignages } from '../ecran-devenir-aidant/composants/Temoignages';
 import { FocusRestitution } from './composants/FocusRestitution';
 import { FonctionnementDispositif } from './composants/FonctionnementDispositif';
 import { HeroDemandeAide } from './composants/HeroDemandeAide';
@@ -13,6 +12,7 @@ import { TypographieH3 } from '../../../composants/communs/typographie/Typograph
 import { useNavigate } from 'react-router-dom';
 import illustrationAutodiag from './../../../../public/images/illustration-autodiag.svg';
 import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
+import { Temoignages } from '../temoignages/Temoignages.tsx';
 
 export const EcranBeneficierDuDispositif = () => {
   useDefilementFluide();
