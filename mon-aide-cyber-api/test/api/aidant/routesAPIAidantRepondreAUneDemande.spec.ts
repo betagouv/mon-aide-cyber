@@ -20,66 +20,69 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
 
   afterEach(() => testeurMAC.arrete());
 
-  it("Envoie la confirmation de diagnostic à l'Aidant", async () => {
-    const aidant = unAidant()
-      .avecUnEmail('jean.dupont@email.com')
-      .avecUnNomPrenom('Jean DUPONT')
-      .construis();
-    const demandeAide: DemandeAide = uneDemandeAide()
-      .avecUnEmail('entite-aidee@email.com')
-      .dansLeDepartement(gironde)
-      .construis();
-    await testeurMAC.entrepots.aidants().persiste(aidant);
-    await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
-    const token = tokenAttributionDemandeAide().chiffre(
-      demandeAide.email,
-      aidant.identifiant
-    );
+  describe("Concernant la réponse par l'aidant", () => {
+    it("Envoie la confirmation de diagnostic à l'Aidant", async () => {
+      const aidant = unAidant()
+        .avecUnEmail('jean.dupont@email.com')
+        .avecUnNomPrenom('Jean DUPONT')
+        .construis();
+      const demandeAide: DemandeAide = uneDemandeAide()
+          .avecUnEmail('entite-aidee@email.com')
+          .dansLeDepartement(gironde)
+          .construis();
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+      await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
+      const token = tokenAttributionDemandeAide().chiffre(
+        demandeAide.email,
+        aidant.identifiant
+      );
 
-    const reponse = await executeRequete(
-      donneesServeur.app,
-      'POST',
-      `/api/aidant/repondre-a-une-demande`,
-      {
-        token,
-      }
-    );
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/aidant/repondre-a-une-demande`,
+        { token }
+      );
 
-    expect(reponse.statusCode).toBe(202);
-    expect(
-      (
-        testeurMAC.adaptateurEnvoieMessage as AdaptateurEnvoiMailMemoire
-      ).demandeAideAttribueeEnvoyee({
-        emailAidant: 'user-xavier@yopmail.com',
-        nomPrenomAidant: 'User XAVIER',
-        emailEntite: 'entite-aidee@yopmail.com',
-        departement: gironde,
-      })
-    ).toBe(true);
-  });
+      expect(reponse.statusCode).toBe(202);
+      expect(
+        (
+          testeurMAC.adaptateurEnvoieMessage as AdaptateurEnvoiMailMemoire
+        ).demandeAideAttribueeEnvoyee({
+          emailAidant: 'user-xavier@yopmail.com',
+          nomPrenomAidant: 'User XAVIER',
+          emailEntite: 'entite-aidee@yopmail.com',
+          departement: gironde,
+        })
+      ).toBe(true);
+    });
 
-  it('Retourne une erreur 400 si la demande ne peut être pourvue (le mail de la demande commence par b)', async () => {
-    const aidant = unAidant().construis();
-    const demandeAide: DemandeAide = uneDemandeAide()
-      .avecUnEmail('banal@email.com')
-      .dansLeDepartement(gironde)
-      .construis();
-    await testeurMAC.entrepots.aidants().persiste(aidant);
-    await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
-    const token = tokenAttributionDemandeAide().chiffre(
-      demandeAide.email,
-      aidant.identifiant
-    );
+    it('Retourne une erreur 400 si la demande ne peut être pourvue (le mail de la demande commence par b)', async () => {
+      const aidant = unAidant()
 
-    const reponse = await executeRequete(
-      donneesServeur.app,
-      'POST',
-      `/api/aidant/repondre-a-une-demande`,
-      {
-        token,
-      }
-    );
+        .construis();
+      const demandeAide: DemandeAide = uneDemandeAide()
+          .avecUnEmail('banal@email.com')
+          .dansLeDepartement(gironde)
+          .construis();
 
-    expect(reponse.statusCode).toBe(400);
+      await testeurMAC.entrepots.aidants().persiste(aidant);
+      await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
+      const token = tokenAttributionDemandeAide().chiffre(
+        demandeAide.email,
+        aidant.identifiant
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/aidant/repondre-a-une-demande`,
+        {
+          token,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(400);
+    });
   });
 });
