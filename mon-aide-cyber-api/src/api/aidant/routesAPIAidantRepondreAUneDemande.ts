@@ -8,6 +8,8 @@ import * as core from 'express-serve-static-core';
 
 import { tokenAttributionDemandeAide } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 
+import { DemandePourPostuler } from './miseEnRelation';
+
 type CorpsRequeteRepondreAUneDemande = core.ParamsDictionary & {
   token: string;
 };
@@ -44,6 +46,22 @@ export const routesAPIAidantRepondreAUneDemande = (
           .status(400)
           .json({ message: (erreur as DemandeAideDejaPourvue).message });
       }
+    }
+  );
+
+  routes.get(
+    '/informations-de-demande',
+    async (_requete, reponse: Response<DemandePourPostuler>) => {
+      reponse.json({
+        dateCreation: new Date('2025-05-15T15:30').toISOString(),
+        departement: {
+          nom: 'Gironde',
+          code: '33',
+          codeRegion: '75',
+        },
+        typeEntite: 'Entreprise privée',
+        secteurActivite: 'Tertiaire',
+      });
     }
   );
 

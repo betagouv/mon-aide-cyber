@@ -9,6 +9,7 @@ import { gironde } from '../../../src/gestion-demandes/departements';
 import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
 
 import { tokenAttributionDemandeAide } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
+import { DemandePourPostuler } from '../../../src/api/aidant/miseEnRelation';
 
 describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
   const testeurMAC = testeurIntegration();
@@ -83,6 +84,29 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
       );
 
       expect(reponse.statusCode).toBe(400);
+    });
+  });
+
+  describe("Concernant l'obtention des détails de la demande d'aide", () => {
+    it('Renvoie systématiquement des infos en dur, le temps de développer complètement la feature', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/aidant/repondre-a-une-demande/informations-de-demande`
+      );
+
+      expect(reponse.statusCode).toBe(200);
+
+      expect(reponse.json()).toStrictEqual<DemandePourPostuler>({
+        dateCreation: '2025-05-15T13:30:00.000Z',
+        departement: {
+          nom: 'Gironde',
+          code: '33',
+          codeRegion: '75',
+        },
+        typeEntite: 'Entreprise privée',
+        secteurActivite: 'Tertiaire',
+      });
     });
   });
 });
