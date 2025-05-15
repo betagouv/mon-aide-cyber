@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within } from '@storybook/test';
 import {
   Temoignages,
   Verbatim,
-} from '../../domaine/vitrine/ecran-devenir-aidant/composants/Temoignages';
-import { expect, userEvent, within } from '@storybook/test';
+} from '../../domaine/vitrine/temoignages/Temoignages.tsx';
 
 const meta: Meta<typeof Temoignages> = {
   component: Temoignages,
