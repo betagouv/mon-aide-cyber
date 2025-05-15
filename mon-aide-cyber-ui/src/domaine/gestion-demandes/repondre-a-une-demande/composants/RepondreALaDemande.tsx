@@ -6,10 +6,10 @@ import { DemandePourPostuler } from '../EcranRepondreAUneDemande.tsx';
 
 export const RepondreALaDemande = ({
   demandeAide,
-  surReponsePositive,
+  surReponse,
 }: {
   demandeAide?: DemandePourPostuler;
-  surReponsePositive?: () => void;
+  surReponse?: () => void;
 }) => {
   return (
     <>
@@ -55,11 +55,7 @@ export const RepondreALaDemande = ({
               </div>
             </div>
             <div className="actions-demande-aide">
-              <Button
-                type="button"
-                variant="primary"
-                onClick={surReponsePositive}
-              >
+              <Button type="button" variant="primary" onClick={surReponse}>
                 Je souhaite réaliser ce diagnostic
               </Button>
             </div>

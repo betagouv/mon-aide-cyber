@@ -6,6 +6,7 @@ import { ConfirmationReponseALaDemande } from './composants/ConfirmationReponseA
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { DemandeDejaPourvue } from './composants/DemandeDejaPourvue.tsx';
+import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 
 type ProprietesEcransAvecToken = {
   token?: string;
@@ -22,21 +23,26 @@ export const EcranRepondreAUneDemande = ({
   token,
 }: ProprietesEcransAvecToken) => {
   const macAPI = useMACAPI();
+  const navigationMAC = useNavigationMAC();
 
-  const { data: demandeAide } = useQuery<DemandePourPostuler>({
-    enabled: !!token,
-    queryKey: ['recuperer-demande-aide', token],
-    queryFn: async () =>
-      await macAPI.execute<DemandePourPostuler, DemandePourPostuler>(
-        constructeurParametresAPI()
-          .url('/api/aidant/repondre-a-une-demande/informations-de-demande')
-          .methode('GET')
-          .construis(),
-        async (json) => await json
-      ),
-  });
+  const { data: demandeAide, isError: tokenIllegal } =
+    useQuery<DemandePourPostuler>({
+      enabled: !!token,
+      queryKey: ['recuperer-demande-aide', token],
+      retry: false,
+      queryFn: async () =>
+        await macAPI.execute<DemandePourPostuler, DemandePourPostuler>(
+          constructeurParametresAPI()
+            .url(
+              `/api/aidant/repondre-a-une-demande/informations-de-demande?token=${token}`
+            )
+            .methode('GET')
+            .construis(),
+          async (json) => await json
+        ),
+    });
 
-  const repondreAUneDemande = useMutation({
+  const postulerALaDemande = useMutation({
     mutationKey: ['repondre-a-une-demande'],
     mutationFn: async (token: string) => {
       return await macAPI.execute<any, any, { token: string }>(
@@ -52,11 +58,11 @@ export const EcranRepondreAUneDemande = ({
     },
   });
 
-  const repondreALaDemande = () => {
-    if (token) repondreAUneDemande.mutate(token);
-  };
+  if (tokenIllegal) {
+    navigationMAC.navigue('/', navigationMAC.etat);
+  }
 
-  if (repondreAUneDemande.isSuccess) {
+  if (postulerALaDemande.isSuccess) {
     return (
       <main role="main" className="ecran-repondre-a-une-demande">
         <ConfirmationReponseALaDemande />
@@ -64,7 +70,7 @@ export const EcranRepondreAUneDemande = ({
     );
   }
 
-  if (repondreAUneDemande.isError) {
+  if (postulerALaDemande.isError) {
     return (
       <main role="main" className="ecran-repondre-a-une-demande">
         <DemandeDejaPourvue />
@@ -76,7 +82,9 @@ export const EcranRepondreAUneDemande = ({
     <main role="main" className="ecran-repondre-a-une-demande">
       <RepondreALaDemande
         demandeAide={demandeAide}
-        surReponsePositive={repondreALaDemande}
+        surReponse={() => {
+          if (token) postulerALaDemande.mutate(token);
+        }}
       />
     </main>
   );
