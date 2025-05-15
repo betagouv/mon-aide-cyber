@@ -34,7 +34,7 @@ const genereCorpsRecapitulatifDemandeAide = (
   const raisonSociale = aide.raisonSociale
     ? `- Raison sociale: ${aide.raisonSociale}\n`
     : '';
-  const aidantsQuiMatchent = aidants.map((a) => `- ${a.email}\n`);
+  const aidantsQuiMatchent = aidants.map((a) => `- ${a.email}`);
   return (
     'Bonjour,\n' +
     '\n' +
@@ -46,7 +46,7 @@ const genereCorpsRecapitulatifDemandeAide = (
     raisonSociale +
     '\n' +
     `Les Aidants disponibles : \n` +
-    (aidantsQuiMatchent.length > 0 ? aidantsQuiMatchent : 'Aucun')
+    (aidantsQuiMatchent.length > 0 ? aidantsQuiMatchent.join('\n') : 'Aucun')
   );
 };
 
