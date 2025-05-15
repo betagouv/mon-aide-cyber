@@ -15,6 +15,7 @@ import { FournisseurHorloge } from '../../../src/infrastructure/horloge/Fourniss
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { Aidant } from '../../../src/espace-aidant/Aidant';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
+import { uneDemandeDevenirAidant } from '../../constructeurs/constructeurDemandesDevenirAidant';
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -354,14 +355,52 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           expect(fauxServiceDeChiffrement.aEteAppele()).toBe(true);
         });
 
-        it('Vérifie que le mail est bien rattaché à la demande', async () => {
-          const demande = unConstructeurDeDemandeDevenirAidant()
-            .avecUnMail('jean.dupont@mail.fr')
+        it('Lève une erreur si la demande a déjà été traitée', async () => {
+          const demandeDejaTraitee = uneDemandeDevenirAidant()
+            .traitee()
             .construis();
-          await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
+          await testeurMAC.entrepots
+            .demandesDevenirAidant()
+            .persiste(demandeDejaTraitee);
           const token = btoa(
             JSON.stringify({
-              demande: demande.identifiant,
+              demande: demandeDejaTraitee.identifiant,
+              mail: 'jean.dupont@email.com',
+            })
+          );
+          const fauxServiceDeChiffrement =
+            testeurMAC.serviceDeChiffrement as FauxServiceDeChiffrement;
+          fauxServiceDeChiffrement.ajoute(token, 'cccc');
+
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/demandes/devenir-aidant/creation-espace-aidant',
+            {
+              motDePasse: 'mon_Mot-D3p4ssee',
+              confirmationMotDePasse: 'mon_Mot-D3p4ssee',
+              token: 'cccc',
+              cguSignees: true,
+            }
+          );
+
+          expect(reponse.statusCode).toBe(422);
+          expect(await reponse.json()).toStrictEqual({
+            message:
+              'Votre demande pour devenir Aidant a déjà été traitée. Votre espace Aidant est disponible, vous pouvez vous connecter à celui-ci.',
+          });
+        });
+
+        it('Lève une erreur si le mail dans le token ne correspond pas à celui de la demande', async () => {
+          const demandeEnCours = unConstructeurDeDemandeDevenirAidant()
+            .avecUnMail('jean.dupont@mail.fr')
+            .construis();
+          await testeurMAC.entrepots
+            .demandesDevenirAidant()
+            .persiste(demandeEnCours);
+          const token = btoa(
+            JSON.stringify({
+              demande: demandeEnCours.identifiant,
               mail: 'marc.dupont@mail.fr',
             })
           );
@@ -377,40 +416,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
               motDePasse: 'mon_Mot-D3p4ssee',
               confirmationMotDePasse: 'mon_Mot-D3p4ssee',
               token: 'aaa',
-              cguSignees: true,
-            }
-          );
-
-          expect(reponse.statusCode).toBe(422);
-          expect(await reponse.json()).toStrictEqual({
-            message: 'Aucune demande ne correspond.',
-          });
-          expect(fauxServiceDeChiffrement.aEteAppele()).toBe(true);
-        });
-
-        it('Vérifie que le mail est bien rattaché à une demande en cours', async () => {
-          const demande = unConstructeurDeDemandeDevenirAidant()
-            .traitee()
-            .construis();
-          await testeurMAC.entrepots.demandesDevenirAidant().persiste(demande);
-          const token = btoa(
-            JSON.stringify({
-              demande: demande.identifiant,
-              mail: demande.mail,
-            })
-          );
-          const fauxServiceDeChiffrement =
-            testeurMAC.serviceDeChiffrement as FauxServiceDeChiffrement;
-          fauxServiceDeChiffrement.ajoute(token, 'bbbb');
-
-          const reponse = await executeRequete(
-            donneesServeur.app,
-            'POST',
-            '/api/demandes/devenir-aidant/creation-espace-aidant',
-            {
-              motDePasse: 'mon_Mot-D3p4ssee',
-              confirmationMotDePasse: 'mon_Mot-D3p4ssee',
-              token: 'bbbb',
               cguSignees: true,
             }
           );

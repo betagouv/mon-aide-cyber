@@ -23,23 +23,30 @@ import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorl
 import { isAfter } from 'date-fns';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { estDateNouveauParcoursDemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/nouveauParcours';
+import {
+  DemandeDevenirAidant,
+  StatutDemande,
+} from '../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 
 export const validateurDemande = (
   entrepots: Entrepots,
   serviceDeChiffrement: ServiceDeChiffrement
 ) => {
+  const extraisToken = (valeur: string): { demande: string; mail: string } =>
+    JSON.parse(atob(serviceDeChiffrement.dechiffre(valeur)));
+
   const { body } = new ExpressValidator({
     verifieCoherenceDeLaDemande: async (valeur: string) => {
-      const tokenConverti: { demande: string; mail: string } = JSON.parse(
-        atob(serviceDeChiffrement.dechiffre(valeur))
-      );
-
-      await entrepots.demandesDevenirAidant().lis(tokenConverti.demande);
+      const tokenConverti = extraisToken(valeur);
 
       const demande = await entrepots
         .demandesDevenirAidant()
-        .rechercheDemandeEnCoursParMail(tokenConverti.mail);
-      if (demande === undefined) {
+        .lis(tokenConverti.demande);
+      if (
+        demande === undefined ||
+        (demande.mail !== tokenConverti.mail &&
+          demande.statut === StatutDemande.EN_COURS)
+      ) {
         throw new Error(
           `Le mail fourni dans le token de création d'Aidant ne correspond pas à la demande (${tokenConverti.mail}).`
         );
@@ -47,10 +54,31 @@ export const validateurDemande = (
 
       return true;
     },
+    demandeDejaTraitee: async (valeur: string) => {
+      const tokenConverti = extraisToken(valeur);
+      let demande: DemandeDevenirAidant | undefined = undefined;
+      try {
+        demande = await entrepots
+          .demandesDevenirAidant()
+          .lis(tokenConverti.demande);
+      } catch (error: unknown | Error) {
+        console.error(
+          'Les informations de la demande sont incohérentes.',
+          (error as Error).message
+        );
+      }
+      if (demande && demande.statut === StatutDemande.TRAITEE) {
+        throw new Error('La demande a déjà été traitée.');
+      }
+    },
   });
 
   return [
     body('token')
+      .demandeDejaTraitee()
+      .withMessage(
+        'Votre demande pour devenir Aidant a déjà été traitée. Votre espace Aidant est disponible, vous pouvez vous connecter à celui-ci.'
+      )
       .verifieCoherenceDeLaDemande()
       .withMessage('Aucune demande ne correspond.'),
   ];

@@ -17,6 +17,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
+import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
 
 export type CorpsCreationEspaceAidant = {
   cguSignees?: boolean;
@@ -57,7 +58,7 @@ export const EcranCreationEspaceAidant = ({
     'finalise-creation-espace-aidant'
   );
 
-  const { mutate, isSuccess, isPending } = useMutation({
+  const { mutate, isSuccess, isPending, error, isError } = useMutation({
     mutationKey: ['finaliser-creation-espace-aidant'],
     mutationFn: (parametresMutation: CorpsCreationEspaceAidant) => {
       if (!parametresMutation.token) {
@@ -125,6 +126,11 @@ export const EcranCreationEspaceAidant = ({
               J&apos;accède à mon espace
             </Button>
           </div>
+          {isError ? (
+            <div className="texte-centre">
+              <Toast className="w-100" type="ERREUR" message={error.message} />
+            </div>
+          ) : null}
         </div>
         <div className="fond-clair-mac colonne-droite">
           <img
