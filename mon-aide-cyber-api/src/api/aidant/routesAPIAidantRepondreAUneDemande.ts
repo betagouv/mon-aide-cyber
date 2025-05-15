@@ -51,8 +51,14 @@ export const routesAPIAidantRepondreAUneDemande = (
 
   routes.get(
     '/informations-de-demande',
-    async (_requete, reponse: Response<DemandePourPostuler>) => {
-      reponse.json({
+    async (
+      requete: Request,
+      reponse: Response<DemandePourPostuler | { codeErreur: string }>
+    ) => {
+      if ((requete.query['token'] as string)?.startsWith('x')) {
+        return reponse.status(400).json({ codeErreur: 'TOKEN_INVALIDE' });
+      }
+      return reponse.json({
         dateCreation: new Date('2025-05-15T15:30').toISOString(),
         departement: {
           nom: 'Gironde',
