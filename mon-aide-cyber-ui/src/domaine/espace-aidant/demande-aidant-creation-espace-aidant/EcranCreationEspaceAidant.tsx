@@ -57,7 +57,7 @@ export const EcranCreationEspaceAidant = ({
     'finalise-creation-espace-aidant'
   );
 
-  const { mutate, isSuccess } = useMutation({
+  const { mutate, isSuccess, isPending } = useMutation({
     mutationKey: ['finaliser-creation-espace-aidant'],
     mutationFn: (parametresMutation: CorpsCreationEspaceAidant) => {
       if (!parametresMutation.token) {
@@ -115,6 +115,7 @@ export const EcranCreationEspaceAidant = ({
             <Button
               type="button"
               variant="primary"
+              disabled={isPending}
               onClick={() =>
                 mutate({
                   token: token,
