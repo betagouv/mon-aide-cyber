@@ -108,5 +108,18 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
         secteurActivite: 'Tertiaire',
       });
     });
+
+    it('Rejette la requête avec une erreur 400 si le token commence par ’x’, le temps de développer complètement la feature', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/aidant/repondre-a-une-demande/informations-de-demande?token=xa`
+      );
+
+      expect(reponse.statusCode).toBe(400);
+      expect(await reponse.json()).toStrictEqual({
+        codeErreur: 'TOKEN_INVALIDE',
+      });
+    });
   });
 });
