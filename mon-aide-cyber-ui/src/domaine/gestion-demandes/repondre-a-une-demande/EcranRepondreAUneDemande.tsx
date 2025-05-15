@@ -7,24 +7,15 @@ import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { DemandeDejaPourvue } from './composants/DemandeDejaPourvue.tsx';
 
-export type DemandeAide = {
+type ProprietesEcransAvecToken = {
+  token?: string;
+};
+
+export type DemandePourPostuler = {
   dateCreation: string;
   departement: Departement;
   typeEntite: string;
   secteurActivite: string;
-};
-const recupereDemandeAide = (): DemandeAide => ({
-  dateCreation: '29/03/1996 17:30',
-  departement: {
-    code: '33',
-    nom: 'Gironde',
-  },
-  typeEntite: 'Entreprise privée',
-  secteurActivite: 'Tertiaire',
-});
-
-type ProprietesEcransAvecToken = {
-  token?: string;
 };
 
 export const EcranRepondreAUneDemande = ({
@@ -32,13 +23,20 @@ export const EcranRepondreAUneDemande = ({
 }: ProprietesEcransAvecToken) => {
   const macAPI = useMACAPI();
 
-  const { data: demandeAide } = useQuery({
+  const { data: demandeAide } = useQuery<DemandePourPostuler>({
     enabled: !!token,
     queryKey: ['recuperer-demande-aide', token],
-    queryFn: () => recupereDemandeAide(),
+    queryFn: async () =>
+      await macAPI.execute<DemandePourPostuler, DemandePourPostuler>(
+        constructeurParametresAPI()
+          .url('/api/aidant/repondre-a-une-demande/informations-de-demande')
+          .methode('GET')
+          .construis(),
+        async (json) => await json
+      ),
   });
 
-  const { mutate, isSuccess, isError } = useMutation({
+  const repondreAUneDemande = useMutation({
     mutationKey: ['repondre-a-une-demande'],
     mutationFn: async (token: string) => {
       return await macAPI.execute<any, any, { token: string }>(
@@ -55,10 +53,10 @@ export const EcranRepondreAUneDemande = ({
   });
 
   const repondreALaDemande = () => {
-    if (token) mutate(token);
+    if (token) repondreAUneDemande.mutate(token);
   };
 
-  if (isSuccess) {
+  if (repondreAUneDemande.isSuccess) {
     return (
       <main role="main" className="ecran-repondre-a-une-demande">
         <ConfirmationReponseALaDemande />
@@ -66,7 +64,7 @@ export const EcranRepondreAUneDemande = ({
     );
   }
 
-  if (isError) {
+  if (repondreAUneDemande.isError) {
     return (
       <main role="main" className="ecran-repondre-a-une-demande">
         <DemandeDejaPourvue />
@@ -77,7 +75,7 @@ export const EcranRepondreAUneDemande = ({
   return (
     <main role="main" className="ecran-repondre-a-une-demande">
       <RepondreALaDemande
-        demandeAide={demandeAide!}
+        demandeAide={demandeAide}
         surReponsePositive={repondreALaDemande}
       />
     </main>
