@@ -25,6 +25,14 @@ export class ErreurPostulerTokenInvalide extends Error {
   }
 }
 
+export class ErreurPostulerTokenSansDemande extends Error {
+  constructor(token: string) {
+    super(
+      `Reçu token valide mais impossible de trouver la demande associée : ${token}`
+    );
+  }
+}
+
 export const routesAPIAidantRepondreAUneDemande = (
   configuration: ConfigurationServeur
 ) => {
@@ -89,6 +97,14 @@ export const routesAPIAidantRepondreAUneDemande = (
       const demandeAide = await entrepots
         .demandesAides()
         .rechercheParEmail(tokenEnClair.demande);
+      if (demandeAide.etat === 'INEXISTANT') {
+        return suite(
+          ErreurMAC.cree(
+            "Demande d'aide",
+            new ErreurPostulerTokenSansDemande(token)
+          )
+        );
+      }
       if (demandeAide.demandeAide) {
         const entreprises =
           await adaptateurRechercheEntreprise.rechercheEntreprise(
@@ -104,7 +120,6 @@ export const routesAPIAidantRepondreAUneDemande = (
             .join(', '),
         });
       }
-      return reponse.status(500).json({ codeErreur: 'NON_IMPLEMENTÉ' });
     }
   );
 

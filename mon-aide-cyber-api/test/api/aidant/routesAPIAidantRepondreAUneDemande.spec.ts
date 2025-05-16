@@ -156,5 +156,23 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
         message: '',
       });
     });
+
+    it('Rejette la requête avec une erreur 400 (et non une 404) si la demande d’Aide est introuvable', async () => {
+      const tokenSansDemande = tokenAttributionDemandeAide(
+        testeurMAC.serviceDeChiffrement
+      ).chiffre('entite-aidee@email.com', crypto.randomUUID());
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/aidant/repondre-a-une-demande/informations-de-demande?token=${tokenSansDemande}`
+      );
+
+      expect(reponse.statusCode).toBe(400);
+      expect(await reponse.json()).toStrictEqual({
+        codeErreur: 'TOKEN_SANS_DEMANDE',
+        message: '',
+      });
+    });
   });
 });
