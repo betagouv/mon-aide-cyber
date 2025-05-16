@@ -23,7 +23,7 @@ export type AidantMisEnRelation = {
   lienPourPostuler: string;
 };
 
-type TonkenAttributionDemandeAide = {
+export type TonkenAttributionDemandeAide = {
   demande: crypto.UUID;
   aidant: crypto.UUID;
 };
