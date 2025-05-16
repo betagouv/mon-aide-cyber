@@ -7,6 +7,7 @@ export type DemandeAide = Aggregat & {
   email: string;
   raisonSociale?: string;
   departement: Departement;
+  siret: string | 'NON_DISPONIBLE';
 };
 
 export type RechercheDemandeAide = {

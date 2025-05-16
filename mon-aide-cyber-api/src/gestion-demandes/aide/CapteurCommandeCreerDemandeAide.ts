@@ -11,6 +11,7 @@ export type CommandeCreerDemandeAide = Omit<Commande, 'type'> & {
   email: string;
   raisonSociale?: string;
   etat?: 'INCOMPLET';
+  siret: string;
 };
 
 export class CapteurCommandeCreerDemandeAide
@@ -24,6 +25,7 @@ export class CapteurCommandeCreerDemandeAide
       departement: commande.departement,
       email: commande.email,
       identifiant: adaptateurUUID.genereUUID(),
+      siret: commande.siret,
       ...(commande.raisonSociale && { raisonSociale: commande.raisonSociale }),
     };
 

@@ -191,6 +191,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         identifiant: aide.identifiant,
         dateSignatureCGU: FournisseurHorloge.maintenant(),
         raisonSociale: 'beta-gouv',
+        siret: '12345',
       });
     });
 
@@ -223,6 +224,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
 
   describe("Si l'Aidé n'est pas connu de MAC", () => {
     it("Crée l'Aidé", async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
       const entrepots = new EntrepotsMemoire();
       const capteur = fabriqueCapteur({ entrepots });
 
@@ -234,9 +236,20 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         siret: '12345',
       });
 
-      expect(
-        await entrepots.demandesAides().rechercheParEmail('un email')
-      ).not.toBeUndefined();
+      const demandeAideRecherchee = await entrepots
+        .demandesAides()
+        .rechercheParEmail('un email');
+      expect(demandeAideRecherchee).not.toBeUndefined();
+      expect(demandeAideRecherchee).toStrictEqual<RechercheDemandeAide>({
+        etat: 'COMPLET',
+        demandeAide: {
+          identifiant: expect.any(String),
+          email: 'un email',
+          dateSignatureCGU: FournisseurHorloge.maintenant(),
+          departement: allier,
+          siret: '12345',
+        },
+      });
     });
 
     it("Publie l'évènement 'AIDE_CREE'", async () => {
@@ -345,6 +358,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           dateSignatureCGU: FournisseurHorloge.maintenant(),
           raisonSociale: 'beta-gouv',
           departement: gironde,
+          siret: '12345',
         },
         etat: 'COMPLET',
       });

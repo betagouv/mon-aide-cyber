@@ -8,6 +8,7 @@ export type CommandeMettreAJourDemandeAide = Commande & {
   identifiant: crypto.UUID;
   departement: Departement;
   email: string;
+  siret: string;
   raisonSociale?: string;
 };
 
@@ -21,6 +22,7 @@ export class CapteurCommandeMettreAJourDemandeAide
       identifiant: commande.identifiant,
       email: commande.email,
       departement: commande.departement,
+      siret: commande.siret,
       ...(commande.raisonSociale && { raisonSociale: commande.raisonSociale }),
       dateSignatureCGU: FournisseurHorloge.maintenant(),
     });

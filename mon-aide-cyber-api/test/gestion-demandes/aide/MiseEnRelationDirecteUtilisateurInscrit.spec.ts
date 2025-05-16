@@ -30,6 +30,7 @@ describe('Mise en relation directe avec un Utilisateur Inscrit', () => {
         departement: gironde,
         identifiant: crypto.randomUUID(),
         dateSignatureCGU: FournisseurHorloge.maintenant(),
+        siret: '12345',
       },
       secteursActivite: [{ nom: 'Administration' }],
       typeEntite: entitesPubliques,
