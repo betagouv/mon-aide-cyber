@@ -89,7 +89,6 @@ export const RouteurPrive = () => {
             ></Route>
           </Route>
           <Route element={<LayoutAidant />}>
-            {/* @todo remettre cette route quand TDB développé <Route path="/tableau-de-bord" element={<TableauDeBord />}></Route>*/}
             <Route
               path="tableau-de-bord"
               element={<EcranDiagnostics />}
