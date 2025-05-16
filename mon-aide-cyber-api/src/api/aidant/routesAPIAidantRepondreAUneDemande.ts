@@ -1,5 +1,5 @@
 import { ConfigurationServeur } from '../../serveur';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import {
   CommandeAttribueDemandeAide,
   DemandeAideDejaPourvue,
@@ -7,10 +7,19 @@ import {
 import * as core from 'express-serve-static-core';
 import { tokenAttributionDemandeAide } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 import { DemandePourPostuler } from './miseEnRelation';
+import { ErreurMAC } from '../../domaine/erreurMAC';
 
 type CorpsRequeteRepondreAUneDemande = core.ParamsDictionary & {
   token: string;
 };
+
+export class ErreurPostulerTokenInvalide extends Error {
+  constructor(token: string) {
+    super(
+      `Reçu un token invalide : ${token} (probablement manipulation humaine)`
+    );
+  }
+}
 
 export const routesAPIAidantRepondreAUneDemande = (
   configuration: ConfigurationServeur
@@ -56,18 +65,24 @@ export const routesAPIAidantRepondreAUneDemande = (
     '/informations-de-demande',
     async (
       requete: Request,
-      reponse: Response<DemandePourPostuler | { codeErreur: string }>
+      reponse: Response<DemandePourPostuler | { codeErreur: string }>,
+      suite: NextFunction
     ) => {
-      if ((requete.query['token'] as string)?.startsWith('x')) {
-        return reponse.status(400).json({ codeErreur: 'TOKEN_INVALIDE' });
+      const token = requete.query['token'] as string;
+      if (token?.startsWith('x')) {
+        return suite(
+          ErreurMAC.cree(
+            "Demande d'aide",
+            new ErreurPostulerTokenInvalide(token)
+          )
+        );
       }
 
-      const tokenAttribue = tokenAttributionDemandeAide(
-        serviceDeChiffrement
-      ).dechiffre(requete.query['token'] as string);
+      const tokenEnClair =
+        tokenAttributionDemandeAide(serviceDeChiffrement).dechiffre(token);
       const demandeAide = await entrepots
         .demandesAides()
-        .rechercheParEmail(tokenAttribue.demande);
+        .rechercheParEmail(tokenEnClair.demande);
       if (demandeAide.demandeAide) {
         const entreprises =
           await adaptateurRechercheEntreprise.rechercheEntreprise(
