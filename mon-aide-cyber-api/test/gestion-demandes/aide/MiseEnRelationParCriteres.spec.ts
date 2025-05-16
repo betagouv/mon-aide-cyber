@@ -294,25 +294,24 @@ describe('Mise en relation par critères', () => {
         Buffer.from('assoc-longueur16'),
         'ma-clef-secrete-de-longueur-0032'
       );
-      const demandeAide: DemandeAide = {
-        ...uneDemandeAide().construis(),
-        identifiant: '44553107-cdfa-40c1-8155-db5639def867',
-      };
+      const demandeAide: DemandeAide = uneDemandeAide()
+        .avecUnEmail('jean.dupont@email.com')
+        .construis();
       const identifiantAidant = '7571dfe9-31e7-4e6f-80de-fafa3f323b1d';
 
       const valeurChiffree = tokenAttributionDemandeAide(
         serviceDeChiffrement
-      ).chiffre(demandeAide, identifiantAidant);
+      ).chiffre(demandeAide.email, identifiantAidant);
 
       expect(valeurChiffree).toBe(
-        'Njk3NjZjNmY2ZTY3NzU2NTc1NzIzMTMyNjE3MzczNmY2MzJkNmM2ZjZlNjc3NTY1NzU3MjMxMzZmNWY0ZDBhZTc4YzNhOTEwMGMxN2E0NjdkZWU5YWRjZGIyY2RjMGExMWY1ZDY2MGI1Y2I1NDY2MTc4YmY0NTA1YzBkZDM5OGY0MmUwMTU5NjZiNjlkMzliM2NhNjczMDg2OGI2YThmYWU5ZjlhZDEwYTQ1ZjQ5MGRjZDU0NGVlYmZiMzA2MGY5NTJjZDkxOWZhMTg0MjQwZmVlODc5YTkyY2ZkMDQzMGE0MTVlYzc1MGU4YWY3NzBhN2QwMzc3MTZhNDg5Nzg3ODIzNzFiZjEzMmJlZDgxZDZlMGI0YzkwMjQzZTA='
+        'Njk3NjZjNmY2ZTY3NzU2NTc1NzIzMTMyNjE3MzczNmY2MzJkNmM2ZjZlNjc3NTY1NzU3MjMxMzZmNWY0ZDBhZTc4YzNhOTEwMGMxN2E0Njc4MGI4Zjk5NmFmOTg4NWU2NWQ1MDc2MmQ1OGY1MTMzODc3YTAwYjUyOWNjYTIwODA0N2ViNDRjMTM2MjQ5NWM0NzhhOTcwMDg3YmZlZWNmZWI5YjBmZjRmYjU0YTVlMWI5ZjU3MWZmN2E3NjY2MWE1NTI5OGMxOWNmNzlhNzY1OWVhZDJkNTliOWI5NjViMDFhOWM4YmU3MmZiOGNkOTU2NjkyMTExNTIwNDVlYWM='
       );
       expect(
         tokenAttributionDemandeAide(serviceDeChiffrement).dechiffre(
           valeurChiffree
         )
       ).toStrictEqual({
-        demande: '44553107-cdfa-40c1-8155-db5639def867',
+        demande: 'jean.dupont@email.com',
         aidant: '7571dfe9-31e7-4e6f-80de-fafa3f323b1d',
       });
     });
