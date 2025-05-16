@@ -18,6 +18,7 @@ import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/Fourn
 import {
   DemandeAide,
   RechercheDemandeAide,
+  RechercheDemandeAideComplete,
 } from '../../../../src/gestion-demandes/aide/DemandeAide';
 import { uneDemandeAide } from '../../../gestion-demandes/aide/ConstructeurDemandeAide';
 import { AdaptateurRepertoireDeContactsMemoire } from '../../../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
@@ -264,7 +265,9 @@ describe('Entrepot Aidé Concret', () => {
         entrepotAideBrevoMemoire
       ).rechercheParEmail(demandeAide.email);
 
-      expect(aideRecherche.demandeAide?.siret).toBe('NON_DISPONIBLE');
+      const demandeTrouvee = (aideRecherche as RechercheDemandeAideComplete)
+        .demandeAide;
+      expect(demandeTrouvee.siret).toBe('NON_DISPONIBLE');
     });
   });
 });

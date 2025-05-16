@@ -97,7 +97,8 @@ export const routesAPIAidantRepondreAUneDemande = (
       const demandeAide = await entrepots
         .demandesAides()
         .rechercheParEmail(tokenEnClair.demande);
-      if (demandeAide.etat === 'INEXISTANT') {
+
+      if (demandeAide.etat !== 'COMPLET') {
         return suite(
           ErreurMAC.cree(
             "Postuler à une demande d'aide",
@@ -106,21 +107,22 @@ export const routesAPIAidantRepondreAUneDemande = (
         );
       }
 
-      if (demandeAide.demandeAide) {
-        const entreprises =
-          await adaptateurRechercheEntreprise.rechercheEntreprise(
-            demandeAide.demandeAide.siret,
-            ''
-          );
-        return reponse.json({
-          dateCreation: demandeAide.demandeAide.dateSignatureCGU.toISOString(),
-          departement: demandeAide.demandeAide.departement,
-          typeEntite: entreprises[0].typeEntite.nom,
-          secteurActivite: entreprises[0].secteursActivite
-            .map((s) => s.nom)
-            .join(', '),
-        });
-      }
+      const demande = demandeAide.demandeAide;
+
+      const [entreprise] =
+        await adaptateurRechercheEntreprise.rechercheEntreprise(
+          demande.siret,
+          ''
+        );
+
+      return reponse.json({
+        dateCreation: demande.dateSignatureCGU.toISOString(),
+        departement: demande.departement,
+        typeEntite: entreprise?.typeEntite.nom ?? 'Information indisponible',
+        secteurActivite:
+          entreprise?.secteursActivite.map((s) => s.nom).join(', ') ??
+          'Information indisponible',
+      });
     }
   );
 

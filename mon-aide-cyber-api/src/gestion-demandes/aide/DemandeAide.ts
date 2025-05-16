@@ -10,10 +10,17 @@ export type DemandeAide = Aggregat & {
   siret: string | 'NON_DISPONIBLE';
 };
 
-export type RechercheDemandeAide = {
-  demandeAide?: DemandeAide;
-  etat: 'COMPLET' | 'INCOMPLET' | 'INEXISTANT';
+export type RechercheDemandeAide =
+  | RechercheDemandeAideComplete
+  | RechercheDemandeAideNonTrouvee;
+export type RechercheDemandeAideComplete = {
+  demandeAide: DemandeAide;
+  etat: 'COMPLET';
 };
+export type RechercheDemandeAideNonTrouvee = {
+  etat: 'INEXISTANT' | 'INCOMPLET';
+};
+
 export interface EntrepotDemandeAide {
   rechercheParEmail(email: string): Promise<RechercheDemandeAide>;
   persiste(entite: DemandeAide): Promise<void>;
