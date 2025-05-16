@@ -88,7 +88,7 @@ export const routesAPIAidantRepondreAUneDemande = (
       } catch (erreur: unknown | Error) {
         return suite(
           ErreurMAC.cree(
-            "Demande d'aide",
+            "Postuler à une demande d'aide",
             new ErreurPostulerTokenInvalide(token, erreur as Error)
           )
         );
@@ -100,11 +100,12 @@ export const routesAPIAidantRepondreAUneDemande = (
       if (demandeAide.etat === 'INEXISTANT') {
         return suite(
           ErreurMAC.cree(
-            "Demande d'aide",
+            "Postuler à une demande d'aide",
             new ErreurPostulerTokenSansDemande(token)
           )
         );
       }
+
       if (demandeAide.demandeAide) {
         const entreprises =
           await adaptateurRechercheEntreprise.rechercheEntreprise(
