@@ -23,6 +23,7 @@ import { ErreurAidantNonTrouve } from '../../espace-utilisateur-inscrit/ServiceU
 import { RequeteUtilisateur } from '../routesAPI';
 import { ErreurLectureReferentielAssociations } from '../associations/routesAssociations';
 import { IpDeniedError } from 'express-ipfilter';
+import { ErreurPostulerTokenInvalide } from '../aidant/routesAPIAidantRepondreAUneDemande';
 
 const HTTP_MAUVAISE_REQUETE = 400;
 const HTTP_NON_AUTORISE = 401;
@@ -282,6 +283,21 @@ const erreursGerees: Map<
       construisReponse(reponse, HTTP_NON_TROUVE, {
         message: erreur.message,
       });
+    },
+  ],
+  [
+    'ErreurPostulerTokenInvalide',
+    (
+      erreur: ErreurMAC<ErreurPostulerTokenInvalide>,
+      _requete: Request,
+      consignateur,
+      reponse
+    ) => {
+      construisReponse(reponse, HTTP_MAUVAISE_REQUETE, {
+        codeErreur: 'TOKEN_INVALIDE',
+        message: '',
+      });
+      consignateur.consigne(erreur);
     },
   ],
 ]);

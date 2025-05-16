@@ -153,6 +153,7 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
       expect(reponse.statusCode).toBe(400);
       expect(await reponse.json()).toStrictEqual({
         codeErreur: 'TOKEN_INVALIDE',
+        message: '',
       });
     });
   });
