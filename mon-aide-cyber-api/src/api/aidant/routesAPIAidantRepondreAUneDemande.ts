@@ -5,9 +5,7 @@ import {
   DemandeAideDejaPourvue,
 } from '../../gestion-demandes/aide/CapteurCommandeAttribueDemandeAide';
 import * as core from 'express-serve-static-core';
-
 import { tokenAttributionDemandeAide } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
-
 import { DemandePourPostuler } from './miseEnRelation';
 
 type CorpsRequeteRepondreAUneDemande = core.ParamsDictionary & {
@@ -19,7 +17,12 @@ export const routesAPIAidantRepondreAUneDemande = (
 ) => {
   const routes = express.Router();
 
-  const { busCommande } = configuration;
+  const {
+    busCommande,
+    entrepots,
+    adaptateurRechercheEntreprise,
+    serviceDeChiffrement,
+  } = configuration;
 
   routes.post(
     '/',
@@ -58,16 +61,29 @@ export const routesAPIAidantRepondreAUneDemande = (
       if ((requete.query['token'] as string)?.startsWith('x')) {
         return reponse.status(400).json({ codeErreur: 'TOKEN_INVALIDE' });
       }
-      return reponse.json({
-        dateCreation: new Date('2025-05-15T15:30').toISOString(),
-        departement: {
-          nom: 'Gironde',
-          code: '33',
-          codeRegion: '75',
-        },
-        typeEntite: 'Entreprise privée',
-        secteurActivite: 'Tertiaire',
-      });
+
+      const tokenAttribue = tokenAttributionDemandeAide(
+        serviceDeChiffrement
+      ).dechiffre(requete.query['token'] as string);
+      const demandeAide = await entrepots
+        .demandesAides()
+        .rechercheParEmail(tokenAttribue.demande);
+      if (demandeAide.demandeAide) {
+        const entreprises =
+          await adaptateurRechercheEntreprise.rechercheEntreprise(
+            demandeAide.demandeAide.siret,
+            ''
+          );
+        return reponse.json({
+          dateCreation: demandeAide.demandeAide.dateSignatureCGU.toISOString(),
+          departement: demandeAide.demandeAide.departement,
+          typeEntite: entreprises[0].typeEntite.nom,
+          secteurActivite: entreprises[0].secteursActivite
+            .map((s) => s.nom)
+            .join(', '),
+        });
+      }
+      return reponse.status(500).json({ codeErreur: 'NON_IMPLEMENTÉ' });
     }
   );
 

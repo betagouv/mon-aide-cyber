@@ -50,6 +50,11 @@ class ConstructeurDemandeAide implements Constructeur<DemandeAide> {
     this.email = email;
     return this;
   }
+
+  avecLeSiret(siret: string): ConstructeurDemandeAide {
+    this.siret = siret;
+    return this;
+  }
 }
 
 export const uneDemandeAide = () => new ConstructeurDemandeAide();
