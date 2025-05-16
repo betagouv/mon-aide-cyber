@@ -5,7 +5,10 @@ import {
   DemandeAideDejaPourvue,
 } from '../../gestion-demandes/aide/CapteurCommandeAttribueDemandeAide';
 import * as core from 'express-serve-static-core';
-import { tokenAttributionDemandeAide } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
+import {
+  tokenAttributionDemandeAide,
+  TonkenAttributionDemandeAide,
+} from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 import { DemandePourPostuler } from './miseEnRelation';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 
@@ -14,9 +17,10 @@ type CorpsRequeteRepondreAUneDemande = core.ParamsDictionary & {
 };
 
 export class ErreurPostulerTokenInvalide extends Error {
-  constructor(token: string) {
+  constructor(token: string, erreur: Error) {
     super(
-      `Reçu un token invalide : ${token} (probablement manipulation humaine)`
+      `Reçu un token invalide : ${token} (probablement manipulation humaine)`,
+      { cause: erreur }
     );
   }
 }
@@ -69,17 +73,19 @@ export const routesAPIAidantRepondreAUneDemande = (
       suite: NextFunction
     ) => {
       const token = requete.query['token'] as string;
-      if (token?.startsWith('x')) {
+      let tokenEnClair: TonkenAttributionDemandeAide | undefined = undefined;
+      try {
+        tokenEnClair =
+          tokenAttributionDemandeAide(serviceDeChiffrement).dechiffre(token);
+      } catch (erreur: unknown | Error) {
         return suite(
           ErreurMAC.cree(
             "Demande d'aide",
-            new ErreurPostulerTokenInvalide(token)
+            new ErreurPostulerTokenInvalide(token, erreur as Error)
           )
         );
       }
 
-      const tokenEnClair =
-        tokenAttributionDemandeAide(serviceDeChiffrement).dechiffre(token);
       const demandeAide = await entrepots
         .demandesAides()
         .rechercheParEmail(tokenEnClair.demande);
