@@ -172,7 +172,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const capteur = fabriqueCapteur({ entrepots });
 
       await capteur.execute({
-        type: 'SagaDemandeValidationCGUAide',
+        type: 'SagaDemandeAide',
         cguValidees: true,
         email: aide.email,
         departement: aide.departement,
@@ -207,7 +207,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const capteur = fabriqueCapteur({ entrepots });
 
       const promesse = capteur.execute({
-        type: 'SagaDemandeValidationCGUAide',
+        type: 'SagaDemandeAide',
         cguValidees: true,
         email: aide.email,
         departement: aide.departement,
@@ -229,7 +229,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const capteur = fabriqueCapteur({ entrepots });
 
       await capteur.execute({
-        type: 'SagaDemandeValidationCGUAide',
+        type: 'SagaDemandeAide',
         cguValidees: true,
         email: 'un email',
         departement: allier,
@@ -259,7 +259,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const busEvenement = new BusEvenementDeTest();
 
       await fabriqueCapteur({ entrepots, busEvenement }).execute({
-        type: 'SagaDemandeValidationCGUAide',
+        type: 'SagaDemandeAide',
         cguValidees: true,
         email: 'jean-dupont@email.com',
         departement: gironde,
@@ -318,7 +318,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
 
         await expect(() =>
           capteur.execute({
-            type: 'SagaDemandeValidationCGUAide',
+            type: 'SagaDemandeAide',
             cguValidees: true,
             email: 'jean-dupont@email.com',
             departement: gironde,
@@ -340,7 +340,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const capteur = fabriqueCapteur({ entrepots });
 
       await capteur.execute({
-        type: 'PeuImporte',
+        type: 'SagaDemandeAide',
         cguValidees: true,
         email: demandeIncomplete.email,
         departement: gironde,
@@ -438,7 +438,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             entrepots
           ),
         }).execute({
-          type: 'SagaDemandeValidationCGUAide',
+          type: 'SagaDemandeAide',
           relationUtilisateur: aidant.email,
           cguValidees: true,
           email: 'jean-dupont@email.com',
@@ -516,7 +516,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
             entrepots
           ),
         }).execute({
-          type: 'SagaDemandeValidationCGUAide',
+          type: 'SagaDemandeAide',
           relationUtilisateur: utilisateurInscrit.email,
           cguValidees: true,
           email: 'jean-dupont@email.com',
@@ -665,7 +665,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         busEvenement,
         fabriqueMiseEnRelation: new FabriqueDeMiseEnRelationEcoutee(entrepots),
       }).execute({
-        type: 'SagaDemandeValidationCGUAide',
+        type: 'SagaDemandeAide',
         cguValidees: true,
         email: 'jean-dupont@email.com',
         departement: gironde,
