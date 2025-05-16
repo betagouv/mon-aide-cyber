@@ -18,10 +18,7 @@ type ProprietesComposantIntercepteur<
 > = React.PropsWithChildren<Proprietes & CommePropriete<C>> &
   Omit<React.ComponentPropsWithoutRef<C>, ProprietesAOmettre<C, Proprietes>>;
 
-type ProprietesComposant = {
-  idDiagnostic?: UUID;
-  token?: string;
-};
+type ProprietesComposant = Record<string, unknown | string | UUID>;
 
 export const ComposantIntercepteur = <C extends React.ElementType = 'div'>({
   composant,
