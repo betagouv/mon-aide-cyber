@@ -14,6 +14,7 @@ class ConstructeurDemandeAide implements Constructeur<DemandeAide> {
   private email: string = fakerFR.internet.email();
   private departement: Departement =
     departements[fakerFR.number.int({ min: 1, max: 99 })];
+  private siret: string = fakerFR.string.alpha(10);
 
   construis(): DemandeAide {
     return this.demandeIncomplete
@@ -24,6 +25,7 @@ class ConstructeurDemandeAide implements Constructeur<DemandeAide> {
           email: this.email,
           raisonSociale: fakerFR.company.name(),
           departement: this.departement,
+          siret: this.siret,
         };
   }
 

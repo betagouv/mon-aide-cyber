@@ -33,6 +33,7 @@ export class CapteurCommandeAttribueDemandeAide
       departement: gironde,
       dateSignatureCGU: FournisseurHorloge.maintenant(),
       identifiant: crypto.randomUUID(),
+      siret: '12345',
     };
 
     const aidant: Aidant = {

@@ -55,6 +55,7 @@ describe('Entrepot Aidé Concret', () => {
           email: aide.email,
           departement: aide.departement,
           raisonSociale: aide.raisonSociale!,
+          siret: aide.siret,
         },
       });
     });
@@ -206,10 +207,16 @@ describe('Entrepot Aidé Concret', () => {
           departement: aide.departement,
           identifiantMAC: aide.identifiant,
           ...(aide.raisonSociale && { raisonSociale: aide.raisonSociale }),
+          siret: aide.siret,
         },
-        (identifiantMAC, departement, raisonSociale) =>
+        (identifiantMAC, departement, siret, raisonSociale) =>
           tableDeChiffrement.get(
-            JSON.stringify({ identifiantMAC, departement, raisonSociale })
+            JSON.stringify({
+              identifiantMAC,
+              departement,
+              raisonSociale,
+              siret,
+            })
           )!
       );
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
@@ -226,6 +233,39 @@ describe('Entrepot Aidé Concret', () => {
         etat: 'INEXISTANT',
       });
     });
+
+    it('Indique un Siret "NON_DISPONIBLE" dans le cas où un contact Brevo ne dispose pas de l’information', async () => {
+      const demandeAide = uneDemandeAide()
+        .avecUneDateDeSignatureDesCGU(
+          FournisseurHorloge.enDate('2024-02-01T13:26:34+01:00')
+        )
+        .construis();
+      const tableDeChiffrement = new DictionnaireDeChiffrementAide()
+        .avec(demandeAide)
+        .sansSIRET()
+        .construis();
+      const serviceDeChiffrement = new FauxServiceDeChiffrement(
+        tableDeChiffrement
+      );
+      serviceDeChiffrement.chiffre = (chaine): string => {
+        const { siret, ...reste } = JSON.parse(chaine);
+        return tableDeChiffrement.get(JSON.stringify(reste))!;
+      };
+      const entrepotAideBrevoMemoire = new EntrepotAideBrevoMemoire();
+      await new EntrepotAideConcret(
+        serviceDeChiffrement,
+        new AdaptateurRepertoireDeContactsMemoire(),
+        entrepotAideBrevoMemoire
+      ).persiste(demandeAide);
+
+      const aideRecherche = await new EntrepotAideConcret(
+        serviceDeChiffrement,
+        new AdaptateurRepertoireDeContactsMemoire(),
+        entrepotAideBrevoMemoire
+      ).rechercheParEmail(demandeAide.email);
+
+      expect(aideRecherche.demandeAide?.siret).toBe('NON_DISPONIBLE');
+    });
   });
 });
 
@@ -238,6 +278,7 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
     chiffrement: (
       identifiantMAC: crypto.UUID,
       departement: string,
+      siret: string,
       raisonSociale?: string
     ) => string
   ): Promise<void> {
@@ -250,6 +291,7 @@ class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
           METADONNEES: chiffrement(
             entite.identifiantMAC,
             entite.departement.nom,
+            entite.siret,
             entite.raisonSociale
           ),
         }),
@@ -279,18 +321,27 @@ class DictionnaireDeChiffrementAide
   implements DictionnaireDeChiffrement<DemandeAide>
 {
   private _dictionnaire: Dictionnaire = new Map();
+  private _avecSIRET = true;
+  private aide: DemandeAide | undefined = undefined;
 
-  avec(aide: DemandeAide): DictionnaireDeChiffrement<DemandeAide> {
-    const valeurEnClair = JSON.stringify({
-      identifiantMAC: aide.identifiant,
-      departement: aide.departement.nom,
-      raisonSociale: aide.raisonSociale,
-    });
-    this._dictionnaire.set(valeurEnClair, fakerFR.string.alpha(10));
+  avec(aide: DemandeAide): DictionnaireDeChiffrementAide {
+    this.aide = aide;
+    return this;
+  }
+
+  sansSIRET(): DictionnaireDeChiffrementAide {
+    this._avecSIRET = false;
     return this;
   }
 
   construis(): Dictionnaire {
+    const valeurEnClair = JSON.stringify({
+      identifiantMAC: this.aide!.identifiant,
+      departement: this.aide!.departement.nom,
+      raisonSociale: this.aide!.raisonSociale,
+      ...(this._avecSIRET && { siret: this.aide!.siret }),
+    });
+    this._dictionnaire.set(valeurEnClair, fakerFR.string.alpha(10));
     return this._dictionnaire;
   }
 }

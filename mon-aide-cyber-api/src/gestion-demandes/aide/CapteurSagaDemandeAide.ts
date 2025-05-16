@@ -129,6 +129,7 @@ export class CapteurSagaDemandeAide
           identifiant: aide.demandeAide!.identifiant,
           departement: saga.departement,
           email: saga.email,
+          siret: saga.siret,
           ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
         };
         return this.busCommande.publie<CommandeMettreAJourDemandeAide, void>(
@@ -140,6 +141,7 @@ export class CapteurSagaDemandeAide
         type: 'CommandeCreerDemandeAide',
         departement: saga.departement,
         email: saga.email,
+        siret: saga.siret,
         ...(saga.raisonSociale && { raisonSociale: saga.raisonSociale }),
         ...(aide.etat === 'INCOMPLET' && { etat: 'INCOMPLET' }),
       };

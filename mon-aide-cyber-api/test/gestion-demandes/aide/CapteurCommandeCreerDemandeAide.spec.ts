@@ -13,6 +13,7 @@ describe('Capteur de Commande Créer une demande d’Aide', () => {
       type: 'CommandeCreerDemandeAide',
       departement: allier,
       email: 'un email',
+      siret: '12345',
     });
 
     expect(

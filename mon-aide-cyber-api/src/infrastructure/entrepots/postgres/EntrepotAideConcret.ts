@@ -31,7 +31,10 @@ type AideMACDTO = DTO & {
   donnees: DonneesAidesMAC;
 };
 
-type AideMAC = Omit<DemandeAide, 'email' | 'raisonSociale' | 'departement'>;
+type AideMAC = Omit<
+  DemandeAide,
+  'email' | 'raisonSociale' | 'departement' | 'siret'
+>;
 
 class EntrepotAidePostgres extends EntrepotEcriturePostgres<
   AideMAC,
@@ -71,6 +74,7 @@ export type AideDistant = {
   identifiantMAC: crypto.UUID;
   departement: Departement;
   raisonSociale?: string;
+  siret: string;
 };
 
 export type AideDistantDTO = {
@@ -91,6 +95,7 @@ export interface EntrepotAideDistant {
     chiffrement: (
       identifiantMAC: crypto.UUID,
       departement: string,
+      siret: string,
       raisonSociale?: string
     ) => string
   ): Promise<void>;
@@ -128,6 +133,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
     chiffrement: (
       identifiantMAC: crypto.UUID,
       departement: string,
+      siret: string,
       raisonSociale?: string
     ) => string
   ): Promise<void> {
@@ -137,6 +143,7 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
         metadonnees: chiffrement(
           entite.identifiantMAC,
           entite.departement.nom,
+          entite.siret,
           entite.raisonSociale
         ),
       })
@@ -172,6 +179,7 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
       identifiantMAC: crypto.UUID;
       departement: string;
       raisonSociale: string;
+      siret: string;
     } = JSON.parse(this.serviceChiffrement.dechiffre(aideBrevo.metaDonnees));
 
     const aide: AideDistant = {
@@ -179,6 +187,7 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
       raisonSociale: metadonnees.raisonSociale,
       departement: rechercheParNomDepartement(metadonnees.departement),
       identifiantMAC: metadonnees.identifiantMAC,
+      siret: metadonnees.siret ?? 'NON_DISPONIBLE',
     };
 
     try {
@@ -192,6 +201,7 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
           departement: aide.departement,
           ...(aide.raisonSociale && { raisonSociale: aide.raisonSociale }),
           email: aide.email,
+          siret: aide.siret,
         },
         etat: 'COMPLET',
       };
@@ -209,10 +219,11 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
         identifiantMAC: aide.identifiant,
         departement: aide.departement,
         ...(aide.raisonSociale && { raisonSociale: aide.raisonSociale }),
+        siret: aide.siret,
       },
-      (identifiantMAC, departement, raisonSociale) =>
+      (identifiantMAC, departement, siret, raisonSociale) =>
         this.serviceChiffrement.chiffre(
-          JSON.stringify({ identifiantMAC, departement, raisonSociale })
+          JSON.stringify({ identifiantMAC, departement, raisonSociale, siret })
         )
     );
 
