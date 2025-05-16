@@ -21,6 +21,7 @@ export type Contexte =
   | 'Modifie le mot de passe'
   | 'Modifie le profil Aidant'
   | 'Modifie les préférences de l’Aidant'
+  | "Postuler à une demande d'aide"
   | "Recherche d'un Aidé"
   | 'Réinitialisation mot de passe'
   | 'Valide les CGU'
