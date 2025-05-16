@@ -31,14 +31,14 @@ export const tokenAttributionDemandeAide = (
   serviceDeChiffrement: ServiceDeChiffrement = adaptateurServiceChiffrement()
 ): {
   dechiffre: (token: string) => TonkenAttributionDemandeAide;
-  chiffre: (demandeAide: DemandeAide, identifiantAidant: crypto.UUID) => string;
+  chiffre: (emailEntiteAidee: string, identifiantAidant: crypto.UUID) => string;
 } => {
   return {
-    chiffre(demandeAide: DemandeAide, identifiantAidant: crypto.UUID): string {
+    chiffre(emailEntiteAidee: string, identifiantAidant: crypto.UUID): string {
       return btoa(
         serviceDeChiffrement.chiffre(
           JSON.stringify({
-            demande: demandeAide.identifiant,
+            demande: emailEntiteAidee,
             aidant: identifiantAidant,
           })
         )
@@ -126,10 +126,7 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
     return emailsDesAidants.map((email) => ({
       email,
       nomPrenom: 'Un prénom',
-      lienPourPostuler: `${urlMAC}/repondre-a-une-demande?token=${chiffre(
-        demandeAide,
-        crypto.randomUUID()
-      )}`,
+      lienPourPostuler: `${urlMAC}/repondre-a-une-demande?token=${chiffre(demandeAide.email, crypto.randomUUID())}`,
     }));
   };
 }

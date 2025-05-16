@@ -25,17 +25,14 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
       .avecUnEmail('jean.dupont@email.com')
       .avecUnNomPrenom('Jean DUPONT')
       .construis();
-    const demandeAide: DemandeAide = {
-      ...uneDemandeAide()
-        .avecUnEmail('entite-aidee@email.com')
-        .dansLeDepartement(gironde)
-        .construis(),
-      identifiant: 'ae904fd1-b430-4a1b-a78c-e8b2e65d2d12',
-    };
+    const demandeAide: DemandeAide = uneDemandeAide()
+      .avecUnEmail('entite-aidee@email.com')
+      .dansLeDepartement(gironde)
+      .construis();
     await testeurMAC.entrepots.aidants().persiste(aidant);
     await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
     const token = tokenAttributionDemandeAide().chiffre(
-      demandeAide,
+      demandeAide.email,
       aidant.identifiant
     );
 
@@ -61,22 +58,16 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
     ).toBe(true);
   });
 
-  it('Retourne une erreur 400 si la demande ne peut être pourvue (l’identifiant de la demande commence par b)', async () => {
-    const aidant = unAidant()
-      .avecUnEmail('jean.dupont@email.com')
-      .avecUnNomPrenom('Jean DUPONT')
+  it('Retourne une erreur 400 si la demande ne peut être pourvue (le mail de la demande commence par b)', async () => {
+    const aidant = unAidant().construis();
+    const demandeAide: DemandeAide = uneDemandeAide()
+      .avecUnEmail('banal@email.com')
+      .dansLeDepartement(gironde)
       .construis();
-    const demandeAide: DemandeAide = {
-      ...uneDemandeAide()
-        .avecUnEmail('entite-aidee@email.com')
-        .dansLeDepartement(gironde)
-        .construis(),
-      identifiant: 'be904fd1-b430-4a1b-a78c-e8b2e65d2d12',
-    };
     await testeurMAC.entrepots.aidants().persiste(aidant);
     await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
     const token = tokenAttributionDemandeAide().chiffre(
-      demandeAide,
+      demandeAide.email,
       aidant.identifiant
     );
 
