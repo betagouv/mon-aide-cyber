@@ -6,6 +6,7 @@ import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorl
 import crypto from 'crypto';
 import { Aidant } from '../../espace-aidant/Aidant';
 import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
+import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 
 export type CommandeAttribueDemandeAide = Omit<Commande, 'type'> & {
   type: 'CommandeAttribueDemandeAide';
@@ -13,6 +14,12 @@ export type CommandeAttribueDemandeAide = Omit<Commande, 'type'> & {
   identifiantAidant: crypto.UUID;
   emailDemande: string;
 };
+
+export type DemandeAidePourvue = Evenement<{
+  identifiantDemande: crypto.UUID;
+  identifiantAidant: crypto.UUID;
+  statut: 'SUCCESS' | 'TROP_TARD';
+}>;
 
 export class DemandeAideDejaPourvue extends Error {
   constructor() {
@@ -25,7 +32,8 @@ export class CapteurCommandeAttribueDemandeAide
 {
   constructor(
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
-    private readonly relations: AdaptateurRelations
+    private readonly relations: AdaptateurRelations,
+    private readonly bus: BusEvenement
   ) {}
 
   async execute(commande: CommandeAttribueDemandeAide): Promise<void> {
@@ -71,6 +79,27 @@ export class CapteurCommandeAttribueDemandeAide
       emailEntite: demandeAide.email,
     });
 
-    return Promise.resolve(undefined);
+    await this.bus.publie<DemandeAidePourvue>(
+      this.evenementSucces(
+        commande.identifiantDemande,
+        commande.identifiantAidant
+      )
+    );
+  }
+
+  private evenementSucces(
+    identifiantDemande: crypto.UUID,
+    identifiantAidant: crypto.UUID
+  ): DemandeAidePourvue {
+    return {
+      identifiant: crypto.randomUUID(),
+      type: 'DEMANDE_AIDE_POURVUE',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        identifiantDemande: identifiantDemande,
+        identifiantAidant: identifiantAidant,
+        statut: 'SUCCESS',
+      },
+    };
   }
 }

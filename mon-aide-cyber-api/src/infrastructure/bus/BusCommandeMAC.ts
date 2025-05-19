@@ -234,7 +234,8 @@ const capteurs: Map<string, Capteur> = new Map([
       capteur: (parametres) =>
         new CapteurCommandeAttribueDemandeAide(
           parametres.adaptateurEnvoiMail!,
-          parametres.adaptateurRelations
+          parametres.adaptateurRelations,
+          parametres.busEvenements!
         ),
     },
   ],
