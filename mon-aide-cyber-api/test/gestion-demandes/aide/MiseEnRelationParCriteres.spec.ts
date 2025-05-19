@@ -185,7 +185,10 @@ describe('Mise en relation par critères', () => {
       );
 
       await miseEnRelation.execute({
-        demandeAide: uneDemandeAide().dansLeDepartement(finistere).construis(),
+        demandeAide: uneDemandeAide()
+          .avecUnEmail('demandeur@societe.fr')
+          .dansLeDepartement(finistere)
+          .construis(),
         secteursActivite: [{ nom: 'Transports' }],
         typeEntite: entitesPubliques,
         siret: '12345',
@@ -199,8 +202,8 @@ describe('Mise en relation par critères', () => {
             premierAidantMisEnRelation.lienPourPostuler.indexOf('=') + 1
           )
         )
-      ).toStrictEqual<{ demande: crypto.UUID; aidant: crypto.UUID }>({
-        demande: expect.any(String),
+      ).toStrictEqual<{ demande: string; aidant: crypto.UUID }>({
+        demande: 'demandeur@societe.fr',
         aidant: expect.any(String),
       });
       const deuxiemeAidantMisEnRelation = aidantsContactes[0];
@@ -210,8 +213,8 @@ describe('Mise en relation par critères', () => {
             deuxiemeAidantMisEnRelation.lienPourPostuler.indexOf('=') + 1
           )
         )
-      ).toStrictEqual<{ demande: crypto.UUID; aidant: crypto.UUID }>({
-        demande: expect.any(String),
+      ).toStrictEqual<{ demande: string; aidant: crypto.UUID }>({
+        demande: 'demandeur@societe.fr',
         aidant: expect.any(String),
       });
     });
