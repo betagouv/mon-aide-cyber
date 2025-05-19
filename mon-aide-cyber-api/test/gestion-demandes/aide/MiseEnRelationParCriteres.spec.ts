@@ -208,7 +208,7 @@ describe('Mise en relation par critères', () => {
       ).toStrictEqual<TonkenAttributionDemandeAide>({
         emailDemande: 'demandeur@societe.fr',
         identifiantDemande: '11111111-1111-1111-1111-111111111111',
-        aidant: expect.any(String),
+        identifiantAidant: expect.any(String),
       });
       const deuxiemeAidantMisEnRelation = aidantsContactes[0];
       expect(
@@ -220,7 +220,7 @@ describe('Mise en relation par critères', () => {
       ).toStrictEqual<TonkenAttributionDemandeAide>({
         emailDemande: 'demandeur@societe.fr',
         identifiantDemande: '11111111-1111-1111-1111-111111111111',
-        aidant: expect.any(String),
+        identifiantAidant: expect.any(String),
       });
     });
 
@@ -313,7 +313,7 @@ describe('Mise en relation par critères', () => {
       ).chiffre(demandeAide.email, demandeAide.identifiant, identifiantAidant);
 
       expect(valeurChiffree).toBe(
-        'Njk3NjZjNmY2ZTY3NzU2NTc1NzIzMTMyNjE3MzczNmY2MzJkNmM2ZjZlNjc3NTY1NzU3MjMxMzZmNWY0ZDFhNjc0Y2JhYjMwMGM1OGZmMmI4ZWI4YmFjMmEzOTY5NWY3NWMxMDY2MTg0ZGY3MWMyNTViZWIwNTVjOTg4NDIyYzE0OWVmMDI4YzdhMzlkMzliMzRlYTJjNTkyM2ZiZTRlZmM0ZjhhMTFmYmUxOTE2MGRjMDQzNDhlYmFlNjczNGYxNGVjZjhkY2JhNzk4MjE0N2U5ZDA4NjliZDI4NTE3MTYxNjEyOTAwMGVhZjg3NTA5N2Y1MDc3NDNiN2M1YTZkNDBkZDk4M2Q2NDZiYTIxOTM1ZDkyM2UxYWE5OWE2YTEzZTQwMjc1YmRiYzRmOWJhZDhmYjIzMzE5ODIwZTZjZTZmZWYyNDNkYWM1NWZiNmYzMDM3MzBjMDQwNTA3YTI1MzliMDZkMTE4YzZiZjRhOWIxZWQ4YzAyMzY5ZWJkZmI4'
+        'Njk3NjZjNmY2ZTY3NzU2NTc1NzIzMTMyNjE3MzczNmY2MzJkNmM2ZjZlNjc3NTY1NzU3MjMxMzZmNWY0ZDFhNjc0Y2JhYjMwMGM1OGZmMmI4ZWI4YmFjMmEzOTY5NWY3NWMxMDY2MTg0ZGY3MWMyNTViZWIwNTVjOTg4NDIyYzE0OWVmMDI4YzdhMzlkMzliMzRlYTJjNTkyM2ZiZTRlZmM0ZjhhMTFmYmUxOTE2MGRjMDQzNDhlYmFlNjczNGYxNGVjZjhkY2JhNzk4MjE0N2U5ZDA4NjliZDI4NTE3MTYxNjEyOTAwMGVhZjg3NTA5N2Y1MDc3NDNiN2M1YTZkNDBkZDE4ZWQ3NDlhMDNjZDcwZWQxNjc1YmRmYzI2YTE0ZWY0ZjdhYjRhZjFkOTliNzhhYjM2MzFhOTYxYjZmYjNmZWU4MDg4ZmM2MDhlM2I4MDg3MTViMDMxOTA1ZTE0OGMxMjg1MDE3MTc2NGY5ZjY4MTcxYzMxMjMzM2FjOWQwNmVmZmViMTA3MWIyMzU0YmJmMDQ1YQ=='
       );
       expect(
         tokenAttributionDemandeAide(serviceDeChiffrement).dechiffre(
@@ -322,7 +322,7 @@ describe('Mise en relation par critères', () => {
       ).toStrictEqual<TonkenAttributionDemandeAide>({
         emailDemande: 'jean.dupont@email.com',
         identifiantDemande: '11111111-1111-1111-1111-111111111111',
-        aidant: '7571dfe9-31e7-4e6f-80de-fafa3f323b1d',
+        identifiantAidant: '7571dfe9-31e7-4e6f-80de-fafa3f323b1d',
       });
     });
   });
