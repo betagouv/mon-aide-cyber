@@ -26,7 +26,7 @@ export type AidantMisEnRelation = {
 export type TonkenAttributionDemandeAide = {
   emailDemande: string;
   identifiantDemande: crypto.UUID;
-  aidant: crypto.UUID;
+  identifiantAidant: crypto.UUID;
 };
 
 type GestionTokenAttributionDemandeAide = {
@@ -52,7 +52,7 @@ export const tokenAttributionDemandeAide = (
           JSON.stringify({
             emailDemande,
             identifiantDemande,
-            aidant: identifiantAidant,
+            identifiantAidant,
           })
         )
       );
