@@ -21,7 +21,37 @@ export const Accueil = () => {
     setMotDGClique(false);
     setMotGeneralClique(true);
   }, []);
-  
+
+  const tuiles = [
+    {
+      titre: 'Un dispositif étatique',
+      contenu:
+        'MonAideCyber est proposé par l’Agence nationale de la sécurité des systèmes d’information.',
+      illustration: {
+        lien: '/images/icones/accompagnement-personnalise.svg',
+        alt: 'Un diagnostic cyber',
+      },
+    },
+    {
+      titre: 'Une communauté de confiance',
+      contenu:
+        'Les Aidants cyber sont issus de la sphère publique ou sont membres d’associations œuvrant pour un numérique de confiance.',
+      illustration: {
+        lien: '/images/icones/diagnostic-cyber.svg',
+        alt: 'Un accompagnement personnalisé',
+      },
+    },
+    {
+      titre: 'Au service de l’intérêt général',
+      contenu:
+        'Le diagnostic cyber aide les entités qui souhaitent se protéger contre les cyberattaques et passer à l’action.',
+      illustration: {
+        lien: '/images/icones/communaute-aidants.svg',
+        alt: 'Communauté d‘Aidants cyber',
+      },
+    },
+  ];
+
   return (
     <main role="main">
       <lab-anssi-brique-hero
@@ -42,6 +72,9 @@ export const Accueil = () => {
           lien: liensMesServicesCyber().cyberDepartBrut,
         })}
       ></lab-anssi-brique-hero>
+      <lab-anssi-carrousel-tuiles
+        tuiles={JSON.stringify(tuiles)}
+      ></lab-anssi-carrousel-tuiles>
       <div className="conteneur-accueil">
         <div className="fr-container">
           <div id="ce-que-cest" className="fr-grid-row fr-grid-row--gutters">
