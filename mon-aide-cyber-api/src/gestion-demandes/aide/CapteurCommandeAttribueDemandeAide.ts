@@ -5,6 +5,7 @@ import { gironde } from '../departements';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import crypto from 'crypto';
 import { Aidant } from '../../espace-aidant/Aidant';
+import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
 
 export type CommandeAttribueDemandeAide = Omit<Commande, 'type'> & {
   type: 'CommandeAttribueDemandeAide';
@@ -22,7 +23,10 @@ export class DemandeAideDejaPourvue extends Error {
 export class CapteurCommandeAttribueDemandeAide
   implements CapteurCommande<CommandeAttribueDemandeAide, void>
 {
-  constructor(private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail) {}
+  constructor(
+    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
+    private readonly relations: AdaptateurRelations
+  ) {}
 
   async execute(commande: CommandeAttribueDemandeAide): Promise<void> {
     if (commande.emailDemande.startsWith('b')) {
@@ -49,6 +53,11 @@ export class CapteurCommandeAttribueDemandeAide
       },
       identifiant: crypto.randomUUID(),
     };
+
+    await this.relations.attribueDemandeAAidant(
+      commande.identifiantDemande,
+      commande.identifiantAidant
+    );
 
     await this.adaptateurEnvoiMail.envoieConfirmationDemandeAideAttribuee({
       emailAidant: aidant.email,

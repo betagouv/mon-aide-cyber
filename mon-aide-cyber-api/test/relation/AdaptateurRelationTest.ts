@@ -43,4 +43,11 @@ export class AdaptateurRelationsTest implements AdaptateurRelations {
   ): Promise<void> {
     throw new Error('Method not implemented.');
   }
+
+  async attribueDemandeAAidant(
+    _identifiantDemande: crypto.UUID,
+    _identifiantAidant: crypto.UUID
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 }

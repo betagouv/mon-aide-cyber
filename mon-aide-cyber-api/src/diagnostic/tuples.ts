@@ -79,3 +79,29 @@ export const unTupleEntiteAideeBeneficieDiagnostic = (
     .avecUtilisateur(identifiantEntite)
     .avecObjet(identifiantDiagnostic)
     .construis();
+
+export type DefinitionAttributionDemandeAideAAidant = DefinitionTuple & {
+  relation: 'demandeAttribuee';
+  typeObjet: 'demandeAide';
+  typeUtilisateur: 'aidant';
+};
+export const definitionAttributionDemandeAideAAidant: {
+  definition: DefinitionAttributionDemandeAideAAidant;
+} = {
+  definition: {
+    relation: 'demandeAttribuee',
+    typeObjet: 'demandeAide',
+    typeUtilisateur: 'aidant',
+  },
+};
+
+export const unTupleAttributionDemandeAideAAidant = (
+  identifiantDemande: crypto.UUID,
+  identifiantAidant: crypto.UUID
+): Tuple =>
+  unTuple<DefinitionAttributionDemandeAideAAidant>(
+    definitionAttributionDemandeAideAAidant
+  )
+    .avecUtilisateur(identifiantAidant)
+    .avecObjet(identifiantDemande)
+    .construis();

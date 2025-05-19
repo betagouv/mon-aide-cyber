@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { AdaptateurRelations, Email } from './AdaptateurRelations';
 import { EntrepotRelation } from './EntrepotRelation';
 import { fabriqueEntrepotRelations } from './infrastructure/fabriqueEntrepotRelations';
+import { unTupleAttributionDemandeAideAAidant } from '../diagnostic/tuples';
 
 export class AdaptateurRelationsMAC implements AdaptateurRelations {
   private tupleEntrepot: EntrepotRelation;
@@ -45,5 +46,17 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
 
   typeRelationExiste(relation: Relation, objet: Objet) {
     return this.tupleEntrepot.typeRelationExiste(relation, objet);
+  }
+
+  async attribueDemandeAAidant(
+    identifiantDemande: crypto.UUID,
+    identifiantAidant: crypto.UUID
+  ): Promise<void> {
+    await this.creeTuple(
+      unTupleAttributionDemandeAideAAidant(
+        identifiantDemande,
+        identifiantAidant
+      )
+    );
   }
 }

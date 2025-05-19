@@ -35,4 +35,9 @@ export interface AdaptateurRelations {
       objet: Objet;
     }[]
   ): Promise<void>;
+
+  attribueDemandeAAidant(
+    identifiantDemande: crypto.UUID,
+    identifiantAidant: crypto.UUID
+  ): Promise<void>;
 }
