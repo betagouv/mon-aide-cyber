@@ -94,7 +94,7 @@ export const NavigationPublique = ({
         <li className="diagnostic-mes-services-cyber fr-nav__item lien">
           <lab-anssi-mes-services-cyber-lien-diagnostic-cyber
             lien={liensMesServicesCyber().cyberDepartAvecTracking}
-            versExterne={true}
+            versExterne="true"
           ></lab-anssi-mes-services-cyber-lien-diagnostic-cyber>
         </li>
       </ul>
