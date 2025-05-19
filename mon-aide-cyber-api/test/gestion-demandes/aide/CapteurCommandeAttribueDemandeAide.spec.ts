@@ -4,8 +4,11 @@ import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/En
 import {
   CapteurCommandeAttribueDemandeAide,
   DemandeAideDejaPourvue,
+  DemandeAidePourvue,
 } from '../../../src/gestion-demandes/aide/CapteurCommandeAttribueDemandeAide';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
+import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
+import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe("Capteur de commande d'attribution de demande d'aide", () => {
   it("Attribue la demande d'aide à l'aidant", async () => {
@@ -13,7 +16,8 @@ describe("Capteur de commande d'attribution de demande d'aide", () => {
 
     const capteur = new CapteurCommandeAttribueDemandeAide(
       new AdaptateurEnvoiMailMemoire(),
-      relations
+      relations,
+      new BusEvenementDeTest()
     );
 
     await capteur.execute({
@@ -35,6 +39,38 @@ describe("Capteur de commande d'attribution de demande d'aide", () => {
     ).toBe(true);
   });
 
+  it("Publie un événement de « DEMANDE_AIDE_POURVUE » avec un statut en Succès lorsque l'Aidant est le premier arrivé", async () => {
+    const bus = new BusEvenementDeTest();
+    const maintenant = new Date();
+    FournisseurHorlogeDeTest.initialise(maintenant);
+
+    const relations = new AdaptateurRelationsMAC(new EntrepotRelationMemoire());
+
+    const capteur = new CapteurCommandeAttribueDemandeAide(
+      new AdaptateurEnvoiMailMemoire(),
+      relations,
+      bus
+    );
+
+    await capteur.execute({
+      type: 'CommandeAttribueDemandeAide',
+      identifiantDemande: '22222222-2222-2222-2222-222222222222',
+      emailDemande: 'demande@societe.fr',
+      identifiantAidant: '11111111-1111-1111-1111-111111111111',
+    });
+
+    expect(bus.evenementRecu).toStrictEqual<DemandeAidePourvue>({
+      identifiant: expect.any(String),
+      type: 'DEMANDE_AIDE_POURVUE',
+      date: maintenant,
+      corps: {
+        identifiantDemande: '22222222-2222-2222-2222-222222222222',
+        identifiantAidant: '11111111-1111-1111-1111-111111111111',
+        statut: 'SUCCESS',
+      },
+    });
+  });
+
   it('Jette une erreur de DemandeDejaPourvue si un aidant a déjà répondu à la demande', async () => {
     const relations = new AdaptateurRelationsMAC(new EntrepotRelationMemoire());
     await relations.attribueDemandeAAidant(
@@ -44,7 +80,8 @@ describe("Capteur de commande d'attribution de demande d'aide", () => {
 
     const capteur = new CapteurCommandeAttribueDemandeAide(
       new AdaptateurEnvoiMailMemoire(),
-      relations
+      relations,
+      new BusEvenementDeTest()
     );
 
     const deuxiemeAidant = 'BBBBBBBB-1111-1111-1111-111111111111';
