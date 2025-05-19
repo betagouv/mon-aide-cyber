@@ -9,6 +9,7 @@ import {
 } from '../../../src/gestion-demandes/departements';
 
 class ConstructeurDemandeAide implements Constructeur<DemandeAide> {
+  private identifiant: crypto.UUID = crypto.randomUUID();
   private dateSignatureCGU: Date = FournisseurHorloge.maintenant();
   private demandeIncomplete = false;
   private email: string = fakerFR.internet.email();
@@ -20,7 +21,7 @@ class ConstructeurDemandeAide implements Constructeur<DemandeAide> {
     return this.demandeIncomplete
       ? ({ email: fakerFR.internet.email() } as DemandeAide)
       : {
-          identifiant: crypto.randomUUID(),
+          identifiant: this.identifiant,
           dateSignatureCGU: this.dateSignatureCGU,
           email: this.email,
           raisonSociale: fakerFR.company.name(),
@@ -48,6 +49,11 @@ class ConstructeurDemandeAide implements Constructeur<DemandeAide> {
 
   avecUnEmail(email: string): ConstructeurDemandeAide {
     this.email = email;
+    return this;
+  }
+
+  avecIdentifiant(id: crypto.UUID): ConstructeurDemandeAide {
+    this.identifiant = id;
     return this;
   }
 

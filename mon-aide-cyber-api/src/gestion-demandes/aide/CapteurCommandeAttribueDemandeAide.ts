@@ -10,6 +10,7 @@ export type CommandeAttribueDemandeAide = Omit<Commande, 'type'> & {
   type: 'CommandeAttribueDemandeAide';
   identifiantDemande: crypto.UUID;
   identifiantAidant: crypto.UUID;
+  emailDemande: string;
 };
 
 export class DemandeAideDejaPourvue extends Error {
@@ -24,7 +25,7 @@ export class CapteurCommandeAttribueDemandeAide
   constructor(private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail) {}
 
   async execute(commande: CommandeAttribueDemandeAide): Promise<void> {
-    if (commande.identifiantDemande.startsWith('b')) {
+    if (commande.emailDemande.startsWith('b')) {
       throw new DemandeAideDejaPourvue();
     }
     const demandeAide: DemandeAide = {

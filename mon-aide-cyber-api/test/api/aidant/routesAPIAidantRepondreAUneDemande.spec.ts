@@ -61,6 +61,7 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
       await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
       const token = tokenAttributionDemandeAide().chiffre(
         demandeAide.email,
+        demandeAide.identifiant,
         aidant.identifiant
       );
 
@@ -95,6 +96,7 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
       await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
       const token = tokenAttributionDemandeAide().chiffre(
         demandeAide.email,
+        demandeAide.identifiant,
         aidant.identifiant
       );
 
@@ -102,9 +104,7 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
         donneesServeur.app,
         'POST',
         `/api/aidant/repondre-a-une-demande`,
-        {
-          token,
-        }
+        { token }
       );
 
       expect(reponse.statusCode).toBe(400);
@@ -115,10 +115,15 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
     it('Renvoie les infos de la demande dont l’email est dans le token', async () => {
       const token = tokenAttributionDemandeAide(
         testeurMAC.serviceDeChiffrement
-      ).chiffre('entite-aidee@email.com', crypto.randomUUID());
+      ).chiffre(
+        'entite-aidee@email.com',
+        '11111111-1111-1111-1111-111111111111',
+        crypto.randomUUID()
+      );
       const demandeAide: DemandeAide = uneDemandeAide()
         .avecUneDateDeSignatureDesCGU(new Date('2025-04-02T12:37:00.000Z'))
         .avecUnEmail('entite-aidee@email.com')
+        .avecIdentifiant('11111111-1111-1111-1111-111111111111')
         .dansLeDepartement(finistere)
         .avecLeSiret('0987654321')
         .construis();
@@ -160,7 +165,11 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
     it('Rejette la requête avec une erreur 400 (et non une 404) si la demande d’Aide est introuvable', async () => {
       const tokenSansDemande = tokenAttributionDemandeAide(
         testeurMAC.serviceDeChiffrement
-      ).chiffre('entite-aidee@email.com', crypto.randomUUID());
+      ).chiffre(
+        'entite-aidee@email.com',
+        crypto.randomUUID(),
+        crypto.randomUUID()
+      );
 
       const reponse = await executeRequete(
         donneesServeur.app,

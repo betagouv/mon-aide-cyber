@@ -53,13 +53,13 @@ export const routesAPIAidantRepondreAUneDemande = (
       reponse: Response
     ) => {
       try {
-        const { demande, aidant } = tokenAttributionDemandeAide().dechiffre(
-          requete.body.token
-        );
+        const { identifiantDemande, demande, aidant } =
+          tokenAttributionDemandeAide().dechiffre(requete.body.token);
         const commandeAttribueDemandeAide: CommandeAttribueDemandeAide = {
           type: 'CommandeAttribueDemandeAide',
-          identifiantDemande: demande,
+          identifiantDemande,
           identifiantAidant: aidant,
+          emailDemande: demande,
         };
 
         await busCommande.publie(commandeAttribueDemandeAide);

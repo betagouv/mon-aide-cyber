@@ -24,21 +24,34 @@ export type AidantMisEnRelation = {
 };
 
 export type TonkenAttributionDemandeAide = {
-  demande: crypto.UUID;
+  demande: string;
+  identifiantDemande: crypto.UUID;
   aidant: crypto.UUID;
 };
+
+type GestionTokenAttributionDemandeAide = {
+  chiffre: (
+    emailEntiteAidee: string,
+    identifiantDemande: crypto.UUID,
+    identifiantAidant: crypto.UUID
+  ) => string;
+  dechiffre: (token: string) => TonkenAttributionDemandeAide;
+};
+
 export const tokenAttributionDemandeAide = (
   serviceDeChiffrement: ServiceDeChiffrement = adaptateurServiceChiffrement()
-): {
-  dechiffre: (token: string) => TonkenAttributionDemandeAide;
-  chiffre: (emailEntiteAidee: string, identifiantAidant: crypto.UUID) => string;
-} => {
+): GestionTokenAttributionDemandeAide => {
   return {
-    chiffre(emailEntiteAidee: string, identifiantAidant: crypto.UUID): string {
+    chiffre(
+      emailEntiteAidee: string,
+      identifiantDemande: crypto.UUID,
+      identifiantAidant: crypto.UUID
+    ): string {
       return btoa(
         serviceDeChiffrement.chiffre(
           JSON.stringify({
             demande: emailEntiteAidee,
+            identifiantDemande,
             aidant: identifiantAidant,
           })
         )
@@ -126,7 +139,7 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
     return emailsDesAidants.map((email) => ({
       email,
       nomPrenom: 'Un prénom',
-      lienPourPostuler: `${urlMAC}/repondre-a-une-demande?token=${chiffre(demandeAide.email, crypto.randomUUID())}`,
+      lienPourPostuler: `${urlMAC}/repondre-a-une-demande?token=${chiffre(demandeAide.email, demandeAide.identifiant, crypto.randomUUID())}`,
     }));
   };
 }
