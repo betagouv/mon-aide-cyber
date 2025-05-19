@@ -18,7 +18,7 @@ export type CommandeAttribueDemandeAide = Omit<Commande, 'type'> & {
 export type DemandeAidePourvue = Evenement<{
   identifiantDemande: crypto.UUID;
   identifiantAidant: crypto.UUID;
-  statut: 'SUCCESS' | 'TROP_TARD';
+  statut: 'SUCCESS' | 'DEJA_POURVUE';
 }>;
 
 export class DemandeAideDejaPourvue extends Error {
@@ -42,6 +42,12 @@ export class CapteurCommandeAttribueDemandeAide
     );
 
     if (dejaPourvue) {
+      await this.bus.publie(
+        this.evenementTropTard(
+          commande.identifiantDemande,
+          commande.identifiantAidant
+        )
+      );
       throw new DemandeAideDejaPourvue();
     }
 
@@ -87,6 +93,22 @@ export class CapteurCommandeAttribueDemandeAide
     );
   }
 
+  private evenementTropTard(
+    identifiantDemande: crypto.UUID,
+    identifiantAidant: crypto.UUID
+  ): DemandeAidePourvue {
+    return {
+      identifiant: crypto.randomUUID(),
+      type: 'DEMANDE_AIDE_POURVUE',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        identifiantDemande,
+        identifiantAidant,
+        statut: 'DEJA_POURVUE',
+      },
+    };
+  }
+
   private evenementSucces(
     identifiantDemande: crypto.UUID,
     identifiantAidant: crypto.UUID
@@ -96,8 +118,8 @@ export class CapteurCommandeAttribueDemandeAide
       type: 'DEMANDE_AIDE_POURVUE',
       date: FournisseurHorloge.maintenant(),
       corps: {
-        identifiantDemande: identifiantDemande,
-        identifiantAidant: identifiantAidant,
+        identifiantDemande,
+        identifiantAidant,
         statut: 'SUCCESS',
       },
     };
