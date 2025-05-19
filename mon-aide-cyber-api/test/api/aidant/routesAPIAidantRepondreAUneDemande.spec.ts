@@ -77,9 +77,9 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
         (
           testeurMAC.adaptateurEnvoieMessage as AdaptateurEnvoiMailMemoire
         ).demandeAideAttribueeEnvoyee({
-          emailAidant: 'user-xavier@yopmail.com',
-          nomPrenomAidant: 'User XAVIER',
-          emailEntite: 'entite-aidee@yopmail.com',
+          emailAidant: 'jean.dupont@email.com',
+          nomPrenomAidant: 'Jean DUPONT',
+          emailEntite: 'entite-aidee@email.com',
           departement: gironde,
         })
       ).toBe(true);

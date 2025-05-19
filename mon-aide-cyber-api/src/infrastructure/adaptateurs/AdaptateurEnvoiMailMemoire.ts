@@ -126,7 +126,7 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   }): boolean {
     const confirmationCorrespond =
       this.confirmation !== undefined &&
-      this.confirmation.departement === confirmation.departement &&
+      this.confirmation.departement.code === confirmation.departement.code &&
       this.confirmation.emailEntite === confirmation.emailEntite &&
       this.confirmation.nomPrenomAidant === confirmation.nomPrenomAidant;
     return (

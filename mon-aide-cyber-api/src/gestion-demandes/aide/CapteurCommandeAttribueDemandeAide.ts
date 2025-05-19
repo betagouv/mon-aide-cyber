@@ -1,12 +1,11 @@
 import { CapteurCommande, Commande } from '../../domaine/commande';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
-import { DemandeAide } from './DemandeAide';
-import { gironde } from '../departements';
+import { RechercheDemandeAideComplete } from './DemandeAide';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import crypto from 'crypto';
-import { Aidant } from '../../espace-aidant/Aidant';
 import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
+import { Entrepots } from '../../domaine/Entrepots';
 
 export type CommandeAttribueDemandeAide = Omit<Commande, 'type'> & {
   type: 'CommandeAttribueDemandeAide';
@@ -33,7 +32,8 @@ export class CapteurCommandeAttribueDemandeAide
   constructor(
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
     private readonly relations: AdaptateurRelations,
-    private readonly bus: BusEvenement
+    private readonly bus: BusEvenement,
+    private readonly entrepot: Entrepots
   ) {}
 
   async execute(commande: CommandeAttribueDemandeAide): Promise<void> {
@@ -46,27 +46,15 @@ export class CapteurCommandeAttribueDemandeAide
       throw new DemandeAideDejaPourvue();
     }
 
-    const demandeAide: DemandeAide = {
-      email: 'entite-aidee@yopmail.com',
-      raisonSociale: 'BETAGOUV',
-      departement: gironde,
-      dateSignatureCGU: FournisseurHorloge.maintenant(),
-      identifiant: crypto.randomUUID(),
-      siret: '12345',
-    };
+    const { demandeAide }: RechercheDemandeAideComplete = (await this.entrepot
+      .demandesAides()
+      .rechercheParEmail(
+        commande.emailDemande
+      )) as RechercheDemandeAideComplete;
 
-    const aidant: Aidant = {
-      consentementAnnuaire: false,
-      email: 'user-xavier@yopmail.com',
-      nomPrenom: 'User XAVIER',
-      preferences: {
-        secteursActivite: [],
-        departements: [],
-        typesEntites: [],
-        nomAffichageAnnuaire: 'User X.',
-      },
-      identifiant: crypto.randomUUID(),
-    };
+    const aidant = await this.entrepot
+      .aidants()
+      .lis(commande.identifiantAidant);
 
     await this.relations.attribueDemandeAAidant(
       commande.identifiantDemande,
