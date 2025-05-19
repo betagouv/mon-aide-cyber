@@ -40,4 +40,6 @@ export interface AdaptateurRelations {
     identifiantDemande: crypto.UUID,
     identifiantAidant: crypto.UUID
   ): Promise<void>;
+
+  demandeDejaPourvue(identifiantDemande: crypto.UUID): Promise<boolean>;
 }

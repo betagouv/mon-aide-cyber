@@ -29,9 +29,14 @@ export class CapteurCommandeAttribueDemandeAide
   ) {}
 
   async execute(commande: CommandeAttribueDemandeAide): Promise<void> {
-    if (commande.emailDemande.startsWith('b')) {
+    const dejaPourvue = await this.relations.demandeDejaPourvue(
+      commande.identifiantDemande
+    );
+
+    if (dejaPourvue) {
       throw new DemandeAideDejaPourvue();
     }
+
     const demandeAide: DemandeAide = {
       email: 'entite-aidee@yopmail.com',
       raisonSociale: 'BETAGOUV',

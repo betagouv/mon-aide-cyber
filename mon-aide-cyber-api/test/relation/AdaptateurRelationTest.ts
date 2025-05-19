@@ -50,4 +50,8 @@ export class AdaptateurRelationsTest implements AdaptateurRelations {
   ): Promise<void> {
     throw new Error('Method not implemented.');
   }
+
+  demandeDejaPourvue(_identifiantDemande: crypto.UUID): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
 }

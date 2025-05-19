@@ -85,10 +85,15 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
       ).toBe(true);
     });
 
-    it('Retourne une erreur 400 si la demande ne peut être pourvue (le mail de la demande commence par b)', async () => {
+    it('Retourne une erreur 400 si la demande est déjà pourvue ', async () => {
+      await testeurMAC.adaptateurRelations.attribueDemandeAAidant(
+        '22222222-2222-2222-2222-222222222222',
+        'AAAAAAAA-1111-1111-1111-111111111111'
+      );
       const aidant = unAidant().construis();
       const demandeAide: DemandeAide = uneDemandeAide()
-        .avecUnEmail('banal@email.com')
+        .avecIdentifiant('22222222-2222-2222-2222-222222222222')
+        .avecUnEmail('entite@email.com')
         .dansLeDepartement(gironde)
         .construis();
 
