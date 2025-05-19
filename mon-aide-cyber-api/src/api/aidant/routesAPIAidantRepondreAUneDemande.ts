@@ -53,13 +53,14 @@ export const routesAPIAidantRepondreAUneDemande = (
       reponse: Response
     ) => {
       try {
-        const { identifiantDemande, demande, aidant } =
+        const { identifiantDemande, emailDemande, aidant } =
           tokenAttributionDemandeAide().dechiffre(requete.body.token);
+
         const commandeAttribueDemandeAide: CommandeAttribueDemandeAide = {
           type: 'CommandeAttribueDemandeAide',
           identifiantDemande,
+          emailDemande,
           identifiantAidant: aidant,
-          emailDemande: demande,
         };
 
         await busCommande.publie(commandeAttribueDemandeAide);
@@ -96,7 +97,7 @@ export const routesAPIAidantRepondreAUneDemande = (
 
       const demandeAide = await entrepots
         .demandesAides()
-        .rechercheParEmail(tokenEnClair.demande);
+        .rechercheParEmail(tokenEnClair.emailDemande);
 
       if (demandeAide.etat !== 'COMPLET') {
         return suite(
