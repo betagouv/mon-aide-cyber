@@ -42,12 +42,7 @@ export class CapteurCommandeAttribueDemandeAide
     );
 
     if (dejaPourvue) {
-      await this.bus.publie(
-        this.evenementTropTard(
-          commande.identifiantDemande,
-          commande.identifiantAidant
-        )
-      );
+      await this.bus.publie(this.evenementDejaPourvue(commande));
       throw new DemandeAideDejaPourvue();
     }
 
@@ -85,41 +80,34 @@ export class CapteurCommandeAttribueDemandeAide
       emailEntite: demandeAide.email,
     });
 
-    await this.bus.publie<DemandeAidePourvue>(
-      this.evenementSucces(
-        commande.identifiantDemande,
-        commande.identifiantAidant
-      )
-    );
+    await this.bus.publie<DemandeAidePourvue>(this.evenementSucces(commande));
   }
 
-  private evenementTropTard(
-    identifiantDemande: crypto.UUID,
-    identifiantAidant: crypto.UUID
+  private evenementDejaPourvue(
+    commande: CommandeAttribueDemandeAide
   ): DemandeAidePourvue {
     return {
       identifiant: crypto.randomUUID(),
       type: 'DEMANDE_AIDE_POURVUE',
       date: FournisseurHorloge.maintenant(),
       corps: {
-        identifiantDemande,
-        identifiantAidant,
+        identifiantDemande: commande.identifiantDemande,
+        identifiantAidant: commande.identifiantAidant,
         statut: 'DEJA_POURVUE',
       },
     };
   }
 
   private evenementSucces(
-    identifiantDemande: crypto.UUID,
-    identifiantAidant: crypto.UUID
+    commande: CommandeAttribueDemandeAide
   ): DemandeAidePourvue {
     return {
       identifiant: crypto.randomUUID(),
       type: 'DEMANDE_AIDE_POURVUE',
       date: FournisseurHorloge.maintenant(),
       corps: {
-        identifiantDemande,
-        identifiantAidant,
+        identifiantDemande: commande.identifiantDemande,
+        identifiantAidant: commande.identifiantAidant,
         statut: 'SUCCESS',
       },
     };
