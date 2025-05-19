@@ -59,4 +59,11 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
       )
     );
   }
+
+  async demandeDejaPourvue(identifiantDemande: crypto.UUID): Promise<boolean> {
+    return this.typeRelationExiste('demandeAttribuee', {
+      type: 'demandeAide',
+      identifiant: identifiantDemande,
+    });
+  }
 }

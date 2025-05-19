@@ -30,7 +30,6 @@ export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
   ): Promise<boolean> {
     return Promise.resolve(false);
   }
-
   retireLesRelations(
     _relations: { relation: string; utilisateur: Utilisateur; objet: Objet }[]
   ): Promise<void> {
@@ -41,6 +40,10 @@ export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
     _identifiantDemande: crypto.UUID,
     _identifiantAidant: crypto.UUID
   ): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  demandeDejaPourvue(_identifiantDemande: crypto.UUID): Promise<boolean> {
     throw new Error('Method not implemented.');
   }
 }
