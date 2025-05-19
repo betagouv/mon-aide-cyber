@@ -4,6 +4,7 @@ import {
   AidantMisEnRelation,
   MiseEnRelationParCriteres,
   tokenAttributionDemandeAide,
+  TonkenAttributionDemandeAide,
 } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
 import {
   allier,
@@ -184,11 +185,14 @@ describe('Mise en relation par critères', () => {
         entrepots
       );
 
+      const demandeAide = uneDemandeAide()
+        .avecIdentifiant('11111111-1111-1111-1111-111111111111')
+        .avecUnEmail('demandeur@societe.fr')
+        .dansLeDepartement(finistere)
+        .construis();
+
       await miseEnRelation.execute({
-        demandeAide: uneDemandeAide()
-          .avecUnEmail('demandeur@societe.fr')
-          .dansLeDepartement(finistere)
-          .construis(),
+        demandeAide,
         secteursActivite: [{ nom: 'Transports' }],
         typeEntite: entitesPubliques,
         siret: '12345',
@@ -202,8 +206,13 @@ describe('Mise en relation par critères', () => {
             premierAidantMisEnRelation.lienPourPostuler.indexOf('=') + 1
           )
         )
-      ).toStrictEqual<{ demande: string; aidant: crypto.UUID }>({
+      ).toStrictEqual<{
+        demande: string;
+        identifiantDemande: crypto.UUID;
+        aidant: crypto.UUID;
+      }>({
         demande: 'demandeur@societe.fr',
+        identifiantDemande: '11111111-1111-1111-1111-111111111111',
         aidant: expect.any(String),
       });
       const deuxiemeAidantMisEnRelation = aidantsContactes[0];
@@ -213,8 +222,13 @@ describe('Mise en relation par critères', () => {
             deuxiemeAidantMisEnRelation.lienPourPostuler.indexOf('=') + 1
           )
         )
-      ).toStrictEqual<{ demande: string; aidant: crypto.UUID }>({
+      ).toStrictEqual<{
+        demande: string;
+        identifiantDemande: crypto.UUID;
+        aidant: crypto.UUID;
+      }>({
         demande: 'demandeur@societe.fr',
+        identifiantDemande: '11111111-1111-1111-1111-111111111111',
         aidant: expect.any(String),
       });
     });
@@ -298,23 +312,25 @@ describe('Mise en relation par critères', () => {
         'ma-clef-secrete-de-longueur-0032'
       );
       const demandeAide: DemandeAide = uneDemandeAide()
+        .avecIdentifiant('11111111-1111-1111-1111-111111111111')
         .avecUnEmail('jean.dupont@email.com')
         .construis();
       const identifiantAidant = '7571dfe9-31e7-4e6f-80de-fafa3f323b1d';
 
       const valeurChiffree = tokenAttributionDemandeAide(
         serviceDeChiffrement
-      ).chiffre(demandeAide.email, identifiantAidant);
+      ).chiffre(demandeAide.email, demandeAide.identifiant, identifiantAidant);
 
       expect(valeurChiffree).toBe(
-        'Njk3NjZjNmY2ZTY3NzU2NTc1NzIzMTMyNjE3MzczNmY2MzJkNmM2ZjZlNjc3NTY1NzU3MjMxMzZmNWY0ZDBhZTc4YzNhOTEwMGMxN2E0Njc4MGI4Zjk5NmFmOTg4NWU2NWQ1MDc2MmQ1OGY1MTMzODc3YTAwYjUyOWNjYTIwODA0N2ViNDRjMTM2MjQ5NWM0NzhhOTcwMDg3YmZlZWNmZWI5YjBmZjRmYjU0YTVlMWI5ZjU3MWZmN2E3NjY2MWE1NTI5OGMxOWNmNzlhNzY1OWVhZDJkNTliOWI5NjViMDFhOWM4YmU3MmZiOGNkOTU2NjkyMTExNTIwNDVlYWM='
+        'Njk3NjZjNmY2ZTY3NzU2NTc1NzIzMTMyNjE3MzczNmY2MzJkNmM2ZjZlNjc3NTY1NzU3MjMxMzZmNWY0ZDBhZTc4YzNhOTEwMGMxN2E0Njc4MGI4Zjk5NmFmOTg4NWU2NWQ1MDc2MmQ1OGY1MTMzODc3YTAwYjUyOWNjYTIwODA0N2ViNDRjMTM2MjQ5NWM0NzhhOTcwMDg3YmZlZWNmZWI5YjBmZjRmYjU0YTVlMWI5ZjU3MWZmN2E3NjY2MWE1NTI5OGMxOWNmNzlhNzY1OWVhZDJkNTliOWI5NjBhMDU0ZTViYzQ1ZmFmYTAyMjUxMmYwZjMyMzZlMzk5ZTU5NjRiZGRjODg4MDVlNTY0ODA1NjgxMzgxZWFmODYzZjQ0YjAwYTc1YmZiYzFiOWRhZDhhZTYzNDRlODIwNzZkYjNhYWVlMTQ4YTkyMGZiNGE0MDE2MzQyOWI2ZTYyYTFmMDY3MmEyODJjZjRhM2VkZWU5MWUxMzE='
       );
       expect(
         tokenAttributionDemandeAide(serviceDeChiffrement).dechiffre(
           valeurChiffree
         )
-      ).toStrictEqual({
+      ).toStrictEqual<TonkenAttributionDemandeAide>({
         demande: 'jean.dupont@email.com',
+        identifiantDemande: '11111111-1111-1111-1111-111111111111',
         aidant: '7571dfe9-31e7-4e6f-80de-fafa3f323b1d',
       });
     });
