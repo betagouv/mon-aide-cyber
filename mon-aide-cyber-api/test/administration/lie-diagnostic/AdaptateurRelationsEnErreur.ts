@@ -23,7 +23,6 @@ export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
   diagnosticsDeLAide(_email: Email): Promise<string[]> {
     return Promise.resolve([]);
   }
-
   relationExiste(
     _relation: Relation,
     _utilisateur: Utilisateur,
@@ -34,6 +33,13 @@ export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
 
   retireLesRelations(
     _relations: { relation: string; utilisateur: Utilisateur; objet: Objet }[]
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  async attribueDemandeAAidant(
+    _identifiantDemande: crypto.UUID,
+    _identifiantAidant: crypto.UUID
   ): Promise<void> {
     throw new Error('Method not implemented.');
   }
