@@ -1,6 +1,7 @@
 import { ActionsPiedDePage } from './composants/communs/ActionsPiedDePage.tsx';
 import { useCallback, useState } from 'react';
 import { useTitreDePage } from './hooks/useTitreDePage.ts';
+import { liensMesServicesCyber } from './infrastructure/mes-services-cyber/liens.ts';
 
 export const Accueil = () => {
   const [motDGClique, setMotDGClique] = useState<boolean>(true);
@@ -20,102 +21,28 @@ export const Accueil = () => {
     setMotDGClique(false);
     setMotGeneralClique(true);
   }, []);
-
+  
   return (
     <main role="main">
-      <div className="mode-fonce accueil">
-        <div id="presentation" className="fr-container">
-          <div className="fr-grid-row fr-grid-row--middle fr-py-20v">
-            <div id="corps" className="fr-col-md-6 fr-col-sm-12">
-              <h1 className="fr-mb-5w">MonAideCyber</h1>
-              <p>
-                Passez à l’action et menons ensemble votre première démarche de
-                cybersécurité grâce à notre communauté d’Aidants cyber présente
-                sur tout le territoire !
-              </p>
-            </div>
-            <div id="illustration" className="fr-col-md-6 fr-col-sm-12">
-              <img
-                src="/images/illustration-dialogue-mac.svg"
-                alt="scène d'un aidant cyber et d'un aidé faisant un diagnostic"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <lab-anssi-brique-hero
+        titre="MonAideCyber"
+        soustitre="Passez à l’action et menons ensemble votre première démarche de
+                cybersécurité grâce à notre communauté d’Aidants présente sur
+                tout le territoire !"
+        illustration={JSON.stringify({
+          lien: '/images/illustration-dialogue-mac.svg',
+          alt: '',
+        })}
+        actiongauche={JSON.stringify({
+          titre: 'Devenir Aidant cyber',
+          lien: '/realiser-des-diagnostics-anssi',
+        })}
+        actiondroite={JSON.stringify({
+          titre: 'Bénéficier d‘un diagnostic cyber',
+          lien: liensMesServicesCyber().cyberDepartBrut,
+        })}
+      ></lab-anssi-brique-hero>
       <div className="conteneur-accueil">
-        <div className="fr-container tuiles">
-          <div className="fr-grid-row fr-grid-row--gutters">
-            <div className="fr-col-md-4 fr-col-sm-12">
-              <div className="tuile tuile-centree tuile-petite">
-                <div className="illustration">
-                  <img
-                    src="/images/icones/diagnostic-cyber.svg"
-                    alt="Un diagnostic cyber"
-                  />
-                </div>
-                <div className="corps">
-                  <div>
-                    <h4>
-                      <span>
-                        1 Diagnostic <br />
-                        cyber
-                      </span>
-                    </h4>
-                  </div>
-                  <div>
-                    <p>
-                      MonAideCyber propose un diagnostic de sécurité cyber
-                      gratuit
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="fr-col-md-4 fr-col-sm-12">
-              <div className="tuile tuile-centree tuile-petite">
-                <div className="illustration">
-                  <img
-                    src="/images/icones/communaute-aidants.svg"
-                    alt="Un diagnostic cyber"
-                  />
-                </div>
-                <div className="corps">
-                  <div>
-                    <h4>1 Communauté d&apos;Aidants cyber</h4>
-                  </div>
-                  <div>
-                    <p>
-                      MonAideCyber s’appuie sur une communauté d’Aidants cyber
-                      de confiance
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="fr-col-md-4 fr-col-sm-12">
-              <div className="tuile tuile-centree tuile-petite">
-                <div className="illustration">
-                  <img
-                    src="/images/icones/accompagnement-personnalise.svg"
-                    alt="Un diagnostic cyber"
-                  />
-                </div>
-                <div className="corps">
-                  <div>
-                    <h4>1 Accompagnement personnalisé</h4>
-                  </div>
-                  <div>
-                    <p>
-                      MonAideCyber aiguille les entités vers des dispositifs et
-                      des tiers de confiance
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div className="fr-container">
           <div id="ce-que-cest" className="fr-grid-row fr-grid-row--gutters">
             <div className="fr-col-8 fr-col-sm-12">
