@@ -24,14 +24,14 @@ export type AidantMisEnRelation = {
 };
 
 export type TonkenAttributionDemandeAide = {
-  demande: string;
+  emailDemande: string;
   identifiantDemande: crypto.UUID;
   aidant: crypto.UUID;
 };
 
 type GestionTokenAttributionDemandeAide = {
   chiffre: (
-    emailEntiteAidee: string,
+    emailDemande: string,
     identifiantDemande: crypto.UUID,
     identifiantAidant: crypto.UUID
   ) => string;
@@ -43,14 +43,14 @@ export const tokenAttributionDemandeAide = (
 ): GestionTokenAttributionDemandeAide => {
   return {
     chiffre(
-      emailEntiteAidee: string,
+      emailDemande: string,
       identifiantDemande: crypto.UUID,
       identifiantAidant: crypto.UUID
     ): string {
       return btoa(
         serviceDeChiffrement.chiffre(
           JSON.stringify({
-            demande: emailEntiteAidee,
+            emailDemande,
             identifiantDemande,
             aidant: identifiantAidant,
           })
