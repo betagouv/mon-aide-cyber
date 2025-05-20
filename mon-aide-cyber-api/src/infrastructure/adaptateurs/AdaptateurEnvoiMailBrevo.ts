@@ -63,6 +63,8 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
         nomPrenom: confirmation.nomPrenomAidant,
         mail: confirmation.emailEntite,
         departement: confirmation.departement.nom,
+        secteursActivite: confirmation.secteursActivite,
+        typeEntite: confirmation.typeEntite,
       });
     await this.envoieMailAvecTemplate(constructeurEmailBrevo.construis());
   }

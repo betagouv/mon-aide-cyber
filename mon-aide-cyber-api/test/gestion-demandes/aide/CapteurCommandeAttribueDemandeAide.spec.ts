@@ -14,8 +14,14 @@ import { uneDemandeAide } from './ConstructeurDemandeAide';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { finistere } from '../../../src/gestion-demandes/departements';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
-import { Aidant } from '../../../src/espace-aidant/Aidant';
+import { Aidant, entitesPubliques } from '../../../src/espace-aidant/Aidant';
 import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
+import {
+  AdaptateurRechercheEntreprise,
+  adaptateurRechercheEntreprise,
+} from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
+import { ReponseAPIRechercheEntreprise } from '../../api/recherche-entreprise/api';
 
 describe("Capteur de commande d'attribution de demande d'aide", () => {
   let entrepot: EntrepotsMemoire;
@@ -24,6 +30,24 @@ describe("Capteur de commande d'attribution de demande d'aide", () => {
   let demandeFinistere: DemandeAide;
   let bus: BusEvenementDeTest;
   let envoiMail: AdaptateurEnvoiMailMemoire;
+  const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
+  const rechercheEntreprise: AdaptateurRechercheEntreprise =
+    adaptateurRechercheEntreprise(adaptateurDeRequeteHTTP);
+  const entreprisePubliqueCorrespondantALaDemande: ReponseAPIRechercheEntreprise =
+    {
+      results: [
+        {
+          complements: { est_association: false, est_service_public: true },
+          nom_complet: 'Plouguerneau',
+          siege: {
+            departement: '29',
+            siret: '0987654321',
+            libelle_commune: 'PLOUGUERNEAU',
+          },
+          section_activite_principale: 'O',
+        },
+      ],
+    };
 
   beforeEach(async () => {
     aidantJeanDujardin = unAidant()
@@ -44,10 +68,20 @@ describe("Capteur de commande d'attribution de demande d'aide", () => {
     relations = new AdaptateurRelationsMAC(new EntrepotRelationMemoire());
     bus = new BusEvenementDeTest();
     envoiMail = new AdaptateurEnvoiMailMemoire();
+
+    adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>(
+      entreprisePubliqueCorrespondantALaDemande
+    );
   });
 
   const leCapteur = () =>
-    new CapteurCommandeAttribueDemandeAide(envoiMail, relations, bus, entrepot);
+    new CapteurCommandeAttribueDemandeAide(
+      envoiMail,
+      relations,
+      bus,
+      entrepot,
+      rechercheEntreprise
+    );
 
   it("Attribue la demande d'aide à l'aidant", async () => {
     const capteur = leCapteur();
@@ -96,31 +130,31 @@ describe("Capteur de commande d'attribution de demande d'aide", () => {
     });
   });
 
-  describe("Pour l'envoie du mail de confirmation à l'Aidant", () => {
-    it("Fournit les détails de l'entité Aidée et de l'Aidant", async () => {
-      let confirmationEnvoyee: ConfirmationDemandeAideAttribuee;
-      envoiMail.envoieConfirmationDemandeAideAttribuee = async (
-        confirmation: ConfirmationDemandeAideAttribuee
-      ) => {
-        confirmationEnvoyee = confirmation;
-      };
-      const capteur = leCapteur();
+  it("Fournit toutes les informations nécessaires au mail de confirmation envoyé à l'Aidant", async () => {
+    let confirmationEnvoyee: ConfirmationDemandeAideAttribuee;
+    envoiMail.envoieConfirmationDemandeAideAttribuee = async (
+      confirmation: ConfirmationDemandeAideAttribuee
+    ) => {
+      confirmationEnvoyee = confirmation;
+    };
+    const capteur = leCapteur();
 
-      await capteur.execute({
-        type: 'CommandeAttribueDemandeAide',
-        identifiantDemande: '22222222-2222-2222-2222-222222222222',
-        emailDemande: 'demande@societe.fr',
-        identifiantAidant: '11111111-1111-1111-1111-111111111111',
-      });
+    await capteur.execute({
+      type: 'CommandeAttribueDemandeAide',
+      identifiantDemande: '22222222-2222-2222-2222-222222222222',
+      emailDemande: 'demande@societe.fr',
+      identifiantAidant: '11111111-1111-1111-1111-111111111111',
+    });
 
-      expect(
-        confirmationEnvoyee!
-      ).toStrictEqual<ConfirmationDemandeAideAttribuee>({
-        emailEntite: 'demande@societe.fr',
-        departement: finistere,
-        emailAidant: 'aidant@societe.fr',
-        nomPrenomAidant: 'Jean Dujardin',
-      });
+    expect(
+      confirmationEnvoyee!
+    ).toStrictEqual<ConfirmationDemandeAideAttribuee>({
+      emailEntite: 'demande@societe.fr',
+      secteursActivite: 'Administration, Tertiaire',
+      typeEntite: entitesPubliques.nom,
+      departement: finistere,
+      emailAidant: 'aidant@societe.fr',
+      nomPrenomAidant: 'Jean Dujardin',
     });
   });
 

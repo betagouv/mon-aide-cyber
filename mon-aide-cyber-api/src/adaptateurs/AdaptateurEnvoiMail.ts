@@ -21,6 +21,8 @@ export type ConfirmationDemandeAideAttribuee = {
   emailAidant: string;
   nomPrenomAidant: string;
   emailEntite: string;
+  secteursActivite: string;
+  typeEntite: string;
   departement: Departement;
 };
 
