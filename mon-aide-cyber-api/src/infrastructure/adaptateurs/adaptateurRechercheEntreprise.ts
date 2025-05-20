@@ -41,6 +41,8 @@ export interface AdaptateurRechercheEntreprise {
     nomOuSiretEntreprise: string,
     parametresRecherche: string
   ): Promise<Entreprise[]>;
+
+  rechercheParSiret(siret: string): Promise<Entreprise | undefined>;
 }
 
 class AdaptateurRechercheEntrepriseHTTP
@@ -113,6 +115,11 @@ class AdaptateurRechercheEntrepriseHTTP
           }))
       : [];
     return [...entreprises, ...associationsTrouvees];
+  }
+
+  async rechercheParSiret(siret: string): Promise<Entreprise | undefined> {
+    const entreprises = await this.rechercheEntreprise(siret, '');
+    return entreprises.length === 0 ? undefined : entreprises[0];
   }
 }
 

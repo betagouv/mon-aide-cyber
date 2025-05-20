@@ -110,16 +110,14 @@ export const routesAPIAidantRepondreAUneDemande = (
 
       const demande = demandeAide.demandeAide;
 
-      const [entreprise] =
-        await adaptateurRechercheEntreprise.rechercheEntreprise(
-          demande.siret,
-          ''
-        );
+      const entreprise = await adaptateurRechercheEntreprise.rechercheParSiret(
+        demande.siret
+      );
 
       return reponse.json({
         dateCreation: demande.dateSignatureCGU.toISOString(),
         departement: demande.departement,
-        typeEntite: entreprise?.typeEntite.nom ?? 'Information indisponible',
+        typeEntite: entreprise?.typeEntite?.nom ?? 'Information indisponible',
         secteurActivite:
           entreprise?.secteursActivite.map((s) => s.nom).join(', ') ??
           'Information indisponible',
