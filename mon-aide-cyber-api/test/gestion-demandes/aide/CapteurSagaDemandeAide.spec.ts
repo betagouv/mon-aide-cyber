@@ -58,11 +58,12 @@ import { SecteurActivite } from '../../../src/espace-aidant/preferences/secteurs
 import {
   AdaptateurRechercheEntreprise,
   adaptateurRechercheEntreprise,
+  ReponseAPIRechercheEntreprise,
 } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
-import { ReponseAPIRechercheEntreprise } from '../../api/recherche-entreprise/api';
 import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
+import { AdaptateurGeographieMemoire } from '../../../src/adaptateurs/AdaptateurGeographie';
 
 class FabriqueDeMiseEnRelationDeTest implements FabriqueMiseEnRelation {
   public readonly miseEnRelationDeTest = new MiseEnRelationDeTest();
@@ -717,7 +718,9 @@ class FabriqueDeMiseEnRelationEcoutee extends FabriqueMiseEnRelationConcrete {
         rechercheEmailParDepartement: (__departement: Departement) =>
           'cot@email.com',
       },
-      entrepots
+      entrepots,
+      unAdaptateurRechercheEntreprise().construis(),
+      new AdaptateurGeographieMemoire()
     );
   }
 

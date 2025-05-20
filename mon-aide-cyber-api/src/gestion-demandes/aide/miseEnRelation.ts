@@ -16,6 +16,8 @@ import {
 } from '../../espace-aidant/Aidant';
 import { Entrepots } from '../../domaine/Entrepots';
 import crypto from 'crypto';
+import { AdaptateurRechercheEntreprise } from '../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { AdaptateurGeographie } from '../../adaptateurs/AdaptateurGeographie';
 
 export const envoieConfirmationDemandeAide = async (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
@@ -155,7 +157,9 @@ export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
     private readonly annuaireCOT: {
       rechercheEmailParDepartement: (departement: Departement) => string;
     },
-    private readonly entrepots: Entrepots
+    private readonly entrepots: Entrepots,
+    private readonly adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise,
+    private readonly adaptateurGeo: AdaptateurGeographie
   ) {}
 
   fabrique(utilisateurMac: UtilisateurMACDTO | undefined): MiseEnRelation {
@@ -180,19 +184,26 @@ export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
     return new MiseEnRelationParCriteres(
       this.adaptateurEnvoiMail,
       this.annuaireCOT,
-      this.entrepots
+      this.entrepots,
+      this.adaptateurRechercheEntreprise,
+      this.adaptateurGeo
     );
   }
 }
+
 export const fabriqueMiseEnRelation = (
   adaptateurEnvoiMail: AdaptateurEnvoiMail,
   annuaireCOT: {
     rechercheEmailParDepartement: (departement: Departement) => string;
   },
-  entrepots: Entrepots
+  entrepots: Entrepots,
+  adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise,
+  adaptateurGeo: AdaptateurGeographie
 ): FabriqueMiseEnRelation =>
   new FabriqueMiseEnRelationConcrete(
     adaptateurEnvoiMail,
     annuaireCOT,
-    entrepots
+    entrepots,
+    adaptateurRechercheEntreprise,
+    adaptateurGeo
   );

@@ -16,6 +16,11 @@ import crypto from 'crypto';
 import { DemandeAide } from './DemandeAide';
 import { adaptateurServiceChiffrement } from '../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
+import { AdaptateurGeographie } from '../../adaptateurs/AdaptateurGeographie';
+import {
+  AdaptateurRechercheEntreprise,
+  Entreprise,
+} from '../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 
 export type AidantMisEnRelation = {
   email: string;
@@ -69,7 +74,9 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
     private readonly annuaireCOT: {
       rechercheEmailParDepartement: (departement: Departement) => string;
     },
-    private readonly entrepots: Entrepots
+    private readonly entrepots: Entrepots,
+    private readonly adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise,
+    private readonly adaptateurGeo: AdaptateurGeographie
   ) {}
 
   async execute(
@@ -123,10 +130,17 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
       donneesMiseEnRelation.demandeAide,
       aidants
     );
+    const entreprise =
+      (await this.adaptateurRechercheEntreprise.rechercheParSiret(
+        donneesMiseEnRelation.siret
+      )) as Entreprise;
+    const epci = await this.adaptateurGeo.epciAvecCode(entreprise.codeEpci);
+
     const envoisEmails = matchingAidants.map((a) =>
       this.adaptateurEnvoiMail.envoieMiseEnRelation(
         {
           departement: donneesMiseEnRelation.demandeAide.departement.nom,
+          epci: epci.nom,
           typeEntite: donneesMiseEnRelation.typeEntite.nom,
           secteursActivite: donneesMiseEnRelation.secteursActivite
             .map((s) => s.nom)

@@ -29,6 +29,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
             .dansLaVille({
               commune: 'Bordeaux',
               departement: '33',
+              codeEPCI: 'Bordeaux Métropole',
             })
             .avecLeSiret('1234567890')
             .estUneAssociation()
@@ -49,6 +50,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
           nom: 'Beta-Gouv',
           departement: '33',
           commune: 'Bordeaux',
+          codeEpci: 'Bordeaux Métropole',
         },
       ]);
     });
@@ -123,6 +125,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
             .dansLaVille({
               commune: 'Bordeaux',
               departement: '33',
+              codeEPCI: 'Bordeaux Métropole',
             })
             .avecLeSiret('1234567890')
             .portantLeNom('Réserviste')
@@ -144,12 +147,14 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
           nom: 'Réserviste',
           departement: '33',
           commune: 'Bordeaux',
+          codeEpci: 'Bordeaux Métropole',
         },
         {
           nom: 'Réserviste de la Gendarmerie',
           siret: '00000000000000',
           departement: '75',
           commune: 'Paris',
+          codeEpci: 'Aucun',
         },
       ]);
     });
@@ -161,6 +166,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
             .dansLaVille({
               commune: 'Bordeaux',
               departement: '33',
+              codeEPCI: 'Bordeaux Métropole',
             })
             .avecLeSiret('1234567890')
             .portantLeNom('Réserviste')
@@ -182,6 +188,7 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
           nom: 'Réserviste',
           departement: '33',
           commune: 'Bordeaux',
+          codeEpci: 'Bordeaux Métropole',
         },
       ]);
     });

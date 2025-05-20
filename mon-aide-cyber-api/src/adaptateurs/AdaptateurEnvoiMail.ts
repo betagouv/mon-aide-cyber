@@ -27,6 +27,7 @@ export type ConfirmationDemandeAideAttribuee = {
 
 export type InformationEntitePourMiseEnRelation = {
   departement: string;
+  epci: string;
   typeEntite: string;
   secteursActivite: string;
 };
