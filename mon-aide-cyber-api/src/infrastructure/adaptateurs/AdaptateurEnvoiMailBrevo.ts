@@ -4,6 +4,7 @@ import {
   Destinataire,
   Email,
   Expediteur,
+  InformationEntitePourMiseEnRelation,
   UtilisateurMACEnRelation,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
@@ -19,7 +20,6 @@ import {
 } from '../brevo/ConstructeursBrevo';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { isArray } from 'lodash';
-import { DonneesMiseEnRelation } from '../../gestion-demandes/aide/miseEnRelation';
 import { AidantMisEnRelation } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
@@ -70,7 +70,7 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   }
 
   async envoieMiseEnRelation(
-    donneesMiseEnRelation: DonneesMiseEnRelation,
+    informations: InformationEntitePourMiseEnRelation,
     aidant: AidantMisEnRelation
   ): Promise<void> {
     const destinataire: Destinataire = { email: aidant.email };
@@ -81,11 +81,9 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
       .ayantPourDestinataires([[destinataire.email, destinataire.nom]])
       .ayantPourParametres({
         nomPrenom: aidant.nomPrenom,
-        departement: donneesMiseEnRelation.demandeAide.departement.nom,
-        typeEntite: donneesMiseEnRelation.typeEntite.nom,
-        secteursActivite: donneesMiseEnRelation.secteursActivite
-          .map((s) => s.nom)
-          .join(','),
+        departement: informations.departement,
+        typeEntite: informations.typeEntite,
+        secteursActivite: informations.secteursActivite,
         lienPourPostuler: aidant.lienPourPostuler,
       })
       .construis();
