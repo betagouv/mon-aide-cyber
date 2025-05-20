@@ -124,7 +124,16 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
       aidants
     );
     const envoisEmails = matchingAidants.map((a) =>
-      this.adaptateurEnvoiMail.envoieMiseEnRelation(donneesMiseEnRelation, a)
+      this.adaptateurEnvoiMail.envoieMiseEnRelation(
+        {
+          departement: donneesMiseEnRelation.demandeAide.departement.nom,
+          typeEntite: donneesMiseEnRelation.typeEntite.nom,
+          secteursActivite: donneesMiseEnRelation.secteursActivite
+            .map((s) => s.nom)
+            .join(','),
+        },
+        a
+      )
     );
     await Promise.all(envoisEmails);
   }

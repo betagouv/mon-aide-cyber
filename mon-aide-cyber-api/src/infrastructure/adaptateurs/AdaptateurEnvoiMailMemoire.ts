@@ -4,9 +4,9 @@ import {
   Destinataire,
   Email,
   Expediteur,
+  InformationEntitePourMiseEnRelation,
   UtilisateurMACEnRelation,
 } from '../../adaptateurs/AdaptateurEnvoiMail';
-import { DonneesMiseEnRelation } from '../../gestion-demandes/aide/miseEnRelation';
 import { AidantMisEnRelation } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 import { Departement } from '../../gestion-demandes/departements';
 
@@ -53,7 +53,7 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   }
 
   envoieMiseEnRelation(
-    _donneesMiseEnRelation: DonneesMiseEnRelation,
+    _informations: InformationEntitePourMiseEnRelation,
     aidant: AidantMisEnRelation
   ): Promise<void> {
     this.destinataires.push(aidant.email);
