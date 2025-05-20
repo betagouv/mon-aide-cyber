@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import {
@@ -12,7 +13,6 @@ import {
   finistere,
   gironde,
 } from '../../../src/gestion-demandes/departements';
-import { beforeEach, describe, expect, it } from 'vitest';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { adaptateursCorpsMessage } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
@@ -28,11 +28,13 @@ import { DonneesMiseEnRelation } from '../../../src/gestion-demandes/aide/miseEn
 import { ServiceDeChiffrementChacha20 } from '../../../src/infrastructure/securite/ServiceDeChiffrementChacha20';
 import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
 
-const cotParDefaut = {
-  rechercheEmailParDepartement: (__departement: Departement) => 'cot@email.com',
-};
-
 describe('Mise en relation par critères', () => {
+  let envoieMail: AdaptateurEnvoiMailMemoire;
+  let annuaireCot: {
+    rechercheEmailParDepartement: (departement: Departement) => string;
+  };
+  let entrepots: EntrepotsMemoire;
+
   beforeEach(() => {
     adaptateursCorpsMessage.demande =
       unAdaptateurDeCorpsDeMessage().construis().demande;
@@ -44,18 +46,22 @@ describe('Mise en relation par critères', () => {
     adaptateurEnvironnement.mac = () => ({
       urlMAC: () => 'http://domaine:1234',
     });
+
+    envoieMail = new AdaptateurEnvoiMailMemoire();
+    annuaireCot = {
+      rechercheEmailParDepartement: (__d: Departement) => 'cot@email.com',
+    };
+    entrepots = new EntrepotsMemoire();
   });
+
+  const laMiseEnRelation = () =>
+    new MiseEnRelationParCriteres(envoieMail, annuaireCot, entrepots);
 
   it('Envoie un email de demande d’aide en copie à MAC', async () => {
     FournisseurHorlogeDeTest.initialise(
       new Date(Date.parse('2024-03-19T14:45:17+01:00'))
     );
-    const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-    const miseEnRelation = new MiseEnRelationParCriteres(
-      adaptateurEnvoiMail,
-      cotParDefaut,
-      new EntrepotsMemoire()
-    );
+    const miseEnRelation = laMiseEnRelation();
 
     await miseEnRelation.execute({
       demandeAide: uneDemandeAide().construis(),
@@ -65,7 +71,7 @@ describe('Mise en relation par critères', () => {
     });
 
     expect(
-      adaptateurEnvoiMail.aEteEnvoyeEnCopieA(
+      envoieMail.aEteEnvoyeEnCopieA(
         'copie-mac@email.com',
         'Bonjour une entité a fait une demande d’aide'
       )
@@ -76,16 +82,9 @@ describe('Mise en relation par critères', () => {
     FournisseurHorlogeDeTest.initialise(
       new Date(Date.parse('2024-03-19T14:45:17+01:00'))
     );
-    const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-    const annuaireCOT = {
-      rechercheEmailParDepartement: (__departement: Departement) =>
-        'gironde@ssi.gouv.fr',
-    };
-    const miseEnRelation = new MiseEnRelationParCriteres(
-      adaptateurEnvoiMail,
-      annuaireCOT,
-      new EntrepotsMemoire()
-    );
+    annuaireCot.rechercheEmailParDepartement = (__d: Departement) =>
+      'gironde@ssi.gouv.fr';
+    const miseEnRelation = laMiseEnRelation();
 
     await miseEnRelation.execute({
       demandeAide: uneDemandeAide().construis(),
@@ -95,7 +94,7 @@ describe('Mise en relation par critères', () => {
     });
 
     expect(
-      adaptateurEnvoiMail.aEteEnvoyeA(
+      envoieMail.aEteEnvoyeA(
         'gironde@ssi.gouv.fr',
         'Bonjour une entité a fait une demande d’aide'
       )
@@ -104,7 +103,6 @@ describe('Mise en relation par critères', () => {
 
   describe('Matching des Aidants', () => {
     it('Indique dans le mail envoyé au COT, la liste des aidants qui ont matchés', async () => {
-      const entrepots = new EntrepotsMemoire();
       const unAidantEnGirondeEtTransportsPourDuPrive = unAidant()
         .avecUnNomPrenom('Jean DUPONT')
         .avecUnEmail('jean.dupont@email.com')
@@ -125,7 +123,6 @@ describe('Mise en relation par critères', () => {
       await entrepots
         .aidants()
         .persiste(unAidantDansAllierEtAdministrationPublique);
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
         .recapitulatifDemandeAide((_aide, aidants) => {
           if (aidants.length === 0) {
@@ -134,15 +131,10 @@ describe('Mise en relation par critères', () => {
           return `Aidant trouvé par le matching : ${aidants[0].nomPrenom} (${aidants[0].email})`;
         })
         .construis().demande;
-      const annuaireCOT = {
-        rechercheEmailParDepartement: (__departement: Departement) =>
-          'gironde@ssi.gouv.fr',
-      };
-      const miseEnRelation = new MiseEnRelationParCriteres(
-        adaptateurEnvoiMail,
-        annuaireCOT,
-        entrepots
-      );
+      annuaireCot.rechercheEmailParDepartement = (__d: Departement) =>
+        'gironde@ssi.gouv.fr';
+
+      const miseEnRelation = laMiseEnRelation();
 
       await miseEnRelation.execute({
         demandeAide: uneDemandeAide().dansLeDepartement(gironde).construis(),
@@ -152,7 +144,7 @@ describe('Mise en relation par critères', () => {
       });
 
       expect(
-        adaptateurEnvoiMail.aEteEnvoyeA(
+        envoieMail.aEteEnvoyeA(
           'gironde@ssi.gouv.fr',
           'Aidant trouvé par le matching : Jean DUPONT (jean.dupont@email.com)'
         )
@@ -160,7 +152,6 @@ describe('Mise en relation par critères', () => {
     });
 
     it('Génère un lien unique par Aidant pour postuler à la demande', async () => {
-      const entrepots = new EntrepotsMemoire();
       const premierAidant = unAidant()
         .ayantPourDepartements([finistere])
         .ayantPourSecteursActivite([{ nom: 'Transports' }])
@@ -176,19 +167,16 @@ describe('Mise en relation par critères', () => {
         .construis();
       await entrepots.aidants().persiste(premierAidant);
       await entrepots.aidants().persiste(deuxiemeAidant);
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+
       const aidantsContactes: AidantMisEnRelation[] = [];
-      adaptateurEnvoiMail.envoieMiseEnRelation = async (
+      envoieMail.envoieMiseEnRelation = async (
         _donneesMiseEnRelation,
         aidant
       ) => {
         aidantsContactes.push(aidant);
       };
-      const miseEnRelation = new MiseEnRelationParCriteres(
-        adaptateurEnvoiMail,
-        cotParDefaut,
-        entrepots
-      );
+
+      const miseEnRelation = laMiseEnRelation();
 
       const demandeAide = uneDemandeAide()
         .avecIdentifiant('11111111-1111-1111-1111-111111111111')
@@ -231,7 +219,6 @@ describe('Mise en relation par critères', () => {
     });
 
     it('Envoie un mail aux Aidants qui matchent', async () => {
-      const entrepots = new EntrepotsMemoire();
       const premierAidant = unAidant()
         .avecUnEmail('aidant-qui-matche@mail.con')
         .avecUnNomPrenom('Jean DUPONT')
@@ -240,19 +227,14 @@ describe('Mise en relation par critères', () => {
         .ayantPourTypesEntite([entitesPubliques])
         .construis();
       const aidantsContactes: AidantMisEnRelation[] = [];
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      adaptateurEnvoiMail.envoieMiseEnRelation = async (
+      envoieMail.envoieMiseEnRelation = async (
         _donneesMiseEnRelation,
         aidant
       ) => {
         aidantsContactes.push(aidant);
       };
       await entrepots.aidants().persiste(premierAidant);
-      const miseEnRelation = new MiseEnRelationParCriteres(
-        adaptateurEnvoiMail,
-        cotParDefaut,
-        entrepots
-      );
+      const miseEnRelation = laMiseEnRelation();
 
       const donneesMiseEnRelation: DonneesMiseEnRelation = {
         demandeAide: uneDemandeAide().dansLeDepartement(finistere).construis(),
@@ -268,24 +250,16 @@ describe('Mise en relation par critères', () => {
     });
 
     it('Envoie un mail au COT en cas de matching infructueux', async () => {
-      const entrepots = new EntrepotsMemoire();
       const aidant = unAidant().construis();
       await entrepots.aidants().persiste(aidant);
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       adaptateursCorpsMessage.demande = unAdaptateurDeCorpsDeMessage()
         .aucunAidantPourLaDemandeAide((donneesMiseEnRelation) => {
           return `Aucun Aidant! ${donneesMiseEnRelation.siret}`;
         })
         .construis().demande;
-      const annuaireCOT = {
-        rechercheEmailParDepartement: (__departement: Departement) =>
-          'gironde@ssi.gouv.fr',
-      };
-      const miseEnRelation = new MiseEnRelationParCriteres(
-        adaptateurEnvoiMail,
-        annuaireCOT,
-        entrepots
-      );
+      annuaireCot.rechercheEmailParDepartement = (__d: Departement) =>
+        'gironde@ssi.gouv.fr';
+      const miseEnRelation = laMiseEnRelation();
 
       await miseEnRelation.execute({
         demandeAide: uneDemandeAide().dansLeDepartement(gironde).construis(),
@@ -295,10 +269,7 @@ describe('Mise en relation par critères', () => {
       });
 
       expect(
-        adaptateurEnvoiMail.aEteEnvoyeA(
-          'gironde@ssi.gouv.fr',
-          'Aucun Aidant! 12345'
-        )
+        envoieMail.aEteEnvoyeA('gironde@ssi.gouv.fr', 'Aucun Aidant! 12345')
       ).toBe(true);
     });
 
