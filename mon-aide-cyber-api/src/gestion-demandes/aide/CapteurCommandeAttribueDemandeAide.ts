@@ -6,6 +6,7 @@ import crypto from 'crypto';
 import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { Entrepots } from '../../domaine/Entrepots';
+import { AdaptateurRechercheEntreprise } from '../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 
 export type CommandeAttribueDemandeAide = Omit<Commande, 'type'> & {
   type: 'CommandeAttribueDemandeAide';
@@ -33,7 +34,8 @@ export class CapteurCommandeAttribueDemandeAide
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
     private readonly relations: AdaptateurRelations,
     private readonly bus: BusEvenement,
-    private readonly entrepot: Entrepots
+    private readonly entrepot: Entrepots,
+    private readonly rechercheEntreprise: AdaptateurRechercheEntreprise
   ) {}
 
   async execute(commande: CommandeAttribueDemandeAide): Promise<void> {
@@ -61,11 +63,20 @@ export class CapteurCommandeAttribueDemandeAide
       commande.identifiantAidant
     );
 
+    const entreprises = await this.rechercheEntreprise.rechercheEntreprise(
+      demandeAide.siret,
+      ''
+    );
+
     await this.adaptateurEnvoiMail.envoieConfirmationDemandeAideAttribuee({
       emailAidant: aidant.email,
       nomPrenomAidant: aidant.nomPrenom,
       departement: demandeAide.departement,
       emailEntite: demandeAide.email,
+      secteursActivite: entreprises[0].secteursActivite
+        .map((s) => s.nom)
+        .join(', '),
+      typeEntite: entreprises[0].typeEntite.nom,
     });
 
     await this.bus.publie<DemandeAidePourvue>(this.evenementSucces(commande));
