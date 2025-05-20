@@ -121,7 +121,7 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
 
     const matchingAidants = this.aidantsPourPostuler(
       donneesMiseEnRelation.demandeAide,
-      adaptateurEnvironnement.miseEnRelation().aidantsDeTest
+      aidants
     );
     const envoisEmails = matchingAidants.map((a) =>
       this.adaptateurEnvoiMail.envoieMiseEnRelation(donneesMiseEnRelation, a)
@@ -131,15 +131,15 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
 
   private aidantsPourPostuler = (
     demandeAide: DemandeAide,
-    emailsDesAidants: string[]
+    aidants: Aidant[]
   ): AidantMisEnRelation[] => {
     const urlMAC = adaptateurEnvironnement.mac().urlMAC();
     const { chiffre } = tokenAttributionDemandeAide();
 
-    return emailsDesAidants.map((email) => ({
-      email,
-      nomPrenom: 'Un prénom',
-      lienPourPostuler: `${urlMAC}/repondre-a-une-demande?token=${chiffre(demandeAide.email, demandeAide.identifiant, crypto.randomUUID())}`,
+    return aidants.map((aidant) => ({
+      email: aidant.email,
+      nomPrenom: aidant.nomPrenom,
+      lienPourPostuler: `${urlMAC}/repondre-a-une-demande?token=${chiffre(demandeAide.email, demandeAide.identifiant, aidant.identifiant)}`,
     }));
   };
 }
