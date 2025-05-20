@@ -166,7 +166,16 @@ describe('Mise en relation par critères', () => {
         .ayantPourSecteursActivite([{ nom: 'Transports' }])
         .ayantPourTypesEntite([entitesPubliques])
         .construis();
+      const deuxiemeAidant = unAidant()
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([
+          { nom: 'Transports' },
+          { nom: 'Administration' },
+        ])
+        .ayantPourTypesEntite([entitesPubliques])
+        .construis();
       await entrepots.aidants().persiste(premierAidant);
+      await entrepots.aidants().persiste(deuxiemeAidant);
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       const aidantsContactes: AidantMisEnRelation[] = [];
       adaptateurEnvoiMail.envoieMiseEnRelation = async (
@@ -175,9 +184,6 @@ describe('Mise en relation par critères', () => {
       ) => {
         aidantsContactes.push(aidant);
       };
-      adaptateurEnvironnement.miseEnRelation = () => ({
-        aidantsDeTest: ['jean.dupont@email.com', 'jean.dujardin@email.com'],
-      });
       const miseEnRelation = new MiseEnRelationParCriteres(
         adaptateurEnvoiMail,
         cotParDefaut,
@@ -224,9 +230,11 @@ describe('Mise en relation par critères', () => {
       });
     });
 
-    it('[FEATURE FLAG] Envoie un mail direct seulement aux Aidants mentionnés dans la variable d’environnement', async () => {
+    it('Envoie un mail aux Aidants qui matchent', async () => {
       const entrepots = new EntrepotsMemoire();
       const premierAidant = unAidant()
+        .avecUnEmail('aidant-qui-matche@mail.con')
+        .avecUnNomPrenom('Jean DUPONT')
         .ayantPourDepartements([finistere])
         .ayantPourSecteursActivite([{ nom: 'Transports' }])
         .ayantPourTypesEntite([entitesPubliques])
@@ -258,7 +266,8 @@ describe('Mise en relation par critères', () => {
       await miseEnRelation.execute(donneesMiseEnRelation);
 
       expect(aidantsContactes).toHaveLength(1);
-      expect(aidantsContactes[0].email).toBe('aidant-hardcode@beta.gouv.fr');
+      expect(aidantsContactes[0].email).toBe('aidant-qui-matche@mail.con');
+      expect(aidantsContactes[0].nomPrenom).toBe('Jean DUPONT');
     });
 
     it('Envoie un mail au COT en cas de matching infructueux', async () => {
