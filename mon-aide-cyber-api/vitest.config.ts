@@ -18,7 +18,9 @@ export default defineProject({
     onConsoleLog(log: string): boolean {
       return !log.includes('Une erreur est survenue:');
     },
-    environment: 'node',
+    // Sur la CI, on veut un joli rapport de test
+    reporters: process.env.GITHUB_ACTIONS ? ['junit'] : ['verbose'],
+    outputFile: process.env.GITHUB_ACTIONS ? './vitest-junit.xml' : null,
     globals: true,
   },
 });
