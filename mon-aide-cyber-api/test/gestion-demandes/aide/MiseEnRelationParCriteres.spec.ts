@@ -239,9 +239,6 @@ describe('Mise en relation par critères', () => {
         .ayantPourSecteursActivite([{ nom: 'Transports' }])
         .ayantPourTypesEntite([entitesPubliques])
         .construis();
-      adaptateurEnvironnement.miseEnRelation = () => ({
-        aidantsDeTest: ['aidant-hardcode@beta.gouv.fr'],
-      });
       const aidantsContactes: AidantMisEnRelation[] = [];
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       adaptateurEnvoiMail.envoieMiseEnRelation = async (
