@@ -16,11 +16,9 @@ import {
   Departement,
   departements,
   finistere,
-  gironde,
   hautesAlpes,
 } from '../../../src/gestion-demandes/departements';
 import { EntrepotAideMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import { associations } from '../../../src/espace-aidant/Aidant';
 import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 
 describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
@@ -124,17 +122,8 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
       it('Renvoie une erreur si la demande n’a pu aller au bout', async () => {
         const testeurMAC = testeurIntegration();
         const donneesServeur: { app: Express } = testeurMAC.initialise();
-        testeurMAC.adaptateurDeRechercheEntreprise.rechercheEntreprise = () =>
-          Promise.resolve([
-            {
-              siret: '12345678901234',
-              departement: gironde.code,
-              secteursActivite: [],
-              nom: 'entreprise-factice',
-              commune: 'BORDEAUX',
-              typeEntite: associations,
-            },
-          ]);
+        testeurMAC.adaptateurDeRechercheEntreprise =
+          unAdaptateurRechercheEntreprise().construis();
         testeurMAC.adaptateurEnvoieMessage.envoie = async () => {
           throw new Error(
             'Erreur car on simule une erreur d’envoie de message.'

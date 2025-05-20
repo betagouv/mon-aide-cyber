@@ -27,6 +27,10 @@ import { uneDemandeAide } from './ConstructeurDemandeAide';
 import { DonneesMiseEnRelation } from '../../../src/gestion-demandes/aide/miseEnRelation';
 import { ServiceDeChiffrementChacha20 } from '../../../src/infrastructure/securite/ServiceDeChiffrementChacha20';
 import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
+import { AdaptateurGeographie } from '../../../src/adaptateurs/AdaptateurGeographie';
+import { AdaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
+import { InformationEntitePourMiseEnRelation } from '../../../src/adaptateurs/AdaptateurEnvoiMail';
 
 describe('Mise en relation par critères', () => {
   let envoieMail: AdaptateurEnvoiMailMemoire;
@@ -34,6 +38,8 @@ describe('Mise en relation par critères', () => {
     rechercheEmailParDepartement: (departement: Departement) => string;
   };
   let entrepots: EntrepotsMemoire;
+  let rechercheEntreprise: AdaptateurRechercheEntreprise;
+  let adaptateurGeo: AdaptateurGeographie;
 
   beforeEach(() => {
     adaptateursCorpsMessage.demande =
@@ -52,10 +58,24 @@ describe('Mise en relation par critères', () => {
       rechercheEmailParDepartement: (__d: Departement) => 'cot@email.com',
     };
     entrepots = new EntrepotsMemoire();
+    rechercheEntreprise = unAdaptateurRechercheEntreprise().construis();
+    annuaireCot = {
+      rechercheEmailParDepartement: (__departement: Departement) =>
+        'cot@par-defaut.fr',
+    };
+    adaptateurGeo = {
+      epciAvecCode: async (__codeEpci: string) => ({ nom: '' }),
+    };
   });
 
   const laMiseEnRelation = () =>
-    new MiseEnRelationParCriteres(envoieMail, annuaireCot, entrepots);
+    new MiseEnRelationParCriteres(
+      envoieMail,
+      annuaireCot,
+      entrepots,
+      rechercheEntreprise,
+      adaptateurGeo
+    );
 
   it('Envoie un email de demande d’aide en copie à MAC', async () => {
     FournisseurHorlogeDeTest.initialise(
@@ -216,6 +236,45 @@ describe('Mise en relation par critères', () => {
         identifiantDemande: '11111111-1111-1111-1111-111111111111',
         identifiantAidant: expect.any(String),
       });
+    });
+
+    it("Mentionne, dans le mail vers l'Aidant, les informations d'EPCI de l'Aidé", async () => {
+      const premierAidant = unAidant()
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .construis();
+      await entrepots.aidants().persiste(premierAidant);
+
+      let informationsDuMail: InformationEntitePourMiseEnRelation;
+      envoieMail.envoieMiseEnRelation = async (
+        informations: InformationEntitePourMiseEnRelation,
+        __aidant
+      ) => {
+        informationsDuMail = informations;
+      };
+      rechercheEntreprise = unAdaptateurRechercheEntreprise()
+        .quiRenvoieCodeEpci('888999')
+        .construis();
+      adaptateurGeo.epciAvecCode = async (__codeEpci: string) => ({
+        nom: 'Bordeaux Métropole',
+      });
+      const miseEnRelation = laMiseEnRelation();
+
+      const demandeAide = uneDemandeAide()
+        .avecIdentifiant('11111111-1111-1111-1111-111111111111')
+        .avecUnEmail('demandeur@societe.fr')
+        .dansLeDepartement(finistere)
+        .construis();
+
+      await miseEnRelation.execute({
+        demandeAide,
+        secteursActivite: [{ nom: 'Transports' }],
+        typeEntite: entitesPubliques,
+        siret: '12345',
+      });
+
+      expect(informationsDuMail!.epci).toBe('Bordeaux Métropole');
     });
 
     it('Envoie un mail aux Aidants qui matchent', async () => {

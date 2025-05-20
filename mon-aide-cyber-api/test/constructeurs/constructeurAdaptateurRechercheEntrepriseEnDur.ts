@@ -17,6 +17,7 @@ class ConstructeurAdaptateurRechercheEntrepriseEnDur
       nom: 'Une entreprise',
       departement: '33',
       commune: 'Bordeaux',
+      codeEpci: 'Bordeaux Métropole',
       typeEntite: entitesPrivees,
       secteursActivite: [],
     },
@@ -60,6 +61,11 @@ class ConstructeurAdaptateurRechercheEntrepriseEnDur
     numeroSiret: string
   ): ConstructeurAdaptateurRechercheEntrepriseEnDur {
     this.reponse[0].siret = numeroSiret;
+    return this;
+  }
+
+  quiRenvoieCodeEpci(codeEpci: string) {
+    this.reponse[0].codeEpci = codeEpci;
     return this;
   }
 

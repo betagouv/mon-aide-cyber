@@ -25,12 +25,15 @@ export type Entreprise = {
     | EntitesEntreprisesPrivees
     | EntitesOrganisationsPubliques;
   secteursActivite: SecteurActivite[];
+  codeEpci: string;
 };
+
 export type APIEntreprise = {
   nom_complet: string;
   siege: { siret: string; departement: string; libelle_commune: string };
   complements: { est_association: boolean; est_service_public: boolean };
   section_activite_principale: LettreSecteur;
+  matching_etablissements: { epci: string }[];
 };
 export type ReponseAPIRechercheEntreprise = {
   results: APIEntreprise[];
@@ -85,6 +88,7 @@ class AdaptateurRechercheEntrepriseHTTP
         siret: res.siege.siret,
         commune: res.siege.libelle_commune,
         departement: res.siege.departement,
+        codeEpci: res.matching_etablissements[0]?.epci,
         typeEntite,
         secteursActivite,
       };
@@ -110,6 +114,7 @@ class AdaptateurRechercheEntrepriseHTTP
             siret: asso.siret,
             commune: asso.commune,
             departement: asso.departement,
+            codeEpci: 'Aucun',
             typeEntite: associations,
             secteursActivite: [],
           }))

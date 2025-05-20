@@ -32,6 +32,7 @@ import { AdaptateurRelationsMAC } from '../../relation/AdaptateurRelationsMAC';
 import { fabriqueMiseEnRelation } from '../../gestion-demandes/aide/miseEnRelation';
 import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise';
 import { CapteurCommandeAttribueDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeAttribueDemandeAide';
+import { unAdaptateurGeographie } from '../../adaptateurs/AdaptateurGeographie';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -78,7 +79,9 @@ const capteurs: Map<string, Capteur> = new Map([
           fabriqueMiseEnRelation(
             parametres.adaptateurEnvoiMail!,
             fabriqueAnnuaireCOT().annuaireCOT(),
-            parametres.entrepots
+            parametres.entrepots,
+            parametres.adaptateurRechercheEntreprise,
+            unAdaptateurGeographie()
           ),
           parametres.adaptateurRechercheEntreprise
         ),
