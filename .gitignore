@@ -2,3 +2,4 @@
 node_modules
 bdd-mac
 .idea
+vitest-junit.xml

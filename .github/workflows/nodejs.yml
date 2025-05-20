@@ -34,3 +34,11 @@ jobs:
       - run: npm run ci:initialise -w mon-aide-cyber-api
       - run: npm run format:verifie
       - run: npm test
+
+      - name: Rapport des tests
+        uses: dorny/test-reporter@v2
+        if: ${{ !cancelled() }} # On force l'exécution même si l'étape précédente a échoué
+        with:
+          name: Tests vitest
+          path: mon-aide-cyber-api/vitest-junit.xml,mon-aide-cyber-ui/vitest-junit.xml
+          reporter: jest-junit
