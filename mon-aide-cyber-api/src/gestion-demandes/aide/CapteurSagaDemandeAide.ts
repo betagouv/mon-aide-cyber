@@ -100,12 +100,9 @@ export class CapteurSagaDemandeAide
 
     const rechercheEntreprise = async () => {
       const entreprise =
-        await this.adaptateurRechercheEntreprise.rechercheEntreprise(
-          saga.siret,
-          ''
-        );
+        await this.adaptateurRechercheEntreprise.rechercheParSiret(saga.siret);
 
-      if (entreprise.length === 0) {
+      if (!entreprise) {
         throw new ErreurDemandeAideEntrepriseInconnue();
       }
       return entreprise;
@@ -153,9 +150,9 @@ export class CapteurSagaDemandeAide
             this.fabriqueMiseEnRelation.fabrique(utilisateurMAC);
           const resultat = await miseEnRelation.execute({
             demandeAide: aide,
-            siret: entreprise[0].siret,
-            secteursActivite: entreprise[0].secteursActivite,
-            typeEntite: entreprise[0].typeEntite,
+            siret: entreprise.siret,
+            secteursActivite: entreprise.secteursActivite,
+            typeEntite: entreprise.typeEntite,
           });
 
           await this.busEvenement.publie<DemandeAideCree<typeof resultat>>({

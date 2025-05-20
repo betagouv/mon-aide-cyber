@@ -63,9 +63,8 @@ export class CapteurCommandeAttribueDemandeAide
       commande.identifiantAidant
     );
 
-    const entreprises = await this.rechercheEntreprise.rechercheEntreprise(
-      demandeAide.siret,
-      ''
+    const entreprise = await this.rechercheEntreprise.rechercheParSiret(
+      demandeAide.siret
     );
 
     await this.adaptateurEnvoiMail.envoieConfirmationDemandeAideAttribuee({
@@ -73,10 +72,10 @@ export class CapteurCommandeAttribueDemandeAide
       nomPrenomAidant: aidant.nomPrenom,
       departement: demandeAide.departement,
       emailEntite: demandeAide.email,
-      secteursActivite: entreprises[0].secteursActivite
+      secteursActivite: entreprise!.secteursActivite
         .map((s) => s.nom)
         .join(', '),
-      typeEntite: entreprises[0].typeEntite.nom,
+      typeEntite: entreprise!.typeEntite.nom,
     });
 
     await this.bus.publie<DemandeAidePourvue>(this.evenementSucces(commande));
