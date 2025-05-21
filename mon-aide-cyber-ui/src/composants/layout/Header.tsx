@@ -26,28 +26,30 @@ export const Header = ({
       nom: 'Accueil',
     },
     {
-      route: '/beneficier-du-dispositif/etre-aide',
-      nom: 'Bénéficier du dispositif',
+      route: '/beneficier-du-dispositif/annuaire',
+      nom: 'Les Aidants cyber',
       clef: 770,
       enfants: [
-        {
-          route: '/beneficier-du-dispositif/etre-aide',
-          nom: 'Faire une demande',
-        },
         {
           route: '/beneficier-du-dispositif/annuaire',
           nom: 'Annuaire des Aidants cyber',
         },
+        {
+          route: '/relais-associatifs',
+          nom: 'Relais associatifs',
+        },
       ],
     },
     {
-      route: '/realiser-des-diagnostics-anssi',
-      nom: 'Réaliser des diagnostics ANSSI',
-    },
-    {
       route: '/kit-de-communication',
-      nom: 'Promouvoir MonAideCyber',
+      nom: 'Promouvoir',
       clef: 776,
+      enfants: [
+        {
+          route: '/kit-de-communication',
+          nom: 'Kit de communication',
+        },
+      ],
     },
   ];
 
