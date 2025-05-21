@@ -14,31 +14,22 @@ import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRe
 import { ReponseAPIRechercheEntreprise } from '../recherche-entreprise/api';
 import { adaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import crypto from 'crypto';
+import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
 
 describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { app: Express };
-  const uneEntrepriseDuSecteurPublicDansLeFinistere: ReponseAPIRechercheEntreprise =
-    {
-      results: [
-        {
-          complements: { est_association: false, est_service_public: true },
-          nom_complet: 'Plouguerneau',
-          siege: {
-            departement: '29',
-            siret: '0987654321',
-            libelle_commune: 'PLOUGUERNEAU',
-          },
-          section_activite_principale: 'O',
-        },
-      ],
-    };
 
   beforeEach(() => {
     const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
-    adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>(
-      uneEntrepriseDuSecteurPublicDansLeFinistere
-    );
+    adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>({
+      results: [
+        unConstructeurDeReponseAPIEntreprise()
+          .dansLeServicePublic()
+          .dansAdministration()
+          .construis(),
+      ],
+    });
     testeurMAC.adaptateurDeRechercheEntreprise = adaptateurRechercheEntreprise(
       adaptateurDeRequeteHTTP
     );

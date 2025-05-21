@@ -60,6 +60,7 @@ import {
   adaptateurRechercheEntreprise,
 } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
+import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
 import { ReponseAPIRechercheEntreprise } from '../../api/recherche-entreprise/api';
 
 class FabriqueDeMiseEnRelationDeTest implements FabriqueMiseEnRelation {
@@ -89,19 +90,13 @@ class MiseEnRelationDeTest implements MiseEnRelation {
   }
 }
 
-const uneReponseAPIRechercheEntrepriseMairieBordeaux: ReponseAPIRechercheEntreprise =
+const uneReponseAPIRechercheEntrepriseAdministrationPublique: ReponseAPIRechercheEntreprise =
   {
     results: [
-      {
-        nom_complet: 'Mairie BORDEAUX',
-        siege: {
-          siret: '122345',
-          departement: gironde.code,
-          libelle_commune: 'Bordeaux',
-        },
-        complements: { est_association: false, est_service_public: true },
-        section_activite_principale: 'O',
-      },
+      unConstructeurDeReponseAPIEntreprise()
+        .dansLeServicePublic()
+        .dansAdministration()
+        .construis(),
     ],
   };
 
@@ -125,7 +120,7 @@ const fabriqueCapteur = ({
     fabriqueMiseEnRelation ?? new FabriqueDeMiseEnRelationDeTest();
   const adaptateurDeRequeteHTTPMemoire = new AdaptateurDeRequeteHTTPMemoire();
   adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>(
-    uneReponseAPIRechercheEntrepriseMairieBordeaux
+    uneReponseAPIRechercheEntrepriseAdministrationPublique
   );
 
   return new CapteurSagaDemandeAide(
@@ -584,7 +579,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const adaptateurDeRequeteHTTPMemoire =
         new AdaptateurDeRequeteHTTPMemoire();
       adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>(
-        uneReponseAPIRechercheEntrepriseMairieBordeaux
+        uneReponseAPIRechercheEntrepriseAdministrationPublique
       );
       const capteur = fabriqueCapteur({
         entrepots,
@@ -622,7 +617,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const adaptateurDeRequeteHTTPMemoire =
         new AdaptateurDeRequeteHTTPMemoire();
       adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>(
-        uneReponseAPIRechercheEntrepriseMairieBordeaux
+        uneReponseAPIRechercheEntrepriseAdministrationPublique
       );
       const capteur = fabriqueCapteur({
         entrepots,

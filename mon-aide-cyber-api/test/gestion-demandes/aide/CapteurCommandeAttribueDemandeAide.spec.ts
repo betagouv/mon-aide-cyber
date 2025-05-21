@@ -21,6 +21,7 @@ import {
   adaptateurRechercheEntreprise,
 } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
+import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
 import { ReponseAPIRechercheEntreprise } from '../../api/recherche-entreprise/api';
 
 describe("Capteur de commande d'attribution de demande d'aide", () => {
@@ -36,16 +37,10 @@ describe("Capteur de commande d'attribution de demande d'aide", () => {
   const entreprisePubliqueCorrespondantALaDemande: ReponseAPIRechercheEntreprise =
     {
       results: [
-        {
-          complements: { est_association: false, est_service_public: true },
-          nom_complet: 'Plouguerneau',
-          siege: {
-            departement: '29',
-            siret: '0987654321',
-            libelle_commune: 'PLOUGUERNEAU',
-          },
-          section_activite_principale: 'O',
-        },
+        unConstructeurDeReponseAPIEntreprise()
+          .dansLeServicePublic()
+          .dansAdministration()
+          .construis(),
       ],
     };
 
