@@ -1,3 +1,5 @@
+import { AdaptateurDeRequeteHTTP } from '../infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
+
 export type EPCI = { nom: string };
 
 export interface AdaptateurGeographie {
@@ -11,8 +13,15 @@ export class AdaptateurGeographieMemoire implements AdaptateurGeographie {
 }
 
 class AdaptateurGeographieGeoAPI implements AdaptateurGeographie {
-  epciAvecCode(__codeEpci: string): Promise<EPCI> {
-    throw new Error('Method not implemented.');
+  async epciAvecCode(codeEpci: string): Promise<EPCI> {
+    const reponse = await new AdaptateurDeRequeteHTTP().execute<
+      { nom: string }[]
+    >({
+      url: `https://geo.api.gouv.fr/epcis?code=${codeEpci}`,
+      methode: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    return { nom: reponse[0]?.nom };
   }
 }
 
