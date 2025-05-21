@@ -81,6 +81,7 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
       .ayantPourDestinataires([[destinataire.email, destinataire.nom]])
       .ayantPourParametres({
         nomPrenom: aidant.nomPrenom,
+        epci: informations.epci,
         departement: informations.departement,
         typeEntite: informations.typeEntite,
         secteursActivite: informations.secteursActivite,
