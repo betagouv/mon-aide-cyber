@@ -10,29 +10,19 @@ import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
 
 import { tokenAttributionDemandeAide } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
 import { DemandePourPostuler } from '../../../src/api/aidant/miseEnRelation';
-import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
-import { ReponseAPIRechercheEntreprise } from '../recherche-entreprise/api';
-import { adaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import crypto from 'crypto';
-import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
+import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 
 describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { app: Express };
 
   beforeEach(() => {
-    const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
-    adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>({
-      results: [
-        unConstructeurDeReponseAPIEntreprise()
-          .dansLeServicePublic()
-          .dansAdministration()
-          .construis(),
-      ],
-    });
-    testeurMAC.adaptateurDeRechercheEntreprise = adaptateurRechercheEntreprise(
-      adaptateurDeRequeteHTTP
-    );
+    testeurMAC.adaptateurDeRechercheEntreprise =
+      unAdaptateurRechercheEntreprise()
+        .dansAdministration()
+        .dansLeServicePublic()
+        .construis();
     donneesServeur = testeurMAC.initialise();
   });
 

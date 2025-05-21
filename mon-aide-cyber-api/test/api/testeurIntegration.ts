@@ -26,12 +26,11 @@ import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
 import { AdaptateurDeVerificationDuTypeDeRelationDeTest } from '../adaptateurs/AdaptateurDeVerificationDuTypeDeRelationDeTest';
 import { AdaptateurProConnect } from '../../src/adaptateurs/pro-connect/adaptateurProConnect';
 import { AdaptateurProConnectDeTest } from '../adaptateurs/pro-connect/AdaptateurProConnectDeTest';
-import { AdaptateurDeRequeteHTTPMemoire } from '../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
 import { AdaptateurDeVerificationDeDemandeDeTest } from '../adaptateurs/AdaptateurDeVerificationDeDemandeDeTest';
 import { AdaptateurDeVerificationDeDemande } from '../../src/adaptateurs/AdaptateurDeVerificationDeDemande';
 import { AdaptateurAseptisationDeTest } from '../adaptateurs/AdaptateurAseptisationDeTest';
 import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
-import { adaptateurRechercheEntreprise } from '../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { unAdaptateurRechercheEntreprise } from '../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 
 const PORT_DISPONIBLE = 0;
 
@@ -76,9 +75,7 @@ class TesteurIntegrationMAC {
     },
     public adaptateurMetabase: AdaptateurMetabaseMemoire = new AdaptateurMetabaseMemoire(),
     public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest(),
-    public adaptateurDeRechercheEntreprise = adaptateurRechercheEntreprise(
-      new AdaptateurDeRequeteHTTPMemoire()
-    )
+    public adaptateurDeRechercheEntreprise = unAdaptateurRechercheEntreprise().construis()
   ) {}
 
   initialise() {

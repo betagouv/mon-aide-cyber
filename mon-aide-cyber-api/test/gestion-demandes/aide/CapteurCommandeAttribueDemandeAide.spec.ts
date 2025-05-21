@@ -1,4 +1,4 @@
-import { assert, describe, expect, it, beforeEach } from 'vitest';
+import { assert, beforeEach, describe, expect, it } from 'vitest';
 import { AdaptateurRelationsMAC } from '../../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/EntrepotRelationMemoire';
 import {
@@ -16,13 +16,7 @@ import { finistere } from '../../../src/gestion-demandes/departements';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { Aidant, entitesPubliques } from '../../../src/espace-aidant/Aidant';
 import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
-import {
-  AdaptateurRechercheEntreprise,
-  adaptateurRechercheEntreprise,
-} from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
-import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
-import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
-import { ReponseAPIRechercheEntreprise } from '../../api/recherche-entreprise/api';
+import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 
 describe("Capteur de commande d'attribution de demande d'aide", () => {
   let entrepot: EntrepotsMemoire;
@@ -31,19 +25,6 @@ describe("Capteur de commande d'attribution de demande d'aide", () => {
   let demandeFinistere: DemandeAide;
   let bus: BusEvenementDeTest;
   let envoiMail: AdaptateurEnvoiMailMemoire;
-  const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
-  const rechercheEntreprise: AdaptateurRechercheEntreprise =
-    adaptateurRechercheEntreprise(adaptateurDeRequeteHTTP);
-  const entreprisePubliqueCorrespondantALaDemande: ReponseAPIRechercheEntreprise =
-    {
-      results: [
-        unConstructeurDeReponseAPIEntreprise()
-          .dansLeServicePublic()
-          .dansAdministration()
-          .construis(),
-      ],
-    };
-
   beforeEach(async () => {
     aidantJeanDujardin = unAidant()
       .avecUnIdentifiant('11111111-1111-1111-1111-111111111111')
@@ -63,10 +44,6 @@ describe("Capteur de commande d'attribution de demande d'aide", () => {
     relations = new AdaptateurRelationsMAC(new EntrepotRelationMemoire());
     bus = new BusEvenementDeTest();
     envoiMail = new AdaptateurEnvoiMailMemoire();
-
-    adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>(
-      entreprisePubliqueCorrespondantALaDemande
-    );
   });
 
   const leCapteur = () =>
@@ -75,7 +52,10 @@ describe("Capteur de commande d'attribution de demande d'aide", () => {
       relations,
       bus,
       entrepot,
-      rechercheEntreprise
+      unAdaptateurRechercheEntreprise()
+        .dansLeServicePublic()
+        .dansAdministration()
+        .construis()
     );
 
   it("Attribue la demande d'aide à l'aidant", async () => {
