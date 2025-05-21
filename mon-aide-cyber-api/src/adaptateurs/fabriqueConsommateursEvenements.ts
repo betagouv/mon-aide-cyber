@@ -2,6 +2,7 @@ import {
   aidantCree,
   aidantMigreEnUtilisateurInscrit,
   aideCree,
+  demandeAidePourvue,
   demandeDevenirAidantCree,
   demandeDevenirAidantespaceAidantCree,
   demandeDevenirAidantModifiee,
@@ -78,6 +79,7 @@ export const fabriqueConsommateursEvenements = (
     ['REPONSE_AJOUTEE', [reponseAjoutee(entrepotJournalisation)]],
     ['AIDANT_CREE', [consommateurs.aidantCree()]],
     ['AIDE_CREE', [consommateurs.aideCree()]],
+    ['DEMANDE_AIDE_POURVUE', [demandeAidePourvue(entrepotJournalisation)]],
     [
       'DEMANDE_DEVENIR_AIDANT_CREEE',
       [demandeDevenirAidantCree(entrepotJournalisation)],

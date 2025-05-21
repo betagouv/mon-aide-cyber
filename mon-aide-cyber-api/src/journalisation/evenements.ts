@@ -45,6 +45,7 @@ export const reponseAjoutee = consommateurEvenement();
 export const aidantCree = consommateurEvenement();
 
 export const aideCree = consommateurEvenement();
+export const demandeAidePourvue = consommateurEvenement();
 
 export const demandeDevenirAidantCree = consommateurEvenement();
 export const demandeDevenirAidantModifiee = consommateurEvenement();
