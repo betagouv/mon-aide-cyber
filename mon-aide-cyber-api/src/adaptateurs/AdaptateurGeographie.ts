@@ -26,6 +26,6 @@ class AdaptateurGeographieGeoAPI implements AdaptateurGeographie {
 }
 
 export const unAdaptateurGeographie = (): AdaptateurGeographie =>
-  process.env.NODE_ENV === 'production'
+  process.env.EPCI_ADAPTATEUR_GEOGRAPHIE === 'API'
     ? new AdaptateurGeographieGeoAPI()
     : new AdaptateurGeographieMemoire();
