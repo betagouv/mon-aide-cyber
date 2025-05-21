@@ -20,24 +20,16 @@ import {
   hautesAlpes,
 } from '../../../src/gestion-demandes/departements';
 import { EntrepotAideMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import { ReponseAPIRechercheEntreprise } from '../recherche-entreprise/api';
-import { adaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
-import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
 import { associations } from '../../../src/espace-aidant/Aidant';
-import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
+import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 
 describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { app: Express };
 
   beforeEach(() => {
-    const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
-    adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>({
-      results: [unConstructeurDeReponseAPIEntreprise().construis()],
-    });
-    testeurMAC.adaptateurDeRechercheEntreprise = adaptateurRechercheEntreprise(
-      adaptateurDeRequeteHTTP
-    );
+    testeurMAC.adaptateurDeRechercheEntreprise =
+      unAdaptateurRechercheEntreprise().construis();
     donneesServeur = testeurMAC.initialise();
   });
 
@@ -219,8 +211,8 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
 
       it('Renvoie une erreur si l‘entité ne correspond pas au SIRET fourni', async () => {
         const testeurMAC = testeurIntegration();
-        testeurMAC.adaptateurDeRechercheEntreprise.rechercheEntreprise = () =>
-          Promise.resolve([]);
+        testeurMAC.adaptateurDeRechercheEntreprise =
+          unAdaptateurRechercheEntreprise().vide().construis();
         const donneesServeur: { app: Express } = testeurMAC.initialise();
 
         const reponse = await executeRequete(
@@ -247,12 +239,8 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
         let donneesServeur: { app: Express };
 
         beforeEach(() => {
-          const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
-          adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>({
-            results: [unConstructeurDeReponseAPIEntreprise().construis()],
-          });
           testeurMAC.adaptateurDeRechercheEntreprise =
-            adaptateurRechercheEntreprise(adaptateurDeRequeteHTTP);
+            unAdaptateurRechercheEntreprise().construis();
           donneesServeur = testeurMAC.initialise();
         });
 

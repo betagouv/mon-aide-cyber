@@ -19,8 +19,7 @@ import {
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { EntiteAidant } from '../../../src/espace-aidant/Aidant';
-import { adaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
-import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
+import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 
 describe('Capteur de saga pour créer un espace Aidant correspondant à une demande', () => {
   let busEvenementDeTest = new BusEvenementDeTest();
@@ -35,7 +34,7 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       busEvenementDeTest,
       new AdaptateurEnvoiMailMemoire(),
       unConstructeurDeServices(entrepots.aidants()),
-      adaptateurRechercheEntreprise(new AdaptateurDeRequeteHTTPMemoire())
+      unAdaptateurRechercheEntreprise().construis()
     );
   });
 

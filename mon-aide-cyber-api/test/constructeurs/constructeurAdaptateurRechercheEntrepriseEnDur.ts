@@ -1,40 +1,75 @@
-import { AdaptateurRechercheEntreprise } from '../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import {
+  AdaptateurRechercheEntreprise,
+  Entreprise,
+} from '../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { Constructeur } from './constructeur';
-import { entitesPrivees } from '../../src/espace-aidant/Aidant';
+import {
+  entitesPrivees,
+  entitesPubliques,
+} from '../../src/espace-aidant/Aidant';
 
 class ConstructeurAdaptateurRechercheEntrepriseEnDur
   implements Constructeur<AdaptateurRechercheEntreprise>
 {
-  private readonly siret = '12345678912345';
-  private readonly nom = 'Une entreprise';
-  private readonly departement = '33';
-  private readonly commune = 'Bordeaux';
-  private readonly typeEntite = entitesPrivees;
-  private readonly secteursActivite = [];
+  private reponse: Entreprise[] = [
+    {
+      siret: '12345678912345',
+      nom: 'Une entreprise',
+      departement: '33',
+      commune: 'Bordeaux',
+      typeEntite: entitesPrivees,
+      secteursActivite: [],
+    },
+  ];
+
+  vide(): ConstructeurAdaptateurRechercheEntrepriseEnDur {
+    this.reponse = [];
+    return this;
+  }
+
+  dansAdministration(): ConstructeurAdaptateurRechercheEntrepriseEnDur {
+    this.reponse[0].secteursActivite = [
+      { nom: 'Administration' },
+      { nom: 'Tertiaire' },
+    ];
+    return this;
+  }
+
+  dansLeServicePublic(): ConstructeurAdaptateurRechercheEntrepriseEnDur {
+    this.reponse[0].typeEntite = entitesPubliques;
+    return this;
+  }
+
+  portantLeNom(
+    nomEntreprise: string
+  ): ConstructeurAdaptateurRechercheEntrepriseEnDur {
+    this.reponse[0].nom = nomEntreprise;
+    return this;
+  }
+
+  dansLaVille(ville: {
+    commune: string;
+    departement: string;
+  }): ConstructeurAdaptateurRechercheEntrepriseEnDur {
+    this.reponse[0].commune = ville.commune;
+    this.reponse[0].departement = ville.departement;
+    return this;
+  }
+
+  avecLeSiret(
+    numeroSiret: string
+  ): ConstructeurAdaptateurRechercheEntrepriseEnDur {
+    this.reponse[0].siret = numeroSiret;
+    return this;
+  }
 
   construis(): AdaptateurRechercheEntreprise {
     return {
       rechercheEntreprise: async (
         __nomOuSiretEntreprise: string,
         __parametresRecherche: string
-      ) => [
-        {
-          siret: this.siret,
-          nom: this.nom,
-          departement: this.departement,
-          commune: this.commune,
-          typeEntite: this.typeEntite,
-          secteursActivite: this.secteursActivite,
-        },
-      ],
-      rechercheParSiret: async (__siret: string) => ({
-        siret: this.siret,
-        nom: this.nom,
-        departement: this.departement,
-        commune: this.commune,
-        typeEntite: this.typeEntite,
-        secteursActivite: this.secteursActivite,
-      }),
+      ) => this.reponse,
+      rechercheParSiret: async (__siret: string) => this.reponse[0],
     };
   }
 }

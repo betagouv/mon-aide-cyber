@@ -18,8 +18,7 @@ import { adaptateurUUID } from '../../src/infrastructure/adaptateurs/adaptateurU
 import crypto from 'crypto';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { adaptateurRechercheEntreprise } from '../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
-import { AdaptateurDeRequeteHTTPMemoire } from '../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
+import { unAdaptateurRechercheEntreprise } from '../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 
 describe('Capteur pour lancer un Auto-Diagnostic', () => {
   let adaptateurReferentiel: AdaptateurReferentielDeTest;
@@ -40,7 +39,7 @@ describe('Capteur pour lancer un Auto-Diagnostic', () => {
       busEvenement,
       adaptateurEnvoiMail,
       unConstructeurDeServices(entrepots.aidants()),
-      adaptateurRechercheEntreprise(new AdaptateurDeRequeteHTTPMemoire())
+      unAdaptateurRechercheEntreprise().construis()
     );
     const referentiel = unReferentiel().construis();
     adaptateurReferentiel.ajoute(referentiel);

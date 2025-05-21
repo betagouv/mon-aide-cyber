@@ -11,7 +11,6 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { app: Express };
   const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
-  adaptateurDeRequeteHTTP;
 
   beforeEach(() => {
     testeurMAC.adaptateurDeRechercheEntreprise = adaptateurRechercheEntreprise(

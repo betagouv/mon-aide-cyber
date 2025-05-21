@@ -60,8 +60,9 @@ import {
   adaptateurRechercheEntreprise,
 } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
-import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
 import { ReponseAPIRechercheEntreprise } from '../../api/recherche-entreprise/api';
+import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
+import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
 
 class FabriqueDeMiseEnRelationDeTest implements FabriqueMiseEnRelation {
   public readonly miseEnRelationDeTest = new MiseEnRelationDeTest();
@@ -90,15 +91,11 @@ class MiseEnRelationDeTest implements MiseEnRelation {
   }
 }
 
-const uneReponseAPIRechercheEntrepriseAdministrationPublique: ReponseAPIRechercheEntreprise =
-  {
-    results: [
-      unConstructeurDeReponseAPIEntreprise()
-        .dansLeServicePublic()
-        .dansAdministration()
-        .construis(),
-    ],
-  };
+const unAdaptateurRechercheEntreprisePourUneAdministrationPublique =
+  unAdaptateurRechercheEntreprise()
+    .dansLeServicePublic()
+    .dansAdministration()
+    .construis();
 
 const fabriqueCapteur = ({
   entrepots,
@@ -118,10 +115,6 @@ const fabriqueCapteur = ({
   const envoiMail = new AdaptateurEnvoiMailMemoire();
   const laFabriqueDeMiseEnRelation =
     fabriqueMiseEnRelation ?? new FabriqueDeMiseEnRelationDeTest();
-  const adaptateurDeRequeteHTTPMemoire = new AdaptateurDeRequeteHTTPMemoire();
-  adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>(
-    uneReponseAPIRechercheEntrepriseAdministrationPublique
-  );
 
   return new CapteurSagaDemandeAide(
     busCommande ??
@@ -130,7 +123,7 @@ const fabriqueCapteur = ({
         leBusEvenement,
         envoiMail,
         unConstructeurDeServices(lesEntrepots.aidants()),
-        adaptateurRechercheEntreprise(adaptateurDeRequeteHTTPMemoire)
+        unAdaptateurRechercheEntreprisePourUneAdministrationPublique
       ),
     leBusEvenement,
     new EntrepotUtilisateurMACMemoire({
@@ -139,7 +132,7 @@ const fabriqueCapteur = ({
     }),
     laFabriqueDeMiseEnRelation,
     rechercheEntreprise ??
-      adaptateurRechercheEntreprise(adaptateurDeRequeteHTTPMemoire)
+      unAdaptateurRechercheEntreprisePourUneAdministrationPublique
   );
 };
 
@@ -576,16 +569,10 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       const entrepots = new EntrepotsMemoire();
       const fabriqueDeMiseEnRelationDeTest =
         new FabriqueDeMiseEnRelationDeTest();
-      const adaptateurDeRequeteHTTPMemoire =
-        new AdaptateurDeRequeteHTTPMemoire();
-      adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>(
-        uneReponseAPIRechercheEntrepriseAdministrationPublique
-      );
       const capteur = fabriqueCapteur({
         entrepots,
-        rechercheEntreprise: adaptateurRechercheEntreprise(
-          adaptateurDeRequeteHTTPMemoire
-        ),
+        rechercheEntreprise:
+          unAdaptateurRechercheEntreprisePourUneAdministrationPublique,
         fabriqueMiseEnRelation: fabriqueDeMiseEnRelationDeTest,
       });
 
@@ -616,9 +603,14 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         new FabriqueDeMiseEnRelationDeTest();
       const adaptateurDeRequeteHTTPMemoire =
         new AdaptateurDeRequeteHTTPMemoire();
-      adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>(
-        uneReponseAPIRechercheEntrepriseAdministrationPublique
-      );
+      adaptateurDeRequeteHTTPMemoire.reponse<ReponseAPIRechercheEntreprise>({
+        results: [
+          unConstructeurDeReponseAPIEntreprise()
+            .dansLeServicePublic()
+            .dansAdministration()
+            .construis(),
+        ],
+      });
       const capteur = fabriqueCapteur({
         entrepots,
         rechercheEntreprise: adaptateurRechercheEntreprise(
@@ -697,15 +689,9 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
     const entrepots = new EntrepotsMemoire();
     const fabriqueDeMiseEnRelationEcoutee =
       new FabriqueDeMiseEnRelationEcoutee();
-    const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
-    adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>({
-      results: [],
-    });
     const capteur = fabriqueCapteur({
       entrepots,
-      rechercheEntreprise: adaptateurRechercheEntreprise(
-        adaptateurDeRequeteHTTP
-      ),
+      rechercheEntreprise: unAdaptateurRechercheEntreprise().vide().construis(),
       fabriqueMiseEnRelation: fabriqueDeMiseEnRelationEcoutee,
     });
 
