@@ -5,6 +5,7 @@ import { Express } from 'express';
 import { ReponseRechercheEntreprise } from '../../../src/api/recherche-entreprise/routesAPIRechercheEntreprise';
 import { adaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
+import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
 
 describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
   const testeurMAC = testeurIntegration();
@@ -23,15 +24,16 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
     it('Retourne la liste des entreprises correspondant à la requête', async () => {
       adaptateurDeRequeteHTTP.reponse({
         results: [
-          {
-            siege: {
-              siret: '1234567890',
-              libelle_commune: 'Bordeaux',
+          unConstructeurDeReponseAPIEntreprise()
+            .portantLeNom('Beta-Gouv')
+            .dansAdministration()
+            .dansLaVille({
+              commune: 'Bordeaux',
               departement: '33',
-            },
-            complements: { est_association: true },
-            nom_complet: 'Beta-Gouv',
-          },
+            })
+            .avecLeSiret('1234567890')
+            .estUneAssociation()
+            .construis(),
         ],
       });
 
@@ -55,12 +57,11 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
     it('La requête est conforme', async () => {
       adaptateurDeRequeteHTTP.reponse({
         results: [
-          {
-            siege: { siret: '1234567890' },
-            complements: { est_association: true },
-            nom_complet:
-              'agence nationale de sécurité des systèmes d’information',
-          },
+          unConstructeurDeReponseAPIEntreprise()
+            .portantLeNom(
+              'agence nationale de sécurité des systèmes d’information'
+            )
+            .construis(),
         ],
       });
 
@@ -78,11 +79,10 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
     it('Prends en compte les paramètres de requêtes optionnels', async () => {
       adaptateurDeRequeteHTTP.reponse({
         results: [
-          {
-            siege: { siret: '1234567890' },
-            complements: { est_association: true },
-            nom_complet: 'Beta-Gouv',
-          },
+          unConstructeurDeReponseAPIEntreprise()
+            .portantLeNom('Beta-Gouv')
+            .estUneAssociation()
+            .construis(),
         ],
       });
 
@@ -120,15 +120,15 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
     it('Retourne la liste des entreprises et des associations non référencées correspondant à la requête', async () => {
       adaptateurDeRequeteHTTP.reponse({
         results: [
-          {
-            siege: {
-              siret: '1234567890',
-              libelle_commune: 'Bordeaux',
+          unConstructeurDeReponseAPIEntreprise()
+            .dansLaVille({
+              commune: 'Bordeaux',
               departement: '33',
-            },
-            complements: { est_association: true },
-            nom_complet: 'Réserviste',
-          },
+            })
+            .avecLeSiret('1234567890')
+            .portantLeNom('Réserviste')
+            .estUneAssociation()
+            .construis(),
         ],
       });
 
@@ -158,15 +158,15 @@ describe('Le serveur MAC, sur les routes de recherche entreprise', () => {
     it('Ne Retourne pas la liste des associations non référencées si la recherche n’est pas lancée pour les associations', async () => {
       adaptateurDeRequeteHTTP.reponse({
         results: [
-          {
-            siege: {
-              siret: '1234567890',
-              libelle_commune: 'Bordeaux',
+          unConstructeurDeReponseAPIEntreprise()
+            .dansLaVille({
+              commune: 'Bordeaux',
               departement: '33',
-            },
-            complements: { est_association: true },
-            nom_complet: 'Réserviste',
-          },
+            })
+            .avecLeSiret('1234567890')
+            .portantLeNom('Réserviste')
+            .estUneAssociation()
+            .construis(),
         ],
       });
 

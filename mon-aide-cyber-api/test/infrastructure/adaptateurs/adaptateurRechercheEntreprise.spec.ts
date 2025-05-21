@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { adaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import {
+  adaptateurRechercheEntreprise,
+  APIEntreprise,
+} from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import {
   AdaptateurDeRequeteHTTP,
   RequeteHTTP,
@@ -15,19 +18,11 @@ import {
   TypesEntites,
 } from '../../../src/espace-aidant/Aidant';
 import { SecteurActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
+import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
 
 type ParametresTest<T> = {
   nomOuSIRETEntreprise: string;
-  reponseRetournee?: {
-    nom_complet: string;
-    siege: {
-      siret: string;
-      libelle_commune: string;
-      departement: '75';
-    };
-    section_activite_principale?: string;
-    complements: { est_service_public?: boolean; est_association?: boolean };
-  };
+  reponseRetournee?: APIEntreprise;
   parametresRecherche?: string;
   reponseAttendue: T;
 };
@@ -42,41 +37,24 @@ describe('L’adaptateur de recherche Entreprise', () => {
   >([
     {
       nomOuSIRETEntreprise: '01234567891234',
-      reponseRetournee: {
-        nom_complet: 'Beta-gouv',
-        siege: {
-          siret: '01234567891234',
-          libelle_commune: 'PARIS',
-          departement: '75',
-        },
-        complements: { est_service_public: true },
-      },
+      reponseRetournee: unConstructeurDeReponseAPIEntreprise()
+        .dansLeServicePublic()
+        .construis(),
       reponseAttendue: entitesPubliques,
     },
     {
       nomOuSIRETEntreprise: '01234567891234',
-      reponseRetournee: {
-        nom_complet: 'Asso-beta',
-        siege: {
-          siret: '01234567891234',
-          libelle_commune: 'PARIS',
-          departement: '75',
-        },
-        complements: { est_association: true },
-      },
+      reponseRetournee: unConstructeurDeReponseAPIEntreprise()
+        .estUneAssociation()
+        .construis(),
       reponseAttendue: associations,
     },
     {
       nomOuSIRETEntreprise: '12345678912345',
-      reponseRetournee: {
-        nom_complet: 'Entreprise Privée',
-        siege: {
-          siret: '12345678912345',
-          libelle_commune: 'PARIS',
-          departement: '75',
-        },
-        complements: { est_association: false },
-      },
+      reponseRetournee: unConstructeurDeReponseAPIEntreprise()
+        .dansLaVille({ commune: 'PARIS', departement: '75' })
+        .dansLePrive()
+        .construis(),
       reponseAttendue: entitesPrivees,
     },
     {
@@ -105,30 +83,16 @@ describe('L’adaptateur de recherche Entreprise', () => {
   it.each<ParametresTest<SecteurActivite[]>>([
     {
       nomOuSIRETEntreprise: '01234567891234',
-      reponseRetournee: {
-        nom_complet: 'Beta-gouv',
-        siege: {
-          siret: '01234567891234',
-          libelle_commune: 'PARIS',
-          departement: '75',
-        },
-        section_activite_principale: 'O',
-        complements: { est_service_public: true },
-      },
+      reponseRetournee: unConstructeurDeReponseAPIEntreprise()
+        .dansAdministration()
+        .construis(),
       reponseAttendue: [{ nom: 'Administration' }, { nom: 'Tertiaire' }],
     },
     {
       nomOuSIRETEntreprise: '01234567891234',
-      reponseRetournee: {
-        nom_complet: 'Asso-beta',
-        siege: {
-          siret: '01234567891234',
-          libelle_commune: 'PARIS',
-          departement: '75',
-        },
-        complements: { est_association: true },
-        section_activite_principale: 'J',
-      },
+      reponseRetournee: unConstructeurDeReponseAPIEntreprise()
+        .dansInformationEtCommunication()
+        .construis(),
       reponseAttendue: [
         { nom: 'Information et communication' },
         { nom: 'Tertiaire' },
@@ -136,16 +100,9 @@ describe('L’adaptateur de recherche Entreprise', () => {
     },
     {
       nomOuSIRETEntreprise: '12345678912345',
-      reponseRetournee: {
-        nom_complet: 'Entreprise Privée',
-        siege: {
-          siret: '12345678912345',
-          libelle_commune: 'PARIS',
-          departement: '75',
-        },
-        complements: { est_association: false },
-        section_activite_principale: 'L',
-      },
+      reponseRetournee: unConstructeurDeReponseAPIEntreprise()
+        .dansActivitesImmobilieres()
+        .construis(),
       reponseAttendue: [
         { nom: 'Activités immobilières' },
         { nom: 'Tertiaire' },

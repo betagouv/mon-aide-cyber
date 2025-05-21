@@ -24,30 +24,17 @@ import { ReponseAPIRechercheEntreprise } from '../recherche-entreprise/api';
 import { adaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
 import { associations } from '../../../src/espace-aidant/Aidant';
+import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
 
 describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’Aidé', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { app: Express };
-  const reponseAPIRechercheEntreprise: ReponseAPIRechercheEntreprise = {
-    results: [
-      {
-        complements: { est_association: false, est_service_public: true },
-        nom_complet: 'BORDEAUX',
-        siege: {
-          departement: '33',
-          siret: '000000000',
-          libelle_commune: 'BORDEAUX',
-        },
-        section_activite_principale: 'O',
-      },
-    ],
-  };
 
   beforeEach(() => {
     const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
-    adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>(
-      reponseAPIRechercheEntreprise
-    );
+    adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>({
+      results: [unConstructeurDeReponseAPIEntreprise().construis()],
+    });
     testeurMAC.adaptateurDeRechercheEntreprise = adaptateurRechercheEntreprise(
       adaptateurDeRequeteHTTP
     );
@@ -261,9 +248,9 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
 
         beforeEach(() => {
           const adaptateurDeRequeteHTTP = new AdaptateurDeRequeteHTTPMemoire();
-          adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>(
-            reponseAPIRechercheEntreprise
-          );
+          adaptateurDeRequeteHTTP.reponse<ReponseAPIRechercheEntreprise>({
+            results: [unConstructeurDeReponseAPIEntreprise().construis()],
+          });
           testeurMAC.adaptateurDeRechercheEntreprise =
             adaptateurRechercheEntreprise(adaptateurDeRequeteHTTP);
           donneesServeur = testeurMAC.initialise();
