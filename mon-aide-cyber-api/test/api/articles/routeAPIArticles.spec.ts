@@ -5,6 +5,7 @@ import { Express } from 'express';
 import { AdaptateurCmsCrispMACMemoire } from '../../adaptateurs/AdaptateurCmsCrispMACMemoire';
 import { unArticle } from '../../constructeurs/constructeurArticle';
 import { ReponseArticle } from '../../../src/api/articles/routeAPIArticles';
+import { Options } from '../../../src/api/hateoas/hateoas';
 
 describe('Articles', () => {
   const testeurMAC = testeurIntegration();
@@ -31,11 +32,19 @@ describe('Articles', () => {
     );
 
     expect(reponse.statusCode).toBe(200);
-    expect(await reponse.json()).toStrictEqual<ReponseArticle>({
+    const contenu = await reponse.json();
+    expect(contenu).toStrictEqual<ReponseArticle>({
       titre: 'Un titre',
       contenu: 'un contenu',
       description: 'Une description',
       tableDesMatieres: [],
+      liens: expect.any(Object),
     });
+    expect(contenu.liens['afficher-guide-aidant-cyber']).toStrictEqual<Options>(
+      {
+        url: '/api/articles/guide-aidant-cyber',
+        methode: 'GET',
+      }
+    );
   });
 });

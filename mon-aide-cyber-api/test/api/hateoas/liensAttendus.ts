@@ -30,6 +30,10 @@ export const liensPublicsAttendus: ReponseHATEOAS = {
       methode: 'GET',
       url: '/pro-connect/connexion',
     },
+    'afficher-guide-aidant-cyber': {
+      methode: 'GET',
+      url: '/api/articles/guide-aidant-cyber',
+    },
   },
 };
 
@@ -62,6 +66,10 @@ export const liensPublicsAttendusNouveauParcours: ReponseHATEOAS = {
     'se-connecter-avec-pro-connect': {
       methode: 'GET',
       url: '/pro-connect/connexion',
+    },
+    'afficher-guide-aidant-cyber': {
+      methode: 'GET',
+      url: '/api/articles/guide-aidant-cyber',
     },
   },
 };
