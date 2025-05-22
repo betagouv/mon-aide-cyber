@@ -3,19 +3,13 @@ import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useQuery } from '@tanstack/react-query';
-import { ReponseHATEOAS } from '../../Lien.ts';
 import { TypographieH1 } from '../../../composants/communs/typographie/TypographieH1/TypographieH1.tsx';
 import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
 import HeroBloc from '../../../composants/communs/HeroBloc.tsx';
 import './ecran-guide-des-aidants-cyber.scss';
-import Sidemenu from '../../../composants/communs/Sidemenu/Sidemenu.tsx';
-
-type ReponseArticle = ReponseHATEOAS & {
-  titre: string;
-  contenu: string | null;
-  description: string;
-  tableDesMatieres: any[];
-};
+import './article-crisp.scss';
+import { MenuLateralCrispMobile } from './MenuLateralCrispMobile.tsx';
+import { ReponseArticle } from './Crisp.types.ts';
 
 export const EcranGuideDesAidantsCyber = () => {
   const navigationMAC = useNavigationMAC();
@@ -66,37 +60,19 @@ export const EcranGuideDesAidantsCyber = () => {
           </section>
         </div>
       </HeroBloc>
-      <section className="fond-clair-mac">
-        <div className="fr-container">
-          <div className="fr-grid-row">
-            <Sidemenu
-              sticky={true}
-              className="fr-col-12 fr-col-lg-3"
-              aria-labelledby="fr-sidemenu-title"
-            >
-              <>
-                {data?.tableDesMatieres
-                  ? data.tableDesMatieres?.map(
-                      (element: { texte: string; id: string }) => (
-                        <Sidemenu.Link
-                          key={element.id}
-                          to={`#${element.id}`}
-                          anchorId={element.id}
-                        >
-                          {element.texte}
-                        </Sidemenu.Link>
-                      )
-                    )
-                  : null}
-              </>
-            </Sidemenu>
-            <div
-              className="fr-col-12 fr-col-lg-9 section"
-              dangerouslySetInnerHTML={{ __html: data?.contenu || '' }}
-            />
-          </div>
+      <MenuLateralCrispMobile
+        tableDesMatieres={data?.tableDesMatieres.filter(
+          (e) => e.profondeur === 2
+        )}
+      />
+      <div className="article">
+        <div className="contenu-section">
+          <div
+            className="contenu"
+            dangerouslySetInnerHTML={{ __html: data?.contenu || '' }}
+          ></div>
         </div>
-      </section>
+      </div>
     </main>
   );
 };
