@@ -32,6 +32,11 @@
 @import 'commun';
 @import "centre-aide";
 
+
+html {
+  scroll-behavior: smooth;
+}
+
 .devise {
   height: 1.38em;
   background-image: $logo-devise;
