@@ -31,6 +31,8 @@ import { AdaptateurDeVerificationDeDemande } from '../../src/adaptateurs/Adaptat
 import { AdaptateurAseptisationDeTest } from '../adaptateurs/AdaptateurAseptisationDeTest';
 import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 import { unAdaptateurRechercheEntreprise } from '../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
+import { AdaptateurCmsCrispMACMemoire } from '../adaptateurs/AdaptateurCmsCrispMACMemoire';
+import { AdaptateurCmsCrispMAC } from '../../src/adaptateurs/AdaptateurCmsCrispMAC';
 
 const PORT_DISPONIBLE = 0;
 
@@ -75,7 +77,8 @@ class TesteurIntegrationMAC {
     },
     public adaptateurMetabase: AdaptateurMetabaseMemoire = new AdaptateurMetabaseMemoire(),
     public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest(),
-    public adaptateurDeRechercheEntreprise = unAdaptateurRechercheEntreprise().construis()
+    public adaptateurDeRechercheEntreprise = unAdaptateurRechercheEntreprise().construis(),
+    public adaptateurCmsCrisp: AdaptateurCmsCrispMAC = new AdaptateurCmsCrispMACMemoire()
   ) {}
 
   initialise() {
@@ -119,6 +122,7 @@ class TesteurIntegrationMAC {
       repertoireDeContacts: this.repertoireDeContacts,
       adaptateurProConnect: this.adaptateurProConnect,
       adaptateurRechercheEntreprise: this.adaptateurDeRechercheEntreprise,
+      adaptateurCmsCrisp: this.adaptateurCmsCrisp,
       estEnMaintenance: false,
       redirigeVersUrlBase: (
         _requete: Request,
