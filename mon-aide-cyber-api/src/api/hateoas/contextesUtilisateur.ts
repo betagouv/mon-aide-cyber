@@ -28,8 +28,12 @@ import {
 import { lancerDiagnostic } from './diagnostic';
 import { rechercheEntreprise } from './rechercheEntreprise';
 import { afficherAssociations } from './afficherAssociations';
+import { afficherGuideAidantCyber } from './articles';
 
 type ClefContexte =
+  | 'afficher-statistiques'
+  | 'afficher-annuaire-aidants'
+  | 'afficher-guide-aidant-cyber'
   | 'aidant'
   | 'aidant:acceder-au-profil'
   | 'aidant:acceder-aux-informations-utilisateur'
@@ -39,8 +43,6 @@ type ClefContexte =
   | 'se-connecter'
   | 'se-deconnecter'
   | 'se-deconnecter-avec-pro-connect'
-  | 'afficher-statistiques'
-  | 'afficher-annuaire-aidants'
   | 'reinitialisation-mot-de-passe'
   | 'utiliser-outil-diagnostic'
   | 'valider-profil'
@@ -76,6 +78,9 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
   },
   'afficher-annuaire-aidants': {
     ...afficherAnnuaireAidants,
+  },
+  'afficher-guide-aidant-cyber': {
+    ...afficherGuideAidantCyber,
   },
   'reinitialisation-mot-de-passe': {
     ...reinitialiserMotDePasse,
