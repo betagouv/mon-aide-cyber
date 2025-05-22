@@ -1,6 +1,5 @@
 import { CmsCrisp, PageHtmlCrisp } from '@lab-anssi/lib';
 import { adaptateurEnvironnement } from './adaptateurEnvironnement';
-import { AdaptateurCmsCrispMACMemoire } from '../../test/adaptateurs/AdaptateurCmsCrispMACMemoire';
 
 export type Article = PageHtmlCrisp;
 
@@ -15,10 +14,21 @@ class AdaptateurCmsCrispMACConcret implements AdaptateurCmsCrispMAC {
     this.cmsCrisp = new CmsCrisp(idSite, clefAPI);
   }
 
-  async recupereGuideAidantCyber(): Promise<PageHtmlCrisp> {
+  async recupereGuideAidantCyber(): Promise<Article> {
     return await this.cmsCrisp.recupereArticle(
       adaptateurEnvironnement.crisp()?.guideAidantCyber ?? ''
     );
+  }
+}
+
+class AdaptateurCmsCrispMACMemoire implements AdaptateurCmsCrispMAC {
+  async recupereGuideAidantCyber(): Promise<Article> {
+    return {
+      titre: 'Un article',
+      contenu: 'Un contenu',
+      description: 'Une description',
+      tableDesMatieres: [],
+    };
   }
 }
 
