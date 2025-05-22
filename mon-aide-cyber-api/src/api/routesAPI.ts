@@ -13,6 +13,7 @@ import { routesAPIProfil } from './aidant/routesAPIProfil';
 import { routesAPIAnnuaireAidants } from './annuaire-aidants/routeAPIAnnuaireAidants';
 import { routesAPIDiagnosticLibreAcces } from './diagnostic-libre-acces/routesAPIDiagnosticLibreAcces';
 import { routesAPIRechercheEntreprise } from './recherche-entreprise/routesAPIRechercheEntreprise';
+import { routesAPIArticles } from './articles/routeAPIArticles';
 
 export interface RequeteUtilisateur<
   CORPS = void,
@@ -52,6 +53,7 @@ const routesAPI = (configuration: ConfigurationServeur) => {
     '/recherche-entreprise',
     routesAPIRechercheEntreprise(configuration)
   );
+  routes.use('/articles', routesAPIArticles(configuration));
 
   return routes;
 };
