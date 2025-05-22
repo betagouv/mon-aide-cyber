@@ -84,6 +84,21 @@ const trustProxy = (): number | string => {
   }
 };
 
+type ConfigurationCrisp = {
+  idSite: string;
+  clefAPI: string;
+  guideAidantCyber: string;
+};
+const crisp = (): ConfigurationCrisp | undefined => {
+  if (!process.env.CRISP_ID_SITE || !process.env.CRISP_CLEF_API)
+    return undefined;
+  return {
+    idSite: process.env.CRISP_ID_SITE,
+    clefAPI: process.env.CRISP_CLEF_API,
+    guideAidantCyber: process.env.CRISP_ID_GUIDE_AIDANT_CYBER || '',
+  };
+};
+
 const ipAutorisees = (): false | string[] =>
   process.env.RESEAU_ADRESSES_IP_AUTORISEES?.split(',') ?? false;
 
@@ -100,6 +115,7 @@ const adaptateurEnvironnement = {
   reseauTrustProxy: trustProxy,
   ipAutorisees,
   brevo,
+  crisp,
 };
 
 export { sentry, adaptateurEnvironnement };
