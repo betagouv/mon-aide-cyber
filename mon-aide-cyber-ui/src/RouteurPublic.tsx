@@ -27,6 +27,7 @@ import { EcranRealiserDesDiagnosticsANSSI } from './domaine/vitrine/ecran-realis
 import { EcranRelaisAssociatifs } from './domaine/vitrine/ecran-relais-associatifs/EcranRelaisAssociatifs.tsx';
 import { EcranSecurite } from './domaine/vitrine/ecran-securite/EcranSecurite.tsx';
 import { EcranRepondreAUneDemande } from './domaine/gestion-demandes/repondre-a-une-demande/EcranRepondreAUneDemande.tsx';
+import { EcranGuideDesAidantsCyber } from './domaine/vitrine/guide-des-aidants-cyber/EcranGuideDesAidantsCyber.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -49,6 +50,10 @@ export const RouteurPublic = () => {
           </Route>
           <Route path="etre-aide" element={<EcranBeneficierDuDispositif />} />
         </Route>
+        <Route
+          path="guide-des-aidants-cyber"
+          element={<EcranGuideDesAidantsCyber />}
+        />
         <Route path="kit-de-communication" element={<KitDeCommunication />} />
         <Route
           path="realiser-des-diagnostics-anssi"

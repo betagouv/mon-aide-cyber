@@ -14,10 +14,11 @@ export type ReponseHATEOAS = {
 export type Action =
   | `afficher-diagnostic-${UUID}`
   | 'repondre-diagnostic'
+  | 'afficher-annuaire-aidants'
+  | 'afficher-guide-aidant-cyber'
   | 'afficher-preferences'
   | 'afficher-profil'
   | 'afficher-tableau-de-bord'
-  | 'afficher-annuaire-aidants'
   | 'valider-signature-cgu'
   | 'demander-aide'
   | 'solliciter-aide'
