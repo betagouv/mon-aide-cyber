@@ -5,7 +5,7 @@ import { MenuCrispDesktop } from './MenuCrispDesktop.tsx';
 import './article-crisp.scss';
 import useDefilementFluide from '../../hooks/useDefilementFluide.ts';
 
-const synchroniseMenuEtContenu = () => {
+function synchroniseMenuEtContenu() {
   const observateurDIntersection = new IntersectionObserver(
     (entries) => {
       entries.forEach((section) => {
@@ -33,11 +33,11 @@ const synchroniseMenuEtContenu = () => {
   lesSections.forEach((s) => observateurDIntersection.observe(s));
   return () =>
     lesSections.forEach((s) => observateurDIntersection.unobserve(s));
-};
+}
 
 export function ArticleCrisp(props: { article: ReponseArticle }) {
   useDefilementFluide();
-  useEffect(() => synchroniseMenuEtContenu(), []);
+  useEffect(() => synchroniseMenuEtContenu(), [props.article]);
 
   return (
     <main role="main" className="page-crisp">
