@@ -1,10 +1,16 @@
 @import '../../assets/styles/points-de-rupture';
 
+:root {
+  // Fais fonctionner les numéros des listes qui se suivent
+  --ol-content:  unset;
+}
+
 body:has(details[open]) {
   overflow: hidden;
 }
 
 .page-crisp {
+
   .chapeau {
     background: var(--couleurs-mac-violet-fonce);
     padding: 24px var(--gouttiere) 40px;
