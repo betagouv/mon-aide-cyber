@@ -7,6 +7,8 @@ export interface AdaptateurCmsCrispMAC {
   recupereGuideAidantCyber(): Promise<Article>;
 
   promouvoirDiagnosticCyber(): Promise<Article>;
+
+  promouvoirCommunauteAidantsCyber(): Promise<Article>;
 }
 
 class AdaptateurCmsCrispMACConcret implements AdaptateurCmsCrispMAC {
@@ -14,6 +16,10 @@ class AdaptateurCmsCrispMACConcret implements AdaptateurCmsCrispMAC {
 
   constructor(idSite: string, clefAPI: string) {
     this.cmsCrisp = new CmsCrisp(idSite, clefAPI);
+  }
+
+  promouvoirCommunauteAidantsCyber(): Promise<PageHtmlCrisp> {
+    throw new Error('Method not implemented.');
   }
 
   async promouvoirDiagnosticCyber(): Promise<PageHtmlCrisp> {
@@ -36,6 +42,10 @@ class AdaptateurCmsCrispMACMemoire implements AdaptateurCmsCrispMAC {
     description: 'Une description',
     tableDesMatieres: [],
   };
+
+  async promouvoirCommunauteAidantsCyber(): Promise<PageHtmlCrisp> {
+    return this.articeBouchone;
+  }
 
   async promouvoirDiagnosticCyber(): Promise<PageHtmlCrisp> {
     return this.articeBouchone;

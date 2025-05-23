@@ -13,6 +13,10 @@ export const routesAPIArticles = (configuration: ConfigurationServeur) => {
       'promouvoir-diagnostic-cyber',
       () => adaptateurCmsCrisp.promouvoirDiagnosticCyber(),
     ],
+    [
+      'promouvoir-communaute-aidants-cyber',
+      () => adaptateurCmsCrisp.promouvoirCommunauteAidantsCyber(),
+    ],
   ]);
 
   routes.get(

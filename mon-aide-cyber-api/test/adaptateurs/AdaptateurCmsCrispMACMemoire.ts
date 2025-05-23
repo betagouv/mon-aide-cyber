@@ -7,6 +7,10 @@ import {
 export class AdaptateurCmsCrispMACMemoire implements AdaptateurCmsCrispMAC {
   private articleARetourner: Map<string, Article> = new Map();
 
+  async promouvoirCommunauteAidantsCyber(): Promise<PageHtmlCrisp> {
+    return this.articleARetourner.get('promouvoir-communaute-aidants-cyber')!;
+  }
+
   async recupereGuideAidantCyber(): Promise<Article> {
     return this.articleARetourner.get('guide-aidant-cyber')!;
   }
