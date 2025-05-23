@@ -75,4 +75,18 @@ describe('Articles', () => {
       });
     }
   );
+
+  it('Retourne une erreur HTTP 404 si l’article n’existe pas', async () => {
+    const reponse = await executeRequete(
+      donneesServeur.app,
+      'GET',
+      `/api/articles/article-inconnu`
+    );
+
+    expect(reponse.statusCode).toBe(404);
+    const contenu = await reponse.json();
+    expect(contenu).toStrictEqual<{ message: string }>({
+      message: 'L’article demandé n’est pas disponible.',
+    });
+  });
 });
