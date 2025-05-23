@@ -3,7 +3,7 @@ import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useQuery } from '@tanstack/react-query';
 import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
 import './article-crisp.scss';
-import { MenuLateralCrispMobile } from './MenuLateralCrispMobile.tsx';
+import { MenuCrispMobile } from './MenuCrispMobile.tsx';
 import { ReponseArticle } from './Crisp.types.ts';
 
 export const EcranGuideDesAidantsCyber = () => {
@@ -38,7 +38,7 @@ export const EcranGuideDesAidantsCyber = () => {
       <div className="chapeau">
         <h1 className="fr-container">{data?.titre}</h1>
       </div>
-      <MenuLateralCrispMobile
+      <MenuCrispMobile
         tableDesMatieres={data?.tableDesMatieres.filter(
           (e) => e.profondeur === 2
         )}
