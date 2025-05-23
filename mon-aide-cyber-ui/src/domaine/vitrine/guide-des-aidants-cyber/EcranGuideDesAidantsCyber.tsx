@@ -2,11 +2,11 @@ import { constructeurParametresAPI } from '../../../fournisseurs/api/Constructeu
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useQuery } from '@tanstack/react-query';
 import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
-import './article-crisp.scss';
-import './synchro-menu-crisp.js';
-import { MenuCrispMobile } from './MenuCrispMobile.tsx';
-import { ReponseArticle } from './Crisp.types.ts';
-import { MenuCrispDesktop } from './MenuCrispDesktop.tsx';
+import '../../crisp/article-crisp.scss';
+import '../../crisp/synchro-menu-crisp.js';
+import { MenuCrispMobile } from '../../crisp/MenuCrispMobile.tsx';
+import { ReponseArticle } from '../../crisp/Crisp.types.ts';
+import { MenuCrispDesktop } from '../../crisp/MenuCrispDesktop.tsx';
 
 export const EcranGuideDesAidantsCyber = () => {
   const macAPI = useMACAPI();
