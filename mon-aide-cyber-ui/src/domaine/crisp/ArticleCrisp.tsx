@@ -16,9 +16,13 @@ const synchroniseMenuEtContenu = () => {
 
         if (!lesLiens) return;
 
-        if (section.isIntersecting)
+        if (section.isIntersecting) {
           lesLiens.forEach((l) => l.parentElement!.classList.add('actif'));
-        else
+
+          const menuMobileVisible = document.querySelector('#section-active');
+          if (menuMobileVisible)
+            menuMobileVisible.textContent = titreDeLaSection!.textContent;
+        } else
           lesLiens.forEach((l) => l.parentElement!.classList.remove('actif'));
       });
     },
