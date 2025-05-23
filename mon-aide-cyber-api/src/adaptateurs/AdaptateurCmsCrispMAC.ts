@@ -5,6 +5,8 @@ export type Article = PageHtmlCrisp;
 
 export interface AdaptateurCmsCrispMAC {
   recupereGuideAidantCyber(): Promise<Article>;
+
+  promouvoirDiagnosticCyber(): Promise<Article>;
 }
 
 class AdaptateurCmsCrispMACConcret implements AdaptateurCmsCrispMAC {
@@ -12,6 +14,10 @@ class AdaptateurCmsCrispMACConcret implements AdaptateurCmsCrispMAC {
 
   constructor(idSite: string, clefAPI: string) {
     this.cmsCrisp = new CmsCrisp(idSite, clefAPI);
+  }
+
+  promouvoirDiagnosticCyber(): Promise<PageHtmlCrisp> {
+    throw new Error('Method not implemented.');
   }
 
   async recupereGuideAidantCyber(): Promise<Article> {
@@ -22,13 +28,18 @@ class AdaptateurCmsCrispMACConcret implements AdaptateurCmsCrispMAC {
 }
 
 class AdaptateurCmsCrispMACMemoire implements AdaptateurCmsCrispMAC {
+  private articeBouchone = {
+    titre: 'Un article',
+    contenu: 'Un contenu',
+    description: 'Une description',
+    tableDesMatieres: [],
+  };
+
+  async promouvoirDiagnosticCyber(): Promise<PageHtmlCrisp> {
+    return this.articeBouchone;
+  }
   async recupereGuideAidantCyber(): Promise<Article> {
-    return {
-      titre: 'Un article',
-      contenu: 'Un contenu',
-      description: 'Une description',
-      tableDesMatieres: [],
-    };
+    return this.articeBouchone;
   }
 }
 

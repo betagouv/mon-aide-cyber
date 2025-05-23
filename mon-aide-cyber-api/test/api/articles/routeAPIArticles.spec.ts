@@ -5,6 +5,15 @@ import { Express } from 'express';
 import { AdaptateurCmsCrispMACMemoire } from '../../adaptateurs/AdaptateurCmsCrispMACMemoire';
 import { unArticle } from '../../constructeurs/constructeurArticle';
 import { ReponseArticle } from '../../../src/api/articles/routeAPIArticles';
+import { Article } from '../../../src/adaptateurs/AdaptateurCmsCrispMAC';
+
+type ParametresDeTest = {
+  nomArticle: string;
+  resultatAttendu: {
+    lienPresent: { nom: string; url: string };
+    articleAttendu: Article;
+  };
+};
 
 describe('Articles', () => {
   const testeurMAC = testeurIntegration();
@@ -14,28 +23,56 @@ describe('Articles', () => {
     donneesServeur = testeurMAC.initialise();
   });
 
-  it('Retourne l’article fourni en paramètre', async () => {
+  const retourneArticleAttendu = (nomArticle: string, article: Article) => {
     (
       testeurMAC.adaptateurCmsCrisp as AdaptateurCmsCrispMACMemoire
-    ).retourneArticle(
-      unArticle()
-        .avecLeTitre('Un titre')
-        .avecLaDescription('Une description')
-        .avecLeContenu('un contenu')
-        .construis()
-    );
-    const reponse = await executeRequete(
-      donneesServeur.app,
-      'GET',
-      '/api/articles/un-article'
-    );
+    ).retourneArticle(nomArticle, article);
+  };
 
-    expect(reponse.statusCode).toBe(200);
-    expect(await reponse.json()).toStrictEqual<ReponseArticle>({
-      titre: 'Un titre',
-      contenu: 'un contenu',
-      description: 'Une description',
-      tableDesMatieres: [],
-    });
-  });
+  it.each<ParametresDeTest>([
+    {
+      nomArticle: 'guide-aidant-cyber',
+      resultatAttendu: {
+        lienPresent: {
+          nom: 'afficher-guide-aidant-cyber',
+          url: '/api/articles/guide-aidant-cyber',
+        },
+        articleAttendu: unArticle()
+          .avecLeTitre('Un titre')
+          .avecLaDescription('Une description')
+          .avecLeContenu('Un contenu')
+          .construis(),
+      },
+    },
+    {
+      nomArticle: 'promouvoir-diagnostic-cyber',
+      resultatAttendu: {
+        lienPresent: {
+          nom: 'afficher-promouvoir-diagnostic-cyber',
+          url: '/api/articles/promouvoir-diagnostic-cyber',
+        },
+        articleAttendu: unArticle()
+          .avecLeTitre('Promouvoir')
+          .avecLaDescription('Promouvoir le diagnostic')
+          .avecLeContenu('Un contenu de promotion')
+          .construis(),
+      },
+    },
+  ])(
+    'Retourne l’article $nomArticle fourni en paramètre',
+    async ({ nomArticle, resultatAttendu }) => {
+      retourneArticleAttendu(nomArticle, resultatAttendu.articleAttendu);
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/articles/${nomArticle}`
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      const contenu = await reponse.json();
+      expect(contenu).toStrictEqual<ReponseArticle>({
+        ...resultatAttendu.articleAttendu,
+      });
+    }
+  );
 });
