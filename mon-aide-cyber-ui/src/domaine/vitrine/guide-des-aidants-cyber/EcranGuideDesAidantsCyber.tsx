@@ -1,12 +1,9 @@
+import { useQuery } from '@tanstack/react-query';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
-import { useQuery } from '@tanstack/react-query';
 import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
-import '../../crisp/article-crisp.scss';
-import '../../crisp/synchro-menu-crisp.js';
-import { MenuCrispMobile } from '../../crisp/MenuCrispMobile.tsx';
 import { ReponseArticle } from '../../crisp/Crisp.types.ts';
-import { MenuCrispDesktop } from '../../crisp/MenuCrispDesktop.tsx';
+import { ArticleCrisp } from '../../crisp/ArticleCrisp.tsx';
 
 export const EcranGuideDesAidantsCyber = () => {
   const macAPI = useMACAPI();
@@ -48,22 +45,5 @@ export const EcranGuideDesAidantsCyber = () => {
     return <Toast className="w-100" type="ERREUR" message={error.message} />;
   }
 
-  return (
-    <main role="main" className="page-crisp">
-      <div className="chapeau">
-        <h1 className="fr-container">{articleJson?.titre}</h1>
-      </div>
-      <MenuCrispMobile tableDesMatieres={articleJson?.tableDesMatieres} />
-      <div className="article fr-container">
-        <div className="contenu-section">
-          <MenuCrispDesktop tableDesMatieres={articleJson?.tableDesMatieres} />
-
-          <div
-            className="contenu"
-            dangerouslySetInnerHTML={{ __html: articleJson?.contenu || '' }}
-          ></div>
-        </div>
-      </div>
-    </main>
-  );
+  return <ArticleCrisp article={articleJson} />;
 };
