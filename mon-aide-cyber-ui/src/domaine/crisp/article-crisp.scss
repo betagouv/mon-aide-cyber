@@ -194,35 +194,49 @@ body:has(details[open]) {
     }
   }
 
-  .information {
-    background: #e8edff;
+  .information, .alerte, .aide {
     padding: 16px;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+    align-self: stretch;
     gap: 4px;
     margin: 16px 0;
     font-size: 14px;
-    color: #0163cb;
-    border-left: 3px solid #0079d0;
+
+    a {
+      background-image: none;
+    }
+  }
+
+  .information {
+    background: var(--couleurs-mac-violet-clair);
+    color: var(--couleurs-mac-violet-fonce);
+    border-left: 3px solid var(--couleurs-mac-violet-fonce);
+
+    &:before {
+      content: 'Information';
+      font-weight: bold;
+    }
+  }
+
+  .alerte {
+    color: var(--bleu-survol);
+    border-left: 3px solid #faa72c;
+    background: #fff2de;
+
+    &:before {
+      content: 'Alerte';
+      font-weight: bold;
+    }
   }
 
   .aide {
     background: #f6f6f6;
     position: relative;
     padding: 20px 16px 16px 64px;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 4px;
-    align-self: stretch;
-    margin: 16px 0;
-    font-size: 14px;
-    z-index: -1;
 
     &:before {
       content: '';
@@ -236,10 +250,6 @@ body:has(details[open]) {
     }
   }
 
-  .information:before {
-    content: 'Information';
-    font-weight: bold;
-  }
 
   h2 {
     font-size: 1.75rem;
