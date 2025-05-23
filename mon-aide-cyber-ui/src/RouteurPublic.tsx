@@ -52,11 +52,21 @@ export const RouteurPublic = () => {
         </Route>
         <Route
           path="guide-des-aidants-cyber"
-          element={<PageCrisp idArticle="guide-aidant-cyber" />}
+          element={
+            <PageCrisp
+              idArticle="guide-aidant-cyber"
+              key="guide-des-aidants-cyber"
+            />
+          }
         />
         <Route
           path="promouvoir-diagnostic-cyber"
-          element={<PageCrisp idArticle="promouvoir-diagnostic-cyber" />}
+          element={
+            <PageCrisp
+              idArticle="promouvoir-diagnostic-cyber"
+              key="promouvoir-diagnostic-cyber"
+            />
+          }
         />
         <Route path="kit-de-communication" element={<KitDeCommunication />} />
         <Route
