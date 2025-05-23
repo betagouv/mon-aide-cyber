@@ -9,10 +9,7 @@ import { Article } from '../../../src/adaptateurs/AdaptateurCmsCrispMAC';
 
 type ParametresDeTest = {
   nomArticle: string;
-  resultatAttendu: {
-    lienPresent: { nom: string; url: string };
-    articleAttendu: Article;
-  };
+  articleAttendu: Article;
 };
 
 describe('Articles', () => {
@@ -32,36 +29,32 @@ describe('Articles', () => {
   it.each<ParametresDeTest>([
     {
       nomArticle: 'guide-aidant-cyber',
-      resultatAttendu: {
-        lienPresent: {
-          nom: 'afficher-guide-aidant-cyber',
-          url: '/api/articles/guide-aidant-cyber',
-        },
-        articleAttendu: unArticle()
-          .avecLeTitre('Un titre')
-          .avecLaDescription('Une description')
-          .avecLeContenu('Un contenu')
-          .construis(),
-      },
+      articleAttendu: unArticle()
+        .avecLeTitre('Un titre')
+        .avecLaDescription('Une description')
+        .avecLeContenu('Un contenu')
+        .construis(),
     },
     {
       nomArticle: 'promouvoir-diagnostic-cyber',
-      resultatAttendu: {
-        lienPresent: {
-          nom: 'afficher-promouvoir-diagnostic-cyber',
-          url: '/api/articles/promouvoir-diagnostic-cyber',
-        },
-        articleAttendu: unArticle()
-          .avecLeTitre('Promouvoir')
-          .avecLaDescription('Promouvoir le diagnostic')
-          .avecLeContenu('Un contenu de promotion')
-          .construis(),
-      },
+      articleAttendu: unArticle()
+        .avecLeTitre('Promouvoir')
+        .avecLaDescription('Promouvoir le diagnostic')
+        .avecLeContenu('Un contenu de promotion')
+        .construis(),
+    },
+    {
+      nomArticle: 'promouvoir-communaute-aidants-cyber',
+      articleAttendu: unArticle()
+        .avecLeTitre('Promouvoir')
+        .avecLaDescription('Promouvoir la communauté d’Aidants')
+        .avecLeContenu('Un contenu de promotion')
+        .construis(),
     },
   ])(
     'Retourne l’article $nomArticle fourni en paramètre',
-    async ({ nomArticle, resultatAttendu }) => {
-      retourneArticleAttendu(nomArticle, resultatAttendu.articleAttendu);
+    async ({ nomArticle, articleAttendu }) => {
+      retourneArticleAttendu(nomArticle, articleAttendu);
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
@@ -70,9 +63,7 @@ describe('Articles', () => {
 
       expect(reponse.statusCode).toBe(200);
       const contenu = await reponse.json();
-      expect(contenu).toStrictEqual<ReponseArticle>({
-        ...resultatAttendu.articleAttendu,
-      });
+      expect(contenu).toStrictEqual<ReponseArticle>(articleAttendu);
     }
   );
 
