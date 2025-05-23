@@ -115,7 +115,7 @@ body:has(details[open]) {
     display: flex;
     flex-direction: column;
     position: sticky;
-    top: 167px;
+    top: 196px;
   }
 
   ul {
@@ -131,12 +131,13 @@ body:has(details[open]) {
         font-weight: bold;
 
         a {
-          border-left: 2px solid var(--jaune-msc);
+          border-left: 2px solid var(--couleurs-mac-violet-clair);
           padding-left: 6px;
         }
       }
 
       a {
+        background-image: none;
         border-bottom: none;
         text-decoration: none;
         padding-left: 8px;
