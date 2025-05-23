@@ -17,8 +17,20 @@ export const routesAPIArticles = (configuration: ConfigurationServeur) => {
 
   routes.get(
     '/:article',
-    async (requete: Request, reponse: Response<ReponseArticle>) => {
-      const article = await articlesCrisp.get(requete.params.article)!();
+    async (
+      requete: Request,
+      reponse: Response<ReponseArticle | { message: string }>
+    ) => {
+      const appelCrisp: (() => Promise<Article>) | undefined =
+        articlesCrisp.get(requete.params.article);
+
+      if (typeof appelCrisp !== 'function') {
+        return reponse.status(404).json({
+          message: 'L’article demandé n’est pas disponible.',
+        });
+      }
+
+      const article = await appelCrisp();
       return reponse.status(200).json(article);
     }
   );
