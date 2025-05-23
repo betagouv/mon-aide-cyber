@@ -130,8 +130,7 @@ class ConstructeurActionsHATEOAS {
       contexte: 'demande-devenir-aidant:demande-devenir-aidant',
     })
       .pour({ contexte: 'demande-etre-aide' })
-      .pour({ contexte: 'se-connecter' })
-      .pour({ contexte: 'afficher-guide-aidant-cyber' });
+      .pour({ contexte: 'se-connecter' });
     return this;
   }
 
