@@ -1,5 +1,6 @@
-import { TableDesMatieres } from './Crisp.types.ts';
 import { useRef } from 'react';
+import { TableDesMatieres } from './Crisp.types.ts';
+import './synchro-menu-mobile.js';
 
 export const MenuLateralCrispMobile = ({
   tableDesMatieres,
