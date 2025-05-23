@@ -3,6 +3,7 @@ import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useQuery } from '@tanstack/react-query';
 import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
 import './article-crisp.scss';
+import './synchro-menu-crisp.js';
 import { MenuCrispMobile } from './MenuCrispMobile.tsx';
 import { ReponseArticle } from './Crisp.types.ts';
 import { MenuCrispDesktop } from './MenuCrispDesktop.tsx';
