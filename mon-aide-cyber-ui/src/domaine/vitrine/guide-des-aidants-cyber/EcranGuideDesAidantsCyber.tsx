@@ -5,11 +5,17 @@ import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
 import './article-crisp.scss';
 import { MenuCrispMobile } from './MenuCrispMobile.tsx';
 import { ReponseArticle } from './Crisp.types.ts';
+import { MenuCrispDesktop } from './MenuCrispDesktop.tsx';
 
 export const EcranGuideDesAidantsCyber = () => {
   const macAPI = useMACAPI();
 
-  const { data, isPending, isError, error } = useQuery({
+  const {
+    data: articleJson,
+    isPending,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ['afficher-guide-aidant-cyber'],
     queryFn: (): Promise<ReponseArticle> =>
       macAPI.execute<ReponseArticle, ReponseArticle>(
@@ -17,7 +23,15 @@ export const EcranGuideDesAidantsCyber = () => {
           .url('/api/articles/guide-aidant-cyber')
           .methode('GET')
           .construis(),
-        (reponse) => reponse
+        async (reponse) => {
+          const contenu = await reponse;
+          return {
+            ...contenu,
+            tableDesMatieres: contenu.tableDesMatieres.filter(
+              (e) => e.profondeur === 2
+            ),
+          };
+        }
       ),
   });
 
@@ -36,29 +50,16 @@ export const EcranGuideDesAidantsCyber = () => {
   return (
     <main role="main" className="page-crisp">
       <div className="chapeau">
-        <h1 className="fr-container">{data?.titre}</h1>
+        <h1 className="fr-container">{articleJson?.titre}</h1>
       </div>
-      <MenuCrispMobile
-        tableDesMatieres={data?.tableDesMatieres.filter(
-          (e) => e.profondeur === 2
-        )}
-      />
+      <MenuCrispMobile tableDesMatieres={articleJson?.tableDesMatieres} />
       <div className="article fr-container">
         <div className="contenu-section">
-          <div className="sommaire sommaire-deplie">
-            <ul>
-              {data?.tableDesMatieres
-                .filter((e) => e.profondeur === 2)
-                .map((entree) => (
-                  <li key={entree.id}>
-                    <a href={`#${entree.id}`}>{entree.texte}</a>
-                  </li>
-                ))}
-            </ul>
-          </div>
+          <MenuCrispDesktop tableDesMatieres={articleJson?.tableDesMatieres} />
+
           <div
             className="contenu"
-            dangerouslySetInnerHTML={{ __html: data?.contenu || '' }}
+            dangerouslySetInnerHTML={{ __html: articleJson?.contenu || '' }}
           ></div>
         </div>
       </div>
