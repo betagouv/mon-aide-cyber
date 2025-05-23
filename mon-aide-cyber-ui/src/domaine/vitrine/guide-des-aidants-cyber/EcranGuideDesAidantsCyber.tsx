@@ -3,10 +3,7 @@ import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useQuery } from '@tanstack/react-query';
-import { TypographieH1 } from '../../../composants/communs/typographie/TypographieH1/TypographieH1.tsx';
 import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
-import HeroBloc from '../../../composants/communs/HeroBloc.tsx';
-import './ecran-guide-des-aidants-cyber.scss';
 import './article-crisp.scss';
 import { MenuLateralCrispMobile } from './MenuLateralCrispMobile.tsx';
 import { ReponseArticle } from './Crisp.types.ts';
@@ -52,14 +49,10 @@ export const EcranGuideDesAidantsCyber = () => {
     return <Toast className="w-100" type="ERREUR" message={error.message} />;
   }
   return (
-    <main role="main" className="ecran-guide-des-aidants-cyber">
-      <HeroBloc>
-        <div className="fr-container hero-layout">
-          <section>
-            <TypographieH1>{data?.titre}</TypographieH1>
-          </section>
-        </div>
-      </HeroBloc>
+    <main role="main" className="page-crisp">
+      <div className="chapeau">
+        <h1>{data?.titre}</h1>
+      </div>
       <MenuLateralCrispMobile
         tableDesMatieres={data?.tableDesMatieres.filter(
           (e) => e.profondeur === 2
