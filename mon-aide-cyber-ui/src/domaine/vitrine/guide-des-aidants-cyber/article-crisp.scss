@@ -4,6 +4,25 @@ body:has(details[open]) {
   overflow: hidden;
 }
 
+.page-crisp {
+  .chapeau {
+    background: var(--couleurs-mac-violet-fonce);
+    padding: 24px var(--gouttiere) 40px;
+
+    h1 {
+      color: white;
+      font-size: 2.5rem;
+      line-height: 2.875rem;
+
+      @include a-partir-de(md) {
+        font-size: 3.5rem;
+        line-height: 3.875rem;
+        margin-top: 24px;
+      }
+    }
+  }
+}
+
 .sommaire-replie {
   padding: 12px var(--gouttiere);
   border: 1px solid #ddd;
