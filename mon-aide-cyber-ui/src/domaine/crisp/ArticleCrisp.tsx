@@ -3,8 +3,11 @@ import { MenuCrispMobile } from './MenuCrispMobile.tsx';
 import { MenuCrispDesktop } from './MenuCrispDesktop.tsx';
 import './article-crisp.scss';
 import './synchro-menu-crisp.js';
+import useDefilementFluide from '../../hooks/useDefilementFluide.ts';
 
 export function ArticleCrisp(props: { article: ReponseArticle }) {
+  useDefilementFluide();
+
   return (
     <main role="main" className="page-crisp">
       <div className="chapeau">
