@@ -18,8 +18,10 @@ class AdaptateurCmsCrispMACConcret implements AdaptateurCmsCrispMAC {
     this.cmsCrisp = new CmsCrisp(idSite, clefAPI);
   }
 
-  promouvoirCommunauteAidantsCyber(): Promise<PageHtmlCrisp> {
-    throw new Error('Method not implemented.');
+  async promouvoirCommunauteAidantsCyber(): Promise<PageHtmlCrisp> {
+    return await this.cmsCrisp.recupereArticle(
+      adaptateurEnvironnement.crisp()?.promouvoirCommunauteAidantsCyber ?? ''
+    );
   }
 
   async promouvoirDiagnosticCyber(): Promise<PageHtmlCrisp> {
