@@ -235,18 +235,19 @@ body:has(details[open]) {
 
   .aide {
     background: #f6f6f6;
-    position: relative;
-    padding: 20px 16px 16px 64px;
+    flex-direction: row;
 
     &:before {
       content: '';
       display: block;
       background-image: url('/images/icones/icone-aide.svg');
-      width: 24px;
+      background-repeat: no-repeat;
+      min-width: 36px;
       height: 24px;
-      position: absolute;
-      top: 20px;
-      left: 24px;
+    }
+
+    > div {
+      display: block;
     }
   }
 
