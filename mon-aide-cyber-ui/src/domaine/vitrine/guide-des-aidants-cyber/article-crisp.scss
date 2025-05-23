@@ -1,5 +1,8 @@
 @import './../../../assets/styles/points-de-rupture';
 
+body:has(details[open]) {
+  overflow: hidden;
+}
 
 .sommaire-replie {
   padding: 12px var(--gouttiere);
