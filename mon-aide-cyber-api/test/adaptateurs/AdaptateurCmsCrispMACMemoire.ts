@@ -1,17 +1,21 @@
-import { unArticle } from '../constructeurs/constructeurArticle';
+import { PageHtmlCrisp } from '@lab-anssi/lib';
 import {
   AdaptateurCmsCrispMAC,
   Article,
 } from '../../src/adaptateurs/AdaptateurCmsCrispMAC';
 
 export class AdaptateurCmsCrispMACMemoire implements AdaptateurCmsCrispMAC {
-  private articleARetourner: Article = unArticle().construis();
+  private articleARetourner: Map<string, Article> = new Map();
 
   async recupereGuideAidantCyber(): Promise<Article> {
-    return this.articleARetourner;
+    return this.articleARetourner.get('guide-aidant-cyber')!;
   }
 
-  retourneArticle(article: Article) {
-    this.articleARetourner = article;
+  async promouvoirDiagnosticCyber(): Promise<PageHtmlCrisp> {
+    return this.articleARetourner.get('promouvoir-diagnostic-cyber')!;
+  }
+
+  retourneArticle(nomArticle: string, article: Article) {
+    this.articleARetourner.set(nomArticle, article);
   }
 }

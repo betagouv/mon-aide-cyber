@@ -7,10 +7,18 @@ export const routesAPIArticles = (configuration: ConfigurationServeur) => {
 
   const { adaptateurCmsCrisp } = configuration;
 
+  const articlesCrisp: Map<string, () => Promise<Article>> = new Map([
+    ['guide-aidant-cyber', () => adaptateurCmsCrisp.recupereGuideAidantCyber()],
+    [
+      'promouvoir-diagnostic-cyber',
+      () => adaptateurCmsCrisp.promouvoirDiagnosticCyber(),
+    ],
+  ]);
+
   routes.get(
     '/:article',
-    async (_requete: Request, reponse: Response<ReponseArticle>) => {
-      const article = await adaptateurCmsCrisp.recupereGuideAidantCyber();
+    async (requete: Request, reponse: Response<ReponseArticle>) => {
+      const article = await articlesCrisp.get(requete.params.article)!();
       return reponse.status(200).json(article);
     }
   );
