@@ -68,6 +68,15 @@ export const RouteurPublic = () => {
             />
           }
         />
+        <Route
+          path="promouvoir-communaute-aidants-cyber"
+          element={
+            <PageCrisp
+              key="promouvoir-communaute-aidants-cyber"
+              idArticle="promouvoir-communaute-aidants-cyber"
+            />
+          }
+        />
         <Route path="kit-de-communication" element={<KitDeCommunication />} />
         <Route
           path="realiser-des-diagnostics-anssi"

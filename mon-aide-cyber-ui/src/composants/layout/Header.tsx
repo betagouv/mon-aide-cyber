@@ -57,6 +57,10 @@ export const Header = ({
           route: '/kit-de-communication',
           nom: 'Kit de communication',
         },
+        {
+          route: '/promouvoir-communaute-aidants-cyber',
+          nom: 'Promouvoir les Aidants cyber',
+        },
       ],
     },
   ];
