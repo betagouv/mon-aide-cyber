@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
-import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
-import { ReponseArticle } from '../../crisp/Crisp.types.ts';
-import { ArticleCrisp } from '../../crisp/ArticleCrisp.tsx';
+import { useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
+import { ReponseArticle } from './Crisp.types.ts';
+import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
+import { Toast } from '../../composants/communs/Toasts/Toast.tsx';
+import { ArticleCrisp } from './ArticleCrisp.tsx';
 
-export const EcranGuideDesAidantsCyber = () => {
+export const PageCrisp = ({ idArticle }: { idArticle: string }) => {
   const macAPI = useMACAPI();
 
   const {
@@ -14,11 +14,11 @@ export const EcranGuideDesAidantsCyber = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ['afficher-guide-aidant-cyber'],
+    queryKey: ['afficher-page-crisp'],
     queryFn: (): Promise<ReponseArticle> =>
       macAPI.execute<ReponseArticle, ReponseArticle>(
         constructeurParametresAPI()
-          .url('/api/articles/guide-aidant-cyber')
+          .url(`/api/articles/${idArticle}`)
           .methode('GET')
           .construis(),
         async (reponse) => {
