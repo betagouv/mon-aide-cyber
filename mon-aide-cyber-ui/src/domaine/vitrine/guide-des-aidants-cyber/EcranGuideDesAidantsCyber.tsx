@@ -1,5 +1,3 @@
-import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
-import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useQuery } from '@tanstack/react-query';
@@ -9,32 +7,18 @@ import { MenuLateralCrispMobile } from './MenuLateralCrispMobile.tsx';
 import { ReponseArticle } from './Crisp.types.ts';
 
 export const EcranGuideDesAidantsCyber = () => {
-  const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
 
   const { data, isPending, isError, error } = useQuery({
-    enabled: new MoteurDeLiens(navigationMAC.etat).existe(
-      'afficher-guide-aidant-cyber'
-    ),
     queryKey: ['afficher-guide-aidant-cyber'],
-    queryFn: (): Promise<ReponseArticle> => {
-      const afficherGuideAidantCyber = new MoteurDeLiens(
-        navigationMAC.etat
-      ).trouveEtRenvoie('afficher-guide-aidant-cyber');
-
-      if (!afficherGuideAidantCyber)
-        throw new Error(
-          `Une erreur est survenue lors de la récupération du guide de l’Aidant cyber`
-        );
-
-      return macAPI.execute<ReponseArticle, ReponseArticle>(
+    queryFn: (): Promise<ReponseArticle> =>
+      macAPI.execute<ReponseArticle, ReponseArticle>(
         constructeurParametresAPI()
-          .url(afficherGuideAidantCyber.url)
-          .methode(afficherGuideAidantCyber.methode!)
+          .url('/api/articles/guide-aidant-cyber')
+          .methode('GET')
           .construis(),
         (reponse) => reponse
-      );
-    },
+      ),
   });
 
   if (isPending) {
@@ -48,6 +32,7 @@ export const EcranGuideDesAidantsCyber = () => {
   if (isError) {
     return <Toast className="w-100" type="ERREUR" message={error.message} />;
   }
+
   return (
     <main role="main" className="page-crisp">
       <div className="chapeau">
