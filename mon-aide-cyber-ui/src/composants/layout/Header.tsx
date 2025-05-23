@@ -50,6 +50,10 @@ export const Header = ({
       clef: 776,
       enfants: [
         {
+          route: '/promouvoir-diagnostic-cyber',
+          nom: 'Promouvoir le diagnostic cyber',
+        },
+        {
           route: '/kit-de-communication',
           nom: 'Kit de communication',
         },
