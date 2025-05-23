@@ -88,6 +88,7 @@ type ConfigurationCrisp = {
   idSite: string;
   clefAPI: string;
   guideAidantCyber: string;
+  promouvoirDiagnosticCyber: string;
 };
 const crisp = (): ConfigurationCrisp | undefined => {
   if (!process.env.CRISP_ID_SITE || !process.env.CRISP_CLEF_API)
@@ -96,6 +97,8 @@ const crisp = (): ConfigurationCrisp | undefined => {
     idSite: process.env.CRISP_ID_SITE,
     clefAPI: process.env.CRISP_CLEF_API,
     guideAidantCyber: process.env.CRISP_ID_GUIDE_AIDANT_CYBER || '',
+    promouvoirDiagnosticCyber:
+      process.env.CRISP_ID_PROMOUVOIR_DIAGNOSTIC_CYBER || '',
   };
 };
 
