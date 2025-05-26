@@ -1,5 +1,6 @@
 import { useTitreDePage } from './hooks/useTitreDePage.ts';
 import { liensMesServicesCyber } from './infrastructure/mes-services-cyber/liens.ts';
+import { EncartDiagnosticCyber } from './composants/landing/EncartDiagnosticCyber.tsx';
 
 export const AccueilIntegrationUIKit = () => {
   useTitreDePage('Accueil');
@@ -134,6 +135,8 @@ export const AccueilIntegrationUIKit = () => {
             'https://ressources-mac.cellar-c2.services.clever-cloud.com/Video_MAC.mp4',
         })}
       ></lab-anssi-titre-multimedia>
+
+      <EncartDiagnosticCyber />
 
       <lab-anssi-marelle
         titre="Comment réaliser des diagnostics cyber ?"

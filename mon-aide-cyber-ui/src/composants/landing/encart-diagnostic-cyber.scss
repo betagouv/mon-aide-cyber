@@ -1,0 +1,58 @@
+section {
+  padding: 48px 16px;
+
+  .contenu {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #fff7db;
+    border-radius: 8px;
+
+    padding: 48px 16px;
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+      margin: 0 0 8px 0;
+    }
+
+    .details {
+      margin: 0 0 32px 0;
+    }
+
+    img {
+      max-width: 296px;
+      margin: 0 auto 32px;
+    }
+
+    a[role='button'] {
+      margin-bottom: 16px;
+      text-decoration: none;
+      padding: 8px 16px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 1rem;
+      line-height: 24px;
+      border-radius: 8px;
+      background-image: none;
+
+      &.action {
+        background-color: transparent;
+        color: #0d0c21;
+        border: 1px solid #0d0c21;
+        cursor: pointer;
+
+        &:active {
+          background-color: transparent;
+        }
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
+    }
+
+    .disclaimer {
+      margin: 0 0 16px 0;
+    }
+  }
+}
