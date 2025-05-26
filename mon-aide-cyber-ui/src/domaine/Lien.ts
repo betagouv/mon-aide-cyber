@@ -38,7 +38,6 @@ export type Action =
   | 'se-connecter-avec-pro-connect'
   | 'se-deconnecter'
   | 'afficher-statistiques'
-  | 'afficher-associations'
   | 'reinitialisation-mot-de-passe'
   | 'reinitialiser-mot-de-passe'
   | 'creer-diagnostic'
