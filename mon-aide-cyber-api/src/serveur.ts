@@ -31,7 +31,6 @@ import { adaptateurConfigurationLimiteurTraffic } from './api/adaptateurLimiteur
 import { AdaptateurDeVerificationDeTypeDeRelation } from './adaptateurs/AdaptateurDeVerificationDeTypeDeRelation';
 import { AdaptateurProConnect } from './adaptateurs/pro-connect/adaptateurProConnect';
 import { routesProConnect } from './api/pro-connect/routeProConnect';
-import { routesAssociations } from './api/associations/routesAssociations';
 import { AdaptateurDeVerificationDeDemande } from './adaptateurs/AdaptateurDeVerificationDeDemande';
 import { AdaptateurAseptisation } from './adaptateurs/AdaptateurAseptisation';
 import { RepertoireDeContacts } from './contacts/RepertoireDeContacts';
@@ -131,7 +130,6 @@ const creeApp = (config: ConfigurationServeur) => {
   );
 
   app.use('/api', routesAPI(config));
-  app.use('/associations', routesAssociations(config));
   app.use('/pro-connect', routesProConnect(config));
   app.use('/contact', routeContact(config));
   app.use('/statistiques', routesStatistiques(config));

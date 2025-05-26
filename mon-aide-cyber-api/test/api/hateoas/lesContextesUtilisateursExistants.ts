@@ -96,18 +96,6 @@ export const lesContextesUtilisateursNouveauParcoursExistants: ContextesUtilisat
       },
     },
     {
-      contexte: 'Afficher les associations',
-      informationContexte: {
-        contexte: 'afficher-associations',
-      },
-      liens: {
-        'afficher-associations': {
-          url: '/associations',
-          methode: 'GET',
-        },
-      },
-    },
-    {
       contexte: 'Afficher l’annuaire Aidants',
       informationContexte: {
         contexte: 'afficher-annuaire-aidants',
