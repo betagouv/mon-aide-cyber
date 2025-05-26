@@ -23,7 +23,6 @@ import { EcranDemandeAutodiagnostic } from './domaine/auto-diagnostic/EcranDeman
 import { EcranDemandeDevenirAidant } from './domaine/gestion-demandes/parcours-aidant/EcranDemandeDevenirAidant.tsx';
 import { EcranUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/vitrine/EcranUtilisationDuService.tsx';
 import { EcranRealiserDesDiagnosticsANSSI } from './domaine/vitrine/ecran-realiser-des-diagnostics-anssi/EcranRealiserDesDiagnosticsANSSI.tsx';
-import { EcranRelaisAssociatifs } from './domaine/vitrine/ecran-relais-associatifs/EcranRelaisAssociatifs.tsx';
 import { EcranSecurite } from './domaine/vitrine/ecran-securite/EcranSecurite.tsx';
 import { EcranRepondreAUneDemande } from './domaine/gestion-demandes/repondre-a-une-demande/EcranRepondreAUneDemande.tsx';
 import { PageCrisp } from './domaine/crisp/PageCrisp.tsx';
@@ -41,7 +40,15 @@ export const RouteurPublic = () => {
         <Route path="cgu" element={<ComposantCGU />} />
         <Route path="securite" element={<EcranSecurite />} />
         <Route path="charte-aidant" element={<EcranCharteAidant />} />
-        <Route path="relais-associatifs" element={<EcranRelaisAssociatifs />} />
+        <Route
+          path="relais-associatifs"
+          element={
+            <PageCrisp
+              idArticle="relais-associatifs"
+              key="relais-associatifs"
+            />
+          }
+        />
         <Route path="beneficier-du-dispositif">
           <Route path="annuaire">
             <Route index element={<EcranAnnuaire />} />
