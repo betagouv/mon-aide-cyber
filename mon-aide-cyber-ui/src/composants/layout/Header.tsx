@@ -45,17 +45,13 @@ export const Header = ({
       ],
     },
     {
-      route: '/kit-de-communication',
+      route: '/promouvoir-diagnostic-cyber',
       nom: 'Promouvoir',
       clef: 776,
       enfants: [
         {
           route: '/promouvoir-diagnostic-cyber',
           nom: 'Promouvoir le diagnostic cyber',
-        },
-        {
-          route: '/kit-de-communication',
-          nom: 'Kit de communication',
         },
         {
           route: '/promouvoir-communaute-aidants-cyber',
