@@ -39,42 +39,13 @@ export const Sidebar = () => {
                       nom: 'Mes diagnostics',
                       route: `${ROUTE_MON_ESPACE}/tableau-de-bord`,
                       actif: true,
-                      enfants: [
-                        /* {
-                          nom: 'Mes demandes',
-                          route: '/aidant/mes-demandes',
-                          actif: false,
-                        },
-                        {
-                          nom: 'Mes diagnostics',
-                          route: '/aidant/tableau-de-bord',
-                          actif: true,
-                        },
-                        {
-                          nom: 'Mes tests',
-                          route: '/aidant/mes-tests',
-                          actif: false,
-                        }, */
-                      ],
+                      enfants: [],
                     },
                   ]
                 : []),
             ]}
           />
         </section>
-        {!peutDemanderADevenirAidant ? (
-          <section>
-            <MenuNavigation
-              elements={[
-                {
-                  nom: 'Kit des Aidants cyber',
-                  route: `${ROUTE_MON_ESPACE}/ressources/kit-aidant-cyber`,
-                  actif: true,
-                },
-              ]}
-            />
-          </section>
-        ) : null}
         <section>
           <MenuNavigation
             elements={[
