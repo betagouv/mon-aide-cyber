@@ -17,6 +17,7 @@ export const routesAPIArticles = (configuration: ConfigurationServeur) => {
       'promouvoir-communaute-aidants-cyber',
       () => adaptateurCmsCrisp.promouvoirCommunauteAidantsCyber(),
     ],
+    ['relais-associatifs', () => adaptateurCmsCrisp.relaisAssociatifs()],
   ]);
 
   routes.get(
