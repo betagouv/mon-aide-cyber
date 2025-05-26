@@ -6,7 +6,7 @@ export function EncartDiagnosticCyber() {
   return (
     <section className="encart-diagnostic-cyber">
       <div className="contenu">
-        <div>
+        <div className="titre-details">
           <TypographieH3>
             Vous souhaitez vous protéger contre les cyberattaques mais ne savez
             pas comment vous y prendre&nbsp;?
@@ -21,20 +21,22 @@ export function EncartDiagnosticCyber() {
 
         <img src="/images/illustration-dino-cyberdepart.svg" alt="" />
 
-        <a
-          role="button"
-          className="action"
-          href={liensMesServicesCyber().cyberDepartAvecTracking}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Bénéficier du diagnostic cyber gratuit
-        </a>
+        <div className="cta">
+          <a
+            role="button"
+            className="action"
+            href={liensMesServicesCyber().cyberDepartAvecTracking}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Bénéficier du diagnostic cyber gratuit
+          </a>
 
-        <p className="disclaimer">
-          Ce diagnostic proposé par l&apos;État n&apos;est pas adapté aux
-          particuliers et micro-entreprises.
-        </p>
+          <p className="disclaimer">
+            Ce diagnostic proposé par l&apos;État n&apos;est pas adapté aux
+            particuliers et micro-entreprises.
+          </p>
+        </div>
       </div>
     </section>
   );
