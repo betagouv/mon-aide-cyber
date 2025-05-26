@@ -10,8 +10,26 @@ section {
     border-radius: 8px;
 
     padding: 48px 16px;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:  'titre-details'
+                          'illustration'
+                          'cta';
+
+    @include a-partir-de(lg) {
+      grid-template-columns: 6fr 4fr;
+      grid-template-areas:  'titre-details  illustration'
+                            'cta            illustration';
+    }
+
+    @include a-partir-de(lg2) {
+      padding-left: 102px;
+      padding-right: 102px;
+    }
+
+    .titre-details {
+      grid-area: titre-details;
+    }
 
     h3 {
       margin: 0 0 8px 0;
@@ -28,6 +46,7 @@ section {
     img {
       width: 296px;
       margin: 0 auto 32px;
+      grid-area: illustration;
 
       @include a-partir-de(sm) {
         width: 424px;
@@ -35,41 +54,53 @@ section {
       @include a-partir-de(md) {
         width: 486px;
       }
-    }
-
-    a[role='button'] {
-      margin-bottom: 16px;
-      text-decoration: none;
-      padding: 8px 16px;
-      text-align: center;
-      font-weight: 500;
-      font-size: 1rem;
-      line-height: 24px;
-      border-radius: 8px;
-      background-image: none;
-
-      @include a-partir-de(sm) {
-        width: fit-content;
-      }
-
-      &.action {
-        background-color: transparent;
-        color: #0d0c21;
-        border: 1px solid #0d0c21;
-        cursor: pointer;
-
-        &:active {
-          background-color: transparent;
-        }
-
-        &:hover {
-          background-color: transparent;
-        }
+      @include a-partir-de(lg) {
+        width: 318px;
+        margin: auto 0 auto auto;
       }
     }
 
-    .disclaimer {
-      margin: 0 0 16px 0;
+    .cta {
+      grid-area: cta;
+
+      a[role='button'] {
+        margin-bottom: 16px;
+        text-decoration: none;
+        padding: 8px 16px;
+        text-align: center;
+        font-weight: 500;
+        font-size: 1rem;
+        line-height: 24px;
+        border-radius: 8px;
+        background-image: none;
+
+        @include a-partir-de(sm) {
+          width: fit-content;
+        }
+
+        &.action {
+          background-color: transparent;
+          color: #0d0c21;
+          border: 1px solid #0d0c21;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:active {
+            background-color: transparent;
+          }
+
+          &:hover {
+            background-color: transparent;
+          }
+        }
+      }
+
+      .disclaimer {
+        margin: 0 0 16px 0;
+      }
     }
+
   }
 }
