@@ -51,6 +51,14 @@ describe('Articles', () => {
         .avecLeContenu('Un contenu de promotion')
         .construis(),
     },
+    {
+      nomArticle: 'relais-associatifs',
+      articleAttendu: unArticle()
+        .avecLeTitre('Relais associatifs')
+        .avecLaDescription('Ler relais associatifs')
+        .avecLeContenu('Un contenu avec des relais associatifs')
+        .construis(),
+    },
   ])(
     'Retourne l’article $nomArticle fourni en paramètre',
     async ({ nomArticle, articleAttendu }) => {
