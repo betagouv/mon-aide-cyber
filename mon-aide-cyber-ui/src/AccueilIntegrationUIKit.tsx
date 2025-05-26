@@ -67,7 +67,7 @@ export const AccueilIntegrationUIKit = () => {
       description:
         'Participer à la formation gratuite "Devenir Aidant cyber" d’une demi-journée et accepter la Charte de l’Aidant.',
       lien: {
-        href: '#',
+        href: '/charte-aidant',
         texte: "Consulter la Charte de l'Aidant cyber",
         target: '_blank',
       },
@@ -79,7 +79,11 @@ export const AccueilIntegrationUIKit = () => {
     {
       titre: 'Rejoindre la communauté des Aidants cyber',
       description: 'Echangez avec tous les les Aidants cyber sur Tchap !',
-      lien: { href: '#', texte: 'Rejoindre la communauté', target: '_blank' },
+      lien: {
+        href: 'https://tally.so/r/3EYlq2',
+        texte: 'Rejoindre la communauté',
+        target: '_blank',
+      },
       illustration: {
         lien: '/images/illustration-marelle-etape-3.svg',
         alt: '',
@@ -90,7 +94,7 @@ export const AccueilIntegrationUIKit = () => {
       description:
         'Répondez aux sollicitations de demandes de diagnostics cyber et faîtes la promotion du dispositif autour de vous !',
       lien: {
-        href: '#',
+        href: '/promouvoir-diagnostic-cyber',
         texte: 'Accéder au kit de communication',
         target: '_blank',
       },
@@ -121,9 +125,11 @@ export const AccueilIntegrationUIKit = () => {
           lien: liensMesServicesCyber().cyberDepartBrut,
         })}
       ></lab-anssi-brique-hero>
+
       <lab-anssi-carrousel-tuiles
         tuiles={JSON.stringify(tuiles)}
       ></lab-anssi-carrousel-tuiles>
+
       <lab-anssi-titre-multimedia
         titre="Découvrez MonAideCyber en vidéo"
         multimedia={JSON.stringify({
@@ -131,14 +137,20 @@ export const AccueilIntegrationUIKit = () => {
             'https://ressources-mac.cellar-c2.services.clever-cloud.com/Video_MAC.mp4',
         })}
       ></lab-anssi-titre-multimedia>
+
       <lab-anssi-marelle
         titre="Comment réaliser des diagnostics cyber ?"
         etapesmarelle={JSON.stringify(etapesMarelle)}
-        action={JSON.stringify({ titre: 'Devenir Aidant cyber', lien: '#' })}
+        action={JSON.stringify({
+          titre: 'Devenir Aidant cyber',
+          lien: '/realiser-des-diagnostics-anssi#formulaire-formation',
+        })}
       ></lab-anssi-marelle>
+
       <div className="conteneur-accueil">
         <div className="fr-container"></div>
       </div>
+
       <div className="conteneur-accueil">
         <div className="fr-container">
           <div id="ce-que-cest" className="fr-grid-row fr-grid-row--gutters">
