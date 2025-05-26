@@ -199,3 +199,44 @@ fieldset {
 .fr-btn:hover {
   background-color: rgba(0, 0, 0, 0.04) !important;
 }
+
+.information-message {
+  display: flex;
+  gap: .5rem;
+  padding: 1rem;
+
+  background-color: var(--couleurs-mac-violet-tres-clair);
+  border-radius: .5rem;
+  line-height: 28px;
+  font-size: 1rem;
+
+  #information-id {
+    font-size: 22px;
+    font-family: 'Marianne ExtraBold';
+    font-weight: 800;
+  }
+
+  p {
+    margin-bottom: 0;
+    font-weight: 400;
+
+    strong {
+      font-family: 'Marianne ExtraBold';
+      font-weight: 400;
+    }
+  }
+
+  @include jusqu-a(sm) {
+    flex-direction: column;
+  }
+}
+
+.white-space-no-wrap {
+  white-space: nowrap;
+
+  &.white-space-xl-normal {
+    @include jusqu-a(xl) {
+      white-space: normal;
+    }
+  }
+}
