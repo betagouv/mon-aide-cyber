@@ -90,6 +90,7 @@ type ConfigurationCrisp = {
   guideAidantCyber: string;
   promouvoirDiagnosticCyber: string;
   promouvoirCommunauteAidantsCyber: string;
+  relaisAssociatifs: string;
 };
 const crisp = (): ConfigurationCrisp | undefined => {
   if (!process.env.CRISP_ID_SITE || !process.env.CRISP_CLEF_API)
@@ -102,6 +103,7 @@ const crisp = (): ConfigurationCrisp | undefined => {
       process.env.CRISP_ID_PROMOUVOIR_DIAGNOSTIC_CYBER || '',
     promouvoirCommunauteAidantsCyber:
       process.env.CRISP_ID_PROMOUVOIR_COMMUNAUTE_AIDANTS_CYBER || '',
+    relaisAssociatifs: process.env.CRISP_ID_RELAIS_ASSOCIATIFS || '',
   };
 };
 
