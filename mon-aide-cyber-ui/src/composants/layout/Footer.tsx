@@ -56,6 +56,9 @@ export const Footer = () => (
         </a>
       </div>
     </section>
+
+    <lab-anssi-presentation-anssi></lab-anssi-presentation-anssi>
+
     <div className="fr-footer">
       <div className="fr-container">
         <div className="fr-footer__body">
