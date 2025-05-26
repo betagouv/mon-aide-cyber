@@ -15,6 +15,10 @@ section {
 
     h3 {
       margin: 0 0 8px 0;
+      @include a-partir-de(md) {
+        font-size: 1.75rem;
+        line-height: 2.25rem;
+      }
     }
 
     .details {
@@ -27,6 +31,9 @@ section {
 
       @include a-partir-de(sm) {
         width: 424px;
+      }
+      @include a-partir-de(md) {
+        width: 486px;
       }
     }
 
