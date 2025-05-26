@@ -13,7 +13,7 @@ const TuileActionKitDeCommunication = () => (
         <b>Téléchargez les ressources</b> mises à disposition dans notre kit de
         communication !
       </p>
-      <a href="/kit-de-communication">
+      <a href="/promouvoir-diagnostic-cyber">
         <button type="button" className="fr-btn bouton-mac bouton-mac-primaire">
           En savoir plus
         </button>
