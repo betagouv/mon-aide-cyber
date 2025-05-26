@@ -1,3 +1,5 @@
+@import "../../assets/styles/points-de-rupture.scss";
+
 section {
   padding: 48px 16px;
 
@@ -20,8 +22,12 @@ section {
     }
 
     img {
-      max-width: 296px;
+      width: 296px;
       margin: 0 auto 32px;
+
+      @include a-partir-de(sm) {
+        width: 424px;
+      }
     }
 
     a[role='button'] {
@@ -34,6 +40,10 @@ section {
       line-height: 24px;
       border-radius: 8px;
       background-image: none;
+
+      @include a-partir-de(sm) {
+        width: fit-content;
+      }
 
       &.action {
         background-color: transparent;
