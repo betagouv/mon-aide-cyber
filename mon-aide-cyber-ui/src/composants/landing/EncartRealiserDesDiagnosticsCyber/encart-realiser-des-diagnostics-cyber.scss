@@ -1,0 +1,60 @@
+@import "../../../assets/styles/points-de-rupture.scss";
+
+section.encart-realiser-des-diagnostics-cyber {
+  padding: 48px 16px;
+
+  .contenu {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--couleurs-mac-violet-tres-clair);
+    border-radius: 8px;
+
+    padding: 48px 16px;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:  'titre-details'
+                          'cta';
+    row-gap: 32px;
+
+    @include a-partir-de(lg) {
+      grid-template-columns: 6fr 4fr;
+      grid-template-areas:  'titre-details cta';
+      column-gap: 24px;
+    }
+
+    @include a-partir-de(lg2) {
+      padding-left: 102px;
+      padding-right: 102px;
+    }
+
+    .titre-details {
+      grid-area: titre-details;
+    }
+
+    .cta {
+      grid-area: cta;
+      display: flex;
+      justify-content: start;
+
+      button {
+        width: 100%;
+
+        @include a-partir-de(sm) {
+          width: fit-content;
+        }
+      }
+
+      @include a-partir-de(lg) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    h3 {
+      color: var(--couleurs-mac-violet-fonce);
+      margin: 0 0 8px 0;
+    }
+  }
+}
