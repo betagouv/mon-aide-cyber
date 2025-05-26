@@ -20,7 +20,7 @@
   "dependencies": {
     "@babel/runtime": ">=7.26.10",
     "@gouvfr/dsfr": "^1.11.0",
-    "@lab-anssi/ui-kit": "1.9.0",
+    "@lab-anssi/ui-kit": "1.11.0",
     "@tanstack/react-query": "^5.59.15",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "react": "^18.2.0",

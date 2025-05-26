@@ -28,12 +28,17 @@ import { EcranRelaisAssociatifs } from './domaine/vitrine/ecran-relais-associati
 import { EcranSecurite } from './domaine/vitrine/ecran-securite/EcranSecurite.tsx';
 import { EcranRepondreAUneDemande } from './domaine/gestion-demandes/repondre-a-une-demande/EcranRepondreAUneDemande.tsx';
 import { PageCrisp } from './domaine/crisp/PageCrisp.tsx';
+import { AccueilIntegrationUIKit } from './AccueilIntegrationUIKit.tsx';
 
 export const RouteurPublic = () => {
   return (
     <Routes>
       <Route path="/" element={<LayoutPublic />}>
         <Route index element={<Accueil />} />
+        <Route
+          path="/accueil-integration-ui-kit"
+          element={<AccueilIntegrationUIKit />}
+        />
         <Route path="accessibilite" element={<EcranAccessibilite />} />
         <Route
           path="statistiques-utilisation"
