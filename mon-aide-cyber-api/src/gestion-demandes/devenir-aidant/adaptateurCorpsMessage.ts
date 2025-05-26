@@ -32,7 +32,7 @@ const genereCorpsDemandeDevenirAidant = (
       '<b>Comment bien préparer l’atelier Devenir Aidant cyber ?</b>\n' +
       '\n' +
       '<ul>' +
-      `<li>En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/kit-de-communication">la plaquette d’information</a></li>` +
+      `<li>En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/promouvoir-diagnostic-cyber">la plaquette d’information</a></li>` +
       `<li>Relire la <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">charte de l’Aidant</a> ` +
       `rappelant les principes et les engagements des Aidants Cyber</li>` +
       '</ul>' +
@@ -59,7 +59,7 @@ const genereCorpsDemandeDevenirAidant = (
     '\n' +
     '<b>Comment bien préparer mon atelier Devenir Aidant cyber ?</b>\n' +
     '\n' +
-    `\t - En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/kit-de-communication">la plaquette informative</a>\n` +
+    `\t - En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/promouvoir-diagnostic-cyber">la plaquette informative</a>\n` +
     `\t - Consulter <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">la charte Aidant</a> qui rappelle le principe de gratuité du dispositif à signer avant, pendant ou après l'atelier\n` +
     '\t - Noter qu’aucun autre pré-requis n’est demandé pour participer à cet atelier\n' +
     '\n' +
@@ -130,7 +130,7 @@ const genereCorpsMiseAJourDemandeDevenirAidant = (
     '\n' +
     '<b>Comment bien préparer mon atelier Devenir Aidant cyber ?</b>\n' +
     '<ul>' +
-    `<li>En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/kit-de-communication">la plaquette d’information</a></li>` +
+    `<li>En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/promouvoir-diagnostic-cyber">la plaquette d’information</a></li>` +
     `<li>Relire <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">la charte de l'Aidant</a> rappelant les principes et les engagements des Aidants Cyber</li>` +
     '</ul>' +
     'Toute l’équipe reste à votre disposition,\n' +
