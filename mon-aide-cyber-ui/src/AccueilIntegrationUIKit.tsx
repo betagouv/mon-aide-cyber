@@ -1,6 +1,7 @@
 import { useTitreDePage } from './hooks/useTitreDePage.ts';
 import { liensMesServicesCyber } from './infrastructure/mes-services-cyber/liens.ts';
 import { EncartDiagnosticCyber } from './composants/landing/EncartDiagnosticCyber.tsx';
+import { EncartRealiserDesDiagnosticsCyber } from './composants/landing/EncartRealiserDesDiagnosticsCyber/EncartRealiserDesDiagnosticsCyber.tsx';
 
 export const AccueilIntegrationUIKit = () => {
   useTitreDePage('Accueil');
@@ -167,6 +168,8 @@ export const AccueilIntegrationUIKit = () => {
           lien: 'https://tally.so/r/3EYlq2',
         })}
       ></lab-anssi-brique-rejoindre-la-communaute>
+
+      <EncartRealiserDesDiagnosticsCyber />
     </main>
   );
 };
