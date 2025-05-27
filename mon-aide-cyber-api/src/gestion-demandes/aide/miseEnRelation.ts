@@ -90,7 +90,8 @@ export const envoieRecapitulatifDemandeAide = async (
   }
 ) => {
   await adaptateurEnvoiMail.envoie({
-    objet: "Assignation d’un Aidant pour une demande d'aide pour MonAideCyber",
+    objet:
+      "Mise en relation d’un Aidant pour une demande d'aide pour MonAideCyber",
     destinataire: {
       email: annuaireCOT.rechercheEmailParDepartement(aide.departement),
     },

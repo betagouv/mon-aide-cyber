@@ -34,18 +34,18 @@ const genereCorpsRecapitulatifDemandeAide = (
   const raisonSociale = aide.raisonSociale
     ? `- Raison sociale: ${aide.raisonSociale}\n`
     : '';
-  const aidantsQuiMatchent = aidants.map((a) => `- ${a.email}`);
+  const aidantsQuiMatchent = aidants.map((a) => `${a.email}`);
   return (
     'Bonjour,\n' +
     '\n' +
-    `Une demande d’aide a été faite par ${aide.email}\n` +
+    `Une demande d’aide a été faite par ${aide.email}. Aucune action de votre part n'est requise.\n` +
     '\n' +
     'Ci-dessous, les informations concernant cette demande :\n' +
     `- Date de la demande : ${formateDate.date} à ${formateDate.heure}\n` +
     `- Département: ${aide.departement.nom}\n` +
     raisonSociale +
     '\n' +
-    `Les Aidants disponibles : \n` +
+    `Les Aidants qui ont été contactés pour une mise en relation : \n` +
     (aidantsQuiMatchent.length > 0 ? aidantsQuiMatchent.join('\n') : 'Aucun')
   );
 };
