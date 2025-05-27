@@ -90,7 +90,7 @@ const genereCorpsAucunAidantPourLaDemandeAide = (
     'Bonjour,\n' +
     '\n' +
     `Une demande d’aide a été faite par ${donneesMiseEnRelation.demandeAide.email}\n` +
-    `Aucun Aidant ne répond aux critères de l’entité.\n` +
+    `Aucun Aidant ne répond aux critères de l’entité. Une action de votre part est requise, il faut affecter un Aidant.\n` +
     '\n' +
     'Ci-dessous, les informations concernant cette demande :\n' +
     `- Date de la demande : ${formateDate.date} à ${formateDate.heure}\n` +
