@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/images/favicons/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="%VITE_GOOGLE_SEARCH_CONSOLE_VERIFICATION%">
 
     <link
       rel="apple-touch-icon"
@@ -36,20 +37,6 @@
       src="https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.9.0/lab-anssi-ui-kit.iife.js"
       nonce="%%NONCE%%"
     >
-    </script>
-
-    <script type="text/javascript">
-      const insertMetaTag = () => {
-        const contenuMeta = "%VITE_GOOGLE_SEARCH_CONSOLE_VERIFICATION%"
-        if(contenuMeta !== "false") {
-          const tagMeta = document.createElement("meta");
-          tagMeta.name = "google-site-verification";
-          tagMeta.content = contenuMeta;
-
-          document.head.appendChild(tagMeta);
-        }
-      };
-      window.onload = insertMetaTag;
     </script>
 
     <title>MonAideCyber</title>
