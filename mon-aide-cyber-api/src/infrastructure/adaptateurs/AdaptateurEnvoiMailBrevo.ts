@@ -21,6 +21,7 @@ import {
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { isArray } from 'lodash';
 import { AidantMisEnRelation } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
+import { emailCOTDeLaRegion } from '../annuaireCOT/annuaireCOT';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   async envoieConfirmationDemandeAide(
@@ -59,6 +60,9 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
         adaptateurEnvironnement.brevo().templateAidantDemandeAideAttribuee()
       )
       .ayantPourDestinataires([[destinataire.email, destinataire.nom]])
+      .ayantPourDestinatairesEnCopie([
+        [emailCOTDeLaRegion(confirmation.departement), ''],
+      ])
       .ayantPourParametres({
         nomPrenom: confirmation.nomPrenomAidant,
         mail: confirmation.emailEntite,
