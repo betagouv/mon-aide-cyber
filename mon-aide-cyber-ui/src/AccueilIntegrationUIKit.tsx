@@ -12,8 +12,8 @@ export const AccueilIntegrationUIKit = () => {
       contenu:
         'MonAideCyber est proposé par l’Agence nationale de la sécurité des systèmes d’information.',
       illustration: {
-        lien: '/images/icones/accompagnement-personnalise.svg',
-        alt: 'Un diagnostic cyber',
+        lien: '/images/icones/dispositif-etatique.svg',
+        alt: '',
       },
     },
     {
@@ -21,8 +21,8 @@ export const AccueilIntegrationUIKit = () => {
       contenu:
         'Les Aidants cyber sont issus de la sphère publique ou sont membres d’associations œuvrant pour un numérique de confiance.',
       illustration: {
-        lien: '/images/icones/diagnostic-cyber.svg',
-        alt: 'Un accompagnement personnalisé',
+        lien: '/images/icones/communaute.svg',
+        alt: '',
       },
     },
     {
@@ -30,8 +30,8 @@ export const AccueilIntegrationUIKit = () => {
       contenu:
         'Le diagnostic cyber aide les entités qui souhaitent se protéger contre les cyberattaques et passer à l’action.',
       illustration: {
-        lien: '/images/icones/communaute-aidants.svg',
-        alt: 'Communauté d‘Aidants cyber',
+        lien: '/images/icones/interet-general.svg',
+        alt: '',
       },
     },
   ];
@@ -108,9 +108,7 @@ export const AccueilIntegrationUIKit = () => {
     <main role="main">
       <lab-anssi-brique-hero
         titre="MonAideCyber"
-        soustitre="Passez à l’action et menons ensemble votre première démarche de
-                cybersécurité grâce à notre communauté d’Aidants présente sur
-                tout le territoire !"
+        soustitre="Des Aidants cyber mobilisés pour aider les entités publiques et privées à prendre leur cyberdépart !"
         illustration={JSON.stringify({
           lien: '/images/illustration-dialogue-mac.svg',
           alt: "scène d'un aidant cyber et d'un aidé faisant un diagnostic",
@@ -121,13 +119,15 @@ export const AccueilIntegrationUIKit = () => {
         })}
         actiondroite={JSON.stringify({
           titre: 'Bénéficier d‘un diagnostic cyber',
-          lien: liensMesServicesCyber().cyberDepartBrut,
+          lien: liensMesServicesCyber().cyberDepartAvecTracking,
         })}
       ></lab-anssi-brique-hero>
 
       <lab-anssi-carrousel-tuiles
         tuiles={JSON.stringify(tuiles)}
       ></lab-anssi-carrousel-tuiles>
+
+      <EncartDiagnosticCyber />
 
       <lab-anssi-titre-multimedia
         titre="Découvrez MonAideCyber en vidéo"
@@ -136,8 +136,6 @@ export const AccueilIntegrationUIKit = () => {
             'https://ressources-mac.cellar-c2.services.clever-cloud.com/Video_MAC.mp4',
         })}
       ></lab-anssi-titre-multimedia>
-
-      <EncartDiagnosticCyber />
 
       <lab-anssi-marelle
         titre="Comment réaliser des diagnostics cyber ?"
