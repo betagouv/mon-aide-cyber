@@ -44,6 +44,24 @@ export abstract class AdaptateurDeRestitution<T> {
     const contactsLiensUtiles = this.genereContactsEtLiensUtiles();
     const ressources = this.genereRessources();
 
+    return this.genereToutesLesPages(
+      autresMesures,
+      informations,
+      indicateurs,
+      mesuresPrioritaires,
+      contactsLiensUtiles,
+      ressources
+    );
+  }
+
+  protected genereToutesLesPages(
+    autresMesures: MesurePriorisee[],
+    informations: Promise<ContenuHtml>,
+    indicateurs: Promise<ContenuHtml>,
+    mesuresPrioritaires: Promise<ContenuHtml>,
+    contactsLiensUtiles: Promise<ContenuHtml>,
+    ressources: Promise<ContenuHtml>
+  ) {
     if (estMesurePrioritaire(autresMesures)) {
       return this.genere([
         informations,
