@@ -1,12 +1,15 @@
 import {
   AdaptateurDeRestitution,
   ContenuHtml,
+  estMesurePrioritaire,
 } from '../../adaptateurs/AdaptateurDeRestitution';
 import * as pug from 'pug';
 import puppeteer, { Browser, PDFOptions } from 'puppeteer';
 import { PDFDocument } from 'pdf-lib';
 import { Restitution } from '../../restitution/Restitution';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
+import { MesurePriorisee } from '../../diagnostic/Diagnostic';
+import fs from 'fs';
 
 const forgeIdentifiant = (identifiant: string): string =>
   `${identifiant.substring(0, 3)} ${identifiant.substring(
@@ -69,6 +72,33 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
       });
   }
 
+  protected genereToutesLesPages(
+    autresMesures: MesurePriorisee[],
+    informations: Promise<ContenuHtml>,
+    indicateurs: Promise<ContenuHtml>,
+    mesuresPrioritaires: Promise<ContenuHtml>,
+    contactsLiensUtiles: Promise<ContenuHtml>,
+    ressources: Promise<ContenuHtml>
+  ): Promise<Buffer> {
+    if (estMesurePrioritaire(autresMesures)) {
+      return this.genere([
+        informations,
+        mesuresPrioritaires,
+        indicateurs,
+        contactsLiensUtiles,
+        ressources,
+        this.genereAutresMesures(autresMesures),
+      ]);
+    }
+    return this.genere([
+      informations,
+      mesuresPrioritaires,
+      indicateurs,
+      contactsLiensUtiles,
+      ressources,
+    ]);
+  }
+
   async genereHtml(pugCorps: string, paramsCorps: any): Promise<ContenuHtml> {
     const fonctionInclusionDynamique = (
       cheminTemplatePug: string,
@@ -125,6 +155,11 @@ const generePdfs = async (
 ): Promise<Buffer[]> => {
   const pagesHtmlRemplies = pagesHtml.filter(
     (pageHtml) => pageHtml.corps !== ''
+  );
+
+  fs.writeFileSync(
+    `restitution-${FournisseurHorloge.maintenant()}.html`,
+    pagesHtmlRemplies.flatMap((pagesHtml) => pagesHtml.corps).join('')
   );
 
   const navigateur = await lanceNavigateur();

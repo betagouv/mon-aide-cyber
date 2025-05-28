@@ -1,10 +1,6 @@
 div(class="restitution")
     div(id="mesures-prioritaires")
-        h4 6 mesures prioritaires pour passer à l'action
+        h4 Recommandations prioritaires
+        p Appliquez ces 6 recommandations pour renforcer rapidement la cybersécurité de votre organisation.
         each mesure, index in mesures
           h6(class="titre-mesure") !{index + 1} . !{mesure.titre}
-        br
-        h4 Détail des mesures
-        include ../../html/modeles/mesures-detaillees
-script
-    include ./ressources/ouvre-mesures.js
