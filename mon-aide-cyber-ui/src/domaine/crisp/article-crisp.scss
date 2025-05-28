@@ -5,7 +5,7 @@
   --ol-content:  unset;
 }
 
-body:has(details[open]) {
+body:has(.page-crisp details[open]) {
   overflow: hidden;
 }
 
