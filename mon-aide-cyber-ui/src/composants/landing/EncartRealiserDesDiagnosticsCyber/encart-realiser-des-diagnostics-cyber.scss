@@ -3,6 +3,10 @@
 section.encart-realiser-des-diagnostics-cyber {
   padding: 72px 16px;
 
+  @include a-partir-de(lg) {
+    padding: 72px 24px;
+  }
+
   .contenu {
     max-width: 1200px;
     margin: 0 auto;
