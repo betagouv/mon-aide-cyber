@@ -24,6 +24,17 @@ html {
     padding-bottom: 20mm;
 }
 
+.entete {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    gap: 2rem;
+    margin-left: 15mm;
+    margin-right: 15mm;
+    margin-bottom: 5mm;
+    font-size: 10px;
+}
+
 .piedpage {
   display: flex;
   flex: 1;
