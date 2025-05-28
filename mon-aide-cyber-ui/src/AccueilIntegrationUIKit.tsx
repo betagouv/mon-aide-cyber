@@ -121,7 +121,7 @@ export const AccueilIntegrationUIKit = () => {
         })}
         actiondroite={JSON.stringify({
           titre: 'Bénéficier d‘un diagnostic cyber',
-          lien: liensMesServicesCyber().cyberDepartBrut,
+          lien: liensMesServicesCyber().cyberDepartAvecTracking,
         })}
       ></lab-anssi-brique-hero>
 
