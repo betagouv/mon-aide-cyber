@@ -151,6 +151,28 @@ h6.titre-mesure {
     }
 }
 
+.entete-page-de-garde {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+
+    h1 {
+        font-size: 2.2rem;
+        line-height: 3.2rem;
+        border: unset;
+    }
+
+    h2 {
+        line-height: 2.8rem;
+        margin: 0rem 0rem 0.25rem 0rem;
+    }
+
+    p {
+        margin: unset;
+        padding: unset;
+    }
+}
+
 .page-de-garde {
 
     h1 {

@@ -11,7 +11,11 @@ export const estMesurePrioritaire = (
   return mesurePrioritaire !== undefined && mesurePrioritaire.length > 0;
 };
 
-export type ContenuHtml = { corps: string; entete: string; piedPage: string };
+export type ContenuHtml = {
+  corps: string;
+  entete: string;
+  piedPage: string;
+};
 
 export abstract class AdaptateurDeRestitution<T> {
   constructor(protected readonly traductionThematiques: Map<string, string>) {}
