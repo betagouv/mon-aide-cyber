@@ -51,7 +51,6 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
   }
 
   protected genereLaRestitution(restitution: Restitution): Promise<Buffer> {
-    const informations = this.genereInformations(restitution);
     const indicateursRestitution = this.trieLesIndicateurs(restitution);
     const indicateurs = this.genereIndicateurs(indicateursRestitution);
     const mesuresPrioritaires = this.genereMesuresPrioritaires(
@@ -62,7 +61,6 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
     const ressources = this.genereRessources();
 
     return this.genere([
-      informations,
       indicateurs,
       mesuresPrioritaires,
       contactsLiensUtiles,
@@ -77,10 +75,6 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
       indicateurs,
       traductions: this.traductionThematiques,
     });
-  }
-
-  protected async genereInformations(_: Restitution): Promise<ContenuHtml> {
-    return { corps: '', entete: '', piedPage: '' };
   }
 
   protected genereMesuresPrioritaires(
