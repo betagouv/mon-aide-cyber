@@ -1,7 +1,6 @@
 import {
   AdaptateurDeRestitution,
   ContenuHtml,
-  estMesurePrioritaire,
 } from '../../adaptateurs/AdaptateurDeRestitution';
 import * as pug from 'pug';
 import puppeteer, { Browser, PDFOptions } from 'puppeteer';
@@ -57,21 +56,10 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
     const mesuresPrioritaires = this.genereMesuresPrioritaires(
       restitution.mesures.mesuresPrioritaires
     );
-    const autresMesures = restitution.mesures.autresMesures;
 
     const contactsLiensUtiles = this.genereContactsEtLiensUtiles();
     const ressources = this.genereRessources();
 
-    if (estMesurePrioritaire(autresMesures)) {
-      return this.genere([
-        informations,
-        indicateurs,
-        mesuresPrioritaires,
-        contactsLiensUtiles,
-        ressources,
-        this.genereAutresMesures(autresMesures),
-      ]);
-    }
     return this.genere([
       informations,
       indicateurs,
@@ -92,14 +80,6 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
 
   protected async genereInformations(_: Restitution): Promise<ContenuHtml> {
     return { corps: '', entete: '', piedPage: '' };
-  }
-
-  protected genereAutresMesures(
-    autresMesures: MesurePriorisee[] | undefined
-  ): Promise<ContenuHtml> {
-    return this.genereHtml('autres-mesures', {
-      mesures: autresMesures,
-    });
   }
 
   protected genereMesuresPrioritaires(
