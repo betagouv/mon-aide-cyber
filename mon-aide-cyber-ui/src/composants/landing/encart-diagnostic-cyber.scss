@@ -98,7 +98,14 @@ section.encart-diagnostic-cyber {
       }
 
       .disclaimer {
+        font-size: 16px;
+        line-height: 24px;
         margin: 0 0 16px 0;
+
+        @include a-partir-de(lg) {
+          font-size: 14px;
+          line-height: 24px;
+        }
       }
     }
 
