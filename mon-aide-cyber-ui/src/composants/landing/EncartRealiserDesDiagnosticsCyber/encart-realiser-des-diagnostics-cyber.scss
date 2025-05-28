@@ -1,7 +1,7 @@
 @import "../../../assets/styles/points-de-rupture.scss";
 
 section.encart-realiser-des-diagnostics-cyber {
-  padding: 48px 16px;
+  padding: 72px 16px;
 
   .contenu {
     max-width: 1200px;
@@ -21,6 +21,7 @@ section.encart-realiser-des-diagnostics-cyber {
       grid-template-columns: 6fr 4fr;
       grid-template-areas:  'titre-details cta';
       column-gap: 24px;
+      padding: 48px 24px;
     }
 
     @include a-partir-de(lg2) {
@@ -30,6 +31,14 @@ section.encart-realiser-des-diagnostics-cyber {
 
     .titre-details {
       grid-area: titre-details;
+
+      h3 {
+        font-family: Marianne, arial, sans-serif;
+      }
+
+      p {
+        margin: 0;
+      }
     }
 
     .cta {
