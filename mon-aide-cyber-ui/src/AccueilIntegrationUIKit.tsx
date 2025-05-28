@@ -12,8 +12,8 @@ export const AccueilIntegrationUIKit = () => {
       contenu:
         'MonAideCyber est proposé par l’Agence nationale de la sécurité des systèmes d’information.',
       illustration: {
-        lien: '/images/icones/accompagnement-personnalise.svg',
-        alt: 'Un diagnostic cyber',
+        lien: '/images/icones/dispositif-etatique.svg',
+        alt: '',
       },
     },
     {
@@ -21,8 +21,8 @@ export const AccueilIntegrationUIKit = () => {
       contenu:
         'Les Aidants cyber sont issus de la sphère publique ou sont membres d’associations œuvrant pour un numérique de confiance.',
       illustration: {
-        lien: '/images/icones/diagnostic-cyber.svg',
-        alt: 'Un accompagnement personnalisé',
+        lien: '/images/icones/communaute.svg',
+        alt: '',
       },
     },
     {
@@ -30,8 +30,8 @@ export const AccueilIntegrationUIKit = () => {
       contenu:
         'Le diagnostic cyber aide les entités qui souhaitent se protéger contre les cyberattaques et passer à l’action.',
       illustration: {
-        lien: '/images/icones/communaute-aidants.svg',
-        alt: 'Communauté d‘Aidants cyber',
+        lien: '/images/icones/interet-general.svg',
+        alt: '',
       },
     },
   ];
