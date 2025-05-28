@@ -8,7 +8,7 @@ import puppeteer, { Browser, PDFOptions } from 'puppeteer';
 import { PDFDocument } from 'pdf-lib';
 import { Restitution } from '../../restitution/Restitution';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
-import { MesurePriorisee } from '../../diagnostic/Diagnostic';
+import { Indicateurs, MesurePriorisee } from '../../diagnostic/Diagnostic';
 
 const forgeIdentifiant = (identifiant: string): string =>
   `${identifiant.substring(0, 3)} ${identifiant.substring(
@@ -45,13 +45,77 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
     super(traductionThematiques);
   }
 
-  genereRestitution(restitution: Restitution): Promise<Buffer> {
+  public genereRestitution(restitution: Restitution): Promise<Buffer> {
     this.identifiant = forgeIdentifiant(restitution.identifiant);
-    return super.genereRestitution(restitution);
+    return this.genereLaRestitution(restitution);
+  }
+
+  protected genereLaRestitution(restitution: Restitution): Promise<Buffer> {
+    const informations = this.genereInformations(restitution);
+    const indicateursRestitution = this.trieLesIndicateurs(restitution);
+    const indicateurs = this.genereIndicateurs(indicateursRestitution);
+    const mesuresPrioritaires = this.genereMesuresPrioritaires(
+      restitution.mesures.mesuresPrioritaires
+    );
+    const autresMesures = restitution.mesures.autresMesures;
+
+    const contactsLiensUtiles = this.genereContactsEtLiensUtiles();
+    const ressources = this.genereRessources();
+
+    if (estMesurePrioritaire(autresMesures)) {
+      return this.genere([
+        informations,
+        indicateurs,
+        mesuresPrioritaires,
+        contactsLiensUtiles,
+        ressources,
+        this.genereAutresMesures(autresMesures),
+      ]);
+    }
+    return this.genere([
+      informations,
+      indicateurs,
+      mesuresPrioritaires,
+      contactsLiensUtiles,
+      ressources,
+    ]);
+  }
+
+  protected genereIndicateurs(
+    indicateurs: Indicateurs | undefined
+  ): Promise<ContenuHtml> {
+    return this.genereHtml('indicateurs', {
+      indicateurs,
+      traductions: this.traductionThematiques,
+    });
   }
 
   protected async genereInformations(_: Restitution): Promise<ContenuHtml> {
     return { corps: '', entete: '', piedPage: '' };
+  }
+
+  protected genereAutresMesures(
+    autresMesures: MesurePriorisee[] | undefined
+  ): Promise<ContenuHtml> {
+    return this.genereHtml('autres-mesures', {
+      mesures: autresMesures,
+    });
+  }
+
+  protected genereMesuresPrioritaires(
+    mesuresPrioritaires: MesurePriorisee[] | undefined
+  ): Promise<ContenuHtml> {
+    return this.genereHtml('mesures', {
+      mesures: mesuresPrioritaires,
+    });
+  }
+
+  protected genereContactsEtLiensUtiles(): Promise<ContenuHtml> {
+    return this.genereHtml('contacts-liens-utiles', {});
+  }
+
+  protected genereRessources(): Promise<ContenuHtml> {
+    return this.genereHtml('ressources', {});
   }
 
   protected genere(mesures: Promise<ContenuHtml>[]) {
@@ -69,33 +133,6 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
         console.log('Erreur génération restitution', erreur);
         throw new Error(erreur);
       });
-  }
-
-  protected genereToutesLesPages(
-    autresMesures: MesurePriorisee[],
-    informations: Promise<ContenuHtml>,
-    indicateurs: Promise<ContenuHtml>,
-    mesuresPrioritaires: Promise<ContenuHtml>,
-    contactsLiensUtiles: Promise<ContenuHtml>,
-    ressources: Promise<ContenuHtml>
-  ): Promise<Buffer> {
-    if (estMesurePrioritaire(autresMesures)) {
-      return this.genere([
-        informations,
-        mesuresPrioritaires,
-        indicateurs,
-        contactsLiensUtiles,
-        ressources,
-        this.genereAutresMesures(autresMesures),
-      ]);
-    }
-    return this.genere([
-      informations,
-      mesuresPrioritaires,
-      indicateurs,
-      contactsLiensUtiles,
-      ressources,
-    ]);
   }
 
   async genereHtml(pugCorps: string, paramsCorps: any): Promise<ContenuHtml> {
