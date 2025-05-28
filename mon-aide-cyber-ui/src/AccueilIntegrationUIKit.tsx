@@ -108,9 +108,7 @@ export const AccueilIntegrationUIKit = () => {
     <main role="main">
       <lab-anssi-brique-hero
         titre="MonAideCyber"
-        soustitre="Passez à l’action et menons ensemble votre première démarche de
-                cybersécurité grâce à notre communauté d’Aidants présente sur
-                tout le territoire !"
+        soustitre="Des Aidants cyber mobilisés pour aider les entités publiques et privées à prendre leur cyberdépart !"
         illustration={JSON.stringify({
           lien: '/images/illustration-dialogue-mac.svg',
           alt: "scène d'un aidant cyber et d'un aidé faisant un diagnostic",
@@ -129,6 +127,8 @@ export const AccueilIntegrationUIKit = () => {
         tuiles={JSON.stringify(tuiles)}
       ></lab-anssi-carrousel-tuiles>
 
+      <EncartDiagnosticCyber />
+
       <lab-anssi-titre-multimedia
         titre="Découvrez MonAideCyber en vidéo"
         multimedia={JSON.stringify({
@@ -136,8 +136,6 @@ export const AccueilIntegrationUIKit = () => {
             'https://ressources-mac.cellar-c2.services.clever-cloud.com/Video_MAC.mp4',
         })}
       ></lab-anssi-titre-multimedia>
-
-      <EncartDiagnosticCyber />
 
       <lab-anssi-marelle
         titre="Comment réaliser des diagnostics cyber ?"
