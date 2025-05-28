@@ -34,6 +34,11 @@ section.encart-realiser-des-diagnostics-cyber {
 
       h3 {
         font-family: Marianne, arial, sans-serif;
+
+        @include a-partir-de(md) {
+          font-size: 1.75rem;
+          line-height: 2.25rem;
+        }
       }
 
       p {
