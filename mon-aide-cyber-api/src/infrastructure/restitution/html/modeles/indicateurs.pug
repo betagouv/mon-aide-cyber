@@ -1,27 +1,2 @@
 h4 Indicateurs MonAideCyber
-
-div(class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle")
-    - const couleursThematiques = new Map([['gouvernance', '#FC7530'], ['SecuriteAcces', '#9C51D0'], ['securiteposte', '#FDC8D5'], ['securiteinfrastructure', '#FDC82E'], ['sensibilisation', '#5D2A9D'], ['reaction', '#FD8EB9']])
-    - const configurationIndicateurs = Object.entries(indicateurs).map(([thematique, indicateur]) => ({thematique: thematique.toLowerCase(), legende: traductions.get(thematique), couleur: couleursThematiques.get(thematique), valeur: indicateur.moyennePonderee * 5 / 3}))
-    div(class="fr-col-6")
-        - const values = configurationIndicateurs.map(configuration => configuration.valeur)
-        - const colors = configurationIndicateurs.map(configuration => configuration.couleur)
-        include graphe-polaire
-    div(class="fr-col-6 legende")
-         each indicateur, i in configurationIndicateurs
-             - const pillOrdinate = (i / 6 * cy) + 10
-             - const legendOrdinate = pillOrdinate + 1.5
-             div(class="fr-grid-row")
-                div(class="fr-col-2")
-                    span(class="badge badge-" + indicateur.thematique) &nbsp;
-                div(class="fr-col-2")
-                    b !{indicateur.valeur.toFixed(1)}
-                div(class="fr-col-8")
-                    p !{indicateur.legende}
-         div(class="sous-legende")
-             div
-                span 0 - 1 = Critique
-                span 1 - 3 = Insuffisant
-             div
-                span 3 - 4 = Satisfaisant
-                span 5 = Bon
+include ./graphique-indicateurs

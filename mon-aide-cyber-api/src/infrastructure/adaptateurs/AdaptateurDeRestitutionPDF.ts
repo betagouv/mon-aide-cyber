@@ -50,14 +50,17 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
 
   protected genereLaRestitution(restitution: Restitution): Promise<Buffer> {
     const indicateursRestitution = this.trieLesIndicateurs(restitution);
-    const pageDeGarde = this.genereHtml('restitution.page-de-garde', {
-      dateGeneration: FournisseurHorloge.formateDate(
-        FournisseurHorloge.maintenant()
-      ),
-      identifiant: this.identifiant,
-      mesures: restitution.mesures.mesuresPrioritaires,
-      indicateurs: indicateursRestitution,
-      traductions: this.traductionThematiques,
+    const pageDeGarde = this.genereHtml({
+      pugCorps: 'restitution.page-de-garde',
+      params: {
+        dateGeneration: FournisseurHorloge.formateDate(
+          FournisseurHorloge.maintenant()
+        ),
+        identifiant: this.identifiant,
+        mesures: restitution.mesures.mesuresPrioritaires,
+        indicateurs: indicateursRestitution,
+        traductions: this.traductionThematiques,
+      },
     });
 
     return Promise.all([pageDeGarde])
@@ -69,7 +72,10 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
       });
   }
 
-  async genereHtml(pugCorps: string, paramsCorps: any): Promise<ContenuHtml> {
+  async genereHtml(configuration: {
+    pugCorps: string;
+    params: any;
+  }): Promise<ContenuHtml> {
     const fonctionInclusionDynamique = (
       cheminTemplatePug: string,
       options = {}
@@ -81,13 +87,17 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
     };
     return Promise.all([
       pug.compileFile(
-        `src/infrastructure/restitution/pdf/modeles/${pugCorps}.pug`
+        `src/infrastructure/restitution/pdf/modeles/${configuration.pugCorps}.pug`
       )({
-        ...paramsCorps,
+        ...configuration.params,
         include: fonctionInclusionDynamique,
       }),
     ])
-      .then(([corps]) => ({ corps, entete: '', piedPage: '' }))
+      .then(([corps]) => ({
+        corps,
+        entete: '',
+        piedPage: '',
+      }))
       .catch((erreur) => {
         console.log('Erreur génération HTML', erreur);
         throw new Error(erreur);
@@ -155,7 +165,10 @@ const generePdfs = async (
         .then(async () =>
           Buffer.from(
             await page.pdf(
-              formatPdfA4(contenuFinal.entete, contenuFinal.piedPage)
+              formatPdfA4({
+                entete: contenuFinal.entete,
+                piedDePage: contenuFinal.piedPage,
+              })
             )
           )
         )
@@ -173,13 +186,21 @@ const generePdfs = async (
   }
 };
 
-const formatPdfA4 = (enteteHtml: string, piedPageHtml: string): PDFOptions => ({
+const formatPdfA4 = (configuration: {
+  entete: string;
+  piedDePage: string;
+}): PDFOptions => ({
   format: 'A4',
   printBackground: true,
   displayHeaderFooter: true,
-  headerTemplate: enteteHtml,
-  footerTemplate: piedPageHtml,
-  margin: { bottom: '15mm', left: '15mm', right: '15mm', top: '15mm' },
+  headerTemplate: configuration.entete,
+  footerTemplate: configuration.piedDePage,
+  margin: {
+    bottom: '15mm',
+    left: '15mm',
+    right: '15mm',
+    top: '15mm',
+  },
 });
 
 const lanceNavigateur = (): Promise<Browser> => {

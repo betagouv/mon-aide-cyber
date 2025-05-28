@@ -1,9 +1,18 @@
 extends base
 
 block page
-    div(class="page-de-garde")
+    div(class="entete-page-de-garde")
         div
             .logo-republique-francaise-anssi
         div
             h2 Votre diagnostic cyber
             p Généré le !{dateGeneration.date} -  ID !{identifiant}
+    div(class="page-de-garde")
+        div(id="mesures-prioritaires")
+            h4 Recommandations prioritaires
+            p Appliquez ces 6 recommandations pour renforcer rapidement la cybersécurité de votre organisation.
+            each mesure, index in mesures
+              h6(class="titre-mesure") !{index + 1} . !{mesure.titre}
+        div(id="indicateurs")
+            h4 Indicateurs
+            include ../../html/modeles/graphique-indicateurs
