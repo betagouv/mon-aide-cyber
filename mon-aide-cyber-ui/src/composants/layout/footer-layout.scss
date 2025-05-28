@@ -8,6 +8,14 @@ footer.footer {
     margin: 0;
     padding: 56px 16px;
 
+    @include a-partir-de(lg) {
+      padding: 56px 24px;
+    }
+
+    h2 {
+      font-family: Marianne, arial, sans-serif;
+    }
+
     .encart-titre-logos {
       max-width: 1200px;
       width: 100%;
@@ -31,13 +39,10 @@ footer.footer {
         .logo {
           display: flex;
           align-items: center;
-
-          margin-left: auto;
-          margin-right: auto;
         }
 
         .logo-comcybermi {
-          max-width: 241px;
+          max-width: 240px;
           padding: 42px 0 42px 0;
         }
 
@@ -49,7 +54,7 @@ footer.footer {
           max-width: 130px;
           width: 130px;
           height: 120px;
-          padding: 26px 0 26px 0;
+          padding: 25px 0 25px 0;
         }
 
         .logo-cybermalveillance {
