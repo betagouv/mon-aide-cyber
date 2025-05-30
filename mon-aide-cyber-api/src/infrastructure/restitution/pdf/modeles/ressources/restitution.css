@@ -86,14 +86,6 @@ h4 {
     line-height: 16px !important;
 }
 
-h6.titre-mesure {
-    padding-left: 12mm;
-}
-
-#indicateurs {
-    page-break-after: always;
-}
-
 .mode-fonce {
     display: none;
 }
@@ -151,7 +143,30 @@ h6.titre-mesure {
     }
 }
 
+.entete-page-de-garde {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+
+    h1 {
+        font-size: 2.2rem;
+        line-height: 3.2rem;
+        border: unset;
+    }
+
+    h2 {
+        line-height: 2.8rem;
+        margin: 0rem 0rem 0.25rem 0rem;
+    }
+
+    p {
+        margin: unset;
+        padding: unset;
+    }
+}
+
 .page-de-garde {
+    padding-top: 1rem;
 
     h1 {
         font-size: 2.2rem;
@@ -197,6 +212,68 @@ h6.titre-mesure {
     width: 100%; /* Matches container */
     height: 100%; /* Matches container */
     background-size: contain; /* Ensures scaling fits */
+}
+
+section.mesures-prioritaires .contenu {
+
+    .titre {
+        padding-bottom: 0.5rem;
+    }
+
+    .mesures {
+        padding: 0.25rem 1rem;
+
+        .mesure {
+            display: flex;
+            flex-direction: row;
+            padding-left: 0.25rem;
+            gap: 0.75rem;
+            align-self: stretch;
+            align-items: center;
+
+            .indice {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border-radius: 50%;
+                background: #161616;
+                width: 2rem;
+                height: 2rem;
+
+                color: #FFF;
+                text-align: center;
+                font-size: 1.25rem;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
+            }
+
+            .libelle {
+                display: flex;
+                padding: 0.375rem 0;
+                align-items: center;
+                gap: 0.625rem;
+                flex: 1 0 0;
+            }
+        }
+    }
+
+}
+
+section.indicateurs .contenu {
+    padding: 1.5rem 0;
+}
+
+section.ressources-et-contacts .contenu {
+    margin: 0 auto;
+    background: #fff7db;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    display: grid;
+
+    p {
+        margin-top: 0.25rem;
+    }
 }
 
 /* stylelint-enable */

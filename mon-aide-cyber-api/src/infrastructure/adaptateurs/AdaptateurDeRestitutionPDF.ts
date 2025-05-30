@@ -7,6 +7,7 @@ import puppeteer, { Browser, PDFOptions } from 'puppeteer';
 import { PDFDocument } from 'pdf-lib';
 import { Restitution } from '../../restitution/Restitution';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
 const forgeIdentifiant = (identifiant: string): string =>
   `${identifiant.substring(0, 3)} ${identifiant.substring(
@@ -60,11 +61,21 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
         mesures: restitution.mesures.mesuresPrioritaires,
         indicateurs: indicateursRestitution,
         traductions: this.traductionThematiques,
+        mesServicesCyber: adaptateurEnvironnement
+          .mesServicesCyber()
+          .urlMesServicesCyber(),
+      },
+    });
+    const mesures = this.genereHtml({
+      pugCorps: 'restitution.mesures',
+      params: {
+        mesures: restitution.mesures.mesuresPrioritaires,
+        mesServicesCyber: `${adaptateurEnvironnement.mesServicesCyber().urlCyberDepart()}`,
       },
     });
 
-    return Promise.all([pageDeGarde])
-      .then((htmls) => generePdfs(htmls, this.identifiant))
+    return Promise.all([pageDeGarde, mesures])
+      .then((htmls) => generePdfs(htmls))
       .then((pdfs) => fusionnePdfs(pdfs))
       .catch((erreur) => {
         console.log('Erreur génération restitution', erreur);
@@ -129,10 +140,7 @@ const fusionnePdfs = (pdfs: Buffer[]): Promise<Buffer> => {
     .then((pdf) => Buffer.from(pdf));
 };
 
-const generePdfs = async (
-  pagesHtml: ContenuHtml[],
-  identifiant: string
-): Promise<Buffer[]> => {
+const generePdfs = async (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
   const pagesHtmlRemplies = pagesHtml.filter(
     (pageHtml) => pageHtml.corps !== ''
   );
@@ -157,7 +165,11 @@ const generePdfs = async (
       )(),
       piedPage: pug.compileFile(
         'src/infrastructure/restitution/pdf/modeles/restitution.piedpage.pug'
-      )({ identifiant }),
+      )({
+        mesServicesCyber: adaptateurEnvironnement
+          .mesServicesCyber()
+          .urlMesServicesCyber(),
+      }),
     };
     const resultat = navigateur.newPage().then((page) => {
       return page
