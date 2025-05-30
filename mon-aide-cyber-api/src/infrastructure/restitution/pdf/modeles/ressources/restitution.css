@@ -166,6 +166,7 @@ h4 {
 }
 
 .page-de-garde {
+    page-break-after: always;
     padding-top: 1rem;
 
     h1 {
@@ -274,6 +275,76 @@ section.ressources-et-contacts .contenu {
     p {
         margin-top: 0.25rem;
     }
+}
+
+.page-mesures {
+
+    .contenu {
+        display: flex;
+        padding-bottom: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        align-self: stretch;
+    }
+
+    .mesure {
+        padding-bottom: 1.5rem;
+        break-inside: avoid;
+
+        .titre {
+            display: flex;
+            padding-bottom: 0.75rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.625rem;
+            align-self: stretch;
+
+            text {
+                font-size: 1rem;
+                font-style: normal;
+                font-weight: 700;
+                line-height: 1.5rem;
+            }
+        }
+
+
+        .pourquoi {
+            display: flex;
+            padding-bottom: 1rem;
+            flex-direction: column;
+            align-items: flex-start;
+            align-self: stretch;
+            line-height: 1.5rem;
+
+            .titre {
+                display: flex;
+                font-weight: bold;
+                padding-bottom: 0.5rem;
+                align-items: flex-start;
+                gap: 0.125rem;
+                align-self: stretch;
+            }
+        }
+
+        .comment {
+            display: flex;
+            padding-bottom: 1rem;
+            flex-direction: column;
+            align-items: flex-start;
+            align-self: stretch;
+            line-height: 1.5rem;
+
+            .titre {
+                display: flex;
+                font-weight: bold;
+                padding-bottom: 0.5rem;
+                align-items: flex-start;
+                gap: 0.125rem;
+                align-self: stretch;
+            }
+        }
+    }
+
 }
 
 /* stylelint-enable */

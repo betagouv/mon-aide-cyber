@@ -1,0 +1,16 @@
+extends base
+
+block page
+    div(class="page-mesures")
+        section
+            div(class="contenu")
+              each mesure, index in mesures
+                div(class="mesure")
+                  div(class="titre")
+                    h4 !{index + 1}. !{mesure.titre}
+                  div(class="pourquoi")
+                    div(class="titre") Pourquoi ?
+                    div(class="libelle") !{include(mesure.pourquoi)}
+                  div(class="comment")
+                    div(class="titre") Comment appliquer cette recommandation ?
+                    div(class="libelle") !{include(mesure.comment)}
