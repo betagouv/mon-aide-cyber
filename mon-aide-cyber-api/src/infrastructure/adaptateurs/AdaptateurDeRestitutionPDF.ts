@@ -8,6 +8,7 @@ import { PDFDocument } from 'pdf-lib';
 import { Restitution } from '../../restitution/Restitution';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
 import fs from 'fs';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
 const forgeIdentifiant = (identifiant: string): string =>
   `${identifiant.substring(0, 3)} ${identifiant.substring(
@@ -61,6 +62,7 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
         mesures: restitution.mesures.mesuresPrioritaires,
         indicateurs: indicateursRestitution,
         traductions: this.traductionThematiques,
+        mesServicesCyber: adaptateurEnvironnement.msc().urlMSC(),
       },
     });
 

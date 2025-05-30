@@ -8,11 +8,21 @@ block page
             h2 Votre diagnostic cyber
             p Généré le !{dateGeneration.date} -  ID !{identifiant}
     div(class="page-de-garde")
-        div(id="mesures-prioritaires")
-            h4 Recommandations prioritaires
-            p Appliquez ces 6 recommandations pour renforcer rapidement la cybersécurité de votre organisation.
-            each mesure, index in mesures
-              h6(class="titre-mesure") !{index + 1} . !{mesure.titre}
-        div(id="indicateurs")
-            h4 Indicateurs
-            include ../../html/modeles/graphique-indicateurs
+        section(class="mesures-prioritaires")
+            div(class="contenu")
+                div(class="titre")
+                    h4 Recommandations prioritaires
+                    p Appliquez ces 6 recommandations pour renforcer rapidement la cybersécurité de votre organisation.
+                div(class="mesures")
+                    each mesure, index in mesures
+                      div(class="mesure")
+                        div(class="indice") !{index + 1}
+                        div(class="libelle") !{mesure.titre}
+        section(class="indicateurs")
+            div(class="contenu")
+                h4 Indicateurs
+                include ../../html/modeles/graphique-indicateurs
+        section(class="ressources-et-contacts")
+            div(class="contenu")
+                b Retrouvez les ressources et les contacts utiles dans votre espace MesServicesCyber
+                p Accédez à des services et ressources cyber et découvrez des contacts utiles près de chez vous dans votre espace <a href="!{mesServicesCyber}">MesServicesCyber</a>.
