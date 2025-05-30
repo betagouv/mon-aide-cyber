@@ -278,6 +278,7 @@ section.ressources-et-contacts .contenu {
 }
 
 .page-mesures {
+    display: flex;
 
     .contenu {
         display: flex;
@@ -341,6 +342,53 @@ section.ressources-et-contacts .contenu {
                 align-items: flex-start;
                 gap: 0.125rem;
                 align-self: stretch;
+            }
+        }
+    }
+
+    .cyber-depart {
+        display: flex;
+        padding: 1rem 0;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        flex: 1 0 0;
+        align-self: stretch;
+
+        .contenu {
+            display: flex;
+            padding: 0.75rem;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 0.25rem;
+            border: 0.5px solid #DDD;
+            width: 26.25rem;
+            text-align: center;
+
+            .reseaux {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 0.5rem;
+
+                .reseau {
+                    display: flex;
+                    padding: 0.25rem 0.75rem 0.25rem 0.5rem;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+
+                .linkedin {
+                    content: var(--logo-linkedin);
+                }
+
+
+                .email {
+                    content: var(--logo-email);
+                }
             }
         }
     }

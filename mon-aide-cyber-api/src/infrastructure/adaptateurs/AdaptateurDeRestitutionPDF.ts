@@ -67,7 +67,10 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
     });
     const mesures = this.genereHtml({
       pugCorps: 'restitution.mesures',
-      params: { mesures: restitution.mesures.mesuresPrioritaires },
+      params: {
+        mesures: restitution.mesures.mesuresPrioritaires,
+        mesServicesCyber: `${adaptateurEnvironnement.msc().urlMSC()}/mon-diagnostic-cyber`,
+      },
     });
 
     return Promise.all([pageDeGarde, mesures])
