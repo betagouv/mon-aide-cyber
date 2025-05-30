@@ -65,8 +65,12 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
         mesServicesCyber: adaptateurEnvironnement.msc().urlMSC(),
       },
     });
+    const mesures = this.genereHtml({
+      pugCorps: 'restitution.mesures',
+      params: { mesures: restitution.mesures.mesuresPrioritaires },
+    });
 
-    return Promise.all([pageDeGarde])
+    return Promise.all([pageDeGarde, mesures])
       .then((htmls) => generePdfs(htmls, this.identifiant))
       .then((pdfs) => fusionnePdfs(pdfs))
       .catch((erreur) => {
