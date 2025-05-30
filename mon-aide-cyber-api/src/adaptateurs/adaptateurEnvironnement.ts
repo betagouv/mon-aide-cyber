@@ -30,6 +30,10 @@ const mac = () => ({
   urlMAC: () => process.env.URL_MAC || '',
 });
 
+const msc = () => ({
+  urlMSC: () => process.env.URL_MSC || '',
+});
+
 type ConfigurationProConnect = {
   urlRedirectionApresAuthentification: () => string;
   urlRedirectionApresDeconnexion: () => string;
@@ -113,6 +117,7 @@ const ipAutorisees = (): false | string[] =>
 const adaptateurEnvironnement = {
   messagerie,
   mac,
+  msc,
   proConnect,
   modeMaintenance,
   siretsEntreprise,
