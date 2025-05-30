@@ -7,7 +7,6 @@ import puppeteer, { Browser, PDFOptions } from 'puppeteer';
 import { PDFDocument } from 'pdf-lib';
 import { Restitution } from '../../restitution/Restitution';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
-import { Indicateurs, MesurePriorisee } from '../../diagnostic/Diagnostic';
 
 const forgeIdentifiant = (identifiant: string): string =>
   `${identifiant.substring(0, 3)} ${identifiant.substring(
@@ -51,56 +50,17 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
 
   protected genereLaRestitution(restitution: Restitution): Promise<Buffer> {
     const indicateursRestitution = this.trieLesIndicateurs(restitution);
-    const indicateurs = this.genereIndicateurs(indicateursRestitution);
-    const mesuresPrioritaires = this.genereMesuresPrioritaires(
-      restitution.mesures.mesuresPrioritaires
-    );
-
-    const contactsLiensUtiles = this.genereContactsEtLiensUtiles();
-    const ressources = this.genereRessources();
-
-    return this.genere([
-      indicateurs,
-      mesuresPrioritaires,
-      contactsLiensUtiles,
-      ressources,
-    ]);
-  }
-
-  protected genereIndicateurs(
-    indicateurs: Indicateurs | undefined
-  ): Promise<ContenuHtml> {
-    return this.genereHtml('indicateurs', {
-      indicateurs,
-      traductions: this.traductionThematiques,
-    });
-  }
-
-  protected genereMesuresPrioritaires(
-    mesuresPrioritaires: MesurePriorisee[] | undefined
-  ): Promise<ContenuHtml> {
-    return this.genereHtml('mesures', {
-      mesures: mesuresPrioritaires,
-    });
-  }
-
-  protected genereContactsEtLiensUtiles(): Promise<ContenuHtml> {
-    return this.genereHtml('contacts-liens-utiles', {});
-  }
-
-  protected genereRessources(): Promise<ContenuHtml> {
-    return this.genereHtml('ressources', {});
-  }
-
-  protected genere(mesures: Promise<ContenuHtml>[]) {
     const pageDeGarde = this.genereHtml('restitution.page-de-garde', {
       dateGeneration: FournisseurHorloge.formateDate(
         FournisseurHorloge.maintenant()
       ),
       identifiant: this.identifiant,
+      mesures: restitution.mesures.mesuresPrioritaires,
+      indicateurs: indicateursRestitution,
+      traductions: this.traductionThematiques,
     });
-    mesures.unshift(pageDeGarde);
-    return Promise.all(mesures)
+
+    return Promise.all([pageDeGarde])
       .then((htmls) => generePdfs(htmls, this.identifiant))
       .then((pdfs) => fusionnePdfs(pdfs))
       .catch((erreur) => {
