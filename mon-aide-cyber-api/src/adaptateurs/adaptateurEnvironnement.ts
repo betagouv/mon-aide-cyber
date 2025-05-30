@@ -30,6 +30,13 @@ const mac = () => ({
   urlMAC: () => process.env.URL_MAC || '',
 });
 
+const mesServicesCyber = () => ({
+  urlMesServicesCyber: (): URL | string =>
+    process.env.URL_MSC ? new URL(process.env.URL_MSC) : '',
+  urlCyberDepart: (): URL | string =>
+    process.env.URL_MSC ? new URL(`${process.env.URL_MSC}/cyberdepart`) : '',
+});
+
 type ConfigurationProConnect = {
   urlRedirectionApresAuthentification: () => string;
   urlRedirectionApresDeconnexion: () => string;
@@ -113,6 +120,7 @@ const ipAutorisees = (): false | string[] =>
 const adaptateurEnvironnement = {
   messagerie,
   mac,
+  mesServicesCyber,
   proConnect,
   modeMaintenance,
   siretsEntreprise,
