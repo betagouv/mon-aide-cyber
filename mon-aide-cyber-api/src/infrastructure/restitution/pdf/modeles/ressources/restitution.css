@@ -84,13 +84,6 @@ header {
 h4 {
     font-size: 16px !important;
     line-height: 16px !important;
-    border-left: 5px solid var(--couleurs-mac-violet-fonce);
-    padding-left: 1.5rem;
-}
-
-h5.mesures-prioritaires-detail {
-    font-size: 16px !important;
-    line-height: 16px !important;
 }
 
 h6.titre-mesure {
@@ -101,195 +94,8 @@ h6.titre-mesure {
     page-break-after: always;
 }
 
-#mesures-prioritaires {
-    page-break-after: always;
-
-    h4 {
-        font-size: 2.2rem !important;
-        line-height: 2rem !important;
-        border-left: 8px solid var(--couleurs-mac-violet-fonce);
-        border-image: linear-gradient(
-                to top,
-                var(--couleurs-mac-violet-fonce) 0 95%,
-                rgba(0, 0, 0, 0) 5%
-        );
-        border-image-slice: 1;
-    }
-}
-
-#autres-mesures {
-    page-break-before: always;
-
-    h4 {
-        font-size: 2.2rem !important;
-        line-height: 2rem !important;
-        border-left: 8px solid var(--couleurs-mac-violet-fonce);
-        border-image: linear-gradient(
-                to top,
-                var(--couleurs-mac-violet-fonce) 0 95%,
-                rgba(0, 0, 0, 0) 5%
-        );
-        border-image-slice: 1;
-    }
-}
-
-#contacts-liens-utiles {
-    page-break-before: always;
-
-    h4 {
-        font-size: 2.2rem !important;
-        line-height: 2rem !important;
-        border-left: 8px solid var(--couleurs-mac-violet-fonce);
-        border-image: linear-gradient(
-                to top,
-                var(--couleurs-mac-violet-fonce) 0 95%,
-                rgba(0, 0, 0, 0) 5%
-        );
-        border-image-slice: 1;
-    }
-
-    a {
-        color: var(--couleurs-mac-violet-fonce) !important;
-    }
-
-    .titre {
-        font-family: 'Marianne ExtraBold';
-        font-weight: 800;
-        line-height: 2rem;
-        font-size: 1rem;
-        padding-bottom: 1rem;
-    }
-
-    [class*="logo-"] {
-        max-width: 8rem;
-        max-height: 8rem;
-    }
-}
-
-#section-ressources {
-    margin-top: 20mm;
-    page-break-after: always;
-
-    h4 {
-        font-size: 2.2rem !important;
-        line-height: 2rem !important;
-        border-left: 8px solid var(--couleurs-mac-violet-fonce);
-        border-image: linear-gradient(
-                to top,
-                var(--couleurs-mac-violet-fonce) 0 95%,
-                rgba(0, 0, 0, 0) 5%
-        );
-        border-image-slice: 1;
-    }
-
-    a {
-        color: var(--couleurs-mac-violet-fonce) !important;
-    }
-
-    .titre {
-        font-family: 'Marianne ExtraBold';
-        font-weight: 800;
-        line-height: 2rem;
-        font-size: 1rem;
-    }
-}
-
 .mode-fonce {
     display: none;
-}
-
-.restitution {
-    padding-right: 13mm;
-
-    details {
-        position: relative;
-
-        b {
-            font-size: 12px !important;
-            color: var(--couleurs-mac-violet-fonce);
-        }
-
-        p {
-            padding-bottom: 0 !important;
-        }
-    }
-
-    summary + div {
-        padding-left: 12mm;
-    }
-
-    details[open] > summary {
-        --hover: none;
-        --active: none;
-        background-color: unset;
-        color: var(--couleurs-mac-noir) !important;
-        font-size: 1.2rem;
-        font-family: "Marianne ExtraBold";
-        padding: 1rem 0 1.5rem 0;
-    }
-
-    .section-mesure > div {
-        padding-bottom: 5mm;
-    }
-
-    .section-mesure > div > b {
-        font-family: "Marianne ExtraBold";
-    }
-
-    summary {
-        user-select: none;
-        display: inline-flex;
-        align-items: baseline;
-        vertical-align: top !important;
-        width: 100%;
-    }
-
-
-    summary:before {
-        content: '';
-        width: 1mm;
-        height: 4mm;
-        margin-right: 11mm;
-        mask-repeat: no-repeat;
-        background: var(--couleurs-mac-violet-clair);
-        flex-shrink: 0;
-    }
-
-    div[id^='mesures-prioritaires'] {
-        b {
-            font-size: 18px;
-        }
-    }
-
-    .indicateur-polaire {
-        font-size: 4px;
-    }
-}
-
-.contact {
-    align-items: center;
-    width: 100%;
-}
-
-.contact::before {
-    content: '';
-    width: 1mm;
-    height: 4mm;
-    margin-right: 11mm;
-    mask-repeat: no-repeat;
-    flex-shrink: 0;
-}
-
-.ressource {
-    border-left: 5px solid var(--couleurs-mac-violet-clair);
-    border-image: linear-gradient(
-            to bottom,
-            rgba(0, 0, 0, 0) 10px,
-            var(--couleurs-mac-violet-clair) 10px 30px,
-            rgba(0, 0, 0, 0) 30px
-    );
-    border-image-slice: 1;
-    padding-left: 10mm;
 }
 
 .logo {
@@ -303,12 +109,6 @@ h6.titre-mesure {
     font-size: 48px;
     line-height: 48px;
     font-weight: 800;
-}
-
-.intersection {
-    margin: 2.5rem 0;
-    color: var(--couleurs-mac-violet-tres-clair);
-    height: 40px;
 }
 
 .badge-gouvernance {
@@ -352,9 +152,6 @@ h6.titre-mesure {
 }
 
 .page-de-garde {
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
 
     h1 {
         font-size: 2.2rem;
