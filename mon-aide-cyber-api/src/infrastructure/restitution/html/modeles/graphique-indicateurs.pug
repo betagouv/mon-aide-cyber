@@ -10,13 +10,4 @@ div(class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle")
         div(class="indicateur")
             div
                 span(class="badge badge-" + indicateur.thematique) &nbsp;
-            div
-                b !{indicateur.valeur.toFixed(1)}
             div !{indicateur.legende}
-      div(class="sous-legende")
-        div
-            span 0 - 1 = Critique
-            span 1 - 3 = Insuffisant
-        div
-            span 3 - 4 = Satisfaisant
-            span 5 = Bon
