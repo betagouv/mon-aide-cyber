@@ -82,8 +82,8 @@ header {
 }
 
 h4 {
-    font-size: 16px !important;
-    line-height: 16px !important;
+    font-size: 18px !important;
+    line-height: 28px !important;
 }
 
 .mode-fonce {
@@ -228,12 +228,23 @@ h4 {
 }
 
 section.mesures-prioritaires .contenu {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 
     .titre {
+
         padding-bottom: 0.5rem;
+
+        h4 {
+            font-size: 20px !important;
+        }
     }
 
     .mesures {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
         padding: 0.25rem 1rem;
 
         .mesure {
@@ -303,6 +314,10 @@ section.ressources-et-contacts .contenu {
         padding-bottom: 1.5rem;
         break-inside: avoid;
 
+        h4 {
+            font-weight: 700;
+        }
+
         .titre {
             display: flex;
             padding-bottom: 0.75rem;
@@ -330,7 +345,8 @@ section.ressources-et-contacts .contenu {
 
             .titre {
                 display: flex;
-                font-weight: bold;
+                font-size: 14px;
+                font-weight: 700;
                 padding-bottom: 0.5rem;
                 align-items: flex-start;
                 gap: 0.125rem;
@@ -348,7 +364,8 @@ section.ressources-et-contacts .contenu {
 
             .titre {
                 display: flex;
-                font-weight: bold;
+                font-size: 14px;
+                font-weight: 700;
                 padding-bottom: 0.5rem;
                 align-items: flex-start;
                 gap: 0.125rem;
