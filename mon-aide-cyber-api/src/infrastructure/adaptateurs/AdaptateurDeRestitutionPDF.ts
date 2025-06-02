@@ -38,26 +38,24 @@ const generationPdfExterne = (): GenerationPDFExterne => {
 };
 
 export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> {
-  private identifiant = '';
-
   constructor(traductionThematiques: Map<string, string>) {
     super(traductionThematiques);
   }
 
   public genereRestitution(restitution: Restitution): Promise<Buffer> {
-    this.identifiant = forgeIdentifiant(restitution.identifiant);
     return this.genereLaRestitution(restitution);
   }
 
   protected genereLaRestitution(restitution: Restitution): Promise<Buffer> {
     const indicateursRestitution = this.trieLesIndicateurs(restitution);
+    const identifiant = forgeIdentifiant(restitution.identifiant);
     const pageDeGarde = this.genereHtml({
       pugCorps: 'restitution.page-de-garde',
       params: {
         dateGeneration: FournisseurHorloge.formateDate(
           FournisseurHorloge.maintenant()
         ),
-        identifiant: this.identifiant,
+        identifiant: identifiant,
         mesures: restitution.mesures.mesuresPrioritaires,
         indicateurs: indicateursRestitution,
         traductions: this.traductionThematiques,
