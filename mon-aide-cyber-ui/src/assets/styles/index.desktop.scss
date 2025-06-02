@@ -45,3 +45,94 @@
     width: 32rem;
   }
 }
+
+.page-accueil {
+  .encart-logos {
+    width: 100%;
+    background: var(--couleurs-mac-violet-tres-clair);
+    margin: 0;
+    padding: 56px 16px;
+
+    @include a-partir-de(lg) {
+      padding: 56px 24px;
+    }
+
+    h2 {
+      font-family: Marianne, arial, sans-serif;
+    }
+
+    .encart-titre-logos {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto 0 auto;
+
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+
+      .footer-logos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        gap: 24px 56px;
+        flex: 1 0 0;
+        flex-wrap: wrap;
+
+        padding: 0 24px 0 24px;
+
+        .logo {
+          display: flex;
+          align-items: center;
+        }
+
+        .logo-comcybermi {
+          max-width: 240px;
+          padding: 42px 0 42px 0;
+        }
+
+        .logo-gendarmerienationale {
+          max-width: 136px;
+        }
+
+        .logo-cnil {
+          max-width: 130px;
+          width: 130px;
+          height: 120px;
+          padding: 25px 0 25px 0;
+        }
+
+        .logo-cybermalveillance {
+          max-width: 141px;
+          width: 141px;
+          height: 120px;
+          padding: 14px 0 14px 0;
+        }
+
+        .logo-policenationale {
+          max-width: 130px;
+          width: 130px;
+          height: 120px;
+          padding: 18px 6px 18px 6px;
+        }
+
+        img {
+          width: 100%;
+        }
+
+        a[href] {
+          background-image: unset;
+          background-position: unset;
+          background-repeat: unset;
+          background-size: unset;
+          transition: unset;
+        }
+
+        [target='_blank']:after {
+          background-color: unset;
+          display: none;
+        }
+      }
+    }
+  }
+}
