@@ -1,20 +1,35 @@
 - const valueMax = 5
-- const size = 100;
-- const height = 106
+- const size = 1200;
+- const height = 1200
+- const tailleRadar = 550
 
-svg(viewbox=`0 -5 ${size} ${height}` class="indicateur-polaire")
-  - const [cx, cy] = [size/2, size/2]
-  - const radius = size/2
-  - const polarToCartesian = (r, a) => ({ x: cx + (r * Math.cos(a)), y: cy + (r * Math.sin(a))})
-  - const pathForSlice = (r, a0, a1) => {const start=polarToCartesian(r, a1);const end=polarToCartesian(r, a0);const largeArcFlag = a1 - a0 <= 180 ? 0 : 1;return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y} L ${cx} ${cy} L ${start.x} ${start.y} Z`;}
-  - const angleStep = Math.PI * 2 / values.length;
-  each v, i in values
-    - const startAngle = angleStep * i - Math.PI / 2;
-    - const r = v !== 0 ? (v  / valueMax) * radius : 2
-    path(d=pathForSlice(r, startAngle, startAngle + angleStep) fill=colors[i] stroke='#ffffff' stroke-width=1)
-  each i in new Array(5).fill(0).map((_, i) => i + 1)
-    - const r = i / 5 * radius;
-    - const ordinateCoordinate = (-(i-5) / 5 * radius) - 1.5
-    - const abscissaCoordinate = cx - 5
-    circle(cx=cx cy=cy r=r stroke='#eeeeee' fill='none' stroke-width=0.3)
-    text(x=abscissaCoordinate y=ordinateCoordinate) !{i}
+svg(viewbox=`-600 -600 ${size} ${height}` class="indicateur-polaire")
+  - const polaireVersCartesien = (r, theta) => ({x: r * Math.cos(theta),y: r * Math.sin(theta)})
+  - const calculeAngleAIndex = index => (index * 2 * Math.PI) / 6 - Math.PI / 2;
+  -
+    const pointsDuPolygone = new Array(6).fill(0).map((_, index) => {
+      const valeur = values[index];
+      const r = ((valeur || 0) / 5) * tailleRadar;
+      const theta = calculeAngleAIndex(index);
+      const theta2 = calculeAngleAIndex(index + 1);
+      const point1 = polaireVersCartesien(r, theta);
+      const point2 = polaireVersCartesien(r, theta2);
+      return `M 0 0 L ${point1.x} ${point1.y} L ${point2.x} ${point2.y} Z`;
+    });
+  each chemin, i in pointsDuPolygone
+    path(d=chemin fill-opacity="0.7" fill=colors[i] )
+  each index in new Array(6).fill(0).map((_, index) => index)
+    - const theta = calculeAngleAIndex(index);
+    - const thetaSuivant = calculeAngleAIndex(index + 1);
+    - const coordonnees = polaireVersCartesien(tailleRadar, theta)
+    line(x1="0" y1="0" x2=coordonnees.x y2=coordonnees.y stroke="#ddd" stroke-width=3)
+    each index2 in new Array(6).fill(0).map((_, index) => index)
+      - const decalage = (tailleRadar / 5) * index2
+      - const coordonneesActuelles = polaireVersCartesien(decalage, theta)
+      - const coordonneesSuivantes = polaireVersCartesien(decalage,thetaSuivant)
+      line(x1=coordonneesActuelles.x y1=coordonneesActuelles.y x2=coordonneesSuivantes.x y2=coordonneesSuivantes.y stroke="#ddd" stroke-width=3 )
+  each index in new Array(6).fill(0).map((_, index) => index)
+    if index !== 0
+      - const r = (tailleRadar / 5) * index
+      - const y = -r * Math.sin(Math.PI / 2)
+      text(x="0" y=y text-anchor="middle" font-size="48" stroke="white" stroke-width="1.3" font-weight="bolder" dominant-baseline="middle") !{index}

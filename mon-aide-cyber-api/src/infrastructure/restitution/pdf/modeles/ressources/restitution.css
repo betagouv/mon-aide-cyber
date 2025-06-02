@@ -9,12 +9,12 @@
     --couleurs-mac-noir: #282828;
     --couleurs-mac-violet-clair: #f1e2fd;
     --couleurs-mac-violet-tres-clair: #f5f1f9;
-    --couleurs-mac-gouvernance: #fc7530;
-    --couleurs-mac-securiteacces: #9c51d0;
-    --couleurs-mac-securiteposte: #fdc8d5;
-    --couleurs-mac-securiteinfrastructure: #fdc82e;
-    --couleurs-mac-sensibilisation: #5d2a9d;
-    --couleurs-mac-reaction: #fd8eb9;
+    --couleurs-mac-gouvernance: #6369F1;
+    --couleurs-mac-securiteacces: #FEC54B;
+    --couleurs-mac-securiteposte: #8248A1;
+    --couleurs-mac-securiteinfrastructure: #F26C85;
+    --couleurs-mac-sensibilisation: #8ED4A3;
+    --couleurs-mac-reaction: #FD8FB9;
 }
 
 html {
@@ -103,45 +103,63 @@ h4 {
     font-weight: 800;
 }
 
-.badge-gouvernance {
-    background-color: var(--couleurs-mac-gouvernance);
-}
 
-.badge-securiteacces {
-    background-color: var(--couleurs-mac-securiteacces);
-}
+.legende {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 
-.badge-securiteposte {
-    background-color: var(--couleurs-mac-securiteposte);
-}
+    .indicateur {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
 
-.badge-securiteinfrastructure {
-    background-color: var(--couleurs-mac-securiteinfrastructure);
-}
+        .badge-gouvernance {
+            background-color: var(--couleurs-mac-gouvernance);
+        }
 
-.badge-sensibilisation {
-    background-color: var(--couleurs-mac-sensibilisation);
-}
+        .badge-securiteacces {
+            background-color: var(--couleurs-mac-securiteacces);
+        }
 
-.badge-reaction {
-    background-color: var(--couleurs-mac-reaction);
-}
+        .badge-securiteposte {
+            background-color: var(--couleurs-mac-securiteposte);
+        }
 
-.badge {
-    width: 2.5rem;
-    height: 0.8rem;
-    display: inline-flex;
-    line-height: 1.5rem;
-    border-radius: 5rem;
-    margin-top: 0.4rem;
-    -webkit-print-color-adjust: exact;
-}
+        .badge-securiteinfrastructure {
+            background-color: var(--couleurs-mac-securiteinfrastructure);
+        }
 
-.legende .sous-legende {
-    span {
-        padding-right: 1rem;
+        .badge-sensibilisation {
+            background-color: var(--couleurs-mac-sensibilisation);
+        }
+
+        .badge-reaction {
+            background-color: var(--couleurs-mac-reaction);
+        }
+
+        .badge {
+            width: 1rem;
+            height: 1rem;
+            display: inline-flex;
+            line-height: 1.5rem;
+            border-radius: 50%;
+            margin-top: 0.4rem;
+            -webkit-print-color-adjust: exact;
+            opacity: 0.7;
+            align-items: center;
+        }
+    }
+
+
+    .sous-legende {
+        span {
+            padding-right: 1rem;
+        }
     }
 }
+
 
 .entete-page-de-garde {
     display: flex;
