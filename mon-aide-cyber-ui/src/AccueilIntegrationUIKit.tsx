@@ -2,6 +2,7 @@ import { useTitreDePage } from './hooks/useTitreDePage.ts';
 import { liensMesServicesCyber } from './infrastructure/mes-services-cyber/liens.ts';
 import { EncartDiagnosticCyber } from './composants/landing/EncartDiagnosticCyber.tsx';
 import { EncartRealiserDesDiagnosticsCyber } from './composants/landing/EncartRealiserDesDiagnosticsCyber/EncartRealiserDesDiagnosticsCyber.tsx';
+import { EncartLogosPartenaires } from './composants/landing/EncartLogosPartenaires/EncartLogosPartenaires.tsx';
 
 export const AccueilIntegrationUIKit = () => {
   useTitreDePage('Accueil');
@@ -105,7 +106,7 @@ export const AccueilIntegrationUIKit = () => {
   ];
 
   return (
-    <main role="main">
+    <main role="main" className="page-accueil">
       <lab-anssi-brique-hero
         titre="MonAideCyber"
         soustitre="Des Aidants cyber mobilisés pour aider les entités publiques et privées à prendre leur cyberdépart !"
@@ -168,6 +169,10 @@ export const AccueilIntegrationUIKit = () => {
       ></lab-anssi-brique-rejoindre-la-communaute>
 
       <EncartRealiserDesDiagnosticsCyber />
+
+      <EncartLogosPartenaires />
+
+      <lab-anssi-presentation-anssi></lab-anssi-presentation-anssi>
     </main>
   );
 };
