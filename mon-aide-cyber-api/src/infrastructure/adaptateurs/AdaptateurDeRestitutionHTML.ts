@@ -4,7 +4,7 @@ import {
   ContenuHtml,
   estMesurePrioritaire,
 } from '../../adaptateurs/AdaptateurDeRestitution';
-import { Restitution } from '../../restitution/Restitution';
+import { Restitution, trieLesIndicateurs } from '../../restitution/Restitution';
 import { Indicateurs, MesurePriorisee } from '../../diagnostic/Diagnostic';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
 
@@ -30,8 +30,7 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
     restitution: Restitution
   ): Promise<RestitutionHTML> {
     const informations = this.genereInformations(restitution);
-    const indicateursRestitution: Indicateurs =
-      this.trieLesIndicateurs(restitution);
+    const indicateursRestitution: Indicateurs = trieLesIndicateurs(restitution);
     const indicateurs = this.genereIndicateurs(indicateursRestitution);
     const mesuresPrioritaires = this.genereMesuresPrioritaires(
       restitution.mesures.mesuresPrioritaires
