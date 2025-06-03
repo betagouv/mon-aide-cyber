@@ -38,8 +38,10 @@ const generationPdfExterne = (): GenerationPDFExterne => {
   };
 };
 
-export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> {
-  public genereRestitution(restitution: Restitution): Promise<Buffer> {
+export class AdaptateurDeRestitutionPDF
+  implements AdaptateurDeRestitution<Buffer>
+{
+  genereRestitution(restitution: Restitution): Promise<Buffer> {
     return this.genereLaRestitution(restitution);
   }
 
