@@ -54,7 +54,6 @@ export const AccueilIntegrationUIKit = () => {
       lien: {
         href: '/charte-aidant',
         texte: "Consulter la Charte de l'Aidant cyber",
-        target: '_blank',
       },
       illustration: {
         lien: '/images/illustration-marelle-etape-2.svg',
@@ -81,7 +80,6 @@ export const AccueilIntegrationUIKit = () => {
       lien: {
         href: '/promouvoir-diagnostic-cyber',
         texte: 'Accéder au kit de communication',
-        target: '_blank',
       },
       illustration: {
         lien: '/images/illustration-marelle-etape-4.svg',
@@ -121,6 +119,7 @@ export const AccueilIntegrationUIKit = () => {
         actiondroite={JSON.stringify({
           titre: 'Bénéficier d‘un diagnostic cyber',
           lien: liensMesServicesCyber().cyberDepartAvecTracking,
+          target: '_blank',
         })}
       ></lab-anssi-brique-hero>
 
